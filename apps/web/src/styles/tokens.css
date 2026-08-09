@@ -1,0 +1,94 @@
+/* Design System — "Textbook precision" (docs/SPEC.md §5.3).
+   Warm paper background, calm indigo accent, serif reading type + mono for code/data/task
+   numbers. Comfortable density. Light-only for M0 — dark mode is not required for MVP. */
+
+:root {
+  --color-bg: #faf8f3;
+  --color-text: #1c1a17;
+  --color-accent: #3450a3;
+  --color-muted: #8a8578;
+  --color-highlight: #b4562b;
+
+  --font-display: "Fraunces", "Source Serif 4", Georgia, serif;
+  --font-body: "Source Serif 4", Georgia, serif;
+  --font-mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace;
+
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2.5rem;
+
+  --line-height-comfortable: 1.7;
+  --max-content-width: 42rem;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  line-height: var(--line-height-comfortable);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  line-height: 1.25;
+}
+
+code,
+pre,
+.task-badge {
+  font-family: var(--font-mono);
+}
+
+a {
+  color: var(--color-accent);
+}
+
+/* Signature element (docs/SPEC.md §5.3): the ЕГЭ task-number badge that opens a topic page. */
+.task-badge {
+  display: inline-block;
+  border: 1px solid var(--color-accent);
+  color: var(--color-accent);
+  border-radius: 0.25rem;
+  padding: 0.15rem 0.6rem;
+  font-size: 1.25rem;
+}
+
+.container {
+  max-width: var(--max-content-width);
+  margin: 0 auto;
+  padding: var(--space-3) var(--space-2);
+}
+
+/* Signalling principle (docs/artifacts/learning-science-principles.md §2) — the exact element a
+   diagram highlights must be visually unmistakable, not a subtle tint. */
+[data-highlighted="true"] {
+  stroke: var(--color-highlight);
+  fill: var(--color-highlight);
+  font-weight: 700;
+}
+
+table[data-diagram] {
+  border-collapse: collapse;
+}
+
+table[data-diagram] th,
+table[data-diagram] td {
+  border: 1px solid var(--color-muted);
+  padding: var(--space-1);
+  text-align: center;
+}
+
+table[data-diagram] td[data-highlighted="true"] {
+  background: color-mix(in srgb, var(--color-highlight) 20%, transparent);
+  color: var(--color-highlight);
+  font-weight: 700;
+}

@@ -1,0 +1,52 @@
+# Topology per docs/SPEC.md §7.1. `web` runs the TanStack Start Node server (Nitro) — pages are
+# prerendered at build time, but client-side navigation still calls server functions
+# (apps/web/src/content/server-loaders.ts) over RPC, which needs a running process to answer.
+services:
+  nginx:
+    image: nginx:1.27-alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - web
+      - api
+    restart: unless-stopped
+
+  web:
+    build:
+      context: ..
+      dockerfile: apps/web/Dockerfile
+    depends_on:
+      - api
+    restart: unless-stopped
+    expose:
+      - "3000"
+
+  api:
+    build:
+      context: ..
+      dockerfile: apps/api/Dockerfile
+    environment:
+      - DATABASE_URL=postgresql://infraege:infraege@postgres:5432/infraege
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN:-}
+      - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID:-}
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    # Not exposed to the host — Nginx reaches it over the internal docker network.
+    expose:
+      - "8000"
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_USER=infraege
+      - POSTGRES_PASSWORD=infraege
+      - POSTGRES_DB=infraege
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  postgres-data:

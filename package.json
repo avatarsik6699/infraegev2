@@ -1,0 +1,14 @@
+{
+  "name": "infraege",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm --filter web dev",
+    "build": "pnpm --filter web build",
+    "test": "pnpm --filter web test",
+    "typecheck": "pnpm --filter web typecheck",
+    "lint": "pnpm --filter web lint",
+    "validate:content": "node scripts/validate-content-links.mjs"
+  },
+  "packageManager": "pnpm@10.33.0"
+}

@@ -1,0 +1,54 @@
+{
+  "id": "placeholder-topic",
+  "task_numbers": [1],
+  "title": "Графы: матрица смежности (заглушка для проверки рендера)",
+  "summary": "Тестовая тема — не проходит Content Quality Gate (docs/SPEC.md §2.3), используется только для проверки пайплайна рендера/чекера на этапе фундамента.",
+  "content_blocks": [
+    {
+      "type": "worked_example",
+      "data": {
+        "prompt": "Дан граф с вершинами A, B, C. Постройте его матрицу смежности.",
+        "steps": [
+          "Матрица смежности — таблица N×N, где N — число вершин.",
+          "Строка i, столбец j = 1, если между вершинами i и j есть ребро, иначе 0.",
+          "Для рёбер A–B и B–C матрица будет: A=[0,1,0], B=[1,0,1], C=[0,1,0]."
+        ]
+      }
+    },
+    {
+      "type": "diagram",
+      "data": {
+        "kind": "graph",
+        "ariaLabel": "Граф из трёх вершин A, B, C с рёбрами A-B и B-C",
+        "elements": [
+          { "kind": "node", "id": "A", "x": 40, "y": 40, "text": "A" },
+          { "kind": "node", "id": "B", "x": 160, "y": 40, "text": "B", "highlighted": true },
+          { "kind": "node", "id": "C", "x": 280, "y": 40, "text": "C" },
+          { "kind": "edge", "id": "AB", "from": "A", "to": "B" },
+          { "kind": "edge", "id": "BC", "from": "B", "to": "C" }
+        ]
+      }
+    },
+    {
+      "type": "diagram",
+      "data": {
+        "kind": "bit-grid",
+        "ariaLabel": "Матрица смежности графа A, B, C",
+        "headers": ["", "A", "B", "C"],
+        "rows": [
+          ["A", "0", "1", "0"],
+          ["B", "1", "0", "1"],
+          ["C", "0", "1", "0"]
+        ],
+        "highlightedCells": ["1,2"]
+      }
+    }
+  ],
+  "prerequisites": [],
+  "mastery_threshold": 0.8,
+  "presentation_mode": "worked_example_first",
+  "related_topics": [],
+  "practice_task_ids": ["placeholder-task"],
+  "status": "draft",
+  "access_tier": "free"
+}

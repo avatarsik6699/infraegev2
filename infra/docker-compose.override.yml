@@ -1,0 +1,20 @@
+# Local-dev overrides, merged automatically by `docker compose` on top of docker-compose.yml
+# (SPEC.md §7.1/§7.2 — same compose file locally and on the VPS, only overrides differ).
+services:
+  nginx:
+    ports:
+      - "8080:80"
+
+  web:
+    ports:
+      - "3000:3000"
+
+  api:
+    ports:
+      - "8000:8000"
+    environment:
+      - RELOAD=true
+
+  postgres:
+    ports:
+      - "5432:5432"

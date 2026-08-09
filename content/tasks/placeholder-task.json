@@ -1,0 +1,18 @@
+{
+  "id": "placeholder-task",
+  "topic_ids": ["placeholder-topic"],
+  "statement": "Сколько вершин у графа, заданного матрицей смежности размера 4×4?",
+  "checker_type": "exact_match",
+  "answer_variants": ["4", "четыре"],
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Размер матрицы смежности N×N всегда равен числу вершин графа — каждая строка/столбец соответствует ровно одной вершине. Типичная ошибка — посчитать количество единиц в матрице (это число рёбер, не вершин)."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}
