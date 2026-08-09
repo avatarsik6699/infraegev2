@@ -1,5 +1,5 @@
 import { env } from "~/shared/config/env";
-import type { Task } from "~/entities/content/model/types";
+import type { Task } from "~/entities/content";
 
 export type CheckAnswerResponse = {
   correct: boolean;

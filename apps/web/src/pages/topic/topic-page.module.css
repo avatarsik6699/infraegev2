@@ -1,0 +1,4 @@
+.taskBadge {
+  align-self: flex-start;
+  font-family: var(--font-mono);
+}

@@ -3,9 +3,9 @@ import {
   loadTask,
   loadTopic,
   resolveContentLink,
-} from "~/entities/content/api/server-loaders";
-import { parseTopicRouteSlug } from "~/entities/content/lib/parse-topic-route-slug";
-import { TopicPage } from "~/pages/topic/ui/topic-page";
+  parseTopicRouteSlug,
+} from "~/entities/content";
+import { TopicPage } from "~/pages/topic";
 
 export const Route = createFileRoute("/theory/$topicSlug")({
   loader: async ({ params }) => {

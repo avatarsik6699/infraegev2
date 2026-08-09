@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { listPublishedTopics } from "~/entities/content/api/server-loaders";
+import { listPublishedTopics } from "~/entities/content";
 import { env } from "~/shared/config/env";
 
 /**

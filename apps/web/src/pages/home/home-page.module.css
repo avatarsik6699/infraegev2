@@ -1,0 +1,19 @@
+.topicList {
+  display: grid;
+  gap: var(--space-2);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.topicLink {
+  display: inline-flex;
+  gap: var(--space-1);
+  align-items: center;
+  text-decoration: none;
+}
+
+.taskBadge {
+  flex: 0 0 auto;
+  font-family: var(--font-mono);
+}

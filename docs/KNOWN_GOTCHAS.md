@@ -11,7 +11,7 @@
 
 ## Gotcha Log
 
-### Pre-emptive: Mantine adoption must use v9.5.1 exclusively (change 04+)
+### Mantine adoption must use v9.5.1 exclusively (change 04+)
 
 - **Applies when**: change 04 starts the planned Mantine UI-kit adoption; it is not part of
   change 03.
@@ -24,7 +24,9 @@
 - **Documentation**: before writing Mantine integration code, fetch current documentation through
   Context7 and scope the lookup to v9.5.1. If Context7 coverage is stale or too thin for v9, use
   Mantine's LLM documentation guide at <https://mantine.dev/guides/llms/> to find Mantine's own
-  current documentation sources.
+  current documentation sources. Aggregated docs may still contain removed APIs (change 04 found
+  `TypographyStylesProvider` in Context7 although 9.5.1 no longer exports it), so the installed
+  package's `.d.ts` exports and a real typecheck are the final authority for the pinned version.
 - **Origin**: explicit architect instruction during change 03 scoping; also recorded in
   `docs/changes/03-testing-conventions.md` § Implementation Notes.
 
@@ -95,6 +97,16 @@
 - **Fix**: configure a development-only Nitro `routeRules` entry for `/api/**`, with a proxy target
   ending in `/api/**` so Nitro preserves the wildcard suffix. Keep the rule out of production
   builds, where Nginx owns `/api` routing. See `apps/web/vite.config.ts`.
+
+### Playwright must not reuse an arbitrary server on its gate ports
+
+- **Symptoms**: the browser journey renders an older UI or misses a newly-added status even though
+  unit tests and a fresh manual Vite server are correct.
+- **Root cause**: `reuseExistingServer: true` accepts any process answering the configured URL;
+  WSL/Windows port forwarding can keep a stale dev server reachable outside the current process
+  tree, so Playwright silently tests a different checkout.
+- **Fix**: keep the e2e-only ports `127.0.0.2:3100` / `127.0.0.2:8100`, pass Vite `--strictPort`,
+  and set both Playwright web servers to `reuseExistingServer: false`.
 
 ### Docker: non-root user with `--no-create-home` breaks `uv run`
 

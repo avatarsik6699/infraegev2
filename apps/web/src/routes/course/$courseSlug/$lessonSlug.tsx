@@ -3,8 +3,8 @@ import {
   loadCourse,
   loadTask,
   resolveContentLink,
-} from "~/entities/content/api/server-loaders";
-import { LessonPage } from "~/pages/lesson/ui/lesson-page";
+} from "~/entities/content";
+import { LessonPage } from "~/pages/lesson";
 
 export const Route = createFileRoute("/course/$courseSlug/$lessonSlug")({
   loader: async ({ params }) => {

@@ -16,7 +16,7 @@
 
 | Layer | Technology |
 |-------|-----------|
-| Frontend | React + TanStack Start (SSR/SSG, file-based routing, `createServerFn` for server-only content access) — no TanStack Query yet, no API surface needs client caching on M0; no `openapi-typescript` yet, no OpenAPI schema exists (see Known Gotchas) |
+| Frontend | React + TanStack Start (SSR/SSG, file-based routing, `createServerFn` for server-only content access) + Mantine Core/Hooks **9.5.1 exact** as the UI primitive layer — no TanStack Query yet, no API surface needs client caching on M0; no `openapi-typescript` yet, no OpenAPI schema exists (see Known Gotchas) |
 | Backend | Python/FastAPI (`apps/api`) |
 | Database | PostgreSQL (provisioned in `infra/docker-compose.yml`; no schema/migrations yet — content is git-based, docs/SPEC.md §3) |
 | Cache | — (not needed on M0) |
@@ -75,7 +75,7 @@ task — it's expensive by design; that's why it's separated from the Fast Gate.
 | Migrations | `n/a` | content is git-based, not DB-backed (docs/SPEC.md §3); no schema exists yet to migrate |
 | Backend test suite | `cd apps/api && uv run pytest` | 11 tests as of change 01 |
 | Frontend build | `cd apps/web && pnpm build` | runs TanStack Start's build-time prerender; fails the build if any crawled page 500s |
-| Frontend unit tests | `cd apps/web && pnpm test` | 8 tests as of change 01 |
+| Frontend unit tests | `cd apps/web && pnpm test` | 14 tests as of change 04 |
 | E2E lint / determinism | `pnpm --filter web exec playwright test --list` | local only, never CI'd; validates Playwright config/spec collection without running the journey |
 | E2E (Playwright) | `pnpm --filter web test:e2e` | local only, never CI'd; starts local Vite + Uvicorn through Playwright `webServer` and runs the single Chromium project |
 | Smoke | `curl -f http://localhost:8000/health` (backend) — frontend smoke is the build's own prerender crawl | |
@@ -114,7 +114,7 @@ tool that isn't available must be reported as skipped with a reason, never silen
 | E2E test change | Playwright + Page Object Model | during implementation and verification; use `e2e/pages/*.page.ts` and user-visible locators | yes |
 | TypeScript / Python change | LSP diagnostics | after implementing, before checking off | yes |
 | New/changed API surface | `openapi-typescript` (or equivalent) regen + frontend re-typecheck | after backend contract change | n/a — no OpenAPI schema yet, see Fast Gate note |
-| Architecture-level decision | architecture skill | during planning | yes |
+| Architecture-level decision | architecture skill | during planning | no — not exposed in the current runtime; change 04 used an architect-reviewed plan plus Context7/package-type verification |
 | Frontend design decision | `frontend-design` skill | during `/plan` §5.3 and design Backlog items | yes |
 | Backend/API design decision | `backend-design` skill | during `/plan` §4 and backend-architecture Backlog items | yes |
 
@@ -158,9 +158,9 @@ pnpm --filter web test:e2e
 - Vitest unit tests live in `apps/web/tests/`.
 - Playwright specs live in `apps/web/e2e/`; browser journeys use Page Object Model classes from
   `e2e/pages/*.page.ts` and user-visible `getByRole`/`getByText` locators.
-- `playwright.config.ts` contains one project only: Chromium. It starts the local frontend and
-  backend automatically; `PLAYWRIGHT_BASE_URL` and `BACKEND_URL` may override its loopback
-  defaults.
+- `playwright.config.ts` contains one project only: Chromium. It always starts fresh local frontend
+  and backend processes on dedicated `127.0.0.2:3100` / `127.0.0.2:8100` ports with strict port
+  binding; it never reuses an arbitrary process that may serve a stale checkout.
 
 ---
 
@@ -189,17 +189,24 @@ pnpm --filter web test:e2e
 routes/      TanStack Start file-based routing (framework-fixed location) — thin: a route
              definition + loader + head, rendering a pages/ component with loader data as props.
              `router.tsx`/`routeTree.gen.ts` are the app layer; there is no separate `src/app/`.
-pages/       one ecosystem per route: ui/ (+ hooks/model/ as needed), composing everything below.
-widgets/     composite chrome reused across pages (currently: site-footer).
-features/    a user-facing capability with its own UI + logic (check-answer, track-progress).
+pages/       one ecosystem per route; root component at the slice root, private composition under
+             components/, and model/hooks only when needed.
+widgets/     composite chrome reused across pages (currently: site-footer), with the same
+             root/components hierarchy.
+features/    a user-facing capability with root UI + logic (check-answer, track-progress).
 entities/    domain concepts reused across features/pages (content, content-block).
-shared/      domain-agnostic, reusable anywhere (config/env+runtime, lib/safe-ls+safe-json, styles).
+shared/      domain-agnostic config/lib/styles plus policy components wrapping Mantine where the
+             project owns semantics or defaults.
 ```
 
 Import direction is enforced by `eslint.config.js`'s per-layer `no-restricted-imports` zones: each
 layer may import only itself and the layers listed above it in this table (e.g. `entities` must
 not import from `features`/`widgets`/`pages`/`routes`). `~/*` still maps to `src/*` (see
-`tsconfig.json`) — no separate per-layer alias set.
+`tsconfig.json`) — no separate per-layer alias set. Every slice exposes a strict `index.ts` public
+API; cross-slice deep imports are forbidden, while imports within a slice are relative. UI does
+not use an extra `ui/` segment: a root component is colocated with its `*.types.ts` and optional
+CSS Module, and recursively complex private components live under `components/`. Meaningful
+`api/`, `model/`, and `lib/` segments remain.
 
 ### Backend modules (`apps/api/app/`) — DDD-like, established in change 02
 

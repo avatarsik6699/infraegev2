@@ -9,13 +9,15 @@
 - Keep one React component per file. Extract a second component into its own file instead of
   assigning JSX or declaring a nested component in the first component's module.
 - Define components as arrow functions typed with `React.FC<Props>`.
-- Use `type`, never `interface`. Name file-local component props `Props`; export a more descriptive
-  props type only when another file consumes it.
+- Use `type`, never `interface`. Every slice root keeps props in `root-component.types.ts` under a
+  root-qualified namespace; nested components do so only for non-trivial or cross-file types.
 
 ```tsx
-type Props = { title: string };
+export namespace TopicPageTypes {
+  export type Props = { title: string };
+}
 
-export const TopicHeading: React.FC<Props> = (props) => {
+export const TopicPage: React.FC<TopicPageTypes.Props> = (props) => {
   return <h1>{props.title}</h1>;
 };
 ```
@@ -45,7 +47,7 @@ useEffect(function persistProgressFx() {
 }, [progressStore]);
 ```
 
-## 4. Module structure
+## 4. Module structure and public APIs
 
 Keep the FSD-like layers established for this project; do not replace them with a route-local
 folder convention:
@@ -60,8 +62,28 @@ shared/    domain-agnostic config, helpers and styles
 ```
 
 Imports may only point within the same layer or downward in this list. ESLint enforces the exact
-boundaries declared in `docs/STACK.md`. Create only the `ui/`, `model/`, `api/`, `lib/`, `hooks/`
-or other subdirectories a module actually needs.
+boundaries declared in `docs/STACK.md`.
+
+```text
+slice/
+├── index.ts                       # the only cross-slice public API
+├── root-component.tsx
+├── root-component.types.ts       # RootComponentTypes namespace
+├── root-component.module.css      # only when local styles exist
+├── api/ | model/ | lib/           # retain only meaningful segments
+└── components/                    # private composition
+```
+
+- Do not create an extra `ui/` segment. Existing `api/`, `model/`, and `lib/` segments remain
+  valid and should not be flattened merely for symmetry.
+- Cross-slice imports target the slice directory and resolve through `index.ts`; deep imports are
+  forbidden by ESLint. Use relative imports inside a slice.
+- A private child stays a single file under `components/` while simple. Give it its own recursive
+  directory only when it owns types, styles, utilities, or child components.
+- Promote a component to a lower reusable slice only after real cross-slice reuse appears. Do not
+  create shared abstractions from hypothetical future reuse.
+- Capability meaning is more important than matching the directory name to its root component:
+  `check-answer/PracticeTaskWidget` and `track-progress/ProgressBar` are intentional.
 
 ## 5. Routing
 
@@ -89,12 +111,33 @@ rendered by those callbacks are not exempt.
 ## 7. Types
 
 - Use `type` for object shapes, unions and aliases; do not use `interface`.
+- Literal namespaces are allowed only in `*.types.ts` and qualify ownership, for example
+  `TopicPageTypes.Props`. ESLint continues to reject namespaces everywhere else.
+- Group module helpers and constants in root-prefixed objects such as `topicPageUtils` and
+  `topicPageConstants`; keep helpers pure and do not create empty placeholder files.
+- Use `*.dto.ts` only for transport/API boundary shapes, never as a synonym for component props.
 - Export only types consumed outside their module.
 - Keep content-domain types in `entities/content/model/types.ts`. Do not duplicate an API response
   shape in several consumers.
 - `src/routeTree.gen.ts` is generated and exempt from authoring conventions.
 
-## 8. Testing
+## 8. Styling and Mantine
+
+- Every adopted `@mantine/*` package is pinned to exact version `9.5.1`; version ranges and mixed
+  Mantine versions are forbidden.
+- `shared/config/mantine-theme.ts` owns global Mantine theme values and component defaults.
+  Project CSS variables alias those theme values where native semantic renderers need them.
+- Use CSS Modules for local static styles. Do not create `*.styles.ts` objects for static CSS;
+  use Mantine style props only for genuinely dynamic values.
+- Shared policy components are mandatory for `ExternalLink`, `Image`, `Typography`, and
+  `PageContainer`. ESLint forbids raw `<a>`/`<img>` and direct Mantine
+  `Anchor/Image/Text/Title/Container` outside shared. TanStack Router `Link` remains the internal
+  navigation primitive.
+- Other Mantine components may be used directly. Do not wrap a component solely to rename it.
+- Keep specialized semantic markup native when it carries meaning Mantine must not obscure:
+  diagrams, tables, figures, code/pre, details, and lists.
+
+## 9. Testing
 
 - New or changed pure logic, storage behavior and API-client behavior receives a focused Vitest
   test under `apps/web/tests/` using `*.test.ts` or `*.test.tsx`.
@@ -107,3 +150,5 @@ rendered by those callbacks are not exempt.
   CI. The durable policy and gate commands live in `docs/STACK.md`.
 - Test observable behavior rather than implementation details. Stub network/global boundaries and
   restore them after each unit test; do not make live network calls from unit tests.
+- Render Mantine-based units through `tests/render.tsx` so they receive the production theme and
+  the test-safe provider environment.

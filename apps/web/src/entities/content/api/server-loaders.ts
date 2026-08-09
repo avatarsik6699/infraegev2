@@ -11,8 +11,8 @@ import { join } from "node:path";
 import {
   ContentNotFoundError,
   type ResolvedContentLink,
-} from "~/entities/content/lib/content-link";
-import type { Course, Task, Topic } from "~/entities/content/model/types";
+} from "../lib/content-link";
+import type { Course, Task, Topic } from "../model/types";
 
 // content/ lives at the repo root, not inside apps/web — this is a monorepo, not a single-package
 // project. `__CONTENT_ROOT__` is baked in at build time by vite.config.ts (see its comment) since

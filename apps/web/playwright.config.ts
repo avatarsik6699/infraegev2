@@ -1,8 +1,7 @@
 import { defineConfig } from "@playwright/test";
 
-const FRONTEND_URL =
-  process.env.PLAYWRIGHT_BASE_URL ?? "http://127.0.0.2:3000";
-const BACKEND_URL = process.env.BACKEND_URL ?? "http://127.0.0.2:8000";
+const FRONTEND_URL = "http://127.0.0.2:3100";
+const BACKEND_URL = "http://127.0.0.2:8100";
 
 export default defineConfig({
   testDir: "./e2e",
@@ -25,17 +24,17 @@ export default defineConfig({
     {
       name: "backend",
       command:
-        "uv run --project ../api uvicorn app.main:app --host 127.0.0.2 --port 8000",
+        "uv run --project ../api uvicorn app.main:app --host 127.0.0.2 --port 8100",
       url: `${BACKEND_URL}/health`,
-      reuseExistingServer: true,
+      reuseExistingServer: false,
       timeout: 120_000,
     },
     {
       name: "frontend",
       command:
-        "VITE_PROXY_TARGET=http://127.0.0.2:8000 pnpm dev --host 127.0.0.2",
+        "VITE_PROXY_TARGET=http://127.0.0.2:8100 pnpm dev --host 127.0.0.2 --port 3100 --strictPort",
       url: FRONTEND_URL,
-      reuseExistingServer: true,
+      reuseExistingServer: false,
       timeout: 120_000,
     },
   ],

@@ -3,7 +3,7 @@ import {
   isMastered,
   markMastered,
   progressRatio,
-} from "~/features/track-progress/model/progress-store";
+} from "~/features/track-progress";
 
 beforeEach(() => {
   window.localStorage.clear();

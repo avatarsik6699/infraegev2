@@ -1,4 +1,4 @@
-import { ContentNotFoundError } from "~/entities/content/lib/content-link";
+import { ContentNotFoundError } from "./content-link";
 
 /** Parses the `/theory/zadanie-{n}-{slug}` route param into a task number + topic id. */
 export function parseTopicRouteSlug(routeSlug: string): {

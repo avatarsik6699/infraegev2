@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { listPublishedTopics } from "~/entities/content/api/server-loaders";
-import { HomePage } from "~/pages/home/ui/home-page";
+import { listPublishedTopics } from "~/entities/content";
+import { HomePage } from "~/pages/home";
 
 export const Route = createFileRoute("/")({
   loader: async () => ({ topics: await listPublishedTopics() }),
