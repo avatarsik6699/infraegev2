@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { DiagramBlock } from "~/components/content-blocks/DiagramBlock";
-import { TableDiagramBlock } from "~/components/content-blocks/TableDiagramBlock";
-import { WorkedExampleBlock } from "~/components/content-blocks/WorkedExampleBlock";
+import { DiagramBlock } from "~/entities/content-block/ui/diagram-block";
+import { TableDiagramBlock } from "~/entities/content-block/ui/table-diagram-block";
+import { WorkedExampleBlock } from "~/entities/content-block/ui/worked-example-block";
 
 describe("DiagramBlock", () => {
   it("marks the signalled node with data-highlighted (learning-science-principles.md §2)", () => {

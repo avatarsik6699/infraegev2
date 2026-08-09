@@ -1,6 +1,5 @@
-from app.schemas.task import Task
-
-from app.services.checker import is_correct
+from app.modules.content.schemas import Task
+from app.modules.tasks.service import is_correct
 
 
 def make_task(**overrides: object) -> Task:

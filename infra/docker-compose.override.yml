@@ -1,5 +1,8 @@
 # Local-dev overrides, merged automatically by `docker compose` on top of docker-compose.yml
 # (SPEC.md §7.1/§7.2 — same compose file locally and on the VPS, only overrides differ).
+#
+# Must NOT exist on a production host — Compose auto-loads any file with this exact name, which
+# would silently republish these ports and flip APP_ENV back to development.
 services:
   nginx:
     ports:
@@ -13,7 +16,8 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - RELOAD=true
+      # apps/api/entrypoint.sh reads this to decide whether to pass --reload to uvicorn.
+      - APP_ENV=development
 
   postgres:
     ports:

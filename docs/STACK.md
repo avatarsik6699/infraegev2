@@ -56,7 +56,7 @@ not the full suite. Fill every row that applies; mark `n/a` for rows that don't 
 
 | Check | Command | Preconditions / notes |
 |-------|---------|-----------------------|
-| Lint | `cd apps/web && pnpm lint` (frontend) · `n/a` (backend — no linter configured yet) | run from repo root or `apps/web` |
+| Lint | `cd apps/web && pnpm lint` (frontend) · `cd apps/api && uv run ruff check app tests` (backend) | run from repo root or `apps/web`/`apps/api` |
 | Type-check (affected) | `cd apps/web && pnpm typecheck` (frontend) · `cd apps/api && npx pyright app tests` (backend) | pyright reads `[tool.pyright]` in `apps/api/pyproject.toml` |
 | Targeted / affected unit tests | `cd apps/web && pnpm test` (frontend, vitest) · `cd apps/api && uv run pytest` (backend) | |
 | LSP diagnostics | available: yes | pyright (backend) confirmed working; frontend TS diagnostics via `tsc`/editor LSP |
@@ -71,7 +71,7 @@ task — it's expensive by design; that's why it's separated from the Fast Gate.
 
 | Check | Command | Preconditions / notes |
 |-------|---------|-----------------------|
-| Infrastructure / bootstrap | `docker compose -f infra/docker-compose.yml -f infra/docker-compose.override.yml up --build -d` | not yet run end-to-end in CI — no Docker daemon was available in the environment change 01 was built in; the compose file and Dockerfiles are written but unverified as a running stack |
+| Infrastructure / bootstrap | `docker compose -f infra/docker-compose.yml -f infra/docker-compose.override.yml up --build -d` | verified live in change 02: `postgres`+`api`+`nginx` come up healthy, `/health` and `POST /api/tasks/{id}/check` work through nginx, the `/api/tasks/` rate limit fires (`503` past its burst — nginx's default `limit_req_status`, not `429`). `web`'s image could not be built in that session's sandboxed Docker environment (docs/KNOWN_GOTCHAS.md) — still needs a real Docker host to close out fully |
 | Migrations | `n/a` | content is git-based, not DB-backed (docs/SPEC.md §3); no schema exists yet to migrate |
 | Backend test suite | `cd apps/api && uv run pytest` | 11 tests as of change 01 |
 | Frontend build | `cd apps/web && pnpm build` | runs TanStack Start's build-time prerender; fails the build if any crawled page 500s |
@@ -153,9 +153,47 @@ ambiguous between "not asked" and "not needed."
 ├── .claude/skills/            # Claude Code skill wrappers (plan, work, ship)
 ├── .agents/skills/             # generic-agent skill wrappers (plan, work, ship)
 ├── plugins/sdd-workflow/       # Codex plugin (skills, commands, MCP, hooks)
-├── [your source dirs]
+├── apps/web/, apps/api/, infra/, content/, scripts/
 └── AGENTS.md / CLAUDE.md       # AI agent rules
 ```
+
+### Frontend layers (`apps/web/src/`) — pragmatic FSD-like, established in change 02
+
+```
+routes/      TanStack Start file-based routing (framework-fixed location) — thin: a route
+             definition + loader + head, rendering a pages/ component with loader data as props.
+             `router.tsx`/`routeTree.gen.ts` are the app layer; there is no separate `src/app/`.
+pages/       one ecosystem per route: ui/ (+ hooks/model/ as needed), composing everything below.
+widgets/     composite chrome reused across pages (currently: site-footer).
+features/    a user-facing capability with its own UI + logic (check-answer, track-progress).
+entities/    domain concepts reused across features/pages (content, content-block).
+shared/      domain-agnostic, reusable anywhere (config/env+runtime, lib/safe-ls+safe-json, styles).
+```
+
+Import direction is enforced by `eslint.config.js`'s per-layer `no-restricted-imports` zones: each
+layer may import only itself and the layers listed above it in this table (e.g. `entities` must
+not import from `features`/`widgets`/`pages`/`routes`). `~/*` still maps to `src/*` (see
+`tsconfig.json`) — no separate per-layer alias set.
+
+### Backend modules (`apps/api/app/`) — DDD-like, established in change 02
+
+```
+main.py      create_app() factory.
+api/         router.py — aggregates every module's router under one prefix (`/api`, not `/api/v1`
+             — see docs/changes/02-architecture-refactor.md's Contracts section for why).
+core/        cross-cutting infra with no HTTP surface of its own: config (Settings), exceptions
+             (AppException base), logging (structlog), middleware (request-id + error alerting),
+             alerting (Telegram). Modules may import from core/; core/ must not import modules/.
+modules/     one package per bounded context — health/, content/, tasks/. Each holds only the
+             files it needs: api.py (routes), service.py (logic), schemas.py (Pydantic DTOs),
+             exceptions.py (module-specific AppException subclasses).
+shared/      cross-module code used by >= 2 modules — stays an empty placeholder until that's
+             actually true; do not pre-populate it.
+```
+
+No repository/ORM layer exists yet — content is git-based (SPEC.md §3), not DB-backed. When a
+first SQLAlchemy model is added, see the pre-emptive asyncpg datetime rule in
+`docs/KNOWN_GOTCHAS.md` before writing it.
 
 ---
 

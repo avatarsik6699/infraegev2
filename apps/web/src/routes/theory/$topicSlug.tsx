@@ -1,13 +1,11 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
-import { ContentBlockList } from "~/components/content-blocks/ContentBlockRenderer";
-import { PracticeTaskWidget } from "~/components/PracticeTaskWidget";
-import { PrerequisiteCallout } from "~/components/PrerequisiteCallout";
 import {
   loadTask,
   loadTopic,
   resolveContentLink,
-} from "~/content/server-loaders";
-import { parseTopicRouteSlug } from "~/content/loader";
+} from "~/entities/content/api/server-loaders";
+import { parseTopicRouteSlug } from "~/entities/content/lib/parse-topic-route-slug";
+import { TopicPage } from "~/pages/topic/ui/topic-page";
 
 export const Route = createFileRoute("/theory/$topicSlug")({
   loader: async ({ params }) => {
@@ -44,30 +42,17 @@ export const Route = createFileRoute("/theory/$topicSlug")({
         ]
       : [],
   }),
-  component: TopicPage,
+  component: TopicRoute,
 });
 
-function TopicPage() {
+function TopicRoute() {
   const { topic, tasks, prerequisites, related } = Route.useLoaderData();
-
   return (
-    <main className="container">
-      <span className="task-badge">№{topic.task_numbers[0]}</span>
-      <h1>{topic.title}</h1>
-
-      <PrerequisiteCallout
-        heading="Эта тема легче даётся, если понимать:"
-        links={prerequisites}
-      />
-
-      <ContentBlockList blocks={topic.content_blocks} />
-
-      <h2>Практика</h2>
-      {tasks.map((task) => (
-        <PracticeTaskWidget key={task.id} task={task} />
-      ))}
-
-      <PrerequisiteCallout heading="Связанные темы:" links={related} />
-    </main>
+    <TopicPage
+      topic={topic}
+      tasks={tasks}
+      prerequisites={prerequisites}
+      related={related}
+    />
   );
 }

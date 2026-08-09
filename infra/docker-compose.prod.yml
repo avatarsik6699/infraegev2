@@ -1,0 +1,29 @@
+# Production overlay:
+#   docker compose -f infra/docker-compose.yml -f infra/docker-compose.prod.yml up -d --build
+#
+# CRITICAL: docker-compose.override.yml must NOT exist on the production host. Compose auto-loads
+# any file with that exact name — leaving it there would silently republish Postgres/api/web ports
+# to the internet and flip APP_ENV back to development.
+#
+# TLS/Let's Encrypt is deliberately deferred: no domain is chosen yet (docs/SPEC.md §7.1). When one
+# is, add a certbot service + an HTTPS server block here, e.g.:
+#   docker run --rm -v certbot-etc:/etc/letsencrypt ... certonly --standalone -d <domain>
+# plus a renewal cron job — and mount a TLS-enabled conf.d over infra/nginx/conf.d.
+services:
+  nginx:
+    restart: always
+
+  web:
+    restart: always
+    environment:
+      - SITE_URL=${SITE_URL:?SITE_URL is required in production}
+
+  api:
+    environment:
+      - APP_ENV=production
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN:?TELEGRAM_BOT_TOKEN is required in production}
+      - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID:?TELEGRAM_CHAT_ID is required in production}
+    restart: always
+
+  postgres:
+    restart: always

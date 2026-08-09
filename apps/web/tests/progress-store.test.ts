@@ -1,5 +1,9 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { isMastered, markMastered, progressRatio } from "~/lib/progress-store";
+import {
+  isMastered,
+  markMastered,
+  progressRatio,
+} from "~/features/track-progress/model/progress-store";
 
 beforeEach(() => {
   window.localStorage.clear();

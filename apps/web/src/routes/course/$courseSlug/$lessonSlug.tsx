@@ -1,11 +1,10 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
-import { ContentBlockList } from "~/components/content-blocks/ContentBlockRenderer";
-import { PracticeTaskWidget } from "~/components/PracticeTaskWidget";
 import {
   loadCourse,
   loadTask,
   resolveContentLink,
-} from "~/content/server-loaders";
+} from "~/entities/content/api/server-loaders";
+import { LessonPage } from "~/pages/lesson/ui/lesson-page";
 
 export const Route = createFileRoute("/course/$courseSlug/$lessonSlug")({
   loader: async ({ params }) => {
@@ -31,32 +30,10 @@ export const Route = createFileRoute("/course/$courseSlug/$lessonSlug")({
       ? [{ title: `${loaderData.lesson.title} — ${loaderData.course.title}` }]
       : [],
   }),
-  component: LessonPage,
+  component: LessonRoute,
 });
 
-function LessonPage() {
+function LessonRoute() {
   const { lesson, tasks, unlocks } = Route.useLoaderData();
-
-  return (
-    <main className="container">
-      <h1>{lesson.title}</h1>
-      <ContentBlockList blocks={lesson.content_blocks} />
-
-      <h2>Практика</h2>
-      {tasks.map((task) => (
-        <PracticeTaskWidget key={task.id} task={task} />
-      ))}
-
-      {unlocks.length > 0 && (
-        <aside role="note">
-          <p>Теперь ты готов к темам ЕГЭ:</p>
-          <ul>
-            {unlocks.map((link) => (
-              <li key={link.id}>{link.title}</li>
-            ))}
-          </ul>
-        </aside>
-      )}
-    </main>
-  );
+  return <LessonPage lesson={lesson} tasks={tasks} unlocks={unlocks} />;
 }

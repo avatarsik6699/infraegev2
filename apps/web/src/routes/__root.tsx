@@ -4,8 +4,8 @@ import {
   Outlet,
   Scripts,
 } from "@tanstack/react-router";
-import { SiteFooter } from "~/components/SiteFooter";
-import appCss from "~/styles/tokens.css?url";
+import { SiteFooter } from "~/widgets/site-footer/ui/site-footer";
+import appCss from "~/shared/styles/tokens.css?url";
 
 export const Route = createRootRoute({
   head: () => ({
