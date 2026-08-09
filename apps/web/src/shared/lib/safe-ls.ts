@@ -8,16 +8,16 @@
 import { runtime } from "~/shared/config/runtime";
 import { safeJson, type TypeGuard } from "~/shared/lib/safe-json";
 
-export interface SafeLsKey<T> {
+export type SafeLsKey<T> = {
   key: string;
   version: number;
   guard: TypeGuard<T>;
-}
+};
 
-interface Envelope<T> {
+type Envelope<T> = {
   version: number;
   data: T;
-}
+};
 
 function isEnvelope<T>(
   value: unknown,

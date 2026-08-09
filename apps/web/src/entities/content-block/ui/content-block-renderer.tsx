@@ -16,13 +16,17 @@ import { TextBlock } from "~/entities/content-block/ui/text-block";
 import { VideoEmbedBlock } from "~/entities/content-block/ui/video-embed-block";
 import { WorkedExampleBlock } from "~/entities/content-block/ui/worked-example-block";
 
+type Props = { block: ContentBlock };
+
 /** Dispatches a single ContentBlock to its renderer, by `type` (docs/SPEC.md §3/§5.2). */
-export function ContentBlockRenderer({ block }: { block: ContentBlock }) {
-  switch (block.type) {
+export const ContentBlockRenderer: React.FC<Props> = (props) => {
+  switch (props.block.type) {
     case "text":
-      return <TextBlock data={block.data as TextBlockData} />;
+      return <TextBlock data={props.block.data as TextBlockData} />;
     case "diagram": {
-      const data = block.data as DiagramBlockData | TableDiagramBlockData;
+      const data = props.block.data as
+        | DiagramBlockData
+        | TableDiagramBlockData;
       return data.kind === "bit-grid" ? (
         <TableDiagramBlock data={data} />
       ) : (
@@ -30,31 +34,25 @@ export function ContentBlockRenderer({ block }: { block: ContentBlock }) {
       );
     }
     case "code_example":
-      return <CodeExampleBlock data={block.data as CodeExampleBlockData} />;
+      return (
+        <CodeExampleBlock data={props.block.data as CodeExampleBlockData} />
+      );
     case "worked_example":
     case "completion_exercise":
     case "productive_failure_prompt":
       return (
         <WorkedExampleBlock
-          type={block.type}
-          data={block.data as WorkedExampleBlockData}
+          type={props.block.type}
+          data={props.block.data as WorkedExampleBlockData}
         />
       );
     case "callout":
-      return <CalloutBlock data={block.data as CalloutBlockData} />;
+      return <CalloutBlock data={props.block.data as CalloutBlockData} />;
     case "video_embed":
-      return <VideoEmbedBlock data={block.data as VideoEmbedBlockData} />;
+      return (
+        <VideoEmbedBlock data={props.block.data as VideoEmbedBlockData} />
+      );
     default:
       return null;
   }
-}
-
-export function ContentBlockList({ blocks }: { blocks: ContentBlock[] }) {
-  return (
-    <>
-      {blocks.map((block, i) => (
-        <ContentBlockRenderer key={i} block={block} />
-      ))}
-    </>
-  );
-}
+};

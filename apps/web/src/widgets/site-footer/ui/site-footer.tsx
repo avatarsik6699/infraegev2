@@ -1,11 +1,13 @@
 import { Link } from "@tanstack/react-router";
 import { env } from "~/shared/config/env";
 
+type Props = Record<string, never>;
+
 /**
  * Feedback link + age marking, per docs/SPEC.md §5.2/§8. No feedback form — a Telegram/VK link
  * is zero-cost and reuses the same channel monitoring alerts land in (docs/SPEC.md §7.2).
  */
-export function SiteFooter() {
+export const SiteFooter: React.FC<Props> = () => {
   return (
     <footer
       className="container"
@@ -25,4 +27,4 @@ export function SiteFooter() {
       <p aria-label="Возрастная маркировка">12+</p>
     </footer>
   );
-}
+};

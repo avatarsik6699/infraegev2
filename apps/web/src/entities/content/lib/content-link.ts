@@ -1,7 +1,7 @@
 export class ContentNotFoundError extends Error {}
 
-export interface ResolvedContentLink {
+export type ResolvedContentLink = {
   id: string;
   title: string;
   href: string;
-}
+};

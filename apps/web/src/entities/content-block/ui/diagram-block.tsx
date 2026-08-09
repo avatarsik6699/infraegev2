@@ -5,28 +5,30 @@ import type {
 
 const NODE_RADIUS = 20;
 
+type Props = { data: DiagramBlockData };
+
 /**
  * Graph/automaton diagrams — pure SVG rendered from declarative data (docs/SPEC.md §5.2).
  * Coordinates come from the content file, not a runtime layout algorithm. Labels sit on the
  * element they describe (split-attention effect, learning-science-principles.md §1.2), and the
  * element the surrounding text is discussing gets `data-highlighted` (signalling, §2).
  */
-export function DiagramBlock({ data }: { data: DiagramBlockData }) {
-  const nodes = data.elements.filter((el) => el.kind === "node");
+export const DiagramBlock: React.FC<Props> = (props) => {
+  const nodes = props.data.elements.filter((el) => el.kind === "node");
   const byId = new Map(nodes.map((n) => [n.id, n]));
 
   return (
     <svg
       role="img"
-      aria-label={data.ariaLabel}
+      aria-label={props.data.ariaLabel}
       viewBox={viewBoxFor(nodes)}
       style={{ maxWidth: "100%", height: "auto" }}
     >
-      <title>{data.ariaLabel}</title>
-      {data.elements.map((el) => renderElement(el, byId))}
+      <title>{props.data.ariaLabel}</title>
+      {props.data.elements.map((el) => renderElement(el, byId))}
     </svg>
   );
-}
+};
 
 function viewBoxFor(nodes: DiagramElement[]): string {
   const xs = nodes.map((n) => n.x ?? 0);

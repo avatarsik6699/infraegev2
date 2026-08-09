@@ -18,7 +18,7 @@ export type ContentBlockType =
   | "callout"
   | "video_embed";
 
-export interface DiagramElement {
+export type DiagramElement = {
   kind: "node" | "edge" | "arrow" | "label" | "highlight";
   id: string;
   // Node/label position (ignored for edge/arrow, which reference from/to node ids).
@@ -29,52 +29,52 @@ export interface DiagramElement {
   text?: string;
   /** Marks this element as the one the adjacent text is currently talking about (Mayer signalling). */
   highlighted?: boolean;
-}
+};
 
-export interface DiagramBlockData {
+export type DiagramBlockData = {
   kind: "graph" | "automaton";
   /** Text alternative for the whole diagram — required for a11y (SPEC.md §8). */
   ariaLabel: string;
   elements: DiagramElement[];
-}
+};
 
-export interface TableDiagramBlockData {
+export type TableDiagramBlockData = {
   kind: "bit-grid";
   ariaLabel: string;
   headers: string[];
   rows: string[][];
   /** Cell coordinates ("row,col") to visually highlight. */
   highlightedCells?: string[];
-}
+};
 
-export interface TextBlockData {
+export type TextBlockData = {
   markdown: string;
-}
+};
 
-export interface CodeExampleBlockData {
+export type CodeExampleBlockData = {
   language: string;
   code: string;
   caption?: string;
-}
+};
 
-export interface CalloutBlockData {
+export type CalloutBlockData = {
   // Author-written asides inside content_blocks. The auto-derived "эта тема легче даётся, если
   // понимать X → перейти" navigation widget is a separate component driven by Topic.prerequisites/
   // related_topics/unlocks_topics (SPEC.md §5.2's PrerequisiteCallout), not this block type.
   tone: "info" | "warning";
   markdown: string;
-}
+};
 
-export interface VideoEmbedBlockData {
+export type VideoEmbedBlockData = {
   url: string;
   title: string;
-}
+};
 
 /** worked_example / completion_exercise / productive_failure_prompt share the same shape. */
-export interface WorkedExampleBlockData {
+export type WorkedExampleBlockData = {
   prompt: string;
   steps: string[];
-}
+};
 
 export type ContentBlockData =
   | TextBlockData
@@ -85,12 +85,12 @@ export type ContentBlockData =
   | VideoEmbedBlockData
   | WorkedExampleBlockData;
 
-export interface ContentBlock {
+export type ContentBlock = {
   type: ContentBlockType;
   data: ContentBlockData;
-}
+};
 
-export interface Topic {
+export type Topic = {
   id: string;
   task_numbers: number[];
   title: string;
@@ -103,9 +103,9 @@ export interface Topic {
   practice_task_ids: string[];
   status: ContentStatus;
   access_tier: AccessTier;
-}
+};
 
-export interface CourseLesson {
+export type CourseLesson = {
   id: string;
   course_id: string;
   title: string;
@@ -113,15 +113,15 @@ export interface CourseLesson {
   unlocks_topics: string[];
   practice_task_ids: string[];
   status: ContentStatus;
-}
+};
 
-export interface Course {
+export type Course = {
   id: string;
   title: string;
   lessons: CourseLesson[];
-}
+};
 
-export interface Task {
+export type Task = {
   id: string;
   topic_ids: string[];
   statement: string;
@@ -132,4 +132,4 @@ export interface Task {
   explanation: ContentBlock[];
   difficulty: 1 | 2 | 3;
   is_interleaving_eligible: boolean;
-}
+};

@@ -1,10 +1,15 @@
 import { useState } from "react";
-import { ContentBlockList } from "~/entities/content-block/ui/content-block-renderer";
+import { ContentBlockList } from "~/entities/content-block/ui/content-block-list";
 import type { Task } from "~/entities/content/model/types";
 import {
   checkAnswer,
   type CheckAnswerResponse,
 } from "~/features/check-answer/api/check-answer";
+
+type Props = {
+  task: Task;
+  onMastered?: () => void;
+};
 
 /**
  * Practice widget — `interaction_type: production` in priority over `recognition` (docs/SPEC.md
@@ -12,13 +17,7 @@ import {
  * what the testing effect relies on (learning-science-principles.md §3.1). Progressively enhanced:
  * the statement/explanation are server-rendered; only "submit answer" needs JS.
  */
-export function PracticeTaskWidget({
-  task,
-  onMastered,
-}: {
-  task: Task;
-  onMastered?: () => void;
-}) {
+export const PracticeTaskWidget: React.FC<Props> = (props) => {
   const [answer, setAnswer] = useState("");
   const [result, setResult] = useState<CheckAnswerResponse | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -27,9 +26,9 @@ export function PracticeTaskWidget({
     event.preventDefault();
     setSubmitting(true);
     try {
-      const body = await checkAnswer(task.id, answer);
+      const body = await checkAnswer(props.task.id, answer);
       setResult(body);
-      if (body.correct) onMastered?.();
+      if (body.correct) props.onMastered?.();
     } finally {
       setSubmitting(false);
     }
@@ -37,7 +36,7 @@ export function PracticeTaskWidget({
 
   return (
     <form onSubmit={handleSubmit}>
-      <p>{task.statement}</p>
+      <p>{props.task.statement}</p>
       <label>
         Ответ
         <input
@@ -62,4 +61,4 @@ export function PracticeTaskWidget({
       )}
     </form>
   );
-}
+};

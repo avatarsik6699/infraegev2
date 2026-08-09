@@ -6,9 +6,9 @@
  */
 import { safeLs, type SafeLsKey } from "~/shared/lib/safe-ls";
 
-interface ProgressState {
+type ProgressState = {
   masteredIds: string[];
-}
+};
 
 function isProgressState(value: unknown): value is ProgressState {
   return (

@@ -1,10 +1,10 @@
 import { env } from "~/shared/config/env";
 import type { Task } from "~/entities/content/model/types";
 
-export interface CheckAnswerResponse {
+export type CheckAnswerResponse = {
   correct: boolean;
   explanation: Task["explanation"];
-}
+};
 
 function isCheckAnswerResponse(value: unknown): value is CheckAnswerResponse {
   return (

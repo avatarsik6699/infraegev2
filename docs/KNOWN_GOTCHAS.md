@@ -11,6 +11,23 @@
 
 ## Gotcha Log
 
+### Pre-emptive: Mantine adoption must use v9.5.1 exclusively (change 04+)
+
+- **Applies when**: change 04 starts the planned Mantine UI-kit adoption; it is not part of
+  change 03.
+- **Risk**: stale examples or documentation can introduce an older Mantine API, while independently
+  resolved `@mantine/*` dependencies can leave the frontend on incompatible mixed versions.
+- **Required version**: pin `@mantine/core`, `@mantine/hooks`, and every other adopted
+  `@mantine/*` package (`form`, `notifications`, `modals`, `dates`, etc.) to the exact version
+  `9.5.1` in `apps/web/package.json`. Do not use ranges, older major/minor versions, or mix Mantine
+  package versions.
+- **Documentation**: before writing Mantine integration code, fetch current documentation through
+  Context7 and scope the lookup to v9.5.1. If Context7 coverage is stale or too thin for v9, use
+  Mantine's LLM documentation guide at <https://mantine.dev/guides/llms/> to find Mantine's own
+  current documentation sources.
+- **Origin**: explicit architect instruction during change 03 scoping; also recorded in
+  `docs/changes/03-testing-conventions.md` § Implementation Notes.
+
 ### TanStack Start: filesystem access in a route `loader` breaks the client build
 
 - **Symptoms**: `vite build` fails with `"join" is not exported by "__vite-browser-external"` (or
@@ -52,13 +69,12 @@
   plain `docker run`, but fails inside `docker build`'s `RUN` step with
   `TypeError: fetch failed` / `ECONNREFUSED 127.0.0.1:<port>` — the prerender crawler can't reach
   the server it just started, on the same loopback interface, in the same process.
-- **Root cause**: observed in this project's dev environment (a nested/sandboxed Docker daemon) —
-  BuildKit's default (isolated) network namespace for `RUN` steps does not support whatever the
-  TanStack Start/Vinxi prerender step needs for its self-connect loopback fetch, even though a
-  plain Node `http` server's own self-connect works fine in the same sandbox. This is very likely
-  specific to constrained/nested container environments (CI runners with heavy network sandboxing,
-  this coding assistant's own Docker daemon) — a normal Docker host is expected to build fine with
-  the default network.
+- **Root cause**: Vite's preview server can bind a different loopback address family from the
+  `127.0.0.1` URL advertised to TanStack Start's prerender crawler inside BuildKit. The failure is
+  therefore a preview bind mismatch, not proof that Docker Desktop or the daemon is offline.
+- **Fix**: set `preview.host: "127.0.0.1"` in `apps/web/vite.config.ts`. Keep the official
+  `nitro/vite` plugin enabled as well: without it, current TanStack Start emits only a fetch-style
+  `dist/server/server.js`, not the runnable `.output/server/index.mjs` expected by the Node image.
 - **Attempted fix that makes it WORSE, do not use**: passing `network: host` to the build (compose
   `build.network: host` or `docker build --network=host`) does make the prerender step itself
   succeed, but in this same environment it triggers a *different*, more severe BuildKit bug: files
@@ -66,10 +82,19 @@
   very next instruction (even a trivial `RUN ls`, or a later stage's `COPY --from=builder`) reports
   the files as missing. Verified reproducible with both the BuildKit and legacy (`DOCKER_BUILDKIT=0`)
   builders.
-- **Status**: unresolved in this environment as of change 02. If this recurs, verify on a real
-  Docker host/CI runner before assuming it's a code regression — check `docker version`'s server
-  component and whether the daemon itself runs nested/sandboxed before spending time on the
-  Dockerfile.
+- **Verified**: change 03 on Docker Desktop/BuildKit — Compose built both images, TanStack
+  prerendered `/`, `/privacy`, and `/terms`, and all four services became healthy.
+
+### Nitro Vite dev server bypasses Vite's `server.proxy`
+
+- **Symptoms**: a browser `fetch("/api/...")` works before adding `nitro/vite`, then returns the
+  TanStack application's HTML 404 in local dev even though FastAPI is healthy and
+  `server.proxy["/api"]` is configured.
+- **Root cause**: Nitro owns the full-stack Vite request pipeline, so the request reaches the Start
+  renderer instead of Vite's proxy middleware.
+- **Fix**: configure a development-only Nitro `routeRules` entry for `/api/**`, with a proxy target
+  ending in `/api/**` so Nitro preserves the wildcard suffix. Keep the rule out of production
+  builds, where Nginx owns `/api` routing. See `apps/web/vite.config.ts`.
 
 ### Docker: non-root user with `--no-create-home` breaks `uv run`
 

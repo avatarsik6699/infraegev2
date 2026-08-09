@@ -1,5 +1,7 @@
-export function ProgressBar({ ratio }: { ratio: number }) {
-  const percent = Math.round(ratio * 100);
+type Props = { ratio: number };
+
+export const ProgressBar: React.FC<Props> = (props) => {
+  const percent = Math.round(props.ratio * 100);
   return (
     <div
       role="progressbar"
@@ -26,4 +28,4 @@ export function ProgressBar({ ratio }: { ratio: number }) {
       <span>{percent}%</span>
     </div>
   );
-}
+};

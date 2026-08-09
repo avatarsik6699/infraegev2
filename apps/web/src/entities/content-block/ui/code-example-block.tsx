@@ -1,12 +1,14 @@
 import type { CodeExampleBlockData } from "~/entities/content/model/types";
 
-export function CodeExampleBlock({ data }: { data: CodeExampleBlockData }) {
+type Props = { data: CodeExampleBlockData };
+
+export const CodeExampleBlock: React.FC<Props> = (props) => {
   return (
     <figure>
       <pre>
-        <code>{data.code}</code>
+        <code>{props.data.code}</code>
       </pre>
-      {data.caption && <figcaption>{data.caption}</figcaption>}
+      {props.data.caption && <figcaption>{props.data.caption}</figcaption>}
     </figure>
   );
-}
+};

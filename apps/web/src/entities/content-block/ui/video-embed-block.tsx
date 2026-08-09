@@ -1,10 +1,12 @@
 import type { VideoEmbedBlockData } from "~/entities/content/model/types";
 
-export function VideoEmbedBlock({ data }: { data: VideoEmbedBlockData }) {
+type Props = { data: VideoEmbedBlockData };
+
+export const VideoEmbedBlock: React.FC<Props> = (props) => {
   return (
     <figure>
-      <iframe src={data.url} title={data.title} allowFullScreen />
-      <figcaption>{data.title}</figcaption>
+      <iframe src={props.data.url} title={props.data.title} allowFullScreen />
+      <figcaption>{props.data.title}</figcaption>
     </figure>
   );
-}
+};

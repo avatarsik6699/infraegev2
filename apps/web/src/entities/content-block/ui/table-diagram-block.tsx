@@ -1,27 +1,29 @@
 import type { TableDiagramBlockData } from "~/entities/content/model/types";
 
+type Props = { data: TableDiagramBlockData };
+
 /**
  * Encoding grids / truth tables — semantic HTML `<table>`, not SVG (docs/SPEC.md §5.2/§8):
  * a screen reader understands a real table natively, which arbitrary text-in-SVG does not.
  */
-export function TableDiagramBlock({ data }: { data: TableDiagramBlockData }) {
-  const highlighted = new Set(data.highlightedCells ?? []);
+export const TableDiagramBlock: React.FC<Props> = (props) => {
+  const highlighted = new Set(props.data.highlightedCells ?? []);
   return (
-    <table data-diagram aria-label={data.ariaLabel}>
+    <table data-diagram aria-label={props.data.ariaLabel}>
       <caption style={{ position: "absolute", left: "-9999px" }}>
-        {data.ariaLabel}
+        {props.data.ariaLabel}
       </caption>
       <thead>
         <tr>
-          {data.headers.map((h, i) => (
-            <th key={i} scope="col">
-              {h}
+          {props.data.headers.map((header, index) => (
+            <th key={index} scope="col">
+              {header}
             </th>
           ))}
         </tr>
       </thead>
       <tbody>
-        {data.rows.map((row, rowIndex) => (
+        {props.data.rows.map((row, rowIndex) => (
           <tr key={rowIndex}>
             {row.map((cell, colIndex) => (
               <td
@@ -38,4 +40,4 @@ export function TableDiagramBlock({ data }: { data: TableDiagramBlockData }) {
       </tbody>
     </table>
   );
-}
+};

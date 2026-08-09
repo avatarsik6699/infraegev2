@@ -9,24 +9,23 @@ const HEADING: Record<string, string> = {
   productive_failure_prompt: "Попробуй сам, пока не зная теории",
 };
 
+type Props = {
+  type: ContentBlockType;
+  data: WorkedExampleBlockData;
+};
+
 /** worked_example / completion_exercise / productive_failure_prompt share one shape (docs/SPEC.md
  * §3) — they differ only in pedagogical framing (learning-science-principles.md §1.1/§5), not
  * structure, so one component renders all three with a type-specific heading. */
-export function WorkedExampleBlock({
-  type,
-  data,
-}: {
-  type: ContentBlockType;
-  data: WorkedExampleBlockData;
-}) {
+export const WorkedExampleBlock: React.FC<Props> = (props) => {
   return (
-    <section data-block-type={type}>
-      <h3>{HEADING[type] ?? "Пример"}</h3>
-      <p>{data.prompt}</p>
-      {type === "worked_example" ? (
+    <section data-block-type={props.type}>
+      <h3>{HEADING[props.type] ?? "Пример"}</h3>
+      <p>{props.data.prompt}</p>
+      {props.type === "worked_example" ? (
         <ol>
-          {data.steps.map((step, i) => (
-            <li key={i}>{step}</li>
+          {props.data.steps.map((step, index) => (
+            <li key={index}>{step}</li>
           ))}
         </ol>
       ) : (
@@ -35,12 +34,12 @@ export function WorkedExampleBlock({
         <details>
           <summary>Показать разбор</summary>
           <ol>
-            {data.steps.map((step, i) => (
-              <li key={i}>{step}</li>
+            {props.data.steps.map((step, index) => (
+              <li key={index}>{step}</li>
             ))}
           </ol>
         </details>
       )}
     </section>
   );
-}
+};

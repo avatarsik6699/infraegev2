@@ -58,7 +58,7 @@ not the full suite. Fill every row that applies; mark `n/a` for rows that don't 
 |-------|---------|-----------------------|
 | Lint | `cd apps/web && pnpm lint` (frontend) · `cd apps/api && uv run ruff check app tests` (backend) | run from repo root or `apps/web`/`apps/api` |
 | Type-check (affected) | `cd apps/web && pnpm typecheck` (frontend) · `cd apps/api && npx pyright app tests` (backend) | pyright reads `[tool.pyright]` in `apps/api/pyproject.toml` |
-| Targeted / affected unit tests | `cd apps/web && pnpm test` (frontend, vitest) · `cd apps/api && uv run pytest` (backend) | |
+| Targeted / affected unit tests | `cd apps/web && pnpm test` (frontend, Vitest) · `cd apps/api && uv run pytest` (backend) | Local developer environment only; never run in Docker or CI (Testing Policy below) |
 | LSP diagnostics | available: yes | pyright (backend) confirmed working; frontend TS diagnostics via `tsc`/editor LSP |
 | API type regen (`openapi-typescript` or equivalent) | `n/a` | no OpenAPI schema/generated client yet — the frontend calls `/api/tasks/{id}/check` with a hand-written `fetch` + inline response type (`PracticeTaskWidget.tsx`), not a generated client. Revisit once the API surface grows past one endpoint. |
 
@@ -71,13 +71,13 @@ task — it's expensive by design; that's why it's separated from the Fast Gate.
 
 | Check | Command | Preconditions / notes |
 |-------|---------|-----------------------|
-| Infrastructure / bootstrap | `docker compose -f infra/docker-compose.yml -f infra/docker-compose.override.yml up --build -d` | verified live in change 02: `postgres`+`api`+`nginx` come up healthy, `/health` and `POST /api/tasks/{id}/check` work through nginx, the `/api/tasks/` rate limit fires (`503` past its burst — nginx's default `limit_req_status`, not `429`). `web`'s image could not be built in that session's sandboxed Docker environment (docs/KNOWN_GOTCHAS.md) — still needs a real Docker host to close out fully |
+| Infrastructure / bootstrap | `docker compose -f infra/docker-compose.yml -f infra/docker-compose.override.yml up --build -d` | verified live in change 03 on Docker Desktop/BuildKit: all four services become healthy; frontend and `/health` return 200 through Nginx. Change 02 also verified `POST /api/tasks/{id}/check` and the `/api/tasks/` rate limit (`503` past its burst — Nginx's default `limit_req_status`, not `429`) |
 | Migrations | `n/a` | content is git-based, not DB-backed (docs/SPEC.md §3); no schema exists yet to migrate |
 | Backend test suite | `cd apps/api && uv run pytest` | 11 tests as of change 01 |
 | Frontend build | `cd apps/web && pnpm build` | runs TanStack Start's build-time prerender; fails the build if any crawled page 500s |
 | Frontend unit tests | `cd apps/web && pnpm test` | 8 tests as of change 01 |
-| E2E lint / determinism | `n/a` | no e2e suite yet |
-| E2E (Playwright) | `n/a` | no e2e suite yet — revisit once there's more than one real published topic to click through |
+| E2E lint / determinism | `pnpm --filter web exec playwright test --list` | local only, never CI'd; validates Playwright config/spec collection without running the journey |
+| E2E (Playwright) | `pnpm --filter web test:e2e` | local only, never CI'd; starts local Vite + Uvicorn through Playwright `webServer` and runs the single Chromium project |
 | Smoke | `curl -f http://localhost:8000/health` (backend) — frontend smoke is the build's own prerender crawl | |
 | SAST (e.g. Semgrep) | `n/a` | not set up in change 01 |
 | Secrets scan (e.g. Gitleaks) | `n/a` | not set up in change 01 |
@@ -111,6 +111,7 @@ tool that isn't available must be reported as skipped with a reason, never silen
 | Domain | Required tool/skill | When | Available in this project |
 |--------|----------------------|------|-----------------------------|
 | Frontend UI change | Playwright MCP / chrome-devtools MCP (screenshot + console check) | after implementing, before checking off | yes |
+| E2E test change | Playwright + Page Object Model | during implementation and verification; use `e2e/pages/*.page.ts` and user-visible locators | yes |
 | TypeScript / Python change | LSP diagnostics | after implementing, before checking off | yes |
 | New/changed API surface | `openapi-typescript` (or equivalent) regen + frontend re-typecheck | after backend contract change | n/a — no OpenAPI schema yet, see Fast Gate note |
 | Architecture-level decision | architecture skill | during planning | yes |
@@ -122,19 +123,44 @@ ambiguous between "not asked" and "not needed."
 
 ---
 
+## Testing Policy
+
+Unit tests (Vitest and pytest) and browser e2e tests (Playwright) run **only locally in the
+developer's own environment**. They must never be containerized and must never be added to CI,
+including after a CI pipeline exists for non-test checks such as lint or build. This is a durable
+architect decision, not a temporary gap in the current CI setup.
+
+Docker may serve the application for unrelated infrastructure verification, but no test runner or
+browser is installed or executed inside an application image or Compose service. The Playwright
+gate uses its locally installed Chromium and locally starts Vite and Uvicorn.
+
 ## Testing
 
 ### Backend
 
 ```bash
-# [test command + notes]
+cd apps/api && uv run pytest
 ```
+
+- Use FastAPI `TestClient`; do not call a live server or external network from unit tests.
+- Prefer function-style pytest tests and fixtures. Build content fixtures with small helpers such
+  as the existing `make_task()` pattern rather than shared mutable objects or class setup.
+- Keep each test focused on observable service or HTTP behavior.
 
 ### Frontend (if applicable)
 
 ```bash
-# [unit / typecheck / e2e commands]
+pnpm --filter web test
+pnpm --filter web test:e2e:install  # installs Chromium only; first run / browser update
+pnpm --filter web test:e2e
 ```
+
+- Vitest unit tests live in `apps/web/tests/`.
+- Playwright specs live in `apps/web/e2e/`; browser journeys use Page Object Model classes from
+  `e2e/pages/*.page.ts` and user-visible `getByRole`/`getByText` locators.
+- `playwright.config.ts` contains one project only: Chromium. It starts the local frontend and
+  backend automatically; `PLAYWRIGHT_BASE_URL` and `BACKEND_URL` may override its loopback
+  defaults.
 
 ---
 
