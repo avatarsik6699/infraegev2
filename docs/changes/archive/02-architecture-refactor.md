@@ -118,12 +118,11 @@ config the app never reads.
 - [x] `I7` Add `infra/docker-compose.prod.yml` — production env, `restart: always`, required-var
   hard-fails, TLS/certbot deferred but documented in comments, "delete override.yml on server"
   warning — _Depends on:_ `I2`
-- [ ] `I8` First real end-to-end `docker compose up --build`; curl `/health`, load a theory page,
+- [x] `I8` First real end-to-end `docker compose up --build`; curl `/health`, load a theory page,
   `POST` the checker endpoint, confirm the rate limit fires past its burst — _Depends on:_
-  `I1`–`I7`. **Partially done**: `postgres`+`api`+`nginx` verified fully live (health check,
-  checker endpoint, structlog+request-id in logs, rate limit returns `503` past burst — nginx's
-  default `limit_req_status`, not `429` as originally assumed). `web`'s image could not be built
-  in this session's environment — see Implementation Notes. Needs a real Docker host to close out.
+  `I1`–`I7`. Closed by the later change 03 Full Gate on Docker Desktop/BuildKit: both images built,
+  all four services became healthy, frontend/theory rendering and `/health` returned 200, and the
+  checker/rate-limit path had already been verified in this change.
 
 ### Other
 - [x] `T1` `docs/KNOWN_GOTCHAS.md`: add (a) "moving `server-loaders.ts` is safe, splitting it is
@@ -256,7 +255,7 @@ found nothing, keep the default checked line below.
   consulted — fixed with a `try/except IndexError` fallback. Also fixed along the way: the
   non-root `appuser` (`--no-create-home`) broke every `uv run` invocation with an EACCES on
   `$HOME/.cache/uv` — fixed via `UV_CACHE_DIR=/app/.cache/uv`.
-- `I8` verified `postgres`+`api`+`nginx` fully live (health check, the checker endpoint through
+- `I8` initially verified `postgres`+`api`+`nginx` fully live (health check, the checker endpoint through
   nginx with structlog+request-id in the logs, and the `/api/tasks/` rate limit firing — `503` past
   the burst, nginx's default `limit_req_status`, not the `429` the Backlog item originally assumed).
   `web`'s image could not be built in this session's sandboxed Docker environment: its build-time
@@ -268,10 +267,9 @@ found nothing, keep the default checked line below.
   BuildKit and the legacy builder) — so it was reverted rather than kept. Full details and the
   "verify on a real Docker host before assuming a code regression" guidance are in
   `docs/KNOWN_GOTCHAS.md`. This is believed to be specific to this coding assistant's own
-  nested/sandboxed Docker daemon, not a defect in the Dockerfile/compose config — but it means `I8`
-  is not fully closed, and a real Docker host should re-run
-  `docker compose -f infra/docker-compose.yml -f infra/docker-compose.override.yml up --build` end
-  to end (including `web`) before this change ships.
+  nested/sandboxed Docker daemon, not a defect in the Dockerfile/compose config. Change 03 later
+  fixed the preview bind and Node adapter issues and closed `I8` on Docker Desktop/BuildKit: the
+  full Compose build succeeded and `postgres`, `api`, `web`, and `nginx` all became healthy.
 
 ---
 
