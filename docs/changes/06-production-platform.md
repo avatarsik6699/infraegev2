@@ -86,6 +86,8 @@ explicitly accepted deferred risk, not a release blocker for this change.
   container runtime instead of the unprivileged deploy user's filesystem permissions — _Depends on:_ I8, I10
 - [x] `T12` Replace the production Nginx volume list instead of resetting it away so the live
   certificate and ACME webroot are mounted into the container — _Depends on:_ I3, I8, T11
+- [x] `T13` Prevent the one-off TLS check from consuming the remaining SSH-fed deploy script via
+  its default interactive stdin attachment — _Depends on:_ I8, T11, T12
 
 ---
 

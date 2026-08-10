@@ -37,7 +37,7 @@ trap rollback ERR
 
 printf '%s\n' "$DEPLOY_SHA" > "$release_dir/.deploy-sha"
 run_compose "$release_dir" "$DEPLOY_SHA" pull
-if ! run_compose "$release_dir" "$DEPLOY_SHA" run --rm --no-deps --entrypoint /bin/sh nginx \
+if ! run_compose "$release_dir" "$DEPLOY_SHA" run --rm --no-deps --interactive=false --entrypoint /bin/sh nginx \
   -ec 'test -r /etc/letsencrypt/live/infraege.ru/fullchain.pem && test -r /etc/letsencrypt/live/infraege.ru/privkey.pem'; then
   echo "TLS certificate is missing or unreadable inside the Nginx container; run obtain-initial-certificate.sh first" >&2
   exit 1
