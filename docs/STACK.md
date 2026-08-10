@@ -10,6 +10,11 @@
 >
 > **Stack status:** CONFIGURED (change 01 — project-foundation)
 
+For a portable starting point for another project on a similar single-VPS stack, use the
+[`Infrastructure blueprint`](INFRASTRUCTURE_BLUEPRINT.md). It separates reusable invariants from
+infraege-specific values and includes the new-project inputs, acceptance evidence, and production
+pitfalls that must be reconsidered rather than copied.
+
 ---
 
 ## Stack
