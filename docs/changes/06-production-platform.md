@@ -84,6 +84,8 @@ explicitly accepted deferred risk, not a release blocker for this change.
   deploy while preserving fail-closed health checks after deployment — _Depends on:_ I8, I17, T9
 - [x] `T11` Make the remote deploy verify the root-owned Let's Encrypt certificate through the
   container runtime instead of the unprivileged deploy user's filesystem permissions — _Depends on:_ I8, I10
+- [x] `T12` Replace the production Nginx volume list instead of resetting it away so the live
+  certificate and ACME webroot are mounted into the container — _Depends on:_ I3, I8, T11
 
 ---
 

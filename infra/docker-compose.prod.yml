@@ -13,7 +13,7 @@ services:
   nginx:
     image: ghcr.io/avatarsik6699/infraegev2-nginx:${DEPLOY_SHA:?DEPLOY_SHA is required}
     build: !reset null
-    volumes: !reset
+    volumes: !override
       - /etc/letsencrypt:/etc/letsencrypt:ro
       - /var/www/certbot:/var/www/certbot:ro
     ports:
