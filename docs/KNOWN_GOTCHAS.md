@@ -11,6 +11,17 @@
 
 ## Gotcha Log
 
+### A split Vite + `tsc` application can silently retain a renamed server entrypoint
+
+- **Symptom:** the current TypeScript source builds successfully, but `pnpm start` runs an old BFF
+  file from `dist/server/` or fails only on a clean machine because the configured entrypoint was
+  renamed.
+- **Root cause:** Vite cleans only its client `outDir`; plain `tsc` emits current files but does not
+  delete JavaScript whose source was renamed or removed.
+- **Fix:** make the application build remove its own narrow `dist` directory before running Vite
+  and `tsc`, and keep the `start` entrypoint aligned with the emitted bootstrap (`server/main.ts`
+  for `apps/ops`). Never rely on a dirty local `dist` as evidence that the production command works.
+
 ### Mantine adoption must use v9.5.1 exclusively (change 04+)
 
 - **Applies when**: change 04 starts the planned Mantine UI-kit adoption; it is not part of
@@ -146,6 +157,50 @@
   `DateTime(timezone=True)` explicitly (matched in the corresponding Alembic migration with
   `sa.DateTime(timezone=True)`); always construct "now" via `datetime.now(UTC)`, never bare
   `datetime.now()`.
+
+### Production: same-host Restic is not disaster recovery
+
+- **Symptoms**: local restore checks pass, but loss of the VPS would remove both live data and the
+  Restic repository.
+- **Root cause**: change 06 intentionally starts with `/var/backups/infraege` on the same VPS.
+- **Fix**: add an encrypted off-site Restic backend and prove a restore from that backend before
+  storing irreplaceable user data. This accepted residual risk is documented in the backup runbook.
+
+### Production: deferred operator details and RKN work remain a legal risk
+
+- **Symptoms**: legal pages can describe current processing, but cannot identify the operator or
+  prove completion of the Russian regulator workflow.
+- **Root cause**: the architect explicitly deferred operator requisites and RKN notification into
+  one later task and accepted the risk; no age marking is shown.
+- **Fix**: before collecting accounts or other non-minimal personal data, obtain specialist legal
+  review and close the combined operator/RKN task. Do not invent requisites in source code.
+
+### WSL: Lighthouse must use Playwright's Linux Chromium
+
+- **Symptoms**: Lighthouse selects Windows Chrome through WSL interop, waits for DevTools and fails
+  with `bind() ... 0x2740` or `ECONNREFUSED` after concurrent runs.
+- **Root cause**: the Windows browser and Linux CLI disagree about lifecycle/port ownership.
+- **Fix**: `lighthouserc.cjs` resolves `chromium.executablePath()` from the web workspace and passes
+  it as `collect.chromePath`; keep the dedicated `127.0.0.2:3200` server address as well.
+
+### Production: certificate preflight must bypass the VPS hostname override
+
+- **Symptoms**: public DNS correctly points `infraege.ru` at the VPS, but the certificate script
+  reports the apex as `127.0.1.1` when it runs on that same VPS.
+- **Root cause**: the provider sets the machine hostname to `infraege`; the local resolver can
+  answer the machine's own name from `/etc/hosts` instead of returning public DNS.
+- **Fix**: query two explicit public resolvers (`1.1.1.1` and `8.8.8.8`) in the certificate
+  preflight. Do not weaken or remove the DNS check.
+
+### Docker Compose: do not mount production-only Nginx vhosts into the local stack
+
+- **Symptoms**: the local Nginx still serves existing traffic, but `nginx -t` hangs until the
+  container healthcheck times out and Compose reports it as unhealthy.
+- **Root cause**: mounting the whole `infra/nginx/conf.d/` directory makes local configuration
+  validation resolve production-only upstreams such as Umami, which do not exist in the base
+  Compose topology. A pre-existing Nginx master can hide the invalid new vhost until validation.
+- **Fix**: base Compose mounts only `infraege.conf` as `default.conf`; the production Nginx image
+  copies `infraege.prod.conf` itself. Keep those configuration inputs separate.
 
 <!--
 ### [Title — short, punchy, searchable]

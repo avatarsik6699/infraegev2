@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+command_name=${SSH_ORIGINAL_COMMAND:-${1:-}}
+
+case "$command_name" in
+  fail2ban-status)
+    sudo -n /usr/bin/fail2ban-client status
+    sudo -n /usr/bin/fail2ban-client status sshd
+    sudo -n /usr/bin/fail2ban-client status infraege-nginx-limit
+    ;;
+  backup-status)
+    if [[ -r /var/lib/infraege/backup-status.json ]]; then
+      cat /var/lib/infraege/backup-status.json
+    else
+      printf '%s\n' '{"status":"missing"}'
+    fi
+    ;;
+  deploy-status)
+    if [[ -r /var/lib/infraege/deploy-status.json ]]; then
+      cat /var/lib/infraege/deploy-status.json
+    else
+      printf '%s\n' '{"status":"unknown"}'
+    fi
+    ;;
+  *)
+    echo "unsupported operation" >&2
+    exit 64
+    ;;
+esac

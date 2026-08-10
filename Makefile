@@ -11,8 +11,7 @@ LOCAL_ENV := POSTGRES_USER=infraege \
 	POSTGRES_DB=infraege \
 	APP_ENV=development \
 	SITE_URL=http://localhost:8080 \
-	TELEGRAM_BOT_TOKEN= \
-	TELEGRAM_CHAT_ID=
+	DEPLOY_SHA=development
 
 .DEFAULT_GOAL := help
 

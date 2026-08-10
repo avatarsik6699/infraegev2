@@ -1,0 +1,11 @@
+[Unit]
+Description=infraege monthly restore drill
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+User=deploy
+Group=deploy
+WorkingDirectory=/opt/infraege/current
+ExecStart=/opt/infraege/current/scripts/restore-check.sh

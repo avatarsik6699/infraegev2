@@ -14,6 +14,7 @@ export const env = {
     feedbackUrl:
       import.meta.env.VITE_FEEDBACK_URL ??
       "https://t.me/REPLACE_WITH_FEEDBACK_CHANNEL",
+    umamiWebsiteId: import.meta.env.VITE_UMAMI_WEBSITE_ID ?? "",
   },
   server: {
     get siteUrl(): string {

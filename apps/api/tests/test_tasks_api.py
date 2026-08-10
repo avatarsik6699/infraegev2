@@ -1,16 +1,35 @@
 import json
 
+from fastapi import HTTPException
 from fastapi.testclient import TestClient
 
 from app.core.config import settings
 from app.main import app
 from app.modules.content.schemas import Task
+from app.modules.health.api import require_database
 
 client = TestClient(app)
 
 
 def test_health():
-    assert client.get("/health").json() == {"status": "ok"}
+    expected = {"status": "ok", "version": settings.deploy_sha}
+    assert client.get("/health/live").json() == expected
+    assert client.get("/health/ready").json() == expected
+    assert client.get("/health").json() == expected
+
+
+def test_readiness_returns_503_when_database_is_unavailable():
+    async def unavailable_database() -> None:
+        raise HTTPException(status_code=503, detail="database unavailable")
+
+    app.dependency_overrides[require_database] = unavailable_database
+    try:
+        assert client.get("/health/live").status_code == 200
+        response = client.get("/health/ready")
+        assert response.status_code == 503
+        assert response.json() == {"detail": "database unavailable"}
+    finally:
+        app.dependency_overrides.clear()
 
 
 def load_graphs_and_tables_tasks() -> list[Task]:
@@ -58,7 +77,6 @@ def test_check_unknown_task_returns_404():
     assert response.status_code == 404
 
 
-def test_error_alert_middleware_does_not_break_normal_requests():
-    # Middleware logs a warning instead of raising when Telegram isn't configured.
+def test_error_logging_middleware_does_not_break_normal_requests():
     response = client.get("/health")
     assert response.status_code == 200

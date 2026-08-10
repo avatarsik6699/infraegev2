@@ -1,0 +1,10 @@
+[Unit]
+Description=Daily infraege production backup
+
+[Timer]
+OnCalendar=*-*-* 02:15:00 UTC
+RandomizedDelaySec=20m
+Persistent=true
+
+[Install]
+WantedBy=timers.target

@@ -3,6 +3,10 @@ import { useState } from "react";
 import { ContentBlockList } from "~/entities/content-block";
 import { Typography } from "~/shared/components/typography";
 import {
+  trackPracticeAnswer,
+  trackPracticeStart,
+} from "~/shared/lib/analytics";
+import {
   checkAnswer,
   type CheckAnswerResponse,
 } from "./api/check-answer";
@@ -21,9 +25,19 @@ export const PracticeTaskWidget: React.FC<PracticeTaskWidgetTypes.Props> = (prop
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
+    if (props.analytics) {
+      trackPracticeStart(props.analytics.topicId, props.analytics.totalTasks);
+    }
     setSubmitting(true);
     try {
       const body = await checkAnswer(props.task.id, answer);
+      if (props.analytics) {
+        trackPracticeAnswer(
+          props.analytics.topicId,
+          props.analytics.taskIndex,
+          body.correct,
+        );
+      }
       setResult(body);
       if (body.correct) props.onCorrect?.(props.task.id);
     } finally {

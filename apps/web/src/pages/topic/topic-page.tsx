@@ -1,5 +1,5 @@
 import { Badge, Stack } from "@mantine/core";
-import { useSyncExternalStore } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 import { ContentBlockList } from "~/entities/content-block";
 import { PrerequisiteCallout } from "~/entities/content";
 import { PracticeTaskWidget } from "~/features/check-answer";
@@ -12,6 +12,7 @@ import {
 } from "~/features/track-progress";
 import { PageContainer } from "~/shared/components/page-container";
 import { Typography } from "~/shared/components/typography";
+import { trackTopicView } from "~/shared/lib/analytics";
 import styles from "./topic-page.module.css";
 import type { TopicPageTypes } from "./topic-page.types";
 
@@ -29,6 +30,10 @@ export const TopicPage: React.FC<TopicPageTypes.Props> = (props) => {
     () => JSON.stringify(serverProgress),
   );
   const progress = JSON.parse(progressSnapshot) as TopicProgress;
+
+  useEffect(() => {
+    trackTopicView(props.topic.id);
+  }, [props.topic.id]);
 
   function handleCorrect(taskId: string) {
     recordCorrectTask(
@@ -66,10 +71,15 @@ export const TopicPage: React.FC<TopicPageTypes.Props> = (props) => {
               : `${progress.correctCount} из ${progress.totalCount} задач решено верно`}
           </Typography.Text>
         </div>
-        {props.tasks.map((task) => (
+        {props.tasks.map((task, taskIndex) => (
           <PracticeTaskWidget
             key={task.id}
             task={task}
+            analytics={{
+              topicId: props.topic.id,
+              taskIndex: taskIndex + 1,
+              totalTasks: props.tasks.length,
+            }}
             onCorrect={handleCorrect}
           />
         ))}

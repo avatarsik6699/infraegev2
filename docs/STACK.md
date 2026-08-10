@@ -20,9 +20,10 @@
 | Backend | Python/FastAPI (`apps/api`) |
 | Database | PostgreSQL (provisioned in `infra/docker-compose.yml`; no schema/migrations yet — content is git-based, docs/SPEC.md §3) |
 | Cache | — (not needed on M0) |
-| Infra | Docker Compose: Nginx (front door + rate limiting) → `web` (Node/Nitro) and `api` (Uvicorn); Postgres |
-| Package managers | uv (`apps/api`), pnpm workspace (`apps/web`, root `package.json`) |
-| CI | — (not wired yet; `pnpm --filter web build/test/typecheck/lint`, `uv run pytest`, `node scripts/validate-content-links.mjs` are the commands a CI config would call) |
+| Operations UI | Local-first React/Vite `apps/ops`, Mantine Core/Charts 9.5.1 + Recharts 3.10.1, loopback-only Node BFF |
+| Infra | Docker Compose: Nginx → `web`/`api`/Postgres plus pinned Umami/Beszel; Ubuntu 24.04, systemd, journald, fail2ban, WireGuard, Restic |
+| Package managers | uv (`apps/api`), pnpm workspace (`apps/web`, `apps/ops`, root) |
+| CI/CD | GitHub Actions: static/security/audit checks without tests; GHCR SHA images; environment-approved manual SSH deploy with rollback; scheduled uptime/TLS probe |
 
 ---
 
@@ -59,9 +60,9 @@ not the full suite. Fill every row that applies; mark `n/a` for rows that don't 
 
 | Check | Command | Preconditions / notes |
 |-------|---------|-----------------------|
-| Lint | `cd apps/web && pnpm lint` (frontend) · `cd apps/api && uv run ruff check app tests` (backend) | run from repo root or `apps/web`/`apps/api` |
-| Type-check (affected) | `cd apps/web && pnpm typecheck` (frontend) · `cd apps/api && npx pyright app tests` (backend) | pyright reads `[tool.pyright]` in `apps/api/pyproject.toml` |
-| Targeted / affected unit tests | `cd apps/web && pnpm test` (frontend, Vitest) · `cd apps/api && uv run pytest` (backend) | Local developer environment only; never run in Docker or CI (Testing Policy below) |
+| Lint | `pnpm --filter web lint` · `pnpm --filter ops lint` · `cd apps/api && uv run ruff check app tests` | scope to touched workspace |
+| Type-check (affected) | `pnpm --filter web typecheck` · `pnpm --filter ops typecheck` · `cd apps/api && pnpm exec pyright app tests` | pyright reads `[tool.pyright]` in `apps/api/pyproject.toml` |
+| Targeted / affected unit tests | `pnpm --filter web test` · `pnpm --filter ops test` · `cd apps/api && uv run pytest` | local developer environment only; never Docker/CI |
 | LSP diagnostics | available: yes | pyright (backend) confirmed working; frontend TS diagnostics via `tsc`/editor LSP |
 | API type regen (`openapi-typescript` or equivalent) | `n/a` | no OpenAPI schema/generated client yet — the frontend calls `/api/tasks/{id}/check` with a hand-written `fetch` + inline response type (`PracticeTaskWidget.tsx`), not a generated client. Revisit once the API surface grows past one endpoint. |
 
@@ -76,20 +77,20 @@ task — it's expensive by design; that's why it's separated from the Fast Gate.
 |-------|---------|-----------------------|
 | Infrastructure / bootstrap | `docker compose -f infra/docker-compose.yml -f infra/docker-compose.override.yml up --build -d` | verified live in change 03 on Docker Desktop/BuildKit: all four services become healthy; frontend and `/health` return 200 through Nginx. Change 02 also verified `POST /api/tasks/{id}/check` and the `/api/tasks/` rate limit (`503` past its burst — Nginx's default `limit_req_status`, not `429`) |
 | Migrations | `n/a` | content is git-based, not DB-backed (docs/SPEC.md §3); no schema exists yet to migrate |
-| Backend test suite | `cd apps/api && uv run pytest` | 11 tests as of change 01 |
+| Backend test suite | `cd apps/api && uv run pytest` | local only |
 | Frontend build | `cd apps/web && pnpm build` | runs TanStack Start's build-time prerender; fails the build if any crawled page 500s |
-| Frontend unit tests | `cd apps/web && pnpm test` | 19 tests as of change 05 |
+| Frontend unit tests | `pnpm --filter web test && pnpm --filter ops test` | local only |
 | E2E lint / determinism | `pnpm --filter web exec playwright test --list` | local only, never CI'd; validates Playwright config/spec collection without running the journey |
 | E2E (Playwright) | `pnpm --filter web test:e2e` | local only, never CI'd; starts local Vite + Uvicorn through Playwright `webServer` and runs 2 smoke tests in the single Chromium project |
-| Smoke | `curl -f http://localhost:8000/health` (backend) — frontend smoke is the build's own prerender crawl | |
-| SAST (e.g. Semgrep) | `n/a` | not set up in change 01 |
-| Secrets scan (e.g. Gitleaks) | `n/a` | not set up in change 01 |
-| Dependency audit (e.g. Trivy / `npm audit` / `pip-audit`) | `n/a` | not set up in change 01 |
-| Accessibility audit (e.g. axe / Lighthouse CI) | `n/a` | not set up in change 01 — §8 a11y requirements (diagram `aria-label`, semantic tables) are implemented and manually verified in the rendered HTML, but not yet gated by an automated audit |
-| Performance budget (e.g. Lighthouse CI, Core Web Vitals) | `n/a` | not set up in change 01; thresholds are LCP ≤ 2.5s, INP ≤ 200ms, CLS ≤ 0.1 per docs/SPEC.md §8 once it is |
+| Ops dashboard | `pnpm --filter ops build` | BFF tests are included in the local-only workspace unit test row |
+| Smoke | `curl -f http://localhost:8000/health/ready` (backend) — frontend smoke is the build prerender crawl | |
+| SAST / secrets / dependency audit | `pnpm audit:security` | Docker required for pinned Gitleaks 8.30.1 and Trivy 0.73.0; Semgrep 1.172.0 and pip-audit 2.10.1 run through uvx |
+| Accessibility audit | `pnpm audit:a11y` | local Playwright/axe; four public routes, serious/critical violations fail |
+| Performance budget | `SITE_URL=https://infraege.ru pnpm --filter web build && pnpm audit:performance` | local Chrome; median of 3, LCP ≤2.5s, CLS ≤0.1, TBT ≤200ms as lab proxy for INP |
 | Content link validation | `node scripts/validate-content-links.mjs` | docs/SPEC.md §2.2/§3/§7.2 — fails if any `prerequisites`/`related_topics`/`unlocks_topics`/`practice_task_ids`/`topic_ids` reference a nonexistent id |
 
-No helper script yet — the commands above are run individually.
+Tests remain local-only; the security command is also mirrored in GitHub Actions without invoking
+pytest, Vitest or Playwright.
 
 ---
 
@@ -100,9 +101,10 @@ before pushing to `origin/main`.
 
 | Check | Command | Preconditions / notes |
 |-------|---------|-----------------------|
-| Container image scan (e.g. Trivy) | `n/a` | not set up in change 01 |
-| Health-check / zero-downtime deploy verification | `curl -f https://<domain>/health` (via Nginx → api) once deployed | `<domain>` and deploy pipeline don't exist yet — no VPS deploy in change 01 |
-| `gh` authenticated for this repo | no | not checked in this environment |
+| Container image build + scan | `pnpm audit:images` | builds the three production images and fails on fixed HIGH/CRITICAL findings |
+| Production Compose render | `scripts/render-production-config.sh /etc/infraege/production.env >/dev/null` | run on the provisioned VPS or against a complete temporary env |
+| Health/deploy verification | `scripts/check-release-target.sh` | Before the first push, permits an unavailable site only when the remote repository has no default branch and both public A records match the VPS. Later releases fail closed unless current production health reports a 40-character SHA. After push, the deploy workflow checks the public page/readiness and rolls back on failure. |
+| `gh` repository/environment | `gh auth status && gh repo view avatarsik6699/infraegev2` | production approval and required secrets/vars must be configured |
 
 ---
 
@@ -182,7 +184,7 @@ pnpm --filter web test:e2e
 ├── .claude/skills/            # Claude Code skill wrappers (plan, work, ship)
 ├── .agents/skills/             # generic-agent skill wrappers (plan, work, ship)
 ├── plugins/sdd-workflow/       # Codex plugin (skills, commands, MCP, hooks)
-├── apps/web/, apps/api/, infra/, content/, scripts/
+├── apps/web/, apps/api/, apps/ops/, infra/, ops/, content/, scripts/
 └── AGENTS.md / CLAUDE.md       # AI agent rules
 ```
 
@@ -219,7 +221,7 @@ api/         router.py — aggregates every module's router under one prefix (`/
              — see docs/changes/02-architecture-refactor.md's Contracts section for why).
 core/        cross-cutting infra with no HTTP surface of its own: config (Settings), exceptions
              (AppException base), logging (structlog), middleware (request-id + error alerting),
-             alerting (Telegram). Modules may import from core/; core/ must not import modules/.
+             structured logging). Modules may import from core/; core/ must not import modules/.
 modules/     one package per bounded context — health/, content/, tasks/. Each holds only the
              files it needs: api.py (routes), service.py (logic), schemas.py (Pydantic DTOs),
              exceptions.py (module-specific AppException subclasses).
@@ -230,6 +232,33 @@ shared/      cross-module code used by >= 2 modules — stays an empty placehold
 No repository/ORM layer exists yet — content is git-based (SPEC.md §3), not DB-backed. When a
 first SQLAlchemy model is added, see the pre-emptive asyncpg datetime rule in
 `docs/KNOWN_GOTCHAS.md` before writing it.
+
+### Operations application (`apps/ops/`) — local-first FSD/DDD-like boundary
+
+```
+contracts/    BFF-to-browser DTOs and the finite dashboard range contract; package-local and
+              compiled with the server so the two TypeScript consumers cannot drift.
+src/          React client: app.tsx is composition-only; pages/dashboard owns its API client,
+              polling model and private components; shared contains only reusable config/styles.
+server/main.ts
+              production bootstrap and listen only.
+server/app.ts request-listener factory; composes the API router and static client delivery.
+server/core/  cross-cutting config, HTTP response and static-file infrastructure.
+server/api/   aggregates module HTTP handlers; contains no source-specific logic.
+server/modules/
+              projects and dashboard bounded contexts, each with its API/service/schema needs.
+server/integrations/
+              isolated Availability/Beszel/Umami/journald/fail2ban adapters implementing the
+              dashboard reader port; credentials are resolved only inside the BFF.
+```
+
+The React client follows the same pragmatic rule as `apps/web`: a one-page component used only by
+that page remains private under `pages/dashboard/components/`; do not create ceremonial widgets,
+features or shared helpers until a second consumer exists. The ops ESLint config enforces
+`app -> pages -> shared` and public `index.ts` imports. On the server, dependencies point inward:
+modules define the reader port, integrations implement it, and `main.ts` injects the live adapters.
+The BFF stays on Node's built-in `http`/`fetch`; do not add a web framework or global singleton
+cache for the current two-route surface.
 
 ---
 

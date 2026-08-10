@@ -8,7 +8,15 @@
     "test": "pnpm --filter web test",
     "typecheck": "pnpm --filter web typecheck",
     "lint": "pnpm --filter web lint",
-    "validate:content": "node scripts/validate-content-links.mjs"
+    "validate:content": "node scripts/validate-content-links.mjs",
+    "audit:a11y": "pnpm --filter web exec playwright test e2e/accessibility.spec.ts",
+    "audit:performance": "lhci autorun",
+    "audit:security": "bash scripts/security-gate.sh",
+    "audit:images": "bash scripts/image-gate.sh"
   },
-  "packageManager": "pnpm@10.33.0"
+  "packageManager": "pnpm@10.33.0",
+  "devDependencies": {
+    "@lhci/cli": "0.15.1",
+    "pyright": "1.1.411"
+  }
 }

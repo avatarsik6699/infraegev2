@@ -1,0 +1,44 @@
+.header {
+  align-items: flex-end;
+}
+
+.controls {
+  align-items: center;
+}
+
+.eyebrow,
+.utilityLabel {
+  color: var(--ops-muted);
+  font-family: var(--mantine-font-family-monospace);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+}
+
+.sourceTape {
+  min-height: 44px;
+  padding: 0.5rem 0.75rem;
+  border-block: 1px solid var(--ops-rule);
+  background: linear-gradient(90deg, rgb(111 140 255 / 8%), transparent 55%);
+}
+
+.metricCard {
+  border-top: 2px solid var(--ops-signal);
+  background: var(--ops-panel);
+}
+
+.metricValue {
+  font-family: var(--mantine-font-family-monospace);
+  font-size: clamp(1.35rem, 2vw, 2rem);
+  font-variant-numeric: tabular-nums;
+}
+
+.chartSummary {
+  min-height: 2.5rem;
+}
+
+@media (max-width: 48rem) {
+  .header,
+  .controls {
+    align-items: stretch;
+  }
+}

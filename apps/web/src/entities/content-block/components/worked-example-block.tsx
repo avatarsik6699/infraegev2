@@ -29,7 +29,7 @@ export const WorkedExampleBlock: React.FC<Props> = (props) => {
       radius="sm"
     >
       <Stack gap="sm">
-        <Typography.Title order={3}>
+        <Typography.Title order={2}>
           {HEADING[props.type] ?? "Пример"}
         </Typography.Title>
         <Typography.Text>{props.data.prompt}</Typography.Text>

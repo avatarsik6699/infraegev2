@@ -1,7 +1,4 @@
-"""Request-id context binding + Telegram error alerting.
-
-docs/SPEC.md §7.2 — the "узнать о падении иначе, чем от случайной жалобы" requirement.
-"""
+"""Request-id context binding and structured request/error logging."""
 
 from __future__ import annotations
 
@@ -13,8 +10,6 @@ from fastapi import FastAPI
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 from starlette.requests import Request
 from starlette.responses import Response
-
-from app.core.alerting import send_alert
 
 logger = structlog.get_logger(__name__)
 
@@ -51,24 +46,28 @@ class RequestContextMiddleware(BaseHTTPMiddleware):
         return response
 
 
-class ErrorAlertMiddleware(BaseHTTPMiddleware):
+class ErrorLoggingMiddleware(BaseHTTPMiddleware):
     async def dispatch(
         self, request: Request, call_next: RequestResponseEndpoint
     ) -> Response:
         try:
             response = await call_next(request)
-        except Exception as exc:  # noqa: BLE001 — must catch everything to alert on it
+        except Exception:  # noqa: BLE001 — log every unhandled request failure
             logger.exception(
-                "Unhandled exception", method=request.method, path=request.url.path
-            )
-            await send_alert(
-                f"🔥 Unhandled exception\n{request.method} {request.url.path}\n{exc!r}"
+                "request.unhandled_error",
+                method=request.method,
+                path=request.url.path,
+                error_category="unhandled_exception",
             )
             raise
 
         if response.status_code >= 500:
-            await send_alert(
-                f"⚠️ {response.status_code} on {request.method} {request.url.path}"
+            logger.error(
+                "request.server_error",
+                method=request.method,
+                path=request.url.path,
+                status_code=response.status_code,
+                error_category="http_5xx",
             )
 
         return response
@@ -77,6 +76,6 @@ class ErrorAlertMiddleware(BaseHTTPMiddleware):
 def register_middleware(app: FastAPI) -> None:
     # Added in this order so RequestContextMiddleware ends up outermost (Starlette wraps
     # most-recently-added middleware last) — request-id context must be bound before
-    # ErrorAlertMiddleware's dispatch runs, so an alert's log line is correlatable.
-    app.add_middleware(ErrorAlertMiddleware)
+    # ErrorLoggingMiddleware's dispatch runs, so every error line is correlatable.
+    app.add_middleware(ErrorLoggingMiddleware)
     app.add_middleware(RequestContextMiddleware)

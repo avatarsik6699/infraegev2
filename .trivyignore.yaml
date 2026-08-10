@@ -1,0 +1,9 @@
+misconfigurations:
+  - id: AVD-DS-0002
+    paths:
+      - "infra/nginx/Dockerfile"
+    expired_at: 2027-08-10
+    statement: >-
+      Nginx keeps its master process as root to bind ports 80/443, read the root-owned
+      Let's Encrypt private key, and support graceful reloads. nginx.conf explicitly runs
+      request-handling workers as the unprivileged nginx user.

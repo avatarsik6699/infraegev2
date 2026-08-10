@@ -1,0 +1,25 @@
+name: External production probe
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: HTTP and readiness
+        run: |
+          curl --fail --silent --show-error --max-time 15 https://infraege.ru/ >/dev/null
+          curl --fail --silent --show-error --max-time 15 https://infraege.ru/health/ready |
+            jq -e '.status == "ok" and (.version | length == 40)' >/dev/null
+      - name: TLS expires in more than 14 days
+        run: |
+          expires=$(echo | openssl s_client -servername infraege.ru -connect infraege.ru:443 2>/dev/null |
+            openssl x509 -noout -enddate | cut -d= -f2)
+          test $(( $(date --date "$expires" +%s) - $(date +%s) )) -gt $((14 * 86400))

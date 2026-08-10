@@ -14,11 +14,19 @@ COPY apps/web/package.json apps/web/package.json
 RUN pnpm install --frozen-lockfile
 COPY apps/web apps/web
 COPY content ./content
+RUN chown -R node:node /repo
+USER node
 CMD ["pnpm", "--filter", "web", "dev", "--host", "0.0.0.0", "--port", "3000", "--strictPort"]
 
 FROM node:22-slim AS builder
 RUN corepack enable
 WORKDIR /repo
+ARG SITE_URL=https://infraege.ru
+ARG VITE_FEEDBACK_URL
+ARG VITE_UMAMI_WEBSITE_ID
+ENV SITE_URL=${SITE_URL}
+ENV VITE_FEEDBACK_URL=${VITE_FEEDBACK_URL}
+ENV VITE_UMAMI_WEBSITE_ID=${VITE_UMAMI_WEBSITE_ID}
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
 COPY apps/web/package.json apps/web/package.json
 RUN pnpm install --frozen-lockfile

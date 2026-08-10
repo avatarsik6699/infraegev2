@@ -19,8 +19,8 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(extra="ignore")
 
     content_dir: Path = _DEFAULT_CONTENT_DIR
-    telegram_bot_token: str = ""
-    telegram_chat_id: str = ""
+    database_url: str = ""
+    deploy_sha: str = "development"
     app_env: str = "development"
     log_level: str = "INFO"
 

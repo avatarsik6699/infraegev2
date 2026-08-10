@@ -4,8 +4,9 @@
 практика с проверкой ответа и локальный прогресс без регистрации.
 
 Технический контракт проекта находится в [`docs/SPEC.md`](docs/SPEC.md), команды и версии стека —
-в [`docs/STACK.md`](docs/STACK.md). Ниже приведён практический путь для локального запуска и
-ручной проверки текущей темы change 05.
+в [`docs/STACK.md`](docs/STACK.md). Production-контур для `infraege.ru` описан в
+[`docs/runbooks/production.md`](docs/runbooks/production.md); до появления реального VPS/DNS это
+готовая, но ещё не выполненная процедура.
 
 ## Быстрый старт — одна команда
 
@@ -102,7 +103,7 @@ curl -f http://127.0.0.1:8000/health
 Ожидаемый ответ:
 
 ```json
-{"status":"ok"}
+{"status":"ok","version":"development"}
 ```
 
 Терминал 2 — frontend:
@@ -113,7 +114,7 @@ pnpm dev
 
 Откройте главную страницу: <http://127.0.0.1:3000/>.
 
-Опубликованная тема change 05 доступна с главной страницы и включена в sitemap. Прямой URL:
+Опубликованная тема доступна с главной страницы и включена в sitemap. Прямой URL:
 
 <http://127.0.0.1:3000/theory/zadanie-1-graphs-and-tables>
 
@@ -167,6 +168,15 @@ pnpm test
 pnpm build
 ```
 
+Локальный operations dashboard:
+
+```bash
+pnpm --filter ops lint
+pnpm --filter ops typecheck
+pnpm --filter ops test
+pnpm --filter ops build
+```
+
 Backend:
 
 ```bash
@@ -198,6 +208,35 @@ pnpm --filter web test:e2e
 Playwright сам поднимает свежие frontend/backend на изолированных адресах
 `127.0.0.2:3100` и `127.0.0.2:8100`; заранее запускать серверы для него не нужно. Сценарий проходит
 по опубликованной теме с главной страницы, проверяет порог освоения, sitemap, no-JS и оба viewport.
+
+Production-гейты (подробные предусловия — в `docs/STACK.md`):
+
+```bash
+pnpm audit:a11y       # локальный Playwright + axe; никогда не запускается в CI
+pnpm audit:performance
+pnpm audit:security
+pnpm audit:images
+```
+
+## Production и наблюдаемость
+
+Production использует неизменяемые GHCR-образы с тегом полного commit SHA, Nginx с TLS,
+PostgreSQL, Umami, Beszel, journald/fail2ban и Restic. GitHub Actions выполняет только статические
+и security-проверки — unit/E2E тесты по контракту проекта остаются локальными. Деплой запускается
+вручную для выбранного SHA через защищённое environment `production`, проверяет smoke/readiness и
+откатывает неуспешный релиз.
+
+`apps/ops` — отдельное локальное приложение, которое через WireGuard объединяет доступность,
+нагрузку, контейнеры, аналитику, ошибки и fail2ban. Конфигурация нескольких проектов уже
+поддерживается; секреты задаются только environment-переменными. Запуск и модель доступа описаны
+в [`docs/runbooks/monitoring.md`](docs/runbooks/monitoring.md).
+
+Runbook’и: [DNS/TLS](docs/runbooks/dns-tls.md),
+[backup/restore](docs/runbooks/backup-restore.md),
+[инциденты](docs/runbooks/incident-response.md). Уведомление РКН и реквизиты оператора отложены по
+явному решению владельца; это принятый юридический риск. Локальный backup на том же VPS также не
+считается disaster recovery — off-site backend остаётся обязательным до появления незаменимых
+пользовательских данных.
 
 ## Ручная проверка темы change 05
 

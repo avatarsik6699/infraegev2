@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "projects": [
+    {
+      "id": "infraege",
+      "name": "infraege.ru",
+      "publicUrl": "https://infraege.ru",
+      "beszel": {
+        "baseUrl": "http://10.77.0.1:8090",
+        "systemId": "replace-with-system-id",
+        "emailEnv": "INFRAEGE_BESZEL_EMAIL",
+        "passwordEnv": "INFRAEGE_BESZEL_PASSWORD"
+      },
+      "umami": {
+        "baseUrl": "http://10.77.0.1:3001/stats",
+        "websiteId": "replace-with-website-id",
+        "usernameEnv": "INFRAEGE_UMAMI_USERNAME",
+        "passwordEnv": "INFRAEGE_UMAMI_PASSWORD",
+        "timezone": "Europe/Moscow"
+      },
+      "journal": { "baseUrl": "http://10.77.0.1:19531" },
+      "fail2ban": {
+        "sshTarget": "ops-reader@10.77.0.1",
+        "keyPathEnv": "INFRAEGE_OPS_SSH_KEY"
+      }
+    }
+  ]
+}

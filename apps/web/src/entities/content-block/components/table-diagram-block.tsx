@@ -25,16 +25,18 @@ export const TableDiagramBlock: React.FC<Props> = (props) => {
       <tbody>
         {props.data.rows.map((row, rowIndex) => (
           <tr key={rowIndex}>
-            {row.map((cell, colIndex) => (
-              <td
-                key={colIndex}
-                data-highlighted={
-                  highlighted.has(`${rowIndex},${colIndex}`) ? "true" : "false"
-                }
-              >
-                {cell}
-              </td>
-            ))}
+            {row.map((cell, colIndex) => {
+              const isHighlighted = highlighted.has(`${rowIndex},${colIndex}`);
+              return colIndex === 0 ? (
+                <th key={colIndex} scope="row" data-highlighted={isHighlighted ? "true" : "false"}>
+                  {cell}
+                </th>
+              ) : (
+                <td key={colIndex} data-highlighted={isHighlighted ? "true" : "false"}>
+                  {cell}
+                </td>
+              );
+            })}
           </tr>
         ))}
       </tbody>

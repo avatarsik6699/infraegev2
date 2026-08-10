@@ -1,31 +1,139 @@
-# Production overlay:
-#   docker compose -f infra/docker-compose.yml -f infra/docker-compose.prod.yml up -d --build
-#
-# CRITICAL: docker-compose.override.yml must NOT exist on the production host. Compose auto-loads
-# any file with that exact name — leaving it there would silently republish Postgres/api/web ports
-# to the internet and flip APP_ENV back to development.
-#
-# TLS/Let's Encrypt is deliberately deferred: no domain is chosen yet (docs/SPEC.md §7.1). When one
-# is, add a certbot service + an HTTPS server block here, e.g.:
-#   docker run --rm -v certbot-etc:/etc/letsencrypt ... certonly --standalone -d <domain>
-# plus a renewal cron job — and mount a TLS-enabled conf.d over infra/nginx/conf.d.
+# Production overlay for infraege.ru. Render with scripts/render-production-config.sh.
+x-journald: &journald
+  driver: journald
+  options:
+    tag: "infraege/{{.Name}}"
+    labels: "com.infraege.service,com.infraege.version"
+
+x-runtime-labels: &runtime-labels
+  com.infraege.project: infraege
+  com.infraege.version: ${DEPLOY_SHA:?DEPLOY_SHA is required}
+
 services:
   nginx:
+    image: ghcr.io/avatarsik6699/infraegev2-nginx:${DEPLOY_SHA:?DEPLOY_SHA is required}
+    build: !reset null
+    volumes: !reset
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - /var/www/certbot:/var/www/certbot:ro
     ports:
       - "80:80"
+      - "443:443"
+    mem_limit: 128m
     restart: always
+    labels:
+      <<: *runtime-labels
+      com.infraege.service: nginx
+    logging: *journald
 
   web:
-    restart: always
+    image: ghcr.io/avatarsik6699/infraegev2-web:${DEPLOY_SHA:?DEPLOY_SHA is required}
+    build: !reset null
     environment:
-      - SITE_URL=${SITE_URL:?SITE_URL is required in production}
+      SITE_URL: https://infraege.ru
+      DEPLOY_SHA: ${DEPLOY_SHA}
+    mem_limit: 512m
+    restart: always
+    labels:
+      <<: *runtime-labels
+      com.infraege.service: web
+    logging: *journald
 
   api:
+    image: ghcr.io/avatarsik6699/infraegev2-api:${DEPLOY_SHA:?DEPLOY_SHA is required}
+    build: !reset null
     environment:
-      - APP_ENV=production
-      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN:?TELEGRAM_BOT_TOKEN is required in production}
-      - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID:?TELEGRAM_CHAT_ID is required in production}
+      APP_ENV: production
+      DEPLOY_SHA: ${DEPLOY_SHA}
+    mem_limit: 384m
     restart: always
+    labels:
+      <<: *runtime-labels
+      com.infraege.service: api
+    logging: *journald
 
   postgres:
+    mem_limit: 640m
     restart: always
+    labels:
+      <<: *runtime-labels
+      com.infraege.service: postgres
+    logging: *journald
+
+  umami:
+    image: docker.umami.is/umami-software/umami:3.2.0
+    environment:
+      DATABASE_URL: ${UMAMI_DATABASE_URL:?UMAMI_DATABASE_URL is required}
+      APP_SECRET: ${UMAMI_APP_SECRET:?UMAMI_APP_SECRET is required}
+      BASE_PATH: /stats
+      COLLECT_API_ENDPOINT: /stats/api/send
+      DISABLE_TELEMETRY: "1"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    expose:
+      - "3000"
+    ports:
+      - "${WIREGUARD_IP:?WIREGUARD_IP is required}:3001:3000"
+    restart: always
+    mem_limit: 512m
+    labels:
+      <<: *runtime-labels
+      com.infraege.service: umami
+    logging: *journald
+
+  beszel:
+    image: henrygd/beszel:0.18.7
+    volumes:
+      - beszel-data:/beszel_data
+      - beszel-socket:/beszel_socket
+    ports:
+      - "${WIREGUARD_IP:?WIREGUARD_IP is required}:8090:8090"
+    restart: always
+    mem_limit: 224m
+    labels:
+      <<: *runtime-labels
+      com.infraege.service: beszel
+    logging: *journald
+
+  beszel-agent:
+    image: henrygd/beszel-agent:0.18.7
+    network_mode: host
+    volumes:
+      - beszel-socket:/beszel_socket
+    environment:
+      LISTEN: /beszel_socket/beszel.sock
+      HUB_URL: http://${WIREGUARD_IP}:8090
+      DOCKER_HOST: tcp://127.0.0.1:2375
+      TOKEN: ${BESZEL_AGENT_TOKEN:?BESZEL_AGENT_TOKEN is required}
+      KEY: ${BESZEL_AGENT_KEY:?BESZEL_AGENT_KEY is required}
+    restart: always
+    mem_limit: 96m
+    labels:
+      <<: *runtime-labels
+      com.infraege.service: beszel-agent
+    logging: *journald
+
+  docker-socket-proxy:
+    image: ghcr.io/tecnativa/docker-socket-proxy:v0.4.2
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    ports:
+      - "127.0.0.1:2375:2375"
+    environment:
+      CONTAINERS: "1"
+      INFO: "1"
+      PING: "1"
+      VERSION: "1"
+      POST: "0"
+      LOG_LEVEL: warning
+    restart: always
+    mem_limit: 64m
+    labels:
+      <<: *runtime-labels
+      com.infraege.service: docker-socket-proxy
+    logging: *journald
+
+volumes:
+  beszel-data:
+  beszel-socket:

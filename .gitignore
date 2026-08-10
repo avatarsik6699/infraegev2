@@ -2,6 +2,7 @@ node_modules/
 .output/
 .vinxi/
 dist/
+.lighthouseci/
 *.local
 
 __pycache__/

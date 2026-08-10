@@ -1,0 +1,97 @@
+name: Static quality and security
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - "feature/**"
+
+concurrency:
+  group: quality-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  static-quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320
+        with:
+          version: 10.33.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "22"
+          cache: pnpm
+      - uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78
+        with:
+          version: "0.8.15"
+          enable-cache: true
+      - run: pnpm install --frozen-lockfile
+      - name: Frontend static checks
+        run: |
+          pnpm --filter web lint
+          pnpm --filter web typecheck
+          SITE_URL=https://infraege.ru pnpm --filter web build
+          node scripts/validate-content-links.mjs
+      - name: Operations dashboard static checks
+        run: |
+          pnpm --filter ops lint
+          pnpm --filter ops typecheck
+          pnpm --filter ops build
+      - name: Backend static checks
+        working-directory: apps/api
+        run: |
+          uv sync --frozen --dev
+          uv run ruff check app tests
+          pnpm exec pyright app tests
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78
+        with:
+          version: "0.8.15"
+          enable-cache: true
+      - uses: zricethezav/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Semgrep SAST
+        run: uvx --from semgrep==1.172.0 semgrep scan --config p/default --error
+      - name: Trivy repository scan
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25
+        with:
+          scan-type: fs
+          scan-ref: .
+          scanners: vuln,misconfig,secret
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          exit-code: "1"
+
+  dependency-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320
+        with:
+          version: 10.33.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "22"
+          cache: pnpm
+      - uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78
+        with:
+          version: "0.8.15"
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm audit --prod --audit-level high
+      - name: Audit locked Python dependencies
+        working-directory: apps/api
+        run: |
+          uv export --frozen --no-dev --format requirements-txt --output-file /tmp/infraege-requirements.txt
+          uvx --from pip-audit==2.10.1 pip-audit --requirement /tmp/infraege-requirements.txt

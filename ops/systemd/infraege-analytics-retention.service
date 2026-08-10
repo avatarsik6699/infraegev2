@@ -1,0 +1,11 @@
+[Unit]
+Description=Prune infraege analytics beyond the documented retention
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+User=deploy
+Group=deploy
+WorkingDirectory=/opt/infraege/current
+ExecStart=/opt/infraege/current/scripts/prune-umami-data.sh

@@ -43,6 +43,7 @@ export default defineConfig((configEnv) => {
       // Nitro owns the request pipeline, so its route rule (rather than Vite's server.proxy)
       // forwards browser /api calls to FastAPI. Production routes /api through Nginx instead.
       nitro({
+        compressPublicAssets: { gzip: true, brotli: true },
         routeRules:
           configEnv.command === "serve"
             ? {

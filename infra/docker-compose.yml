@@ -14,7 +14,7 @@ services:
     image: nginx:1.27-alpine
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/conf.d/infraege.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
       web:
         condition: service_healthy
@@ -55,11 +55,8 @@ services:
       dockerfile: apps/api/Dockerfile
     environment:
       - APP_ENV=${APP_ENV:-production}
-      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN:-}
-      - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID:-}
-      # Not read by the backend yet — provisioned ahead of the optional future analytics
-      # aggregation table (docs/SPEC.md §3).
       - DATABASE_URL=postgresql://${POSTGRES_USER:-infraege}:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}@postgres:5432/${POSTGRES_DB:-infraege}
+      - DEPLOY_SHA=${DEPLOY_SHA:-development}
     depends_on:
       postgres:
         condition: service_healthy
@@ -70,7 +67,7 @@ services:
     healthcheck:
       test: [
         "CMD", "python", "-c",
-        "import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=3)"
+        "import urllib.request; urllib.request.urlopen('http://localhost:8000/health/ready', timeout=3)"
       ]
       interval: 30s
       timeout: 5s
