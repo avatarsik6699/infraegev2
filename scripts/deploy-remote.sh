@@ -9,10 +9,6 @@ release_dir="$root/releases/$DEPLOY_SHA"
 archive="/tmp/infraege-$DEPLOY_SHA.tar.gz"
 env_file=/etc/infraege/production.env
 [[ -r $archive && -r $env_file ]] || { echo "release archive or production env missing" >&2; exit 1; }
-[[ -r /etc/letsencrypt/live/infraege.ru/fullchain.pem ]] || {
-  echo "TLS certificate missing; run obtain-initial-certificate.sh first" >&2
-  exit 1
-}
 
 mkdir -p "$release_dir"
 tar --extract --gzip --file "$archive" --directory "$release_dir"
@@ -41,6 +37,11 @@ trap rollback ERR
 
 printf '%s\n' "$DEPLOY_SHA" > "$release_dir/.deploy-sha"
 run_compose "$release_dir" "$DEPLOY_SHA" pull
+if ! run_compose "$release_dir" "$DEPLOY_SHA" run --rm --no-deps --entrypoint /bin/sh nginx \
+  -ec 'test -r /etc/letsencrypt/live/infraege.ru/fullchain.pem && test -r /etc/letsencrypt/live/infraege.ru/privkey.pem'; then
+  echo "TLS certificate is missing or unreadable inside the Nginx container; run obtain-initial-certificate.sh first" >&2
+  exit 1
+fi
 run_compose "$release_dir" "$DEPLOY_SHA" up --detach postgres
 "$release_dir/scripts/init-umami-db.sh" "$env_file"
 run_compose "$release_dir" "$DEPLOY_SHA" up --detach --remove-orphans --wait --wait-timeout 180

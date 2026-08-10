@@ -82,6 +82,8 @@ explicitly accepted deferred risk, not a release blocker for this change.
   not depend on an unreachable pre-push commit and pip-audit excludes the editable project — _Depends on:_ I7, T7
 - [x] `T10` Let a failed initial CI attempt be replaced before the first successful production
   deploy while preserving fail-closed health checks after deployment — _Depends on:_ I8, I17, T9
+- [x] `T11` Make the remote deploy verify the root-owned Let's Encrypt certificate through the
+  container runtime instead of the unprivileged deploy user's filesystem permissions — _Depends on:_ I8, I10
 
 ---
 
