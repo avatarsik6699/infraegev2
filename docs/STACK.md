@@ -103,7 +103,7 @@ before pushing to `origin/main`.
 |-------|---------|-----------------------|
 | Container image build + scan | `pnpm audit:images` | builds the three production images and fails on fixed HIGH/CRITICAL findings |
 | Production Compose render | `scripts/render-production-config.sh /etc/infraege/production.env >/dev/null` | run on the provisioned VPS or against a complete temporary env |
-| Health/deploy verification | `scripts/check-release-target.sh` | Before the first push, permits an unavailable site only when the remote repository has no default branch and both public A records match the VPS. Later releases fail closed unless current production health reports a 40-character SHA. After push, the deploy workflow checks the public page/readiness and rolls back on failure. |
+| Health/deploy verification | `scripts/check-release-target.sh` | Before the first successful deploy, permits an unavailable site only when the deploy workflow has no successful run and both public A records match the VPS. Later releases fail closed unless current production health reports a 40-character SHA. After push, the deploy workflow checks the public page/readiness and rolls back on failure. |
 | `gh` repository/environment | `gh auth status && gh repo view avatarsik6699/infraegev2` | production approval and required secrets/vars must be configured |
 
 ---

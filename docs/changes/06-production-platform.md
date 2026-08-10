@@ -80,6 +80,8 @@ explicitly accepted deferred risk, not a release blocker for this change.
   socket is not mounted into the distro — _Depends on:_ T1
 - [x] `T9` Align GitHub security jobs with the verified local gate so an initial branch push does
   not depend on an unreachable pre-push commit and pip-audit excludes the editable project — _Depends on:_ I7, T7
+- [x] `T10` Let a failed initial CI attempt be replaced before the first successful production
+  deploy while preserving fail-closed health checks after deployment — _Depends on:_ I8, I17, T9
 
 ---
 
@@ -157,6 +159,9 @@ Vitest, pytest and Playwright remain local-only and must never be added to GitHu
 - The initial GitHub push cannot provide a reachable previous remote commit to a range-based
   Gitleaks action, so CI uses the same digest-pinned filesystem scan as the local gate. Its Python
   audit likewise excludes the editable project and audits only the exported locked dependencies.
+- Initial-release recovery is keyed to the absence of a successful deploy workflow, not to the
+  existence of remote `main`; once any deploy succeeds, an unavailable public health endpoint
+  blocks every later release exactly as before.
 
 ---
 

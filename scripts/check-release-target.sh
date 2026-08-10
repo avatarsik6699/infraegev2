@@ -13,9 +13,9 @@ if health_payload=$(curl --fail --silent --show-error --max-time 15 "$health_url
   exit 0
 fi
 
-default_branch=$(gh repo view "$github_repository" --json defaultBranchRef \
-  --jq '.defaultBranchRef.name // ""')
-if [[ -n $default_branch ]]; then
+successful_deploy_count=$(gh run list --repo "$github_repository" --workflow deploy.yml \
+  --status success --limit 1 --json databaseId --jq 'length')
+if [[ $successful_deploy_count != 0 ]]; then
   echo "Existing production target is unavailable; refusing a release over an unhealthy deployment." >&2
   exit 1
 fi
@@ -30,4 +30,4 @@ for dns_resolver in 1.1.1.1 8.8.8.8; do
   done
 done
 
-echo "Initial release target is ready: remote main is absent and public DNS is correct."
+echo "Initial release target is ready: no successful deploy exists and public DNS is correct."
