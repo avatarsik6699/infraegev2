@@ -6,7 +6,7 @@
 # vite.config.ts bakes an absolute CONTENT_ROOT path into the server bundle at build time
 # (computed as two directories up from apps/web) — the runtime image keeps the same /repo/apps/web
 # layout so that baked-in path still resolves to content/ here.
-FROM node:22-slim AS development
+FROM node:25-slim AS development
 RUN corepack enable
 WORKDIR /repo
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
@@ -18,7 +18,7 @@ RUN chown -R node:node /repo
 USER node
 CMD ["pnpm", "--filter", "web", "dev", "--host", "0.0.0.0", "--port", "3000", "--strictPort"]
 
-FROM node:22-slim AS builder
+FROM node:25-slim AS builder
 RUN corepack enable
 WORKDIR /repo
 ARG SITE_URL=https://infraege.ru
@@ -37,7 +37,7 @@ COPY apps/web apps/web
 COPY content ./content
 RUN pnpm --filter web build
 
-FROM node:22-slim
+FROM node:25-slim
 WORKDIR /repo
 RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx /root/.npm
 COPY --from=builder /repo/apps/web/.output ./apps/web/.output
