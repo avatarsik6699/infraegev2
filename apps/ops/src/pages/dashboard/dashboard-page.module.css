@@ -7,11 +7,76 @@
 }
 
 .eyebrow,
-.utilityLabel {
+.utilityLabel,
+.controlLabel {
   color: var(--ops-muted);
   font-family: var(--mantine-font-family-monospace);
   font-size: 0.7rem;
   letter-spacing: 0.12em;
+}
+
+.controlLabel {
+  line-height: 1;
+}
+
+.refreshButton {
+  min-height: 36px;
+  padding-inline: 0.8rem;
+  border: 1px solid var(--ops-rule);
+  border-radius: 4px;
+  background: var(--ops-panel);
+  color: var(--ops-ink);
+  font-family: var(--mantine-font-family-monospace);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+}
+
+.refreshButton::before {
+  display: inline-block;
+  width: 0.45rem;
+  height: 0.45rem;
+  margin-right: 0.45rem;
+  border-radius: 50%;
+  background: var(--ops-muted);
+  content: "";
+}
+
+.refreshButton[data-live="true"]::before {
+  background: var(--ops-signal);
+  box-shadow: 0 0 0 0 rgb(111 140 255 / 50%);
+  animation: live-pulse 2s infinite;
+}
+
+.refreshButton:hover:not(:disabled),
+.refreshButton:focus-visible {
+  border-color: var(--ops-signal);
+}
+
+.refreshButton:focus-visible {
+  outline: 2px solid var(--ops-signal);
+  outline-offset: 2px;
+}
+
+.refreshButton:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
+@keyframes live-pulse {
+  70% {
+    box-shadow: 0 0 0 0.35rem rgb(111 140 255 / 0%);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgb(111 140 255 / 0%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .refreshButton[data-live="true"]::before {
+    animation: none;
+  }
 }
 
 .sourceTape {

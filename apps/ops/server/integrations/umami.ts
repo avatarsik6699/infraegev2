@@ -1,6 +1,9 @@
 import type { DashboardRange, TrafficPoint } from "../../contracts/index.js";
 import type { ProjectConfig } from "../core/config.js";
-import type { TrafficSnapshot } from "../modules/dashboard/schemas.js";
+import type {
+  RealtimeTrafficSnapshot,
+  TrafficSnapshot,
+} from "../modules/dashboard/schemas.js";
 import { resolveCredential } from "./credentials.js";
 import { fetchJson } from "./http-client.js";
 import { finiteNumber, record } from "./parsing.js";
@@ -20,6 +23,23 @@ const UNIT: Record<DashboardRange, "minute" | "hour" | "day"> = {
 };
 
 const EVENT_NAMES = ["topic_view", "practice_start", "practice_answer"] as const;
+
+async function authenticateUmami(project: ProjectConfig): Promise<string> {
+  const auth = record(
+    await fetchJson(`${project.umami.baseUrl}/api/auth/login`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        username: resolveCredential(project.umami.usernameEnv),
+        password: resolveCredential(project.umami.passwordEnv),
+      }),
+    }),
+  );
+  if (typeof auth.token !== "string") {
+    throw new Error("Umami authentication response is invalid");
+  }
+  return auth.token;
+}
 
 function metricValue(stats: Record<string, unknown>, key: string): number {
   const entry = stats[key];
@@ -60,19 +80,7 @@ export async function readUmami(
   project: ProjectConfig,
   range: DashboardRange,
 ): Promise<TrafficSnapshot> {
-  const auth = record(
-    await fetchJson(`${project.umami.baseUrl}/api/auth/login`, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({
-        username: resolveCredential(project.umami.usernameEnv),
-        password: resolveCredential(project.umami.passwordEnv),
-      }),
-    }),
-  );
-  if (typeof auth.token !== "string") {
-    throw new Error("Umami authentication response is invalid");
-  }
+  const token = await authenticateUmami(project);
 
   const endAt = Date.now();
   const query = new URLSearchParams({
@@ -82,7 +90,7 @@ export async function readUmami(
   const pageviewsQuery = new URLSearchParams(query);
   pageviewsQuery.set("unit", UNIT[range]);
   pageviewsQuery.set("timezone", project.umami.timezone);
-  const headers = { Authorization: `Bearer ${auth.token}` };
+  const headers = { Authorization: `Bearer ${token}` };
 
   const [statsResponse, pageviewsResponse, ...eventStats] = await Promise.all([
     fetchJson(
@@ -111,5 +119,24 @@ export async function readUmami(
       step,
       total: eventCount(eventStats[index]),
     })),
+  };
+}
+
+export async function readUmamiRealtime(
+  project: ProjectConfig,
+): Promise<RealtimeTrafficSnapshot> {
+  const token = await authenticateUmami(project);
+  const response = record(
+    await fetchJson(
+      `${project.umami.baseUrl}/api/realtime/${project.umami.websiteId}`,
+      { headers: { Authorization: `Bearer ${token}` } },
+    ),
+  );
+  const totals = record(response.totals);
+  return {
+    windowMinutes: 30,
+    visitors: finiteNumber(totals.visitors),
+    views: finiteNumber(totals.views),
+    events: finiteNumber(totals.events),
   };
 }

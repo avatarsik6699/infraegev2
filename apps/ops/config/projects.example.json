@@ -12,7 +12,7 @@
         "passwordEnv": "INFRAEGE_BESZEL_PASSWORD"
       },
       "umami": {
-        "baseUrl": "http://10.77.0.1:3001/stats",
+        "baseUrl": "http://10.77.0.1:3001",
         "websiteId": "replace-with-website-id",
         "usernameEnv": "INFRAEGE_UMAMI_USERNAME",
         "passwordEnv": "INFRAEGE_UMAMI_PASSWORD",
@@ -21,7 +21,9 @@
       "journal": { "baseUrl": "http://10.77.0.1:19531" },
       "fail2ban": {
         "sshTarget": "ops-reader@10.77.0.1",
-        "keyPathEnv": "INFRAEGE_OPS_SSH_KEY"
+        "hostKeyAlias": "2.26.8.245",
+        "keyPathEnv": "INFRAEGE_OPS_SSH_KEY",
+        "knownHostsPathEnv": "INFRAEGE_OPS_SSH_KNOWN_HOSTS"
       }
     }
   ]

@@ -39,6 +39,12 @@ export type DashboardData = {
     memory: number;
     disk: number;
     visits: number;
+    realtime: {
+      windowMinutes: 30;
+      visitors: number;
+      views: number;
+      events: number;
+    };
     errors: number;
     activeBans: number;
   };
@@ -48,7 +54,7 @@ export type DashboardData = {
     name: string;
     status: string;
     cpu: number;
-    memory: number;
+    memoryMiB: number;
   }>;
   funnel: Array<{ step: string; total: number }>;
   errors: Array<{ time: string; service: string; message: string }>;

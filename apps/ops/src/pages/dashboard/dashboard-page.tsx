@@ -6,7 +6,11 @@ import { IncidentTables } from "./components/incident-tables";
 import { OperationsTables } from "./components/operations-tables";
 import { SourceStatus } from "./components/source-status";
 import { SummaryMetrics } from "./components/summary-metrics";
-import { useDashboard } from "./model/use-dashboard";
+import {
+  DEFAULT_DASHBOARD_REFRESH_MS,
+  type DashboardRefreshMs,
+  useDashboard,
+} from "./model/use-dashboard";
 import { useProjects } from "./model/use-projects";
 
 const TelemetryCharts = lazy(() => import("./components/telemetry-charts"));
@@ -15,12 +19,15 @@ export const DashboardPage: React.FC = () => {
   const projectsState = useProjects();
   const [projectId, setProjectId] = useState("");
   const [range, setRange] = useState<DashboardRange>("24h");
+  const [refreshMs, setRefreshMs] = useState<DashboardRefreshMs>(
+    DEFAULT_DASHBOARD_REFRESH_MS,
+  );
   const selectedProjectId = projectsState.projects.some(
     (project) => project.id === projectId,
   )
     ? projectId
     : (projectsState.projects[0]?.id ?? "");
-  const dashboard = useDashboard(selectedProjectId, range);
+  const dashboard = useDashboard(selectedProjectId, range, refreshMs);
 
   const controlsDisabled = projectsState.status !== "ready" || projectsState.projects.length === 0;
 
@@ -31,9 +38,13 @@ export const DashboardPage: React.FC = () => {
           projects={projectsState.projects}
           projectId={selectedProjectId}
           range={range}
+          refreshMs={refreshMs}
+          refreshing={dashboard.refreshing}
           disabled={controlsDisabled}
           onProjectChange={setProjectId}
           onRangeChange={setRange}
+          onRefreshMsChange={setRefreshMs}
+          onRefresh={dashboard.refresh}
         />
 
         {projectsState.status === "error" && (

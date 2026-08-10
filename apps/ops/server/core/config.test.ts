@@ -18,7 +18,12 @@ const project = {
     passwordEnv: "U_P",
   },
   journal: { baseUrl: "http://j.test" },
-  fail2ban: { sshTarget: "reader@host", keyPathEnv: "SSH_KEY" },
+  fail2ban: {
+    sshTarget: "reader@10.0.0.1",
+    hostKeyAlias: "public-host.example",
+    keyPathEnv: "SSH_KEY",
+    knownHostsPathEnv: "SSH_KNOWN_HOSTS",
+  },
 };
 
 describe("parseConfig", () => {
@@ -45,6 +50,13 @@ describe("parseConfig", () => {
     [
       { ...project, umami: { ...project.umami, timezone: "Mars/Olympus" } },
       "Invalid IANA timezone",
+    ],
+    [
+      {
+        ...project,
+        fail2ban: { ...project.fail2ban, knownHostsPathEnv: "not-valid" },
+      },
+      "Invalid environment variable name",
     ],
   ])("rejects invalid provider configuration", (candidate, message) => {
     expect(() => parseConfig({ version: 1, projects: [candidate] })).toThrow(message);

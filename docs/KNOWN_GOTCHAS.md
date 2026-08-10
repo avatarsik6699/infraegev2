@@ -183,6 +183,64 @@
 - **Fix**: `lighthouserc.cjs` resolves `chromium.executablePath()` from the web workspace and passes
   it as `collect.chromePath`; keep the dedicated `127.0.0.2:3200` server address as well.
 
+### WSL: an active Windows VPN does not create the infraege WireGuard route
+
+- **Symptoms**: `ping 10.77.0.1` times out; `ip route get 10.77.0.1` selects the mirrored Windows
+  VPN adapter (for example source `10.8.1.1`), and there is no `infraege-wsl` link or recent
+  handshake.
+- **Root cause**: WSL mirrored networking exposes the active Windows/Amnezia default tunnel, but
+  the separate infraege WireGuard config has not been raised inside WSL. Installing
+  `wireguard-tools` alone does not create the interface or its `AllowedIPs` route.
+- **Fix**: use `make ops-tunnel-up` (or `make ops-up`) with the protected
+  `~/.config/infraege/production/infraege-wsl.conf`. Its `10.77.0.0/24` route is more specific than
+  the Amnezia default route. If the interface exists but has no handshake, temporarily disconnect
+  Amnezia to distinguish endpoint routing from VPS/WireGuard configuration, then retry and inspect
+  `make ops-status`; do not add a public route for private admin ports.
+
+### Ops: journald ranges and private SSH need explicit protocol identities
+
+- **Symptoms**: journald returns HTTP 400 or times out, while fail2ban SSH reports that no ED25519
+  host key is known for `10.77.0.1`, even though the VPS public SSH key is already pinned.
+- **Root cause**: systemd journal gateway treats `follow` as a presence-only option and requires
+  the structured `entries=[cursor][[:skip]:[count]]` Range syntax. OpenSSH indexes known host keys
+  by the connection host unless a separate host-key identity is configured.
+- **Fix**: request `/entries` with `Range: entries=:-200:200`, without `follow=false`. Connect
+  fail2ban to `ops-reader@10.77.0.1` but set `HostKeyAlias` to the already pinned public VPS host,
+  use its explicit `UserKnownHostsFile`, and keep strict host-key checking enabled. Never replace
+  this with `StrictHostKeyChecking=no` or TOFU.
+
+### Ops: history range is not refresh cadence
+
+- **Symptoms**: the smallest dashboard range is `1h`, so the operator assumes metrics can update
+  only once per hour or lowers one global polling interval until Umami, Beszel and SSH are queried
+  continuously.
+- **Root cause**: `1h` controls the amount and resolution of historical chart data. Freshness is a
+  separate browser cadence, while every upstream source has a different useful collection rate.
+- **Fix**: keep `HISTORY` and `REFRESH` as separate controls. Browser near-live polling defaults to
+  15 seconds, pauses in hidden tabs and never overlaps. The BFF coalesces tabs and enforces
+  source-specific TTLs; raw Umami realtime events and session identifiers must never cross the
+  BFF boundary.
+
+### Ops: Beszel container memory values are MiB, not GB
+
+- **Symptoms**: a small container appears to consume hundreds of GB even though `docker stats`
+  reports only hundreds of MiB.
+- **Root cause**: Beszel agent field `m` is used memory converted from bytes to binary megabytes.
+  Relabelling that raw number as GB inflates the displayed unit by a factor of 1024.
+- **Fix**: keep the BFF/browser contract explicit as `memoryMiB`; display MiB below 1024 and
+  normalize larger values to GiB. Compare suspicious values with `docker stats --no-stream`.
+
+### Production: Umami public prefix is not the tracker script upstream path
+
+- **Symptoms**: `/stats/script.js` returns 404, `window.umami` is absent and genuine visits or
+  practice actions never appear in Umami, while the private hub and collector remain healthy.
+- **Root cause**: the prebuilt Umami image serves the script at upstream `/script.js`; Nginx owns
+  the public `/stats` prefix. Proxying the public URI unchanged therefore requests a nonexistent
+  upstream `/stats/script.js`.
+- **Fix**: keep an exact public `/stats/script.js` location mapped to upstream `/script.js`, retain
+  the exact `/stats/api/send` collector allowlist, and return 404 for every other `/stats/` route.
+  Verify the public script and a real browser event after the corrected Nginx image is deployed.
+
 ### Production: certificate preflight must bypass the VPS hostname override
 
 - **Symptoms**: public DNS correctly points `infraege.ru` at the VPS, but the certificate script

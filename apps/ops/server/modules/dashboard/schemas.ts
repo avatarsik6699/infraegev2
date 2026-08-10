@@ -25,6 +25,8 @@ export type TrafficSnapshot = {
   funnel: DashboardData["funnel"];
 };
 
+export type RealtimeTrafficSnapshot = DashboardData["summary"]["realtime"];
+
 export type JournalSnapshot = DashboardData["errors"];
 export type Fail2banSnapshot = DashboardData["bans"];
 
@@ -38,6 +40,7 @@ export type DashboardReaders = {
     project: ProjectConfig,
     range: DashboardRange,
   ): Promise<TrafficSnapshot>;
+  readUmamiRealtime(project: ProjectConfig): Promise<RealtimeTrafficSnapshot>;
   readJournal(project: ProjectConfig): Promise<JournalSnapshot>;
   readFail2ban(project: ProjectConfig): Promise<Fail2banSnapshot>;
 };

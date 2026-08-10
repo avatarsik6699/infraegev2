@@ -7,7 +7,8 @@ import {
   fetchDashboard,
   fetchProjects,
 } from "~/pages/dashboard/api/ops-client";
-import { DASHBOARD_REFRESH_MS } from "~/pages/dashboard/model/use-dashboard";
+import { DEFAULT_DASHBOARD_REFRESH_MS } from "~/pages/dashboard/model/use-dashboard";
+import { formatContainerMemory } from "~/pages/dashboard/components/operations-tables";
 import { dashboardFixture } from "./fixtures";
 import { render } from "./render";
 
@@ -24,6 +25,10 @@ const fetchProjectsMock = vi.mocked(fetchProjects);
 const fetchDashboardMock = vi.mocked(fetchDashboard);
 
 beforeEach(() => {
+  Object.defineProperty(document, "visibilityState", {
+    configurable: true,
+    value: "visible",
+  });
   fetchProjectsMock.mockResolvedValue([{ id: "infraege", name: "infraege.ru" }]);
   fetchDashboardMock.mockResolvedValue(dashboardFixture);
 });
@@ -35,11 +40,18 @@ afterEach(() => {
 });
 
 describe("DashboardPage", () => {
+  it("formats Beszel container memory in binary units", () => {
+    expect(formatContainerMemory(208.04)).toBe("208.04 MiB");
+    expect(formatContainerMemory(1280)).toBe("1.25 GiB");
+  });
+
   it("loads the first configured project and renders every dashboard section", async () => {
     render(<DashboardPage />);
     expect(await screen.findByText("Графики загружены")).toBeTruthy();
     expect(screen.getByText("42")).toBeTruthy();
+    expect(screen.getByText("LIVE 30M")).toBeTruthy();
     expect(screen.getByText("web")).toBeTruthy();
+    expect(screen.getByText("208.04 MiB")).toBeTruthy();
     expect(screen.getByText("topic_view")).toBeTruthy();
     expect(screen.getByText("request failed")).toBeTruthy();
     expect(screen.getByText("192.0.2.1")).toBeTruthy();
@@ -84,7 +96,7 @@ describe("DashboardPage", () => {
     });
     expect(screen.getByText("request failed")).toBeTruthy();
     await act(async () => {
-      vi.advanceTimersByTime(DASHBOARD_REFRESH_MS);
+      vi.advanceTimersByTime(DEFAULT_DASHBOARD_REFRESH_MS);
       await Promise.resolve();
       await Promise.resolve();
     });
@@ -94,5 +106,82 @@ describe("DashboardPage", () => {
       ),
     ).toBeTruthy();
     expect(screen.getByText("request failed")).toBeTruthy();
+  });
+
+  it("supports paused polling and an explicit manual refresh", async () => {
+    vi.useFakeTimers();
+    render(<DashboardPage />);
+    await act(async () => {
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+    expect(fetchDashboardMock).toHaveBeenCalledTimes(1);
+
+    fireEvent.click(screen.getByText("PAUSE"));
+    await act(async () => {
+      vi.advanceTimersByTime(60_000);
+      await Promise.resolve();
+    });
+    expect(fetchDashboardMock).toHaveBeenCalledTimes(1);
+
+    fireEvent.click(screen.getByRole("button", { name: "Обновить сейчас" }));
+    await act(async () => {
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+    expect(fetchDashboardMock).toHaveBeenCalledTimes(2);
+  });
+
+  it("pauses in a hidden tab and refreshes immediately when it becomes visible", async () => {
+    vi.useFakeTimers();
+    render(<DashboardPage />);
+    await act(async () => {
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+    Object.defineProperty(document, "visibilityState", {
+      configurable: true,
+      value: "hidden",
+    });
+
+    await act(async () => {
+      vi.advanceTimersByTime(DEFAULT_DASHBOARD_REFRESH_MS);
+      await Promise.resolve();
+    });
+    expect(fetchDashboardMock).toHaveBeenCalledTimes(1);
+
+    Object.defineProperty(document, "visibilityState", {
+      configurable: true,
+      value: "visible",
+    });
+    await act(async () => {
+      document.dispatchEvent(new Event("visibilitychange"));
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+    expect(fetchDashboardMock).toHaveBeenCalledTimes(2);
+  });
+
+  it("does not overlap refreshes when a request is still running", async () => {
+    vi.useFakeTimers();
+    let release!: (value: typeof dashboardFixture) => void;
+    fetchDashboardMock.mockImplementationOnce(
+      () =>
+        new Promise((resolve) => {
+          release = resolve;
+        }),
+    );
+    render(<DashboardPage />);
+
+    await act(async () => {
+      vi.advanceTimersByTime(DEFAULT_DASHBOARD_REFRESH_MS);
+      await Promise.resolve();
+    });
+    expect(fetchDashboardMock).toHaveBeenCalledTimes(1);
+
+    await act(async () => {
+      release(dashboardFixture);
+      await Promise.resolve();
+    });
   });
 });

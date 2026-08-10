@@ -7,6 +7,42 @@ import { INTEGRATION_TIMEOUT_MS } from "./http-client.js";
 
 const execFileAsync = promisify(execFile);
 
+export function buildFail2banSshArgs(
+  project: ProjectConfig,
+  keyPath: string,
+  knownHostsPath: string,
+): string[] {
+  return [
+    "-F",
+    "/dev/null",
+    "-n",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "ConnectTimeout=8",
+    "-o",
+    "IdentitiesOnly=yes",
+    "-o",
+    "IdentityAgent=none",
+    "-o",
+    "PasswordAuthentication=no",
+    "-o",
+    "KbdInteractiveAuthentication=no",
+    "-o",
+    "StrictHostKeyChecking=yes",
+    "-o",
+    `UserKnownHostsFile=${knownHostsPath}`,
+    "-o",
+    "GlobalKnownHostsFile=/dev/null",
+    "-o",
+    `HostKeyAlias=${project.fail2ban.hostKeyAlias}`,
+    "-i",
+    keyPath,
+    project.fail2ban.sshTarget,
+    "fail2ban-status",
+  ];
+}
+
 export function parseFail2ban(output: string): Fail2banSnapshot {
   return output
     .split(/Status for the jail:\s*/)
@@ -26,18 +62,12 @@ export async function readFail2ban(
   project: ProjectConfig,
 ): Promise<Fail2banSnapshot> {
   const keyPath = resolveCredential(project.fail2ban.keyPathEnv);
+  const knownHostsPath = resolveCredential(
+    project.fail2ban.knownHostsPathEnv,
+  );
   const { stdout } = await execFileAsync(
     "ssh",
-    [
-      "-o",
-      "BatchMode=yes",
-      "-o",
-      "ConnectTimeout=8",
-      "-i",
-      keyPath,
-      project.fail2ban.sshTarget,
-      "fail2ban-status",
-    ],
+    buildFail2banSshArgs(project, keyPath, knownHostsPath),
     { timeout: INTEGRATION_TIMEOUT_MS, maxBuffer: 128_000 },
   );
   const rows = parseFail2ban(stdout);

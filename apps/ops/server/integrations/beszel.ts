@@ -71,7 +71,7 @@ export async function readBeszel(
               name: String(item.n ?? "unknown"),
               status: "running",
               cpu: finiteNumber(item.c),
-              memory: finiteNumber(item.m),
+              memoryMiB: finiteNumber(item.m),
             }]
           : [];
       })

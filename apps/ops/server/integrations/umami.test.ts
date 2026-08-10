@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { ProjectConfig } from "../core/config.js";
-import { readUmami } from "./umami.js";
+import { readUmami, readUmamiRealtime } from "./umami.js";
 
 const project = {
   id: "x",
@@ -67,5 +67,29 @@ describe("readUmami", () => {
     const pageviewsUrl = requestedUrls.find((url) => url.includes("/pageviews?"));
     expect(pageviewsUrl).toContain("unit=minute");
     expect(pageviewsUrl).toContain("timezone=Europe%2FMoscow");
+  });
+
+  it("sanitizes realtime analytics to aggregate totals", async () => {
+    process.env.TEST_UMAMI_USER = "reader";
+    process.env.TEST_UMAMI_PASSWORD = "password";
+    vi.stubGlobal(
+      "fetch",
+      vi.fn<typeof fetch>(async (input) => {
+        if (String(input).endsWith("/api/auth/login")) {
+          return Response.json({ token: "token" });
+        }
+        return Response.json({
+          totals: { visitors: 3, views: 8, events: 2 },
+          events: [{ sessionId: "must-not-leave-the-bff", urlPath: "/private" }],
+        });
+      }),
+    );
+
+    await expect(readUmamiRealtime(project)).resolves.toEqual({
+      windowMinutes: 30,
+      visitors: 3,
+      views: 8,
+      events: 2,
+    });
   });
 });

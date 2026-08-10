@@ -21,7 +21,7 @@ export const SummaryMetrics: React.FC<{
   const sourceStatuses = Object.values(data.sources);
   const freshSources = sourceStatuses.filter((item) => item.state === "fresh").length;
   return (
-    <SimpleGrid cols={{ base: 2, sm: 4, lg: 8 }}>
+    <SimpleGrid cols={{ base: 2, sm: 3, lg: 9 }}>
       <MetricCard
         label="EDGE"
         value={data.summary.availability}
@@ -31,6 +31,11 @@ export const SummaryMetrics: React.FC<{
       <MetricCard label="RAM" value={`${data.summary.memory}%`} detail="warning 75%" />
       <MetricCard label="DISK" value={`${data.summary.disk}%`} detail="warning 70%" />
       <MetricCard label="VISITS" value={String(data.summary.visits)} detail={range} />
+      <MetricCard
+        label="LIVE 30M"
+        value={String(data.summary.realtime.visitors)}
+        detail={`${data.summary.realtime.views} views · ${data.summary.realtime.events} events`}
+      />
       <MetricCard label="ERRORS" value={String(data.summary.errors)} detail={range} />
       <MetricCard label="BANS" value={String(data.summary.activeBans)} detail="active" />
       <MetricCard

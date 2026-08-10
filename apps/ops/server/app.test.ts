@@ -31,6 +31,7 @@ const dashboard: DashboardData = {
     memory: 2,
     disk: 3,
     visits: 4,
+    realtime: { windowMinutes: 30, visitors: 2, views: 4, events: 1 },
     errors: 0,
     activeBans: 0,
   },

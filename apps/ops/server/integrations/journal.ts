@@ -30,8 +30,8 @@ export function parseJournal(body: string): JournalSnapshot {
 }
 
 export async function readJournal(project: ProjectConfig): Promise<JournalSnapshot> {
-  const body = await fetchText(`${project.journal.baseUrl}/entries?follow=false`, {
-    headers: { Accept: "application/json", Range: "entries=-200" },
+  const body = await fetchText(`${project.journal.baseUrl}/entries`, {
+    headers: { Accept: "application/json", Range: "entries=:-200:200" },
   });
   return parseJournal(body);
 }

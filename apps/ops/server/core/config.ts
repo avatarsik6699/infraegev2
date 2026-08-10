@@ -18,7 +18,12 @@ export type ProjectConfig = {
     timezone: string;
   };
   journal: { baseUrl: string };
-  fail2ban: { sshTarget: string; keyPathEnv: string };
+  fail2ban: {
+    sshTarget: string;
+    hostKeyAlias: string;
+    keyPathEnv: string;
+    knownHostsPathEnv: string;
+  };
 };
 
 export type OpsConfig = { version: 1; projects: ProjectConfig[] };
@@ -113,9 +118,17 @@ function parseProject(value: unknown, index: number): ProjectConfig {
         fail2ban.sshTarget,
         `projects[${index}].fail2ban.sshTarget`,
       ),
+      hostKeyAlias: text(
+        fail2ban.hostKeyAlias,
+        `projects[${index}].fail2ban.hostKeyAlias`,
+      ),
       keyPathEnv: environmentName(
         fail2ban.keyPathEnv,
         `projects[${index}].fail2ban.keyPathEnv`,
+      ),
+      knownHostsPathEnv: environmentName(
+        fail2ban.knownHostsPathEnv,
+        `projects[${index}].fail2ban.knownHostsPathEnv`,
       ),
     },
   };

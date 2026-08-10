@@ -205,9 +205,11 @@ uuidgen
 ```
 
 Set that UUID as the GitHub environment variable from section 2. After the first stack start,
-connect WireGuard and open `http://10.77.0.1:3001/stats`. Log in with the one-time default
-`admin` / `umami` credentials and change the password immediately. Create a website named
-`infraege.ru`, domain `infraege.ru`, using `POST /stats/api/websites` with the pre-generated UUID
+connect WireGuard and open `http://10.77.0.1:3001`. Log in with the one-time default
+`admin` / `umami` credentials and change the password immediately. The current single-operator
+local setup has explicitly accepted deferring that rotation while the administration surface is
+WireGuard-only; rotate it before hosting ops remotely, sharing access or adding users. Create a website named
+`infraege.ru`, domain `infraege.ru`, using `POST /api/websites` with the pre-generated UUID
 in its `id` field. The [Umami websites API](https://docs.umami.is/docs/api/websites) explicitly
 supports forcing the website UUID; authenticated self-hosted requests use a bearer token from
 [`POST /api/auth/login`](https://docs.umami.is/docs/api/authentication).
@@ -223,13 +225,13 @@ printf '\n'
 infraege_umami_token=$(
   jq -cn --arg username "$infraege_umami_username" \
     --arg password "$infraege_umami_password" '{username:$username,password:$password}' |
-    curl -fsS http://10.77.0.1:3001/stats/api/auth/login \
+    curl -fsS http://10.77.0.1:3001/api/auth/login \
       -H 'Content-Type: application/json' --data-binary @- |
     jq -er .token
 )
 jq -cn --arg id "$infraege_umami_website_id" \
   '{id:$id,name:"infraege.ru",domain:"infraege.ru"}' |
-  curl -fsS http://10.77.0.1:3001/stats/api/websites \
+  curl -fsS http://10.77.0.1:3001/api/websites \
     -H 'Content-Type: application/json' \
     -H "Authorization: Bearer $infraege_umami_token" --data-binary @-
 unset infraege_umami_password infraege_umami_token
@@ -268,7 +270,8 @@ The current Beszel flow and meanings of `KEY`, `TOKEN` and `HUB_URL` are documen
 [agent-installation](https://www.beszel.dev/guide/agent-installation) guides.
 
 Create a separate read-only Beszel user, share only this system with it, and use that account in
-the local dashboard environment:
+the local dashboard environment. The current single-operator setup temporarily uses the existing
+administrator; replace it before moving ops off the private workstation:
 
 ```bash
 export INFRAEGE_BESZEL_EMAIL='REPLACE_WITH_READ_ONLY_EMAIL'

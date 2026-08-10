@@ -7,6 +7,17 @@ const EmptyRow: React.FC<{ columns: number; children: React.ReactNode }> = (prop
   </Table.Tr>
 );
 
+export const formatContainerMemory = (memoryMiB: number): string => {
+  const value = memoryMiB >= 1024 ? memoryMiB / 1024 : memoryMiB;
+  const unit = memoryMiB >= 1024 ? "GiB" : "MiB";
+  const formatted = value
+    .toFixed(2)
+    .replace(/\.00$/, "")
+    .replace(/(\.\d)0$/, "$1");
+
+  return `${formatted} ${unit}`;
+};
+
 const ContainersTable: React.FC<{ rows: DashboardData["containers"] }> = ({ rows }) => (
   <Card withBorder radius="sm">
     <Title order={2}>Контейнеры</Title>
@@ -30,7 +41,7 @@ const ContainersTable: React.FC<{ rows: DashboardData["containers"] }> = ({ rows
                 <Table.Td>{item.name}</Table.Td>
                 <Table.Td>{item.status}</Table.Td>
                 <Table.Td>{item.cpu}%</Table.Td>
-                <Table.Td>{item.memory} GB</Table.Td>
+                <Table.Td>{formatContainerMemory(item.memoryMiB)}</Table.Td>
               </Table.Tr>
             ))
           )}

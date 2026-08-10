@@ -10,21 +10,33 @@ import type {
   DashboardReaders,
   Fail2banSnapshot,
   JournalSnapshot,
+  RealtimeTrafficSnapshot,
   ResourceSnapshot,
   TrafficSnapshot,
 } from "./schemas.js";
 
-type Values = {
-  availability: AvailabilitySnapshot;
-  beszel: ResourceSnapshot;
-  umami: TrafficSnapshot;
-  journal: JournalSnapshot;
-  fail2ban: Fail2banSnapshot;
+export const SOURCE_TTL_MS = {
+  availability: 10_000,
+  umamiRealtime: 15_000,
+  journal: 30_000,
+  fail2ban: 30_000,
+  beszel: 60_000,
+  umami: 60_000,
+} as const;
+
+type CacheEntry<T> = {
+  hasValue: boolean;
+  value?: T;
+  valueUpdatedAt?: string;
+  checkedAt?: number;
+  checkedAtIso?: string;
+  lastError?: unknown;
+  inFlight?: Promise<void>;
 };
 
-type CacheEntry = {
-  values: Partial<Values>;
-  updatedAt: Partial<Record<SourceName, string>>;
+type CachedResult<T> = {
+  value?: T;
+  status: SourceStatus;
 };
 
 export type DashboardService = {
@@ -42,78 +54,165 @@ const safeMessage = (reason: unknown): string =>
     ? reason.message
     : "source request failed";
 
+function statusFor<T>(entry: CacheEntry<T>): SourceStatus {
+  if (entry.lastError === undefined) {
+    return {
+      state: "fresh",
+      updatedAt: entry.valueUpdatedAt ?? entry.checkedAtIso ?? new Date(0).toISOString(),
+    };
+  }
+  if (entry.hasValue) {
+    return {
+      state: "stale",
+      updatedAt: entry.valueUpdatedAt ?? new Date(0).toISOString(),
+      message: "showing the last successful snapshot",
+    };
+  }
+  return {
+    state: "unavailable",
+    updatedAt: entry.checkedAtIso ?? new Date(0).toISOString(),
+    message: safeMessage(entry.lastError),
+  };
+}
+
+function combineUmamiStatus(
+  history: CachedResult<TrafficSnapshot>,
+  realtime: CachedResult<RealtimeTrafficSnapshot>,
+): SourceStatus {
+  const timestamps = [history.status.updatedAt, realtime.status.updatedAt].sort();
+  if (history.status.state === "fresh" && realtime.status.state === "fresh") {
+    return { state: "fresh", updatedAt: timestamps[0] };
+  }
+  if (history.value !== undefined || realtime.value !== undefined) {
+    return {
+      state: "stale",
+      updatedAt: timestamps[0],
+      message: "showing a partial or cached analytics snapshot",
+    };
+  }
+  return {
+    state: "unavailable",
+    updatedAt: timestamps[0],
+    message: "source request failed",
+  };
+}
+
 export function createDashboardService({
   readers,
   now = () => new Date(),
 }: DashboardServiceOptions): DashboardService {
-  const cache = new Map<string, CacheEntry>();
+  const cache = new Map<string, CacheEntry<unknown>>();
+
+  function entryFor<T>(key: string): CacheEntry<T> {
+    const existing = cache.get(key) as CacheEntry<T> | undefined;
+    if (existing) return existing;
+    const created: CacheEntry<T> = { hasValue: false };
+    cache.set(key, created as CacheEntry<unknown>);
+    return created;
+  }
+
+  async function readCached<T>(
+    key: string,
+    ttlMs: number,
+    read: () => Promise<T>,
+  ): Promise<CachedResult<T>> {
+    const entry = entryFor<T>(key);
+    const currentTime = now();
+    const cacheIsCurrent =
+      entry.checkedAt !== undefined && currentTime.getTime() - entry.checkedAt < ttlMs;
+
+    if (!cacheIsCurrent && !entry.inFlight) {
+      entry.checkedAt = currentTime.getTime();
+      entry.checkedAtIso = currentTime.toISOString();
+      entry.inFlight = read()
+        .then((value) => {
+          const completedAt = now();
+          entry.hasValue = true;
+          entry.value = value;
+          entry.valueUpdatedAt = completedAt.toISOString();
+          entry.lastError = undefined;
+        })
+        .catch((reason: unknown) => {
+          entry.lastError = reason;
+        })
+        .finally(() => {
+          entry.inFlight = undefined;
+        });
+    }
+
+    await entry.inFlight;
+    return {
+      value: entry.hasValue ? entry.value : undefined,
+      status: statusFor(entry),
+    };
+  }
 
   async function getDashboard(
     project: ProjectConfig,
     range: DashboardRange,
   ): Promise<DashboardData> {
-    const results = await Promise.allSettled([
-      readers.readAvailability(project),
-      readers.readBeszel(project, range),
-      readers.readUmami(project, range),
-      readers.readJournal(project),
-      readers.readFail2ban(project),
-    ]);
-    const [availability, beszel, umami, journal, fail2ban] = results;
-    const key = `${project.id}:${range}`;
-    const previous = cache.get(key) ?? { values: {}, updatedAt: {} };
-    const next: CacheEntry = {
-      values: { ...previous.values },
-      updatedAt: { ...previous.updatedAt },
-    };
-    const sources = {} as Record<SourceName, SourceStatus>;
+    const projectKey = project.id;
+    const [availability, beszel, umami, umamiRealtime, journal, fail2ban] =
+      await Promise.all([
+        readCached<AvailabilitySnapshot>(
+          `${projectKey}:availability`,
+          SOURCE_TTL_MS.availability,
+          () => readers.readAvailability(project),
+        ),
+        readCached<ResourceSnapshot>(
+          `${projectKey}:beszel:${range}`,
+          SOURCE_TTL_MS.beszel,
+          () => readers.readBeszel(project, range),
+        ),
+        readCached<TrafficSnapshot>(
+          `${projectKey}:umami:${range}`,
+          SOURCE_TTL_MS.umami,
+          () => readers.readUmami(project, range),
+        ),
+        readCached<RealtimeTrafficSnapshot>(
+          `${projectKey}:umami-realtime`,
+          SOURCE_TTL_MS.umamiRealtime,
+          () => readers.readUmamiRealtime(project),
+        ),
+        readCached<JournalSnapshot>(
+          `${projectKey}:journal`,
+          SOURCE_TTL_MS.journal,
+          () => readers.readJournal(project),
+        ),
+        readCached<Fail2banSnapshot>(
+          `${projectKey}:fail2ban`,
+          SOURCE_TTL_MS.fail2ban,
+          () => readers.readFail2ban(project),
+        ),
+      ]);
 
-    function retain<K extends keyof Values>(
-      name: K,
-      result: PromiseSettledResult<Values[K]>,
-    ): Values[K] | undefined {
-      if (result.status === "fulfilled") {
-        const updatedAt = now().toISOString();
-        next.values[name] = result.value;
-        next.updatedAt[name] = updatedAt;
-        sources[name] = { state: "fresh", updatedAt };
-        return result.value;
-      }
-
-      const cached = previous.values[name];
-      sources[name] = cached === undefined
-        ? {
-            state: "unavailable",
-            updatedAt: now().toISOString(),
-            message: safeMessage(result.reason),
-          }
-        : {
-            state: "stale",
-            updatedAt: previous.updatedAt[name] ?? new Date(0).toISOString(),
-            message: "showing the last successful snapshot",
-          };
-      return cached;
-    }
-
-    const availabilityValue = retain("availability", availability) ?? {
+    const availabilityValue = availability.value ?? {
       availability: "unknown" as const,
       version: "",
     };
-    const resourceValue = retain("beszel", beszel) ?? {
+    const resourceValue = beszel.value ?? {
       cpu: 0,
       memory: 0,
       disk: 0,
       series: [],
       containers: [],
     };
-    const trafficValue = retain("umami", umami) ?? {
-      visits: 0,
-      series: [],
-      funnel: [],
+    const trafficValue = umami.value ?? { visits: 0, series: [], funnel: [] };
+    const realtimeValue = umamiRealtime.value ?? {
+      windowMinutes: 30 as const,
+      visitors: 0,
+      views: 0,
+      events: 0,
     };
-    const errors = retain("journal", journal) ?? [];
-    const bans = retain("fail2ban", fail2ban) ?? [];
-    cache.set(key, next);
+    const errors = journal.value ?? [];
+    const bans = fail2ban.value ?? [];
+    const sources: Record<SourceName, SourceStatus> = {
+      availability: availability.status,
+      beszel: beszel.status,
+      umami: combineUmamiStatus(umami, umamiRealtime),
+      journal: journal.status,
+      fail2ban: fail2ban.status,
+    };
 
     return {
       project: {
@@ -129,6 +228,7 @@ export function createDashboardService({
         memory: resourceValue.memory,
         disk: resourceValue.disk,
         visits: trafficValue.visits,
+        realtime: realtimeValue,
         errors: errors.length,
         activeBans: bans.reduce((total, item) => total + item.count, 0),
       },

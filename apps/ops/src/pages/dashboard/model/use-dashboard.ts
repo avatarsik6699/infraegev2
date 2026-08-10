@@ -1,19 +1,22 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { DashboardData, DashboardRange } from "../../../../contracts/index";
 import { fetchDashboard } from "../api/ops-client";
 
-export const DASHBOARD_REFRESH_MS = 60_000;
+export const DASHBOARD_REFRESH_OPTIONS = [15_000, 30_000, 60_000, 0] as const;
+export type DashboardRefreshMs = (typeof DASHBOARD_REFRESH_OPTIONS)[number];
+export const DEFAULT_DASHBOARD_REFRESH_MS: DashboardRefreshMs = 15_000;
 
 export type DashboardState = {
   data: DashboardData | null;
   error: boolean;
   loading: boolean;
   refreshing: boolean;
+  refresh(): void;
 };
 
-type InternalDashboardState = DashboardState & { key: string };
+type InternalDashboardState = Omit<DashboardState, "refresh"> & { key: string };
 
-const emptyState = (loading: boolean): DashboardState => ({
+const emptyState = (loading: boolean): Omit<DashboardState, "refresh"> => ({
   data: null,
   error: false,
   loading,
@@ -23,19 +26,30 @@ const emptyState = (loading: boolean): DashboardState => ({
 export function useDashboard(
   projectId: string,
   range: DashboardRange,
+  refreshMs: DashboardRefreshMs,
 ): DashboardState {
   const key = projectId ? `${projectId}:${range}` : "";
+  const refreshRef = useRef<((background: boolean) => Promise<void>) | null>(null);
   const [state, setState] = useState<InternalDashboardState>({
     ...emptyState(false),
     key: "",
   });
+  const refresh = useCallback(() => {
+    void refreshRef.current?.(true);
+  }, []);
 
   useEffect(() => {
-    if (!projectId) return;
+    if (!projectId) {
+      refreshRef.current = null;
+      return;
+    }
 
     const controller = new AbortController();
+    let inFlight = false;
 
-    async function refresh(background: boolean): Promise<void> {
+    async function performRefresh(background: boolean): Promise<void> {
+      if (inFlight) return;
+      inFlight = true;
       if (background) {
         setState((current) =>
           current.key === key ? { ...current, refreshing: true } : current,
@@ -56,19 +70,33 @@ export function useDashboard(
             key,
           }));
         }
+      } finally {
+        inFlight = false;
       }
     }
 
-    void refresh(false);
-    const interval = window.setInterval(
-      () => void refresh(true),
-      DASHBOARD_REFRESH_MS,
-    );
+    refreshRef.current = performRefresh;
+    void performRefresh(false);
     return () => {
       controller.abort();
-      window.clearInterval(interval);
+      if (refreshRef.current === performRefresh) refreshRef.current = null;
     };
   }, [key, projectId, range]);
 
-  return state.key === key ? state : emptyState(Boolean(projectId));
+  useEffect(() => {
+    if (refreshMs === 0) return;
+
+    const refreshWhenVisible = () => {
+      if (document.visibilityState === "visible") refresh();
+    };
+    const interval = window.setInterval(refreshWhenVisible, refreshMs);
+    document.addEventListener("visibilitychange", refreshWhenVisible);
+    return () => {
+      window.clearInterval(interval);
+      document.removeEventListener("visibilitychange", refreshWhenVisible);
+    };
+  }, [refresh, refreshMs]);
+
+  const visibleState = state.key === key ? state : emptyState(Boolean(projectId));
+  return { ...visibleState, refresh };
 }
