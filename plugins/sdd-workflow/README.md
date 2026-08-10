@@ -5,8 +5,8 @@ All workflow logic lives in `docs/playbooks/`; plugin files are thin wrappers.
 
 ## Commands
 
-- `/plan` — draft/refresh `docs/SPEC.md` and scaffold a new `docs/changes/NN-slug.md` with its
-  feature branch
+- `/plan` — select the next scope from project docs or use a brief, refresh `docs/SPEC.md` when
+  needed, and scaffold a new change with its feature branch
 - `/work` — implement Backlog tasks (default) or fix unchecked Architect Review Notes
   (`/work [XX] review`) through the same agent execution loop, absorbing mid-session findings and
   running the Fast Gate

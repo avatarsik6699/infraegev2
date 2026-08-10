@@ -6,7 +6,10 @@ export const ProgressBar: React.FC<ProgressBarTypes.Props> = (props) => {
   const percent = Math.round(props.ratio * 100);
   return (
     <Stack gap="xs">
-      <Progress value={percent} aria-label="Прогресс освоения" />
+      <Progress
+        value={percent}
+        aria-label={props.label ?? "Прогресс освоения"}
+      />
       <Typography.Text component="span" size="sm" tone="muted">
         {percent}%
       </Typography.Text>

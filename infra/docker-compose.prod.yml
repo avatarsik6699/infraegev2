@@ -11,6 +11,8 @@
 # plus a renewal cron job — and mount a TLS-enabled conf.d over infra/nginx/conf.d.
 services:
   nginx:
+    ports:
+      - "80:80"
     restart: always
 
   web:

@@ -12,8 +12,6 @@ x-json-file-logging: &json-file-logging
 services:
   nginx:
     image: nginx:1.27-alpine
-    ports:
-      - "80:80"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/conf.d:/etc/nginx/conf.d:ro

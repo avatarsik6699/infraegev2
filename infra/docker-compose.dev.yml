@@ -1,0 +1,47 @@
+# One-command developer overlay used by `make dev`.
+# Dependencies are installed inside images; source/content bind mounts provide hot reload without
+# requiring Node, pnpm, Python, uv, PostgreSQL, or an .env file on the host.
+services:
+  nginx:
+    ports:
+      - "8080:80"
+    healthcheck:
+      interval: 2s
+      timeout: 2s
+      retries: 30
+
+  web:
+    build:
+      target: development
+    environment:
+      - NODE_ENV=development
+      - SITE_URL=http://localhost:8080
+      - VITE_PROXY_TARGET=http://api:8000
+    volumes:
+      - ../apps/web/src:/repo/apps/web/src
+      - ../content:/repo/content:ro
+    healthcheck:
+      interval: 2s
+      timeout: 2s
+      retries: 30
+      start_period: 2s
+
+  api:
+    environment:
+      - APP_ENV=development
+      - TELEGRAM_BOT_TOKEN=
+      - TELEGRAM_CHAT_ID=
+    volumes:
+      - ../apps/api/app:/app/app
+      - ../content:/content:ro
+    healthcheck:
+      interval: 2s
+      timeout: 2s
+      retries: 30
+      start_period: 2s
+
+  postgres:
+    healthcheck:
+      interval: 2s
+      timeout: 2s
+      retries: 30

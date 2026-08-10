@@ -94,8 +94,8 @@ fix. If no gotcha entry exists, ask how to proceed and add the resolution to `KN
 
 The SDD workflows are defined in `docs/playbooks/`:
 
-- [`plan`](docs/playbooks/plan.md) — draft/refresh `docs/SPEC.md` and scaffold a new
-  `docs/changes/NN-slug.md` with its feature branch
+- [`plan`](docs/playbooks/plan.md) — select the next scope from project docs or use an explicit
+  brief, refresh `docs/SPEC.md` when needed, and scaffold a new change with its feature branch
 - [`work`](docs/playbooks/work.md) — implement Backlog tasks (default) or fix Architect Review
   Notes (`/work [XX] review`) through the agent execution loop, absorbing mid-session findings and
   running the Fast Gate
@@ -107,9 +107,9 @@ Runtime wrappers are thin stubs. Workflow logic belongs in the playbooks.
 ## Change Lifecycle
 
 ```text
-1. Architect provides a brief (chat text or a draft file, e.g. docs/DRAFT_SPEC.md)
-2. /plan ["brief" | path/to/draft.md]  -> draft/refresh docs/SPEC.md, scaffold
-                                          docs/changes/NN-slug.md, create feature/NN-slug
+1. Architect ships the current change; an optional brief may be provided in chat or a draft file
+2. /plan ["brief" | path/to/draft.md]  -> auto-select next scope when omitted, refresh SPEC if
+                                          needed, scaffold change, create feature/NN-slug
 3. Architect approves docs/SPEC.md (first time / on pivots only)
 4. /work NN                            -> agent implements Backlog items, absorbing any
                                           findings the architect reports mid-session

@@ -5,7 +5,8 @@ set -e
                                  # uncomment once a future analytics change adds one.
 
 if [ "${APP_ENV}" = "development" ]; then
-  exec uv run uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+  exec .venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8000 \
+    --reload --reload-dir /app --reload-dir /content
 else
-  exec uv run uvicorn app.main:app --host 0.0.0.0 --port 8000
+  exec .venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8000
 fi

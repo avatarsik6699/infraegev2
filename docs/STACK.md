@@ -29,11 +29,13 @@
 ## Prerequisites
 
 ```bash
-docker --version   # Compose v2
-node --version      # >=22
-pnpm --version       # >=10
-python3 --version    # >=3.12
-uv --version
+docker --version          # application: Docker + Compose v2
+docker compose version
+make --version            # application: GNU Make
+node --version            # local tests only: >=22
+pnpm --version            # local tests only: >=10
+python3 --version         # local tests only: >=3.12
+uv --version              # local tests only
 ```
 
 ---
@@ -41,10 +43,11 @@ uv --version
 ## Initial setup
 
 ```bash
-pnpm install
-cd apps/api && uv sync && cd ../..
-docker compose -f infra/docker-compose.yml -f infra/docker-compose.override.yml up --build
+make dev
 ```
+
+`make dev` supplies disposable process-scoped local values, builds dependencies inside Docker,
+starts the dedicated development overlay, waits for every healthcheck, and requires no `.env`.
 
 ---
 
@@ -75,9 +78,9 @@ task — it's expensive by design; that's why it's separated from the Fast Gate.
 | Migrations | `n/a` | content is git-based, not DB-backed (docs/SPEC.md §3); no schema exists yet to migrate |
 | Backend test suite | `cd apps/api && uv run pytest` | 11 tests as of change 01 |
 | Frontend build | `cd apps/web && pnpm build` | runs TanStack Start's build-time prerender; fails the build if any crawled page 500s |
-| Frontend unit tests | `cd apps/web && pnpm test` | 14 tests as of change 04 |
+| Frontend unit tests | `cd apps/web && pnpm test` | 19 tests as of change 05 |
 | E2E lint / determinism | `pnpm --filter web exec playwright test --list` | local only, never CI'd; validates Playwright config/spec collection without running the journey |
-| E2E (Playwright) | `pnpm --filter web test:e2e` | local only, never CI'd; starts local Vite + Uvicorn through Playwright `webServer` and runs the single Chromium project |
+| E2E (Playwright) | `pnpm --filter web test:e2e` | local only, never CI'd; starts local Vite + Uvicorn through Playwright `webServer` and runs 2 smoke tests in the single Chromium project |
 | Smoke | `curl -f http://localhost:8000/health` (backend) — frontend smoke is the build's own prerender crawl | |
 | SAST (e.g. Semgrep) | `n/a` | not set up in change 01 |
 | Secrets scan (e.g. Gitleaks) | `n/a` | not set up in change 01 |
@@ -234,14 +237,21 @@ first SQLAlchemy model is added, see the pre-emptive asyncpg datetime rule in
 
 ```bash
 # Start the stack
-# [command]
+make dev
 
-# Stop everything
-# [command]
+# Gracefully stop everything and preserve PostgreSQL data
+make stop
+
+# Follow service logs
+make logs
+
+# Show health/status
+make ps
 
 # Add a new migration / schema change
-# [command]
+# n/a — no database schema exists yet
 
 # Format / lint
-# [command]
+cd apps/web && pnpm lint
+cd apps/api && uv run ruff check app tests
 ```

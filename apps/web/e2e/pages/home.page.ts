@@ -16,10 +16,12 @@ export class HomePage {
     ).toBeVisible();
   }
 
-  async openPlaceholderTopic(): Promise<void> {
-    // The only checked-in fixture intentionally remains `draft`, so it is not linked from the
-    // published-topic list. The smoke journey starts at home, then navigates to its real route.
-    await this.page.goto("/theory/zadanie-1-placeholder-topic");
+  async openGraphsAndTablesTopic(): Promise<void> {
+    await this.page
+      .getByRole("link", {
+        name: /Как сопоставить граф и таблицу дорог — задание 1 ЕГЭ/,
+      })
+      .click();
     // TanStack Start streams usable SSR markup before all client modules have hydrated. Wait for
     // those module requests to settle before interacting with controlled React inputs.
     await this.page.waitForLoadState("networkidle");

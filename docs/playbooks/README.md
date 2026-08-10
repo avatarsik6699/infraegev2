@@ -9,8 +9,8 @@ These playbooks are the canonical source of truth for the workflow. Runtime wrap
 
 ## Integrated-project workflow
 
-- [plan.md](./plan.md) — draft/refresh `docs/SPEC.md` and scaffold a new `docs/changes/NN-slug.md`
-  with its feature branch
+- [plan.md](./plan.md) — select the next scope from project docs or use a brief, refresh
+  `docs/SPEC.md` when needed, and scaffold a new change with its feature branch
 - [work.md](./work.md) — implement Backlog tasks (default) or fix Architect Review Notes
   (`/work XX review`) through the agent execution loop, absorbing mid-session findings into the
   Backlog and running the Fast Gate

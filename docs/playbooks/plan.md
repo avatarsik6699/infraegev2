@@ -1,8 +1,8 @@
 # plan — Canonical Playbook
 
-Create or refresh `docs/SPEC.md` from a brief (chat text or a draft file), then scaffold exactly
-one `docs/changes/NN-slug.md` from `docs/CHANGE_TEMPLATE.md` with a Backlog derived from the spec,
-and switch to its feature branch.
+Select the next scope from project documentation or use an explicit brief, create or refresh
+`docs/SPEC.md` when needed, then scaffold exactly one `docs/changes/NN-slug.md` from
+`docs/CHANGE_TEMPLATE.md` with a Backlog derived from the spec, and switch to its feature branch.
 
 This document is the single source of truth for the `plan` workflow.
 
@@ -15,6 +15,9 @@ In an integrated project, runtime wrappers under `.claude/skills/plan/SKILL.md` 
 - Optional free-form product brief (one paragraph to several pages).
 - Optional file path (e.g. `/plan docs/DRAFT_SPEC.md`) — read the file as the primary source brief
   instead of asking for one in chat.
+- With no brief or file, `$plan` derives the next smallest coherent change from `docs/SPEC.md`'s
+  first unfinished roadmap outcome and the evidence in active/archived change history. It asks for
+  direction only when that evidence does not identify one unique safe scope.
 - Optional mode flag: `--new` (rewrite `docs/SPEC.md` end-to-end) or `--continue` (extend/refine
   the existing spec). If omitted: default to `new` when `docs/SPEC.md` is still mostly template
   placeholders, otherwise `continue`.
@@ -34,7 +37,26 @@ In an integrated project, runtime wrappers under `.claude/skills/plan/SKILL.md` 
 
 - If a file path is given, read it in full and treat it as the source brief. Do not ask the
   architect to repeat it in chat.
-- Otherwise use the chat-provided brief, or ask for one if none was given.
+- Otherwise use the chat-provided brief.
+- If no brief or file is supplied, enter **self-scoping mode**:
+  1. Inspect non-archived changes first. If any active change exists, stop and report whether it
+     still needs work or is ready for `/ship`; do not silently plan a parallel change or branch
+     from `main` before the current change is archived.
+  2. Compare `docs/SPEC.md`'s roadmap outcomes, in milestone and listed-output order, with archived
+     changes and the current codebase. Treat a checkbox or milestone label as evidence, not proof
+     that an outcome shipped.
+  3. From the first milestone with an unfinished outcome, derive the smallest end-to-end slice
+     that delivers one observable result and is suitable for a single change. Do not pull an entire
+     multi-output milestone into one change merely because it appears in one roadmap row.
+  4. Use only behavior and constraints already stated in SPEC/project documentation. Do not invent
+     a topic, product priority, API, schema, integration, or design direction to make the scope look
+     complete.
+  5. If one candidate is clearly supported, synthesize a concise internal brief containing its
+     goal, in-scope result, exclusions, constraints, and acceptance evidence, then continue without
+     asking for confirmation. Record its source as `auto: SPEC roadmap + change history`.
+  6. If no candidate exists, or two or more materially different candidates remain equally
+     supported, ask one focused question that presents the concrete candidates and the decision
+     needed. Do not create a change until the answer makes the scope unique.
 - Parse `--new` / `--continue`; if both given, stop and ask for exactly one. Resolve the default
   per the Input section otherwise. Record the chosen mode in the final report.
 - Preserve explicit user wording for domain constraints and business rules — do not silently
@@ -142,7 +164,7 @@ If a subsection yields nothing, write `None` — never leave it blank or a gener
 
 SPEC.md: updated / unchanged — [reason]
 Mode: [new | continue | auto->new | auto->continue]
-Source brief: [chat / file: <path>]
+Source brief: [chat / file: <path> / auto: SPEC roadmap + change history]
 Design: filled from references / self-driven via frontend-design skill / unchanged
 Validation: PASS / PASS with deferred clarifications
 

@@ -1,6 +1,6 @@
 ---
 name: plan
-description: Draft, reset, or continue SPEC.md from a brief (chat text or draft file, `--new` / `--continue`), scaffold a new docs/changes/NN-slug.md with a Backlog, and switch to its feature branch. Use when the architect wants the AI to draft a validated spec and start the next unit of work.
+description: Select the next scope from project docs or use an explicit brief, draft or continue SPEC.md (`--new` / `--continue`) when needed, scaffold a new docs/changes/NN-slug.md with a Backlog, and switch to its feature branch.
 metadata:
   priority: 6
   pathPatterns:
@@ -28,6 +28,7 @@ retrieval:
     - sdd plan
     - spec bootstrap
   intents:
+    - select the next unit of work from project documentation
     - draft project spec from brief
     - scaffold a new unit of work
   entities:

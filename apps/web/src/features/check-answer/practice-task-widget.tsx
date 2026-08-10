@@ -25,7 +25,7 @@ export const PracticeTaskWidget: React.FC<PracticeTaskWidgetTypes.Props> = (prop
     try {
       const body = await checkAnswer(props.task.id, answer);
       setResult(body);
-      if (body.correct) props.onMastered?.();
+      if (body.correct) props.onCorrect?.(props.task.id);
     } finally {
       setSubmitting(false);
     }

@@ -1,0 +1,14 @@
+.git
+.output
+**/node_modules
+**/.output
+**/.vinxi
+**/dist
+**/.venv
+**/__pycache__
+**/.pytest_cache
+**/.ruff_cache
+**/*.pyc
+**/.env
+**/.env.*
+**/*.log
