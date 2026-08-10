@@ -241,6 +241,18 @@
   the exact `/stats/api/send` collector allowlist, and return 404 for every other `/stats/` route.
   Verify the public script and a real browser event after the corrected Nginx image is deployed.
 
+### Production: operator-written env values must remain Compose and Bash compatible
+
+- **Symptoms**: image publication succeeds, but remote deploy exits `127` while sourcing
+  `production.env`; the log shows the second word of an SSH public key as `command not found`.
+- **Root cause**: Docker Compose accepts an unquoted env value containing spaces, while Bash
+  `source` treats the text after the first word as a command. The Beszel helper previously wrote
+  its system public key without quoting.
+- **Fix**: serialize operator-provided values with the shared single-quoted literal dotenv formatter and
+  reject line breaks. Run `make ops-repair-beszel-env` once for an affected protected file. Remote
+  deploy validates sourceability before extraction, pulls or container changes, so a malformed
+  file now fails without requiring rollback.
+
 ### Production: certificate preflight must bypass the VPS hostname override
 
 - **Symptoms**: public DNS correctly points `infraege.ru` at the VPS, but the certificate script

@@ -70,6 +70,13 @@ release_dir=$(readlink -f /opt/infraege/current)
   echo 'Production environment is not writable by the deploy user.' >&2
   exit 1
 }
+env_lib="$release_dir/scripts/lib/production-env.sh"
+[[ -r $env_lib ]] || {
+  echo 'Production environment helper is unavailable in the current release.' >&2
+  exit 1
+}
+# shellcheck disable=SC1090
+source "$env_lib"
 
 IFS= read -r -d '' new_token
 IFS= read -r -d '' new_key
@@ -92,11 +99,11 @@ key_seen=0
 while IFS= read -r line || [[ -n $line ]]; do
   case $line in
     BESZEL_AGENT_TOKEN=*)
-      printf 'BESZEL_AGENT_TOKEN=%s\n' "$new_token"
+      printf 'BESZEL_AGENT_TOKEN=%s\n' "$(production_env_quote "$new_token")"
       token_seen=1
       ;;
     BESZEL_AGENT_KEY=*)
-      printf 'BESZEL_AGENT_KEY=%s\n' "$new_key"
+      printf 'BESZEL_AGENT_KEY=%s\n' "$(production_env_quote "$new_key")"
       key_seen=1
       ;;
     *) printf '%s\n' "$line" ;;
@@ -108,6 +115,10 @@ done <"$env_file" >"$new_env"
 }
 chmod --reference="$env_file" "$new_env"
 chown --reference="$env_file" "$new_env"
+production_env_validate "$new_env" || {
+  echo 'Updated production environment is not shell-sourceable.' >&2
+  exit 1
+}
 mv -- "$new_env" "$env_file"
 
 deploy_sha=$(<"$release_dir/.deploy-sha")

@@ -21,7 +21,8 @@ STOP_TIMEOUT ?= 30
 
 .PHONY: help dev stop down restart logs ps config \
 	ops-init ops-up ops-down ops-status ops-logs ops-tunnel-up ops-tunnel-down \
-	ops-open-beszel ops-open-umami ops-configure-beszel-agent
+	ops-open-beszel ops-open-umami ops-configure-beszel-agent \
+	ops-repair-beszel-env
 
 help:
 	@echo "infraege local Docker workflow"
@@ -46,6 +47,7 @@ help:
 	@echo "  make ops-open-beszel Open private Beszel UI in WSLg Chromium"
 	@echo "  make ops-open-umami  Open private Umami UI in WSLg Chromium"
 	@echo "  make ops-configure-beszel-agent  Securely activate the production Beszel agent"
+	@echo "  make ops-repair-beszel-env       Normalize the protected Beszel key assignment"
 
 dev:
 	@docker info >/dev/null 2>&1 || { echo "Docker is not running." >&2; exit 1; }
@@ -105,3 +107,6 @@ ops-open-umami:
 
 ops-configure-beszel-agent:
 	@./scripts/configure-beszel-agent.sh
+
+ops-repair-beszel-env:
+	@./scripts/repair-beszel-env.sh --apply

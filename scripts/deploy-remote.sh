@@ -4,11 +4,32 @@ set -euo pipefail
 : "${DEPLOY_SHA:?DEPLOY_SHA is required}"
 [[ $DEPLOY_SHA =~ ^[0-9a-f]{40}$ ]] || { echo "DEPLOY_SHA must be a full SHA" >&2; exit 64; }
 
+validate_production_env() {
+  local target=$1
+  [[ -r $target ]] || return 1
+  (
+    set -a
+    # shellcheck disable=SC1090
+    source "$target"
+    set +a
+  ) >/dev/null 2>&1
+}
+
+if [[ ${1:-} == --validate-env ]]; then
+  [[ $# == 2 ]] || { echo "usage: $0 --validate-env PATH" >&2; exit 64; }
+  validate_production_env "$2"
+  exit
+fi
+
 root=/opt/infraege
 release_dir="$root/releases/$DEPLOY_SHA"
 archive="/tmp/infraege-$DEPLOY_SHA.tar.gz"
 env_file=/etc/infraege/production.env
 [[ -r $archive && -r $env_file ]] || { echo "release archive or production env missing" >&2; exit 1; }
+validate_production_env "$env_file" || {
+  echo "production environment is not shell-sourceable; no release changes were made" >&2
+  exit 65
+}
 
 mkdir -p "$release_dir"
 tar --extract --gzip --file "$archive" --directory "$release_dir"
