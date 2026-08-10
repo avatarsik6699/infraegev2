@@ -39,6 +39,7 @@ RUN pnpm --filter web build
 
 FROM node:22-slim
 WORKDIR /repo
+RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx /root/.npm
 COPY --from=builder /repo/apps/web/.output ./apps/web/.output
 COPY content ./content
 RUN chown -R node:node /repo

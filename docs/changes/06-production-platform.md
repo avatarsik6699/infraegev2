@@ -76,6 +76,8 @@ explicitly accepted deferred risk, not a release blocker for this change.
 - [x] `T6` Document and enforce the resulting ops frontend/server boundaries and re-run the complete
   ops Fast Gate plus local browser verification — _Depends on:_ B3, B4, F7, F8
 - [x] `T7` Resolve the blocking Semgrep findings from the Full Gate without weakening the security gate — _Depends on:_ T1, I7
+- [x] `T8` Make the Release Gate image scan work with Docker Desktop on WSL when the host Docker
+  socket is not mounted into the distro — _Depends on:_ T1
 
 ---
 
@@ -147,6 +149,9 @@ Vitest, pytest and Playwright remain local-only and must never be added to GitHu
 - Trivy's non-root Dockerfile check is scoped out only for `infra/nginx/Dockerfile` until
   2027-08-10: the root master binds 80/443, reads the root-owned TLS key and supports graceful
   reloads, while `nginx.conf` explicitly drops request-handling workers to the `nginx` user.
+- The image gate scans `docker image save` archives so Docker Desktop on WSL needs no distro-local
+  socket. The web runtime intentionally omits unused npm tooling, and the Nginx image upgrades its
+  Alpine packages during the immutable build so fixed base-image CVEs cannot pass the release.
 
 ---
 

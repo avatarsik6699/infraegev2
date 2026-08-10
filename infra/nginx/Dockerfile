@@ -1,5 +1,7 @@
 FROM nginx:1.27-alpine
 
+RUN apk upgrade --no-cache
+
 COPY infra/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY infra/nginx/conf.d/infraege.prod.conf /etc/nginx/conf.d/default.conf
 
