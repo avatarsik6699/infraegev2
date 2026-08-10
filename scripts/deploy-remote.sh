@@ -42,7 +42,7 @@ if ! run_compose "$release_dir" "$DEPLOY_SHA" run --rm --no-deps --interactive=f
   echo "TLS certificate is missing or unreadable inside the Nginx container; run obtain-initial-certificate.sh first" >&2
   exit 1
 fi
-run_compose "$release_dir" "$DEPLOY_SHA" up --detach postgres
+run_compose "$release_dir" "$DEPLOY_SHA" up --detach --wait --wait-timeout 60 postgres
 "$release_dir/scripts/init-umami-db.sh" "$env_file"
 run_compose "$release_dir" "$DEPLOY_SHA" up --detach --remove-orphans --wait --wait-timeout 180
 
@@ -53,7 +53,8 @@ curl --fail --silent --show-error --max-time 15 \
   https://infraege.ru/theory/zadanie-1-graphs-and-tables >/dev/null
 curl --fail --silent --show-error --max-time 15 https://infraege.ru/sitemap.xml >/dev/null
 
-ln -sfn "$release_dir" "$root/current"
+run_compose "$release_dir" "$DEPLOY_SHA" run --rm --no-deps --interactive=false \
+  --volume "$root:$root" --entrypoint /bin/ln nginx -sfn "$release_dir" "$root/current"
 jq -n --arg status healthy --arg sha "$DEPLOY_SHA" --arg deployedAt "$(date --utc +%FT%TZ)" \
   '{status:$status,sha:$sha,deployedAt:$deployedAt}' > /var/lib/infraege/deploy-status.json
 chmod 644 /var/lib/infraege/deploy-status.json

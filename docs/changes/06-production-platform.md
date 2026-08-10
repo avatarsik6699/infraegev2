@@ -88,6 +88,14 @@ explicitly accepted deferred risk, not a release blocker for this change.
   certificate and ACME webroot are mounted into the container — _Depends on:_ I3, I8, T11
 - [x] `T13` Prevent the one-off TLS check from consuming the remaining SSH-fed deploy script via
   its default interactive stdin attachment — _Depends on:_ I8, T11, T12
+- [x] `T14` Wait for the production PostgreSQL healthcheck before executing the idempotent Umami
+  role and database initialization — _Depends on:_ D1, I4, I8
+- [x] `T15` Feed the Umami role creation SQL through psql input so its safely quoted password
+  variable is interpolated client-side instead of reaching PostgreSQL literally — _Depends on:_ D1, T14
+- [x] `T16` Disable interactive stdin on every Compose exec in Umami initialization so the nested
+  script cannot consume the remaining SSH-fed deploy program — _Depends on:_ T13, T15
+- [x] `T17` Publish the current-release symlink through a narrow one-off container mount because
+  the hardened `/opt/infraege` parent remains root-owned — _Depends on:_ I2, I8, T13
 
 ---
 
