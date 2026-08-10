@@ -241,6 +241,16 @@
   the exact `/stats/api/send` collector allowlist, and return 404 for every other `/stats/` route.
   Verify the public script and a real browser event after the corrected Nginx image is deployed.
 
+### Production: Umami collector endpoint is relative to BASE_PATH
+
+- **Symptoms**: `/stats/script.js` loads and `window.umami.track` exists, but pageviews and events
+  POST twice to `/stats/stats/api/send`, receive 404 and never reach the dashboard.
+- **Root cause**: Umami prefixes `COLLECT_API_ENDPOINT` with `BASE_PATH`. Configuring both as
+  `/stats`-prefixed paths duplicates the public prefix in the generated tracker endpoint.
+- **Fix**: with `BASE_PATH=/stats`, set `COLLECT_API_ENDPOINT=/api/send`; keep Nginx's exact public
+  `/stats/api/send` allowlist mapped to the same prefixed upstream path. Verify the generated URL
+  and response in a real browser because a curl check of the allowlisted route cannot catch this.
+
 ### Production: operator-written env values must remain Compose and Bash compatible
 
 - **Symptoms**: image publication succeeds, but remote deploy exits `127` while sourcing

@@ -66,7 +66,7 @@ services:
       DATABASE_URL: ${UMAMI_DATABASE_URL:?UMAMI_DATABASE_URL is required}
       APP_SECRET: ${UMAMI_APP_SECRET:?UMAMI_APP_SECRET is required}
       BASE_PATH: /stats
-      COLLECT_API_ENDPOINT: /stats/api/send
+      COLLECT_API_ENDPOINT: /api/send
       DISABLE_TELEMETRY: "1"
     depends_on:
       postgres:
