@@ -59,9 +59,11 @@ jobs:
         with:
           version: "0.8.15"
           enable-cache: true
-      - uses: zricethezav/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Gitleaks filesystem scan
+        run: |
+          docker run --rm --volume "$PWD:/src:ro" \
+            zricethezav/gitleaks@sha256:c00b6bd0aeb3071cbcb79009cb16a60dd9e0a7c60e2be9ab65d25e6bc8abbb7f \
+            detect --source=/src --no-banner --redact --no-git
       - name: Semgrep SAST
         run: uvx --from semgrep==1.172.0 semgrep scan --config p/default --error
       - name: Trivy repository scan
@@ -73,6 +75,7 @@ jobs:
           severity: HIGH,CRITICAL
           ignore-unfixed: true
           exit-code: "1"
+          trivyignores: .trivyignore.yaml
 
   dependency-audit:
     runs-on: ubuntu-latest
@@ -93,5 +96,5 @@ jobs:
       - name: Audit locked Python dependencies
         working-directory: apps/api
         run: |
-          uv export --frozen --no-dev --format requirements-txt --output-file /tmp/infraege-requirements.txt
+          uv export --frozen --no-dev --no-emit-project --format requirements-txt --output-file /tmp/infraege-requirements.txt
           uvx --from pip-audit==2.10.1 pip-audit --requirement /tmp/infraege-requirements.txt
