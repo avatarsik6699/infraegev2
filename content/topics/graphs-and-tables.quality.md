@@ -1,6 +1,22 @@
 # Content Quality Gate — graphs-and-tables
 
-Status: `APPROVED`
+Status: `PASS`
+
+Change 12 restructures the published lesson and replaces its visual baseline. The 2026-08-10
+approval below remains historical evidence for the mathematics/tasks, but it does not approve the
+new learning shell or the pending AI-assisted graph asset.
+
+## Change 12 re-review
+
+- [x] **AGENT — learning order:** content is reorganized as idea → theory → algorithm → pitfalls,
+  followed by the unchanged five-task practice.
+- [x] **AGENT — generation brief:** `graphs-and-tables.visuals.md` records exact nodes, edges, row
+  counts, prompt, negative prompt, alt/caption and factual review checks.
+- [x] **HUMAN — generated graph:** approve the final externally generated asset for exact data,
+  originality, legibility and visual-language fit.
+- [x] **AGENT — asset integration:** add the approved optimized asset, replace the legacy SVG block,
+  pass asset validation and capture desktop/tablet/narrow browser evidence.
+- [x] **HUMAN — final decision:** approve the reworked lesson and restore `review -> published`.
 
 This record applies to `graphs-and-tables.json` and its five `graphs-and-tables-*.json` tasks.
 Agent-owned checks may be checked from reproducible evidence. Human-owned checks stay open until
@@ -53,6 +69,11 @@ deferred until more than one real topic exists.
 
 ## Rendered evidence
 
+- [x] **AGENT — Change 12 desktop/tablet/narrow:** the direct route rendered at 1440-class,
+  900-class and emulated 390×844 viewports; the figure retained its intrinsic 16:9 ratio, document
+  horizontal overflow stayed at 0, and the browser console had 0 warnings/errors after the local
+  HMR proxy fix.
+
 - [x] **AGENT — desktop:** direct review route
   `/theory/zadanie-1-graphs-and-tables` rendered at 1440×1000; screenshot captured locally as
   `/tmp/infraege-change05-f1-desktop.png`; all four distinct answers reached exactly 80%; browser
@@ -69,4 +90,7 @@ deferred until more than one real topic exists.
 - [x] **HUMAN — final decision:** approve `review -> published`. Until this exact approval is
   recorded, `D3` remains unchecked and the topic must stay `review`.
 
-Overall gate: **PASS — architect completed T1 review and approved publication on 2026-08-10.**
+Historical gate: **PASS — architect approved the previous presentation on 2026-08-10.**
+
+Current gate: **PASS — architect approved the Change 12 lesson and current visual asset on
+2026-08-11.**

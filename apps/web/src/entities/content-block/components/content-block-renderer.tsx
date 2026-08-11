@@ -3,6 +3,7 @@ import type {
   CodeExampleBlockData,
   ContentBlock,
   DiagramBlockData,
+  FigureBlockData,
   TableDiagramBlockData,
   TextBlockData,
   VideoEmbedBlockData,
@@ -11,6 +12,7 @@ import type {
 import { CalloutBlock } from "./callout-block";
 import { CodeExampleBlock } from "./code-example-block";
 import { DiagramBlock } from "./diagram-block";
+import { FigureBlock } from "./figure-block";
 import { TableDiagramBlock } from "./table-diagram-block";
 import { TextBlock } from "./text-block";
 import { VideoEmbedBlock } from "./video-embed-block";
@@ -23,6 +25,8 @@ export const ContentBlockRenderer: React.FC<Props> = (props) => {
   switch (props.block.type) {
     case "text":
       return <TextBlock data={props.block.data as TextBlockData} />;
+    case "figure":
+      return <FigureBlock data={props.block.data as FigureBlockData} />;
     case "diagram": {
       const data = props.block.data as
         | DiagramBlockData

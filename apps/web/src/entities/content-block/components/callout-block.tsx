@@ -4,7 +4,7 @@ import { Typography } from "~/shared/components/typography";
 
 type Props = { data: CalloutBlockData };
 
-/** Author-written aside inside content_blocks (info/warning). For the auto-derived
+/** Author-written aside inside a learning section (info/warning). For the auto-derived
  * prerequisite/related-topic navigation widget, see the `entities/content` public API. */
 export const CalloutBlock: React.FC<Props> = (props) => {
   return (

@@ -9,13 +9,13 @@
 FROM node:22-slim AS development
 RUN corepack enable
 WORKDIR /repo
-COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
-COPY apps/web/package.json apps/web/package.json
-RUN pnpm install --frozen-lockfile
-COPY apps/web apps/web
-COPY content ./content
-RUN chown -R node:node /repo
+RUN chown node:node /repo
+COPY --chown=node:node package.json pnpm-workspace.yaml pnpm-lock.yaml ./
+COPY --chown=node:node apps/web/package.json apps/web/package.json
 USER node
+RUN pnpm install --frozen-lockfile
+COPY --chown=node:node apps/web apps/web
+COPY --chown=node:node content ./content
 CMD ["pnpm", "--filter", "web", "dev", "--host", "0.0.0.0", "--port", "3000", "--strictPort"]
 
 FROM node:22-slim AS builder
@@ -40,9 +40,8 @@ RUN pnpm --filter web build
 FROM node:22-slim
 WORKDIR /repo
 RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx /root/.npm
-COPY --from=builder /repo/apps/web/.output ./apps/web/.output
-COPY content ./content
-RUN chown -R node:node /repo
+COPY --from=builder --chown=node:node /repo/apps/web/.output ./apps/web/.output
+COPY --chown=node:node content ./content
 USER node
 EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=5s --retries=3 --start-period=10s \

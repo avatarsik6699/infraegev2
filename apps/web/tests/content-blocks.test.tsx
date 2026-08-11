@@ -3,6 +3,37 @@ import { describe, expect, it } from "vitest";
 import { ContentBlockList } from "~/entities/content-block";
 import { render } from "./render";
 
+describe("FigureBlock", () => {
+  it("renders an informative lazy image with intrinsic dimensions and a caption", () => {
+    render(
+      <ContentBlockList
+        blocks={[{
+          type: "figure",
+          data: {
+            src: "/content/topics/test/diagram.png",
+            alt: "Степень вершины совпадает с числом ячеек",
+            width: 1600,
+            height: 900,
+            caption: "Один признак в двух представлениях",
+          },
+        }]}
+      />,
+    );
+
+    const image = screen.getByRole("img", {
+      name: "Степень вершины совпадает с числом ячеек",
+    });
+    expect(image.getAttribute("width")).toBe("1600");
+    expect(image.getAttribute("height")).toBe("900");
+    expect(image.getAttribute("loading")).toBe("lazy");
+    const caption = screen
+      .getByText("Один признак в двух представлениях")
+      .closest("figcaption");
+    expect(caption).toBeTruthy();
+    expect(caption?.parentElement?.tagName).toBe("FIGURE");
+  });
+});
+
 describe("DiagramBlock", () => {
   it("marks the signalled node with data-highlighted (learning-science-principles.md §2)", () => {
     render(

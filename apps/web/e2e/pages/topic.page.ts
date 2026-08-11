@@ -19,7 +19,9 @@ export class TopicPage {
     await expect(
       this.page.locator('meta[name="description"]'),
     ).toHaveAttribute("content", TOPIC_DESCRIPTION);
-    await expect(this.page.getByText("№1", { exact: true })).toBeVisible();
+    await expect(
+      this.page.getByText("Задание №1 · теория и практика", { exact: true }),
+    ).toBeVisible();
     await expect(
       this.page.getByRole("heading", { name: TOPIC_TITLE, level: 1 }),
     ).toBeVisible();
@@ -29,15 +31,27 @@ export class TopicPage {
     await expect(
       this.page.getByRole("heading", { name: "Закончи решение" }),
     ).toBeVisible();
+    await expect(this.page.getByRole("link", { name: /Идея/ })).toHaveAttribute(
+      "href",
+      "#idea",
+    );
     await expect(
-      this.page.getByRole("img", { name: /Схема четырёх пунктов/ }),
+      this.page.getByRole("link", { name: /Подводные камни/ }),
+    ).toHaveAttribute("href", "#pitfalls");
+    await expect(
+      this.page.getByRole("link", { name: /К практике/ }),
+    ).toHaveAttribute("href", "#practice");
+    await expect(
+      this.page.getByRole("img", {
+        name: /Вершина 2 имеет три ребра и соответствует строке Б/,
+      }),
     ).toBeVisible();
     await expect(
       this.page.getByRole("table", { name: /Таблица длин дорог/ }),
     ).toBeVisible();
-    await expect(
-      this.page.getByText("Типичная ошибка:", { exact: false }).first(),
-    ).toBeVisible();
+    await expect(this.page.getByRole("note")).toContainText(
+      "Типичная ошибка —",
+    );
     await expect(this.page.locator("main form")).toHaveCount(5);
     await expect(
       this.page.getByRole("progressbar", {

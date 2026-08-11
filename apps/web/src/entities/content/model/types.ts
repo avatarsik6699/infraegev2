@@ -3,13 +3,13 @@
 
 export type ContentStatus = "draft" | "review" | "published";
 export type AccessTier = "free" | "paid";
-export type PresentationMode =
-  "worked_example_first" | "productive_failure_first";
 export type CheckerType = "exact_match" | "numeric_tolerance";
 export type InteractionType = "production" | "recognition";
+export type LearningSectionRole = "idea" | "theory" | "algorithm" | "pitfalls";
 
 export type ContentBlockType =
   | "text"
+  | "figure"
   | "diagram"
   | "code_example"
   | "worked_example"
@@ -51,6 +51,14 @@ export type TextBlockData = {
   markdown: string;
 };
 
+export type FigureBlockData = {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  caption?: string;
+};
+
 export type CodeExampleBlockData = {
   language: string;
   code: string;
@@ -58,7 +66,7 @@ export type CodeExampleBlockData = {
 };
 
 export type CalloutBlockData = {
-  // Author-written asides inside content_blocks. The auto-derived "эта тема легче даётся, если
+  // Author-written asides inside section blocks. The auto-derived "эта тема легче даётся, если
   // понимать X → перейти" navigation widget is a separate component driven by Topic.prerequisites/
   // related_topics/unlocks_topics (SPEC.md §5.2's PrerequisiteCallout), not this block type.
   tone: "info" | "warning";
@@ -78,6 +86,7 @@ export type WorkedExampleBlockData = {
 
 export type ContentBlockData =
   | TextBlockData
+  | FigureBlockData
   | DiagramBlockData
   | TableDiagramBlockData
   | CodeExampleBlockData
@@ -90,15 +99,24 @@ export type ContentBlock = {
   data: ContentBlockData;
 };
 
+export type LearningSection = {
+  id: string;
+  role: LearningSectionRole;
+  title: string;
+  nav_label?: string;
+  blocks: ContentBlock[];
+};
+
 export type Topic = {
   id: string;
   task_numbers: number[];
   title: string;
   summary: string;
-  content_blocks: ContentBlock[];
+  sections: LearningSection[];
+  quick_reference_blocks: ContentBlock[];
+  learning_outcomes: string[];
   prerequisites: string[];
   mastery_threshold: number;
-  presentation_mode: PresentationMode;
   related_topics: string[];
   practice_task_ids: string[];
   status: ContentStatus;
@@ -109,7 +127,9 @@ export type CourseLesson = {
   id: string;
   course_id: string;
   title: string;
-  content_blocks: ContentBlock[];
+  sections: LearningSection[];
+  quick_reference_blocks: ContentBlock[];
+  learning_outcomes: string[];
   unlocks_topics: string[];
   practice_task_ids: string[];
   status: ContentStatus;

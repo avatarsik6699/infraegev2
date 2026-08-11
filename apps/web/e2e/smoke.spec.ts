@@ -61,8 +61,12 @@ test("published topic is discoverable, readable, and mastered at its threshold",
     await noJsPage.goto("/theory/zadanie-1-graphs-and-tables");
     await expect(noJsPage).toHaveTitle(TOPIC_TITLE);
     await expect(
-      noJsPage.getByText("Начинать с перебора опасно", { exact: false }),
+      noJsPage.getByText("поиску признаков", { exact: false }),
     ).toBeVisible();
+    await expect(noJsPage.getByRole("link", { name: /К практике/ })).toHaveAttribute(
+      "href",
+      "#practice",
+    );
     await expect(noJsPage.locator("main form")).toHaveCount(5);
   } finally {
     await noJsContext.close();

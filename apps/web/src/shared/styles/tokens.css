@@ -8,6 +8,13 @@
   --color-accent: var(--mantine-color-textbook-6);
   --color-muted: var(--mantine-color-gray-7);
   --color-highlight: var(--mantine-color-highlight-6);
+  --color-highlight-soft: #f7e6dc;
+  --color-graphite: #5b5f63;
+  --color-study-blue: #a9ccf5;
+  --color-study-amber: #f2c979;
+  --color-study-coral: #e88e94;
+  --color-rule: #ded8cc;
+  --color-rule-strong: #c9c0b2;
 
   --font-display: var(--mantine-font-family-headings);
   --font-body: var(--mantine-font-family);

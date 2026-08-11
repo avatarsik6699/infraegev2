@@ -11,6 +11,33 @@
 
 ## Gotcha Log
 
+### Docker: running pnpm as node still requires a writable workspace root
+
+- **Symptoms:** a Docker build switches to `USER node` before `pnpm install`, copied manifests
+  already use `COPY --chown=node:node`, but pnpm fails with `EACCES` while opening a temporary
+  `/repo/_tmp_*` file.
+- **Root cause:** `WORKDIR /repo` creates the directory itself as root. Owning only the copied
+  files is insufficient because pnpm also writes atomic temporary files at the workspace root.
+- **Fix:** before switching users, run the narrow non-recursive `chown node:node /repo`; continue
+  using `COPY --chown` for manifests, source and runtime artifacts. Do not restore a recursive
+  `chown -R /repo`, which walks the entire dependency tree and makes `make dev` appear stalled.
+
+### Vite HMR behind local Nginx requires WebSocket upgrade headers
+
+- **Symptoms:** `make dev` reports every service healthy and HTTP works through port 8080, but the
+  browser console shows `WebSocket handshake: Unexpected response code: 200`, followed by an
+  unreachable direct fallback to `localhost:3000`.
+- **Root cause:** Vite first opens its HMR WebSocket through the page origin. Without forwarding
+  `Upgrade`/`Connection` on Nginx's application location, the request is handled as ordinary HTTP.
+- **Fix:** keep `proxy_http_version 1.1`, set the upstream `Upgrade` value to the literal
+  `websocket`, and derive `Connection` through an `http`-scope `map`: only a case-insensitive exact
+  client `Upgrade: websocket` becomes `upgrade`; every other value becomes `close`. Directly
+  forwarding arbitrary `$http_upgrade` values restores HMR but triggers the security gate's
+  h2c-smuggling rule, while mapping the `Upgrade` value itself is too opaque for that static rule.
+  The generic rule flags any complete WebSocket proxy directive triple without analyzing values,
+  so keep its narrow inline suppression beside the allowlist explanation. Verify a WebSocket 101,
+  an h2c non-101 response, and a clean browser console through `http://localhost:8080`.
+
 ### A split Vite + `tsc` application can silently retain a renamed server entrypoint
 
 - **Symptom:** the current TypeScript source builds successfully, but `pnpm start` runs an old BFF

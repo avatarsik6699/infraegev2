@@ -3,5 +3,6 @@ export namespace PageContainerTypes {
     children: React.ReactNode;
     component?: "main" | "footer" | "section" | "div";
     className?: string;
+    size?: string;
   };
 }

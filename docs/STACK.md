@@ -68,7 +68,7 @@ not the full suite. Fill every row that applies; mark `n/a` for rows that don't 
 | Lint | `pnpm --filter web lint` · `pnpm --filter ops lint` · `cd apps/api && uv run ruff check app tests` | scope to touched workspace |
 | Type-check (affected) | `pnpm --filter web typecheck` · `pnpm --filter ops typecheck` · `cd apps/api && pnpm exec pyright app tests` | pyright reads `[tool.pyright]` in `apps/api/pyproject.toml` |
 | Targeted / affected unit tests | `pnpm --filter web test` · `pnpm --filter ops test` · `cd apps/api && uv run pytest` | local developer environment only; never Docker/CI |
-| LSP diagnostics | available: yes | pyright (backend) confirmed working; frontend TS diagnostics via `tsc`/editor LSP |
+| LSP diagnostics | available: yes | `python-lsp` (Pyright) and `typescript-lsp` MCP servers; repository type-check commands remain complementary gate evidence |
 | API type regen (`openapi-typescript` or equivalent) | `n/a` | no OpenAPI schema/generated client yet — the frontend calls `/api/tasks/{id}/check` with a hand-written `fetch` + inline response type (`PracticeTaskWidget.tsx`), not a generated client. Revisit once the API surface grows past one endpoint. |
 
 ---
@@ -124,7 +124,8 @@ tool that isn't available must be reported as skipped with a reason, never silen
 | E2E test change | Playwright + Page Object Model | during implementation and verification; use `e2e/pages/*.page.ts` and user-visible locators | yes |
 | TypeScript / Python change | LSP diagnostics | after implementing, before checking off | yes |
 | New/changed API surface | `openapi-typescript` (or equivalent) regen + frontend re-typecheck | after backend contract change | n/a — no OpenAPI schema yet, see Fast Gate note |
-| Architecture-level decision | architecture skill | during planning | no — not exposed in the current runtime; change 04 used an architect-reviewed plan plus Context7/package-type verification |
+| Frontend architecture decision | `frontend-architecture` skill | during planning and architecture review | yes — installed in the local Codex skill catalog |
+| Backend architecture decision | `backend-architecture` skill | during planning and architecture review | yes — installed in the local Codex skill catalog |
 | Frontend design decision | `frontend-design` skill | during `/plan` §5.3 and design Backlog items | yes |
 | Backend/API design decision | `backend-design` skill | during `/plan` §4 and backend-architecture Backlog items | yes |
 

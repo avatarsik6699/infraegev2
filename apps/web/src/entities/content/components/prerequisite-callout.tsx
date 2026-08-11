@@ -12,7 +12,7 @@ type Props = {
  * "Эта тема легче даётся, если понимать [Python: списки] → перейти" (docs/SPEC.md §5.2).
  * Rendered from a Topic's `prerequisites`/`related_topics`/`unlocks_topics`, already resolved to
  * routes by the page's loader (see `../api/server-loaders#resolveContentLink`) —
- * not from content_blocks.
+ * not from authored section blocks.
  */
 export const PrerequisiteCallout: React.FC<Props> = (props) => {
   if (props.links.length === 0) return null;

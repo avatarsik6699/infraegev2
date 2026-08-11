@@ -26,10 +26,18 @@ const topic: Topic = {
   task_numbers: [1],
   title: "Тестовая тема",
   summary: "Тест",
-  content_blocks: [],
+  sections: [
+    {
+      id: "idea",
+      role: "idea",
+      title: "Идея",
+      blocks: [],
+    },
+  ],
+  quick_reference_blocks: [],
+  learning_outcomes: ["Решать тестовую задачу"],
   prerequisites: [],
   mastery_threshold: 0.8,
-  presentation_mode: "worked_example_first",
   related_topics: [],
   practice_task_ids: tasks.map((task) => task.id),
   status: "review",
@@ -56,6 +64,13 @@ describe("topic practice progress", () => {
       })),
     );
     renderTopic();
+
+    expect(screen.getByRole("link", { name: /Идея/ }).getAttribute("href")).toBe(
+      "#idea",
+    );
+    expect(
+      screen.getByRole("link", { name: /К практике/ }).getAttribute("href"),
+    ).toBe("#practice");
 
     const inputs = screen.getAllByRole("textbox", { name: "Ответ" });
     const buttons = screen.getAllByRole("button", { name: "Проверить" });
