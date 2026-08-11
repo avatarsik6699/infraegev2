@@ -35,6 +35,8 @@ docker exec "$container_name" pg_restore -U postgres --exit-on-error \
   -d application_restore /tmp/application.dump
 
 docker exec "$container_name" createdb -U postgres umami_restore
+docker exec "$container_name" psql -U postgres --set ON_ERROR_STOP=1 \
+  --command 'CREATE ROLE umami NOLOGIN;'
 docker cp "$umami_dump" "$container_name:/tmp/umami.dump"
 docker exec "$container_name" pg_restore -U postgres --exit-on-error \
   -d umami_restore /tmp/umami.dump

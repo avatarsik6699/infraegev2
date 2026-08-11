@@ -166,6 +166,26 @@
 - **Fix**: add an encrypted off-site Restic backend and prove a restore from that backend before
   storing irreplaceable user data. This accepted residual risk is documented in the backup runbook.
 
+### PostgreSQL restore drills must recreate archived owner roles
+
+- **Symptoms**: the Restic snapshot restores and the application dump imports, but the Umami
+  `pg_restore` stops on `ALTER ... OWNER TO umami` with `role "umami" does not exist`.
+- **Root cause**: a custom-format dump retains object ownership metadata, while a fresh disposable
+  PostgreSQL container initially contains only its bootstrap superuser.
+- **Fix**: create the fixed source owner as a loginless role in the disposable cluster before
+  `pg_restore` (`CREATE ROLE umami NOLOGIN`). Keep `--exit-on-error`; do not hide ownership drift
+  with `--no-owner` when the purpose of the drill is fidelity. Always prove cleanup on failure.
+
+### Ubuntu already has a system group named `operator`
+
+- **Symptoms**: `useradd operator` fails with `group operator exists`, or a hand-written workaround
+  silently places the human login in an unrelated pre-existing system group.
+- **Root cause**: Ubuntu reserves an `operator` group even when no `operator` user exists; default
+  user-private-group creation collides with it.
+- **Fix**: keep the login name `operator`, but create and use the dedicated primary group
+  `infraege-operator`. Add only the user to the standard `sudo` supplementary group, validate the
+  effective SSH hardening before success, and keep `deploy` outside sudo.
+
 ### Production: deferred operator details and RKN work remain a legal risk
 
 - **Symptoms**: legal pages can describe current processing, but cannot identify the operator or

@@ -342,6 +342,9 @@ Nginx выставляет `Cache-Control`/`ETag` для хэшированно�
 - Production deploy запускается вручную через `workflow_dispatch`: SSH host-key verification,
   pull выбранного SHA, Compose replace, smoke/health и автоматический rollback на предыдущий SHA.
   Branch protection для `main` пока не включается, поскольку над проектом работает один человек.
+- Интерактивное администрирование выполняется отдельным `operator`: только key-based SSH и
+  password-protected `sudo`. Автоматический `deploy` не входит в `sudo`; прямой root SSH, SSH
+  password authentication и keyboard-interactive authentication остаются отключены.
 - CI-валидация связей контента: скрипт проверяет, что `prerequisites`/`related_topics`/
   `unlocks_topics`/`practice_task_ids`/`topic_ids` ссылаются на существующие id — сборка падает при
   битых связях, до того как они попадут в прод (см. §3, §2.3).

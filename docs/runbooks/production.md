@@ -35,6 +35,20 @@ from a developer machine. Generate and place every required value using the orde
    ops/install-backup-timers.sh
    ```
 
+7. Provision a distinct human administrator after verifying the operator public key through the
+   protected local recovery copy. The account uses key-only SSH and password-protected sudo;
+   `deploy` remains non-sudo and direct root SSH remains disabled:
+
+   ```bash
+   ssh -i ~/.ssh/id_ed25519 operator@2.26.8.245
+   sudo -i
+   ```
+
+   The current operator sudo recovery value is mode `600` at
+   `~/.config/infraege/production/operator-sudo-password`. It is not an SSH password because
+   password and keyboard-interactive SSH remain disabled. Rotate it from an authenticated operator
+   session with `sudo passwd operator`; do not put it in shell history, git, chat or GitHub.
+
 ## GitHub production settings
 
 Environment `production` requires reviewer approval. Set secrets `PROD_HOST`, `PROD_USER`,

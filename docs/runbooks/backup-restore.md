@@ -8,12 +8,34 @@ disposable PostgreSQL container. Status is written to `/var/lib/infraege/backup-
 Checks:
 
 ```bash
-systemctl list-timers 'infraege-*'
+sudo ops/install-backup-timers.sh
+systemctl list-timers --all 'infraege-*'
 sudo systemctl start infraege-backup.service
 sudo scripts/check-backup-freshness.sh
+sudo -u deploy env \
+  RESTIC_REPOSITORY=/var/backups/infraege/restic \
+  RESTIC_PASSWORD_FILE=/etc/infraege/restic-password \
+  restic snapshots --latest 1
+sudo -u deploy env \
+  RESTIC_REPOSITORY=/var/backups/infraege/restic \
+  RESTIC_PASSWORD_FILE=/etc/infraege/restic-password \
+  restic check --read-data
 sudo systemctl start infraege-restore-check.service
+systemctl show infraege-backup.service infraege-restore-check.service \
+  -p Id -p Result -p ExecMainStatus --no-pager
+docker ps -a --filter name=infraege-restore-check
 journalctl -u infraege-backup.service -u infraege-restore-check.service --since today
 ```
+
+The first production proof is not complete until all three `infraege-*` timers appear with a next
+run, the marker is fresh, Restic reports a current snapshot and `check --read-data` finds no
+errors, both oneshot services exit with status 0, and no `infraege-restore-check-*` container or
+`restore.*` work directory remains. A timer reported as `not-found` was never installed; waiting
+for its calendar cannot create the first backup.
+
+The custom-format Umami dump retains object ownership. The disposable cluster must create the
+loginless `umami` owner role before `pg_restore`; using `--no-owner` would make a simplified import
+pass without proving that the archived ownership metadata is restorable.
 
 For an actual restore, stop application writers, select a Restic snapshot, restore it to a new
 temporary directory, validate both dumps, then use `pg_restore --clean --if-exists` only after a
@@ -23,4 +45,3 @@ Run public smoke checks and preserve the pre-restore backup until acceptance.
 Known accepted risk: the initial repository is on the same VPS, so it protects against logical
 errors but not total VPS loss. Before storing irreplaceable user data, configure an encrypted
 off-site Restic backend and perform the same restore drill against it.
-

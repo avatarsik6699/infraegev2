@@ -43,6 +43,17 @@ with the reviewer-gated environment and dedicated `deploy` account; protect the 
 regularly. The deployment private key goes only to GitHub; the ops-reader private key stays on the
 dashboard machine.
 
+Human administration is a third, separate identity. The current `operator` account authorizes the
+operator workstation's personal ED25519 public key and belongs to the dedicated primary group
+`infraege-operator` plus Ubuntu's `sudo` group. Its sudo password is independent of root,
+application and automation credentials. SSH still accepts public keys only: never add `operator`
+to a password-enabled `Match` block, add `deploy` to sudo, or enable direct root SSH.
+
+Provision or rotate the account only through `ops/setup-operator-access.sh`, supplying the public
+key and a crypt password hash through protected process input. The helper validates `sshd -t` and
+the effective requirements `PermitRootLogin no`, `PasswordAuthentication no`,
+`KbdInteractiveAuthentication no`, and `PubkeyAuthentication yes` before reporting success.
+
 Upload a release checkout to the VPS and run from its root as `root`:
 
 ```bash
