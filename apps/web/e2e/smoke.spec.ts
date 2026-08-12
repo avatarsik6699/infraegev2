@@ -1,54 +1,29 @@
 import { test } from "./fixtures";
 
-test("published topic is discoverable, readable, and mastered at its threshold", async ({
+test("the neutral Table of Contents stand works across viewports and without JavaScript", async ({
   browserSession,
-  homePage,
-  noJavaScriptTopicPage,
-  sitemapPage,
-  topicPage,
+  foundationPage,
+  noJavaScriptFoundationPage,
 }) => {
   await browserSession.useDesktopViewport();
-  await homePage.open();
-  await homePage.openGraphsAndTablesTopic();
-  await topicPage.expectPublishedLesson();
-  await topicPage.expectBlankAnswerValidation();
-  await topicPage.expectKeyboardVisibleSubmit();
-  await browserSession.captureFullPage("graphs-and-tables-desktop.png");
-
-  await topicPage.submitCorrectTask(0, "Б");
-  await topicPage.submitCorrectTask(1, "8 км");
-  await topicPage.submitCorrectTask(2, "Д");
-  await topicPage.expectProgress(60, 3);
-  await topicPage.expectNotMastered();
-  await topicPage.submitCorrectTask(3, "24");
-  await topicPage.expectProgress(80, 4);
-  await topicPage.expectMastered();
-
-  await sitemapPage.expectPublishedTopic("/theory/zadanie-1-graphs-and-tables");
+  await foundationPage.open();
+  await foundationPage.expectTableOfContentsStand();
+  await foundationPage.expectAnchorNavigation();
+  await browserSession.captureFullPage("foundation-desktop.png");
 
   await browserSession.useNarrowViewport();
-  await topicPage.expectNoHorizontalOverflow();
-  await browserSession.captureFullPage("graphs-and-tables-narrow.png");
-  await topicPage.submitCorrectTask(4, "11 км");
-  await topicPage.expectProgress(100, 5);
-  await topicPage.expectMastered();
+  await foundationPage.open();
+  await foundationPage.expectNoHorizontalOverflow();
+  await browserSession.captureFullPage("foundation-narrow.png");
   browserSession.expectCleanConsole();
 
-  await noJavaScriptTopicPage.open();
-  await noJavaScriptTopicPage.expectReadableWithoutJavaScript();
-});
-
-test("legal pages retain headings and main landmarks", async ({
-  legalPage,
-}) => {
-  await legalPage.expectPrivacy();
-  await legalPage.expectTerms();
+  await noJavaScriptFoundationPage.expectReadableWithoutJavaScript();
 });
 
 test("unknown routes recover and browser errors are privacy-safe", async ({
   errorTelemetryPage,
-  homePage,
+  foundationPage,
 }) => {
-  await homePage.expectNotFound();
+  await foundationPage.expectRemovedRouteNotFound();
   await errorTelemetryPage.expectSanitizedGlobalErrorDelivery();
 });

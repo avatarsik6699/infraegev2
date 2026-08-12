@@ -1,104 +1,93 @@
 # ship — Canonical Playbook
 
-Run the Full Gate for a change, and on PASS merge its feature branch into `main` and archive the
-change file. With `--release`, additionally run the Release Gate and push to `origin/main`,
-confirming the resulting deploy via `gh`.
+Close a change locally after a compact Critical Gate. The expensive Full Gate is manual through
+`--full`; production publication through `--release` always implies the Full Gate and then runs
+the Release Gate before pushing.
 
-This document is the single source of truth for the `ship` workflow. It replaces the old
-`phase-gate` + `context-update` pair: there is no Current Contract/Phase Status/Project Log left
-to synchronize after archival, since the archive folder and git history are the record.
-
-In an integrated project, runtime wrappers under `.claude/skills/ship/SKILL.md` (Claude Code),
-`.agents/skills/ship/SKILL.md` (generic agent), and `plugins/sdd-workflow/{commands,skills}/ship/...`
-(Codex) point here. The wrappers are thin stubs — every workflow detail lives in this file.
+This document is the single source of truth for the `ship` workflow. Runtime wrappers under
+`.claude/skills/`, `.agents/skills/`, and `plugins/sdd-workflow/` stay thin and point here.
 
 ## Input
 
 ```text
-/ship [NN]              — run the Full Gate; merge to main and archive on PASS
-/ship [NN] --release     — also run the Release Gate, push main, and verify the deploy
+/ship [NN]              — Critical Gate; merge to local main and archive on PASS
+/ship [NN] --full       — Full Gate; merge to local main and archive on PASS
+/ship [NN] --release    — Full + Release Gates; merge, push main, and verify the deploy
 ```
 
-- `NN` — zero-padded change number. If omitted, infer it from the current `feature/NN-slug` branch.
+- `NN` — zero-padded change number. If omitted, infer it from `feature/NN-slug`.
+- `--release` implies `--full`; passing both is valid but redundant.
 
 ## Required reads
 
-- `docs/changes/NN-slug.md` — the change under gate (Backlog, Files, Gate Checks override,
-  Architect Review Notes)
-- `docs/STACK.md` — Full Gate table, Release Gate table (`--release` only)
-- Current git branch / `docs/changes/` directory, if `NN` wasn't given
+- `docs/changes/NN-slug.md` — Backlog, Gate Checks, and Architect Review Notes
+- `docs/STACK.md` — Critical, Full, and Release Gate command tables
+- Current git branch and `docs/changes/` when `NN` is omitted
 
 ## Procedure
 
 ### 1. Identify the target
 
-- If `NN` was given, open `docs/changes/NN-slug.md`. Otherwise resolve `NN` from the current
-  `feature/NN-slug` branch name; if the branch doesn't follow that pattern, ask which change.
-- Confirm the branch is `feature/NN-slug` for that change; if not, stop and ask before proceeding
-  (do not gate or merge the wrong branch).
+- Resolve the change file and confirm the current branch is its `feature/NN-slug` branch. Stop
+  before gating or merging if it is not.
+- Count unchecked Backlog and Architect Review Note items. Either kind blocks shipping regardless
+  of automated results.
+- Read change-specific `Gate Checks`; applicable overrides add to the selected standard gate.
 
-### 2. Run the Full Gate
+### 2. Select and run the gate
 
-1. Read the change file's `Gate Checks` section for any phase/change-specific override (e.g. a
-   custom smoke-test expectation) and treat it as an addition to, not a replacement of, the
-   standard rows.
-2. Read the change file's `Architect Review Notes` and count unchecked items. Unchecked items
-   block PASS regardless of automated results.
-3. Read `docs/STACK.md`'s **Full Gate** table and treat it as the command source. If a command is
-   not defined for a row, mark that row `SKIPPED — no command in STACK.md` rather than guessing.
-4. Ensure a project `.env` (or equivalent secrets file declared by `STACK.md`) exists so
-   container-based commands use the same credentials the app uses.
-5. If the project declares a helper script (`scripts/ship.sh` or any path in
-   `STACK.md#gate-commands`), prefer it. Otherwise execute the rows below directly.
-6. Bring up the full stack if bootstrap is required (e.g. start Docker services); wait for
-   readiness before continuing.
-7. Run, in order, whichever of these rows are defined in `docs/STACK.md`'s Full Gate table:
-   migrations, backend test suite, frontend build, frontend type-check, frontend test suite,
-   e2e determinism/lint check, e2e suite, smoke, **SAST** (e.g. Semgrep), **secrets scan** (e.g.
-   Gitleaks), **dependency audit** (e.g. Trivy/`npm audit`/`pip-audit`), **accessibility audit**
-   (e.g. axe/Lighthouse CI), **performance budget** (e.g. Lighthouse CI Core Web Vitals
-   thresholds).
-8. Do not stop at the first failure — run every defined row so the architect sees the full
-   picture at once.
-9. Produce a table report: one row per check, plus a row for Architect Review Notes. Overall PASS
-   only if every executed row is green and there are no unchecked review notes.
+#### Default local ship
+
+1. Read `docs/STACK.md`'s **Critical Gate** table.
+2. Determine touched areas from the feature-branch diff against local `main`.
+3. Run the applicable Critical Gate rows once. Use focused tests covering changed behavior; do not
+   broaden them to complete unit, E2E, infrastructure, security, accessibility, or performance
+   suites. Documentation-only changes normally need formatting/link integrity only.
+4. Report each applicable row and every intentional skip with its reason.
+
+#### `--full` or `--release`
+
+1. Read `docs/STACK.md`'s **Full Gate** table and treat it as the command source.
+2. Ensure the declared environment/bootstrap prerequisites exist. Prefer a declared helper script
+   when present; otherwise execute every defined row directly in table order.
+3. Do not stop at the first failure: run every defined row and report the full picture. A missing
+   command is `SKIPPED — no command in STACK.md`, never an invitation to guess.
+
+For either mode, PASS requires every executed row to be green and no unchecked Backlog or
+Architect Review Note items.
 
 ### 3. On FAIL
 
-Report the full table and stop. Do not commit, merge, or archive.
+Report the selected gate table and stop. Do not commit, merge, archive, or push.
 
 ### 4. On PASS — merge and archive
 
-1. Commit any outstanding changes on `feature/NN-slug` using the change file's Commit Message.
-2. Merge `feature/NN-slug` into local `main` (fast-forward if possible, otherwise a normal merge
-   commit — never rewrite history).
-3. Change the file's `Change Metadata` status from `active` to `archived`, then move
-   `docs/changes/NN-slug.md` to `docs/changes/archive/NN-slug.md`.
-4. Report PASS, the merge result, and the archive path.
+1. Commit outstanding changes on `feature/NN-slug` using the change file's Commit Message.
+2. Merge it into local `main` (fast-forward when possible, otherwise a normal merge commit; never
+   rewrite history).
+3. Set the change status to `archived` and move it to `docs/changes/archive/NN-slug.md`.
+4. Report the gate mode, merge result, and archive path.
 
 ### 5. `--release` only — Release Gate and deploy
 
-Run this only after step 4 succeeds.
+Run only after the mandatory Full Gate and local merge succeed.
 
-1. Read `docs/STACK.md`'s **Release Gate** table and run its rows (e.g. container image scan,
-   health-check/zero-downtime deploy verification). `n/a`/`SKIPPED` rows follow the same honesty
-   rule as the Full Gate.
-2. On PASS: push local `main` to `origin/main`.
-3. Use `gh` to find the resulting CI/CD run for the pushed commit and confirm it completed
-   successfully; if the project has a deploy step, confirm the deployment reports healthy
-   (e.g. a `gh run watch`, a deployment status check, or the project's declared health endpoint).
-   Report the live status — "pushed" alone is not sufficient.
-4. On Release Gate FAIL: report and stop before pushing. The local merge from step 4 already
-   happened and is not undone.
+1. Run every row in `docs/STACK.md`'s **Release Gate** table, reporting honest `SKIPPED` rows.
+2. On PASS, push local `main` to `origin/main`.
+3. Use `gh` to locate the resulting CI/CD run and confirm its successful completion and declared
+   deployment health. “Pushed” alone is not sufficient.
+4. On Release Gate failure, stop before pushing. Do not undo the already completed local merge.
 
-### 6. Report
+## Report
 
-```
+```text
 ## ship complete — change [NN]
 
-Full Gate:
+Gate mode: Critical / Full / Full + Release
+[selected gate]:
   [row] — PASS
   [row] — SKIPPED ([reason])
+Backlog: [count] unresolved
 Architect Review Notes: [count] unresolved
 
 Result: PASS / FAIL
@@ -115,19 +104,16 @@ Deploy status: [live status via gh, or "not applicable"]
 ## Rules
 
 - Do not edit code files in this workflow.
-- Do not stop at the first Full/Release Gate failure — show the full picture.
-- Do bring up the full stack yourself when bootstrap is required; the gate verifies the real
-  end-to-end environment, not isolated unit tests.
-- Do not treat unchecked architect review notes as informational; they block PASS until resolved.
+- Default `/ship` is intentionally compact; do not silently promote it to a Full Gate.
+- Run the Full Gate only for explicit `--full` or `--release`.
+- Publication safety is not optional: `--release` must pass both Full and Release Gates.
+- Unchecked Backlog or Architect Review Note items block every ship mode.
 - Never force-push, rewrite history, or delete branches without explicit confirmation.
-- Only push to `origin/main` when `--release` was passed and the Full Gate already passed.
-- If the stack changes (new framework, new test runner, new container layout, new security
-  scanner), update `docs/STACK.md`, never this playbook.
+- Push `origin/main` only for `--release` after all mandatory gates pass.
+- When the stack changes, update `docs/STACK.md`, not this playbook.
 
 ## Done when
 
-- Every Full Gate row (and, with `--release`, every Release Gate row) has a reported status.
-- The output clearly states overall PASS or FAIL.
-- On PASS: the branch is merged to local `main` and the change file is archived.
-- With `--release` and Release Gate PASS: `main` is pushed and the deploy status is confirmed, not
-  assumed.
+- Every selected gate row has a reported status and all unresolved checklist items are counted.
+- On PASS, the branch is merged locally and the change file is archived.
+- With `--release`, Full and Release Gates pass, `main` is pushed, and deploy health is confirmed.

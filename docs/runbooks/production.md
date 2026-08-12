@@ -52,9 +52,9 @@ from a developer machine. Generate and place every required value using the orde
 ## GitHub production settings
 
 Environment `production` requires reviewer approval. Set secrets `PROD_HOST`, `PROD_USER`,
-`PROD_SSH_KEY`, `PROD_SSH_HOST_KEY`; set variables `VITE_FEEDBACK_URL` and
-`VITE_UMAMI_WEBSITE_ID`. The host key must be the exact `known_hosts` line obtained through a
-trusted channel, never `StrictHostKeyChecking=no`.
+`PROD_SSH_KEY`, `PROD_SSH_HOST_KEY`; set variable `VITE_UMAMI_WEBSITE_ID`. The host key must be
+the exact `known_hosts` line obtained through a trusted channel, never
+`StrictHostKeyChecking=no`.
 
 For this VPS, `PROD_HOST=2.26.8.245` and `PROD_USER=deploy`. Do not use the bootstrap `root`
 account or its password in GitHub.

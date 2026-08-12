@@ -1,8 +1,8 @@
 ---
 name: ship
-description: Run the Full Gate for a change; on PASS, commit, merge its feature branch into main, and archive the change file. With `--release`, also run the Release Gate, push origin/main, and verify the deploy via gh.
+description: Close a change with the compact Critical Gate by default; use `--full` for the manual Full Gate or `--release` for mandatory Full and Release Gates, push, and deploy verification.
 allowed-tools: Bash, Read
-argument-hint: "[change number] [--release]"
+argument-hint: "[change number] [--full|--release]"
 ---
 
 You are running the SDD `ship` workflow.
@@ -10,7 +10,7 @@ You are running the SDD `ship` workflow.
 **Arguments**: $ARGUMENTS
 
 Execute the canonical playbook in [docs/playbooks/ship.md](../../../docs/playbooks/ship.md). The
-executable commands live in `docs/STACK.md`'s Full Gate and Release Gate tables; do not duplicate
+executable commands live in `docs/STACK.md`'s Critical, Full, and Release Gate tables; do not duplicate
 them here.
 
 Do not edit code in this workflow — only run gate commands, and on PASS perform the commit, merge,

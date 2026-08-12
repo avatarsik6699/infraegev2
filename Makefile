@@ -10,7 +10,6 @@ LOCAL_ENV := POSTGRES_USER=infraege \
 	POSTGRES_PASSWORD=infraege-local-only \
 	POSTGRES_DB=infraege \
 	APP_ENV=development \
-	SITE_URL=http://localhost:8080 \
 	DEPLOY_SHA=development
 
 OPS_LOCAL := ./scripts/ops-local.sh
@@ -55,7 +54,7 @@ dev:
 	@$(LOCAL_ENV) $(COMPOSE) up --build --wait --wait-timeout 180
 	@echo ""
 	@echo "infraege is ready: http://localhost:8080/"
-	@echo "Published topic: http://localhost:8080/theory/zadanie-1-graphs-and-tables"
+	@echo "UI foundation: http://localhost:8080/"
 
 stop:
 	@docker info >/dev/null 2>&1 || { echo "Docker is not running." >&2; exit 1; }

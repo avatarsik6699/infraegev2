@@ -82,41 +82,6 @@
 - **Origin**: explicit architect instruction during change 03 scoping; also recorded in
   `docs/changes/03-testing-conventions.md` § Implementation Notes.
 
-### TanStack Start: filesystem access in a route `loader` breaks the client build
-
-- **Symptoms**: `vite build` fails with `"join" is not exported by "__vite-browser-external"` (or
-  similar) pointing at a module that imports `node:fs`/`node:path`, even though that module is only
-  used inside a route's `loader` field.
-- **Root cause**: route `loader` functions run on both server and client (TanStack Start docs,
-  "code execution patterns") — the client bundler tries to include whatever the loader touches,
-  and `node:fs` can't be bundled for the browser.
-- **Fix**: wrap the filesystem-touching function in `createServerFn()` from `@tanstack/react-start`,
-  and keep the `createServerFn` call **in the same file** as the `node:fs`/`node:path` imports — the
-  compiler's client-bundle stripping is per-file; splitting the fs code into a separately-imported
-  module defeats it. See `apps/web/src/entities/content/api/server-loaders.ts`.
-- **Consequence**: once any route uses `createServerFn`, the deployed frontend needs a running Node
-  process to answer the client's RPC calls on navigation — pure static Nginx serving isn't enough,
-  even if every page is prerendered. See `infra/docker-compose.yml`'s `web` service.
-- **Corollary (change 02, FSD-like restructure)**: this file is safe to **move** as a whole (e.g.
-  into a different FSD layer) — only an import path changes. It is not safe to **split**
-  ("helpers in `lib/`, `createServerFn` calls in `api/`"), even during a refactor that otherwise
-  splits every other content module that way. The whole file moved intact in change 02.
-
-### TanStack Start: `import.meta.dirname`-relative paths break once bundled
-
-- **Symptoms**: a path computed as `join(import.meta.dirname, "..", ...)` inside a server function
-  resolves correctly in `pnpm dev` but 500s (or silently reads the wrong files) after `vite build` —
-  prerendering may fail outright with "Internal Server Error" and no useful stack trace.
-- **Root cause**: after bundling, the module lives in `.output/server/assets/`, not its original
-  source path — `import.meta.dirname` at runtime reflects the bundle's location, not the source
-  tree's.
-- **Fix**: compute the absolute path once in `vite.config.ts` (which always runs from source) and
-  inject it as a build-time constant via `define`. See `apps/web/vite.config.ts`'s
-  `__CONTENT_ROOT__` and `apps/web/src/entities/content/api/server-loaders.ts`.
-- **Corollary**: do not route this constant through a runtime env-config module (e.g.
-  `shared/config/env.ts`) even for consistency — env reads happen at *runtime*, which is exactly
-  the wrong resolution timing after bundling. `__CONTENT_ROOT__` must stay a build-time `define`.
-
 ### Docker: TanStack Start's build-time prerender can ECONNREFUSED inside `docker build`
 
 - **Symptoms**: `pnpm build` (with `prerender.enabled: true`) works fine on the host and inside a
@@ -136,8 +101,8 @@
   very next instruction (even a trivial `RUN ls`, or a later stage's `COPY --from=builder`) reports
   the files as missing. Verified reproducible with both the BuildKit and legacy (`DOCKER_BUILDKIT=0`)
   builders.
-- **Verified**: change 03 on Docker Desktop/BuildKit — Compose built both images, TanStack
-  prerendered `/`, `/privacy`, and `/terms`, and all four services became healthy.
+- **Verified**: change 03 on Docker Desktop/BuildKit; after the Change 15 reset the retained proof
+  target is the prerendered `/` foundation route.
 
 ### Nitro Vite dev server bypasses Vite's `server.proxy`
 

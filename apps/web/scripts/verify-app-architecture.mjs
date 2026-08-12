@@ -6,19 +6,11 @@ const workspaceRoot = path.join(import.meta.dirname, "..");
 const sourcePath = path.join(
   workspaceRoot,
   "src",
-  "features",
-  "track-progress",
-  "model",
-  "progress-store.ts",
+  "shared",
+  "lib",
+  "safe-json.ts",
 );
-const apiPath = path.join(
-  workspaceRoot,
-  "src",
-  "features",
-  "check-answer",
-  "api",
-  "check-answer.ts",
-);
+const apiPath = path.join(workspaceRoot, "src", "shared", "api", "errors.ts");
 const storagePath = path.join(
   workspaceRoot,
   "src",
@@ -59,7 +51,7 @@ const forbiddenPatterns = [
     source: "Promise.resolve();",
   },
   {
-    name: "native fetch inside a feature API",
+    name: "native fetch outside the transport adapter",
     ruleId: "no-restricted-globals",
     source: 'export const load = () => fetch("/api/value");',
     filePath: apiPath,

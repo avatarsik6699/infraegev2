@@ -2,7 +2,7 @@
 
 Implement one or more uncompleted items from a change file through a deterministic agent-only
 cycle: confirm the right branch, read the change contract, explore the codebase, implement,
-verify with the domain's mandated tooling and the Fast Gate, and update the change file only after
+verify with the domain's mandated tooling and one compact Critical Gate, and update the change file only after
 the code satisfies the item's contract. An "item" is either a **Backlog task** (`B1`, `F2`, …) or
 an **Architect Review Note** (`R1`, `R2`, …) — both go through the same loop, just with a different
 source location and a different checkbox to flip. Findings the architect reports mid-session are
@@ -40,7 +40,7 @@ In an integrated project, runtime wrappers under `.claude/skills/work/SKILL.md` 
   Gate Checks override, existing Implementation Notes
 - `docs/SPEC.md` §3–§4 (and others as relevant) — the actual contract; the change file only
   points here, it doesn't duplicate it
-- `docs/STACK.md` — Fast Gate table, Required Tooling table, stack conventions
+- `docs/STACK.md` — Critical Gate table, Required Tooling table, stack conventions
 - `docs/KNOWN_GOTCHAS.md` — project pitfalls
 - Relevant source files and git history — verify current implementation before editing; recent
   commits and diffs are the record of *how* prior work was done, so read them instead of expecting
@@ -140,7 +140,7 @@ before editing code:
 - **Done when:** concrete completion condition
 - **Files:** exact paths expected to change
 - **Steps:** short ordered implementation steps
-- **Checks:** which Fast Gate rows apply, plus any focused test commands
+- **Checks:** which Critical Gate rows apply, plus any focused test commands
 - **Required tooling:** which row(s) of `docs/STACK.md`'s Required Tooling table apply to this
   item's domain (e.g. frontend UI → Playwright/chrome-devtools MCP; TS/Python → LSP)
 
@@ -178,14 +178,18 @@ This is not optional or "if convenient." If a mandated tool genuinely isn't avai
 environment, report it explicitly as skipped with the reason — do not check off the item silently
 as if the tool had run.
 
-### 10. Verify and mark complete (Fast Gate)
+### 10. Verify and mark complete (Critical Gate)
 
-After implementing each item:
+After implementing the complete target set:
 
-1. Re-read the changed files and confirm the contract/note is satisfied.
-2. Run the `docs/STACK.md` **Fast Gate** rows relevant to the touched area (lint, type-check,
-   targeted/affected unit tests, LSP diagnostics, API type regen when applicable) — not the Full
-   Gate. `n/a`/`SKIPPED` rows are reported as such, same honesty rule as the full gate.
+1. Re-read the changed files and confirm every targeted contract/note is satisfied. During
+   implementation, run a focused test immediately only when it provides useful feedback; do not
+   replay the gate after every individual checkbox.
+2. Run the `docs/STACK.md` **Critical Gate** once, selecting only rows relevant to the touched
+   area: formatting, affected-workspace lint/type-check, tests directly covering changed behavior,
+   LSP diagnostics, and API type regeneration when applicable. Documentation-only work normally
+   needs formatting/link integrity only. Do not run full unit suites, E2E, infrastructure,
+   security, accessibility, performance, or the Full Gate unless explicitly requested.
 3. Report the commands run and their results; if a check was not run, state the reason.
 4. Mark the item:
    - Backlog task → check off the matching item in `docs/changes/NN-slug.md` § Backlog.
@@ -195,7 +199,8 @@ After implementing each item:
 Only check off an item after verification succeeds, the fix is re-verified, or the task is
 explicitly already implemented.
 
-Do not run the Full Gate or merge/archive. That is `/ship`.
+Do not run the Full Gate or merge/archive. Full Gate requires explicit `/ship --full` or
+`/ship --release`.
 
 ### 11. Report
 
@@ -222,7 +227,7 @@ Blocked:
 Needs clarification:
   [ID] — [question]
 
-Fast Gate:
+Critical Gate:
   [row] — PASS
   [row] — SKIPPED ([reason])
 
@@ -251,4 +256,4 @@ them next session, then run `/work [NN] review` or `/ship [NN]` when the change 
 - Any mid-session architect findings are recorded as new Backlog items, not silently fixed.
 - Required tooling for each done item's domain was used, or explicitly reported as skipped with a
   reason.
-- The final report lists Fast Gate results and remaining manual next steps.
+- The final report lists Critical Gate results and remaining manual next steps.

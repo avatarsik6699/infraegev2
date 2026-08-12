@@ -1,7 +1,5 @@
-# Topology per docs/SPEC.md §7.1. `web` runs the TanStack Start Node server (Nitro) — pages are
-# prerendered at build time, but client-side navigation still calls server functions
-# (apps/web/src/entities/content/api/server-loaders.ts) over RPC, which needs a running process to
-# answer.
+# Topology per docs/SPEC.md §7.1. `web` runs the TanStack Start Node server (Nitro); the root
+# foundation route is prerendered and remains readable without JavaScript.
 x-json-file-logging: &json-file-logging
   logging:
     driver: json-file

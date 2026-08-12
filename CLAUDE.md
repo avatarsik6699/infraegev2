@@ -10,9 +10,9 @@ This file only lists Claude-specific command wrappers.
 | Command | When to use | Wraps playbook |
 |---------|-------------|----------------|
 | `/plan ["brief" \| path/to/draft.md] [--new\|--continue]` | Auto-select the next documented scope when omitted, or use a brief; refresh SPEC when needed and scaffold its feature branch | [docs/playbooks/plan.md](docs/playbooks/plan.md) |
-| `/work [NN] [ID\|group]` | Agent implements Backlog items, absorbing mid-session findings, running the Fast Gate | [docs/playbooks/work.md](docs/playbooks/work.md) |
+| `/work [NN] [ID\|group]` | Agent implements Backlog items and runs one affected-area Critical Gate | [docs/playbooks/work.md](docs/playbooks/work.md) |
 | `/work [NN] review [R#]` | Agent fixes unchecked Architect Review Notes | [docs/playbooks/work.md](docs/playbooks/work.md) |
-| `/ship [NN] [--release]` | Full Gate; on PASS merge to `main` and archive; with `--release`, push and verify deploy | [docs/playbooks/ship.md](docs/playbooks/ship.md) |
+| `/ship [NN] [--full\|--release]` | Critical Gate by default; `--full` is manual Full Gate; `--release` adds mandatory Full + Release Gates and deploy verification | [docs/playbooks/ship.md](docs/playbooks/ship.md) |
 
 Skill wrappers live in `.claude/skills/` and are intentionally thin.
 

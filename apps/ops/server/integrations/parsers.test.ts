@@ -70,9 +70,9 @@ Status for the jail: infraege-nginx-limit
       MESSAGE: JSON.stringify({
         event: "client.error_reported",
         kind: "chunk_load",
-        route_id: "/theory/$topicSlug",
+        route_id: "/section/$sectionId",
         fingerprint: "a".repeat(64),
-        asset_path: "/_build/topic.js",
+        asset_path: "/_build/section.js",
       }),
     });
 
@@ -81,7 +81,7 @@ Status for the jail: infraege-nginx-limit
         time: "2026-08-12T10:00:00Z",
         service: "web",
         message:
-          "chunk_load · /theory/$topicSlug · /_build/topic.js · aaaaaaaaaaaa",
+          "chunk_load · /section/$sectionId · /_build/section.js · aaaaaaaaaaaa",
       },
     ]);
   });

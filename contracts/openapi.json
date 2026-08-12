@@ -72,8 +72,7 @@
                   "callout": "#/components/schemas/CalloutBlock",
                   "code_example": "#/components/schemas/CodeExampleBlock",
                   "completion_exercise": "#/components/schemas/WorkedExampleBlock",
-                  "diagram": "#/components/schemas/DiagramBlock",
-                  "figure": "#/components/schemas/FigureBlock",
+                  "learning_visual": "#/components/schemas/LearningVisualBlock",
                   "productive_failure_prompt": "#/components/schemas/WorkedExampleBlock",
                   "text": "#/components/schemas/TextBlock",
                   "video_embed": "#/components/schemas/VideoEmbedBlock",
@@ -86,10 +85,7 @@
                   "$ref": "#/components/schemas/TextBlock"
                 },
                 {
-                  "$ref": "#/components/schemas/FigureBlock"
-                },
-                {
-                  "$ref": "#/components/schemas/DiagramBlock"
+                  "$ref": "#/components/schemas/LearningVisualBlock"
                 },
                 {
                   "$ref": "#/components/schemas/CodeExampleBlock"
@@ -240,170 +236,61 @@
         "title": "CodeExampleBlockData",
         "type": "object"
       },
-      "DiagramBlock": {
-        "additionalProperties": false,
+      "HTTPValidationError": {
         "properties": {
-          "data": {
-            "discriminator": {
-              "mapping": {
-                "automaton": "#/components/schemas/GraphDiagramData",
-                "bit-grid": "#/components/schemas/TableDiagramData",
-                "graph": "#/components/schemas/GraphDiagramData"
-              },
-              "propertyName": "kind"
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
             },
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/GraphDiagramData"
-              },
-              {
-                "$ref": "#/components/schemas/TableDiagramData"
-              }
-            ],
-            "title": "Data"
-          },
-          "type": {
-            "const": "diagram",
-            "title": "Type",
-            "type": "string"
+            "title": "Detail",
+            "type": "array"
           }
         },
-        "required": [
-          "type",
-          "data"
-        ],
-        "title": "DiagramBlock",
+        "title": "HTTPValidationError",
         "type": "object"
       },
-      "DiagramElement": {
+      "HybridLearningVisualData": {
         "additionalProperties": false,
         "properties": {
-          "from": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "From"
-          },
-          "highlighted": {
-            "anyOf": [
-              {
-                "type": "boolean"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Highlighted"
-          },
-          "id": {
-            "title": "Id",
+          "accessible_description": {
+            "title": "Accessible Description",
             "type": "string"
           },
-          "kind": {
-            "enum": [
-              "node",
-              "edge",
-              "arrow",
-              "label",
-              "highlight"
-            ],
-            "title": "Kind",
-            "type": "string"
-          },
-          "text": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Text"
-          },
-          "to": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "To"
-          },
-          "x": {
-            "anyOf": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "X"
-          },
-          "y": {
-            "anyOf": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Y"
-          }
-        },
-        "required": [
-          "kind",
-          "id"
-        ],
-        "title": "DiagramElement",
-        "type": "object"
-      },
-      "FigureBlock": {
-        "additionalProperties": false,
-        "properties": {
-          "data": {
-            "$ref": "#/components/schemas/FigureBlockData"
-          },
-          "type": {
-            "const": "figure",
-            "title": "Type",
-            "type": "string"
-          }
-        },
-        "required": [
-          "type",
-          "data"
-        ],
-        "title": "FigureBlock",
-        "type": "object"
-      },
-      "FigureBlockData": {
-        "additionalProperties": false,
-        "properties": {
-          "alt": {
-            "title": "Alt",
-            "type": "string"
+          "asset": {
+            "$ref": "#/components/schemas/LearningVisualAsset"
           },
           "caption": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Caption"
+            "title": "Caption",
+            "type": "string"
           },
+          "purpose": {
+            "title": "Purpose",
+            "type": "string"
+          },
+          "representation": {
+            "const": "hybrid",
+            "title": "Representation",
+            "type": "string"
+          },
+          "visual": {
+            "$ref": "#/components/schemas/StructuredLearningVisual"
+          }
+        },
+        "required": [
+          "representation",
+          "purpose",
+          "accessible_description",
+          "caption",
+          "asset",
+          "visual"
+        ],
+        "title": "HybridLearningVisualData",
+        "type": "object"
+      },
+      "JsonValue": {},
+      "LearningVisualAsset": {
+        "additionalProperties": false,
+        "properties": {
           "height": {
             "exclusiveMinimum": 0.0,
             "title": "Height",
@@ -421,108 +308,142 @@
         },
         "required": [
           "src",
-          "alt",
           "width",
           "height"
         ],
-        "title": "FigureBlockData",
+        "title": "LearningVisualAsset",
         "type": "object"
       },
-      "GraphDiagramData": {
+      "LearningVisualBlock": {
         "additionalProperties": false,
         "properties": {
-          "ariaLabel": {
-            "title": "Arialabel",
-            "type": "string"
-          },
-          "elements": {
-            "items": {
-              "$ref": "#/components/schemas/DiagramElement"
+          "data": {
+            "discriminator": {
+              "mapping": {
+                "hybrid": "#/components/schemas/HybridLearningVisualData",
+                "raster": "#/components/schemas/RasterLearningVisualData",
+                "structured": "#/components/schemas/StructuredLearningVisualData"
+              },
+              "propertyName": "representation"
             },
-            "title": "Elements",
-            "type": "array"
-          },
-          "kind": {
-            "enum": [
-              "graph",
-              "automaton"
-            ],
-            "title": "Kind",
-            "type": "string"
-          }
-        },
-        "required": [
-          "kind",
-          "ariaLabel",
-          "elements"
-        ],
-        "title": "GraphDiagramData",
-        "type": "object"
-      },
-      "HTTPValidationError": {
-        "properties": {
-          "detail": {
-            "items": {
-              "$ref": "#/components/schemas/ValidationError"
-            },
-            "title": "Detail",
-            "type": "array"
-          }
-        },
-        "title": "HTTPValidationError",
-        "type": "object"
-      },
-      "TableDiagramData": {
-        "additionalProperties": false,
-        "properties": {
-          "ariaLabel": {
-            "title": "Arialabel",
-            "type": "string"
-          },
-          "headers": {
-            "items": {
-              "type": "string"
-            },
-            "title": "Headers",
-            "type": "array"
-          },
-          "highlightedCells": {
-            "anyOf": [
+            "oneOf": [
               {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
+                "$ref": "#/components/schemas/RasterLearningVisualData"
               },
               {
-                "type": "null"
+                "$ref": "#/components/schemas/StructuredLearningVisualData"
+              },
+              {
+                "$ref": "#/components/schemas/HybridLearningVisualData"
               }
             ],
-            "title": "Highlightedcells"
+            "title": "Data"
           },
-          "kind": {
-            "const": "bit-grid",
-            "title": "Kind",
+          "type": {
+            "const": "learning_visual",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "data"
+        ],
+        "title": "LearningVisualBlock",
+        "type": "object"
+      },
+      "RasterLearningVisualData": {
+        "additionalProperties": false,
+        "properties": {
+          "accessible_description": {
+            "title": "Accessible Description",
             "type": "string"
           },
-          "rows": {
-            "items": {
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
+          "asset": {
+            "$ref": "#/components/schemas/LearningVisualAsset"
+          },
+          "caption": {
+            "title": "Caption",
+            "type": "string"
+          },
+          "purpose": {
+            "title": "Purpose",
+            "type": "string"
+          },
+          "representation": {
+            "const": "raster",
+            "title": "Representation",
+            "type": "string"
+          }
+        },
+        "required": [
+          "representation",
+          "purpose",
+          "accessible_description",
+          "caption",
+          "asset"
+        ],
+        "title": "RasterLearningVisualData",
+        "type": "object"
+      },
+      "StructuredLearningVisual": {
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/JsonValue"
             },
-            "title": "Rows",
-            "type": "array"
+            "minProperties": 1,
+            "title": "Data",
+            "type": "object"
+          },
+          "kind": {
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^[a-z][a-z0-9_]*$",
+            "title": "Kind",
+            "type": "string"
           }
         },
         "required": [
           "kind",
-          "ariaLabel",
-          "headers",
-          "rows"
+          "data"
         ],
-        "title": "TableDiagramData",
+        "title": "StructuredLearningVisual",
+        "type": "object"
+      },
+      "StructuredLearningVisualData": {
+        "additionalProperties": false,
+        "properties": {
+          "accessible_description": {
+            "title": "Accessible Description",
+            "type": "string"
+          },
+          "caption": {
+            "title": "Caption",
+            "type": "string"
+          },
+          "purpose": {
+            "title": "Purpose",
+            "type": "string"
+          },
+          "representation": {
+            "const": "structured",
+            "title": "Representation",
+            "type": "string"
+          },
+          "visual": {
+            "$ref": "#/components/schemas/StructuredLearningVisual"
+          }
+        },
+        "required": [
+          "representation",
+          "purpose",
+          "accessible_description",
+          "caption",
+          "visual"
+        ],
+        "title": "StructuredLearningVisualData",
         "type": "object"
       },
       "TextBlock": {

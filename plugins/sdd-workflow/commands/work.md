@@ -1,5 +1,5 @@
 ---
-description: Implement Backlog tasks (default) or fix Architect Review Notes (review), absorbing mid-session findings and running the Fast Gate. Usage: /work [change] [task-id|group|review [R#]|--force]
+description: Implement Backlog tasks (default) or fix Architect Review Notes (review), absorbing findings and running one affected-area Critical Gate. Usage: /work [change] [task-id|group|review [R#]|--force]
 ---
 
 # /work

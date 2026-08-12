@@ -1,5 +1,5 @@
 # One-command developer overlay used by `make dev`.
-# Dependencies are installed inside images; source/content bind mounts provide hot reload without
+# Dependencies are installed inside images; source bind mounts provide hot reload without
 # requiring Node, pnpm, Python, uv, PostgreSQL, or an .env file on the host.
 services:
   nginx:
@@ -15,11 +15,9 @@ services:
       target: development
     environment:
       - NODE_ENV=development
-      - SITE_URL=http://localhost:8080
       - VITE_PROXY_TARGET=http://api:8000
     volumes:
       - ../apps/web/src:/repo/apps/web/src
-      - ../content:/repo/content:ro
     healthcheck:
       interval: 2s
       timeout: 2s

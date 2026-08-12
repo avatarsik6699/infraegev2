@@ -22,10 +22,6 @@ export const AppNavigationProgress: React.FC = () => {
   }, [loading]);
 
   return (
-    <NavigationProgress
-      aria-label="Загрузка страницы"
-      color="textbook"
-      size={3}
-    />
+    <NavigationProgress aria-label="Загрузка страницы" color="ember" size={3} />
   );
 };

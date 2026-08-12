@@ -50,7 +50,7 @@
 ### Infra
 - [ ] `I1` [task] — _Depends on:_ —
 
-<!-- Test execution is governed by `docs/STACK.md`'s Fast Gate (per task) and Full Gate (per ship).
+<!-- Test execution is governed by `docs/STACK.md`'s Critical Gate and opt-in Full Gate.
      Do not duplicate that list here. -->
 
 ---
@@ -77,8 +77,8 @@ of truth; this file only tracks what to build and what's left.
 
 ## Gate Checks
 
-> Fast Gate runs per task in `/work`; Full Gate and (with `--release`) Release Gate run once in
-> `/ship`. Both are defined in [docs/STACK.md](./STACK.md) — this section only records
+> Critical Gate runs once per `/work` target set and by default in `/ship`; Full Gate runs only
+> with `--full` or `--release`. All gates are defined in [docs/STACK.md](./STACK.md) — this section only records
 > change-specific overrides.
 
 If this change needs a custom smoke target or other change-specific note, record it here:

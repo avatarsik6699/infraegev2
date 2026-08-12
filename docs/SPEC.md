@@ -9,8 +9,8 @@
 
 | Field | Value |
 |-------|-------|
-| Document Version | `v1.1` |
-| Date | `2026-08-10` |
+| Document Version | `v1.2` |
+| Date | `2026-08-12` |
 | Architect / Owner | `v.godlevskiy` |
 | Stack | See [docs/STACK.md](./STACK.md) |
 | Domain | Платформа подготовки к ЕГЭ по информатике — теория, визуализация, практика по темам экзамена, привязанные к мини-курсам |
@@ -40,16 +40,16 @@ sdamgia.ru, kpolyakov.spb.ru), ни новыми AI-ботами (решают �
 ### 1.2 Goal and Success Metrics
 
 Цель MVP — подтвердить, что органический поиск приводит трафик на темы, сделанные по этим
-принципам, и что ученики реально проходят путь теория → практика → следующая тема, а не уходят
-после первого экрана.
+принципам, и что ученики реально проходят путь Теория → Практика → Что важно для ЕГЭ → Результат,
+а затем продолжают обучение, а не уходят после первого экрана.
 
 - [NEEDS_CLARIFICATION: конкретные числовые целевые показатели (сколько органических визитов /
   за какой срок / какая глубина прохождения темы считается успехом) не зафиксированы архитектором
   — решить после этапа 3 (публичный запуск), когда появятся первые данные Umami, а не гадать
   заранее.]
-- Прокси-метрики, которые собираются с первого дня публикации (раздел 12, Umami): просмотр темы,
-  старт практики по теме, номер задачи, на которой ученик прекратил попытки. Они используются для
-  приоритизации следующих тем по данным, а не как формальные KPI с порогами.
+- Продуктовые события будут определены вместе с реализацией закреплённого в §1.4 учебного flow.
+  Текущий нейтральный frontend не имитирует вовлечённость и отправляет только базовый pageview
+  Umami и безопасную telemetry клиентских ошибок.
 
 ### 1.3 Project Boundaries
 
@@ -62,6 +62,44 @@ sdamgia.ru, kpolyakov.spb.ru), ни новыми AI-ботами (решают �
 | Практика по каждой теме: 5–10 заданий с проверкой ответа, без адаптивного подбора сложности | Мини-курс Excel и остальные темы ЕГЭ — вторая волна, по той же структуре |
 | Прогресс на уровне браузера (localStorage), без обязательной регистрации | i18n/локализация (аудитория исключительно русскоязычная) |
 | | Полноценный поиск по сайту (пока тем < 10, обычная навигация достаточна) |
+
+Таблица описывает целевой продукт, а не текущий набор web-маршрутов. После reset Change 15 в
+`apps/web` нет опубликованной темы, главной или legal UI: до нового design/product change публично
+доступен только технический ToC-стенд.
+
+### 1.4 Durable Learning Flow
+
+Учебная траектория является продуктовым контрактом и не зависит от будущих URL, page composition
+или визуальной системы. Тема и урок используют четыре канонических learner-facing раздела:
+
+1. **Теория** (`theory`) объединяет идею, содержательное объяснение, полезные приёмы, схемы и
+   учебные визуалы. Она объясняет, что происходит и почему это работает, без искусственного
+   переключателя «кратко/подробно».
+2. **Практика** (`practice`) объединяет алгоритм, разобранный пример, частичные упражнения и
+   постепенно усложняющиеся самостоятельные задачи с приоритетом свободного ввода. Визуалы могут
+   быть непосредственно связаны с примером или задачей.
+3. **Что важно для ЕГЭ** (`exam_focus`) объединяет типичные ошибки, требования экзаменационного
+   формата, лайфхаки, общие подсказки и при необходимости отдельные визуалы. Помощь к конкретному
+   заданию остаётся доступна внутри практики и не откладывается до третьего раздела.
+4. **Результат** (`result`) завершает материал вариативным набором релевантных блоков: краткие
+   итоги, освоенные умения, результат практики, зоны для повторения, похожие задачи и следующий
+   связанный материал.
+
+Четыре роли задают стабильную навигацию и порядок, но не требуют заполнять каждый внутренний тип
+блока. Контент включается только когда помогает понять материал, решить задачу или выбрать
+следующий шаг.
+
+Подсказки и решение доступны сразу. Правильная работа с подсказкой учитывается в прогрессе; при
+слабом результате `result` рекомендует конкретный материал для повторения, а не вводит штраф.
+Отдельного финального испытания без подсказок, таймеров, задержек, assisted-solution scoring и
+оценки уверенности по каждому шагу нет. Их нельзя добавлять без нового решения архитектора.
+Глубина разделов зависит от сложности материала, но линейная модель предпочтительнее скрытого
+адаптивного ветвления.
+
+Reset удаляет конкретные публикации и UI-решения, но не этот контракт и не предметную область
+продукта. Сохраняются нейтральные сущности Topic/CourseLesson/Task, связи и mastery-семантика;
+slug, тексты, ассеты, маршруты и композиции удалённой публикации не являются основанием для нового
+дизайна.
 
 ---
 
@@ -102,33 +140,35 @@ localStorage на клиенте; БД используется по миним�
 чистоту):
 
 **Педагогика** (см. `learning-science-principles.md` §8 для полного чек-листа):
-- [ ] Секции идут в осознанном учебном порядке: идея/теория → алгоритм → подводные камни →
-  практика; глубина теории соответствует сложности темы, а не искусственному лимиту длины.
-- [ ] В `diagram`-блоке нет элементов без прямой смысловой ссылки в тексте; ключевые элементы
-  визуально выделены.
+- [ ] Материал реализует четыре раздела §1.4: Теория → Практика → Что важно для ЕГЭ → Результат;
+  внутренние блоки соответствуют назначению раздела, а глубина — сложности темы, не искусственному
+  лимиту длины.
+- [ ] Каждый `learning_visual` объясняет конкретную закономерность, сравнение, процесс, ошибку или
+  этап алгоритма; его ключевые элементы имеют прямую смысловую связь с соседним текстом.
 - [ ] Задачи используют `interaction_type: production`, кроме случаев, где сам формат ЕГЭ требует
   выбора варианта.
 - [ ] `mastery_threshold` осознанно выставлен, не оставлен дефолтом бездумно.
 - [ ] `explanation` каждой задачи — содержательный разбор с объяснением типичной ошибки, а не
   строка «правильный ответ: X».
-- [ ] Для каждого AI-assisted `figure` рядом с контентом хранится generation brief: точные данные,
-  композиция, prompt, negative prompt, alt-текст и human-owned чек-лист проверки.
+- [ ] Помощь доступна без искусственной задержки; правильное решение с подсказкой учитывается в
+  прогрессе, а слабый результат вызывает рекомендацию повторения, не штраф или скрытый scoring.
+- [ ] Medium (`raster`, `structured` или `hybrid`) выбран по учебной эффективности, а не удобству
+  реализации; визуал имеет самостоятельный вес в объяснении и не используется как декорация.
 
 **Фактическая корректность:**
 - [ ] Математика/логика в `worked_example`/`completion_exercise` проверена человеком вручную, не
   принята на веру из AI-черновика.
 - [ ] Все `answer_variants` каждой задачи реально протестированы через checker локально, включая
   нормализацию (§4: ё/е, запятая/точка, обрезка пробелов) — не только «выглядит правильным».
-- [ ] Данные `diagram`-блока визуально проверены в браузере (не только как JSON).
-- [ ] Каждая AI-assisted схема вручную проверена на лишние/пропущенные рёбра, подписи, числа и
-  смысловые искажения; изображение не принято на веру из генератора.
+- [ ] Точные данные `learning_visual` и итоговое представление проверены человеком в браузере на
+  лишние/пропущенные связи, подписи, числа и смысловые искажения.
 
 **Технически:**
 - [ ] `prerequisites`/`related_topics`/`unlocks_topics`/`practice_task_ids`/`topic_ids`
   ссылаются на существующие id — проходит CI-валидацию связей (§3, §7.2).
 - [ ] Заполнены `title`/`summary` для корректных meta-тегов (§8) — не заглушки вида «TODO».
-- [ ] `figure` имеет содержательный `alt`, явные размеры и существующий оптимизированный ассет;
-  точные таблицы остаются семантическим HTML `<table>` (§8).
+- [ ] `learning_visual` имеет доступное описание и caption; raster также имеет явные intrinsic
+  dimensions и существующий оптимизированный ассет, а сложные точные данные доступны семантически.
 
 **Юридически:**
 - [ ] Текст темы и формулировки задач не являются близким пересказом источника — переформулированы
@@ -148,7 +188,7 @@ localStorage на клиенте; БД используется по миним�
 
 ```text
 Topic (content/topics/{id}.{mdx|json})
-  id: slug                                    // например "graphs-matrix-table"
+  id: slug
   task_numbers: [int]                         // может закрывать несколько номеров ЕГЭ
   title
   summary                                     // 1-2 предложения, для превью и meta description
@@ -163,12 +203,12 @@ Topic (content/topics/{id}.{mdx|json})
   access_tier: free | paid                     // задел под монетизацию — не enforced на MVP, все published = free
 
 Course (content/courses/{id}.json)
-  id: slug                                      // "python-basics"
+  id: slug
   title
   lessons: [CourseLesson]
 
 CourseLesson
-  id: slug                                      // "python-loops"
+  id: slug
   course_id
   title
   sections: [LearningSection]
@@ -180,23 +220,20 @@ CourseLesson
 
 LearningSection
   id: slug
-  role: idea | theory | algorithm | pitfalls
+  role: theory | practice | exam_focus | result
   title
   nav_label: string | null
   blocks: [ContentBlock]
 
 ContentBlock
-  type: text | figure | diagram | code_example | worked_example | completion_exercise
+  type: text | learning_visual | code_example | worked_example | completion_exercise
         | productive_failure_prompt | callout | video_embed
   data: <зависит от типа>
-  // figure.data — { src, alt, width, height, caption? }; статичный author-approved ассет,
-  // созданный offline и не являющийся единственным носителем условия/объяснения
-  // diagram.data — декларативный JSON (не картинка-файл): { kind: graph|automaton|bit-grid,
-  //   elements: [node|edge|arrow|label|highlight, ...] }, координаты элементов — часть данных,
-  //   не результат runtime layout-алгоритма (авторский инструмент — одноразовый dagre/elkjs
-  //   CLI-скрипт для стартовых координат, не runtime-зависимость)
-  // табличные диаграммы (кодировочные сетки, таблицы истинности) — семантический HTML <table>
-  //   с CSS-подсветкой ячеек, не SVG
+  // learning_visual.data — discriminated representation: raster | structured | hybrid;
+  // общие поля: purpose, accessible_description, caption. Raster хранит src/width/height;
+  // structured хранит минимальные типизированные факты конкретного учебного визуала;
+  // hybrid соединяет основной raster-материал с доступным структурированным представлением.
+  // Raster, SVG/HTML и hybrid равноправны; medium выбирается по тому, что лучше объясняет идею.
 
 Task (practice_task_ids ссылается сюда)
   id
@@ -209,6 +246,18 @@ Task (practice_task_ids ссылается сюда)
   explanation                                    // полноценный worked-example-разбор, не строка "правильный ответ: X"
   difficulty: 1-3
   is_interleaving_eligible: bool (default true при published)
+
+LearningFlowPolicy (продуктовый контракт, не отдельный runtime-объект)
+  section_order: theory -> practice -> exam_focus -> result
+  theory_blocks: idea | explanation | lifehack | learning_visual
+  practice_blocks: algorithm | worked_example | completion_exercise | task | learning_visual
+  exam_focus_blocks: pitfall | exam_requirement | lifehack | hint | learning_visual
+  result_blocks: summary | learning_outcome | practice_result | review_target | similar_task | next
+  task_order: nondecreasing difficulty внутри первого прохождения материала
+  task_hints: immediately available inside practice
+  assisted_correct_attempts: count toward progress
+  weak_outcome: result recommends targeted review
+  forbidden_without_new_decision: timers | delayed hints | final no-hint exam | assistance penalty
 
 -- БД (Postgres), опционально, только агрегированная аналитика практики --
 task_attempt_stats(task_id, attempts_count, wrong_count, last_aggregated_at)
@@ -224,14 +273,12 @@ CI-валидация: скрипт проверяет, что все `prerequis
 
 ## 4. API / Backend Contract
 
-Контент **не** отдаётся через API — он статически сгенерирован на этапе билда (SSR/SSG, §5).
-Backend на MVP обслуживает узкий набор задач: проверку ответов практики и, при необходимости,
-данные для клиентской навигации по графу связей.
+Backend сохраняет content/task schemas и проверку ответа как независимый будущий контур. Реальных
+task-файлов и frontend-consumer после reset нет; endpoint неизвестного task id отвечает `404`.
 
 | Verb / Method | Path | Auth | Response / Payload |
 |---------------|------|------|---------------------|
 | `POST` | `/api/tasks/{id}/check` | Нет (публичный, анонимный) | Запрос: `{ answer: string }`. Ответ: `{ correct: bool, explanation: ContentBlock[] }`. Ограничен на уровне Nginx (§7.2, §8): `limit_req` 20 req/min/IP, burst 5 |
-| `GET` | `/api/topics-graph` | Нет | [NEEDS_CLARIFICATION: решить при реализации — отдавать через API или собрать в статический JSON на этапе билда; не усложнять заранее, если фронтенду для навигации хватает build-time данных] |
 | `GET` | `/health/live` | Нет | `{ status: "ok", version: string }`; проверяет только доступность процесса |
 | `GET` | `/health/ready` | Нет | `{ status: "ok", version: string }` при доступной БД, `503` при неготовности зависимости |
 | `GET` | `/health` | Нет | Совместимый alias для `/health/ready` |
@@ -250,67 +297,33 @@ Backend на MVP обслуживает узкий набор задач: про
 
 | Page | Route | Purpose |
 |------|-------|---------|
-| Тема ЕГЭ | `/theory/zadanie-{n}-{slug}` | Теория + визуализация + практика по теме; SSG, полный текст без JS |
-| Урок мини-курса | `/course/{course-slug}/{lesson-slug}` | Урок Python-курса; после урока — блок «Теперь ты готов к темам ЕГЭ: […]» |
-| Главная | `/` | Навигация по темам/номерам заданий, точка входа без полноценного поиска (§10 Out of Scope) |
-| Политика обработки персональных данных | `/privacy` | Обязательна при любой обработке ПДн (152-ФЗ, §8) |
-| Пользовательское соглашение | `/terms` | Условия использования бесплатного сервиса |
+| UI foundation | `/` | Нейтральный responsive-стенд сохранённого Table of Contents; SSR/no-JS anchors, без продуктового контента и брендинга |
+| Not found | любой неизвестный маршрут | Общий доступный 404 без предположений о будущем IA |
+
+Home/topic/lesson/legal/sitemap routes удалены. Их будущие URL, loader contracts, SEO и composition
+не фиксируются до отдельного планирования нового продукта. Будущая композиция обязана реализовать
+§1.4, но сам учебный flow не предопределяет маршрутную структуру.
 
 ### 5.2 Components / Stores
 
 | Component / Store | Purpose | Notes |
 |--------------------|---------|-------|
-| Learning page shell | Общий shell для Topic/CourseLesson | Desktop: маршрут разделов слева, материал по центру, памятка справа; tablet/mobile сохраняют линейный порядок и читаемость без JS |
-| Figure renderer | Статичные объясняющие схемы и проверенные графы | Offline AI-assisted PNG/WebP через shared `Image`; обязательны alt, width/height, generation brief и ручная проверка |
-| Legacy diagram renderer | Существующий чистый SVG из `ContentBlock.diagram` | Только совместимость/редкие будущие интерактивные случаи; новые статичные схемы на нём не авторятся и движок не развивается |
-| Table diagram renderer | Кодировочные сетки, таблицы истинности | Семантический HTML `<table>` + CSS-подсветка ячеек, не SVG — доступность «бесплатно» |
-| Practice task widget | Ввод ответа → `POST /api/tasks/{id}/check` → показ разбора | `interaction_type: production` в приоритете; прогрессивное улучшение — работает без JS для чтения, JS нужен только для отправки/проверки ответа |
-| Progress store (localStorage) | Хранит, какие темы/уроки отмечены пройденными (по `mastery_threshold`), рисует прогресс-бар | Без аккаунта; ключ — по slug темы/урока |
+| Learning path Table of Contents | Единственный сохранённый продуктовый UI-компонент | Mantine scroll tracking, SSR initial data, anchor fallback, active `aria-current`, responsive layout и изолированный визуальный contract |
 | Page state primitives | Единые loading/skeleton, empty, not-found и recoverable error состояния | Семантический статус и понятное действие важнее декоративной анимации; skeleton повторяет геометрию страницы и не озвучивается скринридером как контент |
 | Route resilience shell | Route-level pending/error/not-found UI, retry/reset и верхний navigation progress | Ошибка одной навигации не ломает document shell; предыдущий полезный экран не заменяется мгновенным мигающим fallback |
 | Typed API client | Единственная граница runtime HTTP для `apps/web`, сгенерированная из FastAPI OpenAPI | Feature `api/` вызывает типизированный shared client; transport/HTTP/contract errors различимы, abort/timeout и безопасные сообщения обязательны |
-| Query client | Владение runtime server-state, mutation lifecycle, cache/retry/cancellation | Build-time content остаётся в TanStack Router loaders; Query не дублирует local UI state или progress store |
-| Form boundary | Mantine form state + Zod validation для интерактивных форм | Сервер остаётся источником истины; ошибки полей inline, submission error рядом с действием, focus возвращается к исправляемому месту |
-| Prerequisite/related-topic callout | «Эта тема легче даётся, если понимать [Python: списки] → перейти» | Рендерится из `prerequisites`/`related_topics`/`unlocks_topics`, не текстовая ссылка вручную |
-| Footer feedback link | Ссылка в футере/на страницах тем на Telegram-канал (или VK-группу) для свободных сообщений о проблемах | Канал используется только для обратной связи; автоматические Telegram-алерты отложены |
+| Query client | Будущая граница runtime server-state, mutation lifecycle, cache/retry/cancellation | Не дублирует local UI или URL state; сейчас product queries отсутствуют |
 
-**Визуалы — гибридное решение:** объясняющие схемы и статичные графы готовятся offline через
-author-owned generation brief и внешнюю image-модель, затем проходят ручную проверку и попадают в
-репозиторий как обычные оптимизированные ассеты. Точные таблицы и код остаются HTML; динамические
-или интерактивные данные при необходимости остаются кодовыми. AI не работает внутри продукта.
-Существующий SVG renderer сохраняется для совместимости, но не становится развиваемым авторским
-движком. Текст/семантическая таблица рядом с картинкой остаются источником истины.
+Практика, подсказки и mastery-прогресс из §1.4 сейчас не имеют frontend consumer-а. Их реализация
+должна быть спроектирована заново поверх сохранённой семантики, без восстановления удалённой
+страницы или её layout.
 
 ### 5.3 Design System
 
-Дизайн-направление обновлено архитектором по референсам из `docs/artifacts/design/`:
-
-**Направление: «Экзаменационный атлас».** Тёплый учебный разворот объединяет выразительную
-серифную типографику с моноширинными служебными метками и визуальной грамматикой технических схем.
-Структура страницы кодирует реальный flow темы, а не украшает его: маршрут решения слева, теория
-по центру, памятка справа. Тон спокойный и редакционный, но узнаваемость строится на предметных
-маркерах ЕГЭ — `№`, шагах и линиях трассировки.
-
-- **Цвета:** бумага `#FAF8F3`; текст `#1C1A17`; интерактивный индиго `#3450A3`; редакционная охра
-  `#B4562B`; графит схем `#5B5F63`; смысловые пастели `#A9CCF5`, `#F2C979`, `#E88E94`.
-- **Типографика:** дисплей/заголовки тем — гуманистический сериф (например Fraunces или Source
-  Serif); тело — читаемый на экране сериф или чистый sans для длинных абзацев теории; моно
-  (JetBrains Mono / IBM Plex Mono) — для `code_example`-блоков, ID задач, номер-бэйджей заданий.
-- **Layout / плотность:** desktop от `1200px` — три колонки; tablet — памятка inline; mobile — одна
-  колонка с якорной навигацией над материалом. Центральная колонка остаётся комфортной для чтения.
-- **Режим по умолчанию:** light (переключение на dark — не обязательно на MVP, но не запрещено
-  если появится время; light выбран из-за приоритета легибельности диаграмм и SEO/no-JS чтения).
-- **Signature-элемент:** номер задания, вертикальный маршрут секций и L-образные регистрационные
-  метки схем образуют одну «линию решения»; она показывает реальную последовательность обучения.
-- **Грамматика схем:** шесть шаблонов — вложенные слои, процесс, ветвление, сравнение, иерархия,
-  пространственная аннотация. Графитовая обводка, лёгкая жёсткая тень, пастельное кодирование и
-  приглушение второстепенных элементов применяются последовательно, без декоративных иллюстраций.
-- **Ограничения:** нет существующих брендовых цветов/лого; a11y-пол — требования §8 (aria-label на
-  графовых/автоматных диаграммах, семантические таблицы), без дополнительных требований сверх
-  этого.
-
-Последующие точечные изменения дизайна (правки компонентов, палитры) — обычные Backlog-задачи в
-активном change-файле через `/work`, не повторный запуск этого флоу.
+Глобальная дизайн-система намеренно не выбрана. Предыдущий visual world и его Impeccable
+direction/surface artifacts отклонены и удалены; `apps/web/DESIGN.md` отсутствует до следующего
+new-work round. Единственное утверждённое исключение — существующий Learning Path Table of
+Contents, чей внешний вид и доступное поведение инкапсулированы в shared-компоненте.
 
 ### 5.4 Client Application Infrastructure
 
@@ -330,31 +343,24 @@ author-owned generation brief и внешнюю image-модель, затем �
 - **Loading / empty / not-found:** быстрые переходы не мигают skeleton; медленные используют
   геометрически стабильный skeleton и верхний progress. Empty state объясняет причину и предлагает
   следующее доступное действие. Not-found отделён от инфраструктурной ошибки.
-- **Suspense и lazy:** route components и тяжёлая подсветка кода могут загружаться отдельными
-  chunks, но исходный текст, теория и код остаются в prerendered/no-JS HTML fallback. Lazy не
-  применяется к небольшим компонентам без измеримого выигрыша.
-- **Forms / runtime validation:** `@mantine/form` задаёт lifecycle формы, Zod валидирует
-  недоверенные client-side значения. Generated OpenAPI types дают compile-time contract, но сами
-  по себе не считаются runtime validation внешних данных.
-- **UI extensions:** в фундамент входят только официальные Mantine 9.5.1 packages, имеющие текущий
-  сценарий: `form`, `nprogress`, `code-highlight`. `notifications` не дублирует inline feedback и
-  добавляется только вместе с реальным глобальным/background outcome. `dates`, `dropzone`,
-  `modals`, `spotlight`, `carousel`, `tiptap`, дополнительные charts и community extensions
-  откладываются до конкретного consumer-а и отдельной проверки maintenance/a11y/supply-chain.
+- **Suspense и lazy:** route splitting остаётся инфраструктурной возможностью; lazy применяется
+  только вместе с измеримым выигрышем и полноценным SSR/no-JS fallback.
+- **UI extensions:** Mantine Core/Hooks/NProgress 9.5.1 составляют текущую основу. Form,
+  code-highlight и любые новые extensions добавляются только вместе с реальным consumer и
+  отдельной maintenance/a11y/supply-chain проверкой.
 - **Client state:** отдельный глобальный store (Zustand/MobX и аналоги) не вводится заранее.
   Компонентное состояние остаётся локальным, server state принадлежит Query, URL state — Router,
-  прогресс — существующему versioned external store. Новый store допустим только при нескольких
+  persistent product state пока отсутствует. Новый store допустим только при нескольких
   независимых consumers и явно описанном lifecycle/persistence contract.
-- **Визуальная системность:** состояния используют палитру и типографику «Экзаменационного атласа»;
-  scrollbar минималистичен, сохраняет native behavior, достаточный contrast/target и корректный
-  forced-colors fallback.
+- **Визуальная системность:** до новой direction round foundation использует нейтральные Mantine
+  defaults; исключение — инкапсулированный ToC. Это технический baseline, не дизайн-направление.
 
 ---
 
 ## 6. Auth & Access Model
 
-Нет аутентификации на MVP. Все страницы и `POST /api/tasks/{id}/check` публичны и анонимны;
-прогресс — только localStorage на стороне клиента, не серверная сессия. Ограничение на уровне
+Нет аутентификации на MVP. Foundation route и `POST /api/tasks/{id}/check` публичны и анонимны;
+frontend-прогресс после reset отсутствует. Ограничение на уровне
 инфраструктуры (не auth) — rate limiting чекер-эндпоинта на Nginx (§4, §8) против автоматического
 перебора банка ответов.
 
@@ -375,11 +381,9 @@ swap thrashing или устойчивую загрузку CPU выше 70%. Т
 production через общий Compose и development overlay.
 
 Топология (Docker Compose, всё на одном сервере — осознанно, «ничего лишнего»):
-- **Nginx** — единственная точка входа (80/443), reverse-proxy + раздача статики фронтенда напрямую
-  из volume (не через прокси на Node-процесс для чисто статических страниц тем); отдельный
-  `location` на Node-процесс фронтенда только если часть маршрутов требует SSR на каждый запрос.
-- **Frontend (TanStack Start)** — build-time статика для страниц тем/уроков (контент —
-  content-as-code, меняется только через деплой, не нужен SSR на каждый запрос).
+- **Nginx** — единственная точка входа (80/443), reverse-proxy для web/API и статики.
+- **Frontend (TanStack Start/Nitro)** — Node runtime с prerendered foundation route; будущие
+  product routes и data-loading boundaries определяются отдельным change.
 - **Backend (FastAPI/Uvicorn)** — отдельный контейнер, доступен Nginx по внутренней docker-сети,
   наружу не смотрит напрямую.
 - **Postgres** — отдельный контейнер, volume + регулярный `pg_dump`-бэкап (§8).
@@ -414,8 +418,8 @@ Nginx выставляет `Cache-Control`/`ETag` для хэшированно�
   с российским S3-compatible storage.
 
 **Наблюдаемость** (self-hosted, тот же VPS на старте, минимальный расход ресурсов):
-- **Umami v3** — отдельная БД/роль в Postgres; DNT, без cookies/fingerprinting/query/hash; allowlist
-  событий `topic_view`, `practice_start`, `practice_answer` без ответов и идентификаторов.
+- **Umami v3** — отдельная БД/роль в Postgres; DNT, без cookies/fingerprinting/query/hash; текущий
+  frontend отправляет только базовые pageviews, а новый event allowlist появится с product flow.
 - **Beszel Hub + Agent** — host/container metrics и история на application VPS.
 - **journald + fail2ban** — структурированные application/Nginx/security logs; read-only доступ
   dashboard через WireGuard и ограниченный SSH wrapper.
@@ -432,14 +436,14 @@ Nginx выставляет `Cache-Control`/`ETag` для хэшированно�
 | Concern | Requirement |
 |---------|-------------|
 | Security headers / CORS | Rate limiting чекер-эндпоинта на Nginx: `limit_req_zone` 20 req/min/IP, burst 5, `nodelay` (см. §4, §11.2 источника) — против автоматизированного перебора банка ответов; конкретную цифру пересмотреть по факту логов после запуска |
-| Accessibility target | `figure` имеет содержательный alt и соседний текст-источник истины; legacy SVG сохраняет `aria-label`/`<title>`; табличные диаграммы — семантический `<table>`; rails не нарушают heading/keyboard order |
-| Performance budget | LCP < 2.5s, CLS < 0.1, INP < 200ms на мобильном 4G-профиле — измерять по факту (Lighthouse/PageSpeed Insights) на каждую опубликованную тему, не полагаться на то, что архитектура «сама» это даёт |
+| Accessibility target | Foundation и будущие поверхности не имеют serious/critical axe violations; ToC сохраняет semantic anchors, keyboard focus, `aria-current` и корректный source order на узком экране |
+| Performance budget | LCP < 2.5s, CLS < 0.1, INP < 200ms на мобильном 4G-профиле; текущий Lighthouse gate измеряет только `/` до появления новых public routes |
 | Observability | Umami + Beszel + journald/fail2ban на application VPS; унифицированный `apps/ops` через WireGuard; scheduled GitHub probe для внешней доступности; без Telegram на этом этапе |
 | Backup / restore | Локальный restic на VPS: daily `pg_dump -Fc`, Beszel/config snapshots, 7 daily + 4 weekly + 3 monthly, freshness marker и ежемесячный restore drill; off-site storage отложен с явно принятым риском |
-| SEO | URL-паттерн `/theory/zadanie-{n}-{slug}` (соответствует реальным поисковым запросам и конкурентам — не изобретать таксономию); уникальные `title`/`description` из `title`/`summary` каждой темы, не общий шаблон; `sitemap.xml` генерируется автоматически из `published`-тем/уроков при билде; structured data (schema.org `LearningResource`/`FAQPage`) — опционально, дёшево добавить учитывая типизированный контент |
-| Mobile / no-JS readability | Mobile-first; страница темы открывается и читаема без JS (SSR-контент, интерактивность — прогрессивное улучшение) — важно и для SEO, и для медленного мобильного интернета в школе |
+| SEO | Product URL taxonomy, metadata and sitemap intentionally deferred until public surfaces are redesigned; foundation `/` has a neutral technical title and is not a substitute for product SEO |
+| Mobile / no-JS readability | Foundation ToC anchors and targets доступны без JS; будущий обязательный content сохраняется в SSR HTML, а интерактивность остаётся progressive enhancement |
 | Client resilience / API drift | Route failures восстанавливаемы без белого экрана; loading/empty/error/not-found состояния доступны с клавиатуры и скринридера; OpenAPI schema/types drift ломает gate до merge; runtime HTTP имеет timeout/abort и не делает скрытый retry мутаций |
-| Юридическое (152-ФЗ) | Минимизация сбора, российский application VPS и достоверная `/privacy` реализуются сейчас. Реквизиты оператора, канал обращений субъектов ПДн и уведомление РКН осознанно вынесены в отдельный будущий change и не блокируют текущий release; риск принят архитектором |
+| Юридическое (152-ФЗ) | Минимизация сбора и российский application VPS сохраняются; web `/privacy` удалён вместе с product UI и должен быть спроектирован заново до следующей публичной product release. Реквизиты оператора и уведомление РКН остаются отдельным принятым долгом |
 | Юридическое (436-ФЗ) | Возрастная маркировка для обычного сайта не вводится: существующая `12+` удаляется без замены на `18+` |
 | Юридическое (оригинальность контента) | Тексты тем и формулировки задач — собственного авторства/переформулированы, не дословные копии ФИПИ/sdamgia/kpolyakov (риск конфликта с площадками, не только вопрос добросовестности); проверяется в Content Quality Gate (§2.3) на каждой теме перед `published` |
 | Other (юридический ориентир, не консультация) | Открытые источники используются как инженерный ориентир; формальная юридическая проверка и РКН составляют отдельный принятый долг |
@@ -450,10 +454,10 @@ Nginx выставляет `Cache-Control`/`ETag` для хэшированно�
 
 | Milestone | Goal | Key Outputs |
 |-----------|------|-------------|
-| `M0` — фундамент | Модель контента и базовый рендер готовы, чтобы штамповать темы | Схема content-as-code (типы, frontmatter), рендер `ContentBlock` (включая diagram хотя бы в статичном SVG), скрипт CI-валидации связей |
-| `M1` — первая тема целиком | Один эталон в финальном качестве — задаёт стандарт для всех следующих тем | Тема «граф+таблица» (задание с максимальной подтверждённой болью): текст, диаграмма, практика, meta/SEO, прошедшая Content Quality Gate (§2.3) |
+| `M0` — технический фундамент | Сохранить проверенную web/backend/ops инфраструктуру без навязывания продуктовой страницы | Нейтральный ToC-стенд, shared primitives, API contract, пустой content skeleton и локальные gates |
+| `M1` — новый product/design baseline | Спроектировать информационную архитектуру и визуальную систему без наследования удалённых страниц | Новый Impeccable direction, утверждённые routes/surfaces и decision-complete implementation contract |
 | `M2` — инфраструктурная пауза | Подготовить production-платформу до продолжения продуктового контента | `infraege.ru`, VPS/GHCR deploy, security/release gates, backups и локальный ops-dashboard |
-| `M3` — учебный flow и публичный запуск | Сначала закрепить эталонный учебный shell/визуальный и client-infrastructure pipeline, затем добавить 2–4 темы/первые уроки и индексировать MVP | Секции «идея → теория → алгоритм → ошибки», offline AI-assisted figures, typed API/query/forms, доступные loading/empty/error states, лестница практики, связи «тема ↔ урок», Umami-события |
+| `M3` — учебный flow и публичный запуск | Реализовать утверждённые поверхности и только затем добавить проверенный контент | Доступный SSR/no-JS flow, практика, прогресс, SEO/legal surfaces и Umami-события по новому контракту |
 | `M4+` (после трафика, вне MVP) | Расширение охвата и сообщества поверх работающей бесплатной базы | Второй мини-курс (Excel), аккаунты/синхронизация, обсуждения тем с модерацией, затем платные фичи — без runtime AI до этого момента |
 
 ---
@@ -484,8 +488,9 @@ Nginx выставляет `Cache-Control`/`ETag` для хэшированно�
 
 - [NEEDS_CLARIFICATION: числовые целевые показатели успеха MVP (объём органического трафика,
   срок, глубина прохождения) — решить после `M3`, когда появятся данные Umami (§1.2).]
-- [NEEDS_CLARIFICATION: `GET /api/topics-graph` — решить при реализации, нужен ли отдельный
-  backend-эндпоинт для графа связей или достаточно build-time статического JSON (§4).]
+- [NEEDS_CLARIFICATION: будущие product routes, content loading и техническое владение client
+  state определяются в новом product/design change; foundation не закрепляет эти решения, но они
+  обязаны сохранять поведение §1.4.]
 - Точная цифра rate limit чекер-эндпоинта (20 req/min/IP, burst 5) — стартовый ориентир,
   архитектор явно указал пересмотреть по факту логов после запуска, не считать зафиксированной
   раз и навсегда (§8).

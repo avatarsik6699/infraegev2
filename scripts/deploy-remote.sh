@@ -70,9 +70,6 @@ run_compose "$release_dir" "$DEPLOY_SHA" up --detach --remove-orphans --wait --w
 curl --fail --silent --show-error --max-time 15 https://infraege.ru/health/ready |
   jq -e --arg sha "$DEPLOY_SHA" '.status == "ok" and .version == $sha' >/dev/null
 curl --fail --silent --show-error --max-time 15 https://infraege.ru/ >/dev/null
-curl --fail --silent --show-error --max-time 15 \
-  https://infraege.ru/theory/zadanie-1-graphs-and-tables >/dev/null
-curl --fail --silent --show-error --max-time 15 https://infraege.ru/sitemap.xml >/dev/null
 
 run_compose "$release_dir" "$DEPLOY_SHA" run --rm --no-deps --interactive=false \
   --volume "$root:$root" --entrypoint /bin/ln nginx -sfn "$release_dir" "$root/current"

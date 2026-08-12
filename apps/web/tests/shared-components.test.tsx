@@ -57,14 +57,14 @@ describe("Typography and PageContainer", () => {
   it("preserves semantic heading and main landmarks", () => {
     render(
       <PageContainer>
-        <Typography.Title order={2}>Практика</Typography.Title>
-        <Typography.Text>Решите задачу</Typography.Text>
+        <Typography.Title order={2}>Раздел</Typography.Title>
+        <Typography.Text>Содержимое раздела</Typography.Text>
       </PageContainer>,
     );
     expect(screen.getByRole("main")).toBeTruthy();
     expect(screen.getByRole("heading", { level: 2 }).textContent).toBe(
-      "Практика",
+      "Раздел",
     );
-    expect(screen.getByText("Решите задачу").tagName).toBe("P");
+    expect(screen.getByText("Содержимое раздела").tagName).toBe("P");
   });
 });

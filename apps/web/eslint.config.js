@@ -194,12 +194,6 @@ export default tseslint.config(
     },
   },
   {
-    files: ["src/shared/lib/analytics/analytics.ts"],
-    rules: {
-      "no-restricted-globals": restrictedPlatformGlobals("window", "navigator"),
-    },
-  },
-  {
     files: ["src/shared/lib/client-errors/browser-adapter.ts"],
     rules: {
       "no-restricted-globals": restrictedPlatformGlobals("window"),
@@ -235,7 +229,7 @@ export default tseslint.config(
     files: ["e2e/**/*.spec.{ts,tsx}"],
     rules: {
       ...playwright.configs["flat/recommended"].rules,
-      // Assertions intentionally live behind domain-named POM methods.
+      // Assertions intentionally live behind application Page Object methods.
       "playwright/expect-expect": [
         "error",
         { assertFunctionPatterns: ["^expect"] },
@@ -388,10 +382,7 @@ export default tseslint.config(
     }),
   },
   {
-    files: [
-      "src/entities/content/api/server-loaders.ts",
-      "src/shared/config/client-env.ts",
-    ],
+    files: ["src/shared/config/client-env.ts"],
     rules: { "no-restricted-syntax": "off" },
   },
   eslintConfigPrettier,

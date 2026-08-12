@@ -176,10 +176,11 @@ Ask the user for:
    - Ask the DB (default suggestion: Postgres, editable) and infra (default suggestion:
      Docker + Nginx, editable).
    - Ask for the gate command rows, split by tier — group by area, accept "skip"/`n/a` per row:
-     - **Fast Gate** (run per task in `/work`): lint, type-check, targeted/affected unit tests,
+     - **Critical Gate** (run once per `/work` target set and default `/ship`): formatting,
+       affected-workspace lint/type-check, focused tests covering changed behavior,
        LSP diagnostics availability (yes/no — informational, not a command), API type regen
        command (e.g. `openapi-typescript` invocation) if applicable.
-     - **Full Gate** (run once per `/ship`): infrastructure/bootstrap, migrations, backend test
+     - **Full Gate** (manual `/ship --full`, mandatory for `--release`): infrastructure/bootstrap, migrations, backend test
        suite, frontend build, frontend unit tests, e2e determinism/lint check, e2e suite, smoke,
        SAST command (e.g. Semgrep), secrets-scan command (e.g. Gitleaks), dependency-audit command
        (e.g. Trivy / `npm audit` / `pip-audit`), accessibility-audit command (e.g. axe/Lighthouse
@@ -259,7 +260,7 @@ banner. Print:
 
 ```
 docs/STACK.md has been left as a template.
-Fill the Fast Gate / Full Gate / Release Gate tables before running /ship.
+Fill the Critical Gate / Full Gate / Release Gate tables before running /ship.
 ```
 
 Then skip the rest of this step.
@@ -267,7 +268,7 @@ Then skip the rest of this step.
 If `docs/STACK.md` was just created (step 6) and `stack_known` is **true**:
 
 - Substitute the Stack table with the frontend default (if accepted) plus the given backend/DB/infra.
-- Substitute the Fast Gate, Full Gate, and Release Gate rows with what the user entered in step 4.
+- Substitute the Critical Gate, Full Gate, and Release Gate rows with what the user entered in step 4.
   Leave `[bracketed placeholders]` for any row the user said `n/a` to, but mark the row's
   **Command** column with `n/a` so `/work`/`/ship` report it as `SKIPPED — n/a in STACK.md`.
 - Fill the Required Tooling table from the availability answers in step 4 item 5 — mark
@@ -276,7 +277,7 @@ If `docs/STACK.md` was just created (step 6) and `stack_known` is **true**:
 
 If `docs/STACK.md` already existed, do **not** edit it. Print a clear message:
 
-> `docs/STACK.md` already exists. Verify it has Fast Gate / Full Gate / Release Gate tables and a
+> `docs/STACK.md` already exists. Verify it has Critical Gate / Full Gate / Release Gate tables and a
 > Required Tooling table matching the shape expected by `docs/playbooks/work.md` and `ship.md`.
 > Missing rows will be reported as SKIPPED.
 
@@ -327,7 +328,7 @@ Produce a short report with:
   **Stack configured** (`stack_known = true`), draft found:
   ```text
   Next steps:
-    1. Review docs/STACK.md and ensure every Fast Gate / Full Gate / Release Gate row is correct,
+    1. Review docs/STACK.md and ensure every Critical Gate / Full Gate / Release Gate row is correct,
        and the Required Tooling table matches what's actually available in this environment.
     2. Run /plan <found-draft-path> to draft docs/SPEC.md and scaffold the first change.
   ```
@@ -335,7 +336,7 @@ Produce a short report with:
   **Stack configured** (`stack_known = true`), no draft found:
   ```text
   Next steps:
-    1. Review docs/STACK.md and ensure every Fast Gate / Full Gate / Release Gate row is correct,
+    1. Review docs/STACK.md and ensure every Critical Gate / Full Gate / Release Gate row is correct,
        and the Required Tooling table matches what's actually available in this environment.
     2. Run /plan "[your project brief]" (or /plan docs/DRAFT_SPEC.md if you have a draft file) to
        draft docs/SPEC.md and scaffold the first change.

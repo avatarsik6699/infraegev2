@@ -122,7 +122,7 @@ export interface components {
             /** Correct */
             correct: boolean;
             /** Explanation */
-            explanation: (components["schemas"]["TextBlock"] | components["schemas"]["FigureBlock"] | components["schemas"]["DiagramBlock"] | components["schemas"]["CodeExampleBlock"] | components["schemas"]["WorkedExampleBlock"] | components["schemas"]["CalloutBlock"] | components["schemas"]["VideoEmbedBlock"])[];
+            explanation: (components["schemas"]["TextBlock"] | components["schemas"]["LearningVisualBlock"] | components["schemas"]["CodeExampleBlock"] | components["schemas"]["WorkedExampleBlock"] | components["schemas"]["CalloutBlock"] | components["schemas"]["VideoEmbedBlock"])[];
         };
         /**
          * ClientErrorReport
@@ -163,53 +163,30 @@ export interface components {
             /** Language */
             language: string;
         };
-        /** DiagramBlock */
-        DiagramBlock: {
-            /** Data */
-            data: components["schemas"]["GraphDiagramData"] | components["schemas"]["TableDiagramData"];
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            type: "diagram";
+        /** HTTPValidationError */
+        HTTPValidationError: {
+            /** Detail */
+            detail?: components["schemas"]["ValidationError"][];
         };
-        /** DiagramElement */
-        DiagramElement: {
-            /** From */
-            from?: string | null;
-            /** Highlighted */
-            highlighted?: boolean | null;
-            /** Id */
-            id: string;
-            /**
-             * Kind
-             * @enum {string}
-             */
-            kind: "node" | "edge" | "arrow" | "label" | "highlight";
-            /** Text */
-            text?: string | null;
-            /** To */
-            to?: string | null;
-            /** X */
-            x?: number | null;
-            /** Y */
-            y?: number | null;
-        };
-        /** FigureBlock */
-        FigureBlock: {
-            data: components["schemas"]["FigureBlockData"];
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            type: "figure";
-        };
-        /** FigureBlockData */
-        FigureBlockData: {
-            /** Alt */
-            alt: string;
+        /** HybridLearningVisualData */
+        HybridLearningVisualData: {
+            /** Accessible Description */
+            accessible_description: string;
+            asset: components["schemas"]["LearningVisualAsset"];
             /** Caption */
-            caption?: string | null;
+            caption: string;
+            /** Purpose */
+            purpose: string;
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            representation: "hybrid";
+            visual: components["schemas"]["StructuredLearningVisual"];
+        };
+        JsonValue: unknown;
+        /** LearningVisualAsset */
+        LearningVisualAsset: {
             /** Height */
             height: number;
             /** Src */
@@ -217,38 +194,54 @@ export interface components {
             /** Width */
             width: number;
         };
-        /** GraphDiagramData */
-        GraphDiagramData: {
-            /** Arialabel */
-            ariaLabel: string;
-            /** Elements */
-            elements: components["schemas"]["DiagramElement"][];
+        /** LearningVisualBlock */
+        LearningVisualBlock: {
+            /** Data */
+            data: components["schemas"]["RasterLearningVisualData"] | components["schemas"]["StructuredLearningVisualData"] | components["schemas"]["HybridLearningVisualData"];
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
-            kind: "automaton" | "graph";
+            type: "learning_visual";
         };
-        /** HTTPValidationError */
-        HTTPValidationError: {
-            /** Detail */
-            detail?: components["schemas"]["ValidationError"][];
-        };
-        /** TableDiagramData */
-        TableDiagramData: {
-            /** Arialabel */
-            ariaLabel: string;
-            /** Headers */
-            headers: string[];
-            /** Highlightedcells */
-            highlightedCells?: string[] | null;
+        /** RasterLearningVisualData */
+        RasterLearningVisualData: {
+            /** Accessible Description */
+            accessible_description: string;
+            asset: components["schemas"]["LearningVisualAsset"];
+            /** Caption */
+            caption: string;
+            /** Purpose */
+            purpose: string;
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
-            kind: "bit-grid";
-            /** Rows */
-            rows: string[][];
+            representation: "raster";
+        };
+        /** StructuredLearningVisual */
+        StructuredLearningVisual: {
+            /** Data */
+            data: {
+                [key: string]: components["schemas"]["JsonValue"];
+            };
+            /** Kind */
+            kind: string;
+        };
+        /** StructuredLearningVisualData */
+        StructuredLearningVisualData: {
+            /** Accessible Description */
+            accessible_description: string;
+            /** Caption */
+            caption: string;
+            /** Purpose */
+            purpose: string;
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            representation: "structured";
+            visual: components["schemas"]["StructuredLearningVisual"];
         };
         /** TextBlock */
         TextBlock: {

@@ -1,26 +1,12 @@
 .stateCard {
   max-width: 42rem;
   margin-inline: auto;
-  border-left: 0.25rem solid var(--color-highlight);
+  padding-block: clamp(4rem, 10vw, 7rem);
+  border: 0;
+  background: transparent;
 }
 
 .pending {
   max-width: 58rem;
   margin-inline: auto;
-}
-
-.skeletonGrid {
-  display: grid;
-  grid-template-columns: minmax(8rem, 0.35fr) minmax(0, 1fr);
-  gap: var(--space-4);
-}
-
-@media (max-width: 48rem) {
-  .skeletonGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .railSkeleton {
-    display: none;
-  }
 }

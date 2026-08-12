@@ -1,8 +1,5 @@
-import { fireEvent, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import type { Task } from "~/entities/content";
-import { PracticeTaskWidget } from "~/features/check-answer";
-import { ContentBlockList } from "~/entities/content-block";
 import { EmptyState } from "~/shared/components/empty-state";
 import { RoutePending } from "~/shared/components/route-state";
 import { AppNavigationProgress } from "~/shared/components/navigation-progress";
@@ -21,32 +18,7 @@ vi.mock("@tanstack/react-router", async (importOriginal) => {
   };
 });
 
-const task: Task = {
-  id: "form-task",
-  topic_ids: ["forms"],
-  statement: "Введите ответ",
-  checker_type: "exact_match",
-  answer_variants: ["да"],
-  interaction_type: "production",
-  explanation: [],
-  difficulty: 1,
-  is_interleaving_eligible: true,
-};
-
 describe("client foundation states", () => {
-  it("validates a blank answer without making a request and returns focus", async () => {
-    const fetchMock = vi.fn();
-    vi.stubGlobal("fetch", fetchMock);
-    render(<PracticeTaskWidget task={task} />);
-
-    fireEvent.click(screen.getByRole("button", { name: "Проверить" }));
-
-    const input = await screen.findByRole("textbox", { name: /Ответ/ });
-    expect(input.getAttribute("aria-invalid")).toBe("true");
-    expect(input).toBe(document.activeElement);
-    expect(fetchMock).not.toHaveBeenCalled();
-  });
-
   it("creates isolated query clients with requests configured for no retries", () => {
     const first = createAppQueryClient();
     const second = createAppQueryClient();
@@ -74,25 +46,5 @@ describe("client foundation states", () => {
     expect(
       screen.getByRole("progressbar", { name: "Загрузка страницы" }),
     ).toBeTruthy();
-  });
-
-  it("renders code content while the highlighter loads", async () => {
-    render(
-      <ContentBlockList
-        blocks={[
-          {
-            type: "code_example",
-            data: {
-              code: "const answer = 42;",
-              language: "typescript",
-              caption: "Пример",
-            },
-          },
-        ]}
-      />,
-    );
-
-    expect(await screen.findByText("const answer = 42;")).toBeTruthy();
-    expect(screen.getByText("Пример")).toBeTruthy();
   });
 });

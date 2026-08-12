@@ -1,6 +1,4 @@
-/* Mantine supports component-level style imports for smaller production CSS. Keep global styles
-   first, dependencies before their consumers, and add a component stylesheet with every new
-   @mantine/core component used by apps/web. */
+/* Mantine component styles are imported individually to keep the production bundle explicit. */
 @import "@mantine/core/styles/baseline.css";
 @import "@mantine/core/styles/default-css-variables.css";
 @import "@mantine/core/styles/global.css";
@@ -8,56 +6,30 @@
 @import "@mantine/core/styles/Loader.css";
 @import "@mantine/core/styles/Alert.css";
 @import "@mantine/core/styles/Anchor.css";
-@import "@mantine/core/styles/AspectRatio.css";
-@import "@mantine/core/styles/Badge.css";
 @import "@mantine/core/styles/Button.css";
-@import "@mantine/core/styles/Code.css";
 @import "@mantine/core/styles/Container.css";
 @import "@mantine/core/styles/Group.css";
 @import "@mantine/core/styles/Image.css";
-@import "@mantine/core/styles/Input.css";
-@import "@mantine/core/styles/List.css";
 @import "@mantine/core/styles/Paper.css";
-@import "@mantine/core/styles/Progress.css";
 @import "@mantine/core/styles/Skeleton.css";
 @import "@mantine/core/styles/Stack.css";
+@import "@mantine/core/styles/TableOfContents.css";
 @import "@mantine/core/styles/Text.css";
 @import "@mantine/core/styles/Title.css";
 @import "@mantine/core/styles/Typography.css";
 @import "@mantine/core/styles/VisuallyHidden.css";
-@import "@mantine/code-highlight/styles.css";
-@import "highlight.js/styles/github.css";
 @import "@mantine/nprogress/styles.css";
-
-/* Design System — "Textbook precision" (docs/SPEC.md §5.3).
-   Warm paper background, calm indigo accent, serif reading type + mono for code/data/task
-   numbers. Comfortable density. Light-only for M0 — dark mode is not required for MVP. */
 
 :root {
   --color-bg: var(--mantine-color-body);
   --color-text: var(--mantine-color-text);
-  --color-accent: var(--mantine-color-textbook-6);
   --color-muted: var(--mantine-color-gray-7);
-  --color-highlight: var(--mantine-color-highlight-6);
-  --color-highlight-soft: #f7e6dc;
-  --color-graphite: #5b5f63;
-  --color-study-blue: #a9ccf5;
-  --color-study-amber: #f2c979;
-  --color-study-coral: #e88e94;
-  --color-rule: #ded8cc;
-  --color-rule-strong: #c9c0b2;
-
-  --font-display: var(--mantine-font-family-headings);
-  --font-body: var(--mantine-font-family);
-  --font-mono: var(--mantine-font-family-monospace);
-
+  --color-accent: var(--mantine-color-dark-7);
+  --color-highlight: var(--mantine-color-dark-9);
   --space-1: var(--mantine-spacing-xs);
   --space-2: var(--mantine-spacing-sm);
   --space-3: var(--mantine-spacing-md);
-  --space-4: var(--mantine-spacing-lg);
-
-  --line-height-comfortable: 1.7;
-  --max-content-width: 42rem;
+  --max-content-width: 46rem;
 }
 
 * {
@@ -69,83 +41,13 @@ body {
   margin: 0;
   background: var(--color-bg);
   color: var(--color-text);
-  font-family: var(--font-body);
-  line-height: var(--line-height-comfortable);
+  font-family: var(--mantine-font-family);
 }
 
-html {
-  scrollbar-color: var(--color-rule-strong) var(--color-bg);
-  scrollbar-width: thin;
-}
-
-*::-webkit-scrollbar {
-  width: 0.625rem;
-  height: 0.625rem;
-}
-
-*::-webkit-scrollbar-track {
-  background: var(--color-bg);
-}
-
-*::-webkit-scrollbar-thumb {
-  background: var(--color-rule-strong);
-  border: 0.1875rem solid var(--color-bg);
-  border-radius: 999px;
-}
-
-*::-webkit-scrollbar-thumb:hover {
-  background: var(--color-muted);
-}
-
-@media (forced-colors: active), (pointer: coarse) {
-  html {
-    scrollbar-color: auto;
-    scrollbar-width: auto;
-  }
-
-  *::-webkit-scrollbar {
-    width: auto;
-    height: auto;
-  }
-}
-
-h1,
-h2,
-h3 {
-  font-family: var(--font-display);
-  line-height: 1.25;
-}
-
-code,
-pre {
-  font-family: var(--font-mono);
-}
-
-a {
-  color: var(--color-accent);
-}
-
-/* Signalling principle (docs/artifacts/learning-science-principles.md §2) — the exact element a
-   diagram highlights must be visually unmistakable, not a subtle tint. */
-[data-highlighted="true"] {
-  stroke: var(--color-highlight);
-  fill: var(--color-highlight);
-  font-weight: 700;
-}
-
-table[data-diagram] {
-  border-collapse: collapse;
-}
-
-table[data-diagram] th,
-table[data-diagram] td {
-  border: 1px solid var(--color-muted);
-  padding: var(--space-1);
-  text-align: center;
-}
-
-table[data-diagram] td[data-highlighted="true"] {
-  background: color-mix(in srgb, var(--color-highlight) 20%, transparent);
-  color: var(--color-highlight);
-  font-weight: 700;
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+summary:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--color-accent) 38%, transparent);
+  outline-offset: 3px;
 }

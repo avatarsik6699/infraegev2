@@ -13,6 +13,6 @@ These playbooks are the canonical source of truth for the workflow. Runtime wrap
   `docs/SPEC.md` when needed, and scaffold a new change with its feature branch
 - [work.md](./work.md) — implement Backlog tasks (default) or fix Architect Review Notes
   (`/work XX review`) through the agent execution loop, absorbing mid-session findings into the
-  Backlog and running the Fast Gate
-- [ship.md](./ship.md) — run the Full Gate, merge to `main`, archive the change, and (with
-  `--release`) push and verify the deploy
+  Backlog and running one affected-area Critical Gate
+- [ship.md](./ship.md) — run the Critical Gate by default or Full Gate with `--full`, merge to
+  `main`, archive the change, and (with `--release`) push and verify the deploy

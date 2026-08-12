@@ -9,8 +9,8 @@ const eslint = new ESLint({ cwd: workspaceRoot });
 const validSpec = `
   import { test } from "./fixtures";
 
-  test("uses a domain fixture", async ({ topicPage }) => {
-    await topicPage.expectPublishedLesson();
+  test("uses an application fixture", async ({ foundationPage }) => {
+    await foundationPage.expectTableOfContentsStand();
   });
 `;
 
@@ -29,9 +29,9 @@ const invalidSpecs = [
     source: `
       import { chromium } from "playwright";
       import { test } from "./fixtures";
-      test("launches a browser", async ({ topicPage }) => {
+      test("launches a browser", async ({ foundationPage }) => {
         await chromium.launch();
-        await topicPage.expectPublishedLesson();
+        await foundationPage.expectTableOfContentsStand();
       });
     `,
   },
@@ -50,8 +50,8 @@ const invalidSpecs = [
     ruleId: "no-restricted-syntax",
     source: `
       import { test } from "./fixtures";
-      test("constructs an object", async ({ topicPage }) => {
-        const pageObject = new HomePage(topicPage);
+      test("constructs an object", async ({ foundationPage }) => {
+        const pageObject = new FoundationPage(foundationPage);
         await pageObject.expectReady();
       });
     `,
@@ -61,8 +61,8 @@ const invalidSpecs = [
     ruleId: "no-restricted-syntax",
     source: `
       import { test } from "./fixtures";
-      test("uses a raw locator", async ({ topicPage }) => {
-        await topicPage.locator("main");
+      test("uses a raw locator", async ({ foundationPage }) => {
+        await foundationPage.locator("main");
       });
     `,
   },
@@ -71,9 +71,9 @@ const invalidSpecs = [
     ruleId: "no-restricted-syntax",
     source: `
       import { test } from "./fixtures";
-      test("uses test info", async ({ topicPage }, testInfo) => {
+      test("uses test info", async ({ foundationPage }, testInfo) => {
         testInfo.snapshotSuffix = "raw";
-        await topicPage.expectPublishedLesson();
+        await foundationPage.expectTableOfContentsStand();
       });
     `,
   },

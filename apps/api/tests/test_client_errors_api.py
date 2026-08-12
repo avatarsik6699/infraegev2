@@ -16,9 +16,9 @@ def client() -> Iterator[TestClient]:
 def valid_report() -> dict[str, object]:
     return {
         "kind": "render",
-        "route_id": "/theory/$topicSlug",
+        "route_id": "/section/$sectionId",
         "fingerprint": "a" * 64,
-        "asset_path": "/_build/assets/topic-AbC123.js",
+        "asset_path": "/_build/assets/section-AbC123.js",
         "line": 42,
         "column": 7,
     }
@@ -37,9 +37,9 @@ def test_client_error_report_is_logged_as_bounded_structured_data(client: TestCl
             "event": "client.error_reported",
             "error_source": "browser",
             "error_kind": "render",
-            "route_id": "/theory/$topicSlug",
+            "route_id": "/section/$sectionId",
             "fingerprint": "a" * 64,
-            "asset_path": "/_build/assets/topic-AbC123.js",
+            "asset_path": "/_build/assets/section-AbC123.js",
             "line": 42,
             "column": 7,
             "deploy_sha": "development",
@@ -52,9 +52,9 @@ def test_client_error_report_is_logged_as_bounded_structured_data(client: TestCl
     [
         ("message", "raw exception"),
         ("stack", "raw stack"),
-        ("url", "https://infraege.ru/theory/x?answer=secret"),
+        ("url", "https://infraege.ru/example/x?answer=secret"),
         ("fingerprint", "not-a-sha256"),
-        ("route_id", "/theory/x?answer=secret"),
+        ("route_id", "/example/x?answer=secret"),
         ("asset_path", "https://third-party.example/script.js"),
         ("line", 0),
     ],

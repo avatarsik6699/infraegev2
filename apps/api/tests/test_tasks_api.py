@@ -1,5 +1,6 @@
 import json
 from collections.abc import Iterator
+from pathlib import Path
 
 import pytest
 from fastapi import HTTPException
@@ -8,11 +9,47 @@ from fastapi.testclient import TestClient
 from app.core.config import settings
 from app.main import app
 from app.modules.content.schemas import Task
+from app.modules.content.service import clear_cache
 from app.modules.health.api import require_database
 
 
 @pytest.fixture
-def client() -> Iterator[TestClient]:
+def content_task(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Iterator[Task]:
+    task = Task.model_validate(
+        {
+            "id": "sample-task",
+            "statement": "Введите контрольное значение",
+            "checker_type": "exact_match",
+            "answer_variants": ["42", "сорок два"],
+            "interaction_type": "production",
+            "difficulty": 1,
+            "explanation": [
+                {
+                    "type": "callout",
+                    "data": {
+                        "tone": "info",
+                        "markdown": "Проверьте вычисления и повторите попытку.",
+                    },
+                }
+            ],
+        }
+    )
+    tasks_dir = tmp_path / "tasks"
+    tasks_dir.mkdir()
+    (tasks_dir / f"{task.id}.json").write_text(
+        json.dumps(task.model_dump(mode="json"), ensure_ascii=False),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(settings, "content_dir", tmp_path)
+    clear_cache()
+    try:
+        yield task
+    finally:
+        clear_cache()
+
+
+@pytest.fixture
+def client(content_task: Task) -> Iterator[TestClient]:
     try:
         with TestClient(app) as test_client:
             yield test_client
@@ -38,48 +75,37 @@ def test_readiness_returns_503_when_database_is_unavailable(client: TestClient):
     assert response.json() == {"detail": "database unavailable"}
 
 
-def load_graphs_and_tables_tasks() -> list[Task]:
-    tasks = []
-    for path in sorted(settings.tasks_dir.glob("graphs-and-tables-*.json")):
-        tasks.append(Task.model_validate_json(path.read_text(encoding="utf-8")))
-    assert len(tasks) == 5
-    return tasks
-
-
-def assert_substantive_explanation(body: dict[str, object]) -> None:
-    explanation = body["explanation"]
-    serialized = json.dumps(explanation, ensure_ascii=False)
-    assert len(serialized) >= 300
-    assert "Типичная ошибка" in serialized
-
-
-def test_every_declared_answer_variant_is_accepted_through_real_endpoint(
-    client: TestClient,
+def test_every_declared_answer_variant_is_accepted_through_endpoint(
+    client: TestClient, content_task: Task
 ):
-    for task in load_graphs_and_tables_tasks():
-        for answer in task.answer_variants:
-            response = client.post(
-                f"/api/tasks/{task.id}/check",
-                json={"answer": answer},
-            )
-            assert response.status_code == 200, (task.id, answer)
-            body = response.json()
-            assert body["correct"] is True, (task.id, answer)
-            assert_substantive_explanation(body)
-
-
-def test_every_task_rejects_a_known_wrong_answer_with_substantive_feedback(
-    client: TestClient,
-):
-    for task in load_graphs_and_tables_tasks():
+    for answer in content_task.answer_variants:
         response = client.post(
-            f"/api/tasks/{task.id}/check",
-            json={"answer": "заведомо неверный ответ"},
+            f"/api/tasks/{content_task.id}/check",
+            json={"answer": answer},
         )
-        assert response.status_code == 200, task.id
-        body = response.json()
-        assert body["correct"] is False, task.id
-        assert_substantive_explanation(body)
+        assert response.status_code == 200, answer
+        assert response.json() == {
+            "correct": True,
+            "explanation": [
+                {
+                    "type": "callout",
+                    "data": {
+                        "tone": "info",
+                        "markdown": "Проверьте вычисления и повторите попытку.",
+                    },
+                }
+            ],
+        }
+
+
+def test_task_rejects_a_known_wrong_answer_with_feedback(client: TestClient, content_task: Task):
+    response = client.post(
+        f"/api/tasks/{content_task.id}/check",
+        json={"answer": "заведомо неверный ответ"},
+    )
+    assert response.status_code == 200
+    assert response.json()["correct"] is False
+    assert response.json()["explanation"]
 
 
 def test_check_unknown_task_returns_404(client: TestClient):
@@ -97,7 +123,7 @@ def test_check_unknown_task_returns_404(client: TestClient):
     ],
 )
 def test_check_answer_rejects_invalid_request_contract(client: TestClient, body: dict[str, object]):
-    response = client.post("/api/tasks/graphs-and-tables-01/check", json=body)
+    response = client.post("/api/tasks/sample-task/check", json=body)
     assert response.status_code == 422
 
 
@@ -112,13 +138,75 @@ def test_openapi_exposes_discriminated_content_blocks(client: TestClient):
         "callout",
         "code_example",
         "completion_exercise",
-        "diagram",
-        "figure",
+        "learning_visual",
         "productive_failure_prompt",
         "text",
         "video_embed",
         "worked_example",
     }
+
+
+def test_learning_visual_contract_accepts_generic_json_and_rejects_legacy_shapes(
+    content_task: Task,
+):
+    common = {
+        "purpose": "Показать последовательность",
+        "accessible_description": "Три связанных этапа процесса",
+        "caption": "Этапы выполняются по порядку",
+    }
+    visual = {
+        "kind": "relationship_map",
+        "data": {
+            "items": [
+                {"id": "first", "label": "Первый этап"},
+                {"id": "second", "label": "Второй этап"},
+            ],
+            "links": [{"source": "first", "target": "second"}],
+        },
+    }
+
+    task = content_task.model_dump()
+    task["explanation"] = [
+        {
+            "type": "learning_visual",
+            "data": {**common, "representation": "structured", "visual": visual},
+        }
+    ]
+    assert Task.model_validate(task).explanation[0].type == "learning_visual"
+
+    with pytest.raises(ValueError):
+        Task.model_validate({**task, "explanation": [{"type": "figure", "data": {}}]})
+    with pytest.raises(ValueError):
+        Task.model_validate(
+            {
+                **task,
+                "explanation": [
+                    {
+                        "type": "learning_visual",
+                        "data": {
+                            **common,
+                            "representation": "structured",
+                            "visual": {
+                                "kind": "legacy_shape",
+                                "nodes": ["first", "second"],
+                            },
+                        },
+                    }
+                ],
+            }
+        )
+    with pytest.raises(ValueError):
+        Task.model_validate(
+            {
+                **task,
+                "explanation": [
+                    {
+                        "type": "learning_visual",
+                        "data": {**common, "representation": "raster"},
+                    }
+                ],
+            }
+        )
 
 
 def test_error_logging_middleware_does_not_break_normal_requests(client: TestClient):

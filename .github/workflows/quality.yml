@@ -37,7 +37,7 @@ jobs:
         run: |
           pnpm --filter web lint
           pnpm --filter web typecheck
-          SITE_URL=https://infraege.ru pnpm --filter web build
+          pnpm --filter web build
           node scripts/validate-content-links.mjs
       - name: Operations dashboard static checks
         run: |

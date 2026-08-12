@@ -30,7 +30,6 @@ services:
     image: ghcr.io/avatarsik6699/infraegev2-web:${DEPLOY_SHA:?DEPLOY_SHA is required}
     build: !reset null
     environment:
-      SITE_URL: https://infraege.ru
       DEPLOY_SHA: ${DEPLOY_SHA}
     mem_limit: 512m
     restart: always

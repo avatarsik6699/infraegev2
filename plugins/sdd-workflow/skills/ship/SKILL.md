@@ -1,6 +1,6 @@
 ---
 name: ship
-description: Run the Full Gate for a change; on PASS, commit, merge to main, and archive the change file. With --release, also run the Release Gate, push origin/main, and verify the deploy via gh. Use when the architect wants to close out a change or release it.
+description: Close a change with the Critical Gate by default, the manual Full Gate with --full, or mandatory Full and Release Gates with --release. Use when the architect wants to close or publish a change.
 metadata:
   priority: 6
   pathPatterns:
@@ -25,7 +25,7 @@ retrieval:
     - sdd ship
     - phase gate
   intents:
-    - run full gate and merge
+    - run selected gate and merge
     - release to production
   entities:
     - docs/changes/archive
@@ -35,5 +35,5 @@ retrieval:
 # ship
 
 Execute the canonical playbook in [docs/playbooks/ship.md](../../../../docs/playbooks/ship.md).
-The executable commands live in `docs/STACK.md`'s Full Gate and Release Gate tables; do not
+The executable commands live in `docs/STACK.md`'s Critical, Full, and Release Gate tables; do not
 duplicate them here.

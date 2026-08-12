@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from typing import Annotated, Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, JsonValue
 
 CheckerType = Literal["exact_match", "numeric_tolerance"]
 InteractionType = Literal["production", "recognition"]
@@ -22,40 +22,46 @@ class TextBlockData(StrictContentModel):
     markdown: str
 
 
-class FigureBlockData(StrictContentModel):
+class LearningVisualAsset(StrictContentModel):
     src: str
-    alt: str
     width: int = Field(gt=0)
     height: int = Field(gt=0)
-    caption: str | None = None
 
 
-class DiagramElement(StrictContentModel):
-    kind: Literal["node", "edge", "arrow", "label", "highlight"]
-    id: str
-    x: float | None = None
-    y: float | None = None
-    from_: str | None = Field(default=None, alias="from")
-    to: str | None = None
-    text: str | None = None
-    highlighted: bool | None = None
+class StructuredLearningVisual(StrictContentModel):
+    kind: str = Field(min_length=1, max_length=64, pattern=r"^[a-z][a-z0-9_]*$")
+    data: dict[str, JsonValue] = Field(min_length=1)
 
 
-class GraphDiagramData(StrictContentModel):
-    kind: Literal["graph", "automaton"]
-    ariaLabel: str
-    elements: list[DiagramElement]
+class RasterLearningVisualData(StrictContentModel):
+    representation: Literal["raster"]
+    purpose: str
+    accessible_description: str
+    caption: str
+    asset: LearningVisualAsset
 
 
-class TableDiagramData(StrictContentModel):
-    kind: Literal["bit-grid"]
-    ariaLabel: str
-    headers: list[str]
-    rows: list[list[str]]
-    highlightedCells: list[str] | None = None
+class StructuredLearningVisualData(StrictContentModel):
+    representation: Literal["structured"]
+    purpose: str
+    accessible_description: str
+    caption: str
+    visual: StructuredLearningVisual
 
 
-DiagramData = Annotated[GraphDiagramData | TableDiagramData, Field(discriminator="kind")]
+class HybridLearningVisualData(StrictContentModel):
+    representation: Literal["hybrid"]
+    purpose: str
+    accessible_description: str
+    caption: str
+    asset: LearningVisualAsset
+    visual: StructuredLearningVisual
+
+
+LearningVisualData = Annotated[
+    RasterLearningVisualData | StructuredLearningVisualData | HybridLearningVisualData,
+    Field(discriminator="representation"),
+]
 
 
 class CodeExampleBlockData(StrictContentModel):
@@ -84,14 +90,9 @@ class TextBlock(StrictContentModel):
     data: TextBlockData
 
 
-class FigureBlock(StrictContentModel):
-    type: Literal["figure"]
-    data: FigureBlockData
-
-
-class DiagramBlock(StrictContentModel):
-    type: Literal["diagram"]
-    data: DiagramData
+class LearningVisualBlock(StrictContentModel):
+    type: Literal["learning_visual"]
+    data: LearningVisualData
 
 
 class CodeExampleBlock(StrictContentModel):
@@ -116,8 +117,7 @@ class VideoEmbedBlock(StrictContentModel):
 
 ContentBlock = Annotated[
     TextBlock
-    | FigureBlock
-    | DiagramBlock
+    | LearningVisualBlock
     | CodeExampleBlock
     | WorkedExampleBlock
     | CalloutBlock

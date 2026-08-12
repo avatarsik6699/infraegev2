@@ -13,11 +13,11 @@
   root-qualified namespace; nested components do so only for non-trivial or cross-file types.
 
 ```tsx
-export namespace TopicPageTypes {
+export namespace ExamplePageTypes {
   export type Props = { title: string };
 }
 
-export const TopicPage: React.FC<TopicPageTypes.Props> = (props) => {
+export const ExamplePage: React.FC<ExamplePageTypes.Props> = (props) => {
   return <h1>{props.title}</h1>;
 };
 ```
@@ -29,8 +29,8 @@ export const TopicPage: React.FC<TopicPageTypes.Props> = (props) => {
 - A `useState` tuple is the sole hook-return destructuring exception.
 
 ```tsx
-const topicRoute = Route.useLoaderData();
-const [answer, setAnswer] = useState("");
+const routeData = Route.useLoaderData();
+const [value, setValue] = useState("");
 ```
 
 These rules keep call sites searchable and make the owner of each value visible. They apply to
@@ -42,9 +42,9 @@ improves clarity.
 Every `useEffect` callback is a named function whose name ends in `Fx`:
 
 ```tsx
-useEffect(function persistProgressFx() {
-  progressStore.save();
-}, [progressStore]);
+useEffect(function persistStateFx() {
+  stateStore.save();
+}, [stateStore]);
 ```
 
 ## 4. Module structure and public APIs
@@ -82,8 +82,7 @@ slice/
   directory only when it owns types, styles, utilities, or child components.
 - Promote a component to a lower reusable slice only after real cross-slice reuse appears. Do not
   create shared abstractions from hypothetical future reuse.
-- Capability meaning is more important than matching the directory name to its root component:
-  `check-answer/PracticeTaskWidget` and `track-progress/ProgressBar` are intentional.
+- Capability meaning is more important than matching the directory name to its root component.
 
 ## 5. Routing
 
@@ -103,22 +102,20 @@ rendered by those callbacks are not exempt.
   SSR-safe `safeLs` API.
 - Use `shared/lib/safe-json` for persisted JSON. `JSON.stringify` is allowed for an HTTP request
   body because that is transport serialization, not storage.
-- Only `shared/config/env.ts` and `shared/config/runtime.ts` may read `import.meta.env`. Consumers
-  use their typed exports.
-- Keep `__CONTENT_ROOT__` as the build-time Vite constant documented in
-  `docs/KNOWN_GOTCHAS.md`; it is intentionally not a runtime env value.
+- Only `shared/config/client-env.ts` and explicitly named `*.server.ts` modules may read
+  environment values. Consumers use their typed exports.
 
 ## 7. Types
 
 - Use `type` for object shapes, unions and aliases; do not use `interface`.
 - Literal namespaces are allowed only in `*.types.ts` and qualify ownership, for example
-  `TopicPageTypes.Props`. ESLint continues to reject namespaces everywhere else.
-- Group module helpers and constants in root-prefixed objects such as `topicPageUtils` and
-  `topicPageConstants`; keep helpers pure and do not create empty placeholder files.
+  `ExamplePageTypes.Props`. ESLint continues to reject namespaces everywhere else.
+- Group module helpers and constants in root-prefixed objects such as `examplePageUtils` and
+  `examplePageConstants`; keep helpers pure and do not create empty placeholder files.
 - Use `*.dto.ts` only for transport/API boundary shapes, never as a synonym for component props.
 - Export only types consumed outside their module.
-- Keep content-domain types in `entities/content/model/types.ts`. Do not duplicate an API response
-  shape in several consumers.
+- Future domain types belong to their owning entity. Do not duplicate an API response shape in
+  several consumers.
 - `src/routeTree.gen.ts` is generated and exempt from authoring conventions.
 
 ## 8. Styling and Mantine

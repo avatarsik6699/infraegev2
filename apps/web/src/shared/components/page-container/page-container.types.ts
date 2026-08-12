@@ -1,7 +1,7 @@
 export namespace PageContainerTypes {
   export type Props = {
     children: React.ReactNode;
-    component?: "main" | "footer" | "section" | "div";
+    component?: "main" | "header" | "footer" | "section" | "div";
     className?: string;
     size?: string;
   };

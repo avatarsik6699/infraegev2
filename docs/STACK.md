@@ -4,8 +4,9 @@
 >
 > The SDD pipeline (`plan` / `work` / `ship`) is specialized for web applications but stack-neutral
 > within that: this file is where it learns what to actually run. `docs/playbooks/work.md` reads
-> the [Fast Gate](#fast-gate) and [Required Tooling](#required-tooling) tables verbatim;
-> `docs/playbooks/ship.md` reads [Full Gate](#full-gate) and [Release Gate](#release-gate) verbatim.
+> the [Critical Gate](#critical-gate) and [Required Tooling](#required-tooling) tables verbatim;
+> `docs/playbooks/ship.md` reads the Critical, [Full Gate](#full-gate), and
+> [Release Gate](#release-gate) tables verbatim.
 > Keep these tables accurate.
 >
 > **Stack status:** CONFIGURED (change 01 — project-foundation)
@@ -21,7 +22,7 @@ pitfalls that must be reconsidered rather than copied.
 
 | Layer | Technology |
 |-------|-----------|
-| Frontend | React + TanStack Start (SSR/SSG, file-based routing and automatic route splitting, `createServerFn` for build-time content access) on Vite **8.2.1 exact** (Rolldown/Oxc); Mantine Core/Hooks/Form/NProgress/Code Highlight **9.5.1 exact**; TanStack Query for server state; Zod for form input; generated `openapi-typescript` contracts with `openapi-fetch` transport |
+| Frontend | React + TanStack Start (SSR/SSG, file-based routing and automatic route splitting) on Vite **8.2.1 exact** (Rolldown/Oxc); Mantine Core/Hooks/NProgress **9.5.1 exact**; TanStack Query for future server state; generated `openapi-typescript` contracts with `openapi-fetch` transport |
 | Backend | Python/FastAPI (`apps/api`) |
 | Database | PostgreSQL (provisioned in `infra/docker-compose.yml`; no schema/migrations yet — content is git-based, docs/SPEC.md §3) |
 | Cache | — (not needed on M0) |
@@ -106,27 +107,29 @@ editors beyond VS Code.
 
 ---
 
-## Fast Gate
+## Critical Gate
 
-Run by `/work` after each Backlog item or Architect Review Note, scoped to the touched area only —
-not the full suite. Fill every row that applies; mark `n/a` for rows that don't (e.g. no frontend
-→ frontend rows are `n/a`). Reported as `SKIPPED — n/a in STACK.md` otherwise.
+Run once after the complete target set of a `/work` invocation and by default local `/ship`, scoped
+to the touched area only. It proves that changed code is internally consistent without replaying
+the full regression, browser, infrastructure, security, accessibility, or performance suites.
+Fill every applicable row and report the rest as `SKIPPED` with a reason.
 
 | Check | Command | Preconditions / notes |
 |-------|---------|-----------------------|
-| Format | `pnpm format:check` | scope is repository-wide because configuration and cross-editor behavior are shared |
+| Format | `pnpm format:check` | run once for the target set; scope is repository-wide because formatting configuration is shared |
 | Lint | `pnpm --filter web lint` · `pnpm --filter ops lint` · `cd apps/api && uv run ruff check app tests` | scope to touched workspace |
 | Type-check (affected) | `pnpm --filter web typecheck` · `pnpm --filter ops typecheck` · `cd apps/api && pnpm exec pyright app tests` | pyright reads `[tool.pyright]` in `apps/api/pyproject.toml` |
-| Targeted / affected unit tests | `pnpm --filter web test` · `pnpm --filter ops test` · `cd apps/api && uv run pytest` | local developer environment only; never Docker/CI |
+| Focused tests | `pnpm --filter web exec vitest run <changed-test-files>` · `pnpm --filter ops exec vitest run <changed-test-files>` · `cd apps/api && uv run pytest <changed-test-files-or-nodeids>` | run only tests directly covering changed behavior; documentation-only changes are `SKIPPED`; never expand this row to the full suite |
 | LSP diagnostics | available: yes | `python-lsp` (Pyright) and `typescript-lsp` MCP servers; repository type-check commands remain complementary gate evidence |
-| API type regen (`openapi-typescript` or equivalent) | `pnpm api:check` | exports FastAPI OpenAPI deterministically and regenerates the TypeScript contract in a temporary directory; fails on tracked drift |
+| API type regen (`openapi-typescript` or equivalent) | `pnpm api:check` | only when the public API surface or its generated consumer changed; fails on tracked drift |
 
 ---
 
 ## Full Gate
 
-Run once by `/ship`, before merging a change's feature branch into `main`. Do not run this per
-task — it's expensive by design; that's why it's separated from the Fast Gate.
+Run only when explicitly requested through `/ship --full`, or as a mandatory prerequisite of
+`/ship --release`. It is intentionally expensive and is not part of routine task completion or
+default local shipping.
 
 | Check | Command | Preconditions / notes |
 |-------|---------|-----------------------|
@@ -138,12 +141,12 @@ task — it's expensive by design; that's why it's separated from the Fast Gate.
 | Frontend build | `cd apps/web && pnpm build` | runs TanStack Start's build-time prerender; fails the build if any crawled page 500s |
 | Frontend unit tests | `pnpm --filter web test && pnpm --filter ops test` | local only |
 | E2E lint / determinism | `pnpm --filter web exec playwright test --list` | local only, never CI'd; validates Playwright config/spec collection without running the journey |
-| E2E (Playwright) | `pnpm --filter web test:e2e` | local only, never CI'd; starts local Vite + Uvicorn through Playwright `webServer` and runs 2 smoke tests in the single Chromium project |
+| E2E (Playwright) | `pnpm --filter web test:e2e` | local only, never CI'd; starts local Vite + Uvicorn through Playwright `webServer` and verifies the foundation/404 journeys in the single Chromium project |
 | Ops dashboard | `pnpm --filter ops build` | BFF tests are included in the local-only workspace unit test row |
 | Smoke | `curl -f http://localhost:8000/health/ready` (backend) — frontend smoke is the build prerender crawl | |
 | SAST / secrets / dependency audit | `pnpm audit:security` | Docker required for pinned Gitleaks 8.30.1 and Trivy 0.73.0; Semgrep 1.172.0 and pip-audit 2.10.1 run through uvx |
-| Accessibility audit | `pnpm audit:a11y` | local Playwright/axe; four public routes, serious/critical violations fail |
-| Performance budget | `SITE_URL=https://infraege.ru pnpm --filter web build && pnpm audit:performance` | local Chrome; median of 3, LCP ≤2.5s, CLS ≤0.1, TBT ≤200ms as lab proxy for INP |
+| Accessibility audit | `pnpm audit:a11y` | local Playwright/axe; foundation and not-found routes, serious/critical violations fail |
+| Performance budget | `pnpm --filter web build && pnpm audit:performance` | local Chrome against `/`; median of 3, LCP ≤2.5s, CLS ≤0.1, TBT ≤200ms as lab proxy for INP |
 | Content link validation | `node scripts/validate-content-links.mjs` | docs/SPEC.md §2.2/§3/§7.2 — fails if any `prerequisites`/`related_topics`/`unlocks_topics`/`practice_task_ids`/`topic_ids` reference a nonexistent id |
 
 Tests remain local-only; the security command is also mirrored in GitHub Actions without invoking
@@ -178,7 +181,7 @@ tool that isn't available must be reported as skipped with a reason, never silen
 | New/changed API surface | `openapi-typescript` regen + frontend re-typecheck | after backend contract change | yes — `pnpm api:generate` updates tracked artifacts; `pnpm api:check` proves no drift |
 | Frontend architecture decision | `frontend-architecture` skill | during planning and architecture review | yes — installed in the local Codex skill catalog |
 | Backend architecture decision | `backend-architecture` skill | during planning and architecture review | yes — installed in the local Codex skill catalog |
-| Frontend design decision | `frontend-design` skill | during `/plan` §5.3 and design Backlog items | yes |
+| Frontend design decision | `impeccable` skill | during `/plan` §5.3 and design Backlog items; replacement worlds require its product, direction, finish-review and documentation flow | yes — 4.0.4 installed |
 | Backend/API design decision | `backend-design` skill | during `/plan` §4 and backend-architecture Backlog items | yes |
 
 Mark a row `no` (not available) rather than leaving it blank — an unmarked row is otherwise
@@ -225,7 +228,7 @@ pnpm --filter web test:e2e
   `e2e/pages/*.page.ts`, typed application fixtures from `e2e/fixtures.ts`, and user-visible
   `getByRole`/`getByText` locators. Specs describe journeys; POMs own page actions/assertions, and
   fixtures own object construction plus resource teardown. Specs import `test` only from
-  `./fixtures`, consume domain fixtures only, and neither instantiate POMs nor use Playwright
+  `./fixtures`, consume application fixtures only, and neither instantiate POMs nor use Playwright
   locators, assertions, runner plumbing, or context/page APIs directly. `pnpm --filter web lint`
   enforces this boundary and runs policy self-tests; extend the fixture or owning POM instead of
   bypassing the rule.
@@ -267,15 +270,12 @@ pnpm --filter web test:e2e
 ### Frontend layers (`apps/web/src/`) — pragmatic FSD-like, established in change 02
 
 ```
-routes/      TanStack Start file-based routing (framework-fixed location) — thin: a route
-             definition + loader + head, rendering a pages/ component with loader data as props.
-             `router.tsx`/`routeTree.gen.ts` are the app layer; there is no separate `src/app/`.
-pages/       one ecosystem per route; root component at the slice root, private composition under
-             components/, and model/hooks only when needed.
-widgets/     composite chrome reused across pages (currently: site-footer), with the same
-             root/components hierarchy.
-features/    a user-facing capability with root UI + logic (check-answer, track-progress).
-entities/    domain concepts reused across features/pages (content, content-block).
+routes/      TanStack Start file-based routing (framework-fixed location). During the foundation
+             reset it owns only `/`, root shell and generated route tree.
+pages/       reserved for future route ecosystems; currently absent.
+widgets/     reserved for future cross-page composition; currently absent.
+features/    reserved for future user-facing capabilities; currently absent.
+entities/    reserved for future shared domain concepts; currently absent.
 shared/      domain-agnostic config/lib/styles plus policy components wrapping Mantine where the
              project owns semantics or defaults.
 ```
@@ -301,20 +301,18 @@ generated augmentation is resolved by the project `tsc` gate but not fully by Pr
 the documented `notFound()` sentinel also requires the route-only `only-throw-error` exemption.
 
 Server state belongs to a per-router TanStack Query client, which is integrated with SSR and is
-never reused between requests. The answer checker is a no-retry mutation; build-time topic content
-remains in route loaders because it is not runtime server state. Domain operations use the single
-generated `shared/api` transport. Regenerate `contracts/openapi.json` and
-`shared/api/schema.ts` with `pnpm api:generate`; prove no drift with `pnpm api:check`. Zod validates
-form input only, while generated OpenAPI types define the API contract. No global client-state
-store is installed until a real cross-route client-state owner exists.
+never reused between requests. No product query currently consumes it. Future domain operations
+use the single generated `shared/api` transport. Regenerate `contracts/openapi.json` and
+`shared/api/schema.ts` with `pnpm api:generate`; prove no drift with `pnpm api:check`. No global
+client-state store is installed until a real cross-route owner exists.
 
 Route pending/error/not-found UI, delayed skeletons, and navigation progress are application-level
 defaults. Browser render/route/chunk/global failures pass through `shared/lib/client-errors`, which
 discards messages, page URLs, full stacks, and user data before posting a bounded fingerprint
 event. Nginx applies a dedicated body/rate limit, FastAPI writes a structured journald event, and
-the existing ops journal adapter projects it into the dashboard incident table. Expected form/API
-failures remain inline. Notifications and other Mantine extensions stay deferred until a domain
-flow consumes them.
+the existing ops journal adapter projects it into the dashboard incident table. Expected product
+errors will remain local to their owner. Mantine extensions stay deferred until a real flow
+consumes them.
 
 ### Backend modules (`apps/api/app/`) — DDD-like, established in change 02
 

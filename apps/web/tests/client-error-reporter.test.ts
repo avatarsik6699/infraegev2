@@ -35,13 +35,13 @@ describe("privacy-safe client error reporting", () => {
 
     const report = await createClientErrorReport(
       "render",
-      "/theory/$topicSlug",
+      "/foundation/$sectionId",
       error,
     );
 
     expect(report).toEqual({
       kind: "render",
-      route_id: "/theory/$topicSlug",
+      route_id: "/foundation/$sectionId",
       fingerprint: "0a".repeat(32),
       asset_path: "/_build/app.js",
       line: 12,

@@ -16,33 +16,22 @@ import { appMantineTheme } from "~/shared/config/mantine-theme";
 import { AppNavigationProgress } from "~/shared/components/navigation-progress";
 import { RouteError } from "~/shared/components/route-state";
 import "~/shared/styles/tokens.css";
-import { SiteFooter } from "~/widgets/site-footer";
 
 export const Route = createRootRouteWithContext<AppRouterContext>()({
   head: () => ({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { title: "UI foundation" },
     ],
-    links: [{ rel: "icon", href: "/favicon.svg", type: "image/svg+xml" }],
   }),
   shellComponent: RootDocument,
-  errorComponent: (props) => (
-    <>
-      <RouteError {...props} />
-      <SiteFooter />
-    </>
-  ),
+  errorComponent: RouteError,
   component: RootComponent,
 });
 
 function RootComponent() {
-  return (
-    <>
-      <Outlet />
-      <SiteFooter />
-    </>
-  );
+  return <Outlet />;
 }
 
 function RootDocument(props: { children: React.ReactNode }) {
@@ -50,6 +39,7 @@ function RootDocument(props: { children: React.ReactNode }) {
     <html lang="ru" {...mantineHtmlProps}>
       <head>
         <ColorSchemeScript defaultColorScheme="light" />
+        <link rel="icon" href="data:," />
         <HeadContent />
         {clientEnv.umamiWebsiteId && (
           <script

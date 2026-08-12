@@ -14,11 +14,13 @@ tooling live in [`docs/STACK.md`](docs/STACK.md).
    agents implement.
 3. **No Guessing**: If a requirement is genuinely ambiguous and risky, ask a concise question
    instead of inventing behavior.
-4. **Gates First**: `/work` runs the Fast Gate after every item; `/ship` runs the Full Gate before
-   merging. Automated green is not enough if `Architect Review Notes` has unchecked items.
+4. **Proportional Gates**: `/work` runs one affected-area Critical Gate for its complete target
+   set; default `/ship` repeats that compact gate before merging. Full Gate runs only for explicit
+   `/ship --full` or as a mandatory part of `/ship --release`. Automated green is not enough when
+   Backlog or `Architect Review Notes` has unchecked items.
 5. **Security**: No hardcoded secrets. Use `.env`, environment variables, and typed settings
-   appropriate to the stack. `/ship`'s Full Gate includes a secrets scan and dependency audit —
-   don't treat those as optional.
+   appropriate to the stack. When Full Gate is requested, its secrets scan and dependency audit
+   are mandatory; `/ship --release` always includes them.
 6. **Open Backlog**: When the architect reports a finding, bug, or follow-up in chat mid-session,
    append it to the active change's Backlog with a new ID before acting on it — never fix it
    off-list. See `docs/playbooks/work.md` § Backlog append.
@@ -39,7 +41,7 @@ tooling live in [`docs/STACK.md`](docs/STACK.md).
 
 Before writing code, running commands, or reasoning about project layout, read
 [`docs/STACK.md`](docs/STACK.md). It is the source of truth for concrete technologies, setup
-commands, gate commands (Fast/Full/Release), required tooling, and per-module style guides.
+commands, gate commands (Critical/Full/Release), required tooling, and per-module style guides.
 
 If a stack convention is missing from `STACK.md`, do not invent it. Ask the user, then update
 `STACK.md` so the answer is durable.
@@ -93,11 +95,12 @@ fix. If no gotcha entry exists, ask how to proceed and add the resolution to `KN
    architect should not need to say "switch to the feature branch" in chat.
 2. Never use destructive git commands or force-push without explicit instruction.
 3. Use conventional commits: `feat|fix|chore|docs|test|refactor(scope): description`.
-4. `/ship` runs the Full Gate, and on PASS commits outstanding work, merges `feature/NN-slug` into
-   local `main`, and archives the change file. Do not merge or push outside of `/ship`.
-5. `/ship --release` additionally pushes `main` to `origin/main` and verifies the resulting
-   deploy via `gh` — only after the Full Gate (and Release Gate) pass. Do not push to `origin/main`
-   any other way without explicit instruction.
+4. `/ship` runs the Critical Gate by default; `/ship --full` runs the manually requested Full
+   Gate. On PASS either mode commits outstanding work, merges `feature/NN-slug` into local `main`,
+   and archives the change file. Do not merge or push outside of `/ship`.
+5. `/ship --release` always runs Full and Release Gates, then pushes `main` to `origin/main` and
+   verifies the resulting deploy via `gh`. Do not push to `origin/main` any other way without
+   explicit instruction.
 
 ## Workflow Playbooks
 
@@ -107,9 +110,9 @@ The SDD workflows are defined in `docs/playbooks/`:
   brief, refresh `docs/SPEC.md` when needed, and scaffold a new change with its feature branch
 - [`work`](docs/playbooks/work.md) — implement Backlog tasks (default) or fix Architect Review
   Notes (`/work [XX] review`) through the agent execution loop, absorbing mid-session findings and
-  running the Fast Gate
-- [`ship`](docs/playbooks/ship.md) — run the Full Gate, merge to `main`, archive the change, and
-  (with `--release`) push and verify the deploy
+  running one affected-area Critical Gate
+- [`ship`](docs/playbooks/ship.md) — run the Critical Gate by default or the Full Gate with
+  `--full`, merge to `main`, archive the change, and (with `--release`) push and verify the deploy
 
 Runtime wrappers are thin stubs. Workflow logic belongs in the playbooks.
 
@@ -125,8 +128,9 @@ Runtime wrappers are thin stubs. Workflow logic belongs in the playbooks.
 5. Architect manually verifies product behavior
 6. Architect adds unchecked items to Architect Review Notes if fixes are needed
 7. /work NN review                     -> agent fixes review notes; repeat 5-7 until clean
-8. /ship NN                            -> Full Gate; on PASS: merge to main, archive the change
-9. /ship NN --release                  -> Release Gate; push origin/main; verify deploy via gh
+8. /ship NN                            -> Critical Gate; on PASS: merge to main, archive
+9. /ship NN --full                     -> manual Full Gate; on PASS: merge to main, archive
+10. /ship NN --release                 -> Full + Release Gates; push and verify deploy via gh
 ```
 
 ## Implementation Notes
@@ -144,5 +148,5 @@ section exists only for what git can't tell you.
 | `docs/SPEC.md` | Strategic product and system intent | Rarely; architect-approved |
 | `docs/changes/NN-slug.md` | Active unit of work: Backlog, files, gate overrides, review notes, implementation notes | Continuously while active |
 | `docs/changes/archive/NN-slug.md` | Completed unit of work, kept as history | Written once, by `/ship` |
-| `docs/STACK.md` | Stack-specific commands, Fast/Full/Release gate tables, required tooling | When tooling changes |
+| `docs/STACK.md` | Stack-specific commands, Critical/Full/Release gate tables, required tooling | When tooling changes |
 | `docs/KNOWN_GOTCHAS.md` | Recurring pitfall log | When new traps are discovered |
