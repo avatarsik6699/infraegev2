@@ -255,6 +255,18 @@
 - **Fix**: `lighthouserc.cjs` resolves `chromium.executablePath()` from the web workspace and passes
   it as `collect.chromePath`; keep the dedicated `127.0.0.2:3200` server address as well.
 
+### Mantine component styles must follow component imports
+
+- **Symptoms**: Lighthouse LCP regresses because the full Mantine stylesheet blocks first paint,
+  or a newly adopted Mantine component renders without its expected styles after the stylesheet
+  is trimmed.
+- **Root cause**: `@mantine/core/styles.css` includes every core component, while the optimized web
+  entry imports only the global baseline and styles for components the application actually uses.
+- **Fix**: whenever `apps/web` adopts another `@mantine/core` component, add its documented
+  `@mantine/core/styles/<Component>.css` import and any component dependencies to
+  `apps/web/src/shared/styles/tokens.css`. Keep core styles before extension styles and application
+  rules, then verify build, browser rendering and the Lighthouse budget.
+
 ### WSL: an active Windows VPN does not create the infraege WireGuard route
 
 - **Symptoms**: `ping 10.77.0.1` times out; `ip route get 10.77.0.1` selects the mirrored Windows

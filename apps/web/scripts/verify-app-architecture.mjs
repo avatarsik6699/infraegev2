@@ -59,6 +59,12 @@ const forbiddenPatterns = [
     source: "Promise.resolve();",
   },
   {
+    name: "native fetch inside a feature API",
+    ruleId: "no-restricted-globals",
+    source: 'export const load = () => fetch("/api/value");',
+    filePath: apiPath,
+  },
+  {
     name: "server environment access in a network adapter",
     ruleId: "no-restricted-globals",
     source: "export const secret = process.env.SECRET;",

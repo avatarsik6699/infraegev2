@@ -266,6 +266,11 @@ Backend на MVP обслуживает узкий набор задач: про
 | Table diagram renderer | Кодировочные сетки, таблицы истинности | Семантический HTML `<table>` + CSS-подсветка ячеек, не SVG — доступность «бесплатно» |
 | Practice task widget | Ввод ответа → `POST /api/tasks/{id}/check` → показ разбора | `interaction_type: production` в приоритете; прогрессивное улучшение — работает без JS для чтения, JS нужен только для отправки/проверки ответа |
 | Progress store (localStorage) | Хранит, какие темы/уроки отмечены пройденными (по `mastery_threshold`), рисует прогресс-бар | Без аккаунта; ключ — по slug темы/урока |
+| Page state primitives | Единые loading/skeleton, empty, not-found и recoverable error состояния | Семантический статус и понятное действие важнее декоративной анимации; skeleton повторяет геометрию страницы и не озвучивается скринридером как контент |
+| Route resilience shell | Route-level pending/error/not-found UI, retry/reset и верхний navigation progress | Ошибка одной навигации не ломает document shell; предыдущий полезный экран не заменяется мгновенным мигающим fallback |
+| Typed API client | Единственная граница runtime HTTP для `apps/web`, сгенерированная из FastAPI OpenAPI | Feature `api/` вызывает типизированный shared client; transport/HTTP/contract errors различимы, abort/timeout и безопасные сообщения обязательны |
+| Query client | Владение runtime server-state, mutation lifecycle, cache/retry/cancellation | Build-time content остаётся в TanStack Router loaders; Query не дублирует local UI state или progress store |
+| Form boundary | Mantine form state + Zod validation для интерактивных форм | Сервер остаётся источником истины; ошибки полей inline, submission error рядом с действием, focus возвращается к исправляемому месту |
 | Prerequisite/related-topic callout | «Эта тема легче даётся, если понимать [Python: списки] → перейти» | Рендерится из `prerequisites`/`related_topics`/`unlocks_topics`, не текстовая ссылка вручную |
 | Footer feedback link | Ссылка в футере/на страницах тем на Telegram-канал (или VK-группу) для свободных сообщений о проблемах | Канал используется только для обратной связи; автоматические Telegram-алерты отложены |
 
@@ -306,6 +311,43 @@ author-owned generation brief и внешнюю image-модель, затем �
 
 Последующие точечные изменения дизайна (правки компонентов, палитры) — обычные Backlog-задачи в
 активном change-файле через `/work`, не повторный запуск этого флоу.
+
+### 5.4 Client Application Infrastructure
+
+- **Контракты API:** FastAPI OpenAPI экспортируется детерминированно и является источником
+  генерируемых `openapi-typescript` типов. `openapi-fetch` — единственный shared transport;
+  feature-срезы не вызывают нативный `fetch` и не описывают response types вручную. Generated-файл
+  не редактируется, а schema drift проверяется отдельной gate-командой.
+- **Server state:** TanStack Query владеет только runtime запросами/мутациями. Query client
+  создаётся SSR-safe, не разделяется между server requests и не пересоздаётся при Suspense на
+  клиенте. Для мутаций автоматический retry по умолчанию запрещён; повтор выполняется явно
+  пользователем, чтобы проверка ответа не отправлялась незаметно дважды.
+- **Ошибки и восстановление:** transport, timeout/abort, HTTP и malformed-contract failures имеют
+  различимые технические категории, но безопасный русский user-facing текст. Route error boundary
+  даёт повторить загрузку или вернуться к рабочему маршруту; ожидаемые form/API ошибки остаются
+  inline и не превращаются в глобальные toast. Тела ответов, введённые ответы и URL query/hash не
+  попадают в telemetry.
+- **Loading / empty / not-found:** быстрые переходы не мигают skeleton; медленные используют
+  геометрически стабильный skeleton и верхний progress. Empty state объясняет причину и предлагает
+  следующее доступное действие. Not-found отделён от инфраструктурной ошибки.
+- **Suspense и lazy:** route components и тяжёлая подсветка кода могут загружаться отдельными
+  chunks, но исходный текст, теория и код остаются в prerendered/no-JS HTML fallback. Lazy не
+  применяется к небольшим компонентам без измеримого выигрыша.
+- **Forms / runtime validation:** `@mantine/form` задаёт lifecycle формы, Zod валидирует
+  недоверенные client-side значения. Generated OpenAPI types дают compile-time contract, но сами
+  по себе не считаются runtime validation внешних данных.
+- **UI extensions:** в фундамент входят только официальные Mantine 9.5.1 packages, имеющие текущий
+  сценарий: `form`, `nprogress`, `code-highlight`. `notifications` не дублирует inline feedback и
+  добавляется только вместе с реальным глобальным/background outcome. `dates`, `dropzone`,
+  `modals`, `spotlight`, `carousel`, `tiptap`, дополнительные charts и community extensions
+  откладываются до конкретного consumer-а и отдельной проверки maintenance/a11y/supply-chain.
+- **Client state:** отдельный глобальный store (Zustand/MobX и аналоги) не вводится заранее.
+  Компонентное состояние остаётся локальным, server state принадлежит Query, URL state — Router,
+  прогресс — существующему versioned external store. Новый store допустим только при нескольких
+  независимых consumers и явно описанном lifecycle/persistence contract.
+- **Визуальная системность:** состояния используют палитру и типографику «Экзаменационного атласа»;
+  scrollbar минималистичен, сохраняет native behavior, достаточный contrast/target и корректный
+  forced-colors fallback.
 
 ---
 
@@ -396,6 +438,7 @@ Nginx выставляет `Cache-Control`/`ETag` для хэшированно�
 | Backup / restore | Локальный restic на VPS: daily `pg_dump -Fc`, Beszel/config snapshots, 7 daily + 4 weekly + 3 monthly, freshness marker и ежемесячный restore drill; off-site storage отложен с явно принятым риском |
 | SEO | URL-паттерн `/theory/zadanie-{n}-{slug}` (соответствует реальным поисковым запросам и конкурентам — не изобретать таксономию); уникальные `title`/`description` из `title`/`summary` каждой темы, не общий шаблон; `sitemap.xml` генерируется автоматически из `published`-тем/уроков при билде; structured data (schema.org `LearningResource`/`FAQPage`) — опционально, дёшево добавить учитывая типизированный контент |
 | Mobile / no-JS readability | Mobile-first; страница темы открывается и читаема без JS (SSR-контент, интерактивность — прогрессивное улучшение) — важно и для SEO, и для медленного мобильного интернета в школе |
+| Client resilience / API drift | Route failures восстанавливаемы без белого экрана; loading/empty/error/not-found состояния доступны с клавиатуры и скринридера; OpenAPI schema/types drift ломает gate до merge; runtime HTTP имеет timeout/abort и не делает скрытый retry мутаций |
 | Юридическое (152-ФЗ) | Минимизация сбора, российский application VPS и достоверная `/privacy` реализуются сейчас. Реквизиты оператора, канал обращений субъектов ПДн и уведомление РКН осознанно вынесены в отдельный будущий change и не блокируют текущий release; риск принят архитектором |
 | Юридическое (436-ФЗ) | Возрастная маркировка для обычного сайта не вводится: существующая `12+` удаляется без замены на `18+` |
 | Юридическое (оригинальность контента) | Тексты тем и формулировки задач — собственного авторства/переформулированы, не дословные копии ФИПИ/sdamgia/kpolyakov (риск конфликта с площадками, не только вопрос добросовестности); проверяется в Content Quality Gate (§2.3) на каждой теме перед `published` |
@@ -410,7 +453,7 @@ Nginx выставляет `Cache-Control`/`ETag` для хэшированно�
 | `M0` — фундамент | Модель контента и базовый рендер готовы, чтобы штамповать темы | Схема content-as-code (типы, frontmatter), рендер `ContentBlock` (включая diagram хотя бы в статичном SVG), скрипт CI-валидации связей |
 | `M1` — первая тема целиком | Один эталон в финальном качестве — задаёт стандарт для всех следующих тем | Тема «граф+таблица» (задание с максимальной подтверждённой болью): текст, диаграмма, практика, meta/SEO, прошедшая Content Quality Gate (§2.3) |
 | `M2` — инфраструктурная пауза | Подготовить production-платформу до продолжения продуктового контента | `infraege.ru`, VPS/GHCR deploy, security/release gates, backups и локальный ops-dashboard |
-| `M3` — учебный flow и публичный запуск | Сначала закрепить эталонный учебный shell/визуальный pipeline, затем добавить 2–4 темы/первые уроки и индексировать MVP | Секции «идея → теория → алгоритм → ошибки», offline AI-assisted figures, лестница практики, связи «тема ↔ урок», Umami-события |
+| `M3` — учебный flow и публичный запуск | Сначала закрепить эталонный учебный shell/визуальный и client-infrastructure pipeline, затем добавить 2–4 темы/первые уроки и индексировать MVP | Секции «идея → теория → алгоритм → ошибки», offline AI-assisted figures, typed API/query/forms, доступные loading/empty/error states, лестница практики, связи «тема ↔ урок», Umami-события |
 | `M4+` (после трафика, вне MVP) | Расширение охвата и сообщества поверх работающей бесплатной базы | Второй мини-курс (Excel), аккаунты/синхронизация, обсуждения тем с модерацией, затем платные фичи — без runtime AI до этого момента |
 
 ---
@@ -430,6 +473,10 @@ Nginx выставляет `Cache-Control`/`ETag` для хэшированно�
 - Онлайн-кассы / 54-ФЗ — возникают только с появлением платежей, не на MVP-этапе.
 - CDN, Telegram-алерты, off-site backup и второй monitoring VPS — отдельные последующие задачи.
 - Формальные реквизиты оператора ПДн и уведомление РКН — отдельный принятый юридический долг.
+- PWA/service worker, offline mutation queue и optimistic updates — только после отдельного
+  пользовательского сценария и стратегии конфликтов/устаревания.
+- Глобальный client store и Mantine/community extensions без текущего consumer-а — не часть
+  клиентского фундамента; добавляются по доказанной потребности (§5.4).
 
 ---
 

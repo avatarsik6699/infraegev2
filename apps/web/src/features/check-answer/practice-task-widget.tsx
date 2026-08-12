@@ -1,12 +1,15 @@
 import { Alert, Button, Paper, Stack, TextInput } from "@mantine/core";
-import { useState } from "react";
+import { useForm } from "@mantine/form";
+import { zod4Resolver } from "mantine-form-zod-resolver";
+import { useEffect, useRef } from "react";
 import { ContentBlockList } from "~/entities/content-block";
 import { Typography } from "~/shared/components/typography";
 import {
   trackPracticeAnswer,
   trackPracticeStart,
 } from "~/shared/lib/analytics";
-import { checkAnswer, type CheckAnswerResponse } from "./api/check-answer";
+import { answerFormSchema, type AnswerFormValues } from "./model/answer-form";
+import { useCheckAnswer } from "./model/use-check-answer";
 import type { PracticeTaskWidgetTypes } from "./practice-task-widget.types";
 
 /**
@@ -18,21 +21,30 @@ import type { PracticeTaskWidgetTypes } from "./practice-task-widget.types";
 export const PracticeTaskWidget: React.FC<PracticeTaskWidgetTypes.Props> = (
   props,
 ) => {
-  const [answer, setAnswer] = useState("");
-  const [result, setResult] = useState<CheckAnswerResponse | null>(null);
-  const [submitting, setSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState(false);
+  const answerInputRef = useRef<HTMLInputElement>(null);
+  const form = useForm<AnswerFormValues>({
+    initialValues: { answer: "" },
+    validate: zod4Resolver(answerFormSchema),
+    validateInputOnBlur: true,
+  });
+  const checkAnswerMutation = useCheckAnswer();
 
-  async function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
-    event.preventDefault();
+  useEffect(() => {
+    if (form.errors.answer || checkAnswerMutation.isError) {
+      answerInputRef.current?.focus();
+    }
+  }, [checkAnswerMutation.isError, form.errors.answer]);
+
+  async function handleSubmit(values: AnswerFormValues) {
     if (props.analytics) {
       trackPracticeStart(props.analytics.topicId, props.analytics.totalTasks);
     }
-    setResult(null);
-    setSubmitError(false);
-    setSubmitting(true);
+    checkAnswerMutation.reset();
     try {
-      const body = await checkAnswer(props.task.id, answer);
+      const body = await checkAnswerMutation.mutateAsync({
+        taskId: props.task.id,
+        answer: values.answer.trim(),
+      });
       if (props.analytics) {
         trackPracticeAnswer(
           props.analytics.topicId,
@@ -40,19 +52,16 @@ export const PracticeTaskWidget: React.FC<PracticeTaskWidgetTypes.Props> = (
           body.correct,
         );
       }
-      setResult(body);
       if (body.correct) props.onCorrect?.(props.task.id);
     } catch {
-      setSubmitError(true);
-    } finally {
-      setSubmitting(false);
+      // The mutation owns the error state rendered below; expected request failures stay inline.
     }
   }
 
   return (
     <Paper
       component="form"
-      onSubmit={(event) => void handleSubmit(event)}
+      onSubmit={form.onSubmit((values) => void handleSubmit(values))}
       withBorder
       p="md"
       radius="sm"
@@ -62,35 +71,35 @@ export const PracticeTaskWidget: React.FC<PracticeTaskWidgetTypes.Props> = (
         <TextInput
           label="Ответ"
           type="text"
-          value={answer}
-          onChange={(event) => setAnswer(event.target.value)}
-          disabled={submitting}
+          ref={answerInputRef}
+          {...form.getInputProps("answer")}
+          disabled={checkAnswerMutation.isPending}
         />
         <Button
           type="submit"
-          loading={submitting}
-          disabled={answer.trim() === ""}
+          loading={checkAnswerMutation.isPending}
+          disabled={checkAnswerMutation.isPending}
         >
           Проверить
         </Button>
 
-        {result && (
+        {checkAnswerMutation.data && (
           <Alert
             role="status"
-            data-correct={result.correct}
-            color={result.correct ? "textbook" : "highlight"}
+            data-correct={checkAnswerMutation.data.correct}
+            color={checkAnswerMutation.data.correct ? "textbook" : "highlight"}
             variant="light"
           >
             <Typography.Text>
-              {result.correct ? "Верно!" : "Неверно."}
+              {checkAnswerMutation.data.correct ? "Верно!" : "Неверно."}
             </Typography.Text>
             {/* Feedback timing/depth per learning-science-principles.md §6: correct/incorrect is
               immediate, but the explanation is a full worked-example-style breakdown, not just
               "the right answer is X" (docs/SPEC.md §3, Task.explanation). */}
-            <ContentBlockList blocks={result.explanation} />
+            <ContentBlockList blocks={checkAnswerMutation.data.explanation} />
           </Alert>
         )}
-        {submitError && (
+        {checkAnswerMutation.isError && (
           <Alert role="alert" color="highlight" variant="light">
             Не удалось проверить ответ. Попробуйте ещё раз.
           </Alert>

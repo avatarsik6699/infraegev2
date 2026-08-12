@@ -16,6 +16,12 @@ export default defineConfig((configEnv) => {
     process.env.VITE_PROXY_TARGET ?? "http://localhost:8000";
 
   return {
+    build: {
+      // The app's route CSS is small, while each split stylesheet adds a render-blocking round
+      // trip before the prerendered heading can paint. One compressed stylesheet keeps the
+      // no-JS document styled and leaves JavaScript route/code-highlight chunks split.
+      cssCodeSplit: false,
+    },
     preview: {
       // TanStack Start prerendering starts Vite preview on an ephemeral port and fetches it from
       // the same process. Bind IPv4 explicitly so BuildKit does not resolve the advertised

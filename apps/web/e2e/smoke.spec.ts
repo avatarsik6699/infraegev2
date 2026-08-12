@@ -11,6 +11,7 @@ test("published topic is discoverable, readable, and mastered at its threshold",
   await homePage.open();
   await homePage.openGraphsAndTablesTopic();
   await topicPage.expectPublishedLesson();
+  await topicPage.expectBlankAnswerValidation();
   await topicPage.expectKeyboardVisibleSubmit();
   await browserSession.captureFullPage("graphs-and-tables-desktop.png");
 
@@ -42,4 +43,12 @@ test("legal pages retain headings and main landmarks", async ({
 }) => {
   await legalPage.expectPrivacy();
   await legalPage.expectTerms();
+});
+
+test("unknown routes recover and browser errors are privacy-safe", async ({
+  errorTelemetryPage,
+  homePage,
+}) => {
+  await homePage.expectNotFound();
+  await errorTelemetryPage.expectSanitizedGlobalErrorDelivery();
 });

@@ -5,6 +5,8 @@
 **/dist/
 .lighthouseci/
 apps/web/src/routeTree.gen.ts
+apps/web/src/shared/api/schema.ts
+contracts/openapi.json
 pnpm-lock.yaml
 
 # Documentation and authored learning content retain intentional wrapping.

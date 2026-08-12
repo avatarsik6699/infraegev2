@@ -58,10 +58,7 @@ describe("topic practice progress", () => {
   it("counts distinct correct tasks and marks mastery at four of five", async () => {
     vi.stubGlobal(
       "fetch",
-      vi.fn(async () => ({
-        ok: true,
-        json: async () => ({ correct: true, explanation: [] }),
-      })),
+      vi.fn(async () => Response.json({ correct: true, explanation: [] })),
     );
     renderTopic();
 
@@ -104,14 +101,8 @@ describe("topic practice progress", () => {
   it("allows a wrong attempt to be retried without counting the wrong result", async () => {
     const fetchMock = vi
       .fn()
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ correct: false, explanation: [] }),
-      })
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ correct: true, explanation: [] }),
-      });
+      .mockResolvedValueOnce(Response.json({ correct: false, explanation: [] }))
+      .mockResolvedValueOnce(Response.json({ correct: true, explanation: [] }));
     vi.stubGlobal("fetch", fetchMock);
     renderTopic();
 

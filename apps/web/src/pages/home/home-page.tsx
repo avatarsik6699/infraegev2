@@ -1,5 +1,6 @@
 import { Badge, Stack } from "@mantine/core";
 import { Link } from "@tanstack/react-router";
+import { EmptyState } from "~/shared/components/empty-state";
 import { PageContainer } from "~/shared/components/page-container";
 import { Typography } from "~/shared/components/typography";
 import styles from "./home-page.module.css";
@@ -14,24 +15,31 @@ export const HomePage: React.FC<HomePageTypes.Props> = (props) => {
         </Typography.Title>
         {/* No full-site search on M0 — plain navigation by task number is enough while there are
           fewer than ten topics (docs/SPEC.md §10). */}
-        <ul className={styles.topicList}>
-          {props.topics.map((topic) => (
-            <li key={topic.id}>
-              <Link
-                className={styles.topicLink}
-                to="/theory/$topicSlug"
-                params={{
-                  topicSlug: `zadanie-${topic.task_numbers[0]}-${topic.id}`,
-                }}
-              >
-                <Badge variant="outline" className={styles.taskBadge}>
-                  №{topic.task_numbers[0]}
-                </Badge>
-                {topic.title}
-              </Link>
-            </li>
-          ))}
-        </ul>
+        {props.topics.length === 0 ? (
+          <EmptyState
+            title="Темы готовятся к публикации"
+            description="Загляните позже: здесь появятся проверенные материалы и практика."
+          />
+        ) : (
+          <ul className={styles.topicList}>
+            {props.topics.map((topic) => (
+              <li key={topic.id}>
+                <Link
+                  className={styles.topicLink}
+                  to="/theory/$topicSlug"
+                  params={{
+                    topicSlug: `zadanie-${topic.task_numbers[0]}-${topic.id}`,
+                  }}
+                >
+                  <Badge variant="outline" className={styles.taskBadge}>
+                    №{topic.task_numbers[0]}
+                  </Badge>
+                  {topic.title}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
       </Stack>
     </PageContainer>
   );

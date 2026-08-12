@@ -1,3 +1,34 @@
+/* Mantine supports component-level style imports for smaller production CSS. Keep global styles
+   first, dependencies before their consumers, and add a component stylesheet with every new
+   @mantine/core component used by apps/web. */
+@import "@mantine/core/styles/baseline.css";
+@import "@mantine/core/styles/default-css-variables.css";
+@import "@mantine/core/styles/global.css";
+@import "@mantine/core/styles/UnstyledButton.css";
+@import "@mantine/core/styles/Loader.css";
+@import "@mantine/core/styles/Alert.css";
+@import "@mantine/core/styles/Anchor.css";
+@import "@mantine/core/styles/AspectRatio.css";
+@import "@mantine/core/styles/Badge.css";
+@import "@mantine/core/styles/Button.css";
+@import "@mantine/core/styles/Code.css";
+@import "@mantine/core/styles/Container.css";
+@import "@mantine/core/styles/Group.css";
+@import "@mantine/core/styles/Image.css";
+@import "@mantine/core/styles/Input.css";
+@import "@mantine/core/styles/List.css";
+@import "@mantine/core/styles/Paper.css";
+@import "@mantine/core/styles/Progress.css";
+@import "@mantine/core/styles/Skeleton.css";
+@import "@mantine/core/styles/Stack.css";
+@import "@mantine/core/styles/Text.css";
+@import "@mantine/core/styles/Title.css";
+@import "@mantine/core/styles/Typography.css";
+@import "@mantine/core/styles/VisuallyHidden.css";
+@import "@mantine/code-highlight/styles.css";
+@import "highlight.js/styles/github.css";
+@import "@mantine/nprogress/styles.css";
+
 /* Design System — "Textbook precision" (docs/SPEC.md §5.3).
    Warm paper background, calm indigo accent, serif reading type + mono for code/data/task
    numbers. Comfortable density. Light-only for M0 — dark mode is not required for MVP. */
@@ -40,6 +71,42 @@ body {
   color: var(--color-text);
   font-family: var(--font-body);
   line-height: var(--line-height-comfortable);
+}
+
+html {
+  scrollbar-color: var(--color-rule-strong) var(--color-bg);
+  scrollbar-width: thin;
+}
+
+*::-webkit-scrollbar {
+  width: 0.625rem;
+  height: 0.625rem;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--color-rule-strong);
+  border: 0.1875rem solid var(--color-bg);
+  border-radius: 999px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--color-muted);
+}
+
+@media (forced-colors: active), (pointer: coarse) {
+  html {
+    scrollbar-color: auto;
+    scrollbar-width: auto;
+  }
+
+  *::-webkit-scrollbar {
+    width: auto;
+    height: auto;
+  }
 }
 
 h1,

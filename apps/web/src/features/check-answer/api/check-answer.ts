@@ -1,39 +1,35 @@
-import { clientEnv } from "~/shared/config/client-env";
-import type { Task } from "~/entities/content";
+import {
+  apiClient,
+  ApiError,
+  normalizeApiFailure,
+  type components,
+} from "~/shared/api";
 
-export type CheckAnswerResponse = {
-  correct: boolean;
-  explanation: Task["explanation"];
-};
-
-function isCheckAnswerResponse(value: unknown): value is CheckAnswerResponse {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    typeof (value as CheckAnswerResponse).correct === "boolean" &&
-    Array.isArray((value as CheckAnswerResponse).explanation)
-  );
-}
+export type CheckAnswerResponse = components["schemas"]["CheckResponse"];
 
 export async function checkAnswer(
   taskId: string,
   answer: string,
 ): Promise<CheckAnswerResponse> {
-  const response = await fetch(
-    `${clientEnv.apiBasePath}/tasks/${encodeURIComponent(taskId)}/check`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ answer }),
-      signal: AbortSignal.timeout(10_000),
-    },
-  );
-  if (!response.ok) {
-    throw new Error(`Answer check failed with HTTP ${response.status}`);
+  try {
+    const { data, response } = await apiClient.POST(
+      "/api/tasks/{task_id}/check",
+      {
+        params: { path: { task_id: taskId } },
+        body: { answer },
+        signal: AbortSignal.timeout(10_000),
+      },
+    );
+    if (!response.ok) {
+      throw new ApiError("http", "Answer check returned an HTTP error", {
+        status: response.status,
+      });
+    }
+    if (!data) {
+      throw new ApiError("protocol", "Answer check response had no data");
+    }
+    return data;
+  } catch (error) {
+    throw normalizeApiFailure(error);
   }
-  const body: unknown = await response.json();
-  if (!isCheckAnswerResponse(body)) {
-    throw new Error("Malformed /tasks/:id/check response");
-  }
-  return body;
 }

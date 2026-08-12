@@ -1,9 +1,11 @@
 import { MantineProvider } from "@mantine/core";
+import { QueryClientProvider } from "@tanstack/react-query";
 import {
   render as testingLibraryRender,
   type RenderOptions,
 } from "@testing-library/react";
 import { appMantineTheme } from "~/shared/config/mantine-theme";
+import { createAppQueryClient } from "~/shared/lib/query-client";
 
 type Props = { children: React.ReactNode };
 
@@ -21,24 +23,25 @@ Object.defineProperty(window, "matchMedia", {
   }),
 });
 
-const MantineTestProvider: React.FC<Props> = (props) => {
-  return (
-    <MantineProvider
-      theme={appMantineTheme}
-      forceColorScheme="light"
-      env="test"
-    >
-      {props.children}
-    </MantineProvider>
-  );
-};
-
 export function render(
   ui: React.ReactNode,
   options?: Omit<RenderOptions, "wrapper">,
 ) {
+  const queryClient = createAppQueryClient();
+  const TestProvider: React.FC<Props> = (props) => (
+    <QueryClientProvider client={queryClient}>
+      <MantineProvider
+        theme={appMantineTheme}
+        forceColorScheme="light"
+        env="test"
+      >
+        {props.children}
+      </MantineProvider>
+    </QueryClientProvider>
+  );
+
   return testingLibraryRender(ui, {
-    wrapper: MantineTestProvider,
+    wrapper: TestProvider,
     ...options,
   });
 }

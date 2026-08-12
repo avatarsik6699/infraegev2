@@ -3,34 +3,49 @@ import {
   MantineProvider,
   mantineHtmlProps,
 } from "@mantine/core";
-import mantineCss from "@mantine/core/styles.css?url";
 import {
-  createRootRoute,
+  createRootRouteWithContext,
   HeadContent,
   Outlet,
   Scripts,
 } from "@tanstack/react-router";
+import type { AppRouterContext } from "~/router";
+import { ClientErrorMonitor } from "~/shared/components/client-error-monitor";
 import { clientEnv } from "~/shared/config/client-env";
 import { appMantineTheme } from "~/shared/config/mantine-theme";
-import appCss from "~/shared/styles/tokens.css?url";
+import { AppNavigationProgress } from "~/shared/components/navigation-progress";
+import { RouteError } from "~/shared/components/route-state";
+import "~/shared/styles/tokens.css";
 import { SiteFooter } from "~/widgets/site-footer";
 
-export const Route = createRootRoute({
+export const Route = createRootRouteWithContext<AppRouterContext>()({
   head: () => ({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
     ],
-    links: [
-      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
-      { rel: "stylesheet", href: mantineCss },
-      { rel: "stylesheet", href: appCss },
-    ],
+    links: [{ rel: "icon", href: "/favicon.svg", type: "image/svg+xml" }],
   }),
+  shellComponent: RootDocument,
+  errorComponent: (props) => (
+    <>
+      <RouteError {...props} />
+      <SiteFooter />
+    </>
+  ),
   component: RootComponent,
 });
 
 function RootComponent() {
+  return (
+    <>
+      <Outlet />
+      <SiteFooter />
+    </>
+  );
+}
+
+function RootDocument(props: { children: React.ReactNode }) {
   return (
     <html lang="ru" {...mantineHtmlProps}>
       <head>
@@ -54,8 +69,9 @@ function RootComponent() {
           defaultColorScheme="light"
           forceColorScheme="light"
         >
-          <Outlet />
-          <SiteFooter />
+          <AppNavigationProgress />
+          <ClientErrorMonitor />
+          {props.children}
         </MantineProvider>
         <Scripts />
       </body>

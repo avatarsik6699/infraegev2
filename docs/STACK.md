@@ -21,7 +21,7 @@ pitfalls that must be reconsidered rather than copied.
 
 | Layer | Technology |
 |-------|-----------|
-| Frontend | React + TanStack Start (SSR/SSG, file-based routing, `createServerFn` for server-only content access) on Vite **8.2.1 exact** (Rolldown/Oxc) + Mantine Core/Hooks **9.5.1 exact** as the UI primitive layer — no TanStack Query yet, no API surface needs client caching on M0; no `openapi-typescript` yet, no OpenAPI schema exists (see Known Gotchas) |
+| Frontend | React + TanStack Start (SSR/SSG, file-based routing and automatic route splitting, `createServerFn` for build-time content access) on Vite **8.2.1 exact** (Rolldown/Oxc); Mantine Core/Hooks/Form/NProgress/Code Highlight **9.5.1 exact**; TanStack Query for server state; Zod for form input; generated `openapi-typescript` contracts with `openapi-fetch` transport |
 | Backend | Python/FastAPI (`apps/api`) |
 | Database | PostgreSQL (provisioned in `infra/docker-compose.yml`; no schema/migrations yet — content is git-based, docs/SPEC.md §3) |
 | Cache | — (not needed on M0) |
@@ -119,7 +119,7 @@ not the full suite. Fill every row that applies; mark `n/a` for rows that don't 
 | Type-check (affected) | `pnpm --filter web typecheck` · `pnpm --filter ops typecheck` · `cd apps/api && pnpm exec pyright app tests` | pyright reads `[tool.pyright]` in `apps/api/pyproject.toml` |
 | Targeted / affected unit tests | `pnpm --filter web test` · `pnpm --filter ops test` · `cd apps/api && uv run pytest` | local developer environment only; never Docker/CI |
 | LSP diagnostics | available: yes | `python-lsp` (Pyright) and `typescript-lsp` MCP servers; repository type-check commands remain complementary gate evidence |
-| API type regen (`openapi-typescript` or equivalent) | `n/a` | no OpenAPI schema/generated client yet — the frontend calls `/api/tasks/{id}/check` with a hand-written `fetch` + inline response type (`PracticeTaskWidget.tsx`), not a generated client. Revisit once the API surface grows past one endpoint. |
+| API type regen (`openapi-typescript` or equivalent) | `pnpm api:check` | exports FastAPI OpenAPI deterministically and regenerates the TypeScript contract in a temporary directory; fails on tracked drift |
 
 ---
 
@@ -134,6 +134,7 @@ task — it's expensive by design; that's why it's separated from the Fast Gate.
 | Infrastructure / bootstrap | `docker compose -f infra/docker-compose.yml -f infra/docker-compose.override.yml up --build -d` | verified live in change 03 on Docker Desktop/BuildKit: all four services become healthy; frontend and `/health` return 200 through Nginx. Change 02 also verified `POST /api/tasks/{id}/check` and the `/api/tasks/` rate limit (`503` past its burst — Nginx's default `limit_req_status`, not `429`) |
 | Migrations | `n/a` | content is git-based, not DB-backed (docs/SPEC.md §3); no schema exists yet to migrate |
 | Backend test suite | `cd apps/api && uv run pytest` | local only |
+| API contract drift | `pnpm api:check` | requires the frozen API and pnpm environments; tracked schema and generated TypeScript must match |
 | Frontend build | `cd apps/web && pnpm build` | runs TanStack Start's build-time prerender; fails the build if any crawled page 500s |
 | Frontend unit tests | `pnpm --filter web test && pnpm --filter ops test` | local only |
 | E2E lint / determinism | `pnpm --filter web exec playwright test --list` | local only, never CI'd; validates Playwright config/spec collection without running the journey |
@@ -174,7 +175,7 @@ tool that isn't available must be reported as skipped with a reason, never silen
 | Frontend UI change | Playwright MCP / chrome-devtools MCP (screenshot + console check) | after implementing, before checking off | yes |
 | E2E test change | Playwright + Page Object Model + E2E policy lint | during implementation and verification; use typed fixtures, `e2e/pages/*.page.ts`, user-visible locators, and run `pnpm --filter web lint` | yes |
 | TypeScript / Python change | LSP diagnostics | after implementing, before checking off | yes |
-| New/changed API surface | `openapi-typescript` (or equivalent) regen + frontend re-typecheck | after backend contract change | n/a — no OpenAPI schema yet, see Fast Gate note |
+| New/changed API surface | `openapi-typescript` regen + frontend re-typecheck | after backend contract change | yes — `pnpm api:generate` updates tracked artifacts; `pnpm api:check` proves no drift |
 | Frontend architecture decision | `frontend-architecture` skill | during planning and architecture review | yes — installed in the local Codex skill catalog |
 | Backend architecture decision | `backend-architecture` skill | during planning and architecture review | yes — installed in the local Codex skill catalog |
 | Frontend design decision | `frontend-design` skill | during `/plan` §5.3 and design Backlog items | yes |
@@ -298,6 +299,22 @@ type-checks production lint rules through typescript-eslint Project Service, and
 policy cases. TanStack route modules retain two narrow unsafe-value lint exemptions because its
 generated augmentation is resolved by the project `tsc` gate but not fully by Project Service;
 the documented `notFound()` sentinel also requires the route-only `only-throw-error` exemption.
+
+Server state belongs to a per-router TanStack Query client, which is integrated with SSR and is
+never reused between requests. The answer checker is a no-retry mutation; build-time topic content
+remains in route loaders because it is not runtime server state. Domain operations use the single
+generated `shared/api` transport. Regenerate `contracts/openapi.json` and
+`shared/api/schema.ts` with `pnpm api:generate`; prove no drift with `pnpm api:check`. Zod validates
+form input only, while generated OpenAPI types define the API contract. No global client-state
+store is installed until a real cross-route client-state owner exists.
+
+Route pending/error/not-found UI, delayed skeletons, and navigation progress are application-level
+defaults. Browser render/route/chunk/global failures pass through `shared/lib/client-errors`, which
+discards messages, page URLs, full stacks, and user data before posting a bounded fingerprint
+event. Nginx applies a dedicated body/rate limit, FastAPI writes a structured journald event, and
+the existing ops journal adapter projects it into the dashboard incident table. Expected form/API
+failures remain inline. Notifications and other Mantine extensions stay deferred until a domain
+flow consumes them.
 
 ### Backend modules (`apps/api/app/`) — DDD-like, established in change 02
 

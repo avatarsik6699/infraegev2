@@ -1,6 +1,7 @@
 import { test as base } from "@playwright/test";
 import { AccessibilityPage } from "./pages/accessibility.page";
 import { BrowserSession } from "./pages/browser-session.page";
+import { ErrorTelemetryPage } from "./pages/error-telemetry.page";
 import { HomePage } from "./pages/home.page";
 import { LegalPage } from "./pages/legal.page";
 import { SitemapPage } from "./pages/sitemap.page";
@@ -9,6 +10,7 @@ import { TopicPage } from "./pages/topic.page";
 type AppFixtures = {
   accessibilityPage: AccessibilityPage;
   browserSession: BrowserSession;
+  errorTelemetryPage: ErrorTelemetryPage;
   homePage: HomePage;
   legalPage: LegalPage;
   noJavaScriptTopicPage: TopicPage;
@@ -22,6 +24,9 @@ export const test = base.extend<AppFixtures>({
   },
   browserSession: async ({ page }, use, testInfo) => {
     await use(new BrowserSession(page, testInfo));
+  },
+  errorTelemetryPage: async ({ page }, use) => {
+    await use(new ErrorTelemetryPage(page));
   },
   homePage: async ({ page }, use) => {
     await use(new HomePage(page));

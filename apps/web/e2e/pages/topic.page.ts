@@ -82,6 +82,15 @@ export class TopicPage {
     ).toBeVisible();
   }
 
+  async expectBlankAnswerValidation(): Promise<void> {
+    const input = this.page.getByRole("textbox", { name: "Ответ" }).first();
+    await input.fill("готово");
+    await input.fill("");
+    await this.page.getByRole("button", { name: "Проверить" }).first().click();
+    await expect(this.page.getByText("Введите ответ").first()).toBeVisible();
+    await expect(input).toBeFocused();
+  }
+
   async expectProgress(percent: number, solved: number): Promise<void> {
     await expect(
       this.page.getByRole("progressbar", {

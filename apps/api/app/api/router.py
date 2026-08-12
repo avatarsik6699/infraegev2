@@ -9,7 +9,9 @@ from __future__ import annotations
 
 from fastapi import APIRouter
 
+from app.modules.client_errors.api import router as client_errors_router
 from app.modules.tasks.api import router as tasks_router
 
 api_router = APIRouter(prefix="/api")
 api_router.include_router(tasks_router)
+api_router.include_router(client_errors_router)

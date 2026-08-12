@@ -34,10 +34,7 @@ describe("privacy-minimized analytics", () => {
     (window as AnalyticsWindow).umami = { track };
     vi.stubGlobal(
       "fetch",
-      vi.fn(async () => ({
-        ok: true,
-        json: async () => ({ correct: false, explanation: [] }),
-      })),
+      vi.fn(async () => Response.json({ correct: false, explanation: [] })),
     );
 
     render(
@@ -79,7 +76,7 @@ describe("privacy-minimized analytics", () => {
   it("shows retryable feedback when the answer API fails", async () => {
     vi.stubGlobal(
       "fetch",
-      vi.fn(async () => ({ ok: false, status: 503 })),
+      vi.fn(async () => new Response(null, { status: 503 })),
     );
 
     render(<PracticeTaskWidget task={task} />);

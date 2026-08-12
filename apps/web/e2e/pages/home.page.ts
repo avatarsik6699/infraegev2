@@ -23,4 +23,14 @@ export class HomePage {
       })
       .click();
   }
+
+  async expectNotFound(): Promise<void> {
+    await this.page.goto("/missing-client-foundation-page");
+    await expect(
+      this.page.getByRole("heading", { name: "Такой страницы нет" }),
+    ).toBeVisible();
+    await expect(
+      this.page.getByRole("link", { name: "К списку тем" }),
+    ).toBeVisible();
+  }
 }

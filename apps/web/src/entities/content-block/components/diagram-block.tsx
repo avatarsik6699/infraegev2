@@ -53,13 +53,18 @@ function renderNode(el: DiagramElement) {
   return (
     <g key={el.id} data-highlighted={highlightedValue(el)}>
       <circle
-        cx={el.x}
-        cy={el.y}
+        cx={el.x ?? undefined}
+        cy={el.y ?? undefined}
         r={NODE_RADIUS}
         fill="none"
         stroke="currentColor"
       />
-      <text x={el.x} y={el.y} textAnchor="middle" dominantBaseline="central">
+      <text
+        x={el.x ?? undefined}
+        y={el.y ?? undefined}
+        textAnchor="middle"
+        dominantBaseline="central"
+      >
         {el.text ?? el.id}
       </text>
     </g>
@@ -77,10 +82,10 @@ function renderConnection(
     <line
       key={el.id}
       data-highlighted={highlightedValue(el)}
-      x1={from.x}
-      y1={from.y}
-      x2={to.x}
-      y2={to.y}
+      x1={from.x ?? undefined}
+      y1={from.y ?? undefined}
+      x2={to.x ?? undefined}
+      y2={to.y ?? undefined}
       stroke="currentColor"
       markerEnd={el.kind === "arrow" ? "url(#arrowhead)" : undefined}
     />
@@ -89,7 +94,12 @@ function renderConnection(
 
 function renderLabel(el: DiagramElement) {
   return (
-    <text key={el.id} data-highlighted={highlightedValue(el)} x={el.x} y={el.y}>
+    <text
+      key={el.id}
+      data-highlighted={highlightedValue(el)}
+      x={el.x ?? undefined}
+      y={el.y ?? undefined}
+    >
       {el.text}
     </text>
   );
@@ -106,8 +116,8 @@ function renderHighlight(
     <circle
       key={el.id}
       data-highlighted="true"
-      cx={target.x}
-      cy={target.y}
+      cx={target.x ?? undefined}
+      cy={target.y ?? undefined}
       r={NODE_RADIUS + 4}
       fill="none"
       strokeWidth={2}

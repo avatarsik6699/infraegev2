@@ -50,6 +50,8 @@ jobs:
           uv sync --frozen --dev
           uv run ruff check app tests
           pnpm exec pyright app tests
+      - name: Generated API contract drift
+        run: pnpm api:check
 
   security:
     runs-on: ubuntu-24.04

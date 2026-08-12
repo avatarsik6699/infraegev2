@@ -87,6 +87,40 @@ def test_check_unknown_task_returns_404(client: TestClient):
     assert response.status_code == 404
 
 
+@pytest.mark.parametrize(
+    "body",
+    [
+        {},
+        {"answer": ""},
+        {"answer": "x" * 501},
+        {"answer": "5", "unexpected": True},
+    ],
+)
+def test_check_answer_rejects_invalid_request_contract(client: TestClient, body: dict[str, object]):
+    response = client.post("/api/tasks/graphs-and-tables-01/check", json=body)
+    assert response.status_code == 422
+
+
+def test_openapi_exposes_discriminated_content_blocks(client: TestClient):
+    schema = client.get("/openapi.json").json()
+    check_response = schema["components"]["schemas"]["CheckResponse"]
+    explanation_items = check_response["properties"]["explanation"]["items"]
+
+    assert "oneOf" in explanation_items
+    assert explanation_items["discriminator"]["propertyName"] == "type"
+    assert set(explanation_items["discriminator"]["mapping"]) == {
+        "callout",
+        "code_example",
+        "completion_exercise",
+        "diagram",
+        "figure",
+        "productive_failure_prompt",
+        "text",
+        "video_embed",
+        "worked_example",
+    }
+
+
 def test_error_logging_middleware_does_not_break_normal_requests(client: TestClient):
     response = client.get("/health")
     assert response.status_code == 200

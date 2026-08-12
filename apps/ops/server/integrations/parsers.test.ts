@@ -62,4 +62,27 @@ Status for the jail: infraege-nginx-limit
       { time: "", service: "api", message: longMessage.slice(0, 500) },
     ]);
   });
+
+  it("projects privacy-safe browser events into the existing incident table", () => {
+    const output = JSON.stringify({
+      PRIORITY: "info",
+      __REALTIME_TIMESTAMP: "2026-08-12T10:00:00Z",
+      MESSAGE: JSON.stringify({
+        event: "client.error_reported",
+        kind: "chunk_load",
+        route_id: "/theory/$topicSlug",
+        fingerprint: "a".repeat(64),
+        asset_path: "/_build/topic.js",
+      }),
+    });
+
+    expect(parseJournal(output)).toEqual([
+      {
+        time: "2026-08-12T10:00:00Z",
+        service: "web",
+        message:
+          "chunk_load · /theory/$topicSlug · /_build/topic.js · aaaaaaaaaaaa",
+      },
+    ]);
+  });
 });

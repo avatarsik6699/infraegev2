@@ -169,13 +169,17 @@ export default tseslint.config(
     rules: { "@typescript-eslint/no-namespace": "off" },
   },
   {
+    files: ["src/shared/api/schema.ts"],
+    rules: { "@typescript-eslint/consistent-type-definitions": "off" },
+  },
+  {
     files: ["src/**/*.{ts,tsx}"],
     rules: {
       "no-restricted-globals": restrictedPlatformGlobals(),
     },
   },
   {
-    files: ["src/features/*/api/**/*.{ts,tsx}"],
+    files: ["src/shared/api/client.ts"],
     rules: {
       "no-restricted-globals": restrictedPlatformGlobals("fetch"),
     },
@@ -193,6 +197,12 @@ export default tseslint.config(
     files: ["src/shared/lib/analytics/analytics.ts"],
     rules: {
       "no-restricted-globals": restrictedPlatformGlobals("window", "navigator"),
+    },
+  },
+  {
+    files: ["src/shared/lib/client-errors/browser-adapter.ts"],
+    rules: {
+      "no-restricted-globals": restrictedPlatformGlobals("window"),
     },
   },
   {
