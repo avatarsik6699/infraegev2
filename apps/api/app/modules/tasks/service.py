@@ -41,7 +41,4 @@ def is_correct(task: Task, answer: str) -> bool:
         return False
 
     normalized_answer = _normalize_text(answer)
-    return any(
-        normalized_answer == _normalize_text(variant)
-        for variant in task.answer_variants
-    )
+    return any(normalized_answer == _normalize_text(variant) for variant in task.answer_variants)

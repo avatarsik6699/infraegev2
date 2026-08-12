@@ -4,12 +4,17 @@
   border: 1px solid var(--color-rule);
   border-radius: 0.5rem;
   background: var(--color-bg);
-  box-shadow: 0 0.2rem 0 color-mix(in srgb, var(--color-graphite) 12%, transparent);
+  box-shadow: 0 0.2rem 0
+    color-mix(in srgb, var(--color-graphite) 12%, transparent);
 }
 
 .surface {
   padding: clamp(0.35rem, 1vw, 0.75rem);
-  background-color: color-mix(in srgb, var(--color-study-blue) 6%, var(--color-bg));
+  background-color: color-mix(
+    in srgb,
+    var(--color-study-blue) 6%,
+    var(--color-bg)
+  );
   background-image:
     linear-gradient(
       color-mix(in srgb, var(--color-graphite) 7%, transparent) 1px,

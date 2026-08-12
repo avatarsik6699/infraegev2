@@ -2,11 +2,7 @@ export const DASHBOARD_RANGES = ["1h", "24h", "7d", "30d"] as const;
 
 export type DashboardRange = (typeof DASHBOARD_RANGES)[number];
 export type SourceName =
-  | "availability"
-  | "beszel"
-  | "umami"
-  | "journal"
-  | "fail2ban";
+  "availability" | "beszel" | "umami" | "journal" | "fail2ban";
 export type SourceState = "fresh" | "stale" | "unavailable";
 
 export type SourceStatus = {
@@ -61,6 +57,8 @@ export type DashboardData = {
   bans: Array<{ jail: string; count: number; addresses: string[] }>;
 };
 
-export function isDashboardRange(value: string | null): value is DashboardRange {
+export function isDashboardRange(
+  value: string | null,
+): value is DashboardRange {
   return DASHBOARD_RANGES.some((range) => range === value);
 }

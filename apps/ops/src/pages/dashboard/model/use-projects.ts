@@ -20,7 +20,10 @@ export function useProjects(): ProjectsState {
         if (!controller.signal.aborted) setState({ status: "ready", projects });
       })
       .catch((reason: unknown) => {
-        if (!controller.signal.aborted && (reason as Error).name !== "AbortError") {
+        if (
+          !controller.signal.aborted &&
+          (reason as Error).name !== "AbortError"
+        ) {
           setState({ status: "error", projects: [] });
         }
       });

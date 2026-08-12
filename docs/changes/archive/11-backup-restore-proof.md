@@ -7,7 +7,7 @@
 | Change | `11` |
 | Slug | `backup-restore-proof` |
 | Title | Prove the production backup and restore lifecycle |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/11-backup-restore-proof` |
 
 ---

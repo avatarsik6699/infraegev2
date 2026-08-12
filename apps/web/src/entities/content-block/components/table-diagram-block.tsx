@@ -28,11 +28,18 @@ export const TableDiagramBlock: React.FC<Props> = (props) => {
             {row.map((cell, colIndex) => {
               const isHighlighted = highlighted.has(`${rowIndex},${colIndex}`);
               return colIndex === 0 ? (
-                <th key={colIndex} scope="row" data-highlighted={isHighlighted ? "true" : "false"}>
+                <th
+                  key={colIndex}
+                  scope="row"
+                  data-highlighted={isHighlighted ? "true" : "false"}
+                >
                   {cell}
                 </th>
               ) : (
-                <td key={colIndex} data-highlighted={isHighlighted ? "true" : "false"}>
+                <td
+                  key={colIndex}
+                  data-highlighted={isHighlighted ? "true" : "false"}
+                >
                   {cell}
                 </td>
               );

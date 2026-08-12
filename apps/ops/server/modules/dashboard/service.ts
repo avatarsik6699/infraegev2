@@ -40,7 +40,10 @@ type CachedResult<T> = {
 };
 
 export type DashboardService = {
-  getDashboard(project: ProjectConfig, range: DashboardRange): Promise<DashboardData>;
+  getDashboard(
+    project: ProjectConfig,
+    range: DashboardRange,
+  ): Promise<DashboardData>;
   clearCache(): void;
 };
 
@@ -50,7 +53,8 @@ type DashboardServiceOptions = {
 };
 
 const safeMessage = (reason: unknown): string =>
-  reason instanceof Error && /missing credential environment variable/.test(reason.message)
+  reason instanceof Error &&
+  /missing credential environment variable/.test(reason.message)
     ? reason.message
     : "source request failed";
 
@@ -58,7 +62,8 @@ function statusFor<T>(entry: CacheEntry<T>): SourceStatus {
   if (entry.lastError === undefined) {
     return {
       state: "fresh",
-      updatedAt: entry.valueUpdatedAt ?? entry.checkedAtIso ?? new Date(0).toISOString(),
+      updatedAt:
+        entry.valueUpdatedAt ?? entry.checkedAtIso ?? new Date(0).toISOString(),
     };
   }
   if (entry.hasValue) {
@@ -79,7 +84,10 @@ function combineUmamiStatus(
   history: CachedResult<TrafficSnapshot>,
   realtime: CachedResult<RealtimeTrafficSnapshot>,
 ): SourceStatus {
-  const timestamps = [history.status.updatedAt, realtime.status.updatedAt].sort();
+  const timestamps = [
+    history.status.updatedAt,
+    realtime.status.updatedAt,
+  ].sort();
   if (history.status.state === "fresh" && realtime.status.state === "fresh") {
     return { state: "fresh", updatedAt: timestamps[0] };
   }
@@ -119,7 +127,8 @@ export function createDashboardService({
     const entry = entryFor<T>(key);
     const currentTime = now();
     const cacheIsCurrent =
-      entry.checkedAt !== undefined && currentTime.getTime() - entry.checkedAt < ttlMs;
+      entry.checkedAt !== undefined &&
+      currentTime.getTime() - entry.checkedAt < ttlMs;
 
     if (!cacheIsCurrent && !entry.inFlight) {
       entry.checkedAt = currentTime.getTime();

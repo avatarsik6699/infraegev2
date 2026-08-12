@@ -12,7 +12,9 @@ type ProgressState = {
 };
 
 function isStringArray(value: unknown): value is string[] {
-  return Array.isArray(value) && value.every((item) => typeof item === "string");
+  return (
+    Array.isArray(value) && value.every((item) => typeof item === "string")
+  );
 }
 
 function isProgressState(value: unknown): value is ProgressState {
@@ -36,10 +38,12 @@ const PROGRESS_STORAGE: SafeLsKey<ProgressState> = {
 const listeners = new Set<() => void>();
 
 function read(): ProgressState {
-  return safeLs.get(PROGRESS_STORAGE) ?? {
-    masteredIds: [],
-    correctTaskIdsByTopic: {},
-  };
+  return (
+    safeLs.get(PROGRESS_STORAGE) ?? {
+      masteredIds: [],
+      correctTaskIdsByTopic: {},
+    }
+  );
 }
 
 function write(state: ProgressState): void {
@@ -49,14 +53,10 @@ function write(state: ProgressState): void {
 
 export function subscribeToProgress(listener: () => void): () => void {
   listeners.add(listener);
-  if (typeof window !== "undefined") {
-    window.addEventListener("storage", listener);
-  }
+  const unsubscribeStorage = safeLs.subscribe(PROGRESS_STORAGE, listener);
   return () => {
     listeners.delete(listener);
-    if (typeof window !== "undefined") {
-      window.removeEventListener("storage", listener);
-    }
+    unsubscribeStorage();
   };
 }
 

@@ -9,8 +9,14 @@ type ApiRouterOptions = {
   dashboardService: DashboardService;
 };
 
-export function createApiRouter({ config, dashboardService }: ApiRouterOptions) {
-  return async function routeApi(response: ServerResponse, url: URL): Promise<boolean> {
+export function createApiRouter({
+  config,
+  dashboardService,
+}: ApiRouterOptions) {
+  return async function routeApi(
+    response: ServerResponse,
+    url: URL,
+  ): Promise<boolean> {
     if (url.pathname === "/api/projects") {
       sendProjects(response, config);
       return true;

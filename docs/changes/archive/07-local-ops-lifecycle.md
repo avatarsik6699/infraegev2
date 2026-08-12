@@ -7,7 +7,7 @@
 | Change | `07` |
 | Slug | `local-ops-lifecycle` |
 | Title | One-command local operations dashboard lifecycle |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/07-local-ops-lifecycle` |
 
 ---

@@ -2,7 +2,6 @@ import { defineConfig } from "vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import { nitro } from "nitro/vite";
 import viteReact from "@vitejs/plugin-react";
-import tsconfigPaths from "vite-tsconfig-paths";
 import { fileURLToPath } from "node:url";
 
 // Computed here (config authoring time, always run from source) rather than via
@@ -13,7 +12,8 @@ import { fileURLToPath } from "node:url";
 const CONTENT_ROOT = fileURLToPath(new URL("../../content", import.meta.url));
 
 export default defineConfig((configEnv) => {
-  const apiProxyTarget = process.env.VITE_PROXY_TARGET ?? "http://localhost:8000";
+  const apiProxyTarget =
+    process.env.VITE_PROXY_TARGET ?? "http://localhost:8000";
 
   return {
     preview: {
@@ -24,12 +24,15 @@ export default defineConfig((configEnv) => {
     },
     server: {
       port: 3000,
+      strictPort: true,
+    },
+    resolve: {
+      tsconfigPaths: true,
     },
     define: {
       __CONTENT_ROOT__: JSON.stringify(CONTENT_ROOT),
     },
     plugins: [
-      tsconfigPaths(),
       tanstackStart({
         prerender: {
           // Every route in this change is static content (docs/SPEC.md §5.1) — enable build-time

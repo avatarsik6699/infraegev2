@@ -19,7 +19,7 @@ OPS_LOCAL := ./scripts/ops-local.sh
 
 STOP_TIMEOUT ?= 30
 
-.PHONY: help dev stop down restart logs ps config \
+.PHONY: help dev stop down restart logs ps config clean \
 	ops-init ops-up ops-down ops-status ops-logs ops-tunnel-up ops-tunnel-down \
 	ops-open-beszel ops-open-umami ops-configure-beszel-agent \
 	ops-repair-beszel-env
@@ -34,6 +34,7 @@ help:
 	@echo "  make logs     Follow logs from all services"
 	@echo "  make ps       Show service and health status"
 	@echo "  make config   Validate the fully rendered Compose configuration"
+	@echo "  make clean    Remove regenerable local reports, build outputs, and caches"
 	@echo ""
 	@echo "infraege local operations dashboard"
 	@echo ""
@@ -77,6 +78,14 @@ ps:
 config:
 	@$(LOCAL_ENV) $(COMPOSE) config --quiet
 	@echo "Compose configuration is valid."
+
+clean:
+	@rm -rf -- .lighthouseci .output .vinxi \
+		apps/web/.output apps/web/.vinxi apps/web/dist apps/web/.eslintcache \
+		apps/ops/dist apps/ops/.eslintcache
+	@find apps/api -type d \( -name __pycache__ -o -name .pytest_cache -o -name .ruff_cache \) \
+		-prune -exec rm -rf -- {} +
+	@echo "Regenerable local reports, build outputs, and caches removed."
 
 ops-init:
 	@$(OPS_LOCAL) init

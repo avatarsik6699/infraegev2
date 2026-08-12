@@ -26,7 +26,11 @@ describe("TelemetryCharts", () => {
     expect(
       screen.getByText("Последний срез: 50 просмотров и 42 сессий."),
     ).toBeTruthy();
-    expect(screen.getByRole("img", { name: "График нагрузки CPU и RAM" })).toBeTruthy();
-    expect(screen.getByRole("img", { name: "График просмотров и сессий" })).toBeTruthy();
+    expect(
+      screen.getByRole("img", { name: "График нагрузки CPU и RAM" }),
+    ).toBeTruthy();
+    expect(
+      screen.getByRole("img", { name: "График просмотров и сессий" }),
+    ).toBeTruthy();
   });
 });

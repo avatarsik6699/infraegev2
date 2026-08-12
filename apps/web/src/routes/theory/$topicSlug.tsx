@@ -1,7 +1,8 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import { createFileRoute, isNotFound, notFound } from "@tanstack/react-router";
 import {
   loadTask,
   loadTopic,
+  isContentNotFoundError,
   resolveContentLink,
   parseTopicRouteSlug,
 } from "~/entities/content";
@@ -9,9 +10,12 @@ import { TopicPage } from "~/pages/topic";
 
 export const Route = createFileRoute("/theory/$topicSlug")({
   loader: async ({ params }) => {
-    const { topicId } = parseTopicRouteSlug(params.topicSlug);
     try {
+      const { taskNumber, topicId } = parseTopicRouteSlug(params.topicSlug);
       const topic = await loadTopic({ data: topicId });
+      if (!topic.task_numbers.includes(taskNumber)) {
+        throw notFound();
+      }
       const tasks = await Promise.all(
         topic.practice_task_ids.map((id) => loadTask({ data: id })),
       );
@@ -26,10 +30,13 @@ export const Route = createFileRoute("/theory/$topicSlug")({
         )
       ).filter((link) => link !== null);
       return { topic, tasks, prerequisites, related };
-    } catch {
-      // Any load failure here (missing topic/task file, unresolvable link) means the requested
-      // content doesn't exist — a 404, not a 500 (docs/SPEC.md §5.1).
-      throw notFound();
+    } catch (error) {
+      if (isNotFound(error) || isContentNotFoundError(error)) {
+        throw notFound();
+      }
+      throw error instanceof Error
+        ? error
+        : new Error("Unexpected topic loader failure");
     }
   },
   head: ({ loaderData }) => ({

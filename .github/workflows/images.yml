@@ -13,7 +13,8 @@ permissions:
 jobs:
   images:
     environment: production
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
@@ -25,25 +26,26 @@ jobs:
           - name: nginx
             file: infra/nginx/Dockerfile
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - name: Require production build variables
         if: matrix.name == 'web'
         env:
           FEEDBACK_URL: ${{ vars.VITE_FEEDBACK_URL }}
           UMAMI_WEBSITE_ID: ${{ vars.VITE_UMAMI_WEBSITE_ID }}
         run: test -n "$FEEDBACK_URL" && test -n "$UMAMI_WEBSITE_ID"
-      - uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f
-      - uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9
+      - uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c
+      - uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - id: build
-        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8
+        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a
         with:
           context: .
           file: ${{ matrix.file }}
           push: true
+          pull: true
           tags: ghcr.io/${{ github.repository_owner }}/infraegev2-${{ matrix.name }}:${{ github.sha }}
           build-args: |
             SITE_URL=https://infraege.ru

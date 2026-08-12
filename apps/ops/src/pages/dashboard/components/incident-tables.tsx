@@ -1,7 +1,9 @@
 import { Card, Table, Title } from "@mantine/core";
 import type { DashboardData } from "../../../../contracts/index";
 
-const EmptyRow: React.FC<{ columns: number; children: React.ReactNode }> = (props) => (
+const EmptyRow: React.FC<{ columns: number; children: React.ReactNode }> = (
+  props,
+) => (
   <Table.Tr>
     <Table.Td colSpan={props.columns}>{props.children}</Table.Td>
   </Table.Tr>
@@ -11,7 +13,9 @@ const ErrorTable: React.FC<{ rows: DashboardData["errors"] }> = ({ rows }) => (
   <Card withBorder radius="sm">
     <Title order={2}>Последние ошибки</Title>
     <Table>
-      <Table.Caption>Последние ошибки приложений и системных служб</Table.Caption>
+      <Table.Caption>
+        Последние ошибки приложений и системных служб
+      </Table.Caption>
       <Table.Thead>
         <Table.Tr>
           <Table.Th>Время</Table.Th>

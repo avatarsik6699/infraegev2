@@ -22,7 +22,6 @@ type AnalyticsWindow = Window & {
 };
 
 beforeEach(() => {
-  vi.unstubAllGlobals();
   Object.defineProperty(navigator, "doNotTrack", {
     configurable: true,
     value: "0",
@@ -36,6 +35,7 @@ describe("privacy-minimized analytics", () => {
     vi.stubGlobal(
       "fetch",
       vi.fn(async () => ({
+        ok: true,
         json: async () => ({ correct: false, explanation: [] }),
       })),
     );
@@ -74,5 +74,28 @@ describe("privacy-minimized analytics", () => {
 
     trackTopicView("dnt-topic");
     expect(track).not.toHaveBeenCalled();
+  });
+
+  it("shows retryable feedback when the answer API fails", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => ({ ok: false, status: 503 })),
+    );
+
+    render(<PracticeTaskWidget task={task} />);
+    fireEvent.change(screen.getByRole("textbox", { name: "Ответ" }), {
+      target: { value: "ответ" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Проверить" }));
+
+    const errorMessage = await screen.findByText(
+      "Не удалось проверить ответ. Попробуйте ещё раз.",
+    );
+    expect(errorMessage.closest('[role="alert"]')).toBeTruthy();
+    expect(
+      screen
+        .getByRole("button", { name: "Проверить" })
+        .hasAttribute("disabled"),
+    ).toBe(false);
   });
 });

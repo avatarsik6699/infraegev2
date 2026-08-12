@@ -9,7 +9,7 @@
 | Change | `05` |
 | Slug | `first-published-topic` |
 | Title | First Published Topic |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/05-first-published-topic` |
 
 ---
@@ -172,7 +172,7 @@ source of truth.
 ## Gate Checks
 
 > Fast Gate runs per task in `/work`; Full Gate and (with `--release`) Release Gate run once in
-> `/ship`. Both are defined in [docs/STACK.md](../STACK.md) — this section only records
+> `/ship`. Both are defined in [docs/STACK.md](../../STACK.md) — this section only records
 > change-specific additions.
 
 Before architect approval, inspect `/theory/zadanie-1-graphs-and-tables` directly while its status

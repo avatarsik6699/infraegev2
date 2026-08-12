@@ -1,7 +1,4 @@
-import type {
-  DiagramBlockData,
-  DiagramElement,
-} from "~/entities/content";
+import type { DiagramBlockData, DiagramElement } from "~/entities/content";
 
 const NODE_RADIUS = 20;
 
@@ -39,71 +36,85 @@ function viewBoxFor(nodes: DiagramElement[]): string {
 }
 
 function renderElement(el: DiagramElement, byId: Map<string, DiagramElement>) {
-  const highlighted = el.highlighted ? "true" : "false";
-
   switch (el.kind) {
     case "node":
-      return (
-        <g key={el.id} data-highlighted={highlighted}>
-          <circle
-            cx={el.x}
-            cy={el.y}
-            r={NODE_RADIUS}
-            fill="none"
-            stroke="currentColor"
-          />
-          <text
-            x={el.x}
-            y={el.y}
-            textAnchor="middle"
-            dominantBaseline="central"
-          >
-            {el.text ?? el.id}
-          </text>
-        </g>
-      );
+      return renderNode(el);
     case "edge":
-    case "arrow": {
-      const from = el.from ? byId.get(el.from) : undefined;
-      const to = el.to ? byId.get(el.to) : undefined;
-      if (!from || !to) return null;
-      return (
-        <line
-          key={el.id}
-          data-highlighted={highlighted}
-          x1={from.x}
-          y1={from.y}
-          x2={to.x}
-          y2={to.y}
-          stroke="currentColor"
-          markerEnd={el.kind === "arrow" ? "url(#arrowhead)" : undefined}
-        />
-      );
-    }
+    case "arrow":
+      return renderConnection(el, byId);
     case "label":
-      return (
-        <text key={el.id} data-highlighted={highlighted} x={el.x} y={el.y}>
-          {el.text}
-        </text>
-      );
-    case "highlight": {
-      // Standalone ring drawn over an existing node/edge, for signalling a specific element
-      // without changing that element's own markup (learning-science-principles.md §2).
-      const target = el.from ? byId.get(el.from) : undefined;
-      if (!target) return null;
-      return (
-        <circle
-          key={el.id}
-          data-highlighted="true"
-          cx={target.x}
-          cy={target.y}
-          r={NODE_RADIUS + 4}
-          fill="none"
-          strokeWidth={2}
-        />
-      );
-    }
-    default:
-      return null;
+      return renderLabel(el);
+    case "highlight":
+      return renderHighlight(el, byId);
   }
+}
+
+function renderNode(el: DiagramElement) {
+  return (
+    <g key={el.id} data-highlighted={highlightedValue(el)}>
+      <circle
+        cx={el.x}
+        cy={el.y}
+        r={NODE_RADIUS}
+        fill="none"
+        stroke="currentColor"
+      />
+      <text x={el.x} y={el.y} textAnchor="middle" dominantBaseline="central">
+        {el.text ?? el.id}
+      </text>
+    </g>
+  );
+}
+
+function renderConnection(
+  el: DiagramElement,
+  byId: Map<string, DiagramElement>,
+) {
+  const from = el.from ? byId.get(el.from) : undefined;
+  const to = el.to ? byId.get(el.to) : undefined;
+  if (!from || !to) return null;
+  return (
+    <line
+      key={el.id}
+      data-highlighted={highlightedValue(el)}
+      x1={from.x}
+      y1={from.y}
+      x2={to.x}
+      y2={to.y}
+      stroke="currentColor"
+      markerEnd={el.kind === "arrow" ? "url(#arrowhead)" : undefined}
+    />
+  );
+}
+
+function renderLabel(el: DiagramElement) {
+  return (
+    <text key={el.id} data-highlighted={highlightedValue(el)} x={el.x} y={el.y}>
+      {el.text}
+    </text>
+  );
+}
+
+function renderHighlight(
+  el: DiagramElement,
+  byId: Map<string, DiagramElement>,
+) {
+  // Standalone ring drawn over an existing node/edge, for signalling a specific element.
+  const target = el.from ? byId.get(el.from) : undefined;
+  if (!target) return null;
+  return (
+    <circle
+      key={el.id}
+      data-highlighted="true"
+      cx={target.x}
+      cy={target.y}
+      r={NODE_RADIUS + 4}
+      fill="none"
+      strokeWidth={2}
+    />
+  );
+}
+
+function highlightedValue(el: DiagramElement): "true" | "false" {
+  return el.highlighted ? "true" : "false";
 }

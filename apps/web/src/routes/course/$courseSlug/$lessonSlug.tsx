@@ -1,5 +1,6 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import { createFileRoute, isNotFound, notFound } from "@tanstack/react-router";
 import {
+  isContentNotFoundError,
   loadCourse,
   loadTask,
   resolveContentLink,
@@ -21,8 +22,13 @@ export const Route = createFileRoute("/course/$courseSlug/$lessonSlug")({
         )
       ).filter((l) => l !== null);
       return { course, lesson, tasks, unlocks };
-    } catch {
-      throw notFound();
+    } catch (error) {
+      if (isNotFound(error) || isContentNotFoundError(error)) {
+        throw notFound();
+      }
+      throw error instanceof Error
+        ? error
+        : new Error("Unexpected lesson loader failure");
     }
   },
   head: ({ loaderData }) => ({

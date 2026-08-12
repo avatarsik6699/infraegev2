@@ -9,7 +9,7 @@
 | Change | `03` |
 | Slug | `testing-conventions` |
 | Title | Testing Infrastructure & Coding Conventions |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/03-testing-conventions` |
 
 ---
@@ -146,7 +146,7 @@ No product/API contract changes — this change is tooling and convention only.
 ## Gate Checks
 
 > Fast Gate runs per task in `/work`; Full Gate and (with `--release`) Release Gate run once in
-> `/ship`. Both are defined in [docs/STACK.md](../STACK.md) — this section only records
+> `/ship`. Both are defined in [docs/STACK.md](../../STACK.md) — this section only records
 > change-specific overrides.
 
 ```bash

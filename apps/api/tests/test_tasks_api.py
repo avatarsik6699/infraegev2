@@ -1,5 +1,7 @@
 import json
+from collections.abc import Iterator
 
+import pytest
 from fastapi import HTTPException
 from fastapi.testclient import TestClient
 
@@ -8,28 +10,32 @@ from app.main import app
 from app.modules.content.schemas import Task
 from app.modules.health.api import require_database
 
-client = TestClient(app)
+
+@pytest.fixture
+def client() -> Iterator[TestClient]:
+    try:
+        with TestClient(app) as test_client:
+            yield test_client
+    finally:
+        app.dependency_overrides.clear()
 
 
-def test_health():
+def test_health(client: TestClient):
     expected = {"status": "ok", "version": settings.deploy_sha}
     assert client.get("/health/live").json() == expected
     assert client.get("/health/ready").json() == expected
     assert client.get("/health").json() == expected
 
 
-def test_readiness_returns_503_when_database_is_unavailable():
+def test_readiness_returns_503_when_database_is_unavailable(client: TestClient):
     async def unavailable_database() -> None:
         raise HTTPException(status_code=503, detail="database unavailable")
 
     app.dependency_overrides[require_database] = unavailable_database
-    try:
-        assert client.get("/health/live").status_code == 200
-        response = client.get("/health/ready")
-        assert response.status_code == 503
-        assert response.json() == {"detail": "database unavailable"}
-    finally:
-        app.dependency_overrides.clear()
+    assert client.get("/health/live").status_code == 200
+    response = client.get("/health/ready")
+    assert response.status_code == 503
+    assert response.json() == {"detail": "database unavailable"}
 
 
 def load_graphs_and_tables_tasks() -> list[Task]:
@@ -47,7 +53,9 @@ def assert_substantive_explanation(body: dict[str, object]) -> None:
     assert "Типичная ошибка" in serialized
 
 
-def test_every_declared_answer_variant_is_accepted_through_real_endpoint():
+def test_every_declared_answer_variant_is_accepted_through_real_endpoint(
+    client: TestClient,
+):
     for task in load_graphs_and_tables_tasks():
         for answer in task.answer_variants:
             response = client.post(
@@ -60,7 +68,9 @@ def test_every_declared_answer_variant_is_accepted_through_real_endpoint():
             assert_substantive_explanation(body)
 
 
-def test_every_task_rejects_a_known_wrong_answer_with_substantive_feedback():
+def test_every_task_rejects_a_known_wrong_answer_with_substantive_feedback(
+    client: TestClient,
+):
     for task in load_graphs_and_tables_tasks():
         response = client.post(
             f"/api/tasks/{task.id}/check",
@@ -72,11 +82,11 @@ def test_every_task_rejects_a_known_wrong_answer_with_substantive_feedback():
         assert_substantive_explanation(body)
 
 
-def test_check_unknown_task_returns_404():
+def test_check_unknown_task_returns_404(client: TestClient):
     response = client.post("/api/tasks/does-not-exist/check", json={"answer": "5"})
     assert response.status_code == 404
 
 
-def test_error_logging_middleware_does_not_break_normal_requests():
+def test_error_logging_middleware_does_not_break_normal_requests(client: TestClient):
     response = client.get("/health")
     assert response.status_code == 200

@@ -6,10 +6,7 @@ import {
   trackPracticeAnswer,
   trackPracticeStart,
 } from "~/shared/lib/analytics";
-import {
-  checkAnswer,
-  type CheckAnswerResponse,
-} from "./api/check-answer";
+import { checkAnswer, type CheckAnswerResponse } from "./api/check-answer";
 import type { PracticeTaskWidgetTypes } from "./practice-task-widget.types";
 
 /**
@@ -18,16 +15,21 @@ import type { PracticeTaskWidgetTypes } from "./practice-task-widget.types";
  * what the testing effect relies on (learning-science-principles.md §3.1). Progressively enhanced:
  * the statement/explanation are server-rendered; only "submit answer" needs JS.
  */
-export const PracticeTaskWidget: React.FC<PracticeTaskWidgetTypes.Props> = (props) => {
+export const PracticeTaskWidget: React.FC<PracticeTaskWidgetTypes.Props> = (
+  props,
+) => {
   const [answer, setAnswer] = useState("");
   const [result, setResult] = useState<CheckAnswerResponse | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
 
-  async function handleSubmit(event: React.FormEvent) {
+  async function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     if (props.analytics) {
       trackPracticeStart(props.analytics.topicId, props.analytics.totalTasks);
     }
+    setResult(null);
+    setSubmitError(false);
     setSubmitting(true);
     try {
       const body = await checkAnswer(props.task.id, answer);
@@ -40,13 +42,21 @@ export const PracticeTaskWidget: React.FC<PracticeTaskWidgetTypes.Props> = (prop
       }
       setResult(body);
       if (body.correct) props.onCorrect?.(props.task.id);
+    } catch {
+      setSubmitError(true);
     } finally {
       setSubmitting(false);
     }
   }
 
   return (
-    <Paper component="form" onSubmit={handleSubmit} withBorder p="md" radius="sm">
+    <Paper
+      component="form"
+      onSubmit={(event) => void handleSubmit(event)}
+      withBorder
+      p="md"
+      radius="sm"
+    >
       <Stack gap="sm">
         <Typography.Text>{props.task.statement}</Typography.Text>
         <TextInput
@@ -78,6 +88,11 @@ export const PracticeTaskWidget: React.FC<PracticeTaskWidgetTypes.Props> = (prop
               immediate, but the explanation is a full worked-example-style breakdown, not just
               "the right answer is X" (docs/SPEC.md §3, Task.explanation). */}
             <ContentBlockList blocks={result.explanation} />
+          </Alert>
+        )}
+        {submitError && (
+          <Alert role="alert" color="highlight" variant="light">
+            Не удалось проверить ответ. Попробуйте ещё раз.
           </Alert>
         )}
       </Stack>

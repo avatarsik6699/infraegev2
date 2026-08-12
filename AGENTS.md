@@ -25,6 +25,15 @@ tooling live in [`docs/STACK.md`](docs/STACK.md).
 7. **Required Tooling**: Domain-mandated tools (Playwright/chrome-devtools MCP for frontend UI,
    LSP for TypeScript/Python, design skills for design decisions) are not optional judgment calls —
    see `docs/STACK.md` § Required Tooling and use them before checking an item off.
+8. **E2E Architecture**: Playwright specs import `test` only from `apps/web/e2e/fixtures.ts` and
+   consume domain fixtures only. Specs do not construct Page Objects or call low-level Playwright
+   APIs; Page Objects own actions/assertions, while fixtures own construction and cleanup. Extend
+   those abstractions instead of weakening the policy enforced by `pnpm --filter web lint`.
+9. **Web Platform Boundaries**: Production `apps/web` code does not call `window`, `document`,
+   storage, `navigator`, `fetch`, or `process` ad hoc. Put browser/platform access in the owning
+   `shared/lib` adapter, network access in the owning slice's `api/`, and server environment access
+   in `*.server.ts`; consume semantic functions elsewhere. Extend the boundary and its lint
+   self-test instead of adding an inline bypass.
 
 ## Stack Conventions
 

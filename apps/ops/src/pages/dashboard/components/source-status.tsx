@@ -16,7 +16,10 @@ const time = (value: string): string =>
   });
 
 const age = (value: string, now: number): string => {
-  const seconds = Math.max(0, Math.floor((now - new Date(value).getTime()) / 1000));
+  const seconds = Math.max(
+    0,
+    Math.floor((now - new Date(value).getTime()) / 1000),
+  );
   if (seconds < 5) return "только что";
   if (seconds < 60) return `${seconds}с назад`;
   if (seconds < 3_600) return `${Math.floor(seconds / 60)}м назад`;

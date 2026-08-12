@@ -136,14 +136,19 @@ function parseProject(value: unknown, index: number): ProjectConfig {
 
 export function parseConfig(value: unknown): OpsConfig {
   const input = record(value, "root");
-  if (input.version !== 1 || !Array.isArray(input.projects) || input.projects.length === 0) {
+  if (
+    input.version !== 1 ||
+    !Array.isArray(input.projects) ||
+    input.projects.length === 0
+  ) {
     throw new Error("Config must use version 1 and contain projects");
   }
 
   const projects = input.projects.map(parseProject);
   const ids = new Set<string>();
   for (const project of projects) {
-    if (ids.has(project.id)) throw new Error(`Duplicate project id: ${project.id}`);
+    if (ids.has(project.id))
+      throw new Error(`Duplicate project id: ${project.id}`);
     ids.add(project.id);
   }
   return { version: 1, projects };

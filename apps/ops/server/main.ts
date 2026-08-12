@@ -7,11 +7,13 @@ import { createDashboardService } from "./modules/dashboard/service.js";
 const host = "127.0.0.1";
 const port = Number(process.env.OPS_PORT ?? 8787);
 const config = await loadConfig();
-const dashboardService = createDashboardService({ readers: createLiveReaders() });
+const dashboardService = createDashboardService({
+  readers: createLiveReaders(),
+});
 const clientRoot = new URL("../client/", import.meta.url).pathname;
 
-createServer(createOpsApp({ config, dashboardService, clientRoot, host })).listen(
-  port,
-  host,
-  () => console.log(`ops dashboard listening on http://${host}:${port}`),
+createServer(
+  createOpsApp({ config, dashboardService, clientRoot, host }),
+).listen(port, host, () =>
+  console.log(`ops dashboard listening on http://${host}:${port}`),
 );

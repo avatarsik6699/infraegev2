@@ -7,17 +7,6 @@ export type CheckerType = "exact_match" | "numeric_tolerance";
 export type InteractionType = "production" | "recognition";
 export type LearningSectionRole = "idea" | "theory" | "algorithm" | "pitfalls";
 
-export type ContentBlockType =
-  | "text"
-  | "figure"
-  | "diagram"
-  | "code_example"
-  | "worked_example"
-  | "completion_exercise"
-  | "productive_failure_prompt"
-  | "callout"
-  | "video_embed";
-
 export type DiagramElement = {
   kind: "node" | "edge" | "arrow" | "label" | "highlight";
   id: string;
@@ -84,20 +73,21 @@ export type WorkedExampleBlockData = {
   steps: string[];
 };
 
-export type ContentBlockData =
-  | TextBlockData
-  | FigureBlockData
-  | DiagramBlockData
-  | TableDiagramBlockData
-  | CodeExampleBlockData
-  | CalloutBlockData
-  | VideoEmbedBlockData
-  | WorkedExampleBlockData;
+export type WorkedExampleBlockType =
+  "worked_example" | "completion_exercise" | "productive_failure_prompt";
 
-export type ContentBlock = {
-  type: ContentBlockType;
-  data: ContentBlockData;
-};
+/** Discriminated union: `type` determines the exact shape of `data` at every consumer. */
+export type ContentBlock =
+  | { type: "text"; data: TextBlockData }
+  | { type: "figure"; data: FigureBlockData }
+  | { type: "diagram"; data: DiagramBlockData | TableDiagramBlockData }
+  | { type: "code_example"; data: CodeExampleBlockData }
+  | { type: WorkedExampleBlockType; data: WorkedExampleBlockData }
+  | { type: "callout"; data: CalloutBlockData }
+  | { type: "video_embed"; data: VideoEmbedBlockData };
+
+export type ContentBlockType = ContentBlock["type"];
+export type ContentBlockData = ContentBlock["data"];
 
 export type LearningSection = {
   id: string;

@@ -7,7 +7,7 @@
 | Change | `10` |
 | Slug | `infrastructure-blueprint` |
 | Title | Reusable infrastructure blueprint for future projects |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/10-infrastructure-blueprint` |
 
 ---

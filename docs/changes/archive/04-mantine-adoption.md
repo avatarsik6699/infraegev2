@@ -9,7 +9,7 @@
 | Change | `04` |
 | Slug | `mantine-adoption` |
 | Title | Mantine 9.5.1 Adoption |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/04-mantine-adoption` |
 
 ---
@@ -142,7 +142,7 @@ frontend implementation primitives only.
 ## Gate Checks
 
 > Fast Gate runs per task in `/work`; Full Gate and (with `--release`) Release Gate run once in
-> `/ship`. Both are defined in [docs/STACK.md](../STACK.md) — this section only records
+> `/ship`. Both are defined in [docs/STACK.md](../../STACK.md) — this section only records
 > change-specific overrides.
 
 For each visibly migrated component or page, use the frontend UI tooling required by

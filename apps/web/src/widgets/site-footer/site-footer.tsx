@@ -1,6 +1,6 @@
 import { Stack } from "@mantine/core";
 import { Link } from "@tanstack/react-router";
-import { env } from "~/shared/config/env";
+import { clientEnv } from "~/shared/config/client-env";
 import { ExternalLink } from "~/shared/components/external-link";
 import { PageContainer } from "~/shared/components/page-container";
 import { Typography } from "~/shared/components/typography";
@@ -13,7 +13,7 @@ export const SiteFooter: React.FC<SiteFooterTypes.Props> = () => {
     <PageContainer component="footer" className={styles.root}>
       <Stack gap="xs">
         <Typography.Text>
-          <ExternalLink href={env.client.feedbackUrl} newTab>
+          <ExternalLink href={clientEnv.feedbackUrl} newTab>
             Сообщить о проблеме
           </ExternalLink>
         </Typography.Text>

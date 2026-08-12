@@ -1,14 +1,4 @@
-import type {
-  CalloutBlockData,
-  CodeExampleBlockData,
-  ContentBlock,
-  DiagramBlockData,
-  FigureBlockData,
-  TableDiagramBlockData,
-  TextBlockData,
-  VideoEmbedBlockData,
-  WorkedExampleBlockData,
-} from "~/entities/content";
+import type { ContentBlock } from "~/entities/content";
 import { CalloutBlock } from "./callout-block";
 import { CodeExampleBlock } from "./code-example-block";
 import { DiagramBlock } from "./diagram-block";
@@ -24,13 +14,11 @@ type Props = { block: ContentBlock };
 export const ContentBlockRenderer: React.FC<Props> = (props) => {
   switch (props.block.type) {
     case "text":
-      return <TextBlock data={props.block.data as TextBlockData} />;
+      return <TextBlock data={props.block.data} />;
     case "figure":
-      return <FigureBlock data={props.block.data as FigureBlockData} />;
+      return <FigureBlock data={props.block.data} />;
     case "diagram": {
-      const data = props.block.data as
-        | DiagramBlockData
-        | TableDiagramBlockData;
+      const data = props.block.data;
       return data.kind === "bit-grid" ? (
         <TableDiagramBlock data={data} />
       ) : (
@@ -38,25 +26,16 @@ export const ContentBlockRenderer: React.FC<Props> = (props) => {
       );
     }
     case "code_example":
-      return (
-        <CodeExampleBlock data={props.block.data as CodeExampleBlockData} />
-      );
+      return <CodeExampleBlock data={props.block.data} />;
     case "worked_example":
     case "completion_exercise":
     case "productive_failure_prompt":
       return (
-        <WorkedExampleBlock
-          type={props.block.type}
-          data={props.block.data as WorkedExampleBlockData}
-        />
+        <WorkedExampleBlock type={props.block.type} data={props.block.data} />
       );
     case "callout":
-      return <CalloutBlock data={props.block.data as CalloutBlockData} />;
+      return <CalloutBlock data={props.block.data} />;
     case "video_embed":
-      return (
-        <VideoEmbedBlock data={props.block.data as VideoEmbedBlockData} />
-      );
-    default:
-      return null;
+      return <VideoEmbedBlock data={props.block.data} />;
   }
 };

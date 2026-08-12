@@ -1,0 +1,14 @@
+# Generated and dependency-owned files
+**/node_modules/
+**/.output/
+**/.vinxi/
+**/dist/
+.lighthouseci/
+apps/web/src/routeTree.gen.ts
+pnpm-lock.yaml
+
+# Documentation and authored learning content retain intentional wrapping.
+**/*.md
+
+# Machine-local editor state is not repository formatting scope.
+.claude/settings.local.json

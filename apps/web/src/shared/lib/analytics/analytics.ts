@@ -6,11 +6,17 @@ type AnalyticsEvent =
     }
   | {
       name: "practice_answer";
-      data: { topic_id: string; task_index: number; result: "correct" | "wrong" };
+      data: {
+        topic_id: string;
+        task_index: number;
+        result: "correct" | "wrong";
+      };
     };
 
 type AnalyticsWindow = Window & {
-  umami?: { track: (name: string, data: Record<string, string | number>) => void };
+  umami?: {
+    track: (name: string, data: Record<string, string | number>) => void;
+  };
 };
 
 const startedTopics = new Set<string>();

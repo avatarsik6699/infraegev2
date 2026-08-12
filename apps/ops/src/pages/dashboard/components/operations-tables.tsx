@@ -1,7 +1,9 @@
 import { Card, ScrollArea, SimpleGrid, Table, Title } from "@mantine/core";
 import type { DashboardData } from "../../../../contracts/index";
 
-const EmptyRow: React.FC<{ columns: number; children: React.ReactNode }> = (props) => (
+const EmptyRow: React.FC<{ columns: number; children: React.ReactNode }> = (
+  props,
+) => (
   <Table.Tr>
     <Table.Td colSpan={props.columns}>{props.children}</Table.Td>
   </Table.Tr>
@@ -18,12 +20,16 @@ export const formatContainerMemory = (memoryMiB: number): string => {
   return `${formatted} ${unit}`;
 };
 
-const ContainersTable: React.FC<{ rows: DashboardData["containers"] }> = ({ rows }) => (
+const ContainersTable: React.FC<{ rows: DashboardData["containers"] }> = ({
+  rows,
+}) => (
   <Card withBorder radius="sm">
     <Title order={2}>Контейнеры</Title>
     <ScrollArea>
       <Table striped highlightOnHover>
-        <Table.Caption>Состояние и потребление ресурсов контейнерами</Table.Caption>
+        <Table.Caption>
+          Состояние и потребление ресурсов контейнерами
+        </Table.Caption>
         <Table.Thead>
           <Table.Tr>
             <Table.Th>Сервис</Table.Th>
@@ -55,7 +61,9 @@ const FunnelTable: React.FC<{ rows: DashboardData["funnel"] }> = ({ rows }) => (
   <Card withBorder radius="sm">
     <Title order={2}>Учебная воронка</Title>
     <Table>
-      <Table.Caption>Количество учебных событий за выбранный период</Table.Caption>
+      <Table.Caption>
+        Количество учебных событий за выбранный период
+      </Table.Caption>
       <Table.Thead>
         <Table.Tr>
           <Table.Th>Шаг</Table.Th>
@@ -78,7 +86,9 @@ const FunnelTable: React.FC<{ rows: DashboardData["funnel"] }> = ({ rows }) => (
   </Card>
 );
 
-export const OperationsTables: React.FC<{ data: DashboardData }> = ({ data }) => (
+export const OperationsTables: React.FC<{ data: DashboardData }> = ({
+  data,
+}) => (
   <SimpleGrid cols={{ base: 1, lg: 2 }}>
     <ContainersTable rows={data.containers} />
     <FunnelTable rows={data.funnel} />

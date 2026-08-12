@@ -10,7 +10,7 @@ import {
   Outlet,
   Scripts,
 } from "@tanstack/react-router";
-import { env } from "~/shared/config/env";
+import { clientEnv } from "~/shared/config/client-env";
 import { appMantineTheme } from "~/shared/config/mantine-theme";
 import appCss from "~/shared/styles/tokens.css?url";
 import { SiteFooter } from "~/widgets/site-footer";
@@ -36,11 +36,11 @@ function RootComponent() {
       <head>
         <ColorSchemeScript defaultColorScheme="light" />
         <HeadContent />
-        {env.client.umamiWebsiteId && (
+        {clientEnv.umamiWebsiteId && (
           <script
             defer
             src="/stats/script.js"
-            data-website-id={env.client.umamiWebsiteId}
+            data-website-id={clientEnv.umamiWebsiteId}
             data-domains="infraege.ru"
             data-do-not-track="true"
             data-exclude-search="true"

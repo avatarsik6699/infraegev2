@@ -7,6 +7,7 @@ export {
 } from "./api/server-loaders";
 export {
   ContentNotFoundError,
+  isContentNotFoundError,
   type ResolvedContentLink,
 } from "./lib/content-link";
 export { parseTopicRouteSlug } from "./lib/parse-topic-route-slug";
@@ -32,6 +33,7 @@ export type {
   TextBlockData,
   Topic,
   VideoEmbedBlockData,
+  WorkedExampleBlockType,
   WorkedExampleBlockData,
 } from "./model/types";
 export { PrerequisiteCallout } from "./components/prerequisite-callout";

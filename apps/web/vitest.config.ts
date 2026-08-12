@@ -10,8 +10,11 @@ export default defineConfig({
     },
   },
   test: {
+    clearMocks: true,
     environment: "jsdom",
     exclude: [...configDefaults.exclude, "e2e/**"],
     globals: true,
+    restoreMocks: true,
+    unstubGlobals: true,
   },
 });

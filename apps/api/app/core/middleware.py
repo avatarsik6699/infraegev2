@@ -24,9 +24,7 @@ class RequestContextMiddleware(BaseHTTPMiddleware):
     the personal-data surface for no operational benefit (docs/SPEC.md §8, 152-ФЗ).
     """
 
-    async def dispatch(
-        self, request: Request, call_next: RequestResponseEndpoint
-    ) -> Response:
+    async def dispatch(self, request: Request, call_next: RequestResponseEndpoint) -> Response:
         request_id = request.headers.get(REQUEST_ID_HEADER, str(uuid.uuid4()))
         structlog.contextvars.clear_contextvars()
         structlog.contextvars.bind_contextvars(request_id=request_id)
@@ -47,9 +45,7 @@ class RequestContextMiddleware(BaseHTTPMiddleware):
 
 
 class ErrorLoggingMiddleware(BaseHTTPMiddleware):
-    async def dispatch(
-        self, request: Request, call_next: RequestResponseEndpoint
-    ) -> Response:
+    async def dispatch(self, request: Request, call_next: RequestResponseEndpoint) -> Response:
         try:
             response = await call_next(request)
         except Exception:  # noqa: BLE001 — log every unhandled request failure

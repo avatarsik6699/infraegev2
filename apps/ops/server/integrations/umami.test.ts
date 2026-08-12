@@ -19,7 +19,6 @@ const project = {
 } as ProjectConfig;
 
 afterEach(() => {
-  vi.unstubAllGlobals();
   delete process.env.TEST_UMAMI_USER;
   delete process.env.TEST_UMAMI_PASSWORD;
 });
@@ -34,7 +33,8 @@ describe("readUmami", () => {
       vi.fn<typeof fetch>(async (input) => {
         const url = String(input);
         requestedUrls.push(url);
-        if (url.endsWith("/api/auth/login")) return Response.json({ token: "token" });
+        if (url.endsWith("/api/auth/login"))
+          return Response.json({ token: "token" });
         if (url.includes("/pageviews?")) {
           return Response.json({
             pageviews: [{ x: "2026-08-10T10:00:00Z", y: 8 }],
@@ -64,7 +64,9 @@ describe("readUmami", () => {
         { step: "practice_answer", total: 3 },
       ],
     });
-    const pageviewsUrl = requestedUrls.find((url) => url.includes("/pageviews?"));
+    const pageviewsUrl = requestedUrls.find((url) =>
+      url.includes("/pageviews?"),
+    );
     expect(pageviewsUrl).toContain("unit=minute");
     expect(pageviewsUrl).toContain("timezone=Europe%2FMoscow");
   });
@@ -80,7 +82,9 @@ describe("readUmami", () => {
         }
         return Response.json({
           totals: { visitors: 3, views: 8, events: 2 },
-          events: [{ sessionId: "must-not-leave-the-bff", urlPath: "/private" }],
+          events: [
+            { sessionId: "must-not-leave-the-bff", urlPath: "/private" },
+          ],
         });
       }),
     );

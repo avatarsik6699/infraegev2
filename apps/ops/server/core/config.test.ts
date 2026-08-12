@@ -36,9 +36,9 @@ describe("parseConfig", () => {
   });
 
   it("rejects duplicate ids", () => {
-    expect(() => parseConfig({ version: 1, projects: [project, project] })).toThrow(
-      "Duplicate",
-    );
+    expect(() =>
+      parseConfig({ version: 1, projects: [project, project] }),
+    ).toThrow("Duplicate");
   });
 
   it.each([
@@ -59,6 +59,8 @@ describe("parseConfig", () => {
       "Invalid environment variable name",
     ],
   ])("rejects invalid provider configuration", (candidate, message) => {
-    expect(() => parseConfig({ version: 1, projects: [candidate] })).toThrow(message);
+    expect(() => parseConfig({ version: 1, projects: [candidate] })).toThrow(
+      message,
+    );
   });
 });

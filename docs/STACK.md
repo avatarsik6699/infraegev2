@@ -21,14 +21,15 @@ pitfalls that must be reconsidered rather than copied.
 
 | Layer | Technology |
 |-------|-----------|
-| Frontend | React + TanStack Start (SSR/SSG, file-based routing, `createServerFn` for server-only content access) + Mantine Core/Hooks **9.5.1 exact** as the UI primitive layer — no TanStack Query yet, no API surface needs client caching on M0; no `openapi-typescript` yet, no OpenAPI schema exists (see Known Gotchas) |
+| Frontend | React + TanStack Start (SSR/SSG, file-based routing, `createServerFn` for server-only content access) on Vite **8.2.1 exact** (Rolldown/Oxc) + Mantine Core/Hooks **9.5.1 exact** as the UI primitive layer — no TanStack Query yet, no API surface needs client caching on M0; no `openapi-typescript` yet, no OpenAPI schema exists (see Known Gotchas) |
 | Backend | Python/FastAPI (`apps/api`) |
 | Database | PostgreSQL (provisioned in `infra/docker-compose.yml`; no schema/migrations yet — content is git-based, docs/SPEC.md §3) |
 | Cache | — (not needed on M0) |
-| Operations UI | Local-first React/Vite `apps/ops`, Mantine Core/Charts 9.5.1 + Recharts 3.10.1, loopback-only Node BFF |
+| Operations UI | Local-first React/Vite **8.2.1 exact** `apps/ops`, Mantine Core/Charts 9.5.1 + Recharts 3.10.1, loopback-only Node BFF |
 | Infra | Docker Compose: Nginx → `web`/`api`/Postgres plus pinned Umami/Beszel; Ubuntu 24.04, systemd, journald, fail2ban, WireGuard, Restic |
 | Package managers | uv (`apps/api`), pnpm workspace (`apps/web`, `apps/ops`, root) |
-| CI/CD | GitHub Actions: static/security/audit checks without tests; GHCR SHA images; environment-approved manual SSH deploy with rollback; scheduled uptime/TLS probe |
+| Formatting | Prettier 3.9.6 exact for supported repository files; Ruff from the API lock for Python; EditorConfig for cross-editor whitespace defaults |
+| CI/CD | GitHub Actions on pinned Ubuntu 24.04 runners: static/security/audit checks without tests; GHCR SHA images with SBOM/provenance; environment-approved serialized SSH deploy with rollback; scheduled uptime/TLS probe |
 
 ---
 
@@ -38,8 +39,8 @@ pitfalls that must be reconsidered rather than copied.
 docker --version          # application: Docker + Compose v2
 docker compose version
 make --version            # application: GNU Make
-node --version            # local tests only: >=22
-pnpm --version            # local tests only: >=10
+node --version            # local tests only: >=22.13
+pnpm --version            # local tests only: exactly 10.33.0 (packageManager)
 python3 --version         # local tests only: >=3.12
 uv --version              # local tests only
 ```
@@ -55,6 +56,54 @@ make dev
 `make dev` supplies disposable process-scoped local values, builds dependencies inside Docker,
 starts the dedicated development overlay, waits for every healthcheck, and requires no `.env`.
 
+### pnpm workspace policy
+
+The root `packageManager` and workspace policy pin pnpm 10.33.0, model dependency compatibility
+against the Node 22.13 minimum while CI and production images use the current pinned Node 22
+maintenance patch, reject invalid peers and stale `node_modules` before
+scripts, and fail on unreviewed dependency build scripts. The only approved install script is the
+exact currently locked `esbuild@0.28.2`; an esbuild update must therefore be reviewed and approved
+explicitly instead of inheriting permission by package name. Supply-chain cooldown, provenance
+downgrade prevention, exotic transitive-source blocking, and frozen-lockfile installs remain in
+force. Run `pnpm install --frozen-lockfile` explicitly after checkout; pnpm will not repair stale
+dependencies as a side effect of `pnpm run`.
+
+Production Dockerfiles and third-party Compose images use a readable release tag plus an immutable
+multi-platform digest. Dependabot monitors Dockerfiles, Compose, package locks, Python dependencies,
+and SHA-pinned GitHub Actions weekly; image updates still require the repository gates and review.
+The image gate uses `--pull` so a missing or revoked digest fails closed, while the digest keeps a
+successful rebuild reproducible. Do not replace these references with floating `latest` tags or run
+package-manager upgrades inside a pinned runtime image.
+
+### VS Code workspace
+
+Run `pnpm install --frozen-lockfile` before opening the repository when local editor/test tooling
+has not been installed yet. The tracked [`.vscode/settings.json`](../.vscode/settings.json) points
+the TypeScript language service at `apps/web/node_modules/typescript/lib`; both JavaScript
+workspaces resolve that SDK from the frozen pnpm lockfile. Accept VS Code's workspace-TypeScript
+prompt (or run **TypeScript: Select TypeScript Version** and choose **Use Workspace Version**) so
+the status bar no longer reports VS Code's bundled TypeScript version.
+
+The workspace also recommends the ESLint, Prettier, Python, Ruff, and Playwright extensions used by the
+repository. Its shared settings select `apps/api/.venv`, expose the API pytest suite in Test
+Explorer, give each JavaScript workspace the correct ESLint working directory, update imports on
+file moves, formats supported source/config files with the repository-local Prettier or Ruff on
+save, and applies repository-backed lint fixes on explicit save. Each app's flat ESLint config
+also pins `parserOptions.tsconfigRootDir` to its own directory for every TypeScript extension,
+including contracts, tests, and root-level configs; this is required because the long-lived
+extension process loads both sibling typescript-eslint configs. Markdown remains
+outside the Prettier boundary and is exempt from trailing-whitespace removal because authored
+wrapping and two spaces can be meaningful. Personal UI, theme, font, autosave, and experimental
+settings remain user-level choices.
+
+Repository-wide commands are `pnpm format:check` for the non-mutating gate and `pnpm format` to
+apply Prettier plus Ruff. ESLint stays a separate quality pass: `pnpm lint` checks both JavaScript
+workspaces with content-based caches, while `pnpm lint:fix` applies its safe fixes. Web lint also
+runs typed production-code rules plus executable positive/negative checks for the E2E and web
+platform architecture policies; these static checks run in CI without collecting or executing
+tests. `.editorconfig` provides UTF-8, LF, final-newline, indentation, and whitespace defaults to
+editors beyond VS Code.
+
 ---
 
 ## Fast Gate
@@ -65,6 +114,7 @@ not the full suite. Fill every row that applies; mark `n/a` for rows that don't 
 
 | Check | Command | Preconditions / notes |
 |-------|---------|-----------------------|
+| Format | `pnpm format:check` | scope is repository-wide because configuration and cross-editor behavior are shared |
 | Lint | `pnpm --filter web lint` · `pnpm --filter ops lint` · `cd apps/api && uv run ruff check app tests` | scope to touched workspace |
 | Type-check (affected) | `pnpm --filter web typecheck` · `pnpm --filter ops typecheck` · `cd apps/api && pnpm exec pyright app tests` | pyright reads `[tool.pyright]` in `apps/api/pyproject.toml` |
 | Targeted / affected unit tests | `pnpm --filter web test` · `pnpm --filter ops test` · `cd apps/api && uv run pytest` | local developer environment only; never Docker/CI |
@@ -80,6 +130,7 @@ task — it's expensive by design; that's why it's separated from the Fast Gate.
 
 | Check | Command | Preconditions / notes |
 |-------|---------|-----------------------|
+| Formatting | `pnpm format:check` | Prettier and Ruff; Markdown and generated/dependency-owned files are explicitly ignored |
 | Infrastructure / bootstrap | `docker compose -f infra/docker-compose.yml -f infra/docker-compose.override.yml up --build -d` | verified live in change 03 on Docker Desktop/BuildKit: all four services become healthy; frontend and `/health` return 200 through Nginx. Change 02 also verified `POST /api/tasks/{id}/check` and the `/api/tasks/` rate limit (`503` past its burst — Nginx's default `limit_req_status`, not `429`) |
 | Migrations | `n/a` | content is git-based, not DB-backed (docs/SPEC.md §3); no schema exists yet to migrate |
 | Backend test suite | `cd apps/api && uv run pytest` | local only |
@@ -121,7 +172,7 @@ tool that isn't available must be reported as skipped with a reason, never silen
 | Domain | Required tool/skill | When | Available in this project |
 |--------|----------------------|------|-----------------------------|
 | Frontend UI change | Playwright MCP / chrome-devtools MCP (screenshot + console check) | after implementing, before checking off | yes |
-| E2E test change | Playwright + Page Object Model | during implementation and verification; use `e2e/pages/*.page.ts` and user-visible locators | yes |
+| E2E test change | Playwright + Page Object Model + E2E policy lint | during implementation and verification; use typed fixtures, `e2e/pages/*.page.ts`, user-visible locators, and run `pnpm --filter web lint` | yes |
 | TypeScript / Python change | LSP diagnostics | after implementing, before checking off | yes |
 | New/changed API surface | `openapi-typescript` (or equivalent) regen + frontend re-typecheck | after backend contract change | n/a — no OpenAPI schema yet, see Fast Gate note |
 | Frontend architecture decision | `frontend-architecture` skill | during planning and architecture review | yes — installed in the local Codex skill catalog |
@@ -157,6 +208,8 @@ cd apps/api && uv run pytest
 - Prefer function-style pytest tests and fixtures. Build content fixtures with small helpers such
   as the existing `make_task()` pattern rather than shared mutable objects or class setup.
 - Keep each test focused on observable service or HTTP behavior.
+- Own `TestClient` through a pytest fixture/context manager and reset FastAPI dependency overrides
+  in fixture teardown so failures cannot leak global application state into later tests.
 
 ### Frontend (if applicable)
 
@@ -168,7 +221,20 @@ pnpm --filter web test:e2e
 
 - Vitest unit tests live in `apps/web/tests/`.
 - Playwright specs live in `apps/web/e2e/`; browser journeys use Page Object Model classes from
-  `e2e/pages/*.page.ts` and user-visible `getByRole`/`getByText` locators.
+  `e2e/pages/*.page.ts`, typed application fixtures from `e2e/fixtures.ts`, and user-visible
+  `getByRole`/`getByText` locators. Specs describe journeys; POMs own page actions/assertions, and
+  fixtures own object construction plus resource teardown. Specs import `test` only from
+  `./fixtures`, consume domain fixtures only, and neither instantiate POMs nor use Playwright
+  locators, assertions, runner plumbing, or context/page APIs directly. `pnpm --filter web lint`
+  enforces this boundary and runs policy self-tests; extend the fixture or owning POM instead of
+  bypassing the rule.
+- Prefer locator actions and web-first assertions over `waitForTimeout`, selector polling, or
+  global `networkidle`. When streamed SSR markup precedes hydration, retry the user action against
+  an observable interactive state inside the owning POM.
+- Vitest owns mock cleanup through workspace config (`clearMocks`, `restoreMocks`, and
+  `unstubGlobals`). Keep DOM cleanup explicit in ops jsdom files because that workspace does not
+  expose global hooks; keep fake-timer and environment-variable cleanup beside the tests that own
+  those resources.
 - `playwright.config.ts` contains one project only: Chromium. It always starts fresh local frontend
   and backend processes on dedicated `127.0.0.2:3100` / `127.0.0.2:8100` ports with strict port
   binding; it never reuses an arbitrary process that may serve a stale checkout.
@@ -189,6 +255,9 @@ pnpm --filter web test:e2e
 │   └── playbooks/            # plan.md / work.md / ship.md / workflow-init.md
 ├── .claude/skills/            # Claude Code skill wrappers (plan, work, ship)
 ├── .agents/skills/             # generic-agent skill wrappers (plan, work, ship)
+├── .vscode/                    # shared workspace editor settings (repository TypeScript SDK)
+├── .editorconfig               # editor-independent whitespace and indentation defaults
+├── prettier.config.mjs         # repository-local Prettier opt-in/config anchor
 ├── plugins/sdd-workflow/       # Codex plugin (skills, commands, MCP, hooks)
 ├── apps/web/, apps/api/, apps/ops/, infra/, ops/, content/, scripts/
 └── AGENTS.md / CLAUDE.md       # AI agent rules
@@ -218,6 +287,17 @@ API; cross-slice deep imports are forbidden, while imports within a slice are re
 not use an extra `ui/` segment: a root component is colocated with its `*.types.ts` and optional
 CSS Module, and recursively complex private components live under `components/`. Meaningful
 `api/`, `model/`, and `lib/` segments remain.
+
+Production modules use explicit execution and integration boundaries. Public Vite values live in
+`shared/config/client-env.ts`; server environment reads live in marker-protected `*.server.ts`
+modules and happen inside the request handler. Browser globals and storage are owned by focused
+`shared/lib` adapters, while HTTP calls are owned by the consuming slice's `api/`. Components,
+stores, pages, and routes call those semantic APIs rather than raw `window`, `document`,
+`navigator`, storage, `fetch`, or `process`. `pnpm --filter web lint` enforces this allowlist,
+type-checks production lint rules through typescript-eslint Project Service, and runs executable
+policy cases. TanStack route modules retain two narrow unsafe-value lint exemptions because its
+generated augmentation is resolved by the project `tsc` gate but not fully by Project Service;
+the documented `notFound()` sentinel also requires the route-only `only-throw-error` exemption.
 
 ### Backend modules (`apps/api/app/`) — DDD-like, established in change 02
 
@@ -282,6 +362,10 @@ make logs
 
 # Show health/status
 make ps
+
+# Remove regenerable local reports, build outputs, and caches
+# Preserves node_modules, apps/api/.venv, env files, and PostgreSQL/Docker data
+make clean
 
 # Add a new migration / schema change
 # n/a — no database schema exists yet

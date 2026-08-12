@@ -37,13 +37,14 @@ make logs     # смотреть общие логи, выход — Ctrl+C
 make restart  # перезапустить весь dev-стек
 make stop     # корректно остановить стек, сохранив данные PostgreSQL
 make down     # совместимый алиас для make stop
+make clean    # удалить локальные отчёты, build outputs и кэши; зависимости и данные сохраняются
 make help     # показать доступные команды
 ```
 
 ## Требования
 
 - Docker с Compose v2 и GNU Make — для `make dev`;
-- Node.js 22+, pnpm 10+, Python 3.12+ и
+- Node.js 22.13+, pnpm 10.33.0 (закреплён в `packageManager`), Python 3.12+ и
   [uv](https://docs.astral.sh/uv/) — только если вы запускаете автоматические тесты на host;
 - Chromium — только для локального Playwright E2E.
 
@@ -67,7 +68,7 @@ make --version
 typecheck или тесты непосредственно в WSL/на host:
 
 ```bash
-pnpm install
+pnpm install --frozen-lockfile
 cd apps/api
 uv sync
 cd ../..
@@ -159,21 +160,26 @@ make stop
 
 ## Автоматические проверки
 
-Frontend:
+Все JavaScript-workspace:
 
 ```bash
 pnpm lint
 pnpm typecheck
 pnpm test
-pnpm build
 ```
 
-Локальный operations dashboard:
+Форматирование всего поддерживаемого репозитория проверяется отдельно от линтеров:
 
 ```bash
-pnpm --filter ops lint
-pnpm --filter ops typecheck
-pnpm --filter ops test
+pnpm format:check
+pnpm format        # применить Prettier и Ruff
+pnpm lint:fix      # применить безопасные ESLint fixes
+```
+
+Сборки остаются явными, потому что web и локальный operations dashboard имеют разные runtime:
+
+```bash
+pnpm build
 pnpm --filter ops build
 ```
 
@@ -182,7 +188,7 @@ Backend:
 ```bash
 cd apps/api
 uv run ruff check app tests
-npx pyright app tests
+pnpm exec pyright app tests
 uv run pytest
 cd ../..
 ```
@@ -307,5 +313,5 @@ Runbook’и: [DNS/TLS](docs/runbooks/dns-tls.md),
 - [`docs/SPEC.md`](docs/SPEC.md) — продуктовый и системный контракт;
 - [`docs/STACK.md`](docs/STACK.md) — версии, команды Fast/Full/Release Gate и структура проекта;
 - [`docs/KNOWN_GOTCHAS.md`](docs/KNOWN_GOTCHAS.md) — известные проблемы окружения;
-- [`docs/changes/05-first-published-topic.md`](docs/changes/05-first-published-topic.md) — активный
-  change 05 и его зависимости.
+- [`docs/changes/`](docs/changes/) — активный change; завершённые changes хранятся в
+  [`docs/changes/archive/`](docs/changes/archive/).

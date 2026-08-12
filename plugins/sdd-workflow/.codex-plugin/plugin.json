@@ -25,11 +25,7 @@
     "longDescription": "Workspace-local Codex plugin that exposes the project's SDD workflow as native Codex skills and slash commands, while also declaring project-local docs MCP expectations.",
     "developerName": "Local Project",
     "category": "Coding",
-    "capabilities": [
-      "Interactive",
-      "Read",
-      "Write"
-    ],
+    "capabilities": ["Interactive", "Read", "Write"],
     "defaultPrompt": [
       "Draft SPEC.md from a high-level project brief and scaffold the next change",
       "Implement Backlog tasks for a change through the agent execution loop",

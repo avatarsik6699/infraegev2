@@ -74,7 +74,7 @@ sdamgia.ru, kpolyakov.spb.ru), ни новыми AI-ботами (решают �
 | `Anonymous learner` | Читает теорию, решает практику, прогресс сохраняется в localStorage браузера | Нет аккаунта на MVP — прогресс не синхронизируется между устройствами |
 | `Content author` (архитектор + AI как инструмент) | Пишет/генерирует content-as-code файлы (`content/topics/`, `content/courses/`), ревьюит AI-черновики через git diff, переводит `draft → review → published` | Публикация только через прохождение Content Quality Gate (§2.3); AI не публикует напрямую |
 | `Architect` | Владеет `docs/SPEC.md`, принимает архитектурные решения, ревьюит контент перед `published` | — |
-| `AI_Agent` | Реализует изменения через `/work`, генерирует черновики контента по промптам с чек-листом из [`learning-science-principles.md`](../artifacts/learning-science-principles.md) (§2.3), запускает гейты через `/ship` | Не переводит контент в `published` самостоятельно; нет прямого push в `main` вне `/ship` |
+| `AI_Agent` | Реализует изменения через `/work`, генерирует черновики контента по промптам с чек-листом из [`learning-science-principles.md`](./artifacts/learning-science-principles.md) (§2.3), запускает гейты через `/ship` | Не переводит контент в `published` самостоятельно; нет прямого push в `main` вне `/ship` |
 
 ### 2.2 Key Entities
 
@@ -92,7 +92,7 @@ localStorage на клиенте; БД используется по миним�
 
 Педагогические принципы, обязательные при любой генерации Topic/CourseLesson/Task через AI —
 полное обоснование с источниками в
-[`docs/artifacts/learning-science-principles.md`](../artifacts/learning-science-principles.md).
+[`docs/artifacts/learning-science-principles.md`](./artifacts/learning-science-principles.md).
 Черновик обязан быть проверен по чек-листу из раздела 8 того документа до перевода в статус
 `review`; сам промпт, используемый для AI-генерации, обязан включать этот чек-лист как явное
 требование, а не полагаться на то, что модель воспроизведёт эти принципы по умолчанию.

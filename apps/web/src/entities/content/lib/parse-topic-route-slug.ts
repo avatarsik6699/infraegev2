@@ -1,4 +1,5 @@
 import { ContentNotFoundError } from "./content-link";
+import { parseContentId } from "./content-id";
 
 /** Parses the `/theory/zadanie-{n}-{slug}` route param into a task number + topic id. */
 export function parseTopicRouteSlug(routeSlug: string): {
@@ -9,5 +10,5 @@ export function parseTopicRouteSlug(routeSlug: string): {
   if (!match) {
     throw new ContentNotFoundError(`Malformed topic route slug: ${routeSlug}`);
   }
-  return { taskNumber: Number(match[1]), topicId: match[2] };
+  return { taskNumber: Number(match[1]), topicId: parseContentId(match[2]) };
 }

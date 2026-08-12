@@ -62,15 +62,14 @@ export async function readFail2ban(
   project: ProjectConfig,
 ): Promise<Fail2banSnapshot> {
   const keyPath = resolveCredential(project.fail2ban.keyPathEnv);
-  const knownHostsPath = resolveCredential(
-    project.fail2ban.knownHostsPathEnv,
-  );
+  const knownHostsPath = resolveCredential(project.fail2ban.knownHostsPathEnv);
   const { stdout } = await execFileAsync(
     "ssh",
     buildFail2banSshArgs(project, keyPath, knownHostsPath),
     { timeout: INTEGRATION_TIMEOUT_MS, maxBuffer: 128_000 },
   );
   const rows = parseFail2ban(stdout);
-  if (rows.length === 0) throw new Error("fail2ban adapter returned no jail status");
+  if (rows.length === 0)
+    throw new Error("fail2ban adapter returned no jail status");
   return rows;
 }

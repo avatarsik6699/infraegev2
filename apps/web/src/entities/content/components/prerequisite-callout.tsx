@@ -18,7 +18,12 @@ export const PrerequisiteCallout: React.FC<Props> = (props) => {
   if (props.links.length === 0) return null;
 
   return (
-    <Alert role="note" data-tone="prerequisite" color="textbook" variant="light">
+    <Alert
+      role="note"
+      data-tone="prerequisite"
+      color="textbook"
+      variant="light"
+    >
       <Stack gap="xs">
         <Typography.Text>{props.heading}</Typography.Text>
         <List>

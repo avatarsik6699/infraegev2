@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   getTopicProgress,
   isMastered,
@@ -77,5 +77,21 @@ describe("progress-store", () => {
     );
     expect(isMastered("topic-a")).toBe(false);
     expect(window.localStorage.getItem("infraege:progress")).toBeNull();
+  });
+
+  it("ignores storage failures instead of breaking the learning flow", () => {
+    const getItem = vi
+      .spyOn(Storage.prototype, "getItem")
+      .mockImplementation(() => {
+        throw new DOMException("Storage unavailable", "SecurityError");
+      });
+
+    expect(getTopicProgress("topic-a", ["t1"]).ratio).toBe(0);
+    getItem.mockRestore();
+
+    vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
+      throw new DOMException("Quota exceeded", "QuotaExceededError");
+    });
+    expect(() => markMastered("topic-a")).not.toThrow();
   });
 });

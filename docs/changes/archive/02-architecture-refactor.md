@@ -9,7 +9,7 @@
 | Change | `02` |
 | Slug | `architecture-refactor` |
 | Title | Architecture Refactor |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/02-architecture-refactor` |
 
 ---
@@ -185,7 +185,7 @@ Redis, which this stack doesn't have).
 ## Gate Checks
 
 > Fast Gate runs per task in `/work`; Full Gate and (with `--release`) Release Gate run once in
-> `/ship`. Both are defined in [docs/STACK.md](../STACK.md) — this section only records
+> `/ship`. Both are defined in [docs/STACK.md](../../STACK.md) — this section only records
 > change-specific overrides.
 
 ```bash

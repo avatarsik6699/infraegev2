@@ -1,6 +1,6 @@
 import { Paper, Stack } from "@mantine/core";
 import type {
-  ContentBlockType,
+  WorkedExampleBlockType,
   WorkedExampleBlockData,
 } from "~/entities/content";
 import { Typography } from "~/shared/components/typography";
@@ -12,7 +12,7 @@ const HEADING: Record<string, string> = {
 };
 
 type Props = {
-  type: ContentBlockType;
+  type: WorkedExampleBlockType;
   data: WorkedExampleBlockData;
 };
 

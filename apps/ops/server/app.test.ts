@@ -3,7 +3,7 @@ import { createServer } from "node:http";
 import type { AddressInfo } from "node:net";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { afterEach, describe, expect, it } from "vitest";
+import { describe, expect, it, onTestFinished } from "vitest";
 import type { DashboardData } from "../contracts/index.js";
 import { createOpsApp } from "./app.js";
 import type { OpsConfig } from "./core/config.js";
@@ -48,19 +48,25 @@ const dashboardService: DashboardService = {
   clearCache: () => undefined,
 };
 
-const cleanups: Array<() => Promise<void>> = [];
-
-afterEach(async () => {
-  await Promise.all(cleanups.splice(0).map((cleanup) => cleanup()));
-});
-
 async function start(service = dashboardService) {
   const clientRoot = await mkdtemp(join(tmpdir(), "infraege-ops-client-"));
-  await writeFile(join(clientRoot, "index.html"), "<h1>Operations</h1>");
-  const server = createServer(createOpsApp({ config, dashboardService: service, clientRoot }));
-  await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
+  const server = createServer();
+  try {
+    await writeFile(join(clientRoot, "index.html"), "<h1>Operations</h1>");
+    server.on(
+      "request",
+      createOpsApp({ config, dashboardService: service, clientRoot }),
+    );
+    await new Promise<void>((resolve) =>
+      server.listen(0, "127.0.0.1", resolve),
+    );
+  } catch (error) {
+    server.close();
+    await rm(clientRoot, { recursive: true });
+    throw error;
+  }
   const port = (server.address() as AddressInfo).port;
-  cleanups.push(async () => {
+  onTestFinished(async () => {
     await new Promise<void>((resolve, reject) =>
       server.close((error) => (error ? reject(error) : resolve())),
     );
@@ -113,6 +119,8 @@ describe("ops app", () => {
     const baseUrl = await start(service);
     const response = await fetch(`${baseUrl}/api/dashboard?project=x`);
     expect(response.status).toBe(500);
-    expect(await response.json()).toEqual({ error: "internal dashboard error" });
+    expect(await response.json()).toEqual({
+      error: "internal dashboard error",
+    });
   });
 });

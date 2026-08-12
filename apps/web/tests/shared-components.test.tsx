@@ -45,11 +45,7 @@ describe("Image", () => {
 
   it("forwards an explicit fallback source", () => {
     render(
-      <Image
-        src="/missing.png"
-        fallbackSrc="/fallback.png"
-        alt="Диаграмма"
-      />,
+      <Image src="/missing.png" fallbackSrc="/fallback.png" alt="Диаграмма" />,
     );
     const image = screen.getByRole("img", { name: "Диаграмма" });
     fireEvent.error(image);

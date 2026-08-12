@@ -14,7 +14,8 @@ export const ExternalLink: React.FC<ExternalLinkTypes.Props> = (props) => {
       {props.children}
       {props.newTab && (
         <span className={styles.visuallyHidden}>
-          {" "}(откроется в новой вкладке)
+          {" "}
+          (откроется в новой вкладке)
         </span>
       )}
     </Anchor>

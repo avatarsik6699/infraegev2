@@ -7,7 +7,7 @@
 | Change | `09` |
 | Slug | `umami-collector-path` |
 | Title | Restore production Umami event ingestion |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/09-umami-collector-path` |
 
 ---

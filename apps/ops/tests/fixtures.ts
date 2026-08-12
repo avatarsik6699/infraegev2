@@ -3,7 +3,11 @@ import type { DashboardData } from "../contracts/index";
 const updatedAt = "2026-08-10T10:00:00.000Z";
 
 export const dashboardFixture: DashboardData = {
-  project: { id: "infraege", name: "infraege.ru", publicUrl: "https://infraege.ru" },
+  project: {
+    id: "infraege",
+    name: "infraege.ru",
+    publicUrl: "https://infraege.ru",
+  },
   generatedAt: updatedAt,
   sources: {
     availability: { state: "fresh", updatedAt },

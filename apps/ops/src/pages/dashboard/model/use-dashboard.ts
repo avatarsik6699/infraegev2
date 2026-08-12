@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { DashboardData, DashboardRange } from "../../../../contracts/index";
+import type {
+  DashboardData,
+  DashboardRange,
+} from "../../../../contracts/index";
 import { fetchDashboard } from "../api/ops-client";
 
 export const DASHBOARD_REFRESH_OPTIONS = [15_000, 30_000, 60_000, 0] as const;
@@ -29,7 +32,9 @@ export function useDashboard(
   refreshMs: DashboardRefreshMs,
 ): DashboardState {
   const key = projectId ? `${projectId}:${range}` : "";
-  const refreshRef = useRef<((background: boolean) => Promise<void>) | null>(null);
+  const refreshRef = useRef<((background: boolean) => Promise<void>) | null>(
+    null,
+  );
   const [state, setState] = useState<InternalDashboardState>({
     ...emptyState(false),
     key: "",
@@ -58,10 +63,19 @@ export function useDashboard(
       try {
         const data = await fetchDashboard(projectId, range, controller.signal);
         if (!controller.signal.aborted) {
-          setState({ data, error: false, loading: false, refreshing: false, key });
+          setState({
+            data,
+            error: false,
+            loading: false,
+            refreshing: false,
+            key,
+          });
         }
       } catch (reason) {
-        if (!controller.signal.aborted && (reason as Error).name !== "AbortError") {
+        if (
+          !controller.signal.aborted &&
+          (reason as Error).name !== "AbortError"
+        ) {
           setState((current) => ({
             ...(current.key === key ? current : emptyState(false)),
             error: true,
@@ -97,6 +111,7 @@ export function useDashboard(
     };
   }, [refresh, refreshMs]);
 
-  const visibleState = state.key === key ? state : emptyState(Boolean(projectId));
+  const visibleState =
+    state.key === key ? state : emptyState(Boolean(projectId));
   return { ...visibleState, refresh };
 }

@@ -10,12 +10,16 @@ const CONTENT_TYPES: Record<string, string> = {
   ".svg": "image/svg+xml",
 };
 
-async function fileOrIndex(clientRoot: string, pathname: string): Promise<string> {
-  const requested = pathname === "/"
-    ? "index.html"
-    : normalize(pathname)
-        .replace(/^(\.\.(\/|\\|$))+/, "")
-        .replace(/^\//, "");
+async function fileOrIndex(
+  clientRoot: string,
+  pathname: string,
+): Promise<string> {
+  const requested =
+    pathname === "/"
+      ? "index.html"
+      : normalize(pathname)
+          .replace(/^(\.\.(\/|\\|$))+/, "")
+          .replace(/^\//, "");
   const candidate = join(clientRoot, requested);
   try {
     if ((await stat(candidate)).isFile()) return candidate;

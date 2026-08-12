@@ -1,4 +1,12 @@
-import { Alert, Container, Group, Loader, Skeleton, Stack, Text } from "@mantine/core";
+import {
+  Alert,
+  Container,
+  Group,
+  Loader,
+  Skeleton,
+  Stack,
+  Text,
+} from "@mantine/core";
 import { lazy, Suspense, useState } from "react";
 import type { DashboardRange } from "../../../contracts/index";
 import { DashboardHeader } from "./components/dashboard-header";
@@ -29,7 +37,8 @@ export const DashboardPage: React.FC = () => {
     : (projectsState.projects[0]?.id ?? "");
   const dashboard = useDashboard(selectedProjectId, range, refreshMs);
 
-  const controlsDisabled = projectsState.status !== "ready" || projectsState.projects.length === 0;
+  const controlsDisabled =
+    projectsState.status !== "ready" || projectsState.projects.length === 0;
 
   return (
     <Container size="xl" py="xl">
@@ -50,9 +59,10 @@ export const DashboardPage: React.FC = () => {
         {projectsState.status === "error" && (
           <Alert color="red">Конфигурация проектов недоступна</Alert>
         )}
-        {projectsState.status === "ready" && projectsState.projects.length === 0 && (
-          <Alert color="yellow">В конфигурации нет доступных проектов</Alert>
-        )}
+        {projectsState.status === "ready" &&
+          projectsState.projects.length === 0 && (
+            <Alert color="yellow">В конфигурации нет доступных проектов</Alert>
+          )}
         {dashboard.error && (
           <Alert color="red">
             {dashboard.data
@@ -66,17 +76,22 @@ export const DashboardPage: React.FC = () => {
           </Text>
         )}
 
-        {(projectsState.status === "loading" || dashboard.loading) && !dashboard.data && (
-          <Group justify="center" py="xl">
-            <Loader aria-label="Загрузка данных" />
-          </Group>
-        )}
+        {(projectsState.status === "loading" || dashboard.loading) &&
+          !dashboard.data && (
+            <Group justify="center" py="xl">
+              <Loader aria-label="Загрузка данных" />
+            </Group>
+          )}
 
         {dashboard.data && (
           <>
             <SourceStatus data={dashboard.data} />
             <SummaryMetrics data={dashboard.data} range={range} />
-            <Suspense fallback={<Skeleton height={320} aria-label="Загрузка графиков" />}>
+            <Suspense
+              fallback={
+                <Skeleton height={320} aria-label="Загрузка графиков" />
+              }
+            >
               <TelemetryCharts data={dashboard.data} />
             </Suspense>
             <OperationsTables data={dashboard.data} />

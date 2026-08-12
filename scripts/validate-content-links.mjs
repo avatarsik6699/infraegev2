@@ -89,7 +89,11 @@ for (const { file, data } of topics) {
   checkRefs(file, data.prerequisites, topicOrLessonIds, "prerequisites");
   checkRefs(file, data.related_topics, topicIds, "related_topics");
   checkRefs(file, data.practice_task_ids, taskIds, "practice_task_ids");
-  checkFigureBlocks(file, `/content/topics/${data.id}/`, contentBlocksFor(data));
+  checkFigureBlocks(
+    file,
+    `/content/topics/${data.id}/`,
+    contentBlocksFor(data),
+  );
 }
 
 for (const { file, data } of courses) {

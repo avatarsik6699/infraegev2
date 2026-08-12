@@ -1,14 +1,10 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import type { ProjectConfig } from "../core/config.js";
 import { readJournal } from "./journal.js";
 
 const project = {
   journal: { baseUrl: "http://journal.test" },
 } as ProjectConfig;
-
-afterEach(() => {
-  vi.unstubAllGlobals();
-});
 
 describe("readJournal", () => {
   it("requests the latest bounded journal range without follow mode", async () => {

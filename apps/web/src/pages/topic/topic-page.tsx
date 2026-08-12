@@ -29,9 +29,12 @@ export const TopicPage: React.FC<TopicPageTypes.Props> = (props) => {
   );
   const progress = JSON.parse(progressSnapshot) as TopicProgress;
 
-  useEffect(function trackTopicViewFx() {
-    trackTopicView(props.topic.id);
-  }, [props.topic.id]);
+  useEffect(
+    function trackTopicViewFx() {
+      trackTopicView(props.topic.id);
+    },
+    [props.topic.id],
+  );
 
   function handleCorrect(taskId: string) {
     recordCorrectTask(

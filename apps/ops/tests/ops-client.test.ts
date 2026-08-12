@@ -1,15 +1,17 @@
 // @vitest-environment jsdom
 
-import { afterEach, describe, expect, it, vi } from "vitest";
-import { fetchDashboard, fetchProjects } from "~/pages/dashboard/api/ops-client";
-
-afterEach(() => {
-  vi.unstubAllGlobals();
-});
+import { describe, expect, it, vi } from "vitest";
+import {
+  fetchDashboard,
+  fetchProjects,
+} from "~/pages/dashboard/api/ops-client";
 
 describe("ops API client", () => {
   it("rejects non-success responses before decoding JSON", async () => {
-    vi.stubGlobal("fetch", vi.fn(async () => new Response("bad", { status: 503 })));
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => new Response("bad", { status: 503 })),
+    );
     await expect(fetchProjects(new AbortController().signal)).rejects.toThrow(
       "ops API HTTP 503",
     );

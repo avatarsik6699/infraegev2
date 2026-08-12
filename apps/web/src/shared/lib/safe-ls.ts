@@ -1,11 +1,10 @@
 /**
- * Typed, versioned, SSR-safe localStorage wrapper. Replaces raw `window.localStorage` access,
- * which throws under SSR, silently returns malformed data, and has no schema-evolution story.
+ * Typed, versioned, SSR-safe localStorage adapter. This is the single owner of storage access and
+ * storage-event subscriptions; feature code consumes semantic operations instead of `window`.
  *
  * A stored value is enveloped as `{ version, data }`; `get` validates both the version and the
  * `guard` and self-heals by removing the key on any mismatch, rather than returning bad data.
  */
-import { runtime } from "~/shared/config/runtime";
 import { safeJson, type TypeGuard } from "~/shared/lib/safe-json";
 
 export type SafeLsKey<T> = {
@@ -34,7 +33,7 @@ function isEnvelope<T>(
 }
 
 function getLocalStorage(): Storage | null {
-  if (runtime.isServer || !runtime.hasWindow) return null;
+  if (typeof window === "undefined") return null;
   try {
     return window.localStorage;
   } catch {
@@ -47,14 +46,23 @@ function get<T>(def: SafeLsKey<T>): T | null {
   const storage = getLocalStorage();
   if (!storage) return null;
 
-  const raw = storage.getItem(def.key);
+  let raw: string | null;
+  try {
+    raw = storage.getItem(def.key);
+  } catch {
+    return null;
+  }
   if (raw === null) return null;
 
   const envelope = safeJson.parse<Envelope<T>>(raw, (v): v is Envelope<T> =>
     isEnvelope(v, def.guard),
   );
   if (envelope === null || envelope.version !== def.version) {
-    storage.removeItem(def.key);
+    try {
+      storage.removeItem(def.key);
+    } catch {
+      // Storage can become unavailable between access and cleanup; a stale value is still ignored.
+    }
     return null;
   }
   return envelope.data;
@@ -64,11 +72,30 @@ function set<T>(def: SafeLsKey<T>, data: T): void {
   const storage = getLocalStorage();
   if (!storage) return;
   const serialized = safeJson.stringify({ version: def.version, data });
-  if (serialized !== null) storage.setItem(def.key, serialized);
+  if (serialized === null) return;
+  try {
+    storage.setItem(def.key, serialized);
+  } catch {
+    // Quota/security failures must not break the learning flow; persistence is best-effort.
+  }
 }
 
 function remove<T>(def: SafeLsKey<T>): void {
-  getLocalStorage()?.removeItem(def.key);
+  try {
+    getLocalStorage()?.removeItem(def.key);
+  } catch {
+    // Removing optional local progress is best-effort for the same reason as writes.
+  }
 }
 
-export const safeLs = { get, set, remove };
+function subscribe<T>(def: SafeLsKey<T>, listener: () => void): () => void {
+  if (typeof window === "undefined") return () => undefined;
+
+  const handleStorage = (event: StorageEvent) => {
+    if (event.key === def.key) listener();
+  };
+  window.addEventListener("storage", handleStorage);
+  return () => window.removeEventListener("storage", handleStorage);
+}
+
+export const safeLs = { get, set, remove, subscribe };

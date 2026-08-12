@@ -7,7 +7,7 @@
 | Change | `06` |
 | Slug | `production-platform` |
 | Title | Production platform for infraege.ru |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/06-production-platform` |
 
 ---

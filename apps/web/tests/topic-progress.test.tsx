@@ -52,7 +52,6 @@ function renderTopic() {
 
 beforeEach(() => {
   window.localStorage.clear();
-  vi.unstubAllGlobals();
 });
 
 describe("topic practice progress", () => {
@@ -60,14 +59,15 @@ describe("topic practice progress", () => {
     vi.stubGlobal(
       "fetch",
       vi.fn(async () => ({
+        ok: true,
         json: async () => ({ correct: true, explanation: [] }),
       })),
     );
     renderTopic();
 
-    expect(screen.getByRole("link", { name: /Идея/ }).getAttribute("href")).toBe(
-      "#idea",
-    );
+    expect(
+      screen.getByRole("link", { name: /Идея/ }).getAttribute("href"),
+    ).toBe("#idea");
     expect(
       screen.getByRole("link", { name: /К практике/ }).getAttribute("href"),
     ).toBe("#practice");
@@ -87,7 +87,12 @@ describe("topic practice progress", () => {
     expect(screen.getByText("Тема освоена")).toBeTruthy();
     fireEvent.click(buttons[0]);
     await waitFor(() =>
-      expect(getTopicProgress(topic.id, tasks.map((task) => task.id))).toEqual({
+      expect(
+        getTopicProgress(
+          topic.id,
+          tasks.map((task) => task.id),
+        ),
+      ).toEqual({
         correctCount: 4,
         totalCount: 5,
         ratio: 0.8,
@@ -100,9 +105,11 @@ describe("topic practice progress", () => {
     const fetchMock = vi
       .fn()
       .mockResolvedValueOnce({
+        ok: true,
         json: async () => ({ correct: false, explanation: [] }),
       })
       .mockResolvedValueOnce({
+        ok: true,
         json: async () => ({ correct: true, explanation: [] }),
       });
     vi.stubGlobal("fetch", fetchMock);
@@ -113,11 +120,21 @@ describe("topic practice progress", () => {
     fireEvent.change(input, { target: { value: "нет" } });
     fireEvent.click(button);
     await screen.findByText("Неверно.");
-    expect(getTopicProgress(topic.id, tasks.map((task) => task.id)).ratio).toBe(0);
+    expect(
+      getTopicProgress(
+        topic.id,
+        tasks.map((task) => task.id),
+      ).ratio,
+    ).toBe(0);
 
     fireEvent.change(input, { target: { value: "да" } });
     fireEvent.click(button);
     await screen.findByText("Верно!");
-    expect(getTopicProgress(topic.id, tasks.map((task) => task.id)).ratio).toBe(0.2);
+    expect(
+      getTopicProgress(
+        topic.id,
+        tasks.map((task) => task.id),
+      ).ratio,
+    ).toBe(0.2);
   });
 });

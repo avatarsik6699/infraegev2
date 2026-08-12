@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { listPublishedTopics } from "~/entities/content";
-import { env } from "~/shared/config/env";
+import { getSiteUrl } from "~/shared/config/server-env.server";
 
 /**
  * Build-time sitemap generation from `published` content (docs/SPEC.md §8) — no separate CMS/API
@@ -13,7 +13,7 @@ export const Route = createFileRoute("/sitemap.xml")({
         // Sitemap <loc> entries must be absolute (sitemaps.org spec) — SITE_URL is unset until
         // the domain is chosen (docs/SPEC.md §7.1), so this falls back to a clearly-fake host
         // rather than emitting invalid relative URLs.
-        const siteUrl = env.server.siteUrl;
+        const siteUrl = getSiteUrl();
         const topics = await listPublishedTopics();
         const urls = topics
           .map(

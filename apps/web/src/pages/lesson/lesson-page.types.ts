@@ -1,4 +1,8 @@
-import type { CourseLesson, ResolvedContentLink, Task } from "~/entities/content";
+import type {
+  CourseLesson,
+  ResolvedContentLink,
+  Task,
+} from "~/entities/content";
 
 export namespace LessonPageTypes {
   export type Props = {

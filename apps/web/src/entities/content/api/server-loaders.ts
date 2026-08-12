@@ -12,6 +12,7 @@ import {
   ContentNotFoundError,
   type ResolvedContentLink,
 } from "../lib/content-link";
+import { parseContentId } from "../lib/content-id";
 import type { Course, Task, Topic } from "../model/types";
 
 // content/ lives at the repo root, not inside apps/web — this is a monorepo, not a single-package
@@ -20,48 +21,46 @@ import type { Course, Task, Topic } from "../model/types";
 // relative path computed from `import.meta.dirname` here. Content only changes through a deploy
 // (docs/SPEC.md §2.2), so no runtime invalidation is needed.
 declare const __CONTENT_ROOT__: string;
-const CONTENT_ROOT = __CONTENT_ROOT__;
+
+function getContentRoot(): string {
+  return __CONTENT_ROOT__;
+}
 
 function readJson<T>(path: string): T {
   return JSON.parse(readFileSync(path, "utf-8")) as T;
 }
 
-export const loadTopic = createServerFn({ method: "GET" })
-  .validator((id: string) => id)
-  .handler(async ({ data: id }): Promise<Topic> => {
-    const path = join(CONTENT_ROOT, "topics", `${id}.json`);
-    try {
-      return readJson<Topic>(path);
-    } catch {
-      throw new ContentNotFoundError(`Topic not found: ${id}`);
+function readContentJson<T>(directory: string, id: string): T {
+  const path = join(getContentRoot(), directory, `${id}.json`);
+  try {
+    return readJson<T>(path);
+  } catch (error) {
+    if (isFileNotFoundError(error)) {
+      throw new ContentNotFoundError(`${directory}/${id} not found`);
     }
-  });
+    throw error;
+  }
+}
+
+function isFileNotFoundError(error: unknown): error is NodeJS.ErrnoException {
+  return error instanceof Error && "code" in error && error.code === "ENOENT";
+}
+
+export const loadTopic = createServerFn({ method: "GET" })
+  .validator(parseContentId)
+  .handler(({ data: id }): Topic => readContentJson<Topic>("topics", id));
 
 export const loadTask = createServerFn({ method: "GET" })
-  .validator((id: string) => id)
-  .handler(async ({ data: id }): Promise<Task> => {
-    const path = join(CONTENT_ROOT, "tasks", `${id}.json`);
-    try {
-      return readJson<Task>(path);
-    } catch {
-      throw new ContentNotFoundError(`Task not found: ${id}`);
-    }
-  });
+  .validator(parseContentId)
+  .handler(({ data: id }): Task => readContentJson<Task>("tasks", id));
 
 export const loadCourse = createServerFn({ method: "GET" })
-  .validator((id: string) => id)
-  .handler(async ({ data: id }): Promise<Course> => {
-    const path = join(CONTENT_ROOT, "courses", `${id}.json`);
-    try {
-      return readJson<Course>(path);
-    } catch {
-      throw new ContentNotFoundError(`Course not found: ${id}`);
-    }
-  });
+  .validator(parseContentId)
+  .handler(({ data: id }): Course => readContentJson<Course>("courses", id));
 
 export const listPublishedTopics = createServerFn({ method: "GET" }).handler(
-  async (): Promise<Topic[]> => {
-    const dir = join(CONTENT_ROOT, "topics");
+  (): Topic[] => {
+    const dir = join(getContentRoot(), "topics");
     return readdirSync(dir)
       .filter((f) => f.endsWith(".json"))
       .map((f) => readJson<Topic>(join(dir, f)))
@@ -75,9 +74,9 @@ export const listPublishedTopics = createServerFn({ method: "GET" }).handler(
  * `task_numbers[0]` to build `/theory/zadanie-{n}-{slug}`; a lesson needs its `course_id`).
  */
 export const resolveContentLink = createServerFn({ method: "GET" })
-  .validator((id: string) => id)
-  .handler(async ({ data: id }): Promise<ResolvedContentLink | null> => {
-    const topicPath = join(CONTENT_ROOT, "topics", `${id}.json`);
+  .validator(parseContentId)
+  .handler(({ data: id }): ResolvedContentLink | null => {
+    const topicPath = join(getContentRoot(), "topics", `${id}.json`);
     if (existsSync(topicPath)) {
       const topic = readJson<Topic>(topicPath);
       return {
@@ -87,7 +86,7 @@ export const resolveContentLink = createServerFn({ method: "GET" })
       };
     }
 
-    const coursesDir = join(CONTENT_ROOT, "courses");
+    const coursesDir = join(getContentRoot(), "courses");
     for (const file of readdirSync(coursesDir).filter((f) =>
       f.endsWith(".json"),
     )) {

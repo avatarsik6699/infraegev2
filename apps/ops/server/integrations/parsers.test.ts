@@ -52,7 +52,11 @@ Status for the jail: infraege-nginx-limit
     const output = [
       JSON.stringify({ PRIORITY: "info", MESSAGE: "started" }),
       "not-json",
-      JSON.stringify({ PRIORITY: "error", MESSAGE: longMessage, SYSLOG_IDENTIFIER: "api" }),
+      JSON.stringify({
+        PRIORITY: "error",
+        MESSAGE: longMessage,
+        SYSLOG_IDENTIFIER: "api",
+      }),
     ].join("\n");
     expect(parseJournal(output)).toEqual([
       { time: "", service: "api", message: longMessage.slice(0, 500) },

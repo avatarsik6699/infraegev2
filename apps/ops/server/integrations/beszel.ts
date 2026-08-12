@@ -67,12 +67,14 @@ export async function readBeszel(
     ? latestContainerStats.slice(0, 20).flatMap((value) => {
         const item = record(value);
         return Object.keys(item).length
-          ? [{
-              name: String(item.n ?? "unknown"),
-              status: "running",
-              cpu: finiteNumber(item.c),
-              memoryMiB: finiteNumber(item.m),
-            }]
+          ? [
+              {
+                name: String(item.n ?? "unknown"),
+                status: "running",
+                cpu: finiteNumber(item.c),
+                memoryMiB: finiteNumber(item.m),
+              },
+            ]
           : [];
       })
     : [];

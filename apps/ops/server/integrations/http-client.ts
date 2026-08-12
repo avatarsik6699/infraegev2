@@ -1,6 +1,9 @@
 const TIMEOUT_MS = 8_000;
 
-export async function fetchJson(url: string, init?: RequestInit): Promise<unknown> {
+export async function fetchJson(
+  url: string,
+  init?: RequestInit,
+): Promise<unknown> {
   const response = await fetch(url, {
     ...init,
     signal: AbortSignal.timeout(TIMEOUT_MS),
@@ -9,7 +12,10 @@ export async function fetchJson(url: string, init?: RequestInit): Promise<unknow
   return response.json();
 }
 
-export async function fetchText(url: string, init?: RequestInit): Promise<string> {
+export async function fetchText(
+  url: string,
+  init?: RequestInit,
+): Promise<string> {
   const response = await fetch(url, {
     ...init,
     signal: AbortSignal.timeout(TIMEOUT_MS),

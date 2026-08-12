@@ -5,3 +5,15 @@ packages:
 minimumReleaseAge: 10080
 trustPolicy: no-downgrade
 blockExoticSubdeps: true
+strictPeerDependencies: true
+engineStrict: true
+nodeVersion: 22.13.0
+packageManagerStrictVersion: true
+verifyDepsBeforeRun: error
+strictDepBuilds: true
+
+allowBuilds:
+  "esbuild@0.28.2": true
+
+overrides:
+  "tmp@<0.2.7": "0.2.7"

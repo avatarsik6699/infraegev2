@@ -1,6 +1,12 @@
 // @vitest-environment jsdom
 
-import { act, cleanup, fireEvent, screen, waitFor } from "@testing-library/react";
+import {
+  act,
+  cleanup,
+  fireEvent,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { DashboardPage } from "~/pages/dashboard";
 import {
@@ -29,13 +35,14 @@ beforeEach(() => {
     configurable: true,
     value: "visible",
   });
-  fetchProjectsMock.mockResolvedValue([{ id: "infraege", name: "infraege.ru" }]);
+  fetchProjectsMock.mockResolvedValue([
+    { id: "infraege", name: "infraege.ru" },
+  ]);
   fetchDashboardMock.mockResolvedValue(dashboardFixture);
 });
 
 afterEach(() => {
   cleanup();
-  vi.clearAllMocks();
   vi.useRealTimers();
 });
 

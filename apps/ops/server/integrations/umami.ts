@@ -22,7 +22,11 @@ const UNIT: Record<DashboardRange, "minute" | "hour" | "day"> = {
   "30d": "day",
 };
 
-const EVENT_NAMES = ["topic_view", "practice_start", "practice_answer"] as const;
+const EVENT_NAMES = [
+  "topic_view",
+  "practice_start",
+  "practice_answer",
+] as const;
 
 async function authenticateUmami(project: ProjectConfig): Promise<string> {
   const auth = record(
@@ -68,7 +72,9 @@ export function parseTrafficSeries(value: unknown): TrafficPoint[] {
   const response = record(value);
   const pageviews = pointSeries(response.pageviews);
   const sessions = pointSeries(response.sessions);
-  const timestamps = [...new Set([...pageviews.keys(), ...sessions.keys()])].sort();
+  const timestamps = [
+    ...new Set([...pageviews.keys(), ...sessions.keys()]),
+  ].sort();
   return timestamps.map((time) => ({
     time,
     pageviews: pageviews.get(time) ?? 0,

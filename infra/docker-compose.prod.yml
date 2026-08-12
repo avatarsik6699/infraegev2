@@ -61,7 +61,7 @@ services:
     logging: *journald
 
   umami:
-    image: docker.umami.is/umami-software/umami:3.2.0
+    image: docker.umami.is/umami-software/umami:3.2.0@sha256:8edfe4beaef13f9d1300619fa264ef250a3688df9cc54d24ca830ca31cb475ec
     environment:
       DATABASE_URL: ${UMAMI_DATABASE_URL:?UMAMI_DATABASE_URL is required}
       APP_SECRET: ${UMAMI_APP_SECRET:?UMAMI_APP_SECRET is required}
@@ -83,7 +83,7 @@ services:
     logging: *journald
 
   beszel:
-    image: henrygd/beszel:0.18.7
+    image: henrygd/beszel:0.18.7@sha256:a849ad80814b6a1a3be665304dcace5d4854b3bed7bde4dd1227e8ce1b82d477
     volumes:
       - beszel-data:/beszel_data
       - beszel-socket:/beszel_socket
@@ -97,7 +97,7 @@ services:
     logging: *journald
 
   beszel-agent:
-    image: henrygd/beszel-agent:0.18.7
+    image: henrygd/beszel-agent:0.18.7@sha256:8874e2c53f9de5e063a6a80d6b617e20fa593ac5dc4eb4c6ce1f912f510f38f8
     network_mode: host
     volumes:
       - beszel-socket:/beszel_socket
@@ -115,7 +115,7 @@ services:
     logging: *journald
 
   docker-socket-proxy:
-    image: ghcr.io/tecnativa/docker-socket-proxy:v0.4.2
+    image: ghcr.io/tecnativa/docker-socket-proxy:v0.5.0@sha256:1f5038b54f06c3e18422902cf00ba21803d1c97805aae032e5e6673d532d3459
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     ports:

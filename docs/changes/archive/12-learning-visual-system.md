@@ -7,7 +7,7 @@
 | Change | `12` |
 | Slug | `learning-visual-system` |
 | Title | Learning Visual System |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/12-learning-visual-system` |
 
 ---

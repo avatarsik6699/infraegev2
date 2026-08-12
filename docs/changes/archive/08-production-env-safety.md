@@ -7,7 +7,7 @@
 | Change | `08` |
 | Slug | `production-env-safety` |
 | Title | Shell-safe production environment lifecycle |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/08-production-env-safety` |
 
 ---

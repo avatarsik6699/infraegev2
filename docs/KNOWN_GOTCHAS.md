@@ -11,6 +11,20 @@
 
 ## Gotcha Log
 
+### VS Code ESLint must not infer a shared TSConfig root across sibling apps
+
+- **Symptoms:** TypeScript files intermittently show `Parsing error: No tsconfigRootDir was set,
+  and multiple candidate TSConfigRootDirs are present`, naming both `apps/web` and `apps/ops`, even
+  though each workspace's standalone `pnpm lint` passes.
+- **Root cause:** the VS Code ESLint extension keeps both flat configs in one Node process.
+  `typescript-eslint` records the directory of every accessed preset as a candidate root; after
+  both sibling configs load, its process-global inference is ambiguous.
+- **Fix:** keep `parserOptions.tsconfigRootDir: import.meta.dirname` in a config block covering
+  every TypeScript extension in each app, not only application source directories: contracts,
+  tests, and root-level Vite configs also use the typescript-eslint parser. Do not replace it with
+  `process.cwd()`: editor and root-level invocations do not guarantee that the current directory is
+  the app that owns the config.
+
 ### Docker: running pnpm as node still requires a writable workspace root
 
 - **Symptoms:** a Docker build switches to `USER node` before `pnpm install`, copied manifests
@@ -145,6 +159,17 @@
   tree, so Playwright silently tests a different checkout.
 - **Fix**: keep the e2e-only ports `127.0.0.2:3100` / `127.0.0.2:8100`, pass Vite `--strictPort`,
   and set both Playwright web servers to `reuseExistingServer: false`.
+
+### Streamed SSR markup is visible before controlled React inputs hydrate
+
+- **Symptoms**: a Playwright locator sees the topic form, but an immediate fill leaves its submit
+  button disabled; replacing this with `waitForLoadState("networkidle")` works but couples the
+  journey to unrelated background requests and slows every navigation.
+- **Root cause**: TanStack Start can stream usable server-rendered markup before the client module
+  has attached the controlled input handler.
+- **Fix**: keep the synchronization inside the owning POM and use `expect.poll` to retry the user
+  action until its observable result (the submit button becoming enabled) appears. Do not expose
+  hydration waits in specs, add fixed sleeps, or make global network-idle the readiness contract.
 
 ### Docker: non-root user with `--no-create-home` breaks `uv run`
 

@@ -2,12 +2,19 @@
   "name": "infraege",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=22.13.0",
+    "pnpm": "10.33.0"
+  },
   "scripts": {
     "dev": "pnpm --filter web dev",
     "build": "pnpm --filter web build",
-    "test": "pnpm --filter web test",
-    "typecheck": "pnpm --filter web typecheck",
-    "lint": "pnpm --filter web lint",
+    "test": "pnpm -r --if-present test",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "lint": "pnpm -r --if-present lint",
+    "lint:fix": "pnpm -r --if-present lint:fix",
+    "format": "prettier . --write && cd apps/api && uv run ruff format app tests",
+    "format:check": "prettier . --check && cd apps/api && uv run ruff format --check app tests",
     "validate:content": "node scripts/validate-content-links.mjs",
     "audit:a11y": "pnpm --filter web exec playwright test e2e/accessibility.spec.ts",
     "audit:performance": "lhci autorun",
@@ -17,6 +24,7 @@
   "packageManager": "pnpm@10.33.0",
   "devDependencies": {
     "@lhci/cli": "0.15.1",
+    "prettier": "3.9.6",
     "pyright": "1.1.411"
   }
 }

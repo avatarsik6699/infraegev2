@@ -22,8 +22,5 @@ export class HomePage {
         name: /Как сопоставить граф и таблицу дорог — задание 1 ЕГЭ/,
       })
       .click();
-    // TanStack Start streams usable SSR markup before all client modules have hydrated. Wait for
-    // those module requests to settle before interacting with controlled React inputs.
-    await this.page.waitForLoadState("networkidle");
   }
 }

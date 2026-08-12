@@ -1,4 +1,12 @@
-import { Box, Group, NativeSelect, SegmentedControl, Stack, Text, Title } from "@mantine/core";
+import {
+  Box,
+  Group,
+  NativeSelect,
+  SegmentedControl,
+  Stack,
+  Text,
+  Title,
+} from "@mantine/core";
 import {
   DASHBOARD_RANGES,
   type DashboardRange,
@@ -57,7 +65,9 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = (props) => (
           aria-label="Частота обновления"
           value={String(props.refreshMs)}
           disabled={props.disabled}
-          onChange={(value) => props.onRefreshMsChange(Number(value) as DashboardRefreshMs)}
+          onChange={(value) =>
+            props.onRefreshMsChange(Number(value) as DashboardRefreshMs)
+          }
           data={[
             { value: "15000", label: "15s" },
             { value: "30000", label: "30s" },
