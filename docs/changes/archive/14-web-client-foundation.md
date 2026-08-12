@@ -9,7 +9,7 @@
 | Change | `14` |
 | Slug | `web-client-foundation` |
 | Title | Web Client Foundation |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/14-web-client-foundation` |
 
 ---
