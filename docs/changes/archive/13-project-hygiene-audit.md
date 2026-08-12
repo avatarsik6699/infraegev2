@@ -9,7 +9,7 @@
 | Change | `13` |
 | Slug | `project-hygiene-audit` |
 | Title | Project Hygiene Audit |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/13-project-hygiene-audit` |
 
 ---
