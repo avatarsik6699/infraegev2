@@ -9,7 +9,7 @@
 | Change | `15` |
 | Slug | `impeccable-public-web-redesign` |
 | Title | Impeccable Public Web Redesign |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/15-impeccable-public-web-redesign` |
 
 ---
