@@ -9,7 +9,7 @@
 | Change | `16` |
 | Slug | `exploded-algorithm-design-system` |
 | Title | Exploded Algorithm Design System |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/16-exploded-algorithm-design-system` |
 
 ---
