@@ -16,17 +16,25 @@ export class BrowserSession {
   }
 
   async useDesktopViewport(): Promise<void> {
-    await this.page.setViewportSize({ width: 1440, height: 1000 });
+    await this.page.setViewportSize({ width: 1440, height: 1024 });
+  }
+
+  async useWideViewport(): Promise<void> {
+    await this.page.setViewportSize({ width: 1920, height: 1080 });
   }
 
   async useNarrowViewport(): Promise<void> {
     await this.page.setViewportSize({ width: 390, height: 844 });
   }
 
-  async captureFullPage(filename: string): Promise<void> {
+  async useIntermediateViewport(): Promise<void> {
+    await this.page.setViewportSize({ width: 1024, height: 768 });
+  }
+
+  async captureViewport(filename: string): Promise<void> {
     await this.page.screenshot({
       path: this.testInfo.outputPath(filename),
-      fullPage: true,
+      fullPage: false,
     });
   }
 

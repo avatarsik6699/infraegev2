@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-13T11:49:00+03:00",
+  "title": "Design System: infraege Editorial Rail",
+  "extensions": {
+    "colorMeta": {
+      "accent": {
+        "role": "primary",
+        "displayName": "Evidence Orange",
+        "canonical": "#bd4326",
+        "tonalRamp": [
+          "#4a1c11",
+          "#6c2818",
+          "#8d321e",
+          "#bd4326",
+          "#df6b4d",
+          "#ed9a7e",
+          "#f8c9b7",
+          "#fff1e9"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Lesson Paper",
+        "canonical": "#f8f6f1",
+        "tonalRamp": [
+          "#272522",
+          "#4f4b45",
+          "#777168",
+          "#a19a90",
+          "#c8c2b9",
+          "#dedad3",
+          "#eeeae4",
+          "#f8f6f1"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Editorial Ink",
+        "canonical": "#211f1c",
+        "tonalRamp": [
+          "#211f1c",
+          "#423f39",
+          "#625e56",
+          "#827d73",
+          "#a39d92",
+          "#c4beb5",
+          "#e0dcd5",
+          "#f6f3ee"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Lesson Thesis",
+        "purpose": "A compact two-line claim at the start of a lesson."
+      },
+      "body": {
+        "displayName": "Editorial Reading",
+        "purpose": "Explanations and causal argument."
+      },
+      "interface": {
+        "displayName": "Interface Sans",
+        "purpose": "Navigation, controls, and responsive shell copy."
+      },
+      "label": {
+        "displayName": "Technical Label",
+        "purpose": "Metadata, diagram notation, and compact structural copy."
+      }
+    },
+    "shadows": [],
+    "motion": [],
+    "breakpoints": [
+      { "name": "rail-stack", "value": "72rem" },
+      { "name": "marginalia-linear", "value": "52rem" },
+      { "name": "compact-mobile", "value": "34rem" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The single dominant local action.",
+      "html": "<button class=\"ds-button-primary\">К практике</button>",
+      "css": ".ds-button-primary{background:#bd4326;color:#fbfaf7;border:0;border-radius:999px;padding:.72rem 1.25rem;font:600 .875rem 'Onest Variable',system-ui,sans-serif}.ds-button-primary:hover{background:#98371f}.ds-button-primary:focus-visible{outline:2px solid #bd4326;outline-offset:3px}"
+    },
+    {
+      "name": "Lesson Chip",
+      "kind": "chip",
+      "description": "Compact technical metadata.",
+      "html": "<span class=\"ds-chip\">~7 мин</span>",
+      "css": ".ds-chip{display:inline-block;border:1px solid #dcd6cc;border-radius:999px;background:#fbfaf7;color:#716b63;padding:.35rem .75rem;font:400 .65rem 'SFMono-Regular',Consolas,monospace;text-transform:uppercase}"
+    },
+    {
+      "name": "Answer Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Flat practice input on the reading surface.",
+      "html": "<input class=\"ds-input\" aria-label=\"Ваш ответ\" placeholder=\"Ваш ответ\">",
+      "css": ".ds-input{background:#fbfaf7;color:#211f1c;border:1px solid #c8c0b4;border-radius:.35rem;padding:.72rem .85rem;font:400 1rem 'Onest Variable',system-ui,sans-serif}.ds-input:focus-visible{outline:2px solid #bd4326;outline-offset:3px}"
+    },
+    {
+      "name": "Outline Node",
+      "kind": "nav",
+      "description": "Active child in the hierarchical lesson rail.",
+      "html": "<a class=\"ds-outline-active\" href=\"#range\"><i></i>Как сужается диапазон</a>",
+      "css": ".ds-outline-active{position:relative;display:flex;align-items:center;background:#f1eee7;color:#211f1c;border-radius:.45rem;padding:.55rem .55rem .55rem 1.05rem;font:400 .83rem 'Literata Variable',Georgia,serif;text-decoration:none}.ds-outline-active i{position:absolute;left:0;width:.56rem;height:.56rem;border-radius:50%;background:#bd4326;transform:translateX(-50%)}.ds-outline-active:focus-visible{outline:2px solid #bd4326;outline-offset:3px}"
+    },
+    {
+      "name": "Evidence Cell",
+      "kind": "custom",
+      "description": "The selected midpoint in an authored algorithm proof.",
+      "html": "<span class=\"ds-evidence-cell\">31</span>",
+      "css": ".ds-evidence-cell{display:grid;width:2rem;height:2rem;place-items:center;background:#f8e4d8;color:#98371f;box-shadow:inset 0 0 0 1px #bd4326;font:400 .78rem 'Literata Variable',Georgia,serif}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Разобранный алгоритм",
+    "overview": "A carefully annotated lesson sheet where warm paper, ruled structure, reading typography, and compact notation make diagrams and prose one argument.",
+    "keyCharacteristics": [
+      "Bounded outline, expanding proof, and content-sized marginalia",
+      "Serif lesson voice with compact technical labels",
+      "Hierarchical rail and diagram-to-marginalia leaders",
+      "No-JS reading with visible alternatives",
+      "Metric-adjusted fallbacks and bounded critical font preloads"
+    ],
+    "rules": [
+      {
+        "name": "The One Voice Rule",
+        "body": "Orange is evidence and action, not general decoration.",
+        "section": "colors"
+      },
+      {
+        "name": "The Claim-First Rule",
+        "body": "A section opens with its real heading, never a decorative eyebrow.",
+        "section": "typography"
+      },
+      {
+        "name": "The Ruled-Paper Rule",
+        "body": "Use a hairline or tonal shift before introducing a raised container.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Continuous Frame Rule",
+        "body": "A structural rule ends only at a viewport edge or where another rule receives it.",
+        "section": "layout"
+      },
+      {
+        "name": "The Supporting Margin Rule",
+        "body": "The center absorbs wide-screen growth; marginal notes stay content-sized and group locally without a vertical divider.",
+        "section": "layout"
+      }
+    ],
+    "dos": [
+      "Do make the diagram and prose one continuous argument.",
+      "Do preserve nested rail semantics and source order at every breakpoint.",
+      "Do keep marginalia bounded while the central proof expands."
+    ],
+    "donts": [
+      "Don't turn lessons into dashboards of rounded cards.",
+      "Don't separate a proof from its explanation with long or overlapping leaders.",
+      "Don't divide the proof and marginalia with a vertical rule."
+    ]
+  }
+}

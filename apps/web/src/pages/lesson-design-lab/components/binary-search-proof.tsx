@@ -1,0 +1,94 @@
+import { LearningVisualFrame } from "~/entities/learning-visual";
+import styles from "../lesson-design-lab.module.css";
+
+const rows = [
+  {
+    id: "step-1",
+    number: "1",
+    values: [2, 5, 7, 9, 12, 14, 21, 27, 31, 34, 38, 45, 50],
+    middle: 6,
+    mutedUntil: -1,
+    equation: "a[M] ? x",
+    note: "Сравниваем x со средним элементом a[M] в диапазоне [L, R].",
+  },
+  {
+    id: "step-2",
+    number: "2",
+    values: [2, 5, 7, 9, 12, 14, 18, 27, 31, 34, 38, 41, 50],
+    middle: 8,
+    mutedUntil: 6,
+    equation: "x больше a[M] → L = M + 1",
+    note: "Если x > a[M], элементы слева не могут быть равны x.",
+  },
+  {
+    id: "step-3",
+    number: "3",
+    values: [2, 5, 7, 9, 12, 14, 18, 27, 31, 34, 41, 45, 50],
+    middle: 8,
+    mutedUntil: 7,
+    equation: "x меньше a[M] → R = M − 1",
+    note: "Если x < a[M], элементы справа не могут быть равны x.",
+  },
+] as const;
+
+export const BinarySearchProof: React.FC = () => (
+  <LearningVisualFrame
+    className={styles.visual}
+    caption="Три состояния одного шага двоичного поиска"
+    purpose="Цель: связать сравнение с безопасным отсечением диапазона"
+    accessibleDescription="В исходном отсортированном диапазоне выбирается середина. Если искомое значение больше среднего, левая половина исключается; если меньше — исключается правая. После каждого сравнения остаётся не более половины прежних кандидатов."
+  >
+    <div className={styles.proof} aria-hidden="true">
+      {rows.map((row, rowIndex) => (
+        <div className={styles.proofRow} key={row.id} data-proof-row>
+          <div className={styles.stage} data-proof-stage>
+            <span className={styles.stageNumber}>{row.number}.</span>
+            <div className={styles.arrayWrap}>
+              <div className={styles.bounds}>
+                <var>L</var>
+                <var>M</var>
+                <var>R</var>
+              </div>
+              <div className={styles.array}>
+                {row.values.map((value, index) => (
+                  <span
+                    className={
+                      index === row.middle
+                        ? styles.middleCell
+                        : index <= row.mutedUntil
+                          ? styles.mutedCell
+                          : undefined
+                    }
+                    key={`${row.id}-${String(index)}`}
+                  >
+                    {value}
+                  </span>
+                ))}
+              </div>
+              <p className={styles.equation}>{row.equation}</p>
+            </div>
+          </div>
+          <svg
+            className={styles.leader}
+            viewBox="0 0 120 84"
+            preserveAspectRatio="none"
+            focusable="false"
+          >
+            <path d={leaderPath(rowIndex)} />
+          </svg>
+          <div className={styles.explanation} data-proof-note>
+            <span>{row.number}</span>
+            <p>{row.note}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </LearningVisualFrame>
+);
+
+function leaderPath(rowIndex: number): string {
+  if (rowIndex === 0) return "M 0 54 H 60 V 24 Q 60 16 68 16 H 120";
+  if (rowIndex === 1)
+    return "M 0 42 H 74 Q 82 42 82 34 V 30 Q 82 22 90 22 H 120";
+  return "M 0 30 H 90 Q 98 30 98 22 V 18 Q 98 10 106 10 H 120";
+}

@@ -1,12 +1,12 @@
 import { createRouter } from "@tanstack/react-router";
 import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query";
 import type { QueryClient } from "@tanstack/react-query";
-import { createAppQueryClient } from "~/shared/lib/query-client";
 import {
+  createAppQueryClient,
   RouteError,
   RouteNotFound,
   RoutePending,
-} from "~/shared/components/route-state";
+} from "~/app";
 import { routeTree } from "./routeTree.gen";
 
 export type AppRouterContext = { queryClient: QueryClient };

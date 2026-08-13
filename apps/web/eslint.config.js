@@ -27,6 +27,11 @@ const policyJsxRestrictions = [
     selector: "JSXOpeningElement[name.name='img']",
     message: "Use the shared Image policy component instead of a raw image.",
   },
+  {
+    selector: "JSXOpeningElement[name.name=/^(p|h1|h2|h3|h4|h5|h6)$/]",
+    message:
+      "Use the shared Typography policy component for page text and headings.",
+  },
 ];
 
 const platformSyntaxRestrictions = [
@@ -200,6 +205,18 @@ export default tseslint.config(
     },
   },
   {
+    files: ["src/shared/lib/section-observer/browser-adapter.ts"],
+    rules: {
+      "no-restricted-globals": restrictedPlatformGlobals("document", "window"),
+    },
+  },
+  {
+    files: ["src/shared/lib/reading-position/browser-adapter.ts"],
+    rules: {
+      "no-restricted-globals": restrictedPlatformGlobals("window"),
+    },
+  },
+  {
     files: ["src/shared/config/*.server.ts"],
     rules: {
       "no-restricted-globals": restrictedPlatformGlobals("process"),
@@ -368,6 +385,20 @@ export default tseslint.config(
         ...pageInternals,
       ],
     }),
+  },
+  {
+    // The proof is a specialized semantic diagram: its native text nodes are part of the
+    // renderer geometry, not general page typography.
+    files: ["src/pages/lesson-design-lab/components/binary-search-proof.tsx"],
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        ...platformSyntaxRestrictions,
+        ...policyJsxRestrictions.filter(
+          ({ selector }) => !selector.includes("p|h1|h2|h3|h4|h5|h6"),
+        ),
+      ],
+    },
   },
   {
     files: ["src/routes/**/*.{ts,tsx}"],

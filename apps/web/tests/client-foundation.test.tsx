@@ -1,9 +1,11 @@
 import { screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+import {
+  AppNavigationProgress,
+  createAppQueryClient,
+  RoutePending,
+} from "~/app";
 import { EmptyState } from "~/shared/components/empty-state";
-import { RoutePending } from "~/shared/components/route-state";
-import { AppNavigationProgress } from "~/shared/components/navigation-progress";
-import { createAppQueryClient } from "~/shared/lib/query-client";
 import { render } from "./render";
 
 vi.mock("@tanstack/react-router", async (importOriginal) => {
@@ -11,10 +13,7 @@ vi.mock("@tanstack/react-router", async (importOriginal) => {
     await importOriginal<typeof import("@tanstack/react-router")>();
   return {
     ...actual,
-    useRouterState: vi.fn(
-      (options: { select: (state: { isLoading: boolean }) => unknown }) =>
-        options.select({ isLoading: false }),
-    ),
+    useRouterState: vi.fn(() => ({ isLoading: false, matches: [] })),
   };
 });
 

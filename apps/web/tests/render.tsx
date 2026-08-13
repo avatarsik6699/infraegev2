@@ -4,8 +4,7 @@ import {
   render as testingLibraryRender,
   type RenderOptions,
 } from "@testing-library/react";
-import { appMantineTheme } from "~/shared/config/mantine-theme";
-import { createAppQueryClient } from "~/shared/lib/query-client";
+import { appMantineTheme, createAppQueryClient } from "~/app";
 
 type Props = { children: React.ReactNode };
 

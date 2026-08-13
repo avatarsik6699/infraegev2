@@ -270,18 +270,19 @@ pnpm --filter web test:e2e
 ### Frontend layers (`apps/web/src/`) — pragmatic FSD-like, established in change 02
 
 ```
+app/         application providers, project-wide configuration, route states and global styles.
 routes/      TanStack Start file-based routing (framework-fixed location). During the foundation
-             reset it owns only `/`, root shell and generated route tree.
-pages/       reserved for future route ecosystems; currently absent.
-widgets/     reserved for future cross-page composition; currently absent.
-features/    reserved for future user-facing capabilities; currently absent.
-entities/    reserved for future shared domain concepts; currently absent.
-shared/      domain-agnostic config/lib/styles plus policy components wrapping Mantine where the
-             project owns semantics or defaults.
+             reset it owns only thin route definitions and the generated route tree.
+pages/       route-level composition and content that belongs to one page.
+widgets/     reusable composite page chrome, including lesson navigation.
+features/    reusable user-facing capabilities, including lesson practice and progress.
+entities/    reusable domain concepts, including lesson semantics and learning visuals.
+shared/      domain-agnostic config/lib plus policy components wrapping Mantine where the project
+             owns semantics or defaults.
 ```
 
 Import direction is enforced by `eslint.config.js`'s per-layer `no-restricted-imports` zones: each
-layer may import only itself and the layers listed above it in this table (e.g. `entities` must
+layer may import only itself and the lower layers listed below it in this table (e.g. `entities` must
 not import from `features`/`widgets`/`pages`/`routes`). `~/*` still maps to `src/*` (see
 `tsconfig.json`) — no separate per-layer alias set. Every slice exposes a strict `index.ts` public
 API; cross-slice deep imports are forbidden, while imports within a slice are relative. UI does
@@ -304,7 +305,10 @@ Server state belongs to a per-router TanStack Query client, which is integrated 
 never reused between requests. No product query currently consumes it. Future domain operations
 use the single generated `shared/api` transport. Regenerate `contracts/openapi.json` and
 `shared/api/schema.ts` with `pnpm api:generate`; prove no drift with `pnpm api:check`. No global
-client-state store is installed until a real cross-route owner exists.
+client-state store is installed until a real cross-route owner exists. Transient feature state
+lives in the owning component or a slice-local model hook; longer-lived domain state uses an
+injected store such as lesson progress so persistence and rendering remain separate without a
+global service locator.
 
 Route pending/error/not-found UI, delayed skeletons, and navigation progress are application-level
 defaults. Browser render/route/chunk/global failures pass through `shared/lib/client-errors`, which

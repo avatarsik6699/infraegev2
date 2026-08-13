@@ -8,41 +8,11 @@ export class FoundationPage {
     await expect(this.page).toHaveURL(/\/$/);
   }
 
-  async expectTableOfContentsStand(): Promise<void> {
+  async expectNeutralPlaceholder(): Promise<void> {
     await expect(
-      this.page.getByRole("navigation", { name: "Оглавление" }),
+      this.page.getByRole("heading", { name: "Учебные материалы готовятся" }),
     ).toBeVisible();
-    await expect(
-      this.page.getByRole("link", { name: "Теория" }),
-    ).toHaveAttribute("href", "#theory");
-    await expect(
-      this.page.getByRole("heading", { name: "Результат" }),
-    ).toBeVisible();
-  }
-
-  async expectAnchorNavigation(): Promise<void> {
-    await this.page.getByRole("link", { name: "Что важно для ЕГЭ" }).click();
-    await expect(this.page).toHaveURL(/#exam-focus$/);
-    await expect(
-      this.page.getByRole("heading", { name: "Что важно для ЕГЭ" }),
-    ).toBeInViewport();
-  }
-
-  async expectNoHorizontalOverflow(): Promise<void> {
-    const overflow = await this.page.evaluate(
-      () => document.documentElement.scrollWidth > window.innerWidth,
-    );
-    expect(overflow).toBe(false);
-  }
-
-  async expectReadableWithoutJavaScript(): Promise<void> {
-    await this.open();
-    await expect(
-      this.page.getByRole("link", { name: "Теория" }),
-    ).toHaveAttribute("href", "#theory");
-    await expect(
-      this.page.getByRole("heading", { name: "Результат" }),
-    ).toBeVisible();
+    await expect(this.page.getByRole("link", { name: /lab/i })).toHaveCount(0);
   }
 
   async expectRemovedRouteNotFound(): Promise<void> {

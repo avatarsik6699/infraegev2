@@ -53,6 +53,7 @@ Keep the FSD-like layers established for this project; do not replace them with 
 folder convention:
 
 ```text
+app/       global providers, project configuration, route states and global styles
 routes/    framework-owned route definitions, loaders and metadata
 pages/     route-level composition
 widgets/   reusable composite page chrome
@@ -83,6 +84,18 @@ slice/
 - Promote a component to a lower reusable slice only after real cross-slice reuse appears. Do not
   create shared abstractions from hypothetical future reuse.
 - Capability meaning is more important than matching the directory name to its root component.
+
+### State ownership
+
+- Keep transient interaction state in the owning component or a slice-local `model/use-*.ts`
+  hook. Extract a hook when rendering, keyboard/focus behavior and state transitions would
+  otherwise be mixed in one component.
+- Use an injected slice store for state that must outlive one component instance, persist, or be
+  shared by multiple consumers in the same domain. The store exposes domain actions and a
+  subscription contract; components do not reach into its persistence adapter.
+- Add a global state library only after a real cross-route owner and multiple consumers make the
+  local hook/injected-store contract insufficient. A large component alone is not evidence for a
+  global store.
 
 ## 5. Routing
 
@@ -122,7 +135,8 @@ rendered by those callbacks are not exempt.
 
 - Every adopted `@mantine/*` package is pinned to exact version `9.5.1`; version ranges and mixed
   Mantine versions are forbidden.
-- `shared/config/mantine-theme.ts` owns global Mantine theme values and component defaults.
+- `app/config/mantine-theme.ts` owns global Mantine theme values and component defaults;
+  `app/styles.css` is the single global stylesheet entry point.
   Project CSS variables alias those theme values where native semantic renderers need them.
 - Use CSS Modules for local static styles. Do not create `*.styles.ts` objects for static CSS;
   use Mantine style props only for genuinely dynamic values.
@@ -131,6 +145,11 @@ rendered by those callbacks are not exempt.
   `Anchor/Image/Text/Title/Container` outside shared. TanStack Router `Link` remains the internal
   navigation primitive.
 - Other Mantine components may be used directly. Do not wrap a component solely to rename it.
+- Textual headings and paragraphs use the shared `Typography` policy. Native text tags remain
+  appropriate inside specialized semantic renderers such as diagrams and code, where the tag is
+  part of that renderer rather than general page typography.
+- Use Mantine `Badge` for badge/chip/status presentation and the adopted tree-shakeable icon
+  library for interface icons. Authored SVG remains valid for data geometry and diagrams.
 - Keep specialized semantic markup native when it carries meaning Mantine must not obscure:
   diagrams, tables, figures, code/pre, details, and lists.
 

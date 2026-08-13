@@ -4,9 +4,11 @@ import type { TypographyTypes } from "../typography.types";
 export const TypographyTitle: React.FC<TypographyTypes.TitleProps> = (
   props,
 ) => {
+  const { children, order, ...headingProps } = props;
+
   return (
-    <Title order={props.order} className={props.className}>
-      {props.children}
+    <Title order={order} {...headingProps}>
+      {children}
     </Title>
   );
 };

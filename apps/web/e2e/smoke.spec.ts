@@ -1,29 +1,62 @@
 import { test } from "./fixtures";
 
-test("the neutral Table of Contents stand works across viewports and without JavaScript", async ({
+test("the unlisted lesson lab works across viewports and without JavaScript", async ({
   browserSession,
-  foundationPage,
-  noJavaScriptFoundationPage,
+  lessonLabPage,
+  noJavaScriptLessonLabPage,
 }) => {
+  await browserSession.useWideViewport();
+  await lessonLabPage.open();
+  await lessonLabPage.expectBoundedMarginalia();
+  await lessonLabPage.expectNoHorizontalOverflow();
+  await browserSession.captureViewport("lesson-lab-wide.png");
+
   await browserSession.useDesktopViewport();
-  await foundationPage.open();
-  await foundationPage.expectTableOfContentsStand();
-  await foundationPage.expectAnchorNavigation();
-  await browserSession.captureFullPage("foundation-desktop.png");
+  await lessonLabPage.open();
+  await lessonLabPage.expectLessonStructure();
+  await lessonLabPage.expectCodeExampleSurface();
+  await lessonLabPage.expectUnlistedMetadata();
+  await lessonLabPage.expectLessonNavigation();
+  await browserSession.captureViewport("lesson-lab-practice-initial.png");
+  await lessonLabPage.expectReadingPosition();
+  await lessonLabPage.expectPracticeFeedback();
+  await lessonLabPage.expectContinuousFrame();
+  await lessonLabPage.expectStableFontContract();
+  await lessonLabPage.expectBoundedMarginalia();
+  await lessonLabPage.expectSectionRhythm();
+  await lessonLabPage.expectWhitespaceGrouping();
+  await lessonLabPage.expectDesktopOutlineGeometry();
+  await lessonLabPage.expectOutlineTracksReadingPosition();
+  await browserSession.captureViewport("lesson-lab-desktop.png");
+
+  await browserSession.useIntermediateViewport();
+  await lessonLabPage.open();
+  await lessonLabPage.expectContinuousFrame();
+  await lessonLabPage.expectNoHorizontalOverflow();
+  await lessonLabPage.expectCompactOutlineList();
+  await browserSession.captureViewport("lesson-lab-intermediate.png");
 
   await browserSession.useNarrowViewport();
-  await foundationPage.open();
-  await foundationPage.expectNoHorizontalOverflow();
-  await browserSession.captureFullPage("foundation-narrow.png");
+  await lessonLabPage.open();
+  await lessonLabPage.expectContinuousFrame();
+  await lessonLabPage.expectNoHorizontalOverflow();
+  await lessonLabPage.expectSectionRhythm();
+  await lessonLabPage.expectWhitespaceGrouping();
+  await lessonLabPage.expectCompactOutlineList();
+  await lessonLabPage.expectMobilePracticeTabs();
+  await browserSession.captureViewport("lesson-lab-narrow.png");
   browserSession.expectCleanConsole();
 
-  await noJavaScriptFoundationPage.expectReadableWithoutJavaScript();
+  await noJavaScriptLessonLabPage.expectReadableWithoutJavaScript();
+  await lessonLabPage.expectBackNavigation();
 });
 
-test("unknown routes recover and browser errors are privacy-safe", async ({
+test("the neutral root and unknown routes remain safe", async ({
   errorTelemetryPage,
   foundationPage,
 }) => {
+  await foundationPage.open();
+  await foundationPage.expectNeutralPlaceholder();
   await foundationPage.expectRemovedRouteNotFound();
   await errorTelemetryPage.expectSanitizedGlobalErrorDelivery();
 });

@@ -33,6 +33,8 @@ export default defineConfig((configEnv) => {
           // The foundation route is static and must remain readable without JavaScript.
           enabled: true,
           crawlLinks: true,
+          // The lesson lab is an unlisted design proof, not published content.
+          filter: ({ path }) => !path.startsWith("/lab/"),
           failOnError: true,
         },
       }),

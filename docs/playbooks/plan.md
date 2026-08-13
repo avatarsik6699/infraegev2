@@ -103,9 +103,9 @@ flow.
   (Pages) / §5.2 (Components) concretely and list them under §5.3 Design References.
 - If there are none: do not leave §5.3 as a placeholder.
   1. Analyze the domain, audience, and tone implied by the spec.
-  2. Invoke the `frontend-design` skill to propose 1–2 concrete directions (typography, palette,
-     layout patterns, tone) grounded in that analysis — no heavyweight design tooling (no Figma
-     plugins, no Pencil-style installs), reasoning and lightweight references only.
+  2. Invoke the `impeccable` skill and follow its new-work/product/direction flow for a replacement
+     visual world. Persist product truth before code, obtain the required direction and execution
+     decisions, and write `DESIGN.md` only from the finished implementation.
   3. Ask a short set of preference questions (max 5): visual tone, light/dark default, density,
      any hard constraints (existing brand colors, accessibility requirements).
   4. Record the chosen direction in §5.3 as the project's Design System baseline.
@@ -165,7 +165,7 @@ If a subsection yields nothing, write `None` — never leave it blank or a gener
 SPEC.md: updated / unchanged — [reason]
 Mode: [new | continue | auto->new | auto->continue]
 Source brief: [chat / file: <path> / auto: SPEC roadmap + change history]
-Design: filled from references / self-driven via frontend-design skill / unchanged
+Design: filled from references / self-driven via Impeccable / unchanged
 Validation: PASS / PASS with deferred clarifications
 
 Created: docs/changes/NN-slug.md

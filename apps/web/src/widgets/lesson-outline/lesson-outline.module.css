@@ -1,0 +1,228 @@
+.headingRow {
+  display: flex;
+  gap: var(--space-2);
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.heading,
+.sectionPosition {
+  margin: 0;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.heading {
+  color: var(--color-muted);
+  font-family: var(--font-reading);
+  font-size: 0.92rem;
+}
+
+.sectionPosition {
+  color: var(--color-accent-dark);
+  font-family: var(--font-data);
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.tree {
+  position: relative;
+}
+
+.groups,
+.children {
+  position: relative;
+  z-index: 1;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.connectors {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.neutralPaths,
+.activePath {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.neutralPaths {
+  stroke: var(--color-rule-strong);
+  stroke-width: 1;
+}
+
+.activePath {
+  stroke: var(--color-accent);
+  stroke-width: 1.5;
+}
+
+.group {
+  padding-bottom: 1.05rem;
+}
+
+.group:last-child {
+  padding-bottom: 0;
+}
+
+.groupLink,
+.childLink {
+  display: grid;
+  grid-template-columns: 0.75rem minmax(0, 1fr);
+  column-gap: 0.55rem;
+  align-items: start;
+  color: var(--color-text);
+  text-decoration: none;
+  text-underline-offset: 0.2em;
+}
+
+.groupLink {
+  min-height: 1.8rem;
+  font-family: var(--font-reading);
+  font-size: 0.96rem;
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+.children {
+  display: grid;
+  gap: 0.08rem;
+  padding-top: 0.2rem;
+  margin-left: 1.5rem;
+}
+
+.childLink {
+  min-height: 1.9rem;
+  padding-block: 0.24rem;
+  color: var(--color-muted);
+  font-family: var(--font-reading);
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.node {
+  display: block;
+  align-self: start;
+  justify-self: center;
+  overflow: visible;
+  color: var(--color-rule-strong);
+  fill: currentColor;
+  transition: color 140ms ease-out;
+}
+
+.parentNode {
+  width: 0.5625rem;
+  height: 0.5625rem;
+  margin-top: 0.36rem;
+}
+
+.childNode {
+  width: 0.4375rem;
+  height: 0.4375rem;
+  margin-top: 0.32rem;
+}
+
+.groupLink[data-active-branch="true"],
+.childLink[aria-current="location"] {
+  color: var(--color-accent);
+}
+
+.groupLink[data-active-branch="true"] .node,
+.childLink[aria-current="location"] .node {
+  color: var(--color-accent);
+}
+
+.childLink[aria-current="location"] {
+  font-weight: 620;
+}
+
+.groupLink:hover,
+.childLink:hover {
+  color: var(--color-accent-dark);
+}
+
+.groupLink:hover .node,
+.childLink:hover .node {
+  color: var(--color-accent-dark);
+}
+
+.groupLink:focus-visible,
+.childLink:focus-visible {
+  border-radius: 0.15rem;
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .node {
+    transition: none;
+  }
+}
+
+@media (max-width: 72rem) {
+  .connectors,
+  .node {
+    display: none;
+  }
+
+  .groups {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem 2.5rem;
+  }
+
+  .group,
+  .group:last-child {
+    padding-bottom: 0;
+  }
+
+  .groupLink,
+  .childLink {
+    display: block;
+    min-height: 0;
+  }
+
+  .groupLink {
+    font-size: 0.92rem;
+  }
+
+  .children {
+    gap: 0.2rem;
+    padding-top: 0.35rem;
+    margin-left: 0.85rem;
+  }
+
+  .childLink {
+    padding-block: 0.12rem;
+  }
+}
+
+@media (max-width: 52rem) {
+  .headingRow {
+    margin-bottom: 0.75rem;
+  }
+
+  .groups {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.9rem;
+  }
+}

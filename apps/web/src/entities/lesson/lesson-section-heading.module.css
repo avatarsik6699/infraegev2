@@ -1,0 +1,18 @@
+.heading {
+  display: flex;
+  gap: 0.55rem;
+  align-items: center;
+  margin: 0;
+  color: var(--color-accent);
+  font-family: var(--font-data);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.045em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.index {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}

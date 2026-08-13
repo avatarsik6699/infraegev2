@@ -1,0 +1,11 @@
+.tone[data-tone="muted"] {
+  color: var(--color-muted);
+}
+
+.tone[data-tone="accent"] {
+  color: var(--color-accent);
+}
+
+.tone[data-tone="highlight"] {
+  color: var(--color-highlight);
+}

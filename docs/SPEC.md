@@ -9,8 +9,8 @@
 
 | Field | Value |
 |-------|-------|
-| Document Version | `v1.2` |
-| Date | `2026-08-12` |
+| Document Version | `v1.3` |
+| Date | `2026-08-13` |
 | Architect / Owner | `v.godlevskiy` |
 | Stack | See [docs/STACK.md](./STACK.md) |
 | Domain | Платформа подготовки к ЕГЭ по информатике — теория, визуализация, практика по темам экзамена, привязанные к мини-курсам |
@@ -63,9 +63,9 @@ sdamgia.ru, kpolyakov.spb.ru), ни новыми AI-ботами (решают �
 | Прогресс на уровне браузера (localStorage), без обязательной регистрации | i18n/локализация (аудитория исключительно русскоязычная) |
 | | Полноценный поиск по сайту (пока тем < 10, обычная навигация достаточна) |
 
-Таблица описывает целевой продукт, а не текущий набор web-маршрутов. После reset Change 15 в
-`apps/web` нет опубликованной темы, главной или legal UI: до нового design/product change публично
-доступен только технический ToC-стенд.
+Таблица описывает целевой продукт, а не текущий набор web-маршрутов. В `apps/web` нет
+опубликованной темы, главной или legal UI: дизайн-система проверяется на unlisted/noindex lab, а
+публично доступный корень остаётся нейтральной технической заглушкой.
 
 ### 1.4 Durable Learning Flow
 
@@ -297,33 +297,47 @@ task-файлов и frontend-consumer после reset нет; endpoint неи�
 
 | Page | Route | Purpose |
 |------|-------|---------|
-| UI foundation | `/` | Нейтральный responsive-стенд сохранённого Table of Contents; SSR/no-JS anchors, без продуктового контента и брендинга |
+| UI foundation | `/` | Нейтральная SSR-заглушка на базовых токенах новой системы; без product claims и ссылки на lab |
+| Lesson design lab | `/lab/lesson` | Unlisted/noindex эталон четырёхраздельного урока на синтетическом контенте; не публикация и не security boundary |
 | Not found | любой неизвестный маршрут | Общий доступный 404 без предположений о будущем IA |
 
 Home/topic/lesson/legal/sitemap routes удалены. Их будущие URL, loader contracts, SEO и composition
 не фиксируются до отдельного планирования нового продукта. Будущая композиция обязана реализовать
-§1.4, но сам учебный flow не предопределяет маршрутную структуру.
+§1.4, но сам учебный flow не предопределяет маршрутную структуру. `/lab/lesson` отсутствует в
+навигации и sitemap, отдаёт `robots: noindex,nofollow` и явно исключается из prerender discovery.
 
 ### 5.2 Components / Stores
 
 | Component / Store | Purpose | Notes |
 |--------------------|---------|-------|
-| Learning path Table of Contents | Единственный сохранённый продуктовый UI-компонент | Mantine scroll tracking, SSR initial data, anchor fallback, active `aria-current`, responsive layout и изолированный визуальный contract |
+| Learning visual frame | Общая семантическая рамка сложного учебного визуала | Видимые caption/purpose, доступное описание и полная текстовая альтернатива; presentation boundary не разбирает свободный JSON API |
+| Lesson outline | Иерархическая навигация по уроку | Четыре стабильных верхних раздела и переменные content-derived подпункты; SSR-якоря, доступный текущий пункт и responsive in-flow adaptation; новая ломаная path-грамматика без наследования прежнего ToC-кода |
+| Practice tabs | Локальная навигация по постепенно усложняющимся задачам внутри `practice` | Пять компактных доступных вкладок показывают рост сложности цветом, индикатором уровня и текстом; одна активная задача после hydration, свободный ручной переход без блокировок и автопродвижения, одна или несколько task-specific ссылок на фрагменты теории рядом с заголовком; все формы остаются в SSR/no-JS HTML и не становятся пунктами lesson outline |
 | Page state primitives | Единые loading/skeleton, empty, not-found и recoverable error состояния | Семантический статус и понятное действие важнее декоративной анимации; skeleton повторяет геометрию страницы и не озвучивается скринридером как контент |
 | Route resilience shell | Route-level pending/error/not-found UI, retry/reset и верхний navigation progress | Ошибка одной навигации не ломает document shell; предыдущий полезный экран не заменяется мгновенным мигающим fallback |
 | Typed API client | Единственная граница runtime HTTP для `apps/web`, сгенерированная из FastAPI OpenAPI | Feature `api/` вызывает типизированный shared client; transport/HTTP/contract errors различимы, abort/timeout и безопасные сообщения обязательны |
 | Query client | Будущая граница runtime server-state, mutation lifecycle, cache/retry/cancellation | Не дублирует local UI или URL state; сейчас product queries отсутствуют |
 
-Практика, подсказки и mastery-прогресс из §1.4 сейчас не имеют frontend consumer-а. Их реализация
-должна быть спроектирована заново поверх сохранённой семантики, без восстановления удалённой
-страницы или её layout.
+Lab использует локальное демонстрационное состояние hint/incorrect/correct и пять синтетических
+задач, чтобы проверить полный progress/mastery contract до появления публичного consumer. Верные
+задачи сохраняются через версионированный SSR-safe localStorage, четыре из пяти означают освоение;
+API и аккаунт не используются. Интерактивные вкладки при каждом входе начинают с первой задачи,
+не сохраняет активную позицию или черновики, оставляет все шаги доступными и переходит дальше
+только по явному действию ученика. Каждая задача получает одну или несколько ссылок к связанным
+фрагментам теории прямо рядом с заголовком, без отдельной плашки, а no-JS показывает все задачи
+последовательно. Позиция чтения, текущий раздел и выбранная задача остаются отдельными
+навигационными сигналами и не увеличивают учебный прогресс. Публичный content/data consumer
+по-прежнему должен быть спроектирован отдельно поверх §1.4.
 
 ### 5.3 Design System
 
-Глобальная дизайн-система намеренно не выбрана. Предыдущий visual world и его Impeccable
-direction/surface artifacts отклонены и удалены; `apps/web/DESIGN.md` отсутствует до следующего
-new-work round. Единственное утверждённое исключение — существующий Learning Path Table of
-Contents, чей внешний вид и доступное поведение инкапсулированы в shared-компоненте.
+Baseline **«Разобранный алгоритм»** показывает целое, причинные части и их самостоятельную сборку.
+Утверждённый Editorial Rail использует тёплую редакционную поверхность, serif-голос учебного
+текста, sans/mono-интерфейс, тонкие разделительные линии и один выжженно-оранжевый цвет причинного
+доказательства. Схемы встроены в чтение и связаны с пояснениями на полях; система отказывается от
+card-dashboard edtech, glassmorphism и декоративной геймификации. Первый lab работает в режиме
+Impeccable `Read` и comp-led. `DESIGN.md` документирует только принятую реализацию после detector и
+независимого finish review, не предварительное намерение.
 
 ### 5.4 Client Application Infrastructure
 
@@ -352,8 +366,9 @@ Contents, чей внешний вид и доступное поведение 
   Компонентное состояние остаётся локальным, server state принадлежит Query, URL state — Router,
   persistent product state пока отсутствует. Новый store допустим только при нескольких
   независимых consumers и явно описанном lifecycle/persistence contract.
-- **Визуальная системность:** до новой direction round foundation использует нейтральные Mantine
-  defaults; исключение — инкапсулированный ToC. Это технический baseline, не дизайн-направление.
+- **Визуальная системность:** Mantine 9.5.1 остаётся доступным поведением и theme foundation, а
+  semantic CSS tokens, типографика, focus, линии, motion и компонентные extensions принадлежат
+  `apps/web`. Light-only baseline использует self-hosted кириллический шрифт без runtime-запроса.
 
 ---
 
@@ -436,12 +451,12 @@ Nginx выставляет `Cache-Control`/`ETag` для хэшированно�
 | Concern | Requirement |
 |---------|-------------|
 | Security headers / CORS | Rate limiting чекер-эндпоинта на Nginx: `limit_req_zone` 20 req/min/IP, burst 5, `nodelay` (см. §4, §11.2 источника) — против автоматизированного перебора банка ответов; конкретную цифру пересмотреть по факту логов после запуска |
-| Accessibility target | Foundation и будущие поверхности не имеют serious/critical axe violations; ToC сохраняет semantic anchors, keyboard focus, `aria-current` и корректный source order на узком экране |
+| Accessibility target | Foundation и lab не имеют serious/critical axe violations; lesson outline сохраняет вложенный semantic list, anchors, keyboard focus, различимый текущий пункт и корректный source order, а сложный визуал имеет видимую полную текстовую альтернативу |
 | Performance budget | LCP < 2.5s, CLS < 0.1, INP < 200ms на мобильном 4G-профиле; текущий Lighthouse gate измеряет только `/` до появления новых public routes |
 | Observability | Umami + Beszel + journald/fail2ban на application VPS; унифицированный `apps/ops` через WireGuard; scheduled GitHub probe для внешней доступности; без Telegram на этом этапе |
 | Backup / restore | Локальный restic на VPS: daily `pg_dump -Fc`, Beszel/config snapshots, 7 daily + 4 weekly + 3 monthly, freshness marker и ежемесячный restore drill; off-site storage отложен с явно принятым риском |
-| SEO | Product URL taxonomy, metadata and sitemap intentionally deferred until public surfaces are redesigned; foundation `/` has a neutral technical title and is not a substitute for product SEO |
-| Mobile / no-JS readability | Foundation ToC anchors and targets доступны без JS; будущий обязательный content сохраняется в SSR HTML, а интерактивность остаётся progressive enhancement |
+| SEO | Product URL taxonomy, metadata and sitemap intentionally deferred; `/` имеет нейтральный technical title, а `/lab/lesson` unlisted, `noindex,nofollow` и исключён из prerender discovery |
+| Mobile / no-JS readability | Lab-текст, последовательные стадии визуала, подписи, `<details>`-подсказка и section anchors доступны в SSR HTML; интерактивность остаётся progressive enhancement |
 | Client resilience / API drift | Route failures восстанавливаемы без белого экрана; loading/empty/error/not-found состояния доступны с клавиатуры и скринридера; OpenAPI schema/types drift ломает gate до merge; runtime HTTP имеет timeout/abort и не делает скрытый retry мутаций |
 | Юридическое (152-ФЗ) | Минимизация сбора и российский application VPS сохраняются; web `/privacy` удалён вместе с product UI и должен быть спроектирован заново до следующей публичной product release. Реквизиты оператора и уведомление РКН остаются отдельным принятым долгом |
 | Юридическое (436-ФЗ) | Возрастная маркировка для обычного сайта не вводится: существующая `12+` удаляется без замены на `18+` |
@@ -454,8 +469,8 @@ Nginx выставляет `Cache-Control`/`ETag` для хэшированно�
 
 | Milestone | Goal | Key Outputs |
 |-----------|------|-------------|
-| `M0` — технический фундамент | Сохранить проверенную web/backend/ops инфраструктуру без навязывания продуктовой страницы | Нейтральный ToC-стенд, shared primitives, API contract, пустой content skeleton и локальные gates |
-| `M1` — новый product/design baseline | Спроектировать информационную архитектуру и визуальную систему без наследования удалённых страниц | Новый Impeccable direction, утверждённые routes/surfaces и decision-complete implementation contract |
+| `M0` — технический фундамент | Сохранить проверенную web/backend/ops инфраструктуру без навязывания продуктовой страницы | Нейтральная root-заглушка, shared primitives, API contract, пустой content skeleton и локальные gates |
+| `M1` — новый product/design baseline | Доказать визуальную систему без наследования удалённых страниц и без преждевременной публикации | «Разобранный алгоритм», unlisted lesson lab, принятый DESIGN.md и reusable visual/reading primitives |
 | `M2` — инфраструктурная пауза | Подготовить production-платформу до продолжения продуктового контента | `infraege.ru`, VPS/GHCR deploy, security/release gates, backups и локальный ops-dashboard |
 | `M3` — учебный flow и публичный запуск | Реализовать утверждённые поверхности и только затем добавить проверенный контент | Доступный SSR/no-JS flow, практика, прогресс, SEO/legal surfaces и Umami-события по новому контракту |
 | `M4+` (после трафика, вне MVP) | Расширение охвата и сообщества поверх работающей бесплатной базы | Второй мини-курс (Excel), аккаунты/синхронизация, обсуждения тем с модерацией, затем платные фичи — без runtime AI до этого момента |
@@ -488,9 +503,9 @@ Nginx выставляет `Cache-Control`/`ETag` для хэшированно�
 
 - [NEEDS_CLARIFICATION: числовые целевые показатели успеха MVP (объём органического трафика,
   срок, глубина прохождения) — решить после `M3`, когда появятся данные Umami (§1.2).]
-- [NEEDS_CLARIFICATION: будущие product routes, content loading и техническое владение client
-  state определяются в новом product/design change; foundation не закрепляет эти решения, но они
-  обязаны сохранять поведение §1.4.]
+- [NEEDS_CLARIFICATION: будущие публичные product routes, content loading и владение mastery state
+  определяются после проверки lab; дизайн-система не закрепляет эти решения, но они обязаны
+  сохранять поведение §1.4.]
 - Точная цифра rate limit чекер-эндпоинта (20 req/min/IP, burst 5) — стартовый ориентир,
   архитектор явно указал пересмотреть по факту логов после запуска, не считать зафиксированной
   раз и навсегда (§8).

@@ -3,7 +3,7 @@ type BaseProps = {
   width?: number | string;
   height?: number | string;
   fallbackSrc?: string;
-  fit?: React.CSSProperties["objectFit"];
+  fit?: "contain" | "cover" | "fill" | "none" | "scale-down";
   className?: string;
 };
 

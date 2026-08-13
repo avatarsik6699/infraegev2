@@ -1,0 +1,362 @@
+.practiceSet {
+  margin-top: var(--space-4);
+}
+
+.practiceTabs {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(6.25rem, 1fr));
+  max-width: 68rem;
+  overflow-x: auto;
+  border-block: 1px solid var(--color-rule-strong);
+  scrollbar-color: var(--color-rule-strong) transparent;
+  scrollbar-width: thin;
+}
+
+.practiceTabs[hidden],
+.practicePanel[hidden] {
+  display: none;
+}
+
+.practiceTab {
+  --difficulty-tint: #f7eee8;
+
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  gap: 0.05rem 0.42rem;
+  min-height: 3.35rem;
+  padding: 0.38rem 0.55rem 0.32rem;
+  border: 0;
+  border-right: 1px solid var(--color-rule);
+  border-radius: 0;
+  background: var(--difficulty-tint);
+  color: var(--color-text-soft);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  transition:
+    background-color 140ms ease-out,
+    border-color 140ms ease-out,
+    color 140ms ease-out;
+}
+
+.practiceTab[data-difficulty="2"] {
+  --difficulty-tint: #f6e9e1;
+}
+
+.practiceTab[data-difficulty="3"] {
+  --difficulty-tint: #f4e1d7;
+}
+
+.practiceTab[data-difficulty="4"] {
+  --difficulty-tint: #f2d8ca;
+}
+
+.practiceTab[data-difficulty="5"] {
+  --difficulty-tint: #efcdbb;
+
+  border-right: 0;
+}
+
+.practiceTab:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent-dark);
+}
+
+.practiceTab[aria-selected="true"] {
+  z-index: 1;
+  box-shadow: inset 0 -3px 0 var(--color-accent);
+  color: var(--color-text);
+}
+
+.practiceTab:focus-visible,
+.practicePanel:focus-visible,
+.taskHeading h4:focus-visible,
+.taskTheoryLinks a:focus-visible {
+  outline: 2px solid var(--color-accent);
+}
+
+.practiceTab:focus-visible {
+  z-index: 2;
+  outline-offset: -3px;
+}
+
+.tabIndex {
+  grid-row: 1 / -1;
+  align-self: center;
+  color: var(--color-accent-dark);
+  font-family: var(--font-data);
+  font-size: 0.64rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.difficultyGlyph {
+  display: flex;
+  grid-column: 2;
+  align-items: end;
+}
+
+.difficultyGlyph svg {
+  width: 1.7rem;
+  height: 0.8rem;
+  overflow: visible;
+}
+
+.difficultyGlyph rect {
+  fill: var(--color-rule-strong);
+}
+
+.difficultyGlyph rect[data-filled="true"] {
+  fill: var(--color-accent-dark);
+}
+
+.tabLabel {
+  grid-column: 2;
+  overflow: hidden;
+  color: inherit;
+  font-family: var(--font-data);
+  font-size: 0.65rem;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tabSolved {
+  position: absolute;
+  top: 0.28rem;
+  right: 0.32rem;
+  width: 0.68rem;
+  height: 0.68rem;
+  fill: none;
+  stroke: var(--color-success);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.practicePanel {
+  max-width: 68rem;
+  margin-top: var(--space-3);
+}
+
+.practicePanel:focus-visible,
+.taskHeading h4:focus-visible {
+  border-radius: 0.15rem;
+  outline-offset: 4px;
+}
+
+.practiceForm {
+  max-width: 68rem;
+}
+
+.taskHeading {
+  display: grid;
+  grid-template-columns: 1.7rem minmax(12rem, 1fr) auto auto;
+  gap: 0.55rem;
+  align-items: baseline;
+}
+
+.taskHeading > :first-child {
+  color: var(--color-accent);
+  font-family: var(--font-data);
+  font-size: 0.72rem;
+}
+
+.taskHeading h4 {
+  margin: 0;
+  color: var(--color-text-soft);
+  font-family: var(--font-reading);
+  font-size: 1.05rem;
+  font-weight: 620;
+  line-height: 1.35;
+}
+
+.taskTheoryLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 0.65rem;
+  justify-content: flex-end;
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  line-height: 1.4;
+}
+
+.taskTheoryLinks span {
+  color: var(--color-muted);
+}
+
+.taskTheoryLinks a {
+  color: var(--color-accent-dark);
+  text-underline-offset: 0.18em;
+}
+
+.taskTheoryLinks a:focus-visible {
+  border-radius: 0.15rem;
+  outline-offset: 2px;
+}
+
+.solvedStatus {
+  --badge-bd: 1px solid
+    color-mix(in srgb, var(--color-success) 45%, transparent);
+  --badge-bg: transparent;
+  --badge-color: var(--color-success);
+  --badge-fz: 0.68rem;
+  --badge-height: 1.45rem;
+  --badge-padding-x: 0.45rem;
+
+  font-family: var(--font-data);
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.taskStatement {
+  max-width: 68ch;
+  margin: 0.45rem 0 0 2.25rem;
+  font-family: var(--font-reading);
+  font-size: 0.94rem;
+  line-height: 1.58;
+}
+
+.practiceForm label {
+  display: block;
+  margin: 0.85rem 0 0.55rem 2.25rem;
+  color: var(--color-muted);
+  font-size: 0.78rem;
+}
+
+.answerRow {
+  display: flex;
+  gap: 0.65rem;
+  margin-left: 2.25rem;
+}
+
+.answerRow input {
+  min-height: 2.75rem;
+  min-width: 0;
+  flex: 1;
+  padding: 0.72rem 0.85rem;
+  border: 1px solid var(--color-rule-strong);
+  border-radius: 0.35rem;
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+.answerRow input:disabled {
+  background: var(--color-surface-quiet);
+  color: var(--color-muted);
+  cursor: not-allowed;
+}
+
+.answerRow button {
+  min-height: 2.75rem;
+}
+
+.hint,
+.feedback {
+  margin: 0.75rem 0 0 2.25rem;
+  color: var(--color-muted);
+  font-family: var(--font-reading);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.hint summary {
+  width: max-content;
+  min-height: 2.75rem;
+  padding-block: 0.65rem;
+  color: var(--color-accent-dark);
+  cursor: pointer;
+  font-family: var(--font-ui);
+}
+
+.feedback {
+  line-height: 1.55;
+}
+
+.feedback:empty {
+  display: none;
+}
+
+.feedback[data-state="correct"] {
+  color: var(--color-success);
+}
+
+.feedback[data-state="incorrect"] {
+  color: var(--color-accent-dark);
+}
+
+.nextTask,
+.resultLink {
+  margin: 0.9rem 0 0 2.25rem;
+}
+
+.resultLink {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  padding-inline: 1.1rem;
+  border: 1px solid var(--color-accent);
+  border-radius: 999px;
+  color: var(--color-accent-dark);
+  font-family: var(--font-ui);
+  font-size: 0.88rem;
+  text-decoration: none;
+}
+
+.resultLink:hover {
+  background: var(--color-accent-soft);
+}
+
+.resultLink:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+@media (max-width: 34rem) {
+  .answerRow {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .taskStatement,
+  .practiceForm label,
+  .answerRow,
+  .hint,
+  .feedback,
+  .nextTask,
+  .resultLink {
+    margin-left: 0;
+  }
+
+  .practiceTabs {
+    grid-template-columns: repeat(5, minmax(4.25rem, 1fr));
+  }
+
+  .practiceTab {
+    min-height: 3.2rem;
+    gap: 0.04rem 0.28rem;
+    padding-inline: 0.35rem;
+  }
+
+  .tabIndex {
+    grid-row: 1;
+  }
+
+  .tabLabel {
+    grid-column: 1 / -1;
+    font-size: 0.65rem;
+    text-align: center;
+    text-overflow: clip;
+    white-space: nowrap;
+  }
+
+  .taskHeading {
+    grid-template-columns: 1.7rem minmax(0, 1fr) auto;
+  }
+
+  .taskTheoryLinks {
+    grid-column: 2 / -1;
+    justify-content: flex-start;
+  }
+}

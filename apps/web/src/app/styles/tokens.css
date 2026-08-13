@@ -1,0 +1,31 @@
+:root {
+  color-scheme: light;
+  --font-ui: "Onest Variable", "Onest Fallback", Arial, sans-serif;
+  --font-reading: "Literata Variable", "Literata Fallback", Georgia, serif;
+  --font-data: "SFMono-Regular", Consolas, monospace;
+  --color-bg: #f8f6f1;
+  --color-surface: #fbfaf7;
+  --color-surface-quiet: #f1eee7;
+  --color-text: #211f1c;
+  --color-text-soft: #3f3a34;
+  --color-muted: #716b63;
+  --color-faint: #716b63;
+  --color-rule: #dcd6cc;
+  --color-rule-strong: #c8c0b4;
+  --color-accent: #bd4326;
+  --color-accent-dark: #98371f;
+  --color-accent-soft: #f8e4d8;
+  --color-success: #496f43;
+  --color-code: #24211d;
+  --color-code-top: #1d1a17;
+  --color-code-text: #eee8df;
+  --space-1: 0.5rem;
+  --space-2: 0.875rem;
+  --space-3: 1.25rem;
+  --space-4: 2rem;
+  --space-5: 3rem;
+  --space-section-break: clamp(2.25rem, 3vw, 3rem);
+  --max-content-width: 76rem;
+  --focus-ring: 0 0 0 3px
+    color-mix(in srgb, var(--color-accent) 28%, transparent);
+}

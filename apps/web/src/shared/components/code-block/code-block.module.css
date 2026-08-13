@@ -1,0 +1,83 @@
+.root {
+  position: relative;
+  max-width: 100%;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--color-code-text) 16%, transparent);
+  border-radius: 0.45rem;
+  background: var(--color-code);
+  color: var(--color-code-text);
+}
+
+.header {
+  display: flex;
+  gap: 0.65rem;
+  align-items: center;
+  min-height: 2.25rem;
+  padding: 0.45rem 3.25rem 0.45rem 1rem;
+  border-bottom: 1px solid
+    color-mix(in srgb, var(--color-code-text) 14%, transparent);
+  background: var(--color-code-top);
+}
+
+.language,
+.kind {
+  color: var(--color-code-text);
+  font-family: var(--font-data);
+  font-size: 0.68rem;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.language {
+  font-weight: 650;
+  letter-spacing: 0.08em;
+}
+
+.kind {
+  opacity: 0.58;
+}
+
+.highlight {
+  --ch-background: var(--color-code);
+  --code-line-height: 1.65;
+
+  position: static;
+  max-width: 100%;
+}
+
+.highlight :global(.mantine-CodeHighlight-pre) {
+  overflow: visible;
+}
+
+.highlight :global(.mantine-CodeHighlight-code.hljs) {
+  min-width: 100%;
+  padding: 1.15rem 1.25rem 1.3rem;
+  overflow: visible;
+  background: transparent;
+  color: var(--color-code-text);
+  font-family: var(--font-data);
+  font-size: 0.78rem;
+  tab-size: 4;
+}
+
+.highlight :global(.mantine-CodeHighlight-controls) {
+  top: 0.42rem;
+  right: 0.55rem;
+  background: transparent;
+}
+
+.highlight :global(.mantine-CodeHighlight-control) {
+  color: var(--color-code-text);
+  opacity: 0.72;
+}
+
+.highlight :global(.mantine-CodeHighlight-control:hover) {
+  opacity: 1;
+}
+
+@media (max-width: 34rem) {
+  .highlight :global(.mantine-CodeHighlight-code.hljs) {
+    padding-inline: 1rem;
+    font-size: 0.72rem;
+  }
+}

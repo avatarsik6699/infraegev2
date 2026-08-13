@@ -1,0 +1,563 @@
+import { expect, type Page } from "@playwright/test";
+
+export class LessonLabPage {
+  constructor(private readonly page: Page) {}
+
+  async open(): Promise<void> {
+    await this.page.goto("/lab/lesson");
+    await expect(this.page).toHaveURL(/\/lab\/lesson$/);
+  }
+
+  async expectLessonStructure(): Promise<void> {
+    await expect(
+      this.page.getByRole("heading", {
+        level: 1,
+        name: "Почему двоичный поиск отбрасывает половину вариантов",
+      }),
+    ).toBeVisible();
+    await expect(
+      this.page.getByRole("navigation", { name: "Содержание урока" }),
+    ).toBeVisible();
+    await expect(
+      this.page.getByRole("link", { name: "Теория" }),
+    ).toHaveAttribute("aria-current", "location");
+    await expect(this.page.getByText(/Текстовое описание схемы/)).toBeVisible();
+  }
+
+  async expectUnlistedMetadata(): Promise<void> {
+    await expect(this.page.locator('meta[name="robots"]')).toHaveAttribute(
+      "content",
+      "noindex,nofollow",
+    );
+  }
+
+  async expectCodeExampleSurface(): Promise<void> {
+    const example = this.page.getByLabel("Пример двоичного поиска на Python");
+    await expect(example).toBeVisible();
+    await expect(
+      example.getByRole("button", { name: /Копировать код/ }),
+    ).toBeVisible();
+    await expect(example.locator(".hljs.python")).toHaveCount(1);
+
+    const overflow = await example
+      .locator(".mantine-ScrollArea-viewport")
+      .evaluate((element) => element.scrollWidth > element.clientWidth);
+    expect(overflow).toBe(false);
+  }
+
+  async expectPracticeFeedback(): Promise<void> {
+    const tabs = this.page.getByRole("tablist", {
+      name: "Задачи по сложности",
+    });
+    await expect(tabs).toBeVisible();
+    await expect(tabs.getByRole("tab")).toHaveCount(5);
+    const firstTab = tabs.getByRole("tab", { name: /Задача 1 из 5/ });
+    await expect(firstTab).toHaveAttribute("aria-selected", "true");
+    await expect(firstTab).toHaveAttribute("tabindex", "0");
+    await expect(this.page.locator("[data-practice-task]:visible")).toHaveCount(
+      1,
+    );
+    await expect(this.page.getByRole("tabpanel")).toHaveCount(1);
+
+    const firstTaskTheory = this.page.getByRole("navigation", {
+      name: "Теория к задаче «Выберите половину»",
+    });
+    await expect(
+      firstTaskTheory.getByRole("link", { name: "Схема сравнения" }),
+    ).toHaveAttribute("href", "#range");
+
+    await firstTab.focus();
+    await firstTab.press("ArrowRight");
+    const secondTab = tabs.getByRole("tab", { name: /Задача 2 из 5/ });
+    await expect(secondTab).toBeFocused();
+    await expect(secondTab).toHaveAttribute("aria-selected", "true");
+    await secondTab.press("Home");
+    await expect(firstTab).toBeFocused();
+    await expect(firstTab).toHaveAttribute("aria-selected", "true");
+    await expect(
+      this.page.getByText("Решено 0 из 5 задач", { exact: true }),
+    ).toBeVisible();
+    await this.answerTask("keep-half", "правая");
+    await expect(
+      this.page.getByText("Решено 0 из 5 задач", { exact: true }),
+    ).toBeVisible();
+
+    await this.answerTask("keep-half", "левая");
+    await expect(
+      this.page.locator('[data-practice-task="keep-half"]'),
+    ).toBeVisible();
+    const nextTask = this.page.getByRole("button", {
+      name: "Следующая задача: Сдвиньте левую границу",
+    });
+    await expect(nextTask).toBeVisible();
+    await nextTask.click();
+    await expect(
+      this.page.getByRole("heading", {
+        level: 4,
+        name: "Сдвиньте левую границу",
+      }),
+    ).toBeFocused();
+    await this.answerTask("left-boundary", "9");
+    await this.answerTask("right-boundary", "7");
+    await this.answerTask("loop-condition", "L <= R");
+    await expect(
+      this.page.getByText("Решено 4 из 5 задач", { exact: true }),
+    ).toBeVisible();
+    await expect(this.page.locator("[data-mastery-status]")).toHaveText(
+      "Тема освоена",
+    );
+
+    await this.answerTask("trace-count", "3");
+    await expect(
+      this.page.getByText("Решено 5 из 5 задач", { exact: true }),
+    ).toBeVisible();
+    await expect(
+      this.page.getByRole("link", { name: "Перейти к результату" }),
+    ).toHaveAttribute("href", "#result");
+    await expect(this.page.locator("[data-mastery-status]")).toHaveText(
+      "Все задания решены",
+    );
+
+    await this.page.reload();
+    await expect(
+      this.page.getByText("Решено 5 из 5 задач", { exact: true }),
+    ).toBeVisible();
+    await expect(
+      this.page
+        .getByRole("tablist", { name: "Задачи по сложности" })
+        .getByRole("tab", { name: /Задача 1 из 5/ }),
+    ).toHaveAttribute("aria-selected", "true");
+  }
+
+  async expectLessonNavigation(): Promise<void> {
+    await expect(
+      this.page.getByRole("link", { name: "Назад к темам" }),
+    ).toHaveAttribute("href", "/");
+    await expect(this.page.getByText("Алгоритмы поиска")).toBeVisible();
+    await expect(
+      this.page.getByRole("link", { name: "В избранное", exact: true }),
+    ).toHaveCount(0);
+    await expect(
+      this.page.getByRole("link", { name: "К практике", exact: true }),
+    ).toHaveCount(0);
+
+    await expect(this.page.locator("[data-section-position]")).toContainText(
+      "Раздел 1 из 4",
+    );
+    await this.page
+      .getByRole("heading", { level: 3, name: "Почему это быстро" })
+      .evaluate((element) => element.scrollIntoView({ block: "start" }));
+    await expect(this.page.locator("[data-section-position]")).toContainText(
+      "Раздел 1 из 4",
+    );
+    await this.page
+      .getByRole("heading", { level: 3, name: "Попробуйте сами" })
+      .evaluate((element) => element.scrollIntoView({ block: "start" }));
+    await expect(this.page.locator("[data-section-position]")).toContainText(
+      "Раздел 2 из 4",
+    );
+  }
+
+  async expectReadingPosition(): Promise<void> {
+    await this.page.evaluate(() => scrollTo(0, 0));
+    await expect(
+      this.page.locator("[data-reading-position-value]"),
+    ).toHaveAttribute("style", /scaleX\(0\)/);
+    await this.page.evaluate(() => scrollTo(0, document.body.scrollHeight));
+    await expect
+      .poll(() =>
+        this.page
+          .locator("[data-reading-position-value]")
+          .evaluate((element) => {
+            const match = element
+              .getAttribute("style")
+              ?.match(/scaleX\((.+)\)/);
+            return Number(match?.[1] ?? 0);
+          }),
+      )
+      .toBeGreaterThan(0.99);
+  }
+
+  async expectMobilePracticeTabs(): Promise<void> {
+    const tabs = this.page.getByRole("tablist", {
+      name: "Задачи по сложности",
+    });
+    await tabs.scrollIntoViewIfNeeded();
+    await expect(tabs).toBeVisible();
+    await expect(
+      this.page.getByRole("navigation", {
+        name: "Теория к задаче «Выберите половину»",
+      }),
+    ).toBeVisible();
+    await tabs.getByRole("tab", { name: /Задача 4 из 5/ }).click();
+    await expect(
+      this.page
+        .getByRole("navigation", {
+          name: "Теория к задаче «Сохраните последний кандидат»",
+        })
+        .getByRole("link"),
+    ).toHaveCount(2);
+  }
+
+  async expectBackNavigation(): Promise<void> {
+    await this.page.getByRole("link", { name: "Назад к темам" }).click();
+    await expect(this.page).toHaveURL(/\/$/);
+  }
+
+  async expectNoHorizontalOverflow(): Promise<void> {
+    const overflow = await this.page.evaluate(
+      () => document.documentElement.scrollWidth > window.innerWidth,
+    );
+    expect(overflow).toBe(false);
+  }
+
+  async expectContinuousFrame(): Promise<void> {
+    const viewport = this.page.viewportSize();
+    if (!viewport) throw new Error("Lesson viewport is unavailable");
+
+    const siteHeader = await this.page
+      .locator("[data-lesson-site-header]")
+      .boundingBox();
+    const subheader = await this.page
+      .locator("[data-lesson-subheader]")
+      .boundingBox();
+    const outlineRail = await this.page
+      .locator("[data-outline-rail]")
+      .boundingBox();
+    const article = await this.page
+      .locator("[data-article-frame]")
+      .boundingBox();
+
+    expect(siteHeader).not.toBeNull();
+    expect(subheader).not.toBeNull();
+    expect(outlineRail).not.toBeNull();
+    expect(article).not.toBeNull();
+
+    if (!siteHeader || !subheader || !outlineRail || !article) return;
+
+    expect(siteHeader.x).toBeCloseTo(0, 0);
+    expect(siteHeader.width).toBeCloseTo(viewport.width, 0);
+    expect(subheader.x).toBeCloseTo(0, 0);
+    expect(subheader.width).toBeCloseTo(viewport.width, 0);
+
+    if (viewport.width > 1152) {
+      expect(outlineRail.y).toBeCloseTo(article.y, 0);
+      expect(outlineRail.x + outlineRail.width).toBeCloseTo(article.x, 0);
+      expect(outlineRail.height).toBeCloseTo(article.height, 0);
+
+      await expect(this.page.locator("[data-margin-heading]")).toHaveCount(0);
+
+      const centralDivider = await this.page
+        .locator("[data-article-frame]")
+        .evaluate((element) => getComputedStyle(element, "::before").content);
+      expect(centralDivider).toBe("none");
+    } else {
+      expect(outlineRail.x).toBeCloseTo(0, 0);
+      expect(outlineRail.width).toBeCloseTo(viewport.width, 0);
+      expect(outlineRail.y + outlineRail.height).toBeCloseTo(article.y, 0);
+      expect(article.width).toBeCloseTo(viewport.width, 0);
+    }
+  }
+
+  async expectStableFontContract(): Promise<void> {
+    const preloads = this.page.locator('link[rel="preload"][as="font"]');
+    await expect(preloads).toHaveCount(2);
+    await expect(preloads.nth(0)).toHaveAttribute("type", "font/woff2");
+    await expect(preloads.nth(0)).toHaveAttribute("crossorigin", "anonymous");
+    await expect(preloads.nth(0)).toHaveAttribute(
+      "href",
+      /wght-normal\.[a-f0-9]{8}\.woff2$/,
+    );
+    await expect(preloads.nth(1)).toHaveAttribute("type", "font/woff2");
+    await expect(preloads.nth(1)).toHaveAttribute("crossorigin", "anonymous");
+    await expect(preloads.nth(1)).toHaveAttribute(
+      "href",
+      /wght-normal\.[a-f0-9]{8}\.woff2$/,
+    );
+
+    await this.page.evaluate(() => document.fonts.ready);
+    const requestedFonts = await this.page.evaluate(() =>
+      performance
+        .getEntriesByType("resource")
+        .map((entry) => entry.name)
+        .filter((name) => name.includes("/fonts/")),
+    );
+
+    expect(requestedFonts).not.toEqual(
+      expect.arrayContaining([expect.stringContaining("italic")]),
+    );
+    expect(new Set(requestedFonts).size).toBeLessThanOrEqual(4);
+  }
+
+  async expectBoundedMarginalia(): Promise<void> {
+    const viewport = this.page.viewportSize();
+    if (!viewport) throw new Error("Lesson viewport is unavailable");
+
+    const stage = await this.page
+      .locator("[data-proof-stage]")
+      .first()
+      .boundingBox();
+    const note = await this.page
+      .locator("[data-proof-note]")
+      .first()
+      .boundingBox();
+    expect(stage).not.toBeNull();
+    expect(note).not.toBeNull();
+    if (!stage || !note) return;
+
+    if (viewport.width >= 1440) {
+      expect(note.width).toBeLessThanOrEqual(256);
+      expect(note.x - (stage.x + stage.width)).toBeLessThanOrEqual(32);
+      expect(stage.width).toBeGreaterThanOrEqual(
+        viewport.width >= 1920 ? 1000 : 760,
+      );
+      expect(stage.width).toBeLessThanOrEqual(1088);
+    }
+
+    const visualTreatment = await this.page
+      .locator("[data-proof-note]")
+      .first()
+      .evaluate((element) => ({
+        background: getComputedStyle(element).backgroundColor,
+        borderLeft: getComputedStyle(element).borderLeftWidth,
+      }));
+    expect(visualTreatment.background).not.toBe("rgba(0, 0, 0, 0)");
+    expect(visualTreatment.borderLeft).toBe("0px");
+  }
+
+  async expectSectionRhythm(): Promise<void> {
+    const sections = this.page.locator("[data-lesson-section]");
+    await expect(sections).toHaveCount(4);
+
+    for (const name of [
+      "Теория",
+      "Практика",
+      "Что важно для ЕГЭ",
+      "Результат",
+    ]) {
+      await expect(
+        this.page.getByRole("heading", { level: 2, name }),
+      ).toBeVisible();
+    }
+    await expect(
+      this.page.getByRole("heading", {
+        level: 3,
+        name: "Середина превращает неизвестность в выбор",
+      }),
+    ).toBeVisible();
+    for (const name of [
+      "Попробуйте сами",
+      "Типичная ошибка с границами",
+      "Что получилось",
+      "Следующий шаг",
+    ]) {
+      await expect(
+        this.page.getByRole("heading", { level: 3, name }),
+      ).toBeVisible();
+    }
+    await expect(
+      this.page.getByRole("heading", {
+        level: 3,
+        name: "Почему это быстро",
+      }),
+    ).toBeVisible();
+
+    const rhythm = await sections.evaluateAll((elements) =>
+      elements.map((element) => {
+        const styles = getComputedStyle(element);
+        const rect = element.getBoundingClientRect();
+        return {
+          id: element.id,
+          marginTop: Number.parseFloat(styles.marginTop),
+          paddingTop: Number.parseFloat(styles.paddingTop),
+          x: rect.x,
+          width: rect.width,
+        };
+      }),
+    );
+
+    for (const section of rhythm.slice(1)) {
+      expect(section.marginTop).toBeGreaterThanOrEqual(32);
+      expect(section.paddingTop).toBeGreaterThanOrEqual(20);
+      expect(section.x).toBeCloseTo(rhythm[0]?.x ?? 0, 0);
+      if (section.id === "practice") {
+        expect(section.width).toBeGreaterThanOrEqual(rhythm[0]?.width ?? 0);
+      } else {
+        expect(section.width).toBeCloseTo(rhythm[0]?.width ?? 0, 0);
+      }
+    }
+  }
+
+  async expectWhitespaceGrouping(): Promise<void> {
+    const separators = await this.page.evaluate(() => {
+      const readBorder = (
+        selector: string,
+        side: "borderTopWidth" | "borderBottomWidth",
+      ) => {
+        const element = document.querySelector(selector);
+        if (!element) throw new Error(`Missing spacing target: ${selector}`);
+        return getComputedStyle(element)[side];
+      };
+
+      const intro = document.querySelector<HTMLElement>("[data-lesson-intro]");
+      if (!intro) throw new Error("Missing lesson intro");
+
+      return {
+        introAfter: getComputedStyle(intro, "::after").content,
+        visualCaption: readBorder("[data-visual-caption]", "borderTopWidth"),
+        visualAlternative: readBorder(
+          "[data-visual-alternative]",
+          "borderBottomWidth",
+        ),
+        practiceForm: readBorder("[data-practice-form]", "borderTopWidth"),
+        proofRows: Array.from(
+          document.querySelectorAll("[data-proof-row]"),
+          (element) => getComputedStyle(element).borderBottomWidth,
+        ),
+      };
+    });
+
+    expect(separators.introAfter).toBe("none");
+    expect(separators.visualCaption).toBe("0px");
+    expect(separators.visualAlternative).toBe("0px");
+    expect(separators.practiceForm).toBe("0px");
+    expect(separators.proofRows).toEqual(["0px", "0px", "0px"]);
+  }
+
+  async expectOutlineTracksReadingPosition(): Promise<void> {
+    const target = this.page.getByRole("heading", {
+      level: 3,
+      name: "Почему это быстро",
+    });
+    await target.evaluate((element) =>
+      element.scrollIntoView({ block: "start" }),
+    );
+    await expect(
+      this.page.getByRole("link", { name: "Почему это быстро" }),
+    ).toHaveAttribute("aria-current", "location");
+    await expect(
+      this.page.getByRole("link", { name: "Теория" }),
+    ).toHaveAttribute("data-active-branch", "true");
+    await expect(this.page.locator("[data-outline-active-path]")).toBeVisible();
+
+    const activeTreatment = await this.page
+      .getByRole("link", { name: "Почему это быстро" })
+      .evaluate((element) => ({
+        background: getComputedStyle(element).backgroundColor,
+        color: getComputedStyle(element).color,
+        weight: Number.parseFloat(getComputedStyle(element).fontWeight),
+      }));
+    expect(activeTreatment.background).toBe("rgba(0, 0, 0, 0)");
+    expect(activeTreatment.weight).toBeGreaterThanOrEqual(600);
+  }
+
+  async expectDesktopOutlineGeometry(): Promise<void> {
+    const tree = this.page.locator("[data-outline-tree]");
+    const connectors = tree.locator("[data-outline-connectors]");
+    await expect(connectors).toBeVisible();
+    await expect(tree.locator("[data-outline-node]")).toHaveCount(10);
+
+    const result = await tree.evaluate((element) => {
+      const svg = element.querySelector<SVGSVGElement>(
+        "[data-outline-connectors]",
+      );
+      if (!svg) throw new Error("Missing outline connector SVG");
+      const svgRect = svg.getBoundingClientRect();
+      const nodes = Array.from(
+        element.querySelectorAll<SVGSVGElement>("[data-outline-node]"),
+        (node) => {
+          const rect = node.getBoundingClientRect();
+          const label = node.parentElement?.querySelector("span");
+          const labelRect = label?.getBoundingClientRect();
+          const circle = node.querySelector("circle");
+          return {
+            x: rect.left - svgRect.left + rect.width / 2,
+            y: rect.top - svgRect.top + rect.height / 2,
+            radius: Math.min(rect.width, rect.height) / 2,
+            labelGap: labelRect ? labelRect.left - rect.right : -1,
+            stroke: circle ? getComputedStyle(circle).stroke : "missing",
+          };
+        },
+      );
+      let minimumClearance = Number.POSITIVE_INFINITY;
+      for (const path of svg.querySelectorAll<SVGPathElement>("path")) {
+        const length = path.getTotalLength();
+        for (let index = 0; index <= 120; index += 1) {
+          const point = path.getPointAtLength((length * index) / 120);
+          for (const node of nodes) {
+            const distance = Math.hypot(point.x - node.x, point.y - node.y);
+            minimumClearance = Math.min(
+              minimumClearance,
+              distance - node.radius,
+            );
+          }
+        }
+      }
+
+      return {
+        minimumClearance,
+        labelGaps: nodes.map(({ labelGap }) => labelGap),
+        strokes: nodes.map(({ stroke }) => stroke),
+      };
+    });
+
+    expect(result.minimumClearance).toBeGreaterThanOrEqual(4);
+    expect(result.labelGaps.every((gap) => gap >= 4)).toBe(true);
+    expect(result.strokes.every((stroke) => stroke === "none")).toBe(true);
+  }
+
+  async expectCompactOutlineList(): Promise<void> {
+    await expect(this.page.locator("[data-outline-connectors]")).toBeHidden();
+    await expect(this.page.locator("[data-outline-node]").first()).toBeHidden();
+    for (const name of [
+      "Теория",
+      "Середина превращает неизвестность в выбор",
+      "Практика",
+      "Попробуйте сами",
+      "Что важно для ЕГЭ",
+      "Результат",
+      "Следующий шаг",
+    ]) {
+      await expect(this.page.getByRole("link", { name })).toBeVisible();
+    }
+  }
+
+  async expectReadableWithoutJavaScript(): Promise<void> {
+    await this.open();
+    await expect(
+      this.page.getByRole("heading", {
+        name: "Почему двоичный поиск отбрасывает половину вариантов",
+      }),
+    ).toBeVisible();
+    await expect(this.page.getByText(/Текстовое описание схемы/)).toBeVisible();
+    await expect(this.page.locator("[data-practice-tabs]")).toBeHidden();
+    await expect(this.page.locator("[data-practice-task]")).toHaveCount(5);
+    for (const task of await this.page.locator("[data-practice-task]").all()) {
+      await expect(task).toBeVisible();
+    }
+    await expect(this.page.getByText("Подсказка").first()).toBeVisible();
+    await expect(this.page.getByText("К теории:")).toHaveCount(5);
+    await expect(
+      this.page.getByRole("heading", { name: "Результат" }),
+    ).toBeVisible();
+    await expect(
+      this.page.getByRole("link", { name: "Следующий шаг" }),
+    ).toBeVisible();
+  }
+
+  private async answerTask(taskId: string, answer: string): Promise<void> {
+    const task = this.page.locator(`[data-practice-task="${taskId}"]`);
+    if (!(await task.isVisible())) {
+      await this.page
+        .locator(
+          `[data-practice-tabs] [aria-controls="practice-panel-${taskId}"]`,
+        )
+        .click();
+    }
+    await task.getByRole("textbox").fill(answer);
+    await task.getByRole("button", { name: "Проверить" }).click();
+    await expect(task.getByRole("status")).toContainText(
+      answer === "правая" ? "Пока нет" : "Верно",
+    );
+  }
+}

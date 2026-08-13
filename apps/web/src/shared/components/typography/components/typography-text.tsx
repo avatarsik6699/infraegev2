@@ -1,23 +1,30 @@
 import { Text } from "@mantine/core";
 import type { TypographyTypes } from "../typography.types";
-
-const toneColor: Record<TypographyTypes.Tone, string> = {
-  default: "var(--color-text)",
-  muted: "var(--color-muted)",
-  accent: "var(--color-accent)",
-  highlight: "var(--color-highlight)",
-};
+import styles from "./typography-text.module.css";
 
 export const TypographyText: React.FC<TypographyTypes.TextProps> = (props) => {
+  const {
+    ariaLabel,
+    children,
+    className,
+    component = "p",
+    size,
+    tone,
+    ...textProps
+  } = props;
+
   return (
     <Text
-      component={props.component ?? "p"}
-      c={toneColor[props.tone ?? "default"]}
-      size={props.size}
-      className={props.className}
-      aria-label={props.ariaLabel}
+      component={component}
+      size={size}
+      aria-label={ariaLabel}
+      data-tone={tone}
+      {...textProps}
+      className={[tone ? styles.tone : undefined, className]
+        .filter(Boolean)
+        .join(" ")}
     >
-      {props.children}
+      {children}
     </Text>
   );
 };
