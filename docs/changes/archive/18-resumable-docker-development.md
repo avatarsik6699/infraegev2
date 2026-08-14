@@ -7,7 +7,7 @@
 | Change | `18` |
 | Slug | `resumable-docker-development` |
 | Title | Resumable Docker Development |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/18-resumable-docker-development` |
 
 ## Goal
