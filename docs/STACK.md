@@ -54,8 +54,13 @@ uv --version              # local tests only
 make dev
 ```
 
-`make dev` supplies disposable process-scoped local values, builds dependencies inside Docker,
-starts the dedicated development overlay, waits for every healthcheck, and requires no `.env`.
+`make dev` supplies disposable process-scoped local values, builds missing images on first use,
+starts or resumes the dedicated development overlay, waits for every healthcheck, and requires no
+`.env`. Web source, API source and content use development bind mounts. After changing dependency
+manifests, lockfiles, Dockerfiles, Vite configuration or other image-owned files, run
+`make rebuild`; Docker then reuses unchanged layers, including the frozen pnpm and uv dependency
+installs. Use `make stop` for a fast resumable halt; use `make down` only when the owned containers
+and network must be recreated. Both paths preserve the named PostgreSQL volume.
 
 ### pnpm workspace policy
 
@@ -373,8 +378,14 @@ cache for the current two-route surface.
 # Start the stack
 make dev
 
-# Gracefully stop everything and preserve PostgreSQL data
+# Rebuild after changing image-owned configuration or dependencies
+make rebuild
+
+# Gracefully stop everything, preserving containers and PostgreSQL data for fast resume
 make stop
+
+# Explicitly remove the development containers and network; PostgreSQL data remains
+make down
 
 # Follow service logs
 make logs

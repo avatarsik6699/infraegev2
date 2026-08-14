@@ -11,6 +11,20 @@
 
 ## Gotcha Log
 
+### Compose `up --build` can recreate dev containers even when every build layer is cached
+
+- **Symptoms:** a stopped development stack still runs the full build progress on `make dev`, all
+  Dockerfile steps report `CACHED`, but Compose recreates the API and web containers before start.
+- **Root cause:** BuildKit exports fresh image metadata/attestations for an explicit build, and
+  current Docker Compose can treat the resulting image reference as changed even though no layer
+  ran. Preserving containers in `make stop` alone therefore does not make resume fast while normal
+  startup still passes `--build`.
+- **Fix:** keep normal `make dev` on `compose up --wait` so it builds only missing images and reuses
+  stopped containers. Use `make rebuild` after changing lockfiles, manifests, Dockerfiles, Vite
+  configuration or other image-owned inputs. Keep web/API source and content on development bind
+  mounts; reserve `make down` for explicit container/network removal. Neither stop nor down removes
+  the named PostgreSQL volume.
+
 ### VS Code ESLint must not infer a shared TSConfig root across sibling apps
 
 - **Symptoms:** TypeScript files intermittently show `Parsing error: No tsconfigRootDir was set,

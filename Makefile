@@ -18,7 +18,7 @@ OPS_LOCAL := ./scripts/ops-local.sh
 
 STOP_TIMEOUT ?= 30
 
-.PHONY: help dev stop down restart logs ps config clean \
+.PHONY: help dev rebuild stop down restart logs ps config clean \
 	ops-init ops-up ops-down ops-status ops-logs ops-tunnel-up ops-tunnel-down \
 	ops-open-beszel ops-open-umami ops-configure-beszel-agent \
 	ops-repair-beszel-env
@@ -26,9 +26,10 @@ STOP_TIMEOUT ?= 30
 help:
 	@echo "infraege local Docker workflow"
 	@echo ""
-	@echo "  make dev      Build, start, and wait until the app is healthy"
-	@echo "  make stop     Gracefully stop the app (keeps PostgreSQL data)"
-	@echo "  make down     Alias for make stop"
+	@echo "  make dev      Start or resume the app and wait until it is healthy"
+	@echo "  make rebuild  Rebuild app images, start, and wait until healthy"
+	@echo "  make stop     Stop the app and keep containers for fast resume"
+	@echo "  make down     Remove app containers/network (keeps PostgreSQL data)"
 	@echo "  make restart  Restart the complete developer stack"
 	@echo "  make logs     Follow logs from all services"
 	@echo "  make ps       Show service and health status"
@@ -51,18 +52,28 @@ help:
 
 dev:
 	@docker info >/dev/null 2>&1 || { echo "Docker is not running." >&2; exit 1; }
-	@$(LOCAL_ENV) $(COMPOSE) up --build --wait --wait-timeout 180
+	@$(LOCAL_ENV) $(COMPOSE) up --wait --wait-timeout 180
 	@echo ""
 	@echo "infraege is ready: http://localhost:8080/"
 	@echo "UI foundation: http://localhost:8080/"
 
+rebuild:
+	@docker info >/dev/null 2>&1 || { echo "Docker is not running." >&2; exit 1; }
+	@$(LOCAL_ENV) $(COMPOSE) up --build --wait --wait-timeout 180
+	@echo ""
+	@echo "infraege was rebuilt and is ready: http://localhost:8080/"
+
 stop:
 	@docker info >/dev/null 2>&1 || { echo "Docker is not running." >&2; exit 1; }
 	@echo "Stopping infraege gracefully (timeout: $(STOP_TIMEOUT)s per service)..."
-	@$(LOCAL_ENV) $(COMPOSE) down --timeout $(STOP_TIMEOUT) --remove-orphans
-	@echo "infraege stopped. PostgreSQL data was preserved."
+	@$(LOCAL_ENV) $(COMPOSE) stop --timeout $(STOP_TIMEOUT)
+	@echo "infraege stopped. Containers and PostgreSQL data were preserved for fast resume."
 
-down: stop
+down:
+	@docker info >/dev/null 2>&1 || { echo "Docker is not running." >&2; exit 1; }
+	@echo "Removing infraege containers and network (timeout: $(STOP_TIMEOUT)s per service)..."
+	@$(LOCAL_ENV) $(COMPOSE) down --timeout $(STOP_TIMEOUT) --remove-orphans
+	@echo "infraege containers and network removed. PostgreSQL data was preserved."
 
 restart:
 	@$(MAKE) stop

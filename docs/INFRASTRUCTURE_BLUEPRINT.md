@@ -123,10 +123,14 @@ Use one Compose base for service topology and a development overlay for source b
 and developer ports. Give every long-running dependency a healthcheck. A startup dependency is
 ready only when its health condition passes; container creation order is not readiness.
 
-Expose discoverable commands such as `make dev`, `make stop`, `make logs`, and `make ps`. Stop must
-be graceful, remove owned containers and networks, preserve named data volumes unless destruction
-is explicitly requested, and use a bounded timeout. Render the effective model with
-`docker compose config` so interpolation errors and unintended mounts are caught before runtime.
+Expose discoverable commands such as `make dev`, `make rebuild`, `make stop`, `make down`,
+`make logs`, and `make ps`. Normal dev startup should reuse existing images and containers; make
+image rebuilds explicit while keeping missing-image first boot automatic. Stop must be graceful,
+retain owned containers and networks for fast resume, preserve named data volumes, and use a
+bounded timeout. Reserve `down` for explicitly removing owned containers and networks; it must
+still preserve named data volumes unless destruction is separately and explicitly requested.
+Render the effective model with `docker compose config` so interpolation errors and unintended
+mounts are caught before runtime.
 
 Exit evidence: a clean machine can start the stack, wait for health, exercise public readiness,
 stop it, start it again with persisted data, and explain exactly what remains on disk.
