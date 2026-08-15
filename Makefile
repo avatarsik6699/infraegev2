@@ -12,14 +12,11 @@ LOCAL_ENV := POSTGRES_USER=infraege \
 	APP_ENV=development \
 	DEPLOY_SHA=development
 
-OPS_LOCAL := ./scripts/ops-local.sh
-
 .DEFAULT_GOAL := help
 
 STOP_TIMEOUT ?= 30
 
 .PHONY: help dev rebuild stop down restart logs ps config clean \
-	ops-init ops-up ops-down ops-status ops-logs ops-tunnel-up ops-tunnel-down \
 	ops-open-beszel ops-open-umami ops-configure-beszel-agent \
 	ops-repair-beszel-env
 
@@ -36,15 +33,8 @@ help:
 	@echo "  make config   Validate the fully rendered Compose configuration"
 	@echo "  make clean    Remove regenerable local reports, build outputs, and caches"
 	@echo ""
-	@echo "infraege local operations dashboard"
+	@echo "infraege private-service shortcuts"
 	@echo ""
-	@echo "  make ops-init        Create protected local config templates"
-	@echo "  make ops-up          Start WireGuard and the loopback ops dashboard"
-	@echo "  make ops-status      Show dashboard, route, and handshake status"
-	@echo "  make ops-logs        Follow dashboard logs"
-	@echo "  make ops-down        Stop dashboard and its managed WireGuard tunnel"
-	@echo "  make ops-tunnel-up   Start only WireGuard for first-time source setup"
-	@echo "  make ops-tunnel-down Stop only the managed WireGuard tunnel"
 	@echo "  make ops-open-beszel Open private Beszel UI in WSLg Chromium"
 	@echo "  make ops-open-umami  Open private Umami UI in WSLg Chromium"
 	@echo "  make ops-configure-beszel-agent  Securely activate the production Beszel agent"
@@ -91,32 +81,10 @@ config:
 
 clean:
 	@rm -rf -- .lighthouseci .output .vinxi \
-		apps/web/.output apps/web/.vinxi apps/web/dist apps/web/.eslintcache \
-		apps/ops/dist apps/ops/.eslintcache
+		apps/web/.output apps/web/.vinxi apps/web/dist apps/web/.eslintcache
 	@find apps/api -type d \( -name __pycache__ -o -name .pytest_cache -o -name .ruff_cache \) \
 		-prune -exec rm -rf -- {} +
 	@echo "Regenerable local reports, build outputs, and caches removed."
-
-ops-init:
-	@$(OPS_LOCAL) init
-
-ops-up:
-	@$(OPS_LOCAL) up
-
-ops-status:
-	@$(OPS_LOCAL) status
-
-ops-logs:
-	@$(OPS_LOCAL) logs
-
-ops-down:
-	@$(OPS_LOCAL) down
-
-ops-tunnel-up:
-	@$(OPS_LOCAL) tunnel-up
-
-ops-tunnel-down:
-	@$(OPS_LOCAL) tunnel-down
 
 ops-open-beszel:
 	@pnpm --filter web exec playwright open http://10.77.0.1:8090

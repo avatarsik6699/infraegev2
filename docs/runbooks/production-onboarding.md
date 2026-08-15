@@ -243,17 +243,9 @@ jq -cn --arg id "$infraege_umami_website_id" \
 unset infraege_umami_password infraege_umami_token
 ```
 
-For `apps/ops`, create a separate least-privilege Umami account if the installed version permits
-access to this website without administrative rights. Set its values only in the local process
-environment:
-
-```bash
-export INFRAEGE_UMAMI_USERNAME='REPLACE_WITH_READ_ONLY_USERNAME'
-read -rsp 'Umami dashboard password: ' INFRAEGE_UMAMI_PASSWORD
-export INFRAEGE_UMAMI_PASSWORD
-```
-
-The website ID also goes into the untracked `projects.json`; the login does not.
+For sre-kit's `umami-http` source, create a separate least-privilege Umami account if the
+installed version permits access to this website without administrative rights, then register
+it as a source in sre-kit's own UI — credentials never enter this repository.
 
 ## 6. Obtain Beszel `TOKEN`, `KEY` and system ID
 
@@ -275,15 +267,5 @@ The current Beszel flow and meanings of `KEY`, `TOKEN` and `HUB_URL` are documen
 [getting-started](https://beszel.dev/guide/getting-started) and
 [agent-installation](https://www.beszel.dev/guide/agent-installation) guides.
 
-Create a separate read-only Beszel user, share only this system with it, and use that account in
-the local dashboard environment. The current single-operator setup temporarily uses the existing
-administrator; replace it before moving ops off the private workstation:
-
-```bash
-export INFRAEGE_BESZEL_EMAIL='REPLACE_WITH_READ_ONLY_EMAIL'
-read -rsp 'Beszel dashboard password: ' INFRAEGE_BESZEL_PASSWORD
-export INFRAEGE_BESZEL_PASSWORD
-export INFRAEGE_OPS_SSH_KEY="$HOME/.ssh/infraege-ops-reader"
-```
-
-Then follow `docs/runbooks/monitoring.md` to start `apps/ops`.
+Create a separate read-only Beszel user, share only this system with it, and register it as a
+`beszel-api` source in sre-kit — credentials are stored only there, never in this repository.

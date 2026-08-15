@@ -402,9 +402,9 @@ production через общий Compose и development overlay.
 - **Backend (FastAPI/Uvicorn)** — отдельный контейнер, доступен Nginx по внутренней docker-сети,
   наружу не смотрит напрямую.
 - **Postgres** — отдельный контейнер, volume + регулярный `pg_dump`-бэкап (§8).
-- **Observability-источники** — Umami, Beszel и журналы остаются на application VPS; `apps/ops`
-  сначала запускается локально и подключается к ним через WireGuard. В будущем тот же dashboard
-  переносится на отдельный monitoring VPS и агрегирует несколько проектов.
+- **Observability-источники** — Umami, Beszel и журналы остаются на application VPS; наблюдаемость
+  ведётся через внешний инструмент [sre-kit](https://github.com/avatarsik6699/sre-kit) (единственный
+  логин, single-VPS auto-provisioning), а не через собственный дашборд этого репозитория.
 
 **Публичный edge:** `infraege.ru` зарегистрирован и использует DNS reg.ru. На первом релизе трафик
 идёт напрямую `infraege.ru → Nginx`, без CDN; `www.infraege.ru` перенаправляется на canonical apex.
@@ -438,9 +438,8 @@ Nginx выставляет `Cache-Control`/`ETag` для хэшированно�
 - **Beszel Hub + Agent** — host/container metrics и история на application VPS.
 - **journald + fail2ban** — структурированные application/Nginx/security logs; read-only доступ
   dashboard через WireGuard и ограниченный SSH wrapper.
-- **`apps/ops`** — локальный Node BFF + React/Mantine dashboard с `@mantine/charts` 9.5.1 и
-  обязательным Recharts 3.10.1. Конфигурация источников поддерживает несколько проектов; секреты
-  не попадают в браузер. Позже приложение переносится на отдельный monitoring VPS.
+- **sre-kit** — внешний инструмент, читающий Umami/Beszel/journald/fail2ban через WireGuard/SSH под
+  единственным логином; секреты не попадают в этот репозиторий. Дашборда в `apps/` больше нет.
 - **Внешняя доступность** — временный scheduled GitHub Action проверяет сайт, readiness и TLS.
   Telegram-алерты и отдельный внешний monitoring server отложены.
 
@@ -453,7 +452,7 @@ Nginx выставляет `Cache-Control`/`ETag` для хэшированно�
 | Security headers / CORS | Rate limiting чекер-эндпоинта на Nginx: `limit_req_zone` 20 req/min/IP, burst 5, `nodelay` (см. §4, §11.2 источника) — против автоматизированного перебора банка ответов; конкретную цифру пересмотреть по факту логов после запуска |
 | Accessibility target | Foundation и lab не имеют serious/critical axe violations; lesson outline сохраняет вложенный semantic list, anchors, keyboard focus, различимый текущий пункт и корректный source order, а сложный визуал имеет видимую полную текстовую альтернативу |
 | Performance budget | LCP < 2.5s, CLS < 0.1, INP < 200ms на мобильном 4G-профиле; текущий Lighthouse gate измеряет только `/` до появления новых public routes |
-| Observability | Umami + Beszel + journald/fail2ban на application VPS; унифицированный `apps/ops` через WireGuard; scheduled GitHub probe для внешней доступности; без Telegram на этом этапе |
+| Observability | Umami + Beszel + journald/fail2ban на application VPS; читаются внешним sre-kit через WireGuard/SSH; scheduled GitHub probe для внешней доступности; без Telegram на этом этапе |
 | Backup / restore | Локальный restic на VPS: daily `pg_dump -Fc`, Beszel/config snapshots, 7 daily + 4 weekly + 3 monthly, freshness marker и ежемесячный restore drill; off-site storage отложен с явно принятым риском |
 | SEO | Product URL taxonomy, metadata and sitemap intentionally deferred; `/` имеет нейтральный technical title, а `/lab/lesson` unlisted, `noindex,nofollow` и исключён из prerender discovery |
 | Mobile / no-JS readability | Lab-текст, последовательные стадии визуала, подписи, `<details>`-подсказка и section anchors доступны в SSR HTML; интерактивность остаётся progressive enhancement |

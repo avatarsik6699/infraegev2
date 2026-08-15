@@ -28,8 +28,10 @@
 ### VS Code ESLint must not infer a shared TSConfig root across sibling apps
 
 - **Symptoms:** TypeScript files intermittently show `Parsing error: No tsconfigRootDir was set,
-  and multiple candidate TSConfigRootDirs are present`, naming both `apps/web` and `apps/ops`, even
-  though each workspace's standalone `pnpm lint` passes.
+  and multiple candidate TSConfigRootDirs are present`, naming multiple sibling app workspaces
+  (this repo hit it with `apps/web` and the now-removed `apps/ops`), even though each workspace's
+  standalone `pnpm lint` passes. Currently dormant with only `apps/web` in the workspace — resurface
+  this if a second pnpm-workspace app is added again.
 - **Root cause:** the VS Code ESLint extension keeps both flat configs in one Node process.
   `typescript-eslint` records the directory of every accessed preset as a candidate root; after
   both sibling configs load, its process-global inference is ambiguous.
@@ -74,8 +76,9 @@
 - **Root cause:** Vite cleans only its client `outDir`; plain `tsc` emits current files but does not
   delete JavaScript whose source was renamed or removed.
 - **Fix:** make the application build remove its own narrow `dist` directory before running Vite
-  and `tsc`, and keep the `start` entrypoint aligned with the emitted bootstrap (`server/main.ts`
-  for `apps/ops`). Never rely on a dirty local `dist` as evidence that the production command works.
+  and `tsc`, and keep the `start` entrypoint aligned with the emitted bootstrap (this repo hit it
+  in the now-removed `apps/ops`'s `server/main.ts`; no workspace currently uses this split
+  build shape). Never rely on a dirty local `dist` as evidence that the production command works.
 
 ### Mantine adoption must use v9.5.1 exclusively (change 04+)
 
@@ -245,53 +248,6 @@
   `@mantine/core/styles/<Component>.css` import and any component dependencies to
   `apps/web/src/shared/styles/tokens.css`. Keep core styles before extension styles and application
   rules, then verify build, browser rendering and the Lighthouse budget.
-
-### WSL: an active Windows VPN does not create the infraege WireGuard route
-
-- **Symptoms**: `ping 10.77.0.1` times out; `ip route get 10.77.0.1` selects the mirrored Windows
-  VPN adapter (for example source `10.8.1.1`), and there is no `infraege-wsl` link or recent
-  handshake.
-- **Root cause**: WSL mirrored networking exposes the active Windows/Amnezia default tunnel, but
-  the separate infraege WireGuard config has not been raised inside WSL. Installing
-  `wireguard-tools` alone does not create the interface or its `AllowedIPs` route.
-- **Fix**: use `make ops-tunnel-up` (or `make ops-up`) with the protected
-  `~/.config/infraege/production/infraege-wsl.conf`. Its `10.77.0.0/24` route is more specific than
-  the Amnezia default route. If the interface exists but has no handshake, temporarily disconnect
-  Amnezia to distinguish endpoint routing from VPS/WireGuard configuration, then retry and inspect
-  `make ops-status`; do not add a public route for private admin ports.
-
-### Ops: journald ranges and private SSH need explicit protocol identities
-
-- **Symptoms**: journald returns HTTP 400 or times out, while fail2ban SSH reports that no ED25519
-  host key is known for `10.77.0.1`, even though the VPS public SSH key is already pinned.
-- **Root cause**: systemd journal gateway treats `follow` as a presence-only option and requires
-  the structured `entries=[cursor][[:skip]:[count]]` Range syntax. OpenSSH indexes known host keys
-  by the connection host unless a separate host-key identity is configured.
-- **Fix**: request `/entries` with `Range: entries=:-200:200`, without `follow=false`. Connect
-  fail2ban to `ops-reader@10.77.0.1` but set `HostKeyAlias` to the already pinned public VPS host,
-  use its explicit `UserKnownHostsFile`, and keep strict host-key checking enabled. Never replace
-  this with `StrictHostKeyChecking=no` or TOFU.
-
-### Ops: history range is not refresh cadence
-
-- **Symptoms**: the smallest dashboard range is `1h`, so the operator assumes metrics can update
-  only once per hour or lowers one global polling interval until Umami, Beszel and SSH are queried
-  continuously.
-- **Root cause**: `1h` controls the amount and resolution of historical chart data. Freshness is a
-  separate browser cadence, while every upstream source has a different useful collection rate.
-- **Fix**: keep `HISTORY` and `REFRESH` as separate controls. Browser near-live polling defaults to
-  15 seconds, pauses in hidden tabs and never overlaps. The BFF coalesces tabs and enforces
-  source-specific TTLs; raw Umami realtime events and session identifiers must never cross the
-  BFF boundary.
-
-### Ops: Beszel container memory values are MiB, not GB
-
-- **Symptoms**: a small container appears to consume hundreds of GB even though `docker stats`
-  reports only hundreds of MiB.
-- **Root cause**: Beszel agent field `m` is used memory converted from bytes to binary megabytes.
-  Relabelling that raw number as GB inflates the displayed unit by a factor of 1024.
-- **Fix**: keep the BFF/browser contract explicit as `memoryMiB`; display MiB below 1024 and
-  normalize larger values to GiB. Compare suspicious values with `docker stats --no-stream`.
 
 ### Production: Umami public prefix is not the tracker script upstream path
 
