@@ -3,8 +3,8 @@
 ## Triage
 
 1. Record UTC start time, affected URLs and deployed SHA; do not rotate/delete logs before capture.
-2. Check `https://infraege.ru/health/live` and `/health/ready`, GitHub probe history, then the local
-   ops dashboard source strip.
+2. Check `https://infraege.ru/health/live` and `/health/ready`, GitHub probe history, then sre-kit's
+   source strip.
 3. On the VPS use `docker compose ... ps`, `journalctl -u docker --since -30min`, disk/memory state,
    and `fail2ban-client status`. Never paste production env files or tokens into tickets/chat.
 

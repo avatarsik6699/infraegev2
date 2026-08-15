@@ -439,7 +439,6 @@ Reference asset map (inspect current files; paths may evolve):
 | Render, deploy and rollback | `scripts/render-production-config.sh`, `scripts/deploy-remote.sh` | env grammar, release layout, migration compatibility, smokes |
 | Backup and drills | `scripts/backup.sh`, restore/freshness scripts, systemd units | complete dataset inventory, off-site backend, RPO/RTO |
 | Delivery and probes | `.github/workflows/` | repository/environment, permissions, approvals, registry, concurrency |
-| Local operations lifecycle | `scripts/ops-local.sh`, `Makefile`, `apps/ops/` | private sources, BFF contract, credentials, polling and ownership |
 | Operations procedures | `docs/runbooks/` | provider values, contacts, evidence, recovery and handover |
 | Regression knowledge | `docs/KNOWN_GOTCHAS.md` | retain only applicable traps; add new symptoms/root causes/fixes |
 

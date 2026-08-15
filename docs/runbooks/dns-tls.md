@@ -24,4 +24,4 @@ sudo certbot renew --dry-run
 ```
 
 The scheduled GitHub probe fails when HTTPS/readiness fails or fewer than 14 certificate days
-remain. It deliberately has no Telegram integration yet; inspect Actions and the ops dashboard.
+remain. It deliberately has no Telegram integration yet; inspect Actions and sre-kit.

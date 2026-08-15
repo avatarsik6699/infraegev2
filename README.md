@@ -193,11 +193,8 @@ pnpm format        # применить Prettier и Ruff
 pnpm lint:fix      # применить безопасные ESLint fixes
 ```
 
-Сборки остаются явными, потому что web и локальный operations dashboard имеют разные runtime:
-
 ```bash
 pnpm build
-pnpm --filter ops build
 ```
 
 Backend:
@@ -249,10 +246,9 @@ PostgreSQL, Umami, Beszel, journald/fail2ban и Restic. GitHub Actions выпо�
 вручную для выбранного SHA через защищённое environment `production`, проверяет smoke/readiness и
 откатывает неуспешный релиз.
 
-`apps/ops` — отдельное локальное приложение, которое через WireGuard объединяет доступность,
-нагрузку, контейнеры, аналитику, ошибки и fail2ban. Конфигурация нескольких проектов уже
-поддерживается; секреты задаются только environment-переменными. Запуск и модель доступа описаны
-в [`docs/runbooks/monitoring.md`](docs/runbooks/monitoring.md).
+Наблюдаемость (доступность, нагрузка, контейнеры, аналитика, ошибки, fail2ban) читается через
+внешний инструмент [sre-kit](https://github.com/avatarsik6699/sre-kit) — единственный логин,
+секреты не попадают в этот репозиторий.
 
 Runbook’и: [DNS/TLS](docs/runbooks/dns-tls.md),
 [backup/restore](docs/runbooks/backup-restore.md),

@@ -26,9 +26,9 @@ pitfalls that must be reconsidered rather than copied.
 | Backend | Python/FastAPI (`apps/api`) |
 | Database | PostgreSQL (provisioned in `infra/docker-compose.yml`; no schema/migrations yet — content is git-based, docs/SPEC.md §3) |
 | Cache | — (not needed on M0) |
-| Operations UI | Local-first React/Vite **8.2.1 exact** `apps/ops`, Mantine Core/Charts 9.5.1 + Recharts 3.10.1, loopback-only Node BFF |
+| Observability | External [sre-kit](https://github.com/avatarsik6699/sre-kit) — host metrics, fail2ban, journal logs, uptime, and Umami traffic sources over WireGuard/SSH; no local operations UI in this repo |
 | Infra | Docker Compose: Nginx → `web`/`api`/Postgres plus pinned Umami/Beszel; Ubuntu 24.04, systemd, journald, fail2ban, WireGuard, Restic |
-| Package managers | uv (`apps/api`), pnpm workspace (`apps/web`, `apps/ops`, root) |
+| Package managers | uv (`apps/api`), pnpm workspace (`apps/web`, root) |
 | Formatting | Prettier 3.9.6 exact for supported repository files; Ruff from the API lock for Python; EditorConfig for cross-editor whitespace defaults |
 | CI/CD | GitHub Actions on pinned Ubuntu 24.04 runners: static/security/audit checks without tests; GHCR SHA images with SBOM/provenance; environment-approved serialized SSH deploy with rollback; scheduled uptime/TLS probe |
 
@@ -122,9 +122,9 @@ Fill every applicable row and report the rest as `SKIPPED` with a reason.
 | Check | Command | Preconditions / notes |
 |-------|---------|-----------------------|
 | Format | `pnpm format:check` | run once for the target set; scope is repository-wide because formatting configuration is shared |
-| Lint | `pnpm --filter web lint` · `pnpm --filter ops lint` · `cd apps/api && uv run ruff check app tests` | scope to touched workspace |
-| Type-check (affected) | `pnpm --filter web typecheck` · `pnpm --filter ops typecheck` · `cd apps/api && pnpm exec pyright app tests` | pyright reads `[tool.pyright]` in `apps/api/pyproject.toml` |
-| Focused tests | `pnpm --filter web exec vitest run <changed-test-files>` · `pnpm --filter ops exec vitest run <changed-test-files>` · `cd apps/api && uv run pytest <changed-test-files-or-nodeids>` | run only tests directly covering changed behavior; documentation-only changes are `SKIPPED`; never expand this row to the full suite |
+| Lint | `pnpm --filter web lint` · `cd apps/api && uv run ruff check app tests` | scope to touched workspace |
+| Type-check (affected) | `pnpm --filter web typecheck` · `cd apps/api && pnpm exec pyright app tests` | pyright reads `[tool.pyright]` in `apps/api/pyproject.toml` |
+| Focused tests | `pnpm --filter web exec vitest run <changed-test-files>` · `cd apps/api && uv run pytest <changed-test-files-or-nodeids>` | run only tests directly covering changed behavior; documentation-only changes are `SKIPPED`; never expand this row to the full suite |
 | LSP diagnostics | available: yes | `python-lsp` (Pyright) and `typescript-lsp` MCP servers; repository type-check commands remain complementary gate evidence |
 | API type regen (`openapi-typescript` or equivalent) | `pnpm api:check` | only when the public API surface or its generated consumer changed; fails on tracked drift |
 
@@ -144,10 +144,9 @@ default local shipping.
 | Backend test suite | `cd apps/api && uv run pytest` | local only |
 | API contract drift | `pnpm api:check` | requires the frozen API and pnpm environments; tracked schema and generated TypeScript must match |
 | Frontend build | `cd apps/web && pnpm build` | runs TanStack Start's build-time prerender; fails the build if any crawled page 500s |
-| Frontend unit tests | `pnpm --filter web test && pnpm --filter ops test` | local only |
+| Frontend unit tests | `pnpm --filter web test` | local only |
 | E2E lint / determinism | `pnpm --filter web exec playwright test --list` | local only, never CI'd; validates Playwright config/spec collection without running the journey |
 | E2E (Playwright) | `pnpm --filter web test:e2e` | local only, never CI'd; starts local Vite + Uvicorn through Playwright `webServer` and verifies the foundation/404 journeys in the single Chromium project |
-| Ops dashboard | `pnpm --filter ops build` | BFF tests are included in the local-only workspace unit test row |
 | Smoke | `curl -f http://localhost:8000/health/ready` (backend) — frontend smoke is the build prerender crawl | |
 | SAST / secrets / dependency audit | `pnpm audit:security` | Docker required for pinned Gitleaks 8.30.1 and Trivy 0.73.0; Semgrep 1.172.0 and pip-audit 2.10.1 run through uvx |
 | Accessibility audit | `pnpm audit:a11y` | local Playwright/axe; foundation and not-found routes, serious/critical violations fail |
@@ -241,8 +240,7 @@ pnpm --filter web test:e2e
   global `networkidle`. When streamed SSR markup precedes hydration, retry the user action against
   an observable interactive state inside the owning POM.
 - Vitest owns mock cleanup through workspace config (`clearMocks`, `restoreMocks`, and
-  `unstubGlobals`). Keep DOM cleanup explicit in ops jsdom files because that workspace does not
-  expose global hooks; keep fake-timer and environment-variable cleanup beside the tests that own
+  `unstubGlobals`); keep fake-timer and environment-variable cleanup beside the tests that own
   those resources.
 - `playwright.config.ts` contains one project only: Chromium. It always starts fresh local frontend
   and backend processes on dedicated `127.0.0.2:3100` / `127.0.0.2:8100` ports with strict port
@@ -268,7 +266,7 @@ pnpm --filter web test:e2e
 ├── .editorconfig               # editor-independent whitespace and indentation defaults
 ├── prettier.config.mjs         # repository-local Prettier opt-in/config anchor
 ├── plugins/sdd-workflow/       # Codex plugin (skills, commands, MCP, hooks)
-├── apps/web/, apps/api/, apps/ops/, infra/, ops/, content/, scripts/
+├── apps/web/, apps/api/, infra/, ops/, content/, scripts/
 └── AGENTS.md / CLAUDE.md       # AI agent rules
 ```
 
@@ -319,9 +317,9 @@ Route pending/error/not-found UI, delayed skeletons, and navigation progress are
 defaults. Browser render/route/chunk/global failures pass through `shared/lib/client-errors`, which
 discards messages, page URLs, full stacks, and user data before posting a bounded fingerprint
 event. Nginx applies a dedicated body/rate limit, FastAPI writes a structured journald event, and
-the existing ops journal adapter projects it into the dashboard incident table. Expected product
-errors will remain local to their owner. Mantine extensions stay deferred until a real flow
-consumes them.
+sre-kit's `journal-http` adapter (with `parse_json_message` enabled) surfaces it as a labeled
+event. Expected product errors will remain local to their owner. Mantine extensions stay deferred
+until a real flow consumes them.
 
 ### Backend modules (`apps/api/app/`) — DDD-like, established in change 02
 
@@ -342,35 +340,6 @@ shared/      cross-module code used by >= 2 modules — stays an empty placehold
 No repository/ORM layer exists yet — content is git-based (SPEC.md §3), not DB-backed. When a
 first SQLAlchemy model is added, see the pre-emptive asyncpg datetime rule in
 `docs/KNOWN_GOTCHAS.md` before writing it.
-
-### Operations application (`apps/ops/`) — local-first FSD/DDD-like boundary
-
-```
-contracts/    BFF-to-browser DTOs and the finite dashboard range contract; package-local and
-              compiled with the server so the two TypeScript consumers cannot drift.
-src/          React client: app.tsx is composition-only; pages/dashboard owns its API client,
-              polling model and private components; shared contains only reusable config/styles.
-server/main.ts
-              production bootstrap and listen only.
-server/app.ts request-listener factory; composes the API router and static client delivery.
-server/core/  cross-cutting config, HTTP response and static-file infrastructure.
-server/api/   aggregates module HTTP handlers; contains no source-specific logic.
-server/modules/
-              projects and dashboard bounded contexts, each with its API/service/schema needs.
-server/integrations/
-              isolated Availability/Beszel/Umami/journald/fail2ban adapters implementing the
-              dashboard reader port; credentials are resolved only inside the BFF.
-```
-
-The React client follows the same pragmatic rule as `apps/web`: a one-page component used only by
-that page remains private under `pages/dashboard/components/`; do not create ceremonial widgets,
-features or shared helpers until a second consumer exists. The ops ESLint config enforces
-`app -> pages -> shared` and public `index.ts` imports. On the server, dependencies point inward:
-modules define the reader port, integrations implement it, and `main.ts` injects the live adapters.
-The BFF stays on Node's built-in `http`/`fetch`; do not add a web framework or global singleton
-cache for the current two-route surface.
-
----
 
 ## Common operations
 

@@ -39,11 +39,6 @@ jobs:
           pnpm --filter web typecheck
           pnpm --filter web build
           node scripts/validate-content-links.mjs
-      - name: Operations dashboard static checks
-        run: |
-          pnpm --filter ops lint
-          pnpm --filter ops typecheck
-          pnpm --filter ops build
       - name: Backend static checks
         working-directory: apps/api
         run: |

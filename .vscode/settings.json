@@ -8,7 +8,7 @@
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "typescript.updateImportsOnFileMove.enabled": "always",
   "javascript.updateImportsOnFileMove.enabled": "always",
-  "eslint.workingDirectories": ["./apps/web", "./apps/ops"],
+  "eslint.workingDirectories": ["./apps/web"],
   "python.defaultInterpreterPath": "${workspaceFolder}/apps/api/.venv/bin/python",
   "python.testing.cwd": "${workspaceFolder}/apps/api",
   "python.testing.pytestArgs": ["tests"],
