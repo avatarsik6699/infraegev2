@@ -62,6 +62,13 @@ manifests, lockfiles, Dockerfiles, Vite configuration or other image-owned files
 installs. Use `make stop` for a fast resumable halt; use `make down` only when the owned containers
 and network must be recreated. Both paths preserve the named PostgreSQL volume.
 
+**Private VPS access:** reaching the application VPS's private `10.77.0.0/24` network (Beszel,
+Umami, journald gatewayd, private SSH — e.g. for an external observability tool like sre-kit run
+locally) needs the WireGuard tunnel: `make tunnel-up` starts and verifies it, `make tunnel-down`
+stops a tunnel this Makefile started, `make tunnel-status` reports interface/route/handshake state.
+Wraps `scripts/wireguard-tunnel.sh`; requires the protected config at
+`~/.config/infraege/production/infraege-wsl.conf` (or `$INFRAEGE_WG_CONFIG`) to already exist.
+
 ### pnpm workspace policy
 
 The root `packageManager` and workspace policy pin pnpm 10.33.0, model dependency compatibility

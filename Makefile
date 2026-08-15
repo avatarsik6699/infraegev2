@@ -12,11 +12,14 @@ LOCAL_ENV := POSTGRES_USER=infraege \
 	APP_ENV=development \
 	DEPLOY_SHA=development
 
+WIREGUARD_TUNNEL := ./scripts/wireguard-tunnel.sh
+
 .DEFAULT_GOAL := help
 
 STOP_TIMEOUT ?= 30
 
 .PHONY: help dev rebuild stop down restart logs ps config clean \
+	tunnel-up tunnel-down tunnel-status \
 	ops-open-beszel ops-open-umami ops-configure-beszel-agent \
 	ops-repair-beszel-env
 
@@ -32,6 +35,12 @@ help:
 	@echo "  make ps       Show service and health status"
 	@echo "  make config   Validate the fully rendered Compose configuration"
 	@echo "  make clean    Remove regenerable local reports, build outputs, and caches"
+	@echo ""
+	@echo "infraege private VPS access"
+	@echo ""
+	@echo "  make tunnel-up     Start and verify the WireGuard tunnel to the private VPS network"
+	@echo "  make tunnel-down   Stop a tunnel started by this Makefile"
+	@echo "  make tunnel-status Show interface, route, and handshake state"
 	@echo ""
 	@echo "infraege private-service shortcuts"
 	@echo ""
@@ -85,6 +94,15 @@ clean:
 	@find apps/api -type d \( -name __pycache__ -o -name .pytest_cache -o -name .ruff_cache \) \
 		-prune -exec rm -rf -- {} +
 	@echo "Regenerable local reports, build outputs, and caches removed."
+
+tunnel-up:
+	@$(WIREGUARD_TUNNEL) up
+
+tunnel-down:
+	@$(WIREGUARD_TUNNEL) down
+
+tunnel-status:
+	@$(WIREGUARD_TUNNEL) status
 
 ops-open-beszel:
 	@pnpm --filter web exec playwright open http://10.77.0.1:8090
