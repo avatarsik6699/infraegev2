@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 390" role="img" aria-labelledby="title description">
+  <title id="title">Сокращение отношения соседних рекуррентных значений</title>
+  <desc id="description">F(100) раскрывается через F(99), затем через F(98); общий множитель F(98) сокращается, и остаётся произведение 100 на 99.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#737373"/>
+    </marker>
+    <style>
+      .heading { font: 600 24px ui-sans-serif, system-ui, sans-serif; fill: #171717; }
+      .formula { font: 500 21px ui-monospace, SFMono-Regular, Consolas, monospace; fill: #171717; }
+      .note { font: 400 16px ui-sans-serif, system-ui, sans-serif; fill: #737373; }
+      .box { fill: #fafafa; stroke: #d4d4d4; stroke-width: 2; }
+      .result { fill: #f5f5f5; stroke: #737373; stroke-width: 2; }
+      .line { fill: none; stroke: #737373; stroke-width: 2; marker-end: url(#arrow); }
+    </style>
+  </defs>
+
+  <rect width="880" height="390" rx="24" fill="#ffffff"/>
+  <text x="440" y="48" text-anchor="middle" class="heading">Раскрываем только нужные шаги</text>
+
+  <rect x="55" y="92" width="220" height="74" rx="16" class="box"/>
+  <text x="165" y="136" text-anchor="middle" class="formula">F(100)</text>
+  <path d="M275 129 H328" class="line"/>
+  <rect x="333" y="92" width="220" height="74" rx="16" class="box"/>
+  <text x="443" y="136" text-anchor="middle" class="formula">100 · F(99)</text>
+  <path d="M553 129 H606" class="line"/>
+  <rect x="611" y="92" width="220" height="74" rx="16" class="box"/>
+  <text x="721" y="136" text-anchor="middle" class="formula">100 · 99 · F(98)</text>
+
+  <text x="440" y="218" text-anchor="middle" class="formula">F(100) / F(98)</text>
+  <path d="M440 232 V267" class="line"/>
+  <rect x="215" y="272" width="450" height="74" rx="16" class="result"/>
+  <text x="440" y="317" text-anchor="middle" class="formula">100 · 99 · F(98) / F(98) = 9900</text>
+  <text x="440" y="374" text-anchor="middle" class="note">Одинаковый множитель сокращается — считать F(98) не нужно</text>
+</svg>

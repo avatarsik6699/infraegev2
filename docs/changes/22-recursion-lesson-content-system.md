@@ -91,13 +91,13 @@ See `docs/SPEC.md` §3 for the full contract.
 - ~~`D2` Adapt all 23 authored chapters and final synthesis into the approved six-role recursion lesson with source-faithful wording and one structured recursion trace~~ (removed — superseded by `D5`, which reorders rather than preserves the original section split)
 - [x] `D3` Add the three authored tasks with server-owned accepted answers, public hints/explanations and a review-only quality record — _Depends on:_ B1
 - ~~`D4` Recompose the recursion lesson into a small set of numbered theory groups, move examples into the theory flow and mark only reusable pedagogical fragments as semantic blocks without shortening the authored material~~ (removed — superseded by `D5`)
-- [ ] `D5` Rewrite `docs/artifacts/lessons/16-rekursiya.md` into TSX `ConceptBlock`s, reordered so concrete worked examples precede formal justification, each common mistake sits next to its concept, and the loop/memoization alternatives are introduced by the cost they solve (recursion depth limit, repeated subcomputation) rather than as unmotivated alternatives; add two `Checkpoint` self-checks — _Depends on:_ F9
-- [ ] `D6` Produce `Diagram` SVG assets (recursion call/return trace, recurrence derivation, others as the `ConceptBlock` split identifies a need) with required `alt`/`caption`/`purpose` — _Depends on:_ F8
+- [x] `D5` Rewrite `docs/artifacts/lessons/16-rekursiya.md` into TSX `ConceptBlock`s, reordered so concrete worked examples precede formal justification, each common mistake sits next to its concept, and the loop/memoization alternatives are introduced by the cost they solve (recursion depth limit, repeated subcomputation) rather than as unmotivated alternatives; add two `Checkpoint` self-checks — _Depends on:_ F9
+- [x] `D6` Produce `Diagram` SVG assets (recursion call/return trace, recurrence derivation, others as the `ConceptBlock` split identifies a need) with required `alt`/`caption`/`purpose` — _Depends on:_ F8
 
 ### Other
 
 - ~~`T1` Synchronize SPEC and PRODUCT with the approved flexible learning flow, hybrid content boundary and first review-only product route~~ (removed — superseded by `T4`)
-- [ ] `T2` Complete required browser, design-quality, LSP and affected Critical Gate evidence while retaining human publication approval — _Depends on:_ B2, F12, D3, D5, D6, I2, F24
+- [x] `T2` Complete required browser, design-quality, LSP and affected Critical Gate evidence while retaining human publication approval — _Depends on:_ B2, F12, D3, D5, D6, I2, F24
 - ~~`T3` Synchronize the lesson structure contract after removing `guided_examples` as a standalone stage and adopting coarse theory navigation with semantic islands~~ (removed — superseded by `T4`)
 - [x] `T4` Synchronize `docs/SPEC.md` §3/§5.2 with the TSX-as-content boundary — _Depends on:_ —
 - ~~`T5` Synchronize `apps/web/PRODUCT.md` with the TSX-as-content authoring boundary~~ (removed — superseded by `T6`; durable product truth belongs to `docs/SPEC.md`, while the Impeccable-owned frontend artifact is removed)
