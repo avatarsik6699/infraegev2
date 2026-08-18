@@ -4,30 +4,25 @@ import {
   useState,
   useSyncExternalStore,
   type ComponentProps,
-  type KeyboardEvent,
 } from "react";
 import type { LessonTypes } from "~/entities/lesson";
 import { useLessonProgress } from "~/features/lesson-progress";
+import { enhancementState } from "~/shared/lib/enhancement-state";
 import type { LessonPracticeTypes } from "../lesson-practice.types";
-import { isPracticeAnswerCorrect } from "./practice-answer";
 
 type FormSubmitHandler = NonNullable<ComponentProps<"form">["onSubmit"]>;
-
-const subscribeToEnhancement = () => () => undefined;
-const getClientEnhancement = () => true;
-const getServerEnhancement = () => false;
 
 export function useLessonPracticeModel(props: LessonPracticeTypes.Props) {
   const [practiceStates, setPracticeStates] =
     useState<LessonPracticeTypes.States>({});
+  const [feedback, setFeedback] = useState<LessonPracticeTypes.Feedback>({});
   const [activeTaskId, setActiveTaskId] = useState(props.tasks[0]?.id ?? "");
   const enhanced = useSyncExternalStore(
-    subscribeToEnhancement,
-    getClientEnhancement,
-    getServerEnhancement,
+    enhancementState.subscribe,
+    enhancementState.getClientSnapshot,
+    enhancementState.getServerSnapshot,
   );
   const headingRefs = useRef(new Map<string, HTMLHeadingElement>());
-  const tabRefs = useRef(new Map<string, HTMLButtonElement>());
   const focusSelectedHeading = useRef(false);
   const progress = useLessonProgress(props.progressStore);
 
@@ -45,39 +40,27 @@ export function useLessonPracticeModel(props: LessonPracticeTypes.Props) {
     setActiveTaskId(taskId);
   };
 
-  const handleTabKeyDown = (
-    event: KeyboardEvent<HTMLButtonElement>,
-    currentIndex: number,
-  ) => {
-    const nextIndex = getNextTaskIndex(
-      event.key,
-      currentIndex,
-      props.tasks.length,
-    );
-    if (nextIndex === undefined) return;
-
-    event.preventDefault();
-    const nextTask = props.tasks[nextIndex];
-    if (!nextTask) return;
-    selectTask(nextTask.id);
-    tabRefs.current.get(nextTask.id)?.focus();
-  };
-
-  const checkAnswer = (
+  const checkAnswer = async (
     task: LessonTypes.PracticeTask,
     event: Parameters<FormSubmitHandler>[0],
   ) => {
     event.preventDefault();
     const value = new FormData(event.currentTarget).get("answer");
-    const correct = isPracticeAnswerCorrect(
-      task,
-      typeof value === "string" ? value : "",
-    );
-    setPracticeStates((current) => ({
-      ...current,
-      [task.id]: correct ? "correct" : "incorrect",
-    }));
-    if (correct) props.progressStore.markSolved(task.id);
+    setPracticeStates((current) => ({ ...current, [task.id]: "checking" }));
+    try {
+      const result = await props.checkAnswer(
+        task.id,
+        typeof value === "string" ? value : "",
+      );
+      setFeedback((current) => ({ ...current, [task.id]: result.explanation }));
+      setPracticeStates((current) => ({
+        ...current,
+        [task.id]: result.correct ? "correct" : "incorrect",
+      }));
+      if (result.correct) props.progressStore.markSolved(task.id);
+    } catch {
+      setPracticeStates((current) => ({ ...current, [task.id]: "error" }));
+    }
   };
 
   const setHeadingRef = (
@@ -88,32 +71,14 @@ export function useLessonPracticeModel(props: LessonPracticeTypes.Props) {
     else headingRefs.current.delete(taskId);
   };
 
-  const setTabRef = (taskId: string, element: HTMLButtonElement | null) => {
-    if (element) tabRefs.current.set(taskId, element);
-    else tabRefs.current.delete(taskId);
-  };
-
   return {
     activeTaskId,
     checkAnswer,
     enhanced,
-    handleTabKeyDown,
+    feedbackFor: (taskId: string) => feedback[taskId] ?? "",
     isSolved: (taskId: string) => progress.solvedTaskIds.includes(taskId),
     selectTask,
     setHeadingRef,
-    setTabRef,
     stateFor: (taskId: string) => practiceStates[taskId] ?? "idle",
   };
-}
-
-function getNextTaskIndex(
-  key: string,
-  currentIndex: number,
-  taskCount: number,
-): number | undefined {
-  if (key === "ArrowLeft") return (currentIndex - 1 + taskCount) % taskCount;
-  if (key === "ArrowRight") return (currentIndex + 1) % taskCount;
-  if (key === "Home") return 0;
-  if (key === "End") return taskCount - 1;
-  return undefined;
 }

@@ -1,0 +1,24 @@
+.root {
+  color: inherit;
+  /* The link reads as interactive without hover through a persistent neutral
+     underline; color is not required for the affordance. */
+  text-decoration-color: var(--color-accent);
+  transition:
+    color 140ms ease-out,
+    text-decoration-color 140ms ease-out;
+}
+
+.root:hover {
+  color: var(--color-accent-dark);
+  text-decoration-color: currentColor;
+}
+
+/* Uses currentColor — rides the anchor's own `color` transition
+   above instead of animating on its own (one authored motion, not two). */
+.icon {
+  display: inline-block;
+  width: 0.85em;
+  height: 0.85em;
+  margin-right: 0.2em;
+  vertical-align: -0.1em;
+}

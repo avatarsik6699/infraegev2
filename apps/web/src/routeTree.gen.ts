@@ -10,11 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LabDesignSystemRouteImport } from './routes/lab.design-system'
 import { Route as LabLessonRouteImport } from './routes/lab.lesson'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LabDesignSystemRoute = LabDesignSystemRouteImport.update({
+  id: '/lab/design-system',
+  path: '/lab/design-system',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LabLessonRoute = LabLessonRouteImport.update({
@@ -25,27 +31,31 @@ const LabLessonRoute = LabLessonRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/lab/design-system': typeof LabDesignSystemRoute
   '/lab/lesson': typeof LabLessonRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/lab/design-system': typeof LabDesignSystemRoute
   '/lab/lesson': typeof LabLessonRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/lab/design-system': typeof LabDesignSystemRoute
   '/lab/lesson': typeof LabLessonRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/lab/lesson'
+  fullPaths: '/' | '/lab/design-system' | '/lab/lesson'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/lab/lesson'
-  id: '__root__' | '/' | '/lab/lesson'
+  to: '/' | '/lab/design-system' | '/lab/lesson'
+  id: '__root__' | '/' | '/lab/design-system' | '/lab/lesson'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  LabDesignSystemRoute: typeof LabDesignSystemRoute
   LabLessonRoute: typeof LabLessonRoute
 }
 
@@ -56,6 +66,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lab/design-system': {
+      id: '/lab/design-system'
+      path: '/lab/design-system'
+      fullPath: '/lab/design-system'
+      preLoaderRoute: typeof LabDesignSystemRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/lab/lesson': {
@@ -70,6 +87,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LabDesignSystemRoute: LabDesignSystemRoute,
   LabLessonRoute: LabLessonRoute,
 }
 export const routeTree = rootRouteImport

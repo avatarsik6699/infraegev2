@@ -1,0 +1,28 @@
+{
+  "id": "rekursiya-two-values",
+  "topic_ids": ["rekursiya"],
+  "title": "Используйте два предыдущих значения",
+  "statement": "F(1) = 1, F(2) = 2, F(n) = 2F(n - 1) + F(n - 2). Найдите F(5).",
+  "hint": "Храните два последних значения и не пропускайте F(3) и F(4).",
+  "theory_links": [
+    {
+      "hash": "several-previous-values",
+      "label": "Несколько предыдущих значений"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["29"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "worked_example",
+      "data": {
+        "prompt": "Последовательно применим формулу.",
+        "steps": ["F(3) = 5", "F(4) = 12", "F(5) = 29"]
+      }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

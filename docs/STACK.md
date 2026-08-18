@@ -22,7 +22,7 @@ pitfalls that must be reconsidered rather than copied.
 
 | Layer | Technology |
 |-------|-----------|
-| Frontend | React + TanStack Start (SSR/SSG, file-based routing and automatic route splitting) on Vite **8.2.1 exact** (Rolldown/Oxc); Mantine Core/Hooks/NProgress **9.5.1 exact**; TanStack Query for future server state; generated `openapi-typescript` contracts with `openapi-fetch` transport |
+| Frontend | React + TanStack Start (SSR/SSG, file-based routing and automatic route splitting) on Vite **8.2.1 exact** (Rolldown/Oxc); Base UI **1.7.0 exact** with local CSS Modules; synchronous Python tokenization through `@speed-highlight/core` **2.0.0 exact**; TanStack Query for future server state; generated `openapi-typescript` contracts with `openapi-fetch` transport |
 | Backend | Python/FastAPI (`apps/api`) |
 | Database | PostgreSQL (provisioned in `infra/docker-compose.yml`; no schema/migrations yet — content is git-based, docs/SPEC.md §3) |
 | Cache | — (not needed on M0) |
@@ -40,6 +40,7 @@ pitfalls that must be reconsidered rather than copied.
 docker --version          # application: Docker + Compose v2
 docker compose version
 make --version            # application: GNU Make
+flock --version           # serializes local Docker lifecycle mutations (util-linux)
 node --version            # local tests only: >=22.13
 pnpm --version            # local tests only: exactly 10.33.0 (packageManager)
 python3 --version         # local tests only: >=3.12
@@ -61,6 +62,16 @@ manifests, lockfiles, Dockerfiles, Vite configuration or other image-owned files
 `make rebuild`; Docker then reuses unchanged layers, including the frozen pnpm and uv dependency
 installs. Use `make stop` for a fast resumable halt; use `make down` only when the owned containers
 and network must be recreated. Both paths preserve the named PostgreSQL volume.
+
+Lifecycle mutations are serialized for the `infraege-dev` Compose project: if a previous
+`make dev`, `make rebuild`, `make stop`, `make down` or `make restart` is still running, a second
+command fails immediately instead of racing the first one. Docker Desktop may also show a separate
+`infra` project created by direct `docker compose` commands; the Make targets intentionally own
+only `infraege-dev`. A failed start prints service status and recent nginx/web/api logs.
+
+The web lesson loader reads git-owned topic and task files through `CONTENT_DIR`. Compose mounts
+the repository `content/` directory read-only at `/content`; production images copy the same tree
+to `/content` during build. Host commands fall back to the workspace `content/` path.
 
 **Private VPS access:** reaching the application VPS's private `10.77.0.0/24` network (Beszel,
 Umami, journald gatewayd, private SSH — e.g. for an external observability tool like sre-kit run
@@ -192,7 +203,6 @@ tool that isn't available must be reported as skipped with a reason, never silen
 | New/changed API surface | `openapi-typescript` regen + frontend re-typecheck | after backend contract change | yes — `pnpm api:generate` updates tracked artifacts; `pnpm api:check` proves no drift |
 | Frontend architecture decision | `frontend-architecture` skill | during planning and architecture review | yes — installed in the local Codex skill catalog |
 | Backend architecture decision | `backend-architecture` skill | during planning and architecture review | yes — installed in the local Codex skill catalog |
-| Frontend design decision | `impeccable` skill | during `/plan` §5.3 and design Backlog items; replacement worlds require its product, direction, finish-review and documentation flow | yes — 4.0.4 installed |
 | Backend/API design decision | `backend-design` skill | during `/plan` §4 and backend-architecture Backlog items | yes |
 
 Mark a row `no` (not available) rather than leaving it blank — an unmarked row is otherwise
@@ -279,6 +289,9 @@ pnpm --filter web test:e2e
 
 ### Frontend layers (`apps/web/src/`) — pragmatic FSD-like, established in change 02
 
+Architecture, code-shape, interaction and visual-system rules for this tree live in
+[`docs/FRONTEND.md`](FRONTEND.md) — see `AGENTS.md` Core Rule 10.
+
 ```
 app/         application providers, project-wide configuration, route states and global styles.
 routes/      TanStack Start file-based routing (framework-fixed location). During the foundation
@@ -287,8 +300,8 @@ pages/       route-level composition and content that belongs to one page.
 widgets/     reusable composite page chrome, including lesson navigation.
 features/    reusable user-facing capabilities, including lesson practice and progress.
 entities/    reusable domain concepts, including lesson semantics and learning visuals.
-shared/      domain-agnostic config/lib plus policy components wrapping Mantine where the project
-             owns semantics or defaults.
+shared/      domain-agnostic config/lib plus local policy components owning semantic APIs and CSS;
+             Base UI behavior stays an internal detail of those components.
 ```
 
 Import direction is enforced by `eslint.config.js`'s per-layer `no-restricted-imports` zones: each
@@ -325,8 +338,8 @@ defaults. Browser render/route/chunk/global failures pass through `shared/lib/cl
 discards messages, page URLs, full stacks, and user data before posting a bounded fingerprint
 event. Nginx applies a dedicated body/rate limit, FastAPI writes a structured journald event, and
 sre-kit's `journal-http` adapter (with `parse_json_message` enabled) surfaces it as a labeled
-event. Expected product errors will remain local to their owner. Mantine extensions stay deferred
-until a real flow consumes them.
+event. Expected product errors remain local to their owner. Additional Base UI primitives or
+component libraries are adopted only with a real consumer and a local semantic boundary.
 
 ### Backend modules (`apps/api/app/`) — DDD-like, established in change 02
 

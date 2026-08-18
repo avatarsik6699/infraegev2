@@ -1,0 +1,40 @@
+:root {
+  color-scheme: light;
+
+  /* Active replaceable profile: “Engineering notebook”. Components must not
+     consume these values directly; tokens.css is the semantic boundary. */
+  --theme-page: oklch(1 0 0);
+  --theme-surface: oklch(1 0 0);
+  --theme-surface-muted: oklch(0.97 0 0);
+  --theme-ink: oklch(0.145 0 0);
+  --theme-ink-secondary: oklch(0.42 0 0);
+  --theme-rule: oklch(0.922 0 0);
+  --theme-rule-strong: oklch(0.87 0 0);
+  --theme-primary: oklch(0.205 0 0);
+  --theme-primary-hover: oklch(0.145 0 0);
+  --theme-interactive-muted: oklch(0.97 0 0);
+  --theme-on-primary: oklch(0.985 0 0);
+  --theme-ring: oklch(0.708 0 0);
+  --theme-success: oklch(0.46 0.08 145);
+  --theme-warning: oklch(0.48 0.12 65);
+  --theme-danger: oklch(0.5 0.18 25);
+  --theme-code: oklch(0.205 0 0);
+  --theme-code-top: oklch(0.145 0 0);
+  --theme-code-ink: oklch(0.985 0 0);
+  --theme-code-keyword: oklch(0.78 0.12 25);
+  --theme-code-string: oklch(0.82 0.1 145);
+  --theme-code-comment: oklch(0.68 0 0);
+  --theme-code-number: oklch(0.8 0.1 75);
+  --theme-code-function: oklch(0.82 0.09 255);
+  --theme-code-operator: oklch(0.86 0.05 300);
+
+  --theme-font-ui: "Onest Variable", "Onest Fallback", Arial, sans-serif;
+  --theme-font-reading:
+    "Literata Variable", "Literata Fallback", Georgia, serif;
+  --theme-font-data: "SFMono-Regular", Consolas, monospace;
+
+  --theme-radius-sm: 0.5rem;
+  --theme-radius-md: 0.625rem;
+  --theme-motion-duration: 140ms;
+  --theme-motion-easing: ease-out;
+}

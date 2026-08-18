@@ -25,13 +25,13 @@
 .heading {
   color: var(--color-muted);
   font-family: var(--font-reading);
-  font-size: 0.92rem;
+  font-size: var(--text-sm);
 }
 
 .sectionPosition {
   color: var(--color-accent-dark);
   font-family: var(--font-data);
-  font-size: 0.72rem;
+  font-size: var(--text-2xs);
   font-variant-numeric: tabular-nums;
 }
 
@@ -93,13 +93,14 @@
   color: var(--color-text);
   text-decoration: none;
   text-underline-offset: 0.2em;
+  transition: color var(--motion-duration) var(--motion-easing);
 }
 
 .groupLink {
   min-height: 1.8rem;
   font-family: var(--font-reading);
-  font-size: 0.96rem;
-  font-weight: 650;
+  font-size: var(--text-base);
+  font-weight: 600;
   line-height: 1.35;
 }
 
@@ -115,7 +116,7 @@
   padding-block: 0.24rem;
   color: var(--color-muted);
   font-family: var(--font-reading);
-  font-size: 0.82rem;
+  font-size: var(--text-xs);
   line-height: 1.35;
 }
 
@@ -126,7 +127,7 @@
   overflow: visible;
   color: var(--color-rule-strong);
   fill: currentColor;
-  transition: color 140ms ease-out;
+  transition: color var(--motion-duration) var(--motion-easing);
 }
 
 .parentNode {
@@ -152,11 +153,12 @@
 }
 
 .childLink[aria-current="location"] {
-  font-weight: 620;
+  font-weight: 600;
 }
 
 .groupLink:hover,
 .childLink:hover {
+  z-index: 1;
   color: var(--color-accent-dark);
 }
 
@@ -170,6 +172,13 @@
   border-radius: 0.15rem;
   outline: 2px solid var(--color-accent);
   outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .groupLink,
+  .childLink {
+    transition: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -202,7 +211,7 @@
   }
 
   .groupLink {
-    font-size: 0.92rem;
+    font-size: var(--text-sm);
   }
 
   .children {

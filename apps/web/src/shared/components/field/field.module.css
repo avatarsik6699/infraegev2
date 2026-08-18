@@ -1,0 +1,25 @@
+.root {
+  display: grid;
+  gap: var(--space-0-5);
+  font-family: var(--font-ui);
+}
+
+.label {
+  color: var(--color-text);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.description,
+.error {
+  font-size: var(--text-xs);
+  line-height: 1.45;
+}
+
+.description {
+  color: var(--color-muted);
+}
+
+.error {
+  color: var(--color-danger);
+}

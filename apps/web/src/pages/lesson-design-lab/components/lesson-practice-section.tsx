@@ -1,5 +1,8 @@
 import { LessonSectionHeading } from "~/entities/lesson";
-import { LessonPractice } from "~/features/lesson-practice";
+import {
+  createLocalPracticeChecker,
+  LessonPractice,
+} from "~/features/lesson-practice";
 import type { LessonProgressTypes } from "~/features/lesson-progress";
 import { Typography } from "~/shared/components/typography";
 import { lessonDesignLabConstants } from "../lesson-design-lab.constants";
@@ -30,6 +33,9 @@ export const LessonPracticeSection: React.FC<LessonPracticeSectionProps> = (
       учитывается: важно понять правило и применить его без ошибки.
     </Typography.Text>
     <LessonPractice
+      checkAnswer={createLocalPracticeChecker(
+        lessonDesignLabConstants.practiceTasks,
+      )}
       progressStore={props.progressStore}
       tasks={lessonDesignLabConstants.practiceTasks}
     />

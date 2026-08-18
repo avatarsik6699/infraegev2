@@ -13,10 +13,16 @@ LOCAL_ENV := POSTGRES_USER=infraege \
 	DEPLOY_SHA=development
 
 WIREGUARD_TUNNEL := ./scripts/wireguard-tunnel.sh
+DOCKER_LIFECYCLE := ./scripts/docker-dev-lifecycle.sh
 
 .DEFAULT_GOAL := help
 
-STOP_TIMEOUT ?= 30
+# Compose stops services in reverse dependency order (nginx, web, api, postgres), so a service
+# that doesn't exit on SIGTERM pays this timeout once per service — up to 4x in the worst case.
+# Kept low: local dev holds no in-flight traffic or unflushed state worth draining, and postgres
+# durability comes from WAL, not a slow shutdown — so a stuck process should be force-killed
+# quickly instead of stalling `make stop`/`make down`.
+STOP_TIMEOUT ?= 10
 
 .PHONY: help dev rebuild stop down restart logs ps config clean \
 	tunnel-up tunnel-down tunnel-status \
@@ -50,39 +56,25 @@ help:
 	@echo "  make ops-repair-beszel-env       Normalize the protected Beszel key assignment"
 
 dev:
-	@docker info >/dev/null 2>&1 || { echo "Docker is not running." >&2; exit 1; }
-	@$(LOCAL_ENV) $(COMPOSE) up --wait --wait-timeout 180
-	@echo ""
-	@echo "infraege is ready: http://localhost:8080/"
-	@echo "UI foundation: http://localhost:8080/"
+	@STOP_TIMEOUT=$(STOP_TIMEOUT) $(DOCKER_LIFECYCLE) dev
 
 rebuild:
-	@docker info >/dev/null 2>&1 || { echo "Docker is not running." >&2; exit 1; }
-	@$(LOCAL_ENV) $(COMPOSE) up --build --wait --wait-timeout 180
-	@echo ""
-	@echo "infraege was rebuilt and is ready: http://localhost:8080/"
+	@STOP_TIMEOUT=$(STOP_TIMEOUT) $(DOCKER_LIFECYCLE) rebuild
 
 stop:
-	@docker info >/dev/null 2>&1 || { echo "Docker is not running." >&2; exit 1; }
-	@echo "Stopping infraege gracefully (timeout: $(STOP_TIMEOUT)s per service)..."
-	@$(LOCAL_ENV) $(COMPOSE) stop --timeout $(STOP_TIMEOUT)
-	@echo "infraege stopped. Containers and PostgreSQL data were preserved for fast resume."
+	@STOP_TIMEOUT=$(STOP_TIMEOUT) $(DOCKER_LIFECYCLE) stop
 
 down:
-	@docker info >/dev/null 2>&1 || { echo "Docker is not running." >&2; exit 1; }
-	@echo "Removing infraege containers and network (timeout: $(STOP_TIMEOUT)s per service)..."
-	@$(LOCAL_ENV) $(COMPOSE) down --timeout $(STOP_TIMEOUT) --remove-orphans
-	@echo "infraege containers and network removed. PostgreSQL data was preserved."
+	@STOP_TIMEOUT=$(STOP_TIMEOUT) $(DOCKER_LIFECYCLE) down
 
 restart:
-	@$(MAKE) stop
-	@$(MAKE) dev
+	@STOP_TIMEOUT=$(STOP_TIMEOUT) $(DOCKER_LIFECYCLE) restart
 
 logs:
 	@$(LOCAL_ENV) $(COMPOSE) logs --follow --tail=100
 
 ps:
-	@$(LOCAL_ENV) $(COMPOSE) ps
+	@$(LOCAL_ENV) $(COMPOSE) ps --all
 
 config:
 	@$(LOCAL_ENV) $(COMPOSE) config --quiet

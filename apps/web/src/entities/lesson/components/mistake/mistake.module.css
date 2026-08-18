@@ -1,0 +1,48 @@
+.root {
+  display: grid;
+  gap: 0.3rem;
+  margin: 0;
+  padding: 0;
+}
+
+.eyebrow {
+  color: var(--color-muted);
+  font-family: var(--font-ui);
+  font-size: var(--text-2xs);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.claim {
+  display: flex;
+  gap: 0.4rem;
+  align-items: baseline;
+  color: var(--color-muted);
+}
+
+.claimIcon {
+  flex-shrink: 0;
+  align-self: center;
+  color: var(--color-text-soft);
+}
+
+.claimText {
+  text-decoration: line-through;
+  text-decoration-color: var(--color-rule-strong);
+  text-decoration-thickness: 1.5px;
+}
+
+.explanation {
+  color: var(--color-text-soft);
+}
+
+/* Non-prose fragments (code, formulas, isolated symbols) get a shared
+   data-register treatment so they read as evidence, not decoration. */
+.root :global(code) {
+  padding-inline: 0.05em;
+  color: var(--color-text);
+  background: transparent;
+  font-family: var(--font-data);
+  font-size: var(--text-inline-code);
+  box-decoration-break: clone;
+}

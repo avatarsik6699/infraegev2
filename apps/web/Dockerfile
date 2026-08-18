@@ -10,7 +10,10 @@ COPY --chown=node:node apps/web/package.json apps/web/package.json
 USER node
 RUN pnpm install --frozen-lockfile
 COPY --chown=node:node apps/web apps/web
-CMD ["pnpm", "--filter", "web", "dev", "--host", "0.0.0.0", "--port", "3000", "--strictPort"]
+# `pnpm exec` (not `pnpm --filter web dev`) so vite runs as a direct child of pnpm instead of
+# behind an `sh -c` layer — the shell doesn't forward SIGTERM, so `docker compose stop` had to
+# wait out the full per-service timeout before force-killing the orphaned vite process.
+CMD ["pnpm", "--filter", "web", "exec", "vite", "dev", "--host", "0.0.0.0", "--port", "3000", "--strictPort"]
 
 FROM node:22.23.2-slim@sha256:d649c27dae7ba0137b3cef5dd75baa422c08dc3d9e3fc0c23dfb172dc3cc6436 AS builder
 RUN corepack enable

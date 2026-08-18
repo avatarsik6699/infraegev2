@@ -1,37 +1,24 @@
-import type { KeyboardEvent } from "react";
 import { Check } from "lucide-react";
 import type { LessonTypes } from "~/entities/lesson";
+import { TabsTab } from "~/shared/components/tabs";
 import styles from "../lesson-practice.module.css";
 
 type PracticeTaskTabProps = {
   task: LessonTypes.PracticeTask;
   index: number;
   total: number;
-  active: boolean;
   solved: boolean;
-  onSelect: (taskId: string) => void;
-  onKeyDown: (
-    event: KeyboardEvent<HTMLButtonElement>,
-    currentIndex: number,
-  ) => void;
-  setRef: (taskId: string, element: HTMLButtonElement | null) => void;
 };
 
 export const PracticeTaskTab: React.FC<PracticeTaskTabProps> = (props) => (
-  <button
+  <TabsTab
     className={styles.practiceTab}
-    type="button"
-    role="tab"
-    id={`practice-tab-${props.task.id}`}
-    aria-controls={`practice-panel-${props.task.id}`}
-    aria-selected={props.active}
-    aria-label={`Задача ${String(props.index + 1)} из ${String(props.total)}, сложность ${String(props.index + 1)} из ${String(props.total)}: ${props.task.title}${props.solved ? ", решена" : ""}`}
-    data-difficulty={props.index + 1}
-    data-solved={props.solved || undefined}
-    tabIndex={props.active ? 0 : -1}
-    ref={(element) => props.setRef(props.task.id, element)}
-    onClick={() => props.onSelect(props.task.id)}
-    onKeyDown={(event) => props.onKeyDown(event, props.index)}
+    value={props.task.id}
+    ariaLabel={`${String(props.index + 1).padStart(2, "0")} · ${props.task.difficultyLabel}. Задача ${String(props.index + 1)} из ${String(props.total)}: ${props.task.title}${props.solved ? ", решена" : ""}`}
+    tabProps={{
+      "data-difficulty": props.index + 1,
+      "data-solved": props.solved || undefined,
+    }}
   >
     <span className={styles.tabIndex} aria-hidden="true">
       {String(props.index + 1).padStart(2, "0")}
@@ -60,5 +47,5 @@ export const PracticeTaskTab: React.FC<PracticeTaskTabProps> = (props) => (
         strokeWidth={2}
       />
     ) : null}
-  </button>
+  </TabsTab>
 );

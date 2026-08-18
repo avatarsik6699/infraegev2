@@ -1,3 +1,28 @@
+.root {
+  color: inherit;
+  /* Neutral link text with a persistent affordance in the underline. */
+  text-decoration-line: underline;
+  text-decoration-color: var(--color-accent);
+  transition:
+    color var(--motion-duration) var(--motion-easing),
+    text-decoration-color var(--motion-duration) var(--motion-easing);
+}
+
+.root:hover {
+  color: var(--color-accent-dark);
+  text-decoration-color: currentColor;
+}
+
+/* Uses currentColor — rides the anchor's own `color` transition
+   above instead of animating on its own (one authored motion, not two). */
+.icon {
+  display: inline-block;
+  width: 0.85em;
+  height: 0.85em;
+  margin-left: 0.2em;
+  vertical-align: -0.1em;
+}
+
 .visuallyHidden {
   position: absolute;
   width: 1px;

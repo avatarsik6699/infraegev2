@@ -29,7 +29,7 @@ const outline: LessonTypes.OutlineGroup[] = [
   },
 ];
 
-const practiceTasks: LessonTypes.PracticeTask[] = [
+const practiceTasks: LessonTypes.LocalPracticeTask[] = [
   {
     id: "keep-half",
     difficultyLabel: "Разминка",

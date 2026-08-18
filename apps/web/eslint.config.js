@@ -9,11 +9,11 @@ import tseslint from "typescript-eslint";
 // FSD-like layer boundaries (docs/STACK.md § Project structure): each layer may only import
 // from itself and the layers below it. Without this, the layering decays back to flat within a
 // change or two — see docs/changes/02-architecture-refactor.md.
-const policyImportPaths = [
+const removedVendorPatterns = [
   {
-    name: "@mantine/core",
-    importNames: ["Anchor", "Container", "Image", "Text", "Title"],
-    message: "Use the matching shared policy component instead.",
+    group: ["@mantine/*"],
+    message:
+      "Mantine has been removed; use the project-owned shared component or a native element.",
   },
 ];
 
@@ -53,9 +53,9 @@ function architectureRules({ upward = [], publicApi = [], policy = true }) {
       "no-restricted-imports": [
         "error",
         {
-          paths: policy ? policyImportPaths : [],
-          patterns:
-            upward.length + publicApi.length > 0
+          patterns: [
+            ...removedVendorPatterns,
+            ...(upward.length + publicApi.length > 0
               ? [
                   {
                     group: [...upward, ...publicApi],
@@ -63,7 +63,8 @@ function architectureRules({ upward = [], publicApi = [], policy = true }) {
                       "Respect layer direction and import from slice public index.ts APIs.",
                   },
                 ]
-              : [],
+              : []),
+          ],
         },
       ],
       "no-restricted-syntax": [
@@ -214,6 +215,12 @@ export default tseslint.config(
     files: ["src/shared/lib/reading-position/browser-adapter.ts"],
     rules: {
       "no-restricted-globals": restrictedPlatformGlobals("window"),
+    },
+  },
+  {
+    files: ["src/shared/lib/clipboard/browser-adapter.ts"],
+    rules: {
+      "no-restricted-globals": restrictedPlatformGlobals("navigator"),
     },
   },
   {

@@ -9,8 +9,8 @@
 
 | Field | Value |
 |-------|-------|
-| Document Version | `v1.3` |
-| Date | `2026-08-13` |
+| Document Version | `v1.4` |
+| Date | `2026-08-16` |
 | Architect / Owner | `v.godlevskiy` |
 | Stack | See [docs/STACK.md](./STACK.md) |
 | Domain | Платформа подготовки к ЕГЭ по информатике — теория, визуализация, практика по темам экзамена, привязанные к мини-курсам |
@@ -69,25 +69,25 @@ sdamgia.ru, kpolyakov.spb.ru), ни новыми AI-ботами (решают �
 
 ### 1.4 Durable Learning Flow
 
-Учебная траектория является продуктовым контрактом и не зависит от будущих URL, page composition
-или визуальной системы. Тема и урок используют четыре канонических learner-facing раздела:
+Учебная траектория является продуктовым контрактом и не зависит от URL, page composition или
+визуальной системы. Тема и урок собираются из упорядоченных learner-facing ролей:
 
-1. **Теория** (`theory`) объединяет идею, содержательное объяснение, полезные приёмы, схемы и
-   учебные визуалы. Она объясняет, что происходит и почему это работает, без искусственного
-   переключателя «кратко/подробно».
-2. **Практика** (`practice`) объединяет алгоритм, разобранный пример, частичные упражнения и
-   постепенно усложняющиеся самостоятельные задачи с приоритетом свободного ввода. Визуалы могут
-   быть непосредственно связаны с примером или задачей.
-3. **Что важно для ЕГЭ** (`exam_focus`) объединяет типичные ошибки, требования экзаменационного
-   формата, лайфхаки, общие подсказки и при необходимости отдельные визуалы. Помощь к конкретному
-   заданию остаётся доступна внутри практики и не откладывается до третьего раздела.
-4. **Результат** (`result`) завершает материал вариативным набором релевантных блоков: краткие
-   итоги, освоенные умения, результат практики, зоны для повторения, похожие задачи и следующий
-   связанный материал.
+1. **Теория** (`theory`, обязательна, может состоять из нескольких последовательных крупных
+   групп) вводит идею и объясняет, что происходит и почему это работает, без искусственного
+   переключателя «кратко/подробно». Примеры, промежуточные вычисления, способы решения и
+   разобранные ошибки располагаются непосредственно рядом с теорией, которую они поясняют, а не
+   образуют отдельный этап.
+2. **Что важно для ЕГЭ** (`exam_focus`, опциональна) объединяет требования формата, универсальный
+   алгоритм, типичные ловушки, лайфхаки и общие подсказки.
+3. **Промежуточный итог** (`checkpoint`, опциональна) компактно собирает опорную модель перед
+   самостоятельным применением и не учитывается как выполненная практика.
+4. **Практика** (`practice`, обязательна) содержит постепенно усложняющиеся самостоятельные
+   задачи с приоритетом свободного ввода, доступными подсказками и решениями.
+5. **Результат** (`result`, обязательна) завершает материал итогами, освоенными умениями,
+   результатом практики, зонами для повторения и следующим связанным материалом.
 
-Четыре роли задают стабильную навигацию и порядок, но не требуют заполнять каждый внутренний тип
-блока. Контент включается только когда помогает понять материал, решить задачу или выбрать
-следующий шаг.
+Роли идут только в этом порядке; опциональные роли можно пропускать, но нельзя переставлять.
+Контент включается только когда помогает понять материал, решить задачу или выбрать следующий шаг.
 
 Подсказки и решение доступны сразу. Правильная работа с подсказкой учитывается в прогрессе; при
 слабом результате `result` рекомендует конкретный материал для повторения, а не вводит штраф.
@@ -140,9 +140,9 @@ localStorage на клиенте; БД используется по миним�
 чистоту):
 
 **Педагогика** (см. `learning-science-principles.md` §8 для полного чек-листа):
-- [ ] Материал реализует четыре раздела §1.4: Теория → Практика → Что важно для ЕГЭ → Результат;
-  внутренние блоки соответствуют назначению раздела, а глубина — сложности темы, не искусственному
-  лимиту длины.
+- [ ] Материал реализует обязательные роли §1.4 — Теория → Практика → Результат — и только
+  полезные для темы опциональные роли в каноническом порядке; внутренние блоки соответствуют
+  назначению роли, а глубина — сложности темы, не искусственному лимиту длины.
 - [ ] Каждый `learning_visual` объясняет конкретную закономерность, сравнение, процесс, ошибку или
   этап алгоритма; его ключевые элементы имеют прямую смысловую связь с соседним текстом.
 - [ ] Задачи используют `interaction_type: production`, кроме случаев, где сам формат ЕГЭ требует
@@ -181,78 +181,91 @@ localStorage на клиенте; БД используется по миним�
 
 ## 3. Data Model
 
-Контент — **не** реляционные таблицы; это типизированные файлы content-as-code
-(`*.mdx`/`*.json` во frontend-репозитории, папка `content/`), версионируемые через git и
-проверяемые CI-скриптом валидации связей (см. §7.2). Схема ниже описывает форму этих файлов, не
-таблицы БД.
+Контент делится на две независимые границы по тому, кто его должен читать:
+
+- **Теория урока — content-as-code в TSX**, не данные. Автор пишет типизированные React-компоненты
+  напрямую (`apps/web/src/entities/lesson/content/{slug}.lesson.tsx`, один файл на урок; переиспользуемые
+  content-компоненты — `entities/lesson/components/*` для lesson-domain частей типа `WorkedExample`/
+  `Diagram`/`Checkpoint`, `shared/components/*` для domain-agnostic частей типа `Callout`, следуя
+  существующим слоям FSD-like архитектуры, §"Frontend layers" в `docs/STACK.md`), версионируется
+  через git как обычный исходник. Компилятор TypeScript проверяет обязательную форму урока —
+  runtime-парсинг Markdown/JSON и ручная валидация роли/порядка секций для теории больше не нужны.
+- **Задания — типизированные JSON-файлы** (`content/tasks/{id}.json`), потому что их читают два
+  рантайма (frontend для публичной проекции, backend для server-owned проверки ответа) и решение не
+  должно попасть в клиентский бандл. Это единственная часть контента, где JSON остаётся обязательной
+  границей, а не выбором.
+
+Схема ниже описывает форму TSX-конструктора и JSON-файлов, не таблицы БД.
 
 ```text
-Topic (content/topics/{id}.{mdx|json})
+defineLesson(...) — типизированный конструктор, один вызов на файл урока
   id: slug
-  task_numbers: [int]                         // может закрывать несколько номеров ЕГЭ
+  routeSlug: slug                              // публичный путь /ege/{routeSlug}
+  taskNumber: int
   title
-  summary                                     // 1-2 предложения, для превью и meta description
-  sections: [LearningSection]
-  quick_reference_blocks: [ContentBlock]       // краткая памятка/алгоритм в боковом rail
-  learning_outcomes: [string]                  // что ученик умеет после прохождения
-  prerequisites: [topic_id | course_lesson_id]  // ссылка на mastery-статус, не булев чек-лист "открыл страницу"
-  mastery_threshold: float (default 0.8)       // порог доли верных ответов для статуса "усвоено"
-  related_topics: [topic_id]                   // необязательные, но полезные связи
-  practice_task_ids: [task_id]
+  summary
+  masteryThreshold: float (default 0.8)        // порог доли верных ответов Task, для статуса "усвоено"
+  learningOutcomes: [string]
+  practiceTaskIds: [task_id]                   // ссылается в content/tasks/**, см. Task ниже
+  theory: ConceptBlock[]                       // порядок = порядок массива, без runtime role-инварианта
+  examFocus: ReactNode
+  checkpoint: CheckpointItem[]                 // формативная самопроверка, не входит в masteryThreshold
+  result: ReactNode
   status: draft | review | published
-  access_tier: free | paid                     // задел под монетизацию — не enforced на MVP, все published = free
+  accessTier: free | paid                      // задел под монетизацию — не enforced на MVP
 
-Course (content/courses/{id}.json)
+ConceptBlock — единица нарезки теории по одной идее, не по произвольной длине файла
+  id: slug                                     // якорь в outline и точка для будущего interleaving
+  navLabel: string
+  explanation: ReactNode                        // проза; не дублирует то, что уже показывает diagram
+                                                 // (redundancy principle)
+  diagram?: <Diagram/>                          // только когда объяснение требует одновременно держать
+                                                 // в голове ≥3 взаимосвязанных величин (split-attention)
+  workedExample?: <WorkedExample/>               // предшествует любой самостоятельной попытке
+                                                 // (worked-example effect, см. docs/artifacts/learning-science-principles.md §1.1)
+  mistake?: <Mistake/>                           // рядом со своим концептом, не в общем списке в конце
+                                                 // (signalling principle)
+
+Diagram — готовый asset-образ, не runtime-данные
+  src: string                                   // единственный asset; Light-only baseline (§5.3) — без dark-варианта
+  alt: string                                    // обязателен независимо от того, что изображение статично
+  caption: string
+  purpose: string
+
+CheckpointItem — формативная (не суммативная) самопроверка внутри урока
   id: slug
-  title
-  lessons: [CourseLesson]
+  prompt: ReactNode
+  reveal: ReactNode                              // think-then-reveal: без валидации ответа, без обращения
+                                                 // к backend, не учитывается в masteryThreshold — эффект
+                                                 // тестирования (testing effect) даёт сама попытка вспомнить,
+                                                 // а не факт автоматической проверки
 
-CourseLesson
-  id: slug
-  course_id
-  title
-  sections: [LearningSection]
-  quick_reference_blocks: [ContentBlock]
-  learning_outcomes: [string]
-  unlocks_topics: [topic_id]                    // обратная связь: после этого урока — какие темы ЕГЭ разблокируются
-  practice_task_ids: [task_id]
-  status: draft | review | published
+Course (content/courses/{id}.json) — не затронуто этим изменением, вне текущего этапа roadmap
 
-LearningSection
-  id: slug
-  role: theory | practice | exam_focus | result
-  title
-  nav_label: string | null
-  blocks: [ContentBlock]
-
-ContentBlock
-  type: text | learning_visual | code_example | worked_example | completion_exercise
-        | productive_failure_prompt | callout | video_embed
-  data: <зависит от типа>
-  // learning_visual.data — discriminated representation: raster | structured | hybrid;
-  // общие поля: purpose, accessible_description, caption. Raster хранит src/width/height;
-  // structured хранит минимальные типизированные факты конкретного учебного визуала;
-  // hybrid соединяет основной raster-материал с доступным структурированным представлением.
-  // Raster, SVG/HTML и hybrid равноправны; medium выбирается по тому, что лучше объясняет идею.
-
-Task (practice_task_ids ссылается сюда)
+Task (content/tasks/{id}.json, practiceTaskIds ссылается сюда) — без изменений
   id
   topic_ids: [topic_id]                         // может относиться к нескольким темам
+  title
   statement
+  hint
+  theory_links: [{ hash, label }]                // hash указывает на ConceptBlock.id
   checker_type: exact_match | numeric_tolerance
   answer_variants: [string]                     // все допустимые написания верного ответа (см. §11.1 нормализация)
   numeric_tolerance: float                       // только для checker_type: numeric_tolerance
   interaction_type: production | recognition     // приоритет — production
-  explanation                                    // полноценный worked-example-разбор, не строка "правильный ответ: X"
+  explanation                                    // ContentBlock[], полноценный worked-example-разбор
   difficulty: 1-3
   is_interleaving_eligible: bool (default true при published)
 
+ContentBlock — контракт ответа `POST /api/tasks/{id}/check` (§4), без изменений
+  type: text | learning_visual | code_example | worked_example | completion_exercise
+        | productive_failure_prompt | callout | video_embed
+  data: <зависит от типа>
+  // learning_visual.data — discriminated representation: raster | structured | hybrid;
+  // общие поля: purpose, accessible_description, caption.
+
 LearningFlowPolicy (продуктовый контракт, не отдельный runtime-объект)
-  section_order: theory -> practice -> exam_focus -> result
-  theory_blocks: idea | explanation | lifehack | learning_visual
-  practice_blocks: algorithm | worked_example | completion_exercise | task | learning_visual
-  exam_focus_blocks: pitfall | exam_requirement | lifehack | hint | learning_visual
-  result_blocks: summary | learning_outcome | practice_result | review_target | similar_task | next
+  section_order: theory (ConceptBlock+) -> exam_focus? -> checkpoint? -> practice -> result
   task_order: nondecreasing difficulty внутри первого прохождения материала
   task_hints: immediately available inside practice
   assisted_correct_attempts: count toward progress
@@ -265,9 +278,10 @@ task_attempt_stats(task_id, attempts_count, wrong_count, last_aggregated_at)
   // раздел 12 — вместо отдельной таблицы, если этого достаточно для приоритизации тем)
 ```
 
-CI-валидация: скрипт проверяет, что все `prerequisites`, `related_topics`, `unlocks_topics`,
-`practice_task_ids`, `topic_ids` ссылаются на существующие id — сборка падает при битых связях
-(см. §2.3 Content Quality Gate, пункт «Технически»).
+CI-валидация: `scripts/validate-content-links.mjs` проверяет, что `practiceTaskIds` и
+`theory_links.hash` ссылаются на существующие `Task.id`/`ConceptBlock.id` — эта связь соединяет
+TSX-модуль урока с JSON-файлами заданий и не может быть проверена одним TypeScript-компилятором;
+сборка падает при битых связях (см. §2.3 Content Quality Gate, пункт «Технически»).
 
 ---
 
@@ -299,19 +313,21 @@ task-файлов и frontend-consumer после reset нет; endpoint неи�
 |------|-------|---------|
 | UI foundation | `/` | Нейтральная SSR-заглушка на базовых токенах новой системы; без product claims и ссылки на lab |
 | Lesson design lab | `/lab/lesson` | Unlisted/noindex эталон четырёхраздельного урока на синтетическом контенте; не публикация и не security boundary |
+| Design system stand | `/lab/design-system` | Unlisted/noindex приватный стенд текущей дизайн-системы (шрифты, цвета, типографика) и переиспользуемых lesson-компонентов; не публикация и не security boundary |
+| Topic lesson | `/ege/$slug` | Общий SSR consumer типизированного Topic; `review` доступен только по прямому URL с `noindex,nofollow`, `published` может войти в prerender/public discovery |
 | Not found | любой неизвестный маршрут | Общий доступный 404 без предположений о будущем IA |
 
-Home/topic/lesson/legal/sitemap routes удалены. Их будущие URL, loader contracts, SEO и composition
-не фиксируются до отдельного планирования нового продукта. Будущая композиция обязана реализовать
-§1.4, но сам учебный flow не предопределяет маршрутную структуру. `/lab/lesson` отсутствует в
-навигации и sitemap, отдаёт `robots: noindex,nofollow` и явно исключается из prerender discovery.
+Home/catalog/legal/sitemap routes удалены. Первый product consumer фиксирует только общий
+`/ege/$slug` contract; review-контент не появляется в навигации или sitemap, отдаёт
+`robots: noindex,nofollow` и исключается из prerender discovery. `/lab/lesson` и
+`/lab/design-system` сохраняют тот же unlisted/noindex режим независимо от product content.
 
 ### 5.2 Components / Stores
 
 | Component / Store | Purpose | Notes |
 |--------------------|---------|-------|
-| Learning visual frame | Общая семантическая рамка сложного учебного визуала | Видимые caption/purpose, доступное описание и полная текстовая альтернатива; presentation boundary не разбирает свободный JSON API |
-| Lesson outline | Иерархическая навигация по уроку | Четыре стабильных верхних раздела и переменные content-derived подпункты; SSR-якоря, доступный текущий пункт и responsive in-flow adaptation; новая ломаная path-грамматика без наследования прежнего ToC-кода |
+| Lesson content components | Переиспользуемая библиотека дизайн-системы урока: `Callout`, `WorkedExample`, `Procedure`, `Mistake`, `Diagram`, `Checkpoint` | Типизированные React-компоненты, не markdown-директивы; `Diagram` требует `alt`/`caption`/`purpose` независимо от того, что это готовый asset; `Checkpoint` рендерит `CheckpointItem[]` вертикальным списком (не табами — таб-навигация позволяет незаметно пропустить пункт retrieval-практики) |
+| Lesson outline | Иерархическая навигация по уроку | Строится напрямую из `ConceptBlock[].id`/`navLabel`, без regex-извлечения заголовков из текста; SSR-якоря, доступный текущий пункт и responsive in-flow adaptation; lab сохраняет свой четырёхраздельный synthetic contract |
 | Practice tabs | Локальная навигация по постепенно усложняющимся задачам внутри `practice` | Пять компактных доступных вкладок показывают рост сложности цветом, индикатором уровня и текстом; одна активная задача после hydration, свободный ручной переход без блокировок и автопродвижения, одна или несколько task-specific ссылок на фрагменты теории рядом с заголовком; все формы остаются в SSR/no-JS HTML и не становятся пунктами lesson outline |
 | Page state primitives | Единые loading/skeleton, empty, not-found и recoverable error состояния | Семантический статус и понятное действие важнее декоративной анимации; skeleton повторяет геометрию страницы и не озвучивается скринридером как контент |
 | Route resilience shell | Route-level pending/error/not-found UI, retry/reset и верхний navigation progress | Ошибка одной навигации не ломает document shell; предыдущий полезный экран не заменяется мгновенным мигающим fallback |
@@ -331,13 +347,20 @@ API и аккаунт не используются. Интерактивные 
 
 ### 5.3 Design System
 
-Baseline **«Разобранный алгоритм»** показывает целое, причинные части и их самостоятельную сборку.
-Утверждённый Editorial Rail использует тёплую редакционную поверхность, serif-голос учебного
-текста, sans/mono-интерфейс, тонкие разделительные линии и один выжженно-оранжевый цвет причинного
-доказательства. Схемы встроены в чтение и связаны с пояснениями на полях; система отказывается от
-card-dashboard edtech, glassmorphism и декоративной геймификации. Первый lab работает в режиме
-Impeccable `Read` и comp-led. `DESIGN.md` документирует только принятую реализацию после detector и
-независимого finish review, не предварительное намерение.
+Frontend использует локальную доменную UI-систему поверх Base UI и CSS Modules. Первый активный
+визуальный профиль **«Инженерная тетрадь»** сочетает нейтральную монохромную поверхность,
+читающий serif и компактный sans/mono-интерфейс без фоновой текстуры. Иерархию создают два
+нейтральных уровня текста, whitespace, muted surfaces и тонкие borders; цвет зарезервирован для
+семантической обратной связи. Статичные поверхности и controls плоские: один блок использует не
+более одного поверхностного сигнала (fill, border или будущая обоснованная overlay-тень), без
+вложенных карточек и декоративного elevation. Система по умолчанию dense: связанные controls
+согласованы по высоте `40px`, но зоны взаимодействия не уменьшаются; группы строятся прежде всего
+на расстоянии и выравнивании, а разделительная линия остаётся только там, где несёт структурный
+смысл.
+Профиль намеренно заменяем: палитра, шрифты, геометрия и motion меняются в theme layer; устройство
+контрола — внутри локального компонента; композиция страницы — без переписывания domain/API/content
+state. Публичные component API описывают назначение, а не текущий внешний вид. Обязательный
+frontend-контракт и происхождение адаптированных практик зафиксированы в `docs/FRONTEND.md`.
 
 ### 5.4 Client Application Infrastructure
 
@@ -359,16 +382,16 @@ Impeccable `Read` и comp-led. `DESIGN.md` документирует тольк
   следующее доступное действие. Not-found отделён от инфраструктурной ошибки.
 - **Suspense и lazy:** route splitting остаётся инфраструктурной возможностью; lazy применяется
   только вместе с измеримым выигрышем и полноценным SSR/no-JS fallback.
-- **UI extensions:** Mantine Core/Hooks/NProgress 9.5.1 составляют текущую основу. Form,
-  code-highlight и любые новые extensions добавляются только вместе с реальным consumer и
-  отдельной maintenance/a11y/supply-chain проверкой.
+- **UI foundation:** Base UI 1.7.0 предоставляет доступное поведение там, где существует подходящий
+  primitive. Локальные компоненты владеют публичным API и CSS; новые primitives и составные
+  библиотеки добавляются только с реальным consumer и maintenance/a11y/supply-chain проверкой.
 - **Client state:** отдельный глобальный store (Zustand/MobX и аналоги) не вводится заранее.
   Компонентное состояние остаётся локальным, server state принадлежит Query, URL state — Router,
   persistent product state пока отсутствует. Новый store допустим только при нескольких
   независимых consumers и явно описанном lifecycle/persistence contract.
-- **Визуальная системность:** Mantine 9.5.1 остаётся доступным поведением и theme foundation, а
-  semantic CSS tokens, типографика, focus, линии, motion и компонентные extensions принадлежат
-  `apps/web`. Light-only baseline использует self-hosted кириллический шрифт без runtime-запроса.
+- **Визуальная системность:** значения активной темы отображаются в semantic CSS tokens, которые
+  потребляют локальные компоненты. Base UI не определяет внешний вид и не выходит типами/props за
+  их public API. Light-only baseline использует self-hosted кириллические шрифты без runtime-запроса.
 
 ---
 
@@ -454,8 +477,8 @@ Nginx выставляет `Cache-Control`/`ETag` для хэшированно�
 | Performance budget | LCP < 2.5s, CLS < 0.1, INP < 200ms на мобильном 4G-профиле; текущий Lighthouse gate измеряет только `/` до появления новых public routes |
 | Observability | Umami + Beszel + journald/fail2ban на application VPS; читаются внешним sre-kit через WireGuard/SSH; scheduled GitHub probe для внешней доступности; без Telegram на этом этапе |
 | Backup / restore | Локальный restic на VPS: daily `pg_dump -Fc`, Beszel/config snapshots, 7 daily + 4 weekly + 3 monthly, freshness marker и ежемесячный restore drill; off-site storage отложен с явно принятым риском |
-| SEO | Product URL taxonomy, metadata and sitemap intentionally deferred; `/` имеет нейтральный technical title, а `/lab/lesson` unlisted, `noindex,nofollow` и исключён из prerender discovery |
-| Mobile / no-JS readability | Lab-текст, последовательные стадии визуала, подписи, `<details>`-подсказка и section anchors доступны в SSR HTML; интерактивность остаётся progressive enhancement |
+| SEO | `/` имеет нейтральный technical title; `/lab/lesson` и review-уроки `/ege/$slug` unlisted, `noindex,nofollow` и исключены из prerender discovery; published topics могут явно войти в public discovery |
+| Mobile / no-JS readability | Lab и topic lesson сохраняют текст, последовательные стадии визуала, подписи, решения и section anchors в SSR HTML; интерактивная проверка остаётся progressive enhancement |
 | Client resilience / API drift | Route failures восстанавливаемы без белого экрана; loading/empty/error/not-found состояния доступны с клавиатуры и скринридера; OpenAPI schema/types drift ломает gate до merge; runtime HTTP имеет timeout/abort и не делает скрытый retry мутаций |
 | Юридическое (152-ФЗ) | Минимизация сбора и российский application VPS сохраняются; web `/privacy` удалён вместе с product UI и должен быть спроектирован заново до следующей публичной product release. Реквизиты оператора и уведомление РКН остаются отдельным принятым долгом |
 | Юридическое (436-ФЗ) | Возрастная маркировка для обычного сайта не вводится: существующая `12+` удаляется без замены на `18+` |
@@ -469,7 +492,7 @@ Nginx выставляет `Cache-Control`/`ETag` для хэшированно�
 | Milestone | Goal | Key Outputs |
 |-----------|------|-------------|
 | `M0` — технический фундамент | Сохранить проверенную web/backend/ops инфраструктуру без навязывания продуктовой страницы | Нейтральная root-заглушка, shared primitives, API contract, пустой content skeleton и локальные gates |
-| `M1` — новый product/design baseline | Доказать визуальную систему без наследования удалённых страниц и без преждевременной публикации | «Разобранный алгоритм», unlisted lesson lab, принятый DESIGN.md и reusable visual/reading primitives |
+| `M1` — новый product/design baseline | Доказать заменяемую визуальную систему без преждевременной публикации | «Инженерная тетрадь», unlisted design-system/lesson labs, единый frontend-контракт и reusable primitives |
 | `M2` — инфраструктурная пауза | Подготовить production-платформу до продолжения продуктового контента | `infraege.ru`, VPS/GHCR deploy, security/release gates, backups и локальный ops-dashboard |
 | `M3` — учебный flow и публичный запуск | Реализовать утверждённые поверхности и только затем добавить проверенный контент | Доступный SSR/no-JS flow, практика, прогресс, SEO/legal surfaces и Umami-события по новому контракту |
 | `M4+` (после трафика, вне MVP) | Расширение охвата и сообщества поверх работающей бесплатной базы | Второй мини-курс (Excel), аккаунты/синхронизация, обсуждения тем с модерацией, затем платные фичи — без runtime AI до этого момента |
@@ -493,7 +516,7 @@ Nginx выставляет `Cache-Control`/`ETag` для хэшированно�
 - Формальные реквизиты оператора ПДн и уведомление РКН — отдельный принятый юридический долг.
 - PWA/service worker, offline mutation queue и optimistic updates — только после отдельного
   пользовательского сценария и стратегии конфликтов/устаревания.
-- Глобальный client store и Mantine/community extensions без текущего consumer-а — не часть
+- Глобальный client store и Base UI/community primitives без текущего consumer-а — не часть
   клиентского фундамента; добавляются по доказанной потребности (§5.4).
 
 ---

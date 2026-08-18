@@ -1,3 +1,6 @@
+import { Badge } from "~/shared/components/badge";
+import { Progress } from "~/shared/components/progress";
+import { Typography } from "~/shared/components/typography";
 import type { LessonProgressTypes } from "./lesson-progress.types";
 import styles from "./lesson-progress.module.css";
 
@@ -18,15 +21,16 @@ export const LessonProgress: React.FC<LessonProgressTypes.Props> = (props) => {
         <Typography.Title order={2} id="lesson-progress-heading">
           Прогресс темы
         </Typography.Title>
-        <Badge variant="outline" className={styles.count}>
+        <Badge tone="neutral" className={styles.count}>
           {`${String(props.solved)} / ${String(props.total)}`}
         </Badge>
       </div>
-      <progress
+      <Progress
         className={styles.progress}
         max={props.total}
         value={props.solved}
-        aria-label="Решённые задачи темы"
+        label="Решённые задачи темы"
+        valueText={`Решено ${String(props.solved)} из ${String(props.total)} задач`}
       />
       <Typography.Text className={styles.summary}>
         {`Решено ${String(props.solved)} из ${String(props.total)} задач`}
@@ -37,5 +41,3 @@ export const LessonProgress: React.FC<LessonProgressTypes.Props> = (props) => {
     </section>
   );
 };
-import { Badge } from "@mantine/core";
-import { Typography } from "~/shared/components/typography";

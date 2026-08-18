@@ -1,16 +1,21 @@
-import { Paper, Stack } from "@mantine/core";
+import { useId } from "react";
 import { Typography } from "~/shared/components/typography";
+import type { EmptyStateTypes } from "./empty-state.types";
+import styles from "./empty-state.module.css";
 
-type Props = {
-  title: string;
-  description: string;
-};
+export const EmptyState: React.FC<EmptyStateTypes.Props> = (props) => {
+  const generatedHeadingId = useId();
+  const headingId = props.headingId ?? generatedHeadingId;
 
-export const EmptyState: React.FC<Props> = (props) => (
-  <Paper component="section" withBorder p="xl" radius="sm">
-    <Stack gap="xs">
-      <Typography.Title order={2}>{props.title}</Typography.Title>
+  return (
+    <section className={styles.root} aria-labelledby={headingId}>
+      <Typography.Title order={props.headingOrder ?? 2} id={headingId}>
+        {props.title}
+      </Typography.Title>
       <Typography.Text tone="muted">{props.description}</Typography.Text>
-    </Stack>
-  </Paper>
-);
+      {props.action ? (
+        <div className={styles.action}>{props.action}</div>
+      ) : null}
+    </section>
+  );
+};

@@ -11,6 +11,7 @@ from app.main import app
 from app.modules.content.schemas import Task
 from app.modules.content.service import clear_cache
 from app.modules.health.api import require_database
+from app.modules.tasks.service import is_correct
 
 
 @pytest.fixture
@@ -18,7 +19,11 @@ def content_task(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Iterator[Ta
     task = Task.model_validate(
         {
             "id": "sample-task",
+            "topic_ids": ["sample-topic"],
+            "title": "Контрольное значение",
             "statement": "Введите контрольное значение",
+            "hint": "Вспомните ответ на главный вопрос.",
+            "theory_links": [{"hash": "sample-theory", "label": "К теории"}],
             "checker_type": "exact_match",
             "answer_variants": ["42", "сорок два"],
             "interaction_type": "production",
@@ -212,3 +217,27 @@ def test_learning_visual_contract_accepts_generic_json_and_rejects_legacy_shapes
 def test_error_logging_middleware_does_not_break_normal_requests(client: TestClient):
     response = client.get("/health")
     assert response.status_code == 200
+
+
+@pytest.mark.parametrize(
+    ("task_id", "correct_answer"),
+    [
+        ("rekursiya-base-sequence", "32"),
+        ("rekursiya-two-values", "29"),
+        ("rekursiya-large-ratio", "9900"),
+    ],
+)
+def test_recursion_content_tasks_are_strict_and_checkable(
+    task_id: str,
+    correct_answer: str,
+):
+    content_root = Path(__file__).resolve().parents[3] / "content" / "tasks"
+    task = Task.model_validate_json((content_root / f"{task_id}.json").read_text(encoding="utf-8"))
+
+    assert task.topic_ids == ["rekursiya"]
+    assert task.title
+    assert task.hint
+    assert task.theory_links
+
+    assert is_correct(task, correct_answer)
+    assert not is_correct(task, "неверно")

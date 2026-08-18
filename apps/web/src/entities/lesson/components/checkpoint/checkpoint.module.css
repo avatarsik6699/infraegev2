@@ -1,0 +1,26 @@
+.root {
+  display: grid;
+  gap: 0.6rem;
+  margin: var(--space-2) 0;
+  padding-top: var(--space-2);
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--color-muted);
+  font-family: var(--font-ui);
+  font-size: var(--text-2xs);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* Non-prose fragments (code, formulas, isolated symbols) get a shared
+   data-register treatment so they read as evidence, not decoration. */
+.root :global(code) {
+  padding-inline: 0.05em;
+  color: var(--color-text);
+  background: transparent;
+  font-family: var(--font-data);
+  font-size: var(--text-inline-code);
+  box-decoration-break: clone;
+}

@@ -1,5 +1,5 @@
-import { Badge } from "@mantine/core";
 import type { LessonTypes } from "~/entities/lesson";
+import { Badge } from "~/shared/components/badge";
 import { FragmentLink } from "~/shared/components/fragment-link";
 import { Typography } from "~/shared/components/typography";
 import styles from "../lesson-practice.module.css";
@@ -20,7 +20,7 @@ export const PracticeTaskHeading: React.FC<PracticeTaskHeadingProps> = (
       {props.index + 1}
     </Typography.Text>
     <Typography.Title
-      order={4}
+      order={3}
       id={props.headingId}
       tabIndex={-1}
       ref={(element) => props.setHeadingRef(props.task.id, element)}
@@ -39,7 +39,7 @@ export const PracticeTaskHeading: React.FC<PracticeTaskHeadingProps> = (
       ))}
     </nav>
     {props.alreadySolved ? (
-      <Badge className={styles.solvedStatus} variant="outline">
+      <Badge className={styles.solvedStatus} tone="success">
         решено
       </Badge>
     ) : null}

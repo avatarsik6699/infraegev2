@@ -60,3 +60,25 @@ test("the neutral root and unknown routes remain safe", async ({
   await foundationPage.expectRemovedRouteNotFound();
   await errorTelemetryPage.expectSanitizedGlobalErrorDelivery();
 });
+
+test("the design-system catalog works across viewports and without JavaScript", async ({
+  browserSession,
+  designSystemLabPage,
+  noJavaScriptDesignSystemLabPage,
+}) => {
+  await browserSession.useDesktopViewport();
+  await designSystemLabPage.open();
+  await designSystemLabPage.expectCatalogStructure();
+  await designSystemLabPage.expectUnlistedMetadata();
+  await designSystemLabPage.expectNoHorizontalOverflow();
+  await browserSession.captureViewport("design-system-lab-desktop.png");
+
+  await browserSession.useNarrowViewport();
+  await designSystemLabPage.open();
+  await designSystemLabPage.expectCatalogStructure();
+  await designSystemLabPage.expectNoHorizontalOverflow();
+  await browserSession.captureViewport("design-system-lab-mobile.png");
+  browserSession.expectCleanConsole();
+
+  await noJavaScriptDesignSystemLabPage.expectLinearContentWithoutJavaScript();
+});

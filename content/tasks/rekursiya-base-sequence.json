@@ -1,0 +1,28 @@
+{
+  "id": "rekursiya-base-sequence",
+  "topic_ids": ["rekursiya"],
+  "title": "Вычислите последовательность",
+  "statement": "F(1) = 4, F(n) = F(n - 1) + 2n при n > 1. Найдите F(5).",
+  "hint": "Начните с F(1) и последовательно найдите F(2), F(3), F(4), F(5).",
+  "theory_links": [
+    {
+      "hash": "loop-instead-of-recursion",
+      "label": "Шаблон для одного предыдущего значения"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["32"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "worked_example",
+      "data": {
+        "prompt": "Вычислим значения снизу вверх.",
+        "steps": ["F(2) = 8", "F(3) = 14", "F(4) = 22", "F(5) = 32"]
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

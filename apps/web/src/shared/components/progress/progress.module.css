@@ -1,0 +1,43 @@
+.root {
+  width: 100%;
+}
+
+.track {
+  height: var(--progress-height, 0.5rem);
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-quiet);
+}
+
+.indicator {
+  width: var(--progress-value);
+  height: 100%;
+  border-radius: inherit;
+  background: var(--color-text);
+}
+
+.root[data-complete] .indicator {
+  background: var(--color-success);
+}
+
+.root[data-indeterminate] .indicator {
+  width: 40%;
+  animation: indeterminate 1.2s var(--motion-easing) infinite alternate;
+}
+
+@keyframes indeterminate {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(150%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root[data-indeterminate] .indicator {
+    animation: none;
+    transform: none;
+  }
+}

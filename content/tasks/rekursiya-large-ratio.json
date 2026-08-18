@@ -1,0 +1,32 @@
+{
+  "id": "rekursiya-large-ratio",
+  "topic_ids": ["rekursiya"],
+  "title": "Сократите отношение",
+  "statement": "F(1) = 2, F(n) = nF(n - 1). Найдите F(100) / F(98).",
+  "hint": "Раскройте только F(100) и F(99), не вычисляя всю последовательность.",
+  "theory_links": [
+    {
+      "hash": "large-arguments-algebraic-shortcut",
+      "label": "Большие значения функции"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["9900"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "worked_example",
+      "data": {
+        "prompt": "Выразим соседние значения через F(98).",
+        "steps": [
+          "F(99) = 99F(98)",
+          "F(100) = 100 · 99F(98)",
+          "F(100) / F(98) = 9900"
+        ]
+      }
+    }
+  ],
+  "difficulty": 3,
+  "is_interleaving_eligible": true
+}

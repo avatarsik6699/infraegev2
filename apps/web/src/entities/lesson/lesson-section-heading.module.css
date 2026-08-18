@@ -3,13 +3,16 @@
   gap: 0.55rem;
   align-items: center;
   margin: 0;
-  color: var(--color-accent);
+  color: var(--color-text-soft);
   font-family: var(--font-data);
-  font-size: 0.72rem;
+  font-size: var(--text-2xs);
   font-weight: 600;
-  letter-spacing: 0.045em;
   line-height: 1.4;
-  text-transform: uppercase;
+}
+
+.heading > span:last-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .index {

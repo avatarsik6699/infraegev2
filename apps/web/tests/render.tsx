@@ -1,10 +1,9 @@
-import { MantineProvider } from "@mantine/core";
 import { QueryClientProvider } from "@tanstack/react-query";
 import {
   render as testingLibraryRender,
   type RenderOptions,
 } from "@testing-library/react";
-import { appMantineTheme, createAppQueryClient } from "~/app";
+import { createAppQueryClient } from "~/app";
 
 type Props = { children: React.ReactNode };
 
@@ -29,13 +28,7 @@ export function render(
   const queryClient = createAppQueryClient();
   const TestProvider: React.FC<Props> = (props) => (
     <QueryClientProvider client={queryClient}>
-      <MantineProvider
-        theme={appMantineTheme}
-        forceColorScheme="light"
-        env="test"
-      >
-        {props.children}
-      </MantineProvider>
+      {props.children}
     </QueryClientProvider>
   );
 

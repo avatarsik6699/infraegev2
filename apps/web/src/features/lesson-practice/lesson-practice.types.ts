@@ -5,8 +5,10 @@ export namespace LessonPracticeTypes {
   export type Props = {
     tasks: readonly LessonTypes.PracticeTask[];
     progressStore: LessonProgressTypes.Store;
+    checkAnswer: LessonTypes.PracticeChecker;
   };
 
-  export type State = "idle" | "incorrect" | "correct";
+  export type State = "idle" | "checking" | "incorrect" | "correct" | "error";
   export type States = Partial<Record<string, State>>;
+  export type Feedback = Partial<Record<string, string>>;
 }

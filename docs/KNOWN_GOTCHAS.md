@@ -25,6 +25,20 @@
   mounts; reserve `make down` for explicit container/network removal. Neither stop nor down removes
   the named PostgreSQL volume.
 
+### Concurrent Compose lifecycle commands can stop a newly-started dev stack
+
+- **Symptoms:** `make stop` appears stuck, a second `make dev` starts some dependencies, then those
+  containers stop again and nginx looks as though it never started. Nginx may finish with exit 137
+  after serving Vite HMR traffic normally.
+- **Root cause:** the official nginx image uses graceful `SIGQUIT`; open HMR WebSockets can keep the
+  drain alive until the stop timeout. Compose stop and up are separate operations, so a concurrent
+  up can race the still-running stop and have its newly-started containers stopped by that older
+  command.
+- **Fix:** use the Make targets, which serialize mutations of the `infraege-dev` project. The dev
+  overlay overrides nginx to `SIGTERM`; production retains graceful image shutdown. Do not start a
+  second lifecycle command while the first is running. Docker Desktop's separate `infra` group is
+  left behind by direct Compose commands and is not owned by `make stop`.
+
 ### VS Code ESLint must not infer a shared TSConfig root across sibling apps
 
 - **Symptoms:** TypeScript files intermittently show `Parsing error: No tsconfigRootDir was set,
@@ -79,25 +93,6 @@
   and `tsc`, and keep the `start` entrypoint aligned with the emitted bootstrap (this repo hit it
   in the now-removed `apps/ops`'s `server/main.ts`; no workspace currently uses this split
   build shape). Never rely on a dirty local `dist` as evidence that the production command works.
-
-### Mantine adoption must use v9.5.1 exclusively (change 04+)
-
-- **Applies when**: change 04 starts the planned Mantine UI-kit adoption; it is not part of
-  change 03.
-- **Risk**: stale examples or documentation can introduce an older Mantine API, while independently
-  resolved `@mantine/*` dependencies can leave the frontend on incompatible mixed versions.
-- **Required version**: pin `@mantine/core`, `@mantine/hooks`, and every other adopted
-  `@mantine/*` package (`form`, `notifications`, `modals`, `dates`, etc.) to the exact version
-  `9.5.1` in `apps/web/package.json`. Do not use ranges, older major/minor versions, or mix Mantine
-  package versions.
-- **Documentation**: before writing Mantine integration code, fetch current documentation through
-  Context7 and scope the lookup to v9.5.1. If Context7 coverage is stale or too thin for v9, use
-  Mantine's LLM documentation guide at <https://mantine.dev/guides/llms/> to find Mantine's own
-  current documentation sources. Aggregated docs may still contain removed APIs (change 04 found
-  `TypographyStylesProvider` in Context7 although 9.5.1 no longer exports it), so the installed
-  package's `.d.ts` exports and a real typecheck are the final authority for the pinned version.
-- **Origin**: explicit architect instruction during change 03 scoping; also recorded in
-  `docs/changes/03-testing-conventions.md` § Implementation Notes.
 
 ### Docker: TanStack Start's build-time prerender can ECONNREFUSED inside `docker build`
 
@@ -236,18 +231,6 @@
 - **Root cause**: the Windows browser and Linux CLI disagree about lifecycle/port ownership.
 - **Fix**: `lighthouserc.cjs` resolves `chromium.executablePath()` from the web workspace and passes
   it as `collect.chromePath`; keep the dedicated `127.0.0.2:3200` server address as well.
-
-### Mantine component styles must follow component imports
-
-- **Symptoms**: Lighthouse LCP regresses because the full Mantine stylesheet blocks first paint,
-  or a newly adopted Mantine component renders without its expected styles after the stylesheet
-  is trimmed.
-- **Root cause**: `@mantine/core/styles.css` includes every core component, while the optimized web
-  entry imports only the global baseline and styles for components the application actually uses.
-- **Fix**: whenever `apps/web` adopts another `@mantine/core` component, add its documented
-  `@mantine/core/styles/<Component>.css` import and any component dependencies to
-  `apps/web/src/shared/styles/tokens.css`. Keep core styles before extension styles and application
-  rules, then verify build, browser rendering and the Lighthouse budget.
 
 ### Production: Umami public prefix is not the tracker script upstream path
 

@@ -14,15 +14,12 @@
     "lint:fix": "eslint . --fix --cache --cache-strategy content --max-warnings 0 && node scripts/verify-test-architecture.mjs && node scripts/verify-app-architecture.mjs"
   },
   "dependencies": {
-    "@mantine/code-highlight": "9.5.1",
-    "@mantine/core": "9.5.1",
-    "@mantine/hooks": "9.5.1",
-    "@mantine/nprogress": "9.5.1",
+    "@base-ui/react": "1.7.0",
+    "@speed-highlight/core": "2.0.0",
     "@tanstack/react-query": "5.101.4",
     "@tanstack/react-router": "^1.121.0",
     "@tanstack/react-router-ssr-query": "1.167.1",
     "@tanstack/react-start": "^1.121.0",
-    "highlight.js": "11.12.0",
     "lucide-react": "1.29.0",
     "nitro": "3.0.260610-beta",
     "openapi-fetch": "0.17.0",

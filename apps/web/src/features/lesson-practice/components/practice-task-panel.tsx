@@ -1,5 +1,6 @@
 import type { ComponentProps } from "react";
 import type { LessonTypes } from "~/entities/lesson";
+import { TabsPanel } from "~/shared/components/tabs";
 import type { LessonPracticeTypes } from "../lesson-practice.types";
 import styles from "../lesson-practice.module.css";
 import { PracticeTaskAnswer } from "./practice-task-answer";
@@ -10,8 +11,8 @@ type PracticeTaskPanelProps = {
   task: LessonTypes.PracticeTask;
   index: number;
   state: LessonPracticeTypes.State;
+  feedback: string;
   alreadySolved: boolean;
-  active: boolean;
   enhanced: boolean;
   nextTask?: LessonTypes.PracticeTask;
   onSubmit: NonNullable<ComponentProps<"form">["onSubmit"]>;
@@ -24,17 +25,14 @@ export const PracticeTaskPanel: React.FC<PracticeTaskPanelProps> = (props) => {
   const headingId = `practice-heading-${props.task.id}`;
 
   return (
-    <section
+    <TabsPanel
       className={styles.practicePanel}
-      id={`practice-panel-${props.task.id}`}
-      role={props.enhanced ? "tabpanel" : undefined}
-      aria-labelledby={
-        props.enhanced ? `practice-tab-${props.task.id}` : headingId
-      }
-      tabIndex={props.enhanced ? 0 : undefined}
-      hidden={props.enhanced && !props.active}
-      data-practice-task={props.task.id}
-      data-solved={props.alreadySolved || undefined}
+      value={props.task.id}
+      focusable={props.enhanced}
+      panelProps={{
+        "data-practice-task": props.task.id,
+        "data-solved": props.alreadySolved || undefined,
+      }}
     >
       <PracticeTaskHeading
         alreadySolved={props.alreadySolved}
@@ -45,17 +43,20 @@ export const PracticeTaskPanel: React.FC<PracticeTaskPanelProps> = (props) => {
       />
       <PracticeTaskAnswer
         alreadySolved={props.alreadySolved}
+        checking={props.state === "checking"}
         inputId={inputId}
         onSubmit={props.onSubmit}
+        state={props.state}
         task={props.task}
       />
       <PracticeTaskFeedback
         alreadySolved={props.alreadySolved}
+        feedback={props.feedback}
         nextTask={props.nextTask}
         onSelectNext={props.onSelectNext}
         state={props.state}
         task={props.task}
       />
-    </section>
+    </TabsPanel>
   );
 };

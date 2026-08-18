@@ -1,13 +1,13 @@
 .practiceSet {
-  margin-top: var(--space-4);
+  margin-top: var(--space-3);
 }
 
 .practiceTabs {
   display: grid;
   grid-template-columns: repeat(5, minmax(6.25rem, 1fr));
+  column-gap: var(--space-0-5);
   max-width: 68rem;
   overflow-x: auto;
-  border-block: 1px solid var(--color-rule-strong);
   scrollbar-color: var(--color-rule-strong) transparent;
   scrollbar-width: thin;
 }
@@ -17,64 +17,56 @@
   display: none;
 }
 
-.practiceTab {
-  --difficulty-tint: #f7eee8;
+.practiceSet:not([data-enhanced]) .practiceTabs {
+  display: none;
+}
 
+.practiceTab {
   position: relative;
+  z-index: 0;
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   grid-template-rows: auto auto;
   gap: 0.05rem 0.42rem;
-  min-height: 3.35rem;
-  padding: 0.38rem 0.55rem 0.32rem;
+  min-height: 3rem;
+  padding: var(--space-0-5) var(--space-1);
   border: 0;
-  border-right: 1px solid var(--color-rule);
   border-radius: 0;
-  background: var(--difficulty-tint);
+  background: var(--color-surface);
   color: var(--color-text-soft);
   cursor: pointer;
   font: inherit;
   text-align: left;
   transition:
-    background-color 140ms ease-out,
-    border-color 140ms ease-out,
-    color 140ms ease-out;
+    background-color var(--motion-duration) var(--motion-easing),
+    border-color var(--motion-duration) var(--motion-easing),
+    color var(--motion-duration) var(--motion-easing);
 }
 
-.practiceTab[data-difficulty="2"] {
-  --difficulty-tint: #f6e9e1;
-}
-
-.practiceTab[data-difficulty="3"] {
-  --difficulty-tint: #f4e1d7;
-}
-
-.practiceTab[data-difficulty="4"] {
-  --difficulty-tint: #f2d8ca;
-}
-
-.practiceTab[data-difficulty="5"] {
-  --difficulty-tint: #efcdbb;
-
-  border-right: 0;
+@media (prefers-reduced-motion: reduce) {
+  .practiceTab {
+    transition: none;
+  }
 }
 
 .practiceTab:hover {
-  border-color: var(--color-accent);
-  color: var(--color-accent-dark);
+  z-index: 1;
+  background: var(--color-surface-quiet);
+  color: var(--color-text);
 }
 
 .practiceTab[aria-selected="true"] {
   z-index: 1;
-  box-shadow: inset 0 -3px 0 var(--color-accent);
+  background: var(--color-surface-quiet);
+  box-shadow: inset 0 -2px 0 var(--color-text);
   color: var(--color-text);
 }
 
 .practiceTab:focus-visible,
 .practicePanel:focus-visible,
-.taskHeading h4:focus-visible,
+.taskHeading h3:focus-visible,
 .taskTheoryLinks a:focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--color-focus);
 }
 
 .practiceTab:focus-visible {
@@ -85,9 +77,9 @@
 .tabIndex {
   grid-row: 1 / -1;
   align-self: center;
-  color: var(--color-accent-dark);
+  color: var(--color-text-soft);
   font-family: var(--font-data);
-  font-size: 0.64rem;
+  font-size: var(--text-2xs);
   font-variant-numeric: tabular-nums;
 }
 
@@ -108,7 +100,7 @@
 }
 
 .difficultyGlyph rect[data-filled="true"] {
-  fill: var(--color-accent-dark);
+  fill: var(--color-text);
 }
 
 .tabLabel {
@@ -116,7 +108,7 @@
   overflow: hidden;
   color: inherit;
   font-family: var(--font-data);
-  font-size: 0.65rem;
+  font-size: var(--text-2xs);
   line-height: 1.2;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -137,11 +129,11 @@
 
 .practicePanel {
   max-width: 68rem;
-  margin-top: var(--space-3);
+  margin-top: var(--space-2);
 }
 
 .practicePanel:focus-visible,
-.taskHeading h4:focus-visible {
+.taskHeading h3:focus-visible {
   border-radius: 0.15rem;
   outline-offset: 4px;
 }
@@ -153,22 +145,22 @@
 .taskHeading {
   display: grid;
   grid-template-columns: 1.7rem minmax(12rem, 1fr) auto auto;
-  gap: 0.55rem;
+  gap: var(--space-0-5) var(--space-1);
   align-items: baseline;
 }
 
 .taskHeading > :first-child {
-  color: var(--color-accent);
+  color: var(--color-text-soft);
   font-family: var(--font-data);
-  font-size: 0.72rem;
+  font-size: var(--text-2xs);
 }
 
-.taskHeading h4 {
+.taskHeading h3 {
   margin: 0;
-  color: var(--color-text-soft);
+  color: var(--color-text);
   font-family: var(--font-reading);
-  font-size: 1.05rem;
-  font-weight: 620;
+  font-size: var(--text-base);
+  font-weight: 600;
   line-height: 1.35;
 }
 
@@ -178,7 +170,7 @@
   gap: 0.2rem 0.65rem;
   justify-content: flex-end;
   font-family: var(--font-ui);
-  font-size: 0.72rem;
+  font-size: var(--text-2xs);
   line-height: 1.4;
 }
 
@@ -187,7 +179,7 @@
 }
 
 .taskTheoryLinks a {
-  color: var(--color-accent-dark);
+  color: var(--color-text);
   text-underline-offset: 0.18em;
 }
 
@@ -197,77 +189,59 @@
 }
 
 .solvedStatus {
-  --badge-bd: 1px solid
-    color-mix(in srgb, var(--color-success) 45%, transparent);
-  --badge-bg: transparent;
-  --badge-color: var(--color-success);
-  --badge-fz: 0.68rem;
-  --badge-height: 1.45rem;
-  --badge-padding-x: 0.45rem;
-
   font-family: var(--font-data);
   font-weight: 500;
-  text-transform: uppercase;
 }
 
 .taskStatement {
   max-width: 68ch;
-  margin: 0.45rem 0 0 2.25rem;
+  margin: var(--space-0-5) 0 0 2.25rem;
   font-family: var(--font-reading);
-  font-size: 0.94rem;
+  font-size: var(--text-sm);
   line-height: 1.58;
-}
-
-.practiceForm label {
-  display: block;
-  margin: 0.85rem 0 0.55rem 2.25rem;
-  color: var(--color-muted);
-  font-size: 0.78rem;
 }
 
 .answerRow {
   display: flex;
-  gap: 0.65rem;
+  gap: var(--space-1);
+  align-items: end;
+  margin-top: var(--space-1);
   margin-left: 2.25rem;
 }
 
-.answerRow input {
-  min-height: 2.75rem;
-  min-width: 0;
+.answerRow > :first-child {
   flex: 1;
-  padding: 0.72rem 0.85rem;
-  border: 1px solid var(--color-rule-strong);
-  border-radius: 0.35rem;
-  background: var(--color-surface);
-  color: var(--color-text);
-}
-
-.answerRow input:disabled {
-  background: var(--color-surface-quiet);
-  color: var(--color-muted);
-  cursor: not-allowed;
 }
 
 .answerRow button {
-  min-height: 2.75rem;
+  min-height: 2.5rem;
 }
 
 .hint,
 .feedback {
-  margin: 0.75rem 0 0 2.25rem;
+  margin: var(--space-1) 0 0 2.25rem;
   color: var(--color-muted);
   font-family: var(--font-reading);
-  font-size: 0.9rem;
+  font-size: var(--text-sm);
   line-height: 1.6;
 }
 
 .hint summary {
+  display: inline-flex;
   width: max-content;
-  min-height: 2.75rem;
-  padding-block: 0.65rem;
-  color: var(--color-accent-dark);
+  min-height: 2.5rem;
+  align-items: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-text);
   cursor: pointer;
   font-family: var(--font-ui);
+  transition: color var(--motion-duration) var(--motion-easing);
+}
+
+.hint[open] summary {
+  color: var(--color-muted);
 }
 
 .feedback {
@@ -283,34 +257,43 @@
 }
 
 .feedback[data-state="incorrect"] {
-  color: var(--color-accent-dark);
+  color: var(--color-danger);
 }
 
 .nextTask,
 .resultLink {
-  margin: 0.9rem 0 0 2.25rem;
+  margin: var(--space-1) 0 0 2.25rem;
 }
 
 .resultLink {
   display: inline-flex;
-  min-height: 2.75rem;
+  min-height: 2.5rem;
   align-items: center;
   padding-inline: 1.1rem;
-  border: 1px solid var(--color-accent);
-  border-radius: 999px;
-  color: var(--color-accent-dark);
+  border: 1px solid var(--color-rule-strong);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-control);
+  color: var(--color-text);
   font-family: var(--font-ui);
-  font-size: 0.88rem;
+  font-size: var(--text-sm);
   text-decoration: none;
+  transition: background-color var(--motion-duration) var(--motion-easing);
 }
 
 .resultLink:hover {
-  background: var(--color-accent-soft);
+  background: var(--color-surface-quiet);
 }
 
 .resultLink:focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--color-focus);
   outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .resultLink {
+    transition: none;
+  }
 }
 
 @media (max-width: 34rem) {
@@ -320,7 +303,6 @@
   }
 
   .taskStatement,
-  .practiceForm label,
   .answerRow,
   .hint,
   .feedback,
@@ -334,7 +316,7 @@
   }
 
   .practiceTab {
-    min-height: 3.2rem;
+    min-height: 3rem;
     gap: 0.04rem 0.28rem;
     padding-inline: 0.35rem;
   }
@@ -345,7 +327,7 @@
 
   .tabLabel {
     grid-column: 1 / -1;
-    font-size: 0.65rem;
+    font-size: var(--text-2xs);
     text-align: center;
     text-overflow: clip;
     white-space: nowrap;

@@ -1,0 +1,46 @@
+.root {
+  display: inline-flex;
+  min-height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  padding-inline: var(--space-1-5);
+  border: 1px solid var(--control-secondary-border);
+  border-radius: var(--radius-control);
+  color: var(--control-secondary-text);
+  background: var(--control-secondary-bg);
+  box-shadow: var(--shadow-control);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    box-shadow var(--motion-duration) var(--motion-easing),
+    background-color var(--motion-duration) var(--motion-easing),
+    border-color var(--motion-duration) var(--motion-easing),
+    color var(--motion-duration) var(--motion-easing);
+}
+
+.root[data-hierarchy="quiet"] {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+}
+
+.root:hover {
+  background: var(--control-quiet-bg-hover);
+  color: var(--color-text);
+}
+
+.root[data-hierarchy="secondary"]:active {
+  background: color-mix(in oklch, var(--color-text) 7%, var(--color-surface));
+}
+
+.root[data-hierarchy="secondary"]:focus-visible {
+  box-shadow: var(--shadow-control), var(--focus-ring);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root {
+    transition: none;
+  }
+}

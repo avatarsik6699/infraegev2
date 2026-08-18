@@ -1,31 +1,90 @@
 :root {
-  color-scheme: light;
-  --font-ui: "Onest Variable", "Onest Fallback", Arial, sans-serif;
-  --font-reading: "Literata Variable", "Literata Fallback", Georgia, serif;
-  --font-data: "SFMono-Regular", Consolas, monospace;
-  --color-bg: #f8f6f1;
-  --color-surface: #fbfaf7;
-  --color-surface-quiet: #f1eee7;
-  --color-text: #211f1c;
-  --color-text-soft: #3f3a34;
-  --color-muted: #716b63;
-  --color-faint: #716b63;
-  --color-rule: #dcd6cc;
-  --color-rule-strong: #c8c0b4;
-  --color-accent: #bd4326;
-  --color-accent-dark: #98371f;
-  --color-accent-soft: #f8e4d8;
-  --color-success: #496f43;
-  --color-code: #24211d;
-  --color-code-top: #1d1a17;
-  --color-code-text: #eee8df;
+  /* Semantic typography */
+  --font-ui: var(--theme-font-ui);
+  --font-reading: var(--theme-font-reading);
+  --font-data: var(--theme-font-data);
+  --text-2xs: 0.75rem;
+  --text-xs: 0.8125rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-md: var(--text-base);
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: clamp(1.5rem, 2vw, 1.75rem);
+  --text-3xl: clamp(2rem, 3vw, 2.5rem);
+  --text-inline-code: 0.86em;
+
+  /* Semantic color roles */
+  --color-bg: var(--theme-page);
+  --color-surface: var(--theme-surface);
+  --color-surface-quiet: var(--theme-surface-muted);
+  --color-text: var(--theme-ink);
+  --color-text-soft: var(--theme-ink-secondary);
+  --color-muted: var(--theme-ink-secondary);
+  --color-faint: var(--theme-ink-secondary);
+  --color-rule: var(--theme-rule);
+  --color-rule-strong: var(--theme-rule-strong);
+  --color-accent: var(--theme-primary);
+  --color-accent-dark: var(--theme-primary-hover);
+  --color-accent-soft: var(--theme-interactive-muted);
+  --color-focus: var(--theme-ring);
+  --color-success: var(--theme-success);
+  --color-warning: var(--theme-warning);
+  --color-danger: var(--theme-danger);
+  --color-code: var(--theme-code);
+  --color-code-top: var(--theme-code-top);
+  --color-code-text: var(--theme-code-ink);
+  --color-code-keyword: var(--theme-code-keyword);
+  --color-code-string: var(--theme-code-string);
+  --color-code-comment: var(--theme-code-comment);
+  --color-code-number: var(--theme-code-number);
+  --color-code-function: var(--theme-code-function);
+  --color-code-operator: var(--theme-code-operator);
+
+  /* Semantic spacing and geometry */
+  --space-0-5: 0.25rem;
   --space-1: 0.5rem;
-  --space-2: 0.875rem;
-  --space-3: 1.25rem;
+  --space-1-5: 0.75rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
   --space-4: 2rem;
   --space-5: 3rem;
+  --space-6: 4rem;
   --space-section-break: clamp(2.25rem, 3vw, 3rem);
+  --radius-control: var(--theme-radius-sm);
+  --radius-surface: var(--theme-radius-md);
+  --radius-pill: 999px;
   --max-content-width: 76rem;
+  --measure-reading: 68ch;
+  --measure-wide: 76rem;
+
+  /* Semantic component roles */
+  --control-primary-bg: var(--color-accent);
+  --control-primary-bg-hover: var(--color-accent-dark);
+  --control-primary-text: var(--theme-on-primary);
+  --control-secondary-bg: var(--color-surface);
+  --control-secondary-border: var(--color-rule-strong);
+  --control-secondary-text: var(--color-text);
+  --control-quiet-bg-hover: var(--color-accent-soft);
+  --control-disabled-bg: var(--color-surface-quiet);
+  --control-disabled-text: var(--color-muted);
+  --surface-tonal-1: color-mix(
+    in oklch,
+    var(--color-accent) 3%,
+    var(--color-surface)
+  );
+  --surface-tonal-2: color-mix(
+    in oklch,
+    var(--color-accent) 6%,
+    var(--color-surface)
+  );
+
+  /* Static and control surfaces stay flat. Add elevation only with a real overlay consumer. */
+  --shadow-annotation: none;
+  --shadow-control: none;
+
+  --motion-duration: var(--theme-motion-duration);
+  --motion-easing: var(--theme-motion-easing);
   --focus-ring: 0 0 0 3px
-    color-mix(in srgb, var(--color-accent) 28%, transparent);
+    color-mix(in srgb, var(--color-focus) 35%, transparent);
 }

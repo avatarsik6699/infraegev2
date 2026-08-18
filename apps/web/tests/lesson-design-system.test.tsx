@@ -1,4 +1,4 @@
-import { fireEvent, screen, within } from "@testing-library/react";
+import { fireEvent, screen, waitFor, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { LessonSectionHeading } from "~/entities/lesson";
 import { LearningVisualFrame } from "~/entities/learning-visual";
@@ -181,7 +181,7 @@ describe("lesson design system", () => {
     ).toBeTruthy();
     expect(screen.getByRole("button", { name: /Копировать код/ })).toBeTruthy();
     expect(
-      screen.getByText("Средняя").closest(".mantine-Badge-root"),
+      screen.getByText("Средняя").closest('[data-tone="accent"]'),
     ).not.toBeNull();
     for (const name of [
       "Попробуйте сами",
@@ -213,7 +213,7 @@ describe("lesson design system", () => {
     expect(within(siteHeader).queryByText("Тренажёр")).toBeNull();
   });
 
-  it("keeps one enhanced practice task active without losing draft answers", () => {
+  it("keeps one enhanced practice task active without losing draft answers", async () => {
     lessonProgress.clear();
     render(<LessonDesignLab />);
 
@@ -227,7 +227,7 @@ describe("lesson design system", () => {
     });
     expect(within(tabs).getAllByRole("tab")).toHaveLength(5);
     const firstTab = within(tabs).getByRole("tab", {
-      name: /Задача 1 из 5/,
+      name: /^01 · Разминка\. Задача 1 из 5/,
     });
     expect(firstTab.getAttribute("aria-selected")).toBe("true");
     expect(firstTab.getAttribute("tabindex")).toBe("0");
@@ -251,11 +251,15 @@ describe("lesson design system", () => {
     const secondTab = within(tabs).getByRole("tab", {
       name: /Задача 2 из 5/,
     });
-    expect(secondTab.getAttribute("aria-selected")).toBe("true");
-    expect(document.activeElement).toBe(secondTab);
+    await waitFor(() => {
+      expect(secondTab.getAttribute("aria-selected")).toBe("true");
+      expect(document.activeElement).toBe(secondTab);
+    });
     fireEvent.keyDown(secondTab, { key: "Home" });
-    expect(firstTab.getAttribute("aria-selected")).toBe("true");
-    expect(document.activeElement).toBe(firstTab);
+    await waitFor(() => {
+      expect(firstTab.getAttribute("aria-selected")).toBe("true");
+      expect(document.activeElement).toBe(firstTab);
+    });
 
     const answer = screen.getByRole("textbox");
     const check = screen.getByRole("button", { name: "Проверить" });
@@ -280,30 +284,34 @@ describe("lesson design system", () => {
 
     fireEvent.change(answer, { target: { value: "правая" } });
     fireEvent.click(check);
-    expect(screen.getByRole("status").textContent).toContain("Пока нет");
+    await waitFor(() => {
+      expect(screen.getByRole("status").textContent).toContain("Пока нет");
+    });
     expect(screen.getByText("Решено 0 из 5 задач")).toBeTruthy();
 
     fireEvent.change(answer, { target: { value: "левая" } });
     fireEvent.click(check);
-    expect(screen.getByRole("status").textContent).toContain("Верно");
+    await waitFor(() => {
+      expect(screen.getByRole("status").textContent).toContain("Верно");
+    });
     expect(screen.getByText("Решено 1 из 5 задач")).toBeTruthy();
     expect(answer.hasAttribute("disabled")).toBe(true);
     expect(screen.getByRole("button", { name: "Решено" })).toBeTruthy();
     expect(
-      screen.getByText("решено").closest(".mantine-Badge-root"),
+      screen.getByText("решено").closest('[data-tone="success"]'),
     ).not.toBeNull();
     const next = screen.getByRole("button", {
       name: "Следующая задача: Сдвиньте левую границу",
     });
     expect(
       within(tabs)
-        .getByRole("tab", { name: /Задача 1 из 5,.*решена/ })
+        .getByRole("tab", { name: /Задача 1 из 5:.*решена/ })
         .getAttribute("data-solved"),
     ).toBe("true");
     fireEvent.click(next);
     expect(document.activeElement).toBe(
       screen.getByRole("heading", {
-        level: 4,
+        level: 3,
         name: "Сдвиньте левую границу",
       }),
     );

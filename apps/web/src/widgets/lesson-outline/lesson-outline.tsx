@@ -105,6 +105,7 @@ export const LessonOutline: React.FC<LessonOutlineTypes.Props> = (props) => {
                 <FragmentLink
                   className={styles.groupLink}
                   hash={group.id}
+                  icon={false}
                   anchorProps={{
                     "aria-current": groupCurrent ? "location" : undefined,
                     "data-active-branch": branchActive || undefined,
@@ -133,6 +134,7 @@ export const LessonOutline: React.FC<LessonOutlineTypes.Props> = (props) => {
                         <FragmentLink
                           className={styles.childLink}
                           hash={item.id}
+                          icon={false}
                           anchorProps={{
                             "aria-current": active ? "location" : undefined,
                             "data-outline-link-id": item.id,

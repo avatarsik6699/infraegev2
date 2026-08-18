@@ -15,16 +15,16 @@
   margin: 0 0 4rem;
   color: var(--color-accent);
   font-family: var(--font-reading);
-  font-size: 1.15rem;
-  font-weight: 650;
+  font-size: var(--text-base);
+  font-weight: 600;
 }
 
 .root h1 {
   margin: 0 0 1rem;
   font-family: var(--font-reading);
-  font-size: clamp(2.4rem, 6vw, 5rem);
+  font-size: var(--text-3xl);
   font-weight: 600;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.025em;
   line-height: 1.02;
 }
 
@@ -33,6 +33,6 @@
   margin: 0;
   color: var(--color-muted);
   font-family: var(--font-reading);
-  font-size: 1.05rem;
+  font-size: var(--text-base);
   line-height: 1.7;
 }

@@ -1,0 +1,20 @@
+.root {
+  color: var(--color-text);
+  font-family: var(--font-reading);
+  font-size: var(--text-base);
+  line-height: 1.68;
+}
+
+.root :where(p, ul, ol, blockquote, pre, table) {
+  margin-block: 0 var(--space-2);
+}
+
+.root :where(ul, ol) {
+  padding-inline-start: 1.4em;
+}
+
+.root :where(h2, h3, h4) {
+  margin-block: var(--space-4) var(--space-2);
+  font-family: var(--font-reading);
+  line-height: 1.2;
+}

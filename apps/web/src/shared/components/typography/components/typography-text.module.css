@@ -1,11 +1,49 @@
-.tone[data-tone="muted"] {
+.root {
+  margin-block: 0;
+  color: var(--color-text);
+  font-family: var(--font-reading);
+  font-size: var(--text-base);
+  line-height: 1.68;
+}
+
+.root[data-variant="lead"] {
+  font-size: var(--text-lg);
+  line-height: 1.55;
+}
+
+.root[data-variant="caption"] {
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  line-height: 1.45;
+}
+
+.root[data-variant="interface"] {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  line-height: 1.45;
+}
+
+.root[data-tone="muted"] {
   color: var(--color-muted);
 }
 
-.tone[data-tone="accent"] {
-  color: var(--color-accent);
+.root[data-tone="accent"] {
+  color: var(--color-accent-dark);
 }
 
-.tone[data-tone="highlight"] {
-  color: var(--color-highlight);
+.root[data-tone="highlight"] {
+  background: var(--color-accent-soft);
+  color: var(--color-accent-dark);
+}
+
+.root[data-truncate] {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.root[data-line-clamp] {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
 }

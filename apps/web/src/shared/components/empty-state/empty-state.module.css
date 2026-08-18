@@ -1,0 +1,11 @@
+.root {
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-2);
+  border-radius: var(--radius-surface);
+  background: var(--color-surface-quiet);
+}
+
+.action {
+  margin-top: var(--space-1);
+}

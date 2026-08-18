@@ -86,9 +86,13 @@ export const BinarySearchProof: React.FC = () => (
   </LearningVisualFrame>
 );
 
+// A horizontal-ease cubic curve rather than orthogonal H/V/Q segments — same
+// technique as the annotated-diagram leaders (diagram-geometry.ts), so it
+// reads as a hand-inked connector rather than a ruled schematic, matching
+// the reference diagrams' ("docs/artifacts/diagram-references/") ink-line
+// style. Endpoints are unchanged from the previous orthogonal paths.
 function leaderPath(rowIndex: number): string {
-  if (rowIndex === 0) return "M 0 54 H 60 V 24 Q 60 16 68 16 H 120";
-  if (rowIndex === 1)
-    return "M 0 42 H 74 Q 82 42 82 34 V 30 Q 82 22 90 22 H 120";
-  return "M 0 30 H 90 Q 98 30 98 22 V 18 Q 98 10 106 10 H 120";
+  if (rowIndex === 0) return "M 0 54 C 60 54 60 16 120 16";
+  if (rowIndex === 1) return "M 0 42 C 60 42 60 22 120 22";
+  return "M 0 30 C 60 30 60 10 120 10";
 }

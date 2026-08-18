@@ -1,0 +1,43 @@
+.root {
+  display: inline-flex;
+  min-height: 1.5rem;
+  gap: var(--space-0-5);
+  align-items: center;
+  width: fit-content;
+  padding: 0.1rem var(--space-1);
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-quiet);
+  color: var(--color-text-soft);
+  font-family: var(--font-data);
+  font-size: var(--text-2xs);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+}
+
+.root[data-tone="accent"] {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+  color: var(--control-primary-text);
+}
+
+.root[data-tone="success"] {
+  border-color: color-mix(in srgb, var(--color-success) 45%, transparent);
+  color: var(--color-success);
+}
+
+.root[data-tone="warning"] {
+  border-color: color-mix(in srgb, var(--color-warning) 45%, transparent);
+  background: color-mix(
+    in oklch,
+    var(--color-warning) 10%,
+    var(--color-surface)
+  );
+  color: var(--color-warning);
+}
+
+.root[data-full-width] {
+  justify-content: center;
+  width: 100%;
+}

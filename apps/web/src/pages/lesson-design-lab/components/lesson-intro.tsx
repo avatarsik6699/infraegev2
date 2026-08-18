@@ -1,16 +1,16 @@
-import { Badge } from "@mantine/core";
+import { Badge } from "~/shared/components/badge";
 import { Typography } from "~/shared/components/typography";
 import styles from "../lesson-design-lab.module.css";
 
 export const LessonIntro: React.FC = () => (
   <div className={styles.intro} data-lesson-intro>
     <div className={styles.chips} aria-label="Сведения об уроке">
-      <Badge variant="outline">№12</Badge>
-      <Badge className={styles.accentChip}>Средняя</Badge>
-      <Badge variant="outline">~7 мин</Badge>
-      <Badge variant="outline">1 балл</Badge>
-      <Badge variant="outline">алгоритмы</Badge>
-      <Badge variant="outline">проверка кода</Badge>
+      <Badge>№12</Badge>
+      <Badge tone="accent">Средняя</Badge>
+      <Badge>~7 мин</Badge>
+      <Badge>1 балл</Badge>
+      <Badge>алгоритмы</Badge>
+      <Badge>проверка кода</Badge>
     </div>
     <Typography.Title order={1}>
       Почему двоичный поиск отбрасывает половину вариантов

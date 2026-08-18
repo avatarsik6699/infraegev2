@@ -5,6 +5,11 @@ services:
   nginx:
     ports:
       - "8080:80"
+    # The upstream image uses SIGQUIT for graceful shutdown. Open Vite HMR WebSockets can keep
+    # that drain alive until Compose sends SIGKILL, making `make stop` appear hung. Local
+    # development has no traffic to drain, so terminate nginx promptly; production keeps the
+    # image's graceful signal from the base Compose file.
+    stop_signal: SIGTERM
     healthcheck:
       interval: 2s
       timeout: 2s
@@ -18,6 +23,7 @@ services:
       - VITE_PROXY_TARGET=http://api:8000
     volumes:
       - ../apps/web/src:/repo/apps/web/src
+      - ../apps/web/public:/repo/apps/web/public
     healthcheck:
       interval: 2s
       timeout: 2s

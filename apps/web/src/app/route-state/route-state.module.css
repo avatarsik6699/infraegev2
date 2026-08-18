@@ -2,6 +2,59 @@
   padding-block: 5rem;
 }
 
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skeletonStack {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.skeleton {
+  display: block;
+  width: 100%;
+  height: 1rem;
+  border-radius: var(--radius-control);
+  background: var(--color-surface-quiet);
+}
+
+.skeleton[data-size="title"] {
+  width: 45%;
+  height: 2rem;
+}
+
+.skeleton[data-size="short"] {
+  width: 75%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .skeleton {
+    animation: skeleton-pulse 1.4s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes skeleton-pulse {
+  to {
+    opacity: 0.52;
+  }
+}
+
 .stateCard {
   margin-block: 4rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  align-items: center;
+  margin-top: var(--space-2);
 }

@@ -37,10 +37,11 @@ export class LessonLabPage {
     await expect(
       example.getByRole("button", { name: /Копировать код/ }),
     ).toBeVisible();
-    await expect(example.locator(".hljs.python")).toHaveCount(1);
+    await expect(example.locator('[data-language="python"]')).toHaveCount(1);
+    await expect(example.locator('[data-token="kwd"]')).not.toHaveCount(0);
 
     const overflow = await example
-      .locator(".mantine-ScrollArea-viewport")
+      .locator("[data-code-scroll]")
       .evaluate((element) => element.scrollWidth > element.clientWidth);
     expect(overflow).toBe(false);
   }
@@ -51,7 +52,9 @@ export class LessonLabPage {
     });
     await expect(tabs).toBeVisible();
     await expect(tabs.getByRole("tab")).toHaveCount(5);
-    const firstTab = tabs.getByRole("tab", { name: /Задача 1 из 5/ });
+    const firstTab = tabs.getByRole("tab", {
+      name: /^01 · Разминка\. Задача 1 из 5/,
+    });
     await expect(firstTab).toHaveAttribute("aria-selected", "true");
     await expect(firstTab).toHaveAttribute("tabindex", "0");
     await expect(this.page.locator("[data-practice-task]:visible")).toHaveCount(
@@ -93,7 +96,7 @@ export class LessonLabPage {
     await nextTask.click();
     await expect(
       this.page.getByRole("heading", {
-        level: 4,
+        level: 3,
         name: "Сдвиньте левую границу",
       }),
     ).toBeFocused();

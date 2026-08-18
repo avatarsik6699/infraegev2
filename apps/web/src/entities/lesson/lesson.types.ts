@@ -20,9 +20,22 @@ export namespace LessonTypes {
     difficultyLabel: string;
     title: string;
     statement: string;
-    answers: readonly string[];
     hint: string;
-    explanation: string;
     theoryLinks: readonly TheoryLink[];
   };
+
+  export type LocalPracticeTask = PracticeTask & {
+    answers: readonly string[];
+    explanation: string;
+  };
+
+  export type CheckResult = {
+    correct: boolean;
+    explanation: string;
+  };
+
+  export type PracticeChecker = (
+    taskId: string,
+    answer: string,
+  ) => Promise<CheckResult>;
 }

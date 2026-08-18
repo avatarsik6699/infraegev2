@@ -39,11 +39,11 @@ describe("client foundation states", () => {
     expect(screen.getByText("Данные появятся позже")).toBeTruthy();
   });
 
-  it("gives the navigation progress indicator an accessible name", () => {
+  it("keeps an idle navigation progress indicator out of the accessibility tree", () => {
     render(<AppNavigationProgress />);
 
     expect(
-      screen.getByRole("progressbar", { name: "Загрузка страницы" }),
-    ).toBeTruthy();
+      screen.queryByRole("progressbar", { name: "Загрузка страницы" }),
+    ).toBeNull();
   });
 });

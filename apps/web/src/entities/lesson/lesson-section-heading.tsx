@@ -1,3 +1,4 @@
+import { Typography } from "~/shared/components/typography";
 import type { LessonSectionHeadingTypes } from "./lesson-section-heading.types";
 import styles from "./lesson-section-heading.module.css";
 
@@ -15,4 +16,3 @@ export const LessonSectionHeading: React.FC<LessonSectionHeadingTypes.Props> = (
     <span>{props.children}</span>
   </Typography.Title>
 );
-import { Typography } from "~/shared/components/typography";

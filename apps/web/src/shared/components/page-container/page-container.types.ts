@@ -1,8 +1,12 @@
+import type { HTMLAttributes } from "react";
+
 export namespace PageContainerTypes {
-  export type Props = {
+  export type Measure = "reading" | "wide" | "full";
+  export type Component = "main" | "header" | "footer" | "section" | "div";
+
+  export type Props = HTMLAttributes<HTMLElement> & {
     children: React.ReactNode;
-    component?: "main" | "header" | "footer" | "section" | "div";
-    className?: string;
-    size?: string;
+    component?: Component;
+    measure?: Measure;
   };
 }

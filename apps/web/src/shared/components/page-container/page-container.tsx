@@ -1,16 +1,21 @@
-import { Container } from "@mantine/core";
+import { cssUtils } from "~/shared/lib/css-utils";
 import type { PageContainerTypes } from "./page-container.types";
+import styles from "./page-container.module.css";
 
-export const PageContainer: React.FC<PageContainerTypes.Props> = (props) => {
+export const PageContainer: React.FC<PageContainerTypes.Props> = ({
+  component: Component = "main",
+  measure = "wide",
+  className,
+  children,
+  ...containerProps
+}) => {
   return (
-    <Container
-      component={props.component ?? "main"}
-      size={props.size ?? "var(--max-content-width)"}
-      px="var(--space-2)"
-      py="var(--space-3)"
-      className={props.className}
+    <Component
+      {...containerProps}
+      data-measure={measure}
+      className={cssUtils.cx(styles.root, className)}
     >
-      {props.children}
-    </Container>
+      {children}
+    </Component>
   );
 };

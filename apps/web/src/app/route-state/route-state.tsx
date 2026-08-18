@@ -1,14 +1,9 @@
-import {
-  Alert,
-  Button,
-  Group,
-  Paper,
-  Skeleton,
-  Stack,
-  VisuallyHidden,
-} from "@mantine/core";
-import { Link, type ErrorComponentProps } from "@tanstack/react-router";
+import type { ErrorComponentProps } from "@tanstack/react-router";
 import { useEffect } from "react";
+import { ActionLink } from "~/shared/components/action-link";
+import { Button } from "~/shared/components/button";
+import { Callout } from "~/shared/components/callout";
+import { EmptyState } from "~/shared/components/empty-state";
 import { PageContainer } from "~/shared/components/page-container";
 import { Typography } from "~/shared/components/typography";
 import {
@@ -20,13 +15,15 @@ import styles from "./route-state.module.css";
 export const RoutePending: React.FC = () => (
   <PageContainer>
     <section className={styles.pending} aria-busy="true">
-      <VisuallyHidden role="status">Загружаем страницу</VisuallyHidden>
-      <Stack gap="xl" aria-hidden="true">
-        <Skeleton height={32} width="45%" radius="sm" />
-        <Skeleton height={16} />
-        <Skeleton height={16} />
-        <Skeleton height={16} width="75%" />
-      </Stack>
+      <span className={styles.visuallyHidden} role="status">
+        Загружаем страницу
+      </span>
+      <div className={styles.skeletonStack} aria-hidden="true">
+        <span className={styles.skeleton} data-size="title" />
+        <span className={styles.skeleton} />
+        <span className={styles.skeleton} />
+        <span className={styles.skeleton} data-size="short" />
+      </div>
     </section>
   </PageContainer>
 );
@@ -49,45 +46,33 @@ export const RouteError: React.FC<ErrorComponentProps> = (props) => {
 
   return (
     <PageContainer>
-      <Alert
-        className={styles.stateCard}
-        role="alert"
-        color="gray"
-        variant="light"
-        title="Не удалось загрузить страницу"
-      >
-        <Stack gap="md">
+      <div className={styles.stateCard} role="alert">
+        <Callout tone="warning" title="Не удалось загрузить страницу">
           <Typography.Text>
             Повторите загрузку. Пользовательские данные не включаются в отчёт об
             ошибке.
           </Typography.Text>
-          <Group>
+          <div className={styles.actions}>
             <Button onClick={props.reset}>Повторить</Button>
-            <Button component={Link} to="/" variant="subtle">
+            <ActionLink to="/" hierarchy="quiet">
               На стартовую страницу
-            </Button>
-          </Group>
-        </Stack>
-      </Alert>
+            </ActionLink>
+          </div>
+        </Callout>
+      </div>
     </PageContainer>
   );
 };
 
 export const RouteNotFound: React.FC = () => (
   <PageContainer>
-    <Paper className={styles.stateCard} withBorder p="xl" radius="sm">
-      <Stack gap="md">
-        <Typography.Text tone="muted">Ошибка 404</Typography.Text>
-        <Typography.Title order={1}>Страница не найдена</Typography.Title>
-        <Typography.Text>
-          Проверьте адрес или вернитесь на стартовую страницу.
-        </Typography.Text>
-        <Group>
-          <Button component={Link} to="/" color="dark" variant="outline">
-            На стартовую страницу
-          </Button>
-        </Group>
-      </Stack>
-    </Paper>
+    <div className={styles.stateCard}>
+      <EmptyState
+        headingOrder={1}
+        title="Страница не найдена"
+        description="Ошибка 404. Проверьте адрес или вернитесь на стартовую страницу."
+        action={<ActionLink to="/">На стартовую страницу</ActionLink>}
+      />
+    </div>
   </PageContainer>
 );

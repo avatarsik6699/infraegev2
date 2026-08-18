@@ -1,0 +1,17 @@
+.root {
+  width: 100%;
+  margin-inline: auto;
+  padding: var(--space-3) clamp(var(--space-2), 3vw, var(--space-4));
+}
+
+.root[data-measure="reading"] {
+  max-width: calc(var(--measure-reading) + 2 * var(--space-4));
+}
+
+.root[data-measure="wide"] {
+  max-width: var(--measure-wide);
+}
+
+.root[data-measure="full"] {
+  max-width: none;
+}

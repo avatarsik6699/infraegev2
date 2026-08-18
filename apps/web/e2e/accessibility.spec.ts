@@ -1,6 +1,11 @@
 import { test } from "./fixtures";
 
-for (const path of ["/", "/lab/lesson", "/removed-route"]) {
+for (const path of [
+  "/",
+  "/lab/lesson",
+  "/lab/design-system",
+  "/removed-route",
+]) {
   test(`no serious accessibility violations on ${path}`, async ({
     accessibilityPage,
   }) => {
