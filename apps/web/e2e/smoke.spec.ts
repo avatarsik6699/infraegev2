@@ -82,3 +82,23 @@ test("the design-system catalog works across viewports and without JavaScript", 
 
   await noJavaScriptDesignSystemLabPage.expectLinearContentWithoutJavaScript();
 });
+
+test("the recursion lesson stays review-only and readable across runtimes", async ({
+  browserSession,
+  noJavaScriptTopicLessonPage,
+  topicLessonPage,
+}) => {
+  await browserSession.useDesktopViewport();
+  await topicLessonPage.open();
+  await topicLessonPage.expectReviewLesson();
+  await topicLessonPage.expectNoHorizontalOverflow();
+
+  await browserSession.useNarrowViewport();
+  await topicLessonPage.open();
+  await topicLessonPage.expectReviewLesson();
+  await topicLessonPage.expectNoHorizontalOverflow();
+  browserSession.expectCleanConsole();
+
+  await noJavaScriptTopicLessonPage.expectReadableWithoutJavaScript();
+  await topicLessonPage.expectUnknownLessonNotFound();
+});

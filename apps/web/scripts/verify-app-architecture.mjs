@@ -19,6 +19,21 @@ const storagePath = path.join(
   "lib",
   "safe-ls.ts",
 );
+const serverConfigPath = path.join(
+  workspaceRoot,
+  "src",
+  "shared",
+  "config",
+  "content.server.ts",
+);
+const serverAdapterPath = path.join(
+  workspaceRoot,
+  "src",
+  "shared",
+  "lib",
+  "content-files",
+  "server-adapter.ts",
+);
 const eslint = new ESLint({ cwd: workspaceRoot });
 
 const applicationSourceRoot = path.join(workspaceRoot, "src");
@@ -204,6 +219,25 @@ assert.deepEqual(
   [],
   `Valid application boundary failed policy lint:\n${JSON.stringify(validResult.messages, null, 2)}`,
 );
+
+const validServerBoundaries = [
+  [
+    serverConfigPath,
+    'import path from "node:path"; export const root = process.env.CONTENT_DIR ?? path.resolve("content");',
+  ],
+  [
+    serverAdapterPath,
+    'import { readFile } from "node:fs/promises"; export const read = () => readFile("content/tasks/example.json", "utf8");',
+  ],
+];
+for (const [filePath, source] of validServerBoundaries) {
+  const [result] = await eslint.lintText(source, { filePath });
+  assert.deepEqual(
+    result.messages,
+    [],
+    `Valid server boundary failed policy lint:\n${JSON.stringify(result.messages, null, 2)}`,
+  );
+}
 
 for (const pattern of forbiddenPatterns) {
   const [result] = await eslint.lintText(pattern.source, {

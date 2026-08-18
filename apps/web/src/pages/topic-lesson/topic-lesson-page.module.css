@@ -1,0 +1,135 @@
+.page {
+  width: min(100% - 2rem, var(--measure-full));
+  margin-inline: auto;
+  padding-block: var(--space-6) var(--space-section-break);
+}
+
+.header {
+  display: grid;
+  gap: var(--space-2);
+  max-width: var(--measure-reading);
+  margin: 0 auto var(--space-6);
+}
+
+.header h1,
+.header p {
+  margin: 0;
+}
+
+.outcomes {
+  display: grid;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface-tonal-1);
+  border-radius: var(--radius-lg);
+}
+
+.outcomes h2,
+.outcomes ul {
+  margin: 0;
+}
+
+.outcomes ul {
+  display: grid;
+  gap: var(--space-1);
+  padding-left: 1.25rem;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(14rem, 18rem) minmax(0, var(--measure-reading));
+  gap: var(--space-6);
+  justify-content: center;
+  align-items: start;
+}
+
+.rail {
+  align-self: stretch;
+}
+
+.railContents {
+  position: sticky;
+  top: var(--space-4);
+  display: grid;
+  gap: var(--space-4);
+  max-height: calc(100vh - 2 * var(--space-4));
+  padding-right: var(--space-2);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.article,
+.section,
+.concepts,
+.concept {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+}
+
+.article {
+  gap: var(--space-section-break);
+}
+
+.section {
+  gap: var(--space-4);
+  scroll-margin-top: var(--space-4);
+}
+
+.concepts {
+  gap: var(--space-6);
+}
+
+.concept {
+  gap: var(--space-3);
+  scroll-margin-top: var(--space-4);
+}
+
+.concept h3 {
+  margin: 0;
+}
+
+.resultStatus {
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface-tonal-1);
+  border-radius: var(--radius-lg);
+}
+
+@media (max-width: 72rem) {
+  .layout {
+    grid-template-columns: minmax(0, var(--measure-reading));
+  }
+
+  .rail {
+    order: 0;
+  }
+
+  .railContents {
+    position: static;
+    max-height: none;
+    padding-right: 0;
+    overflow: visible;
+  }
+}
+
+@media (max-width: 40rem) {
+  .page {
+    width: min(100% - 1.25rem, var(--measure-reading));
+    padding-top: var(--space-4);
+  }
+
+  .header {
+    margin-bottom: var(--space-4);
+  }
+
+  .layout,
+  .article,
+  .concepts {
+    gap: var(--space-5);
+  }
+
+  .outcomes {
+    padding-inline: var(--space-3);
+  }
+}

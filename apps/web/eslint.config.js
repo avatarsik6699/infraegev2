@@ -47,6 +47,10 @@ const platformSyntaxRestrictions = [
   },
 ];
 
+const serverBoundarySyntaxRestrictions = platformSyntaxRestrictions.filter(
+  ({ selector }) => !selector.startsWith("ImportDeclaration"),
+);
+
 function architectureRules({ upward = [], publicApi = [], policy = true }) {
   return {
     rules: {
@@ -422,6 +426,15 @@ export default tseslint.config(
   {
     files: ["src/shared/config/client-env.ts"],
     rules: { "no-restricted-syntax": "off" },
+  },
+  {
+    files: [
+      "src/shared/config/*.server.ts",
+      "src/shared/lib/**/server-adapter.ts",
+    ],
+    rules: {
+      "no-restricted-syntax": ["error", ...serverBoundarySyntaxRestrictions],
+    },
   },
   eslintConfigPrettier,
 );

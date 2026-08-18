@@ -69,9 +69,12 @@ command fails immediately instead of racing the first one. Docker Desktop may al
 `infra` project created by direct `docker compose` commands; the Make targets intentionally own
 only `infraege-dev`. A failed start prints service status and recent nginx/web/api logs.
 
-The web lesson loader reads git-owned topic and task files through `CONTENT_DIR`. Compose mounts
-the repository `content/` directory read-only at `/content`; production images copy the same tree
-to `/content` during build. Host commands fall back to the workspace `content/` path.
+The web lesson loader reads only git-owned practice tasks through `CONTENT_DIR`. Compose mounts
+`content/tasks/` read-only at `/content/tasks`; web development and production images contain the
+same task subtree at that path. Host commands fall back to the workspace `content/` path. Lesson
+theory is compiled from `apps/web/src/entities/lesson/content/*.lesson.tsx` and is never mounted as
+runtime content. The API retains its separate full `content/` tree because courses, topics and task
+validation remain backend-owned contracts.
 
 **Private VPS access:** reaching the application VPS's private `10.77.0.0/24` network (Beszel,
 Umami, journald gatewayd, private SSH — e.g. for an external observability tool like sre-kit run

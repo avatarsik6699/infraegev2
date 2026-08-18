@@ -2,10 +2,16 @@ import { defineConfig } from "vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import { nitro } from "nitro/vite";
 import viteReact from "@vitejs/plugin-react";
+import { lessonPublications } from "./src/entities/lesson/content/lesson-publication.mjs";
 
 export default defineConfig((configEnv) => {
   const apiProxyTarget =
     process.env.VITE_PROXY_TARGET ?? "http://localhost:8000";
+  const publishedLessonPaths = new Set(
+    lessonPublications
+      .filter(({ status }) => status === "published")
+      .map(({ routeSlug }) => `/ege/${routeSlug}`),
+  );
 
   return {
     build: {
@@ -34,7 +40,9 @@ export default defineConfig((configEnv) => {
           enabled: true,
           crawlLinks: true,
           // The lesson lab is an unlisted design proof, not published content.
-          filter: ({ path }) => !path.startsWith("/lab/"),
+          filter: ({ path }) =>
+            !path.startsWith("/lab/") &&
+            (!path.startsWith("/ege/") || publishedLessonPaths.has(path)),
           failOnError: true,
         },
       }),

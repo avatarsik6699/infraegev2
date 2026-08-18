@@ -4,6 +4,7 @@ for (const path of [
   "/",
   "/lab/lesson",
   "/lab/design-system",
+  "/ege/16-rekursiya",
   "/removed-route",
 ]) {
   test(`no serious accessibility violations on ${path}`, async ({

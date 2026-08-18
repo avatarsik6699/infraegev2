@@ -6,10 +6,11 @@ import { Mistake } from "../components/mistake";
 import { Procedure } from "../components/procedure";
 import { WorkedExample } from "../components/worked-example";
 import { defineLesson } from "../lib/define-lesson";
+import { rekursiyaLessonPublication } from "./lesson-publication.mjs";
 
 export const rekursiyaLesson = defineLesson({
+  ...rekursiyaLessonPublication,
   id: "rekursiya",
-  routeSlug: "16-rekursiya",
   taskNumber: 16,
   title: "Рекурсивные алгоритмы",
   summary:
@@ -26,7 +27,6 @@ export const rekursiyaLesson = defineLesson({
     "rekursiya-two-values",
     "rekursiya-large-ratio",
   ],
-  status: "draft",
   accessTier: "free",
   theory: [
     {

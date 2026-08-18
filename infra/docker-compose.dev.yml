@@ -24,6 +24,7 @@ services:
     volumes:
       - ../apps/web/src:/repo/apps/web/src
       - ../apps/web/public:/repo/apps/web/public
+      - ../content/tasks:/content/tasks:ro
     healthcheck:
       interval: 2s
       timeout: 2s
