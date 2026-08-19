@@ -9,7 +9,7 @@
 | Change | `26` |
 | Slug | `api-image-security-refresh` |
 | Title | API Image Security Refresh |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/26-api-image-security-refresh` |
 
 ---
