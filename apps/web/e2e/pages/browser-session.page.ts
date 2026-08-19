@@ -31,6 +31,10 @@ export class BrowserSession {
     await this.page.setViewportSize({ width: 1024, height: 768 });
   }
 
+  async useZoomedDesktopViewport(): Promise<void> {
+    await this.page.setViewportSize({ width: 960, height: 683 });
+  }
+
   async captureViewport(filename: string): Promise<void> {
     await this.page.screenshot({
       path: this.testInfo.outputPath(filename),

@@ -129,7 +129,33 @@ app → routes → pages → widgets → features → entities → shared
   server-loaded public projection; checker answers and tolerances never enter that projection.
   Before enhancement both help sections remain ordinary linear SSR/no-JS content; after hydration
   they collapse independently and retain native keyboard/focus semantics through the shared
-  `Accordion` wrapper.
+  `Accordion` wrapper. A solved task uses the success check in its tab and a clear success
+  border/background on its disabled answer field; keep the «Проверить» control visible but disabled
+  so the form geometry and action context remain stable. Do not repeat solved state with a badge or
+  navigation actions to the next task/result because the tabs and page outline already provide
+  those paths. Persist only the learner's accepted submitted value alongside the solved task id,
+  restore it after reload and keep the useful correctness explanation immediately after submission;
+  checker answers and tolerances remain server-owned.
+- Public discovery is registry-driven. A lesson enters the home list, prerender crawl and sitemap
+  only through one `published` status; review and lab routes stay unlisted and `noindex,nofollow`.
+  Every indexable HTML route exposes an absolute `https://infraege.ru` canonical plus unique title,
+  description and social metadata. `/robots.txt` and `/sitemap.xml` are server routes, not copied
+  static lists that can drift from publication state.
+- Public pages remain complete in SSR/no-JavaScript output and link to the current data-processing
+  disclosure. Legal copy describes only behavior present in code/configuration and never invents
+  missing operator details or a contact channel.
+- The public home uses a responsive editorial split: the primary product statement leads on the
+  left and the registry-derived topic list sits on the right, collapsing to one linear column on
+  narrow screens. Group it through spacing and one quiet topic surface rather than decorative
+  separators; public copy stays concise and states the current free theory-and-practice offer.
+- A shared back-navigation link always renders a real fallback `href` for SSR/no-JavaScript and
+  modified-click behavior. After hydration it follows TanStack Router history only when the
+  router-owned history index says an in-app entry exists; direct entry, document reload and
+  external-origin arrival use the explicit fallback route instead of leaving the application.
+- Public headers share one release identity from `siteConfig`: the wordmark and restrained release
+  label stay grouped at the left, while the current application version remains visible at the
+  right. Published pages do not duplicate this chrome with page-private header markup; frozen lab
+  headers keep their explicitly isolated review contract.
 
 ## 5. Responsive and accessible behavior
 
@@ -158,6 +184,9 @@ app → routes → pages → widgets → features → entities → shared
 
 - Reading prose uses the reading family; controls and labels use the UI family; code and numeric
   evidence use the data family. Component APIs use semantic text roles rather than raw size names.
+- Public surfaces use metric-normalized local reading/UI faces so cold load has no font download,
+  late replacement or layout shift. Do not reintroduce network webfonts without before/after
+  cold-cache evidence that preserves CLS = 0 and the public-route LCP budget.
 - The active typography baseline uses only `500` and `600` in component CSS and the shared
   `--text-*` scale; consumers do not introduce literal sizes or intermediate variable-font weights.
   Semantic heading levels may share an effective size when hierarchy already comes from spacing

@@ -30,9 +30,8 @@
   --theme-code-function: oklch(0.82 0.09 255);
   --theme-code-operator: oklch(0.86 0.05 300);
 
-  --theme-font-ui: "Onest Variable", "Onest Fallback", Arial, sans-serif;
-  --theme-font-reading:
-    "Literata Variable", "Literata Fallback", Georgia, serif;
+  --theme-font-ui: "Onest Fallback", Arial, sans-serif;
+  --theme-font-reading: "Literata Fallback", Georgia, serif;
   --theme-font-data: "SFMono-Regular", Consolas, monospace;
 
   --theme-radius-sm: 0.5rem;

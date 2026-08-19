@@ -1,6 +1,7 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { findLessonByRouteSlug, getLessonRouteData } from "~/entities/lesson";
 import { TopicLessonPage } from "~/pages/topic-lesson";
+import { pageHead } from "~/shared/lib/seo";
 
 export const Route = createFileRoute("/ege/$slug")({
   loader: async ({ params }: { params: { slug: string } }) => {
@@ -13,15 +14,13 @@ export const Route = createFileRoute("/ege/$slug")({
   head: ({ params }: { params: { slug: string } }) => {
     const lesson = findLessonByRouteSlug(params.slug);
     return lesson
-      ? {
-          meta: [
-            { title: `${lesson.title} — infraege` },
-            { name: "description", content: lesson.summary },
-            ...(lesson.status === "published"
-              ? []
-              : [{ name: "robots", content: "noindex,nofollow" }]),
-          ],
-        }
+      ? pageHead.create({
+          title: `${lesson.title} — infraege`,
+          description: lesson.summary,
+          path: `/ege/${lesson.routeSlug}`,
+          type: "article",
+          noIndex: lesson.status !== "published",
+        })
       : {};
   },
   component: TopicLessonRoute,

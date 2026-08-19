@@ -23,15 +23,14 @@ export const LessonPractice: React.FC<LessonPracticeTypes.Props> = (props) => {
         {props.tasks.map((task, index) => (
           <PracticeTaskPanel
             alreadySolved={model.isSolved(task.id)}
+            answer={model.answerFor(task.id)}
             enhanced={model.enhanced}
             index={index}
             key={task.id}
-            nextTask={props.tasks[index + 1]}
-            onSelectNext={(taskId) => model.selectTask(taskId, true)}
             onSubmit={(event) => {
               void model.checkAnswer(task, event);
             }}
-            setHeadingRef={model.setHeadingRef}
+            onAnswerChange={(value) => model.updateAnswer(task.id, value)}
             state={model.stateFor(task.id)}
             feedback={model.feedbackFor(task.id)}
             task={task}

@@ -15,10 +15,9 @@ type PracticeTaskPanelProps = {
   feedback: string;
   alreadySolved: boolean;
   enhanced: boolean;
-  nextTask?: LessonTypes.PracticeTask;
+  answer: string;
+  onAnswerChange: (value: string) => void;
   onSubmit: NonNullable<ComponentProps<"form">["onSubmit"]>;
-  onSelectNext: (taskId: string) => void;
-  setHeadingRef: (taskId: string, element: HTMLHeadingElement | null) => void;
 };
 
 export const PracticeTaskPanel: React.FC<PracticeTaskPanelProps> = (props) => {
@@ -35,29 +34,19 @@ export const PracticeTaskPanel: React.FC<PracticeTaskPanelProps> = (props) => {
         "data-solved": props.alreadySolved || undefined,
       }}
     >
-      <PracticeTaskHeading
-        alreadySolved={props.alreadySolved}
-        headingId={headingId}
-        setHeadingRef={props.setHeadingRef}
-        task={props.task}
-      />
+      <PracticeTaskHeading headingId={headingId} task={props.task} />
       <PracticeTaskAnswer
         alreadySolved={props.alreadySolved}
+        answer={props.answer}
         checking={props.state === "checking"}
         inputId={inputId}
+        onAnswerChange={props.onAnswerChange}
         onSubmit={props.onSubmit}
         state={props.state}
         task={props.task}
       />
       <PracticeTaskHelp task={props.task} />
-      <PracticeTaskFeedback
-        alreadySolved={props.alreadySolved}
-        feedback={props.feedback}
-        nextTask={props.nextTask}
-        onSelectNext={props.onSelectNext}
-        state={props.state}
-        task={props.task}
-      />
+      <PracticeTaskFeedback feedback={props.feedback} state={props.state} />
     </TabsPanel>
   );
 };

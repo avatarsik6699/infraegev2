@@ -1,0 +1,22 @@
+.root {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
+  align-items: center;
+  justify-content: space-between;
+  min-height: 3.5rem;
+  padding: var(--space-1) clamp(1.25rem, 2.6vw, 3rem);
+  border-top: 1px solid var(--color-rule);
+  color: var(--color-text-soft);
+  font-size: var(--text-sm);
+}
+
+.root[data-seamless] {
+  border-top: 0;
+}
+
+.root a {
+  min-height: 2.5rem;
+  display: inline-flex;
+  align-items: center;
+}

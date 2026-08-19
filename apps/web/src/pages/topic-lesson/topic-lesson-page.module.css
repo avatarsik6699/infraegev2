@@ -5,33 +5,6 @@
   background: var(--color-bg);
 }
 
-.siteHeader {
-  display: flex;
-  align-items: center;
-  min-height: 3.35rem;
-  padding-inline: clamp(1.25rem, 2.6vw, 3rem);
-  border-bottom: 1px solid var(--color-rule);
-}
-
-.brand {
-  color: var(--color-text);
-  font-family: var(--font-reading);
-  font-size: var(--text-2xl);
-  font-weight: 600;
-  letter-spacing: -0.035em;
-  text-decoration: none;
-}
-
-.brand:hover {
-  color: var(--color-text-soft);
-}
-
-.brand:focus-visible {
-  border-radius: var(--radius-control);
-  outline: 2px solid var(--color-focus);
-  outline-offset: 0.25rem;
-}
-
 .contextBar {
   display: grid;
   grid-template-columns:
@@ -42,8 +15,7 @@
 }
 
 .contextArea,
-.contextLesson,
-.contextMobile {
+.contextLesson {
   display: flex;
   align-items: center;
   margin: 0;
@@ -63,10 +35,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.contextMobile {
-  display: none;
 }
 
 .lesson {
@@ -271,17 +239,15 @@
 
 @media (max-width: 52rem) {
   .contextBar {
-    display: block;
+    grid-template-columns: auto minmax(0, 1fr);
     min-height: 3.25rem;
   }
 
-  .contextArea,
-  .contextLesson {
-    display: none;
+  .contextArea {
+    padding-inline: var(--space-1-5);
   }
 
-  .contextMobile {
-    display: flex;
+  .contextLesson {
     min-height: 3.25rem;
     padding-inline: var(--lesson-column-gutter);
   }
@@ -294,11 +260,5 @@
   .section,
   .concepts {
     gap: var(--space-2);
-  }
-}
-
-@media (max-width: 34rem) {
-  .siteHeader {
-    min-height: 3rem;
   }
 }

@@ -94,7 +94,7 @@
 
 .taskHeading {
   display: grid;
-  grid-template-columns: minmax(12rem, 1fr) auto auto;
+  grid-template-columns: minmax(12rem, 1fr) auto;
   gap: var(--space-1);
   align-items: baseline;
 }
@@ -127,11 +127,6 @@
   color: var(--color-text);
 }
 
-.solvedStatus {
-  font-family: var(--font-data);
-  font-weight: 500;
-}
-
 .taskStatement {
   max-width: 68ch;
   margin: var(--space-2) 0 0;
@@ -153,6 +148,17 @@
   min-height: 2.5rem;
   min-width: 8rem;
   justify-self: start;
+}
+
+.answerRow .solvedAnswer:disabled {
+  border-color: var(--color-success);
+  background: color-mix(
+    in srgb,
+    var(--color-success) 14%,
+    var(--color-surface)
+  );
+  color: var(--color-text);
+  opacity: 1;
 }
 
 .feedback {
@@ -217,41 +223,6 @@
 
 .feedback[data-state="incorrect"] {
   color: var(--color-danger);
-}
-
-.nextTask,
-.resultLink {
-  margin-top: var(--space-1);
-}
-
-.resultLink {
-  display: inline-flex;
-  min-height: 2.5rem;
-  align-items: center;
-  padding-inline: 1.1rem;
-  border: 1px solid var(--color-rule-strong);
-  border-radius: var(--radius-control);
-  background: var(--color-surface);
-  color: var(--color-text);
-  font-family: var(--font-ui);
-  font-size: var(--text-sm);
-  text-decoration: none;
-  transition: background-color var(--motion-duration) var(--motion-easing);
-}
-
-.resultLink:hover {
-  background: var(--color-surface-quiet);
-}
-
-.resultLink:focus-visible {
-  outline: 2px solid var(--color-focus);
-  outline-offset: 3px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .resultLink {
-    transition: none;
-  }
 }
 
 @media (max-width: 34rem) {

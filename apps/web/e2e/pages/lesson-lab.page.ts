@@ -86,20 +86,25 @@ export class LessonLabPage {
     ).toHaveAttribute("aria-valuetext", "Решено 0 из 5 задач");
 
     await this.answerTask("keep-half", "левая");
+    const solvedTask = this.page.locator('[data-practice-task="keep-half"]');
+    await expect(solvedTask).toBeVisible();
+    await expect(solvedTask.getByRole("textbox")).toBeDisabled();
+    await expect(solvedTask.getByRole("textbox")).toHaveAttribute(
+      "data-solved",
+      "true",
+    );
+    await expect(solvedTask.getByRole("textbox")).toHaveValue("левая");
     await expect(
-      this.page.locator('[data-practice-task="keep-half"]'),
-    ).toBeVisible();
-    const nextTask = this.page.getByRole("button", {
-      name: "Следующая задача: Сдвиньте левую границу",
-    });
-    await expect(nextTask).toBeVisible();
-    await nextTask.click();
+      solvedTask.getByRole("button", { name: "Проверить" }),
+    ).toBeDisabled();
     await expect(
-      this.page.getByRole("heading", {
-        level: 3,
-        name: "Сдвиньте левую границу",
-      }),
-    ).toBeFocused();
+      this.page.getByRole("button", { name: /Следующая задача:/ }),
+    ).toHaveCount(0);
+    await expect(
+      this.page.getByRole("link", { name: "Перейти к результату" }),
+    ).toHaveCount(0);
+    await secondTab.click();
+    await expect(secondTab).toHaveAttribute("aria-selected", "true");
     await this.answerTask("left-boundary", "9");
     await this.answerTask("right-boundary", "7");
     await this.answerTask("loop-condition", "L <= R");
@@ -116,7 +121,7 @@ export class LessonLabPage {
     ).toHaveAttribute("aria-valuetext", "Решено 5 из 5 задач");
     await expect(
       this.page.getByRole("link", { name: "Перейти к результату" }),
-    ).toHaveAttribute("href", "#result");
+    ).toHaveCount(0);
     await expect(this.page.locator("[data-mastery-status]")).toHaveText(
       "Все задания решены",
     );
@@ -130,6 +135,16 @@ export class LessonLabPage {
         .getByRole("tablist", { name: "Задачи по сложности" })
         .getByRole("tab", { name: /Задача 1 из 5/ }),
     ).toHaveAttribute("aria-selected", "true");
+    await expect(
+      this.page
+        .locator('[data-practice-task="keep-half"]')
+        .getByRole("textbox"),
+    ).toHaveValue("левая");
+    await expect(
+      this.page
+        .locator('[data-practice-task="keep-half"]')
+        .getByRole("button", { name: "Проверить" }),
+    ).toBeDisabled();
   }
 
   async expectLessonNavigation(): Promise<void> {
@@ -274,32 +289,23 @@ export class LessonLabPage {
 
   async expectStableFontContract(): Promise<void> {
     const preloads = this.page.locator('link[rel="preload"][as="font"]');
-    await expect(preloads).toHaveCount(2);
-    await expect(preloads.nth(0)).toHaveAttribute("type", "font/woff2");
-    await expect(preloads.nth(0)).toHaveAttribute("crossorigin", "anonymous");
-    await expect(preloads.nth(0)).toHaveAttribute(
-      "href",
-      /wght-normal\.[a-f0-9]{8}\.woff2$/,
-    );
-    await expect(preloads.nth(1)).toHaveAttribute("type", "font/woff2");
-    await expect(preloads.nth(1)).toHaveAttribute("crossorigin", "anonymous");
-    await expect(preloads.nth(1)).toHaveAttribute(
-      "href",
-      /wght-normal\.[a-f0-9]{8}\.woff2$/,
-    );
+    await expect(preloads).toHaveCount(0);
 
     await this.page.evaluate(() => document.fonts.ready);
-    const requestedFonts = await this.page.evaluate(() =>
-      performance
+    const fontState = await this.page.evaluate(() => ({
+      requestedFonts: performance
         .getEntriesByType("resource")
         .map((entry) => entry.name)
         .filter((name) => name.includes("/fonts/")),
-    );
+      bodyFamily: getComputedStyle(document.body).fontFamily,
+      headingFamily: getComputedStyle(
+        document.querySelector("h1") ?? document.body,
+      ).fontFamily,
+    }));
 
-    expect(requestedFonts).not.toEqual(
-      expect.arrayContaining([expect.stringContaining("italic")]),
-    );
-    expect(new Set(requestedFonts).size).toBeLessThanOrEqual(4);
+    expect(fontState.requestedFonts).toEqual([]);
+    expect(fontState.bodyFamily).toContain("Onest Fallback");
+    expect(fontState.headingFamily).toContain("Literata Fallback");
   }
 
   async expectBoundedMarginalia(): Promise<void> {

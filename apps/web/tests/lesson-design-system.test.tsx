@@ -29,6 +29,8 @@ vi.mock(
           {children}
         </a>
       ),
+      useCanGoBack: () => false,
+      useRouter: () => ({ history: { back: vi.fn() } }),
     };
   },
 );
@@ -256,7 +258,7 @@ describe("lesson design system", () => {
 
   it("keeps one enhanced practice task active without losing draft answers", async () => {
     lessonProgress.clear();
-    render(<LessonDesignLab />);
+    const lesson = render(<LessonDesignLab />);
 
     expect(screen.queryByRole("link", { name: "В избранное" })).toBeNull();
     expect(screen.queryByRole("link", { name: "К практике" })).toBeNull();
@@ -352,25 +354,38 @@ describe("lesson design system", () => {
         .getAttribute("aria-valuetext"),
     ).toBe("Решено 1 из 5 задач");
     expect(answer.hasAttribute("disabled")).toBe(true);
-    expect(screen.getByRole("button", { name: "Решено" })).toBeTruthy();
+    expect(answer.getAttribute("data-solved")).toBe("true");
+    expect((answer as HTMLInputElement).value).toBe("левая");
     expect(
-      screen.getByText("решено").closest('[data-tone="success"]'),
-    ).not.toBeNull();
-    const next = screen.getByRole("button", {
-      name: "Следующая задача: Сдвиньте левую границу",
-    });
+      screen
+        .getByRole("button", { name: "Проверить" })
+        .hasAttribute("disabled"),
+    ).toBe(true);
+    expect(screen.queryByText("решено", { exact: true })).toBeNull();
+    expect(
+      screen.queryByRole("button", { name: /Следующая задача:/ }),
+    ).toBeNull();
+    expect(
+      screen.queryByRole("link", { name: "Перейти к результату" }),
+    ).toBeNull();
     expect(
       within(tabs)
         .getByRole("tab", { name: /Задача 1 из 5:.*решена/ })
         .getAttribute("data-solved"),
     ).toBe("true");
-    fireEvent.click(next);
-    expect(document.activeElement).toBe(
-      screen.getByRole("heading", {
-        level: 3,
-        name: "Сдвиньте левую границу",
-      }),
-    );
+    fireEvent.click(within(tabs).getByRole("tab", { name: /Задача 2 из 5/ }));
+    expect(secondTab.getAttribute("aria-selected")).toBe("true");
+
+    lesson.unmount();
+    render(<LessonDesignLab />);
+    const restoredAnswer = screen.getByRole("textbox", { name: "Ответ" });
+    expect((restoredAnswer as HTMLInputElement).value).toBe("левая");
+    expect(restoredAnswer.hasAttribute("disabled")).toBe(true);
+    expect(
+      screen
+        .getByRole("button", { name: "Проверить" })
+        .hasAttribute("disabled"),
+    ).toBe(true);
     lessonProgress.clear();
   });
 
@@ -382,11 +397,17 @@ describe("lesson design system", () => {
 
   it("separates task mastery from navigation and persists solved task ids", () => {
     lessonProgress.clear();
-    lessonProgress.markSolved("task-1");
-    lessonProgress.markSolved("task-1");
+    lessonProgress.markSolved("task-1", " 42 ");
+    lessonProgress.markSolved("task-1", " 42 ");
     expect(lessonProgress.getSnapshot().solvedTaskIds).toEqual(["task-1"]);
+    expect(lessonProgress.getSnapshot().acceptedAnswers).toEqual({
+      "task-1": " 42 ",
+    });
     expect(window.localStorage.getItem(lessonProgressStorageKey)).toContain(
       "task-1",
+    );
+    expect(window.localStorage.getItem(lessonProgressStorageKey)).toContain(
+      " 42 ",
     );
 
     render(<LessonProgress solved={4} total={5} masteryThreshold={0.8} />);
@@ -394,6 +415,35 @@ describe("lesson design system", () => {
       screen.getByRole("progressbar", { name: "Решённые задачи темы" }),
     ).toBeTruthy();
     expect(screen.getByText("Тема освоена")).toBeTruthy();
+    lessonProgress.clear();
+  });
+
+  it("keeps legacy solved progress without inventing an accepted answer", () => {
+    lessonProgress.clear();
+    const unsubscribe = lessonProgress.subscribe(() => undefined);
+    window.localStorage.setItem(
+      lessonProgressStorageKey,
+      JSON.stringify({
+        version: 1,
+        data: { solvedTaskIds: ["keep-half"] },
+      }),
+    );
+    window.dispatchEvent(
+      new StorageEvent("storage", {
+        key: lessonProgressStorageKey,
+      }),
+    );
+    expect(lessonProgress.getSnapshot()).toEqual({
+      acceptedAnswers: {},
+      solvedTaskIds: ["keep-half"],
+    });
+    render(<LessonDesignLab />);
+    expect(
+      screen
+        .getByPlaceholderText("Ответ был принят ранее")
+        .hasAttribute("disabled"),
+    ).toBe(true);
+    unsubscribe();
     lessonProgress.clear();
   });
 
@@ -406,7 +456,10 @@ describe("lesson design system", () => {
         key: lessonProgressStorageKey,
       }),
     );
-    expect(lessonProgress.getSnapshot().solvedTaskIds).toEqual([]);
+    expect(lessonProgress.getSnapshot()).toEqual({
+      acceptedAnswers: {},
+      solvedTaskIds: [],
+    });
     expect(window.localStorage.getItem(lessonProgressStorageKey)).toBeNull();
     unsubscribe();
   });

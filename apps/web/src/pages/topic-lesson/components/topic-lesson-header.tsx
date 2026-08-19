@@ -1,5 +1,6 @@
-import { Link } from "@tanstack/react-router";
+import { BackLink } from "~/shared/components/back-link";
 import { Typography } from "~/shared/components/typography";
+import { PublicHeader } from "~/widgets/public-header";
 import styles from "../topic-lesson-page.module.css";
 
 type Props = {
@@ -9,20 +10,13 @@ type Props = {
 
 export const TopicLessonHeader: React.FC<Props> = (props) => (
   <>
-    <header className={styles.siteHeader} data-topic-lesson-header>
-      <Link aria-label="infraege — на главную" className={styles.brand} to="/">
-        infraege
-      </Link>
-    </header>
+    <PublicHeader />
     <div className={styles.contextBar} data-topic-lesson-context>
-      <Typography.Text className={styles.contextArea}>
-        ЕГЭ по информатике
-      </Typography.Text>
+      <div className={styles.contextArea}>
+        <BackLink>Назад</BackLink>
+      </div>
       <Typography.Text className={styles.contextLesson}>
         {`Задание ${String(props.taskNumber)} · ${props.title}`}
-      </Typography.Text>
-      <Typography.Text className={styles.contextMobile}>
-        {`Задание ${String(props.taskNumber)} · ЕГЭ по информатике`}
       </Typography.Text>
     </div>
   </>

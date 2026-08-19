@@ -1,13 +1,14 @@
 export namespace LessonProgressTypes {
   export type Snapshot = {
     solvedTaskIds: readonly string[];
+    acceptedAnswers: Readonly<Record<string, string>>;
   };
 
   export type Store = {
     clear: () => void;
     getServerSnapshot: () => Snapshot;
     getSnapshot: () => Snapshot;
-    markSolved: (taskId: string) => void;
+    markSolved: (taskId: string, acceptedAnswer: string) => void;
     subscribe: (listener: () => void) => () => void;
   };
 

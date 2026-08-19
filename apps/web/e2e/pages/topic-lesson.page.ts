@@ -1,4 +1,5 @@
 import { expect, type Page } from "@playwright/test";
+import { expectPublicReleaseIdentity } from "./public-header.assertions";
 
 export class TopicLessonPage {
   constructor(private readonly page: Page) {}
@@ -6,12 +7,21 @@ export class TopicLessonPage {
   async open(): Promise<void> {
     await this.page.goto("/ege/16-rekursiya");
     await expect(this.page).toHaveURL(/\/ege\/16-rekursiya$/);
-    await this.page.evaluate(() => {
-      if (document.scrollingElement) document.scrollingElement.scrollTop = 0;
-    });
+    await expect
+      .poll(async () => {
+        await this.page.evaluate(() => {
+          if (document.scrollingElement)
+            document.scrollingElement.scrollTop = 0;
+        });
+        return this.page.evaluate(
+          () => document.scrollingElement?.scrollTop ?? window.scrollY,
+        );
+      })
+      .toBe(0);
   }
 
-  async expectReviewLesson(): Promise<void> {
+  async expectPublishedLesson(): Promise<void> {
+    await expectPublicReleaseIdentity(this.page);
     await expect(
       this.page.getByRole("link", { name: "infraege — на главную" }),
     ).toHaveAttribute("href", "/");
@@ -23,8 +33,18 @@ export class TopicLessonPage {
     ).toBeVisible();
     await expect(this.page.locator('meta[name="robots"]')).toHaveAttribute(
       "content",
-      "noindex,nofollow",
+      "index,follow",
     );
+    await expect(this.page.locator('link[rel="canonical"]')).toHaveAttribute(
+      "href",
+      "https://infraege.ru/ege/16-rekursiya",
+    );
+    await expect(
+      this.page.getByRole("link", { name: "Обработка данных" }),
+    ).toHaveAttribute("href", "/privacy");
+    await expect(
+      this.page.getByRole("link", { name: "Назад", exact: true }),
+    ).toHaveAttribute("href", "/");
     await expect(
       this.page
         .getByRole("navigation", { name: "Содержание урока" })
@@ -64,7 +84,7 @@ export class TopicLessonPage {
   async expectDesktopComposition(): Promise<void> {
     const context = this.page.locator("[data-topic-lesson-context]");
     await expect(
-      context.getByText("ЕГЭ по информатике", { exact: true }),
+      context.getByRole("link", { name: "Назад", exact: true }),
     ).toBeVisible();
     await expect(
       context.getByText("Задание 16 · Рекурсивные алгоритмы", {
@@ -115,12 +135,12 @@ export class TopicLessonPage {
 
   async expectMobileComposition(): Promise<void> {
     await expect(
-      this.page.getByText("Задание 16 · ЕГЭ по информатике", {
+      this.page.getByText("Задание 16 · Рекурсивные алгоритмы", {
         exact: true,
       }),
     ).toBeVisible();
     await expect(
-      this.page.getByPlaceholder("Без единиц измерения").first(),
+      this.page.getByRole("link", { name: "Назад", exact: true }),
     ).toBeVisible();
     await expect(
       this.page.getByRole("textbox", { name: "Ответ" }).first(),
@@ -129,6 +149,43 @@ export class TopicLessonPage {
     await expect(
       this.page.getByRole("button", { name: "Решение" }).first(),
     ).toBeVisible();
+  }
+
+  async expectDirectEntryBackFallback(): Promise<void> {
+    await this.page.goto("about:blank");
+    await this.open();
+    await this.page.getByRole("link", { name: "Назад", exact: true }).click();
+    await expect(this.page).toHaveURL(/\/$/);
+    await expect(
+      this.page.getByRole("heading", {
+        name: "Подготовка к ЕГЭ по информатике",
+      }),
+    ).toBeVisible();
+  }
+
+  async expectInternalBackNavigation(): Promise<void> {
+    await this.open();
+    await expect(
+      this.page.locator("[data-practice-form][data-enhanced]"),
+    ).toBeVisible();
+    await this.page
+      .getByRole("link", { name: "infraege — на главную" })
+      .click();
+    await expect(this.page).toHaveURL(/\/$/);
+    await this.page.evaluate(() => {
+      window.location.hash = "materials-title";
+    });
+    await expect(this.page).toHaveURL(/\/#materials-title$/);
+    await this.page
+      .getByRole("link", { name: /Рекурсивные алгоритмы/ })
+      .click();
+    await expect(this.page).toHaveURL(/\/ege\/16-rekursiya$/);
+    const backLink = this.page.getByRole("link", {
+      name: "Назад",
+      exact: true,
+    });
+    await backLink.click();
+    await expect(this.page).toHaveURL(/\/#materials-title$/);
   }
 
   async expectPracticeSolutions(): Promise<void> {
@@ -150,6 +207,78 @@ export class TopicLessonPage {
         name: "Та же рекуррентная формула в Python",
       }),
     ).toBeVisible();
+  }
+
+  async expectDistilledSolvedTask(): Promise<void> {
+    const firstTab = this.page.getByRole("tab", {
+      name: /Задача 1 из 5/,
+    });
+    await firstTab.click();
+    const firstPanel = this.page.locator(
+      '[data-practice-task="rekursiya-base-sequence"]',
+    );
+    const answer = firstPanel.getByRole("textbox", { name: "Ответ" });
+    await answer.fill("32");
+    await firstPanel.getByRole("button", { name: "Проверить" }).click();
+    await expect(firstPanel.getByRole("status")).toContainText("Верно");
+    await expect(answer).toBeDisabled();
+    await expect(answer).toHaveAttribute("data-solved", "true");
+    await expect(answer).toHaveValue("32");
+    await expect(
+      firstPanel.getByRole("button", { name: "Проверить" }),
+    ).toBeDisabled();
+    await expect(firstPanel.getByText("решено", { exact: true })).toHaveCount(
+      0,
+    );
+    await expect(
+      this.page.getByRole("button", { name: /Следующая задача:/ }),
+    ).toHaveCount(0);
+    await expect(
+      this.page.getByRole("link", { name: "Перейти к результату" }),
+    ).toHaveCount(0);
+
+    await expect(firstTab).toHaveAttribute(
+      "aria-label",
+      /Задача 1 из 5:.*решена/,
+    );
+    await expect(firstTab).toHaveAttribute("data-solved", "true");
+    const solvedColors = await answer.evaluate((element) => {
+      const style = getComputedStyle(element);
+      return {
+        background: style.backgroundColor,
+        border: style.borderColor,
+      };
+    });
+
+    const secondTab = this.page.getByRole("tab", { name: /Задача 2 из 5/ });
+    await secondTab.click();
+    await expect(secondTab).toHaveAttribute("aria-selected", "true");
+    const unsolvedColors = await this.page
+      .locator('[data-practice-task="rekursiya-call-stack-trace"]')
+      .getByRole("textbox", { name: "Ответ" })
+      .evaluate((element) => {
+        const style = getComputedStyle(element);
+        return {
+          background: style.backgroundColor,
+          border: style.borderColor,
+        };
+      });
+    expect(solvedColors.border).not.toBe(unsolvedColors.border);
+    expect(solvedColors.background).not.toBe(unsolvedColors.background);
+    await firstTab.click();
+    await expect(firstTab).toHaveAttribute("aria-selected", "true");
+
+    await this.page.reload();
+    const restoredAnswer = this.page
+      .locator('[data-practice-task="rekursiya-base-sequence"]')
+      .getByRole("textbox", { name: "Ответ" });
+    await expect(restoredAnswer).toHaveValue("32");
+    await expect(restoredAnswer).toBeDisabled();
+    await expect(
+      this.page
+        .locator('[data-practice-task="rekursiya-base-sequence"]')
+        .getByRole("button", { name: "Проверить" }),
+    ).toBeDisabled();
   }
 
   async expectReadingPosition(): Promise<void> {
@@ -215,7 +344,7 @@ export class TopicLessonPage {
 
   async expectReadableWithoutJavaScript(): Promise<void> {
     await this.open();
-    await this.expectReviewLesson();
+    await this.expectPublishedLesson();
     await expect(this.page.locator("[data-practice-form] form")).toHaveCount(5);
     await expect(
       this.page.locator("[data-practice-form] [data-unenhanced-accordion]"),
@@ -234,5 +363,10 @@ export class TopicLessonPage {
   async expectUnknownLessonNotFound(): Promise<void> {
     const response = await this.page.goto("/ege/unknown-lesson");
     expect(response?.status()).toBe(404);
+  }
+
+  async expectStableReload(): Promise<void> {
+    await this.page.reload();
+    await this.expectPublishedLesson();
   }
 }

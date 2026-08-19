@@ -1,0 +1,38 @@
+.root {
+  display: inline-flex;
+  min-height: 2.5rem;
+  gap: var(--space-1);
+  align-items: center;
+  color: var(--color-text-soft);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  text-decoration: none;
+  transition: color var(--motion-duration) var(--motion-easing);
+}
+
+.root svg {
+  flex: 0 0 auto;
+  transition: transform var(--motion-duration) var(--motion-easing);
+}
+
+.root:hover {
+  color: var(--color-text);
+}
+
+.root:hover svg {
+  transform: translateX(-0.125rem);
+}
+
+.root:focus-visible {
+  border-radius: var(--radius-control);
+  outline: 2px solid var(--color-focus);
+  outline-offset: 0.25rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root,
+  .root svg {
+    transition: none;
+  }
+}

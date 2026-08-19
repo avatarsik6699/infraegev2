@@ -51,14 +51,54 @@ test("the unlisted lesson lab works across viewports and without JavaScript", as
   await lessonLabPage.expectBackNavigation();
 });
 
-test("the neutral root and unknown routes remain safe", async ({
+test("the public root exposes only published material and unknown routes remain safe", async ({
+  browserSession,
   errorTelemetryPage,
   foundationPage,
+  noJavaScriptFoundationPage,
 }) => {
+  await browserSession.useDesktopViewport();
   await foundationPage.open();
-  await foundationPage.expectNeutralPlaceholder();
+  await foundationPage.expectPublishedMaterial();
+  await foundationPage.expectDesktopComposition();
+  await foundationPage.expectNoHorizontalOverflow();
+  await foundationPage.expectStableReload();
+  await browserSession.captureViewport("public-home-desktop.png");
+
+  await browserSession.useNarrowViewport();
+  await foundationPage.open();
+  await foundationPage.expectPublishedMaterial();
+  await foundationPage.expectMobileComposition();
+  await foundationPage.expectNoHorizontalOverflow();
+  await browserSession.captureViewport("public-home-mobile.png");
+  await noJavaScriptFoundationPage.open();
+  await noJavaScriptFoundationPage.expectPublishedMaterial();
+  await noJavaScriptFoundationPage.expectNoHorizontalOverflow();
+  browserSession.expectCleanConsole();
   await foundationPage.expectRemovedRouteNotFound();
   await errorTelemetryPage.expectSanitizedGlobalErrorDelivery();
+});
+
+test("privacy and crawl surfaces describe the public release", async ({
+  browserSession,
+  noJavaScriptPrivacyPage,
+  privacyPage,
+  publicDiscoveryPage,
+}) => {
+  await browserSession.useDesktopViewport();
+  await privacyPage.open();
+  await privacyPage.expectCurrentDisclosure();
+  await privacyPage.expectNoHorizontalOverflow();
+  await browserSession.captureViewport("privacy-desktop.png");
+
+  await browserSession.useNarrowViewport();
+  await privacyPage.open();
+  await privacyPage.expectNoHorizontalOverflow();
+  await browserSession.captureViewport("privacy-mobile.png");
+  browserSession.expectCleanConsole();
+
+  await noJavaScriptPrivacyPage.expectReadableWithoutJavaScript();
+  await publicDiscoveryPage.expectRobotsAndSitemap();
 });
 
 test("the design-system catalog works across viewports and without JavaScript", async ({
@@ -83,28 +123,38 @@ test("the design-system catalog works across viewports and without JavaScript", 
   await noJavaScriptDesignSystemLabPage.expectLinearContentWithoutJavaScript();
 });
 
-test("the recursion lesson stays review-only and readable across runtimes", async ({
+test("the published recursion lesson stays readable across runtimes", async ({
   browserSession,
   noJavaScriptTopicLessonPage,
   topicLessonPage,
 }) => {
   await browserSession.useDesktopViewport();
   await topicLessonPage.open();
-  await topicLessonPage.expectReviewLesson();
+  await topicLessonPage.expectPublishedLesson();
   await topicLessonPage.expectDesktopComposition();
-  await topicLessonPage.expectPracticeSolutions();
-  await topicLessonPage.expectNoHorizontalOverflow();
   await browserSession.captureViewport("recursion-lesson-desktop.png");
+  await topicLessonPage.expectPracticeSolutions();
+  await topicLessonPage.expectDistilledSolvedTask();
+  await browserSession.captureViewport("recursion-practice-solved.png");
+  await topicLessonPage.expectNoHorizontalOverflow();
+  await topicLessonPage.expectStableReload();
   await topicLessonPage.expectReadingPosition();
+
+  await browserSession.useZoomedDesktopViewport();
+  await topicLessonPage.open();
+  await topicLessonPage.expectPublishedLesson();
+  await topicLessonPage.expectNoHorizontalOverflow();
 
   await browserSession.useNarrowViewport();
   await topicLessonPage.open();
-  await topicLessonPage.expectReviewLesson();
+  await browserSession.captureViewport("recursion-lesson-mobile.png");
+  await topicLessonPage.expectPublishedLesson();
   await topicLessonPage.expectMobileComposition();
   await topicLessonPage.expectNoHorizontalOverflow();
-  await browserSession.captureViewport("recursion-lesson-mobile.png");
   browserSession.expectCleanConsole();
 
   await noJavaScriptTopicLessonPage.expectReadableWithoutJavaScript();
+  await topicLessonPage.expectDirectEntryBackFallback();
+  await topicLessonPage.expectInternalBackNavigation();
   await topicLessonPage.expectUnknownLessonNotFound();
 });

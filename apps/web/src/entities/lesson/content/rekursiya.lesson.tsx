@@ -10,10 +10,6 @@ import { rekursiyaLessonPublication } from "./lesson-publication.mjs";
 
 export const rekursiyaLesson = defineLesson({
   ...rekursiyaLessonPublication,
-  taskNumber: 16,
-  title: "Рекурсивные алгоритмы",
-  summary:
-    "Вычисление значений функции, заданной через саму себя: от одного базового случая до больших аргументов и алгебраических сокращений.",
   learningOutcomes: [
     "Находить значения рекуррентно заданной функции, поднимаясь от базового случая к нужному аргументу",
     "Отличать функции с одним предыдущим значением от функций с двумя и более",

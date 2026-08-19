@@ -9,7 +9,7 @@
 
 | Field | Value |
 |-------|-------|
-| Document Version | `v1.5` |
+| Document Version | `v1.6` |
 | Date | `2026-08-19` |
 | Architect / Owner | `v.godlevskiy` |
 | Stack | See [docs/STACK.md](./STACK.md) |
@@ -64,9 +64,9 @@ sdamgia.ru, kpolyakov.spb.ru), ни новыми AI-ботами (решают �
 | Прогресс на уровне браузера (localStorage), без обязательной регистрации | i18n/локализация (аудитория исключительно русскоязычная) |
 | | Полноценный поиск по сайту (пока тем < 10, обычная навигация достаточна) |
 
-Таблица описывает целевой продукт, а не текущий набор web-маршрутов. В `apps/web` нет
-опубликованной темы, главной или legal UI: дизайн-система проверяется на unlisted/noindex lab, а
-публично доступный корень остаётся нейтральной технической заглушкой.
+Первый публичный product release переводит проверенный урок `/ege/16-rekursiya` в `published`,
+заменяет техническую заглушку `/` минимальной публичной точкой входа и возвращает обязательные
+SEO/legal surfaces. Lab-маршруты остаются unlisted/noindex и не входят в публичную навигацию.
 
 ### 1.4 Durable Learning Flow
 
@@ -323,16 +323,22 @@ task-файлы первой review-only темы читаются frontend-cons
 
 | Page | Route | Purpose |
 |------|-------|---------|
-| UI foundation | `/` | Нейтральная SSR-заглушка на базовых токенах новой системы; без product claims и ссылки на lab |
+| Public home | `/` | Минимальная SSR/no-JS точка входа в опубликованные материалы: честное описание продукта и ссылки только на реально опубликованные уроки |
 | Lesson design lab | `/lab/lesson` | Unlisted/noindex эталон четырёхраздельного урока на синтетическом контенте; не публикация и не security boundary |
 | Design system stand | `/lab/design-system` | Unlisted/noindex приватный стенд текущей дизайн-системы (шрифты, цвета, типографика) и переиспользуемых lesson-компонентов; не публикация и не security boundary |
 | Topic lesson | `/ege/$slug` | Общий SSR consumer типизированного Topic; `review` доступен только по прямому URL с `noindex,nofollow`, `published` может войти в prerender/public discovery |
+| Privacy | `/privacy` | Публичное фактическое описание текущей минимальной обработки данных, localStorage, Umami и технических журналов; доступно со всех публичных страниц |
+| Robots | `/robots.txt` | Машиночитаемые правила обхода и ссылка на sitemap; не используются как замена page-level `noindex` |
+| Sitemap | `/sitemap.xml` | Только canonical URL публичной главной, privacy и `published`-уроков; review/lab/404 не включаются |
 | Not found | любой неизвестный маршрут | Общий доступный 404 без предположений о будущем IA |
 
-Home/catalog/legal/sitemap routes удалены. Первый product consumer фиксирует только общий
-`/ege/$slug` contract; review-контент не появляется в навигации или sitemap, отдаёт
-`robots: noindex,nofollow` и исключается из prerender discovery. `/lab/lesson` и
+Первый public release не вводит отдельный каталог: при одном опубликованном уроке `/` выполняет
+роль компактного списка материалов. `review`-контент не появляется в навигации или sitemap,
+отдаёт `robots: noindex,nofollow` и исключается из prerender discovery. `/lab/lesson` и
 `/lab/design-system` сохраняют тот же unlisted/noindex режим независимо от product content.
+Каждая индексируемая HTML-страница имеет абсолютный canonical на `https://infraege.ru`, уникальные
+title/description и достаточные social metadata; sitemap и prerender строятся из того же
+publication registry, чтобы статусы не расходились между рантаймами.
 
 ### 5.2 Components / Stores
 
@@ -348,7 +354,8 @@ Home/catalog/legal/sitemap routes удалены. Первый product consumer 
 
 Lab использует локальное демонстрационное состояние hint/incorrect/correct и пять синтетических
 задач, чтобы проверить полный progress/mastery contract до появления публичного consumer. Верные
-задачи сохраняются через версионированный SSR-safe localStorage, четыре из пяти означают освоение;
+задачи и фактически принятые введённые значения сохраняются через версионированный SSR-safe
+localStorage, четыре из пяти означают освоение; checker-ответы в это хранилище не попадают;
 API и аккаунт не используются. Интерактивные вкладки при каждом входе начинают с первой задачи,
 не сохраняет активную позицию или черновики, оставляет все шаги доступными и переходит дальше
 только по явному действию ученика. Каждая задача получает одну или несколько ссылок к связанным
@@ -488,13 +495,13 @@ Nginx выставляет `Cache-Control`/`ETag` для хэшированно�
 |---------|-------------|
 | Security headers / CORS | Rate limiting чекер-эндпоинта на Nginx: `limit_req_zone` 20 req/min/IP, burst 5, `nodelay` (см. §4, §11.2 источника) — против автоматизированного перебора банка ответов; конкретную цифру пересмотреть по факту логов после запуска |
 | Accessibility target | Foundation и lab не имеют serious/critical axe violations; lesson outline сохраняет вложенный semantic list, anchors, keyboard focus, различимый текущий пункт и корректный source order, а сложный визуал имеет видимую полную текстовую альтернативу |
-| Performance budget | LCP < 2.5s, CLS < 0.1, INP < 200ms на мобильном 4G-профиле; текущий Lighthouse gate измеряет только `/` до появления новых public routes |
+| Performance budget | LCP < 2.5s, CLS < 0.1, INP < 200ms на мобильном 4G-профиле; release evidence измеряет `/` и первый опубликованный `/ege/16-rekursiya`, отдельно проверяет cold-load font/layout shifts и не подменяет route-level метрики общей оценкой технической страницы |
 | Observability | Существующие Umami + Beszel + journald/fail2ban на application VPS и внешний sre-kit сохраняются без расширения; новые события, сбор данных и operations-интерфейсы отложены до финального этапа после доменной логики, сайта и MVP-контента |
 | Backup / restore | Локальный restic на VPS: daily `pg_dump -Fc`, Beszel/config snapshots, 7 daily + 4 weekly + 3 monthly, freshness marker и ежемесячный restore drill; off-site storage отложен с явно принятым риском |
-| SEO | `/` имеет нейтральный technical title; `/lab/lesson` и review-уроки `/ege/$slug` unlisted, `noindex,nofollow` и исключены из prerender discovery; published topics могут явно войти в public discovery |
+| SEO | `/`, `/privacy` и published topics имеют canonical, уникальные metadata, SSR content и входят в sitemap/prerender; lab и review routes остаются unlisted, `noindex,nofollow` и исключены из public discovery; Lighthouse SEO для публичных маршрутов проходит без ошибок |
 | Mobile / no-JS readability | Lab и topic lesson сохраняют текст, последовательные стадии визуала, подписи, решения и section anchors в SSR HTML; интерактивная проверка остаётся progressive enhancement |
 | Client resilience / API drift | Route failures восстанавливаемы без белого экрана; loading/empty/error/not-found состояния доступны с клавиатуры и скринридера; OpenAPI schema/types drift ломает gate до merge; runtime HTTP имеет timeout/abort и не делает скрытый retry мутаций |
-| Юридическое (152-ФЗ) | Минимизация сбора и российский application VPS сохраняются; web `/privacy` удалён вместе с product UI и должен быть спроектирован заново до следующей публичной product release. Реквизиты оператора и уведомление РКН остаются отдельным принятым долгом |
+| Юридическое (152-ФЗ) | Минимизация сбора и российский application VPS сохраняются; `/privacy` перед первым public release правдиво описывает фактическую обработку и доступна со всех публичных страниц. По явному решению архитектора от 2026-08-19 ФИО/наименование, ИНН/ОГРН, адрес, публичный email оператора и уведомление РКН временно не публикуются; архитектор осознанно принимает юридический риск и обязуется заполнить сведения отдельным последующим изменением |
 | Юридическое (436-ФЗ) | Возрастная маркировка для обычного сайта не вводится: существующая `12+` удаляется без замены на `18+` |
 | Юридическое (оригинальность контента) | Тексты тем и формулировки задач — собственного авторства/переформулированы, не дословные копии ФИПИ/sdamgia/kpolyakov (риск конфликта с площадками, не только вопрос добросовестности); проверяется в Content Quality Gate (§2.3) на каждой теме перед `published` |
 | Other (юридический ориентир, не консультация) | Открытые источники используются как инженерный ориентир; формальная юридическая проверка и РКН составляют отдельный принятый долг |

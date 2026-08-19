@@ -1,26 +1,18 @@
 import type { LessonTypes } from "~/entities/lesson";
-import { Badge } from "~/shared/components/badge";
 import { FragmentLink } from "~/shared/components/fragment-link";
 import { Typography } from "~/shared/components/typography";
 import styles from "../lesson-practice.module.css";
 
 type PracticeTaskHeadingProps = {
   task: LessonTypes.PracticeTask;
-  alreadySolved: boolean;
   headingId: string;
-  setHeadingRef: (taskId: string, element: HTMLHeadingElement | null) => void;
 };
 
 export const PracticeTaskHeading: React.FC<PracticeTaskHeadingProps> = (
   props,
 ) => (
   <div className={styles.taskHeading}>
-    <Typography.Title
-      order={3}
-      id={props.headingId}
-      tabIndex={-1}
-      ref={(element) => props.setHeadingRef(props.task.id, element)}
-    >
+    <Typography.Title order={3} id={props.headingId}>
       {props.task.title}
     </Typography.Title>
     <nav
@@ -33,10 +25,5 @@ export const PracticeTaskHeading: React.FC<PracticeTaskHeadingProps> = (
         </FragmentLink>
       ))}
     </nav>
-    {props.alreadySolved ? (
-      <Badge className={styles.solvedStatus} tone="success">
-        решено
-      </Badge>
-    ) : null}
   </div>
 );

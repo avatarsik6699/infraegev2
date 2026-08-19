@@ -14,23 +14,7 @@ export const Route = createRootRouteWithContext<AppRouterContext>()({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "UI foundation" },
-    ],
-    links: [
-      {
-        rel: "preload",
-        href: "/fonts/literata/literata-cyrillic-wght-normal.df20f1a8.woff2",
-        as: "font",
-        type: "font/woff2",
-        crossOrigin: "anonymous",
-      },
-      {
-        rel: "preload",
-        href: "/fonts/literata/literata-latin-wght-normal.9adbeac5.woff2",
-        as: "font",
-        type: "font/woff2",
-        crossOrigin: "anonymous",
-      },
+      { title: "infraege" },
     ],
   }),
   shellComponent: RootDocument,

@@ -13,6 +13,7 @@ import { ReadingPositionIndicator } from "~/features/reading-position";
 import { Badge } from "~/shared/components/badge";
 import { Typography } from "~/shared/components/typography";
 import { LessonOutline } from "~/widgets/lesson-outline";
+import { PublicFooter } from "~/widgets/public-footer";
 import { TopicLessonHeader } from "./components/topic-lesson-header";
 import { TopicLessonResult } from "./components/topic-lesson-result";
 import type { TopicLessonPageTypes } from "./topic-lesson-page.types";
@@ -181,6 +182,7 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
           aria-hidden="true"
         />
       </main>
+      <PublicFooter />
     </div>
   );
 };

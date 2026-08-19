@@ -5,6 +5,8 @@ import { DesignSystemLabPage } from "./pages/design-system-lab.page";
 import { ErrorTelemetryPage } from "./pages/error-telemetry.page";
 import { FoundationPage } from "./pages/foundation.page";
 import { LessonLabPage } from "./pages/lesson-lab.page";
+import { PrivacyPage } from "./pages/privacy.page";
+import { PublicDiscoveryPage } from "./pages/public-discovery.page";
 import { TopicLessonPage } from "./pages/topic-lesson.page";
 
 type AppFixtures = {
@@ -13,9 +15,13 @@ type AppFixtures = {
   designSystemLabPage: DesignSystemLabPage;
   errorTelemetryPage: ErrorTelemetryPage;
   foundationPage: FoundationPage;
+  noJavaScriptFoundationPage: FoundationPage;
   lessonLabPage: LessonLabPage;
   noJavaScriptLessonLabPage: LessonLabPage;
   noJavaScriptDesignSystemLabPage: DesignSystemLabPage;
+  privacyPage: PrivacyPage;
+  noJavaScriptPrivacyPage: PrivacyPage;
+  publicDiscoveryPage: PublicDiscoveryPage;
   topicLessonPage: TopicLessonPage;
   noJavaScriptTopicLessonPage: TopicLessonPage;
 };
@@ -35,6 +41,18 @@ export const test = base.extend<AppFixtures>({
   },
   foundationPage: async ({ page }, use) => {
     await use(new FoundationPage(page));
+  },
+  noJavaScriptFoundationPage: async ({ baseURL, browser }, use) => {
+    const context = await browser.newContext({
+      baseURL,
+      javaScriptEnabled: false,
+      viewport: { width: 390, height: 844 },
+    });
+    try {
+      await use(new FoundationPage(await context.newPage()));
+    } finally {
+      await context.close();
+    }
   },
   lessonLabPage: async ({ page }, use) => {
     await use(new LessonLabPage(page));
@@ -62,6 +80,24 @@ export const test = base.extend<AppFixtures>({
     } finally {
       await context.close();
     }
+  },
+  privacyPage: async ({ page }, use) => {
+    await use(new PrivacyPage(page));
+  },
+  noJavaScriptPrivacyPage: async ({ baseURL, browser }, use) => {
+    const context = await browser.newContext({
+      baseURL,
+      javaScriptEnabled: false,
+      viewport: { width: 390, height: 844 },
+    });
+    try {
+      await use(new PrivacyPage(await context.newPage()));
+    } finally {
+      await context.close();
+    }
+  },
+  publicDiscoveryPage: async ({ page }, use) => {
+    await use(new PublicDiscoveryPage(page));
   },
   topicLessonPage: async ({ page }, use) => {
     await use(new TopicLessonPage(page));

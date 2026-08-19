@@ -10,6 +10,9 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as EgeSlugRouteImport } from './routes/ege.$slug'
 import { Route as LabDesignSystemRouteImport } from './routes/lab.design-system'
 import { Route as LabLessonRouteImport } from './routes/lab.lesson'
@@ -17,6 +20,21 @@ import { Route as LabLessonRouteImport } from './routes/lab.lesson'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
+  id: '/robots.txt',
+  path: '/robots.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EgeSlugRoute = EgeSlugRouteImport.update({
@@ -37,12 +55,18 @@ const LabLessonRoute = LabLessonRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/privacy': typeof PrivacyRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/ege/$slug': typeof EgeSlugRoute
   '/lab/design-system': typeof LabDesignSystemRoute
   '/lab/lesson': typeof LabLessonRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/privacy': typeof PrivacyRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/ege/$slug': typeof EgeSlugRoute
   '/lab/design-system': typeof LabDesignSystemRoute
   '/lab/lesson': typeof LabLessonRoute
@@ -50,20 +74,48 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/privacy': typeof PrivacyRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/ege/$slug': typeof EgeSlugRoute
   '/lab/design-system': typeof LabDesignSystemRoute
   '/lab/lesson': typeof LabLessonRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/ege/$slug' | '/lab/design-system' | '/lab/lesson'
+  fullPaths:
+    | '/'
+    | '/privacy'
+    | '/robots.txt'
+    | '/sitemap.xml'
+    | '/ege/$slug'
+    | '/lab/design-system'
+    | '/lab/lesson'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/ege/$slug' | '/lab/design-system' | '/lab/lesson'
-  id: '__root__' | '/' | '/ege/$slug' | '/lab/design-system' | '/lab/lesson'
+  to:
+    | '/'
+    | '/privacy'
+    | '/robots.txt'
+    | '/sitemap.xml'
+    | '/ege/$slug'
+    | '/lab/design-system'
+    | '/lab/lesson'
+  id:
+    | '__root__'
+    | '/'
+    | '/privacy'
+    | '/robots.txt'
+    | '/sitemap.xml'
+    | '/ege/$slug'
+    | '/lab/design-system'
+    | '/lab/lesson'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  PrivacyRoute: typeof PrivacyRoute
+  RobotsDottxtRoute: typeof RobotsDottxtRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   EgeSlugRoute: typeof EgeSlugRoute
   LabDesignSystemRoute: typeof LabDesignSystemRoute
   LabLessonRoute: typeof LabLessonRoute
@@ -76,6 +128,27 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/robots.txt': {
+      id: '/robots.txt'
+      path: '/robots.txt'
+      fullPath: '/robots.txt'
+      preLoaderRoute: typeof RobotsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ege/$slug': {
@@ -104,6 +177,9 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  PrivacyRoute: PrivacyRoute,
+  RobotsDottxtRoute: RobotsDottxtRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   EgeSlugRoute: EgeSlugRoute,
   LabDesignSystemRoute: LabDesignSystemRoute,
   LabLessonRoute: LabLessonRoute,

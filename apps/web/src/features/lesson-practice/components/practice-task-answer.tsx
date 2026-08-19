@@ -11,7 +11,9 @@ type PracticeTaskAnswerProps = {
   inputId: string;
   alreadySolved: boolean;
   checking: boolean;
+  answer: string;
   state: LessonPracticeTypes.State;
+  onAnswerChange: (value: string) => void;
   onSubmit: NonNullable<ComponentProps<"form">["onSubmit"]>;
 };
 
@@ -24,25 +26,29 @@ export const PracticeTaskAnswer: React.FC<PracticeTaskAnswerProps> = (
     </Typography.Text>
     <div className={styles.answerRow}>
       <Field
+        className={props.alreadySolved ? styles.solvedAnswer : undefined}
+        data-solved={props.alreadySolved || undefined}
         id={props.inputId}
         name="answer"
         label="Ответ"
         labelVisibility="sr-only"
-        placeholder="Без единиц измерения"
+        placeholder={
+          props.alreadySolved
+            ? "Ответ был принят ранее"
+            : "Без единиц измерения"
+        }
         error={answerError(props.state)}
         autoComplete="off"
         disabled={props.alreadySolved || props.checking}
+        value={props.answer}
+        onChange={(event) => props.onAnswerChange(event.currentTarget.value)}
       />
       <Button
         type="submit"
         loading={props.checking}
         disabled={props.alreadySolved}
       >
-        {props.alreadySolved
-          ? "Решено"
-          : props.checking
-            ? "Проверяем"
-            : "Проверить"}
+        {props.checking ? "Проверяем" : "Проверить"}
       </Button>
     </div>
   </form>
