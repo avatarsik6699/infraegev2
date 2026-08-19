@@ -5,7 +5,9 @@ from app.modules.tasks.service import is_correct
 def make_task(**overrides: object) -> Task:
     defaults: dict[str, object] = dict(
         id="t1",
+        title="Test task",
         statement="...",
+        hint="Test hint",
         checker_type="exact_match",
         answer_variants=["4", "четыре"],
         interaction_type="production",
