@@ -9,7 +9,7 @@
 | Change | `25` |
 | Slug | `backend-checker-test-fixture` |
 | Title | Backend Checker Test Fixture |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/25-backend-checker-test-fixture` |
 
 ---
