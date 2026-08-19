@@ -12,11 +12,11 @@ sudo ops/install-backup-timers.sh
 systemctl list-timers --all 'infraege-*'
 sudo systemctl start infraege-backup.service
 sudo scripts/check-backup-freshness.sh
-sudo -u deploy env \
+env \
   RESTIC_REPOSITORY=/var/backups/infraege/restic \
   RESTIC_PASSWORD_FILE=/etc/infraege/restic-password \
   restic snapshots --latest 1
-sudo -u deploy env \
+env \
   RESTIC_REPOSITORY=/var/backups/infraege/restic \
   RESTIC_PASSWORD_FILE=/etc/infraege/restic-password \
   restic check --read-data

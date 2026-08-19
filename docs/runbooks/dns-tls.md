@@ -20,7 +20,7 @@ curl -I https://www.infraege.ru
 curl -fsS https://infraege.ru/health/ready | jq .
 echo | openssl s_client -servername infraege.ru -connect infraege.ru:443 2>/dev/null \
   | openssl x509 -noout -issuer -subject -dates
-sudo certbot renew --dry-run
+sudo certbot renew --dry-run --no-random-sleep-on-renew
 ```
 
 The scheduled GitHub probe fails when HTTPS/readiness fails or fewer than 14 certificate days

@@ -34,28 +34,34 @@ jobs:
           git fetch origin main
           git merge-base --is-ancestor "$DEPLOY_SHA" origin/main
           test "$(git rev-parse HEAD)" = "$DEPLOY_SHA"
-      - name: Prepare SSH trust
+      - name: Prepare password SSH trust
         env:
-          SSH_KEY: ${{ secrets.PROD_SSH_KEY }}
           SSH_HOST_KEY: ${{ secrets.PROD_SSH_HOST_KEY }}
         run: |
           install -m 700 -d ~/.ssh
-          printf '%s\n' "$SSH_KEY" > ~/.ssh/infraege
-          chmod 600 ~/.ssh/infraege
           printf '%s\n' "$SSH_HOST_KEY" > ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
+          test -x scripts/ssh-askpass.sh
       - name: Upload release bundle
         env:
           DEPLOY_SHA: ${{ inputs.sha }}
           PROD_HOST: ${{ secrets.PROD_HOST }}
-          PROD_USER: ${{ secrets.PROD_USER }}
+          INFRAEGE_SSH_PASSWORD: ${{ secrets.PROD_ROOT_PASSWORD }}
+          INFRAEGE_PROD_KNOWN_HOSTS: /home/runner/.ssh/known_hosts
         run: |
           git archive --format=tar.gz --output="/tmp/infraege-$DEPLOY_SHA.tar.gz" "$DEPLOY_SHA"
-          scp -i ~/.ssh/infraege -o StrictHostKeyChecking=yes "/tmp/infraege-$DEPLOY_SHA.tar.gz" "$PROD_USER@$PROD_HOST:/tmp/"
+          source scripts/lib/production-ssh.sh
+          INFRAEGE_PROD_HOST="$PROD_HOST"
+          production_ssh_init
+          production_scp "/tmp/infraege-$DEPLOY_SHA.tar.gz" "root@$PROD_HOST:/root/"
       - name: Deploy and verify with rollback
         env:
           DEPLOY_SHA: ${{ inputs.sha }}
           PROD_HOST: ${{ secrets.PROD_HOST }}
-          PROD_USER: ${{ secrets.PROD_USER }}
+          INFRAEGE_SSH_PASSWORD: ${{ secrets.PROD_ROOT_PASSWORD }}
+          INFRAEGE_PROD_KNOWN_HOSTS: /home/runner/.ssh/known_hosts
         run: |
-          ssh -i ~/.ssh/infraege -o StrictHostKeyChecking=yes "$PROD_USER@$PROD_HOST" "DEPLOY_SHA='$DEPLOY_SHA' bash -s" < scripts/deploy-remote.sh
+          source scripts/lib/production-ssh.sh
+          INFRAEGE_PROD_HOST="$PROD_HOST"
+          production_ssh_init
+          production_ssh "DEPLOY_SHA='$DEPLOY_SHA' bash -s" < scripts/deploy-remote.sh

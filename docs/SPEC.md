@@ -453,9 +453,12 @@ production через общий Compose и development overlay.
 - **Backend (FastAPI/Uvicorn)** — отдельный контейнер, доступен Nginx по внутренней docker-сети,
   наружу не смотрит напрямую.
 - **Postgres** — отдельный контейнер, volume + регулярный `pg_dump`-бэкап (§8).
-- **Observability-источники** — Umami, Beszel и журналы остаются на application VPS; наблюдаемость
-  ведётся через внешний инструмент [sre-kit](https://github.com/avatarsik6699/sre-kit) (единственный
-  логин, single-VPS auto-provisioning), а не через собственный дашборд этого репозитория.
+- **Observability-источники** — Umami, Beszel и журналы остаются на application VPS; ядро
+  наблюдаемости и его deployment capabilities принадлежат нашему first-party sibling-репозиторию
+  [sre-kit](https://github.com/avatarsik6699/sre-kit), а не собственному дашборду этого репозитория.
+  infraegev2 владеет application telemetry, доступом/сетевыми prerequisites VPS и своим Compose до
+  явной миграции. Изменения, пересекающие границу, получают связанные Backlog items в обоих
+  репозиториях; удалённый `apps/ops` не возрождается как параллельный продукт.
 
 **Публичный edge:** `infraege.ru` зарегистрирован и использует DNS reg.ru. На первом релизе трафик
 идёт напрямую `infraege.ru → Nginx`, без CDN; `www.infraege.ru` перенаправляется на canonical apex.
@@ -472,9 +475,13 @@ Nginx выставляет `Cache-Control`/`ETag` для хэшированно�
 - Production deploy запускается вручную через `workflow_dispatch`: SSH host-key verification,
   pull выбранного SHA, Compose replace, smoke/health и автоматический rollback на предыдущий SHA.
   Branch protection для `main` пока не включается, поскольку над проектом работает один человек.
-- Интерактивное администрирование выполняется отдельным `operator`: только key-based SSH и
-  password-protected `sudo`. Автоматический `deploy` не входит в `sudo`; прямой root SSH, SSH
-  password authentication и keyboard-interactive authentication остаются отключены.
+- До отдельного решения архитектора действует временный упрощённый режим администрирования:
+  публичный SSH принимает только логин `root` с новым уникальным длинным паролем; public-key и
+  keyboard-interactive authentication отключены. Аккаунты `operator`, `deploy` и `ops-reader`
+  удаляются после доказанного перехода их runtime-обязанностей на `root`. GitHub Environment
+  сохраняет reviewer approval и pinned host key, но временно получает root-пароль для ручного
+  `workflow_dispatch` deploy. Это явно принятый beta-риск без календарного дедлайна; возврат к
+  отдельным key-only human/deploy/read-only identities оформляется последующим change.
 - CI-валидация связей контента: скрипт проверяет, что `prerequisites`/`related_topics`/
   `unlocks_topics`/`practice_task_ids`/`topic_ids` ссылаются на существующие id — сборка падает при
   битых связях, до того как они попадут в прод (см. §3, §2.3).
@@ -488,10 +495,12 @@ Nginx выставляет `Cache-Control`/`ETag` для хэшированно�
   frontend отправляет только базовые pageviews. Новый event allowlist и развитие сбора данных
   отложены до финального этапа после доменной логики, сайта и MVP-контента.
 - **Beszel Hub + Agent** — host/container metrics и история на application VPS.
-- **journald + fail2ban** — структурированные application/Nginx/security logs; read-only доступ
-  dashboard через WireGuard и ограниченный SSH wrapper.
-- **sre-kit** — внешний инструмент, читающий Umami/Beszel/journald/fail2ban через WireGuard/SSH под
-  единственным логином; секреты не попадают в этот репозиторий. Дашборда в `apps/` больше нет.
+- **journald + fail2ban** — структурированные application/Nginx/security logs; journald доступен
+  через WireGuard-only gateway, fail2ban временно читается sre-kit через root/password SSH.
+- **sre-kit** — наш first-party sibling и владелец observability core, adapters, source config,
+  presets и deployment automation; он читает Umami/Beszel/journald через WireGuard, а host metrics
+  и fail2ban через временный root/password SSH. Его секреты и runtime data не попадают в этот
+  репозиторий. Дашборда в `apps/` больше нет.
 - **Внешняя доступность** — временный scheduled GitHub Action проверяет сайт, readiness и TLS.
   Telegram-алерты и отдельный внешний monitoring server отложены.
 
@@ -501,10 +510,10 @@ Nginx выставляет `Cache-Control`/`ETag` для хэшированно�
 
 | Concern | Requirement |
 |---------|-------------|
-| Security headers / CORS | Rate limiting чекер-эндпоинта на Nginx: `limit_req_zone` 20 req/min/IP, burst 5, `nodelay` (см. §4, §11.2 источника) — против автоматизированного перебора банка ответов; конкретную цифру пересмотреть по факту логов после запуска |
+| Security headers / CORS | Rate limiting чекер-эндпоинта на Nginx: `limit_req_zone` 20 req/min/IP, burst 5, `nodelay` (см. §4, §11.2 источника) — против автоматизированного перебора банка ответов; конкретную цифру пересмотреть по факту логов после запуска. Временный public root/password SSH защищён только уникальным длинным паролем, pinned host key, UFW, fail2ban и GitHub Environment approval; риск полного захвата VPS при компрометации пароля принят архитектором до отдельного возврата key-only access. |
 | Accessibility target | Foundation и lab не имеют serious/critical axe violations; lesson outline сохраняет вложенный semantic list, anchors, keyboard focus, различимый текущий пункт и корректный source order, а сложный визуал имеет видимую полную текстовую альтернативу |
 | Performance budget | LCP < 2.5s, CLS < 0.1, INP < 200ms на мобильном 4G-профиле; release evidence измеряет `/` и первый опубликованный `/ege/16-rekursiya`, отдельно проверяет cold-load font/layout shifts и не подменяет route-level метрики общей оценкой технической страницы |
-| Observability | Существующие Umami + Beszel + journald/fail2ban на application VPS и внешний sre-kit сохраняются без расширения; новые события, сбор данных и operations-интерфейсы отложены до финального этапа после доменной логики, сайта и MVP-контента |
+| Observability | Существующие Umami + Beszel + journald/fail2ban на application VPS и first-party sibling sre-kit сохраняются без расширения; работа на границе приложения и observability оформляется связанными changes в обоих репозиториях, а новые события, сбор данных и operations-интерфейсы отложены до финального этапа после доменной логики, сайта и MVP-контента |
 | Backup / restore | Локальный restic на VPS: daily `pg_dump -Fc`, Beszel/config snapshots, 7 daily + 4 weekly + 3 monthly, freshness marker и ежемесячный restore drill; off-site storage отложен с явно принятым риском |
 | SEO | `/`, `/privacy` и published topics имеют canonical, уникальные metadata, SSR content и входят в sitemap/prerender; lab и review routes остаются unlisted, `noindex,nofollow` и исключены из public discovery; Lighthouse SEO для публичных маршрутов проходит без ошибок |
 | Mobile / no-JS readability | Lab и topic lesson сохраняют текст, последовательные стадии визуала, подписи, решения и section anchors в SSR HTML; интерактивная проверка остаётся progressive enhancement |
@@ -522,9 +531,9 @@ Nginx выставляет `Cache-Control`/`ETag` для хэшированно�
 |-----------|------|-------------|
 | `M0` — технический фундамент | Сохранить проверенную web/backend/ops инфраструктуру без навязывания продуктовой страницы | Нейтральная root-заглушка, shared primitives, API contract, пустой content skeleton и локальные gates |
 | `M1` — новый product/design baseline | Доказать заменяемую визуальную систему без преждевременной публикации | «Инженерная тетрадь», unlisted design-system/lesson labs, единый frontend-контракт и reusable primitives |
-| `M2` — инфраструктурная пауза | Подготовить production-платформу до продолжения продуктового контента | `infraege.ru`, VPS/GHCR deploy, security/release gates, backups и локальный ops-dashboard |
+| `M2` — инфраструктурная пауза | Подготовить production-платформу до продолжения продуктового контента | `infraege.ru`, VPS/GHCR deploy, security/release gates, backups и first-party sre-kit operations-контур |
 | `M3` — учебный flow и публичный запуск | Завершить доменную логику, основные поверхности сайта и проверенный MVP-контент до расширения аналитики | Два опубликованных полных урока образуют текущую точку проверки; до третьей темы или мини-курса Python проводится оценка готовности приложения по целостному learner journey, навигации, непрерывности/прогрессу, trust/legal-пробелам и production feedback. Исходные цели 3–5 тем и Python-курса остаются дальнейшим расширением M3, но не текущим приоритетом |
-| `M4` — финальное измерение и эксплуатация | Только после готовности домена, сайта и MVP-контента расширить наблюдаемость | Privacy-safe allowlist продуктовых событий Umami, проверка сбора данных и необходимые улучшения внешнего operations-контура без возрождения `apps/ops` |
+| `M4` — финальное измерение и эксплуатация | Только после готовности домена, сайта и MVP-контента расширить наблюдаемость | Privacy-safe allowlist продуктовых событий Umami, проверка сбора данных и необходимые улучшения first-party sre-kit без возрождения `apps/ops` |
 | `M5+` (после первых данных, вне MVP) | Расширение охвата и сообщества поверх работающей бесплатной базы | Второй мини-курс (Excel), аккаунты/синхронизация, обсуждения тем с модерацией, затем платные фичи — без runtime AI до этого момента |
 
 ---

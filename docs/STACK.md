@@ -26,7 +26,7 @@ pitfalls that must be reconsidered rather than copied.
 | Backend | Python/FastAPI (`apps/api`) |
 | Database | PostgreSQL (provisioned in `infra/docker-compose.yml`; no schema/migrations yet — content is git-based, docs/SPEC.md §3) |
 | Cache | — (not needed on M0) |
-| Observability | External [sre-kit](https://github.com/avatarsik6699/sre-kit) — host metrics, fail2ban, journal logs, uptime, and Umami traffic sources over WireGuard/SSH; no local operations UI in this repo |
+| Observability | First-party sibling [sre-kit](https://github.com/avatarsik6699/sre-kit) owns the core, adapters, source configuration, presets and observability deployment; infraegev2 owns application telemetry plus VPS/network prerequisites. Host metrics and fail2ban use temporary root/password SSH; journal logs, Beszel and Umami use WireGuard; no local operations UI in this repo |
 | Infra | Docker Compose: Nginx → `web`/`api`/Postgres plus pinned Umami/Beszel; Ubuntu 24.04, systemd, journald, fail2ban, WireGuard, Restic |
 | Package managers | uv (`apps/api`), pnpm workspace (`apps/web`, root) |
 | Formatting | Prettier 3.9.6 exact for supported repository files; Ruff from the API lock for Python; EditorConfig for cross-editor whitespace defaults |
@@ -76,9 +76,11 @@ theory is compiled from `apps/web/src/entities/lesson/content/*.lesson.tsx` and 
 runtime content. The API retains its separate full `content/` tree because courses, topics and task
 validation remain backend-owned contracts.
 
-**Private VPS access:** reaching the application VPS's private `10.77.0.0/24` network (Beszel,
-Umami, journald gatewayd, private SSH — e.g. for an external observability tool like sre-kit run
-locally) needs the WireGuard tunnel: `make tunnel-up` starts and verifies it, `make tunnel-down`
+**Production access:** administrative SSH temporarily uses public `root@2.26.8.245` with the
+protected `root-admin-password`, pinned `known_hosts` and `scripts/production-root-ssh.sh`; direct
+keys and alternate SSH users are not active. Reaching the VPS's private `10.77.0.0/24` network
+(Beszel, Umami and journald gatewayd) still needs the WireGuard tunnel: `make tunnel-up` starts and
+verifies it, `make tunnel-down`
 stops a tunnel this Makefile started, `make tunnel-status` reports interface/route/handshake state.
 Wraps `scripts/wireguard-tunnel.sh`; requires the protected config at
 `~/.config/infraege/production/infraege-wsl.conf` (or `$INFRAEGE_WG_CONFIG`) to already exist.

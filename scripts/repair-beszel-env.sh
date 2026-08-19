@@ -7,18 +7,15 @@ set -Eeuo pipefail
 }
 
 repo_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
-config_root=${XDG_CONFIG_HOME:-"$HOME/.config"}
-production_dir=${INFRAEGE_PRODUCTION_DIR:-"$config_root/infraege/production"}
-deploy_host=${INFRAEGE_PROD_HOST:-2.26.8.245}
-deploy_user=${INFRAEGE_PROD_USER:-deploy}
-deploy_key=${INFRAEGE_PROD_SSH_KEY:-"$production_dir/deploy_ed25519"}
-known_hosts=${INFRAEGE_PROD_KNOWN_HOSTS:-"$production_dir/known_hosts"}
 env_lib="$repo_dir/scripts/lib/production-env.sh"
+# shellcheck source=lib/production-ssh.sh
+source "$repo_dir/scripts/lib/production-ssh.sh"
 
-[[ -r $deploy_key && -r $known_hosts && -r $env_lib ]] || {
-  echo 'Pinned deploy SSH inputs or production environment helper are unavailable.' >&2
+[[ -r $env_lib ]] || {
+  echo 'Production environment helper is unavailable.' >&2
   exit 1
 }
+production_ssh_init
 
 remote_script=$(
   cat "$env_lib"
@@ -27,7 +24,7 @@ set -Eeuo pipefail
 
 env_file=/etc/infraege/production.env
 [[ -w $env_file ]] || {
-  echo 'Production environment is not writable by the deploy user.' >&2
+  echo 'Production environment is not writable by root.' >&2
   exit 1
 }
 
@@ -67,10 +64,4 @@ REMOTE_SCRIPT
 )
 printf -v remote_command 'bash -c %q' "$remote_script"
 
-ssh \
-  -i "$deploy_key" \
-  -o BatchMode=yes \
-  -o IdentitiesOnly=yes \
-  -o StrictHostKeyChecking=yes \
-  -o UserKnownHostsFile="$known_hosts" \
-  "$deploy_user@$deploy_host" "$remote_command"
+production_ssh "$remote_command"

@@ -1,4 +1,0 @@
-ops-reader ALL=(root) NOPASSWD: /usr/bin/fail2ban-client status
-ops-reader ALL=(root) NOPASSWD: /usr/bin/fail2ban-client status sshd
-ops-reader ALL=(root) NOPASSWD: /usr/bin/fail2ban-client status infraege-nginx-limit
-ops-reader ALL=(root) NOPASSWD: /usr/bin/tail -n 2000 /var/log/fail2ban.log

@@ -246,9 +246,11 @@ PostgreSQL, Umami, Beszel, journald/fail2ban и Restic. GitHub Actions выпо�
 вручную для выбранного SHA через защищённое environment `production`, проверяет smoke/readiness и
 откатывает неуспешный релиз.
 
-Наблюдаемость (доступность, нагрузка, контейнеры, аналитика, ошибки, fail2ban) читается через
-внешний инструмент [sre-kit](https://github.com/avatarsik6699/sre-kit) — единственный логин,
-секреты не попадают в этот репозиторий.
+Наблюдаемость (доступность, нагрузка, контейнеры, аналитика, ошибки, fail2ban) принадлежит нашему
+first-party sibling-репозиторию [sre-kit](https://github.com/avatarsik6699/sre-kit): он содержит
+ядро, adapters, source config, presets и observability deployment. infraegev2 сохраняет владение
+application telemetry и prerequisites VPS; пересекающие границу задачи оформляются связанными
+changes в обоих репозиториях. Секреты sre-kit сюда не попадают.
 
 Runbook’и: [DNS/TLS](docs/runbooks/dns-tls.md),
 [backup/restore](docs/runbooks/backup-restore.md),

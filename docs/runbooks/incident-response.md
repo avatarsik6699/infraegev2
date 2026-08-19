@@ -14,9 +14,12 @@
   handles failed deploy smoke, but not delayed application defects.
 - Database/storage: stop writers and follow `backup-restore.md`; never run broad `DELETE`,
   `TRUNCATE`, `DROP TABLE` or `DROP DATABASE` as an exploratory action.
-- Compromise suspicion: isolate with provider firewall, preserve journal/GitHub evidence, rotate
-  deploy, database, Umami, Beszel, Restic and WireGuard secrets, then rebuild from bootstrap rather
-  than trusting the host.
+- Compromise suspicion: isolate with the provider firewall, preserve journal/GitHub evidence,
+  rotate the temporary root password in both GitHub and the local protected store plus database,
+  Umami, Beszel, Restic and WireGuard secrets, then rebuild from bootstrap rather than trusting the
+  host. A leaked root password means the whole VPS is untrusted.
+- Root/password lockout: use the REG.RU console, restore a usable root password and rerun
+  `ops/migrate-root-password-access.sh check`; never weaken host-key verification as a workaround.
 - Resource exhaustion: identify the container first; scale the VPS only after containing runaway
   processes. Preserve at least 30% disk headroom.
 
@@ -25,4 +28,3 @@
 Confirm public page and readiness, certificate validity, analytics collection, fresh backup and all
 dashboard sources. Record root cause, timeline, affected data, corrective backlog item and whether
 legal notification duties need specialist review. Telegram alerts are deliberately deferred.
-

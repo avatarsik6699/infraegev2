@@ -1,8 +1,9 @@
 # Production values and secret onboarding
 
 This runbook turns provider values into the inputs expected by the production scripts and GitHub
-workflows. Run secret-generating commands on the operator laptop or in the VPS provider console;
-never paste private keys, passwords or `/etc/infraege/production.env` into the repository.
+workflows. The current beta contract deliberately uses public root/password SSH until the architect
+requests re-hardening. Generate secrets on the administration laptop or provider console; never
+paste passwords or `/etc/infraege/production.env` into the repository or chat.
 
 ## Confirmed non-secret inputs
 
@@ -10,8 +11,7 @@ never paste private keys, passwords or `/etc/infraege/production.env` into the r
 |-------|-------|
 | Domain | `infraege.ru` |
 | VPS IPv4 | `2.26.8.245` |
-| Bootstrap login | `root` over the provider console/SSH, temporary only |
-| Runtime/deploy login | `deploy` with an SSH key |
+| Bootstrap/runtime/deploy login | `root` with password authentication (temporary beta exception) |
 | Authoritative DNS | `ns1.reg.ru`, `ns2.reg.ru` |
 | Required A records | `@ -> 2.26.8.245`, `www -> 2.26.8.245` |
 | TLS contact | `vlad-god500@mail.ru` |
@@ -19,53 +19,39 @@ never paste private keys, passwords or `/etc/infraege/production.env` into the r
 | WireGuard server address | `10.77.0.1/24` |
 | Initial laptop address | `10.77.0.2/32` |
 
-The bootstrap root password is not an application secret and must not be added to GitHub. Because
-it has been transmitted through chat, rotate it in the provider console. Keep the provider console
-open while hardening SSH: `ops/bootstrap-vps.sh` disables root and password login. Do not close the
-root session until a second `deploy` session succeeds with the new key.
+The previous recovery password has been transmitted through chat and must not be reused. Generate a
+new unique value, store it in `~/.config/infraege/production/root-admin-password` with mode `600`,
+and add the same value to the reviewer-protected GitHub Environment. Keep the provider console and
+old session open until a second password-only root session succeeds with the pinned host key.
 
-## 1. Create the two SSH key pairs
+## 1. Create and verify the temporary root credential
 
-Create a dedicated deployment key and a separate read-only dashboard key on the operator laptop:
-
-```bash
-install -d -m 700 ~/.ssh
-ssh-keygen -t ed25519 -a 100 -N '' \
-  -f ~/.ssh/infraege-prod-deploy -C infraege-prod-deploy
-ssh-keygen -t ed25519 -a 100 -N '' \
-  -f ~/.ssh/infraege-ops-reader -C infraege-ops-reader
-```
-
-The two files without `.pub` are private. Both automation keys are deliberately unencrypted because
-the GitHub workflow and loopback-only dashboard BFF are non-interactive. Protect the deployment key
-with the reviewer-gated environment and dedicated `deploy` account; protect the ops key with mode
-`600`, WireGuard-only reachability and its server-side forced read-only command. Rotate both
-regularly. The deployment private key goes only to GitHub; the ops-reader private key stays on the
-dashboard machine.
-
-Human administration is a third, separate identity. The current `operator` account authorizes the
-operator workstation's personal ED25519 public key and belongs to the dedicated primary group
-`infraege-operator` plus Ubuntu's `sudo` group. Its sudo password is independent of root,
-application and automation credentials. SSH still accepts public keys only: never add `operator`
-to a password-enabled `Match` block, add `deploy` to sudo, or enable direct root SSH.
-
-Provision or rotate the account only through `ops/setup-operator-access.sh`, supplying the public
-key and a crypt password hash through protected process input. The helper validates `sshd -t` and
-the effective requirements `PermitRootLogin no`, `PasswordAuthentication no`,
-`KbdInteractiveAuthentication no`, and `PubkeyAuthentication yes` before reporting success.
-
-Upload a release checkout to the VPS and run from its root as `root`:
+Generate at least 48 random bytes without printing them to chat or committing them. One safe local
+flow is:
 
 ```bash
-ADMIN_SSH_PUBLIC_KEY="$(<~/.ssh/infraege-prod-deploy.pub)" ops/bootstrap-vps.sh
+install -d -m 700 ~/.config/infraege/production
+umask 077
+openssl rand -base64 48 > ~/.config/infraege/production/root-admin-password
+chmod 600 ~/.config/infraege/production/root-admin-password
 ```
 
-The public-key file must be copied to the VPS first if the command runs there. Verify from a new
-laptop terminal before ending the bootstrap session:
+Set that password through the provider console with `passwd root`; do not pass it as a command-line
+argument. Upload a release checkout and prepare the access profile:
 
 ```bash
-ssh -i ~/.ssh/infraege-prod-deploy deploy@2.26.8.245
+ops/migrate-root-password-access.sh prepare
 ```
+
+From a second terminal use the repository wrapper, then record the proof from that new session:
+
+```bash
+scripts/production-root-ssh.sh 'ops/migrate-root-password-access.sh verify'
+```
+
+Only after deploy, services and sre-kit are migrated may the old identities be retired with the
+exact confirmation documented in `production.md`. Personal SSH and WireGuard keys are unrelated and
+must not be deleted.
 
 ## 2. Fill the GitHub `production` environment
 
@@ -78,8 +64,7 @@ Add these secrets:
 | Name | Exact source |
 |------|--------------|
 | `PROD_HOST` | `2.26.8.245` |
-| `PROD_USER` | `deploy` |
-| `PROD_SSH_KEY` | Entire contents of `~/.ssh/infraege-prod-deploy`, including BEGIN/END lines |
+| `PROD_ROOT_PASSWORD` | Entire single line from protected `root-admin-password` |
 | `PROD_SSH_HOST_KEY` | Verified `known_hosts` line for `2.26.8.245`, as described below |
 
 Obtain the SSH host key without weakening strict host checking:
@@ -92,15 +77,16 @@ Obtain the SSH host key without weakening strict host checking:
 3. Continue only if the fingerprints match. Use the complete line from
    `/tmp/infraege-known-hosts` as `PROD_SSH_HOST_KEY`.
 
-The same values can be entered without exposing private-key contents in shell history:
+The same values can be entered without exposing the password in shell history:
 
 ```bash
 printf %s 2.26.8.245 | gh secret set --repo avatarsik6699/infraegev2 --env production PROD_HOST
-printf %s deploy | gh secret set --repo avatarsik6699/infraegev2 --env production PROD_USER
-gh secret set --repo avatarsik6699/infraegev2 --env production PROD_SSH_KEY \
-  < ~/.ssh/infraege-prod-deploy
+gh secret set --repo avatarsik6699/infraegev2 --env production PROD_ROOT_PASSWORD \
+  < ~/.config/infraege/production/root-admin-password
 gh secret set --repo avatarsik6699/infraegev2 --env production PROD_SSH_HOST_KEY \
   < /tmp/infraege-known-hosts
+gh secret delete --repo avatarsik6699/infraegev2 --env production PROD_USER
+gh secret delete --repo avatarsik6699/infraegev2 --env production PROD_SSH_KEY
 ```
 
 Add one environment variable under **Environment variables**:
@@ -161,14 +147,14 @@ Enable the VPS interface with `systemctl enable --now wg-quick@wg0`; bring up th
 using its WireGuard client and verify `ping 10.77.0.1`. The key-generation flow follows the
 [official WireGuard quick start](https://www.wireguard.com/quickstart/).
 
-Once the tunnel works, install the restricted dashboard key on the VPS:
+Once the tunnel works, install the journal gateway independently of SSH identities:
 
 ```bash
-OPS_READER_SSH_PUBLIC_KEY="$(<infraege-ops-reader.pub)" \
-  WIREGUARD_IP=10.77.0.1 ops/setup-ops-access.sh
+WIREGUARD_IP=10.77.0.1 ops/setup-journal-gateway.sh
 ```
 
-Here `infraege-ops-reader.pub` is a copy of the laptop public key, not its private key.
+sre-kit's `host-metrics-ssh` and `fail2ban-ssh` sources use `root`, password authentication and the
+public SSH endpoint. Beszel, Umami and the journal gateway remain private WireGuard services.
 
 ## 4. Generate application and Restic secrets
 

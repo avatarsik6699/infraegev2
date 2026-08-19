@@ -21,9 +21,14 @@ if [[ ${1:-} == --validate-env ]]; then
   exit
 fi
 
+[[ ${EUID:-$(id -u)} -eq 0 ]] || {
+  echo 'production deploy must run as root' >&2
+  exit 1
+}
+
 root=/opt/infraege
 release_dir="$root/releases/$DEPLOY_SHA"
-archive="/tmp/infraege-$DEPLOY_SHA.tar.gz"
+archive="/root/infraege-$DEPLOY_SHA.tar.gz"
 env_file=/etc/infraege/production.env
 [[ -r $archive && -r $env_file ]] || { echo "release archive or production env missing" >&2; exit 1; }
 validate_production_env "$env_file" || {

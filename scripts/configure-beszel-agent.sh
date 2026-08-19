@@ -1,24 +1,13 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-config_root=${XDG_CONFIG_HOME:-"$HOME/.config"}
-production_dir=${INFRAEGE_PRODUCTION_DIR:-"$config_root/infraege/production"}
-deploy_host=${INFRAEGE_PROD_HOST:-2.26.8.245}
-deploy_user=${INFRAEGE_PROD_USER:-deploy}
-deploy_key=${INFRAEGE_PROD_SSH_KEY:-"$production_dir/deploy_ed25519"}
-known_hosts=${INFRAEGE_PROD_KNOWN_HOSTS:-"$production_dir/known_hosts"}
+repo_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
+# shellcheck source=lib/production-ssh.sh
+source "$repo_dir/scripts/lib/production-ssh.sh"
 
 die() {
   echo "configure-beszel-agent: $*" >&2
   exit 1
-}
-
-assert_private_file() {
-  local path=$1
-  local label=$2
-  [[ -f "$path" ]] || die "$label is missing: $path"
-  [[ $(stat -c '%u' "$path") == "$(id -u)" ]] || die "$label must be owned by the current user"
-  [[ $(stat -c '%a' "$path") == "600" ]] || die "$label must have mode 600: $path"
 }
 
 show_help() {
@@ -38,8 +27,7 @@ fi
 [[ $# == 0 ]] || die "unexpected argument; use --help"
 [[ -t 0 && -t 1 ]] || die "run this command from an interactive terminal"
 command -v ssh >/dev/null 2>&1 || die "ssh is required"
-assert_private_file "$deploy_key" "Deploy SSH key"
-[[ -f "$known_hosts" ]] || die "Pinned known_hosts file is missing: $known_hosts"
+production_ssh_init
 
 beszel_token=''
 beszel_key=''
@@ -54,7 +42,7 @@ read -r -s -p 'Beszel system public key: ' beszel_key </dev/tty
 printf '\n' >/dev/tty
 [[ ${#beszel_token} -ge 16 ]] || die "token is unexpectedly short"
 [[ ${#beszel_key} -ge 16 ]] || die "public key is unexpectedly short"
-read -r -p "Update beszel-agent on $deploy_user@$deploy_host? [y/N] " confirmation </dev/tty
+read -r -p "Update beszel-agent on root@$INFRAEGE_PROD_HOST? [y/N] " confirmation </dev/tty
 [[ $confirmation == y || $confirmation == Y ]] || die "cancelled"
 
 remote_script=$(cat <<'REMOTE_SCRIPT'
@@ -67,7 +55,7 @@ release_dir=$(readlink -f /opt/infraege/current)
   exit 1
 }
 [[ -w $env_file ]] || {
-  echo 'Production environment is not writable by the deploy user.' >&2
+  echo 'Production environment is not writable by root.' >&2
   exit 1
 }
 env_lib="$release_dir/scripts/lib/production-env.sh"
@@ -142,10 +130,4 @@ REMOTE_SCRIPT
 printf -v remote_command 'bash -c %q' "$remote_script"
 
 printf '%s\0%s\0' "$beszel_token" "$beszel_key" |
-  ssh \
-    -i "$deploy_key" \
-    -o BatchMode=yes \
-    -o IdentitiesOnly=yes \
-    -o StrictHostKeyChecking=yes \
-    -o UserKnownHostsFile="$known_hosts" \
-    "$deploy_user@$deploy_host" "$remote_command"
+  production_ssh "$remote_command"

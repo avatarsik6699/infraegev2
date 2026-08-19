@@ -5,7 +5,7 @@ After=docker.service
 
 [Service]
 Type=oneshot
-User=deploy
-Group=deploy
+User=root
+Group=root
 WorkingDirectory=/opt/infraege/current
 ExecStart=/opt/infraege/current/scripts/restore-check.sh

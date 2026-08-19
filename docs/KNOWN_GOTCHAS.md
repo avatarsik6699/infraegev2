@@ -195,6 +195,28 @@
 - **Fix**: add an encrypted off-site Restic backend and prove a restore from that backend before
   storing irreplaceable user data. This accepted residual risk is documented in the backup runbook.
 
+### Temporary root/password SSH is a live exception, not the reusable baseline
+
+- **Symptoms**: a fresh agent follows archived key-only operator/deploy instructions, or removes
+  host identities before root/password deploy, timers and observability have been proven.
+- **Root cause**: Change 30 temporarily simplifies this beta VPS to public password-only `root`;
+  archived changes and the reusable infrastructure blueprint intentionally retain the safer model.
+- **Fix**: use `ops/migrate-root-password-access.sh` in `prepare` → second-session `verify` →
+  explicitly confirmed `retire` order. Keep the provider console open, pinned `known_hosts`, UFW,
+  fail2ban and GitHub Environment approval. Never use an old chat-exposed recovery password.
+
+### Observability work spans two first-party repositories
+
+- **Symptoms**: a live sre-kit source is repaired manually while one repository still documents
+  the old topology, or an agent treats sre-kit as an external consumer and starts rebuilding
+  observability inside the removed `apps/ops`.
+- **Root cause**: infraegev2 and sre-kit have separate Git/SDD lifecycles but jointly implement one
+  operations system.
+- **Fix**: create linked active Backlog items in both repositories for cross-boundary work.
+  infraegev2 owns application telemetry and VPS/network prerequisites; sre-kit owns the core,
+  adapters, source configuration, presets and observability deployment. Migrate a running service
+  only through an explicit state/rollback/continuity plan.
+
 ### PostgreSQL restore drills must recreate archived owner roles
 
 - **Symptoms**: the Restic snapshot restores and the application dump imports, but the Umami

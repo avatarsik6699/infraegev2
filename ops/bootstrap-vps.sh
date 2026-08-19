@@ -6,8 +6,6 @@ if [[ ${EUID} -ne 0 ]]; then
   exit 1
 fi
 
-: "${ADMIN_SSH_PUBLIC_KEY:?Set ADMIN_SSH_PUBLIC_KEY to the deploy public key}"
-deploy_user=${DEPLOY_USER:-deploy}
 repo_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 
 export DEBIAN_FRONTEND=noninteractive
@@ -16,19 +14,22 @@ apt-get install -y \
   ca-certificates certbot curl dnsutils docker.io docker-compose-v2 fail2ban jq restic \
   systemd-journal-remote ufw wireguard
 
-if ! id "$deploy_user" >/dev/null 2>&1; then
-  useradd --create-home --shell /bin/bash "$deploy_user"
-fi
-usermod -aG docker "$deploy_user"
-
-install -d -m 700 -o "$deploy_user" -g "$deploy_user" "/home/$deploy_user/.ssh"
-printf '%s\n' "$ADMIN_SSH_PUBLIC_KEY" | install -m 600 -o "$deploy_user" -g "$deploy_user" \
-  /dev/stdin "/home/$deploy_user/.ssh/authorized_keys"
+[[ $(passwd --status root | awk '{print $2}') == P ]] || {
+  echo 'Set a new root password through the provider console before bootstrap.' >&2
+  exit 1
+}
 
 install -d -m 755 /etc/ssh/sshd_config.d
-install -m 644 "$repo_dir/ops/sshd/20-infraege-hardening.conf" \
-  /etc/ssh/sshd_config.d/20-infraege-hardening.conf
+install -m 644 "$repo_dir/ops/sshd/20-infraege-root-password.conf" \
+  /etc/ssh/sshd_config.d/20-infraege-root-password.conf
+rm -f /etc/ssh/sshd_config.d/20-infraege-hardening.conf
 sshd -t
+effective_sshd=$(sshd -T)
+grep -qx 'permitrootlogin yes' <<<"$effective_sshd"
+grep -qx 'passwordauthentication yes' <<<"$effective_sshd"
+grep -qx 'kbdinteractiveauthentication no' <<<"$effective_sshd"
+grep -qx 'pubkeyauthentication no' <<<"$effective_sshd"
+grep -qx 'allowusers root' <<<"$effective_sshd"
 systemctl reload ssh
 
 ufw default deny incoming
@@ -76,10 +77,10 @@ install -m 644 "$repo_dir/ops/fail2ban/jail.d/infraege.conf" \
 systemctl enable --now fail2ban
 fail2ban-client reload
 
-install -d -m 750 -o "$deploy_user" -g "$deploy_user" /etc/infraege /opt/infraege/releases
+install -d -m 750 -o root -g root /etc/infraege /opt/infraege/releases
 install -d -m 755 /var/www/certbot
-install -d -m 700 -o "$deploy_user" -g "$deploy_user" /var/backups/infraege
-install -d -m 755 -o "$deploy_user" -g "$deploy_user" /var/lib/infraege
+install -d -m 700 -o root -g root /var/backups/infraege
+install -d -m 755 -o root -g root /var/lib/infraege
 
-echo "Bootstrap complete. Open a second SSH session before closing the current one."
-echo "Next: install WireGuard config, obtain the TLS certificate, then run setup-ops-access.sh."
+echo "Bootstrap complete. Verify a second root/password SSH session before closing the console."
+echo "Next: install WireGuard, obtain TLS, then run setup-journal-gateway.sh."
