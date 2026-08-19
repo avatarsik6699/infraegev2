@@ -9,7 +9,7 @@
 | Change | `24` |
 | Slug | `first-lesson-publication-readiness` |
 | Title | First Lesson Publication Readiness |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/24-first-lesson-publication-readiness` |
 
 ---
