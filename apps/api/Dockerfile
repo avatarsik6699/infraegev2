@@ -1,6 +1,20 @@
 # syntax=docker/dockerfile:1
 
 FROM python:3.12-slim@sha256:229a2c5bfa27522db7815ea81f9bed70af17ccb9de9fc7ad142b1877b5830d36
+
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends --only-upgrade \
+        bsdutils=1:2.41.5-0+deb13u1 \
+        libblkid1=2.41.5-0+deb13u1 \
+        liblastlog2-2=2.41.5-0+deb13u1 \
+        libmount1=2.41.5-0+deb13u1 \
+        libsmartcols1=2.41.5-0+deb13u1 \
+        libuuid1=2.41.5-0+deb13u1 \
+        login=1:4.16.0-2+really2.41.5-0+deb13u1 \
+        mount=2.41.5-0+deb13u1 \
+        util-linux=2.41.5-0+deb13u1 \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY --from=ghcr.io/astral-sh/uv:0.12.3@sha256:2d890623d310b57771ce840f0da5eed5fc6d657da05ffaa45d82797b53fa3abc /uv /uvx /bin/
 
 WORKDIR /app
