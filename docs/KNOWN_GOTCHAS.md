@@ -284,6 +284,18 @@
 - **Fix**: base Compose mounts only `infraege.conf` as `default.conf`; the production Nginx image
   copies `infraege.prod.conf` itself. Keep those configuration inputs separate.
 
+### TypeScript LSP can misresolve Playwright's isolated E2E files
+
+- **Symptoms**: diagnostics for one `apps/web/e2e/**/*.ts` file claim that `@playwright/test` has
+  no exported `expect` or `Page`, then cascade into implicit-`any` errors, while the same checkout
+  passes the web TypeScript, ESLint architecture and Playwright commands.
+- **Root cause**: the long-lived LSP adapter can resolve an isolated E2E file outside the effective
+  web project context and load the wrong declaration view; switching its workspace to `apps/web`
+  does not necessarily refresh that library view.
+- **Fix**: still run and report the required LSP pass, but treat these E2E-only diagnostics as
+  supplementary when `pnpm --filter web typecheck`, `pnpm --filter web lint` and the focused
+  Playwright journey all pass. Production source and ordinary test files must remain LSP-clean.
+
 <!--
 ### [Title — short, punchy, searchable]
 

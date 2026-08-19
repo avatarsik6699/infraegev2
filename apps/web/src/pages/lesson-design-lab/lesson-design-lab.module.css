@@ -438,11 +438,12 @@
 
   .lessonContext {
     padding-inline: 1.5rem 0;
-    border-left: 1px solid var(--color-rule);
+    border-left: 1px slid var(--color-rule);
   }
 
   .lesson {
     grid-template-columns: minmax(0, 1fr);
+    align-content: start;
   }
 
   .outlineRail {

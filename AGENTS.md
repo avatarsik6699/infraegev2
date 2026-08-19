@@ -24,8 +24,8 @@ tooling live in [`docs/STACK.md`](docs/STACK.md).
 6. **Open Backlog**: When the architect reports a finding, bug, or follow-up in chat mid-session,
    append it to the active change's Backlog with a new ID before acting on it — never fix it
    off-list. See `docs/playbooks/work.md` § Backlog append.
-7. **Required Tooling**: Domain-mandated tools (Playwright/chrome-devtools MCP for frontend UI,
-   LSP for TypeScript/Python, design skills for design decisions) are not optional judgment calls —
+7. **Required Tooling**: Domain-mandated tools (Playwright/chrome-devtools MCP for frontend UI and
+   LSP for TypeScript/Python) are not optional judgment calls —
    see `docs/STACK.md` § Required Tooling and use them before checking an item off.
 8. **E2E Architecture**: Playwright specs import `test` only from `apps/web/e2e/fixtures.ts` and
    consume domain fixtures only. Specs do not construct Page Objects or call low-level Playwright
@@ -36,6 +36,10 @@ tooling live in [`docs/STACK.md`](docs/STACK.md).
    `shared/lib` adapter, network access in the owning slice's `api/`, and server environment access
    in `*.server.ts`; consume semantic functions elsewhere. Extend the boundary and its lint
    self-test instead of adding an inline bypass.
+10. **Frontend Contract**: Before writing or reviewing any `apps/web/src` code, read
+    [`docs/FRONTEND.md`](docs/FRONTEND.md) — the binding architecture, code-shape, interaction and
+    visual-system contract for that layer tree. Follow it exactly; where it and this file overlap
+    on a frontend specific, `FRONTEND.md` governs.
 
 ## Stack Conventions
 
@@ -149,4 +153,5 @@ section exists only for what git can't tell you.
 | `docs/changes/NN-slug.md` | Active unit of work: Backlog, files, gate overrides, review notes, implementation notes | Continuously while active |
 | `docs/changes/archive/NN-slug.md` | Completed unit of work, kept as history | Written once, by `/ship` |
 | `docs/STACK.md` | Stack-specific commands, Critical/Full/Release gate tables, required tooling | When tooling changes |
+| `docs/FRONTEND.md` | Binding architecture, code, interaction and visual-system contract for `apps/web` | When frontend rules change |
 | `docs/KNOWN_GOTCHAS.md` | Recurring pitfall log | When new traps are discovered |

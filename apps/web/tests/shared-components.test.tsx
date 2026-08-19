@@ -194,6 +194,24 @@ describe("Field and feedback", () => {
       "Ответ должен быть целым числом",
     );
   });
+
+  it("keeps a visually hidden answer label as the accessible name", () => {
+    render(
+      <Field
+        label="Ответ"
+        labelVisibility="sr-only"
+        placeholder="Без единиц измерения"
+      />,
+    );
+
+    expect(screen.getByRole("textbox", { name: "Ответ" })).toBeTruthy();
+    expect(screen.queryByText("Ответ")).toBeTruthy();
+    expect(
+      screen
+        .getByRole("textbox", { name: "Ответ" })
+        .getAttribute("placeholder"),
+    ).toBe("Без единиц измерения");
+  });
 });
 
 describe("Progress and disclosure", () => {
@@ -302,9 +320,9 @@ describe("Notation", () => {
     expect(screen.getByText("countdown(n)").tagName).toBe("CODE");
   });
 
-  it("renders a variable as a <var> element, defaulting kind to code", () => {
-    render(<Notation kind="var">M</Notation>);
-    expect(screen.getByText("M").tagName).toBe("VAR");
+  it("renders a formula as a <var> element, defaulting kind to code", () => {
+    render(<Notation kind="formula">F(n)</Notation>);
+    expect(screen.getByText("F(n)").tagName).toBe("VAR");
     render(<Notation>x</Notation>);
     expect(screen.getByText("x").tagName).toBe("CODE");
   });

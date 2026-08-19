@@ -20,6 +20,8 @@ export namespace LessonContent {
     workedExample?: React.ReactNode;
     /** Sits next to the concept it belongs to, not in a trailing list (signalling principle). */
     mistake?: React.ReactNode;
+    /** Optional local self-check rendered immediately after the theory group it reinforces. */
+    checkpoint?: readonly CheckpointItem[];
   };
 
   export type Definition = {

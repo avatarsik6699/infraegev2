@@ -20,7 +20,6 @@ export const CodeBlock: React.FC<CodeBlockTypes.Props> = (props) => {
   );
   const className = cssUtils.cx(styles.root, props.className);
   const isPython = props.language === "python";
-  const kind = isPython ? "пример" : "запись";
   const copyLabel =
     copyState === "copied"
       ? "Код скопирован"
@@ -39,12 +38,9 @@ export const CodeBlock: React.FC<CodeBlockTypes.Props> = (props) => {
         <div className={styles.meta} aria-hidden="true">
           {isPython ? (
             <Typography.Text component="span" className={styles.language}>
-              {props.language}
+              Python
             </Typography.Text>
           ) : null}
-          <Typography.Text component="span" className={styles.kind}>
-            {kind}
-          </Typography.Text>
         </div>
         {enhanced ? (
           <Button

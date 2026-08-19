@@ -10,7 +10,11 @@
 }
 
 .root :where(ul, ol) {
+  display: grid;
+  gap: var(--space-1);
   padding-inline-start: 1.4em;
+  font-size: var(--text-sm);
+  line-height: 1.6;
 }
 
 .root :where(h2, h3, h4) {

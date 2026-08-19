@@ -5,6 +5,7 @@ import styles from "./field.module.css";
 
 export const Field: React.FC<FieldTypes.Props> = ({
   label,
+  labelVisibility = "visible",
   description,
   error,
   invalid = Boolean(error),
@@ -13,7 +14,13 @@ export const Field: React.FC<FieldTypes.Props> = ({
   ...inputProps
 }) => (
   <BaseField.Root className={styles.root} invalid={invalid} disabled={disabled}>
-    <BaseField.Label className={styles.label}>{label}</BaseField.Label>
+    <BaseField.Label
+      className={
+        labelVisibility === "sr-only" ? styles.visuallyHidden : styles.label
+      }
+    >
+      {label}
+    </BaseField.Label>
     {description ? (
       <BaseField.Description className={styles.description}>
         {description}

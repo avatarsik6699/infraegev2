@@ -361,7 +361,7 @@ export const DesignSystemLab: React.FC = () => {
 
             <Typography.Text component="div" className={styles.placeholder}>
               <Notation kind="code">countdown(n)</Notation> — код-фрагмент
-              (моноширинный шрифт); <Notation kind="var">M</Notation> —
+              (моноширинный шрифт); <Notation kind="formula">M</Notation> —
               алгоритмическая переменная (читательская гарнитура, без курсива).
               Общий чип из <code>shared/components/notation</code> вместо
               копирования CSS в каждый компонент теории.
@@ -730,10 +730,10 @@ export const DesignSystemLab: React.FC = () => {
                 Diagram · placement=&quot;figure&quot;
               </code>
               <Diagram
-                src="/diagrams/recursion-call-return-trace.png"
-                alt="Схема вычисления F(5) по формуле F(n) = 2 · F(n-1) + 1: слева — спуск до базового случая F(1) = 1, справа — обратный подъём со значениями F(2)=3, F(3)=7, F(4)=15, F(5)=31."
-                caption="Спуск и возврат при вычислении F(5)"
-                purpose="Показать, что рекурсия сначала спускается к базовому случаю, а считает только на обратном пути"
+                src="/diagrams/bst-subtrees.png"
+                alt="Двоичное дерево поиска с корнем 10: слева поддерево со значениями меньше 10, справа — со значениями больше 10."
+                caption="Свойство двоичного дерева поиска"
+                purpose="Показать смысл обычной учебной иллюстрации с подписью"
               />
             </div>
 
@@ -782,14 +782,14 @@ export const DesignSystemLab: React.FC = () => {
               <div className={styles.floatDemo}>
                 <Diagram
                   placement="float-right"
-                  src="/diagrams/recursion-call-return-trace.png"
-                  alt="Схема вычисления F(5) по формуле F(n) = 2 · F(n-1) + 1: слева — спуск до базового случая F(1) = 1, справа — обратный подъём со значениями F(2)=3, F(3)=7, F(4)=15, F(5)=31."
-                  caption="Спуск и возврат при вычислении F(5)"
-                  purpose="Показать, что рекурсия сначала спускается к базовому случаю"
+                  src="/diagrams/bst-subtrees.png"
+                  alt="Двоичное дерево поиска с корнем 10: слева поддерево со значениями меньше 10, справа — со значениями больше 10."
+                  caption="Свойство двоичного дерева поиска"
+                  purpose="Связать правило поиска с устройством дерева"
                   footnotes={[
                     {
                       id: "order",
-                      text: "Ни одно сложение не происходит на спуске — только сравнение с базовым случаем.",
+                      text: "Одно сравнение с корнем исключает целое поддерево.",
                     },
                   ]}
                 />
@@ -798,11 +798,10 @@ export const DesignSystemLab: React.FC = () => {
                   Diagram уходит вправо маргиналией, а само объяснение остаётся
                   обычным читаемым текстом здесь, слева — того же размера, что и
                   остальная теория урока, а не сжатым до dense-подписи под
-                  картинкой. Каждый вызов <code>F(n)</code> сначала спускается
-                  до базового случая <code>F(1)</code>, ничего не считая по пути
-                  — сложение <code>2 · F(n - 1) + 1</code> происходит только на
-                  обратном подъёме, когда результат вложенного вызова уже
-                  известен.
+                  картинкой. В двоичном дереве поиска значения меньше корня
+                  находятся слева, а большие — справа. Поэтому после одного
+                  сравнения алгоритм продолжает поиск только в подходящем
+                  поддереве.
                 </Typography.Text>
               </div>
             </div>
@@ -826,10 +825,10 @@ export const DesignSystemLab: React.FC = () => {
                 <div className={styles.imageDemoBox}>
                   <Image
                     key={loadingDemoKey}
-                    src={`/diagrams/recursion-call-return-trace.png?demo=${String(loadingDemoKey)}`}
-                    alt="Схема для демонстрации состояния загрузки"
-                    width={700}
-                    height={1050}
+                    src={`/diagrams/bst-subtrees.png?demo=${String(loadingDemoKey)}`}
+                    alt="Двоичное дерево для демонстрации состояния загрузки"
+                    width={812}
+                    height={390}
                   />
                   <Button
                     density="compact"

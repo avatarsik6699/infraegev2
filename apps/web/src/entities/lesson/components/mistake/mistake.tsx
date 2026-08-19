@@ -1,4 +1,4 @@
-import { X } from "lucide-react";
+import { TriangleAlert } from "lucide-react";
 import { Typography } from "~/shared/components/typography";
 import styles from "./mistake.module.css";
 
@@ -9,20 +9,27 @@ type Props = {
 
 export const Mistake: React.FC<Props> = (props) => {
   return (
-    <figure className={styles.root}>
-      <figcaption className={styles.eyebrow}>Типичная ошибка</figcaption>
-      <Typography.Text component="div" className={styles.claim}>
-        <X
-          className={styles.claimIcon}
-          size={15}
-          strokeWidth={2.25}
+    <aside className={styles.root} aria-label="Типичная ошибка">
+      <div className={styles.heading}>
+        <TriangleAlert
+          className={styles.icon}
           aria-hidden="true"
+          size={18}
+          strokeWidth={2}
         />
-        <span className={styles.claimText}>{props.claim}</span>
+        <Typography.Text component="span" className={styles.label}>
+          Типичная ошибка
+        </Typography.Text>
+      </div>
+      <Typography.Text component="div" className={styles.claim}>
+        {props.claim}
+      </Typography.Text>
+      <Typography.Text component="div" className={styles.explanationLabel}>
+        Почему это неверно
       </Typography.Text>
       <Typography.Text component="div" className={styles.explanation}>
         {props.explanation}
       </Typography.Text>
-    </figure>
+    </aside>
   );
 };

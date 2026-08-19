@@ -6,7 +6,6 @@ import styles from "../lesson-practice.module.css";
 
 type PracticeTaskHeadingProps = {
   task: LessonTypes.PracticeTask;
-  index: number;
   alreadySolved: boolean;
   headingId: string;
   setHeadingRef: (taskId: string, element: HTMLHeadingElement | null) => void;
@@ -16,9 +15,6 @@ export const PracticeTaskHeading: React.FC<PracticeTaskHeadingProps> = (
   props,
 ) => (
   <div className={styles.taskHeading}>
-    <Typography.Text component="span" aria-hidden="true">
-      {props.index + 1}
-    </Typography.Text>
     <Typography.Title
       order={3}
       id={props.headingId}
@@ -31,7 +27,6 @@ export const PracticeTaskHeading: React.FC<PracticeTaskHeadingProps> = (
       className={styles.taskTheoryLinks}
       aria-label={`Теория к задаче «${props.task.title}»`}
     >
-      <Typography.Text component="span">К теории:</Typography.Text>
       {props.task.theoryLinks.map((link) => (
         <FragmentLink hash={link.hash} key={link.hash}>
           {link.label}

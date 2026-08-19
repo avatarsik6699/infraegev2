@@ -1,3 +1,4 @@
+import { useMemo, useRef } from "react";
 import {
   Checkpoint,
   LessonSectionHeading,
@@ -7,28 +8,24 @@ import {
   LessonPractice,
   checkPracticeAnswer,
 } from "~/features/lesson-practice";
-import {
-  createLessonProgressStore,
-  LessonProgress,
-  useLessonProgress,
-} from "~/features/lesson-progress";
+import { createLessonProgressStore } from "~/features/lesson-progress";
+import { ReadingPositionIndicator } from "~/features/reading-position";
+import { Badge } from "~/shared/components/badge";
 import { Typography } from "~/shared/components/typography";
 import { LessonOutline } from "~/widgets/lesson-outline";
+import { TopicLessonHeader } from "./components/topic-lesson-header";
+import { TopicLessonResult } from "./components/topic-lesson-result";
 import type { TopicLessonPageTypes } from "./topic-lesson-page.types";
 import styles from "./topic-lesson-page.module.css";
 
 export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
   props,
 ) => {
-  const progressStore = createLessonProgressStore({
-    lessonId: props.lesson.id,
-  });
-  const progress = useLessonProgress(progressStore);
-  const solved = progress.solvedTaskIds.filter((id) =>
-    props.tasks.some((task) => task.id === id),
-  ).length;
-  const threshold = props.lesson.masteryThreshold ?? 0.8;
-  const mastered = solved >= props.tasks.length * threshold;
+  const articleRef = useRef<HTMLElement>(null);
+  const progressStore = useMemo(
+    () => createLessonProgressStore({ lessonId: props.lesson.id }),
+    [props.lesson.id],
+  );
   const outline: LessonTypes.OutlineGroup[] = [
     {
       id: "theory",
@@ -54,41 +51,42 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
   const resultIndex = practiceIndex + 1;
 
   return (
-    <main className={styles.page}>
-      <header className={styles.header}>
-        <Typography.Text variant="caption" tone="muted">
-          {`Задание ${String(props.lesson.taskNumber)} · ЕГЭ по информатике`}
-        </Typography.Text>
-        <Typography.Title order={1}>{props.lesson.title}</Typography.Title>
-        <Typography.Text variant="lead" tone="muted">
-          {props.lesson.summary}
-        </Typography.Text>
-        <section className={styles.outcomes} aria-labelledby="lesson-outcomes">
-          <Typography.Title order={2} id="lesson-outcomes">
-            После урока вы сможете
-          </Typography.Title>
-          <ul>
-            {props.lesson.learningOutcomes.map((outcome) => (
-              <li key={outcome}>{outcome}</li>
-            ))}
-          </ul>
-        </section>
-      </header>
+    <div className={styles.page} data-topic-lesson-page>
+      <ReadingPositionIndicator targetRef={articleRef} />
+      <TopicLessonHeader
+        taskNumber={props.lesson.taskNumber}
+        title={props.lesson.title}
+      />
 
-      <div className={styles.layout}>
-        <aside className={styles.rail}>
+      <main className={styles.lesson} data-lesson-frame>
+        <aside className={styles.rail} data-outline-rail>
           <div className={styles.railContents}>
             <LessonOutline groups={outline} />
-            <LessonProgress
-              solved={solved}
-              total={props.tasks.length}
-              masteryThreshold={threshold}
-            />
           </div>
         </aside>
 
-        <article className={styles.article}>
-          <section id="theory" className={styles.section}>
+        <article className={styles.article} data-article-frame ref={articleRef}>
+          <header className={styles.intro}>
+            <div className={styles.lessonMeta} aria-label="Сведения об уроке">
+              <Badge>{`Задание ${String(props.lesson.taskNumber)}`}</Badge>
+              <Badge>ЕГЭ по информатике</Badge>
+              <Badge>{`${String(props.tasks.length)} задачи`}</Badge>
+              <Badge>
+                {props.lesson.accessTier === "free"
+                  ? "Бесплатно"
+                  : "По подписке"}
+              </Badge>
+            </div>
+            <Typography.Title order={1}>{props.lesson.title}</Typography.Title>
+            <Typography.Text variant="lead" tone="muted">
+              {props.lesson.summary}
+            </Typography.Text>
+          </header>
+
+          <section
+            id="theory"
+            className={`${styles.section} ${styles.theorySection}`}
+          >
             <LessonSectionHeading index={1}>Теория</LessonSectionHeading>
             <div className={styles.concepts}>
               {props.lesson.theory.map((concept) => (
@@ -100,10 +98,35 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
                   <Typography.Title order={3}>
                     {concept.navLabel}
                   </Typography.Title>
-                  <Typography.Prose>{concept.explanation}</Typography.Prose>
-                  {concept.diagram}
-                  {concept.workedExample}
-                  {concept.mistake}
+                  <Typography.Prose
+                    className={styles.conceptExplanation}
+                    data-concept-explanation
+                  >
+                    {concept.explanation}
+                  </Typography.Prose>
+                  {concept.diagram ? (
+                    <div className={styles.conceptVisual}>
+                      {concept.diagram}
+                    </div>
+                  ) : null}
+                  {concept.workedExample ? (
+                    <div className={styles.conceptExample}>
+                      {concept.workedExample}
+                    </div>
+                  ) : null}
+                  {concept.mistake ? (
+                    <div className={styles.conceptMistake} data-concept-mistake>
+                      {concept.mistake}
+                    </div>
+                  ) : null}
+                  {concept.checkpoint ? (
+                    <div
+                      className={styles.conceptCheckpoint}
+                      data-concept-checkpoint
+                    >
+                      <Checkpoint items={concept.checkpoint} />
+                    </div>
+                  ) : null}
                 </section>
               ))}
             </div>
@@ -119,15 +142,18 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
           ) : null}
 
           {props.lesson.checkpoint ? (
-            <div id="checkpoint" className={styles.section}>
+            <section id="checkpoint" className={styles.section}>
               <LessonSectionHeading index={checkpointIndex}>
                 Проверьте себя
               </LessonSectionHeading>
               <Checkpoint items={props.lesson.checkpoint} />
-            </div>
+            </section>
           ) : null}
 
-          <section id="practice" className={styles.section}>
+          <section
+            id="practice"
+            className={`${styles.section} ${styles.practiceSection}`}
+          >
             <LessonSectionHeading index={practiceIndex}>
               Практика
             </LessonSectionHeading>
@@ -138,19 +164,23 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
             />
           </section>
 
-          <section id="result" className={styles.section}>
+          <section
+            id="result"
+            className={`${styles.section} ${styles.resultSection}`}
+          >
             <LessonSectionHeading index={resultIndex}>
               Итог
             </LessonSectionHeading>
-            <Typography.Prose>{props.lesson.result}</Typography.Prose>
-            <Typography.Text className={styles.resultStatus}>
-              {mastered
-                ? "Порог освоения достигнут."
-                : "Вернитесь к связанным фрагментам теории и продолжите практику."}
-            </Typography.Text>
+            <TopicLessonResult lesson={props.lesson} />
           </section>
         </article>
-      </div>
-    </main>
+
+        <aside
+          className={styles.marginRail}
+          data-margin-rail
+          aria-hidden="true"
+        />
+      </main>
+    </div>
   );
 };

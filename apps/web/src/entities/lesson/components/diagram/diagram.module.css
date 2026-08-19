@@ -143,14 +143,3 @@
   display: grid;
   gap: 0.2rem;
 }
-
-/* Non-prose fragments (code, formulas, isolated symbols) get a shared
-   data-register treatment so they read as evidence, not decoration. */
-.root :global(code) {
-  padding-inline: 0.05em;
-  color: var(--color-text);
-  background: transparent;
-  font-family: var(--font-data);
-  font-size: var(--text-inline-code);
-  box-decoration-break: clone;
-}

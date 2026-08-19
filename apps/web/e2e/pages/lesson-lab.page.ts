@@ -78,12 +78,12 @@ export class LessonLabPage {
     await expect(firstTab).toBeFocused();
     await expect(firstTab).toHaveAttribute("aria-selected", "true");
     await expect(
-      this.page.getByText("Решено 0 из 5 задач", { exact: true }),
-    ).toBeVisible();
+      this.page.getByRole("progressbar", { name: "Решённые задачи темы" }),
+    ).toHaveAttribute("aria-valuetext", "Решено 0 из 5 задач");
     await this.answerTask("keep-half", "правая");
     await expect(
-      this.page.getByText("Решено 0 из 5 задач", { exact: true }),
-    ).toBeVisible();
+      this.page.getByRole("progressbar", { name: "Решённые задачи темы" }),
+    ).toHaveAttribute("aria-valuetext", "Решено 0 из 5 задач");
 
     await this.answerTask("keep-half", "левая");
     await expect(
@@ -104,16 +104,16 @@ export class LessonLabPage {
     await this.answerTask("right-boundary", "7");
     await this.answerTask("loop-condition", "L <= R");
     await expect(
-      this.page.getByText("Решено 4 из 5 задач", { exact: true }),
-    ).toBeVisible();
+      this.page.getByRole("progressbar", { name: "Решённые задачи темы" }),
+    ).toHaveAttribute("aria-valuetext", "Решено 4 из 5 задач");
     await expect(this.page.locator("[data-mastery-status]")).toHaveText(
       "Тема освоена",
     );
 
     await this.answerTask("trace-count", "3");
     await expect(
-      this.page.getByText("Решено 5 из 5 задач", { exact: true }),
-    ).toBeVisible();
+      this.page.getByRole("progressbar", { name: "Решённые задачи темы" }),
+    ).toHaveAttribute("aria-valuetext", "Решено 5 из 5 задач");
     await expect(
       this.page.getByRole("link", { name: "Перейти к результату" }),
     ).toHaveAttribute("href", "#result");
@@ -123,8 +123,8 @@ export class LessonLabPage {
 
     await this.page.reload();
     await expect(
-      this.page.getByText("Решено 5 из 5 задач", { exact: true }),
-    ).toBeVisible();
+      this.page.getByRole("progressbar", { name: "Решённые задачи темы" }),
+    ).toHaveAttribute("aria-valuetext", "Решено 5 из 5 задач");
     await expect(
       this.page
         .getByRole("tablist", { name: "Задачи по сложности" })
@@ -257,7 +257,17 @@ export class LessonLabPage {
     } else {
       expect(outlineRail.x).toBeCloseTo(0, 0);
       expect(outlineRail.width).toBeCloseTo(viewport.width, 0);
-      expect(outlineRail.y + outlineRail.height).toBeCloseTo(article.y, 0);
+      const edgeGap = await this.page.evaluate(() => {
+        const rail = document.querySelector<HTMLElement>("[data-outline-rail]");
+        const content = document.querySelector<HTMLElement>(
+          "[data-article-frame]",
+        );
+        if (!rail || !content) throw new Error("Missing lesson frame");
+        const railRect = rail.getBoundingClientRect();
+        const contentRect = content.getBoundingClientRect();
+        return contentRect.top - railRect.bottom;
+      });
+      expect(Math.abs(edgeGap)).toBeLessThanOrEqual(2);
       expect(article.width).toBeCloseTo(viewport.width, 0);
     }
   }
@@ -441,8 +451,6 @@ export class LessonLabPage {
     await expect(
       this.page.getByRole("link", { name: "Теория" }),
     ).toHaveAttribute("data-active-branch", "true");
-    await expect(this.page.locator("[data-outline-active-path]")).toBeVisible();
-
     const activeTreatment = await this.page
       .getByRole("link", { name: "Почему это быстро" })
       .evaluate((element) => ({
@@ -454,64 +462,15 @@ export class LessonLabPage {
     expect(activeTreatment.weight).toBeGreaterThanOrEqual(600);
   }
 
-  async expectDesktopOutlineGeometry(): Promise<void> {
+  async expectSimpleDesktopOutline(): Promise<void> {
     const tree = this.page.locator("[data-outline-tree]");
-    const connectors = tree.locator("[data-outline-connectors]");
-    await expect(connectors).toBeVisible();
-    await expect(tree.locator("[data-outline-node]")).toHaveCount(10);
-
-    const result = await tree.evaluate((element) => {
-      const svg = element.querySelector<SVGSVGElement>(
-        "[data-outline-connectors]",
-      );
-      if (!svg) throw new Error("Missing outline connector SVG");
-      const svgRect = svg.getBoundingClientRect();
-      const nodes = Array.from(
-        element.querySelectorAll<SVGSVGElement>("[data-outline-node]"),
-        (node) => {
-          const rect = node.getBoundingClientRect();
-          const label = node.parentElement?.querySelector("span");
-          const labelRect = label?.getBoundingClientRect();
-          const circle = node.querySelector("circle");
-          return {
-            x: rect.left - svgRect.left + rect.width / 2,
-            y: rect.top - svgRect.top + rect.height / 2,
-            radius: Math.min(rect.width, rect.height) / 2,
-            labelGap: labelRect ? labelRect.left - rect.right : -1,
-            stroke: circle ? getComputedStyle(circle).stroke : "missing",
-          };
-        },
-      );
-      let minimumClearance = Number.POSITIVE_INFINITY;
-      for (const path of svg.querySelectorAll<SVGPathElement>("path")) {
-        const length = path.getTotalLength();
-        for (let index = 0; index <= 120; index += 1) {
-          const point = path.getPointAtLength((length * index) / 120);
-          for (const node of nodes) {
-            const distance = Math.hypot(point.x - node.x, point.y - node.y);
-            minimumClearance = Math.min(
-              minimumClearance,
-              distance - node.radius,
-            );
-          }
-        }
-      }
-
-      return {
-        minimumClearance,
-        labelGaps: nodes.map(({ labelGap }) => labelGap),
-        strokes: nodes.map(({ stroke }) => stroke),
-      };
-    });
-
-    expect(result.minimumClearance).toBeGreaterThanOrEqual(4);
-    expect(result.labelGaps.every((gap) => gap >= 4)).toBe(true);
-    expect(result.strokes.every((stroke) => stroke === "none")).toBe(true);
+    await expect(tree.locator("svg")).toHaveCount(0);
+    await expect(tree.getByRole("list").first()).toBeVisible();
+    await expect(tree.getByRole("link")).toHaveCount(10);
   }
 
   async expectCompactOutlineList(): Promise<void> {
-    await expect(this.page.locator("[data-outline-connectors]")).toBeHidden();
-    await expect(this.page.locator("[data-outline-node]").first()).toBeHidden();
+    await expect(this.page.locator("[data-outline-tree] svg")).toHaveCount(0);
     for (const name of [
       "Теория",
       "Середина превращает неизвестность в выбор",
@@ -539,7 +498,9 @@ export class LessonLabPage {
       await expect(task).toBeVisible();
     }
     await expect(this.page.getByText("Подсказка").first()).toBeVisible();
-    await expect(this.page.getByText("К теории:")).toHaveCount(5);
+    await expect(
+      this.page.getByRole("navigation", { name: /Теория к задаче/ }),
+    ).toHaveCount(5);
     await expect(
       this.page.getByRole("heading", { name: "Результат" }),
     ).toBeVisible();
@@ -551,11 +512,7 @@ export class LessonLabPage {
   private async answerTask(taskId: string, answer: string): Promise<void> {
     const task = this.page.locator(`[data-practice-task="${taskId}"]`);
     if (!(await task.isVisible())) {
-      await this.page
-        .locator(
-          `[data-practice-tabs] [aria-controls="practice-panel-${taskId}"]`,
-        )
-        .click();
+      await this.page.locator(`[data-practice-task-tab="${taskId}"]`).click();
     }
     await task.getByRole("textbox").fill(answer);
     await task.getByRole("button", { name: "Проверить" }).click();

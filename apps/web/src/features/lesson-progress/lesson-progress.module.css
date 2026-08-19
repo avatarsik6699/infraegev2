@@ -1,7 +1,6 @@
 .root {
-  margin-top: var(--space-4);
-  padding-top: var(--space-3);
-  border-top: 1px solid var(--color-rule);
+  display: grid;
+  gap: var(--space-1);
 }
 
 .headingRow {
@@ -12,7 +11,6 @@
 }
 
 .headingRow h2,
-.summary,
 .status {
   margin: 0;
 }
@@ -25,27 +23,17 @@
 }
 
 .count {
+  color: var(--color-muted);
   font-family: var(--font-data);
   font-weight: 500;
   font-variant-numeric: tabular-nums;
 }
 
 .progress {
-  --progress-height: 0.28rem;
-
-  margin-top: 0.8rem;
-}
-
-.summary {
-  margin-top: var(--space-1);
-  color: var(--color-text-soft);
-  font-family: var(--font-reading);
-  font-size: var(--text-xs);
-  line-height: 1.4;
+  --progress-height: 0.22rem;
 }
 
 .status {
-  margin-top: 0.18rem;
   color: var(--color-muted);
   font-family: var(--font-reading);
   font-size: var(--text-xs);

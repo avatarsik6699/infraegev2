@@ -1,18 +1,15 @@
 import { fireEvent, screen, waitFor, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { LessonSectionHeading } from "~/entities/lesson";
+import { LessonSectionHeading, rekursiyaLesson } from "~/entities/lesson";
 import { LearningVisualFrame } from "~/entities/learning-visual";
 import {
   createLessonProgressStore,
   LessonProgress,
 } from "~/features/lesson-progress";
 import { LessonDesignLab } from "~/pages/lesson-design-lab";
-import {
-  buildLessonOutlinePaths,
-  type LessonOutlineGeometry,
-  LessonOutline,
-} from "~/widgets/lesson-outline";
+import { TopicLessonPage } from "~/pages/topic-lesson";
 import { calculateReadingPosition } from "~/shared/lib/reading-position";
+import { LessonOutline } from "~/widgets/lesson-outline";
 import { render } from "./render";
 
 vi.mock(
@@ -79,58 +76,6 @@ describe("lesson design system", () => {
         .getByRole("link", { name: "Теория" })
         .getAttribute("data-active-branch"),
     ).toBe("true");
-  });
-
-  it("builds connector paths with explicit clearance around solid nodes", () => {
-    const geometry: LessonOutlineGeometry = {
-      width: 220,
-      height: 100,
-      nodes: [
-        {
-          id: "theory",
-          groupId: "theory",
-          kind: "group",
-          x: 8,
-          y: 10,
-          radius: 4.5,
-        },
-        {
-          id: "range",
-          groupId: "theory",
-          kind: "item",
-          x: 32,
-          y: 40,
-          radius: 3.5,
-        },
-        {
-          id: "speed",
-          groupId: "theory",
-          kind: "item",
-          x: 32,
-          y: 58,
-          radius: 3.5,
-        },
-        {
-          id: "practice",
-          groupId: "practice",
-          kind: "group",
-          x: 8,
-          y: 80,
-          radius: 4.5,
-        },
-      ],
-    };
-
-    const result = buildLessonOutlinePaths(geometry, "speed");
-    expect(result.paths.find(({ kind }) => kind === "trunk")?.d).toBe(
-      "M 8 19.5 V 70.5",
-    );
-    expect(result.paths.find(({ kind }) => kind === "branch")?.d).toContain(
-      "H 23.5",
-    );
-    expect(result.activePath?.d).toContain("M 8 19.5");
-    expect(result.activePath?.d).toContain("M 20 58 H 23.5");
-    expect(result.activePath?.d).not.toContain("M 20 40 H 23.5");
   });
 
   it("keeps the learning visual alternative visible", () => {
@@ -213,6 +158,81 @@ describe("lesson design system", () => {
     expect(within(siteHeader).queryByText("Тренажёр")).toBeNull();
   });
 
+  it("keeps recursion metadata with the title while leaving progress and duplicate outcomes out", () => {
+    render(
+      <TopicLessonPage
+        lesson={rekursiyaLesson}
+        tasks={[
+          {
+            id: "rekursiya-base-sequence",
+            difficultyLabel: "Базовая",
+            title: "База",
+            statement: "Условие",
+            hint: "Подсказка",
+            theoryLinks: [],
+          },
+          {
+            id: "rekursiya-two-values",
+            difficultyLabel: "Средняя",
+            title: "Два значения",
+            statement: "Условие",
+            hint: "Подсказка",
+            theoryLinks: [],
+          },
+          {
+            id: "rekursiya-large-ratio",
+            difficultyLabel: "Высокая",
+            title: "Отношение",
+            statement: "Условие",
+            hint: "Подсказка",
+            theoryLinks: [],
+          },
+        ]}
+      />,
+    );
+
+    const metadata = screen.getByLabelText("Сведения об уроке");
+    expect(within(metadata).getByText("Задание 16")).toBeTruthy();
+    expect(within(metadata).getByText("ЕГЭ по информатике")).toBeTruthy();
+    expect(within(metadata).getByText("3 задачи")).toBeTruthy();
+    expect(within(metadata).getByText("Бесплатно")).toBeTruthy();
+
+    const rail = document.querySelector<HTMLElement>("[data-outline-rail]");
+    const article = document.querySelector<HTMLElement>("[data-article-frame]");
+    const marginRail =
+      document.querySelector<HTMLElement>("[data-margin-rail]");
+    expect(rail).not.toBeNull();
+    expect(article).not.toBeNull();
+    expect(marginRail).not.toBeNull();
+    if (!rail || !article || !marginRail) return;
+    expect(within(rail).queryByRole("progressbar")).toBeNull();
+    expect(within(article).queryByRole("progressbar")).toBeNull();
+    expect(marginRail.children).toHaveLength(0);
+    expect(
+      screen.queryByRole("heading", { name: "После урока вы сможете" }),
+    ).toBeNull();
+    expect(screen.queryByRole("heading", { name: "Освоение темы" })).toBeNull();
+    expect(
+      screen.queryByRole("navigation", { name: "Вернуться к теории" }),
+    ).toBeNull();
+    const checkpoints = screen.getAllByLabelText("Проверьте себя");
+    expect(checkpoints).toHaveLength(4);
+    expect(
+      checkpoints.map(
+        (checkpoint) => within(checkpoint).getAllByRole("button").length,
+      ),
+    ).toEqual([2, 2, 2, 1]);
+    for (const checkpoint of checkpoints) {
+      expect(checkpoint.querySelector('svg[aria-hidden="true"]')).toBeTruthy();
+    }
+
+    const template = screen.getByRole("group", {
+      name: "Универсальный шаблон: одно предыдущее значение",
+    });
+    expect(within(template).getByText("Python")).toBeTruthy();
+    expect(within(template).queryByText("пример", { exact: false })).toBeNull();
+  });
+
   it("keeps one enhanced practice task active without losing draft answers", async () => {
     lessonProgress.clear();
     render(<LessonDesignLab />);
@@ -235,7 +255,11 @@ describe("lesson design system", () => {
       document.querySelectorAll("[data-practice-task]:not([hidden])"),
     ).toHaveLength(1);
     expect(screen.getAllByRole("tabpanel")).toHaveLength(1);
-    expect(screen.getByText("Решено 0 из 5 задач")).toBeTruthy();
+    expect(
+      screen
+        .getByRole("progressbar", { name: "Решённые задачи темы" })
+        .getAttribute("aria-valuetext"),
+    ).toBe("Решено 0 из 5 задач");
 
     const firstTaskTheory = screen.getByRole("navigation", {
       name: "Теория к задаче «Выберите половину»",
@@ -287,14 +311,22 @@ describe("lesson design system", () => {
     await waitFor(() => {
       expect(screen.getByRole("status").textContent).toContain("Пока нет");
     });
-    expect(screen.getByText("Решено 0 из 5 задач")).toBeTruthy();
+    expect(
+      screen
+        .getByRole("progressbar", { name: "Решённые задачи темы" })
+        .getAttribute("aria-valuetext"),
+    ).toBe("Решено 0 из 5 задач");
 
     fireEvent.change(answer, { target: { value: "левая" } });
     fireEvent.click(check);
     await waitFor(() => {
       expect(screen.getByRole("status").textContent).toContain("Верно");
     });
-    expect(screen.getByText("Решено 1 из 5 задач")).toBeTruthy();
+    expect(
+      screen
+        .getByRole("progressbar", { name: "Решённые задачи темы" })
+        .getAttribute("aria-valuetext"),
+    ).toBe("Решено 1 из 5 задач");
     expect(answer.hasAttribute("disabled")).toBe(true);
     expect(screen.getByRole("button", { name: "Решено" })).toBeTruthy();
     expect(

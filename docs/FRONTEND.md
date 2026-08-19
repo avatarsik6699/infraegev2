@@ -83,11 +83,13 @@ app → routes → pages → widgets → features → entities → shared
 - Keep one active light theme in this change. Runtime theme switching and dark mode are out of
   scope. The baseline is neutral monochrome: ink, muted surfaces and borders establish hierarchy;
   chromatic values are reserved for semantic success, warning and error feedback. Syntax tokens
-  inside the dedicated dark code surface are the sole presentational exception: their hues aid
-  token recognition and must not leak into product hierarchy, controls or public variant names.
+  inside the dedicated dark code surface are the sole presentational exception; inline `Notation`
+  uses neutral ink on a quiet neutral surface so formulas and code stay recognizable without
+  becoming a competing color accent.
 - The active profile has two neutral text levels only: primary and secondary. Semantic
-  success/warning/error remain separate, while `soft`/`muted`/`faint` aliases must not create
-  additional visible gray steps. Syntax colors remain the exception above.
+  success/information/warning/error remain separate, while `soft`/`muted`/`faint` aliases must not
+  create additional visible gray steps. Syntax colors remain the exception above. Informational
+  blue is reserved for formative `Checkpoint` markers, not ordinary prose or decorative surfaces.
 - Static surfaces and controls stay flat. Use spacing, one quiet fill or one border to establish a
   boundary; do not stack fill + border + shadow or nest card-like surfaces. Add an elevation token
   only together with a real transient-overlay consumer, never as a reserved decorative scale.
@@ -102,11 +104,26 @@ app → routes → pages → widgets → features → entities → shared
   layer and only when it improves orientation without reducing text contrast or adding local
   component backgrounds.
 - Shared policy components are mandatory for links, images, typography, page containers, buttons,
-  badges and other adopted primitives. Specialized semantic markup remains native for figures,
-  diagrams, tables, lists, code and variables.
+  badges and other adopted primitives. Authored inline code and formulas use `Notation`
+  (`code`/`formula`) so semantics and the neutral recognition treatment stay consistent.
+  Specialized markup remains native for figures, diagrams, tables and lists.
 - `CodeBlock` renders Python tokens synchronously as escaped React text nodes through the exact
   `@speed-highlight/core` grammar. Do not replace this boundary with runtime HTML injection or a
   client-only highlighting pass: readable SSR and no-JavaScript output are part of its contract.
+  Its visible header names only the language; copy remains a quiet action without a contrasting
+  hover surface.
+- Topic lessons use a three-column desktop shell: outline, central reading stream and a reserved
+  right rail. The right rail may be empty, but central lesson blocks do not move into it merely to
+  fill space. Lesson progress is not shown in the outline or title area until a later product
+  decision gives it a necessary learner-facing role. The outline, central article and their
+  context labels share one compact responsive column gutter so their content edges remain aligned
+  through desktop, intermediate and mobile layouts.
+- A `Checkpoint` may appear immediately after a `ConceptBlock` that closes a coherent theory
+  group. Keep these checks short, sequential in SSR/no-JS, and visually contained; distinguish the
+  group with one question icon, a matching informational heading label and the same compact
+  left-rule weight used by `Mistake`, without adding a card surface or coloring the question text.
+  A group may contain several independent disclosure questions when the theory cluster warrants
+  them. Do not defer all retrieval practice to one block directly before the practice section.
 
 ## 5. Responsive and accessible behavior
 
@@ -116,6 +133,9 @@ app → routes → pages → widgets → features → entities → shared
 - Content may reflow from rows/columns into a linear order. Do not hide required lesson content on
   small screens. Nothing may overflow the viewport except an explicitly scrollable data/code
   region.
+- Page and nested scroll regions use the same system-wide thin neutral, square-ended scrollbar.
+  A sticky navigation rail stays in normal flow at responsive breakpoints and scrolls internally
+  only when its content cannot fit in the viewport.
 - Interactive targets are at least `40 × 40px`; compact visuals may use a larger invisible hit
   area. Dense styling never overrides this floor. Essential actions and information cannot depend
   on hover.
@@ -146,6 +166,9 @@ app → routes → pages → widgets → features → entities → shared
   non-breaking spaces where a value/unit or short semantic group must not split.
 - Name fields with a concise noun describing the requested value. Avoid filler such as «ваш» or
   «введите» in labels; put a genuinely useful format constraint in the description instead.
+- A tightly scoped answer field may visually hide its still-accessible label when the surrounding
+  task already names the value. Its placeholder may carry one short input constraint such as
+  «Без единиц измерения», but must not be the field's only accessible name.
 - Avoid all-caps running labels. A compact, tracked uppercase rubric is allowed only when it acts
   as quiet navigation or classification rather than body text.
 

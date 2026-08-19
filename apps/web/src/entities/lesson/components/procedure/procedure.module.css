@@ -21,28 +21,29 @@
 
 .steps {
   display: grid;
-  gap: 0.5rem;
-  margin: 0.15rem 0 0;
-  padding: 0;
-  list-style: none;
+  gap: var(--space-1);
+  margin: 0;
+  padding-left: 1.5rem;
 }
 
 .step {
   color: var(--color-text-soft);
+  padding-left: var(--space-0-5);
+}
+
+.step > [data-variant] {
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+.step::marker {
+  color: var(--color-text-soft);
+  font-family: var(--font-data);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
 }
 
 .stepLabel {
   color: var(--color-text);
   font-weight: 600;
-}
-
-/* Non-prose fragments (code, formulas, isolated symbols) get a shared
-   data-register treatment so they read as evidence, not decoration. */
-.root :global(code) {
-  padding-inline: 0.05em;
-  color: var(--color-text);
-  background: transparent;
-  font-family: var(--font-data);
-  font-size: var(--text-inline-code);
-  box-decoration-break: clone;
 }

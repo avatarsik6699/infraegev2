@@ -1,7 +1,7 @@
 import { Callout } from "~/shared/components/callout";
 import { CodeBlock } from "~/shared/components/code-block";
+import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
-import { Diagram } from "../components/diagram";
 import { Mistake } from "../components/mistake";
 import { Procedure } from "../components/procedure";
 import { WorkedExample } from "../components/worked-example";
@@ -35,12 +35,15 @@ export const rekursiyaLesson = defineLesson({
       explanation: (
         <>
           <Typography.Text>
-            Пусть известно, что <code>F(1) = 1</code>, а каждое следующее
-            значение получается по правилу <code>F(n) = 2·F(n − 1) + 1</code>{" "}
-            при <code>n &gt; 1</code>. Формула сама по себе ничего не считает —
-            чтобы найти <code>F(n)</code>, сначала нужно знать{" "}
-            <code>F(n − 1)</code>. Найдём <code>F(5)</code>, поднимаясь от того,
-            что уже известно.
+            Пусть известно, что <Notation kind="formula">F(1) = 1</Notation>, а
+            каждое следующее значение получается по правилу{" "}
+            <Notation kind="formula">F(n) = 2·F(n − 1) + 1</Notation> при{" "}
+            <Notation kind="formula">n &gt; 1</Notation>. Формула сама по себе
+            ничего не считает — чтобы найти{" "}
+            <Notation kind="formula">F(n)</Notation>, сначала нужно знать{" "}
+            <Notation kind="formula">F(n − 1)</Notation>. Найдём{" "}
+            <Notation kind="formula">F(5)</Notation>, поднимаясь от того, что
+            уже известно.
           </Typography.Text>
         </>
       ),
@@ -55,19 +58,32 @@ export const rekursiyaLesson = defineLesson({
           }
           steps={[
             <>
-              <code>F(1) = 1</code> — это значение дано, вычислять его не нужно.
+              <Notation kind="formula">F(1) = 1</Notation> — это значение дано,
+              вычислять его не нужно.
             </>,
             <>
-              <code>F(2) = 2·F(1) + 1 = 2·1 + 1 = 3</code>.
+              <Notation kind="formula">
+                F(2) = 2·F(1) + 1 = 2·1 + 1 = 3
+              </Notation>
+              .
             </>,
             <>
-              <code>F(3) = 2·F(2) + 1 = 2·3 + 1 = 7</code>.
+              <Notation kind="formula">
+                F(3) = 2·F(2) + 1 = 2·3 + 1 = 7
+              </Notation>
+              .
             </>,
             <>
-              <code>F(4) = 2·F(3) + 1 = 2·7 + 1 = 15</code>.
+              <Notation kind="formula">
+                F(4) = 2·F(3) + 1 = 2·7 + 1 = 15
+              </Notation>
+              .
             </>,
             <>
-              <code>F(5) = 2·F(4) + 1 = 2·15 + 1 = 31</code>.
+              <Notation kind="formula">
+                F(5) = 2·F(4) + 1 = 2·15 + 1 = 31
+              </Notation>
+              .
             </>,
           ]}
         />
@@ -81,17 +97,21 @@ export const rekursiyaLesson = defineLesson({
           <Typography.Text>
             Рекурсивное определение работает только потому, что в нём
             одновременно есть два условия. Первое — начальное значение (его
-            называют базовым случаем): <code>F(1) = 1</code> просто дано,
-            вычислять его не нужно. Второе — правило перехода:{" "}
-            <code>F(n) = 2·F(n − 1) + 1</code> при <code>n &gt; 1</code>,
-            которое показывает, как получить следующее значение из предыдущего.
+            называют базовым случаем):{" "}
+            <Notation kind="formula">F(1) = 1</Notation> просто дано, вычислять
+            его не нужно. Второе — правило перехода:{" "}
+            <Notation kind="formula">F(n) = 2·F(n − 1) + 1</Notation> при{" "}
+            <Notation kind="formula">n &gt; 1</Notation>, которое показывает,
+            как получить следующее значение из предыдущего.
           </Typography.Text>
           <Typography.Text>
-            Работает это как ряд костяшек домино: <code>F(1)</code> — костяшка,
-            которую толкнули вручную, а правило перехода — то, что заставляет
-            каждую следующую костяшку падать от предыдущей. Без первого толчка
-            (без базового случая) ни одна костяшка не упадёт, и цепочка{" "}
-            <code>F(5) → F(4) → F(3) → …</code> никогда не остановится.
+            Работает это как ряд костяшек домино:{" "}
+            <Notation kind="formula">F(1)</Notation> — костяшка, которую
+            толкнули вручную, а правило перехода — то, что заставляет каждую
+            следующую костяшку падать от предыдущей. Без первого толчка (без
+            базового случая) ни одна костяшка не упадёт, и цепочка{" "}
+            <Notation kind="formula">F(5) → F(4) → F(3) → …</Notation> никогда
+            не остановится.
           </Typography.Text>
         </>
       ),
@@ -99,18 +119,21 @@ export const rekursiyaLesson = defineLesson({
         <Mistake
           claim={
             <>
-              Если в формуле <code>F(n) = F(n − 1) + n</code> сказано{" "}
-              <code>n &gt; 3</code>, её можно применить и для <code>F(2)</code>{" "}
-              — раз число маленькое, разница небольшая.
+              Если в формуле{" "}
+              <Notation kind="formula">F(n) = F(n − 1) + n</Notation> сказано{" "}
+              <Notation kind="formula">n &gt; 3</Notation>, её можно применить и
+              для <Notation kind="formula">F(2)</Notation> — раз число
+              маленькое, разница небольшая.
             </>
           }
           explanation={
             <>
-              Нельзя: условие <code>n &gt; 3</code> — часть определения, а не
-              подсказка для удобства. Для <code>n ≤ 3</code> функция должна быть
+              Нельзя: условие <Notation kind="formula">n &gt; 3</Notation> —
+              часть определения, а не подсказка для удобства. Для{" "}
+              <Notation kind="formula">n ≤ 3</Notation> функция должна быть
               задана отдельно — своим базовым значением. Применение формулы за
               пределами её условия даёт какое-то число, но не значение{" "}
-              <code>F(n)</code>.
+              <Notation kind="formula">F(n)</Notation>.
             </>
           }
         />
@@ -123,24 +146,69 @@ export const rekursiyaLesson = defineLesson({
         <>
           <Typography.Text>
             На первый взгляд определение через саму себя похоже на логический
-            круг: чтобы найти <code>F(5)</code>, нужно знать <code>F(4)</code>,
-            а чтобы найти <code>F(4)</code> — знать <code>F(3)</code>, и так
-            далее. Круга здесь на самом деле нет.
+            круг: чтобы найти <Notation kind="formula">F(5)</Notation>, нужно
+            знать <Notation kind="formula">F(4)</Notation>, а чтобы найти{" "}
+            <Notation kind="formula">F(4)</Notation> — знать{" "}
+            <Notation kind="formula">F(3)</Notation>, и так далее. Круга здесь
+            на самом деле нет.
           </Typography.Text>
           <Typography.Text>
-            Раз <code>F(1)</code> известно без всяких вычислений, из него
-            однозначно находится <code>F(2)</code>. Раз известно{" "}
-            <code>F(2)</code>, точно так же находится <code>F(3)</code>. Раз
-            известно <code>F(3)</code> — находится <code>F(4)</code>, и так
-            далее для любого <code>n</code>. Каждое следующее значение опирается
-            только на уже найденное, поэтому вся последовательность{" "}
-            <code>F(1), F(2), F(3), …</code> определена целиком, без пропусков и
-            без противоречий — тот же принцип, что и математическая индукция:
-            база плюс шаг, работающий для любого <code>n</code>, задают значение
-            сразу для всех <code>n</code>.
+            Раз <Notation kind="formula">F(1)</Notation> известно без всяких
+            вычислений, из него однозначно находится{" "}
+            <Notation kind="formula">F(2)</Notation>. Раз известно{" "}
+            <Notation kind="formula">F(2)</Notation>, точно так же находится{" "}
+            <Notation kind="formula">F(3)</Notation>. Раз известно{" "}
+            <Notation kind="formula">F(3)</Notation> — находится{" "}
+            <Notation kind="formula">F(4)</Notation>, и так далее для любого{" "}
+            <Notation kind="formula">n</Notation>. Каждое следующее значение
+            опирается только на уже найденное, поэтому вся последовательность{" "}
+            <Notation kind="formula">F(1), F(2), F(3), …</Notation> определена
+            целиком, без пропусков и без противоречий — тот же принцип, что и
+            математическая индукция: база плюс шаг, работающий для любого{" "}
+            <Notation kind="formula">n</Notation>, задают значение сразу для
+            всех <Notation kind="formula">n</Notation>.
           </Typography.Text>
         </>
       ),
+      checkpoint: [
+        {
+          id: "checkpoint-base-case",
+          prompt: (
+            <>
+              Дано <Notation kind="formula">F(1) = 5</Notation> и{" "}
+              <Notation kind="formula">F(n) = F(n − 1) + 3</Notation> при{" "}
+              <Notation kind="formula">n &gt; 1</Notation>. Можно ли подставить{" "}
+              <Notation kind="formula">n = 1</Notation> в рекуррентную формулу,
+              чтобы найти ещё одно значение?
+            </>
+          ),
+          reveal: (
+            <>
+              Нет. Формула работает только при{" "}
+              <Notation kind="formula">n &gt; 1</Notation>, а{" "}
+              <Notation kind="formula">F(1)</Notation> — отдельно заданный
+              базовый случай. Такая подстановка потребовала бы не определённое в
+              условии значение <Notation kind="formula">F(0)</Notation>.
+            </>
+          ),
+        },
+        {
+          id: "checkpoint-base-case-value",
+          prompt: (
+            <>
+              Чему равно <Notation kind="formula">F(3)</Notation> для той же
+              функции?
+            </>
+          ),
+          reveal: (
+            <>
+              Сначала <Notation kind="formula">F(2) = 5 + 3 = 8</Notation>,
+              затем <Notation kind="formula">F(3) = 8 + 3 = 11</Notation>.
+              Двигаться нужно от базового случая вверх по одному шагу.
+            </>
+          ),
+        },
+      ],
     },
     {
       id: "code-and-call-stack",
@@ -152,49 +220,48 @@ export const rekursiyaLesson = defineLesson({
             себе:
           </Typography.Text>
           <CodeBlock
-            code={`def F(n):\n    if n == 1:\n        return 1\n    return 2 * F(n - 1) + 1\n\nprint(F(5))`}
+            code={`def F(n):\n    if n == 1:\n        return 1  # Базовый случай: значение уже известно\n    return 2 * F(n - 1) + 1  # Шаг: сначала находим F(n - 1)\n\nprint(F(5))`}
             label="Рекурсивная функция F"
             language="python"
           />
           <Typography.Text>
-            Вызов <code>F(5)</code> не может сразу вернуть число — сначала нужно
-            узнать <code>F(4)</code>, для которого нужно <code>F(3)</code>, и
-            так далее, пока не будет достигнут базовый случай <code>F(1)</code>.
+            Вызов <Notation kind="formula">F(5)</Notation> не может сразу
+            вернуть число — сначала нужно узнать{" "}
+            <Notation kind="formula">F(4)</Notation>, для которого нужно{" "}
+            <Notation kind="formula">F(3)</Notation>, и так далее, пока не будет
+            достигнут базовый случай <Notation kind="formula">F(1)</Notation>.
             После этого каждый вызов возвращает своё значение туда, откуда был
             вызван, и подъём происходит в обратном порядке.
           </Typography.Text>
           <Typography.Text>
-            <code>return</code> делает две вещи одновременно: завершает текущий
-            вызов и передаёт вычисленное число туда, откуда функция была
-            вызвана. В строке <code>return 2 * F(n - 1) + 1</code> выражение{" "}
-            <code>F(n - 1)</code> — это не текст и не номер, а конкретное число,
-            которое вернул вложенный вызов.
+            <Notation>return</Notation> делает две вещи одновременно: завершает
+            текущий вызов и передаёт вычисленное число туда, откуда функция была
+            вызвана. В строке <Notation>return 2 * F(n - 1) + 1</Notation>{" "}
+            выражение <Notation kind="formula">F(n - 1)</Notation> — это не
+            текст и не номер, а конкретное число, которое вернул вложенный
+            вызов.
           </Typography.Text>
         </>
-      ),
-      diagram: (
-        <Diagram
-          src="/diagrams/recursion-call-return-trace.svg"
-          alt="Схема вычисления F(5) по формуле F(n) = 2 · F(n-1) + 1: слева — спуск до базового случая F(1) = 1, справа — обратный подъём со значениями F(2)=3, F(3)=7, F(4)=15, F(5)=31."
-          caption="Спуск и возврат при вычислении F(5)"
-          purpose="Показать, что рекурсия сначала спускается к базовому случаю, ничего не считая, и только потом считает на обратном пути"
-        />
       ),
       mistake: (
         <Mistake
           claim={
             <>
-              <code>F(n - 1)</code> и <code>F(n) - 1</code> — примерно одно и то
+              <Notation kind="formula">F(n - 1)</Notation> и{" "}
+              <Notation kind="formula">F(n) - 1</Notation> — примерно одно и то
               же, в обоих случаях просто «минус один».
             </>
           }
           explanation={
             <>
-              Это разные выражения. <code>F(n - 1)</code> — значение функции для
-              аргумента <code>n − 1</code> (нужно снова вызывать <code>F</code>
-              ). <code>F(n) - 1</code> — значение <code>F(n)</code>, из которого
-              потом вычли единицу. Перепутав их, можно получить синтаксически
-              похожую, но математически совсем другую формулу.
+              Это разные выражения. <Notation kind="formula">F(n - 1)</Notation>{" "}
+              — значение функции для аргумента{" "}
+              <Notation kind="formula">n − 1</Notation> (нужно снова вызывать{" "}
+              <Notation kind="formula">F</Notation>
+              ). <Notation kind="formula">F(n) - 1</Notation> — значение{" "}
+              <Notation kind="formula">F(n)</Notation>, из которого потом вычли
+              единицу. Перепутав их, можно получить синтаксически похожую, но
+              математически совсем другую формулу.
             </>
           }
         />
@@ -208,10 +275,10 @@ export const rekursiyaLesson = defineLesson({
           <Typography.Text>
             У рекурсивной записи есть практическая цена: каждый незавершённый
             вызов остаётся в стеке вызовов, ожидая результата вложенного. Для{" "}
-            <code>F(2024)</code> это значит две тысячи с лишним вложенных
-            вызовов одновременно — на Python это упирается в ограничение глубины
-            рекурсии и завершается ошибкой ещё до того, как будет достигнут
-            базовый случай:
+            <Notation kind="formula">F(2024)</Notation> это значит две тысячи с
+            лишним вложенных вызовов одновременно — на Python это упирается в
+            ограничение глубины рекурсии и завершается ошибкой ещё до того, как
+            будет достигнут базовый случай:
           </Typography.Text>
           <CodeBlock
             code={`def F(n):\n    if n == 1:\n        return 1\n    return n * F(n - 1)\n\nprint(F(2024))  # RecursionError: превышена глубина рекурсии`}
@@ -224,7 +291,7 @@ export const rekursiyaLesson = defineLesson({
             одну переменную, ничего не откладывая в стек:
           </Typography.Text>
           <CodeBlock
-            code={`f = 1\n\nfor n in range(2, 2025):\n    f = n * f\n\nprint(f)`}
+            code={`f = 1  # Начинаем с известного F(1)\n\nfor n in range(2, 2025):\n    f = n * f  # Новое значение заменяет предыдущее\n\nprint(f)`}
             label="Тот же результат циклом"
             language="python"
           />
@@ -232,9 +299,9 @@ export const rekursiyaLesson = defineLesson({
             Общий шаблон для функции с одним предыдущим значением:
           </Typography.Text>
           <CodeBlock
-            code={`f = начальное_значение\n\nfor n in range(первое_n, последнее_n + 1):\n    f = формула_через_f\n\nprint(f)`}
+            code={`f = base_value\n\nfor n in range(first_n, target + 1):\n    f = ...  # Формула через предыдущее значение f\n\nprint(f)`}
             label="Универсальный шаблон: одно предыдущее значение"
-            language="text"
+            language="python"
           />
         </>
       ),
@@ -242,20 +309,59 @@ export const rekursiyaLesson = defineLesson({
         <Mistake
           claim={
             <>
-              В <code>range(первое_n, последнее_n + 1)</code> неважно, какую
-              именно верхнюю границу писать — Python сам разберётся.
+              В <Notation>range(первое_n, последнее_n + 1)</Notation> неважно,
+              какую именно верхнюю границу писать — Python сам разберётся.
             </>
           }
           explanation={
             <>
-              <code>range(a, b)</code> не включает <code>b</code>. Чтобы дойти
-              до значения <code>F(target)</code> включительно, верхнюю границу
-              нужно писать как <code>target + 1</code> — иначе последний нужный
-              шаг цикла просто не выполнится.
+              <Notation>range(a, b)</Notation> не включает{" "}
+              <Notation kind="formula">b</Notation>. Чтобы дойти до значения{" "}
+              <Notation kind="formula">F(target)</Notation> включительно,
+              верхнюю границу нужно писать как{" "}
+              <Notation kind="formula">target + 1</Notation> — иначе последний
+              нужный шаг цикла просто не выполнится.
             </>
           }
         />
       ),
+      checkpoint: [
+        {
+          id: "checkpoint-loop-choice",
+          prompt: (
+            <>
+              Для вычисления <Notation kind="formula">F(2024)</Notation> каждое
+              следующее значение зависит только от предыдущего. Что надёжнее в
+              Python: прямая рекурсия или цикл с одной переменной?
+            </>
+          ),
+          reveal: (
+            <>
+              Цикл с одной переменной: ему не нужен глубокий стек вызовов, и он
+              хранит ровно то значение, которое понадобится на следующем шаге.
+            </>
+          ),
+        },
+        {
+          id: "checkpoint-loop-range",
+          prompt: (
+            <>
+              Если переменная <Notation>f</Notation> уже хранит{" "}
+              <Notation kind="formula">F(1)</Notation>, с какого значения{" "}
+              <Notation kind="formula">n</Notation> должен начинаться цикл для
+              вычисления <Notation kind="formula">F(target)</Notation>?
+            </>
+          ),
+          reveal: (
+            <>
+              С <Notation kind="formula">n = 2</Notation>: первое значение уже
+              известно. Чтобы обработать <Notation>target</Notation>{" "}
+              включительно, граница Python-цикла будет{" "}
+              <Notation>range(2, target + 1)</Notation>.
+            </>
+          ),
+        },
+      ],
     },
     {
       id: "several-previous-values",
@@ -263,10 +369,13 @@ export const rekursiyaLesson = defineLesson({
       explanation: (
         <Typography.Text>
           Иногда следующее значение зависит не от одного, а от двух предыдущих:{" "}
-          <code>F(n) = F(n − 1) + F(n − 2)</code>. Тогда одного базового
-          значения недостаточно — уже для <code>F(3)</code> нужны сразу{" "}
-          <code>F(2)</code> и <code>F(1)</code>, поэтому определение обязано
-          задать оба сразу: <code>F(1) = 2</code>, <code>F(2) = 3</code>.
+          <Notation kind="formula">F(n) = F(n − 1) + F(n − 2)</Notation>. Тогда
+          одного базового значения недостаточно — уже для{" "}
+          <Notation kind="formula">F(3)</Notation> нужны сразу{" "}
+          <Notation kind="formula">F(2)</Notation> и{" "}
+          <Notation kind="formula">F(1)</Notation>, поэтому определение обязано
+          задать оба сразу: <Notation kind="formula">F(1) = 2</Notation>,{" "}
+          <Notation kind="formula">F(2) = 3</Notation>.
         </Typography.Text>
       ),
       workedExample: (
@@ -281,16 +390,24 @@ export const rekursiyaLesson = defineLesson({
           }
           steps={[
             <>
-              <code>F(3) = F(2) + F(1) = 3 + 2 = 5</code>.
+              <Notation kind="formula">F(3) = F(2) + F(1) = 3 + 2 = 5</Notation>
+              .
             </>,
             <>
-              <code>F(4) = F(3) + F(2) = 5 + 3 = 8</code>.
+              <Notation kind="formula">F(4) = F(3) + F(2) = 5 + 3 = 8</Notation>
+              .
             </>,
             <>
-              <code>F(5) = F(4) + F(3) = 8 + 5 = 13</code>.
+              <Notation kind="formula">
+                F(5) = F(4) + F(3) = 8 + 5 = 13
+              </Notation>
+              .
             </>,
             <>
-              <code>F(6) = F(5) + F(4) = 13 + 8 = 21</code>.
+              <Notation kind="formula">
+                F(6) = F(5) + F(4) = 13 + 8 = 21
+              </Notation>
+              .
             </>,
           ]}
         />
@@ -299,18 +416,21 @@ export const rekursiyaLesson = defineLesson({
         <Mistake
           claim={
             <>
-              В формуле <code>F(n) = 3·F(n − 1) − 2·F(n − 2)</code> коэффициенты
-              можно переставить местами — какая разница, у какого слагаемого
-              какой множитель.
+              В формуле{" "}
+              <Notation kind="formula">F(n) = 3·F(n − 1) − 2·F(n − 2)</Notation>{" "}
+              коэффициенты можно переставить местами — какая разница, у какого
+              слагаемого какой множитель.
             </>
           }
           explanation={
             <>
-              Разница есть: коэффициент <code>3</code> обязательно стоит при
-              ближайшем предыдущем значении <code>F(n − 1)</code>, а{" "}
-              <code>−2</code> — при значении через одно, <code>F(n − 2)</code>.
-              Перестановка коэффициентов даёт другую последовательность чисел,
-              даже если формула выглядит похоже.
+              Разница есть: коэффициент <Notation kind="formula">3</Notation>{" "}
+              обязательно стоит при ближайшем предыдущем значении{" "}
+              <Notation kind="formula">F(n − 1)</Notation>, а{" "}
+              <Notation kind="formula">−2</Notation> — при значении через одно,{" "}
+              <Notation kind="formula">F(n − 2)</Notation>. Перестановка
+              коэффициентов даёт другую последовательность чисел, даже если
+              формула выглядит похоже.
             </>
           }
         />
@@ -331,16 +451,18 @@ export const rekursiyaLesson = defineLesson({
             language="python"
           />
           <Typography.Text>
-            Вызов <code>F(6)</code> запускает <code>F(5)</code> и{" "}
-            <code>F(4)</code>. Но <code>F(5)</code>, в свою очередь, снова
-            запускает <code>F(4)</code> — то же самое значение считается заново,
-            хотя уже вычислялось. При больших <code>n</code> количество
-            повторных вычислений растёт очень быстро. Решение — не
-            пересчитывать, а один раз сохранить каждое найденное значение,
-            например списком:
+            Вызов <Notation kind="formula">F(6)</Notation> запускает{" "}
+            <Notation kind="formula">F(5)</Notation> и{" "}
+            <Notation kind="formula">F(4)</Notation>. Но{" "}
+            <Notation kind="formula">F(5)</Notation>, в свою очередь, снова
+            запускает <Notation kind="formula">F(4)</Notation> — то же самое
+            значение считается заново, хотя уже вычислялось. При больших{" "}
+            <Notation kind="formula">n</Notation> количество повторных
+            вычислений растёт очень быстро. Решение — не пересчитывать, а один
+            раз сохранить каждое найденное значение, например списком:
           </Typography.Text>
           <CodeBlock
-            code={`target = 6\nF = [0] * (target + 1)\n\nF[1] = 2\nF[2] = 3\n\nfor n in range(3, target + 1):\n    F[n] = F[n - 1] + F[n - 2]\n\nprint(F[target])`}
+            code={`target = 6\nF = [0] * (target + 1)\n\n# Два базовых значения нужны до первого шага\nF[1] = 2\nF[2] = 3\n\nfor n in range(3, target + 1):\n    F[n] = F[n - 1] + F[n - 2]  # Сохраняем один раз\n\nprint(F[target])`}
             label="Список вместо повторного пересчёта"
             language="python"
           />
@@ -349,16 +471,16 @@ export const rekursiyaLesson = defineLesson({
             только два последних:
           </Typography.Text>
           <CodeBlock
-            code={`f_prev2, f_prev1 = 2, 3\n\nfor n in range(3, 7):\n    f_prev2, f_prev1 = f_prev1, f_prev1 + f_prev2\n\nprint(f_prev1)`}
+            code={`f_prev2, f_prev1 = 2, 3\n\nfor n in range(3, 7):\n    # Правая часть использует оба старых значения до присваивания\n    f_prev2, f_prev1 = f_prev1, f_prev1 + f_prev2\n\nprint(f_prev1)`}
             label="Две переменные вместо списка"
             language="python"
           />
           <Typography.Text>
             Тот же эффект — не считать одно и то же значение дважды — даёт{" "}
-            <code>@cache</code>, если оставить саму функцию рекурсивной: каждое
-            значение вычисляется только один раз, а при повторном обращении
-            берётся из памяти. Для задач такого масштаба, впрочем, обычно проще
-            и надёжнее цикл.
+            <Notation>@cache</Notation>, если оставить саму функцию рекурсивной:
+            каждое значение вычисляется только один раз, а при повторном
+            обращении берётся из памяти. Для задач такого масштаба, впрочем,
+            обычно проще и надёжнее цикл.
           </Typography.Text>
         </>
       ),
@@ -367,26 +489,65 @@ export const rekursiyaLesson = defineLesson({
           claim={
             <>
               Чтобы сдвинуть два хранимых значения на шаг вперёд, можно просто
-              присвоить <code>f_prev2 = f_prev1</code>, а потом{" "}
-              <code>f_prev1 = f_prev1 + f_prev2</code> — порядок не важен.
+              присвоить <Notation>f_prev2 = f_prev1</Notation>, а потом{" "}
+              <Notation>f_prev1 = f_prev1 + f_prev2</Notation> — порядок не
+              важен.
             </>
           }
           explanation={
             <>
-              Порядок важен: после первой строки <code>f_prev2</code> уже стало
-              равно старому <code>f_prev1</code>, поэтому вторая строка
-              складывает <code>f_prev1</code> само с собой, а не с настоящим
-              предыдущим значением. Сначала нужно вычислить новое значение в
-              отдельную переменную и только потом обновить обе хранимых:{" "}
-              <code>
+              Порядок важен: после первой строки <Notation>f_prev2</Notation>{" "}
+              уже стало равно старому <Notation>f_prev1</Notation>, поэтому
+              вторая строка складывает <Notation>f_prev1</Notation> само с
+              собой, а не с настоящим предыдущим значением. Сначала нужно
+              вычислить новое значение в отдельную переменную и только потом
+              обновить обе хранимых:{" "}
+              <Notation>
                 f_current = f_prev1 + f_prev2; f_prev2 = f_prev1; f_prev1 =
                 f_current
-              </code>
+              </Notation>
               .
             </>
           }
         />
       ),
+      checkpoint: [
+        {
+          id: "checkpoint-two-values",
+          prompt: (
+            <>
+              Функция задана как <Notation kind="formula">F(1) = 1</Notation>,{" "}
+              <Notation kind="formula">F(2) = 1</Notation>,{" "}
+              <Notation kind="formula">F(n) = F(n − 1) + F(n − 2)</Notation>.
+              Что станет главной проблемой прямой рекурсии при{" "}
+              <Notation kind="formula">F(40)</Notation>?
+            </>
+          ),
+          reveal: (
+            <>
+              Не глубина, а огромное количество повторных вычислений: одни и те
+              же значения вызываются заново из разных ветвей. Здесь лучше цикл,
+              список, пара переменных или кеширование.
+            </>
+          ),
+        },
+        {
+          id: "checkpoint-two-values-update",
+          prompt: (
+            <>
+              Почему два последних значения нельзя бездумно обновлять двумя
+              последовательными присваиваниями?
+            </>
+          ),
+          reveal: (
+            <>
+              Первое присваивание перезапишет одно из старых значений, и второе
+              уже сложит не ту пару. Нужно сначала сохранить новое значение или
+              использовать параллельное присваивание Python.
+            </>
+          ),
+        },
+      ],
     },
     {
       id: "large-arguments-algebraic-shortcut",
@@ -394,54 +555,75 @@ export const rekursiyaLesson = defineLesson({
       explanation: (
         <>
           <Typography.Text>
-            Если аргумент огромный — <code>2024</code>, <code>100 000</code> — а
-            нужен не сам <code>F(n)</code>, а отношение или разность двух
-            соседних значений, считать всю последовательность необязательно.
-            Обычно достаточно раскрыть только несколько последних шагов и что-то
-            сократить.
+            Если аргумент огромный — <Notation kind="formula">2024</Notation>,{" "}
+            <Notation kind="formula">100 000</Notation> — а нужен не сам{" "}
+            <Notation kind="formula">F(n)</Notation>, а отношение или разность
+            двух соседних значений, считать всю последовательность
+            необязательно. Обычно достаточно раскрыть только несколько последних
+            шагов и что-то сократить.
           </Typography.Text>
           <Callout tone="idea" title="Когда применим этот приём">
             Помогает, если в условии — огромный аргумент, а требуется дробь или
-            разность соседних значений функции: <code>F(2024)/F(2022)</code>,{" "}
-            <code>F(2024) − 2024·F(2023)</code> и подобные. Если же нужно просто
-            число вроде <code>F(20)</code> без сокращения, быстрее и надёжнее
-            посчитать циклом от начала.
+            разность соседних значений функции:{" "}
+            <Notation kind="formula">F(2024)/F(2022)</Notation>,{" "}
+            <Notation kind="formula">F(2024) − 2024·F(2023)</Notation> и
+            подобные. Если же нужно просто число вроде{" "}
+            <Notation kind="formula">F(20)</Notation> без сокращения, быстрее и
+            надёжнее посчитать циклом от начала.
           </Callout>
         </>
       ),
       workedExample: (
-        <>
-          <WorkedExample
-            title="Найдите F(100) / F(98), если F(1) = 2 и F(n) = n·F(n − 1)"
-            prompt={
-              <>
-                Выразим <code>F(100)</code> и <code>F(99)</code> через{" "}
-                <code>F(98)</code> — до него раскрывать не нужно.
-              </>
-            }
-            steps={[
-              <>
-                <code>F(99) = 99·F(98)</code>.
-              </>,
-              <>
-                <code>F(100) = 100·F(99) = 100·99·F(98)</code>.
-              </>,
-              <>
-                <code>
-                  F(100) / F(98) = 100·99·F(98) / F(98) = 100·99 = 9900
-                </code>
-                .
-              </>,
-            ]}
-          />
-          <Diagram
-            src="/diagrams/recurrence-ratio-derivation.svg"
-            alt="Схема сокращения F(100) / F(98): F(100) раскрывается как 100 · 99 · F(98), после чего F(98) в числителе и знаменателе сокращается и получается 9900."
-            caption="Раскрытие рекуррентной формулы до общего множителя"
-            purpose="Показать, почему для отношения соседних значений не требуется вычислять всю последовательность"
-          />
-        </>
+        <WorkedExample
+          title="Найдите F(100) / F(98), если F(1) = 2 и F(n) = n·F(n − 1)"
+          prompt={
+            <>
+              Выразим <Notation kind="formula">F(100)</Notation> и{" "}
+              <Notation kind="formula">F(99)</Notation> через{" "}
+              <Notation kind="formula">F(98)</Notation> — до него раскрывать не
+              нужно.
+            </>
+          }
+          steps={[
+            <>
+              <Notation kind="formula">F(99) = 99·F(98)</Notation>.
+            </>,
+            <>
+              <Notation kind="formula">
+                F(100) = 100·F(99) = 100·99·F(98)
+              </Notation>
+              .
+            </>,
+            <>
+              <Notation kind="formula">
+                F(100) / F(98) = 100·99·F(98) / F(98) = 100·99 = 9900
+              </Notation>
+              .
+            </>,
+          ]}
+        />
       ),
+      checkpoint: [
+        {
+          id: "checkpoint-large-ratio",
+          prompt: (
+            <>
+              Если <Notation kind="formula">F(n) = n·F(n − 1)</Notation>, нужно
+              ли вычислять всю последовательность от{" "}
+              <Notation kind="formula">F(1)</Notation>, чтобы найти{" "}
+              <Notation kind="formula">F(2024) / F(2022)</Notation>?
+            </>
+          ),
+          reveal: (
+            <>
+              Нет. Достаточно раскрыть два последних шага:{" "}
+              <Notation kind="formula">F(2024) = 2024·2023·F(2022)</Notation>,
+              после чего <Notation kind="formula">F(2022)</Notation>{" "}
+              сокращается.
+            </>
+          ),
+        },
+      ],
     },
     {
       id: "general-method",
@@ -458,7 +640,8 @@ export const rekursiyaLesson = defineLesson({
                 label: "Определите область n.",
                 detail: (
                   <>
-                    <code>n</code> натуральное, <code>n ≥ 0</code>, или задано
+                    <Notation kind="formula">n</Notation> натуральное,{" "}
+                    <Notation kind="formula">n ≥ 0</Notation>, или задано
                     отдельно — от этого зависит, с какого числа начинать.
                   </>
                 ),
@@ -472,8 +655,8 @@ export const rekursiyaLesson = defineLesson({
                 detail: (
                   <>
                     Одно предыдущее значение, два предыдущих, разные формулы для
-                    чётных/нечётных <code>n</code> или две связанные функции
-                    сразу.
+                    чётных/нечётных <Notation kind="formula">n</Notation> или
+                    две связанные функции сразу.
                   </>
                 ),
               },
@@ -481,8 +664,10 @@ export const rekursiyaLesson = defineLesson({
                 label: "Проверьте, что аргумент приближается к базе.",
                 detail: (
                   <>
-                    <code>F(n) → F(n − 1) → F(n − 2) → …</code> должно дойти до
-                    уже известного значения.
+                    <Notation kind="formula">
+                      F(n) → F(n − 1) → F(n − 2) → …
+                    </Notation>{" "}
+                    должно дойти до уже известного значения.
                   </>
                 ),
               },
@@ -495,56 +680,16 @@ export const rekursiyaLesson = defineLesson({
                 label: "Считайте снизу вверх и проверьте границы цикла.",
                 detail: (
                   <>
-                    <code>range(a, b)</code> не включает <code>b</code> — если
-                    нужно значение <code>F(target)</code>, верхняя граница
-                    должна быть <code>target + 1</code>.
+                    <Notation>range(a, b)</Notation> не включает{" "}
+                    <Notation kind="formula">b</Notation> — если нужно значение{" "}
+                    <Notation kind="formula">F(target)</Notation>, верхняя
+                    граница должна быть{" "}
+                    <Notation kind="formula">target + 1</Notation>.
                   </>
                 ),
               },
             ]}
           />
-        </>
-      ),
-    },
-  ],
-  checkpoint: [
-    {
-      id: "checkpoint-single-value",
-      prompt: (
-        <>
-          Дано <code>F(1) = 5</code> и <code>F(n) = F(n − 1) + 3</code> при{" "}
-          <code>n &gt; 1</code>. Без вычислений: можно ли сразу подставить{" "}
-          <code>n = 1</code> в формулу <code>F(n) = F(n − 1) + 3</code>, чтобы
-          найти ещё одно значение?
-        </>
-      ),
-      reveal: (
-        <>
-          Нет: формула работает только при <code>n &gt; 1</code>, а{" "}
-          <code>F(1)</code> — это отдельно заданное базовое значение.
-          Подстановка <code>n = 1</code> потребовала бы <code>F(0)</code>,
-          которое в условии не определено.
-        </>
-      ),
-    },
-    {
-      id: "checkpoint-two-values",
-      prompt: (
-        <>
-          Функция задана как <code>F(1) = 1</code>, <code>F(2) = 1</code>,{" "}
-          <code>F(n) = F(n − 1) + F(n − 2)</code>. Если реализовать её прямой
-          рекурсией на Python без <code>@cache</code>, что произойдёт при вызове{" "}
-          <code>F(40)</code> — ошибка глубины рекурсии, огромное количество
-          повторных вычислений, или и то, и другое?
-        </>
-      ),
-      reveal: (
-        <>
-          Ошибки глубины рекурсии не будет — глубина вложенных вызовов не
-          превышает 40. А вот повторных вычислений будет огромное количество:
-          например, <code>F(38)</code> вызывается много раз из разных ветвей.
-          Это случай, где цикл или список надёжнее не из-за глубины, а из-за
-          объёма повторной работы.
         </>
       ),
     },

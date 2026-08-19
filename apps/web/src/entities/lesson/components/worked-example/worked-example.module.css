@@ -39,6 +39,11 @@
   align-items: start;
 }
 
+.step > [data-variant] {
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
 .stepBadge {
   position: relative;
   z-index: 1;
@@ -51,15 +56,4 @@
   font-family: var(--font-data);
   font-size: var(--text-2xs);
   font-weight: 600;
-}
-
-/* Non-prose fragments (code, formulas, isolated symbols) get a shared
-   data-register treatment so they read as evidence, not decoration. */
-.root :global(code) {
-  padding-inline: 0.05em;
-  color: var(--color-text);
-  background: transparent;
-  font-family: var(--font-data);
-  font-size: var(--text-inline-code);
-  box-decoration-break: clone;
 }

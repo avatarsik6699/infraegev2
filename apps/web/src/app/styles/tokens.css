@@ -29,8 +29,20 @@
   --color-accent-soft: var(--theme-interactive-muted);
   --color-focus: var(--theme-ring);
   --color-success: var(--theme-success);
+  --color-info: var(--theme-info);
+  --color-info-rule: var(--theme-info-rule);
   --color-warning: var(--theme-warning);
   --color-danger: var(--theme-danger);
+  --color-danger-soft: color-mix(
+    in oklch,
+    var(--color-danger) 8%,
+    var(--color-surface)
+  );
+  --color-danger-rule: color-mix(
+    in oklch,
+    var(--color-danger) 42%,
+    var(--color-surface)
+  );
   --color-code: var(--theme-code);
   --color-code-top: var(--theme-code-top);
   --color-code-text: var(--theme-code-ink);

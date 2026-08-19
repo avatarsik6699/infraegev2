@@ -78,6 +78,20 @@ See `docs/SPEC.md` §3 for the full contract.
 - [x] `F28` Add fixture/Page Object E2E coverage for `/lab/design-system` across desktop, mobile, axe and JavaScript-disabled linear content, including screenshots, overflow, metadata and clean-console evidence — _Depends on:_ F27
 - [x] `F29` Distill the implemented web visual system toward a quieter minimal baseline: reduce the effective typography scale, weights and text-color roles; remove non-essential component decoration and nested-surface noise; preserve accessibility, responsive behavior, public component APIs and theme-level redesign flexibility; update `/lab/design-system` proofs and the binding frontend contract — _Depends on:_ F28
 - [x] `F30` Apply a second dense-minimal pass to every component family demonstrated on `/lab/design-system`: remove non-essential divider lines, let spacing and composition carry grouping, tighten component-internal rhythm consistently, and retain Kontur-aligned semantics, target sizes, responsive behavior and accessible states — _Depends on:_ F29
+- [x] `F31` Replace the blue inline `Notation` treatment for authored code and formulas with one restrained neutral ink/gray treatment whose foreground and background preserve contrast without creating a separate chromatic accent — _Depends on:_ F30
+- [x] `F32` Distill the real recursion lesson typography and vertical rhythm: reduce visible font-family/size/weight/color variation, keep a clear but compact heading hierarchy, and apply one small spacing scale consistently across the title, section headings, prose and semantic blocks — _Depends on:_ F31
+- [x] `F33` Restore a linear central reading flow on `/ege/16-rekursiya`: move mistakes and other explanatory semantic blocks out of the right marginal column, flatten their backgrounds/emphasis where possible, and keep the right rail free of blocks that disrupt the content rhythm — _Depends on:_ F32
+- [x] `F34` Refine code-related explanations and procedures without changing the teaching sequence: place concise code-local explanations as comments inside code blocks where that improves comprehension, retain surrounding prose where it carries conceptual meaning, prevent adjacent text from visually sticking together, and number the steps in «Общий алгоритм решения» — _Depends on:_ F33
+- [x] `F35` Simplify lesson-level navigation and status: remove the result-side «Вернуться к теории» and «Освоение темы» blocks, remove progress from the left rail, place compact progress beside the title metadata, and restore the recursion lesson's useful badges/meta information in the header — _Depends on:_ F33
+- [x] `F36` Synchronize the binding SPEC/FRONTEND contracts and focused unit/E2E evidence for the manual-review refinements; verify desktop/mobile/no-JS, rail overflow, clean console, LSP, Impeccable detector and the affected Critical Gate without publishing the lesson — _Depends on:_ F31, F32, F33, F34, F35
+- [x] `F37` Restore the desktop three-column lesson shell with a deliberately empty right rail, keep mistakes and other authored content in the central reading column, remove the lesson-progress block entirely, and remove the duplicated «После урока вы сможете» introduction — _Depends on:_ F36
+- [x] `F38` Refine mistake and code presentation: add a restrained warning icon and thin yellow right rule to mistakes, remove «Пример» from code-block headers, render the one-previous-value template as highlighted Python, and simplify the copy control hover treatment — _Depends on:_ F37
+- [x] `F39` Rebalance formative checks and reading components: add checkpoints after meaningful theory groups, keep the transition into practice logical, fix disclosure chevron containment, and unify authored list typography and spacing for compact readability — _Depends on:_ F38
+- [x] `F40` Unify page and nested scrollbars with the same thin neutral square-ended treatment across the document and scrollable navigation regions — _Depends on:_ F37
+- [x] `F41` Synchronize focused tests and binding frontend documentation for this review pass; verify desktop/mobile/no-JS, three-column layout, empty right rail, clean console, LSP, Impeccable detector and the affected Critical Gate without publishing the lesson — _Depends on:_ F37, F38, F39, F40
+- [x] `F42` Give `Checkpoint` a distinct but restrained informational treatment: place one question icon beside «Проверьте себя», add a thin left rule in soft blue tones, preserve the flat central reading flow, and verify the component across desktop/mobile, console, LSP, focused tests and the affected Critical Gate — _Depends on:_ F39
+- [x] `F43` Compact the lesson shell gutters with one shared responsive value for the article and table of contents, keeping their content edges aligned across desktop, intermediate and mobile layouts; verify spacing, overflow, console, Impeccable detector and the affected Critical Gate — _Depends on:_ F37
+- [x] `F44` Harmonize `Mistake` and `Checkpoint` around the same compact semantic-block structure: align each icon with its colored heading label, match the left-rule weight while preserving warning/information colors, and add multiple questions to selected recursion checkpoints so stacked disclosure rhythm can be reviewed; verify focused tests, desktop/mobile interaction, console, LSP, Impeccable detector and the affected Critical Gate — _Depends on:_ F42
 
 ### Infra
 
@@ -176,7 +190,14 @@ loader data, exclusion from prerender/public navigation and unchanged `/lab/less
 
 ## Architect Review Notes
 
-- [x] No architect review issues recorded
+- [x] Recompose `/ege/$slug` around the approved `/lab/lesson` editorial shell: brand/context chrome, persistent desktop rail, wide reading column plus marginalia, and responsive in-flow adaptation without changing lesson content order or state contracts.
+- [x] Make inline code and formulas use a reusable blue `Notation` treatment; redesign `Mistake` and `Checkpoint` for clearer semantic emphasis without strike-through, the redundant divider, duplicate heading or decorative question icon.
+- [x] Simplify practice tabs and task panels while preserving Base UI behavior, difficulty growth, SSR/no-JS forms, answer checking and accessible field semantics; remove redundant visible labels/copy and make Hint an obvious disclosure.
+- [x] Replace the plain result and verbose topic-progress presentation with compact mastery metadata, learning outcomes and current-lesson theory links, without inventing related lesson routes or changing the lesson definition contract.
+- [x] Simplify `LessonOutline` to semantic text navigation without measured SVG connectors, add a visible reading-position indicator, and adopt a restrained system-wide scrollbar with rail overflow only when needed.
+- [x] Remove recursion diagrams from the real lesson and defer their authored assets to a later change while retaining the reusable `Diagram` contract and a working design-system catalog example.
+- [x] Synchronize SPEC/FRONTEND and complete focused unit, desktop/mobile/no-JS, keyboard, axe, console, LSP, Impeccable detector and affected Critical Gate evidence without publishing the lesson.
+- [x] Fix the web container's lesson-task root so Docker SSR reads the mounted `/content/tasks` files instead of the host-only `/repo/content/tasks` fallback; verify the real route through Nginx on port `8080` after container recreation.
 
 ---
 
@@ -193,6 +214,9 @@ loader data, exclusion from prerender/public navigation and unchanged `/lab/less
   API changed, only the replaceable theme and local component CSS contract.
 - Base UI imports remain confined to local `shared/components` wrappers; lint and architecture
   proofs reject any restored `@mantine/*` import and keep literal theme values out of component CSS.
+- The real recursion lesson intentionally carries no diagrams in this review pass. The generic
+  `Diagram` component stays in the catalog, while recursion-specific assets are deferred to the
+  later lesson-polish change instead of remaining as unused production files.
 - The pinned Base UI 1.7.0 `Field.Control` adds a benign empty `style` object only on the client;
   the local `Input` wrapper contains `suppressHydrationWarning` for that single vendor-generated
   attribute difference while value, validation and accessible field semantics remain identical.

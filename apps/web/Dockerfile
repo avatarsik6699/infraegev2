@@ -2,6 +2,7 @@
 
 # apps/web keeps a Node runtime for TanStack Start/Nitro routing and future server boundaries.
 FROM node:22.23.2-slim@sha256:d649c27dae7ba0137b3cef5dd75baa422c08dc3d9e3fc0c23dfb172dc3cc6436 AS development
+ENV CONTENT_DIR=/content
 RUN corepack enable
 WORKDIR /repo
 RUN chown node:node /repo
@@ -17,6 +18,7 @@ COPY --chown=node:node content/tasks /content/tasks
 CMD ["pnpm", "--filter", "web", "exec", "vite", "dev", "--host", "0.0.0.0", "--port", "3000", "--strictPort"]
 
 FROM node:22.23.2-slim@sha256:d649c27dae7ba0137b3cef5dd75baa422c08dc3d9e3fc0c23dfb172dc3cc6436 AS builder
+ENV CONTENT_DIR=/content
 RUN corepack enable
 WORKDIR /repo
 ARG VITE_UMAMI_WEBSITE_ID
@@ -29,6 +31,7 @@ COPY content/tasks /content/tasks
 RUN pnpm --filter web build
 
 FROM node:22.23.2-slim@sha256:d649c27dae7ba0137b3cef5dd75baa422c08dc3d9e3fc0c23dfb172dc3cc6436
+ENV CONTENT_DIR=/content
 WORKDIR /repo
 RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx /root/.npm
 COPY --from=builder --chown=node:node /repo/apps/web/.output ./apps/web/.output

@@ -26,7 +26,10 @@ export const Accordion: React.FC<AccordionTypes.Props> = ({
       >
         {items.map((item) => (
           <div className={styles.item} key={item.id}>
-            <div className={styles.staticHeader}>
+            <div
+              className={styles.staticHeader}
+              data-has-leading={item.icon ? "true" : undefined}
+            >
               {item.icon ? (
                 <span className={styles.leading} aria-hidden="true">
                   {item.icon}
@@ -57,7 +60,10 @@ export const Accordion: React.FC<AccordionTypes.Props> = ({
           value={item.id}
         >
           <BaseAccordion.Header className={styles.header}>
-            <BaseAccordion.Trigger className={styles.trigger}>
+            <BaseAccordion.Trigger
+              className={styles.trigger}
+              data-has-leading={item.icon ? "true" : undefined}
+            >
               {item.icon ? (
                 <span className={styles.leading} aria-hidden="true">
                   {item.icon}

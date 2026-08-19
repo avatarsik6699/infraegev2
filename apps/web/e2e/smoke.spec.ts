@@ -25,7 +25,7 @@ test("the unlisted lesson lab works across viewports and without JavaScript", as
   await lessonLabPage.expectBoundedMarginalia();
   await lessonLabPage.expectSectionRhythm();
   await lessonLabPage.expectWhitespaceGrouping();
-  await lessonLabPage.expectDesktopOutlineGeometry();
+  await lessonLabPage.expectSimpleDesktopOutline();
   await lessonLabPage.expectOutlineTracksReadingPosition();
   await browserSession.captureViewport("lesson-lab-desktop.png");
 
@@ -91,12 +91,17 @@ test("the recursion lesson stays review-only and readable across runtimes", asyn
   await browserSession.useDesktopViewport();
   await topicLessonPage.open();
   await topicLessonPage.expectReviewLesson();
+  await topicLessonPage.expectDesktopComposition();
   await topicLessonPage.expectNoHorizontalOverflow();
+  await browserSession.captureViewport("recursion-lesson-desktop.png");
+  await topicLessonPage.expectReadingPosition();
 
   await browserSession.useNarrowViewport();
   await topicLessonPage.open();
   await topicLessonPage.expectReviewLesson();
+  await topicLessonPage.expectMobileComposition();
   await topicLessonPage.expectNoHorizontalOverflow();
+  await browserSession.captureViewport("recursion-lesson-mobile.png");
   browserSession.expectCleanConsole();
 
   await noJavaScriptTopicLessonPage.expectReadableWithoutJavaScript();

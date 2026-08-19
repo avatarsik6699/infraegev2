@@ -1,4 +1,5 @@
 import type { ComponentProps } from "react";
+import { ChevronDown } from "lucide-react";
 import type { LessonTypes } from "~/entities/lesson";
 import { Button } from "~/shared/components/button";
 import { Field } from "~/shared/components/field";
@@ -27,7 +28,8 @@ export const PracticeTaskAnswer: React.FC<PracticeTaskAnswerProps> = (
         id={props.inputId}
         name="answer"
         label="Ответ"
-        description="Без единиц измерения."
+        labelVisibility="sr-only"
+        placeholder="Без единиц измерения"
         error={answerError(props.state)}
         autoComplete="off"
         disabled={props.alreadySolved || props.checking}
@@ -45,7 +47,10 @@ export const PracticeTaskAnswer: React.FC<PracticeTaskAnswerProps> = (
       </Button>
     </div>
     <details className={styles.hint}>
-      <summary>Подсказка</summary>
+      <summary>
+        <span>Подсказка</span>
+        <ChevronDown aria-hidden="true" size={16} strokeWidth={1.75} />
+      </summary>
       {props.task.hint}
     </details>
   </form>

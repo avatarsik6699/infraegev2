@@ -17,12 +17,10 @@ export const PracticeTaskTab: React.FC<PracticeTaskTabProps> = (props) => (
     ariaLabel={`${String(props.index + 1).padStart(2, "0")} · ${props.task.difficultyLabel}. Задача ${String(props.index + 1)} из ${String(props.total)}: ${props.task.title}${props.solved ? ", решена" : ""}`}
     tabProps={{
       "data-difficulty": props.index + 1,
+      "data-practice-task-tab": props.task.id,
       "data-solved": props.solved || undefined,
     }}
   >
-    <span className={styles.tabIndex} aria-hidden="true">
-      {String(props.index + 1).padStart(2, "0")}
-    </span>
     <span className={styles.difficultyGlyph} aria-hidden="true">
       <svg viewBox="0 0 34 20" focusable="false">
         {[0, 1, 2, 3, 4].map((level) => (

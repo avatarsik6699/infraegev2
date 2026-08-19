@@ -26,22 +26,13 @@
   align-items: center;
 }
 
-.language,
-.kind {
+.language {
   color: var(--color-code-text);
   font-family: var(--font-data);
   font-size: var(--text-2xs);
-  line-height: 1.2;
-  text-transform: uppercase;
-}
-
-.language {
   font-weight: 600;
+  line-height: 1.2;
   letter-spacing: 0.08em;
-}
-
-.kind {
-  opacity: 0.58;
 }
 
 .copyButton {
@@ -53,9 +44,11 @@
   color: var(--color-code-text);
 }
 
-.copyButton:hover {
-  border-color: color-mix(in srgb, var(--color-code-text) 18%, transparent);
-  background: color-mix(in srgb, var(--color-code-text) 8%, transparent);
+.copyButton.copyButton:hover:not(:disabled),
+.copyButton.copyButton:active:not(:disabled) {
+  border-color: transparent;
+  background: transparent;
+  color: color-mix(in srgb, var(--color-code-text) 72%, transparent);
 }
 
 .copyButton:focus-visible {

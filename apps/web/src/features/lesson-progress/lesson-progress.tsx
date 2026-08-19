@@ -1,4 +1,3 @@
-import { Badge } from "~/shared/components/badge";
 import { Progress } from "~/shared/components/progress";
 import { Typography } from "~/shared/components/typography";
 import type { LessonProgressTypes } from "./lesson-progress.types";
@@ -19,11 +18,11 @@ export const LessonProgress: React.FC<LessonProgressTypes.Props> = (props) => {
     <section className={styles.root} aria-labelledby="lesson-progress-heading">
       <div className={styles.headingRow}>
         <Typography.Title order={2} id="lesson-progress-heading">
-          Прогресс темы
+          Прогресс
         </Typography.Title>
-        <Badge tone="neutral" className={styles.count}>
+        <Typography.Text component="span" className={styles.count}>
           {`${String(props.solved)} / ${String(props.total)}`}
-        </Badge>
+        </Typography.Text>
       </div>
       <Progress
         className={styles.progress}
@@ -32,9 +31,6 @@ export const LessonProgress: React.FC<LessonProgressTypes.Props> = (props) => {
         label="Решённые задачи темы"
         valueText={`Решено ${String(props.solved)} из ${String(props.total)} задач`}
       />
-      <Typography.Text className={styles.summary}>
-        {`Решено ${String(props.solved)} из ${String(props.total)} задач`}
-      </Typography.Text>
       <Typography.Text className={styles.status} data-mastery-status>
         {status}
       </Typography.Text>

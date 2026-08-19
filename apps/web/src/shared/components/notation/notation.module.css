@@ -1,15 +1,10 @@
 .root {
-  padding-inline: 0.05em;
-  color: var(--notation-color, var(--color-accent-dark));
-  background: var(--notation-bg, transparent);
-  box-decoration-break: clone;
-}
-
-.root[data-kind="code"] {
+  padding: 0.08em 0.36em;
+  border-radius: 0.3rem;
+  background: var(--notation-bg, var(--color-surface-quiet));
+  color: var(--notation-color, var(--color-text));
   font-family: var(--font-data);
   font-size: var(--text-inline-code);
-}
-
-.root[data-kind="var"] {
   font-style: normal;
+  box-decoration-break: clone;
 }

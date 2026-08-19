@@ -16,6 +16,8 @@
   --theme-on-primary: oklch(0.985 0 0);
   --theme-ring: oklch(0.708 0 0);
   --theme-success: oklch(0.46 0.08 145);
+  --theme-info: oklch(0.5 0.11 245);
+  --theme-info-rule: oklch(0.82 0.055 245);
   --theme-warning: oklch(0.48 0.12 65);
   --theme-danger: oklch(0.5 0.18 25);
   --theme-code: oklch(0.205 0 0);

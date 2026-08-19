@@ -1,26 +1,30 @@
 .root {
   display: grid;
-  gap: 0.6rem;
-  margin: var(--space-2) 0;
-  padding-top: var(--space-2);
+  gap: var(--space-1);
+  margin: 0;
+  padding: var(--space-0-5) var(--space-2) var(--space-0-5) var(--space-2);
+  border-left: 2px solid var(--color-info-rule);
 }
 
-.eyebrow {
-  margin: 0;
-  color: var(--color-muted);
+.heading {
+  display: flex;
+  gap: var(--space-1);
+  align-items: center;
+  min-height: 1.4rem;
+}
+
+.icon {
+  display: block;
+  flex: 0 0 auto;
+  width: 1.125rem;
+  height: 1.125rem;
+  color: var(--color-info);
+}
+
+.label {
+  color: var(--color-info);
   font-family: var(--font-ui);
-  font-size: var(--text-2xs);
+  font-size: var(--text-sm);
   font-weight: 600;
   line-height: 1.4;
-}
-
-/* Non-prose fragments (code, formulas, isolated symbols) get a shared
-   data-register treatment so they read as evidence, not decoration. */
-.root :global(code) {
-  padding-inline: 0.05em;
-  color: var(--color-text);
-  background: transparent;
-  font-family: var(--font-data);
-  font-size: var(--text-inline-code);
-  box-decoration-break: clone;
 }

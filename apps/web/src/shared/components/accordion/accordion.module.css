@@ -4,6 +4,8 @@
 }
 
 .item {
+  min-width: 0;
+  overflow: hidden;
   border-radius: var(--radius-control);
 }
 
@@ -13,22 +15,22 @@
 
 .staticHeader {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-1);
   align-items: center;
   min-height: 2.5rem;
-  padding: var(--space-1) var(--space-1);
+  padding: var(--space-1) var(--space-0-5);
   color: var(--color-text);
 }
 
 .trigger {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) 1.125rem;
   width: 100%;
   min-height: 2.5rem;
   gap: var(--space-1);
   align-items: center;
-  padding: var(--space-1);
+  padding: var(--space-1) var(--space-0-5);
   border: 0;
   background: transparent;
   color: var(--color-text);
@@ -36,6 +38,14 @@
   font: inherit;
   text-align: left;
   transition: background-color var(--motion-duration) var(--motion-easing);
+}
+
+.staticHeader[data-has-leading="true"] {
+  grid-template-columns: auto minmax(0, 1fr);
+}
+
+.trigger[data-has-leading="true"] {
+  grid-template-columns: auto minmax(0, 1fr) 1.125rem;
 }
 
 .trigger:hover:not([data-disabled]) {
@@ -53,12 +63,16 @@
 }
 
 .title {
-  font-family: var(--font-reading);
-  font-weight: 600;
-  line-height: 1.4;
+  min-width: 0;
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  line-height: 1.45;
 }
 
 .chevron {
+  display: block;
+  justify-self: end;
   color: var(--color-muted);
   transition: transform var(--motion-duration) var(--motion-easing);
 }
@@ -73,10 +87,11 @@
 }
 
 .content {
-  padding: 0 var(--space-1) var(--space-1);
+  padding: 0 var(--space-0-5) var(--space-1);
   color: var(--color-text-soft);
   font-family: var(--font-reading);
-  line-height: 1.6;
+  font-size: var(--text-sm);
+  line-height: 1.58;
 }
 
 .item[data-disabled] {

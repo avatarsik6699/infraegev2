@@ -1,6 +1,5 @@
 import { CircleHelp } from "lucide-react";
 import { Accordion } from "~/shared/components/accordion";
-import { Divider } from "~/shared/components/divider";
 import { Typography } from "~/shared/components/typography";
 import styles from "./checkpoint.module.css";
 
@@ -17,17 +16,23 @@ type Props = {
 export const Checkpoint: React.FC<Props> = (props) => {
   return (
     <section className={styles.root} aria-label="Проверьте себя">
-      <Divider />
-      <Typography.Text component="p" className={styles.eyebrow}>
-        Проверьте себя
-      </Typography.Text>
+      <div className={styles.heading}>
+        <CircleHelp
+          className={styles.icon}
+          aria-hidden="true"
+          size={18}
+          strokeWidth={2}
+        />
+        <Typography.Text component="div" className={styles.label}>
+          Проверьте себя
+        </Typography.Text>
+      </div>
       <Accordion
         multiple
         items={props.items.map((item) => ({
           id: item.id,
           title: item.prompt,
           content: item.reveal,
-          icon: <CircleHelp size={18} strokeWidth={1.75} />,
         }))}
       />
     </section>

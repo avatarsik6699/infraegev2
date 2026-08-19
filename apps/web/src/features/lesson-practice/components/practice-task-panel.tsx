@@ -37,7 +37,6 @@ export const PracticeTaskPanel: React.FC<PracticeTaskPanelProps> = (props) => {
       <PracticeTaskHeading
         alreadySolved={props.alreadySolved}
         headingId={headingId}
-        index={props.index}
         setHeadingRef={props.setHeadingRef}
         task={props.task}
       />

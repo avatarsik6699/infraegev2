@@ -1,48 +1,48 @@
 .root {
   display: grid;
-  gap: 0.3rem;
+  gap: var(--space-1);
   margin: 0;
-  padding: 0;
+  padding: var(--space-0-5) var(--space-2) var(--space-0-5) var(--space-2);
+  border-left: 2px solid
+    color-mix(in oklch, var(--color-warning) 55%, var(--color-rule));
 }
 
-.eyebrow {
-  color: var(--color-muted);
+.heading {
+  display: flex;
+  gap: var(--space-1);
+  align-items: center;
+  min-height: 1.4rem;
+}
+
+.icon {
+  display: block;
+  flex: 0 0 auto;
+  width: 1.125rem;
+  height: 1.125rem;
+  color: var(--color-warning);
+}
+
+.label,
+.explanationLabel {
   font-family: var(--font-ui);
-  font-size: var(--text-2xs);
+  font-size: var(--text-sm);
   font-weight: 600;
   line-height: 1.4;
 }
 
-.claim {
-  display: flex;
-  gap: 0.4rem;
-  align-items: baseline;
-  color: var(--color-muted);
+.label {
+  color: var(--color-warning);
 }
 
-.claimIcon {
-  flex-shrink: 0;
-  align-self: center;
+.explanationLabel {
   color: var(--color-text-soft);
 }
 
-.claimText {
-  text-decoration: line-through;
-  text-decoration-color: var(--color-rule-strong);
-  text-decoration-thickness: 1.5px;
+.claim {
+  color: var(--color-text);
+  font-weight: 500;
 }
 
 .explanation {
   color: var(--color-text-soft);
-}
-
-/* Non-prose fragments (code, formulas, isolated symbols) get a shared
-   data-register treatment so they read as evidence, not decoration. */
-.root :global(code) {
-  padding-inline: 0.05em;
-  color: var(--color-text);
-  background: transparent;
-  font-family: var(--font-data);
-  font-size: var(--text-inline-code);
-  box-decoration-break: clone;
 }
