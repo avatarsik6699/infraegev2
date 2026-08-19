@@ -9,7 +9,7 @@
 | Change | `23` |
 | Slug | `recursion-practice-expansion` |
 | Title | Recursion Practice Expansion |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/23-recursion-practice-expansion` |
 
 ---
