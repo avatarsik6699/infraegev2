@@ -223,7 +223,9 @@ def test_error_logging_middleware_does_not_break_normal_requests(client: TestCli
     ("task_id", "correct_answer"),
     [
         ("rekursiya-base-sequence", "32"),
+        ("rekursiya-call-stack-trace", "16"),
         ("rekursiya-two-values", "29"),
+        ("rekursiya-repeated-calls", "25"),
         ("rekursiya-large-ratio", "9900"),
     ],
 )
@@ -238,6 +240,9 @@ def test_recursion_content_tasks_are_strict_and_checkable(
     assert task.title
     assert task.hint
     assert task.theory_links
+    assert task.explanation
 
+    for accepted_answer in task.answer_variants:
+        assert is_correct(task, accepted_answer)
     assert is_correct(task, correct_answer)
     assert not is_correct(task, "неверно")

@@ -30,7 +30,7 @@ export class TopicLessonPage {
         .getByRole("navigation", { name: "Содержание урока" })
         .getByRole("link", { name: "Вычисляем F(5) по правилу" }),
     ).toHaveAttribute("href", "#concrete-computation");
-    await expect(this.page.locator("[data-practice-task]")).toHaveCount(3);
+    await expect(this.page.locator("[data-practice-task]")).toHaveCount(5);
     await expect(this.page.locator("[data-article-frame] img")).toHaveCount(0);
     await expect(this.page.locator("[data-outline-tree] svg")).toHaveCount(0);
     await expect(
@@ -40,7 +40,7 @@ export class TopicLessonPage {
       this.page.getByLabel("Сведения об уроке").getByText("Задание 16"),
     ).toBeVisible();
     await expect(
-      this.page.getByLabel("Сведения об уроке").getByText("3 задачи"),
+      this.page.getByLabel("Сведения об уроке").getByText("5 задач"),
     ).toBeVisible();
     await expect(
       this.page.getByRole("heading", { name: "Освоение темы" }),
@@ -126,6 +126,30 @@ export class TopicLessonPage {
       this.page.getByRole("textbox", { name: "Ответ" }).first(),
     ).toBeVisible();
     await expect(this.page.getByText("Подсказка").first()).toBeVisible();
+    await expect(
+      this.page.getByRole("button", { name: "Решение" }).first(),
+    ).toBeVisible();
+  }
+
+  async expectPracticeSolutions(): Promise<void> {
+    const firstPanel = this.page.locator("[data-practice-task]").first();
+    await firstPanel.getByRole("button", { name: "Решение" }).click();
+    await expect(firstPanel.getByText(/F\(5\) = 32/)).toBeVisible();
+
+    await this.page
+      .getByRole("tab", {
+        name: /Задача 2 из 5: Проследите рекурсивные вызовы/,
+      })
+      .click();
+    const tracePanel = this.page.locator(
+      '[data-practice-task="rekursiya-call-stack-trace"]',
+    );
+    await tracePanel.getByRole("button", { name: "Решение" }).click();
+    await expect(
+      tracePanel.getByRole("group", {
+        name: "Та же рекуррентная формула в Python",
+      }),
+    ).toBeVisible();
   }
 
   async expectReadingPosition(): Promise<void> {
@@ -159,17 +183,51 @@ export class TopicLessonPage {
   }
 
   async expectNoHorizontalOverflow(): Promise<void> {
+    const overflow = await this.page.evaluate(() => ({
+      viewportWidth: window.innerWidth,
+      documentWidth: document.documentElement.scrollWidth,
+      offenders: Array.from(document.querySelectorAll<HTMLElement>("*"))
+        .map((element) => {
+          const bounds = element.getBoundingClientRect();
+          return {
+            tag: element.tagName,
+            className: element.className,
+            left: Math.round(bounds.left),
+            right: Math.round(bounds.right),
+            width: Math.round(bounds.width),
+            scrollWidth: element.scrollWidth,
+            overflowX: getComputedStyle(element).overflowX,
+            text: element.textContent?.trim().slice(0, 80) ?? "",
+          };
+        })
+        .filter(
+          (element) =>
+            element.left < -1 || element.right > window.innerWidth + 1,
+        )
+        .sort((left, right) => right.right - left.right)
+        .slice(0, 12),
+    }));
     expect(
-      await this.page.evaluate(
-        () => document.documentElement.scrollWidth > window.innerWidth,
-      ),
-    ).toBe(false);
+      overflow.documentWidth,
+      JSON.stringify(overflow, null, 2),
+    ).toBeLessThanOrEqual(overflow.viewportWidth);
   }
 
   async expectReadableWithoutJavaScript(): Promise<void> {
     await this.open();
     await this.expectReviewLesson();
-    await expect(this.page.locator("[data-practice-form] form")).toHaveCount(3);
+    await expect(this.page.locator("[data-practice-form] form")).toHaveCount(5);
+    await expect(
+      this.page.locator("[data-practice-form] [data-unenhanced-accordion]"),
+    ).toHaveCount(5);
+    await expect(
+      this.page.getByText(/Раскрываем вызовы снизу вверх/),
+    ).toBeVisible();
+    await expect(
+      this.page.getByRole("group", {
+        name: "Та же рекуррентная формула в Python",
+      }),
+    ).toBeVisible();
     await this.expectNoHorizontalOverflow();
   }
 

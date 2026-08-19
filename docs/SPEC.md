@@ -9,8 +9,8 @@
 
 | Field | Value |
 |-------|-------|
-| Document Version | `v1.4` |
-| Date | `2026-08-16` |
+| Document Version | `v1.5` |
+| Date | `2026-08-19` |
 | Architect / Owner | `v.godlevskiy` |
 | Stack | See [docs/STACK.md](./STACK.md) |
 | Domain | Платформа подготовки к ЕГЭ по информатике — теория, визуализация, практика по темам экзамена, привязанные к мини-курсам |
@@ -45,11 +45,12 @@ sdamgia.ru, kpolyakov.spb.ru), ни новыми AI-ботами (решают �
 
 - [NEEDS_CLARIFICATION: конкретные числовые целевые показатели (сколько органических визитов /
   за какой срок / какая глубина прохождения темы считается успехом) не зафиксированы архитектором
-  — решить после этапа 3 (публичный запуск), когда появятся первые данные Umami, а не гадать
-  заранее.]
-- Продуктовые события будут определены вместе с реализацией закреплённого в §1.4 учебного flow.
-  Текущий нейтральный frontend не имитирует вовлечённость и отправляет только базовый pageview
-  Umami и безопасную telemetry клиентских ошибок.
+  — решить после этапа 4, когда домен, сайт и MVP-контент будут готовы и появятся первые пригодные
+  данные Umami, а не гадать заранее.]
+- Продуктовая аналитика и новые события Umami откладываются до финального этапа после завершения
+  доменной логики, основных поверхностей сайта и MVP-контента. До этого frontend отправляет только
+  уже существующий базовый pageview Umami и безопасную telemetry клиентских ошибок; новые события,
+  сбор данных и собственные operations-поверхности не добавляются.
 
 ### 1.3 Project Boundaries
 
@@ -125,8 +126,8 @@ slug, тексты, ассеты, маршруты и композиции уд�
 
 Контент (`Topic`, `Course`, `CourseLesson`, `Task`, `ContentBlock`) — content-as-code, живёт в git
 (`content/`), не в БД (раздел 2.2 ниже). Состояние пользователя (прогресс) — на MVP только
-localStorage на клиенте; БД используется по минимуму для необязательной анонимной аналитики
-практики (см. §3).
+localStorage на клиенте; новая серверная аналитика практики не добавляется до финального этапа
+`M4` (см. §3).
 
 ### 2.3 Content Quality Gate (Definition of Done)
 
@@ -261,6 +262,12 @@ Task (content/tasks/{id}.json, practiceTaskIds ссылается сюда) — 
   difficulty: 1-3
   is_interleaving_eligible: bool (default true при published)
 
+Публичная server-loaded проекция Task включает условие, подсказку, ссылки на теорию и
+`explanation` как отдельное развёрнутое «Решение» со структурированными шагами/кодом. Она никогда
+не включает `answer_variants`, `numeric_tolerance` или иные checker-секреты. До hydration
+подсказка и решение остаются линейно читаемыми; после enhancement раскрываются независимо друг от
+друга по явному действию ученика.
+
 ContentBlock — контракт ответа `POST /api/tasks/{id}/check` (§4), без изменений
   type: text | learning_visual | code_example | worked_example | completion_exercise
         | productive_failure_prompt | callout | video_embed
@@ -276,10 +283,10 @@ LearningFlowPolicy (продуктовый контракт, не отдельн
   weak_outcome: result recommends targeted review
   forbidden_without_new_decision: timers | delayed hints | final no-hint exam | assistance penalty
 
--- БД (Postgres), опционально, только агрегированная аналитика практики --
+-- БД (Postgres), отложено до финального M4, только агрегированная аналитика практики --
 task_attempt_stats(task_id, attempts_count, wrong_count, last_aggregated_at)
-  // минимум на MVP; решить точную форму при реализации (может быть заменено чисто событиями Umami —
-  // раздел 12 — вместо отдельной таблицы, если этого достаточно для приоритизации тем)
+  // не часть M3; точную форму решить только на M4 (может быть заменено событиями Umami,
+  // если этого достаточно для приоритизации тем)
 ```
 
 CI-валидация: `scripts/validate-content-links.mjs` проверяет, что `practiceTaskIds` и
@@ -291,8 +298,9 @@ TSX-модуль урока с JSON-файлами заданий и не мож
 
 ## 4. API / Backend Contract
 
-Backend сохраняет content/task schemas и проверку ответа как независимый будущий контур. Реальных
-task-файлов и frontend-consumer после reset нет; endpoint неизвестного task id отвечает `404`.
+Backend сохраняет content/task schemas и проверку ответа как независимый контур. Реальные
+task-файлы первой review-only темы читаются frontend-consumer без checker-секретов; endpoint
+неизвестного task id отвечает `404`.
 
 | Verb / Method | Path | Auth | Response / Payload |
 |---------------|------|------|---------------------|
@@ -332,7 +340,7 @@ Home/catalog/legal/sitemap routes удалены. Первый product consumer 
 |--------------------|---------|-------|
 | Lesson content components | Переиспользуемая библиотека дизайн-системы урока: `Notation`, `Callout`, `WorkedExample`, `Procedure`, `Mistake`, `Diagram`, `Checkpoint` | Типизированные React-компоненты, не markdown-директивы; `Notation` различает inline-код и формулу без appearance-led API; `Diagram` используется только когда изображение действительно помогает и требует `alt`/`caption`/`purpose`; `Checkpoint` рендерит `CheckpointItem[]` вертикальным списком (не табами — таб-навигация позволяет незаметно пропустить пункт retrieval-практики) и может завершать конкретный `ConceptBlock` вместо единственного блока перед практикой |
 | Lesson outline | Иерархическая навигация по уроку | Строится напрямую из `ConceptBlock[].id`/`navLabel`, без regex-извлечения заголовков из текста и измеряемых SVG-связей; desktop shell сохраняет три колонки — sticky outline, центральный reading stream и зарезервированную правую колонку; progress в rail/header отсутствует, а правый rail может оставаться пустым до появления полезного контента; overflow rail включается только при необходимости, на узких экранах навигация возвращается в normal flow; lab сохраняет свой четырёхраздельный synthetic contract |
-| Practice tabs | Локальная навигация по постепенно усложняющимся задачам внутри `practice` | Компактные доступные вкладки показывают рост сложности нейтральным индикатором уровня и текстом; одна активная задача после hydration, свободный ручной переход без блокировок и автопродвижения, одна или несколько task-specific ссылок на фрагменты теории рядом с заголовком; все формы остаются в SSR/no-JS HTML и не становятся пунктами lesson outline |
+| Practice tabs | Локальная навигация по постепенно усложняющимся задачам внутри `practice` | Компактные доступные вкладки показывают рост сложности нейтральным индикатором уровня и текстом; одна активная задача после hydration, свободный ручной переход без блокировок и автопродвижения, одна или несколько task-specific ссылок на фрагменты теории рядом с заголовком; независимые «Подсказка» и развёрнутое «Решение» доступны сразу и остаются линейным содержимым в SSR/no-JS; все формы остаются в SSR/no-JS HTML и не становятся пунктами lesson outline |
 | Page state primitives | Единые loading/skeleton, empty, not-found и recoverable error состояния | Семантический статус и понятное действие важнее декоративной анимации; skeleton повторяет геометрию страницы и не озвучивается скринридером как контент |
 | Route resilience shell | Route-level pending/error/not-found UI, retry/reset и верхний navigation progress | Ошибка одной навигации не ломает document shell; предыдущий полезный экран не заменяется мгновенным мигающим fallback |
 | Typed API client | Единственная граница runtime HTTP для `apps/web`, сгенерированная из FastAPI OpenAPI | Feature `api/` вызывает типизированный shared client; transport/HTTP/contract errors различимы, abort/timeout и безопасные сообщения обязательны |
@@ -462,7 +470,8 @@ Nginx выставляет `Cache-Control`/`ETag` для хэшированно�
 
 **Наблюдаемость** (self-hosted, тот же VPS на старте, минимальный расход ресурсов):
 - **Umami v3** — отдельная БД/роль в Postgres; DNT, без cookies/fingerprinting/query/hash; текущий
-  frontend отправляет только базовые pageviews, а новый event allowlist появится с product flow.
+  frontend отправляет только базовые pageviews. Новый event allowlist и развитие сбора данных
+  отложены до финального этапа после доменной логики, сайта и MVP-контента.
 - **Beszel Hub + Agent** — host/container metrics и история на application VPS.
 - **journald + fail2ban** — структурированные application/Nginx/security logs; read-only доступ
   dashboard через WireGuard и ограниченный SSH wrapper.
@@ -480,7 +489,7 @@ Nginx выставляет `Cache-Control`/`ETag` для хэшированно�
 | Security headers / CORS | Rate limiting чекер-эндпоинта на Nginx: `limit_req_zone` 20 req/min/IP, burst 5, `nodelay` (см. §4, §11.2 источника) — против автоматизированного перебора банка ответов; конкретную цифру пересмотреть по факту логов после запуска |
 | Accessibility target | Foundation и lab не имеют serious/critical axe violations; lesson outline сохраняет вложенный semantic list, anchors, keyboard focus, различимый текущий пункт и корректный source order, а сложный визуал имеет видимую полную текстовую альтернативу |
 | Performance budget | LCP < 2.5s, CLS < 0.1, INP < 200ms на мобильном 4G-профиле; текущий Lighthouse gate измеряет только `/` до появления новых public routes |
-| Observability | Umami + Beszel + journald/fail2ban на application VPS; читаются внешним sre-kit через WireGuard/SSH; scheduled GitHub probe для внешней доступности; без Telegram на этом этапе |
+| Observability | Существующие Umami + Beszel + journald/fail2ban на application VPS и внешний sre-kit сохраняются без расширения; новые события, сбор данных и operations-интерфейсы отложены до финального этапа после доменной логики, сайта и MVP-контента |
 | Backup / restore | Локальный restic на VPS: daily `pg_dump -Fc`, Beszel/config snapshots, 7 daily + 4 weekly + 3 monthly, freshness marker и ежемесячный restore drill; off-site storage отложен с явно принятым риском |
 | SEO | `/` имеет нейтральный technical title; `/lab/lesson` и review-уроки `/ege/$slug` unlisted, `noindex,nofollow` и исключены из prerender discovery; published topics могут явно войти в public discovery |
 | Mobile / no-JS readability | Lab и topic lesson сохраняют текст, последовательные стадии визуала, подписи, решения и section anchors в SSR HTML; интерактивная проверка остаётся progressive enhancement |
@@ -499,17 +508,18 @@ Nginx выставляет `Cache-Control`/`ETag` для хэшированно�
 | `M0` — технический фундамент | Сохранить проверенную web/backend/ops инфраструктуру без навязывания продуктовой страницы | Нейтральная root-заглушка, shared primitives, API contract, пустой content skeleton и локальные gates |
 | `M1` — новый product/design baseline | Доказать заменяемую визуальную систему без преждевременной публикации | «Инженерная тетрадь», unlisted design-system/lesson labs, единый frontend-контракт и reusable primitives |
 | `M2` — инфраструктурная пауза | Подготовить production-платформу до продолжения продуктового контента | `infraege.ru`, VPS/GHCR deploy, security/release gates, backups и локальный ops-dashboard |
-| `M3` — учебный flow и публичный запуск | Реализовать утверждённые поверхности и только затем добавить проверенный контент | Доступный SSR/no-JS flow, практика, прогресс, SEO/legal surfaces и Umami-события по новому контракту |
-| `M4+` (после трафика, вне MVP) | Расширение охвата и сообщества поверх работающей бесплатной базы | Второй мини-курс (Excel), аккаунты/синхронизация, обсуждения тем с модерацией, затем платные фичи — без runtime AI до этого момента |
+| `M3` — учебный flow и публичный запуск | Завершить доменную логику, основные поверхности сайта и проверенный MVP-контент до расширения аналитики | Доступный SSR/no-JS flow, практика и локальный прогресс, 3–5 полных тем, мини-курс Python, связи между материалами, SEO/legal surfaces |
+| `M4` — финальное измерение и эксплуатация | Только после готовности домена, сайта и MVP-контента расширить наблюдаемость | Privacy-safe allowlist продуктовых событий Umami, проверка сбора данных и необходимые улучшения внешнего operations-контура без возрождения `apps/ops` |
+| `M5+` (после первых данных, вне MVP) | Расширение охвата и сообщества поверх работающей бесплатной базы | Второй мини-курс (Excel), аккаунты/синхронизация, обсуждения тем с модерацией, затем платные фичи — без runtime AI до этого момента |
 
 ---
 
 ## 10. Out of Scope
 
-- Аккаунты и синхронизация прогресса между устройствами (до `M4+`).
-- Обсуждения тем, комментарии, ответы и модерация (до аккаунтов и отдельного `M4+` change).
+- Аккаунты и синхронизация прогресса между устройствами (до `M5+`).
+- Обсуждения тем, комментарии, ответы и модерация (до аккаунтов и отдельного `M5+` change).
 - Полноценный тренажёр-пробник ЕГЭ с таймером на весь вариант.
-- Платные функции любого вида (до `M4+`, и только поверх уже работающей бесплатной базы).
+- Платные функции любого вида (до `M5+`, и только поверх уже работающей бесплатной базы).
 - AI внутри продукта как пользовательская фича (только как инструмент автора при подготовке
   контента, offline).
 - Мини-курс Excel и остальные темы ЕГЭ — вторая волна, по той же структуре, что первая.
@@ -529,7 +539,7 @@ Nginx выставляет `Cache-Control`/`ETag` для хэшированно�
 ## 11. Open Questions
 
 - [NEEDS_CLARIFICATION: числовые целевые показатели успеха MVP (объём органического трафика,
-  срок, глубина прохождения) — решить после `M3`, когда появятся данные Umami (§1.2).]
+  срок, глубина прохождения) — решить после `M4`, когда появятся пригодные данные Umami (§1.2).]
 - [NEEDS_CLARIFICATION: будущие публичные product routes, content loading и владение mastery state
   определяются после проверки lab; дизайн-система не закрепляет эти решения, но они обязаны
   сохранять поведение §1.4.]

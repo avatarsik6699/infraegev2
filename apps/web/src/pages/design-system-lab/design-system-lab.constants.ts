@@ -11,6 +11,12 @@ export const practiceTasks: LessonTypes.LocalPracticeTask[] = [
     hint: "Базовый случай — вход, при котором функция не делает рекурсивный вызов.",
     explanation:
       "При n = 0 функция возвращается сразу, без нового вызова — это и есть базовый случай.",
+    solution: [
+      {
+        type: "text",
+        text: "При n = 0 функция возвращается сразу, без нового вызова — это и есть базовый случай.",
+      },
+    ],
     theoryLinks: [{ hash: "base-case", label: "Базовый случай" }],
   },
   {
@@ -23,6 +29,12 @@ export const practiceTasks: LessonTypes.LocalPracticeTask[] = [
     hint: "Считайте сам исходный вызов countdown(3) тоже.",
     explanation:
       "4 вызова: countdown(3), countdown(2), countdown(1), countdown(0) — последний из них базовый случай.",
+    solution: [
+      {
+        type: "text",
+        text: "4 вызова: countdown(3), countdown(2), countdown(1), countdown(0) — последний из них базовый случай.",
+      },
+    ],
     theoryLinks: [{ hash: "base-case", label: "Базовый случай" }],
   },
 ];

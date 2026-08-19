@@ -10,7 +10,6 @@ import { rekursiyaLessonPublication } from "./lesson-publication.mjs";
 
 export const rekursiyaLesson = defineLesson({
   ...rekursiyaLessonPublication,
-  id: "rekursiya",
   taskNumber: 16,
   title: "Рекурсивные алгоритмы",
   summary:
@@ -24,7 +23,9 @@ export const rekursiyaLesson = defineLesson({
   ],
   practiceTaskIds: [
     "rekursiya-base-sequence",
+    "rekursiya-call-stack-trace",
     "rekursiya-two-values",
+    "rekursiya-repeated-calls",
     "rekursiya-large-ratio",
   ],
   accessTier: "free",

@@ -5,6 +5,7 @@ import type { LessonPracticeTypes } from "../lesson-practice.types";
 import styles from "../lesson-practice.module.css";
 import { PracticeTaskAnswer } from "./practice-task-answer";
 import { PracticeTaskFeedback } from "./practice-task-feedback";
+import { PracticeTaskHelp } from "./practice-task-help";
 import { PracticeTaskHeading } from "./practice-task-heading";
 
 type PracticeTaskPanelProps = {
@@ -48,6 +49,7 @@ export const PracticeTaskPanel: React.FC<PracticeTaskPanelProps> = (props) => {
         state={props.state}
         task={props.task}
       />
+      <PracticeTaskHelp task={props.task} />
       <PracticeTaskFeedback
         alreadySolved={props.alreadySolved}
         feedback={props.feedback}

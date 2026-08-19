@@ -1,5 +1,4 @@
 import type { ComponentProps } from "react";
-import { ChevronDown } from "lucide-react";
 import type { LessonTypes } from "~/entities/lesson";
 import { Button } from "~/shared/components/button";
 import { Field } from "~/shared/components/field";
@@ -46,13 +45,6 @@ export const PracticeTaskAnswer: React.FC<PracticeTaskAnswerProps> = (
             : "Проверить"}
       </Button>
     </div>
-    <details className={styles.hint}>
-      <summary>
-        <span>Подсказка</span>
-        <ChevronDown aria-hidden="true" size={16} strokeWidth={1.75} />
-      </summary>
-      {props.task.hint}
-    </details>
   </form>
 );
 

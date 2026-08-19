@@ -92,6 +92,7 @@ test("the recursion lesson stays review-only and readable across runtimes", asyn
   await topicLessonPage.open();
   await topicLessonPage.expectReviewLesson();
   await topicLessonPage.expectDesktopComposition();
+  await topicLessonPage.expectPracticeSolutions();
   await topicLessonPage.expectNoHorizontalOverflow();
   await browserSession.captureViewport("recursion-lesson-desktop.png");
   await topicLessonPage.expectReadingPosition();

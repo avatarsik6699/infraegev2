@@ -170,6 +170,16 @@ describe("lesson design system", () => {
             statement: "Условие",
             hint: "Подсказка",
             theoryLinks: [],
+            solution: [{ type: "text", text: "Решение базовой задачи" }],
+          },
+          {
+            id: "rekursiya-call-stack-trace",
+            difficultyLabel: "Средняя",
+            title: "Вызовы",
+            statement: "Условие",
+            hint: "Подсказка",
+            theoryLinks: [],
+            solution: [{ type: "text", text: "Решение задачи о вызовах" }],
           },
           {
             id: "rekursiya-two-values",
@@ -178,6 +188,16 @@ describe("lesson design system", () => {
             statement: "Условие",
             hint: "Подсказка",
             theoryLinks: [],
+            solution: [{ type: "text", text: "Решение о двух значениях" }],
+          },
+          {
+            id: "rekursiya-repeated-calls",
+            difficultyLabel: "Высокая",
+            title: "Повторы",
+            statement: "Условие",
+            hint: "Подсказка",
+            theoryLinks: [],
+            solution: [{ type: "text", text: "Решение задачи о повторах" }],
           },
           {
             id: "rekursiya-large-ratio",
@@ -186,6 +206,7 @@ describe("lesson design system", () => {
             statement: "Условие",
             hint: "Подсказка",
             theoryLinks: [],
+            solution: [{ type: "text", text: "Решение об отношении" }],
           },
         ]}
       />,
@@ -194,7 +215,7 @@ describe("lesson design system", () => {
     const metadata = screen.getByLabelText("Сведения об уроке");
     expect(within(metadata).getByText("Задание 16")).toBeTruthy();
     expect(within(metadata).getByText("ЕГЭ по информатике")).toBeTruthy();
-    expect(within(metadata).getByText("3 задачи")).toBeTruthy();
+    expect(within(metadata).getByText("5 задач")).toBeTruthy();
     expect(within(metadata).getByText("Бесплатно")).toBeTruthy();
 
     const rail = document.querySelector<HTMLElement>("[data-outline-rail]");
@@ -287,7 +308,10 @@ describe("lesson design system", () => {
 
     const answer = screen.getByRole("textbox");
     const check = screen.getByRole("button", { name: "Проверить" });
+    const solution = screen.getByRole("button", { name: "Решение" });
     if (!answer || !check) throw new Error("Missing first practice controls");
+    fireEvent.click(solution);
+    expect(screen.getByText(/Оставляем левую половину/)).toBeTruthy();
     fireEvent.change(answer, { target: { value: "черновик" } });
     fireEvent.click(within(tabs).getByRole("tab", { name: /Задача 2 из 5/ }));
     expect(screen.getByRole("textbox").getAttribute("id")).toBe(

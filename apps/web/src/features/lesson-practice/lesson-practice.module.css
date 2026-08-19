@@ -1,10 +1,12 @@
 .practiceSet {
+  min-width: 0;
   margin-top: var(--space-3);
 }
 
 .practiceTabs {
   display: flex;
   gap: var(--space-0-5);
+  width: 100%;
   max-width: 68rem;
   overflow-x: auto;
 }
@@ -72,6 +74,7 @@
 }
 
 .practicePanel {
+  min-width: 0;
   max-width: 68rem;
   margin-top: var(--space-3);
 }
@@ -85,6 +88,7 @@
 }
 
 .practiceForm {
+  min-width: 0;
   max-width: 68rem;
 }
 
@@ -151,7 +155,6 @@
   justify-self: start;
 }
 
-.hint,
 .feedback {
   max-width: 68ch;
   margin: var(--space-1) 0 0;
@@ -161,28 +164,47 @@
   line-height: 1.6;
 }
 
-.hint summary {
-  display: inline-flex;
-  gap: var(--space-0-5);
-  min-height: 2.5rem;
-  align-items: center;
-  color: var(--color-text);
-  cursor: pointer;
-  font-family: var(--font-ui);
-  list-style: none;
+.taskHelp {
+  max-width: 68ch;
+  margin-top: var(--space-1);
 }
 
-.hint summary::-webkit-details-marker {
-  display: none;
-}
-
-.hint summary svg {
+.hintContent {
   color: var(--color-muted);
-  transition: transform var(--motion-duration) var(--motion-easing);
 }
 
-.hint[open] summary svg {
-  transform: rotate(180deg);
+.solution {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.solutionText,
+.solutionSteps p,
+.solutionCode p {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.58;
+}
+
+.solutionSteps {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.solutionSteps ol {
+  display: grid;
+  gap: var(--space-0-5);
+  margin: 0;
+  padding-left: var(--space-3);
+}
+
+.solutionSteps li {
+  padding-left: var(--space-0-5);
+}
+
+.solutionCode {
+  display: grid;
+  gap: var(--space-1);
 }
 
 .feedback:empty {
@@ -227,7 +249,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hint summary svg,
   .resultLink {
     transition: none;
   }

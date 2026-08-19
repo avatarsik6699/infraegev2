@@ -7,6 +7,7 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { lessonPublications } from "../apps/web/src/entities/lesson/content/lesson-publication.mjs";
 
 const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const CONTENT_ROOT = join(REPO_ROOT, "content");
@@ -25,7 +26,10 @@ const topics = readJsonFiles(join(CONTENT_ROOT, "topics"));
 const tasks = readJsonFiles(join(CONTENT_ROOT, "tasks"));
 const courses = readJsonFiles(join(CONTENT_ROOT, "courses"));
 
-const topicIds = new Set(topics.map((t) => t.data.id));
+const topicIds = new Set([
+  ...topics.map((topic) => topic.data.id),
+  ...lessonPublications.map((lesson) => lesson.id),
+]);
 const taskIds = new Set(tasks.map((t) => t.data.id));
 const lessonIds = new Set(
   courses.flatMap((c) => c.data.lessons.map((l) => l.id)),
@@ -132,5 +136,5 @@ if (errors.length > 0) {
 }
 
 console.log(
-  `Content link validation passed (${topics.length} topics, ${tasks.length} tasks, ${courses.length} courses).`,
+  `Content link validation passed (${topics.length} JSON topics, ${lessonPublications.length} TSX lessons, ${tasks.length} tasks, ${courses.length} courses).`,
 );

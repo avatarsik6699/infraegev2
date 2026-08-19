@@ -124,6 +124,12 @@ app → routes → pages → widgets → features → entities → shared
   left-rule weight used by `Mistake`, without adding a card surface or coloring the question text.
   A group may contain several independent disclosure questions when the theory cluster warrants
   them. Do not defer all retrieval practice to one block directly before the practice section.
+- Every practice task exposes separate «Подсказка» and «Решение» disclosures. The solution renders
+  the authored structured explanation (prose, ordered reasoning and code where useful) from the
+  server-loaded public projection; checker answers and tolerances never enter that projection.
+  Before enhancement both help sections remain ordinary linear SSR/no-JS content; after hydration
+  they collapse independently and retain native keyboard/focus semantics through the shared
+  `Accordion` wrapper.
 
 ## 5. Responsive and accessible behavior
 

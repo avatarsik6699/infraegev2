@@ -70,7 +70,7 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
             <div className={styles.lessonMeta} aria-label="Сведения об уроке">
               <Badge>{`Задание ${String(props.lesson.taskNumber)}`}</Badge>
               <Badge>ЕГЭ по информатике</Badge>
-              <Badge>{`${String(props.tasks.length)} задачи`}</Badge>
+              <Badge>{taskCountLabel(props.tasks.length)}</Badge>
               <Badge>
                 {props.lesson.accessTier === "free"
                   ? "Бесплатно"
@@ -184,3 +184,17 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
     </div>
   );
 };
+
+function taskCountLabel(count: number): string {
+  const modulo100 = count % 100;
+  const modulo10 = count % 10;
+  const noun =
+    modulo100 >= 11 && modulo100 <= 14
+      ? "задач"
+      : modulo10 === 1
+        ? "задача"
+        : modulo10 >= 2 && modulo10 <= 4
+          ? "задачи"
+          : "задач";
+  return `${String(count)} ${noun}`;
+}
