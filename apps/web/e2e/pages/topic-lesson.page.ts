@@ -35,7 +35,7 @@ export class TopicLessonPage {
       .toBe(0);
   }
 
-  async expectReviewLesson(): Promise<void> {
+  async expectPublishedNumberRecordLesson(): Promise<void> {
     await expectPublicReleaseIdentity(this.page);
     await expect(
       this.page.getByRole("heading", {
@@ -45,7 +45,11 @@ export class TopicLessonPage {
     ).toBeVisible();
     await expect(this.page.locator('meta[name="robots"]')).toHaveAttribute(
       "content",
-      "noindex,nofollow",
+      "index,follow",
+    );
+    await expect(this.page.locator('link[rel="canonical"]')).toHaveAttribute(
+      "href",
+      `https://infraege.ru${this.config.route}`,
     );
     await expect(this.page.locator("[data-practice-task]")).toHaveCount(5);
     await expect(
@@ -80,9 +84,9 @@ export class TopicLessonPage {
     await expect(firstTask.getByText(/19₁₀ = 10011₂/)).toBeVisible();
   }
 
-  async expectReviewLessonReadableWithoutJavaScript(): Promise<void> {
+  async expectPublishedNumberRecordLessonReadableWithoutJavaScript(): Promise<void> {
     await this.open();
-    await this.expectReviewLesson();
+    await this.expectPublishedNumberRecordLesson();
     await expect(this.page.locator("[data-practice-form] form")).toHaveCount(5);
     await expect(
       this.page.locator("[data-practice-form] [data-unenhanced-accordion]"),

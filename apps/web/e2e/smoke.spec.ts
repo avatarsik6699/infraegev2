@@ -159,34 +159,34 @@ test("the published recursion lesson stays readable across runtimes", async ({
   await topicLessonPage.expectUnknownLessonNotFound();
 });
 
-test("the task-5 review lesson stays complete but unlisted", async ({
+test("the published task-5 lesson stays discoverable and complete", async ({
   browserSession,
   foundationPage,
-  noJavaScriptReviewTopicLessonPage,
+  noJavaScriptNumberRecordLessonPage,
+  numberRecordLessonPage,
   publicDiscoveryPage,
-  reviewTopicLessonPage,
 }) => {
   await browserSession.useDesktopViewport();
-  await reviewTopicLessonPage.open();
-  await reviewTopicLessonPage.expectReviewLesson();
-  await reviewTopicLessonPage.expectKeyboardHelpDisclosures();
-  await reviewTopicLessonPage.expectNoHorizontalOverflow();
-  await browserSession.captureViewport("task-5-review-lesson-desktop.png");
+  await numberRecordLessonPage.open();
+  await numberRecordLessonPage.expectPublishedNumberRecordLesson();
+  await numberRecordLessonPage.expectKeyboardHelpDisclosures();
+  await numberRecordLessonPage.expectNoHorizontalOverflow();
+  await browserSession.captureViewport("task-5-published-lesson-desktop.png");
 
   await browserSession.useZoomedDesktopViewport();
-  await reviewTopicLessonPage.open();
-  await reviewTopicLessonPage.expectReviewLesson();
-  await reviewTopicLessonPage.expectNoHorizontalOverflow();
+  await numberRecordLessonPage.open();
+  await numberRecordLessonPage.expectPublishedNumberRecordLesson();
+  await numberRecordLessonPage.expectNoHorizontalOverflow();
 
   await browserSession.useNarrowViewport();
-  await reviewTopicLessonPage.open();
-  await reviewTopicLessonPage.expectReviewLesson();
-  await reviewTopicLessonPage.expectMobileComposition();
-  await reviewTopicLessonPage.expectNoHorizontalOverflow();
-  await browserSession.captureViewport("task-5-review-lesson-mobile.png");
+  await numberRecordLessonPage.open();
+  await numberRecordLessonPage.expectPublishedNumberRecordLesson();
+  await numberRecordLessonPage.expectMobileComposition();
+  await numberRecordLessonPage.expectNoHorizontalOverflow();
+  await browserSession.captureViewport("task-5-published-lesson-mobile.png");
   browserSession.expectCleanConsole();
 
-  await noJavaScriptReviewTopicLessonPage.expectReviewLessonReadableWithoutJavaScript();
+  await noJavaScriptNumberRecordLessonPage.expectPublishedNumberRecordLessonReadableWithoutJavaScript();
 
   await foundationPage.open();
   await foundationPage.expectPublishedMaterial();

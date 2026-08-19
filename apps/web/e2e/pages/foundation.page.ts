@@ -28,7 +28,7 @@ export class FoundationPage {
     ).toHaveAttribute("href", "/ege/16-rekursiya");
     await expect(
       this.page.getByRole("link", { name: /Преобразование записей чисел/ }),
-    ).toHaveCount(0);
+    ).toHaveAttribute("href", "/ege/5-preobrazovanie-zapisey-chisel");
     await expect(
       this.page.getByRole("link", { name: "Обработка данных" }),
     ).toHaveAttribute("href", "/privacy");

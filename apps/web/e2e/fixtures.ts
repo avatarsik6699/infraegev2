@@ -24,8 +24,8 @@ type AppFixtures = {
   publicDiscoveryPage: PublicDiscoveryPage;
   topicLessonPage: TopicLessonPage;
   noJavaScriptTopicLessonPage: TopicLessonPage;
-  reviewTopicLessonPage: TopicLessonPage;
-  noJavaScriptReviewTopicLessonPage: TopicLessonPage;
+  numberRecordLessonPage: TopicLessonPage;
+  noJavaScriptNumberRecordLessonPage: TopicLessonPage;
 };
 
 export const test = base.extend<AppFixtures>({
@@ -104,7 +104,7 @@ export const test = base.extend<AppFixtures>({
   topicLessonPage: async ({ page }, use) => {
     await use(new TopicLessonPage(page));
   },
-  reviewTopicLessonPage: async ({ page }, use) => {
+  numberRecordLessonPage: async ({ page }, use) => {
     await use(
       new TopicLessonPage(page, {
         route: "/ege/5-preobrazovanie-zapisey-chisel",
@@ -125,7 +125,7 @@ export const test = base.extend<AppFixtures>({
       await context.close();
     }
   },
-  noJavaScriptReviewTopicLessonPage: async ({ baseURL, browser }, use) => {
+  noJavaScriptNumberRecordLessonPage: async ({ baseURL, browser }, use) => {
     const context = await browser.newContext({
       baseURL,
       javaScriptEnabled: false,
