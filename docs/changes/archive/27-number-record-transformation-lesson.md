@@ -9,7 +9,7 @@
 | Change | `27` |
 | Slug | `number-record-transformation-lesson` |
 | Title | Number-record Transformation Lesson |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/27-number-record-transformation-lesson` |
 
 ---
