@@ -9,7 +9,7 @@
 | Change | `22` |
 | Slug | `recursion-lesson-content-system` |
 | Title | Recursion Lesson Content System |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/22-recursion-lesson-content-system` |
 
 ---
