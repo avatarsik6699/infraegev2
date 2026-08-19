@@ -15,7 +15,7 @@ export const preobrazovanieZapiseyChiselLessonPublication = Object.freeze({
   title: "Преобразование записей чисел",
   summary:
     "Как перевести число в заданную систему, изменить запись по алгоритму и безопасно найти исходное число или результат.",
-  status: "review",
+  status: "published",
 });
 
 export const lessonPublications = Object.freeze([

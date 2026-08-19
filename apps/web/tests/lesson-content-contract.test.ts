@@ -68,6 +68,6 @@ describe("defineLesson", () => {
       "preobrazovanie-zapisey-non-monotonic-maximum",
     ]);
     expect(preobrazovanieZapiseyChiselLesson.masteryThreshold).toBe(0.8);
-    expect(preobrazovanieZapiseyChiselLesson.status).toBe("review");
+    expect(preobrazovanieZapiseyChiselLesson.status).toBe("published");
   });
 });

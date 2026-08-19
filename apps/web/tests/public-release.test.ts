@@ -28,14 +28,14 @@ describe("public release metadata", () => {
         routeSlug: "5-preobrazovanie-zapisey-chisel",
         taskNumber: 5,
         title: "Преобразование записей чисел",
-        status: "review",
+        status: "published",
       }),
     ]);
     expect(
       lessonPublications
         .filter((lesson) => lesson.status === "published")
         .map((lesson) => lesson.routeSlug),
-    ).toEqual(["16-rekursiya"]);
+    ).toEqual(["16-rekursiya", "5-preobrazovanie-zapisey-chisel"]);
     expect(new Set(lessonPublications.map((lesson) => lesson.id)).size).toBe(
       lessonPublications.length,
     );
