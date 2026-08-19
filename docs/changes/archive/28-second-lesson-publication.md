@@ -9,7 +9,7 @@
 | Change | `28` |
 | Slug | `second-lesson-publication` |
 | Title | Second Lesson Publication |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/28-second-lesson-publication` |
 
 ---
