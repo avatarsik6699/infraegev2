@@ -9,7 +9,7 @@
 | Change | `29` |
 | Slug | `second-lesson-publication-e2e` |
 | Title | Second Lesson Publication E2E |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/29-second-lesson-publication-e2e` |
 
 ---
