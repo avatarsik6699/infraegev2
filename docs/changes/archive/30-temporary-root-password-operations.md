@@ -7,7 +7,7 @@
 | Change | `30` |
 | Slug | `temporary-root-password-operations` |
 | Title | Temporary Root Password Operations |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/30-temporary-root-password-operations` |
 
 ---
