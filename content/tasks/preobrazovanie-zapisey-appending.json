@@ -1,0 +1,32 @@
+{
+  "id": "preobrazovanie-zapisey-appending",
+  "topic_ids": ["preobrazovanie-zapisey-chisel"],
+  "title": "Припишите двоичный блок",
+  "statement": "Двоичную запись числа N = 19 дополнили справа цифрами 01. Чему равно полученное число R в десятичной системе?",
+  "hint": "Сначала запишите 19 в двоичной системе, затем именно к строке допишите 01.",
+  "theory_links": [
+    {
+      "hash": "appending-and-place-value",
+      "label": "Приписывание и разрядность"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["77"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "worked_example",
+      "data": {
+        "prompt": "Разделим преобразование на запись, изменение строки и обратный перевод.",
+        "steps": [
+          "19₁₀ = 10011₂.",
+          "После приписывания справа получаем 1001101₂.",
+          "1001101₂ = 64 + 8 + 4 + 1 = 77. То же следует из формулы 19 · 2² + 1 = 77."
+        ]
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

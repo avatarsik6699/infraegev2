@@ -4,6 +4,7 @@ export { Procedure } from "./components/procedure";
 export { Mistake } from "./components/mistake";
 export { Diagram } from "./components/diagram";
 export { Checkpoint } from "./components/checkpoint";
+export { preobrazovanieZapiseyChiselLesson } from "./content/preobrazovanie-zapisey-chisel.lesson";
 export { rekursiyaLesson } from "./content/rekursiya.lesson";
 export { lessonPublications } from "./content/lesson-publication.mjs";
 export { findLessonByRouteSlug } from "./content/lesson-registry";

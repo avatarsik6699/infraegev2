@@ -1,0 +1,32 @@
+{
+  "id": "preobrazovanie-zapisey-base-three",
+  "topic_ids": ["preobrazovanie-zapisey-chisel"],
+  "title": "Исполните ветвящийся троичный алгоритм",
+  "statement": "Строят троичную запись N = 14. Если N делится на 3, слева приписывают 1, а справа 02; иначе справа дважды приписывают остаток от деления N на 3. Найдите R.",
+  "hint": "Условие проверяет само число N, а не сумму цифр его троичной записи.",
+  "theory_links": [
+    {
+      "hash": "branched-base-three",
+      "label": "Ветвление в троичной системе"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["134"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "worked_example",
+      "data": {
+        "prompt": "Сначала выберем ветвь по N, затем изменим троичную строку.",
+        "steps": [
+          "14₁₀ = 112₃, а остаток 14 при делении на 3 равен 2.",
+          "Срабатывает ветвь «иначе»: дважды приписываем 2 и получаем 11222₃.",
+          "11222₃ = 81 + 27 + 18 + 6 + 2 = 134."
+        ]
+      }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

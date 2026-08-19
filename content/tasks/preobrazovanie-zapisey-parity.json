@@ -1,0 +1,32 @@
+{
+  "id": "preobrazovanie-zapisey-parity",
+  "topic_ids": ["preobrazovanie-zapisey-chisel"],
+  "title": "Обновите бит чётности дважды",
+  "statement": "Строят двоичную запись N = 22. Затем два раза подряд дописывают справа остаток от деления суммы цифр текущей записи на 2. Чему равно итоговое R?",
+  "hint": "После первого дописывания пересчитайте сумму цифр уже изменённой строки.",
+  "theory_links": [
+    {
+      "hash": "repeated-parity",
+      "label": "Повторное добавление бита чётности"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["90"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "worked_example",
+      "data": {
+        "prompt": "Каждый новый бит вычисляется по состоянию строки на этом шаге.",
+        "steps": [
+          "22₁₀ = 10110₂; сумма цифр равна 3, поэтому дописываем 1 и получаем 101101.",
+          "Теперь сумма цифр равна 4, поэтому дописываем 0 и получаем 1011010₂.",
+          "1011010₂ = 64 + 16 + 8 + 2 = 90."
+        ]
+      }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

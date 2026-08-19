@@ -18,4 +18,13 @@ export const rekursiyaLessonPublication: Readonly<{
   status: "published";
 }>;
 
+export const preobrazovanieZapiseyChiselLessonPublication: Readonly<{
+  id: "preobrazovanie-zapisey-chisel";
+  routeSlug: "5-preobrazovanie-zapisey-chisel";
+  taskNumber: 5;
+  title: "Преобразование записей чисел";
+  summary: "Как перевести число в заданную систему, изменить запись по алгоритму и безопасно найти исходное число или результат.";
+  status: "review";
+}>;
+
 export const lessonPublications: readonly LessonPublication[];

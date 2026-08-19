@@ -158,3 +158,37 @@ test("the published recursion lesson stays readable across runtimes", async ({
   await topicLessonPage.expectInternalBackNavigation();
   await topicLessonPage.expectUnknownLessonNotFound();
 });
+
+test("the task-5 review lesson stays complete but unlisted", async ({
+  browserSession,
+  foundationPage,
+  noJavaScriptReviewTopicLessonPage,
+  publicDiscoveryPage,
+  reviewTopicLessonPage,
+}) => {
+  await browserSession.useDesktopViewport();
+  await reviewTopicLessonPage.open();
+  await reviewTopicLessonPage.expectReviewLesson();
+  await reviewTopicLessonPage.expectKeyboardHelpDisclosures();
+  await reviewTopicLessonPage.expectNoHorizontalOverflow();
+  await browserSession.captureViewport("task-5-review-lesson-desktop.png");
+
+  await browserSession.useZoomedDesktopViewport();
+  await reviewTopicLessonPage.open();
+  await reviewTopicLessonPage.expectReviewLesson();
+  await reviewTopicLessonPage.expectNoHorizontalOverflow();
+
+  await browserSession.useNarrowViewport();
+  await reviewTopicLessonPage.open();
+  await reviewTopicLessonPage.expectReviewLesson();
+  await reviewTopicLessonPage.expectMobileComposition();
+  await reviewTopicLessonPage.expectNoHorizontalOverflow();
+  await browserSession.captureViewport("task-5-review-lesson-mobile.png");
+  browserSession.expectCleanConsole();
+
+  await noJavaScriptReviewTopicLessonPage.expectReviewLessonReadableWithoutJavaScript();
+
+  await foundationPage.open();
+  await foundationPage.expectPublishedMaterial();
+  await publicDiscoveryPage.expectRobotsAndSitemap();
+});

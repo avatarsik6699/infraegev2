@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { defineLesson, type LessonContent } from "~/entities/lesson";
+import {
+  defineLesson,
+  preobrazovanieZapiseyChiselLesson,
+  type LessonContent,
+} from "~/entities/lesson";
 
 const definition: LessonContent.Definition = {
   id: "sample-lesson",
@@ -37,5 +41,33 @@ describe("defineLesson", () => {
     });
 
     expect(lesson.masteryThreshold).toBe(0.75);
+  });
+
+  it("preserves the task-5 lesson's authored concept and practice order", () => {
+    expect(
+      preobrazovanieZapiseyChiselLesson.theory.map(({ id }) => id),
+    ).toEqual([
+      "four-stage-model",
+      "number-and-representation",
+      "five-step-execution",
+      "string-operations",
+      "appending-and-place-value",
+      "repeated-parity",
+      "minimum-search",
+      "branched-base-three",
+      "safe-search-bounds",
+      "simultaneous-replacement",
+      "digit-sum-and-general-template",
+      "final-solution-algorithm",
+    ]);
+    expect(preobrazovanieZapiseyChiselLesson.practiceTaskIds).toEqual([
+      "preobrazovanie-zapisey-appending",
+      "preobrazovanie-zapisey-parity",
+      "preobrazovanie-zapisey-base-three",
+      "preobrazovanie-zapisey-digit-replacement",
+      "preobrazovanie-zapisey-non-monotonic-maximum",
+    ]);
+    expect(preobrazovanieZapiseyChiselLesson.masteryThreshold).toBe(0.8);
+    expect(preobrazovanieZapiseyChiselLesson.status).toBe("review");
   });
 });

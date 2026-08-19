@@ -23,7 +23,31 @@ describe("public release metadata", () => {
         title: "Рекурсивные алгоритмы",
         status: "published",
       }),
+      expect.objectContaining({
+        id: "preobrazovanie-zapisey-chisel",
+        routeSlug: "5-preobrazovanie-zapisey-chisel",
+        taskNumber: 5,
+        title: "Преобразование записей чисел",
+        status: "review",
+      }),
     ]);
+    expect(
+      lessonPublications
+        .filter((lesson) => lesson.status === "published")
+        .map((lesson) => lesson.routeSlug),
+    ).toEqual(["16-rekursiya"]);
+    expect(new Set(lessonPublications.map((lesson) => lesson.id)).size).toBe(
+      lessonPublications.length,
+    );
+    expect(
+      new Set(lessonPublications.map((lesson) => lesson.routeSlug)).size,
+    ).toBe(lessonPublications.length);
+    expect(new Set(lessonPublications.map((lesson) => lesson.title)).size).toBe(
+      lessonPublications.length,
+    );
+    expect(
+      new Set(lessonPublications.map((lesson) => lesson.summary)).size,
+    ).toBe(lessonPublications.length);
   });
 
   it("creates absolute canonical and social metadata", () => {

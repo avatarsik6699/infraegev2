@@ -1,12 +1,27 @@
 import { expect, type Page } from "@playwright/test";
 import { expectPublicReleaseIdentity } from "./public-header.assertions";
 
+type TopicLessonPageConfig = {
+  route: string;
+  title: string;
+  taskNumber: number;
+};
+
+const recursionLessonConfig: TopicLessonPageConfig = {
+  route: "/ege/16-rekursiya",
+  title: "Рекурсивные алгоритмы",
+  taskNumber: 16,
+};
+
 export class TopicLessonPage {
-  constructor(private readonly page: Page) {}
+  constructor(
+    private readonly page: Page,
+    private readonly config: TopicLessonPageConfig = recursionLessonConfig,
+  ) {}
 
   async open(): Promise<void> {
-    await this.page.goto("/ege/16-rekursiya");
-    await expect(this.page).toHaveURL(/\/ege\/16-rekursiya$/);
+    await this.page.goto(this.config.route);
+    await expect(this.page).toHaveURL(new RegExp(this.config.route + "$"));
     await expect
       .poll(async () => {
         await this.page.evaluate(() => {
@@ -18,6 +33,63 @@ export class TopicLessonPage {
         );
       })
       .toBe(0);
+  }
+
+  async expectReviewLesson(): Promise<void> {
+    await expectPublicReleaseIdentity(this.page);
+    await expect(
+      this.page.getByRole("heading", {
+        level: 1,
+        name: this.config.title,
+      }),
+    ).toBeVisible();
+    await expect(this.page.locator('meta[name="robots"]')).toHaveAttribute(
+      "content",
+      "noindex,nofollow",
+    );
+    await expect(this.page.locator("[data-practice-task]")).toHaveCount(5);
+    await expect(
+      this.page
+        .getByLabel("Сведения об уроке")
+        .getByText("Задание " + String(this.config.taskNumber)),
+    ).toBeVisible();
+    await expect(this.page.locator("[data-article-frame] img")).toHaveCount(0);
+    await expect(this.page.getByLabel("Проверьте себя")).toHaveCount(6);
+  }
+
+  async expectKeyboardHelpDisclosures(): Promise<void> {
+    const firstCheckpoint = this.page
+      .getByLabel("Проверьте себя")
+      .first()
+      .getByRole("button")
+      .first();
+    await firstCheckpoint.focus();
+    await firstCheckpoint.press("Enter");
+    await expect(firstCheckpoint).toHaveAttribute("aria-expanded", "true");
+
+    const firstTask = this.page.locator("[data-practice-task]").first();
+    const hint = firstTask.getByRole("button", { name: "Подсказка" });
+    await hint.focus();
+    await hint.press("Enter");
+    await expect(hint).toHaveAttribute("aria-expanded", "true");
+
+    const solution = firstTask.getByRole("button", { name: "Решение" });
+    await solution.focus();
+    await solution.press("Enter");
+    await expect(solution).toHaveAttribute("aria-expanded", "true");
+    await expect(firstTask.getByText(/19₁₀ = 10011₂/)).toBeVisible();
+  }
+
+  async expectReviewLessonReadableWithoutJavaScript(): Promise<void> {
+    await this.open();
+    await this.expectReviewLesson();
+    await expect(this.page.locator("[data-practice-form] form")).toHaveCount(5);
+    await expect(
+      this.page.locator("[data-practice-form] [data-unenhanced-accordion]"),
+    ).toHaveCount(5);
+    await expect(this.page.getByText(/19₁₀ = 10011₂/)).toBeVisible();
+    await expect(this.page.locator("[data-article-frame] img")).toHaveCount(0);
+    await this.expectNoHorizontalOverflow();
   }
 
   async expectPublishedLesson(): Promise<void> {
@@ -135,9 +207,12 @@ export class TopicLessonPage {
 
   async expectMobileComposition(): Promise<void> {
     await expect(
-      this.page.getByText("Задание 16 · Рекурсивные алгоритмы", {
-        exact: true,
-      }),
+      this.page.getByText(
+        `Задание ${String(this.config.taskNumber)} · ${this.config.title}`,
+        {
+          exact: true,
+        },
+      ),
     ).toBeVisible();
     await expect(
       this.page.getByRole("link", { name: "Назад", exact: true }),

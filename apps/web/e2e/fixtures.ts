@@ -24,6 +24,8 @@ type AppFixtures = {
   publicDiscoveryPage: PublicDiscoveryPage;
   topicLessonPage: TopicLessonPage;
   noJavaScriptTopicLessonPage: TopicLessonPage;
+  reviewTopicLessonPage: TopicLessonPage;
+  noJavaScriptReviewTopicLessonPage: TopicLessonPage;
 };
 
 export const test = base.extend<AppFixtures>({
@@ -102,6 +104,15 @@ export const test = base.extend<AppFixtures>({
   topicLessonPage: async ({ page }, use) => {
     await use(new TopicLessonPage(page));
   },
+  reviewTopicLessonPage: async ({ page }, use) => {
+    await use(
+      new TopicLessonPage(page, {
+        route: "/ege/5-preobrazovanie-zapisey-chisel",
+        title: "Преобразование записей чисел",
+        taskNumber: 5,
+      }),
+    );
+  },
   noJavaScriptTopicLessonPage: async ({ baseURL, browser }, use) => {
     const context = await browser.newContext({
       baseURL,
@@ -110,6 +121,24 @@ export const test = base.extend<AppFixtures>({
     });
     try {
       await use(new TopicLessonPage(await context.newPage()));
+    } finally {
+      await context.close();
+    }
+  },
+  noJavaScriptReviewTopicLessonPage: async ({ baseURL, browser }, use) => {
+    const context = await browser.newContext({
+      baseURL,
+      javaScriptEnabled: false,
+      viewport: { width: 390, height: 844 },
+    });
+    try {
+      await use(
+        new TopicLessonPage(await context.newPage(), {
+          route: "/ege/5-preobrazovanie-zapisey-chisel",
+          title: "Преобразование записей чисел",
+          taskNumber: 5,
+        }),
+      );
     } finally {
       await context.close();
     }

@@ -1,0 +1,32 @@
+{
+  "id": "preobrazovanie-zapisey-digit-replacement",
+  "topic_ids": ["preobrazovanie-zapisey-chisel"],
+  "title": "Замените троичные цифры одновременно",
+  "statement": "Строят троичную запись N = 20. В ней одновременно заменяют 0 на 2, 2 на 0, а 1 оставляют без изменения. Ведущие нули удаляют. Чему равно R?",
+  "hint": "Не выполняйте две последовательные замены: сопоставьте каждой исходной цифре ровно одну новую.",
+  "theory_links": [
+    {
+      "hash": "simultaneous-replacement",
+      "label": "Одновременная замена и ведущие нули"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["6"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "worked_example",
+      "data": {
+        "prompt": "Преобразуем исходную запись посимвольно и только затем удалим ведущий ноль.",
+        "steps": [
+          "20₁₀ = 202₃.",
+          "Одновременная замена даёт 020₃: первая 2 превращается в 0, средний 0 — в 2, последняя 2 — в 0.",
+          "После удаления ведущего нуля остаётся 20₃ = 6."
+        ]
+      }
+    }
+  ],
+  "difficulty": 3,
+  "is_interleaving_eligible": true
+}

@@ -246,3 +246,32 @@ def test_recursion_content_tasks_are_strict_and_checkable(
         assert is_correct(task, accepted_answer)
     assert is_correct(task, correct_answer)
     assert not is_correct(task, "неверно")
+
+
+@pytest.mark.parametrize(
+    ("task_id", "correct_answer"),
+    [
+        ("preobrazovanie-zapisey-appending", "77"),
+        ("preobrazovanie-zapisey-parity", "90"),
+        ("preobrazovanie-zapisey-base-three", "134"),
+        ("preobrazovanie-zapisey-digit-replacement", "6"),
+        ("preobrazovanie-zapisey-non-monotonic-maximum", "55"),
+    ],
+)
+def test_number_record_transformation_tasks_are_strict_and_checkable(
+    task_id: str,
+    correct_answer: str,
+):
+    content_root = Path(__file__).resolve().parents[3] / "content" / "tasks"
+    task = Task.model_validate_json((content_root / f"{task_id}.json").read_text(encoding="utf-8"))
+
+    assert task.topic_ids == ["preobrazovanie-zapisey-chisel"]
+    assert task.title
+    assert task.hint
+    assert task.theory_links
+    assert task.explanation
+
+    for accepted_answer in task.answer_variants:
+        assert is_correct(task, accepted_answer)
+    assert is_correct(task, correct_answer)
+    assert not is_correct(task, "неверно")

@@ -27,6 +27,9 @@ export class FoundationPage {
       this.page.getByRole("link", { name: /Рекурсивные алгоритмы/ }),
     ).toHaveAttribute("href", "/ege/16-rekursiya");
     await expect(
+      this.page.getByRole("link", { name: /Преобразование записей чисел/ }),
+    ).toHaveCount(0);
+    await expect(
       this.page.getByRole("link", { name: "Обработка данных" }),
     ).toHaveAttribute("href", "/privacy");
     await expect(this.page.getByRole("link", { name: /lab/i })).toHaveCount(0);
