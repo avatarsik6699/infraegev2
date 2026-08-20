@@ -7,7 +7,7 @@
 | Change | `43` |
 | Slug | `production-ops-final-cutover` |
 | Title | Production Operations Final Cutover |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/43-production-ops-final-cutover` |
 
 ---
