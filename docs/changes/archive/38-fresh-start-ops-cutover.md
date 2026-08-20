@@ -7,7 +7,7 @@
 | Change | `38` |
 | Slug | `fresh-start-ops-cutover` |
 | Title | Simplified Fresh-Start Operations Lifecycle |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/38-fresh-start-ops-cutover` |
 
 ---
