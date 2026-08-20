@@ -11,12 +11,6 @@ snapshot_tag=infraege-ops
 restic_lock_file=${RESTIC_LOCK_FILE:-/run/lock/infraege-restic.lock}
 backup_status_file=${OPS_BACKUP_STATUS_FILE:-/var/lib/infraege-ops/backup-status.json}
 
-set -a
-# shellcheck disable=SC1090
-source "$env_file"
-set +a
-: "${OPS_POSTGRES_PASSWORD:?OPS_POSTGRES_PASSWORD is required}"
-
 export RESTIC_REPOSITORY=$restic_repo
 export RESTIC_PASSWORD_FILE=$restic_password_file
 install -d -m 755 "$(dirname -- "$restic_lock_file")" "$(dirname -- "$backup_status_file")"

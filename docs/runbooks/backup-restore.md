@@ -72,7 +72,9 @@ current backup. Restore Beszel state only for the operations project and before 
 The fresh-start cutover does not inspect, copy or restore old Umami/Beszel data. Old application
 volumes remain unreferenced rollback resources until a separate destructive cleanup is authorized.
 The first 2026-08-20 attempt proved a successful operations backup and disposable Umami/Beszel
-restore before rolling back for an unrelated Beszel network defect; its new volumes remain intact.
+restore before rolling back for an unrelated Beszel network defect. A second attempt proved the
+network and Agent registration, then rolled back when backup shell-sourced a valid space-containing
+Beszel key. The maintenance path now leaves env parsing to Compose; both volume sets remain intact.
 
 Known accepted risk: the repository is on the same VPS, so it protects against logical errors but
 not total VPS loss. Configure an encrypted off-site backend and repeat both restore drills before

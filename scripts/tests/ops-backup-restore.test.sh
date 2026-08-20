@@ -19,7 +19,7 @@ cat >"$env_file" <<'EOF'
 OPS_POSTGRES_PASSWORD=synthetic-postgres
 UMAMI_APP_SECRET=synthetic-umami
 BESZEL_AGENT_TOKEN=synthetic-token
-BESZEL_AGENT_KEY=synthetic-key
+BESZEL_AGENT_KEY=ssh-ed25519 synthetic-public-key
 WIREGUARD_IP=10.77.0.1
 EOF
 

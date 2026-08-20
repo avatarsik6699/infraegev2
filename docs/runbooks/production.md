@@ -7,10 +7,10 @@ place every required value using the ordered
 [production onboarding guide](production-onboarding.md) before following this summary.
 
 The independent operations definition can be validated locally with
-`make ops-config ENV_FILE=... RELEASE=<full-sha>`. Do not run `ops-install` while the live
-application release still owns Umami/Beszel ports. The first authorized fresh-start attempt rolled
-back after Beszel Hub's WireGuard binding proved unreachable; retry only with a published SHA that
-contains the dual-network Hub fix. No old analytics or metrics data is transferred.
+`make ops-config ENV_FILE=... RELEASE=<full-sha>`. Do not run `ops-install` or `ops-update` while
+the live application release still owns Umami/Beszel ports. Two authorized attempts rolled back
+after exposing a Beszel network defect and then unsafe shell parsing of a valid public key. Retry
+only with a published SHA containing both fixes. No old analytics or metrics data is transferred.
 
 ## One-time bootstrap
 
@@ -101,11 +101,12 @@ the retired `apps/ops` dashboard.
 Use one full SHA that contains this topology and has already passed the Release Gate. Keep the
 provider console open and record the previous application release SHA. Before the maintenance
 window, validate the protected operations env locally, prove the current application backup and
-confirm that no `infraege-ops` project is installed.
+confirm that no `infraege-ops` containers run. An installed release symlink and preserved clean
+volumes are expected after rollback.
 
-The 2026-08-20 first attempt exercised rollback successfully after Beszel Hub was unreachable on
-its declared WireGuard port. Do not reuse that candidate. The retry SHA must attach Beszel to both
-`ops-internal` and `infraege-observability-ingress`; Postgres remains internal-only.
+The 2026-08-20 attempts exercised rollback successfully. The final retry SHA must attach Beszel to
+both `ops-internal` and `infraege-observability-ingress`, keep Postgres internal-only and never
+shell-source the Compose operations env in maintenance scripts.
 
 During the authorized window:
 
@@ -115,8 +116,9 @@ During the authorized window:
 3. Deploy the prepared application release. Its Compose project removes the now-orphaned legacy
    containers but does not remove their named volumes. Public application health must pass; the two
    `/stats` routes may return `502` until the next step.
-4. Run `make ops-install ENV_FILE=... RELEASE=<full-sha>`. It creates empty operations volumes and
-   waits for all operations services; it does not read legacy volumes.
+4. Run `make ops-update ENV_FILE=... RELEASE=<full-sha>` when `/opt/infraege-ops/current` exists
+   after a rollback; use `ops-install` only on a genuinely new target. Both reuse only the clean
+   operations volumes and wait for all services; neither reads legacy volumes.
 5. Run `sudo /opt/infraege/current/ops/install-backup-timers.sh activate-operations`, then manually
    start both `infraege-ops` backup and restore-check services and verify their tagged snapshots.
 6. Create the new Umami website/Beszel system, enter the six Source configurations from the

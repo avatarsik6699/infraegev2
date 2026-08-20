@@ -169,9 +169,9 @@ The repository contains the prepared `infraege-ops` Compose definition. Onboardi
 start it and does not create a second Umami/Beszel installation. Its
 `env.contract` records names only; actual values remain in the protected operations environment.
 Create `~/.config/infraege/production/ops.env` with exactly those names, independently generated
-values and mode `600`; do not copy it into the checkout. After the first cutover attempt rolled
-back, the generated file and clean operations volumes were deliberately retained for the corrected
-retry. Validate the exact retry release before any install/update:
+values and mode `600`; do not copy it into the checkout. The generated file, bootstrapped Beszel
+credentials and clean operations volumes were deliberately retained across both rollback gates.
+Validate the exact final retry release before any install/update:
 
 ```bash
 make ops-config \
@@ -270,6 +270,10 @@ Over WireGuard open `http://10.77.0.1:8090`, create the initial Beszel administr
    currently installed full release SHA to recreate `beszel-agent`.
 4. Complete **Add System**, then copy the resulting system record ID into the untracked
    `projects.json` as `beszel.systemId`.
+
+The Beszel public key normally contains a space. It is valid Compose env input; operations
+maintenance scripts must pass this file through `docker compose --env-file` and must never
+`source` it as shell code.
 
 The current Beszel flow and meanings of `KEY`, `TOKEN` and `HUB_URL` are documented in its
 [getting-started](https://beszel.dev/guide/getting-started) and

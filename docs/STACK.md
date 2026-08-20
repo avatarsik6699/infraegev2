@@ -102,9 +102,10 @@ release. Releases live under `/opt/infraege-ops`, their mode-600 environments un
 
 The repository's application production definition now owns only Nginx, web, API and its Postgres;
 Nginx attaches to `infraege-observability-ingress`. The VPS currently runs the previous combined
-release after the first cutover attempt failed its Beszel private-port check and rolled back. A
-retry must use a published SHA containing the corrected dual-network Hub definition and first free
-the legacy ports. This repository deliberately has no desired-state JSON,
+release after two fail-closed cutover gates: first Beszel private networking, then shell-sourcing a
+space-containing Beszel key in the backup path. A final retry must use a published SHA containing
+both the dual-network Hub and Compose-only env parsing fixes, then first free the legacy ports.
+This repository deliberately has no desired-state JSON,
 generic plan/apply engine, migration rehearsal, snapshot selector or deployment UI. Compose is the
 service desired state; the runbook is the cross-project transition contract.
 
