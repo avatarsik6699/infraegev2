@@ -5,6 +5,10 @@ workflows. The current beta contract deliberately uses public root/password SSH 
 requests re-hardening. Generate secrets on the administration laptop or provider console; never
 paste passwords or `/etc/infraege/production.env` into the repository or chat.
 
+Operations onboarding ends with `make ops-preflight BUNDLE=...` against a locally generated
+immutable manifest. `ready_for_migration_planning` is not cutover approval: upload, migration and
+all remote mutations require a separate change.
+
 ## Confirmed non-secret inputs
 
 | Input | Value |

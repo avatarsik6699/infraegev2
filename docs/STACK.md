@@ -85,7 +85,8 @@ stops a tunnel this Makefile started, `make tunnel-status` reports interface/rou
 Wraps `scripts/wireguard-tunnel.sh`; requires the protected config at
 `~/.config/infraege/production/infraege-wsl.conf` (or `$INFRAEGE_WG_CONFIG`) to already exist.
 
-Read-only operations commands are `make ops-inventory`, `make ops-status` and `make ops-plan`.
+Read-only operations commands are `make ops-inventory`, `make ops-status`, `make ops-plan` and
+`make ops-preflight BUNDLE=/path/to/bundle.json`.
 Their canonical desired state is `ops/observability/desired-state.json`; JSON consumers call
 `ops/opsctl <command> --json`. These commands never expose remote environment values or raw SSH
 stderr. Production apply and any mutating remote transport remain unavailable.
@@ -103,6 +104,12 @@ The inactive independent definition is `ops/observability/compose.yml`, always r
 provide every name listed in `ops/observability/env.contract`. `make ops-bundle` emits a
 deterministic manifest of repository-relative asset hashes. Neither target runs `pull`, `create`,
 `up` or any remote command. Synthetic values are allowed only in disposable validation tests.
+
+Generate a persisted manifest with `python3 ops/observability/build-bundle.py --output FILE`, then
+pass it to `ops-preflight`. The fixed remote collector returns only allowlisted readiness codes for
+tools, WireGuard, Compose ownership, target path, backup freshness and restore proof. A green report
+means only `ready_for_migration_planning`; `authorized_to_apply` is always false. It performs no
+upload, Compose/systemd action, migration or cutover and suppresses raw SSH output.
 
 ### pnpm workspace policy
 

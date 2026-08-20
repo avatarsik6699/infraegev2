@@ -19,6 +19,7 @@ from typing import Any
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 DEFAULT_DESIRED = ROOT / "ops/observability/desired-state.json"
 REMOTE_COLLECTOR = ROOT / "ops/observability/remote-inventory.sh"
+REMOTE_PREFLIGHT = ROOT / "ops/observability/remote-preflight.sh"
 SSH_WRAPPER = ROOT / "scripts/production-root-ssh.sh"
 SUPPORTED_SCHEMA_VERSION = 1
 FORBIDDEN_KEY = re.compile(r"(?:secret|password|token|credential|private_key|environment)", re.I)
@@ -29,6 +30,7 @@ CONTRACT_KINDS = {
     "inventory",
     "outbox",
     "plan",
+    "preflight",
     "revision",
     "status",
 }
@@ -101,6 +103,17 @@ def validate_contract(kind: str, value: dict[str, Any]) -> None:
             "summary",
             "changes",
         },
+        "preflight": {
+            "schema_version",
+            "installation_id",
+            "bundle_id",
+            "observed_at",
+            "reachable",
+            "ready_for_migration_planning",
+            "authorized_to_apply",
+            "summary",
+            "checks",
+        },
         "status": {
             "schema_version",
             "installation_id",
@@ -148,6 +161,15 @@ def validate_contract(kind: str, value: dict[str, Any]) -> None:
             raise ContractError("plan contains an unknown effect")
         if not re.fullmatch(r"[a-f0-9]{64}", str(value["plan_id"])):
             raise ContractError("plan_id must be a lowercase SHA-256 digest")
+    if kind == "preflight":
+        if value["authorized_to_apply"] is not False or not isinstance(value["checks"], list):
+            raise ContractError("preflight cannot authorize apply and checks must be an array")
+        if not re.fullmatch(r"[a-f0-9]{64}", str(value["bundle_id"])):
+            raise ContractError("preflight bundle_id must be a lowercase SHA-256 digest")
+        if any(
+            item.get("status") not in {"pass", "warning", "blocker"} for item in value["checks"]
+        ):
+            raise ContractError("preflight contains an unknown status")
     if kind == "revision" and value["status"] != "applied":
         raise ContractError("revision status must be applied")
     if kind == "apply-result" and value["status"] not in {"applied", "failed", "no-op"}:
@@ -284,6 +306,106 @@ def collect_inventory(desired: dict[str, Any]) -> dict[str, Any]:
         return inventory_from_tsv(desired, completed.stdout)
     except ContractError:
         return unreachable_inventory(desired)
+
+
+PREFLIGHT_CODES: dict[str, set[str]] = {
+    "docker": {"available", "missing"},
+    "compose": {"available", "missing"},
+    "systemd": {"available", "missing"},
+    "jq": {"available", "missing"},
+    "restic": {"available", "missing"},
+    "wireguard": {"active", "missing"},
+    "application-project": {"owned", "missing"},
+    "operations-project": {"absent", "already-running"},
+    "target-directory": {"available", "unsafe"},
+    "backup-freshness": {"fresh", "stale-or-missing"},
+    "restore-proof": {"successful", "missing-or-failed"},
+}
+
+
+def preflight_from_tsv(desired: dict[str, Any], bundle: dict[str, Any], raw: str) -> dict[str, Any]:
+    checks: list[dict[str, str]] = []
+    seen: set[str] = set()
+    for line in raw.splitlines():
+        parts = line.split("\t")
+        if len(parts) != 3:
+            raise ContractError("remote preflight returned an invalid sanitized record")
+        check_id, status, code = parts
+        if check_id not in PREFLIGHT_CODES or check_id in seen:
+            raise ContractError("remote preflight returned an unknown or duplicate check")
+        if status not in {"pass", "warning", "blocker"} or code not in PREFLIGHT_CODES[check_id]:
+            raise ContractError("remote preflight returned an invalid status or code")
+        seen.add(check_id)
+        checks.append({"id": check_id, "status": status, "code": code})
+    if seen != set(PREFLIGHT_CODES):
+        raise ContractError("remote preflight omitted required checks")
+    checks.sort(key=lambda item: item["id"])
+    counts = {
+        status: sum(item["status"] == status for item in checks)
+        for status in ("pass", "warning", "blocker")
+    }
+    result = {
+        "schema_version": 1,
+        "installation_id": desired["installation_id"],
+        "bundle_id": bundle["bundle_id"],
+        "observed_at": utc_now(),
+        "reachable": True,
+        "ready_for_migration_planning": counts["blocker"] == 0,
+        "authorized_to_apply": False,
+        "summary": counts,
+        "checks": checks,
+    }
+    validate_contract("preflight", result)
+    return result
+
+
+def collect_preflight(desired: dict[str, Any], bundle: dict[str, Any]) -> dict[str, Any]:
+    fixture = os.environ.get("INFRAEGE_OPS_PREFLIGHT_FILE")
+    if fixture:
+        return preflight_from_tsv(
+            desired, bundle, pathlib.Path(fixture).read_text(encoding="utf-8")
+        )
+    try:
+        completed = subprocess.run(
+            [str(SSH_WRAPPER), "bash", "-se"],
+            input=REMOTE_PREFLIGHT.read_text(encoding="utf-8"),
+            text=True,
+            capture_output=True,
+            check=False,
+            timeout=30,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        completed = None
+    if completed is None or completed.returncode != 0:
+        result = {
+            "schema_version": 1,
+            "installation_id": desired["installation_id"],
+            "bundle_id": bundle["bundle_id"],
+            "observed_at": utc_now(),
+            "reachable": False,
+            "ready_for_migration_planning": False,
+            "authorized_to_apply": False,
+            "summary": {"pass": 0, "warning": 0, "blocker": 1},
+            "checks": [{"id": "remote-access", "status": "blocker", "code": "ssh-unreachable"}],
+        }
+        validate_contract("preflight", result)
+        return result
+    try:
+        return preflight_from_tsv(desired, bundle, completed.stdout)
+    except ContractError:
+        result = {
+            "schema_version": 1,
+            "installation_id": desired["installation_id"],
+            "bundle_id": bundle["bundle_id"],
+            "observed_at": utc_now(),
+            "reachable": True,
+            "ready_for_migration_planning": False,
+            "authorized_to_apply": False,
+            "summary": {"pass": 0, "warning": 0, "blocker": 1},
+            "checks": [{"id": "remote-protocol", "status": "blocker", "code": "invalid-response"}],
+        }
+        validate_contract("preflight", result)
+        return result
 
 
 def build_plan(desired: dict[str, Any], inventory: dict[str, Any]) -> dict[str, Any]:
@@ -574,6 +696,12 @@ def emit(value: dict[str, Any], as_json: bool, command: str) -> None:
         print("mutating: no")
         for item in value["changes"]:
             print(f"  {item['effect']}: {item['component_id']} ({item['reason']})")
+    elif command == "preflight":
+        ready = "yes" if value["ready_for_migration_planning"] else "no"
+        print(f"ready for migration planning: {ready}")
+        print("authorized to apply: no")
+        for item in value["checks"]:
+            print(f"  {item['status']}: {item['id']} ({item['code']})")
     else:
         print(f"status: {value['status']}")
         print(f"effects applied: {value['effects_applied']}")
@@ -587,6 +715,9 @@ def parser() -> argparse.ArgumentParser:
     for name in ("inventory", "status", "plan"):
         command = subcommands.add_parser(name)
         command.add_argument("--json", action="store_true")
+    preflight = subcommands.add_parser("preflight")
+    preflight.add_argument("--bundle-manifest", required=True, type=pathlib.Path)
+    preflight.add_argument("--json", action="store_true")
     apply = subcommands.add_parser("apply")
     apply.add_argument("--plan-file", required=True, type=pathlib.Path)
     apply.add_argument("--inventory-file", required=True, type=pathlib.Path)
@@ -607,6 +738,35 @@ def main() -> int:
             print(f"{args.kind}: valid")
             return 0
         desired = desired_state(args.desired)
+        if args.command == "preflight":
+            bundle = load_json(args.bundle_manifest)
+            require_fields(
+                bundle,
+                {"schema_version", "installation_id", "compose_project", "bundle_id", "assets"},
+                "bundle",
+            )
+            assert_secret_free(bundle)
+            if (
+                bundle["schema_version"] != 1
+                or bundle["installation_id"] != desired["installation_id"]
+            ):
+                raise ContractError("bundle manifest does not match desired installation")
+            if not re.fullmatch(r"[a-f0-9]{64}", str(bundle["bundle_id"])):
+                raise ContractError("bundle manifest has invalid bundle_id")
+            bundle_identity = {
+                "schema_version": bundle["schema_version"],
+                "installation_id": bundle["installation_id"],
+                "compose_project": bundle["compose_project"],
+                "assets": bundle["assets"],
+            }
+            expected_bundle_id = hashlib.sha256(
+                canonical_json(bundle_identity).encode()
+            ).hexdigest()
+            if bundle["bundle_id"] != expected_bundle_id:
+                raise ContractError("bundle manifest identity does not match bundle_id")
+            value = collect_preflight(desired, bundle)
+            emit(value, args.json, args.command)
+            return 0 if value["ready_for_migration_planning"] else 2
         if args.command == "apply":
             inventory = load_json(args.inventory_file)
             validate_contract("inventory", inventory)

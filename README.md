@@ -264,6 +264,11 @@ environment защищёнными значениями, а `make ops-bundle` п
 manifest и hashes repository-owned assets. Эти команды не запускают и не загружают контейнеры;
 параллельный старт рядом с текущим application Compose запрещён до отдельной миграции.
 
+Перед проектированием этой миграции сохраните manifest через
+`python3 ops/observability/build-bundle.py --output /tmp/infraege-ops-bundle.json` и запустите
+`make ops-preflight BUNDLE=/tmp/infraege-ops-bundle.json`. Это только санитизированная read-only
+проверка; даже полностью зелёный отчёт содержит `authorized_to_apply: false`.
+
 First-party sibling [sre-kit](https://github.com/avatarsik6699/sre-kit) остаётся универсальным
 ядром наблюдаемости: adapters, Source configuration, normalization, alerts и monitoring UI. Он
 читает источники infraegev2 через private API/WireGuard/read-only SSH, но не устанавливает и не

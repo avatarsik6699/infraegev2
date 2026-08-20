@@ -9,6 +9,10 @@ and restore-check events but never runs backup, restore or retention mutations. 
 currently observes only timer state—the freshness and installed-restore proofs below remain the
 authoritative acceptance checks.
 
+`opsctl preflight` evaluates the freshness script and the last successful systemd restore result
+as sanitized readiness codes. Missing, stale or failed proof blocks migration planning, but the
+command never starts backup/restore and never reads their logs.
+
 `ops/observability/backup-cutover.json` names the future independent Umami database and Beszel
 volume, but `activation_status: inactive-definition-only` means the existing backup script below
 remains authoritative. Do not switch backup ownership merely because the new Compose renders.

@@ -6,6 +6,11 @@ public root/password SSH; keep the provider console open during any access chang
 place every required value using the ordered
 [production onboarding guide](production-onboarding.md) before following this summary.
 
+Before any separate migration/cutover change, persist the bundle manifest and run
+`make ops-preflight BUNDLE=...`. Resolve all blockers and retain JSON evidence from
+`ops/opsctl preflight --bundle-manifest ... --json`; preflight neither uploads the bundle nor
+authorizes production changes.
+
 ## One-time bootstrap
 
 1. In REG.RU replace the existing `A` records for `@` and `www` with `2.26.8.245`, TTL 300 during

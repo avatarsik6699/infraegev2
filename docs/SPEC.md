@@ -571,6 +571,16 @@ read-only proxy. Наличие и локальная валидация bundle 
 принадлежат текущему application Compose, новый stack нельзя поднимать параллельно из-за port/data
 ownership. Remote preflight, data migration и cutover остаются отдельными последовательными gates.
 
+Remote preflight является отдельной read-only стадией до любой миграции. Он связывает
+`bundle_id` проверенного локального bundle с санитизированным снимком VPS и проверяет только
+наличие обязательных host tools, WireGuard interface, текущую Compose ownership, отсутствие
+запущенного `infraege-ops`, доступность целевых каталогов, установленные backup/restore units и
+результат freshness/restore proof. Удалённый collector возвращает закрытый набор кодов, а не
+environment, логи, пути credentials или raw stderr. Итоговый versioned report различает
+`pass`/`warning`/`blocker`, всегда содержит `authorized_to_apply: false` и не является разрешением
+на upload, migration, Compose/systemd mutation или cutover. Неизвестная, malformed или
+недоступная проверка fail closed как blocker.
+
 ---
 
 ## 8. Non-Functional Requirements

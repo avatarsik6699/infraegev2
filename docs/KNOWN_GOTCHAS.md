@@ -34,6 +34,15 @@
   inspect checkpoint/revision/outbox evidence there. Production execution requires a later
   approved change and must never be inferred from credentials found in the environment.
 
+### A green operations preflight is not production approval
+
+- **Symptoms:** `ready_for_migration_planning` is treated as permission to upload the bundle or
+  start `infraege-ops`.
+- **Root cause:** preflight validates prerequisites and current ownership only; it does not
+  exercise migration, rollback or operator approval.
+- **Fix:** require the separate migration/cutover change and explicit approval. The report's
+  `authorized_to_apply` field must remain false.
+
 ### A valid `infraege-ops` Compose render is not permission to start it
 
 - **Symptoms:** `make ops-config` passes and the inactive stack is started beside the current

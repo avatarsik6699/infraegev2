@@ -9,6 +9,7 @@
     "ops/observability/compose.yml",
     "ops/observability/desired-state.json",
     "ops/observability/env.contract",
+    "ops/observability/remote-preflight.sh",
     "ops/observability/schemas/apply-result.schema.json",
     "ops/observability/schemas/backup-cutover.schema.json",
     "ops/observability/schemas/bundle.schema.json",
@@ -17,6 +18,7 @@
     "ops/observability/schemas/inventory.schema.json",
     "ops/observability/schemas/outbox.schema.json",
     "ops/observability/schemas/plan.schema.json",
+    "ops/observability/schemas/preflight.schema.json",
     "ops/observability/schemas/revision.schema.json",
     "ops/observability/schemas/status.schema.json"
   ]

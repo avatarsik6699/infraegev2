@@ -61,6 +61,7 @@ help:
 	@echo "  make ops-apply-sandbox PLAN=... INVENTORY=... SANDBOX_ROOT=..."
 	@echo "  make ops-config                   Validate inactive infraege-ops Compose definition"
 	@echo "  make ops-bundle                   Print deterministic operations bundle manifest"
+	@echo "  make ops-preflight BUNDLE=...     Run read-only production readiness preflight"
 
 dev:
 	@STOP_TIMEOUT=$(STOP_TIMEOUT) $(DOCKER_LIFECYCLE) dev
@@ -136,3 +137,7 @@ ops-config:
 
 ops-bundle:
 	@python3 ops/observability/build-bundle.py
+
+ops-preflight:
+	@test -n "$(BUNDLE)" || { echo "BUNDLE is required" >&2; exit 2; }
+	@./ops/opsctl preflight --bundle-manifest "$(BUNDLE)"
