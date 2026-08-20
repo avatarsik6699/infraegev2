@@ -7,7 +7,7 @@
 | Change | `40` |
 | Slug | `production-ops-activation` |
 | Title | Production Operations Activation Gate |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/40-production-ops-activation` |
 
 ---
