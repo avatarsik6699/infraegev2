@@ -1,14 +1,19 @@
 # infraege
 
 Веб-приложение для подготовки к ЕГЭ по информатике с двумя опубликованными полными уроками,
-связанной практикой и локальным прогрессом ученика. Каталог намеренно поставлен на паузу: перед
-третьей темой проект проходит аудит целостного learner journey и закрывает найденные продуктовые
-пробелы.
+связанной практикой и локальным прогрессом ученика. Аудит learner journey и закрытие анонимного
+progress/result/continuation loop завершены; перед выбором третьей темы или первого среза
+мини-курса проект стабилизирует документацию и зафиксированные границы двух репозиториев.
 
 Технический контракт проекта находится в [`docs/SPEC.md`](docs/SPEC.md), команды и версии стека —
 в [`docs/STACK.md`](docs/STACK.md). Production-контур для `infraege.ru` описан в
 [`docs/runbooks/production.md`](docs/runbooks/production.md). Production работает на
 `infraege.ru`; application и operations используют независимые Compose projects.
+
+Статус `complete`/`archived` в change-файлах описывает код в локальной истории репозитория, а не
+факт публикации. GitHub может отставать от локального `main`, а production — от GitHub; фактически
+развёрнутый SHA всегда проверяется через `/health/ready` и release evidence, а не выводится из
+документационного статуса.
 
 ## Быстрый старт — одна команда
 
@@ -273,7 +278,9 @@ Source-конфигураций сверены с актуальными adapter
 ровно шесть уникальных enabled Sources и доказал для каждой свежие polling/status, quiet success,
 обратимый failure/recovery и authenticated Dashboard/Sources/detail без target-side mutations.
 Этот proof не делает локальный sre-kit core круглосуточным: когда workstation выключен, polling и
-alerts не выполняются.
+alerts не выполняются. Source registration является операторским действием внутри sre-kit, а
+адаптеры сами читают targets; generic push ingress остаётся будущим sre-kit M9 и здесь не
+подразумевается.
 
 Runbook’и: [DNS/TLS](docs/runbooks/dns-tls.md),
 [backup/restore](docs/runbooks/backup-restore.md),

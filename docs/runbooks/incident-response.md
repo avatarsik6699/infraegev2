@@ -39,4 +39,6 @@ accepted split topology now runs independently; legacy volumes remain rollback-o
 Confirm public page and readiness, certificate validity, analytics collection, fresh tagged
 application and operations backups, and all dashboard sources. Record root cause, timeline,
 affected data, corrective backlog item and whether
-legal notification duties need specialist review. Telegram alerts are deliberately deferred.
+legal notification duties need specialist review. infraegev2-specific Telegram rule/channel
+wiring is deliberately deferred; sre-kit's generic Telegram engine already exists, but it sends
+nothing for this target while the workstation-hosted core is off or no rule is configured.

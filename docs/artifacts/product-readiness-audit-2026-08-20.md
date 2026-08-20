@@ -13,6 +13,18 @@ clear lesson-only reset, and offer registry-derived links back to all topics and
 published lesson without presenting it as a personalized recommendation. It must add Page Object
 coverage for incorrect, accepted, reload, failure/retry, reset and cross-lesson continuation.
 
+## Current disposition
+
+This table updates the finding state without rewriting the historical observations and evidence
+below. A resolved repository finding does not by itself mean the change has reached production.
+
+| Finding | Current disposition |
+|---------|---------------------|
+| `PR-01`, `PR-02`, `PR-03`, `PR-06` | Resolved by archived Change 46: result/mastery, lesson-only reset, registry-derived continuation and the full Page Object journey are implemented |
+| `PR-05` | Resolved in Change 47 by replacing the scheduled-sounding promise with factual current-state privacy copy; no operator details or contact channel were invented |
+| `PR-04` | Open, deferred to explicit architect visual review; Change 47 does not redesign the mobile outline or task layout |
+| `PR-07` | Accepted limitation: the completed bounded proof remains valid, but polling and alerts stop while the workstation-hosted sre-kit core is off |
+
 ## Evidence method
 
 All production checks were read-only. No production browser was opened, so the audit itself did

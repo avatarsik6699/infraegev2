@@ -243,7 +243,6 @@ tool that isn't available must be reported as skipped with a reason, never silen
 | New/changed API surface | `openapi-typescript` regen + frontend re-typecheck | after backend contract change | yes — `pnpm api:generate` updates tracked artifacts; `pnpm api:check` proves no drift |
 | Frontend architecture decision | `frontend-architecture` skill | during planning and architecture review | yes — installed in the local Codex skill catalog |
 | Backend architecture decision | `backend-architecture` skill | during planning and architecture review | yes — installed in the local Codex skill catalog |
-| Backend/API design decision | `backend-design` skill | during `/plan` §4 and backend-architecture Backlog items | yes |
 
 Mark a row `no` (not available) rather than leaving it blank — an unmarked row is otherwise
 ambiguous between "not asked" and "not needed."
@@ -386,7 +385,7 @@ component libraries are adopted only with a real consumer and a local semantic b
 ```
 main.py      create_app() factory.
 api/         router.py — aggregates every module's router under one prefix (`/api`, not `/api/v1`
-             — see docs/changes/02-architecture-refactor.md's Contracts section for why).
+             — see docs/changes/archive/02-architecture-refactor.md's Contracts section for why).
 core/        cross-cutting infra with no HTTP surface of its own: config (Settings), exceptions
              (AppException base), logging (structlog), middleware (request-id + error alerting),
              structured logging). Modules may import from core/; core/ must not import modules/.

@@ -8,7 +8,7 @@ import tseslint from "typescript-eslint";
 
 // FSD-like layer boundaries (docs/STACK.md § Project structure): each layer may only import
 // from itself and the layers below it. Without this, the layering decays back to flat within a
-// change or two — see docs/changes/02-architecture-refactor.md.
+// change or two — see docs/changes/archive/02-architecture-refactor.md.
 const removedVendorPatterns = [
   {
     group: ["@mantine/*"],

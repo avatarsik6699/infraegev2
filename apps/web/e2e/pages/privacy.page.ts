@@ -19,7 +19,7 @@ export class PrivacyPage {
     await expect(
       this.page.getByText(/отправленные правильные ответы/),
     ).toBeVisible();
-    await expect(this.page.getByText(/будут добавлены позднее/)).toBeVisible();
+    await expect(this.page.getByText(/сейчас не опубликованы/)).toBeVisible();
     await expect(this.page.locator('link[rel="canonical"]')).toHaveAttribute(
       "href",
       "https://infraege.ru/privacy",

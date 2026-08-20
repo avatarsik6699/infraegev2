@@ -239,16 +239,6 @@
   `pg_restore` (`CREATE ROLE umami NOLOGIN`). Keep `--exit-on-error`; do not hide ownership drift
   with `--no-owner` when the purpose of the drill is fidelity. Always prove cleanup on failure.
 
-### Ubuntu already has a system group named `operator`
-
-- **Symptoms**: `useradd operator` fails with `group operator exists`, or a hand-written workaround
-  silently places the human login in an unrelated pre-existing system group.
-- **Root cause**: Ubuntu reserves an `operator` group even when no `operator` user exists; default
-  user-private-group creation collides with it.
-- **Fix**: keep the login name `operator`, but create and use the dedicated primary group
-  `infraege-operator`. Add only the user to the standard `sudo` supplementary group, validate the
-  effective SSH hardening before success, and keep `deploy` outside sudo.
-
 ### Production: operator details and RKN work are accepted indefinite legal debt
 
 - **Symptoms**: legal pages can describe current processing, but cannot identify the operator or

@@ -95,17 +95,19 @@ SEO/legal surfaces. Lab-маршруты остаются unlisted/noindex и н
 4. **Практика** (`practice`, обязательна) содержит постепенно усложняющиеся самостоятельные
    задачи с приоритетом свободного ввода, доступными подсказками и решениями.
 5. **Результат** (`result`, обязательна) завершает материал итогами, освоенными умениями,
-   результатом практики, зонами для повторения и следующим связанным материалом.
+   результатом практики, текущим mastery-состоянием и registry-derived списком доступных
+   опубликованных материалов.
 
 Роли идут только в этом порядке; опциональные роли можно пропускать, но нельзя переставлять.
 Контент включается только когда помогает понять материал, решить задачу или выбрать следующий шаг.
 
-Подсказки и решение доступны сразу. Правильная работа с подсказкой учитывается в прогрессе; при
-слабом результате `result` рекомендует конкретный материал для повторения, а не вводит штраф.
-Отдельного финального испытания без подсказок, таймеров, задержек, assisted-solution scoring и
-оценки уверенности по каждому шагу нет. Их нельзя добавлять без нового решения архитектора.
-Глубина разделов зависит от сложности материала, но линейная модель предпочтительнее скрытого
-адаптивного ветвления.
+Подсказки и решение доступны сразу и не меняют прогресс. Прогресс хранит только принятые ответы и
+вычисленные из них solved/mastery-состояния текущего урока; `result` показывает этот итог и
+registry-derived список доступных опубликованных материалов, не выдавая его за персональную
+рекомендацию. Отдельного финального испытания без подсказок, таймеров, задержек,
+assisted-solution scoring, оценки уверенности или персонализированного повторения нет. Их нельзя
+добавлять без нового решения архитектора. Глубина разделов зависит от сложности материала, но
+линейная модель предпочтительнее скрытого адаптивного ветвления.
 
 Reset удаляет конкретные публикации и UI-решения, но не этот контракт и не предметную область
 продукта. Сохраняются нейтральные сущности Topic/CourseLesson/Task, связи и mastery-семантика;
@@ -522,10 +524,10 @@ Nginx выставляет `Cache-Control`/`ETag` для хэшированно�
 
 ```text
 infraegev2 ops package ── pinned SSH/Compose/systemd ──> application VPS operations stack
-       │
-       └─ registration + sanitized Check/Event ──> sre-kit (local or management VPS)
 
-sre-kit adapters ── WireGuard/private API/read-only SSH ──> observability Sources
+sre-kit operator ── registers Source config in sre-kit ──> adapter engine
+sre-kit adapters ── WireGuard/private API/read-only SSH ──> infraegev2 observability targets
+                <── normalized Metric/Check/Event results ──┘
 
 application VPS
   ├─ infraege Compose: nginx, web, api, application Postgres
@@ -616,7 +618,7 @@ target-side mutations. Это завершает integration proof, но не о
 | `M0` — технический фундамент | complete | Сохранить проверенную web/backend/ops инфраструктуру без навязывания продуктовой страницы | Исторический neutral baseline, shared primitives, API contract, content skeleton и локальные gates |
 | `M1` — новый product/design baseline | complete | Доказать заменяемую визуальную систему без преждевременной публикации | «Инженерная тетрадь», unlisted design-system/lesson labs, единый frontend-контракт и reusable primitives |
 | `M2` — инфраструктурная пауза | complete | Подготовить production-платформу до продолжения продуктового контента | `infraege.ru`, VPS/GHCR deploy, security/release gates, backups и независимый operations stack активны; linked sre-kit Change 20 доказал все шесть Sources end to end |
-| `M3` — учебный flow и публичный запуск | in progress | Завершить доменную логику, основные поверхности сайта и проверенный MVP-контент до расширения аналитики | Аудит двух опубликованных уроков завершён: checker/content/production surfaces готовы, но анонимный progress/result/continuation loop остаётся блокером до третьей темы или мини-курса Python |
+| `M3` — учебный flow и публичный запуск | in progress | Завершить доменную логику, основные поверхности сайта и проверенный MVP-контент до расширения аналитики | Два опубликованных урока и анонимный progress/result/continuation loop готовы; следующий выбор — третья тема или первый целостный срез мини-курса Python, но только после документационной стабилизации |
 | `M4` — финальное измерение и эксплуатация | planned | Только после готовности домена, сайта и MVP-контента расширить продуктовые сигналы | Privacy-safe allowlist продуктовых событий Umami и проверка сбора данных; lifecycle остаётся в `opsctl`, monitoring UI — в sre-kit |
 | `M5+` (после первых данных, вне MVP) | deferred | Расширение охвата и сообщества поверх работающей бесплатной базы | Второй мини-курс (Excel), аккаунты/синхронизация, обсуждения тем с модерацией, затем платные фичи — без runtime AI до этого момента |
 
@@ -627,7 +629,7 @@ target-side mutations. Это завершает integration proof, но не о
 | `0` | Завершить документационные infraegev2 Change 44 и sre-kit Change 19 | Complete: документы обоих репозиториев согласованы, stale local Source state зафиксирован без секретов, runtime не мутировался |
 | `1` | В sre-kit Change 20 сверить и доказать шесть infraegev2 Sources | Complete: stale записи безопасно инвентаризированы; все шесть текущих конфигураций зарегистрированы; доказаны свежие polling/status/dashboard и failure/recovery evidence |
 | `2` | Провести product-readiness audit двух опубликованных уроков | Complete: вход, оба урока, checker/persistence/recovery, mobile/no-JS, trust, crawl и production/monitoring evidence проверены; находки `PR-01`–`PR-07` ранжированы в `docs/artifacts/product-readiness-audit-2026-08-20.md` |
-| `3` | Закрыть Change 46 — анонимный progress/result/continuation loop | В одном browser journey ученик видит solved/mastery result, сбрасывает только текущий урок и переходит к другой опубликованной теме или ко всем темам; incorrect/failure/retry/reload/reset/continuation защищены Page Object coverage без аккаунта, новых событий или выдуманных связей |
+| `3` | Закрыть Change 46 — анонимный progress/result/continuation loop | Complete: browser journey показывает solved/mastery result, сбрасывает только текущий урок и переводит к другой опубликованной теме или ко всем темам; incorrect/failure/retry/reload/reset/continuation защищены Page Object coverage без аккаунта, новых событий или выдуманных связей |
 | `4` | Выбрать расширение M3: третья тема ЕГЭ или первый срез мини-курса Python | Выбор опирается на аудит, связи между уже опубликованными материалами и минимальный целостный learner outcome; новый контент не начинается автоматически |
 | `5` | После готовности MVP перейти к M4 | Определён privacy-safe event allowlist, проверена фактическая доставка Umami без ответов, свободного текста и лишних идентификаторов |
 
