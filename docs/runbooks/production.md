@@ -8,9 +8,9 @@ place every required value using the ordered
 
 The independent operations definition can be validated locally with
 `make ops-config ENV_FILE=... RELEASE=<full-sha>`. Do not run `ops-install` while the live
-application release still owns Umami/Beszel ports. The repository is prepared for a fresh-start
-cutover, but this runbook does not authorize executing it; no old analytics or metrics data is
-transferred.
+application release still owns Umami/Beszel ports. The first authorized fresh-start attempt rolled
+back after Beszel Hub's WireGuard binding proved unreachable; retry only with a published SHA that
+contains the dual-network Hub fix. No old analytics or metrics data is transferred.
 
 ## One-time bootstrap
 
@@ -96,12 +96,16 @@ infraegev2 deployment automation or target credentials. The repository definitio
 split, while the live VPS remains unchanged until an explicitly authorized cutover. Do not recreate
 the retired `apps/ops` dashboard.
 
-## Prepared fresh-start cutover (not yet authorized)
+## Prepared fresh-start cutover retry
 
 Use one full SHA that contains this topology and has already passed the Release Gate. Keep the
 provider console open and record the previous application release SHA. Before the maintenance
 window, validate the protected operations env locally, prove the current application backup and
 confirm that no `infraege-ops` project is installed.
+
+The 2026-08-20 first attempt exercised rollback successfully after Beszel Hub was unreachable on
+its declared WireGuard port. Do not reuse that candidate. The retry SHA must attach Beszel to both
+`ops-internal` and `infraege-observability-ingress`; Postgres remains internal-only.
 
 During the authorized window:
 

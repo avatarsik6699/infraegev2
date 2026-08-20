@@ -35,7 +35,9 @@ jq -e '
 
 jq -e '
   .networks["observability-ingress"].external == true and
-  .services.umami.networks["observability-ingress"].aliases == ["umami"]
+  .services.umami.networks["observability-ingress"].aliases == ["umami"] and
+  (.services.beszel.networks | has("ops-internal")) and
+  (.services.beszel.networks | has("observability-ingress"))
 ' "$test_root/operations.json" >/dev/null
 
 ! rg -n '^  (umami|beszel|beszel-agent|docker-socket-proxy):|^  beszel-(data|socket):' \

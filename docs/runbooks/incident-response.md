@@ -1,5 +1,10 @@
 # Incident response
 
+The 2026-08-20 split-operations cutover exercised this rollback boundary successfully: operations
+timers were disabled, the independent project was stopped without `--volumes`, and the previous
+combined application release restored all legacy observability services. The preserved clean-start
+volumes are not evidence that the corrected topology has shipped or been activated.
+
 ## Triage
 
 1. Record UTC start time, affected URLs and deployed SHA; do not rotate/delete logs before capture.

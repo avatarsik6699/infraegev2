@@ -101,9 +101,10 @@ release. Releases live under `/opt/infraege-ops`, their mode-600 environments un
 `/etc/infraege/ops`, and none of these commands reference the application Compose project.
 
 The repository's application production definition now owns only Nginx, web, API and its Postgres;
-Nginx attaches to `infraege-observability-ingress`. The existing VPS may still run the previous
-combined release, so install/update must not run before the separately approved fresh-start cutover
-frees its legacy ports. This repository deliberately has no desired-state JSON,
+Nginx attaches to `infraege-observability-ingress`. The VPS currently runs the previous combined
+release after the first cutover attempt failed its Beszel private-port check and rolled back. A
+retry must use a published SHA containing the corrected dual-network Hub definition and first free
+the legacy ports. This repository deliberately has no desired-state JSON,
 generic plan/apply engine, migration rehearsal, snapshot selector or deployment UI. Compose is the
 service desired state; the runbook is the cross-project transition contract.
 

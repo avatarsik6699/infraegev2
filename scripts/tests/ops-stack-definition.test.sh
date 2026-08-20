@@ -40,6 +40,8 @@ jq -e --arg release "$release" '
   .networks["observability-ingress"].external == true and
   .networks["observability-ingress"].name == "infraege-observability-ingress" and
   .services.umami.networks["observability-ingress"].aliases == ["umami"] and
+  (.services.beszel.networks | has("ops-internal")) and
+  (.services.beszel.networks | has("observability-ingress")) and
   (.services.postgres.networks | has("observability-ingress") | not) and
   (.volumes | keys) == ["beszel-data","beszel-socket","ops-postgres-data"]
 ' "$test_root/compose.json" >/dev/null

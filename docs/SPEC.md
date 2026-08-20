@@ -570,11 +570,12 @@ Umami/Beszel из-за занятых ports.
 подключаются к ней; Umami получает стабильный alias `umami`, а Nginx остаётся также в application
 network для web/api. Создание сети — одна явная lifecycle-операция, а не отдельная модель ресурсов.
 
-Fresh-start cutover остаётся отдельной, ещё не выполненной production-операцией: проверить shared
-network, остановить legacy observability services, выпустить подготовленный application release,
-запустить чистый `infraege-ops`, активировать его timers, зарегистрировать Sources и проверить
-dashboard. Старые volumes сохраняются на короткий rollback-период. Их удаление и перенос старых
-данных не входят в cutover и требуют отдельного явно одобренного действия.
+Первый авторизованный fresh-start cutover был безопасно откачен после того, как live-проверка
+обнаружила недоступный WireGuard port Beszel Hub: сервис был подключён только к `internal`-сети.
+Исправленная definition подключает Hub также к shared non-internal network, сохраняя host binding
+`10.77.0.1:8090` и не добавляя public Nginx route. Повторный cutover остаётся отдельной
+production-операцией после публикации immutable SHA. Старые и новые volumes сохранены; их удаление
+или перенос данных требуют отдельного явно одобренного действия.
 
 `ops/observability/sre-kit-sources.example.json` — secret-free операторская подсказка, а не новый
 универсальный deployment contract. Поля сверяются с manifest соответствующего adapter, но реальные
@@ -590,7 +591,7 @@ IDs/accounts/secrets вводятся в sre-kit. Недоступность sre
 | Security headers / CORS | Rate limiting чекер-эндпоинта на Nginx: `limit_req_zone` 20 req/min/IP, burst 5, `nodelay` (см. §4, §11.2 источника) — против автоматизированного перебора банка ответов; конкретную цифру пересмотреть по факту логов после запуска. Временный public root/password SSH защищён только уникальным длинным паролем, pinned host key, UFW, fail2ban и GitHub Environment approval; риск полного захвата VPS при компрометации пароля принят архитектором до отдельного возврата key-only access. |
 | Accessibility target | Foundation и lab не имеют serious/critical axe violations; lesson outline сохраняет вложенный semantic list, anchors, keyboard focus, различимый текущий пункт и корректный source order, а сложный визуал имеет видимую полную текстовую альтернативу |
 | Performance budget | LCP < 2.5s, CLS < 0.1, INP < 200ms на мобильном 4G-профиле; release evidence измеряет `/` и первый опубликованный `/ege/16-rekursiya`, отдельно проверяет cold-load font/layout shifts и не подменяет route-level метрики общей оценкой технической страницы |
-| Observability | Application deploy и operations stack имеют независимые Compose projects, volumes и rollback. infraegev2 владеет небольшим Compose/SSH operations package; sre-kit работает вне monitored VPS и владеет только ingestion, adapters, alerts и UI. Репозиторий подготовлен к fresh-start cutover, его live-выполнение требует отдельного разрешения |
+| Observability | Application deploy и operations stack имеют независимые Compose projects, volumes и rollback. infraegev2 владеет небольшим Compose/SSH operations package; sre-kit работает вне monitored VPS и владеет только ingestion, adapters, alerts и UI. Первый live cutover выявил Beszel network defect и был откачен; повтор требует опубликованного исправленного SHA |
 | Backup / restore | Application и operations jobs используют отдельные Restic tags, restore proofs и status markers в общем encrypted repository. Operations timers активируются только после clean install, без импорта старых Umami/Beszel artifacts. Для каждого владельца сохраняются 7 daily + 4 weekly + 3 monthly и общий same-host/off-site risk |
 | SEO | `/`, `/privacy` и published topics имеют canonical, уникальные metadata, SSR content и входят в sitemap/prerender; lab и review routes остаются unlisted, `noindex,nofollow` и исключены из public discovery; Lighthouse SEO для публичных маршрутов проходит без ошибок |
 | Mobile / no-JS readability | Lab и topic lesson сохраняют текст, последовательные стадии визуала, подписи, решения и section anchors в SSR HTML; интерактивная проверка остаётся progressive enhancement |

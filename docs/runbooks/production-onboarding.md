@@ -169,8 +169,9 @@ The repository contains the prepared `infraege-ops` Compose definition. Onboardi
 start it and does not create a second Umami/Beszel installation. Its
 `env.contract` records names only; actual values remain in the protected operations environment.
 Create `~/.config/infraege/production/ops.env` with exactly those names, independently generated
-values and mode `600`; do not copy it into the checkout. Use the definition only for local render
-validation until the fresh-start cutover is approved:
+values and mode `600`; do not copy it into the checkout. After the first cutover attempt rolled
+back, the generated file and clean operations volumes were deliberately retained for the corrected
+retry. Validate the exact retry release before any install/update:
 
 ```bash
 make ops-config \
