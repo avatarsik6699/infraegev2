@@ -9,7 +9,7 @@
 | Change | `47` |
 | Slug | `cross-repository-documentation-stabilization` |
 | Title | Cross-repository documentation stabilization |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/47-cross-repository-documentation-stabilization` |
 
 ---
