@@ -7,7 +7,7 @@
 | Change | `39` |
 | Slug | `production-ops-cutover` |
 | Title | Production Operations Cutover Preparation |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/39-production-ops-cutover` |
 
 ---
