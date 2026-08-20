@@ -7,7 +7,7 @@
 | Change | `46` |
 | Slug | `anonymous-lesson-progress-closure` |
 | Title | Anonymous Lesson Progress Closure |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/46-anonymous-lesson-progress-closure` |
 
 ---
