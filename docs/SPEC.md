@@ -574,8 +574,11 @@ network для web/api. Создание сети — одна явная lifecy
 Beszel Hub. Второй доказал исправленную dual-network связность и зарегистрировал Agent, но также
 был откачен: operations backup ошибочно исполнял Compose env как shell, а Beszel public key содержит
 пробел. Maintenance-скрипт больше не source-ит env и получает его только через Compose
-`--env-file`; финальный retry требует SHA с этим исправлением. Старые и новые volumes сохранены;
-их удаление или перенос данных требуют отдельного явно одобренного действия.
+`--env-file`. Финальный retry на `ad6df05fa7d44e7a4f9434c196091ed4890e2f49` прошёл: application
+и operations используют независимые Compose projects, Umami/Beszel доступны только через
+предусмотренные public/private маршруты, Agent имеет статус `up`, backup/restore proof успешны и
+три operations timers активны. Legacy volumes сохранены как rollback-only; их удаление или перенос
+данных требуют отдельного явно одобренного действия.
 
 `ops/observability/sre-kit-sources.example.json` — secret-free операторская подсказка, а не новый
 универсальный deployment contract. Поля сверяются с manifest соответствующего adapter, но реальные
@@ -591,7 +594,7 @@ IDs/accounts/secrets вводятся в sre-kit. Недоступность sre
 | Security headers / CORS | Rate limiting чекер-эндпоинта на Nginx: `limit_req_zone` 20 req/min/IP, burst 5, `nodelay` (см. §4, §11.2 источника) — против автоматизированного перебора банка ответов; конкретную цифру пересмотреть по факту логов после запуска. Временный public root/password SSH защищён только уникальным длинным паролем, pinned host key, UFW, fail2ban и GitHub Environment approval; риск полного захвата VPS при компрометации пароля принят архитектором до отдельного возврата key-only access. |
 | Accessibility target | Foundation и lab не имеют serious/critical axe violations; lesson outline сохраняет вложенный semantic list, anchors, keyboard focus, различимый текущий пункт и корректный source order, а сложный визуал имеет видимую полную текстовую альтернативу |
 | Performance budget | LCP < 2.5s, CLS < 0.1, INP < 200ms на мобильном 4G-профиле; release evidence измеряет `/` и первый опубликованный `/ege/16-rekursiya`, отдельно проверяет cold-load font/layout shifts и не подменяет route-level метрики общей оценкой технической страницы |
-| Observability | Application deploy и operations stack имеют независимые Compose projects, volumes и rollback. infraegev2 владеет небольшим Compose/SSH operations package; sre-kit работает вне monitored VPS и владеет только ingestion, adapters, alerts и UI. Два live gates безопасно откачены после network и env-parsing дефектов; финальный retry требует опубликованного исправленного SHA |
+| Observability | Application deploy и operations stack имеют независимые Compose projects, volumes и rollback. infraegev2 владеет небольшим Compose/SSH operations package; sre-kit работает вне monitored VPS и владеет только ingestion, adapters, alerts и UI. Split topology активна на production; private sources и maintenance lifecycle проверены, Source registration в sre-kit остаётся отдельным change |
 | Backup / restore | Application и operations jobs используют отдельные Restic tags, restore proofs и status markers в общем encrypted repository. Operations timers активируются только после clean install, без импорта старых Umami/Beszel artifacts. Для каждого владельца сохраняются 7 daily + 4 weekly + 3 monthly и общий same-host/off-site risk |
 | SEO | `/`, `/privacy` и published topics имеют canonical, уникальные metadata, SSR content и входят в sitemap/prerender; lab и review routes остаются unlisted, `noindex,nofollow` и исключены из public discovery; Lighthouse SEO для публичных маршрутов проходит без ошибок |
 | Mobile / no-JS readability | Lab и topic lesson сохраняют текст, последовательные стадии визуала, подписи, решения и section anchors в SSR HTML; интерактивная проверка остаётся progressive enhancement |

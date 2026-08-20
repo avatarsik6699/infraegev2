@@ -170,8 +170,8 @@ start it and does not create a second Umami/Beszel installation. Its
 `env.contract` records names only; actual values remain in the protected operations environment.
 Create `~/.config/infraege/production/ops.env` with exactly those names, independently generated
 values and mode `600`; do not copy it into the checkout. The generated file, bootstrapped Beszel
-credentials and clean operations volumes were deliberately retained across both rollback gates.
-Validate the exact final retry release before any install/update:
+credentials and clean operations volumes survived both rollback gates and now back the accepted
+split production stack. Validate every later operations release before install/update:
 
 ```bash
 make ops-config \

@@ -1,9 +1,9 @@
 # Incident response
 
-The 2026-08-20 split-operations gates exercised this rollback boundary twice: operations timers
-were disabled, the independent project was stopped without `--volumes`, and the previous combined
-application release restored all legacy observability services after network and backup-env defects.
-Preserved clean-start volumes are not evidence that the corrected topology is active.
+The 2026-08-20 split-operations gates exercised this rollback boundary twice before final cutover:
+operations timers were disabled, the independent project was stopped without `--volumes`, and the
+previous combined release restored legacy observability after network and backup-env defects. The
+accepted split topology now runs independently; legacy volumes remain rollback-only.
 
 ## Triage
 

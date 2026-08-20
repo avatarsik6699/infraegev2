@@ -96,17 +96,17 @@ infraegev2 deployment automation or target credentials. The repository definitio
 split, while the live VPS remains unchanged until an explicitly authorized cutover. Do not recreate
 the retired `apps/ops` dashboard.
 
-## Prepared fresh-start cutover retry
+## Verified fresh-start cutover
 
-Use one full SHA that contains this topology and has already passed the Release Gate. Keep the
-provider console open and record the previous application release SHA. Before the maintenance
-window, validate the protected operations env locally, prove the current application backup and
-confirm that no `infraege-ops` containers run. An installed release symlink and preserved clean
-volumes are expected after rollback.
+Production completed this procedure on 2026-08-20 with exact SHA
+`ad6df05fa7d44e7a4f9434c196091ed4890e2f49`. Application and operations projects, public collector,
+private services, Beszel registration, tagged backup/restore and timers passed acceptance. Keep the
+following sequence as the rebuild/cutover contract; use one SHA that passed the Release Gate and
+record the previous application release first.
 
-The 2026-08-20 attempts exercised rollback successfully. The final retry SHA must attach Beszel to
-both `ops-internal` and `infraege-observability-ingress`, keep Postgres internal-only and never
-shell-source the Compose operations env in maintenance scripts.
+Two preliminary attempts exercised rollback successfully. The accepted topology attaches Beszel to
+both `ops-internal` and `infraege-observability-ingress`, keeps Postgres internal-only and never
+shell-sources the Compose operations env in maintenance scripts.
 
 During the authorized window:
 
@@ -121,9 +121,10 @@ During the authorized window:
    operations volumes and wait for all services; neither reads legacy volumes.
 5. Run `sudo /opt/infraege/current/ops/install-backup-timers.sh activate-operations`, then manually
    start both `infraege-ops` backup and restore-check services and verify their tagged snapshots.
-6. Create the new Umami website/Beszel system, enter the six Source configurations from the
-   secret-free example into sre-kit, and verify collector `2xx`, all Source checks and dashboard
-   data. Source registration never gates either Compose project.
+6. Create the new Umami website/Beszel system and verify the secret-free IDs in
+   `ops/observability/sre-kit-sources.example.json`. Register the six Sources in sre-kit in its own
+   change, then verify Source checks and dashboard data. Registration never gates either Compose
+   project.
 
 If acceptance fails, disable the three `infraege-ops-*` timers, run the operations project's
 Compose `down` without `--volumes`, and deploy the recorded previous application SHA. That release

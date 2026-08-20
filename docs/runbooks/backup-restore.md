@@ -74,7 +74,9 @@ volumes remain unreferenced rollback resources until a separate destructive clea
 The first 2026-08-20 attempt proved a successful operations backup and disposable Umami/Beszel
 restore before rolling back for an unrelated Beszel network defect. A second attempt proved the
 network and Agent registration, then rolled back when backup shell-sourced a valid space-containing
-Beszel key. The maintenance path now leaves env parsing to Compose; both volume sets remain intact.
+Beszel key. The maintenance path now leaves env parsing to Compose. Final cutover then produced a
+fresh `infraege-ops` snapshot and successful disposable Umami/Beszel restore; all three operations
+timers are active and both volume sets remain intact.
 
 Known accepted risk: the repository is on the same VPS, so it protects against logical errors but
 not total VPS loss. Configure an encrypted off-site backend and repeat both restore drills before
