@@ -7,7 +7,7 @@
 | Change | `45` |
 | Slug | `product-readiness-audit` |
 | Title | Product Readiness Audit |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/45-product-readiness-audit` |
 
 ---
