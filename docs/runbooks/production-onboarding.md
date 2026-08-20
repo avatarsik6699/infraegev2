@@ -268,8 +268,9 @@ Over WireGuard open `http://10.77.0.1:8090`, create the initial Beszel administr
 3. Replace both bootstrap values in the protected operations env and use `ops-update` with the
    currently installed full release SHA to recreate `beszel-agent`.
 4. Complete **Add System**, then copy the resulting system record ID into the tracked non-secret
-   `ops/observability/sre-kit-sources.example.json` `beszel-api.system_id` field and verify it in
-   the dedicated sre-kit runtime reconciliation change that follows documentation Change 19.
+   `ops/observability/sre-kit-sources.example.json` `beszel-api.system_id` field. For the current
+   target, linked sre-kit Change 20 already verified the resulting Source; a replacement target
+   must repeat that proof through sre-kit's supported API/UI contracts.
 
 The Beszel public key normally contains a space. It is valid Compose env input; operations
 maintenance scripts must pass this file through `docker compose --env-file` and must never

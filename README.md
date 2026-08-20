@@ -269,10 +269,11 @@ First-party sibling [sre-kit](https://github.com/avatarsik6699/sre-kit) оста
 читает источники infraegev2 через private API/WireGuard/read-only SSH, но не устанавливает и не
 настраивает target stack. Deployment credentials и target lifecycle в sre-kit не передаются;
 `ops/observability/sre-kit-sources.example.json` служит только операторской подсказкой. Шесть
-Source-конфигураций сверены с актуальными adapter manifests, но их фактическая регистрация,
-polling и dashboard-представление не доказаны: локальная sre-kit DB содержит пять устаревших
-pre-cutover записей, без uptime и без успешного SSH polling. Их нужно сверить и заново проверить в
-отдельном change `sre-kit`.
+Source-конфигураций сверены с актуальными adapter manifests. Связанный sre-kit Change 20 оставил
+ровно шесть уникальных enabled Sources и доказал для каждой свежие polling/status, quiet success,
+обратимый failure/recovery и authenticated Dashboard/Sources/detail без target-side mutations.
+Этот proof не делает локальный sre-kit core круглосуточным: когда workstation выключен, polling и
+alerts не выполняются.
 
 Runbook’и: [DNS/TLS](docs/runbooks/dns-tls.md),
 [backup/restore](docs/runbooks/backup-restore.md),

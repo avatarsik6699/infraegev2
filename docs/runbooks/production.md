@@ -91,8 +91,10 @@ volumes remain rollback-only and are removed only by a later approved cleanup.
 `/home/niquetamerewsl/projects/sre-kit` is the first-party sibling for the universal observability
 core, adapters, Source configuration, normalization, alerts and monitoring UI. It does not own
 infraegev2 deployment automation or target credentials. Repository and live VPS ownership are
-split; the remaining cross-repository work is registration and verification of the six Sources in
-sre-kit. Do not recreate the retired `apps/ops` dashboard.
+split. Linked sre-kit Change 20 reconciled exactly six enabled Sources and proved fresh polling,
+quiet success, reversible failure/recovery and authenticated UI rendering without mutating the
+target. A workstation-hosted core still provides no polling or alerts while it is off. Do not
+recreate the retired `apps/ops` dashboard.
 
 ## Verified fresh-start cutover
 
@@ -120,9 +122,9 @@ During the authorized window:
 5. Run `sudo /opt/infraege/current/ops/install-backup-timers.sh activate-operations`, then manually
    start both `infraege-ops` backup and restore-check services and verify their tagged snapshots.
 6. Create the new Umami website/Beszel system and verify the secret-free IDs in
-   `ops/observability/sre-kit-sources.example.json`. Register the six Sources in sre-kit in its own
-   change, then verify Source checks and dashboard data. Registration never gates either Compose
-   project.
+   `ops/observability/sre-kit-sources.example.json`. For a genuinely new target, register and
+   verify all six Sources through sre-kit's supported API/UI contracts; do not copy Change 20's
+   local runtime state. Source registration never gates either Compose project.
 
 If acceptance fails, disable the three `infraege-ops-*` timers, run the operations project's
 Compose `down` without `--volumes`, and deploy the recorded previous application SHA. That release

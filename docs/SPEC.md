@@ -9,7 +9,7 @@
 
 | Field | Value |
 |-------|-------|
-| Document Version | `v1.8` |
+| Document Version | `v1.9` |
 | Date | `2026-08-20` |
 | Architect / Owner | `v.godlevskiy` |
 | Stack | See [docs/STACK.md](./STACK.md) |
@@ -582,12 +582,11 @@ Beszel Hub. Второй доказал исправленную dual-network с
 
 `ops/observability/sre-kit-sources.example.json` — secret-free операторская подсказка, а не новый
 универсальный deployment contract. Все шесть конфигураций сверены с текущими adapter manifests;
-реальные accounts/secrets вводятся только в sre-kit. Read-only аудит локальной sre-kit DB нашёл
-пять устаревших pre-cutover записей: `uptime-http` отсутствует, оба SSH Source никогда не были seen
-и имеют `unreachable`, остальные три не обновлялись с 2026-08-15. Это не live monitoring proof;
-связанный документационный sre-kit Change 19 фиксирует разрыв, а сверка, свежий polling и
-dashboard-проверка закрываются отдельным следующим runtime change. Недоступность sre-kit не
-блокирует Compose lifecycle.
+реальные accounts/secrets вводятся только в sre-kit. Связанный sre-kit Change 20 примирил stale
+pre-cutover состояние с шестью уникальными enabled Sources и доказал повторный свежий polling,
+quiet success, обратимый failure/recovery и authenticated Dashboard/Sources/detail rendering без
+target-side mutations. Это завершает integration proof, но не обещает круглосуточные alerts при
+выключенном локальном core и не меняет независимый Compose lifecycle.
 
 ---
 
@@ -598,7 +597,7 @@ dashboard-проверка закрываются отдельным следу�
 | Security headers / CORS | Rate limiting чекер-эндпоинта на Nginx: `limit_req_zone` 20 req/min/IP, burst 5, `nodelay` (см. §4, §11.2 источника) — против автоматизированного перебора банка ответов; конкретную цифру пересмотреть по факту логов после запуска. Основной public root/password SSH защищён уникальным длинным паролем, pinned host key, UFW, fail2ban и GitHub Environment approval; риск полного захвата VPS при компрометации пароля осознанно принят, key-only migration не запланирована. |
 | Accessibility target | Foundation и lab не имеют serious/critical axe violations; lesson outline сохраняет вложенный semantic list, anchors, keyboard focus, различимый текущий пункт и корректный source order, а сложный визуал имеет видимую полную текстовую альтернативу |
 | Performance budget | LCP < 2.5s, CLS < 0.1, INP < 200ms на мобильном 4G-профиле; release evidence измеряет `/` и первый опубликованный `/ege/16-rekursiya`, отдельно проверяет cold-load font/layout shifts и не подменяет route-level метрики общей оценкой технической страницы |
-| Observability | Application deploy и operations stack имеют независимые Compose projects, volumes и rollback. infraegev2 владеет небольшим Compose/SSH operations package; sre-kit работает вне monitored VPS и владеет только ingestion, adapters, alerts и UI. Split topology активна на production; target endpoints и maintenance lifecycle проверены, документационный sre-kit Change 19 фиксирует разрыв, а регистрация и polling шести Sources остаются отдельным следующим runtime change |
+| Observability | Application deploy и operations stack имеют независимые Compose projects, volumes и rollback. infraegev2 владеет небольшим Compose/SSH operations package; sre-kit работает вне monitored VPS и владеет только ingestion, adapters, alerts и UI. Split topology активна на production; target endpoints и maintenance lifecycle проверены, а sre-kit Change 20 доказал регистрацию, свежий polling, failure/recovery и UI для всех шести Sources без target-side mutation |
 | Backup / restore | Application и operations jobs используют отдельные Restic tags, restore proofs и status markers в общем encrypted repository. Operations timers активируются только после clean install, без импорта старых Umami/Beszel artifacts. Для каждого владельца сохраняются 7 daily + 4 weekly + 3 monthly и общий same-host/off-site risk |
 | SEO | `/`, `/privacy` и published topics имеют canonical, уникальные metadata, SSR content и входят в sitemap/prerender; lab и review routes остаются unlisted, `noindex,nofollow` и исключены из public discovery; Lighthouse SEO для публичных маршрутов проходит без ошибок |
 | Mobile / no-JS readability | Lab и topic lesson сохраняют текст, последовательные стадии визуала, подписи, решения и section anchors в SSR HTML; интерактивная проверка остаётся progressive enhancement |
@@ -616,8 +615,8 @@ dashboard-проверка закрываются отдельным следу�
 |-----------|--------|------|-------------|
 | `M0` — технический фундамент | complete | Сохранить проверенную web/backend/ops инфраструктуру без навязывания продуктовой страницы | Исторический neutral baseline, shared primitives, API contract, content skeleton и локальные gates |
 | `M1` — новый product/design baseline | complete | Доказать заменяемую визуальную систему без преждевременной публикации | «Инженерная тетрадь», unlisted design-system/lesson labs, единый frontend-контракт и reusable primitives |
-| `M2` — инфраструктурная пауза | complete, integration proof open | Подготовить production-платформу до продолжения продуктового контента | `infraege.ru`, VPS/GHCR deploy, security/release gates, backups и независимый operations stack активны; шесть sre-kit Sources требуют linked registration proof |
-| `M3` — учебный flow и публичный запуск | in progress | Завершить доменную логику, основные поверхности сайта и проверенный MVP-контент до расширения аналитики | Два опубликованных полных урока образуют текущую точку проверки; до третьей темы или мини-курса Python проводится оценка готовности приложения по целостному learner journey, навигации, непрерывности/прогрессу, trust/legal-пробелам и production feedback |
+| `M2` — инфраструктурная пауза | complete | Подготовить production-платформу до продолжения продуктового контента | `infraege.ru`, VPS/GHCR deploy, security/release gates, backups и независимый operations stack активны; linked sre-kit Change 20 доказал все шесть Sources end to end |
+| `M3` — учебный flow и публичный запуск | in progress | Завершить доменную логику, основные поверхности сайта и проверенный MVP-контент до расширения аналитики | Аудит двух опубликованных уроков завершён: checker/content/production surfaces готовы, но анонимный progress/result/continuation loop остаётся блокером до третьей темы или мини-курса Python |
 | `M4` — финальное измерение и эксплуатация | planned | Только после готовности домена, сайта и MVP-контента расширить продуктовые сигналы | Privacy-safe allowlist продуктовых событий Umami и проверка сбора данных; lifecycle остаётся в `opsctl`, monitoring UI — в sre-kit |
 | `M5+` (после первых данных, вне MVP) | deferred | Расширение охвата и сообщества поверх работающей бесплатной базы | Второй мини-курс (Excel), аккаунты/синхронизация, обсуждения тем с модерацией, затем платные фичи — без runtime AI до этого момента |
 
@@ -625,10 +624,10 @@ dashboard-проверка закрываются отдельным следу�
 
 | Order | Scope | Exit evidence |
 |-------|-------|---------------|
-| `0` | Завершить документационные infraegev2 Change 44 и sre-kit Change 19 | Документы обоих репозиториев согласованы, stale local Source state зафиксирован без секретов, runtime не мутировался |
-| `1` | Отдельным sre-kit change сверить и доказать шесть infraegev2 Sources | Stale записи безопасно инвентаризированы; все шесть текущих конфигураций зарегистрированы; есть свежие polling/status/dashboard и failure/recovery evidence |
-| `2` | Провести product-readiness audit двух опубликованных уроков | Проверены вход/навигация, переходы между уроками, сохранение и объяснимость прогресса, mobile/no-JS, trust surfaces и production feedback; найденные пробелы приоритизированы по влиянию на learner journey |
-| `3` | Закрыть один минимальный end-to-end пакет блокирующих продуктовых пробелов | Результат проверен в браузере как путь ученика, а не как набор изолированных компонентов; неблокирующие находки остаются явно ранжированным backlog |
+| `0` | Завершить документационные infraegev2 Change 44 и sre-kit Change 19 | Complete: документы обоих репозиториев согласованы, stale local Source state зафиксирован без секретов, runtime не мутировался |
+| `1` | В sre-kit Change 20 сверить и доказать шесть infraegev2 Sources | Complete: stale записи безопасно инвентаризированы; все шесть текущих конфигураций зарегистрированы; доказаны свежие polling/status/dashboard и failure/recovery evidence |
+| `2` | Провести product-readiness audit двух опубликованных уроков | Complete: вход, оба урока, checker/persistence/recovery, mobile/no-JS, trust, crawl и production/monitoring evidence проверены; находки `PR-01`–`PR-07` ранжированы в `docs/artifacts/product-readiness-audit-2026-08-20.md` |
+| `3` | Закрыть Change 46 — анонимный progress/result/continuation loop | В одном browser journey ученик видит solved/mastery result, сбрасывает только текущий урок и переходит к другой опубликованной теме или ко всем темам; incorrect/failure/retry/reload/reset/continuation защищены Page Object coverage без аккаунта, новых событий или выдуманных связей |
 | `4` | Выбрать расширение M3: третья тема ЕГЭ или первый срез мини-курса Python | Выбор опирается на аудит, связи между уже опубликованными материалами и минимальный целостный learner outcome; новый контент не начинается автоматически |
 | `5` | После готовности MVP перейти к M4 | Определён privacy-safe event allowlist, проверена фактическая доставка Umami без ответов, свободного текста и лишних идентификаторов |
 
