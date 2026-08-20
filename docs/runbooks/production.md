@@ -71,15 +71,16 @@ readiness or the public page fails.
 
 ## Observability ownership
 
-`/home/niquetamerewsl/projects/sre-kit` is the first-party sibling repository for the observability
-core, adapters, source configuration, presets and observability deployment automation. This
-repository owns application telemetry plus VPS access, WireGuard/journal prerequisites and the
-application Compose topology. Any operation that changes both sides must be represented by active
-Backlog items in both repositories and verified from source to live signal.
+This repository owns the observability target desired state, VPS access, WireGuard/journal
+prerequisites, backup/restore and lifecycle automation. Use `ops/opsctl inventory`, `status` or
+`plan` for a sanitized read-only view; use `--json` for agents. The foundation has no `apply`
+command and therefore cannot mutate production.
 
-Beszel and Umami currently remain in infraegev2 Compose. Moving them under sre-kit deployment is a
-separate migration requiring state backup, rollback and uninterrupted source proof; this ownership
-rule does not authorize that move by itself. Do not recreate the retired `apps/ops` dashboard.
+`/home/niquetamerewsl/projects/sre-kit` is the first-party sibling for the universal observability
+core, adapters, Source configuration, normalization, alerts and monitoring UI. It does not own
+infraegev2 deployment automation or target credentials. Beszel and Umami currently remain in the
+shared infraegev2 Compose; moving them to a separate infraege-ops project requires a later backup,
+rollback and uninterrupted-source migration. Do not recreate the retired `apps/ops` dashboard.
 
 ## Capacity and scale-up trigger
 

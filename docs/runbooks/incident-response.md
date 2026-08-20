@@ -7,6 +7,9 @@
    source strip.
 3. On the VPS use `docker compose ... ps`, `journalctl -u docker --since -30min`, disk/memory state,
    and `fail2ban-client status`. Never paste production env files or tokens into tickets/chat.
+   From a trusted workstation, `ops/opsctl inventory --json` and `status --json` provide the
+   sanitized read-only subset suitable for agent-assisted triage; unreachable SSH is returned as
+   a stable error code without raw remote stderr.
 
 ## Containment and recovery
 

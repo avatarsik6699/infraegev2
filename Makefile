@@ -27,7 +27,7 @@ STOP_TIMEOUT ?= 10
 .PHONY: help dev rebuild stop down restart logs ps config clean \
 	tunnel-up tunnel-down tunnel-status \
 	ops-open-beszel ops-open-umami ops-configure-beszel-agent \
-	ops-repair-beszel-env
+	ops-repair-beszel-env ops-inventory ops-status ops-plan
 
 help:
 	@echo "infraege local Docker workflow"
@@ -54,6 +54,9 @@ help:
 	@echo "  make ops-open-umami  Open private Umami UI in WSLg Chromium"
 	@echo "  make ops-configure-beszel-agent  Securely activate the production Beszel agent"
 	@echo "  make ops-repair-beszel-env       Normalize the protected Beszel key assignment"
+	@echo "  make ops-inventory               Read sanitized production operations inventory"
+	@echo "  make ops-status                  Compare production operations state with desired state"
+	@echo "  make ops-plan                    Print a non-mutating operations reconciliation plan"
 
 dev:
 	@STOP_TIMEOUT=$(STOP_TIMEOUT) $(DOCKER_LIFECYCLE) dev
@@ -107,3 +110,12 @@ ops-configure-beszel-agent:
 
 ops-repair-beszel-env:
 	@./scripts/repair-beszel-env.sh --apply
+
+ops-inventory:
+	@./ops/opsctl inventory
+
+ops-status:
+	@./ops/opsctl status
+
+ops-plan:
+	@./ops/opsctl plan

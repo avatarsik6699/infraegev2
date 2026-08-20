@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://infraege.ru/schemas/ops/desired-state-v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "installation_id",
+    "ownership",
+    "components",
+    "private_endpoints"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "installation_id": { "type": "string", "minLength": 1 },
+    "ownership": { "const": "infraegev2/ops" },
+    "components": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "kind", "desired_state"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "kind": {
+            "enum": [
+              "compose-service",
+              "systemd-unit",
+              "systemd-timer",
+              "network-interface"
+            ]
+          },
+          "desired_state": { "type": "string", "minLength": 1 },
+          "revision": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "private_endpoints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["component_id", "address", "port", "public"],
+        "properties": {
+          "component_id": { "type": "string" },
+          "address": { "type": "string" },
+          "port": { "type": "integer", "minimum": 1, "maximum": 65535 },
+          "public": { "const": false }
+        }
+      }
+    }
+  }
+}

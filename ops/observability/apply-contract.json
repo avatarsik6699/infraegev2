@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "installation_id": "infraege-production",
+  "remote": {
+    "state_directory": "/var/lib/infraege-ops",
+    "revision_file": "/var/lib/infraege-ops/revision.json",
+    "checkpoint_directory": "/var/lib/infraege-ops/checkpoints",
+    "outbox_directory": "/var/lib/infraege-ops/outbox",
+    "lock_file": "/run/lock/infraege-ops.lock"
+  },
+  "rules": {
+    "single_writer": true,
+    "checkpoint_before_mutation": true,
+    "atomic_revision_publish": true,
+    "sanitized_outbox_only": true,
+    "application_compose_out_of_scope": true
+  }
+}

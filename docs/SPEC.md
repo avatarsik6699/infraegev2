@@ -9,8 +9,8 @@
 
 | Field | Value |
 |-------|-------|
-| Document Version | `v1.7` |
-| Date | `2026-08-19` |
+| Document Version | `v1.8` |
+| Date | `2026-08-20` |
 | Architect / Owner | `v.godlevskiy` |
 | Stack | See [docs/STACK.md](./STACK.md) |
 | Domain | Платформа подготовки к ЕГЭ по информатике — теория, визуализация, практика по темам экзамена, привязанные к мини-курсам |
@@ -446,19 +446,27 @@ LTS, AMD EPYC 7502, 2 vCPU, 4 ГБ RAM, 40 ГБ disk. Следующая сту�
 swap thrashing или устойчивую загрузку CPU выше 70%. Тестирование локально максимально повторяет
 production через общий Compose и development overlay.
 
-Топология (Docker Compose, всё на одном сервере — осознанно, «ничего лишнего»):
+Application и observability используют один VPS на текущем beta-этапе, но принадлежат разным
+lifecycle-контуром:
 - **Nginx** — единственная точка входа (80/443), reverse-proxy для web/API и статики.
 - **Frontend (TanStack Start/Nitro)** — Node runtime с prerendered foundation route; будущие
   product routes и data-loading boundaries определяются отдельным change.
 - **Backend (FastAPI/Uvicorn)** — отдельный контейнер, доступен Nginx по внутренней docker-сети,
   наружу не смотрит напрямую.
 - **Postgres** — отдельный контейнер, volume + регулярный `pg_dump`-бэкап (§8).
-- **Observability-источники** — Umami, Beszel и журналы остаются на application VPS; ядро
-  наблюдаемости и его deployment capabilities принадлежат нашему first-party sibling-репозиторию
-  [sre-kit](https://github.com/avatarsik6699/sre-kit), а не собственному дашборду этого репозитория.
-  infraegev2 владеет application telemetry, доступом/сетевыми prerequisites VPS и своим Compose до
-  явной миграции. Изменения, пересекающие границу, получают связанные Backlog items в обоих
-  репозиториях; удалённый `apps/ops` не возрождается как параллельный продукт.
+- **Operations stack** — Umami, Beszel и необходимые gateways физически остаются на application
+  VPS, но их установка, конфигурация, backup/restore и release lifecycle принадлежат модулю
+  `ops/` этого репозитория. Позднее они выделяются в отдельный Compose project с собственными
+  volumes без переноса этой логики в [sre-kit](https://github.com/avatarsik6699/sre-kit).
+- **Граница infraegev2** — репозиторий владеет application telemetry и всей автоматизацией,
+  зависящей от его VPS, routing, Compose и data layout. sre-kit получает только versioned Source
+  registration и Metric/Check/Event, не хранит deployment SSH credentials и не запускает target
+  mutations.
+
+Термин `apps/ops` далее означает логический operations-контур, а не возвращение удалённого Node
+BFF/React dashboard и не новый pnpm workspace. Канонический код автоматизации живёт под `ops/` и
+предоставляет repo-native `opsctl`; UI мониторинга остаётся в sre-kit без Apply/Rollback действий.
+Изменения интеграционного контракта получают связанные active Backlog items в обоих репозиториях.
 
 **Публичный edge:** `infraege.ru` зарегистрирован и использует DNS reg.ru. На первом релизе трафик
 идёт напрямую `infraege.ru → Nginx`, без CDN; `www.infraege.ru` перенаправляется на canonical apex.
@@ -490,19 +498,57 @@ Nginx выставляет `Cache-Control`/`ETag` для хэшированно�
   restore drill. Потеря всего VPS уничтожит и локальные бэкапы — принятый риск до отдельной задачи
   с российским S3-compatible storage.
 
-**Наблюдаемость** (self-hosted, тот же VPS на старте, минимальный расход ресурсов):
+**Наблюдаемость** (источники на application VPS, внешний monitoring core):
 - **Umami v3** — отдельная БД/роль в Postgres; DNT, без cookies/fingerprinting/query/hash; текущий
   frontend отправляет только базовые pageviews. Новый event allowlist и развитие сбора данных
   отложены до финального этапа после доменной логики, сайта и MVP-контента.
 - **Beszel Hub + Agent** — host/container metrics и история на application VPS.
 - **journald + fail2ban** — структурированные application/Nginx/security logs; journald доступен
   через WireGuard-only gateway, fail2ban временно читается sre-kit через root/password SSH.
-- **sre-kit** — наш first-party sibling и владелец observability core, adapters, source config,
-  presets и deployment automation; он читает Umami/Beszel/journald через WireGuard, а host metrics
-  и fail2ban через временный root/password SSH. Его секреты и runtime data не попадают в этот
-  репозиторий. Дашборда в `apps/` больше нет.
+- **sre-kit core** — наш first-party sibling и владелец adapters, Source configuration,
+  normalization, alerts и monitoring UI. Он запускается на workstation или management VPS и
+  читает private sources через WireGuard/API/SSH, но не управляет target stack. Его SQLite,
+  adapter secrets и runtime data не попадают в этот репозиторий. Локальный режим не обещает
+  alerts, пока workstation выключен; круглосуточные alerts требуют always-on core.
 - **Внешняя доступность** — временный scheduled GitHub Action проверяет сайт, readiness и TLS.
-  Telegram-алерты и отдельный внешний monitoring server отложены.
+  Подключение существующего sre-kit Telegram channel к infraege и отдельный внешний management/
+  monitoring server отложены; alert engine не дублируется в этом репозитории.
+
+### 7.3 Operations and sre-kit integration contract
+
+```text
+infraegev2 opsctl ── pinned SSH/Compose/systemd ──> application VPS operations stack
+       │
+       └─ registration + sanitized Check/Event ──> sre-kit (local or management VPS)
+
+sre-kit adapters ── WireGuard/private API/read-only SSH ──> observability Sources
+
+application VPS
+  ├─ infraege Compose: nginx, web, api, application Postgres
+  └─ separate infraege-ops Compose project: Umami, Beszel, gateways
+```
+
+Обязательные инварианты границы:
+
+- application release не запускает `docker compose up/down` для operations stack и не удаляет его
+  containers/volumes через `--remove-orphans`; operations release не меняет application containers;
+- target stack имеет детерминированный installation id, Compose project, remote directory, labels,
+  healthchecks и private-only bindings; повторный apply является no-op/reconcile, а не создаёт
+  второй stack;
+- публичный Umami collector остаётся узким same-origin маршрутом Nginx к private target endpoint;
+  UI/admin ports не публикуются в Интернет;
+- приложение публикует только стабильные сигналы: health/version endpoints, structured journald
+  labels и privacy-safe Umami collector. `opsctl` и application deploy не зависят от доступности
+  sre-kit;
+- deployment secrets принадлежат защищённому infraegev2 ops environment; adapter secrets
+  передаются в sre-kit только через его versioned registration API и никогда не попадают в git;
+- перенос существующих Umami/Beszel выполняется отдельным linked change: backup, inventory,
+  перенос Postgres/volumes, запуск нового stack, cross-check Sources, затем удаление ownership из
+  application Compose. Rollback восстанавливает старый Compose ownership и исходные данные;
+- локальный sre-kit может быть выключен без остановки target tools или ops automation, но
+  polling/alerts при
+  этом не гарантируются. Полная независимость от падения application VPS достигается только после
+  размещения monitoring core на отдельном always-on host.
 
 ---
 
@@ -513,7 +559,7 @@ Nginx выставляет `Cache-Control`/`ETag` для хэшированно�
 | Security headers / CORS | Rate limiting чекер-эндпоинта на Nginx: `limit_req_zone` 20 req/min/IP, burst 5, `nodelay` (см. §4, §11.2 источника) — против автоматизированного перебора банка ответов; конкретную цифру пересмотреть по факту логов после запуска. Временный public root/password SSH защищён только уникальным длинным паролем, pinned host key, UFW, fail2ban и GitHub Environment approval; риск полного захвата VPS при компрометации пароля принят архитектором до отдельного возврата key-only access. |
 | Accessibility target | Foundation и lab не имеют serious/critical axe violations; lesson outline сохраняет вложенный semantic list, anchors, keyboard focus, различимый текущий пункт и корректный source order, а сложный визуал имеет видимую полную текстовую альтернативу |
 | Performance budget | LCP < 2.5s, CLS < 0.1, INP < 200ms на мобильном 4G-профиле; release evidence измеряет `/` и первый опубликованный `/ege/16-rekursiya`, отдельно проверяет cold-load font/layout shifts и не подменяет route-level метрики общей оценкой технической страницы |
-| Observability | Существующие Umami + Beszel + journald/fail2ban на application VPS и first-party sibling sre-kit сохраняются без расширения; работа на границе приложения и observability оформляется связанными changes в обоих репозиториях, а новые события, сбор данных и operations-интерфейсы отложены до финального этапа после доменной логики, сайта и MVP-контента |
+| Observability | Application deploy и operations stack имеют независимые Compose projects, volumes и rollback. infraegev2 `opsctl` владеет target desired state и pinned-SSH automation; sre-kit работает вне monitored VPS и владеет только ingestion, adapters, alerts и UI. До linked migration текущий общий Compose явно считается переходным состоянием |
 | Backup / restore | Локальный restic на VPS: daily `pg_dump -Fc`, Beszel/config snapshots, 7 daily + 4 weekly + 3 monthly, freshness marker и ежемесячный restore drill; off-site storage отложен с явно принятым риском |
 | SEO | `/`, `/privacy` и published topics имеют canonical, уникальные metadata, SSR content и входят в sitemap/prerender; lab и review routes остаются unlisted, `noindex,nofollow` и исключены из public discovery; Lighthouse SEO для публичных маршрутов проходит без ошибок |
 | Mobile / no-JS readability | Lab и topic lesson сохраняют текст, последовательные стадии визуала, подписи, решения и section anchors в SSR HTML; интерактивная проверка остаётся progressive enhancement |
@@ -531,9 +577,9 @@ Nginx выставляет `Cache-Control`/`ETag` для хэшированно�
 |-----------|------|-------------|
 | `M0` — технический фундамент | Сохранить проверенную web/backend/ops инфраструктуру без навязывания продуктовой страницы | Нейтральная root-заглушка, shared primitives, API contract, пустой content skeleton и локальные gates |
 | `M1` — новый product/design baseline | Доказать заменяемую визуальную систему без преждевременной публикации | «Инженерная тетрадь», unlisted design-system/lesson labs, единый frontend-контракт и reusable primitives |
-| `M2` — инфраструктурная пауза | Подготовить production-платформу до продолжения продуктового контента | `infraege.ru`, VPS/GHCR deploy, security/release gates, backups и first-party sre-kit operations-контур |
+| `M2` — инфраструктурная пауза | Подготовить production-платформу до продолжения продуктового контента | `infraege.ru`, VPS/GHCR deploy, security/release gates, backups, repo-native ops automation и внешний first-party sre-kit monitoring core |
 | `M3` — учебный flow и публичный запуск | Завершить доменную логику, основные поверхности сайта и проверенный MVP-контент до расширения аналитики | Два опубликованных полных урока образуют текущую точку проверки; до третьей темы или мини-курса Python проводится оценка готовности приложения по целостному learner journey, навигации, непрерывности/прогрессу, trust/legal-пробелам и production feedback. Исходные цели 3–5 тем и Python-курса остаются дальнейшим расширением M3, но не текущим приоритетом |
-| `M4` — финальное измерение и эксплуатация | Только после готовности домена, сайта и MVP-контента расширить наблюдаемость | Privacy-safe allowlist продуктовых событий Umami, проверка сбора данных и необходимые улучшения first-party sre-kit без возрождения `apps/ops` |
+| `M4` — финальное измерение и эксплуатация | Только после готовности домена, сайта и MVP-контента расширить продуктовые сигналы | Privacy-safe allowlist продуктовых событий Umami и проверка сбора данных; lifecycle остаётся в `opsctl`, monitoring UI — в sre-kit |
 | `M5+` (после первых данных, вне MVP) | Расширение охвата и сообщества поверх работающей бесплатной базы | Второй мини-курс (Excel), аккаунты/синхронизация, обсуждения тем с модерацией, затем платные фичи — без runtime AI до этого момента |
 
 ---
@@ -551,7 +597,9 @@ Nginx выставляет `Cache-Control`/`ETag` для хэшированно�
 - Полноценный поиск по сайту — пока тем меньше десятка, обычная навигация достаточна.
 - Отдельный preview/staging-стенд — тестирование локально повторяет прод (§7.1).
 - Онлайн-кассы / 54-ФЗ — возникают только с появлением платежей, не на MVP-этапе.
-- CDN, Telegram-алерты, off-site backup и второй monitoring VPS — отдельные последующие задачи.
+- CDN, off-site backup и постоянный management VPS для sre-kit — отдельные последующие задачи;
+  локальный core режим остаётся поддерживаемым. Telegram уже принадлежит sre-kit и не
+  реализуется внутри infraegev2.
 - Формальные реквизиты оператора ПДн и уведомление РКН — отдельный принятый юридический долг.
 - PWA/service worker, offline mutation queue и optimistic updates — только после отдельного
   пользовательского сценария и стратегии конфликтов/устаревания.

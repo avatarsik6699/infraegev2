@@ -26,7 +26,7 @@ pitfalls that must be reconsidered rather than copied.
 | Backend | Python/FastAPI (`apps/api`) |
 | Database | PostgreSQL (provisioned in `infra/docker-compose.yml`; no schema/migrations yet — content is git-based, docs/SPEC.md §3) |
 | Cache | — (not needed on M0) |
-| Observability | First-party sibling [sre-kit](https://github.com/avatarsik6699/sre-kit) owns the core, adapters, source configuration, presets and observability deployment; infraegev2 owns application telemetry plus VPS/network prerequisites. Host metrics and fail2ban use temporary root/password SSH; journal logs, Beszel and Umami use WireGuard; no local operations UI in this repo |
+| Observability | `infraegev2/ops` owns target desired state and lifecycle automation; `ops/opsctl` currently provides read-only inventory/status/plan. First-party sibling [sre-kit](https://github.com/avatarsik6699/sre-kit) owns adapters, Source configuration, normalization, alerts and monitoring UI only. Host metrics and fail2ban temporarily use root/password SSH; journal logs, Beszel and Umami use WireGuard; no local operations UI in this repo |
 | Infra | Docker Compose: Nginx → `web`/`api`/Postgres plus pinned Umami/Beszel; Ubuntu 24.04, systemd, journald, fail2ban, WireGuard, Restic |
 | Package managers | uv (`apps/api`), pnpm workspace (`apps/web`, root) |
 | Formatting | Prettier 3.9.6 exact for supported repository files; Ruff from the API lock for Python; EditorConfig for cross-editor whitespace defaults |
@@ -84,6 +84,11 @@ verifies it, `make tunnel-down`
 stops a tunnel this Makefile started, `make tunnel-status` reports interface/route/handshake state.
 Wraps `scripts/wireguard-tunnel.sh`; requires the protected config at
 `~/.config/infraege/production/infraege-wsl.conf` (or `$INFRAEGE_WG_CONFIG`) to already exist.
+
+Read-only operations commands are `make ops-inventory`, `make ops-status` and `make ops-plan`.
+Their canonical desired state is `ops/observability/desired-state.json`; JSON consumers call
+`ops/opsctl <command> --json`. These commands never expose remote environment values or raw SSH
+stderr. There is deliberately no `apply` command in the current foundation.
 
 ### pnpm workspace policy
 

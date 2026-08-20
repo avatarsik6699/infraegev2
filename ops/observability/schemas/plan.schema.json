@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://infraege.ru/schemas/ops/plan-v1.json",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "installation_id",
+    "generated_at",
+    "mutating",
+    "summary",
+    "changes"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "installation_id": { "type": "string" },
+    "generated_at": { "type": "string" },
+    "mutating": { "const": false },
+    "summary": { "type": "object" },
+    "changes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["component_id", "effect", "reason"],
+        "properties": {
+          "component_id": { "type": "string" },
+          "effect": {
+            "enum": ["create", "change", "no-op", "destructive", "blocked"]
+          },
+          "reason": { "type": "string" }
+        }
+      }
+    }
+  }
+}

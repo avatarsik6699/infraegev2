@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "installation_id": "infraege-production",
+  "observed_at": "2026-08-20T08:00:00Z",
+  "reachable": true,
+  "components": [
+    {
+      "id": "beszel",
+      "kind": "compose-service",
+      "state": "exited",
+      "revision": "henrygd/beszel:old"
+    },
+    { "id": "beszel-agent", "kind": "compose-service", "state": "missing" },
+    {
+      "id": "docker-socket-proxy",
+      "kind": "compose-service",
+      "state": "running",
+      "revision": "ghcr.io/tecnativa/docker-socket-proxy:v0.5.0@sha256:1f5038b54f06c3e18422902cf00ba21803d1c97805aae032e5e6673d532d3459"
+    },
+    { "id": "fail2ban", "kind": "systemd-unit", "state": "active" },
+    {
+      "id": "infraege-analytics-retention.timer",
+      "kind": "systemd-timer",
+      "state": "enabled-active"
+    },
+    {
+      "id": "infraege-backup.timer",
+      "kind": "systemd-timer",
+      "state": "enabled-active"
+    },
+    {
+      "id": "infraege-restore-check.timer",
+      "kind": "systemd-timer",
+      "state": "enabled-active"
+    },
+    { "id": "journal-gateway", "kind": "systemd-unit", "state": "active" },
+    {
+      "id": "umami",
+      "kind": "compose-service",
+      "state": "running",
+      "revision": "docker.umami.is/umami-software/umami:3.2.0@sha256:8edfe4beaef13f9d1300619fa264ef250a3688df9cc54d24ca830ca31cb475ec"
+    },
+    { "id": "wg0", "kind": "network-interface", "state": "active" },
+    { "id": "retired-exporter", "kind": "systemd-unit", "state": "active" }
+  ]
+}

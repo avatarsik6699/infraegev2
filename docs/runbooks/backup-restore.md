@@ -4,6 +4,10 @@ Daily backup captures both PostgreSQL databases, Beszel data and the encrypted-a
 environment into a local Restic repository. Retention is 7 daily, 4 weekly and 3 monthly snapshots.
 `infraege-backup.timer` runs daily; `infraege-restore-check.timer` performs a monthly restore into a
 disposable PostgreSQL container. Status is written to `/var/lib/infraege/backup-status.json`.
+Backup/restore lifecycle remains owned by `infraegev2/ops`; sre-kit may report sanitized freshness
+and restore-check events but never runs backup, restore or retention mutations. `ops/opsctl status`
+currently observes only timer state—the freshness and installed-restore proofs below remain the
+authoritative acceptance checks.
 
 Checks:
 

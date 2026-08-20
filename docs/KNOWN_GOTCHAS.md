@@ -11,6 +11,17 @@
 
 ## Gotcha Log
 
+### `opsctl plan` is intentionally not an apply alias
+
+- **Symptoms:** an operator expects `ops/opsctl plan` to repair a stopped component, or looks for
+  deployment actions in sre-kit after seeing drift in its monitoring UI.
+- **Root cause:** the current ops automation foundation is read-only. infraegev2 owns target
+  lifecycle while sre-kit owns observation; neither `plan` nor the sre-kit UI is authorized to
+  mutate the VPS.
+- **Fix:** use `inventory/status/plan` for evidence only. Follow the existing component runbook for
+  manual recovery. Add `apply` only in a later change that implements the declared single lock,
+  pre-mutation checkpoint, atomic revision and sanitized outbox contracts with rollback proof.
+
 ### Compose `up --build` can recreate dev containers even when every build layer is cached
 
 - **Symptoms:** a stopped development stack still runs the full build progress on `make dev`, all

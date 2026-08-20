@@ -155,6 +155,10 @@ WIREGUARD_IP=10.77.0.1 ops/setup-journal-gateway.sh
 
 sre-kit's `host-metrics-ssh` and `fail2ban-ssh` sources use `root`, password authentication and the
 public SSH endpoint. Beszel, Umami and the journal gateway remain private WireGuard services.
+These are read-only adapter connections: sre-kit does not receive target lifecycle ownership.
+After onboarding, run `ops/opsctl inventory`, `status` and `plan` to inspect the infraegev2-owned
+operations stack. There is no `apply` command in this foundation; production changes remain
+manual/runbook-owned until a later reconcile change provides rollback and approval gates.
 
 ## 4. Generate application and Restic secrets
 
