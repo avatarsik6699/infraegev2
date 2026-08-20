@@ -25,10 +25,17 @@ REMOTE_COLLECTOR = ROOT / "ops/observability/remote-inventory.sh"
 REMOTE_PREFLIGHT = ROOT / "ops/observability/remote-preflight.sh"
 SSH_WRAPPER = ROOT / "scripts/production-root-ssh.sh"
 SUPPORTED_SCHEMA_VERSION = 1
+POSTGRES_FIDELITY_IMAGE = (
+    "postgres:16-alpine@sha256:57c72fd2a128e416c7fcc499958864df5301e940bca0a56f58fddf30ffc07777"
+)
+BESZEL_FIDELITY_IMAGE = (
+    "henrygd/beszel:0.18.7@sha256:a849ad80814b6a1a3be665304dcace5d4854b3bed7bde4dd1227e8ce1b82d477"
+)
 FORBIDDEN_KEY = re.compile(r"(?:secret|password|token|credential|private_key|environment)", re.I)
 CONTRACT_KINDS = {
     "apply-result",
     "checkpoint",
+    "data-fidelity-result",
     "desired-state",
     "inventory",
     "migration-rehearsal",
@@ -91,6 +98,16 @@ def validate_contract(kind: str, value: dict[str, Any]) -> None:
             "ownership",
             "components",
             "private_endpoints",
+        },
+        "data-fidelity-result": {
+            "schema_version",
+            "status",
+            "production_data_used",
+            "authorized_to_cutover",
+            "images",
+            "postgres",
+            "beszel",
+            "cleanup",
         },
         "inventory": {
             "schema_version",
@@ -290,6 +307,43 @@ def validate_contract(kind: str, value: dict[str, Any]) -> None:
             raise ContractError("desired-state component ids must be non-empty and unique")
         if any(endpoint.get("public") is not False for endpoint in value["private_endpoints"]):
             raise ContractError("desired-state endpoints must be private")
+    if kind == "data-fidelity-result":
+        if (
+            value["status"] != "passed"
+            or value["production_data_used"] is not False
+            or value["authorized_to_cutover"] is not False
+        ):
+            raise ContractError("data-fidelity-result safety invariants are invalid")
+        expected_images = {
+            "postgres": POSTGRES_FIDELITY_IMAGE,
+            "beszel": BESZEL_FIDELITY_IMAGE,
+        }
+        expected_postgres = {
+            "status": "passed",
+            "row_count": 3,
+            "event_total": 10,
+            "sequence_preserved": True,
+            "ownership_preserved": True,
+        }
+        expected_beszel = {
+            "status": "passed",
+            "source_healthy": True,
+            "target_healthy": True,
+            "identity_preserved": True,
+            "state_files_present": True,
+        }
+        expected_cleanup = {
+            "containers_removed": True,
+            "volumes_removed": True,
+            "workspace_removed": True,
+        }
+        if (
+            value["images"] != expected_images
+            or value["postgres"] != expected_postgres
+            or value["beszel"] != expected_beszel
+            or value["cleanup"] != expected_cleanup
+        ):
+            raise ContractError("data-fidelity-result evidence is incomplete")
 
 
 def utc_now() -> str:

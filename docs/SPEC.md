@@ -591,6 +591,18 @@ lock, сохраняет checkpoint текущего owner, копирует art
 Postgres/Restic restore, source cross-check или operator approval. Любая ошибка оставляет исходные
 fixtures неизменными и завершает rollback до публикации результата.
 
+Следующий data-fidelity gate использует только локальный Docker и генерируемые синтетические
+данные. Он запускает точные digest-версии PostgreSQL и Beszel из target stack под уникальными
+drill labels/names, создаёт Umami-owned таблицу, sequence и view, выполняет `pg_dump -Fc` и
+`pg_restore --exit-on-error` в новую БД, затем проверяет значения и ownership. Отдельный Beszel
+volume инициализируется реальным Hub, останавливается перед byte-copy, восстанавливается в новый
+volume и должен повторно пройти `/api/health` с сохранённой instance identity. Все ports только
+loopback с динамическим host port; containers, volumes и host workspace удаляются как при успехе,
+так и при ошибке. Report содержит только синтетические counts/booleans,
+`production_data_used: false` и `authorized_to_cutover: false`. Этот gate подтверждает
+совместимость target binaries и restore mechanics, но не читает production Restic и не заменяет
+финальный drill на snapshot-копии или Source cross-check.
+
 ---
 
 ## 8. Non-Functional Requirements

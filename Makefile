@@ -63,6 +63,7 @@ help:
 	@echo "  make ops-bundle                   Print deterministic operations bundle manifest"
 	@echo "  make ops-preflight BUNDLE=...     Run read-only production readiness preflight"
 	@echo "  make ops-rehearse-migration BUNDLE=... PREFLIGHT=... SOURCE=... SANDBOX_ROOT=..."
+	@echo "  make ops-data-fidelity-drill      Verify synthetic Postgres/Beszel restore fidelity"
 
 dev:
 	@STOP_TIMEOUT=$(STOP_TIMEOUT) $(DOCKER_LIFECYCLE) dev
@@ -150,3 +151,6 @@ ops-rehearse-migration:
 	@./ops/opsctl rehearse-migration --bundle-manifest "$(BUNDLE)" \
 		--preflight-report "$(PREFLIGHT)" --source-manifest "$(SOURCE)" \
 		--sandbox-root "$(SANDBOX_ROOT)"
+
+ops-data-fidelity-drill:
+	@./scripts/ops-data-fidelity-drill.sh

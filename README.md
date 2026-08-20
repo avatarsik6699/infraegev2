@@ -274,6 +274,11 @@ manifest и hashes repository-owned assets. Эти команды не запу�
 только hash-bound disposable artifacts, моделирует смену owner и обязательно откатывает её внутри
 маркированного sandbox. Это не реальный restore и не разрешение на production cutover.
 
+Совместимость target binaries проверяется отдельно через `make ops-data-fidelity-drill`. Команда
+использует только синтетическую Umami-схему и новый Beszel volume, точные локальные digest-образы,
+динамические loopback-порты и удаляет все созданные ресурсы. Она не читает Restic/production data;
+успешный результат по-прежнему содержит `authorized_to_cutover: false`.
+
 First-party sibling [sre-kit](https://github.com/avatarsik6699/sre-kit) остаётся универсальным
 ядром наблюдаемости: adapters, Source configuration, normalization, alerts и monitoring UI. Он
 читает источники infraegev2 через private API/WireGuard/read-only SSH, но не устанавливает и не

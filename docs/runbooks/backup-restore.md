@@ -18,6 +18,12 @@ cleanup and ownership rollback. It deliberately does not consume the Restic repo
 existing disposable PostgreSQL restore below remains the required data-fidelity proof before any
 production migration.
 
+`make ops-data-fidelity-drill` adds a no-production-data compatibility check using the exact target
+PostgreSQL/Beszel digests. It verifies Umami rows, sequence/view behavior and object ownership, then
+copies a stopped Beszel volume and requires the restored Hub to retain identity and return healthy.
+The command refuses image pulls and cleans its uniquely labeled containers, volumes and workdir on
+success or failure. It does not replace the production-snapshot checks later in this runbook.
+
 `ops/observability/backup-cutover.json` names the future independent Umami database and Beszel
 volume, but `activation_status: inactive-definition-only` means the existing backup script below
 remains authoritative. Do not switch backup ownership merely because the new Compose renders.

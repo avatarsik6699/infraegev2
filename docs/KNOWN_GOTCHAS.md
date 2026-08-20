@@ -52,6 +52,15 @@
 - **Fix:** retain the rehearsal report as rollback-mechanics evidence, then separately run the
   disposable Restic/PostgreSQL restore and Source cross-check before requesting cutover approval.
 
+### `pg_isready` can observe the temporary init server
+
+- **Symptoms:** a fresh PostgreSQL Docker container briefly passes `pg_isready`, then the next
+  `psql` command fails because the Unix socket disappeared.
+- **Root cause:** the official entrypoint starts and stops a temporary server while processing
+  initialization before replacing PID 1 with the final PostgreSQL server.
+- **Fix:** for disposable drills require PID 1 to be `postgres`, then require both `pg_isready` and
+  a trivial `SELECT 1` before creating source/target databases.
+
 ### A valid `infraege-ops` Compose render is not permission to start it
 
 - **Symptoms:** `make ops-config` passes and the inactive stack is started beside the current

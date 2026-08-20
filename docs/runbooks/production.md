@@ -15,6 +15,11 @@ The following gate is a local `opsctl rehearse-migration` run against disposable
 its JSON report, but do not treat `status: rehearsed` as data-fidelity evidence: real Restic restore,
 PostgreSQL validation, Source cross-check and explicit cutover approval remain separate gates.
 
+Run `make ops-data-fidelity-drill` only on a trusted local Docker host with the pinned target images
+already present. Retain its sanitized JSON output from `scripts/ops-data-fidelity-drill.sh --json`.
+It proves synthetic target-binary compatibility, not readability of the current production Restic
+snapshot and not approval to change VPS ownership.
+
 ## One-time bootstrap
 
 1. In REG.RU replace the existing `A` records for `@` and `www` with `2.26.8.245`, TTL 300 during

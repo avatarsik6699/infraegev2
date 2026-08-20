@@ -15,6 +15,7 @@
     "ops/observability/schemas/bundle.schema.json",
     "ops/observability/schemas/checkpoint.schema.json",
     "ops/observability/schemas/desired-state.schema.json",
+    "ops/observability/schemas/data-fidelity-result.schema.json",
     "ops/observability/schemas/inventory.schema.json",
     "ops/observability/schemas/migration-rehearsal.schema.json",
     "ops/observability/schemas/migration-source.schema.json",

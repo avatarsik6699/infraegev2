@@ -45,6 +45,8 @@ node --version            # local tests only: >=22.13
 pnpm --version            # local tests only: exactly 10.33.0 (packageManager)
 python3 --version         # local tests only: >=3.12
 uv --version              # local tests only
+curl --version            # local data-fidelity health checks
+jq --version              # operations JSON contracts and drill reports
 ```
 
 ---
@@ -117,6 +119,13 @@ checkpoint/staged state only below an exact `.infraege-ops-migration-sandbox` ma
 models ownership cutover, verifies target hashes and always rolls back to the source owner while
 removing staged data. Its report always says `production_mutated: false` and
 `authorized_to_cutover: false`; it does not execute Docker, Restic, SSH or a real database restore.
+
+`make ops-data-fidelity-drill` is the local real-binary gate. It refuses to pull and therefore
+requires the exact PostgreSQL and Beszel digest images from `ops/observability/compose.yml` to
+already exist locally. It restores a generated Umami custom-format dump and a stopped Beszel
+volume into disposable targets, verifies PostgreSQL values/ownership plus Beszel health/identity,
+and removes every uniquely labeled container, volume and host work directory. No production path,
+Restic credential, SSH transport or fixed host port is accepted.
 
 ### pnpm workspace policy
 
