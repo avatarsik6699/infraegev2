@@ -1,9 +1,9 @@
 [Unit]
-Description=Monthly infraege analytics retention
+Description=Monthly infraege operations analytics retention
 
 [Timer]
 OnCalendar=monthly
-RandomizedDelaySec=3h
+RandomizedDelaySec=5h
 Persistent=true
 
 [Install]

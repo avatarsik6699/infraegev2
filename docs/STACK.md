@@ -27,7 +27,7 @@ pitfalls that must be reconsidered rather than copied.
 | Database | PostgreSQL (provisioned in `infra/docker-compose.yml`; no schema/migrations yet — content is git-based, docs/SPEC.md §3) |
 | Cache | — (not needed on M0) |
 | Observability | `infraegev2/ops` owns one application-specific Compose/SSH lifecycle package for target sources. First-party sibling [sre-kit](https://github.com/avatarsik6699/sre-kit) owns adapters, Source configuration, normalization, alerts and monitoring UI only. Host metrics and fail2ban temporarily use root/password SSH; journal logs, Beszel and Umami use WireGuard; no local operations UI or generic infrastructure control plane exists in this repo |
-| Infra | Docker Compose: Nginx → `web`/`api`/Postgres plus pinned Umami/Beszel; Ubuntu 24.04, systemd, journald, fail2ban, WireGuard, Restic |
+| Infra | Two Docker Compose projects on one VPS: application Nginx → `web`/`api`/Postgres, plus independently pinned Umami/Beszel operations services; Ubuntu 24.04, systemd, journald, fail2ban, WireGuard, Restic |
 | Package managers | uv (`apps/api`), pnpm workspace (`apps/web`, root) |
 | Formatting | Prettier 3.9.6 exact for supported repository files; Ruff from the API lock for Python; EditorConfig for cross-editor whitespace defaults |
 | CI/CD | GitHub Actions on pinned Ubuntu 24.04 runners: static/security/audit checks without tests; GHCR SHA images with SBOM/provenance; environment-approved serialized SSH deploy with rollback; scheduled uptime/TLS probe |
@@ -93,15 +93,17 @@ project name `infraege-ops`. Callers provide the names listed in
 release id. `make ops-config ENV_FILE=… RELEASE=…` is local and non-mutating.
 
 `make ops-status` reads only the installed project's Compose status through the pinned production
-SSH wrapper. `make ops-install ENV_FILE=… RELEASE=…` uploads the Compose definition and protected
-environment, creates the one external ingress network if absent, then runs `pull` and `up --wait`.
+SSH wrapper. `make ops-install ENV_FILE=… RELEASE=…` uploads the Compose definition, its maintenance
+scripts and protected environment, creates the one external ingress network if absent, then runs
+`pull` and `up --wait`.
 `ops-update` applies another release through the same path; `ops-rollback` reapplies the previous
 release. Releases live under `/opt/infraege-ops`, their mode-600 environments under
 `/etc/infraege/ops`, and none of these commands reference the application Compose project.
 
-The current application Compose still owns the live Umami/Beszel services, so install/update must
-not be run before the separately approved fresh-start cutover frees their ports and attaches Nginx
-to `infraege-observability-ingress`. This repository deliberately has no desired-state JSON,
+The repository's application production definition now owns only Nginx, web, API and its Postgres;
+Nginx attaches to `infraege-observability-ingress`. The existing VPS may still run the previous
+combined release, so install/update must not run before the separately approved fresh-start cutover
+frees its legacy ports. This repository deliberately has no desired-state JSON,
 generic plan/apply engine, migration rehearsal, snapshot selector or deployment UI. Compose is the
 service desired state; the runbook is the cross-project transition contract.
 
@@ -187,7 +189,7 @@ default local shipping.
 |-------|---------|-----------------------|
 | Formatting | `pnpm format:check` | Prettier and Ruff; Markdown and generated/dependency-owned files are explicitly ignored |
 | Infrastructure / bootstrap | `docker compose -f infra/docker-compose.yml -f infra/docker-compose.override.yml up --build -d` | verified live in change 03 on Docker Desktop/BuildKit: all four services become healthy; frontend and `/health` return 200 through Nginx. Change 02 also verified `POST /api/tasks/{id}/check` and the `/api/tasks/` rate limit (`503` past its burst — Nginx's default `limit_req_status`, not `429`) |
-| Operations contracts | `bash scripts/tests/ops-stack-definition.test.sh && bash scripts/tests/ops-lifecycle.test.sh` | local/fake transport only; never connects to production or starts the operations project |
+| Operations contracts | `bash scripts/tests/ops-stack-definition.test.sh && bash scripts/tests/ops-lifecycle.test.sh && bash scripts/tests/production-ops-topology.test.sh && bash scripts/tests/backup-restore.test.sh && bash scripts/tests/ops-backup-restore.test.sh` | local/fake transport only; never connects to production or starts the operations project |
 | Migrations | `n/a` | content is git-based, not DB-backed (docs/SPEC.md §3); no schema exists yet to migrate |
 | Backend test suite | `cd apps/api && uv run pytest` | local only |
 | API contract drift | `pnpm api:check` | requires the frozen API and pnpm environments; tracked schema and generated TypeScript must match |

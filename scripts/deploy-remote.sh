@@ -27,6 +27,7 @@ fi
 }
 
 root=/opt/infraege
+observability_network=infraege-observability-ingress
 release_dir="$root/releases/$DEPLOY_SHA"
 archive="/root/infraege-$DEPLOY_SHA.tar.gz"
 env_file=/etc/infraege/production.env
@@ -62,6 +63,9 @@ rollback() {
 trap rollback ERR
 
 printf '%s\n' "$DEPLOY_SHA" > "$release_dir/.deploy-sha"
+docker network inspect "$observability_network" >/dev/null 2>&1 ||
+  docker network create "$observability_network" >/dev/null
+run_compose "$release_dir" "$DEPLOY_SHA" config --quiet
 run_compose "$release_dir" "$DEPLOY_SHA" pull
 if ! run_compose "$release_dir" "$DEPLOY_SHA" run --rm --no-deps --interactive=false --entrypoint /bin/sh nginx \
   -ec 'test -r /etc/letsencrypt/live/infraege.ru/fullchain.pem && test -r /etc/letsencrypt/live/infraege.ru/privkey.pem'; then
@@ -69,7 +73,6 @@ if ! run_compose "$release_dir" "$DEPLOY_SHA" run --rm --no-deps --interactive=f
   exit 1
 fi
 run_compose "$release_dir" "$DEPLOY_SHA" up --detach --wait --wait-timeout 60 postgres
-"$release_dir/scripts/init-umami-db.sh" "$env_file"
 run_compose "$release_dir" "$DEPLOY_SHA" up --detach --remove-orphans --wait --wait-timeout 180
 
 curl --fail --silent --show-error --max-time 15 https://infraege.ru/health/ready |

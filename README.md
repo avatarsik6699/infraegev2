@@ -240,8 +240,9 @@ pnpm audit:images
 
 ## Production и наблюдаемость
 
-Production использует неизменяемые GHCR-образы с тегом полного commit SHA, Nginx с TLS,
-PostgreSQL, Umami, Beszel, journald/fail2ban и Restic. GitHub Actions выполняет только статические
+Production использует неизменяемые GHCR-образы с тегом полного commit SHA. Application Compose
+владеет Nginx с TLS, web, API и PostgreSQL; отдельный `infraege-ops` Compose владеет Umami, Beszel
+и их gateways. journald/fail2ban и Restic остаются host-level prerequisites. GitHub Actions выполняет только статические
 и security-проверки — unit/E2E тесты по контракту проекта остаются локальными. Деплой запускается
 вручную для выбранного SHA через защищённое environment `production`, проверяет smoke/readiness и
 откатывает неуспешный релиз.
@@ -253,14 +254,15 @@ desired state сервисов; отдельного plan/apply engine, migratio
 
 `make ops-config ENV_FILE=... RELEASE=<full-sha>` локально проверяет definition.
 `make ops-status` читает установленный project через pinned SSH. `ops-install`/`ops-update`
-передают один release и выполняют `pull` + `up --wait`; `ops-rollback` возвращает предыдущий
+передают один Compose + maintenance release и выполняют `pull` + `up --wait`; `ops-rollback` возвращает предыдущий
 release. Эти команды никогда не меняют application Compose.
 
 По решению архитектора существующие beta-данные Umami/Beszel не переносятся. Новый stack получает
 пустые volumes; старые resources сохраняются только для короткого rollback-периода и удаляются
-позднее отдельным подтверждённым действием. Пока live Umami/Beszel остаются в application Compose,
-`ops-install` запускать нельзя из-за занятых ports. Переключение Nginx и backup ownership —
-отдельный production change.
+позднее отдельным подтверждённым действием. Репозиторий уже содержит разделённые Nginx и
+backup/restore contracts, но VPS не переключался: пока там остаётся предыдущий combined release,
+`ops-install` запускать нельзя из-за занятых ports. Выполнение cutover требует отдельного разрешения
+и следует `docs/runbooks/production.md`.
 
 First-party sibling [sre-kit](https://github.com/avatarsik6699/sre-kit) остаётся универсальным
 ядром наблюдаемости: adapters, Source configuration, normalization, alerts и monitoring UI. Он

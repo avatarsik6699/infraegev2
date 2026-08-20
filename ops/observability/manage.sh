@@ -95,7 +95,9 @@ archive="$work_dir/infraege-ops-$release.tar.gz"
 remote_archive="/root/infraege-ops-$release.tar.gz"
 remote_env="/root/infraege-ops-$release.env"
 
-tar --create --gzip --file "$archive" --directory "$repo_dir/ops/observability" compose.yml
+tar --create --gzip --file "$archive" --directory "$repo_dir/ops/observability" \
+  compose.yml backup.sh restore-check.sh prune-umami-data.sh \
+  --directory "$repo_dir/ops/postgres" umami-retention.sql
 production_scp "$archive" "root@$INFRAEGE_PROD_HOST:$remote_archive"
 production_scp "$env_file" "root@$INFRAEGE_PROD_HOST:$remote_env"
 production_ssh "ACTION=$command_name OPS_RELEASE=$release bash -s" \

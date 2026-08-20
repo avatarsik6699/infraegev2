@@ -6,8 +6,9 @@ requests re-hardening. Generate secrets on the administration laptop or provider
 paste passwords or `/etc/infraege/production.env` into the repository or chat.
 
 Operations onboarding prepares a separate mode-600 env file and validates it with
-`make ops-config ENV_FILE=... RELEASE=<full-sha>`. Do not run `ops-install` while the application
-Compose still owns the live Umami/Beszel ports; activation requires a separate cutover change.
+`make ops-config ENV_FILE=... RELEASE=<full-sha>`. Do not run `ops-install` while the live
+application release still owns Umami/Beszel ports; activation requires the separately authorized
+cutover in `production.md`.
 
 ## Confirmed non-secret inputs
 
@@ -164,8 +165,8 @@ After cutover, run `make ops-status` to inspect the infraegev2-owned operations 
 The command is read-only; install, update and rollback remain explicit operator actions and are
 never exposed through sre-kit's UI.
 
-The repository also contains an inactive `infraege-ops` Compose definition. Onboarding the current
-VPS does not start it and does not create a second Umami/Beszel installation. Its
+The repository contains the prepared `infraege-ops` Compose definition. Onboarding alone does not
+start it and does not create a second Umami/Beszel installation. Its
 `env.contract` records names only; actual values remain in the protected operations environment.
 Create `~/.config/infraege/production/ops.env` with exactly those names, independently generated
 values and mode `600`; do not copy it into the checkout. Use the definition only for local render
@@ -179,19 +180,16 @@ make ops-config \
 
 ## 4. Generate application and Restic secrets
 
-Create `/etc/infraege/production.env` from `infra/.env.example` on the VPS. Generate every value
-independently; never reuse the root, SSH-key, database, Umami or Restic credential:
+Create `/etc/infraege/production.env` from `infra/.env.example` on the VPS. It contains only
+application settings. Generate every value independently; never reuse the root, SSH, database or
+Restic credential:
 
 ```bash
 openssl rand -hex 32     # POSTGRES_PASSWORD
-openssl rand -hex 32     # UMAMI_DB_PASSWORD; safe to place in UMAMI_DATABASE_URL
-openssl rand -hex 32     # UMAMI_APP_SECRET
-openssl rand -hex 32     # temporary Beszel token until section 6
 ```
 
-Set `WIREGUARD_IP=10.77.0.1` and set `DEPLOY_SHA` to the full 40-character release SHA when
-deploying. Quote values in the env file when they contain shell metacharacters. Validate the
-completed file without printing it:
+Set `DEPLOY_SHA` to the full 40-character release SHA when deploying. Quote values in the env file
+when they contain shell metacharacters. Validate the completed file without printing it:
 
 ```bash
 umask 077
@@ -203,9 +201,10 @@ scripts/render-production-config.sh /etc/infraege/production.env >/dev/null
 
 Restic has no provider-issued key. Generate one more long random passphrase, store it in a password
 manager, and write only that passphrase plus a trailing newline to
-`/etc/infraege/restic-password` with mode `600`. `scripts/backup.sh` initializes the encrypted
-repository on its first successful run. Losing this password makes the repository unrecoverable;
-same-host Restic is still not disaster recovery. See the
+`/etc/infraege/restic-password` with mode `600`. Application and operations jobs share this
+encrypted repository but select snapshots through separate tags; the first successful backup
+initializes it. Losing this password makes the repository unrecoverable; same-host Restic is still
+not disaster recovery. See the
 [official Restic repository guide](https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html).
 
 ## 5. Create the Umami website ID and dashboard account
@@ -217,7 +216,7 @@ embedded in the public tracker. Before publishing images, generate it on the lap
 uuidgen
 ```
 
-Set that UUID as the GitHub environment variable from section 2. After the first stack start,
+Set that UUID as the GitHub environment variable from section 2. After the clean operations stack starts,
 connect WireGuard and open `http://10.77.0.1:3001`. Log in with the one-time default
 `admin` / `umami` credentials and change the password immediately. The current single-operator
 local setup has explicitly accepted deferring that rotation while the administration surface is
@@ -257,16 +256,17 @@ it as a source in sre-kit's own UI — credentials never enter this repository.
 ## 6. Obtain Beszel `TOKEN`, `KEY` and system ID
 
 These values appear only after the Beszel Hub is running; they are not VPS-provider credentials.
-For the first stack start, use independently generated temporary non-empty values for
-`BESZEL_AGENT_TOKEN` and `BESZEL_AGENT_KEY`. The agent will remain unavailable while Umami, Beszel
-Hub and the application can start.
+Before `ops-install`, use independently generated temporary non-empty values for
+`BESZEL_AGENT_TOKEN` and `BESZEL_AGENT_KEY` in the protected operations env. The agent may remain
+unavailable while Umami, Beszel Hub and the application start.
 
 Over WireGuard open `http://10.77.0.1:8090`, create the initial Beszel administrator, then:
 
 1. Open `/settings/tokens` and create/copy a universal token -> `BESZEL_AGENT_TOKEN`.
 2. Click **Add System** and use `/beszel_socket/beszel.sock` as Host/IP. Copy the public key shown
    by the dialog -> `BESZEL_AGENT_KEY`.
-3. Replace both temporary values in `/etc/infraege/production.env` and recreate `beszel-agent`.
+3. Replace both temporary values in the protected operations env and use `ops-update` with the
+   currently installed full release SHA to recreate `beszel-agent`.
 4. Complete **Add System**, then copy the resulting system record ID into the untracked
    `projects.json` as `beszel.systemId`.
 

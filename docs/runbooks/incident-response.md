@@ -17,7 +17,8 @@
 
 - Bad release: re-run the deploy workflow with the last known-good main SHA. Automatic rollback
   handles failed deploy smoke, but not delayed application defects.
-- Database/storage: stop writers and follow `backup-restore.md`; never run broad `DELETE`,
+- Database/storage: identify whether `infraege-application` or `infraege-ops` owns the data, stop
+  only that project's writers and follow `backup-restore.md`; never run broad `DELETE`,
   `TRUNCATE`, `DROP TABLE` or `DROP DATABASE` as an exploratory action.
 - Compromise suspicion: isolate with the provider firewall, preserve journal/GitHub evidence,
   rotate the temporary root password in both GitHub and the local protected store plus database,
@@ -30,6 +31,7 @@
 
 ## Closeout
 
-Confirm public page and readiness, certificate validity, analytics collection, fresh backup and all
-dashboard sources. Record root cause, timeline, affected data, corrective backlog item and whether
+Confirm public page and readiness, certificate validity, analytics collection, fresh tagged
+application and operations backups, and all dashboard sources. Record root cause, timeline,
+affected data, corrective backlog item and whether
 legal notification duties need specialist review. Telegram alerts are deliberately deferred.

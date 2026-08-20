@@ -15,8 +15,8 @@
 
 - **Symptoms:** `make ops-config` passes and the inactive stack is started beside the current
   application Compose, causing port conflicts or two owners for Umami/Beszel data.
-- **Root cause:** Compose validation proves syntax and interpolation only. Production ownership,
-  ports, Nginx connectivity and backup paths still point at the application project.
+- **Root cause:** Compose validation proves syntax and interpolation only. The repository is
+  prepared for split ownership, but the live VPS may still run the previous combined release.
 - **Fix:** use `ops-config` as local evidence only. Run `ops-install` only inside the separately
   approved fresh-start cutover after legacy ports are freed; verify health and Sources before any
   cleanup. No old Umami/Beszel data is transferred.
@@ -290,12 +290,10 @@
 - **Symptoms**: image publication succeeds, but remote deploy exits `127` while sourcing
   `production.env`; the log shows the second word of an SSH public key as `command not found`.
 - **Root cause**: Docker Compose accepts an unquoted env value containing spaces, while Bash
-  `source` treats the text after the first word as a command. The Beszel helper previously wrote
-  its system public key without quoting.
-- **Fix**: serialize operator-provided values with the shared single-quoted literal dotenv formatter and
-  reject line breaks. Run `make ops-repair-beszel-env` once for an affected protected file. Remote
-  deploy validates sourceability before extraction, pulls or container changes, so a malformed
-  file now fails without requiring rollback.
+  `source` treats the text after the first word as a command.
+- **Fix**: serialize operator-provided values as quoted dotenv literals and reject line breaks.
+  Application and operations deploys validate sourceability before container changes, so a
+  malformed protected file fails without requiring rollback.
 
 ### Production: certificate preflight must bypass the VPS hostname override
 
@@ -355,6 +353,6 @@
 - **Root cause:** both projects declare the network as `external`. Compose deliberately neither
   creates nor removes external networks, which prevents one project from deleting connectivity
   owned by the other.
-- **Fix:** `ops-install` creates the exact network if absent. The future cutover change must create
-  it before attaching application Nginx, then start `infraege-ops` only after legacy ports are free.
+- **Fix:** both deploy paths create the exact network if absent. During the approved cutover deploy
+  the prepared application release, then start `infraege-ops` only after legacy ports are free.
   Network deletion remains a later explicitly approved cleanup action.

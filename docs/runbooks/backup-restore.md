@@ -1,57 +1,77 @@
 # Backup and restore
 
-Daily backup captures both PostgreSQL databases, Beszel data and the encrypted-at-rest production
-environment into a local Restic repository. Retention is 7 daily, 4 weekly and 3 monthly snapshots.
-`infraege-backup.timer` runs daily; `infraege-restore-check.timer` performs a monthly restore into a
-disposable PostgreSQL container. Status is written to `/var/lib/infraege/backup-status.json`.
-Backup/restore lifecycle remains owned by `infraegev2/ops`; sre-kit may report sanitized freshness
-and restore-check events but never runs backup, restore or retention mutations. The freshness and
-installed-restore proofs below remain the authoritative acceptance checks.
+Application and operations own separate backup contracts while sharing one encrypted Restic
+repository. Application snapshots use tag `infraege-application` and contain only the application
+PostgreSQL dump plus `/etc/infraege/production.env`. Operations snapshots use tag `infraege-ops`
+and contain the Umami PostgreSQL dump, Beszel state and the release-specific operations env. Each
+tag has its own 7 daily + 4 weekly + 3 monthly retention, restore proof and freshness marker.
 
-The existing backup script remains authoritative while Umami/Beszel belong to the application
-Compose. The fresh-start cutover deliberately does not inspect, copy or restore their old data.
-After the clean `infraege-ops` stack is healthy, a separate change must split application and
-operations backups so each Compose project owns its own dump/volume restore path. Do not switch the
-timers before that new path has its own restore proof; legacy cleanup always requires separate
-approval.
+The jobs share `/run/lock/infraege-restic.lock`, so backup, restore and prune cannot mutate the same
+repository concurrently. sre-kit may report sanitized status but never runs these mutations.
 
-Checks:
+## Installation and activation
+
+Before cutover, install only the application jobs:
 
 ```bash
-sudo ops/install-backup-timers.sh
-systemctl list-timers --all 'infraege-*'
-sudo systemctl start infraege-backup.service
-sudo scripts/check-backup-freshness.sh
-env \
-  RESTIC_REPOSITORY=/var/backups/infraege/restic \
-  RESTIC_PASSWORD_FILE=/etc/infraege/restic-password \
-  restic snapshots --latest 1
-env \
-  RESTIC_REPOSITORY=/var/backups/infraege/restic \
-  RESTIC_PASSWORD_FILE=/etc/infraege/restic-password \
-  restic check --read-data
-sudo systemctl start infraege-restore-check.service
-systemctl show infraege-backup.service infraege-restore-check.service \
-  -p Id -p Result -p ExecMainStatus --no-pager
-docker ps -a --filter name=infraege-restore-check
-journalctl -u infraege-backup.service -u infraege-restore-check.service --since today
+sudo ops/install-backup-timers.sh application
 ```
 
-The first production proof is not complete until all three `infraege-*` timers appear with a next
-run, the marker is fresh, Restic reports a current snapshot and `check --read-data` finds no
-errors, both oneshot services exit with status 0, and no `infraege-restore-check-*` container or
-`restore.*` work directory remains. A timer reported as `not-found` was never installed; waiting
-for its calendar cannot create the first backup.
+Only after the clean `infraege-ops` project is installed and healthy, switch retention ownership
+and enable its jobs:
 
-The custom-format Umami dump retains object ownership. The disposable cluster must create the
-loginless `umami` owner role before `pg_restore`; using `--no-owner` would make a simplified import
-pass without proving that the archived ownership metadata is restorable.
+```bash
+sudo ops/install-backup-timers.sh activate-operations
+systemctl list-timers --all 'infraege-*'
+```
 
-For an actual restore, stop application writers, select a Restic snapshot, restore it to a new
-temporary directory, validate both dumps, then use `pg_restore --clean --if-exists` only after a
-maintenance window and an additional current backup. Restore Beszel data before starting Beszel.
-Run public smoke checks and preserve the pre-restore backup until acceptance.
+The second command keeps application backup/restore enabled, removes the legacy application-owned
+analytics-retention units and enables the three `infraege-ops-*` timers. It refuses activation when
+`/opt/infraege-ops/current` is absent.
 
-Known accepted risk: the initial repository is on the same VPS, so it protects against logical
-errors but not total VPS loss. Before storing irreplaceable user data, configure an encrypted
-off-site Restic backend and perform the same restore drill against it.
+## Acceptance checks
+
+```bash
+sudo systemctl start infraege-backup.service
+sudo systemctl start infraege-restore-check.service
+sudo systemctl start infraege-ops-backup.service
+sudo systemctl start infraege-ops-restore-check.service
+
+sudo scripts/check-backup-freshness.sh
+jq -e '.status == "success"' /var/lib/infraege-ops/backup-status.json
+
+env RESTIC_REPOSITORY=/var/backups/infraege/restic \
+  RESTIC_PASSWORD_FILE=/etc/infraege/restic-password \
+  restic snapshots --tag infraege-application --latest 1
+env RESTIC_REPOSITORY=/var/backups/infraege/restic \
+  RESTIC_PASSWORD_FILE=/etc/infraege/restic-password \
+  restic snapshots --tag infraege-ops --latest 1
+env RESTIC_REPOSITORY=/var/backups/infraege/restic \
+  RESTIC_PASSWORD_FILE=/etc/infraege/restic-password \
+  restic check --read-data
+
+systemctl show infraege-backup.service infraege-restore-check.service \
+  infraege-ops-backup.service infraege-ops-restore-check.service \
+  -p Id -p Result -p ExecMainStatus --no-pager
+docker ps -a --filter name=infraege-restore-check
+docker ps -a --filter name=infraege-ops-restore-check
+```
+
+Acceptance requires both tags to have a current snapshot, `restic check --read-data` to pass, all
+four jobs to exit successfully and no disposable restore container or `restore.*` directory to
+remain. The Umami drill creates its archived owner role before `pg_restore`; the application drill
+does not restore or inspect operations artifacts.
+
+## Real recovery
+
+Stop only the writers owned by the affected project. Select a snapshot with the matching tag,
+restore into a new temporary directory and run the corresponding restore check before changing live
+data. Use `pg_restore --clean --if-exists` only in an approved maintenance window after taking a new
+current backup. Restore Beszel state only for the operations project and before its Hub starts.
+
+The fresh-start cutover does not inspect, copy or restore old Umami/Beszel data. Old application
+volumes remain unreferenced rollback resources until a separate destructive cleanup is authorized.
+
+Known accepted risk: the repository is on the same VPS, so it protects against logical errors but
+not total VPS loss. Configure an encrypted off-site backend and repeat both restore drills before
+storing irreplaceable user data.

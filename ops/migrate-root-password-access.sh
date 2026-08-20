@@ -71,7 +71,7 @@ case ${1:-} in
       exit 1
     }
     assert_effective_access
-    for unit in infraege-backup.service infraege-restore-check.service infraege-analytics-retention.service; do
+    for unit in infraege-backup.service infraege-restore-check.service; do
       [[ $(systemctl show "$unit" -p User --value) == root ]]
     done
     for user in "${retired_users[@]}"; do

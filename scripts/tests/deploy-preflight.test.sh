@@ -21,6 +21,10 @@ fi
 preflight_line=$(grep -n 'validate_production_env "$env_file"' "$deploy_script" | cut -d: -f1)
 extract_line=$(grep -n 'tar --extract' "$deploy_script" | cut -d: -f1)
 pull_line=$(grep -n '"$DEPLOY_SHA" pull' "$deploy_script" | cut -d: -f1)
+network_line=$(grep -n 'docker network inspect "$observability_network"' "$deploy_script" | cut -d: -f1)
+config_line=$(grep -n '"$DEPLOY_SHA" config --quiet' "$deploy_script" | cut -d: -f1)
 [[ $preflight_line -lt $extract_line && $preflight_line -lt $pull_line ]]
+[[ $network_line -lt $config_line && $config_line -lt $pull_line ]]
+! grep -Fq 'init-umami-db.sh' "$deploy_script"
 
 echo 'deploy environment preflight test: PASS'

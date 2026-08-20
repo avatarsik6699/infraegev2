@@ -1,0 +1,11 @@
+[Unit]
+Description=infraege operations encrypted production backup
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+WorkingDirectory=/opt/infraege-ops/current
+ExecStart=/opt/infraege-ops/current/backup.sh

@@ -63,6 +63,15 @@ case "$action" in
     install -d -m 755 "$releases" "$release_dir"
     install -d -m 700 "$env_root"
     tar --extract --gzip --file "$archive" --directory "$release_dir"
+    for release_file in compose.yml backup.sh restore-check.sh prune-umami-data.sh \
+      umami-retention.sql; do
+      [[ -r $release_dir/$release_file ]] || {
+        echo "operations release is missing $release_file" >&2
+        exit 1
+      }
+    done
+    chmod 755 "$release_dir/backup.sh" "$release_dir/restore-check.sh" \
+      "$release_dir/prune-umami-data.sh"
     install -m 600 "$uploaded_env" "$env_root/$release.env"
     rm -f -- "$archive" "$uploaded_env"
 

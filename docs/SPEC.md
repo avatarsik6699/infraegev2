@@ -495,10 +495,12 @@ Nginx выставляет `Cache-Control`/`ETag` для хэшированно�
 - CI-валидация связей контента: скрипт проверяет, что `prerequisites`/`related_topics`/
   `unlocks_topics`/`practice_task_ids`/`topic_ids` ссылаются на существующие id — сборка падает при
   битых связях, до того как они попадут в прод (см. §3, §2.3).
-- Резервное копирование: ежедневный `pg_dump -Fc`, Beszel state и production-конфигурация в
-  локальный restic на том же VPS; 7 daily, 4 weekly, 3 monthly; freshness marker и ежемесячный
-  restore drill. Потеря всего VPS уничтожит и локальные бэкапы — принятый риск до отдельной задачи
-  с российским S3-compatible storage.
+- Резервное копирование: application и operations независимо создают tagged snapshots в общем
+  локальном Restic repository. Application сохраняет свой `pg_dump -Fc` и environment;
+  operations — Umami dump, Beszel state и свой environment. Для каждого тега действуют 7 daily,
+  4 weekly, 3 monthly, отдельный freshness marker и ежемесячный restore drill. Потеря всего VPS
+  уничтожит и локальные бэкапы — принятый риск до отдельной задачи с российским S3-compatible
+  storage.
 
 **Наблюдаемость** (источники на application VPS, внешний monitoring core):
 - **Umami v3** — отдельная БД/роль в Postgres; DNT, без cookies/fingerprinting/query/hash; текущий
@@ -557,21 +559,22 @@ env; `status` читает состояние установленного proje
 предыдущий release. Эти команды не моделируют собственный desired state, effect graph, checkpoint,
 revision или outbox: декларативным состоянием сервисов уже владеет Compose.
 
-Release содержит только Compose definition. Значения передаются отдельным mode-600 environment и
-хранятся на VPS по release id; они не входят в archive или git. Operations command никогда не
-меняет application Compose, а application deploy до отдельного cutover change не подключает новый
-stack. `install` нельзя запускать параллельно с legacy Umami/Beszel из-за занятых ports.
+Release содержит Compose definition и три коротких maintenance-скрипта для backup, restore proof и
+retention. Значения передаются отдельным mode-600 environment и хранятся на VPS по release id; они
+не входят в archive или git. Operations command никогда не меняет application Compose. Репозиторий
+уже подготовлен к переключению, но `install` нельзя запускать параллельно с live legacy
+Umami/Beszel из-за занятых ports.
 
-Публичный same-origin Umami collector после будущего переключения использует одну заранее
+Публичный same-origin Umami collector в подготовленной production definition использует одну
 созданную external Docker network `infraege-observability-ingress`. Оба Compose project только
 подключаются к ней; Umami получает стабильный alias `umami`, а Nginx остаётся также в application
 network для web/api. Создание сети — одна явная lifecycle-операция, а не отдельная модель ресурсов.
 
-Fresh-start cutover оформляется следующим production change: создать shared network, остановить
-legacy observability services, подключить application Nginx, запустить чистый `infraege-ops`,
-зарегистрировать Sources и проверить dashboard. Старые containers/volumes сохраняются на короткий
-rollback-период. Их удаление, перенос старых данных и изменение backup ownership не выполняются
-этим контрактом и требуют отдельных явно одобренных действий.
+Fresh-start cutover остаётся отдельной, ещё не выполненной production-операцией: проверить shared
+network, остановить legacy observability services, выпустить подготовленный application release,
+запустить чистый `infraege-ops`, активировать его timers, зарегистрировать Sources и проверить
+dashboard. Старые volumes сохраняются на короткий rollback-период. Их удаление и перенос старых
+данных не входят в cutover и требуют отдельного явно одобренного действия.
 
 `ops/observability/sre-kit-sources.example.json` — secret-free операторская подсказка, а не новый
 универсальный deployment contract. Поля сверяются с manifest соответствующего adapter, но реальные
@@ -587,8 +590,8 @@ IDs/accounts/secrets вводятся в sre-kit. Недоступность sre
 | Security headers / CORS | Rate limiting чекер-эндпоинта на Nginx: `limit_req_zone` 20 req/min/IP, burst 5, `nodelay` (см. §4, §11.2 источника) — против автоматизированного перебора банка ответов; конкретную цифру пересмотреть по факту логов после запуска. Временный public root/password SSH защищён только уникальным длинным паролем, pinned host key, UFW, fail2ban и GitHub Environment approval; риск полного захвата VPS при компрометации пароля принят архитектором до отдельного возврата key-only access. |
 | Accessibility target | Foundation и lab не имеют serious/critical axe violations; lesson outline сохраняет вложенный semantic list, anchors, keyboard focus, различимый текущий пункт и корректный source order, а сложный визуал имеет видимую полную текстовую альтернативу |
 | Performance budget | LCP < 2.5s, CLS < 0.1, INP < 200ms на мобильном 4G-профиле; release evidence измеряет `/` и первый опубликованный `/ege/16-rekursiya`, отдельно проверяет cold-load font/layout shifts и не подменяет route-level метрики общей оценкой технической страницы |
-| Observability | Application deploy и operations stack имеют независимые Compose projects, volumes и rollback. infraegev2 владеет небольшим Compose/SSH operations package; sre-kit работает вне monitored VPS и владеет только ingestion, adapters, alerts и UI. До fresh-start cutover текущий общий Compose явно считается переходным состоянием |
-| Backup / restore | До cutover действует текущий локальный Restic lifecycle; чистый `infraege-ops` получает отдельный backup/restore lifecycle после activation, без импорта старых Umami/Beszel artifacts. 7 daily + 4 weekly + 3 monthly и off-site risk сохраняются |
+| Observability | Application deploy и operations stack имеют независимые Compose projects, volumes и rollback. infraegev2 владеет небольшим Compose/SSH operations package; sre-kit работает вне monitored VPS и владеет только ingestion, adapters, alerts и UI. Репозиторий подготовлен к fresh-start cutover, его live-выполнение требует отдельного разрешения |
+| Backup / restore | Application и operations jobs используют отдельные Restic tags, restore proofs и status markers в общем encrypted repository. Operations timers активируются только после clean install, без импорта старых Umami/Beszel artifacts. Для каждого владельца сохраняются 7 daily + 4 weekly + 3 monthly и общий same-host/off-site risk |
 | SEO | `/`, `/privacy` и published topics имеют canonical, уникальные metadata, SSR content и входят в sitemap/prerender; lab и review routes остаются unlisted, `noindex,nofollow` и исключены из public discovery; Lighthouse SEO для публичных маршрутов проходит без ошибок |
 | Mobile / no-JS readability | Lab и topic lesson сохраняют текст, последовательные стадии визуала, подписи, решения и section anchors в SSR HTML; интерактивная проверка остаётся progressive enhancement |
 | Client resilience / API drift | Route failures восстанавливаемы без белого экрана; loading/empty/error/not-found состояния доступны с клавиатуры и скринридера; OpenAPI schema/types drift ломает gate до merge; runtime HTTP имеет timeout/abort и не делает скрытый retry мутаций |

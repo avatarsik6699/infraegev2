@@ -70,6 +70,9 @@ grep -Fq "root@2.26.8.245:/root/infraege-ops-$release.tar.gz" "$calls"
 grep -Fq "root@2.26.8.245:/root/infraege-ops-$release.env" "$calls"
 grep -Fq "ACTION=install OPS_RELEASE=$release bash -s" "$calls"
 ! grep -Eq 'do-not-print-(postgres|umami|token|key)' "$calls"
+grep -Fq 'compose.yml backup.sh restore-check.sh prune-umami-data.sh' \
+  "$repo_dir/ops/observability/manage.sh"
+grep -Fq 'umami-retention.sql' "$repo_dir/ops/observability/manage.sh"
 
 : >"$calls"
 PATH="$fake_bin:$PATH" OPS_CALLS="$calls" INFRAEGE_PRODUCTION_DIR="$production_dir" \
@@ -92,6 +95,8 @@ grep -Fq 'label=com.infraege.service=$legacy_service' \
 grep -Fq 'complete the approved cutover step first' \
   "$repo_dir/ops/observability/remote-deploy.sh"
 grep -Fq 'up --detach --remove-orphans --wait --wait-timeout 180' \
+  "$repo_dir/ops/observability/remote-deploy.sh"
+grep -Fq 'operations release is missing $release_file' \
   "$repo_dir/ops/observability/remote-deploy.sh"
 ! rg -n 'infra/docker-compose|project-name infraege([[:space:]]|$)' \
   "$repo_dir/ops/observability/manage.sh" \

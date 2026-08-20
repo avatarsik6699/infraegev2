@@ -7,9 +7,10 @@ place every required value using the ordered
 [production onboarding guide](production-onboarding.md) before following this summary.
 
 The independent operations definition can be validated locally with
-`make ops-config ENV_FILE=... RELEASE=<full-sha>`. Do not run `ops-install` while the current
-application Compose still owns Umami/Beszel ports. The fresh-start cutover is a separate production
-change with an explicit maintenance sequence; no old analytics or metrics data is transferred.
+`make ops-config ENV_FILE=... RELEASE=<full-sha>`. Do not run `ops-install` while the live
+application release still owns Umami/Beszel ports. The repository is prepared for a fresh-start
+cutover, but this runbook does not authorize executing it; no old analytics or metrics data is
+transferred.
 
 ## One-time bootstrap
 
@@ -84,17 +85,45 @@ previous release. They do not reference or mutate the application Compose projec
 
 `ops/observability/compose.yml` uses empty independent Postgres/Beszel volumes, WireGuard-only
 UI/API bindings, the loopback read-only socket proxy and the external collector-ingress network.
-The lifecycle command creates that network if absent. The subsequent cutover change must update
-application Nginx, stop legacy observability services, start the clean stack, verify every health
-check and add Sources from `ops/observability/sre-kit-sources.example.json`. Legacy resources stay
-available for a short restart-based rollback and are removed only by a later approved cleanup.
+Both deploy paths create that network if absent. The prepared application Nginx resolves Umami at
+request time through Docker DNS, so it can start during the cutover interval and survives an
+independent Umami container replacement. Legacy volumes stay available for a short restart-based
+rollback and are removed only by a later approved cleanup.
 
 `/home/niquetamerewsl/projects/sre-kit` is the first-party sibling for the universal observability
 core, adapters, Source configuration, normalization, alerts and monitoring UI. It does not own
-infraegev2 deployment automation or target credentials. Beszel and Umami currently remain in the
-shared infraegev2 Compose. Cutover starts the independent stack with empty data and retains legacy
-resources only for restart-based rollback; no data migration is performed. Do not recreate the
-retired `apps/ops` dashboard.
+infraegev2 deployment automation or target credentials. The repository definitions are already
+split, while the live VPS remains unchanged until an explicitly authorized cutover. Do not recreate
+the retired `apps/ops` dashboard.
+
+## Prepared fresh-start cutover (not yet authorized)
+
+Use one full SHA that contains this topology and has already passed the Release Gate. Keep the
+provider console open and record the previous application release SHA. Before the maintenance
+window, validate the protected operations env locally, prove the current application backup and
+confirm that no `infraege-ops` project is installed.
+
+During the authorized window:
+
+1. Create or inspect `infraege-observability-ingress`; do not remove any volume.
+2. Stop only legacy `umami`, `beszel`, `beszel-agent` and `docker-socket-proxy` in the currently
+   installed application release. Leave Nginx, web, API and application Postgres running.
+3. Deploy the prepared application release. Its Compose project removes the now-orphaned legacy
+   containers but does not remove their named volumes. Public application health must pass; the two
+   `/stats` routes may return `502` until the next step.
+4. Run `make ops-install ENV_FILE=... RELEASE=<full-sha>`. It creates empty operations volumes and
+   waits for all operations services; it does not read legacy volumes.
+5. Run `sudo /opt/infraege/current/ops/install-backup-timers.sh activate-operations`, then manually
+   start both `infraege-ops` backup and restore-check services and verify their tagged snapshots.
+6. Create the new Umami website/Beszel system, enter the six Source configurations from the
+   secret-free example into sre-kit, and verify collector `2xx`, all Source checks and dashboard
+   data. Source registration never gates either Compose project.
+
+If acceptance fails, disable the three `infraege-ops-*` timers, run the operations project's
+Compose `down` without `--volumes`, and deploy the recorded previous application SHA. That release
+recreates legacy containers against the preserved application-owned volumes. Verify public health,
+collector and the previous dashboards. Do not delete the new operations volumes during rollback;
+all cleanup is a later, separately authorized destructive task.
 
 ## Capacity and scale-up trigger
 

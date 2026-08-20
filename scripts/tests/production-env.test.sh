@@ -42,7 +42,4 @@ if production_env_quote "forbidden'quote" >/dev/null 2>&1; then
   exit 1
 fi
 
-grep -Fq 'production_env_quote "$new_key"' "$repo_dir/scripts/configure-beszel-agent.sh"
-grep -Fq 'production_env_validate "$new_env"' "$repo_dir/scripts/configure-beszel-agent.sh"
-
 echo 'production environment quoting test: PASS'

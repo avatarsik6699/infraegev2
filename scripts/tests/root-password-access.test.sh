@@ -36,8 +36,7 @@ grep -Fq 'SSH_ASKPASS_REQUIRE=force' "$repo_dir/scripts/lib/production-ssh.sh"
 ! grep -Eq 'ADMIN_SSH_PUBLIC_KEY|DEPLOY_USER' "$repo_dir/ops/bootstrap-vps.sh"
 for service in \
   infraege-backup.service \
-  infraege-restore-check.service \
-  infraege-analytics-retention.service; do
+  infraege-restore-check.service; do
   grep -Fxq 'User=root' "$repo_dir/ops/systemd/$service"
   grep -Fxq 'Group=root' "$repo_dir/ops/systemd/$service"
 done

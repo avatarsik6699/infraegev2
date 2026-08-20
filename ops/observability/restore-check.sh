@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -Eeuo pipefail
 
-backup_root=${BACKUP_ROOT:-/var/backups/infraege}
-export RESTIC_REPOSITORY=${RESTIC_REPOSITORY:-$backup_root/restic}
+backup_root=${OPS_BACKUP_ROOT:-/var/backups/infraege-ops}
+export RESTIC_REPOSITORY=${RESTIC_REPOSITORY:-/var/backups/infraege/restic}
 export RESTIC_PASSWORD_FILE=${RESTIC_PASSWORD_FILE:-/etc/infraege/restic-password}
-snapshot_tag=infraege-application
+snapshot_tag=infraege-ops
 restic_lock_file=${RESTIC_LOCK_FILE:-/run/lock/infraege-restic.lock}
 work_dir=$(mktemp -d "$backup_root/restore.XXXXXX")
-container_name="infraege-restore-check-$$"
+container_name="infraege-ops-restore-check-$$"
 
 cleanup() {
   docker rm --force "$container_name" >/dev/null 2>&1 || true
@@ -19,9 +19,10 @@ install -d -m 755 "$(dirname -- "$restic_lock_file")"
 exec 9>"$restic_lock_file"
 flock -n 9 || { echo 'another infraege Restic job is running' >&2; exit 1; }
 restic restore latest --tag "$snapshot_tag" --target "$work_dir"
-application_dump=$(find "$work_dir" -type f -name application.dump -print -quit)
-[[ -n $application_dump ]] || {
-  echo "latest application snapshot does not contain its PostgreSQL dump" >&2
+umami_dump=$(find "$work_dir" -type f -name umami.dump -print -quit)
+beszel_data=$(find "$work_dir" -type d -name beszel-data -print -quit)
+[[ -n $umami_dump && -n $beszel_data ]] || {
+  echo 'latest operations snapshot does not contain Umami and Beszel artifacts' >&2
   exit 1
 }
 
@@ -32,10 +33,11 @@ for _attempt in $(seq 1 30); do
   sleep 1
 done
 docker exec "$container_name" pg_isready -U postgres >/dev/null
-
-docker exec "$container_name" createdb -U postgres application_restore
-docker cp "$application_dump" "$container_name:/tmp/application.dump"
+docker exec "$container_name" psql -U postgres --set ON_ERROR_STOP=1 \
+  --command 'CREATE ROLE umami NOLOGIN;'
+docker exec "$container_name" createdb -U postgres -O umami umami_restore
+docker cp "$umami_dump" "$container_name:/tmp/umami.dump"
 docker exec "$container_name" pg_restore -U postgres --exit-on-error \
-  -d application_restore /tmp/application.dump
+  -d umami_restore /tmp/umami.dump
 
-echo "Restore check passed for the application database."
+echo 'Restore check passed for Umami and restored the Beszel state directory.'
