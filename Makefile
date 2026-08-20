@@ -27,7 +27,8 @@ STOP_TIMEOUT ?= 10
 .PHONY: help dev rebuild stop down restart logs ps config clean \
 	tunnel-up tunnel-down tunnel-status \
 	ops-open-beszel ops-open-umami ops-configure-beszel-agent \
-	ops-repair-beszel-env ops-inventory ops-status ops-plan ops-apply-sandbox
+	ops-repair-beszel-env ops-inventory ops-status ops-plan ops-apply-sandbox \
+	ops-config ops-bundle
 
 help:
 	@echo "infraege local Docker workflow"
@@ -58,6 +59,8 @@ help:
 	@echo "  make ops-status                  Compare production operations state with desired state"
 	@echo "  make ops-plan                    Print a non-mutating operations reconciliation plan"
 	@echo "  make ops-apply-sandbox PLAN=... INVENTORY=... SANDBOX_ROOT=..."
+	@echo "  make ops-config                   Validate inactive infraege-ops Compose definition"
+	@echo "  make ops-bundle                   Print deterministic operations bundle manifest"
 
 dev:
 	@STOP_TIMEOUT=$(STOP_TIMEOUT) $(DOCKER_LIFECYCLE) dev
@@ -126,3 +129,10 @@ ops-apply-sandbox:
 		{ echo "PLAN, INVENTORY and SANDBOX_ROOT are required" >&2; exit 2; }
 	@./ops/opsctl apply --plan-file "$(PLAN)" --inventory-file "$(INVENTORY)" \
 		--sandbox-root "$(SANDBOX_ROOT)"
+
+ops-config:
+	@docker compose --env-file /dev/null --project-name infraege-ops \
+		-f ops/observability/compose.yml config --quiet
+
+ops-bundle:
+	@python3 ops/observability/build-bundle.py

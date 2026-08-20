@@ -9,6 +9,12 @@ and restore-check events but never runs backup, restore or retention mutations. 
 currently observes only timer state—the freshness and installed-restore proofs below remain the
 authoritative acceptance checks.
 
+`ops/observability/backup-cutover.json` names the future independent Umami database and Beszel
+volume, but `activation_status: inactive-definition-only` means the existing backup script below
+remains authoritative. Do not switch backup ownership merely because the new Compose renders.
+Before cutover, extend backup/restore to the `infraege-ops` project and prove both data sets in a
+disposable restore while retaining the pre-migration snapshot for rollback.
+
 Checks:
 
 ```bash

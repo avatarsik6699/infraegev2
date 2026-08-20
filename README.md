@@ -258,6 +258,12 @@ plan по умолчанию, создаёт checkpoint, атомарный revi
 откатывает sandbox. Новый/пустой state root получает marker; существующий непустой каталог без
 marker отклоняется. Это не production apply: SSH/Compose/systemd executor отсутствует.
 
+Неактивное определение будущего отдельного stack находится в
+`ops/observability/compose.yml`. `make ops-config` только render/validate его с переданными через
+environment защищёнными значениями, а `make ops-bundle` печатает детерминированный secret-free
+manifest и hashes repository-owned assets. Эти команды не запускают и не загружают контейнеры;
+параллельный старт рядом с текущим application Compose запрещён до отдельной миграции.
+
 First-party sibling [sre-kit](https://github.com/avatarsik6699/sre-kit) остаётся универсальным
 ядром наблюдаемости: adapters, Source configuration, normalization, alerts и monitoring UI. Он
 читает источники infraegev2 через private API/WireGuard/read-only SSH, но не устанавливает и не

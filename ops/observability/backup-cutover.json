@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "installation_id": "infraege-production",
+  "target_project": "infraege-ops",
+  "activation_status": "inactive-definition-only",
+  "current_owner": "infraege application Compose",
+  "future_data": {
+    "database_service": "postgres",
+    "database_name": "umami",
+    "volumes": ["ops-postgres-data", "beszel-data"]
+  },
+  "required_gates": [
+    "remote-preflight",
+    "fresh-backup",
+    "disposable-restore",
+    "maintenance-window",
+    "data-migration",
+    "source-cross-check",
+    "cutover-approval"
+  ],
+  "rollback_owner": "infraege application Compose",
+  "parallel_start_allowed": false
+}

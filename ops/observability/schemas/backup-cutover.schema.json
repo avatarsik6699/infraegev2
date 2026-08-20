@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://infraege.ru/schemas/ops/backup-cutover-v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "installation_id",
+    "target_project",
+    "activation_status",
+    "current_owner",
+    "future_data",
+    "required_gates",
+    "rollback_owner",
+    "parallel_start_allowed"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "installation_id": { "type": "string" },
+    "target_project": { "const": "infraege-ops" },
+    "activation_status": { "const": "inactive-definition-only" },
+    "current_owner": { "type": "string" },
+    "future_data": { "type": "object" },
+    "required_gates": { "type": "array", "minItems": 1 },
+    "rollback_owner": { "type": "string" },
+    "parallel_start_allowed": { "const": false }
+  }
+}

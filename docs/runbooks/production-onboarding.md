@@ -160,6 +160,11 @@ After onboarding, run `ops/opsctl inventory`, `status` and `plan` to inspect the
 operations stack. There is no `apply` command in this foundation; production changes remain
 manual/runbook-owned until a later reconcile change provides rollback and approval gates.
 
+The repository also contains an inactive `infraege-ops` Compose definition. Onboarding the current
+VPS does not start it and does not create a second Umami/Beszel installation. Its
+`env.contract` records names only; actual values remain in the protected operations environment.
+Use the definition only for local render/bundle validation until the migration runbook is approved.
+
 ## 4. Generate application and Restic secrets
 
 Create `/etc/infraege/production.env` from `infra/.env.example` on the VPS. Generate every value

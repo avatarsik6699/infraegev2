@@ -81,6 +81,13 @@ production-looking directory does not make it a supported production action: the
 SSH/Compose/systemd executor and must not be used as a substitute for these runbooks. A future
 production executor requires its own approved change, current restore proof and rollback drill.
 
+`ops/observability/compose.yml` is likewise an inactive future-state definition, not a deployment
+command. It uses project `infraege-ops`, independent Postgres/Beszel volumes, WireGuard-only UI/API
+bindings and the loopback read-only socket proxy. Validate and hash it locally with `make
+ops-config` and `make ops-bundle`. Do not start it while the current application Compose owns
+Umami/Beszel ports and data. The required order is remote preflight, fresh backup, disposable
+restore, maintenance window, data migration, source cross-check and explicit cutover approval.
+
 `/home/niquetamerewsl/projects/sre-kit` is the first-party sibling for the universal observability
 core, adapters, Source configuration, normalization, alerts and monitoring UI. It does not own
 infraegev2 deployment automation or target credentials. Beszel and Umami currently remain in the

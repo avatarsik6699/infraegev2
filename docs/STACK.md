@@ -98,6 +98,12 @@ sandbox root. A new/empty directory receives `.infraege-ops-sandbox`; a non-empt
 that exact marker fails closed. No production executor or environment-based executor selection
 exists.
 
+The inactive independent definition is `ops/observability/compose.yml`, always rendered with
+`--project-name infraege-ops`. `make ops-config` runs `docker compose config --quiet`; callers must
+provide every name listed in `ops/observability/env.contract`. `make ops-bundle` emits a
+deterministic manifest of repository-relative asset hashes. Neither target runs `pull`, `create`,
+`up` or any remote command. Synthetic values are allowed only in disposable validation tests.
+
 ### pnpm workspace policy
 
 The root `packageManager` and workspace policy pin pnpm 10.33.0, model dependency compatibility

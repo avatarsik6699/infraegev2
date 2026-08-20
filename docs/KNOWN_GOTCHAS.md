@@ -34,6 +34,16 @@
   inspect checkpoint/revision/outbox evidence there. Production execution requires a later
   approved change and must never be inferred from credentials found in the environment.
 
+### A valid `infraege-ops` Compose render is not permission to start it
+
+- **Symptoms:** `make ops-config` passes and the inactive stack is started beside the current
+  application Compose, causing port conflicts or two owners for Umami/Beszel data.
+- **Root cause:** Compose validation proves syntax, interpolation and isolation only. Until the
+  migration change, production ownership and backup paths still point at the application project.
+- **Fix:** use `ops-config` and `ops-bundle` as local evidence only. Require remote preflight, fresh
+  backup, disposable restore, maintenance window, data migration, source cross-check and explicit
+  cutover approval before any lifecycle command.
+
 ### Compose `up --build` can recreate dev containers even when every build layer is cached
 
 - **Symptoms:** a stopped development stack still runs the full build progress on `make dev`, all

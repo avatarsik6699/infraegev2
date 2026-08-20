@@ -1,0 +1,124 @@
+x-ops-labels: &ops-labels
+  com.infraege.ops.managed: "true"
+  com.infraege.ops.installation: infraege-production
+  com.infraege.ops.revision: ${OPS_RELEASE:?OPS_RELEASE is required}
+
+services:
+  postgres:
+    image: postgres:16-alpine@sha256:57c72fd2a128e416c7fcc499958864df5301e940bca0a56f58fddf30ffc07777
+    environment:
+      POSTGRES_USER: umami
+      POSTGRES_PASSWORD: ${OPS_POSTGRES_PASSWORD:?OPS_POSTGRES_PASSWORD is required}
+      POSTGRES_DB: umami
+    volumes:
+      - ops-postgres-data:/var/lib/postgresql/data
+    restart: always
+    mem_limit: 384m
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U umami -d umami"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    labels:
+      <<: *ops-labels
+      com.infraege.ops.component: postgres
+    networks: [ops-internal]
+
+  umami:
+    image: docker.umami.is/umami-software/umami:3.2.0@sha256:8edfe4beaef13f9d1300619fa264ef250a3688df9cc54d24ca830ca31cb475ec
+    environment:
+      DATABASE_URL: postgresql://umami:${OPS_POSTGRES_PASSWORD}@postgres:5432/umami
+      APP_SECRET: ${UMAMI_APP_SECRET:?UMAMI_APP_SECRET is required}
+      BASE_PATH: /stats
+      COLLECT_API_ENDPOINT: /api/send
+      DISABLE_TELEMETRY: "1"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    expose: ["3000"]
+    ports:
+      - target: 3000
+        published: "3001"
+        host_ip: ${WIREGUARD_IP:?WIREGUARD_IP is required}
+        protocol: tcp
+    restart: always
+    mem_limit: 512m
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail http://localhost:3000/api/heartbeat"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    labels:
+      <<: *ops-labels
+      com.infraege.ops.component: umami
+      com.infraege.ops.health.kind: http
+      com.infraege.ops.health.target: http://umami:3000/api/heartbeat
+    networks: [ops-internal]
+
+  beszel:
+    image: henrygd/beszel:0.18.7@sha256:a849ad80814b6a1a3be665304dcace5d4854b3bed7bde4dd1227e8ce1b82d477
+    volumes:
+      - beszel-data:/beszel_data
+      - beszel-socket:/beszel_socket
+    ports:
+      - target: 8090
+        published: "8090"
+        host_ip: ${WIREGUARD_IP:?WIREGUARD_IP is required}
+        protocol: tcp
+    restart: always
+    mem_limit: 224m
+    labels:
+      <<: *ops-labels
+      com.infraege.ops.component: beszel
+      com.infraege.ops.health.kind: http
+      com.infraege.ops.health.target: http://beszel:8090/api/health
+    networks: [ops-internal]
+
+  beszel-agent:
+    image: henrygd/beszel-agent:0.18.7@sha256:8874e2c53f9de5e063a6a80d6b617e20fa593ac5dc4eb4c6ce1f912f510f38f8
+    network_mode: host
+    volumes:
+      - beszel-socket:/beszel_socket
+    environment:
+      LISTEN: /beszel_socket/beszel.sock
+      HUB_URL: http://${WIREGUARD_IP}:8090
+      DOCKER_HOST: tcp://127.0.0.1:2375
+      TOKEN: ${BESZEL_AGENT_TOKEN:?BESZEL_AGENT_TOKEN is required}
+      KEY: ${BESZEL_AGENT_KEY:?BESZEL_AGENT_KEY is required}
+    restart: always
+    mem_limit: 96m
+    labels:
+      <<: *ops-labels
+      com.infraege.ops.component: beszel-agent
+
+  docker-socket-proxy:
+    image: ghcr.io/tecnativa/docker-socket-proxy:v0.5.0@sha256:1f5038b54f06c3e18422902cf00ba21803d1c97805aae032e5e6673d532d3459
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    ports:
+      - target: 2375
+        published: "2375"
+        host_ip: 127.0.0.1
+        protocol: tcp
+    environment:
+      CONTAINERS: "1"
+      INFO: "1"
+      PING: "1"
+      VERSION: "1"
+      POST: "0"
+      LOG_LEVEL: warning
+    restart: always
+    mem_limit: 64m
+    labels:
+      <<: *ops-labels
+      com.infraege.ops.component: docker-socket-proxy
+    networks: [ops-internal]
+
+networks:
+  ops-internal:
+    internal: true
+
+volumes:
+  ops-postgres-data:
+  beszel-data:
+  beszel-socket:

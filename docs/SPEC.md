@@ -563,6 +563,14 @@ approval, preflight текущего revision, установленным restor
 явно выбранного executor должна fail closed; production transport никогда не выбирается по
 умолчанию или только по наличию credentials в environment.
 
+Будущий operations release собирается из repository-owned immutable bundle: отдельного Compose
+project `infraege-ops`, secret-free manifest с hashes и versioned backup/cutover metadata. Его
+Postgres и volumes не разделяют lifecycle или имена с application Compose; Umami/Beszel admin
+ports остаются привязаны только к WireGuard, Docker socket доступен агенту только через
+read-only proxy. Наличие и локальная валидация bundle не разрешают запуск на VPS: пока Umami/Beszel
+принадлежат текущему application Compose, новый stack нельзя поднимать параллельно из-за port/data
+ownership. Remote preflight, data migration и cutover остаются отдельными последовательными gates.
+
 ---
 
 ## 8. Non-Functional Requirements
