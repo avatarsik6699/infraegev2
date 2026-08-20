@@ -7,7 +7,7 @@
 | Change | `41` |
 | Slug | `production-ops-live-cutover` |
 | Title | Production Operations Cutover Gate |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/41-production-ops-live-cutover` |
 
 ---
