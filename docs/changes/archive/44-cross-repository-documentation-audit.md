@@ -7,7 +7,7 @@
 | Change | `44` |
 | Slug | `cross-repository-documentation-audit` |
 | Title | Cross-Repository Documentation Audit |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/44-cross-repository-documentation-audit` |
 
 ---
