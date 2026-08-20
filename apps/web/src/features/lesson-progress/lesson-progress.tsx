@@ -3,7 +3,11 @@ import { Typography } from "~/shared/components/typography";
 import type { LessonProgressTypes } from "./lesson-progress.types";
 import styles from "./lesson-progress.module.css";
 
-export const LessonProgress: React.FC<LessonProgressTypes.Props> = (props) => {
+export const LessonProgress: React.FC<LessonProgressTypes.Props> = ({
+  headingOrder = 2,
+  headingId = "lesson-progress-heading",
+  ...props
+}) => {
   const masteredAt = Math.ceil(props.total * props.masteryThreshold);
   const status =
     props.solved === props.total
@@ -15,9 +19,9 @@ export const LessonProgress: React.FC<LessonProgressTypes.Props> = (props) => {
           : "Продолжайте практику";
 
   return (
-    <section className={styles.root} aria-labelledby="lesson-progress-heading">
+    <section className={styles.root} aria-labelledby={headingId}>
       <div className={styles.headingRow}>
-        <Typography.Title order={2} id="lesson-progress-heading">
+        <Typography.Title order={headingOrder} id={headingId}>
           Прогресс
         </Typography.Title>
         <Typography.Text component="span" className={styles.count}>

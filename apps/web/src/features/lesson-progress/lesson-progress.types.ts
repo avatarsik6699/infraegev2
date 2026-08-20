@@ -16,6 +16,8 @@ export namespace LessonProgressTypes {
     solved: number;
     total: number;
     masteryThreshold: number;
+    headingOrder?: 2 | 3 | 4 | 5 | 6;
+    headingId?: string;
   };
 
   export type StoreOptions = {

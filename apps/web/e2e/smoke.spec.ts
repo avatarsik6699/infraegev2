@@ -134,7 +134,7 @@ test("the published recursion lesson stays readable across runtimes", async ({
   await topicLessonPage.expectDesktopComposition();
   await browserSession.captureViewport("recursion-lesson-desktop.png");
   await topicLessonPage.expectPracticeSolutions();
-  await topicLessonPage.expectDistilledSolvedTask();
+  await topicLessonPage.expectProgressClosureJourney();
   await browserSession.captureViewport("recursion-practice-solved.png");
   await topicLessonPage.expectNoHorizontalOverflow();
   await topicLessonPage.expectStableReload();

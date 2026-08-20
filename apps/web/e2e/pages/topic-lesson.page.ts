@@ -59,6 +59,17 @@ export class TopicLessonPage {
     ).toBeVisible();
     await expect(this.page.locator("[data-article-frame] img")).toHaveCount(0);
     await expect(this.page.getByLabel("Проверьте себя")).toHaveCount(6);
+    await expect(
+      this.page.getByRole("heading", { level: 3, name: "Прогресс" }),
+    ).toBeVisible();
+    await expect(
+      this.page.getByRole("link", {
+        name: "Задание 16 · Рекурсивные алгоритмы",
+      }),
+    ).toHaveAttribute("href", "/ege/16-rekursiya");
+    await expect(
+      this.page.getByRole("link", { name: "Все темы" }),
+    ).toHaveAttribute("href", "/");
   }
 
   async expectKeyboardHelpDisclosures(): Promise<void> {
@@ -93,6 +104,14 @@ export class TopicLessonPage {
     ).toHaveCount(5);
     await expect(this.page.getByText(/19₁₀ = 10011₂/)).toBeVisible();
     await expect(this.page.locator("[data-article-frame] img")).toHaveCount(0);
+    await expect(
+      this.page.getByText(
+        "Прогресс хранится только в этом браузере и появится после загрузки страницы.",
+      ),
+    ).toBeVisible();
+    await expect(
+      this.page.getByRole("link", { name: "Все темы" }),
+    ).toHaveAttribute("href", "/");
     await this.expectNoHorizontalOverflow();
   }
 
@@ -133,6 +152,14 @@ export class TopicLessonPage {
       this.page.getByRole("heading", { name: "Что получилось" }),
     ).toBeVisible();
     await expect(
+      this.page.getByRole("heading", { level: 3, name: "Прогресс" }),
+    ).toBeVisible();
+    await expect(
+      this.page.getByRole("link", {
+        name: "Задание 5 · Преобразование записей чисел",
+      }),
+    ).toHaveAttribute("href", "/ege/5-preobrazovanie-zapisey-chisel");
+    await expect(
       this.page.getByLabel("Сведения об уроке").getByText("Задание 16"),
     ).toBeVisible();
     await expect(
@@ -166,6 +193,9 @@ export class TopicLessonPage {
       context.getByText("Задание 16 · Рекурсивные алгоритмы", {
         exact: true,
       }),
+    ).toBeVisible();
+    await expect(
+      this.page.getByRole("progressbar", { name: "Решённые задачи темы" }),
     ).toBeVisible();
 
     const layout = await this.page
@@ -202,7 +232,7 @@ export class TopicLessonPage {
     expect(layout.railPosition).toBe("sticky");
     expect(layout.articleDisplay).toBe("block");
     expect(layout.railHasProgress).toBe(false);
-    expect(layout.articleHasProgress).toBe(false);
+    expect(layout.articleHasProgress).toBe(true);
     expect(layout.marginRailChildren).toBe(0);
     expect(
       Math.abs((layout.mistakeLeft ?? 0) - (layout.explanationLeft ?? 0)),
@@ -360,6 +390,132 @@ export class TopicLessonPage {
     ).toBeDisabled();
   }
 
+  async expectProgressClosureJourney(): Promise<void> {
+    await this.page.goto("/ege/5-preobrazovanie-zapisey-chisel");
+    await this.solveTask("preobrazovanie-zapisey-appending", 1, "77");
+    await this.page.reload();
+    const otherLessonAnswer = this.page
+      .locator('[data-practice-task="preobrazovanie-zapisey-appending"]')
+      .getByRole("textbox", { name: "Ответ" });
+    await expect(otherLessonAnswer).toHaveValue("77");
+    await expect(otherLessonAnswer).toBeDisabled();
+
+    await this.open();
+    await expect(
+      this.page.locator("[data-practice-form][data-enhanced]"),
+    ).toBeVisible();
+    const firstPanel = this.page.locator(
+      '[data-practice-task="rekursiya-base-sequence"]',
+    );
+    const firstAnswer = firstPanel.getByRole("textbox", { name: "Ответ" });
+    const firstCheck = firstPanel.getByRole("button", { name: "Проверить" });
+
+    await firstAnswer.fill("31");
+    await firstCheck.click();
+    await expect(
+      firstPanel.getByText(
+        "Пока нет. Проверьте правило ещё раз или откройте подсказку.",
+      ),
+    ).toBeVisible();
+    await expect(firstAnswer).toBeEnabled();
+    await expect(firstAnswer).toHaveValue("31");
+
+    let failedChecks = 0;
+    await this.page.route(
+      "**/api/tasks/rekursiya-base-sequence/check",
+      async (route) => {
+        failedChecks += 1;
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: "{}",
+        });
+      },
+      { times: 1 },
+    );
+    await firstAnswer.fill("32");
+    await firstCheck.click();
+    await expect(
+      firstPanel.getByText(
+        "Не удалось проверить ответ. Проверьте соединение и отправьте его ещё раз.",
+      ),
+    ).toBeVisible();
+    expect(failedChecks).toBe(1);
+    await expect(firstAnswer).toBeEnabled();
+    await expect(firstAnswer).toHaveValue("32");
+
+    await firstCheck.click();
+    await expect(firstPanel.getByRole("status")).toContainText("Верно");
+    await this.solveTask("rekursiya-call-stack-trace", 2, "16");
+    await this.solveTask("rekursiya-two-values", 3, "29");
+    await this.solveTask("rekursiya-repeated-calls", 4, "25");
+
+    const resultProgress = this.page.locator("[data-result-progress]");
+    await expect(
+      resultProgress.getByText("4 / 5", { exact: true }),
+    ).toBeVisible();
+    await expect(resultProgress.getByText("Тема освоена")).toBeVisible();
+
+    await this.page.reload();
+    await expect(
+      this.page
+        .locator('[data-practice-task="rekursiya-base-sequence"]')
+        .getByRole("textbox", { name: "Ответ" }),
+    ).toHaveValue("32");
+    await expect(resultProgress.getByText("Тема освоена")).toBeVisible();
+
+    const reset = resultProgress.getByRole("button", {
+      name: "Сбросить прогресс урока",
+    });
+    await reset.focus();
+    await reset.press("Enter");
+    const cancel = resultProgress.getByRole("button", { name: "Отмена" });
+    await expect(cancel).toBeFocused();
+    await cancel.press("Enter");
+    await expect(reset).toBeFocused();
+    await expect(resultProgress.getByText("Тема освоена")).toBeVisible();
+
+    await reset.press("Enter");
+    const confirm = resultProgress.getByRole("button", {
+      name: "Сбросить",
+      exact: true,
+    });
+    await confirm.focus();
+    await confirm.press("Enter");
+    await expect(reset).toBeFocused();
+    await expect(
+      resultProgress.getByText("0 / 5", { exact: true }),
+    ).toBeVisible();
+    await expect(
+      resultProgress.getByText("Практика ещё не начата"),
+    ).toBeVisible();
+    await expect(firstAnswer).toBeEnabled();
+    await expect(firstAnswer).toHaveValue("");
+
+    await this.page
+      .getByRole("link", {
+        name: "Задание 5 · Преобразование записей чисел",
+      })
+      .click();
+    await expect(this.page).toHaveURL(
+      /\/ege\/5-preobrazovanie-zapisey-chisel$/,
+    );
+    const preservedOtherAnswer = this.page
+      .locator('[data-practice-task="preobrazovanie-zapisey-appending"]')
+      .getByRole("textbox", { name: "Ответ" });
+    await expect(preservedOtherAnswer).toHaveValue("77");
+    await expect(preservedOtherAnswer).toBeDisabled();
+
+    await this.page.getByRole("link", { name: "Все темы" }).click();
+    await expect(this.page).toHaveURL(/\/$/);
+    await expect(
+      this.page.getByRole("heading", {
+        name: "Подготовка к ЕГЭ по информатике",
+      }),
+    ).toBeVisible();
+    await this.open();
+  }
+
   async expectReadingPosition(): Promise<void> {
     const value = this.page.locator("[data-reading-position-value]");
     await expect(this.page.locator("[data-reading-position]")).toBeVisible();
@@ -436,7 +592,37 @@ export class TopicLessonPage {
         name: "Та же рекуррентная формула в Python",
       }),
     ).toBeVisible();
+    await expect(
+      this.page.getByText(
+        "Прогресс хранится только в этом браузере и появится после загрузки страницы.",
+      ),
+    ).toBeVisible();
+    await expect(
+      this.page.getByRole("link", {
+        name: "Задание 5 · Преобразование записей чисел",
+      }),
+    ).toHaveAttribute("href", "/ege/5-preobrazovanie-zapisey-chisel");
+    await expect(
+      this.page.getByRole("link", { name: "Все темы" }),
+    ).toHaveAttribute("href", "/");
     await this.expectNoHorizontalOverflow();
+  }
+
+  private async solveTask(
+    taskId: string,
+    index: number,
+    answer: string,
+  ): Promise<void> {
+    await expect(
+      this.page.locator("[data-practice-form][data-enhanced]"),
+    ).toBeVisible();
+    await this.page
+      .getByRole("tab", { name: new RegExp(`Задача ${String(index)} из 5`) })
+      .click();
+    const panel = this.page.locator(`[data-practice-task="${taskId}"]`);
+    await panel.getByRole("textbox", { name: "Ответ" }).fill(answer);
+    await panel.getByRole("button", { name: "Проверить" }).click();
+    await expect(panel.getByRole("status")).toContainText("Верно");
   }
 
   async expectUnknownLessonNotFound(): Promise<void> {

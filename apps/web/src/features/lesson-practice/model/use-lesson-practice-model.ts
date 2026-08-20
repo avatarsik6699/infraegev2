@@ -11,7 +11,12 @@ export function useLessonPracticeModel(props: LessonPracticeTypes.Props) {
     useState<LessonPracticeTypes.States>({});
   const [feedback, setFeedback] = useState<LessonPracticeTypes.Feedback>({});
   const [draftAnswers, setDraftAnswers] = useState<Record<string, string>>({});
-  const [activeTaskId, setActiveTaskId] = useState(props.tasks[0]?.id ?? "");
+  const [selectedTaskId, setSelectedTaskId] = useState(
+    props.tasks[0]?.id ?? "",
+  );
+  const activeTaskId = props.tasks.some((task) => task.id === selectedTaskId)
+    ? selectedTaskId
+    : (props.tasks[0]?.id ?? "");
   const enhanced = useSyncExternalStore(
     enhancementState.subscribe,
     enhancementState.getClientSnapshot,
@@ -48,7 +53,7 @@ export function useLessonPracticeModel(props: LessonPracticeTypes.Props) {
     enhanced,
     feedbackFor: (taskId: string) => feedback[taskId] ?? "",
     isSolved: (taskId: string) => progress.solvedTaskIds.includes(taskId),
-    selectTask: setActiveTaskId,
+    selectTask: setSelectedTaskId,
     stateFor: (taskId: string) => practiceStates[taskId] ?? "idle",
     updateAnswer: (taskId: string, value: string) =>
       setDraftAnswers((current) => ({ ...current, [taskId]: value })),

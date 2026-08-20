@@ -39,6 +39,13 @@ const lessonProgress = createLessonProgressStore({
   lessonId: "binary-search",
 });
 const lessonProgressStorageKey = "infraege:lesson:binary-search:progress";
+const recursionProgress = createLessonProgressStore({ lessonId: "rekursiya" });
+const numberRecordProgress = createLessonProgressStore({
+  lessonId: "preobrazovanie-zapisey-chisel",
+});
+const recursionProgressStorageKey = "infraege:lesson:rekursiya:progress";
+const numberRecordProgressStorageKey =
+  "infraege:lesson:preobrazovanie-zapisey-chisel:progress";
 
 describe("lesson design system", () => {
   it("renders a nested semantic outline with a current child anchor", () => {
@@ -160,7 +167,8 @@ describe("lesson design system", () => {
     expect(within(siteHeader).queryByText("Тренажёр")).toBeNull();
   });
 
-  it("keeps recursion metadata with the title while leaving progress and duplicate outcomes out", () => {
+  it("keeps recursion metadata with the title while leaving progress out of the title and outline", () => {
+    recursionProgress.clear();
     render(
       <TopicLessonPage
         lesson={rekursiyaLesson}
@@ -229,12 +237,29 @@ describe("lesson design system", () => {
     expect(marginRail).not.toBeNull();
     if (!rail || !article || !marginRail) return;
     expect(within(rail).queryByRole("progressbar")).toBeNull();
-    expect(within(article).queryByRole("progressbar")).toBeNull();
+    expect(
+      within(article).getByRole("progressbar", {
+        name: "Решённые задачи темы",
+      }),
+    ).toBeTruthy();
     expect(marginRail.children).toHaveLength(0);
     expect(
       screen.queryByRole("heading", { name: "После урока вы сможете" }),
     ).toBeNull();
-    expect(screen.queryByRole("heading", { name: "Освоение темы" })).toBeNull();
+    expect(
+      screen.getByRole("heading", { level: 3, name: "Прогресс" }),
+    ).toBeTruthy();
+    expect(screen.getByText("Практика ещё не начата")).toBeTruthy();
+    expect(
+      screen
+        .getByRole("link", {
+          name: "Задание 5 · Преобразование записей чисел",
+        })
+        .getAttribute("href"),
+    ).toBe("/ege/5-preobrazovanie-zapisey-chisel");
+    expect(
+      screen.getByRole("link", { name: "Все темы" }).getAttribute("href"),
+    ).toBe("/");
     expect(
       screen.queryByRole("navigation", { name: "Вернуться к теории" }),
     ).toBeNull();
@@ -254,6 +279,125 @@ describe("lesson design system", () => {
     });
     expect(within(template).getByText("Python")).toBeTruthy();
     expect(within(template).queryByText("пример", { exact: false })).toBeNull();
+    recursionProgress.clear();
+  });
+
+  it("renders every existing progress state with result-section hierarchy", () => {
+    const progress = render(
+      <LessonProgress
+        headingOrder={3}
+        masteryThreshold={0.8}
+        solved={0}
+        total={5}
+      />,
+    );
+
+    expect(
+      screen.getByRole("heading", { level: 3, name: "Прогресс" }),
+    ).toBeTruthy();
+    expect(screen.getByText("Практика ещё не начата")).toBeTruthy();
+
+    progress.rerender(
+      <LessonProgress
+        headingOrder={3}
+        masteryThreshold={0.8}
+        solved={1}
+        total={5}
+      />,
+    );
+    expect(screen.getByText("Продолжайте практику")).toBeTruthy();
+
+    progress.rerender(
+      <LessonProgress
+        headingOrder={3}
+        masteryThreshold={0.8}
+        solved={4}
+        total={5}
+      />,
+    );
+    expect(screen.getByText("Тема освоена")).toBeTruthy();
+
+    progress.rerender(
+      <LessonProgress
+        headingOrder={3}
+        masteryThreshold={0.8}
+        solved={5}
+        total={5}
+      />,
+    );
+    expect(screen.getByText("Все задания решены")).toBeTruthy();
+  });
+
+  it("cancels or confirms a current-lesson reset without touching another lesson", async () => {
+    recursionProgress.clear();
+    numberRecordProgress.clear();
+    recursionProgress.markSolved("rekursiya-base-sequence", "32");
+    numberRecordProgress.markSolved("preobrazovanie-zapisey-appending", "77");
+    const progressSubscriber = vi.fn();
+    const unsubscribe = recursionProgress.subscribe(progressSubscriber);
+
+    render(
+      <TopicLessonPage
+        lesson={rekursiyaLesson}
+        tasks={[
+          {
+            id: "rekursiya-base-sequence",
+            difficultyLabel: "Базовая",
+            title: "База",
+            statement: "Условие",
+            hint: "Подсказка",
+            theoryLinks: [],
+            solution: [{ type: "text", text: "Решение" }],
+          },
+        ]}
+      />,
+    );
+
+    expect(screen.getByText("Все задания решены")).toBeTruthy();
+    expect(
+      (screen.getByRole("textbox", { name: "Ответ" }) as HTMLInputElement)
+        .value,
+    ).toBe("32");
+
+    const reset = screen.getByRole("button", {
+      name: "Сбросить прогресс урока",
+    });
+    fireEvent.click(reset);
+    const cancel = screen.getByRole("button", { name: "Отмена" });
+    await waitFor(() => expect(document.activeElement).toBe(cancel));
+    fireEvent.click(cancel);
+    expect(document.activeElement).toBe(reset);
+    expect(recursionProgress.getSnapshot().solvedTaskIds).toEqual([
+      "rekursiya-base-sequence",
+    ]);
+    expect(progressSubscriber).not.toHaveBeenCalled();
+
+    fireEvent.click(reset);
+    fireEvent.click(screen.getByRole("button", { name: "Сбросить" }));
+    await waitFor(() => {
+      expect(screen.getByText("Практика ещё не начата")).toBeTruthy();
+    });
+    expect(progressSubscriber).toHaveBeenCalledTimes(1);
+    expect(recursionProgress.getSnapshot()).toEqual({
+      acceptedAnswers: {},
+      solvedTaskIds: [],
+    });
+    expect(window.localStorage.getItem(recursionProgressStorageKey)).toBeNull();
+    expect(numberRecordProgress.getSnapshot()).toEqual({
+      acceptedAnswers: { "preobrazovanie-zapisey-appending": "77" },
+      solvedTaskIds: ["preobrazovanie-zapisey-appending"],
+    });
+    expect(
+      window.localStorage.getItem(numberRecordProgressStorageKey),
+    ).toContain("77");
+    expect(
+      screen.getByRole("textbox", { name: "Ответ" }).hasAttribute("disabled"),
+    ).toBe(false);
+    expect(document.activeElement).toBe(reset);
+
+    unsubscribe();
+    recursionProgress.clear();
+    numberRecordProgress.clear();
   });
 
   it("keeps one enhanced practice task active without losing draft answers", async () => {

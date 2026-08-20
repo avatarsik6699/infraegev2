@@ -2,6 +2,7 @@ import { useMemo, useRef } from "react";
 import {
   Checkpoint,
   LessonSectionHeading,
+  lessonPublications,
   type LessonTypes,
 } from "~/entities/lesson";
 import {
@@ -26,6 +27,9 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
   const progressStore = useMemo(
     () => createLessonProgressStore({ lessonId: props.lesson.id }),
     [props.lesson.id],
+  );
+  const otherPublishedLessons = lessonPublications.filter(
+    (lesson) => lesson.status === "published" && lesson.id !== props.lesson.id,
   );
   const outline: LessonTypes.OutlineGroup[] = [
     {
@@ -172,7 +176,12 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
             <LessonSectionHeading index={resultIndex}>
               Итог
             </LessonSectionHeading>
-            <TopicLessonResult lesson={props.lesson} />
+            <TopicLessonResult
+              lesson={props.lesson}
+              otherPublishedLessons={otherPublishedLessons}
+              progressStore={progressStore}
+              taskCount={props.tasks.length}
+            />
           </section>
         </article>
 
