@@ -20,6 +20,11 @@ already present. Retain its sanitized JSON output from `scripts/ops-data-fidelit
 It proves synthetic target-binary compatibility, not readability of the current production Restic
 snapshot and not approval to change VPS ownership.
 
+`make ops-snapshot-candidate` is the next read-only operator check. It validates only snapshot and
+path metadata for the Umami dump and Beszel tree, suppresses raw SSH/Restic stderr and always
+reports that no production mutation or data transfer occurred. It does not authorize the later
+streaming restore drill or cutover.
+
 ## One-time bootstrap
 
 1. In REG.RU replace the existing `A` records for `@` and `www` with `2.26.8.245`, TTL 300 during

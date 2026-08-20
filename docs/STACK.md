@@ -127,6 +127,12 @@ volume into disposable targets, verifies PostgreSQL values/ownership plus Beszel
 and removes every uniquely labeled container, volume and host work directory. No production path,
 Restic credential, SSH transport or fixed host port is accepted.
 
+`make ops-snapshot-candidate` is a production read-only metadata gate. Its fixed remote script
+runs only Restic snapshot/list operations, chooses one full immutable snapshot id and requires one
+allowlisted `umami.dump` plus one `beszel-data` root from the same backup workspace. The sanitized
+report always denies mutation, transfer, restore and cutover. It neither reads artifact contents
+nor replaces the later protected streaming and disposable restore proof.
+
 ### pnpm workspace policy
 
 The root `packageManager` and workspace policy pin pnpm 10.33.0, model dependency compatibility

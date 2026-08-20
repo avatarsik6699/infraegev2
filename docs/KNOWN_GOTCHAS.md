@@ -387,3 +387,12 @@
 - **Prevention**: [optional — how to avoid hitting it again]
 - **Links**: [optional — docs / issue / PR]
 -->
+### Restic `--latest 1` is per snapshot group, not globally one result
+
+- **Symptoms:** `restic snapshots --latest 1 --json` returns several objects and selecting `.[0]`
+  records an arbitrary older snapshot.
+- **Root cause:** each backup uses a unique `/var/backups/infraege/work.XXXXXX` source path, which forms
+  a distinct Restic snapshot group; `--latest 1` keeps one result for every group.
+- **Fix:** for the metadata-only candidate gate, read `restic snapshots --json` and select
+  `max_by(.time)` while retaining its full immutable ID. Do not infer a global latest snapshot from
+  array position or deprecated `short_id`.

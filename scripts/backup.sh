@@ -35,7 +35,9 @@ fi
 restic backup "$work_dir"
 restic forget --keep-daily 7 --keep-weekly 4 --keep-monthly 3 --prune
 
-snapshot_id=$(restic snapshots --latest 1 --json | jq -r '.[0].short_id')
+snapshot_id=$(restic snapshots --json | jq -er '
+  if length > 0 then max_by(.time).id else error("no snapshots") end
+')
 jq -n \
   --arg status success \
   --arg completedAt "$(date --utc +%FT%TZ)" \

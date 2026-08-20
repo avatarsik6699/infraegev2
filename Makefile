@@ -64,6 +64,7 @@ help:
 	@echo "  make ops-preflight BUNDLE=...     Run read-only production readiness preflight"
 	@echo "  make ops-rehearse-migration BUNDLE=... PREFLIGHT=... SOURCE=... SANDBOX_ROOT=..."
 	@echo "  make ops-data-fidelity-drill      Verify synthetic Postgres/Beszel restore fidelity"
+	@echo "  make ops-snapshot-candidate       Validate latest production snapshot metadata read-only"
 
 dev:
 	@STOP_TIMEOUT=$(STOP_TIMEOUT) $(DOCKER_LIFECYCLE) dev
@@ -154,3 +155,6 @@ ops-rehearse-migration:
 
 ops-data-fidelity-drill:
 	@./scripts/ops-data-fidelity-drill.sh
+
+ops-snapshot-candidate:
+	@./ops/opsctl snapshot-candidate

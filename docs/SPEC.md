@@ -603,6 +603,17 @@ loopback с динамическим host port; containers, volumes и host work
 совместимость target binaries и restore mechanics, но не читает production Restic и не заменяет
 финальный drill на snapshot-копии или Source cross-check.
 
+Перед копированием production data отдельный read-only snapshot-candidate gate выбирает один
+полный Restic snapshot по immutable full id и проверяет, что именно в нём одновременно присутствуют
+`umami.dump` и корень `beszel-data`. Удалённая сторона выполняет только `restic snapshots` и
+`restic ls`; локальный parser принимает закрытый TSV-протокол, allowlist путей backup workspace и
+публикует schema-validated санитизированный report. Gate не читает содержимое artifacts, не
+выгружает dump/volume, не пишет на VPS и всегда содержит `production_mutated: false`,
+`data_transferred: false`, `authorized_to_restore: false` и `authorized_to_cutover: false`.
+Недоступный SSH, неоднозначные/missing artifacts, malformed metadata или неожиданный путь дают
+fail-closed blocker. Фактический streaming в защищённый локальный temporary workspace и disposable
+restore остаются следующим отдельным change.
+
 ---
 
 ## 8. Non-Functional Requirements

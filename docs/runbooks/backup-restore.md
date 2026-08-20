@@ -24,6 +24,12 @@ copies a stopped Beszel volume and requires the restored Hub to retain identity 
 The command refuses image pulls and cleans its uniquely labeled containers, volumes and workdir on
 success or failure. It does not replace the production-snapshot checks later in this runbook.
 
+Run `make ops-snapshot-candidate` before any production-data drill. It inspects only Restic
+metadata over the pinned SSH wrapper and passes only when one immutable snapshot contains exactly
+one `umami.dump` and one `beszel-data` root under the same allowlisted backup workspace. A pass is
+not permission to transfer or restore data. Do not use `restic dump`/`restore` until the protected
+streaming change provides local temporary-storage cleanup and explicit operator evidence.
+
 `ops/observability/backup-cutover.json` names the future independent Umami database and Beszel
 volume, but `activation_status: inactive-definition-only` means the existing backup script below
 remains authoritative. Do not switch backup ownership merely because the new Compose renders.

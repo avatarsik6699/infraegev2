@@ -279,6 +279,12 @@ manifest и hashes repository-owned assets. Эти команды не запу�
 динамические loopback-порты и удаляет все созданные ресурсы. Она не читает Restic/production data;
 успешный результат по-прежнему содержит `authorized_to_cutover: false`.
 
+Следующий metadata-only gate запускается через `make ops-snapshot-candidate`. Он по fixed
+read-only SSH protocol выбирает immutable full ID последнего Restic snapshot и подтверждает, что
+один backup workspace содержит `umami.dump` и `beszel-data`. Команда не читает содержимое этих
+artifacts, не переносит данные и не разрешает restore/cutover; protected streaming и disposable
+restore выполняются только отдельным последующим change.
+
 First-party sibling [sre-kit](https://github.com/avatarsik6699/sre-kit) остаётся универсальным
 ядром наблюдаемости: adapters, Source configuration, normalization, alerts и monitoring UI. Он
 читает источники infraegev2 через private API/WireGuard/read-only SSH, но не устанавливает и не

@@ -23,6 +23,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 DEFAULT_DESIRED = ROOT / "ops/observability/desired-state.json"
 REMOTE_COLLECTOR = ROOT / "ops/observability/remote-inventory.sh"
 REMOTE_PREFLIGHT = ROOT / "ops/observability/remote-preflight.sh"
+REMOTE_SNAPSHOT_CANDIDATE = ROOT / "ops/observability/remote-snapshot-candidate.sh"
 SSH_WRAPPER = ROOT / "scripts/production-root-ssh.sh"
 SUPPORTED_SCHEMA_VERSION = 1
 POSTGRES_FIDELITY_IMAGE = (
@@ -44,6 +45,7 @@ CONTRACT_KINDS = {
     "plan",
     "preflight",
     "revision",
+    "snapshot-candidate",
     "status",
 }
 
@@ -156,6 +158,19 @@ def validate_contract(kind: str, value: dict[str, Any]) -> None:
             "summary",
             "checks",
         },
+        "snapshot-candidate": {
+            "schema_version",
+            "installation_id",
+            "observed_at",
+            "reachable",
+            "eligible",
+            "production_mutated",
+            "data_transferred",
+            "authorized_to_restore",
+            "authorized_to_cutover",
+            "snapshot",
+            "artifacts",
+        },
         "status": {
             "schema_version",
             "installation_id",
@@ -235,6 +250,56 @@ def validate_contract(kind: str, value: dict[str, Any]) -> None:
         ready = value["reachable"] is True and counts["blocker"] == 0
         if value["ready_for_migration_planning"] is not ready:
             raise ContractError("preflight readiness does not match checks")
+    if kind == "snapshot-candidate":
+        if any(
+            value[field] is not False
+            for field in (
+                "production_mutated",
+                "data_transferred",
+                "authorized_to_restore",
+                "authorized_to_cutover",
+            )
+        ):
+            raise ContractError("snapshot-candidate safety invariants are invalid")
+        if not isinstance(value["artifacts"], list):
+            raise ContractError("snapshot-candidate artifacts must be an array")
+        if value["eligible"] is True:
+            snapshot = value["snapshot"]
+            if value["reachable"] is not True or not isinstance(snapshot, dict):
+                raise ContractError("eligible snapshot-candidate must be reachable")
+            if set(snapshot) != {"id", "time"} or not re.fullmatch(
+                r"[a-f0-9]{64}", str(snapshot["id"])
+            ):
+                raise ContractError("snapshot-candidate identity is invalid")
+            expected = {"umami-dump": "file", "beszel-data": "directory"}
+            if len(value["artifacts"]) != 2 or "error" in value:
+                raise ContractError("eligible snapshot-candidate evidence is incomplete")
+            parents: set[str] = set()
+            seen: set[str] = set()
+            for artifact in value["artifacts"]:
+                if not isinstance(artifact, dict) or set(artifact) != {"id", "kind", "path"}:
+                    raise ContractError("snapshot-candidate artifact shape is invalid")
+                artifact_id = str(artifact["id"])
+                if artifact_id in seen or artifact.get("kind") != expected.get(artifact_id):
+                    raise ContractError("snapshot-candidate artifact identity is invalid")
+                suffix = "umami.dump" if artifact_id == "umami-dump" else "beszel-data"
+                match = re.fullmatch(
+                    rf"(/var/backups/infraege/work\.[A-Za-z0-9]+)/{re.escape(suffix)}",
+                    str(artifact["path"]),
+                )
+                if match is None:
+                    raise ContractError("snapshot-candidate artifact path is unsafe")
+                parents.add(match.group(1))
+                seen.add(artifact_id)
+            if seen != set(expected) or len(parents) != 1:
+                raise ContractError("snapshot-candidate artifacts do not share one backup root")
+        elif (
+            value["eligible"] is not False
+            or value["snapshot"] is not None
+            or value["artifacts"] != []
+            or value.get("error", {}).get("code") not in {"ssh_unreachable", "invalid_response"}
+        ):
+            raise ContractError("blocked snapshot-candidate shape is invalid")
     if kind == "migration-source":
         if not re.fullmatch(r"[a-f0-9]{64}", str(value["bundle_id"])):
             raise ContractError("migration-source bundle_id must be a lowercase SHA-256 digest")
@@ -570,6 +635,103 @@ def collect_preflight(desired: dict[str, Any], bundle: dict[str, Any]) -> dict[s
         }
         validate_contract("preflight", result)
         return result
+
+
+def snapshot_candidate_failure(
+    desired: dict[str, Any], *, reachable: bool, code: str
+) -> dict[str, Any]:
+    result = {
+        "schema_version": 1,
+        "installation_id": desired["installation_id"],
+        "observed_at": utc_now(),
+        "reachable": reachable,
+        "eligible": False,
+        "production_mutated": False,
+        "data_transferred": False,
+        "authorized_to_restore": False,
+        "authorized_to_cutover": False,
+        "snapshot": None,
+        "artifacts": [],
+        "error": {
+            "code": code,
+            "message": (
+                "production snapshot metadata is unavailable"
+                if code == "ssh_unreachable"
+                else "production snapshot metadata is invalid"
+            ),
+        },
+    }
+    validate_contract("snapshot-candidate", result)
+    return result
+
+
+def snapshot_candidate_from_tsv(desired: dict[str, Any], raw: str) -> dict[str, Any]:
+    snapshot: dict[str, str] | None = None
+    artifacts: list[dict[str, str]] = []
+    for line in raw.splitlines():
+        parts = line.split("\t")
+        if len(parts) == 3 and parts[0] == "snapshot" and snapshot is None:
+            snapshot = {"id": parts[1], "time": parts[2]}
+        elif len(parts) == 4 and parts[0] == "artifact":
+            artifacts.append({"id": parts[1], "kind": parts[2], "path": parts[3]})
+        else:
+            raise ContractError("remote snapshot candidate returned an invalid sanitized record")
+    result = {
+        "schema_version": 1,
+        "installation_id": desired["installation_id"],
+        "observed_at": utc_now(),
+        "reachable": True,
+        "eligible": True,
+        "production_mutated": False,
+        "data_transferred": False,
+        "authorized_to_restore": False,
+        "authorized_to_cutover": False,
+        "snapshot": snapshot,
+        "artifacts": sorted(artifacts, key=lambda item: item["id"]),
+    }
+    validate_contract("snapshot-candidate", result)
+    return result
+
+
+def collect_snapshot_candidate(desired: dict[str, Any]) -> dict[str, Any]:
+    fixture = os.environ.get("INFRAEGE_OPS_SNAPSHOT_CANDIDATE_FILE")
+    if fixture:
+        try:
+            raw = pathlib.Path(fixture).read_text(encoding="utf-8")
+            return snapshot_candidate_from_tsv(desired, raw)
+        except (OSError, ContractError):
+            return snapshot_candidate_failure(desired, reachable=True, code="invalid_response")
+    try:
+        completed = subprocess.run(
+            [str(SSH_WRAPPER), "bash", "-se"],
+            input=REMOTE_SNAPSHOT_CANDIDATE.read_text(encoding="utf-8"),
+            text=True,
+            capture_output=True,
+            check=False,
+            timeout=60,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        completed = None
+    if completed is None:
+        return snapshot_candidate_failure(desired, reachable=False, code="ssh_unreachable")
+    if completed.returncode != 0:
+        try:
+            probe = subprocess.run(
+                [str(SSH_WRAPPER), "true"],
+                text=True,
+                capture_output=True,
+                check=False,
+                timeout=15,
+            )
+        except (OSError, subprocess.TimeoutExpired):
+            probe = None
+        if probe is not None and probe.returncode == 0:
+            return snapshot_candidate_failure(desired, reachable=True, code="invalid_response")
+        return snapshot_candidate_failure(desired, reachable=False, code="ssh_unreachable")
+    try:
+        return snapshot_candidate_from_tsv(desired, completed.stdout)
+    except ContractError:
+        return snapshot_candidate_failure(desired, reachable=True, code="invalid_response")
 
 
 def validate_bundle_manifest(bundle: dict[str, Any], installation_id: str) -> None:
@@ -917,6 +1079,17 @@ def emit(value: dict[str, Any], as_json: bool, command: str) -> None:
         print("rolled back: yes")
         for item in value["phases"]:
             print(f"  {item['status']}: {item['id']}")
+    elif command == "snapshot-candidate":
+        print(f"reachable: {'yes' if value['reachable'] else 'no'}")
+        print(f"eligible: {'yes' if value['eligible'] else 'no'}")
+        print("production mutated: no")
+        print("data transferred: no")
+        print("authorized to restore: no")
+        print("authorized to cutover: no")
+        if value["eligible"]:
+            print(f"snapshot: {value['snapshot']['id']}")
+            for item in value["artifacts"]:
+                print(f"  present: {item['id']} ({item['kind']})")
     else:
         print(f"status: {value['status']}")
         print(f"effects applied: {value['effects_applied']}")
@@ -933,6 +1106,8 @@ def parser() -> argparse.ArgumentParser:
     preflight = subcommands.add_parser("preflight")
     preflight.add_argument("--bundle-manifest", required=True, type=pathlib.Path)
     preflight.add_argument("--json", action="store_true")
+    snapshot_candidate = subcommands.add_parser("snapshot-candidate")
+    snapshot_candidate.add_argument("--json", action="store_true")
     rehearsal = subcommands.add_parser("rehearse-migration")
     rehearsal.add_argument("--bundle-manifest", required=True, type=pathlib.Path)
     rehearsal.add_argument("--preflight-report", required=True, type=pathlib.Path)
@@ -959,6 +1134,10 @@ def main() -> int:
             print(f"{args.kind}: valid")
             return 0
         desired = desired_state(args.desired)
+        if args.command == "snapshot-candidate":
+            value = collect_snapshot_candidate(desired)
+            emit(value, args.json, args.command)
+            return 0 if value["eligible"] else 2
         if args.command == "preflight":
             bundle = load_json(args.bundle_manifest)
             validate_bundle_manifest(bundle, desired["installation_id"])
