@@ -7,7 +7,7 @@
 | Change | `36` |
 | Slug | `disposable-data-fidelity-drill` |
 | Title | Disposable Data Fidelity Drill |
-| Status | `shipped` |
+| Status | `archived` |
 | Branch | `feature/36-disposable-data-fidelity-drill` |
 
 ---

@@ -26,7 +26,7 @@ accepted split topology now runs independently; legacy volumes remain rollback-o
   only that project's writers and follow `backup-restore.md`; never run broad `DELETE`,
   `TRUNCATE`, `DROP TABLE` or `DROP DATABASE` as an exploratory action.
 - Compromise suspicion: isolate with the provider firewall, preserve journal/GitHub evidence,
-  rotate the temporary root password in both GitHub and the local protected store plus database,
+  rotate the primary root password in both GitHub and the local protected store plus database,
   Umami, Beszel, Restic and WireGuard secrets, then rebuild from bootstrap rather than trusting the
   host. A leaked root password means the whole VPS is untrusted.
 - Root/password lockout: use the REG.RU console, restore a usable root password and rerun

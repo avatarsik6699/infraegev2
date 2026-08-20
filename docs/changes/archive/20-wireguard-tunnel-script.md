@@ -7,7 +7,7 @@
 | Change | `20` |
 | Slug | `wireguard-tunnel-script` |
 | Title | Standalone WireGuard tunnel up/down script |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/20-wireguard-tunnel-script` |
 
 ---

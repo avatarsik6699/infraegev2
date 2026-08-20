@@ -26,7 +26,7 @@ pitfalls that must be reconsidered rather than copied.
 | Backend | Python/FastAPI (`apps/api`) |
 | Database | PostgreSQL (provisioned in `infra/docker-compose.yml`; no schema/migrations yet — content is git-based, docs/SPEC.md §3) |
 | Cache | — (not needed on M0) |
-| Observability | `infraegev2/ops` owns one application-specific Compose/SSH lifecycle package for target sources. First-party sibling [sre-kit](https://github.com/avatarsik6699/sre-kit) owns adapters, Source configuration, normalization, alerts and monitoring UI only. Host metrics and fail2ban temporarily use root/password SSH; journal logs, Beszel and Umami use WireGuard; no local operations UI or generic infrastructure control plane exists in this repo |
+| Observability | `infraegev2/ops` owns one application-specific Compose/SSH lifecycle package for target sources. First-party sibling [sre-kit](https://github.com/avatarsik6699/sre-kit) owns adapters, Source configuration, normalization, alerts and monitoring UI only. Host metrics and fail2ban use the accepted root/password SSH contract; journal logs, Beszel and Umami use WireGuard. Source registration proof remains in sre-kit; no local operations UI or generic infrastructure control plane exists in this repo |
 | Infra | Two Docker Compose projects on one VPS: application Nginx → `web`/`api`/Postgres, plus independently pinned Umami/Beszel operations services; Ubuntu 24.04, systemd, journald, fail2ban, WireGuard, Restic |
 | Package managers | uv (`apps/api`), pnpm workspace (`apps/web`, root) |
 | Formatting | Prettier 3.9.6 exact for supported repository files; Ruff from the API lock for Python; EditorConfig for cross-editor whitespace defaults |
@@ -78,9 +78,11 @@ theory is compiled from `apps/web/src/entities/lesson/content/*.lesson.tsx` and 
 runtime content. The API retains its separate full `content/` tree because courses, topics and task
 validation remain backend-owned contracts.
 
-**Production access:** administrative SSH temporarily uses public `root@2.26.8.245` with the
-protected `root-admin-password`, pinned `known_hosts` and `scripts/production-root-ssh.sh`; direct
-keys and alternate SSH users are not active. Reaching the VPS's private `10.77.0.0/24` network
+**Production access:** the primary administration contract is public `root@2.26.8.245` with the
+protected `root-admin-password`, pinned `known_hosts` and `scripts/production-root-ssh.sh`.
+Public-key login and alternate SSH users are not active, and no key-only migration is scheduled.
+The architect accepts the resulting host-compromise risk for the current operating horizon.
+Reaching the VPS's private `10.77.0.0/24` network
 (Beszel, Umami and journald gatewayd) still needs the WireGuard tunnel: `make tunnel-up` starts and
 verifies it, `make tunnel-down`
 stops a tunnel this Makefile started, `make tunnel-status` reports interface/route/handshake state.
@@ -110,8 +112,10 @@ generic plan/apply engine, migration rehearsal, snapshot selector or deployment 
 service desired state; the runbook is the cross-project transition contract.
 
 `ops/observability/sre-kit-sources.example.json` documents the six intended adapter configurations
-without real credentials or deployment authority. The operator enters target-specific IDs and
-secrets in sre-kit. Source registration and monitoring availability never gate target lifecycle.
+without real credentials or deployment authority. Its fields are aligned with the six current
+sre-kit manifests. The operator enters secrets in sre-kit; registration, successful polling and
+dashboard evidence remain a separate follow-up sre-kit runtime change after documentation Change
+19. Monitoring availability never gates target lifecycle.
 
 ### pnpm workspace policy
 

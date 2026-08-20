@@ -7,7 +7,7 @@
 | Change | `19` |
 | Slug | `retire-ops-dashboard` |
 | Title | Retire the local `apps/ops` dashboard |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/19-retire-ops-dashboard` |
 
 ---

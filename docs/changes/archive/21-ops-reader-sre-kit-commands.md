@@ -7,7 +7,7 @@
 | Change | `21` |
 | Slug | `ops-reader-sre-kit-commands` |
 | Title | Extend ops-reader's forced command for sre-kit's SSH adapters |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/21-ops-reader-sre-kit-commands` |
 
 ---

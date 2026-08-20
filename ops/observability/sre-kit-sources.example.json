@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "target_id": "infraegev2-production",
-  "note": "Operator-owned template, not a direct API payload. Replace placeholders in the sre-kit UI; keep secrets in sre-kit only.",
+  "note": "Operator-owned template, not a direct API payload. Six configs match current sre-kit manifests. The audited local DB is stale and has only five pre-cutover records; linked documentation Change 19 records the gap, and a following runtime change must reconcile and reverify all six. Replace placeholders in the sre-kit UI and keep secrets in sre-kit only.",
   "sources": [
     {
       "adapter_name": "uptime-http",

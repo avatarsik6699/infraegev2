@@ -1,13 +1,14 @@
 # infraege
 
-Техническая платформа будущего веб-приложения для подготовки к ЕГЭ по информатике. Публичный
-frontend временно сведён к нейтральному стенду переиспользуемого Table of Contents; учебные
-страницы и конкретный контент будут спроектированы заново.
+Веб-приложение для подготовки к ЕГЭ по информатике с двумя опубликованными полными уроками,
+связанной практикой и локальным прогрессом ученика. Каталог намеренно поставлен на паузу: перед
+третьей темой проект проходит аудит целостного learner journey и закрывает найденные продуктовые
+пробелы.
 
 Технический контракт проекта находится в [`docs/SPEC.md`](docs/SPEC.md), команды и версии стека —
 в [`docs/STACK.md`](docs/STACK.md). Production-контур для `infraege.ru` описан в
-[`docs/runbooks/production.md`](docs/runbooks/production.md); до появления реального VPS/DNS это
-готовая, но ещё не выполненная процедура.
+[`docs/runbooks/production.md`](docs/runbooks/production.md). Production работает на
+`infraege.ru`; application и operations используют независимые Compose projects.
 
 ## Быстрый старт — одна команда
 
@@ -227,7 +228,8 @@ pnpm --filter web test:e2e
 
 Playwright сам поднимает свежие frontend/backend на изолированных адресах
 `127.0.0.2:3100` и `127.0.0.2:8100`; заранее запускать серверы для него не нужно. Сценарии
-проверяют ToC-стенд, no-JS anchors, оба viewport, общий 404 и безопасную отправку frontend-ошибок.
+проверяют публичный вход, опубликованные уроки, no-JS чтение, desktop/mobile viewport, общий 404
+и безопасную отправку frontend-ошибок.
 
 Production-гейты (подробные предусловия — в `docs/STACK.md`):
 
@@ -257,30 +259,34 @@ desired state сервисов; отдельного plan/apply engine, migratio
 передают один Compose + maintenance release и выполняют `pull` + `up --wait`; `ops-rollback` возвращает предыдущий
 release. Эти команды никогда не меняют application Compose.
 
-По решению архитектора существующие beta-данные Umami/Beszel не переносятся. Новый stack получает
-пустые volumes; старые resources сохраняются только для короткого rollback-периода и удаляются
-позднее отдельным подтверждённым действием. Репозиторий уже содержит разделённые Nginx и
-backup/restore contracts, но VPS не переключался: пока там остаётся предыдущий combined release,
-`ops-install` запускать нельзя из-за занятых ports. Выполнение cutover требует отдельного разрешения
-и следует `docs/runbooks/production.md`.
+По решению архитектора beta-данные Umami/Beszel не переносились. Split-stack cutover завершён:
+новые operations volumes используются независимым `infraege-ops`, backup/restore и timers
+проверены, а прежние volumes сохранены только как rollback-only. Их удаление остаётся отдельным
+явно подтверждаемым destructive действием.
 
 First-party sibling [sre-kit](https://github.com/avatarsik6699/sre-kit) остаётся универсальным
 ядром наблюдаемости: adapters, Source configuration, normalization, alerts и monitoring UI. Он
 читает источники infraegev2 через private API/WireGuard/read-only SSH, но не устанавливает и не
 настраивает target stack. Deployment credentials и target lifecycle в sre-kit не передаются;
-`ops/observability/sre-kit-sources.example.json` служит только операторской подсказкой.
+`ops/observability/sre-kit-sources.example.json` служит только операторской подсказкой. Шесть
+Source-конфигураций сверены с актуальными adapter manifests, но их фактическая регистрация,
+polling и dashboard-представление не доказаны: локальная sre-kit DB содержит пять устаревших
+pre-cutover записей, без uptime и без успешного SSH polling. Их нужно сверить и заново проверить в
+отдельном change `sre-kit`.
 
 Runbook’и: [DNS/TLS](docs/runbooks/dns-tls.md),
 [backup/restore](docs/runbooks/backup-restore.md),
-[инциденты](docs/runbooks/incident-response.md). Уведомление РКН и реквизиты оператора отложены по
-явному решению владельца; это принятый юридический риск. Локальный backup на том же VPS также не
+[инциденты](docs/runbooks/incident-response.md). Основной административный доступ к VPS —
+password-only `root` с pinned host key, UFW, fail2ban и GitHub Environment approval; риск принят
+владельцем без запланированного перехода на key-only identities. Уведомление РКН и реквизиты
+оператора также отложены бессрочно до отдельного решения владельца. Локальный backup на том же VPS не
 считается disaster recovery — off-site backend остаётся обязательным до появления незаменимых
 пользовательских данных.
 
 ## Полезные документы
 
 - [`docs/SPEC.md`](docs/SPEC.md) — продуктовый и системный контракт;
-- [`docs/STACK.md`](docs/STACK.md) — версии, команды Fast/Full/Release Gate и структура проекта;
+- [`docs/STACK.md`](docs/STACK.md) — версии, команды Critical/Full/Release Gate и структура проекта;
 - [`docs/KNOWN_GOTCHAS.md`](docs/KNOWN_GOTCHAS.md) — известные проблемы окружения;
 - [`docs/changes/`](docs/changes/) — активный change; завершённые changes хранятся в
   [`docs/changes/archive/`](docs/changes/archive/).

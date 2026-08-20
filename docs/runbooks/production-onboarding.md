@@ -1,14 +1,13 @@
 # Production values and secret onboarding
 
 This runbook turns provider values into the inputs expected by the production scripts and GitHub
-workflows. The current beta contract deliberately uses public root/password SSH until the architect
-requests re-hardening. Generate secrets on the administration laptop or provider console; never
+workflows. The primary contract uses public root/password SSH; no key-only migration is scheduled.
+Generate secrets on the administration laptop or provider console; never
 paste passwords or `/etc/infraege/production.env` into the repository or chat.
 
 Operations onboarding prepares a separate mode-600 env file and validates it with
-`make ops-config ENV_FILE=... RELEASE=<full-sha>`. Do not run `ops-install` while the live
-application release still owns Umami/Beszel ports; activation requires the separately authorized
-cutover in `production.md`.
+`make ops-config ENV_FILE=... RELEASE=<full-sha>`. The split stack is active: use `ops-update` for
+the installed project and `ops-install` only for a genuinely new target.
 
 ## Confirmed non-secret inputs
 
@@ -16,7 +15,7 @@ cutover in `production.md`.
 |-------|-------|
 | Domain | `infraege.ru` |
 | VPS IPv4 | `2.26.8.245` |
-| Bootstrap/runtime/deploy login | `root` with password authentication (temporary beta exception) |
+| Bootstrap/runtime/deploy login | `root` with password authentication (primary accepted contract) |
 | Authoritative DNS | `ns1.reg.ru`, `ns2.reg.ru` |
 | Required A records | `@ -> 2.26.8.245`, `www -> 2.26.8.245` |
 | TLS contact | `vlad-god500@mail.ru` |
@@ -29,7 +28,7 @@ new unique value, store it in `~/.config/infraege/production/root-admin-password
 and add the same value to the reviewer-protected GitHub Environment. Keep the provider console and
 old session open until a second password-only root session succeeds with the pinned host key.
 
-## 1. Create and verify the temporary root credential
+## 1. Create and verify the primary root credential
 
 Generate at least 48 random bytes without printing them to chat or committing them. One safe local
 flow is:
@@ -54,9 +53,9 @@ From a second terminal use the repository wrapper, then record the proof from th
 scripts/production-root-ssh.sh 'ops/migrate-root-password-access.sh verify'
 ```
 
-Only after deploy, services and sre-kit are migrated may the old identities be retired with the
-exact confirmation documented in `production.md`. Personal SSH and WireGuard keys are unrelated and
-must not be deleted.
+The previous `operator`, `deploy` and `ops-reader` identities are retired. Do not recreate them or
+plan key-only migration without a new explicit architect decision. Personal WireGuard keys are a
+separate private-network contract and must not be deleted.
 
 ## 2. Fill the GitHub `production` environment
 
@@ -165,8 +164,8 @@ After cutover, run `make ops-status` to inspect the infraegev2-owned operations 
 The command is read-only; install, update and rollback remain explicit operator actions and are
 never exposed through sre-kit's UI.
 
-The repository contains the prepared `infraege-ops` Compose definition. Onboarding alone does not
-start it and does not create a second Umami/Beszel installation. Its
+The repository contains the active `infraege-ops` Compose definition. Onboarding alone does not
+mutate the installed Umami/Beszel project. Its
 `env.contract` records names only; actual values remain in the protected operations environment.
 Create `~/.config/infraege/production/ops.env` with exactly those names, independently generated
 values and mode `600`; do not copy it into the checkout. The generated file, bootstrapped Beszel
@@ -266,10 +265,11 @@ Over WireGuard open `http://10.77.0.1:8090`, create the initial Beszel administr
 1. Open `/settings/tokens` and create/copy a universal token -> `BESZEL_AGENT_TOKEN`.
 2. Click **Add System** and use `/beszel_socket/beszel.sock` as Host/IP. Copy the public key shown
    by the dialog -> `BESZEL_AGENT_KEY`.
-3. Replace both temporary values in the protected operations env and use `ops-update` with the
+3. Replace both bootstrap values in the protected operations env and use `ops-update` with the
    currently installed full release SHA to recreate `beszel-agent`.
-4. Complete **Add System**, then copy the resulting system record ID into the untracked
-   `projects.json` as `beszel.systemId`.
+4. Complete **Add System**, then copy the resulting system record ID into the tracked non-secret
+   `ops/observability/sre-kit-sources.example.json` `beszel-api.system_id` field and verify it in
+   the dedicated sre-kit runtime reconciliation change that follows documentation Change 19.
 
 The Beszel public key normally contains a space. It is valid Compose env input; operations
 maintenance scripts must pass this file through `docker compose --env-file` and must never

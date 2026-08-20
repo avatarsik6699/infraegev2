@@ -7,7 +7,7 @@
 | Change | `37` |
 | Slug | `production-snapshot-candidate` |
 | Title | Production Snapshot Candidate |
-| Status | `shipped` |
+| Status | `archived` |
 | Branch | `feature/37-production-snapshot-candidate` |
 
 ---

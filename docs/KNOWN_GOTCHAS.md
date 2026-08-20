@@ -11,15 +11,16 @@
 
 ## Gotcha Log
 
-### A valid `infraege-ops` Compose render is not permission to start it
+### A valid `infraege-ops` Compose render is not permission to mutate production
 
-- **Symptoms:** `make ops-config` passes and the inactive stack is started beside the current
-  application Compose, causing port conflicts or two owners for Umami/Beszel data.
-- **Root cause:** Compose validation proves syntax and interpolation only. The repository is
-  prepared for split ownership, but the live VPS may still run the previous combined release.
-- **Fix:** use `ops-config` as local evidence only. Run `ops-install` only inside the separately
-  approved fresh-start cutover after legacy ports are freed; verify health and Sources before any
-  cleanup. No old Umami/Beszel data is transferred.
+- **Symptoms:** `make ops-config` passes and an operator treats that local render as approval to
+  install, update or roll back the live stack.
+- **Root cause:** Compose validation proves syntax and interpolation only. The split stack is live,
+  but every production mutation still needs an exact release, protected env and authorized
+  lifecycle command.
+- **Fix:** use `ops-config` as local evidence only. Use `ops-update` for the installed project,
+  `ops-install` only on a genuinely new target, and verify health plus backup/restore evidence
+  before cleanup. Legacy volumes remain rollback-only until separately approved deletion.
 
 ### Compose `up --build` can recreate dev containers even when every build layer is cached
 
@@ -205,15 +206,16 @@
 - **Fix**: add an encrypted off-site Restic backend and prove a restore from that backend before
   storing irreplaceable user data. This accepted residual risk is documented in the backup runbook.
 
-### Temporary root/password SSH is a live exception, not the reusable baseline
+### Primary root/password SSH is project-specific, not the reusable baseline
 
-- **Symptoms**: a fresh agent follows archived key-only operator/deploy instructions, or removes
-  host identities before root/password deploy, timers and observability have been proven.
-- **Root cause**: Change 30 temporarily simplifies this beta VPS to public password-only `root`;
-  archived changes and the reusable infrastructure blueprint intentionally retain the safer model.
-- **Fix**: use `ops/migrate-root-password-access.sh` in `prepare` → second-session `verify` →
-  explicitly confirmed `retire` order. Keep the provider console open, pinned `known_hosts`, UFW,
-  fail2ban and GitHub Environment approval. Never use an old chat-exposed recovery password.
+- **Symptoms**: a fresh agent schedules key-only migration because archived changes or the reusable
+  blueprint describe separate operator/deploy identities.
+- **Root cause**: Change 30 moved this VPS to password-only `root`; on 2026-08-20 the architect made
+  that model the primary current contract and explicitly removed key-only migration from the
+  roadmap. The reusable blueprint intentionally retains the safer generic baseline.
+- **Fix**: keep pinned `known_hosts`, UFW, fail2ban, provider-console recovery and GitHub Environment
+  approval. Do not create a key-only migration change without a new explicit architect decision,
+  and never reuse a chat-exposed recovery password.
 
 ### Observability work spans two first-party repositories
 
@@ -247,14 +249,15 @@
   `infraege-operator`. Add only the user to the standard `sudo` supplementary group, validate the
   effective SSH hardening before success, and keep `deploy` outside sudo.
 
-### Production: deferred operator details and RKN work remain a legal risk
+### Production: operator details and RKN work are accepted indefinite legal debt
 
 - **Symptoms**: legal pages can describe current processing, but cannot identify the operator or
   prove completion of the Russian regulator workflow.
-- **Root cause**: the architect explicitly deferred operator requisites and RKN notification into
-  one later task and accepted the risk; no age marking is shown.
-- **Fix**: before collecting accounts or other non-minimal personal data, obtain specialist legal
-  review and close the combined operator/RKN task. Do not invent requisites in source code.
+- **Root cause**: the architect explicitly deferred operator requisites and RKN notification
+  without a target milestone and accepted the risk; no age marking is shown.
+- **Fix**: do not auto-plan this work. Reopen it only on a new explicit architect decision; before
+  collecting accounts or other non-minimal personal data, surface the risk and recommend
+  specialist legal review. Never invent requisites in source code.
 
 ### WSL: Lighthouse must use Playwright's Linux Chromium
 
@@ -353,6 +356,6 @@
 - **Root cause:** both projects declare the network as `external`. Compose deliberately neither
   creates nor removes external networks, which prevents one project from deleting connectivity
   owned by the other.
-- **Fix:** both deploy paths create the exact network if absent. During the approved cutover deploy
-  the prepared application release, then start `infraege-ops` only after legacy ports are free.
-  Network deletion remains a later explicitly approved cleanup action.
+- **Fix:** both deploy paths create the exact network if absent. The split topology is active;
+  subsequent releases must keep both projects attached without assuming either Compose project
+  owns deletion of the external network. Network deletion remains a separately approved cleanup.

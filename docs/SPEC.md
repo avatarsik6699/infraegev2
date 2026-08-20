@@ -121,21 +121,21 @@ slug, тексты, ассеты, маршруты и композиции уд�
 | Role | Capabilities | Restrictions |
 |------|-------------|--------------|
 | `Anonymous learner` | Читает теорию, решает практику, прогресс сохраняется в localStorage браузера | Нет аккаунта на MVP — прогресс не синхронизируется между устройствами |
-| `Content author` (архитектор + AI как инструмент) | Пишет/генерирует content-as-code файлы (`content/topics/`, `content/courses/`), ревьюит AI-черновики через git diff, переводит `draft → review → published` | Публикация только через прохождение Content Quality Gate (§2.3); AI не публикует напрямую |
+| `Content author` (архитектор + AI как инструмент) | Пишет типизированную теорию в `apps/web/src/entities/lesson/content/*.lesson.tsx` и server-owned практику в `content/tasks/*.json`, ревьюит AI-черновики через git diff, переводит `draft → review → published` | Публикация только через прохождение Content Quality Gate (§2.3); AI не публикует напрямую |
 | `Architect` | Владеет `docs/SPEC.md`, принимает архитектурные решения, ревьюит контент перед `published` | — |
 | `AI_Agent` | Реализует изменения через `/work`, генерирует черновики контента по промптам с чек-листом из [`learning-science-principles.md`](./artifacts/learning-science-principles.md) (§2.3), запускает гейты через `/ship` | Не переводит контент в `published` самостоятельно; нет прямого push в `main` вне `/ship` |
 
 ### 2.2 Key Entities
 
-`Topic` (тема ЕГЭ) `→` `LearningSection[]` (смысловые разделы с типизированными блоками)
+`Topic` (тема ЕГЭ) `→` `ConceptBlock[]` (смысловые разделы типизированной TSX-теории)
 `Topic` `↔` `CourseLesson` (двусторонние связи `prerequisites` / `unlocks_topics`)
 `Course` `→` `CourseLesson[]`
 `Topic` / `CourseLesson` `→` `Task[]` (практика, привязанная к теме, может относиться к нескольким темам)
 
-Контент (`Topic`, `Course`, `CourseLesson`, `Task`, `ContentBlock`) — content-as-code, живёт в git
-(`content/`), не в БД (раздел 2.2 ниже). Состояние пользователя (прогресс) — на MVP только
-localStorage на клиенте; новая серверная аналитика практики не добавляется до финального этапа
-`M4` (см. §3).
+Контент живёт в git, не в БД: lesson theory и publication metadata — в типизированном TSX/модулях
+`apps/web`, practice/checker data — в `content/tasks/`, будущие Course-данные сохраняют отдельную
+JSON-границу только когда появится реальный consumer. Состояние пользователя (прогресс) — на MVP
+только localStorage на клиенте; новая серверная аналитика практики не добавляется до `M4` (§3).
 
 ### 2.3 Content Quality Gate (Definition of Done)
 
@@ -234,7 +234,6 @@ ConceptBlock — единица нарезки теории по одной ид
                                                  // в голове ≥3 взаимосвязанных величин (split-attention)
   workedExample?: <WorkedExample/>               // предшествует любой самостоятельной попытке
                                                  // (worked-example effect, см. docs/artifacts/learning-science-principles.md §1.1)
-  mistake?: <Mistake/>                           // рядом с объясняемой идеей, не в боковой колонке
   checkpoint?: CheckpointItem[]                  // локальная самопроверка сразу после смысловой группы
   mistake?: <Mistake/>                           // рядом со своим концептом, не в общем списке в конце
                                                  // (signalling principle)
@@ -340,7 +339,7 @@ task-файлы первой review-only темы читаются frontend-cons
 | Sitemap | `/sitemap.xml` | Только canonical URL публичной главной, privacy и `published`-уроков; review/lab/404 не включаются |
 | Not found | любой неизвестный маршрут | Общий доступный 404 без предположений о будущем IA |
 
-Первый public release не вводит отдельный каталог: при одном опубликованном уроке `/` выполняет
+Текущий public release не вводит отдельный каталог: при двух опубликованных уроках `/` выполняет
 роль компактного списка материалов. `review`-контент не появляется в навигации или sitemap,
 отдаёт `robots: noindex,nofollow` и исключается из prerender discovery. `/lab/lesson` и
 `/lab/design-system` сохраняют тот же unlisted/noindex режим независимо от product content.
@@ -369,8 +368,8 @@ API и аккаунт не используются. Интерактивные 
 только по явному действию ученика. Каждая задача получает одну или несколько ссылок к связанным
 фрагментам теории прямо рядом с заголовком, без отдельной плашки, а no-JS показывает все задачи
 последовательно. Позиция чтения, текущий раздел и выбранная задача остаются отдельными
-навигационными сигналами и не увеличивают учебный прогресс. Публичный content/data consumer
-по-прежнему должен быть спроектирован отдельно поверх §1.4.
+навигационными сигналами и не увеличивают учебный прогресс. Публичные lesson routes используют тот
+же durable flow, но получают реальную TSX-теорию и server-loaded Task-проекции.
 
 ### 5.3 Design System
 
@@ -415,8 +414,8 @@ frontend-контракт и происхождение адаптированн
   библиотеки добавляются только с реальным consumer и maintenance/a11y/supply-chain проверкой.
 - **Client state:** отдельный глобальный store (Zustand/MobX и аналоги) не вводится заранее.
   Компонентное состояние остаётся локальным, server state принадлежит Query, URL state — Router,
-  persistent product state пока отсутствует. Новый store допустим только при нескольких
-  независимых consumers и явно описанном lifecycle/persistence contract.
+  а versioned localStorage adapter хранит только lesson practice/progress. Новый store допустим
+  только при нескольких независимых consumers и явно описанном lifecycle/persistence contract.
 - **Визуальная системность:** значения активной темы отображаются в semantic CSS tokens, которые
   потребляют локальные компоненты. Base UI не определяет внешний вид и не выходит типами/props за
   их public API. Light-only baseline использует self-hosted кириллические шрифты без runtime-запроса.
@@ -425,8 +424,8 @@ frontend-контракт и происхождение адаптированн
 
 ## 6. Auth & Access Model
 
-Нет аутентификации на MVP. Foundation route и `POST /api/tasks/{id}/check` публичны и анонимны;
-frontend-прогресс после reset отсутствует. Ограничение на уровне
+Нет аутентификации на MVP. Публичные страницы и `POST /api/tasks/{id}/check` анонимны; прогресс
+урока хранится только в localStorage текущего браузера и не синхронизируется. Ограничение на уровне
 инфраструктуры (не auth) — rate limiting чекер-эндпоинта на Nginx (§4, §8) против автоматического
 перебора банка ответов.
 
@@ -449,14 +448,14 @@ production через общий Compose и development overlay.
 Application и observability используют один VPS на текущем beta-этапе, но принадлежат разным
 lifecycle-контуром:
 - **Nginx** — единственная точка входа (80/443), reverse-proxy для web/API и статики.
-- **Frontend (TanStack Start/Nitro)** — Node runtime с prerendered foundation route; будущие
-  product routes и data-loading boundaries определяются отдельным change.
+- **Frontend (TanStack Start/Nitro)** — Node runtime с prerendered публичным входом, legal
+  surface и двумя опубликованными SSR lesson routes; review/lab routes остаются noindex.
 - **Backend (FastAPI/Uvicorn)** — отдельный контейнер, доступен Nginx по внутренней docker-сети,
   наружу не смотрит напрямую.
 - **Postgres** — отдельный контейнер, volume + регулярный `pg_dump`-бэкап (§8).
 - **Operations stack** — Umami, Beszel и необходимые gateways физически остаются на application
   VPS, но их установка, конфигурация, backup/restore и release lifecycle принадлежат небольшому
-  модулю `ops/` этого репозитория. Целевое состояние — отдельный Compose project с собственными
+  модулю `ops/` этого репозитория. Активное состояние — отдельный Compose project с собственными
   volumes без переноса этой логики в [sre-kit](https://github.com/avatarsik6699/sre-kit).
 - **Граница infraegev2** — репозиторий владеет application telemetry и всей автоматизацией,
   зависящей от его VPS, routing, Compose и data layout. sre-kit получает только versioned Source
@@ -485,13 +484,13 @@ Nginx выставляет `Cache-Control`/`ETag` для хэшированно�
 - Production deploy запускается вручную через `workflow_dispatch`: SSH host-key verification,
   pull выбранного SHA, Compose replace, smoke/health и автоматический rollback на предыдущий SHA.
   Branch protection для `main` пока не включается, поскольку над проектом работает один человек.
-- До отдельного решения архитектора действует временный упрощённый режим администрирования:
-  публичный SSH принимает только логин `root` с новым уникальным длинным паролем; public-key и
-  keyboard-interactive authentication отключены. Аккаунты `operator`, `deploy` и `ops-reader`
-  удаляются после доказанного перехода их runtime-обязанностей на `root`. GitHub Environment
-  сохраняет reviewer approval и pinned host key, но временно получает root-пароль для ручного
-  `workflow_dispatch` deploy. Это явно принятый beta-риск без календарного дедлайна; возврат к
-  отдельным key-only human/deploy/read-only identities оформляется последующим change.
+- Основной контракт администрирования VPS — публичный SSH только для `root` с уникальным длинным
+  паролем; public-key и keyboard-interactive authentication отключены, отдельные `operator`,
+  `deploy` и `ops-reader` не активны. GitHub Environment сохраняет reviewer approval и pinned host
+  key и получает root-пароль только как protected secret для ручного `workflow_dispatch` deploy.
+  Архитектор осознанно принимает риск полного захвата VPS при компрометации пароля. Переход на
+  key-only identities не входит в текущий или планируемый roadmap и возвращается в scope только по
+  новому явному решению архитектора.
 - CI-валидация связей контента: скрипт проверяет, что `prerequisites`/`related_topics`/
   `unlocks_topics`/`practice_task_ids`/`topic_ids` ссылаются на существующие id — сборка падает при
   битых связях, до того как они попадут в прод (см. §3, §2.3).
@@ -508,7 +507,8 @@ Nginx выставляет `Cache-Control`/`ETag` для хэшированно�
   отложены до финального этапа после доменной логики, сайта и MVP-контента.
 - **Beszel Hub + Agent** — host/container metrics и история на application VPS.
 - **journald + fail2ban** — структурированные application/Nginx/security logs; journald доступен
-  через WireGuard-only gateway, fail2ban временно читается sre-kit через root/password SSH.
+  через WireGuard-only gateway, fail2ban читается sre-kit через основной root/password SSH
+  контракт.
 - **sre-kit core** — наш first-party sibling и владелец adapters, Source configuration,
   normalization, alerts и monitoring UI. Он запускается на workstation или management VPS и
   читает private sources через WireGuard/API/SSH, но не управляет target stack. Его SQLite,
@@ -561,11 +561,11 @@ revision или outbox: декларативным состоянием серв
 
 Release содержит Compose definition и три коротких maintenance-скрипта для backup, restore proof и
 retention. Значения передаются отдельным mode-600 environment и хранятся на VPS по release id; они
-не входят в archive или git. Operations command никогда не меняет application Compose. Репозиторий
-уже подготовлен к переключению, но `install` нельзя запускать параллельно с live legacy
-Umami/Beszel из-за занятых ports.
+не входят в archive или git. Operations command никогда не меняет application Compose. Split-stack
+cutover завершён; обычные последующие operations releases используют `update`, а `install`
+остаётся только для действительно нового target без `/opt/infraege-ops/current`.
 
-Публичный same-origin Umami collector в подготовленной production definition использует одну
+Публичный same-origin Umami collector в активной production definition использует одну
 созданную external Docker network `infraege-observability-ingress`. Оба Compose project только
 подключаются к ней; Umami получает стабильный alias `umami`, а Nginx остаётся также в application
 network для web/api. Создание сети — одна явная lifecycle-операция, а не отдельная модель ресурсов.
@@ -581,9 +581,13 @@ Beszel Hub. Второй доказал исправленную dual-network с
 данных требуют отдельного явно одобренного действия.
 
 `ops/observability/sre-kit-sources.example.json` — secret-free операторская подсказка, а не новый
-универсальный deployment contract. Поля сверяются с manifest соответствующего adapter, но реальные
-IDs/accounts/secrets вводятся в sre-kit. Недоступность sre-kit не блокирует Compose lifecycle;
-после восстановления core Sources снова начинают polling существующих target endpoints.
+универсальный deployment contract. Все шесть конфигураций сверены с текущими adapter manifests;
+реальные accounts/secrets вводятся только в sre-kit. Read-only аудит локальной sre-kit DB нашёл
+пять устаревших pre-cutover записей: `uptime-http` отсутствует, оба SSH Source никогда не были seen
+и имеют `unreachable`, остальные три не обновлялись с 2026-08-15. Это не live monitoring proof;
+связанный документационный sre-kit Change 19 фиксирует разрыв, а сверка, свежий polling и
+dashboard-проверка закрываются отдельным следующим runtime change. Недоступность sre-kit не
+блокирует Compose lifecycle.
 
 ---
 
@@ -591,31 +595,47 @@ IDs/accounts/secrets вводятся в sre-kit. Недоступность sre
 
 | Concern | Requirement |
 |---------|-------------|
-| Security headers / CORS | Rate limiting чекер-эндпоинта на Nginx: `limit_req_zone` 20 req/min/IP, burst 5, `nodelay` (см. §4, §11.2 источника) — против автоматизированного перебора банка ответов; конкретную цифру пересмотреть по факту логов после запуска. Временный public root/password SSH защищён только уникальным длинным паролем, pinned host key, UFW, fail2ban и GitHub Environment approval; риск полного захвата VPS при компрометации пароля принят архитектором до отдельного возврата key-only access. |
+| Security headers / CORS | Rate limiting чекер-эндпоинта на Nginx: `limit_req_zone` 20 req/min/IP, burst 5, `nodelay` (см. §4, §11.2 источника) — против автоматизированного перебора банка ответов; конкретную цифру пересмотреть по факту логов после запуска. Основной public root/password SSH защищён уникальным длинным паролем, pinned host key, UFW, fail2ban и GitHub Environment approval; риск полного захвата VPS при компрометации пароля осознанно принят, key-only migration не запланирована. |
 | Accessibility target | Foundation и lab не имеют serious/critical axe violations; lesson outline сохраняет вложенный semantic list, anchors, keyboard focus, различимый текущий пункт и корректный source order, а сложный визуал имеет видимую полную текстовую альтернативу |
 | Performance budget | LCP < 2.5s, CLS < 0.1, INP < 200ms на мобильном 4G-профиле; release evidence измеряет `/` и первый опубликованный `/ege/16-rekursiya`, отдельно проверяет cold-load font/layout shifts и не подменяет route-level метрики общей оценкой технической страницы |
-| Observability | Application deploy и operations stack имеют независимые Compose projects, volumes и rollback. infraegev2 владеет небольшим Compose/SSH operations package; sre-kit работает вне monitored VPS и владеет только ingestion, adapters, alerts и UI. Split topology активна на production; private sources и maintenance lifecycle проверены, Source registration в sre-kit остаётся отдельным change |
+| Observability | Application deploy и operations stack имеют независимые Compose projects, volumes и rollback. infraegev2 владеет небольшим Compose/SSH operations package; sre-kit работает вне monitored VPS и владеет только ingestion, adapters, alerts и UI. Split topology активна на production; target endpoints и maintenance lifecycle проверены, документационный sre-kit Change 19 фиксирует разрыв, а регистрация и polling шести Sources остаются отдельным следующим runtime change |
 | Backup / restore | Application и operations jobs используют отдельные Restic tags, restore proofs и status markers в общем encrypted repository. Operations timers активируются только после clean install, без импорта старых Umami/Beszel artifacts. Для каждого владельца сохраняются 7 daily + 4 weekly + 3 monthly и общий same-host/off-site risk |
 | SEO | `/`, `/privacy` и published topics имеют canonical, уникальные metadata, SSR content и входят в sitemap/prerender; lab и review routes остаются unlisted, `noindex,nofollow` и исключены из public discovery; Lighthouse SEO для публичных маршрутов проходит без ошибок |
 | Mobile / no-JS readability | Lab и topic lesson сохраняют текст, последовательные стадии визуала, подписи, решения и section anchors в SSR HTML; интерактивная проверка остаётся progressive enhancement |
 | Client resilience / API drift | Route failures восстанавливаемы без белого экрана; loading/empty/error/not-found состояния доступны с клавиатуры и скринридера; OpenAPI schema/types drift ломает gate до merge; runtime HTTP имеет timeout/abort и не делает скрытый retry мутаций |
-| Юридическое (152-ФЗ) | Минимизация сбора и российский application VPS сохраняются; `/privacy` перед первым public release правдиво описывает фактическую обработку и доступна со всех публичных страниц. По явному решению архитектора от 2026-08-19 ФИО/наименование, ИНН/ОГРН, адрес, публичный email оператора и уведомление РКН временно не публикуются; архитектор осознанно принимает юридический риск и обязуется заполнить сведения отдельным последующим изменением |
+| Юридическое (152-ФЗ) | Минимизация сбора и российский application VPS сохраняются; `/privacy` правдиво описывает фактическую обработку и доступна со всех публичных страниц. По подтверждённому решению архитектора от 2026-08-20 ФИО/наименование, ИНН/ОГРН, адрес, публичный email оператора и уведомление РКН отложены бессрочно: риск осознанно принят, работа не входит в roadmap и возвращается в scope только по новому явному решению архитектора |
 | Юридическое (436-ФЗ) | Возрастная маркировка для обычного сайта не вводится: существующая `12+` удаляется без замены на `18+` |
 | Юридическое (оригинальность контента) | Тексты тем и формулировки задач — собственного авторства/переформулированы, не дословные копии ФИПИ/sdamgia/kpolyakov (риск конфликта с площадками, не только вопрос добросовестности); проверяется в Content Quality Gate (§2.3) на каждой теме перед `published` |
-| Other (юридический ориентир, не консультация) | Открытые источники используются как инженерный ориентир; формальная юридическая проверка и РКН составляют отдельный принятый долг |
+| Other (юридический ориентир, не консультация) | Открытые источники используются как инженерный ориентир; формальная юридическая проверка и РКН составляют принятый бессрочно отложенный риск, а не пункт текущего roadmap |
 
 ---
 
 ## 9. Roadmap
 
-| Milestone | Goal | Key Outputs |
-|-----------|------|-------------|
-| `M0` — технический фундамент | Сохранить проверенную web/backend/ops инфраструктуру без навязывания продуктовой страницы | Нейтральная root-заглушка, shared primitives, API contract, пустой content skeleton и локальные gates |
-| `M1` — новый product/design baseline | Доказать заменяемую визуальную систему без преждевременной публикации | «Инженерная тетрадь», unlisted design-system/lesson labs, единый frontend-контракт и reusable primitives |
-| `M2` — инфраструктурная пауза | Подготовить production-платформу до продолжения продуктового контента | `infraege.ru`, VPS/GHCR deploy, security/release gates, backups, repo-native ops automation и внешний first-party sre-kit monitoring core |
-| `M3` — учебный flow и публичный запуск | Завершить доменную логику, основные поверхности сайта и проверенный MVP-контент до расширения аналитики | Два опубликованных полных урока образуют текущую точку проверки; до третьей темы или мини-курса Python проводится оценка готовности приложения по целостному learner journey, навигации, непрерывности/прогрессу, trust/legal-пробелам и production feedback. Исходные цели 3–5 тем и Python-курса остаются дальнейшим расширением M3, но не текущим приоритетом |
-| `M4` — финальное измерение и эксплуатация | Только после готовности домена, сайта и MVP-контента расширить продуктовые сигналы | Privacy-safe allowlist продуктовых событий Umami и проверка сбора данных; lifecycle остаётся в `opsctl`, monitoring UI — в sre-kit |
-| `M5+` (после первых данных, вне MVP) | Расширение охвата и сообщества поверх работающей бесплатной базы | Второй мини-курс (Excel), аккаунты/синхронизация, обсуждения тем с модерацией, затем платные фичи — без runtime AI до этого момента |
+| Milestone | Status | Goal | Key Outputs |
+|-----------|--------|------|-------------|
+| `M0` — технический фундамент | complete | Сохранить проверенную web/backend/ops инфраструктуру без навязывания продуктовой страницы | Исторический neutral baseline, shared primitives, API contract, content skeleton и локальные gates |
+| `M1` — новый product/design baseline | complete | Доказать заменяемую визуальную систему без преждевременной публикации | «Инженерная тетрадь», unlisted design-system/lesson labs, единый frontend-контракт и reusable primitives |
+| `M2` — инфраструктурная пауза | complete, integration proof open | Подготовить production-платформу до продолжения продуктового контента | `infraege.ru`, VPS/GHCR deploy, security/release gates, backups и независимый operations stack активны; шесть sre-kit Sources требуют linked registration proof |
+| `M3` — учебный flow и публичный запуск | in progress | Завершить доменную логику, основные поверхности сайта и проверенный MVP-контент до расширения аналитики | Два опубликованных полных урока образуют текущую точку проверки; до третьей темы или мини-курса Python проводится оценка готовности приложения по целостному learner journey, навигации, непрерывности/прогрессу, trust/legal-пробелам и production feedback |
+| `M4` — финальное измерение и эксплуатация | planned | Только после готовности домена, сайта и MVP-контента расширить продуктовые сигналы | Privacy-safe allowlist продуктовых событий Umami и проверка сбора данных; lifecycle остаётся в `opsctl`, monitoring UI — в sre-kit |
+| `M5+` (после первых данных, вне MVP) | deferred | Расширение охвата и сообщества поверх работающей бесплатной базы | Второй мини-курс (Excel), аккаунты/синхронизация, обсуждения тем с модерацией, затем платные фичи — без runtime AI до этого момента |
+
+### 9.1 Current execution sequence
+
+| Order | Scope | Exit evidence |
+|-------|-------|---------------|
+| `0` | Завершить документационные infraegev2 Change 44 и sre-kit Change 19 | Документы обоих репозиториев согласованы, stale local Source state зафиксирован без секретов, runtime не мутировался |
+| `1` | Отдельным sre-kit change сверить и доказать шесть infraegev2 Sources | Stale записи безопасно инвентаризированы; все шесть текущих конфигураций зарегистрированы; есть свежие polling/status/dashboard и failure/recovery evidence |
+| `2` | Провести product-readiness audit двух опубликованных уроков | Проверены вход/навигация, переходы между уроками, сохранение и объяснимость прогресса, mobile/no-JS, trust surfaces и production feedback; найденные пробелы приоритизированы по влиянию на learner journey |
+| `3` | Закрыть один минимальный end-to-end пакет блокирующих продуктовых пробелов | Результат проверен в браузере как путь ученика, а не как набор изолированных компонентов; неблокирующие находки остаются явно ранжированным backlog |
+| `4` | Выбрать расширение M3: третья тема ЕГЭ или первый срез мини-курса Python | Выбор опирается на аудит, связи между уже опубликованными материалами и минимальный целостный learner outcome; новый контент не начинается автоматически |
+| `5` | После готовности MVP перейти к M4 | Определён privacy-safe event allowlist, проверена фактическая доставка Umami без ответов, свободного текста и лишних идентификаторов |
+
+Off-site backup и always-on management host остаются trigger-based инфраструктурными улучшениями:
+первый обязателен до появления незаменимых пользовательских данных, второй — когда нужны
+круглосуточные polling/alerts независимо от workstation. Они не блокируют product-readiness audit.
+Key-only SSH, реквизиты оператора и уведомление РКН намеренно исключены из этой последовательности.
 
 ---
 
@@ -635,7 +655,10 @@ IDs/accounts/secrets вводятся в sre-kit. Недоступность sre
 - CDN, off-site backup и постоянный management VPS для sre-kit — отдельные последующие задачи;
   локальный core режим остаётся поддерживаемым. Telegram уже принадлежит sre-kit и не
   реализуется внутри infraegev2.
-- Формальные реквизиты оператора ПДн и уведомление РКН — отдельный принятый юридический долг.
+- Формальные реквизиты оператора ПДн и уведомление РКН — бессрочно отложенный принятый юридический
+  риск; не планировать change без нового явного решения архитектора.
+- Переход с основного root/password SSH на key-only identities — не планировать без нового явного
+  решения архитектора.
 - PWA/service worker, offline mutation queue и optimistic updates — только после отдельного
   пользовательского сценария и стратегии конфликтов/устаревания.
 - Глобальный client store и Base UI/community primitives без текущего consumer-а — не часть
@@ -647,9 +670,6 @@ IDs/accounts/secrets вводятся в sre-kit. Недоступность sre
 
 - [NEEDS_CLARIFICATION: числовые целевые показатели успеха MVP (объём органического трафика,
   срок, глубина прохождения) — решить после `M4`, когда появятся пригодные данные Umami (§1.2).]
-- [NEEDS_CLARIFICATION: будущие публичные product routes, content loading и владение mastery state
-  определяются после проверки lab; дизайн-система не закрепляет эти решения, но они обязаны
-  сохранять поведение §1.4.]
 - Точная цифра rate limit чекер-эндпоинта (20 req/min/IP, burst 5) — стартовый ориентир,
   архитектор явно указал пересмотреть по факту логов после запуска, не считать зафиксированной
   раз и навсегда (§8).

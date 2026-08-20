@@ -1,16 +1,15 @@
 # Production bootstrap and deployment
 
 Target: Ubuntu 24.04 VPS in Moscow, 2 EPYC 7502 vCPU, 4 GB RAM, 40 GB NVMe, domain
-`infraege.ru`, public IPv4 `2.26.8.245`. The temporary beta access contract deliberately uses
-public root/password SSH; keep the provider console open during any access change. Generate and
+`infraege.ru`, public IPv4 `2.26.8.245`. The primary access contract deliberately uses public
+root/password SSH; keep the provider console open during password rotation or access repair. Generate and
 place every required value using the ordered
 [production onboarding guide](production-onboarding.md) before following this summary.
 
-The independent operations definition can be validated locally with
-`make ops-config ENV_FILE=... RELEASE=<full-sha>`. Do not run `ops-install` or `ops-update` while
-the live application release still owns Umami/Beszel ports. Two authorized attempts rolled back
-after exposing a Beszel network defect and then unsafe shell parsing of a valid public key. Retry
-only with a published SHA containing both fixes. No old analytics or metrics data is transferred.
+The independent `infraege-ops` project is active. Validate a candidate locally with
+`make ops-config ENV_FILE=... RELEASE=<full-sha>`, use `ops-update` for the installed project and
+reserve `ops-install` for a genuinely new target. Two preliminary cutover attempts rolled back
+safely; the final 2026-08-20 cutover passed. No old analytics or metrics data was transferred.
 
 ## One-time bootstrap
 
@@ -66,8 +65,8 @@ Environment `production` requires reviewer approval. Set secrets `PROD_HOST`,
 the exact `known_hosts` line obtained through a trusted channel, never
 `StrictHostKeyChecking=no`.
 
-For this temporary contract, GitHub Actions receives the same root password through the protected
-environment. Remove legacy `PROD_USER` and `PROD_SSH_KEY` after the password deploy succeeds.
+GitHub Actions receives the same root password through the protected environment. Legacy
+`PROD_USER` and `PROD_SSH_KEY` are not part of the active contract.
 
 Images publish from `main` to GHCR under the full commit SHA. Deploy is manual: run “Deploy
 production”, enter that 40-character SHA, approve the environment, and follow the smoke step. The
@@ -85,16 +84,15 @@ previous release. They do not reference or mutate the application Compose projec
 
 `ops/observability/compose.yml` uses empty independent Postgres/Beszel volumes, WireGuard-only
 UI/API bindings, the loopback read-only socket proxy and the external collector-ingress network.
-Both deploy paths create that network if absent. The prepared application Nginx resolves Umami at
-request time through Docker DNS, so it can start during the cutover interval and survives an
-independent Umami container replacement. Legacy volumes stay available for a short restart-based
-rollback and are removed only by a later approved cleanup.
+Both deploy paths create that network if absent. The active application Nginx resolves Umami at
+request time through Docker DNS and survives an independent Umami container replacement. Legacy
+volumes remain rollback-only and are removed only by a later approved cleanup.
 
 `/home/niquetamerewsl/projects/sre-kit` is the first-party sibling for the universal observability
 core, adapters, Source configuration, normalization, alerts and monitoring UI. It does not own
-infraegev2 deployment automation or target credentials. The repository definitions are already
-split, while the live VPS remains unchanged until an explicitly authorized cutover. Do not recreate
-the retired `apps/ops` dashboard.
+infraegev2 deployment automation or target credentials. Repository and live VPS ownership are
+split; the remaining cross-repository work is registration and verification of the six Sources in
+sre-kit. Do not recreate the retired `apps/ops` dashboard.
 
 ## Verified fresh-start cutover
 
@@ -113,7 +111,7 @@ During the authorized window:
 1. Create or inspect `infraege-observability-ingress`; do not remove any volume.
 2. Stop only legacy `umami`, `beszel`, `beszel-agent` and `docker-socket-proxy` in the currently
    installed application release. Leave Nginx, web, API and application Postgres running.
-3. Deploy the prepared application release. Its Compose project removes the now-orphaned legacy
+3. Deploy the selected application release. Its Compose project removes the now-orphaned legacy
    containers but does not remove their named volumes. Public application health must pass; the two
    `/stats` routes may return `502` until the next step.
 4. Run `make ops-update ENV_FILE=... RELEASE=<full-sha>` when `/opt/infraege-ops/current` exists
