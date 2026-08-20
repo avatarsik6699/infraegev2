@@ -13,6 +13,11 @@ authoritative acceptance checks.
 as sanitized readiness codes. Missing, stale or failed proof blocks migration planning, but the
 command never starts backup/restore and never reads their logs.
 
+The migration rehearsal consumes only synthetic hash-bound files and proves transaction ordering,
+cleanup and ownership rollback. It deliberately does not consume the Restic repository. The
+existing disposable PostgreSQL restore below remains the required data-fidelity proof before any
+production migration.
+
 `ops/observability/backup-cutover.json` names the future independent Umami database and Beszel
 volume, but `activation_status: inactive-definition-only` means the existing backup script below
 remains authoritative. Do not switch backup ownership merely because the new Compose renders.

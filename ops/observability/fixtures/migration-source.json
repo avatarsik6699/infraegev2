@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "installation_id": "infraege-production",
+  "bundle_id": "0000000000000000000000000000000000000000000000000000000000000000",
+  "source_owner": "infraege application Compose",
+  "artifacts": [
+    {
+      "id": "beszel-data",
+      "path": "migration/beszel-data.db",
+      "sha256": "e1719e8dd1c9f4bff5208174421d9cec59b4611f922bc499d1e0405a4a7bd5e4"
+    },
+    {
+      "id": "umami-dump",
+      "path": "migration/umami.dump",
+      "sha256": "3f793482015acc22c9f50af8a38ea5551a4182439383cc925bedc03294c9c22e"
+    }
+  ]
+}

@@ -43,6 +43,15 @@
 - **Fix:** require the separate migration/cutover change and explicit approval. The report's
   `authorized_to_apply` field must remain false.
 
+### A successful migration rehearsal is not a database restore
+
+- **Symptoms:** a `status: rehearsed` report is used as evidence that a production Umami dump or
+  Beszel database is readable by the target versions.
+- **Root cause:** the sandbox harness proves transaction ordering, hashes, cleanup and ownership
+  rollback using synthetic files; it intentionally does not run Docker, Restic or PostgreSQL.
+- **Fix:** retain the rehearsal report as rollback-mechanics evidence, then separately run the
+  disposable Restic/PostgreSQL restore and Source cross-check before requesting cutover approval.
+
 ### A valid `infraege-ops` Compose render is not permission to start it
 
 - **Symptoms:** `make ops-config` passes and the inactive stack is started beside the current

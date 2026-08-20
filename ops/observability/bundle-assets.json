@@ -16,6 +16,8 @@
     "ops/observability/schemas/checkpoint.schema.json",
     "ops/observability/schemas/desired-state.schema.json",
     "ops/observability/schemas/inventory.schema.json",
+    "ops/observability/schemas/migration-rehearsal.schema.json",
+    "ops/observability/schemas/migration-source.schema.json",
     "ops/observability/schemas/outbox.schema.json",
     "ops/observability/schemas/plan.schema.json",
     "ops/observability/schemas/preflight.schema.json",

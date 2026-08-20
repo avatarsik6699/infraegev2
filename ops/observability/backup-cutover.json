@@ -13,6 +13,7 @@
     "remote-preflight",
     "fresh-backup",
     "disposable-restore",
+    "transaction-rehearsal",
     "maintenance-window",
     "data-migration",
     "source-cross-check",

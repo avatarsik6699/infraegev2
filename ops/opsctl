@@ -2,4 +2,5 @@
 set -Eeuo pipefail
 
 repo_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
-exec python3 "$repo_dir/ops/observability/opsctl.py" "$@"
+export PYTHONPATH="$repo_dir${PYTHONPATH:+:$PYTHONPATH}"
+exec python3 -m ops.observability.opsctl "$@"

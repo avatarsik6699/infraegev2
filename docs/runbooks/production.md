@@ -11,6 +11,10 @@ Before any separate migration/cutover change, persist the bundle manifest and ru
 `ops/opsctl preflight --bundle-manifest ... --json`; preflight neither uploads the bundle nor
 authorizes production changes.
 
+The following gate is a local `opsctl rehearse-migration` run against disposable artifacts. Retain
+its JSON report, but do not treat `status: rehearsed` as data-fidelity evidence: real Restic restore,
+PostgreSQL validation, Source cross-check and explicit cutover approval remain separate gates.
+
 ## One-time bootstrap
 
 1. In REG.RU replace the existing `A` records for `@` and `www` with `2.26.8.245`, TTL 300 during

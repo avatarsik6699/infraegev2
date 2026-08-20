@@ -269,6 +269,11 @@ manifest и hashes repository-owned assets. Эти команды не запу�
 `make ops-preflight BUNDLE=/tmp/infraege-ops-bundle.json`. Это только санитизированная read-only
 проверка; даже полностью зелёный отчёт содержит `authorized_to_apply: false`.
 
+После сохранения зелёного preflight можно отдельно проверить transaction sequence командой
+`make ops-rehearse-migration BUNDLE=... PREFLIGHT=... SOURCE=... SANDBOX_ROOT=...`. Она принимает
+только hash-bound disposable artifacts, моделирует смену owner и обязательно откатывает её внутри
+маркированного sandbox. Это не реальный restore и не разрешение на production cutover.
+
 First-party sibling [sre-kit](https://github.com/avatarsik6699/sre-kit) остаётся универсальным
 ядром наблюдаемости: adapters, Source configuration, normalization, alerts и monitoring UI. Он
 читает источники infraegev2 через private API/WireGuard/read-only SSH, но не устанавливает и не

@@ -62,6 +62,7 @@ help:
 	@echo "  make ops-config                   Validate inactive infraege-ops Compose definition"
 	@echo "  make ops-bundle                   Print deterministic operations bundle manifest"
 	@echo "  make ops-preflight BUNDLE=...     Run read-only production readiness preflight"
+	@echo "  make ops-rehearse-migration BUNDLE=... PREFLIGHT=... SOURCE=... SANDBOX_ROOT=..."
 
 dev:
 	@STOP_TIMEOUT=$(STOP_TIMEOUT) $(DOCKER_LIFECYCLE) dev
@@ -141,3 +142,11 @@ ops-bundle:
 ops-preflight:
 	@test -n "$(BUNDLE)" || { echo "BUNDLE is required" >&2; exit 2; }
 	@./ops/opsctl preflight --bundle-manifest "$(BUNDLE)"
+
+ops-rehearse-migration:
+	@test -n "$(BUNDLE)" -a -n "$(PREFLIGHT)" -a -n "$(SOURCE)" \
+		-a -n "$(SANDBOX_ROOT)" || \
+		{ echo "BUNDLE, PREFLIGHT, SOURCE and SANDBOX_ROOT are required" >&2; exit 2; }
+	@./ops/opsctl rehearse-migration --bundle-manifest "$(BUNDLE)" \
+		--preflight-report "$(PREFLIGHT)" --source-manifest "$(SOURCE)" \
+		--sandbox-root "$(SANDBOX_ROOT)"

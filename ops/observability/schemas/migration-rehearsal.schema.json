@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "installation_id",
+    "bundle_id",
+    "completed_at",
+    "status",
+    "production_mutated",
+    "authorized_to_cutover",
+    "rolled_back",
+    "source_owner",
+    "final_owner",
+    "phases"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "installation_id": { "type": "string", "minLength": 1 },
+    "bundle_id": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "completed_at": { "type": "string", "minLength": 1 },
+    "status": { "enum": ["rehearsed", "failed"] },
+    "failure_code": {
+      "enum": [
+        "injected_failure",
+        "local_io_error",
+        "source_changed",
+        "staged_hash_mismatch"
+      ]
+    },
+    "production_mutated": { "const": false },
+    "authorized_to_cutover": { "const": false },
+    "rolled_back": { "const": true },
+    "source_owner": { "type": "string", "minLength": 1 },
+    "final_owner": { "type": "string", "minLength": 1 },
+    "phases": { "type": "array", "minItems": 1 }
+  }
+}

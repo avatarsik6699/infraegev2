@@ -16,6 +16,9 @@ import sys
 import tempfile
 from typing import Any
 
+from ops.observability.migration_rehearsal import FAILURE_CODES as MIGRATION_FAILURE_CODES
+from ops.observability.migration_rehearsal import RehearsalError, rehearse_migration
+
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 DEFAULT_DESIRED = ROOT / "ops/observability/desired-state.json"
 REMOTE_COLLECTOR = ROOT / "ops/observability/remote-inventory.sh"
@@ -28,6 +31,8 @@ CONTRACT_KINDS = {
     "checkpoint",
     "desired-state",
     "inventory",
+    "migration-rehearsal",
+    "migration-source",
     "outbox",
     "plan",
     "preflight",
@@ -93,6 +98,26 @@ def validate_contract(kind: str, value: dict[str, Any]) -> None:
             "observed_at",
             "reachable",
             "components",
+        },
+        "migration-source": {
+            "schema_version",
+            "installation_id",
+            "bundle_id",
+            "source_owner",
+            "artifacts",
+        },
+        "migration-rehearsal": {
+            "schema_version",
+            "installation_id",
+            "bundle_id",
+            "completed_at",
+            "status",
+            "production_mutated",
+            "authorized_to_cutover",
+            "rolled_back",
+            "source_owner",
+            "final_owner",
+            "phases",
         },
         "plan": {
             "schema_version",
@@ -166,10 +191,95 @@ def validate_contract(kind: str, value: dict[str, Any]) -> None:
             raise ContractError("preflight cannot authorize apply and checks must be an array")
         if not re.fullmatch(r"[a-f0-9]{64}", str(value["bundle_id"])):
             raise ContractError("preflight bundle_id must be a lowercase SHA-256 digest")
-        if any(
-            item.get("status") not in {"pass", "warning", "blocker"} for item in value["checks"]
+        allowed_special = {
+            "remote-access": {"ssh-unreachable"},
+            "remote-protocol": {"invalid-response"},
+        }
+        seen_checks: set[str] = set()
+        for item in value["checks"]:
+            if not isinstance(item, dict) or set(item) != {"id", "status", "code"}:
+                raise ContractError("preflight check has an invalid shape")
+            check_id = item["id"]
+            allowed_codes = PREFLIGHT_CODES.get(check_id, allowed_special.get(check_id))
+            if (
+                check_id in seen_checks
+                or item["status"] not in {"pass", "warning", "blocker"}
+                or allowed_codes is None
+                or item["code"] not in allowed_codes
+            ):
+                raise ContractError("preflight contains an unknown check, status or code")
+            seen_checks.add(check_id)
+        counts = {
+            status: sum(item["status"] == status for item in value["checks"])
+            for status in ("pass", "warning", "blocker")
+        }
+        if value["summary"] != counts:
+            raise ContractError("preflight summary does not match checks")
+        ready = value["reachable"] is True and counts["blocker"] == 0
+        if value["ready_for_migration_planning"] is not ready:
+            raise ContractError("preflight readiness does not match checks")
+    if kind == "migration-source":
+        if not re.fullmatch(r"[a-f0-9]{64}", str(value["bundle_id"])):
+            raise ContractError("migration-source bundle_id must be a lowercase SHA-256 digest")
+        artifacts = value["artifacts"]
+        if not isinstance(artifacts, list) or not artifacts:
+            raise ContractError("migration-source artifacts must be a non-empty array")
+        ids: list[str] = []
+        for artifact in artifacts:
+            if not isinstance(artifact, dict):
+                raise ContractError("migration-source artifact must be an object")
+            require_fields(artifact, {"id", "path", "sha256"}, "migration-source artifact")
+            if set(artifact) != {"id", "path", "sha256"} or not isinstance(artifact["path"], str):
+                raise ContractError("migration-source artifact shape is invalid")
+            if not re.fullmatch(r"[a-z0-9-]+", str(artifact["id"])):
+                raise ContractError("migration-source artifact id is invalid")
+            if not re.fullmatch(r"[a-f0-9]{64}", str(artifact["sha256"])):
+                raise ContractError("migration-source artifact hash is invalid")
+            ids.append(str(artifact["id"]))
+        if len(ids) != len(set(ids)):
+            raise ContractError("migration-source artifact ids must be unique")
+        if value["source_owner"] != "infraege application Compose":
+            raise ContractError("migration-source owner is invalid")
+    if kind == "migration-rehearsal":
+        if not re.fullmatch(r"[a-f0-9]{64}", str(value["bundle_id"])):
+            raise ContractError("migration-rehearsal bundle_id is invalid")
+        if value["status"] not in {"rehearsed", "failed"}:
+            raise ContractError("migration-rehearsal status is invalid")
+        if (
+            value["production_mutated"] is not False
+            or value["authorized_to_cutover"] is not False
+            or value["rolled_back"] is not True
         ):
-            raise ContractError("preflight contains an unknown status")
+            raise ContractError("migration-rehearsal safety invariants are invalid")
+        if value["final_owner"] != value["source_owner"]:
+            raise ContractError("migration-rehearsal must finish at the source owner")
+        if value["status"] == "failed":
+            if value.get("failure_code") not in MIGRATION_FAILURE_CODES:
+                raise ContractError("migration-rehearsal failure code is invalid")
+        elif "failure_code" in value:
+            raise ContractError("successful migration-rehearsal cannot have a failure code")
+        phases = value["phases"]
+        if not isinstance(phases, list) or not phases:
+            raise ContractError("migration-rehearsal phases must be a non-empty array")
+        if any(
+            not isinstance(phase, dict)
+            or set(phase) != {"id", "status"}
+            or phase["status"] != "pass"
+            for phase in phases
+        ):
+            raise ContractError("migration-rehearsal phase is invalid")
+        phase_ids = [phase["id"] for phase in phases]
+        ordered = ["checkpoint", "stage", "verify", "modeled-cutover", "rollback"]
+        if (
+            phase_ids[0] != "checkpoint"
+            or phase_ids[-1] != "rollback"
+            or len(phase_ids) != len(set(phase_ids))
+            or any(phase_id not in ordered for phase_id in phase_ids)
+            or phase_ids != sorted(phase_ids, key=ordered.index)
+        ):
+            raise ContractError("migration-rehearsal phase order is invalid")
+        if value["status"] == "rehearsed" and phase_ids != ordered:
+            raise ContractError("successful migration-rehearsal omitted a phase")
     if kind == "revision" and value["status"] != "applied":
         raise ContractError("revision status must be applied")
     if kind == "apply-result" and value["status"] not in {"applied", "failed", "no-op"}:
@@ -406,6 +516,50 @@ def collect_preflight(desired: dict[str, Any], bundle: dict[str, Any]) -> dict[s
         }
         validate_contract("preflight", result)
         return result
+
+
+def validate_bundle_manifest(bundle: dict[str, Any], installation_id: str) -> None:
+    require_fields(
+        bundle,
+        {"schema_version", "installation_id", "compose_project", "bundle_id", "assets"},
+        "bundle",
+    )
+    assert_secret_free(bundle)
+    if bundle["schema_version"] != 1 or bundle["installation_id"] != installation_id:
+        raise ContractError("bundle manifest does not match desired installation")
+    if not re.fullmatch(r"[a-f0-9]{64}", str(bundle["bundle_id"])):
+        raise ContractError("bundle manifest has invalid bundle_id")
+    definition = load_json(ROOT / "ops/observability/bundle-assets.json")
+    expected_paths = sorted(definition.get("assets", []))
+    assets = bundle["assets"]
+    if (
+        not isinstance(assets, list)
+        or any(not isinstance(item, dict) for item in assets)
+        or [item.get("path") for item in assets] != expected_paths
+    ):
+        raise ContractError("bundle manifest asset inventory does not match this checkout")
+    for item in assets:
+        if not isinstance(item, dict) or set(item) != {"path", "sha256", "size"}:
+            raise ContractError("bundle manifest asset has an invalid shape")
+        relative = pathlib.PurePosixPath(item["path"])
+        if relative.is_absolute() or ".." in relative.parts:
+            raise ContractError("bundle manifest asset path is unsafe")
+        path = ROOT.joinpath(*relative.parts)
+        if path.is_symlink() or not path.is_file() or not path.resolve().is_relative_to(ROOT):
+            raise ContractError("bundle manifest asset is missing or unsafe")
+        content = path.read_bytes()
+        digest = hashlib.sha256(content).hexdigest()
+        if item["size"] != len(content) or item["sha256"] != digest:
+            raise ContractError("bundle manifest asset hash does not match this checkout")
+    identity = {
+        "schema_version": bundle["schema_version"],
+        "installation_id": bundle["installation_id"],
+        "compose_project": bundle["compose_project"],
+        "assets": bundle["assets"],
+    }
+    expected = hashlib.sha256(canonical_json(identity).encode()).hexdigest()
+    if bundle["bundle_id"] != expected:
+        raise ContractError("bundle manifest identity does not match bundle_id")
 
 
 def build_plan(desired: dict[str, Any], inventory: dict[str, Any]) -> dict[str, Any]:
@@ -702,6 +856,13 @@ def emit(value: dict[str, Any], as_json: bool, command: str) -> None:
         print("authorized to apply: no")
         for item in value["checks"]:
             print(f"  {item['status']}: {item['id']} ({item['code']})")
+    elif command == "rehearse-migration":
+        print(f"status: {value['status']}")
+        print("production mutated: no")
+        print("authorized to cutover: no")
+        print("rolled back: yes")
+        for item in value["phases"]:
+            print(f"  {item['status']}: {item['id']}")
     else:
         print(f"status: {value['status']}")
         print(f"effects applied: {value['effects_applied']}")
@@ -718,6 +879,12 @@ def parser() -> argparse.ArgumentParser:
     preflight = subcommands.add_parser("preflight")
     preflight.add_argument("--bundle-manifest", required=True, type=pathlib.Path)
     preflight.add_argument("--json", action="store_true")
+    rehearsal = subcommands.add_parser("rehearse-migration")
+    rehearsal.add_argument("--bundle-manifest", required=True, type=pathlib.Path)
+    rehearsal.add_argument("--preflight-report", required=True, type=pathlib.Path)
+    rehearsal.add_argument("--source-manifest", required=True, type=pathlib.Path)
+    rehearsal.add_argument("--sandbox-root", required=True, type=pathlib.Path)
+    rehearsal.add_argument("--json", action="store_true")
     apply = subcommands.add_parser("apply")
     apply.add_argument("--plan-file", required=True, type=pathlib.Path)
     apply.add_argument("--inventory-file", required=True, type=pathlib.Path)
@@ -740,33 +907,33 @@ def main() -> int:
         desired = desired_state(args.desired)
         if args.command == "preflight":
             bundle = load_json(args.bundle_manifest)
-            require_fields(
-                bundle,
-                {"schema_version", "installation_id", "compose_project", "bundle_id", "assets"},
-                "bundle",
-            )
-            assert_secret_free(bundle)
-            if (
-                bundle["schema_version"] != 1
-                or bundle["installation_id"] != desired["installation_id"]
-            ):
-                raise ContractError("bundle manifest does not match desired installation")
-            if not re.fullmatch(r"[a-f0-9]{64}", str(bundle["bundle_id"])):
-                raise ContractError("bundle manifest has invalid bundle_id")
-            bundle_identity = {
-                "schema_version": bundle["schema_version"],
-                "installation_id": bundle["installation_id"],
-                "compose_project": bundle["compose_project"],
-                "assets": bundle["assets"],
-            }
-            expected_bundle_id = hashlib.sha256(
-                canonical_json(bundle_identity).encode()
-            ).hexdigest()
-            if bundle["bundle_id"] != expected_bundle_id:
-                raise ContractError("bundle manifest identity does not match bundle_id")
+            validate_bundle_manifest(bundle, desired["installation_id"])
             value = collect_preflight(desired, bundle)
             emit(value, args.json, args.command)
             return 0 if value["ready_for_migration_planning"] else 2
+        if args.command == "rehearse-migration":
+            bundle = load_json(args.bundle_manifest)
+            validate_bundle_manifest(bundle, desired["installation_id"])
+            preflight = load_json(args.preflight_report)
+            validate_contract("preflight", preflight)
+            if (
+                preflight["installation_id"] != desired["installation_id"]
+                or preflight["bundle_id"] != bundle["bundle_id"]
+                or preflight["reachable"] is not True
+                or preflight["ready_for_migration_planning"] is not True
+            ):
+                raise RehearsalError("preflight_not_ready", "ready matching preflight is required")
+            source = load_json(args.source_manifest)
+            validate_contract("migration-source", source)
+            if (
+                source["installation_id"] != desired["installation_id"]
+                or source["bundle_id"] != bundle["bundle_id"]
+            ):
+                raise RehearsalError("source_not_bound", "migration source does not match bundle")
+            value = rehearse_migration(args.source_manifest, source, args.sandbox_root, utc_now())
+            validate_contract("migration-rehearsal", value)
+            emit(value, args.json, args.command)
+            return 0
         if args.command == "apply":
             inventory = load_json(args.inventory_file)
             validate_contract("inventory", inventory)
@@ -789,6 +956,9 @@ def main() -> int:
         return 0 if inventory["reachable"] else 2
     except ApplyError as exc:
         print(f"opsctl apply: {exc.code}: {exc}", file=sys.stderr)
+        return 2
+    except RehearsalError as exc:
+        print(f"opsctl rehearse-migration: {exc.code}: {exc}", file=sys.stderr)
         return 2
     except OSError:
         print("opsctl: local_io_error: sandbox state is unavailable", file=sys.stderr)

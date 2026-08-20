@@ -111,6 +111,13 @@ tools, WireGuard, Compose ownership, target path, backup freshness and restore p
 means only `ready_for_migration_planning`; `authorized_to_apply` is always false. It performs no
 upload, Compose/systemd action, migration or cutover and suppresses raw SSH output.
 
+`make ops-rehearse-migration BUNDLE=… PREFLIGHT=… SOURCE=… SANDBOX_ROOT=…` is the next local-only
+gate. It requires a ready matching preflight and hash-bound synthetic source artifacts, then writes
+checkpoint/staged state only below an exact `.infraege-ops-migration-sandbox` marker. The harness
+models ownership cutover, verifies target hashes and always rolls back to the source owner while
+removing staged data. Its report always says `production_mutated: false` and
+`authorized_to_cutover: false`; it does not execute Docker, Restic, SSH or a real database restore.
+
 ### pnpm workspace policy
 
 The root `packageManager` and workspace policy pin pnpm 10.33.0, model dependency compatibility
@@ -171,8 +178,8 @@ Fill every applicable row and report the rest as `SKIPPED` with a reason.
 | Check | Command | Preconditions / notes |
 |-------|---------|-----------------------|
 | Format | `pnpm format:check` | run once for the target set; scope is repository-wide because formatting configuration is shared |
-| Lint | `pnpm --filter web lint` · `cd apps/api && uv run ruff check app tests` | scope to touched workspace |
-| Type-check (affected) | `pnpm --filter web typecheck` · `cd apps/api && pnpm exec pyright app tests` | pyright reads `[tool.pyright]` in `apps/api/pyproject.toml` |
+| Lint | `pnpm --filter web lint` · `cd apps/api && uv run ruff check app tests ../../ops` | scope to touched workspace |
+| Type-check (affected) | `pnpm --filter web typecheck` · `cd apps/api && pnpm exec pyright app tests` · `pnpm exec pyright ops` | app pyright reads `[tool.pyright]` in `apps/api/pyproject.toml`; repository ops is a root package |
 | Focused tests | `pnpm --filter web exec vitest run <changed-test-files>` · `cd apps/api && uv run pytest <changed-test-files-or-nodeids>` | run only tests directly covering changed behavior; documentation-only changes are `SKIPPED`; never expand this row to the full suite |
 | LSP diagnostics | available: yes | `python-lsp` (Pyright) and `typescript-lsp` MCP servers; repository type-check commands remain complementary gate evidence |
 | API type regen (`openapi-typescript` or equivalent) | `pnpm api:check` | only when the public API surface or its generated consumer changed; fails on tracked drift |

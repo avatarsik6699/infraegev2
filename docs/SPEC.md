@@ -581,6 +581,16 @@ environment, логи, пути credentials или raw stderr. Итоговый 
 на upload, migration, Compose/systemd mutation или cutover. Неизвестная, malformed или
 недоступная проверка fail closed как blocker.
 
+До появления production migration executor перенос репетиционно исполняется только в явно
+маркированном disposable sandbox. Rehearsal принимает точные bundle/preflight/source-manifest,
+проверяет их installation/bundle binding и SHA-256 каждого тестового artifact, берёт exclusive
+lock, сохраняет checkpoint текущего owner, копирует artifacts в отдельную staged ownership,
+проверяет целевые hashes, моделирует cutover и обязательно выполняет rollback к исходному owner с
+удалением staged data. Успешный report означает только доказанную локальную обратимость,
+`production_mutated: false` и `authorized_to_cutover: false`; он не заменяет реальный disposable
+Postgres/Restic restore, source cross-check или operator approval. Любая ошибка оставляет исходные
+fixtures неизменными и завершает rollback до публикации результата.
+
 ---
 
 ## 8. Non-Functional Requirements
