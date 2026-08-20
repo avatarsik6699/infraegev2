@@ -7,7 +7,7 @@
 | Change | `42` |
 | Slug | `production-ops-cutover-retry` |
 | Title | Production Operations Cutover Retry Gate |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/42-production-ops-cutover-retry` |
 
 ---
