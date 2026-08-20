@@ -27,8 +27,7 @@ STOP_TIMEOUT ?= 10
 .PHONY: help dev rebuild stop down restart logs ps config clean \
 	tunnel-up tunnel-down tunnel-status \
 	ops-open-beszel ops-open-umami ops-configure-beszel-agent \
-	ops-repair-beszel-env ops-inventory ops-status ops-plan ops-apply-sandbox \
-	ops-config ops-bundle
+	ops-repair-beszel-env ops-status ops-config ops-install ops-update ops-rollback
 
 help:
 	@echo "infraege local Docker workflow"
@@ -55,16 +54,11 @@ help:
 	@echo "  make ops-open-umami  Open private Umami UI in WSLg Chromium"
 	@echo "  make ops-configure-beszel-agent  Securely activate the production Beszel agent"
 	@echo "  make ops-repair-beszel-env       Normalize the protected Beszel key assignment"
-	@echo "  make ops-inventory               Read sanitized production operations inventory"
-	@echo "  make ops-status                  Compare production operations state with desired state"
-	@echo "  make ops-plan                    Print a non-mutating operations reconciliation plan"
-	@echo "  make ops-apply-sandbox PLAN=... INVENTORY=... SANDBOX_ROOT=..."
-	@echo "  make ops-config                   Validate inactive infraege-ops Compose definition"
-	@echo "  make ops-bundle                   Print deterministic operations bundle manifest"
-	@echo "  make ops-preflight BUNDLE=...     Run read-only production readiness preflight"
-	@echo "  make ops-rehearse-migration BUNDLE=... PREFLIGHT=... SOURCE=... SANDBOX_ROOT=..."
-	@echo "  make ops-data-fidelity-drill      Verify synthetic Postgres/Beszel restore fidelity"
-	@echo "  make ops-snapshot-candidate       Validate latest production snapshot metadata read-only"
+	@echo "  make ops-config ENV_FILE=... RELEASE=...  Validate the independent ops definition"
+	@echo "  make ops-status                              Show installed ops status over SSH"
+	@echo "  make ops-install ENV_FILE=... RELEASE=...   Install the first ops release"
+	@echo "  make ops-update ENV_FILE=... RELEASE=...    Apply a new ops release"
+	@echo "  make ops-rollback                            Restore the previous ops release"
 
 dev:
 	@STOP_TIMEOUT=$(STOP_TIMEOUT) $(DOCKER_LIFECYCLE) dev
@@ -119,42 +113,23 @@ ops-configure-beszel-agent:
 ops-repair-beszel-env:
 	@./scripts/repair-beszel-env.sh --apply
 
-ops-inventory:
-	@./ops/opsctl inventory
-
 ops-status:
 	@./ops/opsctl status
 
-ops-plan:
-	@./ops/opsctl plan
-
-ops-apply-sandbox:
-	@test -n "$(PLAN)" -a -n "$(INVENTORY)" -a -n "$(SANDBOX_ROOT)" || \
-		{ echo "PLAN, INVENTORY and SANDBOX_ROOT are required" >&2; exit 2; }
-	@./ops/opsctl apply --plan-file "$(PLAN)" --inventory-file "$(INVENTORY)" \
-		--sandbox-root "$(SANDBOX_ROOT)"
-
 ops-config:
-	@docker compose --env-file /dev/null --project-name infraege-ops \
-		-f ops/observability/compose.yml config --quiet
+	@test -n "$(ENV_FILE)" -a -n "$(RELEASE)" || \
+		{ echo "ENV_FILE and RELEASE are required" >&2; exit 2; }
+	@./ops/opsctl config --env-file "$(ENV_FILE)" --release "$(RELEASE)"
 
-ops-bundle:
-	@python3 ops/observability/build-bundle.py
+ops-install:
+	@test -n "$(ENV_FILE)" -a -n "$(RELEASE)" || \
+		{ echo "ENV_FILE and RELEASE are required" >&2; exit 2; }
+	@./ops/opsctl install --env-file "$(ENV_FILE)" --release "$(RELEASE)"
 
-ops-preflight:
-	@test -n "$(BUNDLE)" || { echo "BUNDLE is required" >&2; exit 2; }
-	@./ops/opsctl preflight --bundle-manifest "$(BUNDLE)"
+ops-update:
+	@test -n "$(ENV_FILE)" -a -n "$(RELEASE)" || \
+		{ echo "ENV_FILE and RELEASE are required" >&2; exit 2; }
+	@./ops/opsctl update --env-file "$(ENV_FILE)" --release "$(RELEASE)"
 
-ops-rehearse-migration:
-	@test -n "$(BUNDLE)" -a -n "$(PREFLIGHT)" -a -n "$(SOURCE)" \
-		-a -n "$(SANDBOX_ROOT)" || \
-		{ echo "BUNDLE, PREFLIGHT, SOURCE and SANDBOX_ROOT are required" >&2; exit 2; }
-	@./ops/opsctl rehearse-migration --bundle-manifest "$(BUNDLE)" \
-		--preflight-report "$(PREFLIGHT)" --source-manifest "$(SOURCE)" \
-		--sandbox-root "$(SANDBOX_ROOT)"
-
-ops-data-fidelity-drill:
-	@./scripts/ops-data-fidelity-drill.sh
-
-ops-snapshot-candidate:
-	@./ops/opsctl snapshot-candidate
+ops-rollback:
+	@./ops/opsctl rollback

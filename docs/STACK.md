@@ -26,7 +26,7 @@ pitfalls that must be reconsidered rather than copied.
 | Backend | Python/FastAPI (`apps/api`) |
 | Database | PostgreSQL (provisioned in `infra/docker-compose.yml`; no schema/migrations yet — content is git-based, docs/SPEC.md §3) |
 | Cache | — (not needed on M0) |
-| Observability | `infraegev2/ops` owns target desired state and lifecycle automation; `ops/opsctl` currently provides read-only inventory/status/plan. First-party sibling [sre-kit](https://github.com/avatarsik6699/sre-kit) owns adapters, Source configuration, normalization, alerts and monitoring UI only. Host metrics and fail2ban temporarily use root/password SSH; journal logs, Beszel and Umami use WireGuard; no local operations UI in this repo |
+| Observability | `infraegev2/ops` owns one application-specific Compose/SSH lifecycle package for target sources. First-party sibling [sre-kit](https://github.com/avatarsik6699/sre-kit) owns adapters, Source configuration, normalization, alerts and monitoring UI only. Host metrics and fail2ban temporarily use root/password SSH; journal logs, Beszel and Umami use WireGuard; no local operations UI or generic infrastructure control plane exists in this repo |
 | Infra | Docker Compose: Nginx → `web`/`api`/Postgres plus pinned Umami/Beszel; Ubuntu 24.04, systemd, journald, fail2ban, WireGuard, Restic |
 | Package managers | uv (`apps/api`), pnpm workspace (`apps/web`, root) |
 | Formatting | Prettier 3.9.6 exact for supported repository files; Ruff from the API lock for Python; EditorConfig for cross-editor whitespace defaults |
@@ -45,8 +45,8 @@ node --version            # local tests only: >=22.13
 pnpm --version            # local tests only: exactly 10.33.0 (packageManager)
 python3 --version         # local tests only: >=3.12
 uv --version              # local tests only
-curl --version            # local data-fidelity health checks
-jq --version              # operations JSON contracts and drill reports
+curl --version            # health and smoke checks
+jq --version              # JSON tests and operational status files
 ```
 
 ---
@@ -87,51 +87,27 @@ stops a tunnel this Makefile started, `make tunnel-status` reports interface/rou
 Wraps `scripts/wireguard-tunnel.sh`; requires the protected config at
 `~/.config/infraege/production/infraege-wsl.conf` (or `$INFRAEGE_WG_CONFIG`) to already exist.
 
-Read-only operations commands are `make ops-inventory`, `make ops-status`, `make ops-plan` and
-`make ops-preflight BUNDLE=/path/to/bundle.json`.
-Their canonical desired state is `ops/observability/desired-state.json`; JSON consumers call
-`ops/opsctl <command> --json`. These commands never expose remote environment values or raw SSH
-stderr. Production apply and any mutating remote transport remain unavailable.
+The independent definition is `ops/observability/compose.yml`, always rendered and applied with
+project name `infraege-ops`. Callers provide the names listed in
+`ops/observability/env.contract` through a protected mode-600 file and pass a full Git SHA as the
+release id. `make ops-config ENV_FILE=… RELEASE=…` is local and non-mutating.
 
-`ops/opsctl apply` is a sandbox-only transaction harness. It requires all of `--plan-file`,
-`--inventory-file` and `--sandbox-root`; it never calls the SSH wrapper. The equivalent Make target
-requires `PLAN=… INVENTORY=… SANDBOX_ROOT=…`. A plan fingerprint binds desired state, sanitized
-inventory and effects; lock/checkpoint/revision/outbox state is written only below the selected
-sandbox root. A new/empty directory receives `.infraege-ops-sandbox`; a non-empty directory without
-that exact marker fails closed. No production executor or environment-based executor selection
-exists.
+`make ops-status` reads only the installed project's Compose status through the pinned production
+SSH wrapper. `make ops-install ENV_FILE=… RELEASE=…` uploads the Compose definition and protected
+environment, creates the one external ingress network if absent, then runs `pull` and `up --wait`.
+`ops-update` applies another release through the same path; `ops-rollback` reapplies the previous
+release. Releases live under `/opt/infraege-ops`, their mode-600 environments under
+`/etc/infraege/ops`, and none of these commands reference the application Compose project.
 
-The inactive independent definition is `ops/observability/compose.yml`, always rendered with
-`--project-name infraege-ops`. `make ops-config` runs `docker compose config --quiet`; callers must
-provide every name listed in `ops/observability/env.contract`. `make ops-bundle` emits a
-deterministic manifest of repository-relative asset hashes. Neither target runs `pull`, `create`,
-`up` or any remote command. Synthetic values are allowed only in disposable validation tests.
+The current application Compose still owns the live Umami/Beszel services, so install/update must
+not be run before the separately approved fresh-start cutover frees their ports and attaches Nginx
+to `infraege-observability-ingress`. This repository deliberately has no desired-state JSON,
+generic plan/apply engine, migration rehearsal, snapshot selector or deployment UI. Compose is the
+service desired state; the runbook is the cross-project transition contract.
 
-Generate a persisted manifest with `python3 ops/observability/build-bundle.py --output FILE`, then
-pass it to `ops-preflight`. The fixed remote collector returns only allowlisted readiness codes for
-tools, WireGuard, Compose ownership, target path, backup freshness and restore proof. A green report
-means only `ready_for_migration_planning`; `authorized_to_apply` is always false. It performs no
-upload, Compose/systemd action, migration or cutover and suppresses raw SSH output.
-
-`make ops-rehearse-migration BUNDLE=… PREFLIGHT=… SOURCE=… SANDBOX_ROOT=…` is the next local-only
-gate. It requires a ready matching preflight and hash-bound synthetic source artifacts, then writes
-checkpoint/staged state only below an exact `.infraege-ops-migration-sandbox` marker. The harness
-models ownership cutover, verifies target hashes and always rolls back to the source owner while
-removing staged data. Its report always says `production_mutated: false` and
-`authorized_to_cutover: false`; it does not execute Docker, Restic, SSH or a real database restore.
-
-`make ops-data-fidelity-drill` is the local real-binary gate. It refuses to pull and therefore
-requires the exact PostgreSQL and Beszel digest images from `ops/observability/compose.yml` to
-already exist locally. It restores a generated Umami custom-format dump and a stopped Beszel
-volume into disposable targets, verifies PostgreSQL values/ownership plus Beszel health/identity,
-and removes every uniquely labeled container, volume and host work directory. No production path,
-Restic credential, SSH transport or fixed host port is accepted.
-
-`make ops-snapshot-candidate` is a production read-only metadata gate. Its fixed remote script
-runs only Restic snapshot/list operations, chooses one full immutable snapshot id and requires one
-allowlisted `umami.dump` plus one `beszel-data` root from the same backup workspace. The sanitized
-report always denies mutation, transfer, restore and cutover. It neither reads artifact contents
-nor replaces the later protected streaming and disposable restore proof.
+`ops/observability/sre-kit-sources.example.json` documents the six intended adapter configurations
+without real credentials or deployment authority. The operator enters target-specific IDs and
+secrets in sre-kit. Source registration and monitoring availability never gate target lifecycle.
 
 ### pnpm workspace policy
 
@@ -193,9 +169,9 @@ Fill every applicable row and report the rest as `SKIPPED` with a reason.
 | Check | Command | Preconditions / notes |
 |-------|---------|-----------------------|
 | Format | `pnpm format:check` | run once for the target set; scope is repository-wide because formatting configuration is shared |
-| Lint | `pnpm --filter web lint` · `cd apps/api && uv run ruff check app tests ../../ops` | scope to touched workspace |
-| Type-check (affected) | `pnpm --filter web typecheck` · `cd apps/api && pnpm exec pyright app tests` · `pnpm exec pyright ops` | app pyright reads `[tool.pyright]` in `apps/api/pyproject.toml`; repository ops is a root package |
-| Focused tests | `pnpm --filter web exec vitest run <changed-test-files>` · `cd apps/api && uv run pytest <changed-test-files-or-nodeids>` | run only tests directly covering changed behavior; documentation-only changes are `SKIPPED`; never expand this row to the full suite |
+| Lint | `pnpm --filter web lint` · `cd apps/api && uv run ruff check app tests` · `bash -n <changed-shell-files>` | scope to touched workspace or scripts |
+| Type-check (affected) | `pnpm --filter web typecheck` · `cd apps/api && pnpm exec pyright app tests` | app pyright reads `[tool.pyright]` in `apps/api/pyproject.toml`; shell changes have no type-check row |
+| Focused tests | `pnpm --filter web exec vitest run <changed-test-files>` · `cd apps/api && uv run pytest <changed-test-files-or-nodeids>` · `bash scripts/tests/<changed-contract>.test.sh` | run only tests directly covering changed behavior; documentation-only changes are `SKIPPED`; never expand this row to the full suite |
 | LSP diagnostics | available: yes | `python-lsp` (Pyright) and `typescript-lsp` MCP servers; repository type-check commands remain complementary gate evidence |
 | API type regen (`openapi-typescript` or equivalent) | `pnpm api:check` | only when the public API surface or its generated consumer changed; fails on tracked drift |
 
@@ -211,6 +187,7 @@ default local shipping.
 |-------|---------|-----------------------|
 | Formatting | `pnpm format:check` | Prettier and Ruff; Markdown and generated/dependency-owned files are explicitly ignored |
 | Infrastructure / bootstrap | `docker compose -f infra/docker-compose.yml -f infra/docker-compose.override.yml up --build -d` | verified live in change 03 on Docker Desktop/BuildKit: all four services become healthy; frontend and `/health` return 200 through Nginx. Change 02 also verified `POST /api/tasks/{id}/check` and the `/api/tasks/` rate limit (`503` past its burst — Nginx's default `limit_req_status`, not `429`) |
+| Operations contracts | `bash scripts/tests/ops-stack-definition.test.sh && bash scripts/tests/ops-lifecycle.test.sh` | local/fake transport only; never connects to production or starts the operations project |
 | Migrations | `n/a` | content is git-based, not DB-backed (docs/SPEC.md §3); no schema exists yet to migrate |
 | Backend test suite | `cd apps/api && uv run pytest` | local only |
 | API contract drift | `pnpm api:check` | requires the frozen API and pnpm environments; tracked schema and generated TypeScript must match |

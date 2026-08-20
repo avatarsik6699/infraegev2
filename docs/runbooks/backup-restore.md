@@ -5,36 +5,15 @@ environment into a local Restic repository. Retention is 7 daily, 4 weekly and 3
 `infraege-backup.timer` runs daily; `infraege-restore-check.timer` performs a monthly restore into a
 disposable PostgreSQL container. Status is written to `/var/lib/infraege/backup-status.json`.
 Backup/restore lifecycle remains owned by `infraegev2/ops`; sre-kit may report sanitized freshness
-and restore-check events but never runs backup, restore or retention mutations. `ops/opsctl status`
-currently observes only timer state—the freshness and installed-restore proofs below remain the
-authoritative acceptance checks.
+and restore-check events but never runs backup, restore or retention mutations. The freshness and
+installed-restore proofs below remain the authoritative acceptance checks.
 
-`opsctl preflight` evaluates the freshness script and the last successful systemd restore result
-as sanitized readiness codes. Missing, stale or failed proof blocks migration planning, but the
-command never starts backup/restore and never reads their logs.
-
-The migration rehearsal consumes only synthetic hash-bound files and proves transaction ordering,
-cleanup and ownership rollback. It deliberately does not consume the Restic repository. The
-existing disposable PostgreSQL restore below remains the required data-fidelity proof before any
-production migration.
-
-`make ops-data-fidelity-drill` adds a no-production-data compatibility check using the exact target
-PostgreSQL/Beszel digests. It verifies Umami rows, sequence/view behavior and object ownership, then
-copies a stopped Beszel volume and requires the restored Hub to retain identity and return healthy.
-The command refuses image pulls and cleans its uniquely labeled containers, volumes and workdir on
-success or failure. It does not replace the production-snapshot checks later in this runbook.
-
-Run `make ops-snapshot-candidate` before any production-data drill. It inspects only Restic
-metadata over the pinned SSH wrapper and passes only when one immutable snapshot contains exactly
-one `umami.dump` and one `beszel-data` root under the same allowlisted backup workspace. A pass is
-not permission to transfer or restore data. Do not use `restic dump`/`restore` until the protected
-streaming change provides local temporary-storage cleanup and explicit operator evidence.
-
-`ops/observability/backup-cutover.json` names the future independent Umami database and Beszel
-volume, but `activation_status: inactive-definition-only` means the existing backup script below
-remains authoritative. Do not switch backup ownership merely because the new Compose renders.
-Before cutover, extend backup/restore to the `infraege-ops` project and prove both data sets in a
-disposable restore while retaining the pre-migration snapshot for rollback.
+The existing backup script remains authoritative while Umami/Beszel belong to the application
+Compose. The fresh-start cutover deliberately does not inspect, copy or restore their old data.
+After the clean `infraege-ops` stack is healthy, a separate change must split application and
+operations backups so each Compose project owns its own dump/volume restore path. Do not switch the
+timers before that new path has its own restore proof; legacy cleanup always requires separate
+approval.
 
 Checks:
 

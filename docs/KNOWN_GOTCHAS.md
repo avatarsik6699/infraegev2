@@ -11,65 +11,15 @@
 
 ## Gotcha Log
 
-### `opsctl plan` is intentionally not an apply alias
-
-- **Symptoms:** an operator expects `ops/opsctl plan` to repair a stopped component, or looks for
-  deployment actions in sre-kit after seeing drift in its monitoring UI.
-- **Root cause:** the current ops automation foundation is read-only. infraegev2 owns target
-  lifecycle while sre-kit owns observation; neither `plan` nor the sre-kit UI is authorized to
-  mutate the VPS.
-- **Fix:** use `inventory/status/plan` for evidence only. Follow the existing component runbook for
-  manual recovery. Add `apply` only in a later change that implements the declared single lock,
-  pre-mutation checkpoint, atomic revision and sanitized outbox contracts with rollback proof.
-
-### `opsctl apply` means sandbox transaction, not production access
-
-- **Symptoms:** a successful apply under `/tmp` is interpreted as proof that the VPS changed, or
-  an operator points `--sandbox-root` at an important local directory.
-- **Root cause:** Change 32 adds only the reconcile state machine and sandbox executor. The path is
-  intentionally explicit, but it is still a writable test state root; no SSH/Compose/systemd
-  mutating transport exists.
-- **Fix:** use a fresh disposable directory; opsctl marks it with `.infraege-ops-sandbox` and
-  rejects an existing non-empty unmarked path. Bind the saved plan to its exact inventory and
-  inspect checkpoint/revision/outbox evidence there. Production execution requires a later
-  approved change and must never be inferred from credentials found in the environment.
-
-### A green operations preflight is not production approval
-
-- **Symptoms:** `ready_for_migration_planning` is treated as permission to upload the bundle or
-  start `infraege-ops`.
-- **Root cause:** preflight validates prerequisites and current ownership only; it does not
-  exercise migration, rollback or operator approval.
-- **Fix:** require the separate migration/cutover change and explicit approval. The report's
-  `authorized_to_apply` field must remain false.
-
-### A successful migration rehearsal is not a database restore
-
-- **Symptoms:** a `status: rehearsed` report is used as evidence that a production Umami dump or
-  Beszel database is readable by the target versions.
-- **Root cause:** the sandbox harness proves transaction ordering, hashes, cleanup and ownership
-  rollback using synthetic files; it intentionally does not run Docker, Restic or PostgreSQL.
-- **Fix:** retain the rehearsal report as rollback-mechanics evidence, then separately run the
-  disposable Restic/PostgreSQL restore and Source cross-check before requesting cutover approval.
-
-### `pg_isready` can observe the temporary init server
-
-- **Symptoms:** a fresh PostgreSQL Docker container briefly passes `pg_isready`, then the next
-  `psql` command fails because the Unix socket disappeared.
-- **Root cause:** the official entrypoint starts and stops a temporary server while processing
-  initialization before replacing PID 1 with the final PostgreSQL server.
-- **Fix:** for disposable drills require PID 1 to be `postgres`, then require both `pg_isready` and
-  a trivial `SELECT 1` before creating source/target databases.
-
 ### A valid `infraege-ops` Compose render is not permission to start it
 
 - **Symptoms:** `make ops-config` passes and the inactive stack is started beside the current
   application Compose, causing port conflicts or two owners for Umami/Beszel data.
-- **Root cause:** Compose validation proves syntax, interpolation and isolation only. Until the
-  migration change, production ownership and backup paths still point at the application project.
-- **Fix:** use `ops-config` and `ops-bundle` as local evidence only. Require remote preflight, fresh
-  backup, disposable restore, maintenance window, data migration, source cross-check and explicit
-  cutover approval before any lifecycle command.
+- **Root cause:** Compose validation proves syntax and interpolation only. Production ownership,
+  ports, Nginx connectivity and backup paths still point at the application project.
+- **Fix:** use `ops-config` as local evidence only. Run `ops-install` only inside the separately
+  approved fresh-start cutover after legacy ports are freed; verify health and Sources before any
+  cleanup. No old Umami/Beszel data is transferred.
 
 ### Compose `up --build` can recreate dev containers even when every build layer is cached
 
@@ -273,9 +223,9 @@
 - **Root cause**: infraegev2 and sre-kit have separate Git/SDD lifecycles but jointly implement one
   operations system.
 - **Fix**: create linked active Backlog items in both repositories for cross-boundary work.
-  infraegev2 owns application telemetry and VPS/network prerequisites; sre-kit owns the core,
-  adapters, source configuration, presets and observability deployment. Migrate a running service
-  only through an explicit state/rollback/continuity plan.
+  infraegev2 owns application telemetry, VPS/network prerequisites and its target-specific Compose
+  lifecycle; sre-kit owns the core, adapters, Source configuration, normalization, alerts and UI.
+  Neither repository imports the other's internals or deployment credentials.
 
 ### PostgreSQL restore drills must recreate archived owner roles
 
@@ -391,8 +341,20 @@
 
 - **Symptoms:** `restic snapshots --latest 1 --json` returns several objects and selecting `.[0]`
   records an arbitrary older snapshot.
-- **Root cause:** each backup uses a unique `/var/backups/infraege/work.XXXXXX` source path, which forms
-  a distinct Restic snapshot group; `--latest 1` keeps one result for every group.
-- **Fix:** for the metadata-only candidate gate, read `restic snapshots --json` and select
-  `max_by(.time)` while retaining its full immutable ID. Do not infer a global latest snapshot from
-  array position or deprecated `short_id`.
+- **Root cause:** each backup uses a unique `/var/backups/infraege/work.XXXXXX` source path, which
+  forms a distinct Restic snapshot group; `--latest 1` keeps one result for every group.
+- **Fix:** when selecting a global newest backup, read `restic snapshots --json` and select
+  `max_by(.time)` while retaining its full immutable ID. Do not infer it from array position or
+  deprecated `short_id`.
+
+### Cross-project collector ingress must exist before either cutover Compose apply
+
+- **Symptoms:** an operations or application Compose render is valid, but `up` fails because
+  `infraege-observability-ingress` was not found; alternatively an operator expects
+  `docker compose down` to remove the shared network.
+- **Root cause:** both projects declare the network as `external`. Compose deliberately neither
+  creates nor removes external networks, which prevents one project from deleting connectivity
+  owned by the other.
+- **Fix:** `ops-install` creates the exact network if absent. The future cutover change must create
+  it before attaching application Nginx, then start `infraege-ops` only after legacy ports are free.
+  Network deletion remains a later explicitly approved cleanup action.

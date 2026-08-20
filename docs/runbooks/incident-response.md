@@ -7,12 +7,11 @@
    source strip.
 3. On the VPS use `docker compose ... ps`, `journalctl -u docker --since -30min`, disk/memory state,
    and `fail2ban-client status`. Never paste production env files or tokens into tickets/chat.
-   From a trusted workstation, `ops/opsctl inventory --json` and `status --json` provide the
-   sanitized read-only subset suitable for agent-assisted triage; unreachable SSH is returned as
-   a stable error code without raw remote stderr.
-4. Do not run `opsctl apply` during an incident. Its current executor is sandbox-only and cannot
-   repair production. Preserve the generated plan as evidence and use the component-specific
-   recovery procedure until a separately approved production executor exists.
+   From a trusted workstation, `make ops-status` reads the independent operations Compose status
+   over the pinned SSH transport without printing its protected environment.
+4. Do not run `ops-install` or `ops-update` merely to inspect an incident. Use the read-only status
+   command first; use `ops-rollback` only when the previous operations release is the confirmed
+   recovery target.
 
 ## Containment and recovery
 

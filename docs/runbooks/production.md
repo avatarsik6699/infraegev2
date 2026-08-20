@@ -6,24 +6,10 @@ public root/password SSH; keep the provider console open during any access chang
 place every required value using the ordered
 [production onboarding guide](production-onboarding.md) before following this summary.
 
-Before any separate migration/cutover change, persist the bundle manifest and run
-`make ops-preflight BUNDLE=...`. Resolve all blockers and retain JSON evidence from
-`ops/opsctl preflight --bundle-manifest ... --json`; preflight neither uploads the bundle nor
-authorizes production changes.
-
-The following gate is a local `opsctl rehearse-migration` run against disposable artifacts. Retain
-its JSON report, but do not treat `status: rehearsed` as data-fidelity evidence: real Restic restore,
-PostgreSQL validation, Source cross-check and explicit cutover approval remain separate gates.
-
-Run `make ops-data-fidelity-drill` only on a trusted local Docker host with the pinned target images
-already present. Retain its sanitized JSON output from `scripts/ops-data-fidelity-drill.sh --json`.
-It proves synthetic target-binary compatibility, not readability of the current production Restic
-snapshot and not approval to change VPS ownership.
-
-`make ops-snapshot-candidate` is the next read-only operator check. It validates only snapshot and
-path metadata for the Umami dump and Beszel tree, suppresses raw SSH/Restic stderr and always
-reports that no production mutation or data transfer occurred. It does not authorize the later
-streaming restore drill or cutover.
+The independent operations definition can be validated locally with
+`make ops-config ENV_FILE=... RELEASE=<full-sha>`. Do not run `ops-install` while the current
+application Compose still owns Umami/Beszel ports. The fresh-start cutover is a separate production
+change with an explicit maintenance sequence; no old analytics or metrics data is transferred.
 
 ## One-time bootstrap
 
@@ -90,28 +76,25 @@ readiness or the public page fails.
 
 ## Observability ownership
 
-This repository owns the observability target desired state, VPS access, WireGuard/journal
-prerequisites, backup/restore and lifecycle automation. Use `ops/opsctl inventory`, `status` or
-`plan` for a sanitized read-only view; use `--json` for agents. The foundation has no `apply`
-command and therefore cannot mutate production.
+This repository owns VPS access, WireGuard/journal prerequisites, backup/restore and the small
+target-specific operations package. `make ops-status` reads the installed `infraege-ops` Compose
+project through pinned SSH. `ops-install` and `ops-update` upload one Compose release plus a
+protected mode-600 environment, then run `pull` and `up --wait`; `ops-rollback` reapplies the
+previous release. They do not reference or mutate the application Compose project.
 
-The repository now contains `opsctl apply` only as a transactional sandbox harness. Supplying a
-production-looking directory does not make it a supported production action: the command has no
-SSH/Compose/systemd executor and must not be used as a substitute for these runbooks. A future
-production executor requires its own approved change, current restore proof and rollback drill.
-
-`ops/observability/compose.yml` is likewise an inactive future-state definition, not a deployment
-command. It uses project `infraege-ops`, independent Postgres/Beszel volumes, WireGuard-only UI/API
-bindings and the loopback read-only socket proxy. Validate and hash it locally with `make
-ops-config` and `make ops-bundle`. Do not start it while the current application Compose owns
-Umami/Beszel ports and data. The required order is remote preflight, fresh backup, disposable
-restore, maintenance window, data migration, source cross-check and explicit cutover approval.
+`ops/observability/compose.yml` uses empty independent Postgres/Beszel volumes, WireGuard-only
+UI/API bindings, the loopback read-only socket proxy and the external collector-ingress network.
+The lifecycle command creates that network if absent. The subsequent cutover change must update
+application Nginx, stop legacy observability services, start the clean stack, verify every health
+check and add Sources from `ops/observability/sre-kit-sources.example.json`. Legacy resources stay
+available for a short restart-based rollback and are removed only by a later approved cleanup.
 
 `/home/niquetamerewsl/projects/sre-kit` is the first-party sibling for the universal observability
 core, adapters, Source configuration, normalization, alerts and monitoring UI. It does not own
 infraegev2 deployment automation or target credentials. Beszel and Umami currently remain in the
-shared infraegev2 Compose; moving them to a separate infraege-ops project requires a later backup,
-rollback and uninterrupted-source migration. Do not recreate the retired `apps/ops` dashboard.
+shared infraegev2 Compose. Cutover starts the independent stack with empty data and retains legacy
+resources only for restart-based rollback; no data migration is performed. Do not recreate the
+retired `apps/ops` dashboard.
 
 ## Capacity and scale-up trigger
 

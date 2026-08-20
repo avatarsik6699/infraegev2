@@ -455,8 +455,8 @@ lifecycle-контуром:
   наружу не смотрит напрямую.
 - **Postgres** — отдельный контейнер, volume + регулярный `pg_dump`-бэкап (§8).
 - **Operations stack** — Umami, Beszel и необходимые gateways физически остаются на application
-  VPS, но их установка, конфигурация, backup/restore и release lifecycle принадлежат модулю
-  `ops/` этого репозитория. Позднее они выделяются в отдельный Compose project с собственными
+  VPS, но их установка, конфигурация, backup/restore и release lifecycle принадлежат небольшому
+  модулю `ops/` этого репозитория. Целевое состояние — отдельный Compose project с собственными
   volumes без переноса этой логики в [sre-kit](https://github.com/avatarsik6699/sre-kit).
 - **Граница infraegev2** — репозиторий владеет application telemetry и всей автоматизацией,
   зависящей от его VPS, routing, Compose и data layout. sre-kit получает только versioned Source
@@ -464,9 +464,11 @@ lifecycle-контуром:
   mutations.
 
 Термин `apps/ops` далее означает логический operations-контур, а не возвращение удалённого Node
-BFF/React dashboard и не новый pnpm workspace. Канонический код автоматизации живёт под `ops/` и
-предоставляет repo-native `opsctl`; UI мониторинга остаётся в sre-kit без Apply/Rollback действий.
-Изменения интеграционного контракта получают связанные active Backlog items в обоих репозиториях.
+BFF/React dashboard и не новый pnpm workspace. Канонический пакет живёт под `ops/`: Compose,
+защищённый environment, короткие lifecycle-скрипты и Source template. UI мониторинга остаётся в
+sre-kit без Apply/Rollback действий. Универсальный desired-state/reconcile engine для одного VPS
+не является частью архитектуры; изменения общего интеграционного контракта получают связанные
+active Backlog items в обоих репозиториях.
 
 **Публичный edge:** `infraege.ru` зарегистрирован и использует DNS reg.ru. На первом релизе трафик
 идёт напрямую `infraege.ru → Nginx`, без CDN; `www.infraege.ru` перенаправляется на canonical apex.
@@ -517,7 +519,7 @@ Nginx выставляет `Cache-Control`/`ETag` для хэшированно�
 ### 7.3 Operations and sre-kit integration contract
 
 ```text
-infraegev2 opsctl ── pinned SSH/Compose/systemd ──> application VPS operations stack
+infraegev2 ops package ── pinned SSH/Compose/systemd ──> application VPS operations stack
        │
        └─ registration + sanitized Check/Event ──> sre-kit (local or management VPS)
 
@@ -532,87 +534,49 @@ application VPS
 
 - application release не запускает `docker compose up/down` для operations stack и не удаляет его
   containers/volumes через `--remove-orphans`; operations release не меняет application containers;
-- target stack имеет детерминированный installation id, Compose project, remote directory, labels,
-  healthchecks и private-only bindings; повторный apply является no-op/reconcile, а не создаёт
-  второй stack;
+- target stack имеет фиксированный Compose project, release directory, labels, healthchecks и
+  private-only bindings; повторный `docker compose up` обновляет тот же stack, а не создаёт второй;
 - публичный Umami collector остаётся узким same-origin маршрутом Nginx к private target endpoint;
   UI/admin ports не публикуются в Интернет;
 - приложение публикует только стабильные сигналы: health/version endpoints, structured journald
-  labels и privacy-safe Umami collector. `opsctl` и application deploy не зависят от доступности
+  labels и privacy-safe Umami collector. Ops lifecycle и application deploy не зависят от доступности
   sre-kit;
 - deployment secrets принадлежат защищённому infraegev2 ops environment; adapter secrets
   передаются в sre-kit только через его versioned registration API и никогда не попадают в git;
-- перенос существующих Umami/Beszel выполняется отдельным linked change: backup, inventory,
-  перенос Postgres/volumes, запуск нового stack, cross-check Sources, затем удаление ownership из
-  application Compose. Rollback восстанавливает старый Compose ownership и исходные данные;
+- по решению архитектора beta-данные существующих Umami/Beszel не переносятся: новый operations
+  stack стартует с пустыми volumes и новым набором Sources. Старые containers/volumes сохраняются
+  только на ограниченный rollback-период и удаляются позднее отдельным явно destructive шагом;
 - локальный sre-kit может быть выключен без остановки target tools или ops automation, но
   polling/alerts при
   этом не гарантируются. Полная независимость от падения application VPS достигается только после
   размещения monitoring core на отдельном always-on host.
 
-`opsctl` развивается через раздельные execution stages. Read-only `inventory/status/plan` может
-работать с production через pinned SSH. Reconcile engine сначала исполняется только через явно
-указанный sandbox state root: он принимает сохранённый plan, повторно вычисляет его fingerprint из
-desired state и inventory, берёт один exclusive lock, пишет checkpoint до первого effect, атомарно
-публикует revision и создаёт только schema-validated sanitized outbox records. Ошибка любого effect
-восстанавливает checkpoint; повтор того же plan после успеха является no-op.
+Operations package намеренно остаётся небольшим. `config` локально проверяет Compose с защищённым
+env; `status` читает состояние установленного project через pinned SSH; `install` и `update`
+передают один Compose release и запускают `pull` + `up --wait`; `rollback` повторно применяет
+предыдущий release. Эти команды не моделируют собственный desired state, effect graph, checkpoint,
+revision или outbox: декларативным состоянием сервисов уже владеет Compose.
 
-Подключение mutating SSH/Compose/systemd executor, передача deployment secrets и production
-cutover не являются неявным продолжением sandbox engine: это отдельные changes с explicit operator
-approval, preflight текущего revision, установленным restore proof и rollback drill. Команда без
-явно выбранного executor должна fail closed; production transport никогда не выбирается по
-умолчанию или только по наличию credentials в environment.
+Release содержит только Compose definition. Значения передаются отдельным mode-600 environment и
+хранятся на VPS по release id; они не входят в archive или git. Operations command никогда не
+меняет application Compose, а application deploy до отдельного cutover change не подключает новый
+stack. `install` нельзя запускать параллельно с legacy Umami/Beszel из-за занятых ports.
 
-Будущий operations release собирается из repository-owned immutable bundle: отдельного Compose
-project `infraege-ops`, secret-free manifest с hashes и versioned backup/cutover metadata. Его
-Postgres и volumes не разделяют lifecycle или имена с application Compose; Umami/Beszel admin
-ports остаются привязаны только к WireGuard, Docker socket доступен агенту только через
-read-only proxy. Наличие и локальная валидация bundle не разрешают запуск на VPS: пока Umami/Beszel
-принадлежат текущему application Compose, новый stack нельзя поднимать параллельно из-за port/data
-ownership. Remote preflight, data migration и cutover остаются отдельными последовательными gates.
+Публичный same-origin Umami collector после будущего переключения использует одну заранее
+созданную external Docker network `infraege-observability-ingress`. Оба Compose project только
+подключаются к ней; Umami получает стабильный alias `umami`, а Nginx остаётся также в application
+network для web/api. Создание сети — одна явная lifecycle-операция, а не отдельная модель ресурсов.
 
-Remote preflight является отдельной read-only стадией до любой миграции. Он связывает
-`bundle_id` проверенного локального bundle с санитизированным снимком VPS и проверяет только
-наличие обязательных host tools, WireGuard interface, текущую Compose ownership, отсутствие
-запущенного `infraege-ops`, доступность целевых каталогов, установленные backup/restore units и
-результат freshness/restore proof. Удалённый collector возвращает закрытый набор кодов, а не
-environment, логи, пути credentials или raw stderr. Итоговый versioned report различает
-`pass`/`warning`/`blocker`, всегда содержит `authorized_to_apply: false` и не является разрешением
-на upload, migration, Compose/systemd mutation или cutover. Неизвестная, malformed или
-недоступная проверка fail closed как blocker.
+Fresh-start cutover оформляется следующим production change: создать shared network, остановить
+legacy observability services, подключить application Nginx, запустить чистый `infraege-ops`,
+зарегистрировать Sources и проверить dashboard. Старые containers/volumes сохраняются на короткий
+rollback-период. Их удаление, перенос старых данных и изменение backup ownership не выполняются
+этим контрактом и требуют отдельных явно одобренных действий.
 
-До появления production migration executor перенос репетиционно исполняется только в явно
-маркированном disposable sandbox. Rehearsal принимает точные bundle/preflight/source-manifest,
-проверяет их installation/bundle binding и SHA-256 каждого тестового artifact, берёт exclusive
-lock, сохраняет checkpoint текущего owner, копирует artifacts в отдельную staged ownership,
-проверяет целевые hashes, моделирует cutover и обязательно выполняет rollback к исходному owner с
-удалением staged data. Успешный report означает только доказанную локальную обратимость,
-`production_mutated: false` и `authorized_to_cutover: false`; он не заменяет реальный disposable
-Postgres/Restic restore, source cross-check или operator approval. Любая ошибка оставляет исходные
-fixtures неизменными и завершает rollback до публикации результата.
-
-Следующий data-fidelity gate использует только локальный Docker и генерируемые синтетические
-данные. Он запускает точные digest-версии PostgreSQL и Beszel из target stack под уникальными
-drill labels/names, создаёт Umami-owned таблицу, sequence и view, выполняет `pg_dump -Fc` и
-`pg_restore --exit-on-error` в новую БД, затем проверяет значения и ownership. Отдельный Beszel
-volume инициализируется реальным Hub, останавливается перед byte-copy, восстанавливается в новый
-volume и должен повторно пройти `/api/health` с сохранённой instance identity. Все ports только
-loopback с динамическим host port; containers, volumes и host workspace удаляются как при успехе,
-так и при ошибке. Report содержит только синтетические counts/booleans,
-`production_data_used: false` и `authorized_to_cutover: false`. Этот gate подтверждает
-совместимость target binaries и restore mechanics, но не читает production Restic и не заменяет
-финальный drill на snapshot-копии или Source cross-check.
-
-Перед копированием production data отдельный read-only snapshot-candidate gate выбирает один
-полный Restic snapshot по immutable full id и проверяет, что именно в нём одновременно присутствуют
-`umami.dump` и корень `beszel-data`. Удалённая сторона выполняет только `restic snapshots` и
-`restic ls`; локальный parser принимает закрытый TSV-протокол, allowlist путей backup workspace и
-публикует schema-validated санитизированный report. Gate не читает содержимое artifacts, не
-выгружает dump/volume, не пишет на VPS и всегда содержит `production_mutated: false`,
-`data_transferred: false`, `authorized_to_restore: false` и `authorized_to_cutover: false`.
-Недоступный SSH, неоднозначные/missing artifacts, malformed metadata или неожиданный путь дают
-fail-closed blocker. Фактический streaming в защищённый локальный temporary workspace и disposable
-restore остаются следующим отдельным change.
+`ops/observability/sre-kit-sources.example.json` — secret-free операторская подсказка, а не новый
+универсальный deployment contract. Поля сверяются с manifest соответствующего adapter, но реальные
+IDs/accounts/secrets вводятся в sre-kit. Недоступность sre-kit не блокирует Compose lifecycle;
+после восстановления core Sources снова начинают polling существующих target endpoints.
 
 ---
 
@@ -623,8 +587,8 @@ restore остаются следующим отдельным change.
 | Security headers / CORS | Rate limiting чекер-эндпоинта на Nginx: `limit_req_zone` 20 req/min/IP, burst 5, `nodelay` (см. §4, §11.2 источника) — против автоматизированного перебора банка ответов; конкретную цифру пересмотреть по факту логов после запуска. Временный public root/password SSH защищён только уникальным длинным паролем, pinned host key, UFW, fail2ban и GitHub Environment approval; риск полного захвата VPS при компрометации пароля принят архитектором до отдельного возврата key-only access. |
 | Accessibility target | Foundation и lab не имеют serious/critical axe violations; lesson outline сохраняет вложенный semantic list, anchors, keyboard focus, различимый текущий пункт и корректный source order, а сложный визуал имеет видимую полную текстовую альтернативу |
 | Performance budget | LCP < 2.5s, CLS < 0.1, INP < 200ms на мобильном 4G-профиле; release evidence измеряет `/` и первый опубликованный `/ege/16-rekursiya`, отдельно проверяет cold-load font/layout shifts и не подменяет route-level метрики общей оценкой технической страницы |
-| Observability | Application deploy и operations stack имеют независимые Compose projects, volumes и rollback. infraegev2 `opsctl` владеет target desired state и pinned-SSH automation; sre-kit работает вне monitored VPS и владеет только ingestion, adapters, alerts и UI. До linked migration текущий общий Compose явно считается переходным состоянием |
-| Backup / restore | Локальный restic на VPS: daily `pg_dump -Fc`, Beszel/config snapshots, 7 daily + 4 weekly + 3 monthly, freshness marker и ежемесячный restore drill; off-site storage отложен с явно принятым риском |
+| Observability | Application deploy и operations stack имеют независимые Compose projects, volumes и rollback. infraegev2 владеет небольшим Compose/SSH operations package; sre-kit работает вне monitored VPS и владеет только ingestion, adapters, alerts и UI. До fresh-start cutover текущий общий Compose явно считается переходным состоянием |
+| Backup / restore | До cutover действует текущий локальный Restic lifecycle; чистый `infraege-ops` получает отдельный backup/restore lifecycle после activation, без импорта старых Umami/Beszel artifacts. 7 daily + 4 weekly + 3 monthly и off-site risk сохраняются |
 | SEO | `/`, `/privacy` и published topics имеют canonical, уникальные metadata, SSR content и входят в sitemap/prerender; lab и review routes остаются unlisted, `noindex,nofollow` и исключены из public discovery; Lighthouse SEO для публичных маршрутов проходит без ошибок |
 | Mobile / no-JS readability | Lab и topic lesson сохраняют текст, последовательные стадии визуала, подписи, решения и section anchors в SSR HTML; интерактивная проверка остаётся progressive enhancement |
 | Client resilience / API drift | Route failures восстанавливаемы без белого экрана; loading/empty/error/not-found состояния доступны с клавиатуры и скринридера; OpenAPI schema/types drift ломает gate до merge; runtime HTTP имеет timeout/abort и не делает скрытый retry мутаций |

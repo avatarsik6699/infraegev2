@@ -2,39 +2,31 @@
 set -Eeuo pipefail
 
 repo_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)
-compose_file="$repo_dir/ops/observability/compose.yml"
-builder="$repo_dir/ops/observability/build-bundle.py"
 test_root=$(mktemp -d)
 trap 'rm -rf -- "$test_root"' EXIT
+env_file="$test_root/ops.env"
+release=0123456789abcdef0123456789abcdef01234567
 
-synthetic_env=(
-  OPS_RELEASE=0123456789abcdef
-  OPS_POSTGRES_PASSWORD=synthetic-postgres
-  UMAMI_APP_SECRET=synthetic-app
-  BESZEL_AGENT_TOKEN=synthetic-token
-  BESZEL_AGENT_KEY=synthetic-key
-  WIREGUARD_IP=10.77.0.1
-)
-compose=(docker compose --env-file /dev/null --project-name infraege-ops -f "$compose_file")
+cat >"$env_file" <<'EOF'
+OPS_POSTGRES_PASSWORD=synthetic-postgres-password
+UMAMI_APP_SECRET=synthetic-umami-secret
+BESZEL_AGENT_TOKEN=synthetic-agent-token
+BESZEL_AGENT_KEY=synthetic-agent-key
+WIREGUARD_IP=10.77.0.1
+EOF
+chmod 600 "$env_file"
 containers_before=$(docker ps --all --quiet --filter label=com.docker.compose.project=infraege-ops)
 
-env "${synthetic_env[@]}" "${compose[@]}" config --quiet
-env "${synthetic_env[@]}" "${compose[@]}" config --format json >"$test_root/rendered.json"
-env "${synthetic_env[@]}" make -s -C "$repo_dir" ops-config
+OPS_RELEASE=$release docker compose --env-file "$env_file" --project-name infraege-ops \
+  -f "$repo_dir/ops/observability/compose.yml" config --format json >"$test_root/compose.json"
+"$repo_dir/ops/opsctl" config --env-file "$env_file" --release "$release" >/dev/null
 
-jq -e '
-  .name == "infraege-ops" and
+jq -e --arg release "$release" '
   (.services | keys) == ["beszel","beszel-agent","docker-socket-proxy","postgres","umami"] and
-  (.services | has("api") | not) and
-  (.services | has("nginx") | not) and
-  (.services | has("web") | not) and
-  .networks["ops-internal"].internal == true and
-  (.volumes | keys) == ["beszel-data","beszel-socket","ops-postgres-data"] and
-  ([.volumes[].name] | all(startswith("infraege-ops_")))
-' "$test_root/rendered.json" >/dev/null
-
-jq -e '
+  .services.postgres.labels["com.infraege.ops.component"] == "ops-postgres" and
+  .services.umami.labels["com.infraege.ops.revision"] == $release and
   (.services.postgres | has("ports") | not) and
+  .networks["ops-internal"].internal == true and
   .services.umami.ports[0].host_ip == "10.77.0.1" and
   .services.beszel.ports[0].host_ip == "10.77.0.1" and
   .services["docker-socket-proxy"].ports[0].host_ip == "127.0.0.1" and
@@ -43,68 +35,51 @@ jq -e '
   .services["beszel-agent"].environment.DOCKER_HOST == "tcp://127.0.0.1:2375" and
   .services.postgres.healthcheck.test[1] == "pg_isready -U umami -d umami" and
   (.services.umami.healthcheck.test[1] | contains("/api/heartbeat")) and
-  .services.beszel.labels["com.infraege.ops.health.target"] == "http://beszel:8090/api/health"
-' "$test_root/rendered.json" >/dev/null
+  ([.services[].image] | all(test("@sha256:[a-f0-9]{64}$"))) and
+  ([.services[].labels["com.infraege.ops.managed"]] | all(. == "true")) and
+  .networks["observability-ingress"].external == true and
+  .networks["observability-ingress"].name == "infraege-observability-ingress" and
+  .services.umami.networks["observability-ingress"].aliases == ["umami"] and
+  (.services.postgres.networks | has("observability-ingress") | not) and
+  (.volumes | keys) == ["beszel-data","beszel-socket","ops-postgres-data"]
+' "$test_root/compose.json" >/dev/null
 
-jq -e '
-  [.services[].image] | all(test("@sha256:[a-f0-9]{64}$"))
-' "$test_root/rendered.json" >/dev/null
-jq -e '
-  [.services[].labels["com.infraege.ops.managed"]] | all(. == "true")
-' "$test_root/rendered.json" >/dev/null
-
-if env -u UMAMI_APP_SECRET \
-  OPS_RELEASE=0123456789abcdef \
-  OPS_POSTGRES_PASSWORD=synthetic-postgres \
-  BESZEL_AGENT_TOKEN=synthetic-token \
-  BESZEL_AGENT_KEY=synthetic-key \
-  WIREGUARD_IP=10.77.0.1 \
-  "${compose[@]}" config --quiet >"$test_root/missing.out" 2>"$test_root/missing.err"; then
+if env -u UMAMI_APP_SECRET OPS_RELEASE=$release \
+  OPS_POSTGRES_PASSWORD=synthetic-postgres BESZEL_AGENT_TOKEN=synthetic-token \
+  BESZEL_AGENT_KEY=synthetic-key WIREGUARD_IP=10.77.0.1 \
+  docker compose --env-file /dev/null --project-name infraege-ops \
+  -f "$repo_dir/ops/observability/compose.yml" config --quiet \
+  >"$test_root/missing.out" 2>"$test_root/missing.err"; then
   echo 'operations Compose accepted a missing required variable' >&2
   exit 1
 fi
 grep -Fq 'UMAMI_APP_SECRET is required' "$test_root/missing.err"
 
-grep -Ev '^(#|$)' "$repo_dir/ops/observability/env.contract" | sort \
-  >"$test_root/contract-names"
-printf '%s\n' BESZEL_AGENT_KEY BESZEL_AGENT_TOKEN OPS_POSTGRES_PASSWORD OPS_RELEASE \
-  UMAMI_APP_SECRET WIREGUARD_IP | sort >"$test_root/expected-names"
-cmp "$test_root/expected-names" "$test_root/contract-names"
+grep -Ev '^(#|$)' "$repo_dir/ops/observability/env.contract" | sort >"$test_root/actual-env"
+printf '%s\n' \
+  BESZEL_AGENT_KEY BESZEL_AGENT_TOKEN OPS_POSTGRES_PASSWORD UMAMI_APP_SECRET WIREGUARD_IP |
+  sort >"$test_root/expected-env"
+cmp "$test_root/expected-env" "$test_root/actual-env"
 ! grep -Eq '^[A-Z0-9_]+=' "$repo_dir/ops/observability/env.contract"
 
-python3 "$builder" >"$test_root/bundle-a.json"
-python3 "$builder" >"$test_root/bundle-b.json"
-make -s -C "$repo_dir" ops-bundle >"$test_root/bundle-make.json"
-cmp "$test_root/bundle-a.json" "$test_root/bundle-b.json"
-cmp "$test_root/bundle-a.json" "$test_root/bundle-make.json"
 jq -e '
   .schema_version == 1 and
-  .installation_id == "infraege-production" and
-  .compose_project == "infraege-ops" and
-  (.bundle_id | test("^[a-f0-9]{64}$")) and
-  (.assets | length >= 10) and
-  ([.assets[].path] | index("ops/observability/compose.yml") != null)
-' "$test_root/bundle-a.json" >/dev/null
-python3 "$builder" --check "$test_root/bundle-a.json"
-python3 "$builder" --output "$test_root/bundle-output.json" >/dev/null
-cmp "$test_root/bundle-a.json" "$test_root/bundle-output.json"
-! grep -Eq 'synthetic-(postgres|app|token|key)' "$test_root/bundle-a.json"
+  .target_id == "infraegev2-production" and
+  ([.sources[].adapter_name] | sort) ==
+    ["beszel-api","fail2ban-ssh","host-metrics-ssh","journal-http","umami-http","uptime-http"] and
+  ([.sources[] | select(.adapter_name == "journal-http")][0].config.host == "10.77.0.1") and
+  ([.sources[] | select(.adapter_name == "umami-http")][0].config.password == "<create-in-sre-kit>")
+' "$repo_dir/ops/observability/sre-kit-sources.example.json" >/dev/null
 
-jq -e '
-  .activation_status == "inactive-definition-only" and
-  .parallel_start_allowed == false and
-  .target_project == "infraege-ops" and
-  .future_data.database_name == "umami" and
-  (.required_gates | index("fresh-backup") != null) and
-  (.required_gates | index("cutover-approval") != null)
-' "$repo_dir/ops/observability/backup-cutover.json" >/dev/null
+for file in \
+  "$repo_dir/ops/opsctl" \
+  "$repo_dir/ops/observability/manage.sh" \
+  "$repo_dir/ops/observability/remote-deploy.sh" \
+  "$repo_dir/ops/observability/remote-status.sh"; do
+  bash -n "$file"
+done
 
-if rg -n '\b(docker compose (up|create|start|pull)|docker (run|create|start)|production-root-ssh)\b' \
-  "$repo_dir/ops/observability/build-bundle.py" "$repo_dir/ops/observability/compose.yml"; then
-  echo 'stack definition test contains a forbidden lifecycle or production command' >&2
-  exit 1
-fi
 containers_after=$(docker ps --all --quiet --filter label=com.docker.compose.project=infraege-ops)
 [[ $containers_before == "$containers_after" ]]
 
-echo 'independent operations stack definition tests: PASS'
+echo 'operations stack definition test: PASS'

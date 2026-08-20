@@ -246,49 +246,27 @@ PostgreSQL, Umami, Beszel, journald/fail2ban и Restic. GitHub Actions выпо�
 вручную для выбранного SHA через защищённое environment `production`, проверяет smoke/readiness и
 откатывает неуспешный релиз.
 
-Автоматизация operations-контура принадлежит этому репозиторию: `ops/opsctl inventory`, `status`
-и `plan` читают pinned-SSH inventory, сравнивают его с versioned secret-free desired state и не
-изменяют VPS. Будущий production apply также останется infraegev2-specific; сейчас реализован
-только sandbox executor для проверки lock/checkpoint/revision/outbox и rollback контрактов.
+Operations-контур принадлежит этому репозиторию, но намеренно остаётся маленьким:
+`ops/observability/compose.yml`, контракт защищённого env, SSH-backed команды
+`config/status/install/update/rollback` и secret-free Source template. Docker Compose является
+desired state сервисов; отдельного plan/apply engine, migration harness или deployment UI нет.
 
-Транзакционный reconcile engine теперь доступен только для disposable sandbox: сначала сохраните
-`ops/opsctl plan --json`, затем передайте этот файл, соответствующий inventory и явный
-`--sandbox-root` в `ops/opsctl apply`. Engine проверяет fingerprint, блокирует stale/destructive
-plan по умолчанию, создаёт checkpoint, атомарный revision и sanitized outbox, а при ошибке
-откатывает sandbox. Новый/пустой state root получает marker; существующий непустой каталог без
-marker отклоняется. Это не production apply: SSH/Compose/systemd executor отсутствует.
+`make ops-config ENV_FILE=... RELEASE=<full-sha>` локально проверяет definition.
+`make ops-status` читает установленный project через pinned SSH. `ops-install`/`ops-update`
+передают один release и выполняют `pull` + `up --wait`; `ops-rollback` возвращает предыдущий
+release. Эти команды никогда не меняют application Compose.
 
-Неактивное определение будущего отдельного stack находится в
-`ops/observability/compose.yml`. `make ops-config` только render/validate его с переданными через
-environment защищёнными значениями, а `make ops-bundle` печатает детерминированный secret-free
-manifest и hashes repository-owned assets. Эти команды не запускают и не загружают контейнеры;
-параллельный старт рядом с текущим application Compose запрещён до отдельной миграции.
-
-Перед проектированием этой миграции сохраните manifest через
-`python3 ops/observability/build-bundle.py --output /tmp/infraege-ops-bundle.json` и запустите
-`make ops-preflight BUNDLE=/tmp/infraege-ops-bundle.json`. Это только санитизированная read-only
-проверка; даже полностью зелёный отчёт содержит `authorized_to_apply: false`.
-
-После сохранения зелёного preflight можно отдельно проверить transaction sequence командой
-`make ops-rehearse-migration BUNDLE=... PREFLIGHT=... SOURCE=... SANDBOX_ROOT=...`. Она принимает
-только hash-bound disposable artifacts, моделирует смену owner и обязательно откатывает её внутри
-маркированного sandbox. Это не реальный restore и не разрешение на production cutover.
-
-Совместимость target binaries проверяется отдельно через `make ops-data-fidelity-drill`. Команда
-использует только синтетическую Umami-схему и новый Beszel volume, точные локальные digest-образы,
-динамические loopback-порты и удаляет все созданные ресурсы. Она не читает Restic/production data;
-успешный результат по-прежнему содержит `authorized_to_cutover: false`.
-
-Следующий metadata-only gate запускается через `make ops-snapshot-candidate`. Он по fixed
-read-only SSH protocol выбирает immutable full ID последнего Restic snapshot и подтверждает, что
-один backup workspace содержит `umami.dump` и `beszel-data`. Команда не читает содержимое этих
-artifacts, не переносит данные и не разрешает restore/cutover; protected streaming и disposable
-restore выполняются только отдельным последующим change.
+По решению архитектора существующие beta-данные Umami/Beszel не переносятся. Новый stack получает
+пустые volumes; старые resources сохраняются только для короткого rollback-периода и удаляются
+позднее отдельным подтверждённым действием. Пока live Umami/Beszel остаются в application Compose,
+`ops-install` запускать нельзя из-за занятых ports. Переключение Nginx и backup ownership —
+отдельный production change.
 
 First-party sibling [sre-kit](https://github.com/avatarsik6699/sre-kit) остаётся универсальным
 ядром наблюдаемости: adapters, Source configuration, normalization, alerts и monitoring UI. Он
 читает источники infraegev2 через private API/WireGuard/read-only SSH, но не устанавливает и не
-настраивает target stack. Deployment credentials и target lifecycle в sre-kit не передаются.
+настраивает target stack. Deployment credentials и target lifecycle в sre-kit не передаются;
+`ops/observability/sre-kit-sources.example.json` служит только операторской подсказкой.
 
 Runbook’и: [DNS/TLS](docs/runbooks/dns-tls.md),
 [backup/restore](docs/runbooks/backup-restore.md),

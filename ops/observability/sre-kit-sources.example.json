@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "target_id": "infraegev2-production",
+  "note": "Operator-owned template, not a direct API payload. Replace placeholders in the sre-kit UI; keep secrets in sre-kit only.",
+  "sources": [
+    {
+      "adapter_name": "uptime-http",
+      "config": {
+        "url": "https://infraege.ru/health/ready",
+        "method": "GET",
+        "expect_status": 200,
+        "tls_expiry_warn_days": 14
+      }
+    },
+    {
+      "adapter_name": "host-metrics-ssh",
+      "config": {
+        "host": "2.26.8.245",
+        "port": 22,
+        "username": "root",
+        "auth_method": "password",
+        "secret": "<create-in-sre-kit>"
+      }
+    },
+    {
+      "adapter_name": "fail2ban-ssh",
+      "config": {
+        "host": "2.26.8.245",
+        "port": 22,
+        "username": "root",
+        "auth_method": "password",
+        "secret": "<create-in-sre-kit>",
+        "lookback_seconds": 120
+      }
+    },
+    {
+      "adapter_name": "journal-http",
+      "config": {
+        "host": "10.77.0.1",
+        "port": 19531,
+        "https": false,
+        "min_priority": 6,
+        "lookback_seconds": 120,
+        "parse_json_message": true
+      }
+    },
+    {
+      "adapter_name": "beszel-api",
+      "config": {
+        "base_url": "http://10.77.0.1:8090",
+        "system_id": "<select-in-beszel>",
+        "email": "<create-in-beszel>",
+        "password": "<create-in-sre-kit>",
+        "auth_collection": "_superusers",
+        "lookback_seconds": 120
+      }
+    },
+    {
+      "adapter_name": "umami-http",
+      "config": {
+        "base_url": "http://10.77.0.1:3001",
+        "website_id": "<create-in-umami>",
+        "username": "<create-in-umami>",
+        "password": "<create-in-sre-kit>",
+        "lookback_seconds": 3600,
+        "tracked_events": []
+      }
+    }
+  ]
+}

@@ -21,7 +21,7 @@ services:
       retries: 5
     labels:
       <<: *ops-labels
-      com.infraege.ops.component: postgres
+      com.infraege.ops.component: ops-postgres
     networks: [ops-internal]
 
   umami:
@@ -53,7 +53,10 @@ services:
       com.infraege.ops.component: umami
       com.infraege.ops.health.kind: http
       com.infraege.ops.health.target: http://umami:3000/api/heartbeat
-    networks: [ops-internal]
+    networks:
+      ops-internal:
+      observability-ingress:
+        aliases: [umami]
 
   beszel:
     image: henrygd/beszel:0.18.7@sha256:a849ad80814b6a1a3be665304dcace5d4854b3bed7bde4dd1227e8ce1b82d477
@@ -117,6 +120,9 @@ services:
 networks:
   ops-internal:
     internal: true
+  observability-ingress:
+    external: true
+    name: infraege-observability-ingress
 
 volumes:
   ops-postgres-data:

@@ -5,9 +5,9 @@ workflows. The current beta contract deliberately uses public root/password SSH 
 requests re-hardening. Generate secrets on the administration laptop or provider console; never
 paste passwords or `/etc/infraege/production.env` into the repository or chat.
 
-Operations onboarding ends with `make ops-preflight BUNDLE=...` against a locally generated
-immutable manifest. `ready_for_migration_planning` is not cutover approval: upload, migration and
-all remote mutations require a separate change.
+Operations onboarding prepares a separate mode-600 env file and validates it with
+`make ops-config ENV_FILE=... RELEASE=<full-sha>`. Do not run `ops-install` while the application
+Compose still owns the live Umami/Beszel ports; activation requires a separate cutover change.
 
 ## Confirmed non-secret inputs
 
@@ -160,14 +160,22 @@ WIREGUARD_IP=10.77.0.1 ops/setup-journal-gateway.sh
 sre-kit's `host-metrics-ssh` and `fail2ban-ssh` sources use `root`, password authentication and the
 public SSH endpoint. Beszel, Umami and the journal gateway remain private WireGuard services.
 These are read-only adapter connections: sre-kit does not receive target lifecycle ownership.
-After onboarding, run `ops/opsctl inventory`, `status` and `plan` to inspect the infraegev2-owned
-operations stack. There is no `apply` command in this foundation; production changes remain
-manual/runbook-owned until a later reconcile change provides rollback and approval gates.
+After cutover, run `make ops-status` to inspect the infraegev2-owned operations Compose project.
+The command is read-only; install, update and rollback remain explicit operator actions and are
+never exposed through sre-kit's UI.
 
 The repository also contains an inactive `infraege-ops` Compose definition. Onboarding the current
 VPS does not start it and does not create a second Umami/Beszel installation. Its
 `env.contract` records names only; actual values remain in the protected operations environment.
-Use the definition only for local render/bundle validation until the migration runbook is approved.
+Create `~/.config/infraege/production/ops.env` with exactly those names, independently generated
+values and mode `600`; do not copy it into the checkout. Use the definition only for local render
+validation until the fresh-start cutover is approved:
+
+```bash
+make ops-config \
+  ENV_FILE="$HOME/.config/infraege/production/ops.env" \
+  RELEASE="$(git rev-parse HEAD)"
+```
 
 ## 4. Generate application and Restic secrets
 
