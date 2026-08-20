@@ -10,6 +10,9 @@
    From a trusted workstation, `ops/opsctl inventory --json` and `status --json` provide the
    sanitized read-only subset suitable for agent-assisted triage; unreachable SSH is returned as
    a stable error code without raw remote stderr.
+4. Do not run `opsctl apply` during an incident. Its current executor is sandbox-only and cannot
+   repair production. Preserve the generated plan as evidence and use the component-specific
+   recovery procedure until a separately approved production executor exists.
 
 ## Containment and recovery
 

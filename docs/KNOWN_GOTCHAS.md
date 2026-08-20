@@ -22,6 +22,18 @@
   manual recovery. Add `apply` only in a later change that implements the declared single lock,
   pre-mutation checkpoint, atomic revision and sanitized outbox contracts with rollback proof.
 
+### `opsctl apply` means sandbox transaction, not production access
+
+- **Symptoms:** a successful apply under `/tmp` is interpreted as proof that the VPS changed, or
+  an operator points `--sandbox-root` at an important local directory.
+- **Root cause:** Change 32 adds only the reconcile state machine and sandbox executor. The path is
+  intentionally explicit, but it is still a writable test state root; no SSH/Compose/systemd
+  mutating transport exists.
+- **Fix:** use a fresh disposable directory; opsctl marks it with `.infraege-ops-sandbox` and
+  rejects an existing non-empty unmarked path. Bind the saved plan to its exact inventory and
+  inspect checkpoint/revision/outbox evidence there. Production execution requires a later
+  approved change and must never be inferred from credentials found in the environment.
+
 ### Compose `up --build` can recreate dev containers even when every build layer is cached
 
 - **Symptoms:** a stopped development stack still runs the full build progress on `make dev`, all

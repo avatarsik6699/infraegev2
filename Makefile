@@ -27,7 +27,7 @@ STOP_TIMEOUT ?= 10
 .PHONY: help dev rebuild stop down restart logs ps config clean \
 	tunnel-up tunnel-down tunnel-status \
 	ops-open-beszel ops-open-umami ops-configure-beszel-agent \
-	ops-repair-beszel-env ops-inventory ops-status ops-plan
+	ops-repair-beszel-env ops-inventory ops-status ops-plan ops-apply-sandbox
 
 help:
 	@echo "infraege local Docker workflow"
@@ -57,6 +57,7 @@ help:
 	@echo "  make ops-inventory               Read sanitized production operations inventory"
 	@echo "  make ops-status                  Compare production operations state with desired state"
 	@echo "  make ops-plan                    Print a non-mutating operations reconciliation plan"
+	@echo "  make ops-apply-sandbox PLAN=... INVENTORY=... SANDBOX_ROOT=..."
 
 dev:
 	@STOP_TIMEOUT=$(STOP_TIMEOUT) $(DOCKER_LIFECYCLE) dev
@@ -119,3 +120,9 @@ ops-status:
 
 ops-plan:
 	@./ops/opsctl plan
+
+ops-apply-sandbox:
+	@test -n "$(PLAN)" -a -n "$(INVENTORY)" -a -n "$(SANDBOX_ROOT)" || \
+		{ echo "PLAN, INVENTORY and SANDBOX_ROOT are required" >&2; exit 2; }
+	@./ops/opsctl apply --plan-file "$(PLAN)" --inventory-file "$(INVENTORY)" \
+		--sandbox-root "$(SANDBOX_ROOT)"

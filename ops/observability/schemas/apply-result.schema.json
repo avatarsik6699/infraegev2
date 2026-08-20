@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://infraege.ru/schemas/ops/apply-result-v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "installation_id",
+    "plan_id",
+    "completed_at",
+    "status",
+    "effects_applied",
+    "rolled_back"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "installation_id": { "type": "string" },
+    "plan_id": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "completed_at": { "type": "string" },
+    "status": { "enum": ["applied", "failed", "no-op"] },
+    "effects_applied": { "type": "integer", "minimum": 0 },
+    "rolled_back": { "type": "boolean" }
+  }
+}

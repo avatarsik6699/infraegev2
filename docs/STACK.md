@@ -88,7 +88,15 @@ Wraps `scripts/wireguard-tunnel.sh`; requires the protected config at
 Read-only operations commands are `make ops-inventory`, `make ops-status` and `make ops-plan`.
 Their canonical desired state is `ops/observability/desired-state.json`; JSON consumers call
 `ops/opsctl <command> --json`. These commands never expose remote environment values or raw SSH
-stderr. There is deliberately no `apply` command in the current foundation.
+stderr. Production apply and any mutating remote transport remain unavailable.
+
+`ops/opsctl apply` is a sandbox-only transaction harness. It requires all of `--plan-file`,
+`--inventory-file` and `--sandbox-root`; it never calls the SSH wrapper. The equivalent Make target
+requires `PLAN=… INVENTORY=… SANDBOX_ROOT=…`. A plan fingerprint binds desired state, sanitized
+inventory and effects; lock/checkpoint/revision/outbox state is written only below the selected
+sandbox root. A new/empty directory receives `.infraege-ops-sandbox`; a non-empty directory without
+that exact marker fails closed. No production executor or environment-based executor selection
+exists.
 
 ### pnpm workspace policy
 

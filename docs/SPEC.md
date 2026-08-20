@@ -550,6 +550,19 @@ application VPS
   этом не гарантируются. Полная независимость от падения application VPS достигается только после
   размещения monitoring core на отдельном always-on host.
 
+`opsctl` развивается через раздельные execution stages. Read-only `inventory/status/plan` может
+работать с production через pinned SSH. Reconcile engine сначала исполняется только через явно
+указанный sandbox state root: он принимает сохранённый plan, повторно вычисляет его fingerprint из
+desired state и inventory, берёт один exclusive lock, пишет checkpoint до первого effect, атомарно
+публикует revision и создаёт только schema-validated sanitized outbox records. Ошибка любого effect
+восстанавливает checkpoint; повтор того же plan после успеха является no-op.
+
+Подключение mutating SSH/Compose/systemd executor, передача deployment secrets и production
+cutover не являются неявным продолжением sandbox engine: это отдельные changes с explicit operator
+approval, preflight текущего revision, установленным restore proof и rollback drill. Команда без
+явно выбранного executor должна fail closed; production transport никогда не выбирается по
+умолчанию или только по наличию credentials в environment.
+
 ---
 
 ## 8. Non-Functional Requirements

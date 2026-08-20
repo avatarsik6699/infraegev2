@@ -5,6 +5,7 @@
   "required": [
     "schema_version",
     "installation_id",
+    "plan_id",
     "generated_at",
     "mutating",
     "summary",
@@ -13,6 +14,7 @@
   "properties": {
     "schema_version": { "const": 1 },
     "installation_id": { "type": "string" },
+    "plan_id": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
     "generated_at": { "type": "string" },
     "mutating": { "const": false },
     "summary": { "type": "object" },

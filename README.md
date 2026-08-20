@@ -248,8 +248,15 @@ PostgreSQL, Umami, Beszel, journald/fail2ban и Restic. GitHub Actions выпо�
 
 Автоматизация operations-контура принадлежит этому репозиторию: `ops/opsctl inventory`, `status`
 и `plan` читают pinned-SSH inventory, сравнивают его с versioned secret-free desired state и не
-изменяют VPS. Будущий `apply` также останется infraegev2-specific и будет работать через отдельные
-lock/checkpoint/outbox контракты; в текущем change он намеренно не реализован.
+изменяют VPS. Будущий production apply также останется infraegev2-specific; сейчас реализован
+только sandbox executor для проверки lock/checkpoint/revision/outbox и rollback контрактов.
+
+Транзакционный reconcile engine теперь доступен только для disposable sandbox: сначала сохраните
+`ops/opsctl plan --json`, затем передайте этот файл, соответствующий inventory и явный
+`--sandbox-root` в `ops/opsctl apply`. Engine проверяет fingerprint, блокирует stale/destructive
+plan по умолчанию, создаёт checkpoint, атомарный revision и sanitized outbox, а при ошибке
+откатывает sandbox. Новый/пустой state root получает marker; существующий непустой каталог без
+marker отклоняется. Это не production apply: SSH/Compose/systemd executor отсутствует.
 
 First-party sibling [sre-kit](https://github.com/avatarsik6699/sre-kit) остаётся универсальным
 ядром наблюдаемости: adapters, Source configuration, normalization, alerts и monitoring UI. Он

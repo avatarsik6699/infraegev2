@@ -76,6 +76,11 @@ prerequisites, backup/restore and lifecycle automation. Use `ops/opsctl inventor
 `plan` for a sanitized read-only view; use `--json` for agents. The foundation has no `apply`
 command and therefore cannot mutate production.
 
+The repository now contains `opsctl apply` only as a transactional sandbox harness. Supplying a
+production-looking directory does not make it a supported production action: the command has no
+SSH/Compose/systemd executor and must not be used as a substitute for these runbooks. A future
+production executor requires its own approved change, current restore proof and rollback drill.
+
 `/home/niquetamerewsl/projects/sre-kit` is the first-party sibling for the universal observability
 core, adapters, Source configuration, normalization, alerts and monitoring UI. It does not own
 infraegev2 deployment automation or target credentials. Beszel and Umami currently remain in the

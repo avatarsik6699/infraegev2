@@ -13,6 +13,10 @@
     "checkpoint_before_mutation": true,
     "atomic_revision_publish": true,
     "sanitized_outbox_only": true,
-    "application_compose_out_of_scope": true
+    "application_compose_out_of_scope": true,
+    "sandbox_executor_only": true,
+    "production_transport_enabled": false,
+    "explicit_executor_required": true,
+    "saved_plan_binding_required": true
   }
 }
