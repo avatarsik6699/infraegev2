@@ -4,5 +4,6 @@ export const clientEnv = {
   // browsers resolve generated absolute API paths against the same origin.
   apiBasePath: import.meta.env.MODE === "test" ? "http://localhost" : "",
   umamiWebsiteId:
-    (import.meta.env.VITE_UMAMI_WEBSITE_ID as string | undefined) ?? "",
+    (import.meta.env.VITE_UMAMI_WEBSITE_ID as string | undefined) ||
+    (import.meta.env.DEV ? "development-only" : ""),
 } as const;

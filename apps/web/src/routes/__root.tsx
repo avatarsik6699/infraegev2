@@ -6,7 +6,7 @@ import {
 } from "@tanstack/react-router";
 import type { AppRouterContext } from "~/router";
 import { AppProviders, RouteError } from "~/app";
-import { clientEnv } from "~/shared/config/client-env";
+import { AnalyticsConsent } from "~/features/analytics-consent";
 import "~/app/styles.css";
 
 export const Route = createRootRouteWithContext<AppRouterContext>()({
@@ -23,7 +23,12 @@ export const Route = createRootRouteWithContext<AppRouterContext>()({
 });
 
 function RootComponent() {
-  return <Outlet />;
+  return (
+    <>
+      <AnalyticsConsent />
+      <Outlet />
+    </>
+  );
 }
 
 function RootDocument(props: { children: React.ReactNode }) {
@@ -32,17 +37,6 @@ function RootDocument(props: { children: React.ReactNode }) {
       <head>
         <link rel="icon" href="data:," />
         <HeadContent />
-        {clientEnv.umamiWebsiteId && (
-          <script
-            defer
-            src="/stats/script.js"
-            data-website-id={clientEnv.umamiWebsiteId}
-            data-domains="infraege.ru"
-            data-do-not-track="true"
-            data-exclude-search="true"
-            data-exclude-hash="true"
-          />
-        )}
       </head>
       <body>
         <AppProviders>{props.children}</AppProviders>

@@ -6,6 +6,7 @@ export namespace LessonPracticeTypes {
     tasks: readonly LessonTypes.PracticeTask[];
     progressStore: LessonProgressTypes.Store;
     checkAnswer: LessonTypes.PracticeChecker;
+    onAnswerChecked?: (result: "correct" | "incorrect") => void;
   };
 
   export type State = "idle" | "checking" | "incorrect" | "correct" | "error";

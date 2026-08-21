@@ -9,8 +9,8 @@
 
 | Field | Value |
 |-------|-------|
-| Document Version | `v1.9` |
-| Date | `2026-08-20` |
+| Document Version | `v2.0` |
+| Date | `2026-08-21` |
 | Architect / Owner | `v.godlevskiy` |
 | Stack | See [docs/STACK.md](./STACK.md) |
 | Domain | Платформа подготовки к ЕГЭ по информатике — теория, визуализация, практика по темам экзамена, привязанные к мини-курсам |
@@ -47,10 +47,10 @@ sdamgia.ru, kpolyakov.spb.ru), ни новыми AI-ботами (решают �
   за какой срок / какая глубина прохождения темы считается успехом) не зафиксированы архитектором
   — решить после этапа 4, когда домен, сайт и MVP-контент будут готовы и появятся первые пригодные
   данные Umami, а не гадать заранее.]
-- Продуктовая аналитика и новые события Umami откладываются до финального этапа после завершения
-  доменной логики, основных поверхностей сайта и MVP-контента. До этого frontend отправляет только
-  уже существующий базовый pageview Umami и безопасную telemetry клиентских ошибок; новые события,
-  сбор данных и собственные operations-поверхности не добавляются.
+- Change 48 вводит прозрачную аналитическую петлю: optional browser analytics и узкий allowlist
+  продуктовых событий включаются только после явного opt-in, а необходимые security/reliability
+  logs и обезличенные server-side aggregates раскрываются отдельно. Fingerprinting, ответы,
+  свободный текст и скрытые постоянные идентификаторы не собираются.
 
 ### 1.3 Project Boundaries
 
@@ -336,7 +336,7 @@ task-файлы первой review-only темы читаются frontend-cons
 | Lesson design lab | `/lab/lesson` | Unlisted/noindex эталон четырёхраздельного урока на синтетическом контенте; не публикация и не security boundary |
 | Design system stand | `/lab/design-system` | Unlisted/noindex приватный стенд текущей дизайн-системы (шрифты, цвета, типографика) и переиспользуемых lesson-компонентов; не публикация и не security boundary |
 | Topic lesson | `/ege/$slug` | Общий SSR consumer типизированного Topic; `review` доступен только по прямому URL с `noindex,nofollow`, `published` может войти в prerender/public discovery |
-| Privacy | `/privacy` | Публичное фактическое описание текущей минимальной обработки данных, localStorage, Umami и технических журналов; доступно со всех публичных страниц |
+| Privacy | `/privacy` | Публичное описание обработки, оператора, целей, состава, оснований, сроков, получателей, прав и способа отозвать optional analytics consent |
 | Robots | `/robots.txt` | Машиночитаемые правила обхода и ссылка на sitemap; не используются как замена page-level `noindex` |
 | Sitemap | `/sitemap.xml` | Только canonical URL публичной главной, privacy и `published`-уроков; review/lab/404 не включаются |
 | Not found | любой неизвестный маршрут | Общий доступный 404 без предположений о будущем IA |
@@ -504,9 +504,10 @@ Nginx выставляет `Cache-Control`/`ETag` для хэшированно�
   storage.
 
 **Наблюдаемость** (источники на application VPS, внешний monitoring core):
-- **Umami v3** — отдельная БД/роль в Postgres; DNT, без cookies/fingerprinting/query/hash; текущий
-  frontend отправляет только базовые pageviews. Новый event allowlist и развитие сбора данных
-  отложены до финального этапа после доменной логики, сайта и MVP-контента.
+- **Umami v3** — отдельная БД/роль в Postgres; без fingerprinting/query/hash. Browser script,
+  pageviews и allowlisted learning-flow events загружаются только после явного opt-in и перестают
+  отправляться после отзыва. Necessary server/security logs и coarse aggregates имеют отдельную
+  цель и disclosure и не называются согласованной browser analytics.
 - **Beszel Hub + Agent** — host/container metrics и история на application VPS.
 - **journald + fail2ban** — структурированные application/Nginx/security logs; journald доступен
   через WireGuard-only gateway, fail2ban читается sre-kit через основной root/password SSH
@@ -583,9 +584,10 @@ Beszel Hub. Второй доказал исправленную dual-network с
 данных требуют отдельного явно одобренного действия.
 
 `ops/observability/sre-kit-sources.example.json` — secret-free операторская подсказка, а не новый
-универсальный deployment contract. Все шесть конфигураций сверены с текущими adapter manifests;
-реальные accounts/secrets вводятся только в sre-kit. Связанный sre-kit Change 20 примирил stale
-pre-cutover состояние с шестью уникальными enabled Sources и доказал повторный свежий polling,
+универсальный deployment contract. Текущий шаблон содержит Project, шесть pull Sources и один
+push Source и согласован с manifests/ingress sre-kit Change 22; реальные accounts/secrets вводятся
+только в sre-kit. Ранее Change 20 примирил stale pre-cutover состояние с шестью уникальными enabled
+pull Sources и доказал повторный свежий polling,
 quiet success, обратимый failure/recovery и authenticated Dashboard/Sources/detail rendering без
 target-side mutations. Это завершает integration proof, но не обещает круглосуточные alerts при
 выключенном локальном core и не меняет независимый Compose lifecycle.
@@ -604,7 +606,7 @@ target-side mutations. Это завершает integration proof, но не о
 | SEO | `/`, `/privacy` и published topics имеют canonical, уникальные metadata, SSR content и входят в sitemap/prerender; lab и review routes остаются unlisted, `noindex,nofollow` и исключены из public discovery; Lighthouse SEO для публичных маршрутов проходит без ошибок |
 | Mobile / no-JS readability | Lab и topic lesson сохраняют текст, последовательные стадии визуала, подписи, решения и section anchors в SSR HTML; интерактивная проверка остаётся progressive enhancement |
 | Client resilience / API drift | Route failures восстанавливаемы без белого экрана; loading/empty/error/not-found состояния доступны с клавиатуры и скринридера; OpenAPI schema/types drift ломает gate до merge; runtime HTTP имеет timeout/abort и не делает скрытый retry мутаций |
-| Юридическое (152-ФЗ) | Минимизация сбора и российский application VPS сохраняются; `/privacy` правдиво описывает фактическую обработку и доступна со всех публичных страниц. По подтверждённому решению архитектора от 2026-08-20 ФИО/наименование, ИНН/ОГРН, адрес, публичный email оператора и уведомление РКН отложены бессрочно: риск осознанно принят, работа не входит в roadmap и возвращается в scope только по новому явному решению архитектора |
+| Юридическое (152-ФЗ) | `/privacy` публикует Годлевского Владислава Александровича, 195112, Россия, Санкт-Петербург, Малоохтинский пр., д. 6, `vlad-god500@mail.ru`, `@avatarsikkk` и Telegram-ссылку как сведения оператора/контакты. Optional browser analytics требует отдельного явного согласия и допускает отзыв; продолжение использования сайта согласием не считается. Формальная проверка уведомления РКН, локализации и текста юристом остаётся обязательным внешним follow-up, а не заявляется выполненной |
 | Юридическое (436-ФЗ) | Возрастная маркировка для обычного сайта не вводится: существующая `12+` удаляется без замены на `18+` |
 | Юридическое (оригинальность контента) | Тексты тем и формулировки задач — собственного авторства/переформулированы, не дословные копии ФИПИ/sdamgia/kpolyakov (риск конфликта с площадками, не только вопрос добросовестности); проверяется в Content Quality Gate (§2.3) на каждой теме перед `published` |
 | Other (юридический ориентир, не консультация) | Открытые источники используются как инженерный ориентир; формальная юридическая проверка и РКН составляют принятый бессрочно отложенный риск, а не пункт текущего roadmap |
@@ -619,7 +621,7 @@ target-side mutations. Это завершает integration proof, но не о
 | `M1` — новый product/design baseline | complete | Доказать заменяемую визуальную систему без преждевременной публикации | «Инженерная тетрадь», unlisted design-system/lesson labs, единый frontend-контракт и reusable primitives |
 | `M2` — инфраструктурная пауза | complete | Подготовить production-платформу до продолжения продуктового контента | `infraege.ru`, VPS/GHCR deploy, security/release gates, backups и независимый operations stack активны; linked sre-kit Change 20 доказал все шесть Sources end to end |
 | `M3` — учебный flow и публичный запуск | in progress | Завершить доменную логику, основные поверхности сайта и проверенный MVP-контент до расширения аналитики | Два опубликованных урока и анонимный progress/result/continuation loop готовы; следующий выбор — третья тема или первый целостный срез мини-курса Python, но только после документационной стабилизации |
-| `M4` — финальное измерение и эксплуатация | planned | Только после готовности домена, сайта и MVP-контента расширить продуктовые сигналы | Privacy-safe allowlist продуктовых событий Umami и проверка сбора данных; lifecycle остаётся в `opsctl`, monitoring UI — в sre-kit |
+| `M4` — финальное измерение и эксплуатация | in progress | Измерить фактический learning flow прозрачно и обезличенно | Change 48: explicit opt-in, privacy-safe event allowlist и target aggregates; lifecycle остаётся в `opsctl`, все dashboard surfaces — в sre-kit Change 22 |
 | `M5+` (после первых данных, вне MVP) | deferred | Расширение охвата и сообщества поверх работающей бесплатной базы | Второй мини-курс (Excel), аккаунты/синхронизация, обсуждения тем с модерацией, затем платные фичи — без runtime AI до этого момента |
 
 ### 9.1 Current execution sequence

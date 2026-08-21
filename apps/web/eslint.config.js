@@ -228,6 +228,12 @@ export default tseslint.config(
     },
   },
   {
+    files: ["src/shared/lib/analytics/browser-adapter.ts"],
+    rules: {
+      "no-restricted-globals": restrictedPlatformGlobals("window", "document"),
+    },
+  },
+  {
     files: ["src/shared/config/*.server.ts"],
     rules: {
       "no-restricted-globals": restrictedPlatformGlobals("process"),

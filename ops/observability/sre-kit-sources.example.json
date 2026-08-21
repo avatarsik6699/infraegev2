@@ -1,7 +1,12 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "target_id": "infraegev2-production",
-  "note": "Operator-owned template, not a direct API payload. Six configs match current sre-kit manifests. Linked sre-kit Change 20 reconciled exactly six enabled Sources and proved fresh polling, quiet success, reversible failure/recovery and authenticated UI rendering without target-side mutations. Replace placeholders in the sre-kit UI and keep secrets in sre-kit only.",
+  "project": {
+    "slug": "infraegev2",
+    "name": "infraegev2",
+    "description": "Public learning product and its production infrastructure"
+  },
+  "note": "Operator-owned template, not a direct API payload. Create the Project first, assign every Source to it and keep all credentials in sre-kit. The push token is generated once by sre-kit and injected only into the target producer environment.",
   "sources": [
     {
       "adapter_name": "uptime-http",
@@ -63,8 +68,36 @@
         "username": "<create-in-umami>",
         "password": "<create-in-sre-kit>",
         "lookback_seconds": 3600,
-        "tracked_events": []
+        "tracked_events": [
+          "lesson_opened",
+          "theory_section_viewed",
+          "practice_started",
+          "practice_answer_checked",
+          "lesson_completed",
+          "continuation_opened"
+        ],
+        "dimensions": [
+          "url",
+          "referrer",
+          "country",
+          "region",
+          "city",
+          "browser",
+          "os",
+          "device",
+          "language"
+        ]
       }
+    },
+    {
+      "adapter_name": "push",
+      "purpose": "Coarse Nginx traffic aggregates produced by build-traffic-telemetry.py",
+      "config": {
+        "token": "<generate-and-store-outside-git>",
+        "idempotency_key": "<unique-per-batch>"
+      },
+      "emits": ["traffic.request_count"],
+      "labels": ["traffic_class", "path", "status_family"]
     }
   ]
 }

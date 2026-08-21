@@ -26,7 +26,7 @@ pitfalls that must be reconsidered rather than copied.
 | Backend | Python/FastAPI (`apps/api`) |
 | Database | PostgreSQL (provisioned in `infra/docker-compose.yml`; no schema/migrations yet — content is git-based, docs/SPEC.md §3) |
 | Cache | — (not needed on M0) |
-| Observability | `infraegev2/ops` owns one application-specific Compose/SSH lifecycle package for target sources. First-party sibling [sre-kit](https://github.com/avatarsik6699/sre-kit) owns adapters, Source configuration, normalization, alerts and monitoring UI only. Host metrics and fail2ban use the accepted root/password SSH contract; journal logs, Beszel and Umami use WireGuard. Linked sre-kit Change 20 proved six registered Sources end to end; no local operations UI or generic infrastructure control plane exists in this repo |
+| Observability | `infraegev2/ops` owns the target lifecycle, explicit browser consent, allowlisted product events and coarse traffic aggregates. First-party sibling [sre-kit](https://github.com/avatarsik6699/sre-kit) Change 22 owns Projects, pull/push ingestion, retention, alerts and every monitoring/analytics dashboard. Host metrics and fail2ban use the accepted root/password SSH contract; journal logs, Beszel and Umami use WireGuard; push uses a Source token kept outside git |
 | Infra | Two Docker Compose projects on one VPS: application Nginx → `web`/`api`/Postgres, plus independently pinned Umami/Beszel operations services; Ubuntu 24.04, systemd, journald, fail2ban, WireGuard, Restic |
 | Package managers | uv (`apps/api`), pnpm workspace (`apps/web`, root) |
 | Formatting | Prettier 3.9.6 exact for supported repository files; Ruff from the API lock for Python; EditorConfig for cross-editor whitespace defaults |
@@ -111,13 +111,14 @@ desired-state JSON,
 generic plan/apply engine, migration rehearsal, snapshot selector or deployment UI. Compose is the
 service desired state; the runbook is the cross-project transition contract.
 
-`ops/observability/sre-kit-sources.example.json` documents the six intended adapter configurations
-without real credentials or deployment authority. Its fields are aligned with the six current
-sre-kit manifests. The operator enters secrets in sre-kit. Linked sre-kit Change 20 reconciled
-exactly six enabled Sources and proved fresh polling, quiet success, reversible failure/recovery
-and authenticated Dashboard/Sources/detail rendering without target-side mutations. A local core
-still provides no polling or alerts while its workstation is off, and monitoring availability
-never gates target lifecycle.
+`ops/observability/sre-kit-sources.example.json` documents one Project, six pull Sources and one
+push Source without real credentials or deployment authority. Its fields are aligned with the
+seven current sre-kit manifests. The operator enters pull credentials in sre-kit and injects the
+generated push token only into the protected target environment. Linked sre-kit Change 20
+historically reconciled the six pull Sources and proved fresh polling, quiet success, reversible
+failure/recovery and authenticated Dashboard/Sources/detail rendering without target-side
+mutations. A local core still provides no polling or alerts while its workstation is off, and
+monitoring availability never gates target lifecycle.
 
 ### pnpm workspace policy
 

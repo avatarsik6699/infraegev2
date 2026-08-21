@@ -95,6 +95,7 @@
   /* Static and control surfaces stay flat. Add elevation only with a real overlay consumer. */
   --shadow-annotation: none;
   --shadow-control: none;
+  --shadow-overlay: 0 0.875rem 3.125rem var(--theme-overlay-shadow);
 
   --motion-duration: var(--theme-motion-duration);
   --motion-easing: var(--theme-motion-easing);

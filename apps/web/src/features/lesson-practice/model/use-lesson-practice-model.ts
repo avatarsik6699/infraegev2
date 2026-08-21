@@ -40,6 +40,7 @@ export function useLessonPracticeModel(props: LessonPracticeTypes.Props) {
         [task.id]: result.correct ? "correct" : "incorrect",
       }));
       if (result.correct) props.progressStore.markSolved(task.id, answer);
+      props.onAnswerChecked?.(result.correct ? "correct" : "incorrect");
     } catch {
       setPracticeStates((current) => ({ ...current, [task.id]: "error" }));
     }

@@ -273,14 +273,15 @@ First-party sibling [sre-kit](https://github.com/avatarsik6699/sre-kit) оста
 ядром наблюдаемости: adapters, Source configuration, normalization, alerts и monitoring UI. Он
 читает источники infraegev2 через private API/WireGuard/read-only SSH, но не устанавливает и не
 настраивает target stack. Deployment credentials и target lifecycle в sre-kit не передаются;
-`ops/observability/sre-kit-sources.example.json` служит только операторской подсказкой. Шесть
-Source-конфигураций сверены с актуальными adapter manifests. Связанный sre-kit Change 20 оставил
-ровно шесть уникальных enabled Sources и доказал для каждой свежие polling/status, quiet success,
+`ops/observability/sre-kit-sources.example.json` служит только операторской подсказкой. Текущий
+шаблон описывает один Project, шесть pull Source и один coarse-aggregate push Source и согласован
+со sre-kit Change 22. Ранее связанный Change 20 оставил ровно шесть уникальных enabled pull Sources
+и доказал для каждой свежие polling/status, quiet success,
 обратимый failure/recovery и authenticated Dashboard/Sources/detail без target-side mutations.
 Этот proof не делает локальный sre-kit core круглосуточным: когда workstation выключен, polling и
-alerts не выполняются. Source registration является операторским действием внутри sre-kit, а
-адаптеры сами читают targets; generic push ingress остаётся будущим sre-kit M9 и здесь не
-подразумевается.
+alerts не выполняются. Source registration и token rotation являются операторскими действиями
+внутри sre-kit; target producer лишь отправляет обезличенные versioned batches и не передаёт core
+deployment authority.
 
 Runbook’и: [DNS/TLS](docs/runbooks/dns-tls.md),
 [backup/restore](docs/runbooks/backup-restore.md),

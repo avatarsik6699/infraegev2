@@ -1,4 +1,4 @@
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import {
   Checkpoint,
   LessonSectionHeading,
@@ -11,6 +11,7 @@ import {
 } from "~/features/lesson-practice";
 import { createLessonProgressStore } from "~/features/lesson-progress";
 import { ReadingPositionIndicator } from "~/features/reading-position";
+import { reportProductEvent } from "~/features/product-analytics";
 import { Badge } from "~/shared/components/badge";
 import { Typography } from "~/shared/components/typography";
 import { LessonOutline } from "~/widgets/lesson-outline";
@@ -28,6 +29,40 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
     () => createLessonProgressStore({ lessonId: props.lesson.id }),
     [props.lesson.id],
   );
+  const practiceStartedRef = useRef(false);
+  const completionReportedRef = useRef(false);
+  useEffect(
+    function reportLessonOpenedFx() {
+      reportProductEvent({
+        name: "lesson_opened",
+        properties: { lesson: props.lesson.id },
+      });
+    },
+    [props.lesson.id],
+  );
+  function handleAnswerChecked(result: "correct" | "incorrect") {
+    if (!practiceStartedRef.current) {
+      practiceStartedRef.current = true;
+      reportProductEvent({
+        name: "practice_started",
+        properties: { lesson: props.lesson.id },
+      });
+    }
+    reportProductEvent({
+      name: "practice_answer_checked",
+      properties: { lesson: props.lesson.id, result },
+    });
+    if (
+      !completionReportedRef.current &&
+      progressStore.getSnapshot().solvedTaskIds.length >= props.tasks.length
+    ) {
+      completionReportedRef.current = true;
+      reportProductEvent({
+        name: "lesson_completed",
+        properties: { lesson: props.lesson.id },
+      });
+    }
+  }
   const otherPublishedLessons = lessonPublications.filter(
     (lesson) => lesson.status === "published" && lesson.id !== props.lesson.id,
   );
@@ -166,6 +201,7 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
               tasks={props.tasks}
               progressStore={progressStore}
               checkAnswer={checkPracticeAnswer}
+              onAnswerChecked={handleAnswerChecked}
             />
           </section>
 

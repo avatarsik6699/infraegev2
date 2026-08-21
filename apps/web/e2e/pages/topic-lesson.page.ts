@@ -617,7 +617,9 @@ export class TopicLessonPage {
       this.page.locator("[data-practice-form][data-enhanced]"),
     ).toBeVisible();
     await this.page
-      .getByRole("tab", { name: new RegExp(`Задача ${String(index)} из 5`) })
+      .getByRole("tab", {
+        name: `Задача ${String(index)} из 5`,
+      })
       .click();
     const panel = this.page.locator(`[data-practice-task="${taskId}"]`);
     await panel.getByRole("textbox", { name: "Ответ" }).fill(answer);
