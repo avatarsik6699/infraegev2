@@ -9,7 +9,7 @@
 | Change | `48` |
 | Slug | `consented-analytics-integration` |
 | Title | Consented Analytics Integration |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/48-consented-analytics-integration` |
 
 ---
