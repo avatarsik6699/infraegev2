@@ -2,8 +2,9 @@
 
 Веб-приложение для подготовки к ЕГЭ по информатике с двумя опубликованными полными уроками,
 связанной практикой и локальным прогрессом ученика. Аудит learner journey и закрытие анонимного
-progress/result/continuation loop завершены; перед выбором третьей темы или первого среза
-мини-курса проект стабилизирует документацию и зафиксированные границы двух репозиториев.
+progress/result/continuation loop завершены; документация двух репозиториев и ручная локальная
+analytics-петля стабилизированы. Следующий продуктовый выбор — третья тема ЕГЭ или первый
+целостный срез мини-курса Python.
 
 Технический контракт проекта находится в [`docs/SPEC.md`](docs/SPEC.md), команды и версии стека —
 в [`docs/STACK.md`](docs/STACK.md). Production-контур для `infraege.ru` описан в
@@ -283,14 +284,15 @@ alerts не выполняются. Source registration и token rotation явл
 внутри sre-kit; target producer лишь отправляет обезличенные versioned batches и не передаёт core
 deployment authority.
 
-Runbook’и: [DNS/TLS](docs/runbooks/dns-tls.md),
+Runbook’и: [analytics](docs/runbooks/analytics.md),
+[DNS/TLS](docs/runbooks/dns-tls.md),
 [backup/restore](docs/runbooks/backup-restore.md),
 [инциденты](docs/runbooks/incident-response.md). Основной административный доступ к VPS —
 password-only `root` с pinned host key, UFW, fail2ban и GitHub Environment approval; риск принят
-владельцем без запланированного перехода на key-only identities. Уведомление РКН и реквизиты
-оператора также отложены бессрочно до отдельного решения владельца. Локальный backup на том же VPS не
-считается disaster recovery — off-site backend остаётся обязательным до появления незаменимых
-пользовательских данных.
+владельцем без запланированного перехода на key-only identities. Реквизиты оператора и контакты
+опубликованы на `/privacy`; формальная юридическая проверка и вопрос уведомления РКН остаются
+отложенным принятым риском. Локальный backup на том же VPS не считается disaster recovery —
+off-site backend остаётся обязательным до появления незаменимых пользовательских данных.
 
 ## Полезные документы
 

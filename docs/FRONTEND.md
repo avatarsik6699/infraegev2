@@ -142,8 +142,9 @@ app → routes → pages → widgets → features → entities → shared
   description and social metadata. `/robots.txt` and `/sitemap.xml` are server routes, not copied
   static lists that can drift from publication state.
 - Public pages remain complete in SSR/no-JavaScript output and link to the current data-processing
-  disclosure. Legal copy describes only behavior present in code/configuration and never invents
-  missing operator details or a contact channel.
+  disclosure. Legal copy describes only behavior present in code/configuration, preserves the
+  architect-supplied operator identity and contact channels, and never invents or silently replaces
+  requisites.
 - The public home uses a responsive editorial split: the primary product statement leads on the
   left and the registry-derived topic list sits on the right, collapsing to one linear column on
   narrow screens. Group it through spacing and one quiet topic surface rather than decorative

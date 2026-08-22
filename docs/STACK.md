@@ -103,18 +103,20 @@ release. Releases live under `/opt/infraege-ops`, their mode-600 environments un
 `/etc/infraege/ops`, and none of these commands reference the application Compose project.
 
 The repository's application production definition now owns only Nginx, web, API and its Postgres;
-Nginx attaches to `infraege-observability-ingress`. Production runs the split application and
-`infraege-ops` projects on exact SHA `ad6df05fa7d44e7a4f9434c196091ed4890e2f49`; five operations
-containers, private Beszel/Umami access, Agent registration, tagged backup/restore and three timers
-passed final acceptance. Legacy volumes remain rollback-only. This repository deliberately has no
-desired-state JSON,
+Nginx attaches to `infraege-observability-ingress`. The accepted split-stack cutover baseline was
+exact SHA `ad6df05fa7d44e7a4f9434c196091ed4890e2f49`: five operations containers, private
+Beszel/Umami access, Agent registration, tagged backup/restore and three timers passed final
+acceptance. The current deployed application SHA must always be read from `/health/ready` and
+release evidence rather than this historical baseline. Legacy volumes remain rollback-only. This
+repository deliberately has no desired-state JSON,
 generic plan/apply engine, migration rehearsal, snapshot selector or deployment UI. Compose is the
 service desired state; the runbook is the cross-project transition contract.
 
 `ops/observability/sre-kit-sources.example.json` documents one Project, six pull Sources and one
 push Source without real credentials or deployment authority. Its fields are aligned with the
-seven current sre-kit manifests. The operator enters pull credentials in sre-kit and injects the
-generated push token only into the protected target environment. Linked sre-kit Change 20
+seven production sre-kit manifests; the separate `stub` manifest is test-only. The operator enters
+pull credentials in sre-kit and injects the generated push token only into the protected target
+environment. Linked sre-kit Change 20
 historically reconciled the six pull Sources and proved fresh polling, quiet success, reversible
 failure/recovery and authenticated Dashboard/Sources/detail rendering without target-side
 mutations. A local core still provides no polling or alerts while its workstation is off, and

@@ -239,15 +239,17 @@
   `pg_restore` (`CREATE ROLE umami NOLOGIN`). Keep `--exit-on-error`; do not hide ownership drift
   with `--no-owner` when the purpose of the drill is fidelity. Always prove cleanup on failure.
 
-### Production: operator details and RKN work are accepted indefinite legal debt
+### Published operator details do not complete formal legal review
 
-- **Symptoms**: legal pages can describe current processing, but cannot identify the operator or
-  prove completion of the Russian regulator workflow.
-- **Root cause**: the architect explicitly deferred operator requisites and RKN notification
-  without a target milestone and accepted the risk; no age marking is shown.
-- **Fix**: do not auto-plan this work. Reopen it only on a new explicit architect decision; before
-  collecting accounts or other non-minimal personal data, surface the risk and recommend
-  specialist legal review. Never invent requisites in source code.
+- **Symptoms**: an agent sees the operator identity and contacts on `/privacy` and concludes that
+  formal legal review or the Russian regulator workflow is complete, while older docs may still
+  claim the identity itself is missing.
+- **Root cause**: Change 48 published architect-supplied operator details, but specialist review
+  and the question of Roskomnadzor notification remain explicitly deferred accepted risks.
+- **Fix**: preserve the published details as current product truth without presenting them as a
+  legal opinion or completed notification. Reopen formal legal work only on a new explicit
+  architect decision; before collecting accounts or other non-minimal personal data, surface the
+  residual risk and recommend specialist review. Never invent or replace requisites in source code.
 
 ### WSL: Lighthouse must use Playwright's Linux Chromium
 

@@ -9,8 +9,8 @@
 
 | Field | Value |
 |-------|-------|
-| Document Version | `v2.0` |
-| Date | `2026-08-21` |
+| Document Version | `v2.1` |
+| Date | `2026-08-22` |
 | Architect / Owner | `v.godlevskiy` |
 | Stack | See [docs/STACK.md](./STACK.md) |
 | Domain | Платформа подготовки к ЕГЭ по информатике — теория, визуализация, практика по темам экзамена, привязанные к мини-курсам |
@@ -629,7 +629,7 @@ workstation по-прежнему означает отсутствие polling,
 | `M0` — технический фундамент | complete | Сохранить проверенную web/backend/ops инфраструктуру без навязывания продуктовой страницы | Исторический neutral baseline, shared primitives, API contract, content skeleton и локальные gates |
 | `M1` — новый product/design baseline | complete | Доказать заменяемую визуальную систему без преждевременной публикации | «Инженерная тетрадь», unlisted design-system/lesson labs, единый frontend-контракт и reusable primitives |
 | `M2` — инфраструктурная пауза | complete | Подготовить production-платформу до продолжения продуктового контента | `infraege.ru`, VPS/GHCR deploy, security/release gates, backups и независимый operations stack активны; linked sre-kit Change 20 доказал все шесть Sources end to end |
-| `M3` — учебный flow и публичный запуск | in progress | Завершить доменную логику, основные поверхности сайта и проверенный MVP-контент до расширения аналитики | Два опубликованных урока и анонимный progress/result/continuation loop готовы; следующий выбор — третья тема или первый целостный срез мини-курса Python, но только после документационной стабилизации |
+| `M3` — учебный flow и публичный запуск | in progress | Завершить доменную логику, основные поверхности сайта и проверенный MVP-контент до расширения каталога | Два опубликованных урока, product-readiness audit, анонимный progress/result/continuation loop и документационная стабилизация готовы; следующий выбор — третья тема или первый целостный срез мини-курса Python |
 | `M4` — финальное измерение и эксплуатация | in progress | Измерить фактический learning flow прозрачно и обезличенно | Change 48: explicit opt-in, privacy-safe event allowlist и target aggregates; Change 49 автоматизирует cursor-based доставку Nginx aggregates внутри ручной `sre-kit-local` сессии; все dashboard surfaces — в sre-kit |
 | `M5+` (после первых данных, вне MVP) | deferred | Расширение охвата и сообщества поверх работающей бесплатной базы | Второй мини-курс (Excel), аккаунты/синхронизация, обсуждения тем с модерацией, затем платные фичи — без runtime AI до этого момента |
 
@@ -643,12 +643,13 @@ workstation по-прежнему означает отсутствие polling,
 | `3` | Закрыть Change 46 — анонимный progress/result/continuation loop | Complete: browser journey показывает solved/mastery result, сбрасывает только текущий урок и переводит к другой опубликованной теме или ко всем темам; incorrect/failure/retry/reload/reset/continuation защищены Page Object coverage без аккаунта, новых событий или выдуманных связей |
 | `4` | Выбрать расширение M3: третья тема ЕГЭ или первый срез мини-курса Python | Выбор опирается на аудит, связи между уже опубликованными материалами и минимальный целостный learner outcome; новый контент не начинается автоматически |
 | `5` | Активировать M4 analytics baseline | Complete: explicit consent и privacy-safe event allowlist работают; семь Sources зарегистрированы, Umami pull и синтетический push batch отображаются без ответов, свободного текста и лишних идентификаторов |
-| `6` | Автоматизировать доставку Nginx aggregates в локальной sre-kit-сессии | Cursor и idempotency переживают retry/restart; raw access records не пишутся на диск; publisher стартует и останавливается только через `sre-kit-local`; два реальных цикла видны в Dashboard/Source detail |
+| `6` | Автоматизировать доставку Nginx aggregates в локальной sre-kit-сессии | Complete: cursor и idempotency переживают retry/restart; raw access records не пишутся на диск; publisher стартует и останавливается только через `sre-kit-local`; два реальных цикла доказаны в Dashboard/Source detail |
 
 Off-site backup и always-on management host остаются trigger-based инфраструктурными улучшениями:
 первый обязателен до появления незаменимых пользовательских данных, второй — когда нужны
 круглосуточные polling/alerts независимо от workstation. Они не блокируют product-readiness audit.
-Key-only SSH, реквизиты оператора и уведомление РКН намеренно исключены из этой последовательности.
+Key-only SSH, формальная юридическая проверка и уведомление РКН намеренно исключены из этой
+последовательности. Реквизиты оператора и контакты уже опубликованы на `/privacy`.
 
 ---
 
@@ -668,8 +669,9 @@ Key-only SSH, реквизиты оператора и уведомление Р
 - CDN, off-site backup и постоянный management VPS для sre-kit — отдельные последующие задачи;
   локальный core режим остаётся поддерживаемым. Telegram уже принадлежит sre-kit и не
   реализуется внутри infraegev2.
-- Формальные реквизиты оператора ПДн и уведомление РКН — бессрочно отложенный принятый юридический
-  риск; не планировать change без нового явного решения архитектора.
+- Формальная юридическая проверка обработки ПДн и вопрос уведомления РКН — бессрочно отложенный
+  принятый риск; опубликованные реквизиты оператора не считать доказательством завершённой
+  правовой проверки и не планировать дальнейший legal change без нового явного решения архитектора.
 - Переход с основного root/password SSH на key-only identities — не планировать без нового явного
   решения архитектора.
 - PWA/service worker, offline mutation queue и optimistic updates — только после отдельного
