@@ -164,6 +164,7 @@ class TrafficTelemetryTest(unittest.TestCase):
             token.write_text("synthetic-token\n")
             token.chmod(0o600)
             state = root / "state/cursor.json"
+            state.parent.mkdir(mode=0o755)
             config = PUBLISHER.Config(
                 fixture.url,
                 fixture.url,
@@ -182,6 +183,7 @@ class TrafficTelemetryTest(unittest.TestCase):
             self.assertEqual(
                 json.loads(state.read_text()), {"schema_version": 1, "cursor": "cursor-two"}
             )
+            self.assertEqual(state.parent.stat().st_mode & 0o777, 0o700)
             self.assertEqual(state.stat().st_mode & 0o777, 0o600)
             transmitted = " ".join(str(post) for post in FixtureHandler.posts)
             self.assertNotIn("203.0.113.8", transmitted)

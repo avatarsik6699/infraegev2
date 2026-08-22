@@ -72,7 +72,7 @@ def load_cursor(path: Path) -> str | None:
 
 def save_cursor(path: Path, cursor: str) -> None:
     path.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
-    os.chmod(path.parent, 0o700)
+    os.chmod(path.parent, stat.S_IRWXU)
     descriptor, temporary = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
     try:
         os.fchmod(descriptor, 0o600)
