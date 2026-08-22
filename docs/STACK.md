@@ -120,6 +120,15 @@ failure/recovery and authenticated Dashboard/Sources/detail rendering without ta
 mutations. A local core still provides no polling or alerts while its workstation is off, and
 monitoring availability never gates target lifecycle.
 
+`ops/observability/install-sre-kit-local.sh` installs the repository-owned manual CLI plus a
+disabled user timer for privacy-safe Nginx aggregate delivery. It accepts the current push Source
+UUID and a mode-600 token file, writes only protected local configuration/state, and never enables
+autostart. The rendered unit pins the same discovered Python ≥3.12 interpreter validated by the
+installer instead of relying on an older `/usr/bin/python3`. `sre-kit-local start` starts tunnel →
+core → one immediate publisher run → timer → web;
+`stop` stops the publisher before core/tunnel. The timer reads at most 500 journal entries per
+minute through the existing loopback gateway forward and persists only its opaque cursor.
+
 ### pnpm workspace policy
 
 The root `packageManager` and workspace policy pin pnpm 10.33.0, model dependency compatibility

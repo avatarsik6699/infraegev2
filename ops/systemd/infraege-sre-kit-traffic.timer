@@ -1,0 +1,13 @@
+[Unit]
+Description=Schedule privacy-safe infraege traffic delivery
+
+[Timer]
+OnActiveSec=5s
+OnUnitActiveSec=60s
+AccuracySec=5s
+Persistent=false
+Unit=infraege-sre-kit-traffic.service
+
+[Install]
+WantedBy=timers.target
+

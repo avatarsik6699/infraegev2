@@ -1,0 +1,16 @@
+[Unit]
+Description=Publish privacy-safe infraege Nginx aggregates to local sre-kit
+Requires=infraege-observability-tunnel.service sre-kit-core.service
+After=infraege-observability-tunnel.service sre-kit-core.service
+
+[Service]
+Type=oneshot
+EnvironmentFile=@CONFIG_FILE@
+ExecStart=@PYTHON_BIN@ @REPO_DIR@/ops/observability/push-nginx-traffic.py
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=@STATE_DIR@
+RestrictAddressFamilies=AF_INET AF_INET6

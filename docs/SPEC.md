@@ -592,6 +592,15 @@ quiet success, обратимый failure/recovery и authenticated Dashboard/So
 target-side mutations. Это завершает integration proof, но не обещает круглосуточные alerts при
 выключенном локальном core и не меняет независимый Compose lifecycle.
 
+Локальный traffic publisher принадлежит infraegev2 и работает только внутри явной сессии
+`sre-kit-local`: через уже поднятый private tunnel он читает Nginx journal entries, немедленно
+сворачивает combined-log записи до path/status-family/coarse traffic class и отправляет batch в
+локальный sre-kit push Source. Raw IP, request id, referrer и полный user agent не записываются в
+state или batch. State содержит только opaque journal cursor; он продвигается после успешного
+ответа ingestion, а повтор того же диапазона использует стабильный `Idempotency-Key`. Publisher и
+его timer не включаются в автозагрузку и останавливаются вместе с локальным core; недоступность
+workstation по-прежнему означает отсутствие polling, доставки и alerts.
+
 ---
 
 ## 8. Non-Functional Requirements
@@ -601,7 +610,7 @@ target-side mutations. Это завершает integration proof, но не о
 | Security headers / CORS | Rate limiting чекер-эндпоинта на Nginx: `limit_req_zone` 20 req/min/IP, burst 5, `nodelay` (см. §4, §11.2 источника) — против автоматизированного перебора банка ответов; конкретную цифру пересмотреть по факту логов после запуска. Основной public root/password SSH защищён уникальным длинным паролем, pinned host key, UFW, fail2ban и GitHub Environment approval; риск полного захвата VPS при компрометации пароля осознанно принят, key-only migration не запланирована. |
 | Accessibility target | Foundation и lab не имеют serious/critical axe violations; lesson outline сохраняет вложенный semantic list, anchors, keyboard focus, различимый текущий пункт и корректный source order, а сложный визуал имеет видимую полную текстовую альтернативу |
 | Performance budget | LCP < 2.5s, CLS < 0.1, INP < 200ms на мобильном 4G-профиле; release evidence измеряет `/` и первый опубликованный `/ege/16-rekursiya`, отдельно проверяет cold-load font/layout shifts и не подменяет route-level метрики общей оценкой технической страницы |
-| Observability | Application deploy и operations stack имеют независимые Compose projects, volumes и rollback. infraegev2 владеет небольшим Compose/SSH operations package; sre-kit работает вне monitored VPS и владеет только ingestion, adapters, alerts и UI. Split topology активна на production; target endpoints и maintenance lifecycle проверены, а sre-kit Change 20 доказал регистрацию, свежий polling, failure/recovery и UI для всех шести Sources без target-side mutation |
+| Observability | Application deploy и operations stack имеют независимые Compose projects, volumes и rollback. infraegev2 владеет небольшим Compose/SSH operations package и локальным privacy-safe Nginx publisher; sre-kit работает вне monitored VPS и владеет ingestion, adapters, alerts и UI. Семь Sources зарегистрированы; pull polling и idempotent push delivery отображаются в Dashboard/Source detail только в пределах явной `sre-kit-local` сессии, без target-side mutation или обещания always-on monitoring |
 | Backup / restore | Application и operations jobs используют отдельные Restic tags, restore proofs и status markers в общем encrypted repository. Operations timers активируются только после clean install, без импорта старых Umami/Beszel artifacts. Для каждого владельца сохраняются 7 daily + 4 weekly + 3 monthly и общий same-host/off-site risk |
 | SEO | `/`, `/privacy` и published topics имеют canonical, уникальные metadata, SSR content и входят в sitemap/prerender; lab и review routes остаются unlisted, `noindex,nofollow` и исключены из public discovery; Lighthouse SEO для публичных маршрутов проходит без ошибок |
 | Mobile / no-JS readability | Lab и topic lesson сохраняют текст, последовательные стадии визуала, подписи, решения и section anchors в SSR HTML; интерактивная проверка остаётся progressive enhancement |
@@ -621,7 +630,7 @@ target-side mutations. Это завершает integration proof, но не о
 | `M1` — новый product/design baseline | complete | Доказать заменяемую визуальную систему без преждевременной публикации | «Инженерная тетрадь», unlisted design-system/lesson labs, единый frontend-контракт и reusable primitives |
 | `M2` — инфраструктурная пауза | complete | Подготовить production-платформу до продолжения продуктового контента | `infraege.ru`, VPS/GHCR deploy, security/release gates, backups и независимый operations stack активны; linked sre-kit Change 20 доказал все шесть Sources end to end |
 | `M3` — учебный flow и публичный запуск | in progress | Завершить доменную логику, основные поверхности сайта и проверенный MVP-контент до расширения аналитики | Два опубликованных урока и анонимный progress/result/continuation loop готовы; следующий выбор — третья тема или первый целостный срез мини-курса Python, но только после документационной стабилизации |
-| `M4` — финальное измерение и эксплуатация | in progress | Измерить фактический learning flow прозрачно и обезличенно | Change 48: explicit opt-in, privacy-safe event allowlist и target aggregates; lifecycle остаётся в `opsctl`, все dashboard surfaces — в sre-kit Change 22 |
+| `M4` — финальное измерение и эксплуатация | in progress | Измерить фактический learning flow прозрачно и обезличенно | Change 48: explicit opt-in, privacy-safe event allowlist и target aggregates; Change 49 автоматизирует cursor-based доставку Nginx aggregates внутри ручной `sre-kit-local` сессии; все dashboard surfaces — в sre-kit |
 | `M5+` (после первых данных, вне MVP) | deferred | Расширение охвата и сообщества поверх работающей бесплатной базы | Второй мини-курс (Excel), аккаунты/синхронизация, обсуждения тем с модерацией, затем платные фичи — без runtime AI до этого момента |
 
 ### 9.1 Current execution sequence
@@ -633,7 +642,8 @@ target-side mutations. Это завершает integration proof, но не о
 | `2` | Провести product-readiness audit двух опубликованных уроков | Complete: вход, оба урока, checker/persistence/recovery, mobile/no-JS, trust, crawl и production/monitoring evidence проверены; находки `PR-01`–`PR-07` ранжированы в `docs/artifacts/product-readiness-audit-2026-08-20.md` |
 | `3` | Закрыть Change 46 — анонимный progress/result/continuation loop | Complete: browser journey показывает solved/mastery result, сбрасывает только текущий урок и переводит к другой опубликованной теме или ко всем темам; incorrect/failure/retry/reload/reset/continuation защищены Page Object coverage без аккаунта, новых событий или выдуманных связей |
 | `4` | Выбрать расширение M3: третья тема ЕГЭ или первый срез мини-курса Python | Выбор опирается на аудит, связи между уже опубликованными материалами и минимальный целостный learner outcome; новый контент не начинается автоматически |
-| `5` | После готовности MVP перейти к M4 | Определён privacy-safe event allowlist, проверена фактическая доставка Umami без ответов, свободного текста и лишних идентификаторов |
+| `5` | Активировать M4 analytics baseline | Complete: explicit consent и privacy-safe event allowlist работают; семь Sources зарегистрированы, Umami pull и синтетический push batch отображаются без ответов, свободного текста и лишних идентификаторов |
+| `6` | Автоматизировать доставку Nginx aggregates в локальной sre-kit-сессии | Cursor и idempotency переживают retry/restart; raw access records не пишутся на диск; publisher стартует и останавливается только через `sre-kit-local`; два реальных цикла видны в Dashboard/Source detail |
 
 Off-site backup и always-on management host остаются trigger-based инфраструктурными улучшениями:
 первый обязателен до появления незаменимых пользовательских данных, второй — когда нужны

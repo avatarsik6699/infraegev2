@@ -257,6 +257,16 @@
 - **Fix**: `lighthouserc.cjs` resolves `chromium.executablePath()` from the web workspace and passes
   it as `collect.chromePath`; keep the dedicated `127.0.0.2:3200` server address as well.
 
+### journal-gatewayd tail ranges need both skip and count fields
+
+- **Symptoms**: a bounded first request to `/entries` returns HTTP 400 with `Failed to parse Range
+  header`, or starts at the oldest retained journal entry instead of the recent tail.
+- **Root cause**: systemd 255 parses `Range` as `entries=cursor[:skip:count]`. A negative tail skip
+  without the final positive count is invalid; an empty cursor with non-negative skip seeks head.
+- **Fix**: bootstrap with `Range: entries=:-500:500`; after a saved cursor use
+  `Range: entries=<cursor>:1:500` so the cursor entry itself is skipped. Persist the new cursor only
+  after the corresponding sre-kit push succeeds or is confirmed as an idempotent duplicate.
+
 ### Production: Umami public prefix is not the tracker script upstream path
 
 - **Symptoms**: `/stats/script.js` returns 404, `window.umami` is absent and genuine visits or
