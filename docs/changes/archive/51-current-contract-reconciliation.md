@@ -9,7 +9,7 @@
 | Change | `51` |
 | Slug | `current-contract-reconciliation` |
 | Title | Current Contract Reconciliation |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/51-current-contract-reconciliation` |
 
 ---
