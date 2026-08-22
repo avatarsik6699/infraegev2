@@ -9,7 +9,7 @@
 | Change | `49` |
 | Slug | `continuous-traffic-publisher` |
 | Title | Continuous Traffic Publisher |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/49-continuous-traffic-publisher` |
 
 ---
