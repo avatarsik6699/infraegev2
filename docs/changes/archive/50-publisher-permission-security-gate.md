@@ -9,7 +9,7 @@
 | Change | `50` |
 | Slug | `publisher-permission-security-gate` |
 | Title | Publisher Permission Security Gate |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/50-publisher-permission-security-gate` |
 
 ---
