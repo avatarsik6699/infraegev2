@@ -9,7 +9,7 @@
 | Change | `53` |
 | Slug | `sre-kit-management-vps-integration` |
 | Title | sre-kit management VPS integration |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/53-sre-kit-management-vps-integration` |
 
 ---
