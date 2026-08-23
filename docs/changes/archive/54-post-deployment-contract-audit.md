@@ -9,7 +9,7 @@
 | Change | `54` |
 | Slug | `post-deployment-contract-audit` |
 | Title | post-deployment contract audit |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/54-post-deployment-contract-audit` |
 
 ---
