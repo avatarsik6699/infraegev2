@@ -7,7 +7,7 @@
 | Change | `52` |
 | Slug | `observability-learning-guide` |
 | Title | Observability Learning Guide |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/52-observability-learning-guide` |
 
 ---
