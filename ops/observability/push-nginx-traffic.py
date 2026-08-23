@@ -52,6 +52,20 @@ def require_loopback_url(value: str, label: str) -> str:
     return value.rstrip("/")
 
 
+def require_journal_url(value: str) -> str:
+    parsed = urlsplit(value)
+    if parsed.scheme != "http" or parsed.hostname not in {
+        "127.0.0.1",
+        "::1",
+        "localhost",
+        "10.77.0.1",
+    }:
+        raise ValueError("journal URL must use loopback or the exact WireGuard server address")
+    if parsed.username or parsed.password or parsed.query or parsed.fragment:
+        raise ValueError("journal URL must not contain credentials, query or fragment")
+    return value.rstrip("/")
+
+
 def require_private_file(path: Path, label: str) -> None:
     info = path.stat()
     if not stat.S_ISREG(info.st_mode):
@@ -229,7 +243,7 @@ def parse_args() -> Config:
     if not 1 <= args.limit <= DEFAULT_LIMIT:
         parser.error(f"--limit must be between 1 and {DEFAULT_LIMIT}")
     return Config(
-        journal_url=require_loopback_url(args.journal_url, "journal URL"),
+        journal_url=require_journal_url(args.journal_url),
         sre_kit_url=require_loopback_url(args.sre_kit_url, "sre-kit URL"),
         source_id=args.source_id,
         token_file=args.token_file.expanduser().resolve(),

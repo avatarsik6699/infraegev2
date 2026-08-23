@@ -81,7 +81,9 @@ validation remain backend-owned contracts.
 **Production access:** the primary administration contract is public `root@2.26.8.245` with the
 protected `root-admin-password`, pinned `known_hosts` and `scripts/production-root-ssh.sh`.
 Public-key login and alternate SSH users are not active, and no key-only migration is scheduled.
-The architect accepts the resulting host-compromise risk for the current operating horizon.
+The adapter accepts the architect-approved 12-character minimum. Longer generated passwords remain
+recommended; the architect accepts the increased brute-force and host-compromise risk for the
+current operating horizon.
 Reaching the VPS's private `10.77.0.0/24` network
 (Beszel, Umami and journald gatewayd) still needs the WireGuard tunnel: `make tunnel-up` starts and
 verifies it, `make tunnel-down`
@@ -102,6 +104,20 @@ scripts and protected environment, creates the one external ingress network if a
 release. Releases live under `/opt/infraege-ops`, their mode-600 environments under
 `/etc/infraege/ops`, and none of these commands reference the application Compose project.
 
+The always-on sre-kit control plane is a third, independent Compose project on the dedicated
+management VPS. `make sre-management ACTION=<action> RELEASE=<sre-kit-main-sha>` wraps the pinned
+root/password connection from `~/.config/sre-kit/dedicated-vps/connection.env`; supported actions
+are `bootstrap`, `wireguard`, `install`, `update`, `rollback`, `sources`, `status`, `backup`,
+`restore-proof` and `all`. The wrapper verifies the independently confirmed management host
+fingerprint before every connection. Bootstrap opens only the configured SSH port and 80/443 in
+UFW, and fails if the pre/post Firecrawl/SearXNG container inventory changes. It never addresses
+the application or `infraege-ops` Compose projects.
+
+The management peer owns `10.77.0.3/32`, pins MTU 1280 for the cross-provider path and routes only
+`10.77.0.1/32`; workstation peer
+`10.77.0.2/32` remains unchanged. DNS `sre.infraege.ru -> 2.27.208.4` must exist before first
+exact-SHA deploy so Caddy can obtain TLS and public readiness can pass.
+
 The repository's application production definition now owns only Nginx, web, API and its Postgres;
 Nginx attaches to `infraege-observability-ingress`. The accepted split-stack cutover baseline was
 exact SHA `ad6df05fa7d44e7a4f9434c196091ed4890e2f49`: five operations containers, private
@@ -112,11 +128,14 @@ repository deliberately has no desired-state JSON,
 generic plan/apply engine, migration rehearsal, snapshot selector or deployment UI. Compose is the
 service desired state; the runbook is the cross-project transition contract.
 
-`ops/observability/sre-kit-sources.example.json` documents one Project, six pull Sources and one
-push Source without real credentials or deployment authority. Its fields are aligned with the
-seven production sre-kit manifests; the separate `stub` manifest is test-only. The operator enters
-pull credentials in sre-kit and injects the generated push token only into the protected target
-environment. Linked sre-kit Change 20
+`ops/observability/sre-kit-sources.example.json` documents one Project and seven human-readable
+Sources: `Public availability`, `Host resources`, `Security bans`, `Application journal`,
+`Container telemetry`, `Product analytics` and `Nginx traffic`. Credentials are transient
+mode-600 reconciliation input, become encrypted sre-kit secret refs, and are then removed from the
+management host. Admin reconciliation uses the verified `https://sre.infraege.ru` origin so the
+production `Secure` session cookie is never weakened; token-based publisher ingestion remains on
+core loopback. The generated push token stays in a protected management-only file. The separate
+`stub` manifest is test-only. Linked sre-kit Change 20
 historically reconciled the six pull Sources and proved fresh polling, quiet success, reversible
 failure/recovery and authenticated Dashboard/Sources/detail rendering without target-side
 mutations. A local core still provides no polling or alerts while its workstation is off, and
@@ -209,7 +228,7 @@ default local shipping.
 |-------|---------|-----------------------|
 | Formatting | `pnpm format:check` | Prettier and Ruff; Markdown and generated/dependency-owned files are explicitly ignored |
 | Infrastructure / bootstrap | `docker compose -f infra/docker-compose.yml -f infra/docker-compose.override.yml up --build -d` | verified live in change 03 on Docker Desktop/BuildKit: all four services become healthy; frontend and `/health` return 200 through Nginx. Change 02 also verified `POST /api/tasks/{id}/check` and the `/api/tasks/` rate limit (`503` past its burst — Nginx's default `limit_req_status`, not `429`) |
-| Operations contracts | `bash scripts/tests/ops-stack-definition.test.sh && bash scripts/tests/ops-lifecycle.test.sh && bash scripts/tests/production-ops-topology.test.sh && bash scripts/tests/backup-restore.test.sh && bash scripts/tests/ops-backup-restore.test.sh` | local/fake transport only; never connects to production or starts the operations project |
+| Operations contracts | `bash scripts/tests/ops-stack-definition.test.sh && bash scripts/tests/ops-lifecycle.test.sh && bash scripts/tests/production-ops-topology.test.sh && bash scripts/tests/backup-restore.test.sh && bash scripts/tests/ops-backup-restore.test.sh && bash scripts/tests/sre-kit-management-contract.test.sh` | local/fake transport only; never connects to production or starts the operations projects |
 | Migrations | `n/a` | content is git-based, not DB-backed (docs/SPEC.md §3); no schema exists yet to migrate |
 | Backend test suite | `cd apps/api && uv run pytest` | local only |
 | API contract drift | `pnpm api:check` | requires the frozen API and pnpm environments; tracked schema and generated TypeScript must match |

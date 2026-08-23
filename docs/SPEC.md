@@ -513,10 +513,11 @@ Nginx выставляет `Cache-Control`/`ETag` для хэшированно�
   через WireGuard-only gateway, fail2ban читается sre-kit через основной root/password SSH
   контракт.
 - **sre-kit core** — наш first-party sibling и владелец adapters, Source configuration,
-  normalization, alerts и monitoring UI. Он запускается на workstation или management VPS и
-  читает private sources через WireGuard/API/SSH, но не управляет target stack. Его SQLite,
-  adapter secrets и runtime data не попадают в этот репозиторий. Локальный режим не обещает
-  alerts, пока workstation выключен; круглосуточные alerts требуют always-on core.
+  normalization, alerts и monitoring UI. Change 26 поставляет generic release bundle, а этот
+  репозиторий владеет конкретной установкой на management VPS `sre.infraege.ru`, отдельным
+  WireGuard peer `10.77.0.3/32`, infraegev2 Source bootstrap и publisher lifecycle. Core читает
+  private sources через WireGuard/API/SSH, но не управляет target stack. Его SQLite, encrypted
+  adapter secrets и runtime data не попадают в git или application VPS.
 - **Внешняя доступность** — временный scheduled GitHub Action проверяет сайт, readiness и TLS.
   Подключение существующего sre-kit Telegram channel к infraege и отдельный внешний management/
   monitoring server отложены; alert engine не дублируется в этом репозитории.
@@ -551,10 +552,11 @@ application VPS
 - по решению архитектора beta-данные существующих Umami/Beszel не переносятся: новый operations
   stack стартует с пустыми volumes и новым набором Sources. Старые containers/volumes сохраняются
   только на ограниченный rollback-период и удаляются позднее отдельным явно destructive шагом;
-- локальный sre-kit может быть выключен без остановки target tools или ops automation, но
-  polling/alerts при
-  этом не гарантируются. Полная независимость от падения application VPS достигается только после
-  размещения monitoring core на отдельном always-on host.
+- недоступность sre-kit не останавливает target tools или ops automation; management VPS даёт
+  круглосуточный polling независимо от workstation, но потеря application VPS по-прежнему
+  одновременно делает его private Sources недоступными;
+- management VPS использует собственный WireGuard key и `10.77.0.3/32`; workstation peer
+  `10.77.0.2/32` сохраняется и никогда не копируется на сервер.
 
 Operations package намеренно остаётся небольшим. `config` локально проверяет Compose с защищённым
 env; `status` читает состояние установленного project через pinned SSH; `install` и `update`
@@ -592,14 +594,13 @@ quiet success, обратимый failure/recovery и authenticated Dashboard/So
 target-side mutations. Это завершает integration proof, но не обещает круглосуточные alerts при
 выключенном локальном core и не меняет независимый Compose lifecycle.
 
-Локальный traffic publisher принадлежит infraegev2 и работает только внутри явной сессии
-`sre-kit-local`: через уже поднятый private tunnel он читает Nginx journal entries, немедленно
-сворачивает combined-log записи до path/status-family/coarse traffic class и отправляет batch в
-локальный sre-kit push Source. Raw IP, request id, referrer и полный user agent не записываются в
-state или batch. State содержит только opaque journal cursor; он продвигается после успешного
-ответа ingestion, а повтор того же диапазона использует стабильный `Idempotency-Key`. Publisher и
-его timer не включаются в автозагрузку и останавливаются вместе с локальным core; недоступность
-workstation по-прежнему означает отсутствие polling, доставки и alerts.
+Traffic publisher принадлежит infraegev2 в обоих режимах. Локальный `sre-kit-local` остаётся
+ручным fallback; management-host system timer использует отдельный WireGuard peer, читает Nginx
+journal entries и отправляет batch только в loopback ingress core. Оба режима немедленно сворачивают
+combined-log записи до path/status-family/coarse traffic class. Raw IP, request id, referrer и
+полный user agent не записываются в state или batch. State содержит только opaque journal cursor;
+он продвигается после успешного ingestion, а повтор диапазона использует стабильный
+`Idempotency-Key`. Локальный и management cursors независимы и не копируются друг в друга.
 
 ---
 
@@ -607,10 +608,10 @@ workstation по-прежнему означает отсутствие polling,
 
 | Concern | Requirement |
 |---------|-------------|
-| Security headers / CORS | Rate limiting чекер-эндпоинта на Nginx: `limit_req_zone` 20 req/min/IP, burst 5, `nodelay` (см. §4, §11.2 источника) — против автоматизированного перебора банка ответов; конкретную цифру пересмотреть по факту логов после запуска. Основной public root/password SSH защищён уникальным длинным паролем, pinned host key, UFW, fail2ban и GitHub Environment approval; риск полного захвата VPS при компрометации пароля осознанно принят, key-only migration не запланирована. |
+| Security headers / CORS | Rate limiting чекер-эндпоинта на Nginx: `limit_req_zone` 20 req/min/IP, burst 5, `nodelay` (см. §4, §11.2 источника) — против автоматизированного перебора банка ответов; конкретную цифру пересмотреть по факту логов после запуска. Основной public root/password SSH использует принятый архитектором минимум 12 символов, pinned host key, UFW, fail2ban и GitHub Environment approval; повышенный риск перебора и полного захвата VPS при компрометации более короткого пароля осознанно принят, key-only migration не запланирована. |
 | Accessibility target | Foundation и lab не имеют serious/critical axe violations; lesson outline сохраняет вложенный semantic list, anchors, keyboard focus, различимый текущий пункт и корректный source order, а сложный визуал имеет видимую полную текстовую альтернативу |
 | Performance budget | LCP < 2.5s, CLS < 0.1, INP < 200ms на мобильном 4G-профиле; release evidence измеряет `/` и первый опубликованный `/ege/16-rekursiya`, отдельно проверяет cold-load font/layout shifts и не подменяет route-level метрики общей оценкой технической страницы |
-| Observability | Application deploy и operations stack имеют независимые Compose projects, volumes и rollback. infraegev2 владеет небольшим Compose/SSH operations package и локальным privacy-safe Nginx publisher; sre-kit работает вне monitored VPS и владеет ingestion, adapters, alerts и UI. Семь Sources зарегистрированы; pull polling и idempotent push delivery отображаются в Dashboard/Source detail только в пределах явной `sre-kit-local` сессии, без target-side mutation или обещания always-on monitoring |
+| Observability | Application, operations и management-host sre-kit имеют независимые lifecycle/volumes/rollback. infraegev2 владеет target operations, WireGuard peer, Source bootstrap и privacy-safe publisher; sre-kit владеет generic core/adapters/UI distribution. Семь clean-start Sources непрерывно poll/push на management VPS без target-side mutation; локальный `sre-kit-local` остаётся выключенным fallback |
 | Backup / restore | Application и operations jobs используют отдельные Restic tags, restore proofs и status markers в общем encrypted repository. Operations timers активируются только после clean install, без импорта старых Umami/Beszel artifacts. Для каждого владельца сохраняются 7 daily + 4 weekly + 3 monthly и общий same-host/off-site risk |
 | SEO | `/`, `/privacy` и published topics имеют canonical, уникальные metadata, SSR content и входят в sitemap/prerender; lab и review routes остаются unlisted, `noindex,nofollow` и исключены из public discovery; Lighthouse SEO для публичных маршрутов проходит без ошибок |
 | Mobile / no-JS readability | Lab и topic lesson сохраняют текст, последовательные стадии визуала, подписи, решения и section anchors в SSR HTML; интерактивная проверка остаётся progressive enhancement |
@@ -630,7 +631,7 @@ workstation по-прежнему означает отсутствие polling,
 | `M1` — новый product/design baseline | complete | Доказать заменяемую визуальную систему без преждевременной публикации | «Инженерная тетрадь», unlisted design-system/lesson labs, единый frontend-контракт и reusable primitives |
 | `M2` — инфраструктурная пауза | complete | Подготовить production-платформу до продолжения продуктового контента | `infraege.ru`, VPS/GHCR deploy, security/release gates, backups и независимый operations stack активны; linked sre-kit Change 20 доказал все шесть Sources end to end |
 | `M3` — учебный flow и публичный запуск | in progress | Завершить доменную логику, основные поверхности сайта и проверенный MVP-контент до расширения каталога | Два опубликованных урока, product-readiness audit, анонимный progress/result/continuation loop и документационная стабилизация готовы; следующий выбор — третья тема или первый целостный срез мини-курса Python |
-| `M4` — финальное измерение и эксплуатация | in progress | Измерить фактический learning flow прозрачно и обезличенно | Change 48: explicit opt-in, privacy-safe event allowlist и target aggregates; Change 49 автоматизирует cursor-based доставку Nginx aggregates внутри ручной `sre-kit-local` сессии; все dashboard surfaces — в sre-kit |
+| `M4` — финальное измерение и эксплуатация | in progress | Измерить фактический learning flow прозрачно и обезличенно | Changes 48–49 дают explicit opt-in и privacy-safe aggregates; Change 53 переносит семь clean-start Sources и publisher на отдельный always-on management VPS; все dashboard surfaces остаются в sre-kit |
 | `M5+` (после первых данных, вне MVP) | deferred | Расширение охвата и сообщества поверх работающей бесплатной базы | Второй мини-курс (Excel), аккаунты/синхронизация, обсуждения тем с модерацией, затем платные фичи — без runtime AI до этого момента |
 
 ### 9.1 Current execution sequence
@@ -644,12 +645,12 @@ workstation по-прежнему означает отсутствие polling,
 | `4` | Выбрать расширение M3: третья тема ЕГЭ или первый срез мини-курса Python | Выбор опирается на аудит, связи между уже опубликованными материалами и минимальный целостный learner outcome; новый контент не начинается автоматически |
 | `5` | Активировать M4 analytics baseline | Complete: explicit consent и privacy-safe event allowlist работают; семь Sources зарегистрированы, Umami pull и синтетический push batch отображаются без ответов, свободного текста и лишних идентификаторов |
 | `6` | Автоматизировать доставку Nginx aggregates в локальной sre-kit-сессии | Complete: cursor и idempotency переживают retry/restart; raw access records не пишутся на диск; publisher стартует и останавливается только через `sre-kit-local`; два реальных цикла доказаны в Dashboard/Source detail |
+| `7` | Подключить отдельный always-on sre-kit management VPS | Linked sre-kit Change 26 поставляет exact-SHA distribution; Change 53 создаёт отдельный WireGuard peer, clean-start Project/семь Sources и system publisher, доказывая TLS, polling, push и отсутствие влияния на application/Firecrawl lifecycles |
 
-Off-site backup и always-on management host остаются trigger-based инфраструктурными улучшениями:
-первый обязателен до появления незаменимых пользовательских данных, второй — когда нужны
-круглосуточные polling/alerts независимо от workstation. Они не блокируют product-readiness audit.
-Key-only SSH, формальная юридическая проверка и уведомление РКН намеренно исключены из этой
-последовательности. Реквизиты оператора и контакты уже опубликованы на `/privacy`.
+Off-site backup остаётся trigger-based улучшением: первый management-host релиз использует
+local-only Restic с явно принятым риском потери вместе с VPS. Key-only SSH, Telegram alerts,
+формальная юридическая проверка и уведомление РКН намеренно исключены из этой последовательности.
+Реквизиты оператора и контакты уже опубликованы на `/privacy`.
 
 ---
 
@@ -666,9 +667,9 @@ Key-only SSH, формальная юридическая проверка и у
 - Полноценный поиск по сайту — пока тем меньше десятка, обычная навигация достаточна.
 - Отдельный preview/staging-стенд — тестирование локально повторяет прод (§7.1).
 - Онлайн-кассы / 54-ФЗ — возникают только с появлением платежей, не на MVP-этапе.
-- CDN, off-site backup и постоянный management VPS для sre-kit — отдельные последующие задачи;
-  локальный core режим остаётся поддерживаемым. Telegram уже принадлежит sre-kit и не
-  реализуется внутри infraegev2.
+- CDN и off-site backup — отдельные последующие задачи; локальный core режим остаётся
+  поддерживаемым fallback. Telegram уже принадлежит sre-kit, отключён для первого management-host
+  запуска и не реализуется внутри infraegev2.
 - Формальная юридическая проверка обработки ПДн и вопрос уведомления РКН — бессрочно отложенный
   принятый риск; опубликованные реквизиты оператора не считать доказательством завершённой
   правовой проверки и не планировать дальнейший legal change без нового явного решения архитектора.

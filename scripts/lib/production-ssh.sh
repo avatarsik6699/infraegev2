@@ -31,18 +31,18 @@ production_ssh_init() {
     production_ssh_assert_private_file "$password_file" 'Root password file' || return
     INFRAEGE_SSH_PASSWORD=$(<"$password_file")
   fi
-  [[ ${#INFRAEGE_SSH_PASSWORD} -ge 48 && $INFRAEGE_SSH_PASSWORD != *$'\n'* ]] ||
-    production_ssh_die 'Root password must be one line of at least 48 characters' || return
+  [[ ${#INFRAEGE_SSH_PASSWORD} -ge 12 && $INFRAEGE_SSH_PASSWORD != *$'\n'* ]] ||
+    production_ssh_die 'Root password must be one line of at least 12 characters' || return
 
-  SSH_ASKPASS=${SSH_ASKPASS:-"$library_dir/../ssh-askpass.sh"}
-  [[ -x $SSH_ASKPASS ]] || production_ssh_die "SSH askpass helper is not executable: $SSH_ASKPASS" || return
-  SSH_ASKPASS_REQUIRE=force
+  INFRAEGE_SSH_ASKPASS="$library_dir/../ssh-askpass.sh"
+  [[ -x $INFRAEGE_SSH_ASKPASS ]] ||
+    production_ssh_die "SSH askpass helper is not executable: $INFRAEGE_SSH_ASKPASS" || return
   export INFRAEGE_PRODUCTION_DIR INFRAEGE_PROD_HOST INFRAEGE_PROD_KNOWN_HOSTS
-  export INFRAEGE_SSH_PASSWORD SSH_ASKPASS SSH_ASKPASS_REQUIRE
+  export INFRAEGE_SSH_PASSWORD INFRAEGE_SSH_ASKPASS
 }
 
 production_ssh() {
-  ssh \
+  SSH_ASKPASS="$INFRAEGE_SSH_ASKPASS" SSH_ASKPASS_REQUIRE=force ssh \
     -o PreferredAuthentications=password \
     -o PubkeyAuthentication=no \
     -o NumberOfPasswordPrompts=1 \
@@ -52,7 +52,7 @@ production_ssh() {
 }
 
 production_scp() {
-  scp \
+  SSH_ASKPASS="$INFRAEGE_SSH_ASKPASS" SSH_ASKPASS_REQUIRE=force scp \
     -o PreferredAuthentications=password \
     -o PubkeyAuthentication=no \
     -o NumberOfPasswordPrompts=1 \

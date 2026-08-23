@@ -1,0 +1,16 @@
+[Unit]
+Description=Publish privacy-safe infraege Nginx aggregates to management sre-kit
+Requires=wg-quick@wg0.service
+After=wg-quick@wg0.service docker.service
+
+[Service]
+Type=oneshot
+EnvironmentFile=/etc/infraege/sre-kit-traffic.env
+ExecStart=/usr/bin/python3 /opt/infraege-sre-kit/push-nginx-traffic.py
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/infraege-sre-kit
+RestrictAddressFamilies=AF_INET AF_INET6

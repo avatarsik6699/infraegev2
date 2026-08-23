@@ -98,6 +98,16 @@ class FixtureServer:
 
 
 class TrafficTelemetryTest(unittest.TestCase):
+    def test_allows_only_loopback_or_exact_wireguard_journal_origin(self):
+        self.assertEqual(
+            PUBLISHER.require_journal_url("http://10.77.0.1:19531"),
+            "http://10.77.0.1:19531",
+        )
+        with self.assertRaises(ValueError):
+            PUBLISHER.require_journal_url("http://10.77.0.9:19531")
+        with self.assertRaises(ValueError):
+            PUBLISHER.require_loopback_url("http://10.77.0.1:18080", "sre-kit URL")
+
     def test_classifies_and_drops_identifiers(self):
         batch = TELEMETRY.build(
             [
@@ -156,9 +166,10 @@ class TrafficTelemetryTest(unittest.TestCase):
             '"GET /robots.txt HTTP/2.0" 200 12 "-" "Googlebot/2.1"',
             1_786_375_116_518_149,
         )
-        with tempfile.TemporaryDirectory() as directory, FixtureServer(
-            [first, second], [202, 202]
-        ) as fixture:
+        with (
+            tempfile.TemporaryDirectory() as directory,
+            FixtureServer([first, second], [202, 202]) as fixture,
+        ):
             root = pathlib.Path(directory)
             token = root / "token"
             token.write_text("synthetic-token\n")
@@ -196,9 +207,10 @@ class TrafficTelemetryTest(unittest.TestCase):
             "retry-cursor",
             '203.0.113.8 - - [21/Aug/2026:10:00:00 +0000] "GET / HTTP/2.0" 200 42 "-" "curl/8"',
         )
-        with tempfile.TemporaryDirectory() as directory, FixtureServer(
-            [response, response], [500, 202]
-        ) as fixture:
+        with (
+            tempfile.TemporaryDirectory() as directory,
+            FixtureServer([response, response], [500, 202]) as fixture,
+        ):
             root = pathlib.Path(directory)
             token = root / "token"
             token.write_text("synthetic-token\n")

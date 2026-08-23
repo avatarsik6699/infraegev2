@@ -30,8 +30,10 @@ old session open until a second password-only root session succeeds with the pin
 
 ## 1. Create and verify the primary root credential
 
-Generate at least 48 random bytes without printing them to chat or committing them. One safe local
-flow is:
+The production adapter enforces the architect-approved minimum of 12 characters; the increased
+brute-force risk is accepted for the current host. A longer independently generated password remains
+the recommended onboarding default. Generate 48 random bytes without printing them to chat or
+committing them. One safe local flow is:
 
 ```bash
 install -d -m 700 ~/.config/infraege/production

@@ -27,7 +27,7 @@ STOP_TIMEOUT ?= 10
 .PHONY: help dev rebuild stop down restart logs ps config clean \
 	tunnel-up tunnel-down tunnel-status \
 	ops-open-beszel ops-open-umami \
-	ops-status ops-config ops-install ops-update ops-rollback
+	ops-status ops-config ops-install ops-update ops-rollback sre-management
 
 help:
 	@echo "infraege local Docker workflow"
@@ -41,6 +41,7 @@ help:
 	@echo "  make ps       Show service and health status"
 	@echo "  make config   Validate the fully rendered Compose configuration"
 	@echo "  make clean    Remove regenerable local reports, build outputs, and caches"
+	@echo "  make sre-management ACTION=status  Operate the dedicated sre-kit management VPS"
 	@echo ""
 	@echo "infraege private VPS access"
 	@echo ""
@@ -125,3 +126,6 @@ ops-update:
 
 ops-rollback:
 	@./ops/opsctl rollback
+
+sre-management:
+	@./scripts/management-sre-kit.sh "$(ACTION)" "$(RELEASE)"

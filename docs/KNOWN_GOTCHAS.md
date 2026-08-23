@@ -11,6 +11,17 @@
 
 ## Gotcha Log
 
+### Dedicated management deployment must not reuse an existing Compose project
+
+- **Symptoms**: a sre-kit bootstrap unexpectedly recreates Firecrawl/SearXNG containers, or an
+  operator command targets the application or `infraege-ops` stack.
+- **Root cause**: an unscoped Compose command or a shared installation directory was used on the
+  management VPS.
+- **Fix**: use `scripts/management-sre-kit.sh`; sre-kit is always project `sre-kit` under
+  `/opt/sre-kit`, and bootstrap compares the complete unrelated-container inventory before/after.
+- **Prevention**: keep management orchestration in `ops/management`; never add Firecrawl/SearXNG
+  service names, networks or volumes to its desired state.
+
 ### A valid `infraege-ops` Compose render is not permission to mutate production
 
 - **Symptoms:** `make ops-config` passes and an operator treats that local render as approval to
@@ -215,7 +226,9 @@
   roadmap. The reusable blueprint intentionally retains the safer generic baseline.
 - **Fix**: keep pinned `known_hosts`, UFW, fail2ban, provider-console recovery and GitHub Environment
   approval. Do not create a key-only migration change without a new explicit architect decision,
-  and never reuse a chat-exposed recovery password.
+  and never reuse a chat-exposed recovery password. The production adapter currently accepts the
+  architect-approved 12-character minimum; longer generated passwords remain recommended and
+  lowering this boundary further requires another explicit security decision.
 
 ### Observability work spans two first-party repositories
 
@@ -228,6 +241,26 @@
   infraegev2 owns application telemetry, VPS/network prerequisites and its target-specific Compose
   lifecycle; sre-kit owns the core, adapters, Source configuration, normalization, alerts and UI.
   Neither repository imports the other's internals or deployment credentials.
+
+### Multiple password-only SSH adapters must reset `SSH_ASKPASS`
+
+- **Symptoms**: direct application and management SSH checks both pass, but a combined orchestration
+  command connects to the management VPS first and the following application SCP fails password
+  authentication.
+- **Root cause**: `SSH_ASKPASS` is process-global; preserving an already-set helper makes the second
+  adapter submit the first host's protected password.
+- **Fix**: every adapter binds its own helper on each concrete `ssh`/`scp` invocation; selecting it
+  only during initialization is still order-dependent when calls alternate. Keep the alternating
+  management/application regression test; never share the password variables or helpers.
+
+### Cross-provider WireGuard can pass health probes while blackholing larger responses
+
+- **Symptoms**: route, ping, handshake and small private HTTP health responses pass, but a journal
+  response above roughly one packet stalls after HTTP 200 with no usable body.
+- **Root cause**: automatic `wg-quick` MTU discovery does not account for every provider path and
+  fragmentation is blackholed between the VPS networks.
+- **Fix**: pin the management peer to MTU 1280 and restart `wg-quick@wg0` when reconciling its
+  config. Verify with a private journal response larger than the former path MTU, not only ping.
 
 ### PostgreSQL restore drills must recreate archived owner roles
 
