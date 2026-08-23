@@ -4,8 +4,10 @@ management_ssh_init() {
   local repo_dir config_dir candidate fingerprint
   repo_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)
   MANAGEMENT_CONNECTION_ENV=${MANAGEMENT_CONNECTION_ENV:-${XDG_CONFIG_HOME:-${HOME:?}/.config}/sre-kit/dedicated-vps/connection.env}
-  [[ -f $MANAGEMENT_CONNECTION_ENV && $(stat -c '%a' "$MANAGEMENT_CONNECTION_ENV") == 600 ]] || {
-    echo "management SSH connection env must be a mode-600 file: $MANAGEMENT_CONNECTION_ENV" >&2
+  [[ -f $MANAGEMENT_CONNECTION_ENV &&
+    $(stat -c '%a' "$MANAGEMENT_CONNECTION_ENV") == 600 &&
+    $(stat -c '%u' "$MANAGEMENT_CONNECTION_ENV") == "$(id -u)" ]] || {
+    echo "management SSH connection env must be a current-user-owned mode-600 file: $MANAGEMENT_CONNECTION_ENV" >&2
     return 1
   }
   set -a

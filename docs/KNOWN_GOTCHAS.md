@@ -230,6 +230,26 @@
   architect-approved 12-character minimum; longer generated passwords remain recommended and
   lowering this boundary further requires another explicit security decision.
 
+### Root-password rotation has two protected client-side authorities
+
+- **Symptoms**: the local root/password wrapper connects successfully after a password rotation,
+  but the reviewer-approved production deploy fails on its first SCP/SSH authentication.
+- **Root cause**: the mode-600 local `root-admin-password` was updated while the GitHub Environment
+  secret `production/PROD_ROOT_PASSWORD` retained the previous value.
+- **Fix**: treat both protected copies as one rotation transaction. Update the VPS password, local
+  file and GitHub Environment secret before closing the provider-console session; then prove a
+  fresh local wrapper connection and a reviewer-approved deploy without printing the value.
+
+### Full Gate Compose bootstrap owns the frontend build port
+
+- **Symptoms**: the Full Gate bootstrap is green, then a host TanStack build fails because port
+  3000 is already published by the `infra` Compose web service started earlier in the same gate.
+- **Root cause**: infrastructure bootstrap and host prerender are valid independently but shared
+  one host port without an ownership-aware transition.
+- **Fix**: run build/performance rows through `scripts/run-host-web-gate.sh`. It stops only a
+  running web service in the repository-owned `infra` project and restores it through an EXIT trap
+  on both success and failure; it never kills an unrelated port owner.
+
 ### Observability work spans two first-party repositories
 
 - **Symptoms**: a live sre-kit source is repaired manually while one repository still documents

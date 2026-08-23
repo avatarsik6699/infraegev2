@@ -228,18 +228,18 @@ default local shipping.
 |-------|---------|-----------------------|
 | Formatting | `pnpm format:check` | Prettier and Ruff; Markdown and generated/dependency-owned files are explicitly ignored |
 | Infrastructure / bootstrap | `docker compose -f infra/docker-compose.yml -f infra/docker-compose.override.yml up --build -d` | verified live in change 03 on Docker Desktop/BuildKit: all four services become healthy; frontend and `/health` return 200 through Nginx. Change 02 also verified `POST /api/tasks/{id}/check` and the `/api/tasks/` rate limit (`503` past its burst — Nginx's default `limit_req_status`, not `429`) |
-| Operations contracts | `bash scripts/tests/ops-stack-definition.test.sh && bash scripts/tests/ops-lifecycle.test.sh && bash scripts/tests/production-ops-topology.test.sh && bash scripts/tests/backup-restore.test.sh && bash scripts/tests/ops-backup-restore.test.sh && bash scripts/tests/sre-kit-management-contract.test.sh` | local/fake transport only; never connects to production or starts the operations projects |
+| Operations contracts | `bash scripts/tests/ops-stack-definition.test.sh && bash scripts/tests/ops-lifecycle.test.sh && bash scripts/tests/production-ops-topology.test.sh && bash scripts/tests/backup-restore.test.sh && bash scripts/tests/ops-backup-restore.test.sh && bash scripts/tests/sre-kit-management-contract.test.sh && bash scripts/tests/host-web-gate.test.sh` | local/fake transport only; never connects to production or starts the operations projects |
 | Migrations | `n/a` | content is git-based, not DB-backed (docs/SPEC.md §3); no schema exists yet to migrate |
 | Backend test suite | `cd apps/api && uv run pytest` | local only |
 | API contract drift | `pnpm api:check` | requires the frozen API and pnpm environments; tracked schema and generated TypeScript must match |
-| Frontend build | `cd apps/web && pnpm build` | runs TanStack Start's build-time prerender; fails the build if any crawled page 500s |
+| Frontend build | `scripts/run-host-web-gate.sh pnpm --filter web build` | temporarily stops only the running Full Gate `infra` Compose web service that owns host port 3000, restores it on success/failure, then runs TanStack Start's build-time prerender; fails if any crawled page 500s |
 | Frontend unit tests | `pnpm --filter web test` | local only |
 | E2E lint / determinism | `pnpm --filter web exec playwright test --list` | local only, never CI'd; validates Playwright config/spec collection without running the journey |
 | E2E (Playwright) | `pnpm --filter web test:e2e` | local only, never CI'd; starts local Vite + Uvicorn through Playwright `webServer` and verifies the foundation/404 journeys in the single Chromium project |
 | Smoke | `curl -f http://localhost:8000/health/ready` (backend) — frontend smoke is the build prerender crawl | |
 | SAST / secrets / dependency audit | `pnpm audit:security` | Docker required for pinned Gitleaks 8.30.1 and Trivy 0.73.0; Semgrep 1.172.0 and pip-audit 2.10.1 run through uvx |
 | Accessibility audit | `pnpm audit:a11y` | local Playwright/axe; foundation and not-found routes, serious/critical violations fail |
-| Performance budget | `pnpm --filter web build && pnpm audit:performance` | local Chrome against `/`; median of 3, LCP ≤2.5s, CLS ≤0.1, TBT ≤200ms as lab proxy for INP |
+| Performance budget | `scripts/run-host-web-gate.sh bash -c 'pnpm --filter web build && pnpm audit:performance'` | restores the repository-owned `infra` web service on success/failure; local Chrome against `/`; median of 3, LCP ≤2.5s, CLS ≤0.1, TBT ≤200ms as lab proxy for INP |
 | Content link validation | `node scripts/validate-content-links.mjs` | docs/SPEC.md §2.2/§3/§7.2 — fails if any `prerequisites`/`related_topics`/`unlocks_topics`/`practice_task_ids`/`topic_ids` reference a nonexistent id |
 
 Tests remain local-only; the security command is also mirrored in GitHub Actions without invoking

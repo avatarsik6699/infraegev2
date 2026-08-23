@@ -31,6 +31,22 @@ production_ssh_init
 [[ $(realpath "$INFRAEGE_SSH_ASKPASS") == "$repo_dir/scripts/ssh-askpass.sh" ]]
 unset INFRAEGE_SSH_PASSWORD
 
+management_connection_env=$temporary/management-connection.env
+printf '%s\n' 'credentials deliberately not loaded' >"$management_connection_env"
+chmod 600 "$management_connection_env"
+cat >"$fake_bin/stat" <<EOF
+#!/usr/bin/env bash
+if [[ \$2 == %a ]]; then printf '%s\n' 600; else printf '%s\n' $(( $(id -u) + 1 )); fi
+EOF
+chmod +x "$fake_bin/stat"
+if PATH="$fake_bin:$PATH" MANAGEMENT_CONNECTION_ENV="$management_connection_env" \
+  management_ssh_init 2>"$temporary/ownership-error.log"; then
+  echo 'management SSH accepted a foreign-owned connection env' >&2
+  exit 1
+fi
+grep -Fq 'current-user-owned mode-600 file' "$temporary/ownership-error.log"
+rm "$fake_bin/stat"
+
 cat > "$fake_bin/docker" <<'EOF'
 #!/usr/bin/env bash
 if [[ $1 == ps ]]; then printf '%s\n' 'firecrawl-api synthetic-image' 'searxng synthetic-image'; fi
@@ -114,6 +130,53 @@ grep -Fq 'beszel-user-password' "$repo_dir/scripts/management-sre-kit.sh"
   "$repo_dir/scripts/management-sre-kit.sh"
 ! grep -Fq 'INFRAEGE_BESZEL_PASSWORD=$INFRAEGE_BESZEL_PASSWORD' \
   "$repo_dir/scripts/management-sre-kit.sh"
+
+# Source the entrypoint without dispatching it so its secret assembly and transport contracts can
+# be exercised without a network connection.
+# shellcheck source=../management-sre-kit.sh
+source "$repo_dir/scripts/management-sre-kit.sh"
+source_test_production=$temporary/source-production
+source_test_ops=$temporary/source-ops
+mkdir "$source_test_production" "$source_test_ops"
+printf 'target-password\n' >"$source_test_production/root-admin-password"
+printf 'beszel@example.invalid\n' >"$source_test_production/beszel-user-email"
+printf 'beszel-password\n' >"$source_test_production/beszel-user-password"
+printf 'synthetic-host-key\n' >"$source_test_production/known_hosts"
+printf '%s\n' \
+  'INFRAEGE_UMAMI_USERNAME=admin' \
+  "INFRAEGE_UMAMI_PASSWORD=\$'line-one\\nline-two'" >"$source_test_ops/ops.env"
+printf '%s\n' '{"projects":[{"id":"infraege","beszel":{"systemId":"host"},"umami":{"websiteId":"site"}}]}' \
+  >"$source_test_ops/projects.json"
+chmod 600 "$source_test_production"/* "$source_test_ops"/*
+cat >"$fake_bin/ssh-keygen" <<'EOF'
+#!/usr/bin/env bash
+printf '%s\n' '256 SHA256:synthetic host (ED25519)'
+EOF
+chmod +x "$fake_bin/ssh-keygen"
+if (production_dir="$source_test_production" ops_dir="$source_test_ops" \
+  PATH="$fake_bin:$PATH" build_source_env "$temporary/invalid-sources.env") \
+  2>"$temporary/source-validation-error.log"; then
+  echo 'Source env accepted a multiline secret' >&2
+  exit 1
+fi
+grep -Fq 'Umami password must be one non-empty line' "$temporary/source-validation-error.log"
+
+remote_stage=$temporary/remote-sources.env
+management_ssh_init() { :; }
+build_source_env() { printf '%s\n' 'synthetic=only' >"$1"; }
+management_scp() { touch "$remote_stage"; }
+management_ssh() {
+  if [[ $1 == *"install -m 600 /root/sources.env"* ]]; then
+    [[ $1 == *"trap 'rm -f -- /root/sources.env' EXIT"* ]]
+    rm -f -- "$remote_stage"
+    return 1
+  fi
+}
+if reconcile_sources 2>/dev/null; then
+  echo 'Source reconciliation ignored a remote installation failure' >&2
+  exit 1
+fi
+[[ ! -e $remote_stage ]]
 
 if rg -n 'set -x|StrictHostKeyChecking=no|InsecureIgnoreHostKey|image:.*:latest' \
   "$repo_dir/ops/management" "$repo_dir/scripts/management-sre-kit.sh"; then

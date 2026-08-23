@@ -645,7 +645,7 @@ combined-log записи до path/status-family/coarse traffic class. Raw IP, 
 | `4` | Выбрать расширение M3: третья тема ЕГЭ или первый срез мини-курса Python | Выбор опирается на аудит, связи между уже опубликованными материалами и минимальный целостный learner outcome; новый контент не начинается автоматически |
 | `5` | Активировать M4 analytics baseline | Complete: explicit consent и privacy-safe event allowlist работают; семь Sources зарегистрированы, Umami pull и синтетический push batch отображаются без ответов, свободного текста и лишних идентификаторов |
 | `6` | Автоматизировать доставку Nginx aggregates в локальной sre-kit-сессии | Complete: cursor и idempotency переживают retry/restart; raw access records не пишутся на диск; publisher стартует и останавливается только через `sre-kit-local`; два реальных цикла доказаны в Dashboard/Source detail |
-| `7` | Подключить отдельный always-on sre-kit management VPS | Linked sre-kit Change 26 поставляет exact-SHA distribution; Change 53 создаёт отдельный WireGuard peer, clean-start Project/семь Sources и system publisher, доказывая TLS, polling, push и отсутствие влияния на application/Firecrawl lifecycles |
+| `7` | Подключить отдельный always-on sre-kit management VPS | Complete: linked sre-kit Change 26 поставляет exact-SHA distribution; Change 53 создал отдельный WireGuard peer, clean-start Project/семь Sources и system publisher; после пользовательской проверки подтверждены TLS, polling, push, backup/restore и отсутствие влияния на application/Firecrawl lifecycles |
 
 Off-site backup остаётся trigger-based улучшением: первый management-host релиз использует
 local-only Restic с явно принятым риском потери вместе с VPS. Key-only SSH, Telegram alerts,

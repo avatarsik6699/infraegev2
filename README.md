@@ -276,17 +276,20 @@ First-party sibling [sre-kit](https://github.com/avatarsik6699/sre-kit) оста
 настраивает target stack. Deployment credentials и target lifecycle в sre-kit не передаются;
 `ops/observability/sre-kit-sources.example.json` служит только операторской подсказкой. Текущий
 шаблон описывает один Project, шесть pull Source и один coarse-aggregate push Source и согласован
-со sre-kit Change 22. Ранее связанный Change 20 оставил ровно шесть уникальных enabled pull Sources
-и доказал для каждой свежие polling/status, quiet success,
-обратимый failure/recovery и authenticated Dashboard/Sources/detail без target-side mutations.
-Этот proof не делает локальный sre-kit core круглосуточным: когда workstation выключен, polling и
-alerts не выполняются. Source registration и token rotation являются операторскими действиями
-внутри sre-kit; target producer лишь отправляет обезличенные versioned batches и не передаёт core
-deployment authority.
+со sre-kit Change 22. Всегда включённый management-контур доступен по
+`https://sre.infraege.ru`: clean-start Project `infraegev2` содержит семь enabled Sources с
+человекочитаемыми назначениями, включая `Nginx traffic`; шесть pull-источников опрашиваются по
+расписанию, а privacy-safe traffic aggregates доставляются system publisher. Порядок входа,
+проверки freshness и восстановления описан в
+[`docs/runbooks/SRE_KIT_MANAGEMENT.md`](docs/runbooks/SRE_KIT_MANAGEMENT.md). Локальный
+`sre-kit-local` сохранён только как ручной fallback и по умолчанию выключен. Source registration и
+token rotation являются операторскими действиями внутри sre-kit; target producer лишь отправляет
+обезличенные versioned batches и не передаёт core deployment authority.
 
 Runbook’и: [analytics](docs/runbooks/analytics.md),
 [DNS/TLS](docs/runbooks/dns-tls.md),
 [backup/restore](docs/runbooks/backup-restore.md),
+[sre-kit management](docs/runbooks/SRE_KIT_MANAGEMENT.md),
 [инциденты](docs/runbooks/incident-response.md). Основной административный доступ к VPS —
 password-only `root` с pinned host key, UFW, fail2ban и GitHub Environment approval; риск принят
 владельцем без запланированного перехода на key-only identities. Реквизиты оператора и контакты

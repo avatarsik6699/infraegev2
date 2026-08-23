@@ -67,6 +67,8 @@ the exact `known_hosts` line obtained through a trusted channel, never
 
 GitHub Actions receives the same root password through the protected environment. Legacy
 `PROD_USER` and `PROD_SSH_KEY` are not part of the active contract.
+Any later root-password rotation must update both the protected local `root-admin-password` file
+and the GitHub Environment `PROD_ROOT_PASSWORD` before the next deploy.
 
 Images publish from `main` to GHCR under the full commit SHA. Deploy is manual: run “Deploy
 production”, enter that 40-character SHA, approve the environment, and follow the smoke step. The
@@ -91,10 +93,10 @@ volumes remain rollback-only and are removed only by a later approved cleanup.
 `/home/niquetamerewsl/projects/sre-kit` is the first-party sibling for the universal observability
 core, adapters, Source configuration, normalization, alerts and monitoring UI. It does not own
 infraegev2 deployment automation or target credentials. Repository and live VPS ownership are
-split. Linked sre-kit Change 20 reconciled exactly six enabled Sources and proved fresh polling,
-quiet success, reversible failure/recovery and authenticated UI rendering without mutating the
-target. A workstation-hosted core still provides no polling or alerts while it is off. Do not
-recreate the retired `apps/ops` dashboard.
+split. The accepted always-on management deployment at `https://sre.infraege.ru` contains the
+clean-start `infraegev2` Project with six pull Sources and one `Nginx traffic` push Source. The
+workstation-hosted core remains a disabled manual fallback; it is not the production monitoring
+surface. Do not recreate the retired `apps/ops` dashboard.
 
 ## Verified fresh-start cutover
 
@@ -123,7 +125,7 @@ During the authorized window:
    start both `infraege-ops` backup and restore-check services and verify their tagged snapshots.
 6. Create the new Umami website/Beszel system and verify the secret-free IDs in
    `ops/observability/sre-kit-sources.example.json`. For a genuinely new target, register and
-   verify all six Sources through sre-kit's supported API/UI contracts; do not copy Change 20's
+   verify all seven Sources through sre-kit's supported API/UI contracts; do not copy Change 20's
    local runtime state. Source registration never gates either Compose project.
 
 If acceptance fails, disable the three `infraege-ops-*` timers, run the operations project's

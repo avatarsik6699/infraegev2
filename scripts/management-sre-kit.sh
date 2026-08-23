@@ -71,7 +71,9 @@ install_release() {
 }
 
 build_source_env() {
-  local output=$1 root_password beszel_email beszel_password ops_env projects_json target_fingerprint
+  local output=$1 root_password beszel_email beszel_password ops_env projects_json
+  local target_password target_fingerprint beszel_email_value beszel_password_value
+  local beszel_system_id umami_username umami_password umami_website_id
   root_password=$production_dir/root-admin-password
   beszel_email=$production_dir/beszel-user-email
   beszel_password=$production_dir/beszel-user-password
@@ -87,17 +89,31 @@ build_source_env() {
   source "$ops_env"
   set +a
   target_fingerprint=$(ssh-keygen -lf "$production_dir/known_hosts" -E sha256 | awk 'NR == 1 { print $2 }')
+  target_password=$(<"$root_password")
+  beszel_email_value=$(<"$beszel_email")
+  beszel_password_value=$(<"$beszel_password")
+  beszel_system_id=$(jq -r '.projects[] | select(.id == "infraege") | .beszel.systemId // empty' "$projects_json")
+  umami_username=${INFRAEGE_UMAMI_USERNAME:-}
+  umami_password=${INFRAEGE_UMAMI_PASSWORD:-}
+  umami_website_id=$(jq -r '.projects[] | select(.id == "infraege") | .umami.websiteId // empty' "$projects_json")
+  require_one_line "$target_password" 'application SSH password'
   require_one_line "$target_fingerprint" 'application SSH host fingerprint'
+  require_one_line "$beszel_email_value" 'Beszel user email'
+  require_one_line "$beszel_password_value" 'Beszel user password'
+  require_one_line "$beszel_system_id" 'Beszel system id'
+  require_one_line "$umami_username" 'Umami username'
+  require_one_line "$umami_password" 'Umami password'
+  require_one_line "$umami_website_id" 'Umami website id'
   umask 077
   printf '%s\n' \
-    "INFRAEGE_TARGET_SSH_PASSWORD=$(<"$root_password")" \
+    "INFRAEGE_TARGET_SSH_PASSWORD=$target_password" \
     "INFRAEGE_TARGET_HOST_KEY_FINGERPRINT=$target_fingerprint" \
-    "INFRAEGE_BESZEL_EMAIL=$(<"$beszel_email")" \
-    "INFRAEGE_BESZEL_PASSWORD=$(<"$beszel_password")" \
-    "INFRAEGE_BESZEL_SYSTEM_ID=$(jq -r '.projects[] | select(.id == "infraege") | .beszel.systemId' "$projects_json")" \
-    "INFRAEGE_UMAMI_USERNAME=$INFRAEGE_UMAMI_USERNAME" \
-    "INFRAEGE_UMAMI_PASSWORD=$INFRAEGE_UMAMI_PASSWORD" \
-    "INFRAEGE_UMAMI_WEBSITE_ID=$(jq -r '.projects[] | select(.id == "infraege") | .umami.websiteId' "$projects_json")" \
+    "INFRAEGE_BESZEL_EMAIL=$beszel_email_value" \
+    "INFRAEGE_BESZEL_PASSWORD=$beszel_password_value" \
+    "INFRAEGE_BESZEL_SYSTEM_ID=$beszel_system_id" \
+    "INFRAEGE_UMAMI_USERNAME=$umami_username" \
+    "INFRAEGE_UMAMI_PASSWORD=$umami_password" \
+    "INFRAEGE_UMAMI_WEBSITE_ID=$umami_website_id" \
     > "$output"
   chmod 600 "$output"
 }
@@ -112,7 +128,7 @@ reconcile_sources() {
   management_ssh 'install -d -m 700 /etc/infraege'
   management_scp "$source_env" "$repo_dir/ops/management/reconcile-sources.py" \
     "$MANAGEMENT_SSH_USER@$MANAGEMENT_SSH_HOST:/root/"
-  management_ssh "install -m 600 /root/sources.env $remote_source_env && chmod 755 /root/reconcile-sources.py"
+  management_ssh "trap 'rm -f -- /root/sources.env' EXIT; install -m 600 /root/sources.env $remote_source_env; chmod 755 /root/reconcile-sources.py"
   if ! printf '%s\n' "$MANAGEMENT_ADMIN_PASSWORD" |
     management_ssh "SRE_KIT_SOURCE_ENV=$remote_source_env python3 /root/reconcile-sources.py"; then
     management_ssh "rm -f -- $remote_source_env"
@@ -146,21 +162,23 @@ remote_operation() {
   esac
 }
 
-case ${1:-help} in
-  bootstrap) bootstrap_host ;;
-  wireguard) provision_wireguard ;;
-  install|update|rollback) install_release "${2:-}" ;;
-  sources) reconcile_sources ;;
-  status|backup|restore-proof) remote_operation "$1" ;;
-  all)
-    bootstrap_host
-    provision_wireguard
-    install_release "${2:-}"
-    reconcile_sources
-    remote_operation status
-    ;;
-  *)
-    echo 'usage: scripts/management-sre-kit.sh bootstrap|wireguard|install SHA|update SHA|rollback SHA|sources|status|backup|restore-proof|all SHA' >&2
-    exit 2
-    ;;
-esac
+if [[ ${BASH_SOURCE[0]} == "$0" ]]; then
+  case ${1:-help} in
+    bootstrap) bootstrap_host ;;
+    wireguard) provision_wireguard ;;
+    install|update|rollback) install_release "${2:-}" ;;
+    sources) reconcile_sources ;;
+    status|backup|restore-proof) remote_operation "$1" ;;
+    all)
+      bootstrap_host
+      provision_wireguard
+      install_release "${2:-}"
+      reconcile_sources
+      remote_operation status
+      ;;
+    *)
+      echo 'usage: scripts/management-sre-kit.sh bootstrap|wireguard|install SHA|update SHA|rollback SHA|sources|status|backup|restore-proof|all SHA' >&2
+      exit 2
+      ;;
+  esac
+fi
