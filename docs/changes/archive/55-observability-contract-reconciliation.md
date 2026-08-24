@@ -9,7 +9,7 @@
 | Change | `55` |
 | Slug | `observability-contract-reconciliation` |
 | Title | Observability Contract Reconciliation |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/55-observability-contract-reconciliation` |
 
 ---
