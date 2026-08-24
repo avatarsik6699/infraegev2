@@ -240,15 +240,17 @@
   file and GitHub Environment secret before closing the provider-console session; then prove a
   fresh local wrapper connection and a reviewer-approved deploy without printing the value.
 
-### Full Gate Compose bootstrap owns the frontend build port
+### Full Gate Compose bootstrap needs a unique project and port namespace
 
-- **Symptoms**: the Full Gate bootstrap is green, then a host TanStack build fails because port
-  3000 is already published by the `infra` Compose web service started earlier in the same gate.
-- **Root cause**: infrastructure bootstrap and host prerender are valid independently but shared
-  one host port without an ownership-aware transition.
+- **Symptoms**: the Full Gate adopts/recreates containers from another checkout named `infra`, or
+  fails on common host ports such as PostgreSQL `5432` before its own stack becomes healthy.
+- **Root cause**: Compose derives a project name from the first Compose-file directory unless one
+  is explicit; the old gate also published the usual development ports on every host interface.
 - **Fix**: run build/performance rows through `scripts/run-host-web-gate.sh`. It stops only a
-  running web service in the repository-owned `infra` project and restores it through an EXIT trap
-  on both success and failure; it never kills an unrelated port owner.
+  running web service in the repository-owned `infraege-full-gate` project and restores it through
+  an EXIT trap on both success and failure; it never kills an unrelated port owner. Bootstrap uses
+  that same explicit project name plus dedicated overlay ports `18080/13000/18000/15432`; relying
+  on the `infra/` basename or common ports can adopt or collide with an unrelated repository.
 
 ### Observability work spans two first-party repositories
 

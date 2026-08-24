@@ -65,16 +65,17 @@ cmp "$test_root/expected-env" "$test_root/actual-env"
 ! grep -Eq '^[A-Z0-9_]+=' "$repo_dir/ops/observability/env.contract"
 
 jq -e '
-  .schema_version == 2 and
+  .schema_version == 3 and
   .target_id == "infraegev2-production" and
   .project.slug == "infraegev2" and
   .project.name == "infraegev2" and
-  ([.sources[].adapter_name] | sort) ==
+  ([.sources[].adapter_id] | sort) ==
     ["beszel-api","fail2ban-ssh","host-metrics-ssh","journal-http","push","umami-http","uptime-http"] and
-  ([.sources[] | select(.adapter_name == "journal-http")][0].config.host == "10.77.0.1") and
-  ([.sources[] | select(.adapter_name == "umami-http")][0].config.password == "<create-in-sre-kit>") and
-  ([.sources[] | select(.adapter_name == "push")][0].config.token == "<generate-and-store-outside-git>") and
-  ([.sources[] | select(.adapter_name == "push")][0].emits == ["traffic.request_count"])
+  ([.sources[] | select(.adapter_id == "journal-http")][0].config.host == "10.77.0.1") and
+  ([.sources[] | select(.adapter_id == "umami-http")][0].config.password == "<create-in-sre-kit>") and
+  ([.sources[] | select(.adapter_id == "push")][0].config == {}) and
+  ([.sources[] | select(.adapter_id == "push")][0].producer.token == "<generate-and-store-outside-git>") and
+  ([.sources[] | select(.adapter_id == "push")][0].emits == ["traffic.request_count"])
 ' "$repo_dir/ops/observability/sre-kit-sources.example.json" >/dev/null
 
 for file in \

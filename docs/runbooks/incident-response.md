@@ -40,5 +40,6 @@ Confirm public page and readiness, certificate validity, analytics collection, f
 application and operations backups, and all dashboard sources. Record root cause, timeline,
 affected data, corrective backlog item and whether
 legal notification duties need specialist review. infraegev2-specific Telegram rule/channel
-wiring is deliberately deferred; sre-kit's generic Telegram engine already exists, but it sends
-nothing for this target while the workstation-hosted core is off or no rule is configured.
+wiring is deliberately deferred; sre-kit's generic Telegram engine already exists, but the
+always-on core sends nothing for this target until an operator explicitly configures a channel
+and matching rules.

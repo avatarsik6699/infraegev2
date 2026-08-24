@@ -1,11 +1,11 @@
 # 6. Где физически живут части системы
 
-Логическая схема становится понятнее, если разложить её по трём физическим зонам.
+Логическая схема становится понятнее, если разложить её по четырём физическим зонам.
 
 ## Зона 1: Internet
 
-Из Internet доступны публичный сайт, readiness endpoint, SSH и same-origin Umami collector.
-GitHub Actions отдельно запускает внешний HTTPS/TLS probe каждые 15 минут.
+Из Internet доступны публичный сайт, readiness endpoint, application SSH и management UI
+`sre.infraege.ru`. GitHub Actions отдельно запускает внешний HTTPS/TLS probe каждые 15 минут.
 
 ## Зона 2: production VPS
 
@@ -23,55 +23,60 @@ host services
   journald, fail2ban, WireGuard, Restic, systemd timers
 ```
 
-Umami и Beszel не публикуются напрямую в Internet. Доступ оператора идёт через WireGuard.
+Umami и Beszel не публикуются напрямую в Internet. Read-only наблюдение идёт через WireGuard.
 
-## Зона 3: локальная рабочая станция
+## Зона 3: dedicated management VPS
 
-На workstation по требованию запускаются:
+Отдельный always-on Compose project содержит:
 
-- WireGuard tunnel и loopback forwards;
-- `sre-kit` core на `127.0.0.1:8080`;
-- privacy-safe traffic publisher и его timer;
-- web dashboard на `localhost:3000`.
+- `sre-kit` core с SQLite и adapters;
+- web dashboard;
+- Caddy edge с TLS;
+- privacy-safe Nginx traffic publisher и systemd timer;
+- ежедневный локальный Restic backup и ежемесячный изолированный restore proof.
 
-Локальные forwards:
+Management peer имеет собственный WireGuard-адрес `10.77.0.3/32` и маршрутизирует только
+production peer `10.77.0.1/32`. Он не управляет application или operations Compose и не получает
+их deployment authority.
 
-| Локальный адрес | Цель на VPS | Назначение |
-|---|---|---|
-| `127.0.0.1:19531` | journal gateway | `journal-http` |
-| `127.0.0.1:18090` | Beszel `:8090` | `beszel-api` |
-| `127.0.0.1:13001` | Umami `:3001` | `umami-http` |
+## Зона 4: локальная рабочая станция
+
+Локальный `sre-kit-local` сохранён как выключенный по умолчанию ручной fallback. Его отдельная
+SQLite, Sources и telemetry не переносятся в management runtime и не являются production truth.
+При явном запуске он поднимает tunnel, core, publisher timer и dashboard только для локальной
+диагностики или восстановления доступа.
 
 ## Каким путём идёт каждый Source
 
-| Source | Путь | Что читает |
+| Source | Основной production-путь | Что читает |
 |---|---|---|
-| `uptime-http` | public HTTPS | readiness и TLS |
-| `host-metrics-ssh` | public SSH | CPU, RAM, disk |
-| `fail2ban-ssh` | public SSH | ban/unban |
-| `journal-http` | WireGuard forward | journald Events |
-| `beszel-api` | WireGuard forward | host/container Metrics |
-| `umami-http` | WireGuard forward | consented analytics aggregates |
-| `push` | local producer → core | coarse Nginx traffic Metrics |
+| `uptime-http` | management VPS → public HTTPS | readiness и TLS |
+| `host-metrics-ssh` | management VPS → public SSH | CPU, RAM, disk |
+| `fail2ban-ssh` | management VPS → public SSH | ban/unban |
+| `journal-http` | management VPS → WireGuard | journald Events |
+| `beszel-api` | management VPS → WireGuard | host/container Metrics |
+| `umami-http` | management VPS → WireGuard | consented analytics aggregates |
+| `push` | management system publisher → loopback core | coarse Nginx traffic Metrics |
 
-## Ручной lifecycle
+## Always-on lifecycle
 
-Установка не включает autostart. Оператор явно запускает сессию:
+GitHub Actions публикует exact-SHA образы, а approval-gated deploy обновляет только management
+Compose project. `infraegev2` владеет target-specific bootstrap, WireGuard peer, Source
+reconciliation и publisher installation:
 
-```text
-sre-kit-local start
-  1. tunnel
-  2. core
-  3. один немедленный publisher run
-  4. publisher timer
-  5. dashboard
+```bash
+make sre-management ACTION=status
+make sre-management ACTION=backup
+make sre-management ACTION=restore-proof
+make sre-management ACTION=update RELEASE=<40-character-sre-kit-main-sha>
 ```
 
-Остановка идёт в безопасном обратном порядке: сначала publisher и timer, затем dashboard, core и
-tunnel. Канал `systemctl --user` может оставаться доступным через `dbus.socket`; это само по себе не
-означает, что `sre-kit` работает в фоне.
+`status` проверяет exact release и readiness без изменения target. `update` делает pre-update
+backup и откатывает предыдущий release, если pull/startup/readiness не проходят.
 
-Канонические команды:
+## Ручной fallback lifecycle
+
+Fallback не включается автоматически:
 
 ```bash
 sre-kit-local start
@@ -81,17 +86,15 @@ sre-kit-local logs
 sre-kit-local stop
 ```
 
-## Что происходит, когда workstation выключена
-
-VPS и продукт продолжают работу. Umami, Beszel, journald, fail2ban, backups и их timers продолжают
-собирать собственные данные. Но локальные polling, push delivery, alert evaluation, Dashboard и
-Telegram delivery через этот core останавливаются. GitHub probe остаётся отдельной ограниченной
+Остановка workstation больше не создаёт штатную слепую зону: production polling, push delivery,
+Dashboard и alert evaluation продолжаются на management VPS. Они останавливаются только при
+отказе management runtime или его пути к target. GitHub probe остаётся независимой ограниченной
 проверкой внешней доступности и TLS.
 
 ## Контрольный вопрос
 
-Почему Umami может продолжать собирать consented события, когда Dashboard выключен? Потому что
-Umami живёт на VPS, а Dashboard и `umami-http` polling — на локальной workstation.
+Почему Umami и `umami-http` продолжают работать, когда workstation выключена? Потому что Umami
+живёт на production VPS, а scheduled polling выполняет always-on management VPS; workstation —
+только отдельный fallback.
 
 [Назад](05-dashboard-and-alerts.md) · [Дальше: сквозные сценарии →](07-end-to-end-scenarios.md)
-

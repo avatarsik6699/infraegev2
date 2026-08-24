@@ -2,7 +2,7 @@
 set -Eeuo pipefail
 
 repo_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
-compose=(docker compose --project-name infra
+compose=(docker compose --project-name infraege-full-gate
   -f "$repo_dir/infra/docker-compose.yml"
   -f "$repo_dir/infra/docker-compose.override.yml")
 web_was_running=false

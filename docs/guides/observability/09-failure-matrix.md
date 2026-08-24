@@ -29,10 +29,10 @@ Nginx Events помогают увидеть upstream error.
 ### Недоступен весь VPS
 
 Одновременно ломаются независимые пути: public uptime, оба SSH Source и все private Source. Если
-workstation и core работают, множество одновременных `unreachable` указывает на общий VPS, сеть или
+management core работает, множество одновременных `unreachable` указывает на общий VPS, сеть или
 provider, а не на семь отдельных adapter.
 
-### Сломан WireGuard или локальный tunnel
+### Сломан management WireGuard peer
 
 `journal-http`, `beszel-api` и `umami-http` становятся `unreachable`. Public uptime,
 `host-metrics-ssh` и `fail2ban-ssh` могут оставаться `ok`. Это характерный рисунок private transport
@@ -79,7 +79,7 @@ dogfood snapshot канал вообще не настроен, поэтому �
 | WireGuard | `ok` | `ok` | недоступны | работает |
 | Umami | `ok` | `ok` | только Umami плох | работает без analytics |
 | Beszel | `ok` | SSH metrics `ok` | только Beszel плох | работает |
-| sre-kit core | нет локального опроса | нет локального опроса | нет локального опроса | работает |
+| sre-kit core | нет опроса | нет опроса | нет опроса | работает |
 | publisher | `ok` | `ok` | pull обычно `ok` | работает |
 
 ## Принцип корреляции
@@ -88,15 +88,15 @@ dogfood snapshot канал вообще не настроен, поэтому �
 Несколько красных Source с общей зависимостью указывают на эту зависимость. Несколько независимых
 путей, сломавшихся одновременно, повышают вероятность общего отказа VPS или сети.
 
-Это эвристика, а не математическое доказательство. Всегда учитывайте время последней точки и то,
-была ли локальная сессия вообще включена.
+Это эвристика, а не математическое доказательство. Всегда учитывайте время последней точки,
+readiness management core и состояние его WireGuard peer.
 
 ## Минимальный порядок диагностики
 
 1. Проверьте публичную страницу и `/health/ready` отдельно.
 2. Посмотрите не только цвет, но и время последнего обновления Source.
 3. Найдите рисунок: один Source, все private, все SSH или вообще все пути.
-4. Сравните независимые пары: SSH/Beszel, Umami/Nginx, local uptime/GitHub probe.
+4. Сравните независимые пары: SSH/Beszel, Umami/Nginx, sre-kit uptime/GitHub probe.
 5. Откройте Source detail и затем journal/fail2ban Events.
 6. Сформулируйте гипотезу до изменения production.
 7. Исправляйте через канонический `infraegev2` runbook или CLI.

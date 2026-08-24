@@ -6,19 +6,19 @@
 services:
   nginx:
     ports:
-      - "8080:80"
+      - "18080:80"
 
   web:
     ports:
-      - "3000:3000"
+      - "13000:3000"
 
   api:
     ports:
-      - "8000:8000"
+      - "18000:8000"
     environment:
       # apps/api/entrypoint.sh reads this to decide whether to pass --reload to uvicorn.
       - APP_ENV=development
 
   postgres:
     ports:
-      - "5432:5432"
+      - "15432:5432"

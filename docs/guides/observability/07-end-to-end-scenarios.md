@@ -11,7 +11,7 @@ Web отправил lesson_opened
   ↓
 same-origin collector → Umami на VPS
   ↓
-umami-http во время локального poll
+umami-http во время scheduled poll на management VPS
   ↓
 analytics.event_count{event="lesson_opened"}
   ↓
@@ -35,7 +35,7 @@ validation → SQLite → Dashboard
 ```text
 Nginx access record в journald
   ↓
-локальный publisher читает ограниченное окно
+system publisher на management VPS читает ограниченное окно
   ↓
 удаляет IP, request id, referrer и полный user agent
   ↓
@@ -106,4 +106,3 @@ Dashboard не является кнопкой управления production. 
 public HTTPS и SSH Sources.
 
 [Назад](06-placement-and-lifecycle.md) · [Дальше: перекрытие источников →](08-overlap-and-redundancy.md)
-

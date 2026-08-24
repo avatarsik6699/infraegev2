@@ -9,8 +9,8 @@
 
 | Field | Value |
 |-------|-------|
-| Document Version | `v2.1` |
-| Date | `2026-08-22` |
+| Document Version | `v2.2` |
+| Date | `2026-08-24` |
 | Architect / Owner | `v.godlevskiy` |
 | Stack | See [docs/STACK.md](./STACK.md) |
 | Domain | Платформа подготовки к ЕГЭ по информатике — теория, визуализация, практика по темам экзамена, привязанные к мини-курсам |

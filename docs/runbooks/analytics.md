@@ -28,9 +28,25 @@ Create the `infraegev2` Project and push Source using
 store it in a protected mode-600 local file, and send each batch with a unique
 `Idempotency-Key`. Do not commit the token. Failed batches may be retried with the same key.
 
-## Continuous local delivery
+## Continuous delivery
 
-Install or refresh the manual lifecycle after creating the push Source:
+The primary production path is the system publisher on the dedicated management VPS. Source
+reconciliation installs its mode-600 loopback credentials and one-minute systemd timer:
+
+```bash
+make sre-management ACTION=sources
+make sre-management ACTION=status
+```
+
+It reads the production Nginx journal through the dedicated WireGuard peer, persists only an
+opaque cursor under `/var/lib/infraege-sre-kit`, and posts sanitized batches to the management
+core on loopback. The publisher and core are always-on but remain observational: neither can
+mutate the application or operations Compose projects.
+
+### Manual workstation fallback
+
+The separate local runtime is retained for explicit fallback use. Install or refresh its manual
+lifecycle only against its own Source/token state:
 
 ```bash
 ops/observability/install-sre-kit-local.sh \
@@ -56,9 +72,9 @@ overlong targets as `__long_path__`, and common vulnerability probes such as `/.
 `/wp-*` as `__probe__`; all three bounded labels use `suspected_automation`. Exact raw targets
 remain available only in the existing bounded security journal, not in sre-kit analytics.
 
-This is deliberately workstation-scoped. While `sre-kit-local` is stopped or the workstation is
-off, target Nginx/Umami/Beszel continue normally but traffic delivery, polling and alerts pause.
-Installing an always-on management core remains a separate decision.
+Stopping `sre-kit-local` pauses only this fallback runtime. Production traffic delivery, polling,
+Dashboard and alert evaluation continue on the management VPS. They pause only if that management
+runtime or its path to the target fails; target Nginx/Umami/Beszel continue independently.
 
 ## Retention and legal checks
 

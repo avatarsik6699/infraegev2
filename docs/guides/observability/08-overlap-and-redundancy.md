@@ -37,14 +37,14 @@ dogfood-проверки в SQLite наблюдались host Metrics Beszel; �
 Первый удобен для расследования неизвестной причины. Второй — для понятной security-картины без
 повторного разбора общего журнала в UI.
 
-## Локальный uptime и GitHub probe
+## Always-on uptime и GitHub probe
 
-`uptime-http` встроен в общий Source/Check/Alert pipeline и работает во время локальной сессии.
-GitHub Actions запускается независимо от workstation каждые 15 минут и проверяет внешний HTTPS и
-срок TLS.
+`uptime-http` встроен в общий Source/Check/Alert pipeline и опрашивается always-on management
+core. GitHub Actions запускается независимо от этого core каждые 15 минут и проверяет внешний
+HTTPS и срок TLS.
 
 GitHub probe не заменяет Dashboard: он не видит CPU, private services, journals или корреляцию.
-Но он уменьшает слепую зону, когда локальный core выключен.
+Но он даёт независимый сигнал, когда management core или его сеть недоступны.
 
 ## Первичный инструмент и sre-kit storage
 
@@ -60,8 +60,9 @@ sre-kit                    = общий ограниченный обзор
 
 ## Где перекрытия пока недостаточно
 
-- локальный core не имеет независимого meta-monitoring;
-- при выключенной workstation polling и Alerts останавливаются;
+- management core не имеет полного независимого meta-monitoring; GitHub probe покрывает только
+  внешний HTTPS/TLS;
+- при отказе management VPS polling, push ingestion и Alerts останавливаются, но target работает;
 - backup/restore status пока не заведён как отдельный Source;
 - пользовательские alert rules и Telegram для `infraegev2` не настроены;
 - практическое использование container Metrics Beszel требует подтверждения данными.
@@ -72,4 +73,3 @@ sre-kit                    = общий ограниченный обзор
 видит consented действия внутри интерфейса и не может достоверно определить намерение пользователя.
 
 [Назад](07-end-to-end-scenarios.md) · [Дальше: матрица отказов →](09-failure-matrix.md)
-

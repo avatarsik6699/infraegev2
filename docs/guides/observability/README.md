@@ -32,21 +32,22 @@ SRE, сбор метрик или внутреннее устройство об
 Этот гайд объясняет архитектуру, но не заменяет рабочие контракты:
 
 - [Stack Guide](../../STACK.md) — технологии, topology и команды;
-- [Analytics operations](../../runbooks/analytics.md) — consent, traffic publisher и локальный
-  lifecycle;
+- [Analytics operations](../../runbooks/analytics.md) — consent, always-on traffic publisher и
+  ручной fallback lifecycle;
 - [Production runbook](../../runbooks/production.md) — production operations;
 - [Source template](../../../ops/observability/sre-kit-sources.example.json) — состав и конфигурация
   Source без секретов;
-- [sre-kit README](../../../../sre-kit/README.md) и
-  [sre-kit SPEC](../../../../sre-kit/docs/SPEC.md) — контракт универсального ядра.
+- [sre-kit README](https://github.com/avatarsik6699/sre-kit/blob/main/README.md) и
+  [sre-kit SPEC](https://github.com/avatarsik6699/sre-kit/blob/main/docs/SPEC.md) — контракт
+  универсального ядра.
 
 Команды, адреса, версии и текущее состояние могут меняться. Перед операцией всегда сверяйтесь с
 указанными источниками истины.
 
 ## Снимок текущей интеграции
 
-На момент последней сквозной проверки 22 августа 2026 года Project `infraegev2` содержал семь
-включённых Source, и все они имели статус `ok`. В защищённом Project `default` Source не было.
-Это исторический снимок успешной проверки, а не обещание текущего состояния. Актуальное состояние
-показывают `sre-kit-local status`, Dashboard и Source detail во время запущенной локальной сессии.
-
+На момент последней сквозной проверки 23 августа 2026 года always-on Project `infraegev2`
+содержал семь включённых Source, и все они имели статус `ok`. Это исторический снимок успешной
+проверки, а не обещание текущего состояния. Актуальное состояние показывают
+`make sre-management ACTION=status`, Dashboard и Source detail; локальный `sre-kit-local` является
+выключенным по умолчанию ручным fallback и не является production authority.

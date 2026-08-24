@@ -1,16 +1,16 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "target_id": "infraegev2-production",
   "project": {
     "slug": "infraegev2",
     "name": "infraegev2",
     "description": "Public learning product and its production infrastructure"
   },
-  "note": "Operator-owned template, not a direct API payload. Create the Project first, assign every Source to it and keep all credentials in sre-kit. The push token is generated once by sre-kit and injected only into the target producer environment.",
+  "note": "Operator-owned template, not a direct API payload. adapter_id and each Source config follow the sre-kit HTTP contract. Create the Project first, assign every Source to it and keep all credentials in sre-kit. The push token is generated once by sre-kit and injected only into the protected management publisher environment.",
   "sources": [
     {
       "name": "Public availability",
-      "adapter_name": "uptime-http",
+      "adapter_id": "uptime-http",
       "config": {
         "url": "https://infraege.ru/health/ready",
         "method": "GET",
@@ -20,7 +20,7 @@
     },
     {
       "name": "Host resources",
-      "adapter_name": "host-metrics-ssh",
+      "adapter_id": "host-metrics-ssh",
       "config": {
         "host": "2.26.8.245",
         "port": 22,
@@ -32,7 +32,7 @@
     },
     {
       "name": "Security bans",
-      "adapter_name": "fail2ban-ssh",
+      "adapter_id": "fail2ban-ssh",
       "config": {
         "host": "2.26.8.245",
         "port": 22,
@@ -45,7 +45,7 @@
     },
     {
       "name": "Application journal",
-      "adapter_name": "journal-http",
+      "adapter_id": "journal-http",
       "config": {
         "host": "10.77.0.1",
         "port": 19531,
@@ -57,11 +57,11 @@
     },
     {
       "name": "Container telemetry",
-      "adapter_name": "beszel-api",
+      "adapter_id": "beszel-api",
       "config": {
         "base_url": "http://10.77.0.1:8090",
         "system_id": "<beszel-system-record-id>",
-        "email": "ops@infraege.ru",
+        "email": "<existing-beszel-user-email>",
         "password": "<create-in-sre-kit>",
         "auth_collection": "users",
         "lookback_seconds": 120
@@ -69,7 +69,7 @@
     },
     {
       "name": "Product analytics",
-      "adapter_name": "umami-http",
+      "adapter_id": "umami-http",
       "config": {
         "base_url": "http://10.77.0.1:3001",
         "website_id": "6deca958-82df-4809-9973-e0e367b7ee29",
@@ -99,9 +99,10 @@
     },
     {
       "name": "Nginx traffic",
-      "adapter_name": "push",
-      "purpose": "Coarse Nginx traffic aggregates produced by build-traffic-telemetry.py",
-      "config": {
+      "adapter_id": "push",
+      "purpose": "Coarse Nginx traffic aggregates produced by push-nginx-traffic.py",
+      "config": {},
+      "producer": {
         "token": "<generate-and-store-outside-git>",
         "idempotency_key": "<unique-per-batch>"
       },
