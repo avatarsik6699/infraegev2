@@ -9,7 +9,7 @@
 | Change | `56` |
 | Slug | `python-course-foundation` |
 | Title | Python Course Foundation |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/56-python-course-foundation` |
 
 ---
