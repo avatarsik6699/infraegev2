@@ -16,7 +16,7 @@ const publishedCourses = coursePublications.filter(
 
 export const FoundationPage: React.FC = () => (
   <div className={styles.page}>
-    <PublicHeader home seamless />
+    <PublicHeader home />
     <main className={styles.root} data-foundation-layout>
       <section className={styles.intro}>
         <Typography.Title order={1}>
@@ -30,6 +30,7 @@ export const FoundationPage: React.FC = () => (
       <div className={styles.catalog}>
         {publishedCourses.length > 0 ? (
           <section
+            id="courses"
             className={styles.materials}
             aria-labelledby="courses-title"
             data-course-list
@@ -63,12 +64,13 @@ export const FoundationPage: React.FC = () => (
         ) : null}
 
         <section
+          id="topics"
           className={styles.materials}
           aria-labelledby="materials-title"
           data-topic-list
         >
           <Typography.Title order={2} id="materials-title">
-            Темы
+            Темы ЕГЭ
           </Typography.Title>
           <ul className={styles.lessonList}>
             {publishedLessons.map((lesson) => (
@@ -92,6 +94,6 @@ export const FoundationPage: React.FC = () => (
         </section>
       </div>
     </main>
-    <PublicFooter seamless />
+    <PublicFooter />
   </div>
 );

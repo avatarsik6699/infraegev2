@@ -25,6 +25,9 @@ export class PublicDiscoveryPage {
       "https://infraege.ru/ege/5-preobrazovanie-zapisey-chisel",
     );
     expect(sitemap).not.toContain("/lab/");
-    expect(sitemap).not.toContain("/courses/python");
+    expect(sitemap).toContain("https://infraege.ru/courses/python");
+    expect(sitemap).toContain(
+      "https://infraege.ru/courses/python/pervaya-programma",
+    );
   }
 }

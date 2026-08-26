@@ -4,12 +4,8 @@ import { siteConfig } from "~/shared/config/site";
 import { TelegramLogo } from "./telegram-logo";
 import styles from "./public-footer.module.css";
 
-type Props = {
-  seamless?: boolean;
-};
-
-export const PublicFooter: React.FC<Props> = ({ seamless = false }) => (
-  <footer className={styles.root} data-seamless={seamless || undefined}>
+export const PublicFooter: React.FC = () => (
+  <footer className={styles.root}>
     <span>infraege</span>
     <nav className={styles.links} aria-label="Ссылки в подвале">
       <Link to="/privacy">Обработка данных</Link>

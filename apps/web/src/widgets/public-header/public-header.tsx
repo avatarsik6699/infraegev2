@@ -4,14 +4,10 @@ import styles from "./public-header.module.css";
 
 type PublicHeaderProps = {
   home?: boolean;
-  seamless?: boolean;
 };
 
-export const PublicHeader: React.FC<PublicHeaderProps> = ({
-  home = false,
-  seamless = false,
-}) => (
-  <header className={styles.root} data-seamless={seamless || undefined}>
+export const PublicHeader: React.FC<PublicHeaderProps> = ({ home = false }) => (
+  <header className={styles.root}>
     <div className={styles.identity}>
       {home ? (
         <span className={styles.brand}>{siteConfig.name}</span>

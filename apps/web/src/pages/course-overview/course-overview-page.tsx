@@ -5,6 +5,7 @@ import { PublicHeader } from "~/widgets/public-header";
 import { CourseOverviewCurriculum } from "./components/course-overview-curriculum";
 import { CourseOverviewIntro } from "./components/course-overview-intro";
 import { CourseOverviewOutcomes } from "./components/course-overview-outcomes";
+import { CourseOverviewProgress } from "./components/course-overview-progress";
 import type { CourseOverviewPageTypes } from "./course-overview-page.types";
 import styles from "./course-overview-page.module.css";
 
@@ -37,16 +38,20 @@ export const CourseOverviewPage: React.FC<CourseOverviewPageTypes.Props> = (
         <div className={styles.courseSummary}>
           <CourseOverviewIntro
             course={props.course}
-            firstVisibleLesson={visibleLessons[0]}
-            progressLessons={progressLessons}
+            firstVisibleLesson={
+              progressLessons.length === 0 ? visibleLessons[0] : undefined
+            }
           />
           <CourseOverviewOutcomes outcomes={props.course.learningOutcomes} />
         </div>
-        <CourseOverviewCurriculum
-          courseRouteSlug={props.course.routeSlug}
-          lessons={visibleLessons}
-          modules={props.course.modules}
-        />
+        <div className={styles.courseContent}>
+          <CourseOverviewProgress lessons={progressLessons} />
+          <CourseOverviewCurriculum
+            courseRouteSlug={props.course.routeSlug}
+            lessons={visibleLessons}
+            modules={props.course.modules}
+          />
+        </div>
       </main>
       <PublicFooter />
     </div>

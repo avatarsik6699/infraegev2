@@ -54,6 +54,7 @@
 
 .materials {
   gap: var(--space-3);
+  scroll-margin-block-start: var(--space-3);
 }
 
 .materials h2 {

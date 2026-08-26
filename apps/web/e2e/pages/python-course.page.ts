@@ -29,7 +29,7 @@ export class PythonCoursePage {
     });
   }
 
-  async expectReviewOverview(): Promise<void> {
+  async expectPublishedOverview(): Promise<void> {
     await expect(
       this.page.getByRole("heading", {
         level: 1,
@@ -39,7 +39,7 @@ export class PythonCoursePage {
     await expect(this.page.getByText("Ранний доступ")).toBeVisible();
     await expect(this.page.locator('meta[name="robots"]')).toHaveAttribute(
       "content",
-      "noindex,nofollow",
+      "index,follow",
     );
     await expect(
       this.page.getByRole("heading", { level: 2, name: "Чему вы научитесь" }),
@@ -70,27 +70,42 @@ export class PythonCoursePage {
     await expect(
       curriculum.locator("[data-course-module]").last(),
     ).toContainText("09");
+    await expect(curriculum.locator("[data-course-module]").first()).toHaveCSS(
+      "border-top-width",
+      "0px",
+    );
+    await expect(curriculum.locator("[data-course-module]").nth(1)).toHaveCSS(
+      "border-top-width",
+      "1px",
+    );
+    await expect(curriculum.locator("[data-course-module]").last()).toHaveCSS(
+      "border-bottom-width",
+      "0px",
+    );
     await expect(
       this.page.getByRole("link", { name: /Первая программа/ }),
     ).toHaveAttribute("href", "/courses/python/pervaya-programma");
-    const firstLessonLink = this.page.getByRole("link", {
-      name: "Открыть первый урок для проверки",
-    });
-    await expect(firstLessonLink).toHaveAttribute(
-      "href",
-      "/courses/python/pervaya-programma",
-    );
-    await expect(firstLessonLink).toHaveCSS(
-      "text-decoration-line",
-      "underline",
-    );
-    await expect(firstLessonLink).toHaveCSS(
-      "background-color",
-      "rgba(0, 0, 0, 0)",
-    );
     await expect(
-      this.page.getByRole("heading", { name: "Ваш прогресс" }),
+      this.page.getByRole("link", { name: "Начать курс" }),
     ).toHaveCount(0);
+    const progress = this.page.getByRole("region", {
+      name: "Прогресс курса",
+    });
+    await expect(progress).toContainText("Освоено 0 из 1 доступных уроков.");
+    await expect(
+      progress.getByRole("progressbar", {
+        name: "Освоенные доступные уроки",
+      }),
+    ).toHaveAttribute("aria-valuetext", "Освоено 0 из 1 доступных уроков.");
+    const progressComesBeforeCurriculum = await progress.evaluate((section) => {
+      const curriculum = section.nextElementSibling;
+      return Boolean(
+        curriculum &&
+        section.compareDocumentPosition(curriculum) &
+          Node.DOCUMENT_POSITION_FOLLOWING,
+      );
+    });
+    expect(progressComesBeforeCurriculum).toBe(true);
     await expectNoHorizontalOverflow(this.page);
   }
 
@@ -110,7 +125,7 @@ export class PythonCoursePage {
       .toBe(0);
   }
 
-  async expectReviewLesson(): Promise<void> {
+  async expectPublishedLesson(): Promise<void> {
     await expect(
       this.page.getByRole("heading", {
         level: 1,
@@ -119,7 +134,7 @@ export class PythonCoursePage {
     ).toBeVisible();
     await expect(this.page.locator('meta[name="robots"]')).toHaveAttribute(
       "content",
-      "noindex,nofollow",
+      "index,follow",
     );
     await expect(this.page.locator("[data-practice-task]")).toHaveCount(5);
     await expect(
@@ -264,7 +279,7 @@ export class PythonCoursePage {
 
   async expectReadableWithoutJavaScript(): Promise<void> {
     await this.openFirstLesson();
-    await this.expectReviewLesson();
+    await this.expectPublishedLesson();
     await expect(this.page.locator("[data-practice-form] form")).toHaveCount(5);
     await expect(
       this.page
@@ -275,7 +290,7 @@ export class PythonCoursePage {
 
   async expectOverviewReadableWithoutJavaScript(): Promise<void> {
     await this.openOverview();
-    await this.expectReviewOverview();
+    await this.expectPublishedOverview();
     await expect(
       this.page.getByLabel("Настройки необязательной аналитики"),
     ).toHaveCount(0);
@@ -283,9 +298,7 @@ export class PythonCoursePage {
       this.page.getByRole("button", { name: "Настройки" }),
     ).toHaveCount(0);
     await expect(
-      this.page.getByRole("link", {
-        name: "Открыть первый урок для проверки",
-      }),
-    ).toBeVisible();
+      this.page.getByRole("link", { name: "Начать курс" }),
+    ).toHaveCount(0);
   }
 }

@@ -1,16 +1,15 @@
-import { Link } from "@tanstack/react-router";
 import { useMemo } from "react";
 import type { CourseTypes } from "~/entities/course";
 import { useLessonsProgress } from "~/features/lesson-progress";
+import { Progress } from "~/shared/components/progress";
 import { Typography } from "~/shared/components/typography";
 import styles from "../course-overview-page.module.css";
 import {
   calculateCourseProgress,
-  getCourseProgressPresentation,
+  getCourseProgressCopy,
 } from "./course-overview-progress.model";
 
 type Props = {
-  courseRouteSlug: string;
   lessons: readonly CourseTypes.LessonDefinition[];
 };
 
@@ -33,33 +32,20 @@ export const CourseOverviewProgress: React.FC<Props> = (props) => {
     () => calculateCourseProgress(progressLessons, progressByLessonId),
     [progressByLessonId, progressLessons],
   );
-  const destination =
-    props.lessons.find((lesson) => lesson.id === progress.continueLessonId) ??
-    props.lessons[0];
+  if (progress.availableCount === 0) return null;
 
-  if (!destination) return null;
-
-  const presentation = getCourseProgressPresentation(progress);
+  const copy = getCourseProgressCopy(progress);
 
   return (
-    <section
-      className={styles.progress}
-      aria-labelledby="course-progress-title"
-    >
-      <Typography.Title order={2} id="course-progress-title">
-        Ваш прогресс
-      </Typography.Title>
-      <Typography.Text tone="muted">{presentation.copy}</Typography.Text>
-      <Link
-        className={styles.courseLink}
-        to="/courses/$courseSlug/$lessonSlug"
-        params={{
-          courseSlug: props.courseRouteSlug,
-          lessonSlug: destination.routeSlug,
-        }}
-      >
-        {presentation.action}
-      </Link>
+    <section className={styles.progress} aria-label="Прогресс курса">
+      <Typography.Text tone="muted">{copy}</Typography.Text>
+      <Progress
+        className={styles.progressBar}
+        label="Освоенные доступные уроки"
+        max={progress.availableCount}
+        value={progress.masteredLessonIds.length}
+        valueText={copy}
+      />
     </section>
   );
 };

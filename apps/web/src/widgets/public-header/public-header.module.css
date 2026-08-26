@@ -15,10 +15,6 @@
   align-items: center;
 }
 
-.root[data-seamless] {
-  border-bottom: 0;
-}
-
 .brand {
   color: var(--color-text);
   font-family: var(--font-reading);

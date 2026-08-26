@@ -140,8 +140,11 @@ app → routes → pages → widgets → features → entities → shared
 - Course progress is a hydration-only enhancement derived from published CourseLesson entries in
   the app-scoped lesson-progress registry; it has no separate store or persistence lifecycle.
   Copy says «освоено N из M доступных уроков» and keeps that state separate from the course's
-  `early_access` stage; never render a total-course percentage, hard lesson locks or course-wide
-  reset while the program is still developing.
+  `early_access` stage. On the overview it stays a compact row with a thin progress bar directly
+  above the curriculum, not a standalone titled section in the course introduction. It is
+  informational only: the published lesson row remains the course entry point, so progress does
+  not contain a competing action. Never render a total-course percentage, hard lesson locks or
+  course-wide reset while the program is still developing.
 - A `Checkpoint` may appear immediately after a `ConceptBlock` that closes a coherent theory
   group. Keep these checks short, sequential in SSR/no-JS, and visually contained; distinguish the
   group with one question icon, a matching informational heading label and the same compact
@@ -181,12 +184,15 @@ app → routes → pages → widgets → features → entities → shared
   external-origin arrival use the explicit fallback route instead of leaving the application.
 - Public headers share one release identity from `siteConfig`: the wordmark and restrained release
   label stay grouped at the left, while the current application version remains at the right.
+  Outside the home page the wordmark is the route back home. Material discovery belongs to the
+  registry-derived home sections rather than duplicate collection links in global chrome.
   Optional analytics first appears only after hydration as a fixed full-width bottom prompt that
   overlays rather than shifts content; after a choice, its only persistent control lives in the
   «Ваш выбор» section on `/privacy`, not in the header. Public footers expose the privacy route and
   the shared Telegram invitation with a text label and the official brand mark. Published pages do
-  not duplicate this chrome with page-private header markup; frozen lab headers keep their
-  explicitly isolated review contract.
+  not duplicate this chrome with page-private header markup. The shared header's bottom rule and
+  footer's top rule remain visible on every public page; there is no page-specific borderless
+  variant. Frozen lab headers keep their explicitly isolated review contract.
 
 ## 5. Responsive and accessible behavior
 

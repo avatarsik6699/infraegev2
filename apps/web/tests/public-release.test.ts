@@ -1,4 +1,8 @@
 import { describe, expect, it } from "vitest";
+import {
+  courseLessonPublications,
+  coursePublications,
+} from "~/entities/course";
 import { lessonPublications } from "~/entities/lesson";
 import { siteConfig } from "~/shared/config/site";
 import { pageHead } from "~/shared/lib/seo";
@@ -48,6 +52,23 @@ describe("public release metadata", () => {
     expect(
       new Set(lessonPublications.map((lesson) => lesson.summary)).size,
     ).toBe(lessonPublications.length);
+  });
+
+  it("publishes the Python course and lesson discovery metadata together", () => {
+    expect(coursePublications).toEqual([
+      expect.objectContaining({
+        id: "python",
+        routeSlug: "python",
+        status: "published",
+      }),
+    ]);
+    expect(courseLessonPublications).toEqual([
+      expect.objectContaining({
+        id: "python-first-program",
+        routeSlug: "pervaya-programma",
+        status: "published",
+      }),
+    ]);
   });
 
   it("creates absolute canonical and social metadata", () => {

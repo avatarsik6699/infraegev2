@@ -11,25 +11,25 @@ import {
 import { loadPracticeTasks } from "~/entities/practice-task";
 import {
   calculateCourseProgress,
-  getCourseProgressPresentation,
+  getCourseProgressCopy,
   type CourseProgressSnapshot,
 } from "~/pages/course-overview/components/course-overview-progress.model";
 
 describe("Python course foundation", () => {
-  it("keeps the course and its first lesson review-only until approval", () => {
+  it("publishes the course and its first lesson as one unit", () => {
     expect(coursePublications).toEqual([
       expect.objectContaining({
         id: "python",
         routeSlug: "python",
         stage: "early_access",
-        status: "review",
+        status: "published",
       }),
     ]);
     expect(courseLessonPublications).toEqual([
       expect.objectContaining({
         id: "python-first-program",
         routeSlug: "pervaya-programma",
-        status: "review",
+        status: "published",
       }),
     ]);
   });
@@ -102,7 +102,6 @@ describe("course progress", () => {
     ).toEqual({
       masteredLessonIds: ["first"],
       availableCount: 2,
-      continueLessonId: "second",
       allAvailableMastered: false,
     });
 
@@ -114,7 +113,6 @@ describe("course progress", () => {
     ).toEqual({
       masteredLessonIds: ["first", "second"],
       availableCount: 2,
-      continueLessonId: "second",
       allAvailableMastered: true,
     });
   });
@@ -124,47 +122,36 @@ describe("course progress", () => {
       progress: {
         allAvailableMastered: false,
         availableCount: 2,
-        continueLessonId: "first",
         masteredLessonIds: [],
       },
-      expected: {
-        action: "Начать курс",
-        copy: "Освоено 0 из 2 доступных уроков.",
-      },
+      expected: "Освоено 0 из 2 доступных уроков.",
     },
     {
       progress: {
         allAvailableMastered: false,
         availableCount: 2,
-        continueLessonId: "second",
         masteredLessonIds: ["first"],
       },
-      expected: {
-        action: "Продолжить курс",
-        copy: "Освоено 1 из 2 доступных уроков.",
-      },
+      expected: "Освоено 1 из 2 доступных уроков.",
     },
     {
       progress: {
         allAvailableMastered: true,
         availableCount: 2,
-        continueLessonId: "second",
         masteredLessonIds: ["first", "second"],
       },
-      expected: {
-        action: "Повторить последний доступный урок",
-        copy: "Освоены все доступные уроки: 2 из 2. Курс продолжает развиваться.",
-      },
+      expected:
+        "Освоены все доступные уроки: 2 из 2. Курс продолжает развиваться.",
     },
   ])(
-    "selects explicit progress copy and action",
-    ({ progress, expected }: ProgressPresentationCase) => {
-      expect(getCourseProgressPresentation(progress)).toEqual(expected);
+    "selects explicit progress copy",
+    ({ progress, expected }: ProgressCopyCase) => {
+      expect(getCourseProgressCopy(progress)).toBe(expected);
     },
   );
 });
 
-type ProgressPresentationCase = {
+type ProgressCopyCase = {
   progress: CourseProgressSnapshot;
-  expected: { action: string; copy: string };
+  expected: string;
 };

@@ -11,10 +11,6 @@
   font-size: var(--text-sm);
 }
 
-.root[data-seamless] {
-  border-top: 0;
-}
-
 .links {
   display: flex;
   flex-wrap: wrap;

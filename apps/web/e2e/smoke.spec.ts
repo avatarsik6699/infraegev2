@@ -1,6 +1,6 @@
 import { test } from "./fixtures";
 
-test("the review Python course is complete but remains unlisted", async ({
+test("the published Python course is discoverable and complete", async ({
   browserSession,
   noJavaScriptPythonCoursePage,
   pythonCoursePage,
@@ -8,14 +8,14 @@ test("the review Python course is complete but remains unlisted", async ({
   await browserSession.useDesktopViewport();
   await pythonCoursePage.openOverview();
   await pythonCoursePage.dismissAnalyticsPrompt();
-  await pythonCoursePage.expectReviewOverview();
-  await browserSession.captureViewport("python-course-review-desktop.png");
+  await pythonCoursePage.expectPublishedOverview();
+  await browserSession.captureViewport("python-course-published-desktop.png");
 
   await pythonCoursePage.openFirstLesson();
-  await pythonCoursePage.expectReviewLesson();
+  await pythonCoursePage.expectPublishedLesson();
   await pythonCoursePage.expectKeyboardDisclosures();
   await browserSession.captureViewport(
-    "python-first-program-review-desktop.png",
+    "python-first-program-published-desktop.png",
   );
   await pythonCoursePage.expectPracticeAndReset();
   await browserSession.captureViewport(
@@ -24,19 +24,19 @@ test("the review Python course is complete but remains unlisted", async ({
 
   await browserSession.useZoomedDesktopViewport();
   await pythonCoursePage.openOverview();
-  await pythonCoursePage.expectReviewOverview();
+  await pythonCoursePage.expectPublishedOverview();
   await pythonCoursePage.openFirstLesson();
-  await pythonCoursePage.expectReviewLesson();
+  await pythonCoursePage.expectPublishedLesson();
   await browserSession.captureViewport(
-    "python-first-program-review-zoomed.png",
+    "python-first-program-published-zoomed.png",
   );
 
   await browserSession.useNarrowViewport();
   await pythonCoursePage.openFirstLesson();
-  await pythonCoursePage.expectReviewLesson();
+  await pythonCoursePage.expectPublishedLesson();
   await pythonCoursePage.expectMobileReadingOrder();
   await browserSession.captureViewport(
-    "python-first-program-review-mobile.png",
+    "python-first-program-published-mobile.png",
   );
   browserSession.expectCleanConsole();
 

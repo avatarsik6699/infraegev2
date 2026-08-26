@@ -3,12 +3,10 @@ import type { CourseTypes } from "~/entities/course";
 import { Badge } from "~/shared/components/badge";
 import { Typography } from "~/shared/components/typography";
 import styles from "../course-overview-page.module.css";
-import { CourseOverviewProgress } from "./course-overview-progress";
 
 type Props = {
   course: CourseTypes.Definition;
   firstVisibleLesson?: CourseTypes.LessonDefinition;
-  progressLessons: readonly CourseTypes.LessonDefinition[];
 };
 
 export const CourseOverviewIntro: React.FC<Props> = (props) => (
@@ -32,14 +30,6 @@ export const CourseOverviewIntro: React.FC<Props> = (props) => (
 );
 
 const CourseOverviewAction: React.FC<Props> = (props) => {
-  if (props.progressLessons.length > 0) {
-    return (
-      <CourseOverviewProgress
-        courseRouteSlug={props.course.routeSlug}
-        lessons={props.progressLessons}
-      />
-    );
-  }
   if (!props.firstVisibleLesson) return null;
   return (
     <Link

@@ -21,8 +21,16 @@ export class FoundationPage {
       this.page.getByText("Понятная теория и практика — бесплатно."),
     ).toBeVisible();
     await expect(
-      this.page.getByRole("heading", { name: "Темы" }),
+      this.page.getByRole("heading", { name: "Мини-курсы" }),
     ).toBeVisible();
+    await expect(
+      this.page.getByRole("heading", { name: "Темы ЕГЭ" }),
+    ).toBeVisible();
+    await expect(this.page.locator("#courses")).toBeVisible();
+    await expect(this.page.locator("#topics")).toBeVisible();
+    await expect(
+      this.page.getByRole("link", { name: /Python с нуля для ЕГЭ/ }),
+    ).toHaveAttribute("href", "/courses/python");
     await expect(
       this.page.getByRole("link", { name: /Рекурсивные алгоритмы/ }),
     ).toHaveAttribute("href", "/ege/16-rekursiya");
@@ -33,9 +41,6 @@ export class FoundationPage {
       this.page.getByRole("link", { name: "Обработка данных" }),
     ).toHaveAttribute("href", "/privacy");
     await expect(this.page.getByRole("link", { name: /lab/i })).toHaveCount(0);
-    await expect(
-      this.page.getByRole("link", { name: /Python с нуля для ЕГЭ/ }),
-    ).toHaveCount(0);
     await expect(this.page.locator('link[rel="canonical"]')).toHaveAttribute(
       "href",
       "https://infraege.ru/",

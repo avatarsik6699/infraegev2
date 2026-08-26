@@ -4,7 +4,7 @@ export const pythonFirstProgramLessonPublication = Object.freeze({
   title: "Первая программа: ввод, вычисление и вывод",
   summary:
     "Разберём, как Python выполняет команды, где хранит значения, как получает ввод и выводит результат.",
-  status: "review",
+  status: "published",
   practiceTaskIds: Object.freeze([
     "python-first-program-output-order",
     "python-first-program-variable-trace",
@@ -28,7 +28,7 @@ export const pythonCoursePublication = Object.freeze({
     "Разбираться в сообщениях об ошибках и находить причину",
     "Собирать знакомые команды и конструкции в готовое решение",
   ]),
-  status: "review",
+  status: "published",
   stage: "early_access",
   modules: Object.freeze([
     Object.freeze({

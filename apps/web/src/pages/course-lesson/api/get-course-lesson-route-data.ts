@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { findCourseLessonByRouteSlugs } from "~/entities/course";
-import { getPracticeTasksRouteData } from "~/entities/practice-task";
+import { loadPracticeTasks } from "~/entities/practice-task";
 
 type RouteInput = {
   courseRouteSlug: string;
@@ -15,5 +15,5 @@ export const getCourseLessonRouteData = createServerFn({ method: "GET" })
       data.lessonRouteSlug,
     );
     if (!lesson) return null;
-    return getPracticeTasksRouteData({ data: lesson.practiceTaskIds });
+    return { tasks: await loadPracticeTasks(lesson.practiceTaskIds) };
   });
