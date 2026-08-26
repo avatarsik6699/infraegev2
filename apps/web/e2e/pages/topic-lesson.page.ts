@@ -492,6 +492,7 @@ export class TopicLessonPage {
     await expect(firstAnswer).toBeEnabled();
     await expect(firstAnswer).toHaveValue("");
 
+    await this.dismissAnalyticsPrompt();
     await this.page
       .getByRole("link", {
         name: "Задание 5 · Преобразование записей чисел",
@@ -514,6 +515,15 @@ export class TopicLessonPage {
       }),
     ).toBeVisible();
     await this.open();
+  }
+
+  private async dismissAnalyticsPrompt(): Promise<void> {
+    const prompt = this.page.getByRole("complementary", {
+      name: "Настройки необязательной аналитики",
+    });
+    await expect(prompt).toBeVisible();
+    await prompt.getByRole("button", { name: "Не сейчас" }).click();
+    await expect(prompt).toBeHidden();
   }
 
   async expectReadingPosition(): Promise<void> {

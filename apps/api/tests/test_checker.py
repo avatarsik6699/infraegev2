@@ -5,6 +5,7 @@ from app.modules.tasks.service import is_correct
 def make_task(**overrides: object) -> Task:
     defaults: dict[str, object] = dict(
         id="t1",
+        topic_ids=["test-topic"],
         title="Test task",
         statement="...",
         hint="Test hint",

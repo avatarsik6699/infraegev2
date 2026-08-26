@@ -3,10 +3,10 @@ import {
   courseLessonPublications,
   coursePublications,
   findCourseByRouteSlug,
+  findCourseLessonPublicationByRouteSlugs,
   findCourseLessonByRouteSlugs,
+  findCoursePublicationByRouteSlug,
   getCourseLessons,
-  pythonCourse,
-  pythonFirstProgramLesson,
 } from "~/entities/course";
 import { loadPracticeTasks } from "~/entities/practice-task";
 import {
@@ -35,13 +35,30 @@ describe("Python course foundation", () => {
   });
 
   it("resolves only lessons owned by the requested course", () => {
-    expect(findCourseByRouteSlug("python")).toBe(pythonCourse);
-    expect(findCourseLessonByRouteSlugs("python", "pervaya-programma")).toBe(
-      pythonFirstProgramLesson,
+    const pythonCourse = findCourseByRouteSlug("python");
+    const pythonFirstProgramLesson = findCourseLessonByRouteSlugs(
+      "python",
+      "pervaya-programma",
     );
+
+    expect(findCoursePublicationByRouteSlug("python")).toMatchObject({
+      id: "python",
+      status: "published",
+    });
+    expect(
+      findCourseLessonPublicationByRouteSlugs("python", "pervaya-programma"),
+    ).toMatchObject({ id: "python-first-program", status: "published" });
+    expect(
+      findCourseLessonPublicationByRouteSlugs("missing", "pervaya-programma"),
+    ).toBeUndefined();
+    expect(pythonCourse).toBeDefined();
+    expect(pythonFirstProgramLesson).toBeDefined();
     expect(findCourseLessonByRouteSlugs("missing", "pervaya-programma")).toBe(
       undefined,
     );
+    if (!pythonCourse || !pythonFirstProgramLesson) {
+      throw new Error("Published Python course fixture is missing");
+    }
     expect(getCourseLessons(pythonCourse)).toEqual([pythonFirstProgramLesson]);
     expect(pythonCourse.modules).toHaveLength(9);
     expect(pythonCourse).toMatchObject({
@@ -59,6 +76,13 @@ describe("Python course foundation", () => {
   });
 
   it("loads five authored practice tasks in order without checker secrets", async () => {
+    const pythonFirstProgramLesson = findCourseLessonByRouteSlugs(
+      "python",
+      "pervaya-programma",
+    );
+    if (!pythonFirstProgramLesson) {
+      throw new Error("Published Python course lesson fixture is missing");
+    }
     const tasks = await loadPracticeTasks(
       pythonFirstProgramLesson.practiceTaskIds,
     );

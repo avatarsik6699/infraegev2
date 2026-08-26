@@ -106,7 +106,7 @@ export class PrivacyPage {
       this.page.getByText(/Обезличенная статистика помогает понять/),
     ).toBeVisible();
     await expect(
-      this.page.getByText(/все материалы останутся доступны/),
+      this.page.getByText(/Ответы, введённый текст и контактные данные/),
     ).toBeVisible();
     await expect(this.page.locator("#infraege-optional-analytics")).toHaveCount(
       0,

@@ -52,6 +52,20 @@ export default defineConfig((configEnv) => {
     },
     plugins: [
       tanstackStart({
+        router: {
+          codeSplittingOptions: {
+            splitBehavior: ({ routeId }) => {
+              if (routeId.startsWith("/courses")) {
+                return [
+                  ["loader", "component"],
+                  ["errorComponent"],
+                  ["notFoundComponent"],
+                ];
+              }
+              return undefined;
+            },
+          },
+        },
         prerender: {
           // The foundation route is static and must remain readable without JavaScript.
           enabled: true,

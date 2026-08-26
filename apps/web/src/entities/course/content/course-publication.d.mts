@@ -18,3 +18,10 @@ export const pythonFirstProgramLessonPublication: Readonly<CourseLessonPublicati
 export const pythonCoursePublication: Readonly<CoursePublication>;
 export const coursePublications: readonly CoursePublication[];
 export const courseLessonPublications: readonly CourseLessonPublication[];
+export function findCoursePublicationByRouteSlug(
+  routeSlug: string,
+): CoursePublication | undefined;
+export function findCourseLessonPublicationByRouteSlugs(
+  courseRouteSlug: string,
+  lessonRouteSlug: string,
+): CourseLessonPublication | undefined;

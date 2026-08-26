@@ -2,6 +2,8 @@ import { createFileRoute, notFound } from "@tanstack/react-router";
 import {
   findCourseByRouteSlug,
   findCourseLessonByRouteSlugs,
+  findCourseLessonPublicationByRouteSlugs,
+  findCoursePublicationByRouteSlug,
 } from "~/entities/course";
 import {
   CourseLessonPage,
@@ -11,8 +13,8 @@ import { pageHead } from "~/shared/lib/seo";
 
 export const Route = createFileRoute("/courses_/$courseSlug/$lessonSlug")({
   loader: async ({ params }) => {
-    const course = findCourseByRouteSlug(params.courseSlug);
-    const lesson = findCourseLessonByRouteSlugs(
+    const course = findCoursePublicationByRouteSlug(params.courseSlug);
+    const lesson = findCourseLessonPublicationByRouteSlugs(
       params.courseSlug,
       params.lessonSlug,
     );
@@ -24,14 +26,11 @@ export const Route = createFileRoute("/courses_/$courseSlug/$lessonSlug")({
       },
     });
     if (!routeData) throw notFound();
-    return { tasks: routeData.tasks };
+    return { course, lesson, tasks: routeData.tasks };
   },
-  head: ({ params }) => {
-    const course = findCourseByRouteSlug(params.courseSlug);
-    const lesson = findCourseLessonByRouteSlugs(
-      params.courseSlug,
-      params.lessonSlug,
-    );
+  head: ({ loaderData }) => {
+    const course = loaderData?.course;
+    const lesson = loaderData?.lesson;
     return course && lesson
       ? pageHead.create({
           title: `${lesson.title} — ${course.title}`,

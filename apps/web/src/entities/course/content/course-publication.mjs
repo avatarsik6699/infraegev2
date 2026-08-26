@@ -93,3 +93,21 @@ export const coursePublications = Object.freeze([pythonCoursePublication]);
 export const courseLessonPublications = Object.freeze([
   pythonFirstProgramLessonPublication,
 ]);
+
+export const findCoursePublicationByRouteSlug = (routeSlug) =>
+  coursePublications.find((course) => course.routeSlug === routeSlug);
+
+export const findCourseLessonPublicationByRouteSlugs = (
+  courseRouteSlug,
+  lessonRouteSlug,
+) => {
+  const course = findCoursePublicationByRouteSlug(courseRouteSlug);
+  if (!course) return undefined;
+  const memberIds = new Set(
+    course.modules.flatMap((courseModule) => courseModule.lessonIds),
+  );
+  return courseLessonPublications.find(
+    (lesson) =>
+      memberIds.has(lesson.id) && lesson.routeSlug === lessonRouteSlug,
+  );
+};

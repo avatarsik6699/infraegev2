@@ -1,15 +1,20 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
-import { findCourseByRouteSlug, getCourseLessons } from "~/entities/course";
+import {
+  findCourseByRouteSlug,
+  findCoursePublicationByRouteSlug,
+  getCourseLessons,
+} from "~/entities/course";
 import { CourseOverviewPage } from "~/pages/course-overview";
 import { pageHead } from "~/shared/lib/seo";
 
 export const Route = createFileRoute("/courses/$courseSlug")({
-  beforeLoad: ({ params }) => {
-    const course = findCourseByRouteSlug(params.courseSlug);
+  loader: ({ params }) => {
+    const course = findCoursePublicationByRouteSlug(params.courseSlug);
     if (!course) throw notFound();
+    return { course };
   },
-  head: ({ params }) => {
-    const course = findCourseByRouteSlug(params.courseSlug);
+  head: ({ loaderData }) => {
+    const course = loaderData?.course;
     return course
       ? pageHead.create({
           title: `${course.title} — infraege`,

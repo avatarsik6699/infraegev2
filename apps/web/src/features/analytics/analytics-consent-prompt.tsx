@@ -37,7 +37,7 @@ export const AnalyticsConsentPrompt: React.FC = () => {
               👉👈
             </span>
           </Typography.Text>
-          <Typography.Text tone="muted">
+          <Typography.Text variant="interface" tone="muted">
             Обезличенная статистика помогает понять, что в уроках удобно, а что
             стоит исправить. Ответы, введённый текст и контактные данные в
             аналитику не отправляются.

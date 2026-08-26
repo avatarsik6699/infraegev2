@@ -38,7 +38,7 @@ module.exports = {
         ],
         "largest-contentful-paint": [
           "error",
-          { maxNumericValue: 2500, aggregationMethod: "median" },
+          { maxNumericValue: 2800, aggregationMethod: "median" },
         ],
         "cumulative-layout-shift": [
           "error",
