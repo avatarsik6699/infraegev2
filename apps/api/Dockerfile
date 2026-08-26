@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM python:3.12-slim@sha256:229a2c5bfa27522db7815ea81f9bed70af17ccb9de9fc7ad142b1877b5830d36
+FROM python:3.12-slim@sha256:7a8b475003c4fe15a2cd4e55e5cfc2f3560bdc9333d624f24cdd6d4340fd7a17
 
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends --only-upgrade \
@@ -9,9 +9,12 @@ RUN apt-get update \
         liblastlog2-2=2.41.5-0+deb13u1 \
         libmount1=2.41.5-0+deb13u1 \
         libsmartcols1=2.41.5-0+deb13u1 \
+        libssl3t64=3.5.7-1~deb13u2 \
         libuuid1=2.41.5-0+deb13u1 \
         login=1:4.16.0-2+really2.41.5-0+deb13u1 \
         mount=2.41.5-0+deb13u1 \
+        openssl=3.5.7-1~deb13u2 \
+        openssl-provider-legacy=3.5.7-1~deb13u2 \
         util-linux=2.41.5-0+deb13u1 \
     && rm -rf /var/lib/apt/lists/*
 
