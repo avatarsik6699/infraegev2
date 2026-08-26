@@ -9,7 +9,7 @@
 | Change | `57` |
 | Slug | `python-course-publication-navigation` |
 | Title | Python Course Publication and Navigation |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/57-python-course-publication-navigation` |
 
 ---
