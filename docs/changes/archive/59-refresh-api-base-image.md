@@ -9,7 +9,7 @@
 | Change | `59` |
 | Slug | `refresh-api-base-image` |
 | Title | Refresh API Base Image |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/59-refresh-api-base-image` |
 
 ---
