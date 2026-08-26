@@ -9,7 +9,7 @@
 | Change | `58` |
 | Slug | `release-gate-regression-fixes` |
 | Title | Release Gate Regression Fixes |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/58-release-gate-regression-fixes` |
 
 ---
