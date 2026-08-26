@@ -32,8 +32,8 @@ STOP_TIMEOUT ?= 10
 help:
 	@echo "infraege local Docker workflow"
 	@echo ""
-	@echo "  make dev      Start or resume the app and wait until it is healthy"
-	@echo "  make rebuild  Rebuild app images, start, and wait until healthy"
+	@echo "  make dev      Start/resume the app; rebuild automatically when image inputs changed"
+	@echo "  make rebuild  Force-rebuild app images, start, and wait until healthy"
 	@echo "  make stop     Stop the app and keep containers for fast resume"
 	@echo "  make down     Remove app containers/network (keeps PostgreSQL data)"
 	@echo "  make restart  Restart the complete developer stack"

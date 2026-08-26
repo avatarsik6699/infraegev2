@@ -41,9 +41,10 @@
   current Docker Compose can treat the resulting image reference as changed even though no layer
   ran. Preserving containers in `make stop` alone therefore does not make resume fast while normal
   startup still passes `--build`.
-- **Fix:** keep normal `make dev` on `compose up --wait` so it builds only missing images and reuses
-  stopped containers. Use `make rebuild` after changing lockfiles, manifests, Dockerfiles, Vite
-  configuration or other image-owned inputs. Keep web/API source and content on development bind
+- **Fix:** keep the normal unchanged-input path on `compose up --wait` so it reuses stopped
+  containers. `make dev` fingerprints lockfiles, manifests, Dockerfiles, Vite configuration and
+  other image-owned inputs and uses `up --build` only when that fingerprint changes; `make rebuild`
+  remains the explicit force-rebuild path. Keep web/API source and content on development bind
   mounts; reserve `make down` for explicit container/network removal. Neither stop nor down removes
   the named PostgreSQL volume.
 

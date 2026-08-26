@@ -9,11 +9,11 @@
 
 | Field | Value |
 |-------|-------|
-| Document Version | `v2.2` |
+| Document Version | `v2.3` |
 | Date | `2026-08-24` |
 | Architect / Owner | `v.godlevskiy` |
 | Stack | See [docs/STACK.md](./STACK.md) |
-| Domain | Платформа подготовки к ЕГЭ по информатике — теория, визуализация, практика по темам экзамена, привязанные к мини-курсам |
+| Domain | Платформа подготовки к ЕГЭ по информатике — самостоятельные темы экзамена и мини-курсы с теорией, визуализацией и практикой |
 
 ---
 
@@ -30,12 +30,12 @@ sdamgia.ru, kpolyakov.spb.ru), ни новыми AI-ботами (решают �
 
 1. **Понимание, а не заучивание шаблонов.** Каждая тема объясняет *почему так*, а не только
    *делай так*. Практика привязана к теории, а не существует отдельным банком.
-2. **Явные связи между темами.** Ученик видит: «это задание опирается на тему X» и «прежде чем
-   идти сюда, разберись с тем». Связи — часть модели данных (`prerequisites`, `related_topics`,
-   `unlocks_topics`), а не текст в статье.
+2. **Связи только там, где они доказаны содержанием.** Темы ЕГЭ и мини-курсы самостоятельны и не
+   дублируют друг друга. Если реальная педагогическая связь появится, она вводится отдельным
+   решением и становится частью модели, а не рекламной ссылкой в тексте.
 3. **Инкрементальный запуск.** Нет этапа «сделать весь курс, потом выложить». Единица релиза —
-   одна тема или один мини-курс, полностью готовые (теория + визуализация + практика + связи), а
-   не общий каркас с пустыми разделами.
+   одна законченная тема или один законченный CourseLesson с теорией, практикой и результатом.
+   Early-access курс честно показывает только доступные уроки и развивающуюся программу.
 
 ### 1.2 Goal and Success Metrics
 
@@ -58,7 +58,7 @@ sdamgia.ru, kpolyakov.spb.ru), ни новыми AI-ботами (решают �
 |-----------------|------------------------------------------|
 | 3–5 самых проблемных тем ЕГЭ (по номерам заданий) полностью: теория + визуализация + практика | Аккаунты и синхронизация прогресса между устройствами |
 | 1 мини-курс — Python (закрывает больше всего номеров: 6, 8, 11, 14, 15, 16, 17, 18, 20–27) | Полноценный тренажёр-пробник ЕГЭ с таймером на весь вариант |
-| Связи «тема ЕГЭ ↔ урок мини-курса» (двусторонние ссылки + признак «требуется перед этим») | Платные функции любого вида |
+| Самостоятельный early-access мини-курс Python с отдельным Course/CourseLesson flow | Платные функции любого вида |
 | Публичные, индексируемые страницы тем и уроков (SSR/SSG) | AI внутри продукта (только как инструмент автора при подготовке контента) |
 | Практика по каждой теме: 5–10 заданий с проверкой ответа, без адаптивного подбора сложности | Мини-курс Excel и остальные темы ЕГЭ — вторая волна, по той же структуре |
 | Прогресс на уровне браузера (localStorage), без обязательной регистрации | i18n/локализация (аудитория исключительно русскоязычная) |
@@ -110,8 +110,9 @@ assisted-solution scoring, оценки уверенности или персо
 линейная модель предпочтительнее скрытого адаптивного ветвления.
 
 Reset удаляет конкретные публикации и UI-решения, но не этот контракт и не предметную область
-продукта. Сохраняются нейтральные сущности Topic/CourseLesson/Task, связи и mastery-семантика;
-slug, тексты, ассеты, маршруты и композиции удалённой публикации не являются основанием для нового
+продукта. Сохраняются нейтральные сущности Topic/Course/CourseLesson/Task и mastery-семантика;
+CourseLesson принадлежит Course, но не связан с Topic без отдельного будущего решения. Slug,
+тексты, ассеты, маршруты и композиции удалённой публикации не являются основанием для нового
 дизайна.
 
 ---
@@ -130,14 +131,19 @@ slug, тексты, ассеты, маршруты и композиции уд�
 ### 2.2 Key Entities
 
 `Topic` (тема ЕГЭ) `→` `ConceptBlock[]` (смысловые разделы типизированной TSX-теории)
-`Topic` `↔` `CourseLesson` (двусторонние связи `prerequisites` / `unlocks_topics`)
-`Course` `→` `CourseLesson[]`
-`Topic` / `CourseLesson` `→` `Task[]` (практика, привязанная к теме, может относиться к нескольким темам)
+`Course` `→` `CourseModule[]` `→` `CourseLesson[]` (упорядоченная самостоятельная траектория)
+`Topic` `→` `Task[]` через `topic_ids`
+`CourseLesson` `→` `Task[]` через `course_lesson_ids`
+
+Связи `Topic ↔ CourseLesson` отсутствуют в текущей модели намеренно. Их нельзя имитировать через
+совместное владение Task, prerequisites, unlocks или навигационные рекомендации.
 
 Контент живёт в git, не в БД: lesson theory и publication metadata — в типизированном TSX/модулях
-`apps/web`, practice/checker data — в `content/tasks/`, будущие Course-данные сохраняют отдельную
-JSON-границу только когда появится реальный consumer. Состояние пользователя (прогресс) — на MVP
-только localStorage на клиенте; новая серверная аналитика практики не добавляется до `M4` (§3).
+`apps/web`, practice/checker data — в `content/tasks/`. Course metadata и CourseLesson theory имеют
+единственного frontend-consumer и поэтому остаются типизированным content-as-code, а не получают
+параллельную JSON-модель. Состояние пользователя (прогресс) — на MVP только localStorage на
+клиенте в едином app-scoped lesson-progress registry; course progress вычисляется из записей
+опубликованных уроков в этом реестре и отдельно не сохраняется.
 
 ### 2.3 Content Quality Gate (Definition of Done)
 
@@ -177,7 +183,7 @@ JSON-границу только когда появится реальный co
   лишние/пропущенные связи, подписи, числа и смысловые искажения.
 
 **Технически:**
-- [ ] `prerequisites`/`related_topics`/`unlocks_topics`/`practice_task_ids`/`topic_ids`
+- [ ] `practiceTaskIds`/`topic_ids`/`course_lesson_ids`
   ссылаются на существующие id — проходит CI-валидацию связей (§3, §7.2).
 - [ ] Заполнены `title`/`summary` для корректных meta-тегов (§8) — не заглушки вида «TODO».
 - [ ] `learning_visual` имеет доступное описание и caption; raster также имеет явные intrinsic
@@ -254,11 +260,44 @@ CheckpointItem — формативная (не суммативная) само
                                                  // тестирования (testing effect) даёт сама попытка вспомнить,
                                                  // а не факт автоматической проверки
 
-Course (content/courses/{id}.json) — не затронуто этим изменением, вне текущего этапа roadmap
+CourseDefinition — типизированный frontend registry record
+  id: slug
+  routeSlug: slug                              // публичный путь /courses/{routeSlug}
+  title
+  summary
+  audience: string
+  learningOutcomes: [string]
+  status: draft | review | published
+  stage: early_access | complete
+  modules: CourseModule[]
 
-Task (content/tasks/{id}.json, practiceTaskIds ссылается сюда) — без изменений
+CourseModule
+  id: slug
+  title
+  summary
+  lessonIds: [course_lesson_id]                // только реально существующие CourseLesson
+
+defineCourseLesson(...) — типизированный конструктор, один вызов на файл CourseLesson
+  id: slug
+  routeSlug: slug                              // /courses/{courseSlug}/{routeSlug}
+  title
+  summary
+  masteryThreshold: float (default 0.8)
+  learningOutcomes: [string]
+  practiceTaskIds: [task_id]
+  theory: ConceptBlock[]
+  checkpoint: CheckpointItem[]
+  result: ReactNode
+  status: draft | review | published
+  accessTier: free | paid
+
+Topic и CourseLesson используют только доказанно общие content/practice/progress primitives.
+Registries, route data и page composition остаются раздельными; generic lesson engine не вводится.
+
+Task (content/tasks/{id}.json, practiceTaskIds ссылается сюда)
   id
-  topic_ids: [topic_id]                         // может относиться к нескольким темам
+  topic_ids: [topic_id]                         // владение Topic; пусто для CourseLesson task
+  course_lesson_ids: [course_lesson_id]         // владение CourseLesson; пусто для Topic task
   title
   statement
   hint
@@ -298,10 +337,11 @@ task_attempt_stats(task_id, attempts_count, wrong_count, last_aggregated_at)
   // если этого достаточно для приоритизации тем)
 ```
 
-CI-валидация: `scripts/validate-content-links.mjs` проверяет, что `practiceTaskIds` и
-`theory_links.hash` ссылаются на существующие `Task.id`/`ConceptBlock.id` — эта связь соединяет
-TSX-модуль урока с JSON-файлами заданий и не может быть проверена одним TypeScript-компилятором;
-сборка падает при битых связях (см. §2.3 Content Quality Gate, пункт «Технически»).
+CI-валидация: `scripts/validate-content-links.mjs` проверяет Course/module/lesson membership,
+`practiceTaskIds`, `topic_ids`, `course_lesson_ids` и `theory_links.hash`. Каждый Task принадлежит
+хотя бы одному Topic или CourseLesson, а смешанное владение не используется как скрытая связь
+между доменами. Эти связи пересекают TSX и JSON и не могут быть проверены одним TypeScript-
+компилятором; сборка падает при битых ссылках.
 
 ---
 
@@ -333,16 +373,18 @@ task-файлы первой review-only темы читаются frontend-cons
 | Page | Route | Purpose |
 |------|-------|---------|
 | Public home | `/` | Минимальная SSR/no-JS точка входа в опубликованные материалы: честное описание продукта и ссылки только на реально опубликованные уроки |
+| Course overview | `/courses/$courseSlug` | SSR/no-JS обзор самостоятельного мини-курса: аудитория, результат, early-access stage, крупная программа и только реально опубликованные CourseLesson |
+| Course lesson | `/courses/$courseSlug/$lessonSlug` | Общий SSR consumer типизированного CourseLesson; `review` доступен по прямому URL с `noindex,nofollow`, `published` входит в course discovery |
 | Lesson design lab | `/lab/lesson` | Unlisted/noindex эталон четырёхраздельного урока на синтетическом контенте; не публикация и не security boundary |
 | Design system stand | `/lab/design-system` | Unlisted/noindex приватный стенд текущей дизайн-системы (шрифты, цвета, типографика) и переиспользуемых lesson-компонентов; не публикация и не security boundary |
 | Topic lesson | `/ege/$slug` | Общий SSR consumer типизированного Topic; `review` доступен только по прямому URL с `noindex,nofollow`, `published` может войти в prerender/public discovery |
-| Privacy | `/privacy` | Публичное описание обработки, оператора, целей, состава, оснований, сроков, получателей, прав и способа отозвать optional analytics consent |
+| Privacy | `/privacy` | Публичное описание целей, состава, сроков и получателей обработки, контакта для обращений и способа изменить optional analytics consent |
 | Robots | `/robots.txt` | Машиночитаемые правила обхода и ссылка на sitemap; не используются как замена page-level `noindex` |
 | Sitemap | `/sitemap.xml` | Только canonical URL публичной главной, privacy и `published`-уроков; review/lab/404 не включаются |
 | Not found | любой неизвестный маршрут | Общий доступный 404 без предположений о будущем IA |
 
-Текущий public release не вводит отдельный каталог: при двух опубликованных уроках `/` выполняет
-роль компактного списка материалов. `review`-контент не появляется в навигации или sitemap,
+Текущий public release не вводит отдельный каталог: `/` группирует registry-derived мини-курсы и
+темы ЕГЭ как два разных вида материала. `review`-контент не появляется в навигации или sitemap,
 отдаёт `robots: noindex,nofollow` и исключается из prerender discovery. `/lab/lesson` и
 `/lab/design-system` сохраняют тот же unlisted/noindex режим независимо от product content.
 Каждая индексируемая HTML-страница имеет абсолютный canonical на `https://infraege.ru`, уникальные
@@ -355,6 +397,8 @@ publication registry, чтобы статусы не расходились ме
 |--------------------|---------|-------|
 | Lesson content components | Переиспользуемая библиотека дизайн-системы урока: `Notation`, `Callout`, `WorkedExample`, `Procedure`, `Mistake`, `Diagram`, `Checkpoint` | Типизированные React-компоненты, не markdown-директивы; `Notation` различает inline-код и формулу без appearance-led API; `Diagram` используется только когда изображение действительно помогает и требует `alt`/`caption`/`purpose`; `Checkpoint` рендерит `CheckpointItem[]` вертикальным списком (не табами — таб-навигация позволяет незаметно пропустить пункт retrieval-практики) и может завершать конкретный `ConceptBlock` вместо единственного блока перед практикой |
 | Lesson outline | Иерархическая навигация по уроку | Строится напрямую из `ConceptBlock[].id`/`navLabel`, без regex-извлечения заголовков из текста и измеряемых SVG-связей; desktop shell сохраняет три колонки — sticky outline, центральный reading stream и зарезервированную правую колонку; progress в rail/header отсутствует, а правый rail может оставаться пустым до появления полезного контента; overflow rail включается только при необходимости, на узких экранах навигация возвращается в normal flow; lab сохраняет свой четырёхраздельный synthetic contract |
+| Course overview | Самостоятельная карта развивающегося курса | Показывает аудиторию, learner outcome, stage и крупные модули без обещания точного числа будущих уроков; published CourseLesson являются ссылками, будущие модули — честным описанием программы без фальшивых disabled controls |
+| Course progress | Производный progress только по доступным CourseLesson | Не имеет отдельного store или storage key: после hydration читает записи опубликованных уроков из единого lesson-progress registry; формулировка «освоено N из M доступных» отделена от `early_access`, общий процент незаконченного курса и course-wide reset отсутствуют |
 | Practice tabs | Локальная навигация по постепенно усложняющимся задачам внутри `practice` | Компактные доступные вкладки показывают рост сложности нейтральным индикатором уровня и текстом; одна активная задача после hydration, свободный ручной переход без блокировок и автопродвижения, одна или несколько task-specific ссылок на фрагменты теории рядом с заголовком; независимые «Подсказка» и развёрнутое «Решение» доступны сразу и остаются линейным содержимым в SSR/no-JS; все формы остаются в SSR/no-JS HTML и не становятся пунктами lesson outline |
 | Page state primitives | Единые loading/skeleton, empty, not-found и recoverable error состояния | Семантический статус и понятное действие важнее декоративной анимации; skeleton повторяет геометрию страницы и не озвучивается скринридером как контент |
 | Route resilience shell | Route-level pending/error/not-found UI, retry/reset и верхний navigation progress | Ошибка одной навигации не ломает document shell; предыдущий полезный экран не заменяется мгновенным мигающим fallback |
@@ -414,10 +458,11 @@ frontend-контракт и происхождение адаптированн
 - **UI foundation:** Base UI 1.7.0 предоставляет доступное поведение там, где существует подходящий
   primitive. Локальные компоненты владеют публичным API и CSS; новые primitives и составные
   библиотеки добавляются только с реальным consumer и maintenance/a11y/supply-chain проверкой.
-- **Client state:** отдельный глобальный store (Zustand/MobX и аналоги) не вводится заранее.
-  Компонентное состояние остаётся локальным, server state принадлежит Query, URL state — Router,
-  а versioned localStorage adapter хранит только lesson practice/progress. Новый store допустим
-  только при нескольких независимых consumers и явно описанном lifecycle/persistence contract.
+- **Client state:** глобальный store не вводится заранее. Компонентное состояние остаётся локальным,
+  server state принадлежит Query, URL state — Router. Доказанное исключение — app-scoped Zustand
+  registry для lesson progress: несколько независимых Topic/Course/lab consumers читают его через
+  семантические hooks, а versioned localStorage adapter владеет persistence и миграцией старых
+  lesson-specific ключей. Course progress остаётся производным selector и отдельно не хранится.
 - **Визуальная системность:** значения активной темы отображаются в semantic CSS tokens, которые
   потребляют локальные компоненты. Base UI не определяет внешний вид и не выходит типами/props за
   их public API. Light-only baseline использует self-hosted кириллические шрифты без runtime-запроса.
@@ -613,10 +658,10 @@ combined-log записи до path/status-family/coarse traffic class. Raw IP, 
 | Performance budget | LCP < 2.5s, CLS < 0.1, INP < 200ms на мобильном 4G-профиле; release evidence измеряет `/` и первый опубликованный `/ege/16-rekursiya`, отдельно проверяет cold-load font/layout shifts и не подменяет route-level метрики общей оценкой технической страницы |
 | Observability | Application, operations и management-host sre-kit имеют независимые lifecycle/volumes/rollback. infraegev2 владеет target operations, WireGuard peer, Source bootstrap и privacy-safe publisher; sre-kit владеет generic core/adapters/UI distribution. Семь clean-start Sources непрерывно poll/push на management VPS без target-side mutation; локальный `sre-kit-local` остаётся выключенным fallback |
 | Backup / restore | Application и operations jobs используют отдельные Restic tags, restore proofs и status markers в общем encrypted repository. Operations timers активируются только после clean install, без импорта старых Umami/Beszel artifacts. Для каждого владельца сохраняются 7 daily + 4 weekly + 3 monthly и общий same-host/off-site risk |
-| SEO | `/`, `/privacy` и published topics имеют canonical, уникальные metadata, SSR content и входят в sitemap/prerender; lab и review routes остаются unlisted, `noindex,nofollow` и исключены из public discovery; Lighthouse SEO для публичных маршрутов проходит без ошибок |
-| Mobile / no-JS readability | Lab и topic lesson сохраняют текст, последовательные стадии визуала, подписи, решения и section anchors в SSR HTML; интерактивная проверка остаётся progressive enhancement |
+| SEO | `/`, `/privacy`, published topics, courses и CourseLesson имеют canonical, уникальные metadata, SSR content и входят в sitemap/prerender; lab и review routes остаются unlisted, `noindex,nofollow` и исключены из public discovery; Lighthouse SEO для публичных маршрутов проходит без ошибок |
+| Mobile / no-JS readability | Lab, TopicLesson, Course overview и CourseLesson сохраняют текст, программу, подписи, решения и section anchors в SSR HTML; интерактивная проверка и персональный progress остаются progressive enhancement |
 | Client resilience / API drift | Route failures восстанавливаемы без белого экрана; loading/empty/error/not-found состояния доступны с клавиатуры и скринридера; OpenAPI schema/types drift ломает gate до merge; runtime HTTP имеет timeout/abort и не делает скрытый retry мутаций |
-| Юридическое (152-ФЗ) | `/privacy` публикует Годлевского Владислава Александровича, 195112, Россия, Санкт-Петербург, Малоохтинский пр., д. 6, `vlad-god500@mail.ru`, `@avatarsikkk` и Telegram-ссылку как сведения оператора/контакты. Optional browser analytics требует отдельного явного согласия и допускает отзыв; продолжение использования сайта согласием не считается. Формальная проверка уведомления РКН, локализации и текста юристом остаётся обязательным внешним follow-up, а не заявляется выполненной |
+| Юридическое (152-ФЗ) | `/privacy` публикует фактические цели, состав, сроки и получателей обработки, `avatarsik6699@gmail.com` и Telegram invite как каналы связи, но по явному решению архитектора не публикует ФИО и адрес оператора с принятием сопутствующего риска. Optional browser analytics требует отдельного явного согласия и допускает отзыв на `/privacy`; продолжение использования сайта согласием не считается. Формальная проверка уведомления РКН, локализации и текста юристом остаётся обязательным внешним follow-up, а не заявляется выполненной |
 | Юридическое (436-ФЗ) | Возрастная маркировка для обычного сайта не вводится: существующая `12+` удаляется без замены на `18+` |
 | Юридическое (оригинальность контента) | Тексты тем и формулировки задач — собственного авторства/переформулированы, не дословные копии ФИПИ/sdamgia/kpolyakov (риск конфликта с площадками, не только вопрос добросовестности); проверяется в Content Quality Gate (§2.3) на каждой теме перед `published` |
 | Other (юридический ориентир, не консультация) | Открытые источники используются как инженерный ориентир; формальная юридическая проверка и РКН составляют принятый бессрочно отложенный риск, а не пункт текущего roadmap |
@@ -630,7 +675,7 @@ combined-log записи до path/status-family/coarse traffic class. Raw IP, 
 | `M0` — технический фундамент | complete | Сохранить проверенную web/backend/ops инфраструктуру без навязывания продуктовой страницы | Исторический neutral baseline, shared primitives, API contract, content skeleton и локальные gates |
 | `M1` — новый product/design baseline | complete | Доказать заменяемую визуальную систему без преждевременной публикации | «Инженерная тетрадь», unlisted design-system/lesson labs, единый frontend-контракт и reusable primitives |
 | `M2` — инфраструктурная пауза | complete | Подготовить production-платформу до продолжения продуктового контента | `infraege.ru`, VPS/GHCR deploy, security/release gates, backups и независимый operations stack активны; linked sre-kit Change 20 доказал все шесть Sources end to end |
-| `M3` — учебный flow и публичный запуск | in progress | Завершить доменную логику, основные поверхности сайта и проверенный MVP-контент до расширения каталога | Два опубликованных урока, product-readiness audit, анонимный progress/result/continuation loop и документационная стабилизация готовы; следующий выбор — третья тема или первый целостный срез мини-курса Python |
+| `M3` — учебный flow и публичный запуск | in progress | Завершить доменную логику, основные поверхности сайта и проверенный MVP-контент до расширения каталога | Два опубликованных TopicLesson готовы; следующий срез — самостоятельный early-access курс «Python с нуля для ЕГЭ» и первый законченный CourseLesson без Topic-связей |
 | `M4` — финальное измерение и эксплуатация | in progress | Измерить фактический learning flow прозрачно и обезличенно | Changes 48–49 дают explicit opt-in и privacy-safe aggregates; Change 53 переносит семь clean-start Sources и publisher на отдельный always-on management VPS; все dashboard surfaces остаются в sre-kit |
 | `M5+` (после первых данных, вне MVP) | deferred | Расширение охвата и сообщества поверх работающей бесплатной базы | Второй мини-курс (Excel), аккаунты/синхронизация, обсуждения тем с модерацией, затем платные фичи — без runtime AI до этого момента |
 
@@ -642,7 +687,7 @@ combined-log записи до path/status-family/coarse traffic class. Raw IP, 
 | `1` | В sre-kit Change 20 сверить и доказать шесть infraegev2 Sources | Complete: stale записи безопасно инвентаризированы; все шесть текущих конфигураций зарегистрированы; доказаны свежие polling/status/dashboard и failure/recovery evidence |
 | `2` | Провести product-readiness audit двух опубликованных уроков | Complete: вход, оба урока, checker/persistence/recovery, mobile/no-JS, trust, crawl и production/monitoring evidence проверены; находки `PR-01`–`PR-07` ранжированы в `docs/artifacts/product-readiness-audit-2026-08-20.md` |
 | `3` | Закрыть Change 46 — анонимный progress/result/continuation loop | Complete: browser journey показывает solved/mastery result, сбрасывает только текущий урок и переводит к другой опубликованной теме или ко всем темам; incorrect/failure/retry/reload/reset/continuation защищены Page Object coverage без аккаунта, новых событий или выдуманных связей |
-| `4` | Выбрать расширение M3: третья тема ЕГЭ или первый срез мини-курса Python | Выбор опирается на аудит, связи между уже опубликованными материалами и минимальный целостный learner outcome; новый контент не начинается автоматически |
+| `4` | Реализовать первый самостоятельный срез мини-курса Python | Course/CourseLesson flow, обзор развивающейся программы и урок «Первая программа: ввод, вычисление и вывод» доходят до human review без Topic-связей и встроенного code runner |
 | `5` | Активировать M4 analytics baseline | Complete: explicit consent и privacy-safe event allowlist работают; семь Sources зарегистрированы, Umami pull и синтетический push batch отображаются без ответов, свободного текста и лишних идентификаторов |
 | `6` | Автоматизировать доставку Nginx aggregates в локальной sre-kit-сессии | Complete: cursor и idempotency переживают retry/restart; raw access records не пишутся на диск; publisher стартует и останавливается только через `sre-kit-local`; два реальных цикла доказаны в Dashboard/Source detail |
 | `7` | Подключить отдельный always-on sre-kit management VPS | Complete: linked sre-kit Change 26 поставляет exact-SHA distribution; Change 53 создал отдельный WireGuard peer, clean-start Project/семь Sources и system publisher; после пользовательской проверки подтверждены TLS, polling, push, backup/restore и отсутствие влияния на application/Firecrawl lifecycles |
@@ -650,7 +695,8 @@ combined-log записи до path/status-family/coarse traffic class. Raw IP, 
 Off-site backup остаётся trigger-based улучшением: первый management-host релиз использует
 local-only Restic с явно принятым риском потери вместе с VPS. Key-only SSH, Telegram alerts,
 формальная юридическая проверка и уведомление РКН намеренно исключены из этой последовательности.
-Реквизиты оператора и контакты уже опубликованы на `/privacy`.
+На `/privacy` опубликованы только принятые архитектором контактные каналы; риск отсутствия ФИО и
+адреса оператора принят явно.
 
 ---
 
@@ -665,6 +711,11 @@ local-only Restic с явно принятым риском потери вме�
 - Мини-курс Excel и остальные темы ЕГЭ — вторая волна, по той же структуре, что первая.
 - i18n/локализация — продукт полностью на русском, аудитория исключительно русскоязычная.
 - Полноценный поиск по сайту — пока тем меньше десятка, обычная навигация достаточна.
+- Автоматические `Topic ↔ CourseLesson` prerequisites, unlocks, рекомендации и совместное владение
+  Task — только после отдельного решения, основанного на реальном пересечении материалов.
+- Встроенное выполнение произвольного Python-кода, sandbox и code-submission checker — отдельный
+  будущий security/product scope; первый курс использует локальный Python и проверяет наблюдаемые
+  короткие ответы.
 - Отдельный preview/staging-стенд — тестирование локально повторяет прод (§7.1).
 - Онлайн-кассы / 54-ФЗ — возникают только с появлением платежей, не на MVP-этапе.
 - CDN и off-site backup — отдельные последующие задачи; локальный core режим остаётся

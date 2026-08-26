@@ -1,10 +1,10 @@
 import { Check, Copy } from "lucide-react";
-import { useState, useSyncExternalStore } from "react";
+import { useState } from "react";
 import { Button } from "~/shared/components/button";
 import { Typography } from "~/shared/components/typography";
 import { copyText } from "~/shared/lib/clipboard";
 import { cssUtils } from "~/shared/lib/css-utils";
-import { enhancementState } from "~/shared/lib/enhancement-state";
+import { useIsEnhanced } from "~/shared/lib/use-is-enhanced";
 import { CodeBlockContent } from "./code-block-content";
 import type { CodeBlockTypes } from "./code-block.types";
 import styles from "./code-block.module.css";
@@ -13,19 +13,11 @@ export const CodeBlock: React.FC<CodeBlockTypes.Props> = (props) => {
   const [copyState, setCopyState] = useState<"idle" | "copied" | "error">(
     "idle",
   );
-  const enhanced = useSyncExternalStore(
-    enhancementState.subscribe,
-    enhancementState.getClientSnapshot,
-    enhancementState.getServerSnapshot,
-  );
+  const enhanced = useIsEnhanced();
   const className = cssUtils.cx(styles.root, props.className);
   const isPython = props.language === "python";
-  const copyLabel =
-    copyState === "copied"
-      ? "Код скопирован"
-      : copyState === "error"
-        ? "Не удалось скопировать"
-        : "Копировать код";
+  const copyLabel = getCopyLabel(copyState);
+  const copyStatus = getCopyStatus(copyState);
 
   const handleCopy = async () => {
     const copied = await copyText(props.code);
@@ -60,11 +52,9 @@ export const CodeBlock: React.FC<CodeBlockTypes.Props> = (props) => {
             {copyLabel}
           </Button>
         ) : null}
-        {!enhanced || copyState === "idle" ? null : (
+        {!enhanced || !copyStatus ? null : (
           <span className={styles.copyStatus} role="status" aria-live="polite">
-            {copyState === "copied"
-              ? "Код скопирован в буфер обмена."
-              : "Не удалось скопировать код. Попробуйте ещё раз."}
+            {copyStatus}
           </span>
         )}
       </div>
@@ -76,3 +66,17 @@ export const CodeBlock: React.FC<CodeBlockTypes.Props> = (props) => {
     </div>
   );
 };
+
+function getCopyLabel(copyState: "idle" | "copied" | "error"): string {
+  if (copyState === "copied") return "Код скопирован";
+  if (copyState === "error") return "Не удалось скопировать";
+  return "Копировать код";
+}
+
+function getCopyStatus(copyState: "idle" | "copied" | "error"): string {
+  if (copyState === "copied") return "Код скопирован в буфер обмена.";
+  if (copyState === "error") {
+    return "Не удалось скопировать код. Попробуйте ещё раз.";
+  }
+  return "";
+}

@@ -1,20 +1,11 @@
-import { LessonSectionHeading } from "~/entities/lesson";
-import {
-  createLocalPracticeChecker,
-  LessonPractice,
-} from "~/features/lesson-practice";
-import type { LessonProgressTypes } from "~/features/lesson-progress";
+import { LessonSectionHeading } from "~/shared/components/learning-content";
+import { createLocalPracticeChecker } from "~/features/lesson-practice";
+import { LessonPracticeFlow } from "~/widgets/lesson-practice-flow";
 import { Typography } from "~/shared/components/typography";
 import { lessonDesignLabConstants } from "../lesson-design-lab.constants";
 import styles from "../lesson-design-lab.module.css";
 
-type LessonPracticeSectionProps = {
-  progressStore: LessonProgressTypes.Store;
-};
-
-export const LessonPracticeSection: React.FC<LessonPracticeSectionProps> = (
-  props,
-) => (
+export const LessonPracticeSection: React.FC = () => (
   <section
     className={`${styles.lessonSection} ${styles.practiceSection}`}
     id="practice"
@@ -32,11 +23,11 @@ export const LessonPracticeSection: React.FC<LessonPracticeSectionProps> = (
       Решите пять коротких задач по порядку. Правильный ответ с подсказкой тоже
       учитывается: важно понять правило и применить его без ошибки.
     </Typography.Text>
-    <LessonPractice
+    <LessonPracticeFlow
       checkAnswer={createLocalPracticeChecker(
         lessonDesignLabConstants.practiceTasks,
       )}
-      progressStore={props.progressStore}
+      lessonId={lessonDesignLabConstants.lessonId}
       tasks={lessonDesignLabConstants.practiceTasks}
     />
   </section>

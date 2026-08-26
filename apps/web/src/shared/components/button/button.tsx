@@ -10,6 +10,7 @@ export const Button: React.FC<ButtonTypes.Props> = ({
   iconStart,
   iconEnd,
   fullWidth = false,
+  iconOnly = false,
   children,
   className,
   disabled,
@@ -23,6 +24,7 @@ export const Button: React.FC<ButtonTypes.Props> = ({
       data-hierarchy={hierarchy}
       data-density={density}
       data-full-width={fullWidth || undefined}
+      data-icon-only={iconOnly || undefined}
       className={cssUtils.cx(styles.root, className)}
     >
       {loading ? (
@@ -30,7 +32,7 @@ export const Button: React.FC<ButtonTypes.Props> = ({
       ) : (
         iconStart
       )}
-      <span className={styles.label}>{children}</span>
+      {iconOnly ? null : <span className={styles.label}>{children}</span>}
       {iconEnd}
     </BaseButton>
   );

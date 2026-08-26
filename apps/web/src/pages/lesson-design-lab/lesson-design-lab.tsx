@@ -1,9 +1,5 @@
 import { useRef } from "react";
-import {
-  createLessonProgressStore,
-  LessonProgress,
-  useLessonProgress,
-} from "~/features/lesson-progress";
+import { LessonProgress, useLessonProgress } from "~/features/lesson-progress";
 import { ReadingPositionIndicator } from "~/features/reading-position";
 import { LessonOutline } from "~/widgets/lesson-outline";
 import { LessonExamFocus } from "./components/lesson-exam-focus";
@@ -15,13 +11,9 @@ import { LessonTheory } from "./components/lesson-theory";
 import { lessonDesignLabConstants } from "./lesson-design-lab.constants";
 import styles from "./lesson-design-lab.module.css";
 
-const progressStore = createLessonProgressStore({
-  lessonId: lessonDesignLabConstants.lessonId,
-});
-
 export const LessonDesignLab: React.FC = () => {
   const articleRef = useRef<HTMLElement>(null);
-  const progress = useLessonProgress(progressStore);
+  const progress = useLessonProgress(lessonDesignLabConstants.lessonId);
   const solvedCount = progress.solvedTaskIds.filter((id) =>
     lessonDesignLabConstants.practiceTasks.some((task) => task.id === id),
   ).length;
@@ -51,7 +43,7 @@ export const LessonDesignLab: React.FC = () => {
         <article className={styles.article} data-article-frame ref={articleRef}>
           <LessonIntro />
           <LessonTheory />
-          <LessonPracticeSection progressStore={progressStore} />
+          <LessonPracticeSection />
           <LessonExamFocus />
           <LessonResult
             mastered={mastered}

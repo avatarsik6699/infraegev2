@@ -1,5 +1,5 @@
 import type { ComponentProps } from "react";
-import type { LessonTypes } from "~/entities/lesson";
+import type { PracticeTaskTypes } from "~/entities/practice-task";
 import { TabsPanel } from "~/shared/components/tabs";
 import type { LessonPracticeTypes } from "../lesson-practice.types";
 import styles from "../lesson-practice.module.css";
@@ -9,7 +9,7 @@ import { PracticeTaskHelp } from "./practice-task-help";
 import { PracticeTaskHeading } from "./practice-task-heading";
 
 type PracticeTaskPanelProps = {
-  task: LessonTypes.PracticeTask;
+  task: PracticeTaskTypes.Task;
   index: number;
   state: LessonPracticeTypes.State;
   feedback: string;

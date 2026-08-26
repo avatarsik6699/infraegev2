@@ -1,0 +1,36 @@
+{
+  "id": "python-first-program-input-conversion",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-first-program"],
+  "title": "Найдите результат после ввода",
+  "statement": "Сначала программа выполняет n = int(input()), а затем print(n + 9). Пользователь вводит 8. Какое число появится на экране?",
+  "hint": "Сначала int превращает текст '8' в число 8.",
+  "theory_links": [
+    {
+      "hash": "input-and-conversion",
+      "label": "Как программа получает число"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["17"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "input() получает текст '8'. Затем int(...) превращает его в число 8, поэтому выражение 8 + 9 даёт 17."
+      }
+    },
+    {
+      "type": "code_example",
+      "data": {
+        "language": "python",
+        "code": "n = int(input())\nprint(n + 9)",
+        "caption": "Если ввести 8, программа напечатает 17"
+      }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

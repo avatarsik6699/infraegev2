@@ -29,7 +29,7 @@ safely; the final 2026-08-20 cutover passed. No old analytics or metrics data wa
 5. Once both DNS records resolve to the VPS, obtain TLS:
 
    ```bash
-   PUBLIC_IPV4=2.26.8.245 TLS_EMAIL=vlad-god500@mail.ru \
+   PUBLIC_IPV4=2.26.8.245 TLS_EMAIL=avatarsik6699@gmail.com \
      ops/obtain-initial-certificate.sh
    ```
 

@@ -2,6 +2,10 @@ import { defineConfig } from "vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import { nitro } from "nitro/vite";
 import viteReact from "@vitejs/plugin-react";
+import {
+  courseLessonPublications,
+  coursePublications,
+} from "./src/entities/course/content/course-publication.mjs";
 import { lessonPublications } from "./src/entities/lesson/content/lesson-publication.mjs";
 
 export default defineConfig((configEnv) => {
@@ -11,6 +15,19 @@ export default defineConfig((configEnv) => {
     lessonPublications
       .filter(({ status }) => status === "published")
       .map(({ routeSlug }) => `/ege/${routeSlug}`),
+  );
+  const publishedCoursePaths = new Set(
+    coursePublications
+      .filter(({ status }) => status === "published")
+      .flatMap(({ routeSlug }) => [
+        `/courses/${routeSlug}`,
+        ...courseLessonPublications
+          .filter(({ status }) => status === "published")
+          .map(
+            ({ routeSlug: lessonRouteSlug }) =>
+              `/courses/${routeSlug}/${lessonRouteSlug}`,
+          ),
+      ]),
   );
 
   return {
@@ -42,7 +59,8 @@ export default defineConfig((configEnv) => {
           // The lesson lab is an unlisted design proof, not published content.
           filter: ({ path }) =>
             !path.startsWith("/lab/") &&
-            (!path.startsWith("/ege/") || publishedLessonPaths.has(path)),
+            (!path.startsWith("/ege/") || publishedLessonPaths.has(path)) &&
+            (!path.startsWith("/courses/") || publishedCoursePaths.has(path)),
           failOnError: true,
         },
       }),

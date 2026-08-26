@@ -67,6 +67,11 @@
   width: 100%;
 }
 
+.root[data-icon-only] {
+  width: 2.5rem;
+  padding: 0;
+}
+
 .root:disabled {
   cursor: not-allowed;
   opacity: 0.5;

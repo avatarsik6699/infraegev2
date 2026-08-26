@@ -1,5 +1,5 @@
 import type { ComponentProps } from "react";
-import type { LessonTypes } from "~/entities/lesson";
+import type { PracticeTaskTypes } from "~/entities/practice-task";
 import { Button } from "~/shared/components/button";
 import { Field } from "~/shared/components/field";
 import { Typography } from "~/shared/components/typography";
@@ -7,7 +7,7 @@ import type { LessonPracticeTypes } from "../lesson-practice.types";
 import styles from "../lesson-practice.module.css";
 
 type PracticeTaskAnswerProps = {
-  task: LessonTypes.PracticeTask;
+  task: PracticeTaskTypes.Task;
   inputId: string;
   alreadySolved: boolean;
   checking: boolean;
@@ -33,9 +33,7 @@ export const PracticeTaskAnswer: React.FC<PracticeTaskAnswerProps> = (
         label="Ответ"
         labelVisibility="sr-only"
         placeholder={
-          props.alreadySolved
-            ? "Ответ был принят ранее"
-            : "Без единиц измерения"
+          props.alreadySolved ? "Этот ответ уже принят" : "Без единиц измерения"
         }
         error={answerError(props.state)}
         autoComplete="off"
@@ -56,10 +54,10 @@ export const PracticeTaskAnswer: React.FC<PracticeTaskAnswerProps> = (
 
 function answerError(state: LessonPracticeTypes.State): string | undefined {
   if (state === "incorrect") {
-    return "Пока нет. Проверьте правило ещё раз или откройте подсказку.";
+    return "Ответ пока не подходит. Попробуйте ещё раз или откройте подсказку.";
   }
   if (state === "error") {
-    return "Не удалось проверить ответ. Проверьте соединение и отправьте его ещё раз.";
+    return "Не получилось проверить ответ. Проверьте соединение и попробуйте ещё раз.";
   }
   return undefined;
 }

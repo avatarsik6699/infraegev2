@@ -22,7 +22,7 @@ pitfalls that must be reconsidered rather than copied.
 
 | Layer | Technology |
 |-------|-----------|
-| Frontend | React + TanStack Start (SSR/SSG, file-based routing and automatic route splitting) on Vite **8.2.1 exact** (Rolldown/Oxc); Base UI **1.7.0 exact** with local CSS Modules; synchronous Python tokenization through `@speed-highlight/core` **2.0.0 exact**; TanStack Query for future server state; generated `openapi-typescript` contracts with `openapi-fetch` transport |
+| Frontend | React + TanStack Start (SSR/SSG, file-based routing and automatic route splitting) on Vite **8.2.1 exact** (Rolldown/Oxc); Base UI **1.7.0 exact** with local CSS Modules; Zustand **5.0.12 exact** for the cross-route lesson-progress registry; synchronous Python tokenization through `@speed-highlight/core` **2.0.0 exact**; TanStack Query for future server state; generated `openapi-typescript` contracts with `openapi-fetch` transport |
 | Backend | Python/FastAPI (`apps/api`) |
 | Database | PostgreSQL (provisioned in `infra/docker-compose.yml`; no schema/migrations yet — content is git-based, docs/SPEC.md §3) |
 | Cache | — (not needed on M0) |
@@ -47,6 +47,7 @@ python3 --version         # local tests only: >=3.12
 uv --version              # local tests only
 curl --version            # health and smoke checks
 jq --version              # JSON tests and operational status files
+sha256sum --version       # Docker development input fingerprinting
 ```
 
 ---
@@ -57,13 +58,13 @@ jq --version              # JSON tests and operational status files
 make dev
 ```
 
-`make dev` supplies disposable process-scoped local values, builds missing images on first use,
-starts or resumes the dedicated development overlay, waits for every healthcheck, and requires no
-`.env`. Web source, API source and content use development bind mounts. After changing dependency
-manifests, lockfiles, Dockerfiles, Vite configuration or other image-owned files, run
-`make rebuild`; Docker then reuses unchanged layers, including the frozen pnpm and uv dependency
-installs. Use `make stop` for a fast resumable halt; use `make down` only when the owned containers
-and network must be recreated. Both paths preserve the named PostgreSQL volume.
+`make dev` supplies disposable process-scoped local values, starts or resumes the dedicated
+development overlay, waits for every healthcheck, and requires no `.env`. It fingerprints
+dependency manifests, lockfiles, Dockerfiles, Vite configuration and other image-owned inputs:
+when they change, `make dev` rebuilds before starting; otherwise it keeps the fast resumable path.
+`make rebuild` remains the explicit force-rebuild command. Web source, API source and content use
+development bind mounts. Use `make stop` for a fast resumable halt; use `make down` only when the
+owned containers and network must be recreated. Both paths preserve the named PostgreSQL volume.
 
 Lifecycle mutations are serialized for the `infraege-dev` Compose project: if a previous
 `make dev`, `make rebuild`, `make stop`, `make down` or `make restart` is still running, a second
@@ -397,11 +398,13 @@ the documented `notFound()` sentinel also requires the route-only `only-throw-er
 Server state belongs to a per-router TanStack Query client, which is integrated with SSR and is
 never reused between requests. No product query currently consumes it. Future domain operations
 use the single generated `shared/api` transport. Regenerate `contracts/openapi.json` and
-`shared/api/schema.ts` with `pnpm api:generate`; prove no drift with `pnpm api:check`. No global
-client-state store is installed until a real cross-route owner exists. Transient feature state
-lives in the owning component or a slice-local model hook; longer-lived domain state uses an
-injected store such as lesson progress so persistence and rendering remain separate without a
-global service locator.
+`shared/api/schema.ts` with `pnpm api:generate`; prove no drift with `pnpm api:check`.
+
+The lesson-progress feature is the one proven cross-route client-state owner: an app/provider-scoped
+Zustand vanilla registry holds all lesson snapshots, persists them through the shared versioned
+storage adapter and exposes semantic feature hooks. Course progress remains a pure derived selector
+over that registry and is not persisted separately. Transient feature state stays in the owning
+component or a slice-local model hook; no global service locator is used.
 
 Route pending/error/not-found UI, delayed skeletons, and navigation progress are application-level
 defaults. Browser render/route/chunk/global failures pass through `shared/lib/client-errors`, which

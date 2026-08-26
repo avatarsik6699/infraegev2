@@ -1,8 +1,7 @@
 import { Accordion as BaseAccordion } from "@base-ui/react/accordion";
 import { ChevronDown } from "lucide-react";
-import { useSyncExternalStore } from "react";
+import { useIsEnhanced } from "~/shared/lib/use-is-enhanced";
 import { cssUtils } from "~/shared/lib/css-utils";
-import { enhancementState } from "~/shared/lib/enhancement-state";
 import type { AccordionTypes } from "./accordion.types";
 import styles from "./accordion.module.css";
 
@@ -12,11 +11,7 @@ export const Accordion: React.FC<AccordionTypes.Props> = ({
   multiple = false,
   className,
 }) => {
-  const enhanced = useSyncExternalStore(
-    enhancementState.subscribe,
-    enhancementState.getClientSnapshot,
-    enhancementState.getServerSnapshot,
-  );
+  const enhanced = useIsEnhanced();
 
   if (!enhanced) {
     return (

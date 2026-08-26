@@ -2,9 +2,11 @@ import { Callout } from "~/shared/components/callout";
 import { CodeBlock } from "~/shared/components/code-block";
 import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
-import { Mistake } from "../components/mistake";
-import { Procedure } from "../components/procedure";
-import { WorkedExample } from "../components/worked-example";
+import {
+  Mistake,
+  Procedure,
+  WorkedExample,
+} from "~/shared/components/learning-content";
 import { defineLesson } from "../lib/define-lesson";
 import { preobrazovanieZapiseyChiselLessonPublication } from "./lesson-publication.mjs";
 

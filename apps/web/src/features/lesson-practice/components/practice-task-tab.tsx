@@ -1,10 +1,10 @@
 import { Check } from "lucide-react";
-import type { LessonTypes } from "~/entities/lesson";
+import type { PracticeTaskTypes } from "~/entities/practice-task";
 import { TabsTab } from "~/shared/components/tabs";
 import styles from "../lesson-practice.module.css";
 
 type PracticeTaskTabProps = {
-  task: LessonTypes.PracticeTask;
+  task: PracticeTaskTypes.Task;
   index: number;
   total: number;
   solved: boolean;

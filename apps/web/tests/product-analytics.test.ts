@@ -1,6 +1,8 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { reportProductEvent } from "~/features/product-analytics";
-import { analyticsConsentStore } from "~/shared/lib/analytics";
+import {
+  analyticsConsentStore,
+  reportProductEvent,
+} from "~/features/analytics";
 
 describe("reportProductEvent", () => {
   afterEach(() => {
@@ -39,5 +41,18 @@ describe("reportProductEvent", () => {
       lesson: "16-rekursiya",
       result: "correct",
     });
+  });
+
+  it("reports a course opening without learner content", () => {
+    const track = vi.fn();
+    (window as Window & { umami?: { track: typeof track } }).umami = { track };
+    analyticsConsentStore.set("granted");
+
+    reportProductEvent({
+      name: "course_opened",
+      properties: { course: "python" },
+    });
+
+    expect(track).toHaveBeenCalledWith("course_opened", { course: "python" });
   });
 });

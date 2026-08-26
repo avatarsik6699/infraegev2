@@ -1,7 +1,6 @@
-import { useState, useSyncExternalStore, type ComponentProps } from "react";
-import type { LessonTypes } from "~/entities/lesson";
-import { useLessonProgress } from "~/features/lesson-progress";
-import { enhancementState } from "~/shared/lib/enhancement-state";
+import { useState, type ComponentProps } from "react";
+import type { PracticeTaskTypes } from "~/entities/practice-task";
+import { useIsEnhanced } from "~/shared/lib/use-is-enhanced";
 import type { LessonPracticeTypes } from "../lesson-practice.types";
 
 type FormSubmitHandler = NonNullable<ComponentProps<"form">["onSubmit"]>;
@@ -17,15 +16,10 @@ export function useLessonPracticeModel(props: LessonPracticeTypes.Props) {
   const activeTaskId = props.tasks.some((task) => task.id === selectedTaskId)
     ? selectedTaskId
     : (props.tasks[0]?.id ?? "");
-  const enhanced = useSyncExternalStore(
-    enhancementState.subscribe,
-    enhancementState.getClientSnapshot,
-    enhancementState.getServerSnapshot,
-  );
-  const progress = useLessonProgress(props.progressStore);
+  const enhanced = useIsEnhanced();
 
   const checkAnswer = async (
-    task: LessonTypes.PracticeTask,
+    task: PracticeTaskTypes.Task,
     event: Parameters<FormSubmitHandler>[0],
   ) => {
     event.preventDefault();
@@ -39,8 +33,13 @@ export function useLessonPracticeModel(props: LessonPracticeTypes.Props) {
         ...current,
         [task.id]: result.correct ? "correct" : "incorrect",
       }));
-      if (result.correct) props.progressStore.markSolved(task.id, answer);
-      props.onAnswerChecked?.(result.correct ? "correct" : "incorrect");
+      const solvedCount = result.correct
+        ? props.onTaskSolved(task.id, answer)
+        : props.solvedTaskIds.length;
+      props.onAnswerChecked?.({
+        result: result.correct ? "correct" : "incorrect",
+        solvedCount,
+      });
     } catch {
       setPracticeStates((current) => ({ ...current, [task.id]: "error" }));
     }
@@ -49,11 +48,11 @@ export function useLessonPracticeModel(props: LessonPracticeTypes.Props) {
   return {
     activeTaskId,
     answerFor: (taskId: string) =>
-      draftAnswers[taskId] ?? progress.acceptedAnswers[taskId] ?? "",
+      draftAnswers[taskId] ?? props.acceptedAnswers[taskId] ?? "",
     checkAnswer,
     enhanced,
     feedbackFor: (taskId: string) => feedback[taskId] ?? "",
-    isSolved: (taskId: string) => progress.solvedTaskIds.includes(taskId),
+    isSolved: (taskId: string) => props.solvedTaskIds.includes(taskId),
     selectTask: setSelectedTaskId,
     stateFor: (taskId: string) => practiceStates[taskId] ?? "idle",
     updateAnswer: (taskId: string, value: string) =>

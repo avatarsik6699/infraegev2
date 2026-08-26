@@ -153,6 +153,7 @@ export default tseslint.config(
     rules: {
       ...reactHooks.configs.recommended.rules,
       "@typescript-eslint/consistent-type-definitions": ["error", "type"],
+      "no-nested-ternary": "error",
       "react/function-component-definition": [
         "error",
         { namedComponents: "arrow-function" },

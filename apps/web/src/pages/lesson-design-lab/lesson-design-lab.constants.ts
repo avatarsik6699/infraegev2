@@ -1,4 +1,5 @@
 import type { LessonTypes } from "~/entities/lesson";
+import type { PracticeTaskTypes } from "~/entities/practice-task";
 
 const outline: LessonTypes.OutlineGroup[] = [
   {
@@ -29,7 +30,7 @@ const outline: LessonTypes.OutlineGroup[] = [
   },
 ];
 
-const practiceTasks: LessonTypes.LocalPracticeTask[] = [
+const practiceTasks: PracticeTaskTypes.LocalTask[] = [
   {
     id: "keep-half",
     difficultyLabel: "Разминка",

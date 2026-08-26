@@ -1,4 +1,4 @@
-import { LessonSectionHeading } from "~/entities/lesson";
+import { LessonSectionHeading } from "~/shared/components/learning-content";
 import { Typography } from "~/shared/components/typography";
 import styles from "../lesson-design-lab.module.css";
 

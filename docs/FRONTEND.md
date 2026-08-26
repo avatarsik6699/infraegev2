@@ -49,8 +49,11 @@ Keep the pragmatic FSD-like dependency direction:
 app → routes → pages → widgets → features → entities → shared
 ```
 
-- Imports stay inside a layer or point downward. Cross-slice imports use the root `index.ts`; deep
-  imports are private. Do not add a generic `ui/` segment.
+- Imports point downward. `entities`, `features`, `widgets` and `pages` never import another slice
+  from their own layer, through either an alias or a relative path; compose peer capabilities one
+  layer above. Imports within one slice stay local, and downward cross-slice imports use the root
+  `index.ts`; deep imports are private. `shared` remains the domain-agnostic foundation and may
+  compose its own public primitives. Do not add a generic `ui/` segment.
 - Keep route definitions thin. Use TanStack Router typed APIs directly rather than wrapping them in
   generic router hooks.
 - Keep transient state in its owning component or slice-local model hook. Use an injected domain
@@ -59,8 +62,11 @@ app → routes → pages → widgets → features → entities → shared
 - Browser globals and storage belong to focused `shared/lib` adapters; network access belongs to
   the consuming slice's `api/`; server environment reads belong to `*.server.ts`. Production
   components do not call `window`, `document`, storage, `navigator`, `fetch` or `process` ad hoc.
-- Use `shared/lib/safe-json` and `shared/lib/safe-ls` for persisted data. DTO filenames are reserved
-  for transport boundaries; domain types belong to the owning entity.
+- Use `shared/lib/safe-json` and `shared/lib/safe-ls` for persisted data. Low-level React external
+  store subscription, scoped Zustand Context wiring and persistence hydration belong to small
+  `shared/lib` primitives; domain slices declare schemas, migrations and business operations and
+  consume those primitives. DTO filenames are reserved for transport boundaries; domain types
+  belong to the owning entity.
 
 ## 4. UI foundation and replaceable theme
 
@@ -86,6 +92,9 @@ app → routes → pages → widgets → features → entities → shared
   inside the dedicated dark code surface are the sole presentational exception; inline `Notation`
   uses neutral ink on a quiet neutral surface so formulas and code stay recognizable without
   becoming a competing color accent.
+- A verified third-party brand mark may retain its official color only when it identifies the
+  destination of a real external link. Keep it small, pair it with a text label and do not reuse
+  the brand color for surrounding controls or decoration.
 - The active profile has two neutral text levels only: primary and secondary. Semantic
   success/information/warning/error remain separate, while `soft`/`muted`/`faint` aliases must not
   create additional visible gray steps. Syntax colors remain the exception above. Informational
@@ -118,6 +127,21 @@ app → routes → pages → widgets → features → entities → shared
   decision gives it a necessary learner-facing role. The outline, central article and their
   context labels share one compact responsive column gutter so their content edges remain aligned
   through desktop, intermediate and mobile layouts.
+- Course pages extend the incumbent neutral reading world without reusing Topic semantics. A
+  course overview presents audience, outcome, `early_access` truth and the broad module sequence;
+  only published CourseLesson rows are links. Future modules remain plain explanatory content,
+  never disabled controls or promised lesson counts. Numbering describes the broad module sequence,
+  not a fixed CourseLesson total; visually subdued future modules keep an explicit neutral status.
+- A CourseLesson keeps course context and its local section outline together in one navigation
+  rail, with the article as the dominant reading stream. On narrow screens the title and outcome
+  precede the ordinary in-flow «Содержание урока» list so a long outline cannot displace the
+  lesson identity from the first viewport. Course navigation resumes at the result rather than
+  competing with local reading navigation throughout the article.
+- Course progress is a hydration-only enhancement derived from published CourseLesson entries in
+  the app-scoped lesson-progress registry; it has no separate store or persistence lifecycle.
+  Copy says «освоено N из M доступных уроков» and keeps that state separate from the course's
+  `early_access` stage; never render a total-course percentage, hard lesson locks or course-wide
+  reset while the program is still developing.
 - A `Checkpoint` may appear immediately after a `ConceptBlock` that closes a coherent theory
   group. Keep these checks short, sequential in SSR/no-JS, and visually contained; distinguish the
   group with one question icon, a matching informational heading label and the same compact
@@ -136,27 +160,33 @@ app → routes → pages → widgets → features → entities → shared
   those paths. Persist only the learner's accepted submitted value alongside the solved task id,
   restore it after reload and keep the useful correctness explanation immediately after submission;
   checker answers and tolerances remain server-owned.
-- Public discovery is registry-driven. A lesson enters the home list, prerender crawl and sitemap
-  only through one `published` status; review and lab routes stay unlisted and `noindex,nofollow`.
+- Public discovery is registry-driven. A TopicLesson, Course or CourseLesson enters the home/course
+  lists, prerender crawl and sitemap only through `published`; review and lab routes stay unlisted
+  and `noindex,nofollow`.
   Every indexable HTML route exposes an absolute `https://infraege.ru` canonical plus unique title,
   description and social metadata. `/robots.txt` and `/sitemap.xml` are server routes, not copied
   static lists that can drift from publication state.
 - Public pages remain complete in SSR/no-JavaScript output and link to the current data-processing
-  disclosure. Legal copy describes only behavior present in code/configuration, preserves the
-  architect-supplied operator identity and contact channels, and never invents or silently replaces
-  requisites.
+  disclosure. Legal copy describes only behavior present in code/configuration, publishes the
+  architect-approved email and Telegram invitation without exposing other personal requisites, and
+  keeps the accepted legal-review risk explicit in the system contract.
 - The public home uses a responsive editorial split: the primary product statement leads on the
-  left and the registry-derived topic list sits on the right, collapsing to one linear column on
-  narrow screens. Group it through spacing and one quiet topic surface rather than decorative
-  separators; public copy stays concise and states the current free theory-and-practice offer.
+  left and registry-derived materials sit on the right, grouped as «Мини-курсы» and «Темы ЕГЭ»
+  without flattening their semantics. It collapses to one linear column on narrow screens. Group
+  through spacing and quiet rows rather than decorative separators; public copy stays concise and
+  states the current free theory-and-practice offer.
 - A shared back-navigation link always renders a real fallback `href` for SSR/no-JavaScript and
   modified-click behavior. After hydration it follows TanStack Router history only when the
   router-owned history index says an in-app entry exists; direct entry, document reload and
   external-origin arrival use the explicit fallback route instead of leaving the application.
 - Public headers share one release identity from `siteConfig`: the wordmark and restrained release
-  label stay grouped at the left, while the current application version remains visible at the
-  right. Published pages do not duplicate this chrome with page-private header markup; frozen lab
-  headers keep their explicitly isolated review contract.
+  label stay grouped at the left, while the current application version remains at the right.
+  Optional analytics first appears only after hydration as a fixed full-width bottom prompt that
+  overlays rather than shifts content; after a choice, its only persistent control lives in the
+  «Ваш выбор» section on `/privacy`, not in the header. Public footers expose the privacy route and
+  the shared Telegram invitation with a text label and the official brand mark. Published pages do
+  not duplicate this chrome with page-private header markup; frozen lab headers keep their
+  explicitly isolated review contract.
 
 ## 5. Responsive and accessible behavior
 
@@ -207,6 +237,16 @@ app → routes → pages → widgets → features → entities → shared
   «Без единиц измерения», but must not be the field's only accessible name.
 - Avoid all-caps running labels. A compact, tracked uppercase rubric is allowed only when it acts
   as quiet navigation or classification rather than body text.
+- Learning copy addresses the learner with polite «вы» and uses plain, calm Russian: short
+  sentences, one main thought at a time, and concrete actions or results instead of bureaucratic,
+  promotional or robotic phrasing. Introduce an unfamiliar technical term where it first matters,
+  but preserve exact names of code, commands, values and errors.
+- Humanizing a lesson is an editorial rewrite, not compression. Preserve the authored teaching
+  sequence, intermediate reasoning, examples, retrieval checks, distinctions and factual
+  precision. Remove repeated headings or helper text only when the adjacent interface already
+  communicates the same meaning.
+- Outcomes describe what the learner can now do. Instructions, hints and feedback say what to do
+  next; mistakes are explained without blame, vague encouragement or hidden scoring.
 
 ## 7. Fields and validation
 
@@ -230,7 +270,8 @@ app → routes → pages → widgets → features → entities → shared
 - Verify keyboard, focus, disabled/loading/error, narrow-screen, SSR and no-JS states in proportion
   to the changed component family.
 - Architecture and lint checks enforce rules that are mechanically decidable: layer direction,
-  public APIs, platform boundaries, forbidden vendor imports and theme-token isolation.
+  strict same-layer slice isolation for aliased and relative imports, public APIs, platform
+  boundaries, forbidden vendor imports and theme-token isolation.
 - Automated green does not approve visual quality or publication. The active change's explicit
   architect checkpoints remain human-owned.
 

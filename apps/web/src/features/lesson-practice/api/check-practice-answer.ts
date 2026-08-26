@@ -1,11 +1,11 @@
-import type { LessonTypes } from "~/entities/lesson";
+import type { PracticeTaskTypes } from "~/entities/practice-task";
 import { apiClient } from "~/shared/api";
 import type { components } from "~/shared/api/schema";
 
 type ExplanationBlock =
   components["schemas"]["CheckResponse"]["explanation"][number];
 
-export const checkPracticeAnswer: LessonTypes.PracticeChecker = async (
+export const checkPracticeAnswer: PracticeTaskTypes.Checker = async (
   taskId,
   answer,
 ) => {

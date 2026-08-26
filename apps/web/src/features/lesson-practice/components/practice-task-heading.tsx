@@ -1,10 +1,10 @@
-import type { LessonTypes } from "~/entities/lesson";
+import type { PracticeTaskTypes } from "~/entities/practice-task";
 import { FragmentLink } from "~/shared/components/fragment-link";
 import { Typography } from "~/shared/components/typography";
 import styles from "../lesson-practice.module.css";
 
 type PracticeTaskHeadingProps = {
-  task: LessonTypes.PracticeTask;
+  task: PracticeTaskTypes.Task;
   headingId: string;
 };
 

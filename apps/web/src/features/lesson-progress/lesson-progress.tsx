@@ -9,14 +9,7 @@ export const LessonProgress: React.FC<LessonProgressTypes.Props> = ({
   ...props
 }) => {
   const masteredAt = Math.ceil(props.total * props.masteryThreshold);
-  const status =
-    props.solved === props.total
-      ? "Все задания решены"
-      : props.solved >= masteredAt
-        ? "Тема освоена"
-        : props.solved === 0
-          ? "Практика ещё не начата"
-          : "Продолжайте практику";
+  const status = progressStatus(props.solved, props.total, masteredAt);
 
   return (
     <section className={styles.root} aria-labelledby={headingId}>
@@ -32,7 +25,7 @@ export const LessonProgress: React.FC<LessonProgressTypes.Props> = ({
         className={styles.progress}
         max={props.total}
         value={props.solved}
-        label="Решённые задачи темы"
+        label="Решённые задачи урока"
         valueText={`Решено ${String(props.solved)} из ${String(props.total)} задач`}
       />
       <Typography.Text className={styles.status} data-mastery-status>
@@ -41,3 +34,14 @@ export const LessonProgress: React.FC<LessonProgressTypes.Props> = ({
     </section>
   );
 };
+
+function progressStatus(
+  solved: number,
+  total: number,
+  masteredAt: number,
+): string {
+  if (solved === total) return "Все задания решены";
+  if (solved >= masteredAt) return "Урок пройден";
+  if (solved === 0) return "Вы ещё не решали задания";
+  return "Можно продолжить с оставшихся заданий";
+}

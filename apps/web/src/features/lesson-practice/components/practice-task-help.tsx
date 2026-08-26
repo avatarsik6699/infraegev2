@@ -1,10 +1,10 @@
-import type { LessonTypes } from "~/entities/lesson";
+import type { PracticeTaskTypes } from "~/entities/practice-task";
 import { Accordion } from "~/shared/components/accordion";
 import styles from "../lesson-practice.module.css";
 import { PracticeTaskSolution } from "./practice-task-solution";
 
 type PracticeTaskHelpProps = {
-  task: LessonTypes.PracticeTask;
+  task: PracticeTaskTypes.Task;
 };
 
 export const PracticeTaskHelp: React.FC<PracticeTaskHelpProps> = (props) => (

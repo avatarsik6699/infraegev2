@@ -1,14 +1,7 @@
-export { LessonSectionHeading } from "./lesson-section-heading";
-export { WorkedExample } from "./components/worked-example";
-export { Procedure } from "./components/procedure";
-export { Mistake } from "./components/mistake";
-export { Diagram } from "./components/diagram";
-export { Checkpoint } from "./components/checkpoint";
 export { preobrazovanieZapiseyChiselLesson } from "./content/preobrazovanie-zapisey-chisel.lesson";
 export { rekursiyaLesson } from "./content/rekursiya.lesson";
 export { lessonPublications } from "./content/lesson-publication.mjs";
 export { findLessonByRouteSlug } from "./content/lesson-registry";
-export { getLessonRouteData } from "./api/get-lesson-route-data";
 export { defineLesson } from "./lib/define-lesson";
 export type { LessonContent } from "./lib/define-lesson.types";
 export type { LessonTypes } from "./lesson.types";

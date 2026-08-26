@@ -1,12 +1,18 @@
-import type { LessonTypes } from "~/entities/lesson";
-import type { LessonProgressTypes } from "~/features/lesson-progress";
+import type { PracticeTaskTypes } from "~/entities/practice-task";
 
 export namespace LessonPracticeTypes {
   export type Props = {
-    tasks: readonly LessonTypes.PracticeTask[];
-    progressStore: LessonProgressTypes.Store;
-    checkAnswer: LessonTypes.PracticeChecker;
-    onAnswerChecked?: (result: "correct" | "incorrect") => void;
+    tasks: readonly PracticeTaskTypes.Task[];
+    solvedTaskIds: readonly string[];
+    acceptedAnswers: Readonly<Record<string, string>>;
+    onTaskSolved: (taskId: string, acceptedAnswer: string) => number;
+    checkAnswer: PracticeTaskTypes.Checker;
+    onAnswerChecked?: (event: AnswerCheckedEvent) => void;
+  };
+
+  export type AnswerCheckedEvent = {
+    result: "correct" | "incorrect";
+    solvedCount: number;
   };
 
   export type State = "idle" | "checking" | "incorrect" | "correct" | "error";

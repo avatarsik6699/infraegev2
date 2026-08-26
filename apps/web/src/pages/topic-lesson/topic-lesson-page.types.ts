@@ -1,8 +1,9 @@
-import type { LessonContent, LessonTypes } from "~/entities/lesson";
+import type { LessonContent } from "~/entities/lesson";
+import type { PracticeTaskTypes } from "~/entities/practice-task";
 
 export namespace TopicLessonPageTypes {
   export type Props = {
     lesson: LessonContent.Definition;
-    tasks: readonly LessonTypes.PracticeTask[];
+    tasks: readonly PracticeTaskTypes.Task[];
   };
 }

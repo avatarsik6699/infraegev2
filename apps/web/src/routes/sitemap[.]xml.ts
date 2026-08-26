@@ -1,4 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
+import {
+  courseLessonPublications,
+  coursePublications,
+} from "~/entities/course";
 import { lessonPublications } from "~/entities/lesson";
 import { siteConfig } from "~/shared/config/site";
 
@@ -8,6 +12,14 @@ const publicPaths = [
   ...lessonPublications
     .filter((lesson) => lesson.status === "published")
     .map((lesson) => `/ege/${lesson.routeSlug}`),
+  ...coursePublications
+    .filter((course) => course.status === "published")
+    .flatMap((course) => [
+      `/courses/${course.routeSlug}`,
+      ...courseLessonPublications
+        .filter((lesson) => lesson.status === "published")
+        .map((lesson) => `/courses/${course.routeSlug}/${lesson.routeSlug}`),
+    ]),
 ];
 
 export const Route = createFileRoute("/sitemap.xml")({

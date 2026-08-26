@@ -1,4 +1,4 @@
-import { LessonSectionHeading } from "~/entities/lesson";
+import { LessonSectionHeading } from "~/shared/components/learning-content";
 import { CodeBlock } from "~/shared/components/code-block";
 import { Typography } from "~/shared/components/typography";
 import { lessonDesignLabConstants } from "../lesson-design-lab.constants";

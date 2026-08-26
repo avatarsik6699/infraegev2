@@ -1,0 +1,45 @@
+{
+  "id": "python-first-program-local-run",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-first-program"],
+  "title": "Запустите программу на своём компьютере",
+  "statement": "Создайте файл first_program.py. Пусть программа получит количество минут, переведёт их в секунды и напечатает только число. Запустите файл, введите 7 и перенесите сюда результат с экрана.",
+  "hint": "В одной минуте 60 секунд, поэтому можно записать seconds = minutes * 60.",
+  "theory_links": [
+    {
+      "hash": "run-and-check",
+      "label": "Запускаем и проверяем программу"
+    },
+    {
+      "hash": "calculation-and-output",
+      "label": "Считаем и выводим результат"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["420"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "worked_example",
+      "data": {
+        "prompt": "Здесь нужны четыре уже знакомых шага.",
+        "steps": [
+          "minutes = int(input()) получает введённое число 7.",
+          "seconds = minutes * 60 вычисляет 7 * 60 = 420.",
+          "print(seconds) выводит 420 без дополнительных слов."
+        ]
+      }
+    },
+    {
+      "type": "code_example",
+      "data": {
+        "language": "python",
+        "code": "minutes = int(input())\nseconds = minutes * 60\nprint(seconds)",
+        "caption": "Один из вариантов программы"
+      }
+    }
+  ],
+  "difficulty": 3,
+  "is_interleaving_eligible": true
+}

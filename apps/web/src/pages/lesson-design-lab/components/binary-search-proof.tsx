@@ -52,13 +52,7 @@ export const BinarySearchProof: React.FC = () => (
               <div className={styles.array}>
                 {row.values.map((value, index) => (
                   <span
-                    className={
-                      index === row.middle
-                        ? styles.middleCell
-                        : index <= row.mutedUntil
-                          ? styles.mutedCell
-                          : undefined
-                    }
+                    className={proofCellClass(row, index)}
                     key={`${row.id}-${String(index)}`}
                   >
                     {value}
@@ -85,6 +79,15 @@ export const BinarySearchProof: React.FC = () => (
     </div>
   </LearningVisualFrame>
 );
+
+function proofCellClass(
+  row: (typeof rows)[number],
+  index: number,
+): string | undefined {
+  if (index === row.middle) return styles.middleCell;
+  if (index <= row.mutedUntil) return styles.mutedCell;
+  return undefined;
+}
 
 // A horizontal-ease cubic curve rather than orthogonal H/V/Q segments — same
 // technique as the annotated-diagram leaders (diagram-geometry.ts), so it

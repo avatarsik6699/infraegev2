@@ -98,4 +98,48 @@ function subscribe<T>(def: SafeLsKey<T>, listener: () => void): () => void {
   return () => window.removeEventListener("storage", handleStorage);
 }
 
-export const safeLs = { get, set, remove, subscribe };
+type SafeLsStore<T> = {
+  getSnapshot: () => T | null;
+  getServerSnapshot: () => null;
+  set: (value: T) => void;
+  remove: () => void;
+  subscribe: (listener: () => void) => () => void;
+};
+
+function createStore<T>(def: SafeLsKey<T>): SafeLsStore<T> {
+  const listeners = new Set<() => void>();
+  let cached: T | null | undefined;
+  const read = () => {
+    if (cached === undefined) cached = get(def);
+    return cached;
+  };
+  const emit = () => listeners.forEach((listener) => listener());
+
+  return {
+    getSnapshot: read,
+    getServerSnapshot: () => null,
+    set: (value) => {
+      set(def, value);
+      cached = value;
+      emit();
+    },
+    remove: () => {
+      remove(def);
+      cached = null;
+      emit();
+    },
+    subscribe: (listener) => {
+      listeners.add(listener);
+      const unsubscribeStorage = subscribe(def, () => {
+        cached = get(def);
+        listener();
+      });
+      return () => {
+        listeners.delete(listener);
+        unsubscribeStorage();
+      };
+    },
+  };
+}
+
+export const safeLs = { createStore, get, set, remove, subscribe };

@@ -1,5 +1,49 @@
 import { test } from "./fixtures";
 
+test("the review Python course is complete but remains unlisted", async ({
+  browserSession,
+  noJavaScriptPythonCoursePage,
+  pythonCoursePage,
+}) => {
+  await browserSession.useDesktopViewport();
+  await pythonCoursePage.openOverview();
+  await pythonCoursePage.dismissAnalyticsPrompt();
+  await pythonCoursePage.expectReviewOverview();
+  await browserSession.captureViewport("python-course-review-desktop.png");
+
+  await pythonCoursePage.openFirstLesson();
+  await pythonCoursePage.expectReviewLesson();
+  await pythonCoursePage.expectKeyboardDisclosures();
+  await browserSession.captureViewport(
+    "python-first-program-review-desktop.png",
+  );
+  await pythonCoursePage.expectPracticeAndReset();
+  await browserSession.captureViewport(
+    "python-first-program-practice-desktop.png",
+  );
+
+  await browserSession.useZoomedDesktopViewport();
+  await pythonCoursePage.openOverview();
+  await pythonCoursePage.expectReviewOverview();
+  await pythonCoursePage.openFirstLesson();
+  await pythonCoursePage.expectReviewLesson();
+  await browserSession.captureViewport(
+    "python-first-program-review-zoomed.png",
+  );
+
+  await browserSession.useNarrowViewport();
+  await pythonCoursePage.openFirstLesson();
+  await pythonCoursePage.expectReviewLesson();
+  await pythonCoursePage.expectMobileReadingOrder();
+  await browserSession.captureViewport(
+    "python-first-program-review-mobile.png",
+  );
+  browserSession.expectCleanConsole();
+
+  await noJavaScriptPythonCoursePage.expectOverviewReadableWithoutJavaScript();
+  await noJavaScriptPythonCoursePage.expectReadableWithoutJavaScript();
+});
+
 test("the unlisted lesson lab works across viewports and without JavaScript", async ({
   browserSession,
   lessonLabPage,

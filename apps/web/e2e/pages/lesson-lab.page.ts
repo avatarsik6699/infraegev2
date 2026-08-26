@@ -48,7 +48,7 @@ export class LessonLabPage {
 
   async expectPracticeFeedback(): Promise<void> {
     const tabs = this.page.getByRole("tablist", {
-      name: "Задачи по сложности",
+      name: "Задачи урока",
     });
     await expect(tabs).toBeVisible();
     await expect(tabs.getByRole("tab")).toHaveCount(5);
@@ -78,11 +78,11 @@ export class LessonLabPage {
     await expect(firstTab).toBeFocused();
     await expect(firstTab).toHaveAttribute("aria-selected", "true");
     await expect(
-      this.page.getByRole("progressbar", { name: "Решённые задачи темы" }),
+      this.page.getByRole("progressbar", { name: "Решённые задачи урока" }),
     ).toHaveAttribute("aria-valuetext", "Решено 0 из 5 задач");
     await this.answerTask("keep-half", "правая");
     await expect(
-      this.page.getByRole("progressbar", { name: "Решённые задачи темы" }),
+      this.page.getByRole("progressbar", { name: "Решённые задачи урока" }),
     ).toHaveAttribute("aria-valuetext", "Решено 0 из 5 задач");
 
     await this.answerTask("keep-half", "левая");
@@ -109,15 +109,15 @@ export class LessonLabPage {
     await this.answerTask("right-boundary", "7");
     await this.answerTask("loop-condition", "L <= R");
     await expect(
-      this.page.getByRole("progressbar", { name: "Решённые задачи темы" }),
+      this.page.getByRole("progressbar", { name: "Решённые задачи урока" }),
     ).toHaveAttribute("aria-valuetext", "Решено 4 из 5 задач");
     await expect(this.page.locator("[data-mastery-status]")).toHaveText(
-      "Тема освоена",
+      "Урок пройден",
     );
 
     await this.answerTask("trace-count", "3");
     await expect(
-      this.page.getByRole("progressbar", { name: "Решённые задачи темы" }),
+      this.page.getByRole("progressbar", { name: "Решённые задачи урока" }),
     ).toHaveAttribute("aria-valuetext", "Решено 5 из 5 задач");
     await expect(
       this.page.getByRole("link", { name: "Перейти к результату" }),
@@ -128,11 +128,11 @@ export class LessonLabPage {
 
     await this.page.reload();
     await expect(
-      this.page.getByRole("progressbar", { name: "Решённые задачи темы" }),
+      this.page.getByRole("progressbar", { name: "Решённые задачи урока" }),
     ).toHaveAttribute("aria-valuetext", "Решено 5 из 5 задач");
     await expect(
       this.page
-        .getByRole("tablist", { name: "Задачи по сложности" })
+        .getByRole("tablist", { name: "Задачи урока" })
         .getByRole("tab", { name: /Задача 1 из 5/ }),
     ).toHaveAttribute("aria-selected", "true");
     await expect(
@@ -198,7 +198,7 @@ export class LessonLabPage {
 
   async expectMobilePracticeTabs(): Promise<void> {
     const tabs = this.page.getByRole("tablist", {
-      name: "Задачи по сложности",
+      name: "Задачи урока",
     });
     await tabs.scrollIntoViewIfNeeded();
     await expect(tabs).toBeVisible();
@@ -523,7 +523,7 @@ export class LessonLabPage {
     await task.getByRole("textbox").fill(answer);
     await task.getByRole("button", { name: "Проверить" }).click();
     await expect(task.getByRole("status")).toContainText(
-      answer === "правая" ? "Пока нет" : "Верно",
+      answer === "правая" ? "Ответ пока не подходит" : "Верно",
     );
   }
 }

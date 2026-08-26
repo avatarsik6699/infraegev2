@@ -1,5 +1,5 @@
 import { CircleCheck } from "lucide-react";
-import { useState, useSyncExternalStore } from "react";
+import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import {
   Checkpoint,
@@ -7,16 +7,13 @@ import {
   Mistake,
   Procedure,
   WorkedExample,
-} from "~/entities/lesson";
-import {
-  createLocalPracticeChecker,
-  LessonPractice,
-} from "~/features/lesson-practice";
-import { createLessonProgressStore } from "~/features/lesson-progress";
+} from "~/shared/components/learning-content";
+import { createLocalPracticeChecker } from "~/features/lesson-practice";
 import { Badge } from "~/shared/components/badge";
 import { Accordion } from "~/shared/components/accordion";
 import { ActionLink } from "~/shared/components/action-link";
 import { Button } from "~/shared/components/button";
+import { LessonPracticeFlow } from "~/widgets/lesson-practice-flow";
 import { Callout } from "~/shared/components/callout";
 import { CodeBlock } from "~/shared/components/code-block";
 import { Divider } from "~/shared/components/divider";
@@ -35,7 +32,7 @@ import {
   TabsTab,
 } from "~/shared/components/tabs";
 import { Typography } from "~/shared/components/typography";
-import { enhancementState } from "~/shared/lib/enhancement-state";
+import { useIsEnhanced } from "~/shared/lib/use-is-enhanced";
 import {
   catalogNavigation,
   colorTokens,
@@ -45,10 +42,6 @@ import {
   tonalSteps,
 } from "./design-system-lab.constants";
 import styles from "./design-system-lab.module.css";
-
-const practiceProgressStore = createLessonProgressStore({
-  lessonId: "design-system-lab",
-});
 
 const longHeading =
   "Как найти количество путей из точки A в точку B, если движение разрешено только вправо и вниз";
@@ -61,11 +54,7 @@ export const DesignSystemLab: React.FC = () => {
   // visible to click and watch rather than just documented in prose.
   const [loadingDemoKey, setLoadingDemoKey] = useState(0);
   const [feedbackTab, setFeedbackTab] = useState("validation");
-  const enhanced = useSyncExternalStore(
-    enhancementState.subscribe,
-    enhancementState.getClientSnapshot,
-    enhancementState.getServerSnapshot,
-  );
+  const enhanced = useIsEnhanced();
 
   return (
     <div className={styles.page} data-enhanced={enhanced || undefined}>
@@ -952,9 +941,9 @@ export const DesignSystemLab: React.FC = () => {
               Секция ниже проверяет композицию целиком: от выбора сложности до
               ошибки, подсказки, успешного ответа и перехода к результату.
             </Typography.Text>
-            <LessonPractice
+            <LessonPracticeFlow
               checkAnswer={createLocalPracticeChecker(practiceTasks)}
-              progressStore={practiceProgressStore}
+              lessonId="design-system-lab"
               tasks={practiceTasks}
             />
           </section>

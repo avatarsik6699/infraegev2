@@ -5,6 +5,22 @@ ACTION=${1:-}
 STOP_TIMEOUT=${STOP_TIMEOUT:-10}
 WAIT_TIMEOUT=${WAIT_TIMEOUT:-180}
 LOCK_FILE=${INFRAEGE_DOCKER_LOCK_FILE:-/tmp/infraege-dev-docker-lifecycle.lock}
+STATE_FILE=${INFRAEGE_DOCKER_STATE_FILE:-.output/docker-dev-inputs.sha256}
+DEV_INPUTS=${INFRAEGE_DOCKER_INPUTS:-"
+package.json
+pnpm-workspace.yaml
+pnpm-lock.yaml
+apps/web/package.json
+apps/web/Dockerfile
+apps/web/tsconfig.json
+apps/web/vite.config.ts
+apps/api/pyproject.toml
+apps/api/uv.lock
+apps/api/Dockerfile
+apps/api/entrypoint.sh
+infra/docker-compose.yml
+infra/docker-compose.dev.yml
+"}
 
 case "$ACTION" in
   dev | rebuild | stop | down | restart) ;;
@@ -55,6 +71,50 @@ require_docker() {
   fi
 }
 
+development_inputs_fingerprint() {
+  if ! command -v sha256sum >/dev/null 2>&1; then
+    echo "sha256sum is required to detect changed Docker development inputs." >&2
+    return 1
+  fi
+
+  for input in $DEV_INPUTS; do
+    if [ ! -f "$input" ]; then
+      echo "Docker development input is missing: $input" >&2
+      return 1
+    fi
+  done
+  for input in $DEV_INPUTS; do
+    sha256sum "$input"
+  done | sha256sum | cut -d ' ' -f 1
+}
+
+remember_development_inputs() {
+  fingerprint=$1
+  state_dir=$(dirname -- "$STATE_FILE")
+  mkdir -p -- "$state_dir"
+  printf '%s\n' "$fingerprint" >"$STATE_FILE"
+}
+
+start_development() {
+  force_build=${1:-false}
+  fingerprint=$(development_inputs_fingerprint)
+  previous_fingerprint=
+  if [ -f "$STATE_FILE" ]; then
+    previous_fingerprint=$(cat -- "$STATE_FILE")
+  fi
+
+  if [ "$force_build" = "true" ] || [ "$fingerprint" != "$previous_fingerprint" ]; then
+    if [ "$force_build" != "true" ]; then
+      echo "Docker development inputs changed; rebuilding affected images..."
+    fi
+    start_stack --build
+    remember_development_inputs "$fingerprint"
+    return
+  fi
+
+  start_stack
+}
+
 start_stack() {
   build_flag=${1:-}
 
@@ -83,12 +143,12 @@ require_docker
 
 case "$ACTION" in
   dev)
-    start_stack
+    start_development
     echo
     echo "infraege is ready: http://localhost:8080/"
     ;;
   rebuild)
-    start_stack --build
+    start_development true
     echo
     echo "infraege was rebuilt and is ready: http://localhost:8080/"
     ;;
@@ -105,7 +165,7 @@ case "$ACTION" in
   restart)
     echo "Restarting the complete infraege developer stack..."
     compose stop --timeout "$STOP_TIMEOUT"
-    start_stack
+    start_development
     echo
     echo "infraege restarted and is ready: http://localhost:8080/"
     ;;

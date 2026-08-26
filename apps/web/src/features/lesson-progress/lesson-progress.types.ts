@@ -4,12 +4,9 @@ export namespace LessonProgressTypes {
     acceptedAnswers: Readonly<Record<string, string>>;
   };
 
-  export type Store = {
+  export type Model = Snapshot & {
     clear: () => void;
-    getServerSnapshot: () => Snapshot;
-    getSnapshot: () => Snapshot;
-    markSolved: (taskId: string, acceptedAnswer: string) => void;
-    subscribe: (listener: () => void) => () => void;
+    markSolved: (taskId: string, acceptedAnswer: string) => Snapshot;
   };
 
   export type Props = {
@@ -20,7 +17,7 @@ export namespace LessonProgressTypes {
     headingId?: string;
   };
 
-  export type StoreOptions = {
-    lessonId: string;
+  export type ProviderProps = {
+    children: React.ReactNode;
   };
 }

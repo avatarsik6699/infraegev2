@@ -1,13 +1,11 @@
 import { fireEvent, screen, waitFor, within } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
-import { LessonSectionHeading, rekursiyaLesson } from "~/entities/lesson";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { rekursiyaLesson } from "~/entities/lesson";
 import { LearningVisualFrame } from "~/entities/learning-visual";
-import {
-  createLessonProgressStore,
-  LessonProgress,
-} from "~/features/lesson-progress";
+import { LessonProgress, useLessonProgress } from "~/features/lesson-progress";
 import { LessonDesignLab } from "~/pages/lesson-design-lab";
 import { TopicLessonPage } from "~/pages/topic-lesson";
+import { LessonSectionHeading } from "~/shared/components/learning-content";
 import { calculateReadingPosition } from "~/shared/lib/reading-position";
 import { LessonOutline } from "~/widgets/lesson-outline";
 import { render } from "./render";
@@ -35,19 +33,50 @@ vi.mock(
   },
 );
 
-const lessonProgress = createLessonProgressStore({
-  lessonId: "binary-search",
-});
 const lessonProgressStorageKey = "infraege:lesson:binary-search:progress";
-const recursionProgress = createLessonProgressStore({ lessonId: "rekursiya" });
-const numberRecordProgress = createLessonProgressStore({
-  lessonId: "preobrazovanie-zapisey-chisel",
-});
-const recursionProgressStorageKey = "infraege:lesson:rekursiya:progress";
-const numberRecordProgressStorageKey =
-  "infraege:lesson:preobrazovanie-zapisey-chisel:progress";
+const progressRegistryStorageKey = "infraege:lesson-progress";
+
+function seedProgressRegistry(
+  lessons: Readonly<
+    Record<
+      string,
+      {
+        solvedTaskIds: readonly string[];
+        acceptedAnswers: Readonly<Record<string, string>>;
+      }
+    >
+  >,
+) {
+  window.localStorage.setItem(
+    progressRegistryStorageKey,
+    JSON.stringify({ version: 1, data: { lessons } }),
+  );
+}
+
+const ProgressHarness = () => {
+  const progress = useLessonProgress("binary-search");
+  return (
+    <>
+      <output aria-label="Состояние прогресса">
+        {JSON.stringify({
+          acceptedAnswers: progress.acceptedAnswers,
+          solvedTaskIds: progress.solvedTaskIds,
+        })}
+      </output>
+      <button
+        type="button"
+        onClick={() => progress.markSolved("task-1", " 42 ")}
+      >
+        Решить
+      </button>
+    </>
+  );
+};
 
 describe("lesson design system", () => {
+  beforeEach(() => {
+    window.localStorage.clear();
+  });
   it("renders a nested semantic outline with a current child anchor", () => {
     render(
       <LessonOutline
@@ -168,7 +197,6 @@ describe("lesson design system", () => {
   });
 
   it("keeps recursion metadata with the title while leaving progress out of the title and outline", () => {
-    recursionProgress.clear();
     render(
       <TopicLessonPage
         lesson={rekursiyaLesson}
@@ -239,7 +267,7 @@ describe("lesson design system", () => {
     expect(within(rail).queryByRole("progressbar")).toBeNull();
     expect(
       within(article).getByRole("progressbar", {
-        name: "Решённые задачи темы",
+        name: "Решённые задачи урока",
       }),
     ).toBeTruthy();
     expect(marginRail.children).toHaveLength(0);
@@ -249,7 +277,7 @@ describe("lesson design system", () => {
     expect(
       screen.getByRole("heading", { level: 3, name: "Прогресс" }),
     ).toBeTruthy();
-    expect(screen.getByText("Практика ещё не начата")).toBeTruthy();
+    expect(screen.getByText("Вы ещё не решали задания")).toBeTruthy();
     expect(
       screen
         .getByRole("link", {
@@ -279,7 +307,6 @@ describe("lesson design system", () => {
     });
     expect(within(template).getByText("Python")).toBeTruthy();
     expect(within(template).queryByText("пример", { exact: false })).toBeNull();
-    recursionProgress.clear();
   });
 
   it("renders every existing progress state with result-section hierarchy", () => {
@@ -295,7 +322,7 @@ describe("lesson design system", () => {
     expect(
       screen.getByRole("heading", { level: 3, name: "Прогресс" }),
     ).toBeTruthy();
-    expect(screen.getByText("Практика ещё не начата")).toBeTruthy();
+    expect(screen.getByText("Вы ещё не решали задания")).toBeTruthy();
 
     progress.rerender(
       <LessonProgress
@@ -305,7 +332,9 @@ describe("lesson design system", () => {
         total={5}
       />,
     );
-    expect(screen.getByText("Продолжайте практику")).toBeTruthy();
+    expect(
+      screen.getByText("Можно продолжить с оставшихся заданий"),
+    ).toBeTruthy();
 
     progress.rerender(
       <LessonProgress
@@ -315,7 +344,7 @@ describe("lesson design system", () => {
         total={5}
       />,
     );
-    expect(screen.getByText("Тема освоена")).toBeTruthy();
+    expect(screen.getByText("Урок пройден")).toBeTruthy();
 
     progress.rerender(
       <LessonProgress
@@ -329,12 +358,16 @@ describe("lesson design system", () => {
   });
 
   it("cancels or confirms a current-lesson reset without touching another lesson", async () => {
-    recursionProgress.clear();
-    numberRecordProgress.clear();
-    recursionProgress.markSolved("rekursiya-base-sequence", "32");
-    numberRecordProgress.markSolved("preobrazovanie-zapisey-appending", "77");
-    const progressSubscriber = vi.fn();
-    const unsubscribe = recursionProgress.subscribe(progressSubscriber);
+    seedProgressRegistry({
+      rekursiya: {
+        acceptedAnswers: { "rekursiya-base-sequence": "32" },
+        solvedTaskIds: ["rekursiya-base-sequence"],
+      },
+      "preobrazovanie-zapisey-chisel": {
+        acceptedAnswers: { "preobrazovanie-zapisey-appending": "77" },
+        solvedTaskIds: ["preobrazovanie-zapisey-appending"],
+      },
+    });
 
     render(
       <TopicLessonPage
@@ -353,11 +386,13 @@ describe("lesson design system", () => {
       />,
     );
 
-    expect(screen.getByText("Все задания решены")).toBeTruthy();
-    expect(
-      (screen.getByRole("textbox", { name: "Ответ" }) as HTMLInputElement)
-        .value,
-    ).toBe("32");
+    await waitFor(() => {
+      expect(screen.getByText("Все задания решены")).toBeTruthy();
+      expect(
+        (screen.getByRole("textbox", { name: "Ответ" }) as HTMLInputElement)
+          .value,
+      ).toBe("32");
+    });
 
     const reset = screen.getByRole("button", {
       name: "Сбросить прогресс урока",
@@ -367,41 +402,29 @@ describe("lesson design system", () => {
     await waitFor(() => expect(document.activeElement).toBe(cancel));
     fireEvent.click(cancel);
     expect(document.activeElement).toBe(reset);
-    expect(recursionProgress.getSnapshot().solvedTaskIds).toEqual([
-      "rekursiya-base-sequence",
-    ]);
-    expect(progressSubscriber).not.toHaveBeenCalled();
+    expect(
+      (screen.getByRole("textbox", { name: "Ответ" }) as HTMLInputElement)
+        .value,
+    ).toBe("32");
 
     fireEvent.click(reset);
     fireEvent.click(screen.getByRole("button", { name: "Сбросить" }));
     await waitFor(() => {
-      expect(screen.getByText("Практика ещё не начата")).toBeTruthy();
+      expect(screen.getByText("Вы ещё не решали задания")).toBeTruthy();
     });
-    expect(progressSubscriber).toHaveBeenCalledTimes(1);
-    expect(recursionProgress.getSnapshot()).toEqual({
-      acceptedAnswers: {},
-      solvedTaskIds: [],
-    });
-    expect(window.localStorage.getItem(recursionProgressStorageKey)).toBeNull();
-    expect(numberRecordProgress.getSnapshot()).toEqual({
-      acceptedAnswers: { "preobrazovanie-zapisey-appending": "77" },
-      solvedTaskIds: ["preobrazovanie-zapisey-appending"],
-    });
+    expect(window.localStorage.getItem(progressRegistryStorageKey)).toContain(
+      "77",
+    );
     expect(
-      window.localStorage.getItem(numberRecordProgressStorageKey),
-    ).toContain("77");
+      window.localStorage.getItem(progressRegistryStorageKey),
+    ).not.toContain("rekursiya-base-sequence");
     expect(
       screen.getByRole("textbox", { name: "Ответ" }).hasAttribute("disabled"),
     ).toBe(false);
     expect(document.activeElement).toBe(reset);
-
-    unsubscribe();
-    recursionProgress.clear();
-    numberRecordProgress.clear();
   });
 
   it("keeps one enhanced practice task active without losing draft answers", async () => {
-    lessonProgress.clear();
     const lesson = render(<LessonDesignLab />);
 
     expect(screen.queryByRole("link", { name: "В избранное" })).toBeNull();
@@ -410,7 +433,7 @@ describe("lesson design system", () => {
       screen.getByRole("link", { name: "Назад к темам" }).getAttribute("href"),
     ).toBe("/");
     const tabs = screen.getByRole("tablist", {
-      name: "Задачи по сложности",
+      name: "Задачи урока",
     });
     expect(within(tabs).getAllByRole("tab")).toHaveLength(5);
     const firstTab = within(tabs).getByRole("tab", {
@@ -424,7 +447,7 @@ describe("lesson design system", () => {
     expect(screen.getAllByRole("tabpanel")).toHaveLength(1);
     expect(
       screen
-        .getByRole("progressbar", { name: "Решённые задачи темы" })
+        .getByRole("progressbar", { name: "Решённые задачи урока" })
         .getAttribute("aria-valuetext"),
     ).toBe("Решено 0 из 5 задач");
 
@@ -479,11 +502,13 @@ describe("lesson design system", () => {
     fireEvent.change(answer, { target: { value: "правая" } });
     fireEvent.click(check);
     await waitFor(() => {
-      expect(screen.getByRole("status").textContent).toContain("Пока нет");
+      expect(screen.getByRole("status").textContent).toContain(
+        "Ответ пока не подходит",
+      );
     });
     expect(
       screen
-        .getByRole("progressbar", { name: "Решённые задачи темы" })
+        .getByRole("progressbar", { name: "Решённые задачи урока" })
         .getAttribute("aria-valuetext"),
     ).toBe("Решено 0 из 5 задач");
 
@@ -494,7 +519,7 @@ describe("lesson design system", () => {
     });
     expect(
       screen
-        .getByRole("progressbar", { name: "Решённые задачи темы" })
+        .getByRole("progressbar", { name: "Решённые задачи урока" })
         .getAttribute("aria-valuetext"),
     ).toBe("Решено 1 из 5 задач");
     expect(answer.hasAttribute("disabled")).toBe(true);
@@ -530,7 +555,6 @@ describe("lesson design system", () => {
         .getByRole("button", { name: "Проверить" })
         .hasAttribute("disabled"),
     ).toBe(true);
-    lessonProgress.clear();
   });
 
   it("clamps the reading position to the article travel range", () => {
@@ -539,32 +563,30 @@ describe("lesson design system", () => {
     expect(calculateReadingPosition(900, 100, 1100, 600)).toBe(1);
   });
 
-  it("separates task mastery from navigation and persists solved task ids", () => {
-    lessonProgress.clear();
-    lessonProgress.markSolved("task-1", " 42 ");
-    lessonProgress.markSolved("task-1", " 42 ");
-    expect(lessonProgress.getSnapshot().solvedTaskIds).toEqual(["task-1"]);
-    expect(lessonProgress.getSnapshot().acceptedAnswers).toEqual({
-      "task-1": " 42 ",
+  it("separates task mastery from navigation and persists solved task ids", async () => {
+    render(<ProgressHarness />);
+    fireEvent.click(screen.getByRole("button", { name: "Решить" }));
+
+    await waitFor(() => {
+      expect(screen.getByLabelText("Состояние прогресса").textContent).toBe(
+        '{"acceptedAnswers":{"task-1":" 42 "},"solvedTaskIds":["task-1"]}',
+      );
     });
-    expect(window.localStorage.getItem(lessonProgressStorageKey)).toContain(
+    expect(window.localStorage.getItem(progressRegistryStorageKey)).toContain(
       "task-1",
     );
-    expect(window.localStorage.getItem(lessonProgressStorageKey)).toContain(
+    expect(window.localStorage.getItem(progressRegistryStorageKey)).toContain(
       " 42 ",
     );
 
     render(<LessonProgress solved={4} total={5} masteryThreshold={0.8} />);
     expect(
-      screen.getByRole("progressbar", { name: "Решённые задачи темы" }),
+      screen.getByRole("progressbar", { name: "Решённые задачи урока" }),
     ).toBeTruthy();
-    expect(screen.getByText("Тема освоена")).toBeTruthy();
-    lessonProgress.clear();
+    expect(screen.getByText("Урок пройден")).toBeTruthy();
   });
 
-  it("keeps legacy solved progress without inventing an accepted answer", () => {
-    lessonProgress.clear();
-    const unsubscribe = lessonProgress.subscribe(() => undefined);
+  it("keeps legacy solved progress without inventing an accepted answer", async () => {
     window.localStorage.setItem(
       lessonProgressStorageKey,
       JSON.stringify({
@@ -572,39 +594,48 @@ describe("lesson design system", () => {
         data: { solvedTaskIds: ["keep-half"] },
       }),
     );
-    window.dispatchEvent(
-      new StorageEvent("storage", {
-        key: lessonProgressStorageKey,
-      }),
-    );
-    expect(lessonProgress.getSnapshot()).toEqual({
-      acceptedAnswers: {},
-      solvedTaskIds: ["keep-half"],
-    });
     render(<LessonDesignLab />);
-    expect(
-      screen
-        .getByPlaceholderText("Ответ был принят ранее")
-        .hasAttribute("disabled"),
-    ).toBe(true);
-    unsubscribe();
-    lessonProgress.clear();
+    await waitFor(() => {
+      expect(
+        screen
+          .getByPlaceholderText("Этот ответ уже принят")
+          .hasAttribute("disabled"),
+      ).toBe(true);
+    });
+    expect(window.localStorage.getItem(progressRegistryStorageKey)).toContain(
+      "keep-half",
+    );
   });
 
-  it("ignores a corrupted stored progress envelope", () => {
-    lessonProgress.clear();
-    const unsubscribe = lessonProgress.subscribe(() => undefined);
-    window.localStorage.setItem(lessonProgressStorageKey, "not-json");
-    window.dispatchEvent(
-      new StorageEvent("storage", {
-        key: lessonProgressStorageKey,
-      }),
-    );
-    expect(lessonProgress.getSnapshot()).toEqual({
-      acceptedAnswers: {},
-      solvedTaskIds: [],
+  it("refreshes the registry when another tab changes stored progress", async () => {
+    render(<ProgressHarness />);
+    seedProgressRegistry({
+      "binary-search": {
+        acceptedAnswers: { "task-2": "99" },
+        solvedTaskIds: ["task-2"],
+      },
     });
-    expect(window.localStorage.getItem(lessonProgressStorageKey)).toBeNull();
-    unsubscribe();
+    window.dispatchEvent(
+      new StorageEvent("storage", { key: progressRegistryStorageKey }),
+    );
+
+    await waitFor(() => {
+      expect(screen.getByLabelText("Состояние прогресса").textContent).toBe(
+        '{"acceptedAnswers":{"task-2":"99"},"solvedTaskIds":["task-2"]}',
+      );
+    });
+  });
+
+  it("ignores a corrupted stored progress envelope", async () => {
+    window.localStorage.setItem(progressRegistryStorageKey, "not-json");
+    render(<ProgressHarness />);
+    await waitFor(() => {
+      expect(
+        window.localStorage.getItem(progressRegistryStorageKey),
+      ).toBeNull();
+    });
+    expect(screen.getByLabelText("Состояние прогресса").textContent).toBe(
+      '{"acceptedAnswers":{},"solvedTaskIds":[]}',
+    );
   });
 });

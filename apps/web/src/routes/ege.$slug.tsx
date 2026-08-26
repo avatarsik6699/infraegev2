@@ -1,13 +1,13 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
-import { findLessonByRouteSlug, getLessonRouteData } from "~/entities/lesson";
-import { TopicLessonPage } from "~/pages/topic-lesson";
+import { findLessonByRouteSlug } from "~/entities/lesson";
+import { getTopicLessonRouteData, TopicLessonPage } from "~/pages/topic-lesson";
 import { pageHead } from "~/shared/lib/seo";
 
 export const Route = createFileRoute("/ege/$slug")({
   loader: async ({ params }: { params: { slug: string } }) => {
     const lesson = findLessonByRouteSlug(params.slug);
     if (!lesson) throw notFound();
-    const routeData = await getLessonRouteData({ data: params.slug });
+    const routeData = await getTopicLessonRouteData({ data: params.slug });
     if (!routeData) throw notFound();
     return routeData;
   },

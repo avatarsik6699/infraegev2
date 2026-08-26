@@ -1,6 +1,6 @@
-import type { LessonTypes } from "~/entities/lesson";
+import type { PracticeTaskTypes } from "~/entities/practice-task";
 
-export const practiceTasks: LessonTypes.LocalPracticeTask[] = [
+export const practiceTasks: PracticeTaskTypes.LocalTask[] = [
   {
     id: "design-system-lab-base-case",
     difficultyLabel: "Разминка",

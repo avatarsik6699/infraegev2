@@ -6,7 +6,7 @@ import {
 } from "@tanstack/react-router";
 import type { AppRouterContext } from "~/router";
 import { AppProviders, RouteError } from "~/app";
-import { AnalyticsConsent } from "~/features/analytics-consent";
+import { AnalyticsConsentPrompt } from "~/features/analytics";
 import "~/app/styles.css";
 
 export const Route = createRootRouteWithContext<AppRouterContext>()({
@@ -25,8 +25,8 @@ export const Route = createRootRouteWithContext<AppRouterContext>()({
 function RootComponent() {
   return (
     <>
-      <AnalyticsConsent />
       <Outlet />
+      <AnalyticsConsentPrompt />
     </>
   );
 }

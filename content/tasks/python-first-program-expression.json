@@ -1,0 +1,33 @@
+{
+  "id": "python-first-program-expression",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-first-program"],
+  "title": "Посчитайте значение выражения",
+  "statement": "Ширина прямоугольника равна 7, а высота — 5. В программе записано perimeter = 2 * (width + height). Какое число напечатает print(perimeter)?",
+  "hint": "Начните с действия в скобках: сложите ширину и высоту.",
+  "theory_links": [
+    {
+      "hash": "calculation-and-output",
+      "label": "Считаем и выводим результат"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["24"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "worked_example",
+      "data": {
+        "prompt": "Скобки показывают, что нужно посчитать в первую очередь.",
+        "steps": [
+          "Сначала width + height = 7 + 5 = 12.",
+          "Затем 2 * 12 = 24.",
+          "В perimeter сохраняется 24, поэтому print(perimeter) печатает 24."
+        ]
+      }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

@@ -18,7 +18,7 @@ the installed project and `ops-install` only for a genuinely new target.
 | Bootstrap/runtime/deploy login | `root` with password authentication (primary accepted contract) |
 | Authoritative DNS | `ns1.reg.ru`, `ns2.reg.ru` |
 | Required A records | `@ -> 2.26.8.245`, `www -> 2.26.8.245` |
-| TLS contact | `vlad-god500@mail.ru` |
+| TLS contact | `avatarsik6699@gmail.com` |
 | Feedback link | `https://t.me/+dElnKYPKGd81OGYy` |
 | WireGuard server address | `10.77.0.1/24` |
 | Initial laptop address | `10.77.0.2/32` |

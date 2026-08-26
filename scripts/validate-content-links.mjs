@@ -8,6 +8,10 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { lessonPublications } from "../apps/web/src/entities/lesson/content/lesson-publication.mjs";
+import {
+  courseLessonPublications,
+  coursePublications,
+} from "../apps/web/src/entities/course/content/course-publication.mjs";
 
 const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const CONTENT_ROOT = join(REPO_ROOT, "content");
@@ -24,17 +28,15 @@ function readJsonFiles(dir) {
 
 const topics = readJsonFiles(join(CONTENT_ROOT, "topics"));
 const tasks = readJsonFiles(join(CONTENT_ROOT, "tasks"));
-const courses = readJsonFiles(join(CONTENT_ROOT, "courses"));
 
 const topicIds = new Set([
   ...topics.map((topic) => topic.data.id),
   ...lessonPublications.map((lesson) => lesson.id),
 ]);
 const taskIds = new Set(tasks.map((t) => t.data.id));
-const lessonIds = new Set(
-  courses.flatMap((c) => c.data.lessons.map((l) => l.id)),
+const courseLessonIds = new Set(
+  courseLessonPublications.map((lesson) => lesson.id),
 );
-const topicOrLessonIds = new Set([...topicIds, ...lessonIds]);
 
 const errors = [];
 
@@ -86,7 +88,7 @@ function contentBlocksFor(data) {
 }
 
 for (const { file, data } of topics) {
-  checkRefs(file, data.prerequisites, topicOrLessonIds, "prerequisites");
+  checkRefs(file, data.prerequisites, topicIds, "prerequisites");
   checkRefs(file, data.related_topics, topicIds, "related_topics");
   checkRefs(file, data.practice_task_ids, taskIds, "practice_task_ids");
   checkLearningVisualAssets(
@@ -96,33 +98,51 @@ for (const { file, data } of topics) {
   );
 }
 
-for (const { file, data } of courses) {
-  for (const lesson of data.lessons) {
+for (const course of coursePublications) {
+  const moduleIds = new Set();
+  for (const courseModule of course.modules) {
+    if (moduleIds.has(courseModule.id)) {
+      errors.push(
+        `course "${course.id}": duplicate module id "${courseModule.id}"`,
+      );
+    }
+    moduleIds.add(courseModule.id);
     checkRefs(
-      file,
-      lesson.unlocks_topics,
-      topicIds,
-      `lesson "${lesson.id}".unlocks_topics`,
-    );
-    checkRefs(
-      file,
-      lesson.practice_task_ids,
-      taskIds,
-      `lesson "${lesson.id}".practice_task_ids`,
-    );
-    checkLearningVisualAssets(
-      file,
-      `/content/lessons/${lesson.id}/`,
-      contentBlocksFor(lesson),
+      `course "${course.id}"`,
+      courseModule.lessonIds,
+      courseLessonIds,
+      `module "${courseModule.id}".lessonIds`,
     );
   }
 }
 
+for (const lesson of courseLessonPublications) {
+  checkRefs(
+    `course lesson "${lesson.id}"`,
+    lesson.practiceTaskIds,
+    taskIds,
+    "practiceTaskIds",
+  );
+}
+
 for (const { file, data } of tasks) {
-  checkRefs(file, data.topic_ids, topicOrLessonIds, "topic_ids");
+  const topicOwners = data.topic_ids ?? [];
+  const courseLessonOwners = data.course_lesson_ids ?? [];
+  checkRefs(file, topicOwners, topicIds, "topic_ids");
+  checkRefs(file, courseLessonOwners, courseLessonIds, "course_lesson_ids");
+  if (topicOwners.length === 0 && courseLessonOwners.length === 0) {
+    errors.push(`${file}: task must have a topic or course lesson owner`);
+  }
+  if (topicOwners.length > 0 && courseLessonOwners.length > 0) {
+    errors.push(
+      `${file}: task cannot bridge topic and course lesson ownership`,
+    );
+  }
   checkLearningVisualAssets(
     file,
-    `/content/topics/${data.topic_ids?.[0] ?? "unknown"}/`,
+    topicOwners.length > 0
+      ? `/content/topics/${topicOwners[0]}/`
+      : `/content/lessons/${courseLessonOwners[0] ?? "unknown"}/`,
     data.explanation,
   );
 }
@@ -136,5 +156,5 @@ if (errors.length > 0) {
 }
 
 console.log(
-  `Content link validation passed (${topics.length} JSON topics, ${lessonPublications.length} TSX lessons, ${tasks.length} tasks, ${courses.length} courses).`,
+  `Content link validation passed (${topics.length} JSON topics, ${lessonPublications.length} Topic lessons, ${tasks.length} tasks, ${coursePublications.length} courses, ${courseLessonPublications.length} Course lessons).`,
 );

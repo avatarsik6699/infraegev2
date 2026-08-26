@@ -1,5 +1,4 @@
 import type { LessonContent } from "~/entities/lesson";
-import type { LessonProgressTypes } from "~/features/lesson-progress";
 import { ActionLink } from "~/shared/components/action-link";
 import { Typography } from "~/shared/components/typography";
 import styles from "../topic-lesson-page.module.css";
@@ -15,7 +14,6 @@ type PublishedLesson = {
 type Props = {
   lesson: LessonContent.Definition;
   otherPublishedLessons: readonly PublishedLesson[];
-  progressStore: LessonProgressTypes.Store;
   taskCount: number;
 };
 
@@ -39,7 +37,7 @@ export const TopicLessonResult: React.FC<Props> = (props) => (
 
     <TopicLessonProgress
       masteryThreshold={props.lesson.masteryThreshold ?? 0.8}
-      progressStore={props.progressStore}
+      lessonId={props.lesson.id}
       taskCount={props.taskCount}
     />
 

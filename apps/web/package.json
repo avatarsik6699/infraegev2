@@ -10,8 +10,8 @@
     "test:e2e": "playwright test",
     "test:e2e:install": "playwright install chromium",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint . --cache --cache-strategy content --max-warnings 0 && node scripts/verify-test-architecture.mjs && node scripts/verify-app-architecture.mjs",
-    "lint:fix": "eslint . --fix --cache --cache-strategy content --max-warnings 0 && node scripts/verify-test-architecture.mjs && node scripts/verify-app-architecture.mjs"
+    "lint": "eslint . --cache --cache-strategy content --max-warnings 0 && node scripts/verify-test-architecture.mjs && node scripts/verify-app-architecture.mjs && node scripts/verify-layer-boundaries.mjs",
+    "lint:fix": "eslint . --fix --cache --cache-strategy content --max-warnings 0 && node scripts/verify-test-architecture.mjs && node scripts/verify-app-architecture.mjs && node scripts/verify-layer-boundaries.mjs"
   },
   "dependencies": {
     "@base-ui/react": "1.7.0",
@@ -24,7 +24,8 @@
     "nitro": "3.0.260610-beta",
     "openapi-fetch": "0.17.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "zustand": "5.0.12"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.12.1",

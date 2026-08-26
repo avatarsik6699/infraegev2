@@ -214,6 +214,22 @@ def test_learning_visual_contract_accepts_generic_json_and_rejects_legacy_shapes
         )
 
 
+def test_task_requires_one_independent_content_owner(content_task: Task):
+    task = content_task.model_dump()
+
+    with pytest.raises(ValueError, match="must belong"):
+        Task.model_validate({**task, "topic_ids": [], "course_lesson_ids": []})
+
+    with pytest.raises(ValueError, match="cannot bridge"):
+        Task.model_validate(
+            {
+                **task,
+                "topic_ids": ["sample-topic"],
+                "course_lesson_ids": ["sample-course-lesson"],
+            }
+        )
+
+
 def test_error_logging_middleware_does_not_break_normal_requests(client: TestClient):
     response = client.get("/health")
     assert response.status_code == 200
@@ -266,6 +282,36 @@ def test_number_record_transformation_tasks_are_strict_and_checkable(
     task = Task.model_validate_json((content_root / f"{task_id}.json").read_text(encoding="utf-8"))
 
     assert task.topic_ids == ["preobrazovanie-zapisey-chisel"]
+    assert task.title
+    assert task.hint
+    assert task.theory_links
+    assert task.explanation
+
+    for accepted_answer in task.answer_variants:
+        assert is_correct(task, accepted_answer)
+    assert is_correct(task, correct_answer)
+    assert not is_correct(task, "неверно")
+
+
+@pytest.mark.parametrize(
+    ("task_id", "correct_answer"),
+    [
+        ("python-first-program-output-order", "8"),
+        ("python-first-program-variable-trace", "11"),
+        ("python-first-program-input-conversion", "17"),
+        ("python-first-program-expression", "24"),
+        ("python-first-program-local-run", "420"),
+    ],
+)
+def test_first_python_course_lesson_tasks_are_strict_and_checkable(
+    task_id: str,
+    correct_answer: str,
+):
+    content_root = Path(__file__).resolve().parents[3] / "content" / "tasks"
+    task = Task.model_validate_json((content_root / f"{task_id}.json").read_text(encoding="utf-8"))
+
+    assert task.topic_ids == []
+    assert task.course_lesson_ids == ["python-first-program"]
     assert task.title
     assert task.hint
     assert task.theory_links

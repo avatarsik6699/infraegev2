@@ -4,6 +4,7 @@ import {
   type RenderOptions,
 } from "@testing-library/react";
 import { createAppQueryClient } from "~/app";
+import { LessonProgressProvider } from "~/features/lesson-progress";
 
 type Props = { children: React.ReactNode };
 
@@ -28,7 +29,7 @@ export function render(
   const queryClient = createAppQueryClient();
   const TestProvider: React.FC<Props> = (props) => (
     <QueryClientProvider client={queryClient}>
-      {props.children}
+      <LessonProgressProvider>{props.children}</LessonProgressProvider>
     </QueryClientProvider>
   );
 

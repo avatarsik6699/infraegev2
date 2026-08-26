@@ -6,9 +6,9 @@ answer (SPEC.md §4/§11.1). Everything else (Topic/Course/CourseLesson) is fron
 
 from __future__ import annotations
 
-from typing import Annotated, Literal
+from typing import Annotated, Literal, Self
 
-from pydantic import BaseModel, ConfigDict, Field, JsonValue
+from pydantic import BaseModel, ConfigDict, Field, JsonValue, model_validator
 
 CheckerType = Literal["exact_match", "numeric_tolerance"]
 InteractionType = Literal["production", "recognition"]
@@ -134,6 +134,7 @@ class TheoryLink(StrictContentModel):
 class Task(StrictContentModel):
     id: str
     topic_ids: list[str] = Field(default_factory=list)
+    course_lesson_ids: list[str] = Field(default_factory=list)
     title: str
     statement: str
     hint: str
@@ -145,3 +146,11 @@ class Task(StrictContentModel):
     explanation: list[ContentBlock] = Field(default_factory=list)
     difficulty: Literal[1, 2, 3]
     is_interleaving_eligible: bool = True
+
+    @model_validator(mode="after")
+    def validate_content_owner(self) -> Self:
+        if not self.topic_ids and not self.course_lesson_ids:
+            raise ValueError("task must belong to a topic or course lesson")
+        if self.topic_ids and self.course_lesson_ids:
+            raise ValueError("task cannot bridge topic and course lesson ownership")
+        return self

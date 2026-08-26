@@ -9,7 +9,7 @@
   independent resolvers before requesting a certificate.
 - The first certificate uses Certbot standalone mode, so ports 80/443 must be free. Subsequent
   renewal uses webroot `/var/www/certbot`; the deploy hook reloads only the Nginx container.
-- Certificate contact: `vlad-god500@mail.ru`. This address is for expiry/account notices, not a
+- Certificate contact: `avatarsik6699@gmail.com`. This address is for expiry/account notices, not a
   certificate private key or a GitHub secret.
 
 Verification:

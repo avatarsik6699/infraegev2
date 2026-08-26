@@ -91,9 +91,8 @@ docs/runbooks/**
   reliability logs are disclosed separately and do not masquerade as consented analytics.
 - Event names/properties are compile-time allowlisted and coarse. Answers, free-form input,
   fingerprint material, full URLs/query/hash and durable cross-session user identifiers are banned.
-- Public operator details are: Годлевский Владислав Александрович; 195112, Россия,
-  Санкт-Петербург, Малоохтинский пр., д. 6; `vlad-god500@mail.ru`; Telegram `@avatarsikkk` and
-  `https://t.me/+dElnKYPKGd81OGYy`.
+- The current public contact channels are `avatarsik6699@gmail.com` and the configured Telegram
+  invitation. Other personal requisites were removed later by an explicit architect decision.
 - Continuing to use the site is not treated as consent. The notice records engineering facts and
   flags formal legal/Roskomnadzor review as required follow-up, not as a completed legal opinion.
 - infraegev2 owns producers, classification rules and target lifecycle. sre-kit owns ingestion,

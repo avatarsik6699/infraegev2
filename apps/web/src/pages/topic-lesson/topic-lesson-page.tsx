@@ -1,20 +1,19 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useRef } from "react";
+import { lessonPublications, type LessonTypes } from "~/entities/lesson";
 import {
   Checkpoint,
   LessonSectionHeading,
-  lessonPublications,
-  type LessonTypes,
-} from "~/entities/lesson";
+} from "~/shared/components/learning-content";
 import {
-  LessonPractice,
   checkPracticeAnswer,
+  type LessonPracticeTypes,
 } from "~/features/lesson-practice";
-import { createLessonProgressStore } from "~/features/lesson-progress";
 import { ReadingPositionIndicator } from "~/features/reading-position";
-import { reportProductEvent } from "~/features/product-analytics";
+import { reportProductEvent } from "~/features/analytics";
 import { Badge } from "~/shared/components/badge";
 import { Typography } from "~/shared/components/typography";
 import { LessonOutline } from "~/widgets/lesson-outline";
+import { LessonPracticeFlow } from "~/widgets/lesson-practice-flow";
 import { PublicFooter } from "~/widgets/public-footer";
 import { TopicLessonHeader } from "./components/topic-lesson-header";
 import { TopicLessonResult } from "./components/topic-lesson-result";
@@ -25,10 +24,6 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
   props,
 ) => {
   const articleRef = useRef<HTMLElement>(null);
-  const progressStore = useMemo(
-    () => createLessonProgressStore({ lessonId: props.lesson.id }),
-    [props.lesson.id],
-  );
   const practiceStartedRef = useRef(false);
   const completionReportedRef = useRef(false);
   useEffect(
@@ -40,7 +35,7 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
     },
     [props.lesson.id],
   );
-  function handleAnswerChecked(result: "correct" | "incorrect") {
+  function handleAnswerChecked(event: LessonPracticeTypes.AnswerCheckedEvent) {
     if (!practiceStartedRef.current) {
       practiceStartedRef.current = true;
       reportProductEvent({
@@ -50,11 +45,11 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
     }
     reportProductEvent({
       name: "practice_answer_checked",
-      properties: { lesson: props.lesson.id, result },
+      properties: { lesson: props.lesson.id, result: event.result },
     });
     if (
       !completionReportedRef.current &&
-      progressStore.getSnapshot().solvedTaskIds.length >= props.tasks.length
+      event.solvedCount >= props.tasks.length
     ) {
       completionReportedRef.current = true;
       reportProductEvent({
@@ -197,9 +192,9 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
             <LessonSectionHeading index={practiceIndex}>
               Практика
             </LessonSectionHeading>
-            <LessonPractice
+            <LessonPracticeFlow
               tasks={props.tasks}
-              progressStore={progressStore}
+              lessonId={props.lesson.id}
               checkAnswer={checkPracticeAnswer}
               onAnswerChecked={handleAnswerChecked}
             />
@@ -215,7 +210,6 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
             <TopicLessonResult
               lesson={props.lesson}
               otherPublishedLessons={otherPublishedLessons}
-              progressStore={progressStore}
               taskCount={props.tasks.length}
             />
           </section>
@@ -235,13 +229,10 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
 function taskCountLabel(count: number): string {
   const modulo100 = count % 100;
   const modulo10 = count % 10;
-  const noun =
-    modulo100 >= 11 && modulo100 <= 14
-      ? "задач"
-      : modulo10 === 1
-        ? "задача"
-        : modulo10 >= 2 && modulo10 <= 4
-          ? "задачи"
-          : "задач";
+  let noun = "задач";
+  if (modulo100 < 11 || modulo100 > 14) {
+    if (modulo10 === 1) noun = "задача";
+    if (modulo10 >= 2 && modulo10 <= 4) noun = "задачи";
+  }
   return `${String(count)} ${noun}`;
 }

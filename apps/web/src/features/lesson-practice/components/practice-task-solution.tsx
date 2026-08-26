@@ -1,11 +1,11 @@
-import type { LessonTypes } from "~/entities/lesson";
+import type { PracticeTaskTypes } from "~/entities/practice-task";
 import { Callout } from "~/shared/components/callout";
 import { CodeBlock } from "~/shared/components/code-block";
 import { Typography } from "~/shared/components/typography";
 import styles from "../lesson-practice.module.css";
 
 type PracticeTaskSolutionProps = {
-  blocks: readonly LessonTypes.PracticeSolutionBlock[];
+  blocks: readonly PracticeTaskTypes.SolutionBlock[];
 };
 
 export const PracticeTaskSolution: React.FC<PracticeTaskSolutionProps> = (

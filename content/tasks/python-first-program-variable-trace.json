@@ -1,0 +1,34 @@
+{
+  "id": "python-first-program-variable-trace",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-first-program"],
+  "title": "Проследите, как меняется переменная",
+  "statement": "Программа выполняет четыре строки: a = 4, b = a + 3, a = b + 4 и print(a). Какое число она напечатает?",
+  "hint": "Когда программа снова присваивает значение переменной a, прежнее значение заменяется.",
+  "theory_links": [
+    {
+      "hash": "values-and-variables",
+      "label": "Как работают переменные"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["11"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "worked_example",
+      "data": {
+        "prompt": "Посмотрим, что хранится в переменных после каждой строки.",
+        "steps": [
+          "После первой строки в a хранится 4.",
+          "Во второй строке b получает 4 + 3 = 7.",
+          "В третьей строке новое значение a равно b + 4, то есть 11.",
+          "Последняя строка печатает значение a — число 11."
+        ]
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

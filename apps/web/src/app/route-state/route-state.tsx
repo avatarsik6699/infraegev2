@@ -32,11 +32,7 @@ export const RouteError: React.FC<ErrorComponentProps> = (props) => {
   useEffect(
     function reportRouteErrorFx() {
       void reportClientError(
-        props.info
-          ? "render"
-          : isChunkLoadError(props.error)
-            ? "chunk_load"
-            : "route_load",
+        classifyRouteError(props.info, props.error),
         "/",
         props.error,
       );
@@ -63,6 +59,15 @@ export const RouteError: React.FC<ErrorComponentProps> = (props) => {
     </PageContainer>
   );
 };
+
+function classifyRouteError(
+  info: ErrorComponentProps["info"],
+  error: ErrorComponentProps["error"],
+): "render" | "chunk_load" | "route_load" {
+  if (info) return "render";
+  if (isChunkLoadError(error)) return "chunk_load";
+  return "route_load";
+}
 
 export const RouteNotFound: React.FC = () => (
   <PageContainer>

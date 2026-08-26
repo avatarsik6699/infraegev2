@@ -3,13 +3,11 @@ import {
   preobrazovanieZapiseyChiselLesson,
   rekursiyaLesson,
 } from "~/entities/lesson";
-import { loadLessonPracticeTasks } from "~/entities/lesson/api/load-lesson-practice-tasks.server";
+import { loadPracticeTasks } from "~/entities/practice-task";
 
 describe("lesson route data", () => {
   it("loads public task projections in the authored order without checker secrets", async () => {
-    const tasks = await loadLessonPracticeTasks(
-      rekursiyaLesson.practiceTaskIds,
-    );
+    const tasks = await loadPracticeTasks(rekursiyaLesson.practiceTaskIds);
 
     expect(tasks.map((task) => task.id)).toEqual(
       rekursiyaLesson.practiceTaskIds,
@@ -38,7 +36,7 @@ describe("lesson route data", () => {
   });
 
   it("loads five task-5 projections in order without checker secrets", async () => {
-    const tasks = await loadLessonPracticeTasks(
+    const tasks = await loadPracticeTasks(
       preobrazovanieZapiseyChiselLesson.practiceTaskIds,
     );
 

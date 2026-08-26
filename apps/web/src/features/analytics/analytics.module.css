@@ -1,0 +1,87 @@
+.banner {
+  position: fixed;
+  z-index: 1000;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border-top: 1px solid var(--color-rule-strong);
+  background: color-mix(in srgb, var(--color-surface) 96%, transparent);
+  box-shadow: var(--shadow-overlay);
+  backdrop-filter: blur(0.5rem);
+}
+
+.bannerInner {
+  display: flex;
+  width: min(72rem, 100%);
+  min-height: 4.75rem;
+  margin: 0 auto;
+  padding: var(--space-1-5) clamp(var(--space-2), 4vw, var(--space-4));
+  gap: var(--space-2);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.copy {
+  display: grid;
+  flex: 1 1 auto;
+  min-width: 0;
+  gap: var(--space-0-5);
+  max-width: 50rem;
+}
+
+.copy p {
+  margin: 0;
+}
+
+.bannerTitle {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-0-5);
+  align-items: center;
+  font-family: var(--font-ui);
+  font-weight: 600;
+}
+
+.promptEmoji {
+  flex: 0 0 auto;
+  font-family:
+    "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+  font-size: var(--text-lg);
+  line-height: 1;
+}
+
+.privacyLink {
+  color: var(--color-text-soft);
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  text-decoration-line: underline;
+  text-underline-offset: 0.2em;
+}
+
+.actions {
+  display: flex;
+  flex: 0 0 auto;
+  gap: var(--space-1);
+}
+
+.consentControl {
+  display: grid;
+  gap: var(--space-1-5);
+  align-items: start;
+  justify-items: start;
+}
+
+.consentControl p {
+  margin: 0;
+}
+
+@media (max-width: 40rem) {
+  .bannerInner {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .actions {
+    justify-content: flex-end;
+  }
+}

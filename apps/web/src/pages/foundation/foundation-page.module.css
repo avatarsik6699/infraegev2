@@ -43,8 +43,16 @@
   line-height: 1.55;
 }
 
+.catalog,
 .materials {
   display: grid;
+}
+
+.catalog {
+  gap: var(--space-5);
+}
+
+.materials {
   gap: var(--space-3);
 }
 

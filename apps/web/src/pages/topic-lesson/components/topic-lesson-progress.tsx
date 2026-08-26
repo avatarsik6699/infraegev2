@@ -1,27 +1,19 @@
-import { useRef, useState, useSyncExternalStore } from "react";
-import {
-  LessonProgress,
-  type LessonProgressTypes,
-  useLessonProgress,
-} from "~/features/lesson-progress";
+import { useRef, useState } from "react";
+import { LessonProgress, useLessonProgress } from "~/features/lesson-progress";
 import { Button } from "~/shared/components/button";
 import { Typography } from "~/shared/components/typography";
-import { enhancementState } from "~/shared/lib/enhancement-state";
+import { useIsEnhanced } from "~/shared/lib/use-is-enhanced";
 import styles from "../topic-lesson-page.module.css";
 
 type Props = {
   masteryThreshold: number;
-  progressStore: LessonProgressTypes.Store;
+  lessonId: string;
   taskCount: number;
 };
 
 export const TopicLessonProgress: React.FC<Props> = (props) => {
-  const progress = useLessonProgress(props.progressStore);
-  const enhanced = useSyncExternalStore(
-    enhancementState.subscribe,
-    enhancementState.getClientSnapshot,
-    enhancementState.getServerSnapshot,
-  );
+  const progress = useLessonProgress(props.lessonId);
+  const enhanced = useIsEnhanced();
   const [confirmingReset, setConfirmingReset] = useState(false);
   const resetButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -30,7 +22,7 @@ export const TopicLessonProgress: React.FC<Props> = (props) => {
     resetButtonRef.current?.focus();
   };
   const confirmReset = () => {
-    props.progressStore.clear();
+    progress.clear();
     setConfirmingReset(false);
     resetButtonRef.current?.focus();
   };

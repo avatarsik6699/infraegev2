@@ -195,7 +195,7 @@ export class TopicLessonPage {
       }),
     ).toBeVisible();
     await expect(
-      this.page.getByRole("progressbar", { name: "Решённые задачи темы" }),
+      this.page.getByRole("progressbar", { name: "Решённые задачи урока" }),
     ).toBeVisible();
 
     const layout = await this.page
@@ -414,7 +414,7 @@ export class TopicLessonPage {
     await firstCheck.click();
     await expect(
       firstPanel.getByText(
-        "Пока нет. Проверьте правило ещё раз или откройте подсказку.",
+        "Ответ пока не подходит. Попробуйте ещё раз или откройте подсказку.",
       ),
     ).toBeVisible();
     await expect(firstAnswer).toBeEnabled();
@@ -437,7 +437,7 @@ export class TopicLessonPage {
     await firstCheck.click();
     await expect(
       firstPanel.getByText(
-        "Не удалось проверить ответ. Проверьте соединение и отправьте его ещё раз.",
+        "Не получилось проверить ответ. Проверьте соединение и попробуйте ещё раз.",
       ),
     ).toBeVisible();
     expect(failedChecks).toBe(1);
@@ -454,7 +454,7 @@ export class TopicLessonPage {
     await expect(
       resultProgress.getByText("4 / 5", { exact: true }),
     ).toBeVisible();
-    await expect(resultProgress.getByText("Тема освоена")).toBeVisible();
+    await expect(resultProgress.getByText("Урок пройден")).toBeVisible();
 
     await this.page.reload();
     await expect(
@@ -462,7 +462,7 @@ export class TopicLessonPage {
         .locator('[data-practice-task="rekursiya-base-sequence"]')
         .getByRole("textbox", { name: "Ответ" }),
     ).toHaveValue("32");
-    await expect(resultProgress.getByText("Тема освоена")).toBeVisible();
+    await expect(resultProgress.getByText("Урок пройден")).toBeVisible();
 
     const reset = resultProgress.getByRole("button", {
       name: "Сбросить прогресс урока",
@@ -473,7 +473,7 @@ export class TopicLessonPage {
     await expect(cancel).toBeFocused();
     await cancel.press("Enter");
     await expect(reset).toBeFocused();
-    await expect(resultProgress.getByText("Тема освоена")).toBeVisible();
+    await expect(resultProgress.getByText("Урок пройден")).toBeVisible();
 
     await reset.press("Enter");
     const confirm = resultProgress.getByRole("button", {
@@ -487,7 +487,7 @@ export class TopicLessonPage {
       resultProgress.getByText("0 / 5", { exact: true }),
     ).toBeVisible();
     await expect(
-      resultProgress.getByText("Практика ещё не начата"),
+      resultProgress.getByText("Вы ещё не решали задания"),
     ).toBeVisible();
     await expect(firstAnswer).toBeEnabled();
     await expect(firstAnswer).toHaveValue("");
