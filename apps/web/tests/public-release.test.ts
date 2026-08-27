@@ -14,6 +14,9 @@ describe("public release metadata", () => {
         name: "infraege",
         releaseLabel: "beta",
         version: "1.0.0",
+        themeColor: "#ffffff",
+        socialImagePath: "/brand/infraege-social.png",
+        socialImageAlt: "infraege — подготовка к ЕГЭ по информатике",
       }),
     );
   });
@@ -89,6 +92,26 @@ describe("public release metadata", () => {
     expect(head.meta).toContainEqual({
       name: "robots",
       content: "index,follow",
+    });
+    expect(head.meta).toContainEqual({
+      property: "og:image",
+      content: `${siteConfig.origin}${siteConfig.socialImagePath}`,
+    });
+    expect(head.meta).toContainEqual({
+      name: "twitter:card",
+      content: "summary_large_image",
+    });
+  });
+
+  it("describes the site without inventing an organization", () => {
+    expect(pageHead.createWebsiteStructuredData()).toEqual({
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: "infraege",
+      alternateName: "infraege.ru",
+      url: "https://infraege.ru/",
+      description: siteConfig.description,
+      inLanguage: "ru",
     });
   });
 });

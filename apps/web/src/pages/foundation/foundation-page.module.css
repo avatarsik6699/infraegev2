@@ -99,7 +99,7 @@
   font-weight: 600;
   line-height: 1.3;
   text-decoration: underline;
-  text-decoration-color: transparent;
+  text-decoration-color: var(--color-rule-strong);
   text-decoration-thickness: 1px;
   text-underline-offset: 0.22em;
   transition: text-decoration-color var(--motion-duration) var(--motion-easing);

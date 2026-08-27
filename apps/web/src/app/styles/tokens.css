@@ -25,6 +25,13 @@
   --color-faint: var(--theme-ink-secondary);
   --color-rule: var(--theme-rule);
   --color-rule-strong: var(--theme-rule-strong);
+  --color-brand: var(--theme-brand);
+  --color-brand-text: var(--theme-brand-ink);
+  --color-brand-strong: color-mix(
+    in oklch,
+    var(--color-brand) 76%,
+    var(--color-text)
+  );
   --color-accent: var(--theme-primary);
   --color-accent-dark: var(--theme-primary-hover);
   --color-accent-soft: var(--theme-interactive-muted);

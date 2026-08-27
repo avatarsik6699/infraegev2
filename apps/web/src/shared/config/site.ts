@@ -3,6 +3,9 @@ export const siteConfig = Object.freeze({
   releaseLabel: "beta",
   version: "1.0.0",
   origin: "https://infraege.ru",
+  themeColor: "#ffffff",
+  socialImagePath: "/brand/infraege-social.png",
+  socialImageAlt: "infraege — подготовка к ЕГЭ по информатике",
   privacyContactEmail: "avatarsik6699@gmail.com",
   telegramInviteUrl: "https://t.me/+dElnKYPKGd81OGYy",
   description:

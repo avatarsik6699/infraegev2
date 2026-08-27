@@ -87,11 +87,13 @@ app → routes → pages → widgets → features → entities → shared
   material or “Engineering notebook” profile. Changing the active profile must not require domain,
   API, content or state changes.
 - Keep one active light theme in this change. Runtime theme switching and dark mode are out of
-  scope. The baseline is neutral monochrome: ink, muted surfaces and borders establish hierarchy;
-  chromatic values are reserved for semantic success, warning and error feedback. Syntax tokens
-  inside the dedicated dark code surface are the sole presentational exception; inline `Notation`
-  uses neutral ink on a quiet neutral surface so formulas and code stay recognizable without
-  becoming a competing color accent.
+  scope. The baseline remains neutral: ink, muted surfaces and borders establish hierarchy. The
+  supplied `#FA7011` orange is isolated to the three-stone mark; the live `ege` wordmark signal
+  uses its contrast-safe `#EA6004` derivative.
+  Public header/footer rules, persistent link underlines, inline `Notation`, the code-header
+  separator, buttons, badges, ordinary surfaces, control states and semantic feedback remain
+  neutral or keep their independent semantic roles. Syntax tokens inside the dedicated dark code
+  surface remain independent.
 - A verified third-party brand mark may retain its official color only when it identifies the
   destination of a real external link. Keep it small, pair it with a text label and do not reuse
   the brand color for surrounding controls or decoration.
@@ -167,8 +169,12 @@ app → routes → pages → widgets → features → entities → shared
   lists, prerender crawl and sitemap only through `published`; review and lab routes stay unlisted
   and `noindex,nofollow`.
   Every indexable HTML route exposes an absolute `https://infraege.ru` canonical plus unique title,
-  description and social metadata. `/robots.txt` and `/sitemap.xml` are server routes, not copied
-  static lists that can drift from publication state.
+  description and shared 1200×630 social metadata. The root owns a browser-only manifest plus the
+  normalized production SVG/PNG/ICO favicon and Apple touch icon set; `/` alone owns the truthful
+  `WebSite` JSON-LD site-name declaration. Generated favicon/touch/manifest assets satisfy
+  `docs/BRAND_ASSET_REQUIREMENTS.md`. Do not add Organization/Person structured data without a
+  separately confirmed real-world identity. `/robots.txt` and `/sitemap.xml` are server routes,
+  not copied static lists that can drift from publication state.
 - Public pages remain complete in SSR/no-JavaScript output and link to the current data-processing
   disclosure. Legal copy describes only behavior present in code/configuration, publishes the
   architect-approved email and Telegram invitation without exposing other personal requisites, and
@@ -182,8 +188,10 @@ app → routes → pages → widgets → features → entities → shared
   modified-click behavior. After hydration it follows TanStack Router history only when the
   router-owned history index says an in-app entry exists; direct entry, document reload and
   external-origin arrival use the explicit fallback route instead of leaving the application.
-- Public headers share one release identity from `siteConfig`: the wordmark and restrained release
-  label stay grouped at the left, while the current application version remains at the right.
+- Public headers share one release identity from `siteConfig`: the supplied baseline mark and live
+  Literata wordmark stay grouped with the restrained release label at the left, while the current
+  application version remains at the right. `infra` remains neutral and `ege` uses the exact mark
+  orange; the mark is decorative beside the accessible live site name rather than its replacement.
   Outside the home page the wordmark is the route back home. Material discovery belongs to the
   registry-derived home sections rather than duplicate collection links in global chrome.
   Optional analytics first appears only after hydration as a fixed full-width bottom prompt that

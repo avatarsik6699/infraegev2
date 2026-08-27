@@ -3,7 +3,7 @@
   gap: var(--space-2);
   align-items: center;
   justify-content: space-between;
-  min-height: 3.35rem;
+  min-height: 4rem;
   padding-inline: clamp(1.25rem, 2.6vw, 3rem);
   border-bottom: 1px solid var(--color-rule);
 }
@@ -16,6 +16,9 @@
 }
 
 .brand {
+  display: inline-flex;
+  gap: var(--space-1);
+  align-items: center;
   color: var(--color-text);
   font-family: var(--font-reading);
   font-size: var(--text-2xl);
@@ -24,8 +27,28 @@
   text-decoration: none;
 }
 
+.mark {
+  width: 2.75rem;
+  height: 2.75rem;
+  flex: 0 0 auto;
+  background: url("/brand/infraege-mark-baseline.svg") center / contain
+    no-repeat;
+}
+
+.wordmark {
+  display: inline-flex;
+}
+
+.signal {
+  color: var(--color-brand-text);
+}
+
 a.brand:hover {
-  color: var(--color-text-soft);
+  color: var(--color-text);
+}
+
+a.brand:hover .signal {
+  color: var(--color-brand-strong);
 }
 
 a.brand:focus-visible {

@@ -43,8 +43,12 @@ fallback.
 
 ## Brand Commitments
 
-The product name is `infraege`. Public copy is concise, factual and calm. Existing neutral light
-visual language and the binding rules in `docs/FRONTEND.md` remain the design authority.
+The product name is `infraege`. Public copy is concise, factual and calm. The architect-supplied
+three-stone mark is the production identity; the live Literata wordmark keeps `infra` neutral and
+uses a contrast-safe `#EA6004` derivative of the mark's `#FA7011` for `ege`. The interface remains
+neutral light: borders, link
+underlines, formula/code recognition surfaces, controls and statuses do not reuse the logo orange.
+The binding rules live in `docs/FRONTEND.md`.
 
 ## Evidence on Hand
 

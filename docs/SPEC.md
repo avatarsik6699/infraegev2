@@ -420,11 +420,15 @@ API и аккаунт не используются. Интерактивные 
 ### 5.3 Design System
 
 Frontend использует локальную доменную UI-систему поверх Base UI и CSS Modules. Первый активный
-визуальный профиль **«Инженерная тетрадь»** сочетает нейтральную монохромную поверхность,
-читающий serif и компактный sans/mono-интерфейс без фоновой текстуры. Иерархию создают два
-нейтральных уровня текста, whitespace, muted surfaces и тонкие borders; цвет зарезервирован для
-семантической обратной связи и синтаксиса в code surface, а inline-нотация использует только
-нейтральные ink/surface-роли. Статичные поверхности и controls плоские: один блок использует не
+визуальный профиль **«Инженерная тетрадь»** сочетает нейтральную светлую поверхность,
+читающий serif и компактный sans/mono-интерфейс без фоновой текстуры. Поставленный архитектором
+трёхкаменный знак с исходным `#FA7011` образует изолированный identity layer: baseline-знак стоит
+рядом с живым Literata-wordmark, где `ege` использует контрастный производный `#EA6004` (3.4:1 на
+белом). Структурные линии public chrome,
+подчёркивания ссылок, recognition-поверхности notation/code, кнопки, badges, обычные reading
+surfaces и их состояния остаются нейтральными; status-цвета и syntax-роли независимы от бренда.
+Иерархию по-прежнему создают два нейтральных уровня текста,
+whitespace, muted surfaces и тонкие borders. Статичные поверхности и controls плоские: один блок использует не
 более одного поверхностного сигнала (fill, border или будущая обоснованная overlay-тень), без
 вложенных карточек и декоративного elevation. Система по умолчанию dense: связанные controls
 согласованы по высоте `40px`, но зоны взаимодействия не уменьшаются; группы строятся прежде всего
@@ -658,7 +662,7 @@ combined-log записи до path/status-family/coarse traffic class. Raw IP, 
 | Performance budget | LCP ≤ 2.8s, CLS < 0.1, INP < 200ms на мобильном 4G-профиле; release evidence измеряет `/` и первый опубликованный `/ege/16-rekursiya`, отдельно проверяет cold-load font/layout shifts и не подменяет route-level метрики общей оценкой технической страницы |
 | Observability | Application, operations и management-host sre-kit имеют независимые lifecycle/volumes/rollback. infraegev2 владеет target operations, WireGuard peer, Source bootstrap и privacy-safe publisher; sre-kit владеет generic core/adapters/UI distribution. Семь clean-start Sources непрерывно poll/push на management VPS без target-side mutation; локальный `sre-kit-local` остаётся выключенным fallback |
 | Backup / restore | Application и operations jobs используют отдельные Restic tags, restore proofs и status markers в общем encrypted repository. Operations timers активируются только после clean install, без импорта старых Umami/Beszel artifacts. Для каждого владельца сохраняются 7 daily + 4 weekly + 3 monthly и общий same-host/off-site risk |
-| SEO | `/`, `/privacy`, published topics, courses и CourseLesson имеют canonical, уникальные metadata, SSR content и входят в sitemap/prerender; lab и review routes остаются unlisted, `noindex,nofollow` и исключены из public discovery; Lighthouse SEO для публичных маршрутов проходит без ошибок |
+| SEO | `/`, `/privacy`, published topics, courses и CourseLesson имеют canonical, уникальные metadata, SSR content, общий crawlable social preview и входят в sitemap/prerender; root document публикует browser-only manifest, SVG/PNG/ICO favicon и Apple touch icon из production-знака, а `/` — правдивый `WebSite` JSON-LD без выдуманной Organization; lab и review routes остаются unlisted, `noindex,nofollow` и исключены из public discovery; Lighthouse SEO для публичных маршрутов проходит без ошибок |
 | Mobile / no-JS readability | Lab, TopicLesson, Course overview и CourseLesson сохраняют текст, программу, подписи, решения и section anchors в SSR HTML; интерактивная проверка и персональный progress остаются progressive enhancement |
 | Client resilience / API drift | Route failures восстанавливаемы без белого экрана; loading/empty/error/not-found состояния доступны с клавиатуры и скринридера; OpenAPI schema/types drift ломает gate до merge; runtime HTTP имеет timeout/abort и не делает скрытый retry мутаций |
 | Юридическое (152-ФЗ) | `/privacy` публикует фактические цели, состав, сроки и получателей обработки, `avatarsik6699@gmail.com` и Telegram invite как каналы связи, но по явному решению архитектора не публикует ФИО и адрес оператора с принятием сопутствующего риска. Optional browser analytics требует отдельного явного согласия и допускает отзыв на `/privacy`; продолжение использования сайта согласием не считается. Формальная проверка уведомления РКН, локализации и текста юристом остаётся обязательным внешним follow-up, а не заявляется выполненной |

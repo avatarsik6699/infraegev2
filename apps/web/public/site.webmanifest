@@ -1,0 +1,25 @@
+{
+  "name": "infraege — подготовка к ЕГЭ по информатике",
+  "short_name": "infraege",
+  "description": "Понятные материалы для подготовки к ЕГЭ по информатике: теория, разборы и практика с объяснениями.",
+  "lang": "ru",
+  "start_url": "/",
+  "scope": "/",
+  "display": "browser",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/brand/infraege-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/brand/infraege-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

@@ -47,6 +47,44 @@ export class FoundationPage {
     );
   }
 
+  async expectBrandMetadata(): Promise<void> {
+    await expect(this.page.locator('meta[name="theme-color"]')).toHaveAttribute(
+      "content",
+      "#ffffff",
+    );
+    await expect(
+      this.page.locator('link[rel="icon"][type="image/svg+xml"]'),
+    ).toHaveAttribute("href", "/favicon.svg");
+    await expect(
+      this.page.locator('link[rel="apple-touch-icon"]'),
+    ).toHaveAttribute("href", "/apple-touch-icon.png");
+    await expect(this.page.locator('link[rel="manifest"]')).toHaveAttribute(
+      "href",
+      "/site.webmanifest",
+    );
+    await expect(
+      this.page.locator('meta[property="og:image"]'),
+    ).toHaveAttribute(
+      "content",
+      "https://infraege.ru/brand/infraege-social.png",
+    );
+    await expect(
+      this.page.locator('meta[name="twitter:card"]'),
+    ).toHaveAttribute("content", "summary_large_image");
+
+    const structuredData = await this.page
+      .locator('script[type="application/ld+json"]')
+      .textContent();
+    expect(structuredData).not.toBeNull();
+    expect(JSON.parse(structuredData ?? "{}")).toEqual(
+      expect.objectContaining({
+        "@type": "WebSite",
+        name: "infraege",
+        url: "https://infraege.ru/",
+      }),
+    );
+  }
+
   async expectDesktopComposition(): Promise<void> {
     const lessonLink = this.page
       .getByRole("link", { name: /Рекурсивные алгоритмы/ })

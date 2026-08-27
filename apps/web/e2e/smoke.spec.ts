@@ -104,6 +104,7 @@ test("the public root exposes only published material and unknown routes remain 
   await browserSession.useDesktopViewport();
   await foundationPage.open();
   await foundationPage.expectPublishedMaterial();
+  await foundationPage.expectBrandMetadata();
   await foundationPage.expectDesktopComposition();
   await foundationPage.expectNoHorizontalOverflow();
   await foundationPage.expectStableReload();
