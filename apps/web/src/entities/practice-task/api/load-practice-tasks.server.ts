@@ -36,29 +36,25 @@ async function loadPracticeTask(
 }
 
 function parseTaskSource(value: string): TaskSource {
-  const source: unknown = JSON.parse(value);
-  if (
-    typeof source !== "object" ||
-    source === null ||
-    !("id" in source) ||
-    typeof source.id !== "string" ||
-    !("title" in source) ||
-    typeof source.title !== "string" ||
-    !("statement" in source) ||
-    typeof source.statement !== "string" ||
-    !("hint" in source) ||
-    typeof source.hint !== "string" ||
-    !("difficulty" in source) ||
-    typeof source.difficulty !== "number" ||
-    !("explanation" in source) ||
-    !Array.isArray(source.explanation) ||
-    !("theory_links" in source) ||
-    !Array.isArray(source.theory_links) ||
-    !source.theory_links.every(isTheoryLink)
-  ) {
+  const source = JSON.parse(value) as unknown;
+  if (!isRecord(source)) {
     throw new Error("Invalid public task projection");
   }
-  return source as TaskSource;
+
+  const theoryLinks = requireArray(source.theory_links);
+  if (!theoryLinks.every(isTheoryLink)) {
+    throw new Error("Invalid public task projection");
+  }
+
+  return {
+    id: requireString(source.id),
+    title: requireString(source.title),
+    statement: requireString(source.statement),
+    hint: requireString(source.hint),
+    difficulty: requireNumber(source.difficulty),
+    explanation: requireArray(source.explanation),
+    theory_links: theoryLinks,
+  };
 }
 
 function parseSolutionBlock(value: unknown): PracticeTaskTypes.SolutionBlock {
@@ -69,52 +65,77 @@ function parseSolutionBlock(value: unknown): PracticeTaskTypes.SolutionBlock {
   ) {
     throw new Error("Invalid practice solution block");
   }
-  if (value.type === "text" && typeof value.data.markdown === "string") {
-    return { type: "text", text: value.data.markdown };
+
+  const parser = solutionBlockParsers[value.type];
+  if (!parser) {
+    throw new Error("Unsupported practice solution block");
   }
+  return parser(value.data);
+}
+
+const solutionBlockParsers: Record<
+  string,
+  (data: Record<string, unknown>) => PracticeTaskTypes.SolutionBlock
+> = {
+  text: parseTextBlock,
+  callout: parseCalloutBlock,
+  worked_example: parseStepsBlock,
+  completion_exercise: parseStepsBlock,
+  productive_failure_prompt: parseStepsBlock,
+  code_example: parseCodeBlock,
+};
+
+function parseTextBlock(
+  data: Record<string, unknown>,
+): PracticeTaskTypes.SolutionBlock {
+  return { type: "text", text: requireSolutionString(data.markdown) };
+}
+
+function parseCalloutBlock(
+  data: Record<string, unknown>,
+): PracticeTaskTypes.SolutionBlock {
+  if (data.tone !== "info" && data.tone !== "warning") {
+    throw new Error("Unsupported practice solution block");
+  }
+  return {
+    type: "callout",
+    tone: data.tone === "info" ? "idea" : "warning",
+    text: requireSolutionString(data.markdown),
+  };
+}
+
+function parseStepsBlock(
+  data: Record<string, unknown>,
+): PracticeTaskTypes.SolutionBlock {
+  const steps = data.steps;
+  if (!Array.isArray(steps) || !steps.every(isString)) {
+    throw new Error("Unsupported practice solution block");
+  }
+  return {
+    type: "steps",
+    prompt: requireSolutionString(data.prompt),
+    steps,
+  };
+}
+
+function parseCodeBlock(
+  data: Record<string, unknown>,
+): PracticeTaskTypes.SolutionBlock {
+  const caption = data.caption;
   if (
-    value.type === "callout" &&
-    (value.data.tone === "info" || value.data.tone === "warning") &&
-    typeof value.data.markdown === "string"
+    caption !== undefined &&
+    caption !== null &&
+    typeof caption !== "string"
   ) {
-    return {
-      type: "callout",
-      tone: value.data.tone === "info" ? "idea" : "warning",
-      text: value.data.markdown,
-    };
+    throw new Error("Unsupported practice solution block");
   }
-  if (
-    (value.type === "worked_example" ||
-      value.type === "completion_exercise" ||
-      value.type === "productive_failure_prompt") &&
-    typeof value.data.prompt === "string" &&
-    Array.isArray(value.data.steps) &&
-    value.data.steps.every((step) => typeof step === "string")
-  ) {
-    return {
-      type: "steps",
-      prompt: value.data.prompt,
-      steps: value.data.steps,
-    };
-  }
-  if (
-    value.type === "code_example" &&
-    typeof value.data.language === "string" &&
-    typeof value.data.code === "string" &&
-    (value.data.caption === undefined ||
-      value.data.caption === null ||
-      typeof value.data.caption === "string")
-  ) {
-    return {
-      type: "code",
-      language: value.data.language === "python" ? "python" : "text",
-      code: value.data.code,
-      ...(typeof value.data.caption === "string"
-        ? { caption: value.data.caption }
-        : {}),
-    };
-  }
-  throw new Error("Unsupported practice solution block");
+  return {
+    type: "code",
+    language:
+      requireSolutionString(data.language) === "python" ? "python" : "text",
+    code: requireSolutionString(data.code),
+    ...(typeof caption === "string" ? { caption } : {}),
+  };
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -130,6 +151,38 @@ function isTheoryLink(value: unknown): value is PracticeTaskTypes.TheoryLink {
     "label" in value &&
     typeof value.label === "string"
   );
+}
+
+function isString(value: unknown): value is string {
+  return typeof value === "string";
+}
+
+function requireString(value: unknown): string {
+  if (typeof value !== "string") {
+    throw new Error("Invalid public task projection");
+  }
+  return value;
+}
+
+function requireNumber(value: unknown): number {
+  if (typeof value !== "number") {
+    throw new Error("Invalid public task projection");
+  }
+  return value;
+}
+
+function requireArray(value: unknown): unknown[] {
+  if (!Array.isArray(value)) {
+    throw new Error("Invalid public task projection");
+  }
+  return value;
+}
+
+function requireSolutionString(value: unknown): string {
+  if (typeof value !== "string") {
+    throw new Error("Unsupported practice solution block");
+  }
+  return value;
 }
 
 function difficultyLabel(difficulty: number): string {

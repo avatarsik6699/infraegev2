@@ -9,8 +9,8 @@
 
 | Field | Value |
 |-------|-------|
-| Document Version | `v2.3` |
-| Date | `2026-08-24` |
+| Document Version | `v2.4` |
+| Date | `2026-08-27` |
 | Architect / Owner | `v.godlevskiy` |
 | Stack | See [docs/STACK.md](./STACK.md) |
 | Domain | Платформа подготовки к ЕГЭ по информатике — самостоятельные темы экзамена и мини-курсы с теорией, визуализацией и практикой |
@@ -45,8 +45,7 @@ sdamgia.ru, kpolyakov.spb.ru), ни новыми AI-ботами (решают �
 
 - [NEEDS_CLARIFICATION: конкретные числовые целевые показатели (сколько органических визитов /
   за какой срок / какая глубина прохождения темы считается успехом) не зафиксированы архитектором
-  — решить после этапа 4, когда домен, сайт и MVP-контент будут готовы и появятся первые пригодные
-  данные Umami, а не гадать заранее.]
+  — решить после накопления пригодных M4-данных Umami, а не гадать заранее.]
 - Change 48 вводит прозрачную аналитическую петлю: optional browser analytics и узкий allowlist
   продуктовых событий включаются только после явного opt-in, а необходимые security/reliability
   logs и обезличенные server-side aggregates раскрываются отдельно. Fingerprinting, ответы,
@@ -68,13 +67,12 @@ sdamgia.ru, kpolyakov.spb.ru), ни новыми AI-ботами (решают �
 заменяет техническую заглушку `/` минимальной публичной точкой входа и возвращает обязательные
 SEO/legal surfaces. Lab-маршруты остаются unlisted/noindex и не входят в публичную навигацию.
 
-После публикации `/ege/5-preobrazovanie-zapisey-chisel` расширение каталога временно
-останавливается на двух полных уроках. До выбора третьей темы ЕГЭ или начала мини-курса Python
-продукт оценивается целиком как приложение: вход и навигация, непрерывность обучения между
-уроками, обратная связь о прогрессе, доверие/legal surfaces, production readiness и минимальная
-петля обратной связи/измерения. Такая оценка выявляет и приоритизирует конкретные пробелы, но сама
-по себе не разрешает аккаунты, новый сбор аналитики, каталог/поиск или другие функции за
-пределами текущих MVP-границ.
+После публикации `/ege/5-preobrazovanie-zapisey-chisel` расширение каталога было остановлено на
+двух полных TopicLesson для product-readiness аудита. Changes 45–46 закрыли выявленные пробелы
+learner journey, а Changes 56–57 затем опубликовали самостоятельный early-access мини-курс Python
+и его первый CourseLesson. Дальнейшее расширение остаётся инкрементальным: одна законченная тема
+или один законченный CourseLesson за изменение; аккаунты, новый сбор аналитики, каталог/поиск и
+другие функции за пределами текущих MVP-границ из этого факта не следуют.
 
 ### 1.4 Durable Learning Flow
 
@@ -681,7 +679,7 @@ combined-log записи до path/status-family/coarse traffic class. Raw IP, 
 | `M0` — технический фундамент | complete | Сохранить проверенную web/backend/ops инфраструктуру без навязывания продуктовой страницы | Исторический neutral baseline, shared primitives, API contract, content skeleton и локальные gates |
 | `M1` — новый product/design baseline | complete | Доказать заменяемую визуальную систему без преждевременной публикации | «Инженерная тетрадь», unlisted design-system/lesson labs, единый frontend-контракт и reusable primitives |
 | `M2` — инфраструктурная пауза | complete | Подготовить production-платформу до продолжения продуктового контента | `infraege.ru`, VPS/GHCR deploy, security/release gates, backups и независимый operations stack активны; linked sre-kit Change 20 доказал все шесть Sources end to end |
-| `M3` — учебный flow и публичный запуск | in progress | Завершить доменную логику, основные поверхности сайта и проверенный MVP-контент до расширения каталога | Два опубликованных TopicLesson готовы; следующий срез — самостоятельный early-access курс «Python с нуля для ЕГЭ» и первый законченный CourseLesson без Topic-связей |
+| `M3` — учебный flow и публичный запуск | in progress | Завершить доменную логику, основные поверхности сайта и проверенный MVP-контент до расширения каталога | Два TopicLesson и самостоятельный early-access курс «Python с нуля для ЕГЭ» с первым законченным CourseLesson опубликованы; дальнейшие единицы контента сохраняют независимость Topic/CourseLesson |
 | `M4` — финальное измерение и эксплуатация | in progress | Измерить фактический learning flow прозрачно и обезличенно | Changes 48–49 дают explicit opt-in и privacy-safe aggregates; Change 53 переносит семь clean-start Sources и publisher на отдельный always-on management VPS; все dashboard surfaces остаются в sre-kit |
 | `M5+` (после первых данных, вне MVP) | deferred | Расширение охвата и сообщества поверх работающей бесплатной базы | Второй мини-курс (Excel), аккаунты/синхронизация, обсуждения тем с модерацией, затем платные фичи — без runtime AI до этого момента |
 
@@ -693,7 +691,7 @@ combined-log записи до path/status-family/coarse traffic class. Raw IP, 
 | `1` | В sre-kit Change 20 сверить и доказать шесть infraegev2 Sources | Complete: stale записи безопасно инвентаризированы; все шесть текущих конфигураций зарегистрированы; доказаны свежие polling/status/dashboard и failure/recovery evidence |
 | `2` | Провести product-readiness audit двух опубликованных уроков | Complete: вход, оба урока, checker/persistence/recovery, mobile/no-JS, trust, crawl и production/monitoring evidence проверены; находки `PR-01`–`PR-07` ранжированы в `docs/artifacts/product-readiness-audit-2026-08-20.md` |
 | `3` | Закрыть Change 46 — анонимный progress/result/continuation loop | Complete: browser journey показывает solved/mastery result, сбрасывает только текущий урок и переводит к другой опубликованной теме или ко всем темам; incorrect/failure/retry/reload/reset/continuation защищены Page Object coverage без аккаунта, новых событий или выдуманных связей |
-| `4` | Реализовать первый самостоятельный срез мини-курса Python | Course/CourseLesson flow, обзор развивающейся программы и урок «Первая программа: ввод, вычисление и вывод» доходят до human review без Topic-связей и встроенного code runner |
+| `4` | Реализовать и опубликовать первый самостоятельный срез мини-курса Python | Complete: Course/CourseLesson flow, обзор развивающейся программы и урок «Первая программа: ввод, вычисление и вывод» опубликованы без Topic-связей и встроенного code runner |
 | `5` | Активировать M4 analytics baseline | Complete: explicit consent и privacy-safe event allowlist работают; семь Sources зарегистрированы, Umami pull и синтетический push batch отображаются без ответов, свободного текста и лишних идентификаторов |
 | `6` | Автоматизировать доставку Nginx aggregates в локальной sre-kit-сессии | Complete: cursor и idempotency переживают retry/restart; raw access records не пишутся на диск; publisher стартует и останавливается только через `sre-kit-local`; два реальных цикла доказаны в Dashboard/Source detail |
 | `7` | Подключить отдельный always-on sre-kit management VPS | Complete: linked sre-kit Change 26 поставляет exact-SHA distribution; Change 53 создал отдельный WireGuard peer, clean-start Project/семь Sources и system publisher; после пользовательской проверки подтверждены TLS, polling, push, backup/restore и отсутствие влияния на application/Firecrawl lifecycles |
@@ -742,7 +740,7 @@ local-only Restic с явно принятым риском потери вме�
 ## 11. Open Questions
 
 - [NEEDS_CLARIFICATION: числовые целевые показатели успеха MVP (объём органического трафика,
-  срок, глубина прохождения) — решить после `M4`, когда появятся пригодные данные Umami (§1.2).]
+  срок, глубина прохождения) — решить после накопления пригодных M4-данных Umami (§1.2).]
 - Точная цифра rate limit чекер-эндпоинта (20 req/min/IP, burst 5) — стартовый ориентир,
   архитектор явно указал пересмотреть по факту логов после запуска, не считать зафиксированной
   раз и навсегда (§8).

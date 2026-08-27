@@ -1,5 +1,5 @@
 import type { PracticeTaskTypes } from "~/entities/practice-task";
-import { apiClient } from "~/shared/api";
+import { apiClient, ApiError, normalizeApiFailure } from "~/shared/api";
 import type { components } from "~/shared/api/schema";
 
 type ExplanationBlock =
@@ -9,18 +9,33 @@ export const checkPracticeAnswer: PracticeTaskTypes.Checker = async (
   taskId,
   answer,
 ) => {
-  const { data, error } = await apiClient.POST("/api/tasks/{task_id}/check", {
-    params: { path: { task_id: taskId } },
-    body: { answer },
-  });
-  if (error || !data) throw new Error("Practice answer request failed");
-  return {
-    correct: data.correct,
-    explanation: data.explanation
-      .map(explanationText)
-      .filter(Boolean)
-      .join(" "),
-  };
+  try {
+    const { data, response } = await apiClient.POST(
+      "/api/tasks/{task_id}/check",
+      {
+        params: { path: { task_id: taskId } },
+        body: { answer },
+        signal: AbortSignal.timeout(10_000),
+      },
+    );
+    if (!response.ok) {
+      throw new ApiError("http", "Answer check returned an HTTP error", {
+        status: response.status,
+      });
+    }
+    if (!data) {
+      throw new ApiError("protocol", "Answer check response had no data");
+    }
+    return {
+      correct: data.correct,
+      explanation: data.explanation
+        .map(explanationText)
+        .filter(Boolean)
+        .join(" "),
+    };
+  } catch (error) {
+    throw normalizeApiFailure(error);
+  }
 };
 
 function explanationText(block: ExplanationBlock): string {

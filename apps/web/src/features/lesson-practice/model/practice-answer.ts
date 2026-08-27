@@ -1,6 +1,6 @@
 import type { PracticeTaskTypes } from "~/entities/practice-task";
 
-export function isPracticeAnswerCorrect(
+function isPracticeAnswerCorrect(
   task: PracticeTaskTypes.LocalTask,
   value: string,
 ): boolean {
