@@ -9,7 +9,7 @@
 | Change | `62` |
 | Slug | `project-contract-audit` |
 | Title | Project Contract Audit |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/62-project-contract-audit` |
 
 ---
