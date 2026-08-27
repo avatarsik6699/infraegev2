@@ -1,9 +1,13 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync, statSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
 const publicPath = (...parts: string[]) =>
   resolve(process.cwd(), "public", ...parts);
+const generatorSource = readFileSync(
+  resolve(process.cwd(), "../..", "scripts/generate-brand-assets.mjs"),
+  "utf8",
+);
 
 function readPngDimensions(path: string): { width: number; height: number } {
   const source = readFileSync(path);
@@ -13,19 +17,44 @@ function readPngDimensions(path: string): { width: number; height: number } {
   return { width: source.readUInt32BE(16), height: source.readUInt32BE(20) };
 }
 
+function readPngColorType(path: string): number {
+  return readFileSync(path).readUInt8(25);
+}
+
 describe("production brand assets", () => {
-  it("publishes the normalized SVG marks without an opaque canvas", () => {
-    for (const name of ["infraege-mark.svg", "infraege-mark-baseline.svg"]) {
-      const source = readFileSync(publicPath("brand", name), "utf8");
+  it("publishes the final large mark and an adapted small mark", () => {
+    const mark = readFileSync(publicPath("brand", "infraege-mark.svg"), "utf8");
+    const favicon = readFileSync(publicPath("favicon.svg"), "utf8");
+
+    expect(mark).toContain('viewBox="0 0 227 319"');
+    expect(mark.match(/<ellipse\b/g)).toHaveLength(3);
+    expect(mark.match(/<path\b/g)).toHaveLength(3);
+    expect(favicon.match(/<ellipse\b/g)).toHaveLength(3);
+    expect(favicon).not.toContain("<path");
+
+    for (const source of [mark, favicon]) {
       expect(source).toContain('preserveAspectRatio="xMidYMid meet"');
-      expect(source).not.toContain('d="M 0 0 L 2048 0 L 2048 1597');
+      expect(source).toContain('fill="#FF6B00"');
+      expect(source).toContain('fill="#393939"');
       expect(source).not.toMatch(
         /<text\b|<script\b|(?:href|src)=["']https?:\/\//i,
       );
     }
+
+    expect(existsSync(publicPath("brand", "infraege-mark-baseline.svg"))).toBe(
+      false,
+    );
   });
 
   it("publishes every required raster size", () => {
+    const headerMarkPath = publicPath("brand", "infraege-mark-header.png");
+
+    expect(readPngDimensions(headerMarkPath)).toEqual({
+      width: 96,
+      height: 135,
+    });
+    expect(readPngColorType(headerMarkPath)).toBe(6);
+    expect(statSync(headerMarkPath).size).toBeLessThan(20_000);
     expect(readPngDimensions(publicPath("favicon-16x16.png"))).toEqual({
       width: 16,
       height: 16,
@@ -38,12 +67,19 @@ describe("production brand assets", () => {
       width: 180,
       height: 180,
     });
+    expect(readPngColorType(publicPath("apple-touch-icon.png"))).toBe(2);
     expect(
       readPngDimensions(publicPath("brand", "infraege-icon-192.png")),
     ).toEqual({ width: 192, height: 192 });
+    expect(readPngColorType(publicPath("brand", "infraege-icon-192.png"))).toBe(
+      2,
+    );
     expect(
       readPngDimensions(publicPath("brand", "infraege-icon-512.png")),
     ).toEqual({ width: 512, height: 512 });
+    expect(readPngColorType(publicPath("brand", "infraege-icon-512.png"))).toBe(
+      2,
+    );
     expect(readPngDimensions(publicPath("brand/infraege-social.png"))).toEqual({
       width: 1200,
       height: 630,
@@ -82,5 +118,11 @@ describe("production brand assets", () => {
         ],
       }),
     );
+  });
+
+  it("centers only the final mark in the social preview", () => {
+    expect(generatorSource).toContain("overlay=(W-w)/2:(H-h)/2:format=auto");
+    expect(generatorSource).not.toContain("drawtext");
+    expect(generatorSource).not.toContain("drawbox");
   });
 });

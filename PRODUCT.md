@@ -44,9 +44,10 @@ fallback.
 ## Brand Commitments
 
 The product name is `infraege`. Public copy is concise, factual and calm. The architect-supplied
-three-stone mark is the production identity; the live Literata wordmark keeps `infra` neutral and
-uses a contrast-safe `#EA6004` derivative of the mark's `#FA7011` for `ege`. The interface remains
-neutral light: borders, link
+`docs/artifacts/final_logo.svg` is the sole production identity source: its three-stone geometry
+and `#FF6B00` / `#393939` colors stay unchanged in large uses, while tiny favicon exports use an
+optically simplified three-ellipse derivative. The live Literata wordmark keeps `infra` neutral
+and uses the contrast-safe `#F56300` derivative for `ege`. The interface remains neutral light: borders, link
 underlines, formula/code recognition surfaces, controls and statuses do not reuse the logo orange.
 The binding rules live in `docs/FRONTEND.md`.
 

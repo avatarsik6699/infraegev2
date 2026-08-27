@@ -28,11 +28,10 @@
 }
 
 .mark {
-  width: 2.75rem;
+  width: 1.95rem;
   height: 2.75rem;
   flex: 0 0 auto;
-  background: url("/brand/infraege-mark-baseline.svg") center / contain
-    no-repeat;
+  background: url("/brand/infraege-mark-header.png") center / contain no-repeat;
 }
 
 .wordmark {
@@ -45,10 +44,6 @@
 
 a.brand:hover {
   color: var(--color-text);
-}
-
-a.brand:hover .signal {
-  color: var(--color-brand-strong);
 }
 
 a.brand:focus-visible {

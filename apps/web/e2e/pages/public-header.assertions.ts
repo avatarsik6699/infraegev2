@@ -7,7 +7,7 @@ export const expectPublicReleaseIdentity = async (
   await expect(header.locator("[data-brand-mark]")).toBeVisible();
   await expect(header.getByText("ege", { exact: true })).toHaveCSS(
     "color",
-    "rgb(234, 96, 4)",
+    "rgb(245, 99, 0)",
   );
   await expect(header.getByText("beta", { exact: true })).toBeVisible();
   await expect(header.getByLabel("Версия 1.0.0")).toHaveText("v1.0.0");

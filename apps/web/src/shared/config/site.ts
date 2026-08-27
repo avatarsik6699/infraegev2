@@ -5,7 +5,7 @@ export const siteConfig = Object.freeze({
   origin: "https://infraege.ru",
   themeColor: "#ffffff",
   socialImagePath: "/brand/infraege-social.png",
-  socialImageAlt: "infraege — подготовка к ЕГЭ по информатике",
+  socialImageAlt: "Фирменный знак infraege из трёх камней",
   privacyContactEmail: "avatarsik6699@gmail.com",
   telegramInviteUrl: "https://t.me/+dElnKYPKGd81OGYy",
   description:

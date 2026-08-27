@@ -10,8 +10,8 @@
   --theme-ink-secondary: oklch(0.42 0 0);
   --theme-rule: oklch(0.922 0 0);
   --theme-rule-strong: oklch(0.87 0 0);
-  --theme-brand: #fa7011;
-  --theme-brand-ink: #ea6004;
+  --theme-brand: #ff6b00;
+  --theme-brand-ink: #f56300;
   --theme-primary: oklch(0.205 0 0);
   --theme-primary-hover: oklch(0.145 0 0);
   --theme-interactive-muted: oklch(0.97 0 0);

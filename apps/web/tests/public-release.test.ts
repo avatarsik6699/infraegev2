@@ -16,7 +16,7 @@ describe("public release metadata", () => {
         version: "1.0.0",
         themeColor: "#ffffff",
         socialImagePath: "/brand/infraege-social.png",
-        socialImageAlt: "infraege — подготовка к ЕГЭ по информатике",
+        socialImageAlt: "Фирменный знак infraege из трёх камней",
       }),
     );
   });

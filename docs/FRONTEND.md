@@ -88,8 +88,8 @@ app → routes → pages → widgets → features → entities → shared
   API, content or state changes.
 - Keep one active light theme in this change. Runtime theme switching and dark mode are out of
   scope. The baseline remains neutral: ink, muted surfaces and borders establish hierarchy. The
-  supplied `#FA7011` orange is isolated to the three-stone mark; the live `ege` wordmark signal
-  uses its contrast-safe `#EA6004` derivative.
+  supplied `#FF6B00` orange is isolated to the final three-stone mark; the live `ege` wordmark
+  signal uses its contrast-safe `#F56300` derivative.
   Public header/footer rules, persistent link underlines, inline `Notation`, the code-header
   separator, buttons, badges, ordinary surfaces, control states and semantic feedback remain
   neutral or keep their independent semantic roles. Syntax tokens inside the dedicated dark code
@@ -170,8 +170,10 @@ app → routes → pages → widgets → features → entities → shared
   and `noindex,nofollow`.
   Every indexable HTML route exposes an absolute `https://infraege.ru` canonical plus unique title,
   description and shared 1200×630 social metadata. The root owns a browser-only manifest plus the
-  normalized production SVG/PNG/ICO favicon and Apple touch icon set; `/` alone owns the truthful
-  `WebSite` JSON-LD site-name declaration. Generated favicon/touch/manifest assets satisfy
+  normalized production SVG/PNG/ICO favicon and Apple touch icon set; the large mark preserves the
+  final source geometry while 16/32px favicon exports use its approved optically simplified
+  three-ellipse derivative. `/` alone owns the truthful `WebSite` JSON-LD site-name declaration.
+  Generated favicon/touch/manifest assets satisfy
   `docs/BRAND_ASSET_REQUIREMENTS.md`. Do not add Organization/Person structured data without a
   separately confirmed real-world identity. `/robots.txt` and `/sitemap.xml` are server routes,
   not copied static lists that can drift from publication state.
@@ -188,10 +190,11 @@ app → routes → pages → widgets → features → entities → shared
   modified-click behavior. After hydration it follows TanStack Router history only when the
   router-owned history index says an in-app entry exists; direct entry, document reload and
   external-origin arrival use the explicit fallback route instead of leaving the application.
-- Public headers share one release identity from `siteConfig`: the supplied baseline mark and live
+- Public headers share one release identity from `siteConfig`: the final vertical mark and live
   Literata wordmark stay grouped with the restrained release label at the left, while the current
-  application version remains at the right. `infra` remains neutral and `ege` uses the exact mark
-  orange; the mark is decorative beside the accessible live site name rather than its replacement.
+  application version remains at the right. `infra` remains neutral and `ege` uses the
+  contrast-safe brand-text derivative; the mark is decorative beside the accessible live site
+  name rather than its replacement.
   Outside the home page the wordmark is the route back home. Material discovery belongs to the
   registry-derived home sections rather than duplicate collection links in global chrome.
   Optional analytics first appears only after hydration as a fixed full-width bottom prompt that

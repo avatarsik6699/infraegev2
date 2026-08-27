@@ -16,12 +16,12 @@ const tokenSource = readFileSync(
 
 describe("restrained brand accents", () => {
   it("keeps controls neutral while exposing the supplied logo orange", () => {
-    expect(themeSource).toContain("--theme-brand: #fa7011");
-    expect(themeSource).toContain("--theme-brand-ink: #ea6004");
+    expect(themeSource).toContain("--theme-brand: #ff6b00");
+    expect(themeSource).toContain("--theme-brand-ink: #f56300");
     expect(themeSource).toContain("--theme-primary: oklch(0.205 0 0)");
     expect(themeSource).toContain("--theme-primary-hover: oklch(0.145 0 0)");
     expect(themeSource).toContain("--theme-interactive-muted: oklch(0.97 0 0)");
-    expect(themeSource.match(/#[\da-f]{6}/gi)).toEqual(["#fa7011", "#ea6004"]);
+    expect(themeSource.match(/#[\da-f]{6}/gi)).toEqual(["#ff6b00", "#f56300"]);
     expect(tokenSource).toContain("--color-brand: var(--theme-brand)");
     expect(tokenSource).toContain("--control-primary-bg: var(--color-accent)");
     expect(tokenSource).toContain(

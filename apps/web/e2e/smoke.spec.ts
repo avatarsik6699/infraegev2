@@ -110,6 +110,12 @@ test("the public root exposes only published material and unknown routes remain 
   await foundationPage.expectStableReload();
   await browserSession.captureViewport("public-home-desktop.png");
 
+  await browserSession.useZoomedDesktopViewport();
+  await foundationPage.open();
+  await foundationPage.expectPublishedMaterial();
+  await foundationPage.expectNoHorizontalOverflow();
+  await browserSession.captureViewport("public-home-zoomed.png");
+
   await browserSession.useNarrowViewport();
   await foundationPage.open();
   await foundationPage.expectPublishedMaterial();
