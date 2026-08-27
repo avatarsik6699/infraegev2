@@ -9,7 +9,7 @@
 | Change | `60` |
 | Slug | `brand-identity-seo` |
 | Title | Brand Identity and SEO Assets |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/60-brand-identity-seo` |
 
 ---
