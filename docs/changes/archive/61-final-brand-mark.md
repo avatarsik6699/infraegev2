@@ -9,7 +9,7 @@
 | Change | `61` |
 | Slug | `final-brand-mark` |
 | Title | Final Brand Mark |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/61-final-brand-mark` |
 
 ---
