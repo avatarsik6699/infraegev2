@@ -14,7 +14,7 @@ export const expectPublicReleaseIdentity = async (
   await expect(
     header.getByRole("navigation", { name: "Разделы сайта" }),
   ).toHaveCount(0);
-  await expect(header).toHaveCSS("border-bottom-width", "1px");
+  await expect(header).toHaveCSS("border-bottom-width", "0px");
   await expect(page.getByRole("contentinfo")).toHaveCSS(
     "border-top-width",
     "1px",

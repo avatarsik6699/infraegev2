@@ -1,6 +1,5 @@
 import { Link } from "@tanstack/react-router";
 import type { CourseTypes } from "~/entities/course";
-import { Badge } from "~/shared/components/badge";
 import { Typography } from "~/shared/components/typography";
 import styles from "../course-overview-page.module.css";
 
@@ -12,7 +11,12 @@ type Props = {
 };
 
 export const CourseOverviewModule: React.FC<Props> = (props) => {
-  const available = props.lessons.length > 0;
+  const lessonsById = new Map(
+    props.lessons.map((lesson) => [lesson.id, lesson] as const),
+  );
+  const available = props.module.lessonPlan.some(
+    (planItem) => lessonsById.get(planItem.id)?.status === "published",
+  );
 
   return (
     <li
@@ -27,29 +31,64 @@ export const CourseOverviewModule: React.FC<Props> = (props) => {
         <Typography.Title order={3}>{props.module.title}</Typography.Title>
         <Typography.Text tone="muted">{props.module.summary}</Typography.Text>
       </div>
-      {available ? null : (
-        <Badge className={styles.moduleStatus}>В разработке</Badge>
-      )}
-      {available ? (
-        <ul className={styles.lessonList}>
-          {props.lessons.map((lesson) => (
-            <li key={lesson.id}>
-              <Link
-                to="/courses/$courseSlug/$lessonSlug"
-                params={{
-                  courseSlug: props.courseRouteSlug,
-                  lessonSlug: lesson.routeSlug,
-                }}
-              >
-                <span>{lesson.title}</span>
-                <span>
-                  {lesson.status === "published" ? "Доступен" : "На проверке"}
-                </span>
-              </Link>
+      <ol className={styles.lessonList}>
+        {props.module.lessonPlan.map((planItem) => {
+          const lesson = lessonsById.get(planItem.id);
+          const published = lesson?.status === "published";
+          return (
+            <li
+              className={styles.lessonPlanItem}
+              data-course-lesson-plan-item
+              data-lesson-status={published ? "published" : "planned"}
+              key={planItem.id}
+            >
+              {published ? (
+                <Link
+                  className={styles.lessonRow}
+                  to="/courses/$courseSlug/$lessonSlug"
+                  params={{
+                    courseSlug: props.courseRouteSlug,
+                    lessonSlug: lesson.routeSlug,
+                  }}
+                >
+                  <span className={styles.lessonCopy}>
+                    <span
+                      className={styles.lessonTitle}
+                      data-course-lesson-title
+                    >
+                      {planItem.title}
+                    </span>
+                    <span
+                      className={styles.lessonOutcome}
+                      data-course-lesson-outcome
+                    >
+                      {planItem.outcome}
+                    </span>
+                  </span>
+                </Link>
+              ) : (
+                <div className={styles.lessonRow}>
+                  <span className={styles.lessonCopy}>
+                    <span
+                      className={styles.lessonTitle}
+                      data-course-lesson-title
+                    >
+                      {planItem.title}
+                    </span>
+                    <span
+                      className={styles.lessonOutcome}
+                      data-course-lesson-outcome
+                    >
+                      {planItem.outcome}
+                    </span>
+                  </span>
+                  <span className={styles.lessonStatus}>В плане</span>
+                </div>
+              )}
             </li>
-          ))}
-        </ul>
-      ) : null}
+          );
+        })}
+      </ol>
     </li>
   );
 };

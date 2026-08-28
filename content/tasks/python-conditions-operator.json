@@ -1,0 +1,33 @@
+{
+  "id": "python-conditions-operator",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-conditions"],
+  "title": "Подберите знак сравнения",
+  "statement": "Программа должна считать правило «участвовать можно с 14 лет включительно». Какой знак нужно поставить вместо пропуска в условии age __ 14?",
+  "hint": "Возраст 14 должен давать True, как и любое большее значение.",
+  "theory_links": [
+    {
+      "hash": "comparison-boundaries",
+      "label": "Как не потерять граничное значение"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": [">="],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "worked_example",
+      "data": {
+        "prompt": "Проверим формулировку на самой границе.",
+        "steps": [
+          "Слова «с 14 лет включительно» означают, что возраст 14 подходит.",
+          "Сравнение age > 14 исключило бы саму границу.",
+          "Знак >= принимает и 14, и любое большее значение."
+        ]
+      }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

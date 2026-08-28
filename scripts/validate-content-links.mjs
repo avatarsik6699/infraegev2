@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // CI check (docs/SPEC.md §2.2/§3/§7.2, Content Quality Gate §2.3): every id referenced by
-// prerequisites/related_topics/unlocks_topics/practice_task_ids/topic_ids must resolve to a real
-// content file. Fails the build on a broken link so it never reaches prod. Deliberately
+// prerequisites/related_topics/unlocks_topics/practice_task_ids/topic_ids and implemented course
+// lesson membership must stay consistent. Fails the build on a broken link so it never reaches prod. Deliberately
 // dependency-free — this only checks id references, not full schema shape.
 
 import { existsSync, readFileSync, readdirSync } from "node:fs";
@@ -39,6 +39,10 @@ const courseLessonIds = new Set(
 );
 
 const errors = [];
+const courseLessonMembershipCounts = new Map();
+const courseLessonsById = new Map(
+  courseLessonPublications.map((lesson) => [lesson.id, lesson]),
+);
 
 function checkRefs(file, ids, validSet, field) {
   for (const id of ids ?? []) {
@@ -100,6 +104,7 @@ for (const { file, data } of topics) {
 
 for (const course of coursePublications) {
   const moduleIds = new Set();
+  const planIds = new Set();
   for (const courseModule of course.modules) {
     if (moduleIds.has(courseModule.id)) {
       errors.push(
@@ -107,16 +112,39 @@ for (const course of coursePublications) {
       );
     }
     moduleIds.add(courseModule.id);
-    checkRefs(
-      `course "${course.id}"`,
-      courseModule.lessonIds,
-      courseLessonIds,
-      `module "${courseModule.id}".lessonIds`,
-    );
+    for (const planItem of courseModule.lessonPlan ?? []) {
+      if (planIds.has(planItem.id)) {
+        errors.push(
+          `course "${course.id}": duplicate lesson plan id "${planItem.id}"`,
+        );
+      }
+      planIds.add(planItem.id);
+      if (!planItem.title?.trim() || !planItem.outcome?.trim()) {
+        errors.push(
+          `course "${course.id}": lesson plan "${planItem.id}" needs title and outcome`,
+        );
+      }
+      const lesson = courseLessonsById.get(planItem.id);
+      if (!lesson) continue;
+      courseLessonMembershipCounts.set(
+        lesson.id,
+        (courseLessonMembershipCounts.get(lesson.id) ?? 0) + 1,
+      );
+      if (lesson.title !== planItem.title) {
+        errors.push(
+          `course "${course.id}": lesson plan title for "${lesson.id}" must match the CourseLesson title`,
+        );
+      }
+    }
   }
 }
 
 for (const lesson of courseLessonPublications) {
+  if (courseLessonMembershipCounts.get(lesson.id) !== 1) {
+    errors.push(
+      `course lesson "${lesson.id}" must appear in exactly one course lesson plan`,
+    );
+  }
   checkRefs(
     `course lesson "${lesson.id}"`,
     lesson.practiceTaskIds,

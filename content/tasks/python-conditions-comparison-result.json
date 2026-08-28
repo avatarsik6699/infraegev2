@@ -1,0 +1,33 @@
+{
+  "id": "python-conditions-comparison-result",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-conditions"],
+  "title": "Вычислите результат сравнения",
+  "statement": "В программе записано n = 7, а следующая строка печатает результат выражения n >= 5. Что появится на экране?",
+  "hint": "Подставьте 7 вместо n и проверьте, верно ли, что 7 больше или равно 5.",
+  "theory_links": [
+    {
+      "hash": "comparison-result",
+      "label": "Что получается при сравнении"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["True"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "worked_example",
+      "data": {
+        "prompt": "Сравнение проверяет одно утверждение.",
+        "steps": [
+          "Подставляем значение n и получаем 7 >= 5.",
+          "Число 7 больше 5, поэтому утверждение верно.",
+          "Результат сравнения в Python записывается как True."
+        ]
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

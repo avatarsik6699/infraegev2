@@ -321,3 +321,35 @@ def test_first_python_course_lesson_tasks_are_strict_and_checkable(
         assert is_correct(task, accepted_answer)
     assert is_correct(task, correct_answer)
     assert not is_correct(task, "неверно")
+
+
+@pytest.mark.parametrize(
+    ("task_id", "correct_answer", "normalized_answer"),
+    [
+        ("python-conditions-comparison-result", "True", " true "),
+        ("python-conditions-branch-trace", "не больше", " НЕ БОЛЬШЕ "),
+        ("python-conditions-boundary", "зачёт", " ЗАЧЕТ "),
+        ("python-conditions-operator", ">=", " >= "),
+        ("python-conditions-local-run", "не мороз", " НЕ МОРОЗ "),
+    ],
+)
+def test_python_conditions_tasks_are_strict_and_checkable(
+    task_id: str,
+    correct_answer: str,
+    normalized_answer: str,
+):
+    content_root = Path(__file__).resolve().parents[3] / "content" / "tasks"
+    task = Task.model_validate_json((content_root / f"{task_id}.json").read_text(encoding="utf-8"))
+
+    assert task.topic_ids == []
+    assert task.course_lesson_ids == ["python-conditions"]
+    assert task.title
+    assert task.hint
+    assert task.theory_links
+    assert task.explanation
+
+    for accepted_answer in task.answer_variants:
+        assert is_correct(task, accepted_answer)
+    assert is_correct(task, correct_answer)
+    assert is_correct(task, normalized_answer)
+    assert not is_correct(task, "неверно")

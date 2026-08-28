@@ -1,5 +1,6 @@
 import { expect, type Page } from "@playwright/test";
 import { expectNoHorizontalOverflow } from "./layout.assertions";
+import { expectPublicReleaseIdentity } from "./public-header.assertions";
 
 export class PythonCoursePage {
   constructor(private readonly page: Page) {}
@@ -30,6 +31,7 @@ export class PythonCoursePage {
   }
 
   async expectPublishedOverview(): Promise<void> {
+    await expectPublicReleaseIdentity(this.page);
     await expect(
       this.page.getByRole("heading", {
         level: 1,
@@ -62,8 +64,97 @@ export class PythonCoursePage {
       curriculum.locator('[data-availability="planned"]'),
     ).toHaveCount(8);
     await expect(
-      curriculum.getByText("В разработке", { exact: true }),
-    ).toHaveCount(8);
+      curriculum.locator("[data-course-lesson-plan-item]"),
+    ).toHaveCount(19);
+    await expect(
+      curriculum.locator('[data-lesson-status="published"]'),
+    ).toHaveCount(1);
+    await expect(
+      curriculum.locator('[data-lesson-status="planned"]'),
+    ).toHaveCount(18);
+    await expect(curriculum.getByText("В плане", { exact: true })).toHaveCount(
+      18,
+    );
+    await expect(
+      this.page.getByText(
+        "Курс развивается. Порядок и формулировки будущих уроков могут уточняться.",
+      ),
+    ).toHaveCount(0);
+    await expect(curriculum.getByText("Доступен", { exact: true })).toHaveCount(
+      0,
+    );
+    const publishedPlanItem = curriculum.locator(
+      '[data-lesson-status="published"]',
+    );
+    const publishedLink = publishedPlanItem.getByRole("link", {
+      name: /Первая программа/,
+    });
+    await expect(publishedLink).not.toContainText("Доступен");
+    await expect(publishedLink).toHaveCSS("text-decoration-line", "none");
+    await expect(
+      publishedPlanItem.locator("[data-course-lesson-title]"),
+    ).toHaveCSS("text-decoration-line", "underline");
+    await expect(
+      publishedPlanItem.locator("[data-course-lesson-outcome]"),
+    ).toHaveCSS("text-decoration-line", "none");
+    await expect(
+      publishedPlanItem.locator("[data-course-lesson-title]"),
+    ).toHaveCSS("font-size", "16px");
+    await expect(
+      publishedPlanItem.locator("[data-course-lesson-title]"),
+    ).toHaveCSS("font-weight", "600");
+    await expect(
+      publishedPlanItem.locator("[data-course-lesson-outcome]"),
+    ).toHaveCSS("font-size", "14px");
+    await expect(
+      publishedPlanItem.locator("[data-course-lesson-outcome]"),
+    ).toHaveCSS("font-weight", "500");
+    const publishedFamilies = await publishedPlanItem.evaluate((planItem) => {
+      const title = planItem.querySelector<HTMLElement>(
+        "[data-course-lesson-title]",
+      );
+      const outcome = planItem.querySelector<HTMLElement>(
+        "[data-course-lesson-outcome]",
+      );
+      if (!title || !outcome) {
+        throw new Error("Missing published lesson hierarchy");
+      }
+      return [title, outcome].map(
+        (element) => getComputedStyle(element).fontFamily,
+      );
+    });
+    expect(new Set(publishedFamilies)).toHaveProperty("size", 1);
+    const planNumberIsOutsideLink = await publishedLink.evaluate((link) => {
+      const planItem = link.closest("[data-course-lesson-plan-item]");
+      return Boolean(
+        planItem &&
+        link.parentElement === planItem &&
+        getComputedStyle(planItem, "::before").content ===
+          "counter(lesson-plan)",
+      );
+    });
+    expect(planNumberIsOutsideLink).toBe(true);
+    const plannedPlanItem = curriculum
+      .locator('[data-lesson-status="planned"]')
+      .first();
+    const plannedColors = await plannedPlanItem.evaluate((planItem) => {
+      const title = planItem.querySelector<HTMLElement>(
+        "[data-course-lesson-title]",
+      );
+      const outcome = planItem.querySelector<HTMLElement>(
+        "[data-course-lesson-outcome]",
+      );
+      const status = [...planItem.querySelectorAll<HTMLElement>("span")].find(
+        (element) => element.textContent === "В плане",
+      );
+      if (!title || !outcome || !status) {
+        throw new Error("Missing planned lesson hierarchy");
+      }
+      return [title, outcome, status].map(
+        (element) => getComputedStyle(element).color,
+      );
+    });
+    expect(new Set(plannedColors)).toHaveProperty("size", 1);
     await expect(
       curriculum.locator("[data-course-module]").first(),
     ).toContainText("01");
@@ -85,6 +176,14 @@ export class PythonCoursePage {
     await expect(
       this.page.getByRole("link", { name: /Первая программа/ }),
     ).toHaveAttribute("href", "/courses/python/pervaya-programma");
+    await expect(
+      this.page.getByRole("link", {
+        name: /Условия: сравнения и выбор из двух вариантов/,
+      }),
+    ).toHaveCount(0);
+    await expect(
+      curriculum.getByText("Написать программу с if/else."),
+    ).toBeVisible();
     await expect(
       this.page.getByRole("link", { name: "Начать курс" }),
     ).toHaveCount(0);
@@ -123,6 +222,65 @@ export class PythonCoursePage {
         );
       })
       .toBe(0);
+  }
+
+  async openConditionsLesson(): Promise<void> {
+    await this.page.goto("/courses/python/usloviya");
+    await expect(this.page).toHaveURL(/\/courses\/python\/usloviya$/);
+  }
+
+  async expectReviewConditionsLesson(): Promise<void> {
+    await expectPublicReleaseIdentity(this.page);
+    await expect(this.page.locator("[data-course-lesson-context]")).toHaveCSS(
+      "border-bottom-width",
+      "1px",
+    );
+    await expect(
+      this.page.getByRole("heading", {
+        level: 1,
+        name: "Условия: сравнения и выбор из двух вариантов",
+      }),
+    ).toBeVisible();
+    await expect(this.page.locator('meta[name="robots"]')).toHaveAttribute(
+      "content",
+      "noindex,nofollow",
+    );
+    await expect(this.page.locator("[data-practice-task]")).toHaveCount(5);
+    await expect(
+      this.page.getByRole("heading", {
+        level: 3,
+        name: "Что получается при сравнении",
+      }),
+    ).toBeVisible();
+    await expect(
+      this.page.getByRole("heading", {
+        level: 3,
+        name: "Как проверить обе ветви",
+      }),
+    ).toBeVisible();
+    await expect(
+      this.page.getByText(
+        "Разберём, как сравнения помогают программе выбрать одну из двух ветвей и почему граничные значения нужно проверять отдельно.",
+      ),
+    ).toBeVisible();
+    await expectNoHorizontalOverflow(this.page);
+  }
+
+  async expectConditionsPractice(): Promise<void> {
+    await expect(
+      this.page.locator("[data-practice-form][data-enhanced]"),
+    ).toBeVisible();
+    const firstTask = this.page.locator("[data-practice-task]").first();
+    await firstTask.getByRole("textbox", { name: "Ответ" }).fill("False");
+    await firstTask.getByRole("button", { name: "Проверить" }).click();
+    await expect(
+      firstTask.getByText(
+        "Ответ пока не подходит. Попробуйте ещё раз или откройте подсказку.",
+      ),
+    ).toBeVisible();
+    await firstTask.getByRole("textbox", { name: "Ответ" }).fill(" true ");
+    await firstTask.getByRole("button", { name: "Проверить" }).click();
+    await expect(firstTask.getByRole("status")).toContainText("Верно");
   }
 
   async expectPublishedLesson(): Promise<void> {
@@ -300,5 +458,16 @@ export class PythonCoursePage {
     await expect(
       this.page.getByRole("link", { name: "Начать курс" }),
     ).toHaveCount(0);
+  }
+
+  async expectConditionsReadableWithoutJavaScript(): Promise<void> {
+    await this.openConditionsLesson();
+    await this.expectReviewConditionsLesson();
+    await expect(this.page.locator("[data-practice-form] form")).toHaveCount(5);
+    await expect(
+      this.page
+        .locator("[data-course-result-progress]")
+        .getByText("0 / 5", { exact: true }),
+    ).toBeVisible();
   }
 }

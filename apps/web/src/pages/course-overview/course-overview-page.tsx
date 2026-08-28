@@ -48,7 +48,7 @@ export const CourseOverviewPage: React.FC<CourseOverviewPageTypes.Props> = (
           <CourseOverviewProgress lessons={progressLessons} />
           <CourseOverviewCurriculum
             courseRouteSlug={props.course.routeSlug}
-            lessons={visibleLessons}
+            lessons={props.lessons}
             modules={props.course.modules}
           />
         </div>

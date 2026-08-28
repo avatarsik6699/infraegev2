@@ -39,6 +39,9 @@ fallback.
 - Checker answers stay on the server; the browser never executes untrusted Python code.
 - The Python course launches incrementally as honest early access. Progress describes only
   currently available lessons and never implies that the developing course is complete.
+- The public curriculum names the planned learning steps and their outcomes. Its `early_access`
+  stage and «В плане» rows distinguish future work; only published lessons are links or progress
+  units.
 - Accounts, synchronized progress, hard lesson locks, payments and in-product AI are out of scope.
 
 ## Brand Commitments

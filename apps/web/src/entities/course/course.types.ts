@@ -23,7 +23,13 @@ export namespace CourseTypes {
     id: string;
     title: string;
     summary: string;
-    lessonIds: readonly string[];
+    lessonPlan: readonly LessonPlanItem[];
+  };
+
+  export type LessonPlanItem = {
+    id: string;
+    title: string;
+    outcome: string;
   };
 
   export type Definition = {

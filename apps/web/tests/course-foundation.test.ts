@@ -31,6 +31,11 @@ describe("Python course foundation", () => {
         routeSlug: "pervaya-programma",
         status: "published",
       }),
+      expect.objectContaining({
+        id: "python-conditions",
+        routeSlug: "usloviya",
+        status: "review",
+      }),
     ]);
   });
 
@@ -39,6 +44,10 @@ describe("Python course foundation", () => {
     const pythonFirstProgramLesson = findCourseLessonByRouteSlugs(
       "python",
       "pervaya-programma",
+    );
+    const pythonConditionsLesson = findCourseLessonByRouteSlugs(
+      "python",
+      "usloviya",
     );
 
     expect(findCoursePublicationByRouteSlug("python")).toMatchObject({
@@ -51,16 +60,26 @@ describe("Python course foundation", () => {
     expect(
       findCourseLessonPublicationByRouteSlugs("missing", "pervaya-programma"),
     ).toBeUndefined();
+    expect(
+      findCourseLessonPublicationByRouteSlugs("python", "usloviya"),
+    ).toMatchObject({ id: "python-conditions", status: "review" });
     expect(pythonCourse).toBeDefined();
     expect(pythonFirstProgramLesson).toBeDefined();
+    expect(pythonConditionsLesson).toBeDefined();
     expect(findCourseLessonByRouteSlugs("missing", "pervaya-programma")).toBe(
       undefined,
     );
-    if (!pythonCourse || !pythonFirstProgramLesson) {
+    if (!pythonCourse || !pythonFirstProgramLesson || !pythonConditionsLesson) {
       throw new Error("Published Python course fixture is missing");
     }
-    expect(getCourseLessons(pythonCourse)).toEqual([pythonFirstProgramLesson]);
+    expect(getCourseLessons(pythonCourse)).toEqual([
+      pythonFirstProgramLesson,
+      pythonConditionsLesson,
+    ]);
     expect(pythonCourse.modules).toHaveLength(9);
+    expect(
+      pythonCourse.modules.flatMap((courseModule) => courseModule.lessonPlan),
+    ).toHaveLength(19);
     expect(pythonCourse).toMatchObject({
       summary:
         "От первой программы — к задачам и алгоритмам, которые пригодятся на ЕГЭ.",
@@ -89,6 +108,33 @@ describe("Python course foundation", () => {
 
     expect(tasks.map((task) => task.id)).toEqual(
       pythonFirstProgramLesson.practiceTaskIds,
+    );
+    expect(tasks).toHaveLength(5);
+    for (const task of tasks) {
+      expect(task.title).not.toBe("");
+      expect(task.statement).not.toBe("");
+      expect(task.theoryLinks.length).toBeGreaterThan(0);
+      expect(task.solution.length).toBeGreaterThan(0);
+      expect(task).not.toHaveProperty("answer_variants");
+      expect(task).not.toHaveProperty("numeric_tolerance");
+      expect(task).not.toHaveProperty("explanation");
+    }
+  });
+
+  it("loads the review conditions tasks without checker secrets", async () => {
+    const pythonConditionsLesson = findCourseLessonByRouteSlugs(
+      "python",
+      "usloviya",
+    );
+    if (!pythonConditionsLesson) {
+      throw new Error("Review Python conditions lesson fixture is missing");
+    }
+    const tasks = await loadPracticeTasks(
+      pythonConditionsLesson.practiceTaskIds,
+    );
+
+    expect(tasks.map((task) => task.id)).toEqual(
+      pythonConditionsLesson.practiceTaskIds,
     );
     expect(tasks).toHaveLength(5);
     for (const task of tasks) {

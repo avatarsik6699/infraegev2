@@ -186,6 +186,7 @@ export class TopicLessonPage {
 
   async expectDesktopComposition(): Promise<void> {
     const context = this.page.locator("[data-topic-lesson-context]");
+    await expect(context).toHaveCSS("border-bottom-width", "1px");
     await expect(
       context.getByRole("link", { name: "Назад", exact: true }),
     ).toBeVisible();

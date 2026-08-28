@@ -273,7 +273,16 @@ CourseModule
   id: slug
   title
   summary
-  lessonIds: [course_lesson_id]                // только реально существующие CourseLesson
+  lessonPlan: [LessonPlanItem]                 // единый публичный порядок, включая будущие шаги
+
+LessonPlanItem
+  id: course_lesson_id                         // совпадает с CourseLesson.id после авторинга
+  title
+  outcome                                      // один наблюдаемый результат, не перечень синтаксиса
+
+Плановый `id` может ещё не иметь CourseLesson definition. Если definition существует, он обязан
+принадлежать ровно одному CourseModule и иметь совпадающий title. Только `published` definition
+становится ссылкой, попадает в discovery и учитывается в course progress.
 
 defineCourseLesson(...) — типизированный конструктор, один вызов на файл CourseLesson
   id: slug
@@ -371,7 +380,7 @@ task-файлы первой review-only темы читаются frontend-cons
 | Page | Route | Purpose |
 |------|-------|---------|
 | Public home | `/` | Минимальная SSR/no-JS точка входа в опубликованные материалы: честное описание продукта и ссылки только на реально опубликованные уроки |
-| Course overview | `/courses/$courseSlug` | SSR/no-JS обзор самостоятельного мини-курса: аудитория, результат, early-access stage, крупная программа и только реально опубликованные CourseLesson |
+| Course overview | `/courses/$courseSlug` | SSR/no-JS обзор самостоятельного мини-курса: аудитория, результат, early-access stage и развивающаяся публичная карта уроков; только опубликованные CourseLesson становятся ссылками и единицами прогресса |
 | Course lesson | `/courses/$courseSlug/$lessonSlug` | Общий SSR consumer типизированного CourseLesson; `review` доступен по прямому URL с `noindex,nofollow`, `published` входит в course discovery |
 | Lesson design lab | `/lab/lesson` | Unlisted/noindex эталон четырёхраздельного урока на синтетическом контенте; не публикация и не security boundary |
 | Design system stand | `/lab/design-system` | Unlisted/noindex приватный стенд текущей дизайн-системы (шрифты, цвета, типографика) и переиспользуемых lesson-компонентов; не публикация и не security boundary |
@@ -395,7 +404,7 @@ publication registry, чтобы статусы не расходились ме
 |--------------------|---------|-------|
 | Lesson content components | Переиспользуемая библиотека дизайн-системы урока: `Notation`, `Callout`, `WorkedExample`, `Procedure`, `Mistake`, `Diagram`, `Checkpoint` | Типизированные React-компоненты, не markdown-директивы; `Notation` различает inline-код и формулу без appearance-led API; `Diagram` используется только когда изображение действительно помогает и требует `alt`/`caption`/`purpose`; `Checkpoint` рендерит `CheckpointItem[]` вертикальным списком (не табами — таб-навигация позволяет незаметно пропустить пункт retrieval-практики) и может завершать конкретный `ConceptBlock` вместо единственного блока перед практикой |
 | Lesson outline | Иерархическая навигация по уроку | Строится напрямую из `ConceptBlock[].id`/`navLabel`, без regex-извлечения заголовков из текста и измеряемых SVG-связей; desktop shell сохраняет три колонки — sticky outline, центральный reading stream и зарезервированную правую колонку; progress в rail/header отсутствует, а правый rail может оставаться пустым до появления полезного контента; overflow rail включается только при необходимости, на узких экранах навигация возвращается в normal flow; lab сохраняет свой четырёхраздельный synthetic contract |
-| Course overview | Самостоятельная карта развивающегося курса | Показывает аудиторию, learner outcome, stage и крупные модули без обещания точного числа будущих уроков; published CourseLesson являются ссылками, будущие модули — честным описанием программы без фальшивых disabled controls |
+| Course overview | Самостоятельная карта развивающегося курса | Показывает аудиторию, learner outcome, stage и упорядоченную программу из 19 законченных учебных шагов. Published CourseLesson являются ссылками; review/draft и ещё не реализованные пункты остаются приглушённым обычным текстом «В плане» без маршрута, дат и disabled controls. Отдельное пояснение об изменяемости программы не дублирует эти признаки |
 | Course progress | Производный progress только по доступным CourseLesson | Не имеет отдельного store или storage key: после hydration читает записи опубликованных уроков из единого lesson-progress registry; формулировка «освоено N из M доступных» отделена от `early_access`, общий процент незаконченного курса и course-wide reset отсутствуют |
 | Practice tabs | Локальная навигация по постепенно усложняющимся задачам внутри `practice` | Компактные доступные вкладки показывают рост сложности нейтральным индикатором уровня и текстом; одна активная задача после hydration, свободный ручной переход без блокировок и автопродвижения, одна или несколько task-specific ссылок на фрагменты теории рядом с заголовком; независимые «Подсказка» и развёрнутое «Решение» доступны сразу и остаются линейным содержимым в SSR/no-JS; все формы остаются в SSR/no-JS HTML и не становятся пунктами lesson outline |
 | Page state primitives | Единые loading/skeleton, empty, not-found и recoverable error состояния | Семантический статус и понятное действие важнее декоративной анимации; skeleton повторяет геометрию страницы и не озвучивается скринридером как контент |

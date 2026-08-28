@@ -1,0 +1,28 @@
+{
+  "id": "python-conditions-boundary",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-conditions"],
+  "title": "Проверьте значение на границе",
+  "statement": "Если score >= 10, программа печатает «зачёт», иначе — «ещё раз». Что она напечатает при score = 10?",
+  "hint": "Знак >= включает равенство: сравните 10 и саму границу 10.",
+  "theory_links": [
+    {
+      "hash": "comparison-boundaries",
+      "label": "Как не потерять граничное значение"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["зачёт", "зачет"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Сравнение 10 >= 10 даёт True, потому что знак >= включает равенство. Поэтому выполняется первая ветвь и программа печатает «зачёт»."
+      }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

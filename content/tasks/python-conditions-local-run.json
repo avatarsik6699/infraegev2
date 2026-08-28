@@ -1,0 +1,45 @@
+{
+  "id": "python-conditions-local-run",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-conditions"],
+  "title": "Запустите программу с двумя ветвями",
+  "statement": "Создайте программу, которая получает температуру. Если она меньше нуля, программа печатает «мороз», иначе — «не мороз». Запустите файл, введите 0 и перенесите сюда текст с экрана.",
+  "hint": "Ноль не меньше нуля, поэтому для него должна выполниться ветвь else.",
+  "theory_links": [
+    {
+      "hash": "if-else",
+      "label": "Как выбрать одну из двух ветвей"
+    },
+    {
+      "hash": "test-both-branches",
+      "label": "Как проверить обе ветви"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["не мороз"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "worked_example",
+      "data": {
+        "prompt": "Здесь важно проверить саму границу.",
+        "steps": [
+          "temperature = int(input()) сохраняет введённый 0 как число.",
+          "Сравнение 0 < 0 даёт False.",
+          "Python пропускает ветвь if и выполняет else, поэтому печатает «не мороз»."
+        ]
+      }
+    },
+    {
+      "type": "code_example",
+      "data": {
+        "language": "python",
+        "code": "temperature = int(input())\nif temperature < 0:\n    print(\"мороз\")\nelse:\n    print(\"не мороз\")",
+        "caption": "Один из вариантов программы"
+      }
+    }
+  ],
+  "difficulty": 3,
+  "is_interleaving_eligible": true
+}

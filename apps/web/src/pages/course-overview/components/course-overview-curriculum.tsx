@@ -9,10 +9,6 @@ type Props = {
 };
 
 export const CourseOverviewCurriculum: React.FC<Props> = (props) => {
-  const lessonsById = new Map(
-    props.lessons.map((lesson) => [lesson.id, lesson]),
-  );
-
   return (
     <section className={styles.curriculum} aria-label="Содержание курса">
       <ol className={styles.moduleList}>
@@ -21,10 +17,7 @@ export const CourseOverviewCurriculum: React.FC<Props> = (props) => {
             courseRouteSlug={props.courseRouteSlug}
             index={index}
             key={courseModule.id}
-            lessons={courseModule.lessonIds.flatMap((lessonId) => {
-              const lesson = lessonsById.get(lessonId);
-              return lesson ? [lesson] : [];
-            })}
+            lessons={props.lessons}
             module={courseModule}
           />
         ))}

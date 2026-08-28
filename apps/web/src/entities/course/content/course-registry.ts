@@ -1,10 +1,12 @@
 import type { CourseTypes } from "../course.types";
 import { pythonCourse } from "./python-course";
+import { pythonConditionsLesson } from "./python-conditions.lesson";
 import { pythonFirstProgramLesson } from "./python-first-program.lesson";
 
 const courses: readonly CourseTypes.Definition[] = [pythonCourse];
 const courseLessons: readonly CourseTypes.LessonDefinition[] = [
   pythonFirstProgramLesson,
+  pythonConditionsLesson,
 ];
 
 export function findCourseByRouteSlug(
@@ -20,7 +22,9 @@ export function findCourseLessonByRouteSlugs(
   const course = findCourseByRouteSlug(courseRouteSlug);
   if (!course) return undefined;
   const memberIds = new Set(
-    course.modules.flatMap((courseModule) => courseModule.lessonIds),
+    course.modules.flatMap((courseModule) =>
+      courseModule.lessonPlan.map((lesson) => lesson.id),
+    ),
   );
   return courseLessons.find(
     (lesson) =>
@@ -35,8 +39,8 @@ export function getCourseLessons(
     courseLessons.map((lesson) => [lesson.id, lesson] as const),
   );
   return course.modules.flatMap((courseModule) =>
-    courseModule.lessonIds.flatMap((lessonId) => {
-      const lesson = lessonsById.get(lessonId);
+    courseModule.lessonPlan.flatMap((planItem) => {
+      const lesson = lessonsById.get(planItem.id);
       return lesson ? [lesson] : [];
     }),
   );

@@ -125,11 +125,12 @@
 
 .moduleList {
   display: grid;
+  counter-reset: lesson-plan;
 }
 
 .module {
   display: grid;
-  grid-template-columns: 2rem minmax(0, 1fr) auto;
+  grid-template-columns: 2rem minmax(0, 1fr);
   gap: var(--space-2);
   align-items: start;
   padding-block: var(--space-2);
@@ -153,15 +154,6 @@
   line-height: 1.4;
 }
 
-.module[data-availability="planned"] .moduleNumber,
-.module[data-availability="planned"] .moduleCopy {
-  opacity: 0.62;
-}
-
-.module[data-availability="planned"] .moduleCopy p {
-  color: var(--color-text);
-}
-
 .module h3[data-order] {
   font-size: var(--text-base);
   line-height: 1.4;
@@ -173,39 +165,85 @@
   line-height: 1.55;
 }
 
-.moduleStatus {
-  margin-top: 0.05rem;
-  white-space: nowrap;
-}
-
 .lessonList {
   grid-column: 2 / -1;
   display: grid;
-  gap: var(--space-1);
+  gap: var(--space-0-5);
 }
 
-.lessonList a {
-  display: flex;
+.lessonPlanItem {
+  display: grid;
+  grid-template-columns: 1.6rem minmax(0, 1fr);
+  gap: var(--space-1);
+  align-items: start;
+  counter-increment: lesson-plan;
+}
+
+.lessonPlanItem::before {
+  padding-top: calc(var(--space-0-5) + 0.2rem);
+  color: var(--color-text-soft);
+  content: counter(lesson-plan);
+  font-family: var(--font-data);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.lessonRow {
+  grid-column: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   min-height: 2.5rem;
   gap: var(--space-2);
   align-items: center;
-  justify-content: space-between;
+  padding-block: var(--space-0-5);
   color: var(--color-text);
   font-family: var(--font-ui);
   font-size: var(--text-sm);
+}
+
+a.lessonRow {
+  text-decoration: none;
+}
+
+.lessonCopy {
+  display: grid;
+  min-width: 0;
+}
+
+.lessonTitle {
+  font-size: var(--text-base);
   font-weight: 600;
+  line-height: 1.4;
+}
+
+a.lessonRow .lessonTitle {
+  text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.2em;
 }
 
-.lessonList a span:last-child {
-  flex: 0 0 auto;
+.lessonOutcome {
+  color: var(--color-text-soft);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.lessonStatus {
   color: var(--color-text-soft);
   font-size: var(--text-xs);
   font-weight: 500;
+  white-space: nowrap;
 }
 
-.lessonList a:focus-visible {
+.lessonList [data-lesson-status="planned"] .lessonTitle {
+  color: var(--color-text-soft);
+  font-weight: 500;
+}
+
+a.lessonRow:focus-visible {
   border-radius: var(--radius-control);
   outline: 2px solid var(--color-focus);
   outline-offset: 3px;
@@ -233,16 +271,13 @@
     gap: var(--space-1);
   }
 
-  .moduleStatus {
-    grid-column: 2;
-    justify-self: start;
-  }
-
   .lessonList {
     grid-column: 2;
   }
 
-  .lessonList a {
+  .lessonRow {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-0-5);
     align-items: start;
   }
 }

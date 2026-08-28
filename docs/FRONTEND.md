@@ -130,10 +130,13 @@ app → routes → pages → widgets → features → entities → shared
   context labels share one compact responsive column gutter so their content edges remain aligned
   through desktop, intermediate and mobile layouts.
 - Course pages extend the incumbent neutral reading world without reusing Topic semantics. A
-  course overview presents audience, outcome, `early_access` truth and the broad module sequence;
-  only published CourseLesson rows are links. Future modules remain plain explanatory content,
-  never disabled controls or promised lesson counts. Numbering describes the broad module sequence,
-  not a fixed CourseLesson total; visually subdued future modules keep an explicit neutral status.
+  course overview presents audience, outcome, `early_access` truth and one ordered public plan of
+  lesson titles plus observable outcomes without a separate evolving-program disclaimer or date
+  promise. Only published CourseLesson rows are links; their numeric order stays outside the link
+  and the link emphasizes the title over its outcome without a redundant availability label.
+  Review/draft or not-yet-authored entries remain visually secondary ordinary text marked «В
+  плане», never disabled controls. Module numbering describes the broad sequence, while lesson-plan
+  order describes the current authoring direction.
 - A CourseLesson keeps course context and its local section outline together in one navigation
   rail, with the article as the dominant reading stream. On narrow screens the title and outcome
   precede the ordinary in-flow «Содержание урока» list so a long outline cannot displace the
@@ -201,9 +204,11 @@ app → routes → pages → widgets → features → entities → shared
   overlays rather than shifts content; after a choice, its only persistent control lives in the
   «Ваш выбор» section on `/privacy`, not in the header. Public footers expose the privacy route and
   the shared Telegram invitation with a text label and the official brand mark. Published pages do
-  not duplicate this chrome with page-private header markup. The shared header's bottom rule and
-  footer's top rule remain visible on every public page; there is no page-specific borderless
-  variant. Frozen lab headers keep their explicitly isolated review contract.
+  not duplicate this chrome with page-private header markup. The shared public header has no
+  bottom rule; spacing separates it from ordinary page content, while a lesson context bar keeps
+  one bottom rule for the complete two-level lesson header. The footer keeps its top rule, and
+  structural rail separators remain where they distinguish navigation from reading. Frozen lab
+  headers keep their explicitly isolated review contract.
 
 ## 5. Responsive and accessible behavior
 

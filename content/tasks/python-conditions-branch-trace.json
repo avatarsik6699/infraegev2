@@ -1,0 +1,33 @@
+{
+  "id": "python-conditions-branch-trace",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-conditions"],
+  "title": "Проследите выбор ветви",
+  "statement": "Программа получает число n. Если n > 5, она печатает «больше», иначе — «не больше». Какой текст появится на экране, если пользователь введёт 4?",
+  "hint": "Сначала вычислите сравнение 4 > 5. При False выполняется ветвь else.",
+  "theory_links": [
+    {
+      "hash": "if-else",
+      "label": "Как выбрать одну из двух ветвей"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["не больше"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "worked_example",
+      "data": {
+        "prompt": "Идём в том же порядке, что и Python.",
+        "steps": [
+          "После ввода в n хранится число 4.",
+          "Сравнение 4 > 5 даёт False.",
+          "Ветвь if пропускается, а ветвь else печатает «не больше»."
+        ]
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}
