@@ -135,7 +135,10 @@ Sources: `Public availability`, `Host resources`, `Security bans`, `Application 
 mode-600 reconciliation input, become encrypted sre-kit secret refs, and are then removed from the
 management host. Admin reconciliation uses the verified `https://sre.infraege.ru` origin so the
 production `Secure` session cookie is never weakened; token-based publisher ingestion remains on
-core loopback. The generated push token stays in a protected management-only file. The separate
+core loopback. Every explicit reconciliation refreshes secret-bearing Source configs from current
+protected operator inputs because an opaque API ref cannot prove credential equality; sre-kit
+replaces the encrypted ref and deletes the superseded value. The generated push token stays in a
+protected management-only file. The separate
 `stub` manifest is test-only. Linked sre-kit Change 20
 historically reconciled the six pull Sources and proved fresh polling, quiet success, reversible
 failure/recovery and authenticated Dashboard/Sources/detail rendering without target-side

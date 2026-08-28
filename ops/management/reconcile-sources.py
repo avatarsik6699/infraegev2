@@ -283,12 +283,16 @@ def reconcile(api: API, env: dict[str, str]) -> None:
             raise RuntimeError(f"Source {desired['name']} uses an unexpected adapter")
         current_config = json.loads(existing["config"])
         reconciled = dict(desired["config"])
-        for field in SECRET_FIELDS.get(desired["name"], set()):
+        secret_fields = SECRET_FIELDS.get(desired["name"], set())
+        for field in secret_fields:
             if field not in current_config:
                 raise RuntimeError(f"Source {desired['name']} lost its protected secret reference")
-            reconciled[field] = current_config[field]
         patch: dict[str, object] = {}
-        if current_config != reconciled:
+        # The API response intentionally exposes only opaque refs, so it cannot prove that the
+        # protected operator input still matches the encrypted value. Refresh secret-bearing
+        # configs on each explicit reconciliation; sre-kit atomically replaces each ref and
+        # deletes the superseded secret while keeping plaintext out of persisted config.
+        if secret_fields or current_config != reconciled:
             patch["config"] = reconciled
         if not existing["enabled"]:
             patch["enabled"] = True
