@@ -7,7 +7,7 @@
 | Change | `65` |
 | Slug | `observability-telemetry-integrity` |
 | Title | Observability Telemetry Integrity |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/65-observability-telemetry-integrity` |
 
 ---
