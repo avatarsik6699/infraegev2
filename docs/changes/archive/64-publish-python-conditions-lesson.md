@@ -9,7 +9,7 @@
 | Change | `64` |
 | Slug | `publish-python-conditions-lesson` |
 | Title | Publish Python Conditions Lesson |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/64-publish-python-conditions-lesson` |
 
 ---
