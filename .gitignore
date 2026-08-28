@@ -4,6 +4,7 @@ node_modules/
 .tanstack/
 dist/
 .lighthouseci/
+C:\\Users\\user\\AppData\\Local\\lighthouse.*/
 *.local
 
 __pycache__/

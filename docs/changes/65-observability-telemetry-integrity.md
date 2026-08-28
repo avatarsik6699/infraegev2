@@ -40,6 +40,8 @@ None.
   real fresh Beszel system/container records — _Depends on:_ I2
 - [x] `F1` Keep Beszel discovery on the fixed WireGuard management endpoint without exposing a
   dynamic URL transport to the reconciliation process — _Depends on:_ I2
+- [x] `F2` Exclude host-specific Lighthouse Chrome profiles created in the repository root from
+  release commits — _Depends on:_ —
 
 ### Data
 
