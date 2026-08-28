@@ -9,8 +9,8 @@
 
 | Field | Value |
 |-------|-------|
-| Document Version | `v2.4` |
-| Date | `2026-08-27` |
+| Document Version | `v2.5` |
+| Date | `2026-08-28` |
 | Architect / Owner | `v.godlevskiy` |
 | Stack | See [docs/STACK.md](./STACK.md) |
 | Domain | Платформа подготовки к ЕГЭ по информатике — самостоятельные темы экзамена и мини-курсы с теорией, визуализацией и практикой |
@@ -70,9 +70,11 @@ SEO/legal surfaces. Lab-маршруты остаются unlisted/noindex и н
 После публикации `/ege/5-preobrazovanie-zapisey-chisel` расширение каталога было остановлено на
 двух полных TopicLesson для product-readiness аудита. Changes 45–46 закрыли выявленные пробелы
 learner journey, а Changes 56–57 затем опубликовали самостоятельный early-access мини-курс Python
-и его первый CourseLesson. Дальнейшее расширение остаётся инкрементальным: одна законченная тема
-или один законченный CourseLesson за изменение; аккаунты, новый сбор аналитики, каталог/поиск и
-другие функции за пределами текущих MVP-границ из этого факта не следуют.
+и его первый CourseLesson. Второй CourseLesson «Условия: сравнения и выбор из двух вариантов»
+опубликован после повторного Content Quality Gate; перед авторингом третьего урока расширение
+останавливается для evidence-first аудита применения продуктового контракта к course flow.
+Дальнейшие релизы остаются инкрементальными; аккаунты, новый сбор аналитики, каталог/поиск и другие
+функции за пределами текущих MVP-границ из этого факта не следуют.
 
 ### 1.4 Durable Learning Flow
 
@@ -688,7 +690,7 @@ combined-log записи до path/status-family/coarse traffic class. Raw IP, 
 | `M0` — технический фундамент | complete | Сохранить проверенную web/backend/ops инфраструктуру без навязывания продуктовой страницы | Исторический neutral baseline, shared primitives, API contract, content skeleton и локальные gates |
 | `M1` — новый product/design baseline | complete | Доказать заменяемую визуальную систему без преждевременной публикации | «Инженерная тетрадь», unlisted design-system/lesson labs, единый frontend-контракт и reusable primitives |
 | `M2` — инфраструктурная пауза | complete | Подготовить production-платформу до продолжения продуктового контента | `infraege.ru`, VPS/GHCR deploy, security/release gates, backups и независимый operations stack активны; linked sre-kit Change 20 доказал все шесть Sources end to end |
-| `M3` — учебный flow и публичный запуск | in progress | Завершить доменную логику, основные поверхности сайта и проверенный MVP-контент до расширения каталога | Два TopicLesson и самостоятельный early-access курс «Python с нуля для ЕГЭ» с первым законченным CourseLesson опубликованы; дальнейшие единицы контента сохраняют независимость Topic/CourseLesson |
+| `M3` — учебный flow и публичный запуск | in progress | Завершить доменную логику, основные поверхности сайта и проверенный MVP-контент до расширения каталога | Два TopicLesson и самостоятельный early-access курс «Python с нуля для ЕГЭ» с двумя законченными CourseLesson опубликованы; дальнейшие единицы контента сохраняют независимость Topic/CourseLesson |
 | `M4` — финальное измерение и эксплуатация | in progress | Измерить фактический learning flow прозрачно и обезличенно | Changes 48–49 дают explicit opt-in и privacy-safe aggregates; Change 53 переносит семь clean-start Sources и publisher на отдельный always-on management VPS; все dashboard surfaces остаются в sre-kit |
 | `M5+` (после первых данных, вне MVP) | deferred | Расширение охвата и сообщества поверх работающей бесплатной базы | Второй мини-курс (Excel), аккаунты/синхронизация, обсуждения тем с модерацией, затем платные фичи — без runtime AI до этого момента |
 
@@ -704,6 +706,8 @@ combined-log записи до path/status-family/coarse traffic class. Raw IP, 
 | `5` | Активировать M4 analytics baseline | Complete: explicit consent и privacy-safe event allowlist работают; семь Sources зарегистрированы, Umami pull и синтетический push batch отображаются без ответов, свободного текста и лишних идентификаторов |
 | `6` | Автоматизировать доставку Nginx aggregates в локальной sre-kit-сессии | Complete: cursor и idempotency переживают retry/restart; raw access records не пишутся на диск; publisher стартует и останавливается только через `sre-kit-local`; два реальных цикла доказаны в Dashboard/Source detail |
 | `7` | Подключить отдельный always-on sre-kit management VPS | Complete: linked sre-kit Change 26 поставляет exact-SHA distribution; Change 53 создал отдельный WireGuard peer, clean-start Project/семь Sources и system publisher; после пользовательской проверки подтверждены TLS, polling, push, backup/restore и отсутствие влияния на application/Firecrawl lifecycles |
+| `8` | Опубликовать второй самостоятельный CourseLesson Python | Complete: урок «Условия: сравнения и выбор из двух вариантов» повторно прошёл Content Quality Gate, стал индексируемым и вошёл в course discovery/progress без Topic-связей и изменения учебного контента |
+| `9` | Провести application-gap audit course flow до третьего CourseLesson | Next: сверить Course/CourseLesson journey с PRODUCT, SPEC и фактической реализацией, зафиксировать только доказанные пробелы и не начинать новый авторинг до выбора следующего scope |
 
 Off-site backup остаётся trigger-based улучшением: первый management-host релиз использует
 local-only Restic с явно принятым риском потери вместе с VPS. Key-only SSH, Telegram alerts,

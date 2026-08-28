@@ -20,7 +20,7 @@ export const pythonConditionsLessonPublication = Object.freeze({
   title: "Условия: сравнения и выбор из двух вариантов",
   summary:
     "Разберём, как сравнения помогают программе выбрать одну из двух ветвей и почему граничные значения нужно проверять отдельно.",
-  status: "review",
+  status: "published",
   practiceTaskIds: Object.freeze([
     "python-conditions-comparison-result",
     "python-conditions-branch-trace",

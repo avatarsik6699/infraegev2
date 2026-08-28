@@ -12,10 +12,12 @@ test("the published Python course is discoverable and complete", async ({
   await browserSession.captureViewport("python-course-published-desktop.png");
 
   await pythonCoursePage.openConditionsLesson();
-  await pythonCoursePage.expectReviewConditionsLesson();
+  await pythonCoursePage.expectPublishedConditionsLesson();
   await pythonCoursePage.expectKeyboardDisclosures();
   await pythonCoursePage.expectConditionsPractice();
-  await browserSession.captureViewport("python-conditions-review-desktop.png");
+  await browserSession.captureViewport(
+    "python-conditions-published-desktop.png",
+  );
 
   await pythonCoursePage.openFirstLesson();
   await pythonCoursePage.expectPublishedLesson();
@@ -32,15 +34,21 @@ test("the published Python course is discoverable and complete", async ({
   await pythonCoursePage.openOverview();
   await pythonCoursePage.expectPublishedOverview();
   await pythonCoursePage.openConditionsLesson();
-  await pythonCoursePage.expectReviewConditionsLesson();
-  await browserSession.captureViewport("python-conditions-review-zoomed.png");
+  await pythonCoursePage.expectPublishedConditionsLesson();
+  await browserSession.captureViewport(
+    "python-conditions-published-zoomed.png",
+  );
 
   await browserSession.useNarrowViewport();
   await pythonCoursePage.openConditionsLesson();
-  await pythonCoursePage.expectReviewConditionsLesson();
+  await pythonCoursePage.expectPublishedConditionsLesson();
   await pythonCoursePage.expectMobileReadingOrder();
-  await browserSession.captureViewport("python-conditions-review-mobile.png");
+  await browserSession.captureViewport(
+    "python-conditions-published-mobile.png",
+  );
   browserSession.expectCleanConsole();
+
+  await pythonCoursePage.expectConditionsInPublicSitemap();
 
   await noJavaScriptPythonCoursePage.expectOverviewReadableWithoutJavaScript();
   await noJavaScriptPythonCoursePage.expectReadableWithoutJavaScript();

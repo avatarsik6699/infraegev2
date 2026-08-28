@@ -16,7 +16,7 @@ import {
 } from "~/pages/course-overview/components/course-overview-progress.model";
 
 describe("Python course foundation", () => {
-  it("publishes the course and its first lesson as one unit", () => {
+  it("publishes the course and its first two lessons as one unit", () => {
     expect(coursePublications).toEqual([
       expect.objectContaining({
         id: "python",
@@ -34,7 +34,7 @@ describe("Python course foundation", () => {
       expect.objectContaining({
         id: "python-conditions",
         routeSlug: "usloviya",
-        status: "review",
+        status: "published",
       }),
     ]);
   });
@@ -62,7 +62,7 @@ describe("Python course foundation", () => {
     ).toBeUndefined();
     expect(
       findCourseLessonPublicationByRouteSlugs("python", "usloviya"),
-    ).toMatchObject({ id: "python-conditions", status: "review" });
+    ).toMatchObject({ id: "python-conditions", status: "published" });
     expect(pythonCourse).toBeDefined();
     expect(pythonFirstProgramLesson).toBeDefined();
     expect(pythonConditionsLesson).toBeDefined();
@@ -121,13 +121,13 @@ describe("Python course foundation", () => {
     }
   });
 
-  it("loads the review conditions tasks without checker secrets", async () => {
+  it("loads the published conditions tasks without checker secrets", async () => {
     const pythonConditionsLesson = findCourseLessonByRouteSlugs(
       "python",
       "usloviya",
     );
     if (!pythonConditionsLesson) {
-      throw new Error("Review Python conditions lesson fixture is missing");
+      throw new Error("Published Python conditions lesson fixture is missing");
     }
     const tasks = await loadPracticeTasks(
       pythonConditionsLesson.practiceTaskIds,

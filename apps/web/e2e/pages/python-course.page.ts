@@ -62,18 +62,18 @@ export class PythonCoursePage {
     await expect(curriculum.locator("[data-course-module]")).toHaveCount(9);
     await expect(
       curriculum.locator('[data-availability="planned"]'),
-    ).toHaveCount(8);
+    ).toHaveCount(7);
     await expect(
       curriculum.locator("[data-course-lesson-plan-item]"),
     ).toHaveCount(19);
     await expect(
       curriculum.locator('[data-lesson-status="published"]'),
-    ).toHaveCount(1);
+    ).toHaveCount(2);
     await expect(
       curriculum.locator('[data-lesson-status="planned"]'),
-    ).toHaveCount(18);
+    ).toHaveCount(17);
     await expect(curriculum.getByText("В плане", { exact: true })).toHaveCount(
-      18,
+      17,
     );
     await expect(
       this.page.getByText(
@@ -83,9 +83,9 @@ export class PythonCoursePage {
     await expect(curriculum.getByText("Доступен", { exact: true })).toHaveCount(
       0,
     );
-    const publishedPlanItem = curriculum.locator(
-      '[data-lesson-status="published"]',
-    );
+    const publishedPlanItem = curriculum
+      .locator('[data-lesson-status="published"]')
+      .first();
     const publishedLink = publishedPlanItem.getByRole("link", {
       name: /Первая программа/,
     });
@@ -180,7 +180,7 @@ export class PythonCoursePage {
       this.page.getByRole("link", {
         name: /Условия: сравнения и выбор из двух вариантов/,
       }),
-    ).toHaveCount(0);
+    ).toHaveAttribute("href", "/courses/python/usloviya");
     await expect(
       curriculum.getByText("Написать программу с if/else."),
     ).toBeVisible();
@@ -190,12 +190,12 @@ export class PythonCoursePage {
     const progress = this.page.getByRole("region", {
       name: "Прогресс курса",
     });
-    await expect(progress).toContainText("Освоено 0 из 1 доступных уроков.");
+    await expect(progress).toContainText("Освоено 0 из 2 доступных уроков.");
     await expect(
       progress.getByRole("progressbar", {
         name: "Освоенные доступные уроки",
       }),
-    ).toHaveAttribute("aria-valuetext", "Освоено 0 из 1 доступных уроков.");
+    ).toHaveAttribute("aria-valuetext", "Освоено 0 из 2 доступных уроков.");
     const progressComesBeforeCurriculum = await progress.evaluate((section) => {
       const curriculum = section.nextElementSibling;
       return Boolean(
@@ -229,7 +229,7 @@ export class PythonCoursePage {
     await expect(this.page).toHaveURL(/\/courses\/python\/usloviya$/);
   }
 
-  async expectReviewConditionsLesson(): Promise<void> {
+  async expectPublishedConditionsLesson(): Promise<void> {
     await expectPublicReleaseIdentity(this.page);
     await expect(this.page.locator("[data-course-lesson-context]")).toHaveCSS(
       "border-bottom-width",
@@ -243,7 +243,11 @@ export class PythonCoursePage {
     ).toBeVisible();
     await expect(this.page.locator('meta[name="robots"]')).toHaveAttribute(
       "content",
-      "noindex,nofollow",
+      "index,follow",
+    );
+    await expect(this.page.locator('link[rel="canonical"]')).toHaveAttribute(
+      "href",
+      "https://infraege.ru/courses/python/usloviya",
     );
     await expect(this.page.locator("[data-practice-task]")).toHaveCount(5);
     await expect(
@@ -462,12 +466,20 @@ export class PythonCoursePage {
 
   async expectConditionsReadableWithoutJavaScript(): Promise<void> {
     await this.openConditionsLesson();
-    await this.expectReviewConditionsLesson();
+    await this.expectPublishedConditionsLesson();
     await expect(this.page.locator("[data-practice-form] form")).toHaveCount(5);
     await expect(
       this.page
         .locator("[data-course-result-progress]")
         .getByText("0 / 5", { exact: true }),
     ).toBeVisible();
+  }
+
+  async expectConditionsInPublicSitemap(): Promise<void> {
+    const response = await this.page.goto("/sitemap.xml");
+    expect(response?.status()).toBe(200);
+    await expect(this.page.locator("body")).toContainText(
+      "https://infraege.ru/courses/python/usloviya",
+    );
   }
 }

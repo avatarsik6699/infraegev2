@@ -56,10 +56,11 @@ The binding rules live in `docs/FRONTEND.md`.
 
 ## Evidence on Hand
 
-Two published Topic lessons, the published early-access Python course with its first complete
-CourseLesson, the shared lesson/practice/checker/progress path and the product-readiness audit
-provide the current implementation evidence. No testimonials, learner outcomes or completion
-benchmarks exist and none may be fabricated.
+Two published Topic lessons, the published early-access Python course with two complete
+CourseLesson entries, the shared lesson/practice/checker/progress path and the product-readiness
+audit provide the current implementation evidence. Before a third CourseLesson is authored, the
+next step is an evidence-first audit of how the course flow applies the current product contract.
+No testimonials, learner outcomes or completion benchmarks exist and none may be fabricated.
 
 ## Product Principles
 
