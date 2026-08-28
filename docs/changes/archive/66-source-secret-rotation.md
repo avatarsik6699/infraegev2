@@ -7,7 +7,7 @@
 | Change | `66` |
 | Slug | `source-secret-rotation` |
 | Title | Source Secret Rotation |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/66-source-secret-rotation` |
 
 ---
