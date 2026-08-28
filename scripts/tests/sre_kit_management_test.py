@@ -22,6 +22,7 @@ class FakeAPI:
         self.projects: list[dict[str, Any]] = []
         self.sources: list[dict[str, Any]] = []
         self.rotations = 0
+        self.secret_updates = 0
 
     def request(
         self,
@@ -60,9 +61,14 @@ class FakeAPI:
             assert payload is not None
             source = next(item for item in self.sources if path.endswith(item["id"]))
             if "config" in payload:
-                source["config"] = json.dumps(
-                    payload["config"], separators=(",", ":"), sort_keys=True
-                )
+                config = dict(payload["config"])
+                secret_fields = MODULE.SECRET_FIELDS.get(source["name"], set())
+                if secret_fields:
+                    self.secret_updates += 1
+                for field in secret_fields:
+                    self.assert_plaintext_secret(config[field])
+                    config[field] = f"secret-ref:{source['name']}:{field}:{self.secret_updates}"
+                source["config"] = json.dumps(config, separators=(",", ":"), sort_keys=True)
             if "enabled" in payload:
                 source["enabled"] = payload["enabled"]
             return source
@@ -70,6 +76,11 @@ class FakeAPI:
             self.rotations += 1
             return {"token": "synthetic-push-token"}
         raise AssertionError((method, path, payload))
+
+    @staticmethod
+    def assert_plaintext_secret(value: str) -> None:
+        if value.startswith("secret-ref:"):
+            raise AssertionError("reconciliation reused a stale secret reference")
 
 
 def source_env() -> dict[str, str]:
@@ -150,6 +161,7 @@ class ManagementSourceTest(unittest.TestCase):
             self.assertEqual({item["name"] for item in api.sources}, MODULE.EXPECTED_NAMES)
             self.assertTrue(all(item["enabled"] for item in api.sources))
             self.assertEqual(api.rotations, 1)
+            self.assertEqual(api.secret_updates, len(MODULE.SECRET_FIELDS))
             self.assertEqual(MODULE.TOKEN_FILE.stat().st_mode & 0o777, 0o600)
             self.assertEqual(MODULE.PUBLISHER_ENV.stat().st_mode & 0o777, 0o600)
             encoded = " ".join(item["config"] for item in api.sources)

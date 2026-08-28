@@ -427,3 +427,14 @@
 - **Fix:** both deploy paths create the exact network if absent. The split topology is active;
   subsequent releases must keep both projects attached without assuming either Compose project
   owns deletion of the external network. Network deletion remains a separately approved cleanup.
+
+### Source reconciliation must refresh opaque secret references
+
+- **Symptoms:** direct production SSH works with the protected operator password, but sre-kit's
+  SSH Sources remain `unreachable` after reconciliation and repeated failures can ban the
+  management VPS.
+- **Root cause:** the Source API returns only an opaque secret ref, so preserving that ref cannot
+  detect that the protected input value was rotated.
+- **Fix:** every explicit reconciliation resubmits current protected values for secret-bearing
+  Sources. sre-kit encrypts the replacements and removes superseded refs; never persist or log the
+  plaintext inputs in this repository.
