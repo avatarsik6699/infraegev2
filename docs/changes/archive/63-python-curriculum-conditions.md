@@ -9,7 +9,7 @@
 | Change | `63` |
 | Slug | `python-curriculum-conditions` |
 | Title | Python Curriculum and Conditions Lesson |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/63-python-curriculum-conditions` |
 
 ---
