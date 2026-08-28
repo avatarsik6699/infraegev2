@@ -602,6 +602,9 @@ application VPS
   containers/volumes через `--remove-orphans`; operations release не меняет application containers;
 - target stack имеет фиксированный Compose project, release directory, labels, healthchecks и
   private-only bindings; повторный `docker compose up` обновляет тот же stack, а не создаёт второй;
+- Beszel Agent остаётся в host-network mode, а read-only Docker socket proxy публикуется только на
+  `127.0.0.1:2375` через отдельную non-internal bridge network; proxy разрешает только необходимые
+  read endpoints и запрещает POST;
 - публичный Umami collector остаётся узким same-origin маршрутом Nginx к private target endpoint;
   UI/admin ports не публикуются в Интернет;
 - приложение публикует только стабильные сигналы: health/version endpoints, structured journald
@@ -648,7 +651,9 @@ Beszel Hub. Второй доказал исправленную dual-network с
 `ops/observability/sre-kit-sources.example.json` — secret-free операторская подсказка, а не новый
 универсальный deployment contract. Текущий шаблон содержит Project, шесть pull Sources и один
 push Source и согласован с manifests/ingress sre-kit Change 22; реальные accounts/secrets вводятся
-только в sre-kit. Ранее Change 20 примирил stale pre-cutover состояние с шестью уникальными enabled
+только в sre-kit. Beszel Source reconciliation получает system id по единственному system record с
+настроенным именем и требует свежие container statistics; ноль или несколько совпадений блокируют
+reconciliation. Ранее Change 20 примирил stale pre-cutover состояние с шестью уникальными enabled
 pull Sources и доказал повторный свежий polling,
 quiet success, обратимый failure/recovery и authenticated Dashboard/Sources/detail rendering без
 target-side mutations. Это завершает integration proof, но не обещает круглосуточные alerts при

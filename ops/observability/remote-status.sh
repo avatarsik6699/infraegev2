@@ -19,3 +19,7 @@ release=$(basename -- "$release_dir")
 echo "infraege-ops release: $release"
 OPS_RELEASE=$release docker compose --env-file "$env_root/$release.env" \
   --project-name infraege-ops -f "$release_dir/compose.yml" ps --all
+[[ $(curl -fsS --max-time 5 http://127.0.0.1:2375/_ping) == OK ]]
+container_count=$(curl -fsS --max-time 5 http://127.0.0.1:2375/containers/json | jq 'length')
+(( container_count > 0 ))
+echo "docker socket proxy: read-only loopback API reachable; containers=$container_count"

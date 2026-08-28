@@ -261,7 +261,7 @@ For sre-kit's `umami-http` source, create a separate least-privilege Umami accou
 installed version permits access to this website without administrative rights, then register
 it as a source in sre-kit's own UI — credentials never enter this repository.
 
-## 6. Obtain Beszel `TOKEN`, `KEY` and system ID
+## 6. Obtain Beszel `TOKEN` and `KEY`
 
 These values appear only after the Beszel Hub is running; they are not VPS-provider credentials.
 Before `ops-install`, use independently generated temporary non-empty values for
@@ -275,10 +275,10 @@ Over WireGuard open `http://10.77.0.1:8090`, create the initial Beszel administr
    by the dialog -> `BESZEL_AGENT_KEY`.
 3. Replace both bootstrap values in the protected operations env and use `ops-update` with the
    currently installed full release SHA to recreate `beszel-agent`.
-4. Complete **Add System**, then copy the resulting system record ID into the tracked non-secret
-   `ops/observability/sre-kit-sources.example.json` `beszel-api.system_id` field. For the current
-   target, linked sre-kit Change 20 already verified the resulting Source; a replacement target
-   must repeat that proof through sre-kit's supported API/UI contracts.
+4. Complete **Add System** with the unique name `infraege.ru`. Management reconciliation resolves
+   its current PocketBase record id by that name and fails closed on zero or multiple matches.
+   Never copy a record id into tracked or protected configuration. A replacement target must prove
+   fresh system and per-container records through sre-kit's supported API/UI contracts.
 
 The Beszel public key normally contains a space. It is valid Compose env input; operations
 maintenance scripts must pass this file through `docker compose --env-file` and must never

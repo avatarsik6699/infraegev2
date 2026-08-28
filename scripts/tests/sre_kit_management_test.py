@@ -78,7 +78,7 @@ def source_env() -> dict[str, str]:
         "INFRAEGE_TARGET_HOST_KEY_FINGERPRINT": "SHA256:" + "A" * 43,
         "INFRAEGE_BESZEL_EMAIL": "ops@example.test",
         "INFRAEGE_BESZEL_PASSWORD": "synthetic-beszel-password",
-        "INFRAEGE_BESZEL_SYSTEM_ID": "system-id",
+        "INFRAEGE_BESZEL_SYSTEM_NAME": "infraege.ru",
         "INFRAEGE_UMAMI_USERNAME": "operator",
         "INFRAEGE_UMAMI_PASSWORD": "synthetic-umami-password",
         "INFRAEGE_UMAMI_WEBSITE_ID": "website-id",
@@ -100,6 +100,41 @@ class ManagementSourceTest(unittest.TestCase):
             expected={204},
         )
 
+    def test_beszel_transport_is_pinned_to_the_wireguard_endpoint(self):
+        self.assertEqual(MODULE.BESZEL_MANAGEMENT_HOST, "10.77.0.1")
+        self.assertEqual(MODULE.BESZEL_MANAGEMENT_PORT, 8090)
+
+        connection = mock.MagicMock()
+        connection.getresponse.return_value.status = 200
+        connection.getresponse.return_value.read.return_value = b'{"token":"token"}'
+        with mock.patch.object(MODULE.http.client, "HTTPConnection", return_value=connection) as open_:
+            self.assertEqual(MODULE.beszel_request("GET", "/api/health"), {"token": "token"})
+
+        open_.assert_called_once_with("10.77.0.1", 8090, timeout=15)
+        connection.request.assert_called_once_with(
+            "GET", "/api/health", body=None, headers={"Accept": "application/json"}
+        )
+        connection.close.assert_called_once_with()
+
+    def test_beszel_system_discovery_requires_one_named_record(self):
+        with mock.patch.object(
+            MODULE,
+            "beszel_request",
+            side_effect=[{"token": "token"}, {"items": [{"id": "current-id"}]}],
+        ) as request:
+            self.assertEqual(MODULE.discover_beszel_system_id(source_env()), "current-id")
+        self.assertEqual(request.call_count, 2)
+        self.assertEqual(request.call_args_list[1].kwargs, {"token": "token"})
+
+        for items in ([], [{"id": "one"}, {"id": "two"}]):
+            with mock.patch.object(
+                MODULE,
+                "beszel_request",
+                side_effect=[{"token": "token"}, {"items": items}],
+            ):
+                with self.assertRaises(RuntimeError):
+                    MODULE.discover_beszel_system_id(source_env())
+
     def test_reconcile_is_idempotent_and_writes_only_protected_runtime_files(self):
         with tempfile.TemporaryDirectory() as directory:
             root = pathlib.Path(directory)
@@ -107,8 +142,9 @@ class ManagementSourceTest(unittest.TestCase):
             MODULE.PUBLISHER_ENV = root / "publisher.env"
             api = FakeAPI()
 
-            MODULE.reconcile(api, source_env())
-            MODULE.reconcile(api, source_env())
+            with mock.patch.object(MODULE, "discover_beszel_system_id", return_value="system-id"):
+                MODULE.reconcile(api, source_env())
+                MODULE.reconcile(api, source_env())
 
             self.assertEqual(len(api.sources), 7)
             self.assertEqual({item["name"] for item in api.sources}, MODULE.EXPECTED_NAMES)
@@ -120,6 +156,8 @@ class ManagementSourceTest(unittest.TestCase):
             self.assertNotIn("synthetic-target-password", encoded)
             self.assertNotIn("synthetic-beszel-password", encoded)
             self.assertNotIn("synthetic-umami-password", encoded)
+            container = next(item for item in api.sources if item["name"] == "Container telemetry")
+            self.assertTrue(json.loads(container["config"])["require_container_stats"])
 
     def test_source_env_requires_exact_mode_and_keys(self):
         with tempfile.TemporaryDirectory() as directory:

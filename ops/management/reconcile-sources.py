@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import http.client
 import http.cookiejar
 import json
 import os
@@ -12,6 +13,7 @@ import tempfile
 from pathlib import Path
 from typing import Any
 from urllib.error import HTTPError
+from urllib.parse import urlencode
 from urllib.request import HTTPCookieProcessor, Request, build_opener
 
 API_ORIGIN = os.environ.get("SRE_KIT_API_ORIGIN", "https://sre.infraege.ru")
@@ -35,6 +37,8 @@ SECRET_FIELDS = {
     "Container telemetry": {"password"},
     "Product analytics": {"password"},
 }
+BESZEL_MANAGEMENT_HOST = "10.77.0.1"
+BESZEL_MANAGEMENT_PORT = 8090
 
 
 def require_private(path: Path) -> None:
@@ -58,7 +62,7 @@ def load_env(path: Path) -> dict[str, str]:
         "INFRAEGE_TARGET_HOST_KEY_FINGERPRINT",
         "INFRAEGE_BESZEL_EMAIL",
         "INFRAEGE_BESZEL_PASSWORD",
-        "INFRAEGE_BESZEL_SYSTEM_ID",
+        "INFRAEGE_BESZEL_SYSTEM_NAME",
         "INFRAEGE_UMAMI_USERNAME",
         "INFRAEGE_UMAMI_PASSWORD",
         "INFRAEGE_UMAMI_WEBSITE_ID",
@@ -93,7 +97,48 @@ class API:
         return json.loads(raw) if raw else None
 
 
-def desired_sources(env: dict[str, str]) -> list[dict[str, Any]]:
+def beszel_request(
+    method: str, path: str, payload: object | None = None, *, token: str = ""
+) -> Any:
+    connection = http.client.HTTPConnection(
+        BESZEL_MANAGEMENT_HOST, BESZEL_MANAGEMENT_PORT, timeout=15
+    )
+    headers = {"Accept": "application/json"}
+    body = None
+    if payload is not None:
+        body = json.dumps(payload, separators=(",", ":"))
+        headers["Content-Type"] = "application/json"
+    if token:
+        headers["Authorization"] = token
+    try:
+        connection.request(method, path, body=body, headers=headers)
+        response = connection.getresponse()
+        raw = response.read(4 * 1024 * 1024 + 1)
+        if response.status < 200 or response.status >= 300 or len(raw) > 4 * 1024 * 1024:
+            raise RuntimeError(f"unexpected Beszel response for {method} {path}")
+        return json.loads(raw) if raw else None
+    finally:
+        connection.close()
+
+
+def discover_beszel_system_id(env: dict[str, str]) -> str:
+    auth = beszel_request(
+        "POST",
+        "/api/collections/users/auth-with-password",
+        {"identity": env["INFRAEGE_BESZEL_EMAIL"], "password": env["INFRAEGE_BESZEL_PASSWORD"]},
+    )
+    token = auth.get("token") if isinstance(auth, dict) else None
+    if not token:
+        raise RuntimeError("Beszel authentication response had no token")
+    query = urlencode({"filter": f'name="{env["INFRAEGE_BESZEL_SYSTEM_NAME"]}"', "perPage": "2"})
+    systems = beszel_request("GET", f"/api/collections/systems/records?{query}", token=str(token))
+    items = systems.get("items", []) if isinstance(systems, dict) else []
+    if len(items) != 1 or not items[0].get("id"):
+        raise RuntimeError("Beszel system discovery requires exactly one named system")
+    return str(items[0]["id"])
+
+
+def desired_sources(env: dict[str, str], beszel_system_id: str) -> list[dict[str, Any]]:
     target_host = "2.26.8.245"
     ssh_common = {
         "host": target_host,
@@ -137,11 +182,12 @@ def desired_sources(env: dict[str, str]) -> list[dict[str, Any]]:
             "adapter_id": "beszel-api",
             "config": {
                 "base_url": "http://10.77.0.1:8090",
-                "system_id": env["INFRAEGE_BESZEL_SYSTEM_ID"],
+                "system_id": beszel_system_id,
                 "email": env["INFRAEGE_BESZEL_EMAIL"],
                 "password": env["INFRAEGE_BESZEL_PASSWORD"],
                 "auth_collection": "users",
                 "lookback_seconds": 120,
+                "require_container_stats": True,
             },
         },
         {
@@ -195,6 +241,7 @@ def atomic_private_write(path: Path, value: str) -> None:
 
 
 def reconcile(api: API, env: dict[str, str]) -> None:
+    beszel_system_id = discover_beszel_system_id(env)
     projects = api.request("GET", "/api/projects", expected={200})
     matches = [project for project in projects if project["slug"] == "infraegev2"]
     if len(matches) > 1:
@@ -221,7 +268,7 @@ def reconcile(api: API, env: dict[str, str]) -> None:
         raise RuntimeError("project contains unexpected or duplicate Sources")
     by_name = {source["name"]: source for source in project_sources}
 
-    for desired in desired_sources(env):
+    for desired in desired_sources(env, beszel_system_id):
         existing = by_name.get(desired["name"])
         if existing is None:
             created = api.request(

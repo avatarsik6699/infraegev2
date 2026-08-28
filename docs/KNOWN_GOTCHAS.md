@@ -11,6 +11,16 @@
 
 ## Gotcha Log
 
+### Beszel host networking cannot reach a proxy confined to an internal Compose network
+
+- **Symptoms**: Beszel reports fresh host statistics but `container_stats` stays empty; the socket
+  proxy container is running while `127.0.0.1:2375` refuses connections.
+- **Root cause**: the host-network Agent uses a loopback `DOCKER_HOST`, but a proxy attached only to
+  an `internal: true` bridge may not receive the declared host publication.
+- **Fix**: keep the Agent in host-network mode, attach the proxy only to the dedicated non-internal
+  `docker-api` bridge, bind its port to `127.0.0.1`, keep `POST=0`, and require `_ping`, a non-empty
+  `/containers/json`, and fresh Beszel container records before accepting the deployment.
+
 ### Dedicated management deployment must not reuse an existing Compose project
 
 - **Symptoms**: a sre-kit bootstrap unexpectedly recreates Firecrawl/SearXNG containers, or an

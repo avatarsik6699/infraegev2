@@ -66,10 +66,13 @@ created.
 3. Open **Sources** and verify all seven names listed above. `Last seen` must advance for the six
    scheduled pull Sources; `Nginx traffic` advances when the system publisher sends a new
    aggregate batch.
-4. Open at least one Source detail page and confirm the displayed purpose, current status and
+4. Open **Container telemetry** and require fresh `beszel.system_fresh` and
+   `beszel.containers_fresh` checks plus both host and per-container measurements. Reconciliation
+   discovers the unique Beszel system named `infraege.ru`; it never reuses a copied record id.
+5. Open at least one Source detail page and confirm the displayed purpose, current status and
    recent metrics belong to that Source. A green overview without a readable detail page is not
    sufficient UI acceptance.
-5. In a terminal run `make sre-management ACTION=status` and compare the reported exact SHA and
+6. In a terminal run `make sre-management ACTION=status` and compare the reported exact SHA and
    service health with the browser session. Use `backup` or `restore-proof` only as explicit
    operator actions; viewing the UI never mutates target lifecycle.
 
@@ -95,8 +98,9 @@ Before claiming completion, record only secret-free output:
 
 - management and application WireGuard handshake/route evidence;
 - `/health/ready` returning the deployed exact SHA through loopback and TLS;
-- two later Source snapshots showing all seven Sources enabled and healthy, with fresh polling for
+- two later Source snapshots showing all seven Sources enabled and reachable, with fresh polling for
   the six pull Sources and a recent batch for `Nginx traffic`;
+- fresh Beszel system and container checks plus at least one per-container metric;
 - one `Nginx traffic` push followed by an idempotent repeat;
 - backup and isolated restore-proof timestamps;
 - before/after container/listener evidence proving Firecrawl/SearXNG and application/ops stacks

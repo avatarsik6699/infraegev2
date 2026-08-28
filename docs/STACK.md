@@ -142,6 +142,12 @@ failure/recovery and authenticated Dashboard/Sources/detail rendering without ta
 mutations. A local core still provides no polling or alerts while its workstation is off, and
 monitoring availability never gates target lifecycle.
 
+Beszel Agent intentionally retains host networking for host network counters. Its Docker API is a
+read-only socket proxy bound only to `127.0.0.1:2375` and attached to the dedicated non-internal
+`docker-api` bridge; `POST=0` remains mandatory. Source reconciliation authenticates with the
+existing protected Beszel user, resolves exactly one system named `infraege.ru`, and sets
+`require_container_stats=true`; copied PocketBase record ids are not configuration inputs.
+
 `ops/observability/install-sre-kit-local.sh` installs the repository-owned manual CLI plus a
 disabled user timer for privacy-safe Nginx aggregate delivery. It accepts the current push Source
 UUID and a mode-600 token file, writes only protected local configuration/state, and never enables

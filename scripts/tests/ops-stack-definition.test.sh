@@ -27,11 +27,13 @@ jq -e --arg release "$release" '
   .services.umami.labels["com.infraege.ops.revision"] == $release and
   (.services.postgres | has("ports") | not) and
   .networks["ops-internal"].internal == true and
+  (.networks["docker-api"].internal // false) == false and
   .services.umami.ports[0].host_ip == "10.77.0.1" and
   .services.beszel.ports[0].host_ip == "10.77.0.1" and
   .services["docker-socket-proxy"].ports[0].host_ip == "127.0.0.1" and
   .services["docker-socket-proxy"].environment.POST == "0" and
   .services["docker-socket-proxy"].volumes[0].read_only == true and
+  (.services["docker-socket-proxy"].networks | keys) == ["docker-api"] and
   .services["beszel-agent"].environment.DOCKER_HOST == "tcp://127.0.0.1:2375" and
   .services.postgres.healthcheck.test[1] == "pg_isready -U umami -d umami" and
   (.services.umami.healthcheck.test[1] | contains("/api/heartbeat")) and
@@ -73,6 +75,7 @@ jq -e '
     ["beszel-api","fail2ban-ssh","host-metrics-ssh","journal-http","push","umami-http","uptime-http"] and
   ([.sources[] | select(.adapter_id == "journal-http")][0].config.host == "10.77.0.1") and
   ([.sources[] | select(.adapter_id == "umami-http")][0].config.password == "<create-in-sre-kit>") and
+  ([.sources[] | select(.adapter_id == "beszel-api")][0].config.require_container_stats == true) and
   ([.sources[] | select(.adapter_id == "push")][0].config == {}) and
   ([.sources[] | select(.adapter_id == "push")][0].producer.token == "<generate-and-store-outside-git>") and
   ([.sources[] | select(.adapter_id == "push")][0].emits == ["traffic.request_count"])

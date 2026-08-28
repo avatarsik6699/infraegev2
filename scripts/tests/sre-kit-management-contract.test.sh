@@ -126,6 +126,8 @@ grep -Fq 'readlink -f /opt/sre-kit/current' "$repo_dir/scripts/management-sre-ki
 ! grep -Fq 'bash -s" < "$deploy_script"' "$repo_dir/scripts/management-sre-kit.sh"
 grep -Fq 'beszel-user-email' "$repo_dir/scripts/management-sre-kit.sh"
 grep -Fq 'beszel-user-password' "$repo_dir/scripts/management-sre-kit.sh"
+grep -Fq 'beszel_system_name=infraege.ru' "$repo_dir/scripts/management-sre-kit.sh"
+! grep -Fq 'INFRAEGE_BESZEL_SYSTEM_ID=' "$repo_dir/scripts/management-sre-kit.sh"
 ! grep -Fq 'INFRAEGE_BESZEL_EMAIL=$INFRAEGE_BESZEL_EMAIL' \
   "$repo_dir/scripts/management-sre-kit.sh"
 ! grep -Fq 'INFRAEGE_BESZEL_PASSWORD=$INFRAEGE_BESZEL_PASSWORD' \

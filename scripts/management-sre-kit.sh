@@ -73,7 +73,7 @@ install_release() {
 build_source_env() {
   local output=$1 root_password beszel_email beszel_password ops_env projects_json
   local target_password target_fingerprint beszel_email_value beszel_password_value
-  local beszel_system_id umami_username umami_password umami_website_id
+  local beszel_system_name umami_username umami_password umami_website_id
   root_password=$production_dir/root-admin-password
   beszel_email=$production_dir/beszel-user-email
   beszel_password=$production_dir/beszel-user-password
@@ -92,7 +92,7 @@ build_source_env() {
   target_password=$(<"$root_password")
   beszel_email_value=$(<"$beszel_email")
   beszel_password_value=$(<"$beszel_password")
-  beszel_system_id=$(jq -r '.projects[] | select(.id == "infraege") | .beszel.systemId // empty' "$projects_json")
+  beszel_system_name=infraege.ru
   umami_username=${INFRAEGE_UMAMI_USERNAME:-}
   umami_password=${INFRAEGE_UMAMI_PASSWORD:-}
   umami_website_id=$(jq -r '.projects[] | select(.id == "infraege") | .umami.websiteId // empty' "$projects_json")
@@ -100,7 +100,7 @@ build_source_env() {
   require_one_line "$target_fingerprint" 'application SSH host fingerprint'
   require_one_line "$beszel_email_value" 'Beszel user email'
   require_one_line "$beszel_password_value" 'Beszel user password'
-  require_one_line "$beszel_system_id" 'Beszel system id'
+  require_one_line "$beszel_system_name" 'Beszel system name'
   require_one_line "$umami_username" 'Umami username'
   require_one_line "$umami_password" 'Umami password'
   require_one_line "$umami_website_id" 'Umami website id'
@@ -110,7 +110,7 @@ build_source_env() {
     "INFRAEGE_TARGET_HOST_KEY_FINGERPRINT=$target_fingerprint" \
     "INFRAEGE_BESZEL_EMAIL=$beszel_email_value" \
     "INFRAEGE_BESZEL_PASSWORD=$beszel_password_value" \
-    "INFRAEGE_BESZEL_SYSTEM_ID=$beszel_system_id" \
+    "INFRAEGE_BESZEL_SYSTEM_NAME=$beszel_system_name" \
     "INFRAEGE_UMAMI_USERNAME=$umami_username" \
     "INFRAEGE_UMAMI_PASSWORD=$umami_password" \
     "INFRAEGE_UMAMI_WEBSITE_ID=$umami_website_id" \

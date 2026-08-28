@@ -85,7 +85,10 @@ protected mode-600 environment, then run `pull` and `up --wait`; `ops-rollback` 
 previous release. They do not reference or mutate the application Compose project.
 
 `ops/observability/compose.yml` uses empty independent Postgres/Beszel volumes, WireGuard-only
-UI/API bindings, the loopback read-only socket proxy and the external collector-ingress network.
+UI/API bindings, the loopback read-only socket proxy on its own non-internal bridge and the
+external collector-ingress network. The Beszel Agent remains in host-network mode and reaches
+only the proxy's `127.0.0.1:2375` read API; production status requires `_ping` and a non-empty
+container listing.
 Both deploy paths create that network if absent. The active application Nginx resolves Umami at
 request time through Docker DNS and survives an independent Umami container replacement. Legacy
 volumes remain rollback-only and are removed only by a later approved cleanup.
@@ -123,8 +126,9 @@ During the authorized window:
    operations volumes and wait for all services; neither reads legacy volumes.
 5. Run `sudo /opt/infraege/current/ops/install-backup-timers.sh activate-operations`, then manually
    start both `infraege-ops` backup and restore-check services and verify their tagged snapshots.
-6. Create the new Umami website/Beszel system and verify the secret-free IDs in
-   `ops/observability/sre-kit-sources.example.json`. For a genuinely new target, register and
+6. Create the new Umami website and one uniquely named Beszel system (`infraege.ru`). Source
+   reconciliation discovers its current record id through the existing protected Beszel account;
+   do not copy an id into tracked or protected configuration. For a genuinely new target, register and
    verify all seven Sources through sre-kit's supported API/UI contracts; do not copy Change 20's
    local runtime state. Source registration never gates either Compose project.
 
