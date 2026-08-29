@@ -1,0 +1,28 @@
+{
+  "id": "python-recursion-return-trace",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-recursion"],
+  "title": "Проследите возврат результата",
+  "statement": "`sum_to(0)` возвращает 0, иначе `n + sum_to(n - 1)`. Что вернёт `sum_to(3)`?",
+  "hint": "Разверните выражение до базового случая.",
+  "theory_links": [
+    {
+      "hash": "model",
+      "label": "Вернитесь к разбору примера"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["6"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Получается 3 + 2 + 1 + 0 = 6. После базового случая результаты возвращаются в обратном порядке."
+      }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

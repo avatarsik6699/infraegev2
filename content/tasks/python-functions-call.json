@@ -1,0 +1,28 @@
+{
+  "id": "python-functions-call",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-functions"],
+  "title": "Проследите вызов функции",
+  "statement": "Функция `double(x)` возвращает `x * 2`. Что вернёт вызов `double(4)`?",
+  "hint": "Аргумент 4 становится значением параметра x.",
+  "theory_links": [
+    {
+      "hash": "trace",
+      "label": "Вернитесь к разбору примера"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["8"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Внутри функции вычисляется 4 * 2. Команда `return` передаёт результат 8 в место вызова."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

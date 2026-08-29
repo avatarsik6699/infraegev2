@@ -1,0 +1,28 @@
+{
+  "id": "python-strings-fix",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-strings"],
+  "title": "Соберите новую строку",
+  "statement": "Строку нельзя изменить через `word[0] = \"P\"`. Какое значение получится у выражения `\"P\" + word[1:]`, если `word = \"python\"`?",
+  "hint": "Новая строка складывается из P и хвоста исходной строки.",
+  "theory_links": [
+    {
+      "hash": "pitfall",
+      "label": "Разберите частую ошибку"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["Python"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Срез `word[1:]` равен `ython`. После добавления заглавной P получается новая строка `Python`."
+      }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

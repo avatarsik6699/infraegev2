@@ -1,0 +1,28 @@
+{
+  "id": "python-dictionaries-membership",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-dictionaries"],
+  "title": "Проверьте наличие ключа",
+  "statement": "Что вернёт `\"math\" in {\"math\": 5, \"python\": 4}`?",
+  "hint": "Оператор in для словаря проверяет ключи.",
+  "theory_links": [
+    {
+      "hash": "model",
+      "label": "Вернитесь к разбору примера"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["True", "true"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Ключ `math` существует, поэтому выражение возвращает `True`."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

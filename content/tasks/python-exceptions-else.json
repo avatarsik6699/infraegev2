@@ -1,0 +1,23 @@
+{
+  "id": "python-exceptions-else",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-exceptions"],
+  "title": "Продолжите после успеха",
+  "statement": "Какой блок выполняется после успешного `try`, если исключения не было?",
+  "hint": "В примере он печатает удвоенное число.",
+  "theory_links": [{ "hash": "expected", "label": "Проследите два пути" }],
+  "checker_type": "exact_match",
+  "answer_variants": ["else", "else:"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Блок else выполняется только если try завершился без исключения."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

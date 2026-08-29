@@ -1,0 +1,25 @@
+{
+  "id": "python-todo-start-command",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-todo-start"],
+  "title": "Какая команда завершает программу",
+  "statement": "Какую команду нужно ввести, чтобы цикл дошёл до `break` и программа завершилась?",
+  "hint": "После неё управление возвращается терминалу.",
+  "theory_links": [
+    { "hash": "command-loop", "label": "Посмотрите ветки командного цикла" }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["exit"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Ветка command == \"exit\" выполняет break и завершает while."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

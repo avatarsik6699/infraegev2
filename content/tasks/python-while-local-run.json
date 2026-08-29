@@ -1,0 +1,28 @@
+{
+  "id": "python-while-local-run",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-while"],
+  "title": "Проверьте накопление в while",
+  "statement": "Запустите цикл, который начинает с `n = 1`, прибавляет n к total и увеличивает n на 1, пока `n <= 4`. Чему равен total?",
+  "hint": "Складываются числа 1, 2, 3 и 4.",
+  "theory_links": [
+    {
+      "hash": "workflow",
+      "label": "Проверьте решение шаг за шагом"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["10"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Накопитель получает 1, затем 3, 6 и 10. После увеличения n до 5 условие становится ложным."
+      }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

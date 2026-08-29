@@ -1,0 +1,28 @@
+{
+  "id": "python-sets-order",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-sets"],
+  "title": "Не полагайтесь на порядок",
+  "statement": "Можно ли считать порядок обхода множества частью результата программы? Ответьте «да» или «нет».",
+  "hint": "Множество предназначено для уникальности и принадлежности, а не для фиксированного порядка.",
+  "theory_links": [
+    {
+      "hash": "pitfall",
+      "label": "Разберите частую ошибку"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["нет"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Нет. Если порядок важен, значения нужно явно упорядочить, например функцией `sorted`."
+      }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

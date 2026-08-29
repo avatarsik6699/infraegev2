@@ -1,0 +1,28 @@
+{
+  "id": "python-bruteforce-local-run",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-bruteforce"],
+  "title": "Найдите первое общее кратное",
+  "statement": "Переберите числа от 1 до 20. Какое наименьшее число делится и на 4, и на 6?",
+  "hint": "Проверяйте остаток от деления на оба числа.",
+  "theory_links": [
+    {
+      "hash": "workflow",
+      "label": "Проверьте решение шаг за шагом"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["12"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Первое число с двумя нулевыми остатками — 12. Число 12 делится на 4 и на 6."
+      }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

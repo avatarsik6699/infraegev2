@@ -1,0 +1,25 @@
+{
+  "id": "python-todo-actions-local-run",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-todo-actions"],
+  "title": "Какой номер будет следующим",
+  "statement": "Добавьте три дела с id 1, 2, 3, удалите второе и добавьте ещё одно. Какой id получит новое дело?",
+  "hint": "Удаление дела не уменьшает next_id.",
+  "theory_links": [
+    { "hash": "snapshot", "label": "Запустите версию с редактированием" }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["4"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "После трёх добавлений next_id равен 4; удаление его не меняет."
+      }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

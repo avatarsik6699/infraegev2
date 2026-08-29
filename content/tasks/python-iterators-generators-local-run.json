@@ -1,0 +1,25 @@
+{
+  "id": "python-iterators-generators-local-run",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-iterators-generators"],
+  "title": "Запустите генератор",
+  "statement": "Измените пример `even_numbers` так, чтобы он начал с 2, и вызовите `even_numbers(7)`. Какое последнее число выведет цикл?",
+  "hint": "Генератор прибавляет 2 и не должен превысить limit.",
+  "theory_links": [
+    { "hash": "choice", "label": "Проверьте ленивую последовательность" }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["6"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Генератор выдаст 2, 4 и 6; следующее значение 8 превышает limit 7."
+      }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

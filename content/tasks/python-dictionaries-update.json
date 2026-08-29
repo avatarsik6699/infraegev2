@@ -1,0 +1,28 @@
+{
+  "id": "python-dictionaries-update",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-dictionaries"],
+  "title": "Обновите значение",
+  "statement": "После `score = {\"Анна\": 5}` выполняется `score[\"Анна\"] += 2`. Какое значение хранится по ключу?",
+  "hint": "К прежнему значению 5 прибавляется 2.",
+  "theory_links": [
+    {
+      "hash": "trace",
+      "label": "Вернитесь к разбору примера"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["7"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Словарь обновляет значение по существующему ключу: 5 + 2 = 7."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

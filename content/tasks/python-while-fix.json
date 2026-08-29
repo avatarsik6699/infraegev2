@@ -1,0 +1,28 @@
+{
+  "id": "python-while-fix",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-while"],
+  "title": "Остановите бесконечный цикл",
+  "statement": "В коде `i = 0; while i < 3: print(i)` забыта одна команда изменения i. Запишите её.",
+  "hint": "После каждой итерации i должно приближаться к границе 3.",
+  "theory_links": [
+    {
+      "hash": "pitfall",
+      "label": "Разберите частую ошибку"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["i += 1", "i=i+1", "i = i + 1"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Команда `i += 1` увеличивает i. Тогда цикл печатает 0, 1, 2 и останавливается."
+      }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

@@ -1,0 +1,25 @@
+{
+  "id": "python-todo-storage-local-run",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-todo-storage"],
+  "title": "Продолжаем нумерацию после перезапуска",
+  "statement": "Сохранённые дела имеют id 2 и 5. Какое значение получит `next_id` после загрузки?",
+  "hint": "Найдите самый большой сохранённый id и прибавьте единицу.",
+  "theory_links": [
+    { "hash": "identity", "label": "Посмотрите расчёт next_id" }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["6"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Максимальный сохранённый id равен 5, поэтому следующий равен 6."
+      }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

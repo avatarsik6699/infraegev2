@@ -1,0 +1,23 @@
+{
+  "id": "python-sorting-search-sorted",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-sorting-search"],
+  "title": "Сохраните исходный порядок",
+  "statement": "Какую функцию нужно вызвать для `scores`, чтобы получить новый отсортированный список и не менять `scores`?",
+  "hint": "В уроке сравниваются функция и метод.",
+  "theory_links": [{ "hash": "sorted", "label": "Сравните две сортировки" }],
+  "checker_type": "exact_match",
+  "answer_variants": ["sorted", "sorted(scores)", "sorted()"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Функция sorted(scores) возвращает новый список; исходный scores не меняется."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

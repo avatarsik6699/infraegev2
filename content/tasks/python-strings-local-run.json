@@ -1,0 +1,28 @@
+{
+  "id": "python-strings-local-run",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-strings"],
+  "title": "Разберите команду",
+  "statement": "Запустите `parts = \"ADD  Купить  хлеб\".split(); print(parts[0].lower(), \" \".join(parts[1:]))`. Какую строку выведет программа?",
+  "hint": "`split()` убирает повторяющиеся пробелы, а `join` соединяет оставшиеся слова одним пробелом.",
+  "theory_links": [
+    {
+      "hash": "split-join",
+      "label": "Вернитесь к разбору команды"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["add Купить хлеб"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Первое слово приводится к нижнему регистру, а два слова названия соединяются одним пробелом: `add Купить хлеб`."
+      }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

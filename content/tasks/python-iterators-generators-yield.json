@@ -1,0 +1,23 @@
+{
+  "id": "python-iterators-generators-yield",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-iterators-generators"],
+  "title": "Сохраните место генератора",
+  "statement": "Какое ключевое слово отдаёт одно значение и сохраняет выполнение функции для продолжения?",
+  "hint": "Это не return.",
+  "theory_links": [{ "hash": "generator", "label": "Вернитесь к генератору" }],
+  "checker_type": "exact_match",
+  "answer_variants": ["yield"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "yield выдаёт очередное значение и сохраняет состояние генератора."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

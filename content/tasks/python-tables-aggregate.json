@@ -1,0 +1,28 @@
+{
+  "id": "python-tables-aggregate",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-tables"],
+  "title": "Сложите столбец",
+  "statement": "Второй столбец трёх строк содержит числа 2, 3 и 4. Чему равна их сумма?",
+  "hint": "Складывайте только значения выбранного столбца.",
+  "theory_links": [
+    {
+      "hash": "pitfall",
+      "label": "Разберите частую ошибку"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["9"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Накопитель получает 2 + 3 + 4 = 9."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

@@ -1,0 +1,28 @@
+{
+  "id": "python-independent-program-local-run",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-independent-program"],
+  "title": "Проверяем номера после перезапуска",
+  "statement": "Добавьте два дела, удалите дело с id 1, перезапустите программу и добавьте ещё одно. Какой id получит новая запись?",
+  "hint": "Максимальный сохранённый id равен 2, а удалённый номер повторно не используется.",
+  "theory_links": [
+    {
+      "hash": "whole-test",
+      "label": "Запустите финальную проверку"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["3"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "После двух добавлений следующий id равен 3. Удаление первой записи и перезапуск не уменьшают его."
+      }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

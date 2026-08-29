@@ -1,0 +1,31 @@
+{
+  "id": "python-independent-program-fix",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-independent-program"],
+  "title": "Почему не нужен голый except",
+  "statement": "Какое конкретное исключение нужно перехватить, чтобы обработать повреждённый JSON и не скрыть остальные ошибки?",
+  "hint": "Это исключение находится в модуле json.",
+  "theory_links": [
+    {
+      "hash": "file-recovery",
+      "label": "Посмотрите обработку повреждённого файла"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": [
+    "except json.JSONDecodeError",
+    "except json.JSONDecodeError:"
+  ],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "except json.JSONDecodeError обрабатывает только повреждённый JSON. Остальные ошибки по-прежнему будут видны."
+      }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

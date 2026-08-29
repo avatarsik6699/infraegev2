@@ -1,0 +1,28 @@
+{
+  "id": "python-files-read-line",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-files"],
+  "title": "Очистите прочитанную строку",
+  "statement": "Из файла прочитана строка `\"12\\n\"`. Что останется после `.strip()`?",
+  "hint": "`strip` удаляет перевод строки по краям.",
+  "theory_links": [
+    {
+      "hash": "trace",
+      "label": "Вернитесь к разбору примера"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["12"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Символ перевода строки удаляется, а цифры остаются. Результат — строка `12`."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

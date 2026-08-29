@@ -164,6 +164,7 @@
 .resultSummary,
 .resultProgress,
 .resultNavigation {
+  min-width: 0;
   max-width: 68ch;
 }
 

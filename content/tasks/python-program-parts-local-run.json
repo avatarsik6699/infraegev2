@@ -1,0 +1,28 @@
+{
+  "id": "python-program-parts-local-run",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-program-parts"],
+  "title": "Запустите программу из функций",
+  "statement": "`add(a, b)` возвращает сумму, `double(x)` — удвоенное значение. Чему равно `double(add(2, 3))`?",
+  "hint": "Сначала сложите 2 и 3.",
+  "theory_links": [
+    {
+      "hash": "workflow",
+      "label": "Проверьте решение шаг за шагом"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["10"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "add возвращает 5, затем double возвращает 5 * 2 = 10."
+      }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

@@ -2,6 +2,37 @@ import { expect, type Page } from "@playwright/test";
 import { expectNoHorizontalOverflow } from "./layout.assertions";
 import { expectPublicReleaseIdentity } from "./public-header.assertions";
 
+const publishedPythonCourseLessons = [
+  ["pervaya-programma", "Первая программа: ввод, вычисление и вывод"],
+  ["chisla-i-vyrazheniya", "Числа, типы и арифметические выражения"],
+  ["oshibki", "Ошибки: читаем сообщение и находим причину"],
+  ["usloviya", "Условия: сравнения и выбор из двух вариантов"],
+  ["sostavnye-usloviya", "Несколько ветвей и составные условия"],
+  ["for-i-range", "for и range: повторяем известное число раз"],
+  ["while", "while: повторяем, пока условие верно"],
+  ["schetchiki-i-nakopiteli", "Счётчики, накопители и границы цикла"],
+  ["tsifry-chisla", "Цифры числа: деление нацело и остаток"],
+  ["stroki", "Строки: символы, индексы и срезы"],
+  ["spiski", "Списки: храним и изменяем последовательность"],
+  ["mnozhestva", "Множества: оставляем уникальные значения"],
+  ["slovari", "Словари: связываем ключи и значения"],
+  ["sortirovka-i-poisk", "Сортировка и поиск в коллекции"],
+  ["vklyucheniya", "Включения: собираем коллекции коротко"],
+  ["funktsii", "Функции: параметры и возвращаемый результат"],
+  ["chasti-programmy", "Разбиваем программу на понятные части"],
+  ["iteratory-i-generatory", "Итераторы и генераторы: значения по одному"],
+  ["rekursiya", "Рекурсия: базовый случай, шаг и трассировка"],
+  ["obrabotka-isklyucheniy", "Ожидаемые ошибки: try и except"],
+  ["fayly", "Читаем данные из файла"],
+  ["tablitsy", "Обрабатываем строки и таблицы"],
+  ["polnyy-perebor", "Полный перебор: строим и проверяем варианты"],
+  ["otbor-rezultata", "Отбор результата: ограничения, минимум и максимум"],
+  ["spisok-del", "Добавляем дела и выводим список"],
+  ["deystviya-so-spiskom", "Отмечаем выполненное, редактируем и удаляем"],
+  ["sohranenie-spiska-del", "Сохраняем дела между запусками"],
+  ["gotovaya-programma", "Проверяем весь сценарий и наводим порядок в коде"],
+] as const;
+
 export class PythonCoursePage {
   constructor(private readonly page: Page) {}
 
@@ -30,7 +61,7 @@ export class PythonCoursePage {
     });
   }
 
-  async expectPublishedOverview(): Promise<void> {
+  async expectCompleteOverview(): Promise<void> {
     await expectPublicReleaseIdentity(this.page);
     await expect(
       this.page.getByRole("heading", {
@@ -38,7 +69,7 @@ export class PythonCoursePage {
         name: "Python с нуля для ЕГЭ",
       }),
     ).toBeVisible();
-    await expect(this.page.getByText("Ранний доступ")).toBeVisible();
+    await expect(this.page.getByText("Полный курс")).toBeVisible();
     await expect(this.page.locator('meta[name="robots"]')).toHaveAttribute(
       "content",
       "index,follow",
@@ -62,18 +93,18 @@ export class PythonCoursePage {
     await expect(curriculum.locator("[data-course-module]")).toHaveCount(9);
     await expect(
       curriculum.locator('[data-availability="planned"]'),
-    ).toHaveCount(7);
+    ).toHaveCount(0);
     await expect(
       curriculum.locator("[data-course-lesson-plan-item]"),
-    ).toHaveCount(19);
+    ).toHaveCount(28);
     await expect(
       curriculum.locator('[data-lesson-status="published"]'),
-    ).toHaveCount(3);
+    ).toHaveCount(28);
     await expect(
       curriculum.locator('[data-lesson-status="planned"]'),
-    ).toHaveCount(16);
+    ).toHaveCount(0);
     await expect(curriculum.getByText("В плане", { exact: true })).toHaveCount(
-      16,
+      0,
     );
     await expect(
       this.page.getByText(
@@ -134,27 +165,6 @@ export class PythonCoursePage {
       );
     });
     expect(planNumberIsOutsideLink).toBe(true);
-    const plannedPlanItem = curriculum
-      .locator('[data-lesson-status="planned"]')
-      .first();
-    const plannedColors = await plannedPlanItem.evaluate((planItem) => {
-      const title = planItem.querySelector<HTMLElement>(
-        "[data-course-lesson-title]",
-      );
-      const outcome = planItem.querySelector<HTMLElement>(
-        "[data-course-lesson-outcome]",
-      );
-      const status = [...planItem.querySelectorAll<HTMLElement>("span")].find(
-        (element) => element.textContent === "В плане",
-      );
-      if (!title || !outcome || !status) {
-        throw new Error("Missing planned lesson hierarchy");
-      }
-      return [title, outcome, status].map(
-        (element) => getComputedStyle(element).color,
-      );
-    });
-    expect(new Set(plannedColors)).toHaveProperty("size", 1);
     await expect(
       curriculum.locator("[data-course-module]").first(),
     ).toContainText("01");
@@ -195,12 +205,12 @@ export class PythonCoursePage {
     const progress = this.page.getByRole("region", {
       name: "Прогресс курса",
     });
-    await expect(progress).toContainText("Освоено 0 из 3 доступных уроков.");
+    await expect(progress).toContainText("Освоено 0 из 28 доступных уроков.");
     await expect(
       progress.getByRole("progressbar", {
         name: "Освоенные доступные уроки",
       }),
-    ).toHaveAttribute("aria-valuetext", "Освоено 0 из 3 доступных уроков.");
+    ).toHaveAttribute("aria-valuetext", "Освоено 0 из 28 доступных уроков.");
     const progressComesBeforeCurriculum = await progress.evaluate((section) => {
       const curriculum = section.nextElementSibling;
       return Boolean(
@@ -237,6 +247,55 @@ export class PythonCoursePage {
   async openErrorsLesson(): Promise<void> {
     await this.page.goto("/courses/python/oshibki");
     await expect(this.page).toHaveURL(/\/courses\/python\/oshibki$/);
+  }
+
+  async expectPublishedCurriculumLesson(
+    lessonIndex: number,
+    options?: { keyboard?: boolean },
+  ): Promise<void> {
+    const lesson = publishedPythonCourseLessons[lessonIndex];
+    expect(lesson).toBeDefined();
+    if (!lesson) return;
+    const [routeSlug, title] = lesson;
+    await this.page.goto(`/courses/python/${routeSlug}`);
+    await expect(
+      this.page.getByRole("heading", { level: 1, name: title }),
+    ).toBeVisible();
+    await expect(this.page.locator('meta[name="robots"]')).toHaveAttribute(
+      "content",
+      "index,follow",
+    );
+    await expect(this.page.locator('link[rel="canonical"]')).toHaveAttribute(
+      "href",
+      `https://infraege.ru/courses/python/${routeSlug}`,
+    );
+    await expect(this.page.locator("[data-practice-task]")).toHaveCount(5);
+    await expect(this.page.locator("[data-practice-form] form")).toHaveCount(5);
+    await expectNoHorizontalOverflow(this.page);
+    if (options?.keyboard) await this.expectKeyboardDisclosures();
+  }
+
+  async openFinalProjectLesson(
+    routeSlug: string,
+    title: string,
+  ): Promise<void> {
+    await this.page.goto(`/courses/python/${routeSlug}`);
+    await expect(
+      this.page.getByRole("heading", {
+        level: 1,
+        name: title,
+      }),
+    ).toBeVisible();
+    await expect(this.page.locator('meta[name="robots"]')).toHaveAttribute(
+      "content",
+      "index,follow",
+    );
+    await expect(this.page.locator('link[rel="canonical"]')).toHaveAttribute(
+      "href",
+      `https://infraege.ru/courses/python/${routeSlug}`,
+    );
+    await expect(this.page.locator("[data-practice-task]")).toHaveCount(5);
+    await expectNoHorizontalOverflow(this.page);
   }
 
   async expectPublishedErrorsLesson(): Promise<void> {
@@ -555,7 +614,7 @@ export class PythonCoursePage {
 
   async expectOverviewReadableWithoutJavaScript(): Promise<void> {
     await this.openOverview();
-    await this.expectPublishedOverview();
+    await this.expectCompleteOverview();
     await expect(
       this.page.getByLabel("Настройки необязательной аналитики"),
     ).toHaveCount(0);
@@ -592,11 +651,11 @@ export class PythonCoursePage {
   async expectPublishedLessonsInPublicSitemap(): Promise<void> {
     const response = await this.page.goto("/sitemap.xml");
     expect(response?.status()).toBe(200);
-    await expect(this.page.locator("body")).toContainText(
-      "https://infraege.ru/courses/python/usloviya",
-    );
-    await expect(this.page.locator("body")).toContainText(
-      "https://infraege.ru/courses/python/oshibki",
-    );
+    const sitemap = this.page.locator("body");
+    for (const [routeSlug] of publishedPythonCourseLessons) {
+      await expect(sitemap).toContainText(
+        `https://infraege.ru/courses/python/${routeSlug}`,
+      );
+    }
   }
 }

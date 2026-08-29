@@ -1,0 +1,23 @@
+{
+  "id": "python-todo-storage-read",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-todo-storage"],
+  "title": "Как прочитать список из JSON",
+  "statement": "Какая функция модуля json читает открытый файл и возвращает объекты Python?",
+  "hint": "Это обратная операция к dump.",
+  "theory_links": [{ "hash": "load", "label": "Посмотрите функцию загрузки" }],
+  "checker_type": "exact_match",
+  "answer_variants": ["json.load", "load", "json.load()"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "json.load(file) читает JSON и восстанавливает список словарей."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

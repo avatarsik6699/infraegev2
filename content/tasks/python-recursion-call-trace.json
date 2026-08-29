@@ -1,0 +1,28 @@
+{
+  "id": "python-recursion-call-trace",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-recursion"],
+  "title": "Посчитайте вызовы",
+  "statement": "`countdown(n)` вызывает `countdown(n - 1)`, пока n не станет 0. Сколько всего вызовов произойдёт для `countdown(3)`, включая первый и базовый?",
+  "hint": "Запишите значения n в каждом вызове.",
+  "theory_links": [
+    {
+      "hash": "trace",
+      "label": "Вернитесь к разбору примера"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["4"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Значения n равны 3, 2, 1 и 0. Получается четыре вызова."
+      }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

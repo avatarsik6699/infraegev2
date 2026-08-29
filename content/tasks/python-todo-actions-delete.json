@@ -1,0 +1,25 @@
+{
+  "id": "python-todo-actions-delete",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-todo-actions"],
+  "title": "Как удалить найденное дело",
+  "statement": "Какой метод списка удаляет словарь `task`, который уже вернула функция поиска?",
+  "hint": "Методу передаётся сам словарь, а не его индекс.",
+  "theory_links": [
+    { "hash": "delete", "label": "Посмотрите функцию удаления" }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["remove", "remove()", "tasks.remove(task)"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Вызов tasks.remove(task) удаляет найденный словарь из списка."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

@@ -1,0 +1,28 @@
+{
+  "id": "python-bruteforce-range",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-bruteforce"],
+  "title": "Задайте пространство вариантов",
+  "statement": "Сколько чисел от 1 до 10 включительно делятся на 3?",
+  "hint": "Проверьте 3, 6 и 9.",
+  "theory_links": [
+    {
+      "hash": "trace",
+      "label": "Вернитесь к разбору примера"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["3"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Подходящие варианты — 3, 6 и 9. Их три."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

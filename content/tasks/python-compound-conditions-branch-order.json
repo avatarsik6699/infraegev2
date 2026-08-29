@@ -1,0 +1,28 @@
+{
+  "id": "python-compound-conditions-branch-order",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-compound-conditions"],
+  "title": "Проследите порядок ветвей",
+  "statement": "x = 7. Программа проверяет `x < 0`, затем `x == 0`, иначе печатает «положительное». Что будет напечатано?",
+  "hint": "Проверки выполняются сверху вниз; при x = 7 первые два условия ложны.",
+  "theory_links": [
+    {
+      "hash": "trace",
+      "label": "Вернитесь к разбору примера"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["положительное"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Обе проверки дают False, поэтому управление доходит до `else` и выводится «положительное»."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

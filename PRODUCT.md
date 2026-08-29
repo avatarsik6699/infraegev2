@@ -37,11 +37,11 @@ fallback.
 
 - Public learning content is SSR/no-JavaScript readable and Russian-only.
 - Checker answers stay on the server; the browser never executes untrusted Python code.
-- The Python course launches incrementally as honest early access. Progress describes only
-  currently available lessons and never implies that the developing course is complete.
-- The public curriculum names the planned learning steps and their outcomes. Its `early_access`
-  stage and «В плане» rows distinguish future work; only published lessons are links or progress
-  units.
+- The Python course has a complete 28-step path from the first program to one terminal task
+  manager. All lessons are public for final architect evaluation. Progress is derived from the
+  published lessons and remains optional browser-local state.
+- Every public curriculum row names a concrete learning outcome and links to its published lesson;
+  future curriculum expansion must not appear as available before its own approval.
 - Accounts, synchronized progress, hard lesson locks, payments and in-product AI are out of scope.
 
 ## Brand Commitments
@@ -56,9 +56,9 @@ The binding rules live in `docs/FRONTEND.md`.
 
 ## Evidence on Hand
 
-Two published Topic lessons, the published early-access Python course with three complete
-CourseLesson entries, the shared lesson/practice/checker/progress path and the completed
-application-gap audit provide the current implementation evidence. Existing consented
+Two published Topic lessons, 28 locally published Python CourseLessons, the shared
+lesson/practice/checker/progress path and the completed application-gap audit provide the current
+implementation evidence. Existing consented
 visits/pageviews and path aggregates are sufficient for the current analytics need; event-level
 refinement does not block the next planned curriculum step. No testimonials, learner outcomes or
 completion benchmarks exist and none may be fabricated.

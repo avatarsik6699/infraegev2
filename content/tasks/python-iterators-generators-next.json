@@ -1,0 +1,23 @@
+{
+  "id": "python-iterators-generators-next",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-iterators-generators"],
+  "title": "Получите следующее значение",
+  "statement": "`iterator = iter([4, 7])`. Что вернёт первый `next(iterator)`?",
+  "hint": "Новый итератор начинает с первого элемента.",
+  "theory_links": [{ "hash": "inside-for", "label": "Повторите ручной шаг" }],
+  "checker_type": "exact_match",
+  "answer_variants": ["4"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Первый запрос возвращает первый элемент списка — 4."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

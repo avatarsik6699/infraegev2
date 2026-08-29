@@ -16,32 +16,42 @@ import {
 } from "~/pages/course-overview/components/course-overview-progress.model";
 
 describe("Python course foundation", () => {
-  it("publishes the course and its first three lessons as one unit", () => {
+  it("publishes the complete expanded curriculum for final evaluation", () => {
     expect(coursePublications).toEqual([
       expect.objectContaining({
         id: "python",
         routeSlug: "python",
-        stage: "early_access",
+        stage: "complete",
         status: "published",
       }),
     ]);
-    expect(courseLessonPublications).toEqual([
-      expect.objectContaining({
-        id: "python-first-program",
-        routeSlug: "pervaya-programma",
-        status: "published",
-      }),
-      expect.objectContaining({
-        id: "python-errors",
-        routeSlug: "oshibki",
-        status: "published",
-      }),
-      expect.objectContaining({
-        id: "python-conditions",
-        routeSlug: "usloviya",
-        status: "published",
-      }),
-    ]);
+    expect(courseLessonPublications).toHaveLength(28);
+    expect(
+      courseLessonPublications.filter(
+        (lesson) => lesson.status === "published",
+      ),
+    ).toHaveLength(28);
+    expect(
+      courseLessonPublications.filter((lesson) => lesson.status === "review"),
+    ).toHaveLength(0);
+    expect(
+      courseLessonPublications.find(
+        (lesson) => lesson.id === "python-todo-start",
+      ),
+    ).toMatchObject({
+      routeSlug: "spisok-del",
+      title: "Добавляем дела и выводим список",
+    });
+    expect(
+      courseLessonPublications.find(
+        (lesson) => lesson.id === "python-todo-actions",
+      ),
+    ).toMatchObject({ routeSlug: "deystviya-so-spiskom" });
+    expect(
+      courseLessonPublications.find(
+        (lesson) => lesson.id === "python-todo-storage",
+      ),
+    ).toMatchObject({ routeSlug: "sohranenie-spiska-del" });
   });
 
   it("resolves only lessons owned by the requested course", () => {
@@ -90,15 +100,18 @@ describe("Python course foundation", () => {
     ) {
       throw new Error("Published Python course fixture is missing");
     }
-    expect(getCourseLessons(pythonCourse)).toEqual([
+    const courseLessons = getCourseLessons(pythonCourse);
+    expect(courseLessons).toHaveLength(28);
+    expect(courseLessons.slice(0, 4)).toEqual([
       pythonFirstProgramLesson,
+      expect.objectContaining({ id: "python-numbers" }),
       pythonErrorsLesson,
       pythonConditionsLesson,
     ]);
     expect(pythonCourse.modules).toHaveLength(9);
     expect(
       pythonCourse.modules.flatMap((courseModule) => courseModule.lessonPlan),
-    ).toHaveLength(19);
+    ).toHaveLength(28);
     expect(pythonCourse).toMatchObject({
       summary:
         "От первой программы — к задачам и алгоритмам, которые пригодятся на ЕГЭ.",
@@ -108,7 +121,7 @@ describe("Python course foundation", () => {
         "Понимать, что делает небольшая программа и как меняются значения",
         "Писать и проверять простые программы на Python",
         "Разбираться в сообщениях об ошибках и находить причину",
-        "Собирать знакомые команды и конструкции в готовое решение",
+        "Собирать знакомые команды и конструкции в терминальное приложение с сохранением данных",
       ],
     });
   });
@@ -189,6 +202,33 @@ describe("Python course foundation", () => {
       expect(task).not.toHaveProperty("answer_variants");
       expect(task).not.toHaveProperty("numeric_tolerance");
       expect(task).not.toHaveProperty("explanation");
+    }
+  });
+
+  it("loads every authored lesson task family without checker secrets", async () => {
+    for (const publication of courseLessonPublications) {
+      const lesson = findCourseLessonByRouteSlugs(
+        "python",
+        publication.routeSlug,
+      );
+      expect(lesson).toMatchObject({
+        id: publication.id,
+        status: publication.status,
+      });
+      if (!lesson) throw new Error(`Missing lesson ${publication.id}`);
+
+      const tasks = await loadPracticeTasks(lesson.practiceTaskIds);
+      expect(tasks.map((task) => task.id)).toEqual(lesson.practiceTaskIds);
+      expect(tasks).toHaveLength(5);
+      for (const task of tasks) {
+        expect(task.title).not.toBe("");
+        expect(task.statement).not.toBe("");
+        expect(task.theoryLinks.length).toBeGreaterThan(0);
+        expect(task.solution.length).toBeGreaterThan(0);
+        expect(task).not.toHaveProperty("answer_variants");
+        expect(task).not.toHaveProperty("numeric_tolerance");
+        expect(task).not.toHaveProperty("explanation");
+      }
     }
   });
 });

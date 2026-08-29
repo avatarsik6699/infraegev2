@@ -1,0 +1,28 @@
+{
+  "id": "python-functions-parameters",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-functions"],
+  "title": "Подставьте два аргумента",
+  "statement": "Функция `area(width, height)` возвращает `width * height`. Что вернёт `area(3, 5)`?",
+  "hint": "Аргументы связываются с параметрами по порядку.",
+  "theory_links": [
+    {
+      "hash": "trace",
+      "label": "Вернитесь к разбору примера"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["15"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "width получает 3, height — 5. Произведение равно 15."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

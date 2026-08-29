@@ -1,0 +1,28 @@
+{
+  "id": "python-while-stop-value",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-while"],
+  "title": "Найдите значение после цикла",
+  "statement": "После `x = 10` выполняется `while x > 3: x -= 3`. Чему равен x после цикла?",
+  "hint": "Проследите значения 10, 7, 4 и следующее изменение.",
+  "theory_links": [
+    {
+      "hash": "trace",
+      "label": "Вернитесь к разбору примера"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["1"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "После трёх итераций x становится 1. Проверка 1 > 3 ложна, поэтому это итоговое значение."
+      }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

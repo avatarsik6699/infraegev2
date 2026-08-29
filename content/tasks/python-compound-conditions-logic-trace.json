@@ -1,0 +1,28 @@
+{
+  "id": "python-compound-conditions-logic-trace",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-compound-conditions"],
+  "title": "Проверьте составное условие",
+  "statement": "При `age = 15` и `has_ticket = True` условие записано как `age >= 14 and has_ticket`. Программа печатает «вход», если условие истинно. Что она напечатает?",
+  "hint": "`and` требует истинности обеих частей.",
+  "theory_links": [
+    {
+      "hash": "trace",
+      "label": "Вернитесь к разбору примера"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["вход"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "15 >= 14 даёт True, и `has_ticket` уже равен True. Обе части истинны, поэтому выполняется ветвь «вход»."
+      }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

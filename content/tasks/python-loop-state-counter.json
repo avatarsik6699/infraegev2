@@ -1,0 +1,28 @@
+{
+  "id": "python-loop-state-counter",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-loop-state"],
+  "title": "Отделите счётчик",
+  "statement": "Сколько чётных чисел в списке `[2, 5, 8, 10]`?",
+  "hint": "Счётчик увеличивается один раз для каждого числа, делящегося на 2.",
+  "theory_links": [
+    {
+      "hash": "trace",
+      "label": "Вернитесь к разбору примера"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["3"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Чётные значения — 2, 8 и 10. Счётчик увеличится три раза."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

@@ -1,0 +1,23 @@
+{
+  "id": "python-exceptions-local-run",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-exceptions"],
+  "title": "Проверьте два пути локально",
+  "statement": "Запустите пример повторного ввода. Введите `три`, затем `3`. Сколько раз появится сообщение `Введите целое число`?",
+  "hint": "Второй ввод успешно преобразуется.",
+  "theory_links": [{ "hash": "decision", "label": "Проверьте оба пути" }],
+  "checker_type": "exact_match",
+  "answer_variants": ["1", "один", "один раз"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Сообщение появляется после первого ValueError; ввод 3 завершает цикл без новой ошибки."
+      }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

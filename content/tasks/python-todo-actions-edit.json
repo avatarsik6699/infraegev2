@@ -1,0 +1,23 @@
+{
+  "id": "python-todo-actions-edit",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-todo-actions"],
+  "title": "Что меняется при редактировании",
+  "statement": "Какое поле меняет команда `edit`, пока id дела остаётся прежним?",
+  "hint": "Именно это поле пользователь видит как текст дела.",
+  "theory_links": [{ "hash": "change", "label": "Сравните изменение полей" }],
+  "checker_type": "exact_match",
+  "answer_variants": ["title", "task[\"title\"]", "task['title']"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Команда edit меняет title, а id дела остаётся прежним."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

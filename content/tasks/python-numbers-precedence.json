@@ -1,0 +1,23 @@
+{
+  "id": "python-numbers-precedence",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-numbers"],
+  "title": "Соблюдите порядок действий",
+  "statement": "Что выведет `print(2 + 3 * 4)`?",
+  "hint": "Умножение выполняется раньше сложения.",
+  "theory_links": [
+    { "hash": "precedence", "label": "Вернитесь к порядку действий" }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["14"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": { "markdown": "Сначала 3 * 4 = 12, затем 2 + 12 = 14." }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

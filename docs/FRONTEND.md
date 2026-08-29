@@ -130,7 +130,7 @@ app → routes → pages → widgets → features → entities → shared
   context labels share one compact responsive column gutter so their content edges remain aligned
   through desktop, intermediate and mobile layouts.
 - Course pages extend the incumbent neutral reading world without reusing Topic semantics. A
-  course overview presents audience, outcome, `early_access` truth and one ordered public plan of
+  course overview presents audience, outcome, the current course stage and one ordered public plan of
   lesson titles plus observable outcomes without a separate evolving-program disclaimer or date
   promise. Only published CourseLesson rows are links; their numeric order stays outside the link
   and the link emphasizes the title over its outcome without a redundant availability label.
@@ -144,8 +144,8 @@ app → routes → pages → widgets → features → entities → shared
   competing with local reading navigation throughout the article.
 - Course progress is a hydration-only enhancement derived from published CourseLesson entries in
   the app-scoped lesson-progress registry; it has no separate store or persistence lifecycle.
-  Copy says «освоено N из M доступных уроков» and keeps that state separate from the course's
-  `early_access` stage. On the overview it stays a compact row with a thin progress bar directly
+  Copy says «освоено N из M доступных уроков» and keeps that state separate from the course stage.
+  On the overview it stays a compact row with a thin progress bar directly
   above the curriculum, not a standalone titled section in the course introduction. It is
   informational only: the published lesson row remains the course entry point, so progress does
   not contain a competing action. Never render a total-course percentage, hard lesson locks or

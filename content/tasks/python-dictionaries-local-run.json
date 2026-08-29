@@ -1,0 +1,28 @@
+{
+  "id": "python-dictionaries-local-run",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-dictionaries"],
+  "title": "Измените найденную запись",
+  "statement": "Запустите `tasks = [{\"id\": 1, \"done\": False}, {\"id\": 2, \"done\": False}]; tasks[1][\"done\"] = True; print(tasks[1][\"id\"], tasks[1][\"done\"])`. Какую строку выведет программа?",
+  "hint": "Изменяется поле второго словаря, но его id остаётся прежним.",
+  "theory_links": [
+    {
+      "hash": "records",
+      "label": "Вернитесь к списку записей"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["2 True"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Второй словарь сохраняет `id` 2, а его изменяемое поле `done` становится `True`."
+      }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

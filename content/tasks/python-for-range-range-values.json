@@ -1,0 +1,28 @@
+{
+  "id": "python-for-range-range-values",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-for-range"],
+  "title": "Перечислите значения range",
+  "statement": "Какие числа по порядку получит i в цикле `for i in range(2, 7, 2)`? Запишите через пробел.",
+  "hint": "Правая граница 7 не включается.",
+  "theory_links": [
+    {
+      "hash": "trace",
+      "label": "Вернитесь к разбору примера"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["2 4 6"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Последовательность начинается с 2 и растёт на 2: 2, 4, 6. Следующее число 8 уже за правой границей."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

@@ -1,0 +1,28 @@
+{
+  "id": "python-loop-state-boundary",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-loop-state"],
+  "title": "Проверьте границы перебора",
+  "statement": "Сколько значений содержит `range(1, 5)`?",
+  "hint": "Правая граница не включается.",
+  "theory_links": [
+    {
+      "hash": "model",
+      "label": "Вернитесь к разбору примера"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["4"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Последовательность содержит 1, 2, 3 и 4 — всего четыре значения."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

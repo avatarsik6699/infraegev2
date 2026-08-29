@@ -1,0 +1,28 @@
+{
+  "id": "python-for-range-boundary",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-for-range"],
+  "title": "Посчитайте итерации",
+  "statement": "Сколько раз выполнится тело цикла `for i in range(5)`?",
+  "hint": "`range(5)` содержит значения от 0 до 4.",
+  "theory_links": [
+    {
+      "hash": "model",
+      "label": "Вернитесь к разбору примера"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["5"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Цикл получает пять значений: 0, 1, 2, 3 и 4. Поэтому тело выполняется пять раз."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

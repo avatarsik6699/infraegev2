@@ -1,0 +1,28 @@
+{
+  "id": "python-lists-index",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-lists"],
+  "title": "Прочитайте элемент списка",
+  "statement": "Чему равно выражение `[4, 7, 9][1]`?",
+  "hint": "Первый элемент имеет индекс 0.",
+  "theory_links": [
+    {
+      "hash": "trace",
+      "label": "Вернитесь к разбору примера"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["7"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "По индексу 1 находится второй элемент списка — 7."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

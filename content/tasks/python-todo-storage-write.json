@@ -1,0 +1,23 @@
+{
+  "id": "python-todo-storage-write",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-todo-storage"],
+  "title": "Как записать список в JSON",
+  "statement": "Какая функция модуля json записывает `tasks` в уже открытый файл?",
+  "hint": "В коде она получает два аргумента: tasks и file.",
+  "theory_links": [{ "hash": "why-file", "label": "Посмотрите вызов записи" }],
+  "checker_type": "exact_match",
+  "answer_variants": ["json.dump", "dump", "json.dump()"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "json.dump(tasks, file, ...) сериализует список и записывает JSON в файл."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

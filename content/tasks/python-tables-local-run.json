@@ -1,0 +1,28 @@
+{
+  "id": "python-tables-local-run",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-tables"],
+  "title": "Найдите максимум в таблице",
+  "statement": "В локальном CSV второй столбец содержит 8, 12 и 5. Какое число выведет программа, выбирающая максимум этого столбца?",
+  "hint": "После преобразования сравниваются три целых числа.",
+  "theory_links": [
+    {
+      "hash": "workflow",
+      "label": "Проверьте решение шаг за шагом"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["12"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Максимальное значение выбранного столбца — 12."
+      }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

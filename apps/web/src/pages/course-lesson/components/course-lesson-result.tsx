@@ -23,8 +23,9 @@ export const CourseLessonResult: React.FC<Props> = (props) => (
     <nav className={styles.resultNavigation} aria-label="Продолжение курса">
       <Typography.Title order={3}>Что дальше</Typography.Title>
       <Typography.Text tone="muted">
-        Вернитесь к курсу, чтобы посмотреть доступные уроки и темы, которые
-        появятся позже.
+        {props.course.stage === "complete"
+          ? "Вернитесь к курсу, чтобы выбрать следующий урок или повторить пройденное."
+          : "Вернитесь к курсу, чтобы посмотреть доступные уроки и темы, которые появятся позже."}
       </Typography.Text>
       <Link
         className={styles.courseLink}

@@ -1,0 +1,28 @@
+{
+  "id": "python-dictionaries-get",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-dictionaries"],
+  "title": "Используйте значение по умолчанию",
+  "statement": "Чему равно `scores.get(\"Борис\", 0)`, если ключа `Борис` в словаре нет?",
+  "hint": "Второй аргумент get возвращается при отсутствии ключа.",
+  "theory_links": [
+    {
+      "hash": "pitfall",
+      "label": "Разберите частую ошибку"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["0"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Ключ не найден, поэтому метод не вызывает ошибку, а возвращает указанное значение 0."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

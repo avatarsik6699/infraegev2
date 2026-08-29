@@ -1,0 +1,31 @@
+{
+  "id": "python-independent-program-decomposition",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-independent-program"],
+  "title": "В каком порядке живут данные",
+  "statement": "Расположите этапы по порядку: `загрузка`, `изменение`, `сохранение`, `новый запуск`.",
+  "hint": "Сначала программа восстанавливает прежнее состояние, а новый запуск происходит уже после записи.",
+  "theory_links": [
+    {
+      "hash": "grown-program",
+      "label": "Проследите путь одного дела"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": [
+    "загрузка изменение сохранение новый запуск",
+    "загрузка, изменение, сохранение, новый запуск"
+  ],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Программа загружает прежние дела, меняет и сохраняет список. При следующем запуске она читает уже обновлённые данные."
+      }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

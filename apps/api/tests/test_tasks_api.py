@@ -13,6 +13,47 @@ from app.modules.content.service import clear_cache
 from app.modules.health.api import require_database
 from app.modules.tasks.service import is_correct
 
+NEW_PYTHON_COURSE_LESSON_IDS = {
+    "python-numbers",
+    "python-compound-conditions",
+    "python-for-range",
+    "python-while",
+    "python-loop-state",
+    "python-number-digits",
+    "python-strings",
+    "python-lists",
+    "python-sets",
+    "python-dictionaries",
+    "python-sorting-search",
+    "python-comprehensions",
+    "python-functions",
+    "python-program-parts",
+    "python-iterators-generators",
+    "python-recursion",
+    "python-exceptions",
+    "python-files",
+    "python-tables",
+    "python-bruteforce",
+    "python-select-result",
+    "python-todo-start",
+    "python-todo-actions",
+    "python-todo-storage",
+    "python-independent-program",
+}
+
+
+def new_python_course_task_paths() -> list[Path]:
+    content_root = Path(__file__).resolve().parents[3] / "content" / "tasks"
+    paths = []
+    for task_path in sorted(content_root.glob("python-*.json")):
+        task = Task.model_validate_json(task_path.read_text(encoding="utf-8"))
+        if (
+            len(task.course_lesson_ids) == 1
+            and task.course_lesson_ids[0] in NEW_PYTHON_COURSE_LESSON_IDS
+        ):
+            paths.append(task_path)
+    return paths
+
 
 @pytest.fixture
 def content_task(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Iterator[Task]:
@@ -385,3 +426,36 @@ def test_python_errors_tasks_are_strict_and_checkable(
     assert is_correct(task, correct_answer)
     assert is_correct(task, normalized_answer)
     assert not is_correct(task, "неверно")
+
+
+@pytest.mark.parametrize(
+    "task_path",
+    new_python_course_task_paths(),
+    ids=lambda task_path: task_path.stem,
+)
+def test_remaining_python_course_tasks_are_strict_and_checkable(task_path: Path):
+    task = Task.model_validate_json(task_path.read_text(encoding="utf-8"))
+
+    assert task.topic_ids == []
+    assert len(task.course_lesson_ids) == 1
+    assert task.course_lesson_ids[0] in NEW_PYTHON_COURSE_LESSON_IDS
+    assert task.title
+    assert task.hint
+    assert task.theory_links
+    assert task.explanation
+    assert task.interaction_type == "production"
+
+    for accepted_answer in task.answer_variants:
+        assert is_correct(task, accepted_answer)
+        assert is_correct(task, f"  {accepted_answer.swapcase()}  ")
+    assert not is_correct(task, "заведомо неверный ответ")
+
+
+def test_remaining_python_course_has_exactly_five_tasks_per_lesson():
+    task_counts = dict.fromkeys(NEW_PYTHON_COURSE_LESSON_IDS, 0)
+    for task_path in new_python_course_task_paths():
+        task = Task.model_validate_json(task_path.read_text(encoding="utf-8"))
+        task_counts[task.course_lesson_ids[0]] += 1
+
+    assert len(new_python_course_task_paths()) == 125
+    assert set(task_counts.values()) == {5}

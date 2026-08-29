@@ -1,0 +1,23 @@
+{
+  "id": "python-number-digits-trace",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-number-digits"],
+  "title": "Проследите две итерации",
+  "statement": "Переменная `number` равна 704. В конце каждой итерации выполняется `number //= 10`. Чему она равна после двух итераций?",
+  "hint": "Примените целое деление два раза.",
+  "theory_links": [{ "hash": "loop", "label": "Проследите цикл" }],
+  "checker_type": "exact_match",
+  "answer_variants": ["7"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "После первого шага получается 70, после второго — 7."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

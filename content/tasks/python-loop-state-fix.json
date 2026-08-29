@@ -1,0 +1,28 @@
+{
+  "id": "python-loop-state-fix",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-loop-state"],
+  "title": "Уберите лишний подсчёт",
+  "statement": "Счётчик количества подходящих элементов ошибочно начинается с `count = 1`. С какого значения он должен начинаться?",
+  "hint": "До просмотра элементов ещё ничего не найдено.",
+  "theory_links": [
+    {
+      "hash": "pitfall",
+      "label": "Разберите частую ошибку"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["0"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Счётчик хранит число уже найденных элементов. До первой проверки их ноль, поэтому начальное значение — 0."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

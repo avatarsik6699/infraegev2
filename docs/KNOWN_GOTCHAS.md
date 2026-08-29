@@ -170,6 +170,18 @@
 - **Fix**: keep the e2e-only ports `127.0.0.2:3100` / `127.0.0.2:8100`, pass Vite `--strictPort`,
   and set both Playwright web servers to `reuseExistingServer: false`.
 
+### Repeated full-page course navigation can exhaust Vite dev hydration
+
+- **Symptoms**: a long Playwright loop successfully sees SSR lesson content, then a later route
+  logs `Failed to fetch dynamically imported module ... default-entry/client.tsx`; interactive
+  disclosure locators never appear and the test reaches its timeout.
+- **Root cause**: repeatedly replacing the document for a large route-owned content chunk in one
+  browser context can race Vite's development module delivery. Production prerender may remain
+  healthy, so retrying the locator hides the real failure instead of proving hydration.
+- **Fix**: keep route data and assertions in the Course Page Object, but give each crawled lesson
+  its own Playwright test/context. For multi-viewport visual checks, navigate once and resize the
+  same hydrated page instead of issuing another `page.goto` for every viewport.
+
 ### Streamed SSR markup is visible before controlled React inputs hydrate
 
 - **Symptoms**: a Playwright locator sees the topic form, but an immediate fill leaves its submit

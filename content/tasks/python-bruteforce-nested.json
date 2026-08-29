@@ -1,0 +1,28 @@
+{
+  "id": "python-bruteforce-nested",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-bruteforce"],
+  "title": "Проследите вложенный перебор",
+  "statement": "a и b принимают значения 1, 2, 3. Сколько пар удовлетворяют `a < b`?",
+  "hint": "Перечислите пары (1,2), (1,3), (2,3).",
+  "theory_links": [
+    {
+      "hash": "pitfall",
+      "label": "Разберите частую ошибку"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["3"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Подходят ровно три упорядоченные пары. Остальные либо равны, либо идут в обратном порядке."
+      }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

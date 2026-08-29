@@ -1,0 +1,28 @@
+{
+  "id": "python-recursion-fix",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-recursion"],
+  "title": "Назовите ошибку без остановки",
+  "statement": "Какой тип ошибки обычно завершает рекурсивную функцию, которая никогда не достигает базового случая?",
+  "hint": "Число вложенных вызовов не может расти бесконечно.",
+  "theory_links": [
+    {
+      "hash": "pitfall",
+      "label": "Разберите частую ошибку"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["RecursionError", "recursionerror"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Python ограничивает глубину вызовов. Когда предел исчерпан, возникает `RecursionError`."
+      }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

@@ -1,0 +1,28 @@
+{
+  "id": "python-compound-conditions-boundary",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-compound-conditions"],
+  "title": "Не потеряйте ноль",
+  "statement": "При `temperature = 0` программа проверяет `temperature < 0`, затем `temperature <= 10`, иначе печатает «тепло». Что будет напечатано?",
+  "hint": "Ноль не меньше нуля, но входит в диапазон до 10 включительно.",
+  "theory_links": [
+    {
+      "hash": "model",
+      "label": "Вернитесь к разбору примера"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["прохладно"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Первая ветвь пропускается. Сравнение 0 <= 10 истинно, поэтому выбирается вторая ветвь — «прохладно»."
+      }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

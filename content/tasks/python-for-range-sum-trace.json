@@ -1,0 +1,28 @@
+{
+  "id": "python-for-range-sum-trace",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-for-range"],
+  "title": "Проследите накопление суммы",
+  "statement": "Чему равна `total` после `total = 0` и цикла `for x in range(1, 4): total += x`?",
+  "hint": "`range(1, 4)` создаёт 1, 2 и 3.",
+  "theory_links": [
+    {
+      "hash": "trace",
+      "label": "Вернитесь к разбору примера"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["6"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Накопитель последовательно получает 0 + 1 = 1, затем 3, затем 6."
+      }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

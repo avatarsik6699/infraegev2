@@ -1,0 +1,28 @@
+{
+  "id": "python-tables-split",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-tables"],
+  "title": "Разделите строку на поля",
+  "statement": "Строка `\"Ира;15;5\"` разделяется через `.split(\";\")`. Что находится в поле с индексом 1?",
+  "hint": "После разделения поля имеют индексы 0, 1 и 2.",
+  "theory_links": [
+    {
+      "hash": "trace",
+      "label": "Вернитесь к разбору примера"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["15"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Получается список `Ира`, `15`, `5`. Второе поле с индексом 1 содержит строку `15`."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

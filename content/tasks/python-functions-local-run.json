@@ -1,0 +1,28 @@
+{
+  "id": "python-functions-local-run",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-functions"],
+  "title": "Проверьте логическую функцию",
+  "statement": "Функция `is_even(n)` возвращает `n % 2 == 0`. Что вернёт `is_even(14)`?",
+  "hint": "Остаток от деления 14 на 2 равен нулю.",
+  "theory_links": [
+    {
+      "hash": "workflow",
+      "label": "Проверьте решение шаг за шагом"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["True", "true"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Сравнение 0 == 0 истинно, поэтому функция возвращает `True`."
+      }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

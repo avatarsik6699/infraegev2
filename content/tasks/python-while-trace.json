@@ -1,0 +1,28 @@
+{
+  "id": "python-while-trace",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-while"],
+  "title": "Проследите изменение состояния",
+  "statement": "После `x = 1` выполняется `while x <= 5: x += 2`. Чему равен x после остановки?",
+  "hint": "Проверка идёт перед каждой итерацией.",
+  "theory_links": [
+    {
+      "hash": "trace",
+      "label": "Вернитесь к разбору примера"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["7"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "x принимает 3, затем 5, затем 7. После этого условие 7 <= 5 ложно, и цикл останавливается."
+      }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

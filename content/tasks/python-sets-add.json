@@ -1,0 +1,28 @@
+{
+  "id": "python-sets-add",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-sets"],
+  "title": "Добавьте новое значение",
+  "statement": "После `numbers = {1}` и `numbers.add(5)` чему равна длина множества?",
+  "hint": "Добавляется новое, ранее отсутствовавшее значение.",
+  "theory_links": [
+    {
+      "hash": "model",
+      "label": "Вернитесь к разбору примера"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["2"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Множество содержит два разных элемента: 1 и 5."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

@@ -1,0 +1,28 @@
+{
+  "id": "python-strings-index",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-strings"],
+  "title": "Получите символ по индексу",
+  "statement": "Какой символ возвращает выражение `\"python\"[2]`?",
+  "hint": "Индексация начинается с нуля.",
+  "theory_links": [
+    {
+      "hash": "trace",
+      "label": "Вернитесь к разбору примера"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["t"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Индексы p, y, t равны 0, 1, 2. Поэтому по индексу 2 находится `t`."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

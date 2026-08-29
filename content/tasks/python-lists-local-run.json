@@ -1,0 +1,28 @@
+{
+  "id": "python-lists-local-run",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-lists"],
+  "title": "Удалите выполненное дело",
+  "statement": "Запустите `tasks = [\"письмо\", \"прогулка\", \"задачи\"]; finished = tasks.pop(1); print(finished, len(tasks))`. Какую строку выведет программа?",
+  "hint": "`pop(1)` возвращает второй элемент и удаляет его из списка.",
+  "theory_links": [
+    {
+      "hash": "remove",
+      "label": "Повторите удаление из списка"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["прогулка 2"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Метод возвращает строку `прогулка`; после удаления в списке остаются два элемента."
+      }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

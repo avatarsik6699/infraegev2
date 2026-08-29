@@ -1,0 +1,23 @@
+{
+  "id": "python-sorting-search-local-run",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-sorting-search"],
+  "title": "Проверьте сортировку локально",
+  "statement": "Запустите `sorted([\"python\", \"код\", \"я\"], key=len)`. Какое слово окажется первым?",
+  "hint": "key=len сравнивает длины строк.",
+  "theory_links": [{ "hash": "choice", "label": "Выберите признак" }],
+  "checker_type": "exact_match",
+  "answer_variants": ["я"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "У слова «я» длина 1 — это наименьшее значение key."
+      }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

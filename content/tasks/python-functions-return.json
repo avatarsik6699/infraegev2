@@ -1,0 +1,28 @@
+{
+  "id": "python-functions-return",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-functions"],
+  "title": "Используйте возвращённое значение",
+  "statement": "Функция `next_number(x)` возвращает `x + 1`. Чему равно `result` после `result = next_number(4)`?",
+  "hint": "`return` подставляет вычисленное значение в место вызова.",
+  "theory_links": [
+    {
+      "hash": "model",
+      "label": "Вернитесь к разбору примера"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["5"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Функция вычисляет 4 + 1 и возвращает 5, поэтому result получает 5."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

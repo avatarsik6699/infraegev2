@@ -1,0 +1,25 @@
+{
+  "id": "python-todo-start-storage",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-todo-start"],
+  "title": "Как хранится одно дело",
+  "statement": "В какой коллекции удобно хранить вместе `id`, `title` и `done` одного дела?",
+  "hint": "У каждого поля есть имя-ключ.",
+  "theory_links": [
+    { "hash": "first-run", "label": "Посмотрите, из чего состоит запись" }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["словарь", "dict"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Одна запись хранится в словаре, а несколько словарей — в списке tasks."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

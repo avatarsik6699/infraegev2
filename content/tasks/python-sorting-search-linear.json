@@ -1,0 +1,23 @@
+{
+  "id": "python-sorting-search-linear",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-sorting-search"],
+  "title": "Остановите поиск",
+  "statement": "Список id равен `3, 7, 9, 12`. Сколько элементов проверит линейный поиск числа 9, если после совпадения выполняется `break`?",
+  "hint": "Считайте проверки слева направо вместе с найденной.",
+  "theory_links": [{ "hash": "search", "label": "Повторите линейный поиск" }],
+  "checker_type": "exact_match",
+  "answer_variants": ["3", "три"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Поиск проверяет 3, затем 7 и затем 9; после третьей проверки цикл останавливается."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

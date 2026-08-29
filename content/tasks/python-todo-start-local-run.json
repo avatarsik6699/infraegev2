@@ -1,0 +1,23 @@
+{
+  "id": "python-todo-start-local-run",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-todo-start"],
+  "title": "Проверяем номера в первой версии",
+  "statement": "Запустите программу, добавьте дела `Читать` и `Практика`, затем выполните `list`. Какой id получит дело `Практика`?",
+  "hint": "После каждого успешного добавления next_id увеличивается на единицу.",
+  "theory_links": [
+    { "hash": "snapshot", "label": "Запустите собранную версию" }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["2"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": { "markdown": "Первое дело получает id 1, второе — id 2." }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

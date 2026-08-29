@@ -1,6 +1,30 @@
 import { test } from "./fixtures";
 
-test("the published Python course is discoverable and complete", async ({
+const finalProjectLessons = [
+  ["spisok-del", "Добавляем дела и выводим список"],
+  ["deystviya-so-spiskom", "Отмечаем выполненное, редактируем и удаляем"],
+  ["sohranenie-spiska-del", "Сохраняем дела между запусками"],
+  ["gotovaya-programma", "Проверяем весь сценарий и наводим порядок в коде"],
+] as const;
+
+for (const lessonIndex of Array.from({ length: 28 }, (_, index) => index)) {
+  test(`Python curriculum lesson ${lessonIndex + 1} is public and SSR-readable`, async ({
+    browserSession,
+    noJavaScriptPythonCoursePage,
+    pythonCoursePage,
+  }) => {
+    await browserSession.useDesktopViewport();
+    await pythonCoursePage.expectPublishedCurriculumLesson(lessonIndex, {
+      keyboard: true,
+    });
+    browserSession.expectCleanConsole();
+    await noJavaScriptPythonCoursePage.expectPublishedCurriculumLesson(
+      lessonIndex,
+    );
+  });
+}
+
+test("the Python course overview exposes the complete published path", async ({
   browserSession,
   noJavaScriptPythonCoursePage,
   pythonCoursePage,
@@ -8,9 +32,28 @@ test("the published Python course is discoverable and complete", async ({
   await browserSession.useDesktopViewport();
   await pythonCoursePage.openOverview();
   await pythonCoursePage.dismissAnalyticsPrompt();
-  await pythonCoursePage.expectPublishedOverview();
+  await pythonCoursePage.expectCompleteOverview();
   await browserSession.captureViewport("python-course-published-desktop.png");
 
+  await browserSession.useZoomedDesktopViewport();
+  await pythonCoursePage.expectCompleteOverview();
+  await browserSession.captureViewport("python-course-published-zoomed.png");
+
+  await browserSession.useNarrowViewport();
+  await pythonCoursePage.expectCompleteOverview();
+  await browserSession.captureViewport("python-course-published-mobile.png");
+  browserSession.expectCleanConsole();
+
+  await pythonCoursePage.expectPublishedLessonsInPublicSitemap();
+  await noJavaScriptPythonCoursePage.expectOverviewReadableWithoutJavaScript();
+});
+
+test("the published Python conditions lesson supports practice and target viewports", async ({
+  browserSession,
+  noJavaScriptPythonCoursePage,
+  pythonCoursePage,
+}) => {
+  await browserSession.useDesktopViewport();
   await pythonCoursePage.openConditionsLesson();
   await pythonCoursePage.expectPublishedConditionsLesson();
   await pythonCoursePage.expectKeyboardDisclosures();
@@ -19,14 +62,51 @@ test("the published Python course is discoverable and complete", async ({
     "python-conditions-published-desktop.png",
   );
 
+  await browserSession.useZoomedDesktopViewport();
+  await pythonCoursePage.expectPublishedConditionsLesson();
+  await browserSession.captureViewport(
+    "python-conditions-published-zoomed.png",
+  );
+
+  await browserSession.useNarrowViewport();
+  await pythonCoursePage.expectMobileReadingOrder();
+  await browserSession.captureViewport(
+    "python-conditions-published-mobile.png",
+  );
+  browserSession.expectCleanConsole();
+  await noJavaScriptPythonCoursePage.expectConditionsReadableWithoutJavaScript();
+});
+
+test("the published Python errors lesson supports practice and target viewports", async ({
+  browserSession,
+  noJavaScriptPythonCoursePage,
+  pythonCoursePage,
+}) => {
+  await browserSession.useDesktopViewport();
   await pythonCoursePage.openErrorsLesson();
   await pythonCoursePage.expectPublishedErrorsLesson();
   await pythonCoursePage.expectKeyboardDisclosures();
   await pythonCoursePage.expectErrorsPractice();
-  await browserSession.captureViewport("python-errors-published-desktop.png");
   await pythonCoursePage.expectSimplifiedErrorsResult();
-  await browserSession.captureViewport("python-errors-result-desktop.png");
+  await browserSession.captureViewport("python-errors-published-desktop.png");
 
+  await browserSession.useZoomedDesktopViewport();
+  await pythonCoursePage.expectPublishedErrorsLesson();
+  await browserSession.captureViewport("python-errors-published-zoomed.png");
+
+  await browserSession.useNarrowViewport();
+  await pythonCoursePage.expectMobileReadingOrder();
+  await browserSession.captureViewport("python-errors-published-mobile.png");
+  browserSession.expectCleanConsole();
+  await noJavaScriptPythonCoursePage.expectErrorsReadableWithoutJavaScript();
+});
+
+test("the first published Python lesson preserves progress and reset", async ({
+  browserSession,
+  noJavaScriptPythonCoursePage,
+  pythonCoursePage,
+}) => {
+  await browserSession.useDesktopViewport();
   await pythonCoursePage.openFirstLesson();
   await pythonCoursePage.expectPublishedLesson();
   await pythonCoursePage.expectKeyboardDisclosures();
@@ -37,39 +117,32 @@ test("the published Python course is discoverable and complete", async ({
   await browserSession.captureViewport(
     "python-first-program-practice-desktop.png",
   );
-
-  await browserSession.useZoomedDesktopViewport();
-  await pythonCoursePage.openOverview();
-  await pythonCoursePage.expectPublishedOverview();
-  await pythonCoursePage.openConditionsLesson();
-  await pythonCoursePage.expectPublishedConditionsLesson();
-  await browserSession.captureViewport(
-    "python-conditions-published-zoomed.png",
-  );
-  await pythonCoursePage.openErrorsLesson();
-  await pythonCoursePage.expectPublishedErrorsLesson();
-  await browserSession.captureViewport("python-errors-published-zoomed.png");
-
-  await browserSession.useNarrowViewport();
-  await pythonCoursePage.openConditionsLesson();
-  await pythonCoursePage.expectPublishedConditionsLesson();
-  await pythonCoursePage.expectMobileReadingOrder();
-  await browserSession.captureViewport(
-    "python-conditions-published-mobile.png",
-  );
-  await pythonCoursePage.openErrorsLesson();
-  await pythonCoursePage.expectPublishedErrorsLesson();
-  await pythonCoursePage.expectMobileReadingOrder();
-  await browserSession.captureViewport("python-errors-published-mobile.png");
   browserSession.expectCleanConsole();
-
-  await pythonCoursePage.expectPublishedLessonsInPublicSitemap();
-
-  await noJavaScriptPythonCoursePage.expectOverviewReadableWithoutJavaScript();
   await noJavaScriptPythonCoursePage.expectReadableWithoutJavaScript();
-  await noJavaScriptPythonCoursePage.expectConditionsReadableWithoutJavaScript();
-  await noJavaScriptPythonCoursePage.expectErrorsReadableWithoutJavaScript();
 });
+
+for (const [routeSlug, title] of finalProjectLessons) {
+  test(`${title} is readable across target viewports`, async ({
+    browserSession,
+    noJavaScriptPythonCoursePage,
+    pythonCoursePage,
+  }) => {
+    await browserSession.useDesktopViewport();
+    await pythonCoursePage.openFinalProjectLesson(routeSlug, title);
+    await pythonCoursePage.expectKeyboardDisclosures();
+    await browserSession.captureViewport(`${routeSlug}-desktop.png`);
+
+    await browserSession.useZoomedDesktopViewport();
+    await pythonCoursePage.expectMobileReadingOrder();
+    await browserSession.captureViewport(`${routeSlug}-zoomed.png`);
+
+    await browserSession.useNarrowViewport();
+    await pythonCoursePage.expectMobileReadingOrder();
+    await browserSession.captureViewport(`${routeSlug}-mobile.png`);
+    browserSession.expectCleanConsole();
+    await noJavaScriptPythonCoursePage.openFinalProjectLesson(routeSlug, title);
+  });
+}
 
 test("the unlisted lesson lab works across viewports and without JavaScript", async ({
   browserSession,

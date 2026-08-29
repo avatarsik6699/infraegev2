@@ -65,28 +65,15 @@ describe("public release metadata", () => {
         status: "published",
       }),
     ]);
-    expect(courseLessonPublications).toEqual([
-      expect.objectContaining({
-        id: "python-first-program",
-        routeSlug: "pervaya-programma",
-        status: "published",
-      }),
-      expect.objectContaining({
-        id: "python-errors",
-        routeSlug: "oshibki",
-        status: "published",
-      }),
-      expect.objectContaining({
-        id: "python-conditions",
-        routeSlug: "usloviya",
-        status: "published",
-      }),
-    ]);
+    expect(courseLessonPublications).toHaveLength(28);
+    expect(
+      courseLessonPublications.filter((lesson) => lesson.status === "review"),
+    ).toHaveLength(0);
     expect(
       courseLessonPublications
         .filter((lesson) => lesson.status === "published")
         .map((lesson) => lesson.routeSlug),
-    ).toEqual(["pervaya-programma", "oshibki", "usloviya"]);
+    ).toHaveLength(28);
   });
 
   it("creates absolute canonical and social metadata", () => {

@@ -1,0 +1,28 @@
+{
+  "id": "python-for-range-fix",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-for-range"],
+  "title": "Включите правую границу",
+  "statement": "Какой `range` переберёт целые числа от 1 до 5 включительно?",
+  "hint": "Правая граница `range` не входит в последовательность.",
+  "theory_links": [
+    {
+      "hash": "pitfall",
+      "label": "Разберите частую ошибку"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["range(1, 6)", "range(1,6)"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Чтобы последним значением стало 5, правую границу нужно поставить на единицу дальше: `range(1, 6)`."
+      }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

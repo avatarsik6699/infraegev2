@@ -1,0 +1,28 @@
+{
+  "id": "python-dictionaries-lookup",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-dictionaries"],
+  "title": "Получите значение по ключу",
+  "statement": "Если `ages = {\"Ира\": 15, \"Олег\": 16}`, чему равно `ages[\"Ира\"]`?",
+  "hint": "Ключ Ира связан со значением 15.",
+  "theory_links": [
+    {
+      "hash": "trace",
+      "label": "Вернитесь к разбору примера"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["15"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Обращение по ключу возвращает связанное с ним значение — 15."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

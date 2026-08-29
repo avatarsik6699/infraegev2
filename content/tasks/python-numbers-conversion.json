@@ -1,0 +1,23 @@
+{
+  "id": "python-numbers-conversion",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-numbers"],
+  "title": "Выберите преобразование",
+  "statement": "Какую функцию нужно применить к строке `\"12.5\"`, чтобы умножить полученное число на 2 без ошибки?",
+  "hint": "У значения есть дробная часть.",
+  "theory_links": [{ "hash": "types", "label": "Повторите числовые типы" }],
+  "checker_type": "exact_match",
+  "answer_variants": ["float", "float()"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Строка содержит десятичную точку, поэтому подходит float(\"12.5\")."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

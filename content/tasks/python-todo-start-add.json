@@ -1,0 +1,25 @@
+{
+  "id": "python-todo-start-add",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-todo-start"],
+  "title": "Почему пробелы не становятся делом",
+  "statement": "Какой строковый метод превратит введённые пробелы в пустую строку?",
+  "hint": "Он убирает пробелы в начале и конце строки.",
+  "theory_links": [
+    { "hash": "empty", "label": "Разберите проверку пустого ввода" }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["strip", "strip()"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "strip() удаляет пробелы по краям; результат можно проверить условием if not title."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

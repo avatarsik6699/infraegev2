@@ -1,0 +1,23 @@
+{
+  "id": "python-numbers-division",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-numbers"],
+  "title": "Найдите целую порцию",
+  "statement": "Чему равно `23 // 5`?",
+  "hint": "Посчитайте, сколько полных пятёрок помещается в 23.",
+  "theory_links": [{ "hash": "operations", "label": "Сравните виды деления" }],
+  "checker_type": "exact_match",
+  "answer_variants": ["4"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "В 23 помещаются четыре полные пятёрки; ещё 3 остаётся."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

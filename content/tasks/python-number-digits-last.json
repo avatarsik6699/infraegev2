@@ -1,0 +1,23 @@
+{
+  "id": "python-number-digits-last",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-number-digits"],
+  "title": "Отделите последнюю цифру",
+  "statement": "Какую цифру вернёт выражение `704 % 10`?",
+  "hint": "Остаток от деления на 10 совпадает с последней цифрой.",
+  "theory_links": [{ "hash": "one-step", "label": "Повторите один шаг" }],
+  "checker_type": "exact_match",
+  "answer_variants": ["4"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Последняя цифра числа 704 — 4, поэтому остаток равен 4."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

@@ -1,0 +1,23 @@
+{
+  "id": "python-iterators-generators-iterable",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-iterators-generators"],
+  "title": "Назовите итерируемый объект",
+  "statement": "Что в выражении `for letter in \"код\"` является итерируемым объектом?",
+  "hint": "Это источник, из которого цикл получает символы.",
+  "theory_links": [{ "hash": "inside-for", "label": "Загляните внутрь for" }],
+  "checker_type": "exact_match",
+  "answer_variants": ["строка код", "\"код\"", "код", "строка"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Строка «код» является итерируемым объектом; цикл получает из неё символы."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

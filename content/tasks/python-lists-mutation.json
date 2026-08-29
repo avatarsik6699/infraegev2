@@ -1,0 +1,28 @@
+{
+  "id": "python-lists-mutation",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-lists"],
+  "title": "Проследите изменение списка",
+  "statement": "После `values = [1, 2, 3]` выполняется `values[0] = 5`. Запишите элементы списка через пробел.",
+  "hint": "Присваивание заменяет только элемент с индексом 0.",
+  "theory_links": [
+    {
+      "hash": "trace",
+      "label": "Вернитесь к разбору примера"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["5 2 3"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Первый элемент меняется с 1 на 5, остальные остаются прежними: 5 2 3."
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

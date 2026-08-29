@@ -1,0 +1,23 @@
+{
+  "id": "python-numbers-local-run",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-numbers"],
+  "title": "Проверьте выражение локально",
+  "statement": "Сначала предскажите, затем запустите `print((7 + 5) // 3 + 2 ** 3)`. Какое число выведет Python?",
+  "hint": "Сначала скобки и степень, затем целое деление и сложение.",
+  "theory_links": [
+    { "hash": "workflow", "label": "Пройдите проверку выражения" }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["12"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": { "markdown": "(7 + 5) // 3 = 4, 2 ** 3 = 8, итог 4 + 8 = 12." }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

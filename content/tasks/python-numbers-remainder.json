@@ -1,0 +1,21 @@
+{
+  "id": "python-numbers-remainder",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-numbers"],
+  "title": "Найдите остаток",
+  "statement": "Чему равно `23 % 5`?",
+  "hint": "После четырёх полных пятёрок остаётся часть числа.",
+  "theory_links": [{ "hash": "operations", "label": "Сравните виды деления" }],
+  "checker_type": "exact_match",
+  "answer_variants": ["3"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": { "markdown": "4 * 5 = 20, поэтому остаток от 23 равен 3." }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

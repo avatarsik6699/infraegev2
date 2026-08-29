@@ -1,0 +1,28 @@
+{
+  "id": "python-independent-program-test-cases",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-independent-program"],
+  "title": "Почему нужны два сообщения об ошибке",
+  "statement": "Пользователь вводит `abc`, затем целое число `99`, которого нет среди дел. Сколько разных сообщений об ошибке должна показать итоговая программа?",
+  "hint": "Неверный формат номера и неудачный поиск — две разные ситуации.",
+  "theory_links": [
+    {
+      "hash": "bad-input",
+      "label": "Разберите два вида неверного ввода"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["2", "два"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "abc вызывает сообщение о формате целого числа, а 99 — сообщение «Дело не найдено»."
+      }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}
