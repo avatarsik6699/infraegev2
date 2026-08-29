@@ -36,7 +36,7 @@ export const pythonErrorsLessonPublication = Object.freeze({
   title: "Ошибки: читаем сообщение и находим причину",
   summary:
     "Разберём, как читать сообщение Python снизу вверх, находить строку остановки и отличать несколько частых причин ошибки.",
-  status: "review",
+  status: "published",
   practiceTaskIds: Object.freeze([
     "python-errors-final-line",
     "python-errors-source-line",

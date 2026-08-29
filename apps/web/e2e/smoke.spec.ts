@@ -20,10 +20,10 @@ test("the published Python course is discoverable and complete", async ({
   );
 
   await pythonCoursePage.openErrorsLesson();
-  await pythonCoursePage.expectReviewErrorsLesson();
+  await pythonCoursePage.expectPublishedErrorsLesson();
   await pythonCoursePage.expectKeyboardDisclosures();
   await pythonCoursePage.expectErrorsPractice();
-  await browserSession.captureViewport("python-errors-review-desktop.png");
+  await browserSession.captureViewport("python-errors-published-desktop.png");
   await pythonCoursePage.expectSimplifiedErrorsResult();
   await browserSession.captureViewport("python-errors-result-desktop.png");
 
@@ -47,8 +47,8 @@ test("the published Python course is discoverable and complete", async ({
     "python-conditions-published-zoomed.png",
   );
   await pythonCoursePage.openErrorsLesson();
-  await pythonCoursePage.expectReviewErrorsLesson();
-  await browserSession.captureViewport("python-errors-review-zoomed.png");
+  await pythonCoursePage.expectPublishedErrorsLesson();
+  await browserSession.captureViewport("python-errors-published-zoomed.png");
 
   await browserSession.useNarrowViewport();
   await pythonCoursePage.openConditionsLesson();
@@ -58,12 +58,12 @@ test("the published Python course is discoverable and complete", async ({
     "python-conditions-published-mobile.png",
   );
   await pythonCoursePage.openErrorsLesson();
-  await pythonCoursePage.expectReviewErrorsLesson();
+  await pythonCoursePage.expectPublishedErrorsLesson();
   await pythonCoursePage.expectMobileReadingOrder();
-  await browserSession.captureViewport("python-errors-review-mobile.png");
+  await browserSession.captureViewport("python-errors-published-mobile.png");
   browserSession.expectCleanConsole();
 
-  await pythonCoursePage.expectConditionsInPublicSitemap();
+  await pythonCoursePage.expectPublishedLessonsInPublicSitemap();
 
   await noJavaScriptPythonCoursePage.expectOverviewReadableWithoutJavaScript();
   await noJavaScriptPythonCoursePage.expectReadableWithoutJavaScript();

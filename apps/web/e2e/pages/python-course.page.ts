@@ -68,12 +68,12 @@ export class PythonCoursePage {
     ).toHaveCount(19);
     await expect(
       curriculum.locator('[data-lesson-status="published"]'),
-    ).toHaveCount(2);
+    ).toHaveCount(3);
     await expect(
       curriculum.locator('[data-lesson-status="planned"]'),
-    ).toHaveCount(17);
+    ).toHaveCount(16);
     await expect(curriculum.getByText("В плане", { exact: true })).toHaveCount(
-      17,
+      16,
     );
     await expect(
       this.page.getByText(
@@ -178,6 +178,11 @@ export class PythonCoursePage {
     ).toHaveAttribute("href", "/courses/python/pervaya-programma");
     await expect(
       this.page.getByRole("link", {
+        name: /Ошибки: читаем сообщение и находим причину/,
+      }),
+    ).toHaveAttribute("href", "/courses/python/oshibki");
+    await expect(
+      this.page.getByRole("link", {
         name: /Условия: сравнения и выбор из двух вариантов/,
       }),
     ).toHaveAttribute("href", "/courses/python/usloviya");
@@ -190,12 +195,12 @@ export class PythonCoursePage {
     const progress = this.page.getByRole("region", {
       name: "Прогресс курса",
     });
-    await expect(progress).toContainText("Освоено 0 из 2 доступных уроков.");
+    await expect(progress).toContainText("Освоено 0 из 3 доступных уроков.");
     await expect(
       progress.getByRole("progressbar", {
         name: "Освоенные доступные уроки",
       }),
-    ).toHaveAttribute("aria-valuetext", "Освоено 0 из 2 доступных уроков.");
+    ).toHaveAttribute("aria-valuetext", "Освоено 0 из 3 доступных уроков.");
     const progressComesBeforeCurriculum = await progress.evaluate((section) => {
       const curriculum = section.nextElementSibling;
       return Boolean(
@@ -234,7 +239,7 @@ export class PythonCoursePage {
     await expect(this.page).toHaveURL(/\/courses\/python\/oshibki$/);
   }
 
-  async expectReviewErrorsLesson(): Promise<void> {
+  async expectPublishedErrorsLesson(): Promise<void> {
     await expectPublicReleaseIdentity(this.page);
     await expect(
       this.page.getByRole("heading", {
@@ -244,7 +249,7 @@ export class PythonCoursePage {
     ).toBeVisible();
     await expect(this.page.locator('meta[name="robots"]')).toHaveAttribute(
       "content",
-      "noindex,nofollow",
+      "index,follow",
     );
     await expect(this.page.locator('link[rel="canonical"]')).toHaveAttribute(
       "href",
@@ -575,7 +580,7 @@ export class PythonCoursePage {
 
   async expectErrorsReadableWithoutJavaScript(): Promise<void> {
     await this.openErrorsLesson();
-    await this.expectReviewErrorsLesson();
+    await this.expectPublishedErrorsLesson();
     await expect(this.page.locator("[data-practice-form] form")).toHaveCount(5);
     await expect(
       this.page
@@ -584,13 +589,13 @@ export class PythonCoursePage {
     ).toBeVisible();
   }
 
-  async expectConditionsInPublicSitemap(): Promise<void> {
+  async expectPublishedLessonsInPublicSitemap(): Promise<void> {
     const response = await this.page.goto("/sitemap.xml");
     expect(response?.status()).toBe(200);
     await expect(this.page.locator("body")).toContainText(
       "https://infraege.ru/courses/python/usloviya",
     );
-    await expect(this.page.locator("body")).not.toContainText(
+    await expect(this.page.locator("body")).toContainText(
       "https://infraege.ru/courses/python/oshibki",
     );
   }

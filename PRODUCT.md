@@ -56,12 +56,12 @@ The binding rules live in `docs/FRONTEND.md`.
 
 ## Evidence on Hand
 
-Two published Topic lessons, the published early-access Python course with two complete
+Two published Topic lessons, the published early-access Python course with three complete
 CourseLesson entries, the shared lesson/practice/checker/progress path and the completed
 application-gap audit provide the current implementation evidence. Existing consented
 visits/pageviews and path aggregates are sufficient for the current analytics need; event-level
-refinement does not block the next CourseLesson. No testimonials, learner outcomes or completion
-benchmarks exist and none may be fabricated.
+refinement does not block the next planned curriculum step. No testimonials, learner outcomes or
+completion benchmarks exist and none may be fabricated.
 
 ## Product Principles
 

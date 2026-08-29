@@ -74,7 +74,7 @@ describe("public release metadata", () => {
       expect.objectContaining({
         id: "python-errors",
         routeSlug: "oshibki",
-        status: "review",
+        status: "published",
       }),
       expect.objectContaining({
         id: "python-conditions",
@@ -86,7 +86,7 @@ describe("public release metadata", () => {
       courseLessonPublications
         .filter((lesson) => lesson.status === "published")
         .map((lesson) => lesson.routeSlug),
-    ).toEqual(["pervaya-programma", "usloviya"]);
+    ).toEqual(["pervaya-programma", "oshibki", "usloviya"]);
   });
 
   it("creates absolute canonical and social metadata", () => {

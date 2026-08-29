@@ -16,7 +16,7 @@ import {
 } from "~/pages/course-overview/components/course-overview-progress.model";
 
 describe("Python course foundation", () => {
-  it("publishes two lessons and keeps the errors lesson in review", () => {
+  it("publishes the course and its first three lessons as one unit", () => {
     expect(coursePublications).toEqual([
       expect.objectContaining({
         id: "python",
@@ -34,7 +34,7 @@ describe("Python course foundation", () => {
       expect.objectContaining({
         id: "python-errors",
         routeSlug: "oshibki",
-        status: "review",
+        status: "published",
       }),
       expect.objectContaining({
         id: "python-conditions",
@@ -71,7 +71,7 @@ describe("Python course foundation", () => {
     ).toBeUndefined();
     expect(
       findCourseLessonPublicationByRouteSlugs("python", "oshibki"),
-    ).toMatchObject({ id: "python-errors", status: "review" });
+    ).toMatchObject({ id: "python-errors", status: "published" });
     expect(
       findCourseLessonPublicationByRouteSlugs("python", "usloviya"),
     ).toMatchObject({ id: "python-conditions", status: "published" });
@@ -167,13 +167,13 @@ describe("Python course foundation", () => {
     }
   });
 
-  it("loads the review errors tasks without checker secrets", async () => {
+  it("loads the published errors tasks without checker secrets", async () => {
     const pythonErrorsLesson = findCourseLessonByRouteSlugs(
       "python",
       "oshibki",
     );
     if (!pythonErrorsLesson) {
-      throw new Error("Review Python errors lesson fixture is missing");
+      throw new Error("Published Python errors lesson fixture is missing");
     }
     const tasks = await loadPracticeTasks(pythonErrorsLesson.practiceTaskIds);
 
