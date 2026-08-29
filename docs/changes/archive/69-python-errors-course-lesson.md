@@ -9,7 +9,7 @@
 | Change | `69` |
 | Slug | `python-errors-course-lesson` |
 | Title | Python Errors CourseLesson |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/69-python-errors-course-lesson` |
 
 ---
