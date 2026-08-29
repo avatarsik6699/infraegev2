@@ -9,7 +9,7 @@
 | Change | `67` |
 | Slug | `python-course-application-gap-audit` |
 | Title | Python Course Application-Gap Audit |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/67-python-course-application-gap-audit` |
 
 ---
