@@ -9,7 +9,7 @@
 | Change | `70` |
 | Slug | `publish-python-errors-lesson` |
 | Title | Publish Python Errors Lesson |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/70-publish-python-errors-lesson` |
 
 ---
