@@ -9,7 +9,7 @@
 | Change | `71` |
 | Slug | `complete-python-course` |
 | Title | Complete and Publish Python Course |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/71-complete-python-course` |
 
 ---
