@@ -9,8 +9,8 @@
 
 | Field | Value |
 |-------|-------|
-| Document Version | `v2.5` |
-| Date | `2026-08-28` |
+| Document Version | `v2.6` |
+| Date | `2026-08-29` |
 | Architect / Owner | `v.godlevskiy` |
 | Stack | See [docs/STACK.md](./STACK.md) |
 | Domain | Платформа подготовки к ЕГЭ по информатике — самостоятельные темы экзамена и мини-курсы с теорией, визуализацией и практикой |
@@ -712,7 +712,8 @@ combined-log записи до path/status-family/coarse traffic class. Raw IP, 
 | `6` | Автоматизировать доставку Nginx aggregates в локальной sre-kit-сессии | Complete: cursor и idempotency переживают retry/restart; raw access records не пишутся на диск; publisher стартует и останавливается только через `sre-kit-local`; два реальных цикла доказаны в Dashboard/Source detail |
 | `7` | Подключить отдельный always-on sre-kit management VPS | Complete: linked sre-kit Change 26 поставляет exact-SHA distribution; Change 53 создал отдельный WireGuard peer, clean-start Project/семь Sources и system publisher; после пользовательской проверки подтверждены TLS, polling, push, backup/restore и отсутствие влияния на application/Firecrawl lifecycles |
 | `8` | Опубликовать второй самостоятельный CourseLesson Python | Complete: урок «Условия: сравнения и выбор из двух вариантов» повторно прошёл Content Quality Gate, стал индексируемым и вошёл в course discovery/progress без Topic-связей и изменения учебного контента |
-| `9` | Провести application-gap audit course flow до третьего CourseLesson | Next: сверить Course/CourseLesson journey с PRODUCT, SPEC и фактической реализацией, зафиксировать только доказанные пробелы и не начинать новый авторинг до выбора следующего scope |
+| `9` | Провести application-gap audit course flow до третьего CourseLesson | Complete: checker, aggregate progress, reset isolation, responsive/no-JS, production и analytics contracts проверены; findings `PC-01`–`PC-04` ранжированы в `docs/artifacts/python-course-application-gap-audit-2026-08-29.md` |
+| `10` | Восстановить правдивость продолжения опубликованного Python course flow | Next: убрать из итога первого урока утверждение, что уже опубликованный урок условий ещё готовится, и защитить этот publication transition focused coverage без нового урока, рекомендации или Topic-связи |
 
 Off-site backup остаётся trigger-based улучшением: первый management-host релиз использует
 local-only Restic с явно принятым риском потери вместе с VPS. Key-only SSH, Telegram alerts,
