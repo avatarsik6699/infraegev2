@@ -2,9 +2,9 @@ import type { ComponentProps } from "react";
 import type { PracticeTaskTypes } from "~/entities/practice-task";
 import { Button } from "~/shared/components/button";
 import { Field } from "~/shared/components/field";
-import { Typography } from "~/shared/components/typography";
 import type { LessonPracticeTypes } from "../lesson-practice.types";
 import styles from "../lesson-practice.module.css";
+import { PracticeTaskStatement } from "./practice-task-statement";
 
 type PracticeTaskAnswerProps = {
   task: PracticeTaskTypes.Task;
@@ -21,9 +21,7 @@ export const PracticeTaskAnswer: React.FC<PracticeTaskAnswerProps> = (
   props,
 ) => (
   <form className={styles.practiceForm} onSubmit={props.onSubmit}>
-    <Typography.Text className={styles.taskStatement}>
-      {props.task.statement}
-    </Typography.Text>
+    <PracticeTaskStatement statement={props.task.statement} />
     <div className={styles.answerRow}>
       <Field
         className={props.alreadySolved ? styles.solvedAnswer : undefined}

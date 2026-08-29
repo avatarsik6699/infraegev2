@@ -1,11 +1,13 @@
 import type { CourseTypes } from "../course.types";
 import { pythonCourse } from "./python-course";
 import { pythonConditionsLesson } from "./python-conditions.lesson";
+import { pythonErrorsLesson } from "./python-errors.lesson";
 import { pythonFirstProgramLesson } from "./python-first-program.lesson";
 
 const courses: readonly CourseTypes.Definition[] = [pythonCourse];
 const courseLessons: readonly CourseTypes.LessonDefinition[] = [
   pythonFirstProgramLesson,
+  pythonErrorsLesson,
   pythonConditionsLesson,
 ];
 

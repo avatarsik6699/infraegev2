@@ -15,6 +15,7 @@ export type CourseLessonPublication = {
 };
 
 export const pythonFirstProgramLessonPublication: Readonly<CourseLessonPublication>;
+export const pythonErrorsLessonPublication: Readonly<CourseLessonPublication>;
 export const pythonConditionsLessonPublication: Readonly<CourseLessonPublication>;
 export const pythonCoursePublication: Readonly<CoursePublication>;
 export const coursePublications: readonly CoursePublication[];

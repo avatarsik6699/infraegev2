@@ -162,7 +162,6 @@
 
 .conceptExplanation,
 .resultSummary,
-.resultSkills,
 .resultProgress,
 .resultNavigation {
   max-width: 68ch;
@@ -195,32 +194,15 @@
   min-width: 0;
 }
 
-.resultSummary h3,
-.resultSkills h3,
-.resultSkills ul,
 .resultNavigation h3,
 .resultNavigation p {
   margin-block: 0;
 }
 
-.resultSummary h3,
-.resultSkills h3,
 .resultNavigation h3 {
   margin-bottom: var(--space-1);
   font-size: var(--text-lg);
   line-height: 1.35;
-}
-
-.resultSkills ul {
-  display: grid;
-  gap: var(--space-0-5);
-  padding-left: 1.25rem;
-}
-
-.resultSkills li {
-  color: var(--color-text-soft);
-  font-size: var(--text-sm);
-  line-height: 1.6;
 }
 
 .resultProgress,

@@ -9,7 +9,7 @@
 
 | Field | Value |
 |-------|-------|
-| Document Version | `v2.6` |
+| Document Version | `v2.7` |
 | Date | `2026-08-29` |
 | Architect / Owner | `v.godlevskiy` |
 | Stack | See [docs/STACK.md](./STACK.md) |
@@ -50,6 +50,11 @@ sdamgia.ru, kpolyakov.spb.ru), ни новыми AI-ботами (решают �
   продуктовых событий включаются только после явного opt-in, а необходимые security/reliability
   logs и обезличенные server-side aggregates раскрываются отдельно. Fingerprinting, ответы,
   свободный текст и скрытые постоянные идентификаторы не собираются.
+- Текущей продуктовой потребности достаточно уже работающих consented Umami pageviews/sessions с
+  разрезом по публичным путям и privacy-safe Nginx aggregates. Дальнейшая детализация продуктовых
+  событий, funnel-семантики и Source allowlist не входит в текущий roadmap: существующий event
+  слой остаётся best-effort telemetry и не блокирует авторинг уроков. Новые события или
+  идентификаторы не добавляются без отдельной доказанной потребности.
 
 ### 1.3 Project Boundaries
 
@@ -71,10 +76,12 @@ SEO/legal surfaces. Lab-маршруты остаются unlisted/noindex и н
 двух полных TopicLesson для product-readiness аудита. Changes 45–46 закрыли выявленные пробелы
 learner journey, а Changes 56–57 затем опубликовали самостоятельный early-access мини-курс Python
 и его первый CourseLesson. Второй CourseLesson «Условия: сравнения и выбор из двух вариантов»
-опубликован после повторного Content Quality Gate; перед авторингом третьего урока расширение
-останавливается для evidence-first аудита применения продуктового контракта к course flow.
-Дальнейшие релизы остаются инкрементальными; аккаунты, новый сбор аналитики, каталог/поиск и другие
-функции за пределами текущих MVP-границ из этого факта не следуют.
+опубликован после повторного Content Quality Gate. Evidence-first аудит course flow и исправление
+неправдивого продолжения завершены; live-проверка подтвердила, что существующих pageviews/sessions
+и разреза по путям достаточно для текущей аналитической потребности. Следующая инкрементальная
+единица — review-only CourseLesson «Ошибки: читаем сообщение и находим причину». Аккаунты, новый
+сбор аналитики, каталог/поиск и другие функции за пределами текущих MVP-границ из этого решения не
+следуют.
 
 ### 1.4 Durable Learning Flow
 
@@ -696,7 +703,7 @@ combined-log записи до path/status-family/coarse traffic class. Raw IP, 
 | `M1` — новый product/design baseline | complete | Доказать заменяемую визуальную систему без преждевременной публикации | «Инженерная тетрадь», unlisted design-system/lesson labs, единый frontend-контракт и reusable primitives |
 | `M2` — инфраструктурная пауза | complete | Подготовить production-платформу до продолжения продуктового контента | `infraege.ru`, VPS/GHCR deploy, security/release gates, backups и независимый operations stack активны; linked sre-kit Change 20 доказал все шесть Sources end to end |
 | `M3` — учебный flow и публичный запуск | in progress | Завершить доменную логику, основные поверхности сайта и проверенный MVP-контент до расширения каталога | Два TopicLesson и самостоятельный early-access курс «Python с нуля для ЕГЭ» с двумя законченными CourseLesson опубликованы; дальнейшие единицы контента сохраняют независимость Topic/CourseLesson |
-| `M4` — финальное измерение и эксплуатация | in progress | Измерить фактический learning flow прозрачно и обезличенно | Changes 48–49 дают explicit opt-in и privacy-safe aggregates; Change 53 переносит семь clean-start Sources и publisher на отдельный always-on management VPS; все dashboard surfaces остаются в sre-kit |
+| `M4` — финальное измерение и эксплуатация | in progress | Измерять посещаемость прозрачно и обезличенно без опережающей детализации | Consented Umami pageviews/sessions и разрез по путям плюс privacy-safe Nginx aggregates уже закрывают текущую потребность; дальнейшая event-level аналитика отложена, все dashboard surfaces остаются в sre-kit |
 | `M5+` (после первых данных, вне MVP) | deferred | Расширение охвата и сообщества поверх работающей бесплатной базы | Второй мини-курс (Excel), аккаунты/синхронизация, обсуждения тем с модерацией, затем платные фичи — без runtime AI до этого момента |
 
 ### 9.1 Current execution sequence
@@ -713,7 +720,8 @@ combined-log записи до path/status-family/coarse traffic class. Raw IP, 
 | `7` | Подключить отдельный always-on sre-kit management VPS | Complete: linked sre-kit Change 26 поставляет exact-SHA distribution; Change 53 создал отдельный WireGuard peer, clean-start Project/семь Sources и system publisher; после пользовательской проверки подтверждены TLS, polling, push, backup/restore и отсутствие влияния на application/Firecrawl lifecycles |
 | `8` | Опубликовать второй самостоятельный CourseLesson Python | Complete: урок «Условия: сравнения и выбор из двух вариантов» повторно прошёл Content Quality Gate, стал индексируемым и вошёл в course discovery/progress без Topic-связей и изменения учебного контента |
 | `9` | Провести application-gap audit course flow до третьего CourseLesson | Complete: checker, aggregate progress, reset isolation, responsive/no-JS, production и analytics contracts проверены; findings `PC-01`–`PC-04` ранжированы в `docs/artifacts/python-course-application-gap-audit-2026-08-29.md` |
-| `10` | Восстановить правдивость продолжения опубликованного Python course flow | Next: убрать из итога первого урока утверждение, что уже опубликованный урок условий ещё готовится, и защитить этот publication transition focused coverage без нового урока, рекомендации или Topic-связи |
+| `10` | Восстановить правдивость продолжения опубликованного Python course flow | Complete: итог первого урока теперь называет условия доступным следующим шагом, а focused browser coverage исключает возврат устаревшего утверждения о подготовке уже опубликованного урока |
+| `11` | Зафиксировать достаточность базовой аналитики и продолжить Python course content | Next: не развивать event-level аналитику при работающих pageviews/sessions и разрезе по путям; подготовить в `review` самостоятельный урок «Ошибки: читаем сообщение и находим причину» с пятью server-owned задачами без публикации до ручного одобрения |
 
 Off-site backup остаётся trigger-based улучшением: первый management-host релиз использует
 local-only Restic с явно принятым риском потери вместе с VPS. Key-only SSH, Telegram alerts,
@@ -753,6 +761,9 @@ local-only Restic с явно принятым риском потери вме�
   пользовательского сценария и стратегии конфликтов/устаревания.
 - Глобальный client store и Base UI/community primitives без текущего consumer-а — не часть
   клиентского фундамента; добавляются по доказанной потребности (§5.4).
+- Дальнейшая детализация product events, funnel-семантики и Product analytics Source — вне
+  текущего roadmap, пока consented visits/pageviews и privacy-safe path aggregates отвечают на
+  фактические продуктовые вопросы.
 
 ---
 

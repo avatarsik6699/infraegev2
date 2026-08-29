@@ -19,6 +19,14 @@ test("the published Python course is discoverable and complete", async ({
     "python-conditions-published-desktop.png",
   );
 
+  await pythonCoursePage.openErrorsLesson();
+  await pythonCoursePage.expectReviewErrorsLesson();
+  await pythonCoursePage.expectKeyboardDisclosures();
+  await pythonCoursePage.expectErrorsPractice();
+  await browserSession.captureViewport("python-errors-review-desktop.png");
+  await pythonCoursePage.expectSimplifiedErrorsResult();
+  await browserSession.captureViewport("python-errors-result-desktop.png");
+
   await pythonCoursePage.openFirstLesson();
   await pythonCoursePage.expectPublishedLesson();
   await pythonCoursePage.expectKeyboardDisclosures();
@@ -38,6 +46,9 @@ test("the published Python course is discoverable and complete", async ({
   await browserSession.captureViewport(
     "python-conditions-published-zoomed.png",
   );
+  await pythonCoursePage.openErrorsLesson();
+  await pythonCoursePage.expectReviewErrorsLesson();
+  await browserSession.captureViewport("python-errors-review-zoomed.png");
 
   await browserSession.useNarrowViewport();
   await pythonCoursePage.openConditionsLesson();
@@ -46,6 +57,10 @@ test("the published Python course is discoverable and complete", async ({
   await browserSession.captureViewport(
     "python-conditions-published-mobile.png",
   );
+  await pythonCoursePage.openErrorsLesson();
+  await pythonCoursePage.expectReviewErrorsLesson();
+  await pythonCoursePage.expectMobileReadingOrder();
+  await browserSession.captureViewport("python-errors-review-mobile.png");
   browserSession.expectCleanConsole();
 
   await pythonCoursePage.expectConditionsInPublicSitemap();
@@ -53,6 +68,7 @@ test("the published Python course is discoverable and complete", async ({
   await noJavaScriptPythonCoursePage.expectOverviewReadableWithoutJavaScript();
   await noJavaScriptPythonCoursePage.expectReadableWithoutJavaScript();
   await noJavaScriptPythonCoursePage.expectConditionsReadableWithoutJavaScript();
+  await noJavaScriptPythonCoursePage.expectErrorsReadableWithoutJavaScript();
 });
 
 test("the unlisted lesson lab works across viewports and without JavaScript", async ({

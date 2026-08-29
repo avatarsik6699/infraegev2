@@ -229,6 +229,104 @@ export class PythonCoursePage {
     await expect(this.page).toHaveURL(/\/courses\/python\/usloviya$/);
   }
 
+  async openErrorsLesson(): Promise<void> {
+    await this.page.goto("/courses/python/oshibki");
+    await expect(this.page).toHaveURL(/\/courses\/python\/oshibki$/);
+  }
+
+  async expectReviewErrorsLesson(): Promise<void> {
+    await expectPublicReleaseIdentity(this.page);
+    await expect(
+      this.page.getByRole("heading", {
+        level: 1,
+        name: "Ошибки: читаем сообщение и находим причину",
+      }),
+    ).toBeVisible();
+    await expect(this.page.locator('meta[name="robots"]')).toHaveAttribute(
+      "content",
+      "noindex,nofollow",
+    );
+    await expect(this.page.locator('link[rel="canonical"]')).toHaveAttribute(
+      "href",
+      "https://infraege.ru/courses/python/oshibki",
+    );
+    await expect(this.page.locator("[data-practice-task]")).toHaveCount(5);
+    await expect(
+      this.page.getByText(
+        "Разберём, как читать сообщение Python снизу вверх, находить строку остановки и отличать несколько частых причин ошибки.",
+      ),
+    ).toBeVisible();
+    await expect(
+      this.page.getByRole("heading", {
+        level: 3,
+        name: "Как читать traceback снизу вверх",
+      }),
+    ).toBeVisible();
+    await expect(
+      this.page.getByRole("heading", {
+        level: 3,
+        name: "Чем TypeError отличается от ValueError",
+      }),
+    ).toBeVisible();
+    await expect(
+      this.page.getByRole("heading", {
+        level: 3,
+        name: "Как исправлять без догадки",
+      }),
+    ).toBeVisible();
+    await expect(
+      this.page.locator('[data-practice-statement] code[data-kind="code"]', {
+        hasText: "if score >= 10",
+      }),
+    ).toHaveCount(1);
+    await expect(
+      this.page.locator('[data-practice-statement] code[data-kind="code"]', {
+        hasText: "SyntaxError",
+      }),
+    ).toHaveCount(1);
+    await expect(
+      this.page.getByRole("heading", { name: "Что теперь понятно" }),
+    ).toHaveCount(0);
+    await expect(
+      this.page.getByRole("heading", { name: "Что вы уже умеете" }),
+    ).toHaveCount(0);
+    await expectNoHorizontalOverflow(this.page);
+  }
+
+  async expectErrorsPractice(): Promise<void> {
+    await expect(
+      this.page.locator("[data-practice-form][data-enhanced]"),
+    ).toBeVisible();
+    const firstTask = this.page.locator("[data-practice-task]").first();
+    await firstTask.getByRole("textbox", { name: "Ответ" }).fill("ошибка");
+    await firstTask.getByRole("button", { name: "Проверить" }).click();
+    await expect(
+      firstTask.getByText(
+        "Ответ пока не подходит. Попробуйте ещё раз или откройте подсказку.",
+      ),
+    ).toBeVisible();
+    await firstTask.getByRole("textbox", { name: "Ответ" }).fill(" nameerror ");
+    await firstTask.getByRole("button", { name: "Проверить" }).click();
+    await expect(firstTask.getByRole("status")).toContainText("Верно");
+  }
+
+  async expectSimplifiedErrorsResult(): Promise<void> {
+    const result = this.page.locator("#result");
+    await result.scrollIntoViewIfNeeded();
+    await expect(
+      result.getByText(
+        "Теперь вы можете разобрать базовое сообщение Python на место, тип и пояснение причины.",
+        { exact: false },
+      ),
+    ).toBeVisible();
+    await expect(
+      result.getByRole("heading", { name: "Что теперь понятно" }),
+    ).toHaveCount(0);
+    await expect(
+      result.getByRole("heading", { name: "Что вы уже умеете" }),
+    ).toHaveCount(0);
+  }
+
   async expectPublishedConditionsLesson(): Promise<void> {
     await expectPublicReleaseIdentity(this.page);
     await expect(this.page.locator("[data-course-lesson-context]")).toHaveCSS(
@@ -320,17 +418,11 @@ export class PythonCoursePage {
       this.page.getByRole("link", { name: "К курсу" }),
     ).toHaveAttribute("href", "/courses/python");
     await expect(
-      this.page.getByRole("heading", {
-        level: 3,
-        name: "Что теперь понятно",
-      }),
-    ).toBeVisible();
+      this.page.getByRole("heading", { name: "Что теперь понятно" }),
+    ).toHaveCount(0);
     await expect(
-      this.page.getByRole("heading", {
-        level: 3,
-        name: "Что вы уже умеете",
-      }),
-    ).toBeVisible();
+      this.page.getByRole("heading", { name: "Что вы уже умеете" }),
+    ).toHaveCount(0);
     await expect(
       this.page.getByText(
         "Следующий доступный шаг курса — урок про условия: с их помощью программа выбирает разные действия.",
@@ -481,11 +573,25 @@ export class PythonCoursePage {
     ).toBeVisible();
   }
 
+  async expectErrorsReadableWithoutJavaScript(): Promise<void> {
+    await this.openErrorsLesson();
+    await this.expectReviewErrorsLesson();
+    await expect(this.page.locator("[data-practice-form] form")).toHaveCount(5);
+    await expect(
+      this.page
+        .locator("[data-course-result-progress]")
+        .getByText("0 / 5", { exact: true }),
+    ).toBeVisible();
+  }
+
   async expectConditionsInPublicSitemap(): Promise<void> {
     const response = await this.page.goto("/sitemap.xml");
     expect(response?.status()).toBe(200);
     await expect(this.page.locator("body")).toContainText(
       "https://infraege.ru/courses/python/usloviya",
+    );
+    await expect(this.page.locator("body")).not.toContainText(
+      "https://infraege.ru/courses/python/oshibki",
     );
   }
 }

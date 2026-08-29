@@ -1,0 +1,33 @@
+{
+  "id": "python-errors-value-error",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-errors"],
+  "title": "Определите ошибку преобразования",
+  "statement": "Программа выполняет `number = int(\"семь\")`. Какой тип ошибки появится?",
+  "hint": "Функция int получает строку, но её содержимое нельзя прочитать как целое число.",
+  "theory_links": [
+    {
+      "hash": "type-or-value",
+      "label": "Чем TypeError отличается от ValueError"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["ValueError"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "worked_example",
+      "data": {
+        "prompt": "Тип аргумента подходит, значение — нет.",
+        "steps": [
+          "int умеет принимать строку, поэтому сама строка здесь допустима.",
+          "Текст «семь» не записан цифрами и не превращается в целое число.",
+          "Python останавливается с ValueError."
+        ]
+      }
+    }
+  ],
+  "difficulty": 2,
+  "is_interleaving_eligible": true
+}

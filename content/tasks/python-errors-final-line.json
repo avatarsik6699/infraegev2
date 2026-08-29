@@ -1,0 +1,33 @@
+{
+  "id": "python-errors-final-line",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-errors"],
+  "title": "Прочитайте последнюю строку",
+  "statement": "Python остановился с сообщением `NameError: name 'total' is not defined`. Как называется тип ошибки?",
+  "hint": "Тип стоит до двоеточия в последней строке сообщения.",
+  "theory_links": [
+    {
+      "hash": "read-bottom-up",
+      "label": "Как читать traceback снизу вверх"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["NameError"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "worked_example",
+      "data": {
+        "prompt": "Последняя строка кратко называет остановку.",
+        "steps": [
+          "Смотрим на часть до двоеточия.",
+          "Там написано NameError — это тип ошибки.",
+          "Часть после двоеточия поясняет причину: имя total не определено."
+        ]
+      }
+    }
+  ],
+  "difficulty": 1,
+  "is_interleaving_eligible": true
+}

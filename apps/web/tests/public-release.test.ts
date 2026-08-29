@@ -72,6 +72,11 @@ describe("public release metadata", () => {
         status: "published",
       }),
       expect.objectContaining({
+        id: "python-errors",
+        routeSlug: "oshibki",
+        status: "review",
+      }),
+      expect.objectContaining({
         id: "python-conditions",
         routeSlug: "usloviya",
         status: "published",

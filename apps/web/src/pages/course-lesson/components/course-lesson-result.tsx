@@ -13,19 +13,8 @@ type Props = {
 export const CourseLessonResult: React.FC<Props> = (props) => (
   <div className={styles.resultGrid}>
     <div className={styles.resultSummary}>
-      <Typography.Title order={3}>Что теперь понятно</Typography.Title>
       <Typography.Prose>{props.lesson.result}</Typography.Prose>
     </div>
-    <section className={styles.resultSkills} aria-labelledby="course-skills">
-      <Typography.Title order={3} id="course-skills">
-        Что вы уже умеете
-      </Typography.Title>
-      <ul>
-        {props.lesson.learningOutcomes.map((outcome) => (
-          <li key={outcome}>{outcome}</li>
-        ))}
-      </ul>
-    </section>
     <CourseLessonProgress
       masteryThreshold={props.lesson.masteryThreshold ?? 0.8}
       lessonId={props.lesson.id}

@@ -1,0 +1,45 @@
+{
+  "id": "python-errors-local-fix",
+  "topic_ids": [],
+  "course_lesson_ids": ["python-errors"],
+  "title": "Исправьте программу и запустите снова",
+  "statement": "Создайте программу из трёх строк: `number = int(input())`, затем `if number > 0:`, затем с отступом `print(nubmer * 2)`. Запустите её с числом 6, прочитайте ошибку, исправьте только неверное имя и перенесите сюда результат повторного запуска.",
+  "hint": "В последней строке сообщения найдите имя, которого нет среди созданных переменных. Сравните nubmer и number буква за буквой.",
+  "theory_links": [
+    {
+      "hash": "name-error",
+      "label": "Почему появляется NameError"
+    },
+    {
+      "hash": "fix-and-rerun",
+      "label": "Как исправлять без догадки"
+    }
+  ],
+  "checker_type": "exact_match",
+  "answer_variants": ["12"],
+  "numeric_tolerance": null,
+  "interaction_type": "production",
+  "explanation": [
+    {
+      "type": "worked_example",
+      "data": {
+        "prompt": "Исправляем причину, а не скрываем сообщение.",
+        "steps": [
+          "Первый запуск доходит до print и сообщает NameError для имени nubmer.",
+          "Выше создана переменная number, значит в print переставлены две буквы.",
+          "После замены nubmer на number и повторного ввода 6 программа печатает 12."
+        ]
+      }
+    },
+    {
+      "type": "code_example",
+      "data": {
+        "language": "python",
+        "code": "number = int(input())\nif number > 0:\n    print(number * 2)",
+        "caption": "Исправленный вариант программы"
+      }
+    }
+  ],
+  "difficulty": 3,
+  "is_interleaving_eligible": true
+}

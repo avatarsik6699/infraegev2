@@ -30,6 +30,22 @@ export const pythonConditionsLessonPublication = Object.freeze({
   ]),
 });
 
+export const pythonErrorsLessonPublication = Object.freeze({
+  id: "python-errors",
+  routeSlug: "oshibki",
+  title: "Ошибки: читаем сообщение и находим причину",
+  summary:
+    "Разберём, как читать сообщение Python снизу вверх, находить строку остановки и отличать несколько частых причин ошибки.",
+  status: "review",
+  practiceTaskIds: Object.freeze([
+    "python-errors-final-line",
+    "python-errors-source-line",
+    "python-errors-syntax-fix",
+    "python-errors-value-error",
+    "python-errors-local-fix",
+  ]),
+});
+
 export const pythonCoursePublication = Object.freeze({
   id: "python",
   routeSlug: "python",
@@ -213,6 +229,7 @@ export const pythonCoursePublication = Object.freeze({
 export const coursePublications = Object.freeze([pythonCoursePublication]);
 export const courseLessonPublications = Object.freeze([
   pythonFirstProgramLessonPublication,
+  pythonErrorsLessonPublication,
   pythonConditionsLessonPublication,
 ]);
 
