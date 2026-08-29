@@ -332,6 +332,12 @@ export class PythonCoursePage {
       }),
     ).toBeVisible();
     await expect(
+      this.page.getByText(
+        "Следующий доступный шаг курса — урок про условия: с их помощью программа выбирает разные действия.",
+      ),
+    ).toBeVisible();
+    await expect(this.page.getByText("Пока урок готовится")).toHaveCount(0);
+    await expect(
       this.page.getByRole("heading", {
         level: 2,
         name: "§ 2 · Проверьте себя",
