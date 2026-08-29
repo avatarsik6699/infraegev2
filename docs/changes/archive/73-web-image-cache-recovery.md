@@ -9,7 +9,7 @@
 | Change | `73` |
 | Slug | `web-image-cache-recovery` |
 | Title | Web Image Cache Recovery |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/73-web-image-cache-recovery` |
 
 ---
