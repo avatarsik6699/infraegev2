@@ -409,6 +409,21 @@
   supplementary when `pnpm --filter web typecheck`, `pnpm --filter web lint` and the focused
   Playwright journey all pass. Production source and ordinary test files must remain LSP-clean.
 
+### GitHub BuildKit can restore an internally stale pnpm install layer
+
+- **Symptoms**: a production web image fails at `pnpm --filter web build` with
+  `ERR_PNPM_VERIFY_DEPS_BEFORE_RUN` even though frozen host installs, the local image gate and a
+  Docker `--no-cache` builder run all pass against the same commit. CI shows the manifest,
+  workspace config and `pnpm install` layers as cached.
+- **Root cause**: the GHA BuildKit scope can retain an internally inconsistent dependency layer;
+  deleting the visible Actions cache index and retrying may still import the same stale backend
+  manifest. pnpm correctly rejects that layer when it compares the current workspace overrides
+  with the cached virtual store.
+- **Fix**: move only the affected image to a new explicit `cache_scope` generation in
+  `.github/workflows/images.yml`, preserving cache use for every image. Prove the source tree with
+  a cold `docker build --no-cache --target builder` before changing the scope; do not weaken
+  `verifyDepsBeforeRun` or regenerate a lockfile that is already current.
+
 <!--
 ### [Title — short, punchy, searchable]
 

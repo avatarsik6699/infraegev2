@@ -21,10 +21,13 @@ jobs:
         include:
           - name: web
             file: apps/web/Dockerfile
+            cache_scope: web-v2
           - name: api
             file: apps/api/Dockerfile
+            cache_scope: api
           - name: nginx
             file: infra/nginx/Dockerfile
+            cache_scope: nginx
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - name: Require production build variables
@@ -48,8 +51,8 @@ jobs:
           tags: ghcr.io/${{ github.repository_owner }}/infraegev2-${{ matrix.name }}:${{ github.sha }}
           build-args: |
             VITE_UMAMI_WEBSITE_ID=${{ vars.VITE_UMAMI_WEBSITE_ID }}
-          cache-from: type=gha,scope=${{ matrix.name }}
-          cache-to: type=gha,mode=max,scope=${{ matrix.name }}
+          cache-from: type=gha,scope=${{ matrix.cache_scope }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.cache_scope }}
       - name: Scan published image
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25
         with:
