@@ -9,7 +9,7 @@
 | Change | `68` |
 | Slug | `python-course-published-continuation-truth` |
 | Title | Python Course Published-Continuation Truth |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/68-python-course-published-continuation-truth` |
 
 ---
