@@ -9,7 +9,7 @@
 | Change | `72` |
 | Slug | `python-course-release` |
 | Title | Python Course Release |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/72-python-course-release` |
 
 ---
