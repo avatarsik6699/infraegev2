@@ -9,7 +9,7 @@
 | Change | `74` |
 | Slug | `project-reconciliation-maintainability` |
 | Title | Project Reconciliation and Maintainability Cleanup |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/74-project-reconciliation-maintainability` |
 
 ---
