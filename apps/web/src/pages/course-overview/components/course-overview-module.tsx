@@ -55,6 +55,7 @@ export const CourseOverviewModule: React.FC<Props> = (props) => {
                     <span
                       className={styles.lessonTitle}
                       data-course-lesson-title
+                      data-title-status="published"
                     >
                       {planItem.title}
                     </span>
@@ -72,6 +73,7 @@ export const CourseOverviewModule: React.FC<Props> = (props) => {
                     <span
                       className={styles.lessonTitle}
                       data-course-lesson-title
+                      data-title-status="planned"
                     >
                       {planItem.title}
                     </span>

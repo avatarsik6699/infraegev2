@@ -24,7 +24,9 @@ export const CourseOverviewIntro: React.FC<Props> = (props) => (
     <Typography.Text variant="lead" tone="muted">
       {props.course.summary}
     </Typography.Text>
-    <Typography.Text>{props.course.audience}</Typography.Text>
+    <Typography.Text className={styles.introSummary}>
+      {props.course.audience}
+    </Typography.Text>
     <CourseOverviewAction {...props} />
   </header>
 );

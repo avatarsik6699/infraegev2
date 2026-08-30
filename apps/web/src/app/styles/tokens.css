@@ -14,6 +14,19 @@
   --text-3xl: clamp(2rem, 3vw, 2.5rem);
   --text-display: clamp(3.25rem, 6.5vw, 6rem);
   --text-inline-code: 0.86em;
+  --text-lab-brand: 1.58rem;
+  --text-lab-signal: 0.56em;
+  --text-lab-context: 0.73rem;
+  --text-lab-micro: 0.7rem;
+  --text-lab-display: clamp(2.6rem, 3vw, 3.25rem);
+  --text-lab-summary: 1.05rem;
+  --text-lab-meta: 0.72rem;
+  --text-lab-heading: clamp(1.2rem, 1.45vw, 1.45rem);
+  --text-lab-stage: 1.35rem;
+  --text-lab-data: 0.8rem;
+  --text-lab-array: 0.78rem;
+  --text-lab-note: 0.88rem;
+  --text-lab-mobile-display: clamp(2.05rem, 9.2vw, 2.55rem);
 
   /* Semantic color roles */
   --color-bg: var(--theme-page);

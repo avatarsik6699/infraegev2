@@ -14,7 +14,11 @@ export const LessonProgress: React.FC<LessonProgressTypes.Props> = ({
   return (
     <section className={styles.root} aria-labelledby={headingId}>
       <div className={styles.headingRow}>
-        <Typography.Title order={headingOrder} id={headingId}>
+        <Typography.Title
+          order={headingOrder}
+          id={headingId}
+          className={styles.heading}
+        >
           Прогресс
         </Typography.Title>
         <Typography.Text component="span" className={styles.count}>

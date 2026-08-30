@@ -1,8 +1,5 @@
 .page {
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  min-height: 100svh;
-  background: var(--color-bg);
+  composes: pageFrame from "../../shared/styles/patterns.module.css";
 }
 
 .root {
@@ -57,7 +54,7 @@
   line-height: 1.6;
 }
 
-.intro > p:not([data-variant]) {
+.introSummary {
   max-width: 50ch;
   line-height: 1.65;
 }
@@ -238,7 +235,7 @@ a.lessonRow .lessonTitle {
   white-space: nowrap;
 }
 
-.lessonList [data-lesson-status="planned"] .lessonTitle {
+.lessonTitle[data-title-status="planned"] {
   color: var(--color-text-soft);
   font-weight: 500;
 }

@@ -20,12 +20,12 @@
   align-items: baseline;
   color: var(--color-text);
   font-family: var(--font-reading);
-  font-size: 1.58rem;
+  font-size: var(--text-lab-brand);
   text-decoration: none;
 }
 
 .brandName {
-  font-weight: 680;
+  font-weight: 600;
   letter-spacing: -0.035em;
   transition: color 140ms ease-out;
 }
@@ -36,8 +36,8 @@
   margin-left: 0.14em;
   color: var(--color-accent);
   font-family: var(--font-ui);
-  font-size: 0.56em;
-  font-weight: 760;
+  font-size: var(--text-lab-signal);
+  font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   transition: color 140ms ease-out;
@@ -73,7 +73,7 @@
   border-right: 1px solid var(--color-rule);
   color: var(--color-text-soft);
   font-family: var(--font-ui);
-  font-size: 0.82rem;
+  font-size: var(--text-xs);
   text-decoration: none;
   transition: color 140ms ease-out;
 }
@@ -119,7 +119,7 @@
   padding-inline: clamp(1.5rem, 3.25vw, 3.75rem);
   color: var(--color-muted);
   font-family: var(--font-data);
-  font-size: 0.73rem;
+  font-size: var(--text-lab-context);
   text-transform: uppercase;
 }
 
@@ -178,7 +178,7 @@
   margin-bottom: 0.9rem;
   color: var(--color-muted);
   font-family: var(--font-data);
-  font-size: 0.7rem;
+  font-size: var(--text-lab-micro);
   text-transform: uppercase;
 }
 
@@ -186,9 +186,9 @@
   max-width: 30ch;
   margin: 0;
   font-family: var(--font-reading);
-  font-size: clamp(2.6rem, 3vw, 3.25rem);
+  font-size: var(--text-lab-display);
   font-variation-settings: "opsz" 60;
-  font-weight: 620;
+  font-weight: 600;
   letter-spacing: -0.035em;
   line-height: 1.04;
   text-wrap: balance;
@@ -199,7 +199,7 @@
   margin: 0.85rem 0 0;
   color: var(--color-text-soft);
   font-family: var(--font-reading);
-  font-size: 1.05rem;
+  font-size: var(--text-lab-summary);
   line-height: 1.62;
 }
 
@@ -207,7 +207,7 @@
   margin: 0.75rem 0 0;
   color: var(--color-faint);
   font-family: var(--font-data);
-  font-size: 0.72rem;
+  font-size: var(--text-lab-meta);
   line-height: 1.5;
 }
 
@@ -235,7 +235,7 @@
   margin: 0 0 0.5rem;
   color: var(--color-text-soft);
   font-family: var(--font-reading);
-  font-size: clamp(1.2rem, 1.45vw, 1.45rem);
+  font-size: var(--text-lab-heading);
   font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1.24;
@@ -251,17 +251,17 @@
   max-width: 68ch;
   margin: 0.45rem 0 0;
   font-family: var(--font-reading);
-  font-size: 1rem;
+  font-size: var(--text-base);
   line-height: 1.62;
 }
 
-.article code:not(.codeBlock code) {
+.inlineCode {
   padding: 0.05em 0.35em;
   color: var(--color-accent-dark);
   border-radius: 0.2rem;
   background: var(--color-accent-soft);
   font-family: var(--font-data);
-  font-size: 0.86em;
+  font-size: var(--text-inline-code);
   box-decoration-break: clone;
 }
 
@@ -302,7 +302,7 @@
 .stageNumber {
   align-self: center;
   font-family: var(--font-reading);
-  font-size: 1.35rem;
+  font-size: var(--text-lab-stage);
 }
 
 .arrayWrap {
@@ -314,7 +314,7 @@
   grid-template-columns: repeat(3, 1fr);
   padding-inline: 0.65rem;
   font-family: var(--font-reading);
-  font-size: 0.8rem;
+  font-size: var(--text-lab-data);
 }
 
 .bounds var {
@@ -344,7 +344,7 @@
   min-height: 2rem;
   border-right: 1px solid var(--color-rule);
   font-family: var(--font-reading);
-  font-size: 0.78rem;
+  font-size: var(--text-lab-array);
   font-variant-numeric: tabular-nums;
   place-items: center;
 }
@@ -368,7 +368,7 @@
 .equation {
   margin: 0.35rem 0 0;
   font-family: var(--font-reading);
-  font-size: 0.8rem;
+  font-size: var(--text-lab-data);
   text-align: center;
 }
 
@@ -405,14 +405,14 @@
   border-radius: 50%;
   color: var(--color-accent);
   font-family: var(--font-data);
-  font-size: 0.72rem;
+  font-size: var(--text-lab-meta);
   place-items: center;
 }
 
 .explanation p {
   margin: 0;
   font-family: var(--font-reading);
-  font-size: 0.88rem;
+  font-size: var(--text-lab-note);
   line-height: 1.5;
 }
 
@@ -539,7 +539,7 @@
   }
 
   .intro h1 {
-    font-size: clamp(2.05rem, 9.2vw, 2.55rem);
+    font-size: var(--text-lab-mobile-display);
   }
 
   .article {
@@ -556,12 +556,14 @@
 
   .array span {
     min-height: 1.8rem;
-    font-size: 0.7rem;
+    font-size: var(--text-lab-micro);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .page * {
-    transition-duration: 0.01ms !important;
+  .backLink,
+  .brandName,
+  .brandSignal {
+    transition: none;
   }
 }

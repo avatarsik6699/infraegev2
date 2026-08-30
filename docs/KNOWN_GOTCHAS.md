@@ -1,5 +1,16 @@
 # Known Gotchas
 
+### Change 17 was abandoned before commit and has no archive file
+
+- **Symptoms**: the numbered archive jumps from Change 16 to Change 18, while a stale local branch
+  or stash named `17-public-recursion-topic` suggests that a shipped archive file is missing.
+- **Root cause**: the first Change 17 attempt was paused before commit. Its useful lesson work was
+  superseded by the independently implemented Changes 22–24, so it was never a completed change
+  and must not be reconstructed as shipped history.
+- **Fix**: treat the number as intentionally unused, use Changes 22–24 as the recursion lesson
+  history, and do not recreate `docs/changes/archive/17-*.md`. The obsolete local stash and merged
+  branch may be deleted after verifying their names and merge state.
+
 > Project memory file. Capture recurring pitfalls that repeatedly waste time during coding,
 > testing, or deploys.
 

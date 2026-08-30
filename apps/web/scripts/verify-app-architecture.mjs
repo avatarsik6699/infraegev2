@@ -85,12 +85,6 @@ const fontFaceFilePath = path.join(
   "styles",
   "fonts.css",
 );
-const lockedLessonLabStylePath = path.join(
-  applicationSourceRoot,
-  "pages",
-  "lesson-design-lab",
-  "lesson-design-lab.module.css",
-);
 const cssColorLiterals = applicationSourceFiles
   .filter((filePath) => filePath.endsWith(".css") && filePath !== themeFilePath)
   .flatMap((filePath) => {
@@ -111,34 +105,35 @@ const typographyConsumerFiles = applicationSourceFiles.filter(
     filePath.endsWith(".css") &&
     filePath !== themeFilePath &&
     filePath !== typographyTokenFilePath &&
-    filePath !== fontFaceFilePath &&
-    filePath !== lockedLessonLabStylePath,
+    filePath !== fontFaceFilePath,
 );
-const literalFontSizes = typographyConsumerFiles.flatMap((filePath) =>
-  fs
-    .readFileSync(filePath, "utf8")
-    .split("\n")
-    .filter(
-      (line) =>
-        /font-size:/.test(line) &&
-        !/font-size:\s*var\(--text-[^)]+\);/.test(line),
-    )
-    .map((line) => `${path.relative(workspaceRoot, filePath)}: ${line.trim()}`),
+
+function invalidCssLines(propertyPattern, allowedPattern) {
+  return typographyConsumerFiles.flatMap((filePath) =>
+    fs
+      .readFileSync(filePath, "utf8")
+      .split("\n")
+      .filter(
+        (line) => propertyPattern.test(line) && !allowedPattern.test(line),
+      )
+      .map(
+        (line) => `${path.relative(workspaceRoot, filePath)}: ${line.trim()}`,
+      ),
+  );
+}
+
+const literalFontSizes = invalidCssLines(
+  /font-size:/,
+  /font-size:\s*var\(--text-[^)]+\);/,
 );
 assert.deepEqual(
   literalFontSizes,
   [],
   `Component CSS font sizes must use semantic --text-* tokens:\n${literalFontSizes.join("\n")}`,
 );
-const unsupportedFontWeights = typographyConsumerFiles.flatMap((filePath) =>
-  fs
-    .readFileSync(filePath, "utf8")
-    .split("\n")
-    .filter(
-      (line) =>
-        /font-weight:/.test(line) && !/font-weight:\s*(?:500|600);/.test(line),
-    )
-    .map((line) => `${path.relative(workspaceRoot, filePath)}: ${line.trim()}`),
+const unsupportedFontWeights = invalidCssLines(
+  /font-weight:/,
+  /font-weight:\s*(?:500|600);/,
 );
 assert.deepEqual(
   unsupportedFontWeights,

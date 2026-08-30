@@ -39,18 +39,10 @@ export const checkPracticeAnswer: PracticeTaskTypes.Checker = async (
 };
 
 function explanationText(block: ExplanationBlock): string {
-  if (block.type === "text" || block.type === "callout")
-    return block.data.markdown;
-  if (
-    block.type === "worked_example" ||
-    block.type === "completion_exercise" ||
-    block.type === "productive_failure_prompt"
-  ) {
-    return `${block.data.prompt} ${block.data.steps.join(" ")}`;
-  }
-  if (block.type === "code_example")
-    return block.data.caption ?? "Разбор приведён в коде.";
-  if (block.type === "learning_visual") return block.data.caption;
-  if (block.type === "video_embed") return block.data.title;
+  const { data } = block;
+  if ("markdown" in data) return data.markdown;
+  if ("steps" in data) return `${data.prompt} ${data.steps.join(" ")}`;
+  if ("title" in data) return data.title;
+  if ("caption" in data) return data.caption ?? "Разбор приведён в коде.";
   return "";
 }

@@ -1,5 +1,63 @@
 import { expect, type Page } from "@playwright/test";
 
+const sectionHeadings = [
+  "Теория",
+  "Практика",
+  "Что важно для ЕГЭ",
+  "Результат",
+];
+const subsectionHeadings = [
+  "Середина превращает неизвестность в выбор",
+  "Попробуйте сами",
+  "Типичная ошибка с границами",
+  "Что получилось",
+  "Следующий шаг",
+  "Почему это быстро",
+];
+
+async function expectHeadings(
+  page: Page,
+  level: 2 | 3,
+  names: readonly string[],
+): Promise<void> {
+  await Promise.all(
+    names.map((name) =>
+      expect(page.getByRole("heading", { level, name })).toBeVisible(),
+    ),
+  );
+}
+
+async function readSectionRhythm(page: Page) {
+  return page.locator("[data-lesson-section]").evaluateAll((elements) =>
+    elements.map((element) => {
+      const styles = getComputedStyle(element);
+      const rect = element.getBoundingClientRect();
+      return {
+        id: element.id,
+        marginTop: Number.parseFloat(styles.marginTop),
+        paddingTop: Number.parseFloat(styles.paddingTop),
+        x: rect.x,
+        width: rect.width,
+      };
+    }),
+  );
+}
+
+function expectSectionGeometry(
+  section: Awaited<ReturnType<typeof readSectionRhythm>>[number],
+  first: Awaited<ReturnType<typeof readSectionRhythm>>[number],
+): void {
+  expect(section.marginTop).toBeGreaterThanOrEqual(32);
+  expect(section.paddingTop).toBeGreaterThanOrEqual(20);
+  expect(section.x).toBeCloseTo(first.x, 0);
+  const expectedWidth = section.id === "practice" ? "minimum" : "equal";
+  if (expectedWidth === "minimum") {
+    expect(section.width).toBeGreaterThanOrEqual(first.width);
+    return;
+  }
+  expect(section.width).toBeCloseTo(first.width, 0);
+}
+
 export class LessonLabPage {
   constructor(private readonly page: Page) {}
 
@@ -347,64 +405,13 @@ export class LessonLabPage {
   async expectSectionRhythm(): Promise<void> {
     const sections = this.page.locator("[data-lesson-section]");
     await expect(sections).toHaveCount(4);
-
-    for (const name of [
-      "Теория",
-      "Практика",
-      "Что важно для ЕГЭ",
-      "Результат",
-    ]) {
-      await expect(
-        this.page.getByRole("heading", { level: 2, name }),
-      ).toBeVisible();
-    }
-    await expect(
-      this.page.getByRole("heading", {
-        level: 3,
-        name: "Середина превращает неизвестность в выбор",
-      }),
-    ).toBeVisible();
-    for (const name of [
-      "Попробуйте сами",
-      "Типичная ошибка с границами",
-      "Что получилось",
-      "Следующий шаг",
-    ]) {
-      await expect(
-        this.page.getByRole("heading", { level: 3, name }),
-      ).toBeVisible();
-    }
-    await expect(
-      this.page.getByRole("heading", {
-        level: 3,
-        name: "Почему это быстро",
-      }),
-    ).toBeVisible();
-
-    const rhythm = await sections.evaluateAll((elements) =>
-      elements.map((element) => {
-        const styles = getComputedStyle(element);
-        const rect = element.getBoundingClientRect();
-        return {
-          id: element.id,
-          marginTop: Number.parseFloat(styles.marginTop),
-          paddingTop: Number.parseFloat(styles.paddingTop),
-          x: rect.x,
-          width: rect.width,
-        };
-      }),
-    );
-
-    for (const section of rhythm.slice(1)) {
-      expect(section.marginTop).toBeGreaterThanOrEqual(32);
-      expect(section.paddingTop).toBeGreaterThanOrEqual(20);
-      expect(section.x).toBeCloseTo(rhythm[0]?.x ?? 0, 0);
-      if (section.id === "practice") {
-        expect(section.width).toBeGreaterThanOrEqual(rhythm[0]?.width ?? 0);
-      } else {
-        expect(section.width).toBeCloseTo(rhythm[0]?.width ?? 0, 0);
-      }
-    }
+    await expectHeadings(this.page, 2, sectionHeadings);
+    await expectHeadings(this.page, 3, subsectionHeadings);
+    const rhythm = await readSectionRhythm(this.page);
+    const [first, ...rest] = rhythm;
+    expect(first).toBeDefined();
+    if (!first) return;
+    rest.forEach((section) => expectSectionGeometry(section, first));
   }
 
   async expectWhitespaceGrouping(): Promise<void> {

@@ -81,6 +81,10 @@ app → routes → pages → widgets → features → entities → shared
   needed or Base UI has no equivalent.
 - Use CSS Modules for local static styles. Use `cssUtils.cx(...)` for class composition and
   `data-*` attributes for prop/state variants. Do not create static `*.styles.ts` objects.
+- Repeated presentation-only declaration sets live in `shared/styles/patterns.module.css` and are
+  consumed through CSS Modules `composes`; they must not carry domain meaning or replace component
+  ownership. TopicLesson and CourseLesson may share neutral `LessonIntro`/`LessonTheory`
+  presentation while retaining independent domain models, publication registries and routes.
 - The visual dependency direction is `theme values → semantic tokens → component CSS`. Theme files
   may contain literal palette/font/geometry values; components consume only semantic tokens.
 - Public names describe purpose (`primary`, `reading`, `warning`), never the current palette,
@@ -244,9 +248,9 @@ app → routes → pages → widgets → features → entities → shared
   `--text-*` scale; consumers do not introduce literal sizes or intermediate variable-font weights.
   Semantic heading levels may share an effective size when hierarchy already comes from spacing
   and document structure. Keep readable line measures and enable lining tabular numerals for
-  product-wide numeric data. The frozen `/lab/lesson` page-private stylesheet remains a temporary
-  migration exception under Change 22's explicit do-not-touch boundary; shared components rendered
-  inside it still follow this baseline.
+  product-wide numeric data. `/lab/lesson` follows the same token and weight contract; page-private
+  visual experiments may add semantic `--text-*` tokens but not literal component sizes or
+  intermediate variable-font weights.
 - Avoid decorative uppercase, tracked rubrics and miniature labels. Keep classification text in
   sentence case; uppercase is reserved for compact code/data notation where it materially improves
   scanning.

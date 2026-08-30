@@ -30,12 +30,20 @@ function resolveImport(importer, specifier) {
 }
 
 function boundaryViolation(importer, specifier) {
-  const owner = sliceFor(importer);
+  const owner = Object.assign({ layer: "", slice: "" }, sliceFor(importer));
   const targetPath = resolveImport(importer, specifier);
-  const target = targetPath ? sliceFor(targetPath) : null;
-  if (!owner || !target) return null;
-  if (owner.layer !== target.layer || owner.slice === target.slice) return null;
-  return `${owner.layer}/${owner.slice} must not import ${target.layer}/${target.slice}`;
+  const target = Object.assign(
+    { layer: "", slice: "" },
+    sliceFor(String(targetPath)),
+  );
+  const crossesSiblingSlice = [
+    isolatedLayers.has(owner.layer),
+    owner.layer === target.layer,
+    owner.slice !== target.slice,
+  ].every(Boolean);
+  return crossesSiblingSlice
+    ? `${owner.layer}/${owner.slice} must not import ${target.layer}/${target.slice}`
+    : null;
 }
 
 const cases = [

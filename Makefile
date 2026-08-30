@@ -24,7 +24,7 @@ DOCKER_LIFECYCLE := ./scripts/docker-dev-lifecycle.sh
 # quickly instead of stalling `make stop`/`make down`.
 STOP_TIMEOUT ?= 10
 
-.PHONY: help dev rebuild stop down restart logs ps config clean \
+.PHONY: help dev rebuild stop down restart logs ps config clean clean-dry-run \
 	tunnel-up tunnel-down tunnel-status \
 	ops-open-beszel ops-open-umami \
 	ops-status ops-config ops-install ops-update ops-rollback sre-management
@@ -41,6 +41,7 @@ help:
 	@echo "  make ps       Show service and health status"
 	@echo "  make config   Validate the fully rendered Compose configuration"
 	@echo "  make clean    Remove regenerable local reports, build outputs, and caches"
+	@echo "  make clean-dry-run  Preview the exact local artifacts make clean removes"
 	@echo "  make sre-management ACTION=status  Operate the dedicated sre-kit management VPS"
 	@echo ""
 	@echo "infraege private VPS access"
@@ -85,11 +86,10 @@ config:
 	@echo "Compose configuration is valid."
 
 clean:
-	@rm -rf -- .lighthouseci .output .vinxi \
-		apps/web/.output apps/web/.vinxi apps/web/dist apps/web/.eslintcache
-	@find apps/api -type d \( -name __pycache__ -o -name .pytest_cache -o -name .ruff_cache \) \
-		-prune -exec rm -rf -- {} +
-	@echo "Regenerable local reports, build outputs, and caches removed."
+	@./scripts/clean-local-artifacts.sh --apply
+
+clean-dry-run:
+	@./scripts/clean-local-artifacts.sh --dry-run
 
 tunnel-up:
 	@$(WIREGUARD_TUNNEL) up

@@ -91,9 +91,8 @@ function proofCellClass(
 
 // A horizontal-ease cubic curve rather than orthogonal H/V/Q segments — same
 // technique as the annotated-diagram leaders (diagram-geometry.ts), so it
-// reads as a hand-inked connector rather than a ruled schematic, matching
-// the reference diagrams' ("docs/artifacts/diagram-references/") ink-line
-// style. Endpoints are unchanged from the previous orthogonal paths.
+// reads as a hand-inked connector rather than a ruled schematic. Endpoints
+// are unchanged from the previous orthogonal paths.
 function leaderPath(rowIndex: number): string {
   if (rowIndex === 0) return "M 0 54 C 60 54 60 16 120 16";
   if (rowIndex === 1) return "M 0 42 C 60 42 60 22 120 22";

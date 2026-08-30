@@ -27,7 +27,7 @@
   color: var(--control-primary-text);
 }
 
-.root[data-hierarchy="primary"]:hover:not(:disabled) {
+.root[data-hierarchy="primary"]:hover:enabled {
   background: var(--control-primary-bg-hover);
 }
 
@@ -38,18 +38,18 @@
   box-shadow: var(--shadow-control);
 }
 
-.root[data-hierarchy="secondary"]:hover:not(:disabled) {
+.root[data-hierarchy="secondary"]:hover:enabled {
   background: var(--control-quiet-bg-hover);
   color: var(--color-text);
 }
 
-.root[data-hierarchy="quiet"]:hover:not(:disabled) {
+.root[data-hierarchy="quiet"]:hover:enabled {
   background: var(--control-quiet-bg-hover);
   color: var(--color-text);
 }
 
-.root[data-hierarchy="secondary"]:active:not(:disabled),
-.root[data-hierarchy="quiet"]:active:not(:disabled) {
+.root[data-hierarchy="secondary"]:active:enabled,
+.root[data-hierarchy="quiet"]:active:enabled {
   background: color-mix(in oklch, var(--color-text) 7%, var(--color-surface));
 }
 

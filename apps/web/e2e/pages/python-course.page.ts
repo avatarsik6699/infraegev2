@@ -1,6 +1,15 @@
 import { expect, type Page } from "@playwright/test";
+import {
+  expectKeyboardLessonDisclosures,
+  openLessonAtTop,
+} from "./lesson-page.assertions";
 import { expectNoHorizontalOverflow } from "./layout.assertions";
 import { expectPublicReleaseIdentity } from "./public-header.assertions";
+import {
+  expectNoJavaScriptPractice,
+  expectPracticeAnswerJourney,
+  expectPublishedLessonDocument,
+} from "./lesson-page.assertions";
 
 const publishedPythonCourseLessons = [
   ["pervaya-programma", "Первая программа: ввод, вычисление и вывод"],
@@ -224,19 +233,7 @@ export class PythonCoursePage {
   }
 
   async openFirstLesson(): Promise<void> {
-    await this.page.goto("/courses/python/pervaya-programma");
-    await expect(this.page).toHaveURL(/\/courses\/python\/pervaya-programma$/);
-    await expect
-      .poll(async () => {
-        await this.page.evaluate(() => {
-          if (document.scrollingElement)
-            document.scrollingElement.scrollTop = 0;
-        });
-        return this.page.evaluate(
-          () => document.scrollingElement?.scrollTop ?? window.scrollY,
-        );
-      })
-      .toBe(0);
+    await openLessonAtTop(this.page, "/courses/python/pervaya-programma");
   }
 
   async openConditionsLesson(): Promise<void> {
@@ -258,18 +255,10 @@ export class PythonCoursePage {
     if (!lesson) return;
     const [routeSlug, title] = lesson;
     await this.page.goto(`/courses/python/${routeSlug}`);
-    await expect(
-      this.page.getByRole("heading", { level: 1, name: title }),
-    ).toBeVisible();
-    await expect(this.page.locator('meta[name="robots"]')).toHaveAttribute(
-      "content",
-      "index,follow",
-    );
-    await expect(this.page.locator('link[rel="canonical"]')).toHaveAttribute(
-      "href",
-      `https://infraege.ru/courses/python/${routeSlug}`,
-    );
-    await expect(this.page.locator("[data-practice-task]")).toHaveCount(5);
+    await expectPublishedLessonDocument(this.page, {
+      canonicalPath: `/courses/python/${routeSlug}`,
+      title,
+    });
     await expect(this.page.locator("[data-practice-form] form")).toHaveCount(5);
     await expectNoHorizontalOverflow(this.page);
     if (options?.keyboard) await this.expectKeyboardDisclosures();
@@ -280,41 +269,19 @@ export class PythonCoursePage {
     title: string,
   ): Promise<void> {
     await this.page.goto(`/courses/python/${routeSlug}`);
-    await expect(
-      this.page.getByRole("heading", {
-        level: 1,
-        name: title,
-      }),
-    ).toBeVisible();
-    await expect(this.page.locator('meta[name="robots"]')).toHaveAttribute(
-      "content",
-      "index,follow",
-    );
-    await expect(this.page.locator('link[rel="canonical"]')).toHaveAttribute(
-      "href",
-      `https://infraege.ru/courses/python/${routeSlug}`,
-    );
-    await expect(this.page.locator("[data-practice-task]")).toHaveCount(5);
+    await expectPublishedLessonDocument(this.page, {
+      canonicalPath: `/courses/python/${routeSlug}`,
+      title,
+    });
     await expectNoHorizontalOverflow(this.page);
   }
 
   async expectPublishedErrorsLesson(): Promise<void> {
     await expectPublicReleaseIdentity(this.page);
-    await expect(
-      this.page.getByRole("heading", {
-        level: 1,
-        name: "Ошибки: читаем сообщение и находим причину",
-      }),
-    ).toBeVisible();
-    await expect(this.page.locator('meta[name="robots"]')).toHaveAttribute(
-      "content",
-      "index,follow",
-    );
-    await expect(this.page.locator('link[rel="canonical"]')).toHaveAttribute(
-      "href",
-      "https://infraege.ru/courses/python/oshibki",
-    );
-    await expect(this.page.locator("[data-practice-task]")).toHaveCount(5);
+    await expectPublishedLessonDocument(this.page, {
+      canonicalPath: "/courses/python/oshibki",
+      title: "Ошибки: читаем сообщение и находим причину",
+    });
     await expect(
       this.page.getByText(
         "Разберём, как читать сообщение Python снизу вверх, находить строку остановки и отличать несколько частых причин ошибки.",
@@ -358,20 +325,7 @@ export class PythonCoursePage {
   }
 
   async expectErrorsPractice(): Promise<void> {
-    await expect(
-      this.page.locator("[data-practice-form][data-enhanced]"),
-    ).toBeVisible();
-    const firstTask = this.page.locator("[data-practice-task]").first();
-    await firstTask.getByRole("textbox", { name: "Ответ" }).fill("ошибка");
-    await firstTask.getByRole("button", { name: "Проверить" }).click();
-    await expect(
-      firstTask.getByText(
-        "Ответ пока не подходит. Попробуйте ещё раз или откройте подсказку.",
-      ),
-    ).toBeVisible();
-    await firstTask.getByRole("textbox", { name: "Ответ" }).fill(" nameerror ");
-    await firstTask.getByRole("button", { name: "Проверить" }).click();
-    await expect(firstTask.getByRole("status")).toContainText("Верно");
+    await expectPracticeAnswerJourney(this.page, "ошибка", " nameerror ");
   }
 
   async expectSimplifiedErrorsResult(): Promise<void> {
@@ -397,21 +351,10 @@ export class PythonCoursePage {
       "border-bottom-width",
       "1px",
     );
-    await expect(
-      this.page.getByRole("heading", {
-        level: 1,
-        name: "Условия: сравнения и выбор из двух вариантов",
-      }),
-    ).toBeVisible();
-    await expect(this.page.locator('meta[name="robots"]')).toHaveAttribute(
-      "content",
-      "index,follow",
-    );
-    await expect(this.page.locator('link[rel="canonical"]')).toHaveAttribute(
-      "href",
-      "https://infraege.ru/courses/python/usloviya",
-    );
-    await expect(this.page.locator("[data-practice-task]")).toHaveCount(5);
+    await expectPublishedLessonDocument(this.page, {
+      canonicalPath: "/courses/python/usloviya",
+      title: "Условия: сравнения и выбор из двух вариантов",
+    });
     await expect(
       this.page.getByRole("heading", {
         level: 3,
@@ -433,34 +376,14 @@ export class PythonCoursePage {
   }
 
   async expectConditionsPractice(): Promise<void> {
-    await expect(
-      this.page.locator("[data-practice-form][data-enhanced]"),
-    ).toBeVisible();
-    const firstTask = this.page.locator("[data-practice-task]").first();
-    await firstTask.getByRole("textbox", { name: "Ответ" }).fill("False");
-    await firstTask.getByRole("button", { name: "Проверить" }).click();
-    await expect(
-      firstTask.getByText(
-        "Ответ пока не подходит. Попробуйте ещё раз или откройте подсказку.",
-      ),
-    ).toBeVisible();
-    await firstTask.getByRole("textbox", { name: "Ответ" }).fill(" true ");
-    await firstTask.getByRole("button", { name: "Проверить" }).click();
-    await expect(firstTask.getByRole("status")).toContainText("Верно");
+    await expectPracticeAnswerJourney(this.page, "False", " true ");
   }
 
   async expectPublishedLesson(): Promise<void> {
-    await expect(
-      this.page.getByRole("heading", {
-        level: 1,
-        name: "Первая программа: ввод, вычисление и вывод",
-      }),
-    ).toBeVisible();
-    await expect(this.page.locator('meta[name="robots"]')).toHaveAttribute(
-      "content",
-      "index,follow",
-    );
-    await expect(this.page.locator("[data-practice-task]")).toHaveCount(5);
+    await expectPublishedLessonDocument(this.page, {
+      canonicalPath: "/courses/python/pervaya-programma",
+      title: "Первая программа: ввод, вычисление и вывод",
+    });
     await expect(
       this.page.getByText(
         "Разберём, как Python выполняет команды, где хранит значения, как получает ввод и выводит результат.",
@@ -568,20 +491,7 @@ export class PythonCoursePage {
   }
 
   async expectKeyboardDisclosures(): Promise<void> {
-    const checkpoint = this.page
-      .getByLabel("Проверьте себя")
-      .first()
-      .getByRole("button")
-      .first();
-    await checkpoint.focus();
-    await checkpoint.press("Enter");
-    await expect(checkpoint).toHaveAttribute("aria-expanded", "true");
-
-    const firstTask = this.page.locator("[data-practice-task]").first();
-    const hint = firstTask.getByRole("button", { name: "Подсказка" });
-    await hint.focus();
-    await hint.press("Enter");
-    await expect(hint).toHaveAttribute("aria-expanded", "true");
+    await expectKeyboardLessonDisclosures(this.page);
   }
 
   async expectMobileReadingOrder(): Promise<void> {
@@ -604,12 +514,7 @@ export class PythonCoursePage {
   async expectReadableWithoutJavaScript(): Promise<void> {
     await this.openFirstLesson();
     await this.expectPublishedLesson();
-    await expect(this.page.locator("[data-practice-form] form")).toHaveCount(5);
-    await expect(
-      this.page
-        .locator("[data-course-result-progress]")
-        .getByText("0 / 5", { exact: true }),
-    ).toBeVisible();
+    await expectNoJavaScriptPractice(this.page);
   }
 
   async expectOverviewReadableWithoutJavaScript(): Promise<void> {
@@ -629,23 +534,13 @@ export class PythonCoursePage {
   async expectConditionsReadableWithoutJavaScript(): Promise<void> {
     await this.openConditionsLesson();
     await this.expectPublishedConditionsLesson();
-    await expect(this.page.locator("[data-practice-form] form")).toHaveCount(5);
-    await expect(
-      this.page
-        .locator("[data-course-result-progress]")
-        .getByText("0 / 5", { exact: true }),
-    ).toBeVisible();
+    await expectNoJavaScriptPractice(this.page);
   }
 
   async expectErrorsReadableWithoutJavaScript(): Promise<void> {
     await this.openErrorsLesson();
     await this.expectPublishedErrorsLesson();
-    await expect(this.page.locator("[data-practice-form] form")).toHaveCount(5);
-    await expect(
-      this.page
-        .locator("[data-course-result-progress]")
-        .getByText("0 / 5", { exact: true }),
-    ).toBeVisible();
+    await expectNoJavaScriptPractice(this.page);
   }
 
   async expectPublishedLessonsInPublicSitemap(): Promise<void> {

@@ -1,5 +1,10 @@
 import { expect, type Page } from "@playwright/test";
 import { expectPublicReleaseIdentity } from "./public-header.assertions";
+import {
+  expectKeyboardLessonDisclosures,
+  expectPublishedLessonDocument,
+  openLessonAtTop,
+} from "./lesson-page.assertions";
 
 type TopicLessonPageConfig = {
   route: string;
@@ -20,38 +25,15 @@ export class TopicLessonPage {
   ) {}
 
   async open(): Promise<void> {
-    await this.page.goto(this.config.route);
-    await expect(this.page).toHaveURL(new RegExp(this.config.route + "$"));
-    await expect
-      .poll(async () => {
-        await this.page.evaluate(() => {
-          if (document.scrollingElement)
-            document.scrollingElement.scrollTop = 0;
-        });
-        return this.page.evaluate(
-          () => document.scrollingElement?.scrollTop ?? window.scrollY,
-        );
-      })
-      .toBe(0);
+    await openLessonAtTop(this.page, this.config.route);
   }
 
   async expectPublishedNumberRecordLesson(): Promise<void> {
     await expectPublicReleaseIdentity(this.page);
-    await expect(
-      this.page.getByRole("heading", {
-        level: 1,
-        name: this.config.title,
-      }),
-    ).toBeVisible();
-    await expect(this.page.locator('meta[name="robots"]')).toHaveAttribute(
-      "content",
-      "index,follow",
-    );
-    await expect(this.page.locator('link[rel="canonical"]')).toHaveAttribute(
-      "href",
-      `https://infraege.ru${this.config.route}`,
-    );
-    await expect(this.page.locator("[data-practice-task]")).toHaveCount(5);
+    await expectPublishedLessonDocument(this.page, {
+      canonicalPath: this.config.route,
+      title: this.config.title,
+    });
     await expect(
       this.page
         .getByLabel("Сведения об уроке")
@@ -73,21 +55,8 @@ export class TopicLessonPage {
   }
 
   async expectKeyboardHelpDisclosures(): Promise<void> {
-    const firstCheckpoint = this.page
-      .getByLabel("Проверьте себя")
-      .first()
-      .getByRole("button")
-      .first();
-    await firstCheckpoint.focus();
-    await firstCheckpoint.press("Enter");
-    await expect(firstCheckpoint).toHaveAttribute("aria-expanded", "true");
-
+    await expectKeyboardLessonDisclosures(this.page);
     const firstTask = this.page.locator("[data-practice-task]").first();
-    const hint = firstTask.getByRole("button", { name: "Подсказка" });
-    await hint.focus();
-    await hint.press("Enter");
-    await expect(hint).toHaveAttribute("aria-expanded", "true");
-
     const solution = firstTask.getByRole("button", { name: "Решение" });
     await solution.focus();
     await solution.press("Enter");
@@ -120,20 +89,10 @@ export class TopicLessonPage {
     await expect(
       this.page.getByRole("link", { name: "infraege — на главную" }),
     ).toHaveAttribute("href", "/");
-    await expect(
-      this.page.getByRole("heading", {
-        level: 1,
-        name: "Рекурсивные алгоритмы",
-      }),
-    ).toBeVisible();
-    await expect(this.page.locator('meta[name="robots"]')).toHaveAttribute(
-      "content",
-      "index,follow",
-    );
-    await expect(this.page.locator('link[rel="canonical"]')).toHaveAttribute(
-      "href",
-      "https://infraege.ru/ege/16-rekursiya",
-    );
+    await expectPublishedLessonDocument(this.page, {
+      canonicalPath: "/ege/16-rekursiya",
+      title: "Рекурсивные алгоритмы",
+    });
     await expect(
       this.page.getByRole("link", { name: "Обработка данных" }),
     ).toHaveAttribute("href", "/privacy");
@@ -145,7 +104,6 @@ export class TopicLessonPage {
         .getByRole("navigation", { name: "Содержание урока" })
         .getByRole("link", { name: "Вычисляем F(5) по правилу" }),
     ).toHaveAttribute("href", "#concrete-computation");
-    await expect(this.page.locator("[data-practice-task]")).toHaveCount(5);
     await expect(this.page.locator("[data-article-frame] img")).toHaveCount(0);
     await expect(this.page.locator("[data-outline-tree] svg")).toHaveCount(0);
     await expect(

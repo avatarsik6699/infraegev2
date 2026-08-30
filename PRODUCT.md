@@ -38,7 +38,7 @@ fallback.
 - Public learning content is SSR/no-JavaScript readable and Russian-only.
 - Checker answers stay on the server; the browser never executes untrusted Python code.
 - The Python course has a complete 28-step path from the first program to one terminal task
-  manager. All lessons are public for final architect evaluation. Progress is derived from the
+  manager. All lessons are published in production. Progress is derived from the
   published lessons and remains optional browser-local state.
 - Every public curriculum row names a concrete learning outcome and links to its published lesson;
   future curriculum expansion must not appear as available before its own approval.
@@ -56,7 +56,7 @@ The binding rules live in `docs/FRONTEND.md`.
 
 ## Evidence on Hand
 
-Two published Topic lessons, 28 locally published Python CourseLessons, the shared
+Two published Topic lessons, 28 production-published Python CourseLessons, the shared
 lesson/practice/checker/progress path and the completed application-gap audit provide the current
 implementation evidence. Existing consented
 visits/pageviews and path aggregates are sufficient for the current analytics need; event-level

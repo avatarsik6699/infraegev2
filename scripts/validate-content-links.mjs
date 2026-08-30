@@ -53,35 +53,51 @@ function checkRefs(file, ids, validSet, field) {
 }
 
 function checkLearningVisualAssets(file, expectedPrefix, blocks) {
-  for (const [index, block] of (blocks ?? []).entries()) {
-    if (block.type !== "learning_visual") continue;
-    const data = block.data ?? {};
-    if (data.representation === "structured") continue;
-    const field = `learning_visual[${index}]`;
-    const asset = data.asset ?? {};
-    if (
-      typeof asset.src !== "string" ||
-      !asset.src.startsWith(expectedPrefix) ||
-      asset.src.includes("..") ||
-      !/\.(png|webp|avif)$/i.test(asset.src)
-    ) {
-      errors.push(
-        `${file}: ${field}.asset.src must be a PNG/WebP/AVIF under "${expectedPrefix}"`,
-      );
-      continue;
-    }
-    if (!Number.isInteger(asset.width) || asset.width <= 0) {
-      errors.push(`${file}: ${field}.asset.width must be a positive integer`);
-    }
-    if (!Number.isInteger(asset.height) || asset.height <= 0) {
-      errors.push(`${file}: ${field}.asset.height must be a positive integer`);
-    }
+  learningVisualAssets(blocks).forEach(({ asset, field }) =>
+    checkLearningVisualAsset(file, expectedPrefix, field, asset),
+  );
+}
 
-    const assetPath = join(WEB_PUBLIC_ROOT, asset.src.slice(1));
-    if (!existsSync(assetPath)) {
-      errors.push(`${file}: ${field}.asset.src does not exist: ${asset.src}`);
-    }
+function learningVisualAssets(blocks) {
+  return (blocks ?? [])
+    .map((block, index) => ({ block, field: `learning_visual[${index}]` }))
+    .filter(({ block }) => block.type === "learning_visual")
+    .filter(({ block }) => block.data?.representation !== "structured")
+    .map(({ block, field }) => ({ asset: block.data?.asset ?? {}, field }));
+}
+
+function checkLearningVisualAsset(file, expectedPrefix, field, asset) {
+  if (!isValidLearningVisualSource(asset.src, expectedPrefix)) {
+    errors.push(
+      `${file}: ${field}.asset.src must be a PNG/WebP/AVIF under "${expectedPrefix}"`,
+    );
+    return;
   }
+  checkPositiveDimension(file, field, "width", asset.width);
+  checkPositiveDimension(file, field, "height", asset.height);
+  checkLearningVisualAssetExists(file, field, asset.src);
+}
+
+function isValidLearningVisualSource(source, expectedPrefix) {
+  return (
+    typeof source === "string" &&
+    source.startsWith(expectedPrefix) &&
+    !source.includes("..") &&
+    /\.(png|webp|avif)$/i.test(source)
+  );
+}
+
+function checkPositiveDimension(file, field, dimension, value) {
+  if (Number.isInteger(value) && value > 0) return;
+  errors.push(
+    `${file}: ${field}.asset.${dimension} must be a positive integer`,
+  );
+}
+
+function checkLearningVisualAssetExists(file, field, source) {
+  const assetPath = join(WEB_PUBLIC_ROOT, source.slice(1));
+  if (existsSync(assetPath)) return;
+  errors.push(`${file}: ${field}.asset.src does not exist: ${source}`);
 }
 
 function contentBlocksFor(data) {

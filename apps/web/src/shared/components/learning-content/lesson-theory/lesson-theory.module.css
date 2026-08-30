@@ -1,0 +1,55 @@
+.root {
+  display: grid;
+}
+
+.concepts {
+  display: grid;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.concept {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+  scroll-margin-top: var(--space-3);
+}
+
+.conceptTitle {
+  margin: 0;
+  font-size: var(--text-lg);
+  line-height: 1.35;
+  letter-spacing: 0;
+}
+
+.conceptExplanation {
+  min-width: 0;
+  max-width: 68ch;
+}
+
+.conceptExplanation > * {
+  margin-block: 0;
+}
+
+.conceptExplanation > :not(:first-child) {
+  margin-top: var(--space-2);
+}
+
+.conceptVisual,
+.conceptExample,
+.conceptMistake,
+.conceptCheckpoint {
+  min-width: 0;
+}
+
+.conceptExample,
+.conceptMistake,
+.conceptCheckpoint {
+  margin-top: var(--space-1);
+}
+
+@media (max-width: 52rem) {
+  .concepts {
+    gap: var(--space-2);
+  }
+}

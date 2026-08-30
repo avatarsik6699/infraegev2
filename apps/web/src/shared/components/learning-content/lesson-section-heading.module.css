@@ -19,3 +19,17 @@
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
+
+.heading[data-variant="lesson"] {
+  gap: var(--space-1);
+  color: var(--color-text);
+  font-family: var(--font-reading);
+  font-size: var(--text-xl);
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+}
+
+.heading[data-variant="lesson"] .index {
+  color: var(--color-text-soft);
+  font-family: inherit;
+}

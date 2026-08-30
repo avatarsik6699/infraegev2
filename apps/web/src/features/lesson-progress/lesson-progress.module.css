@@ -10,12 +10,12 @@
   justify-content: space-between;
 }
 
-.headingRow :is(h2, h3, h4, h5, h6),
+.heading,
 .status {
   margin: 0;
 }
 
-.headingRow :is(h2, h3, h4, h5, h6)[data-order] {
+.heading {
   color: var(--color-muted);
   font-family: var(--font-reading);
   font-size: var(--text-sm);

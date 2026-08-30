@@ -1,16 +1,14 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { lessonPublications, type LessonTypes } from "~/entities/lesson";
 import {
   Checkpoint,
+  LessonIntro,
+  LessonTheory,
   LessonSectionHeading,
 } from "~/shared/components/learning-content";
-import {
-  checkPracticeAnswer,
-  type LessonPracticeTypes,
-} from "~/features/lesson-practice";
+import { checkPracticeAnswer } from "~/features/lesson-practice";
 import { ReadingPositionIndicator } from "~/features/reading-position";
-import { reportProductEvent } from "~/features/analytics";
-import { Badge } from "~/shared/components/badge";
+import { useLessonTelemetry } from "~/features/analytics";
 import { Typography } from "~/shared/components/typography";
 import { LessonOutline } from "~/widgets/lesson-outline";
 import { LessonPracticeFlow } from "~/widgets/lesson-practice-flow";
@@ -24,40 +22,10 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
   props,
 ) => {
   const articleRef = useRef<HTMLElement>(null);
-  const practiceStartedRef = useRef(false);
-  const completionReportedRef = useRef(false);
-  useEffect(
-    function reportLessonOpenedFx() {
-      reportProductEvent({
-        name: "lesson_opened",
-        properties: { lesson: props.lesson.id },
-      });
-    },
-    [props.lesson.id],
+  const handleAnswerChecked = useLessonTelemetry(
+    props.lesson.id,
+    props.tasks.length,
   );
-  function handleAnswerChecked(event: LessonPracticeTypes.AnswerCheckedEvent) {
-    if (!practiceStartedRef.current) {
-      practiceStartedRef.current = true;
-      reportProductEvent({
-        name: "practice_started",
-        properties: { lesson: props.lesson.id },
-      });
-    }
-    reportProductEvent({
-      name: "practice_answer_checked",
-      properties: { lesson: props.lesson.id, result: event.result },
-    });
-    if (
-      !completionReportedRef.current &&
-      event.solvedCount >= props.tasks.length
-    ) {
-      completionReportedRef.current = true;
-      reportProductEvent({
-        name: "lesson_completed",
-        properties: { lesson: props.lesson.id },
-      });
-    }
-  }
   const otherPublishedLessons = lessonPublications.filter(
     (lesson) => lesson.status === "published" && lesson.id !== props.lesson.id,
   );
@@ -101,75 +69,23 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
         </aside>
 
         <article className={styles.article} data-article-frame ref={articleRef}>
-          <header className={styles.intro}>
-            <div className={styles.lessonMeta} aria-label="Сведения об уроке">
-              <Badge>{`Задание ${String(props.lesson.taskNumber)}`}</Badge>
-              <Badge>ЕГЭ по информатике</Badge>
-              <Badge>{taskCountLabel(props.tasks.length)}</Badge>
-              <Badge>
-                {props.lesson.accessTier === "free"
-                  ? "Бесплатно"
-                  : "По подписке"}
-              </Badge>
-            </div>
-            <Typography.Title order={1}>{props.lesson.title}</Typography.Title>
-            <Typography.Text variant="lead" tone="muted">
-              {props.lesson.summary}
-            </Typography.Text>
-          </header>
+          <LessonIntro
+            accessTier={props.lesson.accessTier}
+            eyebrow={`Задание ${String(props.lesson.taskNumber)}`}
+            summary={props.lesson.summary}
+            taskCount={props.tasks.length}
+            technology="ЕГЭ по информатике"
+            title={props.lesson.title}
+          />
 
-          <section
-            id="theory"
-            className={`${styles.section} ${styles.theorySection}`}
-          >
-            <LessonSectionHeading index={1}>Теория</LessonSectionHeading>
-            <div className={styles.concepts}>
-              {props.lesson.theory.map((concept) => (
-                <section
-                  className={styles.concept}
-                  id={concept.id}
-                  key={concept.id}
-                >
-                  <Typography.Title order={3}>
-                    {concept.navLabel}
-                  </Typography.Title>
-                  <Typography.Prose
-                    className={styles.conceptExplanation}
-                    data-concept-explanation
-                  >
-                    {concept.explanation}
-                  </Typography.Prose>
-                  {concept.diagram ? (
-                    <div className={styles.conceptVisual}>
-                      {concept.diagram}
-                    </div>
-                  ) : null}
-                  {concept.workedExample ? (
-                    <div className={styles.conceptExample}>
-                      {concept.workedExample}
-                    </div>
-                  ) : null}
-                  {concept.mistake ? (
-                    <div className={styles.conceptMistake} data-concept-mistake>
-                      {concept.mistake}
-                    </div>
-                  ) : null}
-                  {concept.checkpoint ? (
-                    <div
-                      className={styles.conceptCheckpoint}
-                      data-concept-checkpoint
-                    >
-                      <Checkpoint items={concept.checkpoint} />
-                    </div>
-                  ) : null}
-                </section>
-              ))}
-            </div>
-          </section>
+          <LessonTheory
+            concepts={props.lesson.theory}
+            className={styles.section}
+          />
 
           {props.lesson.examFocus ? (
             <section id="exam-focus" className={styles.section}>
-              <LessonSectionHeading index={examIndex}>
+              <LessonSectionHeading index={examIndex} variant="lesson">
                 На экзамене
               </LessonSectionHeading>
               <Typography.Prose>{props.lesson.examFocus}</Typography.Prose>
@@ -178,7 +94,7 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
 
           {props.lesson.checkpoint ? (
             <section id="checkpoint" className={styles.section}>
-              <LessonSectionHeading index={checkpointIndex}>
+              <LessonSectionHeading index={checkpointIndex} variant="lesson">
                 Проверьте себя
               </LessonSectionHeading>
               <Checkpoint items={props.lesson.checkpoint} />
@@ -189,7 +105,7 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
             id="practice"
             className={`${styles.section} ${styles.practiceSection}`}
           >
-            <LessonSectionHeading index={practiceIndex}>
+            <LessonSectionHeading index={practiceIndex} variant="lesson">
               Практика
             </LessonSectionHeading>
             <LessonPracticeFlow
@@ -204,7 +120,7 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
             id="result"
             className={`${styles.section} ${styles.resultSection}`}
           >
-            <LessonSectionHeading index={resultIndex}>
+            <LessonSectionHeading index={resultIndex} variant="lesson">
               Итог
             </LessonSectionHeading>
             <TopicLessonResult
@@ -225,14 +141,3 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
     </div>
   );
 };
-
-function taskCountLabel(count: number): string {
-  const modulo100 = count % 100;
-  const modulo10 = count % 10;
-  let noun = "задач";
-  if (modulo100 < 11 || modulo100 > 14) {
-    if (modulo10 === 1) noun = "задача";
-    if (modulo10 >= 2 && modulo10 <= 4) noun = "задачи";
-  }
-  return `${String(count)} ${noun}`;
-}

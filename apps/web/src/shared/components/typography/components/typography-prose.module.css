@@ -5,11 +5,17 @@
   line-height: 1.68;
 }
 
-.root :where(p, ul, ol, blockquote, pre, table) {
+.root p,
+.root ul,
+.root ol,
+.root blockquote,
+.root pre,
+.root table {
   margin-block: 0 var(--space-2);
 }
 
-.root :where(ul, ol) {
+.root ul,
+.root ol {
   display: grid;
   gap: var(--space-1);
   padding-inline-start: 1.4em;
@@ -17,7 +23,9 @@
   line-height: 1.6;
 }
 
-.root :where(h2, h3, h4) {
+.root h2,
+.root h3,
+.root h4 {
   margin-block: var(--space-4) var(--space-2);
   font-family: var(--font-reading);
   line-height: 1.2;

@@ -247,10 +247,7 @@
 }
 
 .controlsRow {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-1);
-  align-items: center;
+  composes: controlsRow from "../../shared/styles/patterns.module.css";
 }
 
 .containerSamples {
@@ -286,7 +283,7 @@
 .spacingBar {
   height: 0.6rem;
   background: var(--color-accent-soft);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
 }
 
 .placeholder {
@@ -324,17 +321,16 @@
 }
 
 .progressGrid > div,
-.tabsDemo [role="tabpanel"]:not([hidden]) {
+.tabsPanel {
   display: grid;
   gap: var(--space-1);
 }
 
-.tabsDemo [role="tabpanel"],
-.tabsDemo [data-unenhanced-tab-panel] {
+.tabsPanel {
   padding-block: var(--space-1);
 }
 
-.page:not([data-enhanced]) .tabsDemo [role="tablist"] {
+.enhancedOnly.enhancedOnly {
   display: none;
 }
 

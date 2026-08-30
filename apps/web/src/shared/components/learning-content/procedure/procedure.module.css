@@ -1,16 +1,9 @@
 .root {
-  display: grid;
-  gap: var(--space-1);
-  margin: 0;
-  padding: 0;
+  composes: learningContentRoot from "../../../styles/patterns.module.css";
 }
 
 .eyebrow {
-  color: var(--color-muted);
-  font-family: var(--font-ui);
-  font-size: var(--text-2xs);
-  font-weight: 600;
-  line-height: 1.4;
+  composes: learningContentEyebrow from "../../../styles/patterns.module.css";
 }
 
 .title {

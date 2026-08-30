@@ -21,9 +21,10 @@ export const LessonTheory: React.FC = () => (
         Середина превращает неизвестность в выбор
       </Typography.Title>
       <Typography.Text>
-        Предположим, массив <code>a</code> отсортирован по возрастанию. Ищем
-        значение <code>x</code> и рассматриваем текущий диапазон{" "}
-        <code>[L, R]</code> включительно.
+        Предположим, массив <code className={styles.inlineCode}>a</code>{" "}
+        отсортирован по возрастанию. Ищем значение{" "}
+        <code className={styles.inlineCode}>x</code> и рассматриваем текущий
+        диапазон <code className={styles.inlineCode}>[L, R]</code> включительно.
       </Typography.Text>
     </section>
     <BinarySearchProof />
@@ -33,8 +34,10 @@ export const LessonTheory: React.FC = () => (
       </Typography.Title>
       <Typography.Text>
         На каждом шаге длина диапазона не превышает половины предыдущей. После{" "}
-        <var>k</var> шагов остаётся не больше <code>n / 2ᵏ</code> элементов,
-        поэтому достаточно порядка <code>log₂ n</code> сравнений.
+        <var>k</var> шагов остаётся не больше{" "}
+        <code className={styles.inlineCode}>n / 2ᵏ</code> элементов, поэтому
+        достаточно порядка <code className={styles.inlineCode}>log₂ n</code>{" "}
+        сравнений.
       </Typography.Text>
       <CodeBlock
         className={styles.codeBlock}

@@ -16,10 +16,6 @@
   display: none;
 }
 
-.practiceSet:not([data-enhanced]) .practiceTabs {
-  display: none;
-}
-
 .practiceTab {
   position: relative;
   display: grid;

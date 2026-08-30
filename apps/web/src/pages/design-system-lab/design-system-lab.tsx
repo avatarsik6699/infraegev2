@@ -524,17 +524,21 @@ export const DesignSystemLab: React.FC = () => {
               value={feedbackTab}
               onValueChange={setFeedbackTab}
             >
-              <TabsList label="Пример состояний" hidden={!enhanced}>
+              <TabsList
+                label="Пример состояний"
+                hidden={!enhanced}
+                className={enhanced ? undefined : styles.enhancedOnly}
+              >
                 <TabsTab value="validation">Валидация</TabsTab>
                 <TabsTab value="empty">Пустое состояние</TabsTab>
               </TabsList>
-              <TabsPanel value="validation">
+              <TabsPanel value="validation" className={styles.tabsPanel}>
                 <Typography.Text>
                   Ошибка появляется рядом с полем и связана с ним программно;
                   введённое значение не пропадает.
                 </Typography.Text>
               </TabsPanel>
-              <TabsPanel value="empty">
+              <TabsPanel value="empty" className={styles.tabsPanel}>
                 <EmptyState
                   title="Практика ещё не начата"
                   description="Решите первую задачу, и здесь появится прогресс темы."

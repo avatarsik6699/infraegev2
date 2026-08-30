@@ -8,6 +8,17 @@ import {
 } from "./src/entities/course/content/course-publication.mjs";
 import { lessonPublications } from "./src/entities/lesson/content/lesson-publication.mjs";
 
+const isPublishedPrerenderPath = (
+  path: string,
+  publishedLessonPaths: ReadonlySet<string>,
+  publishedCoursePaths: ReadonlySet<string>,
+): boolean =>
+  [
+    !path.startsWith("/lab/"),
+    !path.startsWith("/ege/") || publishedLessonPaths.has(path),
+    !path.startsWith("/courses/") || publishedCoursePaths.has(path),
+  ].every(Boolean);
+
 export default defineConfig((configEnv) => {
   const apiProxyTarget =
     process.env.VITE_PROXY_TARGET ?? "http://localhost:8000";
@@ -72,9 +83,11 @@ export default defineConfig((configEnv) => {
           crawlLinks: true,
           // The lesson lab is an unlisted design proof, not published content.
           filter: ({ path }) =>
-            !path.startsWith("/lab/") &&
-            (!path.startsWith("/ege/") || publishedLessonPaths.has(path)) &&
-            (!path.startsWith("/courses/") || publishedCoursePaths.has(path)),
+            isPublishedPrerenderPath(
+              path,
+              publishedLessonPaths,
+              publishedCoursePaths,
+            ),
           failOnError: true,
         },
       }),
