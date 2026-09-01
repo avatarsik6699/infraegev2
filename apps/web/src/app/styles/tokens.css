@@ -3,6 +3,9 @@
   --font-ui: var(--theme-font-ui);
   --font-reading: var(--theme-font-reading);
   --font-data: var(--theme-font-data);
+  --font-alchimia-display: var(--theme-font-alchimia-display);
+  --font-alchimia-reading: var(--theme-font-alchimia-reading);
+  --font-alchimia-service: var(--theme-font-alchimia-service);
   --text-2xs: 0.75rem;
   --text-xs: 0.8125rem;
   --text-sm: 0.875rem;
@@ -27,6 +30,8 @@
   --text-lab-array: 0.78rem;
   --text-lab-note: 0.88rem;
   --text-lab-mobile-display: clamp(2.05rem, 9.2vw, 2.55rem);
+  --text-alchimia-wordmark: clamp(1.75rem, 2.4vw, 2.25rem);
+  --text-alchimia-wordmark-mobile: 1.75rem;
 
   /* Semantic color roles */
   --color-bg: var(--theme-page);
@@ -40,6 +45,10 @@
   --color-rule-strong: var(--theme-rule-strong);
   --color-brand: var(--theme-brand);
   --color-brand-text: var(--theme-brand-ink);
+  --color-alchimia-paper: var(--theme-alchimia-paper);
+  --color-alchimia-ink: var(--theme-alchimia-ink);
+  --color-alchimia-ink-secondary: var(--theme-alchimia-ink-secondary);
+  --color-alchimia-rule: var(--theme-alchimia-rule);
   --color-accent: var(--theme-primary);
   --color-accent-dark: var(--theme-primary-hover);
   --color-accent-soft: var(--theme-interactive-muted);

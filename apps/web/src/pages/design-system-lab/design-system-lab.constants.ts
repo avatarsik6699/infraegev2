@@ -40,29 +40,42 @@ export const practiceTasks: PracticeTaskTypes.LocalTask[] = [
 ];
 
 export const colorTokens = [
-  { name: "--color-bg", label: "Фон страницы" },
-  { name: "--color-surface", label: "Поверхность" },
-  { name: "--color-text", label: "Текст" },
-  { name: "--color-muted", label: "Вторичный текст" },
-  { name: "--color-rule", label: "Линия" },
-  { name: "--color-accent", label: "Основное действие" },
-  { name: "--color-code", label: "Код (фон)" },
+  {
+    name: "--color-alchimia-paper",
+    label: "Белый фон",
+    usage: "Основной фон",
+  },
+  {
+    name: "--color-alchimia-ink",
+    label: "Чернила",
+    usage: "Заголовки и основной текст",
+  },
+  {
+    name: "--color-alchimia-ink-secondary",
+    label: "Вторичные чернила",
+    usage: "Пояснения и служебный текст",
+  },
+  {
+    name: "--color-alchimia-rule",
+    label: "Граница",
+    usage: "Структурные линии",
+  },
 ] as const;
 
 export const fontTokens = [
   {
-    name: "--font-reading",
+    name: "--font-alchimia-display",
+    label: "Display — Cormorant SC",
+    sample: "Алхимия знания начинается с точного вопроса.",
+  },
+  {
+    name: "--font-alchimia-reading",
     label: "Reading — Literata",
     sample: "Рекурсия — это вызов функции самой себя.",
   },
   {
-    name: "--font-ui",
-    label: "UI — Onest",
-    sample: "Навигация, подписи, интерфейсные элементы.",
-  },
-  {
-    name: "--font-data",
-    label: "Data — mono",
+    name: "--font-alchimia-service",
+    label: "Service & code — IBM Plex Mono",
     sample: "def fib(n): return n if n < 2 else fib(n-1)+fib(n-2)",
   },
 ] as const;
@@ -85,10 +98,50 @@ export const spacingTokens = [
   { name: "--space-section-break", label: "space-section-break" },
 ] as const;
 
-export const catalogNavigation = [
-  { id: "foundations", label: "Foundations" },
-  { id: "primitives", label: "Primitives" },
-  { id: "feedback-disclosure", label: "Feedback & Disclosure" },
-  { id: "lesson-patterns", label: "Lesson Patterns" },
-  { id: "composite-flows", label: "Composite Flows" },
+export const dashboardTabDefinitions = [
+  {
+    value: "system",
+    label: "Система",
+    description: "Язык всего приложения",
+  },
+  {
+    value: "components",
+    label: "Компоненты",
+    description: "Публичные UI-контракты",
+  },
+  {
+    value: "widgets",
+    label: "Виджеты",
+    description: "Составные части страниц",
+  },
+] as const;
+
+export const systemSections = [
+  { id: "system-identity", label: "Айдентика" },
+  { id: "system-typography", label: "Типографика" },
+  { id: "system-color", label: "Цвет" },
+  { id: "system-surfaces", label: "Поверхности и границы" },
+  { id: "system-layout", label: "Layout и адаптивность" },
+  { id: "system-accessibility", label: "Доступность" },
+  { id: "system-tokens", label: "Карта токенов" },
+  { id: "system-rhythm", label: "Вертикальный ритм" },
+  { id: "system-icons", label: "Иконки" },
+  { id: "system-content-language", label: "Язык контента" },
+] as const;
+
+export const componentSections = [
+  { id: "components-content", label: "Текст и структура" },
+  { id: "components-actions", label: "Действия и навигация" },
+  { id: "components-input", label: "Ввод и раскрытие" },
+  { id: "components-feedback", label: "Статусы и обратная связь" },
+  { id: "components-media", label: "Код и медиа" },
+  { id: "components-learning", label: "Учебный контент" },
+  { id: "components-features", label: "Продуктовые features" },
+] as const;
+
+export const widgetSections = [
+  { id: "widgets-chrome", label: "Навигация приложения" },
+  { id: "widgets-learning", label: "Навигация урока" },
+  { id: "widgets-flow", label: "Учебный flow" },
+  { id: "widgets-layout", label: "Композиции страниц" },
 ] as const;

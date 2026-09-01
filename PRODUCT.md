@@ -46,13 +46,18 @@ fallback.
 
 ## Brand Commitments
 
-The product name is `infraege`. Public copy is concise, factual and calm. The architect-supplied
-`docs/artifacts/final_logo.svg` is the sole production identity source: its three-stone geometry
-and `#FF6B00` / `#393939` colors stay unchanged in large uses, while tiny favicon exports use an
-optically simplified three-ellipse derivative. The live Literata wordmark keeps `infra` neutral
-and uses the contrast-safe `#F56300` derivative for `ege`. The interface remains neutral light: borders, link
-underlines, formula/code recognition surfaces, controls and statuses do not reuse the logo orange.
-The binding rules live in `docs/FRONTEND.md`.
+The current public identity remains `infraege` until the lab-first transition is explicitly
+approved. The approved target identity is `ALCHIMIA`: the architect-supplied
+`docs/artifacts/references/logo_with_transperant_bg.svg` is its sole artistic authority and must
+retain its visible geometry. The current lab profile stays on white and uses only achromatic text
+and structural roles. Any broader palette, including paper or copper accents, remains a later
+architect-approved decision. Visual character comes from typography and composition, not atlas
+decoration, ornamental frames, extra prose colors,
+arbitrary type sizes or widespread bold text. `ALCHIMIA` remains live accessible
+text beside the mark in a compact reusable header. Change 75 develops this direction only on `/lab/design-system`, one small
+architect-reviewed increment at a time; public identity,
+metadata and authored lessons change in later architect-approved units. Binding rules live in
+`docs/FRONTEND.md`.
 
 ## Evidence on Hand
 

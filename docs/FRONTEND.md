@@ -274,6 +274,56 @@ app → routes → pages → widgets → features → entities → shared
 - Outcomes describe what the learner can now do. Instructions, hints and feedback say what to do
   next; mistakes are explained without blame, vague encouragement or hidden scoring.
 
+### 6.1 ALCHIMIA lab transition
+
+- ALCHIMIA copy follows one explicit learning bridge: begin from a familiar situation, name and
+  explain the new term where it first matters, demonstrate it concretely, generalize only after
+  the example, retrieve the idea briefly, then practise and close with an observable result. A
+  term may instead point back to a previous lesson only when that dependency is already true in
+  the authored curriculum. Humanization never removes intermediate reasoning, examples,
+  distinctions or the final synthesis.
+- Change 75 changes only `/lab/design-system`. Build the target profile there through small,
+  separately reviewable increments; do not touch `/lab/lesson`, production routes or shared
+  consumers until the architect explicitly approves a later scope. An isolated reusable widget
+  may be introduced when `/lab/design-system` remains its only consumer; this proves the future
+  production boundary without activating it. Candidate theme values may cross the enforced
+  theme/token boundary only when no public consumer uses them yet.
+- The supplied `docs/artifacts/references/logo_with_transperant_bg.svg` is the sole artistic
+  authority. The obsolete opaque-canvas `logo.svg` is not a fallback. A derivative may repair
+  delivery sizing/viewBox behavior, but may not redraw, smooth, recolor or reinterpret visible
+  geometry. The rejected hero-scale F1 composition is superseded by F11's compact reusable header.
+- The architect selected Athanor's typography roles for the lab: self-hosted Cormorant SC carries
+  display headings and the live wordmark, Literata carries continuous reading, and IBM Plex Mono
+  is limited to code, data and compact service UI. The lab exposes one achromatic primary and one
+  achromatic secondary prose level over the original white background; status colors remain
+  semantic rather than decorative. Public consumers keep the active production profile until the
+  later activation change.
+- After typography approval, keep the lab's original white background and monochrome presentation.
+  Copper activation and broader color work require a later explicit checkpoint. The
+  architecture-led lab dashboard groups contracts into System, Components and Widgets tabs:
+  System owns app-wide identity, typography, palette, layout constraints, accessibility/browser
+  behavior, curated semantic tokens, the active icon inventory and content-language rules;
+  Components groups public `shared`/`entities`/`features` UI contracts by meaning; Widgets owns
+  composed page regions. The System token map demonstrates the supported
+  `theme → semantic → component` direction and every role it lists, but deliberately excludes
+  internal theme values, syntax-only roles, component aliases and lab-only experimental sizes.
+  Its content-language examples document the approved learning-copy bridge without becoming a
+  representative lesson or changing authored content. Each panel has a sticky local table of
+  contents. Controlled tabs must progressively enhance into one active panel while
+  SSR/no-JavaScript renders every panel as an ordinary linear block.
+- Running text has one primary and one secondary neutral level. Copper-orange is inactive in
+  Change 75; any later activation requires an explicit checkpoint and still may not color ordinary
+  paragraphs. Semantic feedback remains independent and never becomes decorative palette.
+- The active lab does not render the `patterns_lines.png` atlas. Headers, catalog navigation,
+  section separators, frames, diagram internals, swatches and interactive controls use standard
+  neutral borders; the primary tablist uses only its ordinary active indicator. The atlas remains
+  a documentation reference rather than a runtime UI asset.
+- Vertical rhythm has three roles: content flow (`0.75–1rem`), concept separation
+  (`1.75–2.5rem`) and major-section separation (`3.5–6rem`). Responsive rules preserve the
+  hierarchy rather than reducing all three roles to one mobile gap.
+- Lesson composition, responsive outline behavior and authored lesson copy are outside Change 75.
+  They remain future work after the design-system lab establishes an approved visual foundation.
+
 ## 7. Fields and validation
 
 - Prevent impossible input where the constraint is obvious, but never show errors on a pristine

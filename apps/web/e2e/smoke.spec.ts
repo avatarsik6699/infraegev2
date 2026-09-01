@@ -252,7 +252,7 @@ test("privacy and crawl surfaces describe the public release", async ({
   await publicDiscoveryPage.expectRobotsAndSitemap();
 });
 
-test("the design-system catalog works across viewports and without JavaScript", async ({
+test("the design-system catalog works on desktop and without JavaScript", async ({
   browserSession,
   designSystemLabPage,
   noJavaScriptDesignSystemLabPage,
@@ -264,11 +264,11 @@ test("the design-system catalog works across viewports and without JavaScript", 
   await designSystemLabPage.expectNoHorizontalOverflow();
   await browserSession.captureViewport("design-system-lab-desktop.png");
 
-  await browserSession.useNarrowViewport();
+  await browserSession.useZoomedDesktopViewport();
   await designSystemLabPage.open();
   await designSystemLabPage.expectCatalogStructure();
   await designSystemLabPage.expectNoHorizontalOverflow();
-  await browserSession.captureViewport("design-system-lab-mobile.png");
+  await browserSession.captureViewport("design-system-lab-zoomed.png");
   browserSession.expectCleanConsole();
 
   await noJavaScriptDesignSystemLabPage.expectLinearContentWithoutJavaScript();

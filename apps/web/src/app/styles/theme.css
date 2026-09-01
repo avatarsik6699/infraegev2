@@ -12,6 +12,10 @@
   --theme-rule-strong: oklch(0.87 0 0);
   --theme-brand: #ff6b00;
   --theme-brand-ink: #f56300;
+  --theme-alchimia-paper: #ffffff;
+  --theme-alchimia-ink: #171717;
+  --theme-alchimia-ink-secondary: #606060;
+  --theme-alchimia-rule: #d4d4d4;
   --theme-primary: oklch(0.205 0 0);
   --theme-primary-hover: oklch(0.145 0 0);
   --theme-interactive-muted: oklch(0.97 0 0);
@@ -36,6 +40,12 @@
   --theme-font-ui: "Onest Fallback", Arial, sans-serif;
   --theme-font-reading: "Literata Fallback", Georgia, serif;
   --theme-font-data: "SFMono-Regular", Consolas, monospace;
+  --theme-font-alchimia-display:
+    "Alchimia Cormorant SC", "Cormorant SC", Georgia, serif;
+  --theme-font-alchimia-reading:
+    "Alchimia Literata", "Literata Fallback", Georgia, serif;
+  --theme-font-alchimia-service:
+    "Alchimia IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
 
   --theme-radius-sm: 0.5rem;
   --theme-radius-md: 0.625rem;
