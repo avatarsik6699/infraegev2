@@ -17,7 +17,7 @@ export const practiceTasks: PracticeTaskTypes.LocalTask[] = [
         text: "При n = 0 функция возвращается сразу, без нового вызова — это и есть базовый случай.",
       },
     ],
-    theoryLinks: [{ hash: "base-case", label: "Базовый случай" }],
+    theoryLinks: [{ hash: "widget-base-case", label: "Базовый случай" }],
   },
   {
     id: "design-system-lab-call-count",
@@ -35,7 +35,27 @@ export const practiceTasks: PracticeTaskTypes.LocalTask[] = [
         text: "4 вызова: countdown(3), countdown(2), countdown(1), countdown(0) — последний из них базовый случай.",
       },
     ],
-    theoryLinks: [{ hash: "base-case", label: "Базовый случай" }],
+    theoryLinks: [{ hash: "widget-base-case", label: "Базовый случай" }],
+  },
+];
+
+export const componentPracticeTasks: PracticeTaskTypes.LocalTask[] = [
+  {
+    ...practiceTasks[0],
+    id: "design-system-lab-component-base-case",
+    theoryLinks: [
+      { hash: "catalog-recursive-step", label: "Рекурсивный вызов" },
+    ],
+  },
+];
+
+export const componentErrorPracticeTasks: PracticeTaskTypes.LocalTask[] = [
+  {
+    ...practiceTasks[0],
+    id: "design-system-lab-component-check-error",
+    theoryLinks: [
+      { hash: "catalog-recursive-step", label: "Рекурсивный вызов" },
+    ],
   },
 ];
 

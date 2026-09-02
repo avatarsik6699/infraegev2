@@ -1,4 +1,5 @@
 import { useId } from "react";
+import { cssUtils } from "~/shared/lib/css-utils";
 import type { LearningVisualFrameTypes } from "./learning-visual-frame.types";
 import styles from "./learning-visual-frame.module.css";
 
@@ -8,7 +9,10 @@ export const LearningVisualFrame: React.FC<LearningVisualFrameTypes.Props> = (
   const descriptionId = useId();
 
   return (
-    <figure className={props.className} aria-describedby={descriptionId}>
+    <figure
+      className={cssUtils.cx(styles.root, props.className)}
+      aria-describedby={descriptionId}
+    >
       <figcaption className={styles.caption} data-visual-caption>
         <span>{props.caption}</span>
         <span className={styles.purpose}>{props.purpose}</span>

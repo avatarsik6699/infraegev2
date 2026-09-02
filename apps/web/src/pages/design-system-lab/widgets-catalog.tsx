@@ -1,13 +1,42 @@
 import { Typography } from "~/shared/components/typography";
 import { AlchimiaHeader } from "~/widgets/alchimia-header";
 import { LessonOutline } from "~/widgets/lesson-outline";
-import { LessonPracticeFlow } from "~/widgets/lesson-practice-flow";
 import { PublicFooter } from "~/widgets/public-footer";
 import { PublicHeader } from "~/widgets/public-header";
-import { createLocalPracticeChecker } from "~/features/lesson-practice";
 import { CatalogLayout } from "./catalog-layout";
-import { practiceTasks, widgetSections } from "./design-system-lab.constants";
+import {
+  CatalogContractMap,
+  type CatalogContract,
+} from "./catalog-contract-map";
+import { widgetSections } from "./design-system-lab.constants";
+import { WidgetPracticeFlowSpecimen } from "./widget-practice-flow-specimen";
 import styles from "./design-system-lab.module.css";
+
+const live = (name: string, note: string): CatalogContract => ({
+  name,
+  note,
+  status: "live",
+});
+
+const candidate = (name: string, note: string): CatalogContract => ({
+  name,
+  note,
+  status: "candidate",
+});
+
+const widgetContracts = {
+  chrome: [
+    candidate("AlchimiaHeader", "Новая айдентика только для текущего lab"),
+    live("PublicHeader", "Действующая шапка публичных страниц"),
+    live("PublicFooter", "Действующая навигация в подвале"),
+  ],
+  learning: [
+    live("LessonOutline", "Содержание урока и активная смысловая ветка"),
+  ],
+  flow: [
+    live("LessonPracticeFlow", "Практика, связанная с локальным прогрессом"),
+  ],
+} as const;
 
 const outlineGroups = [
   {
@@ -43,24 +72,23 @@ export const WidgetsCatalog: React.FC = () => (
       >
         Навигация приложения
       </Typography.Title>
-      <ul className={styles.nameGrid} aria-label="Виджеты навигации приложения">
-        <li>
-          <code>AlchimiaHeader</code>
-        </li>
-        <li>
-          <code>PublicHeader</code>
-        </li>
-        <li>
-          <code>PublicFooter</code>
-        </li>
-      </ul>
-      <div className={styles.widgetSpecimen}>
+      <CatalogContractMap
+        contracts={widgetContracts.chrome}
+        label="Контракты навигации приложения"
+      />
+      <div
+        className={styles.widgetSpecimen}
+        data-widget-specimen="AlchimiaHeader"
+      >
         <code className={styles.typeTag}>ALCHIMIA · candidate header</code>
         <div className={styles.widgetCanvas}>
           <AlchimiaHeader home />
         </div>
       </div>
-      <div className={styles.widgetSpecimen}>
+      <div
+        className={styles.widgetSpecimen}
+        data-widget-specimen="PublicChrome"
+      >
         <code className={styles.typeTag}>infraege · current public chrome</code>
         <div className={`${styles.widgetCanvas} ${styles.productionPreview}`}>
           <PublicHeader home />
@@ -86,12 +114,14 @@ export const WidgetsCatalog: React.FC = () => (
       >
         Навигация урока
       </Typography.Title>
-      <ul className={styles.nameGrid} aria-label="Виджеты навигации урока">
-        <li>
-          <code>LessonOutline</code>
-        </li>
-      </ul>
-      <div className={styles.outlineSpecimen}>
+      <CatalogContractMap
+        contracts={widgetContracts.learning}
+        label="Контракты навигации урока"
+      />
+      <div
+        className={styles.outlineSpecimen}
+        data-widget-specimen="LessonOutline"
+      >
         <LessonOutline groups={outlineGroups} activeId="widget-definition" />
         <div className={styles.outlineContent}>
           <Typography.Title order={4} id="widget-overview">
@@ -126,21 +156,16 @@ export const WidgetsCatalog: React.FC = () => (
       >
         Учебный flow
       </Typography.Title>
-      <ul className={styles.nameGrid} aria-label="Виджеты учебного flow">
-        <li>
-          <code>LessonPracticeFlow</code>
-        </li>
-      </ul>
+      <CatalogContractMap
+        contracts={widgetContracts.flow}
+        label="Контракты учебного flow"
+      />
       <Typography.Text className={styles.placeholder}>
         Виджет соединяет публичный feature <code>LessonPractice</code> с
         локальным progress store. Внутренние части формы не становятся
         самостоятельными контрактами каталога.
       </Typography.Text>
-      <LessonPracticeFlow
-        checkAnswer={createLocalPracticeChecker(practiceTasks)}
-        lessonId="design-system-lab"
-        tasks={practiceTasks}
-      />
+      <WidgetPracticeFlowSpecimen />
     </section>
 
     <section
@@ -160,19 +185,62 @@ export const WidgetsCatalog: React.FC = () => (
         показывают границы существующих widgets и не создают ещё один layout
         API.
       </Typography.Text>
-      <div
-        className={styles.layoutDiagram}
-        aria-label="Схема публичной страницы"
-      >
-        <span>PublicHeader</span>
-        <span>Page content</span>
-        <span>PublicFooter</span>
+      <div className={styles.assemblyGrid}>
+        <figure
+          className={styles.assemblyMap}
+          data-widget-assembly="public-page"
+        >
+          <figcaption>
+            <code>Public page</code>
+            <span>Действующая публичная композиция</span>
+          </figcaption>
+          <ol className={styles.assemblySequence}>
+            <li>
+              <code>PublicHeader</code>
+              <span>Айдентика и версия</span>
+            </li>
+            <li>
+              <code>Page content</code>
+              <span>Содержание маршрута</span>
+            </li>
+            <li>
+              <code>PublicFooter</code>
+              <span>Служебная навигация</span>
+            </li>
+          </ol>
+        </figure>
+        <figure
+          className={styles.assemblyMap}
+          data-widget-assembly="lesson-page"
+        >
+          <figcaption>
+            <code>Lesson page</code>
+            <span>Действующая учебная композиция</span>
+          </figcaption>
+          <ol className={styles.assemblySequence}>
+            <li>
+              <code>PublicHeader</code>
+              <span>Переход на главную</span>
+            </li>
+            <li>
+              <code>LessonOutline</code>
+              <span>Навигация рядом с чтением</span>
+            </li>
+            <li>
+              <code>LessonPracticeFlow</code>
+              <span>Практика и прогресс</span>
+            </li>
+            <li>
+              <code>PublicFooter</code>
+              <span>Завершение страницы</span>
+            </li>
+          </ol>
+        </figure>
       </div>
-      <div className={styles.layoutDiagram} aria-label="Схема страницы урока">
-        <span>Header</span>
-        <span>LessonOutline + reading stream</span>
-        <span>LessonPracticeFlow</span>
-      </div>
+      <Typography.Text className={styles.placeholder}>
+        <code>AlchimiaHeader</code> — кандидат на будущую замену, а не часть
+        текущей публичной сборки.
+      </Typography.Text>
     </section>
   </CatalogLayout>
 );

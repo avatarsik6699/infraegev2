@@ -1,13 +1,14 @@
 .root {
   width: 100%;
   min-width: 0;
-  min-height: 2.5rem;
-  padding: var(--space-1) var(--space-1-5);
-  border: 1px solid var(--control-secondary-border);
-  border-radius: var(--radius-control);
-  background: var(--control-secondary-bg);
+  min-height: var(--input-min-height, 2.5rem);
+  padding: var(--input-padding-block, var(--space-1))
+    var(--input-padding-inline, var(--space-1-5));
+  border: 1px solid var(--input-border-color, var(--control-secondary-border));
+  border-radius: var(--input-radius, var(--radius-control));
+  background: var(--input-background, var(--control-secondary-bg));
   color: var(--color-text);
-  box-shadow: var(--shadow-control);
+  box-shadow: var(--input-shadow, var(--shadow-control));
   font: inherit;
   line-height: 1.4;
   transition:
@@ -17,7 +18,7 @@
 }
 
 .root::placeholder {
-  color: var(--color-muted);
+  color: var(--input-placeholder-color, var(--color-muted));
   opacity: 1;
 }
 
@@ -29,7 +30,7 @@
   border-color: var(--color-focus);
   border-radius: var(--radius-control);
   outline: none;
-  box-shadow: var(--shadow-control), var(--focus-ring);
+  box-shadow: var(--input-shadow, var(--shadow-control)), var(--focus-ring);
 }
 
 .root[aria-invalid="true"] {

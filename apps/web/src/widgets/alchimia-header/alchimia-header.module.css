@@ -31,11 +31,26 @@
 }
 
 .wordmark {
+  display: block;
   font-family: var(--font-alchimia-display);
   font-size: var(--text-alchimia-wordmark);
   font-weight: 600;
   letter-spacing: 0.12em;
   line-height: 1;
+}
+
+.name {
+  display: grid;
+  gap: 0.1rem;
+}
+
+.subtitle {
+  color: var(--color-alchimia-ink-secondary);
+  font-family: var(--font-alchimia-service);
+  font-size: var(--text-2xs);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
 }
 
 a.brand:hover {

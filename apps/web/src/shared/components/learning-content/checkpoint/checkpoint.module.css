@@ -2,8 +2,17 @@
   display: grid;
   gap: var(--space-1);
   margin: 0;
-  padding: var(--space-0-5) var(--space-2) var(--space-0-5) var(--space-2);
-  border-left: 2px solid var(--color-info-rule);
+  padding: var(
+    --learning-alert-padding,
+    var(--space-0-5) var(--space-2) var(--space-0-5) var(--space-2)
+  );
+  border: var(--learning-alert-border, 0 solid transparent);
+  border-left: var(
+    --learning-alert-accent-border,
+    2px solid var(--color-info-rule)
+  );
+  border-radius: var(--learning-alert-radius, 0);
+  background: var(--learning-alert-background, transparent);
 }
 
 .heading {

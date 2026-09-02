@@ -13,6 +13,7 @@ export const Badge: React.FC<BadgeTypes.Props> = ({
   return (
     <span
       {...badgeProps}
+      data-badge=""
       data-tone={tone}
       data-full-width={fullWidth || undefined}
       className={cssUtils.cx(styles.root, className)}

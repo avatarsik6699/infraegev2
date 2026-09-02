@@ -379,6 +379,30 @@ export class PythonCoursePage {
     await expectPracticeAnswerJourney(this.page, "False", " true ");
   }
 
+  async expectLongCodeDisclosure(): Promise<void> {
+    const block = this.page.locator("[data-code-block-long]").first();
+    const content = block.locator("[data-code-scroll]");
+    const toggle = block.getByRole("button", { name: "Показать весь код" });
+    await expect(content).toHaveAttribute("data-collapsed", "true");
+    await toggle.click();
+    await expect(content).not.toHaveAttribute("data-collapsed", "true");
+    await expect(
+      block.getByRole("button", { name: "Свернуть код" }),
+    ).toHaveAttribute("aria-expanded", "true");
+  }
+
+  async expectLongCodeReadableWithoutJavaScript(): Promise<void> {
+    await expect(this.page.locator("[data-code-block-long]")).not.toHaveCount(
+      0,
+    );
+    await expect(
+      this.page.locator("[data-code-scroll][data-collapsed]"),
+    ).toHaveCount(0);
+    await expect(
+      this.page.getByRole("button", { name: "Показать весь код" }),
+    ).toHaveCount(0);
+  }
+
   async expectPublishedLesson(): Promise<void> {
     await expectPublishedLessonDocument(this.page, {
       canonicalPath: "/courses/python/pervaya-programma",

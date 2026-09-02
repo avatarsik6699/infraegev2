@@ -144,6 +144,26 @@ for (const [routeSlug, title] of finalProjectLessons) {
   });
 }
 
+test("long public code is collapsible after hydration and complete without JavaScript", async ({
+  browserSession,
+  noJavaScriptPythonCoursePage,
+  pythonCoursePage,
+}) => {
+  await browserSession.useDesktopViewport();
+  await pythonCoursePage.openFinalProjectLesson(
+    "gotovaya-programma",
+    "Проверяем весь сценарий и наводим порядок в коде",
+  );
+  await pythonCoursePage.expectLongCodeDisclosure();
+  browserSession.expectCleanConsole();
+
+  await noJavaScriptPythonCoursePage.openFinalProjectLesson(
+    "gotovaya-programma",
+    "Проверяем весь сценарий и наводим порядок в коде",
+  );
+  await noJavaScriptPythonCoursePage.expectLongCodeReadableWithoutJavaScript();
+});
+
 test("the unlisted lesson lab works across viewports and without JavaScript", async ({
   browserSession,
   lessonLabPage,
@@ -259,7 +279,9 @@ test("the design-system catalog works on desktop and without JavaScript", async 
 }) => {
   await browserSession.useDesktopViewport();
   await designSystemLabPage.open();
-  await designSystemLabPage.expectCatalogStructure();
+  await designSystemLabPage.expectCatalogStructure({
+    widgetPersistence: true,
+  });
   await designSystemLabPage.expectUnlistedMetadata();
   await designSystemLabPage.expectNoHorizontalOverflow();
   await browserSession.captureViewport("design-system-lab-desktop.png");

@@ -1,12 +1,12 @@
 .root {
   display: inline-flex;
-  min-height: 1.5rem;
+  min-height: var(--badge-height, 1.5rem);
   gap: var(--space-0-5);
   align-items: center;
   width: fit-content;
-  padding: 0.1rem var(--space-1);
+  padding: var(--badge-padding, 0.1rem var(--space-1));
   border: 1px solid transparent;
-  border-radius: var(--radius-pill);
+  border-radius: var(--badge-radius, var(--radius-pill));
   background: var(--color-surface-quiet);
   color: var(--color-text-soft);
   font-family: var(--font-data);

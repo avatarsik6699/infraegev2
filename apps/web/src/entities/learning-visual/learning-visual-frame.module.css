@@ -1,8 +1,15 @@
+.root {
+  overflow: var(--learning-media-overflow, visible);
+  border: var(--learning-media-border, 0 solid transparent);
+  border-radius: var(--learning-media-radius, 0);
+  background: var(--learning-media-background, transparent);
+}
+
 .caption {
   display: flex;
   gap: 1rem;
   justify-content: space-between;
-  padding-block: 0.65rem 0.85rem;
+  padding: var(--learning-media-caption-padding, 0.65rem 0 0.85rem);
   color: var(--color-muted);
   font-family: var(--font-ui);
   font-size: var(--text-xs);
@@ -22,7 +29,7 @@
 
 .alternative {
   max-width: 72ch;
-  padding: 0.9rem 0 0;
+  padding: var(--learning-media-alternative-padding, 0.9rem 0 0);
   color: var(--color-muted);
   font-family: var(--font-reading);
   font-size: var(--text-sm);

@@ -58,7 +58,10 @@
   display: grid;
   gap: var(--space-1);
   margin: 0;
-  padding: 0;
+  padding: var(--learning-panel-padding, 0);
+  border: var(--learning-panel-border, 0 solid transparent);
+  border-radius: var(--learning-panel-radius, 0);
+  background: var(--learning-panel-background, transparent);
 }
 
 .learningContentEyebrow {

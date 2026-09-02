@@ -6,14 +6,14 @@
   height: var(--progress-height, 0.5rem);
   overflow: hidden;
   border-radius: var(--radius-pill);
-  background: var(--color-surface-quiet);
+  background: var(--progress-track-background, var(--color-surface-quiet));
 }
 
 .indicator {
   width: var(--progress-value);
   height: 100%;
   border-radius: inherit;
-  background: var(--color-text);
+  background: var(--progress-indicator-background, var(--color-text));
 }
 
 .root[data-complete] .indicator {

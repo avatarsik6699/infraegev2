@@ -30,8 +30,8 @@
   --text-lab-array: 0.78rem;
   --text-lab-note: 0.88rem;
   --text-lab-mobile-display: clamp(2.05rem, 9.2vw, 2.55rem);
-  --text-alchimia-wordmark: clamp(1.75rem, 2.4vw, 2.25rem);
-  --text-alchimia-wordmark-mobile: 1.75rem;
+  --text-alchimia-wordmark: 1.5rem;
+  --text-alchimia-wordmark-mobile: 1.375rem;
 
   /* Semantic color roles */
   --color-bg: var(--theme-page);

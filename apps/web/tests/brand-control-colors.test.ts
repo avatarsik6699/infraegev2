@@ -49,8 +49,12 @@ describe("restrained brand accents", () => {
     );
 
     expect(themeSource).toContain("--theme-radius-sm: 0.5rem");
-    expect(badgeSource).toContain("border-radius: var(--radius-pill)");
-    expect(progressSource).toContain("background: var(--color-text)");
+    expect(badgeSource).toContain(
+      "border-radius: var(--badge-radius, var(--radius-pill))",
+    );
+    expect(progressSource).toContain(
+      "background: var(--progress-indicator-background, var(--color-text))",
+    );
   });
 
   it("keeps notation and code surfaces independent from the brand", () => {

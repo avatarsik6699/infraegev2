@@ -108,6 +108,11 @@ describe("Button", () => {
 });
 
 describe("CodeBlock", () => {
+  const longCode = Array.from(
+    { length: 9 },
+    (_, index) => `print(${String(index + 1)})`,
+  ).join("\n");
+
   it("renders synchronous Python tokens and optional line numbers as React nodes", () => {
     const result = render(
       <CodeBlock
@@ -135,6 +140,38 @@ describe("CodeBlock", () => {
     );
 
     expect(result.container.querySelector("[data-token]")).toBeNull();
+  });
+
+  it("collapses nine or more lines after hydration and exposes an accessible toggle", () => {
+    const result = render(
+      <CodeBlock code={longCode} label="Длинный пример" language="python" />,
+    );
+    const content = result.container.querySelector("[data-code-scroll]");
+    const toggle = screen.getByRole("button", { name: "Показать весь код" });
+
+    expect(content?.getAttribute("data-collapsed")).toBe("true");
+    expect(toggle.getAttribute("aria-expanded")).toBe("false");
+    expect(toggle.getAttribute("aria-controls")).toBe(content?.id);
+    expect(toggle.querySelector("svg")).toBeTruthy();
+
+    fireEvent.click(toggle);
+    expect(content?.getAttribute("data-collapsed")).toBeNull();
+    expect(
+      screen
+        .getByRole("button", { name: "Свернуть код" })
+        .getAttribute("aria-expanded"),
+    ).toBe("true");
+  });
+
+  it("keeps long code complete and disclosure controls absent in SSR", () => {
+    const html = renderToString(
+      <CodeBlock code={longCode} label="Длинный пример" language="python" />,
+    );
+
+    expect(html).toContain('data-token="num">9</span>');
+    expect(html).not.toContain("data-collapsed");
+    expect(html).not.toContain("Показать весь код");
+    expect(html).not.toContain("Свернуть код");
   });
 
   it("copies through the browser boundary and announces success", async () => {
@@ -249,8 +286,10 @@ describe("Progress and disclosure", () => {
       name: "Что делает базовый случай?",
     });
     expect(trigger.getAttribute("aria-expanded")).toBe("false");
+    expect(trigger.hasAttribute("data-panel-open")).toBe(false);
     fireEvent.click(trigger);
     expect(trigger.getAttribute("aria-expanded")).toBe("true");
+    expect(trigger.hasAttribute("data-panel-open")).toBe(true);
   });
 
   it("renders accordion content linearly before enhancement", () => {

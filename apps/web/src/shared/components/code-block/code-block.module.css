@@ -37,8 +37,9 @@
   letter-spacing: 0.08em;
 }
 
-.copyButton {
-  --button-height-compact: 2rem;
+.copyButton,
+.disclosureButton {
+  --button-height-compact: 2.5rem;
 
   border-color: transparent;
   background: transparent;
@@ -65,6 +66,14 @@
   margin: 0;
   overflow-x: auto;
   background: transparent;
+  font-family: var(--font-data);
+  font-size: var(--text-xs);
+  line-height: 1.65;
+}
+
+.scrollArea[data-collapsed] {
+  max-height: calc(13.2em + var(--space-3));
+  overflow-y: hidden;
 }
 
 .code {
@@ -72,9 +81,9 @@
   min-width: 100%;
   padding: var(--space-1-5) var(--space-2);
   color: var(--color-code-text);
-  font-family: var(--font-data);
+  font-family: inherit;
   font-size: var(--text-xs);
-  line-height: 1.65;
+  line-height: inherit;
   tab-size: 4;
 }
 
@@ -128,18 +137,62 @@
   color: var(--color-code-operator);
 }
 
-@media (max-width: 34rem) {
-  .copyButton span:last-child {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-  }
+.disclosure {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-0-5) var(--space-1) var(--space-1);
+  background: var(--color-code);
+}
 
+.disclosure[data-collapsed] {
+  position: absolute;
+  z-index: 1;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding-top: var(--space-5);
+  border-top: 0;
+  background: linear-gradient(to bottom, transparent, var(--color-code) 68%);
+}
+
+.disclosureButton {
+  color: var(--color-code-text);
+}
+
+.disclosureButton.disclosureButton[data-hierarchy]:hover:enabled,
+.disclosureButton.disclosureButton[data-hierarchy]:active:enabled {
+  border-color: transparent;
+  background: transparent;
+  color: var(--color-code-text);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.disclosureButton:focus-visible {
+  outline-color: var(--color-code-text);
+}
+
+.disclosureIcon {
+  transition: transform var(--motion-duration) var(--motion-easing);
+}
+
+.disclosureButton[aria-expanded="true"] .disclosureIcon {
+  transform: rotate(180deg);
+}
+
+@media (max-width: 34rem) {
   .code {
     padding-inline: 1rem;
     font-size: var(--text-2xs);
+  }
+
+  .scrollArea {
+    font-size: var(--text-2xs);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .disclosureIcon {
+    transition: none;
   }
 }

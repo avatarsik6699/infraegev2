@@ -1,5 +1,11 @@
 import { CircleCheck } from "lucide-react";
 import { useState } from "react";
+import { LearningVisualFrame } from "~/entities/learning-visual";
+import {
+  createLocalPracticeChecker,
+  LessonPractice,
+} from "~/features/lesson-practice";
+import { LessonProgress } from "~/features/lesson-progress";
 import { Accordion } from "~/shared/components/accordion";
 import { ActionLink } from "~/shared/components/action-link";
 import { BackLink } from "~/shared/components/back-link";
@@ -7,7 +13,6 @@ import { Badge } from "~/shared/components/badge";
 import { Button } from "~/shared/components/button";
 import { Callout } from "~/shared/components/callout";
 import { CodeBlock } from "~/shared/components/code-block";
-import { Divider } from "~/shared/components/divider";
 import { EmptyState } from "~/shared/components/empty-state";
 import { ExternalLink } from "~/shared/components/external-link";
 import { Field } from "~/shared/components/field";
@@ -17,6 +22,9 @@ import { Input } from "~/shared/components/input";
 import {
   Checkpoint,
   Diagram,
+  LessonIntro,
+  LessonSectionHeading,
+  LessonTheory,
   Mistake,
   Procedure,
   WorkedExample,
@@ -33,8 +41,16 @@ import {
 import { Typography } from "~/shared/components/typography";
 import { useIsEnhanced } from "~/shared/lib/use-is-enhanced";
 import { CatalogLayout } from "./catalog-layout";
+import {
+  CatalogContractMap,
+  type CatalogContract,
+} from "./catalog-contract-map";
 import { ControlSpecimen } from "./control-specimen";
-import { componentSections } from "./design-system-lab.constants";
+import {
+  componentErrorPracticeTasks,
+  componentPracticeTasks,
+  componentSections,
+} from "./design-system-lab.constants";
 import styles from "./design-system-lab.module.css";
 
 const brokenImageSource = "data:image/png;base64,aW52YWxpZA==";
@@ -43,41 +59,75 @@ const longHeading =
 const longParagraph =
   "Если условие остановки никогда не выполняется, вызовы продолжают накапливаться в стеке вызовов — каждый новый вызов ждёт результата следующего.";
 
+const live = (name: string, note: string): CatalogContract => ({
+  name,
+  note,
+  status: "live",
+});
+
+const context = (name: string, note: string): CatalogContract => ({
+  name,
+  note,
+  status: "context",
+});
+
 const componentContracts = {
-  content: ["Typography", "PageContainer", "Divider", "Notation"],
-  actions: ["Button", "ActionLink", "BackLink", "ExternalLink", "FragmentLink"],
-  input: ["Input", "Field", "Accordion", "Tabs"],
-  feedback: ["Badge", "Progress", "Callout", "EmptyState"],
-  media: ["CodeBlock", "Image"],
+  content: [
+    live("Typography", "Текстовые роли и ограничение строк"),
+    live("PageContainer", "Три смысловые ширины контента"),
+    live("Notation", "Кодовая и формульная запись"),
+  ],
+  actions: [
+    live("Button", "Иерархия, плотность, loading и disabled"),
+    live("ActionLink", "Навигационное действие в двух иерархиях"),
+    live("BackLink", "Возврат с безопасным fallback"),
+    live("ExternalLink", "Внешний переход с явным поведением"),
+    live("FragmentLink", "Переход к разделу текущей страницы"),
+  ],
+  input: [
+    live("Input", "Самостоятельное поле ввода"),
+    live("Field", "Подпись, описание, ошибка и disabled"),
+    live("Accordion", "Раскрытие пояснений на месте"),
+    live("TabsRoot", "Владелец выбранного состояния"),
+    live("TabsList", "Семантический список вкладок"),
+    live("TabsTab", "Доступный интерактивный переключатель"),
+    live("TabsPanel", "Связанная область содержимого"),
+  ],
+  feedback: [
+    live("Badge", "Нейтральные и функциональные статусы"),
+    live("Progress", "Определённый и неопределённый процесс"),
+    live("Callout", "Пояснение и предупреждение"),
+    live("EmptyState", "Пустое состояние со следующим действием"),
+  ],
+  media: [
+    live("CodeBlock", "Код и текстовая запись"),
+    live("Image", "Загрузка, ошибка и fallback"),
+  ],
   learning: [
-    "Checkpoint",
-    "Diagram",
-    "LearningVisualFrame",
-    "LessonIntro",
-    "LessonSectionHeading",
-    "LessonTheory",
-    "Mistake",
-    "Procedure",
-    "WorkedExample",
+    live("Checkpoint", "Проверка понимания с раскрываемым ответом"),
+    live("Diagram", "Изображение с учебной подписью"),
+    live("LearningVisualFrame", "Рамка визуала с текстовой альтернативой"),
+    live("LessonIntro", "Заголовок и метаданные урока"),
+    live("LessonSectionHeading", "Нумерованный заголовок учебного раздела"),
+    live("LessonTheory", "Линейный поток понятий"),
+    live("Mistake", "Ошибочное утверждение и спокойное объяснение"),
+    live("Procedure", "Последовательность действий"),
+    live("WorkedExample", "Пошаговый разбор"),
   ],
   features: [
-    "AnalyticsConsentControl",
-    "AnalyticsConsentPrompt",
-    "LessonPractice",
-    "LessonProgress",
-    "ReadingPositionIndicator",
+    context(
+      "AnalyticsConsentControl",
+      "Читает и изменяет реальное согласие браузера",
+    ),
+    context("AnalyticsConsentPrompt", "Владеет согласием и запуском аналитики"),
+    live("LessonPractice", "Локальная проверка без progress store и сети"),
+    live("LessonProgress", "Чистое представление переданного прогресса"),
+    context(
+      "ReadingPositionIndicator",
+      "Наблюдает за scroll-target страницы урока",
+    ),
   ],
 } as const;
-
-const ContractNames: React.FC<{ names: readonly string[] }> = ({ names }) => (
-  <ul className={styles.nameGrid} aria-label="Публичные UI-контракты">
-    {names.map((name) => (
-      <li key={name}>
-        <code>{name}</code>
-      </li>
-    ))}
-  </ul>
-);
 
 export const ComponentsCatalog: React.FC = () => {
   const [feedbackTab, setFeedbackTab] = useState("validation");
@@ -102,7 +152,10 @@ export const ComponentsCatalog: React.FC = () => {
         >
           Текст и структура
         </Typography.Title>
-        <ContractNames names={componentContracts.content} />
+        <CatalogContractMap
+          contracts={componentContracts.content}
+          label="Контракты текста и структуры"
+        />
         <div className={styles.truncateGrid}>
           <div className={styles.truncateCard}>
             <code className={styles.typeTag}>Text · truncate</code>
@@ -141,11 +194,6 @@ export const ComponentsCatalog: React.FC = () => {
           <Notation kind="code">countdown(n)</Notation> — код;{" "}
           <Notation kind="formula">M</Notation> — алгоритмическая переменная.
         </Typography.Text>
-        <div className={styles.dividerSamples}>
-          <Divider />
-          <Divider purpose="comparison" />
-          <Divider dashed />
-        </div>
       </section>
 
       <section
@@ -160,7 +208,10 @@ export const ComponentsCatalog: React.FC = () => {
         >
           Действия и навигация
         </Typography.Title>
-        <ContractNames names={componentContracts.actions} />
+        <CatalogContractMap
+          contracts={componentContracts.actions}
+          label="Контракты действий и навигации"
+        />
         <ControlSpecimen
           kind="controls"
           title="Иерархия действий"
@@ -218,7 +269,10 @@ export const ComponentsCatalog: React.FC = () => {
         >
           Ввод и раскрытие
         </Typography.Title>
-        <ContractNames names={componentContracts.input} />
+        <CatalogContractMap
+          contracts={componentContracts.input}
+          label="Контракты ввода и раскрытия"
+        />
         <ControlSpecimen
           kind="states"
           title="Состояния поля"
@@ -315,7 +369,10 @@ export const ComponentsCatalog: React.FC = () => {
         >
           Статусы и обратная связь
         </Typography.Title>
-        <ContractNames names={componentContracts.feedback} />
+        <CatalogContractMap
+          contracts={componentContracts.feedback}
+          label="Контракты статусов и обратной связи"
+        />
         <ControlSpecimen
           kind="feedback"
           title="Короткий статус"
@@ -380,10 +437,13 @@ export const ComponentsCatalog: React.FC = () => {
         >
           Код и медиа
         </Typography.Title>
-        <ContractNames names={componentContracts.media} />
+        <CatalogContractMap
+          contracts={componentContracts.media}
+          label="Контракты кода и медиа"
+        />
         <CodeBlock
-          code={`def countdown(n):\n    if n == 0:\n        return\n    print(n)\n    countdown(n - 1)`}
-          label="Пример: countdown"
+          code={`def trace_countdown(n):\n    if n == 0:\n        print("Стоп")\n        return\n\n    print("Вызов", n)\n    trace_countdown(n - 1)\n    print("Возврат", n)\n\n\ntrace_countdown(3)`}
+          label="Пример: трассировка countdown"
           language="python"
           showLineNumbers
         />
@@ -437,7 +497,74 @@ export const ComponentsCatalog: React.FC = () => {
         >
           Учебный контент
         </Typography.Title>
-        <ContractNames names={componentContracts.learning} />
+        <CatalogContractMap
+          contracts={componentContracts.learning}
+          label="Контракты учебного контента"
+        />
+        <div className={styles.learningPrimitiveGrid}>
+          <div
+            className={styles.learningPrimitive}
+            data-component-specimen="LessonIntro"
+          >
+            <code className={styles.typeTag}>LessonIntro · isolated</code>
+            <LessonIntro
+              accessTier="free"
+              eyebrow="Мини-курс"
+              summary="Сначала свяжем рекурсию со знакомым повторением, затем разберём один новый вызов."
+              taskCount={2}
+              technology="Python"
+              title="Рекурсия без скачка в сложность"
+            />
+          </div>
+          <div
+            className={styles.learningPrimitive}
+            data-component-specimen="LessonSectionHeading"
+          >
+            <code className={styles.typeTag}>
+              LessonSectionHeading · default
+            </code>
+            <LessonSectionHeading index={2}>
+              Один шаг рекурсии
+            </LessonSectionHeading>
+          </div>
+        </div>
+        <div
+          className={styles.learningTheorySpecimen}
+          data-component-specimen="LessonTheory"
+        >
+          <code className={styles.typeTag}>LessonTheory · one concept</code>
+          <LessonTheory
+            concepts={[
+              {
+                id: "catalog-recursive-step",
+                navLabel: "Что происходит при новом вызове",
+                explanation: (
+                  <Typography.Text>
+                    Функция получает меньшее значение и решает ту же задачу ещё
+                    раз. Такой повтор называется рекурсивным вызовом.
+                  </Typography.Text>
+                ),
+              },
+            ]}
+          />
+        </div>
+        <LearningVisualFrame
+          accessibleDescription="Три последовательно уменьшающихся значения: 3, 2 и 1; стрелки показывают переход к следующему вызову."
+          caption="Один и тот же шаг с меньшим аргументом"
+          className={styles.learningFrameSpecimen}
+          purpose="Показать направление рекурсивных вызовов"
+        >
+          <div
+            className={styles.recursionSequence}
+            data-component-specimen="LearningVisualFrame"
+          >
+            <code>3</code>
+            <span aria-hidden="true">→</span>
+            <code>2</code>
+            <span aria-hidden="true">→</span>
+            <code>1</code>
+          </div>
+        </LearningVisualFrame>
         <WorkedExample
           title="Сколько раз вызовется countdown(3)?"
           prompt={<code>countdown(n)</code>}
@@ -502,20 +629,75 @@ export const ComponentsCatalog: React.FC = () => {
         >
           Продуктовые features
         </Typography.Title>
-        <ContractNames names={componentContracts.features} />
-        <Typography.Text className={styles.placeholder}>
-          Здесь учитываются только публичные feature-контракты. Приватные части
-          практики проверяются через <code>LessonPractice</code>, а её сборка с
-          progress store — через <code>LessonPracticeFlow</code> во вкладке
-          «Виджеты».
-        </Typography.Text>
-        <div className={styles.contextNotice}>
-          <Typography.Text>
-            <strong>Context-bound:</strong> analytics consent и reading position
-            не запускаются как самостоятельные live-демо: первое изменяет
-            реальное согласие браузера, второе требует владельца scroll-target.
-          </Typography.Text>
+        <CatalogContractMap
+          contracts={componentContracts.features}
+          label="Публичные feature-контракты"
+        />
+        <div className={styles.featureSpecimenGrid}>
+          <div
+            className={styles.featureSpecimen}
+            data-component-specimen="LessonProgress"
+          >
+            <code className={styles.typeTag}>LessonProgress · core states</code>
+            <div className={styles.progressStateGrid}>
+              {[
+                { id: "empty", solved: 0 },
+                { id: "in-progress", solved: 2 },
+                { id: "mastered", solved: 4 },
+                { id: "complete", solved: 5 },
+              ].map((state) => (
+                <div data-progress-state={state.id} key={state.id}>
+                  <LessonProgress
+                    headingOrder={4}
+                    headingId={`catalog-lesson-progress-${state.id}`}
+                    masteryThreshold={0.8}
+                    solved={state.solved}
+                    total={5}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+          <div
+            className={styles.featureSpecimen}
+            data-component-specimen="LessonPractice"
+          >
+            <code className={styles.typeTag}>
+              LessonPractice · feedback states
+            </code>
+            <div className={styles.practiceStateGrid}>
+              <div data-practice-mode="local">
+                <code className={styles.typeTag}>Локальная проверка</code>
+                <LessonPractice
+                  acceptedAnswers={{}}
+                  checkAnswer={createLocalPracticeChecker(
+                    componentPracticeTasks,
+                  )}
+                  onTaskSolved={() => 1}
+                  solvedTaskIds={[]}
+                  tasks={componentPracticeTasks}
+                />
+              </div>
+              <div data-practice-mode="error">
+                <code className={styles.typeTag}>Проверка недоступна</code>
+                <LessonPractice
+                  acceptedAnswers={{}}
+                  checkAnswer={() =>
+                    Promise.reject(new Error("Controlled lab error"))
+                  }
+                  onTaskSolved={() => 0}
+                  solvedTaskIds={[]}
+                  tasks={componentErrorPracticeTasks}
+                />
+              </div>
+            </div>
+          </div>
         </div>
+        <Typography.Text className={styles.placeholder}>
+          <code>LessonPractice</code> здесь не подключён к progress store; его
+          составная production-сборка <code>LessonPracticeFlow</code> остаётся
+          во вкладке «Виджеты».
+        </Typography.Text>
       </section>
     </CatalogLayout>
   );

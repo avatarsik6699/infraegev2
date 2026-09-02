@@ -51,13 +51,17 @@
 
 .frame {
   position: relative;
+  overflow: var(--learning-media-overflow, visible);
+  border: var(--learning-media-border, 0 solid transparent);
+  border-radius: var(--learning-media-radius, 0.35rem);
+  background: var(--learning-media-background, transparent);
 }
 
 .image {
   display: block;
   width: 100%;
   height: auto;
-  border-radius: 0.35rem;
+  border-radius: inherit;
 }
 
 /* A plain dot — no number, no chip. The leader line (when present) is the

@@ -1,9 +1,28 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
 const readWorkspaceFile = (...parts: string[]) =>
   readFileSync(resolve(process.cwd(), "../..", ...parts), "utf8");
+
+const runtimeExportsFrom = (barrels: readonly string[]) =>
+  barrels.flatMap((barrel) =>
+    Array.from(
+      readFileSync(barrel, "utf8").matchAll(/export\s*{([^}]+)}/gs),
+      (match) => match[1]!,
+    ).flatMap((declaration) =>
+      declaration
+        .split(",")
+        .map((name) => name.trim())
+        .filter((name) => name && !name.startsWith("type "))
+        .map((name) => name.split(/\s+as\s+/u)[1] ?? name),
+    ),
+  );
+
+const catalogContractsFrom = (catalog: string) =>
+  [...catalog.matchAll(/(?:live|candidate|context)\(\s*"([A-Za-z0-9]+)"/g)].map(
+    (match) => match[1]!,
+  );
 
 describe("ALCHIMIA design-system lab identity", () => {
   it("keeps the page-local mark source-faithful", () => {
@@ -333,9 +352,7 @@ describe("ALCHIMIA design-system lab identity", () => {
     for (const token of semanticTokens) {
       expect(tokenSource).toContain(`name: "${token}"`);
     }
-    expect(tokenPreviewSource).toContain(
-      "const tokenValue = `var(${props.token.name})`",
-    );
+    expect(tokenPreviewSource).toContain("`var(${token.name})`");
     expect(tokenSource).toContain("data-spacing-token-preview");
     expect(tokenPreviewSource).toContain("data-token-preview");
     for (const icon of iconNames) {
@@ -395,5 +412,136 @@ describe("ALCHIMIA design-system lab identity", () => {
     expect(contentLanguage).toContain('aria-label="Порядок введения идеи"');
     expect(contentLanguage).toContain("data-copy-contract={pair.title}");
     expect(contentLanguage).not.toContain("LessonPracticeFlow");
+  });
+
+  it("reconciles the component catalog with live and context-bound public UI contracts", () => {
+    const catalog = readWorkspaceFile(
+      "apps",
+      "web",
+      "src",
+      "pages",
+      "design-system-lab",
+      "components-catalog.tsx",
+    );
+    const contractMap = readWorkspaceFile(
+      "apps",
+      "web",
+      "src",
+      "pages",
+      "design-system-lab",
+      "catalog-contract-map.tsx",
+    );
+    const componentsRoot = resolve(
+      process.cwd(),
+      "src",
+      "shared",
+      "components",
+    );
+    const publicVisualBarrels = [
+      ...readdirSync(componentsRoot, { withFileTypes: true })
+        .filter(
+          (entry) =>
+            entry.isDirectory() &&
+            existsSync(resolve(componentsRoot, entry.name, "index.ts")),
+        )
+        .map((entry) => resolve(componentsRoot, entry.name, "index.ts")),
+      resolve(process.cwd(), "src/entities/learning-visual/index.ts"),
+      resolve(process.cwd(), "src/features/analytics/index.ts"),
+      resolve(process.cwd(), "src/features/lesson-practice/index.ts"),
+      resolve(process.cwd(), "src/features/lesson-progress/index.ts"),
+      resolve(process.cwd(), "src/features/reading-position/index.ts"),
+    ];
+    const nonVisualRuntimeExports = new Set([
+      "analyticsConsentStore",
+      "checkPracticeAnswer",
+      "createLocalPracticeChecker",
+      "LessonProgressProvider",
+      "reportProductEvent",
+      "useLessonProgress",
+      "useLessonsProgress",
+      "useLessonTelemetry",
+    ]);
+    const runtimeExports = runtimeExportsFrom(publicVisualBarrels);
+    const visualExports = [...new Set(runtimeExports)]
+      .filter((name) => !nonVisualRuntimeExports.has(name))
+      .sort();
+    const catalogContracts = catalogContractsFrom(catalog).sort();
+    const newlyVisibleContracts = [
+      "LearningVisualFrame",
+      "LessonIntro",
+      "LessonSectionHeading",
+      "LessonTheory",
+      "LessonPractice",
+      "LessonProgress",
+    ];
+    const contextBoundContracts = [
+      "AnalyticsConsentControl",
+      "AnalyticsConsentPrompt",
+      "ReadingPositionIndicator",
+    ];
+
+    expect(catalogContracts).toEqual(visualExports);
+    expect(new Set(catalogContracts).size).toBe(catalogContracts.length);
+    expect(existsSync(resolve(componentsRoot, "divider", "index.ts"))).toBe(
+      false,
+    );
+    expect(catalog).not.toContain("Divider");
+    expect(catalog).not.toContain('live("Tabs"');
+    for (const name of newlyVisibleContracts) {
+      expect(catalog).toContain(`data-component-specimen="${name}"`);
+    }
+    for (const name of contextBoundContracts) {
+      expect(catalog).toContain(`"${name}"`);
+    }
+    expect(contractMap).toContain("data-contract-status={contract.status}");
+    expect(catalog).toContain("createLocalPracticeChecker");
+    expect(catalog).not.toContain("<LessonPracticeFlow");
+    expect(catalog).not.toContain("AnalyticsConsentControl />");
+    expect(catalog).not.toContain("AnalyticsConsentPrompt />");
+    expect(catalog).not.toContain("<ReadingPositionIndicator");
+    expect(catalog).toContain("data-progress-state={state.id}");
+    expect(catalog).toContain('data-practice-mode="error"');
+  });
+
+  it("reconciles the widget catalog with every public widget barrel", () => {
+    const catalog = readWorkspaceFile(
+      "apps",
+      "web",
+      "src",
+      "pages",
+      "design-system-lab",
+      "widgets-catalog.tsx",
+    );
+    const flowSpecimen = readWorkspaceFile(
+      "apps",
+      "web",
+      "src",
+      "pages",
+      "design-system-lab",
+      "widget-practice-flow-specimen.tsx",
+    );
+    const widgetsRoot = resolve(process.cwd(), "src", "widgets");
+    const widgetBarrels = readdirSync(widgetsRoot, { withFileTypes: true })
+      .filter(
+        (entry) =>
+          entry.isDirectory() &&
+          existsSync(resolve(widgetsRoot, entry.name, "index.ts")),
+      )
+      .map((entry) => resolve(widgetsRoot, entry.name, "index.ts"));
+    const widgetExports = [
+      ...new Set(runtimeExportsFrom(widgetBarrels)),
+    ].sort();
+    const catalogContracts = catalogContractsFrom(catalog).sort();
+
+    expect(catalogContracts).toEqual(widgetExports);
+    expect(widgetExports).toHaveLength(5);
+    expect(catalog).toContain('candidate("AlchimiaHeader"');
+    expect(catalog).toContain('data-widget-assembly="public-page"');
+    expect(catalog).toContain('data-widget-assembly="lesson-page"');
+    expect(flowSpecimen).toContain(
+      'const specimenLessonId = "design-system-widget-practice"',
+    );
+    expect(flowSpecimen).toContain("progress.clear()");
+    expect(flowSpecimen).toContain("data-widget-flow-progress");
   });
 });

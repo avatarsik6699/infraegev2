@@ -3,23 +3,23 @@
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   gap: var(--space-1);
-  padding: var(--space-1-5) var(--space-2);
-  border-radius: var(--radius-surface);
-  background: var(--color-surface-quiet);
+  padding: var(--callout-padding, var(--space-1-5) var(--space-2));
+  border: var(--callout-border, 0 solid transparent);
+  border-radius: var(--callout-radius, var(--radius-surface));
+  background: var(--callout-background, var(--color-surface-quiet));
 }
 
 .root[data-tone="warning"] {
-  background: color-mix(
-    in oklch,
-    var(--color-warning) 7%,
-    var(--color-surface)
+  background: var(
+    --callout-warning-background,
+    color-mix(in oklch, var(--color-warning) 7%, var(--color-surface))
   );
 }
 
 .root[data-density="dense"] {
   --callout-paragraph-gap: 0.3rem;
 
-  padding: var(--space-1) var(--space-1-5);
+  padding: var(--callout-dense-padding, var(--space-1) var(--space-1-5));
 }
 
 .icon {

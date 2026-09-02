@@ -19,6 +19,8 @@
 Develop the ALCHIMIA visual direction only on `/lab/design-system`, through small dependent
 increments that the architect reviews one at a time. Do not change `/lab/lesson`, public identity,
 authored lessons or shared production presentation while the visual foundation is unsettled.
+F26's explicitly approved long-CodeBlock disclosure is the sole shared production-presentation
+exception.
 
 ---
 
@@ -48,6 +50,9 @@ element at once.
 - Keep ALCHIMIA consumers isolated to `/lab/design-system`. The reusable header, self-hosted font
   files and inactive candidate theme/token roles may live at their enforced architecture
   boundaries, but public components and existing production roles remain unchanged.
+- F26 may add inert component-level CSS aliases with public-preserving fallbacks and activate the
+  approved long-CodeBlock disclosure globally; no other F26 candidate styling reaches public
+  consumers.
 
 ---
 
@@ -78,9 +83,9 @@ None
   _Depends on:_ F5
 - [x] `F7` Restyle the lab's existing control and state specimens using only the accepted
   typography, color, spacing, surface and ornament decisions — _Depends on:_ F6
-- [ ] `F8` Assemble the accepted pieces into one representative learning-content specimen inside
+- [x] `F8` Assemble the accepted pieces into one representative learning-content specimen inside
   `/lab/design-system`; do not change or imitate `/lab/lesson` — _Depends on:_ F20
-- [ ] `F9` Perform the final route-local desktop, zoom, keyboard, no-JavaScript, overflow and
+- [x] `F9` Perform the final route-local desktop, zoom, keyboard, no-JavaScript, overflow and
   accessibility pass without promoting the system to shared or public consumers — _Depends on:_ F8
 - [x] `F11` Revise the pending identity experiment as a compact production-shaped
   `AlchimiaHeader` widget: derive its brand typography from Athanor, reduce the mark and wordmark,
@@ -142,6 +147,47 @@ None
   the branch-heavy semantic-token preview renderer with a typed declarative preview map. Preserve
   the accepted rendering, public consumers and Change 75 boundaries; rerun the affected Critical
   Gate and focused browser evidence before the intermediate commit — _Depends on:_ F21
+- [x] `F23` Complete the Components catalog in one route-local iteration: reconcile its inventory
+  with the actual public barrels from `shared/components`, `entities` and `features`; give every
+  safe standalone contract a visible specimen with its meaningful states; and identify
+  context-bound contracts without activating consent, storage, network or scroll side effects.
+  Remove stale or misclassified names, keep the existing domain-based groups, and preserve
+  monochrome styling, SSR/no-JavaScript output, public consumers, the Widgets boundary and the
+  postponed representative lesson specimen — _Depends on:_ F22
+- [x] `F24` Close the Components catalog audit in one route-local iteration: eliminate duplicate
+  DOM ids between the standalone practice specimen and the Widgets flow; repair its theory
+  fragment; demonstrate the meaningful LessonProgress states and secure deterministic
+  LessonPractice feedback/error behavior; make the public visual-barrel inventory test fail on
+  future unclassified exports; and restore readable contract-name wrapping plus the 40px catalog
+  navigation target floor. Preserve the accepted catalog composition, SSR/no-JavaScript output,
+  monochrome styling, context-bound side-effect boundary, public consumers and postponed lesson
+  specimen — _Depends on:_ F23
+- [x] `F25` Complete the Widgets catalog in one route-local iteration: reconcile every public
+  widget barrel with a shared catalog contract map; distinguish the ALCHIMIA candidate from live
+  production widgets; demonstrate application chrome, lesson navigation and a reproducible
+  LessonPracticeFlow integration with isolated persisted progress and reset; and replace generic
+  layout boxes with truthful public-page and lesson-page assembly maps. Preserve the accepted
+  monochrome composition, SSR/no-JavaScript output, production widget APIs, public consumers and
+  postponed representative lesson specimen — _Depends on:_ F24
+- [x] `F26` Refine the accepted component specimens in one focused iteration: reduce the ALCHIMIA
+  wordmark and add the secondary identity line «ЕГЭ информатика»; remove the unused Divider
+  contract; present Input, Accordion, Badge, Progress, Callout and the learning-content family as
+  restrained, internally consistent lab candidates inspired by the supplied shadcn/ui references
+  without adding dependencies or changing their public-route presentation; and give long
+  CodeBlock instances an accessible hydrated expand/collapse treatment with icon-only copy state
+  while retaining complete SSR/no-JavaScript code. Preserve standard neutral geometry, public
+  component APIs and the postponed representative lesson specimen — _Depends on:_ F25
+- [x] `F27` Correct the F26 component polish in one focused iteration: make the hydrated CodeBlock
+  disclosure a surface-free text-and-icon action; give Accordion its reference-aligned title
+  underline, chevron rotation and reduced-motion-safe panel animation; restore Callout's restrained
+  semantic indication; and remove avoidable frames from the learning-content specimens. Keep the
+  learning-content visual correction isolated to `/lab/design-system`, preserve public APIs and
+  public lesson presentation, and add no dependencies — _Depends on:_ F26
+- [x] `F28` Perform the final code, architecture and visual-quality audit of Change 75, fix every
+  verified in-scope defect, reconcile the later Components and Widgets work with the postponed F8
+  learning specimen, and complete the F9 desktop, zoom, keyboard, no-JavaScript, overflow and
+  accessibility evidence required for local ship. Preserve the lab-only boundary, public behavior
+  and dependency set — _Depends on:_ F27
 
 ### Infra
 
@@ -182,19 +228,28 @@ apps/web/src/app/styles/tokens.css
 apps/web/src/app/styles/fonts.css
 apps/web/tests/**design-system-lab**
 apps/web/tests/**alchimia-header**
+apps/web/tests/shared-components.test.tsx
 apps/web/e2e/pages/design-system-lab.page.ts
+apps/web/e2e/pages/python-course.page.ts
 apps/web/e2e/lab.spec.ts
+apps/web/e2e/smoke.spec.ts
+apps/web/src/entities/learning-visual/learning-visual-frame.*
+apps/web/src/shared/components/{accordion,badge,callout,code-block,input,progress}/**
+apps/web/src/shared/components/learning-content/{checkpoint,diagram,mistake,procedure,worked-example}/**
+apps/web/src/shared/styles/patterns.module.css
 ~~~
 
 A focused test file may use the nearest existing test naming convention. Supporting test changes
-must exercise only `/lab/design-system`.
+must exercise only `/lab/design-system`, except F26's shared CodeBlock unit and public runtime
+journey.
 
 ### Do NOT touch
 
 - `/lab/lesson` page, components, styles, Page Object or browser scenarios
-- Existing production theme/token roles, existing components, image primitives or lesson outline;
-  F11/F2/F13 may add isolated ALCHIMIA candidate roles, font declarations, self-hosted files and one
-  reusable widget, provided `/lab/design-system` remains their only consumer
+- Existing production theme/token roles, image primitives or lesson outline; F11/F2/F13 may add
+  isolated ALCHIMIA candidate roles, font declarations, self-hosted files and one reusable widget,
+  provided `/lab/design-system` remains their only consumer. F26 may add public-preserving CSS
+  aliases to its named components and the explicitly approved global CodeBlock disclosure
 - Public header, footer, metadata, manifest, favicon or social-preview consumers
 - TopicLesson or CourseLesson content, tasks, ids, publication state or progress
 - Backend, API/OpenAPI, database, analytics, infrastructure, operations or deployment contracts
@@ -238,6 +293,13 @@ does not replace architect approval and does not authorize the next item.
 
 - The first broad implementation was rejected and fully removed. Change 75 now uses isolated,
   architect-reviewed increments on one lab route.
+- F26 exposes the component candidates through inherited CSS aliases whose fallbacks preserve the
+  current public presentation. CodeBlock is the deliberate exception: its internal nine-line
+  threshold adds hydrated disclosure globally while SSR/no-JavaScript always renders full code.
+- F27 keeps Accordion motion and hover treatment lab-only through the existing candidate aliases;
+  its Base UI integration uses `data-panel-open` plus transition-state attributes, while closed
+  `hidden` panels retain native visibility semantics. Callout and learning specimens return to
+  their public-preserving fallback styles instead of carrying F26's lab frames.
 - The architect replaced the former opaque-canvas `logo.svg` with
   `logo_with_transperant_bg.svg`; F1 uses that new source unchanged and removes the obsolete file.
 - The initial F1 experiment used a decorative page-local CSS image so it remained visible without
@@ -287,9 +349,14 @@ does not replace architect approval and does not authorize the next item.
   retain a visually hidden page-level heading; the catalog's tablist and per-view headings remain
   its navigation and document landmarks.
 - F22 removes the verified dead CSS surface and reduces `SemanticTokenPreview` from twelve render
-  branches to a typed preview map. Fallow's remaining advisory fail is limited to estimated
-  coverage for the exercised Page Object/preview renderer and intentional declarative repetition
-  in font-face and specimen markup; focused browser tests are the authoritative execution evidence.
+  branches to a typed preview map. F28 further splits its static and motion renderers, decomposes
+  the final browser audit by catalog level, exports the two internal prop contracts reported by
+  Fallow and reconciles stale alias-aware tests. Fallow now reports no introduced dead code or
+  complexity findings; its remaining advisory duplication is intentional declarative repetition
+  in font faces, paired specimens and learning variants.
+- The architect's explicit final-review-and-ship request authorizes F28 to close the previously
+  postponed F8/F9 evidence in the same final iteration rather than pause between those checklist
+  items.
 
 ---
 
