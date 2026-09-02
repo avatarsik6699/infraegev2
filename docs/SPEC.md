@@ -770,7 +770,7 @@ combined-log записи до path/status-family/coarse traffic class. Raw IP, 
 | `13` | Пересмотреть, углубить и опубликовать программу мини-курса Python одним change | Complete: все 28 уроков и 140 server-owned задач прошли содержательную и визуальную оценку, опубликованы в production, включая четыре последовательных стадии менеджера задач; Changes 72–73 доказали exact-SHA release и восстановление web image cache |
 | `14` | Сформировать визуальную основу ALCHIMIA в одном unlisted lab | Complete: Change 75 сформировал и прошёл итоговый architect review для `/lab/design-system`; приняты identity, typography, монохромная palette, rhythm, component и widget contracts без активации ALCHIMIA на public routes |
 | `15` | Активировать одобренный ALCHIMIA profile публично | Complete: Change 76 активировал public theme, wordmark, metadata, manifest/favicon/social assets без изменения доменных ids, storage, analytics или infrastructure names |
-| `16` | Проверить редакторский контракт на двух крайних уроках | Change 77: «Первая программа» и «Рекурсивные алгоритмы» сохраняют факты, последовательность, примеры и задачи, но получают плавные входы, переходы и объяснение терминов |
+| `16` | Проверить редакторский контракт на двух крайних уроках | Complete: Change 77 сохранил факты, последовательность, примеры и задачи в уроках «Первая программа» и «Рекурсивные алгоритмы», добавив плавные входы, переходы и объяснение терминов; оба пилота прошли focused content/browser gates и human approval |
 | `17` | Бережно мигрировать остальные уроки | Changes 78–82: пять ограниченных партий по утверждённой траектории; каждая проходит Content Quality Gate и отдельное human approval |
 
 Off-site backup остаётся trigger-based улучшением: первый management-host релиз использует

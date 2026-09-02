@@ -102,11 +102,12 @@ describe("Python course foundation", () => {
     }
     const courseLessons = getCourseLessons(pythonCourse);
     expect(courseLessons).toHaveLength(28);
-    expect(courseLessons.slice(0, 4)).toEqual([
+    expect(courseLessons.slice(0, 5)).toEqual([
       pythonFirstProgramLesson,
       expect.objectContaining({ id: "python-numbers" }),
       pythonErrorsLesson,
       pythonConditionsLesson,
+      expect.objectContaining({ id: "python-compound-conditions" }),
     ]);
     expect(pythonCourse.modules).toHaveLength(9);
     expect(
@@ -176,6 +177,86 @@ describe("Python course foundation", () => {
       masteryThreshold: 0.8,
       status: "published",
     });
+  });
+
+  it("preserves the foundation editorial batch structure and tasks", () => {
+    const cases = [
+      {
+        routeSlug: "chisla-i-vyrazheniya",
+        sectionIds: ["types", "operations", "precedence", "workflow"],
+        practiceTaskIds: [
+          "python-numbers-precedence",
+          "python-numbers-division",
+          "python-numbers-remainder",
+          "python-numbers-conversion",
+          "python-numbers-local-run",
+        ],
+      },
+      {
+        routeSlug: "oshibki",
+        sectionIds: [
+          "error-as-clue",
+          "read-bottom-up",
+          "syntax-error",
+          "name-error",
+          "type-or-value",
+          "fix-and-rerun",
+        ],
+        practiceTaskIds: [
+          "python-errors-final-line",
+          "python-errors-source-line",
+          "python-errors-syntax-fix",
+          "python-errors-value-error",
+          "python-errors-local-fix",
+        ],
+      },
+      {
+        routeSlug: "usloviya",
+        sectionIds: [
+          "comparison-result",
+          "if-branch",
+          "if-else",
+          "comparison-boundaries",
+          "test-both-branches",
+        ],
+        practiceTaskIds: [
+          "python-conditions-comparison-result",
+          "python-conditions-branch-trace",
+          "python-conditions-boundary",
+          "python-conditions-operator",
+          "python-conditions-local-run",
+        ],
+      },
+      {
+        routeSlug: "sostavnye-usloviya",
+        sectionIds: ["model", "trace", "pitfall", "workflow"],
+        practiceTaskIds: [
+          "python-compound-conditions-branch-order",
+          "python-compound-conditions-logic-trace",
+          "python-compound-conditions-boundary",
+          "python-compound-conditions-fix",
+          "python-compound-conditions-local-run",
+        ],
+      },
+    ] as const;
+
+    for (const lessonCase of cases) {
+      const lesson = findCourseLessonByRouteSlugs(
+        "python",
+        lessonCase.routeSlug,
+      );
+
+      expect(lesson).toBeDefined();
+      expect(lesson?.theory.map((concept) => concept.id)).toEqual(
+        lessonCase.sectionIds,
+      );
+      expect(lesson?.practiceTaskIds).toEqual(lessonCase.practiceTaskIds);
+      expect(lesson).toMatchObject({
+        accessTier: "free",
+        masteryThreshold: 0.8,
+        status: "published",
+      });
+    }
   });
 
   it("loads the published conditions tasks without checker secrets", async () => {

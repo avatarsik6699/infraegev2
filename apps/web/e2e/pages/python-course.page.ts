@@ -237,6 +237,10 @@ export class PythonCoursePage {
     await openLessonAtTop(this.page, "/courses/python/pervaya-programma");
   }
 
+  async openNumbersLesson(): Promise<void> {
+    await openLessonAtTop(this.page, "/courses/python/chisla-i-vyrazheniya");
+  }
+
   async openConditionsLesson(): Promise<void> {
     await this.page.goto("/courses/python/usloviya");
     await expect(this.page).toHaveURL(/\/courses\/python\/usloviya$/);
@@ -245,6 +249,10 @@ export class PythonCoursePage {
   async openErrorsLesson(): Promise<void> {
     await this.page.goto("/courses/python/oshibki");
     await expect(this.page).toHaveURL(/\/courses\/python\/oshibki$/);
+  }
+
+  async openCompoundConditionsLesson(): Promise<void> {
+    await openLessonAtTop(this.page, "/courses/python/sostavnye-usloviya");
   }
 
   async expectPublishedCurriculumLesson(
@@ -307,6 +315,14 @@ export class PythonCoursePage {
       }),
     ).toBeVisible();
     await expect(
+      this.page.getByText("Синтаксис — это правила записи программы.", {
+        exact: false,
+      }),
+    ).toBeVisible();
+    await expect(
+      this.page.getByText("Интерпретатор — программа", { exact: false }),
+    ).toBeVisible();
+    await expect(
       this.page.locator('[data-practice-statement] code[data-kind="code"]', {
         hasText: "if score >= 10",
       }),
@@ -322,6 +338,31 @@ export class PythonCoursePage {
     await expect(
       this.page.getByRole("heading", { name: "Что вы уже умеете" }),
     ).toHaveCount(0);
+    await expectNoHorizontalOverflow(this.page);
+  }
+
+  async expectPublishedNumbersLesson(): Promise<void> {
+    await expectPublishedLessonDocument(this.page, {
+      canonicalPath: "/courses/python/chisla-i-vyrazheniya",
+      title: "Числа, типы и арифметические выражения",
+    });
+    await expect(
+      this.page.getByText(
+        "Способ, которым Python хранит значение, называется его типом.",
+        { exact: false },
+      ),
+    ).toBeVisible();
+    await expect(
+      this.page.getByText("Знак действия в программе называют оператором.", {
+        exact: false,
+      }),
+    ).toBeVisible();
+    await expect(
+      this.page.getByRole("heading", {
+        level: 3,
+        name: "Как проверить числовое выражение",
+      }),
+    ).toBeVisible();
     await expectNoHorizontalOverflow(this.page);
   }
 
@@ -372,6 +413,37 @@ export class PythonCoursePage {
       this.page.getByText(
         "Разберём, как сравнения помогают программе выбрать одну из двух ветвей и почему граничные значения нужно проверять отдельно.",
       ),
+    ).toBeVisible();
+    await expect(
+      this.page.getByText("В обычной жизни действие часто зависит", {
+        exact: false,
+      }),
+    ).toBeVisible();
+    await expect(
+      this.page.getByText("называют ветвью", { exact: false }),
+    ).toBeVisible();
+    await expectNoHorizontalOverflow(this.page);
+  }
+
+  async expectPublishedCompoundConditionsLesson(): Promise<void> {
+    await expectPublishedLessonDocument(this.page, {
+      canonicalPath: "/courses/python/sostavnye-usloviya",
+      title: "Несколько ветвей и составные условия",
+    });
+    await expect(
+      this.page.getByText("это сокращение от «иначе, если»", { exact: false }),
+    ).toBeVisible();
+    await expect(
+      this.page.getByText(
+        "Условие, которое соединяет несколько законченных проверок, называют составным.",
+        { exact: false },
+      ),
+    ).toBeVisible();
+    await expect(
+      this.page.getByRole("heading", {
+        level: 3,
+        name: "Как проверить цепочку",
+      }),
     ).toBeVisible();
     await expectNoHorizontalOverflow(this.page);
   }
@@ -574,9 +646,21 @@ export class PythonCoursePage {
     await expectNoJavaScriptPractice(this.page);
   }
 
+  async expectNumbersReadableWithoutJavaScript(): Promise<void> {
+    await this.openNumbersLesson();
+    await this.expectPublishedNumbersLesson();
+    await expectNoJavaScriptPractice(this.page);
+  }
+
   async expectErrorsReadableWithoutJavaScript(): Promise<void> {
     await this.openErrorsLesson();
     await this.expectPublishedErrorsLesson();
+    await expectNoJavaScriptPractice(this.page);
+  }
+
+  async expectCompoundConditionsReadableWithoutJavaScript(): Promise<void> {
+    await this.openCompoundConditionsLesson();
+    await this.expectPublishedCompoundConditionsLesson();
     await expectNoJavaScriptPractice(this.page);
   }
 

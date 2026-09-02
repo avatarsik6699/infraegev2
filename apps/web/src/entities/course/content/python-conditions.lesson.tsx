@@ -28,9 +28,16 @@ export const pythonConditionsLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
-            Сравнение отвечает на один вопрос: верно ли указанное условие. У
-            ответа только два возможных значения — <Notation>True</Notation>
-            («да, верно») и <Notation>False</Notation> («нет, неверно»).
+            В обычной жизни действие часто зависит от ответа на простой вопрос:
+            температура ниже нуля или нет, набрано ли нужное число баллов. В
+            программе такой вопрос записывают как сравнение, например
+            <Notation> temperature &lt; 0</Notation>.
+          </Typography.Text>
+          <Typography.Text>
+            Такое сравнение можно использовать как условие — проверку, от
+            результата которой выбирают следующее действие. У результата только
+            два логических значения: <Notation>True</Notation> («да, верно») и
+            <Notation> False</Notation> («нет, неверно»).
           </Typography.Text>
           <CodeBlock
             code={
@@ -75,10 +82,15 @@ export const pythonConditionsLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
-            Команда <Notation>if</Notation> выполняет вложенный блок только
-            тогда, когда условие после неё равно <Notation>True</Notation>.
+            Само сравнение лишь даёт <Notation>True</Notation> или
+            <Notation> False</Notation>. Чтобы по этому результату выполнить
+            действие, используют команду <Notation>if</Notation>. Группу команд,
+            выбранную условием, называют ветвью. <Notation>if</Notation>
+            выполняет свою ветвь только при <Notation>True</Notation>.
+          </Typography.Text>
+          <Typography.Text>
             После условия ставится двоеточие, а команды внутри ветви сдвигаются
-            вправо одинаковым отступом.
+            вправо одинаковым отступом. Так Python видит границы группы.
           </Typography.Text>
           <CodeBlock
             code={
@@ -129,10 +141,11 @@ export const pythonConditionsLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
-            Если программа должна выполнить одно действие при верном условии и
-            другое — при неверном, после <Notation>if</Notation> добавляют
-            <Notation> else</Notation>. За один запуск выполняется ровно одна из
-            этих ветвей.
+            Одна ветвь <Notation>if</Notation> подходит, когда действие нужно
+            только при верном условии. Если программа должна сделать одно при
+            <Notation> True</Notation> и другое при <Notation>False</Notation>,
+            добавляют <Notation>else</Notation> — ветвь для всех остальных
+            случаев. За один запуск выполняется ровно одна из двух ветвей.
           </Typography.Text>
           <CodeBlock
             code={
@@ -173,9 +186,10 @@ export const pythonConditionsLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
-            Знаки <Notation>&gt;</Notation> и <Notation>&lt;</Notation> не
-            включают границу, а <Notation>&gt;=</Notation> и{" "}
-            <Notation>&lt;=</Notation>
+            Выбрать правильную ветвь особенно важно рядом с границей —
+            значением, на котором правило меняется. Знаки{" "}
+            <Notation>&gt;</Notation> и<Notation> &lt;</Notation> не включают
+            границу, а<Notation>&gt;=</Notation> и <Notation>&lt;=</Notation>
             включают её. Для правила «14 лет и старше» нужен знак
             <Notation> &gt;=</Notation>: значение 14 должно попасть в первую
             ветвь.
@@ -221,9 +235,10 @@ export const pythonConditionsLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
-            Один удачный запуск проверяет только одну ветвь. Подберите минимум
-            два значения: одно делает условие верным, другое — неверным. Если в
-            условии есть граница, проверьте и её отдельно.
+            Когда условие записано, его ещё нужно проверить. Один удачный запуск
+            показывает только одну ветвь. Подберите минимум два значения: одно
+            делает условие верным, другое — неверным. Если в условии есть
+            граница, проверьте и её отдельно.
           </Typography.Text>
           <CodeBlock
             code={

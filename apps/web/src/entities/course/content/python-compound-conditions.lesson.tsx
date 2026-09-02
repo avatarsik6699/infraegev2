@@ -4,6 +4,7 @@ import {
   WorkedExample,
 } from "~/shared/components/learning-content";
 import { CodeBlock } from "~/shared/components/code-block";
+import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { pythonCompoundConditionsLessonPublication } from "./course-publication.mjs";
@@ -26,14 +27,20 @@ export const pythonCompoundConditionsLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
-            {
-              "Цепочка из нескольких ветвей нужна, когда у программы больше двух возможных действий. Python проверяет условия сверху вниз и выполняет только тело первой подходящей ветви. Остальные условия после выбора уже не проверяются."
-            }
+            В прошлом уроке программа выбирала один из двух вариантов с помощью
+            <Notation> if</Notation> и <Notation>else</Notation>. Но у привычной
+            шкалы оценок вариантов больше: результат может соответствовать
+            оценке 2, 3, 4 или 5. Для такого выбора одной проверки недостаточно.
           </Typography.Text>
           <Typography.Text>
-            {
-              "Порядок поэтому является частью алгоритма. Сначала ставят более узкие или приоритетные случаи, затем общие, а завершающий else оставляют для всех значений, которые не подошли раньше."
-            }
+            Дополнительную ветвь записывают словом <Notation>elif</Notation> —
+            это сокращение от «иначе, если». Последовательность
+            <Notation> if</Notation>, одного или нескольких
+            <Notation> elif</Notation> и завершающего
+            <Notation> else</Notation> называют цепочкой ветвей. Python
+            проверяет её сверху вниз и выполняет тело только первой подходящей
+            ветви. Завершающая ветвь <Notation>else</Notation> принимает все
+            значения, которые не подошли ни одному условию выше.
           </Typography.Text>
           <CodeBlock
             code={
@@ -43,6 +50,16 @@ export const pythonCompoundConditionsLesson = defineCourseLesson({
             language="python"
             showLineNumbers
           />
+          <Typography.Text>
+            Для <Notation>score = 73</Notation> первая проверка
+            <Notation> score &gt;= 90</Notation> даёт
+            <Notation> False</Notation>, а следующая
+            <Notation> score &gt;= 70</Notation> — <Notation>True</Notation>.
+            Поэтому в <Notation>grade</Notation> сохраняется
+            <Notation> "4"</Notation>, а оставшиеся ветви пропускаются. Порядок
+            проверок — часть алгоритма: сначала ставят более узкие или
+            приоритетные случаи, затем общие.
+          </Typography.Text>
         </>
       ),
     },
@@ -52,14 +69,20 @@ export const pythonCompoundConditionsLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
-            {
-              "Составное условие соединяет законченные проверки. Оператор and требует истинности обеих частей, оператор or — хотя бы одной. Оператор not меняет логический результат на противоположный."
-            }
+            Иногда одной ветви нужна не одна, а сразу несколько проверок.
+            Например, для допуска важны и возраст, и наличие билета. Условие,
+            которое соединяет несколько законченных проверок, называют
+            составным.
           </Typography.Text>
           <Typography.Text>
-            {
-              "Полезно сначала вычислить каждую простую проверку отдельно и только потом соединить результаты. Так легче заметить, какая часть отвечает за итог."
-            }
+            Логический оператор <Notation>and</Notation> требует, чтобы обе
+            части дали <Notation>True</Notation>. Оператор{" "}
+            <Notation>or</Notation>
+            требует <Notation>True</Notation> хотя бы от одной части, а
+            <Notation> not</Notation> меняет логический результат на
+            противоположный. Сначала вычисляйте каждую простую проверку отдельно
+            и только потом соединяйте результаты — так видно, какая часть
+            определила итог.
           </Typography.Text>
           <WorkedExample
             title={"Разберём допуск к занятию"}
@@ -67,9 +90,18 @@ export const pythonCompoundConditionsLesson = defineCourseLesson({
               "Ученик допускается, если ему не меньше 14 лет и у него есть билет."
             }
             steps={[
-              "При возрасте 15 лет сравнение с границей 14 даёт True.",
-              "Наличие билета также даёт True.",
-              "True and True даёт True, поэтому выполняется ветвь допуска.",
+              <>
+                При возрасте 15 лет сравнение с границей 14 даёт
+                <Notation> True</Notation>.
+              </>,
+              <>
+                Проверка наличия билета также даёт
+                <Notation> True</Notation>.
+              </>,
+              <>
+                <Notation>True and True</Notation> даёт
+                <Notation> True</Notation>, поэтому выполняется ветвь допуска.
+              </>,
             ]}
           />
         </>
@@ -90,9 +122,11 @@ export const pythonCompoundConditionsLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
-            {
-              "Если широкое условие стоит раньше узкого, оно перехватывает значение. Например, проверка температуры не ниже нуля сработает и для двадцати градусов, поэтому более точная ветвь про тепло ниже неё уже не будет достигнута."
-            }
+            Составные проверки помогают точнее описать случай, но порядок ветвей
+            всё равно решает, какая из них выполнится. Если широкое условие
+            стоит раньше узкого, оно перехватывает значение. Например, проверка
+            температуры не ниже нуля сработает и для двадцати градусов, поэтому
+            более точная ветвь про тепло ниже неё уже не будет достигнута.
           </Typography.Text>
           <Mistake
             claim={
@@ -111,9 +145,10 @@ export const pythonCompoundConditionsLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
-            {
-              "Для проверки выпишите по одному значению из каждой ветви и отдельные значения на границах. Затем пройдите условия именно в том порядке, в котором их увидит Python."
-            }
+            Теперь объединим оба источника сложности: несколько ветвей и
+            несколько проверок внутри условия. Выпишите по одному значению из
+            каждой ветви и отдельные значения на границах. Затем пройдите
+            условия именно в том порядке, в котором их увидит Python.
           </Typography.Text>
           <Procedure
             title={"Проверяем без догадки"}
@@ -146,14 +181,14 @@ export const pythonCompoundConditionsLesson = defineCourseLesson({
   result: (
     <>
       <Typography.Text>
-        {
-          "Теперь вы умеете строить выбор из нескольких вариантов и объяснять, почему выполнилась конкретная ветвь."
-        }
+        Теперь вы умеете строить выбор из нескольких вариантов, соединять
+        проверки с помощью <Notation>and</Notation>, <Notation>or</Notation> и
+        <Notation> not</Notation> и объяснять, почему выполнилась конкретная
+        ветвь.
       </Typography.Text>
       <Typography.Text>
-        {
-          "Возьмите шкалу из трёх диапазонов, выпишите значения на каждой границе и подтвердите локальным запуском, что ни одно значение не потерялось."
-        }
+        Возьмите шкалу из трёх диапазонов, выпишите значения на каждой границе и
+        подтвердите локальным запуском, что ни одно значение не потерялось.
       </Typography.Text>
     </>
   ),

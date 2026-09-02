@@ -48,6 +48,28 @@ test("the Python course overview exposes the complete published path", async ({
   await noJavaScriptPythonCoursePage.expectOverviewReadableWithoutJavaScript();
 });
 
+test("the published Python numbers lesson stays readable across target viewports", async ({
+  browserSession,
+  noJavaScriptPythonCoursePage,
+  pythonCoursePage,
+}) => {
+  await browserSession.useDesktopViewport();
+  await pythonCoursePage.openNumbersLesson();
+  await pythonCoursePage.expectPublishedNumbersLesson();
+  await pythonCoursePage.expectKeyboardDisclosures();
+  await browserSession.captureViewport("python-numbers-published-desktop.png");
+
+  await browserSession.useZoomedDesktopViewport();
+  await pythonCoursePage.expectPublishedNumbersLesson();
+  await browserSession.captureViewport("python-numbers-published-zoomed.png");
+
+  await browserSession.useNarrowViewport();
+  await pythonCoursePage.expectMobileReadingOrder();
+  await browserSession.captureViewport("python-numbers-published-mobile.png");
+  browserSession.expectCleanConsole();
+  await noJavaScriptPythonCoursePage.expectNumbersReadableWithoutJavaScript();
+});
+
 test("the published Python conditions lesson supports practice and target viewports", async ({
   browserSession,
   noJavaScriptPythonCoursePage,
@@ -99,6 +121,34 @@ test("the published Python errors lesson supports practice and target viewports"
   await browserSession.captureViewport("python-errors-published-mobile.png");
   browserSession.expectCleanConsole();
   await noJavaScriptPythonCoursePage.expectErrorsReadableWithoutJavaScript();
+});
+
+test("the published Python compound-conditions lesson stays readable across target viewports", async ({
+  browserSession,
+  noJavaScriptPythonCoursePage,
+  pythonCoursePage,
+}) => {
+  await browserSession.useDesktopViewport();
+  await pythonCoursePage.openCompoundConditionsLesson();
+  await pythonCoursePage.expectPublishedCompoundConditionsLesson();
+  await pythonCoursePage.expectKeyboardDisclosures();
+  await browserSession.captureViewport(
+    "python-compound-conditions-published-desktop.png",
+  );
+
+  await browserSession.useZoomedDesktopViewport();
+  await pythonCoursePage.expectPublishedCompoundConditionsLesson();
+  await browserSession.captureViewport(
+    "python-compound-conditions-published-zoomed.png",
+  );
+
+  await browserSession.useNarrowViewport();
+  await pythonCoursePage.expectMobileReadingOrder();
+  await browserSession.captureViewport(
+    "python-compound-conditions-published-mobile.png",
+  );
+  browserSession.expectCleanConsole();
+  await noJavaScriptPythonCoursePage.expectCompoundConditionsReadableWithoutJavaScript();
 });
 
 test("the first published Python lesson preserves progress and reset", async ({
