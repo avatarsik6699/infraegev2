@@ -72,6 +72,7 @@ export class PythonCoursePage {
 
   async expectCompleteOverview(): Promise<void> {
     await expectPublicReleaseIdentity(this.page);
+    await expect(this.page).toHaveTitle("Python с нуля для ЕГЭ — ALCHIMIA");
     await expect(
       this.page.getByRole("heading", {
         level: 1,

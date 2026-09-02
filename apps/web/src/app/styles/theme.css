@@ -1,26 +1,24 @@
 :root {
   color-scheme: light;
 
-  /* Active replaceable profile: “Engineering notebook”. Components must not
+  /* Active replaceable profile: ALCHIMIA. Components must not
      consume these values directly; tokens.css is the semantic boundary. */
-  --theme-page: oklch(1 0 0);
-  --theme-surface: oklch(1 0 0);
+  --theme-page: #ffffff;
+  --theme-surface: #ffffff;
   --theme-surface-muted: oklch(0.97 0 0);
-  --theme-ink: oklch(0.145 0 0);
-  --theme-ink-secondary: oklch(0.42 0 0);
-  --theme-rule: oklch(0.922 0 0);
-  --theme-rule-strong: oklch(0.87 0 0);
-  --theme-brand: #ff6b00;
-  --theme-brand-ink: #f56300;
+  --theme-ink: #171717;
+  --theme-ink-secondary: #606060;
+  --theme-rule: #d4d4d4;
+  --theme-rule-strong: #d4d4d4;
   --theme-alchimia-paper: #ffffff;
   --theme-alchimia-ink: #171717;
   --theme-alchimia-ink-secondary: #606060;
   --theme-alchimia-rule: #d4d4d4;
-  --theme-primary: oklch(0.205 0 0);
-  --theme-primary-hover: oklch(0.145 0 0);
+  --theme-primary: #171717;
+  --theme-primary-hover: #606060;
   --theme-interactive-muted: oklch(0.97 0 0);
-  --theme-on-primary: oklch(0.985 0 0);
-  --theme-ring: oklch(0.708 0 0);
+  --theme-on-primary: #ffffff;
+  --theme-ring: #171717;
   --theme-overlay-shadow: oklch(0 0 0 / 0.5);
   --theme-success: oklch(0.46 0.08 145);
   --theme-info: oklch(0.5 0.11 245);
@@ -37,9 +35,13 @@
   --theme-code-function: oklch(0.82 0.09 255);
   --theme-code-operator: oklch(0.86 0.05 300);
 
-  --theme-font-ui: "Onest Fallback", Arial, sans-serif;
-  --theme-font-reading: "Literata Fallback", Georgia, serif;
-  --theme-font-data: "SFMono-Regular", Consolas, monospace;
+  --theme-font-display: "Alchimia Cormorant SC", "Cormorant SC", Georgia, serif;
+  --theme-font-ui:
+    "Alchimia IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+  --theme-font-reading:
+    "Alchimia Literata", "Literata Fallback", Georgia, serif;
+  --theme-font-data:
+    "Alchimia IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
   --theme-font-alchimia-display:
     "Alchimia Cormorant SC", "Cormorant SC", Georgia, serif;
   --theme-font-alchimia-reading:

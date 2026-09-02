@@ -16,7 +16,7 @@ course is designed for a learner who knows school mathematics but has never prog
 
 ## Product Purpose
 
-infraege turns difficult informatics material into complete learning paths: an explanation of why
+ALCHIMIA turns difficult informatics material into complete learning paths: an explanation of why
 an idea works, guided examples, immediate practice, useful feedback and a truthful next step.
 Success means a learner can apply the idea independently rather than memorize a task template.
 
@@ -46,18 +46,17 @@ fallback.
 
 ## Brand Commitments
 
-The current public identity remains `infraege` until the lab-first transition is explicitly
-approved. The approved target identity is `ALCHIMIA`: the architect-supplied
+The public identity is `ALCHIMIA`. Archived Change 75 established it on `/lab/design-system`, and
+Change 76 activates the same approved profile in public chrome and delivery metadata. The
+architect-supplied
 `docs/artifacts/references/logo_with_transperant_bg.svg` is its sole artistic authority and must
-retain its visible geometry. The current lab profile stays on white and uses only achromatic text
+retain its visible geometry. The approved lab profile stays on white and uses only achromatic text
 and structural roles. Any broader palette, including paper or copper accents, remains a later
 architect-approved decision. Visual character comes from typography and composition, not atlas
-decoration, ornamental frames, extra prose colors,
-arbitrary type sizes or widespread bold text. `ALCHIMIA` remains live accessible
-text beside the mark in a compact reusable header. Change 75 develops this direction only on `/lab/design-system`, one small
-architect-reviewed increment at a time; public identity,
-metadata and authored lessons change in later architect-approved units. Binding rules live in
-`docs/FRONTEND.md`.
+decoration, ornamental frames, extra prose colors, arbitrary type sizes or widespread bold text.
+`ALCHIMIA` remains live accessible text beside the mark in a compact reusable header. The public
+activation does not copy the lab dashboard composition; authored lesson language changes only in later
+architect-approved units. Binding rules live in `docs/FRONTEND.md`.
 
 ## Evidence on Hand
 

@@ -17,7 +17,7 @@ export const Route = createFileRoute("/courses/$courseSlug")({
     const course = loaderData?.course;
     return course
       ? pageHead.create({
-          title: `${course.title} — infraege`,
+          title: `${course.title} — ALCHIMIA`,
           description: course.summary,
           path: `/courses/${course.routeSlug}`,
           noIndex: course.status !== "published",

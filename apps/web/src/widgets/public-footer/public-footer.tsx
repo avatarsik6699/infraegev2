@@ -6,7 +6,7 @@ import styles from "./public-footer.module.css";
 
 export const PublicFooter: React.FC = () => (
   <footer className={styles.root}>
-    <span>infraege</span>
+    <span>{siteConfig.name}</span>
     <nav className={styles.links} aria-label="Ссылки в подвале">
       <Link to="/privacy">Обработка данных</Link>
       <ExternalLink

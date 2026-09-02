@@ -1,11 +1,11 @@
 export const siteConfig = Object.freeze({
-  name: "infraege",
+  name: "ALCHIMIA",
   releaseLabel: "beta",
   version: "1.0.0",
   origin: "https://infraege.ru",
   themeColor: "#ffffff",
-  socialImagePath: "/brand/infraege-social.png",
-  socialImageAlt: "Фирменный знак infraege из трёх камней",
+  socialImagePath: "/brand/alchimia-social.png",
+  socialImageAlt: "Алхимический знак ALCHIMIA",
   privacyContactEmail: "avatarsik6699@gmail.com",
   telegramInviteUrl: "https://t.me/+dElnKYPKGd81OGYy",
   description:

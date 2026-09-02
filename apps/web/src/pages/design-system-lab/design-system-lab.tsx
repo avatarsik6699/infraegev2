@@ -6,7 +6,7 @@ import {
   TabsTab,
 } from "~/shared/components/tabs";
 import { useIsEnhanced } from "~/shared/lib/use-is-enhanced";
-import { AlchimiaHeader } from "~/widgets/alchimia-header";
+import { PublicHeader } from "~/widgets/public-header";
 import { ComponentsCatalog } from "./components-catalog";
 import { dashboardTabDefinitions } from "./design-system-lab.constants";
 import styles from "./design-system-lab.module.css";
@@ -23,7 +23,7 @@ export const DesignSystemLab: React.FC = () => {
       data-alchimia-lab-root
       data-enhanced={enhanced || undefined}
     >
-      <AlchimiaHeader />
+      <PublicHeader />
       <main className={styles.dashboard}>
         <TabsRoot
           className={styles.dashboardTabs}

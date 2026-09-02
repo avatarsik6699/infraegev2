@@ -6,7 +6,7 @@ import { pageHead } from "~/shared/lib/seo";
 export const Route = createFileRoute("/")({
   head: () => {
     const head = pageHead.create({
-      title: "infraege — подготовка к ЕГЭ по информатике",
+      title: "ALCHIMIA — подготовка к ЕГЭ по информатике",
       description: siteConfig.description,
       path: "/",
     });

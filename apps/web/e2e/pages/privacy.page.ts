@@ -12,6 +12,7 @@ export class PrivacyPage {
 
   async expectCurrentDisclosure(): Promise<void> {
     await expectPublicReleaseIdentity(this.page);
+    await expect(this.page).toHaveTitle("Обработка данных — ALCHIMIA");
     await expect(
       this.page.getByRole("heading", {
         name: "Обработка персональных данных",

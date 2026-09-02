@@ -601,13 +601,13 @@ export class DesignSystemLabPage {
     const widgetsPanel = this.page.locator(
       "[data-dashboard-panel]:not([hidden])",
     );
-    await expect(widgetsPanel.locator("[data-contract-name]")).toHaveCount(5);
+    await expect(widgetsPanel.locator("[data-contract-name]")).toHaveCount(4);
     await expect(
       widgetsPanel.locator('[data-contract-status="live"]'),
     ).toHaveCount(4);
     await expect(
       widgetsPanel.locator('[data-contract-status="candidate"]'),
-    ).toHaveCount(1);
+    ).toHaveCount(0);
     await expect(widgetsPanel.locator("[data-widget-assembly]")).toHaveCount(2);
     await expect(
       widgetsPanel.locator("[data-outline-link-id][aria-current='location']"),
@@ -746,13 +746,13 @@ export class DesignSystemLabPage {
     await expect(this.page.locator("[data-copy-contract]")).toHaveCount(4);
     await expect(this.page.locator("[data-reference-pattern]")).toHaveCount(0);
     await expect(this.page.locator("[data-control-specimen]")).toHaveCount(7);
-    await expect(this.page.locator("[data-contract-name]")).toHaveCount(40);
+    await expect(this.page.locator("[data-contract-name]")).toHaveCount(39);
     await expect(
       this.page.locator('[data-contract-status="context"]'),
     ).toHaveCount(3);
     await expect(
       this.page.locator('[data-contract-status="candidate"]'),
-    ).toHaveCount(1);
+    ).toHaveCount(0);
     await expect(this.page.locator("[data-component-specimen]")).toHaveCount(6);
     await expect(this.page.locator("[data-widget-assembly]")).toHaveCount(2);
     await expect(this.page.locator("[data-widget-flow-progress]")).toHaveText(

@@ -98,7 +98,7 @@
 .taskHeading h3 {
   margin: 0;
   color: var(--color-text);
-  font-family: var(--font-reading);
+  font-family: var(--font-display);
   font-size: var(--text-base);
   font-weight: 600;
   line-height: 1.35;

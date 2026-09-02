@@ -447,15 +447,12 @@ API и аккаунт не используются. Интерактивные 
 
 ### 5.3 Design System
 
-Frontend использует локальную доменную UI-систему поверх Base UI и CSS Modules. Первый активный
-визуальный профиль **«Инженерная тетрадь»** сочетает нейтральную светлую поверхность,
-читающий serif и компактный sans/mono-интерфейс без фоновой текстуры. Поставленный архитектором
-`docs/artifacts/final_logo.svg` является master-файлом действующего public identity layer
-`infraege`: крупные
-применения сохраняют его трёхкаменную геометрию и исходные `#FF6B00` / `#393939`, а favicon
-16/32 px использует оптически упрощённую трёхэллипсную производную. Финальный вертикальный знак
-стоит рядом с живым Literata-wordmark, где `ege` использует контрастный производный `#F56300`
-(3.15:1 на белом). Структурные линии public chrome,
+Frontend использует локальную доменную UI-систему поверх Base UI и CSS Modules. Активный
+визуальный профиль **ALCHIMIA** сочетает белую поверхность, Cormorant SC для display и wordmark,
+Literata для чтения и IBM Plex Mono для кода, данных и компактного service UI. Поставленный
+архитектором `docs/artifacts/references/logo_with_transperant_bg.svg` является единственным
+художественным источником public identity: крупные и малые delivery-применения сохраняют его
+видимую геометрию без перерисовки и перекрашивания. Структурные линии public chrome,
 подчёркивания ссылок, recognition-поверхности notation/code, кнопки, badges, обычные reading
 surfaces и их состояния остаются нейтральными; status-цвета и syntax-роли независимы от бренда.
 Иерархию по-прежнему создают два нейтральных уровня текста,
@@ -470,13 +467,12 @@ whitespace, muted surfaces и тонкие borders. Статичные пове�
 state. Публичные component API описывают назначение, а не текущий внешний вид. Обязательный
 frontend-контракт и происхождение адаптированных практик зафиксированы в `docs/FRONTEND.md`.
 
-Следующий профиль **ALCHIMIA** сначала прорабатывается только на `/lab/design-system`, небольшими
-визуальными шагами с отдельным architect review после каждого шага.
-Lab вправе использовать изолированный reusable header-widget, если он ещё не подключён к public
-routes: так будущая общая граница проверяется в production-shaped композиции без преждевременной
-смены публичного бренда.
-После принятия типографики lab остаётся на исходном белом фоне и в монохромной подаче; активация медного
-акцента и более широкая цветовая схема отложены до отдельного architect approval. Сам стенд —
+Архивированный Change 75 сформировал и прошёл architect review для профиля **ALCHIMIA** на
+`/lab/design-system`. Стенд остаётся одобренным исполняемым источником, но не шаблоном
+production-страницы: Change 76 переносит из него только подтверждённые системные значения,
+reusable boundaries, public identity и delivery metadata.
+Принятый lab остаётся на исходном белом фоне и в монохромной подаче; медный акцент и более широкая
+цветовая схема отложены до отдельного architect approval. Сам стенд —
 architecture-led dashboard с тремя областями: общесистемный язык приложения, самостоятельные
 публичные компоненты и составные widgets. Общесистемная область показывает identity, typography,
 palette, layout/adaptivity, browser/accessibility behavior, поддерживаемую карту
@@ -500,8 +496,8 @@ service UI. Основной и вторичный текст использую
 заголовками и действиями. Абзац,
 concept-блок и крупная секция имеют три явно
 различимых уровня вертикального ритма и не схлопываются на mobile. До отдельного human approval и
-следующего change production theme, public identity, metadata, `/lab/lesson` и реальные уроки
-сохраняют действующий профиль.
+следующего change реальные уроки сохраняют существующую композицию и authored copy; их
+редакторская миграция начинается только после публичной активации.
 
 ### 5.4 Client Application Infrastructure
 
@@ -772,8 +768,8 @@ combined-log записи до path/status-family/coarse traffic class. Raw IP, 
 | `11` | Зафиксировать достаточность базовой аналитики и продолжить Python course content | Complete: event-level аналитику не расширяли; самостоятельный урок «Ошибки: читаем сообщение и находим причину» подготовлен в `review` с пятью server-owned задачами, упрощённым итогом и inline-подсветкой кода в практике |
 | `12` | Опубликовать третий самостоятельный CourseLesson Python | Complete: урок «Ошибки: читаем сообщение и находим причину» повторно прошёл Content Quality Gate, стал индексируемым и вошёл в discovery/progress, sitemap и prerender без изменения учебного контента |
 | `13` | Пересмотреть, углубить и опубликовать программу мини-курса Python одним change | Complete: все 28 уроков и 140 server-owned задач прошли содержательную и визуальную оценку, опубликованы в production, включая четыре последовательных стадии менеджера задач; Changes 72–73 доказали exact-SHA release и восстановление web image cache |
-| `14` | Сформировать визуальную основу ALCHIMIA в одном unlisted lab | Change 75: только `/lab/design-system`; небольшие зависимые подзадачи по identity, typography, palette, rhythm и primitives с отдельным architect review после каждого шага |
-| `15` | Активировать одобренный ALCHIMIA profile публично | Change 76: public theme, wordmark, metadata, manifest/favicon/social assets без изменения доменных ids, storage, analytics или infrastructure names |
+| `14` | Сформировать визуальную основу ALCHIMIA в одном unlisted lab | Complete: Change 75 сформировал и прошёл итоговый architect review для `/lab/design-system`; приняты identity, typography, монохромная palette, rhythm, component и widget contracts без активации ALCHIMIA на public routes |
+| `15` | Активировать одобренный ALCHIMIA profile публично | Complete: Change 76 активировал public theme, wordmark, metadata, manifest/favicon/social assets без изменения доменных ids, storage, analytics или infrastructure names |
 | `16` | Проверить редакторский контракт на двух крайних уроках | Change 77: «Первая программа» и «Рекурсивные алгоритмы» сохраняют факты, последовательность, примеры и задачи, но получают плавные входы, переходы и объяснение терминов |
 | `17` | Бережно мигрировать остальные уроки | Changes 78–82: пять ограниченных партий по утверждённой траектории; каждая проходит Content Quality Gate и отдельное human approval |
 

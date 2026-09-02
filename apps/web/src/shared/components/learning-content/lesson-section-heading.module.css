@@ -23,7 +23,7 @@
 .heading[data-variant="lesson"] {
   gap: var(--space-1);
   color: var(--color-text);
-  font-family: var(--font-reading);
+  font-family: var(--font-display);
   font-size: var(--text-xl);
   line-height: 1.25;
   letter-spacing: -0.015em;

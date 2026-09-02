@@ -3,12 +3,12 @@ import { PrivacyPage } from "~/pages/privacy";
 import { pageHead } from "~/shared/lib/seo";
 
 const description =
-  "Какие технические данные обрабатывает infraege и как хранится прогресс обучения.";
+  "Какие технические данные обрабатывает ALCHIMIA и как хранится прогресс обучения.";
 
 export const Route = createFileRoute("/privacy")({
   head: () =>
     pageHead.create({
-      title: "Обработка данных — infraege",
+      title: "Обработка данных — ALCHIMIA",
       description,
       path: "/privacy",
     }),

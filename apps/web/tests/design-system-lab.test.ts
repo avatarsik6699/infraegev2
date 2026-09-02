@@ -37,7 +37,7 @@ describe("ALCHIMIA design-system lab identity", () => {
       "web",
       "src",
       "widgets",
-      "alchimia-header",
+      "public-header",
       "assets",
       "alchimia-mark.svg",
     );
@@ -534,8 +534,10 @@ describe("ALCHIMIA design-system lab identity", () => {
     const catalogContracts = catalogContractsFrom(catalog).sort();
 
     expect(catalogContracts).toEqual(widgetExports);
-    expect(widgetExports).toHaveLength(5);
-    expect(catalog).toContain('candidate("AlchimiaHeader"');
+    expect(widgetExports).toHaveLength(4);
+    expect(catalog).toContain(
+      'live("PublicHeader", "ALCHIMIA-айдентика и версия публичных страниц")',
+    );
     expect(catalog).toContain('data-widget-assembly="public-page"');
     expect(catalog).toContain('data-widget-assembly="lesson-page"');
     expect(flowSpecimen).toContain(

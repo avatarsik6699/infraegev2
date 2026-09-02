@@ -86,8 +86,11 @@ export class TopicLessonPage {
 
   async expectPublishedLesson(): Promise<void> {
     await expectPublicReleaseIdentity(this.page);
+    await expect(this.page).toHaveTitle("Рекурсивные алгоритмы — ALCHIMIA");
     await expect(
-      this.page.getByRole("link", { name: "infraege — на главную" }),
+      this.page.getByRole("link", {
+        name: "ALCHIMIA — ЕГЭ информатика, на главную",
+      }),
     ).toHaveAttribute("href", "/");
     await expectPublishedLessonDocument(this.page, {
       canonicalPath: "/ege/16-rekursiya",
@@ -237,7 +240,9 @@ export class TopicLessonPage {
       this.page.locator("[data-practice-form][data-enhanced]"),
     ).toBeVisible();
     await this.page
-      .getByRole("link", { name: "infraege — на главную" })
+      .getByRole("link", {
+        name: "ALCHIMIA — ЕГЭ информатика, на главную",
+      })
       .click();
     await expect(this.page).toHaveURL(/\/$/);
     await this.page.evaluate(() => {

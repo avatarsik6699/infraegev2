@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, statSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
@@ -6,6 +6,14 @@ const publicPath = (...parts: string[]) =>
   resolve(process.cwd(), "public", ...parts);
 const generatorSource = readFileSync(
   resolve(process.cwd(), "../..", "scripts/generate-brand-assets.mjs"),
+  "utf8",
+);
+const approvedSource = readFileSync(
+  resolve(
+    process.cwd(),
+    "../..",
+    "docs/artifacts/references/logo_with_transperant_bg.svg",
+  ),
   "utf8",
 );
 
@@ -22,39 +30,38 @@ function readPngColorType(path: string): number {
 }
 
 describe("production brand assets", () => {
-  it("publishes the final large mark and an adapted small mark", () => {
-    const mark = readFileSync(publicPath("brand", "infraege-mark.svg"), "utf8");
+  it("publishes the approved ALCHIMIA mark and a source-faithful favicon", () => {
+    const mark = readFileSync(publicPath("brand", "alchimia-mark.svg"), "utf8");
     const favicon = readFileSync(publicPath("favicon.svg"), "utf8");
+    const approvedPathCount = approvedSource.match(/<path\b/g)?.length ?? 0;
+    const approvedGradientCount =
+      approvedSource.match(/<linearGradient\b/g)?.length ?? 0;
 
-    expect(mark).toContain('viewBox="0 0 227 319"');
-    expect(mark.match(/<ellipse\b/g)).toHaveLength(3);
-    expect(mark.match(/<path\b/g)).toHaveLength(3);
-    expect(favicon.match(/<ellipse\b/g)).toHaveLength(3);
-    expect(favicon).not.toContain("<path");
+    expect(mark).toContain('viewBox="0 0 2048 1365"');
+    expect(favicon).toContain('viewBox="0 -341.5 2048 2048"');
+    expect(mark.match(/<path\b/g)).toHaveLength(approvedPathCount);
+    expect(favicon.match(/<path\b/g)).toHaveLength(approvedPathCount);
+    expect(mark.match(/<linearGradient\b/g)).toHaveLength(
+      approvedGradientCount,
+    );
+    expect(favicon.match(/<linearGradient\b/g)).toHaveLength(
+      approvedGradientCount,
+    );
 
     for (const source of [mark, favicon]) {
       expect(source).toContain('preserveAspectRatio="xMidYMid meet"');
-      expect(source).toContain('fill="#FF6B00"');
-      expect(source).toContain('fill="#393939"');
       expect(source).not.toMatch(
-        /<text\b|<script\b|(?:href|src)=["']https?:\/\//i,
+        /<image\b|<text\b|<script\b|<filter\b|(?:href|src)=["']https?:\/\//i,
       );
     }
 
-    expect(existsSync(publicPath("brand", "infraege-mark-baseline.svg"))).toBe(
-      false,
+    expect(generatorSource).toContain(
+      "docs/artifacts/references/logo_with_transperant_bg.svg",
     );
+    expect(existsSync(publicPath("brand", "infraege-mark.svg"))).toBe(false);
   });
 
   it("publishes every required raster size", () => {
-    const headerMarkPath = publicPath("brand", "infraege-mark-header.png");
-
-    expect(readPngDimensions(headerMarkPath)).toEqual({
-      width: 96,
-      height: 135,
-    });
-    expect(readPngColorType(headerMarkPath)).toBe(6);
-    expect(statSync(headerMarkPath).size).toBeLessThan(20_000);
     expect(readPngDimensions(publicPath("favicon-16x16.png"))).toEqual({
       width: 16,
       height: 16,
@@ -69,18 +76,18 @@ describe("production brand assets", () => {
     });
     expect(readPngColorType(publicPath("apple-touch-icon.png"))).toBe(2);
     expect(
-      readPngDimensions(publicPath("brand", "infraege-icon-192.png")),
+      readPngDimensions(publicPath("brand", "alchimia-icon-192.png")),
     ).toEqual({ width: 192, height: 192 });
-    expect(readPngColorType(publicPath("brand", "infraege-icon-192.png"))).toBe(
+    expect(readPngColorType(publicPath("brand", "alchimia-icon-192.png"))).toBe(
       2,
     );
     expect(
-      readPngDimensions(publicPath("brand", "infraege-icon-512.png")),
+      readPngDimensions(publicPath("brand", "alchimia-icon-512.png")),
     ).toEqual({ width: 512, height: 512 });
-    expect(readPngColorType(publicPath("brand", "infraege-icon-512.png"))).toBe(
+    expect(readPngColorType(publicPath("brand", "alchimia-icon-512.png"))).toBe(
       2,
     );
-    expect(readPngDimensions(publicPath("brand/infraege-social.png"))).toEqual({
+    expect(readPngDimensions(publicPath("brand/alchimia-social.png"))).toEqual({
       width: 1200,
       height: 630,
     });
@@ -93,6 +100,8 @@ describe("production brand assets", () => {
     const manifest = JSON.parse(
       readFileSync(publicPath("site.webmanifest"), "utf8"),
     ) as {
+      name: string;
+      short_name: string;
       display: string;
       background_color: string;
       theme_color: string;
@@ -101,17 +110,19 @@ describe("production brand assets", () => {
 
     expect(manifest).toEqual(
       expect.objectContaining({
+        name: "ALCHIMIA — подготовка к ЕГЭ по информатике",
+        short_name: "ALCHIMIA",
         display: "browser",
         background_color: "#ffffff",
         theme_color: "#ffffff",
         icons: [
           expect.objectContaining({
-            src: "/brand/infraege-icon-192.png",
+            src: "/brand/alchimia-icon-192.png",
             sizes: "192x192",
             purpose: "any",
           }),
           expect.objectContaining({
-            src: "/brand/infraege-icon-512.png",
+            src: "/brand/alchimia-icon-512.png",
             sizes: "512x512",
             purpose: "any",
           }),

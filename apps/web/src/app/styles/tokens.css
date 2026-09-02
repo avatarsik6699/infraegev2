@@ -1,5 +1,6 @@
 :root {
   /* Semantic typography */
+  --font-display: var(--theme-font-display);
   --font-ui: var(--theme-font-ui);
   --font-reading: var(--theme-font-reading);
   --font-data: var(--theme-font-data);
@@ -43,8 +44,6 @@
   --color-faint: var(--theme-ink-secondary);
   --color-rule: var(--theme-rule);
   --color-rule-strong: var(--theme-rule-strong);
-  --color-brand: var(--theme-brand);
-  --color-brand-text: var(--theme-brand-ink);
   --color-alchimia-paper: var(--theme-alchimia-paper);
   --color-alchimia-ink: var(--theme-alchimia-ink);
   --color-alchimia-ink-secondary: var(--theme-alchimia-ink-secondary);

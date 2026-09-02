@@ -41,7 +41,7 @@
 
 .intro h1[data-order] {
   max-width: 12ch;
-  font-family: var(--font-reading);
+  font-family: var(--font-display);
   font-size: var(--text-3xl);
   font-weight: 600;
   line-height: 0.98;
@@ -96,7 +96,7 @@
 }
 
 .outcomes h2[data-order] {
-  font-family: var(--font-reading);
+  font-family: var(--font-display);
   font-size: var(--text-xl);
   line-height: 1.3;
 }

@@ -1,47 +1,29 @@
 # Требования к бренд-ассетам
 
-## Переход ALCHIMIA
+## Активный профиль ALCHIMIA
 
-Текущий production-пакет `infraege` остаётся активным до отдельной публичной миграции. Change 75
-не перезаписывает favicon, manifest, social preview или public header: новый знак и его окружение
-прорабатываются только на `/lab/design-system`, небольшими отдельно принимаемыми шагами.
+Change 75 утвердил ALCHIMIA на `/lab/design-system`; Change 76 активировал тот же профиль в
+public header, metadata, manifest, favicon, Apple/manifest icons и social preview. Технический
+домен `infraege.ru`, storage keys, analytics ids и инфраструктурные имена при этом не меняются.
 
 `docs/artifacts/references/logo_with_transperant_bg.svg` — единственный художественный источник
 ALCHIMIA. Имя файла сохраняет исходное написание архитектора. Прежний `logo.svg` с непрозрачным
-canvas удалён и больше не используется. Любая нормализация или производный ассет сначала
-оформляется отдельной подзадачей Change 75 с точными критериями и визуально принимается
-архитектором; перерисовка, сглаживание, перекрашивание и переинтерпретация видимой геометрии не
-допускаются. Перед будущей public activation крупный знак проходит визуальное сравнение с source,
-а малые favicon получают отдельную оптическую проверку.
+canvas и исторический `docs/artifacts/final_logo.svg` не являются production-источниками.
+Нормализация может убрать фиксированные размеры, исправить `preserveAspectRatio` или добавить
+delivery whitespace, но не может перерисовывать, сглаживать, перекрашивать, обрезать или
+переинтерпретировать видимую геометрию.
 
-## Текущий production-источник infraege
-
-До отдельной публичной активации ALCHIMIA файл `docs/artifacts/final_logo.svg` остаётся
-master-файлом только для действующего production-пакета `infraege` и команды
-`pnpm brand:generate`. Он содержит только три
-камня на прозрачном фоне. В крупных применениях сохраняются его исходные силуэты и цвета:
-`#FF6B00` для верхнего камня и `#393939` для двух остальных. Старые clear/border варианты и
-визуальный референс больше не являются частью поставки.
-
-Этот временно сохраняемый production-source не является художественным источником ALCHIMIA и не
-конкурирует с `logo_with_transperant_bg.svg`. Его удаление возможно только вместе с отдельной
-public activation, которая заменит генератор и все действующие производные файлы.
-
-Надпись `infraege` не входит в SVG и остаётся живым доступным текстом в проектном
-Literata-шрифте. `infra` нейтрален, `ege` использует производный `#F56300`, обеспечивающий
-контраст не ниже 3:1 на белом для крупного полужирного wordmark.
+Надпись `ALCHIMIA` и подзаголовок «ЕГЭ информатика» не встраиваются в SVG: они остаются живым
+доступным текстом в Cormorant SC и IBM Plex Mono соответственно.
 
 ## Производные файлы
 
-- `apps/web/public/brand/infraege-mark.svg` сохраняет авторскую геометрию master-файла, удаляет
-  фиксированные размеры и добавляет нормализованный `viewBox`/`preserveAspectRatio`.
-- `apps/web/public/brand/infraege-mark-header.png` — прозрачный 96×135 raster-дериватив того же
-  production SVG для header. Он сохраняет силуэты и цвета, но не заставляет первый экран загружать
-  сложные path-данные master-файла; размер файла должен оставаться меньше 20 КБ.
-- `apps/web/public/favicon.svg` — оптически упрощённая версия из трёх исходных эллипсов. Она
-  сохраняет композицию и цвета, но исключает шумные контуры, которые не читаются при 16–32 px.
+- `apps/web/public/brand/alchimia-mark.svg` сохраняет все авторские paths и gradients, удаляет
+  фиксированные размеры и нормализует `preserveAspectRatio`.
+- `apps/web/public/favicon.svg` использует те же paths и gradients; квадратный `viewBox` добавляет
+  только прозрачное поле и сохраняет весь исходный знак.
 - PNG/ICO, Apple touch, manifest icons и social preview воспроизводимо генерируются командой
-  `pnpm brand:generate`.
+  `pnpm brand:generate`; manifest хранится декларативно рядом и проверяется тем же test contract.
 
 ## Favicon и иконки
 
@@ -52,24 +34,24 @@ Literata-шрифте. `infra` нейтрален, `ege` использует п
 | `favicon-32x32.png` | 32×32 | Проверенная пиксельная читаемость |
 | `favicon.ico` | 16×16 и 32×32 внутри | PNG frames с alpha |
 | `apple-touch-icon.png` | 180×180 | Непрозрачный белый фон, без встроенного скругления |
-| `infraege-icon-192.png` | 192×192 | Непрозрачный белый фон, manifest purpose `any` |
-| `infraege-icon-512.png` | 512×512 | Непрозрачный белый фон, manifest purpose `any` |
+| `alchimia-icon-192.png` | 192×192 | Непрозрачный белый фон, manifest purpose `any` |
+| `alchimia-icon-512.png` | 512×512 | Непрозрачный белый фон, manifest purpose `any` |
 
 Apple/manifest-иконки оставляют 12.5% свободного поля с каждой стороны. Maskable-вариант,
 service worker, offline-режим и установка как PWA не входят в текущий контракт.
 
 ## Social preview
 
-`apps/web/public/brand/infraege-social.png` имеет размер 1200×630 px и белый фон. Единственный
-элемент — финальный трёхкаменный знак, расположенный по центру обеих осей. Wordmark, подпись,
-разделители и декоративные элементы отсутствуют.
+`apps/web/public/brand/alchimia-social.png` имеет размер 1200×630 px и белый фон. Единственный
+элемент — утверждённый знак ALCHIMIA, расположенный по центру обеих осей. Wordmark, подпись,
+разделители и дополнительные декоративные элементы отсутствуют.
 
 ## Приёмка
 
 - SVG не содержит `<text>`, JavaScript, внешние URL, embedded raster, фильтры или непрозрачный
   canvas; контуры не выходят за `viewBox`.
-- Крупный production mark визуально совпадает с master-файлом; упрощение разрешено только для
-  малых favicon.
+- Крупный production mark визуально совпадает с master-файлом; малые favicon не получают
+  отдельной перерисовки.
 - Проверяются сигнатуры и размеры raster/ICO, manifest declarations, favicon в браузере,
   OG/Twitter metadata, desktop/mobile/150%-zoom header, SSR/no-JS, контраст wordmark и чистая
   консоль.

@@ -17,7 +17,7 @@ export const Route = createRootRouteWithContext<AppRouterContext>()({
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { name: "application-name", content: siteConfig.name },
       { name: "theme-color", content: siteConfig.themeColor },
-      { title: "infraege" },
+      { title: siteConfig.name },
     ],
     links: [
       { rel: "icon", href: "/favicon.ico", sizes: "32x32" },

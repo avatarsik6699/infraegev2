@@ -27,6 +27,6 @@
 .root h3,
 .root h4 {
   margin-block: var(--space-4) var(--space-2);
-  font-family: var(--font-reading);
+  font-family: var(--font-display);
   line-height: 1.2;
 }

@@ -12,6 +12,9 @@ export class FoundationPage {
 
   async expectPublishedMaterial(): Promise<void> {
     await expectPublicReleaseIdentity(this.page);
+    await expect(this.page).toHaveTitle(
+      "ALCHIMIA — подготовка к ЕГЭ по информатике",
+    );
     await expect(
       this.page.getByRole("heading", {
         name: "Подготовка к ЕГЭ по информатике",
@@ -66,7 +69,7 @@ export class FoundationPage {
       this.page.locator('meta[property="og:image"]'),
     ).toHaveAttribute(
       "content",
-      "https://infraege.ru/brand/infraege-social.png",
+      "https://infraege.ru/brand/alchimia-social.png",
     );
     await expect(
       this.page.locator('meta[name="twitter:card"]'),
@@ -79,7 +82,7 @@ export class FoundationPage {
     expect(JSON.parse(structuredData ?? "{}")).toEqual(
       expect.objectContaining({
         "@type": "WebSite",
-        name: "infraege",
+        name: "ALCHIMIA",
         url: "https://infraege.ru/",
       }),
     );

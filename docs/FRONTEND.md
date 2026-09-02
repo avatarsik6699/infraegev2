@@ -91,9 +91,8 @@ app → routes → pages → widgets → features → entities → shared
   material or “Engineering notebook” profile. Changing the active profile must not require domain,
   API, content or state changes.
 - Keep one active light theme in this change. Runtime theme switching and dark mode are out of
-  scope. The baseline remains neutral: ink, muted surfaces and borders establish hierarchy. The
-  supplied `#FF6B00` orange is isolated to the final three-stone mark; the live `ege` wordmark
-  signal uses its contrast-safe `#F56300` derivative.
+  scope. The ALCHIMIA baseline remains monochrome: ink, muted surfaces and borders establish
+  hierarchy, while semantic feedback colors retain only their functional meaning.
   Public header/footer rules, persistent link underlines, inline `Notation`, the code-header
   separator, buttons, badges, ordinary surfaces, control states and semantic feedback remain
   neutral or keep their independent semantic roles. Syntax tokens inside the dedicated dark code
@@ -178,8 +177,8 @@ app → routes → pages → widgets → features → entities → shared
   Every indexable HTML route exposes an absolute `https://infraege.ru` canonical plus unique title,
   description and shared 1200×630 social metadata. The root owns a browser-only manifest plus the
   normalized production SVG/PNG/ICO favicon and Apple touch icon set; the large mark preserves the
-  final source geometry while 16/32px favicon exports use its approved optically simplified
-  three-ellipse derivative. `/` alone owns the truthful `WebSite` JSON-LD site-name declaration.
+  approved ALCHIMIA source geometry while the square favicon viewport adds only delivery whitespace
+  and never redraws the mark. `/` alone owns the truthful `WebSite` JSON-LD site-name declaration.
   Generated favicon/touch/manifest assets satisfy
   `docs/BRAND_ASSET_REQUIREMENTS.md`. Do not add Organization/Person structured data without a
   separately confirmed real-world identity. `/robots.txt` and `/sitemap.xml` are server routes,
@@ -197,11 +196,10 @@ app → routes → pages → widgets → features → entities → shared
   modified-click behavior. After hydration it follows TanStack Router history only when the
   router-owned history index says an in-app entry exists; direct entry, document reload and
   external-origin arrival use the explicit fallback route instead of leaving the application.
-- Public headers share one release identity from `siteConfig`: the final vertical mark and live
-  Literata wordmark stay grouped with the restrained release label at the left, while the current
-  application version remains at the right. `infra` remains neutral and `ege` uses the
-  contrast-safe brand-text derivative; the mark is decorative beside the accessible live site
-  name rather than its replacement.
+- Public headers share one release identity from `siteConfig`: the approved ALCHIMIA mark,
+  Cormorant SC wordmark and IBM Plex Mono subtitle stay grouped with the restrained release label
+  at the left, while the current application version remains at the right. The mark is decorative
+  beside the accessible live site name rather than its replacement.
   Outside the home page the wordmark is the route back home. Material discovery belongs to the
   registry-derived home sections rather than duplicate collection links in global chrome.
   Optional analytics first appears only after hydration as a fixed full-width bottom prompt that
@@ -274,7 +272,7 @@ app → routes → pages → widgets → features → entities → shared
 - Outcomes describe what the learner can now do. Instructions, hints and feedback say what to do
   next; mistakes are explained without blame, vague encouragement or hidden scoring.
 
-### 6.1 ALCHIMIA lab transition
+### 6.1 ALCHIMIA rollout contract
 
 - ALCHIMIA copy follows one explicit learning bridge: begin from a familiar situation, name and
   explain the new term where it first matters, demonstrate it concretely, generalize only after
@@ -282,24 +280,22 @@ app → routes → pages → widgets → features → entities → shared
   term may instead point back to a previous lesson only when that dependency is already true in
   the authored curriculum. Humanization never removes intermediate reasoning, examples,
   distinctions or the final synthesis.
-- Change 75 changes only `/lab/design-system`. Build the target profile there through small,
-  separately reviewable increments; do not touch `/lab/lesson`, production routes or shared
-  consumers until the architect explicitly approves a later scope. An isolated reusable widget
-  may be introduced when `/lab/design-system` remains its only consumer; this proves the future
-  production boundary without activating it. Candidate theme values may cross the enforced
-  theme/token boundary only when no public consumer uses them yet.
+- Archived Change 75 established the approved target profile on `/lab/design-system` and proved
+  its reusable header, theme/token boundary and catalog contracts. Change 76 activates only those
+  accepted system-level values and reusable boundaries on public routes without copying the
+  dashboard composition into production.
 - The supplied `docs/artifacts/references/logo_with_transperant_bg.svg` is the sole artistic
   authority. The obsolete opaque-canvas `logo.svg` is not a fallback. A derivative may repair
   delivery sizing/viewBox behavior, but may not redraw, smooth, recolor or reinterpret visible
   geometry. The rejected hero-scale F1 composition is superseded by F11's compact reusable header.
-- The architect selected Athanor's typography roles for the lab: self-hosted Cormorant SC carries
+- The architect selected Athanor's typography roles for the approved profile: self-hosted
+  Cormorant SC carries
   display headings and the live wordmark, Literata carries continuous reading, and IBM Plex Mono
-  is limited to code, data and compact service UI. The lab exposes one achromatic primary and one
-  achromatic secondary prose level over the original white background; status colors remain
-  semantic rather than decorative. Public consumers keep the active production profile until the
-  later activation change.
-- After typography approval, keep the lab's original white background and monochrome presentation.
-  Copper activation and broader color work require a later explicit checkpoint. The
+  is limited to code, data and compact service UI. The profile exposes one achromatic primary and
+  one achromatic secondary prose level over the original white background; status colors remain
+  semantic rather than decorative. Public consumers adopt these roles through Change 76.
+- Keep the approved white background and monochrome presentation during public activation. Copper
+  activation and broader color work require a later explicit checkpoint. The
   architecture-led lab dashboard groups contracts into System, Components and Widgets tabs:
   System owns app-wide identity, typography, palette, layout constraints, accessibility/browser
   behavior, curated semantic tokens, the active icon inventory and content-language rules;
@@ -311,8 +307,8 @@ app → routes → pages → widgets → features → entities → shared
   representative lesson or changing authored content. Each panel has a sticky local table of
   contents. Controlled tabs must progressively enhance into one active panel while
   SSR/no-JavaScript renders every panel as an ordinary linear block.
-- Running text has one primary and one secondary neutral level. Copper-orange is inactive in
-  Change 75; any later activation requires an explicit checkpoint and still may not color ordinary
+- Running text has one primary and one secondary neutral level. Copper-orange remains inactive;
+  any later activation requires an explicit checkpoint and still may not color ordinary
   paragraphs. Semantic feedback remains independent and never becomes decorative palette.
 - The active lab does not render the `patterns_lines.png` atlas. Headers, catalog navigation,
   section separators, frames, diagram internals, swatches and interactive controls use standard
@@ -321,8 +317,9 @@ app → routes → pages → widgets → features → entities → shared
 - Vertical rhythm has three roles: content flow (`0.75–1rem`), concept separation
   (`1.75–2.5rem`) and major-section separation (`3.5–6rem`). Responsive rules preserve the
   hierarchy rather than reducing all three roles to one mobile gap.
-- Lesson composition, responsive outline behavior and authored lesson copy are outside Change 75.
-  They remain future work after the design-system lab establishes an approved visual foundation.
+- Lesson composition, responsive outline behavior and authored lesson copy remained outside
+  Change 75 and stay outside Change 76. Their editorial rollout belongs to Changes 77–82 after
+  public activation.
 
 ## 7. Fields and validation
 

@@ -1,5 +1,4 @@
 import { Typography } from "~/shared/components/typography";
-import { AlchimiaHeader } from "~/widgets/alchimia-header";
 import { LessonOutline } from "~/widgets/lesson-outline";
 import { PublicFooter } from "~/widgets/public-footer";
 import { PublicHeader } from "~/widgets/public-header";
@@ -18,16 +17,9 @@ const live = (name: string, note: string): CatalogContract => ({
   status: "live",
 });
 
-const candidate = (name: string, note: string): CatalogContract => ({
-  name,
-  note,
-  status: "candidate",
-});
-
 const widgetContracts = {
   chrome: [
-    candidate("AlchimiaHeader", "Новая айдентика только для текущего lab"),
-    live("PublicHeader", "Действующая шапка публичных страниц"),
+    live("PublicHeader", "ALCHIMIA-айдентика и версия публичных страниц"),
     live("PublicFooter", "Действующая навигация в подвале"),
   ],
   learning: [
@@ -78,19 +70,10 @@ export const WidgetsCatalog: React.FC = () => (
       />
       <div
         className={styles.widgetSpecimen}
-        data-widget-specimen="AlchimiaHeader"
-      >
-        <code className={styles.typeTag}>ALCHIMIA · candidate header</code>
-        <div className={styles.widgetCanvas}>
-          <AlchimiaHeader home />
-        </div>
-      </div>
-      <div
-        className={styles.widgetSpecimen}
         data-widget-specimen="PublicChrome"
       >
-        <code className={styles.typeTag}>infraege · current public chrome</code>
-        <div className={`${styles.widgetCanvas} ${styles.productionPreview}`}>
+        <code className={styles.typeTag}>ALCHIMIA · public chrome</code>
+        <div className={styles.widgetCanvas}>
           <PublicHeader home />
           <div className={styles.widgetPlaceholder}>
             <Typography.Text>
@@ -237,10 +220,6 @@ export const WidgetsCatalog: React.FC = () => (
           </ol>
         </figure>
       </div>
-      <Typography.Text className={styles.placeholder}>
-        <code>AlchimiaHeader</code> — кандидат на будущую замену, а не часть
-        текущей публичной сборки.
-      </Typography.Text>
     </section>
   </CatalogLayout>
 );

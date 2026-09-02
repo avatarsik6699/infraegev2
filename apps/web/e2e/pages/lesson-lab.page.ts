@@ -361,9 +361,18 @@ export class LessonLabPage {
       ).fontFamily,
     }));
 
-    expect(fontState.requestedFonts).toEqual([]);
-    expect(fontState.bodyFamily).toContain("Onest Fallback");
-    expect(fontState.headingFamily).toContain("Literata Fallback");
+    expect(fontState.requestedFonts.length).toBeGreaterThan(0);
+    expect(
+      fontState.requestedFonts.every((fontUrl) => {
+        const pathname = new URL(fontUrl).pathname;
+        return (
+          pathname.startsWith("/fonts/alchimia/") ||
+          pathname.startsWith("/fonts/literata/")
+        );
+      }),
+    ).toBe(true);
+    expect(fontState.bodyFamily).toContain("Alchimia Literata");
+    expect(fontState.headingFamily).toContain("Alchimia Literata");
   }
 
   async expectBoundedMarginalia(): Promise<void> {
