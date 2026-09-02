@@ -9,7 +9,7 @@
 | Change | `77` |
 | Slug | `editorial-contract-pilots` |
 | Title | Editorial Contract Pilots |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/77-editorial-contract-pilots` |
 
 ---
