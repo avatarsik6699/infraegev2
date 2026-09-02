@@ -9,7 +9,7 @@
 | Change | `76` |
 | Slug | `alchimia-public-activation` |
 | Title | ALCHIMIA Public Activation |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/76-alchimia-public-activation` |
 
 ---
