@@ -9,7 +9,7 @@
 | Change | `75` |
 | Slug | `alchimia-design-system-labs` |
 | Title | ALCHIMIA Design System Lab |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/75-alchimia-design-system-labs` |
 
 ---
