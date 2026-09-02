@@ -9,7 +9,7 @@
 | Change | `78` |
 | Slug | `python-foundations-editorial-batch` |
 | Title | Python Foundations Editorial Batch |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/78-python-foundations-editorial-batch` |
 
 ---
