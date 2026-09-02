@@ -14,7 +14,10 @@ export async function openLessonAtTop(
   await expect
     .poll(async () => {
       await page.evaluate(() => {
-        if (document.scrollingElement) document.scrollingElement.scrollTop = 0;
+        document.scrollingElement?.scrollTo({
+          behavior: "instant",
+          top: 0,
+        });
       });
       return page.evaluate(
         () => document.scrollingElement?.scrollTop ?? window.scrollY,

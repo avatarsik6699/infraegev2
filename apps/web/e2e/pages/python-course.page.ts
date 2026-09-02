@@ -421,6 +421,18 @@ export class PythonCoursePage {
       }),
     ).toBeVisible();
     await expect(
+      this.page.getByText(
+        "Представьте рецепт, в котором каждое действие записано на отдельной строке.",
+        { exact: false },
+      ),
+    ).toBeVisible();
+    await expect(
+      this.page.getByText("называется присваиванием", { exact: false }),
+    ).toBeVisible();
+    await expect(
+      this.page.getByText("Терминал — это окно", { exact: false }),
+    ).toBeVisible();
+    await expect(
       this.page.getByText("Лучше запускать Python на компьютере"),
     ).toBeVisible();
     await expect(

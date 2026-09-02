@@ -153,6 +153,31 @@ describe("Python course foundation", () => {
     }
   });
 
+  it("preserves the first-program editorial pilot structure and tasks", () => {
+    const lesson = findCourseLessonByRouteSlugs("python", "pervaya-programma");
+
+    expect(lesson).toBeDefined();
+    expect(lesson?.theory.map((concept) => concept.id)).toEqual([
+      "program-order",
+      "values-and-variables",
+      "input-and-conversion",
+      "calculation-and-output",
+      "run-and-check",
+    ]);
+    expect(lesson?.practiceTaskIds).toEqual([
+      "python-first-program-output-order",
+      "python-first-program-variable-trace",
+      "python-first-program-input-conversion",
+      "python-first-program-expression",
+      "python-first-program-local-run",
+    ]);
+    expect(lesson).toMatchObject({
+      accessTier: "free",
+      masteryThreshold: 0.8,
+      status: "published",
+    });
+  });
+
   it("loads the published conditions tasks without checker secrets", async () => {
     const pythonConditionsLesson = findCourseLessonByRouteSlugs(
       "python",

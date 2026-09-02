@@ -117,6 +117,14 @@ test("the first published Python lesson preserves progress and reset", async ({
   await browserSession.captureViewport(
     "python-first-program-practice-desktop.png",
   );
+
+  await browserSession.useZoomedDesktopViewport();
+  await pythonCoursePage.expectMobileReadingOrder();
+  await browserSession.captureViewport("python-first-program-zoomed.png");
+
+  await browserSession.useNarrowViewport();
+  await pythonCoursePage.expectMobileReadingOrder();
+  await browserSession.captureViewport("python-first-program-mobile.png");
   browserSession.expectCleanConsole();
   await noJavaScriptPythonCoursePage.expectReadableWithoutJavaScript();
 });
@@ -296,9 +304,8 @@ test("the design-system catalog works on desktop and without JavaScript", async 
   await noJavaScriptDesignSystemLabPage.expectLinearContentWithoutJavaScript();
 });
 
-test("the published recursion lesson stays readable across runtimes", async ({
+test("the published recursion lesson preserves practice and reading state", async ({
   browserSession,
-  noJavaScriptTopicLessonPage,
   topicLessonPage,
 }) => {
   await browserSession.useDesktopViewport();
@@ -312,7 +319,14 @@ test("the published recursion lesson stays readable across runtimes", async ({
   await topicLessonPage.expectNoHorizontalOverflow();
   await topicLessonPage.expectStableReload();
   await topicLessonPage.expectReadingPosition();
+  browserSession.expectCleanConsole();
+});
 
+test("the published recursion lesson stays readable across runtimes", async ({
+  browserSession,
+  noJavaScriptTopicLessonPage,
+  topicLessonPage,
+}) => {
   await browserSession.useZoomedDesktopViewport();
   await topicLessonPage.open();
   await topicLessonPage.expectPublishedLesson();

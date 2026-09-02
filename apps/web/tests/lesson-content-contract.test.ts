@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   defineLesson,
   preobrazovanieZapiseyChiselLesson,
+  rekursiyaLesson,
   type LessonContent,
 } from "~/entities/lesson";
 
@@ -69,5 +70,31 @@ describe("defineLesson", () => {
     ]);
     expect(preobrazovanieZapiseyChiselLesson.masteryThreshold).toBe(0.8);
     expect(preobrazovanieZapiseyChiselLesson.status).toBe("published");
+  });
+
+  it("preserves the recursion editorial pilot structure and tasks", () => {
+    expect(rekursiyaLesson.theory.map((concept) => concept.id)).toEqual([
+      "concrete-computation",
+      "base-case-and-step",
+      "why-it-works",
+      "code-and-call-stack",
+      "loop-instead-of-recursion",
+      "several-previous-values",
+      "repeated-work-motivates-storage",
+      "large-arguments-algebraic-shortcut",
+      "general-method",
+    ]);
+    expect(rekursiyaLesson.practiceTaskIds).toEqual([
+      "rekursiya-base-sequence",
+      "rekursiya-call-stack-trace",
+      "rekursiya-two-values",
+      "rekursiya-repeated-calls",
+      "rekursiya-large-ratio",
+    ]);
+    expect(rekursiyaLesson).toMatchObject({
+      accessTier: "free",
+      masteryThreshold: 0.8,
+      status: "published",
+    });
   });
 });

@@ -107,6 +107,17 @@ export class TopicLessonPage {
         .getByRole("navigation", { name: "Содержание урока" })
         .getByRole("link", { name: "Вычисляем F(5) по правилу" }),
     ).toHaveAttribute("href", "#concrete-computation");
+    await expect(
+      this.page.getByText("называют рекуррентным определением", {
+        exact: false,
+      }),
+    ).toBeVisible();
+    await expect(
+      this.page.getByText("стеке вызовов — списке функций", { exact: false }),
+    ).toBeVisible();
+    await expect(
+      this.page.getByText("называют кешированием", { exact: false }),
+    ).toBeVisible();
     await expect(this.page.locator("[data-article-frame] img")).toHaveCount(0);
     await expect(this.page.locator("[data-outline-tree] svg")).toHaveCount(0);
     await expect(

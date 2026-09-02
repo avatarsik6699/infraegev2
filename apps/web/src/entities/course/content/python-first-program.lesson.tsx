@@ -30,9 +30,16 @@ export const pythonFirstProgramLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
-            Python выполняет программу строка за строкой: начинает с первой
-            команды, затем переходит к следующей. Поэтому порядок строк важен —
-            от него зависит, что и когда произойдёт.
+            Представьте рецепт, в котором каждое действие записано на отдельной
+            строке. Программа устроена похоже: это последовательность команд,
+            которые компьютер выполняет по порядку. В Python выполнение
+            начинается с первой строки, а затем переходит к следующей, поэтому
+            от порядка зависит, что и когда произойдёт.
+          </Typography.Text>
+          <Typography.Text>
+            Начнём с команды <Notation>print(...)</Notation>. Она выводит на
+            экран то, что указано в скобках: текст записывают в кавычках, а
+            выражение вроде <Notation>2 + 3</Notation> Python сначала вычисляет.
           </Typography.Text>
           <CodeBlock
             code={'print("Старт")\nprint(2 + 3)\nprint("Готово")'}
@@ -43,8 +50,8 @@ export const pythonFirstProgramLesson = defineCourseLesson({
           <Typography.Text>
             В результате мы увидим три строки в том же порядке: слово
             <Notation> Старт</Notation>, число <Notation>5</Notation> и слово
-            <Notation> Готово</Notation>. В скобках указано, что нужно передать
-            команде <Notation>print</Notation>, а текст записан в кавычках.
+            <Notation> Готово</Notation>. Пока программа ничего не запоминает:
+            она только выполняет три команды сверху вниз.
           </Typography.Text>
         </>
       ),
@@ -91,10 +98,11 @@ export const pythonFirstProgramLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
-            Переменная — это имя, под которым программа хранит значение. В
-            строке с присваиванием Python сначала вычисляет выражение справа от
-            знака <Notation>=</Notation>, а затем сохраняет результат в
-            переменной слева.
+            Чтобы не писать одно и то же значение заново, программе нужно его
+            запомнить. Для этого используют переменную — имя, под которым
+            хранится значение. Запись с <Notation>=</Notation> называется
+            присваиванием: Python сначала вычисляет выражение справа, а затем
+            сохраняет результат в переменной слева.
           </Typography.Text>
           <CodeBlock
             code={"price = 120\ncount = 3\ntotal = price * count\nprint(total)"}
@@ -132,10 +140,13 @@ export const pythonFirstProgramLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
-            Команда <Notation>input()</Notation> ждёт, пока пользователь что-то
-            напечатает и нажмёт Enter. Даже введённые цифры она получает как
-            текст. Чтобы считать с ними, этот текст нужно превратить в целое
-            число с помощью <Notation>int(...)</Notation>.
+            До сих пор все значения были заранее записаны в программе. Чтобы
+            получить значение от пользователя, нужна команда
+            <Notation> input()</Notation>: она ждёт, пока человек что-то
+            напечатает и нажмёт Enter. Результат <Notation>input()</Notation>
+            всегда является текстом, даже если введены одни цифры. Для
+            вычислений этот текст превращают в целое число с помощью
+            <Notation> int(...)</Notation>.
           </Typography.Text>
           <CodeBlock
             code={
@@ -193,7 +204,10 @@ export const pythonFirstProgramLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
-            Для первой программы достаточно четырёх арифметических операций:
+            Теперь программа умеет получать числа и хранить их в переменных —
+            осталось выполнить нужное вычисление. Значения, которые программа
+            получает для работы, называют входными данными. Для первой программы
+            достаточно четырёх арифметических операций:
             <Notation>+</Notation>, <Notation>−</Notation>,
             <Notation>*</Notation> и <Notation>/</Notation>. Как и в математике,
             умножение и деление выполняются раньше сложения и вычитания. Если
@@ -240,11 +254,14 @@ export const pythonFirstProgramLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
-            Сохраните программу в файле с расширением
-            <Notation> .py</Notation>. В Windows проверьте установленную версию
-            командой <Notation>py --version</Notation>, а в macOS или Linux —
-            командой <Notation>python3 --version</Notation>. Для заданий курса
-            подойдёт Python 3.12 или любая более новая версия.
+            Код готов — теперь его нужно сохранить и запустить. Файл программы
+            на Python имеет расширение <Notation>.py</Notation>, например
+            <Notation> first_program.py</Notation>. Терминал — это окно, в
+            котором можно вводить команды запуска. В Windows сначала проверьте
+            установленную версию командой <Notation>py --version</Notation>, а в
+            macOS или Linux — командой
+            <Notation> python3 --version</Notation>. Для заданий курса подойдёт
+            Python 3.12 или любая более новая версия.
           </Typography.Text>
           <CodeBlock
             code={

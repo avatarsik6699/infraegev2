@@ -34,8 +34,16 @@ export const rekursiyaLesson = defineLesson({
       explanation: (
         <>
           <Typography.Text>
-            Пусть известно, что <Notation kind="formula">F(1) = 1</Notation>, а
-            каждое следующее значение получается по правилу{" "}
+            Последовательность чисел не обязательно перечислять целиком. Можно
+            задать первое значение и правило, по которому из уже известного
+            получается следующее. Такую запись называют рекуррентным
+            определением. Здесь <Notation kind="formula">F(n)</Notation> —
+            значение с номером <Notation kind="formula">n</Notation>.
+          </Typography.Text>
+          <Typography.Text>
+            Пусть первое значение равно{" "}
+            <Notation kind="formula">F(1) = 1</Notation>, а каждое следующее
+            получается по правилу{" "}
             <Notation kind="formula">F(n) = 2·F(n − 1) + 1</Notation> при{" "}
             <Notation kind="formula">n &gt; 1</Notation>. Формула сама по себе
             ничего не считает — чтобы найти{" "}
@@ -94,11 +102,11 @@ export const rekursiyaLesson = defineLesson({
       explanation: (
         <>
           <Typography.Text>
-            Рекурсивное определение работает только потому, что в нём
-            одновременно есть два условия. Первое — начальное значение (его
-            называют базовым случаем):{" "}
+            В первом примере мы использовали две части определения. Первая —
+            начальное значение, от которого можно начать вычисления. Его
+            называют базовым случаем:{" "}
             <Notation kind="formula">F(1) = 1</Notation> просто дано, вычислять
-            его не нужно. Второе — правило перехода:{" "}
+            его не нужно. Вторая часть — правило перехода:{" "}
             <Notation kind="formula">F(n) = 2·F(n − 1) + 1</Notation> при{" "}
             <Notation kind="formula">n &gt; 1</Notation>, которое показывает,
             как получить следующее значение из предыдущего.
@@ -144,9 +152,11 @@ export const rekursiyaLesson = defineLesson({
       explanation: (
         <>
           <Typography.Text>
-            На первый взгляд определение через саму себя похоже на логический
-            круг: чтобы найти <Notation kind="formula">F(5)</Notation>, нужно
-            знать <Notation kind="formula">F(4)</Notation>, а чтобы найти{" "}
+            Теперь проверим, почему двух частей действительно достаточно. На
+            первый взгляд определение через предыдущие значения похоже на
+            логический круг: чтобы найти{" "}
+            <Notation kind="formula">F(5)</Notation>, нужно знать{" "}
+            <Notation kind="formula">F(4)</Notation>, а чтобы найти{" "}
             <Notation kind="formula">F(4)</Notation> — знать{" "}
             <Notation kind="formula">F(3)</Notation>, и так далее. Круга здесь
             на самом деле нет.
@@ -215,8 +225,9 @@ export const rekursiyaLesson = defineLesson({
       explanation: (
         <>
           <Typography.Text>
-            Ту же идею можно записать программой, где функция обращается сама к
-            себе:
+            Пока мы поднимались от базового значения вручную. Ту же цепочку
+            можно поручить Python. Функцию, которая во время вычисления вызывает
+            саму себя, называют рекурсивной:
           </Typography.Text>
           <CodeBlock
             code={`def F(n):\n    if n == 1:\n        return 1  # Базовый случай: значение уже известно\n    return 2 * F(n - 1) + 1  # Шаг: сначала находим F(n - 1)\n\nprint(F(5))`}
@@ -224,8 +235,9 @@ export const rekursiyaLesson = defineLesson({
             language="python"
           />
           <Typography.Text>
-            Вызов <Notation kind="formula">F(5)</Notation> не может сразу
-            вернуть число — сначала нужно узнать{" "}
+            Вызов функции — это её запуск с конкретным аргументом. Вызов
+            <Notation kind="formula"> F(5)</Notation> не может сразу вернуть
+            число — сначала нужно узнать{" "}
             <Notation kind="formula">F(4)</Notation>, для которого нужно{" "}
             <Notation kind="formula">F(3)</Notation>, и так далее, пока не будет
             достигнут базовый случай <Notation kind="formula">F(1)</Notation>.
@@ -272,8 +284,9 @@ export const rekursiyaLesson = defineLesson({
       explanation: (
         <>
           <Typography.Text>
-            У рекурсивной записи есть практическая цена: каждый незавершённый
-            вызов остаётся в стеке вызовов, ожидая результата вложенного. Для{" "}
+            Рекурсивная запись близка к формуле, но у неё есть практическая
+            цена. Python хранит каждый приостановленный вызов в стеке вызовов —
+            списке функций, которые ещё ждут результат. Для{" "}
             <Notation kind="formula">F(2024)</Notation> это значит две тысячи с
             лишним вложенных вызовов одновременно — на Python это упирается в
             ограничение глубины рекурсии и завершается ошибкой ещё до того, как
@@ -367,7 +380,8 @@ export const rekursiyaLesson = defineLesson({
       navLabel: "Когда нужны два предыдущих значения",
       explanation: (
         <Typography.Text>
-          Иногда следующее значение зависит не от одного, а от двух предыдущих:{" "}
+          До сих пор для нового значения хватало одного предыдущего. Но иногда
+          формула зависит сразу от двух:{" "}
           <Notation kind="formula">F(n) = F(n − 1) + F(n − 2)</Notation>. Тогда
           одного базового значения недостаточно — уже для{" "}
           <Notation kind="formula">F(3)</Notation> нужны сразу{" "}
@@ -441,8 +455,9 @@ export const rekursiyaLesson = defineLesson({
       explanation: (
         <>
           <Typography.Text>
-            Если функцию с двумя предыдущими значениями записать рекурсивно, у
-            неё появляется собственная проблема — не с глубиной, а с повторами:
+            Для зависимости от одного значения главной опасностью была глубина
+            стека. У рекурсивной функции с двумя предыдущими значениями
+            появляется другая проблема — повторные вычисления:
           </Typography.Text>
           <CodeBlock
             code={`def F(n):\n    if n == 1:\n        return 2\n    if n == 2:\n        return 3\n    return F(n - 1) + F(n - 2)`}
@@ -475,9 +490,11 @@ export const rekursiyaLesson = defineLesson({
             language="python"
           />
           <Typography.Text>
-            Тот же эффект — не считать одно и то же значение дважды — даёт{" "}
-            <Notation>@cache</Notation>, если оставить саму функцию рекурсивной:
-            каждое значение вычисляется только один раз, а при повторном
+            Сохранение уже найденного результата называют кешированием. Если
+            оставить функцию рекурсивной, в Python эту работу может взять на
+            себя декоратор <Notation>@cache</Notation> из модуля
+            <Notation> functools</Notation>: специальная отметка над функцией.
+            Тогда каждое значение вычисляется только один раз, а при повторном
             обращении берётся из памяти. Для задач такого масштаба, впрочем,
             обычно проще и надёжнее цикл.
           </Typography.Text>
@@ -554,7 +571,9 @@ export const rekursiyaLesson = defineLesson({
       explanation: (
         <>
           <Typography.Text>
-            Если аргумент огромный — <Notation kind="formula">2024</Notation>,{" "}
+            До этого нам было нужно само значение функции, поэтому мы шли от
+            базы до нужного аргумента. Но если аргумент огромный —{" "}
+            <Notation kind="formula">2024</Notation>,{" "}
             <Notation kind="formula">100 000</Notation> — а нужен не сам{" "}
             <Notation kind="formula">F(n)</Notation>, а отношение или разность
             двух соседних значений, считать всю последовательность
@@ -630,7 +649,8 @@ export const rekursiyaLesson = defineLesson({
       explanation: (
         <>
           <Typography.Text>
-            Разные задания линии 16 сводятся к одному и тому же алгоритму:
+            Мы рассмотрели несколько разных формул и способов вычисления. Теперь
+            соберём их в один алгоритм для задания 16:
           </Typography.Text>
           <Procedure
             title="Как решать задание 16"
@@ -639,6 +659,7 @@ export const rekursiyaLesson = defineLesson({
                 label: "Определите область n.",
                 detail: (
                   <>
+                    Область здесь означает допустимые значения аргумента:{" "}
                     <Notation kind="formula">n</Notation> натуральное,{" "}
                     <Notation kind="formula">n ≥ 0</Notation>, или задано
                     отдельно — от этого зависит, с какого числа начинать.
