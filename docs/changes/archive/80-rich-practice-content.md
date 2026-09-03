@@ -9,7 +9,7 @@
 | Change | `80` |
 | Slug | `rich-practice-content` |
 | Title | Rich Practice Content |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/80-rich-practice-content` |
 
 ---
