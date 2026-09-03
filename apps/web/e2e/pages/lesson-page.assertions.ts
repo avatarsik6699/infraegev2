@@ -76,9 +76,7 @@ export async function expectPublishedLessonDocument(
   await expect(theoryStage).toHaveCSS("text-transform", "uppercase");
 }
 
-export async function expectMigratedLearningControls(
-  page: Page,
-): Promise<void> {
+async function expectMigratedLearningControls(page: Page): Promise<void> {
   const firstTask = page.locator("[data-practice-task]").first();
   const input = firstTask.getByRole("textbox", { name: "Ответ" });
   const hint = firstTask.getByRole("button", { name: "Подсказка" });
@@ -161,6 +159,36 @@ export async function expectDesktopLessonRail(page: Page): Promise<void> {
         label.height <= label.lineHeight * 2 + 1,
     ),
   ).toBe(true);
+}
+
+export async function expectLessonInteractiveTargets(
+  page: Page,
+): Promise<void> {
+  const targetGroups = await page.evaluate(() => {
+    const selectors = {
+      outline: "[data-outline-link-id]",
+      reset: '[aria-label="Сбросить прогресс урока"]',
+      theory: "[data-practice-task] nav a",
+    };
+
+    return Object.entries(selectors).map(([name, selector]) => ({
+      name,
+      heights: Array.from(document.querySelectorAll<HTMLElement>(selector))
+        .filter((target) => target.getClientRects().length > 0)
+        .map((target) => target.getBoundingClientRect().height),
+    }));
+  });
+
+  for (const group of targetGroups) {
+    expect(
+      group.heights.length,
+      `${group.name} targets are present`,
+    ).toBeGreaterThan(0);
+    expect(
+      group.heights.every((height) => height >= 40),
+      `${group.name} targets are at least 40px tall`,
+    ).toBe(true);
+  }
 }
 
 export async function expectLessonVerticalRhythm(page: Page): Promise<void> {

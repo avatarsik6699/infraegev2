@@ -22,9 +22,16 @@
 }
 
 .links a {
-  min-height: 2.5rem;
+  position: relative;
   display: inline-flex;
   align-items: center;
+  padding: 0.15rem 0;
+}
+
+.links a::after {
+  position: absolute;
+  inset: -0.5rem 0;
+  content: "";
 }
 
 .telegramLink {

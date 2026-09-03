@@ -188,15 +188,6 @@ export const pythonErrorsLesson = defineCourseLesson({
           />
         </>
       ),
-      checkpoint: [
-        {
-          id: "checkpoint-name-error",
-          prompt:
-            "Что проверить первым при сообщении NameError: name 'result' is not defined?",
-          reveal:
-            "Найдите место, где result должно было получить значение, и сравните написание имени в обеих строках.",
-        },
-      ],
     },
     {
       id: "type-or-value",
@@ -256,6 +247,13 @@ export const pythonErrorsLesson = defineCourseLesson({
             "Почему int(«12») работает, а int(«двенадцать») завершается с ValueError?",
           reveal:
             "Обе записи — строки, но только «12» содержит допустимую цифровую запись целого числа.",
+        },
+        {
+          id: "checkpoint-name-error",
+          prompt:
+            "Что проверить первым при сообщении NameError: name 'result' is not defined?",
+          reveal:
+            "Найдите место, где result должно было получить значение, и сравните написание имени в обеих строках.",
         },
       ],
     },

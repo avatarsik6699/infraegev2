@@ -112,6 +112,13 @@ export class PrivacyPage {
     await expect(this.page.locator("#infraege-optional-analytics")).toHaveCount(
       0,
     );
+    const detailLink = this.page.getByRole("link", {
+      name: "Подробнее об обработке данных",
+    });
+    await expect(detailLink).toBeVisible();
+    expect(
+      (await detailLink.boundingBox())?.height ?? 0,
+    ).toBeGreaterThanOrEqual(40);
   }
 
   async scrollToFooter(): Promise<void> {

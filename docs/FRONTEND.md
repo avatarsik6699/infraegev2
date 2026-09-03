@@ -170,7 +170,9 @@ app → routes → pages → widgets → features → entities → shared
   group with one question icon, a matching informational heading label and one compact neutral
   left rule, without adding a card surface or coloring the question text.
   A group may contain several independent disclosure questions when the theory cluster warrants
-  them. Do not defer all retrieval practice to one block directly before the practice section.
+  them. Do not defer all retrieval practice to one block directly before the practice section. Two
+  directly adjacent lesson steps must not each render their own single-item `Checkpoint`; merge
+  such a pair into one step's multi-item `checkpoint` array instead.
 - `Mistake` presents its authored claim and explanation as one vertical «Неверно» / «Как правильно»
   comparison at every viewport width. A compact neutral rule identifies the block; error and success
   colors remain reserved for its icons and text labels, while authored body copy stays neutral and

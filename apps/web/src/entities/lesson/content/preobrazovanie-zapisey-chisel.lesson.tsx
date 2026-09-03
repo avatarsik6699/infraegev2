@@ -464,24 +464,6 @@ export const preobrazovanieZapiseyChiselLesson = defineLesson({
           ]}
         />
       ),
-      checkpoint: [
-        {
-          id: "checkpoint-branch-condition",
-          prompt: (
-            <>
-              Если сказано «<Notation kind="formula">N</Notation> делится на 3»,
-              можно ли проверять сумму цифр строки <Notation>s</Notation>?
-            </>
-          ),
-          reveal: (
-            <>
-              Нужно буквально <Notation>n % 3 == 0</Notation>. Условие про сумму
-              цифр записывалось бы отдельно:
-              <Notation> sum(map(int, s)) % 3 == 0</Notation>.
-            </>
-          ),
-        },
-      ],
     },
     {
       id: "safe-search-bounds",
@@ -543,6 +525,22 @@ export const preobrazovanieZapiseyChiselLesson = defineLesson({
               <Notation kind="formula"> R ≥ N</Notation>. Если
               <Notation kind="formula"> N &gt; 500</Notation>, то и
               <Notation kind="formula"> R &gt; 500</Notation>.
+            </>
+          ),
+        },
+        {
+          id: "checkpoint-branch-condition",
+          prompt: (
+            <>
+              Если сказано «<Notation kind="formula">N</Notation> делится на 3»,
+              можно ли проверять сумму цифр строки <Notation>s</Notation>?
+            </>
+          ),
+          reveal: (
+            <>
+              Нужно буквально <Notation>n % 3 == 0</Notation>. Условие про сумму
+              цифр записывалось бы отдельно:
+              <Notation> sum(map(int, s)) % 3 == 0</Notation>.
             </>
           ),
         },

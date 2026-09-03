@@ -1,15 +1,4 @@
 @font-face {
-  font-family: "Onest Fallback";
-  font-style: normal;
-  font-weight: 100 900;
-  src: local("Arial"), local("Liberation Sans");
-  size-adjust: 104.08%;
-  ascent-override: 93.2%;
-  descent-override: 29.8%;
-  line-gap-override: 0%;
-}
-
-@font-face {
   font-family: "Literata Fallback";
   font-style: normal;
   font-weight: 200 900;

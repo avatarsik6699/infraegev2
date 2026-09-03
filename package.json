@@ -18,6 +18,7 @@
     "api:generate": "node scripts/api-contracts.mjs",
     "api:check": "node scripts/api-contracts.mjs --check",
     "brand:generate": "node scripts/generate-brand-assets.mjs",
+    "test:content-assets": "node --test scripts/tests/task-content-assets.test.mjs",
     "validate:content": "node scripts/validate-content-links.mjs",
     "audit:a11y": "pnpm --filter web exec playwright test e2e/accessibility.spec.ts",
     "audit:performance": "lhci autorun",

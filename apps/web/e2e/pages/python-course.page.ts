@@ -2,6 +2,7 @@ import { expect, type Page } from "@playwright/test";
 import {
   expectDesktopLessonRail,
   expectKeyboardLessonDisclosures,
+  expectLessonInteractiveTargets,
   expectLessonVerticalRhythm,
   openLessonAtTop,
 } from "./lesson-page.assertions";
@@ -106,7 +107,7 @@ export class PythonCoursePage {
     const firstModuleHeading = curriculum
       .getByRole("heading", { level: 3 })
       .first();
-    await expect(firstModuleHeading).toHaveCSS("font-size", "16px");
+    await expect(firstModuleHeading).toHaveCSS("font-size", "20px");
     await expect(firstModuleHeading).toHaveCSS("font-weight", "600");
     await expect(firstModuleHeading).toHaveCSS(
       "font-family",
@@ -703,6 +704,7 @@ export class PythonCoursePage {
 
   async expectMobileReadingOrder(): Promise<void> {
     await expectLessonVerticalRhythm(this.page);
+    await expectLessonInteractiveTargets(this.page);
     const introComesBeforeOutline = await this.page
       .locator("main")
       .evaluate((main) => {

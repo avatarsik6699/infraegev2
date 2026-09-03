@@ -89,8 +89,10 @@ learner journey, а Changes 56–57 затем опубликовали само
 включения, итераторы/генераторы и исключения и заканчивается четырьмя уроками одного менеджера
 задач. Все 28 уроков прошли финальную содержательную и визуальную оценку, зафиксированы в
 Change 71 и имеют stage `complete`. Changes 72–73 завершили внешний release и восстановили
-публикацию web image после stale BuildKit cache; `main`, `origin/main` и production подтверждены
-на exact SHA `0cb949d1d9a1949e883a26cf1972954150352d83`. Релиз не расширяет учебный или
+публикацию web image после stale BuildKit cache; их release evidence подтверждает deployed SHA
+`0cb949d1d9a1949e883a26cf1972954150352d83`. Это исторический релизный факт, а не утверждение о
+текущем равенстве local `main`, `origin/main` и production: актуальный deployed SHA всегда читается
+из `/health/ready` и сопоставляется с release evidence. Релиз не расширяет учебный или
 аналитический scope.
 Аккаунты, новый сбор аналитики, Topic-связи, каталог/поиск и другие функции за пределами текущих
 MVP-границ из этого решения не следуют.
@@ -767,9 +769,9 @@ combined-log записи до path/status-family/coarse traffic class. Raw IP, 
 | `M0` — технический фундамент | complete | Сохранить проверенную web/backend/ops инфраструктуру без навязывания продуктовой страницы | Исторический neutral baseline, shared primitives, API contract, content skeleton и локальные gates |
 | `M1` — новый product/design baseline | complete | Доказать заменяемую визуальную систему без преждевременной публикации | «Инженерная тетрадь», unlisted design-system/lesson labs, единый frontend-контракт и reusable primitives |
 | `M2` — инфраструктурная пауза | complete | Подготовить production-платформу до продолжения продуктового контента | `infraege.ru`, VPS/GHCR deploy, security/release gates, backups и независимый operations stack активны; linked sre-kit Change 20 доказал все шесть Sources end to end |
-| `M3` — учебный flow и публичный запуск | complete | Завершить доменную логику, основные поверхности сайта и проверенный MVP-контент до расширения каталога | Два TopicLesson и все 28 одобренных Python CourseLesson опубликованы в production без Topic-связей; exact deployed SHA совпадает с `main` и `origin/main` |
+| `M3` — учебный flow и публичный запуск | complete | Завершить доменную логику, основные поверхности сайта и проверенный MVP-контент до расширения каталога | Два TopicLesson и все 28 одобренных Python CourseLesson опубликованы в production без Topic-связей; deployed SHA подтверждается независимо через health и release evidence |
 | `M4` — финальное измерение и эксплуатация | in progress | Измерять посещаемость прозрачно и обезличенно без опережающей детализации | Consented Umami pageviews/sessions и разрез по путям плюс privacy-safe Nginx aggregates уже закрывают текущую потребность; дальнейшая event-level аналитика отложена, все dashboard surfaces остаются в sre-kit |
-| `M5` — ALCHIMIA learning experience | in progress | Заменить визуальный бренд и улучшить читаемость уроков без потери содержания | Lab-first дизайн-контракт → системная public activation → редакторские пилоты → component/widget rollout → единый rich-practice contract → четыре одобряемые партии оставшихся уроков |
+| `M5` — ALCHIMIA learning experience | complete | Заменить визуальный бренд и улучшить читаемость уроков без потери содержания | Changes 75–84 завершили lab-first дизайн-контракт, системную public activation, редакторские пилоты, component/widget rollout, rich-practice contract и четыре отдельно одобренные партии остальных уроков; публикация определяется только Release Gate |
 | `M6+` (после первых данных, вне MVP) | deferred | Расширение охвата и сообщества поверх работающей бесплатной базы | Второй мини-курс (Excel), аккаунты/синхронизация, обсуждения тем с модерацией, затем платные фичи — без runtime AI до этого момента |
 
 ### 9.1 Current execution sequence
@@ -795,8 +797,9 @@ combined-log записи до path/status-family/coarse traffic class. Raw IP, 
 | `16` | Проверить редакторский контракт на двух крайних уроках | Complete: Change 77 сохранил факты, последовательность, примеры и задачи в уроках «Первая программа» и «Рекурсивные алгоритмы», добавив плавные входы, переходы и объяснение терминов; оба пилота прошли focused content/browser gates и human approval |
 | `17` | Начать бережную миграцию остальных уроков | Complete: Change 78 обновил первую ограниченную партию базовых Python-уроков по утверждённому редакторскому контракту и прошёл отдельное human approval |
 | `18` | Перенести принятые component/widget-контракты из lab в public | Complete: Change 79 сопоставил lab-контракты с реальными consumers, активировал одобренные defaults/composition, удалил доказанно устаревшие fallback-стили и прошёл representative visual/responsive/keyboard/zoom/no-JS evidence |
-| `19` | Расширить содержимое практических задач | Change 80: единый строгий `ContentBlock[]` для условия, подсказки и решения; SSR-renderer для текста, списков, кода, таблиц, изображений, диаграмм и authored-вложений; asset validation, полная shape-миграция задач и два ограниченных публичных доказательства без новых answer modes |
-| `20` | Завершить бережную миграцию остальных уроков | Changes 81–84: четыре ограниченные редакторские партии по утверждённой траектории; каждая сохраняет активированный visual и rich-practice contracts, проходит Content Quality Gate и отдельное human approval |
+| `19` | Расширить содержимое практических задач | Complete: Change 80 ввёл единый строгий `ContentBlock[]` для условия, подсказки и решения; SSR-renderer для текста, списков, кода, таблиц, изображений, диаграмм и authored-вложений; asset validation, полную shape-миграцию задач и два ограниченных публичных доказательства без новых answer modes |
+| `20` | Завершить бережную миграцию остальных уроков | Complete: Changes 81–84 провели четыре ограниченные редакторские партии по утверждённой траектории; каждая сохранила активированные visual и rich-practice contracts, прошла Content Quality Gate и отдельное human approval |
+| `21` | Согласовать финальный release candidate | Change 85: evidence-first сверка source/docs/remote/production, allowlisted cleanup, архитектурное review и явная классификация статических сигналов перед отдельным `/ship --release` |
 
 Off-site backup остаётся trigger-based улучшением: первый management-host релиз использует
 local-only Restic с явно принятым риском потери вместе с VPS. Key-only SSH, Telegram alerts,

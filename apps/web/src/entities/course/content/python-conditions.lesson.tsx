@@ -215,19 +215,6 @@ export const pythonConditionsLesson = defineCourseLesson({
           }
         />
       ),
-      checkpoint: [
-        {
-          id: "checkpoint-boundary",
-          prompt:
-            "Какой знак подойдёт для правила «температура не выше 5 градусов»?",
-          reveal: (
-            <>
-              Знак <Notation>&lt;=</Notation>. Формулировка «не выше» включает и
-              все значения меньше 5, и саму границу 5.
-            </>
-          ),
-        },
-      ],
     },
     {
       id: "test-both-branches",
@@ -262,6 +249,17 @@ export const pythonConditionsLesson = defineCourseLesson({
             "Почему для условия number > 0 недостаточно проверить только число 3?",
           reveal:
             "Такой запуск показывает лишь ветвь if. Нужны ещё значение для else и сама граница 0.",
+        },
+        {
+          id: "checkpoint-boundary",
+          prompt:
+            "Какой знак подойдёт для правила «температура не выше 5 градусов»?",
+          reveal: (
+            <>
+              Знак <Notation>&lt;=</Notation>. Формулировка «не выше» включает и
+              все значения меньше 5, и саму границу 5.
+            </>
+          ),
         },
       ],
     },

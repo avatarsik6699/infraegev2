@@ -70,6 +70,10 @@ visits/pageviews and path aggregates are sufficient for the current analytics ne
 refinement does not block the next planned curriculum step. No testimonials, learner outcomes or
 completion benchmarks exist and none may be fabricated.
 
+Product capability and brand statements describe the current source tree, not an inferred deploy.
+Local `main`, `origin/main` and production may legitimately differ between releases; the deployed
+SHA is authoritative only when read from `/health/ready` and the matching release evidence.
+
 ## Product Principles
 
 - Understanding before memorized patterns.

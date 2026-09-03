@@ -75,8 +75,8 @@ function renderContentBlock(
             {block.caption ? <caption>{block.caption}</caption> : null}
             <thead>
               <tr>
-                {block.headers.map((header) => (
-                  <th key={header} scope="col">
+                {block.headers.map((header, headerIndex) => (
+                  <th key={`${headerIndex}-${header}`} scope="col">
                     <PracticeInlineText text={header} />
                   </th>
                 ))}
@@ -126,8 +126,8 @@ function renderContentBlock(
             </Typography.Text>
             <Typography.Text>{block.accessibleDescription}</Typography.Text>
             <dl>
-              {block.pointers.map((pointer) => (
-                <div key={pointer.label}>
+              {block.pointers.map((pointer, pointerIndex) => (
+                <div key={`${pointerIndex}-${pointer.label}`}>
                   <dt>{pointer.label}</dt>
                   <dd>{pointer.description}</dd>
                 </div>

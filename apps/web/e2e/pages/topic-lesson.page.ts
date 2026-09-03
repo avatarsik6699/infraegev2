@@ -2,6 +2,7 @@ import { expect, type Page } from "@playwright/test";
 import { expectPublicReleaseIdentity } from "./public-header.assertions";
 import {
   expectDesktopLessonRail,
+  expectLessonInteractiveTargets,
   expectKeyboardLessonDisclosures,
   expectLessonVerticalRhythm,
   expectPublishedLessonDocument,
@@ -418,6 +419,7 @@ export class TopicLessonPage {
   }
 
   async expectMobileComposition(): Promise<void> {
+    await expectLessonInteractiveTargets(this.page);
     await expect(
       this.page.getByText(
         `Задание ${String(this.config.taskNumber)} · ${this.config.title}`,
