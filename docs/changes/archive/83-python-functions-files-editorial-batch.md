@@ -9,7 +9,7 @@
 | Change | `83` |
 | Slug | `python-functions-files-editorial-batch` |
 | Title | Python Functions and Files Editorial Batch |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/83-python-functions-files-editorial-batch` |
 
 ---
