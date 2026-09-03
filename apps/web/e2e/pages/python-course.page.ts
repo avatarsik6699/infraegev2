@@ -276,6 +276,36 @@ export class PythonCoursePage {
     await openLessonAtTop(this.page, "/courses/python/fayly");
   }
 
+  async openLoopsEditorialLesson(routeSlug: string): Promise<void> {
+    await openLessonAtTop(this.page, `/courses/python/${routeSlug}`);
+  }
+
+  async expectLoopsEditorialLesson(options: {
+    routeSlug: string;
+    title: string;
+    evidence: string;
+  }): Promise<void> {
+    await expectPublishedLessonDocument(this.page, {
+      canonicalPath: `/courses/python/${options.routeSlug}`,
+      title: options.title,
+    });
+    await expect(
+      this.page.getByText(options.evidence, { exact: false }),
+    ).toBeVisible();
+    await expectLessonVerticalRhythm(this.page);
+    await expectNoHorizontalOverflow(this.page);
+  }
+
+  async expectLoopsEditorialLessonReadableWithoutJavaScript(options: {
+    routeSlug: string;
+    title: string;
+    evidence: string;
+  }): Promise<void> {
+    await this.openLoopsEditorialLesson(options.routeSlug);
+    await this.expectLoopsEditorialLesson(options);
+    await expectNoJavaScriptPractice(this.page);
+  }
+
   async expectTaskAttachment(options?: { download?: boolean }): Promise<void> {
     const taskTab = this.page.getByRole("tab", {
       name: /Сложите строки файла/,

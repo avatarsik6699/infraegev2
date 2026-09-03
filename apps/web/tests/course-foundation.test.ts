@@ -259,6 +259,73 @@ describe("Python course foundation", () => {
     }
   });
 
+  it("preserves the loops editorial batch structure and tasks", () => {
+    const cases = [
+      {
+        routeSlug: "for-i-range",
+        sectionIds: ["model", "trace", "pitfall", "workflow"],
+        practiceTaskIds: [
+          "python-for-range-range-values",
+          "python-for-range-sum-trace",
+          "python-for-range-boundary",
+          "python-for-range-fix",
+          "python-for-range-local-run",
+        ],
+      },
+      {
+        routeSlug: "while",
+        sectionIds: ["model", "trace", "pitfall", "workflow"],
+        practiceTaskIds: [
+          "python-while-trace",
+          "python-while-stop-value",
+          "python-while-condition",
+          "python-while-fix",
+          "python-while-local-run",
+        ],
+      },
+      {
+        routeSlug: "schetchiki-i-nakopiteli",
+        sectionIds: ["model", "trace", "other-state", "pitfall", "workflow"],
+        practiceTaskIds: [
+          "python-loop-state-counter",
+          "python-loop-state-accumulator",
+          "python-loop-state-boundary",
+          "python-loop-state-fix",
+          "python-loop-state-local-run",
+        ],
+      },
+      {
+        routeSlug: "tsifry-chisla",
+        sectionIds: ["one-step", "loop", "zero", "procedure"],
+        practiceTaskIds: [
+          "python-number-digits-last",
+          "python-number-digits-shorten",
+          "python-number-digits-trace",
+          "python-number-digits-sum",
+          "python-number-digits-local-run",
+        ],
+      },
+    ] as const;
+
+    for (const lessonCase of cases) {
+      const lesson = findCourseLessonByRouteSlugs(
+        "python",
+        lessonCase.routeSlug,
+      );
+
+      expect(lesson).toBeDefined();
+      expect(lesson?.theory.map((concept) => concept.id)).toEqual(
+        lessonCase.sectionIds,
+      );
+      expect(lesson?.practiceTaskIds).toEqual(lessonCase.practiceTaskIds);
+      expect(lesson).toMatchObject({
+        accessTier: "free",
+        masteryThreshold: 0.8,
+        status: "published",
+      });
+    }
+  });
+
   it("loads the published conditions tasks without checker secrets", async () => {
     const pythonConditionsLesson = findCourseLessonByRouteSlugs(
       "python",

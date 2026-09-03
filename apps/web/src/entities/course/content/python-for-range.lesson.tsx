@@ -4,6 +4,7 @@ import {
   WorkedExample,
 } from "~/shared/components/learning-content";
 import { CodeBlock } from "~/shared/components/code-block";
+import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { pythonForRangeLessonPublication } from "./course-publication.mjs";
@@ -26,14 +27,24 @@ export const pythonForRangeLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
-            {
-              "Цикл for последовательно получает значения из готовой последовательности. Для числового перебора такую последовательность часто создаёт range: левая граница входит, правая не входит, а необязательный третий аргумент задаёт шаг."
-            }
+            В прошлых уроках программа выполняла ветвь один раз, если условие
+            подходило. Теперь представьте другую задачу: вывести пять строк или
+            проверить десять чисел. Повторять одну и ту же команду вручную
+            неудобно — для повторения нужен цикл.
           </Typography.Text>
           <Typography.Text>
-            {
-              "Запись range(2, 8, 2) даёт 2, 4 и 6. Число 8 служит стоп-границей и не становится значением переменной цикла."
-            }
+            Цикл <Notation>for</Notation> по очереди получает значения из
+            готового набора. Один проход тела цикла называют итерацией, а имя
+            <Notation> number</Notation> в примере ниже — переменной цикла. Для
+            числового перебора значения часто задаёт <Notation>range</Notation>:
+            левая граница входит, правая не входит, а необязательный третий
+            аргумент задаёт шаг.
+          </Typography.Text>
+          <Typography.Text>
+            Запись <Notation>range(2, 8, 2)</Notation> даёт
+            <Notation> 2</Notation>, <Notation>4</Notation> и
+            <Notation> 6</Notation>. Число <Notation>8</Notation> служит
+            стоп-границей и не становится значением переменной цикла.
           </Typography.Text>
           <CodeBlock
             code={"for number in range(2, 8, 2):\n    print(number)"}
@@ -50,14 +61,17 @@ export const pythonForRangeLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
-            {
-              "Перед трассировкой выпишите значения range. Затем для каждого значения отдельно выполните тело цикла и зафиксируйте изменение результата. Это превращает цикл в понятную таблицу повторяющихся шагов."
-            }
+            Когда значения <Notation>range</Notation> уже выписаны, цикл можно
+            читать как несколько обычных последовательных шагов. Для каждого
+            значения отдельно выполните тело цикла и зафиксируйте, что
+            изменилось. Так трассировка превращает повторение в понятную таблицу
+            итераций.
           </Typography.Text>
           <Typography.Text>
-            {
-              "Накопитель создаётся до цикла. Если создать его внутри тела, предыдущее значение будет теряться на каждой итерации."
-            }
+            Переменную, в которой постепенно собирается результат, называют
+            накопителем. Её создают до цикла, чтобы новая итерация получила
+            результат предыдущей. Если создать накопитель внутри тела, прежнее
+            значение будет теряться при каждом проходе.
           </Typography.Text>
           <WorkedExample
             title={"Сумма первых трёх чисел"}
@@ -85,9 +99,11 @@ export const pythonForRangeLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
-            {
-              "Частая ошибка — ожидать, что range(1, 5) содержит число 5. На самом деле перебор остановится перед ним. Если задача требует значения от 1 до 5 включительно, стоп-границей должно быть 6."
-            }
+            Теперь вернёмся к стоп-границе. Частая ошибка — ожидать, что
+            <Notation> range(1, 5)</Notation> содержит число
+            <Notation> 5</Notation>. На самом деле перебор остановится перед
+            ним. Если нужны значения от 1 до 5 включительно, стоп-границей
+            должно быть число <Notation>6</Notation>.
           </Typography.Text>
           <Mistake
             claim={
@@ -106,9 +122,10 @@ export const pythonForRangeLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
-            {
-              "До запуска ответьте на три вопроса: какое значение будет первым, какое последним и сколько значений получится. После этого проверьте первую и последнюю итерации отдельно."
-            }
+            Соберём модель цикла в одну проверку. До запуска ответьте на три
+            вопроса: какое значение будет первым, какое последним и сколько
+            значений получится. После этого отдельно пройдите первую и последнюю
+            итерации.
           </Typography.Text>
           <Procedure
             title={"Четыре шага проверки"}
@@ -140,9 +157,9 @@ export const pythonForRangeLesson = defineCourseLesson({
   result: (
     <>
       <Typography.Text>
-        {
-          "Теперь вы можете заранее перечислить значения range и проследить, как for меняет состояние программы на каждой итерации."
-        }
+        Теперь вы можете заранее перечислить значения
+        <Notation> range</Notation> и проследить, как
+        <Notation> for</Notation> меняет состояние программы на каждой итерации.
       </Typography.Text>
       <Typography.Text>
         {

@@ -7,6 +7,29 @@ const finalProjectLessons = [
   ["gotovaya-programma", "Проверяем весь сценарий и наводим порядок в коде"],
 ] as const;
 
+const loopsEditorialLessons = [
+  {
+    routeSlug: "for-i-range",
+    title: "for и range: повторяем известное число раз",
+    evidence: "Один проход тела цикла называют итерацией",
+  },
+  {
+    routeSlug: "while",
+    title: "while: повторяем, пока условие верно",
+    evidence: "Такую величину удобно считать мерой прогресса цикла",
+  },
+  {
+    routeSlug: "schetchiki-i-nakopiteli",
+    title: "Счётчики, накопители и границы цикла",
+    evidence: "называют логическим флагом",
+  },
+  {
+    routeSlug: "tsifry-chisla",
+    title: "Цифры числа: деление нацело и остаток",
+    evidence: "С числом можно работать так же",
+  },
+] as const;
+
 for (const lessonIndex of Array.from({ length: 28 }, (_, index) => index)) {
   test(`Python curriculum lesson ${lessonIndex + 1} is public and SSR-readable`, async ({
     browserSession,
@@ -150,6 +173,34 @@ test("the published Python compound-conditions lesson stays readable across targ
   browserSession.expectCleanConsole();
   await noJavaScriptPythonCoursePage.expectCompoundConditionsReadableWithoutJavaScript();
 });
+
+for (const lesson of loopsEditorialLessons) {
+  test(`${lesson.title} keeps the approved editorial flow across target viewports`, async ({
+    browserSession,
+    noJavaScriptPythonCoursePage,
+    pythonCoursePage,
+  }) => {
+    await browserSession.useDesktopViewport();
+    await pythonCoursePage.openLoopsEditorialLesson(lesson.routeSlug);
+    await pythonCoursePage.expectLoopsEditorialLesson(lesson);
+    await pythonCoursePage.expectKeyboardDisclosures();
+    await browserSession.captureViewport(`${lesson.routeSlug}-desktop.png`);
+
+    await browserSession.useZoomedDesktopViewport();
+    await pythonCoursePage.expectLoopsEditorialLesson(lesson);
+    await browserSession.captureViewport(`${lesson.routeSlug}-zoomed.png`);
+
+    await browserSession.useNarrowViewport();
+    await pythonCoursePage.expectLoopsEditorialLesson(lesson);
+    await pythonCoursePage.expectMobileReadingOrder();
+    await browserSession.captureViewport(`${lesson.routeSlug}-mobile.png`);
+    browserSession.expectCleanConsole();
+
+    await noJavaScriptPythonCoursePage.expectLoopsEditorialLessonReadableWithoutJavaScript(
+      lesson,
+    );
+  });
+}
 
 test("the first published Python lesson preserves progress and reset", async ({
   browserSession,
