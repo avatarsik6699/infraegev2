@@ -2,16 +2,21 @@ from app.modules.content.schemas import Task
 from app.modules.tasks.service import is_correct
 
 
+def text_blocks(text: str) -> list[dict[str, object]]:
+    return [{"type": "text", "data": {"markdown": text}}]
+
+
 def make_task(**overrides: object) -> Task:
     defaults: dict[str, object] = dict(
         id="t1",
         topic_ids=["test-topic"],
         title="Test task",
-        statement="...",
-        hint="Test hint",
+        statement=text_blocks("..."),
+        hint=text_blocks("Test hint"),
         checker_type="exact_match",
         answer_variants=["4", "четыре"],
         interaction_type="production",
+        explanation=text_blocks("Test explanation"),
         difficulty=1,
     )
     defaults.update(overrides)

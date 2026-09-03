@@ -3,8 +3,22 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-recursion"],
   "title": "Посчитайте вызовы",
-  "statement": "`countdown(n)` вызывает `countdown(n - 1)`, пока n не станет 0. Сколько всего вызовов произойдёт для `countdown(3)`, включая первый и базовый?",
-  "hint": "Запишите значения n в каждом вызове.",
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "`countdown(n)` вызывает `countdown(n - 1)`, пока n не станет 0. Сколько всего вызовов произойдёт для `countdown(3)`, включая первый и базовый?"
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Запишите значения n в каждом вызове."
+      }
+    }
+  ],
   "theory_links": [
     {
       "hash": "trace",

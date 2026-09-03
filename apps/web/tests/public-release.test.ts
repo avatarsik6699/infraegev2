@@ -12,13 +12,13 @@ describe("public release metadata", () => {
     expect(siteConfig).toEqual(
       expect.objectContaining({
         name: "ALCHIMIA",
-        releaseLabel: "beta",
-        version: "1.0.0",
         themeColor: "#ffffff",
         socialImagePath: "/brand/alchimia-social.png",
         socialImageAlt: "Алхимический знак ALCHIMIA",
       }),
     );
+    expect(siteConfig).not.toHaveProperty("releaseLabel");
+    expect(siteConfig).not.toHaveProperty("version");
   });
 
   it("publishes complete lesson discovery metadata from one registry", () => {

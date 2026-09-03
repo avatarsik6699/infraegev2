@@ -5,38 +5,39 @@ import { fileURLToPath } from "node:url";
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const rootDir = resolve(scriptDir, "..");
-const sourcePath = resolve(
-  rootDir,
-  "docs/artifacts/references/logo_with_transperant_bg.svg",
-);
+const sourcePath = resolve(rootDir, "docs/artifacts/references/logo.svg");
 const publicDir = resolve(rootDir, "apps/web/public");
 const brandDir = resolve(publicDir, "brand");
+const headerAssetPath = resolve(
+  rootDir,
+  "apps/web/src/widgets/public-header/assets/alchimia-mark.svg",
+);
 const source = readFileSync(sourcePath, "utf8");
 
 if (
-  !source.includes('viewBox="0 0 2048 1365"') ||
+  !source.includes('viewBox="0 0 2048 1639"') ||
   (source.match(/<path\b/g) ?? []).length === 0 ||
   /<image\b|<text\b|<script\b|<filter\b|(?:href|src)=["']https?:\/\//i.test(
     source,
   )
 ) {
-  throw new Error(
-    "logo_with_transperant_bg.svg does not satisfy the approved source contract",
-  );
+  throw new Error("logo.svg does not satisfy the approved source contract");
 }
 
 const productionMark = source.replace(
   /<svg\b[^>]*>/,
-  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 1365" fill="none" preserveAspectRatio="xMidYMid meet">',
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 1639" fill="none" preserveAspectRatio="xMidYMid meet">',
 );
 
-const smallMark = productionMark.replace(
-  'viewBox="0 0 2048 1365"',
-  'viewBox="0 -341.5 2048 2048"',
-);
+const faviconTheme =
+  "<style>@media (prefers-color-scheme: dark) { path { fill: #fff !important; } stop { stop-color: #fff !important; } }</style>";
+const smallMark = productionMark
+  .replace('viewBox="0 0 2048 1639"', 'viewBox="0 -204.5 2048 2048"')
+  .replace(/(<svg\b[^>]*>)/, `$1${faviconTheme}`);
 const productionMarkPath = resolve(brandDir, "alchimia-mark.svg");
 
 writeFileSync(productionMarkPath, productionMark);
+writeFileSync(headerAssetPath, productionMark);
 writeFileSync(resolve(publicDir, "favicon.svg"), smallMark);
 
 const runFfmpeg = (args) => {
@@ -53,12 +54,18 @@ const runFfmpeg = (args) => {
   }
 };
 
-const renderTransparentIcon = (size, outputPath) => {
+const renderBrowserIcon = (size, outputPath) => {
   runFfmpeg([
+    "-f",
+    "lavfi",
+    "-i",
+    `color=c=white:s=${size}x${size}:d=1`,
     "-i",
     resolve(publicDir, "favicon.svg"),
-    "-vf",
-    `scale=${size}:${size}:flags=lanczos,format=rgba`,
+    "-filter_complex",
+    `[1:v]scale=${size}:${size}:flags=lanczos[mark];[0:v][mark]overlay=0:0:format=auto,format=rgba[out]`,
+    "-map",
+    "[out]",
     "-frames:v",
     "1",
     "-y",
@@ -89,8 +96,8 @@ const renderWhiteIcon = (size, outputPath) => {
 const favicon16Path = resolve(publicDir, "favicon-16x16.png");
 const favicon32Path = resolve(publicDir, "favicon-32x32.png");
 
-renderTransparentIcon(16, favicon16Path);
-renderTransparentIcon(32, favicon32Path);
+renderBrowserIcon(16, favicon16Path);
+renderBrowserIcon(32, favicon32Path);
 renderWhiteIcon(180, resolve(publicDir, "apple-touch-icon.png"));
 renderWhiteIcon(192, resolve(brandDir, "alchimia-icon-192.png"));
 renderWhiteIcon(512, resolve(brandDir, "alchimia-icon-512.png"));
@@ -113,7 +120,7 @@ runFfmpeg([
 ]);
 
 const socialFilter = [
-  "[1:v]scale=780:-1:flags=lanczos[mark]",
+  "[1:v]scale=700:-1:flags=lanczos[mark]",
   "[0:v][mark]overlay=(W-w)/2:(H-h)/2:format=auto",
   "format=rgb24[out]",
 ].join(",");

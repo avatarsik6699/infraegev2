@@ -2,8 +2,22 @@
   "id": "rekursiya-two-values",
   "topic_ids": ["rekursiya"],
   "title": "Используйте два предыдущих значения",
-  "statement": "F(1) = 1, F(2) = 2, F(n) = 2F(n - 1) + F(n - 2). Найдите F(5).",
-  "hint": "Храните два последних значения и не пропускайте F(3) и F(4).",
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "F(1) = 1, F(2) = 2, F(n) = 2F(n - 1) + F(n - 2). Найдите F(5)."
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Храните два последних значения и не пропускайте F(3) и F(4)."
+      }
+    }
+  ],
   "theory_links": [
     {
       "hash": "several-previous-values",

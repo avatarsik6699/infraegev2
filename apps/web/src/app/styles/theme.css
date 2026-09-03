@@ -35,19 +35,20 @@
   --theme-code-function: oklch(0.82 0.09 255);
   --theme-code-operator: oklch(0.86 0.05 300);
 
-  --theme-font-display: "Alchimia Cormorant SC", "Cormorant SC", Georgia, serif;
+  --theme-font-display:
+    "Alchimia Cormorant SC", "Cormorant SC Fallback", Georgia, serif;
   --theme-font-ui:
-    "Alchimia IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+    "Alchimia IBM Plex Mono", "IBM Plex Mono Fallback", monospace;
   --theme-font-reading:
     "Alchimia Literata", "Literata Fallback", Georgia, serif;
   --theme-font-data:
-    "Alchimia IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+    "Alchimia IBM Plex Mono", "IBM Plex Mono Fallback", monospace;
   --theme-font-alchimia-display:
-    "Alchimia Cormorant SC", "Cormorant SC", Georgia, serif;
+    "Alchimia Cormorant SC", "Cormorant SC Fallback", Georgia, serif;
   --theme-font-alchimia-reading:
     "Alchimia Literata", "Literata Fallback", Georgia, serif;
   --theme-font-alchimia-service:
-    "Alchimia IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+    "Alchimia IBM Plex Mono", "IBM Plex Mono Fallback", monospace;
 
   --theme-radius-sm: 0.5rem;
   --theme-radius-md: 0.625rem;

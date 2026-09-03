@@ -7,6 +7,8 @@ import {
   CircleCheck,
   CircleHelp,
   Copy,
+  Download,
+  FileText,
   ImageOff,
   Lightbulb,
   Link,
@@ -37,6 +39,8 @@ const iconContracts = [
   { name: "CircleCheck", Icon: CircleCheck },
   { name: "CircleHelp", Icon: CircleHelp },
   { name: "Copy", Icon: Copy },
+  { name: "Download", Icon: Download },
+  { name: "FileText", Icon: FileText },
   { name: "ImageOff", Icon: ImageOff },
   { name: "Lightbulb", Icon: Lightbulb },
   { name: "Link", Icon: Link },
@@ -68,9 +72,7 @@ export const SystemCatalog: React.FC = () => (
             Живой wordmark остаётся доступным текстом, а знак — декоративным
             изображением из единственного утверждённого SVG-источника.
           </Typography.Text>
-          <code className={styles.colorVar}>
-            logo_with_transperant_bg.svg · source of truth
-          </code>
+          <code className={styles.colorVar}>logo.svg · source of truth</code>
         </div>
       </div>
     </section>
@@ -103,10 +105,15 @@ export const SystemCatalog: React.FC = () => (
           </li>
         ))}
       </ul>
+      <Typography.Text tone="muted">
+        Уровень h1–h6 задаёт структуру документа. Все стандартные заголовки
+        используют Cormorant SC; Literata остаётся гарнитурой непрерывного
+        чтения, а IBM Plex Mono — служебного текста, данных и кода.
+      </Typography.Text>
       <div className={styles.typeSamples}>
         {([1, 2, 3, 4, 5, 6] as const).map((order) => (
           <div className={styles.typeRow} key={order}>
-            <code className={styles.typeTag}>h{order}</code>
+            <code className={styles.typeTag}>heading · h{order}</code>
             <Typography.Title order={order}>
               Базовый случай и шаг рекурсии
             </Typography.Title>

@@ -64,6 +64,16 @@ export async function expectPublishedLessonDocument(
     `https://infraege.ru${document.canonicalPath}`,
   );
   await expect(page.locator("[data-practice-task]")).toHaveCount(5);
+  const theoryStage = page.getByRole("heading", {
+    level: 2,
+    name: "Теория",
+  });
+  await expect(theoryStage).toHaveAttribute("data-variant", "lesson");
+  await expect(theoryStage).not.toHaveAttribute("data-title-role", /.+/);
+  await expect(theoryStage).toHaveCSS("font-size", "12px");
+  await expect(theoryStage).toHaveCSS("font-weight", "500");
+  await expect(theoryStage).toHaveCSS("font-family", /Alchimia IBM Plex Mono/);
+  await expect(theoryStage).toHaveCSS("text-transform", "uppercase");
 }
 
 export async function expectMigratedLearningControls(
@@ -178,6 +188,14 @@ export async function expectLessonVerticalRhythm(page: Page): Promise<void> {
       "[data-article-frame] > #theory",
     );
     const nextSection = theory?.nextElementSibling;
+    const theoryHeading = theory?.querySelector(":scope > h2");
+    const theoryContent = theory?.querySelector(":scope > div");
+    const practice = document.querySelector<HTMLElement>("#practice");
+    const practiceHeading = practice?.querySelector(":scope > h2");
+    const practiceContent = practice?.querySelector(":scope > div");
+    const result = document.querySelector<HTMLElement>("#result");
+    const resultHeading = result?.querySelector(":scope > h2");
+    const resultContent = result?.querySelector(":scope > div");
 
     if (
       !firstConcept ||
@@ -185,31 +203,45 @@ export async function expectLessonVerticalRhythm(page: Page): Promise<void> {
       !title ||
       !explanation ||
       !theory ||
-      !nextSection
+      !nextSection ||
+      !theoryHeading ||
+      !theoryContent ||
+      !practiceHeading ||
+      !practiceContent ||
+      !resultHeading ||
+      !resultContent
     ) {
       throw new Error("Missing lesson rhythm landmarks");
     }
 
     return {
       contentToken: pixelsForVariable("--rhythm-content-flow"),
+      entryToken: pixelsForVariable("--rhythm-section-entry"),
       relatedToken: pixelsForVariable("--rhythm-related-block"),
       conceptToken: pixelsForVariable("--rhythm-concept-separation"),
       sectionToken: pixelsForVariable("--rhythm-section-separation"),
       titleToExplanation: gapBetween(title, explanation),
       conceptGap: gapBetween(firstConcept, secondConcept),
       sectionGap: gapBetween(theory, nextSection),
+      theoryEntryGap: gapBetween(theoryHeading, theoryContent),
+      practiceEntryGap: gapBetween(practiceHeading, practiceContent),
+      resultEntryGap: gapBetween(resultHeading, resultContent),
     };
   });
 
   const viewportWidth = page.viewportSize()?.width;
   const narrow = viewportWidth ? viewportWidth <= 52 * 16 : false;
   expect(rhythm.contentToken).toBeCloseTo(12, 1);
+  expect(rhythm.entryToken).toBeCloseTo(16, 1);
   expect(rhythm.relatedToken).toBeCloseTo(24, 1);
   expect(rhythm.conceptToken).toBeCloseTo(narrow ? 32 : 48, 1);
   expect(rhythm.sectionToken).toBeCloseTo(narrow ? 48 : 64, 1);
   expect(rhythm.titleToExplanation).toBeCloseTo(12, 1);
   expect(rhythm.conceptGap).toBeCloseTo(narrow ? 32 : 48, 1);
   expect(rhythm.sectionGap).toBeCloseTo(narrow ? 48 : 64, 1);
+  expect(rhythm.theoryEntryGap).toBeCloseTo(16, 1);
+  expect(rhythm.practiceEntryGap).toBeCloseTo(16, 1);
+  expect(rhythm.resultEntryGap).toBeCloseTo(16, 1);
 }
 
 export async function expectRelatedLearningBlockRhythm(

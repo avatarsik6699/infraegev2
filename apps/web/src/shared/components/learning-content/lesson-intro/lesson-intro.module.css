@@ -18,7 +18,7 @@
 }
 
 .lead {
-  max-width: 68ch;
+  max-width: var(--measure-reading);
   margin: 0;
   color: var(--color-text-soft);
   font-size: var(--text-base);

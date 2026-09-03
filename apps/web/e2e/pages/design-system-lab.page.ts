@@ -139,7 +139,7 @@ export class DesignSystemLabPage {
     }
 
     const semanticTokenPreviews = this.page.locator("[data-token-preview]");
-    await expect(semanticTokenPreviews).toHaveCount(27);
+    await expect(semanticTokenPreviews).toHaveCount(28);
     await expect(this.page.locator("[data-spacing-token-preview]")).toHaveCount(
       9,
     );
@@ -204,6 +204,8 @@ export class DesignSystemLabPage {
       "CircleCheck",
       "CircleHelp",
       "Copy",
+      "Download",
+      "FileText",
       "ImageOff",
       "Lightbulb",
       "Link",
@@ -236,7 +238,7 @@ export class DesignSystemLabPage {
     });
     expect(rhythmGaps).toEqual({
       content: "12px",
-      related: "16px",
+      related: "24px",
       concept: "48px",
       section: "64px",
     });
@@ -312,11 +314,11 @@ export class DesignSystemLabPage {
       "[data-dashboard-panel]:not([hidden])",
     );
     await expect(componentsPanel.locator("[data-contract-name]")).toHaveCount(
-      36,
+      37,
     );
     await expect(
       componentsPanel.locator('[data-contract-status="live"]'),
-    ).toHaveCount(33);
+    ).toHaveCount(34);
     await expect(
       componentsPanel.locator('[data-contract-status="context"]'),
     ).toHaveCount(3);
@@ -356,6 +358,25 @@ export class DesignSystemLabPage {
     ]);
 
     const localPractice = this.page.locator('[data-practice-mode="local"]');
+    await expect(
+      localPractice.getByRole("table", {
+        name: "Короткие данные остаются семантической таблицей",
+      }),
+    ).toBeVisible();
+    await expect(
+      localPractice.getByRole("img", {
+        name: "Двоичное дерево с выделенными поддеревьями",
+      }),
+    ).toBeVisible();
+    await localPractice.getByRole("button", { name: "Решение" }).click();
+    await expect(
+      localPractice.getByRole("img", {
+        name: "Двоичное дерево с левым и правым поддеревьями",
+      }),
+    ).toBeVisible();
+    await expect(
+      localPractice.getByRole("link", { name: /numbers\.txt/ }),
+    ).toHaveAttribute("download", "");
     const localAnswer = localPractice.getByRole("textbox", { name: "Ответ" });
     await localAnswer.fill("1");
     await localPractice.getByRole("button", { name: "Проверить" }).click();
@@ -761,17 +782,17 @@ export class DesignSystemLabPage {
     ).toHaveCount(21);
     await expect(this.page.locator("[data-rhythm-role]")).toHaveCount(4);
     await expect(this.page.locator("[data-surface-role]")).toHaveCount(4);
-    await expect(this.page.locator("[data-token-preview]")).toHaveCount(27);
+    await expect(this.page.locator("[data-token-preview]")).toHaveCount(28);
     await expect(this.page.locator("[data-spacing-token-preview]")).toHaveCount(
       9,
     );
-    await expect(this.page.locator("[data-icon-specimen]")).toHaveCount(12);
+    await expect(this.page.locator("[data-icon-specimen]")).toHaveCount(14);
     await expect(this.page.locator("[data-layout-specimen]")).toHaveCount(2);
     await expect(this.page.locator("[data-browser-state]")).toHaveCount(5);
     await expect(this.page.locator("[data-copy-contract]")).toHaveCount(4);
     await expect(this.page.locator("[data-reference-pattern]")).toHaveCount(0);
     await expect(this.page.locator("[data-control-specimen]")).toHaveCount(7);
-    await expect(this.page.locator("[data-contract-name]")).toHaveCount(40);
+    await expect(this.page.locator("[data-contract-name]")).toHaveCount(41);
     await expect(
       this.page.locator('[data-contract-status="context"]'),
     ).toHaveCount(3);

@@ -3,10 +3,27 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-number-digits"],
   "title": "Посчитайте чётные цифры",
-  "statement": "Локально измените накопитель так, чтобы он считал цифры с `digit % 2 == 0`. Сколько чётных цифр в числе 12048?",
-  "hint": "Цикл увидит цифры 8, 4, 0, 2 и 1.",
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Локально измените накопитель так, чтобы он считал цифры с `digit % 2 == 0`. Сколько чётных цифр в числе 12048?"
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Цикл увидит цифры 8, 4, 0, 2 и 1."
+      }
+    }
+  ],
   "theory_links": [
-    { "hash": "procedure", "label": "Соберите алгоритм по цифрам" }
+    {
+      "hash": "procedure",
+      "label": "Соберите алгоритм по цифрам"
+    }
   ],
   "checker_type": "exact_match",
   "answer_variants": ["4"],
@@ -15,7 +32,9 @@
   "explanation": [
     {
       "type": "text",
-      "data": { "markdown": "Чётные цифры — 8, 4, 0 и 2, всего четыре." }
+      "data": {
+        "markdown": "Чётные цифры — 8, 4, 0 и 2, всего четыре."
+      }
     }
   ],
   "difficulty": 2,

@@ -14,6 +14,7 @@ import { Button } from "~/shared/components/button";
 import { Callout } from "~/shared/components/callout";
 import { CodeBlock } from "~/shared/components/code-block";
 import { ConfirmationDialog } from "~/shared/components/confirmation-dialog";
+import { DownloadLink } from "~/shared/components/download-link";
 import { EmptyState } from "~/shared/components/empty-state";
 import { ExternalLink } from "~/shared/components/external-link";
 import { Field } from "~/shared/components/field";
@@ -85,6 +86,7 @@ const componentContracts = {
     live("ExternalLink", "Внешний переход с явным поведением"),
     live("FragmentLink", "Переход к разделу текущей страницы"),
     live("ConfirmationDialog", "Подтверждение необратимого действия"),
+    live("DownloadLink", "Скачивание локального authored-файла"),
   ],
   input: [
     live("Input", "Самостоятельное поле ввода"),
@@ -236,6 +238,9 @@ export const ComponentsCatalog: React.FC = () => {
               Следующий урок
             </ActionLink>
             <BackLink fallbackTo="/">Вернуться</BackLink>
+            <DownloadLink href="/content/tasks/python-files-aggregate/numbers.txt">
+              Скачать пример
+            </DownloadLink>
             {enhanced ? (
               <span data-component-specimen="ConfirmationDialog">
                 <ConfirmationDialog
@@ -679,7 +684,7 @@ export const ComponentsCatalog: React.FC = () => {
             data-component-specimen="LessonPractice"
           >
             <code className={styles.typeTag}>
-              LessonPractice · feedback states
+              LessonPractice · rich content и feedback
             </code>
             <div className={styles.practiceStateGrid}>
               <div data-practice-mode="local">
@@ -710,9 +715,13 @@ export const ComponentsCatalog: React.FC = () => {
           </div>
         </div>
         <Typography.Text className={styles.placeholder}>
-          <code>LessonPractice</code> здесь не подключён к progress store; его
-          составная production-сборка <code>LessonPracticeFlow</code> остаётся
-          во вкладке «Виджеты».
+          Условие, подсказка и решение используют один строгий renderer: текст,
+          списки, Python/text-код, таблицы, локальные изображения и схемы,
+          authored-вложения, callout и пошаговый разбор. Произвольные HTML/MDX,
+          SVG-вложения, video/iframe и внешние embeds не поддерживаются. Здесь
+          <code>LessonPractice</code> не подключён к progress store; его
+          production-сборка <code>LessonPracticeFlow</code> остаётся во вкладке
+          «Виджеты».
         </Typography.Text>
       </section>
     </CatalogLayout>

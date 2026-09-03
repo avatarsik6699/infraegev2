@@ -347,7 +347,16 @@ export class LessonLabPage {
 
   async expectStableFontContract(): Promise<void> {
     const preloads = this.page.locator('link[rel="preload"][as="font"]');
-    await expect(preloads).toHaveCount(0);
+    await expect(preloads).toHaveCount(8);
+    expect(
+      await preloads.evaluateAll((links) =>
+        links.every(
+          (link) =>
+            link.getAttribute("type") === "font/woff2" &&
+            link.getAttribute("crossorigin") === "anonymous",
+        ),
+      ),
+    ).toBe(true);
 
     await this.page.evaluate(() => document.fonts.ready);
     const fontState = await this.page.evaluate(() => ({
@@ -359,6 +368,10 @@ export class LessonLabPage {
       headingFamily: getComputedStyle(
         document.querySelector("h1") ?? document.body,
       ).fontFamily,
+      displayFaceLoaded: document.fonts.check(
+        '600 32px "Alchimia Cormorant SC"',
+        "Алхимия рекурсии",
+      ),
     }));
 
     expect(fontState.requestedFonts.length).toBeGreaterThan(0);
@@ -373,6 +386,64 @@ export class LessonLabPage {
     ).toBe(true);
     expect(fontState.bodyFamily).toContain("Alchimia Literata");
     expect(fontState.headingFamily).toContain("Alchimia Literata");
+    expect(fontState.displayFaceLoaded).toBe(true);
+  }
+
+  async expectColdFontLayoutStability(): Promise<void> {
+    const fontPattern = "**/fonts/**/*.woff2";
+    let requestedFonts = 0;
+    const pendingFontRoutes = new Set<Promise<void>>();
+    await this.page.route(fontPattern, (route) => {
+      requestedFonts += 1;
+      const pendingRoute = (async () => {
+        await new Promise<void>((resolve) => setTimeout(resolve, 800));
+        await route.continue();
+      })();
+      pendingFontRoutes.add(pendingRoute);
+      void pendingRoute.finally(() => pendingFontRoutes.delete(pendingRoute));
+      return pendingRoute;
+    });
+
+    try {
+      await this.page.goto("/lab/lesson", { waitUntil: "domcontentloaded" });
+      const heading = this.page.getByRole("heading", {
+        level: 2,
+        name: "Теория",
+      });
+      await expect(heading).toBeAttached();
+      await this.page.evaluate(
+        () =>
+          new Promise<void>((resolve) => {
+            requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+          }),
+      );
+
+      const readTextGeometry = () =>
+        heading.evaluate((element) => {
+          const rect = element.getBoundingClientRect();
+          return {
+            width: rect.width,
+            height: rect.height,
+            top: rect.top,
+          };
+        });
+      const beforeFonts = await readTextGeometry();
+      await this.page.evaluate(() => document.fonts.ready);
+      const afterFonts = await readTextGeometry();
+
+      expect(requestedFonts).toBeGreaterThan(0);
+      expect(afterFonts.width).toBeCloseTo(beforeFonts.width, 1);
+      expect(afterFonts.height).toBeCloseTo(beforeFonts.height, 1);
+      expect(afterFonts.top).toBeCloseTo(beforeFonts.top, 1);
+      await expect(
+        this.page.locator('[data-practice-form][data-enhanced="true"]'),
+      ).toBeAttached();
+    } finally {
+      while (pendingFontRoutes.size > 0) {
+        await Promise.all(pendingFontRoutes);
+      }
+      await this.page.unroute(fontPattern);
+    }
   }
 
   async expectBoundedMarginalia(): Promise<void> {
@@ -481,7 +552,7 @@ export class LessonLabPage {
         weight: Number.parseFloat(getComputedStyle(element).fontWeight),
       }));
     expect(activeTreatment.background).toBe("rgba(0, 0, 0, 0)");
-    expect(activeTreatment.weight).toBeGreaterThanOrEqual(600);
+    expect(activeTreatment.weight).toBe(500);
   }
 
   async expectSimpleDesktopOutline(): Promise<void> {

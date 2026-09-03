@@ -61,7 +61,7 @@
 .intro {
   grid-row: 1;
   grid-column: 2;
-  width: min(100%, 84ch);
+  width: min(100%, var(--measure-lesson));
   padding: var(--space-2) var(--lesson-column-gutter) 0;
 }
 
@@ -82,7 +82,7 @@
 .article {
   grid-row: 2;
   grid-column: 2;
-  width: min(100%, 84ch);
+  width: min(100%, var(--measure-lesson));
   min-width: 0;
   padding: 0 var(--lesson-column-gutter) var(--space-5);
 }
@@ -94,7 +94,7 @@
 .resultSummary,
 .resultNavigation {
   min-width: 0;
-  max-width: 68ch;
+  max-width: var(--measure-reading);
 }
 
 .resultGrid {

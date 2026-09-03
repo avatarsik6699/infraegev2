@@ -3,8 +3,22 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-for-range"],
   "title": "Проследите накопление суммы",
-  "statement": "Чему равна `total` после `total = 0` и цикла `for x in range(1, 4): total += x`?",
-  "hint": "`range(1, 4)` создаёт 1, 2 и 3.",
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Чему равна `total` после `total = 0` и цикла `for x in range(1, 4): total += x`?"
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "`range(1, 4)` создаёт 1, 2 и 3."
+      }
+    }
+  ],
   "theory_links": [
     {
       "hash": "trace",

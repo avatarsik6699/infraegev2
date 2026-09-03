@@ -3,8 +3,22 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-recursion"],
   "title": "Найдите базовый случай",
-  "statement": "Факториал определён так: `factorial(0)` возвращает 1, иначе возвращается `n * factorial(n - 1)`. Что вернёт `factorial(0)`?",
-  "hint": "Для базового случая новый вызов не выполняется.",
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Факториал определён так: `factorial(0)` возвращает 1, иначе возвращается `n * factorial(n - 1)`. Что вернёт `factorial(0)`?"
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Для базового случая новый вызов не выполняется."
+      }
+    }
+  ],
   "theory_links": [
     {
       "hash": "trace",

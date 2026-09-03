@@ -3,9 +3,28 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-todo-actions"],
   "title": "Что возвращает поиск без результата",
-  "statement": "Что вернёт `find_task`, если дела с указанным id нет в списке?",
-  "hint": "В Python есть отдельное значение для отсутствующего результата.",
-  "theory_links": [{ "hash": "continue", "label": "Разберите функцию поиска" }],
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Что вернёт `find_task`, если дела с указанным id нет в списке?"
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "В Python есть отдельное значение для отсутствующего результата."
+      }
+    }
+  ],
+  "theory_links": [
+    {
+      "hash": "continue",
+      "label": "Разберите функцию поиска"
+    }
+  ],
   "checker_type": "exact_match",
   "answer_variants": ["None", "none"],
   "numeric_tolerance": null,

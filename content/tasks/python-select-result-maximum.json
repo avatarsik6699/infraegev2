@@ -3,8 +3,22 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-select-result"],
   "title": "Работайте с отрицательными числами",
-  "statement": "Каков максимум списка `[-5, -2, -8]`?",
-  "hint": "Максимум ближе всего к нулю.",
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Каков максимум списка `[-5, -2, -8]`?"
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Максимум ближе всего к нулю."
+      }
+    }
+  ],
   "theory_links": [
     {
       "hash": "model",

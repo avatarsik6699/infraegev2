@@ -3,9 +3,28 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-number-digits"],
   "title": "Сложите цифры",
-  "statement": "Какую сумму накопит показанный в уроке цикл для числа 704?",
-  "hint": "Ноль тоже участвует как цифра, но не меняет сумму.",
-  "theory_links": [{ "hash": "loop", "label": "Вернитесь к сумме цифр" }],
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Какую сумму накопит показанный в уроке цикл для числа 704?"
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Ноль тоже участвует как цифра, но не меняет сумму."
+      }
+    }
+  ],
+  "theory_links": [
+    {
+      "hash": "loop",
+      "label": "Вернитесь к сумме цифр"
+    }
+  ],
   "checker_type": "exact_match",
   "answer_variants": ["11"],
   "numeric_tolerance": null,
@@ -13,7 +32,9 @@
   "explanation": [
     {
       "type": "text",
-      "data": { "markdown": "Цикл получает 4, 0 и 7; сумма равна 11." }
+      "data": {
+        "markdown": "Цикл получает 4, 0 и 7; сумма равна 11."
+      }
     }
   ],
   "difficulty": 2,

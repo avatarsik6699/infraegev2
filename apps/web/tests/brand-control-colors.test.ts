@@ -13,6 +13,14 @@ const tokenSource = readFileSync(
   sourcePath("app", "styles", "tokens.css"),
   "utf8",
 );
+const fontSource = readFileSync(
+  sourcePath("app", "styles", "fonts.css"),
+  "utf8",
+);
+const productionNginxSource = readFileSync(
+  resolve(process.cwd(), "../..", "infra/nginx/conf.d/infraege.prod.conf"),
+  "utf8",
+);
 
 describe("restrained brand accents", () => {
   it("promotes the approved monochrome ALCHIMIA palette without legacy color roles", () => {
@@ -48,16 +56,35 @@ describe("restrained brand accents", () => {
     );
 
     expect(themeSource).toContain(
-      '"Alchimia Cormorant SC", "Cormorant SC", Georgia, serif',
+      '"Alchimia Cormorant SC", "Cormorant SC Fallback", Georgia, serif',
     );
     expect(themeSource).toContain(
       '"Alchimia Literata", "Literata Fallback", Georgia, serif',
     );
     expect(themeSource).toContain(
-      '"Alchimia IBM Plex Mono", "SFMono-Regular", Consolas, monospace',
+      '"Alchimia IBM Plex Mono", "IBM Plex Mono Fallback", monospace',
     );
     expect(tokenSource).toContain("--font-display: var(--theme-font-display)");
     expect(titleSource).toContain("font-family: var(--font-display)");
+  });
+
+  it("keeps self-hosted font delivery stable and reusable", () => {
+    expect(fontSource).not.toContain("font-display: optional");
+    expect(fontSource.match(/font-display: swap/g)).toHaveLength(8);
+    expect(fontSource).toContain('font-family: "Cormorant SC Fallback"');
+    expect(fontSource).toContain("size-adjust: 84.03%");
+    expect(fontSource).toContain('font-family: "Literata Fallback"');
+    expect(fontSource).toContain("size-adjust: 108.56%");
+    expect(fontSource).toContain('font-family: "IBM Plex Mono Fallback"');
+    expect(fontSource).toContain("size-adjust: 97.06%");
+    expect(productionNginxSource).toContain("location ^~ /fonts/");
+    expect(productionNginxSource).toContain("proxy_hide_header Cache-Control");
+    expect(productionNginxSource).toContain(
+      'add_header Cache-Control "public, max-age=604800" always',
+    );
+    expect(productionNginxSource).not.toContain(
+      'location ^~ /fonts/ {\n    add_header Cache-Control "public, max-age=31536000, immutable"',
+    );
   });
 
   it("restores regular geometry and neutral progress", () => {
@@ -71,11 +98,13 @@ describe("restrained brand accents", () => {
     );
 
     expect(themeSource).toContain("--theme-radius-sm: 0.5rem");
-    expect(badgeSource).toContain(
-      "border-radius: var(--badge-radius, var(--radius-pill))",
+    expect(tokenSource).toContain("--badge-radius: var(--radius-control)");
+    expect(badgeSource).toContain("border-radius: var(--badge-radius)");
+    expect(tokenSource).toContain(
+      "--progress-indicator-background: var(--color-text)",
     );
     expect(progressSource).toContain(
-      "background: var(--progress-indicator-background, var(--color-text))",
+      "background: var(--progress-indicator-background)",
     );
   });
 

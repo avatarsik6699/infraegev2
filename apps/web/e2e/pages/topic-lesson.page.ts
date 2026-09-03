@@ -67,6 +67,38 @@ export class TopicLessonPage {
     await expect(firstTask.getByText(/19₁₀ = 10011₂/)).toBeVisible();
   }
 
+  async expectRichPracticeStatement(): Promise<void> {
+    const taskTab = this.page.getByRole("tab", {
+      name: /Проследите рекурсивные вызовы/,
+    });
+    await taskTab.click();
+    const task = this.page.locator(
+      '[data-practice-task="rekursiya-call-stack-trace"]',
+    );
+    await expect(
+      task.getByRole("group", { name: "Рекурсивная функция" }),
+    ).toBeVisible();
+    await expect(task.getByRole("table")).toHaveCount(0);
+    await expect(
+      task.getByRole("group", { name: "Рекурсивная функция" }),
+    ).toContainText("F(3) = ?");
+    await expect(task.getByText("f(5)", { exact: true })).toBeVisible();
+    await this.expectNoHorizontalOverflow();
+  }
+
+  async expectRichPracticeStatementWithoutJavaScript(): Promise<void> {
+    const task = this.page.locator(
+      '[data-practice-task="rekursiya-call-stack-trace"]',
+    );
+    await expect(
+      task.getByRole("group", { name: "Рекурсивная функция" }),
+    ).toBeVisible();
+    await expect(task.getByRole("table")).toHaveCount(0);
+    await expect(
+      task.getByRole("group", { name: "Рекурсивная функция" }),
+    ).toContainText("F(5) = ?");
+  }
+
   async expectStableOutlineSelection(): Promise<void> {
     const outline = this.page.getByRole("navigation", {
       name: "Содержание урока",
@@ -194,6 +226,93 @@ export class TopicLessonPage {
     await expect(mistake.getByText("Как правильно")).toBeVisible();
     await expect(mistake.locator("svg")).toHaveCount(2);
     await expect(mistake.getByText("Что здесь не так")).toHaveCount(0);
+    const lessonNavigationGeometry = await this.page.evaluate(() => {
+      const outline = document.querySelector<HTMLElement>(
+        "[data-outline-tree]",
+      );
+      const comparison = document.querySelector<HTMLElement>(
+        '[aria-label="Сравнение ошибочного и правильного рассуждения"]',
+      );
+      const checkpoint = document.querySelector<HTMLElement>(
+        '[aria-label="Проверьте себя"]',
+      );
+      const mistakeLabel = comparison?.querySelector<HTMLElement>("span");
+      const checkpointLabel =
+        checkpoint?.querySelector<HTMLElement>(":scope > div > div");
+      const mistakeIcon = comparison?.querySelector<SVGElement>("svg");
+      const checkpointIcon = checkpoint?.querySelector<SVGElement>("svg");
+      const mistakeCopy = comparison?.querySelector<HTMLElement>(
+        ':scope > [data-status="incorrect"] > div',
+      );
+      const checkpointContent = checkpoint?.querySelector<HTMLElement>(
+        ':scope > [data-enhanced="true"], :scope > [data-unenhanced-accordion]',
+      );
+      const correctComparison = comparison?.querySelector<HTMLElement>(
+        ':scope > [data-status="correct"]',
+      );
+      if (
+        !outline ||
+        !comparison ||
+        !checkpoint ||
+        !mistakeLabel ||
+        !checkpointLabel ||
+        !mistakeIcon ||
+        !checkpointIcon ||
+        !mistakeCopy ||
+        !checkpointContent ||
+        !correctComparison
+      ) {
+        throw new Error("Missing lesson navigation or mistake comparison");
+      }
+      const outlineIsSingleColumn = Array.from(
+        outline.querySelectorAll<HTMLOListElement>("ol"),
+      ).every((list) => {
+        const children = Array.from(list.children, (item) =>
+          item.getBoundingClientRect(),
+        );
+        return children.every(
+          (item, index) =>
+            index === 0 || Math.abs(item.left - children[0]!.left) < 1,
+        );
+      });
+      const comparisons = Array.from(comparison.children, (item) =>
+        item.getBoundingClientRect(),
+      );
+      const comparisonStyle = getComputedStyle(comparison);
+      const checkpointStyle = getComputedStyle(checkpoint);
+      const mistakeLabelStyle = getComputedStyle(mistakeLabel);
+      const checkpointLabelStyle = getComputedStyle(checkpointLabel);
+      const mistakeIconRect = mistakeIcon.getBoundingClientRect();
+      const checkpointIconRect = checkpointIcon.getBoundingClientRect();
+      const mistakeCopyRect = mistakeCopy.getBoundingClientRect();
+      const checkpointContentRect = checkpointContent.getBoundingClientRect();
+      return {
+        outlineIsSingleColumn,
+        mistakeIsVertical:
+          comparisons.length === 2 &&
+          comparisons[1]!.top >= comparisons[0]!.bottom,
+        mistakeLeftBorder: Number.parseFloat(comparisonStyle.borderLeftWidth),
+        mistakeRuleIsNeutral:
+          comparisonStyle.borderLeftColor ===
+          getComputedStyle(correctComparison).borderTopColor,
+        learningContentAxesMatch:
+          Math.abs(mistakeCopyRect.left - checkpointContentRect.left) < 1,
+        learningBlockGeometryMatches:
+          comparisonStyle.paddingLeft === checkpointStyle.paddingLeft &&
+          comparisonStyle.paddingRight === checkpointStyle.paddingRight &&
+          comparisonStyle.borderLeftWidth === checkpointStyle.borderLeftWidth &&
+          mistakeLabelStyle.fontSize === checkpointLabelStyle.fontSize &&
+          mistakeLabelStyle.fontWeight === checkpointLabelStyle.fontWeight &&
+          mistakeIconRect.width === checkpointIconRect.width &&
+          mistakeIconRect.height === checkpointIconRect.height,
+      };
+    });
+    expect(lessonNavigationGeometry.outlineIsSingleColumn).toBe(true);
+    expect(lessonNavigationGeometry.mistakeIsVertical).toBe(true);
+    expect(lessonNavigationGeometry.mistakeLeftBorder).toBeCloseTo(2, 0);
+    expect(lessonNavigationGeometry.mistakeRuleIsNeutral).toBe(true);
+    expect(lessonNavigationGeometry.learningContentAxesMatch).toBe(true);
+    expect(lessonNavigationGeometry.learningBlockGeometryMatches).toBe(true);
     await expect(
       this.page.getByRole("heading", { name: "Теперь вы умеете" }),
     ).toHaveCount(0);
@@ -359,6 +478,11 @@ export class TopicLessonPage {
   }
 
   async expectPracticeSolutions(): Promise<void> {
+    await this.page
+      .getByRole("tab", {
+        name: /Задача 1 из 5/,
+      })
+      .click();
     const firstPanel = this.page.locator("[data-practice-task]").first();
     await firstPanel.getByRole("button", { name: "Решение" }).click();
     await expect(firstPanel.getByText(/F\(5\) = 32/)).toBeVisible();
@@ -394,6 +518,9 @@ export class TopicLessonPage {
     await expect(answer).toBeDisabled();
     await expect(answer).toHaveAttribute("data-solved", "true");
     await expect(answer).toHaveValue("32");
+    await expect(
+      firstPanel.locator("[data-answer-accepted-icon]"),
+    ).toBeVisible();
     await expect(
       firstPanel.getByRole("button", { name: "Проверить" }),
     ).toBeDisabled();
@@ -433,8 +560,8 @@ export class TopicLessonPage {
           border: style.borderColor,
         };
       });
-    expect(solvedColors.border).not.toBe(unsolvedColors.border);
-    expect(solvedColors.background).not.toBe(unsolvedColors.background);
+    expect(solvedColors.border).toBe(unsolvedColors.border);
+    expect(solvedColors.background).toBe(unsolvedColors.background);
     await firstTab.click();
     await expect(firstTab).toHaveAttribute("aria-selected", "true");
 

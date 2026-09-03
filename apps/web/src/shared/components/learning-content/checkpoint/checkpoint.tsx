@@ -24,14 +24,15 @@ export const Checkpoint: React.FC<Props> = (props) => {
         <CircleHelp
           className={styles.icon}
           aria-hidden="true"
-          size={18}
-          strokeWidth={2}
+          size={16}
+          strokeWidth={1.8}
         />
         <Typography.Text component="div" className={styles.label}>
           Проверьте себя
         </Typography.Text>
       </div>
       <Accordion
+        className={styles.content}
         multiple
         items={props.items.map((item) => ({
           id: item.id,

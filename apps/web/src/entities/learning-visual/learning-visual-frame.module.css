@@ -28,7 +28,7 @@
 }
 
 .alternative {
-  max-width: 72ch;
+  max-width: var(--measure-reading);
   padding: var(--learning-media-alternative-padding, 0.9rem 0 0);
   color: var(--color-muted);
   font-family: var(--font-reading);

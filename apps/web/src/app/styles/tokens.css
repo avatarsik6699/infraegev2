@@ -87,6 +87,7 @@
   --space-5: 3rem;
   --space-6: 4rem;
   --rhythm-content-flow: var(--space-1-5);
+  --rhythm-section-entry: var(--space-2);
   --rhythm-related-block: var(--space-3);
   --rhythm-concept-separation: var(--space-5);
   --rhythm-section-separation: var(--space-6);
@@ -95,8 +96,10 @@
   --radius-surface: var(--theme-radius-md);
   --radius-pill: 999px;
   --max-content-width: 76rem;
-  --measure-reading: 68ch;
+  --measure-reading: 40rem;
+  --measure-lesson: 48rem;
   --measure-wide: 76rem;
+  --page-chrome-gutter: clamp(var(--space-2), 3vw, var(--space-4));
 
   /* Semantic component roles */
   --control-primary-bg: var(--color-accent);

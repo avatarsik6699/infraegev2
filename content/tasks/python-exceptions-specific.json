@@ -3,10 +3,27 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-exceptions"],
   "title": "Не спрячьте опечатку",
-  "statement": "Какой вариант уже: `except ValueError` или `except` без типа?",
-  "hint": "Узкий обработчик называет одну ожидаемую причину.",
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Какой вариант уже: `except ValueError` или `except` без типа?"
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Узкий обработчик называет одну ожидаемую причину."
+      }
+    }
+  ],
   "theory_links": [
-    { "hash": "specific", "label": "Вернитесь к конкретной причине" }
+    {
+      "hash": "specific",
+      "label": "Вернитесь к конкретной причине"
+    }
   ],
   "checker_type": "exact_match",
   "answer_variants": ["except ValueError", "ValueError", "except valueerror"],

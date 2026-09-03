@@ -3,9 +3,28 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-todo-storage"],
   "title": "Что происходит при первом запуске",
-  "statement": "Какое исключение перехватывает `load_tasks`, если tasks.json ещё не создан?",
-  "hint": "Название исключения буквально означает «файл не найден».",
-  "theory_links": [{ "hash": "load", "label": "Разберите запуск без файла" }],
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Какое исключение перехватывает `load_tasks`, если tasks.json ещё не создан?"
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Название исключения буквально означает «файл не найден»."
+      }
+    }
+  ],
+  "theory_links": [
+    {
+      "hash": "load",
+      "label": "Разберите запуск без файла"
+    }
+  ],
   "checker_type": "exact_match",
   "answer_variants": ["FileNotFoundError", "filenotfounderror"],
   "numeric_tolerance": null,

@@ -1,6 +1,70 @@
 {
   "components": {
     "schemas": {
+      "AttachmentBlock": {
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/AttachmentBlockData"
+          },
+          "type": {
+            "const": "attachment",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "data"
+        ],
+        "title": "AttachmentBlock",
+        "type": "object"
+      },
+      "AttachmentBlockData": {
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "minLength": 1,
+            "title": "Description",
+            "type": "string"
+          },
+          "label": {
+            "minLength": 1,
+            "title": "Label",
+            "type": "string"
+          },
+          "mime_type": {
+            "enum": [
+              "text/plain",
+              "text/csv",
+              "application/json",
+              "text/x-python",
+              "application/zip"
+            ],
+            "title": "Mime Type",
+            "type": "string"
+          },
+          "size_bytes": {
+            "exclusiveMinimum": 0.0,
+            "maximum": 5242880.0,
+            "title": "Size Bytes",
+            "type": "integer"
+          },
+          "src": {
+            "title": "Src",
+            "type": "string"
+          }
+        },
+        "required": [
+          "src",
+          "label",
+          "description",
+          "mime_type",
+          "size_bytes"
+        ],
+        "title": "AttachmentBlockData",
+        "type": "object"
+      },
       "CalloutBlock": {
         "additionalProperties": false,
         "properties": {
@@ -24,6 +88,7 @@
         "additionalProperties": false,
         "properties": {
           "markdown": {
+            "minLength": 1,
             "title": "Markdown",
             "type": "string"
           },
@@ -69,13 +134,16 @@
             "items": {
               "discriminator": {
                 "mapping": {
+                  "attachment": "#/components/schemas/AttachmentBlock",
                   "callout": "#/components/schemas/CalloutBlock",
                   "code_example": "#/components/schemas/CodeExampleBlock",
                   "completion_exercise": "#/components/schemas/WorkedExampleBlock",
-                  "learning_visual": "#/components/schemas/LearningVisualBlock",
+                  "diagram": "#/components/schemas/DiagramBlock",
+                  "image": "#/components/schemas/ImageBlock",
+                  "list": "#/components/schemas/ListBlock",
                   "productive_failure_prompt": "#/components/schemas/WorkedExampleBlock",
+                  "table": "#/components/schemas/TableBlock",
                   "text": "#/components/schemas/TextBlock",
-                  "video_embed": "#/components/schemas/VideoEmbedBlock",
                   "worked_example": "#/components/schemas/WorkedExampleBlock"
                 },
                 "propertyName": "type"
@@ -85,19 +153,28 @@
                   "$ref": "#/components/schemas/TextBlock"
                 },
                 {
-                  "$ref": "#/components/schemas/LearningVisualBlock"
+                  "$ref": "#/components/schemas/ListBlock"
                 },
                 {
                   "$ref": "#/components/schemas/CodeExampleBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/TableBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/ImageBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/DiagramBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/AttachmentBlock"
                 },
                 {
                   "$ref": "#/components/schemas/WorkedExampleBlock"
                 },
                 {
                   "$ref": "#/components/schemas/CalloutBlock"
-                },
-                {
-                  "$ref": "#/components/schemas/VideoEmbedBlock"
                 }
               ]
             },
@@ -221,10 +298,15 @@
             "title": "Caption"
           },
           "code": {
+            "minLength": 1,
             "title": "Code",
             "type": "string"
           },
           "language": {
+            "enum": [
+              "python",
+              "text"
+            ],
             "title": "Language",
             "type": "string"
           }
@@ -234,6 +316,105 @@
           "code"
         ],
         "title": "CodeExampleBlockData",
+        "type": "object"
+      },
+      "DiagramBlock": {
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/DiagramBlockData"
+          },
+          "type": {
+            "const": "diagram",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "data"
+        ],
+        "title": "DiagramBlock",
+        "type": "object"
+      },
+      "DiagramBlockData": {
+        "additionalProperties": false,
+        "properties": {
+          "accessible_description": {
+            "minLength": 1,
+            "title": "Accessible Description",
+            "type": "string"
+          },
+          "alt": {
+            "minLength": 1,
+            "title": "Alt",
+            "type": "string"
+          },
+          "caption": {
+            "minLength": 1,
+            "title": "Caption",
+            "type": "string"
+          },
+          "height": {
+            "exclusiveMinimum": 0.0,
+            "title": "Height",
+            "type": "integer"
+          },
+          "pointers": {
+            "items": {
+              "$ref": "#/components/schemas/DiagramPointer"
+            },
+            "minItems": 1,
+            "title": "Pointers",
+            "type": "array"
+          },
+          "purpose": {
+            "minLength": 1,
+            "title": "Purpose",
+            "type": "string"
+          },
+          "src": {
+            "title": "Src",
+            "type": "string"
+          },
+          "width": {
+            "exclusiveMinimum": 0.0,
+            "title": "Width",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "src",
+          "alt",
+          "caption",
+          "width",
+          "height",
+          "purpose",
+          "accessible_description",
+          "pointers"
+        ],
+        "title": "DiagramBlockData",
+        "type": "object"
+      },
+      "DiagramPointer": {
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "minLength": 1,
+            "title": "Description",
+            "type": "string"
+          },
+          "label": {
+            "minLength": 1,
+            "title": "Label",
+            "type": "string"
+          }
+        },
+        "required": [
+          "label",
+          "description"
+        ],
+        "title": "DiagramPointer",
         "type": "object"
       },
       "HTTPValidationError": {
@@ -249,48 +430,38 @@
         "title": "HTTPValidationError",
         "type": "object"
       },
-      "HybridLearningVisualData": {
+      "ImageBlock": {
         "additionalProperties": false,
         "properties": {
-          "accessible_description": {
-            "title": "Accessible Description",
+          "data": {
+            "$ref": "#/components/schemas/ImageBlockData"
+          },
+          "type": {
+            "const": "image",
+            "title": "Type",
             "type": "string"
-          },
-          "asset": {
-            "$ref": "#/components/schemas/LearningVisualAsset"
-          },
-          "caption": {
-            "title": "Caption",
-            "type": "string"
-          },
-          "purpose": {
-            "title": "Purpose",
-            "type": "string"
-          },
-          "representation": {
-            "const": "hybrid",
-            "title": "Representation",
-            "type": "string"
-          },
-          "visual": {
-            "$ref": "#/components/schemas/StructuredLearningVisual"
           }
         },
         "required": [
-          "representation",
-          "purpose",
-          "accessible_description",
-          "caption",
-          "asset",
-          "visual"
+          "type",
+          "data"
         ],
-        "title": "HybridLearningVisualData",
+        "title": "ImageBlock",
         "type": "object"
       },
-      "JsonValue": {},
-      "LearningVisualAsset": {
+      "ImageBlockData": {
         "additionalProperties": false,
         "properties": {
+          "alt": {
+            "minLength": 1,
+            "title": "Alt",
+            "type": "string"
+          },
+          "caption": {
+            "minLength": 1,
+            "title": "Caption",
+            "type": "string"
+          },
           "height": {
             "exclusiveMinimum": 0.0,
             "title": "Height",
@@ -308,39 +479,22 @@
         },
         "required": [
           "src",
+          "alt",
+          "caption",
           "width",
           "height"
         ],
-        "title": "LearningVisualAsset",
+        "title": "ImageBlockData",
         "type": "object"
       },
-      "LearningVisualBlock": {
+      "ListBlock": {
         "additionalProperties": false,
         "properties": {
           "data": {
-            "discriminator": {
-              "mapping": {
-                "hybrid": "#/components/schemas/HybridLearningVisualData",
-                "raster": "#/components/schemas/RasterLearningVisualData",
-                "structured": "#/components/schemas/StructuredLearningVisualData"
-              },
-              "propertyName": "representation"
-            },
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/RasterLearningVisualData"
-              },
-              {
-                "$ref": "#/components/schemas/StructuredLearningVisualData"
-              },
-              {
-                "$ref": "#/components/schemas/HybridLearningVisualData"
-              }
-            ],
-            "title": "Data"
+            "$ref": "#/components/schemas/ListBlockData"
           },
           "type": {
-            "const": "learning_visual",
+            "const": "list",
             "title": "Type",
             "type": "string"
           }
@@ -349,101 +503,94 @@
           "type",
           "data"
         ],
-        "title": "LearningVisualBlock",
+        "title": "ListBlock",
         "type": "object"
       },
-      "RasterLearningVisualData": {
+      "ListBlockData": {
         "additionalProperties": false,
         "properties": {
-          "accessible_description": {
-            "title": "Accessible Description",
-            "type": "string"
+          "items": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "title": "Items",
+            "type": "array"
           },
-          "asset": {
-            "$ref": "#/components/schemas/LearningVisualAsset"
-          },
-          "caption": {
-            "title": "Caption",
-            "type": "string"
-          },
-          "purpose": {
-            "title": "Purpose",
-            "type": "string"
-          },
-          "representation": {
-            "const": "raster",
-            "title": "Representation",
+          "style": {
+            "enum": [
+              "ordered",
+              "unordered"
+            ],
+            "title": "Style",
             "type": "string"
           }
         },
         "required": [
-          "representation",
-          "purpose",
-          "accessible_description",
-          "caption",
-          "asset"
+          "style",
+          "items"
         ],
-        "title": "RasterLearningVisualData",
+        "title": "ListBlockData",
         "type": "object"
       },
-      "StructuredLearningVisual": {
+      "TableBlock": {
         "additionalProperties": false,
         "properties": {
           "data": {
-            "additionalProperties": {
-              "$ref": "#/components/schemas/JsonValue"
-            },
-            "minProperties": 1,
-            "title": "Data",
-            "type": "object"
+            "$ref": "#/components/schemas/TableBlockData"
           },
-          "kind": {
-            "maxLength": 64,
-            "minLength": 1,
-            "pattern": "^[a-z][a-z0-9_]*$",
-            "title": "Kind",
+          "type": {
+            "const": "table",
+            "title": "Type",
             "type": "string"
           }
         },
         "required": [
-          "kind",
+          "type",
           "data"
         ],
-        "title": "StructuredLearningVisual",
+        "title": "TableBlock",
         "type": "object"
       },
-      "StructuredLearningVisualData": {
+      "TableBlockData": {
         "additionalProperties": false,
         "properties": {
-          "accessible_description": {
-            "title": "Accessible Description",
-            "type": "string"
-          },
           "caption": {
-            "title": "Caption",
-            "type": "string"
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Caption"
           },
-          "purpose": {
-            "title": "Purpose",
-            "type": "string"
+          "headers": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "title": "Headers",
+            "type": "array"
           },
-          "representation": {
-            "const": "structured",
-            "title": "Representation",
-            "type": "string"
-          },
-          "visual": {
-            "$ref": "#/components/schemas/StructuredLearningVisual"
+          "rows": {
+            "items": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "minItems": 1,
+            "title": "Rows",
+            "type": "array"
           }
         },
         "required": [
-          "representation",
-          "purpose",
-          "accessible_description",
-          "caption",
-          "visual"
+          "headers",
+          "rows"
         ],
-        "title": "StructuredLearningVisualData",
+        "title": "TableBlockData",
         "type": "object"
       },
       "TextBlock": {
@@ -469,6 +616,7 @@
         "additionalProperties": false,
         "properties": {
           "markdown": {
+            "minLength": 1,
             "title": "Markdown",
             "type": "string"
           }
@@ -519,44 +667,6 @@
         "title": "ValidationError",
         "type": "object"
       },
-      "VideoEmbedBlock": {
-        "additionalProperties": false,
-        "properties": {
-          "data": {
-            "$ref": "#/components/schemas/VideoEmbedBlockData"
-          },
-          "type": {
-            "const": "video_embed",
-            "title": "Type",
-            "type": "string"
-          }
-        },
-        "required": [
-          "type",
-          "data"
-        ],
-        "title": "VideoEmbedBlock",
-        "type": "object"
-      },
-      "VideoEmbedBlockData": {
-        "additionalProperties": false,
-        "properties": {
-          "title": {
-            "title": "Title",
-            "type": "string"
-          },
-          "url": {
-            "title": "Url",
-            "type": "string"
-          }
-        },
-        "required": [
-          "url",
-          "title"
-        ],
-        "title": "VideoEmbedBlockData",
-        "type": "object"
-      },
       "WorkedExampleBlock": {
         "additionalProperties": false,
         "properties": {
@@ -584,6 +694,7 @@
         "additionalProperties": false,
         "properties": {
           "prompt": {
+            "minLength": 1,
             "title": "Prompt",
             "type": "string"
           },
@@ -591,6 +702,7 @@
             "items": {
               "type": "string"
             },
+            "minItems": 1,
             "title": "Steps",
             "type": "array"
           }

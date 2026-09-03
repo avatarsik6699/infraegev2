@@ -21,6 +21,7 @@
 | `ExternalLink` | lessons, privacy, footer | active | `shared/components/external-link` |
 | `FragmentLink` | LessonOutline и practice theory links | active | `shared/components/fragment-link` |
 | `ConfirmationDialog` | сброс прогресса TopicLesson и CourseLesson | active | `shared/components/confirmation-dialog`; Base UI AlertDialog сохраняет modal/focus contract |
+| `DownloadLink` | authored-вложения в LessonPractice | active | Change 80: `shared/components/download-link`; native download остаётся доступным в SSR/no-JavaScript |
 | `Input` | `Field` внутри LessonPractice | active | defaults перенесены в `tokens.css` и `shared/components/input` |
 | `Field` | LessonPractice answer form | active | `shared/components/field`; получает migrated Input без API-изменения |
 | `Accordion` | Checkpoint, practice hint/solution | active | underline/motion/divider defaults перенесены в `tokens.css` и shared CSS |
@@ -40,7 +41,7 @@
 | `LessonIntro` | обе lesson compositions | active | `shared/components/learning-content/lesson-intro` |
 | `LessonSectionHeading` | обе lesson compositions | active | `shared/components/learning-content/lesson-section-heading` |
 | `LessonTheory` | обе lesson compositions | active | `shared/components/learning-content/lesson-theory` |
-| `Mistake` | authored TopicLesson/CourseLesson theory | active | `shared/components/learning-content/mistake` |
+| `Mistake` | authored TopicLesson/CourseLesson theory | active | `shared/components/learning-content/mistake`; vertical comparison with semantic left rule |
 | `Procedure` | authored TopicLesson/CourseLesson theory | active | `shared/components/learning-content/procedure` |
 | `WorkedExample` | authored TopicLesson/CourseLesson theory | active | `shared/components/learning-content/worked-example` |
 | `AnalyticsConsentControl` | privacy | context | `features/analytics`; реальное consent-state, не статический lab specimen |
@@ -53,9 +54,9 @@
 
 | Контракт | Публичный потребитель | Статус до Change 79 | Владелец вида / действие |
 |---|---|---:|---|
-| `PublicHeader` | home, course overview, обе lessons, privacy | active | `widgets/public-header`; один identity/header contract |
-| `PublicFooter` | home, course overview, обе lessons, privacy | active | `widgets/public-footer`; выровнять внутренний measure с public chrome |
-| `LessonOutline` | TopicLesson и CourseLesson | active | `widgets/lesson-outline`; desktop rail и linear responsive layout |
+| `PublicHeader` | home, course overview, обе lessons, privacy | active | `widgets/public-header`; quiet identity без release/version chrome |
+| `PublicFooter` | home, course overview, обе lessons, privacy | active | `widgets/public-footer`; общий viewport gutter с header |
+| `LessonOutline` | TopicLesson и CourseLesson | active | `widgets/lesson-outline`; одна вертикальная колонка на всех ширинах |
 | `LessonPracticeFlow` | TopicLesson и CourseLesson | active | `widgets/lesson-practice-flow`; связывает practice с progress registry |
 | `Public page` assembly | home, course overview, privacy | active | это lab-only диаграмма существующей сборки, не production-компонент |
 | `Lesson page` assembly | TopicLesson и CourseLesson | active | это lab-only диаграмма существующей сборки, не layout API |

@@ -3,8 +3,22 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-strings"],
   "title": "Найдите результат среза",
-  "statement": "Что вернёт `\"python\"[1:4]`?",
-  "hint": "Левая граница входит, правая — нет.",
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Что вернёт `\"python\"[1:4]`?"
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Левая граница входит, правая — нет."
+      }
+    }
+  ],
   "theory_links": [
     {
       "hash": "model",

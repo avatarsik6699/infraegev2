@@ -3,10 +3,27 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-todo-actions"],
   "title": "Какой номер будет следующим",
-  "statement": "Добавьте три дела с id 1, 2, 3, удалите второе и добавьте ещё одно. Какой id получит новое дело?",
-  "hint": "Удаление дела не уменьшает next_id.",
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Добавьте три дела с id 1, 2, 3, удалите второе и добавьте ещё одно. Какой id получит новое дело?"
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Удаление дела не уменьшает next_id."
+      }
+    }
+  ],
   "theory_links": [
-    { "hash": "snapshot", "label": "Запустите версию с редактированием" }
+    {
+      "hash": "snapshot",
+      "label": "Запустите версию с редактированием"
+    }
   ],
   "checker_type": "exact_match",
   "answer_variants": ["4"],

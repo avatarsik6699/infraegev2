@@ -6,12 +6,13 @@ Change 75 утвердил ALCHIMIA на `/lab/design-system`; Change 76 акт�
 public header, metadata, manifest, favicon, Apple/manifest icons и social preview. Технический
 домен `infraege.ru`, storage keys, analytics ids и инфраструктурные имена при этом не меняются.
 
-`docs/artifacts/references/logo_with_transperant_bg.svg` — единственный художественный источник
-ALCHIMIA. Имя файла сохраняет исходное написание архитектора. Прежний `logo.svg` с непрозрачным
-canvas и исторический `docs/artifacts/final_logo.svg` не являются production-источниками.
+`docs/artifacts/references/logo.svg` — единственный художественный источник ALCHIMIA. Прежний
+`logo_with_transperant_bg.svg` и исторический `docs/artifacts/final_logo.svg` не являются
+production-источниками.
 Нормализация может убрать фиксированные размеры, исправить `preserveAspectRatio` или добавить
 delivery whitespace, но не может перерисовывать, сглаживать, перекрашивать, обрезать или
-переинтерпретировать видимую геометрию.
+переинтерпретировать видимую геометрию. Для явно тёмного контекста допустима только монохромная
+инверсия знака в белый без изменения его формы.
 
 Надпись `ALCHIMIA` и подзаголовок «ЕГЭ информатика» не встраиваются в SVG: они остаются живым
 доступным текстом в Cormorant SC и IBM Plex Mono соответственно.
@@ -21,7 +22,8 @@ delivery whitespace, но не может перерисовывать, сгла
 - `apps/web/public/brand/alchimia-mark.svg` сохраняет все авторские paths и gradients, удаляет
   фиксированные размеры и нормализует `preserveAspectRatio`.
 - `apps/web/public/favicon.svg` использует те же paths и gradients; квадратный `viewBox` добавляет
-  только прозрачное поле и сохраняет весь исходный знак.
+  только прозрачное поле и сохраняет весь исходный знак. Встроенный `prefers-color-scheme`
+  переключает рисунок на белый в тёмном browser chrome.
 - PNG/ICO, Apple touch, manifest icons и social preview воспроизводимо генерируются командой
   `pnpm brand:generate`; manifest хранится декларативно рядом и проверяется тем же test contract.
 
@@ -30,8 +32,8 @@ delivery whitespace, но не может перерисовывать, сгла
 | Файл | Размер | Требование |
 |------|--------|------------|
 | `favicon.svg` | квадратный `viewBox` | Упрощённый знак, прозрачный фон |
-| `favicon-16x16.png` | 16×16 | Проверенная пиксельная читаемость |
-| `favicon-32x32.png` | 32×32 | Проверенная пиксельная читаемость |
+| `favicon-16x16.png` | 16×16 | Чёрный знак на белом fallback-фоне |
+| `favicon-32x32.png` | 32×32 | Чёрный знак на белом fallback-фоне |
 | `favicon.ico` | 16×16 и 32×32 внутри | PNG frames с alpha |
 | `apple-touch-icon.png` | 180×180 | Непрозрачный белый фон, без встроенного скругления |
 | `alchimia-icon-192.png` | 192×192 | Непрозрачный белый фон, manifest purpose `any` |
@@ -48,8 +50,9 @@ service worker, offline-режим и установка как PWA не вхо�
 
 ## Приёмка
 
-- SVG не содержит `<text>`, JavaScript, внешние URL, embedded raster, фильтры или непрозрачный
-  canvas; контуры не выходят за `viewBox`.
+- Master/production SVG не содержит `<text>`, JavaScript, внешние URL, embedded raster, фильтры
+  или непрозрачный canvas; favicon содержит только локальное media-rule для белой dark-схемы;
+  контуры не выходят за `viewBox`.
 - Крупный production mark визуально совпадает с master-файлом; малые favicon не получают
   отдельной перерисовки.
 - Проверяются сигнатуры и размеры raster/ICO, manifest declarations, favicon в браузере,

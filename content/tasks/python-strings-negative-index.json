@@ -3,8 +3,22 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-strings"],
   "title": "Прочитайте последний символ",
-  "statement": "Какой символ возвращает `\"python\"[-1]`?",
-  "hint": "Индекс -1 обозначает последний элемент последовательности.",
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Какой символ возвращает `\"python\"[-1]`?"
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Индекс -1 обозначает последний элемент последовательности."
+      }
+    }
+  ],
   "theory_links": [
     {
       "hash": "trace",

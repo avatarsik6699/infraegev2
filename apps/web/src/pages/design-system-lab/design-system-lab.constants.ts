@@ -1,14 +1,21 @@
 import type { PracticeTaskTypes } from "~/entities/practice-task";
 
+const textContent = (text: string): PracticeTaskTypes.ContentBlock[] => [
+  { type: "text", text },
+];
+
 export const practiceTasks: PracticeTaskTypes.LocalTask[] = [
   {
     id: "design-system-lab-base-case",
     difficultyLabel: "Разминка",
     title: "Найдите базовый случай",
-    statement:
+    statement: textContent(
       "Функция countdown(n) вызывает countdown(n - 1), пока n не станет равно 0. При каком значении n вызовов больше не будет?",
+    ),
     answers: ["0", "ноль"],
-    hint: "Базовый случай — вход, при котором функция не делает рекурсивный вызов.",
+    hint: textContent(
+      "Базовый случай — вход, при котором функция не делает рекурсивный вызов.",
+    ),
     explanation:
       "При n = 0 функция возвращается сразу, без нового вызова — это и есть базовый случай.",
     solution: [
@@ -23,10 +30,11 @@ export const practiceTasks: PracticeTaskTypes.LocalTask[] = [
     id: "design-system-lab-call-count",
     difficultyLabel: "Применение",
     title: "Посчитайте вызовы",
-    statement:
+    statement: textContent(
       "countdown(3) вызывает countdown(2), тот — countdown(1), тот — countdown(0). Сколько всего вызовов функции countdown произойдёт?",
+    ),
     answers: ["4", "четыре"],
-    hint: "Считайте сам исходный вызов countdown(3) тоже.",
+    hint: textContent("Считайте сам исходный вызов countdown(3) тоже."),
     explanation:
       "4 вызова: countdown(3), countdown(2), countdown(1), countdown(0) — последний из них базовый случай.",
     solution: [
@@ -43,6 +51,84 @@ export const componentPracticeTasks: PracticeTaskTypes.LocalTask[] = [
   {
     ...practiceTasks[0],
     id: "design-system-lab-component-base-case",
+    statement: [
+      {
+        type: "text",
+        text: "Один renderer собирает условие из безопасных учебных блоков. Inline-нотация выглядит как `countdown(3)`.",
+      },
+      {
+        type: "list",
+        style: "unordered",
+        items: ["Сначала прочитайте код", "Затем сопоставьте значения"],
+      },
+      {
+        type: "code",
+        language: "python",
+        caption: "Код может быть частью условия",
+        code: "def countdown(n):\n    if n == 0:\n        return\n    countdown(n - 1)",
+      },
+      {
+        type: "table",
+        caption: "Короткие данные остаются семантической таблицей",
+        headers: ["Вызов", "Следующий шаг"],
+        rows: [
+          ["countdown(1)", "countdown(0)"],
+          ["countdown(0)", "return"],
+        ],
+      },
+      {
+        type: "image",
+        src: "/diagrams/bst-subtrees.png",
+        alt: "Двоичное дерево с выделенными поддеревьями",
+        caption: "Изображение получает alt, подпись и intrinsic dimensions.",
+        width: 812,
+        height: 390,
+      },
+    ],
+    hint: [
+      {
+        type: "callout",
+        tone: "idea",
+        text: "Подсказка использует тот же набор блоков и доступна сразу.",
+      },
+    ],
+    solution: [
+      {
+        type: "steps",
+        prompt: "Развёрнутый разбор сохраняет последовательность.",
+        steps: ["Найдите условие остановки.", "Проследите последний вызов."],
+      },
+      {
+        type: "diagram",
+        src: "/diagrams/bst-subtrees.png",
+        alt: "Двоичное дерево с левым и правым поддеревьями",
+        caption: "Сложная схема сопровождается текстовой альтернативой.",
+        width: 812,
+        height: 390,
+        purpose:
+          "Показать, что схема является учебным содержанием, а не декором.",
+        accessibleDescription:
+          "Корень делит дерево на левое и правое поддеревья; каждое повторяет ту же структуру.",
+        pointers: [
+          {
+            label: "Корень",
+            description: "Начальная вершина, от которой расходятся связи.",
+          },
+          {
+            label: "Поддеревья",
+            description: "Самостоятельные части с той же логикой построения.",
+          },
+        ],
+      },
+      {
+        type: "attachment",
+        src: "/content/tasks/python-files-aggregate/numbers.txt",
+        label: "numbers.txt",
+        description: "Пример authored-файла для практической задачи",
+        mimeType: "text/plain",
+        sizeBytes: 6,
+      },
+    ],
     theoryLinks: [
       { hash: "catalog-recursive-step", label: "Рекурсивный вызов" },
     ],

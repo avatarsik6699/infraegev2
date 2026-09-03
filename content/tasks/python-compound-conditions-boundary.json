@@ -3,8 +3,22 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-compound-conditions"],
   "title": "Не потеряйте ноль",
-  "statement": "При `temperature = 0` программа проверяет `temperature < 0`, затем `temperature <= 10`, иначе печатает «тепло». Что будет напечатано?",
-  "hint": "Ноль не меньше нуля, но входит в диапазон до 10 включительно.",
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "При `temperature = 0` программа проверяет `temperature < 0`, затем `temperature <= 10`, иначе печатает «тепло». Что будет напечатано?"
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Ноль не меньше нуля, но входит в диапазон до 10 включительно."
+      }
+    }
+  ],
   "theory_links": [
     {
       "hash": "model",

@@ -3,8 +3,22 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-loop-state"],
   "title": "Проверьте границы перебора",
-  "statement": "Сколько значений содержит `range(1, 5)`?",
-  "hint": "Правая граница не включается.",
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Сколько значений содержит `range(1, 5)`?"
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Правая граница не включается."
+      }
+    }
+  ],
   "theory_links": [
     {
       "hash": "model",

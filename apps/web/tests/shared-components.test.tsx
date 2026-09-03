@@ -379,6 +379,9 @@ describe("Typography and PageContainer", () => {
     expect(screen.getByRole("heading", { level: 2 }).textContent).toBe(
       "Раздел",
     );
+    expect(
+      screen.getByRole("heading", { level: 2 }).hasAttribute("data-title-role"),
+    ).toBe(false);
     expect(screen.getByText("Содержимое раздела").tagName).toBe("P");
     expect(
       screen.getByText("Содержимое раздела").getAttribute("data-variant"),

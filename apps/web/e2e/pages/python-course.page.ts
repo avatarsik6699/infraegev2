@@ -103,6 +103,21 @@ export class PythonCoursePage {
     await expect(curriculum).toBeVisible();
     await expect(this.page.getByRole("heading", { level: 3 })).toHaveCount(9);
     await expect(curriculum.locator("[data-course-module]")).toHaveCount(9);
+    const firstModuleHeading = curriculum
+      .getByRole("heading", { level: 3 })
+      .first();
+    await expect(firstModuleHeading).toHaveCSS("font-size", "16px");
+    await expect(firstModuleHeading).toHaveCSS("font-weight", "600");
+    await expect(firstModuleHeading).toHaveCSS(
+      "font-family",
+      /Alchimia Cormorant SC/,
+    );
+    await expect(
+      this.page.getByRole("heading", {
+        level: 1,
+        name: "Python с нуля для ЕГЭ",
+      }),
+    ).toHaveCSS("font-family", /Alchimia Cormorant SC/);
     await expect(
       curriculum.locator('[data-availability="planned"]'),
     ).toHaveCount(0);
@@ -255,6 +270,35 @@ export class PythonCoursePage {
 
   async openCompoundConditionsLesson(): Promise<void> {
     await openLessonAtTop(this.page, "/courses/python/sostavnye-usloviya");
+  }
+
+  async openFilesLesson(): Promise<void> {
+    await openLessonAtTop(this.page, "/courses/python/fayly");
+  }
+
+  async expectTaskAttachment(options?: { download?: boolean }): Promise<void> {
+    const taskTab = this.page.getByRole("tab", {
+      name: /Сложите строки файла/,
+    });
+    if ((await taskTab.count()) && (await taskTab.isVisible())) {
+      await taskTab.click();
+    }
+    const task = this.page.locator(
+      '[data-practice-task="python-files-aggregate"]',
+    );
+    const attachment = task.getByRole("link", { name: /numbers\.txt/ });
+    await expect(attachment).toHaveAttribute(
+      "href",
+      "/content/tasks/python-files-aggregate/numbers.txt",
+    );
+    await expect(attachment).toHaveAttribute("download", "");
+    await expect(attachment).toContainText("text/plain · 6 Б");
+    if (options?.download) {
+      const downloadPromise = this.page.waitForEvent("download");
+      await attachment.click();
+      const download = await downloadPromise;
+      expect(download.suggestedFilename()).toBe("numbers.txt");
+    }
   }
 
   async expectPublishedCurriculumLesson(

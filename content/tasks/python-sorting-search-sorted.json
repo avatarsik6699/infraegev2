@@ -3,9 +3,28 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-sorting-search"],
   "title": "Сохраните исходный порядок",
-  "statement": "Какую функцию нужно вызвать для `scores`, чтобы получить новый отсортированный список и не менять `scores`?",
-  "hint": "В уроке сравниваются функция и метод.",
-  "theory_links": [{ "hash": "sorted", "label": "Сравните две сортировки" }],
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Какую функцию нужно вызвать для `scores`, чтобы получить новый отсортированный список и не менять `scores`?"
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "В уроке сравниваются функция и метод."
+      }
+    }
+  ],
+  "theory_links": [
+    {
+      "hash": "sorted",
+      "label": "Сравните две сортировки"
+    }
+  ],
   "checker_type": "exact_match",
   "answer_variants": ["sorted", "sorted(scores)", "sorted()"],
   "numeric_tolerance": null,

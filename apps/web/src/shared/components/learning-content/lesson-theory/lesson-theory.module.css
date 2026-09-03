@@ -24,7 +24,7 @@
 
 .conceptExplanation {
   min-width: 0;
-  max-width: 68ch;
+  max-width: var(--measure-reading);
 }
 
 .conceptExplanation[data-learning-flow] > * {

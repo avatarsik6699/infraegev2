@@ -1,4 +1,5 @@
 import { cssUtils } from "~/shared/lib/css-utils";
+import { useIsEnhanced } from "~/shared/lib/use-is-enhanced";
 import { ImageErrorState } from "./components/image-error-state";
 import { ImageMedia } from "./components/image-media";
 import { useImageStatus } from "./model/use-image-status";
@@ -14,6 +15,7 @@ function inferAspectRatio(props: ImageTypes.Props): number | undefined {
 }
 
 export const Image: React.FC<ImageTypes.Props> = (props) => {
+  const enhanced = useIsEnhanced();
   const imageStatus = useImageStatus({
     src: props.src,
     fallbackSrc: props.fallbackSrc,
@@ -26,9 +28,10 @@ export const Image: React.FC<ImageTypes.Props> = (props) => {
     <div
       className={cssUtils.cx(styles.root, props.className)}
       data-status={imageStatus.status}
+      data-enhanced={enhanced || undefined}
       style={aspectRatio ? { aspectRatio: String(aspectRatio) } : undefined}
     >
-      {imageStatus.status === "error" ? (
+      {enhanced && imageStatus.status === "error" ? (
         <ImageErrorState alt={alt} decorative={decorative} />
       ) : (
         <ImageMedia
@@ -38,6 +41,7 @@ export const Image: React.FC<ImageTypes.Props> = (props) => {
           width={props.width}
           height={props.height}
           fit={props.fit}
+          enhanced={enhanced}
         />
       )}
     </div>

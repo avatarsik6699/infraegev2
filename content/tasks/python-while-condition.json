@@ -3,8 +3,22 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-while"],
   "title": "Выберите условие продолжения",
-  "statement": "Какой оператор нужен в `while password ... \"python\"`, чтобы повторять ввод, пока пароль не равен строке `python`?",
-  "hint": "Нужно проверить неравенство.",
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Какой оператор нужен в `while password ... \"python\"`, чтобы повторять ввод, пока пароль не равен строке `python`?"
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Нужно проверить неравенство."
+      }
+    }
+  ],
   "theory_links": [
     {
       "hash": "model",

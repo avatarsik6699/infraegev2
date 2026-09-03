@@ -3,8 +3,22 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-compound-conditions"],
   "title": "Проверьте составное условие",
-  "statement": "При `age = 15` и `has_ticket = True` условие записано как `age >= 14 and has_ticket`. Программа печатает «вход», если условие истинно. Что она напечатает?",
-  "hint": "`and` требует истинности обеих частей.",
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "При `age = 15` и `has_ticket = True` условие записано как `age >= 14 and has_ticket`. Программа печатает «вход», если условие истинно. Что она напечатает?"
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "`and` требует истинности обеих частей."
+      }
+    }
+  ],
   "theory_links": [
     {
       "hash": "trace",

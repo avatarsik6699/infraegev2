@@ -3,10 +3,27 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-iterators-generators"],
   "title": "Запустите генератор",
-  "statement": "Измените пример `even_numbers` так, чтобы он начал с 2, и вызовите `even_numbers(7)`. Какое последнее число выведет цикл?",
-  "hint": "Генератор прибавляет 2 и не должен превысить limit.",
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Измените пример `even_numbers` так, чтобы он начал с 2, и вызовите `even_numbers(7)`. Какое последнее число выведет цикл?"
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Генератор прибавляет 2 и не должен превысить limit."
+      }
+    }
+  ],
   "theory_links": [
-    { "hash": "choice", "label": "Проверьте ленивую последовательность" }
+    {
+      "hash": "choice",
+      "label": "Проверьте ленивую последовательность"
+    }
   ],
   "checker_type": "exact_match",
   "answer_variants": ["6"],

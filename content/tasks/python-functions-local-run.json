@@ -3,8 +3,22 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-functions"],
   "title": "Проверьте логическую функцию",
-  "statement": "Функция `is_even(n)` возвращает `n % 2 == 0`. Что вернёт `is_even(14)`?",
-  "hint": "Остаток от деления 14 на 2 равен нулю.",
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Функция `is_even(n)` возвращает `n % 2 == 0`. Что вернёт `is_even(14)`?"
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Остаток от деления 14 на 2 равен нулю."
+      }
+    }
+  ],
   "theory_links": [
     {
       "hash": "workflow",

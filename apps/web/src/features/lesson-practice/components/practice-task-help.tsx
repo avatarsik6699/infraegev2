@@ -1,7 +1,7 @@
 import type { PracticeTaskTypes } from "~/entities/practice-task";
 import { Accordion } from "~/shared/components/accordion";
 import styles from "../lesson-practice.module.css";
-import { PracticeTaskSolution } from "./practice-task-solution";
+import { PracticeTaskContent } from "./practice-task-content";
 
 type PracticeTaskHelpProps = {
   task: PracticeTaskTypes.Task;
@@ -15,12 +15,19 @@ export const PracticeTaskHelp: React.FC<PracticeTaskHelpProps> = (props) => (
       {
         id: `${props.task.id}-hint`,
         title: "Подсказка",
-        content: <div className={styles.hintContent}>{props.task.hint}</div>,
+        content: (
+          <PracticeTaskContent blocks={props.task.hint} context="hint" />
+        ),
       },
       {
         id: `${props.task.id}-solution`,
         title: "Решение",
-        content: <PracticeTaskSolution blocks={props.task.solution} />,
+        content: (
+          <PracticeTaskContent
+            blocks={props.task.solution}
+            context="solution"
+          />
+        ),
       },
     ]}
   />

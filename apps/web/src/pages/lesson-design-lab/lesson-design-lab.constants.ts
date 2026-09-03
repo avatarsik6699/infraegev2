@@ -1,6 +1,10 @@
 import type { LessonTypes } from "~/entities/lesson";
 import type { PracticeTaskTypes } from "~/entities/practice-task";
 
+const textContent = (text: string): PracticeTaskTypes.ContentBlock[] => [
+  { type: "text", text },
+];
+
 const outline: LessonTypes.OutlineGroup[] = [
   {
     id: "theory",
@@ -35,10 +39,11 @@ const practiceTasks: PracticeTaskTypes.LocalTask[] = [
     id: "keep-half",
     difficultyLabel: "Разминка",
     title: "Выберите половину",
-    statement:
+    statement: textContent(
       "Ищем 27, средний элемент равен 31. Какую половину нужно оставить: левую или правую?",
+    ),
     answers: ["левая", "левую"],
-    hint: "Сравните 27 и 31: искомое число меньше среднего.",
+    hint: textContent("Сравните 27 и 31: искомое число меньше среднего."),
     explanation:
       "Оставляем левую половину. В отсортированном массиве только слева от 31 могут находиться меньшие значения.",
     solution: [
@@ -53,10 +58,11 @@ const practiceTasks: PracticeTaskTypes.LocalTask[] = [
     id: "left-boundary",
     difficultyLabel: "База",
     title: "Сдвиньте левую границу",
-    statement:
+    statement: textContent(
       "Если x > a[M] и M = 8, чему должна стать равна левая граница L? Введите число.",
+    ),
     answers: ["9"],
-    hint: "Используйте правило L = M + 1.",
+    hint: textContent("Используйте правило L = M + 1."),
     explanation:
       "Новая левая граница равна 9. Индекс 8 уже проверен, поэтому повторно включать его в диапазон нельзя.",
     solution: [
@@ -71,10 +77,11 @@ const practiceTasks: PracticeTaskTypes.LocalTask[] = [
     id: "right-boundary",
     difficultyLabel: "Применение",
     title: "Сдвиньте правую границу",
-    statement:
+    statement: textContent(
       "Если x < a[M] и M = 8, чему должна стать равна правая граница R? Введите число.",
+    ),
     answers: ["7"],
-    hint: "Используйте правило R = M − 1.",
+    hint: textContent("Используйте правило R = M − 1."),
     explanation:
       "Новая правая граница равна 7. Средний элемент и всё справа от него уже исключены сравнением.",
     solution: [
@@ -89,10 +96,13 @@ const practiceTasks: PracticeTaskTypes.LocalTask[] = [
     id: "loop-condition",
     difficultyLabel: "Границы",
     title: "Сохраните последний кандидат",
-    statement:
+    statement: textContent(
       "Запишите условие цикла для границ L и R, при котором массив из одного оставшегося элемента ещё проверяется.",
+    ),
     answers: ["l<=r", "left<=right", "l≤r", "left≤right"],
-    hint: "Равные границы означают, что остался один допустимый индекс.",
+    hint: textContent(
+      "Равные границы означают, что остался один допустимый индекс.",
+    ),
     explanation:
       "Условие L ≤ R сохраняет диапазон из одного элемента. Строгое L < R завершило бы поиск на один шаг раньше.",
     solution: [
@@ -110,10 +120,13 @@ const practiceTasks: PracticeTaskTypes.LocalTask[] = [
     id: "trace-count",
     difficultyLabel: "Трасса",
     title: "Завершите трассировку",
-    statement:
+    statement: textContent(
       "В массиве [2, 5, 7, 9, 12, 14, 21, 27, 31, 34, 38, 45, 50] двоичный поиск идёт 21 → 34 → 27. Сколько сравнений выполнено?",
+    ),
     answers: ["3", "три"],
-    hint: "Посчитайте все проверенные средние элементы, включая найденный.",
+    hint: textContent(
+      "Посчитайте все проверенные средние элементы, включая найденный.",
+    ),
     explanation:
       "Выполнено три сравнения: сначала с 21, затем с 34 и наконец с 27. Последнее сравнение тоже входит в результат.",
     solution: [

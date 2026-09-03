@@ -3,8 +3,22 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-dictionaries"],
   "title": "Проверьте наличие ключа",
-  "statement": "Что вернёт `\"math\" in {\"math\": 5, \"python\": 4}`?",
-  "hint": "Оператор in для словаря проверяет ключи.",
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Что вернёт `\"math\" in {\"math\": 5, \"python\": 4}`?"
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Оператор in для словаря проверяет ключи."
+      }
+    }
+  ],
   "theory_links": [
     {
       "hash": "model",

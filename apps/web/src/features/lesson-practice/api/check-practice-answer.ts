@@ -39,10 +39,24 @@ export const checkPracticeAnswer: PracticeTaskTypes.Checker = async (
 };
 
 function explanationText(block: ExplanationBlock): string {
-  const { data } = block;
-  if ("markdown" in data) return data.markdown;
-  if ("steps" in data) return `${data.prompt} ${data.steps.join(" ")}`;
-  if ("title" in data) return data.title;
-  if ("caption" in data) return data.caption ?? "Разбор приведён в коде.";
-  return "";
+  switch (block.type) {
+    case "text":
+    case "callout":
+      return block.data.markdown;
+    case "list":
+      return block.data.items.join(" ");
+    case "worked_example":
+    case "completion_exercise":
+    case "productive_failure_prompt":
+      return `${block.data.prompt} ${block.data.steps.join(" ")}`;
+    case "code_example":
+      return block.data.caption ?? "Разбор приведён в коде.";
+    case "table":
+      return block.data.caption ?? "Сверьте промежуточные данные в таблице.";
+    case "image":
+    case "diagram":
+      return block.data.caption;
+    case "attachment":
+      return `${block.data.label}: ${block.data.description}`;
+  }
 }

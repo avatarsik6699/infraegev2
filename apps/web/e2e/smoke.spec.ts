@@ -236,6 +236,7 @@ test("the unlisted lesson lab works across viewports and without JavaScript", as
 
   await browserSession.useDesktopViewport();
   await lessonLabPage.open();
+  await lessonLabPage.expectColdFontLayoutStability();
   await lessonLabPage.expectLessonStructure();
   await lessonLabPage.expectCodeExampleSurface();
   await lessonLabPage.expectUnlistedMetadata();
@@ -366,6 +367,7 @@ test("the published recursion lesson preserves practice and reading state", asyn
   await topicLessonPage.expectPublishedLesson();
   await topicLessonPage.expectDesktopComposition();
   await topicLessonPage.expectStableOutlineSelection();
+  await topicLessonPage.expectRichPracticeStatement();
   await browserSession.captureViewport("recursion-lesson-desktop.png");
   await topicLessonPage.expectPracticeSolutions();
   await topicLessonPage.expectProgressClosureJourney();
@@ -395,9 +397,28 @@ test("the published recursion lesson stays readable across runtimes", async ({
   browserSession.expectCleanConsole();
 
   await noJavaScriptTopicLessonPage.expectReadableWithoutJavaScript();
+  await noJavaScriptTopicLessonPage.expectRichPracticeStatementWithoutJavaScript();
   await topicLessonPage.expectDirectEntryBackFallback();
   await topicLessonPage.expectInternalBackNavigation();
   await topicLessonPage.expectUnknownLessonNotFound();
+});
+
+test("the files lesson exposes its authored attachment across runtimes", async ({
+  browserSession,
+  noJavaScriptPythonCoursePage,
+  pythonCoursePage,
+}) => {
+  await browserSession.useDesktopViewport();
+  await pythonCoursePage.openFilesLesson();
+  await pythonCoursePage.expectTaskAttachment({ download: true });
+
+  await browserSession.useNarrowViewport();
+  await pythonCoursePage.openFilesLesson();
+  await pythonCoursePage.expectTaskAttachment();
+  browserSession.expectCleanConsole();
+
+  await noJavaScriptPythonCoursePage.openFilesLesson();
+  await noJavaScriptPythonCoursePage.expectTaskAttachment();
 });
 
 test("the published task-5 lesson stays discoverable and complete", async ({

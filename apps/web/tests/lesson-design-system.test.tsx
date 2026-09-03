@@ -35,6 +35,7 @@ vi.mock(
 
 const lessonProgressStorageKey = "infraege:lesson:binary-search:progress";
 const progressRegistryStorageKey = "infraege:lesson-progress";
+const textContent = (text: string) => [{ type: "text" as const, text }];
 
 function seedProgressRegistry(
   lessons: Readonly<
@@ -140,6 +141,8 @@ describe("lesson design system", () => {
       name: "Что важно для ЕГЭ",
     });
     expect(heading.textContent).toBe("§ 3 ·Что важно для ЕГЭ");
+    expect(heading.hasAttribute("data-title-role")).toBe(false);
+    expect(heading.getAttribute("data-variant")).toBe("default");
   });
 
   it("keeps the four lesson stages above their local theory headings", () => {
@@ -205,8 +208,8 @@ describe("lesson design system", () => {
             id: "rekursiya-base-sequence",
             difficultyLabel: "Базовая",
             title: "База",
-            statement: "Условие",
-            hint: "Подсказка",
+            statement: textContent("Условие"),
+            hint: textContent("Подсказка"),
             theoryLinks: [],
             solution: [{ type: "text", text: "Решение базовой задачи" }],
           },
@@ -214,8 +217,8 @@ describe("lesson design system", () => {
             id: "rekursiya-call-stack-trace",
             difficultyLabel: "Средняя",
             title: "Вызовы",
-            statement: "Условие",
-            hint: "Подсказка",
+            statement: textContent("Условие"),
+            hint: textContent("Подсказка"),
             theoryLinks: [],
             solution: [{ type: "text", text: "Решение задачи о вызовах" }],
           },
@@ -223,8 +226,8 @@ describe("lesson design system", () => {
             id: "rekursiya-two-values",
             difficultyLabel: "Средняя",
             title: "Два значения",
-            statement: "Условие",
-            hint: "Подсказка",
+            statement: textContent("Условие"),
+            hint: textContent("Подсказка"),
             theoryLinks: [],
             solution: [{ type: "text", text: "Решение о двух значениях" }],
           },
@@ -232,8 +235,8 @@ describe("lesson design system", () => {
             id: "rekursiya-repeated-calls",
             difficultyLabel: "Высокая",
             title: "Повторы",
-            statement: "Условие",
-            hint: "Подсказка",
+            statement: textContent("Условие"),
+            hint: textContent("Подсказка"),
             theoryLinks: [],
             solution: [{ type: "text", text: "Решение задачи о повторах" }],
           },
@@ -241,8 +244,8 @@ describe("lesson design system", () => {
             id: "rekursiya-large-ratio",
             difficultyLabel: "Высокая",
             title: "Отношение",
-            statement: "Условие",
-            hint: "Подсказка",
+            statement: textContent("Условие"),
+            hint: textContent("Подсказка"),
             theoryLinks: [],
             solution: [{ type: "text", text: "Решение об отношении" }],
           },
@@ -403,8 +406,8 @@ describe("lesson design system", () => {
             id: "rekursiya-base-sequence",
             difficultyLabel: "Базовая",
             title: "База",
-            statement: "Условие",
-            hint: "Подсказка",
+            statement: textContent("Условие"),
+            hint: textContent("Подсказка"),
             theoryLinks: [],
             solution: [{ type: "text", text: "Решение" }],
           },
@@ -555,6 +558,9 @@ describe("lesson design system", () => {
     expect(answer.getAttribute("data-solved")).toBe("true");
     expect((answer as HTMLInputElement).value).toBe("левая");
     expect(
+      document.querySelector("[data-answer-accepted-icon]"),
+    ).not.toBeNull();
+    expect(
       screen
         .getByRole("button", { name: "Проверить" })
         .hasAttribute("disabled"),
@@ -579,6 +585,9 @@ describe("lesson design system", () => {
     const restoredAnswer = screen.getByRole("textbox", { name: "Ответ" });
     expect((restoredAnswer as HTMLInputElement).value).toBe("левая");
     expect(restoredAnswer.hasAttribute("disabled")).toBe(true);
+    expect(
+      document.querySelector("[data-answer-accepted-icon]"),
+    ).not.toBeNull();
     expect(
       screen
         .getByRole("button", { name: "Проверить" })

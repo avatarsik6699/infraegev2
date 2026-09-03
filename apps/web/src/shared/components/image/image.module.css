@@ -11,14 +11,14 @@
   min-height: 6rem;
 }
 
-.image {
+.root[data-enhanced="true"] .image {
   display: block;
   width: 100%;
   height: auto;
   opacity: 0;
 }
 
-.root[data-status="loaded"] .image {
+.root[data-enhanced="true"][data-status="loaded"] .image {
   opacity: 1;
 }
 

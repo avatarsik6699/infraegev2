@@ -3,8 +3,22 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-compound-conditions"],
   "title": "Проверьте программу локально",
-  "statement": "Запустите: `score = 8`, `bonus = 3`; если `score >= 10 or bonus >= 3`, вывести «допуск», иначе «нет». Какое слово появится?",
-  "hint": "`or` достаточно одной истинной части.",
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Запустите: `score = 8`, `bonus = 3`; если `score >= 10 or bonus >= 3`, вывести «допуск», иначе «нет». Какое слово появится?"
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "`or` достаточно одной истинной части."
+      }
+    }
+  ],
   "theory_links": [
     {
       "hash": "workflow",

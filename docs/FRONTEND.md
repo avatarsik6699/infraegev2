@@ -132,9 +132,10 @@ app → routes → pages → widgets → features → entities → shared
   of the desktop left rail; on narrow layouts it returns to normal flow immediately after the
   outline. Its label is a quiet UI caption rather than a content heading. The outline, central
   article and their context labels share one compact responsive column gutter so their content
-  edges remain aligned through desktop, intermediate and mobile layouts. The outline reserves its
-  scrollbar gutter, keeps link weight stable between states and truncates overlong labels instead
-  of reflowing them when the active item or internal overflow changes. Reset remains a quiet
+  edges remain aligned through desktop, intermediate and mobile layouts. Outline groups and their
+  children always remain one vertical column; the outline reserves its scrollbar gutter, keeps
+  link weight stable between states and truncates overlong labels after two lines instead of
+  reflowing them when the active item or internal overflow changes. Reset remains a quiet
   secondary action and uses the shared Base UI alert-dialog boundary so confirmation is modal,
   keyboard contained and returns focus to its trigger without shifting the rail.
 - Course pages extend the incumbent neutral reading world without reusing Topic semantics. A
@@ -170,25 +171,33 @@ app → routes → pages → widgets → features → entities → shared
   left rule, without adding a card surface or coloring the question text.
   A group may contain several independent disclosure questions when the theory cluster warrants
   them. Do not defer all retrieval practice to one block directly before the practice section.
-- `Mistake` presents its authored claim and explanation as a responsive «Неверно» / «Как правильно»
-  comparison on the ordinary reading surface. Error and success colors are reserved for its compact
-  icons and text labels, while the authored body copy remains neutral and the two readings use only
-  a standard neutral divider. Color is always duplicated by the distinct icons and labels; because
+- `Mistake` presents its authored claim and explanation as one vertical «Неверно» / «Как правильно»
+  comparison at every viewport width. A compact neutral rule identifies the block; error and success
+  colors remain reserved for its icons and text labels, while authored body copy stays neutral and
+  the two readings use a standard neutral divider. Color is always duplicated by the distinct icons and labels; because
   this is static instructional content rather than a runtime event, it remains an `aside` instead
-  of an alert. `WorkedExample` treats «Разберём на примере» as restrained reading context, not a
+  of an alert. `Checkpoint` and `Mistake` share the same compact outer padding, left-rule weight,
+  service-label type, icon size and text-column inset so their semantics differ without competing
+  in the reading flow. `WorkedExample` treats «Разберём на примере» as restrained reading context, not a
   data-style eyebrow competing with the example title. Lesson layouts own external vertical
-  rhythm: continued prose uses the 12px content-flow role, a related standalone learning block
-  uses 24px, separate concepts use 48px on desktop and 32px on narrow screens, and major lesson
-  sections use 64px on desktop and 48px on narrow screens. Learning components own only their
+  rhythm: continued prose uses the 12px content-flow role, a stage landmark sits 16px from its
+  first related content, a related standalone learning block uses 24px, separate concepts use 48px
+  on desktop and 32px on narrow screens, and major lesson sections use 64px on desktop and 48px on narrow screens. Learning components own only their
   internal geometry and do not introduce outer margins. `Procedure` exposes its specific authored
   title directly and does not prepend a generic «Как действовать» label.
-- Every practice task exposes separate «Подсказка» and «Решение» disclosures. The solution renders
-  the authored structured explanation (prose, ordered reasoning and code where useful) from the
-  server-loaded public projection; checker answers and tolerances never enter that projection.
+- Every practice task renders its statement, separate «Подсказка» and «Решение» disclosures through
+  one exhaustive structured-content boundary. It supports safe inline notation in text, semantic
+  ordered/unordered lists, Python/text code, native tables, local task-owned images, annotated
+  diagrams with a visible text alternative, authored downloads, callouts and the three established
+  step-based learning roles. Images use the shared policy component and intrinsic dimensions;
+  tables and code scroll within their own bounded region on narrow screens; downloads remain real
+  links in SSR/no-JavaScript. The server-loaded public projection never includes checker answers or
+  tolerances. Arbitrary HTML/MDX, SVG attachments, video/iframe, external embeds and user uploads
+  are rejected at the content boundary rather than sanitized in the renderer.
   Before enhancement both help sections remain ordinary linear SSR/no-JS content; after hydration
   they collapse independently and retain native keyboard/focus semantics through the shared
-  `Accordion` wrapper. A solved task uses the success check in its tab and a clear success
-  border/background on its disabled answer field; keep the «Проверить» control visible but disabled
+  `Accordion` wrapper. A solved task uses the success check in its tab and a trailing success check
+  inside its flat, readable disabled answer field; keep the «Проверить» control visible but disabled
   so the form geometry and action context remain stable. Do not repeat solved state with a badge or
   navigation actions to the next task/result because the tabs and page outline already provide
   those paths. Persist only the learner's accepted submitted value alongside the solved task id,
@@ -201,7 +210,8 @@ app → routes → pages → widgets → features → entities → shared
   description and shared 1200×630 social metadata. The root owns a browser-only manifest plus the
   normalized production SVG/PNG/ICO favicon and Apple touch icon set; the large mark preserves the
   approved ALCHIMIA source geometry while the square favicon viewport adds only delivery whitespace
-  and never redraws the mark. `/` alone owns the truthful `WebSite` JSON-LD site-name declaration.
+  and never redraws the mark. The monochrome SVG/favicon may switch to white only under an explicit
+  dark context or dark browser color scheme. `/` alone owns the truthful `WebSite` JSON-LD site-name declaration.
   Generated favicon/touch/manifest assets satisfy
   `docs/BRAND_ASSET_REQUIREMENTS.md`. Do not add Organization/Person structured data without a
   separately confirmed real-world identity. `/robots.txt` and `/sitemap.xml` are server routes,
@@ -219,10 +229,10 @@ app → routes → pages → widgets → features → entities → shared
   modified-click behavior. After hydration it follows TanStack Router history only when the
   router-owned history index says an in-app entry exists; direct entry, document reload and
   external-origin arrival use the explicit fallback route instead of leaving the application.
-- Public headers share one release identity from `siteConfig`: the approved ALCHIMIA mark,
-  Cormorant SC wordmark and IBM Plex Mono subtitle stay grouped with the restrained release label
-  at the left, while the current application version remains at the right. The mark is decorative
-  beside the accessible live site name rather than its replacement.
+- Public headers share one quiet identity: the approved ALCHIMIA mark, Cormorant SC wordmark and
+  IBM Plex Mono subtitle stay grouped at the left without release/version badges. The mark is
+  decorative beside the accessible live site name rather than its replacement. Header and footer
+  contents follow one viewport-relative gutter instead of contracting inside a centered max-width shell.
   Outside the home page the wordmark is the route back home. Material discovery belongs to the
   registry-derived home sections rather than duplicate collection links in global chrome.
   Optional analytics first appears only after hydration as a fixed full-width bottom prompt that
@@ -262,9 +272,16 @@ app → routes → pages → widgets → features → entities → shared
 
 - Reading prose uses the reading family; controls and labels use the UI family; code and numeric
   evidence use the data family. Component APIs use semantic text roles rather than raw size names.
-- Public surfaces use metric-normalized local reading/UI faces so cold load has no font download,
-  late replacement or layout shift. Do not reintroduce network webfonts without before/after
-  cold-cache evidence that preserves CLS = 0 and the public-route LCP budget.
+- Public surfaces preload the small active self-hosted ALCHIMIA set and use `font-display: swap` so
+  the real display, reading and service faces replace their fallback instead of leaving a first
+  visit on heavier system typography. Display, reading and service fallbacks are metric-adjusted,
+  while every active font subset is explicitly preloaded. Structural lesson columns use the stable
+  `--measure-lesson` rem cap, not a font-relative `ch` width that changes while the reading face
+  becomes available. `/fonts/`
+  receives a bounded reusable production cache policy rather than immutable caching while some
+  filenames remain unversioned. Do not reintroduce network webfonts or alter loading behavior
+  without before/after cold-cache evidence that preserves stable text geometry and the
+  public-route LCP budget.
 - The active typography baseline uses only `500` and `600` in component CSS and the shared
   `--text-*` scale; consumers do not introduce literal sizes or intermediate variable-font weights.
   Semantic heading levels may share an effective size when hierarchy already comes from spacing
@@ -306,19 +323,21 @@ app → routes → pages → widgets → features → entities → shared
 - Archived Change 75 established the approved target profile on `/lab/design-system` and proved
   its reusable header, theme/token boundary and catalog contracts. Change 76 activated only those
   accepted system-level values and reusable boundaries on public routes without copying the
-  dashboard composition into production. Change 79 owns the remaining public rollout: map every
-  accepted Components/Widgets contract to its real consumer, promote approved defaults through the
-  existing visual dependency direction, reconcile public page and lesson compositions, and remove
-  legacy fallbacks only after browser evidence proves that no consumer still needs them. It must
-  not create a parallel component family or copy catalog chrome into a product route.
-- The supplied `docs/artifacts/references/logo_with_transperant_bg.svg` is the sole artistic
-  authority. The obsolete opaque-canvas `logo.svg` is not a fallback. A derivative may repair
-  delivery sizing/viewBox behavior, but may not redraw, smooth, recolor or reinterpret visible
-  geometry. The rejected hero-scale F1 composition is superseded by F11's compact reusable header.
+  dashboard composition into production. Archived Change 79 completed the remaining public
+  rollout: it mapped accepted Components/Widgets contracts to their real consumers, promoted
+  approved defaults through the existing visual dependency direction, reconciled public page and
+  lesson compositions, and removed only legacy fallbacks proven unused by browser evidence. The
+  resulting production routes do not copy catalog chrome or maintain a parallel component family.
+- The supplied `docs/artifacts/references/logo.svg` is the sole artistic authority. The superseded
+  `logo_with_transperant_bg.svg` is not a fallback. A derivative may repair delivery sizing/viewBox
+  behavior and invert the monochrome mark to white for an explicit dark context, but may not redraw,
+  smooth or reinterpret visible geometry. The rejected hero-scale F1 composition is superseded by
+  F11's compact reusable header.
 - The architect selected Athanor's typography roles for the approved profile: self-hosted
-  Cormorant SC carries
-  display headings and the live wordmark, Literata carries continuous reading, and IBM Plex Mono
-  is limited to code, data and compact service UI. The profile exposes one achromatic primary and
+  Cormorant SC 600 carries the live wordmark and every standard heading level, including compact
+  course, practice, prose and dialog headings; Literata carries continuous reading; IBM Plex Mono
+  is limited to code, data and compact service UI. Quiet numbered lesson-stage landmarks remain an
+  intentional IBM Plex Mono exception rather than ordinary content headings. The profile exposes one achromatic primary and
   one achromatic secondary prose level over the original white background; status colors remain
   semantic rather than decorative. Public consumers adopt these roles through Change 76.
 - Keep the approved white background and monochrome presentation during public activation. Copper
@@ -341,14 +360,15 @@ app → routes → pages → widgets → features → entities → shared
   section separators, frames, diagram internals, swatches and interactive controls use standard
   neutral borders; the primary tablist uses only its ordinary active indicator. The atlas remains
   a documentation reference rather than a runtime UI asset.
-- Vertical rhythm has four semantic roles: content flow (12px), a related standalone learning
-  block (24px), concept separation (48px desktop / 32px narrow) and major-section separation
-  (64px desktop / 48px narrow). The parent lesson layout owns these external relationships;
+- Vertical rhythm has five semantic roles: content flow (12px), stage entry (16px), a related
+  standalone learning block (24px), concept separation (48px desktop / 32px narrow) and
+  major-section separation (64px desktop / 48px narrow). The parent lesson layout owns these external relationships;
   components own only internal geometry. Responsive rules preserve the hierarchy instead of
   reducing every role to one mobile gap.
 - Lesson composition, responsive outline behavior and authored lesson copy remained outside
-  Changes 75–76. Change 79 owns visual composition and responsive public-consumer migration without
-  editing authored copy; Changes 77–78 and 80–83 own the separately approved editorial rollout.
+  Changes 75–76. Change 79 completed visual composition and responsive public-consumer migration
+  without editing authored copy. Change 80 owns the unified rich-practice content contract;
+  Changes 77–78 and 81–84 own the separately approved editorial rollout.
 
 ## 7. Fields and validation
 

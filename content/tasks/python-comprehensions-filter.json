@@ -3,9 +3,28 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-comprehensions"],
   "title": "Примените фильтр",
-  "statement": "Какой список создаст `[n for n in range(1, 7) if n % 3 == 0]`? Запишите числа через пробел.",
-  "hint": "Оставьте числа, которые делятся на 3 без остатка.",
-  "theory_links": [{ "hash": "filter", "label": "Повторите фильтр" }],
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Какой список создаст `[n for n in range(1, 7) if n % 3 == 0]`? Запишите числа через пробел."
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Оставьте числа, которые делятся на 3 без остатка."
+      }
+    }
+  ],
+  "theory_links": [
+    {
+      "hash": "filter",
+      "label": "Повторите фильтр"
+    }
+  ],
   "checker_type": "exact_match",
   "answer_variants": ["3 6", "[3, 6]", "3, 6"],
   "numeric_tolerance": null,
@@ -13,7 +32,9 @@
   "explanation": [
     {
       "type": "text",
-      "data": { "markdown": "Из чисел 1–6 условию соответствуют 3 и 6." }
+      "data": {
+        "markdown": "Из чисел 1–6 условию соответствуют 3 и 6."
+      }
     }
   ],
   "difficulty": 1,

@@ -1,7 +1,5 @@
 export const siteConfig = Object.freeze({
   name: "ALCHIMIA",
-  releaseLabel: "beta",
-  version: "1.0.0",
   origin: "https://infraege.ru",
   themeColor: "#ffffff",
   socialImagePath: "/brand/alchimia-social.png",

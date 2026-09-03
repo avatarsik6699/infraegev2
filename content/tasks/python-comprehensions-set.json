@@ -3,9 +3,28 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-comprehensions"],
   "title": "Уберите повторы",
-  "statement": "Сколько элементов будет в `{len(word) for word in [\"кот\", \"дом\", \"я\"]}`?",
-  "hint": "Два слова имеют одинаковую длину, а множество хранит уникальные значения.",
-  "theory_links": [{ "hash": "kinds", "label": "Сравните формы коллекций" }],
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Сколько элементов будет в `{len(word) for word in [\"кот\", \"дом\", \"я\"]}`?"
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Два слова имеют одинаковую длину, а множество хранит уникальные значения."
+      }
+    }
+  ],
+  "theory_links": [
+    {
+      "hash": "kinds",
+      "label": "Сравните формы коллекций"
+    }
+  ],
   "checker_type": "exact_match",
   "answer_variants": ["2", "два"],
   "numeric_tolerance": null,

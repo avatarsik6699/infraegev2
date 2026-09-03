@@ -3,8 +3,22 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-program-parts"],
   "title": "Назовите ответственность функции",
-  "statement": "Какая из функций должна преобразовывать введённые строки в числа: `read_numbers`, `calculate_total` или `print_result`?",
-  "hint": "Преобразование относится к получению и подготовке входных данных.",
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Какая из функций должна преобразовывать введённые строки в числа: `read_numbers`, `calculate_total` или `print_result`?"
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Преобразование относится к получению и подготовке входных данных."
+      }
+    }
+  ],
   "theory_links": [
     {
       "hash": "trace",

@@ -3,8 +3,22 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-bruteforce"],
   "title": "Посчитайте решения",
-  "statement": "Сколько чётных чисел среди целых от 1 до 8 включительно?",
-  "hint": "Чётные числа делятся на 2 без остатка.",
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Сколько чётных чисел среди целых от 1 до 8 включительно?"
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Чётные числа делятся на 2 без остатка."
+      }
+    }
+  ],
   "theory_links": [
     {
       "hash": "model",

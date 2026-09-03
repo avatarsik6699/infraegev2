@@ -3,8 +3,22 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-files"],
   "title": "Удалите пробелы по краям",
-  "statement": "Что получится после `\" 7\\n\".strip()`?",
-  "hint": "Метод удаляет пробел и перевод строки с краёв.",
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Что получится после `\" 7\\n\".strip()`?"
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Метод удаляет пробел и перевод строки с краёв."
+      }
+    }
+  ],
   "theory_links": [
     {
       "hash": "trace",

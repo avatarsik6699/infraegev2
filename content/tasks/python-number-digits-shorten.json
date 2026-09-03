@@ -3,9 +3,28 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-number-digits"],
   "title": "Укоротите число",
-  "statement": "Чему равно `704 // 10`?",
-  "hint": "Целое деление удаляет последнюю цифру.",
-  "theory_links": [{ "hash": "one-step", "label": "Повторите один шаг" }],
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Чему равно `704 // 10`?"
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Целое деление удаляет последнюю цифру."
+      }
+    }
+  ],
+  "theory_links": [
+    {
+      "hash": "one-step",
+      "label": "Повторите один шаг"
+    }
+  ],
   "checker_type": "exact_match",
   "answer_variants": ["70"],
   "numeric_tolerance": null,
@@ -13,7 +32,9 @@
   "explanation": [
     {
       "type": "text",
-      "data": { "markdown": "После удаления последней цифры 4 остаётся 70." }
+      "data": {
+        "markdown": "После удаления последней цифры 4 остаётся 70."
+      }
     }
   ],
   "difficulty": 1,

@@ -30,7 +30,7 @@ describe("ALCHIMIA design-system lab identity", () => {
       "docs",
       "artifacts",
       "references",
-      "logo_with_transperant_bg.svg",
+      "logo.svg",
     );
     const labMark = readWorkspaceFile(
       "apps",
@@ -42,10 +42,21 @@ describe("ALCHIMIA design-system lab identity", () => {
       "alchimia-mark.svg",
     );
 
-    expect(labMark.trimEnd()).toBe(suppliedMark.trimEnd());
-    expect(labMark).toContain('viewBox="0 0 2048 1365"');
+    expect(labMark).toContain('viewBox="0 0 2048 1639"');
+    expect(labMark.match(/<path\b/g)).toHaveLength(
+      suppliedMark.match(/<path\b/g)?.length ?? 0,
+    );
     expect(labMark).not.toMatch(/<(?:script|image|text)\b/i);
     expect(labMark).not.toMatch(/(?:href|src)=["']https?:\/\//i);
+    expect(
+      existsSync(
+        resolve(
+          process.cwd(),
+          "../..",
+          "docs/artifacts/references/logo_with_transperant_bg.svg",
+        ),
+      ),
+    ).toBe(false);
   });
 
   it("self-hosts the selected Athanor typography roles", () => {
@@ -76,6 +87,31 @@ describe("ALCHIMIA design-system lab identity", () => {
         ),
       ).toBe(true);
     }
+
+    const titleComponent = readWorkspaceFile(
+      "apps",
+      "web",
+      "src",
+      "shared",
+      "components",
+      "typography",
+      "components",
+      "typography-title.tsx",
+    );
+    const systemCatalog = readWorkspaceFile(
+      "apps",
+      "web",
+      "src",
+      "pages",
+      "design-system-lab",
+      "system-catalog.tsx",
+    );
+
+    expect(titleComponent).not.toContain("data-title-role");
+    expect(titleComponent).not.toContain("variant =");
+    expect(systemCatalog).toContain("Все стандартные заголовки");
+    expect(systemCatalog).not.toContain('variant="content"');
+    expect(systemCatalog).toContain("Уровень h1–h6 задаёт структуру документа");
   });
 
   it("keeps the ALCHIMIA lab palette achromatic above its accepted paper", () => {
@@ -106,7 +142,7 @@ describe("ALCHIMIA design-system lab identity", () => {
     expect(labConstants).not.toContain("--color-accent");
   });
 
-  it("defines four global semantic rhythm levels without introducing new surfaces", () => {
+  it("defines five global semantic rhythm levels without introducing new surfaces", () => {
     const tokensCss = readWorkspaceFile(
       "apps",
       "web",
@@ -142,6 +178,7 @@ describe("ALCHIMIA design-system lab identity", () => {
 
     expect(labConstants).toContain('id: "system-rhythm"');
     expect(tokensCss).toContain("--rhythm-content-flow: var(--space-1-5)");
+    expect(tokensCss).toContain("--rhythm-section-entry: var(--space-2)");
     expect(tokensCss).toContain("--rhythm-related-block: var(--space-3)");
     expect(tokensCss).toContain("--rhythm-concept-separation: var(--space-5)");
     expect(tokensCss).toContain("--rhythm-section-separation: var(--space-6)");
@@ -402,6 +439,7 @@ describe("ALCHIMIA design-system lab identity", () => {
       "--text-lg",
       "--text-xl",
       "--measure-reading",
+      "--measure-lesson",
       "--measure-wide",
       "--max-content-width",
       "--radius-control",
@@ -421,6 +459,8 @@ describe("ALCHIMIA design-system lab identity", () => {
       "CircleCheck",
       "CircleHelp",
       "Copy",
+      "Download",
+      "FileText",
       "ImageOff",
       "Lightbulb",
       "Link",
@@ -626,7 +666,7 @@ describe("ALCHIMIA design-system lab identity", () => {
     expect(catalogContracts).toEqual(widgetExports);
     expect(widgetExports).toHaveLength(4);
     expect(catalog).toContain(
-      'live("PublicHeader", "ALCHIMIA-айдентика и версия публичных страниц")',
+      'live("PublicHeader", "Компактная ALCHIMIA-айдентика публичных страниц")',
     );
     expect(catalog).toContain('data-widget-assembly="public-page"');
     expect(catalog).toContain('data-widget-assembly="lesson-page"');

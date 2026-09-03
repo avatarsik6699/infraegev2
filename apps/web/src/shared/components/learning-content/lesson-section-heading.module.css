@@ -1,4 +1,4 @@
-.heading {
+.heading.heading[data-order] {
   display: flex;
   gap: 0.55rem;
   align-items: center;

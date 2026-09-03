@@ -121,7 +121,13 @@ const tokenGroups = [
       {
         name: "--measure-reading",
         purpose: "Читаемая строка",
-        label: "reading · 68ch",
+        label: "reading · 40rem",
+        kind: "measure",
+      },
+      {
+        name: "--measure-lesson",
+        purpose: "Стабильная колонка урока",
+        label: "lesson · 48rem",
         kind: "measure",
       },
       {

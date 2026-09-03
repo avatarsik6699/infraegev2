@@ -9,6 +9,7 @@ type ImageMediaProps = {
   width?: number | string;
   height?: number | string;
   fit?: "contain" | "cover" | "fill" | "none" | "scale-down";
+  enhanced: boolean;
 };
 
 export const ImageMedia: React.FC<ImageMediaProps> = (props) => {
@@ -44,7 +45,7 @@ export const ImageMedia: React.FC<ImageMediaProps> = (props) => {
         onError={props.imageStatus.handleError}
         className={styles.image}
       />
-      {props.imageStatus.status === "loading" ? (
+      {props.enhanced && props.imageStatus.status === "loading" ? (
         <span className={styles.skeleton} aria-hidden="true" />
       ) : null}
     </>

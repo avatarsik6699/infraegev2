@@ -8,6 +8,11 @@ const rhythmRoles = [
     value: "0.75rem · 12px",
   },
   {
+    label: "Вход в раздел",
+    token: "--rhythm-section-entry",
+    value: "1rem · 16px",
+  },
+  {
     label: "Связанный учебный блок",
     token: "--rhythm-related-block",
     value: "1.5rem · 24px",

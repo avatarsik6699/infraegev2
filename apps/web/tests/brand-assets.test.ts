@@ -9,11 +9,7 @@ const generatorSource = readFileSync(
   "utf8",
 );
 const approvedSource = readFileSync(
-  resolve(
-    process.cwd(),
-    "../..",
-    "docs/artifacts/references/logo_with_transperant_bg.svg",
-  ),
+  resolve(process.cwd(), "../..", "docs/artifacts/references/logo.svg"),
   "utf8",
 );
 
@@ -37,8 +33,8 @@ describe("production brand assets", () => {
     const approvedGradientCount =
       approvedSource.match(/<linearGradient\b/g)?.length ?? 0;
 
-    expect(mark).toContain('viewBox="0 0 2048 1365"');
-    expect(favicon).toContain('viewBox="0 -341.5 2048 2048"');
+    expect(mark).toContain('viewBox="0 0 2048 1639"');
+    expect(favicon).toContain('viewBox="0 -204.5 2048 2048"');
     expect(mark.match(/<path\b/g)).toHaveLength(approvedPathCount);
     expect(favicon.match(/<path\b/g)).toHaveLength(approvedPathCount);
     expect(mark.match(/<linearGradient\b/g)).toHaveLength(
@@ -54,10 +50,10 @@ describe("production brand assets", () => {
         /<image\b|<text\b|<script\b|<filter\b|(?:href|src)=["']https?:\/\//i,
       );
     }
+    expect(favicon).toContain("prefers-color-scheme: dark");
+    expect(favicon).toContain("fill: #fff !important");
 
-    expect(generatorSource).toContain(
-      "docs/artifacts/references/logo_with_transperant_bg.svg",
-    );
+    expect(generatorSource).toContain("docs/artifacts/references/logo.svg");
     expect(existsSync(publicPath("brand", "infraege-mark.svg"))).toBe(false);
   });
 

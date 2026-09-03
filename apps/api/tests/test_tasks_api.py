@@ -42,6 +42,10 @@ NEW_PYTHON_COURSE_LESSON_IDS = {
 }
 
 
+def text_blocks(text: str) -> list[dict[str, object]]:
+    return [{"type": "text", "data": {"markdown": text}}]
+
+
 def new_python_course_task_paths() -> list[Path]:
     content_root = Path(__file__).resolve().parents[3] / "content" / "tasks"
     paths = []
@@ -62,8 +66,8 @@ def content_task(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Iterator[Ta
             "id": "sample-task",
             "topic_ids": ["sample-topic"],
             "title": "Контрольное значение",
-            "statement": "Введите контрольное значение",
-            "hint": "Вспомните ответ на главный вопрос.",
+            "statement": text_blocks("Введите контрольное значение"),
+            "hint": text_blocks("Вспомните ответ на главный вопрос."),
             "theory_links": [{"hash": "sample-theory", "label": "К теории"}],
             "checker_type": "exact_match",
             "answer_variants": ["42", "сорок два"],
@@ -184,71 +188,81 @@ def test_openapi_exposes_discriminated_content_blocks(client: TestClient):
         "callout",
         "code_example",
         "completion_exercise",
-        "learning_visual",
+        "diagram",
+        "image",
+        "attachment",
+        "list",
         "productive_failure_prompt",
+        "table",
         "text",
-        "video_embed",
         "worked_example",
     }
 
 
-def test_learning_visual_contract_accepts_generic_json_and_rejects_legacy_shapes(
+def test_rich_content_contract_accepts_explicit_blocks_and_rejects_legacy_shapes(
     content_task: Task,
 ):
-    common = {
-        "purpose": "Показать последовательность",
-        "accessible_description": "Три связанных этапа процесса",
-        "caption": "Этапы выполняются по порядку",
-    }
-    visual = {
-        "kind": "relationship_map",
-        "data": {
-            "items": [
-                {"id": "first", "label": "Первый этап"},
-                {"id": "second", "label": "Второй этап"},
-            ],
-            "links": [{"source": "first", "target": "second"}],
-        },
-    }
-
     task = content_task.model_dump()
-    task["explanation"] = [
+    task["statement"] = [
+        {"type": "list", "data": {"style": "ordered", "items": ["Шаг 1"]}},
         {
-            "type": "learning_visual",
-            "data": {**common, "representation": "structured", "visual": visual},
-        }
+            "type": "table",
+            "data": {"headers": ["n", "F(n)"], "rows": [["1", "1"]]},
+        },
+        {
+            "type": "image",
+            "data": {
+                "src": "/content/tasks/sample-task/image.png",
+                "alt": "Пример изображения",
+                "caption": "Подпись",
+                "width": 640,
+                "height": 360,
+            },
+        },
+        {
+            "type": "diagram",
+            "data": {
+                "src": "/content/tasks/sample-task/diagram.webp",
+                "alt": "Схема",
+                "caption": "Связи",
+                "width": 640,
+                "height": 360,
+                "purpose": "Показать порядок",
+                "accessible_description": "Первый шаг ведёт ко второму",
+                "pointers": [{"label": "Шаг 1", "description": "Начало"}],
+            },
+        },
+        {
+            "type": "attachment",
+            "data": {
+                "src": "/content/tasks/sample-task/data.txt",
+                "label": "data.txt",
+                "description": "Данные задания",
+                "mime_type": "text/plain",
+                "size_bytes": 12,
+            },
+        },
     ]
-    assert Task.model_validate(task).explanation[0].type == "learning_visual"
+    assert [block.type for block in Task.model_validate(task).statement] == [
+        "list",
+        "table",
+        "image",
+        "diagram",
+        "attachment",
+    ]
 
-    with pytest.raises(ValueError):
-        Task.model_validate({**task, "explanation": [{"type": "figure", "data": {}}]})
-    with pytest.raises(ValueError):
+    for legacy_type in ("learning_visual", "video_embed", "figure"):
+        with pytest.raises(ValueError):
+            Task.model_validate({**task, "statement": [{"type": legacy_type, "data": {}}]})
+
+    with pytest.raises(ValueError, match="header width"):
         Task.model_validate(
             {
                 **task,
-                "explanation": [
+                "statement": [
                     {
-                        "type": "learning_visual",
-                        "data": {
-                            **common,
-                            "representation": "structured",
-                            "visual": {
-                                "kind": "legacy_shape",
-                                "nodes": ["first", "second"],
-                            },
-                        },
-                    }
-                ],
-            }
-        )
-    with pytest.raises(ValueError):
-        Task.model_validate(
-            {
-                **task,
-                "explanation": [
-                    {
-                        "type": "learning_visual",
-                        "data": {**common, "representation": "raster"},
+                        "type": "table",
+                        "data": {"headers": ["a", "b"], "rows": [["1"]]},
                     }
                 ],
             }

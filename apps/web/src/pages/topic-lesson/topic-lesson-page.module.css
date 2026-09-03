@@ -55,7 +55,7 @@
 
 .article {
   display: block;
-  width: min(100%, 84ch);
+  width: min(100%, var(--measure-lesson));
   min-width: 0;
   padding: var(--space-2) var(--lesson-column-gutter) var(--space-5);
 }
@@ -70,7 +70,7 @@
 
 .resultSummary,
 .resultNavigation {
-  max-width: 68ch;
+  max-width: var(--measure-reading);
 }
 
 .resultGrid {

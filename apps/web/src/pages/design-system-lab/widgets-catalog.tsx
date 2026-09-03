@@ -19,7 +19,7 @@ const live = (name: string, note: string): CatalogContract => ({
 
 const widgetContracts = {
   chrome: [
-    live("PublicHeader", "ALCHIMIA-айдентика и версия публичных страниц"),
+    live("PublicHeader", "Компактная ALCHIMIA-айдентика публичных страниц"),
     live("PublicFooter", "Действующая навигация в подвале"),
   ],
   learning: [
@@ -180,7 +180,7 @@ export const WidgetsCatalog: React.FC = () => (
           <ol className={styles.assemblySequence}>
             <li>
               <code>PublicHeader</code>
-              <span>Айдентика и версия</span>
+              <span>Айдентика</span>
             </li>
             <li>
               <code>Page content</code>

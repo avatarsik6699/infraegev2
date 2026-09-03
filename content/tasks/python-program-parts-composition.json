@@ -3,8 +3,22 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-program-parts"],
   "title": "Соберите вычисление из частей",
-  "statement": "`absolute(-3)` возвращает 3, а `square(3)` возвращает 9. Что вернёт `square(absolute(-3))`?",
-  "hint": "Результат внутренней функции передаётся внешней.",
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "`absolute(-3)` возвращает 3, а `square(3)` возвращает 9. Что вернёт `square(absolute(-3))`?"
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Результат внутренней функции передаётся внешней."
+      }
+    }
+  ],
   "theory_links": [
     {
       "hash": "model",

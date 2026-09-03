@@ -2,8 +2,22 @@
   "id": "rekursiya-large-ratio",
   "topic_ids": ["rekursiya"],
   "title": "Сократите отношение",
-  "statement": "F(1) = 2, F(n) = nF(n - 1). Найдите F(100) / F(98).",
-  "hint": "Раскройте только F(100) и F(99), не вычисляя всю последовательность.",
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "F(1) = 2, F(n) = nF(n - 1). Найдите F(100) / F(98)."
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Раскройте только F(100) и F(99), не вычисляя всю последовательность."
+      }
+    }
+  ],
   "theory_links": [
     {
       "hash": "large-arguments-algebraic-shortcut",

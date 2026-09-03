@@ -3,8 +3,22 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-independent-program"],
   "title": "Что означает повреждённый JSON",
-  "statement": "Какое исключение возникнет, если tasks.json существует, но JSON внутри не закончен?",
-  "hint": "Ищите ошибку декодирования в модуле json.",
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Какое исключение возникнет, если tasks.json существует, но JSON внутри не закончен?"
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Ищите ошибку декодирования в модуле json."
+      }
+    }
+  ],
   "theory_links": [
     {
       "hash": "file-recovery",

@@ -11,9 +11,7 @@
   align-items: center;
   justify-content: space-between;
   min-height: 3.5rem;
-  max-width: 96rem;
-  margin-inline: auto;
-  padding: var(--space-1) clamp(1.25rem, 2.6vw, 3rem);
+  padding: var(--space-1) var(--page-chrome-gutter);
 }
 
 .links {

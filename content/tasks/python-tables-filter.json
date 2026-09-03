@@ -3,8 +3,22 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-tables"],
   "title": "Отберите строки",
-  "statement": "Оценки равны `[5, 3, 4, 2]`. Сколько значений удовлетворяют условию `grade >= 4`?",
-  "hint": "Подходят 5 и 4.",
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Оценки равны `[5, 3, 4, 2]`. Сколько значений удовлетворяют условию `grade >= 4`?"
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Подходят 5 и 4."
+      }
+    }
+  ],
   "theory_links": [
     {
       "hash": "model",

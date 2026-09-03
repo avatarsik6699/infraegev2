@@ -3,8 +3,22 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-bruteforce"],
   "title": "Проследите вложенный перебор",
-  "statement": "a и b принимают значения 1, 2, 3. Сколько пар удовлетворяют `a < b`?",
-  "hint": "Перечислите пары (1,2), (1,3), (2,3).",
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "a и b принимают значения 1, 2, 3. Сколько пар удовлетворяют `a < b`?"
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Перечислите пары (1,2), (1,3), (2,3)."
+      }
+    }
+  ],
   "theory_links": [
     {
       "hash": "pitfall",

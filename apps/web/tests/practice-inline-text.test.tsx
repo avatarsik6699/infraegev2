@@ -1,12 +1,12 @@
 import { screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { PracticeTaskStatement } from "~/features/lesson-practice/components/practice-task-statement";
+import { PracticeInlineText } from "~/features/lesson-practice/components/practice-inline-text";
 import { render } from "./render";
 
-describe("PracticeTaskStatement", () => {
+describe("PracticeInlineText", () => {
   it("renders backtick-delimited fragments as inline code", () => {
     const result = render(
-      <PracticeTaskStatement statement="Добавьте `:` после `if score >= 10`." />,
+      <PracticeInlineText text="Добавьте `:` после `if score >= 10`." />,
     );
 
     expect(screen.getByText(":").tagName).toBe("CODE");
@@ -18,7 +18,7 @@ describe("PracticeTaskStatement", () => {
 
   it("keeps an unmatched backtick visible as ordinary text", () => {
     const result = render(
-      <PracticeTaskStatement statement="Проверьте `SyntaxError без пары." />,
+      <PracticeInlineText text="Проверьте `SyntaxError без пары." />,
     );
 
     expect(result.container.querySelector("code")).toBeNull();

@@ -3,8 +3,22 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-errors"],
   "title": "Найдите строку и тип ошибки",
-  "statement": "В traceback указано: `File \"main.py\", line 2`, затем `print(age + 1)` и `TypeError: can only concatenate str (not \"int\") to str`. Запишите номер строки и тип ошибки через пробел.",
-  "hint": "Номер находится после слова line, а тип — до двоеточия в последней строке.",
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "В traceback указано: `File \"main.py\", line 2`, затем `print(age + 1)` и `TypeError: can only concatenate str (not \"int\") to str`. Запишите номер строки и тип ошибки через пробел."
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Номер находится после слова line, а тип — до двоеточия в последней строке."
+      }
+    }
+  ],
   "theory_links": [
     {
       "hash": "read-bottom-up",

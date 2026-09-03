@@ -3,8 +3,22 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-sets"],
   "title": "Проверьте принадлежность",
-  "statement": "Что вернёт выражение `4 in {2, 4, 6}`?",
-  "hint": "Число 4 явно входит в множество.",
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Что вернёт выражение `4 in {2, 4, 6}`?"
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Число 4 явно входит в множество."
+      }
+    }
+  ],
   "theory_links": [
     {
       "hash": "trace",

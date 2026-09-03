@@ -3,10 +3,27 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-comprehensions"],
   "title": "Прочитайте списковое включение",
-  "statement": "Какой список создаст `[number + 1 for number in [2, 4, 6]]`? Запишите числа через пробел.",
-  "hint": "К каждому исходному числу прибавляется единица.",
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Какой список создаст `[number + 1 for number in [2, 4, 6]]`? Запишите числа через пробел."
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "К каждому исходному числу прибавляется единица."
+      }
+    }
+  ],
   "theory_links": [
-    { "hash": "from-loop", "label": "Разверните включение в цикл" }
+    {
+      "hash": "from-loop",
+      "label": "Разверните включение в цикл"
+    }
   ],
   "checker_type": "exact_match",
   "answer_variants": ["3 5 7", "[3, 5, 7]", "3, 5, 7"],

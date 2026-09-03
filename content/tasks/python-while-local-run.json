@@ -3,8 +3,22 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-while"],
   "title": "Проверьте накопление в while",
-  "statement": "Запустите цикл, который начинает с `n = 1`, прибавляет n к total и увеличивает n на 1, пока `n <= 4`. Чему равен total?",
-  "hint": "Складываются числа 1, 2, 3 и 4.",
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Запустите цикл, который начинает с `n = 1`, прибавляет n к total и увеличивает n на 1, пока `n <= 4`. Чему равен total?"
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Складываются числа 1, 2, 3 и 4."
+      }
+    }
+  ],
   "theory_links": [
     {
       "hash": "workflow",

@@ -12,6 +12,7 @@ import {
   courseLessonPublications,
   coursePublications,
 } from "../apps/web/src/entities/course/content/course-publication.mjs";
+import { validateTaskContentAssets } from "./lib/task-content-assets.mjs";
 
 const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const CONTENT_ROOT = join(REPO_ROOT, "content");
@@ -182,13 +183,21 @@ for (const { file, data } of tasks) {
       `${file}: task cannot bridge topic and course lesson ownership`,
     );
   }
-  checkLearningVisualAssets(
-    file,
-    topicOwners.length > 0
-      ? `/content/topics/${topicOwners[0]}/`
-      : `/content/lessons/${courseLessonOwners[0] ?? "unknown"}/`,
-    data.explanation,
-  );
+  for (const [field, blocks] of [
+    ["statement", data.statement],
+    ["hint", data.hint],
+    ["explanation", data.explanation],
+  ]) {
+    errors.push(
+      ...validateTaskContentAssets({
+        file,
+        taskId: data.id,
+        field,
+        blocks,
+        publicRoot: WEB_PUBLIC_ROOT,
+      }),
+    );
+  }
 }
 
 if (errors.length > 0) {

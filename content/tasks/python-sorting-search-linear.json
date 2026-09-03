@@ -3,9 +3,28 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-sorting-search"],
   "title": "Остановите поиск",
-  "statement": "Список id равен `3, 7, 9, 12`. Сколько элементов проверит линейный поиск числа 9, если после совпадения выполняется `break`?",
-  "hint": "Считайте проверки слева направо вместе с найденной.",
-  "theory_links": [{ "hash": "search", "label": "Повторите линейный поиск" }],
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Список id равен `3, 7, 9, 12`. Сколько элементов проверит линейный поиск числа 9, если после совпадения выполняется `break`?"
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Считайте проверки слева направо вместе с найденной."
+      }
+    }
+  ],
+  "theory_links": [
+    {
+      "hash": "search",
+      "label": "Повторите линейный поиск"
+    }
+  ],
   "checker_type": "exact_match",
   "answer_variants": ["3", "три"],
   "numeric_tolerance": null,

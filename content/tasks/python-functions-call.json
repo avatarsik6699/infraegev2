@@ -3,8 +3,22 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-functions"],
   "title": "Проследите вызов функции",
-  "statement": "Функция `double(x)` возвращает `x * 2`. Что вернёт вызов `double(4)`?",
-  "hint": "Аргумент 4 становится значением параметра x.",
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Функция `double(x)` возвращает `x * 2`. Что вернёт вызов `double(4)`?"
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Аргумент 4 становится значением параметра x."
+      }
+    }
+  ],
   "theory_links": [
     {
       "hash": "trace",

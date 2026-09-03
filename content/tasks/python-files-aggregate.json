@@ -3,8 +3,32 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-files"],
   "title": "Сложите строки файла",
-  "statement": "В файле три строки: `2`, `5`, `3`. Программа преобразует каждую в int и складывает. Каков итог?",
-  "hint": "Каждая строка становится числом.",
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Скачайте файл с тремя строками. Программа преобразует каждую строку в int и складывает. Каков итог?"
+      }
+    },
+    {
+      "type": "attachment",
+      "data": {
+        "src": "/content/tasks/python-files-aggregate/numbers.txt",
+        "label": "numbers.txt",
+        "description": "Три целых числа, по одному в строке",
+        "mime_type": "text/plain",
+        "size_bytes": 6
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Каждая строка становится числом."
+      }
+    }
+  ],
   "theory_links": [
     {
       "hash": "pitfall",

@@ -93,6 +93,31 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** AttachmentBlock */
+        AttachmentBlock: {
+            data: components["schemas"]["AttachmentBlockData"];
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "attachment";
+        };
+        /** AttachmentBlockData */
+        AttachmentBlockData: {
+            /** Description */
+            description: string;
+            /** Label */
+            label: string;
+            /**
+             * Mime Type
+             * @enum {string}
+             */
+            mime_type: "text/plain" | "text/csv" | "application/json" | "text/x-python" | "application/zip";
+            /** Size Bytes */
+            size_bytes: number;
+            /** Src */
+            src: string;
+        };
         /** CalloutBlock */
         CalloutBlock: {
             data: components["schemas"]["CalloutBlockData"];
@@ -122,7 +147,7 @@ export interface components {
             /** Correct */
             correct: boolean;
             /** Explanation */
-            explanation: (components["schemas"]["TextBlock"] | components["schemas"]["LearningVisualBlock"] | components["schemas"]["CodeExampleBlock"] | components["schemas"]["WorkedExampleBlock"] | components["schemas"]["CalloutBlock"] | components["schemas"]["VideoEmbedBlock"])[];
+            explanation: (components["schemas"]["TextBlock"] | components["schemas"]["ListBlock"] | components["schemas"]["CodeExampleBlock"] | components["schemas"]["TableBlock"] | components["schemas"]["ImageBlock"] | components["schemas"]["DiagramBlock"] | components["schemas"]["AttachmentBlock"] | components["schemas"]["WorkedExampleBlock"] | components["schemas"]["CalloutBlock"])[];
         };
         /**
          * ClientErrorReport
@@ -160,33 +185,67 @@ export interface components {
             caption?: string | null;
             /** Code */
             code: string;
-            /** Language */
-            language: string;
+            /**
+             * Language
+             * @enum {string}
+             */
+            language: "python" | "text";
+        };
+        /** DiagramBlock */
+        DiagramBlock: {
+            data: components["schemas"]["DiagramBlockData"];
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "diagram";
+        };
+        /** DiagramBlockData */
+        DiagramBlockData: {
+            /** Accessible Description */
+            accessible_description: string;
+            /** Alt */
+            alt: string;
+            /** Caption */
+            caption: string;
+            /** Height */
+            height: number;
+            /** Pointers */
+            pointers: components["schemas"]["DiagramPointer"][];
+            /** Purpose */
+            purpose: string;
+            /** Src */
+            src: string;
+            /** Width */
+            width: number;
+        };
+        /** DiagramPointer */
+        DiagramPointer: {
+            /** Description */
+            description: string;
+            /** Label */
+            label: string;
         };
         /** HTTPValidationError */
         HTTPValidationError: {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
         };
-        /** HybridLearningVisualData */
-        HybridLearningVisualData: {
-            /** Accessible Description */
-            accessible_description: string;
-            asset: components["schemas"]["LearningVisualAsset"];
-            /** Caption */
-            caption: string;
-            /** Purpose */
-            purpose: string;
+        /** ImageBlock */
+        ImageBlock: {
+            data: components["schemas"]["ImageBlockData"];
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
-            representation: "hybrid";
-            visual: components["schemas"]["StructuredLearningVisual"];
+            type: "image";
         };
-        JsonValue: unknown;
-        /** LearningVisualAsset */
-        LearningVisualAsset: {
+        /** ImageBlockData */
+        ImageBlockData: {
+            /** Alt */
+            alt: string;
+            /** Caption */
+            caption: string;
             /** Height */
             height: number;
             /** Src */
@@ -194,54 +253,42 @@ export interface components {
             /** Width */
             width: number;
         };
-        /** LearningVisualBlock */
-        LearningVisualBlock: {
-            /** Data */
-            data: components["schemas"]["RasterLearningVisualData"] | components["schemas"]["StructuredLearningVisualData"] | components["schemas"]["HybridLearningVisualData"];
+        /** ListBlock */
+        ListBlock: {
+            data: components["schemas"]["ListBlockData"];
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
-            type: "learning_visual";
+            type: "list";
         };
-        /** RasterLearningVisualData */
-        RasterLearningVisualData: {
-            /** Accessible Description */
-            accessible_description: string;
-            asset: components["schemas"]["LearningVisualAsset"];
+        /** ListBlockData */
+        ListBlockData: {
+            /** Items */
+            items: string[];
+            /**
+             * Style
+             * @enum {string}
+             */
+            style: "ordered" | "unordered";
+        };
+        /** TableBlock */
+        TableBlock: {
+            data: components["schemas"]["TableBlockData"];
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "table";
+        };
+        /** TableBlockData */
+        TableBlockData: {
             /** Caption */
-            caption: string;
-            /** Purpose */
-            purpose: string;
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            representation: "raster";
-        };
-        /** StructuredLearningVisual */
-        StructuredLearningVisual: {
-            /** Data */
-            data: {
-                [key: string]: components["schemas"]["JsonValue"];
-            };
-            /** Kind */
-            kind: string;
-        };
-        /** StructuredLearningVisualData */
-        StructuredLearningVisualData: {
-            /** Accessible Description */
-            accessible_description: string;
-            /** Caption */
-            caption: string;
-            /** Purpose */
-            purpose: string;
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            representation: "structured";
-            visual: components["schemas"]["StructuredLearningVisual"];
+            caption?: string | null;
+            /** Headers */
+            headers: string[];
+            /** Rows */
+            rows: string[][];
         };
         /** TextBlock */
         TextBlock: {
@@ -269,22 +316,6 @@ export interface components {
             msg: string;
             /** Error Type */
             type: string;
-        };
-        /** VideoEmbedBlock */
-        VideoEmbedBlock: {
-            data: components["schemas"]["VideoEmbedBlockData"];
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            type: "video_embed";
-        };
-        /** VideoEmbedBlockData */
-        VideoEmbedBlockData: {
-            /** Title */
-            title: string;
-            /** Url */
-            url: string;
         };
         /** WorkedExampleBlock */
         WorkedExampleBlock: {

@@ -3,9 +3,28 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-comprehensions"],
   "title": "Соберите словарь",
-  "statement": "Какое значение будет у ключа `\"код\"` в `{word: len(word) for word in [\"я\", \"код\"]}`?",
-  "hint": "Значением становится длина соответствующего слова.",
-  "theory_links": [{ "hash": "kinds", "label": "Сравните формы коллекций" }],
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Какое значение будет у ключа `\"код\"` в `{word: len(word) for word in [\"я\", \"код\"]}`?"
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Значением становится длина соответствующего слова."
+      }
+    }
+  ],
+  "theory_links": [
+    {
+      "hash": "kinds",
+      "label": "Сравните формы коллекций"
+    }
+  ],
   "checker_type": "exact_match",
   "answer_variants": ["3"],
   "numeric_tolerance": null,

@@ -9,8 +9,8 @@
 
 | Field | Value |
 |-------|-------|
-| Document Version | `v2.10` |
-| Date | `2026-09-02` |
+| Document Version | `v2.11` |
+| Date | `2026-09-03` |
 | Architect / Owner | `v.godlevskiy` |
 | Stack | See [docs/STACK.md](./STACK.md) |
 | Domain | Платформа подготовки к ЕГЭ по информатике — самостоятельные темы экзамена и мини-курсы с теорией, визуализацией и практикой |
@@ -181,8 +181,8 @@ CourseLesson принадлежит Course, но не связан с Topic бе
 - [ ] Материал реализует обязательные роли §1.4 — Теория → Практика → Результат — и только
   полезные для темы опциональные роли в каноническом порядке; внутренние блоки соответствуют
   назначению роли, а глубина — сложности темы, не искусственному лимиту длины.
-- [ ] Каждый `learning_visual` объясняет конкретную закономерность, сравнение, процесс, ошибку или
-  этап алгоритма; его ключевые элементы имеют прямую смысловую связь с соседним текстом.
+- [ ] Каждое изображение или diagram объясняет конкретную закономерность, сравнение, процесс,
+  ошибку или этап алгоритма; его ключевые элементы имеют прямую смысловую связь с соседним текстом.
 - [ ] Задачи используют `interaction_type: production`, кроме случаев, где сам формат ЕГЭ требует
   выбора варианта.
 - [ ] `mastery_threshold` осознанно выставлен, не оставлен дефолтом бездумно.
@@ -190,23 +190,26 @@ CourseLesson принадлежит Course, но не связан с Topic бе
   строка «правильный ответ: X».
 - [ ] Помощь доступна без искусственной задержки; правильное решение с подсказкой учитывается в
   прогрессе, а слабый результат вызывает рекомендацию повторения, не штраф или скрытый scoring.
-- [ ] Medium (`raster`, `structured` или `hybrid`) выбран по учебной эффективности, а не удобству
-  реализации; визуал имеет самостоятельный вес в объяснении и не используется как декорация.
+- [ ] Medium (текст, код, таблица, raster image/diagram или authored-файл) выбран по учебной
+  эффективности, а не удобству реализации; визуал имеет самостоятельный вес в объяснении и не
+  используется как декорация.
 
 **Фактическая корректность:**
 - [ ] Математика/логика в `worked_example`/`completion_exercise` проверена человеком вручную, не
   принята на веру из AI-черновика.
 - [ ] Все `answer_variants` каждой задачи реально протестированы через checker локально, включая
   нормализацию (§4: ё/е, запятая/точка, обрезка пробелов) — не только «выглядит правильным».
-- [ ] Точные данные `learning_visual` и итоговое представление проверены человеком в браузере на
+- [ ] Точные данные изображения/diagram и итоговое представление проверены человеком в браузере на
   лишние/пропущенные связи, подписи, числа и смысловые искажения.
 
 **Технически:**
 - [ ] `practiceTaskIds`/`topic_ids`/`course_lesson_ids`
   ссылаются на существующие id — проходит CI-валидацию связей (§3, §7.2).
 - [ ] Заполнены `title`/`summary` для корректных meta-тегов (§8) — не заглушки вида «TODO».
-- [ ] `learning_visual` имеет доступное описание и caption; raster также имеет явные intrinsic
-  dimensions и существующий оптимизированный ассет, а сложные точные данные доступны семантически.
+- [ ] Image/diagram имеет alt и caption; raster также имеет явные intrinsic dimensions и
+  существующий оптимизированный task-owned ассет, а сложные точные данные доступны семантически.
+- [ ] Authored-вложение открывается/скачивается без JavaScript, соответствует allowlist
+  расширений/MIME и объявленному размеру, а его label/description объясняют назначение файла.
 
 **Юридически:**
 - [ ] Текст темы и формулировки задач не являются близким пересказом источника — переформулированы
@@ -327,8 +330,8 @@ Task (content/tasks/{id}.json, practiceTaskIds ссылается сюда)
   topic_ids: [topic_id]                         // владение Topic; пусто для CourseLesson task
   course_lesson_ids: [course_lesson_id]         // владение CourseLesson; пусто для Topic task
   title
-  statement
-  hint
+  statement                                      // ContentBlock[], полное условие задачи
+  hint                                           // ContentBlock[], доступная сразу помощь
   theory_links: [{ hash, label }]                // hash указывает на ConceptBlock.id
   checker_type: exact_match | numeric_tolerance
   answer_variants: [string]                     // все допустимые написания верного ответа (см. §11.1 нормализация)
@@ -344,12 +347,24 @@ Task (content/tasks/{id}.json, practiceTaskIds ссылается сюда)
 подсказка и решение остаются линейно читаемыми; после enhancement раскрываются независимо друг от
 друга по явному действию ученика.
 
-ContentBlock — контракт ответа `POST /api/tasks/{id}/check` (§4), без изменений
-  type: text | learning_visual | code_example | worked_example | completion_exercise
-        | productive_failure_prompt | callout | video_embed
+ContentBlock — единый строгий контракт для `statement`, `hint` и `explanation`, включая ответ
+`POST /api/tasks/{id}/check` (§4)
+  type: text | list | code_example | table | image | diagram | attachment
+        | worked_example | completion_exercise | productive_failure_prompt | callout
   data: <зависит от типа>
-  // learning_visual.data — discriminated representation: raster | structured | hybrid;
-  // общие поля: purpose, accessible_description, caption.
+  // text поддерживает только безопасную inline-нотацию через обратные кавычки;
+  // list явно различает ordered/unordered; code_example допускает python/text;
+  // image/diagram — локальные PNG/WebP/AVIF с alt, caption и intrinsic dimensions;
+  // diagram дополнительно требует purpose, доступное описание и смысловые pointers;
+  // attachment — локальный authored TXT/CSV/JSON/PY/ZIP до 5 MiB с label/description/MIME/size.
+
+Один renderer показывает этот контракт во всех трёх позициях задачи. Произвольные HTML/MDX,
+iframe/video, SVG-вложения, внешние embeds, пользовательские загрузки и новые режимы ответа в
+Task не допускаются. Все task-owned файлы лежат только в
+`apps/web/public/content/tasks/{task-id}/`; валидатор проверяет префикс владельца, traversal,
+query/hash, расширение/MIME, существование, размер и обязательные accessibility-поля. Публичный
+SSR/no-JavaScript вывод содержит весь текст, таблицы, изображения, диаграммы и ссылки на вложения;
+длинный код остаётся полностью доступным даже когда enhanced UI показывает его свёрнуто.
 
 LearningFlowPolicy (продуктовый контракт, не отдельный runtime-объект)
   section_order: theory (ConceptBlock+) -> exam_focus? -> checkpoint? -> practice -> result
@@ -450,9 +465,10 @@ API и аккаунт не используются. Интерактивные 
 Frontend использует локальную доменную UI-систему поверх Base UI и CSS Modules. Активный
 визуальный профиль **ALCHIMIA** сочетает белую поверхность, Cormorant SC для display и wordmark,
 Literata для чтения и IBM Plex Mono для кода, данных и компактного service UI. Поставленный
-архитектором `docs/artifacts/references/logo_with_transperant_bg.svg` является единственным
-художественным источником public identity: крупные и малые delivery-применения сохраняют его
-видимую геометрию без перерисовки и перекрашивания. Структурные линии public chrome,
+архитектором `docs/artifacts/references/logo.svg` является единственным художественным источником
+public identity: крупные и малые delivery-применения сохраняют его видимую геометрию без
+перерисовки; монохромная производная меняется на белую только для явно тёмного контекста.
+Структурные линии public chrome,
 подчёркивания ссылок, recognition-поверхности notation/code, кнопки, badges, обычные reading
 surfaces и их состояния остаются нейтральными; status-цвета и syntax-роли независимы от бренда.
 Иерархию по-прежнему создают два нейтральных уровня текста,
@@ -487,8 +503,8 @@ palette, layout/adaptivity, browser/accessibility behavior, поддержива
 области работает липкое локальное оглавление, а SSR/no-JavaScript сохраняет весь каталог как
 линейный документ.
 Его художественный источник — предоставленный архитектором
-`docs/artifacts/references/logo_with_transperant_bg.svg` и четыре reference-листа из той же папки.
-Прежний `logo.svg` с непрозрачным canvas удалён. Текущий lab-профиль использует белую поверхность,
+`docs/artifacts/references/logo.svg` и четыре reference-листа из той же папки. Прежний
+`logo_with_transperant_bg.svg` удалён. Текущий lab-профиль использует белую поверхность,
 почти чёрный основной текст, один вторичный ахроматический текст и нейтральные структурные линии.
 Atlas `patterns_lines.png` остаётся только документационным референсом и не отображается в активном
 lab. Header, локальная навигация, поверхности, контрактные строки, схемы и интерактивные контролы
@@ -753,7 +769,7 @@ combined-log записи до path/status-family/coarse traffic class. Raw IP, 
 | `M2` — инфраструктурная пауза | complete | Подготовить production-платформу до продолжения продуктового контента | `infraege.ru`, VPS/GHCR deploy, security/release gates, backups и независимый operations stack активны; linked sre-kit Change 20 доказал все шесть Sources end to end |
 | `M3` — учебный flow и публичный запуск | complete | Завершить доменную логику, основные поверхности сайта и проверенный MVP-контент до расширения каталога | Два TopicLesson и все 28 одобренных Python CourseLesson опубликованы в production без Topic-связей; exact deployed SHA совпадает с `main` и `origin/main` |
 | `M4` — финальное измерение и эксплуатация | in progress | Измерять посещаемость прозрачно и обезличенно без опережающей детализации | Consented Umami pageviews/sessions и разрез по путям плюс privacy-safe Nginx aggregates уже закрывают текущую потребность; дальнейшая event-level аналитика отложена, все dashboard surfaces остаются в sre-kit |
-| `M5` — ALCHIMIA learning experience | in progress | Заменить визуальный бренд и улучшить читаемость уроков без потери содержания | Lab-first дизайн-контракт → системная public activation → два редакторских пилота и первая партия → component/widget rollout с legacy cleanup → четыре одобряемые партии оставшихся уроков |
+| `M5` — ALCHIMIA learning experience | in progress | Заменить визуальный бренд и улучшить читаемость уроков без потери содержания | Lab-first дизайн-контракт → системная public activation → редакторские пилоты → component/widget rollout → единый rich-practice contract → четыре одобряемые партии оставшихся уроков |
 | `M6+` (после первых данных, вне MVP) | deferred | Расширение охвата и сообщества поверх работающей бесплатной базы | Второй мини-курс (Excel), аккаунты/синхронизация, обсуждения тем с модерацией, затем платные фичи — без runtime AI до этого момента |
 
 ### 9.1 Current execution sequence
@@ -778,8 +794,9 @@ combined-log записи до path/status-family/coarse traffic class. Raw IP, 
 | `15` | Активировать одобренный ALCHIMIA profile публично | Complete: Change 76 активировал public theme, wordmark, metadata, manifest/favicon/social assets без изменения доменных ids, storage, analytics или infrastructure names |
 | `16` | Проверить редакторский контракт на двух крайних уроках | Complete: Change 77 сохранил факты, последовательность, примеры и задачи в уроках «Первая программа» и «Рекурсивные алгоритмы», добавив плавные входы, переходы и объяснение терминов; оба пилота прошли focused content/browser gates и human approval |
 | `17` | Начать бережную миграцию остальных уроков | Complete: Change 78 обновил первую ограниченную партию базовых Python-уроков по утверждённому редакторскому контракту и прошёл отдельное human approval |
-| `18` | Перенести принятые component/widget-контракты из lab в public | Change 79: полная матрица lab → public consumer, активация одобренных component defaults и page/widget composition, затем удаление только доказанно устаревших fallback-стилей; representative public routes проходят visual, responsive, keyboard, zoom и no-JS evidence |
-| `19` | Завершить бережную миграцию остальных уроков | Changes 80–83: четыре ограниченные редакторские партии по утверждённой траектории; каждая сохраняет уже активированный visual contract, проходит Content Quality Gate и отдельное human approval |
+| `18` | Перенести принятые component/widget-контракты из lab в public | Complete: Change 79 сопоставил lab-контракты с реальными consumers, активировал одобренные defaults/composition, удалил доказанно устаревшие fallback-стили и прошёл representative visual/responsive/keyboard/zoom/no-JS evidence |
+| `19` | Расширить содержимое практических задач | Change 80: единый строгий `ContentBlock[]` для условия, подсказки и решения; SSR-renderer для текста, списков, кода, таблиц, изображений, диаграмм и authored-вложений; asset validation, полная shape-миграция задач и два ограниченных публичных доказательства без новых answer modes |
+| `20` | Завершить бережную миграцию остальных уроков | Changes 81–84: четыре ограниченные редакторские партии по утверждённой траектории; каждая сохраняет активированный visual и rich-practice contracts, проходит Content Quality Gate и отдельное human approval |
 
 Off-site backup остаётся trigger-based улучшением: первый management-host релиз использует
 local-only Restic с явно принятым риском потери вместе с VPS. Key-only SSH, Telegram alerts,

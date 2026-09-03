@@ -3,9 +3,28 @@
   "topic_ids": [],
   "course_lesson_ids": ["python-exceptions"],
   "title": "Назовите ожидаемую ошибку",
-  "statement": "Какое исключение возникнет у `int(\"семь\")`?",
-  "hint": "Такой текст нельзя преобразовать в целое число.",
-  "theory_links": [{ "hash": "expected", "label": "Повторите ошибку ввода" }],
+  "statement": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Какое исключение возникнет у `int(\"семь\")`?"
+      }
+    }
+  ],
+  "hint": [
+    {
+      "type": "text",
+      "data": {
+        "markdown": "Такой текст нельзя преобразовать в целое число."
+      }
+    }
+  ],
+  "theory_links": [
+    {
+      "hash": "expected",
+      "label": "Повторите ошибку ввода"
+    }
+  ],
   "checker_type": "exact_match",
   "answer_variants": ["ValueError", "valueerror"],
   "numeric_tolerance": null,

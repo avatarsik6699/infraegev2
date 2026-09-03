@@ -46,12 +46,13 @@ fallback.
 
 ## Brand Commitments
 
-The public identity is `ALCHIMIA`. Archived Change 75 established it on `/lab/design-system`, and
-Change 76 activated its system values in public chrome and delivery metadata. Change 79 owns the
-remaining public component/widget rollout and evidence-led removal of superseded presentation. The
+The public identity is `ALCHIMIA`. Archived Change 75 established it on `/lab/design-system`,
+Change 76 activated its system values in public chrome and delivery metadata, and Change 79
+completed the public component/widget rollout with evidence-led removal of superseded presentation. The
 architect-supplied
-`docs/artifacts/references/logo_with_transperant_bg.svg` is its sole artistic authority and must
-retain its visible geometry. The approved lab profile stays on white and uses only achromatic text
+`docs/artifacts/references/logo.svg` is its sole artistic authority and must retain its visible
+geometry. Monochrome delivery may invert the mark to white only for explicit dark contexts. The
+approved lab profile stays on white and uses only achromatic text
 and structural roles. Any broader palette, including paper or copper accents, remains a later
 architect-approved decision. Visual character comes from typography and composition, not atlas
 decoration, ornamental frames, extra prose colors, arbitrary type sizes or widespread bold text.
