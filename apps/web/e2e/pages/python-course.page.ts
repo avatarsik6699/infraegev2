@@ -276,11 +276,11 @@ export class PythonCoursePage {
     await openLessonAtTop(this.page, "/courses/python/fayly");
   }
 
-  async openLoopsEditorialLesson(routeSlug: string): Promise<void> {
+  async openEditorialLesson(routeSlug: string): Promise<void> {
     await openLessonAtTop(this.page, `/courses/python/${routeSlug}`);
   }
 
-  async expectLoopsEditorialLesson(options: {
+  async expectEditorialLesson(options: {
     routeSlug: string;
     title: string;
     evidence: string;
@@ -296,13 +296,13 @@ export class PythonCoursePage {
     await expectNoHorizontalOverflow(this.page);
   }
 
-  async expectLoopsEditorialLessonReadableWithoutJavaScript(options: {
+  async expectEditorialLessonReadableWithoutJavaScript(options: {
     routeSlug: string;
     title: string;
     evidence: string;
   }): Promise<void> {
-    await this.openLoopsEditorialLesson(options.routeSlug);
-    await this.expectLoopsEditorialLesson(options);
+    await this.openEditorialLesson(options.routeSlug);
+    await this.expectEditorialLesson(options);
     await expectNoJavaScriptPractice(this.page);
   }
 

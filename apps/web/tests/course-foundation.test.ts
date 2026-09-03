@@ -326,6 +326,95 @@ describe("Python course foundation", () => {
     }
   });
 
+  it("preserves the collections editorial batch structure and tasks", () => {
+    const cases = [
+      {
+        routeSlug: "stroki",
+        sectionIds: ["model", "trace", "split-join", "pitfall", "workflow"],
+        practiceTaskIds: [
+          "python-strings-index",
+          "python-strings-negative-index",
+          "python-strings-slice",
+          "python-strings-fix",
+          "python-strings-local-run",
+        ],
+      },
+      {
+        routeSlug: "spiski",
+        sectionIds: ["model", "trace", "remove", "pitfall", "workflow"],
+        practiceTaskIds: [
+          "python-lists-index",
+          "python-lists-mutation",
+          "python-lists-append",
+          "python-lists-trace",
+          "python-lists-local-run",
+        ],
+      },
+      {
+        routeSlug: "mnozhestva",
+        sectionIds: ["model", "trace", "pitfall", "workflow"],
+        practiceTaskIds: [
+          "python-sets-unique-count",
+          "python-sets-membership",
+          "python-sets-add",
+          "python-sets-order",
+          "python-sets-local-run",
+        ],
+      },
+      {
+        routeSlug: "slovari",
+        sectionIds: ["model", "trace", "records", "pitfall", "workflow"],
+        practiceTaskIds: [
+          "python-dictionaries-lookup",
+          "python-dictionaries-update",
+          "python-dictionaries-membership",
+          "python-dictionaries-get",
+          "python-dictionaries-local-run",
+        ],
+      },
+      {
+        routeSlug: "sortirovka-i-poisk",
+        sectionIds: ["search", "sorted", "key", "choice"],
+        practiceTaskIds: [
+          "python-sorting-search-linear",
+          "python-sorting-search-sorted",
+          "python-sorting-search-in-place",
+          "python-sorting-search-key",
+          "python-sorting-search-local-run",
+        ],
+      },
+      {
+        routeSlug: "vklyucheniya",
+        sectionIds: ["from-loop", "filter", "kinds", "decision"],
+        practiceTaskIds: [
+          "python-comprehensions-list",
+          "python-comprehensions-filter",
+          "python-comprehensions-set",
+          "python-comprehensions-dict",
+          "python-comprehensions-local-run",
+        ],
+      },
+    ] as const;
+
+    for (const lessonCase of cases) {
+      const lesson = findCourseLessonByRouteSlugs(
+        "python",
+        lessonCase.routeSlug,
+      );
+
+      expect(lesson).toBeDefined();
+      expect(lesson?.theory.map((concept) => concept.id)).toEqual(
+        lessonCase.sectionIds,
+      );
+      expect(lesson?.practiceTaskIds).toEqual(lessonCase.practiceTaskIds);
+      expect(lesson).toMatchObject({
+        accessTier: "free",
+        masteryThreshold: 0.8,
+        status: "published",
+      });
+    }
+  });
+
   it("loads the published conditions tasks without checker secrets", async () => {
     const pythonConditionsLesson = findCourseLessonByRouteSlugs(
       "python",

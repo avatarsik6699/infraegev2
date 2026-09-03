@@ -30,6 +30,39 @@ const loopsEditorialLessons = [
   },
 ] as const;
 
+const collectionsEditorialLessons = [
+  {
+    routeSlug: "stroki",
+    title: "Строки: символы, индексы и срезы",
+    evidence: "Номер позиции называют индексом",
+  },
+  {
+    routeSlug: "spiski",
+    title: "Списки: храним и изменяем последовательность",
+    evidence: "Каждое значение внутри списка называют элементом",
+  },
+  {
+    routeSlug: "mnozhestva",
+    title: "Множества: оставляем уникальные значения",
+    evidence: "коллекция уникальных элементов",
+  },
+  {
+    routeSlug: "slovari",
+    title: "Словари: связываем ключи и значения",
+    evidence: "искать не по позиции, а по осмысленному ключу",
+  },
+  {
+    routeSlug: "sortirovka-i-poisk",
+    title: "Сортировка и поиск в коллекции",
+    evidence: "называют линейным поиском",
+  },
+  {
+    routeSlug: "vklyucheniya",
+    title: "Включения: собираем коллекции коротко",
+    evidence: "Такую запись называют включением",
+  },
+] as const;
+
 for (const lessonIndex of Array.from({ length: 28 }, (_, index) => index)) {
   test(`Python curriculum lesson ${lessonIndex + 1} is public and SSR-readable`, async ({
     browserSession,
@@ -181,22 +214,50 @@ for (const lesson of loopsEditorialLessons) {
     pythonCoursePage,
   }) => {
     await browserSession.useDesktopViewport();
-    await pythonCoursePage.openLoopsEditorialLesson(lesson.routeSlug);
-    await pythonCoursePage.expectLoopsEditorialLesson(lesson);
+    await pythonCoursePage.openEditorialLesson(lesson.routeSlug);
+    await pythonCoursePage.expectEditorialLesson(lesson);
     await pythonCoursePage.expectKeyboardDisclosures();
     await browserSession.captureViewport(`${lesson.routeSlug}-desktop.png`);
 
     await browserSession.useZoomedDesktopViewport();
-    await pythonCoursePage.expectLoopsEditorialLesson(lesson);
+    await pythonCoursePage.expectEditorialLesson(lesson);
     await browserSession.captureViewport(`${lesson.routeSlug}-zoomed.png`);
 
     await browserSession.useNarrowViewport();
-    await pythonCoursePage.expectLoopsEditorialLesson(lesson);
+    await pythonCoursePage.expectEditorialLesson(lesson);
     await pythonCoursePage.expectMobileReadingOrder();
     await browserSession.captureViewport(`${lesson.routeSlug}-mobile.png`);
     browserSession.expectCleanConsole();
 
-    await noJavaScriptPythonCoursePage.expectLoopsEditorialLessonReadableWithoutJavaScript(
+    await noJavaScriptPythonCoursePage.expectEditorialLessonReadableWithoutJavaScript(
+      lesson,
+    );
+  });
+}
+
+for (const lesson of collectionsEditorialLessons) {
+  test(`${lesson.title} keeps the approved editorial flow across target viewports`, async ({
+    browserSession,
+    noJavaScriptPythonCoursePage,
+    pythonCoursePage,
+  }) => {
+    await browserSession.useDesktopViewport();
+    await pythonCoursePage.openEditorialLesson(lesson.routeSlug);
+    await pythonCoursePage.expectEditorialLesson(lesson);
+    await pythonCoursePage.expectKeyboardDisclosures();
+    await browserSession.captureViewport(`${lesson.routeSlug}-desktop.png`);
+
+    await browserSession.useZoomedDesktopViewport();
+    await pythonCoursePage.expectEditorialLesson(lesson);
+    await browserSession.captureViewport(`${lesson.routeSlug}-zoomed.png`);
+
+    await browserSession.useNarrowViewport();
+    await pythonCoursePage.expectEditorialLesson(lesson);
+    await pythonCoursePage.expectMobileReadingOrder();
+    await browserSession.captureViewport(`${lesson.routeSlug}-mobile.png`);
+    browserSession.expectCleanConsole();
+
+    await noJavaScriptPythonCoursePage.expectEditorialLessonReadableWithoutJavaScript(
       lesson,
     );
   });
