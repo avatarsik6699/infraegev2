@@ -253,8 +253,9 @@ Production использует неизменяемые GHCR-образы с т
 владеет Nginx с TLS, web, API и PostgreSQL; отдельный `infraege-ops` Compose владеет Umami, Beszel
 и их gateways. journald/fail2ban и Restic остаются host-level prerequisites. GitHub Actions выполняет только статические
 и security-проверки — unit/E2E тесты по контракту проекта остаются локальными. Деплой запускается
-вручную для выбранного SHA через защищённое environment `production`, проверяет smoke/readiness и
-откатывает неуспешный релиз.
+вручную для выбранного SHA через GitHub Environment `production` (без required reviewers —
+решение архитектора от 2026-09-04, деплой не подтверждается вручную после dispatch), проверяет
+smoke/readiness и откатывает неуспешный релиз.
 
 Operations-контур принадлежит этому репозиторию, но намеренно остаётся маленьким:
 `ops/observability/compose.yml`, контракт защищённого env, SSH-backed команды
