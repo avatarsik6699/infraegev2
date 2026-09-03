@@ -30,7 +30,7 @@ pitfalls that must be reconsidered rather than copied.
 | Infra | Two Docker Compose projects on one VPS: application Nginx → `web`/`api`/Postgres, plus independently pinned Umami/Beszel operations services; Ubuntu 24.04, systemd, journald, fail2ban, WireGuard, Restic |
 | Package managers | uv (`apps/api`), pnpm workspace (`apps/web`, root) |
 | Formatting | Prettier 3.9.6 exact for supported repository files; Ruff from the API lock for Python; EditorConfig for cross-editor whitespace defaults |
-| CI/CD | GitHub Actions on pinned Ubuntu 24.04 runners: static/security/audit checks without tests; GHCR SHA images with SBOM/provenance; environment-approved serialized SSH deploy with rollback; scheduled uptime/TLS probe |
+| CI/CD | GitHub Actions on pinned Ubuntu 24.04 runners: static/security/audit checks without tests; GHCR SHA images with SBOM/provenance; serialized SSH deploy with rollback triggered by `workflow_dispatch` with an explicit SHA; scheduled uptime/TLS probe. The `production` GitHub Environment has no required reviewers (architect decision, 2026-09-04) — image publish and deploy run unattended once dispatched; `can_admins_bypass` stays the only remaining safety property |
 
 ---
 
