@@ -9,7 +9,7 @@
 | Change | `84` |
 | Slug | `python-algorithms-project-editorial-batch` |
 | Title | Python Algorithms and Final Project Editorial Batch |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/84-python-algorithms-project-editorial-batch` |
 
 ---
