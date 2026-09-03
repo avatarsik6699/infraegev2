@@ -221,15 +221,33 @@ notes through `/work 85 review`; leave an item unchecked until it is re-verified
 
 ## Implementation Notes
 
-- `F9`: applied the `F7` invisible-`::after` hit-area technique to `back-link`, `action-link`
-  (`text` variant only — `default`/`secondary`/`quiet` stayed at real 40px per FRONTEND.md's
-  "ordinary interactive controls" rule), `public-footer`, `analytics` consent link,
+- `F9` (superseded, see below): initially applied the `F7` invisible-`::after` hit-area technique to
+  `back-link`, `action-link` (`text` variant only), `public-footer`, `analytics` consent link,
   `lesson-practice` theory links, `course-overview` `.courseLink`, and `tabs`. Deliberately left
   `course-overview-page.module.css` `.lessonRow` unchanged: it always renders a 2-line title +
-  outcome (`course-overview-module.tsx`), so its `min-height: 2.5rem` is already exceeded by real
-  content and isn't inflating anything — converting it would have been a no-op with added risk.
-  Browser evidence (desktop 1440px, mobile 390px, tabs active-indicator, footer, consent banner)
-  confirmed no regression; no console errors/warnings.
+  outcome, so its `min-height: 2.5rem` is already exceeded by real content. Browser evidence looked
+  clean at the time, but see the `/ship 85 --release` Full Gate note below — this technique was
+  reverted.
+- `/ship 85 --release` Full Gate findings (fixed before release, `6d3e8b0`): the deferred Full Gate
+  ran for the first time across the whole change and found real issues the compact `/work` gate
+  never exercised. (1) `F7`/`F9`'s invisible-`::after` hit-area technique shrinks the *real* element
+  box below 40px; `apps/web/e2e/pages/lesson-page.assertions.ts`
+  (`expectLessonInteractiveTargets`) and `privacy.page.ts` both assert
+  `getBoundingClientRect().height >= 40` directly on the element — a pseudo-element's overflow
+  doesn't count. Reverted all 8 touched components (including `LessonOutline`) back to real
+  `min-height: 2.5rem`; only the safe, non-tested group/section-level gap reductions in
+  `lesson-outline.module.css` (`.groups`, `headingRow`) were kept. (2) Fixed two pre-existing,
+  unrelated bugs the Full Gate exposed for the first time (predate this session):
+  `python-course.page.ts` asserted against a `[data-practice-statement]` selector that never
+  matched the real `data-content-context="statement"` attribute; `topic-lesson.page.ts` still
+  expected the pre-`F10` checkpoint count of 6 instead of 5. (3) Suppressed one reviewed Semgrep
+  false positive (`nosemgrep`) in `lesson-page.assertions.ts` — `new RegExp(route + "$")` where
+  `route` is always a hardcoded test-fixture literal, never external input. (4) The performance
+  budget (`pnpm audit:performance`, LCP ≤2800ms) fails at ~4000–4400ms on `/` and
+  `/ege/16-rekursiya`; confirmed via a baseline run against pre-Change-85 `main` (commit `7150078`)
+  that the *identical* failure (within ~10ms) predates this change entirely — a devbox/Lighthouse
+  environmental limitation, not a code regression. Architect-accepted as a known issue (see
+  `docs/KNOWN_GOTCHAS.md`); Full Gate treated as PASS on that basis and the Release Gate proceeded.
 - `F10`: a precise full-codebase census (30 `*.lesson.tsx`, 145 steps, 58 checkpoint arrays) found
   only 3 adjacent single-item `Checkpoint` pairs — not the ~20-file systemic pattern the earlier
   loose regex scan suggested. Fixed all 3 by moving the first step's item into the second step's
