@@ -27,9 +27,17 @@ export const pythonIteratorsGeneratorsLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
-            Мы много раз перебирали строки, списки и <Notation>range</Notation>.
-            Все они итерируемые: у них можно попросить итератор. Итератор помнит
-            текущую позицию и отдаёт следующее значение по запросу.
+            До сих пор цикл <Notation>for</Notation> сам получал очередной
+            символ, число или элемент списка. Теперь разберём один внутренний
+            шаг этого процесса. Строки, списки и <Notation>range</Notation>{" "}
+            называют итерируемыми объектами: у каждого можно попросить итератор.
+          </Typography.Text>
+          <Typography.Text>
+            Итератор — отдельный помощник, который помнит текущую позицию и
+            отдаёт следующее значение по запросу. Функция{" "}
+            <Notation>iter</Notation>
+            создаёт его, а <Notation>next</Notation> выполняет один такой
+            запрос.
           </Typography.Text>
           <CodeBlock
             code={
@@ -41,7 +49,7 @@ export const pythonIteratorsGeneratorsLesson = defineCourseLesson({
           />
           <Typography.Text>
             Цикл <Notation>for</Notation> делает эти запросы сам и
-            останавливается, когда значения закончились. Обычно ручные{" "}
+            останавливается, когда значения закончились. Поэтому обычно ручные{" "}
             <Notation>iter</Notation> и <Notation>next</Notation> не нужны, но
             эта модель объясняет поведение генераторов и файлов.
           </Typography.Text>
@@ -84,10 +92,11 @@ export const pythonIteratorsGeneratorsLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
-            Функция с <Notation>yield</Notation> не собирает весь результат
-            заранее. При каждом запросе она выполняется до следующего{" "}
-            <Notation>yield</Notation>, отдаёт значение и сохраняет место
-            остановки.
+            Иногда последовательность удобнее создавать постепенно, не собирая
+            все значения в список заранее. Функцию с <Notation>yield</Notation>
+            называют генератором. При каждом запросе она выполняется до
+            следующего <Notation>yield</Notation>, отдаёт одно значение и
+            сохраняет место остановки.
           </Typography.Text>
           <CodeBlock
             code={
@@ -98,7 +107,8 @@ export const pythonIteratorsGeneratorsLesson = defineCourseLesson({
             showLineNumbers
           />
           <Typography.Text>
-            Такой подход полезен, когда значений много или они появляются
+            Такой ленивый способ вычисляет значение только тогда, когда его
+            запросили. Он полезен, если значений много или они появляются
             постепенно. Для небольшого готового набора обычный список часто
             проще.
           </Typography.Text>

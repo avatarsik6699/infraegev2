@@ -415,6 +415,95 @@ describe("Python course foundation", () => {
     }
   });
 
+  it("preserves the functions and files editorial batch structure and tasks", () => {
+    const cases = [
+      {
+        routeSlug: "funktsii",
+        sectionIds: ["model", "trace", "pitfall", "workflow"],
+        practiceTaskIds: [
+          "python-functions-call",
+          "python-functions-parameters",
+          "python-functions-return",
+          "python-functions-fix",
+          "python-functions-local-run",
+        ],
+      },
+      {
+        routeSlug: "chasti-programmy",
+        sectionIds: ["model", "trace", "pitfall", "workflow"],
+        practiceTaskIds: [
+          "python-program-parts-responsibility",
+          "python-program-parts-data-flow",
+          "python-program-parts-composition",
+          "python-program-parts-fix",
+          "python-program-parts-local-run",
+        ],
+      },
+      {
+        routeSlug: "iteratory-i-generatory",
+        sectionIds: ["inside-for", "exhaustion", "generator", "choice"],
+        practiceTaskIds: [
+          "python-iterators-generators-iterable",
+          "python-iterators-generators-next",
+          "python-iterators-generators-exhausted",
+          "python-iterators-generators-yield",
+          "python-iterators-generators-local-run",
+        ],
+      },
+      {
+        routeSlug: "obrabotka-isklyucheniy",
+        sectionIds: ["expected", "specific", "retry", "decision"],
+        practiceTaskIds: [
+          "python-exceptions-value-error",
+          "python-exceptions-specific",
+          "python-exceptions-else",
+          "python-exceptions-loop",
+          "python-exceptions-local-run",
+        ],
+      },
+      {
+        routeSlug: "fayly",
+        sectionIds: ["model", "write", "trace", "pitfall", "workflow"],
+        practiceTaskIds: [
+          "python-files-read-line",
+          "python-files-strip",
+          "python-files-parse",
+          "python-files-aggregate",
+          "python-files-local-run",
+        ],
+      },
+      {
+        routeSlug: "tablitsy",
+        sectionIds: ["model", "trace", "records", "pitfall", "workflow"],
+        practiceTaskIds: [
+          "python-tables-split",
+          "python-tables-columns",
+          "python-tables-filter",
+          "python-tables-aggregate",
+          "python-tables-local-run",
+        ],
+      },
+    ] as const;
+
+    for (const lessonCase of cases) {
+      const lesson = findCourseLessonByRouteSlugs(
+        "python",
+        lessonCase.routeSlug,
+      );
+
+      expect(lesson).toBeDefined();
+      expect(lesson?.theory.map((concept) => concept.id)).toEqual(
+        lessonCase.sectionIds,
+      );
+      expect(lesson?.practiceTaskIds).toEqual(lessonCase.practiceTaskIds);
+      expect(lesson).toMatchObject({
+        accessTier: "free",
+        masteryThreshold: 0.8,
+        status: "published",
+      });
+    }
+  });
+
   it("loads the published conditions tasks without checker secrets", async () => {
     const pythonConditionsLesson = findCourseLessonByRouteSlugs(
       "python",

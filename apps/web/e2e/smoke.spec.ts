@@ -63,6 +63,39 @@ const collectionsEditorialLessons = [
   },
 ] as const;
 
+const functionsFilesEditorialLessons = [
+  {
+    routeSlug: "funktsii",
+    title: "Функции: параметры и возвращаемый результат",
+    evidence: "Такую именованную часть программы называют функцией",
+  },
+  {
+    routeSlug: "chasti-programmy",
+    title: "Разбиваем программу на понятные части",
+    evidence: "называют ответственностью функции",
+  },
+  {
+    routeSlug: "iteratory-i-generatory",
+    title: "Итераторы и генераторы: значения по одному",
+    evidence: "называют итерируемыми объектами",
+  },
+  {
+    routeSlug: "obrabotka-isklyucheniy",
+    title: "Ожидаемые ошибки: try и except",
+    evidence: "называется исключением",
+  },
+  {
+    routeSlug: "fayly",
+    title: "Читаем данные из файла",
+    evidence: "Файл позволяет сохранить их на диске",
+  },
+  {
+    routeSlug: "tablitsy",
+    title: "Обрабатываем строки и таблицы",
+    evidence: "Отдельные значения записи называют полями",
+  },
+] as const;
+
 for (const lessonIndex of Array.from({ length: 28 }, (_, index) => index)) {
   test(`Python curriculum lesson ${lessonIndex + 1} is public and SSR-readable`, async ({
     browserSession,
@@ -236,6 +269,34 @@ for (const lesson of loopsEditorialLessons) {
 }
 
 for (const lesson of collectionsEditorialLessons) {
+  test(`${lesson.title} keeps the approved editorial flow across target viewports`, async ({
+    browserSession,
+    noJavaScriptPythonCoursePage,
+    pythonCoursePage,
+  }) => {
+    await browserSession.useDesktopViewport();
+    await pythonCoursePage.openEditorialLesson(lesson.routeSlug);
+    await pythonCoursePage.expectEditorialLesson(lesson);
+    await pythonCoursePage.expectKeyboardDisclosures();
+    await browserSession.captureViewport(`${lesson.routeSlug}-desktop.png`);
+
+    await browserSession.useZoomedDesktopViewport();
+    await pythonCoursePage.expectEditorialLesson(lesson);
+    await browserSession.captureViewport(`${lesson.routeSlug}-zoomed.png`);
+
+    await browserSession.useNarrowViewport();
+    await pythonCoursePage.expectEditorialLesson(lesson);
+    await pythonCoursePage.expectMobileReadingOrder();
+    await browserSession.captureViewport(`${lesson.routeSlug}-mobile.png`);
+    browserSession.expectCleanConsole();
+
+    await noJavaScriptPythonCoursePage.expectEditorialLessonReadableWithoutJavaScript(
+      lesson,
+    );
+  });
+}
+
+for (const lesson of functionsFilesEditorialLessons) {
   test(`${lesson.title} keeps the approved editorial flow across target viewports`, async ({
     browserSession,
     noJavaScriptPythonCoursePage,

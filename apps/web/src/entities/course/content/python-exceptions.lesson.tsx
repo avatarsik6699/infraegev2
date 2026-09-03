@@ -29,7 +29,9 @@ export const pythonExceptionsLesson = defineCourseLesson({
           <Typography.Text>
             Раньше мы читали traceback, чтобы исправить код. Но пользователь
             действительно может написать слово там, где программа просит число.
-            Код исправен; ему нужен понятный путь восстановления.
+            Код при этом может быть исправен: такая ожидаемая проблема во время
+            выполнения называется исключением, и программе нужен понятный путь
+            восстановления.
           </Typography.Text>
           <CodeBlock
             code={
@@ -41,7 +43,7 @@ export const pythonExceptionsLesson = defineCourseLesson({
           />
           <Typography.Text>
             В блок <Notation>try</Notation> помещена только рискованная
-            операция. В<Notation>except ValueError</Notation> находится
+            операция. В <Notation>except ValueError</Notation> находится
             восстановление именно после неверного преобразования, а{" "}
             <Notation>else</Notation> выполняется после успешного ввода.
           </Typography.Text>
@@ -85,7 +87,8 @@ export const pythonExceptionsLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
-            Если без числа продолжать нельзя, знакомый{" "}
+            Сообщить об ошибке иногда недостаточно: без числа программа всё ещё
+            не может продолжить работу. Тогда знакомый{" "}
             <Notation>while</Notation> повторяет запрос. Успешное преобразование
             завершает цикл через <Notation>break</Notation>.
           </Typography.Text>
