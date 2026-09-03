@@ -115,18 +115,11 @@
 }
 
 .taskTheoryLinks a {
-  position: relative;
   display: inline-flex;
+  min-height: 2.5rem;
   align-items: center;
-  padding: 0.15rem 0;
   color: var(--color-text-soft);
   text-underline-offset: 0.18em;
-}
-
-.taskTheoryLinks a::after {
-  position: absolute;
-  inset: -0.5rem 0;
-  content: "";
 }
 
 .taskTheoryLinks a:hover {

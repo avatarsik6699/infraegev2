@@ -10,8 +10,8 @@
 }
 
 .tab {
-  position: relative;
-  padding: var(--space-0-5) var(--space-1);
+  min-height: 2.5rem;
+  padding: var(--space-1) var(--space-1);
   border: 0;
   border-bottom: 2px solid transparent;
   background: transparent;
@@ -19,12 +19,6 @@
   cursor: pointer;
   font: 500 var(--text-sm) / 1.3 var(--font-ui);
   white-space: nowrap;
-}
-
-.tab::after {
-  position: absolute;
-  inset: -0.4rem 0;
-  content: "";
 }
 
 .tab:hover:not([data-disabled]) {

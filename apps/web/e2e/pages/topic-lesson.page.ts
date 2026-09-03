@@ -44,7 +44,7 @@ export class TopicLessonPage {
         .getByText("Задание " + String(this.config.taskNumber)),
     ).toBeVisible();
     await expect(this.page.locator("[data-article-frame] img")).toHaveCount(0);
-    await expect(this.page.getByLabel("Проверьте себя")).toHaveCount(6);
+    await expect(this.page.getByLabel("Проверьте себя")).toHaveCount(5);
     await expect(
       this.page.getByRole("heading", { level: 2, name: "Прогресс" }),
     ).toBeVisible();

@@ -51,21 +51,14 @@
 }
 
 .privacyLink {
-  position: relative;
   display: inline-flex;
+  min-height: 2.5rem;
   align-items: center;
-  padding: 0.15rem 0;
   color: var(--color-text-soft);
   font-family: var(--font-ui);
   font-size: var(--text-xs);
   text-decoration-line: underline;
   text-underline-offset: 0.2em;
-}
-
-.privacyLink::after {
-  position: absolute;
-  inset: -0.5rem 0;
-  content: "";
 }
 
 .actions {

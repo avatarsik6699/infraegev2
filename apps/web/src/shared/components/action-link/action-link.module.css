@@ -27,22 +27,14 @@
 }
 
 .root[data-hierarchy="text"] {
-  position: relative;
   gap: var(--space-0-5);
   justify-content: flex-start;
-  min-height: 0;
-  padding: 0.15rem 0;
+  padding-inline: 0;
   border-color: transparent;
   background: transparent;
   box-shadow: none;
   color: var(--color-text-soft);
   font-weight: 500;
-}
-
-.root[data-hierarchy="text"]::after {
-  position: absolute;
-  inset: -0.5rem 0;
-  content: "";
 }
 
 .root[data-hierarchy="text"] .label {

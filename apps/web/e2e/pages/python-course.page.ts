@@ -400,14 +400,20 @@ export class PythonCoursePage {
       this.page.getByText("Интерпретатор — программа", { exact: false }),
     ).toBeVisible();
     await expect(
-      this.page.locator('[data-practice-statement] code[data-kind="code"]', {
-        hasText: "if score >= 10",
-      }),
+      this.page.locator(
+        '[data-content-context="statement"] code[data-kind="code"]',
+        {
+          hasText: "if score >= 10",
+        },
+      ),
     ).toHaveCount(1);
     await expect(
-      this.page.locator('[data-practice-statement] code[data-kind="code"]', {
-        hasText: "SyntaxError",
-      }),
+      this.page.locator(
+        '[data-content-context="statement"] code[data-kind="code"]',
+        {
+          hasText: "SyntaxError",
+        },
+      ),
     ).toHaveCount(1);
     await expect(
       this.page.getByRole("heading", { name: "Что теперь понятно" }),

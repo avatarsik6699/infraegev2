@@ -10,7 +10,9 @@ export async function openLessonAtTop(
   route: string,
 ): Promise<void> {
   await page.goto(route);
-  await expect(page).toHaveURL(new RegExp(route + "$"));
+  // `route` is always a hardcoded literal path from Playwright test fixtures, never external or
+  // user-controlled input, so there is no ReDoS surface here.
+  await expect(page).toHaveURL(new RegExp(route + "$")); // nosemgrep: javascript.lang.security.audit.detect-non-literal-regexp.detect-non-literal-regexp
   await expect
     .poll(async () => {
       await page.evaluate(() => {

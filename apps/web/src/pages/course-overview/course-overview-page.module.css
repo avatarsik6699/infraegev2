@@ -72,22 +72,15 @@
 }
 
 .courseLink {
-  position: relative;
   display: inline-flex;
+  min-height: 2.5rem;
   width: fit-content;
   align-items: center;
   margin-top: var(--space-1);
-  padding: 0.15rem 0;
   color: var(--color-text);
   font-family: var(--font-ui);
   font-size: var(--text-sm);
   font-weight: 600;
-}
-
-.courseLink::after {
-  position: absolute;
-  inset: -0.5rem 0;
-  content: "";
 }
 
 .outcomes {

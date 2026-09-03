@@ -348,6 +348,23 @@
 - **Fix**: `lighthouserc.cjs` resolves `chromium.executablePath()` from the web workspace and passes
   it as `collect.chromePath`; keep the dedicated `127.0.0.2:3200` server address as well.
 
+### This WSL devbox fails the LCP performance budget regardless of app code
+
+- **Symptoms**: `pnpm audit:performance` (Full Gate) consistently fails `largest-contentful-paint`
+  (budget `≤2800ms`) on both `/` and `/ege/16-rekursiya`, reporting ~4000–4400ms across repeat runs.
+- **Root cause**: not a code regression. Confirmed by running the identical Full Gate performance
+  step against `main` as of the pre-Change-85 baseline (commit `7150078`, archived Change 84): the
+  same two routes failed with near-identical numbers (within ~10ms) despite zero relevant code
+  differences. `server-response-time` and `network-server-latency` audits are ~0ms in every run, so
+  the gap is not server-side; it tracks Lighthouse's simulated mobile throttling
+  (`cpuSlowdownMultiplier: 4`, slow-4G network) interacting with this specific WSL/Docker-Desktop
+  devbox's real CPU contention, not page weight (`total-byte-weight` ~522 KiB, reasonable) or
+  render-blocking resources.
+- **Status**: architect-accepted as a known devbox limitation (2026-09-03) for this Change
+  85/release. Skipped in Full Gate reporting rather than blocking; not fixed by guessing at
+  unrelated code changes. Re-verify the actual budget from the deployed production environment
+  (or a dedicated CI/Lighthouse runner) rather than trusting this sandbox's absolute LCP numbers.
+
 ### journal-gatewayd tail ranges need both skip and count fields
 
 - **Symptoms**: a bounded first request to `/entries` returns HTTP 400 with `Failed to parse Range
