@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { coursePublications } from "~/entities/course";
 import { lessonPublications } from "~/entities/lesson";
 import { Typography } from "~/shared/components/typography";
+import { PageContainer } from "~/shared/components/page-container";
 import { PublicFooter } from "~/widgets/public-footer";
 import { PublicHeader } from "~/widgets/public-header";
 import styles from "./foundation-page.module.css";
@@ -17,7 +18,11 @@ const publishedCourses = coursePublications.filter(
 export const FoundationPage: React.FC = () => (
   <div className={styles.page}>
     <PublicHeader home />
-    <main className={styles.root} data-foundation-layout>
+    <PageContainer
+      component="main"
+      className={styles.root}
+      data-foundation-layout
+    >
       <section className={styles.intro}>
         <Typography.Title order={1}>
           Подготовка к ЕГЭ по информатике
@@ -93,7 +98,7 @@ export const FoundationPage: React.FC = () => (
           </ul>
         </section>
       </div>
-    </main>
+    </PageContainer>
     <PublicFooter />
   </div>
 );

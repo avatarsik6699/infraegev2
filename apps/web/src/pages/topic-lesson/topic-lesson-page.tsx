@@ -14,6 +14,7 @@ import { LessonOutline } from "~/widgets/lesson-outline";
 import { LessonPracticeFlow } from "~/widgets/lesson-practice-flow";
 import { PublicFooter } from "~/widgets/public-footer";
 import { TopicLessonHeader } from "./components/topic-lesson-header";
+import { TopicLessonProgress } from "./components/topic-lesson-progress";
 import { TopicLessonResult } from "./components/topic-lesson-result";
 import type { TopicLessonPageTypes } from "./topic-lesson-page.types";
 import styles from "./topic-lesson-page.module.css";
@@ -26,9 +27,20 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
     props.lesson.id,
     props.tasks.length,
   );
-  const otherPublishedLessons = lessonPublications.filter(
-    (lesson) => lesson.status === "published" && lesson.id !== props.lesson.id,
+  const publishedLessons = lessonPublications.filter(
+    (lesson) => lesson.status === "published",
   );
+  const currentLessonIndex = publishedLessons.findIndex(
+    (lesson) => lesson.id === props.lesson.id,
+  );
+  const previousLesson =
+    currentLessonIndex > 0
+      ? publishedLessons[currentLessonIndex - 1]
+      : undefined;
+  const nextLesson =
+    currentLessonIndex >= 0
+      ? publishedLessons[currentLessonIndex + 1]
+      : undefined;
   const outline: LessonTypes.OutlineGroup[] = [
     {
       id: "theory",
@@ -65,6 +77,11 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
         <aside className={styles.rail} data-outline-rail>
           <div className={styles.railContents}>
             <LessonOutline groups={outline} />
+            <TopicLessonProgress
+              masteryThreshold={props.lesson.masteryThreshold ?? 0.8}
+              lessonId={props.lesson.id}
+              taskCount={props.tasks.length}
+            />
           </div>
         </aside>
 
@@ -125,8 +142,8 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
             </LessonSectionHeading>
             <TopicLessonResult
               lesson={props.lesson}
-              otherPublishedLessons={otherPublishedLessons}
-              taskCount={props.tasks.length}
+              nextLesson={nextLesson}
+              previousLesson={previousLesson}
             />
           </section>
         </article>

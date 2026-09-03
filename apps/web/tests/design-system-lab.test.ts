@@ -106,7 +106,15 @@ describe("ALCHIMIA design-system lab identity", () => {
     expect(labConstants).not.toContain("--color-accent");
   });
 
-  it("defines three semantic rhythm levels without introducing new surfaces", () => {
+  it("defines four global semantic rhythm levels without introducing new surfaces", () => {
+    const tokensCss = readWorkspaceFile(
+      "apps",
+      "web",
+      "src",
+      "app",
+      "styles",
+      "tokens.css",
+    );
     const labCss = readWorkspaceFile(
       "apps",
       "web",
@@ -133,10 +141,13 @@ describe("ALCHIMIA design-system lab identity", () => {
     );
 
     expect(labConstants).toContain('id: "system-rhythm"');
-    expect(labCss).toContain("--rhythm-content-flow: var(--space-1-5)");
-    expect(labCss).toContain("--rhythm-concept-separation: var(--space-4)");
-    expect(labCss).toContain("--rhythm-section-separation: var(--space-6)");
+    expect(tokensCss).toContain("--rhythm-content-flow: var(--space-1-5)");
+    expect(tokensCss).toContain("--rhythm-related-block: var(--space-3)");
+    expect(tokensCss).toContain("--rhythm-concept-separation: var(--space-5)");
+    expect(tokensCss).toContain("--rhythm-section-separation: var(--space-6)");
+    expect(labCss).not.toMatch(/--rhythm-[\w-]+\s*:/u);
     expect(rhythmSpecimen).toContain('data-rhythm-role="content"');
+    expect(rhythmSpecimen).toContain('data-rhythm-role="related"');
     expect(rhythmSpecimen).toContain('data-rhythm-role="concept"');
     expect(rhythmSpecimen).toContain('data-rhythm-role="section"');
   });
@@ -253,6 +264,84 @@ describe("ALCHIMIA design-system lab identity", () => {
     );
     expect(specimenSource).toContain("data-control-specimen={kind}");
     expect(specimenSource).not.toContain("marker");
+  });
+
+  it("publishes accepted component defaults instead of keeping lab-only aliases", () => {
+    const tokens = readWorkspaceFile(
+      "apps",
+      "web",
+      "src",
+      "app",
+      "styles",
+      "tokens.css",
+    );
+    const labCss = readWorkspaceFile(
+      "apps",
+      "web",
+      "src",
+      "pages",
+      "design-system-lab",
+      "design-system-lab.module.css",
+    );
+    const componentTokens = [
+      "--input-min-height",
+      "--input-placeholder-color",
+      "--accordion-item-border",
+      "--accordion-chevron-open-transform",
+      "--badge-height",
+      "--progress-height",
+      "--progress-indicator-background",
+    ];
+
+    for (const token of componentTokens) {
+      expect(tokens).toContain(`${token}:`);
+      expect(labCss).not.toContain(`${token}:`);
+    }
+    expect(labCss).not.toContain(".page [data-badge]");
+    expect(labCss).not.toContain(".page input");
+  });
+
+  it("maps every accepted catalog contract to the public migration record", () => {
+    const componentCatalog = readWorkspaceFile(
+      "apps",
+      "web",
+      "src",
+      "pages",
+      "design-system-lab",
+      "components-catalog.tsx",
+    );
+    const widgetCatalog = readWorkspaceFile(
+      "apps",
+      "web",
+      "src",
+      "pages",
+      "design-system-lab",
+      "widgets-catalog.tsx",
+    );
+    const matrix = readWorkspaceFile(
+      "docs",
+      "artifacts",
+      "alchimia-public-migration-matrix.md",
+    );
+
+    for (const contract of [
+      ...catalogContractsFrom(componentCatalog),
+      ...catalogContractsFrom(widgetCatalog),
+    ]) {
+      expect(matrix).toContain(`\`${contract}\``);
+    }
+    for (const route of [
+      "/",
+      "/courses/python",
+      "/courses/python/pervaya-programma",
+      "/ege/16-rekursiya",
+      "/privacy",
+      "/removed-route",
+      "/lab/design-system",
+      "/lab/lesson",
+    ]) {
+      expect(matrix).toContain(`\`${route}\``);
+    }
   });
 
   it("renders the refined catalog as visual specimens instead of prose inventories", () => {
@@ -473,6 +562,7 @@ describe("ALCHIMIA design-system lab identity", () => {
       "LessonTheory",
       "LessonPractice",
       "LessonProgress",
+      "ConfirmationDialog",
     ];
     const contextBoundContracts = [
       "AnalyticsConsentControl",

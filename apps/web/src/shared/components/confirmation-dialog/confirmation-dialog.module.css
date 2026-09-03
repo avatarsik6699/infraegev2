@@ -1,0 +1,112 @@
+.trigger {
+  justify-self: start;
+  min-height: 2rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-muted);
+  font-family: var(--font-ui);
+  font-size: var(--text-2xs);
+  font-weight: 500;
+  line-height: 1.4;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 0.22em;
+  cursor: pointer;
+  transition:
+    color var(--motion-duration) var(--motion-easing),
+    text-decoration-color var(--motion-duration) var(--motion-easing);
+}
+
+.trigger:hover {
+  color: var(--color-text-soft);
+  text-decoration-color: currentColor;
+}
+
+.trigger:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+.backdrop {
+  position: fixed;
+  z-index: 20;
+  inset: 0;
+  background: color-mix(in oklch, var(--color-text) 20%, transparent);
+  transition: opacity var(--motion-duration) var(--motion-easing);
+}
+
+.viewport {
+  position: fixed;
+  z-index: 21;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--space-2);
+}
+
+.popup {
+  display: grid;
+  width: min(100%, 28rem);
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--color-rule-strong);
+  border-radius: var(--radius-surface);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-overlay);
+  color: var(--color-text);
+  transition:
+    opacity var(--motion-duration) var(--motion-easing),
+    transform var(--motion-duration) var(--motion-easing);
+}
+
+.backdrop[data-starting-style],
+.backdrop[data-ending-style],
+.popup[data-starting-style],
+.popup[data-ending-style] {
+  opacity: 0;
+}
+
+.popup[data-starting-style],
+.popup[data-ending-style] {
+  transform: translateY(0.25rem) scale(0.99);
+}
+
+.copy {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.title,
+.description {
+  margin: 0;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.description {
+  color: var(--color-text-soft);
+  font-family: var(--font-reading);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  justify-content: flex-end;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trigger,
+  .backdrop,
+  .popup {
+    transition: none;
+  }
+}

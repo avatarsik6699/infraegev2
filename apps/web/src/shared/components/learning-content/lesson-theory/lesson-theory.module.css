@@ -4,22 +4,22 @@
 
 .concepts {
   display: grid;
-  gap: var(--space-4);
+  gap: var(--rhythm-concept-separation);
   min-width: 0;
 }
 
 .concept {
   display: grid;
-  gap: var(--space-2);
+  gap: var(--rhythm-content-flow);
   min-width: 0;
   scroll-margin-top: var(--space-3);
 }
 
-.conceptTitle {
+.conceptTitle.conceptTitle[data-order] {
   margin: 0;
-  font-size: var(--text-lg);
-  line-height: 1.35;
-  letter-spacing: 0;
+  font-size: var(--text-2xl);
+  line-height: 1.18;
+  letter-spacing: -0.02em;
 }
 
 .conceptExplanation {
@@ -27,12 +27,18 @@
   max-width: 68ch;
 }
 
-.conceptExplanation > * {
+.conceptExplanation[data-learning-flow] > * {
   margin-block: 0;
 }
 
-.conceptExplanation > :not(:first-child) {
-  margin-top: var(--space-2);
+.conceptExplanation[data-learning-flow] > :not(:first-child) {
+  margin-top: var(--rhythm-content-flow);
+}
+
+.conceptExplanation[data-learning-flow]
+  > [data-learning-block]:not(:first-child),
+.conceptExplanation[data-learning-flow] > [data-learning-block] + * {
+  margin-top: var(--rhythm-related-block);
 }
 
 .conceptVisual,
@@ -40,16 +46,5 @@
 .conceptMistake,
 .conceptCheckpoint {
   min-width: 0;
-}
-
-.conceptExample,
-.conceptMistake,
-.conceptCheckpoint {
-  margin-top: var(--space-1);
-}
-
-@media (max-width: 52rem) {
-  .concepts {
-    gap: var(--space-2);
-  }
+  margin-top: calc(var(--rhythm-related-block) - var(--rhythm-content-flow));
 }

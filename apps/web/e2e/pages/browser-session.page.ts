@@ -35,6 +35,10 @@ export class BrowserSession {
     await this.page.setViewportSize({ width: 960, height: 683 });
   }
 
+  async useReducedMotion(): Promise<void> {
+    await this.page.emulateMedia({ reducedMotion: "reduce" });
+  }
+
   async captureViewport(filename: string): Promise<void> {
     await this.page.screenshot({
       path: this.testInfo.outputPath(filename),

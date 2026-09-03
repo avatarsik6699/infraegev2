@@ -1,7 +1,7 @@
 .root {
   display: grid;
-  gap: 0.4rem;
-  margin: 0 0 var(--space-2);
+  gap: var(--space-1);
+  margin: 0;
 }
 
 /* "figure": the diagram is the primary content, but the asset itself
@@ -31,12 +31,12 @@
 
 .floatLeft {
   float: left;
-  margin: 0.2rem var(--space-3) var(--space-2) 0;
+  margin: var(--space-0-5) var(--space-3) var(--space-2) 0;
 }
 
 .floatRight {
   float: right;
-  margin: 0.2rem 0 var(--space-2) var(--space-3);
+  margin: var(--space-0-5) 0 var(--space-2) var(--space-3);
 }
 
 @media (max-width: 40rem) {
@@ -145,5 +145,5 @@
    rest. */
 .meta {
   display: grid;
-  gap: 0.2rem;
+  gap: var(--space-0-5);
 }

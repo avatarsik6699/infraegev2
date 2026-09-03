@@ -29,6 +29,7 @@ export async function openLessonAtTop(
 export async function expectKeyboardLessonDisclosures(
   page: Page,
 ): Promise<void> {
+  await expectMigratedLearningControls(page);
   const checkpoint = page
     .getByLabel("Проверьте себя")
     .first()
@@ -63,6 +64,186 @@ export async function expectPublishedLessonDocument(
     `https://infraege.ru${document.canonicalPath}`,
   );
   await expect(page.locator("[data-practice-task]")).toHaveCount(5);
+}
+
+export async function expectMigratedLearningControls(
+  page: Page,
+): Promise<void> {
+  const firstTask = page.locator("[data-practice-task]").first();
+  const input = firstTask.getByRole("textbox", { name: "Ответ" });
+  const hint = firstTask.getByRole("button", { name: "Подсказка" });
+  const progress = page.getByRole("progressbar", {
+    name: "Решённые задачи урока",
+  });
+
+  await expect(input).toHaveCSS("font-size", "14px");
+  await expect(hint.locator("xpath=ancestor::div[@data-index][1]")).toHaveCSS(
+    "border-bottom-width",
+    "1px",
+  );
+  await expect(progress.locator("div").first()).toHaveCSS("height", "6px");
+}
+
+export async function expectDesktopLessonRail(page: Page): Promise<void> {
+  const measurements = await page.evaluate(async () => {
+    const scrollingElement = document.scrollingElement;
+    const initialScrollTop = scrollingElement?.scrollTop ?? window.scrollY;
+    const targetScrollTop = Math.min(
+      1000,
+      Math.max(0, document.documentElement.scrollHeight - window.innerHeight),
+    );
+    window.scrollTo({ behavior: "instant", top: targetScrollTop });
+    await new Promise<void>((resolve) => {
+      requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+    });
+
+    const rail = document.querySelector<HTMLElement>("[data-outline-rail]");
+    const contents = rail?.firstElementChild as HTMLElement | null;
+    const progress = rail?.querySelector<HTMLElement>(
+      "[data-result-progress], [data-course-result-progress]",
+    );
+    const labels = Array.from(
+      rail?.querySelectorAll<HTMLElement>("[data-outline-link-id] > span") ??
+        [],
+    );
+    if (!rail || !contents || !progress || labels.length === 0) {
+      throw new Error("Missing desktop lesson-rail landmarks");
+    }
+
+    const contentsStyle = getComputedStyle(contents);
+    const contentsRect = contents.getBoundingClientRect();
+    const progressRect = progress.getBoundingClientRect();
+    const labelMetrics = labels.map((label) => {
+      const style = getComputedStyle(label);
+      return {
+        height: label.getBoundingClientRect().height,
+        lineClamp: style.getPropertyValue("-webkit-line-clamp"),
+        lineHeight: Number.parseFloat(style.lineHeight),
+        overflow: style.overflow,
+        whiteSpace: style.whiteSpace,
+      };
+    });
+
+    window.scrollTo({ behavior: "instant", top: initialScrollTop });
+    return {
+      contentBottomGap: window.innerHeight - contentsRect.bottom,
+      contentHeight: contentsRect.height,
+      expectedContentHeight: window.innerHeight - 32,
+      position: contentsStyle.position,
+      progressBottomGap: window.innerHeight - progressRect.bottom,
+      labels: labelMetrics,
+    };
+  });
+
+  expect(measurements.position).toBe("sticky");
+  expect(measurements.contentHeight).toBeCloseTo(
+    measurements.expectedContentHeight,
+    0,
+  );
+  expect(measurements.contentBottomGap).toBeCloseTo(16, 0);
+  expect(measurements.progressBottomGap).toBeCloseTo(32, 0);
+  expect(
+    measurements.labels.every(
+      (label) =>
+        label.lineClamp === "2" &&
+        label.overflow === "hidden" &&
+        label.whiteSpace === "normal" &&
+        label.height <= label.lineHeight * 2 + 1,
+    ),
+  ).toBe(true);
+}
+
+export async function expectLessonVerticalRhythm(page: Page): Promise<void> {
+  const rhythm = await page.evaluate(() => {
+    const pixelsForVariable = (name: string) => {
+      const probe = document.createElement("span");
+      probe.style.cssText = `position:absolute;width:var(${name});`;
+      document.body.append(probe);
+      const pixels = Number.parseFloat(getComputedStyle(probe).width);
+      probe.remove();
+      return pixels;
+    };
+    const gapBetween = (first: Element, second: Element) =>
+      second.getBoundingClientRect().top - first.getBoundingClientRect().bottom;
+    const concepts = Array.from(
+      document.querySelectorAll<HTMLElement>("#theory > div > section"),
+    );
+    const firstConcept = concepts[0];
+    const secondConcept = concepts[1];
+    const title = firstConcept?.querySelector(":scope > h3");
+    const explanation = firstConcept?.querySelector(
+      ":scope > [data-learning-flow]",
+    );
+    const theory = document.querySelector<HTMLElement>(
+      "[data-article-frame] > #theory",
+    );
+    const nextSection = theory?.nextElementSibling;
+
+    if (
+      !firstConcept ||
+      !secondConcept ||
+      !title ||
+      !explanation ||
+      !theory ||
+      !nextSection
+    ) {
+      throw new Error("Missing lesson rhythm landmarks");
+    }
+
+    return {
+      contentToken: pixelsForVariable("--rhythm-content-flow"),
+      relatedToken: pixelsForVariable("--rhythm-related-block"),
+      conceptToken: pixelsForVariable("--rhythm-concept-separation"),
+      sectionToken: pixelsForVariable("--rhythm-section-separation"),
+      titleToExplanation: gapBetween(title, explanation),
+      conceptGap: gapBetween(firstConcept, secondConcept),
+      sectionGap: gapBetween(theory, nextSection),
+    };
+  });
+
+  const viewportWidth = page.viewportSize()?.width;
+  const narrow = viewportWidth ? viewportWidth <= 52 * 16 : false;
+  expect(rhythm.contentToken).toBeCloseTo(12, 1);
+  expect(rhythm.relatedToken).toBeCloseTo(24, 1);
+  expect(rhythm.conceptToken).toBeCloseTo(narrow ? 32 : 48, 1);
+  expect(rhythm.sectionToken).toBeCloseTo(narrow ? 48 : 64, 1);
+  expect(rhythm.titleToExplanation).toBeCloseTo(12, 1);
+  expect(rhythm.conceptGap).toBeCloseTo(narrow ? 32 : 48, 1);
+  expect(rhythm.sectionGap).toBeCloseTo(narrow ? 48 : 64, 1);
+}
+
+export async function expectRelatedLearningBlockRhythm(
+  page: Page,
+  calloutTitle: string,
+): Promise<void> {
+  const callout = page.getByLabel(calloutTitle);
+  const concept = callout.locator("xpath=ancestor::section[@id][1]");
+  const example = concept
+    .locator(":scope > [data-learning-block]")
+    .filter({ hasText: "Разберём на примере" })
+    .locator("figure[data-learning-block]");
+  const measurements = await callout.evaluate(
+    (element, exampleElement) => {
+      const previous = element.previousElementSibling;
+      const body = element.querySelector<HTMLElement>(":scope > div > div");
+      if (!previous || !body || !(exampleElement instanceof Element)) {
+        throw new Error("Missing related learning-block landmarks");
+      }
+      const gapBetween = (first: Element, second: Element) =>
+        second.getBoundingClientRect().top -
+        first.getBoundingClientRect().bottom;
+      return {
+        beforeCallout: gapBetween(previous, element),
+        insideCallout: Number.parseFloat(getComputedStyle(body).marginTop),
+        afterCallout: gapBetween(element, exampleElement),
+      };
+    },
+    await example.elementHandle(),
+  );
+
+  expect(measurements.beforeCallout).toBeCloseTo(24, 1);
+  expect(measurements.insideCallout).toBeCloseTo(8, 1);
+  expect(measurements.afterCallout).toBeCloseTo(24, 1);
 }
 
 export async function expectPracticeAnswerJourney(

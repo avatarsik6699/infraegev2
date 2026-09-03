@@ -9,7 +9,7 @@ type Props = {
 
 export const WorkedExample: React.FC<Props> = (props) => {
   return (
-    <figure className={styles.root}>
+    <figure className={styles.root} data-learning-block>
       <figcaption className={styles.eyebrow}>Разберём на примере</figcaption>
       <Typography.Text component="div" className={styles.title}>
         {props.title}

@@ -74,6 +74,9 @@
 
 .railContents {
   composes: stickyLessonRail from "../../shared/styles/patterns.module.css";
+  display: flex;
+  height: calc(100dvh - 2 * var(--space-2));
+  flex-direction: column;
 }
 
 .article {
@@ -89,7 +92,6 @@
 }
 
 .resultSummary,
-.resultProgress,
 .resultNavigation {
   min-width: 0;
   max-width: 68ch;
@@ -101,62 +103,27 @@
   min-width: 0;
 }
 
-.resultNavigation h3,
-.resultNavigation p {
-  margin-block: 0;
-}
-
-.resultNavigation h3 {
-  margin-bottom: var(--space-1);
-  font-size: var(--text-lg);
-  line-height: 1.35;
-}
-
-.resultProgress,
 .resultNavigation {
+}
+
+.resultProgress {
   display: grid;
   gap: var(--space-1-5);
-  padding-top: var(--space-1);
+  margin-top: auto;
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-rule);
 }
 
-.resetFlow,
-.resetConfirmation {
-  display: grid;
-  justify-items: start;
-  gap: var(--space-1);
-}
-
-.resetConfirmation {
-  composes: resetConfirmation from "../../shared/styles/patterns.module.css";
-}
-
-.resetConfirmation p {
-  margin: 0;
-}
-
-.resetActions {
+.resultLinks {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-1);
-}
-
-.courseLink {
-  display: inline-flex;
-  min-height: 2.5rem;
-  width: fit-content;
+  gap: var(--space-1) var(--space-2);
   align-items: center;
-  color: var(--color-text);
-  font-family: var(--font-ui);
-  font-size: var(--text-sm);
-  font-weight: 600;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.2em;
 }
 
-.courseLink:focus-visible {
-  border-radius: var(--radius-control);
-  outline: 2px solid var(--color-focus);
-  outline-offset: 3px;
+.resultLinks a {
+  max-width: 100%;
+  overflow-wrap: anywhere;
 }
 
 @media (max-width: 60rem) {
@@ -178,8 +145,14 @@
 
   .railContents {
     position: static;
+    height: auto;
+    min-height: 0;
     max-height: none;
     overflow: visible;
+  }
+
+  .resultProgress {
+    margin-top: var(--space-3);
   }
 
   .article {

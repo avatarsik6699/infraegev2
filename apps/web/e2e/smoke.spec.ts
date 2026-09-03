@@ -159,6 +159,7 @@ test("the first published Python lesson preserves progress and reset", async ({
   await browserSession.useDesktopViewport();
   await pythonCoursePage.openFirstLesson();
   await pythonCoursePage.expectPublishedLesson();
+  await pythonCoursePage.expectDesktopLessonComposition();
   await pythonCoursePage.expectKeyboardDisclosures();
   await browserSession.captureViewport(
     "python-first-program-published-desktop.png",
@@ -349,6 +350,8 @@ test("the design-system catalog works on desktop and without JavaScript", async 
   await designSystemLabPage.expectCatalogStructure();
   await designSystemLabPage.expectNoHorizontalOverflow();
   await browserSession.captureViewport("design-system-lab-zoomed.png");
+  await browserSession.useReducedMotion();
+  await designSystemLabPage.expectReducedMotion();
   browserSession.expectCleanConsole();
 
   await noJavaScriptDesignSystemLabPage.expectLinearContentWithoutJavaScript();
@@ -362,6 +365,7 @@ test("the published recursion lesson preserves practice and reading state", asyn
   await topicLessonPage.open();
   await topicLessonPage.expectPublishedLesson();
   await topicLessonPage.expectDesktopComposition();
+  await topicLessonPage.expectStableOutlineSelection();
   await browserSession.captureViewport("recursion-lesson-desktop.png");
   await topicLessonPage.expectPracticeSolutions();
   await topicLessonPage.expectProgressClosureJourney();

@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { reportProductEvent } from "~/features/analytics";
+import { PageContainer } from "~/shared/components/page-container";
 import { PublicFooter } from "~/widgets/public-footer";
 import { PublicHeader } from "~/widgets/public-header";
 import { CourseOverviewCurriculum } from "./components/course-overview-curriculum";
@@ -34,7 +35,7 @@ export const CourseOverviewPage: React.FC<CourseOverviewPageTypes.Props> = (
   return (
     <div className={styles.page} data-course-overview-page>
       <PublicHeader />
-      <main className={styles.root}>
+      <PageContainer component="main" className={styles.root}>
         <div className={styles.courseSummary}>
           <CourseOverviewIntro
             course={props.course}
@@ -52,7 +53,7 @@ export const CourseOverviewPage: React.FC<CourseOverviewPageTypes.Props> = (
             modules={props.course.modules}
           />
         </div>
-      </main>
+      </PageContainer>
       <PublicFooter />
     </div>
   );

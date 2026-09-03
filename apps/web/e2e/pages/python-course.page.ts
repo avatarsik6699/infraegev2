@@ -1,6 +1,8 @@
 import { expect, type Page } from "@playwright/test";
 import {
+  expectDesktopLessonRail,
   expectKeyboardLessonDisclosures,
+  expectLessonVerticalRhythm,
   openLessonAtTop,
 } from "./lesson-page.assertions";
 import { expectNoHorizontalOverflow } from "./layout.assertions";
@@ -338,6 +340,17 @@ export class PythonCoursePage {
     await expect(
       this.page.getByRole("heading", { name: "Что вы уже умеете" }),
     ).toHaveCount(0);
+    await expect(
+      this.page.getByRole("heading", { name: "Что дальше" }),
+    ).toHaveCount(0);
+    await expect(
+      this.page.getByRole("link", { name: "Все уроки курса" }),
+    ).toHaveCount(0);
+    await expect(
+      this.page.getByRole("link", {
+        name: "Числа, типы и арифметические выражения",
+      }),
+    ).toHaveAttribute("href", "/courses/python/chisla-i-vyrazheniya");
     await expectNoHorizontalOverflow(this.page);
   }
 
@@ -481,6 +494,7 @@ export class PythonCoursePage {
       canonicalPath: "/courses/python/pervaya-programma",
       title: "Первая программа: ввод, вычисление и вывод",
     });
+    await expectLessonVerticalRhythm(this.page);
     await expect(
       this.page.getByText(
         "Разберём, как Python выполняет команды, где хранит значения, как получает ввод и выводит результат.",
@@ -545,6 +559,10 @@ export class PythonCoursePage {
     await expectNoHorizontalOverflow(this.page);
   }
 
+  async expectDesktopLessonComposition(): Promise<void> {
+    await expectDesktopLessonRail(this.page);
+  }
+
   async expectPracticeAndReset(): Promise<void> {
     await expect(
       this.page.locator("[data-practice-form][data-enhanced]"),
@@ -573,27 +591,33 @@ export class PythonCoursePage {
     const progress = this.page.locator("[data-course-result-progress]");
     await expect(progress.getByText("1 / 5", { exact: true })).toBeVisible();
     await expect(
-      this.page.getByRole("link", { name: "Python с нуля для ЕГЭ" }),
-    ).toHaveAttribute("href", "/courses/python");
+      this.page.getByRole("link", { name: "Все уроки курса" }),
+    ).toHaveCount(0);
     const reset = progress.getByRole("button", {
       name: "Сбросить прогресс урока",
     });
     await reset.focus();
     await reset.press("Enter");
+    const dialog = this.page.getByRole("alertdialog", {
+      name: "Сбросить прогресс?",
+    });
+    await expect(dialog).toBeVisible();
     await expect(
-      progress.getByText("Удалить все принятые ответы в этом уроке?"),
+      dialog.getByText(
+        "Будут удалены решённые задачи и принятые ответы только этого урока.",
+      ),
     ).toBeVisible();
-    const cancel = progress.getByRole("button", { name: "Отмена" });
-    const confirm = progress.getByRole("button", {
-      name: "Удалить ответы",
+    const cancel = dialog.getByRole("button", { name: "Отмена" });
+    const confirm = dialog.getByRole("button", {
+      name: "Сбросить",
       exact: true,
     });
-    await expect(confirm).toBeFocused();
-    await cancel.focus();
+    await expect(cancel).toBeFocused();
     await cancel.press("Enter");
     await expect(reset).toBeFocused();
     await reset.press("Enter");
-    await expect(confirm).toBeFocused();
+    await expect(cancel).toBeFocused();
+    await confirm.focus();
     await confirm.press("Enter");
     await expect(reset).toBeFocused();
     await expect(progress.getByText("0 / 5", { exact: true })).toBeVisible();
@@ -604,6 +628,7 @@ export class PythonCoursePage {
   }
 
   async expectMobileReadingOrder(): Promise<void> {
+    await expectLessonVerticalRhythm(this.page);
     const introComesBeforeOutline = await this.page
       .locator("main")
       .evaluate((main) => {

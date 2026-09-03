@@ -2,10 +2,6 @@
   composes: learningContentRoot from "../../../styles/patterns.module.css";
 }
 
-.eyebrow {
-  composes: learningContentEyebrow from "../../../styles/patterns.module.css";
-}
-
 .title {
   color: var(--color-text);
   font-family: var(--font-reading);

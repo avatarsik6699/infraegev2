@@ -4,18 +4,23 @@ import styles from "./design-system-lab.module.css";
 const rhythmRoles = [
   {
     label: "Поток текста",
-    token: "--space-1-5",
-    value: "0.75rem",
+    token: "--rhythm-content-flow",
+    value: "0.75rem · 12px",
+  },
+  {
+    label: "Связанный учебный блок",
+    token: "--rhythm-related-block",
+    value: "1.5rem · 24px",
   },
   {
     label: "Разделение понятий",
-    token: "--space-4",
-    value: "2rem",
+    token: "--rhythm-concept-separation",
+    value: "3rem / 2rem · 48px / 32px",
   },
   {
     label: "Новый крупный раздел",
-    token: "--space-6",
-    value: "4rem",
+    token: "--rhythm-section-separation",
+    value: "4rem / 3rem · 64px / 48px",
   },
 ] as const;
 
@@ -53,7 +58,7 @@ export const RhythmSpecimen: React.FC = () => (
     <article
       className={styles.rhythmSpecimen}
       data-rhythm-role="section"
-      aria-label="Пример трёх уровней вертикального ритма"
+      aria-label="Пример четырёх уровней вертикального ритма"
     >
       <section className={styles.rhythmMajorGroup}>
         <Typography.Title order={4} className={styles.rhythmMajorHeading}>
@@ -70,6 +75,16 @@ export const RhythmSpecimen: React.FC = () => (
               </Typography.Text>
               <Typography.Text>
                 Следующий абзац продолжает ту же мысль, поэтому остаётся рядом.
+              </Typography.Text>
+            </div>
+            <div className={styles.rhythmRelated} data-rhythm-role="related">
+              <Typography.Text>
+                Связанный учебный блок получает достаточно воздуха, чтобы не
+                сливаться с соседним абзацем.
+              </Typography.Text>
+              <Typography.Text tone="muted">
+                Он остаётся частью той же мысли и не выглядит началом новой
+                подтемы.
               </Typography.Text>
             </div>
           </div>

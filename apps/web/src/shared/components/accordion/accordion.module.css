@@ -1,13 +1,13 @@
 .root {
   display: grid;
-  gap: var(--accordion-gap, var(--space-0-5));
+  gap: var(--accordion-gap);
 }
 
 .item {
   min-width: 0;
   overflow: hidden;
-  border-bottom: var(--accordion-item-border, 0 solid transparent);
-  border-radius: var(--accordion-radius, var(--radius-control));
+  border-bottom: var(--accordion-item-border);
+  border-radius: var(--accordion-radius);
 }
 
 .header {
@@ -19,8 +19,8 @@
   grid-template-columns: minmax(0, 1fr);
   gap: var(--space-1);
   align-items: center;
-  min-height: var(--accordion-trigger-height, 2.5rem);
-  padding: var(--accordion-trigger-padding, var(--space-1) var(--space-0-5));
+  min-height: var(--accordion-trigger-height);
+  padding: var(--accordion-trigger-padding);
   color: var(--color-text);
 }
 
@@ -28,20 +28,17 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) 1.125rem;
   width: 100%;
-  min-height: var(--accordion-trigger-height, 2.5rem);
+  min-height: var(--accordion-trigger-height);
   gap: var(--space-1);
   align-items: center;
-  padding: var(--accordion-trigger-padding, var(--space-1) var(--space-0-5));
+  padding: var(--accordion-trigger-padding);
   border: 0;
   background: transparent;
   color: var(--color-text);
   cursor: pointer;
   font: inherit;
   text-align: left;
-  transition: var(
-    --accordion-trigger-transition,
-    background-color var(--motion-duration) var(--motion-easing)
-  );
+  transition: background-color var(--motion-duration) var(--motion-easing);
 }
 
 .staticHeader[data-has-leading="true"] {
@@ -53,11 +50,11 @@
 }
 
 .trigger:hover:not([data-disabled]) {
-  background: var(--accordion-hover-background, var(--color-surface-quiet));
+  background: var(--accordion-hover-background);
 }
 
 .trigger:hover:not([data-disabled]) .title {
-  text-decoration: var(--accordion-title-hover-decoration, none);
+  text-decoration: var(--accordion-title-hover-decoration);
   text-decoration-thickness: 0.0625rem;
   text-underline-offset: 0.25em;
 }
@@ -84,16 +81,16 @@
   display: block;
   justify-self: end;
   color: var(--color-muted);
-  transition: var(--accordion-chevron-transition, none);
+  transition: var(--accordion-chevron-transition);
 }
 
 .trigger[data-panel-open] .chevron {
-  transform: var(--accordion-chevron-open-transform, none);
+  transform: var(--accordion-chevron-open-transform);
 }
 
 .panel {
   overflow: hidden;
-  transition: var(--accordion-panel-transition, none);
+  transition: var(--accordion-panel-transition);
 }
 
 .panel:not([hidden]) {
@@ -109,18 +106,18 @@
 .content {
   min-height: 0;
   overflow: hidden;
-  padding: var(--accordion-content-padding, 0 var(--space-0-5) var(--space-1));
+  padding: var(--accordion-content-padding);
   color: var(--color-text-soft);
   font-family: var(--font-reading);
   font-size: var(--text-sm);
   line-height: 1.58;
-  transition: var(--accordion-content-transition, none);
+  transition: var(--accordion-content-transition);
 }
 
 .panel[data-starting-style] .content,
 .panel[data-ending-style] .content {
-  transform: var(--accordion-content-collapsed-transform, none);
-  opacity: var(--accordion-content-collapsed-opacity, 1);
+  transform: var(--accordion-content-collapsed-transform);
+  opacity: var(--accordion-content-collapsed-opacity);
 }
 
 .item[data-disabled] {

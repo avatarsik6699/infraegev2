@@ -13,6 +13,7 @@ import { Badge } from "~/shared/components/badge";
 import { Button } from "~/shared/components/button";
 import { Callout } from "~/shared/components/callout";
 import { CodeBlock } from "~/shared/components/code-block";
+import { ConfirmationDialog } from "~/shared/components/confirmation-dialog";
 import { EmptyState } from "~/shared/components/empty-state";
 import { ExternalLink } from "~/shared/components/external-link";
 import { Field } from "~/shared/components/field";
@@ -79,10 +80,11 @@ const componentContracts = {
   ],
   actions: [
     live("Button", "Иерархия, плотность, loading и disabled"),
-    live("ActionLink", "Навигационное действие в двух иерархиях"),
+    live("ActionLink", "Кнопочное или текстовое навигационное действие"),
     live("BackLink", "Возврат с безопасным fallback"),
     live("ExternalLink", "Внешний переход с явным поведением"),
     live("FragmentLink", "Переход к разделу текущей страницы"),
+    live("ConfirmationDialog", "Подтверждение необратимого действия"),
   ],
   input: [
     live("Input", "Самостоятельное поле ввода"),
@@ -110,7 +112,7 @@ const componentContracts = {
     live("LessonIntro", "Заголовок и метаданные урока"),
     live("LessonSectionHeading", "Нумерованный заголовок учебного раздела"),
     live("LessonTheory", "Линейный поток понятий"),
-    live("Mistake", "Ошибочное утверждение и спокойное объяснение"),
+    live("Mistake", "Сравнение ошибочного и правильного рассуждения"),
     live("Procedure", "Последовательность действий"),
     live("WorkedExample", "Пошаговый разбор"),
   ],
@@ -230,7 +232,21 @@ export const ComponentsCatalog: React.FC = () => {
             <ActionLink to="/" hierarchy="quiet">
               Тихая ссылка
             </ActionLink>
+            <ActionLink to="/" hierarchy="text" icon="forward">
+              Следующий урок
+            </ActionLink>
             <BackLink fallbackTo="/">Вернуться</BackLink>
+            {enhanced ? (
+              <span data-component-specimen="ConfirmationDialog">
+                <ConfirmationDialog
+                  triggerLabel="Сбросить пример"
+                  title="Сбросить пример?"
+                  description="Это демонстрационное подтверждение не изменяет данные."
+                  confirmLabel="Сбросить"
+                  onConfirm={() => undefined}
+                />
+              </span>
+            ) : null}
           </div>
           <Typography.Text component="div">
             <ExternalLink href="https://docs.python.org/3/" newTab>

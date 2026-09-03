@@ -264,30 +264,56 @@ describe("lesson design system", () => {
     expect(article).not.toBeNull();
     expect(marginRail).not.toBeNull();
     if (!rail || !article || !marginRail) return;
-    expect(within(rail).queryByRole("progressbar")).toBeNull();
     expect(
-      within(article).getByRole("progressbar", {
+      within(rail).getByRole("progressbar", {
         name: "Решённые задачи урока",
       }),
     ).toBeTruthy();
+    expect(within(article).queryByRole("progressbar")).toBeNull();
     expect(marginRail.children).toHaveLength(0);
     expect(
       screen.queryByRole("heading", { name: "После урока вы сможете" }),
     ).toBeNull();
     expect(
-      screen.getByRole("heading", { level: 3, name: "Прогресс" }),
+      screen.getByRole("heading", { level: 2, name: "Прогресс" }),
     ).toBeTruthy();
+    expect(
+      screen.queryByRole("heading", { name: "Теперь вы умеете" }),
+    ).toBeNull();
+    expect(screen.queryByText("Доступные материалы")).toBeNull();
+    expect(screen.queryByText("Что здесь не так")).toBeNull();
+    expect(screen.queryByText("Как действовать")).toBeNull();
+    expect(document.querySelectorAll("[data-learning-flow]").length).toBe(
+      rekursiyaLesson.theory.length,
+    );
+    expect(
+      screen
+        .getByLabelText("Когда применим этот приём")
+        .hasAttribute("data-learning-block"),
+    ).toBe(true);
+    const mistakeComparisons = screen.getAllByLabelText(
+      "Сравнение ошибочного и правильного рассуждения",
+    );
+    expect(mistakeComparisons).toHaveLength(5);
+    expect(
+      mistakeComparisons.every((comparison) =>
+        comparison.hasAttribute("data-learning-block"),
+      ),
+    ).toBe(true);
+    expect(within(mistakeComparisons[0]).getByText("Неверно")).toBeTruthy();
+    expect(
+      within(mistakeComparisons[0]).getByText("Как правильно"),
+    ).toBeTruthy();
+    expect(mistakeComparisons[0].querySelectorAll("svg")).toHaveLength(2);
     expect(screen.getByText("Вы ещё не решали задания")).toBeTruthy();
     expect(
       screen
         .getByRole("link", {
-          name: "Задание 5 · Преобразование записей чисел",
+          name: "Преобразование записей чисел",
         })
         .getAttribute("href"),
     ).toBe("/ege/5-preobrazovanie-zapisey-chisel");
-    expect(
-      screen.getByRole("link", { name: "Все темы" }).getAttribute("href"),
-    ).toBe("/");
+    expect(screen.queryByRole("link", { name: "Все темы" })).toBeNull();
     expect(
       screen.queryByRole("navigation", { name: "Вернуться к теории" }),
     ).toBeNull();
@@ -398,10 +424,13 @@ describe("lesson design system", () => {
       name: "Сбросить прогресс урока",
     });
     fireEvent.click(reset);
+    expect(
+      screen.getByRole("alertdialog", { name: "Сбросить прогресс?" }),
+    ).toBeTruthy();
     const cancel = screen.getByRole("button", { name: "Отмена" });
     await waitFor(() => expect(document.activeElement).toBe(cancel));
     fireEvent.click(cancel);
-    expect(document.activeElement).toBe(reset);
+    await waitFor(() => expect(document.activeElement).toBe(reset));
     expect(
       (screen.getByRole("textbox", { name: "Ответ" }) as HTMLInputElement)
         .value,
@@ -421,7 +450,7 @@ describe("lesson design system", () => {
     expect(
       screen.getByRole("textbox", { name: "Ответ" }).hasAttribute("disabled"),
     ).toBe(false);
-    expect(document.activeElement).toBe(reset);
+    await waitFor(() => expect(document.activeElement).toBe(reset));
   });
 
   it("keeps one enhanced practice task active without losing draft answers", async () => {

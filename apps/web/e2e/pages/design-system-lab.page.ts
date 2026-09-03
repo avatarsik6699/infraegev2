@@ -229,13 +229,15 @@ export class DesignSystemLabPage {
       };
       return {
         content: gapFor("content"),
+        related: gapFor("related"),
         concept: gapFor("concept"),
         section: gapFor("section"),
       };
     });
     expect(rhythmGaps).toEqual({
       content: "12px",
-      concept: "32px",
+      related: "16px",
+      concept: "48px",
       section: "64px",
     });
 
@@ -310,11 +312,11 @@ export class DesignSystemLabPage {
       "[data-dashboard-panel]:not([hidden])",
     );
     await expect(componentsPanel.locator("[data-contract-name]")).toHaveCount(
-      35,
+      36,
     );
     await expect(
       componentsPanel.locator('[data-contract-status="live"]'),
-    ).toHaveCount(32);
+    ).toHaveCount(33);
     await expect(
       componentsPanel.locator('[data-contract-status="context"]'),
     ).toHaveCount(3);
@@ -325,6 +327,7 @@ export class DesignSystemLabPage {
       "LessonTheory",
       "LessonPractice",
       "LessonProgress",
+      "ConfirmationDialog",
     ]) {
       await expect(
         componentsPanel.locator(`[data-component-specimen="${contract}"]`),
@@ -721,6 +724,28 @@ export class DesignSystemLabPage {
     expect(overflow).toBe(false);
   }
 
+  async expectReducedMotion(): Promise<void> {
+    const dashboardTabs = this.page.getByRole("tablist", {
+      name: "Уровни дизайн-системы",
+    });
+    await dashboardTabs.getByRole("tab", { name: /^Компоненты/ }).click();
+    const trigger = this.page
+      .locator("#components-input [data-enhanced='true'] button")
+      .first();
+    await expect(trigger).toBeVisible();
+    const motion = await trigger.evaluate((element) => {
+      const chevron = element.querySelector("svg");
+      const panelId = element.getAttribute("aria-controls");
+      const panel = panelId ? document.getElementById(panelId) : null;
+      return {
+        chevron: chevron ? getComputedStyle(chevron).transitionDuration : "",
+        panel: panel ? getComputedStyle(panel).transitionDuration : "",
+        trigger: getComputedStyle(element).transitionDuration,
+      };
+    });
+    expect(motion).toEqual({ chevron: "0s", panel: "0s", trigger: "0s" });
+  }
+
   async expectLinearContentWithoutJavaScript(): Promise<void> {
     await this.open();
     await expect(
@@ -734,7 +759,7 @@ export class DesignSystemLabPage {
         "#system-identity, #system-typography, #system-color, #system-surfaces, #system-layout, #system-accessibility, #system-tokens, #system-rhythm, #system-icons, #system-content-language, #components-content, #components-actions, #components-input, #components-feedback, #components-media, #components-learning, #components-features, #widgets-chrome, #widgets-learning, #widgets-flow, #widgets-layout",
       ),
     ).toHaveCount(21);
-    await expect(this.page.locator("[data-rhythm-role]")).toHaveCount(3);
+    await expect(this.page.locator("[data-rhythm-role]")).toHaveCount(4);
     await expect(this.page.locator("[data-surface-role]")).toHaveCount(4);
     await expect(this.page.locator("[data-token-preview]")).toHaveCount(27);
     await expect(this.page.locator("[data-spacing-token-preview]")).toHaveCount(
@@ -746,7 +771,7 @@ export class DesignSystemLabPage {
     await expect(this.page.locator("[data-copy-contract]")).toHaveCount(4);
     await expect(this.page.locator("[data-reference-pattern]")).toHaveCount(0);
     await expect(this.page.locator("[data-control-specimen]")).toHaveCount(7);
-    await expect(this.page.locator("[data-contract-name]")).toHaveCount(39);
+    await expect(this.page.locator("[data-contract-name]")).toHaveCount(40);
     await expect(
       this.page.locator('[data-contract-status="context"]'),
     ).toHaveCount(3);

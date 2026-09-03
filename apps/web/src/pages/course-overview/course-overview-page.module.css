@@ -7,10 +7,7 @@
   grid-template-columns: minmax(0, 0.82fr) minmax(25rem, 1.18fr);
   gap: clamp(var(--space-5), 7vw, 7rem);
   align-content: start;
-  width: min(100%, 80rem);
-  margin-inline: auto;
-  padding: clamp(var(--space-4), 7vw, 6rem)
-    clamp(var(--space-2), 4vw, var(--space-4));
+  padding-block: clamp(var(--space-4), 7vw, 6rem);
 }
 
 .courseSummary,
@@ -72,10 +69,6 @@
 .progress > p {
   margin: 0;
   font-size: var(--text-sm);
-}
-
-.progressBar {
-  --progress-height: 0.22rem;
 }
 
 .courseLink {

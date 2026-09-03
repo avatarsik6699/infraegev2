@@ -15,7 +15,11 @@ type Props = {
 
 export const Checkpoint: React.FC<Props> = (props) => {
   return (
-    <section className={styles.root} aria-label="Проверьте себя">
+    <section
+      className={styles.root}
+      data-learning-block
+      aria-label="Проверьте себя"
+    >
       <div className={styles.heading}>
         <CircleHelp
           className={styles.icon}

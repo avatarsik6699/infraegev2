@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { getCourseLessons } from "~/entities/course";
 import { type LessonTypes } from "~/entities/lesson";
 import {
   Checkpoint,
@@ -13,6 +14,7 @@ import { LessonOutline } from "~/widgets/lesson-outline";
 import { LessonPracticeFlow } from "~/widgets/lesson-practice-flow";
 import { PublicFooter } from "~/widgets/public-footer";
 import { CourseLessonHeader } from "./components/course-lesson-header";
+import { CourseLessonProgress } from "./components/course-lesson-progress";
 import { CourseLessonResult } from "./components/course-lesson-result";
 import type { CourseLessonPageTypes } from "./course-lesson-page.types";
 import styles from "./course-lesson-page.module.css";
@@ -25,6 +27,20 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
     props.lesson.id,
     props.tasks.length,
   );
+  const publishedLessons = getCourseLessons(props.course).filter(
+    (lesson) => lesson.status === "published",
+  );
+  const currentLessonIndex = publishedLessons.findIndex(
+    (lesson) => lesson.id === props.lesson.id,
+  );
+  const previousLesson =
+    currentLessonIndex > 0
+      ? publishedLessons[currentLessonIndex - 1]
+      : undefined;
+  const nextLesson =
+    currentLessonIndex >= 0
+      ? publishedLessons[currentLessonIndex + 1]
+      : undefined;
 
   const outline: LessonTypes.OutlineGroup[] = [
     {
@@ -49,7 +65,7 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
         courseTitle={props.course.title}
         lessonTitle={props.lesson.title}
       />
-      <main className={styles.lesson}>
+      <main className={styles.lesson} data-lesson-frame>
         <LessonIntro
           accessTier={props.lesson.accessTier}
           className={styles.intro}
@@ -60,13 +76,18 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
           title={props.lesson.title}
         />
 
-        <aside className={styles.rail}>
+        <aside className={styles.rail} data-outline-rail>
           <div className={styles.railContents}>
             <LessonOutline groups={outline} />
+            <CourseLessonProgress
+              masteryThreshold={props.lesson.masteryThreshold ?? 0.8}
+              lessonId={props.lesson.id}
+              taskCount={props.tasks.length}
+            />
           </div>
         </aside>
 
-        <article className={styles.article} ref={articleRef}>
+        <article className={styles.article} data-article-frame ref={articleRef}>
           <LessonTheory
             concepts={props.lesson.theory}
             className={styles.section}
@@ -103,7 +124,8 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
             <CourseLessonResult
               course={props.course}
               lesson={props.lesson}
-              taskCount={props.tasks.length}
+              nextLesson={nextLesson}
+              previousLesson={previousLesson}
             />
           </section>
         </article>

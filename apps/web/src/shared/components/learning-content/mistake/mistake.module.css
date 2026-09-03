@@ -1,53 +1,78 @@
 .root {
   display: grid;
-  gap: var(--space-1);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
   margin: 0;
-  padding: var(
-    --learning-alert-padding,
-    var(--space-0-5) var(--space-2) var(--space-0-5) var(--space-2)
-  );
-  border: var(--learning-alert-border, 0 solid transparent);
-  border-left: var(
-    --learning-alert-accent-border,
-    2px solid color-mix(in oklch, var(--color-warning) 55%, var(--color-rule))
-  );
-  border-radius: var(--learning-alert-radius, 0);
-  background: var(--learning-alert-background, transparent);
 }
 
-.heading {
-  composes: learningContentHeading from "../../../styles/patterns.module.css";
+.comparison {
+  display: grid;
+  grid-template-columns: 1rem minmax(0, 1fr);
+  gap: var(--space-1);
+  align-content: start;
+  padding-block: var(--space-0-5);
+}
+
+.comparison + .comparison {
+  padding-left: var(--space-2);
+  border-left: 1px solid var(--color-rule);
+}
+
+.comparison:first-child {
+  padding-right: var(--space-2);
+}
+
+.comparison[data-status="incorrect"] .icon,
+.comparison[data-status="incorrect"] .label {
+  color: var(--color-danger);
+}
+
+.comparison[data-status="correct"] .icon,
+.comparison[data-status="correct"] .label {
+  color: var(--color-success);
 }
 
 .icon {
   display: block;
-  flex: 0 0 auto;
-  width: 1.125rem;
-  height: 1.125rem;
-  color: var(--color-warning);
+  width: 1rem;
+  height: 1rem;
+  margin-top: 0.12rem;
 }
 
-.label,
-.explanationLabel {
+.copy {
+  display: grid;
+  gap: var(--space-0-5);
+  min-width: 0;
+}
+
+.label {
   font-family: var(--font-ui);
-  font-size: var(--text-sm);
+  font-size: var(--text-xs);
   font-weight: 600;
   line-height: 1.4;
 }
 
-.label {
-  color: var(--color-warning);
-}
-
-.explanationLabel {
-  color: var(--color-text-soft);
-}
-
-.claim {
+.content {
   color: var(--color-text);
-  font-weight: 500;
+  font-family: var(--font-reading);
+  font-size: var(--text-sm);
+  line-height: 1.55;
 }
 
-.explanation {
-  color: var(--color-text-soft);
+@media (max-width: 52rem) {
+  .root {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .comparison:first-child {
+    padding-right: 0;
+    padding-bottom: var(--space-1-5);
+  }
+
+  .comparison + .comparison {
+    padding-top: var(--space-1-5);
+    padding-left: 0;
+    border-top: 1px solid var(--color-rule);
+    border-left: 0;
+  }
 }

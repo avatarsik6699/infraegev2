@@ -13,11 +13,12 @@ type Props = {
 
 export const Procedure: React.FC<Props> = (props) => {
   return (
-    <figure className={styles.root}>
-      <figcaption className={styles.eyebrow}>Как действовать</figcaption>
-      <Typography.Text component="div" className={styles.title}>
-        {props.title}
-      </Typography.Text>
+    <figure className={styles.root} data-learning-block>
+      <figcaption>
+        <Typography.Text component="span" className={styles.title}>
+          {props.title}
+        </Typography.Text>
+      </figcaption>
       <ol className={styles.steps}>
         {props.steps.map((step) => (
           <li key={step.label} className={styles.step}>

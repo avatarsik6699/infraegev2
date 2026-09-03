@@ -1,4 +1,4 @@
-import { TriangleAlert } from "lucide-react";
+import { CircleCheck, CircleX } from "lucide-react";
 import { Typography } from "~/shared/components/typography";
 import styles from "./mistake.module.css";
 
@@ -9,27 +9,43 @@ type Props = {
 
 export const Mistake: React.FC<Props> = (props) => {
   return (
-    <aside className={styles.root} aria-label="Частая ошибка">
-      <div className={styles.heading}>
-        <TriangleAlert
+    <aside
+      className={styles.root}
+      data-learning-block
+      aria-label="Сравнение ошибочного и правильного рассуждения"
+    >
+      <div className={styles.comparison} data-status="incorrect">
+        <CircleX
           className={styles.icon}
           aria-hidden="true"
-          size={18}
-          strokeWidth={2}
+          size={16}
+          strokeWidth={1.8}
         />
-        <Typography.Text component="span" className={styles.label}>
-          Частая ошибка
-        </Typography.Text>
+        <div className={styles.copy}>
+          <Typography.Text component="span" className={styles.label}>
+            Неверно
+          </Typography.Text>
+          <Typography.Text component="div" className={styles.content}>
+            {props.claim}
+          </Typography.Text>
+        </div>
       </div>
-      <Typography.Text component="div" className={styles.claim}>
-        {props.claim}
-      </Typography.Text>
-      <Typography.Text component="div" className={styles.explanationLabel}>
-        Что здесь не так
-      </Typography.Text>
-      <Typography.Text component="div" className={styles.explanation}>
-        {props.explanation}
-      </Typography.Text>
+      <div className={styles.comparison} data-status="correct">
+        <CircleCheck
+          className={styles.icon}
+          aria-hidden="true"
+          size={16}
+          strokeWidth={1.8}
+        />
+        <div className={styles.copy}>
+          <Typography.Text component="span" className={styles.label}>
+            Как правильно
+          </Typography.Text>
+          <Typography.Text component="div" className={styles.content}>
+            {props.explanation}
+          </Typography.Text>
+        </div>
+      </div>
     </aside>
   );
 };

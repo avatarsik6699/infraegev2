@@ -3,7 +3,11 @@
 }
 
 .eyebrow {
-  composes: learningContentEyebrow from "../../../styles/patterns.module.css";
+  color: var(--color-text-soft);
+  font-family: var(--font-reading);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  line-height: 1.4;
 }
 
 .title {
@@ -18,8 +22,8 @@
 
 .steps {
   display: grid;
-  gap: 0.6rem;
-  margin: 0.15rem 0 0;
+  gap: var(--space-1);
+  margin: var(--space-0-5) 0 0;
   padding: 0;
   list-style: none;
 }
@@ -28,7 +32,7 @@
   position: relative;
   display: grid;
   grid-template-columns: 1.4rem 1fr;
-  gap: 0.6rem;
+  gap: var(--space-1);
   align-items: start;
 }
 

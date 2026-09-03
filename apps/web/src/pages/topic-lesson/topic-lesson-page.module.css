@@ -48,6 +48,9 @@
 
 .railContents {
   composes: stickyLessonRail from "../../shared/styles/patterns.module.css";
+  display: flex;
+  height: calc(100dvh - 2 * var(--space-2));
+  flex-direction: column;
 }
 
 .article {
@@ -61,25 +64,11 @@
   min-width: 0;
 }
 
-.resultSkills ul {
-  display: grid;
-  gap: var(--space-0-5);
-  padding-left: 1.25rem;
-}
-
-.resultSkills li {
-  color: var(--color-text-soft);
-  font-size: var(--text-sm);
-  line-height: 1.6;
-}
-
 .section {
   composes: lessonSection from "../../shared/styles/patterns.module.css";
 }
 
 .resultSummary,
-.resultSkills,
-.resultProgress,
 .resultNavigation {
   max-width: 68ch;
 }
@@ -91,52 +80,35 @@
 }
 
 .resultSummary h3,
-.resultSkills h3,
-.resultSkills ul,
-.resultNavigation h3,
-.resultNavigation p {
+.resultNavigation {
   margin-block: 0;
 }
 
-.resultSummary h3,
-.resultSkills h3,
-.resultNavigation h3 {
+.resultSummary h3 {
   margin-bottom: var(--space-1);
   font-size: var(--text-lg);
   line-height: 1.35;
   letter-spacing: 0;
 }
 
-.resultProgress,
 .resultNavigation {
-  display: grid;
-  gap: var(--space-1-5);
   min-width: 0;
-  padding-top: var(--space-1);
 }
 
-.resetFlow,
-.resetConfirmation {
+.resultProgress {
   display: grid;
-  justify-items: start;
-  gap: var(--space-1);
-}
-
-.resetConfirmation {
-  composes: resetConfirmation from "../../shared/styles/patterns.module.css";
-}
-
-.resetConfirmation p {
-  max-width: 58ch;
-  margin: 0;
-}
-
-.resetActions {
-  composes: controlsRow from "../../shared/styles/patterns.module.css";
+  min-width: 0;
+  gap: var(--space-1-5);
+  margin-top: auto;
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-rule);
 }
 
 .resultLinks {
-  composes: controlsRow from "../../shared/styles/patterns.module.css";
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-2);
+  align-items: center;
 }
 
 .resultLinks a {
@@ -171,8 +143,14 @@
 
   .railContents {
     position: static;
+    height: auto;
+    min-height: 0;
     max-height: none;
     overflow: visible;
+  }
+
+  .resultProgress {
+    margin-top: var(--space-3);
   }
 }
 

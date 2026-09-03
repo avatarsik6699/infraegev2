@@ -47,16 +47,18 @@ fallback.
 ## Brand Commitments
 
 The public identity is `ALCHIMIA`. Archived Change 75 established it on `/lab/design-system`, and
-Change 76 activates the same approved profile in public chrome and delivery metadata. The
+Change 76 activated its system values in public chrome and delivery metadata. Change 79 owns the
+remaining public component/widget rollout and evidence-led removal of superseded presentation. The
 architect-supplied
 `docs/artifacts/references/logo_with_transperant_bg.svg` is its sole artistic authority and must
 retain its visible geometry. The approved lab profile stays on white and uses only achromatic text
 and structural roles. Any broader palette, including paper or copper accents, remains a later
 architect-approved decision. Visual character comes from typography and composition, not atlas
 decoration, ornamental frames, extra prose colors, arbitrary type sizes or widespread bold text.
-`ALCHIMIA` remains live accessible text beside the mark in a compact reusable header. The public
-activation does not copy the lab dashboard composition; authored lesson language changes only in later
-architect-approved units. Binding rules live in `docs/FRONTEND.md`.
+`ALCHIMIA` remains live accessible text beside the mark in a compact reusable header. Public
+activation does not copy the lab dashboard composition or change domain behavior; authored lesson
+language changes only in separate architect-approved units. Binding rules live in
+`docs/FRONTEND.md`.
 
 ## Evidence on Hand
 

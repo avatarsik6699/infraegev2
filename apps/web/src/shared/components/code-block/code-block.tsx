@@ -34,6 +34,7 @@ export const CodeBlock: React.FC<CodeBlockTypes.Props> = (props) => {
       role="group"
       aria-label={props.label}
       data-code-block-long={isLong || undefined}
+      data-learning-block
     >
       <CodeBlockHeader
         copyLabel={copyLabel}

@@ -1,8 +1,11 @@
 import { expect, type Page } from "@playwright/test";
 import { expectPublicReleaseIdentity } from "./public-header.assertions";
 import {
+  expectDesktopLessonRail,
   expectKeyboardLessonDisclosures,
+  expectLessonVerticalRhythm,
   expectPublishedLessonDocument,
+  expectRelatedLearningBlockRhythm,
   openLessonAtTop,
 } from "./lesson-page.assertions";
 
@@ -42,16 +45,16 @@ export class TopicLessonPage {
     await expect(this.page.locator("[data-article-frame] img")).toHaveCount(0);
     await expect(this.page.getByLabel("Проверьте себя")).toHaveCount(6);
     await expect(
-      this.page.getByRole("heading", { level: 3, name: "Прогресс" }),
+      this.page.getByRole("heading", { level: 2, name: "Прогресс" }),
     ).toBeVisible();
     await expect(
       this.page.getByRole("link", {
-        name: "Задание 16 · Рекурсивные алгоритмы",
+        name: "Предыдущий урок: Рекурсивные алгоритмы",
       }),
     ).toHaveAttribute("href", "/ege/16-rekursiya");
-    await expect(
-      this.page.getByRole("link", { name: "Все темы" }),
-    ).toHaveAttribute("href", "/");
+    await expect(this.page.getByRole("link", { name: "Все темы" })).toHaveCount(
+      0,
+    );
   }
 
   async expectKeyboardHelpDisclosures(): Promise<void> {
@@ -62,6 +65,41 @@ export class TopicLessonPage {
     await solution.press("Enter");
     await expect(solution).toHaveAttribute("aria-expanded", "true");
     await expect(firstTask.getByText(/19₁₀ = 10011₂/)).toBeVisible();
+  }
+
+  async expectStableOutlineSelection(): Promise<void> {
+    const outline = this.page.getByRole("navigation", {
+      name: "Содержание урока",
+    });
+    const childLinks = outline.locator("ol ol [data-outline-link-id]");
+    const readGeometry = () =>
+      childLinks.evaluateAll((links) =>
+        links.map((link) => ({
+          fontWeight: getComputedStyle(link).fontWeight,
+          height: link.getBoundingClientRect().height,
+          whiteSpace: getComputedStyle(link).whiteSpace,
+          width: link.getBoundingClientRect().width,
+        })),
+      );
+
+    const before = await readGeometry();
+    const target = outline.getByRole("link", {
+      name: "Почему это вообще определяет функцию",
+    });
+    await target.click();
+    await expect(target).toHaveAttribute("aria-current", "location");
+    expect(await readGeometry()).toEqual(before);
+    expect(new Set(before.map((item) => item.fontWeight))).toEqual(
+      new Set(["500"]),
+    );
+    expect(new Set(before.map((item) => item.whiteSpace))).toEqual(
+      new Set(["normal"]),
+    );
+    expect(Math.max(...before.map((item) => item.height))).toBeGreaterThan(32);
+    await this.page.evaluate(() => {
+      history.replaceState(null, "", location.pathname);
+      document.scrollingElement?.scrollTo({ top: 0 });
+    });
   }
 
   async expectPublishedNumberRecordLessonReadableWithoutJavaScript(): Promise<void> {
@@ -78,9 +116,9 @@ export class TopicLessonPage {
         "Прогресс хранится только в этом браузере и появится после загрузки страницы.",
       ),
     ).toBeVisible();
-    await expect(
-      this.page.getByRole("link", { name: "Все темы" }),
-    ).toHaveAttribute("href", "/");
+    await expect(this.page.getByRole("link", { name: "Все темы" })).toHaveCount(
+      0,
+    );
     await this.expectNoHorizontalOverflow();
   }
 
@@ -96,6 +134,11 @@ export class TopicLessonPage {
       canonicalPath: "/ege/16-rekursiya",
       title: "Рекурсивные алгоритмы",
     });
+    await expectLessonVerticalRhythm(this.page);
+    await expectRelatedLearningBlockRhythm(
+      this.page,
+      "Когда применим этот приём",
+    );
     await expect(
       this.page.getByRole("link", { name: "Обработка данных" }),
     ).toHaveAttribute("href", "/privacy");
@@ -123,12 +166,44 @@ export class TopicLessonPage {
     await expect(
       this.page.getByRole("heading", { name: "Что получилось" }),
     ).toBeVisible();
+    const hierarchy = await this.page.evaluate(() => {
+      const stage = document.querySelector<HTMLElement>("#theory > h2");
+      const subsection = document.querySelector<HTMLElement>(
+        "#theory section > h3",
+      );
+      if (!stage || !subsection) return null;
+      return {
+        stageColor: getComputedStyle(stage).color,
+        stageSize: Number.parseFloat(getComputedStyle(stage).fontSize),
+        stageTransform: getComputedStyle(stage).textTransform,
+        subsectionColor: getComputedStyle(subsection).color,
+        subsectionSize: Number.parseFloat(
+          getComputedStyle(subsection).fontSize,
+        ),
+      };
+    });
+    expect(hierarchy?.stageTransform).toBe("uppercase");
+    expect(hierarchy?.stageColor).not.toBe(hierarchy?.subsectionColor);
+    expect(hierarchy?.subsectionSize ?? 0).toBeGreaterThan(
+      (hierarchy?.stageSize ?? 0) + 10,
+    );
+    const mistake = this.page
+      .getByLabel("Сравнение ошибочного и правильного рассуждения")
+      .first();
+    await expect(mistake.getByText("Неверно")).toBeVisible();
+    await expect(mistake.getByText("Как правильно")).toBeVisible();
+    await expect(mistake.locator("svg")).toHaveCount(2);
+    await expect(mistake.getByText("Что здесь не так")).toHaveCount(0);
     await expect(
-      this.page.getByRole("heading", { level: 3, name: "Прогресс" }),
+      this.page.getByRole("heading", { name: "Теперь вы умеете" }),
+    ).toHaveCount(0);
+    await expect(this.page.getByText("Доступные материалы")).toHaveCount(0);
+    await expect(
+      this.page.getByRole("heading", { level: 2, name: "Прогресс" }),
     ).toBeVisible();
     await expect(
       this.page.getByRole("link", {
-        name: "Задание 5 · Преобразование записей чисел",
+        name: "Преобразование записей чисел",
       }),
     ).toHaveAttribute("href", "/ege/5-preobrazovanie-zapisey-chisel");
     await expect(
@@ -192,6 +267,15 @@ export class TopicLessonPage {
           articleHasProgress: Boolean(
             article.querySelector('[role="progressbar"]'),
           ),
+          progressLabelSize: rail.querySelector<HTMLElement>(
+            "[data-result-progress] h2",
+          )
+            ? getComputedStyle(
+                rail.querySelector<HTMLElement>(
+                  "[data-result-progress] h2",
+                ) as HTMLElement,
+              ).fontSize
+            : null,
           marginRailChildren: marginRail.childElementCount,
           mistakeLeft: article
             .querySelector<HTMLElement>("[data-concept-mistake]")
@@ -204,12 +288,14 @@ export class TopicLessonPage {
     expect(layout.columns.split(" ")).toHaveLength(3);
     expect(layout.railPosition).toBe("sticky");
     expect(layout.articleDisplay).toBe("block");
-    expect(layout.railHasProgress).toBe(false);
-    expect(layout.articleHasProgress).toBe(true);
+    expect(layout.railHasProgress).toBe(true);
+    expect(layout.articleHasProgress).toBe(false);
+    expect(layout.progressLabelSize).toBe("12px");
     expect(layout.marginRailChildren).toBe(0);
     expect(
       Math.abs((layout.mistakeLeft ?? 0) - (layout.explanationLeft ?? 0)),
     ).toBeLessThan(2);
+    await expectDesktopLessonRail(this.page);
   }
 
   async expectMobileComposition(): Promise<void> {
@@ -444,14 +530,18 @@ export class TopicLessonPage {
     });
     await reset.focus();
     await reset.press("Enter");
-    const cancel = resultProgress.getByRole("button", { name: "Отмена" });
+    const dialog = this.page.getByRole("alertdialog", {
+      name: "Сбросить прогресс?",
+    });
+    await expect(dialog).toBeVisible();
+    const cancel = dialog.getByRole("button", { name: "Отмена" });
     await expect(cancel).toBeFocused();
     await cancel.press("Enter");
     await expect(reset).toBeFocused();
     await expect(resultProgress.getByText("Урок пройден")).toBeVisible();
 
     await reset.press("Enter");
-    const confirm = resultProgress.getByRole("button", {
+    const confirm = this.page.getByRole("alertdialog").getByRole("button", {
       name: "Сбросить",
       exact: true,
     });
@@ -470,7 +560,7 @@ export class TopicLessonPage {
     await this.dismissAnalyticsPrompt();
     await this.page
       .getByRole("link", {
-        name: "Задание 5 · Преобразование записей чисел",
+        name: "Преобразование записей чисел",
       })
       .click();
     await expect(this.page).toHaveURL(
@@ -482,7 +572,11 @@ export class TopicLessonPage {
     await expect(preservedOtherAnswer).toHaveValue("77");
     await expect(preservedOtherAnswer).toBeDisabled();
 
-    await this.page.getByRole("link", { name: "Все темы" }).click();
+    await this.page
+      .getByRole("link", {
+        name: "ALCHIMIA — ЕГЭ информатика, на главную",
+      })
+      .click();
     await expect(this.page).toHaveURL(/\/$/);
     await expect(
       this.page.getByRole("heading", {
@@ -584,12 +678,12 @@ export class TopicLessonPage {
     ).toBeVisible();
     await expect(
       this.page.getByRole("link", {
-        name: "Задание 5 · Преобразование записей чисел",
+        name: "Преобразование записей чисел",
       }),
     ).toHaveAttribute("href", "/ege/5-preobrazovanie-zapisey-chisel");
-    await expect(
-      this.page.getByRole("link", { name: "Все темы" }),
-    ).toHaveAttribute("href", "/");
+    await expect(this.page.getByRole("link", { name: "Все темы" })).toHaveCount(
+      0,
+    );
     await this.expectNoHorizontalOverflow();
   }
 

@@ -139,6 +139,9 @@ export class FoundationPage {
 
   async expectRemovedRouteNotFound(): Promise<void> {
     await this.page.goto("/removed-route");
+    await expectPublicReleaseIdentity(this.page);
+    await expect(this.page.locator("[data-route-state-frame]")).toBeVisible();
+    await expect(this.page.getByRole("contentinfo")).toBeVisible();
     await expect(
       this.page.getByRole("heading", { name: "Страница не найдена" }),
     ).toBeVisible();

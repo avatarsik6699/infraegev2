@@ -128,10 +128,15 @@ app → routes → pages → widgets → features → entities → shared
   hover surface.
 - Topic lessons use a three-column desktop shell: outline, central reading stream and a reserved
   right rail. The right rail may be empty, but central lesson blocks do not move into it merely to
-  fill space. Lesson progress is not shown in the outline or title area until a later product
-  decision gives it a necessary learner-facing role. The outline, central article and their
-  context labels share one compact responsive column gutter so their content edges remain aligned
-  through desktop, intermediate and mobile layouts.
+  fill space. Compact per-lesson progress sits below the table of contents and anchors the bottom
+  of the desktop left rail; on narrow layouts it returns to normal flow immediately after the
+  outline. Its label is a quiet UI caption rather than a content heading. The outline, central
+  article and their context labels share one compact responsive column gutter so their content
+  edges remain aligned through desktop, intermediate and mobile layouts. The outline reserves its
+  scrollbar gutter, keeps link weight stable between states and truncates overlong labels instead
+  of reflowing them when the active item or internal overflow changes. Reset remains a quiet
+  secondary action and uses the shared Base UI alert-dialog boundary so confirmation is modal,
+  keyboard contained and returns focus to its trigger without shifting the rail.
 - Course pages extend the incumbent neutral reading world without reusing Topic semantics. A
   course overview presents audience, outcome, the current course stage and one ordered public plan of
   lesson titles plus observable outcomes without a separate evolving-program disclaimer or date
@@ -143,8 +148,14 @@ app → routes → pages → widgets → features → entities → shared
 - A CourseLesson keeps course context and its local section outline together in one navigation
   rail, with the article as the dominant reading stream. On narrow screens the title and outcome
   precede the ordinary in-flow «Содержание урока» list so a long outline cannot displace the
-  lesson identity from the first viewport. Course navigation resumes at the result rather than
-  competing with local reading navigation throughout the article.
+  lesson identity from the first viewport. Both lesson families end with only the available
+  previous and next lesson links in a compact wrapping row; these are underlined directional links,
+  not button-like actions, a collection-index link or a separately titled materials panel. Course
+  navigation resumes at the result rather than competing with local reading navigation throughout
+  the article. Do not repeat a separate «Теперь вы умеете» outcome list in the result.
+- Numbered lesson-stage headings are quiet navigation landmarks: the section index and uppercase
+  name share one compact, low-contrast UI role. The authored subsection heading below is the stronger
+  reading landmark, but stays within the shared type scale rather than becoming display text.
 - Course progress is a hydration-only enhancement derived from published CourseLesson entries in
   the app-scoped lesson-progress registry; it has no separate store or persistence lifecycle.
   Copy says «освоено N из M доступных уроков» and keeps that state separate from the course stage.
@@ -155,10 +166,22 @@ app → routes → pages → widgets → features → entities → shared
   course-wide reset while the program is still developing.
 - A `Checkpoint` may appear immediately after a `ConceptBlock` that closes a coherent theory
   group. Keep these checks short, sequential in SSR/no-JS, and visually contained; distinguish the
-  group with one question icon, a matching informational heading label and the same compact
-  left-rule weight used by `Mistake`, without adding a card surface or coloring the question text.
+  group with one question icon, a matching informational heading label and one compact neutral
+  left rule, without adding a card surface or coloring the question text.
   A group may contain several independent disclosure questions when the theory cluster warrants
   them. Do not defer all retrieval practice to one block directly before the practice section.
+- `Mistake` presents its authored claim and explanation as a responsive «Неверно» / «Как правильно»
+  comparison on the ordinary reading surface. Error and success colors are reserved for its compact
+  icons and text labels, while the authored body copy remains neutral and the two readings use only
+  a standard neutral divider. Color is always duplicated by the distinct icons and labels; because
+  this is static instructional content rather than a runtime event, it remains an `aside` instead
+  of an alert. `WorkedExample` treats «Разберём на примере» as restrained reading context, not a
+  data-style eyebrow competing with the example title. Lesson layouts own external vertical
+  rhythm: continued prose uses the 12px content-flow role, a related standalone learning block
+  uses 24px, separate concepts use 48px on desktop and 32px on narrow screens, and major lesson
+  sections use 64px on desktop and 48px on narrow screens. Learning components own only their
+  internal geometry and do not introduce outer margins. `Procedure` exposes its specific authored
+  title directly and does not prepend a generic «Как действовать» label.
 - Every practice task exposes separate «Подсказка» and «Решение» disclosures. The solution renders
   the authored structured explanation (prose, ordered reasoning and code where useful) from the
   server-loaded public projection; checker answers and tolerances never enter that projection.
@@ -250,8 +273,8 @@ app → routes → pages → widgets → features → entities → shared
   visual experiments may add semantic `--text-*` tokens but not literal component sizes or
   intermediate variable-font weights.
 - Avoid decorative uppercase, tracked rubrics and miniature labels. Keep classification text in
-  sentence case; uppercase is reserved for compact code/data notation where it materially improves
-  scanning.
+  sentence case; uppercase is reserved for compact code/data notation and the deliberately quiet
+  numbered lesson-stage landmarks where it materially improves scanning.
 - Russian interface text uses real Unicode signs, «ёлочки», a true minus sign in arithmetic and
   non-breaking spaces where a value/unit or short semantic group must not split.
 - Name fields with a concise noun describing the requested value. Avoid filler such as «ваш» or
@@ -281,9 +304,13 @@ app → routes → pages → widgets → features → entities → shared
   the authored curriculum. Humanization never removes intermediate reasoning, examples,
   distinctions or the final synthesis.
 - Archived Change 75 established the approved target profile on `/lab/design-system` and proved
-  its reusable header, theme/token boundary and catalog contracts. Change 76 activates only those
+  its reusable header, theme/token boundary and catalog contracts. Change 76 activated only those
   accepted system-level values and reusable boundaries on public routes without copying the
-  dashboard composition into production.
+  dashboard composition into production. Change 79 owns the remaining public rollout: map every
+  accepted Components/Widgets contract to its real consumer, promote approved defaults through the
+  existing visual dependency direction, reconcile public page and lesson compositions, and remove
+  legacy fallbacks only after browser evidence proves that no consumer still needs them. It must
+  not create a parallel component family or copy catalog chrome into a product route.
 - The supplied `docs/artifacts/references/logo_with_transperant_bg.svg` is the sole artistic
   authority. The obsolete opaque-canvas `logo.svg` is not a fallback. A derivative may repair
   delivery sizing/viewBox behavior, but may not redraw, smooth, recolor or reinterpret visible
@@ -314,12 +341,14 @@ app → routes → pages → widgets → features → entities → shared
   section separators, frames, diagram internals, swatches and interactive controls use standard
   neutral borders; the primary tablist uses only its ordinary active indicator. The atlas remains
   a documentation reference rather than a runtime UI asset.
-- Vertical rhythm has three roles: content flow (`0.75–1rem`), concept separation
-  (`1.75–2.5rem`) and major-section separation (`3.5–6rem`). Responsive rules preserve the
-  hierarchy rather than reducing all three roles to one mobile gap.
+- Vertical rhythm has four semantic roles: content flow (12px), a related standalone learning
+  block (24px), concept separation (48px desktop / 32px narrow) and major-section separation
+  (64px desktop / 48px narrow). The parent lesson layout owns these external relationships;
+  components own only internal geometry. Responsive rules preserve the hierarchy instead of
+  reducing every role to one mobile gap.
 - Lesson composition, responsive outline behavior and authored lesson copy remained outside
-  Change 75 and stay outside Change 76. Their editorial rollout belongs to Changes 77–82 after
-  public activation.
+  Changes 75–76. Change 79 owns visual composition and responsive public-consumer migration without
+  editing authored copy; Changes 77–78 and 80–83 own the separately approved editorial rollout.
 
 ## 7. Fields and validation
 

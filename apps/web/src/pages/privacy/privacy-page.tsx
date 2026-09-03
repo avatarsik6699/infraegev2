@@ -1,5 +1,6 @@
 import { AnalyticsConsentControl } from "~/features/analytics";
 import { ExternalLink } from "~/shared/components/external-link";
+import { PageContainer } from "~/shared/components/page-container";
 import { Typography } from "~/shared/components/typography";
 import { siteConfig } from "~/shared/config/site";
 import { PublicFooter } from "~/widgets/public-footer";
@@ -9,7 +10,7 @@ import styles from "./privacy-page.module.css";
 export const PrivacyPage: React.FC = () => (
   <div className={styles.page}>
     <PublicHeader />
-    <main className={styles.root}>
+    <PageContainer component="main" measure="reading" className={styles.root}>
       <Typography.Title order={1}>
         Обработка персональных данных
       </Typography.Title>
@@ -113,7 +114,7 @@ export const PrivacyPage: React.FC = () => (
           .
         </Typography.Text>
       </Typography.Prose>
-    </main>
+    </PageContainer>
     <PublicFooter />
   </div>
 );

@@ -8,10 +8,7 @@
   gap: clamp(var(--space-5), 7vw, 7rem);
   align-content: start;
   align-items: start;
-  width: min(100%, 80rem);
-  margin-inline: auto;
-  padding: clamp(var(--space-5), 9vw, 7rem)
-    clamp(var(--space-2), 4vw, var(--space-4));
+  padding-block: clamp(var(--space-5), 9vw, 7rem);
 }
 
 .intro {

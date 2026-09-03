@@ -124,7 +124,10 @@ export const Diagram: React.FC<Props> = (props) => {
 
   if (!annotated) {
     return (
-      <figure className={`${styles.root} ${placementClass[placement]}`}>
+      <figure
+        className={`${styles.root} ${placementClass[placement]}`}
+        data-learning-block
+      >
         {image}
         <figcaption>{meta}</figcaption>
       </figure>
@@ -132,7 +135,10 @@ export const Diagram: React.FC<Props> = (props) => {
   }
 
   return (
-    <figure className={`${styles.root} ${placementClass[placement]}`}>
+    <figure
+      className={`${styles.root} ${placementClass[placement]}`}
+      data-learning-block
+    >
       <div className={styles.annotatedLayout} ref={layoutRef}>
         <div className={styles.gutter} data-side="left">
           {leftPointers.map((pointer) => (

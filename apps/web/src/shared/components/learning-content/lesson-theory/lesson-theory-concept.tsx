@@ -17,22 +17,35 @@ export const LessonTheoryConcept: React.FC<LessonTheoryConceptProps> = ({
     <Typography.Prose
       className={styles.conceptExplanation}
       data-concept-explanation
+      data-learning-flow
     >
       {concept.explanation}
     </Typography.Prose>
     {concept.diagram ? (
-      <div className={styles.conceptVisual}>{concept.diagram}</div>
+      <div className={styles.conceptVisual} data-learning-block>
+        {concept.diagram}
+      </div>
     ) : null}
     {concept.workedExample ? (
-      <div className={styles.conceptExample}>{concept.workedExample}</div>
+      <div className={styles.conceptExample} data-learning-block>
+        {concept.workedExample}
+      </div>
     ) : null}
     {concept.mistake ? (
-      <div className={styles.conceptMistake} data-concept-mistake>
+      <div
+        className={styles.conceptMistake}
+        data-concept-mistake
+        data-learning-block
+      >
         {concept.mistake}
       </div>
     ) : null}
     {concept.checkpoint ? (
-      <div className={styles.conceptCheckpoint} data-concept-checkpoint>
+      <div
+        className={styles.conceptCheckpoint}
+        data-concept-checkpoint
+        data-learning-block
+      >
         <Checkpoint items={concept.checkpoint} />
       </div>
     ) : null}

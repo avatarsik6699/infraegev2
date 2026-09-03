@@ -1,17 +1,17 @@
 .root {
   display: inline-flex;
-  min-height: var(--badge-height, 1.5rem);
+  min-height: var(--badge-height);
   gap: var(--space-0-5);
   align-items: center;
   width: fit-content;
   padding: var(--badge-padding, 0.1rem var(--space-1));
   border: 1px solid transparent;
-  border-radius: var(--badge-radius, var(--radius-pill));
+  border-radius: var(--badge-radius);
   background: var(--color-surface-quiet);
   color: var(--color-text-soft);
   font-family: var(--font-data);
   font-size: var(--text-2xs);
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1.2;
   letter-spacing: 0.01em;
 }

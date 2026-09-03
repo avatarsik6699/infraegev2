@@ -274,8 +274,9 @@ export const SystemTokenSpecimen: React.FC = () => (
       </ul>
     </div>
     <Typography.Text className={styles.tokenBoundaryNote}>
-      Component aliases, syntax colors и lab-only размеры остаются в своих
-      владельцах и не раздувают общесистемную витрину.
+      Component defaults живут в общей token-границе, а syntax colors и lab-only
+      размеры остаются у своих владельцев. Здесь показаны только роли, которыми
+      пользуется всё приложение.
     </Typography.Text>
   </section>
 );

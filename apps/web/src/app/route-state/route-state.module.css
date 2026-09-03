@@ -1,3 +1,7 @@
+.page {
+  composes: pageFrame from "../../shared/styles/patterns.module.css";
+}
+
 .pending {
   padding-block: 5rem;
 }

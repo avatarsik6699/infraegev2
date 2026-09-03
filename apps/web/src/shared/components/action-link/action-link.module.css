@@ -26,9 +26,51 @@
   box-shadow: none;
 }
 
+.root[data-hierarchy="text"] {
+  gap: var(--space-0-5);
+  justify-content: flex-start;
+  padding-inline: 0;
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+  color: var(--color-text-soft);
+  font-weight: 500;
+}
+
+.root[data-hierarchy="text"] .label {
+  text-decoration-line: underline;
+  text-decoration-color: var(--color-accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+  transition: text-decoration-color var(--motion-duration) var(--motion-easing);
+}
+
+.icon {
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
+  transition: transform var(--motion-duration) var(--motion-easing);
+}
+
 .root:hover {
   background: var(--control-quiet-bg-hover);
   color: var(--color-text);
+}
+
+.root[data-hierarchy="text"]:hover {
+  background: transparent;
+}
+
+.root[data-hierarchy="text"]:hover .label {
+  text-decoration-color: currentColor;
+}
+
+.root[data-hierarchy="text"][data-icon="back"]:hover .icon {
+  transform: translateX(-0.125rem);
+}
+
+.root[data-hierarchy="text"][data-icon="forward"]:hover .icon {
+  transform: translateX(0.125rem);
 }
 
 .root[data-hierarchy="secondary"]:active {
@@ -39,8 +81,19 @@
   box-shadow: var(--shadow-control), var(--focus-ring);
 }
 
+.root[data-hierarchy="quiet"]:focus-visible,
+.root[data-hierarchy="text"]:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 0.2rem;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .root {
+    transition: none;
+  }
+
+  .root[data-hierarchy="text"] .label,
+  .icon {
     transition: none;
   }
 }

@@ -9,8 +9,8 @@
 
 | Field | Value |
 |-------|-------|
-| Document Version | `v2.9` |
-| Date | `2026-08-30` |
+| Document Version | `v2.10` |
+| Date | `2026-09-02` |
 | Architect / Owner | `v.godlevskiy` |
 | Stack | See [docs/STACK.md](./STACK.md) |
 | Domain | Платформа подготовки к ЕГЭ по информатике — самостоятельные темы экзамена и мини-курсы с теорией, визуализацией и практикой |
@@ -469,8 +469,14 @@ frontend-контракт и происхождение адаптированн
 
 Архивированный Change 75 сформировал и прошёл architect review для профиля **ALCHIMIA** на
 `/lab/design-system`. Стенд остаётся одобренным исполняемым источником, но не шаблоном
-production-страницы: Change 76 переносит из него только подтверждённые системные значения,
+production-страницы: Change 76 перенёс из него только подтверждённые системные значения,
 reusable boundaries, public identity и delivery metadata.
+Change 79 завершает намеренно отложенную часть rollout: сверяет каждый принятый компонентный и
+widget-контракт с реальными public consumers, переносит одобренные visual defaults через цепочку
+`theme → semantic tokens → component CSS`, приводит композиции публичных страниц и уроков к
+зафиксированным rhythm/layout-правилам и только после доказанной миграции удаляет устаревшие
+fallback-токены, локальные стили и дубли. Dashboard-композиция `/lab/design-system` в production не
+копируется; domain/API/content/progress contracts и авторский текст уроков не меняются.
 Принятый lab остаётся на исходном белом фоне и в монохромной подаче; медный акцент и более широкая
 цветовая схема отложены до отдельного architect approval. Сам стенд —
 architecture-led dashboard с тремя областями: общесистемный язык приложения, самостоятельные
@@ -747,7 +753,7 @@ combined-log записи до path/status-family/coarse traffic class. Raw IP, 
 | `M2` — инфраструктурная пауза | complete | Подготовить production-платформу до продолжения продуктового контента | `infraege.ru`, VPS/GHCR deploy, security/release gates, backups и независимый operations stack активны; linked sre-kit Change 20 доказал все шесть Sources end to end |
 | `M3` — учебный flow и публичный запуск | complete | Завершить доменную логику, основные поверхности сайта и проверенный MVP-контент до расширения каталога | Два TopicLesson и все 28 одобренных Python CourseLesson опубликованы в production без Topic-связей; exact deployed SHA совпадает с `main` и `origin/main` |
 | `M4` — финальное измерение и эксплуатация | in progress | Измерять посещаемость прозрачно и обезличенно без опережающей детализации | Consented Umami pageviews/sessions и разрез по путям плюс privacy-safe Nginx aggregates уже закрывают текущую потребность; дальнейшая event-level аналитика отложена, все dashboard surfaces остаются в sre-kit |
-| `M5` — ALCHIMIA learning experience | in progress | Заменить визуальный бренд и улучшить читаемость уроков без потери содержания | Lab-first дизайн-контракт → public activation → два редакторских пилота → пять одобряемых партий оставшихся уроков |
+| `M5` — ALCHIMIA learning experience | in progress | Заменить визуальный бренд и улучшить читаемость уроков без потери содержания | Lab-first дизайн-контракт → системная public activation → два редакторских пилота и первая партия → component/widget rollout с legacy cleanup → четыре одобряемые партии оставшихся уроков |
 | `M6+` (после первых данных, вне MVP) | deferred | Расширение охвата и сообщества поверх работающей бесплатной базы | Второй мини-курс (Excel), аккаунты/синхронизация, обсуждения тем с модерацией, затем платные фичи — без runtime AI до этого момента |
 
 ### 9.1 Current execution sequence
@@ -771,7 +777,9 @@ combined-log записи до path/status-family/coarse traffic class. Raw IP, 
 | `14` | Сформировать визуальную основу ALCHIMIA в одном unlisted lab | Complete: Change 75 сформировал и прошёл итоговый architect review для `/lab/design-system`; приняты identity, typography, монохромная palette, rhythm, component и widget contracts без активации ALCHIMIA на public routes |
 | `15` | Активировать одобренный ALCHIMIA profile публично | Complete: Change 76 активировал public theme, wordmark, metadata, manifest/favicon/social assets без изменения доменных ids, storage, analytics или infrastructure names |
 | `16` | Проверить редакторский контракт на двух крайних уроках | Complete: Change 77 сохранил факты, последовательность, примеры и задачи в уроках «Первая программа» и «Рекурсивные алгоритмы», добавив плавные входы, переходы и объяснение терминов; оба пилота прошли focused content/browser gates и human approval |
-| `17` | Бережно мигрировать остальные уроки | Changes 78–82: пять ограниченных партий по утверждённой траектории; каждая проходит Content Quality Gate и отдельное human approval |
+| `17` | Начать бережную миграцию остальных уроков | Complete: Change 78 обновил первую ограниченную партию базовых Python-уроков по утверждённому редакторскому контракту и прошёл отдельное human approval |
+| `18` | Перенести принятые component/widget-контракты из lab в public | Change 79: полная матрица lab → public consumer, активация одобренных component defaults и page/widget composition, затем удаление только доказанно устаревших fallback-стилей; representative public routes проходят visual, responsive, keyboard, zoom и no-JS evidence |
+| `19` | Завершить бережную миграцию остальных уроков | Changes 80–83: четыре ограниченные редакторские партии по утверждённой траектории; каждая сохраняет уже активированный visual contract, проходит Content Quality Gate и отдельное human approval |
 
 Off-site backup остаётся trigger-based улучшением: первый management-host релиз использует
 local-only Restic с явно принятым риском потери вместе с VPS. Key-only SSH, Telegram alerts,

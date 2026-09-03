@@ -1,13 +1,13 @@
-import { Link } from "@tanstack/react-router";
 import type { CourseTypes } from "~/entities/course";
+import { ActionLink } from "~/shared/components/action-link";
 import { Typography } from "~/shared/components/typography";
-import { CourseLessonProgress } from "./course-lesson-progress";
 import styles from "../course-lesson-page.module.css";
 
 type Props = {
   course: CourseTypes.Definition;
   lesson: CourseTypes.LessonDefinition;
-  taskCount: number;
+  previousLesson?: CourseTypes.LessonDefinition;
+  nextLesson?: CourseTypes.LessonDefinition;
 };
 
 export const CourseLessonResult: React.FC<Props> = (props) => (
@@ -15,25 +15,27 @@ export const CourseLessonResult: React.FC<Props> = (props) => (
     <div className={styles.resultSummary}>
       <Typography.Prose>{props.lesson.result}</Typography.Prose>
     </div>
-    <CourseLessonProgress
-      masteryThreshold={props.lesson.masteryThreshold ?? 0.8}
-      lessonId={props.lesson.id}
-      taskCount={props.taskCount}
-    />
     <nav className={styles.resultNavigation} aria-label="Продолжение курса">
-      <Typography.Title order={3}>Что дальше</Typography.Title>
-      <Typography.Text tone="muted">
-        {props.course.stage === "complete"
-          ? "Вернитесь к курсу, чтобы выбрать следующий урок или повторить пройденное."
-          : "Вернитесь к курсу, чтобы посмотреть доступные уроки и темы, которые появятся позже."}
-      </Typography.Text>
-      <Link
-        className={styles.courseLink}
-        to="/courses/$courseSlug"
-        params={{ courseSlug: props.course.routeSlug }}
-      >
-        {props.course.title}
-      </Link>
+      <div className={styles.resultLinks}>
+        {props.previousLesson ? (
+          <ActionLink
+            hierarchy="text"
+            icon="back"
+            to={`/courses/${props.course.routeSlug}/${props.previousLesson.routeSlug}`}
+          >
+            {`Предыдущий урок: ${props.previousLesson.title}`}
+          </ActionLink>
+        ) : null}
+        {props.nextLesson ? (
+          <ActionLink
+            hierarchy="text"
+            icon="forward"
+            to={`/courses/${props.course.routeSlug}/${props.nextLesson.routeSlug}`}
+          >
+            {props.nextLesson.title}
+          </ActionLink>
+        ) : null}
+      </div>
     </nav>
   </div>
 );

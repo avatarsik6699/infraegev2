@@ -3,17 +3,17 @@
 }
 
 .track {
-  height: var(--progress-height, 0.5rem);
+  height: var(--progress-height);
   overflow: hidden;
   border-radius: var(--radius-pill);
-  background: var(--progress-track-background, var(--color-surface-quiet));
+  background: var(--progress-track-background);
 }
 
 .indicator {
   width: var(--progress-value);
   height: 100%;
   border-radius: inherit;
-  background: var(--progress-indicator-background, var(--color-text));
+  background: var(--progress-indicator-background);
 }
 
 .root[data-complete] .indicator {

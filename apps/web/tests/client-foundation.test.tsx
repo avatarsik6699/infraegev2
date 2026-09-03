@@ -13,6 +13,15 @@ vi.mock("@tanstack/react-router", async (importOriginal) => {
     await importOriginal<typeof import("@tanstack/react-router")>();
   return {
     ...actual,
+    Link: ({
+      children,
+      to,
+      ...props
+    }: React.ComponentProps<"a"> & { to: string }) => (
+      <a href={to} {...props}>
+        {children}
+      </a>
+    ),
     useRouterState: vi.fn(() => ({ isLoading: false, matches: [] })),
   };
 });
@@ -28,8 +37,11 @@ describe("client foundation states", () => {
   });
 
   it("announces route loading and renders a semantic empty state", () => {
-    const { unmount } = render(<RoutePending />);
+    const { container, unmount } = render(<RoutePending />);
     expect(screen.getByRole("status").textContent).toContain("Загружаем");
+    expect(container.querySelector("[data-route-state-frame]")).not.toBeNull();
+    expect(container.querySelector("[data-public-header]")).not.toBeNull();
+    expect(screen.getByRole("contentinfo")).toBeTruthy();
     unmount();
 
     render(

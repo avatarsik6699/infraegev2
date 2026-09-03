@@ -49,7 +49,7 @@
 }
 
 .body {
-  margin-top: 0.15rem;
+  margin-top: var(--space-1);
   color: var(--color-text);
   font-family: var(--font-reading);
   font-size: var(--text-base);
@@ -57,7 +57,7 @@
 }
 
 .root[data-density="dense"] .body {
-  margin-top: 0.05rem;
+  margin-top: var(--space-0-5);
   font-size: var(--text-sm);
   line-height: 1.5;
 }

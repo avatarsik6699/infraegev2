@@ -17,6 +17,7 @@ export const Callout: React.FC<CalloutTypes.Props> = ({
       className={styles.root}
       data-tone={props.tone}
       data-density={density}
+      data-learning-block
       aria-label={props.title}
     >
       <Icon
