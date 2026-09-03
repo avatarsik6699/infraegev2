@@ -9,7 +9,7 @@
 | Change | `81` |
 | Slug | `python-loops-editorial-batch` |
 | Title | Python Loops Editorial Batch |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/81-python-loops-editorial-batch` |
 
 ---
