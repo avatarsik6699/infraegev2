@@ -92,9 +92,10 @@ export const pythonTodoActionsLesson = defineCourseLesson({
         <>
           <Typography.Text>
             Добавлять дела мы уже умеем. Теперь пользователь вводит номер и
-            ждёт, что программа изменит именно выбранную запись. Индекс списка
-            для этого не подходит: после удаления он может поменяться. Поэтому
-            ищем дело по его <Notation>id</Notation>.
+            ждёт, что программа изменит именно выбранную запись. Индекс списка —
+            то есть текущая позиция записи — для этого не подходит: после
+            удаления он может поменяться. Поэтому ищем дело по постоянному полю{" "}
+            <Notation>id</Notation>, которое добавили в первой версии.
           </Typography.Text>
           <CodeBlock
             code={
@@ -106,9 +107,11 @@ export const pythonTodoActionsLesson = defineCourseLesson({
           />
           <Typography.Text>
             Если номер найден, функция возвращает словарь из списка. Поэтому
-            присваивание вроде <Notation>task["done"] = True</Notation> меняет
-            не копию, а то самое дело, которое затем покажет{" "}
-            <Notation>list</Notation>.
+            переменная <Notation>task</Notation> указывает на тот же изменяемый
+            словарь, который хранится внутри <Notation>tasks</Notation>, а не на
+            отдельную копию. Присваивание вроде{" "}
+            <Notation>task["done"] = True</Notation> меняет именно то дело,
+            которое затем покажет команда <Notation>list</Notation>.
           </Typography.Text>
         </>
       ),
@@ -118,6 +121,12 @@ export const pythonTodoActionsLesson = defineCourseLesson({
       navLabel: "Один поиск — три действия",
       explanation: (
         <>
+          <Typography.Text>
+            Отметка выполнения, редактирование и удаление начинаются одинаково:
+            пользователь вводит номер, а программа ищет дело. Поэтому поиск
+            остаётся в одной функции <Notation>find_task</Notation>, а каждое
+            действие отвечает только за своё изменение.
+          </Typography.Text>
           <WorkedExample
             title="Отмечаем дело номер 2"
             prompt="В tasks есть словарь с id 2 и done равным False."
@@ -171,11 +180,12 @@ export const pythonTodoActionsLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
+            Это вторая версия того же <Notation>task_manager.py</Notation>.
             Добавьте новые функции в предыдущий файл или сравните свою версию с
-            кодом ниже. Пока есть известная слабость: слово вместо номера
-            вызовет <Notation>ValueError</Notation>. Не отвлекаемся на неё
-            сейчас — в последнем уроке вернёмся к вводу и применим{" "}
-            <Notation>try</Notation>.
+            кодом ниже. Пока оставим одну известную слабость: слово вместо
+            номера вызовет <Notation>ValueError</Notation>. В последнем уроке
+            вернёмся к вводу и применим <Notation>try</Notation>, а сейчас
+            проверим сами действия со списком.
           </Typography.Text>
           <CodeBlock
             code={actionsSnapshot}

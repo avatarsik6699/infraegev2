@@ -113,15 +113,15 @@ export const pythonTodoStorageLesson = defineCourseLesson({
         <>
           <Typography.Text>
             Пока программа запущена, список хранится в памяти. Закроем терминал
-            — и все дела исчезнут. Чтобы список действительно пригодился, будем
-            записывать его после каждого изменения, а при новом запуске — читать
-            обратно из файла.
+            — и все дела исчезнут. В третьей версии проекта добавим постоянное
+            хранение: после каждого изменения будем записывать список в файл, а
+            при новом запуске — читать его обратно.
           </Typography.Text>
           <Typography.Text>
-            JSON подходит без дополнительных преобразований: он умеет хранить
-            списки, словари, строки, числа и логические значения. Стандартный
-            модуль <Notation>json</Notation> запишет наши объекты Python в
-            текст, а потом восстановит их.
+            Для файла выберем JSON — текстовый формат, который умеет
+            представлять списки, словари, строки, числа и логические значения.
+            Стандартный модуль <Notation>json</Notation> превратит наши объекты
+            Python в такой текст, а при загрузке восстановит их.
           </Typography.Text>
           <CodeBlock
             code={
@@ -143,8 +143,9 @@ export const pythonTodoStorageLesson = defineCourseLesson({
             При самом первом запуске файла <Notation>tasks.json</Notation> ещё
             нет — и это нормально. Перехватим только{" "}
             <Notation>FileNotFoundError</Notation> и начнём с пустого списка.
-            Другие ошибки не прячем: если код сломан, нам всё ещё нужен
-            traceback.
+            Другие ошибки не прячем: если проблема не в отсутствующем файле,
+            Python должен показать traceback — знакомое сообщение с местом и
+            причиной ошибки.
           </Typography.Text>
           <CodeBlock
             code={
@@ -209,10 +210,11 @@ export const pythonTodoStorageLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
-            Теперь <Notation>save_tasks</Notation> вызывается после успешного
+            Это третья версия <Notation>task_manager.py</Notation>. Теперь{" "}
+            <Notation>save_tasks</Notation> вызывается после успешного
             добавления, отметки, редактирования или удаления. Команда{" "}
-            <Notation>list</Notation> ничего не меняет, поэтому записывать файл
-            после неё незачем.
+            <Notation>list</Notation> только читает список, поэтому записывать
+            файл после неё незачем.
           </Typography.Text>
           <CodeBlock
             code={storageSnapshot}

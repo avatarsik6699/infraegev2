@@ -504,6 +504,101 @@ describe("Python course foundation", () => {
     }
   });
 
+  it("preserves the algorithms and final project editorial batch structure and tasks", () => {
+    const cases = [
+      {
+        routeSlug: "polnyy-perebor",
+        sectionIds: ["model", "trace", "pitfall", "workflow"],
+        practiceTaskIds: [
+          "python-bruteforce-range",
+          "python-bruteforce-condition",
+          "python-bruteforce-count",
+          "python-bruteforce-nested",
+          "python-bruteforce-local-run",
+        ],
+      },
+      {
+        routeSlug: "otbor-rezultata",
+        sectionIds: ["model", "trace", "pitfall", "workflow"],
+        practiceTaskIds: [
+          "python-select-result-filter",
+          "python-select-result-minimum",
+          "python-select-result-maximum",
+          "python-select-result-initial-value",
+          "python-select-result-local-run",
+        ],
+      },
+      {
+        routeSlug: "spisok-del",
+        sectionIds: ["first-run", "command-loop", "empty", "snapshot"],
+        practiceTaskIds: [
+          "python-todo-start-storage",
+          "python-todo-start-command",
+          "python-todo-start-add",
+          "python-todo-start-show",
+          "python-todo-start-local-run",
+        ],
+      },
+      {
+        routeSlug: "deystviya-so-spiskom",
+        sectionIds: ["continue", "change", "delete", "snapshot"],
+        practiceTaskIds: [
+          "python-todo-actions-find",
+          "python-todo-actions-complete",
+          "python-todo-actions-edit",
+          "python-todo-actions-delete",
+          "python-todo-actions-local-run",
+        ],
+      },
+      {
+        routeSlug: "sohranenie-spiska-del",
+        sectionIds: ["why-file", "load", "identity", "snapshot"],
+        practiceTaskIds: [
+          "python-todo-storage-import",
+          "python-todo-storage-write",
+          "python-todo-storage-read",
+          "python-todo-storage-missing",
+          "python-todo-storage-local-run",
+        ],
+      },
+      {
+        routeSlug: "gotovaya-programma",
+        sectionIds: [
+          "grown-program",
+          "bad-input",
+          "file-recovery",
+          "whole-test",
+          "refactor",
+        ],
+        practiceTaskIds: [
+          "python-independent-program-contract",
+          "python-independent-program-decomposition",
+          "python-independent-program-test-cases",
+          "python-independent-program-fix",
+          "python-independent-program-local-run",
+        ],
+      },
+    ] as const;
+
+    for (const lessonCase of cases) {
+      const lesson = findCourseLessonByRouteSlugs(
+        "python",
+        lessonCase.routeSlug,
+      );
+
+      expect(lesson).toBeDefined();
+      expect(lesson?.theory.map((concept) => concept.id)).toEqual(
+        lessonCase.sectionIds,
+      );
+      expect(lesson?.practiceTaskIds).toEqual(lessonCase.practiceTaskIds);
+      expect(lesson).toMatchObject({
+        accessTier: "free",
+        masteryThreshold: 0.8,
+        status: "published",
+      });
+    }
+  });
+
   it("loads the published conditions tasks without checker secrets", async () => {
     const pythonConditionsLesson = findCourseLessonByRouteSlugs(
       "python",

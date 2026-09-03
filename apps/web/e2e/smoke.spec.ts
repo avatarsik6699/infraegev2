@@ -96,6 +96,39 @@ const functionsFilesEditorialLessons = [
   },
 ] as const;
 
+const algorithmsProjectEditorialLessons = [
+  {
+    routeSlug: "polnyy-perebor",
+    title: "Полный перебор: строим и проверяем варианты",
+    evidence: "Такой способ называют полным перебором",
+  },
+  {
+    routeSlug: "otbor-rezultata",
+    title: "Отбор результата: ограничения, минимум и максимум",
+    evidence: "называют инвариантом цикла",
+  },
+  {
+    routeSlug: "spisok-del",
+    title: "Добавляем дела и выводим список",
+    evidence: "Начинаем итоговый проект курса",
+  },
+  {
+    routeSlug: "deystviya-so-spiskom",
+    title: "Отмечаем выполненное, редактируем и удаляем",
+    evidence: "указывает на тот же изменяемый словарь",
+  },
+  {
+    routeSlug: "sohranenie-spiska-del",
+    title: "Сохраняем дела между запусками",
+    evidence: "JSON — текстовый формат",
+  },
+  {
+    routeSlug: "gotovaya-programma",
+    title: "Проверяем весь сценарий и наводим порядок в коде",
+    evidence: "называют рефакторингом",
+  },
+] as const;
+
 for (const lessonIndex of Array.from({ length: 28 }, (_, index) => index)) {
   test(`Python curriculum lesson ${lessonIndex + 1} is public and SSR-readable`, async ({
     browserSession,
@@ -297,6 +330,34 @@ for (const lesson of collectionsEditorialLessons) {
 }
 
 for (const lesson of functionsFilesEditorialLessons) {
+  test(`${lesson.title} keeps the approved editorial flow across target viewports`, async ({
+    browserSession,
+    noJavaScriptPythonCoursePage,
+    pythonCoursePage,
+  }) => {
+    await browserSession.useDesktopViewport();
+    await pythonCoursePage.openEditorialLesson(lesson.routeSlug);
+    await pythonCoursePage.expectEditorialLesson(lesson);
+    await pythonCoursePage.expectKeyboardDisclosures();
+    await browserSession.captureViewport(`${lesson.routeSlug}-desktop.png`);
+
+    await browserSession.useZoomedDesktopViewport();
+    await pythonCoursePage.expectEditorialLesson(lesson);
+    await browserSession.captureViewport(`${lesson.routeSlug}-zoomed.png`);
+
+    await browserSession.useNarrowViewport();
+    await pythonCoursePage.expectEditorialLesson(lesson);
+    await pythonCoursePage.expectMobileReadingOrder();
+    await browserSession.captureViewport(`${lesson.routeSlug}-mobile.png`);
+    browserSession.expectCleanConsole();
+
+    await noJavaScriptPythonCoursePage.expectEditorialLessonReadableWithoutJavaScript(
+      lesson,
+    );
+  });
+}
+
+for (const lesson of algorithmsProjectEditorialLessons) {
   test(`${lesson.title} keeps the approved editorial flow across target viewports`, async ({
     browserSession,
     noJavaScriptPythonCoursePage,
