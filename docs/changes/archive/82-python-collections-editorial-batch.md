@@ -9,7 +9,7 @@
 | Change | `82` |
 | Slug | `python-collections-editorial-batch` |
 | Title | Python Collections Editorial Batch |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/82-python-collections-editorial-batch` |
 
 ---
