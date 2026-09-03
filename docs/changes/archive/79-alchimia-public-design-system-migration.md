@@ -9,7 +9,7 @@
 | Change | `79` |
 | Slug | `alchimia-public-design-system-migration` |
 | Title | ALCHIMIA Public Design-System Migration |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/79-alchimia-public-design-system-migration` |
 
 ---
