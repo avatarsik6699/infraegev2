@@ -1,6 +1,6 @@
 .root {
   display: grid;
-  gap: var(--space-1);
+  gap: var(--space-0-5);
   margin: 0;
   padding: var(
     --learning-alert-padding,
