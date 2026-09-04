@@ -21,7 +21,7 @@ jobs:
         include:
           - name: web
             file: apps/web/Dockerfile
-            cache_scope: web-v2
+            cache_scope: web-v3
           - name: api
             file: apps/api/Dockerfile
             cache_scope: api
