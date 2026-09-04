@@ -6,5 +6,6 @@
   font-family: var(--font-data);
   font-size: var(--text-inline-code);
   font-style: normal;
+  font-variant-ligatures: none;
   box-decoration-break: clone;
 }

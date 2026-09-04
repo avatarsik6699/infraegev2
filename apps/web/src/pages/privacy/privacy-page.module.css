@@ -16,7 +16,7 @@
 .root > h1 {
   font-family: var(--font-display);
   font-size: var(--text-3xl);
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1.08;
   letter-spacing: -0.025em;
 }
