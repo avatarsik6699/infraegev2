@@ -9,7 +9,7 @@
 | Change | `87` |
 | Slug | `lesson-component-spacing-audit` |
 | Title | Lesson Component Spacing Audit |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/87-lesson-component-spacing-audit` |
 
 ---
