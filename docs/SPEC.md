@@ -9,7 +9,7 @@
 
 | Field | Value |
 |-------|-------|
-| Document Version | `v2.11` |
+| Document Version | `v2.12` |
 | Date | `2026-09-03` |
 | Architect / Owner | `v.godlevskiy` |
 | Stack | See [docs/STACK.md](./STACK.md) |
@@ -465,8 +465,12 @@ API и аккаунт не используются. Интерактивные 
 ### 5.3 Design System
 
 Frontend использует локальную доменную UI-систему поверх Base UI и CSS Modules. Активный
-визуальный профиль **ALCHIMIA** сочетает белую поверхность, Cormorant SC для display и wordmark,
-Literata для чтения и IBM Plex Mono для кода, данных и компактного service UI. Поставленный
+визуальный профиль **ALCHIMIA** сочетает белую поверхность, Alegreya для display и wordmark,
+Golos Text для чтения и UI-контролов/подписей и JetBrains Mono для кода, данных и формул. Change 86
+заменил первоначальный ролевой набор Cormorant SC/Literata/IBM Plex Mono (Change 75/76/79) этим
+набором: small-caps display-начертание Cormorant SC оказалось нечитаемым за пределами
+wordmark-контекста, а обновлённый набор достигает разнообразия начертанием и optical size внутри
+меньшего числа семейств. Поставленный
 архитектором `docs/artifacts/references/logo.svg` является единственным художественным источником
 public identity: крупные и малые delivery-применения сохраняют его видимую геометрию без
 перерисовки; монохромная производная меняется на белую только для явно тёмного контекста.

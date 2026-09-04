@@ -36,19 +36,22 @@
   --theme-code-operator: oklch(0.86 0.05 300);
 
   --theme-font-display:
-    "Alchimia Cormorant SC", "Cormorant SC Fallback", Georgia, serif;
+    "Alchimia Alegreya", "Alegreya Fallback", Georgia, serif;
   --theme-font-ui:
-    "Alchimia IBM Plex Mono", "IBM Plex Mono Fallback", monospace;
+    "Alchimia Golos Text", "Golos Text Fallback", -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
   --theme-font-reading:
-    "Alchimia Literata", "Literata Fallback", Georgia, serif;
+    "Alchimia Golos Text", "Golos Text Fallback", -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
   --theme-font-data:
-    "Alchimia IBM Plex Mono", "IBM Plex Mono Fallback", monospace;
+    "Alchimia JetBrains Mono", "JetBrains Mono Fallback", monospace;
   --theme-font-alchimia-display:
-    "Alchimia Cormorant SC", "Cormorant SC Fallback", Georgia, serif;
+    "Alchimia Alegreya", "Alegreya Fallback", Georgia, serif;
   --theme-font-alchimia-reading:
-    "Alchimia Literata", "Literata Fallback", Georgia, serif;
+    "Alchimia Golos Text", "Golos Text Fallback", -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
   --theme-font-alchimia-service:
-    "Alchimia IBM Plex Mono", "IBM Plex Mono Fallback", monospace;
+    "Alchimia JetBrains Mono", "JetBrains Mono Fallback", monospace;
 
   --theme-radius-sm: 0.5rem;
   --theme-radius-md: 0.625rem;

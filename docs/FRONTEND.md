@@ -231,8 +231,8 @@ app → routes → pages → widgets → features → entities → shared
   modified-click behavior. After hydration it follows TanStack Router history only when the
   router-owned history index says an in-app entry exists; direct entry, document reload and
   external-origin arrival use the explicit fallback route instead of leaving the application.
-- Public headers share one quiet identity: the approved ALCHIMIA mark, Cormorant SC wordmark and
-  IBM Plex Mono subtitle stay grouped at the left without release/version badges. The mark is
+- Public headers share one quiet identity: the approved ALCHIMIA mark, Alegreya wordmark and
+  Golos Text subtitle stay grouped at the left without release/version badges. The mark is
   decorative beside the accessible live site name rather than its replacement. Header and footer
   contents follow one viewport-relative gutter instead of contracting inside a centered max-width shell.
   Outside the home page the wordmark is the route back home. Material discovery belongs to the
@@ -273,7 +273,10 @@ app → routes → pages → widgets → features → entities → shared
 ## 6. Typography and interface copy
 
 - Reading prose uses the reading family; controls and labels use the UI family; code and numeric
-  evidence use the data family. Component APIs use semantic text roles rather than raw size names.
+  evidence use the data family. The reading and UI roles currently resolve to the same font
+  (Golos Text) — display and data remain distinct families — but consumers still address the
+  semantic role token, never the literal family name, so the roles can diverge again without a
+  component rewrite. Component APIs use semantic text roles rather than raw size names.
 - Public surfaces preload the small active self-hosted ALCHIMIA set and use `font-display: swap` so
   the real display, reading and service faces replace their fallback instead of leaving a first
   visit on heavier system typography. Display, reading and service fallbacks are metric-adjusted,
@@ -285,7 +288,10 @@ app → routes → pages → widgets → features → entities → shared
   without before/after cold-cache evidence that preserves stable text geometry and the
   public-route LCP budget.
 - The active typography baseline uses only `500` and `600` in component CSS and the shared
-  `--text-*` scale; consumers do not introduce literal sizes or intermediate variable-font weights.
+  `--text-*` scale, with one role-specific cap: display/heading text (`var(--font-display)`/
+  `var(--font-alchimia-display)`, Alegreya) never exceeds `500` — `600` at display weight reads too
+  heavy — while `--font-ui`/`--font-data` (Golos Text/JetBrains Mono) may still use `600`. Consumers
+  do not introduce literal sizes or intermediate variable-font weights.
   Semantic heading levels may share an effective size when hierarchy already comes from spacing
   and document structure. Keep readable line measures and enable lining tabular numerals for
   product-wide numeric data. `/lab/lesson` follows the same token and weight contract; page-private
@@ -335,13 +341,18 @@ app → routes → pages → widgets → features → entities → shared
   behavior and invert the monochrome mark to white for an explicit dark context, but may not redraw,
   smooth or reinterpret visible geometry. The rejected hero-scale F1 composition is superseded by
   F11's compact reusable header.
-- The architect selected Athanor's typography roles for the approved profile: self-hosted
-  Cormorant SC 600 carries the live wordmark and every standard heading level, including compact
-  course, practice, prose and dialog headings; Literata carries continuous reading; IBM Plex Mono
-  is limited to code, data and compact service UI. Quiet numbered lesson-stage landmarks remain an
-  intentional IBM Plex Mono exception rather than ordinary content headings. The profile exposes one achromatic primary and
-  one achromatic secondary prose level over the original white background; status colors remain
-  semantic rather than decorative. Public consumers adopt these roles through Change 76.
+- Change 86 replaced the original Athanor typography roles: self-hosted Cormorant SC 600, while
+  visually approved for the wordmark, proved too decorative and thin at small-caps display weight
+  to read outside a pure wordmark context once carrying every heading level app-wide. The current
+  roles are self-hosted Alegreya for the live wordmark and every standard heading level, including
+  compact course, practice, prose and dialog headings; Golos Text for continuous reading and for
+  controls/labels; JetBrains Mono (ligatures disabled in rendered code) narrowed strictly to code,
+  data and formula notation — it no longer covers general "compact service UI", which now uses
+  Golos Text like the rest of the interface. Quiet
+  numbered lesson-stage landmarks remain a JetBrains Mono/data-role treatment, consistent with
+  numeric notation, rather than an ordinary content heading. The profile exposes one achromatic
+  primary and one achromatic secondary prose level over the original white background; status
+  colors remain semantic rather than decorative.
 - Keep the approved white background and monochrome presentation during public activation. Copper
   activation and broader color work require a later explicit checkpoint. The
   architecture-led lab dashboard groups contracts into System, Components and Widgets tabs:

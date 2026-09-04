@@ -188,7 +188,7 @@
   color: var(--color-text);
   font-family: var(--font-alchimia-display);
   font-size: var(--text-2xl);
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.02em;
 }
 
@@ -332,7 +332,7 @@
   color: var(--color-text);
   font-family: var(--font-alchimia-display);
   font-size: var(--text-3xl);
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.02em;
 }
 
@@ -360,7 +360,7 @@
   color: var(--color-text-soft);
   font-family: var(--font-alchimia-display);
   font-size: var(--text-xl);
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .truncateGrid {
@@ -1226,7 +1226,7 @@
   color: var(--color-text);
   font-family: var(--font-alchimia-display);
   font-size: var(--text-xl);
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.02em;
 }
 
