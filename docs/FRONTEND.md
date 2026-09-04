@@ -174,9 +174,12 @@ app → routes → pages → widgets → features → entities → shared
   `Checkpoint` block per lesson by construction, so the "merge adjacent blocks" concern this rule
   used to guard against no longer applies — there is nothing left to merge.
 - `Mistake`, `Checkpoint` and `WorkedExample` share one visual contract: a single quiet
-  semantic-tinted fill (no border, no divider line) with `--radius-surface` rounding, the same
-  compact outer padding, service-label type, icon size and text-column inset — this is the fill
-  half of "one quiet fill or one border," not an exception to it. `Mistake` presents its authored
+  semantic-tinted fill (no border, no divider line) with `--radius-surface` rounding, service-label
+  type, icon size and text-column inset — this is the fill half of "one quiet fill or one border,"
+  not an exception to it. `Mistake` and `WorkedExample` share one compact outer padding value
+  (routed through the same `--learning-panel-padding`-style override token); `Checkpoint`
+  intentionally uses more vertical padding (Change 88 F12 architect finding) because its content
+  otherwise presses against its tinted background's top/bottom edge. `Mistake` presents its authored
   claim and explanation as one vertical «Неверно» / «Как правильно» comparison at every viewport
   width; each reading gets its own tinted background (danger for «Неверно», success for «Как
   правильно») instead of a rule between them — color is always duplicated by the distinct icons and

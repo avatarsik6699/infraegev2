@@ -9,7 +9,7 @@
 | Change | `89` |
 | Slug | `lesson-outline-rail-spacer` |
 | Title | Lesson Outline Rail Spacer |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/89-lesson-outline-rail-spacer` |
 
 ---

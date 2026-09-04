@@ -10,6 +10,10 @@
   border-radius: var(--accordion-radius);
 }
 
+.item:last-child {
+  border-bottom: none;
+}
+
 .header {
   margin: 0;
 }

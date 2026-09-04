@@ -9,7 +9,7 @@
   grid-template-columns: 1rem minmax(0, 1fr);
   gap: var(--space-1);
   align-content: start;
-  padding: var(--space-1) var(--space-2);
+  padding: var(--learning-panel-padding, var(--space-1) var(--space-2));
   border-radius: var(--radius-surface);
 }
 
