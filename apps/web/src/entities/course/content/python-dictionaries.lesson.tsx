@@ -73,15 +73,6 @@ export const pythonDictionariesLesson = defineCourseLesson({
           />
         </>
       ),
-      checkpoint: [
-        {
-          id: "checkpoint-trace",
-          prompt:
-            "Чем проверка key in data отличается от проверки value in data.values()?",
-          reveal:
-            "Первая ищет ключ среди ключей словаря, вторая — конкретное значение среди сохранённых значений.",
-        },
-      ],
     },
     {
       id: "records",
@@ -179,4 +170,13 @@ export const pythonDictionariesLesson = defineCourseLesson({
       </Typography.Text>
     </>
   ),
+  checkpoint: [
+    {
+      id: "checkpoint-trace",
+      prompt:
+        "Чем проверка key in data отличается от проверки value in data.values()?",
+      reveal:
+        "Первая ищет ключ среди ключей словаря, вторая — конкретное значение среди сохранённых значений.",
+    },
+  ],
 });

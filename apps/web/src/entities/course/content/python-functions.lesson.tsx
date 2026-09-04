@@ -72,15 +72,6 @@ export const pythonFunctionsLesson = defineCourseLesson({
           />
         </>
       ),
-      checkpoint: [
-        {
-          id: "checkpoint-trace",
-          prompt:
-            "Почему функция с print вместо return может показать правильное число, но сломать следующее вычисление?",
-          reveal:
-            "print выводит число, но сам вызов возвращает None. Следующее вычисление получает не показанное число, а None.",
-        },
-      ],
     },
     {
       id: "pitfall",
@@ -152,4 +143,13 @@ export const pythonFunctionsLesson = defineCourseLesson({
       </Typography.Text>
     </>
   ),
+  checkpoint: [
+    {
+      id: "checkpoint-trace",
+      prompt:
+        "Почему функция с print вместо return может показать правильное число, но сломать следующее вычисление?",
+      reveal:
+        "print выводит число, но сам вызов возвращает None. Следующее вычисление получает не показанное число, а None.",
+    },
+  ],
 });

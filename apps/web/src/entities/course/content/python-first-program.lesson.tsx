@@ -74,23 +74,6 @@ export const pythonFirstProgramLesson = defineCourseLesson({
           ]}
         />
       ),
-      checkpoint: [
-        {
-          id: "checkpoint-order",
-          prompt: (
-            <>
-              Что изменится, если строку <Notation>print("Готово")</Notation>
-              поставить первой?
-            </>
-          ),
-          reveal: (
-            <>
-              Слово <Notation>Готово</Notation> появится первой строкой вывода.
-              Остальные команды сохранят свой взаимный порядок.
-            </>
-          ),
-        },
-      ],
     },
     {
       id: "values-and-variables",
@@ -178,25 +161,6 @@ export const pythonFirstProgramLesson = defineCourseLesson({
           }
         />
       ),
-      checkpoint: [
-        {
-          id: "checkpoint-input",
-          prompt: (
-            <>
-              Какое значение хранит <Notation>n</Notation> после строки
-              <Notation> n = int(input())</Notation>, если пользователь ввёл 8?
-            </>
-          ),
-          reveal: (
-            <>
-              Целое число <Notation>8</Notation>: сначала
-              <Notation> input()</Notation> возвращает текст
-              <Notation> '8'</Notation>, затем <Notation>int</Notation>
-              преобразует его.
-            </>
-          ),
-        },
-      ],
     },
     {
       id: "calculation-and-output",
@@ -298,21 +262,6 @@ export const pythonFirstProgramLesson = defineCourseLesson({
           </Typography.Text>
         </>
       ),
-      checkpoint: [
-        {
-          id: "checkpoint-run",
-          prompt:
-            "Что проверить первым, если терминал не находит команду запуска Python?",
-          reveal: (
-            <>
-              В Windows попробуйте <Notation>py --version</Notation>, а в macOS
-              или Linux — <Notation>python3 --version</Notation>. Если команда
-              не найдена, установите Python с официального сайта и заново
-              откройте терминал.
-            </>
-          ),
-        },
-      ],
     },
   ],
   checkpoint: [
@@ -329,6 +278,51 @@ export const pythonFirstProgramLesson = defineCourseLesson({
           Получить два значения, преобразовать их в числа через
           <Notation> int</Notation>, вычислить сумму и вывести её командой
           <Notation> print</Notation>.
+        </>
+      ),
+    },
+    {
+      id: "checkpoint-order",
+      prompt: (
+        <>
+          Что изменится, если строку <Notation>print("Готово")</Notation>
+          поставить первой?
+        </>
+      ),
+      reveal: (
+        <>
+          Слово <Notation>Готово</Notation> появится первой строкой вывода.
+          Остальные команды сохранят свой взаимный порядок.
+        </>
+      ),
+    },
+    {
+      id: "checkpoint-input",
+      prompt: (
+        <>
+          Какое значение хранит <Notation>n</Notation> после строки
+          <Notation> n = int(input())</Notation>, если пользователь ввёл 8?
+        </>
+      ),
+      reveal: (
+        <>
+          Целое число <Notation>8</Notation>: сначала
+          <Notation> input()</Notation> возвращает текст
+          <Notation> '8'</Notation>, затем <Notation>int</Notation>
+          преобразует его.
+        </>
+      ),
+    },
+    {
+      id: "checkpoint-run",
+      prompt:
+        "Что проверить первым, если терминал не находит команду запуска Python?",
+      reveal: (
+        <>
+          В Windows попробуйте <Notation>py --version</Notation>, а в macOS или
+          Linux — <Notation>python3 --version</Notation>. Если команда не
+          найдена, установите Python с официального сайта и заново откройте
+          терминал.
         </>
       ),
     },

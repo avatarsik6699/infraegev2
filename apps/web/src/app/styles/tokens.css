@@ -67,6 +67,16 @@
     var(--color-danger) 42%,
     var(--color-surface)
   );
+  --color-success-soft: color-mix(
+    in oklch,
+    var(--color-success) 8%,
+    var(--color-surface)
+  );
+  --color-info-soft: color-mix(
+    in oklch,
+    var(--color-info) 8%,
+    var(--color-surface)
+  );
   --color-code: var(--theme-code);
   --color-code-top: var(--theme-code-top);
   --color-code-text: var(--theme-code-ink);

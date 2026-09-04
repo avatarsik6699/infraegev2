@@ -72,15 +72,6 @@ export const pythonSetsLesson = defineCourseLesson({
           />
         </>
       ),
-      checkpoint: [
-        {
-          id: "checkpoint-trace",
-          prompt:
-            "Что произойдёт с длиной множества, если добавить уже существующее значение?",
-          reveal:
-            "Она не изменится: множество хранит один экземпляр каждого значения.",
-        },
-      ],
     },
     {
       id: "pitfall",
@@ -154,4 +145,13 @@ export const pythonSetsLesson = defineCourseLesson({
       </Typography.Text>
     </>
   ),
+  checkpoint: [
+    {
+      id: "checkpoint-trace",
+      prompt:
+        "Что произойдёт с длиной множества, если добавить уже существующее значение?",
+      reveal:
+        "Она не изменится: множество хранит один экземпляр каждого значения.",
+    },
+  ],
 });

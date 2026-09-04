@@ -106,15 +106,6 @@ export const pythonCompoundConditionsLesson = defineCourseLesson({
           />
         </>
       ),
-      checkpoint: [
-        {
-          id: "checkpoint-trace",
-          prompt:
-            "Почему ветка elif может не выполниться, хотя её условие истинно?",
-          reveal:
-            "Потому что расположенная выше ветвь уже могла получить True. После выбора первой подходящей ветви Python пропускает остаток цепочки.",
-        },
-      ],
     },
     {
       id: "pitfall",
@@ -192,4 +183,13 @@ export const pythonCompoundConditionsLesson = defineCourseLesson({
       </Typography.Text>
     </>
   ),
+  checkpoint: [
+    {
+      id: "checkpoint-trace",
+      prompt:
+        "Почему ветка elif может не выполниться, хотя её условие истинно?",
+      reveal:
+        "Потому что расположенная выше ветвь уже могла получить True. После выбора первой подходящей ветви Python пропускает остаток цепочки.",
+    },
+  ],
 });

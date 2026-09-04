@@ -167,15 +167,6 @@ export const pythonTodoStorageLesson = defineCourseLesson({
           />
         </>
       ),
-      checkpoint: [
-        {
-          id: "checkpoint-first-run",
-          prompt:
-            "Почему отсутствие tasks.json можно безопасно превратить в пустой список?",
-          reveal:
-            "Это известное состояние первого запуска; программа умеет начать работу без прежних дел.",
-        },
-      ],
     },
     {
       id: "identity",
@@ -253,6 +244,13 @@ export const pythonTodoStorageLesson = defineCourseLesson({
       prompt: "После каких команд нужно сохранять файл?",
       reveal:
         "После успешного добавления, отметки, редактирования или удаления — то есть после реального изменения tasks.",
+    },
+    {
+      id: "checkpoint-first-run",
+      prompt:
+        "Почему отсутствие tasks.json можно безопасно превратить в пустой список?",
+      reveal:
+        "Это известное состояние первого запуска; программа умеет начать работу без прежних дел.",
     },
   ],
   result: (

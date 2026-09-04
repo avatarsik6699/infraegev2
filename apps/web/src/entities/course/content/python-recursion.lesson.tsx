@@ -72,15 +72,6 @@ export const pythonRecursionLesson = defineCourseLesson({
           />
         </>
       ),
-      checkpoint: [
-        {
-          id: "checkpoint-trace",
-          prompt:
-            "Почему при трассировке рекурсии полезно отдельно записывать входы и возвраты?",
-          reveal:
-            "Сначала создаётся цепочка вложенных вызовов, затем результаты идут обратно. Раздельная запись не смешивает эти два порядка.",
-        },
-      ],
     },
     {
       id: "ege-connection",
@@ -178,4 +169,13 @@ export const pythonRecursionLesson = defineCourseLesson({
       </Typography.Text>
     </>
   ),
+  checkpoint: [
+    {
+      id: "checkpoint-trace",
+      prompt:
+        "Почему при трассировке рекурсии полезно отдельно записывать входы и возвраты?",
+      reveal:
+        "Сначала создаётся цепочка вложенных вызовов, затем результаты идут обратно. Раздельная запись не смешивает эти два порядка.",
+    },
+  ],
 });

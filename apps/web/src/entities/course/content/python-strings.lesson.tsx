@@ -78,14 +78,6 @@ export const pythonStringsLesson = defineCourseLesson({
           />
         </>
       ),
-      checkpoint: [
-        {
-          id: "checkpoint-trace",
-          prompt: "Что вернёт строка длины шесть при срезе [2:5]?",
-          reveal:
-            "Три символа с индексами 2, 3 и 4; позиция 5 служит невключённой границей.",
-        },
-      ],
     },
     {
       id: "split-join",
@@ -185,4 +177,12 @@ export const pythonStringsLesson = defineCourseLesson({
       </Typography.Text>
     </>
   ),
+  checkpoint: [
+    {
+      id: "checkpoint-trace",
+      prompt: "Что вернёт строка длины шесть при срезе [2:5]?",
+      reveal:
+        "Три символа с индексами 2, 3 и 4; позиция 5 служит невключённой границей.",
+    },
+  ],
 });

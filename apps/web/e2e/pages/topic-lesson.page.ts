@@ -44,7 +44,7 @@ export class TopicLessonPage {
         .getByText("Задание " + String(this.config.taskNumber)),
     ).toBeVisible();
     await expect(this.page.locator("[data-article-frame] img")).toHaveCount(0);
-    await expect(this.page.getByLabel("Проверьте себя")).toHaveCount(5);
+    await expect(this.page.getByLabel("Проверьте себя")).toHaveCount(1);
     await expect(
       this.page.getByRole("heading", { level: 2, name: "Прогресс" }),
     ).toBeVisible();
@@ -279,29 +279,24 @@ export class TopicLessonPage {
       const comparisons = Array.from(comparison.children, (item) =>
         item.getBoundingClientRect(),
       );
-      const comparisonStyle = getComputedStyle(comparison);
       const checkpointStyle = getComputedStyle(checkpoint);
+      const correctComparisonStyle = getComputedStyle(correctComparison);
       const mistakeLabelStyle = getComputedStyle(mistakeLabel);
       const checkpointLabelStyle = getComputedStyle(checkpointLabel);
       const mistakeIconRect = mistakeIcon.getBoundingClientRect();
       const checkpointIconRect = checkpointIcon.getBoundingClientRect();
-      const mistakeCopyRect = mistakeCopy.getBoundingClientRect();
-      const checkpointContentRect = checkpointContent.getBoundingClientRect();
       return {
         outlineIsSingleColumn,
         mistakeIsVertical:
           comparisons.length === 2 &&
           comparisons[1]!.top >= comparisons[0]!.bottom,
-        mistakeLeftBorder: Number.parseFloat(comparisonStyle.borderLeftWidth),
-        mistakeRuleIsNeutral:
-          comparisonStyle.borderLeftColor ===
-          getComputedStyle(correctComparison).borderTopColor,
-        learningContentAxesMatch:
-          Math.abs(mistakeCopyRect.left - checkpointContentRect.left) < 1,
+        mistakeHasTintedFill:
+          correctComparisonStyle.backgroundColor !== "rgba(0, 0, 0, 0)" &&
+          correctComparisonStyle.backgroundColor !== "transparent",
+        checkpointHasTintedFill:
+          checkpointStyle.backgroundColor !== "rgba(0, 0, 0, 0)" &&
+          checkpointStyle.backgroundColor !== "transparent",
         learningBlockGeometryMatches:
-          comparisonStyle.paddingLeft === checkpointStyle.paddingLeft &&
-          comparisonStyle.paddingRight === checkpointStyle.paddingRight &&
-          comparisonStyle.borderLeftWidth === checkpointStyle.borderLeftWidth &&
           mistakeLabelStyle.fontSize === checkpointLabelStyle.fontSize &&
           mistakeLabelStyle.fontWeight === checkpointLabelStyle.fontWeight &&
           mistakeIconRect.width === checkpointIconRect.width &&
@@ -310,9 +305,8 @@ export class TopicLessonPage {
     });
     expect(lessonNavigationGeometry.outlineIsSingleColumn).toBe(true);
     expect(lessonNavigationGeometry.mistakeIsVertical).toBe(true);
-    expect(lessonNavigationGeometry.mistakeLeftBorder).toBeCloseTo(2, 0);
-    expect(lessonNavigationGeometry.mistakeRuleIsNeutral).toBe(true);
-    expect(lessonNavigationGeometry.learningContentAxesMatch).toBe(true);
+    expect(lessonNavigationGeometry.mistakeHasTintedFill).toBe(true);
+    expect(lessonNavigationGeometry.checkpointHasTintedFill).toBe(true);
     expect(lessonNavigationGeometry.learningBlockGeometryMatches).toBe(true);
     await expect(
       this.page.getByRole("heading", { name: "Теперь вы умеете" }),
@@ -341,7 +335,7 @@ export class TopicLessonPage {
     await expect(
       this.page.getByRole("heading", { name: "После урока вы сможете" }),
     ).toHaveCount(0);
-    await expect(this.page.getByLabel("Проверьте себя")).toHaveCount(4);
+    await expect(this.page.getByLabel("Проверьте себя")).toHaveCount(1);
     await expect(
       this.page
         .getByRole("group", {

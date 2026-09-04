@@ -1,9 +1,7 @@
 .root {
   display: grid;
-  gap: 0;
+  gap: var(--space-1);
   margin: 0;
-  padding: var(--space-0-5) var(--space-2);
-  border-left: 2px solid var(--color-rule);
 }
 
 .comparison {
@@ -11,16 +9,16 @@
   grid-template-columns: 1rem minmax(0, 1fr);
   gap: var(--space-1);
   align-content: start;
-  padding-block: 0;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-surface);
 }
 
-.comparison + .comparison {
-  padding-top: var(--space-1);
-  border-top: 1px solid var(--color-rule);
+.comparison[data-status="incorrect"] {
+  background: var(--color-danger-soft);
 }
 
-.comparison:first-child {
-  padding-bottom: var(--space-1);
+.comparison[data-status="correct"] {
+  background: var(--color-success-soft);
 }
 
 .comparison[data-status="incorrect"] .icon,

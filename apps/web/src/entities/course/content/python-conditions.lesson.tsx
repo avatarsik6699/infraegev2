@@ -120,20 +120,6 @@ export const pythonConditionsLesson = defineCourseLesson({
           }
         />
       ),
-      checkpoint: [
-        {
-          id: "checkpoint-if",
-          prompt:
-            "Что напечатает программа выше, если пользователь введёт число 2?",
-          reveal: (
-            <>
-              Только <Notation>Проверка закончена</Notation>. Сравнение
-              <Notation> 2 &lt; 0</Notation> даёт <Notation>False</Notation>,
-              поэтому вложенная команда пропускается.
-            </>
-          ),
-        },
-      ],
     },
     {
       id: "if-else",
@@ -242,26 +228,6 @@ export const pythonConditionsLesson = defineCourseLesson({
           </Typography.Text>
         </>
       ),
-      checkpoint: [
-        {
-          id: "checkpoint-tests",
-          prompt:
-            "Почему для условия number > 0 недостаточно проверить только число 3?",
-          reveal:
-            "Такой запуск показывает лишь ветвь if. Нужны ещё значение для else и сама граница 0.",
-        },
-        {
-          id: "checkpoint-boundary",
-          prompt:
-            "Какой знак подойдёт для правила «температура не выше 5 градусов»?",
-          reveal: (
-            <>
-              Знак <Notation>&lt;=</Notation>. Формулировка «не выше» включает и
-              все значения меньше 5, и саму границу 5.
-            </>
-          ),
-        },
-      ],
     },
   ],
   checkpoint: [
@@ -271,6 +237,36 @@ export const pythonConditionsLesson = defineCourseLesson({
         "Какие три шага нужны, чтобы проследить программу с if/else для конкретного ввода?",
       reveal:
         "Подставить значение, получить True или False и выполнить только соответствующую ветвь.",
+    },
+    {
+      id: "checkpoint-if",
+      prompt:
+        "Что напечатает программа выше, если пользователь введёт число 2?",
+      reveal: (
+        <>
+          Только <Notation>Проверка закончена</Notation>. Сравнение
+          <Notation> 2 &lt; 0</Notation> даёт <Notation>False</Notation>,
+          поэтому вложенная команда пропускается.
+        </>
+      ),
+    },
+    {
+      id: "checkpoint-tests",
+      prompt:
+        "Почему для условия number > 0 недостаточно проверить только число 3?",
+      reveal:
+        "Такой запуск показывает лишь ветвь if. Нужны ещё значение для else и сама граница 0.",
+    },
+    {
+      id: "checkpoint-boundary",
+      prompt:
+        "Какой знак подойдёт для правила «температура не выше 5 градусов»?",
+      reveal: (
+        <>
+          Знак <Notation>&lt;=</Notation>. Формулировка «не выше» включает и все
+          значения меньше 5, и саму границу 5.
+        </>
+      ),
     },
   ],
   result: (

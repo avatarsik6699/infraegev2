@@ -72,15 +72,6 @@ export const pythonProgramPartsLesson = defineCourseLesson({
           />
         </>
       ),
-      checkpoint: [
-        {
-          id: "checkpoint-trace",
-          prompt:
-            "Какой признак показывает, что часть программы стоит оформить отдельной функцией?",
-          reveal:
-            "Эту часть можно ясно назвать, описать её вход и возвращаемый результат и проверить независимо от ввода или вывода.",
-        },
-      ],
     },
     {
       id: "pitfall",
@@ -154,4 +145,13 @@ export const pythonProgramPartsLesson = defineCourseLesson({
       </Typography.Text>
     </>
   ),
+  checkpoint: [
+    {
+      id: "checkpoint-trace",
+      prompt:
+        "Какой признак показывает, что часть программы стоит оформить отдельной функцией?",
+      reveal:
+        "Эту часть можно ясно назвать, описать её вход и возвращаемый результат и проверить независимо от ввода или вывода.",
+    },
+  ],
 });

@@ -1,5 +1,6 @@
 import type { CourseTypes } from "~/entities/course";
 import { ActionLink } from "~/shared/components/action-link";
+import { Checkpoint } from "~/shared/components/learning-content";
 import { Typography } from "~/shared/components/typography";
 import styles from "../course-lesson-page.module.css";
 
@@ -14,6 +15,9 @@ export const CourseLessonResult: React.FC<Props> = (props) => (
   <div className={styles.resultGrid}>
     <div className={styles.resultSummary}>
       <Typography.Prose>{props.lesson.result}</Typography.Prose>
+      {props.lesson.checkpoint ? (
+        <Checkpoint items={props.lesson.checkpoint} />
+      ) : null}
     </div>
     <nav className={styles.resultNavigation} aria-label="Продолжение курса">
       <div className={styles.resultLinks}>

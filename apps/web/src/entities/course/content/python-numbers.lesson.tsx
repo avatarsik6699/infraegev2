@@ -87,14 +87,6 @@ export const pythonNumbersLesson = defineCourseLesson({
           />
         </>
       ),
-      checkpoint: [
-        {
-          id: "checkpoint-division",
-          prompt: "Что описывает выражение 23 % 10?",
-          reveal:
-            "Остаток от деления на 10 — последнюю цифру числа, то есть 3.",
-        },
-      ],
     },
     {
       id: "precedence",
@@ -174,6 +166,11 @@ export const pythonNumbersLesson = defineCourseLesson({
         "Почему результат input() нельзя сразу складывать с целым числом?",
       reveal:
         "input() возвращает строку. Сначала её нужно явно преобразовать, например через int().",
+    },
+    {
+      id: "checkpoint-division",
+      prompt: "Что описывает выражение 23 % 10?",
+      reveal: "Остаток от деления на 10 — последнюю цифру числа, то есть 3.",
     },
   ],
   result: (

@@ -127,24 +127,6 @@ export const preobrazovanieZapiseyChiselLesson = defineLesson({
           }
         />
       ),
-      checkpoint: [
-        {
-          id: "checkpoint-same-digits",
-          prompt: (
-            <>
-              Одинаковы ли числа <Notation kind="formula">101₂</Notation> и
-              <Notation kind="formula"> 101₃</Notation>?
-            </>
-          ),
-          reveal: (
-            <>
-              Нет. <Notation kind="formula">101₂ = 5</Notation>, а
-              <Notation kind="formula"> 101₃ = 10</Notation>. Совпадает строка,
-              но не разрядные веса.
-            </>
-          ),
-        },
-      ],
     },
     {
       id: "five-step-execution",
@@ -253,23 +235,6 @@ export const preobrazovanieZapiseyChiselLesson = defineLesson({
           explanation="Первый вариант приписывает цифру справа, второй — слева, поэтому меняются разные разряды и получаются разные числа."
         />
       ),
-      checkpoint: [
-        {
-          id: "checkpoint-string-slice",
-          prompt: (
-            <>
-              Что вернёт <Notation>'101101'[-2:]</Notation> и с какой стороны
-              блок окажется после <Notation>s += s[-2:]</Notation>?
-            </>
-          ),
-          reveal: (
-            <>
-              Срез вернёт <Notation>'01'</Notation>; операция допишет его справа
-              и даст <Notation>'10110101'</Notation>.
-            </>
-          ),
-        },
-      ],
     },
     {
       id: "appending-and-place-value",
@@ -356,23 +321,6 @@ export const preobrazovanieZapiseyChiselLesson = defineLesson({
           explanation="После первого добавления строка и сумма её цифр меняются. Второй шаг работает с текущей записью, поэтому бит нужно вычислить заново."
         />
       ),
-      checkpoint: [
-        {
-          id: "checkpoint-parity-state",
-          prompt: (
-            <>
-              К строке <Notation>101</Notation> дописали бит чётности. По какой
-              строке считать следующий бит?
-            </>
-          ),
-          reveal: (
-            <>
-              Сначала получается <Notation>1010</Notation>. Следующий бит
-              вычисляют уже по <Notation>1010</Notation>.
-            </>
-          ),
-        },
-      ],
     },
     {
       id: "minimum-search",
@@ -509,42 +457,6 @@ export const preobrazovanieZapiseyChiselLesson = defineLesson({
           explanation="Это допустимо только после доказательства монотонности. Здесь соседние числа попадают в разные ветви, и R после скачка может уменьшиться."
         />
       ),
-      checkpoint: [
-        {
-          id: "checkpoint-safe-bound",
-          prompt: (
-            <>
-              Почему <Notation kind="formula">R ≤ 500</Notation> ограничивает
-              <Notation kind="formula"> N</Notation> числом 500, если алгоритм
-              только приписывает цифры?
-            </>
-          ),
-          reveal: (
-            <>
-              Приписывание не уменьшает исходное значение:
-              <Notation kind="formula"> R ≥ N</Notation>. Если
-              <Notation kind="formula"> N &gt; 500</Notation>, то и
-              <Notation kind="formula"> R &gt; 500</Notation>.
-            </>
-          ),
-        },
-        {
-          id: "checkpoint-branch-condition",
-          prompt: (
-            <>
-              Если сказано «<Notation kind="formula">N</Notation> делится на 3»,
-              можно ли проверять сумму цифр строки <Notation>s</Notation>?
-            </>
-          ),
-          reveal: (
-            <>
-              Нужно буквально <Notation>n % 3 == 0</Notation>. Условие про сумму
-              цифр записывалось бы отдельно:
-              <Notation> sum(map(int, s)) % 3 == 0</Notation>.
-            </>
-          ),
-        },
-      ],
     },
     {
       id: "simultaneous-replacement",
@@ -743,6 +655,86 @@ export const preobrazovanieZapiseyChiselLesson = defineLesson({
           если кандидаты идут по возрастанию. Для максимума при ветвлении нужен
           весь обоснованный диапазон, если монотонность
           <Notation kind="formula"> R(N)</Notation> не доказана.
+        </>
+      ),
+    },
+    {
+      id: "checkpoint-same-digits",
+      prompt: (
+        <>
+          Одинаковы ли числа <Notation kind="formula">101₂</Notation> и
+          <Notation kind="formula"> 101₃</Notation>?
+        </>
+      ),
+      reveal: (
+        <>
+          Нет. <Notation kind="formula">101₂ = 5</Notation>, а
+          <Notation kind="formula"> 101₃ = 10</Notation>. Совпадает строка, но
+          не разрядные веса.
+        </>
+      ),
+    },
+    {
+      id: "checkpoint-string-slice",
+      prompt: (
+        <>
+          Что вернёт <Notation>'101101'[-2:]</Notation> и с какой стороны блок
+          окажется после <Notation>s += s[-2:]</Notation>?
+        </>
+      ),
+      reveal: (
+        <>
+          Срез вернёт <Notation>'01'</Notation>; операция допишет его справа и
+          даст <Notation>'10110101'</Notation>.
+        </>
+      ),
+    },
+    {
+      id: "checkpoint-parity-state",
+      prompt: (
+        <>
+          К строке <Notation>101</Notation> дописали бит чётности. По какой
+          строке считать следующий бит?
+        </>
+      ),
+      reveal: (
+        <>
+          Сначала получается <Notation>1010</Notation>. Следующий бит вычисляют
+          уже по <Notation>1010</Notation>.
+        </>
+      ),
+    },
+    {
+      id: "checkpoint-safe-bound",
+      prompt: (
+        <>
+          Почему <Notation kind="formula">R ≤ 500</Notation> ограничивает
+          <Notation kind="formula"> N</Notation> числом 500, если алгоритм
+          только приписывает цифры?
+        </>
+      ),
+      reveal: (
+        <>
+          Приписывание не уменьшает исходное значение:
+          <Notation kind="formula"> R ≥ N</Notation>. Если
+          <Notation kind="formula"> N &gt; 500</Notation>, то и
+          <Notation kind="formula"> R &gt; 500</Notation>.
+        </>
+      ),
+    },
+    {
+      id: "checkpoint-branch-condition",
+      prompt: (
+        <>
+          Если сказано «<Notation kind="formula">N</Notation> делится на 3»,
+          можно ли проверять сумму цифр строки <Notation>s</Notation>?
+        </>
+      ),
+      reveal: (
+        <>
+          Нужно буквально <Notation>n % 3 == 0</Notation>. Условие про сумму
+          цифр записывалось бы отдельно:
+          <Notation> sum(map(int, s)) % 3 == 0</Notation>.
         </>
       ),
     },

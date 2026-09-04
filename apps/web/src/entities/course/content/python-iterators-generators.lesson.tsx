@@ -77,14 +77,6 @@ export const pythonIteratorsGeneratorsLesson = defineCourseLesson({
           />
         </>
       ),
-      checkpoint: [
-        {
-          id: "checkpoint-position",
-          prompt: "Что помнит итератор после одного вызова next?",
-          reveal:
-            "Он помнит, что первое значение уже выдано, и следующий запрос должен продолжить с новой позиции.",
-        },
-      ],
     },
     {
       id: "generator",
@@ -149,6 +141,12 @@ export const pythonIteratorsGeneratorsLesson = defineCourseLesson({
       prompt: "Чем yield отличается от return в этом уроке?",
       reveal:
         "return завершает обычный вызов, а yield отдаёт одно значение и сохраняет состояние для продолжения.",
+    },
+    {
+      id: "checkpoint-position",
+      prompt: "Что помнит итератор после одного вызова next?",
+      reveal:
+        "Он помнит, что первое значение уже выдано, и следующий запрос должен продолжить с новой позиции.",
     },
   ],
   result: (

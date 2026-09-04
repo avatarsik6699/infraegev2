@@ -179,45 +179,6 @@ export const rekursiyaLesson = defineLesson({
           </Typography.Text>
         </>
       ),
-      checkpoint: [
-        {
-          id: "checkpoint-base-case",
-          prompt: (
-            <>
-              Дано <Notation kind="formula">F(1) = 5</Notation> и{" "}
-              <Notation kind="formula">F(n) = F(n − 1) + 3</Notation> при{" "}
-              <Notation kind="formula">n &gt; 1</Notation>. Можно ли подставить{" "}
-              <Notation kind="formula">n = 1</Notation> в рекуррентную формулу,
-              чтобы найти ещё одно значение?
-            </>
-          ),
-          reveal: (
-            <>
-              Нет. Формула работает только при{" "}
-              <Notation kind="formula">n &gt; 1</Notation>, а{" "}
-              <Notation kind="formula">F(1)</Notation> — отдельно заданный
-              базовый случай. Такая подстановка потребовала бы не определённое в
-              условии значение <Notation kind="formula">F(0)</Notation>.
-            </>
-          ),
-        },
-        {
-          id: "checkpoint-base-case-value",
-          prompt: (
-            <>
-              Чему равно <Notation kind="formula">F(3)</Notation> для той же
-              функции?
-            </>
-          ),
-          reveal: (
-            <>
-              Сначала <Notation kind="formula">F(2) = 5 + 3 = 8</Notation>,
-              затем <Notation kind="formula">F(3) = 8 + 3 = 11</Notation>.
-              Двигаться нужно от базового случая вверх по одному шагу.
-            </>
-          ),
-        },
-      ],
     },
     {
       id: "code-and-call-stack",
@@ -337,43 +298,6 @@ export const rekursiyaLesson = defineLesson({
           }
         />
       ),
-      checkpoint: [
-        {
-          id: "checkpoint-loop-choice",
-          prompt: (
-            <>
-              Для вычисления <Notation kind="formula">F(2024)</Notation> каждое
-              следующее значение зависит только от предыдущего. Что надёжнее в
-              Python: прямая рекурсия или цикл с одной переменной?
-            </>
-          ),
-          reveal: (
-            <>
-              Цикл с одной переменной: ему не нужен глубокий стек вызовов, и он
-              хранит ровно то значение, которое понадобится на следующем шаге.
-            </>
-          ),
-        },
-        {
-          id: "checkpoint-loop-range",
-          prompt: (
-            <>
-              Если переменная <Notation>f</Notation> уже хранит{" "}
-              <Notation kind="formula">F(1)</Notation>, с какого значения{" "}
-              <Notation kind="formula">n</Notation> должен начинаться цикл для
-              вычисления <Notation kind="formula">F(target)</Notation>?
-            </>
-          ),
-          reveal: (
-            <>
-              С <Notation kind="formula">n = 2</Notation>: первое значение уже
-              известно. Чтобы обработать <Notation>target</Notation>{" "}
-              включительно, граница Python-цикла будет{" "}
-              <Notation>range(2, target + 1)</Notation>.
-            </>
-          ),
-        },
-      ],
     },
     {
       id: "several-previous-values",
@@ -527,43 +451,6 @@ export const rekursiyaLesson = defineLesson({
           }
         />
       ),
-      checkpoint: [
-        {
-          id: "checkpoint-two-values",
-          prompt: (
-            <>
-              Функция задана как <Notation kind="formula">F(1) = 1</Notation>,{" "}
-              <Notation kind="formula">F(2) = 1</Notation>,{" "}
-              <Notation kind="formula">F(n) = F(n − 1) + F(n − 2)</Notation>.
-              Что станет главной проблемой прямой рекурсии при{" "}
-              <Notation kind="formula">F(40)</Notation>?
-            </>
-          ),
-          reveal: (
-            <>
-              Не глубина, а огромное количество повторных вычислений: одни и те
-              же значения вызываются заново из разных ветвей. Здесь лучше цикл,
-              список, пара переменных или кеширование.
-            </>
-          ),
-        },
-        {
-          id: "checkpoint-two-values-update",
-          prompt: (
-            <>
-              Почему два последних значения нельзя бездумно обновлять двумя
-              последовательными присваиваниями?
-            </>
-          ),
-          reveal: (
-            <>
-              Первое присваивание перезапишет одно из старых значений, и второе
-              уже сложит не ту пару. Нужно сначала сохранить новое значение или
-              использовать параллельное присваивание Python.
-            </>
-          ),
-        },
-      ],
     },
     {
       id: "large-arguments-algebraic-shortcut",
@@ -621,27 +508,6 @@ export const rekursiyaLesson = defineLesson({
           ]}
         />
       ),
-      checkpoint: [
-        {
-          id: "checkpoint-large-ratio",
-          prompt: (
-            <>
-              Если <Notation kind="formula">F(n) = n·F(n − 1)</Notation>, нужно
-              ли вычислять всю последовательность от{" "}
-              <Notation kind="formula">F(1)</Notation>, чтобы найти{" "}
-              <Notation kind="formula">F(2024) / F(2022)</Notation>?
-            </>
-          ),
-          reveal: (
-            <>
-              Нет. Достаточно раскрыть два последних шага:{" "}
-              <Notation kind="formula">F(2024) = 2024·2023·F(2022)</Notation>,
-              после чего <Notation kind="formula">F(2022)</Notation>{" "}
-              сокращается.
-            </>
-          ),
-        },
-      ],
     },
     {
       id: "general-method",
@@ -731,4 +597,130 @@ export const rekursiyaLesson = defineLesson({
       </Typography.Text>
     </>
   ),
+  checkpoint: [
+    {
+      id: "checkpoint-base-case",
+      prompt: (
+        <>
+          Дано <Notation kind="formula">F(1) = 5</Notation> и{" "}
+          <Notation kind="formula">F(n) = F(n − 1) + 3</Notation> при{" "}
+          <Notation kind="formula">n &gt; 1</Notation>. Можно ли подставить{" "}
+          <Notation kind="formula">n = 1</Notation> в рекуррентную формулу,
+          чтобы найти ещё одно значение?
+        </>
+      ),
+      reveal: (
+        <>
+          Нет. Формула работает только при{" "}
+          <Notation kind="formula">n &gt; 1</Notation>, а{" "}
+          <Notation kind="formula">F(1)</Notation> — отдельно заданный базовый
+          случай. Такая подстановка потребовала бы не определённое в условии
+          значение <Notation kind="formula">F(0)</Notation>.
+        </>
+      ),
+    },
+    {
+      id: "checkpoint-base-case-value",
+      prompt: (
+        <>
+          Чему равно <Notation kind="formula">F(3)</Notation> для той же
+          функции?
+        </>
+      ),
+      reveal: (
+        <>
+          Сначала <Notation kind="formula">F(2) = 5 + 3 = 8</Notation>, затем{" "}
+          <Notation kind="formula">F(3) = 8 + 3 = 11</Notation>. Двигаться нужно
+          от базового случая вверх по одному шагу.
+        </>
+      ),
+    },
+    {
+      id: "checkpoint-loop-choice",
+      prompt: (
+        <>
+          Для вычисления <Notation kind="formula">F(2024)</Notation> каждое
+          следующее значение зависит только от предыдущего. Что надёжнее в
+          Python: прямая рекурсия или цикл с одной переменной?
+        </>
+      ),
+      reveal: (
+        <>
+          Цикл с одной переменной: ему не нужен глубокий стек вызовов, и он
+          хранит ровно то значение, которое понадобится на следующем шаге.
+        </>
+      ),
+    },
+    {
+      id: "checkpoint-loop-range",
+      prompt: (
+        <>
+          Если переменная <Notation>f</Notation> уже хранит{" "}
+          <Notation kind="formula">F(1)</Notation>, с какого значения{" "}
+          <Notation kind="formula">n</Notation> должен начинаться цикл для
+          вычисления <Notation kind="formula">F(target)</Notation>?
+        </>
+      ),
+      reveal: (
+        <>
+          С <Notation kind="formula">n = 2</Notation>: первое значение уже
+          известно. Чтобы обработать <Notation>target</Notation> включительно,
+          граница Python-цикла будет <Notation>range(2, target + 1)</Notation>.
+        </>
+      ),
+    },
+    {
+      id: "checkpoint-two-values",
+      prompt: (
+        <>
+          Функция задана как <Notation kind="formula">F(1) = 1</Notation>,{" "}
+          <Notation kind="formula">F(2) = 1</Notation>,{" "}
+          <Notation kind="formula">F(n) = F(n − 1) + F(n − 2)</Notation>. Что
+          станет главной проблемой прямой рекурсии при{" "}
+          <Notation kind="formula">F(40)</Notation>?
+        </>
+      ),
+      reveal: (
+        <>
+          Не глубина, а огромное количество повторных вычислений: одни и те же
+          значения вызываются заново из разных ветвей. Здесь лучше цикл, список,
+          пара переменных или кеширование.
+        </>
+      ),
+    },
+    {
+      id: "checkpoint-two-values-update",
+      prompt: (
+        <>
+          Почему два последних значения нельзя бездумно обновлять двумя
+          последовательными присваиваниями?
+        </>
+      ),
+      reveal: (
+        <>
+          Первое присваивание перезапишет одно из старых значений, и второе уже
+          сложит не ту пару. Нужно сначала сохранить новое значение или
+          использовать параллельное присваивание Python.
+        </>
+      ),
+    },
+    {
+      id: "checkpoint-large-ratio",
+      prompt: (
+        <>
+          Если <Notation kind="formula">F(n) = n·F(n − 1)</Notation>, нужно ли
+          вычислять всю последовательность от{" "}
+          <Notation kind="formula">F(1)</Notation>, чтобы найти{" "}
+          <Notation kind="formula">F(2024) / F(2022)</Notation>?
+        </>
+      ),
+      reveal: (
+        <>
+          Нет. Достаточно раскрыть два последних шага:{" "}
+          <Notation kind="formula">F(2024) = 2024·2023·F(2022)</Notation>, после
+          чего <Notation kind="formula">F(2022)</Notation> сокращается.
+        </>
+      ),
+    },
+  ],
 });

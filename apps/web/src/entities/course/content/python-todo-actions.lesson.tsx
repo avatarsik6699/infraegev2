@@ -147,14 +147,6 @@ export const pythonTodoActionsLesson = defineCourseLesson({
           />
         </>
       ),
-      checkpoint: [
-        {
-          id: "checkpoint-none",
-          prompt: "Зачем проверять task is None до изменения словаря?",
-          reveal:
-            "Поиск может ничего не вернуть; у None нет полей title или done.",
-        },
-      ],
     },
     {
       id: "delete",
@@ -229,6 +221,11 @@ export const pythonTodoActionsLesson = defineCourseLesson({
         'Почему изменение task["title"] видно при следующем обходе списка tasks?',
       reveal:
         "find_task возвращает ссылку на тот же изменяемый словарь, который хранится внутри списка.",
+    },
+    {
+      id: "checkpoint-none",
+      prompt: "Зачем проверять task is None до изменения словаря?",
+      reveal: "Поиск может ничего не вернуть; у None нет полей title или done.",
     },
   ],
   result: (

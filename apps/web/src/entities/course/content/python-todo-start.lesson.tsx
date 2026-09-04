@@ -119,14 +119,6 @@ export const pythonTodoStartLesson = defineCourseLesson({
           />
         </>
       ),
-      checkpoint: [
-        {
-          id: "checkpoint-exit",
-          prompt: "Почему условие цикла можно оставить True?",
-          reveal:
-            "У программы есть явная команда exit, которая завершает цикл через break.",
-        },
-      ],
     },
     {
       id: "empty",
@@ -196,6 +188,12 @@ export const pythonTodoStartLesson = defineCourseLesson({
       prompt: "Почему next_id хранится отдельно от длины списка?",
       reveal:
         "После будущего удаления длина уменьшится, а уже использованный номер нельзя безопасно выдать снова.",
+    },
+    {
+      id: "checkpoint-exit",
+      prompt: "Почему условие цикла можно оставить True?",
+      reveal:
+        "У программы есть явная команда exit, которая завершает цикл через break.",
     },
   ],
   result: (

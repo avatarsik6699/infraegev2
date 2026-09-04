@@ -73,15 +73,6 @@ export const pythonTablesLesson = defineCourseLesson({
           />
         </>
       ),
-      checkpoint: [
-        {
-          id: "checkpoint-trace",
-          prompt:
-            "Почему фильтр лучше применять до обновления суммы или максимума?",
-          reveal:
-            "Тогда неподходящие строки вообще не влияют на агрегат, и смысл каждой итерации остаётся ясным.",
-        },
-      ],
     },
     {
       id: "records",
@@ -177,4 +168,13 @@ export const pythonTablesLesson = defineCourseLesson({
       </Typography.Text>
     </>
   ),
+  checkpoint: [
+    {
+      id: "checkpoint-trace",
+      prompt:
+        "Почему фильтр лучше применять до обновления суммы или максимума?",
+      reveal:
+        "Тогда неподходящие строки вообще не влияют на агрегат, и смысл каждой итерации остаётся ясным.",
+    },
+  ],
 });

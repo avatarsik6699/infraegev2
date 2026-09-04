@@ -84,14 +84,6 @@ export const pythonForRangeLesson = defineCourseLesson({
           />
         </>
       ),
-      checkpoint: [
-        {
-          id: "checkpoint-trace",
-          prompt: "Какие значения создаёт range(3, 8, 2)?",
-          reveal:
-            "3, 5 и 7. Следующее значение 9 уже пересекает стоп-границу 8.",
-        },
-      ],
     },
     {
       id: "pitfall",
@@ -168,4 +160,11 @@ export const pythonForRangeLesson = defineCourseLesson({
       </Typography.Text>
     </>
   ),
+  checkpoint: [
+    {
+      id: "checkpoint-trace",
+      prompt: "Какие значения создаёт range(3, 8, 2)?",
+      reveal: "3, 5 и 7. Следующее значение 9 уже пересекает стоп-границу 8.",
+    },
+  ],
 });

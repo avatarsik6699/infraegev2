@@ -1,7 +1,6 @@
 import { useRef } from "react";
 import { lessonPublications, type LessonTypes } from "~/entities/lesson";
 import {
-  Checkpoint,
   LessonIntro,
   LessonTheory,
   LessonSectionHeading,
@@ -53,16 +52,11 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
     ...(props.lesson.examFocus
       ? [{ id: "exam-focus", label: "На экзамене", items: [] }]
       : []),
-    ...(props.lesson.checkpoint
-      ? [{ id: "checkpoint", label: "Проверьте себя", items: [] }]
-      : []),
     { id: "practice", label: "Практика", items: [] },
     { id: "result", label: "Итог", items: [] },
   ];
   const examIndex = 2;
-  const checkpointIndex = examIndex + Number(Boolean(props.lesson.examFocus));
-  const practiceIndex =
-    checkpointIndex + Number(Boolean(props.lesson.checkpoint));
+  const practiceIndex = examIndex + Number(Boolean(props.lesson.examFocus));
   const resultIndex = practiceIndex + 1;
 
   return (
@@ -106,15 +100,6 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
                 На экзамене
               </LessonSectionHeading>
               <Typography.Prose>{props.lesson.examFocus}</Typography.Prose>
-            </section>
-          ) : null}
-
-          {props.lesson.checkpoint ? (
-            <section id="checkpoint" className={styles.section}>
-              <LessonSectionHeading index={checkpointIndex} variant="lesson">
-                Проверьте себя
-              </LessonSectionHeading>
-              <Checkpoint items={props.lesson.checkpoint} />
             </section>
           ) : null}
 

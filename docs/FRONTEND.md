@@ -103,7 +103,8 @@ app → routes → pages → widgets → features → entities → shared
 - The active profile has two neutral text levels only: primary and secondary. Semantic
   success/information/warning/error remain separate, while `soft`/`muted`/`faint` aliases must not
   create additional visible gray steps. Syntax colors remain the exception above. Informational
-  blue is reserved for formative `Checkpoint` markers, not ordinary prose or decorative surfaces.
+  blue is reserved for the single formative `Checkpoint` block, not ordinary prose or decorative
+  surfaces.
 - Static surfaces and controls stay flat. Use spacing, one quiet fill or one border to establish a
   boundary; do not stack fill + border + shadow or nest card-like surfaces. Add an elevation token
   only together with a real transient-overlay consumer, never as a reserved decorative scale.
@@ -165,22 +166,24 @@ app → routes → pages → widgets → features → entities → shared
   informational only: the published lesson row remains the course entry point, so progress does
   not contain a competing action. Never render a total-course percentage, hard lesson locks or
   course-wide reset while the program is still developing.
-- A `Checkpoint` may appear immediately after a `ConceptBlock` that closes a coherent theory
-  group. Keep these checks short, sequential in SSR/no-JS, and visually contained; distinguish the
-  group with one question icon, a matching informational heading label and one compact neutral
-  left rule, without adding a card surface or coloring the question text.
-  A group may contain several independent disclosure questions when the theory cluster warrants
-  them. Do not defer all retrieval practice to one block directly before the practice section. Two
-  directly adjacent lesson steps must not each render their own single-item `Checkpoint`; merge
-  such a pair into one step's multi-item `checkpoint` array instead.
-- `Mistake` presents its authored claim and explanation as one vertical «Неверно» / «Как правильно»
-  comparison at every viewport width. A compact neutral rule identifies the block; error and success
-  colors remain reserved for its icons and text labels, while authored body copy stays neutral and
-  the two readings use a standard neutral divider. Color is always duplicated by the distinct icons and labels; because
-  this is static instructional content rather than a runtime event, it remains an `aside` instead
-  of an alert. `Checkpoint` and `Mistake` share the same compact outer padding, left-rule weight,
-  service-label type, icon size and text-column inset so their semantics differ without competing
-  in the reading flow. `WorkedExample` treats «Разберём на примере» as restrained reading context, not a
+- A lesson has at most one `Checkpoint`: authored once at `Definition.checkpoint`, gathering every
+  formative disclosure question for the whole lesson, and rendered inside the «Итоги» (`result`)
+  section, after the result copy — never per `ConceptBlock` and never as its own step before
+  practice. Keep each question short, sequential in SSR/no-JS, and visually contained; distinguish
+  the block with one question icon and a matching informational heading label. There is exactly one
+  `Checkpoint` block per lesson by construction, so the "merge adjacent blocks" concern this rule
+  used to guard against no longer applies — there is nothing left to merge.
+- `Mistake`, `Checkpoint` and `WorkedExample` share one visual contract: a single quiet
+  semantic-tinted fill (no border, no divider line) with `--radius-surface` rounding, the same
+  compact outer padding, service-label type, icon size and text-column inset — this is the fill
+  half of "one quiet fill or one border," not an exception to it. `Mistake` presents its authored
+  claim and explanation as one vertical «Неверно» / «Как правильно» comparison at every viewport
+  width; each reading gets its own tinted background (danger for «Неверно», success for «Как
+  правильно») instead of a rule between them — color is always duplicated by the distinct icons and
+  labels. Because this is static instructional content rather than a runtime event, `Mistake`
+  remains an `aside` instead of an alert. `Checkpoint` uses the informational tint;
+  `WorkedExample` uses the neutral accent-tonal fill, since it is not a semantic alert.
+  `WorkedExample` treats «Разберём на примере» as restrained reading context, not a
   data-style eyebrow competing with the example title. Lesson layouts own external vertical
   rhythm: continued prose uses the 12px content-flow role, a stage landmark sits 16px from its
   first related content, a related standalone learning block uses 24px, separate concepts use 48px

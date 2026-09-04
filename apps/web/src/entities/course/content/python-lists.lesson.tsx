@@ -72,15 +72,6 @@ export const pythonListsLesson = defineCourseLesson({
           />
         </>
       ),
-      checkpoint: [
-        {
-          id: "checkpoint-trace",
-          prompt:
-            "Почему после append не нужно присваивать результат метода обратно списку?",
-          reveal:
-            "append изменяет исходный список и возвращает None. Повторное присваивание заменило бы переменную этим значением.",
-        },
-      ],
     },
     {
       id: "remove",
@@ -179,4 +170,13 @@ export const pythonListsLesson = defineCourseLesson({
       </Typography.Text>
     </>
   ),
+  checkpoint: [
+    {
+      id: "checkpoint-trace",
+      prompt:
+        "Почему после append не нужно присваивать результат метода обратно списку?",
+      reveal:
+        "append изменяет исходный список и возвращает None. Повторное присваивание заменило бы переменную этим значением.",
+    },
+  ],
 });

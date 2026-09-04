@@ -2,7 +2,6 @@ import { useRef } from "react";
 import { getCourseLessons } from "~/entities/course";
 import { type LessonTypes } from "~/entities/lesson";
 import {
-  Checkpoint,
   LessonIntro,
   LessonTheory,
   LessonSectionHeading,
@@ -51,9 +50,6 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
         label: concept.navLabel,
       })),
     },
-    ...(props.lesson.checkpoint
-      ? [{ id: "checkpoint", label: "Проверьте себя", items: [] }]
-      : []),
     { id: "practice", label: "Практика", items: [] },
     { id: "result", label: "Итог", items: [] },
   ];
@@ -92,12 +88,6 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
             concepts={props.lesson.theory}
             className={styles.section}
           />
-
-          {props.lesson.checkpoint ? (
-            <div id="checkpoint" className={styles.section}>
-              <Checkpoint items={props.lesson.checkpoint} />
-            </div>
-          ) : null}
 
           <section
             id="practice"

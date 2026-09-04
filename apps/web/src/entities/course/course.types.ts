@@ -16,7 +16,6 @@ export namespace CourseTypes {
     diagram?: React.ReactNode;
     workedExample?: React.ReactNode;
     mistake?: React.ReactNode;
-    checkpoint?: readonly CheckpointItem[];
   };
 
   export type Module = {
@@ -53,6 +52,8 @@ export namespace CourseTypes {
     learningOutcomes: readonly string[];
     practiceTaskIds: readonly string[];
     theory: readonly ConceptBlock[];
+    /** The lesson's single formative, think-then-reveal self-check, rendered inside `result`
+     *  («Итоги»), after the result copy — not counted toward masteryThreshold. */
     checkpoint?: readonly CheckpointItem[];
     result: React.ReactNode;
     status: Status;

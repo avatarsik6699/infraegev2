@@ -72,15 +72,6 @@ export const pythonBruteforceLesson = defineCourseLesson({
           />
         </>
       ),
-      checkpoint: [
-        {
-          id: "checkpoint-trace",
-          prompt:
-            "Почему проверка диапазона так же важна, как условие внутри цикла?",
-          reveal:
-            "Идеальное условие не сможет принять вариант, который цикл вообще не породил.",
-        },
-      ],
     },
     {
       id: "pitfall",
@@ -154,4 +145,13 @@ export const pythonBruteforceLesson = defineCourseLesson({
       </Typography.Text>
     </>
   ),
+  checkpoint: [
+    {
+      id: "checkpoint-trace",
+      prompt:
+        "Почему проверка диапазона так же важна, как условие внутри цикла?",
+      reveal:
+        "Идеальное условие не сможет принять вариант, который цикл вообще не породил.",
+    },
+  ],
 });

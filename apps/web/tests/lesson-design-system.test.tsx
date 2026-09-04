@@ -320,16 +320,9 @@ describe("lesson design system", () => {
     expect(
       screen.queryByRole("navigation", { name: "Вернуться к теории" }),
     ).toBeNull();
-    const checkpoints = screen.getAllByLabelText("Проверьте себя");
-    expect(checkpoints).toHaveLength(4);
-    expect(
-      checkpoints.map(
-        (checkpoint) => within(checkpoint).getAllByRole("button").length,
-      ),
-    ).toEqual([2, 2, 2, 1]);
-    for (const checkpoint of checkpoints) {
-      expect(checkpoint.querySelector('svg[aria-hidden="true"]')).toBeTruthy();
-    }
+    const checkpoint = screen.getByLabelText("Проверьте себя");
+    expect(within(checkpoint).getAllByRole("button")).toHaveLength(7);
+    expect(checkpoint.querySelector('svg[aria-hidden="true"]')).toBeTruthy();
 
     const template = screen.getByRole("group", {
       name: "Универсальный шаблон: одно предыдущее значение",

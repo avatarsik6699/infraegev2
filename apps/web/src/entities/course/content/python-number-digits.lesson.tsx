@@ -86,14 +86,6 @@ export const pythonNumberDigitsLesson = defineCourseLesson({
           </Typography.Text>
         </>
       ),
-      checkpoint: [
-        {
-          id: "checkpoint-trace",
-          prompt:
-            "Каким станет number после двух итераций для исходного значения 538?",
-          reveal: "Сначала 53, затем 5.",
-        },
-      ],
     },
     {
       id: "zero",
@@ -159,6 +151,12 @@ export const pythonNumberDigitsLesson = defineCourseLesson({
       id: "checkpoint-direction",
       prompt: "В каком порядке цикл получает цифры числа 204?",
       reveal: "Справа налево: 4, 0, 2.",
+    },
+    {
+      id: "checkpoint-trace",
+      prompt:
+        "Каким станет number после двух итераций для исходного значения 538?",
+      reveal: "Сначала 53, затем 5.",
     },
   ],
   result: (

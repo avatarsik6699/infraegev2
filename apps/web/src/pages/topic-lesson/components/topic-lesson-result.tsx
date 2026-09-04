@@ -1,5 +1,6 @@
 import type { LessonContent } from "~/entities/lesson";
 import { ActionLink } from "~/shared/components/action-link";
+import { Checkpoint } from "~/shared/components/learning-content";
 import { Typography } from "~/shared/components/typography";
 import styles from "../topic-lesson-page.module.css";
 
@@ -21,6 +22,9 @@ export const TopicLessonResult: React.FC<Props> = (props) => (
     <div className={styles.resultSummary}>
       <Typography.Title order={3}>Что получилось</Typography.Title>
       <Typography.Prose>{props.lesson.result}</Typography.Prose>
+      {props.lesson.checkpoint ? (
+        <Checkpoint items={props.lesson.checkpoint} />
+      ) : null}
     </div>
 
     <nav className={styles.resultNavigation} aria-label="Другие уроки">

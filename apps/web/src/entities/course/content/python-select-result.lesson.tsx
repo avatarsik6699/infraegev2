@@ -72,14 +72,6 @@ export const pythonSelectResultLesson = defineCourseLesson({
           />
         </>
       ),
-      checkpoint: [
-        {
-          id: "checkpoint-trace",
-          prompt: "Почему best описывает только уже просмотренные варианты?",
-          reveal:
-            "Будущие кандидаты ещё не проверены. Инвариант позволяет доказать корректность пошагово: после каждой итерации best лучший среди обработанных.",
-        },
-      ],
     },
     {
       id: "pitfall",
@@ -150,4 +142,12 @@ export const pythonSelectResultLesson = defineCourseLesson({
       </Typography.Text>
     </>
   ),
+  checkpoint: [
+    {
+      id: "checkpoint-trace",
+      prompt: "Почему best описывает только уже просмотренные варианты?",
+      reveal:
+        "Будущие кандидаты ещё не проверены. Инвариант позволяет доказать корректность пошагово: после каждой итерации best лучший среди обработанных.",
+    },
+  ],
 });

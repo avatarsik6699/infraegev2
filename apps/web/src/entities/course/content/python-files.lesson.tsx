@@ -103,15 +103,6 @@ export const pythonFilesLesson = defineCourseLesson({
           />
         </>
       ),
-      checkpoint: [
-        {
-          id: "checkpoint-trace",
-          prompt:
-            "Почему полезно отдельно видеть исходную строку, очищенный текст и число?",
-          reveal:
-            "Так можно точно определить этап ошибки: чтение, очистку формата или преобразование типа.",
-        },
-      ],
     },
     {
       id: "pitfall",
@@ -184,4 +175,13 @@ export const pythonFilesLesson = defineCourseLesson({
       </Typography.Text>
     </>
   ),
+  checkpoint: [
+    {
+      id: "checkpoint-trace",
+      prompt:
+        "Почему полезно отдельно видеть исходную строку, очищенный текст и число?",
+      reveal:
+        "Так можно точно определить этап ошибки: чтение, очистку формата или преобразование типа.",
+    },
+  ],
 });

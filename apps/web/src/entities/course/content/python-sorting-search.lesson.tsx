@@ -80,14 +80,6 @@ export const pythonSortingSearchLesson = defineCourseLesson({
           />
         </>
       ),
-      checkpoint: [
-        {
-          id: "checkpoint-copy",
-          prompt: "Как получить отсортированный список, не меняя исходный?",
-          reveal:
-            "Передать исходную коллекцию функции sorted и сохранить возвращённый новый список.",
-        },
-      ],
     },
     {
       id: "key",
@@ -150,6 +142,12 @@ export const pythonSortingSearchLesson = defineCourseLesson({
       prompt:
         "Зачем после найденного единственного элемента может понадобиться break?",
       reveal: "Он прекращает ненужный дальнейший просмотр списка.",
+    },
+    {
+      id: "checkpoint-copy",
+      prompt: "Как получить отсортированный список, не меняя исходный?",
+      reveal:
+        "Передать исходную коллекцию функции sorted и сохранить возвращённый новый список.",
     },
   ],
   result: (

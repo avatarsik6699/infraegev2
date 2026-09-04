@@ -9,8 +9,8 @@
 
 | Field | Value |
 |-------|-------|
-| Document Version | `v2.12` |
-| Date | `2026-09-03` |
+| Document Version | `v2.13` |
+| Date | `2026-09-04` |
 | Architect / Owner | `v.godlevskiy` |
 | Stack | See [docs/STACK.md](./STACK.md) |
 | Domain | Платформа подготовки к ЕГЭ по информатике — самостоятельные темы экзамена и мини-курсы с теорией, визуализацией и практикой |
@@ -106,18 +106,17 @@ MVP-границ из этого решения не следуют.
    групп) вводит идею и объясняет, что происходит и почему это работает, без искусственного
    переключателя «кратко/подробно». Примеры, промежуточные вычисления, способы решения и
    разобранные ошибки располагаются непосредственно рядом с теорией, которую они поясняют, а не
-   образуют отдельный этап. Короткая формативная самопроверка может завершать смысловую группу
-   теории непосредственно в её `ConceptBlock`, чтобы ученик проверял модель до перехода к
-   следующей идее.
+   образуют отдельный этап. Локальной самопроверки внутри отдельного `ConceptBlock` больше нет —
+   каждая теоретическая группа читается подряд, без прерывающих retrieval-практик.
 2. **Что важно для ЕГЭ** (`exam_focus`, опциональна) объединяет требования формата, универсальный
    алгоритм, типичные ловушки, лайфхаки и общие подсказки.
-3. **Промежуточный итог** (`checkpoint`, опциональна) компактно собирает опорную модель перед
-   самостоятельным применением и не учитывается как выполненная практика.
-4. **Практика** (`practice`, обязательна) содержит постепенно усложняющиеся самостоятельные
+3. **Практика** (`practice`, обязательна) содержит постепенно усложняющиеся самостоятельные
    задачи с приоритетом свободного ввода, доступными подсказками и решениями.
-5. **Результат** (`result`, обязательна) завершает материал итогами, освоенными умениями,
+4. **Результат** (`result`, обязательна) завершает материал итогами, освоенными умениями,
    результатом практики, текущим mastery-состоянием и registry-derived списком доступных
-   опубликованных материалов.
+   опубликованных материалов. Формативная самопроверка (`checkpoint`, опциональна) — единственная
+   на весь урок, собирает вопросы по всем теоретическим идеям и рендерится внутри этой секции,
+   после итогового текста; не учитывается как выполненная практика.
 
 Роли идут только в этом порядке; опциональные роли можно пропускать, но нельзя переставлять.
 Контент включается только когда помогает понять материал, решить задачу или выбрать следующий шаг.
@@ -252,7 +251,8 @@ defineLesson(...) — типизированный конструктор, од�
   practiceTaskIds: [task_id]                   // ссылается в content/tasks/**, см. Task ниже
   theory: ConceptBlock[]                       // порядок = порядок массива, без runtime role-инварианта
   examFocus: ReactNode
-  checkpoint: CheckpointItem[]                 // формативная самопроверка, не входит в masteryThreshold
+  checkpoint: CheckpointItem[]                 // единственная формативная самопроверка урока, рендерится
+                                                // внутри result/«Итоги», не входит в masteryThreshold
   result: ReactNode
   status: draft | review | published
   accessTier: free | paid                      // задел под монетизацию — не enforced на MVP
@@ -266,7 +266,6 @@ ConceptBlock — единица нарезки теории по одной ид
                                                  // в голове ≥3 взаимосвязанных величин (split-attention)
   workedExample?: <WorkedExample/>               // предшествует любой самостоятельной попытке
                                                  // (worked-example effect, см. docs/artifacts/learning-science-principles.md §1.1)
-  checkpoint?: CheckpointItem[]                  // локальная самопроверка сразу после смысловой группы
   mistake?: <Mistake/>                           // рядом со своим концептом, не в общем списке в конце
                                                  // (signalling principle)
 
@@ -319,7 +318,8 @@ defineCourseLesson(...) — типизированный конструктор,
   learningOutcomes: [string]
   practiceTaskIds: [task_id]
   theory: ConceptBlock[]
-  checkpoint: CheckpointItem[]
+  checkpoint: CheckpointItem[]                 // единственная формативная самопроверка урока, рендерится
+                                                // внутри result/«Итоги», не входит в masteryThreshold
   result: ReactNode
   status: draft | review | published
   accessTier: free | paid
@@ -369,7 +369,9 @@ SSR/no-JavaScript вывод содержит весь текст, таблиц�
 длинный код остаётся полностью доступным даже когда enhanced UI показывает его свёрнуто.
 
 LearningFlowPolicy (продуктовый контракт, не отдельный runtime-объект)
-  section_order: theory (ConceptBlock+) -> exam_focus? -> checkpoint? -> practice -> result
+  section_order: theory (ConceptBlock+) -> exam_focus? -> practice -> result
+  // checkpoint больше не самостоятельная роль в этом порядке: единственный CheckpointItem[] урока
+  // рендерится внутри result, после итогового текста
   task_order: nondecreasing difficulty внутри первого прохождения материала
   task_hints: immediately available inside practice
   assisted_correct_attempts: count toward progress
@@ -440,7 +442,7 @@ publication registry, чтобы статусы не расходились ме
 
 | Component / Store | Purpose | Notes |
 |--------------------|---------|-------|
-| Lesson content components | Переиспользуемая библиотека дизайн-системы урока: `Notation`, `Callout`, `WorkedExample`, `Procedure`, `Mistake`, `Diagram`, `Checkpoint` | Типизированные React-компоненты, не markdown-директивы; `Notation` различает inline-код и формулу без appearance-led API; `Diagram` используется только когда изображение действительно помогает и требует `alt`/`caption`/`purpose`; `Checkpoint` рендерит `CheckpointItem[]` вертикальным списком (не табами — таб-навигация позволяет незаметно пропустить пункт retrieval-практики) и может завершать конкретный `ConceptBlock` вместо единственного блока перед практикой |
+| Lesson content components | Переиспользуемая библиотека дизайн-системы урока: `Notation`, `Callout`, `WorkedExample`, `Procedure`, `Mistake`, `Diagram`, `Checkpoint` | Типизированные React-компоненты, не markdown-директивы; `Notation` различает inline-код и формулу без appearance-led API; `Diagram` используется только когда изображение действительно помогает и требует `alt`/`caption`/`purpose`; `Checkpoint` рендерит единственный на урок `CheckpointItem[]` вертикальным списком (не табами — таб-навигация позволяет незаметно пропустить пункт retrieval-практики) внутри секции «Итоги» (`result`), после итогового текста — `ConceptBlock`-level checkpoint не существует |
 | Lesson outline | Иерархическая навигация по уроку | Строится напрямую из `ConceptBlock[].id`/`navLabel`, без regex-извлечения заголовков из текста и измеряемых SVG-связей; desktop shell сохраняет три колонки — sticky outline, центральный reading stream и зарезервированную правую колонку; progress в rail/header отсутствует, а правый rail может оставаться пустым до появления полезного контента; overflow rail включается только при необходимости, на узких экранах навигация возвращается в normal flow; lab сохраняет свой четырёхраздельный synthetic contract |
 | Course overview | Самостоятельная карта курса | Показывает аудиторию, learner outcome, stage `complete` и упорядоченную программу из 28 опубликованных уроков; каждая строка является обычной индексируемой ссылкой без дат, locks и disabled controls |
 | Course progress | Производный progress только по доступным CourseLesson | Не имеет отдельного store или storage key: после hydration читает записи всех 28 опубликованных уроков из единого lesson-progress registry. Формулировка «освоено N из M доступных» описывает фактический набор, а course-wide reset отсутствует |

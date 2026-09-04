@@ -1,5 +1,11 @@
 .root {
-  composes: learningContentRoot from "../../../styles/patterns.module.css";
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  padding: var(--learning-panel-padding, var(--space-1) var(--space-2));
+  border: var(--learning-panel-border, 0 solid transparent);
+  border-radius: var(--learning-panel-radius, var(--radius-surface));
+  background: var(--learning-panel-background, var(--surface-tonal-1));
 }
 
 .eyebrow {
