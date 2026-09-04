@@ -66,7 +66,10 @@ export default defineConfig((configEnv) => {
         router: {
           codeSplittingOptions: {
             splitBehavior: ({ routeId }) => {
-              if (routeId.startsWith("/courses")) {
+              if (
+                routeId.startsWith("/courses") ||
+                routeId.startsWith("/ege")
+              ) {
                 return [
                   ["loader", "component"],
                   ["errorComponent"],
@@ -81,7 +84,7 @@ export default defineConfig((configEnv) => {
           // The foundation route is static and must remain readable without JavaScript.
           enabled: true,
           crawlLinks: true,
-          // The lesson lab is an unlisted design proof, not published content.
+          // The design-system lab is an unlisted design proof, not published content.
           filter: ({ path }) =>
             isPublishedPrerenderPath(
               path,

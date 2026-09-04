@@ -55,14 +55,12 @@ describe("restrained brand accents", () => {
       "utf8",
     );
 
+    expect(themeSource).toContain('"Alchimia Alegreya", "Alegreya Fallback"');
     expect(themeSource).toContain(
-      '"Alchimia Cormorant SC", "Cormorant SC Fallback", Georgia, serif',
+      '"Alchimia Golos Text", "Golos Text Fallback"',
     );
     expect(themeSource).toContain(
-      '"Alchimia Literata", "Literata Fallback", Georgia, serif',
-    );
-    expect(themeSource).toContain(
-      '"Alchimia IBM Plex Mono", "IBM Plex Mono Fallback", monospace',
+      '"Alchimia JetBrains Mono", "JetBrains Mono Fallback", monospace',
     );
     expect(tokenSource).toContain("--font-display: var(--theme-font-display)");
     expect(titleSource).toContain("font-family: var(--font-display)");
@@ -70,13 +68,13 @@ describe("restrained brand accents", () => {
 
   it("keeps self-hosted font delivery stable and reusable", () => {
     expect(fontSource).not.toContain("font-display: optional");
-    expect(fontSource.match(/font-display: swap/g)).toHaveLength(8);
-    expect(fontSource).toContain('font-family: "Cormorant SC Fallback"');
-    expect(fontSource).toContain("size-adjust: 84.03%");
-    expect(fontSource).toContain('font-family: "Literata Fallback"');
-    expect(fontSource).toContain("size-adjust: 108.56%");
-    expect(fontSource).toContain('font-family: "IBM Plex Mono Fallback"');
-    expect(fontSource).toContain("size-adjust: 97.06%");
+    expect(fontSource.match(/font-display: swap/g)).toHaveLength(6);
+    expect(fontSource).toContain('font-family: "Alegreya Fallback"');
+    expect(fontSource).toContain("size-adjust: 91.9693%");
+    expect(fontSource).toContain('font-family: "Golos Text Fallback"');
+    expect(fontSource).toContain("size-adjust: 108.5687%");
+    expect(fontSource).toContain('font-family: "JetBrains Mono Fallback"');
+    expect(fontSource).toContain("size-adjust: 99.9837%");
     expect(productionNginxSource).toContain("location ^~ /fonts/");
     expect(productionNginxSource).toContain("proxy_hide_header Cache-Control");
     expect(productionNginxSource).toContain(

@@ -4,7 +4,6 @@ import { BrowserSession } from "./pages/browser-session.page";
 import { DesignSystemLabPage } from "./pages/design-system-lab.page";
 import { ErrorTelemetryPage } from "./pages/error-telemetry.page";
 import { FoundationPage } from "./pages/foundation.page";
-import { LessonLabPage } from "./pages/lesson-lab.page";
 import { PrivacyPage } from "./pages/privacy.page";
 import { PublicDiscoveryPage } from "./pages/public-discovery.page";
 import { PythonCoursePage } from "./pages/python-course.page";
@@ -17,8 +16,6 @@ type AppFixtures = {
   errorTelemetryPage: ErrorTelemetryPage;
   foundationPage: FoundationPage;
   noJavaScriptFoundationPage: FoundationPage;
-  lessonLabPage: LessonLabPage;
-  noJavaScriptLessonLabPage: LessonLabPage;
   noJavaScriptDesignSystemLabPage: DesignSystemLabPage;
   privacyPage: PrivacyPage;
   noJavaScriptPrivacyPage: PrivacyPage;
@@ -55,21 +52,6 @@ export const test = base.extend<AppFixtures>({
     });
     try {
       await use(new FoundationPage(await context.newPage()));
-    } finally {
-      await context.close();
-    }
-  },
-  lessonLabPage: async ({ page }, use) => {
-    await use(new LessonLabPage(page));
-  },
-  noJavaScriptLessonLabPage: async ({ baseURL, browser }, use) => {
-    const context = await browser.newContext({
-      baseURL,
-      javaScriptEnabled: false,
-      viewport: { width: 390, height: 844 },
-    });
-    try {
-      await use(new LessonLabPage(await context.newPage()));
     } finally {
       await context.close();
     }

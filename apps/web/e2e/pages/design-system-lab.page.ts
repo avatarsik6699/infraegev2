@@ -96,9 +96,9 @@ export class DesignSystemLabPage {
         },
       };
     });
-    expect(typography.display).toContain("Alchimia Cormorant SC");
-    expect(typography.reading).toContain("Alchimia Literata");
-    expect(typography.service).toContain("Alchimia IBM Plex Mono");
+    expect(typography.display).toContain("Alchimia Alegreya");
+    expect(typography.reading).toContain("Alchimia Golos Text");
+    expect(typography.service).toContain("Alchimia JetBrains Mono");
     expect(typography.primaryColor).toBe("rgb(23, 23, 23)");
     expect(typography.secondaryColor).toBe("rgb(96, 96, 96)");
     expect(typography.pageBackground).toBe("rgb(255, 255, 255)");

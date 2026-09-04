@@ -108,17 +108,17 @@ export class PythonCoursePage {
       .getByRole("heading", { level: 3 })
       .first();
     await expect(firstModuleHeading).toHaveCSS("font-size", "20px");
-    await expect(firstModuleHeading).toHaveCSS("font-weight", "600");
+    await expect(firstModuleHeading).toHaveCSS("font-weight", "500");
     await expect(firstModuleHeading).toHaveCSS(
       "font-family",
-      /Alchimia Cormorant SC/,
+      /Alchimia Alegreya/,
     );
     await expect(
       this.page.getByRole("heading", {
         level: 1,
         name: "Python с нуля для ЕГЭ",
       }),
-    ).toHaveCSS("font-family", /Alchimia Cormorant SC/);
+    ).toHaveCSS("font-family", /Alchimia Alegreya/);
     await expect(
       curriculum.locator('[data-availability="planned"]'),
     ).toHaveCount(0);

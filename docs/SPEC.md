@@ -422,7 +422,6 @@ task-файлы первой review-only темы читаются frontend-cons
 | Public home | `/` | Минимальная SSR/no-JS точка входа в опубликованные материалы: честное описание продукта и ссылки только на реально опубликованные уроки |
 | Course overview | `/courses/$courseSlug` | SSR/no-JS обзор самостоятельного мини-курса: аудитория, результат, stage и полная карта из 28 уроков; только опубликованные CourseLesson становятся ссылками и единицами прогресса |
 | Course lesson | `/courses/$courseSlug/$lessonSlug` | Общий SSR consumer типизированного CourseLesson; `review` доступен по прямому URL с `noindex,nofollow`, `published` входит в course discovery |
-| Lesson design lab | `/lab/lesson` | Unlisted/noindex эталон четырёхраздельного урока на синтетическом контенте; не публикация и не security boundary |
 | Design system stand | `/lab/design-system` | Unlisted/noindex приватный стенд текущей дизайн-системы (шрифты, цвета, типографика) и переиспользуемых lesson-компонентов; не публикация и не security boundary |
 | Topic lesson | `/ege/$slug` | Общий SSR consumer типизированного Topic; `review` доступен только по прямому URL с `noindex,nofollow`, `published` может войти в prerender/public discovery |
 | Privacy | `/privacy` | Публичное описание целей, состава, сроков и получателей обработки, контакта для обращений и способа изменить optional analytics consent |
@@ -432,8 +431,8 @@ task-файлы первой review-only темы читаются frontend-cons
 
 Текущий public release не вводит отдельный каталог: `/` группирует registry-derived мини-курсы и
 темы ЕГЭ как два разных вида материала. `review`-контент не появляется в навигации или sitemap,
-отдаёт `robots: noindex,nofollow` и исключается из prerender discovery. `/lab/lesson` и
-`/lab/design-system` сохраняют тот же unlisted/noindex режим независимо от product content.
+отдаёт `robots: noindex,nofollow` и исключается из prerender discovery. `/lab/design-system`
+сохраняет тот же unlisted/noindex режим независимо от product content.
 Каждая индексируемая HTML-страница имеет абсолютный canonical на `https://infraege.ru`, уникальные
 title/description и достаточные social metadata; sitemap и prerender строятся из того же
 publication registry, чтобы статусы не расходились между рантаймами.

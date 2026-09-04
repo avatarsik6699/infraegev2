@@ -74,7 +74,7 @@ export async function expectPublishedLessonDocument(
   await expect(theoryStage).not.toHaveAttribute("data-title-role", /.+/);
   await expect(theoryStage).toHaveCSS("font-size", "12px");
   await expect(theoryStage).toHaveCSS("font-weight", "500");
-  await expect(theoryStage).toHaveCSS("font-family", /Alchimia IBM Plex Mono/);
+  await expect(theoryStage).toHaveCSS("font-family", /Alchimia Golos Text/);
   await expect(theoryStage).toHaveCSS("text-transform", "uppercase");
 }
 
@@ -112,11 +112,12 @@ export async function expectDesktopLessonRail(page: Page): Promise<void> {
     const progress = rail?.querySelector<HTMLElement>(
       "[data-result-progress], [data-course-result-progress]",
     );
+    const spacer = rail?.querySelector<HTMLElement>('[class*="railSpacer"]');
     const labels = Array.from(
       rail?.querySelectorAll<HTMLElement>("[data-outline-link-id] > span") ??
         [],
     );
-    if (!rail || !contents || !progress || labels.length === 0) {
+    if (!rail || !contents || !progress || !spacer || labels.length === 0) {
       throw new Error("Missing desktop lesson-rail landmarks");
     }
 
@@ -141,6 +142,7 @@ export async function expectDesktopLessonRail(page: Page): Promise<void> {
       expectedContentHeight: window.innerHeight - 32,
       position: contentsStyle.position,
       progressBottomGap: window.innerHeight - progressRect.bottom,
+      spacerHeight: spacer.getBoundingClientRect().height,
       labels: labelMetrics,
     };
   });
@@ -151,7 +153,14 @@ export async function expectDesktopLessonRail(page: Page): Promise<void> {
     0,
   );
   expect(measurements.contentBottomGap).toBeCloseTo(16, 0);
-  expect(measurements.progressBottomGap).toBeCloseTo(32, 0);
+  // The rail spacer between the outline and "Прогресс" is capped at
+  // `var(--space-6)` (64px, Change 89) rather than filling all leftover
+  // space — it structurally shrinks toward 0 as lesson content grows, but no
+  // lesson in this checkout is currently tall enough to fill the desktop
+  // viewport and force a true bottom anchor, so `progressBottomGap` varies
+  // with content length. Assert the cap itself instead of a fixed gap value.
+  expect(measurements.spacerHeight).toBeLessThanOrEqual(64.5);
+  expect(measurements.progressBottomGap).toBeGreaterThanOrEqual(16);
   expect(
     measurements.labels.every(
       (label) =>

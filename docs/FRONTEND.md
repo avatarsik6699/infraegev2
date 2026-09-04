@@ -303,9 +303,8 @@ app → routes → pages → widgets → features → entities → shared
   do not introduce literal sizes or intermediate variable-font weights.
   Semantic heading levels may share an effective size when hierarchy already comes from spacing
   and document structure. Keep readable line measures and enable lining tabular numerals for
-  product-wide numeric data. `/lab/lesson` follows the same token and weight contract; page-private
-  visual experiments may add semantic `--text-*` tokens but not literal component sizes or
-  intermediate variable-font weights.
+  product-wide numeric data. Page-private visual experiments may add semantic `--text-*` tokens
+  but not literal component sizes or intermediate variable-font weights.
 - Avoid decorative uppercase, tracked rubrics and miniature labels. Keep classification text in
   sentence case; uppercase is reserved for compact code/data notation and the deliberately quiet
   numbered lesson-stage landmarks where it materially improves scanning.

@@ -69,22 +69,20 @@ describe("ALCHIMIA design-system lab identity", () => {
       "fonts.css",
     );
     const fontFiles = [
-      "cormorant-sc-cyrillic-600.woff2",
-      "cormorant-sc-latin-600.woff2",
-      "ibm-plex-mono-cyrillic-400.woff2",
-      "ibm-plex-mono-latin-400.woff2",
-      "ibm-plex-mono-cyrillic-600.woff2",
-      "ibm-plex-mono-latin-600.woff2",
+      ["alegreya", "alegreya-cyrillic-wght-normal.woff2"],
+      ["alegreya", "alegreya-latin-wght-normal.woff2"],
+      ["golos-text", "golos-text-cyrillic-wght-normal.woff2"],
+      ["golos-text", "golos-text-latin-wght-normal.woff2"],
+      ["jetbrains-mono", "jetbrains-mono-cyrillic-wght-normal.woff2"],
+      ["jetbrains-mono", "jetbrains-mono-latin-wght-normal.woff2"],
     ];
 
-    expect(fontsCss).toContain('font-family: "Alchimia Cormorant SC"');
-    expect(fontsCss).toContain('font-family: "Alchimia Literata"');
-    expect(fontsCss).toContain('font-family: "Alchimia IBM Plex Mono"');
-    for (const fontFile of fontFiles) {
+    expect(fontsCss).toContain('font-family: "Alchimia Alegreya"');
+    expect(fontsCss).toContain('font-family: "Alchimia Golos Text"');
+    expect(fontsCss).toContain('font-family: "Alchimia JetBrains Mono"');
+    for (const [family, fontFile] of fontFiles) {
       expect(
-        existsSync(
-          resolve(process.cwd(), "public", "fonts", "alchimia", fontFile),
-        ),
+        existsSync(resolve(process.cwd(), "public", "fonts", family, fontFile)),
       ).toBe(true);
     }
 
