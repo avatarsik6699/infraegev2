@@ -9,7 +9,7 @@
 | Change | `92` |
 | Slug | `release-gate-drift-and-lcp-fix` |
 | Title | Release Gate Drift and LCP Fix |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/92-release-gate-drift-and-lcp-fix` |
 
 ---
