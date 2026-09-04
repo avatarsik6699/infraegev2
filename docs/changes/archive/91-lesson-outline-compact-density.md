@@ -9,7 +9,7 @@
 | Change | `91` |
 | Slug | `lesson-outline-compact-density` |
 | Title | Lesson Outline Compact Density |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/91-lesson-outline-compact-density` |
 
 ---
