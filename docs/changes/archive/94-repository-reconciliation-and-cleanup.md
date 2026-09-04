@@ -9,7 +9,7 @@
 | Change | `94` |
 | Slug | `repository-reconciliation-and-cleanup` |
 | Title | Repository Reconciliation and Cleanup |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/94-repository-reconciliation-and-cleanup` |
 
 ---
@@ -170,7 +170,7 @@ Run Fallow with JSON/quiet output before and after cleanup. Every deletion candi
 trace or equivalent direct consumer proof; do not auto-fix an unclassified finding. Browser/LSP
 evidence is mandatory only if the audit changes frontend behavior/source or Python/TypeScript code.
 The Full and Release Gates remain outside this change's `/work` run. All gate definitions are in
-[docs/STACK.md](../STACK.md).
+[docs/STACK.md](../../STACK.md).
 
 ---
 
