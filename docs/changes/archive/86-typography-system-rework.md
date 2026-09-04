@@ -9,7 +9,7 @@
 | Change | `86` |
 | Slug | `typography-system-rework` |
 | Title | Typography System Rework |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/86-typography-system-rework` |
 
 ---
