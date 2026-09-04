@@ -57,13 +57,24 @@
 .childLink {
   position: relative;
   display: flex;
-  min-height: 2.5rem;
+  min-height: var(--space-4);
   align-items: center;
   color: var(--color-muted);
-  overflow: hidden;
   text-decoration: none;
   white-space: normal;
   transition: color var(--motion-duration) var(--motion-easing);
+}
+
+/* Visible row is compact (--space-4, 32px); this pseudo-element extends the
+   actual clickable/accessible hit area to the 40px interactive-target floor
+   (docs/FRONTEND.md §5 "compact visuals may use a larger invisible hit area")
+   without growing the row itself. */
+.groupLink::after,
+.childLink::after {
+  position: absolute;
+  inset-block: calc((var(--space-4) - 2.5rem) / 2);
+  inset-inline: 0;
+  content: "";
 }
 
 .groupLink > span,

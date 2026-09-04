@@ -266,7 +266,10 @@ app → routes → pages → widgets → features → entities → shared
   only when its content cannot fit in the viewport.
 - Interactive targets are at least `40 × 40px`; compact visuals may use a larger invisible hit
   area. Dense styling never overrides this floor. Essential actions and information cannot depend
-  on hover.
+  on hover. `LessonOutline`'s group/child links are the one architect-approved exception (Change
+  91): the visible row is `--space-4` (32px) for a denser reading TOC, while an absolutely
+  positioned `::after` pseudo-element extends the actual clickable/accessible hit area back to the
+  `40px` floor. Every other control keeps the ordinary visible `40×40px` floor unchanged.
 - Browser zoom through 150% must preserve access to all content. Prefer fluid measures and type
   tokens; responsive type changes keep heading hierarchy intact.
 - Start from semantic HTML. Every interactive element is keyboard reachable, has a visible

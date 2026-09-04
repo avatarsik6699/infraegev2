@@ -168,7 +168,6 @@ export async function expectLessonInteractiveTargets(
 ): Promise<void> {
   const targetGroups = await page.evaluate(() => {
     const selectors = {
-      outline: "[data-outline-link-id]",
       reset: '[aria-label="Сбросить прогресс урока"]',
       theory: "[data-practice-task] nav a",
     };
@@ -191,6 +190,33 @@ export async function expectLessonInteractiveTargets(
       `${group.name} targets are at least 40px tall`,
     ).toBe(true);
   }
+
+  // LessonOutline links (Change 91) have a compact visible row but extend
+  // their actual clickable area to the 40px floor via an absolutely
+  // positioned ::after pseudo-element — measure that hit area, not the
+  // shrunk visible box, per docs/FRONTEND.md §5.
+  const outlineHitHeights = await page.evaluate(() => {
+    return Array.from(
+      document.querySelectorAll<HTMLElement>("[data-outline-link-id]"),
+    )
+      .filter((target) => target.getClientRects().length > 0)
+      .map((target) => {
+        const rect = target.getBoundingClientRect();
+        const after = getComputedStyle(target, "::after");
+        const expandTop = Math.max(0, -parseFloat(after.top) || 0);
+        const expandBottom = Math.max(0, -parseFloat(after.bottom) || 0);
+        return rect.height + expandTop + expandBottom;
+      });
+  });
+
+  expect(
+    outlineHitHeights.length,
+    "outline targets are present",
+  ).toBeGreaterThan(0);
+  expect(
+    outlineHitHeights.every((height) => height >= 40),
+    "outline targets have at least a 40px accessible hit area",
+  ).toBe(true);
 }
 
 export async function expectLessonVerticalRhythm(page: Page): Promise<void> {
