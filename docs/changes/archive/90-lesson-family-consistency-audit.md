@@ -9,7 +9,7 @@
 | Change | `90` |
 | Slug | `lesson-family-consistency-audit` |
 | Title | Lesson Family Consistency Audit |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/90-lesson-family-consistency-audit` |
 
 ---
