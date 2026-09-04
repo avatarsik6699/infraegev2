@@ -75,6 +75,7 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
         <aside className={styles.rail} data-outline-rail>
           <div className={styles.railContents}>
             <LessonOutline groups={outline} />
+            <div className={styles.railSpacer} aria-hidden="true" />
             <CourseLessonProgress
               masteryThreshold={props.lesson.masteryThreshold ?? 0.8}
               lessonId={props.lesson.id}
