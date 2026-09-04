@@ -2,12 +2,12 @@ import python from "@speed-highlight/core/languages/py.js";
 import todo from "@speed-highlight/core/languages/todo.js";
 import { tokenizeWith, type ShjToken } from "@speed-highlight/core/tokenize";
 
-export type CodeBlockTokenChunk = {
+type CodeBlockTokenChunk = {
   text: string;
   token?: ShjToken;
 };
 
-export type CodeBlockTokenLine = CodeBlockTokenChunk[];
+type CodeBlockTokenLine = CodeBlockTokenChunk[];
 
 function appendChunk(
   lines: CodeBlockTokenLine[],

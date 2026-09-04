@@ -60,7 +60,8 @@ safely; the final 2026-08-20 cutover passed. No old analytics or metrics data wa
 
 ## GitHub production settings
 
-Environment `production` requires reviewer approval. Set secrets `PROD_HOST`,
+Environment `production` has no required reviewers by architect decision (2026-09-04); a manual
+`workflow_dispatch` proceeds without a second approval, and `can_admins_bypass` remains enabled. Set secrets `PROD_HOST`,
 `PROD_ROOT_PASSWORD`, `PROD_SSH_HOST_KEY`; set variable `VITE_UMAMI_WEBSITE_ID`. The host key must be
 the exact `known_hosts` line obtained through a trusted channel, never
 `StrictHostKeyChecking=no`.
@@ -71,7 +72,7 @@ Any later root-password rotation must update both the protected local `root-admi
 and the GitHub Environment `PROD_ROOT_PASSWORD` before the next deploy.
 
 Images publish from `main` to GHCR under the full commit SHA. Deploy is manual: run “Deploy
-production”, enter that 40-character SHA, approve the environment, and follow the smoke step. The
+production”, enter that 40-character SHA, and follow the unattended environment and smoke steps. The
 server runs the deployment as root, keeps the previous release and `scripts/deploy-remote.sh`
 rolls back automatically if
 readiness or the public page fails.

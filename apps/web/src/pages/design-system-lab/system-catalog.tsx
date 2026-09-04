@@ -107,8 +107,9 @@ export const SystemCatalog: React.FC = () => (
       </ul>
       <Typography.Text tone="muted">
         Уровень h1–h6 задаёт структуру документа. Все стандартные заголовки
-        используют Cormorant SC; Literata остаётся гарнитурой непрерывного
-        чтения, а IBM Plex Mono — служебного текста, данных и кода.
+        используют Alegreya; Golos Text отвечает за непрерывное чтение,
+        интерфейсные подписи и контролы, а JetBrains Mono — за код, данные и
+        формулы.
       </Typography.Text>
       <div className={styles.typeSamples}>
         {([1, 2, 3, 4, 5, 6] as const).map((order) => (

@@ -83,7 +83,7 @@ See `docs/SPEC.md` §5 and the Files list above.
 ## Gate Checks
 
 > Critical Gate runs once per `/work` target set and by default in `/ship`; Full Gate runs only
-> with `--full` or `--release`. All gates are defined in [docs/STACK.md](./STACK.md) — this section only records
+> with `--full` or `--release`. All gates are defined in [docs/STACK.md](../../STACK.md) — this section only records
 > change-specific overrides.
 
 None beyond the standard frontend Critical Gate — browser evidence (short-outline and

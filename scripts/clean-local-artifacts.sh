@@ -36,6 +36,7 @@ static_targets=(
   apps/web/.output
   apps/web/.vinxi
   apps/web/.tanstack
+  apps/web/.fallow
   apps/web/dist
   apps/web/.eslintcache
 )

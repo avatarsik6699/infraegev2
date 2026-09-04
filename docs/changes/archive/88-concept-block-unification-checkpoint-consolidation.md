@@ -92,7 +92,7 @@ hand-copy schema/type details into this file — the codebase and `SPEC.md` are 
 ## Gate Checks
 
 > Critical Gate runs once per `/work` target set and by default in `/ship`; Full Gate runs only
-> with `--full` or `--release`. All gates are defined in [docs/STACK.md](./STACK.md) — this section only records
+> with `--full` or `--release`. All gates are defined in [docs/STACK.md](../../STACK.md) — this section only records
 > change-specific overrides.
 
 None — standard affected-area Critical Gate covers this change (frontend lint/typecheck/Vitest for

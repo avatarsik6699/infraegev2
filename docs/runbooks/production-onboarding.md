@@ -98,7 +98,7 @@ gh secret delete --repo avatarsik6699/infraegev2 --env production PROD_SSH_KEY
 Treat the local file, the VPS login and GitHub Environment secret as one credential contract. On
 every later root-password rotation, update
 `~/.config/infraege/production/root-admin-password` and `production/PROD_ROOT_PASSWORD`, then prove
-both a fresh wrapper session and a reviewer-approved deploy. If only the VPS/local copy changes,
+both a fresh wrapper session and a dispatched deploy. If only the VPS/local copy changes,
 the deploy job reaches the host-key check but fails its first authenticated upload.
 
 Add one environment variable under **Environment variables**:

@@ -26,7 +26,7 @@ RUN uv sync --frozen --no-dev --no-install-project
 
 COPY apps/api/app ./app
 COPY apps/api/entrypoint.sh ./entrypoint.sh
-COPY content /content
+COPY content/tasks /content/tasks
 
 RUN chmod +x ./entrypoint.sh \
     && useradd --no-create-home --uid 1000 appuser \

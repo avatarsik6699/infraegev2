@@ -33,17 +33,10 @@
   },
   "version": "1.0.0",
   "description": "Веб-приложение для подготовки к ЕГЭ по информатике с опубликованными уроками, связанной практикой и локальным прогрессом.",
-  "main": "index.js",
-  "directories": {
-    "doc": "docs"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/avatarsik6699/infraegev2.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/avatarsik6699/infraegev2/issues"
   },

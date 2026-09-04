@@ -1,10 +1,9 @@
 #!/usr/bin/env node
-// CI check (docs/SPEC.md §2.2/§3/§7.2, Content Quality Gate §2.3): every id referenced by
-// prerequisites/related_topics/unlocks_topics/practice_task_ids/topic_ids and implemented course
-// lesson membership must stay consistent. Fails the build on a broken link so it never reaches prod. Deliberately
-// dependency-free — this only checks id references, not full schema shape.
+// CI check (docs/SPEC.md §2.2/§3/§7.2, Content Quality Gate §2.3): lesson-plan membership,
+// practice-task ownership and theory links must stay consistent. Fails the build on a broken link
+// so it never reaches prod. Deliberately dependency-free — this checks references, not full schema shape.
 
-import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { lessonPublications } from "../apps/web/src/entities/lesson/content/lesson-publication.mjs";
@@ -27,13 +26,9 @@ function readJsonFiles(dir) {
     }));
 }
 
-const topics = readJsonFiles(join(CONTENT_ROOT, "topics"));
 const tasks = readJsonFiles(join(CONTENT_ROOT, "tasks"));
 
-const topicIds = new Set([
-  ...topics.map((topic) => topic.data.id),
-  ...lessonPublications.map((lesson) => lesson.id),
-]);
+const topicIds = new Set(lessonPublications.map((lesson) => lesson.id));
 const taskIds = new Set(tasks.map((t) => t.data.id));
 const courseLessonIds = new Set(
   courseLessonPublications.map((lesson) => lesson.id),
@@ -51,72 +46,6 @@ function checkRefs(file, ids, validSet, field) {
       errors.push(`${file}: ${field} references unknown id "${id}"`);
     }
   }
-}
-
-function checkLearningVisualAssets(file, expectedPrefix, blocks) {
-  learningVisualAssets(blocks).forEach(({ asset, field }) =>
-    checkLearningVisualAsset(file, expectedPrefix, field, asset),
-  );
-}
-
-function learningVisualAssets(blocks) {
-  return (blocks ?? [])
-    .map((block, index) => ({ block, field: `learning_visual[${index}]` }))
-    .filter(({ block }) => block.type === "learning_visual")
-    .filter(({ block }) => block.data?.representation !== "structured")
-    .map(({ block, field }) => ({ asset: block.data?.asset ?? {}, field }));
-}
-
-function checkLearningVisualAsset(file, expectedPrefix, field, asset) {
-  if (!isValidLearningVisualSource(asset.src, expectedPrefix)) {
-    errors.push(
-      `${file}: ${field}.asset.src must be a PNG/WebP/AVIF under "${expectedPrefix}"`,
-    );
-    return;
-  }
-  checkPositiveDimension(file, field, "width", asset.width);
-  checkPositiveDimension(file, field, "height", asset.height);
-  checkLearningVisualAssetExists(file, field, asset.src);
-}
-
-function isValidLearningVisualSource(source, expectedPrefix) {
-  return (
-    typeof source === "string" &&
-    source.startsWith(expectedPrefix) &&
-    !source.includes("..") &&
-    /\.(png|webp|avif)$/i.test(source)
-  );
-}
-
-function checkPositiveDimension(file, field, dimension, value) {
-  if (Number.isInteger(value) && value > 0) return;
-  errors.push(
-    `${file}: ${field}.asset.${dimension} must be a positive integer`,
-  );
-}
-
-function checkLearningVisualAssetExists(file, field, source) {
-  const assetPath = join(WEB_PUBLIC_ROOT, source.slice(1));
-  if (existsSync(assetPath)) return;
-  errors.push(`${file}: ${field}.asset.src does not exist: ${source}`);
-}
-
-function contentBlocksFor(data) {
-  return [
-    ...(data.quick_reference_blocks ?? []),
-    ...(data.sections ?? []).flatMap((section) => section.blocks ?? []),
-  ];
-}
-
-for (const { file, data } of topics) {
-  checkRefs(file, data.prerequisites, topicIds, "prerequisites");
-  checkRefs(file, data.related_topics, topicIds, "related_topics");
-  checkRefs(file, data.practice_task_ids, taskIds, "practice_task_ids");
-  checkLearningVisualAssets(
-    file,
-    `/content/topics/${data.id}/`,
-    contentBlocksFor(data),
-  );
 }
 
 for (const course of coursePublications) {
@@ -209,5 +138,5 @@ if (errors.length > 0) {
 }
 
 console.log(
-  `Content link validation passed (${topics.length} JSON topics, ${lessonPublications.length} Topic lessons, ${tasks.length} tasks, ${coursePublications.length} courses, ${courseLessonPublications.length} Course lessons).`,
+  `Content link validation passed (${lessonPublications.length} Topic lessons, ${tasks.length} tasks, ${coursePublications.length} courses, ${courseLessonPublications.length} Course lessons).`,
 );

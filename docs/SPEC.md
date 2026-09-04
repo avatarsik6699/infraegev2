@@ -401,6 +401,7 @@ task-файлы первой review-only темы читаются frontend-cons
 | Verb / Method | Path | Auth | Response / Payload |
 |---------------|------|------|---------------------|
 | `POST` | `/api/tasks/{id}/check` | Нет (публичный, анонимный) | Запрос: `{ answer: string }`. Ответ: `{ correct: bool, explanation: ContentBlock[] }`. Ограничен на уровне Nginx (§7.2, §8): `limit_req` 20 req/min/IP, burst 5 |
+| `POST` | `/api/client-errors` | Нет (публичный, анонимный) | Запрос: bounded allowlisted diagnostic `{ kind, route_id, fingerprint, asset_path?, line?, column? }`; свободный текст ошибки, URL/query и request body не принимаются. Ответ: `204 No Content` |
 | `GET` | `/health/live` | Нет | `{ status: "ok", version: string }`; проверяет только доступность процесса |
 | `GET` | `/health/ready` | Нет | `{ status: "ok", version: string }` при доступной БД, `503` при неготовности зависимости |
 | `GET` | `/health` | Нет | Совместимый alias для `/health/ready` |
@@ -517,9 +518,10 @@ Atlas `patterns_lines.png` остаётся только документаци�
 lab. Header, локальная навигация, поверхности, контрактные строки, схемы и интерактивные контролы
 используют обычные нейтральные линии, а основной tablist — только стандартный active indicator.
 Более широкая палитра, включая бумажный фон и медный акцент, отложена до отдельного architect
-approval. Для lab выбран ролевой набор Athanor: self-hosted Cormorant SC для display-заголовков и
-wordmark, Literata для непрерывного чтения, IBM Plex Mono только для кода, данных и компактного
-service UI. Основной и вторичный текст используют два ахроматических уровня поверх исходного
+approval. Первоначальный lab-набор Cormorant SC/Literata/IBM Plex Mono исторически относится к
+Changes 75/76/79; Change 86 заменил его текущими self-hosted ролями Alegreya для всех стандартных
+заголовков и wordmark, Golos Text для непрерывного чтения и интерфейса и JetBrains Mono только для
+кода, данных и формул. Основной и вторичный текст используют два ахроматических уровня поверх исходного
 белого фона; semantic status цвета не становятся декоративными. `500` создаёт локальный
 смысловой акцент, а `600` ограничен
 заголовками и действиями. Абзац,
@@ -564,7 +566,8 @@ concept-блок и крупная секция имеют три явно
 
 ## 6. Auth & Access Model
 
-Нет аутентификации на MVP. Публичные страницы и `POST /api/tasks/{id}/check` анонимны; прогресс
+Нет аутентификации на MVP. Публичные страницы, `POST /api/tasks/{id}/check` и bounded diagnostic
+`POST /api/client-errors` анонимны; прогресс
 урока хранится только в localStorage текущего браузера и не синхронизируется. Ограничение на уровне
 инфраструктуры (не auth) — rate limiting чекер-эндпоинта на Nginx (§4, §8) против автоматического
 перебора банка ответов.
@@ -627,14 +630,16 @@ Nginx выставляет `Cache-Control`/`ETag` для хэшированно�
   Branch protection для `main` пока не включается, поскольку над проектом работает один человек.
 - Основной контракт администрирования VPS — публичный SSH только для `root` с уникальным длинным
   паролем; public-key и keyboard-interactive authentication отключены, отдельные `operator`,
-  `deploy` и `ops-reader` не активны. GitHub Environment сохраняет reviewer approval и pinned host
-  key и получает root-пароль только как protected secret для ручного `workflow_dispatch` deploy.
+  `deploy` и `ops-reader` не активны. GitHub Environment не требует reviewer approval (решение
+  архитектора от 2026-09-04), сохраняет `can_admins_bypass` и pinned host key и получает
+  root-пароль только как protected secret для ручного `workflow_dispatch` deploy.
   Архитектор осознанно принимает риск полного захвата VPS при компрометации пароля. Переход на
   key-only identities не входит в текущий или планируемый roadmap и возвращается в scope только по
   новому явному решению архитектора.
-- CI-валидация связей контента: скрипт проверяет, что `prerequisites`/`related_topics`/
-  `unlocks_topics`/`practice_task_ids`/`topic_ids` ссылаются на существующие id — сборка падает при
-  битых связях, до того как они попадут в прод (см. §3, §2.3).
+- CI-валидация связей контента: скрипт проверяет Course/module/lesson membership и совпадение
+  заголовков, `practiceTaskIds`, `topic_ids`, `course_lesson_ids`, `theory_links.hash`, task asset
+  metadata и однозначное владение задачей — сборка падает при битых связях до production
+  (см. §3, §2.3).
 - Резервное копирование: application и operations независимо создают tagged snapshots в общем
   локальном Restic repository. Application сохраняет свой `pg_dump -Fc` и environment;
   operations — Umami dump, Beszel state и свой environment. Для каждого тега действуют 7 daily,
@@ -752,7 +757,7 @@ combined-log записи до path/status-family/coarse traffic class. Raw IP, 
 
 | Concern | Requirement |
 |---------|-------------|
-| Security headers / CORS | Rate limiting чекер-эндпоинта на Nginx: `limit_req_zone` 20 req/min/IP, burst 5, `nodelay` (см. §4, §11.2 источника) — против автоматизированного перебора банка ответов; конкретную цифру пересмотреть по факту логов после запуска. Основной public root/password SSH использует принятый архитектором минимум 12 символов, pinned host key, UFW, fail2ban и GitHub Environment approval; повышенный риск перебора и полного захвата VPS при компрометации более короткого пароля осознанно принят, key-only migration не запланирована. |
+| Security headers / CORS | Rate limiting чекер-эндпоинта на Nginx: `limit_req_zone` 20 req/min/IP, burst 5, `nodelay` (см. §4, §11.2 источника) — против автоматизированного перебора банка ответов; конкретную цифру пересмотреть по факту логов после запуска. Основной public root/password SSH использует принятый архитектором минимум 12 символов, pinned host key, UFW и fail2ban; production Environment не имеет required reviewers по решению архитектора от 2026-09-04, `can_admins_bypass` остаётся единственным environment safety property. Повышенный риск перебора и полного захвата VPS при компрометации более короткого пароля осознанно принят, key-only migration не запланирована. |
 | Accessibility target | Foundation и lab не имеют serious/critical axe violations; lesson outline сохраняет вложенный semantic list, anchors, keyboard focus, различимый текущий пункт и корректный source order, а сложный визуал имеет видимую полную текстовую альтернативу |
 | Performance budget | LCP ≤ 2.8s, CLS < 0.1, INP < 200ms на мобильном 4G-профиле; release evidence измеряет `/` и первый опубликованный `/ege/16-rekursiya`, отдельно проверяет cold-load font/layout shifts и не подменяет route-level метрики общей оценкой технической страницы |
 | Observability | Application, operations и management-host sre-kit имеют независимые lifecycle/volumes/rollback. infraegev2 владеет target operations, WireGuard peer, Source bootstrap и privacy-safe publisher; sre-kit владеет generic core/adapters/UI distribution. Семь clean-start Sources непрерывно poll/push на management VPS без target-side mutation; локальный `sre-kit-local` остаётся выключенным fallback |

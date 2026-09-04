@@ -7,17 +7,17 @@ public header, metadata, manifest, favicon, Apple/manifest icons и social previ
 домен `infraege.ru`, storage keys, analytics ids и инфраструктурные имена при этом не меняются.
 
 `docs/artifacts/references/logo.svg` — единственный художественный источник ALCHIMIA. Прежний
-`logo_with_transperant_bg.svg` и исторический `docs/artifacts/final_logo.svg` не являются
-production-источниками.
+`logo_with_transperant_bg.svg` и исторический `docs/artifacts/final_logo.svg` удалены после
+перехода на этот источник и не являются production-ассетами.
 Нормализация может убрать фиксированные размеры, исправить `preserveAspectRatio` или добавить
 delivery whitespace, но не может перерисовывать, сглаживать, перекрашивать, обрезать или
 переинтерпретировать видимую геометрию. Для явно тёмного контекста допустима только монохромная
 инверсия знака в белый без изменения его формы.
 
 Надпись `ALCHIMIA` и подзаголовок «ЕГЭ информатика» не встраиваются в SVG: они остаются живым
-доступным текстом в Alegreya и Golos Text соответственно (Change 86 заменил исходную пару
-Cormorant SC/IBM Plex Mono — IBM Plex Mono сузился до кода, данных и формул и больше не покрывает
-service-UI-подпись).
+доступным текстом в Alegreya и Golos Text соответственно. Change 86 заменил исходный набор
+Cormorant SC/Literata/IBM Plex Mono; JetBrains Mono теперь ограничен кодом, данными и формулами и
+не используется для service-UI-подписей.
 
 ## Производные файлы
 

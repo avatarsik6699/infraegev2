@@ -171,17 +171,17 @@ export const colorTokens = [
 export const fontTokens = [
   {
     name: "--font-alchimia-display",
-    label: "Display — Cormorant SC",
+    label: "Display — Alegreya",
     sample: "Алхимия знания начинается с точного вопроса.",
   },
   {
     name: "--font-alchimia-reading",
-    label: "Reading — Literata",
+    label: "Reading & interface — Golos Text",
     sample: "Рекурсия — это вызов функции самой себя.",
   },
   {
     name: "--font-alchimia-service",
-    label: "Service & code — IBM Plex Mono",
+    label: "Code & data — JetBrains Mono",
     sample: "def fib(n): return n if n < 2 else fib(n-1)+fib(n-2)",
   },
 ] as const;

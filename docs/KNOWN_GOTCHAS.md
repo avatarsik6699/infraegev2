@@ -258,8 +258,9 @@
 - **Root cause**: Change 30 moved this VPS to password-only `root`; on 2026-08-20 the architect made
   that model the primary current contract and explicitly removed key-only migration from the
   roadmap. The reusable blueprint intentionally retains the safer generic baseline.
-- **Fix**: keep pinned `known_hosts`, UFW, fail2ban, provider-console recovery and GitHub Environment
-  approval. Do not create a key-only migration change without a new explicit architect decision,
+- **Fix**: keep pinned `known_hosts`, UFW, fail2ban and provider-console recovery. The production
+  Environment intentionally has no required reviewers since 2026-09-04; do not treat
+  `can_admins_bypass` as a second-person approval. Do not create a key-only migration change without a new explicit architect decision,
   and never reuse a chat-exposed recovery password. The production adapter currently accepts the
   architect-approved 12-character minimum; longer generated passwords remain recommended and
   lowering this boundary further requires another explicit security decision.
@@ -267,12 +268,12 @@
 ### Root-password rotation has two protected client-side authorities
 
 - **Symptoms**: the local root/password wrapper connects successfully after a password rotation,
-  but the reviewer-approved production deploy fails on its first SCP/SSH authentication.
+  but the dispatched production deploy fails on its first SCP/SSH authentication.
 - **Root cause**: the mode-600 local `root-admin-password` was updated while the GitHub Environment
   secret `production/PROD_ROOT_PASSWORD` retained the previous value.
 - **Fix**: treat both protected copies as one rotation transaction. Update the VPS password, local
   file and GitHub Environment secret before closing the provider-console session; then prove a
-  fresh local wrapper connection and a reviewer-approved deploy without printing the value.
+  fresh local wrapper connection and a deploy without printing the value.
 
 ### Full Gate Compose bootstrap needs a unique project and port namespace
 

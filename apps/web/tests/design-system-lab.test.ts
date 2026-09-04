@@ -108,6 +108,12 @@ describe("ALCHIMIA design-system lab identity", () => {
     expect(titleComponent).not.toContain("data-title-role");
     expect(titleComponent).not.toContain("variant =");
     expect(systemCatalog).toContain("Все стандартные заголовки");
+    expect(systemCatalog).toContain("используют Alegreya");
+    expect(systemCatalog).toContain("Golos Text отвечает");
+    expect(systemCatalog).toContain("JetBrains Mono");
+    expect(systemCatalog).not.toContain("Cormorant SC");
+    expect(systemCatalog).not.toContain("Literata");
+    expect(systemCatalog).not.toContain("IBM Plex Mono");
     expect(systemCatalog).not.toContain('variant="content"');
     expect(systemCatalog).toContain("Уровень h1–h6 задаёт структуру документа");
   });

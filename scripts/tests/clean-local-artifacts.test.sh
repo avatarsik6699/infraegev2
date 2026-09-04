@@ -14,6 +14,7 @@ mkdir -p \
   "$test_root/apps/api/.venv/keep" \
   "$test_root/apps/api/app/__pycache__" \
   "$test_root/apps/web/node_modules/keep" \
+  "$test_root/apps/web/.fallow" \
   "$test_root/apps/web/src/entities/course/api" \
   "$test_root/data"
 cp "$repo_dir/scripts/clean-local-artifacts.sh" "$test_root/scripts/clean-local-artifacts.sh"
@@ -25,6 +26,7 @@ touch \
   "$test_root/apps/api/.venv/keep/python" \
   "$test_root/apps/api/app/__pycache__/module.pyc" \
   "$test_root/apps/web/node_modules/keep/package.json" \
+  "$test_root/apps/web/.fallow/cache.bin" \
   "$test_root/data/keep.db" \
   "$test_root/.env"
 
@@ -41,6 +43,7 @@ test ! -e "$test_root/C:\Users\user\AppData\Local\lighthouse.1234"
 test ! -e "$test_root/apps/ops"
 test ! -e "$test_root/apps/api/app/__pycache__"
 test ! -e "$test_root/apps/web/src/entities/course/api"
+test ! -e "$test_root/apps/web/.fallow"
 test -f "$test_root/apps/api/.venv/keep/python"
 test -f "$test_root/apps/web/node_modules/keep/package.json"
 test -f "$test_root/data/keep.db"

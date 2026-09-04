@@ -62,7 +62,7 @@ See `docs/KNOWN_GOTCHAS.md` (stale GHA BuildKit cache entry) and the Files list 
 ## Gate Checks
 
 > Critical Gate runs once per `/work` target set and by default in `/ship`; Full Gate runs only
-> with `--full` or `--release`. All gates are defined in [docs/STACK.md](./STACK.md) — this section only records
+> with `--full` or `--release`. All gates are defined in [docs/STACK.md](../../STACK.md) — this section only records
 > change-specific overrides.
 
 Infra-only, workflow-config change. Verification is the CI run itself (`images.yml` on push to

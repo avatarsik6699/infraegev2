@@ -72,12 +72,12 @@ command fails immediately instead of racing the first one. Docker Desktop may al
 `infra` project created by direct `docker compose` commands; the Make targets intentionally own
 only `infraege-dev`. A failed start prints service status and recent nginx/web/api logs.
 
-The web lesson loader reads only git-owned practice tasks through `CONTENT_DIR`. Compose mounts
+The web and API lesson loaders read only git-owned practice tasks through `CONTENT_DIR`. Compose mounts
 `content/tasks/` read-only at `/content/tasks`; web development and production images contain the
 same task subtree at that path. Host commands fall back to the workspace `content/` path. Lesson
 theory is compiled from `apps/web/src/entities/lesson/content/*.lesson.tsx` and is never mounted as
-runtime content. The API retains its separate full `content/` tree because courses, topics and task
-validation remain backend-owned contracts.
+runtime content. Course and Topic theory/registries remain frontend content-as-code; the API image
+and development bind mount carry only `content/tasks/`.
 
 **Production access:** the primary administration contract is public `root@2.26.8.245` with the
 protected `root-admin-password`, pinned `known_hosts` and `scripts/production-root-ssh.sh`.
@@ -250,7 +250,7 @@ default local shipping.
 | SAST / secrets / dependency audit | `pnpm audit:security` | Docker required for pinned Gitleaks 8.30.1 and Trivy 0.73.0; Semgrep 1.172.0 and pip-audit 2.10.1 run through uvx |
 | Accessibility audit | `pnpm audit:a11y` | local Playwright/axe; foundation and not-found routes, serious/critical violations fail |
 | Performance budget | `scripts/run-host-web-gate.sh bash -c 'pnpm --filter web build && pnpm audit:performance'` | restores the repository-owned `infraege-full-gate` web service on success/failure; local Chrome against `/` and `/ege/16-rekursiya`; median of 3, LCP ≤2.8s, CLS ≤0.1, TBT ≤200ms as lab proxy for INP |
-| Content validation | `pnpm test:content-assets && pnpm validate:content` | the isolated validator tests reject unsafe paths and invalid asset metadata before the real-tree pass; docs/SPEC.md §2.2/§3/§7.2 validation also fails if any `prerequisites`/`related_topics`/`unlocks_topics`/`practice_task_ids`/`topic_ids` reference a nonexistent id |
+| Content validation | `pnpm test:content-assets && pnpm validate:content` | the isolated validator tests reject unsafe paths and invalid asset metadata before the real-tree pass; docs/SPEC.md §2.2/§3/§7.2 validation also checks Course/module/lesson membership and titles, `practiceTaskIds`, `topic_ids`, `course_lesson_ids`, `theory_links.hash`, task asset metadata and exclusive task ownership |
 
 Tests remain local-only; the security command is also mirrored in GitHub Actions without invoking
 pytest, Vitest or Playwright.
@@ -267,7 +267,7 @@ before pushing to `origin/main`.
 | Container image build + scan | `pnpm audit:images` | builds the three production images and fails on fixed HIGH/CRITICAL findings |
 | Production Compose render | `scripts/render-production-config.sh /etc/infraege/production.env >/dev/null` | run on the provisioned VPS or against a complete temporary env |
 | Health/deploy verification | `scripts/check-release-target.sh` | Before the first successful deploy, permits an unavailable site only when the deploy workflow has no successful run and both public A records match the VPS. Later releases fail closed unless current production health reports a 40-character SHA. After push, the deploy workflow checks the public page/readiness and rolls back on failure. |
-| `gh` repository/environment | `gh auth status && gh repo view avatarsik6699/infraegev2` | production approval and required secrets/vars must be configured |
+| `gh` repository/environment | `gh auth status && gh repo view avatarsik6699/infraegev2` | verify the documented no-reviewer production policy, `can_admins_bypass`, and required secrets/vars |
 
 ---
 

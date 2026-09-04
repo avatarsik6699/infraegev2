@@ -65,7 +65,9 @@ Report the selected gate table and stop. Do not commit, merge, archive, or push.
 1. Commit outstanding changes on `feature/NN-slug` using the change file's Commit Message.
 2. Merge it into local `main` (fast-forward when possible, otherwise a normal merge commit; never
    rewrite history).
-3. Set the change status to `archived` and move it to `docs/changes/archive/NN-slug.md`.
+3. Set the change status to `archived`, normalize relative links for the extra `archive/` directory
+   level (for example `../STACK.md` becomes `../../STACK.md`), and move it to
+   `docs/changes/archive/NN-slug.md`. Do not otherwise rewrite historical content.
 4. Report the gate mode, merge result, and archive path.
 
 ### 5. `--release` only — Release Gate and deploy

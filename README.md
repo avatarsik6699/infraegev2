@@ -293,8 +293,10 @@ Runbook’и: [analytics](docs/runbooks/analytics.md),
 [backup/restore](docs/runbooks/backup-restore.md),
 [sre-kit management](docs/runbooks/SRE_KIT_MANAGEMENT.md),
 [инциденты](docs/runbooks/incident-response.md). Основной административный доступ к VPS —
-password-only `root` с pinned host key, UFW, fail2ban и GitHub Environment approval; риск принят
-владельцем без запланированного перехода на key-only identities. На `/privacy` опубликованы только
+password-only `root` с pinned host key, UFW и fail2ban; production Environment работает без
+required reviewers по решению архитектора от 2026-09-04, а `can_admins_bypass` остаётся его
+единственным safety property. Риск принят владельцем без запланированного перехода на key-only
+identities. На `/privacy` опубликованы только
 принятые владельцем email и Telegram invite; риск отсутствия других реквизитов, формальная
 юридическая проверка и вопрос уведомления РКН остаются отложенными. Локальный backup на том же VPS
 не считается disaster recovery — off-site backend остаётся обязательным до появления незаменимых

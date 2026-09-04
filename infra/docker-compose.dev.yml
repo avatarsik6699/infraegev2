@@ -34,11 +34,9 @@ services:
   api:
     environment:
       - APP_ENV=development
-      - TELEGRAM_BOT_TOKEN=
-      - TELEGRAM_CHAT_ID=
     volumes:
       - ../apps/api/app:/app/app
-      - ../content:/content:ro
+      - ../content/tasks:/content/tasks:ro
     healthcheck:
       interval: 2s
       timeout: 2s

@@ -134,7 +134,8 @@ marker.
 - Pick the next `NN` (two digits) by scanning `docs/changes/` and `docs/changes/archive/` for the
   highest existing number and incrementing.
 - Derive a short kebab-case `slug` from the unit of work's title.
-- Copy `docs/CHANGE_TEMPLATE.md` to `docs/changes/NN-slug.md` and fill it from the brief/spec:
+- Copy `docs/CHANGE_TEMPLATE.md` to `docs/changes/NN-slug.md`, normalize its `./STACK.md` link to
+  `../STACK.md` for the deeper directory, and fill it from the brief/spec:
   - **Backlog**: group items into Backend/Frontend/Infra/Data/Other, assign IDs sequentially per
     group (`B1`, `F1`, `I1`, `D1`, `T1`…), detect dependency ordering (migrations before models,
     models before routes, routes before tests), and format each as
