@@ -9,7 +9,7 @@
 | Change | `96` |
 | Slug | `home-links-and-footer-polish` |
 | Title | home links and footer polish |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/96-home-links-and-footer-polish` |
 
 ---
