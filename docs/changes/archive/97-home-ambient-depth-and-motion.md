@@ -9,7 +9,7 @@
 | Change | `97` |
 | Slug | `home-ambient-depth-and-motion` |
 | Title | Home Ambient Depth and Motion |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/97-home-ambient-depth-and-motion` |
 
 ---
