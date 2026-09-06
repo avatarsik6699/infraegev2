@@ -49,6 +49,31 @@ describe("SvgDrawing", () => {
     expect(path?.getAttribute("pathLength")).toBe("100");
   });
 
+  it("uses optional stop colors without changing the currentColor fallback", () => {
+    const result = render(
+      <svg>
+        <SvgDrawing.Line
+          d="M0 4h100"
+          fade={{
+            ...fade,
+            stops: [
+              { color: "#ff6a00", offset: 0, opacity: 1 },
+              { offset: 0.5, opacity: 0.8 },
+              { color: "#ffd9c2", offset: 1, opacity: 1 },
+            ],
+          }}
+          strokeWidth={2}
+        />
+      </svg>,
+    );
+
+    expect(
+      [...result.container.querySelectorAll("stop")].map((stop) =>
+        stop.getAttribute("stop-color"),
+      ),
+    ).toEqual(["#ff6a00", "currentColor", "#ffd9c2"]);
+  });
+
   it("keeps generated gradient resources unique in SSR markup", () => {
     const markup = renderToString(
       <svg>

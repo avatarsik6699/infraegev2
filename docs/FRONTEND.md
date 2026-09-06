@@ -248,9 +248,10 @@ app → routes → pages → widgets → features → entities → shared
   start and a compact filled arrowhead at their destination. A separate two-curve return trajectory
   from the practice card back to the theory stage makes the theory-practice cycle legible without
   competing with the central course sequence. The theory stage also fans out selectively to the
-  algorithm, logic-pulse, byte, truth-table and traversal notation. All pattern trajectories use
-  the lowest stroke weight and contrast in the scene so they remain background context rather than
-  new content. Authored routes do not cross one another, and the truth-table trajectory travels
+  algorithm, logic-pulse, byte and truth-table notation; traversal remains an unconnected
+  low-weight pattern. All pattern trajectories use the lowest stroke weight and contrast in the
+  scene so they remain background context rather than new content. Authored routes do not cross
+  one another, and the truth-table trajectory travels
   above rather than through the practice card. Every route uses a longitudinal opacity gradient;
   only selected card and cycle arrows add a slightly offset, low-opacity echo beneath the primary
   shaft. These echoes, modestly stronger paper/stage shadows and brighter edge highlights provide
@@ -266,9 +267,25 @@ app → routes → pages → widgets → features → entities → shared
   duplicate registry catalogs or synthetic social proof. The reference's literal «72% курса» is an
   aria-hidden illustration detail, never learner state. The map alone may pair a thin border with a
   restrained offset shadow to reproduce rotated paper slips; this narrow decorative exception does
-  not change the flat-surface contract for product UI. Domain-agnostic
+  not change the flat-surface contract for product UI. One low-contrast page-local ambient SVG
+  field may extend an orthogonal engineering grid, calibration marks and notation behind the
+  complete hero to connect its statement and map visually. The grid spans the full main-page canvas
+  while a vertical mask progressively removes it near the header and footer; it never draws over
+  either chrome surface or becomes a reusable component background. Local soft relief beneath the
+  authored map patterns prevents their structure from accumulating contrast with the grid. The complete ambient field is
+  neutral and static: directional orange motion belongs only to the learning map. After hydration,
+  separate decorative layers may carry two clearly visible gradient impulses continuously over the already-complete static
+  central and card/cycle connections. Border gradients inherit the surface hierarchy: neutral card
+  and completed-stage borders stay neutral, while only active orange borders sweep in orange. They use nonuniform deterministic phases rather
+  than runtime randomness; pattern routes remain single and lowest-weight. The hero owns one
+  coordinated sequence: central stages lead, card/cycle routes answer, pattern routes and border
+  glints remain quiet.
+  Motion conveys no state or information, stops while the hero is outside the viewport or the
+  document is hidden, and is removed under `prefers-reduced-motion`; SSR/no-JavaScript always renders
+  the complete static map. Domain-agnostic
   `shared/components/svg-drawing` fragments own reusable fading paths,
-  authored tapered outlines and composed arrows; they inherit `currentColor`, generate SSR-stable
+  authored tapered outlines and composed arrows; fade stops may optionally override `currentColor`
+  for multitone consumer-owned gradients, and all resources generate SSR-stable
   gradient ids and do not own a canvas, scene geometry or responsive layout. Page-local components
   retain those composition responsibilities. Domain-agnostic `shared/components/svg-pattern`
   fields own bounded directional fade masks, while their preset API composes deterministic strokes,

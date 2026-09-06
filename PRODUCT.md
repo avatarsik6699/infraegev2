@@ -60,15 +60,26 @@ the first reference-led composition: a direct product statement and real mini-co
 left, plus a non-interactive learning map on the right. Alegreya is reserved there for the live
 wordmark and product statement; the expanded subtitle, benefit line and statement lead use Golos
 Text. The lockup/navigation separator is intentionally faint. Authored SVG geometry gives the CTA
-tapered, fading linework. The current learning-map iteration deliberately leaves its cards, numbered
-stages and background notation unconnected until a semantic trajectory is separately authored.
-Reusable domain-agnostic SVG primitives own gradient resources and line/arrow rendering, while a
+tapered, fading linework. The learning map connects its cards, numbered stages and background
+notation through a selective, non-crossing semantic trajectory: solid stage curves, dashed card
+arrows, quiet theory-to-pattern routes and one practice-to-theory return loop. Reusable
+domain-agnostic SVG primitives own multitone gradient resources and line/arrow rendering, while a
 small SVG pattern preset composes deterministic strokes, labels and nodes inside directional fade
 fields. Pattern subject matter, coordinates and responsive placement stay with the consuming page.
-The homepage is the first and only migrated consumer in this change. The rejected raster dry-ink
+The hero extends that vocabulary into one low-contrast page-local ambient SVG field behind its
+statement and map without entering the header or footer. A fading orthogonal engineering grid spans
+the full main-page canvas and recedes progressively toward both chrome edges; its grid, calibration
+marks and notation remain neutral and static, with local soft relief beneath the map's authored
+patterns to prevent both structures accumulating contrast. After hydration,
+decorative overlay strokes carry two restrained moving impulses through existing connections;
+longer, clearly visible surface-border gradients use each surface's own neutral or active accent
+border color and appear in deterministic offset cycles so the scene feels irregular without
+causing SSR drift. The static composition remains complete, while reduced motion, an offscreen hero
+or a hidden document keeps the overlays stopped. The homepage remains the first and only migrated
+consumer. The rejected raster dry-ink
 experiment is not part of the product. One complete learning-map SVG preserves its cards, stages
 and notation across desktop and mobile. Its wider asymmetric desktop constellation spreads enlarged
-cards and notation toward the scene edges without adding connectors; decorative filter overflow is
+cards and notation toward the scene edges; decorative filter overflow is
 contained by the home visual boundary and never enlarges the document canvas. The scene fits both
 its parent column and available viewport height, switches to width-led fitting when the page stacks,
 then scales as one bounded scene on narrow screens without horizontal page overflow.

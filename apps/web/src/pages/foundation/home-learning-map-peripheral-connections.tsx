@@ -25,11 +25,18 @@ type ArrowHeadMetrics = {
 };
 
 const shaftFadeStops = [
-  { offset: 0, opacity: 0 },
-  { offset: 0.14, opacity: 0.24 },
-  { offset: 0.38, opacity: 0.82 },
-  { offset: 0.72, opacity: 0.92 },
-  { offset: 1, opacity: 1 },
+  { color: "var(--color-brand-orange-soft)", offset: 0, opacity: 0 },
+  { color: "var(--color-brand-orange)", offset: 0.38, opacity: 0.82 },
+  { color: "#ffffff", offset: 0.7, opacity: 0.3 },
+  { color: "var(--color-brand-orange)", offset: 1, opacity: 1 },
+] as const;
+
+const flowFadeStops = [
+  { color: "var(--color-brand-orange)", offset: 0, opacity: 0 },
+  { color: "var(--color-brand-orange)", offset: 0.3, opacity: 0.86 },
+  { color: "#ffb080", offset: 0.54, opacity: 1 },
+  { color: "var(--color-brand-orange)", offset: 0.78, opacity: 0.9 },
+  { color: "var(--color-brand-orange)", offset: 1, opacity: 0 },
 ] as const;
 
 const echoedConnectionIds = new Set([
@@ -114,7 +121,7 @@ const connectionEchoes = (
       d,
       dashArray,
       fade,
-      opacity: 0.13,
+      opacity: 0.09,
       pathLength: 100,
       scaleStroke: true,
       strokeWidth: strokeWidth + 1,
@@ -164,6 +171,28 @@ const PeripheralConnectionArrow: React.FC<PeripheralConnectionProps> = ({
           kind: "filled",
         }}
       />
+      <g data-home-motion="peripheral-flow">
+        <SvgDrawing.Line
+          className={styles.peripheralFlow}
+          d={path}
+          dashArray={kind === "pattern" ? "13 87" : "24 76"}
+          fade={{ ...fade, stops: flowFadeStops }}
+          pathLength={100}
+          scaleStroke
+          strokeWidth={kind === "pattern" ? 1.9 : 3.1}
+        />
+        {kind === "pattern" ? null : (
+          <SvgDrawing.Line
+            className={`${styles.peripheralFlow} ${styles.peripheralFlowSecondary}`}
+            d={path}
+            dashArray="10 90"
+            fade={{ ...fade, stops: flowFadeStops }}
+            pathLength={100}
+            scaleStroke
+            strokeWidth={2}
+          />
+        )}
+      </g>
     </g>
   );
 };

@@ -39,6 +39,7 @@ export class FoundationPage {
       this.page.locator("[data-public-header] [aria-disabled='true']"),
     ).toHaveCount(8);
     await expect(this.page.locator("[data-home-map]")).toBeVisible();
+    await expect(this.page.locator("[data-home-ambient]")).toBeVisible();
     await expect(this.page.locator("[data-course-list]")).toHaveCount(0);
     await expect(this.page.locator("[data-topic-list]")).toHaveCount(0);
     await expect(
@@ -97,8 +98,8 @@ export class FoundationPage {
     const composition = await this.page
       .locator("[data-foundation-layout]")
       .evaluate((layout) => {
-        const intro = layout.children[0];
-        const visual = layout.children[1];
+        const intro = layout.querySelector("[data-foundation-intro]");
+        const visual = layout.querySelector("[data-foundation-visual]");
         const action = layout.querySelector<HTMLElement>("a");
         const heading = intro.querySelector<HTMLElement>("h1");
         const lead = intro.querySelector<HTMLElement>("p");
@@ -290,21 +291,43 @@ export class FoundationPage {
   async expectDeclarativeDrawing(): Promise<void> {
     const map = this.page.locator("[data-home-map]");
 
+    await expect(
+      this.page.locator("[data-home-ambient] [data-svg-pattern='field']"),
+    ).toHaveCount(3);
+    await expect(
+      this.page.locator("[data-pattern-name='ambient-engineering-grid']"),
+    ).toHaveCount(1);
+    await expect(this.page.locator("[data-home-ambient]")).toHaveAttribute(
+      "aria-hidden",
+      "true",
+    );
+    const ambientAnimationNames = await this.page
+      .locator("[data-home-ambient] path")
+      .evaluateAll((paths) =>
+        paths.map((path) => getComputedStyle(path).animationName),
+      );
+    expect(ambientAnimationNames.length).toBeGreaterThan(0);
+    expect(ambientAnimationNames.every((name) => name === "none")).toBe(true);
+
     await expect(map.locator('[data-svg-pattern="field"]')).toHaveCount(7);
+    await expect(map.locator("[data-pattern-grid-relief] ellipse")).toHaveCount(
+      7,
+    );
     await expect(map.locator('[data-svg-pattern="preset"]')).toHaveCount(7);
     await expect(map.locator('[data-svg-pattern="strokes"]')).toHaveCount(5);
     await expect(map.locator("[data-map-connection]")).toHaveCount(3);
     await expect(map.locator("[data-map-peripheral-connection]")).toHaveCount(
-      10,
+      9,
     );
     await expect(map.locator("[data-target-kind='card']")).toHaveCount(4);
     await expect(map.locator("[data-target-kind='cycle']")).toHaveCount(1);
-    await expect(map.locator("[data-target-kind='pattern']")).toHaveCount(5);
+    await expect(map.locator("[data-target-kind='pattern']")).toHaveCount(4);
+    await expect(
+      map.locator("[data-map-peripheral-connection='traversal-pattern']"),
+    ).toHaveCount(0);
     await expect(map.locator("[data-connection-endpoint]")).toHaveCount(0);
-    await expect(map.locator('[data-svg-drawing="arrow"]')).toHaveCount(10);
-    await expect(map.locator('[data-svg-drawing="arrow-head"]')).toHaveCount(
-      10,
-    );
+    await expect(map.locator('[data-svg-drawing="arrow"]')).toHaveCount(9);
+    await expect(map.locator('[data-svg-drawing="arrow-head"]')).toHaveCount(9);
     await expect(
       map.locator('[data-svg-drawing="arrow"] > [data-svg-drawing="line"]'),
     ).toHaveCount(4);
@@ -419,13 +442,13 @@ export class FoundationPage {
       Math.min(...visualHierarchy.cardRightPadding),
     ).toBeGreaterThanOrEqual(18);
     expect(visualHierarchy.activeFill).toBe(visualHierarchy.progressFill);
-    expect(visualHierarchy.activeFill).not.toContain("url(");
+    expect(visualHierarchy.activeFill).toContain("active-stage-surface");
     expect(Math.max(...visualHierarchy.traversalNodeRadii)).toBeLessThanOrEqual(
       3,
     );
 
     const connectionStyles = await map
-      .locator("[data-map-connection] path")
+      .locator("[data-map-connection] [data-connection-layer='base'] path")
       .evaluateAll((connections) =>
         connections.map((connection) => ({
           d: connection.getAttribute("d"),
@@ -522,6 +545,111 @@ export class FoundationPage {
           .map(({ shaftWidth }) => shaftWidth),
       ),
     );
+
+    await expect(
+      map.locator("[data-home-motion='connection-flow']"),
+    ).toHaveCount(3);
+    await expect(
+      map.locator("[data-home-motion='peripheral-flow']"),
+    ).toHaveCount(9);
+    await expect(map.locator("[data-home-motion='card-border']")).toHaveCount(
+      4,
+    );
+    await expect(map.locator("[data-home-motion='stage-border']")).toHaveCount(
+      3,
+    );
+    await expect(
+      map.locator("[data-home-motion='progress-border']"),
+    ).toHaveCount(1);
+
+    const borderPaints = await map.evaluate((mapRoot) => {
+      const active = getComputedStyle(
+        mapRoot.querySelector<SVGElement>(
+          "[data-map-node='tasks-stage'] [data-home-motion='stage-border']",
+        )!,
+      );
+      const card = getComputedStyle(
+        mapRoot.querySelector<SVGElement>(
+          "[data-home-map-card='theory'] [data-home-motion='card-border']",
+        )!,
+      );
+
+      return {
+        active: active.stroke,
+        activePeak: active.getPropertyValue("--border-peak-opacity"),
+        card: card.stroke,
+        cardPeak: card.getPropertyValue("--border-peak-opacity"),
+        completed: getComputedStyle(
+          mapRoot.querySelector<SVGElement>(
+            "[data-map-node='theory-stage'] [data-home-motion='stage-border']",
+          )!,
+        ).stroke,
+        progress: getComputedStyle(
+          mapRoot.querySelector<SVGElement>(
+            "[data-home-motion='progress-border']",
+          )!,
+        ).stroke,
+      };
+    });
+    expect(borderPaints.card).toContain("motion-border-neutral");
+    expect(borderPaints.completed).toContain("motion-border-neutral");
+    expect(borderPaints.active).toContain("motion-border-accent");
+    expect(borderPaints.progress).toContain("motion-border-accent");
+    expect(Number(borderPaints.cardPeak)).toBeLessThan(
+      Number(borderPaints.activePeak),
+    );
+  }
+
+  async expectDecorativeMotion(active: boolean): Promise<void> {
+    const layout = this.page.locator("[data-foundation-layout]");
+    const motionLayers = this.page.locator(
+      "[data-home-motion='connection-flow'] path, [data-home-motion='card-border']",
+    );
+
+    if (active) {
+      await expect(layout).toHaveAttribute("data-motion-active", "true");
+    } else {
+      await expect(layout).not.toHaveAttribute("data-motion-active", "true");
+    }
+
+    const states = await motionLayers.evaluateAll((layers) =>
+      layers.map((layer) => ({
+        animationName: getComputedStyle(layer).animationName,
+        playState: getComputedStyle(layer).animationPlayState,
+      })),
+    );
+
+    expect(states.length).toBeGreaterThan(0);
+    if (active) {
+      expect(
+        states.every(({ animationName }) => animationName !== "none"),
+      ).toBe(true);
+      expect(
+        states.every(({ playState }) =>
+          playState.split(",").every((state) => state.trim() === "running"),
+        ),
+      ).toBe(true);
+      return;
+    }
+
+    expect(
+      states.every(
+        ({ animationName, playState }) =>
+          animationName === "none" || playState === "paused",
+      ),
+    ).toBe(true);
+  }
+
+  async expectReducedMotionFallback(): Promise<void> {
+    const motionLayers = this.page.locator(
+      "[data-home-motion='connection-flow'] path, [data-home-motion='card-border']",
+    );
+    const animationNames = await motionLayers.evaluateAll((layers) =>
+      layers.map((layer) => getComputedStyle(layer).animationName),
+    );
+
+    expect(animationNames.length).toBeGreaterThan(0);
+    expect(animationNames.every((name) => name === "none")).toBe(true);
   }
 
   async expectMobileComposition(): Promise<void> {

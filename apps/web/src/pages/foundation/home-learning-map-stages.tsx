@@ -21,6 +21,14 @@ const StageSurface: React.FC<StageSurfaceProps> = ({
       height={height}
       rx={active ? 27 : 28}
     />
+    <rect
+      className={styles.surfaceMotionBorder}
+      data-home-motion="stage-border"
+      width={width}
+      height={height}
+      pathLength="100"
+      rx={active ? 27 : 28}
+    />
     <path
       className={styles.stageHighlight}
       d={`M24 2.5 C${String(width * 0.34)} .8 ${String(width * 0.72)} 1.2 ${String(width - 24)} 3`}
@@ -115,6 +123,14 @@ export const HomeLearningMapStages: React.FC = () => {
           className={styles.progressSurface}
           width={stages.progress.width}
           height={stages.progress.height}
+          rx="13"
+        />
+        <rect
+          className={styles.surfaceMotionBorder}
+          data-home-motion="progress-border"
+          width={stages.progress.width}
+          height={stages.progress.height}
+          pathLength="100"
           rx="13"
         />
         <path

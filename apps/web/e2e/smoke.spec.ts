@@ -470,6 +470,7 @@ test("the public root exposes only published material and unknown routes remain 
   await foundationPage.expectDesktopComposition();
   await foundationPage.expectHomeChromePolish();
   await foundationPage.expectDeclarativeDrawing();
+  await foundationPage.expectDecorativeMotion(true);
   await foundationPage.expectNoHorizontalOverflow();
   await foundationPage.expectStableReload();
   await browserSession.captureViewport("public-home-desktop.png");
@@ -508,10 +509,23 @@ test("the public root exposes only published material and unknown routes remain 
 
   await noJavaScriptFoundationPage.open();
   await noJavaScriptFoundationPage.expectPublishedMaterial();
+  await noJavaScriptFoundationPage.expectDecorativeMotion(false);
   await noJavaScriptFoundationPage.expectNoHorizontalOverflow();
   browserSession.expectCleanConsole();
   await foundationPage.expectRemovedRouteNotFound();
   await errorTelemetryPage.expectSanitizedGlobalErrorDelivery();
+});
+
+test("the home motion layer respects reduced motion", async ({
+  browserSession,
+  foundationPage,
+}) => {
+  await browserSession.useReducedMotion();
+  await browserSession.useDesktopViewport();
+  await foundationPage.open();
+  await foundationPage.expectPublishedMaterial();
+  await foundationPage.expectReducedMotionFallback();
+  browserSession.expectCleanConsole();
 });
 
 test("privacy and crawl surfaces describe the public release", async ({

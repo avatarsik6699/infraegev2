@@ -73,6 +73,14 @@ const MapPaperCard: React.FC<{ card: MapCard }> = ({ card }) => {
         height={card.height}
         rx="10"
       />
+      <rect
+        className={styles.surfaceMotionBorder}
+        data-home-motion="card-border"
+        width={card.width}
+        height={card.height}
+        pathLength="100"
+        rx="10"
+      />
       <path
         className={styles.cardHighlight}
         d={`M14 2.5 C${card.width * 0.34} .7 ${card.width * 0.72} 1.2 ${highlightEnd} 3`}

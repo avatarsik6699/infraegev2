@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { homeAmbientPatterns } from "~/pages/foundation/home-ambient-patterns";
 import { homeLearningMapGeometry } from "~/pages/foundation/home-learning-map-geometry";
 import { homeLearningMapPatterns } from "~/pages/foundation/home-learning-map-patterns";
 import type { SvgPatternTypes } from "~/shared/components/svg-pattern";
@@ -66,6 +67,32 @@ const segmentsCross = (a: Point, b: Point, c: Point, d: Point): boolean => {
 };
 
 describe("home learning map composition", () => {
+  it("keeps the hero ambience sparse, deterministic and page-owned", () => {
+    expect(Object.keys(homeAmbientPatterns)).toEqual([
+      "engineeringGrid",
+      "calibration",
+      "notation",
+    ]);
+    expect(homeAmbientPatterns.calibration.strokes).toHaveLength(2);
+    expect(homeAmbientPatterns.engineeringGrid.strokes).toHaveLength(3);
+    expect(homeAmbientPatterns.engineeringGrid.bounds).toEqual({
+      x: 0,
+      y: 0,
+      width: 1600,
+      height: 900,
+    });
+    expect(
+      homeAmbientPatterns.engineeringGrid.strokes.every(
+        ({ d }) => !d.includes("C"),
+      ),
+    ).toBe(true);
+    expect(homeAmbientPatterns.notation.labels).toHaveLength(4);
+    for (const pattern of Object.values(homeAmbientPatterns)) {
+      expect(pattern.fade.stops[0]?.opacity).toBe(0);
+      expect(pattern.fade.stops.at(-1)?.opacity).toBe(0);
+    }
+  });
+
   it("connects the four stages in order without changing their composition", () => {
     expect(homeLearningMapGeometry.connections.map(({ id }) => id)).toEqual([
       "theory-practice",
@@ -159,12 +186,14 @@ describe("home learning map composition", () => {
       "logic-pulse-pattern",
       "byte-pattern",
       "truth-table-pattern",
-      "traversal-pattern",
     ]);
     expect(
       homeLearningMapGeometry.cycleConnections.map(({ id }) => id),
     ).toEqual(["practice-card-theory-loop"]);
-    expect(homeLearningMapGeometry.patternConnections).toHaveLength(5);
+    expect(homeLearningMapGeometry.patternConnections).toHaveLength(4);
+    expect(homeLearningMapGeometry.patternConnections).not.toContainEqual(
+      expect.objectContaining({ id: "traversal-pattern" }),
+    );
     expect(homeLearningMapGeometry.cardConnections).toHaveLength(4);
     expect(homeLearningMapGeometry.cycleConnections).toHaveLength(1);
     for (const { start } of homeLearningMapGeometry.patternConnections) {

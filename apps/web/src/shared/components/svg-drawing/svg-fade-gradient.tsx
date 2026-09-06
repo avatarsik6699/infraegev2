@@ -15,7 +15,7 @@ export const SvgFadeGradient: React.FC<SvgDrawingTypes.FadeGradientProps> = (
       <stop
         key={`${String(stop.offset)}-${String(stop.opacity)}`}
         offset={stop.offset}
-        stopColor={props.stopColor ?? "currentColor"}
+        stopColor={stop.color ?? props.stopColor ?? "currentColor"}
         stopOpacity={stop.opacity}
       />
     ))}

@@ -5,6 +5,7 @@ export namespace SvgDrawingTypes {
   };
 
   export type FadeStop = {
+    color?: string;
     offset: number;
     opacity: number;
   };

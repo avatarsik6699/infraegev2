@@ -16,33 +16,41 @@ export const HomeLearningMapScene: React.FC = () => (
     <defs>
       <filter id="paper-shadow" x="-20%" y="-30%" width="140%" height="170%">
         <feDropShadow
-          dx="0"
-          dy="6"
-          stdDeviation="8"
+          dx="0.8"
+          dy="3"
+          stdDeviation="2.8"
           floodColor="#1a1a1a"
-          floodOpacity="0.09"
+          floodOpacity="0.055"
+        />
+        <feDropShadow
+          dx="1.5"
+          dy="10"
+          stdDeviation="11"
+          floodColor="#1a1a1a"
+          floodOpacity="0.075"
         />
       </filter>
       <linearGradient id="paper-surface" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0" stopColor="#ffffff" stopOpacity="0.92" />
+        <stop offset="0" stopColor="#ffffff" stopOpacity="0.98" />
         <stop
-          offset="0.56"
+          offset="0.42"
           stopColor="var(--color-brand-canvas)"
-          stopOpacity="0.98"
+          stopOpacity="0.96"
         />
-        <stop offset="1" stopColor="#eee9e4" stopOpacity="0.72" />
+        <stop offset="0.78" stopColor="#f1ece6" stopOpacity="0.72" />
+        <stop offset="1" stopColor="#e9e3dc" stopOpacity="0.76" />
       </linearGradient>
       <linearGradient id="paper-border" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0" stopColor="var(--color-brand-ink)" stopOpacity="0.2" />
+        <stop offset="0" stopColor="#ffffff" stopOpacity="0.82" />
         <stop
-          offset="0.54"
+          offset="0.28"
           stopColor="var(--color-brand-ink)"
-          stopOpacity="0.07"
+          stopOpacity="0.16"
         />
         <stop
           offset="1"
-          stopColor="var(--color-brand-orange)"
-          stopOpacity="0.16"
+          stopColor="var(--color-brand-muted)"
+          stopOpacity="0.2"
         />
       </linearGradient>
       <linearGradient id="paper-highlight" x1="0" y1="0" x2="1" y2="0">
@@ -53,21 +61,28 @@ export const HomeLearningMapScene: React.FC = () => (
       </linearGradient>
       <filter id="stage-shadow" x="-15%" y="-30%" width="130%" height="170%">
         <feDropShadow
-          dx="0"
-          dy="4"
-          stdDeviation="6"
+          dx="0.6"
+          dy="2.5"
+          stdDeviation="2.4"
           floodColor="#1a1a1a"
-          floodOpacity="0.065"
+          floodOpacity="0.04"
+        />
+        <feDropShadow
+          dx="1"
+          dy="7"
+          stdDeviation="8"
+          floodColor="#1a1a1a"
+          floodOpacity="0.055"
         />
       </filter>
       <linearGradient id="stage-surface" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0" stopColor="#ffffff" stopOpacity="0.68" />
+        <stop offset="0" stopColor="#ffffff" stopOpacity="0.88" />
         <stop
-          offset="0.58"
+          offset="0.52"
           stopColor="var(--color-brand-canvas)"
-          stopOpacity="0.94"
+          stopOpacity="0.96"
         />
-        <stop offset="1" stopColor="#eee9e4" stopOpacity="0.42" />
+        <stop offset="1" stopColor="#e9e3dc" stopOpacity="0.54" />
       </linearGradient>
       <linearGradient id="stage-border" x1="0" y1="0" x2="1" y2="1">
         <stop
@@ -82,8 +97,8 @@ export const HomeLearningMapScene: React.FC = () => (
         />
         <stop
           offset="1"
-          stopColor="var(--color-brand-orange)"
-          stopOpacity="0.13"
+          stopColor="var(--color-brand-muted)"
+          stopOpacity="0.16"
         />
       </linearGradient>
       <linearGradient id="stage-highlight" x1="0" y1="0" x2="1" y2="0">
@@ -91,6 +106,67 @@ export const HomeLearningMapScene: React.FC = () => (
         <stop offset="0.2" stopColor="#ffffff" stopOpacity="0.82" />
         <stop offset="0.78" stopColor="#ffffff" stopOpacity="0.45" />
         <stop offset="1" stopColor="#ffffff" stopOpacity="0" />
+      </linearGradient>
+      <linearGradient id="active-stage-surface" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stopColor="#ffffff" stopOpacity="0.96" />
+        <stop offset="0.54" stopColor="var(--color-brand-canvas)" />
+        <stop offset="1" stopColor="#ebe5de" stopOpacity="0.72" />
+      </linearGradient>
+      <radialGradient id="pattern-grid-relief">
+        <stop
+          offset="0"
+          stopColor="var(--color-brand-canvas)"
+          stopOpacity="0.82"
+        />
+        <stop
+          offset="0.58"
+          stopColor="var(--color-brand-canvas)"
+          stopOpacity="0.56"
+        />
+        <stop
+          offset="1"
+          stopColor="var(--color-brand-canvas)"
+          stopOpacity="0"
+        />
+      </radialGradient>
+      <linearGradient id="motion-border-neutral" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stopColor="var(--color-brand-ink)" stopOpacity="0" />
+        <stop
+          offset="0.3"
+          stopColor="var(--color-brand-muted)"
+          stopOpacity="0.28"
+        />
+        <stop
+          offset="0.54"
+          stopColor="var(--color-brand-ink)"
+          stopOpacity="0.44"
+        />
+        <stop offset="0.72" stopColor="#ffffff" stopOpacity="0.24" />
+        <stop offset="1" stopColor="var(--color-brand-muted)" stopOpacity="0" />
+      </linearGradient>
+      <linearGradient id="motion-border-accent" x1="0" y1="0" x2="1" y2="1">
+        <stop
+          offset="0"
+          stopColor="var(--color-brand-orange)"
+          stopOpacity="0"
+        />
+        <stop
+          offset="0.3"
+          stopColor="var(--color-brand-orange)"
+          stopOpacity="0.5"
+        />
+        <stop offset="0.52" stopColor="#ffb080" stopOpacity="1" />
+        <stop offset="0.7" stopColor="#fff1e8" stopOpacity="0.72" />
+        <stop
+          offset="0.86"
+          stopColor="var(--color-brand-orange)"
+          stopOpacity="0.78"
+        />
+        <stop
+          offset="1"
+          stopColor="var(--color-brand-orange)"
+          stopOpacity="0"
+        />
       </linearGradient>
     </defs>
 

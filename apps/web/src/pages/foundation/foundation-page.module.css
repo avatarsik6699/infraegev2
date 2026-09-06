@@ -14,6 +14,8 @@
 }
 
 .hero {
+  position: relative;
+  isolation: isolate;
   display: grid;
   grid-template-columns: minmax(31rem, 0.68fr) minmax(50rem, 1.32fr);
   gap: 0;
@@ -24,6 +26,57 @@
     var(--space-5);
   margin-inline: auto;
   overflow: clip;
+}
+
+.ambientField {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    rgb(0 0 0 / 0.32) 8%,
+    black 20%,
+    black 80%,
+    rgb(0 0 0 / 0.32) 92%,
+    transparent 100%
+  );
+}
+
+.ambientScene {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.ambientLight {
+  opacity: 0.24;
+}
+
+.ambientPaperLight {
+  opacity: 0.62;
+}
+
+.ambientInkPattern {
+  color: color-mix(in srgb, var(--color-brand-ink) 18%, transparent);
+}
+
+.ambientGridPattern {
+  color: color-mix(in srgb, var(--color-brand-ink) 21%, transparent);
+}
+
+.ambientPatternContent text {
+  fill: currentcolor;
+  font-family: var(--font-data);
+  font-size: var(--text-xs);
+  letter-spacing: 0.07em;
+}
+
+.ambientPatternContent circle {
+  fill: currentcolor;
 }
 
 .intro {
@@ -82,6 +135,7 @@
 }
 
 .visual {
+  z-index: 1;
   min-width: 0;
   align-self: start;
   width: calc(100% + clamp(2.5rem, 5vw, 5.5rem));
@@ -170,6 +224,72 @@
   vector-effect: non-scaling-stroke;
 }
 
+.surfaceMotionBorder {
+  --border-cycle: 7.2s;
+  --border-delay: 0s;
+  --border-rest-opacity: 0.05;
+  --border-peak-opacity: 0.48;
+  --border-tail-opacity: 0.1;
+
+  fill: none;
+  stroke: url("#motion-border-neutral");
+  stroke-dasharray: 18 82;
+  stroke-linecap: round;
+  stroke-width: 1.8;
+  opacity: 0;
+  vector-effect: non-scaling-stroke;
+}
+
+.paperCard[data-home-map-card="theory"] .surfaceMotionBorder {
+  --border-cycle: 7.8s;
+  --border-delay: -1.4s;
+}
+
+.stage[data-map-node="theory-stage"] .surfaceMotionBorder {
+  --border-cycle: 6.7s;
+  --border-delay: -5.2s;
+}
+
+.paperCard[data-home-map-card="practice"] .surfaceMotionBorder {
+  --border-cycle: 6.4s;
+  --border-delay: -4.3s;
+}
+
+.stage[data-map-node="practice-stage"] .surfaceMotionBorder {
+  --border-cycle: 8.1s;
+  --border-delay: -7.6s;
+}
+
+.paperCard[data-home-map-card="tasks"] .surfaceMotionBorder {
+  --border-cycle: 8.6s;
+  --border-delay: -7.1s;
+}
+
+.activeStage .surfaceMotionBorder {
+  --border-cycle: 7s;
+  --border-delay: -2.2s;
+}
+
+.activeStage .surfaceMotionBorder,
+.progress .surfaceMotionBorder {
+  --border-rest-opacity: 0.08;
+  --border-peak-opacity: 0.66;
+  --border-tail-opacity: 0.15;
+
+  stroke: url("#motion-border-accent");
+  stroke-width: 2;
+}
+
+.paperCard[data-home-map-card="statistics"] .surfaceMotionBorder {
+  --border-cycle: 9.2s;
+  --border-delay: -5.6s;
+}
+
+.progress .surfaceMotionBorder {
+  --border-cycle: 6.9s;
+  --border-delay: -2.8s;
+}
+
 .cardIcon {
   --custom-icon-accent: var(--color-brand-orange);
   --custom-icon-paper: color-mix(in srgb, var(--color-brand-canvas) 90%, white);
@@ -207,7 +327,7 @@
 }
 
 .activeStage .stageSurface {
-  fill: var(--color-brand-canvas);
+  fill: url("#active-stage-surface");
   stroke: var(--color-brand-orange);
   stroke-width: 1.25;
 }
@@ -247,7 +367,7 @@
 }
 
 .progressSurface {
-  fill: var(--color-brand-canvas);
+  fill: url("#active-stage-surface");
   stroke: var(--color-brand-orange);
   stroke-width: 1.2;
   filter: url("#stage-shadow");
@@ -259,6 +379,158 @@
   font-size: var(--text-base);
   font-weight: 500;
   text-anchor: middle;
+}
+
+.connectionFlow,
+.peripheralFlow {
+  opacity: 0;
+}
+
+.connectionFlow {
+  --flow-delay: 0s;
+
+  animation: connection-flow 5.2s linear infinite;
+  animation-delay: var(--flow-delay);
+}
+
+[data-map-connection="practice-tasks"] .connectionFlow {
+  --flow-delay: -2.25s;
+}
+
+[data-map-connection="tasks-progress"] .connectionFlow {
+  --flow-delay: -4.5s;
+}
+
+.connectionFlow.connectionFlowSecondary {
+  animation-delay: calc(var(--flow-delay) - 1.1s);
+  animation-direction: reverse;
+  animation-duration: 3.7s;
+}
+
+.peripheralFlow {
+  --peripheral-delay: 0s;
+
+  animation: peripheral-flow 7.8s linear infinite;
+  animation-delay: var(--peripheral-delay);
+}
+
+[data-map-peripheral-connections] > :nth-child(2n) .peripheralFlow {
+  --peripheral-delay: -3.5s;
+}
+
+[data-map-peripheral-connections] > :nth-child(3n) .peripheralFlow {
+  --peripheral-delay: -7s;
+}
+
+[data-map-peripheral-connections] > :nth-child(5n) .peripheralFlow {
+  --peripheral-delay: -10.5s;
+}
+
+.peripheralFlow.peripheralFlowSecondary {
+  animation-delay: calc(var(--peripheral-delay) - 1.8s);
+  animation-direction: reverse;
+  animation-duration: 5.4s;
+}
+
+[data-target-kind="pattern"] .peripheralFlow {
+  opacity: 0;
+  animation-name: pattern-flow;
+  animation-duration: 14s;
+}
+
+.connectionFlow,
+.peripheralFlow {
+  animation-play-state: paused;
+}
+
+.hero[data-motion-active="true"] .connectionFlow,
+.hero[data-motion-active="true"] .peripheralFlow,
+.hero[data-motion-active="true"] .surfaceMotionBorder {
+  animation-play-state: running;
+}
+
+.hero[data-motion-active="true"] .connectionFlow {
+  opacity: 0.72;
+}
+
+.hero[data-motion-active="true"] .peripheralFlow {
+  opacity: 0.55;
+}
+
+.hero[data-motion-active="true"] [data-target-kind="pattern"] .peripheralFlow {
+  opacity: 0.22;
+}
+
+.hero[data-motion-active="true"] .surfaceMotionBorder {
+  animation:
+    surface-border-glint 3.8s linear infinite,
+    surface-border-presence var(--border-cycle) ease-in-out infinite;
+  animation-delay: var(--border-delay), var(--border-delay);
+  animation-play-state: running, running;
+}
+
+.hero[data-motion-active="true"] .connectionFlowSecondary {
+  opacity: 0.44;
+}
+
+.hero[data-motion-active="true"] .peripheralFlowSecondary {
+  opacity: 0.34;
+}
+
+@keyframes connection-flow {
+  from {
+    stroke-dashoffset: 14;
+  }
+
+  to {
+    stroke-dashoffset: -86;
+  }
+}
+
+@keyframes peripheral-flow {
+  from {
+    stroke-dashoffset: 12;
+  }
+
+  to {
+    stroke-dashoffset: -88;
+  }
+}
+
+@keyframes pattern-flow {
+  from {
+    stroke-dashoffset: 8;
+  }
+
+  to {
+    stroke-dashoffset: -92;
+  }
+}
+
+@keyframes surface-border-glint {
+  from {
+    stroke-dashoffset: 14;
+  }
+
+  to {
+    stroke-dashoffset: -86;
+  }
+}
+
+@keyframes surface-border-presence {
+  0%,
+  100% {
+    opacity: var(--border-rest-opacity);
+  }
+
+  14%,
+  62% {
+    opacity: var(--border-peak-opacity);
+  }
+
+  76% {
+    opacity: var(--border-tail-opacity);
+  }
 }
 
 @media (max-width: 86rem) {
@@ -287,6 +559,11 @@
     padding-top: var(--space-5);
   }
 
+  .ambientScene {
+    width: 132%;
+    margin-left: -16%;
+  }
+
   .intro {
     padding-top: var(--space-3);
   }
@@ -313,6 +590,25 @@
     gap: var(--space-5);
     min-height: 0;
     padding-block: var(--space-5) var(--space-6);
+  }
+
+  .ambientField {
+    inset-block: 0;
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0,
+      rgb(0 0 0 / 0.3) 10%,
+      black 22%,
+      black 78%,
+      rgb(0 0 0 / 0.3) 90%,
+      transparent 100%
+    );
+  }
+
+  .ambientScene {
+    width: 100%;
+    margin-left: 0;
+    opacity: 0.78;
   }
 
   .intro {
@@ -356,9 +652,13 @@
   }
 
   .cardSurface,
-  .stageSurface,
-  .progressSurface {
+  .stageSurface {
     stroke: var(--color-brand-ink);
+  }
+
+  .activeStage .stageSurface,
+  .progressSurface {
+    stroke: var(--color-brand-orange-text);
   }
 
   .futurePaperCard {
@@ -373,5 +673,32 @@
   .cycleConnection,
   .patternConnection {
     color: var(--color-brand-orange-text);
+  }
+
+  .ambientInkPattern {
+    color: color-mix(in srgb, var(--color-brand-ink) 34%, transparent);
+  }
+
+  .ambientGridPattern {
+    color: color-mix(in srgb, var(--color-brand-ink) 42%, transparent);
+  }
+
+  .surfaceMotionBorder {
+    stroke: var(--color-brand-ink);
+  }
+
+  .activeStage .surfaceMotionBorder,
+  .progress .surfaceMotionBorder {
+    stroke: var(--color-brand-orange-text);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .connectionFlow,
+  .peripheralFlow,
+  .surfaceMotionBorder,
+  .hero[data-motion-active="true"] .surfaceMotionBorder {
+    animation: none;
+    opacity: 0;
   }
 }

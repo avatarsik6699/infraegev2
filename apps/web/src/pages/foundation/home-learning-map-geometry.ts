@@ -186,22 +186,6 @@ const patternConnections = [
     ],
     end: { x: 860, y: 102 },
   },
-  {
-    id: "traversal-pattern",
-    start: { x: stages.theory.x, y: 248 },
-    controls: [
-      { x: 350, y: 330 },
-      { x: 370, y: 430 },
-    ],
-    via: {
-      end: { x: 386, y: 455 },
-      controls: [
-        { x: 410, y: 500 },
-        { x: 390, y: 610 },
-      ],
-    },
-    end: { x: 290, y: 660 },
-  },
 ] as const;
 
 const cycleConnections = [
