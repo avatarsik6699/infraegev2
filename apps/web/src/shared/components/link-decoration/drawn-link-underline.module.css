@@ -1,0 +1,19 @@
+.root {
+  position: absolute;
+  top: calc(100% + 0.04em);
+  right: -0.04em;
+  left: -0.04em;
+  display: block;
+  width: calc(100% + 0.08em);
+  height: 0.28em;
+  color: var(--color-brand-orange);
+  overflow: visible;
+  pointer-events: none;
+  transition: opacity var(--motion-duration) var(--motion-easing);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root {
+    transition: none;
+  }
+}

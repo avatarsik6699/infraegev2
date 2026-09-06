@@ -1,10 +1,12 @@
 export namespace ActionLinkTypes {
-  export type Props = {
-    to: string;
-    children: React.ReactNode;
-    hierarchy?: "secondary" | "quiet" | "text";
+  export type RootProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
+    hierarchy?: "secondary" | "quiet" | "text" | "drawn";
     icon?: "back" | "forward";
-    className?: string;
     ariaLabel?: string;
+  };
+
+  export type Props = RootProps & {
+    to: string;
+    params?: Record<string, string>;
   };
 }

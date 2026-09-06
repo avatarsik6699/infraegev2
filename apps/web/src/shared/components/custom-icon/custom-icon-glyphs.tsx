@@ -5,6 +5,27 @@ const ink = "currentColor";
 const paper = "var(--custom-icon-paper, #fefdfc)";
 const accent = "var(--custom-icon-accent, #fd6702)";
 
+export const CheckIcon: React.FC<CustomIconTypes.GlyphProps> = (props) => (
+  <CustomIconRoot {...props} data-icon-name="check" viewBox="0 0 32 32">
+    <circle cx="16" cy="16" r="16" fill={accent} />
+    <circle
+      cx="11"
+      cy="11"
+      r="3"
+      fill="color-mix(in srgb, white 62%, transparent)"
+    />
+    <path
+      d="m8 16 6 6L26 7"
+      fill="none"
+      stroke={paper}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      vectorEffect="non-scaling-stroke"
+    />
+  </CustomIconRoot>
+);
+
 export const BookIcon: React.FC<CustomIconTypes.GlyphProps> = (props) => (
   <CustomIconRoot {...props} data-icon-name="book" viewBox="42 222 160 142">
     <path

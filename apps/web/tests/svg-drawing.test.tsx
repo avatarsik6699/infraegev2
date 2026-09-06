@@ -81,6 +81,20 @@ describe("SvgDrawing", () => {
     ).toBe("currentColor");
   });
 
+  it("scales stroke width with its viewBox only when explicitly requested", () => {
+    const result = render(
+      <svg>
+        <SvgDrawing.Line d="M0 0h10" scaleStroke strokeWidth={2.5} />
+      </svg>,
+    );
+
+    expect(
+      result.container
+        .querySelector('[data-svg-drawing="line"]')
+        ?.getAttribute("vector-effect"),
+    ).toBeNull();
+  });
+
   it("composes a tapered arrow shaft, echoes and a solid head", () => {
     const result = render(
       <svg>
@@ -107,13 +121,54 @@ describe("SvgDrawing", () => {
     const shaft = result.container.querySelector(
       '[data-svg-drawing="tapered-line"]',
     );
+    const shaftGroup = result.container.querySelector(
+      '[data-svg-drawing-part="shaft"]',
+    );
     const lines = result.container.querySelectorAll(
       '[data-svg-drawing="line"]',
     );
 
     expect(arrow).not.toBeNull();
+    expect(arrow?.children[0]?.getAttribute("data-svg-drawing")).toBe("line");
+    expect(arrow?.children[1]?.getAttribute("data-svg-drawing-part")).toBe(
+      "shaft",
+    );
+    expect(arrow?.lastElementChild?.getAttribute("data-svg-drawing")).toBe(
+      "line",
+    );
+    expect(shaftGroup?.contains(shaft ?? null)).toBe(true);
     expect(shaft?.getAttribute("fill")).toMatch(/^url\(#svg-drawing-/);
     expect(lines).toHaveLength(2);
     expect(lines[1]?.getAttribute("stroke")).toBe("currentColor");
+  });
+
+  it("supports a dense filled arrowhead without changing shaft paint", () => {
+    const result = render(
+      <svg>
+        <SvgDrawing.Arrow
+          shaft={{
+            kind: "line",
+            d: "M0 4h80",
+            dashArray: "8 7",
+            fade,
+            strokeWidth: 1.4,
+          }}
+          head={{ kind: "filled", d: "M80 4 70 0 70 8Z" }}
+        />
+      </svg>,
+    );
+
+    expect(
+      result.container
+        .querySelector('[data-svg-drawing="arrow-head"]')
+        ?.getAttribute("fill"),
+    ).toBe("currentColor");
+    expect(
+      result.container.querySelector('[data-svg-drawing="arrow"]')
+        ?.lastElementChild,
+    ).toBe(result.container.querySelector('[data-svg-drawing="arrow-head"]'));
+    expect(
+      result.container.querySelectorAll('[data-svg-drawing="line"]'),
+    ).toHaveLength(1);
   });
 });

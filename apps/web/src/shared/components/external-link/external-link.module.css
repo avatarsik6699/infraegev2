@@ -8,9 +8,30 @@
     text-decoration-color var(--motion-duration) var(--motion-easing);
 }
 
+.label {
+  position: relative;
+}
+
+.drawn {
+  display: inline-flex;
+  gap: 0.38em;
+  align-items: center;
+  color: var(--color-brand-ink, var(--color-text));
+  font-weight: 400;
+  text-decoration: none;
+}
+
 .root:hover {
   color: var(--color-accent-dark);
   text-decoration-color: currentColor;
+}
+
+.drawn:hover {
+  color: var(--color-brand-ink, var(--color-text));
+}
+
+.drawn:hover [data-link-underline] {
+  opacity: 0.72;
 }
 
 /* Uses currentColor — rides the anchor's own `color` transition
@@ -23,6 +44,24 @@
   vertical-align: -0.1em;
 }
 
+.drawn .icon {
+  color: var(--color-brand-orange);
+  transition: transform var(--motion-duration) var(--motion-easing);
+}
+
+.drawn:hover .icon {
+  transform: translate(0.08em, -0.08em);
+}
+
+.drawn:active {
+  transform: translateY(1px);
+}
+
+.drawn:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 0.2rem;
+}
+
 .visuallyHidden {
   position: absolute;
   width: 1px;
@@ -33,4 +72,11 @@
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root,
+  .drawn .icon {
+    transition: none;
+  }
 }

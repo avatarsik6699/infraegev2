@@ -46,6 +46,23 @@ describe("ExternalLink", () => {
     expect(link.getAttribute("target")).toBe("_blank");
     expect(link.getAttribute("rel")).toBe("noopener noreferrer");
   });
+
+  it("can share the authored underline while keeping its up-right library icon", () => {
+    const result = render(
+      <ExternalLink href="https://example.com" hierarchy="drawn" newTab>
+        Справка
+      </ExternalLink>,
+    );
+    const link = screen.getByRole("link", {
+      name: "Справка (откроется в новой вкладке)",
+    });
+
+    expect(link.getAttribute("data-hierarchy")).toBe("drawn");
+    expect(link.querySelector("[data-link-underline]")).not.toBeNull();
+    expect(
+      result.container.querySelector("svg.lucide-arrow-up-right"),
+    ).not.toBeNull();
+  });
 });
 
 describe("Image", () => {

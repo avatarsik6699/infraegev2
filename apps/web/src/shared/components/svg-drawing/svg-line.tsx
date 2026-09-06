@@ -27,7 +27,7 @@ export const SvgLine: React.FC<SvgDrawingTypes.LineProps> = (props) => {
         strokeLinejoin="round"
         strokeWidth={props.strokeWidth}
         transform={props.transform}
-        vectorEffect="non-scaling-stroke"
+        vectorEffect={props.scaleStroke ? undefined : "non-scaling-stroke"}
       />
     </>
   );

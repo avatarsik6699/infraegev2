@@ -20,13 +20,13 @@
     color var(--motion-duration) var(--motion-easing);
 }
 
-.root[data-hierarchy="quiet"] {
+.quiet {
   border-color: transparent;
   background: transparent;
   box-shadow: none;
 }
 
-.root[data-hierarchy="text"] {
+.text {
   gap: var(--space-0-5);
   justify-content: flex-start;
   padding-inline: 0;
@@ -37,7 +37,32 @@
   font-weight: 500;
 }
 
-.root[data-hierarchy="text"] .label {
+.drawn {
+  gap: 0.38em;
+  justify-content: flex-start;
+  padding-inline: 0;
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+  color: var(--color-brand-ink, var(--color-text));
+  font-weight: 400;
+}
+
+.drawn .label {
+  position: relative;
+  display: inline-block;
+}
+
+.drawnArrow {
+  width: 1.55em;
+  height: 1em;
+  flex: 0 0 auto;
+  color: var(--color-brand-orange);
+  overflow: visible;
+  transition: transform var(--motion-duration) var(--motion-easing);
+}
+
+.text .label {
   text-decoration-line: underline;
   text-decoration-color: var(--color-accent);
   text-decoration-thickness: 1px;
@@ -57,32 +82,50 @@
   color: var(--color-text);
 }
 
-.root[data-hierarchy="text"]:hover {
+.text:hover {
   background: transparent;
 }
 
-.root[data-hierarchy="text"]:hover .label {
+.drawn:hover {
+  background: transparent;
+  color: var(--color-brand-ink, var(--color-text));
+}
+
+.drawn:hover [data-link-underline] {
+  opacity: 0.72;
+}
+
+.drawn:hover .drawnArrow {
+  transform: translateX(0.12em);
+}
+
+.text:hover .label {
   text-decoration-color: currentColor;
 }
 
-.root[data-hierarchy="text"][data-icon="back"]:hover .icon {
+.text:hover .backIcon {
   transform: translateX(-0.125rem);
 }
 
-.root[data-hierarchy="text"][data-icon="forward"]:hover .icon {
+.text:hover .forwardIcon {
   transform: translateX(0.125rem);
 }
 
-.root[data-hierarchy="secondary"]:active {
+.secondary:active {
   background: color-mix(in oklch, var(--color-text) 7%, var(--color-surface));
 }
 
-.root[data-hierarchy="secondary"]:focus-visible {
+.drawn:active {
+  transform: translateY(1px);
+}
+
+.secondary:focus-visible {
   box-shadow: var(--shadow-control), var(--focus-ring);
 }
 
-.root[data-hierarchy="quiet"]:focus-visible,
-.root[data-hierarchy="text"]:focus-visible {
+.quiet:focus-visible,
+.text:focus-visible,
+.drawn:focus-visible {
   outline: 2px solid var(--color-focus);
   outline-offset: 0.2rem;
 }
@@ -92,8 +135,9 @@
     transition: none;
   }
 
-  .root[data-hierarchy="text"] .label,
-  .icon {
+  .text .label,
+  .icon,
+  .drawnArrow {
     transition: none;
   }
 }

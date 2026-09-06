@@ -468,6 +468,7 @@ test("the public root exposes only published material and unknown routes remain 
   await foundationPage.expectPublishedMaterial();
   await foundationPage.expectBrandMetadata();
   await foundationPage.expectDesktopComposition();
+  await foundationPage.expectHomeChromePolish();
   await foundationPage.expectDeclarativeDrawing();
   await foundationPage.expectNoHorizontalOverflow();
   await foundationPage.expectStableReload();

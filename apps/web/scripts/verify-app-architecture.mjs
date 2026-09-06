@@ -133,12 +133,12 @@ assert.deepEqual(
 );
 const unsupportedFontWeights = invalidCssLines(
   /font-weight:/,
-  /font-weight:\s*(?:500|600);/,
+  /font-weight:\s*(?:400|500|600);/,
 );
 assert.deepEqual(
   unsupportedFontWeights,
   [],
-  `Component CSS font weights must stay on the 500/600 baseline:\n${unsupportedFontWeights.join("\n")}`,
+  `Component CSS font weights must stay on the 400/500/600 baseline:\n${unsupportedFontWeights.join("\n")}`,
 );
 
 const validSource = `

@@ -1,3 +1,4 @@
+import { CustomIcon } from "~/shared/components/custom-icon";
 import styles from "./foundation-page.module.css";
 import { homeLearningMapGeometry } from "./home-learning-map-geometry";
 
@@ -55,15 +56,14 @@ const CompletedStage: React.FC<CompletedStageProps> = ({
     <text className={styles.stageTitle} data-stage-title x="78" y="48">
       {title}
     </text>
-    <circle
-      className={styles.checkDisc}
+    <CustomIcon.Check
+      className={styles.stageCheck}
       data-stage-check
-      cx="204"
-      cy="39"
-      r="16"
+      x="188"
+      y="23"
+      width="32"
+      height="32"
     />
-    <circle className={styles.checkGlint} cx="199" cy="34" r="3" />
-    <path className={styles.checkPath} d="m196 39 6 6 12-15" />
   </g>
 );
 

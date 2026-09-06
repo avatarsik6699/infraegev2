@@ -129,6 +129,8 @@ export class FoundationPage {
           leadFamily: getComputedStyle(lead).fontFamily,
           headingSize: Number.parseFloat(getComputedStyle(heading).fontSize),
           leadSize: Number.parseFloat(getComputedStyle(lead).fontSize),
+          leadWeight: Number.parseFloat(getComputedStyle(lead).fontWeight),
+          actionWeight: Number.parseFloat(getComputedStyle(action).fontWeight),
         };
       });
 
@@ -140,6 +142,115 @@ export class FoundationPage {
     expect(composition.actionArrow).toBe(true);
     expect(composition.headingFamily).not.toBe(composition.leadFamily);
     expect(composition.headingSize).toBeGreaterThan(composition.leadSize * 3);
+    expect(composition.leadWeight).toBeLessThanOrEqual(400);
+    expect(composition.actionWeight).toBeLessThanOrEqual(400);
+  }
+
+  async expectHomeChromePolish(): Promise<void> {
+    const result = await this.page.evaluate(() => {
+      const requiredElement = <ElementType extends Element>(
+        root: ParentNode,
+        selector: string,
+      ): ElementType => {
+        const element = root.querySelector<ElementType>(selector);
+        if (!element)
+          throw new Error(`Missing home chrome element: ${selector}`);
+        return element;
+      };
+      const header = requiredElement<HTMLElement>(
+        document,
+        "[data-public-header]",
+      );
+      const wordmark = requiredElement<HTMLElement>(
+        header,
+        "[data-infraege-wordmark]",
+      );
+      const subtitle = requiredElement<HTMLElement>(
+        header,
+        "[data-infraege-subtitle]",
+      );
+      const benefits = requiredElement<HTMLElement>(
+        header,
+        "[data-infraege-benefits]",
+      );
+      const navLink = requiredElement<HTMLElement>(
+        header,
+        "a[data-hierarchy='drawn']",
+      );
+      const action = requiredElement<HTMLElement>(
+        document,
+        "main a[data-hierarchy='drawn']",
+      );
+      const actionLabel = requiredElement<HTMLElement>(action, "span");
+      const underline = requiredElement<SVGElement>(
+        action,
+        "[data-action-underline]",
+      );
+      const arrow = requiredElement<SVGElement>(action, "[data-action-arrow]");
+      const footer = requiredElement<HTMLElement>(document, "footer");
+      const telegramLink = requiredElement<HTMLElement>(
+        footer,
+        "a[data-hierarchy='drawn'][target='_blank']",
+      );
+      const telegramIcon = requiredElement<SVGElement>(
+        telegramLink,
+        "[data-external-link-icon]",
+      );
+      const dots = [...benefits.querySelectorAll<HTMLElement>("i")];
+      const words = [...benefits.querySelectorAll<HTMLElement>("span")];
+
+      if (dots.length !== 2 || words.length !== 3) {
+        throw new Error("Missing polished home chrome");
+      }
+
+      const wordmarkRect = wordmark.getBoundingClientRect();
+      const subtitleRect = subtitle.getBoundingClientRect();
+      const labelRect = actionLabel.getBoundingClientRect();
+      const underlineRect = underline.getBoundingClientRect();
+      const arrowRect = arrow.getBoundingClientRect();
+      const wordCenters = words.map((word) => {
+        const bounds = word.getBoundingClientRect();
+        return bounds.top + bounds.height / 2;
+      });
+      const averageWordCenter =
+        wordCenters.reduce((sum, center) => sum + center, 0) /
+        wordCenters.length;
+      const accentProbe = document.createElement("span");
+      accentProbe.style.color = "var(--color-brand-orange)";
+      document.body.append(accentProbe);
+      const brandOrange = getComputedStyle(accentProbe).color;
+      accentProbe.remove();
+
+      return {
+        brandGap: subtitleRect.top - wordmarkRect.bottom,
+        dotOffsets: dots.map((dot) => {
+          const bounds = dot.getBoundingClientRect();
+          return Math.abs(bounds.top + bounds.height / 2 - averageWordCenter);
+        }),
+        navWeight: Number.parseFloat(getComputedStyle(navLink).fontWeight),
+        underlineGap: underlineRect.top - labelRect.bottom,
+        arrowGap: arrowRect.left - labelRect.right,
+        footerBrandCount: [...footer.querySelectorAll("span")].filter(
+          (element) => element.textContent === "infraege",
+        ).length,
+        telegramHasDrawnUnderline: Boolean(
+          telegramLink.querySelector("[data-link-underline]"),
+        ),
+        telegramIconColor: getComputedStyle(telegramIcon).color,
+        brandOrange,
+      };
+    });
+
+    expect(result.brandGap).toBeGreaterThanOrEqual(4);
+    expect(Math.max(...result.dotOffsets)).toBeLessThanOrEqual(1.5);
+    expect(result.navWeight).toBeLessThanOrEqual(400);
+    expect(result.underlineGap).toBeGreaterThanOrEqual(0);
+    expect(result.underlineGap).toBeLessThanOrEqual(3);
+    expect(result.arrowGap).toBeGreaterThanOrEqual(0);
+    expect(result.arrowGap).toBeLessThanOrEqual(10);
+    expect(result.footerBrandCount).toBe(0);
+    expect(result.telegramHasDrawnUnderline).toBe(true);
+    expect(result.telegramIconColor).toBe(result.brandOrange);
   }
 
   async expectDesktopMapFitsViewport(): Promise<void> {
@@ -182,8 +293,21 @@ export class FoundationPage {
     await expect(map.locator('[data-svg-pattern="field"]')).toHaveCount(7);
     await expect(map.locator('[data-svg-pattern="preset"]')).toHaveCount(7);
     await expect(map.locator('[data-svg-pattern="strokes"]')).toHaveCount(5);
-    await expect(map.locator("[data-map-connection]")).toHaveCount(0);
-    await expect(map.locator('[data-svg-drawing="arrow"]')).toHaveCount(0);
+    await expect(map.locator("[data-map-connection]")).toHaveCount(3);
+    await expect(map.locator("[data-map-peripheral-connection]")).toHaveCount(
+      10,
+    );
+    await expect(map.locator("[data-target-kind='card']")).toHaveCount(4);
+    await expect(map.locator("[data-target-kind='cycle']")).toHaveCount(1);
+    await expect(map.locator("[data-target-kind='pattern']")).toHaveCount(5);
+    await expect(map.locator("[data-connection-endpoint]")).toHaveCount(0);
+    await expect(map.locator('[data-svg-drawing="arrow"]')).toHaveCount(10);
+    await expect(map.locator('[data-svg-drawing="arrow-head"]')).toHaveCount(
+      10,
+    );
+    await expect(
+      map.locator('[data-svg-drawing="arrow"] > [data-svg-drawing="line"]'),
+    ).toHaveCount(4);
     await expect(map.locator('[data-svg-drawing="tapered-line"]')).toHaveCount(
       0,
     );
@@ -204,6 +328,7 @@ export class FoundationPage {
     await expect(
       map.locator("[data-home-map-card] [data-icon-name='bar-chart']"),
     ).toHaveCount(1);
+    await expect(map.locator("[data-icon-name='check']")).toHaveCount(2);
     expect(await map.locator("mask[id^='svg-pattern-mask-']").count()).toBe(7);
     await expect(map.locator("image, [mask*='dry-ink']")).toHaveCount(0);
     await expect(map.locator("[data-pattern-name='recursion']")).toHaveCount(0);
@@ -237,7 +362,7 @@ export class FoundationPage {
       if (
         !(number instanceof SVGTextElement) ||
         !(title instanceof SVGTextElement) ||
-        !(check instanceof SVGCircleElement) ||
+        !(check instanceof SVGSVGElement) ||
         !(activeSurface instanceof SVGRectElement) ||
         !(progressSurface instanceof SVGRectElement)
       ) {
@@ -245,7 +370,8 @@ export class FoundationPage {
       }
 
       const titleBounds = title.getBBox();
-      const checkBounds = check.getBBox();
+      const checkX = Number(check.getAttribute("x"));
+      const checkWidth = Number(check.getAttribute("width"));
       const stageSurface = practice.querySelector("[data-active], rect");
       const cardRightPadding = [
         ...root.querySelectorAll("[data-home-map-card]"),
@@ -274,10 +400,9 @@ export class FoundationPage {
         progressFill: getComputedStyle(progressSurface).fill,
         numberSize: Number.parseFloat(getComputedStyle(number).fontSize),
         titleSize: Number.parseFloat(getComputedStyle(title).fontSize),
-        titleCheckGap: checkBounds.x - (titleBounds.x + titleBounds.width),
+        titleCheckGap: checkX - (titleBounds.x + titleBounds.width),
         checkRightPadding:
-          Number(stageSurface.getAttribute("width")) -
-          (checkBounds.x + checkBounds.width),
+          Number(stageSurface.getAttribute("width")) - (checkX + checkWidth),
         cardRightPadding,
         traversalNodeRadii: [
           ...root.querySelectorAll("[data-pattern-name='traversal'] circle"),
@@ -298,6 +423,105 @@ export class FoundationPage {
     expect(Math.max(...visualHierarchy.traversalNodeRadii)).toBeLessThanOrEqual(
       3,
     );
+
+    const connectionStyles = await map
+      .locator("[data-map-connection] path")
+      .evaluateAll((connections) =>
+        connections.map((connection) => ({
+          d: connection.getAttribute("d"),
+          linecap: getComputedStyle(connection).strokeLinecap,
+          stroke: getComputedStyle(connection).stroke,
+          strokeWidth: getComputedStyle(connection).strokeWidth,
+          vectorEffect: getComputedStyle(connection).vectorEffect,
+        })),
+      );
+    expect(
+      new Set(connectionStyles.map(({ strokeWidth }) => strokeWidth)),
+    ).toEqual(new Set(["2.9px"]));
+    expect(connectionStyles.every(({ linecap }) => linecap === "round")).toBe(
+      true,
+    );
+    expect(
+      connectionStyles.every(({ stroke }) => stroke.includes("url(")),
+    ).toBe(true);
+    expect(connectionStyles.every(({ d }) => d?.includes(" C "))).toBe(true);
+    expect(
+      connectionStyles.every(({ vectorEffect }) => vectorEffect === "none"),
+    ).toBe(true);
+
+    const satelliteStyles = await map
+      .locator("[data-map-peripheral-connection]")
+      .evaluateAll((connections) =>
+        connections.map((connection) => {
+          const shaft = connection.querySelector('[data-svg-drawing="line"]');
+          const semanticShaft = connection.querySelector(
+            '[data-svg-drawing-part="shaft"] [data-svg-drawing="line"]',
+          );
+          const head = connection.querySelector(
+            '[data-svg-drawing="arrow-head"]',
+          );
+          if (
+            !(shaft instanceof SVGPathElement) ||
+            !(semanticShaft instanceof SVGPathElement) ||
+            !(head instanceof SVGPathElement)
+          ) {
+            throw new Error("Missing satellite connection geometry");
+          }
+          const arrow = connection.querySelector('[data-svg-drawing="arrow"]');
+          const shaftEnd = semanticShaft.getPointAtLength(
+            semanticShaft.getTotalLength(),
+          );
+          const headTip = head.getPointAtLength(0);
+          return {
+            dashArray: getComputedStyle(semanticShaft).strokeDasharray,
+            headFill: getComputedStyle(head).fill,
+            headIsTopLayer: arrow?.lastElementChild === head,
+            kind: connection.getAttribute("data-target-kind"),
+            shaftInset: Math.hypot(
+              headTip.x - shaftEnd.x,
+              headTip.y - shaftEnd.y,
+            ),
+            shaftStroke: getComputedStyle(semanticShaft).stroke,
+            shaftWidth: Number.parseFloat(
+              getComputedStyle(semanticShaft).strokeWidth,
+            ),
+            vectorEffect: getComputedStyle(semanticShaft).vectorEffect,
+          };
+        }),
+      );
+    expect(satelliteStyles.every(({ dashArray }) => dashArray !== "none")).toBe(
+      true,
+    );
+    expect(satelliteStyles.every(({ headFill }) => headFill !== "none")).toBe(
+      true,
+    );
+    expect(satelliteStyles.every(({ headIsTopLayer }) => headIsTopLayer)).toBe(
+      true,
+    );
+    expect(
+      satelliteStyles.every(
+        ({ shaftInset }) => shaftInset >= 6.5 && shaftInset <= 9,
+      ),
+    ).toBe(true);
+    expect(
+      satelliteStyles.every(({ shaftStroke }) => shaftStroke.includes("url(")),
+    ).toBe(true);
+    expect(
+      satelliteStyles.every(({ vectorEffect }) => vectorEffect === "none"),
+    ).toBe(true);
+    expect(
+      Math.max(
+        ...satelliteStyles
+          .filter(({ kind }) => kind === "pattern")
+          .map(({ shaftWidth }) => shaftWidth),
+      ),
+    ).toBeLessThan(
+      Math.min(
+        ...satelliteStyles
+          .filter(({ kind }) => kind === "card")
+          .map(({ shaftWidth }) => shaftWidth),
+      ),
+    );
   }
 
   async expectMobileComposition(): Promise<void> {
@@ -314,7 +538,33 @@ export class FoundationPage {
 
     const fit = await map.evaluate((element) => {
       const bounds = element.getBoundingClientRect();
+      const scene = element.querySelector("[data-home-map-scene]");
+      const central = element.querySelector("[data-map-connection] path");
+      const shaft = element.querySelector(
+        "[data-target-kind='card'] [data-svg-drawing-part='shaft'] path",
+      );
+      const head = element.querySelector(
+        "[data-target-kind='card'] [data-svg-drawing='arrow-head']",
+      );
+      if (
+        !(scene instanceof SVGSVGElement) ||
+        !(central instanceof SVGPathElement) ||
+        !(shaft instanceof SVGPathElement) ||
+        !(head instanceof SVGPathElement)
+      ) {
+        throw new Error("Missing mobile connector geometry");
+      }
+      const scale = scene.getScreenCTM()?.a ?? 0;
+      const headBounds = head.getBBox();
+      const headScreenSize =
+        Math.max(headBounds.width, headBounds.height) * scale;
+      const shaftScreenWidth =
+        Number(shaft.getAttribute("stroke-width")) * scale;
       return {
+        centralScreenWidth:
+          Number(central.getAttribute("stroke-width")) * scale,
+        connectorRatio: shaftScreenWidth / headScreenSize,
+        connectorVectorEffect: getComputedStyle(shaft).vectorEffect,
         left: bounds.left,
         right: bounds.right,
         viewportWidth: window.innerWidth,
@@ -323,6 +573,10 @@ export class FoundationPage {
 
     expect(fit.left).toBeGreaterThanOrEqual(-1);
     expect(fit.right).toBeLessThanOrEqual(fit.viewportWidth + 1);
+    expect(fit.centralScreenWidth).toBeLessThanOrEqual(1.2);
+    expect(fit.connectorRatio).toBeGreaterThanOrEqual(0.22);
+    expect(fit.connectorRatio).toBeLessThanOrEqual(0.28);
+    expect(fit.connectorVectorEffect).toBe("none");
   }
 
   async expectNoHorizontalOverflow(): Promise<void> {

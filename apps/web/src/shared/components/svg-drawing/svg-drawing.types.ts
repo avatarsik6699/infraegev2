@@ -27,6 +27,7 @@ export namespace SvgDrawingTypes {
     strokeWidth: number;
     dashArray?: string;
     pathLength?: number;
+    scaleStroke?: boolean;
   };
 
   export type TaperedLineProps = PathBase;
@@ -43,9 +44,17 @@ export namespace SvgDrawingTypes {
     id: string;
   };
 
+  export type FilledArrowHead = PathBase & {
+    kind: "filled";
+  };
+
+  export type LineArrowHead = LineProps & {
+    kind?: "line";
+  };
+
   export type ArrowProps = {
     shaft: LineShaft | TaperedShaft;
-    head: LineProps;
+    head: FilledArrowHead | LineArrowHead;
     echoes?: readonly ArrowEcho[];
     className?: string;
     opacity?: number;

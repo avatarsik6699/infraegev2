@@ -1,6 +1,8 @@
 import styles from "./foundation-page.module.css";
 import { HomeLearningMapBackground } from "./home-learning-map-background";
 import { HomeLearningMapCards } from "./home-learning-map-cards";
+import { HomeLearningMapConnections } from "./home-learning-map-connections";
+import { HomeLearningMapPeripheralConnections } from "./home-learning-map-peripheral-connections";
 import { HomeLearningMapStages } from "./home-learning-map-stages";
 
 export const HomeLearningMapScene: React.FC = () => (
@@ -16,9 +18,9 @@ export const HomeLearningMapScene: React.FC = () => (
         <feDropShadow
           dx="0"
           dy="6"
-          stdDeviation="7"
+          stdDeviation="8"
           floodColor="#1a1a1a"
-          floodOpacity="0.07"
+          floodOpacity="0.09"
         />
       </filter>
       <linearGradient id="paper-surface" x1="0" y1="0" x2="1" y2="1">
@@ -45,8 +47,8 @@ export const HomeLearningMapScene: React.FC = () => (
       </linearGradient>
       <linearGradient id="paper-highlight" x1="0" y1="0" x2="1" y2="0">
         <stop offset="0" stopColor="#ffffff" stopOpacity="0" />
-        <stop offset="0.24" stopColor="#ffffff" stopOpacity="0.76" />
-        <stop offset="0.76" stopColor="#ffffff" stopOpacity="0.38" />
+        <stop offset="0.24" stopColor="#ffffff" stopOpacity="0.9" />
+        <stop offset="0.76" stopColor="#ffffff" stopOpacity="0.52" />
         <stop offset="1" stopColor="#ffffff" stopOpacity="0" />
       </linearGradient>
       <filter id="stage-shadow" x="-15%" y="-30%" width="130%" height="170%">
@@ -55,7 +57,7 @@ export const HomeLearningMapScene: React.FC = () => (
           dy="4"
           stdDeviation="6"
           floodColor="#1a1a1a"
-          floodOpacity="0.045"
+          floodOpacity="0.065"
         />
       </filter>
       <linearGradient id="stage-surface" x1="0" y1="0" x2="1" y2="1">
@@ -86,14 +88,16 @@ export const HomeLearningMapScene: React.FC = () => (
       </linearGradient>
       <linearGradient id="stage-highlight" x1="0" y1="0" x2="1" y2="0">
         <stop offset="0" stopColor="#ffffff" stopOpacity="0" />
-        <stop offset="0.2" stopColor="#ffffff" stopOpacity="0.68" />
-        <stop offset="0.78" stopColor="#ffffff" stopOpacity="0.3" />
+        <stop offset="0.2" stopColor="#ffffff" stopOpacity="0.82" />
+        <stop offset="0.78" stopColor="#ffffff" stopOpacity="0.45" />
         <stop offset="1" stopColor="#ffffff" stopOpacity="0" />
       </linearGradient>
     </defs>
 
     <HomeLearningMapBackground />
+    <HomeLearningMapPeripheralConnections />
     <HomeLearningMapCards />
     <HomeLearningMapStages />
+    <HomeLearningMapConnections />
   </svg>
 );

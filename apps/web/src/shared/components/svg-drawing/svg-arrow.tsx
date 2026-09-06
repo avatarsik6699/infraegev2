@@ -9,14 +9,27 @@ export const SvgArrow: React.FC<SvgDrawingTypes.ArrowProps> = (props) => (
     opacity={props.opacity}
     transform={props.transform}
   >
-    {props.shaft.kind === "line" ? (
-      <SvgLine {...props.shaft} />
-    ) : (
-      <SvgTaperedLine {...props.shaft} />
-    )}
     {props.echoes?.map((echo) => (
       <SvgLine key={echo.id} {...echo} />
     ))}
-    <SvgLine {...props.head} />
+    <g data-svg-drawing-part="shaft">
+      {props.shaft.kind === "line" ? (
+        <SvgLine {...props.shaft} />
+      ) : (
+        <SvgTaperedLine {...props.shaft} />
+      )}
+    </g>
+    {props.head.kind === "filled" ? (
+      <path
+        className={props.head.className}
+        d={props.head.d}
+        data-svg-drawing="arrow-head"
+        fill="currentColor"
+        opacity={props.head.opacity}
+        transform={props.head.transform}
+      />
+    ) : (
+      <SvgLine {...props.head} />
+    )}
   </g>
 );

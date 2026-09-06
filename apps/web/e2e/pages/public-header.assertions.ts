@@ -14,7 +14,7 @@ export const expectPublicReleaseIdentity = async (
   await expect(header).toHaveCSS("border-bottom-width", "0px");
   await expect(page.getByRole("contentinfo")).toHaveCSS(
     "border-top-width",
-    "1px",
+    "0px",
   );
   const chromeGeometry = await page.evaluate(() => {
     const headerInner = document.querySelector<HTMLElement>(

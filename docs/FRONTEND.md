@@ -121,6 +121,13 @@ app → routes → pages → widgets → features → entities → shared
   badges and other adopted primitives. Authored inline code and formulas use `Notation`
   (`code`/`formula`) so semantics and the neutral recognition treatment stay consistent.
   Specialized markup remains native for figures, diagrams, tables and lists.
+- `ActionLink` owns internal navigational-action states. Its `drawn` hierarchy composes the shared
+  SVG primitives into one bright-orange tapered underline and an optional close-set authored arrow;
+  consumers own only route data, copy, scale and placement. `ExternalLink` remains a separate
+  semantic boundary for external and new-tab behavior rather than being collapsed into an unsafe
+  polymorphic link. Its optional `drawn` hierarchy reuses the same shared underline while keeping
+  the library-provided up-right icon and external semantics; visually adjacent instances therefore
+  share the accent and transition rhythm without duplicating SVG geometry.
 - `CodeBlock` renders Python tokens synchronously as escaped React text nodes through the exact
   `@speed-highlight/core` grammar. Do not replace this boundary with runtime HTML injection or a
   client-only highlighting pass: readable SSR and no-JavaScript output are part of its contract.
@@ -231,9 +238,31 @@ app → routes → pages → widgets → features → entities → shared
   keeps the accepted legal-review risk explicit in the system contract.
 - The public home uses a responsive editorial split: the primary product statement and real Python
   mini-course CTA lead on the left, while a decorative non-interactive learning map presents
-  «теория, практика, задания, будущая статистика» on the right. Its current cards, numbered stages
-  and background notation have no connectors; future semantic trajectories require a separate
-  architect-led iteration. The route does not
+  «теория, практика, задания, будущая статистика» on the right. Its numbered «Теория», «Практика»,
+  «Задания» and illustrative «72% курса» stages form one semantic trajectory through solid,
+  quiet constant-width orange curves with calm dynamic bends. A restrained longitudinal opacity
+  gradient keeps both contour-touching ends at the same bright orange as the active task and
+  progress borders while slightly quieting the middle for depth. Every
+  uninterrupted curve meets both block contours directly, without endpoint markers or visible
+  gaps. Four selective stage-to-card trajectories use medium-weight dashed curves with a fading
+  start and a compact filled arrowhead at their destination. A separate two-curve return trajectory
+  from the practice card back to the theory stage makes the theory-practice cycle legible without
+  competing with the central course sequence. The theory stage also fans out selectively to the
+  algorithm, logic-pulse, byte, truth-table and traversal notation. All pattern trajectories use
+  the lowest stroke weight and contrast in the scene so they remain background context rather than
+  new content. Authored routes do not cross one another, and the truth-table trajectory travels
+  above rather than through the practice card. Every route uses a longitudinal opacity gradient;
+  only selected card and cycle arrows add a slightly offset, low-opacity echo beneath the primary
+  shaft. These echoes, modestly stronger paper/stage shadows and brighter edge highlights provide
+  depth without turning the diagram into a glowing or layered illustration. A filled arrowhead is
+  always the arrow group's final paint layer, while its shaft ends just inside the head base rather
+  than continuing beneath the translucent triangle; endpoint direction follows the final curve
+  tangent, including the return loop's soft downward approach to theory. Map shafts and their
+  filled heads scale together with the scene viewBox so narrow screens preserve their desktop
+  proportions; `SvgDrawing.Line` keeps non-scaling strokes as its default and exposes this behavior
+  only through an explicit map-owned opt-in. The shared `SvgDrawing.Line` and `SvgDrawing.Arrow` own
+  the stroke, gradient and arrowhead primitives; the page
+  owns semantic selection, curve geometry, restrained contrast and scene layering. The route does not
   duplicate registry catalogs or synthetic social proof. The reference's literal «72% курса» is an
   aria-hidden illustration detail, never learner state. The map alone may pair a thin border with a
   restrained offset shadow to reproduce rotated paper slips; this narrow decorative exception does
@@ -286,7 +315,8 @@ app → routes → pages → widgets → features → entities → shared
   the shared Telegram invitation with a text label and the official brand mark. Published pages do
   not duplicate this chrome with page-private header markup. The shared public header has no
   bottom rule; spacing separates it from ordinary page content, while a lesson context bar keeps
-  one bottom rule for the complete two-level lesson header. The footer keeps its top rule, and
+  one bottom rule for the complete two-level lesson header. The public footer uses whitespace
+  rather than a top rule and contains only useful navigation, without repeating the infraege name;
   structural rail separators remain where they distinguish navigation from reading. Frozen lab
   headers keep their explicitly isolated review contract.
 
@@ -333,8 +363,9 @@ app → routes → pages → widgets → features → entities → shared
   filenames remain unversioned. Do not reintroduce network webfonts or alter loading behavior
   without before/after cold-cache evidence that preserves stable text geometry and the
   public-route LCP budget.
-- The active typography baseline uses only `500` and `600` in component CSS and the shared
-  `--text-*` scale, with one role-specific cap: display/heading text (`var(--font-display)`/
+- The active typography baseline uses only `400`, `500` and `600` in component CSS and the shared
+  `--text-*` scale. Regular `400` is reserved for quiet Golos Text leads, navigation and links where
+  `500` competes with the surrounding hierarchy. One role-specific cap remains: display/heading text (`var(--font-display)`/
   `var(--font-alchimia-display)`, Alegreya) never exceeds `500` — `600` at display weight reads too
   heavy — while `--font-ui`/`--font-data` (Golos Text/JetBrains Mono) may still use `600`. Consumers
   do not introduce literal sizes or intermediate variable-font weights.

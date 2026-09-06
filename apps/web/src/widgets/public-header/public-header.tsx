@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { ActionLink } from "~/shared/components/action-link";
 import { PublicHeaderIdentity } from "./public-header-identity";
 import styles from "./public-header.module.css";
 
@@ -18,9 +19,14 @@ const HomeNavigation: React.FC<{ compact?: boolean }> = ({
   <div className={compact ? styles.mobileNavigation : styles.desktopNavigation}>
     <nav className={styles.sections} aria-label="Разделы сайта">
       <FutureItem>Темы</FutureItem>
-      <Link to="/courses/$courseSlug" params={{ courseSlug: "python" }}>
+      <ActionLink
+        className={styles.sectionLink}
+        hierarchy="drawn"
+        to="/courses/$courseSlug"
+        params={{ courseSlug: "python" }}
+      >
         Мини-курсы
-      </Link>
+      </ActionLink>
       <FutureItem>Задания</FutureItem>
       <FutureItem>Статистика</FutureItem>
       <FutureItem>О проекте</FutureItem>
