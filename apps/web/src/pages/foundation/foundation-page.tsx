@@ -1,104 +1,99 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight } from "lucide-react";
-import { coursePublications } from "~/entities/course";
-import { lessonPublications } from "~/entities/lesson";
+import { SvgDrawing } from "~/shared/components/svg-drawing";
 import { Typography } from "~/shared/components/typography";
-import { PageContainer } from "~/shared/components/page-container";
 import { PublicFooter } from "~/widgets/public-footer";
 import { PublicHeader } from "~/widgets/public-header";
+import { HomeLearningMap } from "./home-learning-map";
 import styles from "./foundation-page.module.css";
 
-const publishedLessons = lessonPublications.filter(
-  (lesson) => lesson.status === "published",
-);
-const publishedCourses = coursePublications.filter(
-  (course) => course.status === "published",
-);
+const foundationDrawing = {
+  actionUnderlineFade: {
+    from: { x: 3, y: 0 },
+    to: { x: 223, y: 0 },
+    stops: [
+      { offset: 0, opacity: 0 },
+      { offset: 0.08, opacity: 0.72 },
+      { offset: 0.22, opacity: 1 },
+      { offset: 0.82, opacity: 0.94 },
+      { offset: 1, opacity: 0 },
+    ],
+  },
+  actionArrowFade: {
+    from: { x: 247, y: 0 },
+    to: { x: 305, y: 0 },
+    stops: [
+      { offset: 0, opacity: 0 },
+      { offset: 0.3, opacity: 0.72 },
+      { offset: 1, opacity: 1 },
+    ],
+  },
+} as const;
 
 export const FoundationPage: React.FC = () => (
   <div className={styles.page}>
     <PublicHeader home />
-    <PageContainer
-      component="main"
-      className={styles.root}
-      data-foundation-layout
-    >
+    <main className={styles.hero} data-foundation-layout>
       <section className={styles.intro}>
-        <Typography.Title order={1}>
-          Подготовка к ЕГЭ по информатике
+        <Typography.Title className={styles.heroTitle} order={1}>
+          <span>Информатика -</span>
+          <span>это система</span>
         </Typography.Title>
-        <Typography.Text variant="lead" tone="muted">
-          Понятная теория и практика — бесплатно.
+        <Typography.Text className={styles.lead} variant="lead">
+          Подготовка к ЕГЭ без зубрёжки
         </Typography.Text>
+        <Link
+          className={styles.primaryAction}
+          to="/courses/$courseSlug"
+          params={{ courseSlug: "python" }}
+        >
+          <span>Начать подготовку</span>
+          <svg
+            className={styles.actionDrawing}
+            viewBox="0 0 312 48"
+            aria-hidden="true"
+          >
+            <g data-action-underline>
+              <SvgDrawing.TaperedLine
+                d="M3 38.7C43 34.7 105 34.2 155 35.5c28 .7 51 2.1 68 2.8-18 .1-43-.4-69-1.1-51-1.3-112-.5-151 2.2Z"
+                fade={foundationDrawing.actionUnderlineFade}
+              />
+            </g>
+            <g className={styles.actionArrowGroup} data-action-arrow>
+              <SvgDrawing.Arrow
+                shaft={{
+                  kind: "tapered",
+                  d: "M247 24.8c18-.4 39-1.5 57-2.7l.1 1.1c-18 1.5-39 2.5-57.1 2.1Z",
+                  fade: foundationDrawing.actionArrowFade,
+                }}
+                head={{
+                  d: "M292.5 10.7c4.9 4 8.7 7.7 12.2 11.8-3.3 4.7-7.3 9.1-11.8 13.2",
+                  strokeWidth: 1.9,
+                }}
+                echoes={[
+                  {
+                    id: "head-echo",
+                    d: "M294.2 11.9c4.1 3.3 7.4 6.6 10.3 10.3",
+                    strokeWidth: 0.8,
+                    opacity: 0.3,
+                  },
+                ]}
+              />
+            </g>
+          </svg>
+        </Link>
       </section>
 
-      <div className={styles.catalog}>
-        {publishedCourses.length > 0 ? (
-          <section
-            id="courses"
-            className={styles.materials}
-            aria-labelledby="courses-title"
-            data-course-list
-          >
-            <Typography.Title order={2} id="courses-title">
-              Мини-курсы
-            </Typography.Title>
-            <ul className={styles.lessonList}>
-              {publishedCourses.map((course) => (
-                <li key={course.id}>
-                  <Link
-                    to="/courses/$courseSlug"
-                    params={{ courseSlug: course.routeSlug }}
-                  >
-                    <span className={styles.lessonNumber}>Мини-курс</span>
-                    <span className={styles.lessonTitle}>{course.title}</span>
-                    <span className={styles.lessonSummary}>
-                      {course.summary}
-                    </span>
-                    <ArrowRight
-                      className={styles.lessonArrow}
-                      aria-hidden="true"
-                      size={19}
-                      strokeWidth={1.8}
-                    />
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </section>
-        ) : null}
-
-        <section
-          id="topics"
-          className={styles.materials}
-          aria-labelledby="materials-title"
-          data-topic-list
-        >
-          <Typography.Title order={2} id="materials-title">
-            Темы ЕГЭ
-          </Typography.Title>
-          <ul className={styles.lessonList}>
-            {publishedLessons.map((lesson) => (
-              <li key={lesson.id}>
-                <Link to="/ege/$slug" params={{ slug: lesson.routeSlug }}>
-                  <span className={styles.lessonNumber}>
-                    {`Задание ${String(lesson.taskNumber)}`}
-                  </span>
-                  <span className={styles.lessonTitle}>{lesson.title}</span>
-                  <span className={styles.lessonSummary}>{lesson.summary}</span>
-                  <ArrowRight
-                    className={styles.lessonArrow}
-                    aria-hidden="true"
-                    size={19}
-                    strokeWidth={1.8}
-                  />
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
-      </div>
-    </PageContainer>
+      <section
+        className={styles.visual}
+        aria-label="Учебный путь: теория, практика, задания и будущая статистика"
+      >
+        <Typography.Text className={styles.visuallyHidden}>
+          Сначала разберите теорию, затем закрепите её на практике и переходите
+          к заданиям. Персональная статистика появится позже.
+        </Typography.Text>
+        <HomeLearningMap />
+      </section>
+    </main>
     <PublicFooter />
   </div>
 );

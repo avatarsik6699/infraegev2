@@ -16,7 +16,7 @@ course is designed for a learner who knows school mathematics but has never prog
 
 ## Product Purpose
 
-ALCHIMIA turns difficult informatics material into complete learning paths: an explanation of why
+infraege turns difficult informatics material into complete learning paths: an explanation of why
 an idea works, guided examples, immediate practice, useful feedback and a truthful next step.
 Success means a learner can apply the idea independently rather than memorize a task template.
 
@@ -46,20 +46,38 @@ fallback.
 
 ## Brand Commitments
 
-The public identity is `ALCHIMIA`. Archived Change 75 established it on `/lab/design-system`,
-Change 76 activated its system values in public chrome and delivery metadata, and Change 79
-completed the public component/widget rollout with evidence-led removal of superseded presentation. The
-architect-supplied
-`docs/artifacts/references/logo.svg` is its sole artistic authority and must retain its visible
-geometry. Monochrome delivery may invert the mark to white only for explicit dark contexts. The
-approved lab profile stays on white and uses only achromatic text
-and structural roles. Any broader palette, including paper or copper accents, remains a later
-architect-approved decision. Visual character comes from typography and composition, not atlas
-decoration, ornamental frames, extra prose colors, arbitrary type sizes or widespread bold text.
-`ALCHIMIA` remains live accessible text beside the mark in a compact reusable header. Public
-activation does not copy the lab dashboard composition or change domain behavior; authored lesson
-language changes only in separate architect-approved units. Binding rules live in
-`docs/FRONTEND.md`.
+The public identity is `infraege`: three organic stones, with the small upper stone in orange and
+the two lower stones in ink, paired with a live accessible lowercase wordmark. The architect-approved
+artistic authority is `docs/artifacts/references/infraege-mark.svg`; the visual direction comes from
+`docs/artifacts/references/base.jpg` and `docs/artifacts/references/main-page.png`. The active palette
+is warm paper, ink, one muted text level and a restrained orange accent. Orange identifies the mark,
+primary routes and selected illustration details; it does not recolor ordinary prose or semantic
+feedback.
+
+The selected typography remains unchanged: Alegreya for display and wordmark, Golos Text for
+reading and interface text, and JetBrains Mono for code, data and formula notation. The homepage is
+the first reference-led composition: a direct product statement and real mini-course CTA on the
+left, plus a non-interactive learning map on the right. Alegreya is reserved there for the live
+wordmark and product statement; the expanded subtitle, benefit line and statement lead use Golos
+Text. The lockup/navigation separator is intentionally faint. Authored SVG geometry gives the CTA
+tapered, fading linework. The current learning-map iteration deliberately leaves its cards, numbered
+stages and background notation unconnected until a semantic trajectory is separately authored.
+Reusable domain-agnostic SVG primitives own gradient resources and line/arrow rendering, while a
+small SVG pattern preset composes deterministic strokes, labels and nodes inside directional fade
+fields. Pattern subject matter, coordinates and responsive placement stay with the consuming page.
+The homepage is the first and only migrated consumer in this change. The rejected raster dry-ink
+experiment is not part of the product. One complete learning-map SVG preserves its cards, stages
+and notation across desktop and mobile. Its wider asymmetric desktop constellation spreads enlarged
+cards and notation toward the scene edges without adding connectors; decorative filter overflow is
+contained by the home visual boundary and never enlarges the document canvas. The scene fits both
+its parent column and available viewport height, switches to width-led fitting when the page stacks,
+then scales as one bounded scene on narrow screens without horizontal page overflow.
+Unavailable navigation is visually secondary and noninteractive without
+status labels; account placeholders and synthetic social proof are absent. The literal «72% курса»
+belongs only to the reference illustration and is not learner state. Internal learning layouts keep
+their existing structure until separately scoped.
+The former ALCHIMIA lab is historical design evidence, not the active public brand. Binding rules
+live in `docs/FRONTEND.md`.
 
 ## Evidence on Hand
 

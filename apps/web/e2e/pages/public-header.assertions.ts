@@ -4,16 +4,13 @@ export const expectPublicReleaseIdentity = async (
   page: Page,
 ): Promise<void> => {
   const header = page.getByRole("banner");
-  await expect(header.locator("[data-alchimia-mark]")).toBeVisible();
-  await expect(header.getByText("ALCHIMIA", { exact: true })).toBeVisible();
+  await expect(header.locator("[data-infraege-mark]")).toBeVisible();
+  await expect(header.getByText("infraege", { exact: true })).toBeVisible();
   await expect(
-    header.getByText("ЕГЭ информатика", { exact: true }),
-  ).toBeVisible();
+    header.getByText("подготовка к ЕГЭ по информатике", { exact: true }),
+  ).toHaveCount(1);
   await expect(header.getByText("beta", { exact: true })).toHaveCount(0);
   await expect(header.getByText("v1.0.0", { exact: true })).toHaveCount(0);
-  await expect(
-    header.getByRole("navigation", { name: "Разделы сайта" }),
-  ).toHaveCount(0);
   await expect(header).toHaveCSS("border-bottom-width", "0px");
   await expect(page.getByRole("contentinfo")).toHaveCSS(
     "border-top-width",

@@ -1,8 +1,9 @@
 :root {
   color-scheme: light;
 
-  /* Active replaceable profile: ALCHIMIA. Components must not
-     consume these values directly; tokens.css is the semantic boundary. */
+  /* Active replaceable profile: infraege. Components must not consume these
+     values directly; tokens.css is the semantic boundary. ALCHIMIA aliases
+     below remain only for the historical unlisted design-system lab. */
   --theme-page: #ffffff;
   --theme-surface: #ffffff;
   --theme-surface-muted: oklch(0.97 0 0);
@@ -10,6 +11,12 @@
   --theme-ink-secondary: #606060;
   --theme-rule: #d4d4d4;
   --theme-rule-strong: #d4d4d4;
+  --theme-brand-canvas: #f5f3ef;
+  --theme-brand-ink: #1a1a1a;
+  --theme-brand-muted: #6b6b6b;
+  --theme-brand-orange: #ff6a00;
+  --theme-brand-orange-text: #b84400;
+  --theme-brand-orange-soft: #ffd9c2;
   --theme-alchimia-paper: #ffffff;
   --theme-alchimia-ink: #171717;
   --theme-alchimia-ink-secondary: #606060;

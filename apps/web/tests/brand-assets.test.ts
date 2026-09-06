@@ -9,7 +9,11 @@ const generatorSource = readFileSync(
   "utf8",
 );
 const approvedSource = readFileSync(
-  resolve(process.cwd(), "../..", "docs/artifacts/references/logo.svg"),
+  resolve(
+    process.cwd(),
+    "../..",
+    "docs/artifacts/references/infraege-mark.svg",
+  ),
   "utf8",
 );
 
@@ -26,23 +30,17 @@ function readPngColorType(path: string): number {
 }
 
 describe("production brand assets", () => {
-  it("publishes the approved ALCHIMIA mark and a source-faithful favicon", () => {
-    const mark = readFileSync(publicPath("brand", "alchimia-mark.svg"), "utf8");
+  it("publishes the approved infraege mark and a source-faithful favicon", () => {
+    const mark = readFileSync(publicPath("brand", "infraege-mark.svg"), "utf8");
     const favicon = readFileSync(publicPath("favicon.svg"), "utf8");
     const approvedPathCount = approvedSource.match(/<path\b/g)?.length ?? 0;
-    const approvedGradientCount =
-      approvedSource.match(/<linearGradient\b/g)?.length ?? 0;
 
-    expect(mark).toContain('viewBox="0 0 2048 1639"');
-    expect(favicon).toContain('viewBox="0 -204.5 2048 2048"');
+    expect(mark).toContain('viewBox="0 0 120 156"');
+    expect(favicon).toContain('viewBox="-18 0 156 156"');
     expect(mark.match(/<path\b/g)).toHaveLength(approvedPathCount);
     expect(favicon.match(/<path\b/g)).toHaveLength(approvedPathCount);
-    expect(mark.match(/<linearGradient\b/g)).toHaveLength(
-      approvedGradientCount,
-    );
-    expect(favicon.match(/<linearGradient\b/g)).toHaveLength(
-      approvedGradientCount,
-    );
+    expect(mark.match(/class="stone-accent"/g)).toHaveLength(1);
+    expect(mark.match(/class="stone-ink"/g)).toHaveLength(2);
 
     for (const source of [mark, favicon]) {
       expect(source).toContain('preserveAspectRatio="xMidYMid meet"');
@@ -51,10 +49,12 @@ describe("production brand assets", () => {
       );
     }
     expect(favicon).toContain("prefers-color-scheme: dark");
-    expect(favicon).toContain("fill: #fff !important");
+    expect(favicon).toContain(".stone-ink { fill: #fff; }");
 
-    expect(generatorSource).toContain("docs/artifacts/references/logo.svg");
-    expect(existsSync(publicPath("brand", "infraege-mark.svg"))).toBe(false);
+    expect(generatorSource).toContain(
+      "docs/artifacts/references/infraege-mark.svg",
+    );
+    expect(existsSync(publicPath("brand", "alchimia-mark.svg"))).toBe(false);
   });
 
   it("publishes every required raster size", () => {
@@ -72,18 +72,18 @@ describe("production brand assets", () => {
     });
     expect(readPngColorType(publicPath("apple-touch-icon.png"))).toBe(2);
     expect(
-      readPngDimensions(publicPath("brand", "alchimia-icon-192.png")),
+      readPngDimensions(publicPath("brand", "infraege-icon-192.png")),
     ).toEqual({ width: 192, height: 192 });
-    expect(readPngColorType(publicPath("brand", "alchimia-icon-192.png"))).toBe(
+    expect(readPngColorType(publicPath("brand", "infraege-icon-192.png"))).toBe(
       2,
     );
     expect(
-      readPngDimensions(publicPath("brand", "alchimia-icon-512.png")),
+      readPngDimensions(publicPath("brand", "infraege-icon-512.png")),
     ).toEqual({ width: 512, height: 512 });
-    expect(readPngColorType(publicPath("brand", "alchimia-icon-512.png"))).toBe(
+    expect(readPngColorType(publicPath("brand", "infraege-icon-512.png"))).toBe(
       2,
     );
-    expect(readPngDimensions(publicPath("brand/alchimia-social.png"))).toEqual({
+    expect(readPngDimensions(publicPath("brand/infraege-social.png"))).toEqual({
       width: 1200,
       height: 630,
     });
@@ -106,19 +106,19 @@ describe("production brand assets", () => {
 
     expect(manifest).toEqual(
       expect.objectContaining({
-        name: "ALCHIMIA — подготовка к ЕГЭ по информатике",
-        short_name: "ALCHIMIA",
+        name: "infraege — подготовка к ЕГЭ по информатике",
+        short_name: "infraege",
         display: "browser",
-        background_color: "#ffffff",
-        theme_color: "#ffffff",
+        background_color: "#f5f3ef",
+        theme_color: "#f5f3ef",
         icons: [
           expect.objectContaining({
-            src: "/brand/alchimia-icon-192.png",
+            src: "/brand/infraege-icon-192.png",
             sizes: "192x192",
             purpose: "any",
           }),
           expect.objectContaining({
-            src: "/brand/alchimia-icon-512.png",
+            src: "/brand/infraege-icon-512.png",
             sizes: "512x512",
             purpose: "any",
           }),
@@ -127,9 +127,10 @@ describe("production brand assets", () => {
     );
   });
 
-  it("centers only the final mark in the social preview", () => {
-    expect(generatorSource).toContain("overlay=(W-w)/2:(H-h)/2:format=auto");
-    expect(generatorSource).not.toContain("drawtext");
+  it("renders the infraege social lockup from local mark and fonts", () => {
+    expect(generatorSource).toContain("color=c=0xF5F3EF:s=1200x630");
+    expect(generatorSource).toContain("text='infraege'");
+    expect(generatorSource).toContain("text='подготовка к ЕГЭ по информатике'");
     expect(generatorSource).not.toContain("drawbox");
   });
 });

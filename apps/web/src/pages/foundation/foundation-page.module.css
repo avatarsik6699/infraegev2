@@ -1,145 +1,404 @@
 .page {
-  composes: pageFrame from "../../shared/styles/patterns.module.css";
+  --text-home-hero: clamp(5.25rem, 6vw, 6rem);
+  --text-home-lead: clamp(1.5rem, 1.8vw, 1.75rem);
+  --text-home-card-caption: 0.625rem;
+  --text-home-stage-number: 1.5rem;
+
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-width: 0;
+  min-height: 100svh;
+  overflow-x: clip;
+  color: var(--color-brand-ink);
+  background: var(--color-brand-canvas);
 }
 
-.root {
+.hero {
   display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(24rem, 1.1fr);
-  gap: clamp(var(--space-5), 7vw, 7rem);
-  align-content: start;
-  align-items: start;
-  padding-block: clamp(var(--space-5), 9vw, 7rem);
+  grid-template-columns: minmax(31rem, 0.68fr) minmax(50rem, 1.32fr);
+  gap: 0;
+  width: 100%;
+  max-width: 118rem;
+  min-height: calc(100svh - 7.5rem);
+  padding: clamp(var(--space-5), 8vh, 7.5rem) var(--page-chrome-gutter)
+    var(--space-5);
+  margin-inline: auto;
+  overflow: clip;
 }
 
 .intro {
+  z-index: 1;
   display: grid;
-  gap: var(--space-2);
+  align-content: start;
+  justify-items: start;
+  min-width: 0;
+  padding-top: clamp(var(--space-2), 3vh, var(--space-5));
 }
 
 .intro h1,
-.intro p,
-.materials h2 {
+.intro p {
   margin: 0;
 }
 
-.intro h1[data-order] {
-  max-width: 11ch;
+.intro .heroTitle {
+  display: grid;
+  max-width: none;
   font-family: var(--font-display);
-  font-size: var(--text-3xl);
+  font-size: var(--text-home-hero);
   font-weight: 500;
-  line-height: 0.98;
   letter-spacing: -0.04em;
+  line-height: 0.82;
+  text-wrap: balance;
 }
 
-.intro p[data-variant] {
-  max-width: 31ch;
-  font-size: var(--text-base);
-  line-height: 1.55;
+.heroTitle span {
+  white-space: nowrap;
 }
 
-.catalog,
-.materials {
+.intro .lead {
+  max-width: none;
+  margin-top: clamp(var(--space-3), 3.5vh, var(--space-5));
+  color: var(--color-brand-muted);
+  font-family: var(--font-ui);
+  font-size: var(--text-home-lead);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+.primaryAction {
+  position: relative;
   display: grid;
-}
-
-.catalog {
-  gap: var(--space-5);
-}
-
-.materials {
-  gap: var(--space-3);
-  scroll-margin-block-start: var(--space-3);
-}
-
-.materials h2 {
-  font-family: var(--font-display);
-  font-size: var(--text-xl);
-  line-height: 1.3;
-}
-
-.lessonList {
-  display: grid;
-  gap: var(--space-3);
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
-
-.lessonList a {
-  --lesson-arrow-transform: none;
-  --lesson-title-decoration: var(--color-rule-strong);
-
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: var(--space-0-5) var(--space-2);
-  min-height: 7rem;
-  padding: var(--space-1) 0 var(--space-2);
-  text-decoration: none;
-}
-
-.lessonList a:focus-visible {
-  border-radius: var(--radius-control);
-  outline: 2px solid var(--color-focus);
-  outline-offset: var(--space-1);
-}
-
-.lessonNumber {
-  grid-column: 1;
-  color: var(--color-text-soft);
-  font-size: var(--text-sm);
-}
-
-.lessonTitle {
-  grid-column: 1;
-  font-family: var(--font-display);
+  width: 19.5rem;
+  min-height: 3.25rem;
+  margin-top: clamp(var(--space-3), 4vh, var(--space-5));
+  color: var(--color-brand-ink);
+  font-family: var(--font-ui);
   font-size: var(--text-xl);
   font-weight: 500;
-  line-height: 1.3;
-  text-decoration: underline;
-  text-decoration-color: var(--lesson-title-decoration);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.22em;
-  transition: text-decoration-color var(--motion-duration) var(--motion-easing);
+  line-height: 1;
+  text-decoration: none;
+  place-items: start start;
 }
 
-.lessonSummary {
-  grid-column: 1;
-  max-width: 62ch;
-  color: var(--color-text-soft);
-  font-size: var(--text-sm);
-  line-height: 1.55;
+.primaryAction span {
+  position: relative;
+  z-index: 1;
 }
 
-.lessonArrow {
-  grid-row: 1 / 4;
-  grid-column: 2;
-  align-self: center;
-  color: var(--color-text-soft);
-  transform: var(--lesson-arrow-transform);
+.actionDrawing {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  color: var(--color-brand-orange);
+  overflow: visible;
+  pointer-events: none;
+}
+
+.actionArrowGroup {
   transition: transform var(--motion-duration) var(--motion-easing);
 }
 
-.lessonList a:hover {
-  --lesson-arrow-transform: translateX(0.125rem);
-  --lesson-title-decoration: currentColor;
+.primaryAction:hover .actionArrowGroup {
+  transform: translateX(var(--space-0-5));
 }
 
-@media (max-width: 58rem) {
-  .root {
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--space-5);
-    padding-block: var(--space-5);
+.primaryAction:focus-visible {
+  border-radius: var(--radius-control);
+  outline: 2px solid var(--color-brand-orange-text);
+  outline-offset: var(--space-1);
+}
+
+.visual {
+  min-width: 0;
+  align-self: start;
+  width: calc(100% + clamp(2.5rem, 5vw, 5.5rem));
+  margin-left: calc(-1 * clamp(2.5rem, 5vw, 5.5rem));
+  margin-top: calc(-1 * var(--space-5));
+}
+
+.visuallyHidden {
+  composes: visuallyHidden from "../../shared/styles/patterns.module.css";
+}
+
+.map {
+  position: relative;
+  width: min(100%, calc((100svh - 9.5rem) * 1.4778));
+  max-width: 76rem;
+  min-width: 0;
+  aspect-ratio: 1064 / 720;
+  margin-inline: auto;
+  overflow: clip;
+  font-family: var(--font-ui);
+}
+
+.mapScene {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  shape-rendering: geometricPrecision;
+}
+
+.backgroundPattern {
+  color: var(--color-brand-muted);
+  opacity: 0.58;
+}
+
+.patternPreset text {
+  fill: currentcolor;
+  font-family: var(--font-data);
+  font-size: var(--text-2xs);
+  letter-spacing: 0.06em;
+}
+
+.patternPreset circle {
+  fill: currentcolor;
+  stroke: none;
+}
+
+.patternPreset [data-pattern-node="end"] {
+  fill: var(--color-brand-orange);
+  opacity: 0.72;
+}
+
+.cardSurface {
+  fill: url("#paper-surface");
+  stroke: url("#paper-border");
+  stroke-width: 1;
+  filter: url("#paper-shadow");
+  vector-effect: non-scaling-stroke;
+}
+
+.futurePaperCard {
+  opacity: 0.74;
+}
+
+.cardHighlight {
+  fill: none;
+  stroke: url("#paper-highlight");
+  stroke-linecap: round;
+  stroke-width: 1.25;
+  vector-effect: non-scaling-stroke;
+}
+
+.cardIcon {
+  --custom-icon-accent: var(--color-brand-orange);
+  --custom-icon-paper: color-mix(in srgb, var(--color-brand-canvas) 90%, white);
+
+  color: var(--color-brand-ink);
+  overflow: visible;
+}
+
+.cardTitle,
+.cardCaption,
+.stageNumber,
+.stageTitle,
+.stageDetail,
+.progress text {
+  font-family: var(--font-ui);
+}
+
+.cardTitle {
+  fill: var(--color-brand-ink);
+  font-size: var(--text-lg);
+  font-weight: 500;
+}
+
+.cardCaption {
+  fill: var(--color-brand-muted);
+  font-size: var(--text-home-card-caption);
+}
+
+.stageSurface {
+  fill: url("#stage-surface");
+  stroke: url("#stage-border");
+  stroke-width: 1;
+  filter: url("#stage-shadow");
+  vector-effect: non-scaling-stroke;
+}
+
+.activeStage .stageSurface {
+  fill: var(--color-brand-canvas);
+  stroke: var(--color-brand-orange);
+  stroke-width: 1.25;
+}
+
+.stageHighlight,
+.progressHighlight {
+  fill: none;
+  stroke: url("#stage-highlight");
+  stroke-linecap: round;
+  stroke-width: 1.15;
+  vector-effect: non-scaling-stroke;
+}
+
+.stageNumber {
+  fill: var(--color-brand-orange);
+  font-size: var(--text-home-stage-number);
+  font-weight: 500;
+}
+
+.stageTitle {
+  fill: var(--color-brand-ink);
+  font-size: var(--text-lg);
+  font-weight: 500;
+}
+
+.stageDetail {
+  fill: var(--color-brand-orange);
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+
+.checkDisc {
+  fill: var(--color-brand-orange);
+  stroke: color-mix(in srgb, white 46%, transparent);
+  stroke-width: 0.65;
+  vector-effect: non-scaling-stroke;
+}
+
+.checkGlint {
+  fill: color-mix(in srgb, white 62%, transparent);
+}
+
+.checkPath {
+  fill: none;
+  stroke: var(--color-brand-canvas);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.progressSurface {
+  fill: var(--color-brand-canvas);
+  stroke: var(--color-brand-orange);
+  stroke-width: 1.2;
+  filter: url("#stage-shadow");
+  vector-effect: non-scaling-stroke;
+}
+
+.progress text {
+  fill: var(--color-brand-orange);
+  font-size: var(--text-base);
+  font-weight: 500;
+  text-anchor: middle;
+}
+
+@media (max-width: 86rem) {
+  .page {
+    --text-home-hero: clamp(4.75rem, 7vw, 5.75rem);
   }
 
-  .intro h1[data-order] {
-    max-width: 15ch;
+  .hero {
+    grid-template-columns: minmax(27rem, 0.82fr) minmax(35rem, 1.18fr);
+  }
+
+  .visual {
+    width: calc(100% + var(--space-5));
+    margin-left: calc(-1 * var(--space-5));
+  }
+}
+
+@media (max-width: 68rem) {
+  .page {
+    --text-home-hero: clamp(5rem, 12vw, 8rem);
+  }
+
+  .hero {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-4);
+    padding-top: var(--space-5);
+  }
+
+  .intro {
+    padding-top: var(--space-3);
+  }
+
+  .map {
+    width: 100%;
+    max-width: none;
+  }
+
+  .visual {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 44rem) {
+  .page {
+    --text-home-hero: clamp(3rem, 14vw, 4.75rem);
+    --text-home-lead: clamp(1.4rem, 6.5vw, 1.8rem);
+  }
+
+  .hero {
+    gap: var(--space-5);
+    min-height: 0;
+    padding-block: var(--space-5) var(--space-6);
+  }
+
+  .intro {
+    padding-top: 0;
+  }
+
+  .intro .heroTitle {
+    max-width: none;
+    line-height: 0.88;
+  }
+
+  .heroTitle span {
+    white-space: nowrap;
+  }
+
+  .intro .lead {
+    margin-top: var(--space-3);
+    white-space: normal;
+  }
+
+  .primaryAction {
+    width: min(19.5rem, 100%);
+    margin-top: var(--space-4);
+    font-size: var(--text-lg);
+  }
+
+  .visual {
+    width: calc(100% + var(--page-chrome-gutter) + var(--page-chrome-gutter));
+    margin-inline: calc(-1 * var(--page-chrome-gutter));
+  }
+
+  .map {
+    width: 100%;
+    max-width: none;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .lessonList a,
-  .lessonTitle,
-  .lessonArrow {
+  .actionArrowGroup {
     transition: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .actionDrawing {
+    color: var(--color-brand-orange-text);
+  }
+
+  .patternPreset [data-pattern-node="end"] {
+    fill: var(--color-brand-orange-text);
+  }
+
+  .cardSurface,
+  .stageSurface,
+  .progressSurface {
+    stroke: var(--color-brand-ink);
+  }
+
+  .futurePaperCard {
+    opacity: 1;
   }
 }

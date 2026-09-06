@@ -468,13 +468,27 @@ test("the public root exposes only published material and unknown routes remain 
   await foundationPage.expectPublishedMaterial();
   await foundationPage.expectBrandMetadata();
   await foundationPage.expectDesktopComposition();
+  await foundationPage.expectDeclarativeDrawing();
   await foundationPage.expectNoHorizontalOverflow();
   await foundationPage.expectStableReload();
   await browserSession.captureViewport("public-home-desktop.png");
 
+  await browserSession.useCompactDesktopViewport();
+  await foundationPage.open();
+  await foundationPage.expectPublishedMaterial();
+  await foundationPage.expectDesktopMapFitsViewport();
+  await foundationPage.expectNoHorizontalOverflow();
+  await browserSession.captureViewport("public-home-compact-desktop.png");
+
+  await browserSession.useBreakpointEdgeViewport();
+  await foundationPage.open();
+  await foundationPage.expectPublishedMaterial();
+  await foundationPage.expectNoHorizontalOverflow();
+
   await browserSession.useZoomedDesktopViewport();
   await foundationPage.open();
   await foundationPage.expectPublishedMaterial();
+  await foundationPage.expectStackedMapUsesAvailableWidth();
   await foundationPage.expectNoHorizontalOverflow();
   await browserSession.captureViewport("public-home-zoomed.png");
 
@@ -484,6 +498,13 @@ test("the public root exposes only published material and unknown routes remain 
   await foundationPage.expectMobileComposition();
   await foundationPage.expectNoHorizontalOverflow();
   await browserSession.captureViewport("public-home-mobile.png");
+
+  await browserSession.useMinimumViewport();
+  await foundationPage.open();
+  await foundationPage.expectPublishedMaterial();
+  await foundationPage.expectMobileComposition();
+  await foundationPage.expectNoHorizontalOverflow();
+
   await noJavaScriptFoundationPage.open();
   await noJavaScriptFoundationPage.expectPublishedMaterial();
   await noJavaScriptFoundationPage.expectNoHorizontalOverflow();

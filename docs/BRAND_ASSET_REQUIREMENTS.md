@@ -1,63 +1,61 @@
 # Требования к бренд-ассетам
 
-## Активный профиль ALCHIMIA
+## Активный профиль infraege
 
-Change 75 утвердил ALCHIMIA на `/lab/design-system`; Change 76 активировал тот же профиль в
-public header, metadata, manifest, favicon, Apple/manifest icons и social preview. Технический
-домен `infraege.ru`, storage keys, analytics ids и инфраструктурные имена при этом не меняются.
+Публичная айдентика — `infraege`. Технический домен `infraege.ru`, storage keys, analytics ids
+и infrastructure names при смене визуального профиля не меняются. Исторический ALCHIMIA lab не
+является источником public delivery.
 
-`docs/artifacts/references/logo.svg` — единственный художественный источник ALCHIMIA. Прежний
-`logo_with_transperant_bg.svg` и исторический `docs/artifacts/final_logo.svg` удалены после
-перехода на этот источник и не являются production-ассетами.
-Нормализация может убрать фиксированные размеры, исправить `preserveAspectRatio` или добавить
-delivery whitespace, но не может перерисовывать, сглаживать, перекрашивать, обрезать или
-переинтерпретировать видимую геометрию. Для явно тёмного контекста допустима только монохромная
-инверсия знака в белый без изменения его формы.
+`docs/artifacts/references/infraege-mark.svg` — единственный художественный master знака.
+`docs/artifacts/references/base.jpg` и `docs/artifacts/references/main-page.png` задают направление
+его применения. Master содержит ровно три органических камня и ничего больше:
 
-Надпись `ALCHIMIA` и подзаголовок «ЕГЭ информатика» не встраиваются в SVG: они остаются живым
-доступным текстом в Alegreya и Golos Text соответственно. Change 86 заменил исходный набор
-Cormorant SC/Literata/IBM Plex Mono; JetBrains Mono теперь ограничен кодом, данными и формулами и
-не используется для service-UI-подписей.
+- верхний малый камень — `#FF6A00`;
+- средний и нижний камни — `#1A1A1A`;
+- text, baseline, canvas, filters, masks, embedded raster и внешние URL отсутствуют.
+
+Надпись `infraege` и подзаголовок «подготовка к ЕГЭ по информатике» не встраиваются в mark SVG:
+в интерфейсе они остаются живым доступным текстом в Alegreya и Golos Text. Типографические роли
+Change 86 не меняются; JetBrains Mono остаётся шрифтом кода, данных и формул.
 
 ## Производные файлы
 
-- `apps/web/public/brand/alchimia-mark.svg` сохраняет все авторские paths и gradients, удаляет
-  фиксированные размеры и нормализует `preserveAspectRatio`.
-- `apps/web/public/favicon.svg` использует те же paths и gradients; квадратный `viewBox` добавляет
-  только прозрачное поле и сохраняет весь исходный знак. Встроенный `prefers-color-scheme`
-  переключает рисунок на белый в тёмном browser chrome.
+- `apps/web/public/brand/infraege-mark.svg` и widget asset сохраняют paths, classes, colors и
+  `viewBox` master-файла.
+- `apps/web/public/favicon.svg` использует ту же геометрию; квадратный `viewBox` добавляет только
+  delivery whitespace. В dark browser chrome две ink-фигуры становятся белыми, orange-фигура
+  сохраняет цвет.
 - PNG/ICO, Apple touch, manifest icons и social preview воспроизводимо генерируются командой
-  `pnpm brand:generate`; manifest хранится декларативно рядом и проверяется тем же test contract.
+  `pnpm brand:generate`; генератор также удаляет только известные прежние ALCHIMIA derivatives.
+- Warm opaque background raster-иконок и social preview — `#F5F3EF`.
 
 ## Favicon и иконки
 
 | Файл | Размер | Требование |
 |------|--------|------------|
-| `favicon.svg` | квадратный `viewBox` | Упрощённый знак, прозрачный фон |
-| `favicon-16x16.png` | 16×16 | Чёрный знак на белом fallback-фоне |
-| `favicon-32x32.png` | 32×32 | Чёрный знак на белом fallback-фоне |
+| `favicon.svg` | квадратный `viewBox` | Три камня на прозрачном фоне |
+| `favicon-16x16.png` | 16×16 RGBA | Тот же знак, без отдельной перерисовки |
+| `favicon-32x32.png` | 32×32 RGBA | Тот же знак, без отдельной перерисовки |
 | `favicon.ico` | 16×16 и 32×32 внутри | PNG frames с alpha |
-| `apple-touch-icon.png` | 180×180 | Непрозрачный белый фон, без встроенного скругления |
-| `alchimia-icon-192.png` | 192×192 | Непрозрачный белый фон, manifest purpose `any` |
-| `alchimia-icon-512.png` | 512×512 | Непрозрачный белый фон, manifest purpose `any` |
+| `apple-touch-icon.png` | 180×180 RGB | Непрозрачный warm-paper фон, без встроенного скругления |
+| `infraege-icon-192.png` | 192×192 RGB | Непрозрачный warm-paper фон, manifest purpose `any` |
+| `infraege-icon-512.png` | 512×512 RGB | Непрозрачный warm-paper фон, manifest purpose `any` |
 
-Apple/manifest-иконки оставляют 12.5% свободного поля с каждой стороны. Maskable-вариант,
-service worker, offline-режим и установка как PWA не входят в текущий контракт.
+Apple/manifest icons оставляют устойчивое свободное поле вокруг знака. Maskable-вариант, service
+worker, offline-режим и установка как PWA не входят в текущий контракт.
 
 ## Social preview
 
-`apps/web/public/brand/alchimia-social.png` имеет размер 1200×630 px и белый фон. Единственный
-элемент — утверждённый знак ALCHIMIA, расположенный по центру обеих осей. Wordmark, подпись,
-разделители и дополнительные декоративные элементы отсутствуют.
+`apps/web/public/brand/infraege-social.png` имеет размер 1200×630 px и warm-paper фон. Он включает
+трёхкаменный знак, wordmark `infraege` и короткую подпись о подготовке к ЕГЭ. Это delivery raster,
+поэтому доступное имя задаётся route metadata, а не текстом внутри изображения.
 
 ## Приёмка
 
-- Master/production SVG не содержит `<text>`, JavaScript, внешние URL, embedded raster, фильтры
-  или непрозрачный canvas; favicon содержит только локальное media-rule для белой dark-схемы;
-  контуры не выходят за `viewBox`.
-- Крупный production mark визуально совпадает с master-файлом; малые favicon не получают
-  отдельной перерисовки.
-- Проверяются сигнатуры и размеры raster/ICO, manifest declarations, favicon в браузере,
-  OG/Twitter metadata, desktop/mobile/150%-zoom header, SSR/no-JS, контраст wordmark и чистая
-  консоль.
-- SEO URL и metadata contract остаются стабильными; меняется только содержимое производных файлов.
+- Master/production SVG проходит structural test: три paths, один orange и два ink, без text,
+  script, external URL, embedded raster, filter или непрозрачного canvas.
+- Крупный production mark визуально совпадает с master; размеры 512/48/32/16 проверяются без
+  отдельной художественной версии.
+- Проверяются сигнатуры, pixel format и размеры raster/ICO, manifest declarations, favicon,
+  OG/Twitter metadata, desktop/mobile/150%-zoom header, SSR/no-JavaScript, contrast и clean console.
+- Все brand derivatives воспроизводимы: повторный `pnpm brand:generate` не меняет tracked output.

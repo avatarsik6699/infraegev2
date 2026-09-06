@@ -90,13 +90,12 @@ app → routes → pages → widgets → features → entities → shared
 - Public names describe purpose (`primary`, `reading`, `warning`), never the current palette,
   material or “Engineering notebook” profile. Changing the active profile must not require domain,
   API, content or state changes.
-- Keep one active light theme in this change. Runtime theme switching and dark mode are out of
-  scope. The ALCHIMIA baseline remains monochrome: ink, muted surfaces and borders establish
-  hierarchy, while semantic feedback colors retain only their functional meaning.
-  Public header/footer rules, persistent link underlines, inline `Notation`, the code-header
-  separator, buttons, badges, ordinary surfaces, control states and semantic feedback remain
-  neutral or keep their independent semantic roles. Syntax tokens inside the dedicated dark code
-  surface remain independent.
+- Keep one active light theme. Runtime theme switching and a dark page theme are out of scope.
+  The infraege baseline uses warm paper, ink, one WCAG-safe muted text level and a restrained orange
+  accent. Reference orange belongs to the three-stone mark and selected illustration details; an
+  accessible darker orange semantic token owns small accent text, focus rings and functional underlines. Orange
+  does not recolor ordinary prose, internal lesson controls, semantic feedback or syntax roles.
+  Existing internal page layouts retain their neutral surfaces until separately scoped.
 - A verified third-party brand mark may retain its official color only when it identifies the
   destination of a real external link. Keep it small, pair it with a text label and do not reuse
   the brand color for surrounding controls or decoration.
@@ -165,7 +164,9 @@ app → routes → pages → widgets → features → entities → shared
   above the curriculum, not a standalone titled section in the course introduction. It is
   informational only: the published lesson row remains the course entry point, so progress does
   not contain a competing action. Never render a total-course percentage, hard lesson locks or
-  course-wide reset while the program is still developing.
+  course-wide reset while the program is still developing. The aria-hidden «72% курса» artwork on
+  `/` is a reference illustration rather than a course-progress consumer and does not relax this
+  product-state rule.
 - A lesson has at most one `Checkpoint`: authored once at `Definition.checkpoint`, gathering every
   formative disclosure question for the whole lesson, and rendered inside the «Итоги» (`result`)
   section, after the result copy — never per `ConceptBlock` and never as its own step before
@@ -217,9 +218,9 @@ app → routes → pages → widgets → features → entities → shared
   Every indexable HTML route exposes an absolute `https://infraege.ru` canonical plus unique title,
   description and shared 1200×630 social metadata. The root owns a browser-only manifest plus the
   normalized production SVG/PNG/ICO favicon and Apple touch icon set; the large mark preserves the
-  approved ALCHIMIA source geometry while the square favicon viewport adds only delivery whitespace
-  and never redraws the mark. The monochrome SVG/favicon may switch to white only under an explicit
-  dark context or dark browser color scheme. `/` alone owns the truthful `WebSite` JSON-LD site-name declaration.
+  approved three-path infraege source geometry while the square favicon viewport adds only delivery
+  whitespace and never redraws the mark. In dark browser chrome only the two ink stones may switch
+  to white; the orange stone remains orange. `/` alone owns the truthful `WebSite` JSON-LD site-name declaration.
   Generated favicon/touch/manifest assets satisfy
   `docs/BRAND_ASSET_REQUIREMENTS.md`. Do not add Organization/Person structured data without a
   separately confirmed real-world identity. `/robots.txt` and `/sitemap.xml` are server routes,
@@ -228,21 +229,57 @@ app → routes → pages → widgets → features → entities → shared
   disclosure. Legal copy describes only behavior present in code/configuration, publishes the
   architect-approved email and Telegram invitation without exposing other personal requisites, and
   keeps the accepted legal-review risk explicit in the system contract.
-- The public home uses a responsive editorial split: the primary product statement leads on the
-  left and registry-derived materials sit on the right, grouped as «Мини-курсы» and «Темы ЕГЭ»
-  without flattening their semantics. It collapses to one linear column on narrow screens. Group
-  through spacing and quiet rows rather than decorative separators; public copy stays concise and
-  states the current free theory-and-practice offer.
+- The public home uses a responsive editorial split: the primary product statement and real Python
+  mini-course CTA lead on the left, while a decorative non-interactive learning map presents
+  «теория, практика, задания, будущая статистика» on the right. Its current cards, numbered stages
+  and background notation have no connectors; future semantic trajectories require a separate
+  architect-led iteration. The route does not
+  duplicate registry catalogs or synthetic social proof. The reference's literal «72% курса» is an
+  aria-hidden illustration detail, never learner state. The map alone may pair a thin border with a
+  restrained offset shadow to reproduce rotated paper slips; this narrow decorative exception does
+  not change the flat-surface contract for product UI. Domain-agnostic
+  `shared/components/svg-drawing` fragments own reusable fading paths,
+  authored tapered outlines and composed arrows; they inherit `currentColor`, generate SSR-stable
+  gradient ids and do not own a canvas, scene geometry or responsive layout. Page-local components
+  retain those composition responsibilities. Domain-agnostic `shared/components/svg-pattern`
+  fields own bounded directional fade masks, while their preset API composes deterministic strokes,
+  labels and nodes through `SvgDrawing`; both APIs inherit consumer color and generate SSR-stable
+  resource ids. They do not procedurally jitter paths, define subject-specific formulas/icons, own a
+  canvas, or decide responsive placement. Consumers author deterministic geometry locally, and only the
+  public home is migrated in Change 95. The page-local visual boundary clips only decorative SVG
+  and filter bleed; it remains parent-bounded so neither breakpoint transitions nor narrow viewports
+  can enlarge the root document canvas. The desktop scene uses a wider asymmetric coordinate field:
+  enlarged cards and notation reach toward its edges at varied rotations and vertical positions,
+  while every element remains inside the authored viewBox. Domain-agnostic
+  `shared/components/custom-icon` owns the
+  normalized SVG viewport, decorative/labelled accessibility mode and semantic ink/paper/accent
+  paint hooks for authored vector glyphs. Individual glyph components preserve approved source
+  contours; consumers own icon size, placement and surrounding card/content treatment. Do not put
+  page copy, card geometry or scene composition into the icon layer, and do not inline an authored
+  glyph again after it enters this shared boundary. The reviewed raster dry-ink variant is rejected
+  and must not ship as a runtime asset. The page renders one complete learning-map SVG at every
+  viewport: in the desktop split it expands leftward and fits both the available column width and
+  viewport height instead of deriving height from width alone. As soon as the editorial split
+  becomes one column, sizing becomes width-led so intermediate screens do not inherit desktop
+  height constraints or excessive side gutters; on narrow screens the same bounded scene scales to
+  the available width without clipping, horizontal overflow or removing satellite cards, stages
+  and background notation. The separate accessible textual summary remains the semantic
+  description of this decorative scene.
 - A shared back-navigation link always renders a real fallback `href` for SSR/no-JavaScript and
   modified-click behavior. After hydration it follows TanStack Router history only when the
   router-owned history index says an in-app entry exists; direct entry, document reload and
   external-origin arrival use the explicit fallback route instead of leaving the application.
-- Public headers share one quiet identity: the approved ALCHIMIA mark, Alegreya wordmark and
-  Golos Text subtitle stay grouped at the left without release/version badges. The mark is
-  decorative beside the accessible live site name rather than its replacement. Header and footer
+- Public headers share one quiet identity: the approved three-stone infraege mark and lowercase
+  Alegreya wordmark stay grouped at the left without release/version badges. The expanded `/`
+  lockup uses Golos Text for its subtitle and «просто • понятно • бесплатно» benefit line, separated
+  from navigation by an intentionally faint rule; compact internal headers retain the same ordinary
+  Golos Text subtitle without the benefit line. The mark is decorative beside the accessible live
+  site name rather than its replacement. Header and footer
   contents follow one viewport-relative gutter instead of contracting inside a centered max-width shell.
-  Outside the home page the wordmark is the route back home. Material discovery belongs to the
-  registry-derived home sections rather than duplicate collection links in global chrome.
+  Outside the home page the wordmark is the route back home. On `/`, the expanded reference-led
+  navigation exposes only real destinations as links; unavailable sections are secondary,
+  non-interactive text without status labels, and account placeholders are absent. Narrow viewports
+  use a native disclosure menu.
   Optional analytics first appears only after hydration as a fixed full-width bottom prompt that
   overlays rather than shifts content; after a choice, its only persistent control lives in the
   «Ваш выбор» section on `/privacy`, not in the header. Public footers expose the privacy route and
@@ -286,7 +323,7 @@ app → routes → pages → widgets → features → entities → shared
   (Golos Text) — display and data remain distinct families — but consumers still address the
   semantic role token, never the literal family name, so the roles can diverge again without a
   component rewrite. Component APIs use semantic text roles rather than raw size names.
-- Public surfaces preload the small active self-hosted ALCHIMIA set and use `font-display: swap` so
+- Public surfaces preload the small active self-hosted font set and use `font-display: swap` so
   the real display, reading and service faces replace their fallback instead of leaving a first
   visit on heavier system typography. Display, reading and service fallbacks are metric-adjusted,
   while every active font subset is explicitly preloaded. Structural lesson columns use the stable
@@ -328,15 +365,15 @@ app → routes → pages → widgets → features → entities → shared
 - Outcomes describe what the learner can now do. Instructions, hints and feedback say what to do
   next; mistakes are explained without blame, vague encouragement or hidden scoring.
 
-### 6.1 ALCHIMIA rollout contract
+### 6.1 infraege identity and historical lab
 
-- ALCHIMIA copy follows one explicit learning bridge: begin from a familiar situation, name and
+- Learning copy follows one explicit bridge: begin from a familiar situation, name and
   explain the new term where it first matters, demonstrate it concretely, generalize only after
   the example, retrieve the idea briefly, then practise and close with an observable result. A
   term may instead point back to a previous lesson only when that dependency is already true in
   the authored curriculum. Humanization never removes intermediate reasoning, examples,
   distinctions or the final synthesis.
-- Archived Change 75 established the approved target profile on `/lab/design-system` and proved
+- Archived Change 75 established the historical ALCHIMIA profile on `/lab/design-system` and proved
   its reusable header, theme/token boundary and catalog contracts. Change 76 activated only those
   accepted system-level values and reusable boundaries on public routes without copying the
   dashboard composition into production. Archived Change 79 completed the remaining public
@@ -344,11 +381,11 @@ app → routes → pages → widgets → features → entities → shared
   approved defaults through the existing visual dependency direction, reconciled public page and
   lesson compositions, and removed only legacy fallbacks proven unused by browser evidence. The
   resulting production routes do not copy catalog chrome or maintain a parallel component family.
-- The supplied `docs/artifacts/references/logo.svg` is the sole artistic authority. The superseded
-  `logo_with_transperant_bg.svg` is not a fallback. A derivative may repair delivery sizing/viewBox
-  behavior and invert the monochrome mark to white for an explicit dark context, but may not redraw,
-  smooth or reinterpret visible geometry. The rejected hero-scale F1 composition is superseded by
-  F11's compact reusable header.
+- `docs/artifacts/references/infraege-mark.svg` is the active artistic authority for the public mark;
+  `base.jpg` and `main-page.png` define its current application direction. The mark has exactly three
+  paths, no text or baseline, and uses orange only for the top stone. Derivatives may add delivery
+  whitespace and, for dark browser chrome, invert only ink stones. The former ALCHIMIA source remains
+  historical lab evidence and is not a public fallback.
 - Change 86 replaced the original Athanor typography roles: self-hosted Cormorant SC 600, while
   visually approved for the wordmark, proved too decorative and thin at small-caps display weight
   to read outside a pure wordmark context once carrying every heading level app-wide. The current
@@ -359,10 +396,10 @@ app → routes → pages → widgets → features → entities → shared
   Golos Text like the rest of the interface. Quiet
   numbered lesson-stage landmarks remain a JetBrains Mono/data-role treatment, consistent with
   numeric notation, rather than an ordinary content heading. The profile exposes one achromatic
-  primary and one achromatic secondary prose level over the original white background; status
-  colors remain semantic rather than decorative.
-- Keep the approved white background and monochrome presentation during public activation. Copper
-  activation and broader color work require a later explicit checkpoint. The
+  primary and one secondary prose level; status colors remain semantic rather than decorative.
+- The historical lab may retain its isolated white monochrome presentation. Public infraege chrome
+  and the homepage use the warm paper/ink/orange profile; this does not authorize global restyling
+  of lesson/course layouts. The
   architecture-led lab dashboard groups contracts into System, Components and Widgets tabs:
   System owns app-wide identity, typography, palette, layout constraints, accessibility/browser
   behavior, curated semantic tokens, the active icon inventory and content-language rules;
@@ -374,9 +411,9 @@ app → routes → pages → widgets → features → entities → shared
   representative lesson or changing authored content. Each panel has a sticky local table of
   contents. Controlled tabs must progressively enhance into one active panel while
   SSR/no-JavaScript renders every panel as an ordinary linear block.
-- Running text has one primary and one secondary neutral level. Copper-orange remains inactive;
-  any later activation requires an explicit checkpoint and still may not color ordinary
-  paragraphs. Semantic feedback remains independent and never becomes decorative palette.
+- Running text has one primary and one secondary neutral level. Orange remains a sparse identity and
+  illustration signal and may not color ordinary paragraphs. Semantic feedback remains independent
+  and never becomes decorative palette.
 - The active lab does not render the `patterns_lines.png` atlas. Headers, catalog navigation,
   section separators, frames, diagram internals, swatches and interactive controls use standard
   neutral borders; the primary tablist uses only its ordinary active indicator. The atlas remains

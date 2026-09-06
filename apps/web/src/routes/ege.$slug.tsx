@@ -15,7 +15,7 @@ export const Route = createFileRoute("/ege/$slug")({
     const lesson = findLessonByRouteSlug(params.slug);
     return lesson
       ? pageHead.create({
-          title: `${lesson.title} — ALCHIMIA`,
+          title: `${lesson.title} — infraege`,
           description: lesson.summary,
           path: `/ege/${lesson.routeSlug}`,
           type: "article",

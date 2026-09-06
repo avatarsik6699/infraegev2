@@ -23,8 +23,20 @@ export class BrowserSession {
     await this.page.setViewportSize({ width: 1920, height: 1080 });
   }
 
+  async useCompactDesktopViewport(): Promise<void> {
+    await this.page.setViewportSize({ width: 1366, height: 768 });
+  }
+
+  async useBreakpointEdgeViewport(): Promise<void> {
+    await this.page.setViewportSize({ width: 1249, height: 800 });
+  }
+
   async useNarrowViewport(): Promise<void> {
     await this.page.setViewportSize({ width: 390, height: 844 });
+  }
+
+  async useMinimumViewport(): Promise<void> {
+    await this.page.setViewportSize({ width: 320, height: 800 });
   }
 
   async useIntermediateViewport(): Promise<void> {
