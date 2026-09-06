@@ -9,7 +9,7 @@
 | Change | `95` |
 | Slug | `infraege-home-redesign` |
 | Title | infraege identity and home redesign |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/95-infraege-home-redesign` |
 
 ---
