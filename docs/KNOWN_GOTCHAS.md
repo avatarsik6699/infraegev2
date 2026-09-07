@@ -22,6 +22,19 @@
 
 ## Gotcha Log
 
+### Linux Chromium under WSL can leave Windows-named Lighthouse profiles in the repository
+
+- **Symptoms:** after `pnpm audit:performance`, the repository root contains literal directories
+  such as `C:\Users\user\AppData\Local\lighthouse.12345678`; formatting and cleanup checks then
+  traverse Chrome caches that `git status` hides.
+- **Root cause:** locked `chrome-launcher@0.13.4` detects WSL and converts its temporary profile to
+  Windows syntax even when LHCI launches Playwright's Linux Chromium. Linux Chromium interprets
+  that value as a relative path and creates it under the current working directory.
+- **Fix:** run Lighthouse only through `pnpm audit:performance`. The repository wrapper owns an
+  absolute `/tmp/infraege-lighthouse.*` profile and removes it on success, failure or interruption.
+  Analyze `.lighthouseci` reports before the terminal `make clean-dry-run && make clean &&
+  make clean-check`; never use broad `git clean -fdX`.
+
 ### Beszel host networking cannot reach a proxy confined to an internal Compose network
 
 - **Symptoms**: Beszel reports fresh host statistics but `container_stats` stays empty; the socket
@@ -349,10 +362,11 @@
 - **Fix**: `lighthouserc.cjs` resolves `chromium.executablePath()` from the web workspace and passes
   it as `collect.chromePath`; keep the dedicated `127.0.0.2:3200` server address as well.
 
-### This WSL devbox fails the LCP performance budget regardless of app code
+### The WSL Lighthouse runner needs a separate enforced LCP ceiling and product target
 
-- **Symptoms**: `pnpm audit:performance` (Full Gate) consistently fails `largest-contentful-paint`
-  (budget `≤2800ms`) on both `/` and `/ege/16-rekursiya`, reporting ~4000–4400ms across repeat runs.
+- **Symptoms**: an enforced `largest-contentful-paint` ceiling of `≤2800ms` made
+  `pnpm audit:performance` (Full Gate) repeatedly fail both `/` and `/ege/16-rekursiya` on this
+  devbox, commonly reporting about 4000–4400ms across repeat runs.
 - **Root cause**: not a code regression. Confirmed by running the identical Full Gate performance
   step against `main` as of the pre-Change-85 baseline (commit `7150078`, archived Change 84): the
   same two routes failed with near-identical numbers (within ~10ms) despite zero relevant code
@@ -361,10 +375,11 @@
   (`cpuSlowdownMultiplier: 4`, slow-4G network) interacting with this specific WSL/Docker-Desktop
   devbox's real CPU contention, not page weight (`total-byte-weight` ~522 KiB, reasonable) or
   render-blocking resources.
-- **Status**: architect-accepted as a known devbox limitation (2026-09-03) for this Change
-  85/release. Skipped in Full Gate reporting rather than blocking; not fixed by guessing at
-  unrelated code changes. Re-verify the actual budget from the deployed production environment
-  (or a dedicated CI/Lighthouse runner) rather than trusting this sandbox's absolute LCP numbers.
+- **Fix**: enforce median LCP `≤4000ms` for the current local/release audit so the known runner
+  variance does not repeatedly block unrelated work. Keep `≤2800ms` as the explicit product target,
+  measure it on the deployed production environment or a stable dedicated runner, and tighten the
+  gate back when optimization and repeatable evidence support it. Do not hide a regression beyond
+  4000ms or raise the ceiling again without a new architect decision.
 
 ### journal-gatewayd tail ranges need both skip and count fields
 

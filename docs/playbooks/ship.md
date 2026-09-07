@@ -43,6 +43,7 @@ This document is the single source of truth for the `ship` workflow. Runtime wra
 3. Run the applicable Critical Gate rows once. Use focused tests covering changed behavior; do not
    broaden them to complete unit, E2E, infrastructure, security, accessibility, or performance
    suites. Documentation-only changes normally need formatting/link integrity only.
+   Analyze required reports before running the final Repository hygiene row.
 4. Report each applicable row and every intentional skip with its reason.
 
 #### `--full` or `--release`
@@ -52,6 +53,8 @@ This document is the single source of truth for the `ship` workflow. Runtime wra
    when present; otherwise execute every defined row directly in table order.
 3. Do not stop at the first failure: run every defined row and report the full picture. A missing
    command is `SKIPPED — no command in STACK.md`, never an invitation to guess.
+   Retain reports until their results are recorded, then run the terminal Repository hygiene row
+   even when another row failed.
 
 For either mode, PASS requires every executed row to be green and no unchecked Backlog or
 Architect Review Note items.

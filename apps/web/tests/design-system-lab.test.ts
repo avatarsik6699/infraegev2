@@ -25,29 +25,26 @@ const catalogContractsFrom = (catalog: string) =>
   );
 
 describe("ALCHIMIA design-system lab identity", () => {
-  it("keeps the page-local mark source-faithful", () => {
-    const suppliedMark = readWorkspaceFile(
+  it("keeps the historical mark as documentation evidence only", () => {
+    const historicalMark = readWorkspaceFile(
       "docs",
       "artifacts",
       "references",
       "logo.svg",
     );
-    const labMark = readWorkspaceFile(
-      "apps",
-      "web",
-      "src",
-      "widgets",
-      "public-header",
-      "assets",
-      "alchimia-mark.svg",
-    );
 
-    expect(labMark).toContain('viewBox="0 0 2048 1639"');
-    expect(labMark.match(/<path\b/g)).toHaveLength(
-      suppliedMark.match(/<path\b/g)?.length ?? 0,
-    );
-    expect(labMark).not.toMatch(/<(?:script|image|text)\b/i);
-    expect(labMark).not.toMatch(/(?:href|src)=["']https?:\/\//i);
+    expect(historicalMark).toContain('viewBox="0 0 2048 1639"');
+    expect(historicalMark.match(/<path\b/g)?.length ?? 0).toBeGreaterThan(0);
+    expect(historicalMark).not.toMatch(/<(?:script|image|text)\b/i);
+    expect(historicalMark).not.toMatch(/(?:href|src)=["']https?:\/\//i);
+    expect(
+      existsSync(
+        resolve(
+          process.cwd(),
+          "src/widgets/public-header/assets/alchimia-mark.svg",
+        ),
+      ),
+    ).toBe(false);
     expect(
       existsSync(
         resolve(
@@ -670,7 +667,7 @@ describe("ALCHIMIA design-system lab identity", () => {
     expect(catalogContracts).toEqual(widgetExports);
     expect(widgetExports).toHaveLength(4);
     expect(catalog).toContain(
-      'live("PublicHeader", "Компактная ALCHIMIA-айдентика публичных страниц")',
+      'live("PublicHeader", "Действующая infraege-айдентика публичных страниц")',
     );
     expect(catalog).toContain('data-widget-assembly="public-page"');
     expect(catalog).toContain('data-widget-assembly="lesson-page"');

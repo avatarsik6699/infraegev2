@@ -3,9 +3,10 @@ set -euo pipefail
 
 repo_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 mode=${1:---apply}
+artifacts_found=0
 
-if [[ $mode != --apply && $mode != --dry-run ]]; then
-  echo 'usage: scripts/clean-local-artifacts.sh [--dry-run|--apply]' >&2
+if [[ $mode != --apply && $mode != --dry-run && $mode != --check ]]; then
+  echo 'usage: scripts/clean-local-artifacts.sh [--dry-run|--check|--apply]' >&2
   exit 2
 fi
 
@@ -16,12 +17,19 @@ remove_path() {
     exit 2
   }
   [[ -e $target || -L $target ]] || return 0
-  if [[ $mode == --dry-run ]]; then
-    printf 'would remove %s\n' "${target#"$repo_dir"/}"
-  else
-    rm -rf -- "$target"
-    printf 'removed %s\n' "${target#"$repo_dir"/}"
-  fi
+  case $mode in
+    --dry-run)
+      printf 'would remove %s\n' "${target#"$repo_dir"/}"
+      ;;
+    --check)
+      printf 'artifact remains %s\n' "${target#"$repo_dir"/}"
+      artifacts_found=1
+      ;;
+    --apply)
+      rm -rf -- "$target"
+      printf 'removed %s\n' "${target#"$repo_dir"/}"
+      ;;
+  esac
 }
 
 static_targets=(
@@ -32,7 +40,6 @@ static_targets=(
   .fallow
   .fallow-review
   .ruff_cache
-  apps/ops
   apps/web/.output
   apps/web/.vinxi
   apps/web/.tanstack
@@ -88,8 +95,18 @@ for relative_path in apps/web/.impeccable/live apps/web/.impeccable; do
   fi
 done
 
-if [[ $mode == --dry-run ]]; then
-  echo 'Cleanup dry run complete.'
-else
-  echo 'Regenerable local reports, retired outputs, and caches removed.'
-fi
+case $mode in
+  --dry-run)
+    echo 'Cleanup dry run complete.'
+    ;;
+  --check)
+    if ((artifacts_found > 0)); then
+      echo 'Repository still contains allowlisted local artifacts.' >&2
+      exit 1
+    fi
+    echo 'Repository contains no allowlisted local artifacts.'
+    ;;
+  --apply)
+    echo 'Regenerable local reports, build outputs, and caches removed.'
+    ;;
+esac

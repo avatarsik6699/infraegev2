@@ -21,7 +21,7 @@
     "test:content-assets": "node --test scripts/tests/task-content-assets.test.mjs",
     "validate:content": "node scripts/validate-content-links.mjs",
     "audit:a11y": "pnpm --filter web exec playwright test e2e/accessibility.spec.ts",
-    "audit:performance": "lhci autorun",
+    "audit:performance": "bash scripts/run-lighthouse-audit.sh lhci",
     "audit:security": "bash scripts/security-gate.sh",
     "audit:images": "bash scripts/image-gate.sh"
   },

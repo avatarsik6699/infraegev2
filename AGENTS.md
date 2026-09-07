@@ -40,6 +40,11 @@ tooling live in [`docs/STACK.md`](docs/STACK.md).
     [`docs/FRONTEND.md`](docs/FRONTEND.md) — the binding architecture, code-shape, interaction and
     visual-system contract for that layer tree. Follow it exactly; where it and this file overlap
     on a frontend specific, `FRONTEND.md` governs.
+11. **Repository Hygiene**: Reports, build outputs and caches may remain only until their evidence
+    has been analyzed. Finish `/work`, `/ship` and ad-hoc test/lint/build sessions with
+    `make clean-dry-run`, review the allowlist, then run `make clean` and `make clean-check`.
+    Never substitute `git clean -fdX`: ignored dependencies, environments, secrets and data are
+    protected. Temporary tools such as Lighthouse must clean their own external workspaces on exit.
 
 ## Stack Conventions
 

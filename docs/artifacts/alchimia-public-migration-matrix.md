@@ -35,6 +35,10 @@
 | `EmptyState` | not-found и image fallback | active | `shared/components/empty-state` |
 | `CodeBlock` | TopicLesson, CourseLesson, practice solution | active | `shared/components/code-block`; global long-code disclosure уже live |
 | `Image` | Diagram и image fallback | active | `shared/components/image` |
+| `CustomIcon` | home learning map | context | `shared/components/custom-icon`; authored glyph boundary owned by its public consumer |
+| `DrawnLinkUnderline` | ActionLink и ExternalLink drawn hierarchy | context | `shared/components/link-decoration`; decorative part of a complete link contract |
+| `SvgDrawing` | home paths, arrows and link decoration | context | `shared/components/svg-drawing`; low-level visual primitives composed by public consumers |
+| `SvgPattern` | home background pattern field | context | `shared/components/svg-pattern`; consumer-owned geometry and placement |
 | `Checkpoint` | обе lesson compositions | active | `shared/components/learning-content/checkpoint` |
 | `Diagram` | authored TopicLesson/CourseLesson theory | active | `shared/components/learning-content/diagram` |
 | `LearningVisualFrame` | lesson visuals | active | `entities/learning-visual` |

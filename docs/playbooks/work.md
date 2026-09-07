@@ -192,6 +192,9 @@ After implementing the complete target set:
    LSP diagnostics, and API type regeneration when applicable. Documentation-only work normally
    needs formatting/link integrity only. Do not run full unit suites, E2E, infrastructure,
    security, accessibility, performance, or the Full Gate unless explicitly requested.
+   Analyze any reports and metrics before the final Repository hygiene row removes them. The row is
+   mandatory even when earlier checks produced only caches; never replace its allowlisted commands
+   with broad ignored-file cleanup.
 3. Report the commands run and their results; if a check was not run, state the reason.
 4. Mark the item:
    - Backlog task → check off the matching item in `docs/changes/NN-slug.md` § Backlog.

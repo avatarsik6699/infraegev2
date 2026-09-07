@@ -225,6 +225,7 @@ Fill every applicable row and report the rest as `SKIPPED` with a reason.
 | Focused tests | `pnpm --filter web exec vitest run <changed-test-files>` · `cd apps/api && uv run pytest <changed-test-files-or-nodeids>` · `bash scripts/tests/<changed-contract>.test.sh` · `pnpm test:content-assets` | run only tests directly covering changed behavior; `test:content-assets` owns the isolated task-asset validator contract while `validate:content` checks the real content tree; documentation-only changes are `SKIPPED`; never expand this row to the full suite |
 | LSP diagnostics | available: yes | `python-lsp` (Pyright) and `typescript-lsp` MCP servers; repository type-check commands remain complementary gate evidence |
 | API type regen (`openapi-typescript` or equivalent) | `pnpm api:check` | only when the public API surface or its generated consumer changed; fails on tracked drift |
+| Repository hygiene | analyze required reports, then `make clean-dry-run && make clean && make clean-check` | always run last; the allowlist preserves dependencies, environments, secrets, authored evidence and data; never use `git clean -fdX` as a replacement |
 
 ---
 
@@ -249,8 +250,9 @@ default local shipping.
 | Smoke | `curl -f http://localhost:18000/health/ready` (backend) — frontend smoke is the build prerender crawl | Full Gate API port from `docker-compose.override.yml` |
 | SAST / secrets / dependency audit | `pnpm audit:security` | Docker required for pinned Gitleaks 8.30.1 and Trivy 0.73.0; Semgrep 1.172.0 and pip-audit 2.10.1 run through uvx |
 | Accessibility audit | `pnpm audit:a11y` | local Playwright/axe; foundation and not-found routes, serious/critical violations fail |
-| Performance budget | `scripts/run-host-web-gate.sh bash -c 'pnpm --filter web build && pnpm audit:performance'` | restores the repository-owned `infraege-full-gate` web service on success/failure; local Chrome against `/` and `/ege/16-rekursiya`; median of 3, LCP ≤2.8s, CLS ≤0.1, TBT ≤200ms as lab proxy for INP |
+| Performance budget | `scripts/run-host-web-gate.sh bash -c 'pnpm --filter web build && pnpm audit:performance'` | restores the repository-owned `infraege-full-gate` web service on success/failure; local Chrome against `/` and `/ege/16-rekursiya`; median of 3, enforced LCP ceiling ≤4.0s, CLS ≤0.1, TBT ≤200ms as lab proxy for INP. LCP ≤2.8s remains the product target to restore when stable measurement and optimization evidence support tightening the gate |
 | Content validation | `pnpm test:content-assets && pnpm validate:content` | the isolated validator tests reject unsafe paths and invalid asset metadata before the real-tree pass; docs/SPEC.md §2.2/§3/§7.2 validation also checks Course/module/lesson membership and titles, `practiceTaskIds`, `topic_ids`, `course_lesson_ids`, `theory_links.hash`, task asset metadata and exclusive task ownership |
+| Repository hygiene | analyze all gate reports, then `make clean-dry-run && make clean && make clean-check` | always run last; Lighthouse removes its external Chrome profile on every exit, while this terminal step removes retained reports, builds and caches from the repository |
 
 Tests remain local-only; the security command is also mirrored in GitHub Actions without invoking
 pytest, Vitest or Playwright.
@@ -466,7 +468,9 @@ make ps
 
 # Remove regenerable local reports, build outputs, and caches
 # Preserves node_modules, apps/api/.venv, env files, and PostgreSQL/Docker data
+make clean-dry-run
 make clean
+make clean-check
 
 # Add a new migration / schema change
 # n/a — no database schema exists yet

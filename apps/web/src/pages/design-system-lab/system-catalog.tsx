@@ -69,10 +69,13 @@ export const SystemCatalog: React.FC = () => (
         <span className={styles.identityWordmark}>ALCHIMIA</span>
         <div>
           <Typography.Text>
-            Живой wordmark остаётся доступным текстом, а знак — декоративным
-            изображением из единственного утверждённого SVG-источника.
+            Исторический wordmark остаётся доступным текстом. Исходный знак
+            сохранён только как evidence этого lab и не является public
+            fallback.
           </Typography.Text>
-          <code className={styles.colorVar}>logo.svg · source of truth</code>
+          <code className={styles.colorVar}>
+            docs/artifacts/references/logo.svg · historical evidence
+          </code>
         </div>
       </div>
     </section>

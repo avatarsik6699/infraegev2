@@ -106,6 +106,10 @@ const componentContracts = {
   media: [
     live("CodeBlock", "Код и текстовая запись"),
     live("Image", "Загрузка, ошибка и fallback"),
+    context("CustomIcon", "Набор нормализованных authored SVG-глифов"),
+    context("DrawnLinkUnderline", "Декоративная линия внутри ссылок"),
+    context("SvgDrawing", "Низкоуровневые SVG-линии, стрелки и градиенты"),
+    context("SvgPattern", "Композиция фоновых SVG-паттернов"),
   ],
   learning: [
     live("Checkpoint", "Проверка понимания с раскрываемым ответом"),

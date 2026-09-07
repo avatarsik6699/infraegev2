@@ -1,4 +1,13 @@
 const { execFileSync } = require("node:child_process");
+const { isAbsolute } = require("node:path");
+
+const lighthouseProfileDir = process.env.INFRAEGE_LIGHTHOUSE_PROFILE_DIR;
+
+if (!lighthouseProfileDir || !isAbsolute(lighthouseProfileDir)) {
+  throw new Error(
+    "Run Lighthouse through `pnpm audit:performance` so its temporary Chrome profile is cleaned safely.",
+  );
+}
 
 const chromePath =
   process.env.CHROME_PATH ||
@@ -24,7 +33,9 @@ module.exports = {
       startServerReadyTimeout: 30000,
       url: ["http://127.0.0.2:3200/", "http://127.0.0.2:3200/ege/16-rekursiya"],
       chromePath,
-      settings: { chromeFlags: "--no-sandbox --disable-dev-shm-usage" },
+      settings: {
+        chromeFlags: `--no-sandbox --disable-dev-shm-usage --user-data-dir=${lighthouseProfileDir}`,
+      },
     },
     assert: {
       assertions: {
@@ -38,7 +49,7 @@ module.exports = {
         ],
         "largest-contentful-paint": [
           "error",
-          { maxNumericValue: 2800, aggregationMethod: "median" },
+          { maxNumericValue: 4000, aggregationMethod: "median" },
         ],
         "cumulative-layout-shift": [
           "error",

@@ -19,7 +19,7 @@ const live = (name: string, note: string): CatalogContract => ({
 
 const widgetContracts = {
   chrome: [
-    live("PublicHeader", "Компактная ALCHIMIA-айдентика публичных страниц"),
+    live("PublicHeader", "Действующая infraege-айдентика публичных страниц"),
     live("PublicFooter", "Действующая навигация в подвале"),
   ],
   learning: [
@@ -72,7 +72,7 @@ export const WidgetsCatalog: React.FC = () => (
         className={styles.widgetSpecimen}
         data-widget-specimen="PublicChrome"
       >
-        <code className={styles.typeTag}>ALCHIMIA · public chrome</code>
+        <code className={styles.typeTag}>infraege · current public chrome</code>
         <div className={styles.widgetCanvas}>
           <PublicHeader home />
           <div className={styles.widgetPlaceholder}>
