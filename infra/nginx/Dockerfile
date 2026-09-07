@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM nginx:1.30.4-alpine@sha256:97d490c12ba55b4946b01546d1c3ed324e8d41ab1c9fcb2a616aa470620e5b46
+FROM nginx:1.31.5-alpine@sha256:72ba65eb42c10344912a84ff42408db7d34f2feb642204570ab8fc5ffd29f1d3
 
 RUN apk update \
     && apk add --upgrade --no-cache \
