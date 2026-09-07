@@ -26,7 +26,8 @@ export namespace LessonContent {
     id: string;
     /** Public path segment: /ege/{routeSlug}. */
     routeSlug: string;
-    taskNumber: number;
+    /** One or more EGE task numbers covered by this learning topic. */
+    taskNumbers: readonly [number, ...number[]];
     title: string;
     summary: string;
     /** Share of correct Task answers counted as "mastered". Defaults to 0.8. */

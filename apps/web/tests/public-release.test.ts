@@ -4,6 +4,7 @@ import {
   coursePublications,
 } from "~/entities/course";
 import { lessonPublications } from "~/entities/lesson";
+import { topicCatalog } from "~/entities/topic-catalog";
 import { siteConfig } from "~/shared/config/site";
 import { pageHead } from "~/shared/lib/seo";
 
@@ -26,14 +27,14 @@ describe("public release metadata", () => {
       expect.objectContaining({
         id: "rekursiya",
         routeSlug: "16-rekursiya",
-        taskNumber: 16,
+        taskNumbers: [16],
         title: "Рекурсивные алгоритмы",
         status: "published",
       }),
       expect.objectContaining({
         id: "preobrazovanie-zapisey-chisel",
         routeSlug: "5-preobrazovanie-zapisey-chisel",
-        taskNumber: 5,
+        taskNumbers: [5],
         title: "Преобразование записей чисел",
         status: "published",
       }),
@@ -55,6 +56,30 @@ describe("public release metadata", () => {
     expect(
       new Set(lessonPublications.map((lesson) => lesson.summary)).size,
     ).toBe(lessonPublications.length);
+  });
+
+  it("covers every EGE task number exactly once in the topic catalog", () => {
+    expect(topicCatalog.entries).toHaveLength(25);
+    expect(topicCatalog.entries.flatMap((entry) => entry.taskNumbers)).toEqual(
+      Array.from({ length: 27 }, (_, index) => index + 1),
+    );
+    expect(
+      topicCatalog.entries.find((entry) => entry.id === "winning-strategy"),
+    ).toMatchObject({
+      taskNumbers: [19, 20, 21],
+      title: "Выигрышная стратегия",
+      status: "planned",
+    });
+    expect(
+      topicCatalog.entries
+        .filter((entry) => entry.status === "published")
+        .map((entry) => [entry.id, entry.routeSlug]),
+    ).toEqual([
+      ["preobrazovanie-zapisey-chisel", "5-preobrazovanie-zapisey-chisel"],
+      ["rekursiya", "16-rekursiya"],
+    ]);
+    expect(topicCatalog.formatTaskNumbers([5])).toBe("Задание 5");
+    expect(topicCatalog.formatTaskNumbers([19, 20, 21])).toBe("Задания 19–21");
   });
 
   it("publishes the Python course and lesson discovery metadata together", () => {

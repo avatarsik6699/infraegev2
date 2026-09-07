@@ -71,6 +71,9 @@ describe("PublicHeader", () => {
     expect(screen.queryByText("v1.0.0", { exact: true })).toBeNull();
     expect(screen.getByLabelText("infraege — ЕГЭ информатика")).not.toBeNull();
     expect(
+      screen.getAllByRole("link", { name: "Темы" })[0].getAttribute("href"),
+    ).toBe("/ege/");
+    expect(
       screen
         .getAllByRole("link", { name: "Мини-курсы" })[0]
         .getAttribute("href"),
@@ -87,7 +90,7 @@ describe("PublicHeader", () => {
     ).not.toBeNull();
     expect(screen.queryByText("скоро", { exact: true })).toBeNull();
     expect(container.querySelectorAll('[aria-disabled="true"]')).toHaveLength(
-      8,
+      6,
     );
     expect(screen.queryByText("Войти", { exact: true })).toBeNull();
     expect(screen.queryByText("Регистрация", { exact: true })).toBeNull();
@@ -132,5 +135,31 @@ describe("PublicHeader", () => {
       screen.queryByRole("navigation", { name: "Разделы сайта" }),
     ).toBeNull();
     expect(screen.queryByText("просто", { exact: true })).toBeNull();
+  });
+
+  it("keeps expanded navigation on a public section index", () => {
+    const { container } = render(<PublicHeader activeSection="topics" />);
+
+    expect(
+      screen
+        .getByRole("link", {
+          name: "infraege — ЕГЭ информатика, на главную",
+        })
+        .getAttribute("href"),
+    ).toBe("/");
+    expect(
+      screen.getAllByRole("navigation", { name: "Разделы сайта" }),
+    ).toHaveLength(2);
+    expect(screen.getByText("просто", { exact: true })).not.toBeNull();
+    expect(
+      screen
+        .getAllByRole("link", { name: "Темы" })[0]
+        .getAttribute("data-current"),
+    ).toBe("true");
+    expect(
+      container
+        .querySelector("[data-public-header]")
+        ?.getAttribute("data-expanded"),
+    ).toBe("true");
   });
 });

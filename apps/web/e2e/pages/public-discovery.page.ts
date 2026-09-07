@@ -21,6 +21,7 @@ export class PublicDiscoveryPage {
     expect(sitemap).toContain("https://infraege.ru/");
     expect(sitemap).toContain("https://infraege.ru/privacy");
     expect(sitemap).toContain("https://infraege.ru/ege/16-rekursiya");
+    expect(sitemap).toContain("https://infraege.ru/ege</loc>");
     expect(sitemap).toContain(
       "https://infraege.ru/ege/5-preobrazovanie-zapisey-chisel",
     );

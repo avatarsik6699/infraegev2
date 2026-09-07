@@ -6,7 +6,7 @@ import {
   courseLessonPublications,
   coursePublications,
 } from "./src/entities/course/content/course-publication.mjs";
-import { lessonPublications } from "./src/entities/lesson/content/lesson-publication.mjs";
+import { lessonPublications } from "./src/shared/config/lesson-publication.mjs";
 
 const isPublishedPrerenderPath = (
   path: string,

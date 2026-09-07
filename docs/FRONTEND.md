@@ -153,6 +153,32 @@ app → routes → pages → widgets → features → entities → shared
   Review/draft or not-yet-authored entries remain visually secondary ordinary text marked «В
   плане», never disabled controls. Module numbering describes the broad sequence, while lesson-plan
   order describes the current authoring direction.
+- The `/ege` topic catalog is the second migrated consumer of the public infraege visual world.
+  Its expanded public header retains section navigation and shares one uninterrupted warm canvas
+  with the main content. The catalog itself begins in the first viewport with one compact title;
+  its useful topic count and FIPI source form one separated line directly underneath, while the
+  heading's right column stays empty for future real controls. It does not repeat published topics
+  in a separate hero or introductory paragraph. A
+  page-wide engineering field fades before the header and footer, combining a quiet grid, exam
+  notation and restrained activity-aware orange route impulses without carrying information.
+  The semantic ordered map contains 25 substantial paper surfaces sorted by the first covered exam
+  number and covers tasks 1–27 exactly once. Gradient edge light, soft depth and bounded glints use
+  the homepage material language; only the two published topics receive their supplied conceptual
+  illustrations aligned to an upper media section that also retains the exam-number context and
+  topic copy. Only the artwork layer may overlap the outer top/right edge, and then by no more than
+  a restrained few pixels; the clipped card surface owns all four matching corner radii, the
+  footer and the contained lower-right decorative exam number. Artwork never covers adjacent-card
+  content. One
+  entry may own a non-empty ordered number set, with 19–21 represented by one
+  «Выигрышная стратегия» topic. Published entries expose ordinary internal links; planned entries
+  remain fully opaque paper surfaces and communicate unavailability through the shared «Скоро»
+  badge, absent action, neutral frame, quieter type and reduced depth, never through translucency,
+  anchors or disabled controls. Published cards carry no redundant availability label. Wide, medium and
+  narrow layouts use three, two and one columns without changing DOM or focus order. The heading's
+  secondary area may later own real filters and view controls, but renders no placeholders before
+  those behaviors exist. The page stays complete in SSR/no-JavaScript, loads only catalog
+  publication metadata rather than authored lesson TSX, and currently adds no filters, progress or
+  client state.
 - A CourseLesson keeps course context and its local section outline together in one navigation
   rail, with the article as the dominant reading stream. On narrow screens the title and outcome
   precede the ordinary in-flow «Содержание урока» list so a long outline cannot displace the

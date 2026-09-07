@@ -8,6 +8,7 @@ import { PrivacyPage } from "./pages/privacy.page";
 import { PublicDiscoveryPage } from "./pages/public-discovery.page";
 import { PythonCoursePage } from "./pages/python-course.page";
 import { TopicLessonPage } from "./pages/topic-lesson.page";
+import { TopicCatalogPage } from "./pages/topic-catalog.page";
 
 type AppFixtures = {
   accessibilityPage: AccessibilityPage;
@@ -24,6 +25,8 @@ type AppFixtures = {
   noJavaScriptPythonCoursePage: PythonCoursePage;
   topicLessonPage: TopicLessonPage;
   noJavaScriptTopicLessonPage: TopicLessonPage;
+  topicCatalogPage: TopicCatalogPage;
+  noJavaScriptTopicCatalogPage: TopicCatalogPage;
   numberRecordLessonPage: TopicLessonPage;
   noJavaScriptNumberRecordLessonPage: TopicLessonPage;
 };
@@ -103,6 +106,21 @@ export const test = base.extend<AppFixtures>({
   },
   topicLessonPage: async ({ page }, use) => {
     await use(new TopicLessonPage(page));
+  },
+  topicCatalogPage: async ({ page }, use) => {
+    await use(new TopicCatalogPage(page));
+  },
+  noJavaScriptTopicCatalogPage: async ({ baseURL, browser }, use) => {
+    const context = await browser.newContext({
+      baseURL,
+      javaScriptEnabled: false,
+      viewport: { width: 390, height: 844 },
+    });
+    try {
+      await use(new TopicCatalogPage(await context.newPage()));
+    } finally {
+      await context.close();
+    }
   },
   numberRecordLessonPage: async ({ page }, use) => {
     await use(

@@ -26,6 +26,9 @@ export class FoundationPage {
     await expect(
       this.page.getByRole("link", { name: "Начать подготовку" }),
     ).toHaveAttribute("href", "/courses/python");
+    await expect(
+      this.page.getByRole("link", { name: "Темы" }).first(),
+    ).toHaveAttribute("href", /^\/ege\/?$/);
     await expect(this.page.getByText("10 234 ученика")).toHaveCount(0);
     await expect(this.page.getByText("скоро", { exact: true })).toHaveCount(0);
     await expect(this.page.getByText("Войти", { exact: true })).toHaveCount(0);
@@ -37,7 +40,7 @@ export class FoundationPage {
     ).toBeVisible();
     await expect(
       this.page.locator("[data-public-header] [aria-disabled='true']"),
-    ).toHaveCount(8);
+    ).toHaveCount(6);
     await expect(this.page.locator("[data-home-map]")).toBeVisible();
     await expect(this.page.locator("[data-home-ambient]")).toBeVisible();
     await expect(this.page.locator("[data-course-list]")).toHaveCount(0);
@@ -50,6 +53,11 @@ export class FoundationPage {
       "href",
       "https://infraege.ru/",
     );
+  }
+
+  async openTopics(): Promise<void> {
+    await this.page.getByRole("link", { name: "Темы" }).first().click();
+    await expect(this.page).toHaveURL(/\/ege\/?$/);
   }
 
   async expectBrandMetadata(): Promise<void> {

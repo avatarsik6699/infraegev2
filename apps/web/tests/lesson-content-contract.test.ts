@@ -9,7 +9,7 @@ import {
 const definition: LessonContent.Definition = {
   id: "sample-lesson",
   routeSlug: "1-sample-lesson",
-  taskNumber: 1,
+  taskNumbers: [1],
   title: "Пробный урок",
   summary: "Минимальное определение для проверки авторского контракта.",
   learningOutcomes: ["Проверить форму урока"],

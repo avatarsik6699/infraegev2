@@ -8,7 +8,7 @@ import {
   WorkedExample,
 } from "~/shared/components/learning-content";
 import { defineLesson } from "../lib/define-lesson";
-import { preobrazovanieZapiseyChiselLessonPublication } from "./lesson-publication.mjs";
+import { preobrazovanieZapiseyChiselLessonPublication } from "~/shared/config/lesson-publication.mjs";
 
 export const preobrazovanieZapiseyChiselLesson = defineLesson({
   ...preobrazovanieZapiseyChiselLessonPublication,

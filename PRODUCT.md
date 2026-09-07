@@ -75,8 +75,19 @@ decorative overlay strokes carry two restrained moving impulses through existing
 longer, clearly visible surface-border gradients use each surface's own neutral or active accent
 border color and appear in deterministic offset cycles so the scene feels irregular without
 causing SSR drift. The static composition remains complete, while reduced motion, an offscreen hero
-or a hidden document keeps the overlays stopped. The homepage remains the first and only migrated
-consumer. The rejected raster dry-ink
+or a hidden document keeps the overlays stopped. The homepage remains the visual source and
+`/ege` is the second migrated consumer: it carries the same expanded identity on one uninterrupted
+warm engineering canvas. Its full-page grid, restrained orange route impulses and substantial
+paper topic surfaces begin with the compact catalog title and one separated metadata line for the
+topic count and FIPI source, leaving the heading's right side available for future real controls.
+The two published topics use their supplied transparent conceptual illustrations aligned to an
+upper media section with exam-number context and topic copy. Only the artwork may cross the
+card's top/right edge, and then by a restrained few pixels without covering adjacent content; the
+single clipped surface keeps matching corner radii, a separate action footer and the same contained
+lower-right decorative number used by the complete map. Planned cards remain opaque, while their
+neutral frame, quieter type, reduced depth, absent action and shared «Скоро» badge communicate that
+they are not yet available.
+The complete exam map stays linear instead of reusing the homepage illustration. The rejected raster dry-ink
 experiment is not part of the product. One complete learning-map SVG preserves its cards, stages
 and notation across desktop and mobile. Its wider asymmetric desktop constellation spreads enlarged
 cards and notation toward the scene edges; decorative filter overflow is
@@ -85,8 +96,8 @@ its parent column and available viewport height, switches to width-led fitting w
 then scales as one bounded scene on narrow screens without horizontal page overflow.
 Unavailable navigation is visually secondary and noninteractive without
 status labels; account placeholders and synthetic social proof are absent. The literal «72% курса»
-belongs only to the reference illustration and is not learner state. Internal learning layouts keep
-their existing structure until separately scoped.
+belongs only to the reference illustration and is not learner state. Internal lesson and course
+layouts keep their existing structure until separately scoped.
 The former ALCHIMIA lab is historical design evidence, not the active public brand. Binding rules
 live in `docs/FRONTEND.md`.
 

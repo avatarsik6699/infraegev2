@@ -4,6 +4,7 @@ import { PublicHeaderIdentity } from "./public-header-identity";
 import styles from "./public-header.module.css";
 
 export type PublicHeaderProps = {
+  activeSection?: "courses" | "topics";
   home?: boolean;
 };
 
@@ -13,14 +14,23 @@ const FutureItem: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   </span>
 );
 
-const HomeNavigation: React.FC<{ compact?: boolean }> = ({
-  compact = false,
-}) => (
+const PublicNavigation: React.FC<{
+  activeSection?: PublicHeaderProps["activeSection"];
+  compact?: boolean;
+}> = ({ activeSection, compact = false }) => (
   <div className={compact ? styles.mobileNavigation : styles.desktopNavigation}>
     <nav className={styles.sections} aria-label="Разделы сайта">
-      <FutureItem>Темы</FutureItem>
       <ActionLink
         className={styles.sectionLink}
+        data-current={activeSection === "topics" || undefined}
+        hierarchy="drawn"
+        to="/ege/"
+      >
+        Темы
+      </ActionLink>
+      <ActionLink
+        className={styles.sectionLink}
+        data-current={activeSection === "courses" || undefined}
         hierarchy="drawn"
         to="/courses/$courseSlug"
         params={{ courseSlug: "python" }}
@@ -34,37 +44,48 @@ const HomeNavigation: React.FC<{ compact?: boolean }> = ({
   </div>
 );
 
-export const PublicHeader: React.FC<PublicHeaderProps> = ({ home = false }) => (
-  <header
-    className={styles.root}
-    data-public-header
-    data-home={home || undefined}
-  >
-    <div className={styles.inner}>
-      {home ? (
-        <span className={styles.brand} aria-label="infraege — ЕГЭ информатика">
-          <PublicHeaderIdentity expanded />
-        </span>
-      ) : (
-        <Link
-          aria-label="infraege — ЕГЭ информатика, на главную"
-          className={styles.brand}
-          to="/"
-        >
-          <PublicHeaderIdentity />
-        </Link>
-      )}
+export const PublicHeader: React.FC<PublicHeaderProps> = ({
+  activeSection,
+  home = false,
+}) => {
+  const expanded = home || activeSection !== undefined;
 
-      {home ? (
-        <>
-          <span className={styles.divider} aria-hidden="true" />
-          <HomeNavigation />
-          <details className={styles.mobileMenu}>
-            <summary>Меню</summary>
-            <HomeNavigation compact />
-          </details>
-        </>
-      ) : null}
-    </div>
-  </header>
-);
+  return (
+    <header
+      className={styles.root}
+      data-public-header
+      data-expanded={expanded || undefined}
+      data-home={home || undefined}
+    >
+      <div className={styles.inner}>
+        {home ? (
+          <span
+            className={styles.brand}
+            aria-label="infraege — ЕГЭ информатика"
+          >
+            <PublicHeaderIdentity expanded />
+          </span>
+        ) : (
+          <Link
+            aria-label="infraege — ЕГЭ информатика, на главную"
+            className={styles.brand}
+            to="/"
+          >
+            <PublicHeaderIdentity expanded={expanded} />
+          </Link>
+        )}
+
+        {expanded ? (
+          <>
+            <span className={styles.divider} aria-hidden="true" />
+            <PublicNavigation activeSection={activeSection} />
+            <details className={styles.mobileMenu}>
+              <summary>Меню</summary>
+              <PublicNavigation activeSection={activeSection} compact />
+            </details>
+          </>
+        ) : null}
+      </div>
+    </header>
+  );
+};

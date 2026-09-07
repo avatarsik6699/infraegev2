@@ -8,7 +8,7 @@ import {
   WorkedExample,
 } from "~/shared/components/learning-content";
 import { defineLesson } from "../lib/define-lesson";
-import { rekursiyaLessonPublication } from "./lesson-publication.mjs";
+import { rekursiyaLessonPublication } from "~/shared/config/lesson-publication.mjs";
 
 export const rekursiyaLesson = defineLesson({
   ...rekursiyaLessonPublication,

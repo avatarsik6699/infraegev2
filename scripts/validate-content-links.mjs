@@ -6,7 +6,7 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { lessonPublications } from "../apps/web/src/entities/lesson/content/lesson-publication.mjs";
+import { lessonPublications } from "../apps/web/src/shared/config/lesson-publication.mjs";
 import {
   courseLessonPublications,
   coursePublications,

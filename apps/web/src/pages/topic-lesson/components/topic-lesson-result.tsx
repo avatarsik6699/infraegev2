@@ -7,7 +7,6 @@ import styles from "../topic-lesson-page.module.css";
 type PublishedLesson = {
   id: string;
   routeSlug: string;
-  taskNumber: number;
   title: string;
 };
 

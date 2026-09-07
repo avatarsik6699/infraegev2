@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { lessonPublications, type LessonTypes } from "~/entities/lesson";
+import { topicCatalog } from "~/entities/topic-catalog";
 import {
   LessonIntro,
   LessonTheory,
@@ -63,7 +64,7 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
     <div className={styles.page} data-topic-lesson-page>
       <ReadingPositionIndicator targetRef={articleRef} />
       <TopicLessonHeader
-        taskNumber={props.lesson.taskNumber}
+        taskNumbers={props.lesson.taskNumbers}
         title={props.lesson.title}
       />
 
@@ -83,7 +84,7 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
         <article className={styles.article} data-article-frame ref={articleRef}>
           <LessonIntro
             accessTier={props.lesson.accessTier}
-            eyebrow={`Задание ${String(props.lesson.taskNumber)}`}
+            eyebrow={topicCatalog.formatTaskNumbers(props.lesson.taskNumbers)}
             summary={props.lesson.summary}
             taskCount={props.tasks.length}
             technology="ЕГЭ по информатике"
