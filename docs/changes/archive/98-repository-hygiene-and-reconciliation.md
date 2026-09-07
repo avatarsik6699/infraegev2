@@ -9,7 +9,7 @@
 | Change | `98` |
 | Slug | `repository-hygiene-and-reconciliation` |
 | Title | Repository Hygiene and Reconciliation |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/98-repository-hygiene-and-reconciliation` |
 
 ---
@@ -106,7 +106,7 @@ of truth; this file only tracks what to build and what's left.
 ## Gate Checks
 
 > Critical Gate runs once per `/work` target set and by default in `/ship`; Full Gate runs only
-> with `--full` or `--release`. All gates are defined in [docs/STACK.md](../STACK.md) — this section
+> with `--full` or `--release`. All gates are defined in [docs/STACK.md](../../STACK.md) — this section
 > only records change-specific overrides.
 
 The real Lighthouse audit enforces median LCP ≤4000 ms while preserving ≤2800 ms as the future
