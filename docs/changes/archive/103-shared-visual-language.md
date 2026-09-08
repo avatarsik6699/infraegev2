@@ -7,7 +7,7 @@
 | Change | `103` |
 | Slug | `shared-visual-language` |
 | Title | Shared infraege visual language |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/103-shared-visual-language` |
 
 ## Goal
@@ -61,7 +61,7 @@ See `docs/SPEC.md` §3–§5 and the Files list above; `docs/FRONTEND.md` owns f
 
 ## Gate Checks
 
-Affected Critical Gate from [STACK](../STACK.md). Approved additional focused browser coverage:
+Affected Critical Gate from [STACK](../../STACK.md). Approved additional focused browser coverage:
 four storefronts and lab at desktop/tablet/mobile/200%, SSR/no-JS, reduced motion and activity.
 No Full Gate, commit, merge or release in this work invocation.
 
