@@ -9,7 +9,7 @@
 | Change | `100` |
 | Slug | `course-catalog` |
 | Title | Course Catalog |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/100-course-catalog` |
 
 ---
@@ -114,7 +114,7 @@ details into this file; code and `SPEC.md` remain the source of truth.
 ## Gate Checks
 
 > Critical Gate runs once per `/work` target set and by default in `/ship`; Full Gate runs only
-> with `--full` or `--release`. All gates are defined in [docs/STACK.md](../STACK.md) — this section
+> with `--full` or `--release`. All gates are defined in [docs/STACK.md](../../STACK.md) — this section
 > only records change-specific overrides.
 
 ```bash
