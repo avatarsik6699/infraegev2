@@ -7,7 +7,7 @@
 | Change | `102` |
 | Slug | `course-overview-redesign` |
 | Title | Course overview redesign |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/102-course-overview-redesign` |
 
 ## Goal
@@ -74,7 +74,7 @@ See `docs/SPEC.md` §3–§5 and the Files list above.
 
 ## Gate Checks
 
-Use the affected-area Critical Gate in [STACK.md](../STACK.md).
+Use the affected-area Critical Gate in [STACK.md](../../STACK.md).
 Additionally run the focused overview browser journey approved in the plan, including no-JS,
 keyboard, responsive sizes, progress and screenshots. No Full Gate or release.
 
