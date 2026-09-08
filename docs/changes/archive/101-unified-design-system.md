@@ -9,7 +9,7 @@
 | Change | `101` |
 | Slug | `unified-design-system` |
 | Title | Unified infraege Design System |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/101-unified-design-system` |
 
 ---
@@ -80,7 +80,7 @@ of truth; this file only tracks what to build and what's left.
 ## Gate Checks
 
 > Critical Gate runs once per `/work` target set and by default in `/ship`; Full Gate runs only
-> with `--full` or `--release`. All gates are defined in [docs/STACK.md](../STACK.md) — this section only records
+> with `--full` or `--release`. All gates are defined in [docs/STACK.md](../../STACK.md) — this section only records
 > change-specific overrides.
 
 The approved plan explicitly includes focused browser regression on lab, public references,
