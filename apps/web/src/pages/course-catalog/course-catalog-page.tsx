@@ -8,12 +8,12 @@ import { CourseCatalogAmbientField } from "./components/course-catalog-ambient-f
 import { CourseCatalogCard } from "./components/course-catalog-card";
 import { CourseCatalogStaircase } from "./components/course-catalog-staircase";
 import { CourseCatalogTrail } from "./components/course-catalog-trail";
-import { useCourseCatalogMotion } from "./model/use-course-catalog-motion";
+import { useElementActivity } from "~/shared/lib/element-activity";
 import styles from "./course-catalog-page.module.css";
 
 export const CourseCatalogPage: React.FC = () => {
   const headingRef = useRef<HTMLElement>(null);
-  const motionActive = useCourseCatalogMotion(headingRef);
+  const motionActive = useElementActivity(headingRef);
 
   return (
     <div className={styles.page} data-course-catalog-page>

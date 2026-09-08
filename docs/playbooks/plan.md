@@ -112,6 +112,15 @@ flow.
 - Later design change requests (component tweaks, palette adjustments) are ordinary Backlog items
   added via `/work`, not a re-run of this flow — this only runs once per spec/design baseline.
 
+### 3.1 Existing visual language for frontend changes
+
+For new or revised `apps/web` modules, read `docs/FRONTEND.md` §4.1 and select the closest live
+`/lab/design-system` visual-language specimen before scaffolding implementation. `/courses` and
+`/courses/python` are the accepted references; do not ask the architect to repeat their style.
+Record the specimen, shared primitives, page-owned composition and any deliberate exception in
+the Backlog task plan. Include lab coverage when introducing a reusable visual capability.
+Ask only about a materially new composition/direction or a genuine product ambiguity.
+
 ### 4. Run critical validation checks (spec-level, when step 2 ran)
 
 1. **Completeness** — every required section has actionable, implementation-relevant content.

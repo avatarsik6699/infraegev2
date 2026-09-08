@@ -1,3 +1,7 @@
+import {
+  SurfaceMaterial,
+  SurfaceGlint,
+} from "~/shared/components/surface-decoration";
 import { useRef } from "react";
 import type { CourseCatalogTypes } from "~/entities/course";
 import { ActionLink } from "~/shared/components/action-link";
@@ -6,7 +10,7 @@ import { Typography } from "~/shared/components/typography";
 import styles from "../course-catalog-page.module.css";
 import { CourseCatalogProgress } from "./course-catalog-progress";
 import { CourseCatalogStudy } from "./course-catalog-study";
-import { useCourseCatalogMotion } from "../model/use-course-catalog-motion";
+import { useElementActivity } from "~/shared/lib/element-activity";
 
 type Props = {
   entry: CourseCatalogTypes.Entry;
@@ -14,7 +18,7 @@ type Props = {
 
 export const CourseCatalogCard: React.FC<Props> = (props) => {
   const cardRef = useRef<HTMLElement>(null);
-  const motionActive = useCourseCatalogMotion(cardRef);
+  const motionActive = useElementActivity(cardRef);
   return (
     <li
       className={styles.card}
@@ -26,7 +30,7 @@ export const CourseCatalogCard: React.FC<Props> = (props) => {
         className={styles.cardSurface}
         data-motion-active={motionActive || undefined}
       >
-        <span className={styles.cardMaterial} aria-hidden="true">
+        <SurfaceMaterial className={styles.cardMaterial}>
           <span className={styles.cardTexture}>
             <svg
               className={styles.cardEngraving}
@@ -38,8 +42,14 @@ export const CourseCatalogCard: React.FC<Props> = (props) => {
               <circle cx="0" cy="240" r="185" />
             </svg>
           </span>
-        </span>
-        <span className={styles.cardSheen} aria-hidden="true" />
+        </SurfaceMaterial>
+        {props.entry.status === "published" ? (
+          <SurfaceGlint
+            kind="frame"
+            active={motionActive}
+            className={styles.cardSheen}
+          />
+        ) : null}
         <div className={styles.cardCopy}>
           <div className={styles.cardMeta}>
             {props.entry.status === "published" ? (

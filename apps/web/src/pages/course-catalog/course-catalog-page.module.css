@@ -181,30 +181,10 @@
   border-radius: var(--radius-surface);
 }
 .cardMaterial {
-  box-sizing: border-box;
-  position: absolute;
-  z-index: -1;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-  border: 1px solid transparent;
-  border-radius: inherit;
-  background:
-    linear-gradient(
-        155deg,
-        color-mix(in srgb, var(--color-surface) 60%, var(--color-brand-canvas)),
-        color-mix(in srgb, var(--color-brand-canvas) 94%, var(--color-surface))
-      )
-      padding-box,
-    linear-gradient(
-        125deg,
-        color-mix(in srgb, var(--color-brand-ink) 22%, transparent),
-        color-mix(in srgb, var(--color-brand-ink) 8%, transparent) 52%,
-        color-mix(in srgb, var(--color-brand-ink) 18%, transparent)
-      )
-      border-box;
-  box-shadow: var(--shadow-catalog);
+  --surface-background: var(--surface-paper-background);
+  --surface-shadow: var(--surface-paper-shadow);
 }
+
 .cardTexture {
   position: absolute;
   inset: 0;
@@ -227,9 +207,7 @@
 .card[data-course-status="planned"] .studyImage {
   filter: url("#course-artwork-paper") saturate(0.55);
 }
-.card[data-course-status="planned"] .cardSheen {
-  display: none;
-}
+
 .cardTexture::before {
   content: "";
   position: absolute;
@@ -289,18 +267,7 @@
   animation: card-sheen 3.2s 0.15s var(--motion-easing) both;
   animation-play-state: paused;
 }
-.card:nth-child(2) .cardSheen {
-  animation-delay: 0.4s;
-}
-.card:nth-child(3) .cardSheen {
-  animation-delay: 0.65s;
-}
-.card:nth-child(4) .cardSheen {
-  animation-delay: 0.25s;
-}
-.cardSurface[data-motion-active="true"] .cardSheen {
-  animation-play-state: running;
-}
+
 .cardCopy {
   position: relative;
   z-index: 2;
@@ -427,20 +394,6 @@
   }
   100% {
     stroke-dashoffset: -100;
-    opacity: 0;
-  }
-}
-@keyframes card-sheen {
-  0% {
-    background-position: 100% 0;
-    opacity: 0;
-  }
-  12% {
-    opacity: 1;
-  }
-  40%,
-  100% {
-    background-position: 0 0;
     opacity: 0;
   }
 }

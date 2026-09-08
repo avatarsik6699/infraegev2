@@ -236,6 +236,7 @@ export const systemSections = [
   { id: "system-identity", label: "Айдентика" },
   { id: "system-typography", label: "Типографика" },
   { id: "system-color", label: "Цвет" },
+  { id: "system-visual-language", label: "Визуальный язык" },
   { id: "system-surfaces", label: "Поверхности и границы" },
   { id: "system-layout", label: "Layout и адаптивность" },
   { id: "system-accessibility", label: "Доступность" },

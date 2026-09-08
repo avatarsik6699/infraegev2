@@ -1,6 +1,7 @@
-import { useId, useRef } from "react";
+import { SvgPattern } from "~/shared/components/svg-pattern";
+import { useRef } from "react";
 import { SvgDrawing } from "~/shared/components/svg-drawing";
-import { useCourseOverviewMotion } from "../model/use-course-overview-motion";
+import { useElementActivity } from "~/shared/lib/element-activity";
 import styles from "../course-overview-page.module.css";
 
 const overviewField = {
@@ -8,9 +9,8 @@ const overviewField = {
 };
 
 export const CourseOverviewField: React.FC = () => {
-  const patternId = useId();
   const fieldRef = useRef<HTMLDivElement>(null);
-  const active = useCourseOverviewMotion(fieldRef);
+  const active = useElementActivity(fieldRef);
   return (
     <div
       ref={fieldRef}
@@ -20,18 +20,12 @@ export const CourseOverviewField: React.FC = () => {
       data-motion-active={active || undefined}
     >
       <svg viewBox="0 0 580 400" fill="none" className={styles.fieldScene}>
-        <defs>
-          <pattern
-            id={patternId}
-            width="56"
-            height="56"
-            patternUnits="userSpaceOnUse"
-            patternTransform="matrix(1 -.3 1 .3 -300 60)"
-          >
-            <path d="M56 0H0V56" className={styles.gridLine} />
-          </pattern>
-        </defs>
-        <rect width="580" height="400" fill={`url(#${patternId})`} />
+        <SvgPattern.Grid
+          bounds={{ x: 0, y: 0, width: 580, height: 400 }}
+          cell={{ width: 56, height: 56 }}
+          transform="matrix(1 -.3 1 .3 -300 60)"
+          lineClassName={styles.gridLine}
+        />
         <g className={styles.fieldNotation}>
           <text x="30" y="25">
             input → solve → output

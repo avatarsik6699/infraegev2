@@ -12,6 +12,121 @@ export class DesignSystemLabPage {
     await expect(this.page).toHaveURL(/\/lab\/design-system$/);
   }
 
+  async expectVisualLanguage(interactive = true): Promise<void> {
+    await this.dismissConsentIfVisible();
+    const section = this.page.locator("#system-visual-language");
+    await section.scrollIntoViewIfNeeded();
+    await expect(
+      section.getByRole("heading", {
+        name: "Визуальный язык: готовые композиции",
+      }),
+    ).toBeVisible();
+    await expect(section.locator("[data-visual-example]")).toHaveCount(4);
+    const available = section.locator('[data-visual-example="available"]');
+    const planned = section.locator('[data-visual-example="planned"]');
+    await expect(
+      available.getByRole("link", { name: "Открыть курс" }),
+    ).toHaveAttribute("href", "/courses/python");
+    await expect(planned.getByRole("link")).toHaveCount(0);
+    await expect(planned.locator("[data-surface-glint]")).toHaveCount(0);
+    const gridIds = await section
+      .locator("pattern")
+      .evaluateAll((elements) => elements.map((element) => element.id));
+    expect(new Set(gridIds).size).toBe(gridIds.length);
+    await expect(
+      section.getByText("count = 3", { exact: false }),
+    ).toBeVisible();
+    const form = section.locator('[data-visual-example="form"]');
+    if (interactive) {
+      const field = form.getByRole("textbox");
+      await expect
+        .poll(async () => {
+          await field.fill("5");
+          return form
+            .getByRole("button", { name: "Проверить пример" })
+            .isEnabled();
+        })
+        .toBe(true);
+      await field.press("Tab");
+      await expect(
+        form.getByRole("button", { name: "Проверить пример" }),
+      ).toBeFocused();
+      await form
+        .getByRole("button", { name: "Проверить пример" })
+        .press("Enter");
+      await expect(
+        form.getByText("Прибавьте 1 к исходному значению 3."),
+      ).toBeVisible();
+      await expect(field).toHaveValue("5");
+      await field.fill("4");
+      await expect(form.locator("[data-surface-glint]")).toHaveCSS(
+        "visibility",
+        "hidden",
+      );
+      await field.press("Enter");
+      await expect(form.getByRole("status")).toHaveText(
+        "Верно: программа выведет 4.",
+      );
+    } else {
+      await expect(
+        form.getByRole("button", { name: "Проверить пример" }),
+      ).toBeDisabled();
+      await expect(
+        form.getByText(/Проверка примера доступна с JavaScript/),
+      ).toBeVisible();
+    }
+    expect(
+      await section.evaluate((element) => {
+        const bounds = element.getBoundingClientRect();
+        return (
+          bounds.left >= 0 &&
+          bounds.right <= innerWidth &&
+          [...element.querySelectorAll("img")].every(
+            (image) => image.getBoundingClientRect().right <= innerWidth,
+          )
+        );
+      }),
+    ).toBe(true);
+  }
+
+  async expectVisualLanguageReducedMotion(): Promise<void> {
+    const glints = this.page.locator(
+      "#system-visual-language [data-surface-glint]",
+    );
+    await expect(glints).toHaveCount(3);
+    for (const glint of await glints.all()) {
+      await expect(glint).toHaveCSS("animation-name", "none");
+    }
+  }
+
+  async expectVisualLanguageMotion(): Promise<void> {
+    const card = this.page.locator('[data-visual-example="available"]');
+    const glint = card.locator("[data-surface-glint]");
+    await card.scrollIntoViewIfNeeded();
+    await expect(glint).toHaveCSS("animation-play-state", "running");
+    await expect(glint).toHaveCSS("animation-iteration-count", "1");
+    await glint.evaluate((element) => {
+      for (const animation of element.getAnimations()) animation.finish();
+    });
+    await this.page
+      .getByRole("heading", { name: "Дизайн-система", exact: true })
+      .scrollIntoViewIfNeeded();
+    await expect(glint).toHaveCSS("animation-play-state", "paused");
+    await card.scrollIntoViewIfNeeded();
+    await expect(glint).toHaveCSS("animation-play-state", "running");
+    expect(
+      await glint.evaluate((element) =>
+        element
+          .getAnimations()
+          .every(
+            (animation) =>
+              animation.currentTime ===
+              animation.effect?.getComputedTiming().endTime,
+          ),
+      ),
+    ).toBe(true);
+  }
+
   async expectCatalogStructure(options?: {
     widgetPersistence?: boolean;
   }): Promise<void> {

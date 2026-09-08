@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { SvgDrawing } from "~/shared/components/svg-drawing";
-import { useCourseCatalogMotion } from "../model/use-course-catalog-motion";
+import { useElementActivity } from "~/shared/lib/element-activity";
 import styles from "../course-catalog-page.module.css";
 
 const catalogTrail = {
@@ -11,7 +11,7 @@ const catalogTrail = {
 
 export const CourseCatalogTrail: React.FC = () => {
   const trailRef = useRef<HTMLDivElement>(null);
-  const active = useCourseCatalogMotion(trailRef);
+  const active = useElementActivity(trailRef);
   return (
     <div
       ref={trailRef}

@@ -93,8 +93,8 @@ app → routes → pages → widgets → features → entities → shared
   accent. Reference orange belongs to the three-stone mark and selected illustration details; an
   accessible darker orange semantic token owns small accent text, focus rings and functional underlines. Orange
   does not recolor ordinary prose, internal lesson controls, semantic feedback or syntax roles.
-  All internal pages and the lab use the same warm-paper theme. Learning screens keep a quiet
-  reading composition without catalog illustration, depth or decorative motion around prose.
+  All internal pages and the lab use the same warm-paper theme. Learning and working surfaces may
+  use illustrated fields, depth, gradients and internal light effects under §4.1.
 - A verified third-party brand mark may retain its official color only when it identifies the
   destination of a real external link. Keep it small, pair it with a text label and do not reuse
   the brand color for surrounding controls or decoration.
@@ -103,10 +103,9 @@ app → routes → pages → widgets → features → entities → shared
   create additional visible gray steps. Syntax colors remain the exception above. Informational
   blue is reserved for the single formative `Checkpoint` block, not ordinary prose or decorative
   surfaces.
-- Learning surfaces and controls stay flat. Public catalog materials may use the shared
-  `--shadow-catalog` role with their authored geometry; this is not a control default. Use spacing, one quiet fill or one border to establish a
-  boundary; do not stack fill + border + shadow or nest card-like surfaces. Add an elevation token
-  only together with a real transient-overlay consumer, never as a reserved decorative scale.
+- Surface depth follows the shared recipes in §4.1, including learning blocks. Preserve clear
+  grouping and avoid nesting decorative cards. Functional controls retain their established
+  geometry, contrast and state cues; surrounding decoration never becomes feedback.
 - Dense is the system default, not a one-off component variant: ordinary interactive controls use
   a shared `40px` height, related buttons and fields align, and compactness comes from internal
   spacing and composition rather than smaller hit targets or miniature text. Larger controls need
@@ -114,9 +113,8 @@ app → routes → pages → widgets → features → entities → shared
 - Separators are a last grouping signal. Prefer whitespace, alignment and a single ambient fill;
   keep a line only when removing it would make distinct interactive regions, data cells or focus
   boundaries ambiguous.
-- Page texture is absent from the minimal baseline. A future profile may add it only in the theme
-  layer and only when it improves orientation without reducing text contrast or adding local
-  component backgrounds.
+- Engineering grids, quiet pattern fields and paper material are part of the active visual
+  language. Use the shared mechanisms and semantic tokens in §4.1; pages own placement and fades.
 - Typography defaults use zero-specificity `:where(...)` selectors so an owning component
   can set a semantic role without depending on route stylesheet insertion order. Do not restore
   high-specificity defaults or solve that cascade with lab-only descendant overrides.
@@ -265,8 +263,8 @@ app → routes → pages → widgets → features → entities → shared
   used to guard against no longer applies — there is nothing left to merge.
 - `Mistake`, `Checkpoint` and `WorkedExample` share one visual contract: a single quiet
   semantic-tinted fill (no border, no divider line) with `--radius-surface` rounding, service-label
-  type, icon size and text-column inset — this is the fill half of "one quiet fill or one border,"
-  not an exception to it. `Mistake` and `WorkedExample` share one compact outer padding value
+  type, icon size and text-column inset. This is the currently installed lesson baseline; expressive
+  variants may be adopted through §4.1. `Mistake` and `WorkedExample` share one compact outer padding value
   (routed through the same `--learning-panel-padding`-style override token); `Checkpoint`
   intentionally uses more vertical padding (Change 88 F12 architect finding) because its content
   otherwise presses against its tinted background's top/bottom edge. `Mistake` presents its authored
@@ -348,12 +346,12 @@ app → routes → pages → widgets → features → entities → shared
   owns semantic selection, curve geometry, restrained contrast and scene layering. The route does not
   duplicate registry catalogs or synthetic social proof. The reference's literal «72% курса» is an
   aria-hidden illustration detail, never learner state. The map alone may pair a thin border with a
-  restrained offset shadow to reproduce rotated paper slips; this narrow decorative exception does
-  not change the flat-surface contract for product UI. One low-contrast page-local ambient SVG
+  restrained offset shadow to reproduce rotated paper slips; these materials also inform the shared
+  surface recipes in §4.1. One low-contrast page-local ambient SVG
   field may extend an orthogonal engineering grid, calibration marks and notation behind the
   complete hero to connect its statement and map visually. The grid spans the full main-page canvas
   while a vertical mask progressively removes it near the header and footer; it never draws over
-  either chrome surface or becomes a reusable component background. Local soft relief beneath the
+  either chrome surface. Reusable grid mechanics do not prescribe page placement. Local soft relief beneath the
   authored map patterns prevents their structure from accumulating contrast with the grid. The complete ambient field is
   neutral and static: directional orange motion belongs only to the learning map. After hydration,
   separate decorative layers may carry two clearly visible gradient impulses continuously over the already-complete static
@@ -373,8 +371,9 @@ app → routes → pages → widgets → features → entities → shared
   fields own bounded directional fade masks, while their preset API composes deterministic strokes,
   labels and nodes through `SvgDrawing`; both APIs inherit consumer color and generate SSR-stable
   resource ids. They do not procedurally jitter paths, define subject-specific formulas/icons, own a
-  canvas, or decide responsive placement. Consumers author deterministic geometry locally, and only the
-  public home is migrated in Change 95. The page-local visual boundary clips only decorative SVG
+  canvas, or decide responsive placement. Consumers author deterministic geometry locally, and the
+  public home was the first consumer in Change 95. Shared grid and activity consumers now also
+  include the two catalogs and course overview. The page-local visual boundary clips only decorative SVG
   and filter bleed; it remains parent-bounded so neither breakpoint transitions nor narrow viewports
   can enlarge the root document canvas. The desktop scene uses a wider asymmetric coordinate field:
   enlarged cards and notation reach toward its edges at varied rotations and vertical positions,
@@ -417,6 +416,82 @@ app → routes → pages → widgets → features → entities → shared
   Lesson navigation and reading retain their aligned columns without a full-height rail border.
   The public footer uses whitespace rather than a top rule and contains only useful navigation,
   without repeating the infraege name. The live lab uses the same public chrome.
+
+## 4.1 Reusable infraege visual language
+
+**Default for new work:** start from `/courses` and `/courses/python` and the live
+`/lab/design-system` → Система → Визуальный язык specimens. Apply their expressive language to
+catalogs, overviews, learning blocks and working screens without asking the architect to restate
+it. Existing published lessons keep their installed composition until their own scoped adoption.
+The lab's learning/form compositions are adoption examples, not a claim that lessons were migrated.
+
+### Composition recipes
+
+| Role | Default composition | Shared owners |
+|---|---|---|
+| Catalog | Substantial media separate from copy/action; neutral paper, thin gradient edge, contact depth; one stronger available item | `SurfaceMaterial`, `paperSurface`, `SurfaceGlint(frame/sweep)`, `Image`, `ActionLink` |
+| Overview | Open asymmetric summary/program, field in margins and gutter, restrained illustration depth and recurring light | `SvgPattern.Grid/Preset`, `SvgDrawing`, `artworkDrift`, `SurfaceGlint(soft)` |
+| Learning block | Clear reading sequence inside a paper/gradient surface; internal pattern and soft light below text; no extra nested cards | Existing learning components plus `SurfaceMaterial`, `SurfaceGlint(soft)` |
+| Working form | Same material language around usable controls; visible labels, focus and feedback; hide internal glint while input has focus | `Field`, `Button`, shared material/light layers |
+
+- Keep the current fonts and two neutral text levels. Establish hierarchy through media/copy
+  separation, alignment, whitespace and scale before adding decoration. Orange remains an
+  illustration/navigation accent, never an invented answer, progress or availability state.
+- Compose layers explicitly: ambient field → clipped paper material/pattern → artwork → content
+  and actions. Only the artwork may cross the top/right boundary by a few pixels. Clip material
+  and light to the surface contour; preserve the focus ring and the independent action area.
+- Use `--surface-paper-*` for the mini-course material, `--surface-quiet-*` for subordinate
+  surfaces, and `--surface-accent-*` for an emphasized available destination. `paperSurface` is a
+  CSS Modules `composes` recipe for an owning semantic element; `SurfaceMaterial` supplies its
+  absolute, aria-hidden layer when artwork needs separate clipping. Its parent owns relative
+  positioning, isolation, radius and layout. Neither API knows courses or publication state.
+- Planned entries stay opaque and noninteractive, with the existing «Скоро» badge, quieter
+  artwork/material and no hover lift, frame glint, link or focus stop. A public entry uses an
+  ordinary typed `ActionLink`, never a click handler on the whole decorative surface.
+- `SvgPattern.Grid` owns unique SSR-stable pattern IDs, cell dimensions, transform, bounds,
+  optional node and directional fade. Bounds accept numeric dimensions or SVG percentages.
+  `Preset` owns authored strokes/labels/nodes; `SvgDrawing` owns route strokes and gradients.
+  Subject matter, path data, viewBox, raster assets, responsive positioning and masks remain local.
+  The homepage map stays an authored SVG scene; it is not replaced by a generic page/card engine.
+- No effect carries information. Decorative wrappers use `aria-hidden` and `pointer-events: none`;
+  SVG canvases are nonfocusable. Image dimensions reserve geometry in SSR, with readable content
+  and usable navigation even if an image fails.
+
+### Motion and reading
+
+- Call `useElementActivity(ref)` on a stable mounted element. It starts false during SSR and first
+  hydration, observes visibility through the platform adapter and unsubscribes on unmount. Observe
+  individual cards/illustrations when they can leave the viewport independently.
+- `SurfaceGlint` takes `kind="frame" | "sweep" | "soft"`, `active` and
+  `playback="once" | "loop"` (default `once`). Frame defaults to the catalog's 3.2-second pass;
+  sweep to the topic card's 9-second cycle; soft to the overview's 14-second cycle. Override only
+  rhythm/placement via documented `--glint-duration`, `--glint-delay`, `--glint-easing` and
+  `--glint-light` variables. Study light/drift uses `--surface-study-duration` (18 seconds).
+- Keep animation definitions mounted and change play state to pause/resume; do not re-key elements
+  or restart completed once-only effects on scrolling. `artworkDrift` is the shared bounded
+  four-pixel drift recipe; its parent supplies `data-motion-active` and optional `--drift-duration`.
+- Shared effects animate only under `prefers-reduced-motion: no-preference`. Static materials,
+  artwork and complete route strokes remain without JS/reduced motion. Preserve the storefronts'
+  accepted cadences: catalog effects finish within five seconds; overview light has long quiet
+  intervals; the homepage's coordinated routes retain their own choreography.
+- Expressive learning surfaces may have internal gradient, depth and glints. Keep glints below
+  content, preserve text contrast (4.5:1 body, 3:1 large), readable syntax and text selection, and
+  hide internal form light on `:focus-within`. Error/success labels and icons remain independent
+  of material; decoration neither intercepts input nor implies mastery. Do not automatically wrap
+  every paragraph in a separate surface.
+- At narrow widths, preserve semantic DOM order and bounded images. Simplify large peripheral
+  illustrations and confine fields to available space; never hide learning content. Verify mobile,
+  the structural breakpoint, desktop and 200% zoom for each new composition.
+
+### Adoption and evidence
+
+Before implementation, record the specimen, primitives, local composition and intentional
+exceptions in the active change's task plan. Build from existing examples instead of copying their
+private CSS into a new page. Add genuinely reusable new behavior to the owning primitive and lab
+in that same change. Compare the result to the chosen specimen in the browser, including keyboard,
+input/error states, image failure, no-JS, reduced motion and offscreen activity where applicable.
+Document reference coordinates are examples, not mandatory identical layouts. Automated checks
+prove mechanics; the architect owns visual approval. Do not create a competing DESIGN.md contract.
 
 ## 5. Responsive and accessible behavior
 

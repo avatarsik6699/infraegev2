@@ -1,3 +1,6 @@
+import { useRef } from "react";
+import { useElementActivity } from "~/shared/lib/element-activity";
+import { SurfaceGlint } from "~/shared/components/surface-decoration";
 import { topicCatalog, type TopicCatalogTypes } from "~/entities/topic-catalog";
 import { ActionLink } from "~/shared/components/action-link";
 import { Badge } from "~/shared/components/badge";
@@ -23,6 +26,8 @@ const topicIllustrationById: Readonly<
 };
 
 export const TopicCatalogCard: React.FC<Props> = ({ entry }) => {
+  const cardRef = useRef<HTMLElement>(null);
+  const active = useElementActivity(cardRef);
   const illustration = topicIllustrationById[entry.id];
 
   return (
@@ -32,11 +37,21 @@ export const TopicCatalogCard: React.FC<Props> = ({ entry }) => {
       data-topic-status={entry.status}
     >
       <article
+        ref={cardRef}
         className={styles.mapEntry}
         data-has-illustration={illustration ? "true" : undefined}
         data-topic-frame
       >
-        <span className={styles.cardSheen} aria-hidden="true" />
+        {entry.status === "published" ? (
+          <SurfaceGlint
+            kind="sweep"
+            active={active}
+            playback="loop"
+            className={styles.cardSheen}
+          />
+        ) : (
+          <span className={styles.quietEdge} aria-hidden="true" />
+        )}
         <span className={styles.cardIndex} data-topic-index aria-hidden="true">
           {entry.taskNumbers.length === 1
             ? String(entry.taskNumbers[0]).padStart(2, "0")

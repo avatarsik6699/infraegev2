@@ -1,10 +1,11 @@
 import { useEffect, useState, type RefObject } from "react";
-import { elementActivity } from "~/shared/lib/element-activity";
+import { elementActivity } from "./browser-adapter";
 
-export const useCourseOverviewMotion = (ref: RefObject<HTMLElement | null>) => {
+/** Attach to a stable mounted element; CSS owns reduced motion and playback cadence. */
+export const useElementActivity = (ref: RefObject<HTMLElement | null>) => {
   const [active, setActive] = useState(false);
   useEffect(
-    function observeOverviewMotionFx() {
+    function observeElementActivityFx() {
       const element = ref.current;
       if (!element) return undefined;
       return elementActivity.observe(element, setActive);

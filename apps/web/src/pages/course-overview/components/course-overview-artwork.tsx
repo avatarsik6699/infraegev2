@@ -1,5 +1,6 @@
+import { SurfaceGlint } from "~/shared/components/surface-decoration";
 import { useRef } from "react";
-import { useCourseOverviewMotion } from "../model/use-course-overview-motion";
+import { useElementActivity } from "~/shared/lib/element-activity";
 import { CourseOverviewField } from "./course-overview-field";
 import { Image } from "~/shared/components/image";
 import styles from "../course-overview-page.module.css";
@@ -8,7 +9,7 @@ type Props = { courseId: string };
 
 export const CourseOverviewArtwork: React.FC<Props> = (props) => {
   const artworkRef = useRef<HTMLDivElement>(null);
-  const active = useCourseOverviewMotion(artworkRef);
+  const active = useElementActivity(artworkRef);
   if (props.courseId !== "python") return null;
 
   return (
@@ -20,10 +21,12 @@ export const CourseOverviewArtwork: React.FC<Props> = (props) => {
       data-motion-active={active || undefined}
     >
       <CourseOverviewField />
-      <span
+      <SurfaceGlint
+        kind="soft"
+        active={active}
+        playback="loop"
         className={styles.artworkSheen}
         data-course-sheen
-        aria-hidden="true"
       />
       <Image
         src="/images/course-catalog/python.webp"

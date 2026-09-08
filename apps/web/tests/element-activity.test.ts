@@ -22,6 +22,8 @@ const setVisibility = (visibilityState: DocumentVisibilityState) => {
 
 describe("elementActivity", () => {
   afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
     FakeIntersectionObserver.callback = undefined;
     setVisibility("visible");
   });
@@ -38,10 +40,23 @@ describe("elementActivity", () => {
     FakeIntersectionObserver.callback?.([entry], {} as IntersectionObserver);
 
     expect(listener).toHaveBeenLastCalledWith(true);
+    const calls = listener.mock.calls.length;
+    FakeIntersectionObserver.callback?.([entry], {} as IntersectionObserver);
+    expect(listener).toHaveBeenCalledTimes(calls);
+    FakeIntersectionObserver.callback?.(
+      [{ isIntersecting: false } as IntersectionObserverEntry],
+      {} as IntersectionObserver,
+    );
+    expect(listener).toHaveBeenLastCalledWith(false);
+    FakeIntersectionObserver.callback?.([entry], {} as IntersectionObserver);
 
     setVisibility("hidden");
     document.dispatchEvent(new Event("visibilitychange"));
     expect(listener).toHaveBeenLastCalledWith(false);
+
+    setVisibility("visible");
+    document.dispatchEvent(new Event("visibilitychange"));
+    expect(listener).toHaveBeenLastCalledWith(true);
 
     cleanup();
     expect(removeEventListener).toHaveBeenCalledWith(

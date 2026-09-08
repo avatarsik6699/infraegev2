@@ -97,7 +97,11 @@ then scales as one bounded scene on narrow screens without horizontal page overf
 Unavailable navigation is visually secondary and noninteractive without
 status labels; account placeholders and synthetic social proof are absent. The literal «72% курса»
 belongs only to the reference illustration and is not learner state. Internal lesson and course
-layouts preserve their learning structure while using the same warm-paper system in a quiet reading composition.
+layouts preserve their learning structure. `/courses` and `/courses/python` are the reusable
+visual references for future modules: engineering fields, paper depth, gradients, artwork and
+light also belong inside learning and working surfaces when readability and input remain clear.
+Change 103 demonstrates learning/form compositions in the lab; existing lessons adopt them only
+through later scoped work. Shared primitives supply mechanics while each page owns composition.
 The design-system lab demonstrates the active production components without its own theme.
 ALCHIMIA remains archived design evidence. Binding rules
 live in `docs/FRONTEND.md`.

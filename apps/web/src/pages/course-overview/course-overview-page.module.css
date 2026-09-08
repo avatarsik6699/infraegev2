@@ -87,6 +87,7 @@
 }
 
 .artworkImage {
+  composes: artworkDrift from "../../shared/styles/patterns.module.css";
   width: 100%;
   mix-blend-mode: multiply;
   mask-image: radial-gradient(ellipse at center, black 48%, transparent 72%);
@@ -338,19 +339,8 @@
 }
 
 .artworkSheen {
-  position: absolute;
   z-index: 1;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(
-    110deg,
-    transparent 35%,
-    color-mix(in srgb, var(--color-surface) 65%, transparent) 49%,
-    transparent 63%
-  );
-  background-size: 300% 100%;
-  mask-image: radial-gradient(ellipse, black 30%, transparent 70%);
-  opacity: 0;
+  --glint-delay: 0.3s;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -359,18 +349,6 @@
     animation-play-state: paused;
   }
 
-  .artworkSheen {
-    animation: artwork-glint 14s 0.3s var(--motion-easing) infinite;
-    animation-play-state: paused;
-  }
-
-  .artworkImage {
-    animation: artwork-drift 14s ease-in-out infinite;
-    animation-play-state: paused;
-  }
-
-  [data-motion-active="true"] > .artworkImage,
-  [data-motion-active="true"] > .artworkSheen,
   .field[data-motion-active="true"] .fieldPulse {
     animation-play-state: running;
   }
@@ -389,32 +367,6 @@
   100% {
     stroke-dashoffset: -100;
     opacity: 0;
-  }
-}
-
-@keyframes artwork-glint {
-  0% {
-    background-position: 150% 0;
-    opacity: 0;
-  }
-  8%,
-  20% {
-    opacity: 0.8;
-  }
-  32%,
-  100% {
-    background-position: -100% 0;
-    opacity: 0;
-  }
-}
-
-@keyframes artwork-drift {
-  0%,
-  100% {
-    transform: translateY(0) rotate(-0.25deg);
-  }
-  50% {
-    transform: translateY(-4px) rotate(0.25deg);
   }
 }
 
@@ -568,6 +520,8 @@
 }
 
 .studyImage {
+  composes: artworkDrift from "../../shared/styles/patterns.module.css";
+  --drift-duration: var(--surface-study-duration);
   width: 100%;
 }
 
@@ -578,19 +532,11 @@
 }
 
 .studySheen {
-  position: absolute;
   z-index: 1;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(
-    110deg,
-    transparent 35%,
-    color-mix(in srgb, var(--color-surface) 55%, transparent) 49%,
-    transparent 63%
-  );
-  background-size: 300% 100%;
+  --glint-duration: var(--surface-study-duration);
+  --glint-easing: ease-in-out;
+  --glint-light: var(--surface-glint-study-light);
   mask-image: radial-gradient(ellipse, black 20%, transparent 65%);
-  opacity: 0;
 }
 
 .module:not(:last-child)::before {
@@ -615,11 +561,13 @@
   position: relative;
   overflow: hidden;
 }
-.moduleNumber::after {
-  content: "";
+.numberSheen {
   position: absolute;
   inset: 0;
   border-radius: inherit;
+  --glint-duration: 12s;
+  --glint-easing: ease-in-out;
+  mask-image: none;
   background: linear-gradient(
     120deg,
     transparent 30%,
@@ -632,26 +580,12 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .studySheen {
-    animation: artwork-glint 18s ease-in-out infinite;
-    animation-play-state: paused;
-  }
-  .studyImage {
-    animation: artwork-drift 18s ease-in-out infinite;
-    animation-play-state: paused;
-  }
   .module:not(:last-child)::before {
     animation: spine-light 18s ease-in-out infinite;
     animation-play-state: paused;
   }
-  .moduleNumber::after {
-    animation: artwork-glint 12s ease-in-out infinite;
-    animation-play-state: paused;
-  }
-  .atmosphereStudy[data-motion-active="true"] .studyImage,
-  .atmosphereStudy[data-motion-active="true"] .studySheen,
-  .module[data-motion-active="true"]::before,
-  .module[data-motion-active="true"] .moduleNumber::after {
+
+  .module[data-motion-active="true"]::before {
     animation-play-state: running;
   }
 }

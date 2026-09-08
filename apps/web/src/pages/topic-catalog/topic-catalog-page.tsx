@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { ExternalLink } from "~/shared/components/external-link";
 import { PageContainer } from "~/shared/components/page-container";
 import { Typography } from "~/shared/components/typography";
-import { elementActivity } from "~/shared/lib/element-activity";
+import { useElementActivity } from "~/shared/lib/element-activity";
 import { PublicFooter } from "~/widgets/public-footer";
 import { PublicHeader } from "~/widgets/public-header";
 import { TopicCatalogAmbientField } from "./components/topic-catalog-ambient-field";
@@ -15,14 +15,7 @@ const fipiDocumentsUrl =
 
 export const TopicCatalogPage: React.FC = () => {
   const rootRef = useRef<HTMLElement>(null);
-  const [motionActive, setMotionActive] = useState(false);
-
-  useEffect(function observeMotionActivityFx() {
-    const root = rootRef.current;
-    if (!root) return undefined;
-
-    return elementActivity.observe(root, setMotionActive);
-  }, []);
+  const motionActive = useElementActivity(rootRef);
 
   return (
     <div className={styles.page} data-topic-catalog-page>

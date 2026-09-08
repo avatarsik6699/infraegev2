@@ -1,5 +1,6 @@
+import { SurfaceGlint } from "~/shared/components/surface-decoration";
 import { useRef } from "react";
-import { useCourseOverviewMotion } from "../model/use-course-overview-motion";
+import { useElementActivity } from "~/shared/lib/element-activity";
 import { ActionLink } from "~/shared/components/action-link";
 import type { CourseTypes } from "~/entities/course";
 import { Typography } from "~/shared/components/typography";
@@ -14,7 +15,7 @@ type Props = {
 
 export const CourseOverviewModule: React.FC<Props> = (props) => {
   const moduleRef = useRef<HTMLLIElement>(null);
-  const active = useCourseOverviewMotion(moduleRef);
+  const active = useElementActivity(moduleRef);
   const lessonsById = new Map(
     props.lessons.map((lesson) => [lesson.id, lesson] as const),
   );
@@ -32,6 +33,12 @@ export const CourseOverviewModule: React.FC<Props> = (props) => {
     >
       <span className={styles.moduleNumber} aria-hidden="true">
         {String(props.index + 1).padStart(2, "0")}
+        <SurfaceGlint
+          kind="soft"
+          active={active}
+          playback="loop"
+          className={styles.numberSheen}
+        />
       </span>
       <div className={styles.moduleCopy}>
         <Typography.Title order={3}>{props.module.title}</Typography.Title>

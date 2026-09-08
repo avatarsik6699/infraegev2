@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { ActionLink } from "~/shared/components/action-link";
 import { Typography } from "~/shared/components/typography";
-import { elementActivity } from "~/shared/lib/element-activity";
+import { useElementActivity } from "~/shared/lib/element-activity";
 import { PublicFooter } from "~/widgets/public-footer";
 import { PublicHeader } from "~/widgets/public-header";
 import { HomeAmbientField } from "./home-ambient-field";
@@ -10,14 +10,7 @@ import styles from "./foundation-page.module.css";
 
 export const FoundationPage: React.FC = () => {
   const heroRef = useRef<HTMLElement>(null);
-  const [motionActive, setMotionActive] = useState(false);
-
-  useEffect(function observeMotionActivityFx() {
-    const hero = heroRef.current;
-    if (!hero) return undefined;
-
-    return elementActivity.observe(hero, setMotionActive);
-  }, []);
+  const motionActive = useElementActivity(heroRef);
 
   return (
     <div className={styles.page}>

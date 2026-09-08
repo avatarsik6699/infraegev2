@@ -164,4 +164,37 @@ describe("SvgPattern", () => {
         ?.getAttribute("mask"),
     ).toBeNull();
   });
+  it("keeps grid resources isolated across multiple SSR instances", () => {
+    const markup = renderToString(
+      <svg>
+        <SvgPattern.Grid
+          bounds={{ x: 0, y: 0, width: "100%", height: "100%" }}
+          cell={{ width: 84, height: 84 }}
+          transform="skewY(-18)"
+          node={{ radius: 1.5 }}
+        />
+        <SvgPattern.Grid
+          bounds={{ x: 0, y: 0, width: 640, height: 360 }}
+          cell={{ width: 64, height: 64 }}
+          fade={fade}
+        />
+      </svg>,
+    );
+    const document = new DOMParser().parseFromString(markup, "text/html");
+    const ids = [...document.querySelectorAll("[id]")].map(
+      (element) => element.id,
+    );
+    expect(ids.length).toBe(4);
+    expect(new Set(ids).size).toBe(ids.length);
+    for (const match of markup.matchAll(/url\(#([^)]*)\)/g)) {
+      expect(document.getElementById(match[1])).not.toBeNull();
+    }
+    expect(
+      document.querySelector("pattern")?.getAttribute("patternTransform"),
+    ).toBe("skewY(-18)");
+    expect(document.querySelector("pattern circle")?.getAttribute("r")).toBe(
+      "1.5",
+    );
+    expect(document.querySelector('rect[width="100%"]')).not.toBeNull();
+  });
 });

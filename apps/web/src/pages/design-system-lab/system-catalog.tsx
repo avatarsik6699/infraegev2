@@ -1,3 +1,4 @@
+import { VisualLanguageSpecimen } from "./visual-language-specimen";
 import {
   ArrowLeft,
   ArrowRight,
@@ -198,6 +199,7 @@ export const SystemCatalog: React.FC = () => (
       </div>
     </section>
 
+    <VisualLanguageSpecimen />
     <SurfaceSpecimen />
     <SystemLayoutSpecimen />
     <SystemAccessibilitySpecimen />

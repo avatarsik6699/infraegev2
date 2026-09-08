@@ -362,9 +362,9 @@ export class PythonCoursePage {
     );
     const glint = await modules
       .last()
-      .locator(":scope > span")
-      .evaluate((number) => {
-        const style = getComputedStyle(number, "::after");
+      .locator(":scope > span [data-surface-glint]")
+      .evaluate((glint) => {
+        const style = getComputedStyle(glint);
         return { name: style.animationName, state: style.animationPlayState };
       });
     if (reduced) expect(glint.name).toBe("none");

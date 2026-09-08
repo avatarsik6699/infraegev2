@@ -5,8 +5,8 @@ export namespace SvgPatternTypes {
   export type Bounds = {
     x: number;
     y: number;
-    width: number;
-    height: number;
+    width: number | `${number}%`;
+    height: number | `${number}%`;
   };
 
   export type FieldProps = {
@@ -16,6 +16,13 @@ export namespace SvgPatternTypes {
     fade?: SvgDrawingTypes.Fade;
     name?: string;
     opacity?: number;
+  };
+
+  export type GridProps = Omit<FieldProps, "children"> & {
+    cell: { width: number; height: number };
+    transform?: string;
+    lineClassName?: string;
+    node?: { radius: number; className?: string };
   };
 
   export type StrokeEcho = Omit<SvgDrawingTypes.LineProps, "fade"> & {

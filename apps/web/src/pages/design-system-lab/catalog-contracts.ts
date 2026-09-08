@@ -56,6 +56,14 @@ export const componentContracts = {
     ),
   ],
   media: [
+    catalogContracts.context(
+      "SurfaceMaterial",
+      "Система → Визуальный язык: бумажный слой карточки и учебного блока",
+    ),
+    catalogContracts.context(
+      "SurfaceGlint",
+      "Система → Визуальный язык: frame, sweep и soft; однократный/циклический свет",
+    ),
     catalogContracts.live("CodeBlock", "Код и текстовая запись"),
     catalogContracts.live("Image", "Загрузка, ошибка и fallback"),
     catalogContracts.context(

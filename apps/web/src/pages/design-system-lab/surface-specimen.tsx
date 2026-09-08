@@ -15,8 +15,8 @@ export const SurfaceSpecimen: React.FC = () => (
       Поверхности и границы
     </Typography.Title>
     <Typography.Text className={styles.paletteDescription}>
-      Сначала разделяйте смысл расстоянием. Добавляйте поверхность или линию
-      только тогда, когда без неё граница между областями остаётся неясной.
+      Сначала разделяйте смысл расстоянием. Бумажная поверхность и глубина могут
+      поддерживать композицию; готовые выразительные варианты показаны выше.
     </Typography.Text>
 
     <div className={styles.surfaceRoles}>

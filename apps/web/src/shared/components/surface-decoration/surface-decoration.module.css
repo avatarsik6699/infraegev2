@@ -1,0 +1,125 @@
+.material {
+  composes: paperSurface from "../../styles/patterns.module.css";
+  box-sizing: border-box;
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  border-radius: inherit;
+}
+:where(.glint) {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+}
+:where(.frame) {
+  box-sizing: border-box;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid transparent;
+  background: var(--surface-glint-frame-background);
+  background-size: 300% 100%;
+  mask:
+    linear-gradient(black, black) padding-box,
+    linear-gradient(black, black);
+  mask-composite: exclude;
+}
+:where(.soft) {
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    transparent 35%,
+    var(--glint-light, var(--surface-glint-soft-light)) 49%,
+    transparent 63%
+  );
+  background-size: 300% 100%;
+  mask-image: radial-gradient(ellipse, black 30%, transparent 70%);
+}
+:where(.sweep) {
+  top: 0;
+  left: -55%;
+  width: 48%;
+  height: 42%;
+  background: var(--surface-glint-sweep-background);
+  transform: skewX(-24deg);
+}
+@media (prefers-reduced-motion: no-preference) {
+  :where(.glint) {
+    animation-duration: var(
+      --glint-duration,
+      var(--surface-glint-soft-duration)
+    );
+    animation-delay: var(--glint-delay, 0s);
+    animation-timing-function: var(--glint-easing, var(--motion-easing));
+    animation-fill-mode: both;
+    animation-play-state: paused;
+  }
+  :where(.frame) {
+    animation-name: frame-glint;
+    animation-duration: var(
+      --glint-duration,
+      var(--surface-glint-frame-duration)
+    );
+  }
+  :where(.sweep) {
+    animation-name: sweep-glint;
+    animation-duration: var(
+      --glint-duration,
+      var(--surface-glint-sweep-duration)
+    );
+  }
+  :where(.soft) {
+    animation-name: soft-glint;
+  }
+  :where(.glint)[data-playback="loop"] {
+    animation-iteration-count: infinite;
+  }
+  :where(.glint)[data-glint-active="true"] {
+    animation-play-state: running;
+  }
+}
+@keyframes frame-glint {
+  0% {
+    background-position: 100% 0;
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  40%,
+  100% {
+    background-position: 0 0;
+    opacity: 0;
+  }
+}
+@keyframes soft-glint {
+  0% {
+    background-position: 150% 0;
+    opacity: 0;
+  }
+  8%,
+  20% {
+    opacity: 0.8;
+  }
+  32%,
+  100% {
+    background-position: -100% 0;
+    opacity: 0;
+  }
+}
+@keyframes sweep-glint {
+  0%,
+  70% {
+    left: -55%;
+    opacity: 0;
+  }
+  76% {
+    opacity: 0.68;
+  }
+  88%,
+  100% {
+    left: 118%;
+    opacity: 0;
+  }
+}

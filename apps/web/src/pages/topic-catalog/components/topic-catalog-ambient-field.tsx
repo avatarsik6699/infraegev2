@@ -1,3 +1,4 @@
+import { SvgPattern } from "~/shared/components/svg-pattern";
 import { SvgDrawing } from "~/shared/components/svg-drawing";
 import styles from "../topic-catalog-page.module.css";
 
@@ -17,25 +18,17 @@ export const TopicCatalogAmbientField: React.FC = () => (
       preserveAspectRatio="xMidYMin slice"
     >
       <defs>
-        <pattern
-          id="catalog-engineering-grid"
-          width="220"
-          height="110"
-          patternUnits="userSpaceOnUse"
-        >
-          <path d="M220 0H0V110" className={styles.ambientGridLine} />
-        </pattern>
         <radialGradient id="catalog-paper-light">
           <stop offset="0" stopColor="#ffffff" stopOpacity="0.78" />
           <stop offset="1" stopColor="#ffffff" stopOpacity="0" />
         </radialGradient>
       </defs>
 
-      <rect
+      <SvgPattern.Grid
+        bounds={{ x: 0, y: 0, width: 1440, height: 3600 }}
+        cell={{ width: 220, height: 110 }}
         className={styles.ambientGrid}
-        width="1440"
-        height="3600"
-        fill="url(#catalog-engineering-grid)"
+        lineClassName={styles.ambientGridLine}
       />
       <ellipse
         className={styles.ambientPaperLight}

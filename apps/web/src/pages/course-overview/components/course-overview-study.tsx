@@ -1,13 +1,14 @@
+import { SurfaceGlint } from "~/shared/components/surface-decoration";
 import { useRef } from "react";
 import { Image } from "~/shared/components/image";
-import { useCourseOverviewMotion } from "../model/use-course-overview-motion";
+import { useElementActivity } from "~/shared/lib/element-activity";
 import styles from "../course-overview-page.module.css";
 
 type Props = { kind: "sequence" | "branch" | "stack" };
 
 export const CourseOverviewStudy: React.FC<Props> = (props) => {
   const studyRef = useRef<HTMLDivElement>(null);
-  const active = useCourseOverviewMotion(studyRef);
+  const active = useElementActivity(studyRef);
   return (
     <div
       ref={studyRef}
@@ -23,7 +24,12 @@ export const CourseOverviewStudy: React.FC<Props> = (props) => {
         fit="contain"
         className={styles.studyImage}
       />
-      <span className={styles.studySheen} aria-hidden="true" />
+      <SurfaceGlint
+        kind="soft"
+        active={active}
+        playback="loop"
+        className={styles.studySheen}
+      />
     </div>
   );
 };

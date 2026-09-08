@@ -83,3 +83,35 @@
   font-size: var(--text-xs);
   line-height: 1.4;
 }
+
+/* Material only: the consumer owns its semantic element, layout and clipping. */
+.paperSurface {
+  border: 1px solid transparent;
+  border-radius: var(--radius-surface);
+  background: var(--surface-background, var(--surface-paper-background));
+  box-shadow: var(--surface-shadow, var(--surface-paper-shadow));
+}
+
+.artworkDrift {
+  animation: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .artworkDrift {
+    animation: artwork-drift
+      var(--drift-duration, var(--surface-glint-soft-duration)) ease-in-out
+      infinite;
+    animation-play-state: paused;
+  }
+  [data-motion-active="true"] > .artworkDrift {
+    animation-play-state: running;
+  }
+}
+@keyframes artwork-drift {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-0.25deg);
+  }
+  50% {
+    transform: translateY(-4px) rotate(0.25deg);
+  }
+}
