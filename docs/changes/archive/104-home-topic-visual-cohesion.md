@@ -7,7 +7,7 @@
 | Change | `104` |
 | Slug | `home-topic-visual-cohesion` |
 | Title | Home and topic visual cohesion |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/104-home-topic-visual-cohesion` |
 
 ## Goal
@@ -141,7 +141,7 @@ MCP screenshots, animation/static checks, LSP and the web Critical Gate. Done wh
 visible on both sides, depth is legible without motion, cards have distinct layers, all reading
 content and the real Python action remain clear, and no decoration expands the document canvas.
 
-Critical Gate from [STACK](../STACK.md), web scope. The approved brief additionally requires the
+Critical Gate from [STACK](../../STACK.md), web scope. The approved brief additionally requires the
 focused browser geometry/motion scenarios above; no Full Gate or publication.
 
 ### Verification — 2026-09-08
