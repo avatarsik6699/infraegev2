@@ -148,6 +148,7 @@ for (const lessonIndex of Array.from({ length: 28 }, (_, index) => index)) {
 
 test("the Python course overview exposes the complete published path", async ({
   browserSession,
+  courseCatalogPage,
   noJavaScriptPythonCoursePage,
   pythonCoursePage,
 }) => {
@@ -155,19 +156,35 @@ test("the Python course overview exposes the complete published path", async ({
   await pythonCoursePage.openOverview();
   await pythonCoursePage.dismissAnalyticsPrompt();
   await pythonCoursePage.expectCompleteOverview();
+  await pythonCoursePage.expectOverviewComposition();
+  await pythonCoursePage.expectOverviewMotion();
+  await pythonCoursePage.expectOverviewAtmosphere();
   await browserSession.captureViewport("python-course-published-desktop.png");
+
+  await browserSession.useIntermediateViewport();
+  await pythonCoursePage.expectCompleteOverview();
+  await pythonCoursePage.expectOverviewComposition();
 
   await browserSession.useZoomedDesktopViewport();
   await pythonCoursePage.expectCompleteOverview();
+  await pythonCoursePage.expectOverviewComposition();
   await browserSession.captureViewport("python-course-published-zoomed.png");
 
   await browserSession.useNarrowViewport();
   await pythonCoursePage.expectCompleteOverview();
+  await pythonCoursePage.expectOverviewComposition();
   await browserSession.captureViewport("python-course-published-mobile.png");
+  await pythonCoursePage.expectOverviewNavigation();
   browserSession.expectCleanConsole();
 
   await pythonCoursePage.expectPublishedLessonsInPublicSitemap();
   await noJavaScriptPythonCoursePage.expectOverviewReadableWithoutJavaScript();
+  await courseCatalogPage.seedFirstLessonMastery();
+  await pythonCoursePage.openOverview();
+  await pythonCoursePage.expectCompleteOverview({ masteredCount: 1 });
+  await browserSession.useReducedMotion();
+  await pythonCoursePage.expectOverviewMotion(true);
+  await pythonCoursePage.expectOverviewAtmosphere(true);
 });
 
 test("the published Python numbers lesson stays readable across target viewports", async ({

@@ -74,7 +74,7 @@ export class PythonCoursePage {
   }
 
   async expectCompleteOverview(
-    options: { hydrated?: boolean } = {},
+    options: { hydrated?: boolean; masteredCount?: number } = {},
   ): Promise<void> {
     await expectPublicReleaseIdentity(this.page);
     await expect(this.page).toHaveTitle("Python с нуля для ЕГЭ — infraege");
@@ -98,10 +98,10 @@ export class PythonCoursePage {
       ),
     ).toBeVisible();
     await expect(
-      this.page.getByRole("heading", { level: 2, name: "Программа" }),
-    ).toHaveCount(0);
+      this.page.getByRole("heading", { level: 2, name: "Программа курса" }),
+    ).toBeVisible();
     const curriculum = this.page.getByRole("region", {
-      name: "Содержание курса",
+      name: "Программа курса",
     });
     await expect(curriculum).toBeVisible();
     await expect(this.page.getByRole("heading", { level: 3 })).toHaveCount(9);
@@ -154,7 +154,7 @@ export class PythonCoursePage {
     await expect(publishedLink).toHaveCSS("text-decoration-line", "none");
     await expect(
       publishedPlanItem.locator("[data-course-lesson-title]"),
-    ).toHaveCSS("text-decoration-line", "underline");
+    ).toHaveAttribute("data-hierarchy", "drawn");
     await expect(
       publishedPlanItem.locator("[data-course-lesson-outcome]"),
     ).toHaveCSS("text-decoration-line", "none");
@@ -163,13 +163,13 @@ export class PythonCoursePage {
     ).toHaveCSS("font-size", "16px");
     await expect(
       publishedPlanItem.locator("[data-course-lesson-title]"),
-    ).toHaveCSS("font-weight", "600");
+    ).toHaveCSS("font-weight", "500");
     await expect(
       publishedPlanItem.locator("[data-course-lesson-outcome]"),
     ).toHaveCSS("font-size", "14px");
     await expect(
       publishedPlanItem.locator("[data-course-lesson-outcome]"),
-    ).toHaveCSS("font-weight", "500");
+    ).toHaveCSS("font-weight", "400");
     const publishedFamilies = await publishedPlanItem.evaluate((planItem) => {
       const title = planItem.querySelector<HTMLElement>(
         "[data-course-lesson-title]",
@@ -189,7 +189,7 @@ export class PythonCoursePage {
       const planItem = link.closest("[data-course-lesson-plan-item]");
       return Boolean(
         planItem &&
-        link.parentElement === planItem &&
+        !link.contains(planItem) &&
         getComputedStyle(planItem, "::before").content ===
           "counter(lesson-plan)",
       );
@@ -207,7 +207,7 @@ export class PythonCoursePage {
     );
     await expect(curriculum.locator("[data-course-module]").nth(1)).toHaveCSS(
       "border-top-width",
-      "1px",
+      "0px",
     );
     await expect(curriculum.locator("[data-course-module]").last()).toHaveCSS(
       "border-bottom-width",
@@ -238,12 +238,17 @@ export class PythonCoursePage {
     if (options.hydrated === false) {
       await expect(progress).toHaveCount(0);
     } else {
-      await expect(progress).toContainText("Освоено 0 из 28 доступных уроков.");
+      await expect(progress).toContainText(
+        `Освоено ${String(options.masteredCount ?? 0)} из 28 доступных уроков.`,
+      );
       await expect(
         progress.getByRole("progressbar", {
           name: "Освоенные доступные уроки",
         }),
-      ).toHaveAttribute("aria-valuetext", "Освоено 0 из 28 доступных уроков.");
+      ).toHaveAttribute(
+        "aria-valuetext",
+        `Освоено ${String(options.masteredCount ?? 0)} из 28 доступных уроков.`,
+      );
       const progressComesBeforeCurriculum = await progress.evaluate(
         (section) => {
           const curriculum = section.nextElementSibling;
@@ -257,6 +262,130 @@ export class PythonCoursePage {
       expect(progressComesBeforeCurriculum).toBe(true);
     }
     await expectNoHorizontalOverflow(this.page);
+  }
+
+  async expectOverviewComposition(): Promise<void> {
+    const header = this.page.locator("[data-public-header]");
+    await expect(header).toHaveAttribute("data-expanded", "true");
+    await expect(header.locator('a[href^="/courses"]').first()).toHaveAttribute(
+      "data-current",
+      "true",
+    );
+    await expect(
+      this.page.getByRole("link", { name: "Все мини-курсы" }),
+    ).toHaveCount(0);
+    await expect(this.page.getByText(/Доступно уроков: 28/)).toBeVisible();
+    const artwork = this.page.locator(
+      'main img[src="/images/course-catalog/python.webp"]',
+    );
+    await expect(artwork).toBeVisible();
+    await expect(artwork).toHaveAttribute("alt", "");
+    await artwork.evaluate(async (image) => {
+      if (!(image instanceof HTMLImageElement))
+        throw new Error("Expected course artwork image");
+      await image.decode();
+    });
+    const artworkFits = await artwork.evaluate((image) => {
+      const parent = image.parentElement;
+      if (!parent) return false;
+      const imageRect = image.getBoundingClientRect();
+      const parentRect = parent.getBoundingClientRect();
+      return (
+        imageRect.width > 0 &&
+        imageRect.width <= parentRect.width + 1 &&
+        imageRect.height <= parentRect.height + 1
+      );
+    });
+    expect(artworkFits).toBe(true);
+    const geometry = await this.page.locator("main").evaluate((main) => {
+      const summary = main.querySelector("[data-course-summary]");
+      const program = main.querySelector("[data-course-program]");
+      if (!summary || !program) throw new Error("Missing course composition");
+      const left = summary.getBoundingClientRect();
+      const right = program.getBoundingClientRect();
+      return {
+        width: innerWidth,
+        leftStronger: left.width > right.width,
+        gutter: right.left - left.right,
+        sideBySide:
+          left.right <= right.left && Math.abs(left.top - right.top) < 2,
+        stacked: left.bottom <= right.top,
+        programNearTop: right.top < 220,
+      };
+    });
+    if (geometry.width > 928) {
+      expect(geometry.sideBySide).toBe(true);
+      expect(geometry.leftStronger).toBe(true);
+      if (geometry.width >= 1200) expect(geometry.gutter).toBeGreaterThan(72);
+      expect(geometry.programNearTop).toBe(true);
+    } else {
+      expect(geometry.stacked).toBe(true);
+    }
+  }
+
+  async expectOverviewMotion(reduced = false): Promise<void> {
+    const field = this.page.locator("[data-course-field]");
+    await expect(field).toHaveAttribute("aria-hidden", "true");
+    const sheen = this.page.locator("[data-course-sheen]");
+    if (reduced) {
+      await expect(sheen).toHaveCSS("animation-name", "none");
+      return;
+    }
+    await expect(this.page.locator("[data-course-artwork]")).toHaveAttribute(
+      "data-motion-active",
+      "true",
+    );
+    await expect(sheen).toHaveCSS("animation-play-state", "running");
+    await expect(sheen).toHaveCSS("animation-iteration-count", "infinite");
+    await this.page.getByRole("contentinfo").scrollIntoViewIfNeeded();
+    await expect(
+      this.page.locator("[data-course-artwork]"),
+    ).not.toHaveAttribute("data-motion-active", "true");
+    await expect(sheen).toHaveCSS("animation-play-state", "paused");
+    await this.page.evaluate(() => scrollTo(0, 0));
+    await expect(this.page.locator("[data-course-artwork]")).toHaveAttribute(
+      "data-motion-active",
+      "true",
+    );
+  }
+
+  async expectOverviewAtmosphere(reduced = false): Promise<void> {
+    const atmosphere = this.page.locator("[data-course-atmosphere]");
+    await expect(atmosphere).toHaveAttribute("aria-hidden", "true");
+    await expect(atmosphere.getByRole("link")).toHaveCount(0);
+    const modules = this.page.locator("[data-course-module]");
+    await modules.last().scrollIntoViewIfNeeded();
+    await expect(modules.last()).toHaveAttribute("data-motion-active", "true");
+    await expect(modules.first()).not.toHaveAttribute(
+      "data-motion-active",
+      "true",
+    );
+    const glint = await modules
+      .last()
+      .locator(":scope > span")
+      .evaluate((number) => {
+        const style = getComputedStyle(number, "::after");
+        return { name: style.animationName, state: style.animationPlayState };
+      });
+    if (reduced) expect(glint.name).toBe("none");
+    else {
+      expect(glint.name).not.toBe("none");
+      expect(glint.state).toBe("running");
+    }
+    await this.page.evaluate(() => scrollTo(0, 0));
+  }
+
+  async expectOverviewNavigation(): Promise<void> {
+    const menu = this.page.locator("[data-public-header] summary");
+    await menu.press("Enter");
+    const courses = this.page.locator(
+      '[data-public-header] details a[href^="/courses"]',
+    );
+    await expect(courses).toBeVisible();
+    await courses.press("Enter");
+    await expect(this.page).toHaveURL(/\/courses\/?$/);
+    await this.page.getByRole("link", { name: "Открыть курс" }).press("Enter");
+    await expect(this.page).toHaveURL(/\/courses\/python$/);
   }
 
   async openFirstLesson(): Promise<void> {
@@ -744,6 +873,7 @@ export class PythonCoursePage {
   async expectOverviewReadableWithoutJavaScript(): Promise<void> {
     await this.openOverview();
     await this.expectCompleteOverview({ hydrated: false });
+    await this.expectOverviewComposition();
     await expect(
       this.page.getByLabel("Настройки необязательной аналитики"),
     ).toHaveCount(0);

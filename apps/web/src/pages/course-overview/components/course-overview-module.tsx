@@ -1,4 +1,6 @@
-import { Link } from "@tanstack/react-router";
+import { useRef } from "react";
+import { useCourseOverviewMotion } from "../model/use-course-overview-motion";
+import { ActionLink } from "~/shared/components/action-link";
 import type { CourseTypes } from "~/entities/course";
 import { Typography } from "~/shared/components/typography";
 import styles from "../course-overview-page.module.css";
@@ -11,6 +13,8 @@ type Props = {
 };
 
 export const CourseOverviewModule: React.FC<Props> = (props) => {
+  const moduleRef = useRef<HTMLLIElement>(null);
+  const active = useCourseOverviewMotion(moduleRef);
   const lessonsById = new Map(
     props.lessons.map((lesson) => [lesson.id, lesson] as const),
   );
@@ -20,6 +24,8 @@ export const CourseOverviewModule: React.FC<Props> = (props) => {
 
   return (
     <li
+      ref={moduleRef}
+      data-motion-active={active || undefined}
       className={styles.module}
       data-availability={available ? "available" : "planned"}
       data-course-module
@@ -43,30 +49,29 @@ export const CourseOverviewModule: React.FC<Props> = (props) => {
               key={planItem.id}
             >
               {published ? (
-                <Link
-                  className={styles.lessonRow}
-                  to="/courses/$courseSlug/$lessonSlug"
-                  params={{
-                    courseSlug: props.courseRouteSlug,
-                    lessonSlug: lesson.routeSlug,
-                  }}
-                >
-                  <span className={styles.lessonCopy}>
-                    <span
+                <div className={styles.lessonRow}>
+                  <div className={styles.lessonCopy}>
+                    <ActionLink
+                      hierarchy="drawn"
                       className={styles.lessonTitle}
                       data-course-lesson-title
                       data-title-status="published"
+                      to="/courses/$courseSlug/$lessonSlug"
+                      params={{
+                        courseSlug: props.courseRouteSlug,
+                        lessonSlug: lesson.routeSlug,
+                      }}
                     >
                       {planItem.title}
-                    </span>
+                    </ActionLink>
                     <span
                       className={styles.lessonOutcome}
                       data-course-lesson-outcome
                     >
                       {planItem.outcome}
                     </span>
-                  </span>
-                </Link>
+                  </div>
+                </div>
               ) : (
                 <div className={styles.lessonRow}>
                   <span className={styles.lessonCopy}>

@@ -1,8 +1,11 @@
 import { useEffect } from "react";
 import { reportProductEvent } from "~/features/analytics";
+import { Typography } from "~/shared/components/typography";
 import { PageContainer } from "~/shared/components/page-container";
 import { PublicFooter } from "~/widgets/public-footer";
 import { PublicHeader } from "~/widgets/public-header";
+import { CourseOverviewAtmosphere } from "./components/course-overview-atmosphere";
+import { CourseOverviewArtwork } from "./components/course-overview-artwork";
 import { CourseOverviewCurriculum } from "./components/course-overview-curriculum";
 import { CourseOverviewIntro } from "./components/course-overview-intro";
 import { CourseOverviewOutcomes } from "./components/course-overview-outcomes";
@@ -34,18 +37,24 @@ export const CourseOverviewPage: React.FC<CourseOverviewPageTypes.Props> = (
 
   return (
     <div className={styles.page} data-course-overview-page>
-      <PublicHeader />
-      <PageContainer component="main" className={styles.root}>
-        <div className={styles.courseSummary}>
+      <PublicHeader activeSection="courses" />
+      <PageContainer component="main" measure="full" className={styles.root}>
+        <CourseOverviewAtmosphere />
+        <div className={styles.courseSummary} data-course-summary>
+          <CourseOverviewArtwork courseId={props.course.id} />
           <CourseOverviewIntro
             course={props.course}
+            publishedLessonCount={progressLessons.length}
             firstVisibleLesson={
               progressLessons.length === 0 ? visibleLessons[0] : undefined
             }
           />
           <CourseOverviewOutcomes outcomes={props.course.learningOutcomes} />
         </div>
-        <div className={styles.courseContent}>
+        <div className={styles.courseContent} data-course-program>
+          <Typography.Title order={2} id="course-curriculum">
+            Программа курса
+          </Typography.Title>
           <CourseOverviewProgress lessons={progressLessons} />
           <CourseOverviewCurriculum
             courseRouteSlug={props.course.routeSlug}

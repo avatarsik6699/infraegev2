@@ -10,7 +10,7 @@ type Props = {
 
 export const CourseOverviewCurriculum: React.FC<Props> = (props) => {
   return (
-    <section className={styles.curriculum} aria-label="Содержание курса">
+    <section className={styles.curriculum} aria-labelledby="course-curriculum">
       <ol className={styles.moduleList}>
         {props.modules.map((courseModule, index) => (
           <CourseOverviewModule

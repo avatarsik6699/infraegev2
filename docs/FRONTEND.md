@@ -148,6 +148,30 @@ app → routes → pages → widgets → features → entities → shared
   reflowing them when the active item or internal overflow changes. Reset remains a quiet
   secondary action and uses the shared Base UI alert-dialog boundary so confirmation is modal,
   keyboard contained and returns focus to its trigger without shifting the rail.
+- Course overviews use the expanded public header with the course section active; no duplicate
+  catalog backlink is shown. Desktop uses a wider asymmetric composition with a stronger illustrated course summary and outcomes on
+  the left, a generous gutter and an open sequential program on the right; the module spine stays
+  attached to that right column. They share the same canvas without a backing
+  panel, frame or shadow. Published lesson titles use the shared drawn ActionLink with its owned
+  decoration, focus and hover states; each outcome is ordinary secondary text beneath its title.
+  Numbered modules form a sequential spine rather than independent cards or collapsed panels.
+  A page-owned engineering field, sparse code notation and orange route are anchored to the artwork
+  at every breakpoint, away from prose. A faint contact shadow and slow four-pixel artwork drift
+  establish illustration depth; a route impulse and soft glint recur with long quiet intervals.
+  The whole overview extends the engineering grid into the outer margins and central gutter.
+  Below the desktop summary, three low-contrast architectural raster illustrations with transparent
+  backgrounds occupy the otherwise empty left field. Their reduced opacity and saturation keep them
+  subordinate to the program text; their slow drift and soft sheen add decorative depth
+  without new learning content or program backing. Visible module spines receive a faint, narrow
+  orange light pass and number rims retain a soft glint, without implying completion or active status.
+  Tablet and mobile hide these large illustrations and confine the page grid to outer margins; mobile also
+  hides the module spine while retaining number glints. Decorative animations pause offscreen or
+  while the document is hidden and stop under reduced motion. SSR/no-JS retains the complete static
+  composition without decorative animation.
+  Tablet and mobile retain the complete course summary then program; mobile puts course identity
+  before the illustration. Artwork stays proportionally bounded before hydration and without JS.
+  Course type, stage and published lesson count form one quiet metadata line. CourseLesson pages
+  retain their independent reading layout.
 - Course pages use the quiet infraege reading world without reusing Topic semantics. A
   course overview presents audience, outcome, the current course stage and one ordered public plan of
   lesson titles plus observable outcomes without a separate evolving-program disclaimer or date

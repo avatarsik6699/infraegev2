@@ -40,7 +40,6 @@ export const CourseOverviewProgress: React.FC<Props> = (props) => {
     <section className={styles.progress} aria-label="Прогресс курса">
       <Typography.Text tone="muted">{copy}</Typography.Text>
       <Progress
-        className={styles.progressBar}
         label="Освоенные доступные уроки"
         max={progress.availableCount}
         value={progress.masteredLessonIds.length}
