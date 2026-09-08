@@ -47,14 +47,55 @@ export class TopicCatalogPage {
     ).toBeVisible();
     await expect(this.page.getByText("Скоро", { exact: true })).toHaveCount(23);
     await expect(
-      this.page.locator("[data-topic-card] [data-badge]"),
+      this.page.locator("[data-topic-media] [data-badge]"),
     ).toHaveCount(23);
-    await expect(this.page.locator("[data-topic-media]")).toHaveCount(2);
-    await expect(this.page.locator("[data-topic-footer]")).toHaveCount(2);
+    await expect(this.page.locator("[data-topic-media]")).toHaveCount(25);
+    await expect(this.page.locator("[data-topic-footer]")).toHaveCount(25);
     await expect(this.page.locator('link[rel="canonical"]')).toHaveAttribute(
       "href",
       "https://infraege.ru/ege",
     );
+    await expect(this.page.locator("[data-topic-placeholder]")).toHaveCount(23);
+    const dimensions = await this.page
+      .locator("[data-topic-card]")
+      .evaluateAll((cards) =>
+        cards.map((card) => {
+          const bounds = card.getBoundingClientRect();
+          const media = card
+            .querySelector("[data-topic-media]")
+            ?.getBoundingClientRect();
+          const footer = card
+            .querySelector("[data-topic-footer]")
+            ?.getBoundingClientRect();
+          return {
+            width: bounds.width,
+            height: bounds.height,
+            mediaHeight: media?.height ?? 0,
+            titleTop:
+              card.querySelector("h3")!.getBoundingClientRect().top -
+              bounds.top,
+            summaryTop:
+              card.querySelector("p")!.getBoundingClientRect().top - bounds.top,
+            titleComplete:
+              card.querySelector("h3")!.scrollHeight <=
+              card.querySelector("h3")!.clientHeight + 1,
+
+            contentTop: footer ? footer.top - bounds.top : 0,
+          };
+        }),
+      );
+    for (const key of [
+      "width",
+      "height",
+      "mediaHeight",
+      "contentTop",
+      "titleTop",
+      "summaryTop",
+    ] as const) {
+      const values = dimensions.map((entry) => entry[key]);
+      expect(Math.max(...values) - Math.min(...values), key).toBeLessThan(1);
+    }
+    expect(dimensions.every((entry) => entry.titleComplete)).toBe(true);
     await expectNoHorizontalOverflow(this.page);
   }
 
@@ -77,7 +118,7 @@ export class TopicCatalogPage {
         .poll(() =>
           action.evaluate((element) => element.getBoundingClientRect().height),
         )
-        .toBeGreaterThanOrEqual(44);
+        .toBeGreaterThanOrEqual(40);
     }
   }
 
@@ -112,6 +153,15 @@ export class TopicCatalogPage {
           const illustrationBounds = illustration.getBoundingClientRect();
           const indexBounds = index.getBoundingClientRect();
           const frameStyles = window.getComputedStyle(frame);
+          const cardStyles = getComputedStyle(card);
+          const mediaBounds = frame
+            .querySelector("[data-topic-media]")
+            ?.getBoundingClientRect();
+          const material = frame.querySelector("[data-surface-material]");
+          const image = illustration.querySelector("img");
+          const summary = frame.querySelector("p");
+          const imageBounds = image?.getBoundingClientRect();
+          const summaryBounds = summary?.getBoundingClientRect();
           const radii = [
             frameStyles.borderTopLeftRadius,
             frameStyles.borderTopRightRadius,
@@ -120,12 +170,35 @@ export class TopicCatalogPage {
           ];
 
           return {
+            singleCell:
+              cardStyles.gridRowEnd === "auto" &&
+              cardStyles.gridColumnEnd === "auto",
+            mediaShare: mediaBounds
+              ? mediaBounds.height / frameBounds.height
+              : 0,
+            materialLayers: material?.children.length,
             escape: Math.max(
               frameBounds.top - illustrationBounds.top,
               illustrationBounds.right - frameBounds.right,
               0,
             ),
-            frameClips: frameStyles.overflow === "hidden",
+            frameClips:
+              material !== null &&
+              getComputedStyle(material).overflow === "hidden",
+            imageContained:
+              !imageBounds ||
+              (imageBounds.left >= illustrationBounds.left - 1 &&
+                imageBounds.right <= illustrationBounds.right + 1 &&
+                imageBounds.bottom <= illustrationBounds.bottom + 1),
+            descriptionConstrained:
+              summary !== null &&
+              getComputedStyle(summary).webkitLineClamp === "2" &&
+              summary.clientHeight <=
+                2 * Number.parseFloat(getComputedStyle(summary).lineHeight) + 1,
+            mediaSeparated:
+              !summaryBounds ||
+              illustrationBounds.bottom <= summaryBounds.top + 1 ||
+              illustrationBounds.left >= summaryBounds.right - 1,
             indexContained:
               indexBounds.left >= frameBounds.left - 0.5 &&
               indexBounds.right <= frameBounds.right + 0.5 &&
@@ -143,8 +216,14 @@ export class TopicCatalogPage {
       geometry.every(
         (entry) =>
           entry !== null &&
-          entry.escape > 0 &&
-          entry.escape <= 10 &&
+          entry.singleCell &&
+          entry.mediaShare >= 0.57 &&
+          entry.mediaShare <= 0.59 &&
+          entry.materialLayers === 2 &&
+          entry.escape <= 13 &&
+          entry.imageContained &&
+          entry.descriptionConstrained &&
+          entry.mediaSeparated &&
           entry.frameClips &&
           entry.indexContained &&
           entry.radius > 0 &&

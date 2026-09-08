@@ -178,60 +178,65 @@ app → routes → pages → widgets → features → entities → shared
   Review/draft or not-yet-authored entries remain visually secondary ordinary text marked «В
   плане», never disabled controls. Module numbering describes the broad sequence, while lesson-plan
   order describes the current authoring direction.
-- The `/ege` topic catalog is the second migrated consumer of the public infraege visual world.
-  Its expanded public header retains section navigation and shares one uninterrupted warm canvas
-  with the main content. The catalog itself begins in the first viewport with one compact title;
-  its useful topic count and FIPI source form one separated line directly underneath, while the
-  heading's right column stays empty for future real controls. It does not repeat published topics
-  in a separate hero or introductory paragraph. A
-  page-wide engineering field fades before the header and footer, combining a quiet grid, exam
-  notation and restrained activity-aware orange route impulses without carrying information.
-  The semantic ordered map contains 25 substantial paper surfaces sorted by the first covered exam
-  number and covers tasks 1–27 exactly once. Gradient edge light, soft depth and bounded glints use
-  the homepage material language; only the two published topics receive their supplied conceptual
-  illustrations aligned to an upper media section that also retains the exam-number context and
-  topic copy. Only the artwork layer may overlap the outer top/right edge, and then by no more than
-  a restrained few pixels; the clipped card surface owns all four matching corner radii, the
-  footer and the contained lower-right decorative exam number. Artwork never covers adjacent-card
-  content. One
-  entry may own a non-empty ordered number set, with 19–21 represented by one
-  «Выигрышная стратегия» topic. Published entries expose ordinary internal links; planned entries
-  remain fully opaque paper surfaces and communicate unavailability through the shared «Скоро»
-  badge, absent action, neutral frame, quieter type and reduced depth, never through translucency,
-  anchors or disabled controls. Published cards carry no redundant availability label. Wide, medium and
-  narrow layouts use three, two and one columns without changing DOM or focus order. The heading's
-  secondary area may later own real filters and view controls, but renders no placeholders before
-  those behaviors exist. The page stays complete in SSR/no-JavaScript, loads only catalog
-  publication metadata rather than authored lesson TSX, and currently adds no filters, progress or
-  client state.
+- The `/ege` topic catalog uses the public infraege paper, engineering field and light language.
+  A compact title and the topic-count/FIPI metadata line lead directly into the ordered 25-topic
+  map covering tasks 1–27 exactly once (19–21 remain one topic). Three/two/one-column layouts
+  preserve DOM and focus order. All cards use one media/content/bottom-row template and equal
+  grid-row heights with a 23rem minimum and 58:42 media/content tracks. Cards remain
+  ordinary single grid cells without row/column spans. Planned cards retain opaque quiet material and a «Скоро» badge,
+  without links, hover lift or glints. Every card has very faint fine-grain texture plus alternating
+  arc/dot/diagonal engraving inside its clipped SurfaceMaterial.
+  Every card reserves its upper 58% for artwork. Topics with an illustration display it;
+  the other 23 use the same neutral CustomIcon.Book placeholder. Full source descriptions render as up to two compact lines with an ellipsis; slightly larger headings
+  retain a two-line slot. Eight-pixel content gaps keep the lower region readable. Number and planned-status badges overlay the artwork. Titles occupy
+  a separate shared two-line slot, aligned at the bottom, and descriptions start at the same level.
+  Artwork uses a narrow 8px edge alpha fade, preserving its interior contrast. Published art
+  extends at most 12px above and 8px to the sides/bottom of its media track, without moving
+  the shared image/title/summary layout or covering text;
+  visually truncated descriptions occupy a separate lower region; the aligned bottom row contains
+  the published action; planned «Скоро» badges sit beside the task number over the artwork. Artwork has bounded overflow, descriptions use a two-line clamp, and all dimensions work before hydration/no-JS.
+  The decorative index remains inside the card. SurfaceGlint(frame) plays once within five seconds
+  of first visibility, pauses offscreen/hidden and never restarts after completion. Distributed
+  very faint binary bytes, AND gates, graphs, search code, truth tables, recursion trees, powers
+  and BFS queues extend the stable background grid as eight distinct compositions. There
+  are no vertical orange routes under the cards; broad field illumination varies softly over
+  24 seconds, pauses offscreen/hidden and is absent with reduced motion/no-JS.
+  The heading's remaining space carries no placeholder controls. No filters, progress, new
+  learner state or authored lesson imports are added to this metadata-only catalog.
 - The `/courses` catalog extends the public infraege world with a page-specific illustrated
-  mosaic. Its heading groups «Мини-курсы», a short lead and «1 курс доступен · 3 в плане» on
+  grid. Its heading groups «Мини-курсы», a short lead and «1 курс доступен · 3 в плане» on
   the left; the supplied perspective staircase and a separate orange SvgDrawing route occupy the
-  right and continues visually into orange routes through the mosaic gutters. A visible
+  right with reduced opacity and a downward fade; orange routes remain only below the cards,
+  with no central connector or right-side flourish. A visible
   perspective grid and sparse code fragments belong to the page. Supplied WebP illustrations
   render through shared Image with reserved dimensions; a page-owned SVG color-to-alpha filter
   removes their pale paper while preserving colored ink, and composites against SourceGraphic
-  to avoid opaque filter bounds. The original reference assets stay unchanged. Artwork is a
+  to avoid opaque filter bounds. The original reference assets stay unchanged. Excel and algorithms use architect-supplied
+  transparent derivatives; their native alpha bypasses the paper-removal filter. Artwork is a
   separate unclipped layer above contour-aligned, clipped card material, with a bounded top/right overflow;
   it never covers course copy or adjacent actions. All four courses receive substantial media
-  regions separate from text; Python leads seven columns and two rows, Excel and algorithms
-  occupy the right five-column positions, and advanced problems closes with a wide image/text
-  card. Medium layouts use full-width Python, a planned pair and a full-width closing card;
-  narrow layouts preserve course DOM order. Warm-paper surfaces drawn from the public palette,
-  fine neutral edges, soft contact shadows and quiet engravings create restrained depth, without
-  metallic fill or heavy bevels. Python receives a slightly stronger frame, interactive lift
-  and a single edge glint. Planned artwork uses quieter saturation
+  regions separate from text. Desktop restores the original asymmetric 7/5-column mosaic: Python
+  spans two 19rem rows, Advanced problems and algorithms stack to its right, and Excel spans the
+  full width with copy left and 55% artwork right in a 24rem-minimum frame. Its status and
+  text align to the left inset, text starts 64px below the top, and engraving/dots concentrate left. Medium widths use full-width Python, a planned
+  pair and the wide closing card; narrow widths use single-column 26rem-minimum cards in DOM order.
+  Artwork fills its region with cover cropping, an 8px edge fade and bounded 8px top/side
+  overflow. Metadata and hydrated progress use quiet labels over the artwork; the wide Excel status sits above the left copy. 32px titles and full
+  two-line summaries remain separately readable with 8px gaps. Fine grain at 7% opacity, varied patterns at 6.5%, and the original lower-corner arc engravings
+  span the clipped material. A subtle silver-neutral gradient and a soft four-second once-only
+  activity-aware glint add restrained material sheen, including on planned cards. Python retains its slightly stronger
+  frame, interactive lift and one edge glint; planned artwork uses quieter saturation
   and no frame glint. Larger, softer upper stairs and a partial lower-left continuation share one
   diagonal; faint left-side engravings balance the artwork without filling the reading space.
-  Image edges fade over a narrow perimeter. Python decoration fades out above its footer;
-  the ordinary drawn action has no backing, keeping progress and action on clean reading space.
+  Image edges fade over a narrow 8px perimeter; Excel uses top-aligned cover sizing in its wide
+  region with only minor peripheral cropping. The ordinary drawn action has no backing; progress belongs to the artwork metadata.
   Frame glints and route markers play once within five seconds, pausing offscreen
   or while the document is hidden; there is no animation toggle. Planned cards retain no
   hover lift, pointer affordance or focus stop. Reduced motion renders the completed static
   composition. Published title, summary, route, lesson count and progress inputs derive from
   lightweight Course metadata; planned entries are catalog-only records marked «Скоро» with
   no links, dates, durations, difficulty or lesson counts. Python has one «Открыть курс» link and
-  hydration-only «Освоено N из 28 уроков» in its footer; SSR/no-JS omits only that personal count.
+  hydration-only «Освоено N из 28 уроков» in its artwork metadata; SSR/no-JS omits only that personal count.
   Search, filters, sorting, recommendations and Topic relationships remain absent.
 - A CourseLesson keeps course context and its local section outline together in one navigation
   rail, with the article as the dominant reading stream. On narrow screens the title and outcome
@@ -251,7 +256,7 @@ app → routes → pages → widgets → features → entities → shared
   above the curriculum, not a standalone titled section in the course introduction. It is
   informational only: the published lesson row remains the course entry point, so progress does
   not contain a competing action. Never render a total-course percentage, hard lesson locks or
-  course-wide reset while the program is still developing. The aria-hidden «72% курса» artwork on
+  course-wide reset while the program is still developing. The aria-hidden «72%» artwork on
   `/` is a reference illustration rather than a course-progress consumer and does not relax this
   product-state rule.
 - A lesson has at most one `Checkpoint`: authored once at `Definition.checkpoint`, gathering every
@@ -316,82 +321,52 @@ app → routes → pages → widgets → features → entities → shared
   disclosure. Legal copy describes only behavior present in code/configuration, publishes the
   architect-approved email and Telegram invitation without exposing other personal requisites, and
   keeps the accepted legal-review risk explicit in the system contract.
-- The public home uses a responsive editorial split: the primary product statement and real Python
-  mini-course CTA lead on the left, while a decorative non-interactive learning map presents
-  «теория, практика, задания, будущая статистика» on the right. Its numbered «Теория», «Практика»,
-  «Задания» and illustrative «72% курса» stages form one semantic trajectory through solid,
-  quiet constant-width orange curves with calm dynamic bends. A restrained longitudinal opacity
-  gradient keeps both contour-touching ends at the same bright orange as the active task and
-  progress borders while slightly quieting the middle for depth. Every
-  uninterrupted curve meets both block contours directly, without endpoint markers or visible
-  gaps. Four selective stage-to-card trajectories use medium-weight dashed curves with a fading
-  start and a compact filled arrowhead at their destination. A separate two-curve return trajectory
-  from the practice card back to the theory stage makes the theory-practice cycle legible without
-  competing with the central course sequence. The theory stage also fans out selectively to the
-  algorithm, logic-pulse, byte and truth-table notation; traversal remains an unconnected
-  low-weight pattern. All pattern trajectories use the lowest stroke weight and contrast in the
-  scene so they remain background context rather than new content. Authored routes do not cross
-  one another, and the truth-table trajectory travels
-  above rather than through the practice card. Every route uses a longitudinal opacity gradient;
-  only selected card and cycle arrows add a slightly offset, low-opacity echo beneath the primary
-  shaft. These echoes, modestly stronger paper/stage shadows and brighter edge highlights provide
-  depth without turning the diagram into a glowing or layered illustration. A filled arrowhead is
-  always the arrow group's final paint layer, while its shaft ends just inside the head base rather
-  than continuing beneath the translucent triangle; endpoint direction follows the final curve
-  tangent, including the return loop's soft downward approach to theory. Map shafts and their
-  filled heads scale together with the scene viewBox so narrow screens preserve their desktop
-  proportions; `SvgDrawing.Line` keeps non-scaling strokes as its default and exposes this behavior
-  only through an explicit map-owned opt-in. The shared `SvgDrawing.Line` and `SvgDrawing.Arrow` own
-  the stroke, gradient and arrowhead primitives; the page
-  owns semantic selection, curve geometry, restrained contrast and scene layering. The route does not
-  duplicate registry catalogs or synthetic social proof. The reference's literal «72% курса» is an
-  aria-hidden illustration detail, never learner state. The map alone may pair a thin border with a
-  restrained offset shadow to reproduce rotated paper slips; these materials also inform the shared
-  surface recipes in §4.1. One low-contrast page-local ambient SVG
-  field may extend an orthogonal engineering grid, calibration marks and notation behind the
-  complete hero to connect its statement and map visually. The grid spans the full main-page canvas
-  while a vertical mask progressively removes it near the header and footer; it never draws over
-  either chrome surface. Reusable grid mechanics do not prescribe page placement. Local soft relief beneath the
-  authored map patterns prevents their structure from accumulating contrast with the grid. The complete ambient field is
-  neutral and static: directional orange motion belongs only to the learning map. After hydration,
-  separate decorative layers may carry two clearly visible gradient impulses continuously over the already-complete static
-  central and card/cycle connections. Border gradients inherit the surface hierarchy: neutral card
-  and completed-stage borders stay neutral, while only active orange borders sweep in orange. They use nonuniform deterministic phases rather
-  than runtime randomness; pattern routes remain single and lowest-weight. The hero owns one
-  coordinated sequence: central stages lead, card/cycle routes answer, pattern routes and border
-  glints remain quiet.
-  Motion conveys no state or information, stops while the hero is outside the viewport or the
-  document is hidden, and is removed under `prefers-reduced-motion`; SSR/no-JavaScript always renders
-  the complete static map. Domain-agnostic
-  `shared/components/svg-drawing` fragments own reusable fading paths,
-  authored tapered outlines and composed arrows; fade stops may optionally override `currentColor`
-  for multitone consumer-owned gradients, and all resources generate SSR-stable
-  gradient ids and do not own a canvas, scene geometry or responsive layout. Page-local components
-  retain those composition responsibilities. Domain-agnostic `shared/components/svg-pattern`
-  fields own bounded directional fade masks, while their preset API composes deterministic strokes,
-  labels and nodes through `SvgDrawing`; both APIs inherit consumer color and generate SSR-stable
-  resource ids. They do not procedurally jitter paths, define subject-specific formulas/icons, own a
-  canvas, or decide responsive placement. Consumers author deterministic geometry locally, and the
-  public home was the first consumer in Change 95. Shared grid and activity consumers now also
-  include the two catalogs and course overview. The page-local visual boundary clips only decorative SVG
-  and filter bleed; it remains parent-bounded so neither breakpoint transitions nor narrow viewports
-  can enlarge the root document canvas. The desktop scene uses a wider asymmetric coordinate field:
-  enlarged cards and notation reach toward its edges at varied rotations and vertical positions,
-  while every element remains inside the authored viewBox. Domain-agnostic
-  `shared/components/custom-icon` owns the
-  normalized SVG viewport, decorative/labelled accessibility mode and semantic ink/paper/accent
-  paint hooks for authored vector glyphs. Individual glyph components preserve approved source
-  contours; consumers own icon size, placement and surrounding card/content treatment. Do not put
-  page copy, card geometry or scene composition into the icon layer, and do not inline an authored
-  glyph again after it enters this shared boundary. The reviewed raster dry-ink variant is rejected
-  and must not ship as a runtime asset. The page renders one complete learning-map SVG at every
-  viewport: in the desktop split it expands leftward and fits both the available column width and
-  viewport height instead of deriving height from width alone. As soon as the editorial split
-  becomes one column, sizing becomes width-led so intermediate screens do not inherit desktop
-  height constraints or excessive side gutters; on narrow screens the same bounded scene scales to
-  the available width without clipping, horizontal overflow or removing satellite cards, stages
-  and background notation. The separate accessible textual summary remains the semantic
-  description of this decorative scene.
+- The public home uses an editorial split with a strong product statement and the real Python
+  mini-course CTA on the left, and the non-interactive learning map on the right. The two columns
+  never overlap; desktop bounds the scene by the available viewport height after public chrome,
+  with compact typography on short screens. Below 60rem the statement precedes a width-led scene. Below 44rem one SVG canvas recomposes
+  its existing cards and stages into a taller alternating route with enlarged content, rather
+  than shrinking the desktop constellation. CSS selects supplemental compact connector geometry
+  and relocates the same card/stage nodes before hydration; there is only one accessible summary.
+  The authored wide and compact paths do not cross. Both preserve the theory/practice/tasks/
+  future-statistics meaning, the four satellite cards and the practice-to-theory return loop.
+  Background notation stays subordinate and outside prose; patterns move to available gaps on
+  compact layouts. A full-page perspective grid fades toward the header/footer and behind prose;
+  code, binary cells and graph notation occupy outer fields on both sides. Two edge-owned orange
+  light paths traverse the page on a quiet 22-second cycle.
+  A single 12-second choreography begins after hydration: main-path impulses travel in order
+  during seconds 0–4, branches and contour light answer during seconds 4–7, then rest until the
+  next cycle. Static orange curves remain complete throughout. There is no counterflow on the
+  main path and no moving pattern branches. Card and completed-stage contour light stays neutral;
+  active-stage/progress borders retain orange. Enlarged satellite cards use distinct 5–15 SVG-unit drifts and phase offsets
+  to distinguish depth while their attached shafts deform and arrowheads follow in the same phase. CSS path
+  interpolation support gates both drift halves; unsupported engines retain static geometry.
+  Cards retain modest differences in their authored dimensions and original in-plane rotations,
+  without perspective deformation, distance scaling or blur. Satellite cards use a quiet flat canvas fill and thin neutral outline, without
+  drop shadows, thickness or static edge highlights. Compact 282–290 by 108–116-unit surfaces
+  contain vertically centered 88-unit icons at x=12 and text at x=112. The 12-unit icon/text gap
+  preserves readable copy while reducing padding. Compact layouts keep satellite
+  offsets static. Main-route stages, their text and the progress disc remain stationary throughout
+  the animation cycle; no shared foreground transform moves them. Only satellite cards drift, with
+  coordinated branch attachment motion. The distant pattern plane retains its bounded 18-second drift. Material patterns vary by subject: theory uses concentric arcs, practice dots, tasks a small woven-loop motif and statistics quiet curved contours. Numbered stages reuse their subject
+  motif with lower contrast. Their large data-role numbers and display titles retain independent
+  number/title/check spacing. Very faint deterministic paper fibers cover cards and stages. The progress disc has no
+  decorative texture or engraving. The 40-unit stage numerals and 24-unit titles remain inside the rounded
+  contour; completed stages use vertically centered 24-unit checks.
+  The illustrative progress uses one paper disc with its neutral track and orange arc on the outer
+  perimeter and one centered 40-unit orange «72%» value without a caption; no backing disc protrudes beyond the arc. All animation definitions stay mounted and change
+  play state for offscreen/hidden pause and resume, without restarting the choreography.
+  Reduced motion and SSR/no-JS retain the complete static map. Decorations carry no state; literal
+  «72%» remains inside the aria-hidden illustration and never becomes learner progress.
+  The statement «Информатика - это система» leads into a concrete preparation explanation and
+  one standard drawn-arrow «Начать готовиться» link to `/ege`; there is no extra slogan. The ambient
+  field begins/ends at the chrome-owned region and fades to zero at both boundaries.
+  Paper gradients, contact shadows and edge light extend the courses' material language. The SVG
+  scene alone may use the established thin contour plus paper shadow. Map geometry and resource
+  composition stay page-owned; SvgDrawing owns strokes/fades/arrows, SvgPattern owns deterministic
+  masked presets and grid mechanics, and CustomIcon preserves the approved glyph geometry.
+  Decorative overflow is contained by the map boundary and never enlarges the document canvas.
+  No synthetic social proof, duplicate catalogs or raster replacement of the SVG map is introduced.
 - A shared back-navigation link always renders a real fallback `href` for SSR/no-JavaScript and
   modified-click behavior. After hydration it follows TanStack Router history only when the
   router-owned history index says an in-app entry exists; direct entry, document reload and

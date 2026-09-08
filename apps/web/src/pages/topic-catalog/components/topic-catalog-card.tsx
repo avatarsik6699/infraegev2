@@ -1,8 +1,12 @@
 import { useRef } from "react";
 import { useElementActivity } from "~/shared/lib/element-activity";
-import { SurfaceGlint } from "~/shared/components/surface-decoration";
+import {
+  SurfaceGlint,
+  SurfaceMaterial,
+} from "~/shared/components/surface-decoration";
 import { topicCatalog, type TopicCatalogTypes } from "~/entities/topic-catalog";
 import { ActionLink } from "~/shared/components/action-link";
+import { CustomIcon } from "~/shared/components/custom-icon";
 import { Badge } from "~/shared/components/badge";
 import { Image } from "~/shared/components/image";
 import { Typography } from "~/shared/components/typography";
@@ -12,17 +16,9 @@ type Props = {
   entry: TopicCatalogTypes.Entry;
 };
 
-const topicIllustrationById: Readonly<
-  Record<string, { src: string; position: "number" | "recursion" }>
-> = {
-  "preobrazovanie-zapisey-chisel": {
-    src: "/topics/number-representation.webp",
-    position: "number",
-  },
-  rekursiya: {
-    src: "/topics/recursive-algorithms.webp",
-    position: "recursion",
-  },
+const topicIllustrationById: Readonly<Record<string, string>> = {
+  "preobrazovanie-zapisey-chisel": "/topics/number-representation.webp",
+  rekursiya: "/topics/recursive-algorithms.webp",
 };
 
 export const TopicCatalogCard: React.FC<Props> = ({ entry }) => {
@@ -41,36 +37,62 @@ export const TopicCatalogCard: React.FC<Props> = ({ entry }) => {
         className={styles.mapEntry}
         data-has-illustration={illustration ? "true" : undefined}
         data-topic-frame
+        data-motion-active={active || undefined}
       >
+        <SurfaceMaterial className={styles.cardMaterial}>
+          <span className={styles.cardTexture} />
+          <span className={styles.cardPattern} />
+        </SurfaceMaterial>
         {entry.status === "published" ? (
           <SurfaceGlint
-            kind="sweep"
+            kind="frame"
             active={active}
-            playback="loop"
+            playback="once"
             className={styles.cardSheen}
           />
-        ) : (
-          <span className={styles.quietEdge} aria-hidden="true" />
-        )}
+        ) : null}
         <span className={styles.cardIndex} data-topic-index aria-hidden="true">
           {entry.taskNumbers.length === 1
             ? String(entry.taskNumbers[0]).padStart(2, "0")
             : "19–21"}
         </span>
-        {entry.status === "published" && illustration ? (
-          <>
-            <div className={styles.publishedMedia} data-topic-media>
-              <span className={styles.mediaTaskNumber}>
-                {topicCatalog.formatTaskNumbers(entry.taskNumbers)}
-              </span>
-              <Typography.Title className={styles.cardTitle} order={3}>
-                {entry.title}
-              </Typography.Title>
-              <Typography.Text className={styles.cardSummary} tone="muted">
-                {entry.summary}
-              </Typography.Text>
-            </div>
-            <div className={styles.publishedFooter} data-topic-footer>
+        <div className={styles.cardMedia} data-topic-media>
+          <div className={styles.mediaBadges}>
+            <span className={styles.mediaTaskNumber}>
+              {topicCatalog.formatTaskNumbers(entry.taskNumbers)}
+            </span>
+            {entry.status === "planned" ? <Badge>Скоро</Badge> : null}
+          </div>
+          <div
+            className={styles.cardIllustration}
+            data-topic-illustration
+            aria-hidden="true"
+          >
+            {illustration ? (
+              <Image
+                className={styles.cardIllustrationMedia}
+                src={illustration}
+                decorative
+                width={960}
+                height={640}
+                fit="contain"
+              />
+            ) : (
+              <div className={styles.cardPlaceholder} data-topic-placeholder>
+                <CustomIcon.Book width={88} height={88} />
+              </div>
+            )}
+          </div>
+        </div>
+        <div className={styles.cardContent} data-topic-footer>
+          <Typography.Title className={styles.cardTitle} order={3}>
+            {entry.title}
+          </Typography.Title>
+          <Typography.Text className={styles.cardSummary} tone="muted">
+            {entry.summary}
+          </Typography.Text>
+          <div className={styles.cardBottom}>
+            {entry.status === "published" ? (
               <ActionLink
                 className={styles.cardAction}
                 hierarchy="drawn"
@@ -80,41 +102,10 @@ export const TopicCatalogCard: React.FC<Props> = ({ entry }) => {
               >
                 Открыть тему
               </ActionLink>
-            </div>
-          </>
-        ) : (
-          <>
-            <div className={styles.cardMeta}>
-              <span className={styles.mapEntryNumber}>
-                {topicCatalog.formatTaskNumbers(entry.taskNumbers)}
-              </span>
-              <Badge>Скоро</Badge>
-            </div>
-            <Typography.Title className={styles.cardTitle} order={3}>
-              {entry.title}
-            </Typography.Title>
-            <Typography.Text className={styles.cardSummary} tone="muted">
-              {entry.summary}
-            </Typography.Text>
-          </>
-        )}
-      </article>
-      {entry.status === "published" && illustration ? (
-        <div
-          className={`${styles.cardIllustration} ${styles[illustration.position]}`}
-          data-topic-illustration
-          aria-hidden="true"
-        >
-          <Image
-            className={styles.cardIllustrationMedia}
-            src={illustration.src}
-            decorative
-            width={960}
-            height={640}
-            fit="contain"
-          />
+            ) : null}
+          </div>
         </div>
-      ) : null}
+      </article>
     </li>
   );
 };

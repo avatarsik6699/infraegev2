@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest";
-import { homeAmbientPatterns } from "~/pages/foundation/home-ambient-patterns";
 import { homeLearningMapGeometry } from "~/pages/foundation/home-learning-map-geometry";
 import { homeLearningMapPatterns } from "~/pages/foundation/home-learning-map-patterns";
 import type { SvgPatternTypes } from "~/shared/components/svg-pattern";
@@ -67,33 +66,24 @@ const segmentsCross = (a: Point, b: Point, c: Point, d: Point): boolean => {
 };
 
 describe("home learning map composition", () => {
-  it("keeps the hero ambience sparse, deterministic and page-owned", () => {
-    expect(Object.keys(homeAmbientPatterns)).toEqual([
-      "engineeringGrid",
-      "calibration",
-      "notation",
-    ]);
-    expect(homeAmbientPatterns.calibration.strokes).toHaveLength(2);
-    expect(homeAmbientPatterns.engineeringGrid.strokes).toHaveLength(3);
-    expect(homeAmbientPatterns.engineeringGrid.bounds).toEqual({
-      x: 0,
-      y: 0,
-      width: 1600,
-      height: 900,
+  it("locates attachments using only card position and in-plane rotation", () => {
+    const card = {
+      ...homeLearningMapGeometry.cards.theory,
+      x: 10,
+      y: 20,
+      originX: 0,
+      originY: 0,
+      rotation: 90,
+    };
+    const point = homeLearningMapGeometry.projectCardPoint(card, {
+      x: 100,
+      y: 50,
     });
-    expect(
-      homeAmbientPatterns.engineeringGrid.strokes.every(
-        ({ d }) => !d.includes("C"),
-      ),
-    ).toBe(true);
-    expect(homeAmbientPatterns.notation.labels).toHaveLength(4);
-    for (const pattern of Object.values(homeAmbientPatterns)) {
-      expect(pattern.fade.stops[0]?.opacity).toBe(0);
-      expect(pattern.fade.stops.at(-1)?.opacity).toBe(0);
-    }
+    expect(point.x).toBeCloseTo(-40);
+    expect(point.y).toBeCloseTo(120);
   });
 
-  it("connects the four stages in order without changing their composition", () => {
+  it("connects the four stages in order while keeping satellites clear of the learning sequence", () => {
     expect(homeLearningMapGeometry.connections.map(({ id }) => id)).toEqual([
       "theory-practice",
       "practice-tasks",
@@ -138,9 +128,6 @@ describe("home learning map composition", () => {
     }
 
     expect(homeLearningMapGeometry.cards.tasks.x).toBeLessThan(0);
-    expect(homeLearningMapGeometry.cards.practice.x).toBeGreaterThanOrEqual(
-      770,
-    );
 
     const stageOrder = [
       homeLearningMapGeometry.stages.theory,
@@ -173,6 +160,53 @@ describe("home learning map composition", () => {
         expect(control.y).toBeLessThan(connection.end.y);
       }
     });
+  });
+
+  it("connects compact stages at their scaled contours without crossing branches", () => {
+    const compact = homeLearningMapGeometry.compact;
+    const ids = ["theory", "practice", "tasks", "progress"] as const;
+    compact.connections.forEach((connection, index) => {
+      const from = ids[index]!;
+      const to = ids[index + 1]!;
+      const start = compact.stages[from];
+      const end = compact.stages[to];
+      expect(connection.start.x).toBeCloseTo(
+        start.x +
+          (homeLearningMapGeometry.stages[from].width * start.scale) / 2,
+      );
+      expect(connection.start.y).toBeCloseTo(
+        start.y + homeLearningMapGeometry.stages[from].height * start.scale,
+      );
+      expect(connection.end.x).toBeCloseTo(
+        end.x + (homeLearningMapGeometry.stages[to].width * end.scale) / 2,
+      );
+      expect(connection.end.y).toBe(end.y);
+    });
+    const curves: readonly Curve[] = [
+      ...compact.connections,
+      ...compact.cardConnections,
+      ...compact.cycleConnections,
+    ];
+    const collisions: string[] = [];
+    curves.forEach((curve, index) => {
+      const points = sampleCurve(curve);
+      curves.slice(index + 1).forEach((other) => {
+        const next = sampleCurve(other);
+        if (
+          points
+            .slice(1)
+            .some((point, i) =>
+              next
+                .slice(1)
+                .some((second, j) =>
+                  segmentsCross(points[i]!, point, next[j]!, second),
+                ),
+            )
+        )
+          collisions.push(`${curve.id}:${other.id}`);
+      });
+    });
+    expect(collisions).toEqual([]);
   });
 
   it("keeps satellite trajectories selective and semantically weighted", () => {

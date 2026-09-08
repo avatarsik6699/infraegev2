@@ -31,17 +31,15 @@ export const CourseCatalogCard: React.FC<Props> = (props) => {
         data-motion-active={motionActive || undefined}
       >
         <SurfaceMaterial className={styles.cardMaterial}>
-          <span className={styles.cardTexture}>
-            <svg
-              className={styles.cardEngraving}
-              viewBox="0 0 320 240"
-              fill="none"
-            >
-              <circle cx="0" cy="240" r="105" />
-              <circle cx="0" cy="240" r="145" />
-              <circle cx="0" cy="240" r="185" />
-            </svg>
-          </span>
+          <span className={styles.cardTexture} />
+          <span className={styles.cardPattern} />
+          <span className={styles.cardEngraving} />
+          <SurfaceGlint
+            kind="soft"
+            active={motionActive}
+            playback="once"
+            className={styles.cardLustre}
+          />
         </SurfaceMaterial>
         {props.entry.status === "published" ? (
           <SurfaceGlint
@@ -50,38 +48,40 @@ export const CourseCatalogCard: React.FC<Props> = (props) => {
             className={styles.cardSheen}
           />
         ) : null}
+        <div className={styles.cardMedia} data-course-media>
+          <CourseCatalogStudy courseId={props.entry.id} />
+        </div>
+        <div className={styles.cardMeta} data-course-meta>
+          {props.entry.status === "published" ? (
+            <>
+              <Badge>{`${String(props.entry.lessonCount)} уроков`}</Badge>
+              <CourseCatalogProgress entry={props.entry} />
+            </>
+          ) : (
+            <Badge>Скоро</Badge>
+          )}
+        </div>
         <div className={styles.cardCopy}>
-          <div className={styles.cardMeta}>
-            {props.entry.status === "published" ? (
-              <Typography.Text component="span" className={styles.lessonCount}>
-                {`${String(props.entry.lessonCount)} уроков`}
-              </Typography.Text>
-            ) : (
-              <Badge>Скоро</Badge>
-            )}
-          </div>
           <Typography.Title className={styles.cardTitle} order={2}>
             {props.entry.title}
           </Typography.Title>
           <Typography.Text className={styles.cardSummary} tone="muted">
             {props.entry.summary}
           </Typography.Text>
-        </div>
-        <CourseCatalogStudy courseId={props.entry.id} />
-        {props.entry.status === "published" ? (
           <div className={styles.cardFooter}>
-            <CourseCatalogProgress entry={props.entry} />
-            <ActionLink
-              className={styles.cardAction}
-              hierarchy="drawn"
-              icon="forward"
-              to="/courses/$courseSlug"
-              params={{ courseSlug: props.entry.routeSlug }}
-            >
-              Открыть курс
-            </ActionLink>
+            {props.entry.status === "published" ? (
+              <ActionLink
+                className={styles.cardAction}
+                hierarchy="drawn"
+                icon="forward"
+                to="/courses/$courseSlug"
+                params={{ courseSlug: props.entry.routeSlug }}
+              >
+                Открыть курс
+              </ActionLink>
+            ) : null}
           </div>
-        ) : null}
+        </div>
       </article>
     </li>
   );

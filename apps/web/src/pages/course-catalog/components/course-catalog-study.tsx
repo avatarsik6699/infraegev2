@@ -18,7 +18,7 @@ export const CourseCatalogStudy: React.FC<Props> = (props) => (
       width={1536}
       height={1024}
       decorative
-      fit="contain"
+      fit="cover"
       className={styles.studyImage}
     />
   </div>

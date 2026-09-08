@@ -13,7 +13,8 @@ export const FoundationPage: React.FC = () => {
   const motionActive = useElementActivity(heroRef);
 
   return (
-    <div className={styles.page}>
+    <div className={styles.page} data-motion-active={motionActive || undefined}>
+      <HomeAmbientField />
       <PublicHeader home />
       <main
         ref={heroRef}
@@ -21,23 +22,22 @@ export const FoundationPage: React.FC = () => {
         data-foundation-layout
         data-motion-active={motionActive || undefined}
       >
-        <HomeAmbientField />
         <section className={styles.intro} data-foundation-intro>
           <Typography.Title className={styles.heroTitle} order={1}>
             <span>Информатика -</span>
-            <span>это система</span>
+            <span className={styles.heroSecondLine}>это система</span>
           </Typography.Title>
-          <Typography.Text className={styles.lead} variant="lead">
-            Подготовка к ЕГЭ без зубрёжки
+          <Typography.Text className={styles.introDescription}>
+            Готовьтесь к ЕГЭ через понимание: от первой строки кода до
+            самостоятельного решения задач.
           </Typography.Text>
           <ActionLink
             className={styles.primaryAction}
             hierarchy="drawn"
             icon="forward"
-            to="/courses/$courseSlug"
-            params={{ courseSlug: "python" }}
+            to="/ege"
           >
-            Начать подготовку
+            Начать готовиться
           </ActionLink>
         </section>
 

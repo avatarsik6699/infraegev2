@@ -3,7 +3,7 @@ import styles from "./foundation-page.module.css";
 import { homeLearningMapPatterns } from "./home-learning-map-patterns";
 
 export const HomeLearningMapBackground: React.FC = () => (
-  <>
+  <g data-map-background-patterns>
     <g data-pattern-grid-relief>
       <ellipse
         cx="92"
@@ -64,5 +64,5 @@ export const HomeLearningMapBackground: React.FC = () => (
         name={name}
       />
     ))}
-  </>
+  </g>
 );

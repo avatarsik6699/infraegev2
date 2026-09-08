@@ -4,9 +4,7 @@ import { useElementActivity } from "~/shared/lib/element-activity";
 import styles from "../course-catalog-page.module.css";
 
 const catalogTrail = {
-  route:
-    "M640 330C690 330 710 320 706 384C700 444 703 515 706 573S733 671 701 728C681 765 590 748 479 751S209 750 93 771C-29 793 1 890 48 917",
-  side: "M1185 340C1250 371 1228 455 1197 496S1156 596 1208 645",
+  route: "M479 751C350 751 209 750 93 771C-29 793 1 890 48 917",
 };
 
 export const CourseCatalogTrail: React.FC = () => {
@@ -32,14 +30,7 @@ export const CourseCatalogTrail: React.FC = () => {
           dashArray="8 92"
           className={styles.trailPulse}
         />
-        <SvgDrawing.Line
-          d={catalogTrail.side}
-          strokeWidth={1.2}
-          className={styles.trailLine}
-        />
         <g className={styles.trailNodes}>
-          <circle cx="706" cy="384" r="5" />
-          <circle cx="706" cy="573" r="5" />
           <circle cx="479" cy="751" r="5" />
           <circle cx="48" cy="917" r="5" />
         </g>

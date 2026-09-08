@@ -10,19 +10,20 @@ export class CourseCatalogPage {
   }
 
   async expectCatalog(): Promise<void> {
-    const canvasMatches = await this.page
-      .locator("[data-course-catalog-page]")
-      .evaluate((page) => {
-        const style = getComputedStyle(page);
-        const canvas = style.getPropertyValue("--color-brand-canvas").trim();
-        const probe = page.ownerDocument.createElement("span");
-        probe.style.color = canvas;
-        page.append(probe);
-        const expected = getComputedStyle(probe).color;
-        probe.remove();
-        return style.backgroundColor === expected;
-      });
-    expect(canvasMatches).toBe(true);
+    await expect
+      .poll(() =>
+        this.page.locator("[data-course-catalog-page]").evaluate((page) => {
+          const style = getComputedStyle(page);
+          const canvas = style.getPropertyValue("--color-brand-canvas").trim();
+          const probe = page.ownerDocument.createElement("span");
+          probe.style.color = canvas;
+          page.append(probe);
+          const expected = getComputedStyle(probe).color;
+          probe.remove();
+          return style.backgroundColor === expected;
+        }),
+      )
+      .toBe(true);
     await expect(this.page).toHaveTitle("Мини-курсы — infraege");
     await expect(
       this.page.getByRole("heading", { level: 1, name: "Мини-курсы" }),
@@ -116,13 +117,13 @@ export class CourseCatalogPage {
     const algorithms = byId["algorithms-data-structures"];
     const advanced = byId["advanced-problems"];
 
-    expect(python.width).toBeGreaterThan(excel.width);
-    expect(python.height).toBeGreaterThan(excel.height);
-    expect(excel.left).toBeGreaterThan(python.left);
-    expect(algorithms.left).toBe(excel.left);
-    expect(algorithms.top).toBeGreaterThan(excel.top);
-    expect(advanced.width).toBeGreaterThan(python.width);
-    expect(advanced.top).toBeGreaterThan(python.top);
+    expect(python.width).toBeGreaterThan(advanced.width);
+    expect(python.height).toBeGreaterThan(advanced.height);
+    expect(advanced.left).toBeGreaterThan(python.left);
+    expect(algorithms.left).toBe(advanced.left);
+    expect(algorithms.top).toBeGreaterThan(advanced.top);
+    expect(excel.width).toBeGreaterThan(python.width);
+    expect(excel.top).toBeGreaterThan(python.top);
   }
 
   async expectMobileOrder(): Promise<void> {
@@ -143,7 +144,7 @@ export class CourseCatalogPage {
           "[class*='routeDraw']",
           "[class*='routeMarker']",
           "[class*='trailPulse']",
-          "[class*='cardSheen']",
+          "[data-surface-glint]",
         ]
           .flatMap((selector) => [...root.querySelectorAll(selector)])
           .map((element) => getComputedStyle(element).animationName),
@@ -184,6 +185,38 @@ export class CourseCatalogPage {
         }),
       );
     expect(overlaps).toBe(false);
+    const mediaLayout = await this.page
+      .locator("[data-course-card]")
+      .evaluateAll((cards) =>
+        cards.map((card) => {
+          const frame = card.querySelector("article")!.getBoundingClientRect();
+          const media = card
+            .querySelector("[data-course-media]")!
+            .getBoundingClientRect();
+          const title = card.querySelector("h2")!;
+          const summary = card.querySelector("[class*='cardSummary']")!;
+          return {
+            height: frame.height,
+            share: (media.height * media.width) / (frame.height * frame.width),
+            titleFits: title.scrollHeight <= title.clientHeight + 1,
+            gap:
+              summary.getBoundingClientRect().top -
+              title.getBoundingClientRect().bottom,
+          };
+        }),
+      );
+    expect(
+      mediaLayout.every(
+        (entry) =>
+          entry.share >= 0.48 &&
+          entry.share <= 0.85 &&
+          entry.titleFits &&
+          entry.gap >= 7.9,
+      ),
+    ).toBe(true);
+    await expect(
+      this.page.locator("[data-course-meta] [data-badge]"),
+    ).toHaveCount(4);
     const alignedFrames = await this.page
       .locator("[data-course-card] article")
       .evaluateAll((surfaces) =>
@@ -212,13 +245,9 @@ export class CourseCatalogPage {
     const cleanFooter = await this.page
       .locator('[data-course-card="python"]')
       .evaluate((card) => {
-        const texture = card.querySelector("[class*='cardTexture']")!;
-        const footer = card.querySelector("[class*='cardFooter']")!;
         const action = card.querySelector("a")!;
         const style = getComputedStyle(action);
         return (
-          texture.getBoundingClientRect().bottom <=
-            footer.getBoundingClientRect().top &&
           style.backgroundColor === "rgba(0, 0, 0, 0)" &&
           style.boxShadow === "none"
         );
@@ -252,7 +281,7 @@ export class CourseCatalogPage {
       .evaluate((root) =>
         [
           ...root.querySelectorAll(
-            "[class*='routeDraw'], [class*='routeMarker'], [class*='trailPulse'], [class*='cardSheen']",
+            "[class*='routeDraw'], [class*='routeMarker'], [class*='trailPulse'], [data-surface-glint]",
           ),
         ].every((element) => {
           const style = getComputedStyle(element);

@@ -66,36 +66,41 @@ arrows, quiet theory-to-pattern routes and one practice-to-theory return loop. R
 domain-agnostic SVG primitives own multitone gradient resources and line/arrow rendering, while a
 small SVG pattern preset composes deterministic strokes, labels and nodes inside directional fade
 fields. Pattern subject matter, coordinates and responsive placement stay with the consuming page.
-The hero extends that vocabulary into one low-contrast page-local ambient SVG field behind its
-statement and map without entering the header or footer. A fading orthogonal engineering grid spans
-the full main-page canvas and recedes progressively toward both chrome edges; its grid, calibration
-marks and notation remain neutral and static, with local soft relief beneath the map's authored
-patterns to prevent both structures accumulating contrast. After hydration,
-decorative overlay strokes carry two restrained moving impulses through existing connections;
-longer, clearly visible surface-border gradients use each surface's own neutral or active accent
-border color and appear in deterministic offset cycles so the scene feels irregular without
-causing SSR drift. The static composition remains complete, while reduced motion, an offscreen hero
-or a hidden document keeps the overlays stopped. The homepage remains the visual source and
-`/ege` is the second migrated consumer: it carries the same expanded identity on one uninterrupted
-warm engineering canvas. Its full-page grid, restrained orange route impulses and substantial
-paper topic surfaces begin with the compact catalog title and one separated metadata line for the
-topic count and FIPI source, leaving the heading's right side available for future real controls.
-The two published topics use their supplied transparent conceptual illustrations aligned to an
-upper media section with exam-number context and topic copy. Only the artwork may cross the
-card's top/right edge, and then by a restrained few pixels without covering adjacent content; the
-single clipped surface keeps matching corner radii, a separate action footer and the same contained
-lower-right decorative number used by the complete map. Planned cards remain opaque, while their
-neutral frame, quieter type, reduced depth, absent action and shared «Скоро» badge communicate that
-they are not yet available.
-The complete exam map stays linear instead of reusing the homepage illustration. The rejected raster dry-ink
-experiment is not part of the product. One complete learning-map SVG preserves its cards, stages
-and notation across desktop and mobile. Its wider asymmetric desktop constellation spreads enlarged
-cards and notation toward the scene edges; decorative filter overflow is
-contained by the home visual boundary and never enlarges the document canvas. The scene fits both
-its parent column and available viewport height, switches to width-led fitting when the page stacks,
-then scales as one bounded scene on narrow screens without horizontal page overflow.
+The hero extends that vocabulary into a full-page perspective grid with distributed code/graph
+notation and quiet traveling light fading toward the public chrome,
+with a clean reading area and bounded paper depth. Text and map occupy independent desktop columns;
+desktop scales the scene to the viewport height while narrow/reflow screens scroll naturally. One SVG canvas retains its card/stage content and recomposes it
+into a taller, enlarged alternating route on mobile, with CSS-selected connector geometry before
+hydration. The 12-second choreography leads through the main path during seconds 0–4, answers with
+branches and contour light during seconds 4–7, then rests. Enlarged engraved cards have distinct depth offsets while attached route
+deformation stays coordinated. Main-route stages, text and progress remain stationary; only satellite cards drift, while the
+background retains its quiet independent motion;
+cards retain similar but varied dimensions, clear surfaces and original planar rotations.
+Compact satellite cards contain 88-unit icons and reduced padding. Their flat surfaces have no shadow or thickness and share very faint paper texture with distinct arc, dot, woven-loop and contour
+patterns. Compact stage numerals, titles and vertically centered checks retain clear spacing. A single paper progress disc
+has a clean interior without decorative texture/patterns and a thin track and arc on the perimeter, with a
+large centered orange «72%» and no caption. The original
+statement «Информатика - это система» leads into one standard arrow link «Начать готовиться» to `/ege`. Ambient
+layers fade completely at chrome boundaries. Reduced motion, no-JS, offscreen and hidden-document states preserve
+the complete static composition or pause the mounted effects without restarting them.
+The `/ege` catalog uses equal-height single-cell cards with one shared 58:42 media/content
+layout, faint grain and varied engraving. Missing illustrations use a neutral book placeholder.
+Number labels sit over the artwork; two-line titles and full source descriptions displayed as up to two compact lines with an ellipsis align
+across cards. Published artwork has slight bounded overflow; only an 8px edge band fades into paper. The bottom row holds
+the published action; planned status sits beside the number over the artwork. The field uses distributed quiet motifs and soft 24-second
+illumination instead of vertical orange routes; published cards retain a single frame glint.
+Its 25 topics retain exam order in three/two/one columns.
+The `/courses` cards use the same image-first composition: an asymmetric desktop mosaic with advanced problems above algorithms on the right,
+Excel in the wide closing card, and a single column on mobile,
+region-filling artwork with slight overflow, quiet metadata labels above, separated title/summary/action below, faint
+grain, varied patterns and original corner arcs, with restrained silver-neutral gradients and
+once-only soft material glints. Only Python has a link and hydrated personal progress.
+Static image bounds hold before hydration and without JS; decorations never overlap descriptions
+or links.
+The complete exam map stays linear instead of reusing the homepage illustration. The rejected
+raster dry-ink experiment is not part of the product.
 Unavailable navigation is visually secondary and noninteractive without
-status labels; account placeholders and synthetic social proof are absent. The literal «72% курса»
+status labels; account placeholders and synthetic social proof are absent. The illustrative circular «72%» dial
 belongs only to the reference illustration and is not learner state. Internal lesson and course
 layouts preserve their learning structure. `/courses` and `/courses/python` are the reusable
 visual references for future modules: engineering fields, paper depth, gradients, artwork and

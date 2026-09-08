@@ -56,15 +56,17 @@ export const TopicCatalogPage: React.FC = () => {
             </div>
           </header>
 
-          <ol
-            className={styles.topicList}
-            data-topic-list
-            aria-labelledby="exam-map-heading"
-          >
-            {topicCatalog.entries.map((entry) => (
-              <TopicCatalogCard entry={entry} key={entry.id} />
-            ))}
-          </ol>
+          <div className={styles.catalogMap}>
+            <ol
+              className={styles.topicList}
+              data-topic-list
+              aria-labelledby="exam-map-heading"
+            >
+              {topicCatalog.entries.map((entry) => (
+                <TopicCatalogCard entry={entry} key={entry.id} />
+              ))}
+            </ol>
+          </div>
 
           <aside
             className={styles.sourceNote}
