@@ -32,7 +32,7 @@
   display: grid;
   grid-template-rows: auto 1fr auto;
   min-height: 100svh;
-  background: var(--color-bg);
+  background: var(--page-frame-background, var(--color-bg));
 }
 
 .lessonPage {

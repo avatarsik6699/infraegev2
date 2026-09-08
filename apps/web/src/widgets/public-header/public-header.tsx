@@ -32,8 +32,7 @@ const PublicNavigation: React.FC<{
         className={styles.sectionLink}
         data-current={activeSection === "courses" || undefined}
         hierarchy="drawn"
-        to="/courses/$courseSlug"
-        params={{ courseSlug: "python" }}
+        to="/courses/"
       >
         Мини-курсы
       </ActionLink>

@@ -16,16 +16,18 @@ export const ImageMedia: React.FC<ImageMediaProps> = (props) => {
   const imgRef = useRef<HTMLImageElement>(null);
   const currentSrc = props.imageStatus.currentSrc;
   const handleLoad = props.imageStatus.handleLoad;
+  const handleError = props.imageStatus.handleError;
 
   useEffect(
     function syncCachedImageStatusFx() {
       // A cached image can already be complete before `onLoad` ever fires for
       // this src (including a cached fallback) — check once per src.
-      if (imgRef.current?.complete && imgRef.current.naturalWidth > 0) {
-        handleLoad();
+      if (imgRef.current?.complete) {
+        if (imgRef.current.naturalWidth > 0) handleLoad();
+        else handleError();
       }
     },
-    [currentSrc, handleLoad],
+    [currentSrc, handleLoad, handleError],
   );
 
   return (

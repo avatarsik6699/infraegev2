@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as CoursesIndexRouteImport } from './routes/courses.index'
 import { Route as CoursesCourseSlugRouteImport } from './routes/courses.$courseSlug'
 import { Route as EgeIndexRouteImport } from './routes/ege.index'
 import { Route as EgeSlugRouteImport } from './routes/ege.$slug'
@@ -37,6 +38,11 @@ const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CoursesIndexRoute = CoursesIndexRouteImport.update({
+  id: '/courses/',
+  path: '/courses/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CoursesCourseSlugRoute = CoursesCourseSlugRouteImport.update({
@@ -74,6 +80,7 @@ export interface FileRoutesByFullPath {
   '/courses/$courseSlug': typeof CoursesCourseSlugRoute
   '/ege/$slug': typeof EgeSlugRoute
   '/lab/design-system': typeof LabDesignSystemRoute
+  '/courses/': typeof CoursesIndexRoute
   '/ege/': typeof EgeIndexRoute
   '/courses/$courseSlug/$lessonSlug': typeof CoursesCourseSlugLessonSlugRoute
 }
@@ -85,6 +92,7 @@ export interface FileRoutesByTo {
   '/courses/$courseSlug': typeof CoursesCourseSlugRoute
   '/ege/$slug': typeof EgeSlugRoute
   '/lab/design-system': typeof LabDesignSystemRoute
+  '/courses': typeof CoursesIndexRoute
   '/ege': typeof EgeIndexRoute
   '/courses/$courseSlug/$lessonSlug': typeof CoursesCourseSlugLessonSlugRoute
 }
@@ -97,6 +105,7 @@ export interface FileRoutesById {
   '/courses/$courseSlug': typeof CoursesCourseSlugRoute
   '/ege/$slug': typeof EgeSlugRoute
   '/lab/design-system': typeof LabDesignSystemRoute
+  '/courses/': typeof CoursesIndexRoute
   '/ege/': typeof EgeIndexRoute
   '/courses_/$courseSlug/$lessonSlug': typeof CoursesCourseSlugLessonSlugRoute
 }
@@ -110,6 +119,7 @@ export interface FileRouteTypes {
     | '/courses/$courseSlug'
     | '/ege/$slug'
     | '/lab/design-system'
+    | '/courses/'
     | '/ege/'
     | '/courses/$courseSlug/$lessonSlug'
   fileRoutesByTo: FileRoutesByTo
@@ -121,6 +131,7 @@ export interface FileRouteTypes {
     | '/courses/$courseSlug'
     | '/ege/$slug'
     | '/lab/design-system'
+    | '/courses'
     | '/ege'
     | '/courses/$courseSlug/$lessonSlug'
   id:
@@ -132,6 +143,7 @@ export interface FileRouteTypes {
     | '/courses/$courseSlug'
     | '/ege/$slug'
     | '/lab/design-system'
+    | '/courses/'
     | '/ege/'
     | '/courses_/$courseSlug/$lessonSlug'
   fileRoutesById: FileRoutesById
@@ -144,6 +156,7 @@ export interface RootRouteChildren {
   CoursesCourseSlugRoute: typeof CoursesCourseSlugRoute
   EgeSlugRoute: typeof EgeSlugRoute
   LabDesignSystemRoute: typeof LabDesignSystemRoute
+  CoursesIndexRoute: typeof CoursesIndexRoute
   EgeIndexRoute: typeof EgeIndexRoute
   CoursesCourseSlugLessonSlugRoute: typeof CoursesCourseSlugLessonSlugRoute
 }
@@ -176,6 +189,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/courses/': {
+      id: '/courses/'
+      path: '/courses'
+      fullPath: '/courses/'
+      preLoaderRoute: typeof CoursesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/courses/$courseSlug': {
@@ -224,6 +244,7 @@ const rootRouteChildren: RootRouteChildren = {
   CoursesCourseSlugRoute: CoursesCourseSlugRoute,
   EgeSlugRoute: EgeSlugRoute,
   LabDesignSystemRoute: LabDesignSystemRoute,
+  CoursesIndexRoute: CoursesIndexRoute,
   EgeIndexRoute: EgeIndexRoute,
   CoursesCourseSlugLessonSlugRoute: CoursesCourseSlugLessonSlugRoute,
 }

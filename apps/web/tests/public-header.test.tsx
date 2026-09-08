@@ -77,7 +77,7 @@ describe("PublicHeader", () => {
       screen
         .getAllByRole("link", { name: "Мини-курсы" })[0]
         .getAttribute("href"),
-    ).toBe("/courses/python");
+    ).toBe("/courses/");
     expect(
       screen
         .getAllByRole("link", { name: "Мини-курсы" })[0]

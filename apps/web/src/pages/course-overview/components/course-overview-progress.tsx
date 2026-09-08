@@ -1,13 +1,12 @@
 import { useMemo } from "react";
-import type { CourseTypes } from "~/entities/course";
-import { useLessonsProgress } from "~/features/lesson-progress";
+import { courseProgress, type CourseTypes } from "~/entities/course";
+import {
+  useLessonProgressHydrated,
+  useLessonsProgress,
+} from "~/features/lesson-progress";
 import { Progress } from "~/shared/components/progress";
 import { Typography } from "~/shared/components/typography";
 import styles from "../course-overview-page.module.css";
-import {
-  calculateCourseProgress,
-  getCourseProgressCopy,
-} from "./course-overview-progress.model";
 
 type Props = {
   lessons: readonly CourseTypes.LessonDefinition[];
@@ -18,7 +17,7 @@ export const CourseOverviewProgress: React.FC<Props> = (props) => {
     () =>
       props.lessons.map((lesson) => ({
         id: lesson.id,
-        taskIds: lesson.practiceTaskIds,
+        practiceTaskIds: lesson.practiceTaskIds,
         masteryThreshold: lesson.masteryThreshold ?? 0.8,
       })),
     [props.lessons],
@@ -28,13 +27,14 @@ export const CourseOverviewProgress: React.FC<Props> = (props) => {
     [progressLessons],
   );
   const progressByLessonId = useLessonsProgress(lessonIds);
+  const hydrated = useLessonProgressHydrated();
   const progress = useMemo(
-    () => calculateCourseProgress(progressLessons, progressByLessonId),
+    () => courseProgress.calculate(progressLessons, progressByLessonId),
     [progressByLessonId, progressLessons],
   );
-  if (progress.availableCount === 0) return null;
+  if (!hydrated || progress.availableCount === 0) return null;
 
-  const copy = getCourseProgressCopy(progress);
+  const copy = courseProgress.formatOverviewCopy(progress);
 
   return (
     <section className={styles.progress} aria-label="Прогресс курса">

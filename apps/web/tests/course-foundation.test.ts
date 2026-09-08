@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  courseProgress,
   courseLessonPublications,
   coursePublications,
   findCourseByRouteSlug,
@@ -7,13 +8,9 @@ import {
   findCourseLessonByRouteSlugs,
   findCoursePublicationByRouteSlug,
   getCourseLessons,
+  type CourseProgressTypes,
 } from "~/entities/course";
 import { loadPracticeTasks } from "~/entities/practice-task";
-import {
-  calculateCourseProgress,
-  getCourseProgressCopy,
-  type CourseProgressSnapshot,
-} from "~/pages/course-overview/components/course-overview-progress.model";
 
 describe("Python course foundation", () => {
   it("publishes the complete expanded curriculum for final evaluation", () => {
@@ -684,20 +681,20 @@ describe("course progress", () => {
     const lessons = [
       {
         id: "first",
-        taskIds: ["a"],
+        practiceTaskIds: ["a"],
         masteryThreshold: 0.8,
       },
       {
         id: "second",
-        taskIds: ["b", "c"],
+        practiceTaskIds: ["b", "c"],
         masteryThreshold: 0.5,
       },
     ];
 
     expect(
-      calculateCourseProgress(lessons, {
-        first: { acceptedAnswers: {}, solvedTaskIds: ["a"] },
-        second: { acceptedAnswers: {}, solvedTaskIds: [] },
+      courseProgress.calculate(lessons, {
+        first: { solvedTaskIds: ["a"] },
+        second: { solvedTaskIds: [] },
       }),
     ).toEqual({
       masteredLessonIds: ["first"],
@@ -706,9 +703,9 @@ describe("course progress", () => {
     });
 
     expect(
-      calculateCourseProgress(lessons, {
-        first: { acceptedAnswers: {}, solvedTaskIds: ["a"] },
-        second: { acceptedAnswers: { b: "answer" }, solvedTaskIds: ["b"] },
+      courseProgress.calculate(lessons, {
+        first: { solvedTaskIds: ["a"] },
+        second: { solvedTaskIds: ["b"] },
       }),
     ).toEqual({
       masteredLessonIds: ["first", "second"],
@@ -746,12 +743,22 @@ describe("course progress", () => {
   ])(
     "selects explicit progress copy",
     ({ progress, expected }: ProgressCopyCase) => {
-      expect(getCourseProgressCopy(progress)).toBe(expected);
+      expect(courseProgress.formatOverviewCopy(progress)).toBe(expected);
     },
   );
+
+  it("formats compact catalog progress without exposing a percentage", () => {
+    expect(
+      courseProgress.formatCatalogCopy({
+        allAvailableMastered: false,
+        availableCount: 28,
+        masteredLessonIds: ["first", "second"],
+      }),
+    ).toBe("Освоено 2 из 28 уроков");
+  });
 });
 
 type ProgressCopyCase = {
-  progress: CourseProgressSnapshot;
+  progress: CourseProgressTypes.Snapshot;
   expected: string;
 };

@@ -179,6 +179,35 @@ app → routes → pages → widgets → features → entities → shared
   those behaviors exist. The page stays complete in SSR/no-JavaScript, loads only catalog
   publication metadata rather than authored lesson TSX, and currently adds no filters, progress or
   client state.
+- The `/courses` catalog extends the public infraege world with a page-specific illustrated
+  mosaic. Its heading groups «Мини-курсы», a short lead and «1 курс доступен · 3 в плане» on
+  the left; the supplied perspective staircase and a separate orange SvgDrawing route occupy the
+  right and continues visually into orange routes through the mosaic gutters. A visible
+  perspective grid and sparse code fragments belong to the page. Supplied WebP illustrations
+  render through shared Image with reserved dimensions; a page-owned SVG color-to-alpha filter
+  removes their pale paper while preserving colored ink, and composites against SourceGraphic
+  to avoid opaque filter bounds. The original reference assets stay unchanged. Artwork is a
+  separate unclipped layer above contour-aligned, clipped card material, with a bounded top/right overflow;
+  it never covers course copy or adjacent actions. All four courses receive substantial media
+  regions separate from text; Python leads seven columns and two rows, Excel and algorithms
+  occupy the right five-column positions, and advanced problems closes with a wide image/text
+  card. Medium layouts use full-width Python, a planned pair and a full-width closing card;
+  narrow layouts preserve course DOM order. Warm-paper surfaces drawn from the public palette,
+  fine neutral edges, soft contact shadows and quiet engravings create restrained depth, without
+  metallic fill or heavy bevels. Python receives a slightly stronger frame, interactive lift
+  and a single edge glint. Planned artwork uses quieter saturation
+  and no frame glint. Larger, softer upper stairs and a partial lower-left continuation share one
+  diagonal; faint left-side engravings balance the artwork without filling the reading space.
+  Image edges fade over a narrow perimeter. Python decoration fades out above its footer;
+  the ordinary drawn action has no backing, keeping progress and action on clean reading space.
+  Frame glints and route markers play once within five seconds, pausing offscreen
+  or while the document is hidden; there is no animation toggle. Planned cards retain no
+  hover lift, pointer affordance or focus stop. Reduced motion renders the completed static
+  composition. Published title, summary, route, lesson count and progress inputs derive from
+  lightweight Course metadata; planned entries are catalog-only records marked «Скоро» with
+  no links, dates, durations, difficulty or lesson counts. Python has one «Открыть курс» link and
+  hydration-only «Освоено N из 28 уроков» in its footer; SSR/no-JS omits only that personal count.
+  Search, filters, sorting, recommendations and Topic relationships remain absent.
 - A CourseLesson keeps course context and its local section outline together in one navigation
   rail, with the article as the dominant reading stream. On narrow screens the title and outcome
   precede the ordinary in-flow «Содержание урока» list so a long outline cannot displace the

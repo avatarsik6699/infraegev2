@@ -12,6 +12,7 @@ export type CourseLessonPublication = {
   summary: string;
   status: LessonContent.Status;
   practiceTaskIds: readonly string[];
+  masteryThreshold?: number;
 };
 
 export const pythonFirstProgramLessonPublication: Readonly<CourseLessonPublication>;

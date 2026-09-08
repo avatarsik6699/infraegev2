@@ -66,6 +66,60 @@ describe("ExternalLink", () => {
 });
 
 describe("Image", () => {
+  it("settles an image already loaded before effects without a load event", () => {
+    vi.spyOn(HTMLImageElement.prototype, "complete", "get").mockReturnValue(
+      true,
+    );
+    vi.spyOn(HTMLImageElement.prototype, "naturalWidth", "get").mockReturnValue(
+      100,
+    );
+    const result = render(<Image src="/cached.png" alt="Диаграмма" />);
+    expect(
+      result.container
+        .querySelector("[data-status]")
+        ?.getAttribute("data-status"),
+    ).toBe("loaded");
+  });
+
+  it("settles a failed image completed before effects without an error event", () => {
+    vi.spyOn(HTMLImageElement.prototype, "complete", "get").mockReturnValue(
+      true,
+    );
+    vi.spyOn(HTMLImageElement.prototype, "naturalWidth", "get").mockReturnValue(
+      0,
+    );
+    const result = render(<Image src="/missing.png" alt="Диаграмма" />);
+    expect(
+      result.container
+        .querySelector("[data-status]")
+        ?.getAttribute("data-status"),
+    ).toBe("error");
+  });
+
+  it("settles a cached fallback after the initial image already failed", () => {
+    vi.spyOn(HTMLImageElement.prototype, "complete", "get").mockReturnValue(
+      true,
+    );
+    vi.spyOn(
+      HTMLImageElement.prototype,
+      "naturalWidth",
+      "get",
+    ).mockImplementation(function (this: HTMLImageElement) {
+      return this.getAttribute("src") === "/fallback.png" ? 100 : 0;
+    });
+    const result = render(
+      <Image src="/missing.png" fallbackSrc="/fallback.png" alt="Диаграмма" />,
+    );
+    expect(
+      result.container
+        .querySelector("[data-status]")
+        ?.getAttribute("data-status"),
+    ).toBe("loaded");
+    expect(
+      screen.getByRole("img", { name: "Диаграмма" }).getAttribute("src"),
+    ).toBe("/fallback.png");
+  });
+
   it("applies loading defaults to informative images", () => {
     render(<Image src="/diagram.png" alt="Диаграмма" />);
     const image = screen.getByRole("img", { name: "Диаграмма" });

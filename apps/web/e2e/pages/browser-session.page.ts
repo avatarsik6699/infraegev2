@@ -58,6 +58,13 @@ export class BrowserSession {
     });
   }
 
+  async captureFullPage(filename: string): Promise<void> {
+    await this.page.screenshot({
+      path: this.testInfo.outputPath(filename),
+      fullPage: true,
+    });
+  }
+
   expectCleanConsole(): void {
     expect(this.#consoleErrors).toEqual([]);
     expect(this.#consoleWarnings).toEqual([]);

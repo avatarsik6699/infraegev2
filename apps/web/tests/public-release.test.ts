@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  courseCatalog,
   courseLessonPublications,
   coursePublications,
 } from "~/entities/course";
@@ -99,6 +100,32 @@ describe("public release metadata", () => {
         .filter((lesson) => lesson.status === "published")
         .map((lesson) => lesson.routeSlug),
     ).toHaveLength(28);
+  });
+
+  it("projects truthful course availability into the catalog", () => {
+    expect(courseCatalog.entries.map((entry) => entry.id)).toEqual([
+      "python",
+      "excel",
+      "algorithms-data-structures",
+      "advanced-problems",
+    ]);
+    expect(courseCatalog).toMatchObject({
+      availableCount: 1,
+      plannedCount: 3,
+    });
+    expect(courseCatalog.entries[0]).toMatchObject({
+      id: "python",
+      status: "published",
+      routeSlug: "python",
+      lessonCount: 28,
+    });
+    expect(
+      courseCatalog.entries.filter((entry) => entry.status === "planned"),
+    ).toEqual([
+      expect.not.objectContaining({ routeSlug: expect.anything() }),
+      expect.not.objectContaining({ routeSlug: expect.anything() }),
+      expect.not.objectContaining({ routeSlug: expect.anything() }),
+    ]);
   });
 
   it("creates absolute canonical and social metadata", () => {

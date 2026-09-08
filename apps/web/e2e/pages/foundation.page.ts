@@ -29,6 +29,9 @@ export class FoundationPage {
     await expect(
       this.page.getByRole("link", { name: "Темы" }).first(),
     ).toHaveAttribute("href", /^\/ege\/?$/);
+    await expect(
+      this.page.getByRole("link", { name: "Мини-курсы" }).first(),
+    ).toHaveAttribute("href", /^\/courses\/?$/);
     await expect(this.page.getByText("10 234 ученика")).toHaveCount(0);
     await expect(this.page.getByText("скоро", { exact: true })).toHaveCount(0);
     await expect(this.page.getByText("Войти", { exact: true })).toHaveCount(0);
@@ -58,6 +61,11 @@ export class FoundationPage {
   async openTopics(): Promise<void> {
     await this.page.getByRole("link", { name: "Темы" }).first().click();
     await expect(this.page).toHaveURL(/\/ege\/?$/);
+  }
+
+  async openCourses(): Promise<void> {
+    await this.page.getByRole("link", { name: "Мини-курсы" }).first().click();
+    await expect(this.page).toHaveURL(/\/courses\/?$/);
   }
 
   async expectBrandMetadata(): Promise<void> {

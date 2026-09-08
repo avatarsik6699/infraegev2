@@ -9,6 +9,7 @@ import { siteConfig } from "~/shared/config/site";
 const publicPaths = [
   "/",
   "/ege",
+  "/courses",
   "/privacy",
   ...lessonPublications
     .filter((lesson) => lesson.status === "published")

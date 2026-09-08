@@ -1,6 +1,7 @@
 import { test as base } from "@playwright/test";
 import { AccessibilityPage } from "./pages/accessibility.page";
 import { BrowserSession } from "./pages/browser-session.page";
+import { CourseCatalogPage } from "./pages/course-catalog.page";
 import { DesignSystemLabPage } from "./pages/design-system-lab.page";
 import { ErrorTelemetryPage } from "./pages/error-telemetry.page";
 import { FoundationPage } from "./pages/foundation.page";
@@ -13,6 +14,8 @@ import { TopicCatalogPage } from "./pages/topic-catalog.page";
 type AppFixtures = {
   accessibilityPage: AccessibilityPage;
   browserSession: BrowserSession;
+  courseCatalogPage: CourseCatalogPage;
+  noJavaScriptCourseCatalogPage: CourseCatalogPage;
   designSystemLabPage: DesignSystemLabPage;
   errorTelemetryPage: ErrorTelemetryPage;
   foundationPage: FoundationPage;
@@ -37,6 +40,21 @@ export const test = base.extend<AppFixtures>({
   },
   browserSession: async ({ page }, use, testInfo) => {
     await use(new BrowserSession(page, testInfo));
+  },
+  courseCatalogPage: async ({ page }, use) => {
+    await use(new CourseCatalogPage(page));
+  },
+  noJavaScriptCourseCatalogPage: async ({ baseURL, browser }, use) => {
+    const context = await browser.newContext({
+      baseURL,
+      javaScriptEnabled: false,
+      viewport: { width: 390, height: 844 },
+    });
+    try {
+      await use(new CourseCatalogPage(await context.newPage()));
+    } finally {
+      await context.close();
+    }
   },
   designSystemLabPage: async ({ page }, use) => {
     await use(new DesignSystemLabPage(page));

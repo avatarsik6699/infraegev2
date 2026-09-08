@@ -1,0 +1,686 @@
+.page {
+  composes: pageFrame from "../../shared/styles/patterns.module.css";
+  --page-frame-background: var(--color-brand-canvas);
+  --text-catalog-heading: clamp(3.25rem, 5vw, 4.5rem);
+  min-width: 0;
+  overflow-x: clip;
+  color: var(--color-brand-ink);
+}
+.root {
+  position: relative;
+  isolation: isolate;
+  min-width: 0;
+  overflow: clip;
+}
+.ambientField {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black 8rem,
+    black 80%,
+    transparent
+  );
+}
+.ambientScene {
+  width: 100%;
+  height: 100%;
+}
+.ambientGridLine {
+  fill: none;
+  stroke: color-mix(in srgb, var(--color-brand-ink) 13%, transparent);
+  stroke-width: 1;
+}
+.ambientNotation {
+  fill: color-mix(in srgb, var(--color-brand-muted) 46%, transparent);
+  font-family: var(--font-data);
+  font-size: var(--text-sm);
+}
+.catalogSection {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: var(--space-5);
+  padding-block: var(--space-3) var(--space-6);
+}
+.catalogHeading {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  min-height: 12rem;
+  z-index: 1;
+}
+.headingCopy {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: var(--space-1-5);
+  padding-block: var(--space-2);
+}
+.catalogHeading h1[data-order] {
+  font-family: var(--font-display);
+  font-size: var(--text-catalog-heading);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.02;
+}
+.catalogLead {
+  max-width: 52ch;
+  font-size: var(--text-base);
+  line-height: 1.55;
+}
+.catalogMeta {
+  margin-top: 0;
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+}
+.staircase {
+  position: absolute;
+  z-index: 0;
+  right: -4rem;
+  top: -3rem;
+  width: 68%;
+  opacity: 0.6;
+  aspect-ratio: 1.5;
+  pointer-events: none;
+}
+.staircaseContinuation {
+  position: absolute;
+  z-index: 0;
+  left: -15rem;
+  bottom: -9rem;
+  width: min(64rem, 78%);
+  aspect-ratio: 1.5;
+  opacity: 0.3;
+  pointer-events: none;
+}
+.continuationMarker {
+  display: none;
+}
+.staircaseImage {
+  mix-blend-mode: multiply;
+  filter: url("#course-staircase-ink");
+  mask-image: radial-gradient(ellipse at 55% 48%, black 50%, transparent 82%);
+}
+.staircaseRoute {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  color: var(--color-brand-orange);
+}
+.staircaseImage img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.routeUnderlay {
+  opacity: 0.75;
+}
+.routeDraw {
+  animation: route-draw 2.4s var(--motion-easing) both;
+  animation-play-state: paused;
+}
+.routeMarker {
+  opacity: 0;
+  animation: route-travel 3.4s 0.4s linear both;
+  animation-play-state: paused;
+}
+.routeNodes circle {
+  fill: var(--color-brand-canvas);
+  stroke: var(--color-brand-orange);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+.catalogHeading[data-motion-active="true"] .routeDraw,
+.catalogHeading[data-motion-active="true"] .routeMarker {
+  animation-play-state: running;
+}
+
+.courseList {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(15rem, auto)) auto;
+  position: relative;
+  z-index: 1;
+  gap: var(--space-5) var(--space-4);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.card {
+  position: relative;
+  display: flex;
+  min-width: 0;
+}
+.card[data-course-card="python"] {
+  grid-column: span 7;
+  grid-row: span 2;
+}
+.card[data-course-card="excel"],
+.card[data-course-card="algorithms-data-structures"] {
+  grid-column: span 5;
+}
+.card[data-course-card="advanced-problems"] {
+  grid-column: 1 / -1;
+}
+.cardSurface {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+  overflow: visible;
+  border-radius: var(--radius-surface);
+}
+.cardMaterial {
+  box-sizing: border-box;
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  border: 1px solid transparent;
+  border-radius: inherit;
+  background:
+    linear-gradient(
+        155deg,
+        color-mix(in srgb, var(--color-surface) 60%, var(--color-brand-canvas)),
+        color-mix(in srgb, var(--color-brand-canvas) 94%, var(--color-surface))
+      )
+      padding-box,
+    linear-gradient(
+        125deg,
+        color-mix(in srgb, var(--color-brand-ink) 22%, transparent),
+        color-mix(in srgb, var(--color-brand-ink) 8%, transparent) 52%,
+        color-mix(in srgb, var(--color-brand-ink) 18%, transparent)
+      )
+      border-box;
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--color-surface) 70%, transparent),
+    0 2px 5px color-mix(in srgb, var(--color-brand-ink) 7%, transparent),
+    0 16px 32px -12px
+      color-mix(in srgb, var(--color-brand-ink) 12%, transparent);
+}
+.cardTexture {
+  position: absolute;
+  inset: 0;
+}
+.card[data-course-status="published"] .cardTexture {
+  bottom: 8rem;
+  mask-image: linear-gradient(to top, transparent, black 4rem);
+}
+.cardEngraving {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 20rem;
+  max-width: 70%;
+  height: auto;
+  stroke: color-mix(in srgb, var(--color-brand-ink) 8%, transparent);
+  stroke-width: 1;
+  mask-image: linear-gradient(25deg, black, transparent 70%);
+}
+.card[data-course-status="planned"] .studyImage {
+  filter: url("#course-artwork-paper") saturate(0.55);
+}
+.card[data-course-status="planned"] .cardSheen {
+  display: none;
+}
+.cardTexture::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--color-brand-ink) 16%, transparent) 1px,
+    transparent 1.5px
+  );
+  background-size: 14px 14px;
+  mask-image: radial-gradient(ellipse at 95% 90%, black, transparent 58%);
+}
+.cardTexture::after {
+  content: "";
+  position: absolute;
+  right: -4rem;
+  bottom: -6rem;
+  width: 20rem;
+  height: 14rem;
+  border: 1px solid color-mix(in srgb, var(--color-brand-ink) 18%, transparent);
+  border-radius: 50%;
+  transform: rotate(-24deg);
+  box-shadow:
+    0 -12px 0 -11px var(--color-surface),
+    0 -26px 0 -25px color-mix(in srgb, var(--color-brand-ink) 30%, transparent);
+}
+.card[data-course-status="published"] .cardSurface {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto 1fr auto;
+  transition: transform var(--motion-duration) var(--motion-easing);
+}
+.card[data-course-status="published"] .cardMaterial {
+  border-color: color-mix(in srgb, var(--color-brand-ink) 22%, transparent);
+}
+.cardSheen {
+  box-sizing: border-box;
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  border: 1px solid transparent;
+  background: linear-gradient(
+      115deg,
+      transparent 32%,
+      var(--color-surface) 48%,
+      var(--color-surface) 50%,
+      transparent 66%
+    )
+    border-box;
+  background-size: 300% 100%;
+  mask:
+    linear-gradient(black, black) padding-box,
+    linear-gradient(black, black);
+  mask-composite: exclude;
+  opacity: 0;
+  animation: card-sheen 3.2s 0.15s var(--motion-easing) both;
+  animation-play-state: paused;
+}
+.card:nth-child(2) .cardSheen {
+  animation-delay: 0.4s;
+}
+.card:nth-child(3) .cardSheen {
+  animation-delay: 0.65s;
+}
+.card:nth-child(4) .cardSheen {
+  animation-delay: 0.25s;
+}
+.cardSurface[data-motion-active="true"] .cardSheen {
+  animation-play-state: running;
+}
+.cardCopy {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  align-content: start;
+  gap: var(--space-1-5);
+  min-width: 0;
+  padding: var(--space-3) 0 var(--space-3) var(--space-3);
+}
+.card[data-course-card="python"] .cardCopy {
+  padding: var(--space-4) var(--space-4) var(--space-1);
+}
+.cardMeta {
+  min-height: 1.65rem;
+}
+.lessonCount,
+.progressCopy {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--color-brand-muted);
+  line-height: 1.4;
+  font-variant-numeric: tabular-nums;
+}
+.cardTitle[data-order] {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+.card[data-course-card="python"] .cardTitle[data-order] {
+  font-size: var(--text-3xl);
+}
+.cardSummary {
+  max-width: 48ch;
+  font-size: var(--text-sm);
+  line-height: 1.55;
+}
+.cardFooter {
+  display: flex;
+  position: relative;
+  z-index: 2;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  min-height: 4.5rem;
+  padding: var(--space-2) var(--space-4);
+}
+.cardAction {
+  min-height: 2.75rem;
+  font-weight: 500;
+  margin-left: auto;
+}
+.study {
+  min-width: 0;
+  padding: var(--space-1);
+  position: relative;
+  z-index: 3;
+  pointer-events: none;
+  filter: drop-shadow(
+    0 8px 10px color-mix(in srgb, var(--color-brand-ink) 10%, transparent)
+  );
+}
+.studyImage {
+  filter: url("#course-artwork-paper");
+}
+.studyImage img {
+  display: block;
+  width: 100%;
+  height: auto;
+  mask-image:
+    linear-gradient(to right, transparent, black 6%, black 94%, transparent),
+    linear-gradient(to bottom, transparent, black 6%, black 94%, transparent);
+  mask-composite: intersect;
+}
+.card[data-course-card="python"] .study {
+  width: 94%;
+  max-width: 32rem;
+  justify-self: end;
+  padding: 0;
+  transform: translateX(1.5rem);
+}
+.card[data-course-card="advanced-problems"] .cardSurface {
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+}
+.card[data-course-card="advanced-problems"] .cardCopy {
+  padding: var(--space-4);
+}
+.card[data-course-card="advanced-problems"] .cardTitle[data-order] {
+  max-width: 24ch;
+  font-size: var(--text-3xl);
+}
+.card[data-course-card="advanced-problems"] .study {
+  max-width: 34rem;
+  justify-self: end;
+  padding: 0;
+  transform: translate(1.5rem, -1rem);
+}
+.card[data-course-card="excel"] .study,
+.card[data-course-card="algorithms-data-structures"] .study {
+  width: calc(100% + 1.5rem);
+  transform: translateY(-1.5rem);
+  padding: 0;
+}
+
+@keyframes route-draw {
+  from {
+    stroke-dashoffset: 100;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes route-travel {
+  0% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+  10%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: -100;
+    opacity: 0;
+  }
+}
+@keyframes card-sheen {
+  0% {
+    background-position: 100% 0;
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  40%,
+  100% {
+    background-position: 0 0;
+    opacity: 0;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card[data-course-status="published"] .cardSurface:hover {
+    transform: translateY(-3px);
+    filter: brightness(1.015);
+  }
+}
+.card[data-course-status="published"] .cardSurface:focus-within {
+  transform: translateY(-3px);
+}
+
+@media (max-width: 70rem) {
+  .catalogHeading {
+    min-height: 13rem;
+  }
+  .staircase {
+    top: -1rem;
+    right: -3rem;
+  }
+  .courseList {
+    grid-template-rows: auto auto auto;
+  }
+  .card[data-course-card="python"] {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+  .card[data-course-card="python"] .cardSurface {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    grid-template-rows: 1fr auto;
+  }
+  .card[data-course-card="python"] .study {
+    grid-column: 2;
+    grid-row: 1 / 3;
+  }
+  .card[data-course-card="python"] .cardFooter {
+    grid-column: 1;
+  }
+  .card[data-course-card="excel"],
+  .card[data-course-card="algorithms-data-structures"] {
+    grid-column: span 6;
+  }
+  .card[data-course-status="planned"] .cardSurface {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .card[data-course-status="planned"] .study {
+    grid-row: 1;
+    width: 100%;
+    max-width: 26rem;
+    justify-self: center;
+  }
+  .card[data-course-status="planned"] .cardCopy {
+    padding: var(--space-3);
+    align-self: start;
+  }
+  .card[data-course-card="advanced-problems"] .cardSurface {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .card[data-course-card="advanced-problems"] .study {
+    grid-row: auto;
+  }
+}
+@media (max-width: 44rem) {
+  .catalogSection {
+    padding-block: var(--space-2) var(--space-6);
+    gap: var(--space-3);
+  }
+  .catalogHeading {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 0;
+  }
+  .headingCopy {
+    gap: var(--space-1-5);
+  }
+  .catalogHeading h1[data-order] {
+    font-size: var(--text-display);
+  }
+  .catalogLead {
+    max-width: 32ch;
+    padding-right: var(--space-4);
+  }
+  .catalogMeta {
+    margin-top: var(--space-1);
+  }
+  .staircase {
+    width: 55%;
+    right: -25%;
+    top: 9rem;
+    opacity: 0.4;
+  }
+  .staircaseContinuation {
+    width: 36rem;
+    left: -20rem;
+    bottom: -4rem;
+    opacity: 0.2;
+  }
+  .courseList {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+  }
+  .card[data-course-card] {
+    grid-column: 1;
+    grid-row: auto;
+  }
+  .card[data-course-card] .cardSurface {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto;
+  }
+  .card[data-course-card] .cardCopy {
+    padding: var(--space-3);
+  }
+  .card[data-course-card="python"] .cardCopy {
+    padding-bottom: var(--space-1);
+  }
+  .card[data-course-card] .study {
+    grid-column: 1;
+    grid-row: 1;
+    width: calc(100% + 0.5rem);
+    max-width: none;
+    padding: 0;
+    transform: translate(0.25rem, -0.75rem);
+  }
+  .card[data-course-card="python"] .study {
+    grid-row: 2;
+    transform: translateX(0.5rem);
+  }
+  .card[data-course-card="python"] .cardFooter {
+    grid-row: 3;
+    padding: var(--space-2) var(--space-3);
+  }
+  .card[data-course-status="published"] .cardTexture {
+    bottom: 10rem;
+  }
+  .card[data-course-card] .cardTitle[data-order] {
+    font-size: var(--text-3xl);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .routeDraw,
+  .routeMarker,
+  .cardSheen {
+    animation: none;
+  }
+  .card[data-course-status="published"] .cardSurface {
+    transition: none;
+    transform: none;
+  }
+}
+@media (prefers-contrast: more) {
+  .ambientField,
+  .staircaseContinuation,
+  .staircase {
+    opacity: 0.15;
+  }
+  .cardMaterial,
+  .card[data-course-status="published"] .cardMaterial {
+    border-color: var(--color-brand-ink);
+    background: var(--color-brand-canvas);
+    box-shadow: none;
+  }
+  .cardSheen {
+    display: none;
+  }
+}
+.headingDetails {
+  display: flex;
+  min-height: 2.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-3);
+}
+.catalogTrail {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+}
+.catalogTrail svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.trailLine {
+  color: var(--color-brand-orange);
+  opacity: 0.65;
+}
+.trailPulse {
+  color: var(--color-brand-orange);
+  animation: trail-flow 4s linear both;
+  animation-play-state: paused;
+  opacity: 0;
+}
+.trailNodes {
+  fill: var(--color-brand-canvas);
+  stroke: var(--color-brand-orange);
+  stroke-width: 1.5;
+}
+.catalogTrail[data-motion-active="true"] .trailPulse {
+  animation-play-state: running;
+}
+@keyframes trail-flow {
+  0% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+  10%,
+  85% {
+    opacity: 0.85;
+  }
+  to {
+    stroke-dashoffset: -100;
+    opacity: 0;
+  }
+}
+@media (max-width: 70rem) {
+  .catalogTrail {
+    opacity: 0.6;
+  }
+  .card[data-course-status="planned"] .study {
+    transform: translate(0.75rem, -1rem);
+  }
+}
+@media (max-width: 44rem) {
+  .catalogTrail {
+    left: -1rem;
+    right: -1rem;
+  }
+  .card[data-course-status="planned"] .study {
+    transform: translate(0.25rem, -0.75rem);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .trailPulse {
+    animation: none;
+    opacity: 0;
+  }
+}
