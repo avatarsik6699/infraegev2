@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
 import { ESLint } from "eslint";
+import "./verify-design-system.mjs";
 
 const workspaceRoot = path.join(import.meta.dirname, "..");
 const sourcePath = path.join(

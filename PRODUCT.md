@@ -97,8 +97,9 @@ then scales as one bounded scene on narrow screens without horizontal page overf
 Unavailable navigation is visually secondary and noninteractive without
 status labels; account placeholders and synthetic social proof are absent. The literal «72% курса»
 belongs only to the reference illustration and is not learner state. Internal lesson and course
-layouts keep their existing structure until separately scoped.
-The former ALCHIMIA lab is historical design evidence, not the active public brand. Binding rules
+layouts preserve their learning structure while using the same warm-paper system in a quiet reading composition.
+The design-system lab demonstrates the active production components without its own theme.
+ALCHIMIA remains archived design evidence. Binding rules
 live in `docs/FRONTEND.md`.
 
 ## Evidence on Hand

@@ -1,3 +1,7 @@
+import {
+  componentContracts,
+  widgetContracts,
+} from "../../src/pages/design-system-lab/catalog-contracts";
 import { expect, type Locator, type Page } from "@playwright/test";
 
 export class DesignSystemLabPage {
@@ -23,18 +27,18 @@ export class DesignSystemLabPage {
         level: 1,
         name: "Дизайн-система",
       }),
-    ).toHaveCount(0);
+    ).toBeVisible();
     await expect(
       this.page.getByText("Desktop-каталог визуальных контрактов приложения"),
     ).toHaveCount(0);
     const header = this.page.locator(
-      "[data-alchimia-lab-root] > [data-alchimia-header]",
+      "[data-design-system-root] > [data-public-header]",
     );
-    const mark = header.locator("[data-alchimia-mark]");
-    const wordmark = header.locator("[data-alchimia-wordmark]");
-    const subtitle = header.locator("[data-alchimia-subtitle]");
+    const mark = header.locator("[data-infraege-mark]");
+    const wordmark = header.locator("[data-infraege-wordmark]");
+    const subtitle = header.locator("[data-infraege-subtitle]");
     await expect(wordmark).toBeVisible();
-    await expect(subtitle).toHaveText("ЕГЭ информатика");
+    await expect(subtitle).toHaveText("подготовка к ЕГЭ по информатике");
     await expect(mark).toBeVisible();
     const dashboardTabs = this.page.getByRole("tablist", {
       name: "Уровни дизайн-системы",
@@ -64,13 +68,13 @@ export class DesignSystemLabPage {
         "#system-identity-heading",
       );
       const reading = document.querySelector<HTMLElement>(
-        "[data-alchimia-reading]",
+        "[data-catalog-reading]",
       );
       const service = document.querySelector<HTMLElement>(
         "[aria-label='Уровни дизайн-системы'] [role='tab']",
       );
       const palette = document.querySelector<HTMLElement>(
-        "[data-alchimia-palette]",
+        "[data-system-palette]",
       );
       const swatchColor = (role: string) => {
         const swatch = palette?.querySelector<HTMLElement>(
@@ -85,28 +89,28 @@ export class DesignSystemLabPage {
         primaryColor: display ? getComputedStyle(display).color : "",
         secondaryColor: reading ? getComputedStyle(reading).color : "",
         pageBackground: palette
-          ? getComputedStyle(palette.closest("[data-alchimia-lab-root]")!)
+          ? getComputedStyle(palette.closest("[data-design-system-root]")!)
               .backgroundColor
           : "",
         palette: {
-          paper: swatchColor("--color-alchimia-paper"),
-          ink: swatchColor("--color-alchimia-ink"),
-          secondary: swatchColor("--color-alchimia-ink-secondary"),
-          rule: swatchColor("--color-alchimia-rule"),
+          paper: swatchColor("--color-bg"),
+          ink: swatchColor("--color-text"),
+          secondary: swatchColor("--color-text-soft"),
+          rule: swatchColor("--color-rule"),
         },
       };
     });
-    expect(typography.display).toContain("Alchimia Alegreya");
-    expect(typography.reading).toContain("Alchimia Golos Text");
-    expect(typography.service).toContain("Alchimia JetBrains Mono");
-    expect(typography.primaryColor).toBe("rgb(23, 23, 23)");
-    expect(typography.secondaryColor).toBe("rgb(96, 96, 96)");
-    expect(typography.pageBackground).toBe("rgb(255, 255, 255)");
+    expect(typography.display).toContain("Infraege Alegreya");
+    expect(typography.reading).toContain("Infraege Golos Text");
+    expect(typography.service).toContain("Infraege Golos Text");
+    expect(typography.primaryColor).toBe("rgb(26, 26, 26)");
+    expect(typography.secondaryColor).toBe("rgb(107, 107, 107)");
+    expect(typography.pageBackground).toBe("rgb(245, 243, 239)");
     expect(typography.palette).toEqual({
-      paper: "rgb(255, 255, 255)",
-      ink: "rgb(23, 23, 23)",
-      secondary: "rgb(96, 96, 96)",
-      rule: "rgb(212, 212, 212)",
+      paper: "rgb(245, 243, 239)",
+      ink: "rgb(26, 26, 26)",
+      secondary: "rgb(107, 107, 107)",
+      rule: "rgb(216, 212, 204)",
     });
 
     const paletteComposition = await this.page.evaluate(() => {
@@ -139,7 +143,7 @@ export class DesignSystemLabPage {
     }
 
     const semanticTokenPreviews = this.page.locator("[data-token-preview]");
-    await expect(semanticTokenPreviews).toHaveCount(28);
+    await expect(semanticTokenPreviews).toHaveCount(29);
     await expect(this.page.locator("[data-spacing-token-preview]")).toHaveCount(
       9,
     );
@@ -165,7 +169,7 @@ export class DesignSystemLabPage {
         easing: styleValue("--motion-easing", "transitionTimingFunction"),
       };
     });
-    expect(tokenSignals.background).toBe("rgb(255, 255, 255)");
+    expect(tokenSignals.background).toBe("rgb(245, 243, 239)");
     expect(tokenSignals.danger).not.toBe(tokenSignals.text);
     expect(tokenSignals.ruleStyle).toBe("solid");
     expect(tokenSignals.focusStyle).toBe("solid");
@@ -239,8 +243,8 @@ export class DesignSystemLabPage {
     expect(rhythmGaps).toEqual({
       content: "12px",
       related: "24px",
-      concept: "48px",
-      section: "64px",
+      concept: this.page.viewportSize()!.width <= 832 ? "32px" : "48px",
+      section: this.page.viewportSize()!.width <= 832 ? "48px" : "64px",
     });
 
     const surfaceSignals = await this.page.evaluate(() => {
@@ -271,7 +275,7 @@ export class DesignSystemLabPage {
       };
     });
     expect(surfaceSignals.base).toEqual({
-      background: "rgb(255, 255, 255)",
+      background: "rgb(245, 243, 239)",
       border: "0px",
       shadow: "none",
     });
@@ -281,7 +285,7 @@ export class DesignSystemLabPage {
     expect(surfaceSignals.quiet?.border).toBe("0px");
     expect(surfaceSignals.quiet?.shadow).toBe("none");
     expect(surfaceSignals.bounded).toEqual({
-      background: "rgb(255, 255, 255)",
+      background: "rgb(245, 243, 239)",
       border: "1px",
       shadow: "none",
     });
@@ -299,10 +303,7 @@ export class DesignSystemLabPage {
           }
         : null;
     });
-    expect(catalogNavigationOverflow).toEqual({
-      horizontal: false,
-      vertical: false,
-    });
+    expect(catalogNavigationOverflow?.horizontal).toBe(false);
   }
 
   private async expectComponentsCatalog(): Promise<void> {
@@ -313,15 +314,10 @@ export class DesignSystemLabPage {
     const componentsPanel = this.page.locator(
       "[data-dashboard-panel]:not([hidden])",
     );
-    await expect(componentsPanel.locator("[data-contract-name]")).toHaveCount(
-      37,
+    await this.expectNamedContracts(
+      componentsPanel,
+      Object.values(componentContracts).flat(),
     );
-    await expect(
-      componentsPanel.locator('[data-contract-status="live"]'),
-    ).toHaveCount(34);
-    await expect(
-      componentsPanel.locator('[data-contract-status="context"]'),
-    ).toHaveCount(3);
     for (const contract of [
       "LearningVisualFrame",
       "LessonIntro",
@@ -463,10 +459,10 @@ export class DesignSystemLabPage {
       };
     });
     expect(controlSignals).toMatchObject({
-      primaryBackground: "rgb(23, 23, 23)",
+      primaryBackground: "rgb(26, 26, 26)",
       primaryColor: "rgb(255, 255, 255)",
-      secondaryBackground: "rgb(255, 255, 255)",
-      secondaryBorder: "rgb(212, 212, 212)",
+      secondaryBackground: "rgb(251, 250, 247)",
+      secondaryBorder: "rgb(129, 122, 112)",
     });
     expect(controlSignals.stateBackground).not.toBe(
       controlSignals.secondaryBackground,
@@ -474,7 +470,7 @@ export class DesignSystemLabPage {
     expect(controlSignals.invalidBorder).not.toBe(
       controlSignals.secondaryBorder,
     );
-    expect(controlSignals.successColor).not.toBe("rgb(23, 23, 23)");
+    expect(controlSignals.successColor).not.toBe("rgb(26, 26, 26)");
 
     const candidateSignals = await this.page.evaluate(() => {
       const input = document.querySelector<HTMLInputElement>(
@@ -619,19 +615,16 @@ export class DesignSystemLabPage {
       name: "Уровни дизайн-системы",
     });
     const header = this.page.locator(
-      "[data-alchimia-lab-root] > [data-alchimia-header]",
+      "[data-design-system-root] > [data-public-header]",
     );
     await dashboardTabs.getByRole("tab", { name: /^Виджеты/ }).click();
     const widgetsPanel = this.page.locator(
       "[data-dashboard-panel]:not([hidden])",
     );
-    await expect(widgetsPanel.locator("[data-contract-name]")).toHaveCount(4);
-    await expect(
-      widgetsPanel.locator('[data-contract-status="live"]'),
-    ).toHaveCount(4);
-    await expect(
-      widgetsPanel.locator('[data-contract-status="candidate"]'),
-    ).toHaveCount(0);
+    await this.expectNamedContracts(
+      widgetsPanel,
+      Object.values(widgetContracts).flat(),
+    );
     await expect(widgetsPanel.locator("[data-widget-assembly]")).toHaveCount(2);
     await expect(
       widgetsPanel.locator("[data-outline-link-id][aria-current='location']"),
@@ -685,10 +678,10 @@ export class DesignSystemLabPage {
 
     const identityGeometry = await header.evaluate((element) => {
       const markElement = element.querySelector<HTMLElement>(
-        "[data-alchimia-mark]",
+        "[data-infraege-mark]",
       );
       const nameElement = element.querySelector<HTMLElement>(
-        "[data-alchimia-name]",
+        "[data-infraege-name]",
       );
       if (!markElement || !nameElement) return null;
       const headerBox = element.getBoundingClientRect();
@@ -708,8 +701,74 @@ export class DesignSystemLabPage {
     expect(identityGeometry?.centerDelta).toBeLessThanOrEqual(2);
   }
 
+  private async expectNamedContracts(
+    root: Locator,
+    contracts: readonly { name: string; status: string }[],
+  ): Promise<void> {
+    const entries = root.locator("[data-contract-name]");
+    await expect(entries.locator("code")).toHaveText(
+      contracts.map((contract) => contract.name),
+    );
+    for (const contract of contracts) {
+      await expect(
+        root.locator(`[data-contract-name="${contract.name}"]`),
+      ).toHaveAttribute("data-contract-status", contract.status);
+    }
+  }
+
+  async expectThemeAndIsolatedStates(): Promise<void> {
+    await this.dismissConsentIfVisible();
+    const theme = await this.page.evaluate(() => {
+      const root = getComputedStyle(document.documentElement);
+      const lab = getComputedStyle(
+        document.querySelector("[data-design-system-root]")!,
+      );
+      const names = [
+        "--color-bg",
+        "--color-text",
+        "--font-ui",
+        "--color-focus",
+        "--control-primary-bg",
+      ];
+      return names.map((name) => ({
+        name,
+        root: root.getPropertyValue(name).trim(),
+        lab: lab.getPropertyValue(name).trim(),
+      }));
+    });
+    for (const token of theme) expect(token.lab, token.name).toBe(token.root);
+    await this.page.getByRole("tab", { name: /^Компоненты/ }).click();
+    const trigger = this.page
+      .locator('[data-component-specimen="ConfirmationDialog"]')
+      .getByRole("button");
+    await trigger.click();
+    const dialog = this.page.getByRole("alertdialog");
+    await expect(dialog).toBeVisible();
+    await expect(dialog).toHaveCSS("background-color", "rgb(251, 250, 247)");
+    await this.page.keyboard.press("Escape");
+    await expect(dialog).toHaveCount(0);
+    await expect(trigger).toBeFocused();
+    const consent = this.page.locator(
+      '[data-component-specimen="AnalyticsConsentNotice"]',
+    );
+    const stored = await this.page.evaluate(() => JSON.stringify(localStorage));
+    await consent.getByRole("button", { name: "Разрешить аналитику" }).click();
+    await expect(
+      consent.getByText("Пример: аналитика разрешена."),
+    ).toBeVisible();
+    await consent.getByRole("button", { name: "Не сейчас" }).click();
+    await expect(
+      consent.getByText("Пример: аналитика отклонена."),
+    ).toBeVisible();
+    expect(await this.page.evaluate(() => JSON.stringify(localStorage))).toBe(
+      stored,
+    );
+  }
+
   private async dismissConsentIfVisible(): Promise<void> {
-    const dismissConsent = this.page.getByRole("button", { name: "Не сейчас" });
+    const dismissConsent = this.page
+      .locator("[data-analytics-consent-enhanced]")
+      .getByRole("button", { name: "Не сейчас" });
     if (await dismissConsent.isVisible()) await dismissConsent.click();
   }
 
@@ -728,6 +787,18 @@ export class DesignSystemLabPage {
           `[data-dashboard-panel]:not([hidden]) [data-catalog-canvas] > section`,
         ),
       ).toHaveCount(view.sectionCount);
+    }
+  }
+
+  async expectResponsiveCatalog(): Promise<void> {
+    for (const label of ["Система", "Компоненты", "Виджеты"]) {
+      await this.page
+        .getByRole("tab", { name: new RegExp(`^${label}`) })
+        .click();
+      await expect(
+        this.page.getByRole("heading", { name: label, exact: true, level: 2 }),
+      ).toBeVisible();
+      await this.expectNoHorizontalOverflow();
     }
   }
 
@@ -771,7 +842,7 @@ export class DesignSystemLabPage {
     await this.open();
     await expect(
       this.page.getByRole("heading", { level: 1, name: "Дизайн-система" }),
-    ).toHaveCount(0);
+    ).toBeVisible();
     await expect(
       this.page.getByText("Desktop-каталог визуальных контрактов приложения"),
     ).toHaveCount(0);
@@ -782,7 +853,7 @@ export class DesignSystemLabPage {
     ).toHaveCount(21);
     await expect(this.page.locator("[data-rhythm-role]")).toHaveCount(4);
     await expect(this.page.locator("[data-surface-role]")).toHaveCount(4);
-    await expect(this.page.locator("[data-token-preview]")).toHaveCount(28);
+    await expect(this.page.locator("[data-token-preview]")).toHaveCount(29);
     await expect(this.page.locator("[data-spacing-token-preview]")).toHaveCount(
       9,
     );
@@ -792,14 +863,27 @@ export class DesignSystemLabPage {
     await expect(this.page.locator("[data-copy-contract]")).toHaveCount(4);
     await expect(this.page.locator("[data-reference-pattern]")).toHaveCount(0);
     await expect(this.page.locator("[data-control-specimen]")).toHaveCount(7);
-    await expect(this.page.locator("[data-contract-name]")).toHaveCount(41);
-    await expect(
-      this.page.locator('[data-contract-status="context"]'),
-    ).toHaveCount(3);
-    await expect(
-      this.page.locator('[data-contract-status="candidate"]'),
-    ).toHaveCount(0);
-    await expect(this.page.locator("[data-component-specimen]")).toHaveCount(6);
+    await this.expectNamedContracts(
+      this.page.locator("[data-design-system-root]"),
+      [
+        ...Object.values(componentContracts).flat(),
+        ...Object.values(widgetContracts).flat(),
+      ],
+    );
+    for (const name of [
+      "LessonIntro",
+      "LessonTheory",
+      "LessonSectionHeading",
+      "LearningVisualFrame",
+      "LessonPractice",
+      "LessonProgress",
+      "AnalyticsConsentNotice",
+      "DecorativePrimitives",
+    ]) {
+      await expect(
+        this.page.locator(`[data-component-specimen="${name}"]`),
+      ).toBeVisible();
+    }
     await expect(this.page.locator("[data-widget-assembly]")).toHaveCount(2);
     await expect(this.page.locator("[data-widget-flow-progress]")).toHaveText(
       "Решено 0 из 2",

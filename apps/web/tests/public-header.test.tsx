@@ -3,14 +3,36 @@ import { describe, expect, it, vi } from "vitest";
 import { PublicHeader } from "~/widgets/public-header";
 import { PublicFooter } from "~/widgets/public-footer";
 
-vi.mock("@tanstack/react-router", async (importOriginal) => {
-  const actual =
-    await importOriginal<typeof import("@tanstack/react-router")>();
-  return {
-    ...actual,
-    createLink:
-      (Component: React.ComponentType<React.ComponentProps<"a">>) =>
-      ({
+vi.mock(
+  "@tanstack/react-router",
+  async (importOriginal: <T>() => Promise<T>) => {
+    const actual =
+      await importOriginal<typeof import("@tanstack/react-router")>();
+    return {
+      ...actual,
+      createLink:
+        (Component: React.ComponentType<React.ComponentProps<"a">>) =>
+        ({
+          children,
+          params,
+          to,
+          ...props
+        }: React.ComponentProps<"a"> & {
+          to: string;
+          params?: { courseSlug?: string };
+        }) => (
+          <Component
+            href={
+              params?.courseSlug
+                ? to.replace("$courseSlug", params.courseSlug)
+                : to
+            }
+            {...props}
+          >
+            {children}
+          </Component>
+        ),
+      Link: ({
         children,
         params,
         to,
@@ -19,7 +41,7 @@ vi.mock("@tanstack/react-router", async (importOriginal) => {
         to: string;
         params?: { courseSlug?: string };
       }) => (
-        <Component
+        <a
           href={
             params?.courseSlug
               ? to.replace("$courseSlug", params.courseSlug)
@@ -28,28 +50,11 @@ vi.mock("@tanstack/react-router", async (importOriginal) => {
           {...props}
         >
           {children}
-        </Component>
+        </a>
       ),
-    Link: ({
-      children,
-      params,
-      to,
-      ...props
-    }: React.ComponentProps<"a"> & {
-      to: string;
-      params?: { courseSlug?: string };
-    }) => (
-      <a
-        href={
-          params?.courseSlug ? to.replace("$courseSlug", params.courseSlug) : to
-        }
-        {...props}
-      >
-        {children}
-      </a>
-    ),
-  };
-});
+    };
+  },
+);
 
 describe("PublicHeader", () => {
   it("renders the infraege identity and honest home navigation", () => {
@@ -161,5 +166,26 @@ describe("PublicHeader", () => {
         .querySelector("[data-public-header]")
         ?.getAttribute("data-expanded"),
     ).toBe("true");
+  });
+});
+
+describe("repeated footer specimens", () => {
+  it("isolates each Telegram paint resource when a footer appears in the lab", () => {
+    const { container } = render(
+      <>
+        <PublicFooter />
+        <PublicFooter />
+      </>,
+    );
+    const gradients = [
+      ...container.querySelectorAll('linearGradient[id*="telegram"]'),
+    ];
+    expect(gradients).toHaveLength(2);
+    expect(new Set(gradients.map((gradient) => gradient.id)).size).toBe(2);
+    for (const gradient of gradients) {
+      expect(
+        gradient.closest("svg")?.querySelector("circle")?.getAttribute("fill"),
+      ).toBe(`url(#${gradient.id})`);
+    }
   });
 });

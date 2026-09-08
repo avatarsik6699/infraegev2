@@ -23,18 +23,18 @@ const productionNginxSource = readFileSync(
 );
 
 describe("restrained brand accents", () => {
-  it("promotes the approved monochrome ALCHIMIA palette without legacy color roles", () => {
-    expect(themeSource).not.toContain("--theme-brand");
+  it("uses one warm-paper palette while keeping controls neutral", () => {
+    expect(themeSource).not.toContain("--theme-alchimia");
     expect(themeSource).not.toContain("#ff6b00");
     expect(themeSource).not.toContain("#f56300");
-    expect(themeSource).toContain("--theme-page: #ffffff");
-    expect(themeSource).toContain("--theme-ink: #171717");
-    expect(themeSource).toContain("--theme-ink-secondary: #606060");
-    expect(themeSource).toContain("--theme-rule: #d4d4d4");
-    expect(themeSource).toContain("--theme-primary: #171717");
-    expect(themeSource).toContain("--theme-primary-hover: #606060");
-    expect(themeSource).toContain("--theme-interactive-muted: oklch(0.97 0 0)");
-    expect(tokenSource).not.toContain("--color-brand");
+    expect(themeSource).toContain("--theme-page: #f5f3ef");
+    expect(themeSource).toContain("--theme-ink: #1a1a1a");
+    expect(themeSource).toContain("--theme-ink-secondary: #6b6b6b");
+    expect(themeSource).toContain("--theme-rule: #d8d4cc");
+    expect(themeSource).toContain("--theme-primary: #1a1a1a");
+    expect(themeSource).toContain("--theme-primary-hover: #42403c");
+    expect(themeSource).toContain("--theme-interactive-muted: #eeece7");
+    expect(tokenSource).toContain("--color-brand-canvas: var(--color-bg)");
     expect(tokenSource).toContain("--control-primary-bg: var(--color-accent)");
     expect(tokenSource).toContain(
       "--control-primary-bg-hover: var(--color-accent-dark)",
@@ -55,12 +55,12 @@ describe("restrained brand accents", () => {
       "utf8",
     );
 
-    expect(themeSource).toContain('"Alchimia Alegreya", "Alegreya Fallback"');
+    expect(themeSource).toContain('"Infraege Alegreya", "Alegreya Fallback"');
     expect(themeSource).toContain(
-      '"Alchimia Golos Text", "Golos Text Fallback"',
+      '"Infraege Golos Text", "Golos Text Fallback"',
     );
     expect(themeSource).toContain(
-      '"Alchimia JetBrains Mono", "JetBrains Mono Fallback", monospace',
+      '"Infraege JetBrains Mono", "JetBrains Mono Fallback", monospace',
     );
     expect(tokenSource).toContain("--font-display: var(--theme-font-display)");
     expect(titleSource).toContain("font-family: var(--font-display)");

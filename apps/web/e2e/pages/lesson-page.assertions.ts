@@ -74,7 +74,7 @@ export async function expectPublishedLessonDocument(
   await expect(theoryStage).not.toHaveAttribute("data-title-role", /.+/);
   await expect(theoryStage).toHaveCSS("font-size", "12px");
   await expect(theoryStage).toHaveCSS("font-weight", "500");
-  await expect(theoryStage).toHaveCSS("font-family", /Alchimia Golos Text/);
+  await expect(theoryStage).toHaveCSS("font-family", /Infraege Golos Text/);
   await expect(theoryStage).toHaveCSS("text-transform", "uppercase");
 }
 

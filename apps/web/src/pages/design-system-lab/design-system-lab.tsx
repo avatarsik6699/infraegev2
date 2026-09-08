@@ -6,6 +6,8 @@ import {
   TabsTab,
 } from "~/shared/components/tabs";
 import { useIsEnhanced } from "~/shared/lib/use-is-enhanced";
+import { Typography } from "~/shared/components/typography";
+import { PublicFooter } from "~/widgets/public-footer";
 import { PublicHeader } from "~/widgets/public-header";
 import { ComponentsCatalog } from "./components-catalog";
 import { dashboardTabDefinitions } from "./design-system-lab.constants";
@@ -20,11 +22,18 @@ export const DesignSystemLab: React.FC = () => {
   return (
     <div
       className={styles.page}
-      data-alchimia-lab-root
+      data-design-system-root
       data-enhanced={enhanced || undefined}
     >
       <PublicHeader />
       <main className={styles.dashboard}>
+        <div className={styles.catalogIntro}>
+          <Typography.Title order={1}>Дизайн-система</Typography.Title>
+          <Typography.Text tone="muted">
+            Действующие основы, компоненты и композиции infraege. Примеры
+            используют общую тему приложения.
+          </Typography.Text>
+        </div>
         <TabsRoot
           className={styles.dashboardTabs}
           value={dashboardTab}
@@ -74,6 +83,7 @@ export const DesignSystemLab: React.FC = () => {
           </TabsPanel>
         </TabsRoot>
       </main>
+      <PublicFooter />
     </div>
   );
 };

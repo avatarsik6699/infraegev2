@@ -27,10 +27,14 @@ export class FoundationPage {
       this.page.getByRole("link", { name: "Начать подготовку" }),
     ).toHaveAttribute("href", "/courses/python");
     await expect(
-      this.page.getByRole("link", { name: "Темы" }).first(),
+      this.page
+        .getByRole("link", { name: "Темы", includeHidden: true })
+        .first(),
     ).toHaveAttribute("href", /^\/ege\/?$/);
     await expect(
-      this.page.getByRole("link", { name: "Мини-курсы" }).first(),
+      this.page
+        .getByRole("link", { name: "Мини-курсы", includeHidden: true })
+        .first(),
     ).toHaveAttribute("href", /^\/courses\/?$/);
     await expect(this.page.getByText("10 234 ученика")).toHaveCount(0);
     await expect(this.page.getByText("скоро", { exact: true })).toHaveCount(0);

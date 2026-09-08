@@ -18,6 +18,27 @@ vi.mock(
     const actual = await importOriginal();
     return {
       ...actual,
+      createLink:
+        (Component: React.ComponentType<React.ComponentProps<"a">>) =>
+        ({
+          children,
+          to,
+          params,
+          ...props
+        }: React.ComponentProps<"a"> & {
+          to: string;
+          params?: Record<string, string>;
+        }) => (
+          <Component
+            href={Object.entries(params ?? {}).reduce(
+              (href, [key, value]) => href.replace(`$${key}`, value),
+              to,
+            )}
+            {...props}
+          >
+            {children}
+          </Component>
+        ),
       Link: ({
         children,
         to,

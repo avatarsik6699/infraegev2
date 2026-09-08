@@ -1,8 +1,8 @@
 .root {
   color: inherit;
-  /* The link reads as interactive without hover through a persistent neutral
+  /* The link reads as interactive without hover through a persistent
      underline; color is not required for the affordance. */
-  text-decoration-color: var(--color-accent);
+  text-decoration-color: var(--color-link-decoration);
   transition:
     color 140ms ease-out,
     text-decoration-color 140ms ease-out;

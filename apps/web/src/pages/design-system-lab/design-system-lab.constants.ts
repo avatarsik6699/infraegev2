@@ -147,40 +147,50 @@ export const componentErrorPracticeTasks: PracticeTaskTypes.LocalTask[] = [
 
 export const colorTokens = [
   {
-    name: "--color-alchimia-paper",
-    label: "Белый фон",
+    name: "--color-bg",
+    label: "Тёплая бумага",
     usage: "Основной фон",
   },
   {
-    name: "--color-alchimia-ink",
+    name: "--color-text",
     label: "Чернила",
     usage: "Заголовки и основной текст",
   },
   {
-    name: "--color-alchimia-ink-secondary",
+    name: "--color-text-soft",
     label: "Вторичные чернила",
     usage: "Пояснения и служебный текст",
   },
   {
-    name: "--color-alchimia-rule",
+    name: "--color-rule",
     label: "Граница",
     usage: "Структурные линии",
+  },
+  {
+    name: "--color-brand-orange",
+    label: "Знак и рисунок",
+    usage: "Декоративный акцент",
+  },
+  {
+    name: "--color-focus",
+    label: "Фокус и действие",
+    usage: "Доступный оранжевый",
   },
 ] as const;
 
 export const fontTokens = [
   {
-    name: "--font-alchimia-display",
+    name: "--font-display",
     label: "Display — Alegreya",
-    sample: "Алхимия знания начинается с точного вопроса.",
+    sample: "Понять идею. Разобрать пример. Попробовать самому.",
   },
   {
-    name: "--font-alchimia-reading",
+    name: "--font-reading",
     label: "Reading & interface — Golos Text",
     sample: "Рекурсия — это вызов функции самой себя.",
   },
   {
-    name: "--font-alchimia-service",
+    name: "--font-data",
     label: "Code & data — JetBrains Mono",
     sample: "def fib(n): return n if n < 2 else fib(n-1)+fib(n-2)",
   },

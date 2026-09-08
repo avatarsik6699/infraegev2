@@ -1,6 +1,6 @@
 .root {
   display: inline-flex;
-  min-height: 2.5rem;
+  min-height: var(--control-height);
   align-items: center;
   justify-content: center;
   padding-inline: var(--space-1-5);
@@ -64,7 +64,7 @@
 
 .text .label {
   text-decoration-line: underline;
-  text-decoration-color: var(--color-accent);
+  text-decoration-color: var(--color-link-decoration);
   text-decoration-thickness: 1px;
   text-underline-offset: 0.22em;
   transition: text-decoration-color var(--motion-duration) var(--motion-easing);

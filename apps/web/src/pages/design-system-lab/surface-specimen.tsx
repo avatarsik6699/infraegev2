@@ -26,7 +26,7 @@ export const SurfaceSpecimen: React.FC = () => (
             Основной поток
           </Typography.Title>
           <code className={styles.surfaceRoleToken}>
-            --lab-surface-base · без контейнера
+            --color-bg · без контейнера
           </code>
           <Typography.Text>
             Обычный учебный текст группируется ритмом, а не рамкой.
@@ -50,7 +50,7 @@ export const SurfaceSpecimen: React.FC = () => (
           <Typography.Title order={4} className={styles.surfaceRoleHeading}>
             Тихая поверхность
           </Typography.Title>
-          <code className={styles.surfaceRoleToken}>--lab-surface-quiet</code>
+          <code className={styles.surfaceRoleToken}>--color-surface-quiet</code>
           <Typography.Text>
             Один нейтральный fill объединяет вспомогательный контент.
           </Typography.Text>
@@ -74,7 +74,7 @@ export const SurfaceSpecimen: React.FC = () => (
           <Typography.Title order={4} className={styles.surfaceRoleHeading}>
             Ограниченная область
           </Typography.Title>
-          <code className={styles.surfaceRoleToken}>--lab-rule · 1px</code>
+          <code className={styles.surfaceRoleToken}>--color-rule · 1px</code>
           <Typography.Text>
             Одна рамка обозначает собственную область виджета или управления.
           </Typography.Text>
@@ -98,7 +98,7 @@ export const SurfaceSpecimen: React.FC = () => (
           <Typography.Title order={4} className={styles.surfaceRoleHeading}>
             Разделитель
           </Typography.Title>
-          <code className={styles.surfaceRoleToken}>--lab-rule · 1px</code>
+          <code className={styles.surfaceRoleToken}>--color-rule · 1px</code>
           <Typography.Text>
             Одна линия отделяет соседние равноправные группы.
           </Typography.Text>

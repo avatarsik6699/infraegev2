@@ -1,4 +1,5 @@
-.root {
+/* Defaults remain weaker than the owning consumer, regardless of route CSS order. */
+:where(.root) {
   margin-block: 0;
   color: var(--color-text);
   font-family: var(--font-reading);
@@ -6,43 +7,43 @@
   line-height: 1.68;
 }
 
-.root[data-variant="lead"] {
+:where(.root[data-variant="lead"]) {
   font-size: var(--text-lg);
   line-height: 1.55;
 }
 
-.root[data-variant="caption"] {
+:where(.root[data-variant="caption"]) {
   font-family: var(--font-ui);
   font-size: var(--text-xs);
   line-height: 1.45;
 }
 
-.root[data-variant="interface"] {
+:where(.root[data-variant="interface"]) {
   font-family: var(--font-ui);
   font-size: var(--text-sm);
   line-height: 1.45;
 }
 
-.root[data-tone="muted"] {
+:where(.root[data-tone="muted"]) {
   color: var(--color-muted);
 }
 
-.root[data-tone="accent"] {
+:where(.root[data-tone="accent"]) {
   color: var(--color-accent-dark);
 }
 
-.root[data-tone="highlight"] {
+:where(.root[data-tone="highlight"]) {
   background: var(--color-accent-soft);
   color: var(--color-accent-dark);
 }
 
-.root[data-truncate] {
+:where(.root[data-truncate]) {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.root[data-line-clamp] {
+:where(.root[data-line-clamp]) {
   display: -webkit-box;
   overflow: hidden;
   -webkit-box-orient: vertical;

@@ -509,3 +509,13 @@
 - **Fix:** every explicit reconciliation resubmits current protected values for secret-bearing
   Sources. sre-kit encrypts the replacements and removes superseded refs; never persist or log the
   plaintext inputs in this repository.
+
+### Windows-hosted browser MCP can interpret WSL screenshot paths as a C: path
+
+- **Symptoms:** screenshot saving rejects `/home/...` with `Access denied` and reports a canonical
+  path beginning `C:\home\...` outside its workspace roots, although the WSL directory is writable.
+- **Root cause:** the browser server resolves paths on Windows; the shell workspace is on WSL.
+- **Fix:** after the architect authorizes the target directory, request an inline screenshot without
+  `filePath`, then save its returned image bytes through the local workspace tool. Do not change
+  filesystem permissions, weaken the MCP root allowlist, or retry the same mismatched path.
+  A real shell `EACCES`/`EPERM` still requires the normal permission handoff.

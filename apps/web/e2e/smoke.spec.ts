@@ -560,6 +560,7 @@ test("the design-system catalog works on desktop and without JavaScript", async 
   await designSystemLabPage.expectCatalogStructure({
     widgetPersistence: true,
   });
+  await designSystemLabPage.expectThemeAndIsolatedStates();
   await designSystemLabPage.expectUnlistedMetadata();
   await designSystemLabPage.expectNoHorizontalOverflow();
   await browserSession.captureViewport("design-system-lab-desktop.png");
@@ -569,6 +570,13 @@ test("the design-system catalog works on desktop and without JavaScript", async 
   await designSystemLabPage.expectCatalogStructure();
   await designSystemLabPage.expectNoHorizontalOverflow();
   await browserSession.captureViewport("design-system-lab-zoomed.png");
+  await browserSession.useNarrowViewport();
+  await designSystemLabPage.expectResponsiveCatalog();
+  await browserSession.captureViewport("design-system-lab-mobile.png");
+  await browserSession.useMinimumViewport();
+  await designSystemLabPage.expectResponsiveCatalog();
+  await browserSession.useIntermediateViewport();
+  await designSystemLabPage.expectResponsiveCatalog();
   await browserSession.useReducedMotion();
   await designSystemLabPage.expectReducedMotion();
   browserSession.expectCleanConsole();

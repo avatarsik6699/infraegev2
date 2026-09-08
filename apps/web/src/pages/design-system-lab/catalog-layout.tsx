@@ -28,7 +28,7 @@ export const CatalogLayout: React.FC<CatalogLayoutProps> = ({
       </Typography.Title>
       <Typography.Text
         className={styles.paletteDescription}
-        data-alchimia-reading
+        data-catalog-reading
       >
         {description}
       </Typography.Text>

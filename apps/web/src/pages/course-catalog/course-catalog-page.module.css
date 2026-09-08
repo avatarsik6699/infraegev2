@@ -203,11 +203,7 @@
         color-mix(in srgb, var(--color-brand-ink) 18%, transparent)
       )
       border-box;
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--color-surface) 70%, transparent),
-    0 2px 5px color-mix(in srgb, var(--color-brand-ink) 7%, transparent),
-    0 16px 32px -12px
-      color-mix(in srgb, var(--color-brand-ink) 12%, transparent);
+  box-shadow: var(--shadow-catalog);
 }
 .cardTexture {
   position: absolute;

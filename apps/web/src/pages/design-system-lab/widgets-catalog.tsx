@@ -1,34 +1,13 @@
+import { widgetContracts } from "./catalog-contracts";
 import { Typography } from "~/shared/components/typography";
 import { LessonOutline } from "~/widgets/lesson-outline";
 import { PublicFooter } from "~/widgets/public-footer";
 import { PublicHeader } from "~/widgets/public-header";
 import { CatalogLayout } from "./catalog-layout";
-import {
-  CatalogContractMap,
-  type CatalogContract,
-} from "./catalog-contract-map";
+import { CatalogContractMap } from "./catalog-contract-map";
 import { widgetSections } from "./design-system-lab.constants";
 import { WidgetPracticeFlowSpecimen } from "./widget-practice-flow-specimen";
 import styles from "./design-system-lab.module.css";
-
-const live = (name: string, note: string): CatalogContract => ({
-  name,
-  note,
-  status: "live",
-});
-
-const widgetContracts = {
-  chrome: [
-    live("PublicHeader", "Действующая infraege-айдентика публичных страниц"),
-    live("PublicFooter", "Действующая навигация в подвале"),
-  ],
-  learning: [
-    live("LessonOutline", "Содержание урока и активная смысловая ветка"),
-  ],
-  flow: [
-    live("LessonPracticeFlow", "Практика, связанная с локальным прогрессом"),
-  ],
-} as const;
 
 const outlineGroups = [
   {

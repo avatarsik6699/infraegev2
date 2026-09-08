@@ -166,6 +166,12 @@ const tokenGroups = [
         kind: "radius",
       },
       {
+        name: "--shadow-catalog",
+        purpose: "Бумажная карточка публичного каталога",
+        label: "Каталог",
+        kind: "shadow",
+      },
+      {
         name: "--shadow-overlay",
         purpose: "Временный overlay",
         label: "Overlay",

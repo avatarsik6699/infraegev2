@@ -65,3 +65,21 @@
   align-items: center;
   min-height: 1.4rem;
 }
+
+.progressHeading {
+  margin: 0;
+  color: var(--color-muted);
+  font-family: var(--font-ui);
+  font-size: var(--text-2xs);
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+
+.progressStatus {
+  margin: 0;
+  color: var(--color-muted);
+  font-family: var(--font-reading);
+  font-size: var(--text-xs);
+  line-height: 1.4;
+}

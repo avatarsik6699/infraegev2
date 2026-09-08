@@ -8,7 +8,7 @@
     minmax(15rem, 16.25rem) minmax(0, 1fr)
     minmax(12rem, 16.25rem);
   min-height: 3.75rem;
-  border-bottom: 1px solid var(--color-rule);
+  background: var(--color-bg);
 }
 
 .contextArea,
@@ -43,7 +43,7 @@
 
 .rail {
   min-width: 0;
-  border-right: 1px solid var(--color-rule);
+  background: var(--color-bg);
 }
 
 .railContents {
@@ -142,7 +142,7 @@
 
   .rail {
     border-right: 0;
-    border-bottom: 1px solid var(--color-rule);
+    background: var(--color-bg);
   }
 
   .railContents {
@@ -181,4 +181,12 @@
   .section {
     gap: var(--space-2);
   }
+}
+
+.progressHeading {
+  composes: progressHeading from "../../shared/styles/patterns.module.css";
+}
+
+.progressStatus {
+  composes: progressStatus from "../../shared/styles/patterns.module.css";
 }

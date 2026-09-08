@@ -1,7 +1,5 @@
 .page {
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  min-height: 100svh;
+  composes: pageFrame from "../../shared/styles/patterns.module.css";
 }
 
 .root {

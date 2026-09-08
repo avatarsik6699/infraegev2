@@ -1,32 +1,24 @@
 :root {
   color-scheme: light;
 
-  /* Active replaceable profile: infraege. Components must not consume these
-     values directly; tokens.css is the semantic boundary. ALCHIMIA aliases
-     below remain only for the historical unlisted design-system lab. */
-  --theme-page: #ffffff;
-  --theme-surface: #ffffff;
-  --theme-surface-muted: oklch(0.97 0 0);
-  --theme-ink: #171717;
-  --theme-ink-secondary: #606060;
-  --theme-rule: #d4d4d4;
-  --theme-rule-strong: #d4d4d4;
-  --theme-brand-canvas: #f5f3ef;
-  --theme-brand-ink: #1a1a1a;
-  --theme-brand-muted: #6b6b6b;
+  /* One infraege profile for public pages, reading, controls and the live lab.
+     Only tokens.css consumes these values. */
+  --theme-page: #f5f3ef;
+  --theme-surface: #fbfaf7;
+  --theme-surface-muted: #eeece7;
+  --theme-ink: #1a1a1a;
+  --theme-ink-secondary: #6b6b6b;
+  --theme-rule: #d8d4cc;
+  --theme-rule-strong: #817a70;
   --theme-brand-orange: #ff6a00;
   --theme-brand-orange-text: #b84400;
   --theme-brand-orange-soft: #ffd9c2;
-  --theme-alchimia-paper: #ffffff;
-  --theme-alchimia-ink: #171717;
-  --theme-alchimia-ink-secondary: #606060;
-  --theme-alchimia-rule: #d4d4d4;
-  --theme-primary: #171717;
-  --theme-primary-hover: #606060;
-  --theme-interactive-muted: oklch(0.97 0 0);
+  --theme-primary: #1a1a1a;
+  --theme-primary-hover: #42403c;
+  --theme-interactive-muted: #eeece7;
   --theme-on-primary: #ffffff;
-  --theme-ring: #171717;
-  --theme-overlay-shadow: oklch(0 0 0 / 0.5);
+  --theme-ring: #b84400;
+  --theme-overlay-shadow: oklch(0.22 0.015 65 / 0.16);
   --theme-success: oklch(0.46 0.08 145);
   --theme-info: oklch(0.5 0.11 245);
   --theme-info-rule: oklch(0.82 0.055 245);
@@ -43,22 +35,15 @@
   --theme-code-operator: oklch(0.86 0.05 300);
 
   --theme-font-display:
-    "Alchimia Alegreya", "Alegreya Fallback", Georgia, serif;
+    "Infraege Alegreya", "Alegreya Fallback", Georgia, serif;
   --theme-font-ui:
-    "Alchimia Golos Text", "Golos Text Fallback", -apple-system,
+    "Infraege Golos Text", "Golos Text Fallback", -apple-system,
     BlinkMacSystemFont, "Segoe UI", sans-serif;
   --theme-font-reading:
-    "Alchimia Golos Text", "Golos Text Fallback", -apple-system,
+    "Infraege Golos Text", "Golos Text Fallback", -apple-system,
     BlinkMacSystemFont, "Segoe UI", sans-serif;
   --theme-font-data:
-    "Alchimia JetBrains Mono", "JetBrains Mono Fallback", monospace;
-  --theme-font-alchimia-display:
-    "Alchimia Alegreya", "Alegreya Fallback", Georgia, serif;
-  --theme-font-alchimia-reading:
-    "Alchimia Golos Text", "Golos Text Fallback", -apple-system,
-    BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --theme-font-alchimia-service:
-    "Alchimia JetBrains Mono", "JetBrains Mono Fallback", monospace;
+    "Infraege JetBrains Mono", "JetBrains Mono Fallback", monospace;
 
   --theme-radius-sm: 0.5rem;
   --theme-radius-md: 0.625rem;

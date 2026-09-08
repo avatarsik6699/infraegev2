@@ -1,47 +1,10 @@
 .page {
-  --font-reading: var(--font-alchimia-reading);
-  --font-ui: var(--font-alchimia-service);
-  --font-data: var(--font-alchimia-service);
-  --color-bg: var(--color-alchimia-paper);
-  --color-text: var(--color-alchimia-ink);
-  --color-text-soft: var(--color-alchimia-ink-secondary);
-  --color-muted: var(--color-alchimia-ink-secondary);
-  --color-faint: var(--color-alchimia-ink-secondary);
-  --lab-surface-base: var(--color-alchimia-paper);
-  --lab-surface-quiet: color-mix(
-    in srgb,
-    var(--color-alchimia-ink) 3%,
-    var(--color-alchimia-paper)
-  );
-  --lab-rule: var(--color-alchimia-rule);
-  --color-accent: var(--color-alchimia-ink);
-  --color-accent-dark: var(--color-alchimia-ink);
-  --color-accent-soft: var(--lab-surface-quiet);
-  --color-focus: var(--color-alchimia-ink);
-  --control-primary-bg: var(--color-alchimia-ink);
-  --control-primary-bg-hover: var(--color-alchimia-ink-secondary);
-  --control-primary-text: var(--color-alchimia-paper);
-  --control-secondary-bg: var(--lab-surface-base);
-  --control-secondary-border: var(--lab-rule);
-  --control-secondary-text: var(--color-alchimia-ink);
-  --control-quiet-bg-hover: var(--lab-surface-quiet);
-  --control-disabled-bg: var(--lab-surface-quiet);
-  --control-disabled-text: var(--color-alchimia-ink-secondary);
-  min-height: 100vh;
-  background: var(--color-bg);
-}
-
-.page h1,
-.page h2,
-.page h3,
-.page h4,
-.page h5,
-.page h6 {
-  color: var(--color-alchimia-ink);
-  font-family: var(--font-alchimia-display);
+  composes: pageFrame from "../../shared/styles/patterns.module.css";
 }
 
 .dashboard {
+  width: 100%;
+  min-width: 0;
   max-width: 90rem;
   margin-inline: auto;
   padding: var(--space-3) clamp(var(--space-2), 3vw, var(--space-4))
@@ -62,7 +25,7 @@
 
 .dashboardTabList {
   display: grid;
-  grid-template-columns: repeat(3, minmax(10.5rem, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .dashboardTab.dashboardTab {
@@ -80,7 +43,7 @@
 
 .dashboardTab small {
   color: var(--color-text-soft);
-  font-family: var(--font-alchimia-reading);
+  font-family: var(--font-reading);
   font-size: var(--text-xs);
   font-weight: 500;
   line-height: 1.35;
@@ -132,7 +95,6 @@
   padding-right: var(--space-2);
   overflow-y: auto;
   overscroll-behavior: contain;
-  border-right: 1px solid var(--color-rule);
 }
 
 .catalogNavigationTitle {
@@ -186,10 +148,10 @@
 .sectionHeading[data-order] {
   margin: 0;
   color: var(--color-text);
-  font-family: var(--font-alchimia-display);
+  font-family: var(--font-display);
   font-size: var(--text-2xl);
   font-weight: 500;
-  letter-spacing: 0.02em;
+  letter-spacing: -0.02em;
 }
 
 .paletteGroups {
@@ -246,7 +208,7 @@
 .paletteDescription,
 .colorUsage {
   color: var(--color-text-soft);
-  font-family: var(--font-alchimia-reading);
+  font-family: var(--font-reading);
 }
 
 .paletteDescription {
@@ -330,10 +292,10 @@
 
 .identityWordmark {
   color: var(--color-text);
-  font-family: var(--font-alchimia-display);
+  font-family: var(--font-display);
   font-size: var(--text-3xl);
   font-weight: 500;
-  letter-spacing: 0.02em;
+  letter-spacing: -0.02em;
 }
 
 .typeSamples {
@@ -358,7 +320,7 @@
 .subheading[data-order] {
   margin: var(--space-1-5) 0 0;
   color: var(--color-text-soft);
-  font-family: var(--font-alchimia-display);
+  font-family: var(--font-display);
   font-size: var(--text-xl);
   font-weight: 500;
 }
@@ -391,7 +353,7 @@
   gap: var(--space-4);
   align-items: start;
   padding-block: var(--space-2);
-  border-top: 1px solid var(--lab-rule);
+  border-top: 1px solid var(--color-rule);
 }
 
 .controlSpecimenMeta,
@@ -423,7 +385,7 @@
 
 .controlSpecimen[data-control-specimen="states"] .controlSpecimenContent {
   padding: var(--space-2);
-  background: var(--lab-surface-quiet);
+  background: var(--color-surface-quiet);
 }
 
 .containerSamples {
@@ -562,7 +524,7 @@
 .layoutRuleList dd {
   margin: 0;
   color: var(--color-text-soft);
-  font-family: var(--font-alchimia-reading);
+  font-family: var(--font-reading);
   font-size: var(--text-sm);
   line-height: 1.55;
 }
@@ -591,7 +553,7 @@
 .browserState > p {
   margin: 0;
   color: var(--color-text-soft);
-  font-family: var(--font-alchimia-reading);
+  font-family: var(--font-reading);
   font-size: var(--text-xs);
   line-height: 1.5;
 }
@@ -672,7 +634,7 @@
 
 .accessibilityRuleList li {
   color: var(--color-text-soft);
-  font-family: var(--font-alchimia-reading);
+  font-family: var(--font-reading);
   font-size: var(--text-sm);
   line-height: 1.55;
 }
@@ -710,7 +672,7 @@
 
 .tokenArchitecture span {
   color: var(--color-text-soft);
-  font-family: var(--font-alchimia-reading);
+  font-family: var(--font-reading);
   font-size: var(--text-sm);
   line-height: 1.55;
 }
@@ -779,7 +741,7 @@
 
 .semanticTokenRow dt span {
   color: var(--color-text-soft);
-  font-family: var(--font-alchimia-reading);
+  font-family: var(--font-reading);
   font-size: var(--text-sm);
 }
 
@@ -834,7 +796,7 @@
 .tokenFontSizePreview {
   display: block;
   color: var(--color-text);
-  font-family: var(--font-alchimia-reading);
+  font-family: var(--font-reading);
   line-height: 1.2;
 }
 
@@ -889,7 +851,7 @@
 
 .learningBridge span {
   color: var(--color-text-soft);
-  font-family: var(--font-alchimia-reading);
+  font-family: var(--font-reading);
   font-size: var(--text-sm);
   line-height: 1.5;
 }
@@ -931,7 +893,7 @@
 .copyPairExamples p {
   margin: 0;
   color: var(--color-text);
-  font-family: var(--font-alchimia-reading);
+  font-family: var(--font-reading);
   font-size: var(--text-sm);
   line-height: 1.6;
 }
@@ -1121,7 +1083,7 @@
 }
 
 .surfaceBase {
-  background: var(--lab-surface-base);
+  background: var(--color-bg);
 }
 
 .surfaceQuiet,
@@ -1130,17 +1092,17 @@
 }
 
 .surfaceQuiet {
-  background: var(--lab-surface-quiet);
+  background: var(--color-surface-quiet);
 }
 
 .surfaceBounded {
-  border: 1px solid var(--lab-rule);
-  background: var(--lab-surface-base);
+  border: 1px solid var(--color-rule);
+  background: var(--color-bg);
 }
 
 .surfaceSeparator > div + div {
   padding-top: var(--space-2);
-  border-top: 1px solid var(--lab-rule);
+  border-top: 1px solid var(--color-rule);
 }
 
 .iconGrid {
@@ -1170,7 +1132,7 @@
 .placeholder {
   margin: 0;
   color: var(--color-muted);
-  font-family: var(--font-alchimia-reading);
+  font-family: var(--font-reading);
   font-size: var(--text-sm);
 }
 
@@ -1190,8 +1152,8 @@
   align-content: start;
   min-height: 5.25rem;
   padding: var(--space-1-5);
-  border: 1px solid var(--lab-rule);
-  background: var(--lab-surface-base);
+  border: 1px solid var(--color-rule);
+  background: var(--color-bg);
 }
 
 .contractMapItem code {
@@ -1217,17 +1179,17 @@
 .contractNote {
   grid-column: 1 / -1;
   color: var(--color-muted);
-  font-family: var(--font-alchimia-reading);
+  font-family: var(--font-reading);
   font-size: var(--text-sm);
 }
 
 .patternHeading[data-order] {
   margin: var(--space-3) 0 var(--space-0-5);
   color: var(--color-text);
-  font-family: var(--font-alchimia-display);
+  font-family: var(--font-display);
   font-size: var(--text-xl);
   font-weight: 500;
-  letter-spacing: 0.02em;
+  letter-spacing: -0.02em;
 }
 
 .feedbackGrid {
@@ -1301,7 +1263,7 @@
 .practiceStateGrid > div {
   min-width: 0;
   padding: var(--space-1-5);
-  border: 1px solid var(--lab-rule);
+  border: 1px solid var(--color-rule);
 }
 
 .practiceStateGrid > div {
@@ -1312,8 +1274,8 @@
 .featureSpecimen {
   min-width: 0;
   padding: var(--space-2);
-  border: 1px solid var(--lab-rule);
-  background: var(--lab-surface-base);
+  border: 1px solid var(--color-rule);
+  background: var(--color-bg);
 }
 
 .learningPrimitive,
@@ -1430,7 +1392,7 @@
 .assemblyMap figcaption span,
 .assemblySequence span {
   color: var(--color-text-soft);
-  font-family: var(--font-alchimia-reading);
+  font-family: var(--font-reading);
   font-size: var(--text-sm);
 }
 
@@ -1578,4 +1540,60 @@
     outline-width: 3px;
     box-shadow: none;
   }
+}
+
+.identityMark {
+  width: 4rem;
+  height: 4rem;
+  background: url("/brand/infraege-mark.svg") center / contain no-repeat;
+}
+
+.identitySpecimen > .identityLockup {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.catalogIntro {
+  display: grid;
+  gap: var(--space-1);
+  padding-block: var(--space-3) var(--space-4);
+}
+
+.catalogIntro p {
+  max-width: 65ch;
+}
+
+@media (max-width: 40rem) {
+  .dashboardTab.dashboardTab {
+    padding-inline: var(--space-1);
+    white-space: normal;
+  }
+
+  .dashboardTab small {
+    display: none;
+  }
+
+  .fontMeta {
+    flex-wrap: wrap;
+  }
+
+  .colorVar {
+    overflow-wrap: anywhere;
+  }
+}
+
+.decorativeSpecimen {
+  width: min(100%, 28rem);
+  height: auto;
+  color: var(--color-brand-orange);
+}
+
+.consentSpecimen {
+  border-radius: var(--radius-surface);
+  background: var(--color-surface);
+}
+
+.specimenResult {
+  min-height: 1.5em;
 }

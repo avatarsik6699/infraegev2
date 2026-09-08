@@ -157,10 +157,10 @@ export class TopicLessonPage {
 
   async expectPublishedLesson(): Promise<void> {
     await expectPublicReleaseIdentity(this.page);
-    await expect(this.page).toHaveTitle("Рекурсивные алгоритмы — ALCHIMIA");
+    await expect(this.page).toHaveTitle("Рекурсивные алгоритмы — infraege");
     await expect(
       this.page.getByRole("link", {
-        name: "ALCHIMIA — ЕГЭ информатика, на главную",
+        name: "infraege — ЕГЭ информатика, на главную",
       }),
     ).toHaveAttribute("href", "/");
     await expectPublishedLessonDocument(this.page, {
@@ -347,7 +347,7 @@ export class TopicLessonPage {
 
   async expectDesktopComposition(): Promise<void> {
     const context = this.page.locator("[data-topic-lesson-context]");
-    await expect(context).toHaveCSS("border-bottom-width", "1px");
+    await expect(context).toHaveCSS("border-bottom-width", "0px");
     await expect(
       context.getByRole("link", { name: "Назад", exact: true }),
     ).toBeVisible();
@@ -441,36 +441,37 @@ export class TopicLessonPage {
     await expect(this.page).toHaveURL(/\/$/);
     await expect(
       this.page.getByRole("heading", {
-        name: "Подготовка к ЕГЭ по информатике",
+        name: "Информатика - это система",
       }),
     ).toBeVisible();
   }
 
   async expectInternalBackNavigation(): Promise<void> {
-    await this.open();
+    await this.page.goto("/ege#exam-map-heading");
+    await expect(
+      this.page.getByRole("heading", { name: "Темы ЕГЭ по информатике" }),
+    ).toBeVisible();
+    await expect(this.page).toHaveURL(/\/ege\/?#exam-map-heading$/);
+    await expect(
+      this.page.locator("[data-topic-catalog-page] main"),
+    ).toHaveAttribute("data-motion-active", "true");
+    await this.page
+      .getByRole("article")
+      .filter({
+        has: this.page.getByRole("heading", { name: "Рекурсивные алгоритмы" }),
+      })
+      .getByRole("link", { name: "Открыть тему" })
+      .click();
+    await expect(this.page).toHaveURL(/\/ege\/16-rekursiya$/);
     await expect(
       this.page.locator("[data-practice-form][data-enhanced]"),
     ).toBeVisible();
-    await this.page
-      .getByRole("link", {
-        name: "ALCHIMIA — ЕГЭ информатика, на главную",
-      })
-      .click();
-    await expect(this.page).toHaveURL(/\/$/);
-    await this.page.evaluate(() => {
-      window.location.hash = "materials-title";
-    });
-    await expect(this.page).toHaveURL(/\/#materials-title$/);
-    await this.page
-      .getByRole("link", { name: /Рекурсивные алгоритмы/ })
-      .click();
-    await expect(this.page).toHaveURL(/\/ege\/16-rekursiya$/);
     const backLink = this.page.getByRole("link", {
       name: "Назад",
       exact: true,
     });
     await backLink.click();
-    await expect(this.page).toHaveURL(/\/#materials-title$/);
+    await expect(this.page).toHaveURL(/\/ege\/?#exam-map-heading$/);
   }
 
   async expectPracticeSolutions(): Promise<void> {
@@ -697,13 +698,13 @@ export class TopicLessonPage {
 
     await this.page
       .getByRole("link", {
-        name: "ALCHIMIA — ЕГЭ информатика, на главную",
+        name: "infraege — ЕГЭ информатика, на главную",
       })
       .click();
     await expect(this.page).toHaveURL(/\/$/);
     await expect(
       this.page.getByRole("heading", {
-        name: "Подготовка к ЕГЭ по информатике",
+        name: "Информатика - это система",
       }),
     ).toBeVisible();
     await this.open();

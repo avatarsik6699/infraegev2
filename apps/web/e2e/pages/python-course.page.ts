@@ -73,9 +73,11 @@ export class PythonCoursePage {
     });
   }
 
-  async expectCompleteOverview(): Promise<void> {
+  async expectCompleteOverview(
+    options: { hydrated?: boolean } = {},
+  ): Promise<void> {
     await expectPublicReleaseIdentity(this.page);
-    await expect(this.page).toHaveTitle("Python с нуля для ЕГЭ — ALCHIMIA");
+    await expect(this.page).toHaveTitle("Python с нуля для ЕГЭ — infraege");
     await expect(
       this.page.getByRole("heading", {
         level: 1,
@@ -111,14 +113,14 @@ export class PythonCoursePage {
     await expect(firstModuleHeading).toHaveCSS("font-weight", "500");
     await expect(firstModuleHeading).toHaveCSS(
       "font-family",
-      /Alchimia Alegreya/,
+      /Infraege Alegreya/,
     );
     await expect(
       this.page.getByRole("heading", {
         level: 1,
         name: "Python с нуля для ЕГЭ",
       }),
-    ).toHaveCSS("font-family", /Alchimia Alegreya/);
+    ).toHaveCSS("font-family", /Infraege Alegreya/);
     await expect(
       curriculum.locator('[data-availability="planned"]'),
     ).toHaveCount(0);
@@ -233,21 +235,27 @@ export class PythonCoursePage {
     const progress = this.page.getByRole("region", {
       name: "Прогресс курса",
     });
-    await expect(progress).toContainText("Освоено 0 из 28 доступных уроков.");
-    await expect(
-      progress.getByRole("progressbar", {
-        name: "Освоенные доступные уроки",
-      }),
-    ).toHaveAttribute("aria-valuetext", "Освоено 0 из 28 доступных уроков.");
-    const progressComesBeforeCurriculum = await progress.evaluate((section) => {
-      const curriculum = section.nextElementSibling;
-      return Boolean(
-        curriculum &&
-        section.compareDocumentPosition(curriculum) &
-          Node.DOCUMENT_POSITION_FOLLOWING,
+    if (options.hydrated === false) {
+      await expect(progress).toHaveCount(0);
+    } else {
+      await expect(progress).toContainText("Освоено 0 из 28 доступных уроков.");
+      await expect(
+        progress.getByRole("progressbar", {
+          name: "Освоенные доступные уроки",
+        }),
+      ).toHaveAttribute("aria-valuetext", "Освоено 0 из 28 доступных уроков.");
+      const progressComesBeforeCurriculum = await progress.evaluate(
+        (section) => {
+          const curriculum = section.nextElementSibling;
+          return Boolean(
+            curriculum &&
+            section.compareDocumentPosition(curriculum) &
+              Node.DOCUMENT_POSITION_FOLLOWING,
+          );
+        },
       );
-    });
-    expect(progressComesBeforeCurriculum).toBe(true);
+      expect(progressComesBeforeCurriculum).toBe(true);
+    }
     await expectNoHorizontalOverflow(this.page);
   }
 
@@ -485,7 +493,7 @@ export class PythonCoursePage {
     await expectPublicReleaseIdentity(this.page);
     await expect(this.page.locator("[data-course-lesson-context]")).toHaveCSS(
       "border-bottom-width",
-      "1px",
+      "0px",
     );
     await expectPublishedLessonDocument(this.page, {
       canonicalPath: "/courses/python/usloviya",
@@ -735,7 +743,7 @@ export class PythonCoursePage {
 
   async expectOverviewReadableWithoutJavaScript(): Promise<void> {
     await this.openOverview();
-    await this.expectCompleteOverview();
+    await this.expectCompleteOverview({ hydrated: false });
     await expect(
       this.page.getByLabel("Настройки необязательной аналитики"),
     ).toHaveCount(0);

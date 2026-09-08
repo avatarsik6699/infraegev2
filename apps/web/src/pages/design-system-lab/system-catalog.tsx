@@ -66,16 +66,19 @@ export const SystemCatalog: React.FC = () => (
         Айдентика
       </Typography.Title>
       <div className={styles.identitySpecimen}>
-        <span className={styles.identityWordmark}>ALCHIMIA</span>
+        <div className={styles.identityLockup}>
+          <span className={styles.identityMark} aria-hidden="true" />
+          <span className={styles.identityWordmark}>infraege</span>
+        </div>
         <div>
           <Typography.Text>
-            Исторический wordmark остаётся доступным текстом. Исходный знак
-            сохранён только как evidence этого lab и не является public
-            fallback.
+            Три камня, тёплая бумага и точные акценты. Одна система для
+            знакомства с проектом, чтения и практики.
           </Typography.Text>
-          <code className={styles.colorVar}>
-            docs/artifacts/references/logo.svg · historical evidence
-          </code>
+          <Typography.Text tone="muted">
+            Главная и каталоги используют выразительные композиции. В уроке тот
+            же язык оставляет внимание на материале.
+          </Typography.Text>
         </div>
       </div>
     </section>
@@ -147,15 +150,16 @@ export const SystemCatalog: React.FC = () => (
         Цвет
       </Typography.Title>
       <Typography.Text className={styles.paletteDescription}>
-        Белый фон, два нейтральных уровня текста и ахроматические линии ведут
-        композицию. Статусные цвета сохраняют только функциональный смысл.
+        Тёплая бумага, два нейтральных уровня текста и оранжевый акцент
+        связывают страницы. Яркий оранжевый принадлежит знаку и рисункам; тёмный
+        — функциональным подчёркиваниям и фокусу. Статусы сохраняют свой смысл.
       </Typography.Text>
       <div className={styles.paletteGroups} data-palette-groups>
         <div className={styles.paletteGroup} data-palette-group="core">
           <Typography.Title order={4} className={styles.paletteGroupTitle}>
             Основные роли
           </Typography.Title>
-          <ul className={styles.colorGrid} data-alchimia-palette>
+          <ul className={styles.colorGrid} data-system-palette>
             {colorTokens.map((token) => (
               <li
                 key={token.name}

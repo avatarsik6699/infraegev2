@@ -72,10 +72,8 @@ app → routes → pages → widgets → features → entities → shared
 
 - The local component layer owns semantics and styles. Base UI provides accessible behavior when a
   matching primitive exists; import it through exact subpaths such as `@base-ui/react/button`.
-- The initial neutral visual grammar adapts shadcn/ui's current
-  [neutral theme](https://ui.shadcn.com/docs/theming) and
-  [Button](https://ui.shadcn.com/docs/components/button) hierarchy without adding shadcn, Tailwind
-  or their public variant names as dependencies.
+- The active visual authority is the accepted infraege homepage and public catalogs. Shared
+  components carry that identity by default; local page CSS composes them without private themes.
 - Vendor props, state names and types never cross a local public API. Consumers import the local
   slice, not Base UI. A native implementation is preferred only when no library primitive is
   needed or Base UI has no equivalent.
@@ -95,7 +93,8 @@ app → routes → pages → widgets → features → entities → shared
   accent. Reference orange belongs to the three-stone mark and selected illustration details; an
   accessible darker orange semantic token owns small accent text, focus rings and functional underlines. Orange
   does not recolor ordinary prose, internal lesson controls, semantic feedback or syntax roles.
-  Existing internal page layouts retain their neutral surfaces until separately scoped.
+  All internal pages and the lab use the same warm-paper theme. Learning screens keep a quiet
+  reading composition without catalog illustration, depth or decorative motion around prose.
 - A verified third-party brand mark may retain its official color only when it identifies the
   destination of a real external link. Keep it small, pair it with a text label and do not reuse
   the brand color for surrounding controls or decoration.
@@ -104,7 +103,8 @@ app → routes → pages → widgets → features → entities → shared
   create additional visible gray steps. Syntax colors remain the exception above. Informational
   blue is reserved for the single formative `Checkpoint` block, not ordinary prose or decorative
   surfaces.
-- Static surfaces and controls stay flat. Use spacing, one quiet fill or one border to establish a
+- Learning surfaces and controls stay flat. Public catalog materials may use the shared
+  `--shadow-catalog` role with their authored geometry; this is not a control default. Use spacing, one quiet fill or one border to establish a
   boundary; do not stack fill + border + shadow or nest card-like surfaces. Add an elevation token
   only together with a real transient-overlay consumer, never as a reserved decorative scale.
 - Dense is the system default, not a one-off component variant: ordinary interactive controls use
@@ -117,6 +117,9 @@ app → routes → pages → widgets → features → entities → shared
 - Page texture is absent from the minimal baseline. A future profile may add it only in the theme
   layer and only when it improves orientation without reducing text contrast or adding local
   component backgrounds.
+- Typography defaults use zero-specificity `:where(...)` selectors so an owning component
+  can set a semantic role without depending on route stylesheet insertion order. Do not restore
+  high-specificity defaults or solve that cascade with lab-only descendant overrides.
 - Shared policy components are mandatory for links, images, typography, page containers, buttons,
   badges and other adopted primitives. Authored inline code and formulas use `Notation`
   (`code`/`formula`) so semantics and the neutral recognition treatment stay consistent.
@@ -145,7 +148,7 @@ app → routes → pages → widgets → features → entities → shared
   reflowing them when the active item or internal overflow changes. Reset remains a quiet
   secondary action and uses the shared Base UI alert-dialog boundary so confirmation is modal,
   keyboard contained and returns focus to its trigger without shifting the rail.
-- Course pages extend the incumbent neutral reading world without reusing Topic semantics. A
+- Course pages use the quiet infraege reading world without reusing Topic semantics. A
   course overview presents audience, outcome, the current course stage and one ordered public plan of
   lesson titles plus observable outcomes without a separate evolving-program disclaimer or date
   promise. Only published CourseLesson rows are links; their numeric order stays outside the link
@@ -386,11 +389,10 @@ app → routes → pages → widgets → features → entities → shared
   «Ваш выбор» section on `/privacy`, not in the header. Public footers expose the privacy route and
   the shared Telegram invitation with a text label and the official brand mark. Published pages do
   not duplicate this chrome with page-private header markup. The shared public header has no
-  bottom rule; spacing separates it from ordinary page content, while a lesson context bar keeps
-  one bottom rule for the complete two-level lesson header. The public footer uses whitespace
-  rather than a top rule and contains only useful navigation, without repeating the infraege name;
-  structural rail separators remain where they distinguish navigation from reading. Frozen lab
-  headers keep their explicitly isolated review contract.
+  bottom rule; spacing separates it from page content and the quiet lesson context bar.
+  Lesson navigation and reading retain their aligned columns without a full-height rail border.
+  The public footer uses whitespace rather than a top rule and contains only useful navigation,
+  without repeating the infraege name. The live lab uses the same public chrome.
 
 ## 5. Responsive and accessible behavior
 
@@ -437,8 +439,7 @@ app → routes → pages → widgets → features → entities → shared
   public-route LCP budget.
 - The active typography baseline uses only `400`, `500` and `600` in component CSS and the shared
   `--text-*` scale. Regular `400` is reserved for quiet Golos Text leads, navigation and links where
-  `500` competes with the surrounding hierarchy. One role-specific cap remains: display/heading text (`var(--font-display)`/
-  `var(--font-alchimia-display)`, Alegreya) never exceeds `500` — `600` at display weight reads too
+  `500` competes with the surrounding hierarchy. One role-specific cap remains: display/heading text (`var(--font-display)`, Alegreya) never exceeds `500` — `600` at display weight reads too
   heavy — while `--font-ui`/`--font-data` (Golos Text/JetBrains Mono) may still use `600`. Consumers
   do not introduce literal sizes or intermediate variable-font weights.
   Semantic heading levels may share an effective size when hierarchy already comes from spacing
@@ -468,7 +469,7 @@ app → routes → pages → widgets → features → entities → shared
 - Outcomes describe what the learner can now do. Instructions, hints and feedback say what to do
   next; mistakes are explained without blame, vague encouragement or hidden scoring.
 
-### 6.1 infraege identity and historical lab
+### 6.1 infraege identity and live design-system lab
 
 - Learning copy follows one explicit bridge: begin from a familiar situation, name and
   explain the new term where it first matters, demonstrate it concretely, generalize only after
@@ -488,7 +489,7 @@ app → routes → pages → widgets → features → entities → shared
   `base.jpg` and `main-page.png` define its current application direction. The mark has exactly three
   paths, no text or baseline, and uses orange only for the top stone. Derivatives may add delivery
   whitespace and, for dark browser chrome, invert only ink stones. The former ALCHIMIA source remains
-  historical lab evidence and is not a public fallback.
+  archived design evidence and is not a runtime fallback.
 - Change 86 replaced the original Athanor typography roles: self-hosted Cormorant SC 600, while
   visually approved for the wordmark, proved too decorative and thin at small-caps display weight
   to read outside a pure wordmark context once carrying every heading level app-wide. The current
@@ -500,9 +501,9 @@ app → routes → pages → widgets → features → entities → shared
   numbered lesson-stage landmarks remain a JetBrains Mono/data-role treatment, consistent with
   numeric notation, rather than an ordinary content heading. The profile exposes one achromatic
   primary and one secondary prose level; status colors remain semantic rather than decorative.
-- The historical lab may retain its isolated white monochrome presentation. Public infraege chrome
-  and the homepage use the warm paper/ink/orange profile; this does not authorize global restyling
-  of lesson/course layouts. The
+- Change 101 retires the private lab theme and activates the same infraege foundation on every
+  interface. Historical design evidence stays in archived changes and artifacts, never in runtime
+  token aliases or a second importable component family. The
   architecture-led lab dashboard groups contracts into System, Components and Widgets tabs:
   System owns app-wide identity, typography, palette, layout constraints, accessibility/browser
   behavior, curated semantic tokens, the active icon inventory and content-language rules;
@@ -517,6 +518,13 @@ app → routes → pages → widgets → features → entities → shared
 - Running text has one primary and one secondary neutral level. Orange remains a sparse identity and
   illustration signal and may not color ordinary paragraphs. Semantic feedback remains independent
   and never becomes decorative palette.
+- The lab's `catalog-contracts.ts` names each public UI contract, its live or contextual example
+  and its purpose. Public UI barrels use explicit named re-exports (including aliases); wildcard, namespace and inline runtime exports are rejected to keep coverage enumerable. Architecture checks parse these exports with TypeScript, ignoring comments and type-only declarations; browser tests verify named
+  contracts and real states, not a fixed catalog count. New public UI exports require an entry and
+  an actual example or an explicit context pointer. Private children remain inside parent examples.
+  Consent examples use the real presentational notice with local callbacks, never the global consent
+  actions. Lab progress uses its own lesson ids. Component CSS cannot consume `--theme-*` or
+  redeclare global color/font/control/input tokens; the architecture gate rejects both directions.
 - The active lab does not render the `patterns_lines.png` atlas. Headers, catalog navigation,
   section separators, frames, diagram internals, swatches and interactive controls use standard
   neutral borders; the primary tablist uses only its ordinary active indicator. The atlas remains

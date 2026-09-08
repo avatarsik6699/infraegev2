@@ -4,9 +4,6 @@
   --font-ui: var(--theme-font-ui);
   --font-reading: var(--theme-font-reading);
   --font-data: var(--theme-font-data);
-  --font-alchimia-display: var(--theme-font-alchimia-display);
-  --font-alchimia-reading: var(--theme-font-alchimia-reading);
-  --font-alchimia-service: var(--theme-font-alchimia-service);
   --text-2xs: 0.75rem;
   --text-xs: 0.8125rem;
   --text-sm: 0.875rem;
@@ -31,8 +28,6 @@
   --text-lab-array: 0.78rem;
   --text-lab-note: 0.88rem;
   --text-lab-mobile-display: clamp(2.05rem, 9.2vw, 2.55rem);
-  --text-alchimia-wordmark: 1.5rem;
-  --text-alchimia-wordmark-mobile: 1.375rem;
 
   /* Semantic color roles */
   --color-bg: var(--theme-page);
@@ -44,20 +39,18 @@
   --color-faint: var(--theme-ink-secondary);
   --color-rule: var(--theme-rule);
   --color-rule-strong: var(--theme-rule-strong);
-  --color-brand-canvas: var(--theme-brand-canvas);
-  --color-brand-ink: var(--theme-brand-ink);
-  --color-brand-muted: var(--theme-brand-muted);
+  --color-brand-canvas: var(--color-bg);
+  --color-brand-ink: var(--color-text);
+  --color-brand-muted: var(--color-text-soft);
   --color-brand-orange: var(--theme-brand-orange);
   --color-brand-orange-text: var(--theme-brand-orange-text);
   --color-brand-orange-soft: var(--theme-brand-orange-soft);
-  --color-alchimia-paper: var(--theme-alchimia-paper);
-  --color-alchimia-ink: var(--theme-alchimia-ink);
-  --color-alchimia-ink-secondary: var(--theme-alchimia-ink-secondary);
-  --color-alchimia-rule: var(--theme-alchimia-rule);
   --color-accent: var(--theme-primary);
   --color-accent-dark: var(--theme-primary-hover);
   --color-accent-soft: var(--theme-interactive-muted);
   --color-focus: var(--theme-ring);
+  --color-selection: var(--theme-brand-orange-soft);
+  --color-link-decoration: var(--theme-brand-orange-text);
   --color-success: var(--theme-success);
   --color-info: var(--theme-info);
   --color-info-rule: var(--theme-info-rule);
@@ -127,7 +120,8 @@
   --control-quiet-bg-hover: var(--color-accent-soft);
   --control-disabled-bg: var(--color-surface-quiet);
   --control-disabled-text: var(--color-muted);
-  --input-min-height: 2.5rem;
+  --control-height: 2.5rem;
+  --input-min-height: var(--control-height);
   --input-padding-block: var(--space-1);
   --input-padding-inline: var(--space-1-5);
   --input-border-color: var(--control-secondary-border);
@@ -169,7 +163,12 @@
     var(--color-surface)
   );
 
-  /* Static and control surfaces stay flat. Add elevation only with a real overlay consumer. */
+  /* Controls stay flat; the catalog and overlays own their elevation roles. */
+  --shadow-catalog:
+    inset 0 1px 0 color-mix(in srgb, var(--color-surface) 70%, transparent),
+    0 2px 5px color-mix(in srgb, var(--color-brand-ink) 7%, transparent),
+    0 16px 32px -12px
+      color-mix(in srgb, var(--color-brand-ink) 12%, transparent);
   --shadow-annotation: none;
   --shadow-control: none;
   --shadow-overlay: 0 0.875rem 3.125rem var(--theme-overlay-shadow);

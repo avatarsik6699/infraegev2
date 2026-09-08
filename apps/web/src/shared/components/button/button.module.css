@@ -1,7 +1,7 @@
 .root {
   display: inline-flex;
   min-width: 0;
-  min-height: 2.5rem;
+  min-height: var(--control-height);
   gap: var(--space-1);
   align-items: center;
   justify-content: center;
@@ -58,7 +58,7 @@
 }
 
 .root[data-density="compact"] {
-  min-height: 2.5rem;
+  min-height: var(--control-height);
   padding-inline: var(--space-1);
   font-size: var(--text-xs);
 }
@@ -68,7 +68,7 @@
 }
 
 .root[data-icon-only] {
-  width: 2.5rem;
+  width: var(--control-height);
   padding: 0;
 }
 

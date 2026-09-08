@@ -2,7 +2,7 @@
   color: inherit;
   /* Neutral link text with a persistent affordance in the underline. */
   text-decoration-line: underline;
-  text-decoration-color: var(--color-accent);
+  text-decoration-color: var(--color-link-decoration);
   transition:
     color var(--motion-duration) var(--motion-easing),
     text-decoration-color var(--motion-duration) var(--motion-easing);

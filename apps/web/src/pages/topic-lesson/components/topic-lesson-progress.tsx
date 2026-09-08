@@ -35,10 +35,14 @@ export const TopicLessonProgress: React.FC<Props> = (props) => {
         </>
       ) : (
         <>
-          <Typography.Title order={2} id="result-progress-title">
+          <Typography.Title
+            order={2}
+            id="result-progress-title"
+            className={styles.progressHeading}
+          >
             Прогресс
           </Typography.Title>
-          <Typography.Text tone="muted">
+          <Typography.Text tone="muted" className={styles.progressStatus}>
             Прогресс хранится только в этом браузере и появится после загрузки
             страницы.
           </Typography.Text>

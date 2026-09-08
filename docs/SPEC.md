@@ -536,12 +536,15 @@ fields отвечают за направленные fade masks, а общий 
 перенесены в этот слой без упрощения path data; в Change 95 только главная использует новые SVG и
 pattern/icon contracts.
 
-Внутренние lesson/course layouts, domain/API/content/progress contracts и авторский текст уроков
-этим brand reset не меняются. Исторический `/lab/design-system` сохраняет ALCHIMIA как доказательство
-предыдущих решений, но больше не определяет active public identity. Профиль остаётся заменяемым:
-literal palette/font/geometry values принадлежат theme layer, semantic tokens — contracts
-consumers, а page composition не протекает в domain state. Полный binding contract находится в
-`docs/FRONTEND.md`, delivery requirements — в `docs/BRAND_ASSET_REQUIREMENTS.md`.
+Change 101 распространяет действующий infraege-профиль на весь интерфейс: обзор курса,
+TopicLesson и CourseLesson, практику, privacy, consent, диалоги и состояния маршрутов.
+Учебные экраны используют спокойную композицию на общей тёплой бумаге без декоративной анимации
+вокруг текста. Навигация, порядок материала, domain/API/content/progress contracts и авторский
+текст сохраняются. `/lab/design-system` становится живым каталогом production-компонентов без
+собственной темы; ALCHIMIA остаётся только в архивных материалах. Palette/font/geometry values
+принадлежат theme layer, semantic tokens — общей границе, page composition — своему consumer.
+Полный binding contract находится в `docs/FRONTEND.md`, delivery requirements — в
+`docs/BRAND_ASSET_REQUIREMENTS.md`.
 
 Каталог `/courses` расширяет public visual world иллюстрированной мозаикой. Title, lead и
 «1 курс доступен · 3 в плане» собраны слева; справа расположены supplied perspective staircase

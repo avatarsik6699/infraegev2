@@ -43,7 +43,7 @@ body {
 }
 
 ::selection {
-  background: var(--color-accent-soft);
+  background: var(--color-selection);
   color: var(--color-text);
 }
 
@@ -57,7 +57,7 @@ a:focus-visible,
 button:focus-visible,
 input:focus-visible,
 summary:focus-visible {
-  border-radius: 0.15rem;
+  border-radius: var(--radius-control);
   outline: 2px solid var(--color-focus);
   outline-offset: 3px;
   box-shadow: var(--focus-ring);
@@ -72,4 +72,9 @@ input {
   html {
     scroll-behavior: auto;
   }
+}
+
+input,
+textarea {
+  caret-color: var(--color-focus);
 }

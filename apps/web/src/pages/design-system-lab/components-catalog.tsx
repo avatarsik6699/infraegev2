@@ -1,3 +1,4 @@
+import { componentContracts } from "./catalog-contracts";
 import { CircleCheck } from "lucide-react";
 import { useState } from "react";
 import { LearningVisualFrame } from "~/entities/learning-visual";
@@ -43,10 +44,9 @@ import {
 import { Typography } from "~/shared/components/typography";
 import { useIsEnhanced } from "~/shared/lib/use-is-enhanced";
 import { CatalogLayout } from "./catalog-layout";
-import {
-  CatalogContractMap,
-  type CatalogContract,
-} from "./catalog-contract-map";
+import { CatalogContractMap } from "./catalog-contract-map";
+import { ConsentSpecimen } from "./consent-specimen";
+import { DecorativeSpecimen } from "./decorative-specimen";
 import { ControlSpecimen } from "./control-specimen";
 import {
   componentErrorPracticeTasks,
@@ -60,82 +60,6 @@ const longHeading =
   "Как найти количество путей из точки A в точку B, если движение разрешено только вправо и вниз";
 const longParagraph =
   "Если условие остановки никогда не выполняется, вызовы продолжают накапливаться в стеке вызовов — каждый новый вызов ждёт результата следующего.";
-
-const live = (name: string, note: string): CatalogContract => ({
-  name,
-  note,
-  status: "live",
-});
-
-const context = (name: string, note: string): CatalogContract => ({
-  name,
-  note,
-  status: "context",
-});
-
-const componentContracts = {
-  content: [
-    live("Typography", "Текстовые роли и ограничение строк"),
-    live("PageContainer", "Три смысловые ширины контента"),
-    live("Notation", "Кодовая и формульная запись"),
-  ],
-  actions: [
-    live("Button", "Иерархия, плотность, loading и disabled"),
-    live("ActionLink", "Кнопочное или текстовое навигационное действие"),
-    live("BackLink", "Возврат с безопасным fallback"),
-    live("ExternalLink", "Внешний переход с явным поведением"),
-    live("FragmentLink", "Переход к разделу текущей страницы"),
-    live("ConfirmationDialog", "Подтверждение необратимого действия"),
-    live("DownloadLink", "Скачивание локального authored-файла"),
-  ],
-  input: [
-    live("Input", "Самостоятельное поле ввода"),
-    live("Field", "Подпись, описание, ошибка и disabled"),
-    live("Accordion", "Раскрытие пояснений на месте"),
-    live("TabsRoot", "Владелец выбранного состояния"),
-    live("TabsList", "Семантический список вкладок"),
-    live("TabsTab", "Доступный интерактивный переключатель"),
-    live("TabsPanel", "Связанная область содержимого"),
-  ],
-  feedback: [
-    live("Badge", "Нейтральные и функциональные статусы"),
-    live("Progress", "Определённый и неопределённый процесс"),
-    live("Callout", "Пояснение и предупреждение"),
-    live("EmptyState", "Пустое состояние со следующим действием"),
-  ],
-  media: [
-    live("CodeBlock", "Код и текстовая запись"),
-    live("Image", "Загрузка, ошибка и fallback"),
-    context("CustomIcon", "Набор нормализованных authored SVG-глифов"),
-    context("DrawnLinkUnderline", "Декоративная линия внутри ссылок"),
-    context("SvgDrawing", "Низкоуровневые SVG-линии, стрелки и градиенты"),
-    context("SvgPattern", "Композиция фоновых SVG-паттернов"),
-  ],
-  learning: [
-    live("Checkpoint", "Проверка понимания с раскрываемым ответом"),
-    live("Diagram", "Изображение с учебной подписью"),
-    live("LearningVisualFrame", "Рамка визуала с текстовой альтернативой"),
-    live("LessonIntro", "Заголовок и метаданные урока"),
-    live("LessonSectionHeading", "Нумерованный заголовок учебного раздела"),
-    live("LessonTheory", "Линейный поток понятий"),
-    live("Mistake", "Сравнение ошибочного и правильного рассуждения"),
-    live("Procedure", "Последовательность действий"),
-    live("WorkedExample", "Пошаговый разбор"),
-  ],
-  features: [
-    context(
-      "AnalyticsConsentControl",
-      "Читает и изменяет реальное согласие браузера",
-    ),
-    context("AnalyticsConsentPrompt", "Владеет согласием и запуском аналитики"),
-    live("LessonPractice", "Локальная проверка без progress store и сети"),
-    live("LessonProgress", "Чистое представление переданного прогресса"),
-    context(
-      "ReadingPositionIndicator",
-      "Наблюдает за scroll-target страницы урока",
-    ),
-  ],
-} as const;
 
 export const ComponentsCatalog: React.FC = () => {
   const [feedbackTab, setFeedbackTab] = useState("validation");
@@ -226,6 +150,12 @@ export const ComponentsCatalog: React.FC = () => {
           description="Одно основное действие ведёт группу; вторичные и тихие варианты не спорят с ним за внимание."
         >
           <div className={styles.controlsRow}>
+            <ActionLink to="/courses/" hierarchy="drawn" icon="forward">
+              Мини-курсы
+            </ActionLink>
+            <ExternalLink href="https://docs.python.org/3/" hierarchy="drawn">
+              Внешняя ссылка
+            </ExternalLink>
             <Button>Проверить ответ</Button>
             <Button hierarchy="secondary">Показать решение</Button>
             <Button hierarchy="quiet">Тихое действие</Button>
@@ -466,6 +396,7 @@ export const ComponentsCatalog: React.FC = () => {
           contracts={componentContracts.media}
           label="Контракты кода и медиа"
         />
+        <DecorativeSpecimen />
         <CodeBlock
           code={`def trace_countdown(n):\n    if n == 0:\n        print("Стоп")\n        return\n\n    print("Вызов", n)\n    trace_countdown(n - 1)\n    print("Возврат", n)\n\n\ntrace_countdown(3)`}
           label="Пример: трассировка countdown"
@@ -658,6 +589,7 @@ export const ComponentsCatalog: React.FC = () => {
           contracts={componentContracts.features}
           label="Публичные feature-контракты"
         />
+        <ConsentSpecimen />
         <div className={styles.featureSpecimenGrid}>
           <div
             className={styles.featureSpecimen}
