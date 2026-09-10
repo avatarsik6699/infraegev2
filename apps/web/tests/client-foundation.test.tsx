@@ -3,7 +3,6 @@ import { describe, expect, it, vi } from "vitest";
 import {
   AppNavigationProgress,
   createAppQueryClient,
-  RoutePending,
   RouteNotFound,
   RouteError,
 } from "~/app";
@@ -77,14 +76,7 @@ describe("client foundation states", () => {
     expect(first.getDefaultOptions().mutations?.retry).toBe(false);
   });
 
-  it("announces route loading and renders a semantic empty state", () => {
-    const { container, unmount } = render(<RoutePending />);
-    expect(screen.getByRole("status").textContent).toContain("Загружаем");
-    expect(container.querySelector("[data-route-state-frame]")).not.toBeNull();
-    expect(container.querySelector("[data-public-header]")).not.toBeNull();
-    expect(screen.getByRole("contentinfo")).toBeTruthy();
-    unmount();
-
+  it("renders a semantic empty state", () => {
     render(
       <EmptyState title="Пока пусто" description="Данные появятся позже" />,
     );
@@ -153,6 +145,25 @@ describe("client foundation states", () => {
     );
     fireEvent.click(screen.getByRole("button", { name: "Обновить страницу" }));
     expect(recoveryMocks.reload).toHaveBeenCalledOnce();
+  });
+
+  it("shows delayed progress and removes it when navigation finishes", () => {
+    vi.useFakeTimers();
+    recoveryMocks.loading = true;
+    const view = render(<AppNavigationProgress />);
+    act(() => {
+      vi.advanceTimersByTime(150);
+    });
+    expect(
+      screen.getByRole("progressbar", { name: "Загрузка страницы" }),
+    ).toBeTruthy();
+    recoveryMocks.loading = false;
+    view.rerender(<AppNavigationProgress />);
+    act(() => {
+      vi.runOnlyPendingTimers();
+    });
+    expect(screen.queryByRole("progressbar")).toBeNull();
+    vi.useRealTimers();
   });
 
   it("does not flash progress for a transition shorter than 150ms", () => {

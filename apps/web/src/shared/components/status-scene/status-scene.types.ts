@@ -6,6 +6,6 @@ export namespace StatusSceneTypes {
     children?: React.ReactNode;
   } & (
     | { kind: "code"; code: "404" | "502" | "503" | "504" }
-    | { kind: "error" | "pending"; code?: never }
+    | { kind: "error"; code?: never }
   );
 }

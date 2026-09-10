@@ -691,13 +691,7 @@ Practice theory links use the shared FragmentLink drawn variant: decorative unde
   slowly only while visible; reduced-motion and forced-colors disable decorative animation.
   Autonomous server documents keep their decoration static.
 - Private status cards reuse CustomIcon Book/Checklist/Braces/BarChart, matching the homepage.
-  Loader errors group four cards around a short interrupted route; pending retains its two cards.
-- Pending uses a dense shared grid for outline, article, status/subtitle/dots, formula, table and
-  code. Outline groups stay compact and top-aligned, with fixed gaps independent of scene height.
-  Status is a real grid row, never an absolute overlay. Mobile retains status, article and
-  code. Neutral skeleton shimmer has a two-second cycle, dots a soft sequential pulse; the
-  element-activity boundary pauses both offscreen/hidden. Reduced motion and SSR/no-JS are static.
-  Decorative content stays aria-hidden, with no fake percentage or interactive skeleton controls.
+  Loader errors group four cards around a short interrupted route.
 - Recovery actions use quiet buttons with a refresh icon; navigation retains drawn links.
   404 has only one scene action, home. Autonomous document reload is a native current-document link
   styled as the same quiet refresh control, preserving no-JavaScript operation.
@@ -707,8 +701,10 @@ Practice theory links use the shared FragmentLink drawn variant: decorative unde
   pages use the equivalent local SVG geometry without an application dependency.
 - Lesson navigation has a 32–64px column gutter and stacks below a 36rem container width, keeping
   previous left and next right. Privacy uses quiet consent controls and drawn external links.
-- Pending retains router delays (250ms display, 300ms minimum) and the 150ms navigation-progress
-  threshold. One live status announces loading; skeletons and images stay outside the accessible tree.
+- Client navigation keeps the current page visible until the destination is ready. The app-owned
+  top-edge progress bar appears after 150ms; no global pending screen, skeleton or minimum
+  route display delay is configured. Reduced motion keeps the bar static. Initial document
+  visits retain SSR content; route errors and explicit retry keep their recovery contract.
 - AppDocumentHead is the single owner of title/robots overrides for missing and failed route matches;
   recovery restores normal route metadata. Render-only boundaries retain the route's identity.
   Loader retries invalidate the router; render retries reset the boundary; missing module retries

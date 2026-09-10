@@ -1,12 +1,7 @@
 import { createRouter } from "@tanstack/react-router";
 import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query";
 import type { QueryClient } from "@tanstack/react-query";
-import {
-  createAppQueryClient,
-  RouteError,
-  RouteNotFound,
-  RoutePending,
-} from "~/app";
+import { createAppQueryClient, RouteError, RouteNotFound } from "~/app";
 import { routeTree } from "./routeTree.gen";
 
 export type AppRouterContext = { queryClient: QueryClient };
@@ -19,9 +14,6 @@ export function getRouter() {
     scrollRestoration: true,
     defaultErrorComponent: RouteError,
     defaultNotFoundComponent: RouteNotFound,
-    defaultPendingComponent: RoutePending,
-    defaultPendingMs: 250,
-    defaultPendingMinMs: 300,
   });
   setupRouterSsrQueryIntegration({ router, queryClient });
   return router;

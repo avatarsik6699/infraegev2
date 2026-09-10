@@ -4,7 +4,7 @@
   top: 0;
   right: 0;
   left: 0;
-  height: 2px;
+  height: 4px;
   overflow: hidden;
   pointer-events: none;
   opacity: 0;
@@ -28,6 +28,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .root[data-visible="true"] .indicator {
+    animation: none;
     width: 70%;
     transform: none;
   }

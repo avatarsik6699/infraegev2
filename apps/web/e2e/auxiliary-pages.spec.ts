@@ -12,14 +12,20 @@ test("missing page works on mobile without JavaScript", async ({
   await noJavaScriptAuxiliaryPagesPage.expectMissingPageRecovery();
 });
 
-test("delayed loader exposes pending and recovers after explicit retry", async ({
+test("delayed loader retains the course and recovers after explicit retry", async ({
   auxiliaryPagesPage,
 }) => {
   await auxiliaryPagesPage.expectLoaderRecovery();
 });
 
-test("loading preview respects motion preferences and compact layouts", async ({
+test("error preview respects motion preferences and compact layouts", async ({
   auxiliaryPagesPage,
 }) => {
-  await auxiliaryPagesPage.expectLoadingPreviewMotion();
+  await auxiliaryPagesPage.expectErrorPreviewMotion();
+});
+
+test("delayed successful navigation retains the course until the lesson is ready", async ({
+  auxiliaryPagesPage,
+}) => {
+  await auxiliaryPagesPage.expectLoaderRecovery(false);
 });

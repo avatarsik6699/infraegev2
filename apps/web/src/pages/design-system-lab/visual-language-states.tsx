@@ -18,11 +18,6 @@ const visualLanguageStates = [
     description: "Попробуйте ещё раз или вернитесь на главную.",
   },
   {
-    id: "loading",
-    title: "Загружаем страницу…",
-    description: "Подготавливаем материалы",
-  },
-  {
     id: "502",
     title: "Ошибка обмена с сервером",
     description: "Не удалось получить корректный ответ. Попробуйте ещё раз",
@@ -65,26 +60,19 @@ export const VisualLanguageStates: React.FC = () => {
               setRetried(false);
             }}
           >
-            {item.id === "error" || item.id === "loading"
-              ? item.title
-              : item.id}
+            {item.id === "error" ? item.title : item.id}
           </Button>
         ))}
       </div>
       <StatusScene
         title={state.title}
         description={state.description}
-        {...(state.id !== "error" && state.id !== "loading"
+        {...(state.id !== "error"
           ? { kind: "code" as const, code: state.id }
-          : {
-              kind:
-                state.id === "loading"
-                  ? ("pending" as const)
-                  : ("error" as const),
-            })}
+          : { kind: "error" as const })}
         headingOrder={4}
       >
-        {state.id !== "404" && state.id !== "loading" ? (
+        {state.id !== "404" ? (
           <Button
             hierarchy="quiet"
             iconStart={<RotateCw aria-hidden="true" size={18} />}
@@ -93,11 +81,9 @@ export const VisualLanguageStates: React.FC = () => {
             {state.id === "error" ? "Повторить" : "Обновить страницу"}
           </Button>
         ) : null}
-        {state.id !== "loading" ? (
-          <ActionLink hierarchy="drawn" icon="back" to="/">
-            На главную
-          </ActionLink>
-        ) : null}
+        <ActionLink hierarchy="drawn" icon="back" to="/">
+          На главную
+        </ActionLink>
       </StatusScene>
       {retried ? (
         <Typography.Text role="status">

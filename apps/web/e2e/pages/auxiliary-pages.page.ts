@@ -45,7 +45,7 @@ export class AuxiliaryPagesPage {
     ).toHaveCount(0);
   }
 
-  async expectLoadingPreviewMotion(): Promise<void> {
+  async expectErrorPreviewMotion(): Promise<void> {
     await this.page.goto("/lab/design-system#system-auxiliary-states");
     const scene = this.page.locator("[data-status-scene]");
     await scene.scrollIntoViewIfNeeded();
@@ -59,73 +59,25 @@ export class AuxiliaryPagesPage {
         code,
       );
     }
-    await this.page
-      .getByRole("button", { name: "Загружаем страницу…", exact: true })
-      .click();
-    await expect(scene).toHaveAttribute("data-kind", "pending");
-    await expect(scene.getByRole("status")).toHaveCount(1);
-    await expect(scene.getByText("Подготавливаем материалы")).toBeVisible();
-    await this.page.setViewportSize({ width: 1440, height: 900 });
-    const outline = scene.locator('[class*="skeletonOutline"]');
-    const groups = outline.locator(":scope > div");
-    const firstGroup = await groups.first().boundingBox();
-    const lastGroup = await groups.last().boundingBox();
-    const outlineBounds = await outline.boundingBox();
-    expect(
-      firstGroup &&
-        outlineBounds &&
-        Math.abs(firstGroup.y - outlineBounds.y) < 2,
-    ).toBeTruthy();
-    expect(
-      firstGroup &&
-        lastGroup &&
-        lastGroup.y + lastGroup.height - firstGroup.y < 360,
-    ).toBeTruthy();
-    const dot = scene.locator("i").first();
-    await expect(dot).toHaveCSS("animation-play-state", "running");
-    expect(
-      await dot.evaluate((element) => getComputedStyle(element).animationName),
-    ).not.toBe("none");
+    const pattern = scene.locator("svg").first();
+    await expect(pattern).toHaveCSS("animation-play-state", "running");
     await this.page.emulateMedia({ reducedMotion: "reduce" });
-    await expect(dot).toHaveCSS("animation-name", "none");
+    await expect(pattern).toHaveCSS("animation-name", "none");
     for (const width of [1440, 768, 390, 320]) {
       await this.page.setViewportSize({ width, height: 900 });
-      await scene.scrollIntoViewIfNeeded();
       expect(
         await this.page.evaluate(
           () => document.documentElement.scrollWidth <= innerWidth,
         ),
       ).toBe(true);
-      const code = scene.locator("b").last();
-      const row = await code.boundingBox();
-      const bounds = await scene.boundingBox();
-      expect(
-        row && bounds && row.y + row.height <= bounds.y + bounds.height,
-      ).toBeTruthy();
     }
-    await this.page.evaluate(() => {
-      document.documentElement.style.fontSize = "200%";
-    });
-    expect(
-      await scene.evaluate((element) => {
-        const bounds = element.getBoundingClientRect();
-        return (
-          bounds.left >= 0 &&
-          bounds.right <= innerWidth &&
-          element.scrollWidth <= element.clientWidth
-        );
-      }),
-    ).toBe(true);
-    await this.page.evaluate(() => {
-      document.documentElement.style.fontSize = "";
-    });
     await this.page.emulateMedia({ reducedMotion: "no-preference" });
     await this.page.evaluate(() => scrollTo(0, 0));
     await expect(scene).toHaveAttribute("data-motion-active", "false");
-    await expect(dot).toHaveCSS("animation-play-state", "paused");
+    await expect(pattern).toHaveCSS("animation-play-state", "paused");
   }
 
-  async expectLoaderRecovery(): Promise<void> {
+  async expectLoaderRecovery(failFirst = true): Promise<void> {
     let release = () => {};
     const blocked = new Promise<void>((resolve) => {
       release = resolve;
@@ -135,7 +87,13 @@ export class AuxiliaryPagesPage {
       requests += 1;
       if (requests === 1) {
         await blocked;
-        await route.abort("connectionfailed");
+        if (failFirst)
+          await route.fulfill({
+            status: 503,
+            contentType: "text/plain",
+            body: "Temporarily unavailable",
+          });
+        else await route.continue();
       } else await route.continue();
     });
     await this.page.goto("/courses/python");
@@ -149,28 +107,46 @@ export class AuxiliaryPagesPage {
       })
       .click();
     try {
-      await expect(this.page.getByRole("status")).toContainText(
-        "Загружаем страницу",
+      const progress = this.page.getByRole("progressbar", {
+        name: "Загрузка страницы",
+      });
+      await expect(progress).toBeVisible();
+      await this.page.emulateMedia({ reducedMotion: "reduce" });
+      await expect(progress.locator("span")).toHaveCSS(
+        "animation-name",
+        "none",
       );
+      // Keep the request blocked beyond the former pending threshold.
+      const started = Date.now();
+      await expect.poll(() => Date.now() - started).toBeGreaterThan(600);
+      await expect(
+        this.page.getByRole("region", { name: "Прогресс курса" }),
+      ).toBeVisible();
+      await expect(this.page.locator('[data-kind="pending"]')).toHaveCount(0);
     } finally {
       release();
     }
-    await expect(
-      this.page.getByRole("heading", {
-        name: "Не удалось загрузить страницу",
-        exact: true,
-      }),
-    ).toBeVisible();
-    await expect(this.page).toHaveTitle(
-      "Не удалось загрузить страницу — infraege",
-    );
-    await this.page
-      .getByRole("button", { name: "Повторить", exact: true })
-      .click();
+    if (failFirst) {
+      await expect(
+        this.page.getByRole("heading", {
+          name: "Не удалось загрузить страницу",
+          exact: true,
+        }),
+      ).toBeVisible();
+      await expect(this.page).toHaveTitle(
+        "Не удалось загрузить страницу — infraege",
+      );
+      await this.page
+        .getByRole("button", { name: "Повторить", exact: true })
+        .click();
+    }
     await expect(this.page.getByRole("heading", { level: 1 })).toHaveText(
       "Первая программа: ввод, вычисление и вывод",
     );
     await expect(this.page).not.toHaveTitle(/Не удалось/);
-    expect(requests).toBe(2);
+    await expect(
+      this.page.getByRole("progressbar", { name: "Загрузка страницы" }),
+    ).toHaveCount(0);
+    expect(requests).toBe(failFirst ? 2 : 1);
   }
 }
