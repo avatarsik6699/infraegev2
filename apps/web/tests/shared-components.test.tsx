@@ -159,6 +159,7 @@ describe("Image", () => {
       '[role="img"]',
     ) as HTMLElement | null;
     expect(placeholder?.getAttribute("aria-hidden")).toBe("true");
+    expect(placeholder?.textContent).toBe("");
   });
 });
 

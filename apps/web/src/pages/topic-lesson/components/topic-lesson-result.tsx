@@ -30,7 +30,7 @@ export const TopicLessonResult: React.FC<Props> = (props) => (
       <div className={styles.resultLinks}>
         {props.previousLesson ? (
           <ActionLink
-            hierarchy="text"
+            hierarchy="drawn"
             icon="back"
             to={`/ege/${props.previousLesson.routeSlug}`}
           >
@@ -39,7 +39,7 @@ export const TopicLessonResult: React.FC<Props> = (props) => (
         ) : null}
         {props.nextLesson ? (
           <ActionLink
-            hierarchy="text"
+            hierarchy="drawn"
             icon="forward"
             to={`/ege/${props.nextLesson.routeSlug}`}
           >

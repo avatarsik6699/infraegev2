@@ -804,7 +804,7 @@ export class FoundationPage {
       this.page.getByRole("heading", { name: "Страница не найдена" }),
     ).toBeVisible();
     await expect(
-      this.page.getByRole("link", { name: "На стартовую страницу" }),
+      this.page.getByRole("link", { name: "На главную", exact: true }),
     ).toHaveAttribute("href", "/");
   }
 }

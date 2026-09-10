@@ -35,6 +35,7 @@ export const Image: React.FC<ImageTypes.Props> = (props) => {
         <ImageErrorState alt={alt} decorative={decorative} />
       ) : (
         <ImageMedia
+          loading={props.loading}
           imageStatus={imageStatus}
           alt={alt}
           decorative={decorative}

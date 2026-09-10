@@ -1,11 +1,15 @@
 import {
   createRootRouteWithContext,
-  HeadContent,
   Outlet,
   Scripts,
 } from "@tanstack/react-router";
 import type { AppRouterContext } from "~/router";
-import { AppProviders, RouteError } from "~/app";
+import {
+  AppDocumentHead,
+  AppProviders,
+  RouteError,
+  PageBackground,
+} from "~/app";
 import { AnalyticsConsentPrompt } from "~/features/analytics";
 import { siteConfig } from "~/shared/config/site";
 import "~/app/styles.css";
@@ -102,9 +106,10 @@ function RootDocument(props: { children: React.ReactNode }) {
   return (
     <html lang="ru">
       <head>
-        <HeadContent />
+        <AppDocumentHead />
       </head>
       <body>
+        <PageBackground />
         <AppProviders>{props.children}</AppProviders>
         <Scripts />
       </body>

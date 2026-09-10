@@ -9,10 +9,9 @@ export namespace FragmentLinkTypes {
     hash: string;
     children: React.ReactNode;
     className?: string;
-    /** Trailing affordance arrow, on by default. Turn off where the caller
-     * already draws its own navigation affordance (e.g. the lesson outline's
-     * SVG nodes) so the two don't compete. */
+    /** Leading link icon; omitted by navigation lists with their own indicators. */
     icon?: boolean;
+    hierarchy?: "text" | "drawn";
     anchorProps?: Omit<ComponentProps<"a">, "children" | "className" | "href"> &
       DataAttributes;
   };

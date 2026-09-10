@@ -20,7 +20,7 @@ export const PracticeTaskHeading: React.FC<PracticeTaskHeadingProps> = (
       aria-label={`Теория к задаче «${props.task.title}»`}
     >
       {props.task.theoryLinks.map((link) => (
-        <FragmentLink hash={link.hash} key={link.hash}>
+        <FragmentLink hierarchy="drawn" hash={link.hash} key={link.hash}>
           {link.label}
         </FragmentLink>
       ))}

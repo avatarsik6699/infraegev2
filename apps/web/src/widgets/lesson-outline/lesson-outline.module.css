@@ -135,3 +135,38 @@
     transition: none;
   }
 }
+
+:global([data-presentation="study"]) .groupLink,
+:global([data-presentation="study"]) .childLink {
+  min-height: 2rem;
+}
+
+:global([data-presentation="study"]) .groupLink::after,
+:global([data-presentation="study"]) .childLink::after {
+  content: none;
+}
+
+:global([data-presentation="study"]) .groups {
+  gap: var(--space-0-5);
+}
+:global([data-presentation="study"]) .children {
+  gap: 0;
+  padding-left: var(--space-1-5);
+}
+:global([data-presentation="study"]) .groupLink {
+  font-weight: 500;
+}
+:global([data-presentation="study"]) .childLink {
+  padding: 0.25rem 0;
+  font-weight: 400;
+}
+:global([data-presentation="study"])
+  .childLink[aria-current="location"]::before {
+  left: calc(-1 * var(--space-1));
+}
+@media (any-pointer: coarse) {
+  :global([data-presentation="study"]) .groupLink,
+  :global([data-presentation="study"]) .childLink {
+    min-height: 2.5rem;
+  }
+}

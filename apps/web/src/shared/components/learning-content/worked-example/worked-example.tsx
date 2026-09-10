@@ -2,6 +2,7 @@ import { Typography } from "~/shared/components/typography";
 import styles from "./worked-example.module.css";
 
 type Props = {
+  children?: React.ReactNode;
   title: string;
   prompt: React.ReactNode;
   steps: readonly React.ReactNode[];
@@ -27,6 +28,9 @@ export const WorkedExample: React.FC<Props> = (props) => {
           </li>
         ))}
       </ol>
+      {props.children ? (
+        <div className={styles.content}>{props.children}</div>
+      ) : null}
     </figure>
   );
 };

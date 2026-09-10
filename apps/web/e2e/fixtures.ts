@@ -1,3 +1,5 @@
+import { AuxiliaryPagesPage } from "./pages/auxiliary-pages.page";
+import { LessonReadingPreviewPage } from "./pages/lesson-reading-preview.page";
 import { test as base } from "@playwright/test";
 import { AccessibilityPage } from "./pages/accessibility.page";
 import { BrowserSession } from "./pages/browser-session.page";
@@ -12,6 +14,10 @@ import { TopicLessonPage } from "./pages/topic-lesson.page";
 import { TopicCatalogPage } from "./pages/topic-catalog.page";
 
 type AppFixtures = {
+  auxiliaryPagesPage: AuxiliaryPagesPage;
+  noJavaScriptAuxiliaryPagesPage: AuxiliaryPagesPage;
+  lessonReadingPreviewPage: LessonReadingPreviewPage;
+  noJavaScriptLessonReadingPreviewPage: LessonReadingPreviewPage;
   accessibilityPage: AccessibilityPage;
   browserSession: BrowserSession;
   courseCatalogPage: CourseCatalogPage;
@@ -35,6 +41,36 @@ type AppFixtures = {
 };
 
 export const test = base.extend<AppFixtures>({
+  auxiliaryPagesPage: async ({ page }, use) => {
+    await use(new AuxiliaryPagesPage(page));
+  },
+  noJavaScriptAuxiliaryPagesPage: async ({ baseURL, browser }, use) => {
+    const context = await browser.newContext({
+      baseURL,
+      javaScriptEnabled: false,
+      viewport: { width: 390, height: 844 },
+    });
+    try {
+      await use(new AuxiliaryPagesPage(await context.newPage()));
+    } finally {
+      await context.close();
+    }
+  },
+  lessonReadingPreviewPage: async ({ page }, use) => {
+    await use(new LessonReadingPreviewPage(page));
+  },
+  noJavaScriptLessonReadingPreviewPage: async ({ baseURL, browser }, use) => {
+    const context = await browser.newContext({
+      baseURL,
+      javaScriptEnabled: false,
+      viewport: { width: 390, height: 844 },
+    });
+    try {
+      await use(new LessonReadingPreviewPage(await context.newPage()));
+    } finally {
+      await context.close();
+    }
+  },
   accessibilityPage: async ({ page }, use) => {
     await use(new AccessibilityPage(page));
   },

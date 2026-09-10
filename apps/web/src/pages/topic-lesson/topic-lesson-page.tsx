@@ -69,9 +69,20 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
       />
 
       <main className={styles.lesson} data-lesson-frame>
+        <div className={styles.intro}>
+          <LessonIntro
+            presentation="study"
+            accessTier={props.lesson.accessTier}
+            eyebrow={topicCatalog.formatTaskNumbers(props.lesson.taskNumbers)}
+            summary={props.lesson.summary}
+            taskCount={props.tasks.length}
+            technology="ЕГЭ по информатике"
+            title={props.lesson.title}
+          />
+        </div>
         <aside className={styles.rail} data-outline-rail>
           <div className={styles.railContents}>
-            <LessonOutline groups={outline} />
+            <LessonOutline groups={outline} presentation="study" />
             <div className={styles.railSpacer} aria-hidden="true" />
             <TopicLessonProgress
               masteryThreshold={props.lesson.masteryThreshold ?? 0.8}
@@ -82,15 +93,6 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
         </aside>
 
         <article className={styles.article} data-article-frame ref={articleRef}>
-          <LessonIntro
-            accessTier={props.lesson.accessTier}
-            eyebrow={topicCatalog.formatTaskNumbers(props.lesson.taskNumbers)}
-            summary={props.lesson.summary}
-            taskCount={props.tasks.length}
-            technology="ЕГЭ по информатике"
-            title={props.lesson.title}
-          />
-
           <LessonTheory
             concepts={props.lesson.theory}
             className={styles.section}
@@ -105,14 +107,12 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
             </section>
           ) : null}
 
-          <section
-            id="practice"
-            className={`${styles.section} ${styles.practiceSection}`}
-          >
+          <section id="practice" className={styles.section}>
             <LessonSectionHeading index={practiceIndex} variant="lesson">
               Практика
             </LessonSectionHeading>
             <LessonPracticeFlow
+              presentation="study"
               tasks={props.tasks}
               lessonId={props.lesson.id}
               checkAnswer={checkPracticeAnswer}
@@ -120,10 +120,7 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
             />
           </section>
 
-          <section
-            id="result"
-            className={`${styles.section} ${styles.resultSection}`}
-          >
+          <section id="result" className={styles.section}>
             <LessonSectionHeading index={resultIndex} variant="lesson">
               Итог
             </LessonSectionHeading>
@@ -141,7 +138,9 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
           aria-hidden="true"
         />
       </main>
-      <PublicFooter />
+      <div className={styles.footer} data-lesson-footer>
+        <PublicFooter />
+      </div>
     </div>
   );
 };

@@ -4,14 +4,6 @@ import styles from "../topic-catalog-page.module.css";
 
 export const TopicCatalogAmbientField: React.FC = () => (
   <div className={styles.ambientField} aria-hidden="true">
-    <svg className={styles.ambientScene} fill="none" focusable="false">
-      <SvgPattern.Grid
-        bounds={{ x: 0, y: 0, width: "100%", height: "100%" }}
-        cell={{ width: 96, height: 64 }}
-        transform="skewY(-12)"
-        lineClassName={styles.ambientGridLine}
-      />
-    </svg>
     {Object.entries(topicCatalogPatterns).map(([name, preset], index) => (
       <svg
         key={name}

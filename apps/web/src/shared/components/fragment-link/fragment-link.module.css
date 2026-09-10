@@ -13,12 +13,27 @@
   text-decoration-color: currentColor;
 }
 
-/* Uses currentColor — rides the anchor's own `color` transition
-   above instead of animating on its own (one authored motion, not two). */
 .icon {
   display: inline-block;
   width: 0.85em;
   height: 0.85em;
   margin-right: 0.2em;
   vertical-align: -0.1em;
+}
+
+.root[data-hierarchy="drawn"] {
+  text-decoration: none;
+}
+
+.root[data-hierarchy="drawn"] .label {
+  position: relative;
+}
+
+.root[data-hierarchy="drawn"] .icon {
+  color: var(--color-brand-orange);
+  flex-shrink: 0;
+}
+
+.root[data-hierarchy="drawn"]:hover [data-link-underline] {
+  opacity: 0.72;
 }

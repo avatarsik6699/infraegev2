@@ -3,6 +3,8 @@
 }
 
 .root {
+  min-width: 0;
+  overflow-wrap: anywhere;
   padding-block: clamp(var(--space-4), 6vw, var(--space-6));
 }
 

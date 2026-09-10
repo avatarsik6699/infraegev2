@@ -1,4 +1,5 @@
 type BaseProps = {
+  loading?: "lazy" | "eager";
   src: string;
   width?: number | string;
   height?: number | string;

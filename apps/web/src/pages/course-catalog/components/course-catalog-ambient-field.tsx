@@ -1,4 +1,3 @@
-import { SvgPattern } from "~/shared/components/svg-pattern";
 import styles from "../course-catalog-page.module.css";
 
 export const CourseCatalogAmbientField: React.FC = () => (
@@ -24,12 +23,6 @@ export const CourseCatalogAmbientField: React.FC = () => (
           <feComposite in2="SourceGraphic" operator="in" />
         </filter>
       </defs>
-      <SvgPattern.Grid
-        bounds={{ x: 0, y: 0, width: 1440, height: 1400 }}
-        cell={{ width: 110, height: 110 }}
-        transform="matrix(1 -.35 1 .35 -700 300)"
-        lineClassName={styles.ambientGridLine}
-      />
       <g className={styles.ambientNotation}>
         <text x="14" y="455">
           for i in range(n):

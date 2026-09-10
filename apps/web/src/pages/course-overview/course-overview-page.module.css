@@ -473,31 +473,6 @@
   );
 }
 
-.atmosphereGrid {
-  position: absolute;
-  inset: 0;
-  mask-image: linear-gradient(
-    90deg,
-    black,
-    transparent 7%,
-    transparent 47%,
-    black 54%,
-    black 58%,
-    transparent 63%,
-    transparent 97%,
-    black
-  );
-}
-
-.atmosphereGridLine {
-  stroke: color-mix(in srgb, var(--color-text) 15%, transparent);
-  stroke-width: 0.7;
-}
-
-.atmosphereGridNode {
-  fill: color-mix(in srgb, var(--color-brand-orange) 35%, transparent);
-}
-
 .atmosphereStudies {
   position: absolute;
   top: 72rem;
@@ -609,15 +584,6 @@
 @media (max-width: 58rem) {
   .atmosphereStudies {
     display: none;
-  }
-  .atmosphereGrid {
-    mask-image: linear-gradient(
-      90deg,
-      black,
-      transparent 8%,
-      transparent 92%,
-      black
-    );
   }
 }
 

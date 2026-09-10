@@ -32,9 +32,11 @@ export const LessonProgress: React.FC<LessonProgressTypes.Props> = ({
         label="Решённые задачи урока"
         valueText={`Решено ${String(props.solved)} из ${String(props.total)} задач`}
       />
-      <Typography.Text className={styles.status} data-mastery-status>
-        {status}
-      </Typography.Text>
+      {props.hideEmptyStatus && props.solved === 0 ? null : (
+        <Typography.Text className={styles.status} data-mastery-status>
+          {status}
+        </Typography.Text>
+      )}
     </section>
   );
 };

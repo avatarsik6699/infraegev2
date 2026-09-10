@@ -104,11 +104,18 @@ export const PrivacyPage: React.FC = () => (
         <Typography.Text>
           Локальный прогресс можно удалить очисткой данных сайта в браузере. По
           вопросам обработки данных напишите на{" "}
-          <ExternalLink href={`mailto:${siteConfig.privacyContactEmail}`}>
+          <ExternalLink
+            hierarchy="drawn"
+            href={`mailto:${siteConfig.privacyContactEmail}`}
+          >
             {siteConfig.privacyContactEmail}
           </ExternalLink>
           . Новости проекта и обратная связь доступны в Telegram-канале:{" "}
-          <ExternalLink href={siteConfig.telegramInviteUrl} newTab>
+          <ExternalLink
+            hierarchy="drawn"
+            href={siteConfig.telegramInviteUrl}
+            newTab
+          >
             ссылка-приглашение
           </ExternalLink>
           .

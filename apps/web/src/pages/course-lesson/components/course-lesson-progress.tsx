@@ -1,5 +1,6 @@
 import { LessonProgress, useLessonProgress } from "~/features/lesson-progress";
 import { ConfirmationDialog } from "~/shared/components/confirmation-dialog";
+import { Typography } from "~/shared/components/typography";
 import { useIsEnhanced } from "~/shared/lib/use-is-enhanced";
 import styles from "../course-lesson-page.module.css";
 
@@ -12,26 +13,42 @@ type Props = {
 export const CourseLessonProgress: React.FC<Props> = (props) => {
   const progress = useLessonProgress(props.lessonId);
   const enhanced = useIsEnhanced();
-  const solvedCount = progress.solvedTaskIds.length;
-
   return (
     <div className={styles.resultProgress} data-course-result-progress>
-      <LessonProgress
-        headingId="course-result-progress-title"
-        masteryThreshold={props.masteryThreshold}
-        solved={solvedCount}
-        total={props.taskCount}
-      />
       {enhanced ? (
-        <ConfirmationDialog
-          triggerLabel="Сбросить прогресс"
-          triggerAriaLabel="Сбросить прогресс урока"
-          title="Сбросить прогресс?"
-          description="Будут удалены решённые задачи и принятые ответы только этого урока."
-          confirmLabel="Сбросить"
-          onConfirm={progress.clear}
-        />
-      ) : null}
+        <>
+          <LessonProgress
+            hideEmptyStatus
+            headingId="course-result-progress-title"
+            headingOrder={2}
+            masteryThreshold={props.masteryThreshold}
+            solved={progress.solvedTaskIds.length}
+            total={props.taskCount}
+          />
+          <ConfirmationDialog
+            triggerLabel="Сбросить прогресс"
+            triggerAriaLabel="Сбросить прогресс урока"
+            title="Сбросить прогресс?"
+            description="Будут удалены решённые задачи и принятые ответы только этого урока."
+            confirmLabel="Сбросить"
+            onConfirm={progress.clear}
+          />
+        </>
+      ) : (
+        <>
+          <Typography.Title
+            order={2}
+            id="course-result-progress-title"
+            className={styles.progressHeading}
+          >
+            Прогресс
+          </Typography.Title>
+          <Typography.Text tone="muted" className={styles.progressStatus}>
+            Прогресс хранится только в этом браузере и появится после загрузки
+            страницы.
+          </Typography.Text>
+        </>
+      )}
     </div>
   );
 };

@@ -3,6 +3,14 @@
 
   /* One infraege profile for public pages, reading, controls and the live lab.
      Only tokens.css consumes these values. */
+  --theme-learning-muted: #605e59;
+  --theme-learning-danger: #99453f;
+  --theme-learning-success: #48634b;
+  --theme-learning-info: #3e5e76;
+  --theme-scrollbar: #e4e1dc;
+  --theme-scrollbar-hover: #d2cec7;
+  --theme-scrollbar-dark: #2d2d2d;
+  --theme-scrollbar-dark-hover: #414141;
   --theme-page: #f5f3ef;
   --theme-surface: #fbfaf7;
   --theme-surface-muted: #eeece7;

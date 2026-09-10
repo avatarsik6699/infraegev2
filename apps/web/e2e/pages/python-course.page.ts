@@ -846,6 +846,14 @@ export class PythonCoursePage {
   }
 
   async expectMobileReadingOrder(): Promise<void> {
+    const trigger = this.page.getByRole("button", {
+      name: "Содержание урока",
+      exact: true,
+    });
+    await expect(trigger).toHaveAttribute("aria-expanded", "false");
+    await trigger.focus();
+    await trigger.press("Enter");
+    await expect(trigger).toHaveAttribute("aria-expanded", "true");
     await expectLessonVerticalRhythm(this.page);
     await expectLessonInteractiveTargets(this.page);
     const introComesBeforeOutline = await this.page
@@ -861,12 +869,31 @@ export class PythonCoursePage {
         );
       });
     expect(introComesBeforeOutline).toBe(true);
+    const destination = this.page
+      .getByRole("navigation", { name: "Содержание урока" })
+      .getByRole("link")
+      .nth(1);
+    const hash = await destination.getAttribute("href");
+    if (!hash) throw new Error("Missing course outline destination");
+    await destination.focus();
+    await destination.press("Enter");
+    await expect(trigger).toHaveAttribute("aria-expanded", "false");
+    await expect(this.page.locator(hash)).toBeFocused();
+    expect(new URL(this.page.url()).hash).toBe(hash);
     await expectNoHorizontalOverflow(this.page);
   }
 
   async expectReadableWithoutJavaScript(): Promise<void> {
     await this.openFirstLesson();
     await this.expectPublishedLesson();
+    await expect(
+      this.page.getByRole("navigation", { name: "Содержание урока" }),
+    ).toBeVisible();
+    await expect(
+      this.page.getByText(
+        "Прогресс хранится только в этом браузере и появится после загрузки страницы.",
+      ),
+    ).toBeVisible();
     await expectNoJavaScriptPractice(this.page);
   }
 

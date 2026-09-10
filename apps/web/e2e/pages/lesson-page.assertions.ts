@@ -110,7 +110,7 @@ export async function expectDesktopLessonRail(page: Page): Promise<void> {
     const rail = document.querySelector<HTMLElement>("[data-outline-rail]");
     const contents = rail?.firstElementChild as HTMLElement | null;
     const progress = rail?.querySelector<HTMLElement>(
-      "[data-result-progress], [data-course-result-progress]",
+      "[data-result-progress], [data-course-result-progress], [data-study-progress]",
     );
     const spacer = rail?.querySelector<HTMLElement>('[class*="railSpacer"]');
     const labels = Array.from(
@@ -200,7 +200,7 @@ export async function expectLessonInteractiveTargets(
     ).toBe(true);
   }
 
-  // LessonOutline links (Change 91) have a compact visible row but extend
+  // Legacy LessonOutline links (Change 91) have a compact visible row but extend
   // their actual clickable area to the 40px floor via an absolutely
   // positioned ::after pseudo-element — measure that hit area, not the
   // shrunk visible box, per docs/FRONTEND.md §5.
@@ -214,7 +214,14 @@ export async function expectLessonInteractiveTargets(
         const after = getComputedStyle(target, "::after");
         const expandTop = Math.max(0, -parseFloat(after.top) || 0);
         const expandBottom = Math.max(0, -parseFloat(after.bottom) || 0);
-        return rect.height + expandTop + expandBottom;
+        return {
+          height: rect.height + expandTop + expandBottom,
+          minimum:
+            target.closest('[data-presentation="study"]') &&
+            !matchMedia("(any-pointer: coarse)").matches
+              ? 32
+              : 40,
+        };
       });
   });
 
@@ -223,8 +230,8 @@ export async function expectLessonInteractiveTargets(
     "outline targets are present",
   ).toBeGreaterThan(0);
   expect(
-    outlineHitHeights.every((height) => height >= 40),
-    "outline targets have at least a 40px accessible hit area",
+    outlineHitHeights.every(({ height, minimum }) => height >= minimum),
+    "outline targets preserve the approved mouse/touch and legacy hit areas",
   ).toBe(true);
 }
 
@@ -371,6 +378,8 @@ export async function expectNoJavaScriptPractice(page: Page): Promise<void> {
   await expect(
     page
       .locator("[data-course-result-progress]")
-      .getByText("0 / 5", { exact: true }),
+      .getByText(
+        "Прогресс хранится только в этом браузере и появится после загрузки страницы.",
+      ),
   ).toBeVisible();
 }

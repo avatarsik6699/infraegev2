@@ -47,7 +47,8 @@ const LeadingIcon: React.FC<ActionLinkDecorationProps> = ({
   hierarchy,
   icon,
 }) => {
-  if (icon !== "back" || hierarchy === "drawn") return null;
+  if (icon !== "back") return null;
+  if (hierarchy === "drawn") return <DrawnArrow />;
 
   return (
     <ArrowLeft

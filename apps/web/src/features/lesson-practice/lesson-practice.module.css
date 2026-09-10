@@ -63,7 +63,7 @@
   top: var(--space-0-5);
   right: var(--space-0-5);
   fill: none;
-  stroke: var(--color-success);
+  stroke: var(--learning-success, var(--color-success));
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-width: 1.8;
@@ -363,7 +363,7 @@
   right: var(--input-padding-inline);
   width: 1.125rem;
   height: 1.125rem;
-  color: var(--color-success);
+  color: var(--learning-success, var(--color-success));
   pointer-events: none;
   transform: translateY(-50%);
 }
@@ -398,11 +398,11 @@
 }
 
 .feedback[data-state="correct"] {
-  color: var(--color-success);
+  color: var(--learning-success, var(--color-success));
 }
 
 .feedback[data-state="incorrect"] {
-  color: var(--color-danger);
+  color: var(--learning-danger, var(--color-danger));
 }
 
 @media (max-width: 34rem) {
@@ -427,4 +427,11 @@
     grid-template-columns: minmax(0, 1fr);
     gap: var(--space-0-5);
   }
+}
+
+.taskPosition {
+  margin: 0 0 var(--space-1);
+  color: var(--color-text-soft);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
 }

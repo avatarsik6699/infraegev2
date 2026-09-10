@@ -1,4 +1,6 @@
 .root {
+  min-width: 0;
+  max-width: var(--learning-block-measure, none);
   display: grid;
   gap: var(--space-1);
   margin: 0;
@@ -14,21 +16,26 @@
 }
 
 .comparison[data-status="incorrect"] {
-  background: var(--color-danger-soft);
+  --notation-bg: var(--learning-danger-notation-bg, var(--color-surface-quiet));
+  background: var(--learning-danger-background, var(--color-danger-soft));
 }
 
 .comparison[data-status="correct"] {
-  background: var(--color-success-soft);
+  --notation-bg: var(
+    --learning-success-notation-bg,
+    var(--color-surface-quiet)
+  );
+  background: var(--learning-success-background, var(--color-success-soft));
 }
 
 .comparison[data-status="incorrect"] .icon,
 .comparison[data-status="incorrect"] .label {
-  color: var(--color-danger);
+  color: var(--learning-danger, var(--color-danger));
 }
 
 .comparison[data-status="correct"] .icon,
 .comparison[data-status="correct"] .label {
-  color: var(--color-success);
+  color: var(--learning-success, var(--color-success));
 }
 
 .icon {

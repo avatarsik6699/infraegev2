@@ -11,14 +11,18 @@ type Props = {
 
 export const TopicLessonHeader: React.FC<Props> = (props) => (
   <>
-    <PublicHeader />
-    <div className={styles.contextBar} data-topic-lesson-context>
+    <PublicHeader activeSection="topics" />
+    <nav
+      className={styles.contextBar}
+      data-topic-lesson-context
+      aria-label="Навигация урока"
+    >
       <div className={styles.contextArea}>
         <BackLink>Назад</BackLink>
       </div>
       <Typography.Text className={styles.contextLesson}>
         {`${topicCatalog.formatTaskNumbers(props.taskNumbers)} · ${props.title}`}
       </Typography.Text>
-    </div>
+    </nav>
   </>
 );

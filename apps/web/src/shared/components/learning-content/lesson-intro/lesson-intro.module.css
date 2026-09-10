@@ -24,3 +24,15 @@
   font-size: var(--text-base);
   line-height: 1.6;
 }
+
+.root[data-presentation="study"] .title {
+  font-size: var(--text-3xl);
+  text-wrap: balance;
+}
+
+.studyMeta {
+  margin: 0;
+  color: var(--color-text-soft);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+}

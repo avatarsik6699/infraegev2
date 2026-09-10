@@ -18,6 +18,7 @@ import { Route as CoursesCourseSlugRouteImport } from './routes/courses.$courseS
 import { Route as EgeIndexRouteImport } from './routes/ege.index'
 import { Route as EgeSlugRouteImport } from './routes/ege.$slug'
 import { Route as LabDesignSystemRouteImport } from './routes/lab.design-system'
+import { Route as LabLessonRouteImport } from './routes/lab.lesson'
 import { Route as CoursesCourseSlugLessonSlugRouteImport } from './routes/courses_.$courseSlug.$lessonSlug'
 
 const IndexRoute = IndexRouteImport.update({
@@ -65,6 +66,11 @@ const LabDesignSystemRoute = LabDesignSystemRouteImport.update({
   path: '/lab/design-system',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LabLessonRoute = LabLessonRouteImport.update({
+  id: '/lab/lesson',
+  path: '/lab/lesson',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CoursesCourseSlugLessonSlugRoute =
   CoursesCourseSlugLessonSlugRouteImport.update({
     id: '/courses_/$courseSlug/$lessonSlug',
@@ -80,6 +86,7 @@ export interface FileRoutesByFullPath {
   '/courses/$courseSlug': typeof CoursesCourseSlugRoute
   '/ege/$slug': typeof EgeSlugRoute
   '/lab/design-system': typeof LabDesignSystemRoute
+  '/lab/lesson': typeof LabLessonRoute
   '/courses/': typeof CoursesIndexRoute
   '/ege/': typeof EgeIndexRoute
   '/courses/$courseSlug/$lessonSlug': typeof CoursesCourseSlugLessonSlugRoute
@@ -92,6 +99,7 @@ export interface FileRoutesByTo {
   '/courses/$courseSlug': typeof CoursesCourseSlugRoute
   '/ege/$slug': typeof EgeSlugRoute
   '/lab/design-system': typeof LabDesignSystemRoute
+  '/lab/lesson': typeof LabLessonRoute
   '/courses': typeof CoursesIndexRoute
   '/ege': typeof EgeIndexRoute
   '/courses/$courseSlug/$lessonSlug': typeof CoursesCourseSlugLessonSlugRoute
@@ -105,6 +113,7 @@ export interface FileRoutesById {
   '/courses/$courseSlug': typeof CoursesCourseSlugRoute
   '/ege/$slug': typeof EgeSlugRoute
   '/lab/design-system': typeof LabDesignSystemRoute
+  '/lab/lesson': typeof LabLessonRoute
   '/courses/': typeof CoursesIndexRoute
   '/ege/': typeof EgeIndexRoute
   '/courses_/$courseSlug/$lessonSlug': typeof CoursesCourseSlugLessonSlugRoute
@@ -119,6 +128,7 @@ export interface FileRouteTypes {
     | '/courses/$courseSlug'
     | '/ege/$slug'
     | '/lab/design-system'
+    | '/lab/lesson'
     | '/courses/'
     | '/ege/'
     | '/courses/$courseSlug/$lessonSlug'
@@ -131,6 +141,7 @@ export interface FileRouteTypes {
     | '/courses/$courseSlug'
     | '/ege/$slug'
     | '/lab/design-system'
+    | '/lab/lesson'
     | '/courses'
     | '/ege'
     | '/courses/$courseSlug/$lessonSlug'
@@ -143,6 +154,7 @@ export interface FileRouteTypes {
     | '/courses/$courseSlug'
     | '/ege/$slug'
     | '/lab/design-system'
+    | '/lab/lesson'
     | '/courses/'
     | '/ege/'
     | '/courses_/$courseSlug/$lessonSlug'
@@ -156,6 +168,7 @@ export interface RootRouteChildren {
   CoursesCourseSlugRoute: typeof CoursesCourseSlugRoute
   EgeSlugRoute: typeof EgeSlugRoute
   LabDesignSystemRoute: typeof LabDesignSystemRoute
+  LabLessonRoute: typeof LabLessonRoute
   CoursesIndexRoute: typeof CoursesIndexRoute
   EgeIndexRoute: typeof EgeIndexRoute
   CoursesCourseSlugLessonSlugRoute: typeof CoursesCourseSlugLessonSlugRoute
@@ -226,6 +239,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LabDesignSystemRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/lab/lesson': {
+      id: '/lab/lesson'
+      path: '/lab/lesson'
+      fullPath: '/lab/lesson'
+      preLoaderRoute: typeof LabLessonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/courses_/$courseSlug/$lessonSlug': {
       id: '/courses_/$courseSlug/$lessonSlug'
       path: '/courses/$courseSlug/$lessonSlug'
@@ -244,6 +264,7 @@ const rootRouteChildren: RootRouteChildren = {
   CoursesCourseSlugRoute: CoursesCourseSlugRoute,
   EgeSlugRoute: EgeSlugRoute,
   LabDesignSystemRoute: LabDesignSystemRoute,
+  LabLessonRoute: LabLessonRoute,
   CoursesIndexRoute: CoursesIndexRoute,
   EgeIndexRoute: EgeIndexRoute,
   CoursesCourseSlugLessonSlugRoute: CoursesCourseSlugLessonSlugRoute,

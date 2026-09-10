@@ -120,6 +120,7 @@
 
 .sections {
   min-width: 0;
+  flex-wrap: wrap;
   gap: clamp(var(--space-2), 3.1vw, var(--space-6));
 }
 
@@ -261,5 +262,27 @@ a.brand:hover {
   .mobileMenu summary,
   .mobileNavigation {
     border-color: var(--color-brand-ink);
+  }
+}
+
+@media (max-width: 30rem) {
+  .root[data-expanded="true"] .inner {
+    display: flex;
+    flex-wrap: wrap;
+    padding-block: var(--space-2);
+  }
+  .brand {
+    flex: 1 1 14rem;
+  }
+  .brand,
+  .name {
+    min-width: 0;
+  }
+  .benefits {
+    flex-wrap: wrap;
+    white-space: normal;
+  }
+  .mobileMenu {
+    margin-left: auto;
   }
 }

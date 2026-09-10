@@ -6,6 +6,7 @@ import styles from "./public-header.module.css";
 export type PublicHeaderProps = {
   activeSection?: "courses" | "topics";
   home?: boolean;
+  expanded?: boolean;
 };
 
 const FutureItem: React.FC<{ children: React.ReactNode }> = ({ children }) => (
@@ -46,9 +47,8 @@ const PublicNavigation: React.FC<{
 export const PublicHeader: React.FC<PublicHeaderProps> = ({
   activeSection,
   home = false,
+  expanded = true,
 }) => {
-  const expanded = home || activeSection !== undefined;
-
   return (
     <header
       className={styles.root}

@@ -9,10 +9,14 @@
 }
 
 .label {
+  min-width: 0;
+  overflow-wrap: anywhere;
   position: relative;
 }
 
 .drawn {
+  max-width: 100%;
+  vertical-align: baseline;
   display: inline-flex;
   gap: 0.38em;
   align-items: center;
@@ -37,6 +41,7 @@
 /* Uses currentColor — rides the anchor's own `color` transition
    above instead of animating on its own (one authored motion, not two). */
 .icon {
+  flex: none;
   display: inline-block;
   width: 0.85em;
   height: 0.85em;
@@ -45,11 +50,13 @@
 }
 
 .drawn .icon {
+  flex: none;
   color: var(--color-brand-orange);
   transition: transform var(--motion-duration) var(--motion-easing);
 }
 
 .drawn:hover .icon {
+  flex: none;
   transform: translate(0.08em, -0.08em);
 }
 
@@ -77,6 +84,7 @@
 @media (prefers-reduced-motion: reduce) {
   .root,
   .drawn .icon {
+    flex: none;
     transition: none;
   }
 }

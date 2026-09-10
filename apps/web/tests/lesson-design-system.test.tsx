@@ -98,7 +98,63 @@ const ProgressHarness = () => {
 describe("lesson design system", () => {
   beforeEach(() => {
     window.localStorage.clear();
+    vi.stubGlobal(
+      "matchMedia",
+      vi.fn(() => ({
+        matches: false,
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+      })),
+    );
   });
+  it("collapses study contents on mobile and focuses the selected heading", async () => {
+    vi.stubGlobal(
+      "matchMedia",
+      vi.fn(() => ({
+        matches: true,
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+      })),
+    );
+    const scrollIntoView = vi.fn();
+    render(
+      <div>
+        <LessonOutline
+          presentation="study"
+          groups={[{ id: "mobile-theory", label: "Теория", items: [] }]}
+        />
+        <h2 id="mobile-theory">Теория на странице</h2>
+      </div>,
+    );
+    const heading = screen.getByRole("heading", { name: "Теория на странице" });
+    heading.scrollIntoView = scrollIntoView;
+    const trigger = await screen.findByRole("button", {
+      name: "Содержание урока",
+    });
+    expect(trigger.getAttribute("aria-expanded")).toBe("false");
+    fireEvent.click(trigger);
+    expect(trigger.getAttribute("aria-expanded")).toBe("true");
+    fireEvent.click(screen.getByRole("link", { name: "Теория" }));
+    await waitFor(() => expect(document.activeElement).toBe(heading));
+    expect(trigger.getAttribute("aria-expanded")).toBe("false");
+    expect(scrollIntoView).toHaveBeenCalledOnce();
+  });
+
+  it("leaves study contents open on desktop and preserves ordinary fragment links", () => {
+    render(
+      <LessonOutline
+        presentation="study"
+        groups={[{ id: "desktop-theory", label: "Теория", items: [] }]}
+      />,
+    );
+    expect(
+      screen.queryByRole("button", { name: "Содержание урока" }),
+    ).toBeNull();
+    expect(
+      screen.getByRole("link", { name: "Теория" }).getAttribute("href"),
+    ).toBe("#desktop-theory");
+  });
+
   it("renders a nested semantic outline with a current child anchor", () => {
     render(
       <LessonOutline
@@ -187,9 +243,8 @@ describe("lesson design system", () => {
       screen.getByRole("heading", { level: 3, name: "Почему это быстро" }),
     ).toBeTruthy();
     expect(screen.getByRole("button", { name: /Копировать код/ })).toBeTruthy();
-    expect(
-      screen.getByText("Средняя").closest('[data-tone="accent"]'),
-    ).not.toBeNull();
+    expect(screen.getByText("Демонстрационный урок · 5 задач")).toBeTruthy();
+    expect(screen.queryByText("Средняя")).toBeNull();
     for (const name of [
       "Попробуйте сами",
       "Типичная ошибка с границами",
@@ -201,23 +256,12 @@ describe("lesson design system", () => {
     }
   });
 
-  it("keeps the site header focused on the brand", () => {
+  it("uses public chrome and names the lab return destination", () => {
     render(<LessonDesignLab />);
-
-    const siteHeader = document.querySelector<HTMLElement>(
-      "[data-lesson-site-header]",
-    );
-    expect(siteHeader).not.toBeNull();
-    if (!siteHeader) return;
-
-    expect(Array.from(siteHeader.children)).toHaveLength(1);
     expect(
-      within(siteHeader).getByRole("link", {
-        name: "infraege — на главную",
-      }).textContent,
-    ).toBe("infraege");
-    expect(within(siteHeader).queryByText("Темы")).toBeNull();
-    expect(within(siteHeader).queryByText("Тренажёр")).toBeNull();
+      screen.getByRole("link", { name: "Дизайн-система" }).getAttribute("href"),
+    ).toBe("/lab/design-system");
+    expect(document.querySelector("[data-public-header]")).toBeTruthy();
   });
 
   it("keeps recursion metadata with the title while leaving progress out of the title and outline", () => {
@@ -274,11 +318,8 @@ describe("lesson design system", () => {
       />,
     );
 
-    const metadata = screen.getByLabelText("Сведения об уроке");
-    expect(within(metadata).getByText("Задание 16")).toBeTruthy();
-    expect(within(metadata).getByText("ЕГЭ по информатике")).toBeTruthy();
-    expect(within(metadata).getByText("5 задач")).toBeTruthy();
-    expect(within(metadata).getByText("Бесплатно")).toBeTruthy();
+    expect(screen.getByText("Задание 16 · 5 задач")).toBeTruthy();
+    expect(screen.queryByText("Бесплатно")).toBeNull();
 
     const rail = document.querySelector<HTMLElement>("[data-outline-rail]");
     const article = document.querySelector<HTMLElement>("[data-article-frame]");
@@ -294,6 +335,14 @@ describe("lesson design system", () => {
       }),
     ).toBeTruthy();
     expect(within(article).queryByRole("progressbar")).toBeNull();
+    expect(within(rail).getByText("0 / 5")).toBeTruthy();
+    expect(
+      Boolean(
+        screen
+          .getByRole("heading", { level: 1 })
+          .compareDocumentPosition(rail) & Node.DOCUMENT_POSITION_FOLLOWING,
+      ),
+    ).toBe(true);
     expect(marginRail.children).toHaveLength(0);
     expect(
       screen.queryByRole("heading", { name: "После урока вы сможете" }),
@@ -329,7 +378,7 @@ describe("lesson design system", () => {
       within(mistakeComparisons[0]).getByText("Как правильно"),
     ).toBeTruthy();
     expect(mistakeComparisons[0].querySelectorAll("svg")).toHaveLength(2);
-    expect(screen.getByText("Вы ещё не решали задания")).toBeTruthy();
+    expect(screen.queryByText("Вы ещё не решали задания")).toBeNull();
     expect(
       screen
         .getByRole("link", {
@@ -350,6 +399,30 @@ describe("lesson design system", () => {
     });
     expect(within(template).getByText("Python")).toBeTruthy();
     expect(within(template).queryByText("пример", { exact: false })).toBeNull();
+  });
+
+  it("hides only the opted-in empty progress status", () => {
+    const view = render(
+      <LessonProgress
+        solved={0}
+        total={5}
+        masteryThreshold={0.8}
+        hideEmptyStatus
+      />,
+    );
+    expect(screen.queryByText("Вы ещё не решали задания")).toBeNull();
+    expect(screen.getByText("0 / 5")).toBeTruthy();
+    view.rerender(
+      <LessonProgress
+        solved={1}
+        total={5}
+        masteryThreshold={0.8}
+        hideEmptyStatus
+      />,
+    );
+    expect(
+      screen.getByText("Можно продолжить с оставшихся заданий"),
+    ).toBeTruthy();
   });
 
   it("renders every existing progress state with result-section hierarchy", () => {
@@ -456,7 +529,8 @@ describe("lesson design system", () => {
     fireEvent.click(reset);
     fireEvent.click(screen.getByRole("button", { name: "Сбросить" }));
     await waitFor(() => {
-      expect(screen.getByText("Вы ещё не решали задания")).toBeTruthy();
+      expect(screen.getByText("0 / 1")).toBeTruthy();
+      expect(screen.queryByText("Вы ещё не решали задания")).toBeNull();
     });
     expect(window.localStorage.getItem(progressRegistryStorageKey)).toContain(
       "77",
@@ -476,8 +550,8 @@ describe("lesson design system", () => {
     expect(screen.queryByRole("link", { name: "В избранное" })).toBeNull();
     expect(screen.queryByRole("link", { name: "К практике" })).toBeNull();
     expect(
-      screen.getByRole("link", { name: "Назад к темам" }).getAttribute("href"),
-    ).toBe("/");
+      screen.getByRole("link", { name: "Дизайн-система" }).getAttribute("href"),
+    ).toBe("/lab/design-system");
     const tabs = screen.getByRole("tablist", {
       name: "Задачи урока",
     });
@@ -494,8 +568,8 @@ describe("lesson design system", () => {
     expect(
       screen
         .getByRole("progressbar", { name: "Решённые задачи урока" })
-        .getAttribute("aria-valuetext"),
-    ).toBe("Решено 0 из 5 задач");
+        .getAttribute("aria-valuenow"),
+    ).toBe("0");
 
     const firstTaskTheory = screen.getByRole("navigation", {
       name: "Теория к задаче «Выберите половину»",
@@ -555,8 +629,8 @@ describe("lesson design system", () => {
     expect(
       screen
         .getByRole("progressbar", { name: "Решённые задачи урока" })
-        .getAttribute("aria-valuetext"),
-    ).toBe("Решено 0 из 5 задач");
+        .getAttribute("aria-valuenow"),
+    ).toBe("0");
 
     fireEvent.change(answer, { target: { value: "левая" } });
     fireEvent.click(check);
@@ -566,8 +640,8 @@ describe("lesson design system", () => {
     expect(
       screen
         .getByRole("progressbar", { name: "Решённые задачи урока" })
-        .getAttribute("aria-valuetext"),
-    ).toBe("Решено 1 из 5 задач");
+        .getAttribute("aria-valuenow"),
+    ).toBe("1");
     expect(answer.hasAttribute("disabled")).toBe(true);
     expect(answer.getAttribute("data-solved")).toBe("true");
     expect((answer as HTMLInputElement).value).toBe("левая");

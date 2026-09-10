@@ -1,6 +1,6 @@
-import { fireEvent, screen } from "@testing-library/react";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import type { PracticeTaskTypes } from "~/entities/practice-task";
 import {
   createLocalPracticeChecker,
@@ -68,6 +68,49 @@ const task: PracticeTaskTypes.LocalTask = {
 };
 
 describe("rich practice content", () => {
+  it("explains an empty practice without constructing empty tabs", () => {
+    render(
+      <LessonPractice
+        tasks={[]}
+        solvedTaskIds={[]}
+        acceptedAnswers={{}}
+        checkAnswer={vi.fn()}
+        onTaskSolved={() => 0}
+      />,
+    );
+    expect(
+      screen.getByText("В этом уроке нет практических заданий"),
+    ).toBeTruthy();
+    expect(screen.queryByRole("tablist")).toBeNull();
+  });
+
+  it("keeps service failures separate from answer validation and preserves input for explicit retry", async () => {
+    const checker = vi
+      .fn()
+      .mockRejectedValueOnce(new Error("unavailable"))
+      .mockResolvedValueOnce({ correct: true, explanation: "Верно." });
+    render(
+      <LessonPractice
+        tasks={[task]}
+        solvedTaskIds={[]}
+        acceptedAnswers={{}}
+        checkAnswer={checker}
+        onTaskSolved={() => 1}
+      />,
+    );
+    const input = screen.getByRole("textbox", {
+      name: "Ответ",
+    }) as HTMLInputElement;
+    fireEvent.change(input, { target: { value: "2" } });
+    fireEvent.click(screen.getByRole("button", { name: "Проверить" }));
+    await screen.findByRole("alert");
+    expect(input.value).toBe("2");
+    expect(input.getAttribute("aria-invalid")).not.toBe("true");
+    expect(checker).toHaveBeenCalledTimes(1);
+    fireEvent.click(screen.getByRole("button", { name: "Проверить" }));
+    await waitFor(() => expect(checker).toHaveBeenCalledTimes(2));
+    await waitFor(() => expect(screen.queryByRole("alert")).toBeNull());
+  });
   it("keeps every authored block in server-rendered HTML", () => {
     const html = renderToStaticMarkup(
       <LessonPractice

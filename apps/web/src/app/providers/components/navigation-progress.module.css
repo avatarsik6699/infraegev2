@@ -4,7 +4,7 @@
   top: 0;
   right: 0;
   left: 0;
-  height: 3px;
+  height: 2px;
   overflow: hidden;
   pointer-events: none;
   opacity: 0;
@@ -18,7 +18,7 @@
   display: block;
   width: 42%;
   height: 100%;
-  background: var(--color-text);
+  background: var(--color-brand-orange);
   transform: translateX(-110%);
 }
 

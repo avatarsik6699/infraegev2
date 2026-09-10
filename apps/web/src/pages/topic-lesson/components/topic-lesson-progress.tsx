@@ -18,6 +18,7 @@ export const TopicLessonProgress: React.FC<Props> = (props) => {
       {enhanced ? (
         <>
           <LessonProgress
+            hideEmptyStatus
             headingId="result-progress-title"
             headingOrder={2}
             masteryThreshold={props.masteryThreshold}

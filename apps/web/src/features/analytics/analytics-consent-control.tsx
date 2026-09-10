@@ -19,10 +19,7 @@ export const AnalyticsConsentControl: React.FC = () => {
         <Typography.Text tone="muted">
           Необязательная аналитика сейчас включена.
         </Typography.Text>
-        <Button
-          hierarchy="secondary"
-          onClick={analyticsConsentActions.withdraw}
-        >
+        <Button hierarchy="quiet" onClick={analyticsConsentActions.withdraw}>
           Отключить аналитику
         </Button>
       </div>
@@ -35,7 +32,7 @@ export const AnalyticsConsentControl: React.FC = () => {
         <Typography.Text tone="muted">
           Необязательная аналитика сейчас выключена.
         </Typography.Text>
-        <Button hierarchy="secondary" onClick={analyticsConsentActions.grant}>
+        <Button hierarchy="quiet" onClick={analyticsConsentActions.grant}>
           Разрешить аналитику
         </Button>
       </div>

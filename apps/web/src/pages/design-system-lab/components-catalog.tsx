@@ -192,7 +192,7 @@ export const ComponentsCatalog: React.FC = () => {
               Документация Python
             </ExternalLink>{" "}
             и{" "}
-            <FragmentLink hash="components-learning">
+            <FragmentLink hierarchy="drawn" hash="components-learning">
               учебные компоненты
             </FragmentLink>
             .

@@ -3,6 +3,7 @@ import type { ImageTypes } from "../image.types";
 import styles from "../image.module.css";
 
 type ImageMediaProps = {
+  loading?: "lazy" | "eager";
   imageStatus: ImageTypes.UseImageStatusResult;
   alt: string;
   decorative: boolean;
@@ -38,7 +39,7 @@ export const ImageMedia: React.FC<ImageMediaProps> = (props) => {
         alt={props.alt}
         role={props.decorative ? "presentation" : undefined}
         aria-hidden={props.decorative || undefined}
-        loading="lazy"
+        loading={props.loading ?? "lazy"}
         decoding="async"
         width={props.width}
         height={props.height}
@@ -47,7 +48,9 @@ export const ImageMedia: React.FC<ImageMediaProps> = (props) => {
         onError={props.imageStatus.handleError}
         className={styles.image}
       />
-      {props.enhanced && props.imageStatus.status === "loading" ? (
+      {props.enhanced &&
+      !props.decorative &&
+      props.imageStatus.status === "loading" ? (
         <span className={styles.skeleton} aria-hidden="true" />
       ) : null}
     </>

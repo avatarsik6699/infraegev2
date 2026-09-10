@@ -1,4 +1,7 @@
-import { LessonSectionHeading } from "~/shared/components/learning-content";
+import {
+  LessonSectionHeading,
+  Mistake,
+} from "~/shared/components/learning-content";
 import { Typography } from "~/shared/components/typography";
 import styles from "../lesson-design-lab.module.css";
 
@@ -22,5 +25,9 @@ export const LessonExamFocus: React.FC = () => (
       <code className={styles.inlineCode}>R = M</code> и оставить середину в
       диапазоне: цикл может перестать сужаться.
     </Typography.Text>
+    <Mistake
+      claim="Обновляем L = M: середина остаётся среди кандидатов."
+      explanation="Если x больше a[M], обновляем L = M + 1. Уже проверенный элемент исключается, поэтому диапазон сокращается."
+    />
   </section>
 );

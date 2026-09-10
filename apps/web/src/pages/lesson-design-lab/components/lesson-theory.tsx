@@ -1,4 +1,8 @@
-import { LessonSectionHeading } from "~/shared/components/learning-content";
+import {
+  LessonSectionHeading,
+  WorkedExample,
+  Procedure,
+} from "~/shared/components/learning-content";
 import { CodeBlock } from "~/shared/components/code-block";
 import { Typography } from "~/shared/components/typography";
 import { lessonDesignLabConstants } from "../lesson-design-lab.constants";
@@ -8,7 +12,7 @@ import { BinarySearchProof } from "./binary-search-proof";
 export const LessonTheory: React.FC = () => (
   <>
     <section
-      className={`${styles.lessonSection} ${styles.firstLessonSection}`}
+      className={styles.lessonSection}
       id="theory"
       data-lesson-section="theory"
     >
@@ -39,12 +43,42 @@ export const LessonTheory: React.FC = () => (
         достаточно порядка <code className={styles.inlineCode}>log₂ n</code>{" "}
         сравнений.
       </Typography.Text>
-      <CodeBlock
-        className={styles.codeBlock}
-        code={lessonDesignLabConstants.code}
-        language="python"
-        label="Пример двоичного поиска на Python"
-      />
+      <div className={styles.learningBlock}>
+        <WorkedExample
+          title="Как сужается диапазон"
+          prompt="Проверенная середина больше не участвует в поиске."
+          steps={[
+            "Сравните искомое значение со средним элементом.",
+            "Оставьте подходящую половину, исключив уже проверенную середину.",
+          ]}
+        >
+          <CodeBlock
+            code={lessonDesignLabConstants.code}
+            language="python"
+            label="Пример двоичного поиска на Python"
+          />
+        </WorkedExample>
+      </div>
+      <div className={styles.learningBlock}>
+        <Procedure
+          title="Проследите поиск вручную"
+          steps={[
+            {
+              label: "Запишите границы.",
+              detail: "Отметьте первый и последний индексы текущего диапазона.",
+            },
+            {
+              label: "Найдите середину.",
+              detail: "Сравните её значение с искомым.",
+            },
+            {
+              label: "Сузьте диапазон.",
+              detail:
+                "Исключите середину и неподходящую половину; повторите сравнение.",
+            },
+          ]}
+        />
+      </div>
     </section>
   </>
 );

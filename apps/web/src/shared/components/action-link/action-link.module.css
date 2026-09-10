@@ -141,3 +141,11 @@
     transition: none;
   }
 }
+
+.drawn[data-icon="back"] .drawnArrow {
+  transform: scaleX(-1);
+}
+
+.drawn[data-icon="back"]:hover .drawnArrow {
+  transform: translateX(-0.12em) scaleX(-1);
+}

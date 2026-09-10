@@ -15,7 +15,7 @@
   min-height: 100svh;
   overflow-x: clip;
   color: var(--color-brand-ink);
-  background: var(--color-brand-canvas);
+  background: transparent;
 }
 
 .hero {
@@ -48,26 +48,12 @@
   );
 }
 
-.ambientGrid,
 .ambientScene {
   position: absolute;
   inset: 0;
   display: block;
   width: 100%;
   height: 100%;
-}
-
-.ambientGrid {
-  color: color-mix(in srgb, var(--color-brand-ink) 11%, transparent);
-}
-
-.ambientGridLine {
-  stroke: currentcolor;
-  stroke-width: 0.7;
-}
-.ambientGridNode {
-  fill: var(--color-brand-orange);
-  fill-opacity: 0.32;
 }
 
 .ambientIllumination {
@@ -631,9 +617,7 @@
   .ambientField {
     inset: 6.5rem 0 7rem;
   }
-  .ambientGrid {
-    opacity: 0.8;
-  }
+
   [data-ambient-notation="algorithm"] {
     top: 5%;
     left: auto;

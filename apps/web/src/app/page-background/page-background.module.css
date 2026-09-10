@@ -1,0 +1,33 @@
+.root {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  mask-image:
+    linear-gradient(
+      transparent,
+      black 12rem,
+      black calc(100% - 8rem),
+      transparent
+    ),
+    linear-gradient(
+      90deg,
+      black,
+      color-mix(in srgb, black 20%, transparent) 25%,
+      color-mix(in srgb, black 20%, transparent) 75%,
+      black
+    );
+  mask-composite: intersect;
+}
+.line {
+  fill: none;
+  stroke: var(--color-page-grid);
+  stroke-width: 0.7;
+}
+@media (forced-colors: active) {
+  .root {
+    display: none;
+  }
+}

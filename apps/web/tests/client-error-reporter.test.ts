@@ -1,5 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { createClientErrorReport } from "~/shared/lib/client-errors/browser-adapter";
+import {
+  createClientErrorReport,
+  isChunkLoadError,
+} from "~/shared/lib/client-errors/browser-adapter";
 import {
   reportClientError,
   resetClientErrorReporterForTests,
@@ -66,4 +69,16 @@ describe("privacy-safe client error reporting", () => {
       },
     });
   });
+});
+
+it("distinguishes a failed data fetch from a missing JavaScript module", () => {
+  expect(isChunkLoadError(new TypeError("Failed to fetch"))).toBe(false);
+  expect(
+    isChunkLoadError(
+      new TypeError("Failed to fetch dynamically imported module"),
+    ),
+  ).toBe(true);
+  expect(
+    isChunkLoadError(new TypeError("Importing a module script failed")),
+  ).toBe(true);
 });

@@ -10,6 +10,7 @@ export namespace LessonProgressTypes {
   };
 
   export type Props = {
+    hideEmptyStatus?: boolean;
     solved: number;
     total: number;
     masteryThreshold: number;

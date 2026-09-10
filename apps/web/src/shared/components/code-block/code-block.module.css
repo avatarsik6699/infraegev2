@@ -1,8 +1,10 @@
 .root {
+  --scrollbar-thumb: var(--color-scrollbar-dark);
+  --scrollbar-thumb-hover: var(--color-scrollbar-dark-hover);
   position: relative;
   width: min(100%, 46rem);
   min-width: 0;
-  max-width: 100%;
+  max-width: var(--learning-block-measure, 100%);
   overflow: hidden;
   border: 0;
   border-radius: var(--radius-surface);

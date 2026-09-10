@@ -217,6 +217,18 @@ export default tseslint.config(
     },
   },
   {
+    files: ["src/shared/lib/media-query/browser-adapter.ts"],
+    rules: {
+      "no-restricted-globals": restrictedPlatformGlobals("window"),
+    },
+  },
+  {
+    files: ["src/shared/lib/fragment-navigation/browser-adapter.ts"],
+    rules: {
+      "no-restricted-globals": restrictedPlatformGlobals("document", "window"),
+    },
+  },
+  {
     files: ["src/shared/lib/reading-position/browser-adapter.ts"],
     rules: {
       "no-restricted-globals": restrictedPlatformGlobals("window"),
@@ -226,6 +238,12 @@ export default tseslint.config(
     files: ["src/shared/lib/clipboard/browser-adapter.ts"],
     rules: {
       "no-restricted-globals": restrictedPlatformGlobals("navigator"),
+    },
+  },
+  {
+    files: ["src/shared/lib/document-recovery/browser-adapter.ts"],
+    rules: {
+      "no-restricted-globals": restrictedPlatformGlobals("window"),
     },
   },
   {

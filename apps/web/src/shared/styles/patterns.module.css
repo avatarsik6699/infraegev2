@@ -30,16 +30,64 @@
 
 .pageFrame {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
   grid-template-rows: auto 1fr auto;
   min-height: 100svh;
-  background: var(--page-frame-background, var(--color-bg));
+  background: transparent;
 }
 
 .lessonPage {
   --lesson-column-gutter: clamp(var(--space-2), 1.5vw, var(--space-3));
 
   min-height: 100vh;
-  background: var(--color-bg);
+  background: transparent;
+}
+
+.studyLessonFrame {
+  composes: pageFrame lessonPage;
+  --lesson-frame-columns: minmax(15rem, 16.25rem) minmax(0, 1fr)
+    minmax(12rem, 16.25rem);
+  grid-template-rows: auto auto 1fr auto;
+  min-width: 0;
+}
+
+.lessonFooter {
+  display: grid;
+  grid-template-columns: var(--lesson-frame-columns);
+}
+
+.lessonFooter::before {
+  content: "";
+  grid-column: 1;
+  grid-row: 1;
+  border-right: 1px solid var(--color-rule);
+}
+
+.lessonFooter > footer {
+  grid-column: 2 / -1;
+  grid-row: 1;
+  min-width: 0;
+}
+
+@media (max-width: 72rem) {
+  .studyLessonFrame {
+    --lesson-frame-columns: minmax(13rem, 15rem) minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 60rem) {
+  .studyLessonFrame {
+    --lesson-frame-columns: minmax(0, 1fr);
+  }
+
+  .lessonFooter::before {
+    display: none;
+  }
+
+  .lessonFooter > footer {
+    grid-column: 1 / -1;
+  }
 }
 
 .controlsRow {
@@ -50,6 +98,8 @@
 }
 
 .learningContentRoot {
+  min-width: 0;
+  max-width: var(--learning-block-measure, none);
   display: grid;
   gap: var(--space-1);
   margin: 0;
@@ -113,5 +163,99 @@
   }
   50% {
     transform: translateY(-4px) rotate(0.25deg);
+  }
+}
+
+.studyLessonPalette {
+  --learning-text-soft: var(--color-learning-muted);
+  --learning-danger: var(--color-learning-danger);
+  --learning-success: var(--color-learning-success);
+  --learning-info: var(--color-learning-info);
+  --learning-danger-background: color-mix(
+    in srgb,
+    var(--color-danger) 14%,
+    var(--color-bg)
+  );
+  --learning-success-background: color-mix(
+    in srgb,
+    var(--color-success) 14%,
+    var(--color-bg)
+  );
+  --learning-info-background: color-mix(
+    in srgb,
+    var(--color-info) 14%,
+    var(--color-bg)
+  );
+  --learning-panel-background: transparent;
+  --learning-example-padding: 0;
+  --learning-block-measure: var(--measure-reading);
+  --notation-bg: color-mix(in srgb, var(--color-text) 6%, var(--color-bg));
+  --notation-padding-inline: 0.2em;
+  --notation-radius: 0.125rem;
+  --learning-danger-notation-bg: color-mix(
+    in srgb,
+    var(--learning-danger) 8%,
+    var(--learning-danger-background)
+  );
+  --learning-success-notation-bg: color-mix(
+    in srgb,
+    var(--learning-success) 8%,
+    var(--learning-success-background)
+  );
+  --learning-info-notation-bg: color-mix(
+    in srgb,
+    var(--learning-info) 8%,
+    var(--learning-info-background)
+  );
+  --learning-callout-notation-bg: color-mix(
+    in srgb,
+    var(--color-text) 5%,
+    var(--color-surface-quiet)
+  );
+  --learning-callout-notation-color: var(--color-text);
+}
+
+.lessonNavigationLinks {
+  container-type: inline-size;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: clamp(var(--space-4), 5vw, calc(2 * var(--space-4)));
+  row-gap: var(--space-3);
+  align-items: start;
+}
+
+.lessonNavigationLinks > a {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  grid-row: 1;
+}
+
+.lessonNavigationLinks > a[data-icon="back"] {
+  grid-column: 1;
+  justify-self: start;
+}
+
+.lessonNavigationLinks > a[data-icon="forward"] {
+  grid-column: 2;
+  justify-self: end;
+  text-align: right;
+}
+
+.lessonNavigationLinks > a:only-child {
+  grid-column: 1 / -1;
+}
+
+@container (max-width: 36rem) {
+  .lessonNavigationLinks > a[data-icon="back"] {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+  .lessonNavigationLinks > a[data-icon="forward"] {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  .lessonNavigationLinks > a:only-child {
+    grid-row: 1;
   }
 }

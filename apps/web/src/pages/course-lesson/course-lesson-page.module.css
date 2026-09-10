@@ -1,11 +1,14 @@
 .page {
-  composes: lessonPage from "../../shared/styles/patterns.module.css";
+  composes: studyLessonPalette studyLessonFrame from "../../shared/styles/patterns.module.css";
 }
 
 .contextBar {
   display: grid;
-  grid-template-columns: minmax(15rem, 16.25rem) minmax(0, 1fr);
+  grid-template-columns:
+    minmax(15rem, 16.25rem) minmax(0, 1fr)
+    minmax(12rem, 16.25rem);
   min-height: 3.75rem;
+  border-bottom: 1px solid var(--color-rule);
   background: var(--color-bg);
 }
 
@@ -13,6 +16,9 @@
 .contextLesson {
   display: flex;
   align-items: center;
+  margin: 0;
+  color: var(--color-text-soft);
+  font-size: var(--text-sm);
 }
 
 .contextArea {
@@ -20,54 +26,24 @@
 }
 
 .contextLesson {
+  grid-column: 2 / 4;
   min-width: 0;
   padding-inline: var(--lesson-column-gutter);
   overflow: hidden;
-  color: var(--color-text-soft);
-  font-size: var(--text-sm);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.courseBackLink {
-  display: inline-flex;
-  min-height: 2.5rem;
-  gap: var(--space-1);
-  align-items: center;
-  color: var(--color-text-soft);
-  font-family: var(--font-ui);
-  font-size: var(--text-sm);
-  font-weight: 500;
-  text-decoration: none;
-}
-
-.courseBackLink:hover {
-  color: var(--color-text);
-}
-
-.courseBackLink:focus-visible {
-  border-radius: var(--radius-control);
-  outline: 2px solid var(--color-focus);
-  outline-offset: 3px;
-}
-
 .lesson {
   display: grid;
+  grid-template-columns: var(--lesson-frame-columns);
   grid-template-rows: auto 1fr;
-  grid-template-columns: minmax(15rem, 16.25rem) minmax(0, 1fr);
-  min-height: calc(100vh - 7.1rem);
-}
-
-.intro {
-  grid-row: 1;
-  grid-column: 2;
-  width: min(100%, var(--measure-lesson));
-  padding: var(--space-2) var(--lesson-column-gutter) 0;
 }
 
 .rail {
-  grid-row: 1 / span 2;
   grid-column: 1;
+  grid-row: 1 / span 2;
+  border-right: 1px solid var(--color-rule);
   min-width: 0;
   background: var(--color-bg);
 }
@@ -84,12 +60,27 @@
   max-height: var(--space-6);
 }
 
-.article {
-  grid-row: 2;
+.intro {
   grid-column: 2;
+  grid-row: 1;
+  width: min(100%, var(--measure-lesson));
+  min-width: 0;
+  padding: var(--space-4) var(--lesson-column-gutter) 0;
+}
+
+.article {
+  grid-column: 2;
+  grid-row: 2;
+  display: block;
   width: min(100%, var(--measure-lesson));
   min-width: 0;
   padding: 0 var(--lesson-column-gutter) var(--space-5);
+}
+
+.marginRail {
+  grid-column: 3;
+  grid-row: 1 / span 2;
+  min-width: 0;
 }
 
 .section {
@@ -98,7 +89,6 @@
 
 .resultSummary,
 .resultNavigation {
-  min-width: 0;
   max-width: var(--measure-reading);
 }
 
@@ -108,41 +98,65 @@
   min-width: 0;
 }
 
+.resultSummary h3,
 .resultNavigation {
+  margin-block: 0;
+}
+
+.resultSummary h3 {
+  margin-bottom: var(--space-1);
+  font-size: var(--text-lg);
+  line-height: 1.35;
+  letter-spacing: 0;
+}
+
+.resultNavigation {
+  min-width: 0;
 }
 
 .resultProgress {
   display: grid;
+  min-width: 0;
   gap: var(--space-1-5);
   padding-top: var(--space-2);
   border-top: 1px solid var(--color-rule);
 }
 
 .resultLinks {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-1) var(--space-2);
-  align-items: center;
+  composes: lessonNavigationLinks from "../../shared/styles/patterns.module.css";
 }
 
-.resultLinks a {
-  max-width: 100%;
-  overflow-wrap: anywhere;
+@media (max-width: 72rem) {
+  .contextBar,
+  .lesson {
+    grid-template-columns: minmax(13rem, 15rem) minmax(0, 1fr);
+  }
+
+  .contextLesson {
+    grid-column: auto;
+  }
+
+  .marginRail {
+    display: none;
+  }
 }
 
 @media (max-width: 60rem) {
+  .intro {
+    grid-column: 1;
+  }
+
+  .article {
+    grid-column: 1;
+    grid-row: 3;
+  }
   .lesson {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .intro {
-    grid-row: 1;
-    grid-column: 1;
-  }
-
   .rail {
     grid-row: 2;
-    grid-column: 1;
+    border-bottom: 1px solid var(--color-rule);
     border-right: 0;
     background: var(--color-bg);
   }
@@ -158,11 +172,6 @@
   .resultProgress {
     margin-top: var(--space-3);
   }
-
-  .article {
-    grid-row: 3;
-    grid-column: 1;
-  }
 }
 
 @media (max-width: 52rem) {
@@ -177,14 +186,27 @@
 
   .contextLesson {
     min-height: 3.25rem;
+    padding-inline: var(--lesson-column-gutter);
   }
 
-  .intro,
   .article {
     width: 100%;
+    padding: 0 var(--lesson-column-gutter) var(--space-5);
   }
 
   .section {
     gap: var(--space-2);
   }
+}
+
+.progressHeading {
+  composes: progressHeading from "../../shared/styles/patterns.module.css";
+}
+
+.progressStatus {
+  composes: progressStatus from "../../shared/styles/patterns.module.css";
+}
+
+.footer {
+  composes: lessonFooter from "../../shared/styles/patterns.module.css";
 }

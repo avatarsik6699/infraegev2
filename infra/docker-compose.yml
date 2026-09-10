@@ -12,6 +12,10 @@ services:
     image: nginx:1.30.4-alpine@sha256:97d490c12ba55b4946b01546d1c3ed324e8d41ab1c9fcb2a616aa470620e5b46
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/snippets:/etc/nginx/snippets:ro
+      - ./nginx/auxiliary:/usr/share/nginx/auxiliary:ro
+      - ../apps/web/public/brand/infraege-mark.svg:/usr/share/nginx/auxiliary/assets/infraege-mark.svg:ro
+      - ../apps/web/public/fonts:/usr/share/nginx/auxiliary/assets/fonts:ro
       - ./nginx/conf.d/infraege.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
       web:

@@ -1,5 +1,4 @@
 import { SvgDrawing } from "~/shared/components/svg-drawing";
-import { SvgPattern } from "~/shared/components/svg-pattern";
 import { HomeAmbientNotation } from "./home-ambient-notation";
 import styles from "./foundation-page.module.css";
 
@@ -12,16 +11,6 @@ const homeField = {
 
 export const HomeAmbientField: React.FC = () => (
   <div className={styles.ambientField} aria-hidden="true" data-home-ambient>
-    <svg className={styles.ambientGrid} fill="none">
-      <SvgPattern.Grid
-        bounds={{ x: 0, y: 0, width: "100%", height: "100%" }}
-        cell={{ width: 88, height: 64 }}
-        transform="skewY(-12)"
-        lineClassName={styles.ambientGridLine}
-        node={{ radius: 1.4, className: styles.ambientGridNode }}
-        name="home-perspective-grid"
-      />
-    </svg>
     <div
       className={styles.ambientIllumination}
       data-home-motion="field-light"

@@ -24,7 +24,7 @@ Implementation inventory for the single production theme. Automated evidence is 
 | `Badge` | `pages/course-catalog/components/course-catalog-card.tsx`; `pages/lesson-design-lab/components/lesson-intro.tsx`; `pages/topic-catalog/components/topic-catalog-card.tsx` | Components / Widgets catalog: real import; default, narrow and keyboard states where interactive | Shared infraege defaults |
 | `Progress` | `features/lesson-progress/lesson-progress.tsx`; `pages/course-overview/components/course-overview-progress.tsx` | Components / Widgets catalog: real import; empty, partial, complete and reset | Shared infraege defaults |
 | `Callout` | `features/lesson-practice/components/practice-task-content.tsx`; `app/route-state/route-state.tsx`; `entities/lesson/content/preobrazovanie-zapisey-chisel.lesson.tsx` | Components / Widgets catalog: real import; default, narrow and keyboard states where interactive | Shared infraege defaults |
-| `EmptyState` | `app/route-state/route-state.tsx` | Components / Widgets catalog: real import; default, narrow and keyboard states where interactive | Shared infraege defaults |
+| `EmptyState` | `features/lesson-practice/lesson-practice.tsx` | Components / Widgets catalog: real import; default, narrow and keyboard states where interactive | Shared infraege defaults |
 | `CodeBlock` | `features/lesson-practice/components/practice-task-content.tsx`; `pages/lesson-design-lab/components/lesson-theory.tsx`; `entities/lesson/content/preobrazovanie-zapisey-chisel.lesson.tsx` | Components / Widgets catalog: real import; default, narrow and keyboard states where interactive | Shared infraege defaults |
 | `Image` | `features/lesson-practice/components/practice-task-content.tsx`; `pages/course-catalog/components/course-catalog-study.tsx`; `pages/course-catalog/components/course-catalog-staircase.tsx` | Components / Widgets catalog: real import; default, narrow and keyboard states where interactive | Shared infraege defaults |
 | `CustomIcon` | `pages/foundation/home-learning-map-stages.tsx` | DecorativePrimitives: actual SVG composition, static and narrow | Shared infraege defaults |
@@ -52,6 +52,18 @@ Implementation inventory for the single production theme. Automated evidence is 
 | `LessonOutline` | `pages/topic-lesson/topic-lesson-page.tsx`; `pages/lesson-design-lab/lesson-design-lab.tsx`; `pages/course-lesson/course-lesson-page.tsx` | Components / Widgets catalog: real import; default, narrow and keyboard states where interactive | Shared infraege defaults |
 | `LessonPracticeFlow` | `pages/topic-lesson/topic-lesson-page.tsx`; `pages/course-lesson/course-lesson-page.tsx`; `pages/lesson-design-lab/components/lesson-practice-section.tsx` | Components / Widgets catalog: real import; empty, partial, complete and reset | Shared infraege defaults |
 
+## Subsequent component adoption
+
+The table above records Change 101. Later additions retain their own activation boundaries:
+
+| Public UI contract | Real consumer / composition | Lab example and states | Migration |
+|---|---|---|---|
+| `SurfaceMaterial` | Catalog cards and overview material | System → Visual language: available/planned card and form material | Shared mechanics introduced in Change 103 |
+| `SurfaceGlint` | Catalog and overview motion | System → Visual language: frame/sweep/soft, activity and reduced motion | Shared mechanics introduced in Change 103; Change 105 reading example deliberately static |
+| `ResponsiveDisclosure` | `widgets/lesson-outline` study presentation | `/lab/lesson`: mobile closed/open, desktop open, keyboard target focus and SSR full list | Change 105 F23: lab and all TopicLesson/CourseLesson pages |
+
+| `StatusScene` | App route states and autonomous server compositions | System → Auxiliary states: 404, error, pending, 502/503/504; responsive and reduced motion | Change 105: shared code/error/loading presentation and quiet recovery controls |
+
 ## Route coverage
 
 | Surface | Migration mechanism | Acceptance |
@@ -59,9 +71,9 @@ Implementation inventory for the single production theme. Automated evidence is 
 | `/`, `/ege`, `/courses` | Reference compositions retained; brand palette aliases resolve to common canvas/text; catalog material token extracted | Responsive, motion, no-JS, publication/progress regression |
 | `/courses/python` | Page frame, typography, controls, paper and progress inherit common defaults | Complete curriculum, narrow layout, progress |
 | `/ege/16-rekursiya`, `/ege/5-preobrazovanie-zapisey-chisel` | Quiet lesson canvas, open rail, shared learning and practice components | Reading order, outline, checking, hints, solution, progress/reset |
-| `/courses/python/pervaya-programma` and all CourseLesson routes | Same page-owned CourseLesson composition and shared defaults | First lesson/reset, representative rich content, SSR |
+| `/courses/python/pervaya-programma` and all CourseLesson routes | Page-owned composition with shared study frame/palette, title-first disclosure and full progress | All 28 route coverage; first lesson/reset, rich content, mobile disclosure and SSR |
 | `/privacy` | Shared page frame, typography and consent controls | Settings and readable narrow content |
-| `/removed-route`, pending and error states | Existing EmptyState, Button, ActionLink and shared page frame | Unknown route recovery; pending/empty semantics preserved |
+| `/removed-route`, pending and error states | StatusScene, Button, drawn ActionLink, expanded PublicHeader/PublicFooter | Illustrated matte composition; real retry and restored metadata; mobile/no-JS recovery |
 | `/lab/design-system` | No private theme; live named catalog and isolated specimens | All panels, named contracts, focus, portal theme, no-JS |
 | Lesson-design-lab embedded compositions | Shared semantic tokens and learning components; no new public route | Existing synthetic teaching and practice behavior |
 
@@ -69,3 +81,24 @@ Implementation inventory for the single production theme. Automated evidence is 
 
 No lesson text, publication registry, tasks, answers, storage schema, API or route was changed.
 No parallel component version or theme toggle exists. Historical design artifacts are not runtime dependencies.
+
+### Auxiliary-state adoption (Change 105)
+
+StatusScene is demonstrated in the visual-language lab with 404, error and pending specimens.
+Local EmptyState is unframed; practice service errors and informative/decorative image fallbacks
+have separate semantics. Privacy shares expanded public chrome without consent/copy changes.
+Autonomous Nginx 502/503/504 pages reproduce the public palette, fonts, navigation and footer using
+packaged local assets; their document-only contract is verified independently of the web process.
+
+### Change 105 auxiliary composition revision
+
+StatusScene now explicitly selects code/error/pending compositions, using SVG geometry and
+HTML/CSS skeletons without raster delivery. PageBackground owns the single page grid; privacy
+uses drawn external links and quiet consent controls; lesson navigation gains a wider gutter
+and container-responsive stacking. Autonomous 502/503/504 mirror the SVG identity with local
+assets and quiet no-JS document refresh. The auxiliary-state lab remains the preview entrypoint.
+
+The F30–F31 revision follows `references/new_pages`: outlined background numerals and
+code scenes use only numerals and faint peripheral patterns; icon cards remain in error/loading states. All six states are
+selectable in the auxiliary lab. Pending owns a dense grid and activity-aware shimmer/dots;
+reduced motion and no-JS remain static. Autonomous Nginx code scenes use the same quiet numeral and background-pattern composition.

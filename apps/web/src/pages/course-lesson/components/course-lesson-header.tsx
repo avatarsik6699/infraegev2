@@ -1,5 +1,4 @@
-import { Link } from "@tanstack/react-router";
-import { ArrowLeft } from "lucide-react";
+import { ActionLink } from "~/shared/components/action-link";
 import { Typography } from "~/shared/components/typography";
 import { PublicHeader } from "~/widgets/public-header";
 import styles from "../course-lesson-page.module.css";
@@ -12,21 +11,25 @@ type Props = {
 
 export const CourseLessonHeader: React.FC<Props> = (props) => (
   <>
-    <PublicHeader />
-    <div className={styles.contextBar} data-course-lesson-context>
+    <PublicHeader activeSection="courses" />
+    <nav
+      className={styles.contextBar}
+      data-course-lesson-context
+      aria-label="Навигация урока"
+    >
       <div className={styles.contextArea}>
-        <Link
-          className={styles.courseBackLink}
+        <ActionLink
+          hierarchy="drawn"
+          icon="back"
           to="/courses/$courseSlug"
           params={{ courseSlug: props.courseRouteSlug }}
         >
-          <ArrowLeft aria-hidden="true" size={17} strokeWidth={1.8} />
-          <span>К курсу</span>
-        </Link>
+          К курсу
+        </ActionLink>
       </div>
       <Typography.Text className={styles.contextLesson}>
         {props.courseTitle + " · " + props.lessonTitle}
       </Typography.Text>
-    </div>
+    </nav>
   </>
 );

@@ -9,7 +9,8 @@ type Props = {
 
 export const Mistake: React.FC<Props> = (props) => {
   return (
-    <aside
+    <div
+      role="note"
       className={styles.root}
       data-learning-block
       aria-label="Сравнение ошибочного и правильного рассуждения"
@@ -46,6 +47,6 @@ export const Mistake: React.FC<Props> = (props) => {
           </Typography.Text>
         </div>
       </div>
-    </aside>
+    </div>
   );
 };

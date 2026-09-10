@@ -70,7 +70,7 @@ export function isChunkLoadError(error: unknown) {
 
   return (
     error.name === "ChunkLoadError" ||
-    /(?:dynamically imported module|loading chunk|failed to fetch)/i.test(
+    /(?:dynamically imported module|loading chunk|importing a module script)/i.test(
       error.message,
     )
   );

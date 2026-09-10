@@ -162,6 +162,33 @@ const forbiddenGlobals = [
 ];
 
 const forbiddenPatterns = [
+  {
+    name: "network access in document recovery",
+    ruleId: "no-restricted-globals",
+    source: 'export const load = () => fetch("/api/value");',
+    filePath: path.join(
+      workspaceRoot,
+      "src/shared/lib/document-recovery/browser-adapter.ts",
+    ),
+  },
+  {
+    name: "document access in a media-query adapter",
+    ruleId: "no-restricted-globals",
+    source: "export const title = document.title;",
+    filePath: path.join(
+      workspaceRoot,
+      "src/shared/lib/media-query/browser-adapter.ts",
+    ),
+  },
+  {
+    name: "network access in a fragment adapter",
+    ruleId: "no-restricted-globals",
+    source: 'export const load = () => fetch("/api/value");',
+    filePath: path.join(
+      workspaceRoot,
+      "src/shared/lib/fragment-navigation/browser-adapter.ts",
+    ),
+  },
   ...forbiddenGlobals.map(([name, source]) => ({
     name,
     ruleId: "no-restricted-globals",
@@ -217,6 +244,24 @@ assert.deepEqual(
 );
 
 const validServerBoundaries = [
+  [
+    path.join(
+      workspaceRoot,
+      "src/shared/lib/document-recovery/browser-adapter.ts",
+    ),
+    "export const recovery = { reload: () => window.location.reload() };",
+  ],
+  [
+    path.join(workspaceRoot, "src/shared/lib/media-query/browser-adapter.ts"),
+    'export const media = { matches: () => window.matchMedia("(max-width: 60rem)").matches };',
+  ],
+  [
+    path.join(
+      workspaceRoot,
+      "src/shared/lib/fragment-navigation/browser-adapter.ts",
+    ),
+    "export const fragments = { focus: (id: string) => document.getElementById(id)?.focus() };",
+  ],
   [
     serverConfigPath,
     'import path from "node:path"; export const root = process.env.CONTENT_DIR ?? path.resolve("content");',

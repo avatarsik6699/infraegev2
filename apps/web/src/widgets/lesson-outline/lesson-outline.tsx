@@ -1,11 +1,35 @@
 import { useEffect, useState } from "react";
-import { FragmentLink } from "~/shared/components/fragment-link";
-import { Typography } from "~/shared/components/typography";
+import { ResponsiveDisclosure } from "~/shared/components/responsive-disclosure";
+import { fragmentNavigation } from "~/shared/lib/fragment-navigation";
+import { LessonOutlineContent } from "./lesson-outline-content";
 import { observeActiveSection } from "~/shared/lib/section-observer";
 import type { LessonOutlineTypes } from "./lesson-outline.types";
-import styles from "./lesson-outline.module.css";
 
 export const LessonOutline: React.FC<LessonOutlineTypes.Props> = (props) => {
+  const [expanded, setExpanded] = useState(false);
+  const [navigation, setNavigation] = useState<{ id: string } | null>(null);
+  useEffect(
+    function focusNavigationFx() {
+      if (navigation) return fragmentNavigation.focusAfterLayout(navigation.id);
+    },
+    [navigation],
+  );
+  const handleNavigate = (
+    id: string,
+    event: React.MouseEvent<HTMLAnchorElement>,
+  ) => {
+    if (
+      props.presentation !== "study" ||
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.altKey ||
+      event.shiftKey
+    )
+      return;
+    setExpanded(false);
+    setNavigation({ id });
+  };
   const [observedActiveId, setObservedActiveId] = useState(
     props.groups[0]?.id ?? "",
   );
@@ -33,67 +57,34 @@ export const LessonOutline: React.FC<LessonOutlineTypes.Props> = (props) => {
   );
 
   return (
-    <nav className={props.className} aria-label="Содержание урока">
-      <div className={styles.headingRow}>
-        <Typography.Text className={styles.heading}>
-          В этом уроке
-        </Typography.Text>
-        <Typography.Text
-          className={styles.sectionPosition}
-          data-section-position
+    <nav
+      className={props.className}
+      aria-label="Содержание урока"
+      data-presentation={props.presentation}
+    >
+      {props.presentation === "study" ? (
+        <ResponsiveDisclosure
+          label="Содержание урока"
+          expanded={expanded}
+          onExpandedChange={setExpanded}
         >
-          <span className={styles.visuallyHidden}>
-            {`Раздел ${String(activeGroupIndex + 1)} из ${String(props.groups.length)}. `}
-          </span>
-          <span aria-hidden="true">
-            {activeGroupIndex + 1} / {props.groups.length}
-          </span>
-        </Typography.Text>
-      </div>
-      <div className={styles.tree} data-outline-tree>
-        <ol className={styles.groups}>
-          {props.groups.map((group) => {
-            const groupCurrent = group.id === activeId;
-            const branchActive = group.id === activeGroupId;
-            return (
-              <li className={styles.group} key={group.id}>
-                <FragmentLink
-                  className={styles.groupLink}
-                  hash={group.id}
-                  icon={false}
-                  anchorProps={{
-                    "aria-current": groupCurrent ? "location" : undefined,
-                    "data-active-branch": branchActive || undefined,
-                    "data-outline-link-id": group.id,
-                  }}
-                >
-                  <span>{group.label}</span>
-                </FragmentLink>
-                <ol className={styles.children}>
-                  {group.items.map((item) => {
-                    const active = item.id === activeId;
-                    return (
-                      <li className={styles.child} key={item.id}>
-                        <FragmentLink
-                          className={styles.childLink}
-                          hash={item.id}
-                          icon={false}
-                          anchorProps={{
-                            "aria-current": active ? "location" : undefined,
-                            "data-outline-link-id": item.id,
-                          }}
-                        >
-                          <span>{item.label}</span>
-                        </FragmentLink>
-                      </li>
-                    );
-                  })}
-                </ol>
-              </li>
-            );
-          })}
-        </ol>
-      </div>
+          <LessonOutlineContent
+            groups={props.groups}
+            activeId={activeId}
+            activeGroupId={activeGroupId}
+            activeGroupIndex={activeGroupIndex}
+            onNavigate={handleNavigate}
+          />
+        </ResponsiveDisclosure>
+      ) : (
+        <LessonOutlineContent
+          groups={props.groups}
+          activeId={activeId}
+          activeGroupId={activeGroupId}
+          activeGroupIndex={activeGroupIndex}
+          onNavigate={handleNavigate}
+        />
+      )}
     </nav>
   );
 };

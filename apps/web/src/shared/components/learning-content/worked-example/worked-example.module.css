@@ -1,15 +1,20 @@
 .root {
+  min-width: 0;
+  max-width: var(--learning-block-measure, none);
   display: grid;
   gap: var(--space-1);
   margin: 0;
-  padding: var(--learning-panel-padding, var(--space-1) var(--space-2));
+  padding: var(
+    --learning-example-padding,
+    var(--learning-panel-padding, var(--space-1) var(--space-2))
+  );
   border: var(--learning-panel-border, 0 solid transparent);
   border-radius: var(--learning-panel-radius, var(--radius-surface));
   background: var(--learning-panel-background, var(--surface-tonal-1));
 }
 
 .eyebrow {
-  color: var(--color-text-soft);
+  color: var(--learning-text-soft, var(--color-text-soft));
   font-family: var(--font-reading);
   font-size: var(--text-sm);
   font-weight: 500;
@@ -23,7 +28,7 @@
 }
 
 .prompt {
-  color: var(--color-text-soft);
+  color: var(--learning-text-soft, var(--color-text-soft));
 }
 
 .steps {
@@ -37,7 +42,7 @@
 .step {
   position: relative;
   display: grid;
-  grid-template-columns: 1.4rem 1fr;
+  grid-template-columns: 1.4rem minmax(0, 1fr);
   gap: var(--space-1);
   align-items: start;
 }
@@ -55,8 +60,12 @@
   justify-content: center;
   width: 1.3rem;
   height: 1.3rem;
-  color: var(--color-muted);
+  color: var(--learning-text-soft, var(--color-muted));
   font-family: var(--font-data);
   font-size: var(--text-2xs);
   font-weight: 600;
+}
+
+.content {
+  min-width: 0;
 }

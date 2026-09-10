@@ -1,7 +1,9 @@
+import { ActionLink } from "~/shared/components/action-link";
 import { Typography } from "~/shared/components/typography";
 import { VisualLanguageCard } from "./visual-language-card";
 import { VisualLanguageLearning } from "./visual-language-learning";
 import { VisualLanguageForm } from "./visual-language-form";
+import { VisualLanguageStates } from "./visual-language-states";
 import styles from "./visual-language-specimen.module.css";
 
 export const VisualLanguageSpecimen: React.FC = () => (
@@ -30,19 +32,21 @@ export const VisualLanguageSpecimen: React.FC = () => (
     </Typography.Text>
     <Typography.Title order={4}>Учебный блок и форма</Typography.Title>
     <Typography.Text>
-      Образцы для дальнейшей проработки уроков: градиент и мягкий свет работают
-      внутри поверхности. Текст, код, фокус и обратная связь остаются
-      отчётливыми.
+      В учебном примере объяснение и код собраны вместе отступами и
+      выравниванием, без общей подложки. В форме мягкий свет прекращается при
+      работе с полем.
     </Typography.Text>
     <div className={styles.examples}>
       <VisualLanguageLearning />
       <VisualLanguageForm />
     </div>
     <Typography.Text tone="muted">
-      WorkedExample/CodeBlock и Field/Button сохраняют свои контракты.
-      SurfaceGlint(soft, loop) лежит под содержимым; useElementActivity
-      останавливает движение вне экрана и в скрытой вкладке. При reduced motion
-      остаётся статическая композиция.
+      Этот вариант используется в двух опубликованных уроках ЕГЭ. Полный образец
+      показывает вступление, содержание, практику и итог на одной странице.
     </Typography.Text>
+    <ActionLink to="/lab/lesson" hierarchy="drawn" icon="forward">
+      Открыть образец урока
+    </ActionLink>
+    <VisualLanguageStates />
   </section>
 );

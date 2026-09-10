@@ -41,12 +41,20 @@ export const componentContracts = {
     catalogContracts.live("Input", "Самостоятельное поле ввода"),
     catalogContracts.live("Field", "Подпись, описание, ошибка и disabled"),
     catalogContracts.live("Accordion", "Раскрытие пояснений на месте"),
+    catalogContracts.context(
+      "ResponsiveDisclosure",
+      "Образец /lab/lesson: мобильное содержание сворачивается, desktop и SSR сохраняют полный список",
+    ),
     catalogContracts.live("TabsRoot", "Владелец выбранного состояния"),
     catalogContracts.live("TabsList", "Семантический список вкладок"),
     catalogContracts.live("TabsTab", "Доступный интерактивный переключатель"),
     catalogContracts.live("TabsPanel", "Связанная область содержимого"),
   ],
   feedback: [
+    catalogContracts.live(
+      "StatusScene",
+      "Система → Вспомогательные состояния: иллюстрация, сообщение, действие и загрузка",
+    ),
     catalogContracts.live("Badge", "Нейтральные и функциональные статусы"),
     catalogContracts.live("Progress", "Определённый и неопределённый процесс"),
     catalogContracts.live("Callout", "Пояснение и предупреждение"),

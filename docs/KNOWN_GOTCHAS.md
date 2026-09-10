@@ -519,3 +519,13 @@
   `filePath`, then save its returned image bytes through the local workspace tool. Do not change
   filesystem permissions, weaken the MCP root allowlist, or retry the same mismatched path.
   A real shell `EACCES`/`EPERM` still requires the normal permission handoff.
+
+### Nested read-only Nginx asset mounts need existing mountpoints
+
+- **Symptom:** auxiliary-page test startup fails with `Read-only file system` while creating
+  `/usr/share/nginx/auxiliary/assets/scenes` inside the read-only auxiliary directory mount.
+- **Cause:** Docker cannot create a nested mountpoint after its parent has been mounted read-only.
+- **Resolution:** after the architect's `continue`, create and track the empty `scenes/` and
+  `fonts/` directories with `.gitkeep`, and keep the real brand SVG at the file mountpoint.
+  The explicit retry passed. Production copies real resources into the image; local Compose
+  mounts the existing resource tree over these prepared locations. Do not weaken mount permissions.

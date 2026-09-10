@@ -123,7 +123,7 @@ app → routes → pages → widgets → features → entities → shared
   (`code`/`formula`) so semantics and the neutral recognition treatment stay consistent.
   Specialized markup remains native for figures, diagrams, tables and lists.
 - `ActionLink` owns internal navigational-action states. Its `drawn` hierarchy composes the shared
-  SVG primitives into one bright-orange tapered underline and an optional close-set authored arrow;
+  SVG primitives into one bright-orange tapered underline and an optional close-set authored arrow in either direction;
   consumers own only route data, copy, scale and placement. `ExternalLink` remains a separate
   semantic boundary for external and new-tab behavior rather than being collapsed into an unsafe
   polymorphic link. Its optional `drawn` hierarchy reuses the same shared underline while keeping
@@ -134,18 +134,16 @@ app → routes → pages → widgets → features → entities → shared
   client-only highlighting pass: readable SSR and no-JavaScript output are part of its contract.
   Its visible header names only the language; copy remains a quiet action without a contrasting
   hover surface.
-- Topic lessons use a three-column desktop shell: outline, central reading stream and a reserved
+- Topic and Course lessons use a three-column desktop shell: outline, central reading stream and a reserved
   right rail. The right rail may be empty, but central lesson blocks do not move into it merely to
-  fill space. Compact per-lesson progress sits below the table of contents and anchors the bottom
-  of the desktop left rail; on narrow layouts it returns to normal flow immediately after the
-  outline. Its label is a quiet UI caption rather than a content heading. The outline, central
+  fill space. Full per-lesson progress with its numeric count, bar and confirmed reset sits below the table of contents; on narrow layouts it returns to normal flow immediately after the outline. The zero-solved status sentence is hidden on all lesson pages; other mastery statuses remain. Its label is a quiet UI caption rather than a content heading. The outline, central
   article and their context labels share one compact responsive column gutter so their content
   edges remain aligned through desktop, intermediate and mobile layouts. Outline groups and their
   children always remain one vertical column; the outline reserves its scrollbar gutter, keeps
   link weight stable between states and truncates overlong labels after two lines instead of
   reflowing them when the active item or internal overflow changes. Reset remains a quiet
   secondary action and uses the shared Base UI alert-dialog boundary so confirmation is modal,
-  keyboard contained and returns focus to its trigger without shifting the rail.
+  keyboard contained and returns focus to its trigger.
 - Course overviews use the expanded public header with the course section active; no duplicate
   catalog backlink is shown. Desktop uses a wider asymmetric composition with a stronger illustrated course summary and outcomes on
   the left, a generous gutter and an open sequential program on the right; the module spine stays
@@ -169,7 +167,7 @@ app → routes → pages → widgets → features → entities → shared
   Tablet and mobile retain the complete course summary then program; mobile puts course identity
   before the illustration. Artwork stays proportionally bounded before hydration and without JS.
   Course type, stage and published lesson count form one quiet metadata line. CourseLesson pages
-  retain their independent reading layout.
+  retain independent course context and navigation within the shared lesson reading layout.
 - Course pages use the quiet infraege reading world without reusing Topic semantics. A
   course overview presents audience, outcome, the current course stage and one ordered public plan of
   lesson titles plus observable outcomes without a separate evolving-program disclaimer or date
@@ -240,9 +238,9 @@ app → routes → pages → widgets → features → entities → shared
   Search, filters, sorting, recommendations and Topic relationships remain absent.
 - A CourseLesson keeps course context and its local section outline together in one navigation
   rail, with the article as the dominant reading stream. On narrow screens the title and outcome
-  precede the ordinary in-flow «Содержание урока» list so a long outline cannot displace the
+  precede the collapsible «Содержание урока» list (expanded without JavaScript) so a long outline cannot displace the
   lesson identity from the first viewport. Both lesson families end with only the available
-  previous and next lesson links in a compact wrapping row; these are underlined directional links,
+  previous and next lesson links aligned left and right in a shared two-column container; these are underlined directional links,
   not button-like actions, a collection-index link or a separately titled materials panel. Course
   navigation resumes at the result rather than competing with local reading navigation throughout
   the article. Do not repeat a separate «Теперь вы умеете» outcome list in the result.
@@ -388,7 +386,7 @@ app → routes → pages → widgets → features → entities → shared
   the shared Telegram invitation with a text label and the official brand mark. Published pages do
   not duplicate this chrome with page-private header markup. The shared public header has no
   bottom rule; spacing separates it from page content and the quiet lesson context bar.
-  Lesson navigation and reading retain their aligned columns without a full-height rail border.
+  Topic and Course lesson navigation and reading restore structural rules as specified in Change 105 below.
   The public footer uses whitespace rather than a top rule and contains only useful navigation,
   without repeating the infraege name. The live lab uses the same public chrome.
 
@@ -406,7 +404,7 @@ The lab's learning/form compositions are adoption examples, not a claim that les
 |---|---|---|
 | Catalog | Substantial media separate from copy/action; neutral paper, thin gradient edge, contact depth; one stronger available item | `SurfaceMaterial`, `paperSurface`, `SurfaceGlint(frame/sweep)`, `Image`, `ActionLink` |
 | Overview | Open asymmetric summary/program, field in margins and gutter, restrained illustration depth and recurring light | `SvgPattern.Grid/Preset`, `SvgDrawing`, `artworkDrift`, `SurfaceGlint(soft)` |
-| Learning block | Clear reading sequence inside a paper/gradient surface; internal pattern and soft light below text; no extra nested cards | Existing learning components plus `SurfaceMaterial`, `SurfaceGlint(soft)` |
+| Learning block | Unframed study examples and practice with restrained matte semantic fills; no paper gradient, shadow or glint | Existing learning components and scoped study palette |
 | Working form | Same material language around usable controls; visible labels, focus and feedback; hide internal glint while input has focus | `Field`, `Button`, shared material/light layers |
 
 - Keep the current fonts and two neutral text levels. Establish hierarchy through media/copy
@@ -468,6 +466,31 @@ input/error states, image failure, no-JS, reduced motion and offscreen activity 
 Document reference coordinates are examples, not mandatory identical layouts. Automated checks
 prove mechanics; the architect owns visual approval. Do not create a competing DESIGN.md contract.
 
+### Change 105: lesson reading presentation
+
+The approved target restores functional `1px --color-rule` separators under lesson context and
+between the desktop outline and article, continuing through the footer row to the page bottom; narrow navigation uses a bottom rule. All lessons and the lesson lab use the expanded shared public header with the corresponding topics or courses section active and the same PublicFooter as the catalog. The outer shared page frame sizes header, context, content and footer naturally, without a hardcoded header-height subtraction. Shared header section links wrap within their available width when text is enlarged. This lesson-specific composition preserves the shared public header/footer.
+Title and summary precede mobile contents on all lesson pages and in the lab. Enhanced mobile contents
+collapse under «Содержание урока»; selecting an ordinary anchor closes the list and focuses its
+target after layout settles. SSR/no-JS retains the complete list. Desktop contents remain open.
+Study outline rows use real, non-overlapping 32px minimum targets for mouse and 40px whenever `(any-pointer: coarse)` matches, including hybrid devices. Groups use 4px gaps, children zero gaps and 12px indentation; weights are 500/400 at existing 14/13px sizes.
+
+Study introductions use the existing larger heading role and one quiet metadata line. Study examples and procedures have no panel fill or outer padding; authored steps and the existing related-block rhythm provide grouping. Examples, procedures, mistake comparisons, checkpoints and code share the 40rem reading measure; practice has no outer material, shadow or extra padding. Code retains its functional dark surface. Procedures, semantic mistake comparisons and the single result
+checkpoint preserve their existing semantics. The full progress bar accompanies navigation;
+reading progress never means mastery. Practice exposes the active task position after hydration.
+
+All TopicLesson and CourseLesson pages and the lab select `presentation="study"`. Their shared study palette supplies consistent learning colors; authored nodes remain unchanged.
+`/lab/lesson` demonstrates the complete journey, and `/lab/design-system` uses the same shared
+worked example. The architect approved all-lesson adoption in Change 105 F23, extending the initial F5 Topic rollout. Lesson navigation contains the full progress and confirmed reset; there is no duplicate progress in the result section. The
+accepted typography, publication registries, authored content and persistence are unchanged.
+
+The scoped study palette uses secondary ink #605e59 for readable captions on stronger fills, danger #99453f, success #48634b and info #3e5e76;
+semantic fills mix 14% of the corresponding standard status color into 86% page background in sRGB, retaining the darker muted learning inks for labels. Examples and procedures remain transparent. Notation uses
+6% primary ink into the page, 0.2em horizontal padding and 2px corners; nested notation
+in Mistake/Checkpoint mixes 8% matching learning ink into the block background. Neutral study callouts mix 5% primary ink into their quiet surface. Formula/code text stays primary ink, with no additional border or shadow. Non-study consumers retain existing defaults.
+Practice theory links use the shared FragmentLink drawn variant: decorative underline and orange link icon, preserving native fragment navigation. Previous/next navigation in Topic and Course lessons uses ActionLink drawn with the corresponding shared back/forward arrow. Their shared two-column navigation places previous on the left and next on the right, including when only one link exists; long titles wrap within their column. Outline links retain their plain variant.
+`LessonProgress.hideEmptyStatus` is opt-in and hides only the zero-solved sentence.
+
 ## 5. Responsive and accessible behavior
 
 - Design and verify every changed surface at a narrow mobile width, around its structural
@@ -476,15 +499,15 @@ prove mechanics; the architect owns visual approval. Do not create a competing D
 - Content may reflow from rows/columns into a linear order. Do not hide required lesson content on
   small screens. Nothing may overflow the viewport except an explicitly scrollable data/code
   region.
-- Page and nested scroll regions use the same system-wide thin neutral, square-ended scrollbar.
+- Page and nested scroll regions use a system-wide 6px neutral, square-ended scrollbar where WebKit pseudos are supported, with no arrow buttons and a transparent track. Standard scrollbar properties must be auto in that branch; Firefox uses the standard thin/color fallback with native geometry. Resting scrollbars are deliberately quiet: light thumb/hover colors are #e4e1dc/#d2cec7, dark-code colors #2d2d2d/#414141. They are persistent but visually subordinate; hover strengthens visibility. Forced-colors restores system widths and colors.
   A sticky navigation rail stays in normal flow at responsive breakpoints and scrolls internally
   only when its content cannot fit in the viewport.
 - Interactive targets are at least `40 × 40px`; compact visuals may use a larger invisible hit
-  area. Dense styling never overrides this floor. Essential actions and information cannot depend
+  area. Dense styling never overrides this floor except the explicitly approved study outline: 32px real mouse targets, 40px on any touch-capable device, without overlapping pseudo targets. Essential actions and information cannot depend
   on hover. `LessonOutline`'s group/child links are the one architect-approved exception (Change
   91): the visible row is `--space-4` (32px) for a denser reading TOC, while an absolutely
   positioned `::after` pseudo-element extends the actual clickable/accessible hit area back to the
-  `40px` floor. Every other control keeps the ordinary visible `40×40px` floor unchanged.
+  `40px` floor. Legacy non-study specimens retain that exception; all lesson pages use the separate study 32/40px contract above. Every other control keeps the ordinary visible `40×40px` floor unchanged.
 - Browser zoom through 150% must preserve access to all content. Prefer fluid measures and type
   tokens; responsive type changes keep heading hierarchy intact.
 - Start from semantic HTML. Every interactive element is keyboard reachable, has a visible
@@ -654,3 +677,49 @@ prove mechanics; the architect owns visual approval. Do not create a competing D
 | component/unit/E2E testing rules | keep | Section 8 |
 | Editorial Rail appearance rules from `DESIGN.md` | drop | Replaced by the theme-isolation contract and active profile |
 | Kontur accessibility, adaptivity, typography and validation guidance | adapt | Sections 5–7, narrowed to this product |
+
+### Auxiliary document states
+
+- PublicHeader defaults to expanded chrome, including privacy and application fallback pages.
+  RouteStateFrame composes that header, the shared main measure and PublicFooter. StatusScene
+  owns only the reusable illustration/text/action arrangement; it does not own navigation or retry.
+- Auxiliary compositions follow the six `new_pages` references. Huge outlined Alegreya numerals
+  occupy the background (404/502 center-right, 503/504 left), while filled headings and actions
+  have their own readable area. Code scenes contain no cards or foreground figures.
+  Low-contrast peripheral SVG arcs, ticks and dots supplement the shared grid across all states.
+  A narrow masked glint follows numeral outlines without filling them. App decoration moves
+  slowly only while visible; reduced-motion and forced-colors disable decorative animation.
+  Autonomous server documents keep their decoration static.
+- Private status cards reuse CustomIcon Book/Checklist/Braces/BarChart, matching the homepage.
+  Loader errors group four cards around a short interrupted route; pending retains its two cards.
+- Pending uses a dense shared grid for outline, article, status/subtitle/dots, formula, table and
+  code. Outline groups stay compact and top-aligned, with fixed gaps independent of scene height.
+  Status is a real grid row, never an absolute overlay. Mobile retains status, article and
+  code. Neutral skeleton shimmer has a two-second cycle, dots a soft sequential pulse; the
+  element-activity boundary pauses both offscreen/hidden. Reduced motion and SSR/no-JS are static.
+  Decorative content stays aria-hidden, with no fake percentage or interactive skeleton controls.
+- Recovery actions use quiet buttons with a refresh icon; navigation retains drawn links.
+  404 has only one scene action, home. Autonomous document reload is a native current-document link
+  styled as the same quiet refresh control, preserving no-JavaScript operation.
+- App-owned PageBackground supplies one quiet SVG grid with shared color and fade, behind every
+  route. Local page grids are removed; illustration-local grids and subject notation remain.
+  The background fades behind reading and chrome and disappears in forced-colors. Static server
+  pages use the equivalent local SVG geometry without an application dependency.
+- Lesson navigation has a 32–64px column gutter and stacks below a 36rem container width, keeping
+  previous left and next right. Privacy uses quiet consent controls and drawn external links.
+- Pending retains router delays (250ms display, 300ms minimum) and the 150ms navigation-progress
+  threshold. One live status announces loading; skeletons and images stay outside the accessible tree.
+- AppDocumentHead is the single owner of title/robots overrides for missing and failed route matches;
+  recovery restores normal route metadata. Render-only boundaries retain the route's identity.
+  Loader retries invalidate the router; render retries reset the boundary; missing module retries
+  explicitly reload through the shared document-recovery adapter. A component stack alone does
+  not distinguish loader failure from render failure. Generic fetch failures are not chunk failures.
+- EmptyState uses spacing, without an enclosing card. Empty lesson practice is explicit; technical
+  check failures preserve the answer and announce a local alert without marking the answer invalid.
+  Decorative image failures remain silent; informative images preserve their textual alternative.
+- Nginx 502/503/504 documents are the deliberate autonomous HTML/CSS exception: no app runtime,
+  external assets or JavaScript. The Nginx image contains local fonts, brand mark and local SVG background patterns.
+  Document GET/HEAD failures retain their status, no-store/noindex and security headers. API, health,
+  server functions, resources, other methods and application 404/500 responses are not replaced.
+  `scripts/tests/auxiliary-pages.test.sh` verifies failure isolation; `--preview` keeps only its own
+  isolated test server alive for visual review and cleans it on Enter/exit.

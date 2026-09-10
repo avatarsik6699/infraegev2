@@ -71,18 +71,21 @@
 }
 
 .body code {
-  /* Text-color accent, not a background chip — reads against either tone's
-     ambient background (idea's quiet paper or warning's accent-soft wash)
-     without needing a composited tint. */
-  color: var(--color-accent-dark);
+  color: var(--notation-color, var(--color-accent-dark));
   font-family: var(--font-data);
   font-size: var(--text-inline-code);
 }
 
-/* Same rule for content authored with the shared Notation component instead
-   of a raw <code>/<var> tag: cancel its default chip background through the
-   CSS custom property it reads, rather than fighting its own class. */
 .body {
   --notation-bg: transparent;
   --notation-color: var(--color-accent-dark);
+}
+
+/* Neutral study callouts share the compact Notation treatment. */
+.root[data-tone="idea"] .body {
+  --notation-bg: var(--learning-callout-notation-bg, transparent);
+  --notation-color: var(
+    --learning-callout-notation-color,
+    var(--color-accent-dark)
+  );
 }

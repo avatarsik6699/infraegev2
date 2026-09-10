@@ -3,6 +3,7 @@ import { CircleCheck } from "lucide-react";
 import type { PracticeTaskTypes } from "~/entities/practice-task";
 import { Button } from "~/shared/components/button";
 import { Field } from "~/shared/components/field";
+import { Typography } from "~/shared/components/typography";
 import type { LessonPracticeTypes } from "../lesson-practice.types";
 import styles from "../lesson-practice.module.css";
 import { PracticeTaskContent } from "./practice-task-content";
@@ -61,15 +62,17 @@ export const PracticeTaskAnswer: React.FC<PracticeTaskAnswerProps> = (
         {props.checking ? "Проверяем" : "Проверить"}
       </Button>
     </div>
+    {props.state === "error" ? (
+      <Typography.Text role="alert" tone="muted">
+        Не удалось проверить ответ. Попробуйте ещё раз.
+      </Typography.Text>
+    ) : null}
   </form>
 );
 
 function answerError(state: LessonPracticeTypes.State): string | undefined {
   if (state === "incorrect") {
     return "Ответ пока не подходит. Попробуйте ещё раз или откройте подсказку.";
-  }
-  if (state === "error") {
-    return "Не получилось проверить ответ. Проверьте соединение и попробуйте ещё раз.";
   }
   return undefined;
 }

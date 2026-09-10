@@ -1,4 +1,7 @@
-import { LessonSectionHeading } from "~/shared/components/learning-content";
+import {
+  LessonSectionHeading,
+  Checkpoint,
+} from "~/shared/components/learning-content";
 import { Typography } from "~/shared/components/typography";
 import styles from "../lesson-design-lab.module.css";
 
@@ -38,5 +41,15 @@ export const LessonResult: React.FC<LessonResultProps> = (props) => (
       Следующий шаг: вручную проследить поиск отсутствующего элемента и увидеть,
       как диапазон становится пустым.
     </Typography.Text>
+    <Checkpoint
+      items={[
+        {
+          id: "lab-search-stop",
+          prompt: "Когда поиск можно закончить?",
+          reveal:
+            "Когда найден искомый элемент или левая граница стала больше правой: диапазон пуст, искать больше негде.",
+        },
+      ]}
+    />
   </section>
 );

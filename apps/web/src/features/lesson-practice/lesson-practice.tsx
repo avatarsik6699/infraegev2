@@ -3,17 +3,42 @@ import { PracticeTaskTabs } from "./components/practice-task-tabs";
 import type { LessonPracticeTypes } from "./lesson-practice.types";
 import { useLessonPracticeModel } from "./model/use-lesson-practice-model";
 import { TabsRoot } from "~/shared/components/tabs";
+import { Typography } from "~/shared/components/typography";
+import { EmptyState } from "~/shared/components/empty-state";
 import styles from "./lesson-practice.module.css";
 
 export const LessonPractice: React.FC<LessonPracticeTypes.Props> = (props) => {
   const model = useLessonPracticeModel(props);
 
+  if (props.tasks.length === 0) {
+    return (
+      <EmptyState
+        title="В этом уроке нет практических заданий"
+        description="Можно продолжить чтение урока."
+      />
+    );
+  }
+
   return (
     <div
       className={styles.practiceSet}
       data-enhanced={model.enhanced || undefined}
+      data-presentation={props.presentation}
       data-practice-form
     >
+      {props.presentation === "study" &&
+      model.enhanced &&
+      props.tasks.length > 0 ? (
+        <Typography.Text
+          className={styles.taskPosition}
+          aria-live="polite"
+          data-task-position
+        >
+          Задание{" "}
+          {props.tasks.findIndex((task) => task.id === model.activeTaskId) + 1}{" "}
+          из {props.tasks.length}
+        </Typography.Text>
+      ) : null}
       <TabsRoot value={model.activeTaskId} onValueChange={model.selectTask}>
         <PracticeTaskTabs
           enhanced={model.enhanced}

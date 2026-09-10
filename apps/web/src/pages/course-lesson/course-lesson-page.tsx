@@ -62,19 +62,21 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
         lessonTitle={props.lesson.title}
       />
       <main className={styles.lesson} data-lesson-frame>
-        <LessonIntro
-          accessTier={props.lesson.accessTier}
-          className={styles.intro}
-          eyebrow="Урок курса"
-          summary={props.lesson.summary}
-          taskCount={props.tasks.length}
-          technology="Python 3"
-          title={props.lesson.title}
-        />
+        <div className={styles.intro}>
+          <LessonIntro
+            presentation="study"
+            accessTier={props.lesson.accessTier}
+            eyebrow="Урок курса"
+            summary={props.lesson.summary}
+            taskCount={props.tasks.length}
+            technology="Python 3"
+            title={props.lesson.title}
+          />
+        </div>
 
         <aside className={styles.rail} data-outline-rail>
           <div className={styles.railContents}>
-            <LessonOutline groups={outline} />
+            <LessonOutline groups={outline} presentation="study" />
             <div className={styles.railSpacer} aria-hidden="true" />
             <CourseLessonProgress
               masteryThreshold={props.lesson.masteryThreshold ?? 0.8}
@@ -90,14 +92,12 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
             className={styles.section}
           />
 
-          <section
-            id="practice"
-            className={styles.section + " " + styles.practiceSection}
-          >
+          <section id="practice" className={styles.section}>
             <LessonSectionHeading index={2} variant="lesson">
               Практика
             </LessonSectionHeading>
             <LessonPracticeFlow
+              presentation="study"
               tasks={props.tasks}
               lessonId={props.lesson.id}
               checkAnswer={checkPracticeAnswer}
@@ -105,10 +105,7 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
             />
           </section>
 
-          <section
-            id="result"
-            className={styles.section + " " + styles.resultSection}
-          >
+          <section id="result" className={styles.section}>
             <LessonSectionHeading index={3} variant="lesson">
               Итог
             </LessonSectionHeading>
@@ -120,8 +117,15 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
             />
           </section>
         </article>
+        <aside
+          className={styles.marginRail}
+          data-margin-rail
+          aria-hidden="true"
+        />
       </main>
-      <PublicFooter />
+      <div className={styles.footer} data-lesson-footer>
+        <PublicFooter />
+      </div>
     </div>
   );
 };
