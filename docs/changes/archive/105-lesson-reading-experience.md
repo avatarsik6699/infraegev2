@@ -7,7 +7,7 @@
 | Change | `105` |
 | Slug | `lesson-reading-experience` |
 | Title | Lesson reading experience |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/105-lesson-reading-experience` |
 
 ## Goal
@@ -152,7 +152,7 @@ See `docs/SPEC.md` §3–§5, `docs/FRONTEND.md` and the Files list above.
 
 ## Gate Checks
 
-Affected Critical Gate: [STACK.md](../STACK.md). The approved plan additionally requests focused
+Affected Critical Gate: [STACK.md](../../STACK.md). The approved plan additionally requests focused
 browser/E2E/accessibility evidence for changed lesson behavior; not a Full Gate. Inspect screenshots
 inline through MCP (Windows-hosted file saving is unavailable). Final allowlisted repository cleanup
 must preserve all pre-existing untracked authored references.
