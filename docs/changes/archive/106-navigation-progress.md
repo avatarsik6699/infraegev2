@@ -7,7 +7,7 @@
 | Change | `106` |
 | Slug | `navigation-progress` |
 | Title | Navigation progress without page skeletons |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/106-navigation-progress` |
 
 ## Goal
@@ -62,7 +62,7 @@ See `docs/SPEC.md` §3–§5 and the Files list above.
 
 ## Gate Checks
 
-Critical Gate: [STACK.md](../STACK.md). Focused browser verification includes blocked navigation
+Critical Gate: [STACK.md](../../STACK.md). Focused browser verification includes blocked navigation
 beyond the former pending threshold, then success or error/retry. No Full Gate.
 
 ## Architect Review Notes
