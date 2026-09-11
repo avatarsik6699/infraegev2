@@ -20,6 +20,9 @@
 - Prefer concrete symptoms, root cause, and the shortest reliable fix.
 - Remove entries that are no longer relevant.
 
+Search headings for the affected tool/module before reading detailed entries. Always apply the
+filesystem-permission handoff; historical symptoms do not supersede current STACK or runbooks.
+
 ## Gotcha Log
 
 ### Linux Chromium under WSL can leave Windows-named Lighthouse profiles in the repository

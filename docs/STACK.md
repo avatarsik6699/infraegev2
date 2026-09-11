@@ -11,11 +11,6 @@
 >
 > **Stack status:** CONFIGURED (change 01 — project-foundation)
 
-For a portable starting point for another project on a similar single-VPS stack, use the
-[`Infrastructure blueprint`](INFRASTRUCTURE_BLUEPRINT.md). It separates reusable invariants from
-infraege-specific values and includes the new-project inputs, acceptance evidence, and production
-pitfalls that must be reconsidered rather than copied.
-
 ---
 
 ## Stack
@@ -79,86 +74,11 @@ theory is compiled from `apps/web/src/entities/lesson/content/*.lesson.tsx` and 
 runtime content. Course and Topic theory/registries remain frontend content-as-code; the API image
 and development bind mount carry only `content/tasks/`.
 
-**Production access:** the primary administration contract is public `root@2.26.8.245` with the
-protected `root-admin-password`, pinned `known_hosts` and `scripts/production-root-ssh.sh`.
-Public-key login and alternate SSH users are not active, and no key-only migration is scheduled.
-The adapter accepts the architect-approved 12-character minimum. Longer generated passwords remain
-recommended; the architect accepts the increased brute-force and host-compromise risk for the
-current operating horizon.
-Reaching the VPS's private `10.77.0.0/24` network
-(Beszel, Umami and journald gatewayd) still needs the WireGuard tunnel: `make tunnel-up` starts and
-verifies it, `make tunnel-down`
-stops a tunnel this Makefile started, `make tunnel-status` reports interface/route/handshake state.
-Wraps `scripts/wireguard-tunnel.sh`; requires the protected config at
-`~/.config/infraege/production/infraege-wsl.conf` (or `$INFRAEGE_WG_CONFIG`) to already exist.
-
-The independent definition is `ops/observability/compose.yml`, always rendered and applied with
-project name `infraege-ops`. Callers provide the names listed in
-`ops/observability/env.contract` through a protected mode-600 file and pass a full Git SHA as the
-release id. `make ops-config ENV_FILE=… RELEASE=…` is local and non-mutating.
-
-`make ops-status` reads only the installed project's Compose status through the pinned production
-SSH wrapper. `make ops-install ENV_FILE=… RELEASE=…` uploads the Compose definition, its maintenance
-scripts and protected environment, creates the one external ingress network if absent, then runs
-`pull` and `up --wait`.
-`ops-update` applies another release through the same path; `ops-rollback` reapplies the previous
-release. Releases live under `/opt/infraege-ops`, their mode-600 environments under
-`/etc/infraege/ops`, and none of these commands reference the application Compose project.
-
-The always-on sre-kit control plane is a third, independent Compose project on the dedicated
-management VPS. `make sre-management ACTION=<action> RELEASE=<sre-kit-main-sha>` wraps the pinned
-root/password connection from `~/.config/sre-kit/dedicated-vps/connection.env`; supported actions
-are `bootstrap`, `wireguard`, `install`, `update`, `rollback`, `sources`, `status`, `backup`,
-`restore-proof` and `all`. The wrapper verifies the independently confirmed management host
-fingerprint before every connection. Bootstrap opens only the configured SSH port and 80/443 in
-UFW, and fails if the pre/post Firecrawl/SearXNG container inventory changes. It never addresses
-the application or `infraege-ops` Compose projects.
-
-The management peer owns `10.77.0.3/32`, pins MTU 1280 for the cross-provider path and routes only
-`10.77.0.1/32`; workstation peer
-`10.77.0.2/32` remains unchanged. DNS `sre.infraege.ru -> 2.27.208.4` must exist before first
-exact-SHA deploy so Caddy can obtain TLS and public readiness can pass.
-
-The repository's application production definition now owns only Nginx, web, API and its Postgres;
-Nginx attaches to `infraege-observability-ingress`. The accepted split-stack cutover baseline was
-exact SHA `ad6df05fa7d44e7a4f9434c196091ed4890e2f49`: five operations containers, private
-Beszel/Umami access, Agent registration, tagged backup/restore and three timers passed final
-acceptance. The current deployed application SHA must always be read from `/health/ready` and
-release evidence rather than this historical baseline. Legacy volumes remain rollback-only. This
-repository deliberately has no desired-state JSON,
-generic plan/apply engine, migration rehearsal, snapshot selector or deployment UI. Compose is the
-service desired state; the runbook is the cross-project transition contract.
-
-`ops/observability/sre-kit-sources.example.json` documents one Project and seven human-readable
-Sources: `Public availability`, `Host resources`, `Security bans`, `Application journal`,
-`Container telemetry`, `Product analytics` and `Nginx traffic`. Credentials are transient
-mode-600 reconciliation input, become encrypted sre-kit secret refs, and are then removed from the
-management host. Admin reconciliation uses the verified `https://sre.infraege.ru` origin so the
-production `Secure` session cookie is never weakened; token-based publisher ingestion remains on
-core loopback. Every explicit reconciliation refreshes secret-bearing Source configs from current
-protected operator inputs because an opaque API ref cannot prove credential equality; sre-kit
-replaces the encrypted ref and deletes the superseded value. The generated push token stays in a
-protected management-only file. The separate
-`stub` manifest is test-only. Linked sre-kit Change 20
-historically reconciled the six pull Sources and proved fresh polling, quiet success, reversible
-failure/recovery and authenticated Dashboard/Sources/detail rendering without target-side
-mutations. A local core still provides no polling or alerts while its workstation is off, and
-monitoring availability never gates target lifecycle.
-
-Beszel Agent intentionally retains host networking for host network counters. Its Docker API is a
-read-only socket proxy bound only to `127.0.0.1:2375` and attached to the dedicated non-internal
-`docker-api` bridge; `POST=0` remains mandatory. Source reconciliation authenticates with the
-existing protected Beszel user, resolves exactly one system named `infraege.ru`, and sets
-`require_container_stats=true`; copied PocketBase record ids are not configuration inputs.
-
-`ops/observability/install-sre-kit-local.sh` installs the repository-owned manual CLI plus a
-disabled user timer for privacy-safe Nginx aggregate delivery. It accepts the current push Source
-UUID and a mode-600 token file, writes only protected local configuration/state, and never enables
-autostart. The rendered unit pins the same discovered Python ≥3.12 interpreter validated by the
-installer instead of relying on an older `/usr/bin/python3`. `sre-kit-local start` starts tunnel →
-core → one immediate publisher run → timer → web;
-`stop` stops the publisher before core/tunnel. The timer reads at most 500 journal entries per
-minute through the existing loopback gateway forward and persists only its opaque cursor.
+Production commands and credential onboarding live in [production](runbooks/production.md).
+Target/management/workstation ownership, Source reconciliation and publisher lifecycle live in
+[analytics](runbooks/analytics.md); recovery lives in [backup and restore](runbooks/backup-restore.md).
+Use `make tunnel-{up,down,status}`, `make ops-{config,status,install,update,rollback}` and
+`make sre-management ACTION=…` only with the inputs and scope defined by those runbooks.
 
 ### pnpm workspace policy
 
@@ -357,7 +277,7 @@ pnpm --filter web test:e2e
 │   ├── CHANGE_TEMPLATE.md    # template for new changes
 │   ├── changes/              # active units of work
 │   │   └── archive/          # completed units of work
-│   └── playbooks/            # plan.md / work.md / ship.md / workflow-init.md
+│   └── playbooks/            # plan.md / work.md / ship.md
 ├── .claude/skills/            # Claude Code skill wrappers (plan, work, ship)
 ├── .agents/skills/             # generic-agent skill wrappers (plan, work, ship)
 ├── .vscode/                    # shared workspace editor settings (repository TypeScript SDK)

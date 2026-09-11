@@ -873,7 +873,7 @@ Namespace members Typography, CustomIcon, SvgDrawing и SvgPattern рассмо�
 | [SvgPattern](../../apps/web/src/shared/components/svg-pattern/svg-pattern.ts) | 8 / 1 | Field/Grid/Preset/Strokes, resource IDs; DS20 |
 | [Checkpoint](../../apps/web/src/shared/components/learning-content/checkpoint/checkpoint.tsx) | 5 / 0 | Think/reveal и место в уроке; DS09, DS10 |
 | [Diagram](../../apps/web/src/shared/components/learning-content/diagram/diagram.tsx) | 1 / 0 | Figure/annotated/float API; единственный consumer — lab; DS11 |
-| [LearningVisualFrame](../../apps/web/src/entities/learning-visual/learning-visual-frame.tsx) | 2 / 1 | Purpose/caption/description; оба consumers — labs; DS11 |
+| [LearningVisualFrame](../../apps/web/src/shared/components/learning-content/learning-visual-frame/learning-visual-frame.tsx) | 2 / 1 | Purpose/caption/description; оба consumers — labs; DS11 |
 | [LessonIntro](../../apps/web/src/shared/components/learning-content/lesson-intro/lesson-intro.tsx) | 4 / 0 | Default/study и metadata; DS09 |
 | [LessonSectionHeading](../../apps/web/src/shared/components/learning-content/lesson-section-heading.tsx) | 8 / 1 | Numbered/default/lesson presentation; DS04, DS09 |
 | [LessonTheory](../../apps/web/src/shared/components/learning-content/lesson-theory/lesson-theory.tsx) | 3 / 0 | Concept composition и obsolete checkpoint branch; DS10 |
@@ -1090,7 +1090,7 @@ migration obligations. Change 107 не даёт разрешения удаля�
 по старому пути, и ошибки поведения; затем свести владельцев UI; после стабилизации
 сократить код, документы и историю. Объём удаляемых строк/байтов не определяет срочность.
 
-Change 107 завершён и архивирован локально. Этап 3 реализован в Change 108 и ожидает `/ship`.
+Change 107 завершён и архивирован локально. Этап 3 завершён и архивирован в Change 108. Этап 4 реализуется в Change 109.
 Этапы 4–6 остаются будущими changes; номера им назначает `/plan` после закрытия предыдущего. Не создавать несколько
 активных changes на одних FRONTEND/STACK/tokens и не запускать независимые массовые
 правки этих файлов одновременно.

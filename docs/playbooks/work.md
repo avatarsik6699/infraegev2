@@ -41,7 +41,7 @@ In an integrated project, runtime wrappers under `.claude/skills/work/SKILL.md` 
 - `docs/SPEC.md` §3–§4 (and others as relevant) — the actual contract; the change file only
   points here, it doesn't duplicate it
 - `docs/STACK.md` — Critical Gate table, Required Tooling table, stack conventions
-- `docs/KNOWN_GOTCHAS.md` — project pitfalls
+- `docs/KNOWN_GOTCHAS.md` — search affected-area pitfalls; permission handoff always applies
 - Relevant source files and git history — verify current implementation before editing; recent
   commits and diffs are the record of *how* prior work was done, so read them instead of expecting
   a separate execution-memory file

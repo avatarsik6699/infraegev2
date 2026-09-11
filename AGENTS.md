@@ -46,6 +46,14 @@ tooling live in [`docs/STACK.md`](docs/STACK.md).
     Never substitute `git clean -fdX`: ignored dependencies, environments, secrets and data are
     protected. Temporary tools such as Lighthouse must clean their own external workspaces on exit.
 
+## Reading scope
+
+Read the active change, STACK gate/tooling rows and the SPEC sections affected by the task.
+Use SPEC §2.3 for content, §3–§4 for data/API, §5 plus FRONTEND for web, §7–§8 plus the owning
+runbook for operations. Read SPEC fully for initial planning or a product/system pivot.
+Search KNOWN_GOTCHAS by the affected area; the filesystem permission handoff always applies.
+Archive/history is on-demand evidence, not mandatory context for every task.
+
 ## Stack Conventions
 
 Before writing code, running commands, or reasoning about project layout, read

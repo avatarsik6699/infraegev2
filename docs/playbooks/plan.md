@@ -24,7 +24,7 @@ In an integrated project, runtime wrappers under `.claude/skills/plan/SKILL.md` 
 
 ## Required reads
 
-- `docs/SPEC.md`
+- `docs/SPEC.md` roadmap and affected contracts; full SPEC for initial planning or a product/system pivot
 - `docs/STACK.md`
 - `docs/KNOWN_GOTCHAS.md` (if present)
 - `docs/changes/` and `docs/changes/archive/` (existing change files, to pick the next `NN` and

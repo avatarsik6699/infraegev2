@@ -38,7 +38,7 @@ fallback.
 - Public learning content is SSR/no-JavaScript readable and Russian-only.
 - Checker answers stay on the server; the browser never executes untrusted Python code.
 - The Python course has a complete 28-step path from the first program to one terminal task
-  manager. All lessons are published in production. Progress is derived from the
+  manager. All lessons have passed publication approval; current deployment is verified separately. Progress is derived from the
   published lessons and remains optional browser-local state.
 - Every public curriculum row names a concrete learning outcome and links to its published lesson;
   future curriculum expansion must not appear as available before its own approval.
@@ -54,62 +54,12 @@ is warm paper, ink, one muted text level and a restrained orange accent. Orange 
 primary routes and selected illustration details; it does not recolor ordinary prose or semantic
 feedback.
 
-The selected typography remains unchanged: Alegreya for display and wordmark, Golos Text for
-reading and interface text, and JetBrains Mono for code, data and formula notation. The homepage is
-the first reference-led composition: a direct product statement and the «Начать готовиться» CTA to `/ege` on the
-left, plus a non-interactive learning map on the right. Alegreya is reserved there for the live
-wordmark and product statement; the expanded subtitle, benefit line and statement lead use Golos
-Text. The lockup/navigation separator is intentionally faint. Authored SVG geometry gives the CTA
-tapered, fading linework. The learning map connects its cards, numbered stages and background
-notation through a selective, non-crossing semantic trajectory: solid stage curves, dashed card
-arrows, quiet theory-to-pattern routes and one practice-to-theory return loop. Reusable
-domain-agnostic SVG primitives own multitone gradient resources and line/arrow rendering, while a
-small SVG pattern preset composes deterministic strokes, labels and nodes inside directional fade
-fields. Pattern subject matter, coordinates and responsive placement stay with the consuming page.
-The hero extends that vocabulary into a full-page perspective grid with distributed code/graph
-notation and quiet traveling light fading toward the public chrome,
-with a clean reading area and bounded paper depth. Text and map occupy independent desktop columns;
-desktop scales the scene to the viewport height while narrow/reflow screens scroll naturally. One SVG canvas retains its card/stage content and recomposes it
-into a taller, enlarged alternating route on mobile, with CSS-selected connector geometry before
-hydration. The 12-second choreography leads through the main path during seconds 0–4, answers with
-branches and contour light during seconds 4–7, then rests. Enlarged engraved cards have distinct depth offsets while attached route
-deformation stays coordinated. Main-route stages, text and progress remain stationary; only satellite cards drift, while the
-background retains its quiet independent motion;
-cards retain similar but varied dimensions, clear surfaces and original planar rotations.
-Compact satellite cards contain 88-unit icons and reduced padding. Their flat surfaces have no shadow or thickness and share very faint paper texture with distinct arc, dot, woven-loop and contour
-patterns. Compact stage numerals, titles and vertically centered checks retain clear spacing. A single paper progress disc
-has a clean interior without decorative texture/patterns and a thin track and arc on the perimeter, with a
-large centered orange «72%» and no caption. The original
-statement «Информатика - это система» leads into one standard arrow link «Начать готовиться» to `/ege`. Ambient
-layers fade completely at chrome boundaries. Reduced motion, no-JS, offscreen and hidden-document states preserve
-the complete static composition or pause the mounted effects without restarting them.
-The `/ege` catalog uses equal-height single-cell cards with one shared 58:42 media/content
-layout, faint grain and varied engraving. Missing illustrations use a neutral book placeholder.
-Number labels sit over the artwork; two-line titles and full source descriptions displayed as up to two compact lines with an ellipsis align
-across cards. Published artwork has slight bounded overflow; only an 8px edge band fades into paper. The bottom row holds
-the published action; planned status sits beside the number over the artwork. The field uses distributed quiet motifs and soft 24-second
-illumination instead of vertical orange routes; published cards retain a single frame glint.
-Its 25 topics retain exam order in three/two/one columns.
-The `/courses` cards use the same image-first composition: an asymmetric desktop mosaic with advanced problems above algorithms on the right,
-Excel in the wide closing card, and a single column on mobile,
-region-filling artwork with slight overflow, quiet metadata labels above, separated title/summary/action below, faint
-grain, varied patterns and original corner arcs, with restrained silver-neutral gradients and
-once-only soft material glints. Only Python has a link and hydrated personal progress.
-Static image bounds hold before hydration and without JS; decorations never overlap descriptions
-or links.
-The complete exam map stays linear instead of reusing the homepage illustration. The rejected
-raster dry-ink experiment is not part of the product.
-Unavailable navigation is visually secondary and noninteractive without
-status labels; account placeholders and synthetic social proof are absent. The illustrative circular «72%» dial
-belongs only to the reference illustration and is not learner state. Internal lesson and course
-layouts preserve their learning structure. `/courses` and `/courses/python` are the reusable
-visual references for future modules: engineering fields, paper depth, gradients, artwork and
-light also belong inside learning and working surfaces when readability and input remain clear.
-Change 103 demonstrates learning/form compositions in the lab; existing lessons adopt them only
-through later scoped work. Shared primitives supply mechanics while each page owns composition.
-The design-system lab demonstrates the active production components without its own theme.
-ALCHIMIA remains archived design evidence. Binding rules
-live in `docs/FRONTEND.md`.
+Typography, page recipes, component roles and asset delivery are defined only in
+[FRONTEND](docs/FRONTEND.md). The public homepage statement is «Информатика - это система»
+and «Начать готовиться» leads to `/ege`. Planned content/navigation remains noninteractive;
+no synthetic social proof or account controls are introduced. The illustration's «72%» is
+not learner progress. The lab demonstrates the same supported primitives and study defaults
+as production. Historical ALCHIMIA and raster experiments are not alternate active profiles.
 
 ## Evidence on Hand
 

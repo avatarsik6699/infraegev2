@@ -126,7 +126,7 @@ app → routes → pages → widgets → features → entities → shared
   SVG primitives into one bright-orange tapered underline and an optional close-set authored arrow in either direction;
   consumers own only route data, copy, scale and placement. `ExternalLink` remains a separate
   semantic boundary for external and new-tab behavior rather than being collapsed into an unsafe
-  polymorphic link. Its optional `drawn` hierarchy reuses the same shared underline while keeping
+  polymorphic link. Its `presentation="action"` role reuses the same shared underline while keeping
   the library-provided up-right icon and external semantics; visually adjacent instances therefore
   share the accent and transition rhythm without duplicating SVG geometry.
 - `CodeBlock` renders Python tokens synchronously as escaped React text nodes through the exact
@@ -594,34 +594,16 @@ Practice theory links use the shared FragmentLink drawn variant: decorative unde
   term may instead point back to a previous lesson only when that dependency is already true in
   the authored curriculum. Humanization never removes intermediate reasoning, examples,
   distinctions or the final synthesis.
-- Archived Change 75 established the historical ALCHIMIA profile on `/lab/design-system` and proved
-  its reusable header, theme/token boundary and catalog contracts. Change 76 activated only those
-  accepted system-level values and reusable boundaries on public routes without copying the
-  dashboard composition into production. Archived Change 79 completed the remaining public
-  rollout: it mapped accepted Components/Widgets contracts to their real consumers, promoted
-  approved defaults through the existing visual dependency direction, reconciled public page and
-  lesson compositions, and removed only legacy fallbacks proven unused by browser evidence. The
-  resulting production routes do not copy catalog chrome or maintain a parallel component family.
 - `docs/artifacts/references/infraege-mark.svg` is the active artistic authority for the public mark;
   `base.jpg` and `main-page.png` define its current application direction. The mark has exactly three
   paths, no text or baseline, and uses orange only for the top stone. Derivatives may add delivery
   whitespace and, for dark browser chrome, invert only ink stones. The former ALCHIMIA source remains
   archived design evidence and is not a runtime fallback.
-- Change 86 replaced the original Athanor typography roles: self-hosted Cormorant SC 600, while
-  visually approved for the wordmark, proved too decorative and thin at small-caps display weight
-  to read outside a pure wordmark context once carrying every heading level app-wide. The current
-  roles are self-hosted Alegreya for the live wordmark and every standard heading level, including
-  compact course, practice, prose and dialog headings; Golos Text for continuous reading and for
-  controls/labels; JetBrains Mono (ligatures disabled in rendered code) narrowed strictly to code,
-  data and formula notation — it no longer covers general "compact service UI", which now uses
-  Golos Text like the rest of the interface. Quiet
-  numbered lesson-stage landmarks remain a JetBrains Mono/data-role treatment, consistent with
-  numeric notation, rather than an ordinary content heading. The profile exposes one achromatic
-  primary and one secondary prose level; status colors remain semantic rather than decorative.
-- Change 101 retires the private lab theme and activates the same infraege foundation on every
-  interface. Historical design evidence stays in archived changes and artifacts, never in runtime
-  token aliases or a second importable component family. The
-  architecture-led lab dashboard groups contracts into System, Components and Widgets tabs:
+- Typography uses Alegreya for standard headings and wordmark, Golos Text for reading and UI,
+  JetBrains Mono (code ligatures disabled) only for code/data/formulas. Lesson-stage landmarks
+  use the quiet uppercase UI role; catalog heading roles are explicitly defined in Typography.
+- The lab uses the same infraege foundation as production, without legacy token aliases or a
+  second component family. Its dashboard groups contracts into System, Components and Widgets tabs:
   System owns app-wide identity, typography, palette, layout constraints, accessibility/browser
   behavior, curated semantic tokens, the active icon inventory and content-language rules;
   Components groups public `shared`/`entities`/`features` UI contracts by meaning; Widgets owns
@@ -651,11 +633,6 @@ Practice theory links use the shared FragmentLink drawn variant: decorative unde
   major-section separation (64px desktop / 48px narrow). The parent lesson layout owns these external relationships;
   components own only internal geometry. Responsive rules preserve the hierarchy instead of
   reducing every role to one mobile gap.
-- Lesson composition, responsive outline behavior and authored lesson copy remained outside
-  Changes 75–76. Change 79 completed visual composition and responsive public-consumer migration
-  without editing authored copy. Change 80 owns the unified rich-practice content contract;
-  Changes 77–78 and 81–84 own the separately approved editorial rollout.
-
 ## 7. Fields and validation
 
 - Prevent impossible input where the constraint is obvious, but never show errors on a pristine
@@ -683,22 +660,8 @@ Practice theory links use the shared FragmentLink drawn variant: decorative unde
 - Automated green does not approve visual quality or publication. The active change's explicit
   architect checkpoints remain human-owned.
 
-## 9. Migration record
+## 9. Auxiliary document states
 
-| Former convention | Verdict | Result |
-|---|---|---|
-| kebab-case, one component per file, `React.FC`, `type`, namespaced props | keep | Sections 2–3 |
-| props/hook access, named `*Fx` effects, namespace-style utilities | keep | Section 2 |
-| FSD layers, root public APIs, local state and platform/network boundaries | keep | Section 3 |
-| CSS Modules, `cssUtils.cx`, `data-*` variants, same-file composition | keep | Section 4 |
-| Mantine pin, provider/theme, direct Mantine use and Mantine test wrapper | drop | Replaced by local Base UI/native policy |
-| Mantine forwarding exceptions and component-specific style variables | adapt | Generic local-wrapper forwarding and semantic state attributes |
-| numeric typography props and appearance-led variants | adapt | Semantic typography/component roles |
-| component/unit/E2E testing rules | keep | Section 8 |
-| Editorial Rail appearance rules from `DESIGN.md` | drop | Replaced by the theme-isolation contract and active profile |
-| Kontur accessibility, adaptivity, typography and validation guidance | adapt | Sections 5–7, narrowed to this product |
-
-### Auxiliary document states
 
 - PublicHeader defaults to expanded chrome, including privacy and application fallback pages.
   RouteStateFrame composes that header, the shared main measure and PublicFooter. StatusScene
@@ -720,7 +683,7 @@ Practice theory links use the shared FragmentLink drawn variant: decorative unde
   The background fades behind reading and chrome and disappears in forced-colors. Static server
   pages use the equivalent local SVG geometry without an application dependency.
 - Lesson navigation has a 32–64px column gutter and stacks below a 36rem container width, keeping
-  previous left and next right. Privacy uses quiet consent controls and drawn external links.
+  previous left and next right. Privacy uses quiet consent controls and inline external links within prose.
 - Client navigation keeps the current page visible until the destination is ready. The app-owned
   top-edge progress bar appears after 150ms; no global pending screen, skeleton or minimum
   route display delay is configured. Reduced motion keeps the bar static. Initial document
@@ -739,3 +702,47 @@ Practice theory links use the shared FragmentLink drawn variant: decorative unde
   server functions, resources, other methods and application 404/500 responses are not replaced.
   `scripts/tests/auxiliary-pages.test.sh` verifies failure isolation; `--preview` keeps only its own
   isolated test server alive for visual review and cleans it on Enter/exit.
+
+## 10. Brand delivery
+
+### Производные файлы
+
+- `apps/web/public/brand/infraege-mark.svg` и widget asset сохраняют paths, classes, colors и
+  `viewBox` master-файла.
+- `apps/web/public/favicon.svg` использует ту же геометрию; квадратный `viewBox` добавляет только
+  delivery whitespace. В dark browser chrome две ink-фигуры становятся белыми, orange-фигура
+  сохраняет цвет.
+- PNG/ICO, Apple touch, manifest icons и social preview воспроизводимо генерируются командой
+  `pnpm brand:generate`; генератор также удаляет только известные прежние ALCHIMIA derivatives.
+- Warm opaque background raster-иконок и social preview — `#F5F3EF`.
+
+### Favicon и иконки
+
+| Файл | Размер | Требование |
+|------|--------|------------|
+| `favicon.svg` | квадратный `viewBox` | Три камня на прозрачном фоне |
+| `favicon-16x16.png` | 16×16 RGBA | Тот же знак, без отдельной перерисовки |
+| `favicon-32x32.png` | 32×32 RGBA | Тот же знак, без отдельной перерисовки |
+| `favicon.ico` | 16×16 и 32×32 внутри | PNG frames с alpha |
+| `apple-touch-icon.png` | 180×180 RGB | Непрозрачный warm-paper фон, без встроенного скругления |
+| `infraege-icon-192.png` | 192×192 RGB | Непрозрачный warm-paper фон, manifest purpose `any` |
+| `infraege-icon-512.png` | 512×512 RGB | Непрозрачный warm-paper фон, manifest purpose `any` |
+
+Apple/manifest icons оставляют устойчивое свободное поле вокруг знака. Maskable-вариант, service
+worker, offline-режим и установка как PWA не входят в текущий контракт.
+
+### Social preview
+
+`apps/web/public/brand/infraege-social.png` имеет размер 1200×630 px и warm-paper фон. Он включает
+трёхкаменный знак, wordmark `infraege` и короткую подпись о подготовке к ЕГЭ. Это delivery raster,
+поэтому доступное имя задаётся route metadata, а не текстом внутри изображения.
+
+### Приёмка
+
+- Master/production SVG проходит structural test: три paths, один orange и два ink, без text,
+  script, external URL, embedded raster, filter или непрозрачного canvas.
+- Крупный production mark визуально совпадает с master; размеры 512/48/32/16 проверяются без
+  отдельной художественной версии.
+- Проверяются сигнатуры, pixel format и размеры raster/ICO, manifest declarations, favicon,
+  OG/Twitter metadata, desktop/mobile/150%-zoom header, SSR/no-JavaScript, contrast и clean console.
+- Все brand derivatives воспроизводимы: повторный `pnpm brand:generate` не меняет tracked output.
