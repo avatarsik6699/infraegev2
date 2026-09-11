@@ -6,7 +6,7 @@
 |---|---|
 | Change | `111` |
 | Slug | `history-artifact-compaction` |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/111-history-artifact-compaction` |
 
 ## Goal
@@ -42,7 +42,7 @@ path comments в apps/web/eslint.config.js и scripts/wireguard-tunnel.sh; runti
 
 ## Contracts
 
-[STACK](../STACK.md#change-history); текущие SPEC и FRONTEND; исходный audit §8/§11 в snapshot.
+[STACK](../../STACK.md#change-history); текущие SPEC и FRONTEND; исходный audit §8/§11 в snapshot.
 
 ## Gate Checks
 
