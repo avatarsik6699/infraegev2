@@ -7,7 +7,7 @@
 | Change | `107` |
 | Slug | `frontend-design-system-consolidation` |
 | Title | Frontend design-system consolidation |
-| Status | `active` — реализация завершена, ожидает визуальной проверки архитектора и `/ship` |
+| Status | `archived` |
 | Branch | `feature/107-frontend-design-system-consolidation` |
 
 Ветка создана через `/work` по разрешению на реализацию. Пользовательские staged assets
@@ -19,12 +19,12 @@
 чтобы `/lab/design-system` показывала те же поддерживаемые варианты, что и продукт.
 Закрыть подтверждённые no-JS, focus и modal-layer ошибки, завершить миграции consumers
 и заменить номинальные проверки наличия exports доказательствами поведения.
-Основание: [аудит §9–10](../artifacts/repository-hygiene-audit.md#10-сплошной-аудит-публичного-ui-и-план-консолидации),
+Основание: [аудит §9–10](../../artifacts/repository-hygiene-audit.md#10-сплошной-аудит-публичного-ui-и-план-консолидации),
 находки DS01–DS21 и минимальная сверка D01–D03/D07. Стратегическое намерение SPEC не меняется;
 T5 исправляет его устаревшие описания по уже принятому поведению.
 
 Общая очередь всех исследований и единственные владельцы находок —
-[аудит §11](../artifacts/repository-hygiene-audit.md#11-единая-приоритизация-всех-исследований).
+[аудит §11](../../artifacts/repository-hygiene-audit.md#11-единая-приоритизация-всех-исследований).
 В этом change сначала T5 → T1 → F1 → F2 → F3, затем
 T2 → F4 → F5 → F6 → F7 → F8 → F9 → F10 → F11 → F12 → F13 → F14 → T3 → T4.
 Указанные ниже зависимости задают технический минимум; выполнять эту согласованную очередь
@@ -33,9 +33,9 @@ T2 → F4 → F5 → F6 → F7 → F8 → F9 → F10 → F11 → F12 → F13 →
 
 ## Design References
 
-Текущий бренд infraege, действующий [FRONTEND](../FRONTEND.md), принятые study решения
-[Change 105](archive/105-lesson-reading-experience.md) и navigation progress
-[Change 106](archive/106-navigation-progress.md). Lab — исполняемое представление контракта;
+Текущий бренд infraege, действующий [FRONTEND](../../FRONTEND.md), принятые study решения
+[Change 105](105-lesson-reading-experience.md) и navigation progress
+[Change 106](106-navigation-progress.md). Lab — исполняемое представление контракта;
 её несогласованные defaults выявлены аудитом и не считаются безусловным эталоном.
 Новые визуальная концепция, шрифты и artwork в scope не входят.
 
@@ -255,12 +255,12 @@ apps/web/e2e/auxiliary-pages.spec.ts
 
 ## Contracts
 
-См. [SPEC](../SPEC.md) §3–§7, [FRONTEND](../FRONTEND.md) и Files выше.
+См. [SPEC](../../SPEC.md) §3–§7, [FRONTEND](../../FRONTEND.md) и Files выше.
 Контракты API/schema/env здесь не дублируются.
 
 ## Gate Checks
 
-Critical/Full/Release Gates определены только в [STACK](../STACK.md).
+Critical/Full/Release Gates определены только в [STACK](../../STACK.md).
 Full Gate не назначается автоматически этим планом.
 
 Специфическая приёмка — T1 и T4; specs используют существующие domain fixtures и Page Objects.
