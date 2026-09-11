@@ -6,7 +6,7 @@
 |---|---|
 | Change | `110` |
 | Slug | `compact-history-workflow` |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/110-compact-history-workflow` |
 
 ## Goal
@@ -31,7 +31,7 @@ docs/playbooks/{plan,work,ship}.md; docs/STACK.md; этот change.
 
 ## Contracts
 
-[STACK](../STACK.md), audit §8.3–8.4 и §11. Следующий этап — отдельный change.
+[STACK](../../STACK.md), audit §8.3–8.4 и §11. Следующий этап — отдельный change.
 
 ## Gate Checks
 
