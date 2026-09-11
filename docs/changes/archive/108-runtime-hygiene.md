@@ -7,12 +7,12 @@
 | Change | `108` |
 | Slug | `runtime-hygiene` |
 | Title | Runtime hygiene |
-| Status | `active` — реализован, ожидает `/ship` |
+| Status | `archived` |
 | Branch | `feature/108-runtime-hygiene` |
 
 ## Goal
 
-Выполнить этап 3 [общей очереди аудита](../artifacts/repository-hygiene-audit.md#111-очередь-и-обязательные-условия-перехода)
+Выполнить этап 3 [общей очереди аудита](../../artifacts/repository-hygiene-audit.md#111-очередь-и-обязательные-условия-перехода)
 после локального закрытия Change 107: убрать подтверждённые остатки CSS/token API и старые
 пустые filesystem targets. Сохранить поведение, композицию и независимую доставку Nginx error pages.
 Источник brief: указание архитектора перейти к следующему этапу + аудит §11 (C02–C04, A01/A02).
@@ -87,7 +87,7 @@ docs/changes/108-runtime-hygiene.md
 
 ## Gate Checks
 
-Critical Gate определяется [STACK](../STACK.md#critical-gate). Дополнительный узкий override:
+Critical Gate определяется [STACK](../../STACK.md#critical-gate). Дополнительный узкий override:
 `bash scripts/tests/auxiliary-pages.test.sh`; `--preview` используется только для browser evidence
 и затем завершается штатно. Unit-тест, зеркалящий удалённый CSS/token, не нужен. Full Gate не назначен.
 Для CSS-only изменений LSP и API regen не применимы; web lint/typecheck проверяют consumers.
