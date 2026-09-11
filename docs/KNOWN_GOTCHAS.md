@@ -525,7 +525,8 @@
 - **Symptom:** auxiliary-page test startup fails with `Read-only file system` while creating
   `/usr/share/nginx/auxiliary/assets/scenes` inside the read-only auxiliary directory mount.
 - **Cause:** Docker cannot create a nested mountpoint after its parent has been mounted read-only.
-- **Resolution:** after the architect's `continue`, create and track the empty `scenes/` and
-  `fonts/` directories with `.gitkeep`, and keep the real brand SVG at the file mountpoint.
-  The explicit retry passed. Production copies real resources into the image; local Compose
-  mounts the existing resource tree over these prepared locations. Do not weaken mount permissions.
+- **Resolution:** prepare only the nested mountpoints used by the current Compose/test definition.
+  Keep `fonts/.gitkeep` and the real brand SVG at the file mountpoint. The historical raster
+  `scenes/` mount is no longer configured; its empty placeholder was removed in Change 108.
+  Production copies resources into the image; local Compose mounts the real fonts/brand tree
+  over the prepared locations. Do not weaken mount permissions.

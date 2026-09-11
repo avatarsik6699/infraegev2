@@ -188,11 +188,6 @@ h1 {
   letter-spacing: -0.025em;
   text-wrap: balance;
 }
-.code {
-  font-size: 14px;
-  margin-top: 8px;
-  color: var(--secondary);
-}
 .description {
   font-size: 18px;
   line-height: 1.65;
@@ -206,13 +201,6 @@ h1 {
   flex-wrap: wrap;
   gap: 24px;
   margin-top: 24px;
-}
-.art {
-  display: block;
-  width: 100%;
-  height: auto;
-  min-width: 0;
-  pointer-events: none;
 }
 footer {
   display: flex;
@@ -244,10 +232,6 @@ footer nav {
     grid-template-columns: minmax(0, 1fr);
     gap: 24px;
   }
-  .art {
-    width: min(100%, 32rem);
-    justify-self: center;
-  }
   .desktop-nav {
     display: none;
   }
@@ -274,9 +258,6 @@ footer nav {
   }
 }
 @media (max-width: 40rem) {
-  .art {
-    width: min(100%, 22.5rem);
-  }
   .description {
     font-size: 16px;
   }
@@ -310,17 +291,10 @@ footer nav {
   main {
     padding-block: 24px;
   }
-  .art {
-    max-width: 32rem;
-    justify-self: center;
-  }
 }
 @media (forced-colors: active) {
   .drawn::after {
     background: LinkText;
-  }
-  .art {
-    display: none;
   }
 }
 /* Keep autonomous chrome aligned with PublicHeader, including the native menu. */
@@ -429,11 +403,6 @@ main {
   position: relative;
   z-index: 1;
 }
-.visual {
-  container-type: inline-size;
-  position: relative;
-  min-width: 0;
-}
 .numeral {
   position: absolute;
   inset: 0;
@@ -445,31 +414,6 @@ main {
   letter-spacing: -0.04em;
   line-height: 1;
   color: #dbd9d5;
-}
-.art {
-  display: block;
-  width: 100%;
-  height: auto;
-  max-width: none;
-}
-.diagram {
-  color: var(--secondary);
-  opacity: 0.18;
-  stroke: currentColor;
-  stroke-width: 1;
-}
-.diagram text {
-  fill: currentColor;
-  stroke: none;
-  font-family: monospace;
-  font-size: 16px;
-}
-.route {
-  color: var(--orange);
-}
-.break-disc {
-  fill: var(--canvas);
-  stroke: currentColor;
 }
 .refresh {
   display: inline-flex;
@@ -505,16 +449,8 @@ main {
     min-height: 0;
     gap: 24px;
   }
-  .visual {
-    grid-row: 1;
-    width: min(100%, 38rem);
-    justify-self: center;
-  }
   .copy {
     grid-row: 2;
-  }
-  .art {
-    max-height: 23rem;
   }
   .numeral {
     font-size: min(68cqw, 24rem);
@@ -524,9 +460,6 @@ main {
   main {
     padding-block: 16px;
     gap: 16px;
-  }
-  .art {
-    max-height: 15rem;
   }
   h1 {
     font-size: clamp(2.25rem, 9vw, 3.5rem);
@@ -549,8 +482,7 @@ main {
     scrollbar-color: auto;
     scrollbar-width: auto;
   }
-  body::before,
-  .visual {
+  body::before {
     display: none;
   }
   .copy {

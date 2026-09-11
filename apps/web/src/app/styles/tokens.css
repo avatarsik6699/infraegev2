@@ -55,7 +55,6 @@
   --layer-consent: 30;
   --layer-modal-backdrop: 40;
   --layer-modal: 41;
-  --text-state-title: clamp(2.25rem, 4.5vw, 4rem);
   /* Semantic typography */
   --font-display: var(--theme-font-display);
   --font-ui: var(--theme-font-ui);
@@ -65,26 +64,17 @@
   --text-xs: 0.8125rem;
   --text-sm: 0.875rem;
   --text-base: 1rem;
-  --text-md: var(--text-base);
   --text-lg: 1.125rem;
   --text-xl: 1.25rem;
   --text-2xl: clamp(1.5rem, 2vw, 1.75rem);
   --text-3xl: clamp(2rem, 3vw, 2.5rem);
   --text-display: clamp(3.25rem, 6.5vw, 6rem);
   --text-inline-code: 0.86em;
-  --text-lab-brand: 1.58rem;
-  --text-lab-signal: 0.56em;
-  --text-lab-context: 0.73rem;
-  --text-lab-micro: 0.7rem;
-  --text-lab-display: clamp(2.6rem, 3vw, 3.25rem);
-  --text-lab-summary: 1.05rem;
   --text-lab-meta: 0.72rem;
-  --text-lab-heading: clamp(1.2rem, 1.45vw, 1.45rem);
   --text-lab-stage: 1.35rem;
   --text-lab-data: 0.8rem;
   --text-lab-array: 0.78rem;
   --text-lab-note: 0.88rem;
-  --text-lab-mobile-display: clamp(2.05rem, 9.2vw, 2.55rem);
 
   /* Semantic color roles */
   --color-bg: var(--theme-page);
@@ -110,17 +100,11 @@
   --color-link-decoration: var(--theme-brand-orange-text);
   --color-success: var(--theme-success);
   --color-info: var(--theme-info);
-  --color-info-rule: var(--theme-info-rule);
   --color-warning: var(--theme-warning);
   --color-danger: var(--theme-danger);
   --color-danger-soft: color-mix(
     in oklch,
     var(--color-danger) 8%,
-    var(--color-surface)
-  );
-  --color-danger-rule: color-mix(
-    in oklch,
-    var(--color-danger) 42%,
     var(--color-surface)
   );
   --color-success-soft: color-mix(
@@ -235,7 +219,6 @@
     0 2px 5px color-mix(in srgb, var(--color-brand-ink) 7%, transparent),
     0 16px 32px -12px
       color-mix(in srgb, var(--color-brand-ink) 12%, transparent);
-  --shadow-annotation: none;
   --shadow-control: none;
   --shadow-overlay: 0 0.875rem 3.125rem var(--theme-overlay-shadow);
 
@@ -345,8 +328,6 @@
   --text-state-code-mobile: 61cqw;
   --text-state-code-compact: min(48cqw, 24rem);
   --text-state-title-compact: clamp(2.25rem, 9vw, 3.5rem);
-  --text-state-status: clamp(1.25rem, 2vw, 1.75rem);
-  --text-state-formula: 3rem;
 }
 
 :root {
@@ -356,7 +337,6 @@
     transparent
   );
   --color-state-card: color-mix(in srgb, var(--color-bg) 93%, transparent);
-  --color-state-shimmer: color-mix(in srgb, var(--color-bg) 80%, transparent);
 }
 
 :root {

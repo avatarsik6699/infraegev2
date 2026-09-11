@@ -1,6 +1,5 @@
 .page {
   composes: pageFrame from "../../shared/styles/patterns.module.css";
-  --page-frame-background: var(--color-brand-canvas);
   --text-catalog-heading: clamp(3.25rem, 5vw, 4.5rem);
   min-width: 0;
   overflow-x: clip;
