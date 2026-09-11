@@ -28,7 +28,8 @@ In an integrated project, runtime wrappers under `.claude/skills/plan/SKILL.md` 
 - `docs/STACK.md`
 - `docs/KNOWN_GOTCHAS.md` (if present)
 - `docs/changes/` and `docs/changes/archive/` (existing change files, to pick the next `NN` and
-  confirm nothing with the same slug already exists)
+  confirm nothing with the same slug already exists); when present, read archive/COMPACTED.md
+  for compacted outcomes and use its verified source only for details needed by the new scope
 - The file at the given path, if one was passed as input
 
 ## Procedure
@@ -140,8 +141,9 @@ marker.
 
 ### 5. Scaffold `docs/changes/NN-slug.md`
 
-- Pick the next `NN` (two digits) by scanning `docs/changes/` and `docs/changes/archive/` for the
-  highest existing number and incrementing.
+- Run `python3 scripts/change_history.py next` and use its number (minimum two digits). It takes
+  the maximum of active files, ordinary archives and verified compacted coverage plus one. It
+  refuses an active change or invalid/unavailable history; never fall back to `01`.
 - Derive a short kebab-case `slug` from the unit of work's title.
 - Copy `docs/CHANGE_TEMPLATE.md` to `docs/changes/NN-slug.md`, normalize its `./STACK.md` link to
   `../STACK.md` for the deeper directory, and fill it from the brief/spec:

@@ -54,6 +54,11 @@ In an integrated project, runtime wrappers under `.claude/skills/work/SKILL.md` 
   from `main` first if it doesn't exist yet. Do this before any other step — don't wait to be told.
 - If switching would discard uncommitted work on the current branch, stop and ask.
 
+Run `python3 scripts/change_history.py inspect` before resolving the target. COMPACTED.md is
+archive metadata, never an active unit. Read original compacted files only when the current task
+needs their evidence, using STACK’s history commands. Invalid metadata or missing source blocks
+history-dependent work; fetch the recorded source instead of guessing.
+
 ### 2. Validate input and resolve the target source
 
 - If no change number, ask: "Which change? e.g. /work 01 or /work 01 B3"

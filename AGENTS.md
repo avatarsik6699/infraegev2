@@ -89,6 +89,11 @@ Keep lightweight long-lived project memory in `docs/`:
 
 - `docs/SPEC.md`'s own git history — the record of spec-level decisions (there is no separate
   decision log file; diff `docs/SPEC.md` to see what changed and when).
+- `docs/changes/archive/COMPACTED.md`, when present, summarizes a verified immutable source
+  snapshot; `python3 scripts/change_history.py inspect` validates coverage and current numbering.
+  Missing/corrupt metadata or unavailable source history must fail closed. Ordinary archives stay
+  immutable; only an explicitly approved compaction change may replace them with a verified
+  checkpoint, preserving unresolved items, accepted risks and human approvals.
 - Each `docs/changes/*.md` (and, once shipped, `docs/changes/archive/*.md`) § Implementation Notes
   — non-obvious deviations for that unit of work.
 - `docs/KNOWN_GOTCHAS.md` — recurring pitfalls, symptoms, and fixes.

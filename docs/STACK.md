@@ -399,3 +399,39 @@ make clean-check
 cd apps/web && pnpm lint
 cd apps/api && uv run ruff check app tests
 ```
+
+## Change history
+
+`python3 scripts/change_history.py inspect` validates ordinary/compacted history and reports the
+active file, covered range and next number. `python3 scripts/change_history.py next` refuses
+planning until the active change is shipped. COMPACTED.md is not an active change. Numbering uses
+`max(covered_through, active numbers, remaining archived numbers) + 1` (at least two digits).
+
+For approved initial compaction, list exact repository-relative files in a temporary sorted path
+file, then run `python3 scripts/change_history.py snapshot <full-source-sha> <covered-through>
+<paths-file>`. The source must contain every represented original; output is JSON metadata for one
+`<!-- compacted-metadata -->` fenced `json` block in `docs/changes/archive/COMPACTED.md`. The command
+compares every local file byte-for-byte with its Git blob, rejects symlinks/unsafe paths and checks
+complete archive coverage, including explicitly missing numbers. It does not remove any file.
+The digest binds ordered paths and their SHA-256 blob hashes. Add compact human-readable decisions,
+risks and approvals beside the metadata before deleting only verified originals. A later compaction
+must preserve prior source snapshots; this initial format deliberately rejects incomplete coverage.
+
+Read original content without overwriting the checkout:
+
+```bash
+python3 scripts/change_history.py read docs/changes/archive/01-project-foundation.md
+# Or inspect another exact source_paths entry from COMPACTED.md.
+```
+
+Binary reads write exact bytes to stdout; redirect to a new temporary path when needed. The recorded
+full source SHA is immutable, independent of branch/tag movement. This is local Git preservation,
+not an off-site backup. Missing source objects (including shallow clones) stop the tool: fetch the
+recorded commit/full history from a trusted copy and rerun; never substitute HEAD or reset numbering.
+After normal ship, rerun `inspect` to verify ordinary archive + compacted coverage still agree.
+
+Tooling gate: `python3 -m unittest discover -s scripts/tests -p change_history_test.py`;
+`cd apps/api && uv run ruff check ../../scripts/change_history.py ../../scripts/tests/change_history_test.py`;
+`cd apps/api && uv run ruff format --check ../../scripts/change_history.py ../../scripts/tests/change_history_test.py`;
+`pnpm exec pyright scripts/change_history.py scripts/tests/change_history_test.py`; Python LSP.
+These are stdlib-only tooling checks; no app runtime, browser, API or deployment is involved.

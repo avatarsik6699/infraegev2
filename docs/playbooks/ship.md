@@ -28,6 +28,8 @@ This document is the single source of truth for the `ship` workflow. Runtime wra
 
 ### 1. Identify the target
 
+- Run `python3 scripts/change_history.py inspect`; verify the target is the single active file.
+  COMPACTED.md does not participate in active Backlog checks.
 - Resolve the change file and confirm the current branch is its `feature/NN-slug` branch. Stop
   before gating or merging if it is not.
 - Count unchecked Backlog and Architect Review Note items. Either kind blocks shipping regardless
@@ -71,7 +73,13 @@ Report the selected gate table and stop. Do not commit, merge, archive, or push.
 3. Set the change status to `archived`, normalize relative links for the extra `archive/` directory
    level (for example `../STACK.md` becomes `../../STACK.md`), and move it to
    `docs/changes/archive/NN-slug.md`. Do not otherwise rewrite historical content.
-4. Report the gate mode, merge result, and archive path.
+4. Run `python3 scripts/change_history.py inspect` again after archiving; next numbering must
+   include compacted coverage. Report the gate mode, merge result, and archive path.
+
+Explicitly approved archive compaction is the sole exception to retaining each historical file:
+prepare a separate Backlog, immutable source commit and byte-verified manifest before removal;
+retain decisions, accepted risks and unresolved historical items in COMPACTED.md. Ordinary ship
+continues to create one numbered archive and never edits compacted evidence or rewrites Git.
 
 ### 5. `--release` only — Release Gate and deploy
 
