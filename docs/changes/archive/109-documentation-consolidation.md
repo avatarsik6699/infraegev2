@@ -6,7 +6,7 @@
 |---|---|
 | Change | `109` |
 | Slug | `documentation-consolidation` |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/109-documentation-consolidation` |
 
 ## Goal
@@ -44,7 +44,7 @@ SPEC §2–§8, FRONTEND, STACK. Только консолидация прин�
 
 ## Gate Checks
 
-Документный Critical Gate из [STACK](../STACK.md#critical-gate): format, link/ownership review,
+Документный Critical Gate из [STACK](../../STACK.md#critical-gate): format, link/ownership review,
 cleanup. Runtime/LSP/API tests не применимы. Содержимое команд переносится, а не исполняется.
 
 ## Architect Review Notes
