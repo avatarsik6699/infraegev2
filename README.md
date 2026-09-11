@@ -288,16 +288,16 @@ First-party sibling [sre-kit](https://github.com/avatarsik6699/sre-kit) оста
 человекочитаемыми назначениями, включая `Nginx traffic`; шесть pull-источников опрашиваются по
 расписанию, а privacy-safe traffic aggregates доставляются system publisher. Порядок входа,
 проверки freshness и восстановления описан в
-[`docs/runbooks/SRE_KIT_MANAGEMENT.md`](docs/runbooks/SRE_KIT_MANAGEMENT.md). Локальный
+[management runbook](docs/runbooks/analytics.md#sre-kit-management-vps). Локальный
 `sre-kit-local` сохранён только как ручной fallback и по умолчанию выключен. Source registration и
 token rotation являются операторскими действиями внутри sre-kit; target producer лишь отправляет
 обезличенные versioned batches и не передаёт core deployment authority.
 
 Runbook’и: [analytics](docs/runbooks/analytics.md),
-[DNS/TLS](docs/runbooks/dns-tls.md),
+[DNS/TLS](docs/runbooks/production.md#dns-and-tls),
 [backup/restore](docs/runbooks/backup-restore.md),
-[sre-kit management](docs/runbooks/SRE_KIT_MANAGEMENT.md),
-[инциденты](docs/runbooks/incident-response.md). Основной административный доступ к VPS —
+[sre-kit management](docs/runbooks/analytics.md#sre-kit-management-vps),
+[инциденты](docs/runbooks/production.md#incident-response). Основной административный доступ к VPS —
 password-only `root` с pinned host key, UFW и fail2ban; production Environment работает без
 required reviewers по решению архитектора от 2026-09-04, а `can_admins_bypass` остаётся его
 единственным safety property. Риск принят владельцем без запланированного перехода на key-only

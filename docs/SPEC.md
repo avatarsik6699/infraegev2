@@ -128,7 +128,7 @@ CourseLesson принадлежит Course, но не связан с Topic бе
 | `Anonymous learner` | Читает теорию, решает практику, прогресс сохраняется в localStorage браузера | Нет аккаунта на MVP — прогресс не синхронизируется между устройствами |
 | `Content author` (архитектор + AI как инструмент) | Пишет типизированную теорию в `apps/web/src/entities/lesson/content/*.lesson.tsx` и server-owned практику в `content/tasks/*.json`, ревьюит AI-черновики через git diff, переводит `draft → review → published` | Публикация только через прохождение Content Quality Gate (§2.3); AI не публикует напрямую |
 | `Architect` | Владеет `docs/SPEC.md`, принимает архитектурные решения, ревьюит контент перед `published` | — |
-| `AI_Agent` | Реализует изменения через `/work`, генерирует черновики контента по промптам с чек-листом из [`learning-science-principles.md`](./artifacts/learning-science-principles.md) (§2.3), запускает гейты через `/ship` | Не переводит контент в `published` самостоятельно; нет прямого push в `main` вне `/ship` |
+| `AI_Agent` | Реализует изменения через `/work`, генерирует черновики контента по промптам с чек-листом из [Content Quality Gate](#23-content-quality-gate-definition-of-done) (§2.3), запускает гейты через `/ship` | Не переводит контент в `published` самостоятельно; нет прямого push в `main` вне `/ship` |
 
 ### 2.2 Key Entities
 
@@ -284,7 +284,7 @@ ConceptBlock — единица нарезки теории по одной ид
   diagram?: <Diagram/>                          // только когда объяснение требует одновременно держать
                                                  // в голове ≥3 взаимосвязанных величин (split-attention)
   workedExample?: <WorkedExample/>               // предшествует любой самостоятельной попытке
-                                                 // (worked-example effect, см. docs/artifacts/learning-science-principles.md §1.1)
+                                                 // (worked-example effect, см. SPEC §2.3)
   mistake?: <Mistake/>                           // рядом со своим концептом, не в общем списке в конце
                                                  // (signalling principle)
 
@@ -766,10 +766,10 @@ combined-log записи до path/status-family/coarse traffic class. Raw IP, 
 privacy-safe analytics с always-on management, infraege brand, публичные каталоги,
 shared visual recipes и единый study flow. История authoring/release и human approvals — archive.
 
-Текущая техническая очередь: консолидация документации → поддержка compacted history в SDD →
-проверяемая свёртка истории и вывод согласованных references из checkout. Подробный scope и
-приёмка принадлежат активному change; это не новая продуктовая функциональность.
-После неё расширять learning/catalog scope только по отдельному brief и content gate.
+Техническая hygiene queue завершена в 107–111: DS consolidation, runtime cleanup, документация
+и проверяемая compacted history. Итоги и неизменяемые источники —
+[COMPACTED](changes/archive/COMPACTED.md). Расширять learning/catalog scope только по отдельному
+brief и content gate; старые findings с сохранёнными ограничениями не означают новую задачу.
 
 Off-site backup остаётся trigger-based улучшением: первый management-host релиз использует
 local-only Restic с явно принятым риском потери вместе с VPS. Key-only SSH, Telegram alerts,

@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
-# Standalone WireGuard tunnel lifecycle for reaching the private 10.77.0.0/24 VPS network
-# (Beszel, Umami, journald gatewayd, private SSH) from a local dev machine — e.g. for sre-kit's
-# adapters, run locally, to reach those endpoints the same way apps/ops used to (docs/changes/
-# archive/19-retire-ops-dashboard.md retired apps/ops itself; this script only owns the tunnel).
+# Standalone WireGuard lifecycle for private Beszel, Umami and journald endpoints.
+# Supports local sre-kit adapters; Change 19 retired apps/ops itself.
+# Historical source: docs/changes/archive/COMPACTED.md. This script owns only the tunnel.
 set -Eeuo pipefail
 
 config_root=${XDG_CONFIG_HOME:-"$HOME/.config"}

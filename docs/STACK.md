@@ -350,7 +350,7 @@ component libraries are adopted only with a real consumer and a local semantic b
 ```
 main.py      create_app() factory.
 api/         router.py — aggregates every module's router under one prefix (`/api`, not `/api/v1`
-             — see docs/changes/archive/02-architecture-refactor.md's Contracts section for why).
+             — see SPEC §4 for the current API contract).
 core/        cross-cutting infra with no HTTP surface of its own: config (Settings), exceptions
              (AppException base), logging (structlog), middleware (request-id + error alerting),
              structured logging). Modules may import from core/; core/ must not import modules/.

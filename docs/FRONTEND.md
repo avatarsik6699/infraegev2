@@ -307,7 +307,7 @@ app → routes → pages → widgets → features → entities → shared
   whitespace and never redraws the mark. In dark browser chrome only the two ink stones may switch
   to white; the orange stone remains orange. `/` alone owns the truthful `WebSite` JSON-LD site-name declaration.
   Generated favicon/touch/manifest assets satisfy
-  `docs/BRAND_ASSET_REQUIREMENTS.md`. Do not add Organization/Person structured data without a
+  FRONTEND §10 (Brand delivery). Do not add Organization/Person structured data without a
   separately confirmed real-world identity. `/robots.txt` and `/sitemap.xml` are server routes,
   not copied static lists that can drift from publication state.
 - Public pages remain complete in SSR/no-JavaScript output and link to the current data-processing
