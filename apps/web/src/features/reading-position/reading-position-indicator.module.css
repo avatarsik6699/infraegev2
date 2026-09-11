@@ -1,6 +1,6 @@
 .track {
   position: fixed;
-  z-index: 200;
+  z-index: var(--layer-reading);
   top: 0;
   right: 0;
   left: 0;

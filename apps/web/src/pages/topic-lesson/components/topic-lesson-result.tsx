@@ -2,7 +2,7 @@ import type { LessonContent } from "~/entities/lesson";
 import { ActionLink } from "~/shared/components/action-link";
 import { Checkpoint } from "~/shared/components/learning-content";
 import { Typography } from "~/shared/components/typography";
-import styles from "../topic-lesson-page.module.css";
+import styles from "~/shared/styles/lesson-layout.module.css";
 
 type PublishedLesson = {
   id: string;

@@ -264,19 +264,14 @@ app → routes → pages → widgets → features → entities → shared
   the block with one question icon and a matching informational heading label. There is exactly one
   `Checkpoint` block per lesson by construction, so the "merge adjacent blocks" concern this rule
   used to guard against no longer applies — there is nothing left to merge.
-- `Mistake`, `Checkpoint` and `WorkedExample` share one visual contract: a single quiet
-  semantic-tinted fill (no border, no divider line) with `--radius-surface` rounding, service-label
-  type, icon size and text-column inset. This is the currently installed lesson baseline; expressive
-  variants may be adopted through §4.1. `Mistake` and `WorkedExample` share one compact outer padding value
-  (routed through the same `--learning-panel-padding`-style override token); `Checkpoint`
-  intentionally uses more vertical padding (Change 88 F12 architect finding) because its content
-  otherwise presses against its tinted background's top/bottom edge. `Mistake` presents its authored
-  claim and explanation as one vertical «Неверно» / «Как правильно» comparison at every viewport
-  width; each reading gets its own tinted background (danger for «Неверно», success for «Как
-  правильно») instead of a rule between them — color is always duplicated by the distinct icons and
-  labels. Because this is static instructional content rather than a runtime event, `Mistake`
-  remains an `aside` instead of an alert. `Checkpoint` uses the informational tint;
-  `WorkedExample` uses the neutral accent-tonal fill, since it is not a semantic alert.
+- `Mistake` and `Checkpoint` use quiet semantic fills without borders or divider lines,
+  with `--radius-surface` rounding and shared label/icon roles. `Mistake` presents its authored
+  claim and explanation as a vertical «Неверно» / «Как правильно» comparison at every viewport:
+  danger/success fills are accompanied by distinct icons and labels. It remains an `aside`,
+  because it is instructional content rather than a runtime alert. `Checkpoint` uses an
+  informational fill and more vertical padding to keep questions clear of the surface edges.
+  `WorkedExample` and `Procedure` are unframed, without fill or outer padding; their steps and
+  the surrounding lesson rhythm provide grouping. All use the shared study tokens by default.
   `WorkedExample` treats «Разберём на примере» as restrained reading context, not a
   data-style eyebrow competing with the example title. Lesson layouts own external vertical
   rhythm: continued prose uses the 12px content-flow role, a stage landmark sits 16px from its
@@ -319,8 +314,8 @@ app → routes → pages → widgets → features → entities → shared
   disclosure. Legal copy describes only behavior present in code/configuration, publishes the
   architect-approved email and Telegram invitation without exposing other personal requisites, and
   keeps the accepted legal-review risk explicit in the system contract.
-- The public home uses an editorial split with a strong product statement and the real Python
-  mini-course CTA on the left, and the non-interactive learning map on the right. The two columns
+- The public home uses an editorial split with a strong product statement and the «Начать готовиться»
+  CTA to `/ege` on the left, and the non-interactive learning map on the right. The two columns
   never overlap; desktop bounds the scene by the available viewport height after public chrome,
   with compact typography on short screens. Below 60rem the statement precedes a width-led scene. Below 44rem one SVG canvas recomposes
   its existing cards and stages into a taller alternating route with enlarged content, rather
@@ -390,13 +385,42 @@ app → routes → pages → widgets → features → entities → shared
   The public footer uses whitespace rather than a top rule and contains only useful navigation,
   without repeating the infraege name. The live lab uses the same public chrome.
 
+### Shared roles and complete adoption
+
+Theme values feed semantic tokens; primitives own their internals and states; compositions own
+placement, order and domain context. A consumer may set width, grid position, margins and documented
+semantic hooks. It must not restyle a primitive's internal DOM through descendant selectors.
+Repeated type roles belong to Typography; heading level describes document structure independently.
+
+- Inline prose links retain normal text wrapping and a persistent underline. ExternalLink uses
+  `presentation="inline"` by default; `presentation="action"` is an independent navigation action
+  with the shared drawn treatment and ordinary control target. ActionLink owns internal navigation;
+  its inline presentation uses text hierarchy. DownloadLink defaults to action, with inline available
+  for prose. FragmentLink also distinguishes inline prose from standalone actions; outline row
+  geometry belongs to LessonOutline. BackLink composes ActionLink with history/fallback semantics.
+- Primary/secondary/quiet Button and ActionLink hierarchies describe emphasis; drawn navigation
+  describes the established destination action. A variant must have a live specimen and an actual
+  consumer or an explicit lab purpose. Merely retaining an old default is not such a purpose.
+- Image owns intrinsic/fill geometry and object position; consumers own the outer media box,
+  placement, filters and masks. LearningVisualFrame owns figure/caption/purpose/description;
+  Diagram composes it with Image, while practice adapts its own DTOs. Captions follow media by
+  default; explanatory lab compositions may explicitly place them before it.
+- Learning components share the current study default. Supported variations must be named and
+  demonstrated rather than activated accidentally by a page's CSS inheritance.
+- App overlay order is reading indicator, navigation progress, consent, modal backdrop, modal.
+  Owners consume `--layer-*` tokens; modal content remains scrollable on short viewports.
+- Before enhancement, practice forms remain readable but checking controls are disabled. Incorrect
+  submission focuses its associated field; transport errors preserve input without marking it invalid.
+- Migration finishes only when all consumers use the intended role, obsolete APIs and internal
+  overrides are removed, lab/production parity is checked, and executable tests protect the result.
+  Archived Markdown inventories are evidence of their date, not executable acceptance criteria.
+
 ## 4.1 Reusable infraege visual language
 
 **Default for new work:** start from `/courses` and `/courses/python` and the live
 `/lab/design-system` → Система → Визуальный язык specimens. Apply their expressive language to
-catalogs, overviews, learning blocks and working screens without asking the architect to restate
-it. Existing published lessons keep their installed composition until their own scoped adoption.
-The lab's learning/form compositions are adoption examples, not a claim that lessons were migrated.
+catalogs, overviews and working screens. Learning compositions use the quieter study recipe
+below; the lab and both published lesson domains share it.
 
 ### Composition recipes
 
@@ -404,7 +428,7 @@ The lab's learning/form compositions are adoption examples, not a claim that les
 |---|---|---|
 | Catalog | Substantial media separate from copy/action; neutral paper, thin gradient edge, contact depth; one stronger available item | `SurfaceMaterial`, `paperSurface`, `SurfaceGlint(frame/sweep)`, `Image`, `ActionLink` |
 | Overview | Open asymmetric summary/program, field in margins and gutter, restrained illustration depth and recurring light | `SvgPattern.Grid/Preset`, `SvgDrawing`, `artworkDrift`, `SurfaceGlint(soft)` |
-| Learning block | Unframed study examples and practice with restrained matte semantic fills; no paper gradient, shadow or glint | Existing learning components and scoped study palette |
+| Learning block | Unframed study examples and practice with restrained matte semantic fills; no paper gradient, shadow or glint | Existing learning components and shared learning tokens |
 | Working form | Same material language around usable controls; visible labels, focus and feedback; hide internal glint while input has focus | `Field`, `Button`, shared material/light layers |
 
 - Keep the current fonts and two neutral text levels. Establish hierarchy through media/copy
@@ -447,11 +471,10 @@ The lab's learning/form compositions are adoption examples, not a claim that les
   artwork and complete route strokes remain without JS/reduced motion. Preserve the storefronts'
   accepted cadences: catalog effects finish within five seconds; overview light has long quiet
   intervals; the homepage's coordinated routes retain their own choreography.
-- Expressive learning surfaces may have internal gradient, depth and glints. Keep glints below
-  content, preserve text contrast (4.5:1 body, 3:1 large), readable syntax and text selection, and
-  hide internal form light on `:focus-within`. Error/success labels and icons remain independent
-  of material; decoration neither intercepts input nor implies mastery. Do not automatically wrap
-  every paragraph in a separate surface.
+- Form specimens may use internal light below content and hide it on `:focus-within`.
+  Learning blocks use matte semantic fills or remain unframed as specified above. Preserve text
+  contrast (4.5:1 body, 3:1 large), readable syntax and selection; decoration never intercepts
+  input or implies mastery. Do not wrap every paragraph in a separate surface.
 - At narrow widths, preserve semantic DOM order and bounded images. Simplify large peripheral
   illustrations and confine fields to available space; never hide learning content. Verify mobile,
   the structural breakpoint, desktop and 200% zoom for each new composition.
@@ -479,15 +502,15 @@ Study introductions use the existing larger heading role and one quiet metadata 
 checkpoint preserve their existing semantics. The full progress bar accompanies navigation;
 reading progress never means mastery. Practice exposes the active task position after hydration.
 
-All TopicLesson and CourseLesson pages and the lab select `presentation="study"`. Their shared study palette supplies consistent learning colors; authored nodes remain unchanged.
+The study presentation is the single default of shared learning components, including LessonIntro, LessonSectionHeading, LessonPractice and LessonOutline. Callers do not select a historical presentation or attach a palette class. Root semantic learning tokens supply consistent colors; authored nodes remain unchanged.
 `/lab/lesson` demonstrates the complete journey, and `/lab/design-system` uses the same shared
 worked example. The architect approved all-lesson adoption in Change 105 F23, extending the initial F5 Topic rollout. Lesson navigation contains the full progress and confirmed reset; there is no duplicate progress in the result section. The
 accepted typography, publication registries, authored content and persistence are unchanged.
 
-The scoped study palette uses secondary ink #605e59 for readable captions on stronger fills, danger #99453f, success #48634b and info #3e5e76;
+The shared learning palette uses secondary ink #605e59 for readable captions on stronger fills, danger #99453f, success #48634b and info #3e5e76;
 semantic fills mix 14% of the corresponding standard status color into 86% page background in sRGB, retaining the darker muted learning inks for labels. Examples and procedures remain transparent. Notation uses
 6% primary ink into the page, 0.2em horizontal padding and 2px corners; nested notation
-in Mistake/Checkpoint mixes 8% matching learning ink into the block background. Neutral study callouts mix 5% primary ink into their quiet surface. Formula/code text stays primary ink, with no additional border or shadow. Non-study consumers retain existing defaults.
+in Mistake/Checkpoint mixes 8% matching learning ink into the block background. Neutral study callouts mix 5% primary ink into their quiet surface. Formula/code text stays primary ink, with no additional border or shadow. Historical non-study defaults are removed.
 Practice theory links use the shared FragmentLink drawn variant: decorative underline and orange link icon, preserving native fragment navigation. Previous/next navigation in Topic and Course lessons uses ActionLink drawn with the corresponding shared back/forward arrow. Their shared two-column navigation places previous on the left and next on the right, including when only one link exists; long titles wrap within their column. Outline links retain their plain variant.
 `LessonProgress.hideEmptyStatus` is opt-in and hides only the zero-solved sentence.
 
@@ -504,10 +527,7 @@ Practice theory links use the shared FragmentLink drawn variant: decorative unde
   only when its content cannot fit in the viewport.
 - Interactive targets are at least `40 × 40px`; compact visuals may use a larger invisible hit
   area. Dense styling never overrides this floor except the explicitly approved study outline: 32px real mouse targets, 40px on any touch-capable device, without overlapping pseudo targets. Essential actions and information cannot depend
-  on hover. `LessonOutline`'s group/child links are the one architect-approved exception (Change
-  91): the visible row is `--space-4` (32px) for a denser reading TOC, while an absolutely
-  positioned `::after` pseudo-element extends the actual clickable/accessible hit area back to the
-  `40px` floor. Legacy non-study specimens retain that exception; all lesson pages use the separate study 32/40px contract above. Every other control keeps the ordinary visible `40×40px` floor unchanged.
+  on hover. Every other standalone control keeps the ordinary visible `40×40px` floor.
 - Browser zoom through 150% must preserve access to all content. Prefer fluid measures and type
   tokens; responsive type changes keep heading hierarchy intact.
 - Start from semantic HTML. Every interactive element is keyboard reachable, has a visible

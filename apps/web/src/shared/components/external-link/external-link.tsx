@@ -5,7 +5,7 @@ import type { ExternalLinkTypes } from "./external-link.types";
 import styles from "./external-link.module.css";
 
 export const ExternalLink: React.FC<ExternalLinkTypes.Props> = (props) => {
-  const hierarchy = props.hierarchy ?? "default";
+  const hierarchy = props.presentation === "action" ? "drawn" : "default";
 
   return (
     <a
@@ -19,6 +19,7 @@ export const ExternalLink: React.FC<ExternalLinkTypes.Props> = (props) => {
       )}
       aria-label={props.ariaLabel}
       data-hierarchy={hierarchy}
+      data-presentation={props.presentation ?? "inline"}
     >
       <span className={styles.label} data-external-link-label>
         {props.children}

@@ -82,7 +82,7 @@ const CodeBlockHeader: React.FC<CodeBlockHeaderProps> = (props) => (
     </div>
     {props.enhanced ? (
       <Button
-        className={styles.copyButton}
+        surface="code"
         density="compact"
         hierarchy="quiet"
         iconOnly
@@ -122,6 +122,7 @@ const CodeBlockDisclosure: React.FC<CodeBlockDisclosureProps> = (props) => (
   >
     <Button
       className={styles.disclosureButton}
+      surface="code"
       density="compact"
       hierarchy="quiet"
       iconStart={

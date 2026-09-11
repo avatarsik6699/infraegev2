@@ -49,7 +49,7 @@ describe("ExternalLink", () => {
 
   it("can share the authored underline while keeping its up-right library icon", () => {
     const result = render(
-      <ExternalLink href="https://example.com" hierarchy="drawn" newTab>
+      <ExternalLink href="https://example.com" presentation="action" newTab>
         Справка
       </ExternalLink>,
     );

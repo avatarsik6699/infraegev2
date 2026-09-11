@@ -2,7 +2,7 @@ import { BackLink } from "~/shared/components/back-link";
 import { topicCatalog, type TopicCatalogTypes } from "~/entities/topic-catalog";
 import { Typography } from "~/shared/components/typography";
 import { PublicHeader } from "~/widgets/public-header";
-import styles from "../topic-lesson-page.module.css";
+import styles from "~/shared/styles/lesson-layout.module.css";
 
 type Props = {
   taskNumbers: TopicCatalogTypes.TaskNumbers;

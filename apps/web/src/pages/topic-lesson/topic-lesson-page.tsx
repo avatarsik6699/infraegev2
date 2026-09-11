@@ -17,7 +17,7 @@ import { TopicLessonHeader } from "./components/topic-lesson-header";
 import { TopicLessonProgress } from "./components/topic-lesson-progress";
 import { TopicLessonResult } from "./components/topic-lesson-result";
 import type { TopicLessonPageTypes } from "./topic-lesson-page.types";
-import styles from "./topic-lesson-page.module.css";
+import styles from "~/shared/styles/lesson-layout.module.css";
 
 export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
   props,
@@ -71,18 +71,16 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
       <main className={styles.lesson} data-lesson-frame>
         <div className={styles.intro}>
           <LessonIntro
-            presentation="study"
             accessTier={props.lesson.accessTier}
             eyebrow={topicCatalog.formatTaskNumbers(props.lesson.taskNumbers)}
             summary={props.lesson.summary}
             taskCount={props.tasks.length}
-            technology="ЕГЭ по информатике"
             title={props.lesson.title}
           />
         </div>
         <aside className={styles.rail} data-outline-rail>
           <div className={styles.railContents}>
-            <LessonOutline groups={outline} presentation="study" />
+            <LessonOutline groups={outline} />
             <div className={styles.railSpacer} aria-hidden="true" />
             <TopicLessonProgress
               masteryThreshold={props.lesson.masteryThreshold ?? 0.8}
@@ -100,7 +98,7 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
 
           {props.lesson.examFocus ? (
             <section id="exam-focus" className={styles.section}>
-              <LessonSectionHeading index={examIndex} variant="lesson">
+              <LessonSectionHeading index={examIndex}>
                 На экзамене
               </LessonSectionHeading>
               <Typography.Prose>{props.lesson.examFocus}</Typography.Prose>
@@ -108,11 +106,10 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
           ) : null}
 
           <section id="practice" className={styles.section}>
-            <LessonSectionHeading index={practiceIndex} variant="lesson">
+            <LessonSectionHeading index={practiceIndex}>
               Практика
             </LessonSectionHeading>
             <LessonPracticeFlow
-              presentation="study"
               tasks={props.tasks}
               lessonId={props.lesson.id}
               checkAnswer={checkPracticeAnswer}
@@ -121,7 +118,7 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
           </section>
 
           <section id="result" className={styles.section}>
-            <LessonSectionHeading index={resultIndex} variant="lesson">
+            <LessonSectionHeading index={resultIndex}>
               Итог
             </LessonSectionHeading>
             <TopicLessonResult

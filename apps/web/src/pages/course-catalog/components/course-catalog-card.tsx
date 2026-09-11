@@ -54,18 +54,26 @@ export const CourseCatalogCard: React.FC<Props> = (props) => {
         <div className={styles.cardMeta} data-course-meta>
           {props.entry.status === "published" ? (
             <>
-              <Badge>{`${String(props.entry.lessonCount)} уроков`}</Badge>
+              <Badge presentation="metadata">{`${String(props.entry.lessonCount)} уроков`}</Badge>
               <CourseCatalogProgress entry={props.entry} />
             </>
           ) : (
-            <Badge>Скоро</Badge>
+            <Badge presentation="metadata">Скоро</Badge>
           )}
         </div>
         <div className={styles.cardCopy}>
-          <Typography.Title className={styles.cardTitle} order={2}>
+          <Typography.Title
+            className={styles.cardTitle}
+            variant="catalog"
+            order={2}
+          >
             {props.entry.title}
           </Typography.Title>
-          <Typography.Text className={styles.cardSummary} tone="muted">
+          <Typography.Text
+            className={styles.cardSummary}
+            variant="summary"
+            tone="muted"
+          >
             {props.entry.summary}
           </Typography.Text>
           <div className={styles.cardFooter}>

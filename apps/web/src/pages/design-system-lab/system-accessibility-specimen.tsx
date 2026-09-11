@@ -1,3 +1,4 @@
+import { ActionLink } from "~/shared/components/action-link";
 import { Typography } from "~/shared/components/typography";
 import styles from "./design-system-lab.module.css";
 
@@ -26,6 +27,15 @@ export const SystemAccessibilitySpecimen: React.FC = () => (
       или виджета и поэтому проверяются отдельно от каталога компонентов.
     </Typography.Text>
     <div className={styles.browserStateGrid}>
+      <article className={styles.browserState} data-browser-state="navigation">
+        <Typography.Text>
+          При переходе текущая страница остаётся видимой. Если загрузка занимает
+          больше 150 мс, сверху появляется общий индикатор.
+        </Typography.Text>
+        <ActionLink to="/courses" hierarchy="drawn" data-navigation-specimen>
+          Открыть мини-курсы
+        </ActionLink>
+      </article>
       <article className={styles.browserState} data-browser-state="focus">
         <code>focus-visible</code>
         <button className={styles.browserFocusDemo} type="button">

@@ -6,3 +6,4 @@ export { LessonTheory, type LessonTheoryTypes } from "./lesson-theory";
 export { Mistake } from "./mistake";
 export { Procedure } from "./procedure";
 export { WorkedExample } from "./worked-example";
+export { LearningVisualFrame } from "./learning-visual-frame";

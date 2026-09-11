@@ -1,7 +1,7 @@
 import { componentContracts } from "./catalog-contracts";
 import { CircleCheck } from "lucide-react";
 import { useState } from "react";
-import { LearningVisualFrame } from "~/entities/learning-visual";
+import { LearningVisualFrame } from "~/shared/components/learning-content";
 import {
   createLocalPracticeChecker,
   LessonPractice,
@@ -62,6 +62,9 @@ const longParagraph =
   "Если условие остановки никогда не выполняется, вызовы продолжают накапливаться в стеке вызовов — каждый новый вызов ждёт результата следующего.";
 
 export const ComponentsCatalog: React.FC = () => {
+  const [acceptedDemoAnswers, setAcceptedDemoAnswers] = useState<
+    Record<string, string>
+  >({});
   const [feedbackTab, setFeedbackTab] = useState("validation");
   const [loadingDemoKey, setLoadingDemoKey] = useState(0);
   const enhanced = useIsEnhanced();
@@ -88,6 +91,20 @@ export const ComponentsCatalog: React.FC = () => {
           contracts={componentContracts.content}
           label="Контракты текста и структуры"
         />
+        <div data-typography-roles>
+          <Typography.Title order={4} variant="catalog">
+            Заголовок курса
+          </Typography.Title>
+          <Typography.Title order={4} variant="topic">
+            Заголовок темы
+          </Typography.Title>
+          <Typography.Title order={4} variant="lesson">
+            Заголовок урока
+          </Typography.Title>
+          <Typography.Text variant="summary">
+            Краткое описание карточки.
+          </Typography.Text>
+        </div>
         <div className={styles.truncateGrid}>
           <div className={styles.truncateCard}>
             <code className={styles.typeTag}>Text · truncate</code>
@@ -153,7 +170,10 @@ export const ComponentsCatalog: React.FC = () => {
             <ActionLink to="/courses/" hierarchy="drawn" icon="forward">
               Мини-курсы
             </ActionLink>
-            <ExternalLink href="https://docs.python.org/3/" hierarchy="drawn">
+            <ExternalLink
+              href="https://docs.python.org/3/"
+              presentation="action"
+            >
               Внешняя ссылка
             </ExternalLink>
             <Button>Проверить ответ</Button>
@@ -180,9 +200,9 @@ export const ComponentsCatalog: React.FC = () => {
                 <ConfirmationDialog
                   triggerLabel="Сбросить пример"
                   title="Сбросить пример?"
-                  description="Это демонстрационное подтверждение не изменяет данные."
+                  description="Сбросится ответ учебного примера ниже. Прогресс в уроках сохранится."
                   confirmLabel="Сбросить"
-                  onConfirm={() => undefined}
+                  onConfirm={() => setAcceptedDemoAnswers({})}
                 />
               </span>
             ) : null}
@@ -192,7 +212,11 @@ export const ComponentsCatalog: React.FC = () => {
               Документация Python
             </ExternalLink>{" "}
             и{" "}
-            <FragmentLink hierarchy="drawn" hash="components-learning">
+            <FragmentLink
+              presentation="action"
+              hierarchy="drawn"
+              hash="components-learning"
+            >
               учебные компоненты
             </FragmentLink>
             .
@@ -269,6 +293,12 @@ export const ComponentsCatalog: React.FC = () => {
             multiple
             items={[
               {
+                id: "unavailable",
+                title: "Недоступное пояснение",
+                content: "Этот пример недоступен.",
+                disabled: true,
+              },
+              {
                 id: "base-case",
                 title: "Что делает базовый случай?",
                 content:
@@ -294,6 +324,9 @@ export const ComponentsCatalog: React.FC = () => {
             >
               <TabsTab value="validation">Валидация</TabsTab>
               <TabsTab value="empty">Пустое состояние</TabsTab>
+              <TabsTab value="unavailable" disabled>
+                Недоступная вкладка
+              </TabsTab>
             </TabsList>
             <TabsPanel value="validation" className={styles.tabsPanel}>
               <Typography.Text>
@@ -336,6 +369,8 @@ export const ComponentsCatalog: React.FC = () => {
           <div className={styles.controlsRow}>
             <Badge tone="accent">Задание 16</Badge>
             <Badge>Разбор</Badge>
+            <Badge presentation="metadata">28 уроков</Badge>
+            <Badge presentation="index">№ 16</Badge>
             <Badge tone="neutral">1 / 5</Badge>
             <Badge tone="success" icon={<CircleCheck size={12} />}>
               решено
@@ -468,7 +503,6 @@ export const ComponentsCatalog: React.FC = () => {
               eyebrow="Мини-курс"
               summary="Сначала свяжем рекурсию со знакомым повторением, затем разберём один новый вызов."
               taskCount={2}
-              technology="Python"
               title="Рекурсия без скачка в сложность"
             />
           </div>
@@ -505,6 +539,7 @@ export const ComponentsCatalog: React.FC = () => {
           />
         </div>
         <LearningVisualFrame
+          captionPosition="before"
           accessibleDescription="Три последовательно уменьшающихся значения: 3, 2 и 1; стрелки показывают переход к следующему вызову."
           caption="Один и тот же шаг с меньшим аргументом"
           className={styles.learningFrameSpecimen}
@@ -523,7 +558,7 @@ export const ComponentsCatalog: React.FC = () => {
         </LearningVisualFrame>
         <WorkedExample
           title="Сколько раз вызовется countdown(3)?"
-          prompt={<code>countdown(n)</code>}
+          prompt={<Notation>countdown(n)</Notation>}
           steps={[
             <span key="one">Вызов с 3 переходит к 2.</span>,
             <span key="two">Вызов с 2 переходит к 1.</span>,
@@ -625,13 +660,25 @@ export const ComponentsCatalog: React.FC = () => {
             <div className={styles.practiceStateGrid}>
               <div data-practice-mode="local">
                 <code className={styles.typeTag}>Локальная проверка</code>
+                <Button
+                  hierarchy="quiet"
+                  onClick={() => setAcceptedDemoAnswers({})}
+                >
+                  Сбросить ответ примера
+                </Button>
                 <LessonPractice
-                  acceptedAnswers={{}}
+                  acceptedAnswers={acceptedDemoAnswers}
                   checkAnswer={createLocalPracticeChecker(
                     componentPracticeTasks,
                   )}
-                  onTaskSolved={() => 1}
-                  solvedTaskIds={[]}
+                  onTaskSolved={(id, answer) => {
+                    setAcceptedDemoAnswers((current) => ({
+                      ...current,
+                      [id]: answer,
+                    }));
+                    return 1;
+                  }}
+                  solvedTaskIds={Object.keys(acceptedDemoAnswers)}
                   tasks={componentPracticeTasks}
                 />
               </div>

@@ -19,7 +19,6 @@ export const LessonOutline: React.FC<LessonOutlineTypes.Props> = (props) => {
     event: React.MouseEvent<HTMLAnchorElement>,
   ) => {
     if (
-      props.presentation !== "study" ||
       event.button !== 0 ||
       event.metaKey ||
       event.ctrlKey ||
@@ -60,23 +59,13 @@ export const LessonOutline: React.FC<LessonOutlineTypes.Props> = (props) => {
     <nav
       className={props.className}
       aria-label="Содержание урока"
-      data-presentation={props.presentation}
+      data-presentation="study"
     >
-      {props.presentation === "study" ? (
-        <ResponsiveDisclosure
-          label="Содержание урока"
-          expanded={expanded}
-          onExpandedChange={setExpanded}
-        >
-          <LessonOutlineContent
-            groups={props.groups}
-            activeId={activeId}
-            activeGroupId={activeGroupId}
-            activeGroupIndex={activeGroupIndex}
-            onNavigate={handleNavigate}
-          />
-        </ResponsiveDisclosure>
-      ) : (
+      <ResponsiveDisclosure
+        label="Содержание урока"
+        expanded={expanded}
+        onExpandedChange={setExpanded}
+      >
         <LessonOutlineContent
           groups={props.groups}
           activeId={activeId}
@@ -84,7 +73,7 @@ export const LessonOutline: React.FC<LessonOutlineTypes.Props> = (props) => {
           activeGroupIndex={activeGroupIndex}
           onNavigate={handleNavigate}
         />
-      )}
+      </ResponsiveDisclosure>
     </nav>
   );
 };

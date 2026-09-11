@@ -1,5 +1,4 @@
 import { Typography } from "~/shared/components/typography";
-import { Checkpoint } from "../checkpoint";
 import type { LessonTheoryTypes } from "./lesson-theory.types";
 import styles from "./lesson-theory.module.css";
 
@@ -38,15 +37,6 @@ export const LessonTheoryConcept: React.FC<LessonTheoryConceptProps> = ({
         data-learning-block
       >
         {concept.mistake}
-      </div>
-    ) : null}
-    {concept.checkpoint ? (
-      <div
-        className={styles.conceptCheckpoint}
-        data-concept-checkpoint
-        data-learning-block
-      >
-        <Checkpoint items={concept.checkpoint} />
       </div>
     ) : null}
   </section>

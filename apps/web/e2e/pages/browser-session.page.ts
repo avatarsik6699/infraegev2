@@ -35,6 +35,10 @@ export class BrowserSession {
     await this.page.setViewportSize({ width: 390, height: 844 });
   }
 
+  async useShortViewport(): Promise<void> {
+    await this.page.setViewportSize({ width: 390, height: 600 });
+  }
+
   async useMinimumViewport(): Promise<void> {
     await this.page.setViewportSize({ width: 320, height: 800 });
   }

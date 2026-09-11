@@ -15,6 +15,5 @@ export namespace LessonOutlineTypes {
     groups: LessonTypes.OutlineGroup[];
     activeId?: string;
     className?: string;
-    presentation?: "default" | "study";
   };
 }

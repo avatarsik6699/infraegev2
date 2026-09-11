@@ -3,11 +3,13 @@
   gap: 0.55rem;
   align-items: center;
   margin: 0;
-  color: var(--color-text-soft);
-  font-family: var(--font-data);
+  color: var(--color-muted);
+  font-family: var(--font-ui);
   font-size: var(--text-2xs);
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1.4;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
 }
 
 .heading > span:last-child {
@@ -18,20 +20,4 @@
 .index {
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
-}
-
-.heading.heading[data-variant="lesson"] {
-  gap: 0.55rem;
-  color: var(--color-muted);
-  font-family: var(--font-ui);
-  font-size: var(--text-2xs);
-  font-weight: 500;
-  line-height: 1.4;
-  letter-spacing: 0.055em;
-  text-transform: uppercase;
-}
-
-.heading[data-variant="lesson"] .index {
-  color: inherit;
-  font-family: inherit;
 }

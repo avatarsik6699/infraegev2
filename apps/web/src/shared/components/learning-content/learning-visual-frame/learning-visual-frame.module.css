@@ -1,4 +1,6 @@
 .root {
+  margin: 0;
+  min-width: 0;
   overflow: var(--learning-media-overflow, visible);
   border: var(--learning-media-border, 0 solid transparent);
   border-radius: var(--learning-media-radius, 0);
@@ -16,7 +18,7 @@
 }
 
 .purpose {
-  font-family: var(--font-data);
+  font-family: var(--font-ui);
   font-size: var(--text-2xs);
 }
 

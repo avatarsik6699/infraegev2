@@ -2,8 +2,8 @@ import { CustomIconRoot } from "./custom-icon-root";
 import type { CustomIconTypes } from "./custom-icon.types";
 
 const ink = "currentColor";
-const paper = "var(--custom-icon-paper, #fefdfc)";
-const accent = "var(--custom-icon-accent, #fd6702)";
+const paper = "var(--custom-icon-paper, var(--color-surface))";
+const accent = "var(--custom-icon-accent, var(--color-brand-orange))";
 
 export const CheckIcon: React.FC<CustomIconTypes.GlyphProps> = (props) => (
   <CustomIconRoot {...props} data-icon-name="check" viewBox="0 0 32 32">

@@ -121,10 +121,6 @@
 .root[data-scene="503"] .copy {
   padding-bottom: var(--space-4);
 }
-.root[data-scene="503"] .root[data-scene="error"] .copy {
-  align-self: center;
-  padding-bottom: 0;
-}
 .root[data-scene="error"] [data-card="theory"] {
   top: 5%;
   left: 2%;

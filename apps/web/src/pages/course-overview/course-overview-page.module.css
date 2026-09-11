@@ -93,12 +93,6 @@
   mask-image: radial-gradient(ellipse at center, black 48%, transparent 72%);
 }
 
-.artworkImage img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
 .courseContent,
 .outcomes,
 .curriculum,
@@ -498,12 +492,6 @@
   composes: artworkDrift from "../../shared/styles/patterns.module.css";
   --drift-duration: var(--surface-study-duration);
   width: 100%;
-}
-
-.studyImage img {
-  display: block;
-  width: 100%;
-  height: auto;
 }
 
 .studySheen {

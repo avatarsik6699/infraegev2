@@ -106,3 +106,22 @@
     animation-duration: 1.4s;
   }
 }
+
+.root[data-surface="code"] {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+  color: var(--color-code-text);
+}
+.root[data-surface="code"]:hover:enabled,
+.root[data-surface="code"]:active:enabled {
+  border-color: transparent;
+  background: transparent;
+  color: var(--color-code-text);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+.root[data-surface="code"]:focus-visible {
+  outline: 2px solid var(--color-code-text);
+  outline-offset: 2px;
+}

@@ -1,4 +1,4 @@
-"""Answer-checking and normalization — docs/SPEC.md §11.1.
+"""Answer-checking and normalization — docs/SPEC.md §4.
 
 Normalization is applied to both the submitted answer and every `answer_variants` entry
 before comparison: trim/collapse whitespace, case-insensitive, ё/е folding, and numeric

@@ -1,8 +1,7 @@
-import { Link, useCanGoBack, useRouter } from "@tanstack/react-router";
-import { ArrowLeft } from "lucide-react";
+import { useCanGoBack, useRouter } from "@tanstack/react-router";
+import { ActionLink } from "~/shared/components/action-link";
 import { backNavigation } from "~/shared/lib/back-navigation";
 import type { BackLinkTypes } from "./back-link.types";
-import styles from "./back-link.module.css";
 
 export const BackLink: React.FC<BackLinkTypes.Props> = ({
   fallbackTo = "/",
@@ -28,9 +27,13 @@ export const BackLink: React.FC<BackLinkTypes.Props> = ({
   };
 
   return (
-    <Link className={styles.root} onClick={handleClick} to={fallbackTo}>
-      <ArrowLeft aria-hidden="true" size={17} strokeWidth={1.8} />
-      <span>{children}</span>
-    </Link>
+    <ActionLink
+      hierarchy="text"
+      icon="back"
+      onClick={handleClick}
+      to={fallbackTo}
+    >
+      {children}
+    </ActionLink>
   );
 };

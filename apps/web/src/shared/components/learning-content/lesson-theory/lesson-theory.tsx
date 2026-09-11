@@ -8,9 +8,7 @@ export const LessonTheory: React.FC<LessonTheoryTypes.Props> = ({
   className,
 }) => (
   <section id="theory" className={`${styles.root} ${className ?? ""}`}>
-    <LessonSectionHeading index={1} variant="lesson">
-      Теория
-    </LessonSectionHeading>
+    <LessonSectionHeading index={1}>Теория</LessonSectionHeading>
     <div className={styles.concepts}>
       {concepts.map((concept) => (
         <LessonTheoryConcept key={concept.id} concept={concept} />

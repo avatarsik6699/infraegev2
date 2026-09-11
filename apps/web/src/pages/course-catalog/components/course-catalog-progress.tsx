@@ -4,8 +4,7 @@ import {
   useLessonProgressHydrated,
   useLessonsProgress,
 } from "~/features/lesson-progress";
-import { Typography } from "~/shared/components/typography";
-import styles from "../course-catalog-page.module.css";
+import { Badge } from "~/shared/components/badge";
 
 type Props = {
   entry: CourseCatalogTypes.PublishedEntry;
@@ -27,8 +26,8 @@ export const CourseCatalogProgress: React.FC<Props> = (props) => {
   if (!hydrated) return null;
 
   return (
-    <Typography.Text className={styles.progressCopy} data-course-progress>
+    <Badge presentation="metadata" data-course-progress>
       {courseProgress.formatCatalogCopy(progress)}
-    </Typography.Text>
+    </Badge>
   );
 };

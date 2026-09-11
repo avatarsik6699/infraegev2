@@ -129,6 +129,14 @@ describe("rich practice content", () => {
     expect(html).toContain('href="/content/tasks/rich-task/data.txt"');
     expect(html).toContain("Второй вызов ведёт к первому");
     expect(html).not.toContain("opacity:0");
+    const document = new DOMParser().parseFromString(html, "text/html");
+    const form = document.querySelector("form")!;
+    expect(form.querySelector("input")!.disabled).toBe(true);
+    expect(
+      form.querySelector("button[type=submit]")!.hasAttribute("disabled"),
+    ).toBe(true);
+    expect(new FormData(form).has("answer")).toBe(false);
+    expect(html).toContain("Для проверки ответов нужен JavaScript");
   });
 
   it("renders semantic content and independent help disclosures", () => {

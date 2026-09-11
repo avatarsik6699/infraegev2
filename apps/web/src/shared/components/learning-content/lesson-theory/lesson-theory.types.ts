@@ -6,11 +6,6 @@ export namespace LessonTheoryTypes {
     diagram?: React.ReactNode;
     workedExample?: React.ReactNode;
     mistake?: React.ReactNode;
-    checkpoint?: readonly {
-      id: string;
-      prompt: React.ReactNode;
-      reveal: React.ReactNode;
-    }[];
   };
 
   export type Props = {

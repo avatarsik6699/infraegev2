@@ -48,22 +48,4 @@ describe("live infraege design-system catalog", () => {
       ).toBe(true);
     }
   });
-
-  it("records real consumer and state evidence for every contract", () => {
-    const matrix = read("../../docs/artifacts/infraege-ui-migration.md");
-    for (const entry of contracts)
-      expect(matrix).toContain(`\`${entry.name}\``);
-    for (const route of [
-      "/",
-      "/ege",
-      "/courses",
-      "/courses/python",
-      "/ege/16-rekursiya",
-      "/privacy",
-      "/removed-route",
-      "/lab/design-system",
-    ]) {
-      expect(matrix).toContain(`\`${route}\``);
-    }
-  });
 });

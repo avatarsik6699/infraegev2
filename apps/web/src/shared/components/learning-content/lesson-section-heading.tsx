@@ -4,11 +4,11 @@ import styles from "./lesson-section-heading.module.css";
 
 export const LessonSectionHeading: React.FC<
   LessonSectionHeadingTypes.Props
-> = ({ children, className, index, variant = "default", ...props }) => (
+> = ({ children, className, index, ...props }) => (
   <Typography.Title
     order={2}
     {...props}
-    data-variant={variant}
+    data-variant="lesson"
     className={[styles.heading, className].filter(Boolean).join(" ")}
   >
     <span className={styles.index} aria-hidden="true">

@@ -39,27 +39,6 @@
   letter-spacing: 0.08em;
 }
 
-.copyButton,
-.disclosureButton {
-  --button-height-compact: 2.5rem;
-
-  border-color: transparent;
-  background: transparent;
-  box-shadow: none;
-  color: var(--color-code-text);
-}
-
-.copyButton[data-hierarchy]:hover:enabled,
-.copyButton[data-hierarchy]:active:enabled {
-  border-color: transparent;
-  background: transparent;
-  color: color-mix(in srgb, var(--color-code-text) 72%, transparent);
-}
-
-.copyButton:focus-visible {
-  outline-color: var(--color-code-text);
-}
-
 .copyStatus {
   composes: visuallyHidden from "../../styles/patterns.module.css";
 }
@@ -156,23 +135,6 @@
   padding-top: var(--space-5);
   border-top: 0;
   background: linear-gradient(to bottom, transparent, var(--color-code) 68%);
-}
-
-.disclosureButton {
-  color: var(--color-code-text);
-}
-
-.disclosureButton.disclosureButton[data-hierarchy]:hover:enabled,
-.disclosureButton.disclosureButton[data-hierarchy]:active:enabled {
-  border-color: transparent;
-  background: transparent;
-  color: var(--color-code-text);
-  text-decoration: underline;
-  text-underline-offset: 0.25em;
-}
-
-.disclosureButton:focus-visible {
-  outline-color: var(--color-code-text);
 }
 
 .disclosureIcon {

@@ -53,7 +53,7 @@ export const componentContracts = {
   feedback: [
     catalogContracts.live(
       "StatusScene",
-      "Система → Вспомогательные состояния: иллюстрация, сообщение, действие и загрузка",
+      "Система → Вспомогательные состояния: иллюстрация, сообщение и действие",
     ),
     catalogContracts.live("Badge", "Нейтральные и функциональные статусы"),
     catalogContracts.live("Progress", "Определённый и неопределённый процесс"),
@@ -66,7 +66,7 @@ export const componentContracts = {
   media: [
     catalogContracts.context(
       "SurfaceMaterial",
-      "Система → Визуальный язык: бумажный слой карточки и учебного блока",
+      "Система → Визуальный язык: бумажный слой карточки",
     ),
     catalogContracts.context(
       "SurfaceGlint",

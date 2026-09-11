@@ -23,12 +23,10 @@ export const LessonPractice: React.FC<LessonPracticeTypes.Props> = (props) => {
     <div
       className={styles.practiceSet}
       data-enhanced={model.enhanced || undefined}
-      data-presentation={props.presentation}
+      data-presentation="study"
       data-practice-form
     >
-      {props.presentation === "study" &&
-      model.enhanced &&
-      props.tasks.length > 0 ? (
+      {model.enhanced && props.tasks.length > 0 ? (
         <Typography.Text
           className={styles.taskPosition}
           aria-live="polite"
@@ -37,6 +35,12 @@ export const LessonPractice: React.FC<LessonPracticeTypes.Props> = (props) => {
           Задание{" "}
           {props.tasks.findIndex((task) => task.id === model.activeTaskId) + 1}{" "}
           из {props.tasks.length}
+        </Typography.Text>
+      ) : null}
+      {!model.enhanced ? (
+        <Typography.Text variant="caption" tone="muted">
+          Для проверки ответов нужен JavaScript. Условия, подсказки и решения
+          доступны ниже.
         </Typography.Text>
       ) : null}
       <TabsRoot value={model.activeTaskId} onValueChange={model.selectTask}>

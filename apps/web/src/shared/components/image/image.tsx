@@ -22,12 +22,14 @@ export const Image: React.FC<ImageTypes.Props> = (props) => {
   });
   const alt = props.decorative ? "" : props.alt;
   const decorative = Boolean(props.decorative);
-  const aspectRatio = inferAspectRatio(props);
+  const aspectRatio =
+    props.layout === "fill" ? undefined : inferAspectRatio(props);
 
   return (
     <div
       className={cssUtils.cx(styles.root, props.className)}
       data-status={imageStatus.status}
+      data-layout={props.layout ?? "intrinsic"}
       data-enhanced={enhanced || undefined}
       style={aspectRatio ? { aspectRatio: String(aspectRatio) } : undefined}
     >
@@ -42,6 +44,7 @@ export const Image: React.FC<ImageTypes.Props> = (props) => {
           width={props.width}
           height={props.height}
           fit={props.fit}
+          position={props.position}
           enhanced={enhanced}
         />
       )}

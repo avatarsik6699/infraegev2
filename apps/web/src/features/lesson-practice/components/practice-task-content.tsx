@@ -1,3 +1,4 @@
+import { LearningVisualFrame } from "~/shared/components/learning-content";
 import { Download, FileText } from "lucide-react";
 import type { ReactNode } from "react";
 import type { PracticeTaskTypes } from "~/entities/practice-task";
@@ -98,7 +99,11 @@ function renderContentBlock(
       );
     case "image":
       return (
-        <figure key={key} className={styles.contentFigure}>
+        <LearningVisualFrame
+          key={key}
+          className={styles.contentFigure}
+          caption={block.caption}
+        >
           <Image
             src={block.src}
             alt={block.alt}
@@ -106,12 +111,17 @@ function renderContentBlock(
             height={block.height}
             fit="contain"
           />
-          <figcaption>{block.caption}</figcaption>
-        </figure>
+        </LearningVisualFrame>
       );
     case "diagram":
       return (
-        <figure key={key} className={styles.contentFigure}>
+        <LearningVisualFrame
+          key={key}
+          className={styles.contentFigure}
+          caption={block.caption}
+          purpose={block.purpose}
+          accessibleDescription={block.accessibleDescription}
+        >
           <Image
             src={block.src}
             alt={block.alt}
@@ -119,12 +129,7 @@ function renderContentBlock(
             height={block.height}
             fit="contain"
           />
-          <figcaption>{block.caption}</figcaption>
           <div className={styles.diagramDescription}>
-            <Typography.Text>
-              <strong>Зачем смотреть:</strong> {block.purpose}
-            </Typography.Text>
-            <Typography.Text>{block.accessibleDescription}</Typography.Text>
             <dl>
               {block.pointers.map((pointer, pointerIndex) => (
                 <div key={`${pointerIndex}-${pointer.label}`}>
@@ -134,7 +139,7 @@ function renderContentBlock(
               ))}
             </dl>
           </div>
-        </figure>
+        </LearningVisualFrame>
       );
     case "attachment":
       return (

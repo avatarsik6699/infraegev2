@@ -4,6 +4,5 @@ export namespace LessonSectionHeadingTypes {
   export type Props = Omit<ComponentProps<"h2">, "children"> & {
     index: number;
     children: ReactNode;
-    variant?: "default" | "lesson";
   };
 }

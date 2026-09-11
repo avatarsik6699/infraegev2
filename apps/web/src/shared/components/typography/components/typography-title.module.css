@@ -45,3 +45,21 @@
   overflow: hidden;
   -webkit-box-orient: vertical;
 }
+
+:where(.root[data-typography-role="catalog"]),
+:where(.root[data-typography-role="topic"]) {
+  color: var(--color-brand-ink);
+  font-family: var(--font-ui);
+  font-size: var(--text-catalog-card-title);
+  font-weight: 500;
+  line-height: 1.16;
+  letter-spacing: -0.015em;
+}
+:where(.root[data-typography-role="topic"]) {
+  font-size: var(--text-lg);
+}
+:where(.root[data-typography-role="lesson"]) {
+  font-size: var(--text-3xl);
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+}

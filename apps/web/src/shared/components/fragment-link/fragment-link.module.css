@@ -37,3 +37,18 @@
 .root[data-hierarchy="drawn"]:hover [data-link-underline] {
   opacity: 0.72;
 }
+
+.root[data-presentation="action"] {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--control-height);
+}
+.root:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 0.2rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  .root {
+    transition: none;
+  }
+}

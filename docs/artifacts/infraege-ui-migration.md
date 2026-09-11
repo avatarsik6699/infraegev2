@@ -1,5 +1,9 @@
 # infraege UI migration — Change 101
 
+> Historical snapshot of Changes 101–105, retained on 2026-09-11. This inventory is not the
+> current visual contract. Later changes, including 106 navigation progress, supersede its
+> pending/skeleton scenes. Current rules live in FRONTEND.md and executable lab specimens.
+
 Implementation inventory for the single production theme. Automated evidence is recorded in Change 101; the architect authorized local closure after audit on 2026-09-08. The named catalog is checked against all public UI exports by the web architecture gate.
 
 | Public UI contract | Real consumer / composition | Lab example and states | Migration |

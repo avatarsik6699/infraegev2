@@ -39,6 +39,7 @@ export const PracticeTaskPanel: React.FC<PracticeTaskPanelProps> = (props) => {
         alreadySolved={props.alreadySolved}
         answer={props.answer}
         checking={props.state === "checking"}
+        enhanced={props.enhanced}
         inputId={inputId}
         onAnswerChange={props.onAnswerChange}
         onSubmit={props.onSubmit}

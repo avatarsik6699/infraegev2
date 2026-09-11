@@ -41,3 +41,26 @@
   justify-content: center;
   width: 100%;
 }
+
+.root[data-presentation="metadata"],
+.root[data-presentation="index"] {
+  min-height: 0;
+  padding: var(--space-0-5) var(--space-1);
+  border: 0;
+  border-radius: var(--radius-control);
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: normal;
+  box-shadow: var(--shadow-metadata);
+}
+.root[data-presentation="index"] {
+  font-family: var(--font-data);
+}
+
+.root[data-presentation="metadata"][data-tone="neutral"],
+.root[data-presentation="index"][data-tone="neutral"] {
+  background: var(--color-brand-canvas);
+  color: var(--color-brand-muted);
+}

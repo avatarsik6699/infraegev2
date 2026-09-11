@@ -5,6 +5,7 @@ import styles from "./button.module.css";
 
 export const Button: React.FC<ButtonTypes.Props> = ({
   hierarchy = "primary",
+  surface = "default",
   density = "default",
   loading = false,
   iconStart,
@@ -22,6 +23,7 @@ export const Button: React.FC<ButtonTypes.Props> = ({
       disabled={disabled || loading}
       aria-busy={loading || undefined}
       data-hierarchy={hierarchy}
+      data-surface={surface}
       data-density={density}
       data-full-width={fullWidth || undefined}
       data-icon-only={iconOnly || undefined}

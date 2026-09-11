@@ -6,6 +6,7 @@ import styles from "./typography-title.module.css";
 export const TypographyTitle: React.FC<TypographyTypes.TitleProps> = ({
   children,
   order,
+  variant = "heading",
   lineClamp,
   className,
   style,
@@ -19,6 +20,7 @@ export const TypographyTitle: React.FC<TypographyTypes.TitleProps> = ({
     {
       ...headingProps,
       "data-order": order,
+      "data-typography-role": variant,
       "data-line-clamp": lineClamp ? "true" : undefined,
       style: { ...style, WebkitLineClamp: lineClamp },
       className: cssUtils.cx(styles.root, className),

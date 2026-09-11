@@ -26,8 +26,21 @@ export const expectPublicReleaseIdentity = async (
     }
     const headerRect = headerInner.getBoundingClientRect();
     const footerRect = footerInner.getBoundingClientRect();
+    const lessonArticle = document.querySelector<HTMLElement>(
+      "[data-article-frame]",
+    );
+    const lessonFrame = document.querySelector<HTMLElement>(
+      "[data-lesson-frame]",
+    );
+    const hasStudyColumns =
+      lessonFrame && getComputedStyle(lessonFrame).display === "grid";
+    const expectedFooterLeft =
+      hasStudyColumns && lessonArticle
+        ? lessonArticle.getBoundingClientRect().left
+        : 0;
     return {
       viewportWidth: document.documentElement.clientWidth,
+      expectedFooterLeft,
       headerLeft: headerRect.left,
       headerRight: headerRect.right,
       footerLeft: footerRect.left,
@@ -35,7 +48,10 @@ export const expectPublicReleaseIdentity = async (
     };
   });
   expect(chromeGeometry.headerLeft).toBeCloseTo(0, 0);
-  expect(chromeGeometry.footerLeft).toBeCloseTo(0, 0);
+  expect(chromeGeometry.footerLeft).toBeCloseTo(
+    chromeGeometry.expectedFooterLeft,
+    0,
+  );
   expect(chromeGeometry.headerRight).toBeCloseTo(
     chromeGeometry.viewportWidth,
     0,

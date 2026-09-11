@@ -1,6 +1,6 @@
 .banner {
   position: fixed;
-  z-index: 1000;
+  z-index: var(--layer-consent);
   right: 0;
   bottom: 0;
   left: 0;
@@ -46,17 +46,6 @@
     "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
   font-size: var(--text-lg);
   line-height: 1;
-}
-
-.privacyLink {
-  display: inline-flex;
-  min-height: 2.5rem;
-  align-items: center;
-  color: var(--color-text-soft);
-  font-family: var(--font-ui);
-  font-size: var(--text-xs);
-  text-decoration-line: underline;
-  text-underline-offset: 0.2em;
 }
 
 .actions {

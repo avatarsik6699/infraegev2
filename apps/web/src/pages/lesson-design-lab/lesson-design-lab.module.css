@@ -1,5 +1,5 @@
 .page {
-  composes: studyLessonPalette studyLessonFrame from "../../shared/styles/patterns.module.css";
+  composes: studyLessonFrame from "../../shared/styles/patterns.module.css";
 }
 
 .subheader {
@@ -83,14 +83,6 @@
   max-width: var(--measure-reading);
   font-size: var(--text-base);
   line-height: 1.65;
-}
-
-.inlineCode,
-.article var {
-  color: var(--color-text);
-  font-family: var(--font-data);
-  font-size: var(--text-inline-code);
-  font-style: normal;
 }
 
 .visual {

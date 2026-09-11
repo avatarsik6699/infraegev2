@@ -368,13 +368,25 @@ export async function expectPracticeAnswerJourney(
       "Ответ пока не подходит. Попробуйте ещё раз или откройте подсказку.",
     ),
   ).toBeVisible();
+  await expect(answer).toBeFocused();
+  await expect(answer).toHaveValue(incorrectAnswer);
   await answer.fill(correctAnswer);
   await check.click();
   await expect(firstTask.getByRole("status")).toContainText("Верно");
 }
 
 export async function expectNoJavaScriptPractice(page: Page): Promise<void> {
-  await expect(page.locator("[data-practice-form] form")).toHaveCount(5);
+  const forms = page.locator("[data-practice-form] form");
+  await expect(forms).toHaveCount(5);
+  for (const form of await forms.all()) {
+    await expect(form.getByRole("textbox", { name: "Ответ" })).toBeDisabled();
+    await expect(
+      form.getByRole("button", { name: "Проверить" }),
+    ).toBeDisabled();
+  }
+  await expect(
+    page.getByText(/Для проверки ответов нужен JavaScript/),
+  ).toBeVisible();
   await expect(
     page
       .locator("[data-course-result-progress]")

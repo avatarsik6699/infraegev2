@@ -58,10 +58,12 @@ export const TopicCatalogCard: React.FC<Props> = ({ entry }) => {
         </span>
         <div className={styles.cardMedia} data-topic-media>
           <div className={styles.mediaBadges}>
-            <span className={styles.mediaTaskNumber}>
+            <Badge presentation="index">
               {topicCatalog.formatTaskNumbers(entry.taskNumbers)}
-            </span>
-            {entry.status === "planned" ? <Badge>Скоро</Badge> : null}
+            </Badge>
+            {entry.status === "planned" ? (
+              <Badge presentation="metadata">Скоро</Badge>
+            ) : null}
           </div>
           <div
             className={styles.cardIllustration}
@@ -75,6 +77,7 @@ export const TopicCatalogCard: React.FC<Props> = ({ entry }) => {
                 decorative
                 width={960}
                 height={640}
+                layout="fill"
                 fit="contain"
               />
             ) : (
@@ -85,10 +88,18 @@ export const TopicCatalogCard: React.FC<Props> = ({ entry }) => {
           </div>
         </div>
         <div className={styles.cardContent} data-topic-footer>
-          <Typography.Title className={styles.cardTitle} order={3}>
+          <Typography.Title
+            className={styles.cardTitle}
+            variant="topic"
+            order={3}
+          >
             {entry.title}
           </Typography.Title>
-          <Typography.Text className={styles.cardSummary} tone="muted">
+          <Typography.Text
+            className={styles.cardSummary}
+            variant="summary"
+            tone="muted"
+          >
             {entry.summary}
           </Typography.Text>
           <div className={styles.cardBottom}>

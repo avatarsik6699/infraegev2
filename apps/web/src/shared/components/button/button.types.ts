@@ -6,6 +6,7 @@ export namespace ButtonTypes {
 
   export type Props = Omit<ComponentPropsWithRef<"button">, "color"> & {
     hierarchy?: Hierarchy;
+    surface?: "default" | "code";
     density?: Density;
     loading?: boolean;
     iconStart?: React.ReactNode;

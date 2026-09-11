@@ -1,4 +1,4 @@
-import type { ComponentProps } from "react";
+import { useEffect, useRef, type ComponentProps } from "react";
 import { CircleCheck } from "lucide-react";
 import type { PracticeTaskTypes } from "~/entities/practice-task";
 import { Button } from "~/shared/components/button";
@@ -13,6 +13,7 @@ type PracticeTaskAnswerProps = {
   inputId: string;
   alreadySolved: boolean;
   checking: boolean;
+  enhanced: boolean;
   answer: string;
   state: LessonPracticeTypes.State;
   onAnswerChange: (value: string) => void;
@@ -21,54 +22,67 @@ type PracticeTaskAnswerProps = {
 
 export const PracticeTaskAnswer: React.FC<PracticeTaskAnswerProps> = (
   props,
-) => (
-  <form className={styles.practiceForm} onSubmit={props.onSubmit}>
-    <PracticeTaskContent blocks={props.task.statement} context="statement" />
-    <div className={styles.answerRow}>
-      <div className={styles.answerField}>
-        <Field
-          className={props.alreadySolved ? styles.solvedAnswer : undefined}
-          data-solved={props.alreadySolved || undefined}
-          id={props.inputId}
-          name="answer"
-          label="Ответ"
-          labelVisibility="sr-only"
-          placeholder={
-            props.alreadySolved
-              ? "Этот ответ уже принят"
-              : "Без единиц измерения"
-          }
-          error={answerError(props.state)}
-          autoComplete="off"
-          disabled={props.alreadySolved || props.checking}
-          value={props.answer}
-          onChange={(event) => props.onAnswerChange(event.currentTarget.value)}
-        />
-        {props.alreadySolved ? (
-          <CircleCheck
-            className={styles.answerAcceptedIcon}
-            data-answer-accepted-icon
-            aria-hidden="true"
-            size={18}
-            strokeWidth={1.8}
+) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+  useEffect(
+    function focusInvalidAnswerFx() {
+      if (props.state === "incorrect") inputRef.current?.focus();
+    },
+    [props.state],
+  );
+
+  return (
+    <form className={styles.practiceForm} onSubmit={props.onSubmit}>
+      <PracticeTaskContent blocks={props.task.statement} context="statement" />
+      <div className={styles.answerRow}>
+        <div className={styles.answerField}>
+          <Field
+            className={props.alreadySolved ? styles.solvedAnswer : undefined}
+            data-solved={props.alreadySolved || undefined}
+            ref={inputRef}
+            id={props.inputId}
+            name="answer"
+            label="Ответ"
+            labelVisibility="sr-only"
+            placeholder={
+              props.alreadySolved
+                ? "Этот ответ уже принят"
+                : "Без единиц измерения"
+            }
+            error={answerError(props.state)}
+            autoComplete="off"
+            disabled={!props.enhanced || props.alreadySolved || props.checking}
+            value={props.answer}
+            onChange={(event) =>
+              props.onAnswerChange(event.currentTarget.value)
+            }
           />
-        ) : null}
+          {props.alreadySolved ? (
+            <CircleCheck
+              className={styles.answerAcceptedIcon}
+              data-answer-accepted-icon
+              aria-hidden="true"
+              size={18}
+              strokeWidth={1.8}
+            />
+          ) : null}
+        </div>
+        <Button
+          type="submit"
+          loading={props.checking}
+          disabled={!props.enhanced || props.alreadySolved}
+        >
+          {props.checking ? "Проверяем" : "Проверить"}
+        </Button>
       </div>
-      <Button
-        type="submit"
-        loading={props.checking}
-        disabled={props.alreadySolved}
-      >
-        {props.checking ? "Проверяем" : "Проверить"}
-      </Button>
-    </div>
-    {props.state === "error" ? (
-      <Typography.Text role="alert" tone="muted">
-        Не удалось проверить ответ. Попробуйте ещё раз.
-      </Typography.Text>
-    ) : null}
-  </form>
-);
+      {props.state === "error" ? (
+        <Typography.Text role="alert" tone="muted">
+          Не удалось проверить ответ. Попробуйте ещё раз.
+        </Typography.Text>
+      ) : null}
+    </form>
+  );
+};
 
 function answerError(state: LessonPracticeTypes.State): string | undefined {
   if (state === "incorrect") {

@@ -232,13 +232,6 @@
   margin: 0;
 }
 
-.contentFigure figcaption {
-  color: var(--color-muted);
-  font-family: var(--font-reading);
-  font-size: var(--text-sm);
-  line-height: 1.5;
-}
-
 .diagramDescription {
   display: grid;
   gap: var(--space-1);

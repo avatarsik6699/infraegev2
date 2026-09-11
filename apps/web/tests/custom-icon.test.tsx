@@ -36,7 +36,7 @@ describe("CustomIcon", () => {
       result.container
         .querySelector('[data-icon-name="book"] path:last-child')
         ?.getAttribute("fill"),
-    ).toBe("var(--custom-icon-accent, #fd6702)");
+    ).toBe("var(--custom-icon-accent, var(--color-brand-orange))");
   });
 
   it("is decorative by default and exposes an explicit labelled mode", () => {

@@ -1,3 +1,4 @@
+import { Notation } from "~/shared/components/notation";
 import {
   LessonSectionHeading,
   Mistake,
@@ -21,9 +22,9 @@ export const LessonExamFocus: React.FC = () => (
     </Typography.Title>
     <Typography.Text>
       Двоичный поиск работает только на отсортированных данных. Частая ошибка —
-      обновить границу как <code className={styles.inlineCode}>L = M</code> или{" "}
-      <code className={styles.inlineCode}>R = M</code> и оставить середину в
-      диапазоне: цикл может перестать сужаться.
+      обновить границу как <Notation>L = M</Notation> или{" "}
+      <Notation>R = M</Notation> и оставить середину в диапазоне: цикл может
+      перестать сужаться.
     </Typography.Text>
     <Mistake
       claim="Обновляем L = M: середина остаётся среди кандидатов."

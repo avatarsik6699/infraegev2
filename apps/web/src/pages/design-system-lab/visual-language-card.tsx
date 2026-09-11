@@ -32,6 +32,7 @@ export const VisualLanguageCard: React.FC<Props> = (props) => {
       ) : null}
       <div className={styles.media}>
         <Image
+          layout="fill"
           src={
             props.planned
               ? "/images/course-overview/branch.webp"

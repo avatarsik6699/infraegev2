@@ -126,8 +126,8 @@ describe("PublicHeader", () => {
     ).not.toBeNull();
   });
 
-  it("keeps the compact internal identity linked to home", () => {
-    render(<PublicHeader />);
+  it("keeps the explicitly compact identity linked to home", () => {
+    render(<PublicHeader expanded={false} />);
 
     expect(
       screen

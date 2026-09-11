@@ -56,7 +56,7 @@ feedback.
 
 The selected typography remains unchanged: Alegreya for display and wordmark, Golos Text for
 reading and interface text, and JetBrains Mono for code, data and formula notation. The homepage is
-the first reference-led composition: a direct product statement and real mini-course CTA on the
+the first reference-led composition: a direct product statement and the «Начать готовиться» CTA to `/ege` on the
 left, plus a non-interactive learning map on the right. Alegreya is reserved there for the live
 wordmark and product statement; the expanded subtitle, benefit line and statement lead use Golos
 Text. The lockup/navigation separator is intentionally faint. Authored SVG geometry gives the CTA

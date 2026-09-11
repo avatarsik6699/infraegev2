@@ -239,8 +239,8 @@ Python подставляет title, summary, route и состав уроков
 
 - **Теория урока — content-as-code в TSX**, не данные. Автор пишет типизированные React-компоненты
   напрямую (`apps/web/src/entities/lesson/content/{slug}.lesson.tsx`, один файл на урок; переиспользуемые
-  content-компоненты — `entities/lesson/components/*` для lesson-domain частей типа `WorkedExample`/
-  `Diagram`/`Checkpoint`, `shared/components/*` для domain-agnostic частей типа `Callout`, следуя
+  content-компоненты — `shared/components/learning-content/*` для нейтральных `WorkedExample`/
+  `Diagram`/`Checkpoint`, `shared/components/*` для остальных общих частей типа `Callout`, следуя
   существующим слоям FSD-like архитектуры, §"Frontend layers" в `docs/STACK.md`), версионируется
   через git как обычный исходник. Компилятор TypeScript проверяет обязательную форму урока —
   runtime-парсинг Markdown/JSON и ручная валидация роли/порядка секций для теории больше не нужны.
@@ -348,7 +348,7 @@ Task (content/tasks/{id}.json, practiceTaskIds ссылается сюда)
   hint                                           // ContentBlock[], доступная сразу помощь
   theory_links: [{ hash, label }]                // hash указывает на ConceptBlock.id
   checker_type: exact_match | numeric_tolerance
-  answer_variants: [string]                     // все допустимые написания верного ответа (см. §11.1 нормализация)
+  answer_variants: [string]                     // все допустимые написания верного ответа (см. §4 нормализация)
   numeric_tolerance: float                       // только для checker_type: numeric_tolerance
   interaction_type: production | recognition     // приоритет — production
   explanation                                    // ContentBlock[], полноценный worked-example-разбор
@@ -419,7 +419,7 @@ task-файлы первой review-only темы читаются frontend-cons
 | `GET` | `/health` | Нет | Совместимый alias для `/health/ready` |
 
 Проверка ответа применяет нормализацию к введённому ответу и к каждому `answer_variants` перед
-сравнением (§11.1): обрезка пробелов, схлопывание внутренних пробелов, регистронезависимость,
+сравнением (§4): обрезка пробелов, схлопывание внутренних пробелов, регистронезависимость,
 нормализация «ё»/«е», числовая эквивалентность форматов (запятая/точка), допуск
 `numeric_tolerance` для `checker_type: numeric_tolerance`, явная фиксация значимости порядка для
 ответов-списков (per-task, не угадывается на проверке).
@@ -464,7 +464,7 @@ publication registry, чтобы статусы не расходились ме
 | Topic catalog | Публичная карта заданий ЕГЭ | Начинает первый viewport компактным человеческим введением и сразу показывает 25 содержательных карточек по возрастанию первого номера; хранит номера как непустой массив, объединяет 19–21 в одну тему, иллюстрирует только два опубликованных TopicLesson и не превращает planned entries в ссылки или disabled controls |
 | Course progress | Производный progress только по доступным CourseLesson | Не имеет отдельного store или storage key: после hydration читает записи всех 28 опубликованных уроков из единого lesson-progress registry. Формулировка «освоено N из M доступных» описывает фактический набор, а course-wide reset отсутствует |
 | Practice tabs | Локальная навигация по постепенно усложняющимся задачам внутри `practice` | Компактные доступные вкладки показывают рост сложности нейтральным индикатором уровня и текстом; одна активная задача после hydration, свободный ручной переход без блокировок и автопродвижения, одна или несколько task-specific ссылок на фрагменты теории рядом с заголовком; независимые «Подсказка» и развёрнутое «Решение» доступны сразу и остаются линейным содержимым в SSR/no-JS; все формы остаются в SSR/no-JS HTML и не становятся пунктами lesson outline |
-| Page state primitives | Единые loading/skeleton, empty, not-found и recoverable error состояния | Семантический статус и понятное действие важнее декоративной анимации; skeleton повторяет геометрию страницы и не озвучивается скринридером как контент |
+| Page state primitives | Единые navigation progress, empty, not-found и recoverable error состояния | Семантический статус и понятное действие важнее декоративной анимации; при client navigation текущая страница остаётся до готовности следующей, верхний progress появляется после 150 ms; глобального skeleton нет |
 | Route resilience shell | Route-level pending/error/not-found UI, retry/reset и верхний navigation progress | Ошибка одной навигации не ломает document shell; предыдущий полезный экран не заменяется мгновенным мигающим fallback |
 | Typed API client | Единственная граница runtime HTTP для `apps/web`, сгенерированная из FastAPI OpenAPI | Feature `api/` вызывает типизированный shared client; transport/HTTP/contract errors различимы, abort/timeout и безопасные сообщения обязательны |
 | Query client | Будущая граница runtime server-state, mutation lifecycle, cache/retry/cancellation | Не дублирует local UI или URL state; сейчас product queries отсутствуют |
@@ -499,7 +499,7 @@ text, focus и functional underlines используют более тёмны�
 заменяют независимые status- и syntax-роли.
 
 Публичная главная — первый reference-led consumer: слева располагается крупный product statement на
-Alegreya, lead на Golos Text, реальный CTA в опубликованный Python mini-course с сужающимися и
+Alegreya, lead на Golos Text, CTA «Начать готовиться» в каталог `/ege` с сужающимися и
 затухающими рисованными underline/arrow и без synthetic social proof; справа — неинтерактивная
 композиция «теория, практика, задания, будущая статистика». В текущей итерации карточки и нумерованные
 этапы образуют одну semantic trajectory через непрерывные оранжевые кривые; селективные пунктирные
@@ -618,8 +618,8 @@ Excel заполняет широкую область через cover с пр�
   даёт повторить загрузку или вернуться к рабочему маршруту; ожидаемые form/API ошибки остаются
   inline и не превращаются в глобальные toast. Тела ответов, введённые ответы и URL query/hash не
   попадают в telemetry.
-- **Loading / empty / not-found:** быстрые переходы не мигают skeleton; медленные используют
-  геометрически стабильный skeleton и верхний progress. Empty state объясняет причину и предлагает
+- **Loading / empty / not-found:** текущая страница остаётся до готовности следующей;
+  после 150 ms ожидания появляется верхний progress без глобального skeleton или минимальной задержки. Empty state объясняет причину и предлагает
   следующее доступное действие. Not-found отделён от инфраструктурной ошибки.
 - **Suspense и lazy:** route splitting остаётся инфраструктурной возможностью; lazy применяется
   только вместе с измеримым выигрышем и полноценным SSR/no-JS fallback.

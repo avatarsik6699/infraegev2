@@ -52,7 +52,6 @@ export const LessonPracticeSection: React.FC = () => {
         </div>
       ) : null}
       <LessonPracticeFlow
-        presentation="study"
         checkAnswer={checkAnswer}
         lessonId={lessonDesignLabConstants.lessonId}
         tasks={lessonDesignLabConstants.practiceTasks}

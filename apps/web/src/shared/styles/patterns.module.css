@@ -166,55 +166,6 @@
   }
 }
 
-.studyLessonPalette {
-  --learning-text-soft: var(--color-learning-muted);
-  --learning-danger: var(--color-learning-danger);
-  --learning-success: var(--color-learning-success);
-  --learning-info: var(--color-learning-info);
-  --learning-danger-background: color-mix(
-    in srgb,
-    var(--color-danger) 14%,
-    var(--color-bg)
-  );
-  --learning-success-background: color-mix(
-    in srgb,
-    var(--color-success) 14%,
-    var(--color-bg)
-  );
-  --learning-info-background: color-mix(
-    in srgb,
-    var(--color-info) 14%,
-    var(--color-bg)
-  );
-  --learning-panel-background: transparent;
-  --learning-example-padding: 0;
-  --learning-block-measure: var(--measure-reading);
-  --notation-bg: color-mix(in srgb, var(--color-text) 6%, var(--color-bg));
-  --notation-padding-inline: 0.2em;
-  --notation-radius: 0.125rem;
-  --learning-danger-notation-bg: color-mix(
-    in srgb,
-    var(--learning-danger) 8%,
-    var(--learning-danger-background)
-  );
-  --learning-success-notation-bg: color-mix(
-    in srgb,
-    var(--learning-success) 8%,
-    var(--learning-success-background)
-  );
-  --learning-info-notation-bg: color-mix(
-    in srgb,
-    var(--learning-info) 8%,
-    var(--learning-info-background)
-  );
-  --learning-callout-notation-bg: color-mix(
-    in srgb,
-    var(--color-text) 5%,
-    var(--color-surface-quiet)
-  );
-  --learning-callout-notation-color: var(--color-text);
-}
-
 .lessonNavigationLinks {
   container-type: inline-size;
   display: grid;

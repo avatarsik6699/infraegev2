@@ -1,5 +1,5 @@
 import type { AnalyticsConsentNoticeTypes } from "./analytics-consent-notice.types";
-import { Link } from "@tanstack/react-router";
+import { ActionLink } from "~/shared/components/action-link";
 import { Button } from "~/shared/components/button";
 import { Typography } from "~/shared/components/typography";
 import styles from "./analytics.module.css";
@@ -20,9 +20,9 @@ export const AnalyticsConsentNotice: React.FC<
         стоит исправить. Ответы, введённый текст и контактные данные в аналитику
         не отправляются.
       </Typography.Text>
-      <Link className={styles.privacyLink} to="/privacy">
+      <ActionLink hierarchy="text" to="/privacy">
         Подробнее об обработке данных
-      </Link>
+      </ActionLink>
     </div>
     <div className={styles.actions}>
       <Button hierarchy="quiet" onClick={props.onDeny}>

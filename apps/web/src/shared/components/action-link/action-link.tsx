@@ -93,15 +93,25 @@ const hierarchyClasses = {
 
 const ActionLinkRoot = forwardRef<HTMLAnchorElement, ActionLinkTypes.RootProps>(
   function ActionLinkRoot(
-    { hierarchy = "secondary", children, className, ariaLabel, icon, ...props },
+    {
+      hierarchy: requestedHierarchy = "secondary",
+      presentation = "action",
+      children,
+      className,
+      ariaLabel,
+      icon,
+      ...props
+    },
     ref,
   ) {
+    const hierarchy = presentation === "inline" ? "text" : requestedHierarchy;
     return (
       <a
         {...props}
         ref={ref}
         aria-label={ariaLabel}
         data-hierarchy={hierarchy}
+        data-presentation={presentation}
         data-icon={icon}
         className={cssUtils.cx(
           styles.root,

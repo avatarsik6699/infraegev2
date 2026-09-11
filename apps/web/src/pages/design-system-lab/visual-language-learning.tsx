@@ -1,9 +1,8 @@
-import patterns from "~/shared/styles/patterns.module.css";
 import { CodeBlock } from "~/shared/components/code-block";
 import { WorkedExample } from "~/shared/components/learning-content";
 
 export const VisualLanguageLearning: React.FC = () => (
-  <div className={patterns.studyLessonPalette} data-visual-example="learning">
+  <div data-visual-example="learning">
     <WorkedExample
       title="Как изменяется значение"
       prompt="Каждая новая строка использует значение, полученное на предыдущем шаге."

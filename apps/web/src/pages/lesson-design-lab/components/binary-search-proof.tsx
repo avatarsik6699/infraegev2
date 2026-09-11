@@ -1,4 +1,5 @@
-import { LearningVisualFrame } from "~/entities/learning-visual";
+import { Notation } from "~/shared/components/notation";
+import { LearningVisualFrame } from "~/shared/components/learning-content";
 import styles from "../lesson-design-lab.module.css";
 
 const rows = [
@@ -33,6 +34,7 @@ const rows = [
 
 export const BinarySearchProof: React.FC = () => (
   <LearningVisualFrame
+    captionPosition="before"
     className={styles.visual}
     caption="Три состояния одного шага двоичного поиска"
     purpose="Цель: связать сравнение с безопасным отсечением диапазона"
@@ -45,9 +47,9 @@ export const BinarySearchProof: React.FC = () => (
             <span className={styles.stageNumber}>{row.number}.</span>
             <div className={styles.arrayWrap}>
               <div className={styles.bounds}>
-                <var>L</var>
-                <var>M</var>
-                <var>R</var>
+                <Notation kind="formula">L</Notation>
+                <Notation kind="formula">M</Notation>
+                <Notation kind="formula">R</Notation>
               </div>
               <div className={styles.array}>
                 {row.values.map((value, index) => (
@@ -90,7 +92,7 @@ function proofCellClass(
 }
 
 // A horizontal-ease cubic curve rather than orthogonal H/V/Q segments — same
-// technique as the annotated-diagram leaders (diagram-geometry.ts), so it
+// technique for this authored proof, so it
 // reads as a hand-inked connector rather than a ruled schematic. Endpoints
 // are unchanged from the previous orthogonal paths.
 function leaderPath(rowIndex: number): string {

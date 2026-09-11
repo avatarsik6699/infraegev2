@@ -149,3 +149,15 @@
 .drawn[data-icon="back"]:hover .drawnArrow {
   transform: translateX(-0.12em) scaleX(-1);
 }
+
+.root[data-presentation="inline"] {
+  display: inline;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: inherit;
+  font: inherit;
+}

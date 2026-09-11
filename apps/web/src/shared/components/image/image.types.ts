@@ -1,4 +1,6 @@
 type BaseProps = {
+  layout?: "intrinsic" | "fill";
+  position?: "center" | "top";
   loading?: "lazy" | "eager";
   src: string;
   width?: number | string;

@@ -203,10 +203,7 @@ export class DesignSystemLabPage {
         service: service ? getComputedStyle(service).fontFamily : "",
         primaryColor: display ? getComputedStyle(display).color : "",
         secondaryColor: reading ? getComputedStyle(reading).color : "",
-        pageBackground: palette
-          ? getComputedStyle(palette.closest("[data-design-system-root]")!)
-              .backgroundColor
-          : "",
+        pageBackground: getComputedStyle(document.body).backgroundColor,
         palette: {
           paper: swatchColor("--color-bg"),
           ink: swatchColor("--color-text"),
@@ -293,7 +290,7 @@ export class DesignSystemLabPage {
     expect(tokenSignals.duration).toBe("0.14s");
     expect(tokenSignals.easing).toBe("ease-out");
     await expect(this.page.locator("[data-layout-specimen]")).toHaveCount(2);
-    await expect(this.page.locator("[data-browser-state]")).toHaveCount(5);
+    await expect(this.page.locator("[data-browser-state]")).toHaveCount(6);
     await expect(this.page.locator("[data-copy-contract]")).toHaveCount(4);
     await expect(
       this.page
@@ -497,13 +494,24 @@ export class DesignSystemLabPage {
     await localAnswer.fill("0");
     await localPractice.getByRole("button", { name: "Проверить" }).click();
     await expect(localPractice.getByRole("status")).toContainText("Верно.");
+    await expect(localAnswer).toBeDisabled();
+    await this.page
+      .getByRole("button", { name: "Сбросить ответ примера" })
+      .click();
+    await expect(localAnswer).toBeEnabled();
+    await expect(
+      componentsPanel.getByRole("tab", { name: "Недоступная вкладка" }),
+    ).toBeDisabled();
+    await expect(
+      componentsPanel.getByRole("button", { name: "Недоступное пояснение" }),
+    ).toBeDisabled();
 
     const errorPractice = this.page.locator('[data-practice-mode="error"]');
     await errorPractice.getByRole("textbox", { name: "Ответ" }).fill("0");
     await errorPractice.getByRole("button", { name: "Проверить" }).click();
-    await expect(
-      errorPractice.getByText("Не получилось проверить ответ."),
-    ).toBeVisible();
+    await expect(errorPractice.getByRole("alert")).toHaveText(
+      "Не удалось проверить ответ. Попробуйте ещё раз.",
+    );
 
     const documentIntegrity = await this.page.evaluate(() => {
       const ids = Array.from(document.querySelectorAll<HTMLElement>("[id]"))
@@ -661,9 +669,10 @@ export class DesignSystemLabPage {
     expect(candidateSignals.badgeRadius).not.toBe("9999px");
     expect(candidateSignals.progressHeight).toBe(6);
 
-    const accordionTrigger = componentsPanel
-      .locator("#components-input [data-enhanced='true'] button")
-      .first();
+    const accordionTrigger = componentsPanel.getByRole("button", {
+      name: "Что делает базовый случай?",
+      exact: true,
+    });
     await accordionTrigger.hover();
     await expect
       .poll(() =>
@@ -803,7 +812,11 @@ export class DesignSystemLabPage {
       const markBox = markElement.getBoundingClientRect();
       const nameBox = nameElement.getBoundingClientRect();
       return {
-        headerHeight: headerBox.height,
+        contained:
+          markBox.top >= headerBox.top &&
+          markBox.bottom <= headerBox.bottom &&
+          nameBox.top >= headerBox.top &&
+          nameBox.bottom <= headerBox.bottom,
         ordered: markBox.right <= nameBox.left,
         centerDelta: Math.abs(
           markBox.top + markBox.height / 2 - (nameBox.top + nameBox.height / 2),
@@ -811,7 +824,8 @@ export class DesignSystemLabPage {
       };
     });
     expect(identityGeometry).not.toBeNull();
-    expect(identityGeometry?.headerHeight).toBeLessThanOrEqual(80);
+    await expect(header.getByText("просто", { exact: true })).toBeVisible();
+    expect(identityGeometry?.contained).toBe(true);
     expect(identityGeometry?.ordered).toBe(true);
     expect(identityGeometry?.centerDelta).toBeLessThanOrEqual(2);
   }
@@ -829,6 +843,51 @@ export class DesignSystemLabPage {
         root.locator(`[data-contract-name="${contract.name}"]`),
       ).toHaveAttribute("data-contract-status", contract.status);
     }
+  }
+
+  async expectDialogAbovePendingConsent(): Promise<void> {
+    await expect(
+      this.page.locator("[data-analytics-consent-enhanced]"),
+    ).toBeVisible();
+    await this.page.getByRole("tab", { name: /^Компоненты/ }).click();
+    const trigger = this.page.getByRole("button", {
+      name: "Сбросить пример",
+      exact: true,
+    });
+    await trigger.click();
+    const dialog = this.page.getByRole("alertdialog");
+    await expect(dialog).toBeVisible();
+    for (const button of await dialog.getByRole("button").all()) {
+      await button.scrollIntoViewIfNeeded();
+      expect(
+        await button.evaluate((element) => {
+          const box = element.getBoundingClientRect();
+          const top = document.elementFromPoint(
+            box.x + box.width / 2,
+            box.y + box.height / 2,
+          );
+          return top !== null && element.contains(top);
+        }),
+      ).toBe(true);
+    }
+    for (let index = 0; index < 4; index += 1) {
+      await this.page.keyboard.press("Tab");
+      expect(
+        await dialog.evaluate((element) =>
+          element.contains(document.activeElement),
+        ),
+      ).toBe(true);
+    }
+    await dialog.getByRole("button", { name: "Отмена" }).click();
+    await expect(dialog).toHaveCount(0);
+    await expect(trigger).toBeFocused();
+    await trigger.click();
+    await dialog.getByRole("button", { name: "Сбросить", exact: true }).click();
+    await expect(dialog).toHaveCount(0);
+    await expect(trigger).toBeFocused();
+    await expect(
+      this.page.locator("[data-analytics-consent-enhanced]"),
+    ).toBeVisible();
   }
 
   async expectThemeAndIsolatedStates(): Promise<void> {
@@ -936,10 +995,14 @@ export class DesignSystemLabPage {
       name: "Уровни дизайн-системы",
     });
     await dashboardTabs.getByRole("tab", { name: /^Компоненты/ }).click();
-    const trigger = this.page
-      .locator("#components-input [data-enhanced='true'] button")
-      .first();
+    const trigger = this.page.getByRole("button", {
+      name: "Что делает базовый случай?",
+      exact: true,
+    });
     await expect(trigger).toBeVisible();
+    if ((await trigger.getAttribute("aria-expanded")) !== "true")
+      await trigger.click();
+    await expect(trigger).toHaveAttribute("aria-expanded", "true");
     const motion = await trigger.evaluate((element) => {
       const chevron = element.querySelector("svg");
       const panelId = element.getAttribute("aria-controls");
@@ -974,7 +1037,7 @@ export class DesignSystemLabPage {
     );
     await expect(this.page.locator("[data-icon-specimen]")).toHaveCount(14);
     await expect(this.page.locator("[data-layout-specimen]")).toHaveCount(2);
-    await expect(this.page.locator("[data-browser-state]")).toHaveCount(5);
+    await expect(this.page.locator("[data-browser-state]")).toHaveCount(6);
     await expect(this.page.locator("[data-copy-contract]")).toHaveCount(4);
     await expect(this.page.locator("[data-reference-pattern]")).toHaveCount(0);
     await expect(this.page.locator("[data-control-specimen]")).toHaveCount(7);

@@ -183,26 +183,25 @@ package-manager upgrades inside a pinned runtime image.
 
 Run `pnpm install --frozen-lockfile` before opening the repository when local editor/test tooling
 has not been installed yet. The tracked [`.vscode/settings.json`](../.vscode/settings.json) points
-the TypeScript language service at `apps/web/node_modules/typescript/lib`; both JavaScript
-workspaces resolve that SDK from the frozen pnpm lockfile. Accept VS Code's workspace-TypeScript
+the TypeScript language service at `apps/web/node_modules/typescript/lib`; the web workspace
+resolves that SDK from the frozen pnpm lockfile. Accept VS Code's workspace-TypeScript
 prompt (or run **TypeScript: Select TypeScript Version** and choose **Use Workspace Version**) so
 the status bar no longer reports VS Code's bundled TypeScript version.
 
 The workspace also recommends the ESLint, Prettier, Python, Ruff, and Playwright extensions used by the
 repository. Its shared settings select `apps/api/.venv`, expose the API pytest suite in Test
-Explorer, give each JavaScript workspace the correct ESLint working directory, update imports on
+Explorer, give the web workspace the correct ESLint working directory, update imports on
 file moves, formats supported source/config files with the repository-local Prettier or Ruff on
-save, and applies repository-backed lint fixes on explicit save. Each app's flat ESLint config
+save, and applies repository-backed lint fixes on explicit save. The web flat ESLint config
 also pins `parserOptions.tsconfigRootDir` to its own directory for every TypeScript extension,
 including contracts, tests, and root-level configs; this is required because the long-lived
-extension process loads both sibling typescript-eslint configs. Markdown remains
+extension process can otherwise infer a different config root. Markdown remains
 outside the Prettier boundary and is exempt from trailing-whitespace removal because authored
 wrapping and two spaces can be meaningful. Personal UI, theme, font, autosave, and experimental
 settings remain user-level choices.
 
 Repository-wide commands are `pnpm format:check` for the non-mutating gate and `pnpm format` to
-apply Prettier plus Ruff. ESLint stays a separate quality pass: `pnpm lint` checks both JavaScript
-workspaces with content-based caches, while `pnpm lint:fix` applies its safe fixes. Web lint also
+apply Prettier plus Ruff. ESLint stays a separate quality pass: `pnpm lint` checks root tooling and the web workspace with content-based caches, while `pnpm lint:fix` applies its safe fixes. Web lint also
 runs typed production-code rules plus executable positive/negative checks for the E2E and web
 platform architecture policies; these static checks run in CI without collecting or executing
 tests. `.editorconfig` provides UTF-8, LF, final-newline, indentation, and whitespace defaults to
@@ -417,8 +416,9 @@ storage adapter and exposes semantic feature hooks. Course progress remains a pu
 over that registry and is not persisted separately. Transient feature state stays in the owning
 component or a slice-local model hook; no global service locator is used.
 
-Route pending/error/not-found UI, delayed skeletons, and navigation progress are application-level
-defaults. Browser render/route/chunk/global failures pass through `shared/lib/client-errors`, which
+Route error/not-found UI and delayed navigation progress are application-level defaults.
+Client transitions keep the current page until the next route is ready; the progress bar appears
+after 150 ms, without a global pending screen, skeleton or minimum display delay. Browser render/route/chunk/global failures pass through `shared/lib/client-errors`, which
 discards messages, page URLs, full stacks, and user data before posting a bounded fingerprint
 event. Nginx applies a dedicated body/rate limit, FastAPI writes a structured journald event, and
 sre-kit's `journal-http` adapter (with `parse_json_message` enabled) surfaces it as a labeled

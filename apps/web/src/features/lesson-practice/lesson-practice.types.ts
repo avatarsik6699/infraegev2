@@ -2,7 +2,6 @@ import type { PracticeTaskTypes } from "~/entities/practice-task";
 
 export namespace LessonPracticeTypes {
   export type Props = {
-    presentation?: "default" | "study";
     tasks: readonly PracticeTaskTypes.Task[];
     solvedTaskIds: readonly string[];
     acceptedAnswers: Readonly<Record<string, string>>;

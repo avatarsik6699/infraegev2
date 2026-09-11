@@ -35,10 +35,7 @@ export const LessonDesignLab: React.FC = () => {
         <LessonIntro />
         <aside className={styles.outlineRail} data-outline-rail>
           <div className={styles.railContents}>
-            <LessonOutline
-              presentation="study"
-              groups={lessonDesignLabConstants.outline}
-            />
+            <LessonOutline groups={lessonDesignLabConstants.outline} />
             <div className={styles.railProgress} data-study-progress>
               {enhanced ? (
                 <>

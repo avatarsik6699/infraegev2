@@ -18,6 +18,8 @@ export const CourseCatalogStudy: React.FC<Props> = (props) => (
       width={1536}
       height={1024}
       decorative
+      layout="fill"
+      position={props.courseId === "excel" ? "top" : "center"}
       fit="cover"
       className={styles.studyImage}
     />

@@ -6,6 +6,7 @@ import styles from "./fragment-link.module.css";
 
 export const FragmentLink: React.FC<FragmentLinkTypes.Props> = ({
   icon = true,
+  presentation = "inline",
   hierarchy = "text",
   ...props
 }) => {
@@ -14,6 +15,7 @@ export const FragmentLink: React.FC<FragmentLinkTypes.Props> = ({
       {...props.anchorProps}
       href={`#${props.hash}`}
       data-hierarchy={hierarchy}
+      data-presentation={presentation}
       className={cssUtils.cx(styles.root, props.className)}
     >
       {icon && (

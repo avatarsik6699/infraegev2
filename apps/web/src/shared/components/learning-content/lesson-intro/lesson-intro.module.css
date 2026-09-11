@@ -3,18 +3,9 @@
   gap: var(--space-1-5);
 }
 
-.meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-0-5);
-}
-
 .title {
   max-width: 28ch;
   margin: 0;
-  font-size: var(--text-2xl);
-  line-height: 1.15;
-  letter-spacing: -0.025em;
 }
 
 .lead {
@@ -23,11 +14,6 @@
   color: var(--color-text-soft);
   font-size: var(--text-base);
   line-height: 1.6;
-}
-
-.root[data-presentation="study"] .title {
-  font-size: var(--text-3xl);
-  text-wrap: balance;
 }
 
 .studyMeta {

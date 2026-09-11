@@ -1,6 +1,6 @@
 export namespace TypographyTypes {
   export type Tone = "default" | "muted" | "accent" | "highlight";
-  export type TextRole = "body" | "lead" | "caption" | "interface";
+  export type TextRole = "body" | "lead" | "caption" | "interface" | "summary";
 
   export type TextProps = React.HTMLAttributes<HTMLElement> & {
     children: React.ReactNode;
@@ -15,6 +15,7 @@ export namespace TypographyTypes {
   export type TitleProps = React.HTMLAttributes<HTMLHeadingElement> & {
     children: React.ReactNode;
     order: 1 | 2 | 3 | 4 | 5 | 6;
+    variant?: "heading" | "catalog" | "topic" | "lesson";
     lineClamp?: number;
     ref?: React.Ref<HTMLHeadingElement>;
   };

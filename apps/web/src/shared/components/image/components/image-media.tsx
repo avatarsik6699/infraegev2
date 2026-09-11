@@ -11,6 +11,7 @@ type ImageMediaProps = {
   height?: number | string;
   fit?: "contain" | "cover" | "fill" | "none" | "scale-down";
   enhanced: boolean;
+  position?: "center" | "top";
 };
 
 export const ImageMedia: React.FC<ImageMediaProps> = (props) => {
@@ -43,7 +44,7 @@ export const ImageMedia: React.FC<ImageMediaProps> = (props) => {
         decoding="async"
         width={props.width}
         height={props.height}
-        style={props.fit ? { objectFit: props.fit } : undefined}
+        style={{ objectFit: props.fit, objectPosition: props.position }}
         onLoad={props.imageStatus.handleLoad}
         onError={props.imageStatus.handleError}
         className={styles.image}

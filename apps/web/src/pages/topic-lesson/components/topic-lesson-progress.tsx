@@ -2,7 +2,7 @@ import { LessonProgress, useLessonProgress } from "~/features/lesson-progress";
 import { ConfirmationDialog } from "~/shared/components/confirmation-dialog";
 import { Typography } from "~/shared/components/typography";
 import { useIsEnhanced } from "~/shared/lib/use-is-enhanced";
-import styles from "../topic-lesson-page.module.css";
+import styles from "~/shared/styles/lesson-layout.module.css";
 
 type Props = {
   masteryThreshold: number;

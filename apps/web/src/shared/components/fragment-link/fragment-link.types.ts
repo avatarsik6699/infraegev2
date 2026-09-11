@@ -11,6 +11,7 @@ export namespace FragmentLinkTypes {
     className?: string;
     /** Leading link icon; omitted by navigation lists with their own indicators. */
     icon?: boolean;
+    presentation?: "inline" | "action";
     hierarchy?: "text" | "drawn";
     anchorProps?: Omit<ComponentProps<"a">, "children" | "className" | "href"> &
       DataAttributes;

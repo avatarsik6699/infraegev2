@@ -14,7 +14,7 @@ export const PublicFooter: React.FC = () => (
         <ExternalLink
           className={styles.telegramLink}
           href={siteConfig.telegramInviteUrl}
-          hierarchy="drawn"
+          presentation="action"
           newTab
         >
           <TelegramLogo />

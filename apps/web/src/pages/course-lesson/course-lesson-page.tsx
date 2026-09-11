@@ -16,7 +16,7 @@ import { CourseLessonHeader } from "./components/course-lesson-header";
 import { CourseLessonProgress } from "./components/course-lesson-progress";
 import { CourseLessonResult } from "./components/course-lesson-result";
 import type { CourseLessonPageTypes } from "./course-lesson-page.types";
-import styles from "./course-lesson-page.module.css";
+import styles from "~/shared/styles/lesson-layout.module.css";
 
 export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
   props,
@@ -64,19 +64,17 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
       <main className={styles.lesson} data-lesson-frame>
         <div className={styles.intro}>
           <LessonIntro
-            presentation="study"
             accessTier={props.lesson.accessTier}
             eyebrow="Урок курса"
             summary={props.lesson.summary}
             taskCount={props.tasks.length}
-            technology="Python 3"
             title={props.lesson.title}
           />
         </div>
 
         <aside className={styles.rail} data-outline-rail>
           <div className={styles.railContents}>
-            <LessonOutline groups={outline} presentation="study" />
+            <LessonOutline groups={outline} />
             <div className={styles.railSpacer} aria-hidden="true" />
             <CourseLessonProgress
               masteryThreshold={props.lesson.masteryThreshold ?? 0.8}
@@ -93,11 +91,8 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
           />
 
           <section id="practice" className={styles.section}>
-            <LessonSectionHeading index={2} variant="lesson">
-              Практика
-            </LessonSectionHeading>
+            <LessonSectionHeading index={2}>Практика</LessonSectionHeading>
             <LessonPracticeFlow
-              presentation="study"
               tasks={props.tasks}
               lessonId={props.lesson.id}
               checkAnswer={checkPracticeAnswer}
@@ -106,9 +101,7 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
           </section>
 
           <section id="result" className={styles.section}>
-            <LessonSectionHeading index={3} variant="lesson">
-              Итог
-            </LessonSectionHeading>
+            <LessonSectionHeading index={3}>Итог</LessonSectionHeading>
             <CourseLessonResult
               course={props.course}
               lesson={props.lesson}

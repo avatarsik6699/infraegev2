@@ -1,7 +1,7 @@
 import { fireEvent, screen, waitFor, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { rekursiyaLesson } from "~/entities/lesson";
-import { LearningVisualFrame } from "~/entities/learning-visual";
+import { LearningVisualFrame } from "~/shared/components/learning-content";
 import { LessonProgress, useLessonProgress } from "~/features/lesson-progress";
 import { LessonDesignLab } from "~/pages/lesson-design-lab";
 import { TopicLessonPage } from "~/pages/topic-lesson";
@@ -120,7 +120,6 @@ describe("lesson design system", () => {
     render(
       <div>
         <LessonOutline
-          presentation="study"
           groups={[{ id: "mobile-theory", label: "Теория", items: [] }]}
         />
         <h2 id="mobile-theory">Теория на странице</h2>
@@ -143,7 +142,6 @@ describe("lesson design system", () => {
   it("leaves study contents open on desktop and preserves ordinary fragment links", () => {
     render(
       <LessonOutline
-        presentation="study"
         groups={[{ id: "desktop-theory", label: "Теория", items: [] }]}
       />,
     );
@@ -219,7 +217,7 @@ describe("lesson design system", () => {
     });
     expect(heading.textContent).toBe("§ 3 ·Что важно для ЕГЭ");
     expect(heading.hasAttribute("data-title-role")).toBe(false);
-    expect(heading.getAttribute("data-variant")).toBe("default");
+    expect(heading.getAttribute("data-variant")).toBe("lesson");
   });
 
   it("keeps the four lesson stages above their local theory headings", () => {
@@ -632,6 +630,7 @@ describe("lesson design system", () => {
         .getAttribute("aria-valuenow"),
     ).toBe("0");
 
+    expect(document.activeElement).toBe(answer);
     fireEvent.change(answer, { target: { value: "левая" } });
     fireEvent.click(check);
     await waitFor(() => {

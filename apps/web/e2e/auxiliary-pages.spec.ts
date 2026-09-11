@@ -29,3 +29,15 @@ test("delayed successful navigation retains the course until the lesson is ready
 }) => {
   await auxiliaryPagesPage.expectLoaderRecovery(false);
 });
+
+test("confirmation stays above pending consent on short and narrow screens", async ({
+  browserSession,
+  designSystemLabPage,
+}) => {
+  await browserSession.useShortViewport();
+  await designSystemLabPage.open();
+  await designSystemLabPage.expectDialogAbovePendingConsent();
+  await browserSession.useNarrowViewport();
+  await designSystemLabPage.expectDialogAbovePendingConsent();
+  browserSession.expectCleanConsole();
+});

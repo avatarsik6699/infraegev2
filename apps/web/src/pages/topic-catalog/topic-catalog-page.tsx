@@ -46,7 +46,7 @@ export const TopicCatalogPage: React.FC = () => {
                   </span>
                   <ExternalLink
                     href={fipiDocumentsUrl}
-                    hierarchy="drawn"
+                    presentation="action"
                     newTab
                   >
                     Структура экзамена — ФИПИ

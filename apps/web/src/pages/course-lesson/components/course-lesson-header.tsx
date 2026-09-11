@@ -1,7 +1,7 @@
 import { ActionLink } from "~/shared/components/action-link";
 import { Typography } from "~/shared/components/typography";
 import { PublicHeader } from "~/widgets/public-header";
-import styles from "../course-lesson-page.module.css";
+import styles from "~/shared/styles/lesson-layout.module.css";
 
 type Props = {
   courseRouteSlug: string;

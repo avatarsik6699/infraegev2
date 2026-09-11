@@ -30,7 +30,7 @@
 
 .backdrop {
   position: fixed;
-  z-index: 20;
+  z-index: var(--layer-modal-backdrop);
   inset: 0;
   background: color-mix(in oklch, var(--color-text) 20%, transparent);
   transition: opacity var(--motion-duration) var(--motion-easing);
@@ -38,10 +38,12 @@
 
 .viewport {
   position: fixed;
-  z-index: 21;
+  z-index: var(--layer-modal);
   inset: 0;
   display: grid;
-  place-items: center;
+  place-items: safe center;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   padding: var(--space-2);
 }
 
