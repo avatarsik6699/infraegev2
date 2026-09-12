@@ -7,7 +7,7 @@
 | Change | `113` |
 | Slug | `practice-data-foundation` |
 | Title | PostgreSQL 18 foundation for the practice bank |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/113-practice-data-foundation` |
 
 ## Goal
@@ -145,7 +145,7 @@ endpoint definitions here. First-stage boundary intentionally excludes the later
 ## Gate Checks
 
 Critical Gate runs once per `/work` target set and by default in `/ship`; Full Gate runs only
-with `--full` or `--release`. Commands are defined in [STACK](../STACK.md).
+with `--full` or `--release`. Commands are defined in [STACK](../../STACK.md).
 
 Additional acceptance: nonempty PG16 → PG18 restore proof, role assertions, production-target
 rejection and installed backup/export fidelity. A fake-transport contract is not live restore proof.
