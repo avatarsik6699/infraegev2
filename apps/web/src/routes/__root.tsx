@@ -52,20 +52,6 @@ export const Route = createRootRouteWithContext<AppRouterContext>()({
         type: "font/woff2",
         crossOrigin: "anonymous",
       },
-      {
-        rel: "preload",
-        href: "/fonts/jetbrains-mono/jetbrains-mono-cyrillic-wght-normal.woff2",
-        as: "font",
-        type: "font/woff2",
-        crossOrigin: "anonymous",
-      },
-      {
-        rel: "preload",
-        href: "/fonts/jetbrains-mono/jetbrains-mono-latin-wght-normal.woff2",
-        as: "font",
-        type: "font/woff2",
-        crossOrigin: "anonymous",
-      },
       { rel: "icon", href: "/favicon.ico", sizes: "32x32" },
       {
         rel: "icon",

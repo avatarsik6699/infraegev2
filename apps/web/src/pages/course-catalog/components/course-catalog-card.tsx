@@ -1,8 +1,9 @@
+import type { ImageTypes } from "~/shared/components/image";
 import {
   SurfaceMaterial,
   SurfaceGlint,
 } from "~/shared/components/surface-decoration";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import type { CourseCatalogTypes } from "~/entities/course";
 import { ActionLink } from "~/shared/components/action-link";
 import { Badge } from "~/shared/components/badge";
@@ -18,7 +19,9 @@ type Props = {
 
 export const CourseCatalogCard: React.FC<Props> = (props) => {
   const cardRef = useRef<HTMLElement>(null);
-  const motionActive = useElementActivity(cardRef);
+  const [imageStatus, setImageStatus] = useState<ImageTypes.Status>("loading");
+  const visible = useElementActivity(cardRef);
+  const motionActive = visible && imageStatus === "loaded";
   return (
     <li
       className={styles.card}
@@ -49,7 +52,10 @@ export const CourseCatalogCard: React.FC<Props> = (props) => {
           />
         ) : null}
         <div className={styles.cardMedia} data-course-media>
-          <CourseCatalogStudy courseId={props.entry.id} />
+          <CourseCatalogStudy
+            courseId={props.entry.id}
+            onStatusChange={setImageStatus}
+          />
         </div>
         <div className={styles.cardMeta} data-course-meta>
           {props.entry.status === "published" ? (

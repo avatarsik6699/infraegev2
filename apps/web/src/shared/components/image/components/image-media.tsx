@@ -4,6 +4,9 @@ import styles from "../image.module.css";
 
 type ImageMediaProps = {
   loading?: "lazy" | "eager";
+  srcSet?: string;
+  sizes?: string;
+  fetchPriority?: "high" | "low" | "auto";
   imageStatus: ImageTypes.UseImageStatusResult;
   alt: string;
   decorative: boolean;
@@ -37,6 +40,9 @@ export const ImageMedia: React.FC<ImageMediaProps> = (props) => {
       <img
         ref={imgRef}
         src={props.imageStatus.currentSrc}
+        srcSet={props.srcSet}
+        sizes={props.sizes}
+        fetchPriority={props.fetchPriority}
         alt={props.alt}
         role={props.decorative ? "presentation" : undefined}
         aria-hidden={props.decorative || undefined}

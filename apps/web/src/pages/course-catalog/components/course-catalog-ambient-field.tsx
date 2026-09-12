@@ -14,6 +14,7 @@ export const CourseCatalogAmbientField: React.FC = () => (
             type="matrix"
             values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -3 -3 -3 0 8.4"
           />
+          <feComposite in2="SourceAlpha" operator="in" />
         </filter>
         <filter id="course-artwork-paper" colorInterpolationFilters="sRGB">
           <feColorMatrix

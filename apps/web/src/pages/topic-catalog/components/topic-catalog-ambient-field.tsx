@@ -14,7 +14,7 @@ export const TopicCatalogAmbientField: React.FC = () => (
         focusable="false"
         style={
           {
-            "--notation-top": `${String(3 + index * 12)}%`,
+            "--notation-index": index,
           } as React.CSSProperties
         }
       >

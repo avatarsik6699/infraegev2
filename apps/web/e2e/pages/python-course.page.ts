@@ -236,7 +236,8 @@ export class PythonCoursePage {
       name: "Прогресс курса",
     });
     if (options.hydrated === false) {
-      await expect(progress).toHaveCount(0);
+      await expect(progress).toContainText("Прогресс на этом устройстве");
+      await expect(progress.getByRole("progressbar")).toHaveCount(0);
     } else {
       await expect(progress).toContainText(
         `Освоено ${String(options.masteredCount ?? 0)} из 28 доступных уроков.`,

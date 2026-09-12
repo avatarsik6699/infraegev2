@@ -32,14 +32,21 @@ export const CourseOverviewProgress: React.FC<Props> = (props) => {
     () => courseProgress.calculate(progressLessons, progressByLessonId),
     [progressByLessonId, progressLessons],
   );
-  if (!hydrated || progress.availableCount === 0) return null;
+  if (progress.availableCount === 0) return null;
 
   const copy = courseProgress.formatOverviewCopy(progress);
 
   return (
-    <section className={styles.progress} aria-label="Прогресс курса">
-      <Typography.Text tone="muted">{copy}</Typography.Text>
+    <section
+      className={styles.progress}
+      aria-label="Прогресс курса"
+      data-progress-ready={hydrated || undefined}
+    >
+      <Typography.Text tone="muted">
+        {hydrated ? copy : "Прогресс на этом устройстве"}
+      </Typography.Text>
       <Progress
+        className={hydrated ? undefined : styles.progressPending}
         label="Освоенные доступные уроки"
         max={progress.availableCount}
         value={progress.masteredLessonIds.length}

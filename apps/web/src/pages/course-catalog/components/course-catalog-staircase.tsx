@@ -1,4 +1,6 @@
-import { Image } from "~/shared/components/image";
+import { useRef, useState } from "react";
+import { useElementActivity } from "~/shared/lib/element-activity";
+import { Image, type ImageTypes } from "~/shared/components/image";
 import { SvgDrawing } from "~/shared/components/svg-drawing";
 import styles from "../course-catalog-page.module.css";
 
@@ -16,49 +18,66 @@ const staircase = {
 
 type Props = { continuation?: boolean };
 
-export const CourseCatalogStaircase: React.FC<Props> = (props) => (
-  <div
-    className={
-      props.continuation ? styles.staircaseContinuation : styles.staircase
-    }
-    aria-hidden="true"
-    data-course-staircase={props.continuation ? undefined : true}
-    data-course-staircase-continuation={props.continuation || undefined}
-  >
-    <Image
-      src="/images/course-catalog/staircase.webp"
-      width={1536}
-      height={1024}
-      decorative
-      className={styles.staircaseImage}
-    />
-    <svg className={styles.staircaseRoute} viewBox="0 0 1536 1024" fill="none">
-      <SvgDrawing.Line
-        d={staircase.route}
-        strokeWidth={1.4}
-        className={styles.routeUnderlay}
+export const CourseCatalogStaircase: React.FC<Props> = (props) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const visible = useElementActivity(ref);
+  const [status, setStatus] = useState<ImageTypes.Status>("loading");
+  return (
+    <div
+      className={
+        props.continuation ? styles.staircaseContinuation : styles.staircase
+      }
+      ref={ref}
+      data-motion-active={(visible && status === "loaded") || undefined}
+      aria-hidden="true"
+      data-course-staircase={props.continuation ? undefined : true}
+      data-course-staircase-continuation={props.continuation || undefined}
+    >
+      <Image
+        src="/images/course-catalog/staircase.webp"
+        srcSet="/images/course-catalog/responsive/staircase-480.webp 480w, /images/course-catalog/responsive/staircase-960.webp 960w, /images/course-catalog/responsive/staircase-1536.webp 1536w"
+        sizes="(max-width: 44rem) 50vw, 60vw"
+        fetchPriority="low"
+        onStatusChange={setStatus}
+        width={1536}
+        height={1024}
+        decorative
+        className={styles.staircaseImage}
       />
-      <SvgDrawing.Line
-        d={staircase.route}
-        strokeWidth={1.8}
-        pathLength={100}
-        dashArray="100"
-        className={props.continuation ? styles.routeUnderlay : styles.routeDraw}
-      />
-      <SvgDrawing.Line
-        d={staircase.route}
-        strokeWidth={3}
-        pathLength={100}
-        dashArray="3 97"
-        className={
-          props.continuation ? styles.continuationMarker : styles.routeMarker
-        }
-      />
-      <g className={styles.routeNodes}>
-        {staircase.nodes.map((node) => (
-          <circle key={node.x} cx={node.x} cy={node.y} r={8} />
-        ))}
-      </g>
-    </svg>
-  </div>
-);
+      <svg
+        className={styles.staircaseRoute}
+        viewBox="0 0 1536 1024"
+        fill="none"
+      >
+        <SvgDrawing.Line
+          d={staircase.route}
+          strokeWidth={1.4}
+          className={styles.routeUnderlay}
+        />
+        <SvgDrawing.Line
+          d={staircase.route}
+          strokeWidth={1.8}
+          pathLength={100}
+          dashArray="100"
+          className={
+            props.continuation ? styles.routeUnderlay : styles.routeDraw
+          }
+        />
+        <SvgDrawing.Line
+          d={staircase.route}
+          strokeWidth={3}
+          pathLength={100}
+          dashArray="3 97"
+          className={
+            props.continuation ? styles.continuationMarker : styles.routeMarker
+          }
+        />
+        <g className={styles.routeNodes}>
+          {staircase.nodes.map((node) => (
+            <circle key={node.x} cx={node.x} cy={node.y} r={8} />
+          ))}
+        </g>
+      </svg>
+    </div>
+  );
+};

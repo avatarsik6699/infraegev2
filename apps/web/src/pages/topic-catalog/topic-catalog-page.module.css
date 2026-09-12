@@ -440,7 +440,7 @@
 
 .ambientNotation {
   position: absolute;
-  top: var(--notation-top);
+  top: calc(6rem + var(--notation-index) * 32rem);
   left: -1.5rem;
   width: clamp(10rem, 19vw, 18rem);
   height: auto;

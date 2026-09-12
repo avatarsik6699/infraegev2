@@ -5,9 +5,7 @@
   overflow: hidden;
 }
 
-/* No aspectRatio given: reserve some visible box for the skeleton while
-   loading; once resolved the image's own intrinsic size takes over. */
-.root[data-status="loading"] {
+.root:not([data-sized="true"]):not([data-layout="fill"]) {
   min-height: 6rem;
 }
 
@@ -15,20 +13,6 @@
   display: block;
   width: 100%;
   height: auto;
-}
-
-.root[data-enhanced="true"] .image {
-  opacity: 0;
-}
-
-.root[data-enhanced="true"][data-status="loaded"] .image {
-  opacity: 1;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .image {
-    transition: opacity 0.25s ease;
-  }
 }
 
 .skeleton {
@@ -80,4 +64,10 @@
 }
 .root[data-layout="fill"] .image {
   height: 100%;
+}
+
+.root[data-sized="true"] .errorState {
+  position: absolute;
+  inset: 0;
+  min-height: 0;
 }

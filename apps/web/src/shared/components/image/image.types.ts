@@ -3,6 +3,11 @@ type BaseProps = {
   position?: "center" | "top";
   loading?: "lazy" | "eager";
   src: string;
+  srcSet?: string;
+  sizes?: string;
+  fetchPriority?: "high" | "low" | "auto";
+  /** Reports resource readiness without exposing DOM events to compositions. */
+  onStatusChange?: (status: ImageTypes.Status) => void;
   width?: number | string;
   height?: number | string;
   /** width/height ratio, e.g. 16 / 9 or naturalWidth / naturalHeight. Reserves

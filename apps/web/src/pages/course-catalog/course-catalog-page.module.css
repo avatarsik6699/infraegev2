@@ -128,8 +128,8 @@
   stroke-width: 1.5;
   vector-effect: non-scaling-stroke;
 }
-.catalogHeading[data-motion-active="true"] .routeDraw,
-.catalogHeading[data-motion-active="true"] .routeMarker {
+.staircase[data-motion-active="true"] .routeDraw,
+.staircase[data-motion-active="true"] .routeMarker {
   animation-play-state: running;
 }
 

@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useElementActivity } from "~/shared/lib/element-activity";
 import {
   SurfaceGlint,
@@ -8,7 +8,7 @@ import { topicCatalog, type TopicCatalogTypes } from "~/entities/topic-catalog";
 import { ActionLink } from "~/shared/components/action-link";
 import { CustomIcon } from "~/shared/components/custom-icon";
 import { Badge } from "~/shared/components/badge";
-import { Image } from "~/shared/components/image";
+import { Image, type ImageTypes } from "~/shared/components/image";
 import { Typography } from "~/shared/components/typography";
 import styles from "../topic-catalog-page.module.css";
 
@@ -23,7 +23,9 @@ const topicIllustrationById: Readonly<Record<string, string>> = {
 
 export const TopicCatalogCard: React.FC<Props> = ({ entry }) => {
   const cardRef = useRef<HTMLElement>(null);
-  const active = useElementActivity(cardRef);
+  const [imageStatus, setImageStatus] = useState<ImageTypes.Status>("loading");
+  const visible = useElementActivity(cardRef);
+  const active = visible && imageStatus === "loaded";
   const illustration = topicIllustrationById[entry.id];
 
   return (
@@ -72,8 +74,16 @@ export const TopicCatalogCard: React.FC<Props> = ({ entry }) => {
           >
             {illustration ? (
               <Image
+                onStatusChange={setImageStatus}
                 className={styles.cardIllustrationMedia}
                 src={illustration}
+                srcSet={`${illustration.replace("/topics/", "/topics/responsive/").replace(".webp", "-480.webp")} 480w, ${illustration} 960w`}
+                sizes="(max-width: 44rem) 100vw, (max-width: 70rem) 50vw, 33vw"
+                loading={
+                  entry.id === "preobrazovanie-zapisey-chisel"
+                    ? "eager"
+                    : "lazy"
+                }
                 decorative
                 width={960}
                 height={640}

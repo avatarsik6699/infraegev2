@@ -31,7 +31,13 @@ module.exports = {
       startServerCommand: "HOST=127.0.0.2 PORT=3200 pnpm --filter web start",
       startServerReadyPattern: "Listening on",
       startServerReadyTimeout: 30000,
-      url: ["http://127.0.0.2:3200/", "http://127.0.0.2:3200/ege/16-rekursiya"],
+      url: [
+        "http://127.0.0.2:3200/",
+        "http://127.0.0.2:3200/ege",
+        "http://127.0.0.2:3200/courses",
+        "http://127.0.0.2:3200/courses/python",
+        "http://127.0.0.2:3200/ege/16-rekursiya",
+      ],
       chromePath,
       settings: {
         chromeFlags: `--no-sandbox --disable-dev-shm-usage --user-data-dir=${lighthouseProfileDir}`,

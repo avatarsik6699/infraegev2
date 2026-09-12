@@ -401,8 +401,12 @@ Repeated type roles belong to Typography; heading level describes document struc
 - Primary/secondary/quiet Button and ActionLink hierarchies describe emphasis; drawn navigation
   describes the established destination action. A variant must have a live specimen and an actual
   consumer or an explicit lab purpose. Merely retaining an old default is not such a purpose.
+- Loading geometry and intermediate paint must satisfy [§4.2](#42-loading-visual-stability).
 - Image owns intrinsic/fill geometry and object position; consumers own the outer media box,
-  placement, filters and masks. LearningVisualFrame owns figure/caption/purpose/description;
+  placement, filters and masks. Image forwards `srcSet`, `sizes`, `fetchPriority` and reports
+  readiness through `onStatusChange`, without exposing DOM events. Ready native images never
+  become invisible merely because hydration starts. A fallback source drops the original srcset.
+  Known intrinsic geometry is not overridden by a loading-only minimum height. LearningVisualFrame owns figure/caption/purpose/description;
   Diagram composes it with Image, while practice adapts its own DTOs. Captions follow media by
   default; explanatory lab compositions may explicitly place them before it.
 - Learning components share the current study default. Supported variations must be named and
@@ -464,6 +468,9 @@ below; the lab and both published lesson domains share it.
   sweep to the topic card's 9-second cycle; soft to the overview's 14-second cycle. Override only
   rhythm/placement via documented `--glint-duration`, `--glint-delay`, `--glint-easing` and
   `--glint-light` variables. Study light/drift uses `--surface-study-duration` (18 seconds).
+- Image-associated glint/drift/route effects require both loaded image status and element
+  activity. Page compositions own that conjunction; resource failure keeps effects paused and
+  preserves the static scene, text and geometry. Image load does not block reading/navigation.
 - Keep animation definitions mounted and change play state to pause/resume; do not re-key elements
   or restart completed once-only effects on scrolling. `artworkDrift` is the shared bounded
   four-pixel drift recipe; its parent supplies `data-motion-active` and optional `--drift-duration`.
@@ -513,6 +520,70 @@ semantic fills mix 14% of the corresponding standard status color into 86% page 
 in Mistake/Checkpoint mixes 8% matching learning ink into the block background. Neutral study callouts mix 5% primary ink into their quiet surface. Formula/code text stays primary ink, with no additional border or shadow. Historical non-study defaults are removed.
 Practice theory links use the shared FragmentLink drawn variant: decorative underline and orange link icon, preserving native fragment navigation. Previous/next navigation in Topic and Course lessons uses ActionLink drawn with the corresponding shared back/forward arrow. Their shared two-column navigation places previous on the left and next on the right, including when only one link exists; long titles wrap within their column. Outline links retain their plain variant.
 `LessonProgress.hideEmptyStatus` is opt-in and hides only the zero-solved sentence.
+
+## 4.2 Loading visual stability
+
+These rules apply to new pages, shared components and changes to existing loading paths.
+Correctness includes the first styled paint and intermediate frames, not only the settled screen.
+A low CLS score does not prove absence of flicker, dark patches or disappearing artwork.
+
+### Implementation constraints
+
+- **Reserve geometry before data arrives.** Supply known image dimensions/aspect ratio or a
+  stable parent media box. Loading, fallback and error states must occupy that same box;
+  loading-only minimum heights must not collapse after resolution. Do not place a newly
+  hydrated progress/status block above existing content without an SSR reservation.
+- **Keep SSR and hydration visually continuous.** Render readable content and neutral reserved
+  client-state slots before storage is available. Do not invent progress counts, hide an already
+  visible cached image on hydration, or replace the whole ready page with a loading scene.
+  Course overview progress reserves its text/bar slot and initially hides only the unknown bar.
+- **Keep font delivery stable.** Web fonts use `font-display: optional`; a document keeps its
+  initial fallback when delivery misses the short first-paint window. Keep fallbacks readable,
+  preload only critical display/UI faces, and do not preload mono globally or trigger a late
+  client-side font swap. Check cold and warm visits; their typeface may legitimately differ.
+- **Account for partial HTML delivery.** Large inline SVG and other markup can delay later
+  siblings even without JavaScript. Do not let late siblings redistribute already visible grid
+  tracks or right-aligned navigation. Reserve the root scrollbar gutter. The homepage reserves
+  PublicFooter's minimum track (3.5rem, 6.5rem below 30rem); the footer reserves desktop link
+  width. Update reservations and regressions together when footer content/spacing changes.
+- **Use stable decoration coordinates.** Background artwork must not reposition as the document
+  grows during delivery. Avoid percentage offsets against a still-growing content height;
+  anchor decoration to a stable local frame or independent intervals. Decorative layers must
+  not create layout overflow or affect reading geometry.
+- **Preserve transparency through filters.** A transparent or missing raster source must remain
+  transparent after every SVG/CSS filter chain. Clip alpha-generating color matrices to source
+  alpha; do not rely on masks, opacity, JavaScript readiness or a later image load to conceal
+  an opaque empty filter output. Verify pending, loaded, fallback and permanent-error states.
+- **Synchronize effects with their content.** Image-dependent glint/drift/route effects require
+  both resource readiness and the existing viewport/document activity condition. Preserve
+  reduced-motion behavior. Do not replay entrance effects merely because hydration occurred.
+- **Deliver appropriately sized images.** Use checked-in derivatives, native `srcSet`/`sizes`
+  and deliberate priorities through shared Image. Keep likely hero/LCP imagery eager; keep
+  secondary/offscreen imagery low-priority/lazy as appropriate. Do not preload every asset or
+  duplicate native loading in a page-owned network loader. Fallbacks must drop stale srcsets.
+- **Keep ownership explicit.** Shared Image owns native delivery/status and intrinsic geometry;
+  pages own composition, masks and readiness-dependent scenes. Use existing adapters and
+  components rather than route-specific DOM patches, arbitrary loading delays or timeout-based
+  assumptions that a resource must have arrived.
+
+### Review and regression evidence
+
+For changes to these paths, include the applicable cases below in the affected-area gate,
+using the focused production suite described in STACK. Extend its domain Page Objects/fixtures
+for new routes or states. This does not require the Full Gate for every visual edit.
+
+| Changed behavior | Required evidence |
+|---|---|
+| Fonts, hydration, progress/status geometry | Compare SSR/settled anchors with held fonts/JS, empty and populated storage; retain no-JS readability |
+| Page shell, inline SVG, grid tracks, footer or background placement | Throttle the entire cold-cache production HTML load on narrow/wide viewports with normal motion; isolated resource delays alone are insufficient |
+| Images, filters, masks, blend modes or readiness effects | Inspect intermediate screenshots with held and failed images, then loaded/cached images; check no-JS and reduced motion where applicable |
+| Paint artifact fix | A pixel/screenshot regression must fail on the faulty rendering and pass after the fix; CLS or computed-style assertions alone are insufficient |
+
+Use both geometry/CLS observations and actual intermediate-frame screenshots/console inspection.
+Compare meaningful anchors beyond the initial viewport when content below it can move. Do not
+raise thresholds, hide the affected region or disable ordinary motion simply to obtain a pass.
+Record build mode, viewport/browser, cache/network profile, injected failures and limitations.
+Report observed stability for the tested cases, not a universal guarantee for every device.
 
 ## 5. Responsive and accessible behavior
 

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { cssUtils } from "~/shared/lib/css-utils";
 import { useIsEnhanced } from "~/shared/lib/use-is-enhanced";
 import { ImageErrorState } from "./components/image-error-state";
@@ -25,10 +26,19 @@ export const Image: React.FC<ImageTypes.Props> = (props) => {
   const aspectRatio =
     props.layout === "fill" ? undefined : inferAspectRatio(props);
 
+  const onStatusChange = props.onStatusChange;
+  useEffect(
+    function reportImageStatusFx() {
+      onStatusChange?.(imageStatus.status);
+    },
+    [onStatusChange, imageStatus.status],
+  );
+
   return (
     <div
       className={cssUtils.cx(styles.root, props.className)}
       data-status={imageStatus.status}
+      data-sized={Boolean(aspectRatio) || undefined}
       data-layout={props.layout ?? "intrinsic"}
       data-enhanced={enhanced || undefined}
       style={aspectRatio ? { aspectRatio: String(aspectRatio) } : undefined}
@@ -38,6 +48,11 @@ export const Image: React.FC<ImageTypes.Props> = (props) => {
       ) : (
         <ImageMedia
           loading={props.loading}
+          srcSet={
+            imageStatus.currentSrc === props.src ? props.srcSet : undefined
+          }
+          sizes={props.sizes}
+          fetchPriority={props.fetchPriority}
           imageStatus={imageStatus}
           alt={alt}
           decorative={decorative}

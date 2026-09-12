@@ -449,6 +449,8 @@ export const ComponentsCatalog: React.FC = () => {
               key={loadingDemoKey}
               src={`/diagrams/bst-subtrees.png?demo=${String(loadingDemoKey)}`}
               alt="Двоичное дерево для демонстрации загрузки"
+              loading="eager"
+              fetchPriority="low"
               width={812}
               height={390}
             />

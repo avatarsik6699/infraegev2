@@ -66,6 +66,45 @@ describe("ExternalLink", () => {
 });
 
 describe("Image", () => {
+  it("reports readiness, resets on src changes and disables responsive candidates for fallback", () => {
+    const onStatusChange = vi.fn();
+    const result = render(
+      <Image
+        src="/large.webp"
+        srcSet="/small.webp 480w, /large.webp 960w"
+        sizes="50vw"
+        fetchPriority="high"
+        width={960}
+        height={640}
+        fallbackSrc="/fallback.webp"
+        alt="Схема"
+        onStatusChange={onStatusChange}
+      />,
+    );
+    const image = screen.getByRole("img", { name: "Схема" });
+    expect(image.getAttribute("srcset")).toContain("480w");
+    expect(image.getAttribute("sizes")).toBe("50vw");
+    expect(image.getAttribute("fetchpriority")).toBe("high");
+    expect(onStatusChange).toHaveBeenLastCalledWith("loading");
+    fireEvent.load(image);
+    expect(onStatusChange).toHaveBeenLastCalledWith("loaded");
+    result.rerender(
+      <Image
+        src="/next.webp"
+        srcSet="/next-small.webp 480w"
+        fallbackSrc="/fallback.webp"
+        alt="Схема"
+        onStatusChange={onStatusChange}
+      />,
+    );
+    expect(onStatusChange).toHaveBeenLastCalledWith("loading");
+    fireEvent.error(image);
+    expect(image.getAttribute("src")).toBe("/fallback.webp");
+    expect(image.getAttribute("srcset")).toBeNull();
+    fireEvent.error(image);
+    expect(onStatusChange).toHaveBeenLastCalledWith("error");
+  });
+
   it("settles an image already loaded before effects without a load event", () => {
     vi.spyOn(HTMLImageElement.prototype, "complete", "get").mockReturnValue(
       true,

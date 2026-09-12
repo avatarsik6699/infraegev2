@@ -122,6 +122,7 @@
 }
 
 .progress > p {
+  min-height: 2lh;
   margin: 0;
   font-size: var(--text-sm);
 }
@@ -579,4 +580,8 @@
   .module:not(:last-child)::before {
     display: none;
   }
+}
+
+.progressPending {
+  visibility: hidden;
 }

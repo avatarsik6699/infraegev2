@@ -169,7 +169,7 @@ default local shipping.
 | Smoke | `curl -f http://localhost:18000/health/ready` (backend) — frontend smoke is the build prerender crawl | Full Gate API port from `docker-compose.override.yml` |
 | SAST / secrets / dependency audit | `pnpm audit:security` | Docker required for pinned Gitleaks 8.30.1 and Trivy 0.73.0; Semgrep 1.172.0 and pip-audit 2.10.1 run through uvx |
 | Accessibility audit | `pnpm audit:a11y` | local Playwright/axe; foundation and not-found routes, serious/critical violations fail |
-| Performance budget | `scripts/run-host-web-gate.sh bash -c 'pnpm --filter web build && pnpm audit:performance'` | restores the repository-owned `infraege-full-gate` web service on success/failure; local Chrome against `/` and `/ege/16-rekursiya`; median of 3, enforced LCP ceiling ≤4.0s, CLS ≤0.1, TBT ≤200ms as lab proxy for INP. LCP ≤2.8s remains the product target to restore when stable measurement and optimization evidence support tightening the gate |
+| Performance budget | `scripts/run-host-web-gate.sh bash -c 'pnpm --filter web build && pnpm audit:performance'` | restores the repository-owned `infraege-full-gate` web service on success/failure; local Chrome against `/`, `/ege`, `/courses`, `/courses/python` and `/ege/16-rekursiya`; median of 3, enforced LCP ceiling ≤4.0s, CLS ≤0.1, TBT ≤200ms as lab proxy for INP. LCP ≤2.8s remains the product target to restore when stable measurement and optimization evidence support tightening the gate |
 | Content validation | `pnpm test:content-assets && pnpm validate:content` | the isolated validator tests reject unsafe paths and invalid asset metadata before the real-tree pass; docs/SPEC.md §2.2/§3/§7.2 validation also checks Course/module/lesson membership and titles, `practiceTaskIds`, `topic_ids`, `course_lesson_ids`, `theory_links.hash`, task asset metadata and exclusive task ownership |
 | Repository hygiene | analyze all gate reports, then `make clean-dry-run && make clean && make clean-check` | always run last; Lighthouse removes its external Chrome profile on every exit, while this terminal step removes retained reports, builds and caches from the repository |
 
@@ -223,6 +223,28 @@ browser is installed or executed inside an application image or Compose service.
 gate uses its locally installed Chromium and locally starts Vite and Uvicorn.
 
 ## Testing
+
+### Layout stability (focused production browser suite)
+
+```bash
+scripts/run-host-web-gate.sh pnpm --filter web build
+pnpm --filter web test:layout
+```
+
+This local-only suite owns a production Node server at `127.0.0.2:3200` and tests the four
+public discovery/overview routes with held fonts, images and JavaScript, stored progress,
+plus no-JS, whole-document network/CPU throttling and pixel comparisons of pending/failed
+artwork. Its domain Page Object owns geometry/CLS and paint instrumentation; normal dev E2E
+excludes this spec. Apply the affected-case review matrix in [FRONTEND §4.2](FRONTEND.md#42-loading-visual-stability)
+when changing delivery, hydration, page geometry or filter/effect behavior. Run against a fresh
+production build: dev HMR or a settled screenshot alone cannot verify these loading contracts.
+It does not run a full performance gate or change the CLS/LCP thresholds.
+
+`pnpm images:generate` regenerates only `public/{images/course-catalog,images/course-overview,topics}/responsive`
+WebP derivatives from the original checked-in artwork. It uses host FFmpeg/libwebp (the same
+host conversion capability as `brand:generate`), Lanczos resizing, quality 85, compression level 6;
+no original/reference is overwritten. There is no new runtime dependency. Regeneration requires
+FFmpeg; normal application build/deploy copies the checked-in derivatives.
 
 ### Backend
 

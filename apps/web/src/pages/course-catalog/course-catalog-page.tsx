@@ -1,4 +1,3 @@
-import { useRef } from "react";
 import { courseCatalog } from "~/entities/course";
 import { PageContainer } from "~/shared/components/page-container";
 import { Typography } from "~/shared/components/typography";
@@ -8,13 +7,9 @@ import { CourseCatalogAmbientField } from "./components/course-catalog-ambient-f
 import { CourseCatalogCard } from "./components/course-catalog-card";
 import { CourseCatalogStaircase } from "./components/course-catalog-staircase";
 import { CourseCatalogTrail } from "./components/course-catalog-trail";
-import { useElementActivity } from "~/shared/lib/element-activity";
 import styles from "./course-catalog-page.module.css";
 
 export const CourseCatalogPage: React.FC = () => {
-  const headingRef = useRef<HTMLElement>(null);
-  const motionActive = useElementActivity(headingRef);
-
   return (
     <div className={styles.page} data-course-catalog-page>
       <PublicHeader activeSection="courses" />
@@ -27,11 +22,7 @@ export const CourseCatalogPage: React.FC = () => {
           aria-labelledby="course-catalog-heading"
         >
           <CourseCatalogTrail />
-          <header
-            ref={headingRef}
-            className={styles.catalogHeading}
-            data-motion-active={motionActive || undefined}
-          >
+          <header className={styles.catalogHeading}>
             <div className={styles.headingCopy}>
               <Typography.Title id="course-catalog-heading" order={1}>
                 Мини-курсы

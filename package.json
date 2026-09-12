@@ -17,6 +17,7 @@
     "format:check": "prettier . --check && cd apps/api && uv run ruff format --check app tests ../../ops",
     "api:generate": "node scripts/api-contracts.mjs",
     "api:check": "node scripts/api-contracts.mjs --check",
+    "images:generate": "node scripts/generate-responsive-images.mjs",
     "brand:generate": "node scripts/generate-brand-assets.mjs",
     "test:content-assets": "node --test scripts/tests/task-content-assets.test.mjs",
     "validate:content": "node scripts/validate-content-links.mjs",

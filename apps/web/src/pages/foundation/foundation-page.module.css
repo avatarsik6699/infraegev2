@@ -1,4 +1,5 @@
 .page {
+  --home-footer-min-height: 3.5rem;
   --text-home-hero: clamp(2.75rem, 4.7vw, 5.75rem);
   --text-home-description: clamp(1rem, 1.35vw, 1.25rem);
   --text-home-card-caption: 0.875rem;
@@ -9,7 +10,10 @@
   position: relative;
   isolation: isolate;
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-rows: auto minmax(0, 1fr) minmax(
+      var(--home-footer-min-height),
+      auto
+    );
   height: 100svh;
   min-width: 0;
   min-height: 100svh;
@@ -552,7 +556,7 @@
 @media (max-width: 60rem) {
   .page {
     height: auto;
-    grid-template-rows: auto 1fr auto;
+    grid-template-rows: auto 1fr minmax(var(--home-footer-min-height), auto);
     --text-home-hero: clamp(3rem, 8vw, 6rem);
   }
 
@@ -690,6 +694,13 @@
   }
   [data-pattern-name="hexNibble"] {
     transform: translate(-240px, 20px);
+  }
+}
+
+/* Reserve the stacked PublicFooter before the streamed HTML reaches it. */
+@media (max-width: 30rem) {
+  .page {
+    --home-footer-min-height: 6.5rem;
   }
 }
 

@@ -1,23 +1,18 @@
 import { SvgPattern } from "~/shared/components/svg-pattern";
-import { useRef } from "react";
 import { SvgDrawing } from "~/shared/components/svg-drawing";
-import { useElementActivity } from "~/shared/lib/element-activity";
 import styles from "../course-overview-page.module.css";
 
 const overviewField = {
   route: "M75 45C-30 90 10 260 180 295S430 230 470 300C510 340 520 240 540 185",
 };
 
-export const CourseOverviewField: React.FC = () => {
-  const fieldRef = useRef<HTMLDivElement>(null);
-  const active = useElementActivity(fieldRef);
+export const CourseOverviewField: React.FC<{ active: boolean }> = (props) => {
   return (
     <div
-      ref={fieldRef}
       data-course-field
       className={styles.field}
       aria-hidden="true"
-      data-motion-active={active || undefined}
+      data-motion-active={props.active || undefined}
     >
       <svg viewBox="0 0 580 400" fill="none" className={styles.fieldScene}>
         <SvgPattern.Grid

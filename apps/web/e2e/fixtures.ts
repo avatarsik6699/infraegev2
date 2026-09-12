@@ -1,3 +1,4 @@
+import { LayoutStabilityPage } from "./pages/layout-stability.page";
 import { AuxiliaryPagesPage } from "./pages/auxiliary-pages.page";
 import { LessonReadingPreviewPage } from "./pages/lesson-reading-preview.page";
 import { test as base } from "@playwright/test";
@@ -14,6 +15,8 @@ import { TopicLessonPage } from "./pages/topic-lesson.page";
 import { TopicCatalogPage } from "./pages/topic-catalog.page";
 
 type AppFixtures = {
+  layoutStabilityPage: LayoutStabilityPage;
+  noJavaScriptLayoutStabilityPage: LayoutStabilityPage;
   auxiliaryPagesPage: AuxiliaryPagesPage;
   noJavaScriptAuxiliaryPagesPage: AuxiliaryPagesPage;
   lessonReadingPreviewPage: LessonReadingPreviewPage;
@@ -41,6 +44,21 @@ type AppFixtures = {
 };
 
 export const test = base.extend<AppFixtures>({
+  layoutStabilityPage: async ({ page }, use) => {
+    await use(new LayoutStabilityPage(page));
+  },
+  noJavaScriptLayoutStabilityPage: async ({ baseURL, browser }, use) => {
+    const context = await browser.newContext({
+      baseURL,
+      javaScriptEnabled: false,
+      viewport: { width: 390, height: 900 },
+    });
+    try {
+      await use(new LayoutStabilityPage(await context.newPage()));
+    } finally {
+      await context.close();
+    }
+  },
   auxiliaryPagesPage: async ({ page }, use) => {
     await use(new AuxiliaryPagesPage(page));
   },
