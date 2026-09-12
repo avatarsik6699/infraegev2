@@ -7,12 +7,12 @@
 | Change | `112` |
 | Slug | `layout-stability` |
 | Title | Стабильная загрузка публичных страниц |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/112-layout-stability` |
 
 ## Goal
 
-Устранить подтверждённые LS-01–LS-05 из [аудита](../artifacts/layout-stability-audit.md)
+Устранить подтверждённые LS-01–LS-05 из [аудита](../../artifacts/layout-stability-audit.md)
 на `/`, `/ege`, `/courses`, `/courses/python`. Сохранить читаемый SSR, текущую композицию
 и неподвижную геометрию при поздних/отсутствующих шрифтах, изображениях и JavaScript.
 Источник: аудит и команда архитектора «Приступай к реализации»; mode continue.
@@ -95,7 +95,7 @@ See SPEC §5/§8, FRONTEND §4/§4.1/§5/§8 and Files above.
 
 ## Gate Checks
 
-Use [STACK](../STACK.md) Critical Gate. Explicit scope includes a production build and focused
+Use [STACK](../../STACK.md) Critical Gate. Explicit scope includes a production build and focused
 layout stability browser suite plus MCP cold-network verification; not Full Gate or full E2E.
 Performance route coverage changes without raising thresholds. No production operations.
 
@@ -105,7 +105,7 @@ Performance route coverage changes without raising thresholds. No production ope
 
 ## Implementation Notes
 
-- Проверки и ограничения: [verification](../artifacts/layout-stability-verification.md).
+- Проверки и ограничения: [verification](../../artifacts/layout-stability-verification.md).
 - F6–F8 выявлены только при throttling всей HTML-передачи; isolated задержки fonts/images/JS их не воспроизводили.
 - Optional допускает сохранение fallback на холодном визите; frontend contract обновлён.
 - Существующие 14 staged материалов архитектора сохранены без изменений.
