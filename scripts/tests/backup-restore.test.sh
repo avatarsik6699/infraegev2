@@ -1,80 +1,30 @@
 #!/usr/bin/env bash
-set -Eeuo pipefail
-
+set -euo pipefail
 repo_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)
 test_root=$(mktemp -d)
 trap 'rm -rf -- "$test_root"' EXIT
-fake_bin="$test_root/bin"
-backup_root="$test_root/backups"
-docker_log="$test_root/docker.log"
-restic_log="$test_root/restic.log"
-env_file="$test_root/production.env"
-mkdir -p "$fake_bin" "$backup_root"
-printf 'POSTGRES_USER=infraege\nPOSTGRES_DB=infraege\nPOSTGRES_PASSWORD=synthetic\n' >"$env_file"
-
-cat >"$fake_bin/restic" <<'EOF'
+mkdir "$test_root/bin"
+cat >"$test_root/bin/docker" <<'FAKE'
 #!/usr/bin/env bash
-set -euo pipefail
-printf '%s\n' "$*" >>"$RESTIC_LOG"
-case "${1:-}" in
-  snapshots)
-    [[ " $* " == *' --json '* ]] && printf '[{"id":"application-snapshot","time":"2026-08-20T00:00:00Z"}]\n'
-    ;;
-  restore)
-    target=
-    while (($#)); do
-      [[ $1 == --target ]] && { target=$2; break; }
-      shift
-    done
-    mkdir -p "$target/snapshot"
-    : >"$target/snapshot/application.dump"
-    ;;
-esac
-EOF
-
-cat >"$fake_bin/docker" <<'EOF'
-#!/usr/bin/env bash
-set -euo pipefail
-printf '%s\n' "$*" >>"$DOCKER_LOG"
-case "${1:-}" in
-  compose)
-    [[ " $* " == *' exec -T postgres pg_dump '* ]] && printf 'synthetic-dump'
-    ;;
-  run)
-    printf 'synthetic-container-id\n'
-    ;;
-  exec | cp | rm)
-    ;;
-  *)
-    echo "unexpected docker command: $*" >&2
-    exit 1
-    ;;
-esac
-EOF
-chmod +x "$fake_bin/restic" "$fake_bin/docker"
-
-PATH="$fake_bin:$PATH" BACKUP_ROOT="$backup_root" RESTIC_LOG="$restic_log" \
-  DOCKER_LOG="$docker_log" RESTIC_PASSWORD_FILE="$test_root/restic-password" \
-  RESTIC_LOCK_FILE="$test_root/restic.lock" BACKUP_STATUS_FILE="$test_root/status.json" \
-  "$repo_dir/scripts/backup.sh" "$env_file"
-
-grep -Fq 'backup --tag infraege-application' "$restic_log"
-grep -Fq 'forget --tag infraege-application' "$restic_log"
-grep -Fq 'snapshots --tag infraege-application --json' "$restic_log"
-! grep -Eq 'umami|beszel' "$docker_log"
-jq -e '.status == "success" and .snapshotId == "application-snapshot"' \
-  "$test_root/status.json" >/dev/null
-
-: >"$docker_log"
-: >"$restic_log"
-PATH="$fake_bin:$PATH" BACKUP_ROOT="$backup_root" RESTIC_LOG="$restic_log" \
-  DOCKER_LOG="$docker_log" RESTIC_PASSWORD_FILE="$test_root/restic-password" \
-  RESTIC_LOCK_FILE="$test_root/restic.lock" "$repo_dir/scripts/restore-check.sh"
-
-grep -Fq 'restore latest --tag infraege-application --target' "$restic_log"
-grep -Fq 'pg_restore -U postgres --exit-on-error -d application_restore' "$docker_log"
-! grep -Eq 'umami|beszel' "$docker_log"
-grep -Fq 'rm --force infraege-restore-check-' "$docker_log"
-[[ -z $(find "$backup_root" -maxdepth 1 -type d -name 'restore.*' -print -quit) ]]
-
-echo 'application backup and restore drill test: PASS'
+echo 'unexpected Docker access' >>"$DB_TEST_LOG"
+exit 99
+FAKE
+cp "$test_root/bin/docker" "$test_root/bin/restic"
+chmod +x "$test_root/bin/docker" "$test_root/bin/restic"
+export PATH="$test_root/bin:$PATH" DB_TEST_LOG="$test_root/access.log"
+reject() {
+  if "$@" >"$test_root/output" 2>&1; then
+    echo 'unsafe invocation accepted' >&2; exit 1
+  fi
+  [[ ! -e $DB_TEST_LOG ]]
+}
+reject env DB_ENV=dev DB_PROJECT=infraege bash "$repo_dir/scripts/backup.sh" /not/read
+reject env DB_ENV=prod DB_PROJECT=infraege-ops bash "$repo_dir/scripts/backup.sh" /not/read
+reject env DB_ENV=prod DB_PROJECT=infraege bash "$repo_dir/scripts/restore-check.sh"
+reject env DB_ENV=restore DB_PROJECT=infraege bash "$repo_dir/scripts/restore-check.sh"
+reject env DB_ENV=dev DB_PROJECT=infraege-dev bash "$repo_dir/scripts/db-export.sh" "$test_root/export"
+reject env DB_ENV=prod DB_PROJECT=infraege bash "$repo_dir/scripts/db-export.sh" "$test_root"
+source "$repo_dir/scripts/lib/application-db.sh"
+mkdir "$test_root/bundle"
+if db_validate_bundle "$test_root/bundle" >/dev/null 2>&1; then exit 1; fi
+echo 'application backup/restore fail-closed contracts: PASS (real SQL proof: practice-db-foundation.test.sh)'

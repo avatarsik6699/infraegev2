@@ -12,6 +12,11 @@ mode=${1:-application}
   echo 'usage: ops/install-backup-timers.sh [application|activate-operations]' >&2
   exit 64
 }
+[[ -L /opt/infraege/database-current &&
+   -r /opt/infraege/database-current/scripts/lib/application-db.sh ]] || {
+  echo 'application timers require the verified database-current maintenance release' >&2
+  exit 1
+}
 
 install -m 644 "$repo_dir/ops/systemd/infraege-backup.service" /etc/systemd/system/
 install -m 644 "$repo_dir/ops/systemd/infraege-backup.timer" /etc/systemd/system/

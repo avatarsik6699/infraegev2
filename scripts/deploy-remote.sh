@@ -26,6 +26,9 @@ fi
   exit 1
 }
 
+exec 7>/run/lock/infraege-deploy.lock
+flock -n 7 || { echo 'another application deploy/DB transfer is active' >&2; exit 1; }
+
 root=/opt/infraege
 observability_network=infraege-observability-ingress
 release_dir="$root/releases/$DEPLOY_SHA"
@@ -53,14 +56,38 @@ run_compose() {
     -f "$target_dir/infra/docker-compose.prod.yml" "$@"
 }
 
-rollback() {
-  if [[ -n $previous_release && -r $previous_release/.deploy-sha ]]; then
-    previous_sha=$(<"$previous_release/.deploy-sha")
-    echo "Deploy failed; rolling back to $previous_sha" >&2
-    run_compose "$previous_release" "$previous_sha" up --detach --remove-orphans
-  fi
+source "$release_dir/scripts/lib/application-db-release.sh"
+db_switched=false
+source_major=none
+source_container=$(docker ps -q --filter label=com.docker.compose.project=infraege \
+  --filter label=com.docker.compose.service=postgres)
+if [[ -n $source_container ]]; then
+  [[ $source_container != *$'\n'* ]] || { echo 'ambiguous application postgres identity' >&2; exit 1; }
+  source_major=$(docker exec "$source_container" sh -ec \
+    'psql -X -At -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SHOW server_version_num"')
+  case "$source_major" in
+    16*) ;;
+    18*) db_switched=true ;;
+    *) echo 'unsupported source database version' >&2; exit 1 ;;
+  esac
+elif [[ -n $previous_release ]]; then
+  echo 'installed source postgres must be running for inventory; refusing blind replacement' >&2
+  exit 1
+fi
+# Candidate declares its DB compatibility; reject an old release before changing any containers.
+[[ $(cat "$release_dir/infra/database-major") == 18 ]] || {
+  echo 'candidate lacks PG18 compatibility declaration' >&2; exit 1;
 }
-trap rollback ERR
+if [[ -n $previous_release && $(cat "$previous_release/infra/database-major" 2>/dev/null || true) != 18 ]]; then
+  previous_sha=$(<"$previous_release/.deploy-sha")
+  [[ -f /etc/infraege/pg18-rollback-compatible-sha &&
+     $(stat -c '%u:%a' /etc/infraege/pg18-rollback-compatible-sha) == 0:600 &&
+     $(cat /etc/infraege/pg18-rollback-compatible-sha) == "$previous_sha" ]] || {
+    echo 'PG18 rollback compatibility proof for the exact previous SHA is required before cutover' >&2
+    exit 1
+  }
+fi
+trap application_db_rollback ERR
 
 printf '%s\n' "$DEPLOY_SHA" > "$release_dir/.deploy-sha"
 docker network inspect "$observability_network" >/dev/null 2>&1 ||
@@ -72,7 +99,20 @@ if ! run_compose "$release_dir" "$DEPLOY_SHA" run --rm --no-deps --interactive=f
   echo "TLS certificate is missing or unreadable inside the Nginx container; run obtain-initial-certificate.sh first" >&2
   exit 1
 fi
+if [[ $source_major == 16* ]]; then
+  [[ ${DB_TRANSFER_MODE:-} == 16-to-18 && -n $previous_release ]] || {
+    echo 'PG16 requires an installed previous release and explicit DB_TRANSFER_MODE=16-to-18' >&2; exit 1;
+  }
+  previous_sha=$(<"$previous_release/.deploy-sha")
+  run_compose "$previous_release" "$previous_sha" stop web api
+  DB_ENV=prod DB_PROJECT=infraege DB_DEPLOY_LOCK_HELD=1 \
+    bash "$release_dir/scripts/db-transfer.sh" --prepare-release "$env_file"
+fi
+db_switched=true
 run_compose "$release_dir" "$DEPLOY_SHA" up --detach --wait --wait-timeout 60 postgres
+# DB maintenance follows the installed DB format even if application smoke triggers rollback.
+ln -sfn "$release_dir" "$root/database-current"
+bash "$release_dir/ops/install-backup-timers.sh" application
 run_compose "$release_dir" "$DEPLOY_SHA" up --detach --remove-orphans --wait --wait-timeout 180
 
 curl --fail --silent --show-error --max-time 15 https://infraege.ru/health/ready |
@@ -94,6 +134,5 @@ awk -v deploy_sha="$DEPLOY_SHA" '
 ' "$env_file" > "$env_tmp"
 chmod 600 "$env_tmp"
 mv "$env_tmp" "$env_file"
-
 trap - ERR
 echo "Deployment $DEPLOY_SHA is healthy."

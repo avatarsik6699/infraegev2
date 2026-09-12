@@ -43,7 +43,10 @@ PATH="$fake_bin:$PATH" bash "$repo_dir/scripts/run-host-web-gate.sh" true
 ! grep -Fq 'stop web' "$temporary/docker.log"
 ! grep -Fq 'up -d --no-deps web' "$temporary/docker.log"
 
-rendered=$(POSTGRES_PASSWORD=contract-only docker compose --project-name infraege-full-gate \
+rendered=$(POSTGRES_PASSWORD=contract-only \
+  DB_RUNTIME_PASSWORD=contract-runtime DB_IMPORT_PASSWORD=contract-import \
+  DB_MIGRATION_PASSWORD=contract-migration DB_BACKUP_PASSWORD=contract-backup \
+  docker compose --project-name infraege-full-gate \
   -f "$repo_dir/infra/docker-compose.yml" \
   -f "$repo_dir/infra/docker-compose.override.yml" config --format json)
 jq -e '

@@ -20,6 +20,7 @@ apps/api/Dockerfile
 apps/api/entrypoint.sh
 infra/docker-compose.yml
 infra/docker-compose.dev.yml
+scripts/db-provision-roles.sh
 "}
 
 case "$ACTION" in
@@ -55,6 +56,10 @@ cd "$REPO_ROOT"
 compose() {
   POSTGRES_USER=infraege \
     POSTGRES_PASSWORD=infraege-local-only \
+    DB_RUNTIME_PASSWORD=infraege-dev-runtime-only \
+    DB_IMPORT_PASSWORD=infraege-dev-import-only \
+    DB_MIGRATION_PASSWORD=infraege-dev-migration-only \
+    DB_BACKUP_PASSWORD=infraege-dev-backup-only \
     POSTGRES_DB=infraege \
     APP_ENV=development \
     DEPLOY_SHA=development \

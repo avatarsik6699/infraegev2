@@ -2,6 +2,7 @@
 set -Eeuo pipefail
 
 repo_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)
+source "$repo_dir/scripts/lib/application-db.sh"
 test_root=$(mktemp -d)
 trap 'rm -rf -- "$test_root"' EXIT
 release=0123456789abcdef0123456789abcdef01234567
@@ -9,6 +10,7 @@ app_env="$test_root/application.env"
 ops_env="$test_root/operations.env"
 
 printf 'POSTGRES_PASSWORD=synthetic\n' >"$app_env"
+printf 'DB_RUNTIME_PASSWORD=synthetic-runtime\nDB_IMPORT_PASSWORD=synthetic-import\nDB_MIGRATION_PASSWORD=synthetic-migration\nDB_BACKUP_PASSWORD=synthetic-backup\n' >>"$app_env"
 cat >"$ops_env" <<'EOF'
 OPS_POSTGRES_PASSWORD=synthetic-postgres
 UMAMI_APP_SECRET=synthetic-umami
@@ -24,13 +26,21 @@ OPS_RELEASE=$release docker compose --env-file "$ops_env" --project-name infraeg
   -f "$repo_dir/ops/observability/compose.yml" config --format json \
   >"$test_root/operations.json"
 
-jq -e '
+jq -e --arg image "$DB_IMAGE" '
   (.services | keys) == ["api","nginx","postgres","web"] and
   .networks["observability-ingress"].external == true and
   .networks["observability-ingress"].name == "infraege-observability-ingress" and
   (.services.nginx.networks | has("default")) and
   (.services.nginx.networks | has("observability-ingress")) and
-  (.volumes | keys) == ["postgres-data"]
+  (.volumes | keys) == ["postgres18-data"] and
+  .volumes["postgres18-data"].name == "infraege_postgres18-data" and
+  .services.postgres.image == $image and
+  .services.postgres.environment.PGDATA == "/var/lib/postgresql/18/docker" and
+  any(.services.postgres.volumes[]; .type == "volume" and .source == "postgres18-data" and .target == "/var/lib/postgresql") and
+  (.services.api.environment.DATABASE_URL | startswith("postgresql://infraege_runtime:")) and
+  (.services.api.environment | has("DB_IMPORT_PASSWORD") | not) and
+  (.services.api.environment | has("DB_MIGRATION_PASSWORD") | not) and
+  (.services.api.environment | has("DB_BACKUP_PASSWORD") | not)
 ' "$test_root/application.json" >/dev/null
 
 jq -e '

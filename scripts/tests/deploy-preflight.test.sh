@@ -25,6 +25,29 @@ network_line=$(grep -n 'docker network inspect "$observability_network"' "$deplo
 config_line=$(grep -n '"$DEPLOY_SHA" config --quiet' "$deploy_script" | cut -d: -f1)
 [[ $preflight_line -lt $extract_line && $preflight_line -lt $pull_line ]]
 [[ $network_line -lt $config_line && $config_line -lt $pull_line ]]
+source_major_line=$(grep -n 'source_major=$(docker exec' "$deploy_script" | cut -d: -f1)
+rollback_trap_line=$(grep -n 'trap application_db_rollback ERR' "$deploy_script" | cut -d: -f1)
+[[ $source_major_line -lt $rollback_trap_line ]]
 ! grep -Fq 'init-umami-db.sh' "$deploy_script"
 
 echo 'deploy environment preflight test: PASS'
+
+# Execute the shared rollback path with a fake transport. A switched database must never be
+# replaced by the old Compose postgres service, even if the previous release used PG16.
+source "$repo_dir/scripts/lib/application-db-release.sh"
+previous_release="$test_root/previous"
+release_dir="$test_root/candidate"
+env_file="$valid_env"
+mkdir "$previous_release"
+printf '%s\n' "$test_sha" >"$previous_release/.deploy-sha"
+docker() { printf '%s\n' "$*" >>"$test_root/rollback.log"; }
+run_compose() { printf 'previous-compose %s\n' "$*" >>"$test_root/rollback.log"; }
+db_switched=true
+application_db_rollback
+grep -Fq 'up --detach --no-deps nginx web api' "$test_root/rollback.log"
+! grep -Eq 'previous-compose|pg_restore|downgrade|up .*postgres' "$test_root/rollback.log"
+: >"$test_root/rollback.log"
+db_switched=false
+application_db_rollback
+grep -Fq 'previous-compose' "$test_root/rollback.log"
+echo 'database failure recovery contracts: PASS'

@@ -1,17 +1,67 @@
 # Backup and restore
 
+## Change 113 inventory and transfer preconditions (2026-09-12)
+
+Read-only SQL against the application database confirmed PostgreSQL 16.14 in both the local
+`infraege-dev` project and live `infraege`. Each `infraege` database was 7,699,479 bytes, with
+the `public` schema owned by `pg_database_owner` and no user tables. Local `plpgsql` is 1.0.
+The bootstrap/application login `infraege` currently has superuser, create-role and create-DB
+privileges; the four restricted application roles do not yet exist. This is measured inventory,
+not a conclusion inferred from the absence of ORM models.
+
+Ownership was checked through Compose project/service labels and mount metadata. Local PG16
+uses `infraege-dev_postgres-data`; live PG16 uses `infraege_postgres-data`, both mounted at
+`/var/lib/postgresql/data`. The local container was resumed solely for the SQL inventory and
+returned to its original stopped state. Other local volumes were not mounted or inspected.
+The live application cluster also contains legacy `umami` database/role metadata: exclude both
+from application transfer and role export. Its tables/data were not opened. Independent
+operations databases and volumes remain outside this procedure.
+
+Live release: `a5b0bf5793a85a4e9090f47c311ae01c022f194d`. The application backup and restore timers
+were active; last triggers were 2026-09-12 02:31:13 UTC and 2026-09-01 01:01:50 UTC respectively.
+Both services reported success/exit 0. Backup status recorded success at 02:31:17 UTC on September
+12, with a 36-hour freshness limit. These are installed-job status observations, not a new restore
+drill or proof of the future PG18 backup format. Live disk had 26 GiB available (32% used); the
+workstation filesystem had 6.8 GiB available (86% used), while local Docker reported roughly
+928 GiB available. Recheck disk space immediately before transfer.
+
+Transfer/recovery sequence:
+
+1. Re-run sanitized inventory with explicit environment/project ownership. Record application
+   database/schema/role ownership, version, release, size, disk and backup/restore status.
+2. Reserve room for the retained PG16 volume, new PG18 volume, logical backup, restore workspace
+   and WAL growth; retain at least 30% free disk. Stop application writers for the final dump.
+3. Export only the application database and its allowlisted roles/privileges, with release/schema
+   metadata and checksums. Do not use cluster-wide globals export on this legacy shared cluster.
+4. Restore into a separate PG18 volume (`/var/lib/postgresql`, PGDATA
+   `/var/lib/postgresql/18/docker`) and prove schema, data and role permissions using SQL.
+   Never start PG18 with the old PG16 data directory.
+5. Before target writes, a failed rehearsal/cutover can return to the retained PG16 source.
+   After target writes, PG16 is stale: stop writers and use a separately reviewed recovery plan
+   from current PG18 data. Never automatically downgrade or restore over either retained volume.
+6. Production switching is an explicit serialized release operation following successful local
+   nonempty rehearsal. Keep the old volume until a separate cleanup authorization.
+
+The approved image was resolved and pulled from Docker Hub as
+`postgres:18.6-alpine3.24@sha256:d3e1620b530c944afa6e887d22eb899824da68e19c52024bf98f5220c88a65b2`.
+The code now uses this image; production remains PG16 until the explicit release transfer.
+
 Application and operations own separate backup contracts while sharing one encrypted Restic
 repository. Application snapshots use tag `infraege-application` and contain only the application
-PostgreSQL dump plus `/etc/infraege/production.env`. Operations snapshots use tag `infraege-ops`
+logical bundle: application dump, allowlisted roles, schema/release metadata, SQL data checks,
+checksums and protected `/etc/infraege/production.env`. Operations snapshots use tag `infraege-ops`
 and contain the Umami PostgreSQL dump, Beszel state and the release-specific operations env. Each
 tag has its own 7 daily + 4 weekly + 3 monthly retention, restore proof and freshness marker.
+Application retention groups by host/tag, not the changing temporary dump path.
 
 The jobs share `/run/lock/infraege-restic.lock`, so backup, restore and prune cannot mutate the same
 repository concurrently. sre-kit may report sanitized status but never runs these mutations.
 
 ## Installation and activation
 
-Before cutover, install only the application jobs:
+The release coordinator sets `/opt/infraege/database-current` to the maintenance release matching
+the installed DB. Application systemd units resolve all scripts and libraries through that pointer,
+independently of application-image rollback. Once it exists, install only the application jobs:
 
 ```bash
 sudo ops/install-backup-timers.sh application
@@ -31,6 +81,41 @@ analytics-retention units and enables the three `infraege-ops-*` timers. It refu
 
 ## Acceptance checks
 
+Explicit operator interfaces (run production commands on the VPS, never with local dev secrets):
+
+```bash
+make db-inventory DB_ENV=dev DB_PROJECT=infraege-dev
+make db-inventory DB_ENV=prod DB_PROJECT=infraege
+make db-backup DB_ENV=prod DB_PROJECT=infraege ENV_FILE=/etc/infraege/production.env
+make db-restore-check DB_ENV=restore DB_PROJECT=infraege-restore
+make db-export DB_ENV=prod DB_PROJECT=infraege DESTINATION=/var/backups/infraege/pc-export-YYYY-MM-DD
+```
+
+Inventory never starts a stopped container. Backup selects one running container by exact
+application project/service labels, verifies the database name, and uses the separate backup
+credential when provisioned. Legacy PG16 preparation alone uses the existing bootstrap login.
+Privileged maintenance reads allowlisted role/ownership metadata separately from the dump login.
+Runtime gets SELECT, import gets DML/sequence use, migration owns the empty `practice` schema and
+future default grants, backup gets SELECT. Neither runtime nor import can create schema/table/temp
+objects. No task tables, Alembic head or SQL-aware application readiness are claimed here.
+
+The bundle refuses unknown application role dependencies and changing row fingerprints around the
+logical dump. Final release transfer stops writers first. This pre-Alembic foundation has no runtime
+DB writes; later writers/schema versions must extend the snapshot/metadata contract before use.
+Roles are restored with their privilege attributes and settings but NOLOGIN, without password hashes;
+explicit release provisioning supplies the selected environment's credentials. No source env file
+is executed by disposable restore. Tables, ownership, grants/default privileges and sequences travel
+in the PostgreSQL archive. Restore requires a fresh labelled PG18 volume, verifies checksums and
+actual row/schema evidence, and removes only its own disposable resources.
+
+Local acceptance used host Restic 0.16.4 (matching the VPS) and a nonempty PG16.14 → PG18.6 fixture containing identity
+values, JSONB, Cyrillic text and timezone-aware timestamps. Encrypted backup, disposable restore and
+portable export passed actual SQL/role checks. Measured disposable restore including cleanup was **5 seconds** on the
+workstation for this small fixture; this is not a production RTO estimate. The shared release
+preparation also passed on the isolated fixture, preserving the source and refusing an existing
+candidate. PG18-only writes proved the retained source becomes stale. Live cutover/rollback smoke
+and the newly installed PG18 timer/export proofs remain release acceptance.
+
 ```bash
 sudo systemctl start infraege-backup.service
 sudo systemctl start infraege-restore-check.service
@@ -38,6 +123,7 @@ sudo systemctl start infraege-ops-backup.service
 sudo systemctl start infraege-ops-restore-check.service
 
 sudo scripts/check-backup-freshness.sh
+sudo scripts/check-backup-freshness.sh --restore
 jq -e '.status == "success"' /var/lib/infraege-ops/backup-status.json
 
 env RESTIC_REPOSITORY=/var/backups/infraege/restic \
@@ -66,8 +152,10 @@ does not restore or inspect operations artifacts.
 
 Stop only the writers owned by the affected project. Select a snapshot with the matching tag,
 restore into a new temporary directory and run the corresponding restore check before changing live
-data. Use `pg_restore --clean --if-exists` only in an approved maintenance window after taking a new
-current backup. Restore Beszel state only for the operations project and before its Hub starts.
+data. Application tooling never restores into an existing database and never uses `--clean`.
+Recover application data to a separately verified fresh target, then explicitly switch after SQL
+and application compatibility checks. Restore Beszel state only for the operations project and
+before its Hub starts.
 
 The fresh-start cutover does not inspect, copy or restore old Umami/Beszel data. Old application
 volumes remain unreferenced rollback resources until a separate destructive cleanup is authorized.
@@ -79,5 +167,22 @@ fresh `infraege-ops` snapshot and successful disposable Umami/Beszel restore; al
 timers are active and both volume sets remain intact.
 
 Known accepted risk: the repository is on the same VPS, so it protects against logical errors but
-not total VPS loss. Configure an encrypted off-site backend and repeat both restore drills before
-storing irreplaceable user data.
+not total VPS loss. The approved weekly PC export below provides the current off-host recovery
+copy; automated off-site storage remains a separate future change.
+
+## Weekly manual PC export
+
+After a successful fresh application backup and restore drill, run `make db-export` above with a
+new absolute destination. It validates the complete bundle before copying only the newest
+application-tag snapshot into a new independently encrypted Restic repository, then runs
+`restic check --read-data`. Copy the **entire directory** to the PC over the pinned SSH transport;
+verify it on the PC with `RESTIC_REPOSITORY=<copied-directory> RESTIC_PASSWORD_FILE=<off-VPS-key-file>
+restic check --read-data`. Keep the password available separately from the VPS and export directory.
+Do not copy only `application.dump` or leave the sole decryption password on the VPS. Record the
+actual copy date; an export still on the VPS is not an off-host copy. Export does not delete its
+destination on failure; a failed command is incomplete evidence and requires a new destination.
+
+Current target RPO is at most 24 hours with successful daily backups and a surviving VPS. Total VPS
+loss recovers only to the last actual PC copy (up to a week with the weekly routine, potentially
+total loss without it). Automated off-site storage/PITR and task-file/API restore checks remain
+explicitly pending. Task assets are not fictitious entries in today's seven-file bundle.

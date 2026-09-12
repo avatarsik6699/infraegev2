@@ -7,5 +7,6 @@ After=docker.service
 Type=oneshot
 User=root
 Group=root
-WorkingDirectory=/opt/infraege/current
-ExecStart=/opt/infraege/current/scripts/backup.sh
+WorkingDirectory=/opt/infraege/database-current
+Environment=DB_ENV=prod DB_PROJECT=infraege
+ExecStart=/opt/infraege/database-current/scripts/backup.sh

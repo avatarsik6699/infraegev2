@@ -60,6 +60,50 @@ safely; the final 2026-08-20 cutover passed. No old analytics or metrics data wa
 
 ## GitHub production settings
 
+### First application PG16 → PG18 release (Change 113)
+
+This is a separate maintenance/release operation. `/work 113` does not deploy it. The ordinary
+workflow input `db_transfer=none` refuses an installed PG16 source; choose `16-to-18` only after
+the following preflight. Subsequent PG18 releases use `none`.
+
+1. Refresh the application-only inventory and backup/restore evidence from `backup-restore.md`.
+   Keep the existing bootstrap password unchanged during this cutover. Add four independently
+   generated role passwords from `infra/.env.example` to the protected production env; use
+   `openssl rand -hex 24` for each. Never copy local/test values into production.
+2. Verify that the exact previous application SHA works with PG18 and the read-only runtime
+   connection in an isolated rehearsal. Record that full SHA in the root-owned
+   `/etc/infraege/pg18-rollback-compatible-sha` (mode 600) only after this verification. The first release
+   refuses to proceed without that exact compatibility proof. This live-release prerequisite
+   remains pending after local Change 113 acceptance; a unit test is not this proof.
+3. Check at least 30% disk free and space for old/new volumes, dump, restore workspace and WAL.
+   Select the approved full candidate SHA and dispatch **Deploy production** with
+   `db_transfer=16-to-18`. The coordinator locks `/run/lock/infraege-deploy.lock`, validates
+   compatibility/config/images/TLS, stops only application web/API writers, makes a tagged backup,
+   then invokes `db-transfer.sh --prepare-release` into a new `infraege_postgres18-data` volume.
+4. Preparation restores only application data/roles, compares SQL data/schema evidence, provisions
+   the new role credentials and disables the disposable restore administrator. It refuses an
+   existing target volume. A failed candidate is retained for review; there is no automatic reset,
+   destructive re-restore or volume removal. Old `infraege_postgres-data` is always retained.
+5. The coordinator switches PostgreSQL, sets `/opt/infraege/database-current` to the matching
+   maintenance release and installs the application timers before application smoke. Maintenance
+   stays on the PG18 bundle contract even if application rollback occurs. Ops jobs/tag are untouched.
+6. Verify runtime/readiness, SQL roles, installed timer backup and disposable restore, encrypted
+   manual export, and the public application. Record measured restore duration from
+   `/var/lib/infraege/restore-status.json` and check both freshness markers. This is live acceptance,
+   not implied by local tests. Do not remove the old volume afterward without separate approval.
+
+Before the DB switch, a failed release returns to the retained source. After the switch, automatic
+rollback uses `--no-deps nginx web api` plus the PG18 runtime connection overlay; it never applies
+the previous Postgres service or downgrades/restores data. If PG18 itself is unhealthy, stop and
+inspect the retained volumes/transfer marker instead of retrying a blind restore. After any target
+writes, PG16 is stale and recovery requires stopped writers and a separately reviewed plan using
+current PG18 data. The `db-transfer.json` marker means *prepared*, not *cut over* or *healthy*.
+
+Local `--rehearse` runs the same preparation code only for `test/infraege-db-test-*`, with explicit
+temporary state/backup directories. It cannot select the production destination. Release archives
+must carry the whole `scripts/lib/` tree, provisioning script, DB compatibility declaration and
+rollback overlay; the existing full `git archive` packaging does so.
+
 Environment `production` has no required reviewers by architect decision (2026-09-04); a manual
 `workflow_dispatch` proceeds without a second approval, and `can_admins_bypass` remains enabled. Set secrets `PROD_HOST`,
 `PROD_ROOT_PASSWORD`, `PROD_SSH_HOST_KEY`; set variable `VITE_UMAMI_WEBSITE_ID`. The host key must be

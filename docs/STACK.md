@@ -19,7 +19,7 @@
 |-------|-----------|
 | Frontend | React + TanStack Start (SSR/SSG, file-based routing and automatic route splitting) on Vite **8.2.1 exact** (Rolldown/Oxc); Base UI **1.7.0 exact** with local CSS Modules; Zustand **5.0.12 exact** for the cross-route lesson-progress registry; synchronous Python tokenization through `@speed-highlight/core` **2.0.0 exact**; TanStack Query for future server state; generated `openapi-typescript` contracts with `openapi-fetch` transport |
 | Backend | Python/FastAPI (`apps/api`) |
-| Database | PostgreSQL (provisioned in `infra/docker-compose.yml`; no schema/migrations yet — content is git-based, docs/SPEC.md §3) |
+| Database | Application PostgreSQL 18.6, pinned multi-platform image; separate runtime/import/migration/backup roles and empty `practice` schema. Task tables/ORM/Alembic remain pending; content is git-based (SPEC §3). Live production remains PG16 until explicit release transfer |
 | Cache | — (not needed on M0) |
 | Observability | `infraegev2/ops` owns the target lifecycle, explicit browser consent, allowlisted product events and coarse traffic aggregates. First-party sibling [sre-kit](https://github.com/avatarsik6699/sre-kit) Change 22 owns Projects, pull/push ingestion, retention, alerts and every monitoring/analytics dashboard. Host metrics and fail2ban use the accepted root/password SSH contract; journal logs, Beszel and Umami use WireGuard; push uses a Source token kept outside git |
 | Infra | Two Docker Compose projects on one VPS: application Nginx → `web`/`api`/Postgres, plus independently pinned Umami/Beszel operations services; Ubuntu 24.04, systemd, journald, fail2ban, WireGuard, Restic |
@@ -30,6 +30,72 @@
 ---
 
 ## Prerequisites
+
+### Practice foundation and approved persistence stack
+
+Architect-approved 2026-09-12; SPEC §3.2/§8.1/§9.2. The Stack table above describes the running
+file-based task baseline. Change 113 implements the PostgreSQL foundation locally; subsequent
+changes introduce the Python persistence layer and switch task consumers. Python package versions
+below remain planned, not installed. Production transfer is a separate explicit release operation.
+
+| Component | Approved target | Delivery |
+|-----------|-----------------|----------|
+| Application PostgreSQL | 18.6 | implemented `18.6-alpine3.24@sha256:d3e1620b530c944afa6e887d22eb899824da68e19c52024bf98f5220c88a65b2`; same version for dev/test/restore; independent of operations PostgreSQL |
+| SQLAlchemy | 2.0.52 with `asyncio` extra | exact direct dependency and frozen uv lock; typed 2.x mappings, request/operation-local sessions |
+| Alembic | 1.20.0 | exact dependency; migration files in Git; separately invoked release step, never process-start autogeneration |
+| asyncpg | 0.31.0 | exact dependency; explicit PostgreSQL async driver |
+| Python | existing 3.12 runtime | these package requirements are compatible; no Python major/minor upgrade follows from this change |
+
+Research sources (checked 2026-09-12): [PostgreSQL releases](https://www.postgresql.org/support/versioning/),
+[official image layout](https://raw.githubusercontent.com/docker-library/docs/master/postgres/README.md),
+[SQLAlchemy releases](https://www.sqlalchemy.org/download.html),
+[Alembic changes](https://alembic.sqlalchemy.org/en/latest/changelog.html),
+[asyncpg 0.31 support](https://raw.githubusercontent.com/MagicStack/asyncpg/v0.31.0/README.rst).
+SQLAlchemy 2.1.0rc2 and PostgreSQL 19 Beta 3 are not the production target.
+
+The PG18 mount is `/var/lib/postgresql`, with `PGDATA=/var/lib/postgresql/18/docker`.
+Use a new volume and rehearsed logical dump/restore for the 16 → 18 transition; do not repoint
+the new binary at the old PG16 data directory. Verify ownership/roles and real data before cutover.
+Keep the old volume until separately authorized cleanup; it ceases to be current after PG18 writes.
+
+Operational interfaces (full options and release limits in the backup/production runbooks):
+
+- Foundation: `make db-inventory`, `make db-backup`, `make db-restore-check`, `make db-export`;
+  implemented; every target selects explicit environment/project/credentials and prints sanitized identity.
+  Inventory is read-only, restore-check targets a disposable instance, export creates a portable
+  bundle for manual download. The production switch remains an explicit release operation.
+- Schema phase: `cd apps/api && uv run alembic upgrade head`, `uv run alembic current`,
+  `uv run alembic check`; use the selected environment and separate migration credentials.
+  Define these only after Alembic configuration exists; default developer configuration must not
+  select production. Review generated migrations, maintain one head and name constraints.
+- Task tooling phase: operator CLI export/validate/diff/apply/import shares the task service;
+  final command spelling and package contract are delivered in that change, not an ad-hoc SQL path.
+
+Planned evidence: host-run tests against isolated PostgreSQL (never SQLite substitution for DB
+contracts); fresh and populated migration paths, concurrency/rollback, constraints, JSONB and
+timezone-aware datetimes; installed backup/restore including roles and later task files/API checks.
+Apply KNOWN_GOTCHAS timezone-aware SQLAlchemy column convention. Gates must include schema drift
+checks when the persistence layer lands; CI remains test-free and never contacts production DB.
+Runtime readiness must evolve from TCP reachability to SQL and schema compatibility with the
+persistence layer. All tests, dumps and reports obey the existing hygiene/permission contract.
+
+Foundation acceptance: `bash scripts/tests/practice-db-foundation.test.sh` requires host `restic`,
+Docker, jq and PostgreSQL images. It uses isolated nonempty PG16/PG18 fixtures, actual SQL role/data
+assertions, encrypted backup/export and the same transfer code as release. No test runner runs in
+Docker or CI. Additional focused contracts: `bash scripts/tests/backup-restore.test.sh`,
+`bash scripts/tests/deploy-preflight.test.sh`, `bash scripts/tests/docker-dev-lifecycle.test.sh`,
+`bash scripts/tests/production-ops-topology.test.sh`. These are Change 113 acceptance additions to
+the affected-area Critical Gate, not an instruction to run the Full Gate.
+
+`infra/.env.example` declares bootstrap and four distinct role passwords. Generate production
+role passwords independently with `openssl rand -hex 24`; runtime passwords must be URL-safe.
+`make dev` injects separate disposable local values. Full Gate/test callers must supply their own
+`DB_RUNTIME_PASSWORD`, `DB_IMPORT_PASSWORD`, `DB_MIGRATION_PASSWORD`, `DB_BACKUP_PASSWORD`, plus
+the existing bootstrap credentials. `make config` remains secret-free. `DATABASE_URL` exposes only
+the read-only runtime identity to API; bootstrap/import/migration/backup credentials remain in the
+database/maintenance boundary. Alembic/schema readiness and task-specific verification are pending.
+
+### Current prerequisites
 
 ```bash
 docker --version          # application: Docker + Compose v2
@@ -159,7 +225,7 @@ default local shipping.
 | Formatting | `pnpm format:check` | Prettier and Ruff; Markdown and generated/dependency-owned files are explicitly ignored |
 | Infrastructure / bootstrap | `docker compose --project-name infraege-full-gate -f infra/docker-compose.yml -f infra/docker-compose.override.yml up --build -d` | The explicit project name and overlay ports `18080/13000/18000/15432` isolate the gate from unrelated Compose directories and common development ports. Verified live in change 03 on Docker Desktop/BuildKit: all four services become healthy; frontend and `/health` return 200 through Nginx. Change 02 also verified `POST /api/tasks/{id}/check` and the `/api/tasks/` rate limit (`503` past its burst — Nginx's default `limit_req_status`, not `429`) |
 | Operations contracts | `bash scripts/tests/ops-stack-definition.test.sh && bash scripts/tests/ops-lifecycle.test.sh && bash scripts/tests/production-ops-topology.test.sh && bash scripts/tests/backup-restore.test.sh && bash scripts/tests/ops-backup-restore.test.sh && bash scripts/tests/sre-kit-management-contract.test.sh && bash scripts/tests/host-web-gate.test.sh` | local/fake transport only; never connects to production or starts the operations projects |
-| Migrations | `n/a` | content is git-based, not DB-backed (docs/SPEC.md §3); no schema exists yet to migrate |
+| Migrations | `n/a` | content is git-based, not DB-backed (docs/SPEC.md §3); only an empty provisioned `practice` schema exists, with no task tables or Alembic migrations |
 | Backend test suite | `cd apps/api && uv run pytest` | local only |
 | API contract drift | `pnpm api:check` | requires the frozen API and pnpm environments; tracked schema and generated TypeScript must match |
 | Frontend build | `scripts/run-host-web-gate.sh pnpm --filter web build` | temporarily stops only the running Full Gate `infra` Compose web service that owns host port 3000, restores it on success/failure, then runs TanStack Start's build-time prerender; fails if any crawled page 500s |

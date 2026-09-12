@@ -25,6 +25,15 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
 
 ## Gotcha Log
 
+### Restic retention must not group application snapshots by temporary dump paths
+
+- **Symptoms:** each backup's unique `work.XXXXXX` path gets its own retention group, so repeated
+  same-day backups all survive the nominal 7 daily / 4 weekly / 3 monthly policy.
+- **Cause:** Restic's default `forget` grouping is `host,paths`; every temporary source path differs.
+- **Fix:** application retention explicitly uses `--tag infraege-application --group-by host,tags`.
+  Keep the shared Restic lock and operations tag boundary. Change 113's real isolated Restic
+  rehearsal exposed this; the operations policy is outside that change's mutation scope.
+
 ### Linux Chromium under WSL can leave Windows-named Lighthouse profiles in the repository
 
 - **Symptoms:** after `pnpm audit:performance`, the repository root contains literal directories

@@ -7,5 +7,6 @@ After=docker.service
 Type=oneshot
 User=root
 Group=root
-WorkingDirectory=/opt/infraege/current
-ExecStart=/opt/infraege/current/scripts/restore-check.sh
+WorkingDirectory=/opt/infraege/database-current
+Environment=DB_ENV=restore DB_PROJECT=infraege-restore
+ExecStart=/opt/infraege/database-current/scripts/restore-check.sh
