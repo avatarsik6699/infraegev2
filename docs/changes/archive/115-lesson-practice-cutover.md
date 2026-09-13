@@ -7,7 +7,7 @@
 | Change | `115` |
 | Slug | `lesson-practice-cutover` |
 | Title | Existing lesson practice cutover |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/115-lesson-practice-cutover` |
 
 ## Goal
@@ -163,7 +163,7 @@ See `docs/SPEC.md` §3.2, §4.1, §5, §8.1 and §9.2; `docs/FRONTEND.md`; the F
 
 ## Gate Checks
 
-Critical Gate is defined in [STACK](../STACK.md); Full/Release remain explicit modes.
+Critical Gate is defined in [STACK](../../STACK.md); Full/Release remain explicit modes.
 Use isolated PostgreSQL and host test runners, never production or SQLite substitution.
 API generation and browser/LSP checks apply because this change switches public consumers.
 Capture before/after migration parity and a real DB/file restore using the current application.
