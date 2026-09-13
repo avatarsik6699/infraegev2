@@ -56,6 +56,12 @@ ALTER DEFAULT PRIVILEGES FOR ROLE infraege_migration IN SCHEMA practice GRANT SE
 ALTER DEFAULT PRIVILEGES FOR ROLE infraege_migration IN SCHEMA practice GRANT USAGE, SELECT ON SEQUENCES TO infraege_import;
 ALTER DEFAULT PRIVILEGES FOR ROLE infraege_migration IN SCHEMA practice GRANT SELECT ON SEQUENCES TO infraege_backup;
 ALTER DEFAULT PRIVILEGES FOR ROLE infraege_migration REVOKE EXECUTE ON FUNCTIONS FROM PUBLIC;
+DO $$ BEGIN
+IF to_regclass('practice.task_history') IS NOT NULL THEN
+  REVOKE INSERT, UPDATE, DELETE ON practice.alembic_version, practice.material, practice.material_section FROM infraege_import;
+  REVOKE UPDATE, DELETE ON practice.task_history, practice.import_outcome, practice.file_object FROM infraege_import;
+END IF;
+END $$;
 ALTER ROLE infraege_runtime SET default_transaction_read_only = on;
 COMMIT;
 SQL

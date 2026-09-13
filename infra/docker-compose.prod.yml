@@ -54,6 +54,14 @@ services:
       com.infraege.service: api
     logging: *journald
 
+  db-migrate:
+    image: ghcr.io/avatarsik6699/infraegev2-api:${DEPLOY_SHA:?DEPLOY_SHA is required}
+    build: !reset null
+    command:
+      - uv run --frozen alembic upgrade head && uv run --frozen python -m app.modules.practice.cli register --environment prod --project infraege
+    mem_limit: 384m
+    logging: *journald
+
   postgres:
     mem_limit: 640m
     restart: always

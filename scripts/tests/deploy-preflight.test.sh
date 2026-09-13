@@ -26,7 +26,7 @@ config_line=$(grep -n '"$DEPLOY_SHA" config --quiet' "$deploy_script" | cut -d: 
 [[ $preflight_line -lt $extract_line && $preflight_line -lt $pull_line ]]
 [[ $network_line -lt $config_line && $config_line -lt $pull_line ]]
 source_major_line=$(grep -n 'source_major=$(docker exec' "$deploy_script" | cut -d: -f1)
-rollback_trap_line=$(grep -n 'trap application_db_rollback ERR' "$deploy_script" | cut -d: -f1)
+rollback_trap_line=$(grep -n 'trap .*application_deploy_exit' "$deploy_script" | cut -d: -f1)
 [[ $source_major_line -lt $rollback_trap_line ]]
 ! grep -Fq 'init-umami-db.sh' "$deploy_script"
 
@@ -42,12 +42,24 @@ mkdir "$previous_release"
 printf '%s\n' "$test_sha" >"$previous_release/.deploy-sha"
 docker() { printf '%s\n' "$*" >>"$test_root/rollback.log"; }
 run_compose() { printf 'previous-compose %s\n' "$*" >>"$test_root/rollback.log"; }
+curl() { printf '{"status":"ok","version":"%s"}\n' "$test_sha"; }
 db_switched=true
-application_db_rollback
-grep -Fq 'up --detach --no-deps nginx web api' "$test_root/rollback.log"
+application_db_rollback "$previous_release" "$release_dir" "$env_file" "$db_switched"
+grep -Fq 'up --detach --no-deps --wait --wait-timeout 180 nginx web api' "$test_root/rollback.log"
 ! grep -Eq 'previous-compose|pg_restore|downgrade|up .*postgres' "$test_root/rollback.log"
 : >"$test_root/rollback.log"
 db_switched=false
-application_db_rollback
+application_db_rollback "$previous_release" "$release_dir" "$env_file" "$db_switched"
 grep -Fq 'previous-compose' "$test_root/rollback.log"
 echo 'database failure recovery contracts: PASS'
+
+mkdir -p "$release_dir/infra" "$previous_release/infra"
+printf '114_01\n' >"$release_dir/infra/database-schema"
+printf '114_01\n' >"$previous_release/infra/database-schema"
+application_schema_preflight "$release_dir" "$previous_release" "$test_root/missing-proof"
+printf 'incompatible\n' >"$previous_release/infra/database-schema"
+if application_schema_preflight "$release_dir" "$previous_release" "$test_root/missing-proof" >/dev/null 2>&1; then
+  echo 'incompatible schema rollback accepted without proof' >&2; exit 1
+fi
+application_schema_preflight "$release_dir" '' "$test_root/missing-proof"
+echo 'schema rollback preflight contracts: PASS'

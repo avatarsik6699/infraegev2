@@ -10,7 +10,7 @@ validate_production_env() {
   (
     set -a
     # shellcheck disable=SC1090
-    source "$target"
+    source "$target" || exit $?
     set +a
   ) >/dev/null 2>&1
 }
@@ -87,12 +87,22 @@ if [[ -n $previous_release && $(cat "$previous_release/infra/database-major" 2>/
     exit 1
   }
 fi
-trap application_db_rollback ERR
+# A schema declaration is separate from the PostgreSQL major. First adoption requires
+# exact-SHA evidence for the previous file-based application, just like PG18 transfer.
+application_schema_preflight "$release_dir" "$previous_release" /etc/infraege/schema-rollback-compatible-sha
+trap 'application_deploy_exit "$?" "$previous_release" "$release_dir" "$env_file" "$db_switched"' EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
 
 printf '%s\n' "$DEPLOY_SHA" > "$release_dir/.deploy-sha"
 docker network inspect "$observability_network" >/dev/null 2>&1 ||
   docker network create "$observability_network" >/dev/null
 run_compose "$release_dir" "$DEPLOY_SHA" config --quiet
+[[ $(run_compose "$release_dir" "$DEPLOY_SHA" config --format json |
+  jq -r '.services.api.volumes[] | select(.target=="/task-files") | .source') == /var/lib/infraege/task-files ]] || {
+  echo 'production TASK_FILES_DIR must be /var/lib/infraege/task-files' >&2; exit 1;
+}
+install -d -m 755 -o 1000 -g 1000 /var/lib/infraege/task-files
 run_compose "$release_dir" "$DEPLOY_SHA" pull
 if ! run_compose "$release_dir" "$DEPLOY_SHA" run --rm --no-deps --interactive=false --entrypoint /bin/sh nginx \
   -ec 'test -r /etc/letsencrypt/live/infraege.ru/fullchain.pem && test -r /etc/letsencrypt/live/infraege.ru/privkey.pem'; then
@@ -110,9 +120,11 @@ if [[ $source_major == 16* ]]; then
 fi
 db_switched=true
 run_compose "$release_dir" "$DEPLOY_SHA" up --detach --wait --wait-timeout 60 postgres
+DB_ENV=prod DB_PROJECT=infraege bash "$release_dir/scripts/backup.sh" "$env_file"
 # DB maintenance follows the installed DB format even if application smoke triggers rollback.
 ln -sfn "$release_dir" "$root/database-current"
 bash "$release_dir/ops/install-backup-timers.sh" application
+run_compose "$release_dir" "$DEPLOY_SHA" run --rm --no-deps db-migrate
 run_compose "$release_dir" "$DEPLOY_SHA" up --detach --remove-orphans --wait --wait-timeout 180
 
 curl --fail --silent --show-error --max-time 15 https://infraege.ru/health/ready |
@@ -134,5 +146,5 @@ awk -v deploy_sha="$DEPLOY_SHA" '
 ' "$env_file" > "$env_tmp"
 chmod 600 "$env_tmp"
 mv "$env_tmp" "$env_file"
-trap - ERR
+trap - EXIT INT TERM
 echo "Deployment $DEPLOY_SHA is healthy."

@@ -253,11 +253,10 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
   value the container's env-var override would set anyway), so a too-shallow tree degrades instead
   of crashing before the override is even consulted. See `apps/api/app/core/config.py`.
 
-### Pre-emptive: asyncpg + SQLAlchemy naive/aware `datetime` trap (no DB code exists yet)
+### asyncpg + SQLAlchemy naive/aware `datetime` trap
 
-- **Applies when**: a future change adds the first SQLAlchemy model (e.g. `task_attempt_stats`,
-  SPEC.md §3's optional analytics aggregation) — recorded now, before any model exists, because
-  the fix is a one-line convention that's cheap to state up front and expensive to debug later.
+- **Applies when**: adding or changing a mapped datetime in `modules/practice/` or its Alembic
+  migration. Change 114 applies this convention and verifies timezone-aware round trips on PG18.
 - **Symptoms**: `asyncpg.exceptions.DataError` / `TypeError` when inserting/comparing an
   timezone-aware Python `datetime` against an otherwise-correct `TIMESTAMPTZ` Postgres column.
 - **Root cause**: if a SQLAlchemy `Mapped[datetime]` column omits `DateTime(timezone=True)`,
@@ -267,6 +266,17 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
   `DateTime(timezone=True)` explicitly (matched in the corresponding Alembic migration with
   `sa.DateTime(timezone=True)`); always construct "now" via `datetime.now(UTC)`, never bare
   `datetime.now()`.
+
+### SQLAlchemy/asyncpg: authentication errors can escape SQLAlchemy's exception wrapper
+
+- **Symptom:** a real incorrect-password readiness probe raises `asyncpg.InvalidPasswordError`
+  rather than the `SQLAlchemyError` caught by the transport, producing an unexpected error path.
+- **Cause:** an error while establishing the asyncpg connection can propagate before SQLAlchemy
+  wraps execution errors. Catching only SQLAlchemy exceptions does not cover authentication.
+- **Fix:** the health and operator boundaries handle both `asyncpg.PostgresError` and
+  `SQLAlchemyError`, without printing connection details or private SQL parameters. Keep the
+  readiness total timeout and independent liveness. Change 114's isolated PostgreSQL test
+  verifies the actual invalid-password path returns the sanitized 503.
 
 ### Production: same-host Restic is not disaster recovery
 
@@ -542,3 +552,26 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
   `scenes/` mount is no longer configured; its empty placeholder was removed in Change 108.
   Production copies resources into the image; local Compose mounts the real fonts/brand tree
   over the prepared locations. Do not weaken mount permissions.
+
+
+### Application deploy: ERR traps do not automatically cover helper failures
+
+- **Symptoms**: a failing Docker Compose command inside `run_compose` exits without rollback,
+  despite a direct test of the rollback function passing.
+- **Cause**: `set -e` does not make `ERR` traps inherit into shell functions. This was an inherited
+  pre-113 defect, reproduced during the 113/114 audit.
+- **Fix**: use the installed single `EXIT` recovery boundary, preserve the original exit code,
+  disable recovery traps before rollback and explicitly verify rollback readiness. Every command
+  inside conditionally invoked recovery must propagate failure explicitly. Host tests exercise
+  the actual Compose helper and installed traps, including failure of rollback itself.
+- **Related conditional failure**: a `source` inside a function called from `if`/`||` can fail and
+  then be masked by a successful `set +a`. Environment validation explicitly exits its subshell
+  on `source` failure; the regression test uses the production conditional call context.
+
+### Practice staging leftovers must not become backup objects
+
+- **Symptoms**: an abrupt import exit left `tmp*` in the immutable storage root; all later backups
+  rejected it as an invalid checksum-named object.
+- **Fix**: stage inside `.staging` on the same filesystem, atomically link completed objects into
+  the root, and copy only DB-snapshot-referenced objects into backups. Stop imports before any
+  manual stale-staging cleanup. Never treat this as authorization to delete committed objects.

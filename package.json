@@ -13,8 +13,8 @@
     "typecheck": "pnpm -r --if-present typecheck",
     "lint": "pnpm -r --if-present lint",
     "lint:fix": "pnpm -r --if-present lint:fix",
-    "format": "prettier . --write && cd apps/api && uv run ruff format app tests ../../ops",
-    "format:check": "prettier . --check && cd apps/api && uv run ruff format --check app tests ../../ops",
+    "format": "prettier . --write && cd apps/api && uv run ruff format app tests migrations ../../ops ../../scripts/application_db.py ../../scripts/lib/application_db ../../scripts/tests/application_db_test.py ../../scripts/tests/deploy_orchestration_test.py",
+    "format:check": "prettier . --check && cd apps/api && uv run ruff format --check app tests migrations ../../ops ../../scripts/application_db.py ../../scripts/lib/application_db ../../scripts/tests/application_db_test.py ../../scripts/tests/deploy_orchestration_test.py",
     "api:generate": "node scripts/api-contracts.mjs",
     "api:check": "node scripts/api-contracts.mjs --check",
     "images:generate": "node scripts/generate-responsive-images.mjs",
@@ -24,7 +24,8 @@
     "audit:a11y": "pnpm --filter web exec playwright test e2e/accessibility.spec.ts",
     "audit:performance": "bash scripts/run-lighthouse-audit.sh lhci",
     "audit:security": "bash scripts/security-gate.sh",
-    "audit:images": "bash scripts/image-gate.sh"
+    "audit:images": "bash scripts/image-gate.sh",
+    "lint:shell": "bash scripts/check-shell.sh"
   },
   "packageManager": "pnpm@10.33.0",
   "devDependencies": {

@@ -1,0 +1,10 @@
+{
+  "include": [
+    "application_db.py",
+    "lib/application_db",
+    "tests/application_db_test.py",
+    "tests/deploy_orchestration_test.py"
+  ],
+  "extraPaths": [".."],
+  "pythonVersion": "3.12"
+}

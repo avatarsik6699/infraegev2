@@ -19,7 +19,7 @@
 |-------|-----------|
 | Frontend | React + TanStack Start (SSR/SSG, file-based routing and automatic route splitting) on Vite **8.2.1 exact** (Rolldown/Oxc); Base UI **1.7.0 exact** with local CSS Modules; Zustand **5.0.12 exact** for the cross-route lesson-progress registry; synchronous Python tokenization through `@speed-highlight/core` **2.0.0 exact**; TanStack Query for future server state; generated `openapi-typescript` contracts with `openapi-fetch` transport |
 | Backend | Python/FastAPI (`apps/api`) |
-| Database | Application PostgreSQL 18.6, pinned multi-platform image; separate runtime/import/migration/backup roles and empty `practice` schema. Task tables/ORM/Alembic remain pending; content is git-based (SPEC §3). Live production remains PG16 until explicit release transfer |
+| Database | Application PostgreSQL 18.6, pinned multi-platform image; separate runtime/import/migration/backup roles, Alembic revision `114_01` and server-owned practice model/tooling. Existing lesson consumers remain git-based until cutover (SPEC §3). Live production remains PG16 until explicit release transfer |
 | Cache | — (not needed on M0) |
 | Observability | `infraegev2/ops` owns the target lifecycle, explicit browser consent, allowlisted product events and coarse traffic aggregates. First-party sibling [sre-kit](https://github.com/avatarsik6699/sre-kit) Change 22 owns Projects, pull/push ingestion, retention, alerts and every monitoring/analytics dashboard. Host metrics and fail2ban use the accepted root/password SSH contract; journal logs, Beszel and Umami use WireGuard; push uses a Source token kept outside git |
 | Infra | Two Docker Compose projects on one VPS: application Nginx → `web`/`api`/Postgres, plus independently pinned Umami/Beszel operations services; Ubuntu 24.04, systemd, journald, fail2ban, WireGuard, Restic |
@@ -34,9 +34,10 @@
 ### Practice foundation and approved persistence stack
 
 Architect-approved 2026-09-12; SPEC §3.2/§8.1/§9.2. The Stack table above describes the running
-file-based task baseline. Change 113 implements the PostgreSQL foundation locally; subsequent
-changes introduce the Python persistence layer and switch task consumers. Python package versions
-below remain planned, not installed. Production transfer is a separate explicit release operation.
+file-based lesson-task baseline. Change 113 implements the PostgreSQL foundation locally;
+Change 114 adds the Python persistence layer and operator tooling. Subsequent changes switch task
+consumers. The exact Python package versions below are installed and locked. Production transfer
+is a separate explicit release operation.
 
 | Component | Approved target | Delivery |
 |-----------|-----------------|----------|
@@ -44,13 +45,15 @@ below remain planned, not installed. Production transfer is a separate explicit 
 | SQLAlchemy | 2.0.52 with `asyncio` extra | exact direct dependency and frozen uv lock; typed 2.x mappings, request/operation-local sessions |
 | Alembic | 1.20.0 | exact dependency; migration files in Git; separately invoked release step, never process-start autogeneration |
 | asyncpg | 0.31.0 | exact dependency; explicit PostgreSQL async driver |
+| Pillow | 12.3.0 | exact dependency for bounded full image decoding during import; bytes are preserved |
 | Python | existing 3.12 runtime | these package requirements are compatible; no Python major/minor upgrade follows from this change |
 
 Research sources (checked 2026-09-12): [PostgreSQL releases](https://www.postgresql.org/support/versioning/),
 [official image layout](https://raw.githubusercontent.com/docker-library/docs/master/postgres/README.md),
 [SQLAlchemy releases](https://www.sqlalchemy.org/download.html),
 [Alembic changes](https://alembic.sqlalchemy.org/en/latest/changelog.html),
-[asyncpg 0.31 support](https://raw.githubusercontent.com/MagicStack/asyncpg/v0.31.0/README.rst).
+[asyncpg 0.31 support](https://raw.githubusercontent.com/MagicStack/asyncpg/v0.31.0/README.rst),
+[Pillow 12.3.0](https://pypi.org/project/pillow/12.3.0/).
 SQLAlchemy 2.1.0rc2 and PostgreSQL 19 Beta 3 are not the production target.
 
 The PG18 mount is `/var/lib/postgresql`, with `PGDATA=/var/lib/postgresql/18/docker`.
@@ -66,18 +69,19 @@ Operational interfaces (full options and release limits in the backup/production
   bundle for manual download. The production switch remains an explicit release operation.
 - Schema phase: `cd apps/api && uv run alembic upgrade head`, `uv run alembic current`,
   `uv run alembic check`; use the selected environment and separate migration credentials.
-  Define these only after Alembic configuration exists; default developer configuration must not
-  select production. Review generated migrations, maintain one head and name constraints.
-- Task tooling phase: operator CLI export/validate/diff/apply/import shares the task service;
-  final command spelling and package contract are delivered in that change, not an ad-hoc SQL path.
+  Implemented in Change 114; require explicit `MIGRATION_DATABASE_URL` with the migration role.
+  Default developer configuration does not select production. Review generated migrations, maintain one head and name constraints.
+- Task tooling: `uv run python -m app.modules.practice.cli` supports export/validate/diff/apply/import,
+  outcome, register, preflight and smoke. Explicit environment/project/role inputs are required;
+  see [practice operator guide](runbooks/practice.md) for package preparation and backup sequencing.
 
-Planned evidence: host-run tests against isolated PostgreSQL (never SQLite substitution for DB
+Practice model acceptance: host-run tests against isolated PostgreSQL (never SQLite substitution for DB
 contracts); fresh and populated migration paths, concurrency/rollback, constraints, JSONB and
-timezone-aware datetimes; installed backup/restore including roles and later task files/API checks.
-Apply KNOWN_GOTCHAS timezone-aware SQLAlchemy column convention. Gates must include schema drift
-checks when the persistence layer lands; CI remains test-free and never contacts production DB.
-Runtime readiness must evolve from TCP reachability to SQL and schema compatibility with the
-persistence layer. All tests, dumps and reports obey the existing hygiene/permission contract.
+timezone-aware datetimes; backup/restore including roles, task files and the shipped checker.
+Apply the KNOWN_GOTCHAS timezone-aware SQLAlchemy column convention. Gates include schema drift
+checks on the isolated instance; CI remains test-free and never contacts production DB.
+Runtime readiness now authenticates and verifies SQL/schema compatibility under a shared lock;
+liveness stays independent. The separate `db-migrate` Compose job gates API startup. All tests, dumps and reports obey the existing hygiene/permission contract.
 
 Foundation acceptance: `bash scripts/tests/practice-db-foundation.test.sh` requires host `restic`,
 Docker, jq and PostgreSQL images. It uses isolated nonempty PG16/PG18 fixtures, actual SQL role/data
@@ -93,7 +97,18 @@ role passwords independently with `openssl rand -hex 24`; runtime passwords must
 `DB_RUNTIME_PASSWORD`, `DB_IMPORT_PASSWORD`, `DB_MIGRATION_PASSWORD`, `DB_BACKUP_PASSWORD`, plus
 the existing bootstrap credentials. `make config` remains secret-free. `DATABASE_URL` exposes only
 the read-only runtime identity to API; bootstrap/import/migration/backup credentials remain in the
-database/maintenance boundary. Alembic/schema readiness and task-specific verification are pending.
+database/maintenance boundary. Alembic/schema readiness and task/file/checker restore verification are implemented locally.
+Production installation remains an explicit release operation; existing lesson cutover is pending.
+
+
+Practice model acceptance: `bash scripts/tests/practice-model-tooling.test.sh` uses host
+uv/pytest/Restic and disposable PostgreSQL/application containers. It proves the separate
+migration job and HTTP health, fresh/populated migrations and drift detection, concurrency,
+interrupted imports, roles, CLI export/edit/apply and nonempty restore with the shipped checker.
+Tests never run in containers. `node scripts/practice-registry.mjs --check` detects release-registry
+drift locally and in static CI; it never contacts a DB. Formatting/lint/type-check include migrations.
+Task files use `infra/task-files.local` in dev and `/var/lib/infraege/task-files` in production;
+these are persistent data, outside the repository cleanup allowlist.
 
 ### Current prerequisites
 
@@ -205,8 +220,8 @@ Fill every applicable row and report the rest as `SKIPPED` with a reason.
 | Check | Command | Preconditions / notes |
 |-------|---------|-----------------------|
 | Format | `pnpm format:check` | run once for the target set; scope is repository-wide because formatting configuration is shared |
-| Lint | `pnpm --filter web lint` · `cd apps/api && uv run ruff check app tests` · `bash -n <changed-shell-files>` | scope to touched workspace or scripts |
-| Type-check (affected) | `pnpm --filter web typecheck` · `cd apps/api && pnpm exec pyright app tests` | app pyright reads `[tool.pyright]` in `apps/api/pyproject.toml`; shell changes have no type-check row |
+| Lint | `pnpm --filter web lint` · `cd apps/api && uv run ruff check app tests migrations` · `pnpm lint:shell` · `bash -n <other-changed-shell-files>` | scope to touched workspace or scripts |
+| Type-check (affected) | `pnpm --filter web typecheck` · `cd apps/api && pnpm exec pyright app tests migrations` | app pyright reads `[tool.pyright]` in `apps/api/pyproject.toml`; shell changes have no type-check row |
 | Focused tests | `pnpm --filter web exec vitest run <changed-test-files>` · `cd apps/api && uv run pytest <changed-test-files-or-nodeids>` · `bash scripts/tests/<changed-contract>.test.sh` · `pnpm test:content-assets` | run only tests directly covering changed behavior; `test:content-assets` owns the isolated task-asset validator contract while `validate:content` checks the real content tree; documentation-only changes are `SKIPPED`; never expand this row to the full suite |
 | LSP diagnostics | available: yes | `python-lsp` (Pyright) and `typescript-lsp` MCP servers; repository type-check commands remain complementary gate evidence |
 | API type regen (`openapi-typescript` or equivalent) | `pnpm api:check` | only when the public API surface or its generated consumer changed; fails on tracked drift |
@@ -225,7 +240,7 @@ default local shipping.
 | Formatting | `pnpm format:check` | Prettier and Ruff; Markdown and generated/dependency-owned files are explicitly ignored |
 | Infrastructure / bootstrap | `docker compose --project-name infraege-full-gate -f infra/docker-compose.yml -f infra/docker-compose.override.yml up --build -d` | The explicit project name and overlay ports `18080/13000/18000/15432` isolate the gate from unrelated Compose directories and common development ports. Verified live in change 03 on Docker Desktop/BuildKit: all four services become healthy; frontend and `/health` return 200 through Nginx. Change 02 also verified `POST /api/tasks/{id}/check` and the `/api/tasks/` rate limit (`503` past its burst — Nginx's default `limit_req_status`, not `429`) |
 | Operations contracts | `bash scripts/tests/ops-stack-definition.test.sh && bash scripts/tests/ops-lifecycle.test.sh && bash scripts/tests/production-ops-topology.test.sh && bash scripts/tests/backup-restore.test.sh && bash scripts/tests/ops-backup-restore.test.sh && bash scripts/tests/sre-kit-management-contract.test.sh && bash scripts/tests/host-web-gate.test.sh` | local/fake transport only; never connects to production or starts the operations projects |
-| Migrations | `n/a` | content is git-based, not DB-backed (docs/SPEC.md §3); only an empty provisioned `practice` schema exists, with no task tables or Alembic migrations |
+| Migrations | `cd apps/api && uv run alembic upgrade head && uv run alembic current && uv run alembic check` | explicit isolated gate DB and migration-role URL; Compose runs its own separate migration job before API startup; never CI or production |
 | Backend test suite | `cd apps/api && uv run pytest` | local only |
 | API contract drift | `pnpm api:check` | requires the frozen API and pnpm environments; tracked schema and generated TypeScript must match |
 | Frontend build | `scripts/run-host-web-gate.sh pnpm --filter web build` | temporarily stops only the running Full Gate `infra` Compose web service that owns host port 3000, restores it on success/failure, then runs TanStack Start's build-time prerender; fails if any crawled page 500s |
@@ -449,9 +464,38 @@ shared/      cross-module code used by >= 2 modules — stays an empty placehold
              actually true; do not pre-populate it.
 ```
 
-No repository/ORM layer exists yet — content is git-based (SPEC.md §3), not DB-backed. When a
-first SQLAlchemy model is added, see the pre-emptive asyncpg datetime rule in
-`docs/KNOWN_GOTCHAS.md` before writing it.
+`core/database.py` owns engine construction and shared metadata. `modules/practice/` owns typed
+models, package/content validation, immutable files, transaction service and host CLI; migrations
+live in `apps/api/migrations/`. The existing file-based HTTP checker remains until consumer
+cutover; both consume the pure comparator in `app/shared/checker.py`. Current normalized rows own
+reads; history is audit-only. Public content and edit plans have explicit types. Every mapped datetime uses
+`DateTime(timezone=True)` (KNOWN_GOTCHAS); no hidden commits or shared AsyncSessions.
+
+### Application maintenance code
+
+Keep Bash as explicit command/lifecycle adapters. Structured backup metadata, checksums,
+references, exported-snapshot consistency and restore invariants belong to the stdlib-only
+`scripts/lib/application_db/` package, invoked by `scripts/application_db.py`. Keep the existing
+Make interface and bundle compatibility; do not introduce an SDK/service/framework for host tools.
+Production hosts require Python 3.12+ (Ubuntu 24.04 supplies it). Shell static checks require
+ShellCheck >=0.9; `pnpm lint:shell` checks the declared maintenance allowlist and runs in static CI.
+A shell syntax check is not evidence that rollback runs: test the installed failure boundary.
+`EXIT` recovery preserves the original failure and invokes/health-checks rollback once.
+
+Maintenance checks (host-only, from repository root):
+
+```bash
+pnpm lint:shell
+pnpm exec pyright --project scripts/pyrightconfig.json
+python3 -m unittest discover -s scripts/tests -p application_db_test.py
+python3 -m unittest discover -s scripts/tests -p deploy_orchestration_test.py
+```
+
+The snapshot test requires `PRACTICE_BACKUP_CONTAINER` and is run by the isolated
+`practice-model-tooling.test.sh` fixture, never by CI. `pnpm format:check` includes maintenance Python. Lint from `apps/api` with
+`uv run ruff check ../../scripts/application_db.py ../../scripts/lib/application_db
+../../scripts/tests/application_db_test.py ../../scripts/tests/deploy_orchestration_test.py`.
+
 
 ## Common operations
 
@@ -481,7 +525,7 @@ make clean
 make clean-check
 
 # Add a new migration / schema change
-# n/a — no database schema exists yet
+# Use explicit MIGRATION_DATABASE_URL with the migration role; see runbooks/practice.md
 
 # Format / lint
 cd apps/web && pnpm lint

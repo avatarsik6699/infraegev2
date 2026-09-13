@@ -99,9 +99,11 @@ Runtime gets SELECT, import gets DML/sequence use, migration owns the empty `pra
 future default grants, backup gets SELECT. Neither runtime nor import can create schema/table/temp
 objects. No task tables, Alembic head or SQL-aware application readiness are claimed here.
 
-The bundle refuses unknown application role dependencies and changing row fingerprints around the
-logical dump. Final release transfer stops writers first. This pre-Alembic foundation has no runtime
-DB writes; later writers/schema versions must extend the snapshot/metadata contract before use.
+The bundle refuses unknown application role dependencies. Maintenance exports one PostgreSQL
+REPEATABLE READ snapshot and holds it open while dump, row fingerprints, schema and file references
+are read. `pg_dump --snapshot` and `SET TRANSACTION SNAPSHOT` use that same snapshot. Row data is
+fingerprinted once; concurrent committed imports belong to the next backup. A shared schema advisory
+lock excludes Alembic changes during collection. Final PG16 release transfer still stops writers.
 Roles are restored with their privilege attributes and settings but NOLOGIN, without password hashes;
 explicit release provisioning supplies the selected environment's credentials. No source env file
 is executed by disposable restore. Tables, ownership, grants/default privileges and sequences travel
@@ -184,5 +186,53 @@ destination on failure; a failed command is incomplete evidence and requires a n
 
 Current target RPO is at most 24 hours with successful daily backups and a surviving VPS. Total VPS
 loss recovers only to the last actual PC copy (up to a week with the weekly routine, potentially
-total loss without it). Automated off-site storage/PITR and task-file/API restore checks remain
-explicitly pending. Task assets are not fictitious entries in today's seven-file bundle.
+total loss without it). Automated off-site storage/PITR remains explicitly pending. Change 114 extends application
+bundles with task files and the shipped checker/projection smoke described below; production
+installation of that code is still a release acceptance step.
+
+
+## Maintenance ownership
+
+`make db-*` and the existing shell entry points remain the operator interface. Bash owns Docker
+lifecycle and Restic/systemd coordination; `scripts/application_db.py` and
+`scripts/lib/application_db/` own the bundle contract, SQL snapshot transport, file verification
+and restore safety checks. They use Python 3.12+ standard library and installed Docker tools;
+no API environment, package install, Docker SDK or new service is needed for host maintenance.
+Install the complete `scripts/` release tree, not only the shell wrappers. Subprocess errors are
+explicit and bounded; password-bearing command arguments are never included in exception reports.
+Format 1 and pre-Alembic bundles remain supported. Schema changes must update this explicit
+compatibility contract with matching recovery evidence.
+
+## Practice schema and immutable files (Change 114)
+
+Bundles with schema `114_01` include `task-files/` and `file-references.txt` in addition to the
+foundation dump/roles/metadata/configuration. Each object name is its SHA-256; validation checks
+its bytes and every DB-declared size/reference. The reference list is covered by SHA256SUMS.
+Dump, fingerprint and file-reference metadata share one exported DB snapshot. Only files named
+by that snapshot's immutable `file_object` rows are copied and checked, including historical objects.
+Concurrent additions and `.staging` leftovers do not affect the backup. Never delete old immutable
+files; removing them would invalidate this consistency guarantee.
+Legacy `pre-alembic` snapshots remain supported and are identified explicitly.
+
+Metadata records the exact application verifier image reference and image ID. Production uses
+the full release-SHA GHCR API image; restore requires that image (or a pull of the same ID) on a
+compatible architecture, as well as the pinned PostgreSQL image. Preserve registry access/image
+availability when planning disaster recovery. An image identity mismatch fails the drill.
+
+After SQL/ownership/fingerprint and schema-metadata comparison, restore enables only the runtime
+role with a disposable random password and runs the shipped `practice.cli smoke` in its API image
+against the isolated DB. This is an application command, not a test runner. It validates the
+current material references, reads public projections, verifies required files and checks accepted
+answers. It has no production network credentials, elevated capabilities or writable root mount.
+Success is written only after this command and complete temporary-resource cleanup.
+
+The first schema release keeps `database-current` on the new maintenance implementation before
+running migrations, so backup/restore continues to understand both pre-Alembic and new schema
+states even if application startup fails. The new CLI takes pre/post backups for each applied
+package; a post-commit failure must be resolved through its journal, not assumed to be a rollback.
+See [practice operator workflow](practice.md).
+
+A real recovery must install verified immutable objects at the new target's persistent storage
+path before enabling its application. A validated dump without those objects is insufficient.
+Never restore into an existing production database or overwrite old volumes. The weekly encrypted
+export carries these files automatically; an export remaining on the VPS is still not off-site.

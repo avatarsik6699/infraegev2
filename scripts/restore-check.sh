@@ -50,6 +50,7 @@ for _attempt in $(seq 1 60); do
 done
 docker exec "$container_name" pg_isready -h 127.0.0.1 -U restore_admin >/dev/null
 db_restore_bundle "$bundle" "$container_name"
+db_restore_practice_smoke "$bundle" "$container_name"
 cleanup
 trap - EXIT
 elapsed=$((SECONDS-started))

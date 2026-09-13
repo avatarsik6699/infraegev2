@@ -9,6 +9,8 @@ test_root=$(mktemp -d)
 installed_release="$test_root/database-current"
 mkdir -p "$test_root/releases/candidate/scripts/lib"
 ln -s "$test_root/releases/candidate" "$installed_release"
+cp -p "$repo_dir/scripts/application_db.py" "$installed_release/scripts/"
+cp -r "$repo_dir/scripts/lib/application_db" "$installed_release/scripts/lib/"
 for script in backup.sh restore-check.sh db-export.sh db-transfer.sh db-provision-roles.sh; do
   cp -p "$repo_dir/scripts/$script" "$installed_release/scripts/$script"
 done

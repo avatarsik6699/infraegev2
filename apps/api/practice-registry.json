@@ -1,0 +1,173 @@
+{
+  "format": 1,
+  "materials": [
+    {
+      "id": "preobrazovanie-zapisey-chisel",
+      "sections": [
+        "four-stage-model",
+        "number-and-representation",
+        "five-step-execution",
+        "string-operations",
+        "appending-and-place-value",
+        "repeated-parity",
+        "minimum-search",
+        "branched-base-three",
+        "safe-search-bounds",
+        "simultaneous-replacement",
+        "digit-sum-and-general-template",
+        "final-solution-algorithm"
+      ]
+    },
+    {
+      "id": "python-bruteforce",
+      "sections": ["model", "trace", "pitfall", "workflow"]
+    },
+    {
+      "id": "python-compound-conditions",
+      "sections": ["model", "trace", "pitfall", "workflow"]
+    },
+    {
+      "id": "python-comprehensions",
+      "sections": ["from-loop", "filter", "kinds", "decision"]
+    },
+    {
+      "id": "python-conditions",
+      "sections": [
+        "comparison-result",
+        "if-branch",
+        "if-else",
+        "comparison-boundaries",
+        "test-both-branches"
+      ]
+    },
+    {
+      "id": "python-dictionaries",
+      "sections": ["model", "trace", "records", "pitfall", "workflow"]
+    },
+    {
+      "id": "python-errors",
+      "sections": [
+        "error-as-clue",
+        "read-bottom-up",
+        "syntax-error",
+        "name-error",
+        "type-or-value",
+        "fix-and-rerun"
+      ]
+    },
+    {
+      "id": "python-exceptions",
+      "sections": ["expected", "specific", "retry", "decision"]
+    },
+    {
+      "id": "python-files",
+      "sections": ["model", "write", "trace", "pitfall", "workflow"]
+    },
+    {
+      "id": "python-first-program",
+      "sections": [
+        "program-order",
+        "values-and-variables",
+        "input-and-conversion",
+        "calculation-and-output",
+        "run-and-check"
+      ]
+    },
+    {
+      "id": "python-for-range",
+      "sections": ["model", "trace", "pitfall", "workflow"]
+    },
+    {
+      "id": "python-functions",
+      "sections": ["model", "trace", "pitfall", "workflow"]
+    },
+    {
+      "id": "python-independent-program",
+      "sections": [
+        "grown-program",
+        "bad-input",
+        "file-recovery",
+        "whole-test",
+        "refactor"
+      ]
+    },
+    {
+      "id": "python-iterators-generators",
+      "sections": ["inside-for", "exhaustion", "generator", "choice"]
+    },
+    {
+      "id": "python-lists",
+      "sections": ["model", "trace", "remove", "pitfall", "workflow"]
+    },
+    {
+      "id": "python-loop-state",
+      "sections": ["model", "trace", "other-state", "pitfall", "workflow"]
+    },
+    {
+      "id": "python-number-digits",
+      "sections": ["one-step", "loop", "zero", "procedure"]
+    },
+    {
+      "id": "python-numbers",
+      "sections": ["types", "operations", "precedence", "workflow"]
+    },
+    {
+      "id": "python-program-parts",
+      "sections": ["model", "trace", "pitfall", "workflow"]
+    },
+    {
+      "id": "python-recursion",
+      "sections": ["model", "trace", "ege-connection", "pitfall", "workflow"]
+    },
+    {
+      "id": "python-select-result",
+      "sections": ["model", "trace", "pitfall", "workflow"]
+    },
+    {
+      "id": "python-sets",
+      "sections": ["model", "trace", "pitfall", "workflow"]
+    },
+    {
+      "id": "python-sorting-search",
+      "sections": ["search", "sorted", "key", "choice"]
+    },
+    {
+      "id": "python-strings",
+      "sections": ["model", "trace", "split-join", "pitfall", "workflow"]
+    },
+    {
+      "id": "python-tables",
+      "sections": ["model", "trace", "records", "pitfall", "workflow"]
+    },
+    {
+      "id": "python-todo-actions",
+      "sections": ["continue", "change", "delete", "snapshot"]
+    },
+    {
+      "id": "python-todo-start",
+      "sections": ["first-run", "command-loop", "empty", "snapshot"]
+    },
+    {
+      "id": "python-todo-storage",
+      "sections": ["why-file", "load", "identity", "snapshot"]
+    },
+    {
+      "id": "python-while",
+      "sections": ["model", "trace", "pitfall", "workflow"]
+    },
+    {
+      "id": "rekursiya",
+      "sections": [
+        "concrete-computation",
+        "base-case-and-step",
+        "why-it-works",
+        "code-and-call-stack",
+        "loop-instead-of-recursion",
+        "several-previous-values",
+        "repeated-work-motivates-storage",
+        "large-arguments-algebraic-shortcut",
+        "general-method"
+      ]
+    }
+  ]
+}

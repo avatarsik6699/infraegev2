@@ -21,6 +21,10 @@ apps/api/entrypoint.sh
 infra/docker-compose.yml
 infra/docker-compose.dev.yml
 scripts/db-provision-roles.sh
+apps/api/alembic.ini
+apps/api/practice-registry.json
+apps/api/migrations/env.py
+apps/api/migrations/versions/114_01_practice_model.py
 "}
 
 case "$ACTION" in
@@ -61,6 +65,7 @@ compose() {
     DB_MIGRATION_PASSWORD=infraege-dev-migration-only \
     DB_BACKUP_PASSWORD=infraege-dev-backup-only \
     POSTGRES_DB=infraege \
+    DB_ENV=dev DB_PROJECT=infraege-dev TASK_FILES_DIR="$REPO_ROOT/infra/task-files.local" \
     APP_ENV=development \
     DEPLOY_SHA=development \
     docker compose --env-file /dev/null --project-name infraege-dev \
@@ -101,6 +106,7 @@ remember_development_inputs() {
 }
 
 start_development() {
+  mkdir -p infra/task-files.local
   force_build=${1:-false}
   fingerprint=$(development_inputs_fingerprint)
   previous_fingerprint=

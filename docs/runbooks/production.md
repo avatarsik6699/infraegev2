@@ -569,3 +569,44 @@ scripts and protected environment, creates the one external ingress network if a
 `ops-update` applies another release through the same path; `ops-rollback` reapplies the previous
 release. Releases live under `/opt/infraege-ops`, their mode-600 environments under
 `/etc/infraege/ops`, and none of these commands reference the application Compose project.
+
+
+### Practice schema release (Change 114)
+
+Local implementation does not deploy or authorize a production import. Follow the existing
+Full + Release gates and, on the first PG18 switch, the Change 113 transfer procedure above.
+Set `TASK_FILES_DIR=/var/lib/infraege/task-files` in the protected application environment;
+deploy rejects a different production mount. It creates that persistent directory for UID 1000
+and mounts it read-only into API/PostgreSQL. It is not a release directory or cleanup artifact.
+
+The candidate must declare `infra/database-schema=114_01`. If the previous release does not
+have that same declaration, first prove that exact previous application SHA works against the
+new schema/runtime role on an isolated nonempty clone. Store only that verified full SHA in
+root-owned mode-600 `/etc/infraege/schema-rollback-compatible-sha`. This is a separate proof
+from PG18 binary compatibility; local unit tests do not certify an arbitrary live previous SHA.
+Preflight rejects a missing/mismatched proof before changing application containers.
+
+After PostgreSQL is ready, deploy takes a pre-migration application backup, points
+`database-current` at the candidate's maintenance scripts and installs the matching timers.
+The separate `db-migrate` job uses only migration credentials, applies reviewed Alembic revisions
+and registers the generated application material/section identities. Registration preserves
+historical identifiers and existing links; incompatible links stop the release before app startup.
+API readiness then requires SQL and the exact supported schema, not just an open TCP port.
+
+Rollback remains application-only and never invokes migrations, a DB restore or an old PostgreSQL
+service. Failure after new writes needs a forward fix or separately reviewed recovery, not a
+return to the stale PG16 volume. The new maintenance code supports both the pre-Alembic and
+`114_01` bundle, independently of the application symlink.
+
+Before production acceptance, run the installed backup/restore timers and encrypted export,
+verify the shipped task/checker/file smoke and actually copy the export off VPS. The operator
+host needs uv plus its frozen API environment for CLI imports/edits; use
+[the practice runbook](practice.md), with separate operator credentials and explicit host identity.
+The existing lesson bank is not switched merely by this schema release.
+
+
+Application failure recovery uses a single EXIT boundary after compatibility preflight, including
+failures inside Compose helpers and explicit exits. Recovery disables its own traps, retains the
+original failure code, starts the previous application without replacing the switched DB, and
+verifies readiness for the previous SHA. A rollback failure is reported as requiring manual
+recovery; it never recursively retries or restores/downgrades database volumes.

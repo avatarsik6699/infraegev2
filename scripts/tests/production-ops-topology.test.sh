@@ -27,7 +27,7 @@ OPS_RELEASE=$release docker compose --env-file "$ops_env" --project-name infraeg
   >"$test_root/operations.json"
 
 jq -e --arg image "$DB_IMAGE" '
-  (.services | keys) == ["api","nginx","postgres","web"] and
+  (.services | keys) == ["api","db-migrate","nginx","postgres","web"] and
   .networks["observability-ingress"].external == true and
   .networks["observability-ingress"].name == "infraege-observability-ingress" and
   (.services.nginx.networks | has("default")) and

@@ -13,6 +13,7 @@ LOCAL_ENV := POSTGRES_USER=infraege \
 	DB_MIGRATION_PASSWORD=infraege-dev-migration-only \
 	DB_BACKUP_PASSWORD=infraege-dev-backup-only \
 	POSTGRES_DB=infraege \
+	DB_ENV=dev DB_PROJECT=infraege-dev TASK_FILES_DIR=./task-files.local \
 	APP_ENV=development \
 	DEPLOY_SHA=development
 
