@@ -7,7 +7,7 @@
 | Change | `116` |
 | Slug | `practice-catalog` |
 | Title | Independent practice catalog |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/116-practice-catalog` |
 
 ## Goal
@@ -107,7 +107,7 @@ See `docs/SPEC.md` §3.2, §4.1, §5, §8 and §9.2; `docs/FRONTEND.md`; Files a
 
 ## Gate Checks
 
-Use the affected Critical Gate in [STACK](../STACK.md), isolated PostgreSQL and host test runners.
+Use the affected Critical Gate in [STACK](../../STACK.md), isolated PostgreSQL and host test runners.
 Prove bounded reads at 10,000 synthetic tasks; no whole-bank payload or N+1. Synthetic tasks are
 isolated fixtures only, never production or automatic dev content. Reuse existing reader/checker
 contracts and domain browser fixtures. Full/Release and human visual/content approval remain separate.
