@@ -1,3 +1,4 @@
+import { ApiError } from "~/shared/api";
 import { useState, type ComponentProps } from "react";
 import type { PracticeTaskTypes } from "~/entities/practice-task";
 import { useIsEnhanced } from "~/shared/lib/use-is-enhanced";
@@ -27,7 +28,11 @@ export function useLessonPracticeModel(props: LessonPracticeTypes.Props) {
     const answer = typeof value === "string" ? value : "";
     setPracticeStates((current) => ({ ...current, [task.id]: "checking" }));
     try {
-      const result = await props.checkAnswer(task.id, answer);
+      const result = await props.checkAnswer(
+        task.id,
+        answer,
+        task.solutionRevision,
+      );
       setFeedback((current) => ({ ...current, [task.id]: result.explanation }));
       setPracticeStates((current) => ({
         ...current,
@@ -40,13 +45,29 @@ export function useLessonPracticeModel(props: LessonPracticeTypes.Props) {
         result: result.correct ? "correct" : "incorrect",
         solvedCount,
       });
-    } catch {
-      setPracticeStates((current) => ({ ...current, [task.id]: "error" }));
+    } catch (error) {
+      let state: LessonPracticeTypes.State = "error";
+      if (error instanceof ApiError && error.status === 409) state = "stale";
+      if (error instanceof ApiError && error.status === 404)
+        state = "unavailable";
+      setPracticeStates((current) => ({ ...current, [task.id]: state }));
     }
   };
 
   return {
     activeTaskId,
+    refresh: async () => {
+      try {
+        await props.onRefresh?.();
+        setPracticeStates({});
+        setFeedback({});
+      } catch {
+        setPracticeStates((current) => ({
+          ...current,
+          [activeTaskId]: "error",
+        }));
+      }
+    },
     answerFor: (taskId: string) =>
       draftAnswers[taskId] ?? props.acceptedAnswers[taskId] ?? "",
     checkAnswer,

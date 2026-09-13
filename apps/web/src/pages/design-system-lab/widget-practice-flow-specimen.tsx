@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ApiError } from "~/shared/api";
 import { createLocalPracticeChecker } from "~/features/lesson-practice";
 import { useLessonProgress } from "~/features/lesson-progress";
 import { Button } from "~/shared/components/button";
@@ -12,6 +13,7 @@ const specimenLessonId = "design-system-widget-practice";
 
 export const WidgetPracticeFlowSpecimen: React.FC = () => {
   const [instanceKey, setInstanceKey] = useState(0);
+  const [stale, setStale] = useState(false);
   const enhanced = useIsEnhanced();
   const progress = useLessonProgress(specimenLessonId);
 
@@ -40,8 +42,19 @@ export const WidgetPracticeFlowSpecimen: React.FC = () => {
       <Typography.Text id="widget-base-case">
         Базовый случай останавливает цепочку рекурсивных вызовов.
       </Typography.Text>
+      <Button hierarchy="secondary" onClick={() => setStale(true)}>
+        Показать устаревшую задачу при проверке
+      </Button>
       <LessonPracticeFlow
-        checkAnswer={createLocalPracticeChecker(practiceTasks)}
+        checkAnswer={async (taskId, answer) => {
+          if (stale)
+            throw new ApiError("http", "Stale specimen", { status: 409 });
+          return createLocalPracticeChecker(practiceTasks)(taskId, answer, 1);
+        }}
+        onRefresh={() => {
+          setStale(false);
+          return Promise.resolve();
+        }}
         key={instanceKey}
         lessonId={specimenLessonId}
         tasks={practiceTasks}

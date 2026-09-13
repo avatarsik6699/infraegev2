@@ -27,6 +27,9 @@ function readJsonFiles(dir) {
 }
 
 const tasks = readJsonFiles(join(CONTENT_ROOT, "tasks"));
+const migration = JSON.parse(
+  readFileSync(join(CONTENT_ROOT, "practice-migration/snapshot.json"), "utf8"),
+);
 
 const topicIds = new Set(lessonPublications.map((lesson) => lesson.id));
 const taskIds = new Set(tasks.map((t) => t.data.id));
@@ -93,9 +96,9 @@ for (const lesson of courseLessonPublications) {
   }
   checkRefs(
     `course lesson "${lesson.id}"`,
-    lesson.practiceTaskIds,
+    migration.materials.find((material) => material.id === lesson.id)?.task_ids,
     taskIds,
-    "practiceTaskIds",
+    "migration task_ids",
   );
 }
 

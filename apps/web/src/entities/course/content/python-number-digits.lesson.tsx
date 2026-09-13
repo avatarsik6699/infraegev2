@@ -18,7 +18,6 @@ export const pythonNumberDigitsLesson = defineCourseLesson({
     "Трассировать обработку всех цифр в цикле",
     "Считать сумму или количество цифр",
   ],
-  practiceTaskIds: pythonNumberDigitsLessonPublication.practiceTaskIds,
   accessTier: "free",
   theory: [
     {

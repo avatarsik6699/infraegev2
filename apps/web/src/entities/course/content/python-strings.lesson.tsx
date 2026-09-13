@@ -18,7 +18,6 @@ export const pythonStringsLesson = defineCourseLesson({
     "Создавать новую строку вместо изменения символа",
     "Трассировать обработку строки в цикле",
   ],
-  practiceTaskIds: pythonStringsLessonPublication.practiceTaskIds,
   accessTier: "free",
   theory: [
     {

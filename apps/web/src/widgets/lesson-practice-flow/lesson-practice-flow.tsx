@@ -14,14 +14,19 @@ type LessonPracticeFlowProps = Omit<
 export const LessonPracticeFlow: React.FC<LessonPracticeFlowProps> = (
   props,
 ) => {
-  const progress = useLessonProgress(props.lessonId);
+  const progress = useLessonProgress(props.lessonId, props.tasks);
 
   return (
     <LessonPractice
       {...props}
+      outdatedTaskIds={progress.outdatedTaskIds}
       acceptedAnswers={progress.acceptedAnswers}
       onTaskSolved={(taskId, acceptedAnswer) =>
-        progress.markSolved(taskId, acceptedAnswer).solvedTaskIds.length
+        progress.markSolved(
+          taskId,
+          acceptedAnswer,
+          props.tasks.find((task) => task.id === taskId)?.solutionRevision,
+        ).solvedTaskIds.length
       }
       solvedTaskIds={progress.solvedTaskIds}
     />

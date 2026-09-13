@@ -12,12 +12,13 @@ describe("practice answer API", () => {
     const fetchMock = vi.fn().mockResolvedValue(
       jsonResponse({
         correct: true,
+        solution_revision: 1,
         explanation: [{ type: "text", data: { markdown: "Разбор" } }],
       }),
     );
     vi.stubGlobal("fetch", fetchMock);
 
-    await expect(checkPracticeAnswer("task-1", "42")).resolves.toEqual({
+    await expect(checkPracticeAnswer("task-1", "42", 1)).resolves.toEqual({
       correct: true,
       explanation: "Разбор",
     });
@@ -32,7 +33,7 @@ describe("practice answer API", () => {
       vi.fn().mockResolvedValue(jsonResponse({ detail: "failed" }, 503)),
     );
 
-    await expect(checkPracticeAnswer("task-1", "42")).rejects.toMatchObject({
+    await expect(checkPracticeAnswer("task-1", "42", 1)).rejects.toMatchObject({
       name: "ApiError",
       kind: "http",
       status: 503,
@@ -45,7 +46,7 @@ describe("practice answer API", () => {
       vi.fn().mockResolvedValue(new Response(null, { status: 204 })),
     );
 
-    await expect(checkPracticeAnswer("task-1", "42")).rejects.toMatchObject({
+    await expect(checkPracticeAnswer("task-1", "42", 1)).rejects.toMatchObject({
       name: "ApiError",
       kind: "protocol",
     });
@@ -63,7 +64,9 @@ describe("practice answer API", () => {
     ) => {
       vi.stubGlobal("fetch", vi.fn().mockRejectedValue(failure));
 
-      await expect(checkPracticeAnswer("task-1", "42")).rejects.toMatchObject({
+      await expect(
+        checkPracticeAnswer("task-1", "42", 1),
+      ).rejects.toMatchObject({
         name: "ApiError",
         kind,
       });

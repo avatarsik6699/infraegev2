@@ -610,3 +610,13 @@ failures inside Compose helpers and explicit exits. Recovery disables its own tr
 original failure code, starts the previous application without replacing the switched DB, and
 verifies readiness for the previous SHA. A rollback failure is reported as requiring manual
 recovery; it never recursively retries or restores/downgrades database volumes.
+
+
+### Lesson practice consumer cutover (Change 115)
+
+Before activating the DB-backed lesson consumers, follow the explicit register/convert/validate/
+diff/pre-backup/import/outcome/parity/API-file-smoke/post-backup sequence in
+[practice](practice.md#change-115-explicit-local-bootstrap-and-cutover). A healthy empty schema is
+not a populated practice bank. The nonempty restore smoke now exercises public readers and the
+revision-aware checker. Keep source assets and old volumes through stage-5 production/rollback
+acceptance; local implementation and rehearsals do not authorize production activation.

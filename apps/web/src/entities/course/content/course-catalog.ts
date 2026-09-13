@@ -55,7 +55,6 @@ const entries: readonly CourseCatalogTypes.Entry[] = definitions.map(
         return [
           {
             id: lesson.id,
-            practiceTaskIds: lesson.practiceTaskIds,
             masteryThreshold: lesson.masteryThreshold ?? 0.8,
           },
         ];
@@ -69,7 +68,6 @@ const entries: readonly CourseCatalogTypes.Entry[] = definitions.map(
       status: "published",
       routeSlug: publication.routeSlug,
       lessonCount: progressLessons.length,
-      progressLessons,
     };
   },
 );

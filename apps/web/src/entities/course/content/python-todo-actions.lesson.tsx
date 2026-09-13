@@ -82,7 +82,6 @@ export const pythonTodoActionsLesson = defineCourseLesson({
     "Удалять выбранное дело без перенумерации остальных",
     "Выделять повторяющийся поиск в функцию",
   ],
-  practiceTaskIds: pythonTodoActionsLessonPublication.practiceTaskIds,
   accessTier: "free",
   theory: [
     {

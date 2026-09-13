@@ -4,7 +4,10 @@ import {
   SurfaceGlint,
 } from "~/shared/components/surface-decoration";
 import { useRef, useState } from "react";
-import type { CourseCatalogTypes } from "~/entities/course";
+import type {
+  CourseCatalogTypes,
+  CourseProgressTypes,
+} from "~/entities/course";
 import { ActionLink } from "~/shared/components/action-link";
 import { Badge } from "~/shared/components/badge";
 import { Typography } from "~/shared/components/typography";
@@ -14,6 +17,7 @@ import { CourseCatalogStudy } from "./course-catalog-study";
 import { useElementActivity } from "~/shared/lib/element-activity";
 
 type Props = {
+  lessons: readonly CourseProgressTypes.Lesson[] | null;
   entry: CourseCatalogTypes.Entry;
 };
 
@@ -61,7 +65,7 @@ export const CourseCatalogCard: React.FC<Props> = (props) => {
           {props.entry.status === "published" ? (
             <>
               <Badge presentation="metadata">{`${String(props.entry.lessonCount)} уроков`}</Badge>
-              <CourseCatalogProgress entry={props.entry} />
+              <CourseCatalogProgress lessons={props.lessons} />
             </>
           ) : (
             <Badge presentation="metadata">Скоро</Badge>

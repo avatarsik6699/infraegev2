@@ -18,7 +18,6 @@ export const pythonDictionariesLesson = defineCourseLesson({
     "Использовать get для безопасного значения по умолчанию",
     "Перебирать пары и хранить несколько записей в списке",
   ],
-  practiceTaskIds: pythonDictionariesLessonPublication.practiceTaskIds,
   accessTier: "free",
   theory: [
     {

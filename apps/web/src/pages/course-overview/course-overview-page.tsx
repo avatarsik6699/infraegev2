@@ -55,7 +55,7 @@ export const CourseOverviewPage: React.FC<CourseOverviewPageTypes.Props> = (
           <Typography.Title order={2} id="course-curriculum">
             Программа курса
           </Typography.Title>
-          <CourseOverviewProgress lessons={progressLessons} />
+          <CourseOverviewProgress lessons={props.practiceSummary} />
           <CourseOverviewCurriculum
             courseRouteSlug={props.course.routeSlug}
             lessons={props.lessons}

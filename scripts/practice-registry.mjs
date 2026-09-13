@@ -2,7 +2,10 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { lessonPublications } from "../apps/web/src/shared/config/lesson-publication.mjs";
-import { courseLessonPublications } from "../apps/web/src/entities/course/content/course-publication.mjs";
+import {
+  courseLessonPublications,
+  coursePublications,
+} from "../apps/web/src/entities/course/content/course-publication.mjs";
 
 const materials = [];
 for (const [kind, publications] of [
@@ -28,11 +31,32 @@ for (const [kind, publications] of [
     ) {
       throw new Error(`Unsupported concept shape: ${publication.id}`);
     }
-    materials.push({ id: publication.id, sections });
+    const courses = coursePublications.filter((course) =>
+      course.modules.some((module) =>
+        module.lessonPlan.some((lesson) => lesson.id === publication.id),
+      ),
+    );
+    if (kind === "course" && courses.length !== 1)
+      throw new Error(`Ambiguous course membership: ${publication.id}`);
+    materials.push({
+      id: publication.id,
+      sections,
+      kind: kind === "lesson" ? "topic" : "course",
+      status: publication.status,
+      course_id: courses[0]?.id ?? null,
+    });
   }
 }
 materials.sort((a, b) => a.id.localeCompare(b.id, "en"));
-const output = JSON.stringify({ format: 1, materials }, null, 2) + "\n";
+const courses = coursePublications.map((course) => ({
+  id: course.id,
+  status: course.status,
+  lesson_ids: course.modules.flatMap((module) =>
+    module.lessonPlan.map((lesson) => lesson.id),
+  ),
+}));
+const output =
+  JSON.stringify({ format: 1, materials, courses }, null, 2) + "\n";
 const target = fileURLToPath(
   new URL("../apps/api/practice-registry.json", import.meta.url),
 );

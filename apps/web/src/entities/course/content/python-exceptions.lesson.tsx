@@ -18,7 +18,6 @@ export const pythonExceptionsLesson = defineCourseLesson({
     "Повторять ввод после ValueError",
     "Не скрывать неизвестные ошибки широким except",
   ],
-  practiceTaskIds: pythonExceptionsLessonPublication.practiceTaskIds,
   accessTier: "free",
   theory: [
     {

@@ -7,6 +7,7 @@ const textContent = (text: string): PracticeTaskTypes.ContentBlock[] => [
 export const practiceTasks: PracticeTaskTypes.LocalTask[] = [
   {
     id: "design-system-lab-base-case",
+    solutionRevision: 1,
     difficultyLabel: "Разминка",
     title: "Найдите базовый случай",
     statement: textContent(
@@ -28,6 +29,7 @@ export const practiceTasks: PracticeTaskTypes.LocalTask[] = [
   },
   {
     id: "design-system-lab-call-count",
+    solutionRevision: 1,
     difficultyLabel: "Применение",
     title: "Посчитайте вызовы",
     statement: textContent(

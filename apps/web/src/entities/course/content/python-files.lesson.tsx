@@ -18,7 +18,6 @@ export const pythonFilesLesson = defineCourseLesson({
     "Преобразовывать текст в числа в явном месте",
     "Закрывать файл через контекстный менеджер",
   ],
-  practiceTaskIds: pythonFilesLessonPublication.practiceTaskIds,
   accessTier: "free",
   theory: [
     {

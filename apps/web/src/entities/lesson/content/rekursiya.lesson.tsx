@@ -19,13 +19,6 @@ export const rekursiyaLesson = defineLesson({
     "Замечать, когда простая рекурсия упирается в ограничение глубины или пересчитывает одно и то же значение много раз",
     "Сокращать выражения с огромными аргументами, не вычисляя всю последовательность",
   ],
-  practiceTaskIds: [
-    "rekursiya-base-sequence",
-    "rekursiya-call-stack-trace",
-    "rekursiya-two-values",
-    "rekursiya-repeated-calls",
-    "rekursiya-large-ratio",
-  ],
   accessTier: "free",
   theory: [
     {

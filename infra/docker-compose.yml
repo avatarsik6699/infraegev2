@@ -17,6 +17,7 @@ services:
       - ../apps/web/public/brand/infraege-mark.svg:/usr/share/nginx/auxiliary/assets/infraege-mark.svg:ro
       - ../apps/web/public/fonts:/usr/share/nginx/auxiliary/assets/fonts:ro
       - ./nginx/conf.d/infraege.conf:/etc/nginx/conf.d/default.conf:ro
+      - ${TASK_FILES_DIR:-./task-files.local}:/task-files:ro
     depends_on:
       web:
         condition: service_healthy
@@ -36,6 +37,7 @@ services:
       dockerfile: apps/web/Dockerfile
     environment:
       - CONTENT_DIR=/content
+      - API_INTERNAL_URL=http://api:8000
     depends_on:
       api:
         condition: service_healthy

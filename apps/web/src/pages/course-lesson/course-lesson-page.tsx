@@ -1,3 +1,4 @@
+import { useRouter } from "@tanstack/react-router";
 import { useRef } from "react";
 import { getCourseLessons } from "~/entities/course";
 import { type LessonTypes } from "~/entities/lesson";
@@ -21,6 +22,7 @@ import styles from "~/shared/styles/lesson-layout.module.css";
 export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
   props,
 ) => {
+  const router = useRouter();
   const articleRef = useRef<HTMLElement>(null);
   const handleAnswerChecked = useLessonTelemetry(
     props.lesson.id,
@@ -79,7 +81,7 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
             <CourseLessonProgress
               masteryThreshold={props.lesson.masteryThreshold ?? 0.8}
               lessonId={props.lesson.id}
-              taskCount={props.tasks.length}
+              tasks={props.tasks}
             />
           </div>
         </aside>
@@ -93,6 +95,8 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
           <section id="practice" className={styles.section}>
             <LessonSectionHeading index={2}>Практика</LessonSectionHeading>
             <LessonPracticeFlow
+              unavailable={props.practiceUnavailable}
+              onRefresh={() => router.invalidate()}
               tasks={props.tasks}
               lessonId={props.lesson.id}
               checkAnswer={checkPracticeAnswer}

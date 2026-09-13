@@ -4,14 +4,20 @@ import {
   findCoursePublicationByRouteSlug,
   getCourseLessons,
 } from "~/entities/course";
-import { CourseOverviewPage } from "~/pages/course-overview";
+import {
+  CourseOverviewPage,
+  getCoursePracticeSummary,
+} from "~/pages/course-overview";
 import { pageHead } from "~/shared/lib/seo";
 
 export const Route = createFileRoute("/courses/$courseSlug")({
-  loader: ({ params }) => {
+  loader: async ({ params }) => {
     const course = findCoursePublicationByRouteSlug(params.courseSlug);
     if (!course) throw notFound();
-    return { course };
+    return {
+      course,
+      practiceSummary: await getCoursePracticeSummary({ data: course.id }),
+    };
   },
   head: ({ loaderData }) => {
     const course = loaderData?.course;
@@ -29,9 +35,14 @@ export const Route = createFileRoute("/courses/$courseSlug")({
 
 function CourseOverviewRoute() {
   const params = Route.useParams();
+  const data = Route.useLoaderData();
   const course = findCourseByRouteSlug(params.courseSlug);
   if (!course) return null;
   return (
-    <CourseOverviewPage course={course} lessons={getCourseLessons(course)} />
+    <CourseOverviewPage
+      practiceSummary={data.practiceSummary}
+      course={course}
+      lessons={getCourseLessons(course)}
+    />
   );
 }

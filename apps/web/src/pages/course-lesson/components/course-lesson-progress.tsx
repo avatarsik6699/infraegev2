@@ -1,3 +1,4 @@
+import type { PracticeTaskTypes } from "~/entities/practice-task";
 import { LessonProgress, useLessonProgress } from "~/features/lesson-progress";
 import { ConfirmationDialog } from "~/shared/components/confirmation-dialog";
 import { Typography } from "~/shared/components/typography";
@@ -7,11 +8,11 @@ import styles from "~/shared/styles/lesson-layout.module.css";
 type Props = {
   masteryThreshold: number;
   lessonId: string;
-  taskCount: number;
+  tasks: readonly PracticeTaskTypes.Task[];
 };
 
 export const CourseLessonProgress: React.FC<Props> = (props) => {
-  const progress = useLessonProgress(props.lessonId);
+  const progress = useLessonProgress(props.lessonId, props.tasks);
   const enhanced = useIsEnhanced();
   return (
     <div className={styles.resultProgress} data-course-result-progress>
@@ -23,7 +24,7 @@ export const CourseLessonProgress: React.FC<Props> = (props) => {
             headingOrder={2}
             masteryThreshold={props.masteryThreshold}
             solved={progress.solvedTaskIds.length}
-            total={props.taskCount}
+            total={props.tasks.length}
           />
           <ConfirmationDialog
             triggerLabel="Сбросить прогресс"

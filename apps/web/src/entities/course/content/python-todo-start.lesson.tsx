@@ -52,7 +52,6 @@ export const pythonTodoStartLesson = defineCourseLesson({
     "Добавлять непустое дело с уникальным номером",
     "Показывать понятное состояние пустого и заполненного списка",
   ],
-  practiceTaskIds: pythonTodoStartLessonPublication.practiceTaskIds,
   accessTier: "free",
   theory: [
     {

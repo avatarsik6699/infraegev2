@@ -50,7 +50,6 @@ export namespace CourseTypes {
     summary: string;
     masteryThreshold?: number;
     learningOutcomes: readonly string[];
-    practiceTaskIds: readonly string[];
     theory: readonly ConceptBlock[];
     /** The lesson's single formative, think-then-reveal self-check, rendered inside `result`
      *  («Итоги»), after the result copy — not counted toward masteryThreshold. */

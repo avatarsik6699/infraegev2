@@ -1,9 +1,15 @@
 import { useEffect } from "react";
 import type { LessonProgressTypes } from "../lesson-progress.types";
 import { useLessonProgressRegistry } from "./lesson-progress-context";
-import { emptyLessonProgress } from "./lesson-progress-state";
+import {
+  emptyLessonProgress,
+  currentLessonProgress,
+} from "./lesson-progress-state";
 
-export function useLessonProgress(lessonId: string): LessonProgressTypes.Model {
+export function useLessonProgress(
+  lessonId: string,
+  tasks?: readonly { id: string; solutionRevision?: number }[],
+): LessonProgressTypes.Model {
   const progress = useLessonProgressRegistry(
     (state) => state.lessons[lessonId] ?? emptyLessonProgress,
   );
@@ -22,9 +28,16 @@ export function useLessonProgress(lessonId: string): LessonProgressTypes.Model {
   );
 
   return {
-    ...progress,
+    ...(tasks ? currentLessonProgress(progress, tasks) : progress),
     clear: () => clearLesson(lessonId),
-    markSolved: (taskId, acceptedAnswer) =>
-      markLessonSolved(lessonId, taskId, acceptedAnswer),
+    markSolved: (taskId, acceptedAnswer, solutionRevision) => {
+      const next = markLessonSolved(
+        lessonId,
+        taskId,
+        acceptedAnswer,
+        solutionRevision,
+      );
+      return tasks ? currentLessonProgress(next, tasks) : next;
+    },
   };
 }

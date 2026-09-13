@@ -34,7 +34,6 @@ export namespace LessonContent {
     masteryThreshold?: number;
     learningOutcomes: readonly string[];
     /** References content/tasks/**. */
-    practiceTaskIds: readonly string[];
     theory: readonly ConceptBlock[];
     examFocus?: React.ReactNode;
     /** The lesson's single formative, think-then-reveal self-check, rendered inside `result`

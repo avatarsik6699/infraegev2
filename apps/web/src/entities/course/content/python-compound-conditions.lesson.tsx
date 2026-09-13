@@ -18,7 +18,6 @@ export const pythonCompoundConditionsLesson = defineCourseLesson({
     "Собирать условия с помощью and, or и not",
     "Проверять границы диапазонов и порядок ветвей",
   ],
-  practiceTaskIds: pythonCompoundConditionsLessonPublication.practiceTaskIds,
   accessTier: "free",
   theory: [
     {

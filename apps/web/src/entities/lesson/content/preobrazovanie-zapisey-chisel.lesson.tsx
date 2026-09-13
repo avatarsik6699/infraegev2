@@ -20,13 +20,6 @@ export const preobrazovanieZapiseyChiselLesson = defineLesson({
     "Исполнять ветвящиеся преобразования в двоичной и троичной системах",
     "Выбирать безопасный поиск минимума или максимума и обосновывать границы перебора",
   ],
-  practiceTaskIds: [
-    "preobrazovanie-zapisey-appending",
-    "preobrazovanie-zapisey-parity",
-    "preobrazovanie-zapisey-base-three",
-    "preobrazovanie-zapisey-digit-replacement",
-    "preobrazovanie-zapisey-non-monotonic-maximum",
-  ],
   accessTier: "free",
   theory: [
     {

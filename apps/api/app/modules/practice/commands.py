@@ -194,6 +194,8 @@ async def package_command(
 async def verify_tasks(
     session: AsyncSession, registry: Registry, storage: Path, task_ids: list[str] | None = None
 ) -> dict[str, Any]:
+    from app.modules.practice import readers
+
     await verify_registry(session, registry)
     count = 0
     statement = select(TaskRecord.id).where(TaskRecord.archived.is_(False)).order_by(TaskRecord.id)
@@ -207,11 +209,23 @@ async def verify_tasks(
         record, task = current
         if await read_task(session, task_id) is None:
             raise ValueError("public projection missing")
+        try:
+            await readers.task(session, registry, task_id)
+        except readers.Unavailable:
+            public = False
+        else:
+            public = True
         for usage in task.files:
             if checksum(safe_path(storage, usage.checksum)) != usage.checksum:
                 raise ValueError("task file corrupt")
         for answer in task.checker.answer_variants:
             if not await check_answer(session, task_id, record.solution_revision, answer):
                 raise ValueError("checker smoke failed")
+            if public:
+                result = await readers.check(
+                    session, registry, task_id, record.solution_revision, answer
+                )
+                if not result.correct:
+                    raise ValueError("public checker smoke failed")
         count += 1
     return {"status": "verified", "tasks": count}

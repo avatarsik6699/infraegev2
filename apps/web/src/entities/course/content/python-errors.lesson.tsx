@@ -19,7 +19,6 @@ export const pythonErrorsLesson = defineCourseLesson({
     "Связывать сообщение об ошибке с конкретной причиной в коде",
     "Исправлять одну причину и проверять результат повторным запуском",
   ],
-  practiceTaskIds: pythonErrorsLessonPublication.practiceTaskIds,
   accessTier: "free",
   theory: [
     {

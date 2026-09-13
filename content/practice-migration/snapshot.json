@@ -1,0 +1,640 @@
+{
+  "format": 1,
+  "materials": [
+    {
+      "id": "preobrazovanie-zapisey-chisel",
+      "kind": "topic",
+      "task_ids": [
+        "preobrazovanie-zapisey-appending",
+        "preobrazovanie-zapisey-parity",
+        "preobrazovanie-zapisey-base-three",
+        "preobrazovanie-zapisey-digit-replacement",
+        "preobrazovanie-zapisey-non-monotonic-maximum"
+      ]
+    },
+    {
+      "id": "rekursiya",
+      "kind": "topic",
+      "task_ids": [
+        "rekursiya-base-sequence",
+        "rekursiya-call-stack-trace",
+        "rekursiya-two-values",
+        "rekursiya-repeated-calls",
+        "rekursiya-large-ratio"
+      ]
+    },
+    {
+      "id": "python-bruteforce",
+      "kind": "course",
+      "task_ids": [
+        "python-bruteforce-range",
+        "python-bruteforce-condition",
+        "python-bruteforce-count",
+        "python-bruteforce-nested",
+        "python-bruteforce-local-run"
+      ]
+    },
+    {
+      "id": "python-compound-conditions",
+      "kind": "course",
+      "task_ids": [
+        "python-compound-conditions-branch-order",
+        "python-compound-conditions-logic-trace",
+        "python-compound-conditions-boundary",
+        "python-compound-conditions-fix",
+        "python-compound-conditions-local-run"
+      ]
+    },
+    {
+      "id": "python-comprehensions",
+      "kind": "course",
+      "task_ids": [
+        "python-comprehensions-list",
+        "python-comprehensions-filter",
+        "python-comprehensions-set",
+        "python-comprehensions-dict",
+        "python-comprehensions-local-run"
+      ]
+    },
+    {
+      "id": "python-conditions",
+      "kind": "course",
+      "task_ids": [
+        "python-conditions-comparison-result",
+        "python-conditions-branch-trace",
+        "python-conditions-boundary",
+        "python-conditions-operator",
+        "python-conditions-local-run"
+      ]
+    },
+    {
+      "id": "python-dictionaries",
+      "kind": "course",
+      "task_ids": [
+        "python-dictionaries-lookup",
+        "python-dictionaries-update",
+        "python-dictionaries-membership",
+        "python-dictionaries-get",
+        "python-dictionaries-local-run"
+      ]
+    },
+    {
+      "id": "python-errors",
+      "kind": "course",
+      "task_ids": [
+        "python-errors-final-line",
+        "python-errors-source-line",
+        "python-errors-syntax-fix",
+        "python-errors-value-error",
+        "python-errors-local-fix"
+      ]
+    },
+    {
+      "id": "python-exceptions",
+      "kind": "course",
+      "task_ids": [
+        "python-exceptions-value-error",
+        "python-exceptions-specific",
+        "python-exceptions-else",
+        "python-exceptions-loop",
+        "python-exceptions-local-run"
+      ]
+    },
+    {
+      "id": "python-files",
+      "kind": "course",
+      "task_ids": [
+        "python-files-read-line",
+        "python-files-strip",
+        "python-files-parse",
+        "python-files-aggregate",
+        "python-files-local-run"
+      ]
+    },
+    {
+      "id": "python-first-program",
+      "kind": "course",
+      "task_ids": [
+        "python-first-program-output-order",
+        "python-first-program-variable-trace",
+        "python-first-program-input-conversion",
+        "python-first-program-expression",
+        "python-first-program-local-run"
+      ]
+    },
+    {
+      "id": "python-for-range",
+      "kind": "course",
+      "task_ids": [
+        "python-for-range-range-values",
+        "python-for-range-sum-trace",
+        "python-for-range-boundary",
+        "python-for-range-fix",
+        "python-for-range-local-run"
+      ]
+    },
+    {
+      "id": "python-functions",
+      "kind": "course",
+      "task_ids": [
+        "python-functions-call",
+        "python-functions-parameters",
+        "python-functions-return",
+        "python-functions-fix",
+        "python-functions-local-run"
+      ]
+    },
+    {
+      "id": "python-independent-program",
+      "kind": "course",
+      "task_ids": [
+        "python-independent-program-contract",
+        "python-independent-program-decomposition",
+        "python-independent-program-test-cases",
+        "python-independent-program-fix",
+        "python-independent-program-local-run"
+      ]
+    },
+    {
+      "id": "python-iterators-generators",
+      "kind": "course",
+      "task_ids": [
+        "python-iterators-generators-iterable",
+        "python-iterators-generators-next",
+        "python-iterators-generators-exhausted",
+        "python-iterators-generators-yield",
+        "python-iterators-generators-local-run"
+      ]
+    },
+    {
+      "id": "python-lists",
+      "kind": "course",
+      "task_ids": [
+        "python-lists-index",
+        "python-lists-mutation",
+        "python-lists-append",
+        "python-lists-trace",
+        "python-lists-local-run"
+      ]
+    },
+    {
+      "id": "python-loop-state",
+      "kind": "course",
+      "task_ids": [
+        "python-loop-state-counter",
+        "python-loop-state-accumulator",
+        "python-loop-state-boundary",
+        "python-loop-state-fix",
+        "python-loop-state-local-run"
+      ]
+    },
+    {
+      "id": "python-number-digits",
+      "kind": "course",
+      "task_ids": [
+        "python-number-digits-last",
+        "python-number-digits-shorten",
+        "python-number-digits-trace",
+        "python-number-digits-sum",
+        "python-number-digits-local-run"
+      ]
+    },
+    {
+      "id": "python-numbers",
+      "kind": "course",
+      "task_ids": [
+        "python-numbers-precedence",
+        "python-numbers-division",
+        "python-numbers-remainder",
+        "python-numbers-conversion",
+        "python-numbers-local-run"
+      ]
+    },
+    {
+      "id": "python-program-parts",
+      "kind": "course",
+      "task_ids": [
+        "python-program-parts-responsibility",
+        "python-program-parts-data-flow",
+        "python-program-parts-composition",
+        "python-program-parts-fix",
+        "python-program-parts-local-run"
+      ]
+    },
+    {
+      "id": "python-recursion",
+      "kind": "course",
+      "task_ids": [
+        "python-recursion-base-case",
+        "python-recursion-call-trace",
+        "python-recursion-return-trace",
+        "python-recursion-fix",
+        "python-recursion-local-run"
+      ]
+    },
+    {
+      "id": "python-select-result",
+      "kind": "course",
+      "task_ids": [
+        "python-select-result-filter",
+        "python-select-result-minimum",
+        "python-select-result-maximum",
+        "python-select-result-initial-value",
+        "python-select-result-local-run"
+      ]
+    },
+    {
+      "id": "python-sets",
+      "kind": "course",
+      "task_ids": [
+        "python-sets-unique-count",
+        "python-sets-membership",
+        "python-sets-add",
+        "python-sets-order",
+        "python-sets-local-run"
+      ]
+    },
+    {
+      "id": "python-sorting-search",
+      "kind": "course",
+      "task_ids": [
+        "python-sorting-search-linear",
+        "python-sorting-search-sorted",
+        "python-sorting-search-in-place",
+        "python-sorting-search-key",
+        "python-sorting-search-local-run"
+      ]
+    },
+    {
+      "id": "python-strings",
+      "kind": "course",
+      "task_ids": [
+        "python-strings-index",
+        "python-strings-negative-index",
+        "python-strings-slice",
+        "python-strings-fix",
+        "python-strings-local-run"
+      ]
+    },
+    {
+      "id": "python-tables",
+      "kind": "course",
+      "task_ids": [
+        "python-tables-split",
+        "python-tables-columns",
+        "python-tables-filter",
+        "python-tables-aggregate",
+        "python-tables-local-run"
+      ]
+    },
+    {
+      "id": "python-todo-actions",
+      "kind": "course",
+      "task_ids": [
+        "python-todo-actions-find",
+        "python-todo-actions-complete",
+        "python-todo-actions-edit",
+        "python-todo-actions-delete",
+        "python-todo-actions-local-run"
+      ]
+    },
+    {
+      "id": "python-todo-start",
+      "kind": "course",
+      "task_ids": [
+        "python-todo-start-storage",
+        "python-todo-start-command",
+        "python-todo-start-add",
+        "python-todo-start-show",
+        "python-todo-start-local-run"
+      ]
+    },
+    {
+      "id": "python-todo-storage",
+      "kind": "course",
+      "task_ids": [
+        "python-todo-storage-import",
+        "python-todo-storage-write",
+        "python-todo-storage-read",
+        "python-todo-storage-missing",
+        "python-todo-storage-local-run"
+      ]
+    },
+    {
+      "id": "python-while",
+      "kind": "course",
+      "task_ids": [
+        "python-while-trace",
+        "python-while-stop-value",
+        "python-while-condition",
+        "python-while-fix",
+        "python-while-local-run"
+      ]
+    }
+  ],
+  "inputs": {
+    "tasks/preobrazovanie-zapisey-appending.json": "73f327ef48f94f996bddee2a31de276f655974e38feea8d7d382c5361df31e79",
+    "tasks/preobrazovanie-zapisey-base-three.json": "df7023bff03a4e6bb565f03509f1713b30892ebe0268565ac5af9194e2bf7747",
+    "tasks/preobrazovanie-zapisey-digit-replacement.json": "ab667e6219ca7eef03ac7c57c5abcebca8158748d806005f09bc4bad480e4efd",
+    "tasks/preobrazovanie-zapisey-non-monotonic-maximum.json": "4558a57ad00374cb18272b1dcc931c53b89d39b28f4357dbb4936b2098882e65",
+    "tasks/preobrazovanie-zapisey-parity.json": "513f50e1986542c2507065497fc35851925c54d9b018c062a8c1bbf263e89b29",
+    "tasks/python-bruteforce-condition.json": "90e49f4f311b63ed2b17f6ff0471eb8d76c3f9e5803902ee941745e852d6eb1e",
+    "tasks/python-bruteforce-count.json": "8e40fef6a9add225c3816f7321934306a99f1c85bac5871ebda00d54c4f0c2d9",
+    "tasks/python-bruteforce-local-run.json": "ca95d89e21fdef752872f7810d2ee36edde96ea5cc91f3b7c1c4941708d8c327",
+    "tasks/python-bruteforce-nested.json": "8dca613f9bafd389c3c68b0c400b49f4dacd3ae11fdb47ccc1b3c50504e7e1ff",
+    "tasks/python-bruteforce-range.json": "02713526a7eb9d10f0b1892b7f06c4cf88961a2978c5b82ec6b9310e9498f494",
+    "tasks/python-compound-conditions-boundary.json": "e77a6a983a5976194161156b8a763d0bce5fe233dfbd864bc3ae4ccc22a71ca5",
+    "tasks/python-compound-conditions-branch-order.json": "c30866369b742f69582777e05ef7fa9c4e76c95be8485fcb587ebf90b37a1b73",
+    "tasks/python-compound-conditions-fix.json": "516ba962039054a774d6868e4a55908d3cdd5a79832a883ce115b33042781452",
+    "tasks/python-compound-conditions-local-run.json": "c28531497969dd01111cc9717810d68e0be2b94d653a1a60ce05418500c975c0",
+    "tasks/python-compound-conditions-logic-trace.json": "544734849b49355ea8a072f39e35b0bb357d1a715cbc9e531838889920ae27c6",
+    "tasks/python-comprehensions-dict.json": "c907ec3f7b4287fdd30ae35aa9f47f3ae1f0b7519828c5e971b2f579c16d4d0c",
+    "tasks/python-comprehensions-filter.json": "bc26fc018cb593882bc26c0a34df707f875c2d6aa7379e6fcc01b431f91c492c",
+    "tasks/python-comprehensions-list.json": "e5eab1ef9a8d99d3145d8568972e6928b2c0f88c7c404558335adf6d830f9300",
+    "tasks/python-comprehensions-local-run.json": "c945e84a0c84fc02baf053a46e3762221a12097212bab88fa7fc2a167e0217cc",
+    "tasks/python-comprehensions-set.json": "a4dc86df966b7c179c948a295b4d5d8ca64f05641bc0f77f6ce95e1a24396562",
+    "tasks/python-conditions-boundary.json": "41187393b6ff40ebd4e26dc3452c0da6e971fa9767415baa94154baccc4398ef",
+    "tasks/python-conditions-branch-trace.json": "00a923a1e0686073833434a45eb1ac1d1b605bfe78275ce3e47d570f2ec4cfc1",
+    "tasks/python-conditions-comparison-result.json": "8dc6d13db226abc323be0d676f6bfc6e62dd7afeaae9594391eb4cf68e618b7b",
+    "tasks/python-conditions-local-run.json": "255457972b41aaf520c8229194144258b192cc744513ddccc9a3754eec4f7fa0",
+    "tasks/python-conditions-operator.json": "c83803b574eef722e462396952db76b693151102a8c057c088f826d0888b0012",
+    "tasks/python-dictionaries-get.json": "40f945c4d34e4d13f954e729bf23395725212131bbff1cfa798028a128d6fe37",
+    "tasks/python-dictionaries-local-run.json": "eac561cafcd85a51fc71bbae6bf4405874eac37d9b505ca76faa87513a0b1adf",
+    "tasks/python-dictionaries-lookup.json": "687b61e5feaba6c2cc797020f424f308f9cfa3f86a492dbcf312eae4a05b17f8",
+    "tasks/python-dictionaries-membership.json": "6ec7f81e4e2bcaed9a4aa68eda7e44297d7202bfe9c904b0be870dc9798b1e06",
+    "tasks/python-dictionaries-update.json": "3e92ad440b5687d8eb097a512e4b7d8803ab636eac0e9b24c3b02c35bb97c29f",
+    "tasks/python-errors-final-line.json": "b906b70835316cf3c36fe6fbb408a0ca2ad6ebd53448a1a96ebc03258d0307d9",
+    "tasks/python-errors-local-fix.json": "cb534f2442c0db9a107cd3f7f6282844e12b2fa9f41b2b96725ebe93ae77efb6",
+    "tasks/python-errors-source-line.json": "79725cd1c3568d9a8db79a3ff5142a9341daa583eb772207f50be8579108177d",
+    "tasks/python-errors-syntax-fix.json": "ddc6196fc0e8c65e9e0b4a97c747615f49ff4d2fff5ac0f9e7135ed9e8b3ee6b",
+    "tasks/python-errors-value-error.json": "b0ab54ea827a88ae2bdfcbbaa21a8b517e35b878ce4028f1d338877dfc8e31c4",
+    "tasks/python-exceptions-else.json": "ec3d0143598d9663dbc98c4e397cd2e865c8fffc87ba8f5e7e8c90221a7880b3",
+    "tasks/python-exceptions-local-run.json": "38b1d51ca3e64f5141e0e0f16650cdc89b708b6d73b4506b172b7e11ae21b48e",
+    "tasks/python-exceptions-loop.json": "b15b37abda9d59e65cd7ada3ff944148d7d4a99db47513f286d7706e0d2ac34c",
+    "tasks/python-exceptions-specific.json": "ed225363b4618457e38e33d06d328f89b5b5ba5adb6a9510ada08d96d4055dfc",
+    "tasks/python-exceptions-value-error.json": "6bbcc9a89bb6b2b58d11762b767cdc5cedf5606d17ff93d12eee526892497059",
+    "tasks/python-files-aggregate.json": "721f0a0e17805b64d7b1939e1e375c4ad1a4e37e5792071ec10bcbb48dd95eb0",
+    "tasks/python-files-local-run.json": "4608d742e5e21725ced5f4f2000a65184414bfb2a0e80a40bcaf8bdecf7156f8",
+    "tasks/python-files-parse.json": "500110ed0460b24f080af2659bc59bd3955719258e62e1f41d655cd19dd21f1d",
+    "tasks/python-files-read-line.json": "50db7010cb58085a11d649a99b21a16fc28be5cf43f3052c704bf644a0f98923",
+    "tasks/python-files-strip.json": "d16d46eb3c79ba5f68ad8ed71be9cbeaea75d162e4a42cd662629787f84ec4d6",
+    "tasks/python-first-program-expression.json": "01964b1f13ccf0830bb2de31289bf84ec98e502fc86fbc352238f931a895b3a5",
+    "tasks/python-first-program-input-conversion.json": "1fae063a7e33da5780f000fc5c16878a6915b19e6636af7970ad3193adc1b2af",
+    "tasks/python-first-program-local-run.json": "8034bdc07cf08724d717989150b78100d8c0add669be496373eb909556514485",
+    "tasks/python-first-program-output-order.json": "c21cd21267b01efbefe73c34e89a84fa1e06e4f830b078e8ba500eb9d3afa138",
+    "tasks/python-first-program-variable-trace.json": "c32f3fc692e166db4aedf545ed5a5bed9a63a94a0dae01a0655701f846f67d81",
+    "tasks/python-for-range-boundary.json": "084e15d07bfe65fa46a951f08a827a96ebda2a8ecbaee06fe3dc1f69191c16eb",
+    "tasks/python-for-range-fix.json": "4f3b93713c70952feb569346174cbfb8a493a9e0b59731897ac317d73e7ac068",
+    "tasks/python-for-range-local-run.json": "4f5a09c423d7cd9c00996926a0fc09e2bba2f03bfffe87dafc5f83f5e91bba85",
+    "tasks/python-for-range-range-values.json": "1af3bb70bb18eaecc145f17ccabb72c96b520521504c41b6901918e13e7ecbe1",
+    "tasks/python-for-range-sum-trace.json": "6c54733c1cf77e74cbd0a8912b239eeafd1881caab300e836f5b311def179162",
+    "tasks/python-functions-call.json": "834f57535ad2eaa7af0ef44332ed0db6edbd1fcd5b01f1ce3f99c1e0e57de178",
+    "tasks/python-functions-fix.json": "4c52598090331a7c3188daf4c761b6ee8eae4fe5c6dd23d1976f94b221e542e9",
+    "tasks/python-functions-local-run.json": "fe80f96a8dee4affcf4f7802097133c3bf0b7af391c87ac2050b01ea71b55a85",
+    "tasks/python-functions-parameters.json": "fac5725aa8cbfaad844db4f0e1f9f439fa7083a374e666d0c6f6249e9b0c83fd",
+    "tasks/python-functions-return.json": "7da38061c842c1c3951947802c21de1e96a35649ed50d0a4a449201ce5b6b04d",
+    "tasks/python-independent-program-contract.json": "47c4fe6b30f0b703589f3c472cb3af392f3684c6de4a3297dfd27f1ab1e1c296",
+    "tasks/python-independent-program-decomposition.json": "edeb8a3a01dbbd77c9f15af3c35cd32d3702f91f9f32c67ac5b4125b32e9390a",
+    "tasks/python-independent-program-fix.json": "cbaa7824c3edd4eb27c13d86ad59450a793cb8b311af301245f9cc5581df06a6",
+    "tasks/python-independent-program-local-run.json": "5a7eecb43789f6bd0ee83901eb3d37633b0d30c81442ff3fe266488bc423c3ea",
+    "tasks/python-independent-program-test-cases.json": "aacfa51bc3f01c1719de82d1a69536c1df115d96083214ecc5b1fbb7e840c089",
+    "tasks/python-iterators-generators-exhausted.json": "ca1e9265795639df8f0d5bc33b9cf2f849517c28dd434c9e4b6daba238f1f5e8",
+    "tasks/python-iterators-generators-iterable.json": "847e2c5d83f9b1b09e9154c105ad985db25d42fe896933909ea44a414b23cebe",
+    "tasks/python-iterators-generators-local-run.json": "97b8a9aeffc8dd139a7090693a3feda903d00cbc896fd7ee8c7d52ee2621ff20",
+    "tasks/python-iterators-generators-next.json": "ac89fa45f3a2f4a2c15eb3649b20374c6c43b4fd489f1e0167b8e2724cdd00d6",
+    "tasks/python-iterators-generators-yield.json": "399a10c9ff5985a60f14a26423610e345c1450da600db469b2b58daf83b406c3",
+    "tasks/python-lists-append.json": "e55d5014453136e01bb0629f7bbe31544cf59dc5b975d80419aedf5ff99e8a7c",
+    "tasks/python-lists-index.json": "2cd249d99be743f67ee0f59b96457c6c19e028dced844a352b88b6b8dd70880e",
+    "tasks/python-lists-local-run.json": "1ce7d9bfcd126a689cb1348830bc3fc9cfe7d041902dd511a78aceba3e77bdd8",
+    "tasks/python-lists-mutation.json": "60ca94de8a12e12fea244c5e0612a52bf584f405cab381b5a3103f664ae0d156",
+    "tasks/python-lists-trace.json": "bf097c03ceae1775c5ec9b6668e0bd615d33068376efcc969625d4d93afd041a",
+    "tasks/python-loop-state-accumulator.json": "fe25b87115d478dd63047b66cd82b3f0083e42bd532d58b60a2d020ad835d0ed",
+    "tasks/python-loop-state-boundary.json": "3c5667fedfda9363951411ea935fcad5a979afab512e0c99a2b47f35177e99f8",
+    "tasks/python-loop-state-counter.json": "1fa8e9956676ea60e5cc3dcc5b770d37a900958c114c56b2378b5e2496eac43d",
+    "tasks/python-loop-state-fix.json": "65f391eeafe1e0494bd51b20ee088e319fbdc58f7bd45eed34a3c270faece71a",
+    "tasks/python-loop-state-local-run.json": "6b830dea4e1f4884a46a23de1fd239924b63c2730fc3ed7a7a2bd499b9b64cd2",
+    "tasks/python-number-digits-last.json": "1fc00d77385572032daa8b67554c0da32ee0a445049c755467b623cf20f60ac7",
+    "tasks/python-number-digits-local-run.json": "ecf26e94fa8cc4191875ab1021c5409a80afd27ca322279f4d2cd03450ddb314",
+    "tasks/python-number-digits-shorten.json": "27bca80d6ba95d5ced5172a7e9a12c9ef0971fbe5884756c827596536b71aee3",
+    "tasks/python-number-digits-sum.json": "3e68ea4505ef8c8a39cfb22375c55f4af1793beebc251d5c00941404b573fe0c",
+    "tasks/python-number-digits-trace.json": "8e734b37b73c4f84bab1f01252eb415a3944ff3016004651a6b1ab58066e4459",
+    "tasks/python-numbers-conversion.json": "c25d3c702c11b7d3ede768bb27282958b5820cfc0911dbfbadd0aefb97ef4619",
+    "tasks/python-numbers-division.json": "621a1d0e82feecf11292def0a32069ba4fc28740650502f4fb549b3505bc223a",
+    "tasks/python-numbers-local-run.json": "82ea7f3136a28a1b94d35ba012b846ef20c8d480c9701e4ea5b80c542be8df13",
+    "tasks/python-numbers-precedence.json": "0e4a9f19594003f116ca7fcfe588bb061b7e4dc8cf951c8530ea0981f9b7c5f5",
+    "tasks/python-numbers-remainder.json": "044d6401e8f172767bcd55133c8154ce788e619f9a3ddd94288daa4e12483b8d",
+    "tasks/python-program-parts-composition.json": "b5d3c7e0f56462dff44886c0067dc064ed68cbc94c9f59afa2e46a4853e5ab33",
+    "tasks/python-program-parts-data-flow.json": "96eac1bd860cffb6a25a2093bbf6e6b54c010e3190aca7f5d1b96116f83def90",
+    "tasks/python-program-parts-fix.json": "d2d0dd81e734ba7a4713f7258fc51c7a8b7a09400ab7ae17128ba9295be31f93",
+    "tasks/python-program-parts-local-run.json": "64c3376c6e9065df8783253cb8d167711bac496fe3ddb2b3a68f033a0a62f213",
+    "tasks/python-program-parts-responsibility.json": "b71b2675a5921997fdf5ca585e1a48d9948229f24f895233e239429b67bd38cd",
+    "tasks/python-recursion-base-case.json": "ffd71146d1c0b266213b8e0fee6364d8e08af2ea80119b19bd89d620fbd10d12",
+    "tasks/python-recursion-call-trace.json": "8f09424f755ed7beb3fa5be42a2a8e13d291a8953c8ddf3d1b6517b9f9eea8c5",
+    "tasks/python-recursion-fix.json": "5836e4a030caebd37b69d999c706767ae3ab15c3cac01be155228b0aa5a806bf",
+    "tasks/python-recursion-local-run.json": "ef014545719074818ee348fbbd232927bbf547a03ee9280d5250cfbd73b73de6",
+    "tasks/python-recursion-return-trace.json": "24e1b183dea8987aa79f596482e30a52118f2d729cd92eb4a58e31a8e9c542b0",
+    "tasks/python-select-result-filter.json": "ad6fa3a17587fbad2a09ea05b0e437f41a767b06b96d3e3b9c475b1c4cc39c22",
+    "tasks/python-select-result-initial-value.json": "f327fb47275ee45f2b8bc36717178720f1de7ba9b577b3695385e68c53d867e8",
+    "tasks/python-select-result-local-run.json": "bc4f94833070bfe10be9069360bd23267081efa253e0dab361eeb5bd759c0dc1",
+    "tasks/python-select-result-maximum.json": "d40f64439e228ddc9252fbb47a8be0482924ce01f408c34160db0b8e7376def3",
+    "tasks/python-select-result-minimum.json": "245636d030357e37dc1e19fae41bcb7323658e9582dc55d04c22aff558fff345",
+    "tasks/python-sets-add.json": "5980ed7d2d3445b3b57f21d3e773003b8c3850b8248567249c0456ee460a5640",
+    "tasks/python-sets-local-run.json": "6be22bb8679c363b89c8bbf57a8c6f774eb87194b61db09e84e7cb71a5f8fda1",
+    "tasks/python-sets-membership.json": "29eaa665e7102b0b08fa80575c93adaf7673b5f0c1598dee5825f8ec65336124",
+    "tasks/python-sets-order.json": "5e043a61bfd8981e158d26d78ceb216b3e0731ee40a80f2e645c57414d76e655",
+    "tasks/python-sets-unique-count.json": "66d9b89bfead2482b4d96bfa1c43be2374824bf4aff9a8dbe2bea75316e787a5",
+    "tasks/python-sorting-search-in-place.json": "5bfc7c60ccf8a75453a811bc68d058a0a0d53e3e531a148f3a5c203a7ff7f446",
+    "tasks/python-sorting-search-key.json": "4de9c4f8a0065151b4555c305a2ba1fe421a1b06673e0da1df3cdb08f6e780ab",
+    "tasks/python-sorting-search-linear.json": "08a6ec21640b5b2c1b42f207c5c099521200b326bfdd8e88f0ca137b3bd510f8",
+    "tasks/python-sorting-search-local-run.json": "1c9a727f236a8fa5d64726b5cc6ec44d6b13abec443abd17ba588d34fb71b6c8",
+    "tasks/python-sorting-search-sorted.json": "44949bb85d650d17a3d2bf71b5028643ba3e24e84b4a3995ea51ba5354484cd3",
+    "tasks/python-strings-fix.json": "a6ff1743a041dda66596ad5b633923edf7faa9214d3b3ab8b2002ca0507f23c0",
+    "tasks/python-strings-index.json": "f754aaf43fbbba565de2ec00290e7abf80a9992b7c404e0f6744334f53fba18f",
+    "tasks/python-strings-local-run.json": "ef772ebf529df1e01751d4f4738dd713ed0ffe9e635f5b97e5dbe46af7f9041a",
+    "tasks/python-strings-negative-index.json": "b07d506a37483416b457ef21b55acf1421fd7dbfaa3d795d716f515d1bb06535",
+    "tasks/python-strings-slice.json": "944930eb890ad47ad5874f128a1e30f642343171b3aeb83f15e5b8bb0d062b8a",
+    "tasks/python-tables-aggregate.json": "4d7d965873161997ec284e6a409b7cd32c1e7ce937fadf606839c139a5e7b2a2",
+    "tasks/python-tables-columns.json": "2b3cb71a4442d45f179bd7f65448e4ab55611126daf751e18b8a2ffd36b138ef",
+    "tasks/python-tables-filter.json": "b93b4458e32c0a85d0fe6fc046baa052505b17a617503cbaabb6da0967cdc481",
+    "tasks/python-tables-local-run.json": "a85538dfe289c54f002ba081de77ee37dd9c107a00eb70dcae26e6382cfcc79b",
+    "tasks/python-tables-split.json": "dee5f5ba0139b1963c7508958400b33b9a2b4f19a86e6a3e08d02f56ae6716e1",
+    "tasks/python-todo-actions-complete.json": "304b77c9acde67673689237e53cea7601c165ab74a4aea9b2514bff6ef62f004",
+    "tasks/python-todo-actions-delete.json": "20380c9dc93966b9c1f232bf0162e421fd47e67f77a78f5d45d6edf252ca13ec",
+    "tasks/python-todo-actions-edit.json": "0255ae6491c5af43a170a5c5b7baa01a0eba15d7ad307801c5a3da3db6a67e16",
+    "tasks/python-todo-actions-find.json": "45ddcdcd7953dfe7cc01da45764c6df498835978071f34c2c17512cd4929f1d8",
+    "tasks/python-todo-actions-local-run.json": "681a790efc4170f4c2624ba7ac3565ae27cd03ab5e0c2f365ae3e6a6f319473e",
+    "tasks/python-todo-start-add.json": "79db31fdd0cd5278e2dbe92bf8d5fb9d374b21ad13453881921ae210493cbc42",
+    "tasks/python-todo-start-command.json": "15ed0614b8978ad368631ded096952efaefd2ad481c591967e79ba11d959f7ab",
+    "tasks/python-todo-start-local-run.json": "111e42e78f4aa445dc25d39588ee95e96d691942060460fca0d08ca01bcede8b",
+    "tasks/python-todo-start-show.json": "48688a997006b39076eea461557d4f32cd2c59934912e336f32decf9f2f7a2bf",
+    "tasks/python-todo-start-storage.json": "5a8e065063784661a10b8261c4ab4dc0984786510133209c87f3f670407d84d8",
+    "tasks/python-todo-storage-import.json": "d34186778baacd51004c07f35b3cfe2c1f30a9d9bbd6648e46aeb982dc23c996",
+    "tasks/python-todo-storage-local-run.json": "d36cf8e63ba05af61cfcb75a3cf1bfa58af0980b5fcb2202acd33a2d7d7fbf8a",
+    "tasks/python-todo-storage-missing.json": "b0e36aa98db44609dabda21ae450492d39a021449e670fef42f70e4c62887503",
+    "tasks/python-todo-storage-read.json": "e7ddf26fd12c37195a54684fcc495b3c6062fb7e4052d903328037de7cfd0404",
+    "tasks/python-todo-storage-write.json": "352cef9124e5e38b1931839b372b04adba3b5d6bc36fe171a016ba22a0e6a148",
+    "tasks/python-while-condition.json": "5a035a7e3a0df2b1c3f5f1cb96b4425fbd764086d2708f82983995e0a09d868b",
+    "tasks/python-while-fix.json": "9056b9739027104dca87b9e60259f208a700a3789b6e8c8bb9a8bd94e491e6d5",
+    "tasks/python-while-local-run.json": "47f8edf598abe0f18923782caea9e9fcdc2da65aa03e8ef1e7a212b0b668dc4f",
+    "tasks/python-while-stop-value.json": "0f433c6b82f2c921c1b6ae2bb5cfa634bc6cb6655e954c682ad1c12e3943320b",
+    "tasks/python-while-trace.json": "2cdabaff845804d257eef27d917323e7751a9e7a114347b05c99af7b8bc1804a",
+    "tasks/rekursiya-base-sequence.json": "dedfafe5a241d08b401e00ac37bccfc862a85f6fe94d8a0fd860d3aab05095e4",
+    "tasks/rekursiya-call-stack-trace.json": "20e5e633aaabd1d95a907a4f2c75a13459d28ebeb01e3b55625c5d623c219803",
+    "tasks/rekursiya-large-ratio.json": "663908a9bf8ef0b26d88e999a6f804925ac24747dd0ca1df7c417e47223cfdce",
+    "tasks/rekursiya-repeated-calls.json": "6045f44f072799ad8ff5a3dbe2b9c73315716b4fde0932c9707e649774c2d10f",
+    "tasks/rekursiya-two-values.json": "36f0f4b7f26dd729c30cb43f08bd47c9e033d7b59b2e002406c6d36d5ff6a8e6",
+    "assets/python-files-aggregate/numbers.txt": "a3ffa225a17d35ef0f8185b42bf373fcc9fd45c2494e7e9c6ee01dbc2c6aecaf"
+  },
+  "first_solution_revisions": {
+    "preobrazovanie-zapisey-appending": 1,
+    "preobrazovanie-zapisey-base-three": 1,
+    "preobrazovanie-zapisey-digit-replacement": 1,
+    "preobrazovanie-zapisey-non-monotonic-maximum": 1,
+    "preobrazovanie-zapisey-parity": 1,
+    "python-bruteforce-condition": 1,
+    "python-bruteforce-count": 1,
+    "python-bruteforce-local-run": 1,
+    "python-bruteforce-nested": 1,
+    "python-bruteforce-range": 1,
+    "python-compound-conditions-boundary": 1,
+    "python-compound-conditions-branch-order": 1,
+    "python-compound-conditions-fix": 1,
+    "python-compound-conditions-local-run": 1,
+    "python-compound-conditions-logic-trace": 1,
+    "python-comprehensions-dict": 1,
+    "python-comprehensions-filter": 1,
+    "python-comprehensions-list": 1,
+    "python-comprehensions-local-run": 1,
+    "python-comprehensions-set": 1,
+    "python-conditions-boundary": 1,
+    "python-conditions-branch-trace": 1,
+    "python-conditions-comparison-result": 1,
+    "python-conditions-local-run": 1,
+    "python-conditions-operator": 1,
+    "python-dictionaries-get": 1,
+    "python-dictionaries-local-run": 1,
+    "python-dictionaries-lookup": 1,
+    "python-dictionaries-membership": 1,
+    "python-dictionaries-update": 1,
+    "python-errors-final-line": 1,
+    "python-errors-local-fix": 1,
+    "python-errors-source-line": 1,
+    "python-errors-syntax-fix": 1,
+    "python-errors-value-error": 1,
+    "python-exceptions-else": 1,
+    "python-exceptions-local-run": 1,
+    "python-exceptions-loop": 1,
+    "python-exceptions-specific": 1,
+    "python-exceptions-value-error": 1,
+    "python-files-aggregate": 1,
+    "python-files-local-run": 1,
+    "python-files-parse": 1,
+    "python-files-read-line": 1,
+    "python-files-strip": 1,
+    "python-first-program-expression": 1,
+    "python-first-program-input-conversion": 1,
+    "python-first-program-local-run": 1,
+    "python-first-program-output-order": 1,
+    "python-first-program-variable-trace": 1,
+    "python-for-range-boundary": 1,
+    "python-for-range-fix": 1,
+    "python-for-range-local-run": 1,
+    "python-for-range-range-values": 1,
+    "python-for-range-sum-trace": 1,
+    "python-functions-call": 1,
+    "python-functions-fix": 1,
+    "python-functions-local-run": 1,
+    "python-functions-parameters": 1,
+    "python-functions-return": 1,
+    "python-independent-program-contract": 1,
+    "python-independent-program-decomposition": 1,
+    "python-independent-program-fix": 1,
+    "python-independent-program-local-run": 1,
+    "python-independent-program-test-cases": 1,
+    "python-iterators-generators-exhausted": 1,
+    "python-iterators-generators-iterable": 1,
+    "python-iterators-generators-local-run": 1,
+    "python-iterators-generators-next": 1,
+    "python-iterators-generators-yield": 1,
+    "python-lists-append": 1,
+    "python-lists-index": 1,
+    "python-lists-local-run": 1,
+    "python-lists-mutation": 1,
+    "python-lists-trace": 1,
+    "python-loop-state-accumulator": 1,
+    "python-loop-state-boundary": 1,
+    "python-loop-state-counter": 1,
+    "python-loop-state-fix": 1,
+    "python-loop-state-local-run": 1,
+    "python-number-digits-last": 1,
+    "python-number-digits-local-run": 1,
+    "python-number-digits-shorten": 1,
+    "python-number-digits-sum": 1,
+    "python-number-digits-trace": 1,
+    "python-numbers-conversion": 1,
+    "python-numbers-division": 1,
+    "python-numbers-local-run": 1,
+    "python-numbers-precedence": 1,
+    "python-numbers-remainder": 1,
+    "python-program-parts-composition": 1,
+    "python-program-parts-data-flow": 1,
+    "python-program-parts-fix": 1,
+    "python-program-parts-local-run": 1,
+    "python-program-parts-responsibility": 1,
+    "python-recursion-base-case": 1,
+    "python-recursion-call-trace": 1,
+    "python-recursion-fix": 1,
+    "python-recursion-local-run": 1,
+    "python-recursion-return-trace": 1,
+    "python-select-result-filter": 1,
+    "python-select-result-initial-value": 1,
+    "python-select-result-local-run": 1,
+    "python-select-result-maximum": 1,
+    "python-select-result-minimum": 1,
+    "python-sets-add": 1,
+    "python-sets-local-run": 1,
+    "python-sets-membership": 1,
+    "python-sets-order": 1,
+    "python-sets-unique-count": 1,
+    "python-sorting-search-in-place": 1,
+    "python-sorting-search-key": 1,
+    "python-sorting-search-linear": 1,
+    "python-sorting-search-local-run": 1,
+    "python-sorting-search-sorted": 1,
+    "python-strings-fix": 1,
+    "python-strings-index": 1,
+    "python-strings-local-run": 1,
+    "python-strings-negative-index": 1,
+    "python-strings-slice": 1,
+    "python-tables-aggregate": 1,
+    "python-tables-columns": 1,
+    "python-tables-filter": 1,
+    "python-tables-local-run": 1,
+    "python-tables-split": 1,
+    "python-todo-actions-complete": 1,
+    "python-todo-actions-delete": 1,
+    "python-todo-actions-edit": 1,
+    "python-todo-actions-find": 1,
+    "python-todo-actions-local-run": 1,
+    "python-todo-start-add": 1,
+    "python-todo-start-command": 1,
+    "python-todo-start-local-run": 1,
+    "python-todo-start-show": 1,
+    "python-todo-start-storage": 1,
+    "python-todo-storage-import": 1,
+    "python-todo-storage-local-run": 1,
+    "python-todo-storage-missing": 1,
+    "python-todo-storage-read": 1,
+    "python-todo-storage-write": 1,
+    "python-while-condition": 1,
+    "python-while-fix": 1,
+    "python-while-local-run": 1,
+    "python-while-stop-value": 1,
+    "python-while-trace": 1,
+    "rekursiya-base-sequence": 1,
+    "rekursiya-call-stack-trace": 1,
+    "rekursiya-large-ratio": 1,
+    "rekursiya-repeated-calls": 1,
+    "rekursiya-two-values": 1
+  }
+}

@@ -18,7 +18,6 @@ export const pythonTablesLesson = defineCourseLesson({
     "Проверять формат на маленьком наборе",
     "Собирать разобранные строки в записи для дальнейшей обработки",
   ],
-  practiceTaskIds: pythonTablesLessonPublication.practiceTaskIds,
   accessTier: "free",
   theory: [
     {

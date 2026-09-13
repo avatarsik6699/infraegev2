@@ -11,7 +11,6 @@ export type CourseLessonPublication = {
   title: string;
   summary: string;
   status: LessonContent.Status;
-  practiceTaskIds: readonly string[];
   masteryThreshold?: number;
 };
 

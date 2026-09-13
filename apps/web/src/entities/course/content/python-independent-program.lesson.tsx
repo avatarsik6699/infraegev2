@@ -140,7 +140,6 @@ export const pythonIndependentProgramLesson = defineCourseLesson({
     "Проверять приложение целыми пользовательскими сценариями",
     "Объяснять назначение каждой функции итоговой программы",
   ],
-  practiceTaskIds: pythonIndependentProgramLessonPublication.practiceTaskIds,
   accessTier: "free",
   theory: [
     {

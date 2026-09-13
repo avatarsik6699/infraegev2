@@ -8,13 +8,14 @@ type ExplanationBlock =
 export const checkPracticeAnswer: PracticeTaskTypes.Checker = async (
   taskId,
   answer,
+  solutionRevision,
 ) => {
   try {
     const { data, response } = await apiClient.POST(
       "/api/tasks/{task_id}/check",
       {
         params: { path: { task_id: taskId } },
-        body: { answer },
+        body: { answer, solution_revision: solutionRevision },
         signal: AbortSignal.timeout(10_000),
       },
     );
@@ -26,6 +27,8 @@ export const checkPracticeAnswer: PracticeTaskTypes.Checker = async (
     if (!data) {
       throw new ApiError("protocol", "Answer check response had no data");
     }
+    if (data.solution_revision !== solutionRevision)
+      throw new ApiError("protocol", "Checker revision mismatch");
     return {
       correct: data.correct,
       explanation: data.explanation
@@ -55,8 +58,8 @@ function explanationText(block: ExplanationBlock): string {
       return block.data.caption ?? "Сверьте промежуточные данные в таблице.";
     case "image":
     case "diagram":
-      return block.data.caption;
+      return block.data.caption ?? "";
     case "attachment":
-      return `${block.data.label}: ${block.data.description}`;
+      return "Файл приведён в разборе.";
   }
 }

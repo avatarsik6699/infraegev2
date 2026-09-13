@@ -10,16 +10,16 @@ const calculate = (
     const solvedIds = new Set(
       progressByLessonId[lesson.id]?.solvedTaskIds ?? [],
     );
-    const solvedCount = lesson.practiceTaskIds.filter((taskId) =>
-      solvedIds.has(taskId),
+    const solvedCount = lesson.tasks.filter((task) =>
+      solvedIds.has(task.id),
     ).length;
     const masteryThreshold = lesson.masteryThreshold ?? 0.8;
 
     return {
       id: lesson.id,
       mastered:
-        lesson.practiceTaskIds.length > 0 &&
-        solvedCount / lesson.practiceTaskIds.length >= masteryThreshold,
+        lesson.tasks.length > 0 &&
+        solvedCount / lesson.tasks.length >= masteryThreshold,
     };
   });
   const masteredLessonIds = states

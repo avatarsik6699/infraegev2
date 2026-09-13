@@ -19,7 +19,6 @@ export const pythonConditionsLesson = defineCourseLesson({
     "Писать программу, которая выбирает один из двух вариантов",
     "Проверять обе ветви программы на своём компьютере",
   ],
-  practiceTaskIds: pythonConditionsLessonPublication.practiceTaskIds,
   accessTier: "free",
   theory: [
     {

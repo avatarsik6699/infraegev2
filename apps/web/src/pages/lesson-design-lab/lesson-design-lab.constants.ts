@@ -37,6 +37,7 @@ const outline: LessonTypes.OutlineGroup[] = [
 const practiceTasks: PracticeTaskTypes.LocalTask[] = [
   {
     id: "keep-half",
+    solutionRevision: 1,
     difficultyLabel: "Разминка",
     title: "Выберите половину",
     statement: textContent(
@@ -56,6 +57,7 @@ const practiceTasks: PracticeTaskTypes.LocalTask[] = [
   },
   {
     id: "left-boundary",
+    solutionRevision: 1,
     difficultyLabel: "База",
     title: "Сдвиньте левую границу",
     statement: textContent(
@@ -75,6 +77,7 @@ const practiceTasks: PracticeTaskTypes.LocalTask[] = [
   },
   {
     id: "right-boundary",
+    solutionRevision: 1,
     difficultyLabel: "Применение",
     title: "Сдвиньте правую границу",
     statement: textContent(
@@ -94,6 +97,7 @@ const practiceTasks: PracticeTaskTypes.LocalTask[] = [
   },
   {
     id: "loop-condition",
+    solutionRevision: 1,
     difficultyLabel: "Границы",
     title: "Сохраните последний кандидат",
     statement: textContent(
@@ -118,6 +122,7 @@ const practiceTasks: PracticeTaskTypes.LocalTask[] = [
   },
   {
     id: "trace-count",
+    solutionRevision: 1,
     difficultyLabel: "Трасса",
     title: "Завершите трассировку",
     statement: textContent(

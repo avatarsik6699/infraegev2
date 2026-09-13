@@ -6,7 +6,12 @@ export namespace PracticeTaskTypes {
     | "text/csv"
     | "application/json"
     | "text/x-python"
-    | "application/zip";
+    | "application/zip"
+    | "application/pdf"
+    | "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    | "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    | "application/vnd.oasis.opendocument.spreadsheet"
+    | "application/vnd.oasis.opendocument.text";
 
   export type ContentBlock =
     | { type: "text"; text: string }
@@ -59,6 +64,7 @@ export namespace PracticeTaskTypes {
 
   export type Task = {
     id: string;
+    solutionRevision: number;
     difficultyLabel: string;
     title: string;
     statement: readonly ContentBlock[];
@@ -76,5 +82,6 @@ export namespace PracticeTaskTypes {
   export type Checker = (
     taskId: string,
     answer: string,
+    solutionRevision: number,
   ) => Promise<CheckResult>;
 }

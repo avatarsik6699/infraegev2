@@ -18,7 +18,6 @@ export const pythonIteratorsGeneratorsLesson = defineCourseLesson({
     "Понимать одноразовое исчерпание итератора",
     "Создавать простой генератор с yield",
   ],
-  practiceTaskIds: pythonIteratorsGeneratorsLessonPublication.practiceTaskIds,
   accessTier: "free",
   theory: [
     {

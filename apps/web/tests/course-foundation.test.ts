@@ -10,7 +10,10 @@ import {
   getCourseLessons,
   type CourseProgressTypes,
 } from "~/entities/course";
-import { loadPracticeTasks } from "~/entities/practice-task";
+import {
+  loadMigrationPractice as loadPracticeTasks,
+  migrationTaskIds,
+} from "./practice-migration-fixture";
 
 describe("Python course foundation", () => {
   it("publishes the complete expanded curriculum for final evaluation", () => {
@@ -133,11 +136,11 @@ describe("Python course foundation", () => {
       throw new Error("Published Python course lesson fixture is missing");
     }
     const tasks = await loadPracticeTasks(
-      pythonFirstProgramLesson.practiceTaskIds,
+      migrationTaskIds(pythonFirstProgramLesson.id),
     );
 
     expect(tasks.map((task) => task.id)).toEqual(
-      pythonFirstProgramLesson.practiceTaskIds,
+      migrationTaskIds(pythonFirstProgramLesson.id),
     );
     expect(tasks).toHaveLength(5);
     for (const task of tasks) {
@@ -162,7 +165,7 @@ describe("Python course foundation", () => {
       "calculation-and-output",
       "run-and-check",
     ]);
-    expect(lesson?.practiceTaskIds).toEqual([
+    expect(migrationTaskIds(lesson?.id)).toEqual([
       "python-first-program-output-order",
       "python-first-program-variable-trace",
       "python-first-program-input-conversion",
@@ -247,7 +250,7 @@ describe("Python course foundation", () => {
       expect(lesson?.theory.map((concept) => concept.id)).toEqual(
         lessonCase.sectionIds,
       );
-      expect(lesson?.practiceTaskIds).toEqual(lessonCase.practiceTaskIds);
+      expect(migrationTaskIds(lesson?.id)).toEqual(lessonCase.practiceTaskIds);
       expect(lesson).toMatchObject({
         accessTier: "free",
         masteryThreshold: 0.8,
@@ -314,7 +317,7 @@ describe("Python course foundation", () => {
       expect(lesson?.theory.map((concept) => concept.id)).toEqual(
         lessonCase.sectionIds,
       );
-      expect(lesson?.practiceTaskIds).toEqual(lessonCase.practiceTaskIds);
+      expect(migrationTaskIds(lesson?.id)).toEqual(lessonCase.practiceTaskIds);
       expect(lesson).toMatchObject({
         accessTier: "free",
         masteryThreshold: 0.8,
@@ -403,7 +406,7 @@ describe("Python course foundation", () => {
       expect(lesson?.theory.map((concept) => concept.id)).toEqual(
         lessonCase.sectionIds,
       );
-      expect(lesson?.practiceTaskIds).toEqual(lessonCase.practiceTaskIds);
+      expect(migrationTaskIds(lesson?.id)).toEqual(lessonCase.practiceTaskIds);
       expect(lesson).toMatchObject({
         accessTier: "free",
         masteryThreshold: 0.8,
@@ -492,7 +495,7 @@ describe("Python course foundation", () => {
       expect(lesson?.theory.map((concept) => concept.id)).toEqual(
         lessonCase.sectionIds,
       );
-      expect(lesson?.practiceTaskIds).toEqual(lessonCase.practiceTaskIds);
+      expect(migrationTaskIds(lesson?.id)).toEqual(lessonCase.practiceTaskIds);
       expect(lesson).toMatchObject({
         accessTier: "free",
         masteryThreshold: 0.8,
@@ -587,7 +590,7 @@ describe("Python course foundation", () => {
       expect(lesson?.theory.map((concept) => concept.id)).toEqual(
         lessonCase.sectionIds,
       );
-      expect(lesson?.practiceTaskIds).toEqual(lessonCase.practiceTaskIds);
+      expect(migrationTaskIds(lesson?.id)).toEqual(lessonCase.practiceTaskIds);
       expect(lesson).toMatchObject({
         accessTier: "free",
         masteryThreshold: 0.8,
@@ -605,11 +608,11 @@ describe("Python course foundation", () => {
       throw new Error("Published Python conditions lesson fixture is missing");
     }
     const tasks = await loadPracticeTasks(
-      pythonConditionsLesson.practiceTaskIds,
+      migrationTaskIds(pythonConditionsLesson.id),
     );
 
     expect(tasks.map((task) => task.id)).toEqual(
-      pythonConditionsLesson.practiceTaskIds,
+      migrationTaskIds(pythonConditionsLesson.id),
     );
     expect(tasks).toHaveLength(5);
     for (const task of tasks) {
@@ -631,10 +634,12 @@ describe("Python course foundation", () => {
     if (!pythonErrorsLesson) {
       throw new Error("Published Python errors lesson fixture is missing");
     }
-    const tasks = await loadPracticeTasks(pythonErrorsLesson.practiceTaskIds);
+    const tasks = await loadPracticeTasks(
+      migrationTaskIds(pythonErrorsLesson.id),
+    );
 
     expect(tasks.map((task) => task.id)).toEqual(
-      pythonErrorsLesson.practiceTaskIds,
+      migrationTaskIds(pythonErrorsLesson.id),
     );
     expect(tasks).toHaveLength(5);
     for (const task of tasks) {
@@ -660,8 +665,8 @@ describe("Python course foundation", () => {
       });
       if (!lesson) throw new Error(`Missing lesson ${publication.id}`);
 
-      const tasks = await loadPracticeTasks(lesson.practiceTaskIds);
-      expect(tasks.map((task) => task.id)).toEqual(lesson.practiceTaskIds);
+      const tasks = await loadPracticeTasks(migrationTaskIds(lesson.id));
+      expect(tasks.map((task) => task.id)).toEqual(migrationTaskIds(lesson.id));
       expect(tasks).toHaveLength(5);
       for (const task of tasks) {
         expect(task.title).not.toBe("");
@@ -681,12 +686,15 @@ describe("course progress", () => {
     const lessons = [
       {
         id: "first",
-        practiceTaskIds: ["a"],
+        tasks: [{ id: "a", solutionRevision: 1 }],
         masteryThreshold: 0.8,
       },
       {
         id: "second",
-        practiceTaskIds: ["b", "c"],
+        tasks: [
+          { id: "b", solutionRevision: 1 },
+          { id: "c", solutionRevision: 1 },
+        ],
         masteryThreshold: 0.5,
       },
     ];

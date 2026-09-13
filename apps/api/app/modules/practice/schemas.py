@@ -217,11 +217,21 @@ class Manifest(StrictModel):
 class MaterialDefinition(StrictModel):
     id: Identifier
     sections: list[Identifier]
+    kind: Literal["topic", "course"] = "topic"
+    status: Literal["draft", "review", "published"] = "draft"
+    course_id: Identifier | None = None
+
+
+class CourseDefinition(StrictModel):
+    id: Identifier
+    status: Literal["draft", "review", "published"]
+    lesson_ids: list[Identifier]
 
 
 class Registry(StrictModel):
     format: Literal[1]
     materials: list[MaterialDefinition]
+    courses: list[CourseDefinition] = Field(default_factory=list)
 
     @model_validator(mode="after")
     def unique(self) -> Self:
@@ -237,3 +247,11 @@ class PublicTask(StrictModel):
     revision: int
     solution_revision: int
     content: PublicTaskContent
+    deliveries: list["FileDelivery"] = Field(default_factory=list)
+
+
+class FileDelivery(StrictModel):
+    usage_id: str
+    url: str
+    mime_type: str
+    size_bytes: int

@@ -17,6 +17,7 @@ type PracticeTaskAnswerProps = {
   answer: string;
   state: LessonPracticeTypes.State;
   onAnswerChange: (value: string) => void;
+  onRefresh: () => void;
   onSubmit: NonNullable<ComponentProps<"form">["onSubmit"]>;
 };
 
@@ -70,11 +71,26 @@ export const PracticeTaskAnswer: React.FC<PracticeTaskAnswerProps> = (
         <Button
           type="submit"
           loading={props.checking}
-          disabled={!props.enhanced || props.alreadySolved}
+          disabled={
+            !props.enhanced ||
+            props.alreadySolved ||
+            props.state === "stale" ||
+            props.state === "unavailable"
+          }
         >
           {props.checking ? "Проверяем" : "Проверить"}
         </Button>
       </div>
+      {props.state === "stale" || props.state === "unavailable" ? (
+        <div role="alert">
+          <Typography.Text tone="muted">
+            {props.state === "stale"
+              ? "Задача изменилась. Обновите условие и проверьте ответ заново. Введённый ответ сохранён."
+              : "Задача больше недоступна. Обновите практику урока."}
+          </Typography.Text>
+          <Button onClick={props.onRefresh}>Обновить условие</Button>
+        </div>
+      ) : null}
       {props.state === "error" ? (
         <Typography.Text role="alert" tone="muted">
           Не удалось проверить ответ. Попробуйте ещё раз.

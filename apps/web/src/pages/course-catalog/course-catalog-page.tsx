@@ -1,4 +1,4 @@
-import { courseCatalog } from "~/entities/course";
+import { courseCatalog, type CourseProgressTypes } from "~/entities/course";
 import { PageContainer } from "~/shared/components/page-container";
 import { Typography } from "~/shared/components/typography";
 import { PublicFooter } from "~/widgets/public-footer";
@@ -9,7 +9,11 @@ import { CourseCatalogStaircase } from "./components/course-catalog-staircase";
 import { CourseCatalogTrail } from "./components/course-catalog-trail";
 import styles from "./course-catalog-page.module.css";
 
-export const CourseCatalogPage: React.FC = () => {
+type Props = {
+  summaries: Record<string, readonly CourseProgressTypes.Lesson[] | null>;
+};
+
+export const CourseCatalogPage: React.FC<Props> = (props) => {
   return (
     <div className={styles.page} data-course-catalog-page>
       <PublicHeader activeSection="courses" />
@@ -46,7 +50,11 @@ export const CourseCatalogPage: React.FC = () => {
             aria-labelledby="course-catalog-heading"
           >
             {courseCatalog.entries.map((entry) => (
-              <CourseCatalogCard entry={entry} key={entry.id} />
+              <CourseCatalogCard
+                lessons={props.summaries[entry.id] ?? null}
+                entry={entry}
+                key={entry.id}
+              />
             ))}
           </ol>
         </PageContainer>

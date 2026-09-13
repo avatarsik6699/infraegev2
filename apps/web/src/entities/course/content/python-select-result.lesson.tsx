@@ -17,7 +17,6 @@ export const pythonSelectResultLesson = defineCourseLesson({
     "Корректно работать с отрицательными значениями",
     "Обрабатывать отсутствие подходящего варианта",
   ],
-  practiceTaskIds: pythonSelectResultLessonPublication.practiceTaskIds,
   accessTier: "free",
   theory: [
     {

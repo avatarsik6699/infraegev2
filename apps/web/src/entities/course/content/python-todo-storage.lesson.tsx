@@ -103,7 +103,6 @@ export const pythonTodoStorageLesson = defineCourseLesson({
     "Спокойно обрабатывать первый запуск без файла",
     "Продолжать выдавать уникальные номера после загрузки",
   ],
-  practiceTaskIds: pythonTodoStorageLessonPublication.practiceTaskIds,
   accessTier: "free",
   theory: [
     {

@@ -56,7 +56,12 @@ export const Route = createFileRoute("/courses_/$courseSlug/$lessonSlug")({
       },
     });
     if (!routeData) throw notFound();
-    return { course, lesson, tasks: routeData.tasks };
+    return {
+      course,
+      lesson,
+      tasks: routeData.tasks,
+      practiceUnavailable: routeData.practiceUnavailable,
+    };
   },
   head: ({ loaderData }) => courseLessonHead(loaderData),
   component: CourseLessonRoute,
@@ -72,6 +77,11 @@ function CourseLessonRoute() {
   );
   if (!course || !lesson) return null;
   return (
-    <CourseLessonPage course={course} lesson={lesson} tasks={data.tasks} />
+    <CourseLessonPage
+      course={course}
+      lesson={lesson}
+      tasks={data.tasks}
+      practiceUnavailable={data.practiceUnavailable}
+    />
   );
 }

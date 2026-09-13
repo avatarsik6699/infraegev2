@@ -18,7 +18,6 @@ export const pythonSortingSearchLesson = defineCourseLesson({
     "Сортировать записи по выбранному полю",
     "Сохранять исходный порядок, когда он ещё нужен",
   ],
-  practiceTaskIds: pythonSortingSearchLessonPublication.practiceTaskIds,
   accessTier: "free",
   theory: [
     {

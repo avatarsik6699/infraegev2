@@ -55,7 +55,7 @@ vi.mock(
 );
 
 const lessonProgressStorageKey = "infraege:lesson:binary-search:progress";
-const progressRegistryStorageKey = "infraege:lesson-progress";
+const progressRegistryStorageKey = "infraege:lesson-progress:v2";
 const textContent = (text: string) => [{ type: "text" as const, text }];
 
 function seedProgressRegistry(
@@ -711,7 +711,7 @@ describe("lesson design system", () => {
     expect(screen.getByText("Урок пройден")).toBeTruthy();
   });
 
-  it("keeps legacy solved progress without inventing an accepted answer", async () => {
+  it("keeps unmapped legacy history without inventing revision mastery", async () => {
     window.localStorage.setItem(
       lessonProgressStorageKey,
       JSON.stringify({
@@ -721,11 +721,9 @@ describe("lesson design system", () => {
     );
     render(<LessonDesignLab />);
     await waitFor(() => {
-      expect(
-        screen
-          .getByPlaceholderText("Этот ответ уже принят")
-          .hasAttribute("disabled"),
-      ).toBe(true);
+      expect(screen.getAllByRole("textbox")[0]!.hasAttribute("disabled")).toBe(
+        false,
+      );
     });
     expect(window.localStorage.getItem(progressRegistryStorageKey)).toContain(
       "keep-half",

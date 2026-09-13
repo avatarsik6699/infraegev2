@@ -75,7 +75,7 @@ uv run alembic upgrade head
 uv run alembic current | grep -q '114_01 (head)'
 uv run alembic check
 uv run python -m app.modules.practice.cli register --environment test --project "$DB_PROJECT"
-uv run pytest tests/test_practice_model_tooling.py tests/test_practice_health.py --basetemp "$test_root/pytest" -q
+uv run pytest tests/test_practice_model_tooling.py tests/test_practice_health.py tests/test_practice_legacy.py tests/test_practice_readers.py --basetemp "$test_root/pytest" -q
 # Re-running on a populated database must preserve rows/history and show no model drift.
 uv run alembic upgrade head
 uv run alembic check

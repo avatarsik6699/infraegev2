@@ -1,0 +1,212 @@
+{
+  "preobrazovanie-zapisey-chisel": {
+    "preobrazovanie-zapisey-appending": 1,
+    "preobrazovanie-zapisey-parity": 1,
+    "preobrazovanie-zapisey-base-three": 1,
+    "preobrazovanie-zapisey-digit-replacement": 1,
+    "preobrazovanie-zapisey-non-monotonic-maximum": 1
+  },
+  "rekursiya": {
+    "rekursiya-base-sequence": 1,
+    "rekursiya-call-stack-trace": 1,
+    "rekursiya-two-values": 1,
+    "rekursiya-repeated-calls": 1,
+    "rekursiya-large-ratio": 1
+  },
+  "python-bruteforce": {
+    "python-bruteforce-range": 1,
+    "python-bruteforce-condition": 1,
+    "python-bruteforce-count": 1,
+    "python-bruteforce-nested": 1,
+    "python-bruteforce-local-run": 1
+  },
+  "python-compound-conditions": {
+    "python-compound-conditions-branch-order": 1,
+    "python-compound-conditions-logic-trace": 1,
+    "python-compound-conditions-boundary": 1,
+    "python-compound-conditions-fix": 1,
+    "python-compound-conditions-local-run": 1
+  },
+  "python-comprehensions": {
+    "python-comprehensions-list": 1,
+    "python-comprehensions-filter": 1,
+    "python-comprehensions-set": 1,
+    "python-comprehensions-dict": 1,
+    "python-comprehensions-local-run": 1
+  },
+  "python-conditions": {
+    "python-conditions-comparison-result": 1,
+    "python-conditions-branch-trace": 1,
+    "python-conditions-boundary": 1,
+    "python-conditions-operator": 1,
+    "python-conditions-local-run": 1
+  },
+  "python-dictionaries": {
+    "python-dictionaries-lookup": 1,
+    "python-dictionaries-update": 1,
+    "python-dictionaries-membership": 1,
+    "python-dictionaries-get": 1,
+    "python-dictionaries-local-run": 1
+  },
+  "python-errors": {
+    "python-errors-final-line": 1,
+    "python-errors-source-line": 1,
+    "python-errors-syntax-fix": 1,
+    "python-errors-value-error": 1,
+    "python-errors-local-fix": 1
+  },
+  "python-exceptions": {
+    "python-exceptions-value-error": 1,
+    "python-exceptions-specific": 1,
+    "python-exceptions-else": 1,
+    "python-exceptions-loop": 1,
+    "python-exceptions-local-run": 1
+  },
+  "python-files": {
+    "python-files-read-line": 1,
+    "python-files-strip": 1,
+    "python-files-parse": 1,
+    "python-files-aggregate": 1,
+    "python-files-local-run": 1
+  },
+  "python-first-program": {
+    "python-first-program-output-order": 1,
+    "python-first-program-variable-trace": 1,
+    "python-first-program-input-conversion": 1,
+    "python-first-program-expression": 1,
+    "python-first-program-local-run": 1
+  },
+  "python-for-range": {
+    "python-for-range-range-values": 1,
+    "python-for-range-sum-trace": 1,
+    "python-for-range-boundary": 1,
+    "python-for-range-fix": 1,
+    "python-for-range-local-run": 1
+  },
+  "python-functions": {
+    "python-functions-call": 1,
+    "python-functions-parameters": 1,
+    "python-functions-return": 1,
+    "python-functions-fix": 1,
+    "python-functions-local-run": 1
+  },
+  "python-independent-program": {
+    "python-independent-program-contract": 1,
+    "python-independent-program-decomposition": 1,
+    "python-independent-program-test-cases": 1,
+    "python-independent-program-fix": 1,
+    "python-independent-program-local-run": 1
+  },
+  "python-iterators-generators": {
+    "python-iterators-generators-iterable": 1,
+    "python-iterators-generators-next": 1,
+    "python-iterators-generators-exhausted": 1,
+    "python-iterators-generators-yield": 1,
+    "python-iterators-generators-local-run": 1
+  },
+  "python-lists": {
+    "python-lists-index": 1,
+    "python-lists-mutation": 1,
+    "python-lists-append": 1,
+    "python-lists-trace": 1,
+    "python-lists-local-run": 1
+  },
+  "python-loop-state": {
+    "python-loop-state-counter": 1,
+    "python-loop-state-accumulator": 1,
+    "python-loop-state-boundary": 1,
+    "python-loop-state-fix": 1,
+    "python-loop-state-local-run": 1
+  },
+  "python-number-digits": {
+    "python-number-digits-last": 1,
+    "python-number-digits-shorten": 1,
+    "python-number-digits-trace": 1,
+    "python-number-digits-sum": 1,
+    "python-number-digits-local-run": 1
+  },
+  "python-numbers": {
+    "python-numbers-precedence": 1,
+    "python-numbers-division": 1,
+    "python-numbers-remainder": 1,
+    "python-numbers-conversion": 1,
+    "python-numbers-local-run": 1
+  },
+  "python-program-parts": {
+    "python-program-parts-responsibility": 1,
+    "python-program-parts-data-flow": 1,
+    "python-program-parts-composition": 1,
+    "python-program-parts-fix": 1,
+    "python-program-parts-local-run": 1
+  },
+  "python-recursion": {
+    "python-recursion-base-case": 1,
+    "python-recursion-call-trace": 1,
+    "python-recursion-return-trace": 1,
+    "python-recursion-fix": 1,
+    "python-recursion-local-run": 1
+  },
+  "python-select-result": {
+    "python-select-result-filter": 1,
+    "python-select-result-minimum": 1,
+    "python-select-result-maximum": 1,
+    "python-select-result-initial-value": 1,
+    "python-select-result-local-run": 1
+  },
+  "python-sets": {
+    "python-sets-unique-count": 1,
+    "python-sets-membership": 1,
+    "python-sets-add": 1,
+    "python-sets-order": 1,
+    "python-sets-local-run": 1
+  },
+  "python-sorting-search": {
+    "python-sorting-search-linear": 1,
+    "python-sorting-search-sorted": 1,
+    "python-sorting-search-in-place": 1,
+    "python-sorting-search-key": 1,
+    "python-sorting-search-local-run": 1
+  },
+  "python-strings": {
+    "python-strings-index": 1,
+    "python-strings-negative-index": 1,
+    "python-strings-slice": 1,
+    "python-strings-fix": 1,
+    "python-strings-local-run": 1
+  },
+  "python-tables": {
+    "python-tables-split": 1,
+    "python-tables-columns": 1,
+    "python-tables-filter": 1,
+    "python-tables-aggregate": 1,
+    "python-tables-local-run": 1
+  },
+  "python-todo-actions": {
+    "python-todo-actions-find": 1,
+    "python-todo-actions-complete": 1,
+    "python-todo-actions-edit": 1,
+    "python-todo-actions-delete": 1,
+    "python-todo-actions-local-run": 1
+  },
+  "python-todo-start": {
+    "python-todo-start-storage": 1,
+    "python-todo-start-command": 1,
+    "python-todo-start-add": 1,
+    "python-todo-start-show": 1,
+    "python-todo-start-local-run": 1
+  },
+  "python-todo-storage": {
+    "python-todo-storage-import": 1,
+    "python-todo-storage-write": 1,
+    "python-todo-storage-read": 1,
+    "python-todo-storage-missing": 1,
+    "python-todo-storage-local-run": 1
+  },
+  "python-while": {
+    "python-while-trace": 1,
+    "python-while-stop-value": 1,
+    "python-while-condition": 1,
+    "python-while-fix": 1,
+    "python-while-local-run": 1
+  }
+}

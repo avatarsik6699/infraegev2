@@ -31,5 +31,11 @@ function TopicLessonRoute() {
   const data = Route.useLoaderData();
   const lesson = findLessonByRouteSlug(params.slug);
   if (!lesson) return null;
-  return <TopicLessonPage lesson={lesson} tasks={data.tasks} />;
+  return (
+    <TopicLessonPage
+      lesson={lesson}
+      tasks={data.tasks}
+      practiceUnavailable={data.practiceUnavailable}
+    />
+  );
 }

@@ -1,7 +1,7 @@
 export namespace CourseProgressTypes {
   export type Lesson = {
     id: string;
-    practiceTaskIds: readonly string[];
+    tasks: readonly { id: string; solutionRevision: number }[];
     masteryThreshold?: number;
   };
 

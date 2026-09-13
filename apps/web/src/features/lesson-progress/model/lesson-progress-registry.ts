@@ -16,6 +16,7 @@ type RegistryState = {
     lessonId: string,
     taskId: string,
     acceptedAnswer: string,
+    solutionRevision?: number,
   ) => LessonProgressTypes.Snapshot;
   setHydrated: () => void;
 };
@@ -43,12 +44,17 @@ export function createLessonProgressRegistry() {
           set({ lessons: { ...state.lessons, [lessonId]: progress } });
           if (legacyProgress) lessonProgressStorage.removeLegacy(lessonId);
         },
-        markSolved: (lessonId, taskId, acceptedAnswer) => {
+        markSolved: (lessonId, taskId, acceptedAnswer, solutionRevision) => {
           const state = get();
           const legacyProgress = lessonProgressStorage.readLegacy(lessonId);
           const current =
             state.lessons[lessonId] ?? legacyProgress ?? emptyLessonProgress;
-          const progress = markTaskSolved(current, taskId, acceptedAnswer);
+          const progress = markTaskSolved(
+            current,
+            taskId,
+            acceptedAnswer,
+            solutionRevision,
+          );
           if (progress === current && !legacyProgress) return current;
           set({ lessons: { ...state.lessons, [lessonId]: progress } });
           if (legacyProgress) lessonProgressStorage.removeLegacy(lessonId);
@@ -57,7 +63,7 @@ export function createLessonProgressRegistry() {
         setHydrated: () => set({ hydrated: true }),
       }),
       {
-        name: "infraege:lesson-progress",
+        name: "infraege:lesson-progress:v2",
         partialize: (state) => ({ lessons: state.lessons }),
         skipHydration: true,
         storage: lessonProgressStorage.persistStorage,

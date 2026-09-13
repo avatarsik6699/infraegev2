@@ -144,6 +144,11 @@ sre-management:
 	@./scripts/management-sre-kit.sh "$(ACTION)" "$(RELEASE)"
 
 .PHONY: db-inventory db-backup db-restore-check db-export
+.PHONY: practice-bootstrap
+practice-bootstrap:
+	@test -n "$(ENV_FILE)" || (echo 'ENV_FILE is required; see docs/runbooks/practice.md' >&2; exit 1)
+	@uv run --project apps/api python -m app.modules.practice.dev_bootstrap --backup-env "$(ENV_FILE)"
+
 db-inventory:
 	@bash scripts/db-inventory.sh "$(DB_ENV)" "$(DB_PROJECT)"
 

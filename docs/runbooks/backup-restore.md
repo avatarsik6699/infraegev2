@@ -236,3 +236,13 @@ A real recovery must install verified immutable objects at the new target's pers
 path before enabling its application. A validated dump without those objects is insufficient.
 Never restore into an existing production database or overwrite old volumes. The weekly encrypted
 export carries these files automatically; an export remaining on the VPS is still not off-site.
+
+
+### Lesson practice consumer cutover (Change 115)
+
+Before activating the DB-backed lesson consumers, follow the explicit register/convert/validate/
+diff/pre-backup/import/outcome/parity/API-file-smoke/post-backup sequence in
+[practice](practice.md#change-115-explicit-local-bootstrap-and-cutover). A healthy empty schema is
+not a populated practice bank. The nonempty restore smoke now exercises public readers and the
+revision-aware checker. Keep source assets and old volumes through stage-5 production/rollback
+acceptance; local implementation and rehearsals do not authorize production activation.

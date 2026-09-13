@@ -1,5 +1,3 @@
-import type { CourseProgressTypes } from "./course-progress.types";
-
 export namespace CourseCatalogTypes {
   export type Id =
     "python" | "excel" | "algorithms-data-structures" | "advanced-problems";
@@ -18,7 +16,6 @@ export namespace CourseCatalogTypes {
     status: "published";
     routeSlug: string;
     lessonCount: number;
-    progressLessons: readonly CourseProgressTypes.Lesson[];
   };
 
   export type Entry = PlannedEntry | PublishedEntry;

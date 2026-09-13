@@ -18,7 +18,6 @@ export const pythonNumbersLesson = defineCourseLesson({
     "Использовать обычное и целое деление, остаток и степень",
     "Преобразовывать введённый текст в нужный числовой тип",
   ],
-  practiceTaskIds: pythonNumbersLessonPublication.practiceTaskIds,
   accessTier: "free",
   theory: [
     {

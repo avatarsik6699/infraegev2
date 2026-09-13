@@ -21,7 +21,6 @@ export const pythonFirstProgramLesson = defineCourseLesson({
     "Собирать ввод, вычисление и вывод в одну программу",
     "Запускать файл на своём компьютере и проверять результат на разных данных",
   ],
-  practiceTaskIds: pythonFirstProgramLessonPublication.practiceTaskIds,
   accessTier: "free",
   theory: [
     {

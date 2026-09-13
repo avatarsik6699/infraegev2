@@ -1,63 +1,10 @@
-import { contentFiles } from "~/shared/lib/content-files";
+import type { components } from "~/shared/api/schema";
+import { practiceServerClient } from "./practice-server-client.server";
 import type { PracticeTaskTypes } from "../practice-task.types";
 
-type TaskSource = {
-  id: string;
-  title: string;
-  statement: unknown[];
-  hint: unknown[];
-  theory_links: PracticeTaskTypes.TheoryLink[];
-  difficulty: number;
-  explanation: unknown[];
-};
-
-export async function loadPracticeTasks(
-  taskIds: readonly string[],
-): Promise<PracticeTaskTypes.Task[]> {
-  return Promise.all(taskIds.map(loadPracticeTask));
-}
-
-async function loadPracticeTask(
-  taskId: string,
-): Promise<PracticeTaskTypes.Task> {
-  const source = parseTaskSource(await contentFiles.readTask(taskId));
-  if (source.id !== taskId) {
-    throw new Error(`Task id mismatch for ${taskId}`);
-  }
-  return {
-    id: source.id,
-    title: source.title,
-    statement: source.statement.map(parseContentBlock),
-    hint: source.hint.map(parseContentBlock),
-    theoryLinks: source.theory_links,
-    difficultyLabel: difficultyLabel(source.difficulty),
-    solution: source.explanation.map(parseContentBlock),
-  };
-}
-
-function parseTaskSource(value: string): TaskSource {
-  const source = JSON.parse(value) as unknown;
-  if (!isRecord(source)) {
-    throw new Error("Invalid public task projection");
-  }
-
-  const theoryLinks = requireArray(source.theory_links);
-  if (!theoryLinks.every(isTheoryLink)) {
-    throw new Error("Invalid public task projection");
-  }
-
-  return {
-    id: requireString(source.id),
-    title: requireString(source.title),
-    statement: requireNonEmptyArray(source.statement),
-    hint: requireNonEmptyArray(source.hint),
-    difficulty: requireNumber(source.difficulty),
-    explanation: requireNonEmptyArray(source.explanation),
-    theory_links: theoryLinks,
-  };
-}
-
-function parseContentBlock(value: unknown): PracticeTaskTypes.ContentBlock {
+export function parseContentBlock(
+  value: unknown,
+): PracticeTaskTypes.ContentBlock {
   if (
     !isRecord(value) ||
     typeof value.type !== "string" ||
@@ -91,7 +38,7 @@ const contentBlockParsers: Record<
   attachment: parseAttachmentBlock,
 };
 
-const ATTACHMENT_MAX_BYTES = 5 * 1024 * 1024;
+const ATTACHMENT_MAX_BYTES = 20 * 1024 * 1024;
 
 const attachmentMimeTypes = new Set<PracticeTaskTypes.AttachmentMimeType>([
   "text/plain",
@@ -99,6 +46,11 @@ const attachmentMimeTypes = new Set<PracticeTaskTypes.AttachmentMimeType>([
   "application/json",
   "text/x-python",
   "application/zip",
+  "application/pdf",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "application/vnd.oasis.opendocument.spreadsheet",
+  "application/vnd.oasis.opendocument.text",
 ]);
 
 function parseTextBlock(
@@ -244,7 +196,7 @@ function parseImageData(data: Record<string, unknown>) {
   return {
     src: requireSolutionString(data.src),
     alt: requireSolutionString(data.alt),
-    caption: requireSolutionString(data.caption),
+    caption: optionalString(data.caption) ?? "",
     width: requirePositiveInteger(data.width),
     height: requirePositiveInteger(data.height),
   };
@@ -254,33 +206,8 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
 }
 
-function isTheoryLink(value: unknown): value is PracticeTaskTypes.TheoryLink {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    "hash" in value &&
-    typeof value.hash === "string" &&
-    "label" in value &&
-    typeof value.label === "string"
-  );
-}
-
 function isString(value: unknown): value is string {
   return typeof value === "string";
-}
-
-function requireString(value: unknown): string {
-  if (typeof value !== "string") {
-    throw new Error("Invalid public task projection");
-  }
-  return value;
-}
-
-function requireNumber(value: unknown): number {
-  if (typeof value !== "number") {
-    throw new Error("Invalid public task projection");
-  }
-  return value;
 }
 
 function requireArray(value: unknown): unknown[] {
@@ -358,4 +285,117 @@ function difficultyLabel(difficulty: number): string {
   if (difficulty <= 1) return "Базовая";
   if (difficulty === 2) return "Средняя";
   return "Высокая";
+}
+
+type PublicTask = components["schemas"]["PublicTask"];
+
+export function projectPracticeTask(
+  source: PublicTask,
+  materialId: string,
+): PracticeTaskTypes.Task {
+  const blocks = (values: PublicTask["content"]["statement"]) =>
+    values.map((block) => {
+      if (
+        block.type !== "attachment" &&
+        block.type !== "image" &&
+        block.type !== "diagram"
+      )
+        return parseContentBlock(block);
+      const usage = source.content.files?.find(
+        (file) => file.id === block.data.usage_id,
+      );
+      const delivery = source.deliveries?.find(
+        (file) => file.usage_id === block.data.usage_id,
+      );
+      if (!usage || !delivery) throw new Error("Missing public file delivery");
+      if (block.type === "attachment")
+        return parseContentBlock({
+          type: "attachment",
+          data: {
+            src: delivery.url,
+            label: usage.filename,
+            description: usage.description,
+            mime_type: delivery.mime_type,
+            size_bytes: delivery.size_bytes,
+          },
+        });
+      const data = Object.fromEntries(
+        Object.entries(block.data).filter(([key]) => key !== "usage_id"),
+      );
+      return parseContentBlock({
+        type: block.type,
+        data: {
+          ...data,
+          caption: data.caption ?? undefined,
+          src: delivery.url,
+        },
+      });
+    });
+  return {
+    id: source.id,
+    solutionRevision: source.solution_revision,
+    title: source.content.title,
+    difficultyLabel: difficultyLabel(source.content.difficulty),
+    statement: blocks(source.content.statement),
+    hint: blocks(source.content.hint),
+    solution: blocks(source.content.explanation),
+    theoryLinks: (source.content.theory_links ?? [])
+      .filter((link) => link.material_id === materialId)
+      .map((link) => ({ hash: link.section, label: link.label })),
+  };
+}
+
+export async function loadLessonPractice(
+  kind: "topic" | "course",
+  materialId: string,
+) {
+  try {
+    const result = await practiceServerClient.GET(
+      "/api/learning-materials/{kind}/{material_id}/practice",
+      {
+        params: { path: { kind, material_id: materialId } },
+        cache: "no-store",
+        signal: AbortSignal.timeout(6000),
+      },
+    );
+    if (!result.data || !result.response.ok)
+      throw new Error("Practice unavailable");
+    return {
+      tasks: result.data.tasks.map(
+        (task: components["schemas"]["PublicTask"]) =>
+          projectPracticeTask(task, materialId),
+      ),
+      practiceUnavailable: false,
+    };
+  } catch {
+    return { tasks: [], practiceUnavailable: true };
+  }
+}
+
+export async function loadCoursePracticeSummary(courseId: string) {
+  try {
+    const result = await practiceServerClient.GET(
+      "/api/courses/{course_id}/practice-summary",
+      {
+        params: { path: { course_id: courseId } },
+        cache: "no-store",
+        signal: AbortSignal.timeout(6000),
+      },
+    );
+    return result.response.ok && result.data
+      ? result.data.lessons.map(
+          (lesson: components["schemas"]["LessonSummary"]) => ({
+            id: lesson.id,
+            tasks: lesson.tasks.map(
+              (task: components["schemas"]["TaskVersion"]) => ({
+                id: task.id,
+                solutionRevision: task.solution_revision,
+              }),
+            ),
+          }),
+        )
+      : null;
+  } catch {
+    return null;
+  }
 }

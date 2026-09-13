@@ -5,13 +5,6 @@ export const pythonFirstProgramLessonPublication = Object.freeze({
   summary:
     "Разберём, как Python выполняет команды, где хранит значения, как получает ввод и выводит результат.",
   status: "published",
-  practiceTaskIds: Object.freeze([
-    "python-first-program-output-order",
-    "python-first-program-variable-trace",
-    "python-first-program-input-conversion",
-    "python-first-program-expression",
-    "python-first-program-local-run",
-  ]),
 });
 
 export const pythonNumbersLessonPublication = Object.freeze({
@@ -21,13 +14,6 @@ export const pythonNumbersLessonPublication = Object.freeze({
   summary:
     "Разберём целые и вещественные числа, порядок вычислений и разницу между обычным, целым делением и остатком.",
   status: "published",
-  practiceTaskIds: Object.freeze([
-    "python-numbers-precedence",
-    "python-numbers-division",
-    "python-numbers-remainder",
-    "python-numbers-conversion",
-    "python-numbers-local-run",
-  ]),
 });
 
 export const pythonConditionsLessonPublication = Object.freeze({
@@ -37,13 +23,6 @@ export const pythonConditionsLessonPublication = Object.freeze({
   summary:
     "Разберём, как сравнения помогают программе выбрать одну из двух ветвей и почему граничные значения нужно проверять отдельно.",
   status: "published",
-  practiceTaskIds: Object.freeze([
-    "python-conditions-comparison-result",
-    "python-conditions-branch-trace",
-    "python-conditions-boundary",
-    "python-conditions-operator",
-    "python-conditions-local-run",
-  ]),
 });
 
 export const pythonErrorsLessonPublication = Object.freeze({
@@ -53,13 +32,6 @@ export const pythonErrorsLessonPublication = Object.freeze({
   summary:
     "Разберём, как читать сообщение Python снизу вверх, находить строку остановки и отличать несколько частых причин ошибки.",
   status: "published",
-  practiceTaskIds: Object.freeze([
-    "python-errors-final-line",
-    "python-errors-source-line",
-    "python-errors-syntax-fix",
-    "python-errors-value-error",
-    "python-errors-local-fix",
-  ]),
 });
 
 export const pythonCompoundConditionsLessonPublication = Object.freeze({
@@ -69,13 +41,6 @@ export const pythonCompoundConditionsLessonPublication = Object.freeze({
   summary:
     "Научимся выбирать одну из нескольких ветвей и собирать проверки с помощью elif, and, or и not.",
   status: "published",
-  practiceTaskIds: Object.freeze([
-    "python-compound-conditions-branch-order",
-    "python-compound-conditions-logic-trace",
-    "python-compound-conditions-boundary",
-    "python-compound-conditions-fix",
-    "python-compound-conditions-local-run",
-  ]),
 });
 
 export const pythonForRangeLessonPublication = Object.freeze({
@@ -85,13 +50,6 @@ export const pythonForRangeLessonPublication = Object.freeze({
   summary:
     "Разберём, какие числа создаёт range и как for последовательно обрабатывает каждое из них.",
   status: "published",
-  practiceTaskIds: Object.freeze([
-    "python-for-range-range-values",
-    "python-for-range-sum-trace",
-    "python-for-range-boundary",
-    "python-for-range-fix",
-    "python-for-range-local-run",
-  ]),
 });
 
 export const pythonWhileLessonPublication = Object.freeze({
@@ -101,13 +59,6 @@ export const pythonWhileLessonPublication = Object.freeze({
   summary:
     "Научимся связывать условие продолжения с изменением состояния и заранее видеть момент остановки.",
   status: "published",
-  practiceTaskIds: Object.freeze([
-    "python-while-trace",
-    "python-while-stop-value",
-    "python-while-condition",
-    "python-while-fix",
-    "python-while-local-run",
-  ]),
 });
 
 export const pythonLoopStateLessonPublication = Object.freeze({
@@ -117,13 +68,6 @@ export const pythonLoopStateLessonPublication = Object.freeze({
   summary:
     "Разделим счётчик и накопитель, проследим их изменения и избежим лишней итерации.",
   status: "published",
-  practiceTaskIds: Object.freeze([
-    "python-loop-state-counter",
-    "python-loop-state-accumulator",
-    "python-loop-state-boundary",
-    "python-loop-state-fix",
-    "python-loop-state-local-run",
-  ]),
 });
 
 export const pythonNumberDigitsLessonPublication = Object.freeze({
@@ -133,13 +77,6 @@ export const pythonNumberDigitsLessonPublication = Object.freeze({
   summary:
     "Научимся отделять последнюю цифру, укорачивать число и собирать из этих шагов понятный цикл.",
   status: "published",
-  practiceTaskIds: Object.freeze([
-    "python-number-digits-last",
-    "python-number-digits-shorten",
-    "python-number-digits-trace",
-    "python-number-digits-sum",
-    "python-number-digits-local-run",
-  ]),
 });
 
 export const pythonStringsLessonPublication = Object.freeze({
@@ -149,13 +86,6 @@ export const pythonStringsLessonPublication = Object.freeze({
   summary:
     "Разберём строку как неизменяемую последовательность и научимся точно выбирать её части.",
   status: "published",
-  practiceTaskIds: Object.freeze([
-    "python-strings-index",
-    "python-strings-negative-index",
-    "python-strings-slice",
-    "python-strings-fix",
-    "python-strings-local-run",
-  ]),
 });
 
 export const pythonListsLessonPublication = Object.freeze({
@@ -165,13 +95,6 @@ export const pythonListsLessonPublication = Object.freeze({
   summary:
     "Научимся читать, изменять и последовательно обрабатывать набор значений в списке.",
   status: "published",
-  practiceTaskIds: Object.freeze([
-    "python-lists-index",
-    "python-lists-mutation",
-    "python-lists-append",
-    "python-lists-trace",
-    "python-lists-local-run",
-  ]),
 });
 
 export const pythonSetsLessonPublication = Object.freeze({
@@ -181,13 +104,6 @@ export const pythonSetsLessonPublication = Object.freeze({
   summary:
     "Разберём, как множество удаляет повторы и быстро отвечает на вопрос о принадлежности.",
   status: "published",
-  practiceTaskIds: Object.freeze([
-    "python-sets-unique-count",
-    "python-sets-membership",
-    "python-sets-add",
-    "python-sets-order",
-    "python-sets-local-run",
-  ]),
 });
 
 export const pythonDictionariesLessonPublication = Object.freeze({
@@ -197,13 +113,6 @@ export const pythonDictionariesLessonPublication = Object.freeze({
   summary:
     "Научимся хранить пары ключ–значение, безопасно читать и обновлять данные по ключу.",
   status: "published",
-  practiceTaskIds: Object.freeze([
-    "python-dictionaries-lookup",
-    "python-dictionaries-update",
-    "python-dictionaries-membership",
-    "python-dictionaries-get",
-    "python-dictionaries-local-run",
-  ]),
 });
 
 export const pythonSortingSearchLessonPublication = Object.freeze({
@@ -213,13 +122,6 @@ export const pythonSortingSearchLessonPublication = Object.freeze({
   summary:
     "Разберём линейный поиск, различие sorted и list.sort и выбор поля, по которому сравниваются записи.",
   status: "published",
-  practiceTaskIds: Object.freeze([
-    "python-sorting-search-linear",
-    "python-sorting-search-sorted",
-    "python-sorting-search-in-place",
-    "python-sorting-search-key",
-    "python-sorting-search-local-run",
-  ]),
 });
 
 export const pythonComprehensionsLessonPublication = Object.freeze({
@@ -229,13 +131,6 @@ export const pythonComprehensionsLessonPublication = Object.freeze({
   summary:
     "Перепишем знакомый цикл как читаемое списковое, множественное или словарное включение без скрытой сложности.",
   status: "published",
-  practiceTaskIds: Object.freeze([
-    "python-comprehensions-list",
-    "python-comprehensions-filter",
-    "python-comprehensions-set",
-    "python-comprehensions-dict",
-    "python-comprehensions-local-run",
-  ]),
 });
 
 export const pythonFunctionsLessonPublication = Object.freeze({
@@ -245,13 +140,6 @@ export const pythonFunctionsLessonPublication = Object.freeze({
   summary:
     "Разберём путь данных от аргумента к параметру и от return к месту вызова функции.",
   status: "published",
-  practiceTaskIds: Object.freeze([
-    "python-functions-call",
-    "python-functions-parameters",
-    "python-functions-return",
-    "python-functions-fix",
-    "python-functions-local-run",
-  ]),
 });
 
 export const pythonProgramPartsLessonPublication = Object.freeze({
@@ -261,13 +149,6 @@ export const pythonProgramPartsLessonPublication = Object.freeze({
   summary:
     "Научимся разделять ввод, вычисление и вывод между небольшими функциями с ясными контрактами.",
   status: "published",
-  practiceTaskIds: Object.freeze([
-    "python-program-parts-responsibility",
-    "python-program-parts-data-flow",
-    "python-program-parts-composition",
-    "python-program-parts-fix",
-    "python-program-parts-local-run",
-  ]),
 });
 
 export const pythonIteratorsGeneratorsLessonPublication = Object.freeze({
@@ -277,13 +158,6 @@ export const pythonIteratorsGeneratorsLessonPublication = Object.freeze({
   summary:
     "Заглянем внутрь for, увидим исчерпание итератора и напишем генератор, который выдаёт значения по мере запроса.",
   status: "published",
-  practiceTaskIds: Object.freeze([
-    "python-iterators-generators-iterable",
-    "python-iterators-generators-next",
-    "python-iterators-generators-exhausted",
-    "python-iterators-generators-yield",
-    "python-iterators-generators-local-run",
-  ]),
 });
 
 export const pythonRecursionLessonPublication = Object.freeze({
@@ -293,13 +167,6 @@ export const pythonRecursionLessonPublication = Object.freeze({
   summary:
     "Разберём, как рекурсивный вызов приближает задачу к базовому случаю и как возвращается результат.",
   status: "published",
-  practiceTaskIds: Object.freeze([
-    "python-recursion-base-case",
-    "python-recursion-call-trace",
-    "python-recursion-return-trace",
-    "python-recursion-fix",
-    "python-recursion-local-run",
-  ]),
 });
 
 export const pythonExceptionsLessonPublication = Object.freeze({
@@ -309,13 +176,6 @@ export const pythonExceptionsLessonPublication = Object.freeze({
   summary:
     "Научимся перехватывать только ожидаемую ошибку, сохранять понятный путь программы и не прятать настоящие сбои.",
   status: "published",
-  practiceTaskIds: Object.freeze([
-    "python-exceptions-value-error",
-    "python-exceptions-specific",
-    "python-exceptions-else",
-    "python-exceptions-loop",
-    "python-exceptions-local-run",
-  ]),
 });
 
 export const pythonFilesLessonPublication = Object.freeze({
@@ -325,13 +185,6 @@ export const pythonFilesLessonPublication = Object.freeze({
   summary:
     "Научимся читать текстовый файл построчно, очищать переносы и преобразовывать данные осознанно.",
   status: "published",
-  practiceTaskIds: Object.freeze([
-    "python-files-read-line",
-    "python-files-strip",
-    "python-files-parse",
-    "python-files-aggregate",
-    "python-files-local-run",
-  ]),
 });
 
 export const pythonTablesLessonPublication = Object.freeze({
@@ -341,13 +194,6 @@ export const pythonTablesLessonPublication = Object.freeze({
   summary:
     "Разберём путь табличной строки от разделения на поля до отбора и итогового вычисления.",
   status: "published",
-  practiceTaskIds: Object.freeze([
-    "python-tables-split",
-    "python-tables-columns",
-    "python-tables-filter",
-    "python-tables-aggregate",
-    "python-tables-local-run",
-  ]),
 });
 
 export const pythonBruteforceLessonPublication = Object.freeze({
@@ -357,13 +203,6 @@ export const pythonBruteforceLessonPublication = Object.freeze({
   summary:
     "Научимся задавать конечное пространство вариантов и проверять каждый вариант по условию.",
   status: "published",
-  practiceTaskIds: Object.freeze([
-    "python-bruteforce-range",
-    "python-bruteforce-condition",
-    "python-bruteforce-count",
-    "python-bruteforce-nested",
-    "python-bruteforce-local-run",
-  ]),
 });
 
 export const pythonSelectResultLessonPublication = Object.freeze({
@@ -373,13 +212,6 @@ export const pythonSelectResultLessonPublication = Object.freeze({
   summary:
     "Разделим проверку допустимости и выбор лучшего результата, не теряя подходящие варианты.",
   status: "published",
-  practiceTaskIds: Object.freeze([
-    "python-select-result-filter",
-    "python-select-result-minimum",
-    "python-select-result-maximum",
-    "python-select-result-initial-value",
-    "python-select-result-local-run",
-  ]),
 });
 
 export const pythonIndependentProgramLessonPublication = Object.freeze({
@@ -389,13 +221,6 @@ export const pythonIndependentProgramLessonPublication = Object.freeze({
   summary:
     "Проверим обычные и ошибочные сценарии, а затем приведём выросший код в порядок.",
   status: "published",
-  practiceTaskIds: Object.freeze([
-    "python-independent-program-contract",
-    "python-independent-program-decomposition",
-    "python-independent-program-test-cases",
-    "python-independent-program-fix",
-    "python-independent-program-local-run",
-  ]),
 });
 
 export const pythonTodoStartLessonPublication = Object.freeze({
@@ -405,13 +230,6 @@ export const pythonTodoStartLessonPublication = Object.freeze({
   summary:
     "Начнём с простого: добавим командное меню, ввод нового дела и понятный вывод списка.",
   status: "published",
-  practiceTaskIds: Object.freeze([
-    "python-todo-start-storage",
-    "python-todo-start-command",
-    "python-todo-start-add",
-    "python-todo-start-show",
-    "python-todo-start-local-run",
-  ]),
 });
 
 export const pythonTodoActionsLessonPublication = Object.freeze({
@@ -421,13 +239,6 @@ export const pythonTodoActionsLessonPublication = Object.freeze({
   summary:
     "Добавим выбор дела по номеру, отметку выполнения, редактирование и удаление.",
   status: "published",
-  practiceTaskIds: Object.freeze([
-    "python-todo-actions-find",
-    "python-todo-actions-complete",
-    "python-todo-actions-edit",
-    "python-todo-actions-delete",
-    "python-todo-actions-local-run",
-  ]),
 });
 
 export const pythonTodoStorageLessonPublication = Object.freeze({
@@ -437,13 +248,6 @@ export const pythonTodoStorageLessonPublication = Object.freeze({
   summary:
     "Запишем дела в JSON и вернём их после нового запуска, даже если файла пока нет.",
   status: "published",
-  practiceTaskIds: Object.freeze([
-    "python-todo-storage-import",
-    "python-todo-storage-write",
-    "python-todo-storage-read",
-    "python-todo-storage-missing",
-    "python-todo-storage-local-run",
-  ]),
 });
 
 export const pythonCoursePublication = Object.freeze({

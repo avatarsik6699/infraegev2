@@ -19,7 +19,6 @@ export const pythonLoopStateLesson = defineCourseLesson({
     "Обновлять состояние только для подходящих элементов",
     "Проверять границы и число итераций",
   ],
-  practiceTaskIds: pythonLoopStateLessonPublication.practiceTaskIds,
   accessTier: "free",
   theory: [
     {

@@ -987,7 +987,8 @@ local-only Restic с явно принятым риском потери вме�
 ### 9.2 Approved practice execution sequence
 
 Утверждено архитектором в чате 2026-09-12; фиксация плана не является реализацией или релизом.
-Первый active change — [113: practice data foundation](changes/113-practice-data-foundation.md).
+Локально завершены [113: practice data foundation](changes/archive/113-practice-data-foundation.md)
+и [114: model and tooling](changes/archive/114-practice-model-tooling.md); это не production release.
 Последующие change-файлы создаются по одному после завершения предшествующего, без заранее
 занятых номеров и без параллельного расширения Backlog.
 

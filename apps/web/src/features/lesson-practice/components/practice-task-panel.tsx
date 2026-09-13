@@ -17,6 +17,7 @@ type PracticeTaskPanelProps = {
   enhanced: boolean;
   answer: string;
   onAnswerChange: (value: string) => void;
+  onRefresh: () => void;
   onSubmit: NonNullable<ComponentProps<"form">["onSubmit"]>;
 };
 
@@ -42,6 +43,7 @@ export const PracticeTaskPanel: React.FC<PracticeTaskPanelProps> = (props) => {
         enhanced={props.enhanced}
         inputId={inputId}
         onAnswerChange={props.onAnswerChange}
+        onRefresh={props.onRefresh}
         onSubmit={props.onSubmit}
         state={props.state}
         task={props.task}

@@ -21,6 +21,57 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/courses/{course_id}/practice-summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Course */
+        get: operations["get_course_api_courses__course_id__practice_summary_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/learning-materials/{kind}/{material_id}/practice": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Lesson */
+        get: operations["get_lesson_api_learning_materials__kind___material_id__practice_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/tasks/{task_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Task */
+        get: operations["get_task_api_tasks__task_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/tasks/{task_id}/check": {
         parameters: {
             query?: never;
@@ -32,6 +83,23 @@ export interface paths {
         put?: never;
         /** Check Answer */
         post: operations["check_answer_api_tasks__task_id__check_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/tasks/{task_id}/files/{usage_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get File */
+        get: operations["get_file_api_tasks__task_id__files__usage_id__get"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -95,28 +163,17 @@ export interface components {
     schemas: {
         /** AttachmentBlock */
         AttachmentBlock: {
-            data: components["schemas"]["AttachmentBlockData"];
+            data: components["schemas"]["AttachmentData"];
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
             type: "attachment";
         };
-        /** AttachmentBlockData */
-        AttachmentBlockData: {
-            /** Description */
-            description: string;
-            /** Label */
-            label: string;
-            /**
-             * Mime Type
-             * @enum {string}
-             */
-            mime_type: "text/plain" | "text/csv" | "application/json" | "text/x-python" | "application/zip";
-            /** Size Bytes */
-            size_bytes: number;
-            /** Src */
-            src: string;
+        /** AttachmentData */
+        AttachmentData: {
+            /** Usage Id */
+            usage_id: string;
         };
         /** CalloutBlock */
         CalloutBlock: {
@@ -141,13 +198,17 @@ export interface components {
         CheckRequest: {
             /** Answer */
             answer: string;
+            /** Solution Revision */
+            solution_revision: number;
         };
         /** CheckResponse */
         CheckResponse: {
             /** Correct */
             correct: boolean;
             /** Explanation */
-            explanation: (components["schemas"]["TextBlock"] | components["schemas"]["ListBlock"] | components["schemas"]["CodeExampleBlock"] | components["schemas"]["TableBlock"] | components["schemas"]["ImageBlock"] | components["schemas"]["DiagramBlock"] | components["schemas"]["AttachmentBlock"] | components["schemas"]["WorkedExampleBlock"] | components["schemas"]["CalloutBlock"])[];
+            explanation: (components["schemas"]["TextBlock"] | components["schemas"]["ListBlock"] | components["schemas"]["CodeExampleBlock"] | components["schemas"]["TableBlock"] | components["schemas"]["WorkedExampleBlock"] | components["schemas"]["CalloutBlock"] | components["schemas"]["ImageBlock"] | components["schemas"]["DiagramBlock"] | components["schemas"]["AttachmentBlock"])[];
+            /** Solution Revision */
+            solution_revision: number;
         };
         /**
          * ClientErrorReport
@@ -191,31 +252,38 @@ export interface components {
              */
             language: "python" | "text";
         };
+        /** CourseSummary */
+        CourseSummary: {
+            /** Id */
+            id: string;
+            /** Lessons */
+            lessons: components["schemas"]["LessonSummary"][];
+        };
         /** DiagramBlock */
         DiagramBlock: {
-            data: components["schemas"]["DiagramBlockData"];
+            data: components["schemas"]["DiagramData"];
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
             type: "diagram";
         };
-        /** DiagramBlockData */
-        DiagramBlockData: {
+        /** DiagramData */
+        DiagramData: {
             /** Accessible Description */
             accessible_description: string;
             /** Alt */
             alt: string;
             /** Caption */
-            caption: string;
+            caption?: string | null;
             /** Height */
             height: number;
             /** Pointers */
             pointers: components["schemas"]["DiagramPointer"][];
             /** Purpose */
             purpose: string;
-            /** Src */
-            src: string;
+            /** Usage Id */
+            usage_id: string;
             /** Width */
             width: number;
         };
@@ -226,6 +294,35 @@ export interface components {
             /** Label */
             label: string;
         };
+        /** FileDelivery */
+        FileDelivery: {
+            /** Mime Type */
+            mime_type: string;
+            /** Size Bytes */
+            size_bytes: number;
+            /** Url */
+            url: string;
+            /** Usage Id */
+            usage_id: string;
+        };
+        /** FileUsage */
+        FileUsage: {
+            /** Attribution */
+            attribution?: string | null;
+            /** Checksum */
+            checksum: string;
+            /** Description */
+            description: string;
+            /** Filename */
+            filename: string;
+            /** Id */
+            id: string;
+            /**
+             * Purpose
+             * @enum {string}
+             */
+            purpose: "image" | "attachment";
+        };
         /** HTTPValidationError */
         HTTPValidationError: {
             /** Detail */
@@ -233,25 +330,28 @@ export interface components {
         };
         /** ImageBlock */
         ImageBlock: {
-            data: components["schemas"]["ImageBlockData"];
+            data: components["schemas"]["MediaData"];
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
             type: "image";
         };
-        /** ImageBlockData */
-        ImageBlockData: {
-            /** Alt */
-            alt: string;
-            /** Caption */
-            caption: string;
-            /** Height */
-            height: number;
-            /** Src */
-            src: string;
-            /** Width */
-            width: number;
+        /** LessonPractice */
+        LessonPractice: {
+            /** Id */
+            id: string;
+            /** Kind */
+            kind: string;
+            /** Tasks */
+            tasks: components["schemas"]["PublicTask"][];
+        };
+        /** LessonSummary */
+        LessonSummary: {
+            /** Id */
+            id: string;
+            /** Tasks */
+            tasks: components["schemas"]["TaskVersion"][];
         };
         /** ListBlock */
         ListBlock: {
@@ -272,6 +372,121 @@ export interface components {
              */
             style: "ordered" | "unordered";
         };
+        /** MediaData */
+        MediaData: {
+            /** Alt */
+            alt: string;
+            /** Caption */
+            caption?: string | null;
+            /** Height */
+            height: number;
+            /** Usage Id */
+            usage_id: string;
+            /** Width */
+            width: number;
+        };
+        /** Membership */
+        Membership: {
+            /** Material Id */
+            material_id: string;
+            /** Position */
+            position: number;
+        };
+        /** PublicTask */
+        PublicTask: {
+            content: components["schemas"]["PublicTaskContent"];
+            /** Deliveries */
+            deliveries?: components["schemas"]["FileDelivery"][];
+            /** Id */
+            id: string;
+            /** Revision */
+            revision: number;
+            /** Solution Revision */
+            solution_revision: number;
+        };
+        /** PublicTaskContent */
+        PublicTaskContent: {
+            /** Answer Instruction */
+            answer_instruction: string;
+            /**
+             * Archived
+             * @default false
+             */
+            archived: boolean;
+            /**
+             * Catalog Visible
+             * @default true
+             */
+            catalog_visible: boolean;
+            /**
+             * Content Schema Version
+             * @default 1
+             * @constant
+             */
+            content_schema_version: 1;
+            /**
+             * Difficulty
+             * @enum {integer}
+             */
+            difficulty: 1 | 2 | 3;
+            /** Estimated Minutes */
+            estimated_minutes?: number | null;
+            /** Exam Numbers */
+            exam_numbers?: number[];
+            /** Explanation */
+            explanation: (components["schemas"]["TextBlock"] | components["schemas"]["ListBlock"] | components["schemas"]["CodeExampleBlock"] | components["schemas"]["TableBlock"] | components["schemas"]["WorkedExampleBlock"] | components["schemas"]["CalloutBlock"] | components["schemas"]["ImageBlock"] | components["schemas"]["DiagramBlock"] | components["schemas"]["AttachmentBlock"])[];
+            /** Files */
+            files?: components["schemas"]["FileUsage"][];
+            /** Hint */
+            hint: (components["schemas"]["TextBlock"] | components["schemas"]["ListBlock"] | components["schemas"]["CodeExampleBlock"] | components["schemas"]["TableBlock"] | components["schemas"]["WorkedExampleBlock"] | components["schemas"]["CalloutBlock"] | components["schemas"]["ImageBlock"] | components["schemas"]["DiagramBlock"] | components["schemas"]["AttachmentBlock"])[];
+            /** Id */
+            id: string;
+            /**
+             * Interaction Type
+             * @default production
+             * @enum {string}
+             */
+            interaction_type: "production" | "recognition";
+            /** Lessons */
+            lessons?: components["schemas"]["Membership"][];
+            /** Skills */
+            skills?: string[];
+            /** Sources */
+            sources: components["schemas"]["Source"][];
+            /** Statement */
+            statement: (components["schemas"]["TextBlock"] | components["schemas"]["ListBlock"] | components["schemas"]["CodeExampleBlock"] | components["schemas"]["TableBlock"] | components["schemas"]["WorkedExampleBlock"] | components["schemas"]["CalloutBlock"] | components["schemas"]["ImageBlock"] | components["schemas"]["DiagramBlock"] | components["schemas"]["AttachmentBlock"])[];
+            /** Theory Links */
+            theory_links?: components["schemas"]["TheoryLink"][];
+            /** Title */
+            title: string;
+        };
+        /** Source */
+        Source: {
+            /** Adaptation */
+            adaptation: string | null;
+            /** Author */
+            author: string | null;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "bank" | "original" | "adaptation" | "unknown";
+            /** Original Id */
+            original_id: string | null;
+            /** Primary */
+            primary: boolean;
+            /**
+             * Role
+             * @enum {string}
+             */
+            role: "original" | "copy";
+            /** Title */
+            title: string | null;
+            /** Url */
+            url: string | null;
+            /** Year */
+            year: number | null;
+        };
         /** TableBlock */
         TableBlock: {
             data: components["schemas"]["TableBlockData"];
@@ -290,6 +505,13 @@ export interface components {
             /** Rows */
             rows: string[][];
         };
+        /** TaskVersion */
+        TaskVersion: {
+            /** Id */
+            id: string;
+            /** Solution Revision */
+            solution_revision: number;
+        };
         /** TextBlock */
         TextBlock: {
             data: components["schemas"]["TextBlockData"];
@@ -303,6 +525,15 @@ export interface components {
         TextBlockData: {
             /** Markdown */
             markdown: string;
+        };
+        /** TheoryLink */
+        TheoryLink: {
+            /** Label */
+            label: string;
+            /** Material Id */
+            material_id: string;
+            /** Section */
+            section: string;
         };
         /** ValidationError */
         ValidationError: {
@@ -373,6 +604,100 @@ export interface operations {
             };
         };
     };
+    get_course_api_courses__course_id__practice_summary_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                course_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CourseSummary"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_lesson_api_learning_materials__kind___material_id__practice_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                kind: string;
+                material_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LessonPractice"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_task_api_tasks__task_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                task_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublicTask"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     check_answer_api_tasks__task_id__check_post: {
         parameters: {
             query?: never;
@@ -396,6 +721,36 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["CheckResponse"];
                 };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_file_api_tasks__task_id__files__usage_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                task_id: string;
+                usage_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Validation Error */
             422: {

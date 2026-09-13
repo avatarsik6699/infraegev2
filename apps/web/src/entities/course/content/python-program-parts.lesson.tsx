@@ -17,7 +17,6 @@ export const pythonProgramPartsLesson = defineCourseLesson({
     "Передавать результаты между функциями",
     "Проверять части программы независимо",
   ],
-  practiceTaskIds: pythonProgramPartsLessonPublication.practiceTaskIds,
   accessTier: "free",
   theory: [
     {

@@ -18,7 +18,6 @@ export const pythonComprehensionsLesson = defineCourseLesson({
     "Создавать списки, множества и словари",
     "Оставлять сложную логику в обычном цикле",
   ],
-  practiceTaskIds: pythonComprehensionsLessonPublication.practiceTaskIds,
   accessTier: "free",
   theory: [
     {

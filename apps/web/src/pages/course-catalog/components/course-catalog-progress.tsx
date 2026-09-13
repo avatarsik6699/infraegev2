@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { courseProgress, type CourseCatalogTypes } from "~/entities/course";
+import { courseProgress, type CourseProgressTypes } from "~/entities/course";
 import {
   useLessonProgressHydrated,
   useLessonsProgress,
@@ -7,22 +7,24 @@ import {
 import { Badge } from "~/shared/components/badge";
 
 type Props = {
-  entry: CourseCatalogTypes.PublishedEntry;
+  lessons: readonly CourseProgressTypes.Lesson[] | null;
 };
 
 export const CourseCatalogProgress: React.FC<Props> = (props) => {
+  const progressLessons = useMemo(() => props.lessons ?? [], [props.lessons]);
   const lessonIds = useMemo(
-    () => props.entry.progressLessons.map((lesson) => lesson.id),
-    [props.entry.progressLessons],
+    () => progressLessons.map((lesson) => lesson.id),
+    [progressLessons],
   );
-  const progressByLessonId = useLessonsProgress(lessonIds);
+  const progressByLessonId = useLessonsProgress(lessonIds, progressLessons);
   const hydrated = useLessonProgressHydrated();
   const progress = useMemo(
-    () =>
-      courseProgress.calculate(props.entry.progressLessons, progressByLessonId),
-    [progressByLessonId, props.entry.progressLessons],
+    () => courseProgress.calculate(progressLessons, progressByLessonId),
+    [progressByLessonId, progressLessons],
   );
 
+  if (!props.lessons)
+    return <Badge presentation="metadata">Прогресс временно недоступен</Badge>;
   if (!hydrated) return null;
 
   return (

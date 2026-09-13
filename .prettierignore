@@ -14,3 +14,6 @@ pnpm-lock.yaml
 
 # Machine-local editor state is not repository formatting scope.
 .claude/settings.local.json
+
+# Frozen migration inputs preserve authored bytes and deterministic package identity.
+content/practice-migration/**

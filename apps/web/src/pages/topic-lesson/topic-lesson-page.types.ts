@@ -4,6 +4,7 @@ import type { PracticeTaskTypes } from "~/entities/practice-task";
 export namespace TopicLessonPageTypes {
   export type Props = {
     lesson: LessonContent.Definition;
+    practiceUnavailable?: boolean;
     tasks: readonly PracticeTaskTypes.Task[];
   };
 }

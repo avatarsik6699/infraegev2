@@ -99,7 +99,28 @@ def content_task(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Iterator[Ta
 
 
 @pytest.fixture
-def client(content_task: Task) -> Iterator[TestClient]:
+def client(content_task: Task, monkeypatch: pytest.MonkeyPatch) -> Iterator[TestClient]:
+    from app.modules.practice.api import session
+    from app.modules.practice.readers import CheckedAnswer
+
+    async def connection():
+        yield None
+
+    async def check(_session, _registry, task_id, revision, answer):
+        if task_id != content_task.id:
+            raise HTTPException(404, "task unavailable")
+        if revision != 1:
+            raise HTTPException(409, "refresh the task")
+        return CheckedAnswer.model_validate(
+            {
+                "correct": is_correct(content_task, answer),
+                "explanation": content_task.model_dump()["explanation"],
+                "solution_revision": 1,
+            }
+        )
+
+    app.dependency_overrides[session] = connection
+    monkeypatch.setattr("app.modules.tasks.api.check", check)
     try:
         with TestClient(app) as test_client:
             yield test_client
@@ -131,11 +152,12 @@ def test_every_declared_answer_variant_is_accepted_through_endpoint(
     for answer in content_task.answer_variants:
         response = client.post(
             f"/api/tasks/{content_task.id}/check",
-            json={"answer": answer},
+            json={"solution_revision": 1, "answer": answer},
         )
         assert response.status_code == 200, answer
         assert response.json() == {
             "correct": True,
+            "solution_revision": 1,
             "explanation": [
                 {
                     "type": "callout",
@@ -151,7 +173,7 @@ def test_every_declared_answer_variant_is_accepted_through_endpoint(
 def test_task_rejects_a_known_wrong_answer_with_feedback(client: TestClient, content_task: Task):
     response = client.post(
         f"/api/tasks/{content_task.id}/check",
-        json={"answer": "заведомо неверный ответ"},
+        json={"solution_revision": 1, "answer": "заведомо неверный ответ"},
     )
     assert response.status_code == 200
     assert response.json()["correct"] is False
@@ -159,7 +181,9 @@ def test_task_rejects_a_known_wrong_answer_with_feedback(client: TestClient, con
 
 
 def test_check_unknown_task_returns_404(client: TestClient):
-    response = client.post("/api/tasks/does-not-exist/check", json={"answer": "5"})
+    response = client.post(
+        "/api/tasks/does-not-exist/check", json={"solution_revision": 1, "answer": "5"}
+    )
     assert response.status_code == 404
 
 
@@ -167,7 +191,8 @@ def test_check_unknown_task_returns_404(client: TestClient):
     "body",
     [
         {},
-        {"answer": ""},
+        {"answer": "42"},
+        {"answer": "", "solution_revision": 1},
         {"answer": "x" * 501},
         {"answer": "5", "unexpected": True},
     ],

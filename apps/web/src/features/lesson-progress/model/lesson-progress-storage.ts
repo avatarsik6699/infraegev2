@@ -1,9 +1,11 @@
+import firstImport from "./first-import.json";
 import type { PersistStorage } from "zustand/middleware";
 import { safeLs, type SafeLsKey } from "~/shared/lib/safe-ls";
 import { createSafeLsPersistStorage } from "~/shared/lib/zustand-persistence";
 import type { LessonProgressTypes } from "../lesson-progress.types";
 
 type StoredLessonProgress = {
+  solvedRevisions?: Readonly<Record<string, Readonly<Record<string, string>>>>;
   solvedTaskIds: readonly string[];
   acceptedAnswers?: Readonly<Record<string, string>>;
 };
@@ -12,7 +14,7 @@ export type PersistedLessonProgress = {
   lessons: Readonly<Record<string, LessonProgressTypes.Snapshot>>;
 };
 
-const registryKey = "infraege:lesson-progress";
+const registryKey = "infraege:lesson-progress:v2";
 const registryDefinition: SafeLsKey<{
   lessons: Readonly<Record<string, StoredLessonProgress>>;
 }> = {
@@ -29,18 +31,39 @@ const registryDefinition: SafeLsKey<{
     isStoredLessons(value.lessons),
 };
 
-const persistStorage: PersistStorage<PersistedLessonProgress> =
-  createSafeLsPersistStorage(registryDefinition, {
-    read: (stored) => ({
-      lessons: Object.fromEntries(
-        Object.entries(stored.lessons).map(([lessonId, progress]) => [
-          lessonId,
-          normalizeProgress(progress),
-        ]),
-      ),
-    }),
-    write: (state) => state,
-  });
+const transform = {
+  read: (stored: {
+    lessons: Readonly<Record<string, StoredLessonProgress>>;
+  }): PersistedLessonProgress => ({
+    lessons: Object.fromEntries(
+      Object.entries(stored.lessons).map(([lessonId, progress]) => [
+        lessonId,
+        normalizeProgress(progress, lessonId),
+      ]),
+    ),
+  }),
+  write: (state: PersistedLessonProgress) => state,
+};
+const currentStorage = createSafeLsPersistStorage(
+  registryDefinition,
+  transform,
+);
+const oldRegistryDefinition = {
+  ...registryDefinition,
+  key: "infraege:lesson-progress",
+};
+const persistStorage: PersistStorage<PersistedLessonProgress> = {
+  ...currentStorage,
+  getItem: () => {
+    const current = safeLs.get(registryDefinition);
+    if (current) return { state: transform.read(current) };
+    const legacy = safeLs.get(oldRegistryDefinition);
+    if (!legacy) return null;
+    const migrated = transform.read(legacy);
+    safeLs.set(registryDefinition, migrated);
+    return { state: migrated };
+  },
+};
 
 function legacyDefinition(lessonId: string): SafeLsKey<StoredLessonProgress> {
   return {
@@ -52,7 +75,7 @@ function legacyDefinition(lessonId: string): SafeLsKey<StoredLessonProgress> {
 
 function readLegacy(lessonId: string): LessonProgressTypes.Snapshot | null {
   const stored = safeLs.get(legacyDefinition(lessonId));
-  return stored ? normalizeProgress(stored) : null;
+  return stored ? normalizeProgress(stored, lessonId) : null;
 }
 
 function removeLegacy(lessonId: string): void {
@@ -65,6 +88,7 @@ function subscribe(listener: () => void): () => void {
 
 function normalizeProgress(
   progress: StoredLessonProgress,
+  lessonId: string,
 ): LessonProgressTypes.Snapshot {
   const solvedTaskIds = [...new Set(progress.solvedTaskIds)];
   const solvedTaskIdSet = new Set(solvedTaskIds);
@@ -73,7 +97,16 @@ function normalizeProgress(
       solvedTaskIdSet.has(taskId),
     ),
   );
-  return { acceptedAnswers, solvedTaskIds };
+  const mapping =
+    (firstImport as Record<string, Record<string, number>>)[lessonId] ?? {};
+  const solvedRevisions =
+    progress.solvedRevisions ??
+    Object.fromEntries(
+      solvedTaskIds
+        .filter((id) => mapping[id] === 1)
+        .map((id) => [id, { "1": acceptedAnswers[id] ?? "" }]),
+    );
+  return { acceptedAnswers, solvedTaskIds, solvedRevisions };
 }
 
 function isStoredLessons(
@@ -91,6 +124,11 @@ function isStoredProgress(value: unknown): value is StoredLessonProgress {
   return (
     typeof value === "object" &&
     value !== null &&
+    (!("solvedRevisions" in value) ||
+      (typeof value.solvedRevisions === "object" &&
+        value.solvedRevisions !== null &&
+        !Array.isArray(value.solvedRevisions) &&
+        Object.values(value.solvedRevisions).every(isAcceptedAnswers))) &&
     "solvedTaskIds" in value &&
     Array.isArray(value.solvedTaskIds) &&
     value.solvedTaskIds.every((id) => typeof id === "string") &&

@@ -3,14 +3,17 @@ import {
   preobrazovanieZapiseyChiselLesson,
   rekursiyaLesson,
 } from "~/entities/lesson";
-import { loadPracticeTasks } from "~/entities/practice-task";
+import {
+  loadMigrationPractice as loadPracticeTasks,
+  migrationTaskIds,
+} from "./practice-migration-fixture";
 
 describe("lesson route data", () => {
   it("loads public task projections in the authored order without checker secrets", async () => {
-    const tasks = await loadPracticeTasks(rekursiyaLesson.practiceTaskIds);
+    const tasks = await loadPracticeTasks(migrationTaskIds(rekursiyaLesson.id));
 
     expect(tasks.map((task) => task.id)).toEqual(
-      rekursiyaLesson.practiceTaskIds,
+      migrationTaskIds(rekursiyaLesson.id),
     );
     expect(tasks.map((task) => task.difficultyLabel)).toEqual([
       "Базовая",
@@ -37,11 +40,11 @@ describe("lesson route data", () => {
 
   it("loads five task-5 projections in order without checker secrets", async () => {
     const tasks = await loadPracticeTasks(
-      preobrazovanieZapiseyChiselLesson.practiceTaskIds,
+      migrationTaskIds(preobrazovanieZapiseyChiselLesson.id),
     );
 
     expect(tasks.map((task) => task.id)).toEqual(
-      preobrazovanieZapiseyChiselLesson.practiceTaskIds,
+      migrationTaskIds(preobrazovanieZapiseyChiselLesson.id),
     );
     expect(tasks.map((task) => task.difficultyLabel)).toEqual([
       "Базовая",

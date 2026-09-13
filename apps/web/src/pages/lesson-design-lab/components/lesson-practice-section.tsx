@@ -19,7 +19,7 @@ export const LessonPracticeSection: React.FC = () => {
   const checkAnswer: PracticeTaskTypes.Checker = (taskId, answer) => {
     if (simulateFailure)
       return Promise.reject(new Error("Lab checker unavailable"));
-    return localChecker(taskId, answer);
+    return localChecker(taskId, answer, 1);
   };
   return (
     <section

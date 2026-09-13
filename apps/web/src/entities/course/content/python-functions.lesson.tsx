@@ -17,7 +17,6 @@ export const pythonFunctionsLesson = defineCourseLesson({
     "Возвращать результат через return",
     "Отделять вычисление от печати",
   ],
-  practiceTaskIds: pythonFunctionsLessonPublication.practiceTaskIds,
   accessTier: "free",
   theory: [
     {

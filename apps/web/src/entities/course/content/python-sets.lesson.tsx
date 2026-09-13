@@ -17,7 +17,6 @@ export const pythonSetsLesson = defineCourseLesson({
     "Добавлять элементы без создания повторов",
     "Использовать пересечение для общих значений",
   ],
-  practiceTaskIds: pythonSetsLessonPublication.practiceTaskIds,
   accessTier: "free",
   theory: [
     {

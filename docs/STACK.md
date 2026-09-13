@@ -19,7 +19,7 @@
 |-------|-----------|
 | Frontend | React + TanStack Start (SSR/SSG, file-based routing and automatic route splitting) on Vite **8.2.1 exact** (Rolldown/Oxc); Base UI **1.7.0 exact** with local CSS Modules; Zustand **5.0.12 exact** for the cross-route lesson-progress registry; synchronous Python tokenization through `@speed-highlight/core` **2.0.0 exact**; TanStack Query for future server state; generated `openapi-typescript` contracts with `openapi-fetch` transport |
 | Backend | Python/FastAPI (`apps/api`) |
-| Database | Application PostgreSQL 18.6, pinned multi-platform image; separate runtime/import/migration/backup roles, Alembic revision `114_01` and server-owned practice model/tooling. Existing lesson consumers remain git-based until cutover (SPEC §3). Live production remains PG16 until explicit release transfer |
+| Database | Application PostgreSQL 18.6, pinned multi-platform image; separate runtime/import/migration/backup roles, Alembic revision `114_01` and server-owned practice model/tooling. Existing lesson consumers use the server-owned bank (SPEC §3). Live production remains PG16 until explicit release transfer |
 | Cache | — (not needed on M0) |
 | Observability | `infraegev2/ops` owns the target lifecycle, explicit browser consent, allowlisted product events and coarse traffic aggregates. First-party sibling [sre-kit](https://github.com/avatarsik6699/sre-kit) Change 22 owns Projects, pull/push ingestion, retention, alerts and every monitoring/analytics dashboard. Host metrics and fail2ban use the accepted root/password SSH contract; journal logs, Beszel and Umami use WireGuard; push uses a Source token kept outside git |
 | Infra | Two Docker Compose projects on one VPS: application Nginx → `web`/`api`/Postgres, plus independently pinned Umami/Beszel operations services; Ubuntu 24.04, systemd, journald, fail2ban, WireGuard, Restic |
@@ -98,7 +98,7 @@ role passwords independently with `openssl rand -hex 24`; runtime passwords must
 the existing bootstrap credentials. `make config` remains secret-free. `DATABASE_URL` exposes only
 the read-only runtime identity to API; bootstrap/import/migration/backup credentials remain in the
 database/maintenance boundary. Alembic/schema readiness and task/file/checker restore verification are implemented locally.
-Production installation remains an explicit release operation; existing lesson cutover is pending.
+Existing lesson consumers use the DB readers locally. Production installation and activation remain an explicit release operation.
 
 
 Practice model acceptance: `bash scripts/tests/practice-model-tooling.test.sh` uses host
@@ -108,7 +108,7 @@ interrupted imports, roles, CLI export/edit/apply and nonempty restore with the 
 Tests never run in containers. `node scripts/practice-registry.mjs --check` detects release-registry
 drift locally and in static CI; it never contacts a DB. Formatting/lint/type-check include migrations.
 Task files use `infra/task-files.local` in dev and `/var/lib/infraege/task-files` in production;
-these are persistent data, outside the repository cleanup allowlist.
+these are persistent data, outside the repository cleanup allowlist. Nginx and API mount them read-only for validated X-Accel-Redirect delivery.
 
 ### Current prerequisites
 
@@ -148,12 +148,13 @@ command fails immediately instead of racing the first one. Docker Desktop may al
 `infra` project created by direct `docker compose` commands; the Make targets intentionally own
 only `infraege-dev`. A failed start prints service status and recent nginx/web/api logs.
 
-The web and API lesson loaders read only git-owned practice tasks through `CONTENT_DIR`. Compose mounts
-`content/tasks/` read-only at `/content/tasks`; web development and production images contain the
-same task subtree at that path. Host commands fall back to the workspace `content/` path. Lesson
-theory is compiled from `apps/web/src/entities/lesson/content/*.lesson.tsx` and is never mounted as
-runtime content. Course and Topic theory/registries remain frontend content-as-code; the API image
-and development bind mount carry only `content/tasks/`.
+Lesson practice and the checker read only PostgreSQL through the API; web SSR uses the owning
+typed adapter and `API_INTERNAL_URL` (`http://api:8000` in Compose). Topic and Course theory remain
+content-as-code. Only `/` and `/ege` are prerendered; DB-dependent lesson/course pages are SSR.
+The legacy `content/tasks` assets remain preserved for stage-5 rollback evidence, not as fallback.
+Use explicit `make practice-bootstrap ENV_FILE=...` after `make dev` for first local import;
+[practice](runbooks/practice.md) documents backup setup. Dev PostgreSQL exposes an allocated
+loopback-only port for host CLI/test access. Bootstrap never overwrites operator edits.
 
 Production commands and credential onboarding live in [production](runbooks/production.md).
 Target/management/workstation ownership, Source reconciliation and publisher lifecycle live in
@@ -466,8 +467,8 @@ shared/      cross-module code used by >= 2 modules — stays an empty placehold
 
 `core/database.py` owns engine construction and shared metadata. `modules/practice/` owns typed
 models, package/content validation, immutable files, transaction service and host CLI; migrations
-live in `apps/api/migrations/`. The existing file-based HTTP checker remains until consumer
-cutover; both consume the pure comparator in `app/shared/checker.py`. Current normalized rows own
+live in `apps/api/migrations/`. The HTTP checker uses the shared DB reader and the pure
+comparator in `app/shared/checker.py`; it requires the displayed solution revision. Current normalized rows own
 reads; history is audit-only. Public content and edit plans have explicit types. Every mapped datetime uses
 `DateTime(timezone=True)` (KNOWN_GOTCHAS); no hidden commits or shared AsyncSessions.
 

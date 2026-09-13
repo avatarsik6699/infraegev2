@@ -17,7 +17,6 @@ export const pythonRecursionLesson = defineCourseLesson({
     "Трассировать вложенные вызовы",
     "Собирать результат при возврате вызовов",
   ],
-  practiceTaskIds: pythonRecursionLessonPublication.practiceTaskIds,
   accessTier: "free",
   theory: [
     {

@@ -1,8 +1,8 @@
 # Practice operator workflow
 
-Change 114 implements the server model and tooling locally. Existing lessons still use legacy
-task JSON until their coordinated cutover; this guide does not make an imported task appear in
-those lessons or introduce the public practice catalog. No production transfer follows from work.
+Changes 114–115 implement the server model, operator tooling and existing lesson consumers
+locally. Topic/Course practice and course summaries read PostgreSQL without a JSON fallback.
+The standalone practice catalog and production transfer remain separate stages.
 
 ## Runtime and ownership
 
@@ -174,3 +174,84 @@ its own test resources. The tiny-fixture restore duration is not a production RT
 Production installation/restore acceptance still requires an explicit Full + Release operation
 and the owning production/backup runbooks. Existing lesson cutover, browser progress migration,
 public Task HTTP integration and the practice catalog remain later stages of SPEC §9.2.
+
+
+## Change 115: explicit local bootstrap and cutover
+
+`make dev` starts services and runs migrations/registration but never imports task content.
+The development PostgreSQL port is allocated dynamically on loopback; `make practice-bootstrap`
+resolves it from the exact `infraege-dev` Docker labels and uses the existing disposable dev roles.
+The command only creates the original tasks. It never passes `--update`; replay uses the package
+outcome and cannot overwrite later operator edits.
+
+Prerequisites: host uv, Docker, jq and Restic. Prepare a private local backup location (the example
+uses a new directory; keep it and its password while these snapshots are useful):
+
+```bash
+umask 077
+practice_backup_dir=$(mktemp -d "$HOME/infraege-dev-backup.XXXXXX")
+mkdir "$practice_backup_dir/backups"
+openssl rand -hex 24 > "$practice_backup_dir/password"
+printf 'POSTGRES_DB=infraege\n' > "$practice_backup_dir/environment"
+export RESTIC_REPOSITORY="$practice_backup_dir/restic"
+export RESTIC_PASSWORD_FILE="$practice_backup_dir/password"
+export RESTIC_CACHE_DIR="$practice_backup_dir/cache"
+export RESTIC_LOCK_FILE="$practice_backup_dir/restic.lock"
+export BACKUP_ROOT="$practice_backup_dir/backups"
+export BACKUP_STATUS_FILE="$practice_backup_dir/backup-status.json"
+make dev
+make practice-bootstrap ENV_FILE="$practice_backup_dir/environment"
+```
+
+The bootstrap calls the 114 operator handlers in order: register → convert/validate → diff →
+pre-backup → import → outcome → reader/checker smoke → post-backup. A failed pre-backup prevents
+DB writes. Inspect the outcome after any interrupted import before retrying. The frozen source
+is `content/practice-migration/`: 150 task JSON files, one six-byte `numbers.txt`, ordered membership
+for two Topic and 28 Course lessons, source checksums and first solution revisions. It is excluded
+from formatting to preserve authored bytes. `legacy.py` produces a bounded deterministic package;
+package validation rejects unresolved theory/file links before any persistent write. Unknown
+provenance stays unknown, and every original exercise remains hidden from standalone catalog search.
+
+For a prepared release, before activating web/API consumers: provision/migrate PG18 and register
+the proposed release registry, convert the frozen snapshot using that release, validate/diff,
+make a verified pre-backup, import, query outcome, compare all IDs/content/membership/revisions,
+run public API/file smoke, then make a post-backup. Use the existing CLI with explicit `prod`
+identity and selected credentials; `make practice-bootstrap` deliberately supports dev only.
+Actual production activation remains stage 5 and requires the release workflow. Keep PG16/source
+volumes and legacy source assets. Returning an old application does not revert DB links or edits;
+run registry/schema preflight against the proposed rollback release before switching consumers.
+
+Public material kinds are `topic` and `course`; kind is checked separately from the stable ID.
+Published course membership also requires a published parent course. Lesson and course readers
+use one SQL projection each, without per-card/per-lesson requests. POST-check reads checker,
+explanation and solution revision together. `409` means refresh, `404` unavailable, `503` dependency
+failure. Missing revision is `422` and can never earn success. An already-open pre-115 client
+shows its existing generic failure message: its loaded JavaScript cannot display the new refresh
+control until the user reloads the page. Versioned clients retain input and offer explicit refresh,
+without automatic resubmission.
+
+The new browser registry uses `infraege:lesson-progress:v2`. It migrates the old app registry and
+per-lesson keys using the verified first-import mapping. Old successes and accepted answers remain
+historical; only the displayed revision counts. A separate key prevents an old tab from stripping
+new revision fields. Reset clears the current lesson in the new registry; old stored registries
+are never read again once the new registry exists.
+
+Task files are requested as `/api/tasks/{task_id}/files/{usage_id}`. The API validates task
+availability and the immutable object reference, then returns `X-Accel-Redirect` to the internal
+Nginx `/_task-files/` location. Nginx mounts the same persistent storage read-only, rejects direct
+internal requests and symlinks, and preserves MIME, bytes and UTF-8 download filenames. Reads and
+checker requests have separate rate-limit boundaries. API reads use `Cache-Control: no-store`.
+Only `/` and `/ege` are prerendered; lessons, course overview and course catalog use request-time
+SSR, with no build-time database access. A practice dependency failure leaves theory readable.
+
+Local verification: `bash scripts/tests/practice-model-tooling.test.sh` now imports the full frozen
+corpus and verifies transactional replay plus nonempty DB/file restore with the shipped readers
+and checker. `practice-cutover.spec.ts` uses domain fixtures/Page Objects for stale refresh,
+network retry, in-flight checks, migrated progress and mobile no-JS. Supply the isolated fixture's
+runtime `DATABASE_URL` to the host Playwright backend; frontend server/API transport uses
+`API_INTERNAL_URL`, while browser POSTs use the existing public API adapter.
+
+Manual acceptance: read both Topic lessons and Python lessons, download `numbers.txt`, solve and
+reset a lesson, compare overview/catalog mastery, and review changed-task messaging and preserved
+input after an operator edit. Verify narrow screens, keyboard focus and dependency recovery.
+Automation does not approve pedagogy, visual publication or production cutover.

@@ -17,7 +17,6 @@ export const pythonListsLesson = defineCourseLesson({
     "Перебирать список без потери состояния",
     "Отличать изменение списка от создания нового",
   ],
-  practiceTaskIds: pythonListsLessonPublication.practiceTaskIds,
   accessTier: "free",
   theory: [
     {

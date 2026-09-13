@@ -5,7 +5,7 @@
         "additionalProperties": false,
         "properties": {
           "data": {
-            "$ref": "#/components/schemas/AttachmentBlockData"
+            "$ref": "#/components/schemas/AttachmentData"
           },
           "type": {
             "const": "attachment",
@@ -20,49 +20,19 @@
         "title": "AttachmentBlock",
         "type": "object"
       },
-      "AttachmentBlockData": {
+      "AttachmentData": {
         "additionalProperties": false,
         "properties": {
-          "description": {
-            "minLength": 1,
-            "title": "Description",
-            "type": "string"
-          },
-          "label": {
-            "minLength": 1,
-            "title": "Label",
-            "type": "string"
-          },
-          "mime_type": {
-            "enum": [
-              "text/plain",
-              "text/csv",
-              "application/json",
-              "text/x-python",
-              "application/zip"
-            ],
-            "title": "Mime Type",
-            "type": "string"
-          },
-          "size_bytes": {
-            "exclusiveMinimum": 0.0,
-            "maximum": 5242880.0,
-            "title": "Size Bytes",
-            "type": "integer"
-          },
-          "src": {
-            "title": "Src",
+          "usage_id": {
+            "pattern": "^[a-z0-9][a-z0-9_-]{0,119}$",
+            "title": "Usage Id",
             "type": "string"
           }
         },
         "required": [
-          "src",
-          "label",
-          "description",
-          "mime_type",
-          "size_bytes"
+          "usage_id"
         ],
-        "title": "AttachmentBlockData",
+        "title": "AttachmentData",
         "type": "object"
       },
       "CalloutBlock": {
@@ -116,10 +86,16 @@
             "minLength": 1,
             "title": "Answer",
             "type": "string"
+          },
+          "solution_revision": {
+            "minimum": 1.0,
+            "title": "Solution Revision",
+            "type": "integer"
           }
         },
         "required": [
-          "answer"
+          "answer",
+          "solution_revision"
         ],
         "title": "CheckRequest",
         "type": "object"
@@ -162,6 +138,12 @@
                   "$ref": "#/components/schemas/TableBlock"
                 },
                 {
+                  "$ref": "#/components/schemas/WorkedExampleBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/CalloutBlock"
+                },
+                {
                   "$ref": "#/components/schemas/ImageBlock"
                 },
                 {
@@ -169,22 +151,21 @@
                 },
                 {
                   "$ref": "#/components/schemas/AttachmentBlock"
-                },
-                {
-                  "$ref": "#/components/schemas/WorkedExampleBlock"
-                },
-                {
-                  "$ref": "#/components/schemas/CalloutBlock"
                 }
               ]
             },
             "title": "Explanation",
             "type": "array"
+          },
+          "solution_revision": {
+            "title": "Solution Revision",
+            "type": "integer"
           }
         },
         "required": [
           "correct",
-          "explanation"
+          "explanation",
+          "solution_revision"
         ],
         "title": "CheckResponse",
         "type": "object"
@@ -318,11 +299,33 @@
         "title": "CodeExampleBlockData",
         "type": "object"
       },
+      "CourseSummary": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "lessons": {
+            "items": {
+              "$ref": "#/components/schemas/LessonSummary"
+            },
+            "title": "Lessons",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "lessons"
+        ],
+        "title": "CourseSummary",
+        "type": "object"
+      },
       "DiagramBlock": {
         "additionalProperties": false,
         "properties": {
           "data": {
-            "$ref": "#/components/schemas/DiagramBlockData"
+            "$ref": "#/components/schemas/DiagramData"
           },
           "type": {
             "const": "diagram",
@@ -337,26 +340,35 @@
         "title": "DiagramBlock",
         "type": "object"
       },
-      "DiagramBlockData": {
+      "DiagramData": {
         "additionalProperties": false,
         "properties": {
           "accessible_description": {
+            "maxLength": 10000,
             "minLength": 1,
             "title": "Accessible Description",
             "type": "string"
           },
           "alt": {
+            "maxLength": 10000,
             "minLength": 1,
             "title": "Alt",
             "type": "string"
           },
           "caption": {
-            "minLength": 1,
-            "title": "Caption",
-            "type": "string"
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Caption"
           },
           "height": {
             "exclusiveMinimum": 0.0,
+            "maximum": 50000.0,
             "title": "Height",
             "type": "integer"
           },
@@ -369,31 +381,33 @@
             "type": "array"
           },
           "purpose": {
+            "maxLength": 10000,
             "minLength": 1,
             "title": "Purpose",
             "type": "string"
           },
-          "src": {
-            "title": "Src",
+          "usage_id": {
+            "pattern": "^[a-z0-9][a-z0-9_-]{0,119}$",
+            "title": "Usage Id",
             "type": "string"
           },
           "width": {
             "exclusiveMinimum": 0.0,
+            "maximum": 50000.0,
             "title": "Width",
             "type": "integer"
           }
         },
         "required": [
-          "src",
+          "usage_id",
           "alt",
-          "caption",
           "width",
           "height",
           "purpose",
           "accessible_description",
           "pointers"
         ],
-        "title": "DiagramBlockData",
+        "title": "DiagramData",
         "type": "object"
       },
       "DiagramPointer": {
@@ -417,6 +431,93 @@
         "title": "DiagramPointer",
         "type": "object"
       },
+      "FileDelivery": {
+        "additionalProperties": false,
+        "properties": {
+          "mime_type": {
+            "title": "Mime Type",
+            "type": "string"
+          },
+          "size_bytes": {
+            "title": "Size Bytes",
+            "type": "integer"
+          },
+          "url": {
+            "title": "Url",
+            "type": "string"
+          },
+          "usage_id": {
+            "title": "Usage Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "usage_id",
+          "url",
+          "mime_type",
+          "size_bytes"
+        ],
+        "title": "FileDelivery",
+        "type": "object"
+      },
+      "FileUsage": {
+        "additionalProperties": false,
+        "properties": {
+          "attribution": {
+            "anyOf": [
+              {
+                "maxLength": 10000,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Attribution"
+          },
+          "checksum": {
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Checksum",
+            "type": "string"
+          },
+          "description": {
+            "maxLength": 10000,
+            "minLength": 1,
+            "title": "Description",
+            "type": "string"
+          },
+          "filename": {
+            "maxLength": 180,
+            "minLength": 1,
+            "pattern": "^[^/\\\\\\x00-\\x1f\\x7f]+$",
+            "title": "Filename",
+            "type": "string"
+          },
+          "id": {
+            "pattern": "^[a-z0-9][a-z0-9_-]{0,119}$",
+            "title": "Id",
+            "type": "string"
+          },
+          "purpose": {
+            "enum": [
+              "image",
+              "attachment"
+            ],
+            "title": "Purpose",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "checksum",
+          "purpose",
+          "filename",
+          "description"
+        ],
+        "title": "FileUsage",
+        "type": "object"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -434,7 +535,7 @@
         "additionalProperties": false,
         "properties": {
           "data": {
-            "$ref": "#/components/schemas/ImageBlockData"
+            "$ref": "#/components/schemas/MediaData"
           },
           "type": {
             "const": "image",
@@ -449,42 +550,53 @@
         "title": "ImageBlock",
         "type": "object"
       },
-      "ImageBlockData": {
+      "LessonPractice": {
         "additionalProperties": false,
         "properties": {
-          "alt": {
-            "minLength": 1,
-            "title": "Alt",
+          "id": {
+            "title": "Id",
             "type": "string"
           },
-          "caption": {
-            "minLength": 1,
-            "title": "Caption",
+          "kind": {
+            "title": "Kind",
             "type": "string"
           },
-          "height": {
-            "exclusiveMinimum": 0.0,
-            "title": "Height",
-            "type": "integer"
-          },
-          "src": {
-            "title": "Src",
-            "type": "string"
-          },
-          "width": {
-            "exclusiveMinimum": 0.0,
-            "title": "Width",
-            "type": "integer"
+          "tasks": {
+            "items": {
+              "$ref": "#/components/schemas/PublicTask"
+            },
+            "title": "Tasks",
+            "type": "array"
           }
         },
         "required": [
-          "src",
-          "alt",
-          "caption",
-          "width",
-          "height"
+          "id",
+          "kind",
+          "tasks"
         ],
-        "title": "ImageBlockData",
+        "title": "LessonPractice",
+        "type": "object"
+      },
+      "LessonSummary": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "tasks": {
+            "items": {
+              "$ref": "#/components/schemas/TaskVersion"
+            },
+            "title": "Tasks",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "tasks"
+        ],
+        "title": "LessonSummary",
         "type": "object"
       },
       "ListBlock": {
@@ -531,6 +643,515 @@
           "items"
         ],
         "title": "ListBlockData",
+        "type": "object"
+      },
+      "MediaData": {
+        "additionalProperties": false,
+        "properties": {
+          "alt": {
+            "maxLength": 10000,
+            "minLength": 1,
+            "title": "Alt",
+            "type": "string"
+          },
+          "caption": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Caption"
+          },
+          "height": {
+            "exclusiveMinimum": 0.0,
+            "maximum": 50000.0,
+            "title": "Height",
+            "type": "integer"
+          },
+          "usage_id": {
+            "pattern": "^[a-z0-9][a-z0-9_-]{0,119}$",
+            "title": "Usage Id",
+            "type": "string"
+          },
+          "width": {
+            "exclusiveMinimum": 0.0,
+            "maximum": 50000.0,
+            "title": "Width",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "usage_id",
+          "alt",
+          "width",
+          "height"
+        ],
+        "title": "MediaData",
+        "type": "object"
+      },
+      "Membership": {
+        "additionalProperties": false,
+        "properties": {
+          "material_id": {
+            "pattern": "^[a-z0-9][a-z0-9_-]{0,119}$",
+            "title": "Material Id",
+            "type": "string"
+          },
+          "position": {
+            "minimum": 0.0,
+            "title": "Position",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "material_id",
+          "position"
+        ],
+        "title": "Membership",
+        "type": "object"
+      },
+      "PublicTask": {
+        "additionalProperties": false,
+        "properties": {
+          "content": {
+            "$ref": "#/components/schemas/PublicTaskContent"
+          },
+          "deliveries": {
+            "items": {
+              "$ref": "#/components/schemas/FileDelivery"
+            },
+            "title": "Deliveries",
+            "type": "array"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "revision": {
+            "title": "Revision",
+            "type": "integer"
+          },
+          "solution_revision": {
+            "title": "Solution Revision",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "revision",
+          "solution_revision",
+          "content"
+        ],
+        "title": "PublicTask",
+        "type": "object"
+      },
+      "PublicTaskContent": {
+        "additionalProperties": false,
+        "properties": {
+          "answer_instruction": {
+            "maxLength": 10000,
+            "minLength": 1,
+            "title": "Answer Instruction",
+            "type": "string"
+          },
+          "archived": {
+            "default": false,
+            "title": "Archived",
+            "type": "boolean"
+          },
+          "catalog_visible": {
+            "default": true,
+            "title": "Catalog Visible",
+            "type": "boolean"
+          },
+          "content_schema_version": {
+            "const": 1,
+            "default": 1,
+            "title": "Content Schema Version",
+            "type": "integer"
+          },
+          "difficulty": {
+            "enum": [
+              1,
+              2,
+              3
+            ],
+            "title": "Difficulty",
+            "type": "integer"
+          },
+          "estimated_minutes": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Estimated Minutes"
+          },
+          "exam_numbers": {
+            "items": {
+              "maximum": 27.0,
+              "minimum": 1.0,
+              "type": "integer"
+            },
+            "title": "Exam Numbers",
+            "type": "array"
+          },
+          "explanation": {
+            "items": {
+              "discriminator": {
+                "mapping": {
+                  "attachment": "#/components/schemas/AttachmentBlock",
+                  "callout": "#/components/schemas/CalloutBlock",
+                  "code_example": "#/components/schemas/CodeExampleBlock",
+                  "completion_exercise": "#/components/schemas/WorkedExampleBlock",
+                  "diagram": "#/components/schemas/DiagramBlock",
+                  "image": "#/components/schemas/ImageBlock",
+                  "list": "#/components/schemas/ListBlock",
+                  "productive_failure_prompt": "#/components/schemas/WorkedExampleBlock",
+                  "table": "#/components/schemas/TableBlock",
+                  "text": "#/components/schemas/TextBlock",
+                  "worked_example": "#/components/schemas/WorkedExampleBlock"
+                },
+                "propertyName": "type"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/TextBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/ListBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/CodeExampleBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/TableBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/WorkedExampleBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/CalloutBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/ImageBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/DiagramBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/AttachmentBlock"
+                }
+              ]
+            },
+            "maxItems": 1000,
+            "minItems": 1,
+            "title": "Explanation",
+            "type": "array"
+          },
+          "files": {
+            "items": {
+              "$ref": "#/components/schemas/FileUsage"
+            },
+            "maxItems": 100,
+            "title": "Files",
+            "type": "array"
+          },
+          "hint": {
+            "items": {
+              "discriminator": {
+                "mapping": {
+                  "attachment": "#/components/schemas/AttachmentBlock",
+                  "callout": "#/components/schemas/CalloutBlock",
+                  "code_example": "#/components/schemas/CodeExampleBlock",
+                  "completion_exercise": "#/components/schemas/WorkedExampleBlock",
+                  "diagram": "#/components/schemas/DiagramBlock",
+                  "image": "#/components/schemas/ImageBlock",
+                  "list": "#/components/schemas/ListBlock",
+                  "productive_failure_prompt": "#/components/schemas/WorkedExampleBlock",
+                  "table": "#/components/schemas/TableBlock",
+                  "text": "#/components/schemas/TextBlock",
+                  "worked_example": "#/components/schemas/WorkedExampleBlock"
+                },
+                "propertyName": "type"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/TextBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/ListBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/CodeExampleBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/TableBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/WorkedExampleBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/CalloutBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/ImageBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/DiagramBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/AttachmentBlock"
+                }
+              ]
+            },
+            "maxItems": 1000,
+            "title": "Hint",
+            "type": "array"
+          },
+          "id": {
+            "pattern": "^[a-z0-9][a-z0-9_-]{0,119}$",
+            "title": "Id",
+            "type": "string"
+          },
+          "interaction_type": {
+            "default": "production",
+            "enum": [
+              "production",
+              "recognition"
+            ],
+            "title": "Interaction Type",
+            "type": "string"
+          },
+          "lessons": {
+            "items": {
+              "$ref": "#/components/schemas/Membership"
+            },
+            "maxItems": 100,
+            "title": "Lessons",
+            "type": "array"
+          },
+          "skills": {
+            "items": {
+              "pattern": "^[a-z0-9][a-z0-9_-]{0,119}$",
+              "type": "string"
+            },
+            "maxItems": 100,
+            "title": "Skills",
+            "type": "array"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/Source"
+            },
+            "maxItems": 100,
+            "minItems": 1,
+            "title": "Sources",
+            "type": "array"
+          },
+          "statement": {
+            "items": {
+              "discriminator": {
+                "mapping": {
+                  "attachment": "#/components/schemas/AttachmentBlock",
+                  "callout": "#/components/schemas/CalloutBlock",
+                  "code_example": "#/components/schemas/CodeExampleBlock",
+                  "completion_exercise": "#/components/schemas/WorkedExampleBlock",
+                  "diagram": "#/components/schemas/DiagramBlock",
+                  "image": "#/components/schemas/ImageBlock",
+                  "list": "#/components/schemas/ListBlock",
+                  "productive_failure_prompt": "#/components/schemas/WorkedExampleBlock",
+                  "table": "#/components/schemas/TableBlock",
+                  "text": "#/components/schemas/TextBlock",
+                  "worked_example": "#/components/schemas/WorkedExampleBlock"
+                },
+                "propertyName": "type"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/TextBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/ListBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/CodeExampleBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/TableBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/WorkedExampleBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/CalloutBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/ImageBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/DiagramBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/AttachmentBlock"
+                }
+              ]
+            },
+            "maxItems": 1000,
+            "minItems": 1,
+            "title": "Statement",
+            "type": "array"
+          },
+          "theory_links": {
+            "items": {
+              "$ref": "#/components/schemas/TheoryLink"
+            },
+            "maxItems": 100,
+            "title": "Theory Links",
+            "type": "array"
+          },
+          "title": {
+            "maxLength": 10000,
+            "minLength": 1,
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "difficulty",
+          "answer_instruction",
+          "statement",
+          "hint",
+          "explanation",
+          "sources"
+        ],
+        "title": "PublicTaskContent",
+        "type": "object"
+      },
+      "Source": {
+        "additionalProperties": false,
+        "properties": {
+          "adaptation": {
+            "anyOf": [
+              {
+                "maxLength": 10000,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Adaptation"
+          },
+          "author": {
+            "anyOf": [
+              {
+                "maxLength": 10000,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Author"
+          },
+          "kind": {
+            "enum": [
+              "bank",
+              "original",
+              "adaptation",
+              "unknown"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "original_id": {
+            "anyOf": [
+              {
+                "maxLength": 10000,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Original Id"
+          },
+          "primary": {
+            "title": "Primary",
+            "type": "boolean"
+          },
+          "role": {
+            "enum": [
+              "original",
+              "copy"
+            ],
+            "title": "Role",
+            "type": "string"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "maxLength": 10000,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "pattern": "^https?://[^\\s]+$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url"
+          },
+          "year": {
+            "anyOf": [
+              {
+                "maximum": 9999.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Year"
+          }
+        },
+        "required": [
+          "kind",
+          "role",
+          "primary",
+          "title",
+          "author",
+          "original_id",
+          "url",
+          "year",
+          "adaptation"
+        ],
+        "title": "Source",
         "type": "object"
       },
       "TableBlock": {
@@ -593,6 +1214,25 @@
         "title": "TableBlockData",
         "type": "object"
       },
+      "TaskVersion": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "solution_revision": {
+            "title": "Solution Revision",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "solution_revision"
+        ],
+        "title": "TaskVersion",
+        "type": "object"
+      },
       "TextBlock": {
         "additionalProperties": false,
         "properties": {
@@ -625,6 +1265,34 @@
           "markdown"
         ],
         "title": "TextBlockData",
+        "type": "object"
+      },
+      "TheoryLink": {
+        "additionalProperties": false,
+        "properties": {
+          "label": {
+            "maxLength": 10000,
+            "minLength": 1,
+            "title": "Label",
+            "type": "string"
+          },
+          "material_id": {
+            "pattern": "^[a-z0-9][a-z0-9_-]{0,119}$",
+            "title": "Material Id",
+            "type": "string"
+          },
+          "section": {
+            "pattern": "^[a-z0-9][a-z0-9_-]{0,119}$",
+            "title": "Section",
+            "type": "string"
+          }
+        },
+        "required": [
+          "material_id",
+          "section",
+          "label"
+        ],
+        "title": "TheoryLink",
         "type": "object"
       },
       "ValidationError": {
@@ -756,6 +1424,132 @@
         ]
       }
     },
+    "/api/courses/{course_id}/practice-summary": {
+      "get": {
+        "operationId": "get_course_api_courses__course_id__practice_summary_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "course_id",
+            "required": true,
+            "schema": {
+              "title": "Course Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CourseSummary"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Course"
+      }
+    },
+    "/api/learning-materials/{kind}/{material_id}/practice": {
+      "get": {
+        "operationId": "get_lesson_api_learning_materials__kind___material_id__practice_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "kind",
+            "required": true,
+            "schema": {
+              "title": "Kind",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "material_id",
+            "required": true,
+            "schema": {
+              "title": "Material Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LessonPractice"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Lesson"
+      }
+    },
+    "/api/tasks/{task_id}": {
+      "get": {
+        "operationId": "get_task_api_tasks__task_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "task_id",
+            "required": true,
+            "schema": {
+              "title": "Task Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicTask"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Task"
+      }
+    },
     "/api/tasks/{task_id}/check": {
       "post": {
         "operationId": "check_answer_api_tasks__task_id__check_post",
@@ -803,6 +1597,47 @@
           }
         },
         "summary": "Check Answer"
+      }
+    },
+    "/api/tasks/{task_id}/files/{usage_id}": {
+      "get": {
+        "operationId": "get_file_api_tasks__task_id__files__usage_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "task_id",
+            "required": true,
+            "schema": {
+              "title": "Task Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "usage_id",
+            "required": true,
+            "schema": {
+              "title": "Usage Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get File"
       }
     },
     "/health": {

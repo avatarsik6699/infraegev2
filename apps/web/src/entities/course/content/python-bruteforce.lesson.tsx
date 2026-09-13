@@ -17,7 +17,6 @@ export const pythonBruteforceLesson = defineCourseLesson({
     "Считать и сохранять найденные решения",
     "Использовать вложенный перебор для пар",
   ],
-  practiceTaskIds: pythonBruteforceLessonPublication.practiceTaskIds,
   accessTier: "free",
   theory: [
     {

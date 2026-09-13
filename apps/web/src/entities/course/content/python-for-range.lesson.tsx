@@ -18,7 +18,6 @@ export const pythonForRangeLesson = defineCourseLesson({
     "Повторять действие заданное число раз",
     "Проверять цикл по первой и последней итерации",
   ],
-  practiceTaskIds: pythonForRangeLessonPublication.practiceTaskIds,
   accessTier: "free",
   theory: [
     {

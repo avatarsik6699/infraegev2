@@ -18,7 +18,6 @@ export const pythonWhileLesson = defineCourseLesson({
     "Трассировать состояние до первой ложной проверки",
     "Отличать корректный цикл от бесконечного",
   ],
-  practiceTaskIds: pythonWhileLessonPublication.practiceTaskIds,
   accessTier: "free",
   theory: [
     {
