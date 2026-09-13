@@ -7,7 +7,7 @@
 | Change | `119` |
 | Slug | `practice-release-rehearsal` |
 | Title | Practice release rehearsal |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/119-practice-release-rehearsal` |
 
 ## Goal
@@ -84,7 +84,7 @@ See `docs/SPEC.md` §3–§4, §7–§8 and §9.2; owning production/backup/tran
 
 ## Gate Checks
 
-Affected Critical Gate in [STACK](../STACK.md), plus the bounded rehearsal required by this
+Affected Critical Gate in [STACK](../../STACK.md), plus the bounded rehearsal required by this
 Backlog. Tests run on the host; containers run databases and application images only. Use Python
 LSP if Python tests change and browser MCP for real browser behavior checks. This is not a Full
 or Release Gate; those remain mandatory at explicit publication. If the candidate runtime or
