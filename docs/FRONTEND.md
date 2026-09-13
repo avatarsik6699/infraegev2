@@ -297,7 +297,22 @@ app → routes → pages → widgets → features → entities → shared
   those paths. Persist only the learner's accepted submitted value alongside the solved task id,
   restore it after reload and keep the useful correctness explanation immediately after submission;
   checker answers and tolerances remain server-owned.
-- Public discovery is registry-driven. A TopicLesson, Course or CourseLesson enters the home/course
+- `/practice` extends the public paper/ink world with a compact heading, one lead, labelled
+  skill/exam/difficulty fields and open task rows with alternating quiet fills. Drawn title links
+  lead the classification and optional duration; a reserved status slot shows current-revision
+  success or a changed task after progress hydration. Filters align on desktop and stack on mobile,
+  where row status follows its text. URL-owned GET filters and cursor links work without JavaScript;
+  empty, invalid and unavailable results have explicit local states. `/practice/$taskId` uses the
+  shared reading measure, an unframed statement/help/checker flow, available theory links and
+  subordinate source attribution. Standalone browser progress stores accepted submitted values by
+  task ID and solution revision independently of lessons. Explicit «Решить ещё раз» opens and
+  focuses a fresh answer form while preserving historical success; stale refresh and technical
+  failures retain the entered answer. SSR/no-JS keeps statements, help and downloads readable;
+  checking and browser progress require enhancement. Both routes use canonical/social metadata;
+  filtered or paginated catalog views canonicalize to `/practice` and remain noindex. Only
+  catalog-visible tasks enter bounded runtime sitemap parts; hidden and unavailable task pages
+  remain noindex, and failed catalog loads remain noindex.
+- Learning publication discovery is registry-driven. A TopicLesson, Course or CourseLesson enters the home/course
   lists, prerender crawl and sitemap only through `published`; review and lab routes stay unlisted
   and `noindex,nofollow`.
   Every indexable HTML route exposes an absolute `https://infraege.ru` canonical plus unique title,

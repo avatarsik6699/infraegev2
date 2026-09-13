@@ -255,3 +255,45 @@ Manual acceptance: read both Topic lessons and Python lessons, download `numbers
 reset a lesson, compare overview/catalog mastery, and review changed-task messaging and preserved
 input after an operator edit. Verify narrow screens, keyboard focus and dependency recovery.
 Automation does not approve pedagogy, visual publication or production cutover.
+
+
+## Independent catalog (Change 116)
+
+The public `/practice` list uses `GET /api/tasks`: optional `skill`, `exam_number`, `difficulty`,
+`limit` (30 by default, maximum 100), and `cursor`. Results contain task identity, title,
+classification, estimated time and solution revision, with no statement/checker bodies. Newest
+creation time and descending ID define stable order; a cursor is valid only with the same filters
+and page size. Invalid or mismatched cursors return 422; the UI offers resetting filters. Empty
+catalogs and no matches are normal states, distinct from dependency failure.
+
+Publishing is explicit through the existing export/edit/validate/diff/apply/import CLI: change
+`catalog_visible` in an operator package with its expected revision and reason, inspect the diff,
+and retain the existing backup/outcome checks. No new editor or startup seed is introduced.
+The original 150 lesson exercises remain hidden unless an operator deliberately publishes them.
+Hidden tasks still work through published lesson links, but are noindex on standalone pages and
+absent from the catalog/sitemap. Archived/unavailable tasks return 404.
+
+`/practice/$taskId` reuses the reader/checker and Nginx file boundary. Browser storage
+`infraege:practice-progress` records accepted values by task ID and solution revision independently
+of lessons. Repeating creates a fresh answer form while retaining earned success; a changed
+solution revision requires solving again. Stale/failed checks retain input, and failed explicit
+refresh retains the previous task and entered answer. There is no attempt log or analytics event.
+
+`/sitemap.xml` is a runtime index: `/sitemap-static.xml` retains code-owned public routes;
+`/sitemap-practice/1`, etc. contain at most 1,000 visible task IDs and update timestamps each.
+The bounded `/api/task-sitemap-index` and `/api/task-sitemap?page=...` projections serve discovery.
+They live outside `/api/tasks/{id}` so they reserve no task IDs. Index capacity is 49,999 task
+parts plus the static part; dependency failure returns 503 rather than silently dropping URLs.
+These responses use no-store; task publication is reflected without rebuilding web assets.
+Filtered/cursor catalog pages are noindex with the unfiltered canonical. Task pages have their
+own canonical/social metadata. Conditions/help/downloads remain accessible without JavaScript.
+
+Nginx limits direct task/discovery reads at 120 requests/minute/IP with burst 30 and 429 on excess,
+separately from the existing checker limit. SSR uses the internal API transport. No schema change
+was needed: isolated 10,000-task projections used one query and bounded results with the current
+indexes; measure again before adding indexes for a materially larger bank.
+
+Acceptance commands are in STACK. Manual review: open a visible task after an operator publishes
+it, filter/page the catalog, solve/reload/repeat, compare lesson progress, inspect source links and
+rich content/downloads, then review a changed task and failed request on desktop/mobile. Automated
+fixtures and visual checks do not approve new task content or authorize production activation.

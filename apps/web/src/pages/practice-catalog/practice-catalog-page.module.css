@@ -1,0 +1,86 @@
+.page {
+  composes: pageFrame from "../../shared/styles/patterns.module.css";
+  min-width: 0;
+}
+.main {
+  display: grid;
+  gap: var(--space-3);
+  padding-block: var(--space-4) var(--space-6);
+}
+.heading {
+  display: grid;
+  gap: var(--space-2);
+  max-width: 65ch;
+}
+.filters {
+  display: grid;
+  grid-template-columns: minmax(12rem, 2fr) repeat(2, minmax(9rem, 1fr)) auto;
+  gap: var(--space-2);
+  align-items: end;
+  padding-block: var(--space-1);
+}
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+}
+.row:nth-child(odd) {
+  background: var(--color-surface-quiet);
+  border-radius: var(--radius-surface);
+}
+.rowContent {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.progress {
+  min-width: 10rem;
+  min-height: 1.5em;
+  text-align: right;
+}
+.state {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-3);
+  padding-block: var(--space-6);
+  min-height: 16rem;
+}
+@media (max-width: 64rem) {
+  .filters {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 40rem) {
+  .filters {
+    grid-template-columns: 1fr;
+  }
+  .row {
+    align-items: start;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding-inline: var(--space-2);
+  }
+  .progress {
+    text-align: left;
+  }
+}
+
+.rowHeading {
+  font-family: var(--font-ui);
+  font-size: var(--text-lg);
+  font-weight: 600;
+}

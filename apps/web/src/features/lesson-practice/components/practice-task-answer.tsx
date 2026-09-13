@@ -9,6 +9,7 @@ import styles from "../lesson-practice.module.css";
 import { PracticeTaskContent } from "./practice-task-content";
 
 type PracticeTaskAnswerProps = {
+  focusOnMount?: boolean;
   task: PracticeTaskTypes.Task;
   inputId: string;
   alreadySolved: boolean;
@@ -25,6 +26,12 @@ export const PracticeTaskAnswer: React.FC<PracticeTaskAnswerProps> = (
   props,
 ) => {
   const inputRef = useRef<HTMLInputElement>(null);
+  useEffect(
+    function focusRepeatAnswerFx() {
+      if (props.focusOnMount) inputRef.current?.focus();
+    },
+    [props.focusOnMount],
+  );
   useEffect(
     function focusInvalidAnswerFx() {
       if (props.state === "incorrect") inputRef.current?.focus();
@@ -86,7 +93,7 @@ export const PracticeTaskAnswer: React.FC<PracticeTaskAnswerProps> = (
           <Typography.Text tone="muted">
             {props.state === "stale"
               ? "Задача изменилась. Обновите условие и проверьте ответ заново. Введённый ответ сохранён."
-              : "Задача больше недоступна. Обновите практику урока."}
+              : "Задача больше недоступна. Обновите страницу или выберите другую задачу."}
           </Typography.Text>
           <Button onClick={props.onRefresh}>Обновить условие</Button>
         </div>

@@ -1,0 +1,19 @@
+export namespace PracticeCatalogTypes {
+  export type Search = {
+    skill?: string;
+    exam_number?: number;
+    difficulty?: number;
+    cursor?: string;
+    invalid?: boolean;
+  };
+  export type Entry = {
+    id: string;
+    title: string;
+    difficulty: number;
+    estimated_minutes: number | null;
+    solution_revision: number;
+    skills: string[];
+    exam_numbers: number[];
+  };
+  export type Page = { tasks: Entry[]; next_cursor: string | null };
+}

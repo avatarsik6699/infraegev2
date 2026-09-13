@@ -1090,7 +1090,7 @@ export class DesignSystemLabPage {
       this.page
         .locator("[data-practice-form]")
         .getByRole("textbox", { name: "Ответ" }),
-    ).toHaveCount(4);
+    ).toHaveCount(5);
 
     const inaccessiblePanels = await this.page
       .locator("[data-unenhanced-tab-panel]")

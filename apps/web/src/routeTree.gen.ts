@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
+import { Route as SitemapStaticDotxmlRouteImport } from './routes/sitemap-static[.]xml'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as CoursesIndexRouteImport } from './routes/courses.index'
 import { Route as CoursesCourseSlugRouteImport } from './routes/courses.$courseSlug'
@@ -19,6 +20,9 @@ import { Route as EgeIndexRouteImport } from './routes/ege.index'
 import { Route as EgeSlugRouteImport } from './routes/ege.$slug'
 import { Route as LabDesignSystemRouteImport } from './routes/lab.design-system'
 import { Route as LabLessonRouteImport } from './routes/lab.lesson'
+import { Route as PracticeIndexRouteImport } from './routes/practice.index'
+import { Route as PracticeTaskIdRouteImport } from './routes/practice.$taskId'
+import { Route as SitemapPracticePageRouteImport } from './routes/sitemap-practice.$page'
 import { Route as CoursesCourseSlugLessonSlugRouteImport } from './routes/courses_.$courseSlug.$lessonSlug'
 
 const IndexRoute = IndexRouteImport.update({
@@ -34,6 +38,11 @@ const PrivacyRoute = PrivacyRouteImport.update({
 const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
   id: '/robots.txt',
   path: '/robots.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapStaticDotxmlRoute = SitemapStaticDotxmlRouteImport.update({
+  id: '/sitemap-static.xml',
+  path: '/sitemap-static.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -71,6 +80,21 @@ const LabLessonRoute = LabLessonRouteImport.update({
   path: '/lab/lesson',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PracticeIndexRoute = PracticeIndexRouteImport.update({
+  id: '/practice/',
+  path: '/practice/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PracticeTaskIdRoute = PracticeTaskIdRouteImport.update({
+  id: '/practice/$taskId',
+  path: '/practice/$taskId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapPracticePageRoute = SitemapPracticePageRouteImport.update({
+  id: '/sitemap-practice/$page',
+  path: '/sitemap-practice/$page',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CoursesCourseSlugLessonSlugRoute =
   CoursesCourseSlugLessonSlugRouteImport.update({
     id: '/courses_/$courseSlug/$lessonSlug',
@@ -82,26 +106,34 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/privacy': typeof PrivacyRoute
   '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap-static.xml': typeof SitemapStaticDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/courses/$courseSlug': typeof CoursesCourseSlugRoute
   '/ege/$slug': typeof EgeSlugRoute
   '/lab/design-system': typeof LabDesignSystemRoute
   '/lab/lesson': typeof LabLessonRoute
+  '/practice/$taskId': typeof PracticeTaskIdRoute
+  '/sitemap-practice/$page': typeof SitemapPracticePageRoute
   '/courses/': typeof CoursesIndexRoute
   '/ege/': typeof EgeIndexRoute
+  '/practice/': typeof PracticeIndexRoute
   '/courses/$courseSlug/$lessonSlug': typeof CoursesCourseSlugLessonSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/privacy': typeof PrivacyRoute
   '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap-static.xml': typeof SitemapStaticDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/courses/$courseSlug': typeof CoursesCourseSlugRoute
   '/ege/$slug': typeof EgeSlugRoute
   '/lab/design-system': typeof LabDesignSystemRoute
   '/lab/lesson': typeof LabLessonRoute
+  '/practice/$taskId': typeof PracticeTaskIdRoute
+  '/sitemap-practice/$page': typeof SitemapPracticePageRoute
   '/courses': typeof CoursesIndexRoute
   '/ege': typeof EgeIndexRoute
+  '/practice': typeof PracticeIndexRoute
   '/courses/$courseSlug/$lessonSlug': typeof CoursesCourseSlugLessonSlugRoute
 }
 export interface FileRoutesById {
@@ -109,13 +141,17 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/privacy': typeof PrivacyRoute
   '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap-static.xml': typeof SitemapStaticDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/courses/$courseSlug': typeof CoursesCourseSlugRoute
   '/ege/$slug': typeof EgeSlugRoute
   '/lab/design-system': typeof LabDesignSystemRoute
   '/lab/lesson': typeof LabLessonRoute
+  '/practice/$taskId': typeof PracticeTaskIdRoute
+  '/sitemap-practice/$page': typeof SitemapPracticePageRoute
   '/courses/': typeof CoursesIndexRoute
   '/ege/': typeof EgeIndexRoute
+  '/practice/': typeof PracticeIndexRoute
   '/courses_/$courseSlug/$lessonSlug': typeof CoursesCourseSlugLessonSlugRoute
 }
 export interface FileRouteTypes {
@@ -124,39 +160,51 @@ export interface FileRouteTypes {
     | '/'
     | '/privacy'
     | '/robots.txt'
+    | '/sitemap-static.xml'
     | '/sitemap.xml'
     | '/courses/$courseSlug'
     | '/ege/$slug'
     | '/lab/design-system'
     | '/lab/lesson'
+    | '/practice/$taskId'
+    | '/sitemap-practice/$page'
     | '/courses/'
     | '/ege/'
+    | '/practice/'
     | '/courses/$courseSlug/$lessonSlug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/privacy'
     | '/robots.txt'
+    | '/sitemap-static.xml'
     | '/sitemap.xml'
     | '/courses/$courseSlug'
     | '/ege/$slug'
     | '/lab/design-system'
     | '/lab/lesson'
+    | '/practice/$taskId'
+    | '/sitemap-practice/$page'
     | '/courses'
     | '/ege'
+    | '/practice'
     | '/courses/$courseSlug/$lessonSlug'
   id:
     | '__root__'
     | '/'
     | '/privacy'
     | '/robots.txt'
+    | '/sitemap-static.xml'
     | '/sitemap.xml'
     | '/courses/$courseSlug'
     | '/ege/$slug'
     | '/lab/design-system'
     | '/lab/lesson'
+    | '/practice/$taskId'
+    | '/sitemap-practice/$page'
     | '/courses/'
     | '/ege/'
+    | '/practice/'
     | '/courses_/$courseSlug/$lessonSlug'
   fileRoutesById: FileRoutesById
 }
@@ -164,13 +212,17 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   PrivacyRoute: typeof PrivacyRoute
   RobotsDottxtRoute: typeof RobotsDottxtRoute
+  SitemapStaticDotxmlRoute: typeof SitemapStaticDotxmlRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   CoursesCourseSlugRoute: typeof CoursesCourseSlugRoute
   EgeSlugRoute: typeof EgeSlugRoute
   LabDesignSystemRoute: typeof LabDesignSystemRoute
   LabLessonRoute: typeof LabLessonRoute
+  PracticeTaskIdRoute: typeof PracticeTaskIdRoute
+  SitemapPracticePageRoute: typeof SitemapPracticePageRoute
   CoursesIndexRoute: typeof CoursesIndexRoute
   EgeIndexRoute: typeof EgeIndexRoute
+  PracticeIndexRoute: typeof PracticeIndexRoute
   CoursesCourseSlugLessonSlugRoute: typeof CoursesCourseSlugLessonSlugRoute
 }
 
@@ -195,6 +247,13 @@ declare module '@tanstack/react-router' {
       path: '/robots.txt'
       fullPath: '/robots.txt'
       preLoaderRoute: typeof RobotsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap-static.xml': {
+      id: '/sitemap-static.xml'
+      path: '/sitemap-static.xml'
+      fullPath: '/sitemap-static.xml'
+      preLoaderRoute: typeof SitemapStaticDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemap.xml': {
@@ -246,6 +305,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LabLessonRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/practice/': {
+      id: '/practice/'
+      path: '/practice'
+      fullPath: '/practice/'
+      preLoaderRoute: typeof PracticeIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/practice/$taskId': {
+      id: '/practice/$taskId'
+      path: '/practice/$taskId'
+      fullPath: '/practice/$taskId'
+      preLoaderRoute: typeof PracticeTaskIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap-practice/$page': {
+      id: '/sitemap-practice/$page'
+      path: '/sitemap-practice/$page'
+      fullPath: '/sitemap-practice/$page'
+      preLoaderRoute: typeof SitemapPracticePageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/courses_/$courseSlug/$lessonSlug': {
       id: '/courses_/$courseSlug/$lessonSlug'
       path: '/courses/$courseSlug/$lessonSlug'
@@ -260,13 +340,17 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   PrivacyRoute: PrivacyRoute,
   RobotsDottxtRoute: RobotsDottxtRoute,
+  SitemapStaticDotxmlRoute: SitemapStaticDotxmlRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   CoursesCourseSlugRoute: CoursesCourseSlugRoute,
   EgeSlugRoute: EgeSlugRoute,
   LabDesignSystemRoute: LabDesignSystemRoute,
   LabLessonRoute: LabLessonRoute,
+  PracticeTaskIdRoute: PracticeTaskIdRoute,
+  SitemapPracticePageRoute: SitemapPracticePageRoute,
   CoursesIndexRoute: CoursesIndexRoute,
   EgeIndexRoute: EgeIndexRoute,
+  PracticeIndexRoute: PracticeIndexRoute,
   CoursesCourseSlugLessonSlugRoute: CoursesCourseSlugLessonSlugRoute,
 }
 export const routeTree = rootRouteImport

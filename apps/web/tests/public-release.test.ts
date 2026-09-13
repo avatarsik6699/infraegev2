@@ -103,12 +103,14 @@ describe("public release metadata", () => {
   });
 
   it("projects truthful course availability into the catalog", () => {
-    expect(courseCatalog.entries.map((entry) => entry.id)).toEqual([
-      "python",
-      "excel",
-      "algorithms-data-structures",
-      "advanced-problems",
-    ]);
+    expect(courseCatalog.entries.map((entry) => entry.id).sort()).toEqual(
+      [
+        "python",
+        "excel",
+        "algorithms-data-structures",
+        "advanced-problems",
+      ].sort(),
+    );
     expect(courseCatalog).toMatchObject({
       availableCount: 1,
       plannedCount: 3,

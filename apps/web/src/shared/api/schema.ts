@@ -55,6 +55,57 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/task-sitemap": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Sitemap */
+        get: operations["get_sitemap_api_task_sitemap_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/task-sitemap-index": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Sitemap Index */
+        get: operations["get_sitemap_index_api_task_sitemap_index_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/tasks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Catalog */
+        get: operations["get_catalog_api_tasks_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/tasks/{task_id}": {
         parameters: {
             query?: never;
@@ -193,6 +244,30 @@ export interface components {
              * @enum {string}
              */
             tone: "info" | "warning";
+        };
+        /** CatalogPage */
+        CatalogPage: {
+            /** Next Cursor */
+            next_cursor: string | null;
+            /** Tasks */
+            tasks: components["schemas"]["CatalogTask"][];
+        };
+        /** CatalogTask */
+        CatalogTask: {
+            /** Difficulty */
+            difficulty: number;
+            /** Estimated Minutes */
+            estimated_minutes: number | null;
+            /** Exam Numbers */
+            exam_numbers: number[];
+            /** Id */
+            id: string;
+            /** Skills */
+            skills: string[];
+            /** Solution Revision */
+            solution_revision: number;
+            /** Title */
+            title: string;
         };
         /** CheckRequest */
         CheckRequest: {
@@ -460,6 +535,26 @@ export interface components {
             /** Title */
             title: string;
         };
+        /** SitemapEntry */
+        SitemapEntry: {
+            /** Id */
+            id: string;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+        };
+        /** SitemapIndex */
+        SitemapIndex: {
+            /** Pages */
+            pages: number;
+        };
+        /** SitemapPage */
+        SitemapPage: {
+            /** Tasks */
+            tasks: components["schemas"]["SitemapEntry"][];
+        };
         /** Source */
         Source: {
             /** Adaptation */
@@ -654,6 +749,92 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["LessonPractice"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_sitemap_api_task_sitemap_get: {
+        parameters: {
+            query?: {
+                page?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SitemapPage"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_sitemap_index_api_task_sitemap_index_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SitemapIndex"];
+                };
+            };
+        };
+    };
+    get_catalog_api_tasks_get: {
+        parameters: {
+            query?: {
+                skill?: string | null;
+                exam_number?: number | null;
+                difficulty?: number | null;
+                limit?: number;
+                cursor?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogPage"];
                 };
             };
             /** @description Validation Error */

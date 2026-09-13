@@ -95,8 +95,11 @@ describe("PublicHeader", () => {
     ).not.toBeNull();
     expect(screen.queryByText("скоро", { exact: true })).toBeNull();
     expect(container.querySelectorAll('[aria-disabled="true"]')).toHaveLength(
-      6,
+      4,
     );
+    expect(
+      screen.getAllByRole("link", { name: "Практика" })[0].getAttribute("href"),
+    ).toBe("/practice");
     expect(screen.queryByText("Войти", { exact: true })).toBeNull();
     expect(screen.queryByText("Регистрация", { exact: true })).toBeNull();
     expect(screen.queryByRole("link", { name: "Регистрация" })).toBeNull();

@@ -9,13 +9,13 @@ from typing import Annotated
 from urllib.parse import quote
 
 from asyncpg import PostgresError
-from fastapi import APIRouter, Depends, HTTPException, Response
+from fastapi import APIRouter, Depends, HTTPException, Query, Response
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
 from app.core.database import database_engine
-from app.modules.practice import readers
+from app.modules.practice import catalog, readers
 from app.modules.practice.files import MIME, safe_path
 from app.modules.practice.schemas import PublicTask, Registry
 from app.modules.practice.service import Conflict, require_schema
@@ -42,6 +42,8 @@ async def session(response: Response) -> AsyncIterator[AsyncSession]:
                 except Conflict as exc:
                     raise ValueError("incompatible practice schema") from exc
                 yield connection
+    except catalog.InvalidCursor as exc:
+        raise HTTPException(422, "invalid catalog cursor; reset filters") from exc
     except readers.Unavailable as exc:
         raise HTTPException(404, "task or material unavailable") from exc
     except Conflict as exc:
@@ -55,6 +57,25 @@ async def session(response: Response) -> AsyncIterator[AsyncSession]:
 
 Session = Annotated[AsyncSession, Depends(session)]
 ReleaseRegistry = Annotated[Registry, Depends(registry)]
+
+
+@router.get("/tasks", response_model=catalog.CatalogPage)
+async def get_catalog(
+    query: Annotated[catalog.CatalogQuery, Query()], connection: Session
+) -> catalog.CatalogPage:
+    return await catalog.page(connection, query)
+
+
+@router.get("/task-sitemap-index", response_model=catalog.SitemapIndex)
+async def get_sitemap_index(connection: Session) -> catalog.SitemapIndex:
+    return await catalog.sitemap_index(connection)
+
+
+@router.get("/task-sitemap", response_model=catalog.SitemapPage)
+async def get_sitemap(
+    connection: Session, page: Annotated[int, Query(ge=1, le=49999)] = 1
+) -> catalog.SitemapPage:
+    return await catalog.sitemap_page(connection, page)
 
 
 @router.get("/tasks/{task_id}", response_model=PublicTask)

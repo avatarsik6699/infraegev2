@@ -4,7 +4,7 @@ import { PublicHeaderIdentity } from "./public-header-identity";
 import styles from "./public-header.module.css";
 
 export type PublicHeaderProps = {
-  activeSection?: "courses" | "topics";
+  activeSection?: "courses" | "topics" | "practice";
   home?: boolean;
   expanded?: boolean;
 };
@@ -37,7 +37,14 @@ const PublicNavigation: React.FC<{
       >
         Мини-курсы
       </ActionLink>
-      <FutureItem>Задания</FutureItem>
+      <ActionLink
+        className={styles.sectionLink}
+        data-current={activeSection === "practice" || undefined}
+        hierarchy="drawn"
+        to="/practice"
+      >
+        Практика
+      </ActionLink>
       <FutureItem>Статистика</FutureItem>
       <FutureItem>О проекте</FutureItem>
     </nav>

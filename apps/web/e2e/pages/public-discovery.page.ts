@@ -12,7 +12,7 @@ export class PublicDiscoveryPage {
     );
     await expect(this.page.locator("body")).toContainText("Disallow: /lab/");
 
-    const sitemapResponse = await this.page.goto("/sitemap.xml");
+    const sitemapResponse = await this.page.goto("/sitemap-static.xml");
     expect(sitemapResponse?.status()).toBe(200);
     expect(sitemapResponse?.headers()["content-type"]).toContain(
       "application/xml",

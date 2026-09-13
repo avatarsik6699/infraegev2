@@ -25,6 +25,18 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
 
 ## Gotcha Log
 
+### TypeScript MCP without realpath misresolves pnpm server exports
+
+- **Symptoms:** production TanStack server functions report missing `setResponseHeader` /
+  `setResponseStatus` and cascading implicit-any errors in MCP, while workspace `tsc`, typed
+  lint and production build pass.
+- **Confirmed cause (Change 116):** the installed `@treedy/typescript-lsp-mcp` language-service
+  host omits `realpath`. A host using the same project TypeScript/config reproduces all four
+  diagnostics without `realpath`; adding `ts.sys.realpath` yields zero diagnostics.
+- **Handling:** run and report MCP diagnostics, verify affected files with the workspace compiler
+  and a realpath-aware language-service host. Do not change valid application imports or add
+  casts to silence this adapter defect. Updating the external MCP installation is separate work.
+
 ### Restic retention must not group application snapshots by temporary dump paths
 
 - **Symptoms:** each backup's unique `work.XXXXXX` path gets its own retention group, so repeated

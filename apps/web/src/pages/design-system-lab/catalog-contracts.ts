@@ -115,6 +115,14 @@ export const componentContracts = {
     catalogContracts.live("WorkedExample", "Пошаговый разбор"),
   ],
   features: [
+    catalogContracts.context(
+      "PracticeProgressProvider",
+      "Provider приложения: отдельная история задач по revision, без прогресса уроков",
+    ),
+    catalogContracts.live(
+      "StandalonePractice",
+      "Самостоятельная задача и повторная попытка во вкладке Виджеты",
+    ),
     catalogContracts.live(
       "AnalyticsConsentNotice",
       "Изолированный пример выбора аналитики",

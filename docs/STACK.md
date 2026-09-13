@@ -33,10 +33,9 @@
 
 ### Practice foundation and approved persistence stack
 
-Architect-approved 2026-09-12; SPEC §3.2/§8.1/§9.2. The Stack table above describes the running
-file-based lesson-task baseline. Change 113 implements the PostgreSQL foundation locally;
-Change 114 adds the Python persistence layer and operator tooling. Subsequent changes switch task
-consumers. The exact Python package versions below are installed and locked. Production transfer
+Architect-approved 2026-09-12; SPEC §3.2/§8.1/§9.2. Change 113 implements the PostgreSQL foundation locally; Change 114 adds the Python
+persistence layer and operator tooling. Change 115 switches lesson consumers; Change 116 adds
+the independent practice catalog and task pages. The exact Python package versions below are installed and locked. Production transfer
 is a separate explicit release operation.
 
 | Component | Approved target | Delivery |
@@ -152,6 +151,10 @@ Lesson practice and the checker read only PostgreSQL through the API; web SSR us
 typed adapter and `API_INTERNAL_URL` (`http://api:8000` in Compose). Topic and Course theory remain
 content-as-code. Only `/` and `/ege` are prerendered; DB-dependent lesson/course pages are SSR.
 The legacy `content/tasks` assets remain preserved for stage-5 rollback evidence, not as fallback.
+`/practice` and `/practice/$taskId` use request-time API reads; standalone task progress uses its
+own browser key and does not change lesson progress. `/sitemap.xml` is a runtime index with the
+release-owned `/sitemap-static.xml` and bounded `/sitemap-practice/$page` partitions. Neither page
+builds nor static publication metadata read the database. API reads have a separate Nginx limit.
 Use explicit `make practice-bootstrap ENV_FILE=...` after `make dev` for first local import;
 [practice](runbooks/practice.md) documents backup setup. Dev PostgreSQL exposes an allocated
 loopback-only port for host CLI/test access. Bootstrap never overwrites operator edits.
@@ -327,6 +330,17 @@ WebP derivatives from the original checked-in artwork. It uses host FFmpeg/libwe
 host conversion capability as `brand:generate`), Lanczos resizing, quality 85, compression level 6;
 no original/reference is overwritten. There is no new runtime dependency. Regeneration requires
 FFmpeg; normal application build/deploy copies the checked-in derivatives.
+
+### Independent practice catalog (focused acceptance)
+
+`bash scripts/tests/practice-catalog.test.sh` provisions a disposable PG18 database, migrates it,
+registers release materials using the migration role and seeds 10,000 synthetic visible tasks
+plus hidden/archived fixtures. Host pytest checks bounded queries, payloads, cursor/filter rules,
+publication boundaries, API and sitemap partitions, then Alembic checks drift. `--browser` also
+runs the domain catalog Playwright spec against that isolated bank. `--inspect` keeps only that
+fixture database alive until Enter, for explicitly started local browser inspection servers;
+it prints its disposable runtime URL. The EXIT trap removes the owned container and test files.
+No synthetic task is imported into the persistent dev or production bank.
 
 ### Backend
 

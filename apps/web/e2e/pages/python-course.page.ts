@@ -938,7 +938,7 @@ export class PythonCoursePage {
   }
 
   async expectPublishedLessonsInPublicSitemap(): Promise<void> {
-    const response = await this.page.goto("/sitemap.xml");
+    const response = await this.page.goto("/sitemap-static.xml");
     expect(response?.status()).toBe(200);
     const sitemap = this.page.locator("body");
     for (const [routeSlug] of publishedPythonCourseLessons) {

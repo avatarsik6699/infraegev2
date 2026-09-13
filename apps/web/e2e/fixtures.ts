@@ -1,3 +1,4 @@
+import { PracticeCatalogPage } from "./pages/practice-catalog.page";
 import { LayoutStabilityPage } from "./pages/layout-stability.page";
 import { PracticeCutoverPage } from "./pages/practice-cutover.page";
 import { AuxiliaryPagesPage } from "./pages/auxiliary-pages.page";
@@ -16,6 +17,8 @@ import { TopicLessonPage } from "./pages/topic-lesson.page";
 import { TopicCatalogPage } from "./pages/topic-catalog.page";
 
 type AppFixtures = {
+  practiceCatalogPage: PracticeCatalogPage;
+  noJavaScriptPracticeCatalogPage: PracticeCatalogPage;
   practiceCutoverPage: PracticeCutoverPage;
   noJavaScriptPracticeCutoverPage: PracticeCutoverPage;
   layoutStabilityPage: LayoutStabilityPage;
@@ -47,6 +50,21 @@ type AppFixtures = {
 };
 
 export const test = base.extend<AppFixtures>({
+  practiceCatalogPage: async ({ page }, use) => {
+    await use(new PracticeCatalogPage(page));
+  },
+  noJavaScriptPracticeCatalogPage: async ({ baseURL, browser }, use) => {
+    const context = await browser.newContext({
+      baseURL,
+      javaScriptEnabled: false,
+      viewport: { width: 390, height: 844 },
+    });
+    try {
+      await use(new PracticeCatalogPage(await context.newPage()));
+    } finally {
+      await context.close();
+    }
+  },
   practiceCutoverPage: async ({ page }, use) => {
     await use(new PracticeCutoverPage(page));
   },
