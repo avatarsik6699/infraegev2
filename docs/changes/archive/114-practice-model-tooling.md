@@ -7,7 +7,7 @@
 | Change | `114` |
 | Slug | `practice-model-tooling` |
 | Title | Server-owned practice model and operator tooling |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/114-practice-model-tooling` |
 
 ## Goal
@@ -203,7 +203,7 @@ See `docs/SPEC.md` §3.2, §4.1, §8.1, §9.2 and the Files list above.
 
 ## Gate Checks
 
-Critical Gate is defined in [STACK](../STACK.md); Full/Release remain explicit ship modes.
+Critical Gate is defined in [STACK](../../STACK.md); Full/Release remain explicit ship modes.
 Use isolated PostgreSQL 18 with a host test runner, never SQLite or production.
 The focused contracts must prove actual SQL state, file integrity and restored answer checks.
 Python LSP, Ruff, type-check and formatting apply; API regeneration applies if the implemented
