@@ -299,3 +299,26 @@ Acceptance commands are in STACK. Manual review: open a visible task after an op
 it, filter/page the catalog, solve/reload/repeat, compare lesson progress, inspect source links and
 rich content/downloads, then review a changed task and failed request on desktop/mobile. Automated
 fixtures and visual checks do not approve new task content or authorize production activation.
+
+
+## Change 118: release-owned first import
+
+The production deploy coordinator prepares the candidate's API environment with
+`uv sync --frozen --no-dev` before downtime. Under its existing deployment lock, it stops old
+consumers, migrates/registers the candidate schema and invokes the host `practice.release`
+module before application startup. It uses the selected Compose database and the protected
+runtime/import role credentials; migration authority stays in the separate migration job.
+Production storage remains `/var/lib/infraege/task-files`.
+
+The frozen package uses the same validate/diff/import writer as operator edits. Both pre- and
+post-import backups must succeed. Before activation, verification checks the package journal,
+all original task IDs and revision-one history/content/membership, original file bytes, and
+current reader/checker behavior. History is used only for migration evidence, never public reads.
+A retry after commit/post-backup interruption recognizes the same package checksum and preserves
+subsequent operator edits, including their revisions. No automatic update or catalog publication
+occurs. Corruption or mismatched outcomes block activation and use the deployment recovery path.
+
+Use [the transition checklist](practice-transition.md) for exact-SHA and live recovery evidence.
+Local testing uses the host runner `scripts/tests/practice-release.test.sh` with an explicitly
+selected `PRACTICE_TEST_BASE_IMAGE` (a locally built current API image), host Restic and Docker.
+It owns its disposable DB, image tag, backups and temporary files, and does not touch dev/prod data.

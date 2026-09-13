@@ -574,8 +574,8 @@ release. Releases live under `/opt/infraege-ops`, their mode-600 environments un
 ### Practice schema release (Change 114)
 
 Before the first DB-backed consumer release, follow the
-[practice transition checklist](practice-transition.md). The current coordinator migrates the
-schema but does not import the initial task bank before application startup.
+[practice transition checklist](practice-transition.md). The coordinator prepares the candidate host CLI before downtime, migrates the schema, then
+imports and verifies the initial task bank with backups before application startup (Change 118).
 
 Local implementation does not deploy or authorize a production import. Follow the existing
 Full + Release gates and, on the first PG18 switch, the Change 113 transfer procedure above.
@@ -595,7 +595,10 @@ After PostgreSQL is ready, deploy takes a pre-migration application backup, poin
 The separate `db-migrate` job uses only migration credentials, applies reviewed Alembic revisions
 and registers the generated application material/section identities. Registration preserves
 historical identifiers and existing links; incompatible links stop the release before app startup.
-API readiness then requires SQL and the exact supported schema, not just an open TCP port.
+The host practice coordinator then verifies the frozen bank and its committed outcome before
+consumer activation. API readiness requires SQL and the exact supported schema, not just an open
+TCP port. Host `uv`, Python 3.12+, Docker, Restic and the frozen candidate environment are required;
+provision these before the maintenance window. Dependency setup failure leaves consumers running.
 
 Rollback remains application-only and never invokes migrations, a DB restore or an old PostgreSQL
 service. Failure after new writes needs a forward fix or separately reviewed recovery, not a

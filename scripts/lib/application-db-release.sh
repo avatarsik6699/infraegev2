@@ -1,5 +1,30 @@
 #!/usr/bin/env bash
 
+application_practice_environment() (
+  cd "$1/apps/api" || exit $?
+  uv sync --frozen --no-dev
+)
+
+application_practice_import() (
+  local candidate=$1 environment_file=$2
+  set -a
+  # Protected operator environment, already validated by the deployment coordinator.
+  # shellcheck disable=SC1090
+  source "$environment_file" || exit $?
+  set +a
+  export PRACTICE_RELEASE_ROOT="$candidate"
+  cd "$candidate/apps/api" || exit $?
+  uv run --frozen --no-sync python -m app.modules.practice.release \
+    --environment prod --project infraege --backup-env "$environment_file"
+)
+
+application_practice_activate() {
+  local candidate=$1 candidate_sha=$2 environment_file=$3
+  run_compose "$candidate" "$candidate_sha" run --rm --no-deps db-migrate || return $?
+  application_practice_import "$candidate" "$environment_file" || return $?
+  run_compose "$candidate" "$candidate_sha" up --detach --remove-orphans --wait --wait-timeout 180
+}
+
 application_schema_preflight() {
   local candidate=$1 previous=$2 proof=$3 previous_sha
   [[ $(cat "$candidate/infra/database-schema") == 114_01 ]] || return 1

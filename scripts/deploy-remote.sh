@@ -90,6 +90,8 @@ fi
 # A schema declaration is separate from the PostgreSQL major. First adoption requires
 # exact-SHA evidence for the previous file-based application, just like PG18 transfer.
 application_schema_preflight "$release_dir" "$previous_release" /etc/infraege/schema-rollback-compatible-sha
+# Resolve the candidate's frozen host CLI before stopping the working application.
+application_practice_environment "$release_dir"
 trap 'application_deploy_exit "$?" "$previous_release" "$release_dir" "$env_file" "$db_switched"' EXIT
 trap 'exit 130' INT
 trap 'exit 143' TERM
@@ -118,14 +120,17 @@ if [[ $source_major == 16* ]]; then
   DB_ENV=prod DB_PROJECT=infraege DB_DEPLOY_LOCK_HELD=1 \
     bash "$release_dir/scripts/db-transfer.sh" --prepare-release "$env_file"
 fi
+# Existing PG18 consumers must also stay stopped until migration/import verification completes.
+if [[ $source_major != 16* && -n $previous_release ]]; then
+  run_compose "$previous_release" "$(<"$previous_release/.deploy-sha")" stop web api
+fi
 db_switched=true
 run_compose "$release_dir" "$DEPLOY_SHA" up --detach --wait --wait-timeout 60 postgres
 DB_ENV=prod DB_PROJECT=infraege bash "$release_dir/scripts/backup.sh" "$env_file"
 # DB maintenance follows the installed DB format even if application smoke triggers rollback.
 ln -sfn "$release_dir" "$root/database-current"
 bash "$release_dir/ops/install-backup-timers.sh" application
-run_compose "$release_dir" "$DEPLOY_SHA" run --rm --no-deps db-migrate
-run_compose "$release_dir" "$DEPLOY_SHA" up --detach --remove-orphans --wait --wait-timeout 180
+application_practice_activate "$release_dir" "$DEPLOY_SHA" "$env_file"
 
 curl --fail --silent --show-error --max-time 15 https://infraege.ru/health/ready |
   jq -e --arg sha "$DEPLOY_SHA" '.status == "ok" and .version == $sha' >/dev/null

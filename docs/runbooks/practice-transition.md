@@ -6,21 +6,22 @@ production activation or live recovery evidence. The source audit below was chec
 was inspected by Change 117; the older inventory in [backup and restore](backup-restore.md)
 is historical and must be refreshed.
 
-## Current release blocker
+## Import before activation
 
-[The deploy coordinator](../../scripts/deploy-remote.sh) runs `db-migrate`, then starts the
-application and checks readiness/homepage. It has no initial bank import or populated-bank
-acceptance step between migration and consumer activation. `db-migrate` registers material
-identities; it does not import tasks. A healthy empty schema can therefore pass those checks.
-The [local bootstrap](../../apps/api/app/modules/practice/dev_bootstrap.py) deliberately targets
-dev only. Do not point it at production or infer that the ordinary deploy performs its work.
+Change 118 adds the host coordinator in
+[`practice/release.py`](../../apps/api/app/modules/practice/release.py), called by the
+[deployment boundary](../../scripts/lib/application-db-release.sh) after `db-migrate` and before
+consumer startup. The candidate's frozen host CLI environment is prepared before downtime.
+The existing deployment lock and EXIT rollback handler cover migration/import failures.
 
-Before releasing DB-backed lesson consumers, implement and rehearse the ordered first-import
-boundary in a subsequent implementation change, or prepare an explicitly reviewed maintenance
-procedure that completes it before consumer activation. Do not launch the existing all-in-one
-first deploy and race a manual import against its application startup. Preserve the existing
-backup, deployment lock, interruption/outcome and application rollback boundaries. Local
-catalog tests prove reader behavior, not this missing production coordination.
+The coordinator converts and validates the frozen package, checks the target DB, runs diff and
+the existing journal-aware import with pre/post backups, then verifies original task history,
+current readers/checkers and immutable file bytes. A matching committed package is replayed
+without replacing later operator edits. A failed backup, conversion, import or parity check
+prevents activation. Existing tasks remain hidden from the standalone catalog.
+
+This closes the locally identified coordination gap; production inventory, exact-SHA rehearsal,
+Full/Release gates and live acceptance below remain required. The dev bootstrap remains dev-only.
 
 ## Ordered release evidence
 
@@ -37,7 +38,7 @@ Use the established [production](production.md#first-application-pg16--pg18-rele
    Prove the rollback application can serve its original lessons/checker/files; do not assume
    that returning the application also reverses database writes.
 3. Rehearse the complete candidate transfer/import/activation and interruption path locally,
-   including the missing coordination above. Preserve the old PG16 volume. Freeze and validate
+   including the import coordination above. Preserve the old PG16 volume. Freeze and validate
    the candidate's migration package and material registry; compare all 150 IDs, task content,
    first solution revisions, ordered membership and the immutable file. Existing exercises
    remain hidden from catalog search; publishing selected exercises is a separate content action.
@@ -87,8 +88,8 @@ removes residual packaging and dependencies; it must not reintroduce a JSON fall
 
 ## Next implementation acceptance
 
-The next implementation backlog must first close and test the import/activation coordination
-boundary, then obtain the release evidence above. Only after that may a separately scoped
+The import/activation coordination is implemented locally in Change 118. Obtain the release
+evidence above for the selected immutable candidate. Only after that may a separately scoped
 retirement remove the verified obsolete owners and update their tests/docs. Require focused
 startup/image, content validation, reader/checker/file and browser progress checks for the
 actual changed consumers. Follow the Critical Gate for implementation and Full + Release for

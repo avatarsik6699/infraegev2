@@ -10,6 +10,46 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class DeployFailureTests(unittest.TestCase):
+    def test_practice_failure_blocks_activation_and_recovers_once(self):
+        source = (ROOT / "scripts/deploy-remote.sh").read_text()
+        activation = next(
+            line
+            for line in source.splitlines()
+            if line.startswith("application_practice_activate ")
+        )
+        for failing_step in ("migration", "import", "none"):
+            with self.subTest(failing_step=failing_step):
+                program = f'''set -euo pipefail
+source "{ROOT}/scripts/lib/application-db-release.sh"
+release_dir=/candidate
+DEPLOY_SHA={"a" * 40}
+env_file=/unused
+run_compose() {{
+  if [[ "$*" == *db-migrate ]]; then
+    echo MIGRATION
+    {"return 42" if failing_step == "migration" else "return 0"}
+  fi
+  echo ACTIVATE
+}}
+application_practice_import() {{
+  echo IMPORT
+  {"return 43" if failing_step == "import" else "return 0"}
+}}
+application_db_rollback() {{ echo ROLLBACK; }}
+trap 'application_deploy_exit "$?" /previous /candidate /unused true' EXIT
+{activation}
+'''
+                result = subprocess.run(["bash", "-c", program], capture_output=True, text=True)
+                if failing_step == "none":
+                    self.assertEqual(result.returncode, 0)
+                    self.assertEqual(
+                        result.stdout.splitlines(), ["MIGRATION", "IMPORT", "ACTIVATE"]
+                    )
+                else:
+                    self.assertEqual(result.returncode, 42 if failing_step == "migration" else 43)
+                    self.assertNotIn("ACTIVATE", result.stdout)
+                    self.assertEqual(result.stdout.count("ROLLBACK"), 1)
+
     def run_failure(self, rollback_fails: bool = False, explicit: bool = False):
         source = (ROOT / "scripts/deploy-remote.sh").read_text()
         helper = re.search(r"run_compose\(\) \{\n.*?\n\}", source, re.S)

@@ -97,7 +97,9 @@ role passwords independently with `openssl rand -hex 24`; runtime passwords must
 the existing bootstrap credentials. `make config` remains secret-free. `DATABASE_URL` exposes only
 the read-only runtime identity to API; bootstrap/import/migration/backup credentials remain in the
 database/maintenance boundary. Alembic/schema readiness and task/file/checker restore verification are implemented locally.
-Existing lesson consumers use the DB readers locally. Production installation and activation remain an explicit release operation.
+Existing lesson consumers use the DB readers locally. Production installation and activation remain an explicit release operation. Change 118 adds
+the host first-import coordinator between deployment migration and consumer startup; the
+candidate frozen API environment is prepared before downtime. See the transition runbook.
 
 
 Practice model acceptance: `bash scripts/tests/practice-model-tooling.test.sh` uses host
@@ -108,6 +110,14 @@ Tests never run in containers. `node scripts/practice-registry.mjs --check` dete
 drift locally and in static CI; it never contacts a DB. Formatting/lint/type-check include migrations.
 Task files use `infra/task-files.local` in dev and `/var/lib/infraege/task-files` in production;
 these are persistent data, outside the repository cleanup allowlist. Nginx and API mount them read-only for validated X-Accel-Redirect delivery.
+
+Release-import acceptance: `PRACTICE_TEST_BASE_IMAGE=<locally-built-api-image> bash
+scripts/tests/practice-release.test.sh` uses host uv/pytest/Restic and disposable PG18. It checks
+original-bank parity, interrupted backups, replay and operator-edit preservation, plus real
+pre/post backups and the CLI entrypoint. Run `python3 -m unittest discover -s scripts/tests -p
+deploy_orchestration_test.py` for the migration/import/activation failure boundary. These are
+focused Change 118 checks, not Full/Release acceptance. Host deployment requires uv and its
+frozen candidate API environment before downtime; tests never run in containers.
 
 ### Current prerequisites
 
