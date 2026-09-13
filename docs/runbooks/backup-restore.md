@@ -99,6 +99,15 @@ Runtime gets SELECT, import gets DML/sequence use, migration owns the empty `pra
 future default grants, backup gets SELECT. Neither runtime nor import can create schema/table/temp
 objects. No task tables, Alembic head or SQL-aware application readiness are claimed here.
 
+Provisioning also grants `infraege_backup` schema USAGE and SELECT on existing tables and
+sequences in every non-system schema of the selected `infraege` database. This includes restored
+legacy objects in `public`; a whole-database dump must not silently omit them. It grants no
+cluster-wide `pg_read_all_data` membership, write/sequence-advance rights or RLS bypass, and does
+not widen runtime/import access. Future `practice` objects keep their migration-owner default
+grants. After separately approved DDL outside `practice`, re-run provisioning before backup;
+new objects from other owners have no automatic default grants. RLS and unsupported role/object
+dependencies still fail closed and require explicit review.
+
 The bundle refuses unknown application role dependencies. Maintenance exports one PostgreSQL
 REPEATABLE READ snapshot and holds it open while dump, row fingerprints, schema and file references
 are read. `pg_dump --snapshot` and `SET TRANSACTION SNAPSHOT` use that same snapshot. Row data is

@@ -600,6 +600,15 @@ consumer activation. API readiness requires SQL and the exact supported schema, 
 TCP port. Host `uv`, Python 3.12+, Docker, Restic and the frozen candidate environment are required;
 provision these before the maintenance window. Dependency setup failure leaves consumers running.
 
+Before the first transfer, refresh the complete user-table/schema inventory. The maintenance
+candidate must include backup read grants for restored legacy objects outside `practice`; verify
+its mandatory pre-import backup on a nonempty rehearsal. Do not repair a failed production backup
+by dropping/excluding legacy data or widening runtime/import privileges. Review the exact source
+and image evidence in [the transition handoff](practice-transition.md). A local tree-SHA rehearsal
+is preliminary source evidence: tie it to the final committed release and revalidate affected
+checks before installing proof markers or deploying. Provision the missing host `uv` before
+scheduling downtime; the read-only Change 119 inventory did not install it.
+
 Rollback remains application-only and never invokes migrations, a DB restore or an old PostgreSQL
 service. Failure after new writes needs a forward fix or separately reviewed recovery, not a
 return to the stale PG16 volume. The new maintenance code supports both the pre-Alembic and

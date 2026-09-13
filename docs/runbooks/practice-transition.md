@@ -65,6 +65,51 @@ Use the established [production](production.md#first-application-pg16--pg18-rele
 Until these steps have evidence, stage 5 is open. Do not check live items off using synthetic
 fixtures, historical inventory, source inspection or green local tests.
 
+## Change 119 rehearsal (2026-09-13)
+
+Read-only inventory fixed installed previous release `a5b0bf5793a85a4e9090f47c311ae01c022f194d`
+(rechecked after the correction). The live PG16 application database has no user tables and no
+restricted application roles yet; `uv` is absent. No production writes or compatibility markers
+were made. Host-tool preparation and actual deployment remain explicit release steps.
+
+The first rehearsal found a missing backup grant: a transferred bootstrap-owned public table
+could not be dumped by `infraege_backup`. The architect approved correcting provisioning. Backup
+now receives schema USAGE and SELECT on existing non-system tables/sequences inside `infraege`,
+without cluster-wide membership or additional runtime/import rights. New legacy DDL requires
+re-provisioning; RLS and unsupported dependencies still fail closed. The foundation acceptance
+passed nonempty transfer, quoted-schema and sequence reads, negative privileges, idempotent
+provisioning, encrypted backup/export and disposable restore using host Restic 0.16.4.
+
+The corrected immutable candidate source tree is `e609c2c550c963b50c06b1a0c8430ed861a7b856`:
+base commit `3335eaf477ef96e8354cfd3818beea25674a26ef` plus only the approved provisioning fix.
+It was assembled with a temporary Git index, preserving the user's real staged index; no commit
+was created by work. This identifies the rehearsed bytes, not an installed release commit.
+At ship/release, tie the final commit to these sources and rerun affected evidence if runtime,
+images, previous SHA or deployment definitions differ. Full/Release gates remain mandatory.
+
+Run `CANDIDATE_SHA=<full-sha> bash scripts/tests/practice-release-rehearsal.test.sh --inspect`
+with host Docker/Compose, Git history/GHCR access, Python/uv, jq/curl and the reviewed Restic
+version. The runner builds exact archived sources, uses loopback ports and a synthetic nonempty
+PG16 database, and pauses for browser MCP review at candidate and rollback stages. See STACK for
+workspace cleanup. Synthetic data is not a production clone; same-host encrypted export is not
+an off-host copy. Published previous images are selected by the exact installed SHA.
+
+The completed rehearsal transferred two synthetic public-table rows in 13 seconds, migrated and
+verified the 150-task bank, then ran the published previous application on the same PG18 container
+with runtime credentials. A third PG18 write survived application rollback and candidate recovery.
+Both versions passed browser lesson/checker/file checks with no console warnings/errors. Candidate
+checking without revision returned 422; manual page refresh remains the accepted old-tab path.
+A separate disposable restore verified the nonempty bank/files/checker in 8 seconds; encrypted
+export and full Restic data verification passed. Exact image identities and file checksum are
+recorded in Change 119. Previous readiness is TCP-only, so SQL runtime-role authentication was
+verified separately. Local HTTP bindings do not prove production TLS/SSH/EXIT orchestration.
+
+Stop conditions: a failed backup/import/parity check forbids activation; incomplete previous-app
+or recovery evidence forbids compatibility markers. PG16 becomes stale after PG18 writes and
+must never replace the current database during application rollback. After local acceptance,
+finish host prerequisites, explicit Full/Release gates and deployment, installed timer checks,
+actual off-host export and human product acceptance before separately scoped legacy retirement.
+
 ## Legacy ownership map
 
 Search results are candidates for dependency analysis, not deletion authorization.

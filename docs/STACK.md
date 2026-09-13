@@ -90,6 +90,19 @@ Docker or CI. Additional focused contracts: `bash scripts/tests/backup-restore.t
 `bash scripts/tests/production-ops-topology.test.sh`. These are Change 113 acceptance additions to
 the affected-area Critical Gate, not an instruction to run the Full Gate.
 
+Release rehearsal: `CANDIDATE_SHA=<full-commit-or-tree-sha> bash scripts/tests/practice-release-rehearsal.test.sh`.
+Optional `PREVIOUS_SHA` selects the exact installed previous release; its default is the recorded
+Change 119 inventory, not automatic live discovery. Requires host Docker/Compose, Python, uv,
+Git history, GHCR pull access, curl/jq and Restic (use the installed production version). The runner
+builds exact archived sources, runs databases/apps in isolated containers with loopback ports and
+keeps checks on the host. `--inspect` pauses for browser MCP checks. A tree object supports work
+before committing; record it explicitly as a source snapshot, never as a deployed commit SHA.
+Use `REHEARSAL_WORKSPACE` for a dedicated existing scratch directory; inspect build evidence then
+remove only that owned workspace and its three `infraege-rehearsal-119-*:candidate` image tags.
+Never run concurrent rehearsals with those shared tags. Containers and synthetic volumes are
+cleaned on exit; source production volumes are never selected. See the
+[transition handoff](runbooks/practice-transition.md) for release evidence and stop conditions.
+
 `infra/.env.example` declares bootstrap and four distinct role passwords. Generate production
 role passwords independently with `openssl rand -hex 24`; runtime passwords must be URL-safe.
 `make dev` injects separate disposable local values. Full Gate/test callers must supply their own

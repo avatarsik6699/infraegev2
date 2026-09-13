@@ -63,7 +63,15 @@ RESET ROLE;
 SET ROLE infraege_import;
 INSERT INTO practice.fixture (payload,happened_at) VALUES ('{"text":"Проверка","n":16}', '2026-09-12T12:00:00+03:00'), ('{"n":18}', now());
 RESET ROLE;
+CREATE TABLE public.legacy_probe (id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY, payload text NOT NULL);
+INSERT INTO public.legacy_probe (payload) VALUES ('preserved legacy row');
+CREATE SCHEMA "legacy quoted";
+CREATE TABLE "legacy quoted"."old rows" (id integer PRIMARY KEY);
+INSERT INTO "legacy quoted"."old rows" VALUES (7);
 SQL
+# Real provisioning must cover pre-existing objects without fixture-only backup grants.
+docker exec -i "$source_name" bash <"$repo_dir/scripts/db-provision-roles.sh"
+docker exec -i "$source_name" bash <"$repo_dir/scripts/db-provision-roles.sh"
 assert_roles() {
   local container=$1 admin=$2
   docker exec -i "$container" psql -X -qAt -U "$admin" -d infraege -v ON_ERROR_STOP=1 <<'SQL'
@@ -82,7 +90,21 @@ THEN RAISE EXCEPTION 'import privileges wrong'; END IF;
 IF NOT has_table_privilege('infraege_backup','practice.fixture','SELECT')
 OR has_table_privilege('infraege_backup','practice.fixture','UPDATE')
 THEN RAISE EXCEPTION 'backup privileges wrong'; END IF;
+IF NOT has_table_privilege('infraege_backup','public.legacy_probe','SELECT')
+OR NOT has_table_privilege('infraege_backup','"legacy quoted"."old rows"','SELECT')
+OR NOT has_sequence_privilege('infraege_backup','public.legacy_probe_id_seq','SELECT')
+OR has_sequence_privilege('infraege_backup','public.legacy_probe_id_seq','USAGE')
+OR has_table_privilege('infraege_backup','public.legacy_probe','INSERT,UPDATE,DELETE,TRUNCATE')
+OR has_schema_privilege('infraege_backup','legacy quoted','CREATE')
+OR (has_database_privilege('infraege_backup','postgres','CONNECT')
+    AND (SELECT rolcanlogin FROM pg_roles WHERE rolname='infraege_backup'))
+OR pg_has_role('infraege_backup','pg_read_all_data','MEMBER')
+OR has_table_privilege('infraege_runtime','public.legacy_probe','SELECT')
+OR has_table_privilege('infraege_import','public.legacy_probe','SELECT,INSERT,UPDATE,DELETE')
+THEN RAISE EXCEPTION 'legacy backup isolation wrong'; END IF;
 END $$;
+SELECT payload FROM public.legacy_probe WHERE id=1;
+SELECT id FROM "legacy quoted"."old rows";
 SQL
 }
 assert_roles "$source_name" infraege

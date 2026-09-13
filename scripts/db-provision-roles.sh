@@ -51,6 +51,16 @@ GRANT SELECT ON ALL TABLES IN SCHEMA practice TO infraege_runtime, infraege_back
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA practice TO infraege_import;
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA practice TO infraege_import;
 GRANT SELECT ON ALL SEQUENCES IN SCHEMA practice TO infraege_backup;
+-- The dump covers the whole application database, including restored legacy schemas.
+-- Grant only local object reads; no cluster-wide role membership or RLS bypass.
+-- Future practice objects retain the owner-specific default grants below. Re-provision
+-- after separately approved legacy DDL creates new objects outside that schema.
+SELECT format('GRANT USAGE ON SCHEMA %I TO infraege_backup', nspname),
+       format('GRANT SELECT ON ALL TABLES IN SCHEMA %I TO infraege_backup', nspname),
+       format('GRANT SELECT ON ALL SEQUENCES IN SCHEMA %I TO infraege_backup', nspname)
+FROM pg_namespace
+WHERE nspname <> 'information_schema' AND nspname !~ '^pg_'
+ORDER BY nspname \gexec
 ALTER DEFAULT PRIVILEGES FOR ROLE infraege_migration IN SCHEMA practice GRANT SELECT ON TABLES TO infraege_runtime, infraege_backup;
 ALTER DEFAULT PRIVILEGES FOR ROLE infraege_migration IN SCHEMA practice GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO infraege_import;
 ALTER DEFAULT PRIVILEGES FOR ROLE infraege_migration IN SCHEMA practice GRANT USAGE, SELECT ON SEQUENCES TO infraege_import;
