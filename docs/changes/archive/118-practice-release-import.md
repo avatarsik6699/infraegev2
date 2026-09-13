@@ -7,7 +7,7 @@
 | Change | `118` |
 | Slug | `practice-release-import` |
 | Title | Practice import before release activation |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/118-practice-release-import` |
 
 ## Goal
@@ -76,7 +76,7 @@ See `docs/SPEC.md` §3–§4, §8 and §9.2 and the Files list above.
 
 ## Gate Checks
 
-Affected Critical Gate in [STACK](../STACK.md): format, Python/shell lint, Python typecheck/LSP,
+Affected Critical Gate in [STACK](../../STACK.md): format, Python/shell lint, Python typecheck/LSP,
 focused isolated import and deployment-boundary tests; no frontend/API regeneration or browser
 changes. Tests remain host-only. No Full/Release or live recovery claim. Finish allowlisted cleanup.
 
