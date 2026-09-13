@@ -1,8 +1,9 @@
 # Practice operator workflow
 
-Changes 114–115 implement the server model, operator tooling and existing lesson consumers
-locally. Topic/Course practice and course summaries read PostgreSQL without a JSON fallback.
-The standalone practice catalog and production transfer remain separate stages.
+Changes 114–116 implement the server model, operator tooling, lesson consumers and standalone
+practice catalog locally. Topic/Course practice and course summaries read PostgreSQL without a
+JSON fallback. Production activation remains separate; follow the
+[transition readiness checklist](practice-transition.md) before the first release.
 
 ## Runtime and ownership
 
@@ -172,8 +173,9 @@ encrypted backup/export and a disposable restore with task/file/checker checks. 
 its own test resources. The tiny-fixture restore duration is not a production RTO.
 
 Production installation/restore acceptance still requires an explicit Full + Release operation
-and the owning production/backup runbooks. Existing lesson cutover, browser progress migration,
-public Task HTTP integration and the practice catalog remain later stages of SPEC §9.2.
+and the owning production/backup runbooks. Lesson cutover, browser progress migration, public
+Task HTTP integration and the practice catalog are implemented locally in Changes 115–116.
+The [transition checklist](practice-transition.md) tracks the remaining release prerequisites.
 
 
 ## Change 115: explicit local bootstrap and cutover

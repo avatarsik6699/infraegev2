@@ -573,6 +573,10 @@ release. Releases live under `/opt/infraege-ops`, their mode-600 environments un
 
 ### Practice schema release (Change 114)
 
+Before the first DB-backed consumer release, follow the
+[practice transition checklist](practice-transition.md). The current coordinator migrates the
+schema but does not import the initial task bank before application startup.
+
 Local implementation does not deploy or authorize a production import. Follow the existing
 Full + Release gates and, on the first PG18 switch, the Change 113 transfer procedure above.
 Set `TASK_FILES_DIR=/var/lib/infraege/task-files` in the protected application environment;
