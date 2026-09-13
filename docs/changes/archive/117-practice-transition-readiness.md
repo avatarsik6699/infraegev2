@@ -7,7 +7,7 @@
 | Change | `117` |
 | Slug | `practice-transition-readiness` |
 | Title | Practice transition readiness |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/117-practice-transition-readiness` |
 
 ## Goal
@@ -57,7 +57,7 @@ See `docs/SPEC.md` §3–§4, §8 and §9.2; the Files list above.
 
 ## Gate Checks
 
-Documentation Critical Gate from [STACK](../STACK.md): format and local link integrity,
+Documentation Critical Gate from [STACK](../../STACK.md): format and local link integrity,
 then allowlisted cleanup. Code lint/typecheck, tests, LSP, browser and API regeneration are
 not applicable. Full/Release execution and live production evidence remain separate.
 
