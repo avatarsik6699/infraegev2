@@ -24,7 +24,7 @@ lock and still check every expected revision; a competing stale update fails ins
 the winner. Packages are bounded and processed one task/file at a time. There are no automatic
 write retries or shared AsyncSessions. NullPool avoids retained connections across schema changes.
 
-`infra/database-schema` and `SCHEMA_REVISION` declare the supported revision `114_01`.
+`infra/database-schema` and `SCHEMA_REVISION` declare the supported revision `120_01`.
 The separate Compose `db-migrate` job invokes Alembic, then registers the release's materials;
 API startup waits for successful completion. It never generates migrations at process startup.
 `/health/ready` authenticates with the runtime role, takes a shared schema lock and executes SQL
@@ -322,3 +322,48 @@ Use [the transition checklist](practice-transition.md) for exact-SHA and live re
 Local testing uses the host runner `scripts/tests/practice-release.test.sh` with an explicitly
 selected `PRACTICE_TEST_BASE_IMAGE` (a locally built current API image), host Restic and Docker.
 It owns its disposable DB, image tag, backups and temporary files, and does not touch dev/prod data.
+
+
+## Банк ЕГЭ 5 и 16 (Change 120)
+
+Версионированный набор: `content/practice-imports/120-ege-5-16/`;
+[состав и ограничения](../../content/practice-imports/120-ege-5-16/README.md).
+Пакеты предназначены для operator CLI, не для публичной раздачи.
+
+Перед импортом на целевом хосте установите совместимый релиз со схемой `120_01`,
+выполните обычные migration/registry preflight и host CLI setup выше. Для production
+действует отдельный Release Gate из [production](production.md): старый runtime
+`114_01` не является совместимым автоматическим rollback. Не используйте dev credentials
+или dev backup вместо конфигурации и резервных копий целевой среды.
+
+Из `apps/api` выбранного релиза после установки защищённого окружения:
+
+```bash
+practice_bank="$PRACTICE_RELEASE_ROOT/content/practice-imports/120-ege-5-16"
+# DB_ENV/DB_PROJECT: dev/infraege-dev либо явно выбранные prod/infraege.
+# PRACTICE_BACKUP_ENV: защищённый файл окружения backup на выбранном хосте.
+uv run python -m app.modules.practice.cli validate --environment "$DB_ENV" --project "$DB_PROJECT" --package "$practice_bank/package"
+uv run python -m app.modules.practice.cli diff --environment "$DB_ENV" --project "$DB_PROJECT" --package "$practice_bank/package"
+uv run python -m app.modules.practice.cli import --environment "$DB_ENV" --project "$DB_PROJECT" --package "$practice_bank/package" --backup-env "$PRACTICE_BACKUP_ENV"
+uv run python -m app.modules.practice.cli validate --environment "$DB_ENV" --project "$DB_PROJECT" --package "$practice_bank/corrections"
+uv run python -m app.modules.practice.cli diff --environment "$DB_ENV" --project "$DB_PROJECT" --package "$practice_bank/corrections" --update
+uv run python -m app.modules.practice.cli apply --environment "$DB_ENV" --project "$DB_PROJECT" --package "$practice_bank/corrections" --update --backup-env "$PRACTICE_BACKUP_ENV"
+uv run python -m app.modules.practice.cli smoke --environment "$DB_ENV" --project "$DB_PROJECT"
+```
+
+До первой записи diff должен показать 547 созданий, второй diff — 192 редакторских
+обновления (только title/explanation, без смены solution_revision). Остановитесь при
+неожиданном diff или revision conflict; не обходите его изменением UUID/manifest.
+`import`/`apply` сами выполняют pre/post backups. Затем выполните штатный disposable
+`make db-restore-check` с окружением restore, проверьте `/practice?exam_number=5`
+и `/practice?exam_number=16`, одну отправку ответа и переход к теории.
+
+При прерывании запросите `outcome --package-id` для соответствующего package_id из
+README до повтора. Оба пакета повторяются идемпотентно. Позднейшие исправления задач
+должны оформляться новым экспортом/пакетом, а не заменой этих файлов.
+
+Локальный dev-прогон 2026-09-13: 547 новых задач, 150 прежних сохранены; оба пакета
+повторены с `already_committed`; последняя копия восстановлена с проверкой 697 задач.
+Защищённые настройки/резервные копии этого прогона находятся в игнорируемом
+`infra/practice-import-120.local/`, объекты задач — в `infra/task-files.local/`.
+Эти каталоги не являются частью переносимого пакета и не должны попадать в git.

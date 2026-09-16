@@ -628,7 +628,7 @@ export interface components {
             /** Material Id */
             material_id: string;
             /** Section */
-            section: string;
+            section?: string | null;
         };
         /** ValidationError */
         ValidationError: {

@@ -1,0 +1,140 @@
+{
+  "expected_revision": 0,
+  "mode": "normal",
+  "reason": "Initial exam bank import; source answer retained",
+  "task": {
+    "answer_instruction": "Запишите целое число в десятичной системе счисления.",
+    "archived": false,
+    "catalog_visible": true,
+    "checker": {
+      "answer_variants": [
+        "170480034"
+      ],
+      "checker_type": "exact_match",
+      "numeric_tolerance": null
+    },
+    "content_schema_version": 1,
+    "difficulty": 2,
+    "estimated_minutes": null,
+    "exam_numbers": [
+      16
+    ],
+    "explanation": [
+      {
+        "data": {
+          "markdown": "Искомая величина: Определите сумму чисел, которые выведет процедура при вызове `F(50)`."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Процедура печатает значения, поэтому её результат нужно описать отдельной функцией: C(n) — число напечатанных символов либо S(n) — сумма напечатанных чисел, в зависимости от вопроса. Возвращаемое значение самой процедуры для этого не используется."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Разберите один вызов по коду. Учитывайте печать до условия, внутри выполненной ветви и после неё. При невыполненном условии рекурсивных вызовов может не быть, но безусловная печать всё равно выполняется — это определяет базовый случай."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "К собственному вкладу вызова прибавьте вклады всех рекурсивных вызовов с аргументами из программы. Одинаковый под-вызов учитывается столько раз, сколько он выполняется. Для числа символов или суммы порядок печати не меняет итог; при вопросе о порядке вывода его нужно сохранить."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Вычисляйте полученную вспомогательную функцию с сохранением уже найденных значений. Кэшируйте количество или сумму, а не саму печатающую процедуру: кэширование процедуры пропустит повторную печать и изменит ответ."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Ответ: `170480034`."
+        },
+        "type": "text"
+      }
+    ],
+    "files": [],
+    "hint": [
+      {
+        "data": {
+          "markdown": "Начните с базового случая и направления изменения аргумента. Для выражения из нескольких значений сначала проверьте, можно ли сократить общую часть."
+        },
+        "type": "text"
+      }
+    ],
+    "id": "0f4e8a3c-94bf-4fa3-9f9b-6151050af159",
+    "interaction_type": "production",
+    "lessons": [],
+    "skills": [],
+    "sources": [
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": true,
+        "kind": "unknown",
+        "original_id": null,
+        "primary": true,
+        "role": "original",
+        "title": null,
+        "url": null,
+        "year": null
+      },
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": false,
+        "kind": "bank",
+        "original_id": "604",
+        "primary": false,
+        "role": "copy",
+        "title": "КЕГЭ",
+        "url": "https://kompege.ru/task?id=604",
+        "year": null
+      }
+    ],
+    "statement": [
+      {
+        "data": {
+          "markdown": "Определите сумму чисел, которые выведет процедура при вызове `F(50)`."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "caption": "Python",
+          "code": "def F(n):\n   print(2*n+1)\n   if n>1:\n      print(3*n-8)\n      F(n-1)\n      F(n-4)",
+          "language": "python"
+        },
+        "type": "code_example"
+      },
+      {
+        "data": {
+          "caption": "C++",
+          "code": "void F( int n) {\n   cout << 2*n+1 << endl;\n   if (n>1) {\n      cout<< 3*n-8 << endl;\n      F(n-1);\n      F(n-4);\n   }\n}",
+          "language": "text"
+        },
+        "type": "code_example"
+      },
+      {
+        "data": {
+          "caption": "Pascal",
+          "code": "procedure F(n: integer);\nbegin\n   writeln(2*n+1);\n   if n>1 then begin\n      writeln(3*n-8);\n      F(n-1);\n      F(n-4);\n   end;\nend;",
+          "language": "text"
+        },
+        "type": "code_example"
+      }
+    ],
+    "theory_links": [
+      {
+        "label": "Рекурсия",
+        "material_id": "rekursiya",
+        "section": null
+      }
+    ],
+    "title": "Рекурсивная процедура и вывод"
+  }
+}

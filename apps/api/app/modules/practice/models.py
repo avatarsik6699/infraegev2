@@ -107,8 +107,8 @@ class TheoryReference(Base):
     )
     task_id: Mapped[str] = mapped_column(ForeignKey("practice.task.id"), primary_key=True)
     position: Mapped[int] = mapped_column(Integer, primary_key=True)
-    material_id: Mapped[str] = mapped_column(String(160))
-    section: Mapped[str] = mapped_column(String(120))
+    material_id: Mapped[str] = mapped_column(ForeignKey("practice.material.id"))
+    section: Mapped[str | None] = mapped_column(String(120))
     label: Mapped[str] = mapped_column(Text)
 
 
@@ -132,6 +132,7 @@ class Provenance(Base):
     kind: Mapped[str] = mapped_column(String(30))
     role: Mapped[str] = mapped_column(String(30))
     primary: Mapped[bool] = mapped_column(Boolean)
+    is_public: Mapped[bool] = mapped_column(Boolean, server_default="true")
     title: Mapped[str | None] = mapped_column(Text)
     author: Mapped[str | None] = mapped_column(Text)
     original_id: Mapped[str | None] = mapped_column(Text)

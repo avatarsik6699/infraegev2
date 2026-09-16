@@ -27,12 +27,12 @@ application_practice_activate() {
 
 application_schema_preflight() {
   local candidate=$1 previous=$2 proof=$3 previous_sha
-  [[ $(cat "$candidate/infra/database-schema") == 114_01 ]] || return 1
+  [[ $(cat "$candidate/infra/database-schema") == 120_01 ]] || return 1
   [[ -n $previous ]] || return 0
-  if [[ $(cat "$previous/infra/database-schema" 2>/dev/null || true) == 114_01 ]]; then return 0; fi
+  if [[ $(cat "$previous/infra/database-schema" 2>/dev/null || true) == 120_01 ]]; then return 0; fi
   previous_sha=$(<"$previous/.deploy-sha")
   [[ $previous_sha =~ ^[a-f0-9]{40}$ && -f $proof &&
-     $(stat -c '%u:%a' "$proof") == 0:600 && $(cat "$proof") == "$previous_sha" ]] || {
+     $(stat -c '%u:%a' "$proof") == 0:600 && $(cat "$proof") == "120_01 $previous_sha" ]] || {
     echo 'schema rollback compatibility proof for the exact previous SHA is required' >&2; return 1;
   }
 }

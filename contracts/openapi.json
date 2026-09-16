@@ -1038,7 +1038,6 @@
               "$ref": "#/components/schemas/Source"
             },
             "maxItems": 100,
-            "minItems": 1,
             "title": "Sources",
             "type": "array"
           },
@@ -1419,14 +1418,20 @@
             "type": "string"
           },
           "section": {
-            "pattern": "^[a-z0-9][a-z0-9_-]{0,119}$",
-            "title": "Section",
-            "type": "string"
+            "anyOf": [
+              {
+                "pattern": "^[a-z0-9][a-z0-9_-]{0,119}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Section"
           }
         },
         "required": [
           "material_id",
-          "section",
           "label"
         ],
         "title": "TheoryLink",

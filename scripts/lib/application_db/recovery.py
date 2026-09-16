@@ -5,7 +5,7 @@ import subprocess
 from pathlib import Path
 
 from . import sql
-from .bundle import SCHEMA, schema_version, validate
+from .bundle import TASK_SCHEMAS, schema_version, validate
 from .postgres import TIMEOUT, Database, docker
 
 
@@ -59,7 +59,7 @@ def restore(bundle: Path, container: str) -> None:
     if schema_version(db) != metadata.schemaVersion:
         raise ValueError("restored schema differs from metadata")
     checks = [("data-checks.txt", sql.FINGERPRINT), ("schema.txt", sql.SCHEMAS)]
-    if metadata.schemaVersion == SCHEMA:
+    if metadata.schemaVersion in TASK_SCHEMAS:
         checks.append(("file-references.txt", sql.REFERENCES))
     for name, query in checks:
         if db.query(query) != (bundle / name).read_text():
@@ -68,7 +68,7 @@ def restore(bundle: Path, container: str) -> None:
 
 def smoke(bundle: Path, container: str) -> None:
     metadata = validate(bundle)
-    if metadata.schemaVersion != SCHEMA:
+    if metadata.schemaVersion not in TASK_SCHEMAS:
         return
     require_disposable(container)
     available = subprocess.run(

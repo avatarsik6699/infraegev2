@@ -1,0 +1,124 @@
+{
+  "expected_revision": 0,
+  "mode": "normal",
+  "reason": "Initial exam bank import; source answer retained",
+  "task": {
+    "answer_instruction": "Запишите целое число в десятичной системе счисления.",
+    "archived": false,
+    "catalog_visible": true,
+    "checker": {
+      "answer_variants": [
+        "96"
+      ],
+      "checker_type": "exact_match",
+      "numeric_tolerance": null
+    },
+    "content_schema_version": 1,
+    "difficulty": 2,
+    "estimated_minutes": null,
+    "exam_numbers": [
+      5
+    ],
+    "explanation": [
+      {
+        "data": {
+          "caption": null,
+          "code": "def perevod(n):\n    if n == 0:\n        return '0'\n    s = ''\n    while n != 0:\n        s = str(n % 4) + s\n        n //= 4\n    return s\ndef f(n):\n    s = perevod(n)\n    if n % 2 == 0:\n        s = '12' + s + perevod(int(s[-1],4) * 3)\n    else:\n        s = '13' + s + '21'\n    return int(s,4)\nmi = float('inf')\nfor i in range(0,1000):\n    if f(i) > 50:\n        mi = min(f(i),mi)\nprint(mi)",
+          "language": "python"
+        },
+        "type": "code_example"
+      }
+    ],
+    "files": [],
+    "hint": [
+      {
+        "data": {
+          "markdown": "Сначала выполните все шаги для одного N, сохраняя строку после каждого изменения. Затем уточните, что требуется выбрать: N, R или количество значений."
+        },
+        "type": "text"
+      }
+    ],
+    "id": "4d0f9e0e-c207-47dd-a560-5f303ffd3ad8",
+    "interaction_type": "production",
+    "lessons": [],
+    "skills": [],
+    "sources": [
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": true,
+        "kind": "unknown",
+        "original_id": null,
+        "primary": true,
+        "role": "original",
+        "title": null,
+        "url": null,
+        "year": null
+      },
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": false,
+        "kind": "bank",
+        "original_id": "19870",
+        "primary": false,
+        "role": "copy",
+        "title": "КЕГЭ",
+        "url": "https://kompege.ru/task?id=19870",
+        "year": null
+      }
+    ],
+    "statement": [
+      {
+        "data": {
+          "markdown": "(О. Лысенков) Автомат принимает на вход целое неотрицательное число и преобразует его по следующему алгоритму."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "1) Число переводится в четверичную систему счисления."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "2) Полученное число преобразуется по следующему алгоритму:"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "A) Если число чётное, то слева дописывается 12, справа значение младшего разряда четверичной записи, увеличенное в 3 раза и записанное в четверичной системе счисления."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "B) Если число нечётное, то справа дописывается 21, слева 13."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "3) Полученное четверичное число переводится в десятичную систему счисления и выводится на экран."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Укажите минимальное значение большее 50, которое может являться результатом работы автомата."
+        },
+        "type": "text"
+      }
+    ],
+    "theory_links": [
+      {
+        "label": "Преобразование записей чисел",
+        "material_id": "preobrazovanie-zapisey-chisel",
+        "section": null
+      }
+    ],
+    "title": "Алгоритм обработки числа"
+  }
+}

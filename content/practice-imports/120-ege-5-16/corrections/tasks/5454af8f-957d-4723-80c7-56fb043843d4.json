@@ -1,0 +1,128 @@
+{
+  "expected_revision": 1,
+  "mode": "editorial",
+  "reason": "Correct recurrence classification and clarify selected substitutions; source answers unchanged",
+  "task": {
+    "answer_instruction": "Запишите целое число в десятичной системе счисления.",
+    "archived": false,
+    "catalog_visible": true,
+    "checker": {
+      "answer_variants": [
+        "3702"
+      ],
+      "checker_type": "exact_match",
+      "numeric_tolerance": null
+    },
+    "content_schema_version": 1,
+    "difficulty": 1,
+    "estimated_minutes": null,
+    "exam_numbers": [
+      16
+    ],
+    "explanation": [
+      {
+        "data": {
+          "markdown": "Искомая величина: Чему равно значение функции `F(40)`?"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Выпишите базовые значения и границы каждой ветви. Для конкретного аргумента сначала выберите применимое условие, затем подставляйте рекуррентную формулу этой ветви; базовый случай имеет приоритет перед дальнейшим раскрытием."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Рекурсивные переходы увеличивают аргумент. Начните с известных значений у верхней границы и двигайтесь к меньшим аргументам: при вычислении очередного значения все используемые более высокие индексы уже должны быть готовы."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "После получения нужных значений подставьте их именно в выражение из вопроса, сохранив коэффициенты, знаки и скобки. Значение одной функции может быть лишь промежуточной величиной, а не окончательным ответом."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Ответ: `3702`."
+        },
+        "type": "text"
+      }
+    ],
+    "files": [],
+    "hint": [
+      {
+        "data": {
+          "markdown": "Начните с базового случая и направления изменения аргумента. Для выражения из нескольких значений сначала проверьте, можно ли сократить общую часть."
+        },
+        "type": "text"
+      }
+    ],
+    "id": "5454af8f-957d-4723-80c7-56fb043843d4",
+    "interaction_type": "production",
+    "lessons": [],
+    "skills": [],
+    "sources": [
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": true,
+        "kind": "bank",
+        "original_id": null,
+        "primary": true,
+        "role": "original",
+        "title": "Джобс 12.10.2020",
+        "url": null,
+        "year": 2020
+      },
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": false,
+        "kind": "bank",
+        "original_id": "468",
+        "primary": false,
+        "role": "copy",
+        "title": "КЕГЭ",
+        "url": "https://kompege.ru/task?id=468",
+        "year": null
+      }
+    ],
+    "statement": [
+      {
+        "data": {
+          "markdown": "Алгоритм вычисления функции `F(n)` задан следующими соотношениями:"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "`F(n) = F(n+2) + 2· F(3n)` при `n ≤ 70`"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "`F(n) = n - 50` при `n > 70`"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Чему равно значение функции `F(40)`?"
+        },
+        "type": "text"
+      }
+    ],
+    "theory_links": [
+      {
+        "label": "Рекурсия",
+        "material_id": "rekursiya",
+        "section": null
+      }
+    ],
+    "title": "Вычисление рекурсивной функции"
+  }
+}

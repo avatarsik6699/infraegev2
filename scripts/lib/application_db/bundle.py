@@ -16,7 +16,8 @@ DB_IMAGE = (
     "postgres:18.6-alpine3.24@sha256:"
     "d3e1620b530c944afa6e887d22eb899824da68e19c52024bf98f5220c88a65b2"
 )
-SCHEMA = "114_01"
+SCHEMA = "120_01"
+TASK_SCHEMAS = {"114_01", SCHEMA}
 BASE_FILES = (
     "application.dump",
     "roles.sql",
@@ -73,9 +74,9 @@ class Metadata:
             raise ValueError("invalid metadata types")
         if result.format != 1 or result.database != "infraege" or result.restoreImage != DB_IMAGE:
             raise ValueError("unsupported bundle format/database/image")
-        if result.schemaVersion not in {"pre-alembic", SCHEMA}:
+        if result.schemaVersion not in {"pre-alembic", *TASK_SCHEMAS}:
             raise ValueError("unsupported bundle schema")
-        if result.schemaVersion == SCHEMA and (
+        if result.schemaVersion in TASK_SCHEMAS and (
             result.assets != "task-files"
             or not VERIFIER.fullmatch(result.verifierImage)
             or not re.fullmatch(r"sha256:[a-f0-9]{64}", result.verifierId)
@@ -117,7 +118,7 @@ def verify_references(bundle: Path) -> None:
 
 
 def sums(bundle: Path, schema: str) -> str:
-    names = BASE_FILES + (("file-references.txt",) if schema == SCHEMA else ())
+    names = BASE_FILES + (("file-references.txt",) if schema in TASK_SCHEMAS else ())
     for name in names:
         regular(bundle / name)
     return "".join(f"{checksum(bundle / name)}  {name}\n" for name in names)
@@ -131,7 +132,7 @@ def validate(bundle: Path) -> Metadata:
     metadata = Metadata.read(bundle)
     if sums(bundle, metadata.schemaVersion) != (bundle / "SHA256SUMS").read_text():
         raise ValueError("bundle checksum mismatch")
-    if metadata.schemaVersion == SCHEMA:
+    if metadata.schemaVersion in TASK_SCHEMAS:
         verify_files(bundle / "task-files")
         verify_references(bundle)
     return metadata
@@ -143,7 +144,7 @@ def schema_version(db: Database, snapshot: str | None = None) -> str:
         == "t"
     ):
         version = db.query("SELECT version_num FROM practice.alembic_version;", snapshot).strip()
-        if version != SCHEMA:
+        if version not in TASK_SCHEMAS:
             raise ValueError("unsupported application schema")
         return version
     return "pre-alembic"
@@ -169,7 +170,7 @@ def create(db: Database, bundle: Path, env_file: Path, environment: str, project
         ):
             (bundle / name).write_text(db.query(query, snapshot))
         db.dump(bundle / "application.dump", snapshot)
-        if version == SCHEMA:
+        if version in TASK_SCHEMAS:
             (bundle / "file-references.txt").write_text(db.query(sql.REFERENCES, snapshot))
             files = bundle / "task-files"
             files.mkdir(mode=0o700)
@@ -188,7 +189,7 @@ def create(db: Database, bundle: Path, env_file: Path, environment: str, project
     if environment == "prod" and not re.fullmatch(r"[a-f0-9]{40}", release):
         raise ValueError("unknown production release metadata")
     verifier, verifier_id = "none", "none"
-    if version == SCHEMA:
+    if version in TASK_SCHEMAS:
         verifier = {
             "prod": f"ghcr.io/avatarsik6699/infraegev2-api:{release}",
             "dev": "infraege-dev-api",
@@ -205,7 +206,7 @@ def create(db: Database, bundle: Path, env_file: Path, environment: str, project
         docker("inspect", db.container, "--format", "{{.Image}}"),
         datetime.now(UTC).isoformat(),
         version,
-        "task-files" if version == SCHEMA else "not-yet-introduced",
+        "task-files" if version in TASK_SCHEMAS else "not-yet-introduced",
         verifier,
         verifier_id,
     )

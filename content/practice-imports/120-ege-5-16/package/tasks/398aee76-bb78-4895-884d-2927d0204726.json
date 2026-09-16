@@ -1,0 +1,130 @@
+{
+  "expected_revision": 0,
+  "mode": "normal",
+  "reason": "Initial exam bank import; source answer retained",
+  "task": {
+    "answer_instruction": "Запишите целое число в десятичной системе счисления.",
+    "archived": false,
+    "catalog_visible": true,
+    "checker": {
+      "answer_variants": [
+        "31"
+      ],
+      "checker_type": "exact_match",
+      "numeric_tolerance": null
+    },
+    "content_schema_version": 1,
+    "difficulty": 1,
+    "estimated_minutes": null,
+    "exam_numbers": [
+      5
+    ],
+    "explanation": [
+      {
+        "data": {
+          "caption": null,
+          "code": "def from_10(n, base):\n    res = ''\n    while n != 0:\n        last = n % base\n        res = res + str(last)\n        n //= base\n    return res[::-1]\n\n\nfor n in range(1, 10**5):\n    n_4 = from_10(n, 4)\n    count_d = len(n_4)\n    if count_d % 2 == 0:\n        n_4 = n_4[:count_d//2] + '0' + n_4[count_d//2:]\n    r = int(n_4)\n    if r <= 180:\n        print(n)",
+          "language": "python"
+        },
+        "type": "code_example"
+      }
+    ],
+    "files": [],
+    "hint": [
+      {
+        "data": {
+          "markdown": "Сначала выполните все шаги для одного N, сохраняя строку после каждого изменения. Затем уточните, что требуется выбрать: N, R или количество значений."
+        },
+        "type": "text"
+      }
+    ],
+    "id": "398aee76-bb78-4895-884d-2927d0204726",
+    "interaction_type": "production",
+    "lessons": [],
+    "skills": [],
+    "sources": [
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": true,
+        "kind": "bank",
+        "original_id": null,
+        "primary": true,
+        "role": "original",
+        "title": "PRO100 ЕГЭ 29.12.23",
+        "url": null,
+        "year": null
+      },
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": false,
+        "kind": "bank",
+        "original_id": "12459",
+        "primary": false,
+        "role": "copy",
+        "title": "КЕГЭ",
+        "url": "https://kompege.ru/task?id=12459",
+        "year": null
+      }
+    ],
+    "statement": [
+      {
+        "data": {
+          "markdown": "На вход алгоритма подаётся натуральное число N. Алгоритм строит по нему новое число R следующим образом."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "1. Строится четверичная запись числа N."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "2. Далее эта запись обрабатывается по следующему правилу:"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "а) если количество значащих цифр в четверичной записи числа чётное, то к этой записи в середину дописывается 0;"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "б) если количество значащих цифр в четверичной записи числа нечётное, то запись не изменяется."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Полученная таким образом запись является десятичной записью искомого числа R."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Например, для исходного числа 6₁₀ = 12₄ результатом является число 102₁₀, а для исходного числа 21₁₀ = 111₄ результатом является число 111₁₀."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Укажите максимальное число N, после обработки которого с помощью этого алгоритма, получается число R, не большее, чем 180. В ответе запишите это число в десятичной системе счисления."
+        },
+        "type": "text"
+      }
+    ],
+    "theory_links": [
+      {
+        "label": "Преобразование записей чисел",
+        "material_id": "preobrazovanie-zapisey-chisel",
+        "section": null
+      }
+    ],
+    "title": "Алгоритм обработки числа"
+  }
+}

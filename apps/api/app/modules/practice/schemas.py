@@ -100,6 +100,10 @@ class Source(StrictModel):
     adaptation: Nonempty | None
 
 
+class OperatorSource(Source):
+    is_public: bool = True
+
+
 class Membership(StrictModel):
     material_id: Identifier
     position: int = Field(ge=0)
@@ -107,7 +111,7 @@ class Membership(StrictModel):
 
 class TheoryLink(StrictModel):
     material_id: Identifier
-    section: Identifier
+    section: Identifier | None = None
     label: Nonempty
 
 
@@ -120,7 +124,7 @@ class FileUsage(StrictModel):
     attribution: Nonempty | None = None
 
 
-class PublicTaskContent(StrictModel):
+class TaskContent(StrictModel):
     id: Identifier
     title: Nonempty
     difficulty: Literal[1, 2, 3]
@@ -133,7 +137,6 @@ class PublicTaskContent(StrictModel):
     explanation: list[Block] = Field(min_length=1, max_length=1000)
     skills: list[Identifier] = Field(default_factory=list, max_length=100)
     exam_numbers: list[Annotated[int, Field(ge=1, le=27)]] = Field(default_factory=list)
-    sources: list[Source] = Field(min_length=1, max_length=100)
     files: list[FileUsage] = Field(default_factory=list, max_length=100)
     lessons: list[Membership] = Field(default_factory=list, max_length=100)
     theory_links: list[TheoryLink] = Field(default_factory=list, max_length=100)
@@ -150,8 +153,6 @@ class PublicTaskContent(StrictModel):
         ):
             if len(values) != len(set(values)):
                 raise ValueError("duplicate classification, membership or file usage")
-        if sum(source.primary for source in self.sources) != 1:
-            raise ValueError("exactly one primary source required")
         if self.archived and (self.catalog_visible or self.lessons):
             raise ValueError("archived tasks must be hidden and unlinked")
         usages = {usage.id: usage for usage in self.files}
@@ -168,8 +169,19 @@ class PublicTaskContent(StrictModel):
         return self
 
 
-class TaskData(PublicTaskContent):
+class PublicTaskContent(TaskContent):
+    sources: list[Source] = Field(max_length=100)
+
+
+class TaskData(TaskContent):
+    sources: list[OperatorSource] = Field(min_length=1, max_length=100)
     checker: Checker
+
+    @model_validator(mode="after")
+    def primary_source(self) -> Self:
+        if sum(source.primary for source in self.sources) != 1:
+            raise ValueError("exactly one primary source required")
+        return self
 
 
 class TaskEdit(StrictModel):

@@ -1,0 +1,130 @@
+{
+  "expected_revision": 0,
+  "mode": "normal",
+  "reason": "Initial exam bank import; source answer retained",
+  "task": {
+    "answer_instruction": "Запишите целое число в десятичной системе счисления.",
+    "archived": false,
+    "catalog_visible": true,
+    "checker": {
+      "answer_variants": [
+        "41"
+      ],
+      "checker_type": "exact_match",
+      "numeric_tolerance": null
+    },
+    "content_schema_version": 1,
+    "difficulty": 2,
+    "estimated_minutes": null,
+    "exam_numbers": [
+      5
+    ],
+    "explanation": [
+      {
+        "data": {
+          "caption": null,
+          "code": "def cc(n):\n    s = ''\n    while n != 0:\n        s = str(n % 5) + s\n        n //= 5\n    return s\ndef f(n):\n    s = cc(n)\n    if sum(list(map(int,list(s)))) % 5 == 0:\n        s = s.replace('1','*').replace('0','1').replace('*','0')\n        s += '14'\n    else:\n        s += '33'\n        s = '44' + s[2:]\n    return int(s,5)\nminR = float('inf')\nans = 0\nfor i in range(1,100000):\n    if f(i) > 370:\n        if f(i) < minR:\n            minR = f(i)\n            ans = i\nprint(ans)",
+          "language": "python"
+        },
+        "type": "code_example"
+      }
+    ],
+    "files": [],
+    "hint": [
+      {
+        "data": {
+          "markdown": "Сначала выполните все шаги для одного N, сохраняя строку после каждого изменения. Затем уточните, что требуется выбрать: N, R или количество значений."
+        },
+        "type": "text"
+      }
+    ],
+    "id": "8c616b95-d90a-4fd6-ba50-a3f2524a236e",
+    "interaction_type": "production",
+    "lessons": [],
+    "skills": [],
+    "sources": [
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": true,
+        "kind": "unknown",
+        "original_id": null,
+        "primary": true,
+        "role": "original",
+        "title": null,
+        "url": null,
+        "year": null
+      },
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": false,
+        "kind": "bank",
+        "original_id": "21243",
+        "primary": false,
+        "role": "copy",
+        "title": "КЕГЭ",
+        "url": "https://kompege.ru/task?id=21243",
+        "year": null
+      }
+    ],
+    "statement": [
+      {
+        "data": {
+          "markdown": "(О. Лысенков) На вход алгоритма подаётся натуральное число N. Алгоритм строит по нему новое число R следующим образом."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "1. Строится пятеричная запись числа N."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "2. Далее эта запись обрабатывается по следующему правилу:"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "а) если сумма цифр пятеричной записи кратна 5, то все нули в записи меняются на 1, а все 1 меняются на нули, после к числу приписывается 14 справа;"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "б) если сумма цифр пятеричной записи не кратна 5, то к записи справа приписывается 33 после первые два разряда, полученной записи, меняются на 44 соответственно, разряды нумеруются слева направо, начиная с 1."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Полученная таким образом запись является пятеричной записью искомого числа R."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Укажите минимальное число N, для которого результатом работы алгоритма является наименьшее число R, превышающее 370."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "В ответе это число запишите в десятичной системе счисления."
+        },
+        "type": "text"
+      }
+    ],
+    "theory_links": [
+      {
+        "label": "Преобразование записей чисел",
+        "material_id": "preobrazovanie-zapisey-chisel",
+        "section": null
+      }
+    ],
+    "title": "Алгоритм обработки числа"
+  }
+}

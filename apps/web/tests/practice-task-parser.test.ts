@@ -87,6 +87,12 @@ describe("public practice projection", () => {
                 explanation: [text],
                 theory_links: [
                   { material_id: "lesson", section: "idea", label: "Идея" },
+                  { material_id: "lesson", section: null, label: "Весь урок" },
+                  {
+                    material_id: "other",
+                    section: "idea",
+                    label: "Другой урок",
+                  },
                 ],
               },
               deliveries: [],

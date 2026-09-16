@@ -63,6 +63,16 @@ class BundleTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unsupported bundle schema"):
             bundle.validate(self.root)
 
+    def test_previous_schema_still_requires_valid_assets(self):
+        metadata = json.loads((self.root / "metadata.json").read_text())
+        metadata["schemaVersion"] = "114_01"
+        (self.root / "metadata.json").write_text(json.dumps(metadata))
+        (self.root / "SHA256SUMS").write_text(bundle.sums(self.root, "114_01"))
+        self.assertEqual(bundle.validate(self.root).schemaVersion, "114_01")
+        self.object.write_bytes(b"bad\n")
+        with self.assertRaisesRegex(ValueError, "corrupt"):
+            bundle.validate(self.root)
+
     def test_subprocess_failure_is_not_swallowed(self):
         # The CLI's exit remains nonzero even through the shell's conditional context.
         script = Path(__file__).resolve().parents[1] / "application_db.py"

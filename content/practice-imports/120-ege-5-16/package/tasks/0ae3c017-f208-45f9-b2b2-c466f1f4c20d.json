@@ -1,0 +1,172 @@
+{
+  "expected_revision": 0,
+  "mode": "normal",
+  "reason": "Initial exam bank import; source answer retained",
+  "task": {
+    "answer_instruction": "Запишите целое число в десятичной системе счисления.",
+    "archived": false,
+    "catalog_visible": true,
+    "checker": {
+      "answer_variants": [
+        "-27"
+      ],
+      "checker_type": "exact_match",
+      "numeric_tolerance": null
+    },
+    "content_schema_version": 1,
+    "difficulty": 2,
+    "estimated_minutes": null,
+    "exam_numbers": [
+      16
+    ],
+    "explanation": [
+      {
+        "data": {
+          "markdown": "1 способ решения"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Заметим, что каждое значение функции зависит от следующего значения с той же четностью. Значит можно выразить `F(2984)` через `F(2988)`:"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "`F(2984) = 2984 + x + F(2986)`"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "`F(2986) = 2986 + x + F(2988)`"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "`F(2984) = 2984 + x + 2986+ x + F(2988) = 5970 + 2x + F(2988)`"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Далее уже подставим F(2984) в выражение из вопроса и найдем х:"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "`F(2984) - F(2988) = 5916`"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "`5970 + 2x + F(2988) - F(2988) = 5916`"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "`2x = -54`"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "`x = -27`"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "2 способ решения"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "caption": null,
+          "code": "for x in range(-100, 100):\n    f = [0] * 3003\n    for n in range(3002, 1, -1):\n        if n >= 3000:\n            f[n] = n\n        else:\n            f[n] = n + x + f[n + 2]\n    if f[2984] - f[2988] == 5916:\n        print(x)\n        break",
+          "language": "python"
+        },
+        "type": "code_example"
+      }
+    ],
+    "files": [],
+    "hint": [
+      {
+        "data": {
+          "markdown": "Начните с базового случая и направления изменения аргумента. Для выражения из нескольких значений сначала проверьте, можно ли сократить общую часть."
+        },
+        "type": "text"
+      }
+    ],
+    "id": "0ae3c017-f208-45f9-b2b2-c466f1f4c20d",
+    "interaction_type": "production",
+    "lessons": [],
+    "skills": [],
+    "sources": [
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": true,
+        "kind": "unknown",
+        "original_id": null,
+        "primary": true,
+        "role": "original",
+        "title": null,
+        "url": null,
+        "year": null
+      },
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": false,
+        "kind": "bank",
+        "original_id": "12779",
+        "primary": false,
+        "role": "copy",
+        "title": "КЕГЭ",
+        "url": "https://kompege.ru/task?id=12779",
+        "year": null
+      }
+    ],
+    "statement": [
+      {
+        "data": {
+          "markdown": "(М. Паршиков) Алгоритм вычисления значения функции `F(n)`, где `n` - натуральное число, задан следующими соотношениями:"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "`F(n)= n`, при `n ≥ 3000`"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "`F(n)= n + x + F(n + 2)`, при `n < 3000`"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "При каком целом значении х, значение выражения `F(2984) - F(2988) = 5916`"
+        },
+        "type": "text"
+      }
+    ],
+    "theory_links": [
+      {
+        "label": "Рекурсия",
+        "material_id": "rekursiya",
+        "section": null
+      }
+    ],
+    "title": "Отношение значений рекурсивной функции"
+  }
+}

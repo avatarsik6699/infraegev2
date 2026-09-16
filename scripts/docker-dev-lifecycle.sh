@@ -25,6 +25,8 @@ apps/api/alembic.ini
 apps/api/practice-registry.json
 apps/api/migrations/env.py
 apps/api/migrations/versions/114_01_practice_model.py
+apps/api/migrations/versions/120_01_private_provenance.py
+infra/database-schema
 "}
 
 case "$ACTION" in

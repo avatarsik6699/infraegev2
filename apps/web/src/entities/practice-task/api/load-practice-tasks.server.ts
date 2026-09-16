@@ -339,9 +339,11 @@ export function projectPracticeTask(
     statement: blocks(source.content.statement),
     hint: blocks(source.content.hint),
     solution: blocks(source.content.explanation),
-    theoryLinks: (source.content.theory_links ?? [])
-      .filter((link) => link.material_id === materialId)
-      .map((link) => ({ hash: link.section, label: link.label })),
+    theoryLinks: (source.content.theory_links ?? []).flatMap((link) =>
+      link.material_id === materialId && link.section
+        ? [{ hash: link.section, label: link.label }]
+        : [],
+    ),
   };
 }
 

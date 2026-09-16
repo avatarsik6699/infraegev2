@@ -1,0 +1,112 @@
+{
+  "expected_revision": 0,
+  "mode": "normal",
+  "reason": "Initial exam bank import; source answer retained",
+  "task": {
+    "answer_instruction": "Запишите целое число в десятичной системе счисления.",
+    "archived": false,
+    "catalog_visible": true,
+    "checker": {
+      "answer_variants": [
+        "127547"
+      ],
+      "checker_type": "exact_match",
+      "numeric_tolerance": null
+    },
+    "content_schema_version": 1,
+    "difficulty": 2,
+    "estimated_minutes": null,
+    "exam_numbers": [
+      16
+    ],
+    "explanation": [
+      {
+        "data": {
+          "caption": null,
+          "code": "def F(n):\n    k = 2\n    if n > 1:\n        k += F(n-2) + F(n//2) + 1\n    return k\n\nprint(F(127))",
+          "language": "python"
+        },
+        "type": "code_example"
+      }
+    ],
+    "files": [],
+    "hint": [
+      {
+        "data": {
+          "markdown": "Начните с базового случая и направления изменения аргумента. Для выражения из нескольких значений сначала проверьте, можно ли сократить общую часть."
+        },
+        "type": "text"
+      }
+    ],
+    "id": "471e3be9-3f8c-42d6-a2c9-04ba2829be56",
+    "interaction_type": "production",
+    "lessons": [],
+    "skills": [],
+    "sources": [
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": true,
+        "kind": "unknown",
+        "original_id": null,
+        "primary": true,
+        "role": "original",
+        "title": null,
+        "url": null,
+        "year": null
+      },
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": false,
+        "kind": "bank",
+        "original_id": "9945",
+        "primary": false,
+        "role": "copy",
+        "title": "КЕГЭ",
+        "url": "https://kompege.ru/task?id=9945",
+        "year": null
+      }
+    ],
+    "statement": [
+      {
+        "data": {
+          "markdown": "(С. Чайкин) Определите, сколько символов * выведет эта процедура при вызове `F(127)`:"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "caption": "Python",
+          "code": "def F(n):\n   print('*')\n   if n > 1:\n      F(n-2)\n      F(n // 2)\n      print('*')\n   print('*')",
+          "language": "python"
+        },
+        "type": "code_example"
+      },
+      {
+        "data": {
+          "caption": "C++",
+          "code": "void F (int n) {\n   cout << '*';\n   if (n > 1) {\n      F(n-2);\n      F(n / 2);\n      cout << '*';\n   }\n   cout << '*';\n}",
+          "language": "text"
+        },
+        "type": "code_example"
+      },
+      {
+        "data": {
+          "caption": "Pascal",
+          "code": "procedure F(n:integer);\nbegin\n   write('*');\n   if n > 1 then begin\n      F(n-2);\n      F(n div 2);\n      write('*');\n   end;\n   write('*');\nend;",
+          "language": "text"
+        },
+        "type": "code_example"
+      }
+    ],
+    "theory_links": [
+      {
+        "label": "Рекурсия",
+        "material_id": "rekursiya",
+        "section": null
+      }
+    ],
+    "title": "Рекурсивная процедура и вывод"
+  }
+}

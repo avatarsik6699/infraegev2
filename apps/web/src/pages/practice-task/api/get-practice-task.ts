@@ -28,13 +28,14 @@ export const getPracticeTask = createServerFn({ method: "GET" })
       return { ...result, links: [] };
     }
     const links = (result.detail.theoryLinks ?? []).flatMap((link) => {
+      const hash = link.section ? `#${link.section}` : "";
       const topic = lessonPublications.find(
         (item) => item.id === link.material_id && item.status === "published",
       );
       if (topic)
         return [
           {
-            href: `/ege/${topic.routeSlug}#${link.section}`,
+            href: `/ege/${topic.routeSlug}${hash}`,
             label: link.label,
           },
         ];
@@ -51,7 +52,7 @@ export const getPracticeTask = createServerFn({ method: "GET" })
       return lesson && course
         ? [
             {
-              href: `/courses/${course.routeSlug}/${lesson.routeSlug}#${link.section}`,
+              href: `/courses/${course.routeSlug}/${lesson.routeSlug}${hash}`,
               label: link.label,
             },
           ]

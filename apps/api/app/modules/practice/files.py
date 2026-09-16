@@ -214,7 +214,10 @@ class Package:
                 if link.material_id not in materials:
                     raise ValueError("unknown application material")
             for reference in task.theory_links:
-                if reference.section not in materials.get(reference.material_id, set()):
+                if reference.material_id not in materials or (
+                    reference.section is not None
+                    and reference.section not in materials[reference.material_id]
+                ):
                     raise ValueError("unknown application section")
             usages = {f.id: f for f in task.files}
             for usage in task.files:

@@ -1,0 +1,130 @@
+{
+  "expected_revision": 0,
+  "mode": "normal",
+  "reason": "Initial exam bank import; source answer retained",
+  "task": {
+    "answer_instruction": "Запишите целое число в десятичной системе счисления.",
+    "archived": false,
+    "catalog_visible": true,
+    "checker": {
+      "answer_variants": [
+        "51"
+      ],
+      "checker_type": "exact_match",
+      "numeric_tolerance": null
+    },
+    "content_schema_version": 1,
+    "difficulty": 2,
+    "estimated_minutes": null,
+    "exam_numbers": [
+      5
+    ],
+    "explanation": [
+      {
+        "data": {
+          "caption": null,
+          "code": "def cc(n):\n    s = ''\n    while n != 0:\n        s = str(n % 3) +  s\n        n //= 3\n    return s\n\ndef f(n):\n    s = cc(n)\n    sum_digits = sum(map(int,list(s)))\n    if sum_digits % 4 == 0:\n        s = s.replace('1','*').replace('2','1').replace('*','2')\n        s = '10' + s\n    else:\n        s += '20'\n        s = s[0] + '02' + s[3:]\n    return int(s,3)\n\nmi = float('inf')\nans = 0\nfor i in range(1,100000):\n    if f(i) > 302:\n        if mi >= f(i):\n            mi = f(i)\n            ans = i\nprint(ans)",
+          "language": "python"
+        },
+        "type": "code_example"
+      }
+    ],
+    "files": [],
+    "hint": [
+      {
+        "data": {
+          "markdown": "Сначала выполните все шаги для одного N, сохраняя строку после каждого изменения. Затем уточните, что требуется выбрать: N, R или количество значений."
+        },
+        "type": "text"
+      }
+    ],
+    "id": "7c4ddff2-6363-409c-b20f-b4f9c625ab82",
+    "interaction_type": "production",
+    "lessons": [],
+    "skills": [],
+    "sources": [
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": true,
+        "kind": "unknown",
+        "original_id": null,
+        "primary": true,
+        "role": "original",
+        "title": null,
+        "url": null,
+        "year": null
+      },
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": false,
+        "kind": "bank",
+        "original_id": "21473",
+        "primary": false,
+        "role": "copy",
+        "title": "КЕГЭ",
+        "url": "https://kompege.ru/task?id=21473",
+        "year": null
+      }
+    ],
+    "statement": [
+      {
+        "data": {
+          "markdown": "(О. Лысенков) На вход алгоритма подаётся натуральное число N. Алгоритм строит по нему новое число R следующим образом."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "1. Строится троичная запись числа N."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "2. Далее эта запись обрабатывается по следующему правилу:"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "а) если сумма цифр троичная записи кратна 4, то все единицы в записи меняются на 2, а все 2 меняются на единицы, после к числу приписывается 10 слева;"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "б) если сумма цифр троичной записи не кратна 4, то к записи справа приписывается 20, после второй и третий разряд, полученной записи, меняются на 0 и 2 соответственно, разряды нумеруются слева направо, начиная с 1."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Полученная таким образом запись является троичной записью искомого числа R."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Укажите максимальное число N, для которого результатом работы алгоритма является наименьшее число R, превышающее 302."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "В ответе это число запишите в десятичной системе счисления."
+        },
+        "type": "text"
+      }
+    ],
+    "theory_links": [
+      {
+        "label": "Преобразование записей чисел",
+        "material_id": "preobrazovanie-zapisey-chisel",
+        "section": null
+      }
+    ],
+    "title": "Преобразование троичной записи"
+  }
+}

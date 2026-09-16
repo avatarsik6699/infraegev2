@@ -1,0 +1,140 @@
+{
+  "expected_revision": 1,
+  "mode": "editorial",
+  "reason": "Correct recurrence classification and clarify selected substitutions; source answers unchanged",
+  "task": {
+    "answer_instruction": "Запишите целое число в десятичной системе счисления.",
+    "archived": false,
+    "catalog_visible": true,
+    "checker": {
+      "answer_variants": [
+        "21"
+      ],
+      "checker_type": "exact_match",
+      "numeric_tolerance": null
+    },
+    "content_schema_version": 1,
+    "difficulty": 2,
+    "estimated_minutes": null,
+    "exam_numbers": [
+      16
+    ],
+    "explanation": [
+      {
+        "data": {
+          "markdown": "Искомая величина: Чему равно значение выражения `F(94)-F(80)`?"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Выпишите базовые значения и границы каждой ветви. Для конкретного аргумента сначала выберите применимое условие, затем подставляйте рекуррентную формулу этой ветви; базовый случай имеет приоритет перед дальнейшим раскрытием."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Рекурсивные переходы увеличивают аргумент. Начните с известных значений у верхней границы и двигайтесь к меньшим аргументам: при вычислении очередного значения все используемые более высокие индексы уже должны быть готовы."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Чётность проверяйте для текущего аргумента каждого вызова. Переход на n−1 меняет чётность, переход на n−2 сохраняет её; нельзя продолжать раскрытие одной и той же ветвью только потому, что исходный аргумент был чётным."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "После получения нужных значений подставьте их именно в выражение из вопроса, сохранив коэффициенты, знаки и скобки. Значение одной функции может быть лишь промежуточной величиной, а не окончательным ответом."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Ответ: `21`."
+        },
+        "type": "text"
+      }
+    ],
+    "files": [],
+    "hint": [
+      {
+        "data": {
+          "markdown": "Начните с базового случая и направления изменения аргумента. Для выражения из нескольких значений сначала проверьте, можно ли сократить общую часть."
+        },
+        "type": "text"
+      }
+    ],
+    "id": "09eb8e47-5dfa-4e67-b586-cfdbf4665423",
+    "interaction_type": "production",
+    "lessons": [],
+    "skills": [],
+    "sources": [
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": true,
+        "kind": "unknown",
+        "original_id": null,
+        "primary": true,
+        "role": "original",
+        "title": null,
+        "url": null,
+        "year": null
+      },
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": false,
+        "kind": "bank",
+        "original_id": "5167",
+        "primary": false,
+        "role": "copy",
+        "title": "КЕГЭ",
+        "url": "https://kompege.ru/task?id=5167",
+        "year": null
+      }
+    ],
+    "statement": [
+      {
+        "data": {
+          "markdown": "(Д. Статный) Алгоритм вычисления значения функции `F(n)`, где `n` – натуральное число, задан следующими соотношениями:"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "`F(n)=n`, если `n≥ 10 000`,"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "`F(n) = F(n+2) - 3`, если `n<10 000` и `n` – чётное."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "`F(n)=F(n+2)+1`, если `n<10 000` и `n` – нечётное."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Чему равно значение выражения `F(94)-F(80)`?"
+        },
+        "type": "text"
+      }
+    ],
+    "theory_links": [
+      {
+        "label": "Рекурсия",
+        "material_id": "rekursiya",
+        "section": null
+      }
+    ],
+    "title": "Вычисление рекурсивной функции"
+  }
+}

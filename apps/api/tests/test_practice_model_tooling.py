@@ -495,3 +495,61 @@ package.stage(storage)
     assert list((storage / ".staging").iterdir())
     assert not any(path.name.startswith("tmp") for path in storage.iterdir())
     # The runner's subsequent real backup/restore uses this very storage with the leftovers.
+
+
+def test_private_provenance_and_whole_lesson_export(engines, tmp_path):
+    from app.modules.practice import readers
+
+    writer, reader, migration = engines
+    task_id = uuid.uuid4().hex
+    data = task_data(task_id)
+    data["sources"].append(
+        {
+            **data["sources"][0],
+            "primary": False,
+            "role": "copy",
+            "is_public": False,
+            "title": "Private acquisition",
+            "original_id": "private-source-id",
+            "url": "https://example.com/private-acquisition",
+        }
+    )
+    data["theory_links"] = [{"material_id": "rekursiya", "section": None, "label": "Рекурсия"}]
+    package = package_at(tmp_path / "private", [data])
+    storage = tmp_path / "storage"
+
+    async def scenario():
+        async with AsyncSession(migration) as session, session.begin():
+            await register_materials(session, REGISTRY)
+        await process_package(writer, package, REGISTRY, storage, apply=True)
+        async with AsyncSession(reader) as session, session.begin():
+            await verify_registry(session, REGISTRY)
+            for public in (
+                await read_task(session, task_id),
+                await readers.task(session, REGISTRY, task_id),
+            ):
+                assert public is not None
+                assert len(public.content.sources) == 1
+                assert "private-acquisition" not in public.model_dump_json()
+                assert "private-source-id" not in public.model_dump_json()
+                assert "is_public" not in public.model_dump_json()
+                assert public.content.theory_links[0].section is None
+            await export_task(session, task_id, tmp_path / "export", storage, "private-export")
+        exported = Package(tmp_path / "export")
+        exported.validate(REGISTRY)
+        task = next(exported.edits()).task
+        assert task.sources[0].is_public
+        assert not task.sources[1].is_public
+        assert task.sources[1].original_id == "private-source-id"
+        assert task.theory_links[0].section is None
+        # Loss of the material remains invalid even without an anchor.
+        with pytest.raises(ValueError, match="section"):
+            exported.validate(Registry(format=1, materials=[]))
+        async with AsyncSession(reader) as session, session.begin():
+            with pytest.raises(Conflict, match="registry"):
+                await verify_registry(session, Registry(format=1, materials=[]))
+        assert (await process_package(writer, package, REGISTRY, storage, apply=True))[
+            "status"
+        ] == "already_committed"
+
+    run(scenario())

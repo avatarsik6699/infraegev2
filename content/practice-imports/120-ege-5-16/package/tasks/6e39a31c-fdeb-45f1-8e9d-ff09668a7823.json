@@ -1,0 +1,130 @@
+{
+  "expected_revision": 0,
+  "mode": "normal",
+  "reason": "Initial exam bank import; source answer retained",
+  "task": {
+    "answer_instruction": "Запишите целое число в десятичной системе счисления.",
+    "archived": false,
+    "catalog_visible": true,
+    "checker": {
+      "answer_variants": [
+        "61"
+      ],
+      "checker_type": "exact_match",
+      "numeric_tolerance": null
+    },
+    "content_schema_version": 1,
+    "difficulty": 2,
+    "estimated_minutes": null,
+    "exam_numbers": [
+      5
+    ],
+    "explanation": [
+      {
+        "data": {
+          "caption": null,
+          "code": "def cc(n):\n    s = ''\n    while n != 0:\n        s = str(n % 8) +  s\n        n //= 8\n    return s\n\ndef f(n):\n    s = cc(n)\n    if s[0] == '5':\n        s = s.replace('2','*').replace('1','2').replace('*','1')\n        s = '11' + s\n    else:\n        s += '10'\n        s = '2' + s[1:]\n    return int(s,8)\n\n#1 способ\na = []\nfor i in range(1,100000):\n    if f(i) <  1354:\n        a.append([-f(i),-i])\na.sort()\nprint(abs(a[0][1]))\n#2 способ\nmax_el = float('-inf')\nmin_N = 0\nfor i in range(1,100000):\n    if f(i) <  1354:\n        if max_el <= f(i):\n            max_el = f(i)\n            min_N = i\nprint(min_N)",
+          "language": "python"
+        },
+        "type": "code_example"
+      }
+    ],
+    "files": [],
+    "hint": [
+      {
+        "data": {
+          "markdown": "Сначала выполните все шаги для одного N, сохраняя строку после каждого изменения. Затем уточните, что требуется выбрать: N, R или количество значений."
+        },
+        "type": "text"
+      }
+    ],
+    "id": "6e39a31c-fdeb-45f1-8e9d-ff09668a7823",
+    "interaction_type": "production",
+    "lessons": [],
+    "skills": [],
+    "sources": [
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": true,
+        "kind": "unknown",
+        "original_id": null,
+        "primary": true,
+        "role": "original",
+        "title": null,
+        "url": null,
+        "year": null
+      },
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": false,
+        "kind": "bank",
+        "original_id": "22271",
+        "primary": false,
+        "role": "copy",
+        "title": "КЕГЭ",
+        "url": "https://kompege.ru/task?id=22271",
+        "year": null
+      }
+    ],
+    "statement": [
+      {
+        "data": {
+          "markdown": "(О. Лысенков) На вход алгоритма подаётся натуральное число N. Алгоритм строит по нему новое число R следующим образом."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "1. Строится восьмеричная запись числа N."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "2. Далее эта запись обрабатывается по следующему правилу:"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "а) если восьмеричная запись начинается на 5, то все двойки в записи меняются на единицы, а все единицы меняются на двойки после к числу приписывается 11 слева;"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "б) если восьмеричная запись начинается не на 5, то к записи справа приписывается 10, а первый разряд полученной записи заменяется на 2."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Полученная таким образом запись является восьмеричной записью искомого числа R."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Укажите максимальное число N, для которого результатом работы алгоритма является наибольшее число R, меньшее 1354."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "В ответе это число запишите в десятичной системе счисления.''"
+        },
+        "type": "text"
+      }
+    ],
+    "theory_links": [
+      {
+        "label": "Преобразование записей чисел",
+        "material_id": "preobrazovanie-zapisey-chisel",
+        "section": null
+      }
+    ],
+    "title": "Алгоритм обработки числа"
+  }
+}

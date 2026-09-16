@@ -71,23 +71,25 @@ async def verify_registry(session: AsyncSession, registry: Registry) -> None:
     for material_id, section in await session.execute(
         select(TheoryReference.material_id, TheoryReference.section).distinct()
     ):
-        if section not in materials.get(material_id, set()):
+        if material_id not in materials or (
+            section is not None and section not in materials[material_id]
+        ):
             raise Conflict("application registry would break a theory reference")
 
 
 # Current normalized rows own runtime state. History is append-only audit evidence.
 # Correlated aggregates keep one coherent SQL statement and never join private checker data
 # into the public projection. This per-task reader is not the future catalog/batch endpoint.
-PUBLIC_CONTENT = literal_column(
-    """(to_jsonb(task) - ARRAY['revision','solution_revision','created_at','updated_at'])
+_CONTENT_SQL = """(to_jsonb(task) - ARRAY['revision','solution_revision','created_at','updated_at'])
     || jsonb_build_object(
       'skills', COALESCE((SELECT jsonb_agg(skill ORDER BY skill) FROM practice.task_skill
                 WHERE task_id=practice.task.id), '[]'::jsonb),
       'exam_numbers', COALESCE((SELECT jsonb_agg(number ORDER BY number)
                 FROM practice.task_exam_number WHERE task_id=practice.task.id), '[]'::jsonb),
       'sources', COALESCE((SELECT jsonb_agg(
-                to_jsonb(s)-ARRAY['task_id','position'] ORDER BY position)
-                FROM practice.provenance s WHERE task_id=practice.task.id), '[]'::jsonb),
+                to_jsonb(s)-ARRAY['task_id','position'{source_exclude}] ORDER BY position)
+                FROM practice.provenance s
+                WHERE task_id=practice.task.id {source_filter}), '[]'::jsonb),
       'files', COALESCE((SELECT jsonb_agg(to_jsonb(f)-'task_id' ORDER BY id)
                 FROM practice.task_file_usage f WHERE task_id=practice.task.id), '[]'::jsonb),
       'lessons', COALESCE((SELECT jsonb_agg(to_jsonb(l)-'task_id' ORDER BY material_id)
@@ -95,10 +97,14 @@ PUBLIC_CONTENT = literal_column(
       'theory_links', COALESCE((SELECT jsonb_agg(
                 to_jsonb(r)-ARRAY['task_id','position'] ORDER BY position)
                 FROM practice.theory_reference r WHERE task_id=practice.task.id), '[]'::jsonb)
-    )""",
+    )"""
+PUBLIC_CONTENT = literal_column(
+    _CONTENT_SQL.format(source_filter="AND s.is_public", source_exclude=",'is_public'"),
     type_=JSONB,
 )
-PRIVATE_CONTENT = PUBLIC_CONTENT.op("||")(
+PRIVATE_CONTENT = literal_column(
+    _CONTENT_SQL.format(source_filter="", source_exclude=""), type_=JSONB
+).op("||")(
     literal_column("jsonb_build_object('checker', to_jsonb(task_checker)-'task_id')", type_=JSONB)
 )
 

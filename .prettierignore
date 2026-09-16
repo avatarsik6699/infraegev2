@@ -17,3 +17,6 @@ pnpm-lock.yaml
 
 # Frozen migration inputs preserve authored bytes and deterministic package identity.
 content/practice-migration/**
+
+# Immutable operator inputs and checksum-bound practice packages.
+content/practice-imports/

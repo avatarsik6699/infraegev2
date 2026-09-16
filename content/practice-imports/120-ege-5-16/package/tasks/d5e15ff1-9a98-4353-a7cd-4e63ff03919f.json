@@ -1,0 +1,136 @@
+{
+  "expected_revision": 0,
+  "mode": "normal",
+  "reason": "Initial exam bank import; source answer retained",
+  "task": {
+    "answer_instruction": "Запишите целое число в десятичной системе счисления.",
+    "archived": false,
+    "catalog_visible": true,
+    "checker": {
+      "answer_variants": [
+        "26"
+      ],
+      "checker_type": "exact_match",
+      "numeric_tolerance": null
+    },
+    "content_schema_version": 1,
+    "difficulty": 2,
+    "estimated_minutes": null,
+    "exam_numbers": [
+      5
+    ],
+    "explanation": [
+      {
+        "data": {
+          "caption": null,
+          "code": "def cc(n):\n    s = ''\n    while n != 0:\n        s = str(n % 5) + s\n        n //= 5\n    return s\n\ndef f(n):\n    s = cc(n)\n    if len(s) % 2 == 0:\n        s = s[len(s) // 2:] + s[:len(s) // 2]\n    else:\n        s = s + str(n % 5)\n        s = s[len(s) // 2:] + s[:len(s) // 2]\n    return int(s,5)\n\nfor i in range(1,1000):\n    if f(i)>50:\n        print(i)\n        break",
+          "language": "python"
+        },
+        "type": "code_example"
+      }
+    ],
+    "files": [],
+    "hint": [
+      {
+        "data": {
+          "markdown": "Сначала выполните все шаги для одного N, сохраняя строку после каждого изменения. Затем уточните, что требуется выбрать: N, R или количество значений."
+        },
+        "type": "text"
+      }
+    ],
+    "id": "d5e15ff1-9a98-4353-a7cd-4e63ff03919f",
+    "interaction_type": "production",
+    "lessons": [],
+    "skills": [],
+    "sources": [
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": true,
+        "kind": "unknown",
+        "original_id": null,
+        "primary": true,
+        "role": "original",
+        "title": null,
+        "url": null,
+        "year": null
+      },
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": false,
+        "kind": "bank",
+        "original_id": "20883",
+        "primary": false,
+        "role": "copy",
+        "title": "КЕГЭ",
+        "url": "https://kompege.ru/task?id=20883",
+        "year": null
+      }
+    ],
+    "statement": [
+      {
+        "data": {
+          "markdown": "(О. Лысенков) На вход алгоритма подаётся натуральное число N. Алгоритм строит по нему новое число R следующим образом."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "1. Строится пятеричная запись числа N."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "2. Далее эта запись обрабатывается по следующему правилу:"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "а) если количество разрядов в записи числа R кратно 2, то запись делится посередине, левая и правая половина записи меняются местами;"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "б) если количество разрядов в записи числа R не кратно 2, то к ней справа приписывается остаток от деления числа N на 5, после этого запись делится посередине, левая и правая половина записи меняются местами."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Полученная таким образом запись является пятеричной записью искомого числа R."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Например, для исходного числа 21 = `{41}_{5}` результатом работы алгоритма является `{14}_{5} = 9`"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Укажите наименьшее число N, для которого результат работы данного алгоритма больше 50."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "В ответе это число запишите в десятичной системе счисления."
+        },
+        "type": "text"
+      }
+    ],
+    "theory_links": [
+      {
+        "label": "Преобразование записей чисел",
+        "material_id": "preobrazovanie-zapisey-chisel",
+        "section": null
+      }
+    ],
+    "title": "Алгоритм обработки числа"
+  }
+}
