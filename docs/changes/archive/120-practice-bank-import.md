@@ -7,7 +7,7 @@
 | Change | `120` |
 | Slug | `practice-bank-import` |
 | Title | Practice bank import |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/120-practice-bank-import` |
 
 ## Goal
@@ -31,7 +31,7 @@ Architect approved the revised plan in chat; production import/deploy is not aut
 - [x] `D3` Validate/diff and import ready tasks into dev with pre/post backups; prove API/catalog/checker visibility and package replay. — _Depends on:_ D2, F1
 
 ### Other
-- [x] `R1` Research current practice catalog/solving UX, compare primary-source guidance and document prioritized proposals; no UI implementation. — _Added from architect chat, 2026-09-13; [research](../artifacts/practice-ux-research.md)._
+- [x] `R1` Research current practice catalog/solving UX, compare primary-source guidance and document prioritized proposals; no UI implementation. — _Added from architect chat, 2026-09-13; [research](../../artifacts/practice-ux-research.md)._
 - [x] `T1` Verify populated/fresh migration, provenance privacy/export/restore and link compatibility; browser check desktop/mobile, run affected Critical Gate/LSP and repository hygiene. — _Depends on:_ B1, F1, D3
 - [x] `T2` Document package identity, counts, exceptions, answer trust and production transfer procedure with environment-owned credentials/backups. — _Depends on:_ D3
 
@@ -76,7 +76,7 @@ reuse its source/theory/learning blocks, without a new layout or shared visual p
 
 ## Gate Checks
 
-Affected Critical Gate from [STACK](../STACK.md). Additional focused acceptance: isolated PG18
+Affected Critical Gate from [STACK](../../STACK.md). Additional focused acceptance: isolated PG18
 fresh/populated migration and restore invariants; actual dev import and repeat outcome;
 all imported task API/checker projections and representative desktop/mobile browser journeys.
 Do not run Full Gate or deploy. Human mathematical verification is explicitly deferred to architect.
