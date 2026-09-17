@@ -7,7 +7,7 @@
 | Change | `123` |
 | Slug | `release-readiness` |
 | Title | Release readiness after minimalist restoration |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/123-release-readiness` |
 
 ## Goal
@@ -65,7 +65,7 @@ explicit source selection and immutable-SHA acceptance.
 
 ## Gate Checks
 
-Full and Release rows from [STACK](../STACK.md) explicitly requested by the architect.
+Full and Release rows from [STACK](../../STACK.md) explicitly requested by the architect.
 Run tests only on host; isolate gate database and file storage from development/production.
 Analyze failures, repair through work, then reverify affected checks. No waived security,
 data-transfer, backup or rollback prerequisites. Record any unresolved external prerequisite.
