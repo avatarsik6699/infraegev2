@@ -7,7 +7,7 @@
 | Change | `122` |
 | Slug | `minimalist-baseline` |
 | Title | Minimalist baseline |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/122-minimalist-baseline` |
 
 ## Goal
@@ -71,7 +71,7 @@ schema, API and operational changes; no repeated approval of those choices is re
 
 ## Gate Checks
 
-One affected-area Critical Gate from [STACK](../STACK.md) for the complete target set.
+One affected-area Critical Gate from [STACK](../../STACK.md) for the complete target set.
 Additional acceptance: source/target task parity, replay and rollback of imports, restored
 nonempty DB/files, private projection checks, browser desktop/mobile/degraded states. Tests
 run on host only. Full/Release Gate and production service retirement remain separate.
