@@ -100,14 +100,14 @@ async def get_file(task_id: str, usage_id: str, connection: Session) -> Response
         not re.fullmatch(r"[a-f0-9]{64}", object_file.storage_key)
         or object_file.storage_key != object_file.checksum
     ):
-        raise readers.Unavailable("file unavailable")
+        raise ValueError("file unavailable")
     storage = Path(os.environ.get("TASK_FILES_DIR", "/var/lib/infraege/task-files"))
     path = safe_path(storage, object_file.storage_key)
     if (
         path.stat().st_size != object_file.size_bytes
         or MIME.get(object_file.format) != object_file.mime_type
     ):
-        raise readers.Unavailable("file unavailable")
+        raise ValueError("file unavailable")
     disposition = "inline" if usage.purpose == "image" else "attachment"
     return Response(
         headers={

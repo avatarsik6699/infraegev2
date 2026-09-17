@@ -53,9 +53,16 @@ async def execute(args: argparse.Namespace) -> None:
                 for item in bank.files:
                     source = safe_path(args.directory / "files", item.checksum)
                     target = storage / item.checksum
-                    if not target.exists():
+                    if target.exists() or target.is_symlink():
+                        safe_path(storage, item.checksum)
+                    else:
                         shutil.copyfile(source, target)
                 count = await import_bank(session, bank, storage)
+                # Only validated public attachment bytes live here. Nginx uses another UID;
+                # exports and the operator environment retain the private process umask.
+                for item in bank.files:
+                    safe_path(storage, item.checksum).chmod(0o644)
+                storage.chmod(0o755)
                 print(json.dumps({"tasks": count}))
             else:
                 args.directory.mkdir(mode=0o700)

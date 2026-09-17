@@ -20,7 +20,7 @@ export const FragmentLink: React.FC<FragmentLinkTypes.Props> = ({
       {icon && (
         <Link className={styles.icon} aria-hidden="true" strokeWidth={2} />
       )}
-      <span className={styles.label}>{props.children}</span>
+      <span>{props.children}</span>
     </a>
   );
 };

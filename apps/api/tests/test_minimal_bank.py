@@ -140,7 +140,7 @@ def test_roundtrip_replay_and_atomic_failure(database):
     asyncio.run(scenario())
 
 
-def test_http_catalog_privacy_checker_and_files(database, monkeypatch):
+def test_http_catalog_privacy_checker_and_files(database, monkeypatch, tmp_path):
     monkeypatch.setattr(settings, "database_url", database("runtime"))
     monkeypatch.setenv("TASK_FILES_DIR", str(BANK / "files"))
     source = Bank.model_validate_json((BANK / "bank.json").read_bytes())
@@ -187,6 +187,15 @@ def test_http_catalog_privacy_checker_and_files(database, monkeypatch):
         assert response.status_code == 200 and response.headers["x-accel-redirect"].endswith(
             file.checksum
         )
+        file_url = f"/api/tasks/{attached.task.id}/files/{file.id}"
+        assert client.get(f"/api/tasks/{attached.task.id}/files/missing").status_code == 404
+        monkeypatch.setenv("TASK_FILES_DIR", str(tmp_path))
+        assert client.get(file_url).status_code == 503
+        (tmp_path / file.checksum).write_bytes(b"wrong-size")
+        invalid = client.get(file_url)
+        assert invalid.status_code == 503
+        assert "x-accel-redirect" not in invalid.headers
+        assert str(tmp_path) not in invalid.text
         assert client.get("/api/client-errors").status_code == 404
 
 
@@ -339,3 +348,38 @@ def test_api_startup_does_not_require_legacy_content_directory(tmp_path):
         text=True,
     )
     assert result.returncode == 0, result.stderr
+
+
+def test_cli_publishes_readable_files_and_keeps_export_private(database, tmp_path):
+    storage = tmp_path / "storage"
+    env = {
+        **os.environ,
+        "IMPORT_DATABASE_URL": database("import"),
+        "TASK_FILES_DIR": str(storage),
+    }
+
+    def run(command, directory):
+        result = subprocess.run(
+            [sys.executable, "-m", "app.modules.practice.cli", command, str(directory)],
+            cwd=ROOT / "apps/api",
+            env=env,
+            capture_output=True,
+            text=True,
+        )
+        assert result.returncode == 0, result.stderr
+
+    run("import", BANK)
+    stored = next(storage.iterdir())
+    assert stored.read_bytes() == (BANK / "files" / stored.name).read_bytes()
+    assert stored.stat().st_mode & 0o777 == 0o644
+    assert storage.stat().st_mode & 0o777 == 0o755
+    stored.chmod(0o600)
+    storage.chmod(0o700)
+    run("import", BANK)
+    assert stored.stat().st_mode & 0o777 == 0o644
+    assert storage.stat().st_mode & 0o777 == 0o755
+    destination = tmp_path / "private-export"
+    run("export", destination)
+    assert destination.stat().st_mode & 0o777 == 0o700
+    assert (destination / "bank.json").stat().st_mode & 0o777 == 0o600
+    assert (destination / "files" / stored.name).stat().st_mode & 0o777 == 0o600

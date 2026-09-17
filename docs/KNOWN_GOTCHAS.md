@@ -20,6 +20,10 @@
 - Prefer concrete symptoms, root cause, and the shortest reliable fix.
 - Remove entries that are no longer relevant.
 
+Retired monitoring/package-engine pitfalls were removed in Change 123; recover historical
+procedures from `snapshot/pre-minimalism-2026-09-17` when restoring those systems. They are not
+current operating instructions.
+
 Search headings for the affected tool/module before reading detailed entries. Always apply the
 filesystem-permission handoff; historical symptoms do not supersede current STACK or runbooks.
 
@@ -58,38 +62,6 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
   absolute `/tmp/infraege-lighthouse.*` profile and removes it on success, failure or interruption.
   Analyze `.lighthouseci` reports before the terminal `make clean-dry-run && make clean &&
   make clean-check`; never use broad `git clean -fdX`.
-
-### Beszel host networking cannot reach a proxy confined to an internal Compose network
-
-- **Symptoms**: Beszel reports fresh host statistics but `container_stats` stays empty; the socket
-  proxy container is running while `127.0.0.1:2375` refuses connections.
-- **Root cause**: the host-network Agent uses a loopback `DOCKER_HOST`, but a proxy attached only to
-  an `internal: true` bridge may not receive the declared host publication.
-- **Fix**: keep the Agent in host-network mode, attach the proxy only to the dedicated non-internal
-  `docker-api` bridge, bind its port to `127.0.0.1`, keep `POST=0`, and require `_ping`, a non-empty
-  `/containers/json`, and fresh Beszel container records before accepting the deployment.
-
-### Dedicated management deployment must not reuse an existing Compose project
-
-- **Symptoms**: a sre-kit bootstrap unexpectedly recreates Firecrawl/SearXNG containers, or an
-  operator command targets the application or `infraege-ops` stack.
-- **Root cause**: an unscoped Compose command or a shared installation directory was used on the
-  management VPS.
-- **Fix**: use `scripts/management-sre-kit.sh`; sre-kit is always project `sre-kit` under
-  `/opt/sre-kit`, and bootstrap compares the complete unrelated-container inventory before/after.
-- **Prevention**: keep management orchestration in `ops/management`; never add Firecrawl/SearXNG
-  service names, networks or volumes to its desired state.
-
-### A valid `infraege-ops` Compose render is not permission to mutate production
-
-- **Symptoms:** `make ops-config` passes and an operator treats that local render as approval to
-  install, update or roll back the live stack.
-- **Root cause:** Compose validation proves syntax and interpolation only. The split stack is live,
-  but every production mutation still needs an exact release, protected env and authorized
-  lifecycle command.
-- **Fix:** use `ops-config` as local evidence only. Use `ops-update` for the installed project,
-  `ops-install` only on a genuinely new target, and verify health plus backup/restore evidence
-  before cleanup. Legacy volumes remain rollback-only until separately approved deletion.
 
 ### Compose `up --build` can recreate dev containers even when every build layer is cached
 
@@ -162,18 +134,6 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
   The generic rule flags any complete WebSocket proxy directive triple without analyzing values,
   so keep its narrow inline suppression beside the allowlist explanation. Verify a WebSocket 101,
   an h2c non-101 response, and a clean browser console through `http://localhost:8080`.
-
-### A split Vite + `tsc` application can silently retain a renamed server entrypoint
-
-- **Symptom:** the current TypeScript source builds successfully, but `pnpm start` runs an old BFF
-  file from `dist/server/` or fails only on a clean machine because the configured entrypoint was
-  renamed.
-- **Root cause:** Vite cleans only its client `outDir`; plain `tsc` emits current files but does not
-  delete JavaScript whose source was renamed or removed.
-- **Fix:** make the application build remove its own narrow `dist` directory before running Vite
-  and `tsc`, and keep the `start` entrypoint aligned with the emitted bootstrap (this repo hit it
-  in the now-removed `apps/ops`'s `server/main.ts`; no workspace currently uses this split
-  build shape). Never rely on a dirty local `dist` as evidence that the production command works.
 
 ### Docker: TanStack Start's build-time prerender can ECONNREFUSED inside `docker build`
 
@@ -252,19 +212,6 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
   the non-root user — lives) instead of giving the user a real home directory. See
   `apps/api/Dockerfile`.
 
-### Python: eager `Path(__file__).resolve().parents[N]` breaks at a different tree depth
-
-- **Symptoms**: `IndexError` at *import time* (before any of the module's own logic runs, and
-  before an env-var override like `CONTENT_DIR` even gets a chance to apply) — happens only in an
-  environment whose source tree is shallower than the one the index was tuned for (e.g. inside a
-  Docker image that copies just `app/` in, rather than the whole monorepo).
-- **Root cause**: a module-level constant computed via a fixed `.parents[N]` index bakes in an
-  assumption about how many directories deep the file lives, which differs between local dev (full
-  repo checkout) and a container image (a flattened subset of it).
-- **Fix**: wrap the index access in `try/except IndexError` with a sane fallback (ideally the same
-  value the container's env-var override would set anyway), so a too-shallow tree degrades instead
-  of crashing before the override is even consulted. See `apps/api/app/core/config.py`.
-
 ### asyncpg + SQLAlchemy naive/aware `datetime` trap
 
 - **Applies when**: adding or changing a mapped datetime in `modules/practice/` or its Alembic
@@ -274,7 +221,7 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
 - **Root cause**: if a SQLAlchemy `Mapped[datetime]` column omits `DateTime(timezone=True)`,
   SQLAlchemy tells asyncpg to bind that parameter as `TIMESTAMP` (no timezone) even when the real
   column is `TIMESTAMPTZ` — asyncpg's encoder then chokes on a timezone-aware value.
-- **Fix (apply when the first model is added)**: every `Mapped[datetime]` column must declare
+- **Fix**: every `Mapped[datetime]` column must declare
   `DateTime(timezone=True)` explicitly (matched in the corresponding Alembic migration with
   `sa.DateTime(timezone=True)`); always construct "now" via `datetime.now(UTC)`, never bare
   `datetime.now()`.
@@ -334,59 +281,19 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
   that same explicit project name plus dedicated overlay ports `18080/13000/18000/15432`; relying
   on the `infra/` basename or common ports can adopt or collide with an unrelated repository.
 
-### Observability work spans two first-party repositories
-
-- **Symptoms**: a live sre-kit source is repaired manually while one repository still documents
-  the old topology, or an agent treats sre-kit as an external consumer and starts rebuilding
-  observability inside the removed `apps/ops`.
-- **Root cause**: infraegev2 and sre-kit have separate Git/SDD lifecycles but jointly implement one
-  operations system.
-- **Fix**: create linked active Backlog items in both repositories for cross-boundary work.
-  infraegev2 owns application telemetry, VPS/network prerequisites and its target-specific Compose
-  lifecycle; sre-kit owns the core, adapters, Source configuration, normalization, alerts and UI.
-  Neither repository imports the other's internals or deployment credentials.
-
-### Multiple password-only SSH adapters must reset `SSH_ASKPASS`
-
-- **Symptoms**: direct application and management SSH checks both pass, but a combined orchestration
-  command connects to the management VPS first and the following application SCP fails password
-  authentication.
-- **Root cause**: `SSH_ASKPASS` is process-global; preserving an already-set helper makes the second
-  adapter submit the first host's protected password.
-- **Fix**: every adapter binds its own helper on each concrete `ssh`/`scp` invocation; selecting it
-  only during initialization is still order-dependent when calls alternate. Keep the alternating
-  management/application regression test; never share the password variables or helpers.
-
-### Cross-provider WireGuard can pass health probes while blackholing larger responses
-
-- **Symptoms**: route, ping, handshake and small private HTTP health responses pass, but a journal
-  response above roughly one packet stalls after HTTP 200 with no usable body.
-- **Root cause**: automatic `wg-quick` MTU discovery does not account for every provider path and
-  fragmentation is blackholed between the VPS networks.
-- **Fix**: pin the management peer to MTU 1280 and restart `wg-quick@wg0` when reconciling its
-  config. Verify with a private journal response larger than the former path MTU, not only ping.
-
 ### PostgreSQL restore drills must recreate archived owner roles
 
-- **Symptoms**: the Restic snapshot restores and the application dump imports, but the Umami
-  `pg_restore` stops on `ALTER ... OWNER TO umami` with `role "umami" does not exist`.
-- **Root cause**: a custom-format dump retains object ownership metadata, while a fresh disposable
-  PostgreSQL container initially contains only its bootstrap superuser.
-- **Fix**: create the fixed source owner as a loginless role in the disposable cluster before
-  `pg_restore` (`CREATE ROLE umami NOLOGIN`). Keep `--exit-on-error`; do not hide ownership drift
-  with `--no-owner` when the purpose of the drill is fidelity. Always prove cleanup on failure.
+- **Symptoms**: `pg_restore` fails when an archived object owner is missing in the disposable cluster.
+- **Root cause**: logical dumps retain ownership; a fresh PostgreSQL instance only has its bootstrap role.
+- **Fix**: restore the bundle's allowlisted roles before its dump through the matching maintenance
+  tools. Keep fail-on-error ownership checks and prove disposal of the owned restore resources.
 
-### Published operator details do not complete formal legal review
+### Public privacy text does not complete formal legal review
 
-- **Symptoms**: an agent sees the operator identity and contacts on `/privacy` and concludes that
-  formal legal review or the Russian regulator workflow is complete, while older docs may still
-  claim the identity itself is missing.
-- **Root cause**: Change 48 published architect-supplied operator details, but specialist review
-  and the question of Roskomnadzor notification remain explicitly deferred accepted risks.
-- **Fix**: preserve the published details as current product truth without presenting them as a
-  legal opinion or completed notification. Reopen formal legal work only on a new explicit
-  architect decision; before collecting accounts or other non-minimal personal data, surface the
-  residual risk and recommend specialist review. Never invent or replace requisites in source code.
+- **Symptoms**: published contacts or an older archive are mistaken for completed specialist review.
+- **Current contract**: SPEC §8 records deferred legal review and the architect's decision not to
+  publish the operator's name/address. The current privacy page has no analytics/consent flow.
+  Historical publication choices do not supersede that contract or prove external compliance.
 
 ### WSL: Lighthouse must use Playwright's Linux Chromium
 
@@ -414,37 +321,6 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
   measure it on the deployed production environment or a stable dedicated runner, and tighten the
   gate back when optimization and repeatable evidence support it. Do not hide a regression beyond
   4000ms or raise the ceiling again without a new architect decision.
-
-### journal-gatewayd tail ranges need both skip and count fields
-
-- **Symptoms**: a bounded first request to `/entries` returns HTTP 400 with `Failed to parse Range
-  header`, or starts at the oldest retained journal entry instead of the recent tail.
-- **Root cause**: systemd 255 parses `Range` as `entries=cursor[:skip:count]`. A negative tail skip
-  without the final positive count is invalid; an empty cursor with non-negative skip seeks head.
-- **Fix**: bootstrap with `Range: entries=:-500:500`; after a saved cursor use
-  `Range: entries=<cursor>:1:500` so the cursor entry itself is skipped. Persist the new cursor only
-  after the corresponding sre-kit push succeeds or is confirmed as an idempotent duplicate.
-
-### Production: Umami public prefix is not the tracker script upstream path
-
-- **Symptoms**: `/stats/script.js` returns 404, `window.umami` is absent and genuine visits or
-  practice actions never appear in Umami, while the private hub and collector remain healthy.
-- **Root cause**: the prebuilt Umami image serves the script at upstream `/script.js`; Nginx owns
-  the public `/stats` prefix. Proxying the public URI unchanged therefore requests a nonexistent
-  upstream `/stats/script.js`.
-- **Fix**: keep an exact public `/stats/script.js` location mapped to upstream `/script.js`, retain
-  the exact `/stats/api/send` collector allowlist, and return 404 for every other `/stats/` route.
-  Verify the public script and a real browser event after the corrected Nginx image is deployed.
-
-### Production: Umami collector endpoint is relative to BASE_PATH
-
-- **Symptoms**: `/stats/script.js` loads and `window.umami.track` exists, but pageviews and events
-  POST twice to `/stats/stats/api/send`, receive 404 and never reach the dashboard.
-- **Root cause**: Umami prefixes `COLLECT_API_ENDPOINT` with `BASE_PATH`. Configuring both as
-  `/stats`-prefixed paths duplicates the public prefix in the generated tracker endpoint.
-- **Fix**: with `BASE_PATH=/stats`, set `COLLECT_API_ENDPOINT=/api/send`; keep Nginx's exact public
-  `/stats/api/send` allowlist mapped to the same prefixed upstream path. Verify the generated URL
-  and response in a real browser because a curl check of the allowlisted route cannot catch this.
 
 ### Production: operator-written env values must remain Compose and Bash compatible
 
@@ -521,29 +397,6 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
   `max_by(.time)` while retaining its full immutable ID. Do not infer it from array position or
   deprecated `short_id`.
 
-### Cross-project collector ingress must exist before either cutover Compose apply
-
-- **Symptoms:** an operations or application Compose render is valid, but `up` fails because
-  `infraege-observability-ingress` was not found; alternatively an operator expects
-  `docker compose down` to remove the shared network.
-- **Root cause:** both projects declare the network as `external`. Compose deliberately neither
-  creates nor removes external networks, which prevents one project from deleting connectivity
-  owned by the other.
-- **Fix:** both deploy paths create the exact network if absent. The split topology is active;
-  subsequent releases must keep both projects attached without assuming either Compose project
-  owns deletion of the external network. Network deletion remains a separately approved cleanup.
-
-### Source reconciliation must refresh opaque secret references
-
-- **Symptoms:** direct production SSH works with the protected operator password, but sre-kit's
-  SSH Sources remain `unreachable` after reconciliation and repeated failures can ban the
-  management VPS.
-- **Root cause:** the Source API returns only an opaque secret ref, so preserving that ref cannot
-  detect that the protected input value was rotated.
-- **Fix:** every explicit reconciliation resubmits current protected values for secret-bearing
-  Sources. sre-kit encrypts the replacements and removes superseded refs; never persist or log the
-  plaintext inputs in this repository.
-
 ### Windows-hosted browser MCP can interpret WSL screenshot paths as a C: path
 
 - **Symptoms:** screenshot saving rejects `/home/...` with `Access denied` and reports a canonical
@@ -579,14 +432,6 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
 - **Related conditional failure**: a `source` inside a function called from `if`/`||` can fail and
   then be masked by a successful `set +a`. Environment validation explicitly exits its subshell
   on `source` failure; the regression test uses the production conditional call context.
-
-### Practice staging leftovers must not become backup objects
-
-- **Symptoms**: an abrupt import exit left `tmp*` in the immutable storage root; all later backups
-  rejected it as an invalid checksum-named object.
-- **Fix**: stage inside `.staging` on the same filesystem, atomically link completed objects into
-  the root, and copy only DB-snapshot-referenced objects into backups. Stop imports before any
-  manual stale-staging cleanup. Never treat this as authorization to delete committed objects.
 
 ### Windows-hosted Playwright MCP output paths
 

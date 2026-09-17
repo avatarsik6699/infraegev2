@@ -82,8 +82,8 @@ make dev
 development overlay, waits for every healthcheck, and requires no `.env`. It fingerprints
 dependency manifests, lockfiles, Dockerfiles, Vite configuration and other image-owned inputs:
 when they change, `make dev` rebuilds before starting; otherwise it keeps the fast resumable path.
-`make rebuild` remains the explicit force-rebuild command. Web source, API source and content use
-development bind mounts. Use `make stop` for a fast resumable halt; use `make down` only when the
+`make rebuild` remains the explicit force-rebuild command. Web source/public assets and API source use
+development bind mounts; the API publication registry and migrations are image-owned. Use `make stop` for a fast resumable halt; use `make down` only when the
 owned containers and network must be recreated. Both paths preserve the named PostgreSQL volume.
 
 Lifecycle mutations are serialized for the `infraege-dev` Compose project: if a previous
@@ -125,7 +125,10 @@ multi-platform digest. Dependabot monitors Dockerfiles, Compose, package locks, 
 and SHA-pinned GitHub Actions weekly; image updates still require the repository gates and review.
 The image gate uses `--pull` so a missing or revoked digest fails closed, while the digest keeps a
 successful rebuild reproducible. Do not replace these references with floating `latest` tags or run
-package-manager upgrades inside a pinned runtime image.
+blanket package-manager upgrades. If the current upstream image still contains a fixed security
+finding, pin only the affected OS packages to exact patched versions in the Dockerfile, following
+the existing API/Nginx pattern, and rerun image scanning. Remove such patches once a scanned base
+image supplies the fix itself.
 
 ### VS Code workspace
 
@@ -190,19 +193,45 @@ default local shipping.
 | Migrations | `cd apps/api && uv run alembic upgrade head && uv run alembic current && uv run alembic check` | explicit isolated gate DB and migration-role URL; Compose runs its own separate migration job before API startup; never CI or production |
 | Backend test suite | `cd apps/api && uv run pytest` | local only |
 | API contract drift | `pnpm api:check` | requires the frozen API and pnpm environments; tracked schema and generated TypeScript must match |
-| Frontend build | `scripts/run-host-web-gate.sh pnpm --filter web build` | temporarily stops only the running Full Gate `infra` Compose web service that owns host port 3000, restores it on success/failure, then runs TanStack Start's build-time prerender; fails if any crawled page 500s |
+| Frontend build | `scripts/run-host-web-gate.sh pnpm --filter web build` | temporarily stops only the `infraege-full-gate` Compose web service (host port 13000), runs the host build/prerender, then restores that service on success/failure; fails if any crawled page 500s |
 | Frontend unit tests | `pnpm --filter web test` | local only |
 | E2E lint / determinism | `pnpm --filter web exec playwright test --list` | local only, never CI'd; validates Playwright config/spec collection without running the journey |
-| E2E (Playwright) | `pnpm --filter web test:e2e` | local only, never CI'd; starts local Vite + Uvicorn through Playwright `webServer` and verifies the foundation/404 journeys in the single Chromium project |
+| E2E (Playwright) | `pnpm --filter web test:e2e` | local only, never CI'd; starts local Vite + Uvicorn through Playwright `webServer` and verifies public routes, all published course lessons without JS, practice, degraded states, reading layout and accessibility in Chromium; requires the seeded isolated bank described below |
 | Smoke | `curl -f http://localhost:18000/health/ready` (backend) — frontend smoke is the build prerender crawl | Full Gate API port from `docker-compose.override.yml` |
 | SAST / secrets / dependency audit | `pnpm audit:security` | Docker required for pinned Gitleaks 8.30.1 and Trivy 0.73.0; Semgrep 1.172.0 and pip-audit 2.10.1 run through uvx |
-| Accessibility audit | `pnpm audit:a11y` | local Playwright/axe; foundation and not-found routes, serious/critical violations fail |
+| Accessibility audit | `pnpm audit:a11y` | local Playwright/axe; home, catalogs, course/topic lessons, practice, privacy and not-found routes; serious/critical violations fail |
 | Performance budget | `scripts/run-host-web-gate.sh bash -c 'pnpm --filter web build && pnpm audit:performance'` | restores the repository-owned `infraege-full-gate` web service on success/failure; local Chrome against `/`, `/ege`, `/courses`, `/courses/python` and `/ege/16-rekursiya`; median of 3, enforced LCP ceiling ≤4.0s, CLS ≤0.1, TBT ≤200ms as lab proxy for INP. LCP ≤2.8s remains the product target to restore when stable measurement and optimization evidence support tightening the gate |
 | Content validation | `pnpm test:content-assets && pnpm validate:content` | the isolated validator tests reject unsafe paths and invalid asset metadata before the real-tree pass; `validate:content` checks Course/module/lesson membership and titles, generated publication registry, and the complete canonical bank through the API CLI (schema, lesson positions, theory material/section references and file bytes). Requires uv and the frozen API environment; no database or credentials. The legacy asset tests retain historical fixture coverage |
 | Repository hygiene | analyze all gate reports, then `make clean-dry-run && make clean && make clean-check` | always run last; Lighthouse removes its external Chrome profile on every exit, while this terminal step removes retained reports, builds and caches from the repository |
 
 Tests remain local-only; the security command is also mirrored in GitHub Actions without invoking
 pytest, Vitest or Playwright.
+
+### Full Gate environment
+
+Run in one host shell with the frozen pnpm/API environments installed. Use a fresh isolated
+`infraege-full-gate` database; never supply production credentials or reuse development storage.
+Before bootstrap, export `POSTGRES_USER=infraege`, `POSTGRES_DB=infraege` and distinct random
+URL-safe values of at least 16 characters for `POSTGRES_PASSWORD`, `DB_RUNTIME_PASSWORD`,
+`DB_IMPORT_PASSWORD`, `DB_MIGRATION_PASSWORD`, `DB_BACKUP_PASSWORD`. `openssl rand -hex 24`
+generates a suitable value. Keep these process-scoped or in a mode-600 file outside Git; do not
+print the environment or rendered Compose secrets. Set `TASK_FILES_DIR` to a dedicated absolute
+temporary directory, `APP_ENV=development` and `DEPLOY_SHA=development`.
+
+After bootstrap, wait for PostgreSQL/API/web/Nginx health and the successful migration job. From
+`apps/api`, supply `MIGRATION_DATABASE_URL` using `infraege_migration` and host port 15432 for
+the migration row. Import `../../content/practice-bank` through the host CLI with
+`IMPORT_DATABASE_URL` for `infraege_import` on that same isolated database. The URL shape is
+`postgresql://ROLE:PASSWORD@127.0.0.1:15432/infraege`; passwords come from the protected environment.
+The migration job alone creates an empty schema and is not a seeded-bank acceptance.
+
+For Playwright/axe, export the read-only `DATABASE_URL` for `infraege_runtime` on port 15432 and
+retain `TASK_FILES_DIR`. For Lighthouse and host SSR, set
+`API_INTERNAL_URL=http://127.0.0.1:18000`. Run security scans after browser/build/performance jobs
+finish: generated trace/report files change during those jobs and can invalidate filesystem scans.
+Keep the same environment for `run-host-web-gate.sh` so Compose interpolation succeeds. Finish
+by stopping/removing only the owned gate containers/network, retaining data volumes, then perform
+repository hygiene after reports have been analyzed. No test runner executes inside a container.
 
 ---
 
@@ -260,7 +289,8 @@ pnpm --filter web test:layout
 ```
 
 This local-only suite owns a production Node server at `127.0.0.2:3200` and checks desktop/mobile
-readability with pending and failed fonts. Normal E2E separately checks public routes and every
+readability with pending and failed fonts, plus mobile lesson-outline geometry while scripts are
+held and then released. Supply `API_INTERNAL_URL` for the seeded local API. Normal E2E separately checks public routes and every
 published Python lesson without JavaScript. Use a fresh production build for delivery evidence.
 No decorative artwork or pixel-comparison infrastructure remains.
 
@@ -304,7 +334,8 @@ pnpm --filter web test:e2e
   and backend processes on dedicated `127.0.0.2:3100` / `127.0.0.2:8100` ports with strict port
   binding; it never reuses an arbitrary process that may serve a stale checkout.
 
-E2E requires a seeded bank: run `make dev` and the explicit `make practice-bootstrap` first,
+E2E requires a seeded bank. Prefer the isolated Full Gate database described above for release
+verification. For ordinary development run `make dev` and explicit `make practice-bootstrap` first,
 then provide the read-only runtime `DATABASE_URL` to the host runner, using the allocated
 loopback port from `docker port infraege-dev-postgres-1 5432`. Set `TASK_FILES_DIR` to the absolute
 local task-files directory for file delivery. Never point a test runner at production. No test
@@ -394,9 +425,8 @@ main.py      create_app() factory.
 api/         router.py — aggregates every module's router under one prefix (`/api`, not `/api/v1`
              — see SPEC §4 for the current API contract).
 core/        cross-cutting infra with no HTTP surface of its own: config (Settings), exceptions
-             (AppException base), logging (structlog), middleware (request-id + error alerting),
-             structured logging). Modules may import from core/; core/ must not import modules/.
-modules/     one package per bounded context — health/, content/, tasks/. Each holds only the
+             (AppException base), logging (structlog), middleware (request IDs and request logging). Modules may import from core/; core/ must not import modules/.
+modules/     one package per bounded context — health/, content/, tasks/, practice/. Each holds only the
              files it needs: api.py (routes), service.py (logic), schemas.py (Pydantic DTOs),
              exceptions.py (module-specific AppException subclasses).
 shared/      cross-module code used by >= 2 modules — stays an empty placeholder until that's

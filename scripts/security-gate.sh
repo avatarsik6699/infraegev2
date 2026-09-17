@@ -4,7 +4,7 @@ set -euo pipefail
 repo_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 
 docker run --rm --volume "$repo_dir:/src:ro" zricethezav/gitleaks:v8.30.1 \
-  detect --source=/src --no-banner --redact --no-git
+  detect --source=/src --config=/src/.gitleaks.toml --no-banner --redact --no-git
 
 (cd "$repo_dir" && uvx --from semgrep==1.172.0 semgrep scan --config p/default --error)
 

@@ -1,0 +1,19 @@
+title = "infraege public content exceptions"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "generic-api-key"
+
+[[rules.allowlists]]
+description = "Public exam topic route, not a credential"
+condition = "AND"
+paths = ['''(^|/)apps/web/tests/public-release\.test\.ts$''']
+regexes = ['''^5-preobrazovanie-zapisey-chisel$''']
+
+[[rules.allowlists]]
+description = "Verified SHA-256 of the public six-byte practice attachment"
+condition = "AND"
+paths = ['''(^|/)content/practice-bank/bank\.json$''']
+regexes = ['''^a3ffa225a17d35ef0f8185b42bf373fcc9fd45c2494e7e9c6ee01dbc2c6aecaf$''']

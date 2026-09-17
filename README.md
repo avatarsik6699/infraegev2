@@ -18,8 +18,8 @@
 
 ## Быстрый старт
 
-Для запуска приложения нужны только запущенный Docker с Compose v2 и GNU Make. Из корня
-репозитория выполните:
+Для `make dev` нужны Docker с Compose v2 и GNU Make. Для первого импорта банка
+`make practice-bootstrap` также нужны Python 3.12+ и uv на host. Из корня репозитория выполните:
 
 ```bash
 make dev
@@ -35,7 +35,8 @@ make practice-bootstrap  # первый явный импорт учебного
 - печатает готовые URL.
 
 После запуска откройте <http://localhost:8080/>. Изменения в `apps/web/src`, `apps/api/app` и
-backend-контенте подхватываются контейнерами без ручной переустановки зависимостей.
+`apps/web/public` подхватываются контейнерами без ручной переустановки зависимостей.
+Задачи в PostgreSQL обновляются явным импортом, а publication registry входит в образ API.
 
 Основные команды:
 
@@ -61,7 +62,7 @@ make help     # показать доступные команды
 
 - Docker с Compose v2 и GNU Make — для `make dev`;
 - Node.js 22.13+, pnpm 10.33.0 (закреплён в `packageManager`), Python 3.12+ и
-  [uv](https://docs.astral.sh/uv/) — только если вы запускаете автоматические тесты на host;
+  [uv](https://docs.astral.sh/uv/) — для host-проверок; Python и uv нужны также для импорта банка;
 - Chromium — только для локального Playwright E2E.
 
 Проверить установленные версии:
@@ -86,7 +87,7 @@ typecheck или тесты непосредственно в WSL/на host:
 ```bash
 pnpm install --frozen-lockfile
 cd apps/api
-uv sync
+uv sync --frozen
 cd ../..
 ```
 
@@ -98,8 +99,11 @@ pnpm --filter web test:e2e:install
 
 ## Альтернативный запуск без Docker
 
-Этот вариант не обязателен и оставлен для отладки отдельных процессов. PostgreSQL для текущего
-frontend-стенда не требуется.
+Этот вариант предназначен для отладки отдельных процессов. Полный учебный flow требует
+PostgreSQL со схемой `122_01` и импортированным банком. Подготовьте локальную базу через
+`make dev` и `make practice-bootstrap`, передайте backend read-only `DATABASE_URL` с loopback-портом
+из `docker port infraege-dev-postgres-1 5432` и абсолютный `TASK_FILES_DIR`. Без базы доступны
+статические страницы и liveness; практика и readiness будут недоступны.
 
 Откройте два терминала.
 
@@ -128,7 +132,7 @@ curl -f http://127.0.0.1:8000/health
 pnpm dev
 ```
 
-Откройте стенд UI foundation: <http://127.0.0.1:3000/>.
+Откройте приложение: <http://127.0.0.1:3000/>.
 
 Остановить каждый локальный процесс можно сочетанием `Ctrl+C` в его терминале.
 
@@ -164,7 +168,8 @@ make stop
 Команда посылает сервисам их штатные stop-сигналы и ждёт до 30 секунд на сервис. Контейнеры,
 dev-network, собранные образы, build cache и named volume PostgreSQL сохраняются. Следующий
 `make dev` запустит существующие контейнеры и дождётся их готовности, не запуская сборку. Изменения
-в `apps/web/src`, `apps/api/app` и `content` подключены bind-mount и доступны без пересборки.
+в `apps/web/src`, `apps/web/public` и `apps/api/app` подключены bind-mount и доступны без пересборки.
+Изменения задач применяются отдельным импортом; registry и миграции требуют пересборки API.
 
 После изменения lock-файлов, package manifests, Dockerfile, Vite config или другого файла вне
 bind-mount выполните явную пересборку:
@@ -242,7 +247,9 @@ pnpm --filter web test:e2e
 Playwright сам поднимает свежие frontend/backend на изолированных адресах
 `127.0.0.2:3100` и `127.0.0.2:8100`; заранее запускать серверы для него не нужно. Сценарии
 проверяют публичный вход, опубликованные уроки, no-JS чтение, desktop/mobile viewport, общий 404
-и безопасную отправку frontend-ошибок.
+и восстановление после ошибок. Перед запуском передайте `DATABASE_URL` read-only роли
+локальной базы с импортированным банком и абсолютный `TASK_FILES_DIR`; подробности в
+[STACK](docs/STACK.md#testing). Браузерная телеметрия удалена.
 
 Production-гейты (подробные предусловия — в `docs/STACK.md`):
 

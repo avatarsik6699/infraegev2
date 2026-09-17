@@ -26,7 +26,6 @@ export const LessonProgress: React.FC<LessonProgressTypes.Props> = ({
         </Typography.Text>
       </div>
       <Progress
-        className={styles.progress}
         max={props.total}
         value={props.solved}
         label="Решённые задачи урока"

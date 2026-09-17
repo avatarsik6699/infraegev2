@@ -295,8 +295,7 @@ checker), операторский CLI/import ограниченная запи�
 backup/restore с достаточными отдельными правами. Production PostgreSQL не открыт в интернет;
 оператор использует принятый защищённый доступ к VPS, не меняя текущий SSH-контракт.
 
-Нет аутентификации на MVP. Публичные страницы, `POST /api/tasks/{id}/check` и bounded diagnostic
-`POST /api/client-errors` анонимны; прогресс
+Нет аутентификации на MVP. Публичные страницы и `POST /api/tasks/{id}/check` анонимны; прогресс
 урока хранится только в localStorage текущего браузера и не синхронизируется. Ограничение на уровне
 инфраструктуры (не auth) — rate limiting чекер-эндпоинта на Nginx (§4, §8) против автоматического
 перебора банка ответов.
@@ -345,9 +344,9 @@ monitoring services require explicit release authorization and Full/Release Gate
 
 | Concern | Requirement |
 |---------|-------------|
-| Security headers / CORS | Rate limiting чекер-эндпоинта на Nginx: `limit_req_zone` 20 req/min/IP, burst 5, `nodelay` (см. §4, §11.2 источника) — против автоматизированного перебора банка ответов; конкретную цифру пересмотреть по факту логов после запуска. Основной public root/password SSH использует принятый архитектором минимум 12 символов, pinned host key, UFW и fail2ban; production Environment не имеет required reviewers по решению архитектора от 2026-09-04, `can_admins_bypass` остаётся единственным environment safety property. Повышенный риск перебора и полного захвата VPS при компрометации более короткого пароля осознанно принят, key-only migration не запланирована. |
+| Security headers / CORS | Rate limiting чекер-эндпоинта на Nginx: `limit_req_zone` 20 req/min/IP, burst 5, `nodelay` (см. §4) — против автоматизированного перебора банка ответов; конкретную цифру пересмотреть по факту логов после запуска. Основной public root/password SSH использует принятый архитектором минимум 12 символов, pinned host key, UFW и fail2ban; production Environment не имеет required reviewers по решению архитектора от 2026-09-04, `can_admins_bypass` остаётся единственным environment safety property. Повышенный риск перебора и полного захвата VPS при компрометации более короткого пароля осознанно принят, key-only migration не запланирована. |
 | Accessibility target | Public pages не имеют serious/critical axe violations; lesson outline сохраняет вложенный semantic list, anchors, keyboard focus, различимый текущий пункт и корректный source order, а сложный визуал имеет видимую полную текстовую альтернативу |
-| Performance budget | Текущий release gate ограничивает median LCP значением ≤4.0s на мобильном 4G-профиле; продуктовая цель остаётся LCP ≤2.8s, и порог следует вернуть к ней после подтверждённой оптимизации или на стабильном измерительном runner. CLS < 0.1, INP < 200ms; release evidence измеряет `/` и первый опубликованный `/ege/16-rekursiya`, отдельно проверяет cold-load font/layout shifts и не подменяет route-level метрики общей оценкой технической страницы |
+| Performance budget | Текущий release gate ограничивает median LCP значением ≤4.0s на мобильном 4G-профиле; продуктовая цель остаётся LCP ≤2.8s, и порог следует вернуть к ней после подтверждённой оптимизации или на стабильном измерительном runner. CLS < 0.1, INP < 200ms; release evidence измеряет `/`, `/ege`, `/courses`, `/courses/python` и `/ege/16-rekursiya`, отдельно проверяет cold-load font/layout shifts и не подменяет route-level метрики общей оценкой технической страницы |
 | Observability | Health, structured server logs and scheduled external availability/TLS probe; no browser telemetry or separate monitoring stack |
 | Backup / restore | Application DB, files, roles and protected environment in encrypted Restic; 7 daily + 4 weekly + 3 monthly, monthly isolated restore. Same-host backup loss remains accepted until off-site storage exists |
 | SEO | `/`, `/privacy`, published topics, courses и CourseLesson имеют canonical, уникальные metadata, SSR content, общий crawlable social preview и входят в sitemap/prerender; root document публикует browser-only manifest, SVG/PNG/ICO favicon и Apple touch icon из production-знака, а `/` — правдивый `WebSite` JSON-LD без выдуманной Organization; review routes остаются unlisted, `noindex,nofollow` и исключены из public discovery; Lighthouse SEO для публичных маршрутов проходит без ошибок |
@@ -362,9 +361,10 @@ monitoring services require explicit release authorization and Full/Release Gate
 
 ## 9. Roadmap
 
-One Change 122 owns preservation, minimalist UI, simplified server practice, reduced operations,
-and reconciled documentation. Use sequential Backlog groups, not separate changes. Existing
-history remains in COMPACTED and immutable archives. Future capabilities need demonstrated use.
+Change 122 archived the minimalist UI, simplified server practice and reduced operations while
+preserving source history and data. Change 123 owns Full/Release verification and all resulting
+corrective maintenance in one change. Existing history remains in COMPACTED and immutable archives.
+Future capabilities need demonstrated use.
 
 ## 10. Out of Scope
 

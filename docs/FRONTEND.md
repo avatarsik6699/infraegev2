@@ -99,6 +99,9 @@ Keep shared modal reset confirmation, keyboard navigation and focus return.
 Retain SSR-readable theory/content, stable image dimensions, self-hosted font fallbacks and
 retained-page navigation with delayed progress. No decorative motion observers. Loading, error
 and not-found states use quiet shared primitives; static Nginx errors work without app assets.
+Responsive lesson outlines must have stable first-paint geometry through hydration; do not
+render an expanded mobile outline and collapse it only after JavaScript starts. Preserve the
+complete usable outline when scripting is disabled.
 
 E2E uses domain fixtures and Page Objects exclusively. UI changes require MCP screenshots and
 console inspection, desktop/mobile and affected degraded states. TypeScript changes require

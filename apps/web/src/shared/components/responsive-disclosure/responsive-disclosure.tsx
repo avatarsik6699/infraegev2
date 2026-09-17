@@ -19,17 +19,15 @@ export const ResponsiveDisclosure: React.FC<ResponsiveDisclosureTypes.Props> = (
       data-responsive-disclosure
       data-collapsible={collapsible || undefined}
     >
-      {collapsible ? (
-        <Collapsible.Trigger className={styles.trigger}>
-          <span>{props.label}</span>
-          <ChevronDown
-            aria-hidden="true"
-            size={18}
-            className={styles.chevron}
-          />
-        </Collapsible.Trigger>
-      ) : null}
-      <Collapsible.Panel keepMounted className={styles.panel}>
+      <Collapsible.Trigger className={styles.trigger} disabled={!enhanced}>
+        <span>{props.label}</span>
+        <ChevronDown aria-hidden="true" size={18} className={styles.chevron} />
+      </Collapsible.Trigger>
+      <Collapsible.Panel
+        keepMounted
+        className={styles.panel}
+        data-expanded={props.expanded || undefined}
+      >
         {props.children}
       </Collapsible.Panel>
     </Collapsible.Root>

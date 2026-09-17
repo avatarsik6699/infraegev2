@@ -29,8 +29,8 @@ export const CourseCatalogPage: React.FC<Props> = (props) => {
                 Самостоятельные программы, чтобы последовательно освоить
                 отдельный навык и закрепить его на практике.
               </Typography.Text>
-              <div className={styles.headingDetails}>
-                <Typography.Text className={styles.catalogMeta} tone="muted">
+              <div>
+                <Typography.Text tone="muted">
                   {`${String(courseCatalog.availableCount)} курс доступен · ${String(courseCatalog.plannedCount)} в плане`}
                 </Typography.Text>
               </div>

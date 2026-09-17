@@ -1,5 +1,5 @@
 .trigger {
-  display: flex;
+  display: none;
   justify-content: space-between;
   align-items: center;
   gap: var(--space-2);
@@ -26,4 +26,16 @@
 
 .panel[hidden] {
   display: none;
+}
+
+/* The first mobile paint already matches the hydrated collapsed outline. Without
+   scripting the complete outline stays readable and its anchors remain usable. */
+@media (max-width: 60rem) and (scripting: enabled) {
+  .trigger {
+    display: flex;
+  }
+
+  .panel:not([data-expanded]) {
+    display: none;
+  }
 }

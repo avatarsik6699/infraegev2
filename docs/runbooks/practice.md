@@ -51,7 +51,10 @@ is associated with task ID + solution revision. There is no audit log or automat
 
 Runtime role is read-only; migration/import/backup credentials stay out of web/API runtime.
 Public projections omit checker and nonpublic provenance. Nginx serves only validated file usages
-through internal X-Accel-Redirect; it cannot list the storage directory.
+through internal X-Accel-Redirect; it cannot list the storage directory. Import sets the dedicated
+attachment directory to 0755 and validated attachment bytes to 0644 for the separate Nginx UID.
+Keep this directory free of exports/secrets. Private exports remain 0700 with 0600 files; host
+parent directories must permit traversal for the operator, while containers mount only storage.
 
 ## Checks and recovery
 

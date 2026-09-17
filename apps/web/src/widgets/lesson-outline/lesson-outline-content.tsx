@@ -18,7 +18,7 @@ export const LessonOutlineContent: React.FC<LessonOutlineTypes.ContentProps> = (
         </span>
       </Typography.Text>
     </div>
-    <div className={styles.tree} data-outline-tree>
+    <div data-outline-tree>
       <ol className={styles.groups}>
         {props.groups.map((group) => {
           const groupCurrent = group.id === props.activeId;

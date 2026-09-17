@@ -19,6 +19,12 @@ was the visual reference; query live health/inventory again before release.
 
 ## Production handoff
 
+Read-only inventory on 2026-09-17 for Change 123 found production at `a5b0bf5793a85a4e9090f47c311ae01c022f194d`,
+PostgreSQL 16.14 with no application tables, no `database-current` release and no cutover attestation.
+The reviewed local candidate contains 697 tasks, 547 catalog-visible tasks, 150 lesson memberships
+and one attachment. This is dated evidence, not approval to import it or an enduring live-state claim.
+Recheck inventory and obtain the explicit initial-bank selection required by step 2 before mutation.
+
 1. Refresh source identity, schema, counts, files, role permissions and available disk. Freeze
    operator writes and create a current backup with the SOURCE release's matching maintenance
    scripts. Retain source volume, file storage, environment and exact application/verifier images.

@@ -161,4 +161,38 @@ export class MinimalApplicationPage {
       await this.page.unroute("**/*.woff2");
     }
   }
+
+  async expectStableLessonOutline() {
+    await this.page.setViewportSize({ width: 390, height: 844 });
+    let release!: () => void;
+    const hold = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    await this.page.route("**/*.js", async (route) => {
+      await hold;
+      await route.continue();
+    });
+    try {
+      await this.page.goto("/ege/16-rekursiya", { waitUntil: "commit" });
+      const outline = this.page.getByRole("navigation", {
+        name: "Содержание урока",
+      });
+      const trigger = outline.getByRole("button", { name: "Содержание урока" });
+      await expect(trigger).toBeVisible();
+      await expect(trigger).toBeDisabled();
+      const before = await outline.boundingBox();
+      release();
+      await expect(trigger).toBeEnabled();
+      await expect(trigger).toHaveAttribute("aria-expanded", "false");
+      const after = await outline.boundingBox();
+      expect(Math.abs(after!.height - before!.height)).toBeLessThan(2);
+      await trigger.click();
+      await expect(
+        outline.getByRole("link", { name: "Теория", exact: true }),
+      ).toBeVisible();
+    } finally {
+      release();
+      await this.page.unroute("**/*.js");
+    }
+  }
 }

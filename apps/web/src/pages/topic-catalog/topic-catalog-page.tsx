@@ -30,9 +30,7 @@ export const TopicCatalogPage: React.FC = () => {
                   {`${String(topicCatalog.entries.length)} тем для всех 27 заданий`}
                 </Typography.Text>
                 <span className={styles.catalogSource}>
-                  <span className={styles.catalogSeparator} aria-hidden="true">
-                    ·
-                  </span>
+                  <span aria-hidden="true">·</span>
                   <ExternalLink
                     href={fipiDocumentsUrl}
                     presentation="action"
@@ -45,7 +43,7 @@ export const TopicCatalogPage: React.FC = () => {
             </div>
           </header>
 
-          <div className={styles.catalogMap}>
+          <div>
             <ol
               className={styles.topicList}
               data-topic-list

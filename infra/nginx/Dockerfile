@@ -7,6 +7,7 @@ RUN apk update \
         libcrypto3=3.5.8-r0 \
         libssl3=3.5.8-r0 \
         libexpat=2.8.4-r0 \
+        libuuid=2.42.3-r1 \
     && rm -rf /var/cache/apk/*
 
 COPY infra/nginx/nginx.conf /etc/nginx/nginx.conf
