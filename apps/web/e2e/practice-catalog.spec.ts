@@ -1,43 +1,25 @@
 import { test } from "./fixtures";
 
-test("static publication discovery remains available beside the task index", async ({
-  publicDiscoveryPage,
+test("numbered pages, filters and empty/invalid selections", async ({
+  minimalPage,
 }) => {
-  await publicDiscoveryPage.expectRobotsAndSitemap();
+  await minimalPage.expectCatalog();
 });
 
-test("catalog filters and cursor links work with keyboard", async ({
-  practiceCatalogPage,
+test("accepted progress survives reload while drafts remain transient", async ({
+  minimalPage,
 }) => {
-  await practiceCatalogPage.expectFilterAndPage();
+  await minimalPage.expectSolveAndProgress();
 });
 
-test("standalone success survives reload and repeating keeps history independent", async ({
-  practiceCatalogPage,
+test("failed checks preserve input and support explicit retry", async ({
+  minimalPage,
 }) => {
-  await practiceCatalogPage.expectSolveAndRepeat();
+  await minimalPage.expectFailedCheck();
 });
 
-test("stale and failed checks preserve input and permit explicit retry", async ({
-  practiceCatalogPage,
+test("standalone practice is mobile SSR-readable", async ({
+  noJavaScriptMinimalPage,
 }) => {
-  await practiceCatalogPage.expectStaleAndNetwork();
-});
-
-test("mobile no-JS practice and bounded discovery respect publication", async ({
-  noJavaScriptPracticeCatalogPage,
-}) => {
-  await noJavaScriptPracticeCatalogPage.expectNoJavaScriptAndDiscovery();
-});
-
-test("continuation crosses a page boundary and returns to the originating row", async ({
-  practiceCatalogPage,
-}) => {
-  await practiceCatalogPage.expectContinuationAndReturn();
-});
-
-test("drafts survive leaving the task and continuation failure is recoverable", async ({
-  practiceCatalogPage,
-}) => {
-  await practiceCatalogPage.expectDraftAndContinuationFailure();
+  await noJavaScriptMinimalPage.expectReadablePractice();
 });

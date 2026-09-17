@@ -14,7 +14,7 @@
   position: relative;
 }
 
-.drawn {
+.action {
   min-height: var(--control-height);
   max-width: 100%;
   vertical-align: baseline;
@@ -23,7 +23,7 @@
   align-items: center;
   color: var(--color-brand-ink, var(--color-text));
   font-weight: 400;
-  text-decoration: none;
+  text-decoration: underline;
 }
 
 .root:hover {
@@ -31,12 +31,8 @@
   text-decoration-color: currentColor;
 }
 
-.drawn:hover {
+.action:hover {
   color: var(--color-brand-ink, var(--color-text));
-}
-
-.drawn:hover [data-link-underline] {
-  opacity: 0.72;
 }
 
 /* Uses currentColor — rides the anchor's own `color` transition
@@ -50,19 +46,10 @@
   vertical-align: -0.1em;
 }
 
-.drawn .icon {
+.action .icon {
   flex: none;
   color: var(--color-brand-orange);
   transition: transform var(--motion-duration) var(--motion-easing);
-}
-
-.drawn:hover .icon {
-  flex: none;
-  transform: translate(0.08em, -0.08em);
-}
-
-.drawn:active {
-  transform: translateY(1px);
 }
 
 .root:focus-visible {
@@ -84,7 +71,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .root,
-  .drawn .icon {
+  .action .icon {
     flex: none;
     transition: none;
   }

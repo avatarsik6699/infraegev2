@@ -12,17 +12,15 @@ import { render } from "./render";
 const recoveryMocks = vi.hoisted(() => ({
   invalidate: vi.fn(),
   reload: vi.fn(),
-  report: vi.fn(),
   loading: false,
   loaderError: false,
 }));
 vi.mock("~/shared/lib/document-recovery", () => ({
-  documentRecovery: { reload: recoveryMocks.reload },
-}));
-vi.mock("~/shared/lib/client-errors", () => ({
-  reportClientError: recoveryMocks.report,
-  isChunkLoadError: (error: Error) =>
-    error.message.includes("dynamically imported module"),
+  documentRecovery: {
+    reload: recoveryMocks.reload,
+    isChunkLoadError: (error: Error) =>
+      error.message.includes("dynamically imported module"),
+  },
 }));
 
 vi.mock("@tanstack/react-router", async (importOriginal) => {

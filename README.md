@@ -2,13 +2,13 @@
 
 Веб-приложение для подготовки к ЕГЭ по информатике с двумя опубликованными полными темами,
 завершённым самостоятельным мини-курсом Python из 28 уроков, server-owned практикой и локальным
-прогрессом ученика. Учебный flow, публичный MVP-релиз и privacy-safe analytics baseline работают
-в production; темы ЕГЭ и CourseLesson остаются независимыми учебными траекториями.
+прогрессом ученика. Темы ЕГЭ и CourseLesson остаются независимыми учебными траекториями.
+Текущий candidate возвращает минимальное монохромное оформление; аналитический стек удалён.
 
 Технический контракт проекта находится в [`docs/SPEC.md`](docs/SPEC.md), команды и версии стека —
 в [`docs/STACK.md`](docs/STACK.md). Production-контур для `infraege.ru` описан в
 [`docs/runbooks/production.md`](docs/runbooks/production.md). Production работает на
-`infraege.ru`; application и operations используют независимые Compose projects.
+`infraege.ru`; application использует один Compose project; мониторинг удалён из текущего candidate.
 
 Статус `complete`/`archived` в change-файлах описывает код в локальной истории репозитория, а не
 факт публикации. GitHub может отставать от локального `main`, а production — от GitHub; фактически
@@ -16,13 +16,14 @@
 документационного статуса. Описание возможностей в этом README относится к текущему source tree;
 до `/ship --release` одобренные изменения могут ещё отсутствовать в production.
 
-## Быстрый старт — одна команда
+## Быстрый старт
 
 Для запуска приложения нужны только запущенный Docker с Compose v2 и GNU Make. Из корня
 репозитория выполните:
 
 ```bash
 make dev
+make practice-bootstrap  # первый явный импорт учебного банка
 ```
 
 При первом запуске команда сама:
@@ -252,60 +253,18 @@ pnpm audit:security
 pnpm audit:images
 ```
 
-## Production и наблюдаемость
+## Production и эксплуатация
 
-Production использует неизменяемые GHCR-образы с тегом полного commit SHA. Application Compose
-владеет Nginx с TLS, web, API и PostgreSQL; отдельный `infraege-ops` Compose владеет Umami, Beszel
-и их gateways. journald/fail2ban и Restic остаются host-level prerequisites. GitHub Actions выполняет только статические
-и security-проверки — unit/E2E тесты по контракту проекта остаются локальными. Деплой запускается
-вручную для выбранного SHA через GitHub Environment `production` (без required reviewers —
-решение архитектора от 2026-09-04, деплой не подтверждается вручную после dispatch), проверяет
-smoke/readiness и откатывает неуспешный релиз.
+Один application Compose: Nginx с TLS, web, API и PostgreSQL. Сохраняются health, журналы,
+fail2ban, application backup/restore и явный SHA deploy. Аналитический и monitoring стек удалён
+из candidate; локальная работа не останавливает уже установленные сервисы VPS.
 
-Operations-контур принадлежит этому репозиторию, но намеренно остаётся маленьким:
-`ops/observability/compose.yml`, контракт защищённого env, SSH-backed команды
-`config/status/install/update/rollback` и secret-free Source template. Docker Compose является
-desired state сервисов; отдельного plan/apply engine, migration harness или deployment UI нет.
-
-`make ops-config ENV_FILE=... RELEASE=<full-sha>` локально проверяет definition.
-`make ops-status` читает установленный project через pinned SSH. `ops-install`/`ops-update`
-передают один Compose + maintenance release и выполняют `pull` + `up --wait`; `ops-rollback` возвращает предыдущий
-release. Эти команды никогда не меняют application Compose.
-
-По решению архитектора beta-данные Umami/Beszel не переносились. Split-stack cutover завершён:
-новые operations volumes используются независимым `infraege-ops`, backup/restore и timers
-проверены, а прежние volumes сохранены только как rollback-only. Их удаление остаётся отдельным
-явно подтверждаемым destructive действием.
-
-First-party sibling [sre-kit](https://github.com/avatarsik6699/sre-kit) остаётся универсальным
-ядром наблюдаемости: adapters, Source configuration, normalization, alerts и monitoring UI. Он
-читает источники infraegev2 через private API/WireGuard/read-only SSH, но не устанавливает и не
-настраивает target stack. Deployment credentials и target lifecycle в sre-kit не передаются;
-`ops/observability/sre-kit-sources.example.json` служит только операторской подсказкой. Текущий
-шаблон описывает один Project, шесть pull Source и один coarse-aggregate push Source и согласован
-со sre-kit Change 22. Всегда включённый management-контур доступен по
-`https://sre.infraege.ru`: clean-start Project `infraegev2` содержит семь enabled Sources с
-человекочитаемыми назначениями, включая `Nginx traffic`; шесть pull-источников опрашиваются по
-расписанию, а privacy-safe traffic aggregates доставляются system publisher. Порядок входа,
-проверки freshness и восстановления описан в
-[management runbook](docs/runbooks/analytics.md#sre-kit-management-vps). Локальный
-`sre-kit-local` сохранён только как ручной fallback и по умолчанию выключен. Source registration и
-token rotation являются операторскими действиями внутри sre-kit; target producer лишь отправляет
-обезличенные versioned batches и не передаёт core deployment authority.
-
-Runbook’и: [analytics](docs/runbooks/analytics.md),
-[DNS/TLS](docs/runbooks/production.md#dns-and-tls),
-[backup/restore](docs/runbooks/backup-restore.md),
-[sre-kit management](docs/runbooks/analytics.md#sre-kit-management-vps),
-[инциденты](docs/runbooks/production.md#incident-response). Основной административный доступ к VPS —
-password-only `root` с pinned host key, UFW и fail2ban; production Environment работает без
-required reviewers по решению архитектора от 2026-09-04, а `can_admins_bypass` остаётся его
-единственным safety property. Риск принят владельцем без запланированного перехода на key-only
-identities. На `/privacy` опубликованы только
-принятые владельцем email и Telegram invite; риск отсутствия других реквизитов, формальная
-юридическая проверка и вопрос уведомления РКН остаются отложенными. Локальный backup на том же VPS
-не считается disaster recovery — off-site backend остаётся обязательным до появления незаменимых
-пользовательских данных.
+Практика хранится в PostgreSQL (`122_01`), импорт/экспорт описан в
+[practice](docs/runbooks/practice.md), перенос на новую схему — в
+[transition](docs/runbooks/practice-transition.md). `make practice-bootstrap` импортирует
+полный проверенный банк в локальную базу. Перед повторным импортом экспортируйте свои правки.
+[Production](docs/runbooks/production.md) и [backup/restore](docs/runbooks/backup-restore.md)
+описывают действующие команды. Push и deploy не входят в локальный `/work`.
 
 ## Полезные документы
 

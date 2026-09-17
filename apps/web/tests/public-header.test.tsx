@@ -87,15 +87,15 @@ describe("PublicHeader", () => {
       screen
         .getAllByRole("link", { name: "Мини-курсы" })[0]
         .getAttribute("data-hierarchy"),
-    ).toBe("drawn");
+    ).toBe("text");
     expect(
       screen
         .getAllByRole("link", { name: "Мини-курсы" })[0]
         .querySelector("[data-action-underline]"),
-    ).not.toBeNull();
+    ).toBeNull();
     expect(screen.queryByText("скоро", { exact: true })).toBeNull();
     expect(container.querySelectorAll('[aria-disabled="true"]')).toHaveLength(
-      4,
+      0,
     );
     expect(
       screen.getAllByRole("link", { name: "Практика" })[0].getAttribute("href"),
@@ -115,15 +115,15 @@ describe("PublicHeader", () => {
       screen
         .getByRole("link", { name: "Обработка данных" })
         .getAttribute("data-hierarchy"),
-    ).toBe("drawn");
+    ).toBe("text");
     expect(
       screen
         .getByRole("link", { name: "Обработка данных" })
         .querySelector("[data-action-underline]"),
-    ).not.toBeNull();
+    ).toBeNull();
     const telegramLink = screen.getByRole("link", { name: /Telegram-канал/ });
-    expect(telegramLink.getAttribute("data-hierarchy")).toBe("drawn");
-    expect(telegramLink.querySelector("[data-link-underline]")).not.toBeNull();
+    expect(telegramLink.getAttribute("data-hierarchy")).toBe("text");
+    expect(telegramLink.querySelector("[data-link-underline]")).toBeNull();
     expect(
       telegramLink.querySelector("svg.lucide-arrow-up-right"),
     ).not.toBeNull();

@@ -11,7 +11,7 @@ export const CourseOverviewAction: React.FC<Props> = (props) => {
   if (!props.firstVisibleLesson) return null;
   return (
     <ActionLink
-      hierarchy="drawn"
+      hierarchy="text"
       icon="forward"
       className={styles.courseLink}
       to="/courses/$courseSlug/$lessonSlug"

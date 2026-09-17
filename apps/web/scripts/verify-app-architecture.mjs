@@ -25,16 +25,9 @@ const serverConfigPath = path.join(
   "src",
   "shared",
   "config",
-  "content.server.ts",
+  "practice.server.ts",
 );
-const serverAdapterPath = path.join(
-  workspaceRoot,
-  "src",
-  "shared",
-  "lib",
-  "content-files",
-  "server-adapter.ts",
-);
+
 const eslint = new ESLint({ cwd: workspaceRoot });
 
 const applicationSourceRoot = path.join(workspaceRoot, "src");
@@ -264,11 +257,11 @@ const validServerBoundaries = [
   ],
   [
     serverConfigPath,
-    'import path from "node:path"; export const root = process.env.CONTENT_DIR ?? path.resolve("content");',
+    'import path from "node:path"; export const root = process.env.DATA_ROOT ?? path.resolve("data");',
   ],
   [
-    serverAdapterPath,
-    'import { readFile } from "node:fs/promises"; export const read = () => readFile("content/tasks/example.json", "utf8");',
+    serverConfigPath,
+    'import { readFile } from "node:fs/promises"; export const read = () => readFile("data/example.json", "utf8");',
   ],
 ];
 for (const [filePath, source] of validServerBoundaries) {

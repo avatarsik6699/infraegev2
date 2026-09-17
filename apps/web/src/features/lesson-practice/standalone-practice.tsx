@@ -1,5 +1,3 @@
-import { useMemo, useSyncExternalStore } from "react";
-import { safeLs } from "~/shared/lib/safe-ls";
 import type { LessonPracticeTypes } from "./lesson-practice.types";
 import { useLessonPracticeModel } from "./model/use-lesson-practice-model";
 import { PracticeTaskAnswer } from "./components/practice-task-answer";
@@ -12,31 +10,7 @@ export const StandalonePractice: React.FC<
   LessonPracticeTypes.Props & { focusOnMount?: boolean }
 > = (props) => {
   const task = props.tasks[0];
-  const draft = useMemo(
-    () =>
-      safeLs.createStore({
-        key: `infraege:practice-draft:${task?.id}:${task?.solutionRevision}`,
-        version: 1,
-        storage: "session",
-        guard: (value: unknown): value is string =>
-          typeof value === "string" && value.length <= 500,
-      }),
-    [task?.id, task?.solutionRevision],
-  );
-  const savedDraft = useSyncExternalStore(
-    draft.subscribe,
-    draft.getSnapshot,
-    draft.getServerSnapshot,
-  );
-  const model = useLessonPracticeModel({
-    ...props,
-    drafts: task && savedDraft !== null ? { [task.id]: savedDraft } : {},
-    onDraftChange: (_id, value) => draft.set(value),
-    onTaskSolved: (id, answer) => {
-      draft.remove();
-      return props.onTaskSolved(id, answer);
-    },
-  });
+  const model = useLessonPracticeModel(props);
   if (!task) return null;
   return (
     <div

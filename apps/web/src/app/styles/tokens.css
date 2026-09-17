@@ -70,11 +70,6 @@
   --text-3xl: clamp(2rem, 3vw, 2.5rem);
   --text-display: clamp(3.25rem, 6.5vw, 6rem);
   --text-inline-code: 0.86em;
-  --text-lab-meta: 0.72rem;
-  --text-lab-stage: 1.35rem;
-  --text-lab-data: 0.8rem;
-  --text-lab-array: 0.78rem;
-  --text-lab-note: 0.88rem;
 
   /* Semantic color roles */
   --color-bg: var(--theme-page);
@@ -214,11 +209,7 @@
   );
 
   /* Controls retain their geometry; composed surfaces own decorative depth. */
-  --shadow-catalog:
-    inset 0 1px 0 color-mix(in srgb, var(--color-surface) 70%, transparent),
-    0 2px 5px color-mix(in srgb, var(--color-brand-ink) 7%, transparent),
-    0 16px 32px -12px
-      color-mix(in srgb, var(--color-brand-ink) 12%, transparent);
+  --shadow-catalog: none;
   --shadow-control: none;
   --shadow-overlay: 0 0.875rem 3.125rem var(--theme-overlay-shadow);
 
@@ -226,86 +217,10 @@
   --motion-easing: var(--theme-motion-easing);
   --focus-ring: 0 0 0 3px
     color-mix(in srgb, var(--color-focus) 35%, transparent);
-  /* Shared accepted surface recipes; pages own geometry, not material formulas. */
-  --surface-paper-background:
-    linear-gradient(
-        155deg,
-        color-mix(in srgb, var(--color-surface) 60%, var(--color-brand-canvas)),
-        color-mix(in srgb, var(--color-brand-canvas) 94%, var(--color-surface))
-      )
-      padding-box,
-    linear-gradient(
-        125deg,
-        color-mix(in srgb, var(--color-brand-ink) 22%, transparent),
-        color-mix(in srgb, var(--color-brand-ink) 8%, transparent) 52%,
-        color-mix(in srgb, var(--color-brand-ink) 18%, transparent)
-      )
-      border-box;
-  --surface-paper-shadow: var(--shadow-catalog);
-  --surface-quiet-background:
-    linear-gradient(
-        155deg,
-        color-mix(in srgb, var(--color-surface) 78%, var(--color-brand-canvas)),
-        color-mix(in srgb, var(--color-brand-canvas) 94%, var(--color-surface))
-      )
-      padding-box,
-    linear-gradient(
-        132deg,
-        color-mix(in srgb, var(--color-brand-ink) 26%, transparent),
-        color-mix(in srgb, var(--color-brand-ink) 8%, transparent) 52%,
-        color-mix(in srgb, var(--color-brand-ink) 18%, transparent)
-      )
-      border-box;
-  --surface-quiet-shadow:
-    0 0.8rem 2rem color-mix(in srgb, var(--color-brand-ink) 6%, transparent),
-    0 0.1rem 0.25rem color-mix(in srgb, var(--color-brand-ink) 8%, transparent);
-  --surface-accent-background:
-    linear-gradient(
-        150deg,
-        color-mix(in srgb, var(--color-surface) 84%, var(--color-brand-canvas)),
-        color-mix(in srgb, var(--color-brand-canvas) 92%, var(--color-surface))
-      )
-      padding-box,
-    linear-gradient(
-        128deg,
-        var(--color-brand-orange),
-        color-mix(in srgb, var(--color-brand-orange) 24%, transparent) 34%,
-        color-mix(in srgb, var(--color-brand-ink) 18%, transparent) 62%,
-        var(--color-brand-orange)
-      )
-      border-box;
-  --surface-accent-shadow:
-    0 1.4rem 3rem color-mix(in srgb, var(--color-brand-ink) 12%, transparent),
-    0 0.2rem 0.45rem
-      color-mix(in srgb, var(--color-brand-orange) 12%, transparent);
-  --surface-glint-frame-duration: 3.2s;
-  --surface-glint-sweep-duration: 9s;
-  --surface-glint-soft-duration: 14s;
-  --surface-study-duration: 18s;
-  --surface-glint-soft-light: color-mix(
-    in srgb,
-    var(--color-surface) 65%,
-    transparent
-  );
-  --surface-glint-study-light: color-mix(
-    in srgb,
-    var(--color-surface) 55%,
-    transparent
-  );
-  --surface-glint-frame-background: linear-gradient(
-      115deg,
-      transparent 32%,
-      var(--color-surface) 48%,
-      var(--color-surface) 50%,
-      transparent 66%
-    )
-    border-box;
-  --surface-glint-sweep-background: linear-gradient(
-    102deg,
-    transparent 18%,
-    color-mix(in srgb, var(--color-surface) 46%, transparent) 48%,
-    transparent 72%
-  );
+  --surface-quiet-background: var(--color-surface-quiet);
+  --surface-quiet-shadow: none;
+  --surface-accent-background: var(--color-surface);
+  --surface-accent-shadow: none;
 }
 
 @media (max-width: 52rem) {
@@ -313,41 +228,4 @@
     --rhythm-concept-separation: var(--space-4);
     --rhythm-section-separation: var(--space-5);
   }
-}
-
-:root {
-  --color-page-grid: color-mix(in srgb, var(--color-text) 8%, transparent);
-  --color-state-decoration: color-mix(
-    in srgb,
-    var(--color-text) 12%,
-    var(--color-bg)
-  );
-  --text-state-display: clamp(2.5rem, 5.3vw, 5.75rem);
-  --text-state-code: min(62cqw, 52rem);
-  --text-state-code-left: min(50cqw, 44rem);
-  --text-state-code-mobile: 61cqw;
-  --text-state-code-compact: min(48cqw, 24rem);
-  --text-state-title-compact: clamp(2.25rem, 9vw, 3.5rem);
-}
-
-:root {
-  --color-state-outline: color-mix(
-    in srgb,
-    var(--color-text-soft) 28%,
-    transparent
-  );
-  --color-state-card: color-mix(in srgb, var(--color-bg) 93%, transparent);
-}
-
-:root {
-  --color-state-pattern: color-mix(
-    in srgb,
-    var(--color-text-soft) 15%,
-    transparent
-  );
-  --color-state-glint: color-mix(
-    in srgb,
-    var(--color-text-soft) 45%,
-    transparent
-  );
 }

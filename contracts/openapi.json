@@ -119,16 +119,20 @@
       "CatalogPage": {
         "additionalProperties": false,
         "properties": {
-          "next_cursor": {
+          "next_page": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "integer"
               },
               {
                 "type": "null"
               }
             ],
-            "title": "Next Cursor"
+            "title": "Next Page"
+          },
+          "page": {
+            "title": "Page",
+            "type": "integer"
           },
           "tasks": {
             "items": {
@@ -144,7 +148,8 @@
         },
         "required": [
           "tasks",
-          "next_cursor",
+          "page",
+          "next_page",
           "total"
         ],
         "title": "CatalogPage",
@@ -317,81 +322,6 @@
           "solution_revision"
         ],
         "title": "CheckResponse",
-        "type": "object"
-      },
-      "ClientErrorReport": {
-        "additionalProperties": false,
-        "description": "Bounded diagnostic fields only; free-form exception data is deliberately forbidden.",
-        "properties": {
-          "asset_path": {
-            "anyOf": [
-              {
-                "maxLength": 200,
-                "pattern": "^/(?:_build|assets)/[A-Za-z0-9._/\\-]+$",
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Asset Path"
-          },
-          "column": {
-            "anyOf": [
-              {
-                "maximum": 100000.0,
-                "minimum": 1.0,
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Column"
-          },
-          "fingerprint": {
-            "pattern": "^[a-f0-9]{64}$",
-            "title": "Fingerprint",
-            "type": "string"
-          },
-          "kind": {
-            "enum": [
-              "render",
-              "route_load",
-              "chunk_load",
-              "unhandled_error",
-              "unhandled_rejection"
-            ],
-            "title": "Kind",
-            "type": "string"
-          },
-          "line": {
-            "anyOf": [
-              {
-                "maximum": 10000000.0,
-                "minimum": 1.0,
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Line"
-          },
-          "route_id": {
-            "maxLength": 100,
-            "minLength": 1,
-            "pattern": "^/[A-Za-z0-9_.$/\\-]+$",
-            "title": "Route Id",
-            "type": "string"
-          }
-        },
-        "required": [
-          "kind",
-          "route_id",
-          "fingerprint"
-        ],
-        "title": "ClientErrorReport",
         "type": "object"
       },
       "CodeExampleBlock": {
@@ -1819,40 +1749,6 @@
   },
   "openapi": "3.1.0",
   "paths": {
-    "/api/client-errors": {
-      "post": {
-        "operationId": "reportClientError",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ClientErrorReport"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "204": {
-            "description": "Successful Response"
-          },
-          "422": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            },
-            "description": "Validation Error"
-          }
-        },
-        "summary": "Report Client Error",
-        "tags": [
-          "client-errors"
-        ]
-      }
-    },
     "/api/courses/{course_id}/practice-summary": {
       "get": {
         "operationId": "get_course_api_courses__course_id__practice_summary_get",
@@ -2011,7 +1907,7 @@
             "schema": {
               "anyOf": [
                 {
-                  "pattern": "^[a-z0-9][a-z0-9_-]{0,119}$",
+                  "maxLength": 120,
                   "type": "string"
                 },
                 {
@@ -2059,32 +1955,14 @@
           },
           {
             "in": "query",
-            "name": "limit",
+            "name": "page",
             "required": false,
             "schema": {
-              "default": 30,
-              "maximum": 100,
+              "default": 1,
+              "maximum": 100000,
               "minimum": 1,
-              "title": "Limit",
+              "title": "Page",
               "type": "integer"
-            }
-          },
-          {
-            "in": "query",
-            "name": "cursor",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "maxLength": 1024,
-                  "minLength": 1,
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Cursor"
             }
           }
         ],
@@ -2280,7 +2158,7 @@
             "schema": {
               "anyOf": [
                 {
-                  "pattern": "^[a-z0-9][a-z0-9_-]{0,119}$",
+                  "maxLength": 120,
                   "type": "string"
                 },
                 {

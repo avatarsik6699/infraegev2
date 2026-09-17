@@ -19,7 +19,7 @@ export const CourseLessonHeader: React.FC<Props> = (props) => (
     >
       <div className={styles.contextArea}>
         <ActionLink
-          hierarchy="drawn"
+          hierarchy="text"
           icon="back"
           to="/courses/$courseSlug"
           params={{ courseSlug: props.courseRouteSlug }}

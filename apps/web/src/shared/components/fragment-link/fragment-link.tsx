@@ -1,4 +1,3 @@
-import { DrawnLinkUnderline } from "~/shared/components/link-decoration";
 import { Link } from "lucide-react";
 import { cssUtils } from "~/shared/lib/css-utils";
 import type { FragmentLinkTypes } from "./fragment-link.types";
@@ -21,10 +20,7 @@ export const FragmentLink: React.FC<FragmentLinkTypes.Props> = ({
       {icon && (
         <Link className={styles.icon} aria-hidden="true" strokeWidth={2} />
       )}
-      <span className={styles.label}>
-        {props.children}
-        {hierarchy === "drawn" ? <DrawnLinkUnderline /> : null}
-      </span>
+      <span className={styles.label}>{props.children}</span>
     </a>
   );
 };

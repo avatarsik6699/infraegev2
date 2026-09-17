@@ -12,7 +12,7 @@ export namespace FragmentLinkTypes {
     /** Leading link icon; omitted by navigation lists with their own indicators. */
     icon?: boolean;
     presentation?: "inline" | "action";
-    hierarchy?: "text" | "drawn";
+    hierarchy?: "text";
     anchorProps?: Omit<ComponentProps<"a">, "children" | "className" | "href"> &
       DataAttributes;
   };

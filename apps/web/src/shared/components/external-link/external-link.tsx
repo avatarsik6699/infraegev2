@@ -1,11 +1,10 @@
 import { ArrowUpRight } from "lucide-react";
-import { DrawnLinkUnderline } from "~/shared/components/link-decoration";
 import { cssUtils } from "~/shared/lib/css-utils";
 import type { ExternalLinkTypes } from "./external-link.types";
 import styles from "./external-link.module.css";
 
 export const ExternalLink: React.FC<ExternalLinkTypes.Props> = (props) => {
-  const hierarchy = props.presentation === "action" ? "drawn" : "default";
+  const hierarchy = props.presentation === "action" ? "text" : "default";
 
   return (
     <a
@@ -14,7 +13,7 @@ export const ExternalLink: React.FC<ExternalLinkTypes.Props> = (props) => {
       rel={props.newTab ? "noopener noreferrer" : undefined}
       className={cssUtils.cx(
         styles.root,
-        hierarchy === "drawn" ? styles.drawn : undefined,
+        hierarchy === "text" ? styles.action : undefined,
         props.className,
       )}
       aria-label={props.ariaLabel}
@@ -23,7 +22,6 @@ export const ExternalLink: React.FC<ExternalLinkTypes.Props> = (props) => {
     >
       <span className={styles.label} data-external-link-label>
         {props.children}
-        {hierarchy === "drawn" ? <DrawnLinkUnderline /> : null}
       </span>
       <ArrowUpRight
         className={styles.icon}

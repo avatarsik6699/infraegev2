@@ -1,1 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><defs><pattern id="grid" width="88" height="64" patternUnits="userSpaceOnUse" patternTransform="skewY(-12)"><path d="M88 0H0V64" fill="none" stroke="#1a1a1a" stroke-opacity=".08" stroke-width=".7"/></pattern></defs><rect width="100%" height="100%" fill="url(#grid)"/></svg>

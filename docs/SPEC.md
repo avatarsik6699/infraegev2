@@ -9,8 +9,8 @@
 
 | Field | Value |
 |-------|-------|
-| Document Version | `v2.15` |
-| Date | `2026-09-12` |
+| Document Version | `v2.16` |
+| Date | `2026-09-17` |
 | Architect / Owner | `v.godlevskiy` |
 | Stack | See [docs/STACK.md](./STACK.md) |
 | Domain | Платформа подготовки к ЕГЭ по информатике — самостоятельные темы экзамена и мини-курсы с теорией, визуализацией и практикой |
@@ -46,18 +46,9 @@ sdamgia.ru, kpolyakov.spb.ru), ни новыми AI-ботами (решают �
 принципам, и что ученики реально проходят путь Теория → Практика → Что важно для ЕГЭ → Результат,
 а затем продолжают обучение, а не уходят после первого экрана.
 
-- [NEEDS_CLARIFICATION: конкретные числовые целевые показатели (сколько органических визитов /
-  за какой срок / какая глубина прохождения темы считается успехом) не зафиксированы архитектором
-  — решить после накопления пригодных M4-данных Umami, а не гадать заранее.]
-- Change 48 вводит прозрачную аналитическую петлю: optional browser analytics и узкий allowlist
-  продуктовых событий включаются только после явного opt-in, а необходимые security/reliability
-  logs и обезличенные server-side aggregates раскрываются отдельно. Fingerprinting, ответы,
-  свободный текст и скрытые постоянные идентификаторы не собираются.
-- Текущей продуктовой потребности достаточно уже работающих consented Umami pageviews/sessions с
-  разрезом по публичным путям и privacy-safe Nginx aggregates. Дальнейшая детализация продуктовых
-  событий, funnel-семантики и Source allowlist не входит в текущий roadmap: существующий event
-  слой остаётся best-effort telemetry и не блокирует авторинг уроков. Новые события или
-  идентификаторы не добавляются без отдельной доказанной потребности.
+Числовые цели не зафиксированы. Сейчас проверяем полезность уроков и практики непосредственным
+использованием и обратной связью. Аналитический стек и сбор браузерных событий удалены;
+необходимые журналы сервера служат эксплуатации, а не оценке учебного прогресса.
 
 ### 1.3 Project Boundaries
 
@@ -75,14 +66,13 @@ sdamgia.ru, kpolyakov.spb.ru), ни новыми AI-ботами (решают �
 последовательными CourseLesson и 140 server-owned задачами; финал — четыре стадии одного
 терминального менеджера задач. Все уроки прошли содержательную и визуальную оценку.
 Первоначальная 19-шаговая редакция не получила финального одобрения и не является baseline.
-Lab остаётся unlisted/noindex. Новые Topic-связи, аккаунты и дополнительная аналитика не следуют
-из публикации курса. Consented pageviews/sessions и разреза по путям достаточно для текущей задачи.
+Лаборатории удалены. Новые Topic-связи и аккаунты не следуют из публикации курса.
 Релизная история хранится в archive; текущий deployed SHA проверяется через `/health/ready`,
 а не выводится из local `main`, `origin/main` или старого успешного релиза.
 
 ### 1.4 Durable Learning Flow
 
-Этот flow относится к урокам. Утверждённый следующий модуль «Практика» (§3.2, §4.1)
+Этот flow относится к урокам. Модуль «Практика» (§3, §4)
 содержит самостоятельный каталог и страницы задач без обязательной теории и тренировочных сессий.
 
 Учебная траектория является продуктовым контрактом и не зависит от URL, page composition или
@@ -130,27 +120,27 @@ CourseLesson принадлежит Course, но не связан с Topic бе
 | Role | Capabilities | Restrictions |
 |------|-------------|--------------|
 | `Anonymous learner` | Читает теорию, решает практику, прогресс сохраняется в localStorage браузера | Нет аккаунта на MVP — прогресс не синхронизируется между устройствами |
-| `Content author` (архитектор + AI как инструмент) | Пишет типизированную теорию в `apps/web/src/entities/lesson/content/*.lesson.tsx` и server-owned практику в `content/tasks/*.json`, ревьюит AI-черновики через git diff, переводит `draft → review → published` | Публикация только через прохождение Content Quality Gate (§2.3); AI не публикует напрямую |
+| `Content author` (архитектор + AI как инструмент) | Пишет типизированную теорию в `apps/web/src/entities/lesson/content/*.lesson.tsx` и практику в `content/practice-bank/bank.json`, ревьюит AI-черновики через git diff; для теории переводит `draft → review → published`, для задач использует операторский импорт | Публикация теории проходит Content Quality Gate (§2.3); импорт задач — по §3 и runbook practice; AI не публикует напрямую |
 | `Architect` | Владеет `docs/SPEC.md`, принимает архитектурные решения, ревьюит контент перед `published` | — |
 | `AI_Agent` | Реализует изменения через `/work`, генерирует черновики контента по промптам с чек-листом из [Content Quality Gate](#23-content-quality-gate-definition-of-done) (§2.3), запускает гейты через `/ship` | Не переводит контент в `published` самостоятельно; нет прямого push в `main` вне `/ship` |
 
 ### 2.2 Key Entities
 
-Ниже описан действующий файловый baseline. Утверждённая модель после перехода в PostgreSQL —
-§3.2; её отношения заменяют обязательное владение Task уроком, а не дополняют его вторым реестром.
+Теория и публикация уроков остаются content-as-code; действующий банк задач хранится в
+PostgreSQL (§3). Задача самостоятельна и может иметь упорядоченные связи с уроками.
 
 `TopicCatalogEntry` (учебная тема) `→` непустой упорядоченный `taskNumbers[]` (один или несколько
 номеров ЕГЭ) `→` опциональный опубликованный `TopicLesson`
 `TopicLesson` `→` `ConceptBlock[]` (смысловые разделы типизированной TSX-теории)
 `Course` `→` `CourseModule[]` `→` `CourseLesson[]` (упорядоченная самостоятельная траектория)
-`Topic` `→` `Task[]` через `topic_ids`
-`CourseLesson` `→` `Task[]` через `course_lesson_ids`
+`TopicLesson` / `CourseLesson` `→` `Task[]` через `lessons[{material_id, position}]`
 
 Связи `Topic ↔ CourseLesson` отсутствуют в текущей модели намеренно. Их нельзя имитировать через
 совместное владение Task, prerequisites, unlocks или навигационные рекомендации.
 
-Контент живёт в git, не в БД: lesson theory и publication metadata — в типизированном TSX/модулях
-`apps/web`, practice/checker data — в `content/tasks/`. Course metadata и CourseLesson theory имеют
+Теория и publication metadata живут в типизированном TSX/модулях `apps/web`; практика и checker
+читаются из PostgreSQL. `content/practice-bank` — проверяемый исходный банк для явного импорта,
+а `content/tasks` — исторические тестовые fixtures без runtime-потребителей. Course metadata и CourseLesson theory имеют
 единственного frontend-consumer и поэтому остаются типизированным content-as-code, а не получают
 параллельную JSON-модель. Состояние пользователя (прогресс) — на MVP только localStorage на
 клиенте в едином app-scoped lesson-progress registry; course progress вычисляется из записей
@@ -169,7 +159,7 @@ Python подставляет title, summary, route и состав уроков
 ### 2.3 Content Quality Gate (Definition of Done)
 
 Для теории и публикации уроков сохраняется следующий human gate. Для банка задач принят отдельный
-операторский путь (§3.2): подготовка → валидация/dry-run → импорт → немедленная доступность.
+операторский путь (§3): подготовка → проверка `validate` без записи → импорт → немедленная доступность.
 Редактор и отдельное согласование публикации задач не вводятся. Автоматическая валидация не
 доказывает корректность решения: содержательная проверка и происхождение — ответственность
 подготовки пакета. Переезд старого упражнения в БД сам по себе не включает его в общий каталог.
@@ -217,8 +207,9 @@ Python подставляет title, summary, route и состав уроков
   лишние/пропущенные связи, подписи, числа и смысловые искажения.
 
 **Технически:**
-- [ ] `practiceTaskIds`/`topic_ids`/`course_lesson_ids`
-  ссылаются на существующие id — проходит CI-валидацию связей (§3, §7.2).
+- [ ] `lessons[].material_id` и `theory_links[].material_id/section` банка ссылаются на
+  существующие материалы/разделы; позиции задач в уроке уникальны. `pnpm validate:content`
+  проверяет текущий банк, файлы и согласованность с генерируемым publication registry (§3).
 - [ ] Заполнены `title`/`summary` для корректных meta-тегов (§8) — не заглушки вида «TODO».
 - [ ] Image/diagram имеет alt и caption; raster также имеет явные intrinsic dimensions и
   существующий оптимизированный task-owned ассет, а сложные точные данные доступны семантически.
@@ -255,531 +246,51 @@ Python подставляет title, summary, route и состав уроков
 
 ## 3. Data Model
 
-### 3.1 Current file-based baseline (until practice cutover)
+Change 122, approved 2026-09-17, supersedes the former practice transition and decorative
+roadmap. Theory remains authored content; PostgreSQL 18 owns the full existing task bank.
+Stable task IDs, exact checker answers, content blocks, private provenance, attachments and
+ordered lesson memberships survive the transition to a new isolated volume.
 
-Этот подраздел фиксирует текущую реализацию для безопасной миграции. Целевой контракт §3.2
-утверждён 2026-09-12 и применяется поэтапно через roadmap §9.2; он ещё не реализован.
-
-Контент делится на две независимые границы по тому, кто его должен читать:
-
-- **Теория урока — content-as-code в TSX**, не данные. Автор пишет типизированные React-компоненты
-  напрямую (`apps/web/src/entities/lesson/content/{slug}.lesson.tsx`, один файл на урок; переиспользуемые
-  content-компоненты — `shared/components/learning-content/*` для нейтральных `WorkedExample`/
-  `Diagram`/`Checkpoint`, `shared/components/*` для остальных общих частей типа `Callout`, следуя
-  существующим слоям FSD-like архитектуры, §"Frontend layers" в `docs/STACK.md`), версионируется
-  через git как обычный исходник. Компилятор TypeScript проверяет обязательную форму урока —
-  runtime-парсинг Markdown/JSON и ручная валидация роли/порядка секций для теории больше не нужны.
-- **Задания — типизированные JSON-файлы** (`content/tasks/{id}.json`), потому что их читают два
-  рантайма (frontend для публичной проекции, backend для server-owned проверки ответа) и решение не
-  должно попасть в клиентский бандл. Это единственная часть контента, где JSON остаётся обязательной
-  границей, а не выбором.
-
-Схема ниже описывает форму TSX-конструктора и JSON-файлов, не таблицы БД.
-
-```text
-defineLesson(...) — типизированный конструктор, один вызов на файл урока
-  id: slug
-  routeSlug: slug                              // публичный путь /ege/{routeSlug}
-  taskNumber: int
-  title
-  summary
-  masteryThreshold: float (default 0.8)        // порог доли верных ответов Task, для статуса "усвоено"
-  learningOutcomes: [string]
-  practiceTaskIds: [task_id]                   // ссылается в content/tasks/**, см. Task ниже
-  theory: ConceptBlock[]                       // порядок = порядок массива, без runtime role-инварианта
-  examFocus: ReactNode
-  checkpoint: CheckpointItem[]                 // единственная формативная самопроверка урока, рендерится
-                                                // внутри result/«Итоги», не входит в masteryThreshold
-  result: ReactNode
-  status: draft | review | published
-  accessTier: free | paid                      // задел под монетизацию — не enforced на MVP
-
-ConceptBlock — единица нарезки теории по одной идее, не по произвольной длине файла
-  id: slug                                     // якорь в outline и точка для будущего interleaving
-  navLabel: string
-  explanation: ReactNode                        // проза; не дублирует то, что уже показывает diagram
-                                                 // (redundancy principle)
-  diagram?: <Diagram/>                          // только когда объяснение требует одновременно держать
-                                                 // в голове ≥3 взаимосвязанных величин (split-attention)
-  workedExample?: <WorkedExample/>               // предшествует любой самостоятельной попытке
-                                                 // (worked-example effect, см. SPEC §2.3)
-  mistake?: <Mistake/>                           // рядом со своим концептом, не в общем списке в конце
-                                                 // (signalling principle)
-
-Diagram — готовый asset-образ, не runtime-данные
-  src: string                                   // единственный asset; Light-only baseline (§5.3) — без dark-варианта
-  alt: string                                    // обязателен независимо от того, что изображение статично
-  caption: string
-  purpose: string
-
-CheckpointItem — формативная (не суммативная) самопроверка внутри урока
-  id: slug
-  prompt: ReactNode
-  reveal: ReactNode                              // think-then-reveal: без валидации ответа, без обращения
-                                                 // к backend, не учитывается в masteryThreshold — эффект
-                                                 // тестирования (testing effect) даёт сама попытка вспомнить,
-                                                 // а не факт автоматической проверки
-
-CourseDefinition — типизированный frontend registry record
-  id: slug
-  routeSlug: slug                              // публичный путь /courses/{routeSlug}
-  title
-  summary
-  audience: string
-  learningOutcomes: [string]
-  status: draft | review | published
-  stage: early_access | complete
-  modules: CourseModule[]
-
-CourseModule
-  id: slug
-  title
-  summary
-  lessonPlan: [LessonPlanItem]                 // единый публичный порядок, включая будущие шаги
-
-LessonPlanItem
-  id: course_lesson_id                         // совпадает с CourseLesson.id после авторинга
-  title
-  outcome                                      // один наблюдаемый результат, не перечень синтаксиса
-
-Плановый `id` может ещё не иметь CourseLesson definition. Если definition существует, он обязан
-принадлежать ровно одному CourseModule и иметь совпадающий title. Только `published` definition
-становится ссылкой, попадает в discovery и учитывается в course progress.
-
-defineCourseLesson(...) — типизированный конструктор, один вызов на файл CourseLesson
-  id: slug
-  routeSlug: slug                              // /courses/{courseSlug}/{routeSlug}
-  title
-  summary
-  masteryThreshold: float (default 0.8)
-  learningOutcomes: [string]
-  practiceTaskIds: [task_id]
-  theory: ConceptBlock[]
-  checkpoint: CheckpointItem[]                 // единственная формативная самопроверка урока, рендерится
-                                                // внутри result/«Итоги», не входит в masteryThreshold
-  result: ReactNode
-  status: draft | review | published
-  accessTier: free | paid
-
-Topic и CourseLesson используют только доказанно общие content/practice/progress primitives.
-Registries, route data и page composition остаются раздельными; generic lesson engine не вводится.
-
-Task (content/tasks/{id}.json, practiceTaskIds ссылается сюда)
-  id
-  topic_ids: [topic_id]                         // владение Topic; пусто для CourseLesson task
-  course_lesson_ids: [course_lesson_id]         // владение CourseLesson; пусто для Topic task
-  title
-  statement                                      // ContentBlock[], полное условие задачи
-  hint                                           // ContentBlock[], доступная сразу помощь
-  theory_links: [{ hash, label }]                // hash указывает на ConceptBlock.id
-  checker_type: exact_match | numeric_tolerance
-  answer_variants: [string]                     // все допустимые написания верного ответа (см. §4 нормализация)
-  numeric_tolerance: float                       // только для checker_type: numeric_tolerance
-  interaction_type: production | recognition     // приоритет — production
-  explanation                                    // ContentBlock[], полноценный worked-example-разбор
-  difficulty: 1-3
-  is_interleaving_eligible: bool (default true при published)
-
-Публичная server-loaded проекция Task включает условие, подсказку, ссылки на теорию и
-`explanation` как отдельное развёрнутое «Решение» со структурированными шагами/кодом. Она никогда
-не включает `answer_variants`, `numeric_tolerance` или иные checker-секреты. До hydration
-подсказка и решение остаются линейно читаемыми; после enhancement раскрываются независимо друг от
-друга по явному действию ученика.
-
-ContentBlock — единый строгий контракт для `statement`, `hint` и `explanation`, включая ответ
-`POST /api/tasks/{id}/check` (§4)
-  type: text | list | code_example | table | image | diagram | attachment
-        | worked_example | completion_exercise | productive_failure_prompt | callout
-  data: <зависит от типа>
-  // text поддерживает только безопасную inline-нотацию через обратные кавычки;
-  // list явно различает ordered/unordered; code_example допускает python/text;
-  // image/diagram — локальные PNG/WebP/AVIF с alt, caption и intrinsic dimensions;
-  // diagram дополнительно требует purpose, доступное описание и смысловые pointers;
-  // attachment — локальный authored TXT/CSV/JSON/PY/ZIP до 5 MiB с label/description/MIME/size.
-
-Один renderer показывает этот контракт во всех трёх позициях задачи. Произвольные HTML/MDX,
-iframe/video, SVG-вложения, внешние embeds, пользовательские загрузки и новые режимы ответа в
-Task не допускаются. Все task-owned файлы лежат только в
-`apps/web/public/content/tasks/{task-id}/`; валидатор проверяет префикс владельца, traversal,
-query/hash, расширение/MIME, существование, размер и обязательные accessibility-поля. Публичный
-SSR/no-JavaScript вывод содержит весь текст, таблицы, изображения, диаграммы и ссылки на вложения;
-длинный код остаётся полностью доступным даже когда enhanced UI показывает его свёрнуто.
-
-LearningFlowPolicy (продуктовый контракт, не отдельный runtime-объект)
-  section_order: theory (ConceptBlock+) -> exam_focus? -> practice -> result
-  // checkpoint больше не самостоятельная роль в этом порядке: единственный CheckpointItem[] урока
-  // рендерится внутри result, после итогового текста
-  task_order: nondecreasing difficulty внутри первого прохождения материала
-  task_hints: immediately available inside practice
-  assisted_correct_attempts: count toward progress
-  weak_outcome: result recommends targeted review
-  forbidden_without_new_decision: timers | delayed hints | final no-hint exam | assistance penalty
-
-// Серверная статистика пользовательских попыток не вводится переходом в PostgreSQL.
-```
-
-CI-валидация: `scripts/validate-content-links.mjs` проверяет Course/module/lesson membership,
-`practiceTaskIds`, `topic_ids`, `course_lesson_ids` и `theory_links.hash`. Каждый Task принадлежит
-хотя бы одному Topic или CourseLesson, а смешанное владение не используется как скрытая связь
-между доменами. Эти связи пересекают TSX и JSON и не могут быть проверены одним TypeScript-
-компилятором; сборка падает при битых ссылках. После cutover проверки Task переходят в серверный
-валидатор/импортёр и интеграционные тесты; статические проверки программы курсов остаются.
-
-### 3.2 Approved server-owned practice model (target)
-
-**Граница:** PostgreSQL — единственный runtime-источник задач, характеристик, происхождения,
-связей и истории правок. Бинарные файлы — в постоянном хранилище application VPS вне образов
-и релизных директорий. Теория и программа курсов остаются в коде. Frontend не подключается к БД.
-JSON допустим как формат подготовленного импорта, но не как второй runtime-банк.
-
-#### Task, classification and lesson links
-
-- Task самостоятельна, сохраняет постоянный ID; существующие ID импортируются без изменения.
-  Не требуется наличие урока или номера ЕГЭ. Одна задача может входить в несколько уроков.
-- Условие, подсказка и разбор сохраняют упорядоченные ContentBlock[] в JSONB. Название,
-  difficulty (существующая шкала 1–3), оценочное время в минутах, даты и формат ответа —
-  типизированные поля; навыки и номера ЕГЭ — явные отношения. Неизвестное время/год — null.
-- Инструкция ответа объясняет ожидаемое значение и значимость порядка, в том числе для
-  нескольких чисел. На первом этапе сохраняются exact_match/numeric_tolerance; выполнение кода
-  и новые интерактивные форматы не следуют из наличия PY-файла.
-- TaskChecker хранит допустимые ответы и параметры сравнения; публичные DTO их не включают.
-  Разбор остаётся публично доступным по действующей учебной политике.
-- LessonTask хранит ID материала и задачи, порядок в практике. TheoryReference хранит явную
-  ссылку на материал/раздел, а не один hash текущей страницы. Это разные отношения.
-  Раздел необязателен: без него ссылка ведёт на урок целиком, без hash. Такие ссылки не
-  добавляют задачу в практику урока; существующие ссылки на разделы сохраняются.
-- БД владеет LessonTask и TheoryReference. Код владеет ID, публикацией и теорией материала.
-  Минимальные идентификаторы материалов регистрируются при релизе без удаления старых записей
-  и без перезаписи связей. Доступность определяется реестром текущего приложения; release
-  preflight проверяет ссылки и совместимость. Возврат старого приложения не откатывает связи.
-- После переноса убрать дублирующие practiceTaskIds из определений/реестров frontend.
-  Уроки и обзоры курсов получают состав и версии практики с сервера, без запроса на каждый урок
-  или каждую карточку. Общая задача не создаёт автоматические prerequisites или рекомендации
-  между Topic и CourseLesson.
-- Catalog visibility отделена от доступности: скрытая из каталога задача может работать в уроке.
-  Архивирование используемой задачи требует согласованной замены/удаления связи. Физическое
-  удаление задач не является обычной операторской операцией.
-- Краткое редакционное описание (`short_description`, nullable) помогает различать задачи в
-  каталоге, не раскрывает ответ и не заменяет условие. Тип разбора (`explanation_kind`) явно
-  различает нейтральный материал (`unclassified` по умолчанию), методическую идею (`method`)
-  и полный разбор (`worked_solution`); наличие текста источника само по себе не доказывает
-  полноту решения. Навыки имеют известные идентификаторы и понятные русские названия для выбора.
-
-#### Files and content blocks
-
-- File: постоянный ключ хранения, checksum, фактический MIME/формат, размер. TaskFileUsage:
-  назначение, пользовательское имя скачивания, подпись/описание. Блок ссылается на использование
-  файла в нужном месте условия, подсказки или разбора. Один объект можно использовать повторно.
-- Изображения: PNG/JPEG/WebP/AVIF с alt и intrinsic dimensions; подпись опциональна, смысловые
-  диаграммы сохраняют полное доступное описание. Вложения: TXT/CSV/JSON/PY/ZIP, XLSX/ODS,
-  PDF/DOCX/ODT. Документы скачиваются без встроенного редактора/выполнения. Произвольные HTML,
-  SVG, embeds и пользовательские загрузки не добавляются.
-- Отдавать понятное имя (например, 17.txt), не checksum. Кодировку, разделитель и наличие
-  заголовка описывать, когда они нужны для решения; не менять байты данных незаметно при импорте.
-- Начальные настраиваемые пределы: изображение 5 MiB, вложение 20 MiB; подготовленный пакет
-  максимум 1 GiB и 1000 задач. Размер пакета ограничивает и распакованные данные; ZIP не обходит
-  пределы. Проверять traversal, ссылки за пределы пакета, типы, размеры и целостность; ограничивать
-  распаковку и обрабатывать пакет последовательно, не целиком в RAM. Импортированный код не исполнять.
-- Эквивалентные варианты алгоритма на разных языках объединяются только явной редакционной
-  группой; соседство блоков кода не является признаком эквивалентности. Enhanced UI выбирает
-  Python, если он присутствует, иначе первый вариант; SSR/no-JS сохраняет все варианты линейно.
-  Inline-формула и программный код различаются явной безопасной разметкой и существующим
-  `Notation`; новый математический движок не вводится, символы и смысл выражений сохраняются.
-- Сначала сохранить и проверить неизменяемые файлы, затем фиксировать ссылки в БД. Задача не
-  становится доступной с отсутствующими обязательными файлами. Замена создаёт новый объект;
-  замена исходных данных изменяет версию задачи для решения. Автоудаление старых файлов отложено.
-
-#### Provenance
-
-Источник структурирован: вид (банк/авторская задача/адаптация), название, автор при наличии,
-исходный ID, URL оригинала, подтверждённый год, характер переработки. Различать первоисточник
-и место получения копии; допускать несколько записей с ролями и явным основным источником.
-Дата добавления на сайт отдельна от года источника. Не выводить происхождение из имени файла.
-Неизвестные сведения обозначаются явно; для авторских задач указывать авторское происхождение.
-У файла/изображения может быть собственная атрибуция. Публичная задача показывает компактные
-сведения об источнике и адаптации. Содержимое самодостаточно: ссылка на банк не заменяет вложение.
-
-Запись происхождения имеет признак публичности (по умолчанию публичная для совместимости).
-Внутренние сведения о получении копии остаются в БД, операторском экспорте и резервных копиях,
-но исключаются сервером из публичных API/SSR. Публичный первоисточник и внутренний банк
-получения — отдельные записи. ID задачи нейтрален и не меняется между окружениями/импортами.
-Для импорта КЕГЭ №5/№16 источником ответа служит опубликованный ответ без независимого
-пересчёта; математическая проверка остаётся ручной. Видео и таймкоды не импортируются.
-
-#### Versions, concurrency and progress
-
-- Разделять Alembic revision (схема), content schema version (поддерживаемый формат блоков),
-  solution revision (какую задачу решал ученик) и revision записи для защиты от потери правок.
-- Существенная правка условия, исходных данных или checker повышает solution revision.
-  Метаданные/разбор не сбрасывают зачёт. Опечатки в условии допускают явный editorial mode;
-  изменение checker в таком режиме запрещено. Все правки фиксируются в истории с причиной.
-- Все пути записи, включая массовый импорт, проверяют ожидаемую revision записи. Конфликт не
-  перезаписывает более свежую правку. История не заменяет backup и не является историей попыток.
-- Решение хранится в браузере по Task ID + solution revision. Старые lesson-progress записи
-  мигрируют к первой импортированной версии исходных задач. Повторное решение доступно.
-  Старый успех сохраняется как факт, текущая изменённая версия требует повторения; UI объясняет
-  изменение результата урока. Каталог и уроки сохраняют независимые контексты прогресса.
-- Проверка ответа принимает solution revision; несовпадение возвращает 409 с требованием
-  обновить условие. Ввод сохраняется, повторной отправки автоматически нет. Проверка и её
-  результат относятся к одной согласованно прочитанной версии задачи.
-
-#### Import and operator edits
-
-Подготовленный пакет: versioned manifest, стабильный package ID/checksum, записи задач и
-вложения. Адаптация любого источника к этому формату — отдельный процесс. Ограниченный пакет
-применяется одной транзакцией; поставка разбивается на пакеты с журналом результатов.
-
-Путь: валидация → dry-run/diff целевой БД → backup → запись → API smoke → backup.
-Повтор пакета идемпотентен; совпадающий Task ID с иным содержимым требует явного update и
-проверки revision. После разрыва соединения результат выясняется по журналу, не по предположению
-об откате. Новые обычные импорты видимы после commit; существующие упражнения мигрируют без
-автоматического включения в каталог. Для самостоятельного каталога отобрать пригодные упражнения.
-
-Основной путь правок — CLI на VPS: export → редактирование → validate/diff → apply.
-CLI и импорт используют один серверный сервис правил/транзакций. SQL — диагностика и
-контролируемое аварийное вмешательство с последующей проверкой; DDL только через миграции в Git.
-Нет отдельного редактора, очереди публикаций или административного HTTP API.
-
-#### Architecture
-
-```text
-Browser -> Nginx -> Web SSR/pages -> FastAPI -> SQLAlchemy/asyncpg -> PostgreSQL
-    |         |                       ^                             tasks/links
-    |         +-> immutable files     |                             sources/history
-    +------------ public API ---------+
-
-Operator -> CLI validate/diff/apply -> same domain service -> PostgreSQL + files
-Alembic  -> separate migration role -----------------------> database schema
-
-PostgreSQL dump + files + restore metadata -> Restic on VPS -> weekly manual PC copy
-Browser storage: independent lesson/catalog progress by task ID + solution revision
-```
-
----
+The current-state model has task, private checker, lesson membership and file records. Small
+metadata collections (skills, exam numbers, sources, theory links) use JSONB. There is one
+solution counter for stale submissions and progress, without historical task snapshots.
+One trusted operator imports/exports JSON using host tooling. Import updates selected IDs
+transactionally, never deletes omitted tasks, and does not duplicate replayed data. Basic
+structure, database integrity, bounded input and safe file paths remain mandatory. Concurrent
+editing, package ledgers, revision history, background jobs and garbage collection are deferred.
+Old database volumes and source snapshots are retained; no destructive in-place migration.
 
 ## 4. API / Backend Contract
 
-Следующий список — текущий API до cutover. Дополнения и изменение checker — §4.1.
-
-Backend сохраняет content/task schemas и проверку ответа как независимый контур. Реальные
-task-файлы первой review-only темы читаются frontend-consumer без checker-секретов; endpoint
-неизвестного task id отвечает `404`.
-
-| Verb / Method | Path | Auth | Response / Payload |
-|---------------|------|------|---------------------|
-| `POST` | `/api/tasks/{id}/check` | Нет (публичный, анонимный) | Запрос: `{ answer: string }`. Ответ: `{ correct: bool, explanation: ContentBlock[] }`. Ограничен на уровне Nginx (§7.2, §8): `limit_req` 20 req/min/IP, burst 5 |
-| `POST` | `/api/client-errors` | Нет (публичный, анонимный) | Запрос: bounded allowlisted diagnostic `{ kind, route_id, fingerprint, asset_path?, line?, column? }`; свободный текст ошибки, URL/query и request body не принимаются. Ответ: `204 No Content` |
-| `GET` | `/health/live` | Нет | `{ status: "ok", version: string }`; проверяет только доступность процесса |
-| `GET` | `/health/ready` | Нет | `{ status: "ok", version: string }` при доступной БД, `503` при неготовности зависимости |
-| `GET` | `/health` | Нет | Совместимый alias для `/health/ready` |
-
-Проверка ответа применяет нормализацию к введённому ответу и к каждому `answer_variants` перед
-сравнением (§4): обрезка пробелов, схлопывание внутренних пробелов, регистронезависимость,
-нормализация «ё»/«е», числовая эквивалентность форматов (запятая/точка), допуск
-`numeric_tolerance` для `checker_type: numeric_tolerance`, явная фиксация значимости порядка для
-ответов-списков (per-task, не угадывается на проверке).
-
-### 4.1 Approved practice API (target)
-
-Публичный анонимный API: `GET /api/tasks` (краткий каталог), `GET /api/tasks/{id}` (полная
-публичная задача), `GET /api/learning-materials/{kind}/{id}/practice` (упорядоченный состав),
-`GET /api/courses/{id}/practice-summary` (состав/версии для обзора без N+1), существующий
-`POST /api/tasks/{id}/check` с обязательной solution revision в запросе и ответе.
-Ответ checker сохраняет correct/explanation; 409 обозначает устаревшее условие, 404 —
-недоступную задачу. Переход старых вкладок/клиентов проверяется при совместном обновлении
-OpenAPI, generated client и UI; ошибка предлагает обновление, не создаёт ложный зачёт.
-
-Каталог фильтруется по навыку, номеру ЕГЭ и сложности; отделение ЕГЭ/Python — разрезы общего
-банка. Default page size 30, максимум 100, стабильный порядок newest-first с ID tie-breaker.
-Пагинация серверная, курсор связывается с фильтрами; краткий ответ не содержит всех условий
-и решений. HTML и API не получают checker-секреты. Runtime не читает legacy JSON и не использует
-бессрочный process cache. Слои: HTTP → task service → DB access; CLI использует тот же service.
-Сессия/транзакция принадлежит конкретной операции; нет скрытых commit и общего AsyncSession.
-
-Расширение каталога для UX (Change 121): `GET /api/tasks` возвращает также число всех совпадений
-без ограничения текущим курсором и краткое описание каждой строки. `GET /api/tasks/facets`
-возвращает доступные номера ЕГЭ, навыки с понятными названиями и сложности по видимому банку,
-без скрытых/архивных задач. `GET /api/tasks/{id}/next` принимает те же фильтры отбора, без
-курсора страницы, и возвращает ID следующей видимой задачи или null при конце выборки;
-порядок — тот же `created_at DESC, id DESC`. Текущая задача должна быть доступна и принадлежать
-выборке; иначе ответ 404. Browser progress не передаётся серверу и не исключает решённые задачи.
-Запросы остаются ограниченными: строки/сосед загружаются проекцией без полного условия и
-checker, агрегаты выполняются в БД без загрузки всего банка в приложение. Ошибка продолжения
-не делает условие и проверку ответа недоступными. Новые поля поддерживаются публичными и
-операторскими DTO, экспортом, импортом и восстановлением; OpenAPI и клиент обновляются вместе.
-
-Чтение и POST-check имеют раздельные правила Nginx: текущий checker limit не распространять
-на весь каталог. Ошибки сети/БД сохраняют ввод и дают локальную доступную обратную связь;
-readiness проверяет SQL-запрос и совместимость схемы, liveness остаётся независимой от БД.
-Сервер не сохраняет пользовательские ответы/попытки и не добавляет новую продуктовую аналитику.
-
----
+Existing `/api/tasks` detail/check/file and lesson-practice/course-summary capabilities remain.
+Catalog uses numbered pages of 30 with deterministic ordering, existing exam/skill/difficulty
+filters and server-selected next task in that same filter context. Public projections exclude
+checker answers and private sources. Wrong answers, missing tasks, stale solution counters and
+unavailable services remain distinct. Regenerate OpenAPI/client types with implementation.
+Runtime reads PostgreSQL, never silently falls back to historical JSON. API owns comparison and
+normalization; browser state records only local learning progress. No public write/admin API.
 
 ## 5. Frontend / Client Contract
 
-### 5.1 Pages
+All public learning routes remain: `/`, `/ege`, `/courses`, course overview, published topic and
+course lessons, `/practice`, task detail and `/privacy`. Planned entries remain non-links.
+Internal `/lab/design-system` and `/lab/lesson` and their demos are retired.
 
-Локально реализованы `/practice` и `/practice/$taskId` по §3.2/§4.1: список, фильтры,
-самостоятельное решение и независимый browser progress. Change 121 улучшает их по утверждённому
-UX-плану ниже. Дизайн следует текущему FRONTEND и accepted catalogs, без новой темы или редактора.
+The reference is production commit `a5b0bf5`: white canvas, ink, compact text lists and quiet
+reading. Keep infraege stone identity, current self-hosted Alegreya/Golos Text/JetBrains Mono,
+and small orange accents for brand/focus/navigation. Remove decorative imagery, grids,
+textures, light effects and animation infrastructure. Keep educational figures and attachments.
+Shared semantic controls, accessible focus/errors/loading, stable fonts and retained-page
+navigation stay. FRONTEND is the binding implementation contract.
 
-#### Согласованный UX самостоятельной практики (Change 121)
-
-- Каталог: компактный заголовок → быстрый выбор «Все» и доступных номеров ЕГЭ → дополнительные
-  фильтры → количество найденных задач, снимаемые ограничения → открытые строки. Быстрый выбор
-  применяется сразу, остальные фильтры — кнопкой «Применить»; на мобильном дополнительные
-  фильтры свёрнуты. Изменение фильтра сбрасывает курсор. Фильтры, пагинация и ссылки читаемы без JS.
-- Строка содержит название, короткое описание в 1–2 строки, номер ЕГЭ, словесную сложность и
-  отметку browser progress для текущей solution revision. Устаревший успех обозначается отдельно;
-  до hydration нет ложной отметки «не решено». Полное условие в список не разворачивается.
-  Фильтра решено/не решено по всему банку в этом change нет. Пустой банк, отсутствие совпадений
-  и ошибка загрузки различаются; отсутствие совпадений предлагает снять ограничения.
-- Задача: возврат к списку → компактные название/номер/сложность → условие с файлами → поле
-  ответа с конкретной инструкцией рядом → результат → помощь/теория → ручное продолжение.
-  Одна читаемая колонка на desktop/mobile, второстепенный источник и справка о локальном прогрессе.
-- Неверный ответ сохраняется, обратная связь короткая и без выдуманного диагноза ошибки;
-  технический сбой отличается от неверного ответа и допускает явный повтор. Успех — короткое
-  «Верно» и один структурированный разбор с честным заголовком по типу материала, без плоской
-  копии внутри статуса. Повторное решение сохраняет исторический успех. Раскрытие помощи
-  не даёт зачёт; подсказка доступна сразу.
-- «Следующая задача» ведёт к следующей в том же отфильтрованном порядке, включая уже решённые
-  и переход через границу страницы; автоматического перехода нет. Конец выборки предлагает
-  возврат. Прямой вход использует общий каталог. Контекст возврата содержит только валидированные
-  фильтры/курсор/исходную строку; произвольные redirect URL не принимаются. Возврат восстанавливает
-  позицию прокрутки либо исходную строку. Черновик ответа в пределах вкладки хранится по
-  Task ID + solution revision и переживает поход в теорию, но не переносится на новую версию.
-- Помощь различает «Идея решения», «Решение» и нейтральный «Разбор» по явной классификации;
-  общий методический текст не превращается в фиктивный пошаговый разбор. Полные авторские
-  решения для всех импортированных задач не входят в change. Ссылки на теорию ведут на урок.
-- Искусственное время и статистика допустимы **только в макете `/lab/design-system`** с подписью
-  «Демонстрационные данные — для оценки интерфейса»: например, «≈ 8 минут»,
-  «Решили 1 240 человек», «Верных первых попыток — 68%». Макет показывает также отсутствие,
-  частичное заполнение и длинные значения. В публичном каталоге/задачах, включая dev, нет
-  выдуманной статистики, нулевых заглушек или новых статистических API/таблиц; время показывается
-  только при наличии реального `estimated_minutes`.
-
-Страницы владеют компоновкой и навигационным контекстом; feature практики — попыткой и помощью;
-существующий владелец progress — отметками. Storage и scroll доступны через shared platform
-адаптеры. Общий checker сохраняется для уроков, самостоятельная компоновка не переносится в них
-автоматически. Lab переиспользует общие примитивы. Редакционные изменения банка поставляются
-новым неизменяемым пакетом: применённые пакеты 120 не переписываются, UUID, исходные ответы,
-смысл условий и solution revision сохраняются. Применение на dev — validate/diff, backup,
-apply, smoke, backup; production остаётся отдельной операцией.
-
-| Page | Route | Purpose |
-|------|-------|---------|
-| Practice catalog | `/practice` | Самостоятельные задачи, серверные фильтры/пагинация и независимые локальные отметки решения |
-| Practice task | `/practice/$taskId` | Условие, проверка ответа, помощь и продолжение выбранного списка |
-| Public home | `/` | Минимальная SSR/no-JS точка входа в опубликованные материалы: честное описание продукта и ссылки только на реально опубликованные уроки |
-| Topic catalog | `/ege` | SSR/no-JS каталог из 25 учебных тем, покрывающих задания ЕГЭ 1–27; опубликованные TopicLesson являются ссылками, будущие темы остаются приглушёнными поверхностями с бейджем «Скоро» |
-| Course catalog | `/courses` | SSR/no-JS каталог из одного опубликованного Python course и трёх честно запланированных направлений; только опубликованный Course является ссылкой, а локальный счётчик освоенных уроков появляется после hydration |
-| Course overview | `/courses/$courseSlug` | SSR/no-JS обзор самостоятельного мини-курса: аудитория, результат, stage и полная карта из 28 уроков; только опубликованные CourseLesson становятся ссылками и единицами прогресса |
-| Course lesson | `/courses/$courseSlug/$lessonSlug` | Общий SSR consumer типизированного CourseLesson; `review` доступен по прямому URL с `noindex,nofollow`, `published` входит в course discovery |
-| Design system stand | `/lab/design-system` | Unlisted/noindex приватный стенд текущей дизайн-системы (шрифты, цвета, типографика) и переиспользуемых lesson-компонентов; не публикация и не security boundary |
-| Topic lesson | `/ege/$slug` | Общий SSR consumer типизированного Topic; `review` доступен только по прямому URL с `noindex,nofollow`, `published` может войти в prerender/public discovery |
-| Privacy | `/privacy` | Публичное описание целей, состава, сроков и получателей обработки, контакта для обращений и способа изменить optional analytics consent |
-| Robots | `/robots.txt` | Машиночитаемые правила обхода и ссылка на sitemap; не используются как замена page-level `noindex` |
-| Sitemap | `/sitemap.xml` | Только canonical URL публичной главной, каталогов тем и мини-курсов, privacy и `published`-уроков; review/lab/404 не включаются |
-| Not found | любой неизвестный маршрут | Общий доступный 404 без предположений о будущем IA |
-
-`/ege` — отдельная индексируемая точка входа в темы ЕГЭ; `/` связывает её с самостоятельным
-mini-course flow, не смешивая домены. Каталог строится из lightweight metadata и не загружает
-TSX-теорию всех уроков. `review`-контент не становится ссылкой в каталоге или sitemap, отдаёт
-`robots: noindex,nofollow` по прямому URL и исключается из prerender discovery.
-`/lab/design-system` сохраняет тот же unlisted/noindex режим независимо от product content.
-Каждая индексируемая HTML-страница имеет абсолютный canonical на `https://infraege.ru`, уникальные
-title/description и достаточные social metadata; sitemap и prerender строятся из того же
-publication registry, чтобы статусы не расходились между рантаймами.
-
-При переходе на DB (§3.2) task-dependent страницы и данные читаются при запросе, не фиксируются
-в prerender и не требуют production-БД для сборки. Теория остаётся SSR-читаемой; условия,
-изображения, помощь и скачивание доступны без JS, проверка/прогресс — enhancement. Runtime sitemap
-включает доступные catalog-visible задачи без деплоя, с разбиением при росте банка; скрытые
-упражнения исключены, страницы произвольных фильтров не создают бесконечный индексируемый набор.
-Отдельно проверить empty/not-found/DB unavailable/asset failure/stale tab и клавиатуру/mobile.
-
-### 5.2 Components / Stores
-
-| Component / Store | Purpose | Notes |
-|--------------------|---------|-------|
-| Lesson content components | Переиспользуемая библиотека дизайн-системы урока: `Notation`, `Callout`, `WorkedExample`, `Procedure`, `Mistake`, `Diagram`, `Checkpoint` | Типизированные React-компоненты, не markdown-директивы; `Notation` различает inline-код и формулу без appearance-led API; `Diagram` используется только когда изображение действительно помогает и требует `alt`/`caption`/`purpose`; `Checkpoint` рендерит единственный на урок `CheckpointItem[]` вертикальным списком (не табами — таб-навигация позволяет незаметно пропустить пункт retrieval-практики) внутри секции «Итоги» (`result`), после итогового текста — `ConceptBlock`-level checkpoint не существует |
-| Lesson outline | Иерархическая навигация по уроку | Строится напрямую из `ConceptBlock[].id`/`navLabel`, без regex-извлечения заголовков из текста и измеряемых SVG-связей; desktop shell сохраняет три колонки — sticky outline, центральный reading stream и зарезервированную правую колонку; progress в rail/header отсутствует, а правый rail может оставаться пустым до появления полезного контента; overflow rail включается только при необходимости, на узких экранах навигация возвращается в normal flow; lab сохраняет свой четырёхраздельный synthetic contract |
-| Course overview | Самостоятельная карта курса | Показывает аудиторию, learner outcome, stage `complete` и упорядоченную программу из 28 опубликованных уроков; каждая строка является обычной индексируемой ссылкой без дат, locks и disabled controls |
-| Course catalog | Публичная карта самостоятельных программ | Строится из lightweight publication metadata и трёх catalog-only planned записей; показывает опубликованный Python course и три planned направления в общей сетке карточек, не загружает TSX-теорию, не добавляет фиктивные маршруты и не обещает сроки, длительность или объём будущих курсов |
-| Topic catalog | Публичная карта заданий ЕГЭ | Начинает первый viewport компактным человеческим введением и сразу показывает 25 содержательных карточек по возрастанию первого номера; хранит номера как непустой массив, объединяет 19–21 в одну тему, иллюстрирует только два опубликованных TopicLesson и не превращает planned entries в ссылки или disabled controls |
-| Course progress | Производный progress только по доступным CourseLesson | Не имеет отдельного store или storage key: после hydration читает записи всех 28 опубликованных уроков из единого lesson-progress registry. Формулировка «освоено N из M доступных» описывает фактический набор, а course-wide reset отсутствует |
-| Practice tabs | Локальная навигация по постепенно усложняющимся задачам внутри `practice` | Компактные доступные вкладки показывают рост сложности нейтральным индикатором уровня и текстом; одна активная задача после hydration, свободный ручной переход без блокировок и автопродвижения, одна или несколько task-specific ссылок на фрагменты теории рядом с заголовком; независимые «Подсказка» и развёрнутое «Решение» доступны сразу и остаются линейным содержимым в SSR/no-JS; все формы остаются в SSR/no-JS HTML и не становятся пунктами lesson outline |
-| Page state primitives | Единые navigation progress, empty, not-found и recoverable error состояния | Семантический статус и понятное действие важнее декоративной анимации; при client navigation текущая страница остаётся до готовности следующей, верхний progress появляется после 150 ms; глобального skeleton нет |
-| Route resilience shell | Route-level pending/error/not-found UI, retry/reset и верхний navigation progress | Ошибка одной навигации не ломает document shell; предыдущий полезный экран не заменяется мгновенным мигающим fallback |
-| Typed API client | Единственная граница runtime HTTP для `apps/web`, сгенерированная из FastAPI OpenAPI | Feature `api/` вызывает типизированный shared client; transport/HTTP/contract errors различимы, abort/timeout и безопасные сообщения обязательны |
-| Query client | Будущая граница runtime server-state, mutation lifecycle, cache/retry/cancellation | Не дублирует local UI или URL state; сейчас product queries отсутствуют |
-
-Lab использует локальное демонстрационное состояние hint/incorrect/correct и пять синтетических
-задач, чтобы проверить полный progress/mastery contract до появления публичного consumer. Верные
-задачи и фактически принятые введённые значения сохраняются через версионированный SSR-safe
-localStorage, четыре из пяти означают освоение; checker-ответы в это хранилище не попадают;
-API и аккаунт не используются. Интерактивные вкладки при каждом входе начинают с первой задачи,
-не сохраняет активную позицию или черновики, оставляет все шаги доступными и переходит дальше
-только по явному действию ученика. Каждая задача получает одну или несколько ссылок к связанным
-фрагментам теории прямо рядом с заголовком, без отдельной плашки, а no-JS показывает все задачи
-последовательно. Позиция чтения, текущий раздел и выбранная задача остаются отдельными
-навигационными сигналами и не увеличивают учебный прогресс. Публичные lesson routes используют тот
-же durable flow, но получают реальную TSX-теорию и server-loaded Task-проекции.
-
-### 5.3 Design System
-
-Единственный binding visual/interaction contract — [FRONTEND](FRONTEND.md), включая page recipes,
-semantic tokens, shared components, responsive/no-JS, motion, brand delivery и lab coverage.
-Публичная айдентика — infraege: художественный master
-`docs/artifacts/references/infraege-mark.svg`, направления `base.jpg` и `main-page.png`,
-актуальные auxiliary references в `references/new_pages/`. Ровно три органических камня:
-малый верхний orange, два нижних ink; wordmark/подпись остаются доступным живым текстом.
-Alegreya/Golos Text/JetBrains Mono сохраняют роли FRONTEND. Технические domain/storage/analytics
-идентификаторы не зависят от визуального профиля.
-
-`/lab/design-system` представляет поддерживаемую систему, `/lab/lesson` — учебную композицию;
-они unlisted/noindex, без private theme и без публикации нового контента. Production и lab
-используют общих владельцев. Миграция завершена только после переноса всех consumers и удаления
-obsolete API. Исторические ALCHIMIA, Mantine, raster scenes и pending skeleton не являются
-допустимыми активными альтернативами. Приёмка визуального результата принадлежит архитектору.
-
-### 5.4 Client Application Infrastructure
-
-- **Контракты API:** FastAPI OpenAPI экспортируется детерминированно и является источником
-  генерируемых `openapi-typescript` типов. `openapi-fetch` — единственный shared transport;
-  feature-срезы не вызывают нативный `fetch` и не описывают response types вручную. Generated-файл
-  не редактируется, а schema drift проверяется отдельной gate-командой.
-- **Server state:** TanStack Query владеет только runtime запросами/мутациями. Query client
-  создаётся SSR-safe, не разделяется между server requests и не пересоздаётся при Suspense на
-  клиенте. Для мутаций автоматический retry по умолчанию запрещён; повтор выполняется явно
-  пользователем, чтобы проверка ответа не отправлялась незаметно дважды.
-- **Ошибки и восстановление:** transport, timeout/abort, HTTP и malformed-contract failures имеют
-  различимые технические категории, но безопасный русский user-facing текст. Route error boundary
-  даёт повторить загрузку или вернуться к рабочему маршруту; ожидаемые form/API ошибки остаются
-  inline и не превращаются в глобальные toast. Тела ответов, введённые ответы и URL query/hash не
-  попадают в telemetry.
-- **Loading / empty / not-found:** текущая страница остаётся до готовности следующей;
-  после 150 ms ожидания появляется верхний progress без глобального skeleton или минимальной задержки. Empty state объясняет причину и предлагает
-  следующее доступное действие. Not-found отделён от инфраструктурной ошибки.
-- **Suspense и lazy:** route splitting остаётся инфраструктурной возможностью; lazy применяется
-  только вместе с измеримым выигрышем и полноценным SSR/no-JS fallback.
-- **UI foundation:** Base UI 1.7.0 предоставляет доступное поведение там, где существует подходящий
-  primitive. Локальные компоненты владеют публичным API и CSS; новые primitives и составные
-  библиотеки добавляются только с реальным consumer и maintenance/a11y/supply-chain проверкой.
-- **Client state:** глобальный store не вводится заранее. Компонентное состояние остаётся локальным,
-  server state принадлежит Query, URL state — Router. Доказанное исключение — app-scoped Zustand
-  registry для lesson progress: несколько независимых Topic/Course/lab consumers читают его через
-  семантические hooks, а versioned localStorage adapter владеет persistence и миграцией старых
-  lesson-specific ключей. Course progress остаётся производным selector и отдельно не хранится.
-- **Визуальная системность:** значения активной темы отображаются в semantic CSS tokens, которые
-  потребляют локальные компоненты. Base UI не определяет внешний вид и не выходит типами/props за
-  их public API. Light-only baseline использует self-hosted кириллические шрифты без runtime-запроса.
-
----
+Practice retains filters, answer checking, explanations, files, next-task navigation and local
+progress. Remove persisted answer drafts and special row/scroll restoration; return links
+carry filters and page. No telemetry consent, analytics or client-error collector. No new
+accounts, editing UI, global stores, dependencies or speculative abstractions.
 
 ## 6. Auth & Access Model
 
-Для серверного банка (§3.2) добавить разные DB credentials: HTTP runtime read-only (включая
+Для серверного банка (§3) используются разные DB credentials: HTTP runtime read-only (включая
 checker), операторский CLI/import ограниченная запись без DDL, migrations отдельная роль,
 backup/restore с достаточными отдельными правами. Production PostgreSQL не открыт в интернет;
 оператор использует принятый защищённый доступ к VPS, не меняя текущий SSH-контракт.
@@ -798,341 +309,72 @@ backup/restore с достаточными отдельными правами. 
 
 ## 7. Infrastructure and Deploy/CI
 
-### 7.1 Infrastructure
+### 7.1 Application topology
 
-Один VPS в московском дата-центре на старте, без отдельного preview/staging-стенда: Ubuntu 24.04
-LTS, AMD EPYC 7502, 2 vCPU, 4 ГБ RAM, 40 ГБ disk. Следующая ступень — 4 vCPU, 8 ГБ RAM,
-80 ГБ disk — применяется, если 24-часовой production soak показывает меньше 25% свободной RAM,
-swap thrashing или устойчивую загрузку CPU выше 70%. Тестирование локально максимально повторяет
-production через общий Compose и development overlay.
-
-Application и observability используют один VPS на текущем beta-этапе, но принадлежат разным
-lifecycle-контуром:
-- **Nginx** — единственная точка входа (80/443), reverse-proxy для web/API и статики.
-- **Frontend (TanStack Start/Nitro)** — Node runtime с prerendered публичным входом, legal
-  surface, двумя опубликованными TopicLesson и 28 опубликованными CourseLesson routes; review/lab
-  routes остаются noindex.
-- **Backend (FastAPI/Uvicorn)** — отдельный контейнер, доступен Nginx по внутренней docker-сети,
-  наружу не смотрит напрямую.
-- **Postgres** — отдельный контейнер, volume + регулярный `pg_dump`-бэкап (§8).
-- **Operations stack** — Umami, Beszel и необходимые gateways физически остаются на application
-  VPS, но их установка, конфигурация, backup/restore и release lifecycle принадлежат небольшому
-  модулю `ops/` этого репозитория. Активное состояние — отдельный Compose project с собственными
-  volumes без переноса этой логики в [sre-kit](https://github.com/avatarsik6699/sre-kit).
-- **Граница infraegev2** — репозиторий владеет application telemetry и всей автоматизацией,
-  зависящей от его VPS, routing, Compose и data layout. sre-kit получает только versioned Source
-  registration и Metric/Check/Event, не хранит deployment SSH credentials и не запускает target
-  mutations.
-
-Термин `apps/ops` далее означает логический operations-контур, а не возвращение удалённого Node
-BFF/React dashboard и не новый pnpm workspace. Канонический пакет живёт под `ops/`: Compose,
-защищённый environment, короткие lifecycle-скрипты и Source template. UI мониторинга остаётся в
-sre-kit без Apply/Rollback действий. Универсальный desired-state/reconcile engine для одного VPS
-не является частью архитектуры; изменения общего интеграционного контракта получают связанные
-active Backlog items в обоих репозиториях.
-
-**Публичный edge:** `infraege.ru` зарегистрирован и использует DNS reg.ru. На первом релизе трафик
-идёт напрямую `infraege.ru → Nginx`, без CDN; `www.infraege.ru` перенаправляется на canonical apex.
-Nginx выставляет `Cache-Control`/`ETag` для хэшированной статики, не кэширует API и проксирует
-публичный tracker Umami same-origin. TLS — Let's Encrypt с автоматическим renewal; HSTS включается
-только после успешного renewal drill. CDN пересматривается по фактической географии и нагрузке.
+Один application Compose: Nginx → web/API → PostgreSQL. API и Nginx читают task-files
+с read-only mounts. Ubuntu, journald, fail2ban, TLS renewal и application backup остаются.
+Доступ root/password SSH с pinned host key сохраняет ранее принятое решение архитектора.
 
 ### 7.2 Deploy / CI
 
-- Development Compose собирает исходники локально; production overlay использует immutable
-  GHCR-образы `web`, `api`, `nginx`, помеченные полным commit SHA, без bind mounts исходников.
-- Публичный GitHub-репозиторий — `avatarsik6699/infraegev2`. CI запускает только статические,
-  build и security проверки; Vitest, pytest и Playwright остаются строго локальными.
-- Production deploy запускается вручную через `workflow_dispatch`: SSH host-key verification,
-  pull выбранного SHA, Compose replace, smoke/health и автоматический rollback на предыдущий SHA.
-  Branch protection для `main` пока не включается, поскольку над проектом работает один человек.
-- Основной контракт администрирования VPS — публичный SSH только для `root` с уникальным длинным
-  паролем; public-key и keyboard-interactive authentication отключены, отдельные `operator`,
-  `deploy` и `ops-reader` не активны. GitHub Environment не требует reviewer approval (решение
-  архитектора от 2026-09-04), сохраняет `can_admins_bypass` и pinned host key и получает
-  root-пароль только как protected secret для ручного `workflow_dispatch` deploy.
-  Архитектор осознанно принимает риск полного захвата VPS при компрометации пароля. Переход на
-  key-only identities не входит в текущий или планируемый roadmap и возвращается в scope только по
-  новому явному решению архитектора.
-- CI-валидация связей контента: скрипт проверяет Course/module/lesson membership и совпадение
-  заголовков, `practiceTaskIds`, `topic_ids`, `course_lesson_ids`, `theory_links.hash`, task asset
-  metadata и однозначное владение задачей — сборка падает при битых связях до production
-  (см. §3, §2.3).
-- Резервное копирование: application и operations независимо создают tagged snapshots в общем
-  локальном Restic repository. Application сохраняет свой `pg_dump -Fc` и environment;
-  operations — Umami dump, Beszel state и свой environment. Для каждого тега действуют 7 daily,
-  4 weekly, 3 monthly, отдельный freshness marker и ежемесячный restore drill. Потеря всего VPS
-  уничтожит и локальные бэкапы — принятый риск до отдельной задачи с российским S3-compatible
-  storage.
+CI выполняет static/build/security checks, тесты запускаются только локально.
+Production использует immutable SHA images. Deploy — явный workflow_dispatch, с health/smoke
+и rollback на предыдущий release. Первый переход на 122_01 требует отдельного переноса банка
+в новый volume и restore acceptance для выбранного SHA; обычный deploy не импортирует контент.
+Старый volume сохраняется. После новых записей нельзя считать его актуальной резервной копией.
+Content validation и OpenAPI drift проверяются до merge. Подробности в STACK и runbooks.
 
-**Наблюдаемость** (источники на application VPS, внешний monitoring core):
-- **Umami v3** — отдельная БД/роль в Postgres; без fingerprinting/query/hash. Browser script,
-  pageviews и allowlisted learning-flow events загружаются только после явного opt-in и перестают
-  отправляться после отзыва. Necessary server/security logs и coarse aggregates имеют отдельную
-  цель и disclosure и не называются согласованной browser analytics.
-- **Beszel Hub + Agent** — host/container metrics и история на application VPS.
-- **journald + fail2ban** — структурированные application/Nginx/security logs; journald доступен
-  через WireGuard-only gateway, fail2ban читается sre-kit через основной root/password SSH
-  контракт.
-- **sre-kit core** — наш first-party sibling и владелец adapters, Source configuration,
-  normalization, alerts и monitoring UI. Change 26 поставляет generic release bundle, а этот
-  репозиторий владеет конкретной установкой на management VPS `sre.infraege.ru`, отдельным
-  WireGuard peer `10.77.0.3/32`, infraegev2 Source bootstrap и publisher lifecycle. Core читает
-  private sources через WireGuard/API/SSH, но не управляет target stack. Его SQLite, encrypted
-  adapter secrets и runtime data не попадают в git или application VPS.
-- **Внешняя доступность** — временный scheduled GitHub Action проверяет сайт, readiness и TLS.
-  Подключение существующего sre-kit Telegram channel к infraege и отдельный внешний management/
-  monitoring server отложены; alert engine не дублируется в этом репозитории.
+### 7.3 Minimal operations
 
-### 7.3 Operations and sre-kit integration contract
-
-```text
-infraegev2 ops package ── pinned SSH/Compose/systemd ──> application VPS operations stack
-
-sre-kit operator ── registers Source config in sre-kit ──> adapter engine
-sre-kit adapters ── WireGuard/private API/read-only SSH ──> infraegev2 observability targets
-                <── normalized Metric/Check/Event results ──┘
-
-application VPS
-  ├─ infraege Compose: nginx, web, api, application Postgres
-  └─ separate infraege-ops Compose project: Umami, Beszel, gateways
-```
-
-Обязательные инварианты границы:
-
-- application release не запускает `docker compose up/down` для operations stack и не удаляет его
-  containers/volumes через `--remove-orphans`; operations release не меняет application containers;
-- target stack имеет фиксированный Compose project, release directory, labels, healthchecks и
-  private-only bindings; повторный `docker compose up` обновляет тот же stack, а не создаёт второй;
-- Beszel Agent остаётся в host-network mode, а read-only Docker socket proxy публикуется только на
-  `127.0.0.1:2375` через отдельную non-internal bridge network; proxy разрешает только необходимые
-  read endpoints и запрещает POST;
-- публичный Umami collector остаётся узким same-origin маршрутом Nginx к private target endpoint;
-  UI/admin ports не публикуются в Интернет;
-- приложение публикует только стабильные сигналы: health/version endpoints, structured journald
-  labels и privacy-safe Umami collector. Ops lifecycle и application deploy не зависят от доступности
-  sre-kit;
-- deployment secrets принадлежат защищённому infraegev2 ops environment; adapter secrets
-  передаются в sre-kit только через его versioned registration API и никогда не попадают в git;
-- по решению архитектора beta-данные существующих Umami/Beszel не переносятся: новый operations
-  stack стартует с пустыми volumes и новым набором Sources. Старые containers/volumes сохраняются
-  только на ограниченный rollback-период и удаляются позднее отдельным явно destructive шагом;
-- недоступность sre-kit не останавливает target tools или ops automation; management VPS даёт
-  круглосуточный polling независимо от workstation, но потеря application VPS по-прежнему
-  одновременно делает его private Sources недоступными;
-- management VPS использует собственный WireGuard key и `10.77.0.3/32`; workstation peer
-  `10.77.0.2/32` сохраняется и никогда не копируется на сервер.
-
-Operations package намеренно остаётся небольшим. `config` локально проверяет Compose с защищённым
-env; `status` читает состояние установленного project через pinned SSH; `install` и `update`
-передают один Compose release и запускают `pull` + `up --wait`; `rollback` повторно применяет
-предыдущий release. Эти команды не моделируют собственный desired state, effect graph, checkpoint,
-revision или outbox: декларативным состоянием сервисов уже владеет Compose.
-
-Release содержит Compose definition и три коротких maintenance-скрипта для backup, restore proof и
-retention. Значения передаются отдельным mode-600 environment и хранятся на VPS по release id; они
-не входят в archive или git. Operations command никогда не меняет application Compose. Split-stack
-cutover завершён; обычные последующие operations releases используют `update`, а `install`
-остаётся только для действительно нового target без `/opt/infraege-ops/current`.
-
-Публичный same-origin Umami collector в активной production definition использует одну
-созданную external Docker network `infraege-observability-ingress`. Оба Compose project только
-подключаются к ней; Umami получает стабильный alias `umami`, а Nginx остаётся также в application
-network для web/api. Создание сети — одна явная lifecycle-операция, а не отдельная модель ресурсов.
-
-Первый авторизованный fresh-start cutover был безопасно откачен из-за недоступного WireGuard port
-Beszel Hub. Второй доказал исправленную dual-network связность и зарегистрировал Agent, но также
-был откачен: operations backup ошибочно исполнял Compose env как shell, а Beszel public key содержит
-пробел. Maintenance-скрипт больше не source-ит env и получает его только через Compose
-`--env-file`. Финальный retry на `ad6df05fa7d44e7a4f9434c196091ed4890e2f49` прошёл: application
-и operations используют независимые Compose projects, Umami/Beszel доступны только через
-предусмотренные public/private маршруты, Agent имеет статус `up`, backup/restore proof успешны и
-три operations timers активны. Legacy volumes сохранены как rollback-only; их удаление или перенос
-данных требуют отдельного явно одобренного действия.
-
-`ops/observability/sre-kit-sources.example.json` — secret-free операторская подсказка, а не новый
-универсальный deployment contract. Текущий шаблон содержит Project, шесть pull Sources и один
-push Source и согласован с manifests/ingress sre-kit Change 22; реальные accounts/secrets вводятся
-только в sre-kit. Beszel Source reconciliation получает system id по единственному system record с
-настроенным именем и требует свежие container statistics; ноль или несколько совпадений блокируют
-reconciliation. Ранее Change 20 примирил stale pre-cutover состояние с шестью уникальными enabled
-pull Sources и доказал повторный свежий polling,
-quiet success, обратимый failure/recovery и authenticated Dashboard/Sources/detail rendering без
-target-side mutations. Это завершает integration proof, но не обещает круглосуточные alerts при
-выключенном локальном core и не меняет независимый Compose lifecycle.
-
-Traffic publisher принадлежит infraegev2 в обоих режимах. Локальный `sre-kit-local` остаётся
-ручным fallback; management-host system timer использует отдельный WireGuard peer, читает Nginx
-journal entries и отправляет batch только в loopback ingress core. Оба режима немедленно сворачивают
-combined-log записи до path/status-family/coarse traffic class. Raw IP, request id, referrer и
-полный user agent не записываются в state или batch. State содержит только opaque journal cursor;
-он продвигается после успешного ingestion, а повтор диапазона использует стабильный
-`Idempotency-Key`. Локальный и management cursors независимы и не копируются друг в друга.
-
----
+Сохраняются TLS, health, обычные журналы, rate limits и scheduled application backup/restore.
+Umami, Beszel, sre-kit integration, publishers и monitoring tunnels удалены из репозитория.
+Установленные сервисы VPS этим локальным change не изменяются. Их остановка и отключение старых
+таймеров входят в отдельный явно разрешённый release по runbook; volumes автоматически не удаляются.
 
 ## 8. Non-Functional Requirements
 
-### 8.1 Approved database transition and recovery (target)
+### 8.1 Data transition and recovery
 
-Dev, test, production и restore используют разные экземпляры/volumes/credentials. Тесты выполняются
-локально против отдельного PostgreSQL, не против production и не в контейнере test runner.
-Reset-команды проверяют идентичность среды и отказываются работать с production; dev не получает
-production secrets. Сборки/CI не подключаются к production-БД.
-
-Первый этап — inventory существующей application-БД, затем dump/restore 16 → новый volume 18.
-Не считать БД пустой по отсутствию ORM-моделей. PG18 volume: `/var/lib/postgresql`,
-PGDATA `/var/lib/postgresql/18/docker`. Прежний volume сохраняется временно для контролируемого
-возврата. Не обновлять operations/Umami PostgreSQL как побочный эффект. Application production
-cutover выполняется через release после репетиции, не в момент фиксации плана.
-
-Alembic migrations сериализованы отдельным шагом, с ограниченным ожиданием блокировок и review
-SQL. Schema migrations отделены от импортов. Релиз проверяет совместимость схемы и content format;
-unknown content format отклоняется импортёром. Автоматический rollback приложения не делает
-downgrade/restore поверх новых данных; несовместимый rollback блокируется до переключения.
-Учесть обновление pooled connections после DDL. После начала записи в новую БД старый volume
-не является актуальной копией: возврат требует остановки writers и отдельного recovery-плана.
-
-Application backup расширяется: DB dump, неизменяемые файлы, роли/права, schema/release metadata,
-необходимые настройки восстановления и checksums. Сначала согласованный dump, затем файлы;
-ссылки commit-ятся только после сохранения файлов, удаление исключено. Сохранить текущую
-retention 7 daily + 4 weekly + 3 monthly и независимость operations tag. Копии ежедневно и
-до/после крупных изменений; backup/restore/prune сериализованы действующим Restic lock.
-
-Восстановление доказывается на отдельном экземпляре: схема, роли/права, количество задач,
-ссылки, все требуемые файлы, несколько реальных API/checker операций и cleanup временной среды.
-Weekly manual PC export содержит полный переносимый комплект, не только dump; ключ расшифрования
-должен быть доступен вне VPS. Автоматическое внешнее хранилище/PITR отложены явно.
-При сохранном VPS цель RPO ≤24h при успешном расписании; при потере VPS — с последней фактической
-PC-копии (до недели при соблюдении графика, вплоть до полной потери без неё). RTO измеряется
-репетицией, не обещается заранее. Контролировать свежесть backup/restore и disk headroom с учётом
-dump/WAL/history/assets/старого volume. Первые лимиты проверяются под текущими memory limits.
+Before changing persistence, preserve and restore-check the actual local bank/files. Build the
+simpler model on a new isolated volume; verify IDs, content, checker, memberships and file
+parity. Keep source database/files. Scheduled backup covers database and referenced files;
+restore runs into an empty isolated target. Production transfer and retirement of installed
+monitoring services require explicit release authorization and Full/Release Gate.
 
 ### 8.2 Existing non-functional baseline
 
 | Concern | Requirement |
 |---------|-------------|
 | Security headers / CORS | Rate limiting чекер-эндпоинта на Nginx: `limit_req_zone` 20 req/min/IP, burst 5, `nodelay` (см. §4, §11.2 источника) — против автоматизированного перебора банка ответов; конкретную цифру пересмотреть по факту логов после запуска. Основной public root/password SSH использует принятый архитектором минимум 12 символов, pinned host key, UFW и fail2ban; production Environment не имеет required reviewers по решению архитектора от 2026-09-04, `can_admins_bypass` остаётся единственным environment safety property. Повышенный риск перебора и полного захвата VPS при компрометации более короткого пароля осознанно принят, key-only migration не запланирована. |
-| Accessibility target | Foundation и lab не имеют serious/critical axe violations; lesson outline сохраняет вложенный semantic list, anchors, keyboard focus, различимый текущий пункт и корректный source order, а сложный визуал имеет видимую полную текстовую альтернативу |
+| Accessibility target | Public pages не имеют serious/critical axe violations; lesson outline сохраняет вложенный semantic list, anchors, keyboard focus, различимый текущий пункт и корректный source order, а сложный визуал имеет видимую полную текстовую альтернативу |
 | Performance budget | Текущий release gate ограничивает median LCP значением ≤4.0s на мобильном 4G-профиле; продуктовая цель остаётся LCP ≤2.8s, и порог следует вернуть к ней после подтверждённой оптимизации или на стабильном измерительном runner. CLS < 0.1, INP < 200ms; release evidence измеряет `/` и первый опубликованный `/ege/16-rekursiya`, отдельно проверяет cold-load font/layout shifts и не подменяет route-level метрики общей оценкой технической страницы |
-| Observability | Application, operations и management-host sre-kit имеют независимые lifecycle/volumes/rollback. infraegev2 владеет target operations, WireGuard peer, Source bootstrap и privacy-safe publisher; sre-kit владеет generic core/adapters/UI distribution. Семь clean-start Sources непрерывно poll/push на management VPS без target-side mutation; локальный `sre-kit-local` остаётся выключенным fallback |
-| Backup / restore | Application и operations jobs используют отдельные Restic tags, restore proofs и status markers в общем encrypted repository. Operations timers активируются только после clean install, без импорта старых Umami/Beszel artifacts. Для каждого владельца сохраняются 7 daily + 4 weekly + 3 monthly и общий same-host/off-site risk |
-| SEO | `/`, `/privacy`, published topics, courses и CourseLesson имеют canonical, уникальные metadata, SSR content, общий crawlable social preview и входят в sitemap/prerender; root document публикует browser-only manifest, SVG/PNG/ICO favicon и Apple touch icon из production-знака, а `/` — правдивый `WebSite` JSON-LD без выдуманной Organization; lab и review routes остаются unlisted, `noindex,nofollow` и исключены из public discovery; Lighthouse SEO для публичных маршрутов проходит без ошибок |
-| Mobile / no-JS readability | Lab, TopicLesson, Course overview и CourseLesson сохраняют текст, программу, подписи, решения и section anchors в SSR HTML; интерактивная проверка и персональный progress остаются progressive enhancement |
+| Observability | Health, structured server logs and scheduled external availability/TLS probe; no browser telemetry or separate monitoring stack |
+| Backup / restore | Application DB, files, roles and protected environment in encrypted Restic; 7 daily + 4 weekly + 3 monthly, monthly isolated restore. Same-host backup loss remains accepted until off-site storage exists |
+| SEO | `/`, `/privacy`, published topics, courses и CourseLesson имеют canonical, уникальные metadata, SSR content, общий crawlable social preview и входят в sitemap/prerender; root document публикует browser-only manifest, SVG/PNG/ICO favicon и Apple touch icon из production-знака, а `/` — правдивый `WebSite` JSON-LD без выдуманной Organization; review routes остаются unlisted, `noindex,nofollow` и исключены из public discovery; Lighthouse SEO для публичных маршрутов проходит без ошибок |
+| Mobile / no-JS readability | TopicLesson, Course overview и CourseLesson сохраняют текст, программу, подписи, решения и section anchors в SSR HTML; интерактивная проверка и персональный progress остаются progressive enhancement |
 | Client resilience / API drift | Route failures восстанавливаемы без белого экрана; loading/empty/error/not-found состояния доступны с клавиатуры и скринридера; OpenAPI schema/types drift ломает gate до merge; runtime HTTP имеет timeout/abort и не делает скрытый retry мутаций |
-| Юридическое (152-ФЗ) | `/privacy` публикует фактические цели, состав, сроки и получателей обработки, `avatarsik6699@gmail.com` и Telegram invite как каналы связи, но по явному решению архитектора не публикует ФИО и адрес оператора с принятием сопутствующего риска. Optional browser analytics требует отдельного явного согласия и допускает отзыв на `/privacy`; продолжение использования сайта согласием не считается. Формальная проверка уведомления РКН, локализации и текста юристом остаётся обязательным внешним follow-up, а не заявляется выполненной |
+| Юридическое (152-ФЗ) | `/privacy` публикует фактические цели, состав, сроки и получателей обработки, `avatarsik6699@gmail.com` и Telegram invite как каналы связи, но по явному решению архитектора не публикует ФИО и адрес оператора с принятием сопутствующего риска. Браузерная аналитика и consent UI удалены. Формальная проверка уведомления РКН, локализации и текста юристом остаётся обязательным внешним follow-up, а не заявляется выполненной |
 | Юридическое (436-ФЗ) | Возрастная маркировка для обычного сайта не вводится: существующая `12+` удаляется без замены на `18+` |
-| Происхождение контента | Существующие уроки сохраняют Content Quality Gate (§2.3). Для нового банка принято импортируемое содержимое с явным provenance (§3.2); происхождение, атрибуция и допустимость использования проверяются при подготовке пакета, не выводятся автоматически из URL и не заменяются технической валидацией |
+| Происхождение контента | Существующие уроки сохраняют Content Quality Gate (§2.3). Для нового банка принято импортируемое содержимое с явным provenance (§3); происхождение, атрибуция и допустимость использования проверяются при подготовке импорта, не выводятся автоматически из URL и не заменяются технической валидацией |
 | Other (юридический ориентир, не консультация) | Открытые источники используются как инженерный ориентир; формальная юридическая проверка и РКН составляют принятый бессрочно отложенный риск, а не пункт текущего roadmap |
 
 ---
 
 ## 9. Roadmap
 
-| Milestone | Status | Goal | Key Outputs |
-|-----------|--------|------|-------------|
-| `M0` — технический фундамент | complete | Сохранить проверенную web/backend/ops инфраструктуру без навязывания продуктовой страницы | Исторический neutral baseline, shared primitives, API contract, content skeleton и локальные gates |
-| `M1` — новый product/design baseline | complete | Доказать заменяемую визуальную систему без преждевременной публикации | «Инженерная тетрадь», unlisted design-system/lesson labs, единый frontend-контракт и reusable primitives |
-| `M2` — инфраструктурная пауза | complete | Подготовить production-платформу до продолжения продуктового контента | `infraege.ru`, VPS/GHCR deploy, security/release gates, backups и независимый operations stack активны; linked sre-kit Change 20 доказал все шесть Sources end to end |
-| `M3` — учебный flow и публичный запуск | complete | Завершить доменную логику, основные поверхности сайта и проверенный MVP-контент до расширения каталога | Два TopicLesson и все 28 одобренных Python CourseLesson опубликованы в production без Topic-связей; deployed SHA подтверждается независимо через health и release evidence |
-| `M4` — финальное измерение и эксплуатация | in progress | Измерять посещаемость прозрачно и обезличенно без опережающей детализации | Consented Umami pageviews/sessions и разрез по путям плюс privacy-safe Nginx aggregates уже закрывают текущую потребность; дальнейшая event-level аналитика отложена, все dashboard surfaces остаются в sre-kit |
-| `M5` — learning experience | complete | Улучшить читаемость уроков и доказать заменяемость визуального профиля без потери содержания | Changes 75–84 завершили lab-first ALCHIMIA baseline, редакторские пилоты, component/widget rollout, rich-practice contract и четыре отдельно одобренные партии уроков; Changes 95–97 вернули public identity infraege и завершили reference-led переработку главной, ссылок, footer, глубины и restrained motion без отката выбранной типографики и lesson contracts |
-| `M6` — публичные каталоги обучения | in progress | Дать ученику правдивую карту тем экзамена и самостоятельных программ до расширения контента | `/ege` покрывает номера 1–27 через 25 тем; `/courses` отделяет опубликованный Python от трёх catalog-only planned направлений без фиктивных маршрутов и обещаний |
-| `Practice` — серверный банк задач | planned | Самостоятельные задачи, импорт и безопасная эксплуатация | PostgreSQL 18, версии/источники/файлы, переход уроков на API, каталог; последовательность §9.2 |
-| `M7+` (после первых данных, вне MVP) | deferred | Расширение охвата и сообщества поверх работающей бесплатной базы | Второй мини-курс (Excel), аккаунты/синхронизация, обсуждения тем с модерацией, затем платные фичи — без runtime AI до этого момента |
-
-### 9.1 Current execution sequence
-
-Выполнены: anonymous lesson progress/reset/continuation, публикация 28 Python lessons,
-privacy-safe analytics с always-on management, infraege brand, публичные каталоги,
-shared visual recipes и единый study flow. История authoring/release и human approvals — archive.
-
-Техническая hygiene queue завершена в 107–111: DS consolidation, runtime cleanup, документация
-и проверяемая compacted history. Итоги и неизменяемые источники —
-[COMPACTED](changes/archive/COMPACTED.md). Расширять learning/catalog scope только по отдельному
-brief и content gate; старые findings с сохранёнными ограничениями не означают новую задачу.
-
-Off-site backup остаётся trigger-based улучшением: первый management-host релиз использует
-local-only Restic с явно принятым риском потери вместе с VPS. Key-only SSH, Telegram alerts,
-формальная юридическая проверка и уведомление РКН намеренно исключены из этой последовательности.
-На `/privacy` опубликованы только принятые архитектором контактные каналы; риск отсутствия ФИО и
-адреса оператора принят явно.
-
----
-
-### 9.2 Approved practice execution sequence
-
-Утверждено архитектором в чате 2026-09-12; фиксация плана не является реализацией или релизом.
-Локально завершены [113: practice data foundation](changes/archive/113-practice-data-foundation.md)
-и [114: model and tooling](changes/archive/114-practice-model-tooling.md); это не production release.
-Последующие change-файлы создаются по одному после завершения предшествующего, без заранее
-занятых номеров и без параллельного расширения Backlog.
-
-| Этап | Результат / условие завершения |
-|------|--------------------------------|
-| 1. PostgreSQL 18 foundation (113) | Разделённые среды/роли, проверяемый перенос и restore; готовность release-пути без реализации Task API |
-| 2. Server-owned model and tooling | Alembic/schema, Task/versions/provenance/files/links/history, CLI import/edit и их транзакции |
-| 3. Existing lesson cutover | Сохранены ID/содержимое, server practice membership, единый расчёт обзоров, migration browser progress |
-| 4. Practice catalog | `/practice`, task page, filters/SSR/sitemap, повторное решение и независимый прогресс |
-| 5. Transition completion | Production/restore/rollback proof; затем удаление legacy task runtime, без автоматического удаления rollback volumes |
-
-До production-перехода согласована локальная итерация UX: после закрытого Change 120 с импортом
-№5/№16 — Change 121 с каталогом, флоу решения и lab-макетом демонстрационных показателей (§5.1).
-Она не меняет решение отложить production-перенос и удаление legacy/rollback данных.
-
-Критерии всего перехода: повторный/прерванный импорт; два конкурирующих update; повреждённые
-блоки/вложения/ссылки; unknown format; редакционная/существенная правка; старая вкладка и legacy
-progress; Task без урока/в нескольких уроках/hidden; единый результат lesson/course/catalog;
-DB failure, права, schema lock, несовместимый rollback; восстановление непустой БД со всеми
-вложениями и проверкой ответов. Каталог на 10 000 synthetic задач доказывает ограниченные ответы
-и отсутствие whole-bank загрузки/N+1 под текущими ресурсными лимитами. Каждый change — один
-affected-area Critical Gate; публикация — Full + Release по STACK, тесты остаются local-only.
+One Change 122 owns preservation, minimalist UI, simplified server practice, reduced operations,
+and reconciled documentation. Use sequential Backlog groups, not separate changes. Existing
+history remains in COMPACTED and immutable archives. Future capabilities need demonstrated use.
 
 ## 10. Out of Scope
 
-- Аккаунты и синхронизация прогресса между устройствами (до `M7+`).
-- Редактор задач, отдельное согласование публикации импортов, adaptive sessions, серверная
-  история пользовательских попыток и новые analytics events не входят в первый банк практики.
-- Автоматическое внешнее резервирование/PITR и garbage collection старых task files отложены;
-  ручной weekly export и текущий same-VPS риск — явный контракт §8.1.
-- Обсуждения тем, комментарии, ответы и модерация (до аккаунтов и отдельного `M7+` change).
-- Полноценный тренажёр-пробник ЕГЭ с таймером на весь вариант.
-- Платные функции любого вида (до `M5+`, и только поверх уже работающей бесплатной базы).
-- AI внутри продукта как пользовательская фича (только как инструмент автора при подготовке
-  контента, offline).
-- Мини-курс Excel и полные TopicLesson для остальных заданий ЕГЭ — вторая волна, по той же структуре, что первая.
-- i18n/локализация — продукт полностью на русском, аудитория исключительно русскоязычная.
-- Полноценный поиск по сайту — линейная карта из 25 тем остаётся обозримой без отдельного поиска.
-- Автоматические `Topic ↔ CourseLesson` prerequisites, unlocks, рекомендации и совместное владение
-  учебной траекторией — вне scope. Явное повторное использование самостоятельной Task разрешено
-  §3.2 и не означает автоматическую педагогическую связь между материалами.
-- Встроенное выполнение произвольного Python-кода, sandbox и code-submission checker — отдельный
-  будущий security/product scope; первый курс использует локальный Python и проверяет наблюдаемые
-  короткие ответы.
-- Отдельный preview/staging-стенд — тестирование локально повторяет прод (§7.1).
-- Онлайн-кассы / 54-ФЗ — возникают только с появлением платежей, не на MVP-этапе.
-- CDN и off-site backup — отдельные последующие задачи; локальный core режим остаётся
-  поддерживаемым fallback. Telegram уже принадлежит sre-kit, отключён для первого management-host
-  запуска и не реализуется внутри infraegev2.
-- Формальная юридическая проверка обработки ПДн и вопрос уведомления РКН — бессрочно отложенный
-  принятый риск; опубликованные реквизиты оператора не считать доказательством завершённой
-  правовой проверки и не планировать дальнейший legal change без нового явного решения архитектора.
-- Переход с основного root/password SSH на key-only identities — не планировать без нового явного
-  решения архитектора.
-- PWA/service worker, offline mutation queue и optimistic updates — только после отдельного
-  пользовательского сценария и стратегии конфликтов/устаревания.
-- Глобальный client store и Base UI/community primitives без текущего consumer-а — не часть
-  клиентского фундамента; добавляются по доказанной потребности (§5.4).
-- Дальнейшая детализация product events, funnel-семантики и Product analytics Source — вне
-  текущего roadmap, пока consented visits/pageviews и privacy-safe path aggregates отвечают на
-  фактические продуктовые вопросы.
-
----
+Production deployment/host mutations in local work; deleting old volumes; accounts/payments;
+collaborative editing; editorial audit history; automatic import conflict resolution; background
+imports/file garbage collection; analytics/monitoring dashboards; decorative systems and labs.
+Single-operator sequential imports and ordinary pagination are intentional first-version limits.
+Formal legal review, off-site backup, key-only SSH and new content remain separate decisions.
 
 ## 11. Open Questions
 
-- [NEEDS_CLARIFICATION: числовые целевые показатели успеха MVP (объём органического трафика,
-  срок, глубина прохождения) — решить после накопления пригодных M4-данных Umami (§1.2).]
-- Точная цифра rate limit чекер-эндпоинта (20 req/min/IP, burst 5) — стартовый ориентир,
-  архитектор явно указал пересмотреть по факту логов после запуска, не считать зафиксированной
-  раз и навсегда (§8).
+None for the approved Change 122 scope. Verify actual source data before migration; never infer
+live database contents from archived acceptance counts.

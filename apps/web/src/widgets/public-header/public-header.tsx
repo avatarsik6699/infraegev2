@@ -9,12 +9,6 @@ export type PublicHeaderProps = {
   expanded?: boolean;
 };
 
-const FutureItem: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <span className={styles.futureItem} aria-disabled="true">
-    {children}
-  </span>
-);
-
 const PublicNavigation: React.FC<{
   activeSection?: PublicHeaderProps["activeSection"];
   compact?: boolean;
@@ -24,7 +18,7 @@ const PublicNavigation: React.FC<{
       <ActionLink
         className={styles.sectionLink}
         data-current={activeSection === "topics" || undefined}
-        hierarchy="drawn"
+        hierarchy="text"
         to="/ege/"
       >
         Темы
@@ -32,7 +26,7 @@ const PublicNavigation: React.FC<{
       <ActionLink
         className={styles.sectionLink}
         data-current={activeSection === "courses" || undefined}
-        hierarchy="drawn"
+        hierarchy="text"
         to="/courses/"
       >
         Мини-курсы
@@ -40,13 +34,11 @@ const PublicNavigation: React.FC<{
       <ActionLink
         className={styles.sectionLink}
         data-current={activeSection === "practice" || undefined}
-        hierarchy="drawn"
+        hierarchy="text"
         to="/practice"
       >
         Практика
       </ActionLink>
-      <FutureItem>Статистика</FutureItem>
-      <FutureItem>О проекте</FutureItem>
     </nav>
   </div>
 );

@@ -19,10 +19,10 @@
 |-------|-----------|
 | Frontend | React + TanStack Start (SSR/SSG, file-based routing and automatic route splitting) on Vite **8.2.1 exact** (Rolldown/Oxc); Base UI **1.7.0 exact** with local CSS Modules; Zustand **5.0.12 exact** for the cross-route lesson-progress registry; synchronous Python tokenization through `@speed-highlight/core` **2.0.0 exact**; TanStack Query for future server state; generated `openapi-typescript` contracts with `openapi-fetch` transport |
 | Backend | Python/FastAPI (`apps/api`) |
-| Database | Application PostgreSQL 18.6, pinned multi-platform image; separate runtime/import/migration/backup roles, Alembic revision `121_01` and server-owned practice model/tooling. Existing lesson consumers use the server-owned bank (SPEC §3). Live production remains PG16 until explicit release transfer |
+| Database | PostgreSQL 18.6, separate runtime/import/migration/backup roles; Alembic `122_01`, new isolated volume and current bank |
 | Cache | — (not needed on M0) |
-| Observability | `infraegev2/ops` owns the target lifecycle, explicit browser consent, allowlisted product events and coarse traffic aggregates. First-party sibling [sre-kit](https://github.com/avatarsik6699/sre-kit) Change 22 owns Projects, pull/push ingestion, retention, alerts and every monitoring/analytics dashboard. Host metrics and fail2ban use the accepted root/password SSH contract; journal logs, Beszel and Umami use WireGuard; push uses a Source token kept outside git |
-| Infra | Two Docker Compose projects on one VPS: application Nginx → `web`/`api`/Postgres, plus independently pinned Umami/Beszel operations services; Ubuntu 24.04, systemd, journald, fail2ban, WireGuard, Restic |
+| Observability | Health, structured server logs, fail2ban and scheduled external availability/TLS probe |
+| Infra | Application Docker Compose on Ubuntu 24.04: Nginx → web/API/PostgreSQL; systemd, journald, fail2ban, Restic |
 | Package managers | uv (`apps/api`), pnpm workspace (`apps/web`, root) |
 | Formatting | Prettier 3.9.6 exact for supported repository files; Ruff from the API lock for Python; EditorConfig for cross-editor whitespace defaults |
 | CI/CD | GitHub Actions on pinned Ubuntu 24.04 runners: static/security/audit checks without tests; GHCR SHA images with SBOM/provenance; serialized SSH deploy with rollback triggered by `workflow_dispatch` with an explicit SHA; scheduled uptime/TLS probe. The `production` GitHub Environment has no required reviewers (architect decision, 2026-09-04) — image publish and deploy run unattended once dispatched; `can_admins_bypass` stays the only remaining safety property |
@@ -31,106 +31,28 @@
 
 ## Prerequisites
 
-### Practice foundation and approved persistence stack
+### Practice persistence
 
-Architect-approved 2026-09-12; SPEC §3.2/§8.1/§9.2. Change 113 implements the PostgreSQL foundation locally; Change 114 adds the Python
-persistence layer and operator tooling. Change 115 switches lesson consumers; Change 116 adds
-the independent practice catalog and task pages. The exact Python package versions below are installed and locked. Production transfer
-is a separate explicit release operation.
+PostgreSQL 18.6, SQLAlchemy 2.0.52, Alembic 1.20.0 and asyncpg 0.31.0 are locked.
+Schema `122_01` has current task JSON, separate private checker, lesson membership and file objects.
+Runtime is SELECT-only; import/migration/backup use separate roles. Every datetime is timezone-aware.
+No revision history, package engine, release import or automatic data migration remains.
 
-| Component | Approved target | Delivery |
-|-----------|-----------------|----------|
-| Application PostgreSQL | 18.6 | implemented `18.6-alpine3.24@sha256:d3e1620b530c944afa6e887d22eb899824da68e19c52024bf98f5220c88a65b2`; same version for dev/test/restore; independent of operations PostgreSQL |
-| SQLAlchemy | 2.0.52 with `asyncio` extra | exact direct dependency and frozen uv lock; typed 2.x mappings, request/operation-local sessions |
-| Alembic | 1.20.0 | exact dependency; migration files in Git; separately invoked release step, never process-start autogeneration |
-| asyncpg | 0.31.0 | exact dependency; explicit PostgreSQL async driver |
-| Pillow | 12.3.0 | exact dependency for bounded full image decoding during import; bytes are preserved |
-| Python | existing 3.12 runtime | these package requirements are compatible; no Python major/minor upgrade follows from this change |
+`make dev` owns a NEW `infraege-dev_postgres122-data` volume; older volumes are retained.
+`make practice-bootstrap` explicitly imports `content/practice-bank` into local dev, including
+updates: export/backup operator edits before reimporting. `python3 scripts/practice-local.py export
+/path/to/new-directory` exports the actual local bank and referenced files. This helper refuses
+other container identities. Production import requires explicit protected credentials and the
+[practice runbook](runbooks/practice.md); production transfer is not part of local `/work`.
 
-Research sources (checked 2026-09-12): [PostgreSQL releases](https://www.postgresql.org/support/versioning/),
-[official image layout](https://raw.githubusercontent.com/docker-library/docs/master/postgres/README.md),
-[SQLAlchemy releases](https://www.sqlalchemy.org/download.html),
-[Alembic changes](https://alembic.sqlalchemy.org/en/latest/changelog.html),
-[asyncpg 0.31 support](https://raw.githubusercontent.com/MagicStack/asyncpg/v0.31.0/README.rst),
-[Pillow 12.3.0](https://pypi.org/project/pillow/12.3.0/).
-SQLAlchemy 2.1.0rc2 and PostgreSQL 19 Beta 3 are not the production target.
-
-The PG18 mount is `/var/lib/postgresql`, with `PGDATA=/var/lib/postgresql/18/docker`.
-Use a new volume and rehearsed logical dump/restore for the 16 → 18 transition; do not repoint
-the new binary at the old PG16 data directory. Verify ownership/roles and real data before cutover.
-Keep the old volume until separately authorized cleanup; it ceases to be current after PG18 writes.
-
-Operational interfaces (full options and release limits in the backup/production runbooks):
-
-- Foundation: `make db-inventory`, `make db-backup`, `make db-restore-check`, `make db-export`;
-  implemented; every target selects explicit environment/project/credentials and prints sanitized identity.
-  Inventory is read-only, restore-check targets a disposable instance, export creates a portable
-  bundle for manual download. The production switch remains an explicit release operation.
-- Schema phase: `cd apps/api && uv run alembic upgrade head`, `uv run alembic current`,
-  `uv run alembic check`; use the selected environment and separate migration credentials.
-  Implemented in Change 114; require explicit `MIGRATION_DATABASE_URL` with the migration role.
-  Default developer configuration does not select production. Review generated migrations, maintain one head and name constraints.
-- Task tooling: `uv run python -m app.modules.practice.cli` supports export/validate/diff/apply/import,
-  outcome, register, preflight and smoke. Explicit environment/project/role inputs are required;
-  see [practice operator guide](runbooks/practice.md) for package preparation and backup sequencing.
-
-Practice model acceptance: host-run tests against isolated PostgreSQL (never SQLite substitution for DB
-contracts); fresh and populated migration paths, concurrency/rollback, constraints, JSONB and
-timezone-aware datetimes; backup/restore including roles, task files and the shipped checker.
-Apply the KNOWN_GOTCHAS timezone-aware SQLAlchemy column convention. Gates include schema drift
-checks on the isolated instance; CI remains test-free and never contacts production DB.
-Runtime readiness now authenticates and verifies SQL/schema compatibility under a shared lock;
-liveness stays independent. The separate `db-migrate` Compose job gates API startup. All tests, dumps and reports obey the existing hygiene/permission contract.
-
-Foundation acceptance: `bash scripts/tests/practice-db-foundation.test.sh` requires host `restic`,
-Docker, jq and PostgreSQL images. It uses isolated nonempty PG16/PG18 fixtures, actual SQL role/data
-assertions, encrypted backup/export and the same transfer code as release. No test runner runs in
-Docker or CI. Additional focused contracts: `bash scripts/tests/backup-restore.test.sh`,
-`bash scripts/tests/deploy-preflight.test.sh`, `bash scripts/tests/docker-dev-lifecycle.test.sh`,
-`bash scripts/tests/production-ops-topology.test.sh`. These are Change 113 acceptance additions to
-the affected-area Critical Gate, not an instruction to run the Full Gate.
-
-Release rehearsal: `CANDIDATE_SHA=<full-commit-or-tree-sha> bash scripts/tests/practice-release-rehearsal.test.sh`.
-Optional `PREVIOUS_SHA` selects the exact installed previous release; its default is the recorded
-Change 119 inventory, not automatic live discovery. Requires host Docker/Compose, Python, uv,
-Git history, GHCR pull access, curl/jq and Restic (use the installed production version). The runner
-builds exact archived sources, runs databases/apps in isolated containers with loopback ports and
-keeps checks on the host. `--inspect` pauses for browser MCP checks. A tree object supports work
-before committing; record it explicitly as a source snapshot, never as a deployed commit SHA.
-Use `REHEARSAL_WORKSPACE` for a dedicated existing scratch directory; inspect build evidence then
-remove only that owned workspace and its three `infraege-rehearsal-119-*:candidate` image tags.
-Never run concurrent rehearsals with those shared tags. Containers and synthetic volumes are
-cleaned on exit; source production volumes are never selected. See the
-[transition handoff](runbooks/practice-transition.md) for release evidence and stop conditions.
-
-`infra/.env.example` declares bootstrap and four distinct role passwords. Generate production
-role passwords independently with `openssl rand -hex 24`; runtime passwords must be URL-safe.
-`make dev` injects separate disposable local values. Full Gate/test callers must supply their own
-`DB_RUNTIME_PASSWORD`, `DB_IMPORT_PASSWORD`, `DB_MIGRATION_PASSWORD`, `DB_BACKUP_PASSWORD`, plus
-the existing bootstrap credentials. `make config` remains secret-free. `DATABASE_URL` exposes only
-the read-only runtime identity to API; bootstrap/import/migration/backup credentials remain in the
-database/maintenance boundary. Alembic/schema readiness and task/file/checker restore verification are implemented locally.
-Existing lesson consumers use the DB readers locally. Production installation and activation remain an explicit release operation. Change 118 adds
-the host first-import coordinator between deployment migration and consumer startup; the
-candidate frozen API environment is prepared before downtime. See the transition runbook.
-
-
-Practice model acceptance: `bash scripts/tests/practice-model-tooling.test.sh` uses host
-uv/pytest/Restic and disposable PostgreSQL/application containers. It proves the separate
-migration job and HTTP health, fresh/populated migrations and drift detection, concurrency,
-interrupted imports, roles, CLI export/edit/apply and nonempty restore with the shipped checker.
-Tests never run in containers. `node scripts/practice-registry.mjs --check` detects release-registry
-drift locally and in static CI; it never contacts a DB. Formatting/lint/type-check include migrations.
-Task files use `infra/task-files.local` in dev and `/var/lib/infraege/task-files` in production;
-these are persistent data, outside the repository cleanup allowlist. Nginx and API mount them read-only for validated X-Accel-Redirect delivery.
-
-Release-import acceptance: `PRACTICE_TEST_BASE_IMAGE=<locally-built-api-image> bash
-scripts/tests/practice-release.test.sh` uses host uv/pytest/Restic and disposable PG18. It checks
-original-bank parity, interrupted backups, replay and operator-edit preservation, plus real
-pre/post backups and the CLI entrypoint. Run `python3 -m unittest discover -s scripts/tests -p
-deploy_orchestration_test.py` for the migration/import/activation failure boundary. These are
-focused Change 118 checks, not Full/Release acceptance. Host deployment requires uv and its
-frozen candidate API environment before downtime; tests never run in containers.
+Focused persistence acceptance: `cd apps/api && uv run pytest tests/test_minimal_bank.py`.
+It creates/disposes an isolated PG18 instance, runs migrations and validates nonempty parity,
+transaction rollback, HTTP privacy, checker, filters, paging, files and published lesson ordering.
+No tests run in Docker or CI; Docker contains only PostgreSQL. Backup verification additionally
+uses the shipped read-only `app.modules.practice.verify` and isolated restore machinery.
+`node scripts/practice-registry.mjs --check` checks authored publication metadata.
+Task files are persistent data (`infra/task-files.local` / `/var/lib/infraege/task-files`), outside cleanup.
+See [backup](runbooks/backup-restore.md) and [transition](runbooks/practice-transition.md).
 
 ### Current prerequisites
 
@@ -173,20 +95,18 @@ only `infraege-dev`. A failed start prints service status and recent nginx/web/a
 Lesson practice and the checker read only PostgreSQL through the API; web SSR uses the owning
 typed adapter and `API_INTERNAL_URL` (`http://api:8000` in Compose). Topic and Course theory remain
 content-as-code. Only `/` and `/ege` are prerendered; DB-dependent lesson/course pages are SSR.
-The legacy `content/tasks` assets remain preserved for stage-5 rollback evidence, not as fallback.
+Legacy `content/tasks` JSON remains only as historical test fixtures; it is neither packaged
+into application images nor mounted/read at runtime.
 `/practice` and `/practice/$taskId` use request-time API reads; standalone task progress uses its
 own browser key and does not change lesson progress. `/sitemap.xml` is a runtime index with the
 release-owned `/sitemap-static.xml` and bounded `/sitemap-practice/$page` partitions. Neither page
 builds nor static publication metadata read the database. API reads have a separate Nginx limit.
-Use explicit `make practice-bootstrap ENV_FILE=...` after `make dev` for first local import;
+Use explicit `make practice-bootstrap` after `make dev` for first local import;
 [practice](runbooks/practice.md) documents backup setup. Dev PostgreSQL exposes an allocated
-loopback-only port for host CLI/test access. Bootstrap never overwrites operator edits.
+loopback-only port for host CLI/test access. Bootstrap applies the supplied bank; export operator edits before reimporting.
 
-Production commands and credential onboarding live in [production](runbooks/production.md).
-Target/management/workstation ownership, Source reconciliation and publisher lifecycle live in
-[analytics](runbooks/analytics.md); recovery lives in [backup and restore](runbooks/backup-restore.md).
-Use `make tunnel-{up,down,status}`, `make ops-{config,status,install,update,rollback}` and
-`make sre-management ACTION=…` only with the inputs and scope defined by those runbooks.
+Production credentials and deployment: [production](runbooks/production.md).
+Recovery: [backup and restore](runbooks/backup-restore.md).
 
 ### pnpm workspace policy
 
@@ -266,7 +186,7 @@ default local shipping.
 |-------|---------|-----------------------|
 | Formatting | `pnpm format:check` | Prettier and Ruff; Markdown and generated/dependency-owned files are explicitly ignored |
 | Infrastructure / bootstrap | `docker compose --project-name infraege-full-gate -f infra/docker-compose.yml -f infra/docker-compose.override.yml up --build -d` | The explicit project name and overlay ports `18080/13000/18000/15432` isolate the gate from unrelated Compose directories and common development ports. Verified live in change 03 on Docker Desktop/BuildKit: all four services become healthy; frontend and `/health` return 200 through Nginx. Change 02 also verified `POST /api/tasks/{id}/check` and the `/api/tasks/` rate limit (`503` past its burst — Nginx's default `limit_req_status`, not `429`) |
-| Operations contracts | `bash scripts/tests/ops-stack-definition.test.sh && bash scripts/tests/ops-lifecycle.test.sh && bash scripts/tests/production-ops-topology.test.sh && bash scripts/tests/backup-restore.test.sh && bash scripts/tests/ops-backup-restore.test.sh && bash scripts/tests/sre-kit-management-contract.test.sh && bash scripts/tests/host-web-gate.test.sh` | local/fake transport only; never connects to production or starts the operations projects |
+| Operations contracts | `bash scripts/tests/backup-restore.test.sh && bash scripts/tests/deploy-preflight.test.sh && bash scripts/tests/host-web-gate.test.sh` | local/fake transport only |
 | Migrations | `cd apps/api && uv run alembic upgrade head && uv run alembic current && uv run alembic check` | explicit isolated gate DB and migration-role URL; Compose runs its own separate migration job before API startup; never CI or production |
 | Backend test suite | `cd apps/api && uv run pytest` | local only |
 | API contract drift | `pnpm api:check` | requires the frozen API and pnpm environments; tracked schema and generated TypeScript must match |
@@ -278,7 +198,7 @@ default local shipping.
 | SAST / secrets / dependency audit | `pnpm audit:security` | Docker required for pinned Gitleaks 8.30.1 and Trivy 0.73.0; Semgrep 1.172.0 and pip-audit 2.10.1 run through uvx |
 | Accessibility audit | `pnpm audit:a11y` | local Playwright/axe; foundation and not-found routes, serious/critical violations fail |
 | Performance budget | `scripts/run-host-web-gate.sh bash -c 'pnpm --filter web build && pnpm audit:performance'` | restores the repository-owned `infraege-full-gate` web service on success/failure; local Chrome against `/`, `/ege`, `/courses`, `/courses/python` and `/ege/16-rekursiya`; median of 3, enforced LCP ceiling ≤4.0s, CLS ≤0.1, TBT ≤200ms as lab proxy for INP. LCP ≤2.8s remains the product target to restore when stable measurement and optimization evidence support tightening the gate |
-| Content validation | `pnpm test:content-assets && pnpm validate:content` | the isolated validator tests reject unsafe paths and invalid asset metadata before the real-tree pass; docs/SPEC.md §2.2/§3/§7.2 validation also checks Course/module/lesson membership and titles, `practiceTaskIds`, `topic_ids`, `course_lesson_ids`, `theory_links.hash`, task asset metadata and exclusive task ownership |
+| Content validation | `pnpm test:content-assets && pnpm validate:content` | the isolated validator tests reject unsafe paths and invalid asset metadata before the real-tree pass; `validate:content` checks Course/module/lesson membership and titles, generated publication registry, and the complete canonical bank through the API CLI (schema, lesson positions, theory material/section references and file bytes). Requires uv and the frozen API environment; no database or credentials. The legacy asset tests retain historical fixture coverage |
 | Repository hygiene | analyze all gate reports, then `make clean-dry-run && make clean && make clean-check` | always run last; Lighthouse removes its external Chrome profile on every exit, while this terminal step removes retained reports, builds and caches from the repository |
 
 Tests remain local-only; the security command is also mirrored in GitHub Actions without invoking
@@ -339,31 +259,10 @@ scripts/run-host-web-gate.sh pnpm --filter web build
 pnpm --filter web test:layout
 ```
 
-This local-only suite owns a production Node server at `127.0.0.2:3200` and tests the four
-public discovery/overview routes with held fonts, images and JavaScript, stored progress,
-plus no-JS, whole-document network/CPU throttling and pixel comparisons of pending/failed
-artwork. Its domain Page Object owns geometry/CLS and paint instrumentation; normal dev E2E
-excludes this spec. Apply the affected-case review matrix in [FRONTEND §4.2](FRONTEND.md#42-loading-visual-stability)
-when changing delivery, hydration, page geometry or filter/effect behavior. Run against a fresh
-production build: dev HMR or a settled screenshot alone cannot verify these loading contracts.
-It does not run a full performance gate or change the CLS/LCP thresholds.
-
-`pnpm images:generate` regenerates only `public/{images/course-catalog,images/course-overview,topics}/responsive`
-WebP derivatives from the original checked-in artwork. It uses host FFmpeg/libwebp (the same
-host conversion capability as `brand:generate`), Lanczos resizing, quality 85, compression level 6;
-no original/reference is overwritten. There is no new runtime dependency. Regeneration requires
-FFmpeg; normal application build/deploy copies the checked-in derivatives.
-
-### Independent practice catalog (focused acceptance)
-
-`bash scripts/tests/practice-catalog.test.sh` provisions a disposable PG18 database, migrates it,
-registers release materials using the migration role and seeds 10,000 synthetic visible tasks
-plus hidden/archived fixtures. Host pytest checks bounded queries, payloads, cursor/filter rules,
-publication boundaries, API and sitemap partitions, then Alembic checks drift. `--browser` also
-runs the domain catalog Playwright spec against that isolated bank. `--inspect` keeps only that
-fixture database alive until Enter, for explicitly started local browser inspection servers;
-it prints its disposable runtime URL. The EXIT trap removes the owned container and test files.
-No synthetic task is imported into the persistent dev or production bank.
+This local-only suite owns a production Node server at `127.0.0.2:3200` and checks desktop/mobile
+readability with pending and failed fonts. Normal E2E separately checks public routes and every
+published Python lesson without JavaScript. Use a fresh production build for delivery evidence.
+No decorative artwork or pixel-comparison infrastructure remains.
 
 ### Backend
 
@@ -404,6 +303,12 @@ pnpm --filter web test:e2e
 - `playwright.config.ts` contains one project only: Chromium. It always starts fresh local frontend
   and backend processes on dedicated `127.0.0.2:3100` / `127.0.0.2:8100` ports with strict port
   binding; it never reuses an arbitrary process that may serve a stale checkout.
+
+E2E requires a seeded bank: run `make dev` and the explicit `make practice-bootstrap` first,
+then provide the read-only runtime `DATABASE_URL` to the host runner, using the allocated
+loopback port from `docker port infraege-dev-postgres-1 5432`. Set `TASK_FILES_DIR` to the absolute
+local task-files directory for file delivery. Never point a test runner at production. No test
+imports a synthetic bank into the persistent development volume.
 
 ---
 
@@ -479,11 +384,7 @@ component or a slice-local model hook; no global service locator is used.
 
 Route error/not-found UI and delayed navigation progress are application-level defaults.
 Client transitions keep the current page until the next route is ready; the progress bar appears
-after 150 ms, without a global pending screen, skeleton or minimum display delay. Browser render/route/chunk/global failures pass through `shared/lib/client-errors`, which
-discards messages, page URLs, full stacks, and user data before posting a bounded fingerprint
-event. Nginx applies a dedicated body/rate limit, FastAPI writes a structured journald event, and
-sre-kit's `journal-http` adapter (with `parse_json_message` enabled) surfaces it as a labeled
-event. Expected product errors remain local to their owner. Additional Base UI primitives or
+after 150 ms, without a global pending screen, skeleton or minimum display delay. Expected product errors remain local to their owner. Additional Base UI primitives or
 component libraries are adopted only with a real consumer and a local semantic boundary.
 
 ### Backend modules (`apps/api/app/`) — DDD-like, established in change 02
@@ -503,11 +404,10 @@ shared/      cross-module code used by >= 2 modules — stays an empty placehold
 ```
 
 `core/database.py` owns engine construction and shared metadata. `modules/practice/` owns typed
-models, package/content validation, immutable files, transaction service and host CLI; migrations
-live in `apps/api/migrations/`. The HTTP checker uses the shared DB reader and the pure
-comparator in `app/shared/checker.py`; it requires the displayed solution revision. Current normalized rows own
-reads; history is audit-only. Public content and edit plans have explicit types. Every mapped datetime uses
-`DateTime(timezone=True)` (KNOWN_GOTCHAS); no hidden commits or shared AsyncSessions.
+models, content validation, immutable files, one transactional import/export and a host CLI.
+Migrations live in `apps/api/migrations/`. Public projections exclude checker/private provenance.
+The checker requires the displayed solution revision; the counter advances on solution-affecting
+edits. There is no audit history or concurrent editorial workflow.
 
 ### Application maintenance code
 
@@ -529,8 +429,7 @@ python3 -m unittest discover -s scripts/tests -p application_db_test.py
 python3 -m unittest discover -s scripts/tests -p deploy_orchestration_test.py
 ```
 
-The snapshot test requires `PRACTICE_BACKUP_CONTAINER` and is run by the isolated
-`practice-model-tooling.test.sh` fixture, never by CI. `pnpm format:check` includes maintenance Python. Lint from `apps/api` with
+The optional snapshot integration test requires an explicitly selected `PRACTICE_BACKUP_CONTAINER`; never run it in CI. `pnpm format:check` includes maintenance Python. Lint from `apps/api` with
 `uv run ruff check ../../scripts/application_db.py ../../scripts/lib/application_db
 ../../scripts/tests/application_db_test.py ../../scripts/tests/deploy_orchestration_test.py`.
 

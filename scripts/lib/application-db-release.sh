@@ -1,61 +1,29 @@
 #!/usr/bin/env bash
 
-application_practice_environment() (
-  cd "$1/apps/api" || exit $?
-  uv sync --frozen --no-dev
-)
-
-application_practice_import() (
-  local candidate=$1 environment_file=$2
-  set -a
-  # Protected operator environment, already validated by the deployment coordinator.
-  # shellcheck disable=SC1090
-  source "$environment_file" || exit $?
-  set +a
-  export PRACTICE_RELEASE_ROOT="$candidate"
-  cd "$candidate/apps/api" || exit $?
-  uv run --frozen --no-sync python -m app.modules.practice.release \
-    --environment prod --project infraege --backup-env "$environment_file"
-)
-
-application_practice_activate() {
-  local candidate=$1 candidate_sha=$2 environment_file=$3
-  run_compose "$candidate" "$candidate_sha" run --rm --no-deps db-migrate || return $?
-  application_practice_import "$candidate" "$environment_file" || return $?
-  run_compose "$candidate" "$candidate_sha" up --detach --remove-orphans --wait --wait-timeout 180
-}
-
 application_schema_preflight() {
-  local candidate=$1 previous=$2 proof=$3 previous_sha
-  [[ $(cat "$candidate/infra/database-schema") == 121_01 ]] || return 1
-  [[ -n $previous ]] || return 0
-  if [[ $(cat "$previous/infra/database-schema" 2>/dev/null || true) == 121_01 ]]; then return 0; fi
-  previous_sha=$(<"$previous/.deploy-sha")
-  [[ $previous_sha =~ ^[a-f0-9]{40}$ && -f $proof &&
-     $(stat -c '%u:%a' "$proof") == 0:600 && $(cat "$proof") == "121_01 $previous_sha" ]] || {
-    echo 'schema rollback compatibility proof for the exact previous SHA is required' >&2; return 1;
+  local candidate=$1 previous=$2 proof=$3
+  [[ $(cat "$candidate/infra/database-schema") == 122_01 ]] || return 1
+  if [[ -n $previous && $(cat "$previous/infra/database-schema" 2>/dev/null || true) == 122_01 ]]; then return 0; fi
+  [[ -f $proof && $(stat -c '%u:%a' "$proof") == 0:600 &&
+     $(cat "$proof") == "122_01 $DEPLOY_SHA" ]] || {
+    echo 'Change 122 requires explicit bank transfer/restore acceptance for this exact SHA before deployment' >&2
+    return 1
   }
 }
 
 application_db_rollback() {
-  local previous_release=$1 release_dir=$2 env_file=$3 db_switched=$4
+  local previous_release=$1
   if [[ -n $previous_release && -r $previous_release/.deploy-sha ]]; then
     local previous_sha
     previous_sha=$(<"$previous_release/.deploy-sha")
     echo "Deploy failed; rolling back application to $previous_sha" >&2
-    if [[ $db_switched == true ]]; then
-      # Never reapply the previous PostgreSQL definition or restore/downgrade its data.
-      DEPLOY_SHA="$previous_sha" docker compose --env-file "$env_file" --project-name infraege \
-        -f "$previous_release/infra/docker-compose.yml" \
-        -f "$previous_release/infra/docker-compose.prod.yml" \
-        -f "$release_dir/infra/docker-compose.db-rollback.yml" \
-        up --detach --no-deps --wait --wait-timeout 180 nginx web api || return $?
-    else
-      run_compose "$previous_release" "$previous_sha" up --detach --remove-orphans --wait --wait-timeout 180 || return $?
-    fi
+    run_compose "$previous_release" "$previous_sha" up --detach --remove-orphans --wait --wait-timeout 180 || return $?
     curl --fail --silent --show-error --max-time 15 https://infraege.ru/health |
       jq -e --arg sha "$previous_sha" '.status == "ok" and .version == $sha' >/dev/null || return $?
     curl --fail --silent --show-error --max-time 15 https://infraege.ru/ >/dev/null || return $?
+    # Maintenance must follow the restored database schema, including a first-cutover failure.
+    ln -sfn "$previous_release" "${root:?}/current" || return $?
+    ln -sfn "$previous_release" "$root/database-current" || return $?
   else
     echo 'No previous release available for automatic rollback' >&2
     return 1

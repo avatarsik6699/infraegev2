@@ -8,8 +8,7 @@
   padding-block: clamp(var(--space-4), 6vw, var(--space-6));
 }
 
-.root > h1,
-.updated {
+.root > h1 {
   margin: 0;
 }
 
@@ -19,11 +18,6 @@
   font-weight: 500;
   line-height: 1.08;
   letter-spacing: -0.025em;
-}
-
-.updated {
-  margin-top: var(--space-1);
-  font-size: var(--text-sm);
 }
 
 .content {
@@ -52,8 +46,4 @@
 .content li {
   font-size: var(--text-base);
   line-height: 1.65;
-}
-
-.content > [data-analytics-consent] {
-  margin-bottom: var(--space-2);
 }

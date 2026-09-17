@@ -20,7 +20,7 @@ def _health_payload() -> dict[str, str]:
 
 
 async def check_database() -> None:
-    """Authenticate, execute SQL and verify the exact supported schema under a shared lock."""
+    """Authenticate, execute SQL and verify the exact supported schema."""
     if not settings.database_url:
         if settings.is_production:
             raise RuntimeError("production requires DATABASE_URL")

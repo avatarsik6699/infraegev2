@@ -16,6 +16,7 @@ services:
     volumes: !override
       - /etc/letsencrypt:/etc/letsencrypt:ro
       - /var/www/certbot:/var/www/certbot:ro
+      - ${TASK_FILES_DIR:?TASK_FILES_DIR required}:/task-files:ro
     ports:
       - "80:80"
       - "443:443"
@@ -25,9 +26,6 @@ services:
       <<: *runtime-labels
       com.infraege.service: nginx
     logging: *journald
-    networks:
-      - default
-      - observability-ingress
 
   web:
     image: ghcr.io/avatarsik6699/infraegev2-web:${DEPLOY_SHA:?DEPLOY_SHA is required}
@@ -58,7 +56,7 @@ services:
     image: ghcr.io/avatarsik6699/infraegev2-api:${DEPLOY_SHA:?DEPLOY_SHA is required}
     build: !reset null
     command:
-      - uv run --frozen alembic upgrade head && uv run --frozen python -m app.modules.practice.cli register --environment prod --project infraege
+      - uv run --frozen alembic upgrade head
     mem_limit: 384m
     logging: *journald
 
@@ -69,8 +67,3 @@ services:
       <<: *runtime-labels
       com.infraege.service: postgres
     logging: *journald
-
-networks:
-  observability-ingress:
-    external: true
-    name: infraege-observability-ingress

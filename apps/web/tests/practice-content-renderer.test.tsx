@@ -127,7 +127,7 @@ describe("rich practice content", () => {
     await waitFor(() => expect(checker).toHaveBeenCalledTimes(2));
     await waitFor(() => expect(screen.queryByRole("alert")).toBeNull());
   });
-  it("restores tab drafts after remount but isolates a new solution revision", async () => {
+  it("does not persist unsubmitted drafts across remounts", async () => {
     const draftTask = {
       ...task,
       id: "revision-draft-test",
@@ -155,7 +155,7 @@ describe("rich practice content", () => {
             exact: true,
           }) as HTMLInputElement
         ).value,
-      ).toBe("123"),
+      ).toBe(""),
     );
     second.unmount();
     render(

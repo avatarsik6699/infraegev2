@@ -7,14 +7,6 @@ on:
         description: Full commit SHA from main whose images passed scanning
         required: true
         type: string
-      db_transfer:
-        description: Explicit rehearsed application database transfer
-        required: true
-        default: none
-        type: choice
-        options:
-          - none
-          - 16-to-18
 
 permissions:
   contents: read
@@ -65,7 +57,6 @@ jobs:
       - name: Deploy and verify with rollback
         env:
           DEPLOY_SHA: ${{ inputs.sha }}
-          DB_TRANSFER_MODE: ${{ inputs.db_transfer }}
           PROD_HOST: ${{ secrets.PROD_HOST }}
           INFRAEGE_SSH_PASSWORD: ${{ secrets.PROD_ROOT_PASSWORD }}
           INFRAEGE_PROD_KNOWN_HOSTS: /home/runner/.ssh/known_hosts
@@ -73,5 +64,4 @@ jobs:
           source scripts/lib/production-ssh.sh
           INFRAEGE_PROD_HOST="$PROD_HOST"
           production_ssh_init
-          [[ "$DB_TRANSFER_MODE" == none || "$DB_TRANSFER_MODE" == 16-to-18 ]]
-          production_ssh "DEPLOY_SHA='$DEPLOY_SHA' DB_TRANSFER_MODE='$DB_TRANSFER_MODE' bash -s" < scripts/deploy-remote.sh
+          production_ssh "DEPLOY_SHA='$DEPLOY_SHA' bash -s" < scripts/deploy-remote.sh

@@ -23,7 +23,7 @@ export const CourseLessonResult: React.FC<Props> = (props) => (
       <div className={styles.resultLinks}>
         {props.previousLesson ? (
           <ActionLink
-            hierarchy="drawn"
+            hierarchy="text"
             icon="back"
             to={`/courses/${props.course.routeSlug}/${props.previousLesson.routeSlug}`}
           >
@@ -32,7 +32,7 @@ export const CourseLessonResult: React.FC<Props> = (props) => (
         ) : null}
         {props.nextLesson ? (
           <ActionLink
-            hierarchy="drawn"
+            hierarchy="text"
             icon="forward"
             to={`/courses/${props.course.routeSlug}/${props.nextLesson.routeSlug}`}
           >

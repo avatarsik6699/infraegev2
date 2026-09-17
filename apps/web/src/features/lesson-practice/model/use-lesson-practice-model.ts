@@ -6,12 +6,7 @@ import type { LessonPracticeTypes } from "../lesson-practice.types";
 
 type FormSubmitHandler = NonNullable<ComponentProps<"form">["onSubmit"]>;
 
-export function useLessonPracticeModel(
-  props: LessonPracticeTypes.Props & {
-    drafts?: Readonly<Record<string, string>>;
-    onDraftChange?: (id: string, value: string) => void;
-  },
-) {
+export function useLessonPracticeModel(props: LessonPracticeTypes.Props) {
   const [practiceStates, setPracticeStates] =
     useState<LessonPracticeTypes.States>({});
   const [feedback, setFeedback] = useState<LessonPracticeTypes.Feedback>({});
@@ -47,13 +42,7 @@ export function useLessonPracticeModel(
         ...current,
         [task.id]: result.correct ? "correct" : "incorrect",
       }));
-      const solvedCount = result.correct
-        ? props.onTaskSolved(task.id, answer)
-        : props.solvedTaskIds.length;
-      props.onAnswerChecked?.({
-        result: result.correct ? "correct" : "incorrect",
-        solvedCount,
-      });
+      if (result.correct) props.onTaskSolved(task.id, answer);
     } catch (error) {
       let state: LessonPracticeTypes.State = "error";
       if (error instanceof ApiError && error.status === 409) state = "stale";
@@ -80,10 +69,7 @@ export function useLessonPracticeModel(
       }
     },
     answerFor: (taskId: string) =>
-      draftAnswers[taskId] ??
-      props.acceptedAnswers[taskId] ??
-      props.drafts?.[taskId] ??
-      "",
+      draftAnswers[taskId] ?? props.acceptedAnswers[taskId] ?? "",
     checkAnswer,
     enhanced,
     feedbackFor: (taskId: string) => feedback[taskId] ?? "",
@@ -92,7 +78,6 @@ export function useLessonPracticeModel(
     stateFor: (taskId: string) => practiceStates[taskId] ?? "idle",
     updateAnswer: (taskId: string, value: string) => {
       setDraftAnswers((current) => ({ ...current, [taskId]: value }));
-      props.onDraftChange?.(taskId, value);
     },
   };
 }

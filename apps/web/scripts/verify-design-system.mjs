@@ -74,7 +74,7 @@ const adoptionViolations = (source, file) => {
     /\.tsx?$/.test(file) &&
       /(?<![\w-])presentation=["']study["']/.test(clean) &&
       "retired learning presentation API",
-    file.startsWith("pages/lesson-design-lab/") &&
+    file.startsWith("pages/topic-lesson/") &&
       /\.tsx$/.test(file) &&
       /<(?:code|var)(?:\s|>)/.test(clean) &&
       "lesson notation bypasses Notation",
@@ -103,7 +103,7 @@ for (const [source, file, expected] of [
   ],
   [
     "<var>n</var>",
-    "pages/lesson-design-lab/proof.tsx",
+    "pages/topic-lesson/proof.tsx",
     ["lesson notation bypasses Notation"],
   ],
   [".image { height: 100%; }", "shared/components/image/image.module.css", []],
@@ -114,11 +114,7 @@ for (const [source, file, expected] of [
     [],
   ],
   ['<ExternalLink presentation="inline" />', "pages/privacy/page.tsx", []],
-  [
-    "<Notation kind='formula'>n</Notation>",
-    "pages/lesson-design-lab/proof.tsx",
-    [],
-  ],
+  ["<Notation kind='formula'>n</Notation>", "pages/topic-lesson/proof.tsx", []],
 ])
   assert.deepEqual(adoptionViolations(source, file), expected);
 
@@ -201,40 +197,6 @@ for (const file of files.filter((file) =>
   for (const name of publicUiExports(fs.readFileSync(file, "utf8")))
     publicNames.add(name);
 }
-const catalog = fs.readFileSync(
-  path.join(sourceRoot, "pages/design-system-lab/catalog-contracts.ts"),
-  "utf8",
-);
-const names = [...catalog.matchAll(/(?:live|context)\(\s*"([^"]+)"/g)].map(
-  (match) => match[1],
-);
-const coverageProblems = (expected, actual) => ({
-  missing: [...expected].filter((name) => !actual.includes(name)),
-  stale: actual.filter((name) => !expected.has(name)),
-  duplicate: actual.filter((name, index) => actual.indexOf(name) !== index),
-});
-assert.deepEqual(coverageProblems(new Set(["Button"]), ["Button"]), {
-  missing: [],
-  stale: [],
-  duplicate: [],
-});
-assert.deepEqual(
-  coverageProblems(new Set(["Button", "Input"]), [
-    "Button",
-    "Button",
-    "Removed",
-  ]),
-  {
-    missing: ["Input"],
-    stale: ["Removed"],
-    duplicate: ["Button"],
-  },
-);
-assert.deepEqual(
-  coverageProblems(publicNames, names),
-  { missing: [], stale: [], duplicate: [] },
-  "Every public UI export needs one named live or contextual catalog entry",
-);
 console.log(
-  `Design-system policy: PASS (theme boundaries and ${names.length} public UI contracts)`,
+  `Design-system policy: PASS (theme boundaries and ${publicNames.size} explicit public UI exports)`,
 );

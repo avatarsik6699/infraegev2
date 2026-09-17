@@ -1,11 +1,7 @@
-import { useEffect } from "react";
-import { reportProductEvent } from "~/features/analytics";
 import { Typography } from "~/shared/components/typography";
 import { PageContainer } from "~/shared/components/page-container";
 import { PublicFooter } from "~/widgets/public-footer";
 import { PublicHeader } from "~/widgets/public-header";
-import { CourseOverviewAtmosphere } from "./components/course-overview-atmosphere";
-import { CourseOverviewArtwork } from "./components/course-overview-artwork";
 import { CourseOverviewCurriculum } from "./components/course-overview-curriculum";
 import { CourseOverviewIntro } from "./components/course-overview-intro";
 import { CourseOverviewOutcomes } from "./components/course-overview-outcomes";
@@ -16,16 +12,6 @@ import styles from "./course-overview-page.module.css";
 export const CourseOverviewPage: React.FC<CourseOverviewPageTypes.Props> = (
   props,
 ) => {
-  useEffect(
-    function reportCourseOpenedFx() {
-      reportProductEvent({
-        name: "course_opened",
-        properties: { course: props.course.id },
-      });
-    },
-    [props.course.id],
-  );
-
   const visibleLessons = props.lessons.filter((lesson) =>
     props.course.status === "published"
       ? lesson.status === "published"
@@ -39,9 +25,7 @@ export const CourseOverviewPage: React.FC<CourseOverviewPageTypes.Props> = (
     <div className={styles.page} data-course-overview-page>
       <PublicHeader activeSection="courses" />
       <PageContainer component="main" measure="full" className={styles.root}>
-        <CourseOverviewAtmosphere />
         <div className={styles.courseSummary} data-course-summary>
-          <CourseOverviewArtwork courseId={props.course.id} />
           <CourseOverviewIntro
             course={props.course}
             publishedLessonCount={progressLessons.length}

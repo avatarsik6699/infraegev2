@@ -67,7 +67,7 @@ export const PracticeTaskPage: React.FC<PracticeTaskPageTypes.Props> = (
               <nav className={styles.theory} aria-label="Теория к задаче">
                 <Typography.Title order={2}>Повторить теорию</Typography.Title>
                 {result.links.map((link) => (
-                  <ActionLink key={link.href} to={link.href} hierarchy="drawn">
+                  <ActionLink key={link.href} to={link.href} hierarchy="text">
                     {link.label}
                   </ActionLink>
                 ))}

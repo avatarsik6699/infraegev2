@@ -47,7 +47,7 @@ describe("ExternalLink", () => {
     expect(link.getAttribute("rel")).toBe("noopener noreferrer");
   });
 
-  it("can share the authored underline while keeping its up-right library icon", () => {
+  it("keeps a simple link and its up-right library icon", () => {
     const result = render(
       <ExternalLink href="https://example.com" presentation="action" newTab>
         Справка
@@ -57,8 +57,8 @@ describe("ExternalLink", () => {
       name: "Справка (откроется в новой вкладке)",
     });
 
-    expect(link.getAttribute("data-hierarchy")).toBe("drawn");
-    expect(link.querySelector("[data-link-underline]")).not.toBeNull();
+    expect(link.getAttribute("data-hierarchy")).toBe("text");
+    expect(link.querySelector("[data-link-underline]")).toBeNull();
     expect(
       result.container.querySelector("svg.lucide-arrow-up-right"),
     ).not.toBeNull();

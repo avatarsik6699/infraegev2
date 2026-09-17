@@ -71,52 +71,23 @@ describe("TopicCatalogPage", () => {
     expect(
       container.querySelectorAll('[data-topic-status="planned"]'),
     ).toHaveLength(23);
-    expect(screen.getAllByRole("link", { name: "Открыть тему" })).toHaveLength(
-      2,
-    );
     expect(
-      screen.getAllByRole("navigation", { name: "Разделы сайта" }),
+      container.querySelectorAll('[data-topic-status="published"] a'),
     ).toHaveLength(2);
     expect(
-      screen.getByText("25 тем для всех 27 заданий", { exact: true }),
-    ).not.toBeNull();
-    expect(
-      container
-        .querySelector('a[href^="https://fipi.ru/"]')
-        ?.getAttribute("data-hierarchy"),
-    ).toBe("drawn");
-    expect(
-      screen.queryByText(/Не обязательно идти с первого номера/),
-    ).toBeNull();
-    expect(screen.queryByText("Можно изучать")).toBeNull();
-    expect(container.querySelectorAll('img[src^="/topics/"]')).toHaveLength(2);
-    expect(container.querySelectorAll("[data-topic-media]")).toHaveLength(25);
-    expect(container.querySelectorAll("[data-topic-footer]")).toHaveLength(25);
-    expect(container.querySelectorAll("[data-topic-placeholder]")).toHaveLength(
-      23,
-    );
-    const publishedDecorations = Array.from(
-      container.querySelectorAll(
-        '[data-topic-status="published"] [aria-hidden="true"]',
-      ),
-    );
-    expect(
-      publishedDecorations.some(
-        (element) => element.textContent?.trim() === "05",
-      ),
-    ).toBe(true);
-    expect(
-      publishedDecorations.some(
-        (element) => element.textContent?.trim() === "16",
-      ),
-    ).toBe(true);
+      container.querySelectorAll('[data-topic-status="planned"] a'),
+    ).toHaveLength(0);
     expect(
       screen
-        .getAllByRole("link", { name: "Открыть тему" })[0]
+        .getByRole("link", { name: "Преобразование записей чисел" })
         .getAttribute("href"),
     ).toBe("/ege/5-preobrazovanie-zapisey-chisel");
+    expect(
+      screen
+        .getByRole("link", { name: "Рекурсивные алгоритмы" })
+        .getAttribute("href"),
+    ).toBe("/ege/16-rekursiya");
     expect(screen.getByText("Задания 19–21")).not.toBeNull();
-    expect(screen.getAllByText("Скоро")).toHaveLength(23);
-    expect(container.querySelectorAll("[data-badge]")).toHaveLength(23);
+    expect(screen.getAllByText("В плане")).toHaveLength(23);
   });
 });

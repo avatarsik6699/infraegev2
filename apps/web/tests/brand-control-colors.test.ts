@@ -23,17 +23,17 @@ const productionNginxSource = readFileSync(
 );
 
 describe("restrained brand accents", () => {
-  it("uses one warm-paper palette while keeping controls neutral", () => {
+  it("uses one white palette while keeping controls neutral", () => {
     expect(themeSource).not.toContain("--theme-alchimia");
     expect(themeSource).not.toContain("#ff6b00");
     expect(themeSource).not.toContain("#f56300");
-    expect(themeSource).toContain("--theme-page: #f5f3ef");
-    expect(themeSource).toContain("--theme-ink: #1a1a1a");
-    expect(themeSource).toContain("--theme-ink-secondary: #6b6b6b");
-    expect(themeSource).toContain("--theme-rule: #d8d4cc");
-    expect(themeSource).toContain("--theme-primary: #1a1a1a");
-    expect(themeSource).toContain("--theme-primary-hover: #42403c");
-    expect(themeSource).toContain("--theme-interactive-muted: #eeece7");
+    expect(themeSource).toContain("--theme-page: #ffffff");
+    expect(themeSource).toContain("--theme-ink: #171717");
+    expect(themeSource).toContain("--theme-ink-secondary: #606060");
+    expect(themeSource).toContain("--theme-rule: #d4d4d4");
+    expect(themeSource).toContain("--theme-primary: #171717");
+    expect(themeSource).toContain("--theme-primary-hover: #606060");
+    expect(themeSource).toContain("--theme-interactive-muted: #f5f5f5");
     expect(tokenSource).toContain("--color-brand-canvas: var(--color-bg)");
     expect(tokenSource).toContain("--control-primary-bg: var(--color-accent)");
     expect(tokenSource).toContain(
@@ -67,8 +67,8 @@ describe("restrained brand accents", () => {
   });
 
   it("keeps self-hosted font delivery stable and reusable", () => {
-    expect(fontSource).not.toContain("font-display: optional");
-    expect(fontSource.match(/font-display: swap/g)).toHaveLength(6);
+    expect(fontSource).not.toContain("font-display: swap");
+    expect(fontSource.match(/font-display: optional/g)).toHaveLength(6);
     expect(fontSource).toContain('font-family: "Alegreya Fallback"');
     expect(fontSource).toContain("size-adjust: 91.9693%");
     expect(fontSource).toContain('font-family: "Golos Text Fallback"');

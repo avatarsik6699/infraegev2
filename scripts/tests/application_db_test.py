@@ -63,14 +63,11 @@ class BundleTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unsupported bundle schema"):
             bundle.validate(self.root)
 
-    def test_previous_schema_still_requires_valid_assets(self):
+    def test_previous_schema_requires_archived_tools(self):
         metadata = json.loads((self.root / "metadata.json").read_text())
-        metadata["schemaVersion"] = "114_01"
+        metadata["schemaVersion"] = "121_01"
         (self.root / "metadata.json").write_text(json.dumps(metadata))
-        (self.root / "SHA256SUMS").write_text(bundle.sums(self.root, "114_01"))
-        self.assertEqual(bundle.validate(self.root).schemaVersion, "114_01")
-        self.object.write_bytes(b"bad\n")
-        with self.assertRaisesRegex(ValueError, "corrupt"):
+        with self.assertRaisesRegex(ValueError, "unsupported bundle schema"):
             bundle.validate(self.root)
 
     def test_subprocess_failure_is_not_swallowed(self):
@@ -98,7 +95,7 @@ class SnapshotTests(unittest.TestCase):
         db = Database(os.environ["PRACTICE_BACKUP_CONTAINER"])
         marker = "snapshot-" + uuid.uuid4().hex
         with tempfile.TemporaryDirectory() as temp, db.snapshot() as snapshot:
-            before = db.query("SELECT count(*) FROM practice.import_outcome;", snapshot)
+            before = db.query("SELECT count(*) FROM practice.task;", snapshot)
             docker(
                 "exec",
                 db.container,
@@ -112,15 +109,11 @@ class SnapshotTests(unittest.TestCase):
                 "-v",
                 "ON_ERROR_STOP=1",
                 "-c",
-                "INSERT INTO practice.import_outcome(package_id,checksum,task_count) "
-                f"VALUES ('{marker}', '{'a' * 64}', 0)",
+                "INSERT INTO practice.task(id,content,solution_revision,catalog_visible,archived) "
+                f"VALUES ('{marker}', '{{}}'::jsonb, 1, false, true)",
             )
-            self.assertEqual(
-                db.query("SELECT count(*) FROM practice.import_outcome;", snapshot), before
-            )
-            self.assertEqual(
-                int(db.query("SELECT count(*) FROM practice.import_outcome;")), int(before) + 1
-            )
+            self.assertEqual(db.query("SELECT count(*) FROM practice.task;", snapshot), before)
+            self.assertEqual(int(db.query("SELECT count(*) FROM practice.task;")), int(before) + 1)
             dump = Path(temp) / "snapshot.dump"
             db.dump(dump, snapshot)
             with dump.open("rb") as stream:

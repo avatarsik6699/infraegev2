@@ -22,7 +22,7 @@ export const PracticeTaskHeading: React.FC<PracticeTaskHeadingProps> = (
       {props.task.theoryLinks.map((link) => (
         <FragmentLink
           presentation="action"
-          hierarchy="drawn"
+          hierarchy="text"
           hash={link.hash}
           key={link.hash}
         >

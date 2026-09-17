@@ -100,7 +100,7 @@ export const PracticeFilters: React.FC<{
             to={practiceCatalog.href({
               ...props.search,
               exam_number: undefined,
-              cursor: undefined,
+              page: undefined,
             })}
           >
             Убрать №{props.search.exam_number}
@@ -112,7 +112,7 @@ export const PracticeFilters: React.FC<{
             to={practiceCatalog.href({
               ...props.search,
               skill: undefined,
-              cursor: undefined,
+              page: undefined,
             })}
           >
             Убрать навык:{" "}
@@ -127,7 +127,7 @@ export const PracticeFilters: React.FC<{
             to={practiceCatalog.href({
               ...props.search,
               difficulty: undefined,
-              cursor: undefined,
+              page: undefined,
             })}
           >
             Убрать сложность:{" "}

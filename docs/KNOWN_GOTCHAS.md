@@ -587,3 +587,13 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
 - **Fix**: stage inside `.staging` on the same filesystem, atomically link completed objects into
   the root, and copy only DB-snapshot-referenced objects into backups. Stop imports before any
   manual stale-staging cleanup. Never treat this as authorization to delete committed objects.
+
+### Windows-hosted Playwright MCP output paths
+
+- **Symptoms:** saving a screenshot to a WSL `/tmp/...` path fails with `File access denied`;
+  the tool interprets it as a Windows path outside its allowed output roots.
+- **Cause:** the browser MCP runs on Windows while shell commands run in WSL; their filesystem
+  roots differ.
+- **Resolution (architect authorized 2026-09-17):** omit the screenshot filename to use the MCP
+  default output directory. The resumed screenshot succeeded. Do not change filesystem permissions
+  or substitute a WSL absolute path. Any new permission failure still requires the normal handoff.

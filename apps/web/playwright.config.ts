@@ -33,7 +33,7 @@ export default defineConfig({
     {
       name: "frontend",
       command:
-        "API_INTERNAL_URL=http://127.0.0.2:8100 VITE_PROXY_TARGET=http://127.0.0.2:8100 VITE_UMAMI_WEBSITE_ID=e2e-website pnpm dev --host 127.0.0.2 --port 3100 --strictPort",
+        "API_INTERNAL_URL=http://127.0.0.2:8100 VITE_PROXY_TARGET=http://127.0.0.2:8100 pnpm dev --host 127.0.0.2 --port 3100 --strictPort",
       url: FRONTEND_URL,
       reuseExistingServer: false,
       timeout: 120_000,

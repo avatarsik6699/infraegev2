@@ -46,44 +46,17 @@ fallback.
 
 ## Brand Commitments
 
-The public identity is `infraege`: three organic stones, with the small upper stone in orange and
-the two lower stones in ink, paired with a live accessible lowercase wordmark. The architect-approved
-artistic authority is `docs/artifacts/references/infraege-mark.svg`; the visual direction comes from
-`docs/artifacts/references/base.jpg` and `docs/artifacts/references/main-page.png`. The active palette
-is warm paper, ink, one muted text level and a restrained orange accent. Orange identifies the mark,
-primary routes and selected illustration details; it does not recolor ordinary prose or semantic
-feedback.
+The public identity is `infraege`: three organic stones, orange at the top and ink below,
+with an accessible lowercase wordmark. Retain Alegreya, Golos Text and JetBrains Mono.
+The approved presentation is white, monochrome, text-led and minimal, following remote main
+`a5b0bf5`; orange is a small functional accent. No background patterns, decorative illustrations,
+glints, drawn underlines or idle animation. Educational figures remain part of lessons.
+Homepage gives direct access to published topics and the Python course; navigation includes Practice.
+See [FRONTEND](docs/FRONTEND.md) for implementation contracts.
 
-Typography, page recipes, component roles and asset delivery are defined only in
-[FRONTEND](docs/FRONTEND.md). The public homepage statement is «Информатика - это система»
-and «Начать готовиться» leads to `/ege`. Planned content/navigation remains noninteractive;
-no synthetic social proof or account controls are introduced. The illustration's «72%» is
-not learner progress. The lab demonstrates the same supported primitives and study defaults
-as production. Historical ALCHIMIA and raster experiments are not alternate active profiles.
+## Current scope
 
-## Evidence on Hand
-
-Two published Topic lessons, 28 production-published Python CourseLessons, the shared
-lesson/practice/checker/progress path and the completed application-gap audit provide the current
-implementation evidence. Existing consented
-visits/pageviews and path aggregates are sufficient for the current analytics need; event-level
-refinement does not block the next planned curriculum step. No testimonials, learner outcomes or
-completion benchmarks exist and none may be fabricated.
-
-Product capability and brand statements describe the current source tree, not an inferred deploy.
-Local `main`, `origin/main` and production may legitimately differ between releases; the deployed
-SHA is authoritative only when read from `/health/ready` and the matching release evidence.
-
-## Product Principles
-
-- Understanding before memorized patterns.
-- One complete learner outcome per incremental release.
-- Independent courses and exam topics; relationships require real pedagogical evidence.
-- Progressive enhancement with truthful SSR and local-only learner state.
-- Human content and visual approval before publication.
-
-## Accessibility & Inclusion
-
-Public learning paths remain keyboard-operable, readable through 150% browser zoom and narrow
-mobile layouts, and complete without JavaScript. Required information never depends on color,
-hover or animation alone.
+All public learning routes, the complete server-owned bank, filters, answer checking, help,
+attachments, next task and local progress remain. Catalog pages contain 30 tasks. Unsubmitted
+answer drafts are transient. Labs and browser analytics are removed. One Change 122 owns this
+pivot; original work is recoverable from `snapshot/pre-minimalism-2026-09-17`.

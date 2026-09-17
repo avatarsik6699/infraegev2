@@ -17,7 +17,6 @@ LOCAL_ENV := POSTGRES_USER=infraege \
 	APP_ENV=development \
 	DEPLOY_SHA=development
 
-WIREGUARD_TUNNEL := ./scripts/wireguard-tunnel.sh
 DOCKER_LIFECYCLE := ./scripts/docker-dev-lifecycle.sh
 
 .DEFAULT_GOAL := help
@@ -29,10 +28,7 @@ DOCKER_LIFECYCLE := ./scripts/docker-dev-lifecycle.sh
 # quickly instead of stalling `make stop`/`make down`.
 STOP_TIMEOUT ?= 10
 
-.PHONY: help dev rebuild stop down restart logs ps config clean clean-check clean-dry-run \
-	tunnel-up tunnel-down tunnel-status \
-	ops-open-beszel ops-open-umami \
-	ops-status ops-config ops-install ops-update ops-rollback sre-management
+.PHONY: help dev rebuild stop down restart logs ps config clean clean-check clean-dry-run
 
 help:
 	@echo "infraege local Docker workflow"
@@ -52,23 +48,6 @@ help:
 	@echo "  make db-backup DB_ENV=... DB_PROJECT=... ENV_FILE=...  Back up an explicit application DB"
 	@echo "  make db-restore-check DB_ENV=restore DB_PROJECT=infraege-restore  Verify a disposable restore"
 	@echo "  make db-export DB_ENV=prod DB_PROJECT=infraege DESTINATION=...  Export encrypted PC copy"
-	@echo "  make sre-management ACTION=status  Operate the dedicated sre-kit management VPS"
-	@echo ""
-	@echo "infraege private VPS access"
-	@echo ""
-	@echo "  make tunnel-up     Start and verify the WireGuard tunnel to the private VPS network"
-	@echo "  make tunnel-down   Stop a tunnel started by this Makefile"
-	@echo "  make tunnel-status Show interface, route, and handshake state"
-	@echo ""
-	@echo "infraege private-service shortcuts"
-	@echo ""
-	@echo "  make ops-open-beszel Open private Beszel UI in WSLg Chromium"
-	@echo "  make ops-open-umami  Open private Umami UI in WSLg Chromium"
-	@echo "  make ops-config ENV_FILE=... RELEASE=...  Validate the independent ops definition"
-	@echo "  make ops-status                              Show installed ops status over SSH"
-	@echo "  make ops-install ENV_FILE=... RELEASE=...   Install the first ops release"
-	@echo "  make ops-update ENV_FILE=... RELEASE=...    Apply a new ops release"
-	@echo "  make ops-rollback                            Restore the previous ops release"
 
 dev:
 	@STOP_TIMEOUT=$(STOP_TIMEOUT) $(DOCKER_LIFECYCLE) dev
@@ -104,50 +83,10 @@ clean-dry-run:
 clean-check:
 	@./scripts/clean-local-artifacts.sh --check
 
-tunnel-up:
-	@$(WIREGUARD_TUNNEL) up
-
-tunnel-down:
-	@$(WIREGUARD_TUNNEL) down
-
-tunnel-status:
-	@$(WIREGUARD_TUNNEL) status
-
-ops-open-beszel:
-	@pnpm --filter web exec playwright open http://10.77.0.1:8090
-
-ops-open-umami:
-	@pnpm --filter web exec playwright open http://10.77.0.1:3001
-
-ops-status:
-	@./ops/opsctl status
-
-ops-config:
-	@test -n "$(ENV_FILE)" -a -n "$(RELEASE)" || \
-		{ echo "ENV_FILE and RELEASE are required" >&2; exit 2; }
-	@./ops/opsctl config --env-file "$(ENV_FILE)" --release "$(RELEASE)"
-
-ops-install:
-	@test -n "$(ENV_FILE)" -a -n "$(RELEASE)" || \
-		{ echo "ENV_FILE and RELEASE are required" >&2; exit 2; }
-	@./ops/opsctl install --env-file "$(ENV_FILE)" --release "$(RELEASE)"
-
-ops-update:
-	@test -n "$(ENV_FILE)" -a -n "$(RELEASE)" || \
-		{ echo "ENV_FILE and RELEASE are required" >&2; exit 2; }
-	@./ops/opsctl update --env-file "$(ENV_FILE)" --release "$(RELEASE)"
-
-ops-rollback:
-	@./ops/opsctl rollback
-
-sre-management:
-	@./scripts/management-sre-kit.sh "$(ACTION)" "$(RELEASE)"
-
 .PHONY: db-inventory db-backup db-restore-check db-export
 .PHONY: practice-bootstrap
 practice-bootstrap:
-	@test -n "$(ENV_FILE)" || (echo 'ENV_FILE is required; see docs/runbooks/practice.md' >&2; exit 1)
-	@uv run --project apps/api python -m app.modules.practice.dev_bootstrap --backup-env "$(ENV_FILE)"
+	@python3 scripts/practice-local.py import content/practice-bank
 
 db-inventory:
 	@bash scripts/db-inventory.sh "$(DB_ENV)" "$(DB_PROJECT)"

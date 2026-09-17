@@ -8,7 +8,7 @@ export const PublicFooter: React.FC = () => (
   <footer className={styles.root}>
     <div className={styles.inner}>
       <nav className={styles.links} aria-label="Ссылки в подвале">
-        <ActionLink hierarchy="drawn" to="/privacy">
+        <ActionLink hierarchy="text" to="/privacy">
           Обработка данных
         </ActionLink>
         <ExternalLink

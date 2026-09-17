@@ -149,11 +149,10 @@ before editing code:
 - **Required tooling:** which row(s) of `docs/STACK.md`'s Required Tooling table apply to this
   item's domain (e.g. frontend UI → Playwright/chrome-devtools MCP; TS/Python → LSP)
 
-For frontend visual work, name the selected `/lab/design-system` specimen and the shared
-primitives from `docs/FRONTEND.md` §4.1. Default to the accepted `/courses` and `/courses/python`
-language without repeating the design interview. Keep composition with its page; extend the
-owning primitive and its lab specimen when a reusable mechanism is missing. Compare the built
-surface with that reference in the mandated browser pass, including responsive and motion states.
+For frontend work, read `docs/FRONTEND.md` and use the existing minimal public pages and shared
+semantic controls. Keep composition with the page; introduce a reusable mechanism only for a
+real consumer. Compare desktop/mobile and degraded states in the required browser pass. Labs
+and decorative specimens are not part of the current product.
 
 The plan must stay inside the active change's contract (for Backlog tasks) or narrowly inside the
 targeted note (for Review Notes) — do not use a review-note fix to broaden scope.

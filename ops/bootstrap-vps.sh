@@ -12,7 +12,7 @@ export DEBIAN_FRONTEND=noninteractive
 apt-get update
 apt-get install -y \
   ca-certificates certbot curl dnsutils docker.io docker-compose-v2 fail2ban jq restic \
-  systemd-journal-remote ufw wireguard
+  ufw
 
 [[ $(passwd --status root | awk '{print $2}') == P ]] || {
   echo 'Set a new root password through the provider console before bootstrap.' >&2

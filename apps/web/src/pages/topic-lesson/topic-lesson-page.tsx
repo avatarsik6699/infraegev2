@@ -9,7 +9,6 @@ import {
 } from "~/shared/components/learning-content";
 import { checkPracticeAnswer } from "~/features/lesson-practice";
 import { ReadingPositionIndicator } from "~/features/reading-position";
-import { useLessonTelemetry } from "~/features/analytics";
 import { Typography } from "~/shared/components/typography";
 import { LessonOutline } from "~/widgets/lesson-outline";
 import { LessonPracticeFlow } from "~/widgets/lesson-practice-flow";
@@ -25,10 +24,6 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
 ) => {
   const router = useRouter();
   const articleRef = useRef<HTMLElement>(null);
-  const handleAnswerChecked = useLessonTelemetry(
-    props.lesson.id,
-    props.tasks.length,
-  );
   const publishedLessons = lessonPublications.filter(
     (lesson) => lesson.status === "published",
   );
@@ -117,7 +112,6 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
               tasks={props.tasks}
               lessonId={props.lesson.id}
               checkAnswer={checkPracticeAnswer}
-              onAnswerChecked={handleAnswerChecked}
             />
           </section>
 

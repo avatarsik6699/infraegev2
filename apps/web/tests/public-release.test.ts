@@ -14,7 +14,7 @@ describe("public release metadata", () => {
     expect(siteConfig).toEqual(
       expect.objectContaining({
         name: "infraege",
-        themeColor: "#f5f3ef",
+        themeColor: "#ffffff",
         socialImagePath: "/brand/infraege-social.png",
         socialImageAlt: "Три камня и название infraege",
       }),

@@ -46,7 +46,7 @@ export const PracticeResults: React.FC<PracticeCatalogPageTypes.Props> = (
       <div className={styles.state}>
         <EmptyState
           title={
-            props.search.cursor ||
+            props.search.page ||
             props.search.skill ||
             props.search.exam_number ||
             props.search.difficulty
@@ -61,7 +61,7 @@ export const PracticeResults: React.FC<PracticeCatalogPageTypes.Props> = (
         />
         <ActionLink
           to={props.result.facets?.total ? "/practice" : "/courses"}
-          hierarchy="drawn"
+          hierarchy="text"
         >
           {props.result.facets?.total
             ? "Сбросить фильтры"
@@ -72,7 +72,7 @@ export const PracticeResults: React.FC<PracticeCatalogPageTypes.Props> = (
   return (
     <>
       <Typography.Text tone="muted" variant="caption">
-        Найдено задач: {page.total}. Сначала новые.
+        Найдено задач: {page.total}. Страница {page.page}.
       </Typography.Text>
       <ul className={styles.list} aria-label="Задачи">
         {page.tasks.map((task) => (
@@ -83,20 +83,20 @@ export const PracticeResults: React.FC<PracticeCatalogPageTypes.Props> = (
         Отметки решения сохраняются в этом браузере отдельно от уроков.
       </Typography.Text>
       <nav className={styles.actions} aria-label="Страницы задач">
-        {props.search.cursor && (
+        {props.search.page && (
           <ActionLink
-            to={practiceCatalog.href({ ...props.search, cursor: undefined })}
+            to={practiceCatalog.href({ ...props.search, page: undefined })}
           >
             К началу списка
           </ActionLink>
         )}
-        {page.next_cursor && (
+        {page.next_page && (
           <ActionLink
             to={practiceCatalog.href({
               ...props.search,
-              cursor: page.next_cursor,
+              page: page.next_page,
             })}
-            hierarchy="drawn"
+            hierarchy="text"
             icon="forward"
           >
             Следующие задачи

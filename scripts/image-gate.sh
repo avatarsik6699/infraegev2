@@ -13,7 +13,6 @@ mkdir "$cache_dir"
 trap 'rm -rf "$scan_dir"' EXIT
 
 docker build --pull --file "$repo_dir/apps/web/Dockerfile" \
-  --build-arg VITE_UMAMI_WEBSITE_ID=00000000-0000-0000-0000-000000000000 \
   --tag "${images[0]}:local" "$repo_dir"
 docker build --pull --file "$repo_dir/apps/api/Dockerfile" --tag "${images[1]}:local" "$repo_dir"
 docker build --pull --file "$repo_dir/infra/nginx/Dockerfile" --tag "${images[2]}:local" "$repo_dir"

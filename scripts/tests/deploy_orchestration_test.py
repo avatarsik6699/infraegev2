@@ -10,45 +10,34 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class DeployFailureTests(unittest.TestCase):
-    def test_practice_failure_blocks_activation_and_recovers_once(self):
+    def test_migration_failure_blocks_activation_and_recovers_once(self):
         source = (ROOT / "scripts/deploy-remote.sh").read_text()
-        activation = next(
+        lines = [
             line
             for line in source.splitlines()
-            if line.startswith("application_practice_activate ")
-        )
-        for failing_step in ("migration", "import", "none"):
-            with self.subTest(failing_step=failing_step):
-                program = f'''set -euo pipefail
+            if line.startswith('run_compose "$release_dir" "$DEPLOY_SHA"')
+            and ("db-migrate" in line or "up --detach --remove-orphans" in line)
+        ]
+        self.assertEqual(len(lines), 2)
+        for failure in (True, False):
+            program = f'''set -euo pipefail
 source "{ROOT}/scripts/lib/application-db-release.sh"
 release_dir=/candidate
 DEPLOY_SHA={"a" * 40}
-env_file=/unused
 run_compose() {{
-  if [[ "$*" == *db-migrate ]]; then
-    echo MIGRATION
-    {"return 42" if failing_step == "migration" else "return 0"}
-  fi
+  if [[ "$*" == *db-migrate ]]; then echo MIGRATION; return {42 if failure else 0}; fi
   echo ACTIVATE
 }}
-application_practice_import() {{
-  echo IMPORT
-  {"return 43" if failing_step == "import" else "return 0"}
-}}
 application_db_rollback() {{ echo ROLLBACK; }}
-trap 'application_deploy_exit "$?" /previous /candidate /unused true' EXIT
-{activation}
+trap 'application_deploy_exit "$?" /previous /candidate /unused false' EXIT
+{chr(10).join(lines)}
 '''
-                result = subprocess.run(["bash", "-c", program], capture_output=True, text=True)
-                if failing_step == "none":
-                    self.assertEqual(result.returncode, 0)
-                    self.assertEqual(
-                        result.stdout.splitlines(), ["MIGRATION", "IMPORT", "ACTIVATE"]
-                    )
-                else:
-                    self.assertEqual(result.returncode, 42 if failing_step == "migration" else 43)
-                    self.assertNotIn("ACTIVATE", result.stdout)
-                    self.assertEqual(result.stdout.count("ROLLBACK"), 1)
+            result = subprocess.run(["bash", "-c", program], capture_output=True, text=True)
+            self.assertEqual(result.returncode, 42 if failure else 0)
+            self.assertEqual(
+                result.stdout.splitlines(),
+                ["MIGRATION", "ROLLBACK"] if failure else ["MIGRATION", "ACTIVATE"],
+            )
 
     def run_failure(self, rollback_fails: bool = False, explicit: bool = False):
         source = (ROOT / "scripts/deploy-remote.sh").read_text()
@@ -104,13 +93,30 @@ docker() {{ return 42; }}
             result = subprocess.run(["bash", "-c", program, "test", str(env)], capture_output=True)
             self.assertEqual(result.returncode, 0)
 
+    def test_successful_recovery_restores_maintenance_pointer(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            previous = root / "previous"
+            previous.mkdir()
+            (previous / ".deploy-sha").write_text("a" * 40)
+            program = f'''set -euo pipefail
+source "{ROOT}/scripts/lib/application-db-release.sh"
+root="{root}"
+run_compose() {{ :; }}
+curl() {{ echo '{{"status":"ok","version":"{"a" * 40}"}}'; }}
+application_db_rollback "{previous}"
+'''
+            subprocess.run(["bash", "-c", program], check=True, capture_output=True)
+            self.assertEqual((root / "current").resolve(), previous)
+            self.assertEqual((root / "database-current").resolve(), previous)
+
     def test_recovery_rejects_wrong_release_health(self):
         with tempfile.TemporaryDirectory() as temp:
             previous = Path(temp)
             (previous / ".deploy-sha").write_text("a" * 40)
             program = f'''set -euo pipefail
 source "{ROOT}/scripts/lib/application-db-release.sh"
-docker() {{ echo COMPOSE; }}
+run_compose() {{ echo COMPOSE; }}
 curl() {{ echo '{{"status":"ok","version":"wrong-release"}}'; }}
 if application_db_rollback "{previous}" /candidate /unused true; then exit 99; fi
 '''

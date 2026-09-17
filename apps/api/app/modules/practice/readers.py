@@ -1,18 +1,17 @@
-"""Release-aware public projections. Every projection uses one bounded SQL read."""
+"""Public current-state projections; checker is read only for answer submission."""
 
-from sqlalchemy import and_, exists, literal_column, or_, select
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy import exists, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.modules.practice.models import (
-    FileObject,
-    LessonTask,
-    TaskChecker,
-    TaskFileUsage,
-    TaskRecord,
+from app.modules.practice.models import FileObject, LessonTask, TaskChecker, TaskRecord
+from app.modules.practice.schemas import (
+    Block,
+    FileDelivery,
+    PublicTask,
+    PublicTaskContent,
+    StrictModel,
 )
-from app.modules.practice.schemas import Block, FileDelivery, PublicTask, Registry, StrictModel
-from app.modules.practice.service import PUBLIC_CONTENT, Conflict
+from app.modules.practice.service import Conflict
 from app.shared.checker import is_correct
 
 
@@ -47,138 +46,129 @@ class CheckedAnswer(StrictModel):
     solution_revision: int
 
 
-def public_material_ids(registry: Registry) -> list[str]:
-    courses = {c.id for c in registry.courses if c.status == "published"}
-    return [
-        m.id
-        for m in registry.materials
-        if m.status == "published" and (m.kind == "topic" or m.course_id in courses)
-    ]
-
-
-def availability(registry: Registry):
-    return and_(
-        TaskRecord.archived.is_(False),
-        or_(
-            TaskRecord.catalog_visible.is_(True),
-            exists(
-                select(LessonTask.task_id).where(
-                    LessonTask.task_id == TaskRecord.id,
-                    LessonTask.material_id.in_(public_material_ids(registry)),
-                )
-            ),
+def availability():
+    return TaskRecord.archived.is_(False) & or_(
+        TaskRecord.catalog_visible.is_(True),
+        exists(
+            select(LessonTask.task_id).where(
+                LessonTask.task_id == TaskRecord.id, LessonTask.published.is_(True)
+            )
         ),
     )
 
 
-def public_task(row) -> PublicTask:
+def public_task(row: TaskRecord, files: dict[str, FileObject]) -> PublicTask:
+    content = dict(row.content)
+    content["sources"] = [
+        {k: v for k, v in source.items() if k != "is_public"}
+        for source in content["sources"]
+        if source.get("is_public", True)
+    ]
     deliveries = [
-        {**item, "url": f"/api/tasks/{row[0]}/files/{item['usage_id']}"} for item in row[4]
+        FileDelivery(
+            usage_id=usage["id"],
+            url=f"/api/tasks/{row.id}/files/{usage['id']}",
+            mime_type=files[usage["checksum"]].mime_type,
+            size_bytes=files[usage["checksum"]].size_bytes,
+        )
+        for usage in content["files"]
     ]
     return PublicTask(
-        id=row[0],
-        revision=row[1],
-        solution_revision=row[2],
-        content=row[3],
-        deliveries=[FileDelivery.model_validate(item) for item in deliveries],
+        id=row.id,
+        revision=row.solution_revision,
+        solution_revision=row.solution_revision,
+        content=PublicTaskContent.model_validate(content),
+        deliveries=deliveries,
     )
 
 
-def task_columns():
-    deliveries = literal_column(
-        """COALESCE((SELECT jsonb_agg(jsonb_build_object(
-      'usage_id', u.id, 'mime_type', f.mime_type, 'size_bytes', f.size_bytes) ORDER BY u.id)
-      FROM practice.task_file_usage u JOIN practice.file_object f ON f.checksum=u.checksum
-      WHERE u.task_id=practice.task.id), '[]'::jsonb)""",
-        type_=JSONB,
+async def project(session: AsyncSession, rows: list[TaskRecord]) -> list[PublicTask]:
+    keys = {usage["checksum"] for row in rows for usage in row.content["files"]}
+    files = (
+        {
+            item.checksum: item
+            for item in await session.scalars(
+                select(FileObject).where(FileObject.checksum.in_(keys))
+            )
+        }
+        if keys
+        else {}
     )
-    return (
-        TaskRecord.id,
-        TaskRecord.revision,
-        TaskRecord.solution_revision,
-        PUBLIC_CONTENT,
-        deliveries,
-    )
+    return [public_task(row, files) for row in rows]
 
 
-async def file(session: AsyncSession, registry: Registry, task_id: str, usage_id: str):
-    row = (
-        await session.execute(
-            select(TaskFileUsage, FileObject)
-            .join(FileObject, FileObject.checksum == TaskFileUsage.checksum)
-            .join(TaskRecord, TaskRecord.id == TaskFileUsage.task_id)
-            .where(TaskRecord.id == task_id, TaskFileUsage.id == usage_id, availability(registry))
-        )
-    ).one_or_none()
-    if row is None:
-        raise Unavailable("file unavailable")
-    return row
-
-
-async def task(session: AsyncSession, registry: Registry, task_id: str) -> PublicTask:
-    row = (
-        await session.execute(
-            select(*task_columns()).where(TaskRecord.id == task_id, availability(registry))
-        )
-    ).one_or_none()
+async def task(session: AsyncSession, task_id: str) -> PublicTask:
+    row = await session.scalar(select(TaskRecord).where(TaskRecord.id == task_id, availability()))
     if row is None:
         raise Unavailable("task unavailable")
-    return public_task(row)
+    return (await project(session, [row]))[0]
 
 
-async def lesson(
-    session: AsyncSession, registry: Registry, kind: str, material_id: str
-) -> LessonPractice:
-    if not any(
-        m.id == material_id and m.kind == kind for m in registry.materials
-    ) or material_id not in public_material_ids(registry):
+async def file(session: AsyncSession, task_id: str, usage_id: str):
+    row = await task(session, task_id)
+    usage = next((item for item in row.content.files if item.id == usage_id), None)
+    if usage is None:
+        raise Unavailable("file unavailable")
+    obj = await session.get(FileObject, usage.checksum)
+    if obj is None:
+        raise Unavailable("file unavailable")
+    return usage, obj
+
+
+async def lesson(session: AsyncSession, kind: str, material_id: str) -> LessonPractice:
+    rows = list(
+        await session.scalars(
+            select(TaskRecord)
+            .join(LessonTask)
+            .where(
+                LessonTask.material_id == material_id,
+                LessonTask.kind == kind,
+                LessonTask.published.is_(True),
+                TaskRecord.archived.is_(False),
+            )
+            .order_by(LessonTask.position)
+        )
+    )
+    if not rows:
         raise Unavailable("material unavailable")
-    rows = await session.execute(
-        select(*task_columns())
-        .join(LessonTask, LessonTask.task_id == TaskRecord.id)
-        .where(LessonTask.material_id == material_id, TaskRecord.archived.is_(False))
-        .order_by(LessonTask.position)
-    )
-    return LessonPractice(id=material_id, kind=kind, tasks=[public_task(row) for row in rows])
+    return LessonPractice(id=material_id, kind=kind, tasks=await project(session, rows))
 
 
-async def course(session: AsyncSession, registry: Registry, course_id: str) -> CourseSummary:
-    definition = next(
-        (c for c in registry.courses if c.id == course_id and c.status == "published"), None
-    )
-    if definition is None:
-        raise Unavailable("course unavailable")
-    available = set(public_material_ids(registry))
-    ids = [material for material in definition.lesson_ids if material in available]
+async def course(session: AsyncSession, course_id: str) -> CourseSummary:
     rows = await session.execute(
         select(LessonTask.material_id, TaskRecord.id, TaskRecord.solution_revision)
-        .join(TaskRecord, TaskRecord.id == LessonTask.task_id)
-        .where(LessonTask.material_id.in_(ids), TaskRecord.archived.is_(False))
+        .join(TaskRecord)
+        .where(
+            LessonTask.course_id == course_id,
+            LessonTask.published.is_(True),
+            TaskRecord.archived.is_(False),
+        )
         .order_by(LessonTask.material_id, LessonTask.position)
     )
-    grouped: dict[str, list[TaskVersion]] = {material: [] for material in ids}
+    grouped: dict[str, list[TaskVersion]] = {}
     for material, task_id, revision in rows:
-        grouped[material].append(TaskVersion(id=task_id, solution_revision=revision))
+        grouped.setdefault(material, []).append(TaskVersion(id=task_id, solution_revision=revision))
+    if not grouped:
+        raise Unavailable("course unavailable")
     return CourseSummary(
-        id=course_id,
-        lessons=[LessonSummary(id=material, tasks=grouped[material]) for material in ids],
+        id=course_id, lessons=[LessonSummary(id=k, tasks=v) for k, v in grouped.items()]
     )
 
 
-async def check(
-    session: AsyncSession, registry: Registry, task_id: str, revision: int, answer: str
-) -> CheckedAnswer:
+async def check(session: AsyncSession, task_id: str, revision: int, answer: str) -> CheckedAnswer:
     row = (
         await session.execute(
-            select(TaskRecord.solution_revision, TaskRecord.explanation, TaskChecker)
-            .join(TaskChecker, TaskChecker.task_id == TaskRecord.id)
-            .where(TaskRecord.id == task_id, availability(registry))
+            select(TaskRecord, TaskChecker)
+            .join(TaskChecker)
+            .where(TaskRecord.id == task_id, availability())
         )
     ).one_or_none()
     if row is None:
         raise Unavailable("task unavailable")
-    if revision != row[0]:
+    if row[0].solution_revision != revision:
         raise Conflict("solution revision changed; refresh the task")
     return CheckedAnswer(
-        correct=is_correct(row[2], answer), explanation=row[1], solution_revision=row[0]
+        correct=is_correct(row[1], answer),
+        explanation=row[0].content["explanation"],
+        solution_revision=revision,
     )

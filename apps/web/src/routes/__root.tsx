@@ -4,13 +4,7 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import type { AppRouterContext } from "~/router";
-import {
-  AppDocumentHead,
-  AppProviders,
-  RouteError,
-  PageBackground,
-} from "~/app";
-import { AnalyticsConsentPrompt } from "~/features/analytics";
+import { AppDocumentHead, AppProviders, RouteError } from "~/app";
 import { siteConfig } from "~/shared/config/site";
 import "~/app/styles.css";
 
@@ -83,7 +77,6 @@ function RootComponent() {
   return (
     <>
       <Outlet />
-      <AnalyticsConsentPrompt />
     </>
   );
 }
@@ -95,7 +88,6 @@ function RootDocument(props: { children: React.ReactNode }) {
         <AppDocumentHead />
       </head>
       <body>
-        <PageBackground />
         <AppProviders>{props.children}</AppProviders>
         <Scripts />
       </body>

@@ -3,7 +3,7 @@ export namespace PracticeCatalogTypes {
     skill?: string;
     exam_number?: number;
     difficulty?: number;
-    cursor?: string;
+    page?: number;
     invalid?: boolean;
   };
   export type Entry = {
@@ -18,7 +18,8 @@ export namespace PracticeCatalogTypes {
   };
   export type Page = {
     tasks: Entry[];
-    next_cursor: string | null;
+    page: number;
+    next_page: number | null;
     total: number;
   };
   export type Facets = {
@@ -27,5 +28,5 @@ export namespace PracticeCatalogTypes {
     difficulties: number[];
     skills: { value: string; label: string }[];
   };
-  export type TaskSearch = Search & { origin?: string };
+  export type TaskSearch = Search;
 }

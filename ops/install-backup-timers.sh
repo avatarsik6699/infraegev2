@@ -7,11 +7,6 @@ if [[ ${EUID:-$(id -u)} -ne 0 ]]; then
 fi
 
 repo_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
-mode=${1:-application}
-[[ $mode == application || $mode == activate-operations ]] || {
-  echo 'usage: ops/install-backup-timers.sh [application|activate-operations]' >&2
-  exit 64
-}
 [[ -L /opt/infraege/database-current &&
    -r /opt/infraege/database-current/scripts/lib/application-db.sh ]] || {
   echo 'application timers require the verified database-current maintenance release' >&2
@@ -24,22 +19,3 @@ install -m 644 "$repo_dir/ops/systemd/infraege-restore-check.service" /etc/syste
 install -m 644 "$repo_dir/ops/systemd/infraege-restore-check.timer" /etc/systemd/system/
 systemctl daemon-reload
 systemctl enable --now infraege-backup.timer infraege-restore-check.timer
-
-if [[ $mode == activate-operations ]]; then
-  [[ -L /opt/infraege-ops/current ]] || {
-    echo 'activate-operations requires an installed infraege-ops release' >&2
-    exit 1
-  }
-  for unit in \
-    infraege-ops-backup.service infraege-ops-backup.timer \
-    infraege-ops-restore-check.service infraege-ops-restore-check.timer \
-    infraege-ops-analytics-retention.service infraege-ops-analytics-retention.timer; do
-    install -m 644 "$repo_dir/ops/systemd/$unit" /etc/systemd/system/
-  done
-  systemctl disable --now infraege-analytics-retention.timer >/dev/null 2>&1 || true
-  rm -f /etc/systemd/system/infraege-analytics-retention.service \
-    /etc/systemd/system/infraege-analytics-retention.timer
-  systemctl daemon-reload
-  systemctl enable --now infraege-ops-backup.timer infraege-ops-restore-check.timer \
-    infraege-ops-analytics-retention.timer
-fi

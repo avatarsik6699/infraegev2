@@ -3,18 +3,18 @@ import type { PracticeCatalogTypes } from "./practice-catalog.types";
 function search(value: Record<string, unknown>): PracticeCatalogTypes.Search {
   const result: PracticeCatalogTypes.Search =
     value.invalid === true ? { invalid: true } : {};
-  for (const key of ["skill", "cursor"] as const) {
+  for (const key of ["skill"] as const) {
     const raw = value[key];
     if (raw === undefined || raw === "") continue;
     if (
       typeof raw !== "string" ||
-      raw.length > (key === "cursor" ? 1024 : 120) ||
+      raw.length > 120 ||
       (key === "skill" && !/^[a-z0-9][a-z0-9_-]*$/.test(raw))
     )
       result.invalid = true;
     else result[key] = raw;
   }
-  for (const key of ["difficulty", "exam_number"] as const) {
+  for (const key of ["difficulty", "exam_number", "page"] as const) {
     const raw = value[key];
     if (raw === undefined || raw === "") continue;
     const number =
@@ -22,7 +22,7 @@ function search(value: Record<string, unknown>): PracticeCatalogTypes.Search {
     if (
       !Number.isInteger(number) ||
       number < 1 ||
-      number > (key === "difficulty" ? 3 : 27)
+      number > { difficulty: 3, page: 100000, exam_number: 27 }[key]
     )
       result.invalid = true;
     else result[key] = number;
@@ -32,7 +32,7 @@ function search(value: Record<string, unknown>): PracticeCatalogTypes.Search {
 
 function href(value: PracticeCatalogTypes.Search) {
   const params = new URLSearchParams();
-  for (const key of ["skill", "exam_number", "difficulty", "cursor"] as const) {
+  for (const key of ["skill", "exam_number", "difficulty", "page"] as const) {
     if (value[key] !== undefined) params.set(key, String(value[key]));
   }
   return `/practice${params.size ? `?${params.toString()}` : ""}`;
@@ -43,22 +43,16 @@ function taskSearch(
 ): PracticeCatalogTypes.TaskSearch {
   const parsed = search(value);
   if (parsed.invalid) return {};
-  const origin =
-    typeof value.origin === "string" &&
-    /^[a-z0-9][a-z0-9_-]{0,119}$/.test(value.origin)
-      ? value.origin
-      : undefined;
-  return { ...parsed, ...(origin ? { origin } : {}) };
+  return parsed;
 }
 
 function taskHref(id: string, value: PracticeCatalogTypes.TaskSearch = {}) {
   const params = new URLSearchParams(href(value).split("?")[1]);
-  if (value.origin) params.set("origin", value.origin);
   return `/practice/${encodeURIComponent(id)}${params.size ? `?${params.toString()}` : ""}`;
 }
 
 function returnHref(value: PracticeCatalogTypes.TaskSearch) {
-  return `${href(value)}${value.origin ? `#task-${value.origin}` : ""}`;
+  return href(value);
 }
 
 function difficultyLabel(value: number) {

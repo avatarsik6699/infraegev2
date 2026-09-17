@@ -28,7 +28,6 @@ COPY apps/api/app ./app
 COPY apps/api/migrations ./migrations
 COPY apps/api/alembic.ini apps/api/practice-registry.json ./
 COPY apps/api/entrypoint.sh ./entrypoint.sh
-COPY content/tasks /content/tasks
 
 RUN chmod +x ./entrypoint.sh \
     && useradd --no-create-home --uid 1000 appuser \
@@ -36,7 +35,6 @@ RUN chmod +x ./entrypoint.sh \
 USER appuser
 
 ENV PYTHONPATH=/app
-ENV CONTENT_DIR=/content
 # No home dir (--no-create-home) — uv otherwise tries to create $HOME/.cache/uv and gets
 # EACCES on every `uv run` invocation.
 ENV UV_CACHE_DIR=/app/.cache/uv

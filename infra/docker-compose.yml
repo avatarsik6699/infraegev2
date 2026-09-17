@@ -36,7 +36,6 @@ services:
       context: ..
       dockerfile: apps/web/Dockerfile
     environment:
-      - CONTENT_DIR=/content
       - API_INTERNAL_URL=http://api:8000
     depends_on:
       api:
@@ -98,10 +97,9 @@ services:
       dockerfile: apps/api/Dockerfile
     environment:
       - MIGRATION_DATABASE_URL=postgresql://infraege_migration:${DB_MIGRATION_PASSWORD:?DB_MIGRATION_PASSWORD is required}@postgres:5432/${POSTGRES_DB:-infraege}
-      - PRACTICE_REGISTRY=/app/practice-registry.json
     entrypoint: ["/bin/sh", "-ec"]
     command:
-      - uv run --frozen alembic upgrade head && uv run --frozen python -m app.modules.practice.cli register --environment ${DB_ENV:-dev} --project ${DB_PROJECT:-infraege-dev}
+      - uv run --frozen alembic upgrade head
     depends_on:
       postgres:
         condition: service_healthy
@@ -121,7 +119,7 @@ services:
       - DB_MIGRATION_PASSWORD=${DB_MIGRATION_PASSWORD:?DB_MIGRATION_PASSWORD is required}
       - DB_BACKUP_PASSWORD=${DB_BACKUP_PASSWORD:?DB_BACKUP_PASSWORD is required}
     volumes:
-      - postgres18-data:/var/lib/postgresql
+      - postgres122-data:/var/lib/postgresql
       - ../scripts/db-provision-roles.sh:/docker-entrypoint-initdb.d/10-application-roles.sh:ro
       - ${TASK_FILES_DIR:-./task-files.local}:/task-files:ro
     restart: unless-stopped
@@ -133,4 +131,4 @@ services:
     <<: *json-file-logging
 
 volumes:
-  postgres18-data:
+  postgres122-data:

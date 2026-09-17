@@ -10,7 +10,7 @@ export const RouteNotFound: React.FC = () => (
       code="404"
       description="Проверьте адрес или вернитесь на главную."
     >
-      <ActionLink to="/" hierarchy="drawn" icon="back">
+      <ActionLink to="/" hierarchy="text" icon="back">
         На главную
       </ActionLink>
     </StatusScene>

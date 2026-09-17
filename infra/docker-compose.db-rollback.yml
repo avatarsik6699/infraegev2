@@ -1,5 +1,0 @@
-# Application-only rollback: retain PG18 and its read-only runtime identity.
-services:
-  api:
-    environment:
-      DATABASE_URL: postgresql://infraege_runtime:${DB_RUNTIME_PASSWORD:?DB_RUNTIME_PASSWORD is required}@postgres:5432/${POSTGRES_DB:-infraege}

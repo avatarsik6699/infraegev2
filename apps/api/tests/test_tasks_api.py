@@ -1,4 +1,3 @@
-import json
 from collections.abc import Iterator
 from pathlib import Path
 
@@ -9,7 +8,6 @@ from fastapi.testclient import TestClient
 from app.core.config import settings
 from app.main import app
 from app.modules.content.schemas import Task
-from app.modules.content.service import clear_cache
 from app.modules.health.api import require_database
 from app.modules.tasks.service import is_correct
 
@@ -60,7 +58,7 @@ def new_python_course_task_paths() -> list[Path]:
 
 
 @pytest.fixture
-def content_task(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Iterator[Task]:
+def content_task() -> Task:
     task = Task.model_validate(
         {
             "id": "sample-task",
@@ -84,18 +82,7 @@ def content_task(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Iterator[Ta
             ],
         }
     )
-    tasks_dir = tmp_path / "tasks"
-    tasks_dir.mkdir()
-    (tasks_dir / f"{task.id}.json").write_text(
-        json.dumps(task.model_dump(mode="json"), ensure_ascii=False),
-        encoding="utf-8",
-    )
-    monkeypatch.setattr(settings, "content_dir", tmp_path)
-    clear_cache()
-    try:
-        yield task
-    finally:
-        clear_cache()
+    return task
 
 
 @pytest.fixture
@@ -106,7 +93,7 @@ def client(content_task: Task, monkeypatch: pytest.MonkeyPatch) -> Iterator[Test
     async def connection():
         yield None
 
-    async def check(_session, _registry, task_id, revision, answer):
+    async def check(_session, task_id, revision, answer):
         if task_id != content_task.id:
             raise HTTPException(404, "task unavailable")
         if revision != 1:
@@ -210,6 +197,8 @@ def test_openapi_exposes_discriminated_content_blocks(client: TestClient):
     assert "oneOf" in explanation_items
     assert explanation_items["discriminator"]["propertyName"] == "type"
     assert set(explanation_items["discriminator"]["mapping"]) == {
+        "rich_text",
+        "code_variants",
         "callout",
         "code_example",
         "completion_exercise",

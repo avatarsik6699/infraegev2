@@ -1,839 +1,145 @@
 .page {
-  --home-footer-min-height: 3.5rem;
-  --text-home-hero: clamp(2.75rem, 4.7vw, 5.75rem);
-  --text-home-description: clamp(1rem, 1.35vw, 1.25rem);
-  --text-home-card-caption: 0.875rem;
-  --text-home-progress: 2rem;
-  --text-home-stage-number: 2.5rem;
-  --text-home-stage-title: 1.5rem;
+  composes: pageFrame from "../../shared/styles/patterns.module.css";
+}
 
-  position: relative;
-  isolation: isolate;
+.root {
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr) minmax(
-      var(--home-footer-min-height),
-      auto
-    );
-  height: 100svh;
-  min-width: 0;
-  min-height: 100svh;
-  overflow-x: clip;
-  color: var(--color-brand-ink);
-  background: transparent;
-}
-
-.hero {
-  position: relative;
-  isolation: isolate;
-  display: grid;
-  grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.4fr);
-  gap: clamp(var(--space-2), 2vw, var(--space-4));
-  align-items: center;
-  align-self: stretch;
-  width: 100%;
-  max-width: 118rem;
-  min-height: 0;
-  padding: var(--space-1) var(--page-chrome-gutter);
-  margin-inline: auto;
-}
-
-.ambientField {
-  position: absolute;
-  z-index: -1;
-  inset: 7.5rem 0 3.5rem;
-  overflow: hidden;
-  pointer-events: none;
-  mask-image: linear-gradient(
-    to bottom,
-    transparent,
-    black 22%,
-    black 74%,
-    transparent
-  );
-}
-
-.ambientScene {
-  position: absolute;
-  inset: 0;
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-.ambientIllumination {
-  position: absolute;
-  inset: -20%;
-  opacity: 0.6;
-  background:
-    radial-gradient(
-      ellipse at 72% 48%,
-      color-mix(in srgb, var(--color-brand-orange-soft) 38%, transparent),
-      transparent 46%
-    ),
-    radial-gradient(ellipse at 25% 65%, var(--color-surface), transparent 50%);
-}
-
-.ambientRoute {
-  color: var(--color-brand-orange);
-}
-
-.ambientRouteFlow {
-  opacity: 0;
-}
-
-.ambientNotation {
-  position: absolute;
-  width: clamp(9rem, 18vw, 19rem);
-  height: auto;
-  color: var(--color-brand-muted);
-  opacity: 0.46;
-}
-
-[data-ambient-notation="algorithm"] {
-  left: 1%;
-  top: 10%;
-  width: 12rem;
-  transform: rotate(-5deg);
-}
-[data-ambient-notation="byte"] {
-  left: 3%;
-  bottom: 7%;
-  transform: rotate(-7deg);
-}
-[data-ambient-notation="traversal"] {
-  left: 29%;
-  bottom: 3%;
-  width: 22rem;
-}
-[data-ambient-notation="logicPulse"] {
-  left: 35%;
-  top: 13%;
-  width: 10rem;
-}
-[data-ambient-notation="powers"] {
-  right: -3%;
-  top: 39%;
-  width: 12rem;
+  grid-template-columns: minmax(0, 0.9fr) minmax(24rem, 1.1fr);
+  gap: clamp(var(--space-5), 7vw, 7rem);
+  align-content: start;
+  align-items: start;
+  padding-block: clamp(var(--space-5), 9vw, 7rem);
 }
 
 .intro {
-  position: relative;
-  z-index: 1;
   display: grid;
-  align-content: start;
-  justify-items: start;
-  min-width: 0;
-  padding-block: var(--space-3);
+  gap: var(--space-2);
 }
 
 .intro h1,
-.intro p {
+.intro p,
+.materials h2 {
   margin: 0;
 }
 
-.intro .heroTitle[data-order="1"] {
-  display: grid;
-  max-width: none;
+.intro h1[data-order] {
+  max-width: 11ch;
   font-family: var(--font-display);
-  font-size: var(--text-home-hero);
+  font-size: var(--text-3xl);
   font-weight: 500;
+  line-height: 0.98;
   letter-spacing: -0.04em;
-  line-height: 0.99;
-  text-wrap: balance;
 }
 
-.heroTitle span {
-  white-space: nowrap;
-}
-
-.primaryAction {
-  width: auto;
-  min-height: 3.25rem;
-  margin-top: var(--space-3);
-  font-family: var(--font-ui);
-  font-size: var(--text-xl);
-  font-weight: 400;
-  line-height: 1;
-}
-
-.visual {
-  position: relative;
-  z-index: 1;
-  min-width: 0;
-  width: 100%;
-  align-self: center;
-}
-
-.visuallyHidden {
-  composes: visuallyHidden from "../../shared/styles/patterns.module.css";
-}
-
-.map {
-  position: relative;
-  width: min(100%, calc((100svh - 12rem) * 1.48148));
-  max-width: 68rem;
-  min-width: 0;
-  aspect-ratio: 1200 / 810;
-  margin-inline: auto;
-  overflow: clip;
-  font-family: var(--font-ui);
-}
-
-.mapScene {
-  display: block;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  shape-rendering: geometricPrecision;
-}
-
-.backgroundPattern {
-  color: var(--color-brand-muted);
-  opacity: 0.55;
-}
-
-.patternPreset text {
-  fill: currentcolor;
-  font-family: var(--font-data);
-  font-size: var(--text-2xs);
-  letter-spacing: 0.06em;
-}
-
-.patternPreset circle {
-  fill: currentcolor;
-  stroke: none;
-}
-
-.patternPreset [data-pattern-node="end"] {
-  fill: var(--color-brand-orange);
-  opacity: 0.72;
-}
-
-.mapConnections {
-  color: var(--color-brand-orange);
-}
-
-.cardConnection {
-  color: color-mix(in srgb, var(--color-brand-orange) 82%, transparent);
-}
-
-.cycleConnection {
-  color: color-mix(in srgb, var(--color-brand-orange) 76%, transparent);
-}
-
-.patternConnection {
-  color: color-mix(in srgb, var(--color-brand-orange) 46%, transparent);
-}
-
-.cardSurface {
-  fill: var(--color-brand-canvas);
-  stroke: color-mix(in srgb, var(--color-brand-muted) 16%, transparent);
-  stroke-width: 1;
-  vector-effect: non-scaling-stroke;
-}
-
-.futurePaperCard {
-  opacity: 1;
-}
-
-.surfaceMotionBorder {
-  fill: none;
-  stroke: url("#motion-border-neutral");
-  stroke-dasharray: 20 80;
-  stroke-linecap: round;
-  stroke-width: 2;
-  opacity: 0;
-  vector-effect: non-scaling-stroke;
-}
-
-.activeStage .surfaceMotionBorder,
-.progress .surfaceMotionBorder {
-  stroke: url("#motion-border-accent");
-}
-
-.cardIcon {
-  --custom-icon-accent: var(--color-brand-orange);
-  --custom-icon-paper: color-mix(in srgb, var(--color-brand-canvas) 90%, white);
-
-  color: var(--color-brand-ink);
-  overflow: visible;
-}
-
-.cardTitle,
-.cardCaption,
-.stageNumber,
-.stageTitle,
-.stageDetail,
-.progress text {
-  font-family: var(--font-ui);
-}
-
-.cardTitle {
-  fill: var(--color-brand-ink);
-  font-family: var(--font-display);
-  font-size: var(--text-2xl);
-  font-weight: 500;
-}
-
-.cardCaption {
-  fill: var(--color-brand-muted);
-  font-size: var(--text-home-card-caption);
-}
-
-.stageSurface {
-  fill: url("#stage-surface");
-  stroke: url("#stage-border");
-  stroke-width: 1;
-  filter: url("#stage-shadow");
-  vector-effect: non-scaling-stroke;
-}
-
-.activeStage .stageSurface {
-  fill: url("#active-stage-surface");
-  stroke: var(--color-brand-orange);
-  stroke-width: 1.25;
-}
-
-.stageHighlight {
-  fill: none;
-  stroke: url("#stage-highlight");
-  stroke-linecap: round;
-  stroke-width: 1.3;
-  vector-effect: non-scaling-stroke;
-}
-
-.stageNumber {
-  fill: var(--color-brand-orange);
-  font-family: var(--font-data);
-  font-size: var(--text-home-stage-number);
-  font-weight: 500;
-}
-
-.stageTitle {
-  fill: var(--color-brand-ink);
-  font-family: var(--font-display);
-  font-size: var(--text-home-stage-title);
-  font-weight: 500;
-}
-
-.stageDetail {
-  fill: var(--color-brand-orange);
-  font-size: var(--text-sm);
-  font-weight: 500;
-}
-
-.stageCheck {
-  --custom-icon-accent: var(--color-brand-orange);
-  --custom-icon-paper: var(--color-brand-canvas);
-
-  overflow: visible;
-}
-
-.progressSurface {
-  fill: url("#paper-surface");
-  filter: url("#stage-shadow");
-  stroke: none;
-}
-.progressTrack {
-  fill: none;
-  stroke: var(--color-brand-muted);
-  stroke-opacity: 0.14;
-  stroke-width: 3;
-}
-.progressArc {
-  fill: none;
-  stroke: var(--color-brand-orange);
-  stroke-width: 3.5;
-  stroke-linecap: round;
-  stroke-dasharray: 72 100;
-  transform: rotate(-90deg);
-  transform-origin: 64px 64px;
-}
-.progress text {
-  text-anchor: middle;
-}
-.progress .progressValue {
-  fill: var(--color-brand-orange);
-  font-family: var(--font-ui);
-  font-size: var(--text-home-progress);
-  font-weight: 500;
-}
-
-.surfaceEngraving {
-  color: var(--color-brand-muted);
-  opacity: 0.2;
-}
-.surfaceEngraving[data-stage] {
-  opacity: 0.14;
-}
-.materialPattern circle {
-  fill: currentcolor;
-  stroke: none;
-}
-.materialPattern path {
-  stroke-linecap: round;
-}
-
-.intro::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  inset: -3rem -1rem;
-  background: var(--color-brand-canvas);
-  mask-image: radial-gradient(ellipse, black 48%, transparent 74%);
-  pointer-events: none;
-}
-
-.heroSecondLine {
-  padding-left: 0;
-}
-.intro .introDescription {
-  max-width: 35ch;
-  margin-top: var(--space-4);
-  color: var(--color-brand-muted);
-  font-size: var(--text-home-description);
-  font-weight: 400;
+.intro p[data-variant] {
+  max-width: 31ch;
+  font-size: var(--text-base);
   line-height: 1.55;
 }
-.surfaceTexture {
-  fill: url("#home-paper-texture");
-  opacity: 0.07;
+
+.catalog,
+.materials {
+  display: grid;
 }
 
-.connectionFlow,
-.peripheralFlow {
-  opacity: 0;
+.catalog {
+  gap: var(--space-5);
 }
 
-[data-map-layout="compact"] {
-  display: none;
+.materials {
+  gap: var(--space-3);
+  scroll-margin-block-start: var(--space-3);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .connectionFlow {
-    animation: connection-flow 12s linear infinite paused;
-  }
-
-  [data-map-connection="practice-tasks"] .connectionFlow {
-    animation-delay: 1.25s;
-  }
-
-  [data-map-connection="tasks-progress"] .connectionFlow {
-    animation-delay: 2.5s;
-  }
-
-  .peripheralFlow {
-    animation: peripheral-flow 12s ease-in-out infinite paused;
-  }
-
-  [data-target-kind="pattern"] .peripheralFlow {
-    display: none;
-  }
-
-  .surfaceMotionBorder {
-    animation: surface-border-glint 12s ease-in-out infinite paused;
-  }
-
-  .hero[data-motion-active="true"] .connectionFlow,
-  .hero[data-motion-active="true"] .peripheralFlow,
-  .hero[data-motion-active="true"] .surfaceMotionBorder {
-    animation-play-state: running;
-  }
+.materials h2 {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  line-height: 1.3;
 }
 
-@keyframes connection-flow {
-  0% {
-    stroke-dashoffset: 22;
-    opacity: 0;
-  }
-  2% {
-    opacity: 0.95;
-  }
-  10% {
-    opacity: 0.95;
-  }
-  12%,
-  100% {
-    stroke-dashoffset: -100;
-    opacity: 0;
-  }
+.lessonList {
+  display: grid;
+  gap: var(--space-3);
+  padding: 0;
+  margin: 0;
+  list-style: none;
 }
 
-@keyframes peripheral-flow {
-  0%,
-  33% {
-    stroke-dashoffset: 24;
-    opacity: 0;
-  }
-  36%,
-  50% {
-    opacity: 0.8;
-  }
-  58%,
-  100% {
-    stroke-dashoffset: -100;
-    opacity: 0;
-  }
+.lessonList a {
+  --lesson-arrow-transform: none;
+  --lesson-title-decoration: var(--color-rule-strong);
+
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-0-5) var(--space-2);
+  min-height: 7rem;
+  padding: var(--space-1) 0 var(--space-2);
+  text-decoration: none;
 }
 
-@keyframes surface-border-glint {
-  0%,
-  36% {
-    stroke-dashoffset: 20;
-    opacity: 0;
-  }
-  41%,
-  48% {
-    opacity: 0.8;
-  }
-  58%,
-  100% {
-    stroke-dashoffset: -100;
-    opacity: 0;
-  }
+.lessonList a:focus-visible {
+  border-radius: var(--radius-control);
+  outline: 2px solid var(--color-focus);
+  outline-offset: var(--space-1);
 }
 
-/* The card and its attached route deform together; unsupported engines stay static. */
-@supports (d: path("M0 0L1 1")) {
-  @media (prefers-reduced-motion: no-preference) and (min-width: 44.001rem) {
-    .cardDrift,
-    [data-map-layout="wide"]
-      [data-target-kind="card"]
-      [data-svg-drawing="arrow-head"] {
-      animation: card-drift 12s ease-in-out var(--depth-delay, 0s) infinite
-        paused;
-    }
-
-    [data-map-layout="wide"]
-      .peripheralConnection:not([data-target-kind="pattern"])
-      [data-svg-drawing="line"] {
-      animation: route-drift 12s ease-in-out var(--depth-delay, 0s) infinite
-        paused;
-    }
-
-    [data-map-layout="wide"]
-      .peripheralConnection:not([data-target-kind="pattern"])
-      .peripheralFlow {
-      animation:
-        peripheral-flow 12s ease-in-out infinite paused,
-        route-drift 12s ease-in-out var(--depth-delay, 0s) infinite paused;
-    }
-
-    .hero[data-motion-active="true"] .cardDrift,
-    .hero[data-motion-active="true"]
-      [data-map-layout="wide"]
-      .peripheralConnection
-      [data-svg-drawing] {
-      animation-play-state: running;
-    }
-  }
+.lessonNumber {
+  grid-column: 1;
+  color: var(--color-text-soft);
+  font-size: var(--text-sm);
 }
 
-@keyframes card-drift {
-  0%,
-  25%,
-  70%,
-  100% {
-    transform: translateY(0);
-  }
-  45% {
-    transform: translateY(var(--card-lift, -4px));
-  }
+.lessonTitle {
+  grid-column: 1;
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 500;
+  line-height: 1.3;
+  text-decoration: underline;
+  text-decoration-color: var(--lesson-title-decoration);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+  transition: text-decoration-color var(--motion-duration) var(--motion-easing);
 }
 
-@keyframes route-drift {
-  0%,
-  25%,
-  70%,
-  100% {
-    d: var(--route-rest);
-  }
-  45% {
-    d: var(--route-raised);
-  }
+.lessonSummary {
+  grid-column: 1;
+  max-width: 62ch;
+  color: var(--color-text-soft);
+  font-size: var(--text-sm);
+  line-height: 1.55;
 }
 
-@media (max-width: 60rem) {
-  .page {
-    height: auto;
-    grid-template-rows: auto 1fr minmax(var(--home-footer-min-height), auto);
-    --text-home-hero: clamp(3rem, 8vw, 6rem);
-  }
+.lessonArrow {
+  grid-row: 1 / 4;
+  grid-column: 2;
+  align-self: center;
+  color: var(--color-text-soft);
+  transform: var(--lesson-arrow-transform);
+  transition: transform var(--motion-duration) var(--motion-easing);
+}
 
-  .hero {
+.lessonList a:hover {
+  --lesson-arrow-transform: translateX(0.125rem);
+  --lesson-title-decoration: currentColor;
+}
+
+@media (max-width: 58rem) {
+  .root {
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--space-3);
-    padding-block: var(--space-4);
+    gap: var(--space-5);
+    padding-block: var(--space-5);
   }
 
-  .primaryAction {
-    margin-top: var(--space-2);
-  }
-  .intro {
-    padding-block: 0;
-  }
-
-  .intro .heroTitle[data-order="1"] {
-    display: grid;
-    max-width: none;
-    line-height: 0.95;
-  }
-
-  .heroTitle span + span::before {
-    content: none;
-  }
-
-  .map {
-    width: 100%;
-    max-width: 58rem;
-  }
-}
-
-@media (max-width: 44rem) {
-  .page {
-    --text-home-hero: clamp(2.75rem, 12vw, 4.75rem);
-    --text-home-description: 1rem;
-    --text-home-card-caption: 0.875rem;
-  }
-
-  .hero {
-    gap: var(--space-2);
-    padding-block: var(--space-4) var(--space-3);
-  }
-
-  .intro .heroTitle[data-order="1"] {
-    display: grid;
-    line-height: 0.92;
-  }
-
-  .heroTitle span + span::before {
-    content: none;
-  }
-
-  .primaryAction {
-    font-size: var(--text-lg);
-  }
-
-  .map {
-    aspect-ratio: 1200 / 1500;
-  }
-
-  .ambientField {
-    inset: 6.5rem 0 7rem;
-  }
-
-  [data-ambient-notation="algorithm"] {
-    top: 5%;
-    left: auto;
-    right: -8%;
-    opacity: 0.14;
-  }
-  [data-ambient-notation="byte"] {
-    left: -10%;
-    bottom: 5%;
-  }
-  [data-ambient-notation="traversal"] {
-    left: 45%;
-    bottom: 2%;
-    width: 12rem;
-  }
-  [data-ambient-notation="logicPulse"] {
-    left: 60%;
-    top: 33%;
-  }
-  [data-ambient-notation="powers"] {
-    top: 57%;
-  }
-  .heroSecondLine {
-    padding-left: 0;
-  }
-  .intro .introDescription {
-    max-width: 32ch;
-  }
-
-  [data-map-layout="wide"] {
-    display: none;
-  }
-
-  [data-map-layout="compact"] {
-    display: inline;
-  }
-
-  .paperCard,
-  .stage,
-  .progress {
-    transform: var(--compact-position);
-  }
-
-  .cardTitle {
-    font-size: var(--text-xl);
-  }
-
-  .backgroundPattern {
-    opacity: 0.6;
-  }
-
-  [data-pattern-grid-relief] {
-    display: none;
-  }
-
-  [data-pattern-name="algorithm"] {
-    transform: translate(40px, 500px);
-  }
-  [data-pattern-name="byte"] {
-    transform: translate(670px, 690px);
-  }
-  [data-pattern-name="powers"] {
-    transform: translate(-650px, 400px);
-  }
-  [data-pattern-name="truthTable"] {
-    transform: translate(-150px, 1050px);
-  }
-  [data-pattern-name="traversal"] {
-    transform: translate(200px, 660px);
-  }
-  [data-pattern-name="hexNibble"] {
-    transform: translate(-240px, 20px);
-  }
-}
-
-/* Reserve the stacked PublicFooter before the streamed HTML reaches it. */
-@media (max-width: 30rem) {
-  .page {
-    --home-footer-min-height: 6.5rem;
-  }
-}
-
-@media (prefers-contrast: more) {
-  .patternPreset [data-pattern-node="end"] {
-    fill: var(--color-brand-orange-text);
-  }
-
-  .cardSurface,
-  .stageSurface {
-    stroke: var(--color-brand-ink);
-  }
-
-  .activeStage .stageSurface,
-  .progressSurface {
-    stroke: var(--color-brand-orange-text);
-  }
-
-  .futurePaperCard {
-    opacity: 1;
-  }
-
-  .mapConnections {
-    color: var(--color-brand-orange-text);
-  }
-
-  .cardConnection,
-  .cycleConnection,
-  .patternConnection {
-    color: var(--color-brand-orange-text);
-  }
-
-  .surfaceMotionBorder {
-    stroke: var(--color-brand-ink);
-  }
-
-  .activeStage .surfaceMotionBorder,
-  .progress .surfaceMotionBorder {
-    stroke: var(--color-brand-orange-text);
+  .intro h1[data-order] {
+    max-width: 15ch;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .connectionFlow,
-  .peripheralFlow,
-  .surfaceMotionBorder {
-    opacity: 0;
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .ambientRouteFlow {
-    animation: field-travel 22s linear infinite paused;
-  }
-  [data-field-route="1"] .ambientRouteFlow {
-    animation-delay: 7s;
-  }
-  .ambientIllumination {
-    animation: field-light 22s ease-in-out infinite paused;
-  }
-  .mapBackdropPlane {
-    animation: far-plane 18s ease-in-out infinite paused;
-  }
-  .page[data-motion-active="true"] .ambientRouteFlow,
-  .page[data-motion-active="true"] .ambientIllumination,
-  .page[data-motion-active="true"] .mapBackdropPlane {
-    animation-play-state: running;
-  }
-}
-@keyframes field-travel {
-  0% {
-    stroke-dashoffset: 8;
-    opacity: 0;
-  }
-  5%,
-  55% {
-    opacity: 0.38;
-  }
-  65%,
-  100% {
-    stroke-dashoffset: -100;
-    opacity: 0;
-  }
-}
-@keyframes field-light {
-  0%,
-  100% {
-    transform: translate(-3%, 1%);
-    opacity: 0.45;
-  }
-  50% {
-    transform: translate(3%, -2%);
-    opacity: 0.75;
-  }
-}
-@keyframes far-plane {
-  0%,
-  100% {
-    transform: translate(0, 0);
-  }
-  50% {
-    transform: translate(2px, 4px);
-  }
-}
-
-@media (min-width: 60.001rem) and (max-height: 650px) {
-  .page {
-    --text-home-hero: clamp(2.25rem, 4.2vw, 3.5rem);
-    --text-home-description: 1rem;
-  }
-  .intro .introDescription {
-    margin-top: var(--space-2);
-  }
-  .primaryAction {
-    margin-top: var(--space-2);
-  }
-  .intro {
-    padding-block: 0;
-  }
-}
-@media (min-width: 60.001rem) and (max-height: 430px) {
-  .page {
-    height: auto;
-    min-height: 100svh;
-  }
-  .map {
-    width: min(100%, 34rem);
-  }
-}
-
-@media (min-width: 60.001rem) and (max-height: 550px) {
-  .primaryAction {
-    min-height: 2.75rem;
-    font-size: var(--text-base);
+  .lessonList a,
+  .lessonTitle,
+  .lessonArrow {
+    transition: none;
   }
 }

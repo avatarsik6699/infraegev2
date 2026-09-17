@@ -10,12 +10,6 @@ export namespace LessonPracticeTypes {
     acceptedAnswers: Readonly<Record<string, string>>;
     onTaskSolved: (taskId: string, acceptedAnswer: string) => number;
     checkAnswer: PracticeTaskTypes.Checker;
-    onAnswerChecked?: (event: AnswerCheckedEvent) => void;
-  };
-
-  export type AnswerCheckedEvent = {
-    result: "correct" | "incorrect";
-    solvedCount: number;
   };
 
   export type State =

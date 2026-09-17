@@ -3,10 +3,7 @@ import { PageContainer } from "~/shared/components/page-container";
 import { Typography } from "~/shared/components/typography";
 import { PublicFooter } from "~/widgets/public-footer";
 import { PublicHeader } from "~/widgets/public-header";
-import { CourseCatalogAmbientField } from "./components/course-catalog-ambient-field";
 import { CourseCatalogCard } from "./components/course-catalog-card";
-import { CourseCatalogStaircase } from "./components/course-catalog-staircase";
-import { CourseCatalogTrail } from "./components/course-catalog-trail";
 import styles from "./course-catalog-page.module.css";
 
 type Props = {
@@ -18,14 +15,11 @@ export const CourseCatalogPage: React.FC<Props> = (props) => {
     <div className={styles.page} data-course-catalog-page>
       <PublicHeader activeSection="courses" />
       <main className={styles.root}>
-        <CourseCatalogAmbientField />
-        <CourseCatalogStaircase continuation />
         <PageContainer
           className={styles.catalogSection}
           component="section"
           aria-labelledby="course-catalog-heading"
         >
-          <CourseCatalogTrail />
           <header className={styles.catalogHeading}>
             <div className={styles.headingCopy}>
               <Typography.Title id="course-catalog-heading" order={1}>
@@ -41,7 +35,6 @@ export const CourseCatalogPage: React.FC<Props> = (props) => {
                 </Typography.Text>
               </div>
             </div>
-            <CourseCatalogStaircase />
           </header>
 
           <ol

@@ -4,32 +4,32 @@ import { practiceProgress } from "~/features/practice-progress/model/practice-pr
 import { safeLs } from "~/shared/lib/safe-ls";
 
 describe("practice catalog URL state", () => {
-  it("round-trips the filters and cursor without retaining a cursor after filter reset", () => {
+  it("round-trips the filters and page without retaining a page after filter reset", () => {
     const search = practiceCatalog.search({
       skill: "python",
       exam_number: "17",
       difficulty: "2",
-      cursor: "abc==",
+      page: 2,
     });
     expect(search).toEqual({
       skill: "python",
       exam_number: 17,
       difficulty: 2,
-      cursor: "abc==",
+      page: 2,
     });
     expect(practiceCatalog.href(search)).toBe(
-      "/practice?skill=python&exam_number=17&difficulty=2&cursor=abc%3D%3D",
+      "/practice?skill=python&exam_number=17&difficulty=2&page=2",
     );
-    expect(
-      practiceCatalog.href({ ...search, cursor: undefined }),
-    ).not.toContain("cursor");
+    expect(practiceCatalog.href({ ...search, page: undefined })).not.toContain(
+      "page",
+    );
   });
   it.each([
     { skill: "../" },
     { difficulty: "4" },
     { exam_number: "0" },
     { exam_number: [] },
-    { cursor: "x".repeat(1025) },
+    { page: "0" },
   ])("rejects invalid input %j", (input) => {
     expect(practiceCatalog.search(input).invalid).toBe(true);
   });
@@ -81,18 +81,17 @@ describe("independent practice history", () => {
 });
 
 describe("standalone catalog context", () => {
-  it("round-trips a filtered page and original row across next-task links", () => {
+  it("round-trips a filtered page across next-task links", () => {
     const context = practiceCatalog.taskSearch({
       skill: "recursion",
       exam_number: "16",
-      cursor: "opaque==",
-      origin: "task-30",
+      page: "2",
     });
     expect(practiceCatalog.taskHref("task-31", context)).toBe(
-      "/practice/task-31?skill=recursion&exam_number=16&cursor=opaque%3D%3D&origin=task-30",
+      "/practice/task-31?skill=recursion&exam_number=16&page=2",
     );
     expect(practiceCatalog.returnHref(context)).toBe(
-      "/practice?skill=recursion&exam_number=16&cursor=opaque%3D%3D#task-task-30",
+      "/practice?skill=recursion&exam_number=16&page=2",
     );
   });
   it("rejects external return URLs and invalid origin/filters", () => {

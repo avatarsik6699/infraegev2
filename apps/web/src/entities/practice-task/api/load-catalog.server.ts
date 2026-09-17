@@ -11,7 +11,7 @@ export async function loadPracticeCatalog(search: PracticeCatalogTypes.Search) {
       skill: search.skill,
       exam_number: search.exam_number,
       difficulty: search.difficulty,
-      cursor: search.cursor,
+      page: search.page,
     };
     const result = await practiceServerClient.GET("/api/tasks", {
       params: { query },

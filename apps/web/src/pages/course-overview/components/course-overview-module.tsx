@@ -1,6 +1,3 @@
-import { SurfaceGlint } from "~/shared/components/surface-decoration";
-import { useRef } from "react";
-import { useElementActivity } from "~/shared/lib/element-activity";
 import { ActionLink } from "~/shared/components/action-link";
 import type { CourseTypes } from "~/entities/course";
 import { Typography } from "~/shared/components/typography";
@@ -14,8 +11,6 @@ type Props = {
 };
 
 export const CourseOverviewModule: React.FC<Props> = (props) => {
-  const moduleRef = useRef<HTMLLIElement>(null);
-  const active = useElementActivity(moduleRef);
   const lessonsById = new Map(
     props.lessons.map((lesson) => [lesson.id, lesson] as const),
   );
@@ -25,20 +20,12 @@ export const CourseOverviewModule: React.FC<Props> = (props) => {
 
   return (
     <li
-      ref={moduleRef}
-      data-motion-active={active || undefined}
       className={styles.module}
       data-availability={available ? "available" : "planned"}
       data-course-module
     >
       <span className={styles.moduleNumber} aria-hidden="true">
         {String(props.index + 1).padStart(2, "0")}
-        <SurfaceGlint
-          kind="soft"
-          active={active}
-          playback="loop"
-          className={styles.numberSheen}
-        />
       </span>
       <div className={styles.moduleCopy}>
         <Typography.Title order={3}>{props.module.title}</Typography.Title>
@@ -59,7 +46,7 @@ export const CourseOverviewModule: React.FC<Props> = (props) => {
                 <div className={styles.lessonRow}>
                   <div className={styles.lessonCopy}>
                     <ActionLink
-                      hierarchy="drawn"
+                      hierarchy="text"
                       className={styles.lessonTitle}
                       data-course-lesson-title
                       data-title-status="published"

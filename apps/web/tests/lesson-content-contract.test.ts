@@ -1,3 +1,4 @@
+import { migrationTaskIds } from "./practice-migration-fixture";
 import { describe, expect, it } from "vitest";
 import {
   defineLesson,
@@ -61,7 +62,7 @@ describe("defineLesson", () => {
       "digit-sum-and-general-template",
       "final-solution-algorithm",
     ]);
-    expect(preobrazovanieZapiseyChiselLesson.practiceTaskIds).toEqual([
+    expect(migrationTaskIds(preobrazovanieZapiseyChiselLesson.id)).toEqual([
       "preobrazovanie-zapisey-appending",
       "preobrazovanie-zapisey-parity",
       "preobrazovanie-zapisey-base-three",
@@ -84,7 +85,7 @@ describe("defineLesson", () => {
       "large-arguments-algebraic-shortcut",
       "general-method",
     ]);
-    expect(rekursiyaLesson.practiceTaskIds).toEqual([
+    expect(migrationTaskIds(rekursiyaLesson.id)).toEqual([
       "rekursiya-base-sequence",
       "rekursiya-call-stack-trace",
       "rekursiya-two-values",

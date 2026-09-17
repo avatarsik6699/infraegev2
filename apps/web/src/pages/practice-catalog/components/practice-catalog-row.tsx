@@ -24,9 +24,8 @@ export const PracticeCatalogRow: React.FC<{
           <ActionLink
             to={practiceCatalog.taskHref(props.task.id, {
               ...props.search,
-              origin: props.task.id,
             })}
-            hierarchy="drawn"
+            hierarchy="text"
             presentation="inline"
           >
             {props.task.title}

@@ -21,23 +21,6 @@
   vertical-align: -0.1em;
 }
 
-.root[data-hierarchy="drawn"] {
-  text-decoration: none;
-}
-
-.root[data-hierarchy="drawn"] .label {
-  position: relative;
-}
-
-.root[data-hierarchy="drawn"] .icon {
-  color: var(--color-brand-orange);
-  flex-shrink: 0;
-}
-
-.root[data-hierarchy="drawn"]:hover [data-link-underline] {
-  opacity: 0.72;
-}
-
 .root[data-presentation="action"] {
   display: inline-flex;
   align-items: center;

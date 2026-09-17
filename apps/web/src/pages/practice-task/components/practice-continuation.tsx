@@ -54,7 +54,7 @@ export const PracticeContinuation: React.FC<{
         (result.taskId ? (
           <ActionLink
             to={practiceCatalog.taskHref(result.taskId, props.search)}
-            hierarchy="drawn"
+            hierarchy="text"
             icon="forward"
           >
             Следующая задача

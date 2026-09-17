@@ -27,4 +27,4 @@ reject env DB_ENV=prod DB_PROJECT=infraege bash "$repo_dir/scripts/db-export.sh"
 source "$repo_dir/scripts/lib/application-db.sh"
 mkdir "$test_root/bundle"
 if db_validate_bundle "$test_root/bundle" >/dev/null 2>&1; then exit 1; fi
-echo 'application backup/restore fail-closed contracts: PASS (real SQL proof: practice-db-foundation.test.sh)'
+echo 'application backup/restore fail-closed contracts: PASS (real SQL proof: isolated bundle restore)'

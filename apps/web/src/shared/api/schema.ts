@@ -4,23 +4,6 @@
  */
 
 export interface paths {
-    "/api/client-errors": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Report Client Error */
-        post: operations["reportClientError"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/courses/{course_id}/practice-summary": {
         parameters: {
             query?: never;
@@ -292,8 +275,10 @@ export interface components {
         };
         /** CatalogPage */
         CatalogPage: {
-            /** Next Cursor */
-            next_cursor: string | null;
+            /** Next Page */
+            next_page: number | null;
+            /** Page */
+            page: number;
             /** Tasks */
             tasks: components["schemas"]["CatalogTask"][];
             /** Total */
@@ -333,27 +318,6 @@ export interface components {
             explanation: (components["schemas"]["TextBlock"] | components["schemas"]["ListBlock"] | components["schemas"]["CodeExampleBlock"] | components["schemas"]["TableBlock"] | components["schemas"]["WorkedExampleBlock"] | components["schemas"]["CalloutBlock"] | components["schemas"]["ImageBlock"] | components["schemas"]["DiagramBlock"] | components["schemas"]["AttachmentBlock"] | components["schemas"]["RichTextBlock"] | components["schemas"]["CodeVariantsBlock"])[];
             /** Solution Revision */
             solution_revision: number;
-        };
-        /**
-         * ClientErrorReport
-         * @description Bounded diagnostic fields only; free-form exception data is deliberately forbidden.
-         */
-        ClientErrorReport: {
-            /** Asset Path */
-            asset_path?: string | null;
-            /** Column */
-            column?: number | null;
-            /** Fingerprint */
-            fingerprint: string;
-            /**
-             * Kind
-             * @enum {string}
-             */
-            kind: "render" | "route_load" | "chunk_load" | "unhandled_error" | "unhandled_rejection";
-            /** Line */
-            line?: number | null;
-            /** Route Id */
-            route_id: string;
         };
         /** CodeExampleBlock */
         CodeExampleBlock: {
@@ -787,37 +751,6 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    reportClientError: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ClientErrorReport"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
     get_course_api_courses__course_id__practice_summary_get: {
         parameters: {
             query?: never;
@@ -938,8 +871,7 @@ export interface operations {
                 skill?: string | null;
                 exam_number?: number | null;
                 difficulty?: number | null;
-                limit?: number;
-                cursor?: string | null;
+                page?: number;
             };
             header?: never;
             path?: never;

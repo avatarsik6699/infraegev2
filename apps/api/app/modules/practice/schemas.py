@@ -228,48 +228,6 @@ class TaskData(TaskContent):
         return self
 
 
-class TaskEdit(StrictModel):
-    task: TaskData
-    expected_revision: int = Field(ge=0)
-    mode: Literal["normal", "editorial"] = "normal"
-    reason: Nonempty
-
-
-class PackageFile(StrictModel):
-    path: str
-    checksum: Checksum
-    size_bytes: int = Field(gt=0, le=20 * 1024 * 1024)
-    format: Literal[
-        "png",
-        "jpg",
-        "jpeg",
-        "webp",
-        "avif",
-        "txt",
-        "csv",
-        "json",
-        "py",
-        "zip",
-        "xlsx",
-        "ods",
-        "pdf",
-        "docx",
-        "odt",
-    ]
-
-
-class TaskEntry(StrictModel):
-    path: str
-    checksum: Checksum
-
-
-class Manifest(StrictModel):
-    format: Literal[1]
-    package_id: Identifier
-    tasks: list[TaskEntry] = Field(min_length=1, max_length=1000)
-    files: list[PackageFile] = Field(default_factory=list, max_length=10000)
-
-
 class MaterialDefinition(StrictModel):
     id: Identifier
     sections: list[Identifier]
@@ -311,3 +269,59 @@ class FileDelivery(StrictModel):
     url: str
     mime_type: str
     size_bytes: int
+
+
+class BankTask(StrictModel):
+    task: TaskData
+    solution_revision: int = Field(default=1, ge=1)
+
+
+class BankFile(StrictModel):
+    checksum: Checksum
+    storage_key: Checksum
+    format: str
+    mime_type: str
+    size_bytes: int = Field(gt=0)
+
+
+class Bank(StrictModel):
+    format: Literal[1] = 1
+    tasks: list[BankTask]
+    files: list[BankFile] = Field(default_factory=list)
+    materials: list[MaterialDefinition] = Field(default_factory=list)
+    courses: list[CourseDefinition] = Field(default_factory=list)
+
+    def validate_references(self) -> None:
+        """Check a complete import's references; exports attach registry metadata later."""
+        materials = {item.id: item for item in self.materials}
+        courses = {item.id: item for item in self.courses}
+        if len(materials) != len(self.materials) or len(courses) != len(self.courses):
+            raise ValueError("duplicate publication metadata")
+        if len({entry.task.id for entry in self.tasks}) != len(self.tasks):
+            raise ValueError("duplicate task ID")
+        if len({item.checksum for item in self.files}) != len(self.files):
+            raise ValueError("duplicate file checksum")
+        for material in self.materials:
+            if len(set(material.sections)) != len(material.sections):
+                raise ValueError("duplicate section")
+            if material.kind == "course":
+                course = courses.get(material.course_id or "")
+                if course is None or material.id not in course.lesson_ids:
+                    raise ValueError("unknown course membership")
+            elif material.course_id is not None:
+                raise ValueError("topic cannot belong to a course")
+        positions: set[tuple[str, int]] = set()
+        for entry in self.tasks:
+            for link in entry.task.lessons:
+                if link.material_id not in materials:
+                    raise ValueError("unknown lesson")
+                position = (link.material_id, link.position)
+                if position in positions:
+                    raise ValueError("duplicate lesson position")
+                positions.add(position)
+            for link in entry.task.theory_links:
+                material = materials.get(link.material_id)
+                if material is None:
+                    raise ValueError(f"{entry.task.id}: unknown theory material")
+                if link.section is not None and link.section not in material.sections:
+                    raise ValueError(f"{entry.task.id}: unknown theory section")

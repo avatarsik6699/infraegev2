@@ -115,12 +115,10 @@ flow.
 
 ### 3.1 Existing visual language for frontend changes
 
-For new or revised `apps/web` modules, read `docs/FRONTEND.md` §4.1 and select the closest live
-`/lab/design-system` visual-language specimen before scaffolding implementation. `/courses` and
-`/courses/python` are the accepted references; do not ask the architect to repeat their style.
-Record the specimen, shared primitives, page-owned composition and any deliberate exception in
-the Backlog task plan. Include lab coverage when introducing a reusable visual capability.
-Ask only about a materially new composition/direction or a genuine product ambiguity.
+For frontend work, read `docs/FRONTEND.md` and use the existing minimal public pages and shared
+semantic controls. Keep composition with the page; introduce a reusable mechanism only for a
+real consumer. Compare desktop/mobile and degraded states in the required browser pass. Labs
+and decorative specimens are not part of the current product.
 
 ### 4. Run critical validation checks (spec-level, when step 2 ran)
 

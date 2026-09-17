@@ -1,29 +1,29 @@
 :root {
   color-scheme: light;
 
-  /* One infraege profile for public pages, reading, controls and the live lab.
+  /* One infraege profile for public pages, reading, controls and controls.
      Only tokens.css consumes these values. */
-  --theme-learning-muted: #605e59;
+  --theme-learning-muted: #606060;
   --theme-learning-danger: #99453f;
   --theme-learning-success: #48634b;
   --theme-learning-info: #3e5e76;
-  --theme-scrollbar: #e4e1dc;
-  --theme-scrollbar-hover: #d2cec7;
+  --theme-scrollbar: #e4e4e4;
+  --theme-scrollbar-hover: #d2d2d2;
   --theme-scrollbar-dark: #2d2d2d;
   --theme-scrollbar-dark-hover: #414141;
-  --theme-page: #f5f3ef;
-  --theme-surface: #fbfaf7;
-  --theme-surface-muted: #eeece7;
-  --theme-ink: #1a1a1a;
-  --theme-ink-secondary: #6b6b6b;
-  --theme-rule: #d8d4cc;
-  --theme-rule-strong: #817a70;
+  --theme-page: #ffffff;
+  --theme-surface: #ffffff;
+  --theme-surface-muted: #f5f5f5;
+  --theme-ink: #171717;
+  --theme-ink-secondary: #606060;
+  --theme-rule: #d4d4d4;
+  --theme-rule-strong: #606060;
   --theme-brand-orange: #ff6a00;
   --theme-brand-orange-text: #b84400;
   --theme-brand-orange-soft: #ffd9c2;
-  --theme-primary: #1a1a1a;
-  --theme-primary-hover: #42403c;
-  --theme-interactive-muted: #eeece7;
+  --theme-primary: #171717;
+  --theme-primary-hover: #606060;
+  --theme-interactive-muted: #f5f5f5;
   --theme-on-primary: #ffffff;
   --theme-ring: #b84400;
   --theme-overlay-shadow: oklch(0.22 0.015 65 / 0.16);

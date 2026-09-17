@@ -1,163 +1,26 @@
 .root {
   display: inline-flex;
-  min-height: var(--control-height);
   align-items: center;
-  justify-content: center;
-  padding-inline: var(--space-1-5);
-  border: 1px solid var(--control-secondary-border);
-  border-radius: var(--radius-control);
-  color: var(--control-secondary-text);
-  background: var(--control-secondary-bg);
-  box-shadow: var(--shadow-control);
-  font-family: var(--font-ui);
-  font-size: var(--text-sm);
-  font-weight: 600;
-  text-decoration: none;
-  transition:
-    box-shadow var(--motion-duration) var(--motion-easing),
-    background-color var(--motion-duration) var(--motion-easing),
-    border-color var(--motion-duration) var(--motion-easing),
-    color var(--motion-duration) var(--motion-easing);
-}
-
-.quiet {
-  border-color: transparent;
-  background: transparent;
-  box-shadow: none;
-}
-
-.text {
-  gap: var(--space-0-5);
-  justify-content: flex-start;
-  padding-inline: 0;
-  border-color: transparent;
-  background: transparent;
-  box-shadow: none;
-  color: var(--color-text-soft);
-  font-weight: 500;
-}
-
-.drawn {
-  gap: 0.38em;
-  justify-content: flex-start;
-  padding-inline: 0;
-  border-color: transparent;
-  background: transparent;
-  box-shadow: none;
-  color: var(--color-brand-ink, var(--color-text));
-  font-weight: 400;
-}
-
-.drawn .label {
-  position: relative;
-  display: inline-block;
-}
-
-.drawnArrow {
-  width: 1.55em;
-  height: 1em;
-  flex: 0 0 auto;
-  color: var(--color-brand-orange);
-  overflow: visible;
-  transition: transform var(--motion-duration) var(--motion-easing);
-}
-
-.text .label {
-  text-decoration-line: underline;
-  text-decoration-color: var(--color-link-decoration);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.22em;
-  transition: text-decoration-color var(--motion-duration) var(--motion-easing);
-}
-
-.icon {
-  width: 1rem;
-  height: 1rem;
-  flex: 0 0 auto;
-  transition: transform var(--motion-duration) var(--motion-easing);
-}
-
-.root:hover {
-  background: var(--control-quiet-bg-hover);
+  gap: var(--space-1);
   color: var(--color-text);
+  text-decoration: underline;
+  text-decoration-color: var(--color-rule-strong);
+  text-underline-offset: 0.2em;
+  overflow-wrap: anywhere;
 }
-
-.text:hover {
-  background: transparent;
+.root[data-presentation="action"] {
+  min-height: var(--control-height);
 }
-
-.drawn:hover {
-  background: transparent;
-  color: var(--color-brand-ink, var(--color-text));
-}
-
-.drawn:hover [data-link-underline] {
-  opacity: 0.72;
-}
-
-.drawn:hover .drawnArrow {
-  transform: translateX(0.12em);
-}
-
-.text:hover .label {
+.root:hover {
+  color: var(--color-accent-dark);
   text-decoration-color: currentColor;
 }
-
-.text:hover .backIcon {
-  transform: translateX(-0.125rem);
-}
-
-.text:hover .forwardIcon {
-  transform: translateX(0.125rem);
-}
-
-.secondary:active {
-  background: color-mix(in oklch, var(--color-text) 7%, var(--color-surface));
-}
-
-.drawn:active {
-  transform: translateY(1px);
-}
-
-.secondary:focus-visible {
-  box-shadow: var(--shadow-control), var(--focus-ring);
-}
-
-.quiet:focus-visible,
-.text:focus-visible,
-.drawn:focus-visible {
+.root:focus-visible {
   outline: 2px solid var(--color-focus);
-  outline-offset: 0.2rem;
+  outline-offset: 4px;
 }
-
-@media (prefers-reduced-motion: reduce) {
-  .root {
-    transition: none;
-  }
-
-  .text .label,
-  .icon,
-  .drawnArrow {
-    transition: none;
-  }
-}
-
-.drawn[data-icon="back"] .drawnArrow {
-  transform: scaleX(-1);
-}
-
-.drawn[data-icon="back"]:hover .drawnArrow {
-  transform: translateX(-0.12em) scaleX(-1);
-}
-
-.root[data-presentation="inline"] {
-  display: inline;
-  min-height: 0;
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-  color: inherit;
-  font: inherit;
+.icon {
+  flex: none;
+  width: 1em;
+  height: 1em;
 }

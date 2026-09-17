@@ -51,7 +51,7 @@ jobs:
           uv sync --frozen --dev
           uv run ruff check app tests migrations
           pnpm exec pyright app tests migrations
-          uv run ruff check ../../scripts/application_db.py ../../scripts/lib/application_db ../../scripts/tests/application_db_test.py ../../scripts/tests/deploy_orchestration_test.py
+          uv run ruff check ../../scripts/practice-local.py ../../scripts/application_db.py ../../scripts/lib/application_db ../../scripts/tests/application_db_test.py ../../scripts/tests/deploy_orchestration_test.py
           pnpm exec pyright --project ../../scripts/pyrightconfig.json
       - name: Generated API contract drift
         run: pnpm api:check

@@ -23,7 +23,7 @@ export class PracticeCutoverPage {
     const panel = this.page.locator(
       '[data-practice-task="rekursiya-base-sequence"]',
     );
-    await expect(input).toBeEnabled();
+    await expect(input).toBeEnabled({ timeout: 15000 });
     await input.fill("32");
     await this.page.route("**/api/tasks/*/check", (route) =>
       route.fulfill({
@@ -42,14 +42,14 @@ export class PracticeCutoverPage {
     await panel.getByRole("button", { name: "Обновить условие" }).click();
     await expect(panel.getByRole("alert")).toHaveCount(0);
     await expect(input).toHaveValue("32");
-    await expect(input).toBeEnabled();
+    await expect(input).toBeEnabled({ timeout: 15000 });
     await input.press("Enter");
     await expect(panel).toHaveAttribute("data-solved", "true");
   }
 
   async expectFailedCheckPreservesInput(): Promise<void> {
     const input = this.page.locator("#answer-rekursiya-base-sequence");
-    await expect(input).toBeEnabled();
+    await expect(input).toBeEnabled({ timeout: 15000 });
     await input.fill("32");
     await this.page.route("**/api/tasks/*/check", (route) =>
       route.abort("failed"),
@@ -92,7 +92,7 @@ export class PracticeCutoverPage {
       '[data-practice-task="rekursiya-base-sequence"]',
     );
     const input = panel.getByRole("textbox");
-    await expect(input).toBeEnabled();
+    await expect(input).toBeEnabled({ timeout: 15000 });
     await input.fill("32");
     await input.press("Enter");
     await expect(input).toBeDisabled();

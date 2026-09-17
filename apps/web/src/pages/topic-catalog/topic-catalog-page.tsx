@@ -1,12 +1,9 @@
-import { useRef } from "react";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { ExternalLink } from "~/shared/components/external-link";
 import { PageContainer } from "~/shared/components/page-container";
 import { Typography } from "~/shared/components/typography";
-import { useElementActivity } from "~/shared/lib/element-activity";
 import { PublicFooter } from "~/widgets/public-footer";
 import { PublicHeader } from "~/widgets/public-header";
-import { TopicCatalogAmbientField } from "./components/topic-catalog-ambient-field";
 import { TopicCatalogCard } from "./components/topic-catalog-card";
 import styles from "./topic-catalog-page.module.css";
 
@@ -14,18 +11,10 @@ const fipiDocumentsUrl =
   "https://fipi.ru/ege/demoversii-specifikacii-kodifikatory";
 
 export const TopicCatalogPage: React.FC = () => {
-  const rootRef = useRef<HTMLElement>(null);
-  const motionActive = useElementActivity(rootRef);
-
   return (
     <div className={styles.page} data-topic-catalog-page>
       <PublicHeader activeSection="topics" />
-      <main
-        ref={rootRef}
-        className={styles.root}
-        data-motion-active={motionActive || undefined}
-      >
-        <TopicCatalogAmbientField />
+      <main className={styles.root}>
         <PageContainer
           className={styles.catalogSection}
           component="section"
