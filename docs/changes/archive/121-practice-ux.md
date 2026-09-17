@@ -7,7 +7,7 @@
 | Change | `121` |
 | Slug | `practice-ux` |
 | Title | Practice catalog and solving UX |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/121-practice-ux` |
 
 ## Goal
@@ -18,7 +18,7 @@ private provenance and independent revision-aware browser progress. Implement th
 approved UX plan, including explicitly labelled fictional statistics only in the design lab;
 production transfer and authorship of full solutions for the entire bank are outside this change.
 
-Source: chat-approved plan and [practice UX research](../artifacts/practice-ux-research.md),
+Source: chat-approved plan and [practice UX research](../../artifacts/practice-ux-research.md),
 following locally archived Change 120. Mode: `continue`; no new product/design baseline.
 
 ## Design References
@@ -176,7 +176,7 @@ docs/changes/121-practice-ux.md
 
 ## Contracts
 
-See [SPEC](../SPEC.md) §3.2, §4.1 and §5.1, [FRONTEND](../FRONTEND.md) §3–§4 and
+See [SPEC](../../SPEC.md) §3.2, §4.1 and §5.1, [FRONTEND](../../FRONTEND.md) §3–§4 and
 the Files list above. The agreed schema/API changes are within this change's authorized scope.
 
 ## Implementation Order and Ownership
@@ -203,7 +203,7 @@ release/schema preflight instead of silently losing content; verify the exact co
 
 ## Gate Checks
 
-One affected-area Critical Gate from [STACK](../STACK.md), with these acceptance targets:
+One affected-area Critical Gate from [STACK](../../STACK.md), with these acceptance targets:
 
 - Fresh and populated migration, schema drift, old-package compatibility, editorial revision
   invariants, export/import/replay and nonempty restore of new fields/content.
