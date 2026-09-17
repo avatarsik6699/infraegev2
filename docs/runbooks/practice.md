@@ -24,7 +24,7 @@ lock and still check every expected revision; a competing stale update fails ins
 the winner. Packages are bounded and processed one task/file at a time. There are no automatic
 write retries or shared AsyncSessions. NullPool avoids retained connections across schema changes.
 
-`infra/database-schema` and `SCHEMA_REVISION` declare the supported revision `120_01`.
+`infra/database-schema` and `SCHEMA_REVISION` declare the supported revision `121_01`.
 The separate Compose `db-migrate` job invokes Alembic, then registers the release's materials;
 API startup waits for successful completion. It never generates migrations at process startup.
 `/health/ready` authenticates with the runtime role, takes a shared schema lock and executes SQL
@@ -367,3 +367,27 @@ README до повтора. Оба пакета повторяются идем�
 Защищённые настройки/резервные копии этого прогона находятся в игнорируемом
 `infra/practice-import-120.local/`, объекты задач — в `infra/task-files.local/`.
 Эти каталоги не являются частью переносимого пакета и не должны попадать в git.
+
+
+### Practice UX editorial package (Change 121)
+
+After both immutable Change 120 packages, apply
+`content/practice-imports/121-practice-ux/package` with `--update` on schema `121_01`.
+Use the same explicit target, validate/diff, pre-backup, apply, smoke and post-backup flow above.
+The package adds previews, known skills and honest explanation classifications, and explicitly
+marks formula spans/equivalent code groups. No answers, memberships or solution revisions change.
+Details and reproducible preparation are in the package README. Do not regenerate the existing
+120 packages to obtain these fields: their bytes/identity remain frozen.
+
+Content version 1 remains readable. Version 2 permits `rich_text` (text/code/formula spans) and
+`code_variants` (label/language/code, two to eight distinct labels). Old versions cannot render
+these blocks; a pre-121 application is not an automatically compatible rollback. Release preflight
+requires exact-version compatibility evidence and must reject unproved fallback, without database
+rollback. Backup restore uses the verifier image recorded in that snapshot.
+
+`short_description` is nullable and at most 300 characters; never include the answer or hints.
+`explanation_kind`: `unclassified` → «Разбор», `method` → «Идея решения»,
+`worked_solution` → «Решение». Review substance before marking a full worked solution.
+Catalog facet labels live in the practice module's skill taxonomy; register a readable label when
+introducing a new skill. Unknown legacy skill identifiers remain valid data but are not suggested
+as unnamed filter choices. Mock durations/statistics belong exclusively to lab fixtures.

@@ -1,0 +1,171 @@
+{
+  "expected_revision": 2,
+  "mode": "editorial",
+  "reason": "Practice UX: preview, skill, honest explanation label and explicit presentation; source answers retained",
+  "task": {
+    "answer_instruction": "Запишите целое число в десятичной системе счисления.",
+    "archived": false,
+    "catalog_visible": true,
+    "checker": {
+      "answer_variants": [
+        "8174947"
+      ],
+      "checker_type": "exact_match",
+      "numeric_tolerance": null
+    },
+    "content_schema_version": 2,
+    "difficulty": 2,
+    "estimated_minutes": null,
+    "exam_numbers": [
+      16
+    ],
+    "explanation": [
+      {
+        "data": {
+          "markdown": "Искомая величина: Чему равно значение `G(4044)`?"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Выпишите базовые значения и границы каждой ветви. Для конкретного аргумента сначала выберите применимое условие, затем подставляйте рекуррентную формулу этой ветви; базовый случай имеет приоритет перед дальнейшим раскрытием."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Если переходы используют меньшие аргументы, заполняйте значения по возрастанию от базовой области. При повторных обращениях используйте сохранённый результат: это позволяет избежать многократного обхода одних и тех же ветвей рекурсии."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Значения F и G храните раздельно. При взаимных вызовах состоянием является и имя функции, и аргумент: F(n) и G(n) не взаимозаменяемы. Вложенный аргумент сначала вычисляется, затем передаётся внешнему вызову."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "После получения нужных значений подставьте их именно в выражение из вопроса, сохранив коэффициенты, знаки и скобки. Значение одной функции может быть лишь промежуточной величиной, а не окончательным ответом."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Ответ: `8174947`."
+        },
+        "type": "text"
+      }
+    ],
+    "explanation_kind": "method",
+    "files": [],
+    "hint": [
+      {
+        "data": {
+          "markdown": "Начните с базового случая и направления изменения аргумента. Для выражения из нескольких значений сначала проверьте, можно ли сократить общую часть."
+        },
+        "type": "text"
+      }
+    ],
+    "id": "e3a1b94d-69ad-44a3-b44c-07348edd375f",
+    "interaction_type": "production",
+    "lessons": [],
+    "short_description": "Чему равно значение G(4044)?",
+    "skills": [
+      "mutual-recursion"
+    ],
+    "sources": [
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": true,
+        "kind": "unknown",
+        "original_id": null,
+        "primary": true,
+        "role": "original",
+        "title": null,
+        "url": null,
+        "year": null
+      },
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": false,
+        "kind": "bank",
+        "original_id": "9991",
+        "primary": false,
+        "role": "copy",
+        "title": "КЕГЭ",
+        "url": "https://kompege.ru/task?id=9991",
+        "year": null
+      }
+    ],
+    "statement": [
+      {
+        "data": {
+          "spans": [
+            {
+              "kind": "text",
+              "text": "(С. Чайкин) Алгоритм вычисления значения функции "
+            },
+            {
+              "kind": "formula",
+              "text": "G(n)"
+            },
+            {
+              "kind": "text",
+              "text": ", где "
+            },
+            {
+              "kind": "formula",
+              "text": "n"
+            },
+            {
+              "kind": "text",
+              "text": " - натуральное число, задан следующими соотношениями:"
+            }
+          ]
+        },
+        "type": "rich_text"
+      },
+      {
+        "data": {
+          "spans": [
+            {
+              "kind": "formula",
+              "text": "G(n) = { n, если n < 3 ; n - 1 + G(n - 1), если n > 2 }"
+            }
+          ]
+        },
+        "type": "rich_text"
+      },
+      {
+        "data": {
+          "spans": [
+            {
+              "kind": "text",
+              "text": "Чему равно значение "
+            },
+            {
+              "kind": "formula",
+              "text": "G(4044)"
+            },
+            {
+              "kind": "text",
+              "text": "?"
+            }
+          ]
+        },
+        "type": "rich_text"
+      }
+    ],
+    "theory_links": [
+      {
+        "label": "Рекурсия",
+        "material_id": "rekursiya",
+        "section": null
+      }
+    ],
+    "title": "Вычисление рекурсивной функции"
+  }
+}

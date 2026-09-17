@@ -5,6 +5,7 @@ import type { PracticeTaskTypes } from "~/entities/practice-task";
 import {
   createLocalPracticeChecker,
   LessonPractice,
+  StandalonePractice,
 } from "~/features/lesson-practice";
 import { render } from "./render";
 
@@ -13,6 +14,21 @@ const task: PracticeTaskTypes.LocalTask = {
   difficultyLabel: "Средняя",
   title: "Разберите данные",
   statement: [
+    {
+      type: "rich-text",
+      spans: [
+        { kind: "text", text: "Формула: " },
+        { kind: "formula", text: "F(n) = 2 × n" },
+        { kind: "code", text: "countdown(n)" },
+      ],
+    },
+    {
+      type: "code-variants",
+      variants: [
+        { label: "Pascal", language: "text", code: "writeln(2);" },
+        { label: "Python", language: "python", code: "print(2)" },
+      ],
+    },
     { type: "text", text: "Вызовите `countdown(2)`." },
     {
       type: "list",
@@ -111,6 +127,53 @@ describe("rich practice content", () => {
     await waitFor(() => expect(checker).toHaveBeenCalledTimes(2));
     await waitFor(() => expect(screen.queryByRole("alert")).toBeNull());
   });
+  it("restores tab drafts after remount but isolates a new solution revision", async () => {
+    const draftTask = {
+      ...task,
+      id: "revision-draft-test",
+      solutionRevision: 1,
+    };
+    const props = {
+      tasks: [draftTask],
+      solvedTaskIds: [],
+      acceptedAnswers: {},
+      checkAnswer: vi.fn(),
+      onTaskSolved: () => 0,
+    };
+    const first = render(<StandalonePractice {...props} />);
+    fireEvent.change(
+      screen.getByRole("textbox", { name: "Ответ", exact: true }),
+      { target: { value: "123" } },
+    );
+    first.unmount();
+    const second = render(<StandalonePractice {...props} />);
+    await waitFor(() =>
+      expect(
+        (
+          screen.getByRole("textbox", {
+            name: "Ответ",
+            exact: true,
+          }) as HTMLInputElement
+        ).value,
+      ).toBe("123"),
+    );
+    second.unmount();
+    render(
+      <StandalonePractice
+        {...props}
+        tasks={[{ ...draftTask, solutionRevision: 2 }]}
+      />,
+    );
+    expect(
+      (
+        screen.getByRole("textbox", {
+          name: "Ответ",
+          exact: true,
+        }) as HTMLInputElement
+      ).value,
+    ).toBe("");
+  });
+
   it("keeps every authored block in server-rendered HTML", () => {
     const html = renderToStaticMarkup(
       <LessonPractice
@@ -123,6 +186,9 @@ describe("rich practice content", () => {
     );
 
     expect(html).toContain("countdown(2)");
+    expect(html).toContain("F(n) = 2 × n");
+    expect(html).toContain("writeln(2);");
+    expect(html).toContain("Python");
     expect(html).toContain("<ul");
     expect(html).toContain("<table");
     expect(html).toContain("<img");
@@ -150,6 +216,17 @@ describe("rich practice content", () => {
       />,
     );
 
+    expect(
+      screen
+        .getByRole("tab", { name: "Python", exact: true })
+        .getAttribute("aria-selected"),
+    ).toBe("true");
+    fireEvent.click(screen.getByRole("tab", { name: "Pascal", exact: true }));
+    expect(
+      screen
+        .getByRole("tab", { name: "Pascal", exact: true })
+        .getAttribute("aria-selected"),
+    ).toBe("true");
     expect(screen.getByRole("table", { name: "Данные" })).toBeTruthy();
     expect(screen.getByRole("img", { name: "Числовая схема" })).toBeTruthy();
     const download = screen.getByRole("link", { name: /data\.txt/ });

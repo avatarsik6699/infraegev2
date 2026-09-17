@@ -38,4 +38,38 @@ function href(value: PracticeCatalogTypes.Search) {
   return `/practice${params.size ? `?${params.toString()}` : ""}`;
 }
 
-export const practiceCatalog = { search, href };
+function taskSearch(
+  value: Record<string, unknown>,
+): PracticeCatalogTypes.TaskSearch {
+  const parsed = search(value);
+  if (parsed.invalid) return {};
+  const origin =
+    typeof value.origin === "string" &&
+    /^[a-z0-9][a-z0-9_-]{0,119}$/.test(value.origin)
+      ? value.origin
+      : undefined;
+  return { ...parsed, ...(origin ? { origin } : {}) };
+}
+
+function taskHref(id: string, value: PracticeCatalogTypes.TaskSearch = {}) {
+  const params = new URLSearchParams(href(value).split("?")[1]);
+  if (value.origin) params.set("origin", value.origin);
+  return `/practice/${encodeURIComponent(id)}${params.size ? `?${params.toString()}` : ""}`;
+}
+
+function returnHref(value: PracticeCatalogTypes.TaskSearch) {
+  return `${href(value)}${value.origin ? `#task-${value.origin}` : ""}`;
+}
+
+function difficultyLabel(value: number) {
+  return ["Базовая", "Средняя", "Высокая"][value - 1] ?? "Сложность не указана";
+}
+
+export const practiceCatalog = {
+  search,
+  href,
+  taskSearch,
+  taskHref,
+  returnHref,
+  difficultyLabel,
+};

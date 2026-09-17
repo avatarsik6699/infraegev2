@@ -123,7 +123,13 @@ def prepare(source: Path, output: Path, registry: Registry) -> Package:
     entries = []
     for edit in prepared:
         name = f"tasks/{edit.task.id}.json"
-        (output / name).write_bytes(encoded(edit.model_dump(mode="json")))
+        (output / name).write_bytes(
+            encoded(
+                edit.model_dump(
+                    mode="json", exclude={"task": {"short_description", "explanation_kind"}}
+                )
+            )
+        )
         entries.append({"path": name, "checksum": checksum(output / name)})
     digest = hashlib.sha256(encoded(entries)).hexdigest()
     manifest = {"format": 1, "package_id": f"ege-5-16-{digest[:24]}", "tasks": entries, "files": []}

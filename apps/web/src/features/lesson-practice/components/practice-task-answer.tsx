@@ -10,6 +10,7 @@ import { PracticeTaskContent } from "./practice-task-content";
 
 type PracticeTaskAnswerProps = {
   focusOnMount?: boolean;
+  answerInstruction?: string;
   task: PracticeTaskTypes.Task;
   inputId: string;
   alreadySolved: boolean;
@@ -39,6 +40,9 @@ export const PracticeTaskAnswer: React.FC<PracticeTaskAnswerProps> = (
     [props.state],
   );
 
+  const placeholder = props.answerInstruction
+    ? "Введите ответ"
+    : "Без единиц измерения";
   return (
     <form className={styles.practiceForm} onSubmit={props.onSubmit}>
       <PracticeTaskContent blocks={props.task.statement} context="statement" />
@@ -51,11 +55,11 @@ export const PracticeTaskAnswer: React.FC<PracticeTaskAnswerProps> = (
             id={props.inputId}
             name="answer"
             label="Ответ"
-            labelVisibility="sr-only"
+            labelVisibility={props.answerInstruction ? "visible" : "sr-only"}
+            description={props.answerInstruction}
+            maxLength={500}
             placeholder={
-              props.alreadySolved
-                ? "Этот ответ уже принят"
-                : "Без единиц измерения"
+              props.alreadySolved ? "Этот ответ уже принят" : placeholder
             }
             error={answerError(props.state)}
             autoComplete="off"

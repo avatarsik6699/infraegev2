@@ -1,0 +1,109 @@
+{
+  "expected_revision": 2,
+  "mode": "editorial",
+  "reason": "Practice UX: preview, skill, honest explanation label and explicit presentation; source answers retained",
+  "task": {
+    "answer_instruction": "Запишите целое число в десятичной системе счисления.",
+    "archived": false,
+    "catalog_visible": true,
+    "checker": {
+      "answer_variants": [
+        "9182657279"
+      ],
+      "checker_type": "exact_match",
+      "numeric_tolerance": null
+    },
+    "content_schema_version": 2,
+    "difficulty": 1,
+    "estimated_minutes": null,
+    "exam_numbers": [
+      16
+    ],
+    "explanation": [
+      {
+        "data": {
+          "caption": null,
+          "code": "from functools import lru_cache\n\n@lru_cache(None)\ndef f(n):\n    if n < 3:\n        return n\n    if n > 2 and n % 2 == 1:\n        return f(n-1) + f(n-2) + 1\n    if n > 2 and n % 2 == 0:\n        sum_ = 0\n        for i in range(1, (n-1)+1):\n            sum_ += f(i)\n        return sum_\n\nprint(f(38))",
+          "language": "python"
+        },
+        "type": "code_example"
+      }
+    ],
+    "explanation_kind": "unclassified",
+    "files": [],
+    "hint": [
+      {
+        "data": {
+          "markdown": "Начните с базового случая и направления изменения аргумента. Для выражения из нескольких значений сначала проверьте, можно ли сократить общую часть."
+        },
+        "type": "text"
+      }
+    ],
+    "id": "ec4b482c-e612-4d30-ac9b-4a218ff2fb3a",
+    "interaction_type": "production",
+    "lessons": [],
+    "short_description": "Чему равно значение функции F(38)?",
+    "skills": [
+      "recursion"
+    ],
+    "sources": [
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": true,
+        "kind": "bank",
+        "original_id": null,
+        "primary": true,
+        "role": "original",
+        "title": "PRO100 ЕГЭ 29.12.23",
+        "url": null,
+        "year": null
+      },
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": false,
+        "kind": "bank",
+        "original_id": "12470",
+        "primary": false,
+        "role": "copy",
+        "title": "КЕГЭ",
+        "url": "https://kompege.ru/task?id=12470",
+        "year": null
+      }
+    ],
+    "statement": [
+      {
+        "data": {
+          "markdown": "Алгоритм вычисления значения функции F(n), где n – целое неотрицательное число, задан следующими соотношениями:"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "spans": [
+            {
+              "kind": "formula",
+              "text": "F(n) = n при n < 3; ; F(n) = F(n - 1) + F(n - 2) + 1, если n > 2 и при этом n нечётно;; F(n) = Σ_{i=1}^{n-1}F(i), если n > 2 и при этом n чётно."
+            }
+          ]
+        },
+        "type": "rich_text"
+      },
+      {
+        "data": {
+          "markdown": "Чему равно значение функции F(38)?"
+        },
+        "type": "text"
+      }
+    ],
+    "theory_links": [
+      {
+        "label": "Рекурсия",
+        "material_id": "rekursiya",
+        "section": null
+      }
+    ],
+    "title": "Вычисление рекурсивной функции"
+  }
+}

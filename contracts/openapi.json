@@ -78,6 +78,44 @@
         "title": "CalloutBlockData",
         "type": "object"
       },
+      "CatalogFacets": {
+        "additionalProperties": false,
+        "properties": {
+          "difficulties": {
+            "items": {
+              "type": "integer"
+            },
+            "title": "Difficulties",
+            "type": "array"
+          },
+          "exam_numbers": {
+            "items": {
+              "type": "integer"
+            },
+            "title": "Exam Numbers",
+            "type": "array"
+          },
+          "skills": {
+            "items": {
+              "$ref": "#/components/schemas/SkillOption"
+            },
+            "title": "Skills",
+            "type": "array"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "total",
+          "exam_numbers",
+          "difficulties",
+          "skills"
+        ],
+        "title": "CatalogFacets",
+        "type": "object"
+      },
       "CatalogPage": {
         "additionalProperties": false,
         "properties": {
@@ -98,11 +136,16 @@
             },
             "title": "Tasks",
             "type": "array"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
           }
         },
         "required": [
           "tasks",
-          "next_cursor"
+          "next_cursor",
+          "total"
         ],
         "title": "CatalogPage",
         "type": "object"
@@ -136,6 +179,17 @@
             "title": "Id",
             "type": "string"
           },
+          "short_description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Short Description"
+          },
           "skills": {
             "items": {
               "type": "string"
@@ -155,6 +209,7 @@
         "required": [
           "id",
           "title",
+          "short_description",
           "difficulty",
           "estimated_minutes",
           "solution_revision",
@@ -199,11 +254,13 @@
                   "attachment": "#/components/schemas/AttachmentBlock",
                   "callout": "#/components/schemas/CalloutBlock",
                   "code_example": "#/components/schemas/CodeExampleBlock",
+                  "code_variants": "#/components/schemas/CodeVariantsBlock",
                   "completion_exercise": "#/components/schemas/WorkedExampleBlock",
                   "diagram": "#/components/schemas/DiagramBlock",
                   "image": "#/components/schemas/ImageBlock",
                   "list": "#/components/schemas/ListBlock",
                   "productive_failure_prompt": "#/components/schemas/WorkedExampleBlock",
+                  "rich_text": "#/components/schemas/RichTextBlock",
                   "table": "#/components/schemas/TableBlock",
                   "text": "#/components/schemas/TextBlock",
                   "worked_example": "#/components/schemas/WorkedExampleBlock"
@@ -237,6 +294,12 @@
                 },
                 {
                   "$ref": "#/components/schemas/AttachmentBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/RichTextBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/CodeVariantsBlock"
                 }
               ]
             },
@@ -383,6 +446,76 @@
           "code"
         ],
         "title": "CodeExampleBlockData",
+        "type": "object"
+      },
+      "CodeVariant": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "maxLength": 10000,
+            "minLength": 1,
+            "title": "Code",
+            "type": "string"
+          },
+          "label": {
+            "maxLength": 40,
+            "minLength": 1,
+            "title": "Label",
+            "type": "string"
+          },
+          "language": {
+            "enum": [
+              "python",
+              "text"
+            ],
+            "title": "Language",
+            "type": "string"
+          }
+        },
+        "required": [
+          "label",
+          "language",
+          "code"
+        ],
+        "title": "CodeVariant",
+        "type": "object"
+      },
+      "CodeVariantsBlock": {
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/CodeVariantsData"
+          },
+          "type": {
+            "const": "code_variants",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "data"
+        ],
+        "title": "CodeVariantsBlock",
+        "type": "object"
+      },
+      "CodeVariantsData": {
+        "additionalProperties": false,
+        "properties": {
+          "variants": {
+            "items": {
+              "$ref": "#/components/schemas/CodeVariant"
+            },
+            "maxItems": 8,
+            "minItems": 2,
+            "title": "Variants",
+            "type": "array"
+          }
+        },
+        "required": [
+          "variants"
+        ],
+        "title": "CodeVariantsData",
         "type": "object"
       },
       "CourseSummary": {
@@ -636,6 +769,32 @@
         "title": "ImageBlock",
         "type": "object"
       },
+      "InlineSpan": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "enum": [
+              "text",
+              "code",
+              "formula"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "text": {
+            "maxLength": 10000,
+            "minLength": 1,
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "text"
+        ],
+        "title": "InlineSpan",
+        "type": "object"
+      },
       "LessonPractice": {
         "additionalProperties": false,
         "properties": {
@@ -799,6 +958,27 @@
         "title": "Membership",
         "type": "object"
       },
+      "NextTask": {
+        "additionalProperties": false,
+        "properties": {
+          "task_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Task Id"
+          }
+        },
+        "required": [
+          "task_id"
+        ],
+        "title": "NextTask",
+        "type": "object"
+      },
       "PublicTask": {
         "additionalProperties": false,
         "properties": {
@@ -854,8 +1034,11 @@
             "type": "boolean"
           },
           "content_schema_version": {
-            "const": 1,
             "default": 1,
+            "enum": [
+              1,
+              2
+            ],
             "title": "Content Schema Version",
             "type": "integer"
           },
@@ -896,11 +1079,13 @@
                   "attachment": "#/components/schemas/AttachmentBlock",
                   "callout": "#/components/schemas/CalloutBlock",
                   "code_example": "#/components/schemas/CodeExampleBlock",
+                  "code_variants": "#/components/schemas/CodeVariantsBlock",
                   "completion_exercise": "#/components/schemas/WorkedExampleBlock",
                   "diagram": "#/components/schemas/DiagramBlock",
                   "image": "#/components/schemas/ImageBlock",
                   "list": "#/components/schemas/ListBlock",
                   "productive_failure_prompt": "#/components/schemas/WorkedExampleBlock",
+                  "rich_text": "#/components/schemas/RichTextBlock",
                   "table": "#/components/schemas/TableBlock",
                   "text": "#/components/schemas/TextBlock",
                   "worked_example": "#/components/schemas/WorkedExampleBlock"
@@ -934,6 +1119,12 @@
                 },
                 {
                   "$ref": "#/components/schemas/AttachmentBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/RichTextBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/CodeVariantsBlock"
                 }
               ]
             },
@@ -941,6 +1132,16 @@
             "minItems": 1,
             "title": "Explanation",
             "type": "array"
+          },
+          "explanation_kind": {
+            "default": "unclassified",
+            "enum": [
+              "unclassified",
+              "method",
+              "worked_solution"
+            ],
+            "title": "Explanation Kind",
+            "type": "string"
           },
           "files": {
             "items": {
@@ -957,11 +1158,13 @@
                   "attachment": "#/components/schemas/AttachmentBlock",
                   "callout": "#/components/schemas/CalloutBlock",
                   "code_example": "#/components/schemas/CodeExampleBlock",
+                  "code_variants": "#/components/schemas/CodeVariantsBlock",
                   "completion_exercise": "#/components/schemas/WorkedExampleBlock",
                   "diagram": "#/components/schemas/DiagramBlock",
                   "image": "#/components/schemas/ImageBlock",
                   "list": "#/components/schemas/ListBlock",
                   "productive_failure_prompt": "#/components/schemas/WorkedExampleBlock",
+                  "rich_text": "#/components/schemas/RichTextBlock",
                   "table": "#/components/schemas/TableBlock",
                   "text": "#/components/schemas/TextBlock",
                   "worked_example": "#/components/schemas/WorkedExampleBlock"
@@ -995,6 +1198,12 @@
                 },
                 {
                   "$ref": "#/components/schemas/AttachmentBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/RichTextBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/CodeVariantsBlock"
                 }
               ]
             },
@@ -1024,6 +1233,19 @@
             "title": "Lessons",
             "type": "array"
           },
+          "short_description": {
+            "anyOf": [
+              {
+                "maxLength": 300,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Short Description"
+          },
           "skills": {
             "items": {
               "pattern": "^[a-z0-9][a-z0-9_-]{0,119}$",
@@ -1048,11 +1270,13 @@
                   "attachment": "#/components/schemas/AttachmentBlock",
                   "callout": "#/components/schemas/CalloutBlock",
                   "code_example": "#/components/schemas/CodeExampleBlock",
+                  "code_variants": "#/components/schemas/CodeVariantsBlock",
                   "completion_exercise": "#/components/schemas/WorkedExampleBlock",
                   "diagram": "#/components/schemas/DiagramBlock",
                   "image": "#/components/schemas/ImageBlock",
                   "list": "#/components/schemas/ListBlock",
                   "productive_failure_prompt": "#/components/schemas/WorkedExampleBlock",
+                  "rich_text": "#/components/schemas/RichTextBlock",
                   "table": "#/components/schemas/TableBlock",
                   "text": "#/components/schemas/TextBlock",
                   "worked_example": "#/components/schemas/WorkedExampleBlock"
@@ -1086,6 +1310,12 @@
                 },
                 {
                   "$ref": "#/components/schemas/AttachmentBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/RichTextBlock"
+                },
+                {
+                  "$ref": "#/components/schemas/CodeVariantsBlock"
                 }
               ]
             },
@@ -1120,6 +1350,44 @@
           "sources"
         ],
         "title": "PublicTaskContent",
+        "type": "object"
+      },
+      "RichTextBlock": {
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/RichTextData"
+          },
+          "type": {
+            "const": "rich_text",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "data"
+        ],
+        "title": "RichTextBlock",
+        "type": "object"
+      },
+      "RichTextData": {
+        "additionalProperties": false,
+        "properties": {
+          "spans": {
+            "items": {
+              "$ref": "#/components/schemas/InlineSpan"
+            },
+            "maxItems": 200,
+            "minItems": 1,
+            "title": "Spans",
+            "type": "array"
+          }
+        },
+        "required": [
+          "spans"
+        ],
+        "title": "RichTextData",
         "type": "object"
       },
       "SitemapEntry": {
@@ -1171,6 +1439,25 @@
           "tasks"
         ],
         "title": "SitemapPage",
+        "type": "object"
+      },
+      "SkillOption": {
+        "additionalProperties": false,
+        "properties": {
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "value": {
+            "title": "Value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "label"
+        ],
+        "title": "SkillOption",
         "type": "object"
       },
       "Source": {
@@ -1826,6 +2113,24 @@
         "summary": "Get Catalog"
       }
     },
+    "/api/tasks/facets": {
+      "get": {
+        "operationId": "get_facets_api_tasks_facets_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogFacets"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Get Facets"
+      }
+    },
     "/api/tasks/{task_id}": {
       "get": {
         "operationId": "get_task_api_tasks__task_id__get",
@@ -1953,6 +2258,98 @@
           }
         },
         "summary": "Get File"
+      }
+    },
+    "/api/tasks/{task_id}/next": {
+      "get": {
+        "operationId": "get_next_task_api_tasks__task_id__next_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "task_id",
+            "required": true,
+            "schema": {
+              "title": "Task Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "skill",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^[a-z0-9][a-z0-9_-]{0,119}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Skill"
+            }
+          },
+          {
+            "in": "query",
+            "name": "exam_number",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 27,
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Exam Number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "difficulty",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 3,
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Difficulty"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NextTask"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Next Task"
       }
     },
     "/health": {

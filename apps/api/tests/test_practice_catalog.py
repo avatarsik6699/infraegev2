@@ -138,7 +138,8 @@ def test_bounded_pagination_filtering_and_plans(bank):
         try:
             async with AsyncSession(engine) as session:
                 first = await catalog.page(session, catalog.CatalogQuery())
-                assert len(statements) == 1
+                assert len(statements) == 2
+                assert first.total == 10000
                 assert len(first.tasks) == 30 and first.tasks[0].id == "catalog-09999"
                 assert all(
                     word not in first.model_dump_json()
@@ -147,6 +148,7 @@ def test_bounded_pagination_filtering_and_plans(bank):
                 assert len(first.model_dump_json()) < 15000
                 second = await catalog.page(session, catalog.CatalogQuery(cursor=first.next_cursor))
                 assert len(second.tasks) == 30
+                assert second.total == 10000
                 assert not {t.id for t in first.tasks} & {t.id for t in second.tasks}
                 with pytest.raises(catalog.InvalidCursor):
                     await catalog.page(
@@ -167,6 +169,29 @@ def test_bounded_pagination_filtering_and_plans(bank):
                 )
                 empty = await catalog.page(session, catalog.CatalogQuery(skill="absent"))
                 assert empty.tasks == [] and empty.next_cursor is None
+                assert empty.total == 0
+                facets = await catalog.facets(session)
+                assert facets.total == 10000
+                assert facets.exam_numbers == [16, 17]
+                assert {skill.value for skill in facets.skills} == {"python", "recursion"}
+                assert all(skill.value != skill.label for skill in facets.skills)
+                neighbor = await catalog.next_task(
+                    session, first.tasks[-1].id, catalog.CatalogFilters()
+                )
+                assert neighbor.task_id == second.tasks[0].id
+                assert (
+                    await catalog.next_task(session, "catalog-00000", catalog.CatalogFilters())
+                ).task_id is None
+                assert (
+                    await catalog.next_task(
+                        session, "catalog-09998", catalog.CatalogFilters(skill="python")
+                    )
+                ).task_id == "catalog-09996"
+                for invalid_id in ["catalog-10000", "catalog-10001", "missing", "catalog-09999"]:
+                    with pytest.raises(readers.Unavailable):
+                        await catalog.next_task(
+                            session, invalid_id, catalog.CatalogFilters(skill="python")
+                        )
                 # The private bank never crosses the wire, even for sparse filters or final pages.
                 for query in [
                     catalog.CatalogQuery(),

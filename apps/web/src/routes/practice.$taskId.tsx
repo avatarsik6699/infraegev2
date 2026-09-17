@@ -1,7 +1,9 @@
+import { practiceCatalog } from "~/entities/practice-task";
 import { createFileRoute } from "@tanstack/react-router";
 import { PracticeTaskPage, getPracticeTask } from "~/pages/practice-task";
 import { pageHead } from "~/shared/lib/seo";
 export const Route = createFileRoute("/practice/$taskId")({
+  validateSearch: practiceCatalog.taskSearch,
   loader: ({ params }) => getPracticeTask({ data: params.taskId }),
   staleTime: 0,
   head: ({ loaderData, params }) =>
@@ -21,6 +23,7 @@ function PracticeTaskRoute() {
     <PracticeTaskPage
       key={Route.useParams().taskId}
       result={Route.useLoaderData()}
+      search={Route.useSearch()}
     />
   );
 }

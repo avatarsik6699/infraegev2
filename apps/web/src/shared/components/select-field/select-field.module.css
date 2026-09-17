@@ -1,0 +1,14 @@
+.field {
+  display: grid;
+  gap: var(--space-0-5);
+  min-width: 0;
+  font-family: var(--font-ui);
+}
+.label {
+  color: var(--color-text);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+.control {
+  composes: root from "../input/input.module.css";
+}

@@ -39,6 +39,10 @@ export const componentContracts = {
   ],
   input: [
     catalogContracts.live("Input", "Самостоятельное поле ввода"),
+    catalogContracts.context(
+      "SelectField",
+      "Практика в visual-language specimen: native GET-select без JavaScript",
+    ),
     catalogContracts.live("Field", "Подпись, описание, ошибка и disabled"),
     catalogContracts.live("Accordion", "Раскрытие пояснений на месте"),
     catalogContracts.context(

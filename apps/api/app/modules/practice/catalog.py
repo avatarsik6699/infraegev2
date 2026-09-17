@@ -6,11 +6,12 @@ import json
 from datetime import datetime
 
 from pydantic import AwareDatetime, Field, ValidationError
-from sqlalchemy import exists, func, literal, literal_column, select, tuple_
+from sqlalchemy import ColumnElement, exists, func, literal, literal_column, select, tuple_
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.modules.practice.models import TaskExamNumber, TaskRecord, TaskSkill
+from app.modules.practice.readers import Unavailable
 from app.modules.practice.schemas import Identifier, StrictModel
 
 SITEMAP_SIZE = 1000
@@ -20,10 +21,13 @@ class InvalidCursor(ValueError):
     pass
 
 
-class CatalogQuery(StrictModel):
+class CatalogFilters(StrictModel):
     skill: Identifier | None = None
     exam_number: int | None = Field(default=None, ge=1, le=27)
     difficulty: int | None = Field(default=None, ge=1, le=3)
+
+
+class CatalogQuery(CatalogFilters):
     limit: int = Field(default=30, ge=1, le=100)
     cursor: str | None = Field(default=None, min_length=1, max_length=1024)
 
@@ -38,6 +42,7 @@ class Cursor(StrictModel):
 class CatalogTask(StrictModel):
     id: str
     title: str
+    short_description: str | None
     difficulty: int
     estimated_minutes: int | None
     solution_revision: int
@@ -48,6 +53,7 @@ class CatalogTask(StrictModel):
 class CatalogPage(StrictModel):
     tasks: list[CatalogTask]
     next_cursor: str | None
+    total: int
 
 
 class SitemapIndex(StrictModel):
@@ -85,11 +91,36 @@ def decode_cursor(query: CatalogQuery) -> Cursor | None:
         raise InvalidCursor("invalid catalog cursor") from exc
 
 
+def filters(query: CatalogFilters):
+    result: list[ColumnElement[bool]] = [visible()]
+    if query.skill is not None:
+        result.append(
+            exists(
+                select(TaskSkill.task_id).where(
+                    TaskSkill.task_id == TaskRecord.id, TaskSkill.skill == query.skill
+                )
+            )
+        )
+    if query.exam_number is not None:
+        result.append(
+            exists(
+                select(TaskExamNumber.task_id).where(
+                    TaskExamNumber.task_id == TaskRecord.id,
+                    TaskExamNumber.number == query.exam_number,
+                )
+            )
+        )
+    if query.difficulty is not None:
+        result.append(TaskRecord.difficulty == query.difficulty)
+    return result
+
+
 def statement(query: CatalogQuery):
     cursor = decode_cursor(query)
     columns = (
         TaskRecord.id,
         TaskRecord.title,
+        TaskRecord.short_description,
         TaskRecord.difficulty,
         TaskRecord.estimated_minutes,
         TaskRecord.solution_revision,
@@ -105,26 +136,7 @@ def statement(query: CatalogQuery):
             type_=JSONB,
         ).label("exam_numbers"),
     )
-    result = select(*columns).where(visible())
-    if query.skill is not None:
-        result = result.where(
-            exists(
-                select(TaskSkill.task_id).where(
-                    TaskSkill.task_id == TaskRecord.id, TaskSkill.skill == query.skill
-                )
-            )
-        )
-    if query.exam_number is not None:
-        result = result.where(
-            exists(
-                select(TaskExamNumber.task_id).where(
-                    TaskExamNumber.task_id == TaskRecord.id,
-                    TaskExamNumber.number == query.exam_number,
-                )
-            )
-        )
-    if query.difficulty is not None:
-        result = result.where(TaskRecord.difficulty == query.difficulty)
+    result = select(*columns).where(*filters(query))
     if cursor is not None:
         result = result.where(
             tuple_(TaskRecord.created_at, TaskRecord.id)
@@ -137,6 +149,9 @@ def statement(query: CatalogQuery):
 
 async def page(session: AsyncSession, query: CatalogQuery) -> CatalogPage:
     rows = (await session.execute(statement(query))).mappings().all()
+    total = await session.scalar(
+        select(func.count()).select_from(TaskRecord).where(*filters(query))
+    )
     selected = rows[: query.limit]
     next_cursor = None
     if len(rows) > query.limit:
@@ -149,6 +164,7 @@ async def page(session: AsyncSession, query: CatalogQuery) -> CatalogPage:
             for row in selected
         ],
         next_cursor=next_cursor,
+        total=total or 0,
     )
 
 
@@ -169,3 +185,80 @@ async def sitemap_page(session: AsyncSession, page: int) -> SitemapPage:
         .limit(SITEMAP_SIZE)
     )
     return SitemapPage(tasks=[SitemapEntry(id=row.id, updated_at=row.updated_at) for row in rows])
+
+
+SKILL_LABELS = {
+    "recursion": "Рекуррентные соотношения",
+    "mutual-recursion": "Взаимная рекурсия",
+    "recursive-procedure": "Рекурсивные процедуры",
+    "binary-algorithm": "Двоичная запись числа",
+    "digit-algorithm": "Алгоритмы с цифрами",
+    "string-algorithm": "Преобразование строк",
+    "python": "Алгоритмы на Python",
+}
+
+
+class SkillOption(StrictModel):
+    value: str
+    label: str
+
+
+class CatalogFacets(StrictModel):
+    total: int
+    exam_numbers: list[int]
+    difficulties: list[int]
+    skills: list[SkillOption]
+
+
+class NextTask(StrictModel):
+    task_id: str | None
+
+
+async def facets(session: AsyncSession) -> CatalogFacets:
+    total = await session.scalar(select(func.count()).select_from(TaskRecord).where(visible()))
+    numbers = await session.scalars(
+        select(TaskExamNumber.number)
+        .join(TaskRecord)
+        .where(visible())
+        .distinct()
+        .order_by(TaskExamNumber.number)
+    )
+    difficulties = await session.scalars(
+        select(TaskRecord.difficulty).where(visible()).distinct().order_by(TaskRecord.difficulty)
+    )
+    skills = await session.scalars(
+        select(TaskSkill.skill)
+        .join(TaskRecord)
+        .where(visible(), TaskSkill.skill.in_(SKILL_LABELS))
+        .distinct()
+        .order_by(TaskSkill.skill)
+    )
+    return CatalogFacets(
+        total=total or 0,
+        exam_numbers=list(numbers),
+        difficulties=list(difficulties),
+        skills=[SkillOption(value=skill, label=SKILL_LABELS[skill]) for skill in skills],
+    )
+
+
+async def next_task(session: AsyncSession, task_id: str, query: CatalogFilters) -> NextTask:
+    current = (
+        await session.execute(
+            select(TaskRecord.created_at, TaskRecord.id).where(
+                TaskRecord.id == task_id, *filters(query)
+            )
+        )
+    ).one_or_none()
+    if current is None:
+        raise Unavailable("current task is not in this selection")
+    next_id = await session.scalar(
+        select(TaskRecord.id)
+        .where(
+            *filters(query),
+            tuple_(TaskRecord.created_at, TaskRecord.id)
+            < tuple_(literal(current.created_at), literal(current.id)),
+        )
+        .order_by(TaskRecord.created_at.desc(), TaskRecord.id.desc())
+        .limit(1)
+    )
+    return NextTask(task_id=next_id)

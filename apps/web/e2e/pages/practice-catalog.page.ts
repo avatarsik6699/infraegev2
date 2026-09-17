@@ -17,13 +17,16 @@ export class PracticeCatalogPage {
         .getByRole("list", { name: "Задачи", exact: true })
         .getByRole("listitem"),
     ).toHaveCount(30);
-    await this.page.getByLabel("Навык", { exact: true }).fill("python");
-    await this.page.getByLabel("Номер ЕГЭ").fill("17");
-    await this.page.getByLabel("Сложность: от 1 до 3").fill("1");
+    await this.page.getByRole("button", { name: "№17", exact: true }).click();
+    await this.page
+      .getByText("Дополнительные фильтры", { exact: true })
+      .click();
+    await this.page.getByLabel("Навык", { exact: true }).selectOption("python");
+    await this.page.getByLabel("Сложность", { exact: true }).selectOption("1");
     await this.page.getByRole("button", { name: "Применить" }).press("Enter");
     await expect(this.page).toHaveURL(/skill=python/);
     const list = this.page.getByRole("list", { name: "Задачи", exact: true });
-    await expect(list).toContainText("Сложность 1 из 3 · ЕГЭ 17");
+    await expect(list).toContainText("Базовая · ЕГЭ 17");
     const first = await list.getByRole("link").first().textContent();
     await this.page.getByRole("link", { name: "Следующие задачи" }).click();
     await expect(this.page).toHaveURL(/cursor=/);
@@ -188,6 +191,84 @@ export class PracticeCatalogPage {
     await this.open("/practice/catalog-10001");
     await expect(
       this.page.getByRole("heading", { name: "Задача недоступна" }),
+    ).toBeVisible();
+  }
+
+  async expectContinuationAndReturn() {
+    await this.open("/practice?exam_number=16");
+    const last = this.page
+      .getByRole("list", { name: "Задачи", exact: true })
+      .getByRole("link")
+      .last();
+    const originalHref = await last.getAttribute("href");
+    const originalTitle = await last.textContent();
+    await last.click();
+    await this.page
+      .getByRole("textbox", { name: "Ответ", exact: true })
+      .fill("42");
+    await this.page
+      .getByRole("button", { name: "Проверить", exact: true })
+      .click();
+    await expect(
+      this.page.getByRole("status").filter({ hasText: /^Верно\./ }),
+    ).toHaveText("Верно.");
+    await expect(
+      this.page.locator('[data-content-context="solution"]'),
+    ).toHaveCount(1);
+    await this.page
+      .getByRole("link", { name: "Следующая задача", exact: true })
+      .click();
+    await expect(this.page).toHaveURL(/catalog-09939\?exam_number=16/);
+    await this.page.getByRole("link", { name: "К списку задач" }).click();
+    await expect(this.page).toHaveURL(
+      /\/practice\?exam_number=16#task-catalog-09941$/,
+    );
+    const original = this.page.getByRole("link", {
+      name: originalTitle!,
+      exact: true,
+    });
+    await expect(original).toBeInViewport();
+    await expect(original).toHaveAttribute("href", originalHref!);
+    await this.open("/practice/catalog-00000");
+    await this.page
+      .getByRole("textbox", { name: "Ответ", exact: true })
+      .fill("42");
+    await this.page
+      .getByRole("button", { name: "Проверить", exact: true })
+      .click();
+    await expect(
+      this.page.getByText("Это последняя задача в выбранном списке."),
+    ).toBeVisible();
+  }
+
+  async expectDraftAndContinuationFailure() {
+    await this.open("/practice/catalog-09997");
+    const answer = this.page.getByRole("textbox", {
+      name: "Ответ",
+      exact: true,
+    });
+    await answer.fill("123");
+    await this.page.getByRole("link", { name: "К списку задач" }).click();
+    await this.page.goBack();
+    await expect(answer).toHaveValue("123");
+    await answer.fill("42");
+    await this.page.route("**/_serverFn/**", (route) => route.abort());
+    await this.page
+      .getByRole("button", { name: "Проверить", exact: true })
+      .click();
+    await expect(
+      this.page.getByText("Не удалось загрузить продолжение."),
+    ).toBeVisible();
+    await expect(answer).toHaveValue("42");
+    await expect(
+      this.page.getByRole("button", { name: "Решить ещё раз" }),
+    ).toBeEnabled();
+    await this.page.unroute("**/_serverFn/**");
+    await this.page
+      .getByRole("button", { name: "Повторить загрузку продолжения" })
+      .click();
+    await expect(
+      this.page.getByRole("link", { name: "Следующая задача", exact: true }),
     ).toBeVisible();
   }
 }

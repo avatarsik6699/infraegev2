@@ -5,12 +5,15 @@ import { PracticeTaskContent } from "./practice-task-content";
 
 type PracticeTaskHelpProps = {
   task: PracticeTaskTypes.Task;
+  solutionTitle?: string;
+  revealSolution?: boolean;
 };
 
 export const PracticeTaskHelp: React.FC<PracticeTaskHelpProps> = (props) => (
   <Accordion
     className={styles.taskHelp}
     multiple
+    defaultOpen={props.revealSolution ? [`${props.task.id}-solution`] : []}
     items={[
       {
         id: `${props.task.id}-hint`,
@@ -21,7 +24,7 @@ export const PracticeTaskHelp: React.FC<PracticeTaskHelpProps> = (props) => (
       },
       {
         id: `${props.task.id}-solution`,
-        title: "Решение",
+        title: props.solutionTitle ?? "Решение",
         content: (
           <PracticeTaskContent
             blocks={props.task.solution}

@@ -9,11 +9,23 @@ export namespace PracticeCatalogTypes {
   export type Entry = {
     id: string;
     title: string;
+    short_description: string | null;
     difficulty: number;
     estimated_minutes: number | null;
     solution_revision: number;
     skills: string[];
     exam_numbers: number[];
   };
-  export type Page = { tasks: Entry[]; next_cursor: string | null };
+  export type Page = {
+    tasks: Entry[];
+    next_cursor: string | null;
+    total: number;
+  };
+  export type Facets = {
+    total: number;
+    exam_numbers: number[];
+    difficulties: number[];
+    skills: { value: string; label: string }[];
+  };
+  export type TaskSearch = Search & { origin?: string };
 }

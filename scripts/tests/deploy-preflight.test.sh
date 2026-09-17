@@ -54,8 +54,8 @@ grep -Fq 'previous-compose' "$test_root/rollback.log"
 echo 'database failure recovery contracts: PASS'
 
 mkdir -p "$release_dir/infra" "$previous_release/infra"
-printf '120_01\n' >"$release_dir/infra/database-schema"
-printf '120_01\n' >"$previous_release/infra/database-schema"
+printf '121_01\n' >"$release_dir/infra/database-schema"
+printf '121_01\n' >"$previous_release/infra/database-schema"
 application_schema_preflight "$release_dir" "$previous_release" "$test_root/missing-proof"
 printf 'incompatible\n' >"$previous_release/infra/database-schema"
 if application_schema_preflight "$release_dir" "$previous_release" "$test_root/missing-proof" >/dev/null 2>&1; then

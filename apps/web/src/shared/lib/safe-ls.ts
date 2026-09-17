@@ -10,6 +10,7 @@ import { safeJson, type TypeGuard } from "~/shared/lib/safe-json";
 export type SafeLsKey<T> = {
   key: string;
   version: number;
+  storage?: "local" | "session";
   guard: TypeGuard<T>;
 };
 
@@ -32,10 +33,10 @@ function isEnvelope<T>(
   );
 }
 
-function getLocalStorage(): Storage | null {
+function getStorage(scope: "local" | "session" = "local"): Storage | null {
   if (typeof window === "undefined") return null;
   try {
-    return window.localStorage;
+    return scope === "session" ? window.sessionStorage : window.localStorage;
   } catch {
     // Private-mode Safari and similar can throw on access, not just on read/write.
     return null;
@@ -43,7 +44,7 @@ function getLocalStorage(): Storage | null {
 }
 
 function get<T>(def: SafeLsKey<T>): T | null {
-  const storage = getLocalStorage();
+  const storage = getStorage(def.storage);
   if (!storage) return null;
 
   let raw: string | null;
@@ -69,7 +70,7 @@ function get<T>(def: SafeLsKey<T>): T | null {
 }
 
 function set<T>(def: SafeLsKey<T>, data: T): void {
-  const storage = getLocalStorage();
+  const storage = getStorage(def.storage);
   if (!storage) return;
   const serialized = safeJson.stringify({ version: def.version, data });
   if (serialized === null) return;
@@ -82,7 +83,7 @@ function set<T>(def: SafeLsKey<T>, data: T): void {
 
 function remove<T>(def: SafeLsKey<T>): void {
   try {
-    getLocalStorage()?.removeItem(def.key);
+    getStorage(def.storage)?.removeItem(def.key);
   } catch {
     // Removing optional local progress is best-effort for the same reason as writes.
   }

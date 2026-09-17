@@ -214,7 +214,7 @@ compatibility contract with matching recovery evidence.
 
 ## Practice schema and immutable files (Change 114)
 
-Bundles with schema `114_01` or `120_01` include `task-files/` and `file-references.txt` in addition to the
+Bundles with schema `114_01`, `120_01` or `121_01` include `task-files/` and `file-references.txt` in addition to the
 foundation dump/roles/metadata/configuration. Each object name is its SHA-256; validation checks
 its bytes and every DB-declared size/reference. The reference list is covered by SHA256SUMS.
 Dump, fingerprint and file-reference metadata share one exported DB snapshot. Only files named

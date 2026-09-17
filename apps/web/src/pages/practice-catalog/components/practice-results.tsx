@@ -46,30 +46,42 @@ export const PracticeResults: React.FC<PracticeCatalogPageTypes.Props> = (
       <div className={styles.state}>
         <EmptyState
           title={
+            props.search.cursor ||
             props.search.skill ||
             props.search.exam_number ||
             props.search.difficulty
               ? "По этим фильтрам задач пока нет"
               : "Задачи для самостоятельной практики пока не опубликованы"
           }
-          description="Практические задания доступны внутри уроков."
+          description={
+            props.result.facets?.total
+              ? "Снимите ограничения, чтобы увидеть другие задачи."
+              : "Практические задания доступны внутри уроков."
+          }
         />
-        <ActionLink to="/courses" hierarchy="drawn">
-          Перейти к мини-курсам
+        <ActionLink
+          to={props.result.facets?.total ? "/practice" : "/courses"}
+          hierarchy="drawn"
+        >
+          {props.result.facets?.total
+            ? "Сбросить фильтры"
+            : "Перейти к мини-курсам"}
         </ActionLink>
       </div>
     );
   return (
     <>
       <Typography.Text tone="muted" variant="caption">
-        Сначала новые задачи. Прогресс сохраняется в этом браузере отдельно от
-        уроков.
+        Найдено задач: {page.total}. Сначала новые.
       </Typography.Text>
       <ul className={styles.list} aria-label="Задачи">
         {page.tasks.map((task) => (
-          <PracticeCatalogRow key={task.id} task={task} />
+          <PracticeCatalogRow key={task.id} task={task} search={props.search} />
         ))}
       </ul>
+      <Typography.Text tone="muted" variant="caption">
+        Отметки решения сохраняются в этом браузере отдельно от уроков.
+      </Typography.Text>
       <nav className={styles.actions} aria-label="Страницы задач">
         {props.search.cursor && (
           <ActionLink

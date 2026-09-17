@@ -29,3 +29,15 @@ test("mobile no-JS practice and bounded discovery respect publication", async ({
 }) => {
   await noJavaScriptPracticeCatalogPage.expectNoJavaScriptAndDiscovery();
 });
+
+test("continuation crosses a page boundary and returns to the originating row", async ({
+  practiceCatalogPage,
+}) => {
+  await practiceCatalogPage.expectContinuationAndReturn();
+});
+
+test("drafts survive leaving the task and continuation failure is recoverable", async ({
+  practiceCatalogPage,
+}) => {
+  await practiceCatalogPage.expectDraftAndContinuationFailure();
+});

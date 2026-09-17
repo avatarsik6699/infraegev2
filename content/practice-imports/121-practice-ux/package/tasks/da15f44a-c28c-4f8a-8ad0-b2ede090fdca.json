@@ -1,0 +1,206 @@
+{
+  "expected_revision": 1,
+  "mode": "editorial",
+  "reason": "Practice UX: preview, skill, honest explanation label and explicit presentation; source answers retained",
+  "task": {
+    "answer_instruction": "Запишите целое число в десятичной системе счисления.",
+    "archived": false,
+    "catalog_visible": true,
+    "checker": {
+      "answer_variants": [
+        "2276939784"
+      ],
+      "checker_type": "exact_match",
+      "numeric_tolerance": null
+    },
+    "content_schema_version": 2,
+    "difficulty": 1,
+    "estimated_minutes": null,
+    "exam_numbers": [
+      16
+    ],
+    "explanation": [
+      {
+        "data": {
+          "markdown": "Искомая величина: Чему равно значение выражения `(F(47872) - 290 × F(47865)) / F(47858)`?"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Выпишите базовые значения и границы каждой ветви. Для конкретного аргумента сначала выберите применимое условие, затем подставляйте рекуррентную формулу этой ветви; базовый случай имеет приоритет перед дальнейшим раскрытием."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Если переходы используют меньшие аргументы, заполняйте значения по возрастанию от базовой области. При повторных обращениях используйте сохранённый результат: это позволяет избежать многократного обхода одних и тех же ветвей рекурсии."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Перед вычислением больших значений раскройте рекуррентные формулы в числителе до аргумента знаменателя. Если возникает общий ненулевой множитель, вынесите и сократите его. Сокращать можно общий множитель всего числителя, а не отдельное слагаемое суммы."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "После получения нужных значений подставьте их именно в выражение из вопроса, сохранив коэффициенты, знаки и скобки. Значение одной функции может быть лишь промежуточной величиной, а не окончательным ответом."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Ответ: `2276939784`."
+        },
+        "type": "text"
+      }
+    ],
+    "explanation_kind": "method",
+    "files": [],
+    "hint": [
+      {
+        "data": {
+          "markdown": "Начните с базового случая и направления изменения аргумента. Для выражения из нескольких значений сначала проверьте, можно ли сократить общую часть."
+        },
+        "type": "text"
+      }
+    ],
+    "id": "da15f44a-c28c-4f8a-8ad0-b2ede090fdca",
+    "interaction_type": "production",
+    "lessons": [],
+    "short_description": "Чему равно значение выражения (F(47872) - 290 × F(47865)) / F(47858)?",
+    "skills": [
+      "recursion"
+    ],
+    "sources": [
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": true,
+        "kind": "bank",
+        "original_id": null,
+        "primary": true,
+        "role": "original",
+        "title": "ЕГКР 19.04.25",
+        "url": null,
+        "year": null
+      },
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": false,
+        "kind": "bank",
+        "original_id": "21711",
+        "primary": false,
+        "role": "copy",
+        "title": "КЕГЭ",
+        "url": "https://kompege.ru/task?id=21711",
+        "year": null
+      }
+    ],
+    "statement": [
+      {
+        "data": {
+          "spans": [
+            {
+              "kind": "text",
+              "text": "Алгоритм вычисления значения функции "
+            },
+            {
+              "kind": "formula",
+              "text": "F(n)"
+            },
+            {
+              "kind": "text",
+              "text": ", где "
+            },
+            {
+              "kind": "formula",
+              "text": "n"
+            },
+            {
+              "kind": "text",
+              "text": " – целое число, задан следующими соотношениями:"
+            }
+          ]
+        },
+        "type": "rich_text"
+      },
+      {
+        "data": {
+          "spans": [
+            {
+              "kind": "formula",
+              "text": "F(n) = n"
+            },
+            {
+              "kind": "text",
+              "text": " при "
+            },
+            {
+              "kind": "formula",
+              "text": "n < 20"
+            },
+            {
+              "kind": "text",
+              "text": ";"
+            }
+          ]
+        },
+        "type": "rich_text"
+      },
+      {
+        "data": {
+          "spans": [
+            {
+              "kind": "formula",
+              "text": "F(n) = (n-6) × F(n – 7)"
+            },
+            {
+              "kind": "text",
+              "text": ", если "
+            },
+            {
+              "kind": "formula",
+              "text": "n ≥ 20"
+            },
+            {
+              "kind": "text",
+              "text": "."
+            }
+          ]
+        },
+        "type": "rich_text"
+      },
+      {
+        "data": {
+          "spans": [
+            {
+              "kind": "text",
+              "text": "Чему равно значение выражения "
+            },
+            {
+              "kind": "formula",
+              "text": "(F(47872) - 290 × F(47865)) / F(47858)"
+            },
+            {
+              "kind": "text",
+              "text": "?"
+            }
+          ]
+        },
+        "type": "rich_text"
+      }
+    ],
+    "theory_links": [
+      {
+        "label": "Рекурсия",
+        "material_id": "rekursiya",
+        "section": null
+      }
+    ],
+    "title": "Отношение значений рекурсивной функции"
+  }
+}

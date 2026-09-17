@@ -79,3 +79,33 @@ describe("independent practice history", () => {
     expect(practiceProgress.isStored(value)).toBe(false);
   });
 });
+
+describe("standalone catalog context", () => {
+  it("round-trips a filtered page and original row across next-task links", () => {
+    const context = practiceCatalog.taskSearch({
+      skill: "recursion",
+      exam_number: "16",
+      cursor: "opaque==",
+      origin: "task-30",
+    });
+    expect(practiceCatalog.taskHref("task-31", context)).toBe(
+      "/practice/task-31?skill=recursion&exam_number=16&cursor=opaque%3D%3D&origin=task-30",
+    );
+    expect(practiceCatalog.returnHref(context)).toBe(
+      "/practice?skill=recursion&exam_number=16&cursor=opaque%3D%3D#task-task-30",
+    );
+  });
+  it("rejects external return URLs and invalid origin/filters", () => {
+    expect(
+      practiceCatalog.returnHref(
+        practiceCatalog.taskSearch({
+          returnTo: "https://evil.invalid",
+          origin: "//evil.invalid",
+        }),
+      ),
+    ).toBe("/practice");
+    expect(
+      practiceCatalog.taskSearch({ exam_number: 99, origin: "valid" }),
+    ).toEqual({});
+  });
+});

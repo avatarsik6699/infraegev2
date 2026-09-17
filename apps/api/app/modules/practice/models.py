@@ -29,7 +29,15 @@ class TaskRecord(Base):
         CheckConstraint("difficulty BETWEEN 1 AND 3", name="difficulty"),
         CheckConstraint("estimated_minutes IS NULL OR estimated_minutes > 0", name="minutes"),
         CheckConstraint("revision > 0 AND solution_revision > 0", name="revisions"),
-        CheckConstraint("content_schema_version = 1", name="content_version"),
+        CheckConstraint("content_schema_version IN (1, 2)", name="content_version"),
+        CheckConstraint(
+            "explanation_kind IN ('unclassified','method','worked_solution')",
+            name="explanation_kind",
+        ),
+        CheckConstraint(
+            "short_description IS NULL OR length(short_description) BETWEEN 1 AND 300",
+            name="short_description",
+        ),
         CheckConstraint(
             "jsonb_typeof(statement) = 'array' AND jsonb_array_length(statement)>0",
             name="statement",
@@ -41,6 +49,8 @@ class TaskRecord(Base):
     )
     id: Mapped[str] = mapped_column(String(120), primary_key=True)
     title: Mapped[str] = mapped_column(Text)
+    short_description: Mapped[str | None] = mapped_column(Text)
+    explanation_kind: Mapped[str] = mapped_column(String(30), server_default="unclassified")
     difficulty: Mapped[int] = mapped_column(Integer)
     estimated_minutes: Mapped[int | None] = mapped_column(Integer)
     answer_instruction: Mapped[str] = mapped_column(Text)

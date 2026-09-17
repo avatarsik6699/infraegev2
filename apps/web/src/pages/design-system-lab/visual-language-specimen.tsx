@@ -4,6 +4,7 @@ import { VisualLanguageCard } from "./visual-language-card";
 import { VisualLanguageLearning } from "./visual-language-learning";
 import { VisualLanguageForm } from "./visual-language-form";
 import { VisualLanguageStates } from "./visual-language-states";
+import { PracticeUxSpecimen } from "./practice-ux-specimen";
 import styles from "./visual-language-specimen.module.css";
 
 export const VisualLanguageSpecimen: React.FC = () => (
@@ -48,5 +49,6 @@ export const VisualLanguageSpecimen: React.FC = () => (
       Открыть образец урока
     </ActionLink>
     <VisualLanguageStates />
+    <PracticeUxSpecimen />
   </section>
 );

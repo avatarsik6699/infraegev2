@@ -9,6 +9,8 @@ import { Image } from "~/shared/components/image";
 import { Typography } from "~/shared/components/typography";
 import styles from "../lesson-practice.module.css";
 import { PracticeInlineText } from "./practice-inline-text";
+import { Notation } from "~/shared/components/notation";
+import { PracticeCodeVariants } from "./practice-code-variants";
 
 type PracticeTaskContentProps = {
   blocks: readonly PracticeTaskTypes.ContentBlock[];
@@ -30,6 +32,22 @@ function renderContentBlock(
   key: string,
 ): ReactNode {
   switch (block.type) {
+    case "rich-text":
+      return (
+        <Typography.Text key={key} className={styles.contentText}>
+          {block.spans.map((span, index) =>
+            span.kind === "text" ? (
+              span.text
+            ) : (
+              <Notation key={index} kind={span.kind}>
+                {span.text}
+              </Notation>
+            ),
+          )}
+        </Typography.Text>
+      );
+    case "code-variants":
+      return <PracticeCodeVariants key={key} variants={block.variants} />;
     case "text":
       return (
         <Typography.Text key={key} className={styles.contentText}>

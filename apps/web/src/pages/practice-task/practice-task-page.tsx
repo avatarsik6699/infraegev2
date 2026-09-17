@@ -1,3 +1,4 @@
+import { practiceCatalog } from "~/entities/practice-task";
 import { useState } from "react";
 import { getPracticeTask } from "./api/get-practice-task";
 import { useRouter } from "@tanstack/react-router";
@@ -33,12 +34,12 @@ export const PracticeTaskPage: React.FC<PracticeTaskPageTypes.Props> = (
       <PublicHeader activeSection="practice" />
       <PageContainer component="main" measure="reading" className={styles.main}>
         <ActionLink
-          to="/practice"
+          to={practiceCatalog.returnHref(props.search)}
           icon="back"
           hierarchy="quiet"
           className={styles.back}
         >
-          К практике
+          К списку задач
         </ActionLink>
         {detail ? (
           <>
@@ -47,14 +48,20 @@ export const PracticeTaskPage: React.FC<PracticeTaskPageTypes.Props> = (
                 {detail.task.title}
               </Typography.Title>
               <Typography.Text tone="muted" variant="caption">
+                {detail.examNumbers.map((number) => `№${number}`).join(", ")}
+                {detail.examNumbers.length ? " · " : ""}
                 {detail.task.difficultyLabel}
+                {detail.estimatedMinutes
+                  ? ` · около ${detail.estimatedMinutes} мин`
+                  : ""}
               </Typography.Text>
-              <Typography.Text>{detail.answerInstruction}</Typography.Text>
             </header>
             <PracticeSolving
               key={detail.task.id}
               task={detail.task}
               onRefresh={refresh}
+              search={props.search}
+              catalogVisible={detail.catalogVisible}
             />
             {result.links.length > 0 && (
               <nav className={styles.theory} aria-label="Теория к задаче">

@@ -1,0 +1,222 @@
+{
+  "expected_revision": 1,
+  "mode": "editorial",
+  "reason": "Practice UX: preview, skill, honest explanation label and explicit presentation; source answers retained",
+  "task": {
+    "answer_instruction": "Запишите целое число в десятичной системе счисления.",
+    "archived": false,
+    "catalog_visible": true,
+    "checker": {
+      "answer_variants": [
+        "99607"
+      ],
+      "checker_type": "exact_match",
+      "numeric_tolerance": null
+    },
+    "content_schema_version": 1,
+    "difficulty": 1,
+    "estimated_minutes": null,
+    "exam_numbers": [
+      5
+    ],
+    "explanation": [
+      {
+        "data": {
+          "markdown": "Искомая величина: Укажите наибольшее число N, при обработке которого автомат выдаст число Z = 222."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Разделите решение на два действия: для одного входного числа точно воспроизведите алгоритм, затем отберите результаты по условию задачи. Храните запись числа строкой; основание используемой системы счисления — 10."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Суммируйте цифры записи, а не само число. После преобразования запись может измениться: повторный подсчёт выполняйте по новой строке, если именно она названа в условии."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Дописывание справа реализуется как `s + suffix`, слева — как `prefix + s`. Добавляйте ровно указанную последовательность символов, включая нули. Числовое сложение вместо соединения строк здесь меняет алгоритм."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Отбирайте ту величину, о которой спрашивается в последнем предложении: исходное число и результат алгоритма нельзя подменять друг другом. Для наименьшего входа рассматривайте допустимые N по возрастанию; для наибольшего проверяйте весь обоснованный диапазон."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Строгое «больше» означает `>`, а «не меньше» — `>=`; аналогично различайте верхние границы. Диапазон перебора определяйте из ограничений и изменения длины записи, а не произвольной константой. Пример из условия помогает проверить отдельный проход алгоритма."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Ответ: `99607`."
+        },
+        "type": "text"
+      }
+    ],
+    "explanation_kind": "method",
+    "files": [],
+    "hint": [
+      {
+        "data": {
+          "markdown": "Сначала выполните все шаги для одного N, сохраняя строку после каждого изменения. Затем уточните, что требуется выбрать: N, R или количество значений."
+        },
+        "type": "text"
+      }
+    ],
+    "id": "d6c2ada1-917e-40b1-8e35-f57a4ee636b4",
+    "interaction_type": "production",
+    "lessons": [],
+    "short_description": "Укажите наибольшее число N, при обработке которого автомат выдаст число Z = 222.",
+    "skills": [
+      "digit-algorithm"
+    ],
+    "sources": [
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": true,
+        "kind": "unknown",
+        "original_id": null,
+        "primary": true,
+        "role": "original",
+        "title": null,
+        "url": null,
+        "year": null
+      },
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": false,
+        "kind": "bank",
+        "original_id": "25138",
+        "primary": false,
+        "role": "copy",
+        "title": "КЕГЭ",
+        "url": "https://kompege.ru/task?id=25138",
+        "year": null
+      }
+    ],
+    "statement": [
+      {
+        "data": {
+          "markdown": "(Иглин К.) Автомат получает на вход пятизначное число N. По этому числу строится новое число Z по следующим правилам."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "1) Вычисляется число S - сумма всех цифр числа N."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "2) Вычисляется число M - сумма максимальной и минимальной цифры в записи числа N."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "3) Вычисляется число L - самая левая цифра числа N."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "4) Вычисляется число R - самая правая цифра числа N."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "5) Вычисляется P₁: P₁ = S - L"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "6) Вычисляется P₂: P₂ = M - R"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Новое число Z получается в результате записи рядом, без пробелов, чисел P₁ и P₂ таким образом, чтобы они следовали слева направо в неубывающем порядке."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Пример: Исходное число К = 12502"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "S = 1 + 2 + 5 + 2 = 10"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "M = 0 + 5 = 5"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "L = 1"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "R = 2"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "P₁ = 9"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "P₂ = 3"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Результат: Z = 39"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Укажите наибольшее число N, при обработке которого автомат выдаст число Z = 222."
+        },
+        "type": "text"
+      }
+    ],
+    "theory_links": [
+      {
+        "label": "Преобразование записей чисел",
+        "material_id": "preobrazovanie-zapisey-chisel",
+        "section": null
+      }
+    ],
+    "title": "Алгоритм обработки числа"
+  }
+}

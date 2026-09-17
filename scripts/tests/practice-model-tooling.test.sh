@@ -72,7 +72,7 @@ export TASK_FILES_DIR="$test_root/files" PRACTICE_RELEASE_ROOT="$repo_dir"
 cd "$repo_dir/apps/api"
 uv run alembic upgrade head
 (cd "$repo_dir" && PRACTICE_BACKUP_CONTAINER="$container" python3 -m unittest discover -s scripts/tests -p application_db_test.py)
-uv run alembic current | grep -q '120_01 (head)'
+uv run alembic current | grep -q '121_01 (head)'
 uv run alembic check
 uv run python -m app.modules.practice.cli register --environment test --project "$DB_PROJECT"
 uv run pytest tests/test_practice_model_tooling.py tests/test_practice_health.py tests/test_practice_legacy.py tests/test_practice_readers.py --basetemp "$test_root/pytest" -q

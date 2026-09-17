@@ -57,6 +57,41 @@ class AttachmentBlock(StrictModel):
     data: AttachmentData
 
 
+class InlineSpan(StrictModel):
+    kind: Literal["text", "code", "formula"]
+    text: Annotated[str, Field(min_length=1, max_length=10000)]
+
+
+class RichTextData(StrictModel):
+    spans: list[InlineSpan] = Field(min_length=1, max_length=200)
+
+
+class RichTextBlock(StrictModel):
+    type: Literal["rich_text"]
+    data: RichTextData
+
+
+class CodeVariant(StrictModel):
+    label: Annotated[str, Field(min_length=1, max_length=40)]
+    language: Literal["python", "text"]
+    code: Nonempty
+
+
+class CodeVariantsData(StrictModel):
+    variants: list[CodeVariant] = Field(min_length=2, max_length=8)
+
+    @model_validator(mode="after")
+    def unique_labels(self) -> Self:
+        if len({v.label.casefold() for v in self.variants}) != len(self.variants):
+            raise ValueError("code variant labels must be distinct")
+        return self
+
+
+class CodeVariantsBlock(StrictModel):
+    type: Literal["code_variants"]
+    data: CodeVariantsData
+
+
 Block = Annotated[
     TextBlock
     | ListBlock
@@ -66,7 +101,9 @@ Block = Annotated[
     | CalloutBlock
     | ImageBlock
     | DiagramBlock
-    | AttachmentBlock,
+    | AttachmentBlock
+    | RichTextBlock
+    | CodeVariantsBlock,
     Field(discriminator="type"),
 ]
 
@@ -127,11 +164,13 @@ class FileUsage(StrictModel):
 class TaskContent(StrictModel):
     id: Identifier
     title: Nonempty
+    short_description: Annotated[str, Field(min_length=1, max_length=300)] | None = None
+    explanation_kind: Literal["unclassified", "method", "worked_solution"] = "unclassified"
     difficulty: Literal[1, 2, 3]
     estimated_minutes: int | None = Field(default=None, gt=0)
     answer_instruction: Nonempty
     interaction_type: Literal["production", "recognition"] = "production"
-    content_schema_version: Literal[1] = 1
+    content_schema_version: Literal[1, 2] = 1
     statement: list[Block] = Field(min_length=1, max_length=1000)
     hint: list[Block] = Field(max_length=1000)
     explanation: list[Block] = Field(min_length=1, max_length=1000)
@@ -145,6 +184,11 @@ class TaskContent(StrictModel):
 
     @model_validator(mode="after")
     def consistent(self) -> Self:
+        if self.content_schema_version == 1 and any(
+            isinstance(block, RichTextBlock | CodeVariantsBlock)
+            for block in self.statement + self.hint + self.explanation
+        ):
+            raise ValueError("presentation blocks require content schema version 2")
         for values in (
             self.skills,
             self.exam_numbers,

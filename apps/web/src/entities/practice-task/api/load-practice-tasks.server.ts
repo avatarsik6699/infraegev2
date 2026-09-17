@@ -26,6 +26,8 @@ const contentBlockParsers: Record<
   (data: Record<string, unknown>) => PracticeTaskTypes.ContentBlock
 > = {
   text: parseTextBlock,
+  rich_text: parseRichTextBlock,
+  code_variants: parseCodeVariantsBlock,
   list: parseListBlock,
   callout: parseCalloutBlock,
   worked_example: parseStepsBlock,
@@ -52,6 +54,49 @@ const attachmentMimeTypes = new Set<PracticeTaskTypes.AttachmentMimeType>([
   "application/vnd.oasis.opendocument.spreadsheet",
   "application/vnd.oasis.opendocument.text",
 ]);
+
+function parseRichTextBlock(
+  data: Record<string, unknown>,
+): PracticeTaskTypes.ContentBlock {
+  requireOnlyKeys(data, ["spans"]);
+  const spans = requireNonEmptyArray(data.spans).map(
+    (span): PracticeTaskTypes.InlineSpan => {
+      if (!isRecord(span)) throw new Error("Invalid inline span");
+      requireOnlyKeys(span, ["kind", "text"]);
+      if (
+        span.kind !== "text" &&
+        span.kind !== "code" &&
+        span.kind !== "formula"
+      )
+        throw new Error("Invalid inline kind");
+      return { kind: span.kind, text: requireSolutionString(span.text) };
+    },
+  );
+  if (spans.length > 200) throw new Error("Too many inline spans");
+  return { type: "rich-text", spans };
+}
+
+function parseCodeVariantsBlock(
+  data: Record<string, unknown>,
+): PracticeTaskTypes.ContentBlock {
+  requireOnlyKeys(data, ["variants"]);
+  const variants = requireNonEmptyArray(data.variants).map((variant) => {
+    if (!isRecord(variant)) throw new Error("Invalid code variant");
+    requireOnlyKeys(variant, ["label", "language", "code"]);
+    return {
+      label: requireSolutionString(variant.label),
+      language: requireLanguage(variant.language),
+      code: requireSolutionString(variant.code),
+    };
+  });
+  if (
+    variants.length < 2 ||
+    variants.length > 8 ||
+    new Set(variants.map((v) => v.label.toLowerCase())).size !== variants.length
+  )
+    throw new Error("Invalid variant group");
+  return { type: "code-variants", variants };
+}
 
 function parseTextBlock(
   data: Record<string, unknown>,
@@ -335,6 +380,8 @@ export function projectPracticeTask(
     id: source.id,
     solutionRevision: source.solution_revision,
     title: source.content.title,
+    answerInstruction: source.content.answer_instruction,
+    explanationKind: source.content.explanation_kind,
     difficultyLabel: difficultyLabel(source.content.difficulty),
     statement: blocks(source.content.statement),
     hint: blocks(source.content.hint),

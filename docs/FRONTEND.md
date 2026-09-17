@@ -279,7 +279,7 @@ app → routes → pages → widgets → features → entities → shared
   on desktop and 32px on narrow screens, and major lesson sections use 64px on desktop and 48px on narrow screens. Learning components own only their
   internal geometry and do not introduce outer margins. `Procedure` exposes its specific authored
   title directly and does not prepend a generic «Как действовать» label.
-- Every practice task renders its statement, separate «Подсказка» and «Решение» disclosures through
+- Every practice task renders its statement and separate hint/explanation content through
   one exhaustive structured-content boundary. It supports safe inline notation in text, semantic
   ordered/unordered lists, Python/text code, native tables, local task-owned images, annotated
   diagrams with a visible text alternative, authored downloads, callouts and the three established
@@ -290,28 +290,48 @@ app → routes → pages → widgets → features → entities → shared
   are rejected at the content boundary rather than sanitized in the renderer.
   Before enhancement both help sections remain ordinary linear SSR/no-JS content; after hydration
   they collapse independently and retain native keyboard/focus semantics through the shared
-  `Accordion` wrapper. A solved task uses the success check in its tab and a trailing success check
+  `Accordion` wrapper. In lesson practice, a solved task uses the success check in its tab and a trailing success check
   inside its flat, readable disabled answer field; keep the «Проверить» control visible but disabled
   so the form geometry and action context remain stable. Do not repeat solved state with a badge or
   navigation actions to the next task/result because the tabs and page outline already provide
   those paths. Persist only the learner's accepted submitted value alongside the solved task id,
   restore it after reload and keep the useful correctness explanation immediately after submission;
   checker answers and tolerances remain server-owned.
-- `/practice` extends the public paper/ink world with a compact heading, one lead, labelled
-  skill/exam/difficulty fields and open task rows with alternating quiet fills. Drawn title links
-  lead the classification and optional duration; a reserved status slot shows current-revision
-  success or a changed task after progress hydration. Filters align on desktop and stack on mobile,
-  where row status follows its text. URL-owned GET filters and cursor links work without JavaScript;
+- `/practice` extends the public paper/ink world with a compact heading, immediate exam-number
+  choices derived from the visible bank, and labelled skill/difficulty selects with readable names.
+  Additional filters use an explicit apply action and collapse on mobile; applied constraints can
+  be removed individually. Filter changes reset the cursor. A result count precedes open task rows
+  with alternating quiet fills. Drawn title links lead a distinctive one-to-two-line preview,
+  classification and optional real duration; a reserved status slot shows current-revision
+  success or a changed task after progress hydration. No unsolved claim appears before hydration.
+  Filters align on desktop and stack on mobile, where row status follows its text.
+  URL-owned GET filters and cursor links work without JavaScript;
   empty, invalid and unavailable results have explicit local states. `/practice/$taskId` uses the
-  shared reading measure, an unframed statement/help/checker flow, available theory links and
-  subordinate source attribution. Standalone browser progress stores accepted submitted values by
+  shared reading measure in one column, compact task identity, an unframed statement/help/checker
+  flow, available theory links and subordinate source attribution. The answer instruction belongs
+  beside its field. Wrong answers and service errors retain input with distinct concise feedback;
+  success has one structured explanation, never a flattened duplicate. Labels distinguish an
+  explicitly classified worked solution from a method idea; unclassified material says «Разбор».
+  Explicit equivalent-language groups select Python (otherwise the first option); no-JS displays
+  every variant. Formula/code notation uses the existing semantic `Notation` boundary.
+  Standalone browser progress stores accepted submitted values by
   task ID and solution revision independently of lessons. Explicit «Решить ещё раз» opens and
   focuses a fresh answer form while preserving historical success; stale refresh and technical
-  failures retain the entered answer. SSR/no-JS keeps statements, help and downloads readable;
+  failures retain the entered answer. A successful standalone attempt offers a manual next-task
+  action in the same filtered server order, across pagination boundaries and including solved tasks.
+  End-of-list and unavailable continuation remain local states. Return restores validated catalog
+  filters/page and scroll or the originating row; direct entry uses the general catalog.
+  Per-tab drafts use task ID plus solution revision through a shared storage adapter.
+  The lesson tab/outline navigation rule above does not suppress standalone continuation.
+  SSR/no-JS keeps statements, help and downloads readable;
   checking and browser progress require enhancement. Both routes use canonical/social metadata;
   filtered or paginated catalog views canonicalize to `/practice` and remain noindex. Only
   catalog-visible tasks enter bounded runtime sitemap parts; hidden and unavailable task pages
   remain noindex, and failed catalog loads remain noindex.
+- Practice lab specimens may show invented durations and statistics only with a visible
+  «Демонстрационные данные — для оценки интерфейса» label. Cover full, absent, partial and long
+  values, with duration beside difficulty and statistics subordinate. Shared components receive
+  explicit display values; fake fixtures stay in the lab and never enter public pages, DB or API.
 - Learning publication discovery is registry-driven. A TopicLesson, Course or CourseLesson enters the home/course
   lists, prerender crawl and sitemap only through `published`; review and lab routes stay unlisted
   and `noindex,nofollow`.

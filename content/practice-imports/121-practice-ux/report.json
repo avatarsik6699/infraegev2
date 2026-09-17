@@ -1,0 +1,28 @@
+{
+  "checksum": "4fdca8fc19735af68bc9664fc3c5b0f9072232b7edaafc8b024e50cb49c4bada",
+  "code_group_source_ids": [
+    600,
+    601,
+    602,
+    603,
+    604,
+    605,
+    3772,
+    9945
+  ],
+  "explanation_kinds": {
+    "method": 516,
+    "unclassified": 31
+  },
+  "independently_solved": false,
+  "package_id": "practice-ux-8a59a7d4a30a0440bdff3265",
+  "skills": {
+    "binary-algorithm": 202,
+    "digit-algorithm": 90,
+    "mutual-recursion": 34,
+    "recursion": 213,
+    "recursive-procedure": 8
+  },
+  "source_checksum": "8d2c9574dc85ebfa72ee7226382ae3082903a8e286ac6a51a1f0eddf145be1cc",
+  "tasks": 547
+}

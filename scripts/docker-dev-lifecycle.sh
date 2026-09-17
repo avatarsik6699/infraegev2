@@ -26,6 +26,7 @@ apps/api/practice-registry.json
 apps/api/migrations/env.py
 apps/api/migrations/versions/114_01_practice_model.py
 apps/api/migrations/versions/120_01_private_provenance.py
+apps/api/migrations/versions/121_01_practice_ux.py
 infra/database-schema
 "}
 

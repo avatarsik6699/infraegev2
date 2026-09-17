@@ -1,0 +1,134 @@
+{
+  "expected_revision": 1,
+  "mode": "editorial",
+  "reason": "Practice UX: preview, skill, honest explanation label and explicit presentation; source answers retained",
+  "task": {
+    "answer_instruction": "Запишите целое число в десятичной системе счисления.",
+    "archived": false,
+    "catalog_visible": true,
+    "checker": {
+      "answer_variants": [
+        "31"
+      ],
+      "checker_type": "exact_match",
+      "numeric_tolerance": null
+    },
+    "content_schema_version": 1,
+    "difficulty": 2,
+    "estimated_minutes": null,
+    "exam_numbers": [
+      5
+    ],
+    "explanation": [
+      {
+        "data": {
+          "caption": null,
+          "code": "def cc(n):\n    s = ''\n    while n != 0:\n        s = str(n % 4) +  s\n        n //= 4\n    return s\n\ndef f(n):\n    s = cc(n)\n    sum_digits = sum(map(int,list(s)))\n    if sum_digits % 3 == 0:\n        s = s.replace('0','*').replace('2','0').replace('*','2')\n        s = '32' + s\n    else:\n        s += '33'\n        s = s[0] + '10' + s[3:]\n    return int(s,4)\n\nmi = float('inf')\na = []\nfor i in range(1,100000):\n    if f(i) > 320:\n        a.append([f(i),-i])\na.sort()\nprint(abs(a[0][1]))",
+          "language": "python"
+        },
+        "type": "code_example"
+      }
+    ],
+    "explanation_kind": "unclassified",
+    "files": [],
+    "hint": [
+      {
+        "data": {
+          "markdown": "Сначала выполните все шаги для одного N, сохраняя строку после каждого изменения. Затем уточните, что требуется выбрать: N, R или количество значений."
+        },
+        "type": "text"
+      }
+    ],
+    "id": "80cb586e-b132-4919-852a-7d44f2412fdd",
+    "interaction_type": "production",
+    "lessons": [],
+    "short_description": "Укажите максимальное число N, для которого результатом работы алгоритма является наименьшее число R, превышающее 320.",
+    "skills": [
+      "digit-algorithm"
+    ],
+    "sources": [
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": true,
+        "kind": "unknown",
+        "original_id": null,
+        "primary": true,
+        "role": "original",
+        "title": null,
+        "url": null,
+        "year": null
+      },
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": false,
+        "kind": "bank",
+        "original_id": "21261",
+        "primary": false,
+        "role": "copy",
+        "title": "КЕГЭ",
+        "url": "https://kompege.ru/task?id=21261",
+        "year": null
+      }
+    ],
+    "statement": [
+      {
+        "data": {
+          "markdown": "(О. Лысенков) На вход алгоритма подаётся натуральное число N. Алгоритм строит по нему новое число R следующим образом."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "1. Строится четверичная запись числа N."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "2. Далее эта запись обрабатывается по следующему правилу:"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "а) если сумма цифр четверичной записи кратна 3, то все нули в записи меняются на 2, а все 2 меняются на нули, после к числу приписывается 32 слева;"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "б) если сумма цифр четверичной записи не кратна 3, то к записи справа приписывается 33, после второй и третий разряд, полученной записи, меняются на 1 и 0 соответственно, разряды нумеруются слева направо, начиная с 1."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Полученная таким образом запись является четверичной записью искомого числа R."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Укажите максимальное число N, для которого результатом работы алгоритма является наименьшее число R, превышающее 320."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "В ответе это число запишите в десятичной системе счисления."
+        },
+        "type": "text"
+      }
+    ],
+    "theory_links": [
+      {
+        "label": "Преобразование записей чисел",
+        "material_id": "preobrazovanie-zapisey-chisel",
+        "section": null
+      }
+    ],
+    "title": "Алгоритм обработки числа"
+  }
+}

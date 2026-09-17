@@ -428,3 +428,18 @@
   font-family: var(--font-ui);
   font-size: var(--text-sm);
 }
+
+[data-standalone] .answerRow {
+  grid-template-columns: minmax(10rem, 1fr) auto;
+  align-items: end;
+}
+[data-standalone] .answerAcceptedIcon {
+  top: auto;
+  bottom: calc((var(--input-min-height) - 1.125rem) / 2);
+  transform: none;
+}
+@media (max-width: 40rem) {
+  [data-standalone] .answerRow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

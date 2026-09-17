@@ -18,7 +18,7 @@ export const PracticeCatalogPage: React.FC<PracticeCatalogPageTypes.Props> = (
         <Typography.Title order={1} variant="catalog">
           Практика
         </Typography.Title>
-        <Typography.Text variant="lead">
+        <Typography.Text tone="muted">
           Выберите задачу и решайте в своём темпе. Подсказки и разбор доступны
           сразу.
         </Typography.Text>
@@ -26,6 +26,7 @@ export const PracticeCatalogPage: React.FC<PracticeCatalogPageTypes.Props> = (
       <PracticeFilters
         key={practiceCatalog.href(props.search)}
         search={props.search}
+        facets={props.result.facets}
       />
       <PracticeResults {...props} />
     </PageContainer>

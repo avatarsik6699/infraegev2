@@ -171,7 +171,11 @@ def _convert(source: Path, output: Path, registry: Registry) -> None:
             }
         )
         name = f"tasks/{old.id}.json"
-        payload = encoded(edit.model_dump(mode="json"))
+        payload = encoded(
+            edit.model_dump(
+                mode="json", exclude={"task": {"short_description", "explanation_kind"}}
+            )
+        )
         (output / name).write_bytes(payload)
         entries.append({"path": name, "checksum": hashlib.sha256(payload).hexdigest()})
     if set(memberships) != {Path(name).stem for name in task_paths} or set(

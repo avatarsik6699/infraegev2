@@ -43,6 +43,10 @@ export const checkPracticeAnswer: PracticeTaskTypes.Checker = async (
 
 function explanationText(block: ExplanationBlock): string {
   switch (block.type) {
+    case "rich_text":
+      return block.data.spans.map((span) => span.text).join("");
+    case "code_variants":
+      return "Разбор приведён в коде.";
     case "text":
     case "callout":
       return block.data.markdown;

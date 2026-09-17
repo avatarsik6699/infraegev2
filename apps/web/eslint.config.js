@@ -201,6 +201,7 @@ export default tseslint.config(
       "no-restricted-globals": restrictedPlatformGlobals(
         "window",
         "localStorage",
+        "sessionStorage",
       ),
     },
   },

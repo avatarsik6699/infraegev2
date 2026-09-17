@@ -106,6 +106,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/tasks/facets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Facets */
+        get: operations["get_facets_api_tasks_facets_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/tasks/{task_id}": {
         parameters: {
             query?: never;
@@ -149,6 +166,23 @@ export interface paths {
         };
         /** Get File */
         get: operations["get_file_api_tasks__task_id__files__usage_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/tasks/{task_id}/next": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Next Task */
+        get: operations["get_next_task_api_tasks__task_id__next_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -245,12 +279,25 @@ export interface components {
              */
             tone: "info" | "warning";
         };
+        /** CatalogFacets */
+        CatalogFacets: {
+            /** Difficulties */
+            difficulties: number[];
+            /** Exam Numbers */
+            exam_numbers: number[];
+            /** Skills */
+            skills: components["schemas"]["SkillOption"][];
+            /** Total */
+            total: number;
+        };
         /** CatalogPage */
         CatalogPage: {
             /** Next Cursor */
             next_cursor: string | null;
             /** Tasks */
             tasks: components["schemas"]["CatalogTask"][];
+            /** Total */
+            total: number;
         };
         /** CatalogTask */
         CatalogTask: {
@@ -262,6 +309,8 @@ export interface components {
             exam_numbers: number[];
             /** Id */
             id: string;
+            /** Short Description */
+            short_description: string | null;
             /** Skills */
             skills: string[];
             /** Solution Revision */
@@ -281,7 +330,7 @@ export interface components {
             /** Correct */
             correct: boolean;
             /** Explanation */
-            explanation: (components["schemas"]["TextBlock"] | components["schemas"]["ListBlock"] | components["schemas"]["CodeExampleBlock"] | components["schemas"]["TableBlock"] | components["schemas"]["WorkedExampleBlock"] | components["schemas"]["CalloutBlock"] | components["schemas"]["ImageBlock"] | components["schemas"]["DiagramBlock"] | components["schemas"]["AttachmentBlock"])[];
+            explanation: (components["schemas"]["TextBlock"] | components["schemas"]["ListBlock"] | components["schemas"]["CodeExampleBlock"] | components["schemas"]["TableBlock"] | components["schemas"]["WorkedExampleBlock"] | components["schemas"]["CalloutBlock"] | components["schemas"]["ImageBlock"] | components["schemas"]["DiagramBlock"] | components["schemas"]["AttachmentBlock"] | components["schemas"]["RichTextBlock"] | components["schemas"]["CodeVariantsBlock"])[];
             /** Solution Revision */
             solution_revision: number;
         };
@@ -326,6 +375,32 @@ export interface components {
              * @enum {string}
              */
             language: "python" | "text";
+        };
+        /** CodeVariant */
+        CodeVariant: {
+            /** Code */
+            code: string;
+            /** Label */
+            label: string;
+            /**
+             * Language
+             * @enum {string}
+             */
+            language: "python" | "text";
+        };
+        /** CodeVariantsBlock */
+        CodeVariantsBlock: {
+            data: components["schemas"]["CodeVariantsData"];
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "code_variants";
+        };
+        /** CodeVariantsData */
+        CodeVariantsData: {
+            /** Variants */
+            variants: components["schemas"]["CodeVariant"][];
         };
         /** CourseSummary */
         CourseSummary: {
@@ -412,6 +487,16 @@ export interface components {
              */
             type: "image";
         };
+        /** InlineSpan */
+        InlineSpan: {
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "text" | "code" | "formula";
+            /** Text */
+            text: string;
+        };
         /** LessonPractice */
         LessonPractice: {
             /** Id */
@@ -467,6 +552,11 @@ export interface components {
             /** Position */
             position: number;
         };
+        /** NextTask */
+        NextTask: {
+            /** Task Id */
+            task_id: string | null;
+        };
         /** PublicTask */
         PublicTask: {
             content: components["schemas"]["PublicTaskContent"];
@@ -496,9 +586,9 @@ export interface components {
             /**
              * Content Schema Version
              * @default 1
-             * @constant
+             * @enum {integer}
              */
-            content_schema_version: 1;
+            content_schema_version: 1 | 2;
             /**
              * Difficulty
              * @enum {integer}
@@ -509,11 +599,17 @@ export interface components {
             /** Exam Numbers */
             exam_numbers?: number[];
             /** Explanation */
-            explanation: (components["schemas"]["TextBlock"] | components["schemas"]["ListBlock"] | components["schemas"]["CodeExampleBlock"] | components["schemas"]["TableBlock"] | components["schemas"]["WorkedExampleBlock"] | components["schemas"]["CalloutBlock"] | components["schemas"]["ImageBlock"] | components["schemas"]["DiagramBlock"] | components["schemas"]["AttachmentBlock"])[];
+            explanation: (components["schemas"]["TextBlock"] | components["schemas"]["ListBlock"] | components["schemas"]["CodeExampleBlock"] | components["schemas"]["TableBlock"] | components["schemas"]["WorkedExampleBlock"] | components["schemas"]["CalloutBlock"] | components["schemas"]["ImageBlock"] | components["schemas"]["DiagramBlock"] | components["schemas"]["AttachmentBlock"] | components["schemas"]["RichTextBlock"] | components["schemas"]["CodeVariantsBlock"])[];
+            /**
+             * Explanation Kind
+             * @default unclassified
+             * @enum {string}
+             */
+            explanation_kind: "unclassified" | "method" | "worked_solution";
             /** Files */
             files?: components["schemas"]["FileUsage"][];
             /** Hint */
-            hint: (components["schemas"]["TextBlock"] | components["schemas"]["ListBlock"] | components["schemas"]["CodeExampleBlock"] | components["schemas"]["TableBlock"] | components["schemas"]["WorkedExampleBlock"] | components["schemas"]["CalloutBlock"] | components["schemas"]["ImageBlock"] | components["schemas"]["DiagramBlock"] | components["schemas"]["AttachmentBlock"])[];
+            hint: (components["schemas"]["TextBlock"] | components["schemas"]["ListBlock"] | components["schemas"]["CodeExampleBlock"] | components["schemas"]["TableBlock"] | components["schemas"]["WorkedExampleBlock"] | components["schemas"]["CalloutBlock"] | components["schemas"]["ImageBlock"] | components["schemas"]["DiagramBlock"] | components["schemas"]["AttachmentBlock"] | components["schemas"]["RichTextBlock"] | components["schemas"]["CodeVariantsBlock"])[];
             /** Id */
             id: string;
             /**
@@ -524,16 +620,32 @@ export interface components {
             interaction_type: "production" | "recognition";
             /** Lessons */
             lessons?: components["schemas"]["Membership"][];
+            /** Short Description */
+            short_description?: string | null;
             /** Skills */
             skills?: string[];
             /** Sources */
             sources: components["schemas"]["Source"][];
             /** Statement */
-            statement: (components["schemas"]["TextBlock"] | components["schemas"]["ListBlock"] | components["schemas"]["CodeExampleBlock"] | components["schemas"]["TableBlock"] | components["schemas"]["WorkedExampleBlock"] | components["schemas"]["CalloutBlock"] | components["schemas"]["ImageBlock"] | components["schemas"]["DiagramBlock"] | components["schemas"]["AttachmentBlock"])[];
+            statement: (components["schemas"]["TextBlock"] | components["schemas"]["ListBlock"] | components["schemas"]["CodeExampleBlock"] | components["schemas"]["TableBlock"] | components["schemas"]["WorkedExampleBlock"] | components["schemas"]["CalloutBlock"] | components["schemas"]["ImageBlock"] | components["schemas"]["DiagramBlock"] | components["schemas"]["AttachmentBlock"] | components["schemas"]["RichTextBlock"] | components["schemas"]["CodeVariantsBlock"])[];
             /** Theory Links */
             theory_links?: components["schemas"]["TheoryLink"][];
             /** Title */
             title: string;
+        };
+        /** RichTextBlock */
+        RichTextBlock: {
+            data: components["schemas"]["RichTextData"];
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "rich_text";
+        };
+        /** RichTextData */
+        RichTextData: {
+            /** Spans */
+            spans: components["schemas"]["InlineSpan"][];
         };
         /** SitemapEntry */
         SitemapEntry: {
@@ -554,6 +666,13 @@ export interface components {
         SitemapPage: {
             /** Tasks */
             tasks: components["schemas"]["SitemapEntry"][];
+        };
+        /** SkillOption */
+        SkillOption: {
+            /** Label */
+            label: string;
+            /** Value */
+            value: string;
         };
         /** Source */
         Source: {
@@ -848,6 +967,26 @@ export interface operations {
             };
         };
     };
+    get_facets_api_tasks_facets_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogFacets"];
+                };
+            };
+        };
+    };
     get_task_api_tasks__task_id__get: {
         parameters: {
             query?: never;
@@ -932,6 +1071,41 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_next_task_api_tasks__task_id__next_get: {
+        parameters: {
+            query?: {
+                skill?: string | null;
+                exam_number?: number | null;
+                difficulty?: number | null;
+            };
+            header?: never;
+            path: {
+                task_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NextTask"];
+                };
             };
             /** @description Validation Error */
             422: {

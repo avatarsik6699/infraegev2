@@ -23,3 +23,20 @@ describe("safeLs.createStore", () => {
     unsubscribe();
   });
 });
+
+it("keeps session drafts separate from persistent progress and revision keys", () => {
+  const draft = {
+    ...definition,
+    key: "draft:task:1",
+    storage: "session" as const,
+  };
+  const store = safeLs.createStore(draft);
+  store.set("123");
+  expect(localStorage.getItem(draft.key)).toBeNull();
+  expect(safeLs.createStore(draft).getSnapshot()).toBe("123");
+  expect(
+    safeLs.createStore({ ...draft, key: "draft:task:2" }).getSnapshot(),
+  ).toBeNull();
+  store.remove();
+  expect(sessionStorage.getItem(draft.key)).toBeNull();
+});

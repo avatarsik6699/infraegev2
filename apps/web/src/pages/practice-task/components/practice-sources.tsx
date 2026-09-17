@@ -7,10 +7,10 @@ export const PracticeSources: React.FC<{
   sources: components["schemas"]["Source"][];
 }> = (props) => (
   <aside className={styles.sources} aria-label="Источники задачи">
-    <Typography.Title order={2}>Источник</Typography.Title>
     {props.sources.map((source, index) => (
       <div key={index}>
         <Typography.Text tone="muted" variant="caption">
+          {source.kind === "unknown" ? "" : "Источник: "}
           {source.kind === "unknown"
             ? "Источник не указан"
             : (source.title ??

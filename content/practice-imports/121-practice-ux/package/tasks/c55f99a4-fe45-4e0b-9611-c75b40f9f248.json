@@ -1,0 +1,236 @@
+{
+  "expected_revision": 2,
+  "mode": "editorial",
+  "reason": "Practice UX: preview, skill, honest explanation label and explicit presentation; source answers retained",
+  "task": {
+    "answer_instruction": "Запишите целое число в десятичной системе счисления.",
+    "archived": false,
+    "catalog_visible": true,
+    "checker": {
+      "answer_variants": [
+        "1122"
+      ],
+      "checker_type": "exact_match",
+      "numeric_tolerance": null
+    },
+    "content_schema_version": 2,
+    "difficulty": 3,
+    "estimated_minutes": null,
+    "exam_numbers": [
+      16
+    ],
+    "explanation": [
+      {
+        "data": {
+          "markdown": "Искомая величина: Определите количество натуральных чисел `n < 9^9`, для которых `F(n)` равно `33`"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Выпишите базовые значения и границы каждой ветви. Для конкретного аргумента сначала выберите применимое условие, затем подставляйте рекуррентную формулу этой ветви; базовый случай имеет приоритет перед дальнейшим раскрытием."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Если переходы используют меньшие аргументы, заполняйте значения по возрастанию от базовой области. При повторных обращениях используйте сохранённый результат: это позволяет избежать многократного обхода одних и тех же ветвей рекурсии."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "После вычисления функции проверяйте требуемое свойство отдельно для каждого допустимого аргумента. Если диапазон слишком велик для перебора, используйте структуру рекурсии и подсчёт состояний; простой подсчёт различных значений функции не равен числу подходящих аргументов."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Ответ: `1122`."
+        },
+        "type": "text"
+      }
+    ],
+    "explanation_kind": "method",
+    "files": [],
+    "hint": [
+      {
+        "data": {
+          "markdown": "Начните с базового случая и направления изменения аргумента. Для выражения из нескольких значений сначала проверьте, можно ли сократить общую часть."
+        },
+        "type": "text"
+      }
+    ],
+    "id": "c55f99a4-fe45-4e0b-9611-c75b40f9f248",
+    "interaction_type": "production",
+    "lessons": [],
+    "short_description": "Определите количество натуральных чисел n < 9^9, для которых F(n) равно 33",
+    "skills": [
+      "recursion"
+    ],
+    "sources": [
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": true,
+        "kind": "bank",
+        "original_id": null,
+        "primary": true,
+        "role": "original",
+        "title": "Danov2306",
+        "url": null,
+        "year": null
+      },
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": false,
+        "kind": "bank",
+        "original_id": "9069",
+        "primary": false,
+        "role": "copy",
+        "title": "КЕГЭ",
+        "url": "https://kompege.ru/task?id=9069",
+        "year": null
+      }
+    ],
+    "statement": [
+      {
+        "data": {
+          "spans": [
+            {
+              "kind": "text",
+              "text": "(А.Богданов) Обозначим операцию целочисленного деления с округлением вниз как "
+            },
+            {
+              "kind": "formula",
+              "text": "//"
+            },
+            {
+              "kind": "text",
+              "text": ", а нахождения остатка деления через "
+            },
+            {
+              "kind": "formula",
+              "text": "\\%"
+            },
+            {
+              "kind": "text",
+              "text": ". Например, "
+            },
+            {
+              "kind": "formula",
+              "text": "8 // 3 == 2"
+            },
+            {
+              "kind": "text",
+              "text": " и "
+            },
+            {
+              "kind": "formula",
+              "text": "7 \\% 3 == 1"
+            },
+            {
+              "kind": "text",
+              "text": ". Алгоритм вычисления значения функции "
+            },
+            {
+              "kind": "formula",
+              "text": "F(n)"
+            },
+            {
+              "kind": "text",
+              "text": ", где "
+            },
+            {
+              "kind": "formula",
+              "text": "n"
+            },
+            {
+              "kind": "text",
+              "text": " – целое число, задан следующими соотношениями:"
+            }
+          ]
+        },
+        "type": "rich_text"
+      },
+      {
+        "data": {
+          "spans": [
+            {
+              "kind": "formula",
+              "text": "F(n) = n // 3 + n \\% 3"
+            },
+            {
+              "kind": "text",
+              "text": ", если "
+            },
+            {
+              "kind": "formula",
+              "text": "n < 9"
+            }
+          ]
+        },
+        "type": "rich_text"
+      },
+      {
+        "data": {
+          "spans": [
+            {
+              "kind": "formula",
+              "text": "F(n) = F(n // 9) + F(n \\% 9)"
+            },
+            {
+              "kind": "text",
+              "text": ", если "
+            },
+            {
+              "kind": "formula",
+              "text": "n ≥ 9"
+            }
+          ]
+        },
+        "type": "rich_text"
+      },
+      {
+        "data": {
+          "spans": [
+            {
+              "kind": "text",
+              "text": "Определите количество натуральных чисел "
+            },
+            {
+              "kind": "formula",
+              "text": "n < 9^9"
+            },
+            {
+              "kind": "text",
+              "text": ", для которых "
+            },
+            {
+              "kind": "formula",
+              "text": "F(n)"
+            },
+            {
+              "kind": "text",
+              "text": " равно "
+            },
+            {
+              "kind": "formula",
+              "text": "33"
+            }
+          ]
+        },
+        "type": "rich_text"
+      }
+    ],
+    "theory_links": [
+      {
+        "label": "Рекурсия",
+        "material_id": "rekursiya",
+        "section": null
+      }
+    ],
+    "title": "Вычисление рекурсивной функции"
+  }
+}

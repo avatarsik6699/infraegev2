@@ -2,6 +2,7 @@ export {
   loadLessonPractice,
   loadCoursePracticeSummary,
   loadPracticeCatalog,
+  loadNextPracticeTask,
   loadStandaloneTask,
   loadTaskSitemapIndex,
   loadTaskSitemapPage,

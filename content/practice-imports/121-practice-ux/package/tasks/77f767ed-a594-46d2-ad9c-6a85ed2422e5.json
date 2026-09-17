@@ -1,0 +1,168 @@
+{
+  "expected_revision": 1,
+  "mode": "editorial",
+  "reason": "Practice UX: preview, skill, honest explanation label and explicit presentation; source answers retained",
+  "task": {
+    "answer_instruction": "Запишите целое число в десятичной системе счисления.",
+    "archived": false,
+    "catalog_visible": true,
+    "checker": {
+      "answer_variants": [
+        "2212"
+      ],
+      "checker_type": "exact_match",
+      "numeric_tolerance": null
+    },
+    "content_schema_version": 1,
+    "difficulty": 2,
+    "estimated_minutes": null,
+    "exam_numbers": [
+      5
+    ],
+    "explanation": [
+      {
+        "data": {
+          "markdown": "Разделите решение на два действия: для одного входного числа точно воспроизведите алгоритм, затем отберите результаты по условию задачи. Храните запись числа строкой; основание используемой системы счисления — 10."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Отбирайте ту величину, о которой спрашивается в последнем предложении: исходное число и результат алгоритма нельзя подменять друг другом. Для наименьшего входа рассматривайте допустимые N по возрастанию; для наибольшего проверяйте весь обоснованный диапазон."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Строгое «больше» означает `>`, а «не меньше» — `>=`; аналогично различайте верхние границы. Диапазон перебора определяйте из ограничений и изменения длины записи, а не произвольной константой. Пример из условия помогает проверить отдельный проход алгоритма."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Ответ: `2212`."
+        },
+        "type": "text"
+      }
+    ],
+    "explanation_kind": "method",
+    "files": [],
+    "hint": [
+      {
+        "data": {
+          "markdown": "Сначала выполните все шаги для одного N, сохраняя строку после каждого изменения. Затем уточните, что требуется выбрать: N, R или количество значений."
+        },
+        "type": "text"
+      }
+    ],
+    "id": "77f767ed-a594-46d2-ad9c-6a85ed2422e5",
+    "interaction_type": "production",
+    "lessons": [],
+    "short_description": "Запишите порядок команд в программе, которая преобразует число 45 в число 376 и содержит не более 4 команд. Указывайте лишь номера команд.",
+    "skills": [
+      "digit-algorithm"
+    ],
+    "sources": [
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": true,
+        "kind": "bank",
+        "original_id": null,
+        "primary": true,
+        "role": "original",
+        "title": "Джобс 14.12.2020",
+        "url": null,
+        "year": 2020
+      },
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": false,
+        "kind": "bank",
+        "original_id": "819",
+        "primary": false,
+        "role": "copy",
+        "title": "КЕГЭ",
+        "url": "https://kompege.ru/task?id=819",
+        "year": null
+      }
+    ],
+    "statement": [
+      {
+        "data": {
+          "markdown": "Исполнитель Старье2018 изменяет введенное число по заданной пользователем программе. У исполнителя две команды:"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "1) Прибавить 8,"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "2) Умножить на 2."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Первая команда увеличивает число на 8, вторая – увеличивает вдвое. Программа представляет последовательность записанных команд."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Например, программа 1121 – это программа"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "прибавить 8,"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "прибавить 8,"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "умножить на 2,"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "прибавить 8,"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "которая преобразует число 3 в число 46"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Запишите порядок команд в программе, которая преобразует число 45 в число 376 и содержит не более 4 команд. Указывайте лишь номера команд."
+        },
+        "type": "text"
+      }
+    ],
+    "theory_links": [
+      {
+        "label": "Преобразование записей чисел",
+        "material_id": "preobrazovanie-zapisey-chisel",
+        "section": null
+      }
+    ],
+    "title": "Алгоритм обработки числа"
+  }
+}

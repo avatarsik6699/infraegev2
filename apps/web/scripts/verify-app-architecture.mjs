@@ -293,3 +293,25 @@ for (const pattern of forbiddenPatterns) {
 console.log(
   `Application architecture policy: PASS (${forbiddenPatterns.length} unsafe patterns rejected)`,
 );
+
+const sessionStorageAdapter = await eslint.lintText(
+  "export const read = () => window.sessionStorage.getItem('draft');",
+  { filePath: storagePath },
+);
+assert.equal(
+  sessionStorageAdapter[0].messages.filter(
+    (message) => message.ruleId === "no-restricted-globals",
+  ).length,
+  0,
+  "session storage belongs to the existing storage adapter",
+);
+const sessionStorageConsumer = await eslint.lintText(
+  "export const read = () => window.sessionStorage.getItem('draft');",
+  { filePath: sourcePath },
+);
+assert.ok(
+  sessionStorageConsumer[0].messages.some(
+    (message) => message.ruleId === "no-restricted-globals",
+  ),
+  "session storage must not escape its adapter",
+);

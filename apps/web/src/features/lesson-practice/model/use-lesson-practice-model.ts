@@ -1,12 +1,17 @@
 import { ApiError } from "~/shared/api";
-import { useState, type ComponentProps } from "react";
+import { useState, useRef, type ComponentProps } from "react";
 import type { PracticeTaskTypes } from "~/entities/practice-task";
 import { useIsEnhanced } from "~/shared/lib/use-is-enhanced";
 import type { LessonPracticeTypes } from "../lesson-practice.types";
 
 type FormSubmitHandler = NonNullable<ComponentProps<"form">["onSubmit"]>;
 
-export function useLessonPracticeModel(props: LessonPracticeTypes.Props) {
+export function useLessonPracticeModel(
+  props: LessonPracticeTypes.Props & {
+    drafts?: Readonly<Record<string, string>>;
+    onDraftChange?: (id: string, value: string) => void;
+  },
+) {
   const [practiceStates, setPracticeStates] =
     useState<LessonPracticeTypes.States>({});
   const [feedback, setFeedback] = useState<LessonPracticeTypes.Feedback>({});
@@ -17,6 +22,7 @@ export function useLessonPracticeModel(props: LessonPracticeTypes.Props) {
   const activeTaskId = props.tasks.some((task) => task.id === selectedTaskId)
     ? selectedTaskId
     : (props.tasks[0]?.id ?? "");
+  const pending = useRef(new Set<string>());
   const enhanced = useIsEnhanced();
 
   const checkAnswer = async (
@@ -24,6 +30,9 @@ export function useLessonPracticeModel(props: LessonPracticeTypes.Props) {
     event: Parameters<FormSubmitHandler>[0],
   ) => {
     event.preventDefault();
+    if (pending.current.has(task.id) || props.solvedTaskIds.includes(task.id))
+      return;
+    pending.current.add(task.id);
     const value = new FormData(event.currentTarget).get("answer");
     const answer = typeof value === "string" ? value : "";
     setPracticeStates((current) => ({ ...current, [task.id]: "checking" }));
@@ -51,6 +60,8 @@ export function useLessonPracticeModel(props: LessonPracticeTypes.Props) {
       if (error instanceof ApiError && error.status === 404)
         state = "unavailable";
       setPracticeStates((current) => ({ ...current, [task.id]: state }));
+    } finally {
+      pending.current.delete(task.id);
     }
   };
 
@@ -69,14 +80,19 @@ export function useLessonPracticeModel(props: LessonPracticeTypes.Props) {
       }
     },
     answerFor: (taskId: string) =>
-      draftAnswers[taskId] ?? props.acceptedAnswers[taskId] ?? "",
+      draftAnswers[taskId] ??
+      props.acceptedAnswers[taskId] ??
+      props.drafts?.[taskId] ??
+      "",
     checkAnswer,
     enhanced,
     feedbackFor: (taskId: string) => feedback[taskId] ?? "",
     isSolved: (taskId: string) => props.solvedTaskIds.includes(taskId),
     selectTask: setSelectedTaskId,
     stateFor: (taskId: string) => practiceStates[taskId] ?? "idle",
-    updateAnswer: (taskId: string, value: string) =>
-      setDraftAnswers((current) => ({ ...current, [taskId]: value })),
+    updateAnswer: (taskId: string, value: string) => {
+      setDraftAnswers((current) => ({ ...current, [taskId]: value }));
+      props.onDraftChange?.(taskId, value);
+    },
   };
 }

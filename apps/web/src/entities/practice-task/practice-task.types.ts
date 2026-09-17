@@ -13,7 +13,16 @@ export namespace PracticeTaskTypes {
     | "application/vnd.oasis.opendocument.spreadsheet"
     | "application/vnd.oasis.opendocument.text";
 
+  export type InlineSpan = { kind: "text" | "code" | "formula"; text: string };
+  export type CodeVariant = {
+    label: string;
+    language: "python" | "text";
+    code: string;
+  };
+
   export type ContentBlock =
+    | { type: "rich-text"; spans: readonly InlineSpan[] }
+    | { type: "code-variants"; variants: readonly CodeVariant[] }
     | { type: "text"; text: string }
     | {
         type: "list";
@@ -66,6 +75,8 @@ export namespace PracticeTaskTypes {
     id: string;
     solutionRevision: number;
     difficultyLabel: string;
+    answerInstruction?: string;
+    explanationKind?: "unclassified" | "method" | "worked_solution";
     title: string;
     statement: readonly ContentBlock[];
     hint: readonly ContentBlock[];

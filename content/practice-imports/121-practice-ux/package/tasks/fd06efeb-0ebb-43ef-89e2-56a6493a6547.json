@@ -1,0 +1,190 @@
+{
+  "expected_revision": 1,
+  "mode": "editorial",
+  "reason": "Practice UX: preview, skill, honest explanation label and explicit presentation; source answers retained",
+  "task": {
+    "answer_instruction": "Запишите целое число в десятичной системе счисления.",
+    "archived": false,
+    "catalog_visible": true,
+    "checker": {
+      "answer_variants": [
+        "5859375"
+      ],
+      "checker_type": "exact_match",
+      "numeric_tolerance": null
+    },
+    "content_schema_version": 2,
+    "difficulty": 3,
+    "estimated_minutes": null,
+    "exam_numbers": [
+      16
+    ],
+    "explanation": [
+      {
+        "data": {
+          "markdown": "Перебор в данном случае не принесёт результата, поэтому будем анализировать работу функции. Рассмотрим на примере `f(5)`"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "`f(5) = 5 * f(4), f(4) = 5 * f(3), f(3) = 5 * f(2), f(2) = 5 * f(1)`"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "`f(2) = 5 * 3 = 15, f(3) = 5 * 15 = 75, f(4) = 5 * 75 = 375, F(5) = 5 * 375 = 1875`"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "То есть `f(n) = 3 * 5 ^{n-1}`."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Тогда, `f({10}^{12} + 10) = 3 * {5}^{10^{12} + 10 -1} = 3 * {5}^{10^{12} + 9}`"
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "В таком случае `(f({10}^{12}+ 10)) / ({25}^{ 5 · {10}^{11}}) =` `(3*{5}^{10^{12}+9}) / (5^{{10}^{12}})=3 * {5}^{{10}^{12} + 9 - {10}^{12}} = 3 * {5} ^{9} = 5859375`"
+        },
+        "type": "text"
+      }
+    ],
+    "explanation_kind": "unclassified",
+    "files": [],
+    "hint": [
+      {
+        "data": {
+          "markdown": "Начните с базового случая и направления изменения аргумента. Для выражения из нескольких значений сначала проверьте, можно ли сократить общую часть."
+        },
+        "type": "text"
+      }
+    ],
+    "id": "fd06efeb-0ebb-43ef-89e2-56a6493a6547",
+    "interaction_type": "production",
+    "lessons": [],
+    "short_description": "Найдите значение выражения (f({10}^{12}+10)) / ({25}^{5 · 10 ^ {11}}), при его записи в десятеричной системе счисления.",
+    "skills": [
+      "recursion"
+    ],
+    "sources": [
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": true,
+        "kind": "unknown",
+        "original_id": null,
+        "primary": true,
+        "role": "original",
+        "title": null,
+        "url": null,
+        "year": null
+      },
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": false,
+        "kind": "bank",
+        "original_id": "19801",
+        "primary": false,
+        "role": "copy",
+        "title": "КЕГЭ",
+        "url": "https://kompege.ru/task?id=19801",
+        "year": null
+      }
+    ],
+    "statement": [
+      {
+        "data": {
+          "spans": [
+            {
+              "kind": "text",
+              "text": "(О. Лысенков) Алгоритм вычисления значения функции "
+            },
+            {
+              "kind": "formula",
+              "text": "F(n)"
+            },
+            {
+              "kind": "text",
+              "text": ", где "
+            },
+            {
+              "kind": "formula",
+              "text": "n"
+            },
+            {
+              "kind": "text",
+              "text": " – целое неотрицательное число, задан следующими соотношениями:"
+            }
+          ]
+        },
+        "type": "rich_text"
+      },
+      {
+        "data": {
+          "spans": [
+            {
+              "kind": "formula",
+              "text": "F(1) = 3"
+            }
+          ]
+        },
+        "type": "rich_text"
+      },
+      {
+        "data": {
+          "spans": [
+            {
+              "kind": "formula",
+              "text": "F(n) = 5 * F(n-1)"
+            },
+            {
+              "kind": "text",
+              "text": ", если "
+            },
+            {
+              "kind": "formula",
+              "text": "n > 1"
+            }
+          ]
+        },
+        "type": "rich_text"
+      },
+      {
+        "data": {
+          "spans": [
+            {
+              "kind": "text",
+              "text": "Найдите значение выражения "
+            },
+            {
+              "kind": "formula",
+              "text": "(f({10}^{12}+10)) / ({25}^{5 · 10 ^ {11}})"
+            },
+            {
+              "kind": "text",
+              "text": ", при его записи в десятеричной системе счисления."
+            }
+          ]
+        },
+        "type": "rich_text"
+      }
+    ],
+    "theory_links": [
+      {
+        "label": "Рекурсия",
+        "material_id": "rekursiya",
+        "section": null
+      }
+    ],
+    "title": "Отношение значений рекурсивной функции"
+  }
+}

@@ -78,6 +78,18 @@ async def get_sitemap(
     return await catalog.sitemap_page(connection, page)
 
 
+@router.get("/tasks/facets", response_model=catalog.CatalogFacets)
+async def get_facets(connection: Session) -> catalog.CatalogFacets:
+    return await catalog.facets(connection)
+
+
+@router.get("/tasks/{task_id}/next", response_model=catalog.NextTask)
+async def get_next_task(
+    task_id: str, query: Annotated[catalog.CatalogFilters, Query()], connection: Session
+) -> catalog.NextTask:
+    return await catalog.next_task(connection, task_id, query)
+
+
 @router.get("/tasks/{task_id}", response_model=PublicTask)
 async def get_task(task_id: str, connection: Session, release: ReleaseRegistry) -> PublicTask:
     return await readers.task(connection, release, task_id)

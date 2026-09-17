@@ -1,0 +1,223 @@
+{
+  "expected_revision": 2,
+  "mode": "editorial",
+  "reason": "Practice UX: preview, skill, honest explanation label and explicit presentation; source answers retained",
+  "task": {
+    "answer_instruction": "Запишите целое число в десятичной системе счисления.",
+    "archived": false,
+    "catalog_visible": true,
+    "checker": {
+      "answer_variants": [
+        "49"
+      ],
+      "checker_type": "exact_match",
+      "numeric_tolerance": null
+    },
+    "content_schema_version": 2,
+    "difficulty": 2,
+    "estimated_minutes": null,
+    "exam_numbers": [
+      16
+    ],
+    "explanation": [
+      {
+        "data": {
+          "markdown": "Искомая величина: Определите количество натуральных значений n из отрезка `[1; 1 000]` для которых значения `F(n)` содержит не менее трёх цифр 6."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Выпишите базовые значения и границы каждой ветви. Для конкретного аргумента сначала выберите применимое условие, затем подставляйте рекуррентную формулу этой ветви; базовый случай имеет приоритет перед дальнейшим раскрытием."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Если переходы используют меньшие аргументы, заполняйте значения по возрастанию от базовой области. При повторных обращениях используйте сохранённый результат: это позволяет избежать многократного обхода одних и тех же ветвей рекурсии."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Чётность проверяйте для текущего аргумента каждого вызова. Переход на n−1 меняет чётность, переход на n−2 сохраняет её; нельзя продолжать раскрытие одной и той же ветвью только потому, что исходный аргумент был чётным."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "После вычисления функции проверяйте требуемое свойство отдельно для каждого допустимого аргумента. Если диапазон слишком велик для перебора, используйте структуру рекурсии и подсчёт состояний; простой подсчёт различных значений функции не равен числу подходящих аргументов."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "markdown": "Ответ: `49`."
+        },
+        "type": "text"
+      }
+    ],
+    "explanation_kind": "method",
+    "files": [],
+    "hint": [
+      {
+        "data": {
+          "markdown": "Начните с базового случая и направления изменения аргумента. Для выражения из нескольких значений сначала проверьте, можно ли сократить общую часть."
+        },
+        "type": "text"
+      }
+    ],
+    "id": "a535d311-52c3-413a-a825-b0f59dee74b9",
+    "interaction_type": "production",
+    "lessons": [],
+    "short_description": "Определите количество натуральных значений n из отрезка [1; 1 000] для которых значения F(n) содержит не менее трёх цифр 6.",
+    "skills": [
+      "recursion"
+    ],
+    "sources": [
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": true,
+        "kind": "bank",
+        "original_id": null,
+        "primary": true,
+        "role": "original",
+        "title": "Джобс 25.12.2020",
+        "url": null,
+        "year": 2020
+      },
+      {
+        "adaptation": null,
+        "author": null,
+        "is_public": false,
+        "kind": "bank",
+        "original_id": "881",
+        "primary": false,
+        "role": "copy",
+        "title": "КЕГЭ",
+        "url": "https://kompege.ru/task?id=881",
+        "year": null
+      }
+    ],
+    "statement": [
+      {
+        "data": {
+          "spans": [
+            {
+              "kind": "text",
+              "text": "Алгоритм вычисления функции "
+            },
+            {
+              "kind": "formula",
+              "text": "F(n)"
+            },
+            {
+              "kind": "text",
+              "text": " задан следующими соотношениями:"
+            }
+          ]
+        },
+        "type": "rich_text"
+      },
+      {
+        "data": {
+          "spans": [
+            {
+              "kind": "formula",
+              "text": "F(n) = n · n + 11"
+            },
+            {
+              "kind": "text",
+              "text": " при "
+            },
+            {
+              "kind": "formula",
+              "text": "n ≤ 15"
+            }
+          ]
+        },
+        "type": "rich_text"
+      },
+      {
+        "data": {
+          "spans": [
+            {
+              "kind": "formula",
+              "text": "F(n) = F(n // 2) + n^3 - 5n"
+            },
+            {
+              "kind": "text",
+              "text": " при чётных "
+            },
+            {
+              "kind": "formula",
+              "text": "n > 15"
+            }
+          ]
+        },
+        "type": "rich_text"
+      },
+      {
+        "data": {
+          "spans": [
+            {
+              "kind": "formula",
+              "text": "F(n) = F(n-1) + 2n + 3"
+            },
+            {
+              "kind": "text",
+              "text": " при нечётных "
+            },
+            {
+              "kind": "formula",
+              "text": "n > 15"
+            }
+          ]
+        },
+        "type": "rich_text"
+      },
+      {
+        "data": {
+          "markdown": "Здесь «//» обозначает деление нацело."
+        },
+        "type": "text"
+      },
+      {
+        "data": {
+          "spans": [
+            {
+              "kind": "text",
+              "text": "Определите количество натуральных значений n из отрезка "
+            },
+            {
+              "kind": "formula",
+              "text": "[1; 1 000]"
+            },
+            {
+              "kind": "text",
+              "text": " для которых значения "
+            },
+            {
+              "kind": "formula",
+              "text": "F(n)"
+            },
+            {
+              "kind": "text",
+              "text": " содержит не менее трёх цифр 6."
+            }
+          ]
+        },
+        "type": "rich_text"
+      }
+    ],
+    "theory_links": [
+      {
+        "label": "Рекурсия",
+        "material_id": "rekursiya",
+        "section": null
+      }
+    ],
+    "title": "Вычисление рекурсивной функции"
+  }
+}
