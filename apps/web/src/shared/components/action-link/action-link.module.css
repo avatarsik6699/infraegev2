@@ -1,26 +1,15 @@
 .root {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-1);
-  color: var(--color-text);
-  text-decoration: underline;
-  text-decoration-color: var(--color-rule-strong);
-  text-underline-offset: 0.2em;
-  overflow-wrap: anywhere;
+  composes: root from "../../styles/link.module.css";
 }
-.root[data-presentation="action"] {
-  min-height: var(--control-height);
-}
-.root:hover {
-  color: var(--color-accent-dark);
-  text-decoration-color: currentColor;
-}
-.root:focus-visible {
-  outline: 2px solid var(--color-focus);
-  outline-offset: 4px;
+.button {
+  composes: root from "../button/button.module.css";
 }
 .icon {
-  flex: none;
-  width: 1em;
-  height: 1em;
+  composes: icon from "../../styles/link.module.css";
+}
+.root[data-icon="back"] .icon {
+  margin-inline: 0 0.25em;
+}
+.visuallyHidden {
+  composes: visuallyHidden from "../../styles/patterns.module.css";
 }

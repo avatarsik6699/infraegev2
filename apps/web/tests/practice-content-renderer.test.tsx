@@ -11,6 +11,7 @@ import { render } from "./render";
 
 const task: PracticeTaskTypes.LocalTask = {
   id: "rich-task",
+  solutionRevision: 1,
   difficultyLabel: "Средняя",
   title: "Разберите данные",
   statement: [
@@ -26,6 +27,7 @@ const task: PracticeTaskTypes.LocalTask = {
       type: "code-variants",
       variants: [
         { label: "Pascal", language: "text", code: "writeln(2);" },
+        { label: "C++", language: "text", code: "cout << 2;" },
         { label: "Python", language: "python", code: "print(2)" },
       ],
     },
@@ -141,10 +143,9 @@ describe("rich practice content", () => {
       onTaskSolved: () => 0,
     };
     const first = render(<StandalonePractice {...props} />);
-    fireEvent.change(
-      screen.getByRole("textbox", { name: "Ответ", exact: true }),
-      { target: { value: "123" } },
-    );
+    fireEvent.change(screen.getByRole("textbox", { name: "Ответ" }), {
+      target: { value: "123" },
+    });
     first.unmount();
     const second = render(<StandalonePractice {...props} />);
     await waitFor(() =>
@@ -152,7 +153,6 @@ describe("rich practice content", () => {
         (
           screen.getByRole("textbox", {
             name: "Ответ",
-            exact: true,
           }) as HTMLInputElement
         ).value,
       ).toBe(""),
@@ -168,13 +168,12 @@ describe("rich practice content", () => {
       (
         screen.getByRole("textbox", {
           name: "Ответ",
-          exact: true,
         }) as HTMLInputElement
       ).value,
     ).toBe("");
   });
 
-  it("keeps every authored block in server-rendered HTML", () => {
+  it("renders authored content with Python-only variants in server-rendered HTML", () => {
     const html = renderToStaticMarkup(
       <LessonPractice
         tasks={[task]}
@@ -187,7 +186,10 @@ describe("rich practice content", () => {
 
     expect(html).toContain("countdown(2)");
     expect(html).toContain("F(n) = 2 × n");
-    expect(html).toContain("writeln(2);");
+    expect(html).not.toContain("writeln(2);");
+    expect(html).not.toContain("Pascal");
+    expect(html).not.toContain("C++");
+    expect(html).not.toContain('aria-label="Язык алгоритма"');
     expect(html).toContain("Python");
     expect(html).toContain("<ul");
     expect(html).toContain("<table");
@@ -217,16 +219,11 @@ describe("rich practice content", () => {
     );
 
     expect(
-      screen
-        .getByRole("tab", { name: "Python", exact: true })
-        .getAttribute("aria-selected"),
-    ).toBe("true");
-    fireEvent.click(screen.getByRole("tab", { name: "Pascal", exact: true }));
-    expect(
-      screen
-        .getByRole("tab", { name: "Pascal", exact: true })
-        .getAttribute("aria-selected"),
-    ).toBe("true");
+      screen.queryByRole("tablist", { name: "Язык алгоритма" }),
+    ).toBeNull();
+    expect(screen.getByRole("group", { name: "Python" })).toBeTruthy();
+    expect(screen.queryByText("Pascal")).toBeNull();
+    expect(screen.queryByText("writeln(2);")).toBeNull();
     expect(screen.getByRole("table", { name: "Данные" })).toBeTruthy();
     expect(screen.getByRole("img", { name: "Числовая схема" })).toBeTruthy();
     const download = screen.getByRole("link", { name: /data\.txt/ });

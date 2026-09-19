@@ -1,37 +1,6 @@
 .root {
-  color: inherit;
-  /* The link reads as interactive without hover through a persistent
-     underline; color is not required for the affordance. */
-  text-decoration-color: var(--color-link-decoration);
-  transition:
-    color 140ms ease-out,
-    text-decoration-color 140ms ease-out;
+  composes: root from "../../styles/link.module.css";
 }
-
-.root:hover {
-  color: var(--color-accent-dark);
-  text-decoration-color: currentColor;
-}
-
 .icon {
-  display: inline-block;
-  width: 0.85em;
-  height: 0.85em;
-  margin-right: 0.2em;
-  vertical-align: -0.1em;
-}
-
-.root[data-presentation="action"] {
-  display: inline-flex;
-  align-items: center;
-  min-height: var(--control-height);
-}
-.root:focus-visible {
-  outline: 2px solid var(--color-focus);
-  outline-offset: 0.2rem;
-}
-@media (prefers-reduced-motion: reduce) {
-  .root {
-    transition: none;
-  }
+  composes: icon from "../../styles/link.module.css";
 }

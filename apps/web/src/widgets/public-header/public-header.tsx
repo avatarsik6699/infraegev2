@@ -16,6 +16,7 @@ const PublicNavigation: React.FC<{
   <div className={compact ? styles.mobileNavigation : styles.desktopNavigation}>
     <nav className={styles.sections} aria-label="Разделы сайта">
       <ActionLink
+        presentation="navigation"
         className={styles.sectionLink}
         data-current={activeSection === "topics" || undefined}
         hierarchy="text"
@@ -24,6 +25,7 @@ const PublicNavigation: React.FC<{
         Темы
       </ActionLink>
       <ActionLink
+        presentation="navigation"
         className={styles.sectionLink}
         data-current={activeSection === "courses" || undefined}
         hierarchy="text"
@@ -32,6 +34,7 @@ const PublicNavigation: React.FC<{
         Мини-курсы
       </ActionLink>
       <ActionLink
+        presentation="navigation"
         className={styles.sectionLink}
         data-current={activeSection === "practice" || undefined}
         hierarchy="text"

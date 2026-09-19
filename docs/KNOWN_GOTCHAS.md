@@ -29,6 +29,18 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
 
 ## Gotcha Log
 
+### Hydration-only control swaps cause catalog layout shifts
+
+- **Symptoms:** a tall native select flashes before the compact combobox, rows move and controls
+  repaint on every filter submission. Settled screenshots and unit tests can still look correct.
+- **Cause:** useIsEnhanced chooses different SSR/client geometry; plain GET submissions reload the
+  document. Base UI Combobox.Label also links its trigger after hydration unless explicitly named.
+- **Fix:** server-render the final geometry; put native fallbacks in noscript and hide scripted
+  controls with CSS scripting:none. Avoid duplicate successful form fields. Use router navigation
+  for hydrated GET forms. Match fallback title-link/button geometry and name triggers in SSR.
+  Validate blocked-script production first paint, hydration geometry, no-JS and same-document updates.
+
+
 ### TypeScript MCP without realpath misresolves pnpm server exports
 
 - **Symptoms:** production TanStack server functions report missing `setResponseHeader` /
@@ -442,3 +454,20 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
 - **Resolution (architect authorized 2026-09-17):** omit the screenshot filename to use the MCP
   default output directory. The resumed screenshot succeeded. Do not change filesystem permissions
   or substitute a WSL absolute path. Any new permission failure still requires the normal handoff.
+
+### Playwriter extension not connected when only Playwright Chrome is running
+
+- **Symptom:** `playwriter browser list` reports no browsers and session creation
+  reports `extension_not_connected`, although Chrome windows are visible.
+- **Verified cause (2026-09-19):** only three Playwright/MCP Chrome instances were
+  running, all with temporary profiles and `--disable-extensions`. Playwriter was
+  installed in ordinary Chrome's `Default` profile, which was not running.
+  The WSL relay listened on `127.0.0.1:19988`; Windows HTTP access returned 200.
+- **Fix:** inspect Chrome parent-process command lines, start ordinary Windows
+  Chrome with `--profile-directory=Default`, then retry session creation. This
+  connected the extension and allowed navigation/snapshot/interaction on `/practice`
+  without reinstalling anything or manually enabling the extension.
+- **Prevention:** never infer the extension profile is running merely from visible
+  Chrome windows. Follow [STACK's procedure](STACK.md#interactive-browser-connection-wsl)
+  before falling back. If the normal profile does not connect, check relay/network
+  and ask for an extension-icon click; do not assume every disconnect has this cause.

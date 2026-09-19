@@ -64,3 +64,8 @@
   background: var(--color-brand-canvas);
   color: var(--color-brand-muted);
 }
+
+.root[data-surface="quiet"][data-tone="neutral"] {
+  background: var(--color-surface-quiet);
+  box-shadow: none;
+}

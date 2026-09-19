@@ -1,9 +1,62 @@
+import { routerSearch } from "~/app/lib/router-search";
 import { beforeEach, describe, expect, it } from "vitest";
 import { practiceCatalog } from "~/entities/practice-task/practice-catalog";
 import { practiceProgress } from "~/features/practice-progress/model/practice-progress";
 import { safeLs } from "~/shared/lib/safe-ls";
 
 describe("practice catalog URL state", () => {
+  it("keeps repeated topic parameters across router serialization and hydration", () => {
+    const state = { topics: ["ege-16", "ege-5"], q: "рекурс", page: 2 };
+    const url = routerSearch.stringify(state);
+    expect(new URLSearchParams(url).getAll("topics")).toEqual(state.topics);
+    expect(routerSearch.parse(url)).toEqual(state);
+    expect(routerSearch.parse("?q=0016").q).toBe("0016");
+    expect(routerSearch.parse(routerSearch.stringify({ q: "16" })).q).toBe(
+      "16",
+    );
+    expect(routerSearch.stringify({ q: "test", page: 2 })).toBe(
+      "?page=2&q=test",
+    );
+  });
+  it("normalizes multi-topic search and preserves the complete detail context", () => {
+    const state = practiceCatalog.search({
+      q: " рекурс ",
+      topics: ["ege-16", "ege-5", "ege-16"],
+      sort: "difficulty_desc",
+      limit: "10",
+      page: "2",
+    });
+    expect(state).toEqual({
+      q: "рекурс",
+      topics: ["ege-16", "ege-5"],
+      sort: "difficulty_desc",
+      limit: 10,
+      page: 2,
+    });
+    const href = practiceCatalog.taskHref("task", state);
+    expect(
+      new URL(href, "https://example.test").searchParams.getAll("topics"),
+    ).toEqual(["ege-16", "ege-5"]);
+    expect(practiceCatalog.taskSearch(state)).toEqual(state);
+    expect(practiceCatalog.search({ sort: "default" })).toEqual({});
+  });
+  it.each([
+    { topics: ["../"] },
+    { q: "a".repeat(201) },
+    { limit: 11 },
+    { sort: "random" },
+  ])("rejects invalid catalog controls %j", (input) => {
+    expect(practiceCatalog.search(input).invalid).toBe(true);
+  });
+  it.each([
+    [1, "1 задание"],
+    [2, "2 задания"],
+    [11, "11 заданий"],
+    [21, "21 задание"],
+    [255, "255 заданий"],
+  ])("declines counts %s", (count, label) => {
+    expect(practiceCatalog.countLabel(count as number)).toBe(label);
+  });
   it("round-trips the filters and page without retaining a page after filter reset", () => {
     const search = practiceCatalog.search({
       skill: "python",

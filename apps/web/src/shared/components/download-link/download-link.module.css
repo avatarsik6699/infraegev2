@@ -1,19 +1,6 @@
 .root {
-  color: inherit;
-  text-decoration: underline;
-  text-decoration-color: var(--color-link-decoration);
-  text-underline-offset: 0.22em;
-  overflow-wrap: anywhere;
+  composes: root from "../../styles/link.module.css";
 }
-.root[data-presentation="action"] {
-  display: inline-flex;
-  align-items: center;
-  min-height: var(--control-height);
-}
-.root:hover {
-  text-decoration-color: currentColor;
-}
-.root:focus-visible {
-  outline: 2px solid var(--color-focus);
-  outline-offset: 0.2rem;
+.icon {
+  composes: icon from "../../styles/link.module.css";
 }

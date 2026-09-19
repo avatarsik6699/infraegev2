@@ -263,8 +263,13 @@ Old database volumes and source snapshots are retained; no destructive in-place 
 ## 4. API / Backend Contract
 
 Existing `/api/tasks` detail/check/file and lesson-practice/course-summary capabilities remain.
-Catalog uses numbered pages of 30 with deterministic ordering, existing exam/skill/difficulty
-filters and server-selected next task in that same filter context. Public projections exclude
+Catalog supports server search in title, summary, visible statement and ID (numeric queries also
+match exam numbers), grouped multi-topic OR selection, default stable ID order or difficulty
+ascending/descending with ID tie-break, and numbered pages of 10/30/50/100 (default 30).
+Topic counts include only catalog-visible nonarchived tasks, independent of search; zero topics
+remain selectable. Course sections derive from publication metadata without publishing lesson-only
+tasks. Legacy exam/skill/difficulty links remain supported. Next task uses the same selection/order.
+Public projections exclude
 checker answers and private sources. Wrong answers, missing tasks, stale solution counters and
 unavailable services remain distinct. Regenerate OpenAPI/client types with implementation.
 Runtime reads PostgreSQL, never silently falls back to historical JSON. API owns comparison and
@@ -278,13 +283,28 @@ Internal `/lab/design-system` and `/lab/lesson` and their demos are retired.
 
 The reference is production commit `a5b0bf5`: white canvas, ink, compact text lists and quiet
 reading. Keep infraege stone identity, current self-hosted Alegreya/Golos Text/JetBrains Mono,
-and small orange accents for brand/focus/navigation. Remove decorative imagery, grids,
+and small orange accents for brand identity. Controls and navigation remain monochrome. Remove decorative imagery, grids,
 textures, light effects and animation infrastructure. Keep educational figures and attachments.
 Shared semantic controls, accessible focus/errors/loading, stable fonts and retained-page
 navigation stay. FRONTEND is the binding implementation contract.
 
-Practice retains filters, answer checking, explanations, files, next-task navigation and local
-progress. Remove persisted answer drafts and special row/scroll restoration; return links
+Practice uses the catalog as its primary solving surface: multiple independently expandable
+rows expose statements, checking, help, files, published theory links and public sources.
+“Раскрыть все” and “Свернуть все” affect only the current page; bulk expansion loads full
+statements into visible document content for browser find. Individual disclosure remains available.
+Details load only on first expansion and remain mounted while collapsed. Transient input
+and help state survive collapse, but reset on selection/page changes, leaving or reloading.
+The detail route remains for direct links and no-JS reading; catalog IDs link there with the
+filter/page context. Real task IDs remain canonical; rows show eight-character UUID prefixes with accessible full IDs.
+The catalog heading says “Решай задачи и закрепляй теорию”; a question icon opens draft/progress
+information. Search applies explicitly. Topic selection uses a grouped searchable multiple combobox,
+counts below labels, and Apply/cancel; selected topics appear as removable chips. Default sorting is
+stable UUID order; optional difficulty directions and compact numbered pagination retain URL context.
+No-JS retains GET controls, native multiple selection and detail reading. Empty topics show ordinary
+no-results feedback. Compact rows show difficulty, actual answer format, public sources and a disabled
+favorite affordance. Expanded statements precede answer/check/help actions; theory sits beside the topic heading above the statement. Catalog and detail share compact solving controls; lessons keep their presentation. Base UI owns controls,
+Lucide owns icons, and shadcn/HeroUI are visual references only, without added dependencies.
+Existing filters, numbered pagination, local progress remain. Detail pages have one context-preserving return link and no next-task navigation. Remove persisted answer drafts and special row/scroll restoration; return links
 carry filters and page. No telemetry consent, analytics or client-error collector. No new
 accounts, editing UI, global stores, dependencies or speculative abstractions.
 

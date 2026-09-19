@@ -8,7 +8,7 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogTypes.Props> = (
 ) => (
   <AlertDialog.Root>
     <AlertDialog.Trigger
-      className={styles.trigger}
+      render={<Button hierarchy="quiet" />}
       aria-label={props.triggerAriaLabel}
     >
       {props.triggerLabel}
@@ -32,7 +32,7 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogTypes.Props> = (
               Отмена
             </AlertDialog.Close>
             <AlertDialog.Close
-              render={<Button hierarchy="primary" type="button" />}
+              render={<Button hierarchy="destructive" type="button" />}
               onClick={props.onConfirm}
             >
               {props.confirmLabel}

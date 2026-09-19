@@ -11,3 +11,21 @@ test("mobile lesson outline keeps its first-paint height through hydration", asy
 }) => {
   await minimalPage.expectStableLessonOutline();
 });
+
+test("practice controls retain SSR geometry through hydration and filtering", async ({
+  minimalPage,
+}) => {
+  await minimalPage.expectStablePracticeControls();
+});
+
+test("practice toolbar stays fixed through answer feedback", async ({
+  minimalPage,
+}) => {
+  await minimalPage.expectPracticeToolbarStability();
+});
+
+test("practice navigation remains usable without JavaScript", async ({
+  noJavaScriptMinimalPage,
+}) => {
+  await noJavaScriptMinimalPage.expectCatalogWithoutJavaScript();
+});

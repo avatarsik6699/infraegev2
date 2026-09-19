@@ -1,78 +1,13 @@
 .root {
-  color: inherit;
-  /* Neutral link text with a persistent affordance in the underline. */
-  text-decoration-line: underline;
-  text-decoration-color: var(--color-link-decoration);
-  transition:
-    color var(--motion-duration) var(--motion-easing),
-    text-decoration-color var(--motion-duration) var(--motion-easing);
+  composes: root from "../../styles/link.module.css";
 }
-
 .label {
   min-width: 0;
   overflow-wrap: anywhere;
-  position: relative;
 }
-
-.action {
-  min-height: var(--control-height);
-  max-width: 100%;
-  vertical-align: baseline;
-  display: inline-flex;
-  gap: 0.38em;
-  align-items: center;
-  color: var(--color-brand-ink, var(--color-text));
-  font-weight: 400;
-  text-decoration: underline;
-}
-
-.root:hover {
-  color: var(--color-accent-dark);
-  text-decoration-color: currentColor;
-}
-
-.action:hover {
-  color: var(--color-brand-ink, var(--color-text));
-}
-
-/* Uses currentColor — rides the anchor's own `color` transition
-   above instead of animating on its own (one authored motion, not two). */
 .icon {
-  flex: none;
-  display: inline-block;
-  width: 0.85em;
-  height: 0.85em;
-  margin-left: 0.2em;
-  vertical-align: -0.1em;
+  composes: icon from "../../styles/link.module.css";
 }
-
-.action .icon {
-  flex: none;
-  color: var(--color-brand-orange);
-  transition: transform var(--motion-duration) var(--motion-easing);
-}
-
-.root:focus-visible {
-  outline: 2px solid var(--color-focus);
-  outline-offset: 0.2rem;
-}
-
 .visuallyHidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .root,
-  .action .icon {
-    flex: none;
-    transition: none;
-  }
+  composes: visuallyHidden from "../../styles/patterns.module.css";
 }

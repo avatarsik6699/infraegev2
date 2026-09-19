@@ -1,0 +1,56 @@
+.solving {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.catalogTheory {
+  font-size: var(--text-sm);
+}
+.catalogTheory summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-height: var(--control-height);
+  padding-inline: var(--space-1);
+  border-radius: var(--radius-control);
+  cursor: pointer;
+  list-style: none;
+}
+.catalogTheory summary::-webkit-details-marker {
+  display: none;
+}
+.catalogTheory summary:hover {
+  background: var(--control-quiet-bg-hover);
+}
+.catalogTheory details[open] summary svg {
+  transform: rotate(180deg);
+}
+.theoryOptions {
+  display: grid;
+  gap: var(--space-1);
+  max-width: 20rem;
+}
+
+.catalogHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-1) var(--space-2);
+}
+.catalogTitle[data-order] {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  line-height: 1.4;
+}
+.catalogHeader > nav {
+  flex: none;
+}
+@media (max-width: 30rem) {
+  .catalogHeader > nav {
+    max-width: 45%;
+  }
+}

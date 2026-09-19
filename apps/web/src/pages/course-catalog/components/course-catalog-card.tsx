@@ -20,7 +20,7 @@ export const CourseCatalogCard: React.FC<Props> = (props) => (
     <Typography.Title order={2}>
       {props.entry.status === "published" ? (
         <ActionLink
-          presentation="inline"
+          presentation="navigation"
           to="/courses/$courseSlug"
           params={{ courseSlug: props.entry.routeSlug }}
         >

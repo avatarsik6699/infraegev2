@@ -162,6 +162,7 @@ function renderContentBlock(
     case "attachment":
       return (
         <DownloadLink
+          presentation="navigation"
           key={key}
           className={styles.contentAttachment}
           href={block.src}

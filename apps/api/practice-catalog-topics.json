@@ -1,0 +1,100 @@
+[
+  {
+    "id": "ege-5",
+    "label": "5 номер. Преобразование записей чисел",
+    "group": "ЕГЭ",
+    "exam_number": 5,
+    "material_ids": []
+  },
+  {
+    "id": "ege-16",
+    "label": "16 номер. Рекурсия",
+    "group": "ЕГЭ",
+    "exam_number": 16,
+    "material_ids": []
+  },
+  {
+    "id": "python-start",
+    "label": "Python · Старт и отладка",
+    "group": "Мини-курсы",
+    "exam_number": null,
+    "material_ids": ["python-first-program", "python-numbers", "python-errors"]
+  },
+  {
+    "id": "python-conditions",
+    "label": "Python · Условия",
+    "group": "Мини-курсы",
+    "exam_number": null,
+    "material_ids": ["python-conditions", "python-compound-conditions"]
+  },
+  {
+    "id": "python-loops",
+    "label": "Python · Циклы",
+    "group": "Мини-курсы",
+    "exam_number": null,
+    "material_ids": [
+      "python-for-range",
+      "python-while",
+      "python-loop-state",
+      "python-number-digits"
+    ]
+  },
+  {
+    "id": "python-data",
+    "label": "Python · Строки и коллекции",
+    "group": "Мини-курсы",
+    "exam_number": null,
+    "material_ids": [
+      "python-strings",
+      "python-lists",
+      "python-sets",
+      "python-dictionaries",
+      "python-sorting-search",
+      "python-comprehensions"
+    ]
+  },
+  {
+    "id": "python-functions",
+    "label": "Python · Функции",
+    "group": "Мини-курсы",
+    "exam_number": null,
+    "material_ids": [
+      "python-functions",
+      "python-program-parts",
+      "python-iterators-generators"
+    ]
+  },
+  {
+    "id": "python-recursion",
+    "label": "Python · Рекурсия",
+    "group": "Мини-курсы",
+    "exam_number": null,
+    "material_ids": ["python-recursion", "python-exceptions"]
+  },
+  {
+    "id": "python-files",
+    "label": "Python · Файлы и таблицы",
+    "group": "Мини-курсы",
+    "exam_number": null,
+    "material_ids": ["python-files", "python-tables"]
+  },
+  {
+    "id": "python-algorithms",
+    "label": "Python · Перебор и алгоритмические приёмы",
+    "group": "Мини-курсы",
+    "exam_number": null,
+    "material_ids": ["python-bruteforce", "python-select-result"]
+  },
+  {
+    "id": "python-final-program",
+    "label": "Python · Финальный проект: список дел",
+    "group": "Мини-курсы",
+    "exam_number": null,
+    "material_ids": [
+      "python-todo-start",
+      "python-todo-actions",
+      "python-todo-storage",
+      "python-independent-program"
+    ]
+  }
+]

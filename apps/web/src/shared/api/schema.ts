@@ -270,11 +270,18 @@ export interface components {
             exam_numbers: number[];
             /** Skills */
             skills: components["schemas"]["SkillOption"][];
+            /** Topics */
+            topics?: components["schemas"]["TopicOption"][];
             /** Total */
             total: number;
         };
         /** CatalogPage */
         CatalogPage: {
+            /**
+             * Limit
+             * @default 30
+             */
+            limit: number;
             /** Next Page */
             next_page: number | null;
             /** Page */
@@ -300,8 +307,14 @@ export interface components {
             skills: string[];
             /** Solution Revision */
             solution_revision: number;
+            /** Sources */
+            sources?: components["schemas"]["Source"][];
+            /** Theory Links */
+            theory_links?: components["schemas"]["TheoryLink"][];
             /** Title */
             title: string;
+            /** Topics */
+            topics?: string[];
         };
         /** CheckRequest */
         CheckRequest: {
@@ -713,6 +726,21 @@ export interface components {
             /** Section */
             section?: string | null;
         };
+        /** TopicOption */
+        TopicOption: {
+            /** Count */
+            count: number;
+            /** Exam Number */
+            exam_number: number | null;
+            /** Group */
+            group: string;
+            /** Id */
+            id: string;
+            /** Label */
+            label: string;
+            /** Material Ids */
+            material_ids: string[];
+        };
         /** ValidationError */
         ValidationError: {
             /** Context */
@@ -868,9 +896,13 @@ export interface operations {
     get_catalog_api_tasks_get: {
         parameters: {
             query?: {
+                q?: string | null;
+                topics?: string[];
+                sort?: "default" | "difficulty_asc" | "difficulty_desc";
                 skill?: string | null;
                 exam_number?: number | null;
                 difficulty?: number | null;
+                limit?: 10 | 30 | 50 | 100;
                 page?: number;
             };
             header?: never;
@@ -1018,6 +1050,9 @@ export interface operations {
     get_next_task_api_tasks__task_id__next_get: {
         parameters: {
             query?: {
+                q?: string | null;
+                topics?: string[];
+                sort?: "default" | "difficulty_asc" | "difficulty_desc";
                 skill?: string | null;
                 exam_number?: number | null;
                 difficulty?: number | null;

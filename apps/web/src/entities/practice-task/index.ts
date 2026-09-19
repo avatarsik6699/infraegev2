@@ -2,7 +2,6 @@ export {
   loadLessonPractice,
   loadCoursePracticeSummary,
   loadPracticeCatalog,
-  loadNextPracticeTask,
   loadStandaloneTask,
   loadTaskSitemapIndex,
   loadTaskSitemapPage,
@@ -10,3 +9,4 @@ export {
 export type { PracticeTaskTypes } from "./practice-task.types";
 export { practiceCatalog } from "./practice-catalog";
 export type { PracticeCatalogTypes } from "./practice-catalog.types";
+export { PracticeDifficulty } from "./practice-difficulty";

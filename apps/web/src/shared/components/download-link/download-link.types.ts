@@ -5,6 +5,6 @@ export namespace DownloadLinkTypes {
     className?: string;
     ariaLabel?: string;
     downloadName?: string;
-    presentation?: "inline" | "action";
+    presentation?: "inline" | "action" | "navigation";
   };
 }

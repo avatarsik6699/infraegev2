@@ -1,3 +1,5 @@
+import "./practice-catalog-topics.mjs";
+
 // Release-owned material IDs and section anchors. Generated output is never authored separately.
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";

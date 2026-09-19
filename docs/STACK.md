@@ -268,6 +268,43 @@ ambiguous between "not asked" and "not needed."
 
 ---
 
+## Interactive browser connection (WSL)
+
+Playwriter CLI `~/.local/bin/playwriter` connects through the extension in ordinary
+Windows Chrome, via the WSL relay on `localhost:19988`. Read the Playwriter skill
+before running browser commands. The verified extension profile is `Default`;
+this is local environment configuration, not a requirement for other machines.
+
+On `extension_not_connected`, inspect Chrome processes first. Temporary
+`playwright_chromiumdev_profile-*` profiles with `--disable-extensions` belong to
+Playwright/MCP and cannot host this extension connection. Start the ordinary
+profile if absent, then retry before choosing a fallback driver.
+
+```bash
+# Inspect browser parent processes and their profile/extension flags.
+powershell.exe -NoProfile -Command 'Get-CimInstance Win32_Process | Where-Object Name -eq "chrome.exe" | Where-Object { $_.CommandLine -notmatch "--type=" } | Select-Object ProcessId,ExecutablePath,CommandLine | ConvertTo-Json -Depth 2'
+
+# Start the normal profile if absent; do not close any existing browsers.
+powershell.exe -NoProfile -Command 'Start-Process "C:\Program Files\Google\Chrome\Application\chrome.exe" -ArgumentList "--profile-directory=Default", "http://localhost:8080/practice"'
+
+~/.local/bin/playwriter session new --tab-group test
+# Use the returned ID, not a remembered session number.
+~/.local/bin/playwriter -s ID -e 'await page.goto("http://localhost:8080/practice"); console.log(await page.title())'
+
+# If still disconnected, check the WSL listener and Windows-to-WSL connectivity.
+ss -ltnp 'sport = :19988'
+powershell.exe -NoProfile -Command '(Invoke-WebRequest -UseBasicParsing -TimeoutSec 5 http://127.0.0.1:19988).StatusCode'
+~/.local/bin/playwriter logfile
+```
+
+If the relay is reachable but the extension remains disconnected, ask the user
+to enable/click Playwriter on the target tab in that profile. Do not start a second
+relay on Windows, reinstall tools, clear profiles, or terminate the user's Chrome.
+A successful session plus a page-title/snapshot read proves the full connection;
+a listening port alone does not. Explain any remaining failure before falling back.
+The runtime guide is `~/.local/share/playwriter-runtime/README.md`.
+Repository-prescribed automated Playwright tests keep their existing runner.
+
 ## Testing Policy
 
 Unit tests (Vitest and pytest) and browser e2e tests (Playwright) run **only locally in the

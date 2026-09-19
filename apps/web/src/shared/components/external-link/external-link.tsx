@@ -1,4 +1,4 @@
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Mail } from "lucide-react";
 import { cssUtils } from "~/shared/lib/css-utils";
 import type { ExternalLinkTypes } from "./external-link.types";
 import styles from "./external-link.module.css";
@@ -11,11 +11,7 @@ export const ExternalLink: React.FC<ExternalLinkTypes.Props> = (props) => {
       href={props.href}
       target={props.newTab ? "_blank" : undefined}
       rel={props.newTab ? "noopener noreferrer" : undefined}
-      className={cssUtils.cx(
-        styles.root,
-        hierarchy === "text" ? styles.action : undefined,
-        props.className,
-      )}
+      className={cssUtils.cx(styles.root, props.className)}
       aria-label={props.ariaLabel}
       data-hierarchy={hierarchy}
       data-presentation={props.presentation ?? "inline"}
@@ -23,12 +19,16 @@ export const ExternalLink: React.FC<ExternalLinkTypes.Props> = (props) => {
       <span className={styles.label} data-external-link-label>
         {props.children}
       </span>
-      <ArrowUpRight
-        className={styles.icon}
-        aria-hidden="true"
-        strokeWidth={2}
-        data-external-link-icon
-      />
+      {props.href.startsWith("mailto:") ? (
+        <Mail className={styles.icon} aria-hidden="true" />
+      ) : (
+        <ArrowUpRight
+          className={styles.icon}
+          aria-hidden="true"
+          strokeWidth={2}
+          data-external-link-icon
+        />
+      )}
       {props.newTab && (
         <span className={styles.visuallyHidden}>
           {" "}

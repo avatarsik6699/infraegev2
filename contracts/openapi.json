@@ -102,6 +102,13 @@
             "title": "Skills",
             "type": "array"
           },
+          "topics": {
+            "items": {
+              "$ref": "#/components/schemas/TopicOption"
+            },
+            "title": "Topics",
+            "type": "array"
+          },
           "total": {
             "title": "Total",
             "type": "integer"
@@ -119,6 +126,11 @@
       "CatalogPage": {
         "additionalProperties": false,
         "properties": {
+          "limit": {
+            "default": 30,
+            "title": "Limit",
+            "type": "integer"
+          },
           "next_page": {
             "anyOf": [
               {
@@ -206,9 +218,30 @@
             "title": "Solution Revision",
             "type": "integer"
           },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/Source"
+            },
+            "title": "Sources",
+            "type": "array"
+          },
+          "theory_links": {
+            "items": {
+              "$ref": "#/components/schemas/TheoryLink"
+            },
+            "title": "Theory Links",
+            "type": "array"
+          },
           "title": {
             "title": "Title",
             "type": "string"
+          },
+          "topics": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Topics",
+            "type": "array"
           }
         },
         "required": [
@@ -1654,6 +1687,55 @@
         "title": "TheoryLink",
         "type": "object"
       },
+      "TopicOption": {
+        "additionalProperties": false,
+        "properties": {
+          "count": {
+            "title": "Count",
+            "type": "integer"
+          },
+          "exam_number": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Exam Number"
+          },
+          "group": {
+            "title": "Group",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "material_ids": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Material Ids",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "label",
+          "group",
+          "exam_number",
+          "material_ids",
+          "count"
+        ],
+        "title": "TopicOption",
+        "type": "object"
+      },
       "ValidationError": {
         "properties": {
           "ctx": {
@@ -1902,6 +1984,51 @@
         "parameters": [
           {
             "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 200,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Q"
+            }
+          },
+          {
+            "in": "query",
+            "name": "topics",
+            "required": false,
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 100,
+              "title": "Topics",
+              "type": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "required": false,
+            "schema": {
+              "default": "default",
+              "enum": [
+                "default",
+                "difficulty_asc",
+                "difficulty_desc"
+              ],
+              "title": "Sort",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
             "name": "skill",
             "required": false,
             "schema": {
@@ -1951,6 +2078,22 @@
                 }
               ],
               "title": "Difficulty"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 30,
+              "enum": [
+                10,
+                30,
+                50,
+                100
+              ],
+              "title": "Limit",
+              "type": "integer"
             }
           },
           {
@@ -2148,6 +2291,51 @@
             "required": true,
             "schema": {
               "title": "Task Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 200,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Q"
+            }
+          },
+          {
+            "in": "query",
+            "name": "topics",
+            "required": false,
+            "schema": {
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 100,
+              "title": "Topics",
+              "type": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "required": false,
+            "schema": {
+              "default": "default",
+              "enum": [
+                "default",
+                "difficulty_asc",
+                "difficulty_desc"
+              ],
+              "title": "Sort",
               "type": "string"
             }
           },

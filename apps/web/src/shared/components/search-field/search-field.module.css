@@ -1,0 +1,21 @@
+.action[data-hierarchy="quiet"],
+.action[data-hierarchy="quiet"]:hover:enabled,
+.action[data-hierarchy="quiet"]:active:enabled {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  color: var(--color-muted);
+}
+.action[data-hierarchy="quiet"]:hover:enabled {
+  color: var(--color-text);
+}
+.action[data-hierarchy="quiet"]:focus-visible {
+  outline: 1px solid var(--color-focus);
+  outline-offset: -6px;
+  box-shadow: none;
+}
+@media (scripting: none) {
+  .action[type="button"] {
+    display: none;
+  }
+}

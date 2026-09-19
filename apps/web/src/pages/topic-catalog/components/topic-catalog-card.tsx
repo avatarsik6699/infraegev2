@@ -17,7 +17,7 @@ export const TopicCatalogCard: React.FC<Props> = (props) => (
       <Typography.Title order={2} className={styles.cardTitle}>
         {props.entry.status === "published" ? (
           <ActionLink
-            presentation="inline"
+            presentation="navigation"
             to="/ege/$slug"
             params={{ slug: props.entry.routeSlug }}
           >

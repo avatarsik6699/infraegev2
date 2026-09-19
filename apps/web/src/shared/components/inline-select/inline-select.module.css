@@ -1,0 +1,57 @@
+.root {
+  display: flex;
+  align-items: center;
+  gap: var(--space-0-5);
+  font-size: var(--text-xs);
+}
+.label {
+  color: var(--color-muted);
+}
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-1);
+  min-height: var(--control-height);
+  padding: 0 var(--space-1);
+  border: 0;
+  border-radius: var(--radius-control);
+  background: transparent;
+  color: var(--color-text);
+  font: inherit;
+  cursor: pointer;
+}
+.trigger:hover {
+  background: var(--color-surface-quiet);
+}
+.trigger:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+.positioner {
+  z-index: 50;
+}
+.popup {
+  min-width: 12rem;
+  max-height: var(--available-height);
+  overflow-y: auto;
+  padding: var(--space-0-5);
+  background: var(--color-surface);
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-control);
+}
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  min-height: var(--control-height);
+  padding-inline: var(--space-1);
+  font-size: var(--text-sm);
+  border-radius: var(--radius-control);
+  cursor: pointer;
+}
+.item[data-highlighted] {
+  background: var(--color-surface-quiet);
+  outline: none;
+}

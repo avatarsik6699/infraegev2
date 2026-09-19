@@ -264,7 +264,7 @@
   font-weight: 600;
 }
 
-.contentAttachment {
+.contentAttachment[data-presentation] {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   gap: var(--space-1);
@@ -441,5 +441,139 @@
 @media (max-width: 40rem) {
   [data-standalone] .answerRow {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.answerPanel {
+  min-width: 0;
+}
+.practiceForm[data-layout="compact"] {
+  display: grid;
+  gap: var(--space-2);
+}
+.practiceForm[data-layout="compact"] > .taskContent {
+  max-width: 75ch;
+}
+.practiceForm[data-layout="compact"] .answerPanel {
+  min-width: 0;
+}
+.practiceForm[data-layout="compact"] .answerRow {
+  max-width: 34rem;
+  align-items: end;
+}
+.practiceForm[data-layout="compact"] .feedback {
+  margin-block-start: var(--space-1);
+}
+.answerError {
+  color: var(--color-danger);
+  font-size: var(--text-sm);
+  margin-top: var(--space-1);
+}
+.practiceSet[data-layout="compact"] {
+  gap: var(--space-1-5);
+}
+.practiceSet[data-layout="compact"] .taskContent {
+  gap: var(--space-1-5);
+}
+
+.catalogHelpPanel:not([hidden]) {
+  padding-block: var(--space-1);
+}
+.practiceSet[data-layout="compact"] .taskContent {
+  gap: var(--space-1);
+  margin-top: 0;
+}
+.practiceSet[data-layout="compact"] .contentText,
+.practiceSet[data-layout="compact"] .contentSteps p,
+.practiceSet[data-layout="compact"] .contentList {
+  font-size: var(--text-sm);
+  line-height: 1.5;
+}
+.catalogInstruction {
+  margin-top: var(--space-1);
+  font-size: var(--text-sm);
+}
+.catalogToolbar {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  margin-top: var(--space-2);
+}
+.catalogToolbar > form {
+  flex: 1 1 22rem;
+  max-width: 34rem;
+}
+.catalogHelpActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1);
+}
+.catalogHelpActions button {
+  min-width: 10rem;
+}
+.practiceForm[data-layout="compact"] .answerRow {
+  margin-top: 0;
+  align-items: start;
+}
+.practiceForm[data-layout="compact"] .solvedAnswer:disabled {
+  border-color: var(--color-success);
+}
+.practiceForm[data-layout="compact"] .answerAcceptedIcon {
+  top: calc(var(--input-min-height) / 2);
+  bottom: auto;
+  transform: translateY(-50%);
+}
+.visuallyHidden {
+  composes: visuallyHidden from "../../shared/styles/patterns.module.css";
+}
+.helpTitle[data-order] {
+  margin: 0 0 var(--space-0-5);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+@media (max-width: 40rem) {
+  .catalogToolbar > form {
+    flex-basis: 100%;
+  }
+  .practiceForm[data-layout="compact"] .answerRow {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .answerRow button {
+    min-width: 0;
+  }
+  .catalogHelpActions {
+    width: 100%;
+  }
+  .catalogHelpActions button {
+    min-width: 0;
+    flex: 1;
+  }
+}
+
+.practiceForm[data-layout="compact"] .answerRow {
+  grid-template-columns: minmax(0, 1fr) 9.5rem;
+}
+.practiceForm[data-layout="compact"] .answerRow > button {
+  width: 100%;
+}
+@media (max-width: 40rem) {
+  .practiceForm[data-layout="compact"] .answerRow {
+    grid-template-columns: minmax(0, 1fr) 8rem;
+  }
+  .practiceForm[data-layout="compact"] .answerField {
+    min-height: 7.5rem;
+  }
+}
+
+@media (scripting: none) {
+  .catalogHelpActions {
+    display: none;
+  }
+  .catalogHelpPanel[hidden] {
+    display: block;
+    padding-block: var(--space-1);
   }
 }

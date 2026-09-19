@@ -1,0 +1,13 @@
+.positioner {
+  z-index: var(--layer-modal);
+}
+.popup {
+  max-width: min(20rem, calc(100vw - 2rem));
+  padding: var(--space-1) var(--space-1-5);
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: var(--text-sm);
+  line-height: 1.4;
+}

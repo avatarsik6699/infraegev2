@@ -5,6 +5,7 @@ import styles from "./field.module.css";
 
 export const Field: React.FC<FieldTypes.Props> = ({
   label,
+  endAdornment,
   labelVisibility = "visible",
   description,
   error,
@@ -26,12 +27,18 @@ export const Field: React.FC<FieldTypes.Props> = ({
         {description}
       </BaseField.Description>
     ) : null}
-    <Input
-      {...inputProps}
-      className={className}
-      disabled={disabled}
-      invalid={invalid}
-    />
+    <div
+      className={endAdornment ? styles.controlGroup : styles.controlSlot}
+      data-invalid={invalid || undefined}
+    >
+      <Input
+        {...inputProps}
+        className={className}
+        disabled={disabled}
+        invalid={invalid}
+      />
+      {endAdornment}
+    </div>
     {error ? (
       <BaseField.Error
         className={styles.error}

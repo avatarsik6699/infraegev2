@@ -1,16 +1,22 @@
-import { practiceCatalog } from "~/entities/practice-task";
+import { FileText, Clock } from "lucide-react";
+import { practiceCatalog, PracticeDifficulty } from "~/entities/practice-task";
 import { useState } from "react";
-import { getPracticeTask } from "./api/get-practice-task";
+import {
+  getPracticeTask,
+  PracticeTask,
+  PracticeTheory,
+} from "~/widgets/practice-task";
 import { useRouter } from "@tanstack/react-router";
 import { PublicHeader } from "~/widgets/public-header";
 import { PublicFooter } from "~/widgets/public-footer";
 import { PageContainer } from "~/shared/components/page-container";
 import { Typography } from "~/shared/components/typography";
-import { ActionLink } from "~/shared/components/action-link";
+import { PracticeBackLink } from "./components/practice-back-link";
 import { Button } from "~/shared/components/button";
 import { StatusScene } from "~/shared/components/status-scene";
 import { PracticeSources } from "./components/practice-sources";
-import { PracticeSolving } from "./components/practice-solving";
+import { InfoPopover } from "~/shared/components/info-popover";
+import { practiceTopic } from "./practice-topic";
 import type { PracticeTaskPageTypes } from "./practice-task-page.types";
 import styles from "./practice-task-page.module.css";
 
@@ -33,50 +39,71 @@ export const PracticeTaskPage: React.FC<PracticeTaskPageTypes.Props> = (
     <div className={styles.page}>
       <PublicHeader activeSection="practice" />
       <PageContainer component="main" measure="reading" className={styles.main}>
-        <ActionLink
-          to={practiceCatalog.returnHref(props.search)}
-          icon="back"
-          hierarchy="quiet"
-          className={styles.back}
-        >
-          К списку задач
-        </ActionLink>
         {detail ? (
           <>
             <header className={styles.heading}>
-              <Typography.Title order={1} variant="lesson">
-                {detail.task.title}
-              </Typography.Title>
-              <Typography.Text tone="muted" variant="caption">
-                {detail.examNumbers.map((number) => `№${number}`).join(", ")}
-                {detail.examNumbers.length ? " · " : ""}
-                {detail.task.difficultyLabel}
-                {detail.estimatedMinutes
-                  ? ` · около ${detail.estimatedMinutes} мин`
-                  : ""}
-              </Typography.Text>
+              <PracticeBackLink
+                href={practiceCatalog.returnHref(props.search)}
+              />
+              <div className={styles.titleRow}>
+                <Typography.Title
+                  order={1}
+                  variant="lesson"
+                  className={styles.title}
+                >
+                  {practiceTopic.label(detail)}
+                </Typography.Title>
+                <InfoPopover label="Как работает практика">
+                  <ul>
+                    <li>
+                      Отметки решения сохраняются в этом браузере отдельно от
+                      уроков.
+                    </li>
+                    <li>
+                      Введённый ответ сбросится при уходе со страницы или
+                      перезагрузке.
+                    </li>
+                  </ul>
+                </InfoPopover>
+              </div>
+              <div className={styles.metadata}>
+                <span
+                  title={detail.task.id}
+                  aria-label={`ID: ${detail.task.id}`}
+                >
+                  #{detail.task.id.slice(0, 8)}
+                </span>
+                <PracticeDifficulty level={detail.difficulty} />
+                <span className={styles.metaItem}>
+                  <FileText size={16} aria-hidden="true" />
+                  Ответ
+                </span>
+                {detail.estimatedMinutes ? (
+                  <span className={styles.metaItem}>
+                    <Clock size={16} aria-hidden="true" />
+                    Около {detail.estimatedMinutes} мин
+                  </span>
+                ) : null}
+                <PracticeSources sources={detail.sources} />
+                <PracticeTheory links={result.links} />
+              </div>
             </header>
-            <PracticeSolving
-              key={detail.task.id}
-              task={detail.task}
-              onRefresh={refresh}
-              search={props.search}
-              catalogVisible={detail.catalogVisible}
-            />
-            {result.links.length > 0 && (
-              <nav className={styles.theory} aria-label="Теория к задаче">
-                <Typography.Title order={2}>Повторить теорию</Typography.Title>
-                {result.links.map((link) => (
-                  <ActionLink key={link.href} to={link.href} hierarchy="text">
-                    {link.label}
-                  </ActionLink>
-                ))}
-              </nav>
-            )}
-            <PracticeSources sources={detail.sources} />
+            <div className={styles.task}>
+              <Typography.Text tone="muted" className={styles.subtitle}>
+                {detail.task.title}
+              </Typography.Text>
+              <PracticeTask
+                key={detail.task.id}
+                task={detail.task}
+                links={result.links}
+                onRefresh={refresh}
+              />
+            </div>
           </>
         ) : (
           <section className={styles.state}>
+            <PracticeBackLink href={practiceCatalog.returnHref(props.search)} />
+
             <StatusScene
               kind="code"
               code={result.status === "missing" ? "404" : "503"}
@@ -100,7 +127,6 @@ export const PracticeTaskPage: React.FC<PracticeTaskPageTypes.Props> = (
                 Повторить загрузку
               </Button>
             )}
-            <ActionLink to="/practice">Открыть каталог</ActionLink>
           </section>
         )}
       </PageContainer>

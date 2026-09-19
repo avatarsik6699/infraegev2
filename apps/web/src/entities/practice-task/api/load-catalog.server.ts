@@ -8,6 +8,10 @@ export async function loadPracticeCatalog(search: PracticeCatalogTypes.Search) {
     return { status: "invalid" as const, page: null, facets: null };
   try {
     const query = {
+      q: search.q,
+      topics: search.topics,
+      sort: search.sort,
+      limit: search.limit,
       skill: search.skill,
       exam_number: search.exam_number,
       difficulty: search.difficulty,
@@ -55,35 +59,11 @@ export async function loadStandaloneTask(id: string) {
         catalogVisible: raw.content.catalog_visible,
         answerInstruction: raw.content.answer_instruction,
         examNumbers: raw.content.exam_numbers ?? [],
+        difficulty: raw.content.difficulty,
         estimatedMinutes: raw.content.estimated_minutes,
       },
     };
   } catch {
     return { status: "unavailable" as const, detail: null };
-  }
-}
-
-export async function loadNextPracticeTask(
-  id: string,
-  search: PracticeCatalogTypes.Search,
-) {
-  try {
-    const result = await practiceServerClient.GET("/api/tasks/{task_id}/next", {
-      params: {
-        path: { task_id: id },
-        query: {
-          skill: search.skill,
-          exam_number: search.exam_number,
-          difficulty: search.difficulty,
-        },
-      },
-      cache: "no-store",
-      signal: AbortSignal.timeout(6000),
-    });
-    if (!result.response.ok || !result.data)
-      throw new Error("Continuation unavailable");
-    return { status: "ready" as const, taskId: result.data.task_id };
-  } catch {
-    return { status: "unavailable" as const, taskId: null };
   }
 }

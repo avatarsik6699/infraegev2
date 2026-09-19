@@ -29,13 +29,16 @@ export const Button: React.FC<ButtonTypes.Props> = ({
       data-icon-only={iconOnly || undefined}
       className={cssUtils.cx(styles.root, className)}
     >
-      {loading ? (
-        <span className={styles.spinner} aria-hidden="true" />
-      ) : (
-        iconStart
+      {loading && (
+        <span className={styles.loadingIndicator} aria-hidden="true">
+          <span className={styles.spinner} data-button-spinner />
+        </span>
       )}
-      {iconOnly ? null : <span className={styles.label}>{children}</span>}
-      {iconEnd}
+      <span className={styles.content} data-loading={loading || undefined}>
+        {iconStart}
+        {iconOnly ? null : <span className={styles.label}>{children}</span>}
+        {iconEnd}
+      </span>
     </BaseButton>
   );
 };

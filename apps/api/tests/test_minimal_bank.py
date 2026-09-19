@@ -383,3 +383,51 @@ def test_cli_publishes_readable_files_and_keeps_export_private(database, tmp_pat
     assert destination.stat().st_mode & 0o777 == 0o700
     assert (destination / "bank.json").stat().st_mode & 0o777 == 0o600
     assert (destination / "files" / stored.name).stat().st_mode & 0o777 == 0o600
+
+
+def test_catalog_search_topics_sort_and_limits(database, monkeypatch):
+    monkeypatch.setattr(settings, "database_url", database("runtime"))
+    with TestClient(create_app()) as client:
+        facets = client.get("/api/tasks/facets").json()
+        counts = {t["id"]: t["count"] for t in facets["topics"]}
+        assert counts["ege-16"] == 255 and counts["ege-5"] == 292
+        assert counts["python-loops"] == 0
+        assert client.get("/api/tasks?topics=python-loops").json()["total"] == 0
+        combined = client.get("/api/tasks?topics=ege-16&topics=ege-5&topics=ege-16").json()
+        assert combined["total"] == 547
+        first_id = combined["tasks"][0]["id"]
+        assert client.get(f"/api/tasks?q={first_id[:8]}").json()["tasks"][0]["id"] == first_id
+        assert client.get("/api/tasks?q=16").json()["total"] >= 255
+        assert client.get("/api/tasks?q=РЕКУРС").json()["total"] > 0
+        assert client.get("/api/tasks?q=%25%25%25").json()["total"] == 0
+        for limit in (10, 30, 50, 100):
+            response = client.get(f"/api/tasks?limit={limit}")
+            assert response.status_code == 200
+            assert len(response.json()["tasks"]) == limit
+            assert response.json()["limit"] == limit
+        assert client.get("/api/tasks?limit=11").status_code == 422
+        assert client.get("/api/tasks?topics=unknown").status_code == 422
+        assert client.get("/api/tasks?q=" + "a" * 201).status_code == 422
+        assert client.get("/api/tasks?sort=random").status_code == 422
+        assert client.get("/api/tasks?page=10000").json()["tasks"] == []
+        for direction in ("difficulty_asc", "difficulty_desc", "default"):
+            query = f"topics=ege-16&q=рекурс&sort={direction}&limit=10"
+            first = client.get(f"/api/tasks?{query}").json()["tasks"]
+            second = client.get(f"/api/tasks?{query}&page=2").json()["tasks"]
+            assert not {t["id"] for t in first} & {t["id"] for t in second}
+            items = first + second
+
+            def key(t, direction=direction):
+                return ((-1 if direction == "difficulty_desc" else 1) * t["difficulty"], t["id"])
+
+            assert items == sorted(
+                items, key=(lambda t: t["id"]) if direction == "default" else key
+            )
+            following = client.get(
+                f"/api/tasks/{first[0]['id']}/next?topics=ege-16&q=рекурс&sort={direction}"
+            ).json()
+            assert following["task_id"] == first[1]["id"]
+        serialized = json.dumps(combined, ensure_ascii=False)
+        assert "checker" not in serialized and "answer_variants" not in serialized
+        assert "kompege.ru" not in serialized  # private copy provenance in this bank
+        assert client.get("/api/tasks?q=kompege.ru").json()["total"] == 0

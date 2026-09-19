@@ -1,3 +1,4 @@
+import { Download } from "lucide-react";
 import { cssUtils } from "~/shared/lib/css-utils";
 import styles from "./download-link.module.css";
 import type { DownloadLinkTypes } from "./download-link.types";
@@ -10,6 +11,13 @@ export const DownloadLink: React.FC<DownloadLinkTypes.Props> = (props) => (
     className={cssUtils.cx(styles.root, props.className)}
     data-presentation={props.presentation ?? "action"}
   >
-    {props.children}
+    {props.presentation === "navigation" ? (
+      props.children
+    ) : (
+      <>
+        <span>{props.children}</span>
+        <Download className={styles.icon} aria-hidden="true" />
+      </>
+    )}
   </a>
 );

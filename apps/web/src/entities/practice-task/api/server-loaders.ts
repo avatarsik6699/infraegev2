@@ -23,8 +23,3 @@ export const loadTaskSitemapIndex = createServerOnlyFn(() =>
 export const loadTaskSitemapPage = createServerOnlyFn((page: number) =>
   discovery.loadTaskSitemapPage(page),
 );
-
-export const loadNextPracticeTask = createServerOnlyFn(
-  (id: string, search: PracticeCatalogTypes.Search) =>
-    catalog.loadNextPracticeTask(id, search),
-);

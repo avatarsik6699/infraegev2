@@ -5,9 +5,7 @@
   font-family: var(--font-ui);
 }
 .label {
-  color: var(--color-text);
-  font-size: var(--text-sm);
-  font-weight: 600;
+  composes: label from "../field/field.module.css";
 }
 .control {
   composes: root from "../input/input.module.css";

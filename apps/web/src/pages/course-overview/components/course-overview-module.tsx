@@ -46,6 +46,7 @@ export const CourseOverviewModule: React.FC<Props> = (props) => {
                 <div className={styles.lessonRow}>
                   <div className={styles.lessonCopy}>
                     <ActionLink
+                      presentation="navigation"
                       hierarchy="text"
                       className={styles.lessonTitle}
                       data-course-lesson-title

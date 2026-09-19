@@ -178,3 +178,13 @@
     grid-row: 1;
   }
 }
+
+/* Server and hydrated controls share geometry. Native fallbacks live in noscript. */
+.scriptedOnly {
+  display: contents;
+}
+@media (scripting: none) {
+  .scriptedOnly {
+    display: none;
+  }
+}

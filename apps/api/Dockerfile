@@ -30,7 +30,7 @@ RUN uv sync --frozen --no-dev --no-install-project
 
 COPY apps/api/app ./app
 COPY apps/api/migrations ./migrations
-COPY apps/api/alembic.ini apps/api/practice-registry.json ./
+COPY apps/api/alembic.ini apps/api/practice-registry.json apps/api/practice-catalog-topics.json ./
 COPY apps/api/entrypoint.sh ./entrypoint.sh
 
 RUN chmod +x ./entrypoint.sh \

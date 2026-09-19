@@ -46,6 +46,18 @@ tooling live in [`docs/STACK.md`](docs/STACK.md).
     Never substitute `git clean -fdX`: ignored dependencies, environments, secrets and data are
     protected. Temporary tools such as Lighthouse must clean their own external workspaces on exit.
 
+## Interactive browser connection
+
+Use Playwriter first for interactive browser work; read its skill before use.
+In this WSL environment it connects to ordinary Windows Chrome with the Playwriter
+extension in profile `Default`. Playwright/MCP Chrome instances with temporary
+profiles and `--disable-extensions` cannot provide that connection.
+Before treating `extension_not_connected` as tool unavailability, check the profile,
+start ordinary Chrome if absent, and retry. Follow
+[STACK's browser connection procedure](docs/STACK.md#interactive-browser-connection-wsl)
+and the [known gotcha](docs/KNOWN_GOTCHAS.md#playwriter-extension-not-connected-when-only-playwright-chrome-is-running).
+Explain any fallback after those checks. Automated repository test runners stay unchanged.
+
 ## Reading scope
 
 Read the active change, STACK gate/tooling rows and the SPEC sections affected by the task.

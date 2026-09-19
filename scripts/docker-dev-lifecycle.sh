@@ -23,6 +23,7 @@ infra/docker-compose.dev.yml
 scripts/db-provision-roles.sh
 apps/api/alembic.ini
 apps/api/practice-registry.json
+apps/api/practice-catalog-topics.json
 apps/api/migrations/env.py
 apps/api/migrations/versions/122_01_minimal_bank.py
 infra/database-schema

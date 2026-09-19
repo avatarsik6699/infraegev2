@@ -6,6 +6,7 @@ export namespace BadgeTypes {
   export type Props = HTMLAttributes<HTMLSpanElement> & {
     tone?: Tone;
     presentation?: "status" | "metadata" | "index";
+    surface?: "quiet";
     icon?: React.ReactNode;
     fullWidth?: boolean;
   };

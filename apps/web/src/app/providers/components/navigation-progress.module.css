@@ -18,7 +18,7 @@
   display: block;
   width: 42%;
   height: 100%;
-  background: var(--color-brand-orange);
+  background: var(--color-text);
   transform: translateX(-110%);
 }
 

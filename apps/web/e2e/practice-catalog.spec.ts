@@ -23,3 +23,39 @@ test("standalone practice is mobile SSR-readable", async ({
 }) => {
   await noJavaScriptMinimalPage.expectReadablePractice();
 });
+
+test("solve multiple tasks inside catalog with transient drafts", async ({
+  minimalPage,
+}) => {
+  await minimalPage.expectInlineSolving();
+});
+
+test("catalog links retain context without JavaScript", async ({
+  noJavaScriptMinimalPage,
+}) => {
+  await noJavaScriptMinimalPage.expectCatalogWithoutJavaScript();
+});
+
+test("practice filters apply together and preserve the remaining selection", async ({
+  minimalPage,
+}) => {
+  await minimalPage.expectCombinedPracticeFilters();
+});
+
+test("combined practice filters work without JavaScript", async ({
+  noJavaScriptMinimalPage,
+}) => {
+  await noJavaScriptMinimalPage.expectCombinedPracticeFilters(true);
+});
+
+test("catalog answer follows statement and stays aligned through feedback", async ({
+  minimalPage,
+}) => {
+  await minimalPage.expectPracticeAnswerLayout();
+});
+
+test("topic search supports cancellation, zero counts and accessible help", async ({
+  minimalPage,
+}) => {
+  await minimalPage.expectTopicSearchAndCancellation();
+});

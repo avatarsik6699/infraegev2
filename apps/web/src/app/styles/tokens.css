@@ -91,8 +91,8 @@
   --color-accent-dark: var(--theme-primary-hover);
   --color-accent-soft: var(--theme-interactive-muted);
   --color-focus: var(--theme-ring);
-  --color-selection: var(--theme-brand-orange-soft);
-  --color-link-decoration: var(--theme-brand-orange-text);
+  --color-selection: var(--theme-rule);
+  --color-link-decoration: var(--color-rule-strong);
   --color-success: var(--theme-success);
   --color-info: var(--theme-info);
   --color-warning: var(--theme-warning);
@@ -162,6 +162,11 @@
   --control-secondary-bg: var(--color-surface);
   --control-secondary-border: var(--color-rule-strong);
   --control-secondary-text: var(--color-text);
+  --control-soft-bg: color-mix(
+    in srgb,
+    var(--color-text) 7%,
+    var(--color-surface)
+  );
   --control-quiet-bg-hover: var(--color-accent-soft);
   --control-disabled-bg: var(--color-surface-quiet);
   --control-disabled-text: var(--color-muted);
@@ -169,7 +174,7 @@
   --input-min-height: var(--control-height);
   --input-padding-block: var(--space-1);
   --input-padding-inline: var(--space-1-5);
-  --input-border-color: var(--control-secondary-border);
+  --input-border-color: var(--color-rule);
   --input-background: var(--control-secondary-bg);
   --input-radius: var(--radius-control);
   --input-shadow: none;
@@ -181,7 +186,7 @@
   --accordion-trigger-padding: var(--space-1) 0;
   --accordion-content-padding: 0 0 var(--space-1-5);
   --accordion-hover-background: transparent;
-  --accordion-title-hover-decoration: underline;
+  --accordion-title-hover-decoration: none;
   --accordion-chevron-transition: transform var(--motion-duration)
     var(--motion-easing);
   --accordion-chevron-open-transform: rotate(180deg);

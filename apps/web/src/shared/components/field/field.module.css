@@ -27,3 +27,53 @@
 .error {
   color: var(--color-danger);
 }
+
+.controlGroup {
+  display: flex;
+  align-items: center;
+  position: relative;
+  border-radius: var(--input-radius);
+  background: var(--input-background);
+  min-width: 0;
+}
+.controlGroup:focus-within {
+  box-shadow: var(--focus-ring);
+}
+.controlGroup input {
+  flex: 1;
+  width: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.controlGroup input:focus-visible {
+  box-shadow: none;
+}
+.controlGroup > button {
+  flex-shrink: 0;
+}
+
+.controlGroup::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--input-border-color);
+  border-radius: inherit;
+  pointer-events: none;
+}
+.controlGroup:focus-within::after {
+  border-color: var(--color-focus);
+}
+.controlGroup[data-invalid]::after {
+  border-color: var(--color-danger);
+}
+.controlSlot {
+  display: contents;
+}
+
+/* Paint autofill on the same surface as the composite field, including WebKit's UA fill. */
+.controlGroup input:is(:autofill, :-webkit-autofill) {
+  box-shadow: inset 0 0 0 1000px var(--input-background);
+  -webkit-text-fill-color: var(--color-text);
+  caret-color: var(--color-text);
+}

@@ -1,4 +1,5 @@
 .root {
+  position: relative;
   display: inline-flex;
   min-width: 0;
   min-height: var(--control-height);
@@ -15,7 +16,9 @@
   font-weight: 600;
   line-height: 1;
   cursor: pointer;
+  text-decoration: none;
   transition:
+    transform var(--motion-duration) var(--motion-easing),
     box-shadow var(--motion-duration) var(--motion-easing),
     background-color var(--motion-duration) var(--motion-easing),
     border-color var(--motion-duration) var(--motion-easing),
@@ -27,7 +30,7 @@
   color: var(--control-primary-text);
 }
 
-.root[data-hierarchy="primary"]:hover:enabled {
+.root[data-hierarchy="primary"]:hover:not(:disabled) {
   background: var(--control-primary-bg-hover);
 }
 
@@ -38,23 +41,19 @@
   box-shadow: var(--shadow-control);
 }
 
-.root[data-hierarchy="secondary"]:hover:enabled {
+.root[data-hierarchy="secondary"]:hover:not(:disabled) {
   background: var(--control-quiet-bg-hover);
   color: var(--color-text);
 }
 
-.root[data-hierarchy="quiet"]:hover:enabled {
+.root[data-hierarchy="quiet"]:hover:not(:disabled) {
   background: var(--control-quiet-bg-hover);
   color: var(--color-text);
 }
 
-.root[data-hierarchy="secondary"]:active:enabled,
-.root[data-hierarchy="quiet"]:active:enabled {
+.root[data-hierarchy="secondary"]:active:not(:disabled),
+.root[data-hierarchy="quiet"]:active:not(:disabled) {
   background: color-mix(in oklch, var(--color-text) 7%, var(--color-surface));
-}
-
-.root[data-hierarchy="secondary"]:focus-visible {
-  box-shadow: var(--shadow-control), var(--focus-ring);
 }
 
 .root[data-density="compact"] {
@@ -85,6 +84,7 @@
 .spinner {
   width: 1em;
   height: 1em;
+  flex: none;
   border: 2px solid color-mix(in srgb, currentColor 35%, transparent);
   border-top-color: currentColor;
   border-radius: 50%;
@@ -113,15 +113,75 @@
   box-shadow: none;
   color: var(--color-code-text);
 }
-.root[data-surface="code"]:hover:enabled,
-.root[data-surface="code"]:active:enabled {
+.root[data-surface="code"]:hover:not(:disabled),
+.root[data-surface="code"]:active:not(:disabled) {
   border-color: transparent;
   background: transparent;
   color: var(--color-code-text);
-  text-decoration: underline;
-  text-underline-offset: 0.25em;
+  opacity: 0.8;
 }
 .root[data-surface="code"]:focus-visible {
   outline: 2px solid var(--color-code-text);
   outline-offset: 2px;
+}
+
+.root[data-hierarchy="soft"] {
+  background: var(--control-soft-bg);
+}
+.root[data-hierarchy="soft"]:hover:not(:disabled),
+.root[aria-expanded="true"]:not(:disabled) {
+  background: color-mix(in srgb, var(--color-text) 10%, var(--color-surface));
+}
+.root[data-hierarchy="destructive"] {
+  background: var(--color-danger);
+  color: var(--control-primary-text);
+}
+.root[data-hierarchy="destructive"]:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--color-danger) 88%, black);
+}
+.root:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+.root:active:not(:disabled) {
+  transform: scale(0.98);
+}
+@media (prefers-reduced-motion: reduce) {
+  .root:active:not(:disabled) {
+    transform: none;
+  }
+}
+
+.content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  min-width: 0;
+}
+.content > svg {
+  display: block;
+  flex: none;
+}
+.content[data-loading] {
+  opacity: 0;
+}
+.loadingIndicator {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+.root[aria-busy="true"] {
+  opacity: 1;
+  cursor: progress;
+}
+
+.root[data-surface="bare"],
+.root[data-surface="bare"]:hover:not(:disabled),
+.root[data-surface="bare"]:active:not(:disabled),
+.root[data-surface="bare"][aria-expanded="true"]:not(:disabled) {
+  background: transparent;
+  box-shadow: none;
 }

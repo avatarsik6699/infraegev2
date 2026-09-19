@@ -1,0 +1,52 @@
+.root {
+  color: var(--color-text);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+  transition: color var(--motion-duration) var(--motion-easing);
+}
+.root > span:first-of-type {
+  text-decoration-line: underline;
+  text-decoration-color: var(--color-link-decoration);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  transition: text-decoration-color var(--motion-duration) var(--motion-easing);
+}
+.root:hover {
+  color: var(--color-text-soft);
+}
+.root:hover > span:first-of-type {
+  text-decoration-color: currentColor;
+}
+.root:active {
+  color: var(--color-text);
+}
+.root:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+}
+.root[data-presentation="action"],
+.root[data-presentation="navigation"] {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-height: var(--control-height);
+}
+.root[data-presentation="navigation"] > span:first-of-type,
+.root[data-presentation="button"] > span:first-of-type {
+  text-decoration: none;
+}
+.icon {
+  flex: none;
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  margin-inline-start: 0.25em;
+  vertical-align: -0.125em;
+  color: currentColor;
+}
+@media (prefers-reduced-motion: reduce) {
+  .root,
+  .root > span:first-of-type {
+    transition: none;
+  }
+}

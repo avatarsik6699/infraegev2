@@ -1,3 +1,5 @@
+import { InlineSelect } from "~/shared/components/inline-select";
+import { PracticePagination } from "./practice-pagination";
 import { useRouter } from "@tanstack/react-router";
 import { practiceCatalog } from "~/entities/practice-task";
 import { Typography } from "~/shared/components/typography";
@@ -5,7 +7,8 @@ import { EmptyState } from "~/shared/components/empty-state";
 import { Button } from "~/shared/components/button";
 import { ActionLink } from "~/shared/components/action-link";
 import type { PracticeCatalogPageTypes } from "../practice-catalog-page.types";
-import { PracticeCatalogRow } from "./practice-catalog-row";
+import { PracticeActiveFilters } from "./practice-active-filters";
+import { PracticeTaskList } from "./practice-task-list";
 import styles from "../practice-catalog-page.module.css";
 
 export const PracticeResults: React.FC<PracticeCatalogPageTypes.Props> = (
@@ -37,72 +40,66 @@ export const PracticeResults: React.FC<PracticeCatalogPageTypes.Props> = (
         <Typography.Text>
           Проверьте значения или начните поиск заново.
         </Typography.Text>
-        <ActionLink to="/practice">Сбросить фильтры</ActionLink>
+        <ActionLink to="/practice" presentation="button">
+          Сбросить фильтры
+        </ActionLink>
       </section>
     );
   const page = props.result.page;
-  if (!page?.tasks.length)
-    return (
-      <div className={styles.state}>
-        <EmptyState
-          title={
-            props.search.page ||
-            props.search.skill ||
-            props.search.exam_number ||
-            props.search.difficulty
-              ? "По этим фильтрам задач пока нет"
-              : "Задачи для самостоятельной практики пока не опубликованы"
-          }
-          description={
-            props.result.facets?.total
-              ? "Снимите ограничения, чтобы увидеть другие задачи."
-              : "Практические задания доступны внутри уроков."
-          }
-        />
-        <ActionLink
-          to={props.result.facets?.total ? "/practice" : "/courses"}
-          hierarchy="text"
-        >
-          {props.result.facets?.total
-            ? "Сбросить фильтры"
-            : "Перейти к мини-курсам"}
-        </ActionLink>
-      </div>
-    );
+  if (!page) return null;
   return (
     <>
-      <Typography.Text tone="muted" variant="caption">
-        Найдено задач: {page.total}. Страница {page.page}.
-      </Typography.Text>
-      <ul className={styles.list} aria-label="Задачи">
-        {page.tasks.map((task) => (
-          <PracticeCatalogRow key={task.id} task={task} search={props.search} />
-        ))}
-      </ul>
-      <Typography.Text tone="muted" variant="caption">
-        Отметки решения сохраняются в этом браузере отдельно от уроков.
-      </Typography.Text>
-      <nav className={styles.actions} aria-label="Страницы задач">
-        {props.search.page && (
-          <ActionLink
-            to={practiceCatalog.href({ ...props.search, page: undefined })}
-          >
-            К началу списка
-          </ActionLink>
-        )}
-        {page.next_page && (
-          <ActionLink
-            to={practiceCatalog.href({
-              ...props.search,
-              page: page.next_page,
-            })}
-            hierarchy="text"
-            icon="forward"
-          >
-            Следующие задачи
-          </ActionLink>
-        )}
-      </nav>
+      <div className={styles.resultBar}>
+        <Typography.Text variant="caption">
+          Найдено {practiceCatalog.countLabel(page.total)}
+        </Typography.Text>
+        <PracticeActiveFilters
+          search={props.search}
+          facets={props.result.facets}
+        />
+        <div className={styles.sort}>
+          <InlineSelect
+            label="Сортировка"
+            name="sort"
+            form="practice-filters"
+            defaultValue={props.search.sort ?? "default"}
+            options={[
+              { value: "default", label: "По умолчанию" },
+              { value: "difficulty_asc", label: "Сначала простые" },
+              { value: "difficulty_desc", label: "Сначала сложные" },
+            ]}
+          />
+        </div>
+      </div>
+      {!page.tasks.length && (
+        <div className={styles.state}>
+          <EmptyState
+            title="Пока ничего не нашлось"
+            description="Попробуйте другие слова или выберите другую тему."
+          />
+          {page.total > 0 ? (
+            <ActionLink
+              to={practiceCatalog.href({
+                ...props.search,
+                page: Math.ceil(page.total / (page.limit ?? 30)),
+              })}
+            >
+              На последнюю страницу
+            </ActionLink>
+          ) : (
+            <ActionLink to="/practice" presentation="button">
+              Сбросить фильтры
+            </ActionLink>
+          )}
+        </div>
+      )}
+      <PracticeTaskList
+        tasks={page.tasks}
+        search={props.search}
+        skills={props.result.facets?.skills ?? []}
+        topics={props.result.facets?.topics}
+      />
+      <PracticePagination search={props.search} page={page} />
     </>
   );
 };
