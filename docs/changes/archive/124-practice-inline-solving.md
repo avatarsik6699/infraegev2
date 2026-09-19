@@ -7,7 +7,7 @@
 | Change | `124` |
 | Slug | `practice-inline-solving` |
 | Title | Решение задач прямо в каталоге |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/124-practice-inline-solving` |
 
 ## Goal
@@ -139,7 +139,7 @@ T4 verifies real catalog, detail and lesson consumers, plus existing focused sui
 
 ## Gate Checks
 
-Critical Gate per [STACK](../STACK.md). Focused catalog browser journeys additionally
+Critical Gate per [STACK](../../STACK.md). Focused catalog browser journeys additionally
 cover concurrent disclosures, transient input, stale/error recovery, mobile and no-JS.
 Final architect authorization (2026-09-19): run final audit and local Critical ship (commit, merge, archive). Full/Release Gate and deployment remain outside scope.
 
