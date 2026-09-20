@@ -7,7 +7,7 @@
 | Change | `127` |
 | Slug | `courses-catalog-redesign` |
 | Title | Courses catalog redesign |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/127-courses-catalog-redesign` |
 
 ## Goal
@@ -18,7 +18,7 @@ Keep current publication/order/content and navigate to the Python overview, with
 
 ## Design References
 
-- [Supplied reference](../artifacts/references/d9cf8537-82c3-4db2-a271-07098e9aa187.png): monochrome ink illustrations, compact cards, quiet metadata.
+- [Supplied reference](../../artifacts/references/d9cf8537-82c3-4db2-a271-07098e9aa187.png): monochrome ink illustrations, compact cards, quiet metadata.
 - Approved chat plan: two columns on desktop, one on mobile; existing public typography and controls.
 
 ## Backlog
@@ -77,7 +77,7 @@ See `docs/SPEC.md` §2 and §5, `docs/FRONTEND.md`, and Files above.
 
 ## Gate Checks
 
-Use the affected frontend Critical Gate in [STACK](../STACK.md).
+Use the affected frontend Critical Gate in [STACK](../../STACK.md).
 Additionally run targeted catalog E2E and production browser checks through Playwriter:
 desktop/mobile, keyboard/reduced motion, no-JS, failed images/API and delayed hydration/fonts.
 Record evidence before allowlisted cleanup. Local ship explicitly authorized after final review; no Full/Release Gate, push or deployment.
@@ -88,7 +88,7 @@ Record evidence before allowlisted cleanup. Local ship explicitly authorized aft
 
 ## Implementation Notes
 
-- Acceptance and tooling limitations: [verification](../artifacts/127-courses-catalog/verification.md). Independent design review: [PASS](../artifacts/127-courses-catalog/final-review.md).
+- Acceptance and tooling limitations: [verification](../../artifacts/127-courses-catalog/verification.md). Independent design review: [PASS](../../artifacts/127-courses-catalog/final-review.md).
 
 ## Commit Message
 
