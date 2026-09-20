@@ -100,7 +100,11 @@ into application images nor mounted/read at runtime.
 `/practice` and `/practice/$taskId` use request-time API reads; standalone task progress uses its
 own browser key and does not change lesson progress. `/sitemap.xml` is a runtime index with the
 release-owned `/sitemap-static.xml` and bounded `/sitemap-practice/$page` partitions. Neither page
-builds nor static publication metadata read the database. API reads have a separate Nginx limit.
+builds nor static publication metadata read the database. Practice API reads, SSR learning pages,
+dynamic sitemaps and `/_serverFn` requests share one Nginx per-IP limit: 120/minute, burst 110,
+immediate 429 on excess. The burst permits catalog navigation plus 100 inline task loads. Static
+assets, unrelated pages and health do not consume it; checker retains its separate 20/minute,
+burst 5 limit. Host-only servers bypass Nginx; public deployments must enter through Nginx.
 Use explicit `make practice-bootstrap` after `make dev` for first local import;
 [practice](runbooks/practice.md) documents backup setup. Dev PostgreSQL exposes an allocated
 loopback-only port for host CLI/test access. Bootstrap applies the supplied bank; export operator edits before reimporting.
@@ -152,7 +156,10 @@ wrapping and two spaces can be meaningful. Personal UI, theme, font, autosave, a
 settings remain user-level choices.
 
 Repository-wide commands are `pnpm format:check` for the non-mutating gate and `pnpm format` to
-apply Prettier plus Ruff. ESLint stays a separate quality pass: `pnpm lint` checks root tooling and the web workspace with content-based caches, while `pnpm lint:fix` applies its safe fixes. Web lint also
+apply Prettier plus Ruff. ESLint stays a separate quality pass: `pnpm lint` checks root tooling
+(`pnpm lint:tooling`: `scripts/**/*.mjs` and `lighthouserc.cjs`) and the web workspace. Web lint uses
+a content-based cache; root tooling uses the locked web ESLint with a separate flat configuration
+from repository root. `pnpm lint:fix` applies safe fixes to both. CI invokes the same `pnpm lint`. Web lint also
 runs typed production-code rules plus executable positive/negative checks for the E2E and web
 platform architecture policies; these static checks run in CI without collecting or executing
 tests. `.editorconfig` provides UTF-8, LF, final-newline, indentation, and whitespace defaults to
@@ -170,7 +177,7 @@ Fill every applicable row and report the rest as `SKIPPED` with a reason.
 | Check | Command | Preconditions / notes |
 |-------|---------|-----------------------|
 | Format | `pnpm format:check` | run once for the target set; scope is repository-wide because formatting configuration is shared |
-| Lint | `pnpm --filter web lint` · `cd apps/api && uv run ruff check app tests migrations` · `pnpm lint:shell` · `bash -n <other-changed-shell-files>` | scope to touched workspace or scripts |
+| Lint | `pnpm --filter web lint` · `pnpm lint:tooling` · `cd apps/api && uv run ruff check app tests migrations` · `pnpm lint:shell` · `bash -n <other-changed-shell-files>` | scope to touched workspace or scripts; `pnpm lint` combines root tooling and web |
 | Type-check (affected) | `pnpm --filter web typecheck` · `cd apps/api && pnpm exec pyright app tests migrations` | app pyright reads `[tool.pyright]` in `apps/api/pyproject.toml`; shell changes have no type-check row |
 | Focused tests | `pnpm --filter web exec vitest run <changed-test-files>` · `cd apps/api && uv run pytest <changed-test-files-or-nodeids>` · `bash scripts/tests/<changed-contract>.test.sh` · `pnpm test:content-assets` | run only tests directly covering changed behavior; `test:content-assets` owns the isolated task-asset validator contract while `validate:content` checks the real content tree; documentation-only changes are `SKIPPED`; never expand this row to the full suite |
 | LSP diagnostics | available: yes | `python-lsp` (Pyright) and `typescript-lsp` MCP servers; repository type-check commands remain complementary gate evidence |

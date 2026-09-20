@@ -64,6 +64,7 @@ class CatalogQuery(CatalogFilters):
 class CatalogTask(StrictModel):
     id: str
     title: str
+    answer_instruction: str
     short_description: str | None
     difficulty: int
     estimated_minutes: int | None
@@ -137,19 +138,7 @@ def filters(query: CatalogFilters):
             TaskRecord.content["title"].as_string(),
             TaskRecord.content["short_description"].as_string(),
         ]
-        # Only visible statement values; never checker, explanation, hint or provenance.
-        for key in ("text", "markdown", "code", "caption", "alt", "accessible_description"):
-            values = func.jsonb_array_elements_text(
-                func.jsonb_path_query_array(
-                    TaskRecord.content["statement"], cast(f"$.**.{key}", JSONPATH)
-                )
-            ).table_valued("value")
-            searchable.append(
-                select(func.string_agg(values.c.value, " "))
-                .select_from(values)
-                .correlate(TaskRecord)
-                .scalar_subquery()
-            )
+        searchable.append(statement_text())
         matches = [value.icontains(query.q, autoescape=True) for value in searchable]
         if query.q.isdecimal() and 1 <= int(query.q) <= 27:
             matches.append(TaskRecord.content["exam_numbers"].contains([int(query.q)]))
@@ -157,9 +146,51 @@ def filters(query: CatalogFilters):
     return result
 
 
+def statement_text():
+    # Mirror rendered block fields, without hidden variants or structural metadata.
+    # Preserve ordinary standalone code blocks, regardless of their language.
+    paths = [
+        f'$[*] ? (@.type != "code_variants").data.{field}'
+        for field in (
+            "markdown",
+            "spans[*].text",
+            "code",
+            "caption",
+            "alt",
+            "accessible_description",
+            "items[*]",
+            "headers[*]",
+            "rows[*][*]",
+            "prompt",
+            "steps[*]",
+            "purpose",
+            "pointers[*].label",
+            "pointers[*].description",
+        )
+    ]
+    paths.append(
+        '$[*] ? (@.type == "code_variants").data.variants[*] ? (@.language == "python").code'
+    )
+    fragments = func.jsonb_path_query_array(
+        TaskRecord.content["statement"], cast(paths[0], JSONPATH)
+    )
+    for path in paths[1:]:
+        fragments = fragments.op("||")(
+            func.jsonb_path_query_array(TaskRecord.content["statement"], cast(path, JSONPATH))
+        )
+    values = func.jsonb_array_elements_text(fragments).table_valued("value")
+    return (
+        select(func.string_agg(values.c.value, " "))
+        .select_from(values)
+        .correlate(TaskRecord)
+        .scalar_subquery()
+    )
+
+
 async def page(session: AsyncSession, query: CatalogQuery) -> CatalogPage:
     names = (
         "title",
+        "answer_instruction",
         "short_description",
         "difficulty",
         "estimated_minutes",

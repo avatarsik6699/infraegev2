@@ -1,5 +1,9 @@
 import { FileText, Clock } from "lucide-react";
-import { practiceCatalog, PracticeDifficulty } from "~/entities/practice-task";
+import {
+  practiceCatalog,
+  PracticeDifficulty,
+  practiceAnswerFormat,
+} from "~/entities/practice-task";
 import { useState } from "react";
 import {
   getPracticeTask,
@@ -74,9 +78,12 @@ export const PracticeTaskPage: React.FC<PracticeTaskPageTypes.Props> = (
                   #{detail.task.id.slice(0, 8)}
                 </span>
                 <PracticeDifficulty level={detail.difficulty} />
-                <span className={styles.metaItem}>
+                <span
+                  className={styles.metaItem}
+                  title={detail.answerInstruction}
+                >
                   <FileText size={16} aria-hidden="true" />
-                  Ответ
+                  {practiceAnswerFormat.label(detail.answerInstruction)}
                 </span>
                 {detail.estimatedMinutes ? (
                   <span className={styles.metaItem}>

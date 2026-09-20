@@ -293,6 +293,8 @@ export interface components {
         };
         /** CatalogTask */
         CatalogTask: {
+            /** Answer Instruction */
+            answer_instruction: string;
             /** Difficulty */
             difficulty: number;
             /** Estimated Minutes */

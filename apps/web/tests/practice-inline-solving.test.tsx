@@ -57,6 +57,7 @@ function entry(id: string): PracticeCatalogTypes.Entry {
   return {
     id,
     title: id,
+    answer_instruction: "Запишите целое число в десятичной системе счисления.",
     short_description: "Краткое условие",
     difficulty: 1,
     estimated_minutes: null,
@@ -97,6 +98,7 @@ describe("inline solving", () => {
   });
   it("loads on demand, keeps independent drafts/help on collapse, resets on selection change", async () => {
     const view = render(rows());
+    expect(screen.getAllByText("Целое число")).toHaveLength(2);
     expect(mocks.load).not.toHaveBeenCalled();
     await open();
     await open("second");

@@ -13,6 +13,7 @@ export namespace PracticeCatalogTypes {
   export type Entry = {
     id: string;
     title: string;
+    answer_instruction: string;
     short_description: string | null;
     difficulty: number;
     estimated_minutes: number | null;

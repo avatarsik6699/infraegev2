@@ -396,6 +396,12 @@ def test_catalog_search_topics_sort_and_limits(database, monkeypatch):
         combined = client.get("/api/tasks?topics=ege-16&topics=ege-5&topics=ege-16").json()
         assert combined["total"] == 547
         first_id = combined["tasks"][0]["id"]
+        instruction = client.get(f"/api/tasks/{first_id}").json()["content"]["answer_instruction"]
+        assert combined["tasks"][0]["answer_instruction"] == instruction
+        # These words exist only in the retained Pascal/C++ variants, not rendered Python.
+        assert client.get("/api/tasks?q=writeln").json()["total"] == 0
+        assert client.get("/api/tasks?q=cout").json()["total"] == 0
+        assert client.get("/api/tasks?q=print").json()["total"] > 0
         assert client.get(f"/api/tasks?q={first_id[:8]}").json()["tasks"][0]["id"] == first_id
         assert client.get("/api/tasks?q=16").json()["total"] >= 255
         assert client.get("/api/tasks?q=РЕКУРС").json()["total"] > 0
@@ -431,3 +437,81 @@ def test_catalog_search_topics_sort_and_limits(database, monkeypatch):
         assert "checker" not in serialized and "answer_variants" not in serialized
         assert "kompege.ru" not in serialized  # private copy provenance in this bank
         assert client.get("/api/tasks?q=kompege.ru").json()["total"] == 0
+
+
+def test_catalog_searches_visible_structured_fields(database):
+    async def scenario():
+        engine = database_engine(database("import"))
+        try:
+            async with AsyncSession(engine) as session:
+                transaction = await session.begin()
+                try:
+                    row = await session.scalar(select(TaskRecord).where(catalog.visible()).limit(1))
+                    assert row is not None
+                    row.content = dict(
+                        row.content,
+                        statement=[
+                            {
+                                "type": "list",
+                                "data": {"style": "ordered", "items": ["visible-list-token"]},
+                            },
+                            {
+                                "type": "table",
+                                "data": {
+                                    "headers": ["visible-header-token"],
+                                    "rows": [["visible-cell-token"]],
+                                },
+                            },
+                            {
+                                "type": "worked_example",
+                                "data": {
+                                    "prompt": "visible-prompt-token",
+                                    "steps": ["visible-step-token"],
+                                },
+                            },
+                            {
+                                "type": "code_example",
+                                "data": {"language": "text", "code": "visible-standalone-token"},
+                            },
+                            {
+                                "type": "code_variants",
+                                "data": {
+                                    "variants": [
+                                        {
+                                            "language": "python",
+                                            "label": "Python",
+                                            "code": "visible-python-token",
+                                        },
+                                        {
+                                            "language": "text",
+                                            "label": "Pascal",
+                                            "code": "hidden-pascal-token",
+                                        },
+                                    ]
+                                },
+                            },
+                        ],
+                    )
+                    await session.flush()
+                    for token in (
+                        "list",
+                        "header",
+                        "cell",
+                        "prompt",
+                        "step",
+                        "standalone",
+                        "python",
+                    ):
+                        page = await catalog.page(
+                            session, catalog.CatalogQuery(q=f"visible-{token}-token")
+                        )
+                        assert [task.id for task in page.tasks] == [row.id]
+                    assert (
+                        await catalog.page(session, catalog.CatalogQuery(q="hidden-pascal-token"))
+                    ).total == 0
+                finally:
+                    await transaction.rollback()
+        finally:
+            await engine.dispose()
+
+    asyncio.run(scenario())

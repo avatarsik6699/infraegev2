@@ -57,6 +57,8 @@ See [FRONTEND](docs/FRONTEND.md) for implementation contracts.
 ## Current scope
 
 All public learning routes, the complete server-owned bank, filters, answer checking, help,
-attachments, next task and local progress remain. Catalog pages contain 30 tasks. Unsubmitted
-answer drafts are transient. Labs and browser analytics are removed. One Change 122 owns this
-pivot; original work is recoverable from `snapshot/pre-minimalism-2026-09-17`.
+attachments and local progress remain. Catalog pages offer 10/30/50/100 tasks, default 30, with
+inline solving, topic selection and sorting. Detail has one context-preserving return link;
+next-task navigation is absent. Unsubmitted drafts survive row collapse but reset on selection,
+page changes, leaving or reloading. Labs and browser analytics are removed. Changes 122–124
+established this baseline; original work is recoverable from `snapshot/pre-minimalism-2026-09-17`.

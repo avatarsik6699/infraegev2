@@ -112,7 +112,7 @@ it("renders the compact detail and one context-preserving return link in SSR", (
   ).toBeNull();
   expect(screen.getByText("Вычисление функции").tagName).toBe("P");
   expect(screen.getByText("Средняя")).not.toBeNull();
-  expect(screen.getByText("Ответ", { exact: true })).not.toBeNull();
+  expect(screen.getByText("Целое число", { exact: true })).not.toBeNull();
   const back = screen.getByRole("link", { name: "К списку задач" });
   const url = new URL(back.getAttribute("href")!, "http://localhost");
   expect(url.searchParams.get("topics")).toBe("ege-16");

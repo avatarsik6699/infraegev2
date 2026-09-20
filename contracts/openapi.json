@@ -170,6 +170,10 @@
       "CatalogTask": {
         "additionalProperties": false,
         "properties": {
+          "answer_instruction": {
+            "title": "Answer Instruction",
+            "type": "string"
+          },
           "difficulty": {
             "title": "Difficulty",
             "type": "integer"
@@ -247,6 +251,7 @@
         "required": [
           "id",
           "title",
+          "answer_instruction",
           "short_description",
           "difficulty",
           "estimated_minutes",

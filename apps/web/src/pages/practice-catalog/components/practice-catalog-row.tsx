@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import {
   practiceCatalog,
+  practiceAnswerFormat,
   PracticeDifficulty,
   type PracticeCatalogTypes,
 } from "~/entities/practice-task";
@@ -122,9 +123,11 @@ export const PracticeCatalogRow: React.FC<{
         <span className={styles.difficulty}>
           <PracticeDifficulty level={props.task.difficulty} />
         </span>
-        <span className={styles.format}>
+        <span className={styles.format} title={props.task.answer_instruction}>
           <FileText size={17} aria-hidden="true" />
-          Ответ
+          <span>
+            {practiceAnswerFormat.label(props.task.answer_instruction)}
+          </span>
         </span>
         <span className={styles.source}>
           <span

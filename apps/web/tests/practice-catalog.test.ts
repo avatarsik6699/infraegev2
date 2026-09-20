@@ -3,6 +3,24 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { practiceCatalog } from "~/entities/practice-task/practice-catalog";
 import { practiceProgress } from "~/features/practice-progress/model/practice-progress";
 import { safeLs } from "~/shared/lib/safe-ls";
+import { practiceAnswerFormat } from "~/entities/practice-task/practice-answer-format";
+
+it("uses authored answer guidance without guessing unclassified formats", () => {
+  expect(
+    practiceAnswerFormat.label(
+      "Запишите целое число в десятичной системе счисления.",
+    ),
+  ).toBe("Целое число");
+  expect(
+    practiceAnswerFormat.label(
+      "Введите ответ по условию задачи. Порядок значений важен.",
+    ),
+  ).toBe("По условию");
+  expect(practiceAnswerFormat.label("Введите два числа через пробел.")).toBe(
+    "Введите два числа через пробел.",
+  );
+  expect(practiceAnswerFormat.label()).toBe("По условию");
+});
 
 describe("practice catalog URL state", () => {
   it("keeps repeated topic parameters across router serialization and hydration", () => {
