@@ -7,7 +7,7 @@
 | Change | `126` |
 | Slug | `ege-catalog-redesign` |
 | Title | EGE catalog redesign |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/126-ege-catalog-redesign` |
 
 ## Goal
@@ -19,7 +19,7 @@ Lucide BookOpen placeholder and “Скоро”. No theory tracking, alternate 
 
 ## Design References
 
-- `/ege` — [provided reference](../artifacts/references/13_50_05.png): editorial rows,
+- `/ege` — [provided reference](../../artifacts/references/13_50_05.png): editorial rows,
   large numbers, mathematical miniatures, monochrome controls and progress.
 - Architect-approved plan in chat: responsive reserved geometry, zero unexpected layout shifts;
   reuse shared SearchField, Progress, Button, ActionLink and Lucide interface icons.
@@ -79,7 +79,7 @@ See `docs/SPEC.md` §3–§5, `docs/FRONTEND.md`, and Files above.
 
 ## Gate Checks
 
-Use [STACK](../STACK.md) affected-area Critical Gate. Additionally verify the approved
+Use [STACK](../../STACK.md) affected-area Critical Gate. Additionally verify the approved
 production build/prerender and targeted topic browser scenarios with Playwriter, including
 slow/failed API, hydration/assets, no-JS and desktop/mobile layout stability.
 
@@ -90,8 +90,8 @@ slow/failed API, hydration/assets, no-JS and desktop/mobile layout stability.
 ## Implementation Notes
 
 - Summary transport stays in the owning page API: no other slice consumes this catalog-specific aggregate.
-- Verification and browser evidence: [acceptance record](../artifacts/126-ege-catalog/verification.md).
-- Final [review and audit](../artifacts/126-ege-catalog/final-review.md): no unresolved functional blockers. Fallow retains advisory complexity/state-selector warnings, reviewed as bounded local code; no suppressions added.
+- Verification and browser evidence: [acceptance record](../../artifacts/126-ege-catalog/verification.md).
+- Final [review and audit](../../artifacts/126-ege-catalog/final-review.md): no unresolved functional blockers. Fallow retains advisory complexity/state-selector warnings, reviewed as bounded local code; no suppressions added.
 - E2E language-server diagnostics retain the documented Playwright package-resolution limitation; actual browser tests and repository lint pass.
 
 ## Commit Message
