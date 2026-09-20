@@ -10,6 +10,9 @@ export namespace AccordionTypes {
   export type Props = {
     items: readonly Item[];
     defaultOpen?: readonly string[];
+    value?: readonly string[];
+    onValueChange?: (value: string[]) => void;
+    nativeFallback?: boolean;
     multiple?: boolean;
     className?: string;
   };

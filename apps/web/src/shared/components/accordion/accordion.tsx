@@ -4,14 +4,28 @@ import { useIsEnhanced } from "~/shared/lib/use-is-enhanced";
 import { cssUtils } from "~/shared/lib/css-utils";
 import type { AccordionTypes } from "./accordion.types";
 import styles from "./accordion.module.css";
+import { AccordionNativeFallback } from "./accordion-native-fallback";
 
 export const Accordion: React.FC<AccordionTypes.Props> = ({
   items,
   defaultOpen = [],
+  value,
+  onValueChange,
+  nativeFallback = false,
   multiple = false,
   className,
 }) => {
   const enhanced = useIsEnhanced();
+
+  if (!enhanced && nativeFallback) {
+    return (
+      <AccordionNativeFallback
+        items={items}
+        defaultOpen={value ?? defaultOpen}
+        className={className}
+      />
+    );
+  }
 
   if (!enhanced) {
     return (
@@ -43,6 +57,8 @@ export const Accordion: React.FC<AccordionTypes.Props> = ({
     <BaseAccordion.Root
       className={cssUtils.cx(styles.root, className)}
       defaultValue={[...defaultOpen]}
+      value={value ? [...value] : undefined}
+      onValueChange={onValueChange}
       keepMounted
       multiple={multiple}
       data-enhanced="true"

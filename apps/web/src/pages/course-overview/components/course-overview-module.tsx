@@ -1,96 +1,15 @@
-import { ActionLink } from "~/shared/components/action-link";
-import type { CourseTypes } from "~/entities/course";
-import { Typography } from "~/shared/components/typography";
+import type { CourseOverviewPageTypes } from "../course-overview-page.types";
+import { courseOverviewModel } from "../model/course-overview-model";
 import styles from "../course-overview-page.module.css";
 
-type Props = {
-  courseRouteSlug: string;
-  index: number;
-  lessons: readonly CourseTypes.LessonDefinition[];
-  module: CourseTypes.Module;
-};
+type Props = { module: CourseOverviewPageTypes.Module };
 
-export const CourseOverviewModule: React.FC<Props> = (props) => {
-  const lessonsById = new Map(
-    props.lessons.map((lesson) => [lesson.id, lesson] as const),
-  );
-  const available = props.module.lessonPlan.some(
-    (planItem) => lessonsById.get(planItem.id)?.status === "published",
-  );
-
-  return (
-    <li
-      className={styles.module}
-      data-availability={available ? "available" : "planned"}
-      data-course-module
-    >
-      <span className={styles.moduleNumber} aria-hidden="true">
-        {String(props.index + 1).padStart(2, "0")}
-      </span>
-      <div className={styles.moduleCopy}>
-        <Typography.Title order={3}>{props.module.title}</Typography.Title>
-        <Typography.Text tone="muted">{props.module.summary}</Typography.Text>
-      </div>
-      <ol className={styles.lessonList}>
-        {props.module.lessonPlan.map((planItem) => {
-          const lesson = lessonsById.get(planItem.id);
-          const published = lesson?.status === "published";
-          return (
-            <li
-              className={styles.lessonPlanItem}
-              data-course-lesson-plan-item
-              data-lesson-status={published ? "published" : "planned"}
-              key={planItem.id}
-            >
-              {published ? (
-                <div className={styles.lessonRow}>
-                  <div className={styles.lessonCopy}>
-                    <ActionLink
-                      presentation="navigation"
-                      hierarchy="text"
-                      className={styles.lessonTitle}
-                      data-course-lesson-title
-                      data-title-status="published"
-                      to="/courses/$courseSlug/$lessonSlug"
-                      params={{
-                        courseSlug: props.courseRouteSlug,
-                        lessonSlug: lesson.routeSlug,
-                      }}
-                    >
-                      {planItem.title}
-                    </ActionLink>
-                    <span
-                      className={styles.lessonOutcome}
-                      data-course-lesson-outcome
-                    >
-                      {planItem.outcome}
-                    </span>
-                  </div>
-                </div>
-              ) : (
-                <div className={styles.lessonRow}>
-                  <span className={styles.lessonCopy}>
-                    <span
-                      className={styles.lessonTitle}
-                      data-course-lesson-title
-                      data-title-status="planned"
-                    >
-                      {planItem.title}
-                    </span>
-                    <span
-                      className={styles.lessonOutcome}
-                      data-course-lesson-outcome
-                    >
-                      {planItem.outcome}
-                    </span>
-                  </span>
-                  <span className={styles.lessonStatus}>В плане</span>
-                </div>
-              )}
-            </li>
-          );
-        })}
-      </ol>
-    </li>
-  );
-};
+export const CourseOverviewModule: React.FC<Props> = (props) => (
+  <span className={styles.moduleCopy} data-course-module>
+    <span className={styles.moduleTitle}>{props.module.title}</span>
+    <span className={styles.moduleMeta}>
+      {courseOverviewModel.lessonCount(props.module.lessons.length)}
+      <span> · </span> <span>{props.module.status}</span>
+    </span>
+  </span>
+);

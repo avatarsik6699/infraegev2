@@ -43,6 +43,11 @@
   font: inherit;
   text-align: left;
   transition: background-color var(--motion-duration) var(--motion-easing);
+  list-style: none;
+}
+
+.trigger::-webkit-details-marker {
+  display: none;
 }
 
 .staticHeader[data-has-leading="true"] {
@@ -88,7 +93,8 @@
   transition: var(--accordion-chevron-transition);
 }
 
-.trigger[data-panel-open] .chevron {
+.trigger[data-panel-open] .chevron,
+.item[open] > .trigger .chevron {
   transform: var(--accordion-chevron-open-transform);
 }
 

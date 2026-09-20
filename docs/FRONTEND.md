@@ -225,3 +225,33 @@ the shared opt-in scale effect (1.02, no button translation) and a 4px arrow tra
 foreground and shadow remain unchanged. Reduced motion disables all transforms/transitions.
 Do not change shared control colors per page. The shared light progress track remains visible
 against the constant white surface. Illustrations reserve a 13rem square (bounded on mobile).
+
+
+## 11. Course overview
+
+`/courses/python` follows `docs/artifacts/references/20_30_50.png` with actual published curriculum:
+28 lessons, nine modules and the four-lesson task-manager project. Preserve full authored titles,
+order, URLs, and content. Hide module descriptions, per-lesson outcomes and the long outcomes list
+on this compact overview only. Reading tracking is excluded; header/footer and lesson UI stay shared.
+
+Desktop uses approximately 34/66 summary/program columns with a thin divider; below 60rem stack
+summary, action, practice progress and curriculum. Use existing fonts, neutral tokens and Lucide.
+The summary contains level, lesson count, grounded requirements, primary lesson link and task progress.
+The overview intro is text-only, without a decorative illustration.
+Rows contain module.lesson numbering, complete title, mastery icon, solved/total tasks and an arrow;
+on narrow screens counts move under titles. Keep 40px targets and full text wrapping.
+
+First module starts open. Independent disclosures and expand/collapse-all are page-local; progress
+hydration never automatically changes disclosure. Shared Accordion's opt-in native details fallback
+preserves the same first-paint layout and usable lesson links without or with failed JavaScript.
+Bulk controls remain hidden before enhancement. No animated program height or automatic scrolling.
+
+Existing revision-aware lesson progress drives counts, module states and first-unmastered continuation
+using each lesson's mastery threshold (default 80%). A zero-task lesson is not mastered. Course
+practice counts sum lesson task memberships, consistently with per-lesson progress. No reading state,
+new persistence, API or database change. The catalog keeps its existing mastered-lesson semantics.
+Use “Не начат”, “В процессе”, “Освоен”; exact task counts remain visible even at mastery.
+No progress gives “Начать курс”; partial progress selects the first unmastered lesson; complete mastery
+gives “Все уроки освоены” and “Повторить курс”. Before hydration or on unavailable/incomplete summaries,
+show neutral counters and “Открыть первый урок”, never fabricated zeros or partial aggregates.
+Reserve action/count/status geometry across hydration and show “Прогресс временно недоступен” on failure.

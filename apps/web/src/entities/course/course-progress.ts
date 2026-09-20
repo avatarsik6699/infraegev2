@@ -1,11 +1,11 @@
 import type { CourseProgressTypes } from "./course-progress.types";
 
-const calculate = (
+const calculatePractice = (
   lessons: readonly CourseProgressTypes.Lesson[],
   progressByLessonId: Readonly<
     Record<string, CourseProgressTypes.LessonProgress>
   >,
-): CourseProgressTypes.Snapshot => {
+): CourseProgressTypes.PracticeSnapshot => {
   const states = lessons.map((lesson) => {
     const solvedIds = new Set(
       progressByLessonId[lesson.id]?.solvedTaskIds ?? [],
@@ -17,20 +17,45 @@ const calculate = (
 
     return {
       id: lesson.id,
+      solved: solvedCount,
+      total: lesson.tasks.length,
       mastered:
         lesson.tasks.length > 0 &&
         solvedCount / lesson.tasks.length >= masteryThreshold,
     };
   });
-  const masteredLessonIds = states
-    .filter((state) => state.mastered)
-    .map((state) => state.id);
+  return {
+    byLessonId: Object.fromEntries(
+      states.map((state) => [
+        state.id,
+        {
+          solved: state.solved,
+          total: state.total,
+          mastered: state.mastered,
+        },
+      ]),
+    ),
+    solved: states.reduce((sum, state) => sum + state.solved, 0),
+    total: states.reduce((sum, state) => sum + state.total, 0),
+  };
+};
+
+const calculate = (
+  lessons: readonly CourseProgressTypes.Lesson[],
+  progressByLessonId: Readonly<
+    Record<string, CourseProgressTypes.LessonProgress>
+  >,
+): CourseProgressTypes.Snapshot => {
+  const practice = calculatePractice(lessons, progressByLessonId);
+  const masteredLessonIds = lessons
+    .filter((lesson) => practice.byLessonId[lesson.id]?.mastered)
+    .map((lesson) => lesson.id);
 
   return {
     masteredLessonIds,
-    availableCount: states.length,
+    availableCount: lessons.length,
     allAvailableMastered:
-      states.length > 0 && masteredLessonIds.length === states.length,
+      lessons.length > 0 && masteredLessonIds.length === lessons.length,
   };
 };
 
@@ -47,6 +72,7 @@ const formatCatalogCopy = (progress: CourseProgressTypes.Snapshot): string =>
 
 export const courseProgress = {
   calculate,
+  calculatePractice,
   formatCatalogCopy,
   formatOverviewCopy,
 };

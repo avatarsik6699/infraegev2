@@ -1,56 +1,44 @@
-import { useMemo } from "react";
-import { courseProgress, type CourseProgressTypes } from "~/entities/course";
-import {
-  useLessonProgressHydrated,
-  useLessonsProgress,
-} from "~/features/lesson-progress";
 import { Progress } from "~/shared/components/progress";
 import { Typography } from "~/shared/components/typography";
+import type { CourseOverviewPageTypes } from "../course-overview-page.types";
 import styles from "../course-overview-page.module.css";
+import { courseOverviewModel } from "../model/course-overview-model";
 
-type Props = {
-  lessons: readonly CourseProgressTypes.Lesson[] | null;
-};
+type Props = { progress: CourseOverviewPageTypes.Progress };
 
-export const CourseOverviewProgress: React.FC<Props> = (props) => {
-  const progressLessons = useMemo(() => props.lessons ?? [], [props.lessons]);
-  const lessonIds = useMemo(
-    () => progressLessons.map((lesson) => lesson.id),
-    [progressLessons],
-  );
-  const progressByLessonId = useLessonsProgress(lessonIds, progressLessons);
-  const hydrated = useLessonProgressHydrated();
-  const progress = useMemo(
-    () => courseProgress.calculate(progressLessons, progressByLessonId),
-    [progressByLessonId, progressLessons],
-  );
-  if (!props.lessons)
-    return (
-      <Typography.Text role="status" tone="muted">
-        Прогресс временно недоступен. Обновите страницу, чтобы повторить
-        загрузку.
-      </Typography.Text>
-    );
-  if (progress.availableCount === 0) return null;
-
-  const copy = courseProgress.formatOverviewCopy(progress);
-
-  return (
-    <section
-      className={styles.progress}
-      aria-label="Прогресс курса"
-      data-progress-ready={hydrated || undefined}
+export const CourseOverviewProgress: React.FC<Props> = (props) => (
+  <section
+    className={styles.progress}
+    aria-labelledby="course-progress"
+    data-progress-ready={props.progress.status === "ready" || undefined}
+  >
+    <Typography.Title
+      order={2}
+      id="course-progress"
+      className={styles.smallHeading}
     >
-      <Typography.Text tone="muted">
-        {hydrated ? copy : "Прогресс на этом устройстве"}
-      </Typography.Text>
-      <Progress
-        className={hydrated ? undefined : styles.progressPending}
-        label="Освоенные доступные уроки"
-        max={progress.availableCount}
-        value={progress.masteredLessonIds.length}
-        valueText={copy}
-      />
-    </section>
-  );
-};
+      Ваш прогресс
+    </Typography.Title>
+    <div className={styles.progressRow}>
+      <span>Практика</span>
+      <span className={styles.progressCount}>
+        {props.progress.status === "ready"
+          ? `${String(props.progress.solved)} из ${String(props.progress.total)}`
+          : "— из —"}
+      </span>
+      {props.progress.status === "ready" && props.progress.total > 0 ? (
+        <Progress
+          label="Решённые задачи курса"
+          value={props.progress.solved}
+          max={props.progress.total}
+          valueText={`Решено ${String(props.progress.solved)} из ${String(props.progress.total)} задач`}
+        />
+      ) : (
+        <span className={styles.progressPlaceholder} aria-hidden="true" />
+      )}
+    </div>
+    <div className={styles.progressNote} role="status">
+      {courseOverviewModel.progressNote(props.progress)}
+    </div>
+  </section>
+);

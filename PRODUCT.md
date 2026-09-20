@@ -40,8 +40,9 @@ fallback.
 - The Python course has a complete 28-step path from the first program to one terminal task
   manager. All lessons have passed publication approval; current deployment is verified separately. Progress is derived from the
   published lessons and remains optional browser-local state.
-- Every public curriculum row names a concrete learning outcome and links to its published lesson;
-  future curriculum expansion must not appear as available before its own approval.
+- The compact course overview retains full lesson titles and links to published lessons; authored
+  learning outcomes remain in course content, while overview rows show practice counts.
+  Future curriculum expansion must not appear as available before its own approval.
 - Accounts, synchronized progress, hard lesson locks, payments and in-product AI are out of scope.
 
 ## Brand Commitments
@@ -52,6 +53,7 @@ The approved presentation is white, monochrome, text-led and minimal, following 
 `a5b0bf5`; orange is a small functional accent. No background patterns, decorative illustrations,
 glints, drawn underlines or idle animation. Educational figures remain part of lessons. The approved `/courses` catalog is a local exception:
 four subject-specific hand-drawn raster miniatures, quiet cards and hover/focus-only feedback.
+The Python overview remains text-only.
 Homepage gives direct access to published topics and the Python course; navigation includes Practice.
 See [FRONTEND](docs/FRONTEND.md) for implementation contracts.
 

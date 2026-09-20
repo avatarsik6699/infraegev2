@@ -134,8 +134,8 @@ export class PracticeCutoverPage {
     ).toBeDisabled();
     await this.page.goto("/courses/python");
     await expect(
-      this.page.getByText("Освоено 1 из 28 доступных уроков.", { exact: true }),
-    ).toBeVisible();
+      this.page.getByRole("progressbar", { name: "Решённые задачи курса" }),
+    ).toHaveAttribute("aria-valuenow", "4");
     await this.page.goto("/courses");
     await expect(
       this.page

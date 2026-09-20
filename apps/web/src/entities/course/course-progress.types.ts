@@ -14,4 +14,16 @@ export namespace CourseProgressTypes {
     availableCount: number;
     allAvailableMastered: boolean;
   };
+
+  export type Practice = {
+    solved: number;
+    total: number;
+    mastered: boolean;
+  };
+
+  export type PracticeSnapshot = {
+    byLessonId: Readonly<Record<string, Practice>>;
+    solved: number;
+    total: number;
+  };
 }

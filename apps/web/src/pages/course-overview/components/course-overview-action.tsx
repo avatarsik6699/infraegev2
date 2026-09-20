@@ -1,26 +1,43 @@
 import { ActionLink } from "~/shared/components/action-link";
-import type { CourseTypes } from "~/entities/course";
+import type { CourseOverviewPageTypes } from "../course-overview-page.types";
 import styles from "../course-overview-page.module.css";
 
 type Props = {
-  course: CourseTypes.Definition;
-  firstVisibleLesson?: CourseTypes.LessonDefinition;
+  courseRouteSlug: string;
+  action?: CourseOverviewPageTypes.Action;
+  modules: readonly CourseOverviewPageTypes.Module[];
 };
 
 export const CourseOverviewAction: React.FC<Props> = (props) => {
-  if (!props.firstVisibleLesson) return null;
+  if (!props.action) return null;
   return (
     <ActionLink
-      hierarchy="text"
+      presentation="button"
+      hierarchy="primary"
       icon="forward"
       className={styles.courseLink}
       to="/courses/$courseSlug/$lessonSlug"
       params={{
-        courseSlug: props.course.routeSlug,
-        lessonSlug: props.firstVisibleLesson.routeSlug,
+        courseSlug: props.courseRouteSlug,
+        lessonSlug: props.action.lesson.routeSlug,
       }}
     >
-      Открыть первый урок для проверки
+      <span className={styles.actionCopy}>
+        <span>{props.action.label}</span>
+        {props.modules.flatMap((module) =>
+          module.lessons
+            .filter((lesson) => lesson.routeSlug)
+            .map((lesson) => (
+              <span
+                key={lesson.id}
+                className={styles.actionMeasure}
+                aria-hidden="true"
+              >
+                Продолжить: {lesson.title}
+              </span>
+            )),
+        )}
+      </span>
     </ActionLink>
   );
 };
