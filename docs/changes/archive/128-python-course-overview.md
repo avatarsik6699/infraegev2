@@ -7,7 +7,7 @@
 | Change | `128` |
 | Slug | `python-course-overview` |
 | Title | Python course overview |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/128-python-course-overview` |
 
 ## Goal
@@ -61,7 +61,7 @@ See `docs/SPEC.md` §2.2, §3–§5, `docs/FRONTEND.md` and the Files list above
 
 ## Gate Checks
 
-Critical Gate is defined in [STACK](../STACK.md). Focused model/component tests and required
+Critical Gate is defined in [STACK](../../STACK.md). Focused model/component tests and required
 interactive browser evidence only; no Full Gate or deploy. Verify no-JS, blocked/delayed scripts,
 summary failure, long titles, keyboard and responsive widths (desktop, 768, 390, 320).
 
