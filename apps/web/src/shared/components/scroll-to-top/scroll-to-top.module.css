@@ -1,0 +1,42 @@
+.root {
+  position: fixed;
+  z-index: var(--layer-reading);
+  right: var(--space-2);
+  bottom: var(--space-2);
+}
+
+.root[hidden],
+:global(body:has([aria-modal="true"])) .root {
+  display: none;
+}
+
+@media (max-width: 72rem) {
+  .root {
+    inset: auto 0 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: calc(var(--control-height) + env(safe-area-inset-bottom, 0px));
+    padding: 0 max(var(--space-2), env(safe-area-inset-right, 0px))
+      env(safe-area-inset-bottom, 0px);
+    background: var(--color-bg);
+  }
+
+  :global(
+      body:has(
+        input:focus,
+        textarea:focus,
+        select:focus,
+        [contenteditable="true"]:focus
+      )
+    )
+    .root {
+    display: none;
+  }
+
+  :global(html:has([data-scroll-to-top])) {
+    scroll-padding-bottom: calc(
+      var(--control-height) + var(--space-1) + env(safe-area-inset-bottom, 0px)
+    );
+  }
+}

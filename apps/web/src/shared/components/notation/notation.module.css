@@ -1,11 +1,14 @@
 .root {
-  padding: 0.08em var(--notation-padding-inline, 0.36em);
-  border-radius: var(--notation-radius, 0.3rem);
-  background: var(--notation-bg, var(--color-surface-quiet));
   color: var(--notation-color, var(--color-text));
   font-family: var(--font-data);
   font-size: var(--text-inline-code);
   font-style: normal;
   font-variant-ligatures: none;
   box-decoration-break: clone;
+}
+
+.root[data-emphasis="highlight"] {
+  padding: 0.08em var(--notation-padding-inline, 0.2em);
+  border-radius: var(--notation-radius, 0.125rem);
+  background: var(--notation-bg, var(--color-surface-quiet));
 }

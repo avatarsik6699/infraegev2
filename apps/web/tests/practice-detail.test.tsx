@@ -47,6 +47,7 @@ const result: PracticeTaskWidgetTypes.Result = {
       id: "detail-task",
       title: "Вычисление функции",
       solutionRevision: 1,
+      difficulty: 2,
       difficultyLabel: "Средняя",
       statement: [{ type: "text", text: "Вычислите F(5)." }],
       hint: [{ type: "text", text: "Начните с базы." }],

@@ -34,8 +34,12 @@ export const PracticePagination: React.FC<{
             <ChevronLeft size={16} aria-hidden="true" />
           </ActionLink>
         ) : (
-          <span aria-disabled="true" aria-label="Предыдущая страница">
-            <ChevronLeft size={16} />
+          <span
+            role="link"
+            aria-disabled="true"
+            aria-label="Предыдущая страница"
+          >
+            <ChevronLeft size={16} aria-hidden="true" />
           </span>
         )}
         {pages.map((page, index) => (
@@ -75,8 +79,12 @@ export const PracticePagination: React.FC<{
             <ChevronRight size={16} aria-hidden="true" />
           </ActionLink>
         ) : (
-          <span aria-disabled="true" aria-label="Следующая страница">
-            <ChevronRight size={16} />
+          <span
+            role="link"
+            aria-disabled="true"
+            aria-label="Следующая страница"
+          >
+            <ChevronRight size={16} aria-hidden="true" />
           </span>
         )}
       </nav>

@@ -28,6 +28,7 @@ export const TopicLessonProgress: React.FC<Props> = (props) => {
           />
           <ConfirmationDialog
             triggerLabel="Сбросить прогресс"
+            triggerAppearance="subtle"
             triggerAriaLabel="Сбросить прогресс урока"
             title="Сбросить прогресс?"
             description="Будут удалены решённые задачи и принятые ответы только этого урока."

@@ -255,3 +255,28 @@ No progress gives “Начать курс”; partial progress selects the firs
 gives “Все уроки освоены” and “Повторить курс”. Before hydration or on unavailable/incomplete summaries,
 show neutral counters and “Открыть первый урок”, never fabricated zeros or partial aggregates.
 Reserve action/count/status geometry across hydration and show “Прогресс временно недоступен” on failure.
+
+## 13. Lesson readability and return navigation (Change 129)
+
+Lesson outline rows have no extra group gaps, with 32px minimum mouse targets and 40px touch
+targets. Preserve nested lists, current-location indication and stable SSR/mobile disclosure.
+Lesson progress reset is a compact, content-width, bare action with secondary text and normal
+weight; the destructive confirmation remains in the shared dialog.
+
+Inline Notation uses its data font without a background or padding by default, across lessons,
+catalog and task detail. Only explicit `emphasis="highlight"` opts into a backing; semantic
+containers can supply that backing's color but cannot automatically highlight all notation.
+Preserve authored emphasis and block-code/educational surfaces. Code disclosure buttons remain
+transparent even when expanded, hovered or pressed; expanded help keeps its selected surface.
+
+Lesson practice uses the catalog difficulty glyph with the task's actual numeric level. Task
+headings use 18px/600 UI type; theory links form a vertical list to the right with a 24px
+column gap, wrapping below with an 8px gap at widths up to 40rem. Place Lucide Link before fragment
+links, preserving 16px before the statement. Previous/next lesson links use 14px UI text and 40px targets.
+
+Both lesson types expose a shared return-to-top control after one viewport of scrolling. It
+sits outside the reading column above 72rem; narrower layouts use a borderless 40px bottom strip plus safe
+area, with bottom scroll reserve and scroll padding for focused controls. Hide it while a mobile
+field or modal is active. Focus the lesson heading without an extra scroll and scroll to page
+start smoothly, or instantly for reduced motion. Keep it hidden before enhancement/no-JS and
+reserve geometry independently of hydration. Browser access stays in the owning shared adapter.

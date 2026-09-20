@@ -77,6 +77,10 @@ export class MinimalApplicationPage {
   }
   async expectCombinedPracticeFilters(noJavaScript = false) {
     await this.page.goto("/practice?page=2");
+    if (!noJavaScript) {
+      await this.openTopicChooser();
+      await this.page.keyboard.press("Escape");
+    }
     const filters = this.page.getByRole("form", { name: "Фильтры задач" });
     await filters.getByLabel("Поиск задач", { exact: true }).fill("рекурс");
     await expect(this.page).toHaveURL(/page=2/);
@@ -86,9 +90,7 @@ export class MinimalApplicationPage {
         .selectOption(["ege-16", "ege-5"]);
       await filters.getByRole("button", { name: "Применить" }).click();
     } else {
-      await filters
-        .getByRole("combobox", { name: "Тема", exact: true })
-        .click();
+      await this.openTopicChooser();
       await this.page.getByRole("option", { name: /16 номер/ }).click();
       await this.page.getByRole("option", { name: /5 номер/ }).click();
       await expect(this.page).toHaveURL(/page=2/);
@@ -158,7 +160,7 @@ export class MinimalApplicationPage {
       name: "Тема",
       exact: true,
     });
-    await trigger.click();
+    await this.openTopicChooser();
     await this.page
       .getByRole("combobox", { name: "Найти тему", exact: true })
       .fill("Циклы");
@@ -167,7 +169,7 @@ export class MinimalApplicationPage {
     await option.click();
     await this.page.keyboard.press("Escape");
     await expect(trigger).toContainText("Все темы");
-    await trigger.click();
+    await this.openTopicChooser();
     await this.page
       .getByRole("combobox", { name: "Найти тему", exact: true })
       .fill("Циклы");
@@ -195,6 +197,20 @@ export class MinimalApplicationPage {
         .getByRole("list", { name: "Задачи", exact: true })
         .locator(":scope > li"),
     ).toHaveCount(30);
+  }
+
+  private async openTopicChooser(): Promise<void> {
+    const trigger = this.page.getByRole("combobox", {
+      name: "Тема",
+      exact: true,
+    });
+    // The SSR trigger can paint before its event handlers are attached.
+    await expect(async () => {
+      if ((await trigger.getAttribute("aria-expanded")) !== "true") {
+        await trigger.click();
+      }
+      await expect(this.page.getByPlaceholder("Найти тему")).toBeVisible();
+    }).toPass();
   }
 
   async expectPracticeToolbarStability() {
@@ -593,11 +609,7 @@ export class MinimalApplicationPage {
         await expect(
           list.getByRole("button", { name: /Раскрыть задание:/ }).first(),
         ).toBeVisible();
-        // A visible trigger is SSR content; opening its popup proves hydration has completed.
-        await expect(async () => {
-          await topic.click();
-          await expect(this.page.getByPlaceholder("Найти тему")).toBeVisible();
-        }).toPass();
+        await this.openTopicChooser();
         await this.page.keyboard.press("Escape");
         const filtersAfter = await filters.boundingBox();
         const listAfter = await list.boundingBox();

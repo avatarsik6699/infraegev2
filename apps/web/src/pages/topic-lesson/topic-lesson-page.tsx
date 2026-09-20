@@ -1,5 +1,6 @@
 import { useRouter } from "@tanstack/react-router";
 import { useRef } from "react";
+import { ScrollToTop } from "~/shared/components/scroll-to-top";
 import { lessonPublications, type LessonTypes } from "~/entities/lesson";
 import { topicCatalog } from "~/entities/topic-catalog";
 import {
@@ -59,6 +60,7 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
 
   return (
     <div className={styles.page} data-topic-lesson-page>
+      <ScrollToTop key={props.lesson.id} headingId="lesson-title" />
       <ReadingPositionIndicator targetRef={articleRef} />
       <TopicLessonHeader
         taskNumbers={props.lesson.taskNumbers}

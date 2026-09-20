@@ -9,7 +9,13 @@ export const LessonIntro: React.FC<LessonIntroTypes.Props> = (props) => (
     className={cssUtils.cx(styles.root, props.className)}
     data-presentation="study"
   >
-    <Typography.Title order={1} variant="lesson" className={styles.title}>
+    <Typography.Title
+      order={1}
+      id="lesson-title"
+      tabIndex={-1}
+      variant="lesson"
+      className={styles.title}
+    >
       {props.title}
     </Typography.Title>
     <Typography.Text variant="lead" tone="muted" className={styles.lead}>

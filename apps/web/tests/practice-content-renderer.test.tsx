@@ -12,6 +12,7 @@ import { render } from "./render";
 const task: PracticeTaskTypes.LocalTask = {
   id: "rich-task",
   solutionRevision: 1,
+  difficulty: 2,
   difficultyLabel: "Средняя",
   title: "Разберите данные",
   statement: [

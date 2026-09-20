@@ -67,51 +67,59 @@ describe("public practice projection", () => {
     expect(() => parseContentBlock(source)).toThrow(),
   );
 
-  it("loads server relations with their solution revision and no browser checker", async () => {
-    const fetchMock = vi.fn().mockResolvedValue(
-      new Response(
-        JSON.stringify({
-          id: "lesson",
-          kind: "topic",
-          tasks: [
-            {
-              id: "task",
-              revision: 3,
-              solution_revision: 2,
-              content: {
+  it.each([3, 1, 2])(
+    "loads server relations with actual difficulty %s, revision and no browser checker",
+    async (difficulty) => {
+      const fetchMock = vi.fn().mockResolvedValue(
+        new Response(
+          JSON.stringify({
+            id: "lesson",
+            kind: "topic",
+            tasks: [
+              {
                 id: "task",
-                title: "Задача",
-                difficulty: 1,
-                statement: [text],
-                hint: [],
-                explanation: [text],
-                theory_links: [
-                  { material_id: "lesson", section: "idea", label: "Идея" },
-                  { material_id: "lesson", section: null, label: "Весь урок" },
-                  {
-                    material_id: "other",
-                    section: "idea",
-                    label: "Другой урок",
-                  },
-                ],
+                revision: 3,
+                solution_revision: 2,
+                content: {
+                  id: "task",
+                  title: "Задача",
+                  difficulty,
+                  statement: [text],
+                  hint: [],
+                  explanation: [text],
+                  theory_links: [
+                    { material_id: "lesson", section: "idea", label: "Идея" },
+                    {
+                      material_id: "lesson",
+                      section: null,
+                      label: "Весь урок",
+                    },
+                    {
+                      material_id: "other",
+                      section: "idea",
+                      label: "Другой урок",
+                    },
+                  ],
+                },
+                deliveries: [],
               },
-              deliveries: [],
-            },
-          ],
-        }),
-        { headers: { "Content-Type": "application/json" } },
-      ),
-    );
-    vi.stubGlobal("fetch", fetchMock);
-    const result = await loadLessonPractice("topic", "lesson");
-    expect(result.practiceUnavailable).toBe(false);
-    expect(result.tasks[0]?.solutionRevision).toBe(2);
-    expect(result.tasks[0]?.theoryLinks).toEqual([
-      { hash: "idea", label: "Идея" },
-    ]);
-    expect(fetchMock).toHaveBeenCalledOnce();
-    expect((fetchMock.mock.calls[0]?.[0] as Request).cache).toBe("no-store");
-  });
+            ],
+          }),
+          { headers: { "Content-Type": "application/json" } },
+        ),
+      );
+      vi.stubGlobal("fetch", fetchMock);
+      const result = await loadLessonPractice("topic", "lesson");
+      expect(result.practiceUnavailable).toBe(false);
+      expect(result.tasks[0]?.solutionRevision).toBe(2);
+      expect(result.tasks[0]?.difficulty).toBe(difficulty);
+      expect(result.tasks[0]?.theoryLinks).toEqual([
+        { hash: "idea", label: "Идея" },
+      ]);
+      expect(fetchMock).toHaveBeenCalledOnce();
+      expect((fetchMock.mock.calls[0]?.[0] as Request).cache).toBe("no-store");
+    },
+  );
 
   it("returns dependency failure without reading legacy JSON", async () => {
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new TypeError("offline")));

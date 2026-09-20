@@ -74,6 +74,7 @@ export namespace PracticeTaskTypes {
   export type Task = {
     id: string;
     solutionRevision: number;
+    difficulty: number;
     difficultyLabel: string;
     answerInstruction?: string;
     explanationKind?: "unclassified" | "method" | "worked_solution";

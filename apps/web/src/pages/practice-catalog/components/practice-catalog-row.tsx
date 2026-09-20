@@ -49,6 +49,7 @@ export const PracticeCatalogRow: React.FC<{
       <div className={styles.rowHeader}>
         <span
           className={styles.progress}
+          role="img"
           aria-label={hydrated ? status : "Статус решения загружается"}
           title={status}
         >

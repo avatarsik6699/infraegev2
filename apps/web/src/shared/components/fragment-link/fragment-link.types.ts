@@ -9,7 +9,7 @@ export namespace FragmentLinkTypes {
     hash: string;
     children: React.ReactNode;
     className?: string;
-    /** Leading link icon; omitted by navigation lists with their own indicators. */
+    /** Lucide Link icon for a fragment; omitted by navigation lists. */
     icon?: boolean;
     presentation?: "inline" | "action";
     hierarchy?: "text";

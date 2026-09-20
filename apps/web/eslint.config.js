@@ -230,6 +230,12 @@ export default tseslint.config(
     },
   },
   {
+    files: ["src/shared/lib/scroll-to-top/browser-adapter.ts"],
+    rules: {
+      "no-restricted-globals": restrictedPlatformGlobals("document", "window"),
+    },
+  },
+  {
     files: ["src/shared/lib/reading-position/browser-adapter.ts"],
     rules: {
       "no-restricted-globals": restrictedPlatformGlobals("window"),

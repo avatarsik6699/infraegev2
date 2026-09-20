@@ -382,6 +382,7 @@ export function projectPracticeTask(
     title: source.content.title,
     answerInstruction: source.content.answer_instruction,
     explanationKind: source.content.explanation_kind,
+    difficulty: source.content.difficulty,
     difficultyLabel: difficultyLabel(source.content.difficulty),
     statement: blocks(source.content.statement),
     hint: blocks(source.content.hint),

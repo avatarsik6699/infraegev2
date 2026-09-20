@@ -1,5 +1,6 @@
 import { useRouter } from "@tanstack/react-router";
 import { useRef } from "react";
+import { ScrollToTop } from "~/shared/components/scroll-to-top";
 import { getCourseLessons } from "~/entities/course";
 import { type LessonTypes } from "~/entities/lesson";
 import {
@@ -52,6 +53,7 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
   ];
   return (
     <div className={styles.page} data-course-lesson-page>
+      <ScrollToTop key={props.lesson.id} headingId="lesson-title" />
       <ReadingPositionIndicator targetRef={articleRef} />
       <CourseLessonHeader
         courseRouteSlug={props.course.routeSlug}

@@ -156,6 +156,15 @@ const forbiddenGlobals = [
 
 const forbiddenPatterns = [
   {
+    name: "network access in scroll-to-top adapter",
+    ruleId: "no-restricted-globals",
+    source: 'export const load = () => fetch("/api/value");',
+    filePath: path.join(
+      workspaceRoot,
+      "src/shared/lib/scroll-to-top/browser-adapter.ts",
+    ),
+  },
+  {
     name: "network access in document recovery",
     ruleId: "no-restricted-globals",
     source: 'export const load = () => fetch("/api/value");',
@@ -237,6 +246,10 @@ assert.deepEqual(
 );
 
 const validServerBoundaries = [
+  [
+    path.join(workspaceRoot, "src/shared/lib/scroll-to-top/browser-adapter.ts"),
+    "export const scroll = { top: () => window.scrollTo({ top: 0 }), focus: (id: string) => document.getElementById(id)?.focus() };",
+  ],
   [
     path.join(
       workspaceRoot,

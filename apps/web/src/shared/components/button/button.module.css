@@ -130,7 +130,7 @@
   background: var(--control-soft-bg);
 }
 .root[data-hierarchy="soft"]:hover:not(:disabled),
-.root[aria-expanded="true"]:not(:disabled) {
+.root[aria-expanded="true"]:not([data-surface="code"]):not(:disabled) {
   background: color-mix(in srgb, var(--color-text) 10%, var(--color-surface));
 }
 .root[data-hierarchy="destructive"] {

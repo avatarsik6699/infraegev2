@@ -4,7 +4,7 @@
 .root {
   min-width: 0;
 }
-.catalogSection {
+.catalogSection[data-measure] {
   container-type: inline-size;
   padding-block: var(--space-5);
 }

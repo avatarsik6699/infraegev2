@@ -35,6 +35,7 @@ function detail(id: string, revision = 1): PracticeTaskWidgetTypes.Result {
         id,
         title: id,
         solutionRevision: revision,
+        difficulty: 1,
         difficultyLabel: "Базовая",
         answerInstruction:
           "Запишите целое число в десятичной системе счисления.",

@@ -8,7 +8,11 @@ export const Notation: React.FC<NotationTypes.Props> = ({
 }) => {
   const Tag = kind === "formula" ? "var" : "code";
   return (
-    <Tag className={cssUtils.cx(styles.root, props.className)} data-kind={kind}>
+    <Tag
+      className={cssUtils.cx(styles.root, props.className)}
+      data-kind={kind}
+      data-emphasis={props.emphasis}
+    >
       {props.children}
     </Tag>
   );

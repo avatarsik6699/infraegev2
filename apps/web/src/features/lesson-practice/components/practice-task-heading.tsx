@@ -15,20 +15,25 @@ export const PracticeTaskHeading: React.FC<PracticeTaskHeadingProps> = (
     <Typography.Title order={3} id={props.headingId}>
       {props.task.title}
     </Typography.Title>
-    <nav
-      className={styles.taskTheoryLinks}
-      aria-label={`Теория к задаче «${props.task.title}»`}
-    >
-      {props.task.theoryLinks.map((link) => (
-        <FragmentLink
-          presentation="action"
-          hierarchy="text"
-          hash={link.hash}
-          key={link.hash}
-        >
-          {link.label}
-        </FragmentLink>
-      ))}
-    </nav>
+    {props.task.theoryLinks.length > 0 && (
+      <nav
+        className={styles.taskTheoryLinks}
+        aria-label={`Теория к задаче «${props.task.title}»`}
+      >
+        <ul>
+          {props.task.theoryLinks.map((link) => (
+            <li key={link.hash}>
+              <FragmentLink
+                presentation="action"
+                hierarchy="text"
+                hash={link.hash}
+              >
+                {link.label}
+              </FragmentLink>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    )}
   </div>
 );

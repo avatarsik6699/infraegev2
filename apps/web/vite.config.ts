@@ -32,7 +32,8 @@ export default defineConfig((configEnv) => {
             splitBehavior: ({ routeId }) => {
               if (
                 routeId.startsWith("/courses") ||
-                routeId.startsWith("/ege")
+                routeId.startsWith("/ege") ||
+                routeId.startsWith("/practice")
               ) {
                 return [
                   ["loader", "component"],

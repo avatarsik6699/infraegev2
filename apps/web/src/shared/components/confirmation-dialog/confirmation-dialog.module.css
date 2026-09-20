@@ -81,3 +81,11 @@
     transition: none;
   }
 }
+
+.subtleTrigger[data-hierarchy] {
+  justify-self: start;
+  width: fit-content;
+  padding-inline: 0;
+  color: var(--color-text-soft);
+  font-weight: 400;
+}

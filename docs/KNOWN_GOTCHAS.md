@@ -477,3 +477,14 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
   Chrome windows. Follow [STACK's procedure](STACK.md#interactive-browser-connection-wsl)
   before falling back. If the normal profile does not connect, check relay/network
   and ask for an extension-icon click; do not assume every disconnect has this cause.
+
+### PageContainer overrides must not depend on stylesheet insertion order
+
+- **Symptoms:** delayed-hydration catalog tests see a 24px jump and return even though final
+  geometry matches the server render.
+- **Root cause:** a page's `.catalogSection { padding-block: ... }` and PageContainer's `.root
+  { padding: ... }` have equal specificity. Vite's client style insertion temporarily changes
+  their cascade order.
+- **Fix:** qualify the owning page override with the existing `[data-measure]` attribute. Keep
+  the shared container defaults and the page's intended spacing; do not weaken CLS assertions.
+- **Verification:** all eight delayed/failed asset EGE scenarios pass with zero reported shifts.

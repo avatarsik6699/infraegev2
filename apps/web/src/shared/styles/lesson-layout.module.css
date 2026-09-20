@@ -123,6 +123,9 @@
 }
 
 .resultLinks {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  line-height: 1.45;
   composes: lessonNavigationLinks from "./patterns.module.css";
 }
 
@@ -209,4 +212,12 @@
 
 .footer {
   composes: lessonFooter from "./patterns.module.css";
+}
+
+@media (max-width: 72rem) and (scripting: enabled) {
+  .page {
+    padding-bottom: calc(
+      var(--control-height) + env(safe-area-inset-bottom, 0px)
+    );
+  }
 }

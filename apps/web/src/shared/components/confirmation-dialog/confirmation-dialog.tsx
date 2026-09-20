@@ -8,7 +8,18 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogTypes.Props> = (
 ) => (
   <AlertDialog.Root>
     <AlertDialog.Trigger
-      render={<Button hierarchy="quiet" />}
+      render={
+        <Button
+          hierarchy="quiet"
+          density={props.triggerAppearance === "subtle" ? "compact" : "default"}
+          surface={props.triggerAppearance === "subtle" ? "bare" : "default"}
+          className={
+            props.triggerAppearance === "subtle"
+              ? styles.subtleTrigger
+              : undefined
+          }
+        />
+      }
       aria-label={props.triggerAriaLabel}
     >
       {props.triggerLabel}

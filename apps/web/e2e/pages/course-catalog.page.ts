@@ -73,6 +73,20 @@ export class CourseCatalogPage {
       await expect(
         this.page.getByRole("heading", { name: "Мини-курсы", exact: true }),
       ).toBeVisible();
+      // DOM visibility can precede stylesheet loading; scripts and fonts stay held here.
+      await expect
+        .poll(() =>
+          this.page
+            .locator('link[rel="stylesheet"]')
+            .evaluateAll((links) =>
+              links.every((link) => (link as HTMLLinkElement).sheet !== null),
+            ),
+        )
+        .toBe(true);
+      await expect(this.page.locator("[data-course-list]")).toHaveCSS(
+        "display",
+        "grid",
+      );
       const before = await this.geometry();
       await expect(
         this.page.locator("[data-course-progress]").getByRole("status"),

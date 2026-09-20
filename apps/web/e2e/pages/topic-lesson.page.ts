@@ -33,6 +33,45 @@ export class TopicLessonPage {
     await openLessonAtTop(this.page, this.config.route);
   }
 
+  async expectCodeDisclosureAndReturnToTop(): Promise<void> {
+    await this.page.emulateMedia({ reducedMotion: "reduce" });
+    const top = this.page.getByRole("button", { name: "К началу урока" });
+    await expect(top).toBeHidden();
+    const expand = this.page
+      .getByRole("button", { name: "Показать весь код", exact: true })
+      .first();
+    await expand.click();
+    const collapse = this.page
+      .getByRole("button", { name: "Свернуть код", exact: true })
+      .first();
+    await expect(collapse).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+    await collapse.hover();
+    await expect(collapse).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+    await collapse.click();
+    await expect(expand).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+    await top.click();
+    await expect(this.page.getByRole("heading", { level: 1 })).toBeFocused();
+    await expect.poll(() => this.page.evaluate(() => window.scrollY)).toBe(0);
+    await expect(top).toBeHidden();
+    await this.page.setViewportSize({ width: 390, height: 844 });
+    await this.page.locator("#practice").scrollIntoViewIfNeeded();
+    await expect(top).toBeVisible();
+    await expect(this.page.locator("[data-scroll-to-top]")).toHaveCSS(
+      "height",
+      "40px",
+    );
+    const answer = this.page
+      .getByRole("textbox", { name: "Ответ", exact: true })
+      .first();
+    await answer.focus();
+    await expect(top).toBeHidden();
+    await answer.press("Tab");
+    await expect(top).toBeVisible();
+    await top.click();
+    await expect(this.page.getByRole("heading", { level: 1 })).toBeFocused();
+    await expect(top).toBeHidden();
+  }
+
   async expectSquareScrollbars(): Promise<void> {
     const geometry = await this.page.evaluate(() => {
       const root = document.documentElement;

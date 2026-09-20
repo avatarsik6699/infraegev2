@@ -4,3 +4,11 @@
 .icon {
   composes: icon from "../../styles/link.module.css";
 }
+
+.root > .icon {
+  margin-inline: 0;
+}
+
+.root[data-presentation="inline"] > .icon {
+  margin-inline-end: 0.25em;
+}

@@ -39,3 +39,12 @@ test("study scrollbars use square geometry and preserve forced colors", async ({
   await topicLessonPage.expectSquareScrollbars();
   browserSession.expectCleanConsole();
 });
+
+test("lesson code disclosure stays transparent and return to top preserves focus", async ({
+  topicLessonPage,
+  browserSession,
+}) => {
+  await topicLessonPage.open();
+  await topicLessonPage.expectCodeDisclosureAndReturnToTop();
+  browserSession.expectCleanConsole();
+});

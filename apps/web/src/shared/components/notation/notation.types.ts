@@ -5,6 +5,7 @@ export namespace NotationTypes {
 
   export type Props = {
     kind?: Kind;
+    emphasis?: "highlight";
     children: React.ReactNode;
     className?: string;
   };
