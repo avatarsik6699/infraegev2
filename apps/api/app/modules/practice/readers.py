@@ -29,6 +29,10 @@ class LessonSummary(StrictModel):
     tasks: list[TaskVersion]
 
 
+class TopicSummary(StrictModel):
+    topics: list[LessonSummary]
+
+
 class CourseSummary(StrictModel):
     id: str
     lessons: list[LessonSummary]
@@ -153,6 +157,23 @@ async def course(session: AsyncSession, course_id: str) -> CourseSummary:
     return CourseSummary(
         id=course_id, lessons=[LessonSummary(id=k, tasks=v) for k, v in grouped.items()]
     )
+
+
+async def topics(session: AsyncSession) -> TopicSummary:
+    rows = await session.execute(
+        select(LessonTask.material_id, TaskRecord.id, TaskRecord.solution_revision)
+        .join(TaskRecord)
+        .where(
+            LessonTask.kind == "topic",
+            LessonTask.published.is_(True),
+            TaskRecord.archived.is_(False),
+        )
+        .order_by(LessonTask.material_id, LessonTask.position)
+    )
+    grouped: dict[str, list[TaskVersion]] = {}
+    for material, task_id, revision in rows:
+        grouped.setdefault(material, []).append(TaskVersion(id=task_id, solution_revision=revision))
+    return TopicSummary(topics=[LessonSummary(id=k, tasks=v) for k, v in grouped.items()])
 
 
 async def check(session: AsyncSession, task_id: str, revision: int, answer: str) -> CheckedAnswer:

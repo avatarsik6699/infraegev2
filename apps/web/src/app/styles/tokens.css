@@ -69,6 +69,9 @@
   --text-2xl: clamp(1.5rem, 2vw, 1.75rem);
   --text-3xl: clamp(2rem, 3vw, 2.5rem);
   --text-display: clamp(3.25rem, 6.5vw, 6rem);
+  --text-topic-index: clamp(2.75rem, 4vw, 3.25rem);
+  --text-topic-title: 1.5rem;
+  --text-topic-heading: clamp(2.5rem, 4vw, 3.5rem);
   --text-inline-code: 0.86em;
 
   /* Semantic color roles */

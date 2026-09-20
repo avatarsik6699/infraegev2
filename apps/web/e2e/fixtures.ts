@@ -6,7 +6,11 @@ import { BrowserSession } from "./pages/browser-session.page";
 import { PublicDiscoveryPage } from "./pages/public-discovery.page";
 import { TopicLessonPage } from "./pages/topic-lesson.page";
 
+import { TopicCatalogPage } from "./pages/topic-catalog.page";
+
 type AppFixtures = {
+  topicCatalogPage: TopicCatalogPage;
+  noJavaScriptTopicCatalogPage: TopicCatalogPage;
   minimalPage: MinimalApplicationPage;
   noJavaScriptMinimalPage: MinimalApplicationPage;
   practiceCutoverPage: PracticeCutoverPage;
@@ -21,6 +25,21 @@ type AppFixtures = {
 };
 
 export const test = base.extend<AppFixtures>({
+  topicCatalogPage: async ({ page }, use) => {
+    await use(new TopicCatalogPage(page));
+  },
+  noJavaScriptTopicCatalogPage: async ({ baseURL, browser }, use) => {
+    const context = await browser.newContext({
+      baseURL,
+      javaScriptEnabled: false,
+      viewport: { width: 390, height: 844 },
+    });
+    try {
+      await use(new TopicCatalogPage(await context.newPage()));
+    } finally {
+      await context.close();
+    }
+  },
   minimalPage: async ({ page }, use) => {
     await use(new MinimalApplicationPage(page));
   },

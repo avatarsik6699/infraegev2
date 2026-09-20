@@ -515,3 +515,56 @@ def test_catalog_searches_visible_structured_fields(database):
             await engine.dispose()
 
     asyncio.run(scenario())
+
+
+def test_topic_summary_matches_published_lessons_and_excludes_hidden_tasks(database, monkeypatch):
+    from app.modules.practice.models import LessonTask
+
+    monkeypatch.setattr(settings, "database_url", database("runtime"))
+    with TestClient(create_app()) as client:
+        response = client.get("/api/topics/practice-summary")
+        assert response.status_code == 200
+        assert response.headers["cache-control"] == "no-store"
+        topics = response.json()["topics"]
+        assert {topic["id"] for topic in topics} == {"rekursiya", "preobrazovanie-zapisey-chisel"}
+        for topic in topics:
+            assert set(topic) == {"id", "tasks"}
+            lesson = client.get(f"/api/learning-materials/topic/{topic['id']}/practice").json()
+            assert topic["tasks"] == [
+                {"id": task["id"], "solution_revision": task["solution_revision"]}
+                for task in lesson["tasks"]
+            ]
+            assert topic["tasks"]
+            assert all(set(task) == {"id", "solution_revision"} for task in topic["tasks"])
+
+    async def scenario():
+        engine = database_engine(database("import"))
+        try:
+            async with AsyncSession(engine) as session:
+                memberships = list(
+                    await session.scalars(
+                        select(LessonTask)
+                        .where(LessonTask.kind == "topic", LessonTask.material_id == "rekursiya")
+                        .order_by(LessonTask.position)
+                    )
+                )
+                hidden_id = memberships[0].task_id
+                archived_id = memberships[1].task_id
+                memberships[0].published = False
+                archived = await session.get(TaskRecord, archived_id)
+                assert archived is not None
+                archived.archived = True
+                await session.flush()
+                summary = await readers.topics(session)
+                ids = {task.id for topic in summary.topics for task in topic.tasks}
+                assert hidden_id not in ids
+                assert archived_id not in ids
+                assert all(
+                    topic.id in {"rekursiya", "preobrazovanie-zapisey-chisel"}
+                    for topic in summary.topics
+                )
+                await session.rollback()
+        finally:
+            await engine.dispose()
+
+    asyncio.run(scenario())

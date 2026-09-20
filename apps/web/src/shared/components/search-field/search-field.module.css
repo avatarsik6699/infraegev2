@@ -19,3 +19,7 @@
     display: none;
   }
 }
+
+.action[data-empty="true"] {
+  visibility: hidden;
+}

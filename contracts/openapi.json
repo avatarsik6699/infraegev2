@@ -1741,6 +1741,23 @@
         "title": "TopicOption",
         "type": "object"
       },
+      "TopicSummary": {
+        "additionalProperties": false,
+        "properties": {
+          "topics": {
+            "items": {
+              "$ref": "#/components/schemas/LessonSummary"
+            },
+            "title": "Topics",
+            "type": "array"
+          }
+        },
+        "required": [
+          "topics"
+        ],
+        "title": "TopicSummary",
+        "type": "object"
+      },
       "ValidationError": {
         "properties": {
           "ctx": {
@@ -2421,6 +2438,24 @@
           }
         },
         "summary": "Get Next Task"
+      }
+    },
+    "/api/topics/practice-summary": {
+      "get": {
+        "operationId": "get_topics_api_topics_practice_summary_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TopicSummary"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Get Topics"
       }
     },
     "/health": {

@@ -1,0 +1,26 @@
+[
+  {
+    "name": "desktop",
+    "violations": [],
+    "incomplete": [],
+    "passes": 43
+  },
+  {
+    "name": "mobile",
+    "violations": [],
+    "incomplete": [],
+    "passes": 44
+  },
+  {
+    "name": "published",
+    "violations": [],
+    "incomplete": [],
+    "passes": 43
+  },
+  {
+    "name": "empty",
+    "violations": [],
+    "incomplete": [],
+    "passes": 42
+  }
+]

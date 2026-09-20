@@ -88,6 +88,11 @@ async def get_lesson(kind: str, material_id: str, connection: Session) -> reader
     return await readers.lesson(connection, kind, material_id)
 
 
+@router.get("/topics/practice-summary", response_model=readers.TopicSummary)
+async def get_topics(connection: Session) -> readers.TopicSummary:
+    return await readers.topics(connection)
+
+
 @router.get("/courses/{course_id}/practice-summary", response_model=readers.CourseSummary)
 async def get_course(course_id: str, connection: Session) -> readers.CourseSummary:
     return await readers.course(connection, course_id)

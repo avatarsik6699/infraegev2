@@ -1,0 +1,29 @@
+{
+  "kind": "review-walkthrough-validation",
+  "schema_version": 6,
+  "version": "3.14.0",
+  "command": "review-walkthrough-validation",
+  "graph_snapshot_hash": "graph:6709b16dbb2fcac2",
+  "stale": false,
+  "accepted": [
+    {
+      "signal_id": "sig:33eb044aee1f80c2",
+      "change_anchor": "",
+      "anchor_kind": "signal",
+      "agent_framing": "Page export retains the same zero-prop component contract and route ownership. Existing route imports and metadata remain unchanged; build/prerender and route browser tests pass.",
+      "deterministic": false
+    },
+    {
+      "signal_id": "sig:760713c3820ea58c",
+      "change_anchor": "",
+      "anchor_kind": "signal",
+      "agent_framing": "SearchField adds optional controlled props while preserving defaultValue and explicit submit for the existing practice consumer. Focus, clear and uncontrolled submission regression tests pass.",
+      "deterministic": false
+    }
+  ],
+  "rejected": [],
+  "accepted_count": 2,
+  "rejected_count": 0,
+  "unanchored_count": 0,
+  "_meta": { "telemetry": { "analysis_run_id": "run_db73ebaa5cfda443" } }
+}

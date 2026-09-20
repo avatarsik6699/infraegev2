@@ -174,6 +174,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/topics/practice-summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Topics */
+        get: operations["get_topics_api_topics_practice_summary_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/health": {
         parameters: {
             query?: never;
@@ -743,6 +760,11 @@ export interface components {
             /** Material Ids */
             material_ids: string[];
         };
+        /** TopicSummary */
+        TopicSummary: {
+            /** Topics */
+            topics: components["schemas"]["LessonSummary"][];
+        };
         /** ValidationError */
         ValidationError: {
             /** Context */
@@ -1083,6 +1105,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_topics_api_topics_practice_summary_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TopicSummary"];
                 };
             };
         };

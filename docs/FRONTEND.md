@@ -184,3 +184,24 @@ Separate topic/metadata from the task group with space-4. The subordinate task t
 to that task group, immediately above its statement with a space-1 interval.
 Known public sources stay in metadata; unknown-source filler and duplicate progress/actions are omitted.
 Keep one context-preserving return link; no next-task navigation. Progress explanations live in an info popover.
+
+
+## 9. EGE catalog
+
+Use the existing SearchField, Button, Progress, ActionLink, Typography and PageContainer.
+SearchField supports optional controlled value/onValueChange without changing existing practice
+submission semantics. Topic status buttons use pressed semantics; targets remain at least 40px.
+Topic progress scopes `--progress-height: 8px` locally, preserving the original shared light track and semantic states. Hover/focus uses a slightly darker neutral row surface so the track remains distinct.
+All interface icons are Lucide. Only topic 5 and 16 have authored mathematical SVG miniatures,
+faithful to the supplied reference; other topics share a neutral BookOpen placeholder.
+Published rows expose one navigable link and hover/focus surface; planned rows have no action.
+Place total/published topic counts and lesson practice progress below the page title, without a generic subtitle. Counts reflect the full catalog, independently of filtering.
+Reserve image, progress, status, header-summary and action geometry on first paint, including
+loading, API errors, retry, font failures and delayed hydration. Never clip readable topic copy
+for fixed row heights. Use CSS breakpoints, not post-mount viewport detection. No animations of
+list geometry or automatic scrolling when filters change. Keep full SSR/no-JS catalog access.
+
+Planned topic titles and exam numbers use the existing muted text token; do not fade whole rows
+or compromise text contrast. Published theory/task metadata aligns with the title, while practice
+status/count and the progress track align at the bottom of the text area. The row arrow translates
+4px on hover/focus using transform only; reduced motion disables this translation and transition.

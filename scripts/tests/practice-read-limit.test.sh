@@ -63,7 +63,7 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=20) as pool:
     assert set(pool.map(status, [f"/_serverFn/task?id={i}" for i in range(100)])) == {204}
 # The same budget is consumed regardless of the page/function/API path or query string.
 paths = ["/practice?q=x", "/_serverFn/task?id=x", "/api/tasks", "/api/tasks/facets",
-         "/api/learning-materials/topic/x/practice", "/ege/topic", "/courses/python",
+         "/api/topics/practice-summary", "/api/learning-materials/topic/x/practice", "/ege/topic", "/courses/python",
          "/sitemap.xml", "/sitemap-practice/1"]
 for path in paths:
     with concurrent.futures.ThreadPoolExecutor(max_workers=20) as pool:

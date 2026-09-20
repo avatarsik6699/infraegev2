@@ -308,6 +308,33 @@ Existing filters, numbered pagination, local progress remain. Detail pages have 
 carry filters and page. No telemetry consent, analytics or client-error collector. No new
 accounts, editing UI, global stores, dependencies or speculative abstractions.
 
+### EGE catalog (Change 126)
+
+`/ege` retains 25 topics ordered by exam number, with 19–21 grouped. Published topics
+link to their existing lesson; planned topics say “Скоро”, with no links or invented counts.
+The reference is `docs/artifacts/references/13_50_05.png`: large numbers, quiet separators,
+topic text and thin progress. Only 5/16 have mathematical miniatures faithful to the reference;
+other topics share a Lucide BookOpen placeholder. These are allowed educational catalog figures.
+Search matches title, summary and numbers while typing, ignoring case and е/ё. Status filters
+are All, In progress (0 < solved < total), and Not started (solved = 0), with the latter two
+restricted to published topics with available practice. Completed topics remain in All.
+The heading summary counts unique currently solved tasks from published topic lessons only,
+independently of filtering; standalone practice and course progress remain separate.
+
+`GET /api/topics/practice-summary` returns `{topics: [{id, tasks: [{id, solution_revision}]}]}`
+for published topic memberships and nonarchived tasks, without statements or checker data.
+It uses the existing read-only session and no-store/error policy. No data migration is required.
+The browser compares the summary with revision-aware lesson progress. Missing topic summaries
+are unavailable, never fabricated zero totals. Existing storage keys remain compatible.
+The route remains prerendered without database reads; summary loading is client enhancement.
+No-JS retains the complete readable catalog and published links. Search/status controls are
+hidden via scripting CSS when JavaScript is disabled; hydration never inserts their geometry.
+Loading/error/retry and personalized text occupy reserved slots. API failure does not block
+reading, navigation or search. No unexpected layout shifts from hydration, data, images or fonts
+are accepted; intentional search/filter result changes remain user-controlled.
+Search/filter state is page-local. Theory completion, grid view, recommendation ordering,
+auto-resume scrolling and production delivery are out of scope.
+
 ## 6. Auth & Access Model
 
 Для серверного банка (§3) используются разные DB credentials: HTTP runtime read-only (включая

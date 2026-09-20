@@ -6,12 +6,18 @@ import styles from "./search-field.module.css";
 import type { SearchFieldTypes } from "./search-field.types";
 
 export const SearchField: React.FC<SearchFieldTypes.Props> = (props) => {
-  const [value, setValue] = useState(props.defaultValue ?? "");
+  const [localValue, setLocalValue] = useState(props.defaultValue ?? "");
+  const value = props.value ?? localValue;
+  const setValue = (next: string) => {
+    if (props.value === undefined) setLocalValue(next);
+    props.onValueChange?.(next);
+  };
   const input = useRef<HTMLInputElement>(null);
   return (
     <Field
       ref={input}
       label={props.label}
+      labelVisibility={props.labelVisibility}
       name={props.name}
       type="text"
       role="searchbox"
@@ -23,9 +29,12 @@ export const SearchField: React.FC<SearchFieldTypes.Props> = (props) => {
       onChange={(event) => setValue(event.target.value)}
       endAdornment={
         <>
-          {value.length > 0 && (
+          {
             <Button
               className={styles.action}
+              data-empty={value.length === 0}
+              aria-hidden={value.length === 0}
+              tabIndex={value.length === 0 ? -1 : undefined}
               type="button"
               hierarchy="quiet"
               iconOnly
@@ -36,7 +45,7 @@ export const SearchField: React.FC<SearchFieldTypes.Props> = (props) => {
                 input.current?.focus();
               }}
             />
-          )}
+          }
           <Button
             className={styles.action}
             type="submit"
