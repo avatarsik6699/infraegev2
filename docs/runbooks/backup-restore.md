@@ -22,6 +22,12 @@ verifies roles/data/checksums and runs the bundle's matching verifier image agai
 checker and file; it removes only its own restore resources. Export is an encrypted portable copy.
 A passing backup alone is not a restore proof. Keep exact verifier images available with bundles.
 
+The isolated verifier uses the restored `task-files` directory owner's numeric UID/GID.
+Production timer backups are root-owned; local operator backups may have another owner.
+Directory permissions remain private. The verifier retains a read-only root filesystem and
+storage mount, no Linux capabilities, no-new-privileges and SELECT-only database credentials.
+This maintenance identity does not change the application API's runtime user.
+
 `ops/install-backup-timers.sh application` installs daily backup and monthly restore timers.
 `/opt/infraege/database-current` selects the maintenance release that matches the DB. Inspect
 `backup-status.json`, `restore-check-status.json`, `systemctl list-timers` and journald for status.

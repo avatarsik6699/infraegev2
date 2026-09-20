@@ -111,11 +111,16 @@ def smoke(bundle: Path, container: str) -> None:
         timeout=TIMEOUT,
     )
     # The production application command verifies restored behavior; no test runner in Docker.
+    # Backup storage is private to its owner (root for production timers). Preserve its
+    # permissions and match that identity, rather than inheriting the API image's USER.
+    storage_owner = (bundle / "task-files").stat()
     subprocess.run(
         [
             "docker",
             "run",
             "--rm",
+            "--user",
+            f"{storage_owner.st_uid}:{storage_owner.st_gid}",
             "--read-only",
             "--cap-drop",
             "ALL",

@@ -306,6 +306,16 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
 - **Fix**: restore the bundle's allowlisted roles before its dump through the matching maintenance
   tools. Keep fail-on-error ownership checks and prove disposal of the owned restore resources.
 
+### Root-owned restore files require a matching verifier identity
+
+- **Symptoms**: SQL restore and fingerprints pass, but `practice.verify` raises `PermissionError`
+  on `/task-files/<digest>` only for root-run production backups.
+- **Cause**: backup storage is deliberately mode 700; the API image's default UID cannot traverse
+  a restored root-owned directory. Local operator-owned backups can conceal this mismatch.
+- **Resolution approved 2026-09-21**: run the isolated verifier using the directory owner's numeric
+  UID/GID while retaining read-only mounts, dropped capabilities, no-new-privileges and runtime
+  SELECT-only credentials. Do not chmod/chown the backup or relax application permissions.
+
 ### Public privacy text does not complete formal legal review
 
 - **Symptoms**: published contacts or an older archive are mistaken for completed specialist review.

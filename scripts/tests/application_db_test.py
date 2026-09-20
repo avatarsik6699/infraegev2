@@ -8,8 +8,9 @@ import unittest
 import uuid
 from dataclasses import asdict
 from pathlib import Path
+from unittest.mock import patch
 
-from scripts.lib.application_db import bundle
+from scripts.lib.application_db import bundle, recovery
 from scripts.lib.application_db.postgres import Database, docker
 
 
@@ -85,6 +86,48 @@ class BundleTests(unittest.TestCase):
             capture_output=True,
         )
         self.assertEqual(result.returncode, 0)
+
+    def test_smoke_uses_private_storage_owner_and_keeps_restrictions(self):
+        storage = self.root / "task-files"
+        storage.chmod(0o700)
+        original_stat = Path.stat
+        for uid, gid in ((0, 0), (1000, 1000), (1234, 5678)):
+            with self.subTest(uid=uid, gid=gid):
+
+                def stat(path, *args, owner_uid=uid, owner_gid=gid, **kwargs):
+                    value = original_stat(path, *args, **kwargs)
+                    if path == storage:
+                        fields = list(value)
+                        fields[4:6] = [owner_uid, owner_gid]
+                        return os.stat_result(fields)
+                    return value
+
+                with (
+                    patch.object(Path, "stat", stat),
+                    patch.object(recovery, "require_disposable") as disposable,
+                    patch.object(recovery, "docker", return_value="sha256:" + "a" * 64),
+                    patch.object(recovery.subprocess, "run") as run,
+                ):
+                    run.return_value.returncode = 0
+                    recovery.smoke(self.root, "isolated-restore")
+                disposable.assert_called_once_with("isolated-restore")
+                command = run.call_args.args[0]
+                self.assertEqual(command[command.index("--user") + 1], f"{uid}:{gid}")
+                self.assertIn("--read-only", command)
+                for flag, expected in (
+                    ("--cap-drop", "ALL"),
+                    ("--security-opt", "no-new-privileges"),
+                    ("--network", "container:isolated-restore"),
+                    ("--mount", f"type=bind,source={storage},target=/task-files,readonly"),
+                ):
+                    self.assertEqual(command[command.index(flag) + 1], expected)
+                self.assertTrue(
+                    command[command.index("--env") + 1].startswith(
+                        "DATABASE_URL=postgresql://infraege_runtime:"
+                    )
+                )
+                self.assertTrue(run.call_args.kwargs["check"])
+                self.assertEqual(storage.stat().st_mode & 0o777, 0o700)
 
 
 @unittest.skipUnless(
