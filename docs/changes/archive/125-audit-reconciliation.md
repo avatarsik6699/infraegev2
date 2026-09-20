@@ -7,7 +7,7 @@
 | Change | `125` |
 | Slug | `audit-reconciliation` |
 | Title | Audit reconciliation |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/125-audit-reconciliation` |
 
 ## Goal
@@ -66,7 +66,7 @@ See `docs/SPEC.md` §3–§8, `docs/FRONTEND.md` and the Files list above.
 
 ## Gate Checks
 
-Affected Critical Gate from [STACK](../STACK.md). Additional focused contract:
+Affected Critical Gate from [STACK](../../STACK.md). Additional focused contract:
 `bash scripts/tests/practice-read-limit.test.sh` (host assertions, disposable Nginx only).
 
 ## Architect Review Notes
