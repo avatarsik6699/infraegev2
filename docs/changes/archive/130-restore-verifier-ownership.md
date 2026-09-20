@@ -7,7 +7,7 @@
 | Change | `130` |
 | Slug | `restore-verifier-ownership` |
 | Title | Restore verifier ownership |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/130-restore-verifier-ownership` |
 
 ## Goal
@@ -42,7 +42,7 @@ See `docs/SPEC.md` §7–§8 and the Files list above.
 
 ## Gate Checks
 
-Standard [STACK](../STACK.md) gates apply. Focused maintenance tests:
+Standard [STACK](../../STACK.md) gates apply. Focused maintenance tests:
 `python3 -m unittest scripts.tests.application_db_test`.
 Additional release acceptance: isolated restore of the previously prepared production bank,
 followed by exact-SHA deployment and public bank/HTTP/browser verification.
