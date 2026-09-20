@@ -7,7 +7,7 @@
 | Change | `129` |
 | Slug | `lesson-readability` |
 | Title | Lesson readability |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/129-lesson-readability` |
 
 ## Goal
@@ -58,7 +58,7 @@ See docs/SPEC.md §3–§5, docs/FRONTEND.md and the Files list above.
 
 ## Gate Checks
 
-Affected-area Critical Gate from [STACK](../STACK.md). Browser verification through Playwriter.
+Affected-area Critical Gate from [STACK](../../STACK.md). Browser verification through Playwriter.
 The implementation invocation used the Critical Gate only. On 2026-09-20 the architect
 requested final audit followed by `ship --release`; its mandatory Full Gate is recorded below.
 
@@ -156,7 +156,7 @@ flagged regions were unchanged; the changed expanded-button selector implements 
 Read-only production inventory: healthy release
 `a5b0bf5793a85a4e9090f47c311ae01c022f194d`, PostgreSQL 16.14, zero application tables, no
 `database-current` or minimal-bank attestation, 26GB free. Production still requires the
-[initial bank transition](../runbooks/practice-transition.md), restore/rollback acceptance and
+[initial bank transition](../../runbooks/practice-transition.md), restore/rollback acceptance and
 an attestation for the exact release SHA. The architect explicitly approved the current
 `content/practice-bank` as initial production content in chat: 697 tasks, 547 catalog-visible,
 150 lesson memberships, one file. This approval persists; no import has been made on the server.
