@@ -190,6 +190,12 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
 - **Fix**: keep the e2e-only ports `127.0.0.2:3100` / `127.0.0.2:8100`, pass Vite `--strictPort`,
   and set both Playwright web servers to `reuseExistingServer: false`.
 
+### Dev CSS Modules composition can retain stale class names
+
+- **Symptoms**: a shared control has correct source and production hover behavior, but localhost:8080 still applies old colors after a full page reload.
+- **Evidence**: the ActionLink composed stylesheet and rendered anchor retain the previous Button class hash while the directly loaded Button stylesheet contains the new hash. Current hover selectors therefore do not match the anchor.
+- **Fix**: restart only the local dev web container, then reload the page. Verify settled computed background/foreground before and after hover on port 8080, not only an immediate snapshot or a fresh production preview. Do not clear databases or rebuild the complete stack for this in-memory Vite module issue.
+
 ### Repeated full-page course navigation can exhaust Vite dev hydration
 
 - **Symptoms**: a long Playwright loop successfully sees SSR lesson content, then a later route

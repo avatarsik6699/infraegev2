@@ -138,7 +138,9 @@ export class PracticeCutoverPage {
     ).toBeVisible();
     await this.page.goto("/courses");
     await expect(
-      this.page.getByText("Освоено 1 из 28 уроков", { exact: true }),
+      this.page
+        .locator("[data-course-progress]")
+        .getByText("Освоено 1 из 28 уроков", { exact: true }),
     ).toBeVisible();
   }
 }

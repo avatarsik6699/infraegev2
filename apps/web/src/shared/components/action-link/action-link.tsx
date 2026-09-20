@@ -10,6 +10,7 @@ const ActionLinkRoot = forwardRef<HTMLAnchorElement, ActionLinkTypes.RootProps>(
     {
       hierarchy = "secondary",
       presentation = "action",
+      hoverEffect,
       children,
       className,
       ariaLabel,
@@ -29,6 +30,7 @@ const ActionLinkRoot = forwardRef<HTMLAnchorElement, ActionLinkTypes.RootProps>(
         data-hierarchy={hierarchy}
         data-presentation={presentation}
         data-icon={icon}
+        data-hover-effect={hoverEffect}
         className={cssUtils.cx(
           styles.root,
           presentation === "button" ? styles.button : undefined,

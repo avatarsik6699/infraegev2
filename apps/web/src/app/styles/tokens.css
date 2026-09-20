@@ -217,6 +217,8 @@
   );
 
   /* Controls retain their geometry; composed surfaces own decorative depth. */
+  --shadow-mini-course: 0 2px 12px
+    color-mix(in srgb, var(--color-brand-ink) 8%, transparent);
   --shadow-catalog: none;
   --shadow-control: none;
   --shadow-overlay: 0 0.875rem 3.125rem var(--theme-overlay-shadow);

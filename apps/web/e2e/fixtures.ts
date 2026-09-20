@@ -1,3 +1,4 @@
+import { CourseCatalogPage } from "./pages/course-catalog.page";
 import { MinimalApplicationPage } from "./pages/minimal-application.page";
 import { PracticeCutoverPage } from "./pages/practice-cutover.page";
 import { test as base } from "@playwright/test";
@@ -9,6 +10,8 @@ import { TopicLessonPage } from "./pages/topic-lesson.page";
 import { TopicCatalogPage } from "./pages/topic-catalog.page";
 
 type AppFixtures = {
+  courseCatalogPage: CourseCatalogPage;
+  noJavaScriptCourseCatalogPage: CourseCatalogPage;
   topicCatalogPage: TopicCatalogPage;
   noJavaScriptTopicCatalogPage: TopicCatalogPage;
   minimalPage: MinimalApplicationPage;
@@ -25,6 +28,21 @@ type AppFixtures = {
 };
 
 export const test = base.extend<AppFixtures>({
+  courseCatalogPage: async ({ page }, use) => {
+    await use(new CourseCatalogPage(page));
+  },
+  noJavaScriptCourseCatalogPage: async ({ baseURL, browser }, use) => {
+    const context = await browser.newContext({
+      baseURL,
+      javaScriptEnabled: false,
+      viewport: { width: 390, height: 844 },
+    });
+    try {
+      await use(new CourseCatalogPage(await context.newPage()));
+    } finally {
+      await context.close();
+    }
+  },
   topicCatalogPage: async ({ page }, use) => {
     await use(new TopicCatalogPage(page));
   },

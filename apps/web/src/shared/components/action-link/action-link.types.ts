@@ -1,7 +1,8 @@
 export namespace ActionLinkTypes {
   export type RootProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
     presentation?: "inline" | "action" | "navigation" | "button";
-    hierarchy?: "secondary" | "quiet" | "text";
+    hierarchy?: "primary" | "secondary" | "quiet" | "text";
+    hoverEffect?: "scale";
     icon?: "back" | "forward" | "none";
     ariaLabel?: string;
   };

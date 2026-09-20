@@ -6,6 +6,8 @@ export namespace CourseCatalogTypes {
     id: Id;
     title: string;
     summary: string;
+    level?: string;
+    outcome?: string;
   };
 
   export type PlannedEntry = Definition & {

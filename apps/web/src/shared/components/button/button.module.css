@@ -32,6 +32,7 @@
 
 .root[data-hierarchy="primary"]:hover:not(:disabled) {
   background: var(--control-primary-bg-hover);
+  color: var(--control-primary-text);
 }
 
 .root[data-hierarchy="secondary"] {
@@ -184,4 +185,29 @@
 .root[data-surface="bare"][aria-expanded="true"]:not(:disabled) {
   background: transparent;
   box-shadow: none;
+}
+
+.root[data-hierarchy="primary"][data-hover-effect="scale"]:hover:not(
+    :disabled
+  ) {
+  background: var(--control-primary-bg);
+  color: var(--control-primary-text);
+}
+.root[data-hierarchy="primary"][data-hover-effect="scale"]:is(
+    :hover,
+    :focus-visible
+  ) {
+  transform: scale(1.02);
+}
+.root[data-hierarchy="primary"][data-hover-effect="scale"]:active {
+  transform: scale(0.98);
+}
+@media (prefers-reduced-motion: reduce) {
+  .root[data-hierarchy="primary"][data-hover-effect="scale"]:is(
+      :hover,
+      :focus-visible,
+      :active
+    ) {
+    transform: none;
+  }
 }

@@ -4,7 +4,11 @@ const baseURL = "http://127.0.0.2:3200";
 
 export default defineConfig({
   testDir: "./e2e",
-  testMatch: ["layout-stability.spec.ts", "topic-catalog.spec.ts"],
+  testMatch: [
+    "layout-stability.spec.ts",
+    "topic-catalog.spec.ts",
+    "course-catalog.spec.ts",
+  ],
   outputDir: "../../.output/playwright-layout",
   reporter: "list",
   workers: 1,

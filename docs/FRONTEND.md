@@ -205,3 +205,23 @@ Planned topic titles and exam numbers use the existing muted text token; do not 
 or compromise text contrast. Published theory/task metadata aligns with the title, while practice
 status/count and the progress track align at the bottom of the text area. The row arrow translates
 4px on hover/focus using transform only; reduced motion disables this translation and transition.
+
+## 10. Mini-course catalog
+
+The approved `/courses` reference permits four subject-specific hand-drawn raster illustrations
+as a local exception to §4. Preserve transparent PNG masters and serve optimized WebP with
+explicit dimensions, empty alt and reserved geometry. No SVG substitutes or background scenes.
+Use existing Typography, PageContainer, ActionLink and Progress; two columns become one on mobile.
+Retain registry order, titles and descriptions. Planned directions have a shared corner “Скоро” badge and aria-disabled state, no links,
+disabled controls, invented counts, levels or dates. Python has one “Открыть курс” overview link.
+Header totals and card progress share one revision-aware course-progress calculation. Until
+hydration or on summary failure, show a neutral/loading or unavailable state, never a false zero
+or a partial aggregate. Preserve geometry through hydration, image/font failure and no-JS.
+Planned cards retain the white surface and shared shadow; only titles and decorative illustrations are slightly muted. They have no hover motion.
+All four cards share equal responsive dimensions with a soft static shadow and a very low-contrast border. Metadata follows the description directly;
+published courses may expose grounded level/outcome copy from the catalog definitions.
+Published-card hover/focus translates the card 2px upward. The primary overview ActionLink uses
+the shared opt-in scale effect (1.02, no button translation) and a 4px arrow translation. Background,
+foreground and shadow remain unchanged. Reduced motion disables all transforms/transitions.
+Do not change shared control colors per page. The shared light progress track remains visible
+against the constant white surface. Illustrations reserve a 13rem square (bounded on mobile).

@@ -7,6 +7,9 @@ import {
 const definitions: readonly CourseCatalogTypes.Definition[] = [
   {
     id: "python",
+    level: "Начальный",
+    outcome:
+      "Научитесь писать простые программы, решать задачи и работать с файлами.",
     title: "Python с нуля для ЕГЭ",
     summary:
       "От первой программы — к задачам и алгоритмам, которые пригодятся на ЕГЭ.",

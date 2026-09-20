@@ -50,7 +50,8 @@ The public identity is `infraege`: three organic stones, orange at the top and i
 with an accessible lowercase wordmark. Retain Alegreya, Golos Text and JetBrains Mono.
 The approved presentation is white, monochrome, text-led and minimal, following remote main
 `a5b0bf5`; orange is a small functional accent. No background patterns, decorative illustrations,
-glints, drawn underlines or idle animation. Educational figures remain part of lessons.
+glints, drawn underlines or idle animation. Educational figures remain part of lessons. The approved `/courses` catalog is a local exception:
+four subject-specific hand-drawn raster miniatures, quiet cards and hover/focus-only feedback.
 Homepage gives direct access to published topics and the Python course; navigation includes Practice.
 See [FRONTEND](docs/FRONTEND.md) for implementation contracts.
 
