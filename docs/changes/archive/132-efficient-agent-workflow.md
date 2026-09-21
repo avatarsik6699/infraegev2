@@ -7,7 +7,7 @@
 | Change | `132` |
 | Slug | `efficient-agent-workflow` |
 | Title | Efficient verification and agent workflow |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/132-efficient-agent-workflow` |
 
 ## Goal
@@ -65,7 +65,7 @@ See `docs/SPEC.md` §7–§8 and the Files list above. Explicit Full remains ava
 
 ## Gate Checks
 
-Use the affected Critical Gate in [STACK](../STACK.md): repository format, focused runner/checkpoint tests, host Python type-check and LSP, shell contract checks for the launcher. Full application suites are not executed merely to test orchestration: subprocess fakes exercise selection, invalidation, interruption and release evidence failures.
+Use the affected Critical Gate in [STACK](../../STACK.md): repository format, focused runner/checkpoint tests, host Python type-check and LSP, shell contract checks for the launcher. Full application suites are not executed merely to test orchestration: subprocess fakes exercise selection, invalidation, interruption and release evidence failures.
 
 ## Architect Review Notes
 
