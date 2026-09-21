@@ -7,7 +7,7 @@
 | Change | `131` |
 | Slug | `deploy-transport-completion` |
 | Title | Deploy transport completion |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/131-deploy-transport-completion` |
 
 ## Goal
@@ -44,7 +44,7 @@ See `docs/SPEC.md` §7–§8 and the Files list above.
 
 ## Gate Checks
 
-Standard [STACK](../STACK.md) gates apply. Focused test:
+Standard [STACK](../../STACK.md) gates apply. Focused test:
 `python3 -m unittest scripts.tests.deploy_orchestration_test`.
 Final release must pass through GitHub deployment and match public readiness SHA.
 
