@@ -316,6 +316,16 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
   UID/GID while retaining read-only mounts, dropped capabilities, no-new-privileges and runtime
   SELECT-only credentials. Do not chmod/chown the backup or relax application permissions.
 
+### SSH stdin can truncate a streamed deployment script
+
+- **Symptoms**: GitHub deployment exits successfully after migrations, but `current` and public
+  readiness still report the previous SHA; the final deployment-success line is absent.
+- **Cause**: `bash -s` shares script input with child commands. An interactive Compose command
+  can consume the unread body, so Bash reaches EOF without running activation or health checks.
+- **Fix**: upload the exact reviewed script to a SHA-specific protected path, execute that file
+  with stdin closed, and verify the public SHA in an independent GitHub step. Resume an interrupted
+  release only after inspecting the live DB, volumes and previous application identity.
+
 ### Public privacy text does not complete formal legal review
 
 - **Symptoms**: published contacts or an older archive are mistaken for completed specialist review.

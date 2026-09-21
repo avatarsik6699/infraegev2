@@ -1,12 +1,69 @@
 """Exercise the real Compose helper + installed failure boundary without host mutations."""
 
+import os
 import re
 import subprocess
 import tempfile
+import textwrap
 import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+
+
+def workflow_step(name: str) -> str:
+    source = (ROOT / ".github/workflows/deploy.yml").read_text()
+    step = source.split(f"      - name: {name}\n", 1)[1].split("      - name:", 1)[0]
+    return textwrap.dedent(step.split("        run: |\n", 1)[1])
+
+
+class DeployTransportTests(unittest.TestCase):
+    def test_stdin_consuming_child_cannot_truncate_remote_program(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / "scripts/lib").mkdir(parents=True)
+            # Consume all inherited stdin before the final deployment action.
+            (root / "scripts/deploy-remote.sh").write_text("cat >/dev/null\necho ACTIVATED\n")
+            (root / "scripts/lib/production-ssh.sh").write_text(r"""
+production_ssh_init() { :; }
+production_scp() { cp "$1" "$TEST_REMOTE"; }
+production_ssh() {
+  local command=${1//\/root\/infraege-deploy-$DEPLOY_SHA.sh/$TEST_REMOTE}
+  bash -c "$command"
+}
+""")
+            result = subprocess.run(
+                ["bash", "-e", "-o", "pipefail", "-s"],
+                input=workflow_step("Deploy and verify with rollback"),
+                cwd=root,
+                env={
+                    **os.environ,
+                    "DEPLOY_SHA": "a" * 40,
+                    "PROD_HOST": "synthetic",
+                    "TEST_REMOTE": str(root / "uploaded.sh"),
+                },
+                text=True,
+                capture_output=True,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual(result.stdout.strip(), "ACTIVATED")
+
+    def test_independent_public_check_rejects_false_remote_success(self):
+        for sha in ("a" * 40, "b" * 40):
+            with self.subTest(sha=sha):
+                program = (
+                    "DEPLOY_SHA="
+                    + "a" * 40
+                    + "\n"
+                    + 'curl() { printf \'%s\\n\' \'{"status":"ok","version":"'
+                    + sha
+                    + "\"}'; }\n"
+                    + workflow_step("Verify public release identity")
+                )
+                result = subprocess.run(
+                    ["bash", "-e", "-o", "pipefail", "-c", program], capture_output=True
+                )
+                self.assertEqual(result.returncode == 0, sha == "a" * 40)
 
 
 class DeployFailureTests(unittest.TestCase):

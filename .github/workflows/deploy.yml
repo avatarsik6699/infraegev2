@@ -64,4 +64,12 @@ jobs:
           source scripts/lib/production-ssh.sh
           INFRAEGE_PROD_HOST="$PROD_HOST"
           production_ssh_init
-          production_ssh "DEPLOY_SHA='$DEPLOY_SHA' bash -s" < scripts/deploy-remote.sh
+          production_scp scripts/deploy-remote.sh "root@$PROD_HOST:/root/infraege-deploy-$DEPLOY_SHA.sh"
+          production_ssh "DEPLOY_SHA='$DEPLOY_SHA' bash '/root/infraege-deploy-$DEPLOY_SHA.sh'" </dev/null
+      - name: Verify public release identity
+        env:
+          DEPLOY_SHA: ${{ inputs.sha }}
+        run: |
+          curl --fail --silent --show-error --max-time 15 https://infraege.ru/health/ready |
+            jq -e --arg sha "$DEPLOY_SHA" '.status == "ok" and .version == $sha' >/dev/null
+          curl --fail --silent --show-error --max-time 15 https://infraege.ru/ >/dev/null

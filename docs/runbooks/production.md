@@ -29,6 +29,11 @@ GHCR images after static/security checks. Tests run locally, not in CI or applic
 Deploy workflow_dispatch selects a full commit on remote main. `/ship --release` requires Full
 and Release Gates; ordinary `/work` and `/ship` do not deploy.
 
+The workflow uploads the checked-out deployment script to a SHA-specific root-owned path and
+executes that file with closed stdin. Never stream its body into `bash -s`: a child command can
+consume the remaining script and return false success. A separate runner step checks public
+readiness against the requested full SHA and requests the homepage after remote completion.
+
 The release is unpacked at `/opt/infraege/releases/<sha>` and deploy mutations use a host lock.
 Preflight checks environment, schema-transition attestation, images and TLS readability. It backs
 up the prepared DB, runs migration, activates Compose, verifies health version and public HTTP,
