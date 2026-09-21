@@ -1,4 +1,5 @@
 name: Deploy production
+run-name: Deploy ${{ inputs.sha }}
 
 on:
   workflow_dispatch:

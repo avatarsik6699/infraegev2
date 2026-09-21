@@ -1,5 +1,5 @@
 ---
-description: Run the Critical Gate by default or Full Gate with --full; merge and archive on PASS. --release requires Full and Release Gates, then pushes and verifies deploy. Usage: /ship [change] [--full|--release]
+description: Run the Critical Gate by default or Full Gate with --full; merge and archive on PASS. --release requires risk-selected coverage and Release Gates, then pushes and verifies deploy. Usage: /ship [change] [--full|--release]
 ---
 
 # /ship

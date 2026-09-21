@@ -4,7 +4,13 @@
     "lib/application_db",
     "tests/application_db_test.py",
     "tests/deploy_orchestration_test.py",
-    "practice-local.py"
+    "practice-local.py",
+    "gate.py",
+    "lib/gate",
+    "tests/gate_test.py",
+    "release-checkpoint.py",
+    "release_checkpoint.py",
+    "tests/release_checkpoint_test.py"
   ],
   "extraPaths": [".."],
   "pythonVersion": "3.12"

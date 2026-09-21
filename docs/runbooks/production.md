@@ -26,8 +26,11 @@ No monitoring tunnels or journal HTTP gateways are required.
 GitHub Environment `production` contains `PROD_HOST`, `PROD_ROOT_PASSWORD`, `PROD_SSH_HOST_KEY`.
 The previously accepted no-required-reviewers policy is unchanged. CI publishes immutable full-SHA
 GHCR images after static/security checks. Tests run locally, not in CI or application containers.
-Deploy workflow_dispatch selects a full commit on remote main. `/ship --release` requires Full
-and Release Gates; ordinary `/work` and `/ship` do not deploy.
+Deploy workflow_dispatch selects a full commit on remote main. `/ship --release` requires
+risk-selected local coverage (Full for unknown/shared inputs), fresh security and all Release
+Gate phases; ordinary `/work` and `/ship` do not deploy. Use the durable evidence and resume
+procedure in [verification](verification.md); published-digest scans are checked after push
+and before dispatch, and live SHA is checked independently after deploy.
 
 The workflow uploads the checked-out deployment script to a SHA-specific root-owned path and
 executes that file with closed stdin. Never stream its body into `bash -s`: a child command can

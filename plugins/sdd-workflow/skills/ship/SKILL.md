@@ -1,6 +1,6 @@
 ---
 name: ship
-description: Close a change with the Critical Gate by default, the manual Full Gate with --full, or mandatory Full and Release Gates with --release. Use when the architect wants to close or publish a change.
+description: Close a change with the Critical Gate by default, the manual Full Gate with --full, or risk-selected coverage and Release Gates with --release. Use when the architect wants to close or publish a change.
 metadata:
   priority: 6
   pathPatterns:

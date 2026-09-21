@@ -1,8 +1,8 @@
 # ship — Canonical Playbook
 
 Close a change locally after a compact Critical Gate. The expensive Full Gate is manual through
-`--full`; production publication through `--release` always implies the Full Gate and then runs
-the Release Gate before pushing.
+`--full`; production publication through `--release` uses risk-selected coverage with Full as
+the conservative fallback, then the prepublication, published-image and deployment checks.
 
 This document is the single source of truth for the `ship` workflow. Runtime wrappers under
 `.claude/skills/`, `.agents/skills/`, and `plugins/sdd-workflow/` stay thin and point here.
@@ -12,11 +12,12 @@ This document is the single source of truth for the `ship` workflow. Runtime wra
 ```text
 /ship [NN]              — Critical Gate; merge to local main and archive on PASS
 /ship [NN] --full       — Full Gate; merge to local main and archive on PASS
-/ship [NN] --release    — Full + Release Gates; merge, push main, and verify the deploy
+/ship [NN] --release    — Risk-selected + Release Gates; merge, push, verify deploy
 ```
 
 - `NN` — zero-padded change number. If omitted, infer it from `feature/NN-slug`.
-- `--release` implies `--full`; passing both is valid but redundant.
+- `--release --full` explicitly forces all local coverage; `--release` alone selects coverage
+  against the last verified production SHA, never merely local `main`.
 
 ## Required reads
 
@@ -42,7 +43,8 @@ This document is the single source of truth for the `ship` workflow. Runtime wra
 
 1. Read `docs/STACK.md`'s **Critical Gate** table.
 2. Determine touched areas from the feature-branch diff against local `main`.
-3. Run the applicable Critical Gate rows once. Use focused tests covering changed behavior; do not
+3. Print the runner plan from the [verification runbook](../runbooks/verification.md), resolve any
+   unmapped inputs, then run the applicable Critical Gate rows once. Use focused tests covering changed behavior; do not
    broaden them to complete unit, E2E, infrastructure, security, accessibility, or performance
    suites. Documentation-only changes normally need formatting/link integrity only.
    Analyze required reports before running the final Repository hygiene row.
@@ -50,13 +52,16 @@ This document is the single source of truth for the `ship` workflow. Runtime wra
 
 #### `--full` or `--release`
 
-1. Read `docs/STACK.md`'s **Full Gate** table and treat it as the command source.
-2. Ensure the declared environment/bootstrap prerequisites exist. Prefer a declared helper script
-   when present; otherwise execute every defined row directly in table order.
-3. Do not stop at the first failure: run every defined row and report the full picture. A missing
-   command is `SKIPPED — no command in STACK.md`, never an invitation to guess.
-   Retain reports until their results are recorded, then run the terminal Repository hygiene row
-   even when another row failed.
+1. Read STACK and the verification runbook. Explicit `--full` uses Full. Release-only compares
+   all candidate inputs to a freshly verified production SHA; uncertain/shared inputs use Full.
+   Record the baseline and classification. Do not infer a production baseline from local main.
+2. Print the runner plan, prepare the declared isolated environment, and run the selected profile.
+   A runner prerequisite is part of acceptance, not a reason to declare an omitted check green.
+3. On failure, stop dependent stages; diagnose the specific failing contract and rerun only
+   invalidated work. Resume may reuse exact-input PASS evidence. Fresh security and external
+   release observations are never replaced by saved statuses. Unknown inputs invalidate reuse.
+4. Retain protected durable JSON outside the worktree. Analyze reports before repository hygiene.
+   Cleanup can remove build artifacts and therefore invalidate their dependent reuse.
 
 For either mode, PASS requires every executed row to be green and no unchecked Backlog or
 Architect Review Note items.
@@ -83,20 +88,28 @@ continues to create one numbered archive and never edits compacted evidence or r
 
 ### 5. `--release` only — Release Gate and deploy
 
-Run only after the mandatory Full Gate and local merge succeed.
+Run only after the selected local release coverage and local merge succeed.
 
-1. Run every row in `docs/STACK.md`'s **Release Gate** table, reporting honest `SKIPPED` rows.
-2. On PASS, push local `main` to `origin/main`.
-3. Use `gh` to locate the resulting CI/CD run and confirm its successful completion and declared
-   deployment health. “Pushed” alone is not sufficient.
-4. On Release Gate failure, stop before pushing. Do not undo the already completed local merge.
+1. Reconcile the tested source tree with the final merged SHA (archive-only metadata changes
+   do not authorize untested source edits). Run prepublication STACK rows: production Compose
+   render, release target health, GitHub access/environment/secrets policy. Never persist secrets.
+2. On PASS, push local `main` to `origin/main` under the user's release authorization.
+3. Use the release checkpoint utility to fetch fresh successful CI and images evidence for that
+   exact SHA. The images workflow scans the actual published digests; no second local image build
+   is required. Pending/missing/failed runs block deploy.
+4. Dispatch the existing deploy workflow once for that SHA. On interruption, inspect existing
+   runs before deciding whether any dispatch is needed; a checkpoint never repeats a mutation.
+5. Verify the exact deploy target and independent public readiness SHA/homepage using the
+   checkpoint utility. Saved statuses are history, never current production truth.
+6. Failure before push blocks push; failure after push blocks deploy or completion. Report the
+   actual reached phase. Do not undo a completed merge/push or repeat bank imports automatically.
 
 ## Report
 
 ```text
 ## ship complete — change [NN]
 
-Gate mode: Critical / Full / Full + Release
+Gate mode: Critical / Full / Risk-selected + Release (or forced Full + Release)
 [selected gate]:
   [row] — PASS
   [row] — SKIPPED ([reason])
@@ -119,7 +132,8 @@ Deploy status: [live status via gh, or "not applicable"]
 - Do not edit code files in this workflow.
 - Default `/ship` is intentionally compact; do not silently promote it to a Full Gate.
 - Run the Full Gate only for explicit `--full` or `--release`.
-- Publication safety is not optional: `--release` must pass both Full and Release Gates.
+- Publication safety is not optional: `--release` must pass selected coverage, fresh security
+  and all Release Gate phases. Unknown/shared inputs require Full.
 - Unchecked Backlog or Architect Review Note items block every ship mode.
 - Never force-push, rewrite history, or delete branches without explicit confirmation.
 - Push `origin/main` only for `--release` after all mandatory gates pass.
@@ -129,4 +143,5 @@ Deploy status: [live status via gh, or "not applicable"]
 
 - Every selected gate row has a reported status and all unresolved checklist items are counted.
 - On PASS, the branch is merged locally and the change file is archived.
-- With `--release`, Full and Release Gates pass, `main` is pushed, and deploy health is confirmed.
+- With `--release`, selected coverage and Release Gate pass, `main` is pushed, and the exact
+  deployed SHA is confirmed independently of workflow success.

@@ -174,6 +174,11 @@ to the touched area only. It proves that changed code is internally consistent w
 the full regression, browser, infrastructure, security, accessibility, or performance suites.
 Fill every applicable row and report the rest as `SKIPPED` with a reason.
 
+Use the supported gate runner and [verification runbook](runbooks/verification.md) to print
+the plan and retain timing/status outside the worktree. A Critical plan that cannot map a
+changed path requires an explicit affected-check decision; it never launches Full implicitly.
+One parent owns the gate. Do not repeat it independently in every worker.
+
 | Check | Command | Preconditions / notes |
 |-------|---------|-----------------------|
 | Format | `pnpm format:check` | run once for the target set; scope is repository-wide because formatting configuration is shared |
@@ -188,15 +193,18 @@ Fill every applicable row and report the rest as `SKIPPED` with a reason.
 
 ## Full Gate
 
-Run only when explicitly requested through `/ship --full`, or as a mandatory prerequisite of
-`/ship --release`. It is intentionally expensive and is not part of routine task completion or
-default local shipping.
+Run when explicitly requested through `/ship --full`, or when release risk selection falls
+back to Full. It is intentionally expensive and is not part of routine task completion or
+default local shipping. `/ship --release` selects affected coverage against the last verified
+production SHA; an unknown baseline, shared dependencies, infrastructure or unmapped changes
+require Full. Fresh security and Release Gate remain mandatory for every release.
 
 | Check | Command | Preconditions / notes |
 |-------|---------|-----------------------|
 | Formatting | `pnpm format:check` | Prettier and Ruff; Markdown and generated/dependency-owned files are explicitly ignored |
 | Infrastructure / bootstrap | `docker compose --project-name infraege-full-gate -f infra/docker-compose.yml -f infra/docker-compose.override.yml up --build -d` | The explicit project name and overlay ports `18080/13000/18000/15432` isolate the gate from unrelated Compose directories and common development ports. Verified live in change 03 on Docker Desktop/BuildKit: all four services become healthy; frontend and `/health` return 200 through Nginx. Change 02 also verified `POST /api/tasks/{id}/check` and the `/api/tasks/` rate limit (`503` past its burst — Nginx's default `limit_req_status`, not `429`) |
 | Operations contracts | `bash scripts/tests/backup-restore.test.sh && bash scripts/tests/deploy-preflight.test.sh && bash scripts/tests/host-web-gate.test.sh` | local/fake transport only |
+| Host Python contracts | `python3 -m unittest scripts.tests.application_db_test scripts.tests.deploy_orchestration_test scripts.tests.gate_test scripts.tests.release_checkpoint_test` | includes restore/deploy boundaries and verification orchestration; local fake transports |
 | Migrations | `cd apps/api && uv run alembic upgrade head && uv run alembic current && uv run alembic check` | explicit isolated gate DB and migration-role URL; Compose runs its own separate migration job before API startup; never CI or production |
 | Backend test suite | `cd apps/api && uv run pytest` | local only |
 | API contract drift | `pnpm api:check` | requires the frozen API and pnpm environments; tracked schema and generated TypeScript must match |
@@ -205,10 +213,10 @@ default local shipping.
 | E2E lint / determinism | `pnpm --filter web exec playwright test --list` | local only, never CI'd; validates Playwright config/spec collection without running the journey |
 | E2E (Playwright) | `pnpm --filter web test:e2e` | local only, never CI'd; starts local Vite + Uvicorn through Playwright `webServer` and verifies public routes, all published course lessons without JS, practice, degraded states, reading layout and accessibility in Chromium; requires the seeded isolated bank described below |
 | Smoke | `curl -f http://localhost:18000/health/ready` (backend) — frontend smoke is the build prerender crawl | Full Gate API port from `docker-compose.override.yml` |
-| SAST / secrets / dependency audit | `pnpm audit:security` | Docker required for pinned Gitleaks 8.30.1 and Trivy 0.73.0; Semgrep 1.172.0 and pip-audit 2.10.1 run through uvx |
-| Accessibility audit | `pnpm audit:a11y` | local Playwright/axe; home, catalogs, course/topic lessons, practice, privacy and not-found routes; serious/critical violations fail |
-| Performance budget | `scripts/run-host-web-gate.sh bash -c 'pnpm --filter web build && pnpm audit:performance'` | restores the repository-owned `infraege-full-gate` web service on success/failure; local Chrome against `/`, `/ege`, `/courses`, `/courses/python` and `/ege/16-rekursiya`; median of 3, enforced LCP ceiling ≤4.0s, CLS ≤0.1, TBT ≤200ms as lab proxy for INP. LCP ≤2.8s remains the product target to restore when stable measurement and optimization evidence support tightening the gate |
+| Accessibility audit | covered by `pnpm --filter web test:e2e` above | complete E2E includes `e2e/accessibility.spec.ts`; do not run it twice. `pnpm audit:a11y` remains the focused command when E2E was not selected |
+| Performance budget | `scripts/run-host-web-gate.sh pnpm audit:performance` | consumes the successful build above in the same verified run; rebuild if inputs or output changed. Restores the repository-owned `infraege-full-gate` web service on success/failure; local Chrome against `/`, `/ege`, `/courses`, `/courses/python` and `/ege/16-rekursiya`; median of 3, enforced LCP ceiling ≤4.0s, CLS ≤0.1, TBT ≤200ms as lab proxy for INP. LCP ≤2.8s remains the product target to restore when stable measurement and optimization evidence support tightening the gate |
 | Content validation | `pnpm test:content-assets && pnpm validate:content` | the isolated validator tests reject unsafe paths and invalid asset metadata before the real-tree pass; `validate:content` checks Course/module/lesson membership and titles, generated publication registry, and the complete canonical bank through the API CLI (schema, lesson positions, theory material/section references and file bytes). Requires uv and the frozen API environment; no database or credentials. The legacy asset tests retain historical fixture coverage |
+| SAST / secrets / dependency audit | `pnpm audit:security` | Docker required for pinned Gitleaks 8.30.1 and Trivy 0.73.0; Semgrep 1.172.0 and pip-audit 2.10.1 run through uvx |
 | Repository hygiene | analyze all gate reports, then `make clean-dry-run && make clean && make clean-check` | always run last; Lighthouse removes its external Chrome profile on every exit, while this terminal step removes retained reports, builds and caches from the repository |
 
 Tests remain local-only; the security command is also mirrored in GitHub Actions without invoking
@@ -244,12 +252,14 @@ repository hygiene after reports have been analyzed. No test runner executes ins
 
 ## Release Gate
 
-Run only by `/ship --release`, after the Full Gate has passed and the change is merged locally —
-before pushing to `origin/main`.
+Run only by `/ship --release`, after the selected release coverage has passed and the change is
+merged locally. Prepublication checks run before push; published-image checks necessarily run
+after push and before deploy. A failed publication check blocks deploy, not a fictitious undo
+of an already completed push. See the [verification runbook](runbooks/verification.md).
 
 | Check | Command | Preconditions / notes |
 |-------|---------|-----------------------|
-| Container image build + scan | `pnpm audit:images` | builds the three production images and fails on fixed HIGH/CRITICAL findings |
+| Published image build + scan | successful exact-SHA `images.yml` run, verified by release checkpoint tool | after push, before deploy: the workflow scans all three published digests for fixed HIGH/CRITICAL findings and emits SBOM/provenance. `pnpm audit:images` remains an optional local diagnostic, not a second mandatory build/scan |
 | Production Compose render | `scripts/render-production-config.sh /etc/infraege/production.env >/dev/null` | run on the provisioned VPS or against a complete temporary env |
 | Health/deploy verification | `scripts/check-release-target.sh` | Before the first successful deploy, permits an unavailable site only when the deploy workflow has no successful run and both public A records match the VPS. Later releases fail closed unless current production health reports a 40-character SHA. After push, the deploy workflow checks the public page/readiness and rolls back on failure. |
 | `gh` repository/environment | `gh auth status && gh repo view avatarsik6699/infraegev2` | verify the documented no-reviewer production policy, `can_admins_bypass`, and required secrets/vars |
@@ -501,11 +511,20 @@ pnpm lint:shell
 pnpm exec pyright --project scripts/pyrightconfig.json
 python3 -m unittest discover -s scripts/tests -p application_db_test.py
 python3 -m unittest discover -s scripts/tests -p deploy_orchestration_test.py
+python3 -m unittest discover -s scripts/tests -p gate_test.py
+python3 -m unittest discover -s scripts/tests -p release_checkpoint_test.py
 ```
 
 The optional snapshot integration test requires an explicitly selected `PRACTICE_BACKUP_CONTAINER`; never run it in CI. `pnpm format:check` includes maintenance Python. Lint from `apps/api` with
 `uv run ruff check ../../scripts/application_db.py ../../scripts/lib/application_db
 ../../scripts/tests/application_db_test.py ../../scripts/tests/deploy_orchestration_test.py`.
+
+Gate/checkpoint tooling follows the same stdlib-only boundary. Its focused lint command is
+`cd apps/api && uv run ruff check ../../scripts/gate.py ../../scripts/lib/gate
+../../scripts/tests/gate_test.py ../../scripts/release-checkpoint.py ../../scripts/release_checkpoint.py
+../../scripts/tests/release_checkpoint_test.py`. These checks exercise fake commands/transports;
+testing orchestration does not require running application Full Gate or contacting production.
+See [verification](runbooks/verification.md) and [agent workflow](runbooks/agent-workflow.md).
 
 
 ## Common operations

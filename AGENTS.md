@@ -16,7 +16,8 @@ tooling live in [`docs/STACK.md`](docs/STACK.md).
    instead of inventing behavior.
 4. **Proportional Gates**: `/work` runs one affected-area Critical Gate for its complete target
    set; default `/ship` repeats that compact gate before merging. Full Gate runs only for explicit
-   `/ship --full` or as a mandatory part of `/ship --release`. Automated green is not enough when
+   `/ship --full` or as the conservative fallback of risk-selected `/ship --release`. Fresh security
+   and Release Gate remain mandatory for every release. Automated green is not enough when
    Backlog or `Architect Review Notes` has unchecked items.
 5. **Security**: No hardcoded secrets. Use `.env`, environment variables, and typed settings
    appropriate to the stack. When Full Gate is requested, its secrets scan and dependency audit
@@ -132,11 +133,29 @@ fix. If no gotcha entry exists, ask how to proceed and add the resolution to `KN
 4. `/ship` runs the Critical Gate by default; `/ship --full` runs the manually requested Full
    Gate. On PASS either mode commits outstanding work, merges `feature/NN-slug` into local `main`,
    and archives the change file. Do not merge or push outside of `/ship`.
-5. `/ship --release` always runs Full and Release Gates, then pushes `main` to `origin/main` and
-   verifies the resulting deploy via `gh`. Do not push to `origin/main` any other way without
+5. `/ship --release` runs risk-selected coverage (Full on unknown/shared inputs), fresh security,
+   prepublication checks, then pushes `main`, verifies exact-SHA CI/published images, and verifies
+   the resulting deploy via `gh` and public health. Do not push to `origin/main` any other way without
    explicit instruction.
 
 ## Workflow Playbooks
+
+### Model routing and delegation
+
+Use GPT-5.6 Terra for everyday tasks and bounded subagents. Use GPT-6 Astra for
+planning, orchestration, consequential cross-domain decisions and difficult diagnosis.
+The project `.codex/config.toml` sets Terra defaults; `bash scripts/codex-orchestrator.sh`
+explicitly selects Astra without changing global settings. Existing sessions keep their
+runtime model selection.
+
+Delegate independent, sufficiently substantial tasks to Terra while doing useful work
+locally; do simple sequential tasks directly. Limit concurrent children to two and
+assign disjoint file ownership, acceptance criteria and a concise context. Workers are
+not alone and must preserve others' edits. No nested delegation by default. One parent
+owns integration, shared gates, cleanup, Git and release; deterministic commands belong
+in the runner rather than repeated model-driven shell sequences. Escalate after two
+unsuccessful distinct focused attempts, or immediately for ambiguous high-risk work.
+See [agent workflow](docs/runbooks/agent-workflow.md) for the full handoff and measurement policy.
 
 The SDD workflows are defined in `docs/playbooks/`:
 
@@ -164,7 +183,7 @@ Runtime wrappers are thin stubs. Workflow logic belongs in the playbooks.
 7. /work NN review                     -> agent fixes review notes; repeat 5-7 until clean
 8. /ship NN                            -> Critical Gate; on PASS: merge to main, archive
 9. /ship NN --full                     -> manual Full Gate; on PASS: merge to main, archive
-10. /ship NN --release                 -> Full + Release Gates; push and verify deploy via gh
+10. /ship NN --release                 -> Risk-selected + Release Gates; push and verify deploy
 ```
 
 ## Implementation Notes

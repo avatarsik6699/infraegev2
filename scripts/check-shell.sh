@@ -8,6 +8,7 @@ scripts=(
   scripts/db-provision-roles.sh scripts/db-inventory.sh
   scripts/deploy-remote.sh scripts/lib/application-db.sh scripts/lib/application-db-release.sh
   scripts/tests/practice-read-limit.test.sh
+  scripts/codex-orchestrator.sh
 )
 for script in "${scripts[@]}"; do bash -n "$script"; done
 shellcheck --external-sources --source-path=SCRIPTDIR --severity=style "${scripts[@]}"

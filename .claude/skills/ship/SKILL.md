@@ -1,6 +1,6 @@
 ---
 name: ship
-description: Close a change with the compact Critical Gate by default; use `--full` for the manual Full Gate or `--release` for mandatory Full and Release Gates, push, and deploy verification.
+description: Close a change with the compact Critical Gate by default; use `--full` for the manual Full Gate or `--release` for risk-selected coverage and Release Gates, push, and deploy verification.
 allowed-tools: Bash, Read
 argument-hint: "[change number] [--full|--release]"
 ---

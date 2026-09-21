@@ -205,6 +205,10 @@ After implementing the complete target set:
    Analyze any reports and metrics before the final Repository hygiene row removes them. The row is
    mandatory even when earlier checks produced only caches; never replace its allowlisted commands
    with broad ignored-file cleanup.
+   Print and execute the supported runner plan from [verification](../runbooks/verification.md);
+   record a reason for any reviewed scope override. An unknown path requires a coverage decision,
+   not an automatic expensive Full run. Only the parent runs shared gates; delegated workers
+   return focused evidence according to [agent workflow](../runbooks/agent-workflow.md).
 3. Report the commands run and their results; if a check was not run, state the reason.
 4. Mark the item:
    - Backlog task → check off the matching item in `docs/changes/NN-slug.md` § Backlog.
