@@ -41,8 +41,6 @@ for service in \
   grep -Fxq 'User=root' "$repo_dir/ops/systemd/$service"
   grep -Fxq 'Group=root' "$repo_dir/ops/systemd/$service"
 done
-grep -Fq 'WIREGUARD_IP' "$repo_dir/ops/setup-journal-gateway.sh"
-! grep -Fq 'ops-reader' "$repo_dir/ops/setup-journal-gateway.sh"
 grep -Fq -- '--webroot --webroot-path /var/www/certbot' \
   "$repo_dir/ops/configure-certificate-renewal.sh"
 grep -Fq -- '--dry-run --no-random-sleep-on-renew' \
@@ -79,7 +77,6 @@ grep -Fq 'Root password must be one line of at least 12 characters' "$password_e
 
 for file in \
   "$repo_dir/ops/migrate-root-password-access.sh" \
-  "$repo_dir/ops/setup-journal-gateway.sh" \
   "$repo_dir/scripts/production-root-ssh.sh" \
   "$repo_dir/scripts/ssh-askpass.sh"; do
   bash -n "$file"

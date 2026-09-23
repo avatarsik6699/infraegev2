@@ -9,7 +9,7 @@
 
 | Field | Value |
 |-------|-------|
-| Document Version | `v2.17` |
+| Document Version | `v2.18` |
 | Date | `2026-09-22` |
 | Architect / Owner | `v.godlevskiy` |
 | Stack | See [docs/STACK.md](./STACK.md) |
@@ -365,7 +365,12 @@ backup/restore с достаточными отдельными правами. 
 
 Один application Compose: Nginx → web/API → PostgreSQL. API и Nginx читают task-files
 с read-only mounts. Ubuntu, journald, fail2ban, TLS renewal и application backup остаются.
-Доступ root/password SSH с pinned host key сохраняет ранее принятое решение архитектора.
+Доступ root/password SSH с pinned host key сохраняет ранее принятое решение архитектора
+(подтверждено повторно 2026-09-23: пароли остаются ради удобства ручного и агентского входа,
+риск перебора ограничивается fail2ban с растущим баном повторных нарушителей и `MaxAuthTries 3`).
+Вне Compose на хосте работает агент `smotryashchiy` (systemd `smotryashchiy-agent`, отдельный
+продукт и репозиторий): он только читает метрики, журналы, Docker и fail2ban и отправляет их
+на `sre.infraege.ru`; установка и обновление описаны в production runbook.
 
 ### 7.2 Deploy / CI
 
@@ -396,6 +401,12 @@ infraege.prod.conf`, §8.2): `script-src`/`connect-src` допускают `http
 Установленные сервисы VPS этим локальным change не изменяются, кроме упомянутой правки CSP. Их
 остановка и отключение старых таймеров входят в отдельный явно разрешённый release по runbook;
 volumes автоматически не удаляются.
+
+Решение архитектора 2026-09-23 (Change 136): старый стек `infraege-ops` (Umami, Beszel и его
+агент, docker-socket-proxy, отдельный PostgreSQL, таймеры `infraege-ops-*`) удаляется с хоста
+полностью, включая его volumes и `/opt/infraege-ops`, — его заменил `smotryashchiy`, событий он
+не получал. Это разовое явно разрешённое исключение из правила «volumes не удаляются»; оно не
+распространяется на тома приложения (`infraege_postgres-data`, сохранённый `infraege_postgres122-data`).
 
 ## 8. Non-Functional Requirements
 

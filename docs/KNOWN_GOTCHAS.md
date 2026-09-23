@@ -538,3 +538,16 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
 - **Fix:** the checkpoint takes the first matrix value from the job name (Change 135). Fixtures now
   use the real names. When matching workflow evidence by name, copy the names from a real run
   (`gh api repos/…/actions/runs/<id>/jobs`), not from the workflow file.
+
+### Removing a host stack from the repository does not stop it on the host
+
+- **Symptoms:** two weeks after Change 122 removed the operations stack from this repository, the
+  host still ran `infraege-ops` (Umami, Beszel and its agent, docker-socket-proxy, a PostgreSQL) and
+  its three `infraege-ops-*` timers kept backing up and pruning; found by the smotryashchiy audit on
+  2026-09-23, not by anything in this repo.
+- **Root cause:** deploys install and activate what the release contains; nothing removes what was
+  installed from elsewhere (`/opt/infraege-ops`), and timers keep firing on their own.
+- **Fix:** retiring a host service is its own authorized release step: inventory the Compose project,
+  containers, systemd timers and services, volumes and install directory, disable the timers, bring
+  the project down, then remove what the decision covers (Change 136, `docs/runbooks/production.md`).
+  Check with `docker ps -a`, `systemctl list-timers` and `docker volume ls` afterwards.
