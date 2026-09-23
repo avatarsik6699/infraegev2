@@ -563,3 +563,14 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
 - **Fix**: `scripts/prune-releases.sh` runs after each healthy deploy and keeps three releases plus
   the `current`/`database-current` targets (Change 138). Never prune before the new release is
   recorded, or a rollback could lose its target.
+
+### An interrupted unattended upgrade stops all later security updates, silently
+
+- **Symptoms**: on infraege.ru `apt-get` failed with `dpkg was interrupted, you must manually run
+  'dpkg --configure -a'`, 18 days after a kernel upgrade to 6.8.0-139 had been cut off mid-unpack
+  (2026-09-05). 42 upgrades were pending, and nothing had alerted.
+- **Root cause**: the host rebooted during unattended-upgrades' dpkg run. dpkg keeps a half-configured
+  state, and every later apt run, unattended ones included, refuses to proceed. The failure is
+  only in apt logs.
+- **Fix**: `dpkg --configure -a` and `apt-get -f install` with `NEEDRESTART_MODE=l`, then a planned
+  upgrade and reboot (Change 139). Check `dpkg --audit` as part of routine operation.

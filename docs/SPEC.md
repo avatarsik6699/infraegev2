@@ -9,7 +9,7 @@
 
 | Field | Value |
 |-------|-------|
-| Document Version | `v2.19` |
+| Document Version | `v2.20` |
 | Date | `2026-09-23` |
 | Architect / Owner | `v.godlevskiy` |
 | Stack | See [docs/STACK.md](./STACK.md) |
@@ -378,7 +378,9 @@ CI выполняет static/build/security checks, тесты запускаю�
 Production использует immutable SHA images. Deploy — явный workflow_dispatch, с health/smoke
 и rollback на предыдущий release. Первый переход на 122_01 требует отдельного переноса банка
 в новый volume и restore acceptance для выбранного SHA; обычный deploy не импортирует контент.
-Старый volume сохраняется. После новых записей нельзя считать его актуальной резервной копией.
+Старый volume (`infraege_postgres-data`, PostgreSQL 16) хранился до 2026-09-23 и удалён по решению
+архитектора (Change 139): проверка показала пустую базу `infraege` и только тестовые данные
+выведенного Umami. Rollback на любой хранимый релиз использует тот же `infraege_postgres122-data`.
 Content validation и OpenAPI drift проверяются до merge. Подробности в STACK и runbooks.
 
 ### 7.3 Minimal operations
@@ -417,6 +419,14 @@ volumes автоматически не удаляются.
 - На хосте хранятся три последних релиза: каталог, архив, deploy-скрипт и образы. Кроме них
   хранится то, на что указывают `current` и `database-current`. Очистка выполняется после
   успешного deploy и не может его сорвать.
+
+Решение архитектора 2026-09-23 (Change 139):
+- Старый том `infraege_postgres-data` удалён. Перед удалением проверено: база `infraege` пустая,
+  а база `umami` содержала только тестовые события выведенного Umami.
+- Удалены 13 снапшотов restic без тега (ранние бэкапы приложения 2026-08-10..20).
+- Под защитой остаются только `infraege_postgres122-data` и снапшоты `infraege-application`.
+- Прерванное 2026-09-05 обновление пакетов восстановлено. Хост обновлён и перезагружен на ядро
+  6.8.0-142.
 
 ## 8. Non-Functional Requirements
 

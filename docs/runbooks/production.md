@@ -55,8 +55,8 @@ directories, `/root/infraege-<sha>.tar.gz` archives, `/root/infraege-deploy-<sha
 application images (Change 138). An image still used by a container is skipped. A pruning failure
 prints a warning and never fails the deploy. Set `KEEP_RELEASES` (at least 2) to change the count.
 
-A failure invokes one verified rollback and retains its original error status. Both data volumes
-remain; after new writes the old volume is stale. Missing previous release or failed rollback
+A failure invokes one verified rollback and retains its original error status. The data volume
+`infraege_postgres122-data` is shared by every kept release, so rollback never switches volumes. Missing previous release or failed rollback
 requires manual recovery, not a destructive schema downgrade. Consult [backup](backup-restore.md).
 
 ## Routine operation
@@ -67,6 +67,15 @@ liveness; `/health/ready` checks database/schema readiness. A scheduled GitHub p
 availability and TLS. Preserve bounded logs and rate limits. Browser analytics is the cookieless
 `smotryashchiy` snippet allowlisted in CSP (SPEC §7.3); there is no consent UI or client-error
 ingestion.
+
+Host packages are patched by unattended upgrades. They stop silently if `dpkg` was interrupted,
+because every later `apt` run then fails. Check this monthly:
+- `dpkg --audit` must print nothing;
+- `apt list --upgradable` must stay short;
+- `/var/run/reboot-required` means a pending reboot.
+
+To repair: run `dpkg --configure -a` and `apt-get -f install` with `NEEDRESTART_MODE=l`, so no
+service restarts. Plan the reboot separately: it restarts the application for about a minute.
 
 ## Host monitoring agent (smotryashchiy)
 
