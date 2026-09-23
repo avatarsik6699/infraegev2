@@ -384,7 +384,7 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
 - **Symptoms**: the local Nginx still serves existing traffic, but `nginx -t` hangs until the
   container healthcheck times out and Compose reports it as unhealthy.
 - **Root cause**: mounting the whole `infra/nginx/conf.d/` directory makes local configuration
-  validation resolve production-only upstreams such as Umami, which do not exist in the base
+  validation resolve production-only upstreams, which do not exist in the base
   Compose topology. A pre-existing Nginx master can hide the invalid new vhost until validation.
 - **Fix**: base Compose mounts only `infraege.conf` as `default.conf`; the production Nginx image
   copies `infraege.prod.conf` itself. Keep those configuration inputs separate.
@@ -553,3 +553,13 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
   containers, systemd timers and services, volumes and install directory, disable the timers, bring
   the project down, then remove what the decision covers (Change 136, `docs/runbooks/production.md`).
   Check with `docker ps -a`, `systemctl list-timers` and `docker volume ls` afterwards.
+
+### A deploy that never prunes fills the disk slowly
+
+- **Symptoms**: after ~30 releases the host held 31 release directories, 29 uploaded archives in
+  `/root` and 92 application images (≈2.6 GB reclaimable); nothing failed, so nobody noticed.
+- **Root cause**: every deploy unpacks a new release, uploads an archive and pulls three images, and
+  nothing ever removed the old ones.
+- **Fix**: `scripts/prune-releases.sh` runs after each healthy deploy and keeps three releases plus
+  the `current`/`database-current` targets (Change 138). Never prune before the new release is
+  recorded, or a rollback could lose its target.

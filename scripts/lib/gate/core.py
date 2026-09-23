@@ -18,7 +18,11 @@ EXIT_NEEDS_REVIEW = 3
 OPERATIONS_CONTRACTS = (
     "bash scripts/tests/backup-restore.test.sh && "
     "bash scripts/tests/deploy-preflight.test.sh && "
-    "bash scripts/tests/host-web-gate.test.sh"
+    "bash scripts/tests/host-web-gate.test.sh && "
+    "bash scripts/tests/host-access-policy.test.sh && "
+    "bash scripts/tests/root-password-access.test.sh && "
+    "bash scripts/tests/release-retention.test.sh && "
+    "bash scripts/tests/web-image-build.test.sh"
 )
 OPERATIONS_PYTHON = (
     "python3 -m unittest scripts.tests.application_db_test "

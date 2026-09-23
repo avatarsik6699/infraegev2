@@ -30,7 +30,7 @@ This maintenance identity does not change the application API's runtime user.
 
 `ops/install-backup-timers.sh application` installs daily backup and monthly restore timers.
 `/opt/infraege/database-current` selects the maintenance release that matches the DB. Inspect
-`backup-status.json`, `restore-check-status.json`, `systemctl list-timers` and journald for status.
+`backup-status.json`, `restore-status.json`, `systemctl list-timers` and journald for status.
 The source of timer truth is `ops/systemd/`; no separate monitoring stack is required.
 
 ## Recovery

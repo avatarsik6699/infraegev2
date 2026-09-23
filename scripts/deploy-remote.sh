@@ -104,4 +104,7 @@ awk -v deploy_sha="$DEPLOY_SHA" '
 chmod 600 "$env_tmp"
 mv "$env_tmp" "$env_file"
 trap - EXIT INT TERM
+# Retention runs only after the new release is healthy and recorded; a failure never fails the deploy.
+bash "$release_dir/scripts/prune-releases.sh" "$DEPLOY_SHA" ||
+  echo "warning: release retention failed; the deploy itself succeeded" >&2
 echo "Deployment $DEPLOY_SHA is healthy."

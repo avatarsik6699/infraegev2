@@ -37,8 +37,10 @@ ufw default allow outgoing
 ufw allow OpenSSH
 ufw allow 80/tcp
 ufw allow 443/tcp
-ufw allow 51820/udp
 ufw --force enable
+# Blocked port scans would otherwise be hundreds of kernel warnings per hour in the monitoring
+# events; fail2ban reads the sshd log, not UFW's (Change 138).
+ufw logging off
 
 swap_target_bytes=$((2 * 1024 * 1024 * 1024))
 swap_current_bytes=$(stat --format=%s /swapfile 2>/dev/null || printf '0')
@@ -83,4 +85,4 @@ install -d -m 700 -o root -g root /var/backups/infraege
 install -d -m 755 -o root -g root /var/lib/infraege
 
 echo "Bootstrap complete. Verify a second root/password SSH session before closing the console."
-echo "Next: install WireGuard, obtain TLS, then run setup-journal-gateway.sh."
+echo "Next: obtain TLS (ops/obtain-initial-certificate.sh), then follow docs/runbooks/production.md."

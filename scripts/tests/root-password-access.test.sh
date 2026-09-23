@@ -3,7 +3,6 @@ set -Eeuo pipefail
 
 repo_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)
 config="$repo_dir/ops/sshd/20-infraege-root-password.conf"
-migration="$repo_dir/ops/migrate-root-password-access.sh"
 workflow="$repo_dir/.github/workflows/deploy.yml"
 test_root=$(mktemp -d)
 trap 'rm -rf -- "$test_root"' EXIT
@@ -23,11 +22,6 @@ for expected in \
   grep -Fxq "$expected" "$config"
 done
 
-grep -Fq 'retired_users=(operator deploy ops-reader)' "$migration"
-grep -Fq 'CONFIRM_RETIRE_IDENTITIES:-} == operator,deploy,ops-reader' "$migration"
-grep -Fq 'for group in infraege-operator deploy ops-reader' "$migration"
-! grep -Fq 'for group in infraege-operator operator' "$migration"
-grep -Fq 'root-password-access-verified' "$migration"
 grep -Fq 'PROD_ROOT_PASSWORD' "$workflow"
 ! grep -Eq 'PROD_SSH_KEY|PROD_USER' "$workflow"
 grep -Fq 'root@$PROD_HOST:/root/' "$workflow"
@@ -76,7 +70,6 @@ fi
 grep -Fq 'Root password must be one line of at least 12 characters' "$password_error"
 
 for file in \
-  "$repo_dir/ops/migrate-root-password-access.sh" \
   "$repo_dir/scripts/production-root-ssh.sh" \
   "$repo_dir/scripts/ssh-askpass.sh"; do
   bash -n "$file"

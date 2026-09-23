@@ -26,4 +26,12 @@ for expected in 'enabled = true' 'backend = systemd' 'maxretry = 5'; do
   grep -Fxq "$expected" <<<"$sshd_jail"
 done
 
+# The host accepts only SSH and web traffic; the monitoring agent dials out, so no tunnel port.
+bootstrap="$repo_dir/ops/bootstrap-vps.sh"
+if grep -Eq 'ufw allow (51820|19531)' "$bootstrap" || grep -Fq 'setup-journal-gateway' "$bootstrap"; then
+  echo 'bootstrap still opens a retired port or points to the journal gateway' >&2
+  exit 1
+fi
+grep -Fxq 'ufw logging off' "$bootstrap"
+
 echo "host-access-policy: ok"

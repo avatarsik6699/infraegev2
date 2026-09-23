@@ -17,9 +17,10 @@ access during credential rotation. Store secrets outside Git, mode 600; never pu
    then perform the explicit release. Install application backup/restore timers only when
    `/opt/infraege/database-current` points to the matching reviewed release.
 
-Existing SSH migration helpers remain in `ops/migrate-root-password-access.sh` and
-`scripts/production-root-ssh.sh`. Verify changes from a second session before retiring identities.
-No monitoring tunnels or journal HTTP gateways are required.
+`scripts/production-root-ssh.sh` opens an operator root session with the documented host key and
+password policy; verify SSH changes from a second session before closing the first. No monitoring
+tunnels or journal HTTP gateways are required. UFW packet logging is off (Change 138): blocked
+port scans would otherwise flood the monitoring events, and fail2ban reads the sshd log instead.
 
 Root/password SSH stays by architect decision (SPEC §7.1); guessing is limited by `MaxAuthTries 3`
 and the fail2ban sshd jail, whose bans grow for repeat offenders (Change 136). To apply a changed
@@ -47,6 +48,12 @@ Preflight checks environment, schema-transition attestation, images and TLS read
 up the prepared DB, runs migration, activates Compose, verifies health version and public HTTP,
 then updates `current`, `database-current`, deployment status and environment SHA. It never
 imports content automatically. Preserve candidate and previous images for recovery.
+
+After the release is healthy and recorded, `scripts/prune-releases.sh` keeps the three newest
+releases plus whatever `current` and `database-current` point to, and removes the other releases'
+directories, `/root/infraege-<sha>.tar.gz` archives, `/root/infraege-deploy-<sha>.sh` scripts and
+application images (Change 138). An image still used by a container is skipped. A pruning failure
+prints a warning and never fails the deploy. Set `KEEP_RELEASES` (at least 2) to change the count.
 
 A failure invokes one verified rollback and retains its original error status. Both data volumes
 remain; after new writes the old volume is stale. Missing previous release or failed rollback
@@ -79,9 +86,13 @@ The pre-Change-122 operations stack `infraege-ops` (Umami, Beszel and its agent,
 its own PostgreSQL, timers `infraege-ops-backup`, `infraege-ops-analytics-retention`,
 `infraege-ops-restore-check`, installed from `/opt/infraege-ops`) kept running after Change 122 until
 the Change 136 release removed it completely, volumes included, by architect decision (SPEC §7.3).
-Nothing on the host depends on it. Its WireGuard management tunnel `wg0` (10.77.0.1, peers
-10.77.0.2/.3) carried only that stack: `wg-quick@wg0` is disabled and its UFW rules (51820/udp, the
-old journal gateway 19531 on wg0) are removed, while `/etc/wireguard/` is kept. Its encrypted
-snapshots (restic tag `infraege-ops`) remain in the shared repository `/var/backups/infraege/restic`;
-nothing prunes them any more, and the application's own snapshots are unaffected. Sibling repositories and remote management hosts are still not
+Nothing on the host depends on it. Change 138 removed the rest of it by architect decision:
+- the WireGuard tunnel `wg0` (packages, `/etc/wireguard/`, its UFW rules);
+- the `systemd-journal-remote` package with the journal gateway socket;
+- the env files in `/etc/infraege/ops` and `/var/backups/infraege-ops`;
+- the `infraege-observability-ingress` network, its dangling anonymous volumes and one-off
+  bootstrap/cutover files in `/root`;
+- its restic snapshots (`restic forget --tag infraege-ops --prune`, followed by `restic check`).
+
+The application's `infraege-application` snapshots were not touched. Sibling repositories and remote management hosts are still not
 implicitly authorized by an application deploy.
