@@ -9,7 +9,7 @@
 | Change | `135` |
 | Slug | `checkpoint-matrix-job-names` |
 | Title | Match images.yml matrix jobs by their real GitHub names |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/135-checkpoint-matrix-job-names` |
 
 ---
@@ -87,7 +87,7 @@ of truth; this file only tracks what to build and what's left.
 ## Gate Checks
 
 > Critical Gate runs once per `/work` target set and by default in `/ship`; Full Gate runs only
-> with `--full` or when release risk selection requires it. All gates are defined in [docs/STACK.md](../STACK.md) — this section only records
+> with `--full` or when release risk selection requires it. All gates are defined in [docs/STACK.md](../../STACK.md) — this section only records
 > change-specific overrides.
 
 If this change needs a custom smoke target or other change-specific note, record it here:
