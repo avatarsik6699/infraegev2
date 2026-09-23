@@ -9,8 +9,8 @@
 
 | Field | Value |
 |-------|-------|
-| Document Version | `v2.16` |
-| Date | `2026-09-17` |
+| Document Version | `v2.17` |
+| Date | `2026-09-22` |
 | Architect / Owner | `v.godlevskiy` |
 | Stack | See [docs/STACK.md](./STACK.md) |
 | Domain | Платформа подготовки к ЕГЭ по информатике — самостоятельные темы экзамена и мини-курсы с теорией, визуализацией и практикой |
@@ -47,8 +47,10 @@ sdamgia.ru, kpolyakov.spb.ru), ни новыми AI-ботами (решают �
 а затем продолжают обучение, а не уходят после первого экрана.
 
 Числовые цели не зафиксированы. Сейчас проверяем полезность уроков и практики непосредственным
-использованием и обратной связью. Аналитический стек и сбор браузерных событий удалены;
-необходимые журналы сервера служат эксплуатации, а не оценке учебного прогресса.
+использованием и обратной связью. Cookieless-аналитика посещений (self-hosted сервис
+`smotryashchiy`, без cookie и persistent visitor id, §7.3/§8.2) даёт агрегированную картину
+трафика и переходов; она не заменяет прямую обратную связь и не используется для оценки учебного
+прогресса конкретного ученика.
 
 ### 1.3 Project Boundaries
 
@@ -377,9 +379,23 @@ Content validation и OpenAPI drift проверяются до merge. Подр�
 ### 7.3 Minimal operations
 
 Сохраняются TLS, health, обычные журналы, rate limits и scheduled application backup/restore.
-Umami, Beszel, sre-kit integration, publishers и monitoring tunnels удалены из репозитория.
-Установленные сервисы VPS этим локальным change не изменяются. Их остановка и отключение старых
-таймеров входят в отдельный явно разрешённый release по runbook; volumes автоматически не удаляются.
+Umami, Beszel, sre-kit integration, publishers и monitoring tunnels остаются удалены из
+репозитория как хостящиеся здесь сервисы — ни один из них не возвращается, и в этот Compose
+ничего нового не добавляется.
+
+Браузерная аналитика возвращена точечно, без нового сервиса (2026-09-22, архитектор пересмотрел
+прежний отказ, см. §1.2/§8.2): публичные страницы подключают cookieless tracking snippet
+`<script defer src="https://sre.infraege.ru/track.js" data-site="…">` self-hosted сервиса
+`smotryashchiy` — отдельный репозиторий, отдельный деплой на отдельном VPS, тот же оператор.
+Единственное изменение в этом репозитории — точечная правка Nginx CSP (`infra/nginx/conf.d/
+infraege.prod.conf`, §8.2): `script-src`/`connect-src` допускают `https://sre.infraege.ru` для
+этого конкретного origin, без `unsafe-eval`, без снятия остальных директив. Никакого reverse-proxy
+под первым лицом (first-party proxy) не заводится — расширять эту границу без нового явного
+решения архитектора нельзя.
+
+Установленные сервисы VPS этим локальным change не изменяются, кроме упомянутой правки CSP. Их
+остановка и отключение старых таймеров входят в отдельный явно разрешённый release по runbook;
+volumes автоматически не удаляются.
 
 ## 8. Non-Functional Requirements
 
@@ -398,12 +414,12 @@ monitoring services require explicit release authorization and Full/Release Gate
 | Security headers / CORS | Rate limiting чекер-эндпоинта на Nginx: `limit_req_zone` 20 req/min/IP, burst 5, `nodelay` (см. §4) — против автоматизированного перебора банка ответов; конкретную цифру пересмотреть по факту логов после запуска. Основной public root/password SSH использует принятый архитектором минимум 12 символов, pinned host key, UFW и fail2ban; production Environment не имеет required reviewers по решению архитектора от 2026-09-04, `can_admins_bypass` остаётся единственным environment safety property. Повышенный риск перебора и полного захвата VPS при компрометации более короткого пароля осознанно принят, key-only migration не запланирована. |
 | Accessibility target | Public pages не имеют serious/critical axe violations; lesson outline сохраняет вложенный semantic list, anchors, keyboard focus, различимый текущий пункт и корректный source order, а сложный визуал имеет видимую полную текстовую альтернативу |
 | Performance budget | Текущий release gate ограничивает median LCP значением ≤4.0s на мобильном 4G-профиле; продуктовая цель остаётся LCP ≤2.8s, и порог следует вернуть к ней после подтверждённой оптимизации или на стабильном измерительном runner. CLS < 0.1, INP < 200ms; release evidence измеряет `/`, `/ege`, `/courses`, `/courses/python` и `/ege/16-rekursiya`, отдельно проверяет cold-load font/layout shifts и не подменяет route-level метрики общей оценкой технической страницы |
-| Observability | Health, structured server logs and scheduled external availability/TLS probe; no browser telemetry or separate monitoring stack |
+| Observability | Health, structured server logs and scheduled external availability/TLS probe, plus a cookieless browser-analytics beacon (`smotryashchiy`, self-hosted at `sre.infraege.ru`, separate repo/deploy, §7.3) allowlisted in CSP; no cookies, no persistent visitor id, no consent UI, no dashboards or monitoring stack hosted in this repo |
 | Backup / restore | Application DB, files, roles and protected environment in encrypted Restic; 7 daily + 4 weekly + 3 monthly, monthly isolated restore. Same-host backup loss remains accepted until off-site storage exists |
 | SEO | `/`, `/privacy`, published topics, courses и CourseLesson имеют canonical, уникальные metadata, SSR content, общий crawlable social preview и входят в sitemap/prerender; root document публикует browser-only manifest, SVG/PNG/ICO favicon и Apple touch icon из production-знака, а `/` — правдивый `WebSite` JSON-LD без выдуманной Organization; review routes остаются unlisted, `noindex,nofollow` и исключены из public discovery; Lighthouse SEO для публичных маршрутов проходит без ошибок |
 | Mobile / no-JS readability | TopicLesson, Course overview и CourseLesson сохраняют текст, программу, подписи, решения и section anchors в SSR HTML; интерактивная проверка и персональный progress остаются progressive enhancement |
 | Client resilience / API drift | Route failures восстанавливаемы без белого экрана; loading/empty/error/not-found состояния доступны с клавиатуры и скринридера; OpenAPI schema/types drift ломает gate до merge; runtime HTTP имеет timeout/abort и не делает скрытый retry мутаций |
-| Юридическое (152-ФЗ) | `/privacy` публикует фактические цели, состав, сроки и получателей обработки, `avatarsik6699@gmail.com` и Telegram invite как каналы связи, но по явному решению архитектора не публикует ФИО и адрес оператора с принятием сопутствующего риска. Браузерная аналитика и consent UI удалены. Формальная проверка уведомления РКН, локализации и текста юристом остаётся обязательным внешним follow-up, а не заявляется выполненной |
+| Юридическое (152-ФЗ) | `/privacy` публикует фактические цели, состав, сроки и получателей обработки, `avatarsik6699@gmail.com` и Telegram invite как каналы связи, но по явному решению архитектора не публикует ФИО и адрес оператора с принятием сопутствующего риска. Браузерная аналитика возвращена (2026-09-22, архитектор пересмотрел прежний отказ, §1.2/§7.3): self-hosted `smotryashchiy`, без cookie, без persistent identifier — visitor-хэш `sha256(daily_salt+site+IP+UA)` с посуточной ротацией соли, сырой IP не сохраняется, referrer усекается до hostname. Архитектор трактует это как не требующее отдельного consent UI (нет постоянной идентификации, нет межсуточного связывания посетителя, обработка сопоставима по характеру с обычными access-логами) — это архитекторская интерпретация, не формальное юридическое заключение. `/privacy` обновляется отдельным пунктом, описывающим эту обработку и получателя (тот же оператор, отдельный сервис). Формальная проверка уведомления РКН, локализации, текста политики и этой трактовки юристом остаётся обязательным внешним follow-up, а не заявляется выполненной |
 | Юридическое (436-ФЗ) | Возрастная маркировка для обычного сайта не вводится: существующая `12+` удаляется без замены на `18+` |
 | Происхождение контента | Существующие уроки сохраняют Content Quality Gate (§2.3). Для нового банка принято импортируемое содержимое с явным provenance (§3); происхождение, атрибуция и допустимость использования проверяются при подготовке импорта, не выводятся автоматически из URL и не заменяются технической валидацией |
 | Other (юридический ориентир, не консультация) | Открытые источники используются как инженерный ориентир; формальная юридическая проверка и РКН составляют принятый бессрочно отложенный риск, а не пункт текущего roadmap |
@@ -415,15 +431,21 @@ monitoring services require explicit release authorization and Full/Release Gate
 Change 122 archived the minimalist UI, simplified server practice and reduced operations while
 preserving source history and data. Change 123 owns Full/Release verification and all resulting
 corrective maintenance in one change. Existing history remains in COMPACTED and immutable archives.
-Future capabilities need demonstrated use.
+The next change reinstates cookieless browser analytics (self-hosted `smotryashchiy`, §7.3/§8.2),
+reversing the 152-ФЗ-driven removal after an explicit architect reconsideration: no site was ever
+actually connected, and the earlier consent-avoidance rationale is superseded by a cookieless,
+non-persistent-identifier design the architect judges not to need consent UI (§8.2). Future
+capabilities need demonstrated use.
 
 ## 10. Out of Scope
 
 Production deployment/host mutations in local work; deleting old volumes; accounts/payments;
 collaborative editing; editorial audit history; automatic import conflict resolution; background
-imports/file garbage collection; analytics/monitoring dashboards; decorative systems and labs.
-Single-operator sequential imports and ordinary pagination are intentional first-version limits.
-Formal legal review, off-site backup, key-only SSH and new content remain separate decisions.
+imports/file garbage collection; hosting analytics dashboards or a monitoring stack in this repo
+(dashboards remain in the separate `smotryashchiy` deploy — this repo only allowlists its origin
+in CSP, §7.3); decorative systems and labs. Single-operator sequential imports and ordinary
+pagination are intentional first-version limits. Formal legal review, off-site backup, key-only
+SSH and new content remain separate decisions.
 
 ## 11. Open Questions
 

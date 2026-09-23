@@ -86,6 +86,13 @@ function RootDocument(props: { children: React.ReactNode }) {
     <html lang="ru">
       <head>
         <AppDocumentHead />
+        {/* An async script is a React resource: inserted once per document, never re-appended on
+            navigation, unlike a head() script asset (which re-executes the snippet). */}
+        <script
+          async
+          src="https://sre.infraege.ru/track.js"
+          data-site="a98eb46cb1aa5116e1b5cefd"
+        />
       </head>
       <body>
         <AppProviders>{props.children}</AppProviders>

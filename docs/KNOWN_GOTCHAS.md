@@ -508,3 +508,21 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
 - **Fix:** qualify the owning page override with the existing `[data-measure]` attribute. Keep
   the shared container defaults and the page's intended spacing; do not weaken CLS assertions.
 - **Verification:** all eight delayed/failed asset EGE scenarios pass with zero reported shifts.
+
+### Third-party scripts: use a React `<script async>` resource, not a `head()` script asset
+
+- **Symptoms:** the analytics snippet (`https://sre.infraege.ru/track.js`, Change 133) ran twice
+  in one document when it was declared in `__root.tsx`'s `head().scripts`. A MutationObserver
+  trace showed the SSR tag removed after hydration and a fresh `<script>` appended on client
+  navigation (`/` → `/courses` on a freshly started dev server). The re-executed snippet sent a
+  second pageview for the same URL. A DOM query for the tag also reported it missing, although
+  the first execution had already happened.
+- **Root cause:** TanStack Router's head `Script` asset renders the tag only until hydration, then
+  returns `null` and manages the script from an effect. That effect appends a new element when no
+  matching `src` is in the DOM, which is always true once React has removed the SSR node.
+- **Fix:** render `<script async src=… data-site=…>` directly in `RootDocument`'s `<head>`. React
+  19 treats an async `src` script as a resource: hoisted, de-duplicated by `src`, inserted once and
+  never re-appended. Verified with the same trace: one insertion, one beacon per URL change.
+- **Related:** a same-URL `history.replaceState` during hydration also used to double-count every
+  load. That was fixed in the snippet itself (smotryashchiy Change 16: a pageview is a change of
+  `pathname + search`, not a history call).
