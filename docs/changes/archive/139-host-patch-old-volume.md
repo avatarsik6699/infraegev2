@@ -9,7 +9,7 @@
 | Change | `139` |
 | Slug | `host-patch-old-volume` |
 | Title | Patch and reboot the host, remove the old database volume and untagged snapshots |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/139-host-patch-old-volume` |
 
 ---
@@ -90,7 +90,7 @@ only tracks what to build and what's left.
 ## Gate Checks
 
 > Critical Gate runs once per `/work` target set and by default in `/ship`; Full Gate runs only
-> with `--full` or when release risk selection requires it. All gates are defined in [docs/STACK.md](../STACK.md) — this section only records
+> with `--full` or when release risk selection requires it. All gates are defined in [docs/STACK.md](../../STACK.md) — this section only records
 > change-specific overrides.
 
 Documentation only. The host results are recorded in Implementation Notes.
