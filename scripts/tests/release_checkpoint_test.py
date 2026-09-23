@@ -45,12 +45,20 @@ def response(payload: object):
     return type("Result", (), {"returncode": 0, "stdout": json.dumps(payload), "stderr": ""})()
 
 
+# GitHub's default name for an unnamed matrix job lists every matrix value (images.yml).
+MATRIX_JOB_NAMES = {
+    "web": "images (web, apps/web/Dockerfile, web-v3)",
+    "api": "images (api, apps/api/Dockerfile, api)",
+    "nginx": "images (nginx, infra/nginx/Dockerfile, nginx)",
+}
+
+
 def image_jobs(*, successful: set[str] | None = None) -> dict:
     successful = successful if successful is not None else {"web", "api", "nginx"}
     return {
         "jobs": [
             {
-                "name": f"images ({name})",
+                "name": MATRIX_JOB_NAMES[name],
                 "status": "completed",
                 "conclusion": "success",
                 "steps": [
@@ -195,6 +203,20 @@ class ReleaseCheckpointTests(unittest.TestCase):
             self.assertEqual(self.invoke(), 1)
         stored = json.loads(self.checkpoint_file.read_text())
         self.assertIn("nginx", stored["current"]["error"])
+
+    def test_image_name_is_the_first_matrix_value_not_a_prefix(self):
+        jobs = image_jobs()
+        jobs["jobs"][0]["name"] = "images (web-extra, apps/web/Dockerfile, web-v3)"
+
+        def fake(command, **_kwargs):
+            if "/jobs?" in command[-1]:
+                return response(jobs)
+            return self.gh_success(command)
+
+        with patch.object(checkpoint.subprocess, "run", side_effect=fake):
+            self.assertEqual(self.invoke(), 1)
+        stored = json.loads(self.checkpoint_file.read_text())
+        self.assertIn("web", stored["current"]["error"])
 
     def test_postdeploy_rejects_workflow_head_sha_without_matching_dispatch_target(self):
         def fake(command, **_kwargs):

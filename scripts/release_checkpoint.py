@@ -122,6 +122,13 @@ def run_evidence(run: dict[str, Any], repository: str) -> dict[str, Any]:
     return {"id": identifier, "url": url}
 
 
+def matrix_image(job_name: str) -> str | None:
+    """Image of an images.yml matrix job; GitHub names it with every matrix value."""
+    if not (job_name.startswith("images (") and job_name.endswith(")")):
+        return None
+    return job_name[len("images (") : -1].split(",")[0].strip()
+
+
 def image_evidence(gh: str, repository: str, sha: str) -> dict[str, Any]:
     run = successful_run(workflow_runs(gh, repository, "images.yml", sha), "images.yml", sha)
     evidence = run_evidence(run, repository)
@@ -144,7 +151,7 @@ def image_evidence(gh: str, repository: str, sha: str) -> dict[str, Any]:
         if not isinstance(name, str) or not isinstance(steps, list):
             raise CheckpointError("images.yml job has malformed name or steps")
         for image in IMAGE_NAMES:
-            if name != f"images ({image})":
+            if matrix_image(name) != image:
                 continue
             scan_steps = [
                 step
@@ -218,7 +225,7 @@ def http_json(url: str) -> Any:
     request = Request(url, headers={"User-Agent": "infraege-release-checkpoint/1"})
     try:
         # validate_public_url above admits only credential-free https://, so no file:// read.
-        # nosemgrep: python.lang.security.audit.dynamic-urllib-use-detected.dynamic-urllib-use-detected
+        # nosemgrep: python.lang.security.audit.dynamic-urllib-use-detected.dynamic-urllib-use-detected  # noqa: E501
         with urlopen(request, timeout=15) as response:
             if getattr(response, "geturl", lambda: url)() != url:
                 raise CheckpointError(
@@ -247,7 +254,7 @@ def verify_public_release(health_url: str, homepage_url: str, sha: str) -> dict[
     request = Request(homepage_url, headers={"User-Agent": "infraege-release-checkpoint/1"})
     try:
         # validate_public_url above admits only credential-free https://, so no file:// read.
-        # nosemgrep: python.lang.security.audit.dynamic-urllib-use-detected.dynamic-urllib-use-detected
+        # nosemgrep: python.lang.security.audit.dynamic-urllib-use-detected.dynamic-urllib-use-detected  # noqa: E501
         with urlopen(request, timeout=15) as response:
             if getattr(response, "geturl", lambda: homepage_url)() != homepage_url:
                 raise CheckpointError("homepage redirected away from the configured endpoint")

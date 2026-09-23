@@ -526,3 +526,15 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
 - **Related:** a same-URL `history.replaceState` during hydration also used to double-count every
   load. That was fixed in the snippet itself (smotryashchiy Change 16: a pageview is a change of
   `pathname + search`, not a history call).
+
+### GitHub names an unnamed matrix job with every matrix value
+
+- **Symptoms:** `release-checkpoint.py predeploy/postdeploy` failed on the first real release
+  (`2cf106e`, 2026-09-23) with `images.yml lacks successful published-digest scans for: api, nginx,
+  web`, although every `Scan published image` step had succeeded.
+- **Root cause:** `images.yml` matrix jobs have no explicit `name:`, so GitHub calls them
+  `images (web, apps/web/Dockerfile, web-v3)`, not `images (web)`. Test fixtures with the short
+  form passed, but they never matched GitHub.
+- **Fix:** the checkpoint takes the first matrix value from the job name (Change 135). Fixtures now
+  use the real names. When matching workflow evidence by name, copy the names from a real run
+  (`gh api repos/…/actions/runs/<id>/jobs`), not from the workflow file.
