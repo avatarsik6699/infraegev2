@@ -217,6 +217,8 @@ def http_json(url: str) -> Any:
     validate_public_url(url)
     request = Request(url, headers={"User-Agent": "infraege-release-checkpoint/1"})
     try:
+        # validate_public_url above admits only credential-free https://, so no file:// read.
+        # nosemgrep: python.lang.security.audit.dynamic-urllib-use-detected.dynamic-urllib-use-detected
         with urlopen(request, timeout=15) as response:
             if getattr(response, "geturl", lambda: url)() != url:
                 raise CheckpointError(
@@ -244,6 +246,8 @@ def verify_public_release(health_url: str, homepage_url: str, sha: str) -> dict[
     validate_public_url(homepage_url)
     request = Request(homepage_url, headers={"User-Agent": "infraege-release-checkpoint/1"})
     try:
+        # validate_public_url above admits only credential-free https://, so no file:// read.
+        # nosemgrep: python.lang.security.audit.dynamic-urllib-use-detected.dynamic-urllib-use-detected
         with urlopen(request, timeout=15) as response:
             if getattr(response, "geturl", lambda: homepage_url)() != homepage_url:
                 raise CheckpointError("homepage redirected away from the configured endpoint")

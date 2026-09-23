@@ -240,6 +240,27 @@ class ReleaseCheckpointTests(unittest.TestCase):
                 )
             request.assert_not_called()
 
+    def test_public_probe_rejects_non_https_urls_before_network(self):
+        rejected = (
+            "file:///etc/passwd",
+            "http://infraege.ru/health/ready",
+            "https://user:secret@infraege.ru/health/ready",
+            "https://infraege.ru/health/ready?x=1",
+            "https://infraege.ru/health/ready#frag",
+        )
+        with patch.object(checkpoint, "urlopen") as request:
+            for url in rejected:
+                with self.subTest(url=url):
+                    with self.assertRaisesRegex(
+                        checkpoint.CheckpointError, "credential-free HTTPS"
+                    ):
+                        checkpoint.http_json(url)
+                    with self.assertRaisesRegex(
+                        checkpoint.CheckpointError, "credential-free HTTPS"
+                    ):
+                        checkpoint.verify_public_release(url, url, SHA)
+            request.assert_not_called()
+
     def test_invalid_sha_does_not_create_state(self):
         self.assertEqual(
             checkpoint.main(["predeploy", "--sha", "not-a-sha", "--state-dir", str(self.state)]),
