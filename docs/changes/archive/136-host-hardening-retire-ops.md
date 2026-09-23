@@ -9,7 +9,7 @@
 | Change | `136` |
 | Slug | `host-hardening-retire-ops` |
 | Title | Host hardening, retire the old ops stack, accurate analytics notice |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/136-host-hardening-retire-ops` |
 
 ---
@@ -117,7 +117,7 @@ of truth; this file only tracks what to build and what's left.
 ## Gate Checks
 
 > Critical Gate runs once per `/work` target set and by default in `/ship`; Full Gate runs only
-> with `--full` or when release risk selection requires it. All gates are defined in [docs/STACK.md](../STACK.md) — this section only records
+> with `--full` or when release risk selection requires it. All gates are defined in [docs/STACK.md](../../STACK.md) — this section only records
 > change-specific overrides.
 
 After the release deploy: public `/health/ready` reports the new full SHA; `/privacy` shows the new
