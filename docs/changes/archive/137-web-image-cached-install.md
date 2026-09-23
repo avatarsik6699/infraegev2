@@ -9,7 +9,7 @@
 | Change | `137` |
 | Slug | `web-image-cached-install` |
 | Title | Web image builds when its install layer comes from cache |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/137-web-image-cached-install` |
 
 ---
@@ -90,7 +90,7 @@ what to build and what's left.
 ## Gate Checks
 
 > Critical Gate runs once per `/work` target set and by default in `/ship`; Full Gate runs only
-> with `--full` or when release risk selection requires it. All gates are defined in [docs/STACK.md](../STACK.md) — this section only records
+> with `--full` or when release risk selection requires it. All gates are defined in [docs/STACK.md](../../STACK.md) — this section only records
 > change-specific overrides.
 
 Release acceptance: `images.yml` for the release SHA succeeds for all three images while the web
