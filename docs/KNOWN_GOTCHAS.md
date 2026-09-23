@@ -401,20 +401,22 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
   supplementary when `pnpm --filter web typecheck`, `pnpm --filter web lint` and the focused
   Playwright journey all pass. Production source and ordinary test files must remain LSP-clean.
 
-### GitHub BuildKit can restore an internally stale pnpm install layer
+### A cached pnpm install layer plus fresh web sources fails `verifyDepsBeforeRun`
 
 - **Symptoms**: a production web image fails at `pnpm --filter web build` with
-  `ERR_PNPM_VERIFY_DEPS_BEFORE_RUN` even though frozen host installs, the local image gate and a
-  Docker `--no-cache` builder run all pass against the same commit. CI shows the manifest,
-  workspace config and `pnpm install` layers as cached.
-- **Root cause**: the GHA BuildKit scope can retain an internally inconsistent dependency layer;
-  deleting the visible Actions cache index and retrying may still import the same stale backend
-  manifest. pnpm correctly rejects that layer when it compares the current workspace overrides
-  with the cached virtual store.
-- **Fix**: move only the affected image to a new explicit `cache_scope` generation in
-  `.github/workflows/images.yml`, preserving cache use for every image. Prove the source tree with
-  a cold `docker build --no-cache --target builder` before changing the scope; do not weaken
-  `verifyDepsBeforeRun` or regenerate a lockfile that is already current.
+  `ERR_PNPM_VERIFY_DEPS_BEFORE_RUN  Setting overrides of lockfile in /repo is outdated` even though
+  frozen host installs, the local image gate and a Docker `--no-cache` builder run all pass
+  against the same commit. CI shows the manifest, workspace config and `pnpm install` layers as
+  cached and `COPY apps/web` as fresh.
+- **Root cause**: the fresh copy makes `apps/web/package.json` newer than the cached install, so
+  pnpm 10.33 runs its deep dependency check, which reports the workspace overrides as outdated
+  although the lockfile and `node_modules/.modules.yaml` carry the same ones. Reproducible without
+  CI: in a built builder image, `touch apps/web/package.json && pnpm --filter web build`. Moving
+  the image to a new `cache_scope` only hid it for one release by forcing a cold install.
+- **Fix**: the builder stage re-runs `pnpm install --frozen-lockfile --offline` after copying the
+  web sources (about a second, no network), guarded by `scripts/tests/web-image-build.test.sh`
+  (Change 137). Keep `verifyDepsBeforeRun: error`; do not regenerate a lockfile that is already
+  current or bump cache scopes for this symptom.
 
 <!--
 ### [Title — short, punchy, searchable]

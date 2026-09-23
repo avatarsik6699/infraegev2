@@ -22,6 +22,10 @@ COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
 COPY apps/web/package.json apps/web/package.json
 RUN pnpm install --frozen-lockfile
 COPY apps/web apps/web
+# When the install layer comes from the build cache, the fresh copy makes the manifests newer than
+# the install and pnpm's deep check rejects the tree. Re-running the frozen install from the store
+# already in this layer takes about a second and needs no network (Change 137).
+RUN pnpm install --frozen-lockfile --offline
 RUN pnpm --filter web build
 
 FROM node:22.23.2-slim@sha256:83f487e0a63425e5b4d146fb5e5be574bcbe1b7b843d3ebafdd95eaf7767a7e5
