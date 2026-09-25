@@ -7,7 +7,7 @@
 | Change | `144` |
 | Slug | `offline-migration-runner` |
 | Title | Offline migration runner |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/144-offline-migration-runner` |
 
 ## Goal
