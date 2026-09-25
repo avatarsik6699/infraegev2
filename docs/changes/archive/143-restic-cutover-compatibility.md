@@ -1,4 +1,14 @@
-# Change 143 — Restic cutover compatibility
+# CHANGE 143 — Restic cutover compatibility
+
+## Change Metadata
+
+| Field | Value |
+|-------|-------|
+| Change | `143` |
+| Slug | `restic-cutover-compatibility` |
+| Title | Restic cutover compatibility |
+| Status | `archived` |
+| Branch | `feature/143-restic-cutover-compatibility` |
 
 ## Goal
 
