@@ -7,7 +7,7 @@
 | Change | `141` |
 | Slug | `release-ci-repair` |
 | Title | Release CI Repair |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/141-release-ci-repair` |
 
 ---
