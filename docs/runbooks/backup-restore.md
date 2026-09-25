@@ -85,7 +85,11 @@ attestation.
 
 Use the reviewed `scripts/rehearse-account-cutover.sh` from the exact candidate source on the
 production host, before deploy dispatch. Take a fresh production backup through the existing
-`make db-backup` command and record its full 64-character Restic snapshot ID. Do not extract a
+`make db-backup` command and record its full 64-character Restic snapshot ID. On a production host
+without `make`, run its equivalent from the current release directory:
+`DB_ENV=prod DB_PROJECT=infraege bash scripts/backup.sh /etc/infraege/production.env`.
+The rehearsal authenticates the snapshot and obtains its restore size through Restic stats, so it
+also works with Restic 0.16 snapshots that do not include an embedded `summary`. Do not extract a
 bundle manually: the rehearsal authenticates and restores that exact snapshot itself into its
 private root-owned workspace, rejecting `latest`, prefixes, untagged snapshots and any snapshot
 that does not yield exactly one valid production `122_01` bundle. Pull the candidate API image

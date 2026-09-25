@@ -10,9 +10,15 @@ mkdir -p "$test_root/bin"
 cat >"$test_root/bin/restic" <<'FAKE'
 #!/usr/bin/env bash
 printf '%s\n' "$*" >>"$CUTOVER_TEST_LOG"
-[[ $1 == cat && $2 == snapshot && $3 == "$CUTOVER_TEST_SNAPSHOT" ]] || exit 97
-printf '{"time":"%s","tags":["infraege-application"],"summary":{"total_bytes_processed":1}}\n' \
-  "$(date -u +%FT%TZ)"
+if [[ $1 == cat && $2 == snapshot && $3 == "$CUTOVER_TEST_SNAPSHOT" ]]; then
+  printf '{"time":"%s","tags":["%s"]}\n' \
+    "$(date -u +%FT%TZ)" "${CUTOVER_TEST_TAG:-infraege-application}"
+elif [[ $1 == stats && $2 == --mode && $3 == restore-size && $4 == --json &&
+  $5 == "$CUTOVER_TEST_SNAPSHOT" ]]; then
+  printf '%s\n' "${CUTOVER_TEST_STATS:-{\"total_size\":1,\"snapshots_count\":1}}"
+else
+  exit 97
+fi
 FAKE
 cat >"$test_root/bin/git" <<'FAKE'
 #!/usr/bin/env bash
@@ -62,22 +68,32 @@ if ! bash "$repo_dir/scripts/rehearse-account-cutover.sh" --validate \
 fi
 [[ $(<"$test_root/output") == *'authenticated snapshot and exact candidate source/image inputs: PASS'* ]]
 [[ $(sed -n '1p' "$CUTOVER_TEST_LOG") == "cat snapshot $snapshot" ]]
-[[ $(sed -n '2p' "$CUTOVER_TEST_LOG") == "image inspect ghcr.io/avatarsik6699/infraegev2-api:$sha --format {{json .RepoDigests}}" ]]
-[[ $(wc -l <"$CUTOVER_TEST_LOG") -eq 2 ]]
+[[ $(sed -n '2p' "$CUTOVER_TEST_LOG") == "stats --mode restore-size --json $snapshot" ]]
+[[ $(sed -n '3p' "$CUTOVER_TEST_LOG") == "image inspect ghcr.io/avatarsik6699/infraegev2-api:$sha --format {{json .RepoDigests}}" ]]
+[[ $(wc -l <"$CUTOVER_TEST_LOG") -eq 3 ]]
+
+# Missing or ambiguous snapshot stats fail before image inspection or any restore.
+export CUTOVER_REQUIRE_NO_CALLS=false
+for bad_stats in '{"snapshots_count":1}' '{"total_size":-1,"snapshots_count":1}' \
+  '{"total_size":1,"snapshots_count":2}' 'not-json'; do
+  export CUTOVER_TEST_STATS=$bad_stats
+  reject --validate "$snapshot" "$sha" "$digest"
+  [[ $(wc -l <"$CUTOVER_TEST_LOG") -eq 2 ]]
+done
+unset CUTOVER_TEST_STATS
 
 # A missing tag, wrong source SHA, or non-matching immutable image digest fails before any run.
-export CUTOVER_REQUIRE_NO_CALLS=false
-sed -i 's/infraege-application/not-application/' "$test_root/bin/restic"
+export CUTOVER_TEST_TAG=not-application
 reject --validate "$snapshot" "$sha" "$digest"
 [[ $(<"$CUTOVER_TEST_LOG") == "cat snapshot $snapshot" ]]
-sed -i 's/not-application/infraege-application/' "$test_root/bin/restic"
+unset CUTOVER_TEST_TAG
 export CUTOVER_TEST_SHA=dddddddddddddddddddddddddddddddddddddddd
 reject --validate "$snapshot" "$sha" "$digest"
-[[ $(<"$CUTOVER_TEST_LOG") == "cat snapshot $snapshot" ]]
+[[ $(wc -l <"$CUTOVER_TEST_LOG") -eq 2 ]]
 wrong_digest="sha256:$(printf 'e%.0s' {1..64})"
 export CUTOVER_TEST_SHA=$sha CUTOVER_TEST_DIGEST=$wrong_digest
 reject --validate "$snapshot" "$sha" "$digest"
-[[ $(wc -l <"$CUTOVER_TEST_LOG") -eq 2 ]]
+[[ $(wc -l <"$CUTOVER_TEST_LOG") -eq 3 ]]
 
 # In an ordinary non-root shell, --run must stop before a restore or any disposable Docker action.
 if [[ $EUID != 0 ]]; then
@@ -89,7 +105,7 @@ if [[ $EUID != 0 ]]; then
     exit 1
   fi
   [[ $(<"$test_root/output") == *'cutover rehearsal must run as root'* ]]
-  [[ $(wc -l <"$CUTOVER_TEST_LOG") -eq 2 ]]
+  [[ $(wc -l <"$CUTOVER_TEST_LOG") -eq 3 ]]
 fi
 
 echo 'account cutover authenticated-snapshot and candidate-evidence contracts: PASS'

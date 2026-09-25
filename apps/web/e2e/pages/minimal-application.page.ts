@@ -131,7 +131,7 @@ export class MinimalApplicationPage {
       ).toBeVisible();
     if (noJavaScript) {
       await this.page
-        .getByRole("combobox", { name: "На странице:", exact: true })
+        .locator('select[name="limit"][form="practice-pagination-limit"]')
         .selectOption("10");
     } else {
       await this.page

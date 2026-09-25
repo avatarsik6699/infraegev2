@@ -48,9 +48,13 @@ snapshot_age=$(( $(date -u +%s) - snapshot_epoch ))
 (( snapshot_age >= 0 && snapshot_age <= 14400 )) || {
   db_fail 'requested production snapshot is not fresh'; exit 1;
 }
-snapshot_bytes=$(jq -er '.summary.total_bytes_processed | select(type == "number" and . >= 0)' \
-  <<<"$snapshot_metadata") || {
-  db_fail 'requested Restic snapshot has no usable size summary'; exit 1;
+snapshot_stats=$(restic stats --mode restore-size --json "$snapshot_id") || {
+  db_fail 'Restic could not measure the requested snapshot'; exit 1;
+}
+snapshot_bytes=$(jq -er '
+  select(.snapshots_count == 1) | .total_size | select(type == "number" and . >= 0)
+' <<<"$snapshot_stats") || {
+  db_fail 'requested Restic snapshot has no usable single-snapshot size'; exit 1;
 }
 
 # The rehearsal source is itself evidence: an uncommitted or different checkout could migrate
