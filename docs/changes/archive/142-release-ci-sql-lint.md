@@ -7,7 +7,7 @@
 | Change | `142` |
 | Slug | `release-ci-sql-lint` |
 | Title | Release CI SQL Lint |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/142-release-ci-sql-lint` |
 
 ---
