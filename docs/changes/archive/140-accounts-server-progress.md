@@ -7,7 +7,7 @@
 | Change | `140` |
 | Slug | `accounts-server-progress` |
 | Title | Accounts and Server-Owned Progress |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/140-accounts-server-progress` |
 
 ---
