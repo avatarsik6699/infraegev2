@@ -56,7 +56,7 @@ services:
     image: ghcr.io/avatarsik6699/infraegev2-api:${DEPLOY_SHA:?DEPLOY_SHA is required}
     build: !reset null
     command:
-      - uv run --frozen alembic upgrade head
+      - .venv/bin/alembic upgrade head
     mem_limit: 384m
     logging: *journald
 

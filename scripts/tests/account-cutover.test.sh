@@ -43,6 +43,17 @@ snapshot=$(printf 'c%.0s' {1..64})
 digest="sha256:$(printf 'b%.0s' {1..64})"
 export CUTOVER_TEST_SHA=$sha CUTOVER_TEST_SNAPSHOT=$snapshot CUTOVER_TEST_DIGEST=$digest
 
+# The production image contains only runtime dependencies. Neither migration path may cause
+# uv to sync the default development group in a network-isolated cutover or during deploy.
+for migration_source in "$repo_dir/scripts/rehearse-account-cutover.sh" \
+  "$repo_dir/infra/docker-compose.yml" "$repo_dir/infra/docker-compose.prod.yml"; do
+  grep -Fq '.venv/bin/alembic upgrade head' "$migration_source"
+  if grep -Fq 'uv run --frozen alembic upgrade head' "$migration_source"; then
+    echo "migration would sync dependencies at runtime: $migration_source" >&2
+    exit 1
+  fi
+done
+
 reject() {
   : >"$CUTOVER_TEST_LOG"
   if bash "$repo_dir/scripts/rehearse-account-cutover.sh" "$@" >"$test_root/output" 2>&1; then

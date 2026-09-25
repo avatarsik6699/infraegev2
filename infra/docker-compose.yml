@@ -117,7 +117,7 @@ services:
       - MIGRATION_DATABASE_URL=postgresql://infraege_migration:${DB_MIGRATION_PASSWORD:?DB_MIGRATION_PASSWORD is required}@postgres:5432/${POSTGRES_DB:-infraege}
     entrypoint: ["/bin/sh", "-ec"]
     command:
-      - uv run --frozen alembic upgrade head
+      - .venv/bin/alembic upgrade head
     depends_on:
       postgres:
         condition: service_healthy

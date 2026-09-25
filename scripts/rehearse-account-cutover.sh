@@ -229,7 +229,7 @@ docker run --rm --network "container:$first" \
   --entrypoint /bin/bash "$DB_IMAGE" /db-provision-roles.sh >/dev/null
 docker run --rm --network "container:$first" \
   --env "MIGRATION_DATABASE_URL=postgresql://infraege_migration:$DB_MIGRATION_PASSWORD@127.0.0.1:5432/infraege" \
-  --entrypoint /bin/sh "$image_id" -ec 'uv run --frozen alembic upgrade head'
+  --entrypoint /bin/sh "$image_id" -ec '.venv/bin/alembic upgrade head'
 [[ $(docker image inspect "$image" --format '{{.Id}}') == "$image_id" ]] || {
   db_fail 'candidate image changed during rehearsal'; exit 1;
 }
