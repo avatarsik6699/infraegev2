@@ -4,6 +4,16 @@
   min-width: 0;
 }
 
+.icon {
+  color: var(--color-text-muted);
+  line-height: 1;
+}
+
+.icon svg {
+  block-size: 1.5rem;
+  inline-size: 1.5rem;
+}
+
 .action {
   margin-top: var(--space-1);
 }

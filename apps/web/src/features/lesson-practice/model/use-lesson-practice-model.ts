@@ -42,7 +42,7 @@ export function useLessonPracticeModel(props: LessonPracticeTypes.Props) {
         ...current,
         [task.id]: result.correct ? "correct" : "incorrect",
       }));
-      if (result.correct) props.onTaskSolved(task.id, answer);
+      if (result.correct && result.saved === true) props.onTaskSolved(task.id);
     } catch (error) {
       let state: LessonPracticeTypes.State = "error";
       if (error instanceof ApiError && error.status === 409) state = "stale";
@@ -68,8 +68,7 @@ export function useLessonPracticeModel(props: LessonPracticeTypes.Props) {
         }));
       }
     },
-    answerFor: (taskId: string) =>
-      draftAnswers[taskId] ?? props.acceptedAnswers[taskId] ?? "",
+    answerFor: (taskId: string) => draftAnswers[taskId] ?? "",
     checkAnswer,
     enhanced,
     feedbackFor: (taskId: string) => feedback[taskId] ?? "",

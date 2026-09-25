@@ -17,5 +17,7 @@ install -m 644 "$repo_dir/ops/systemd/infraege-backup.service" /etc/systemd/syst
 install -m 644 "$repo_dir/ops/systemd/infraege-backup.timer" /etc/systemd/system/
 install -m 644 "$repo_dir/ops/systemd/infraege-restore-check.service" /etc/systemd/system/
 install -m 644 "$repo_dir/ops/systemd/infraege-restore-check.timer" /etc/systemd/system/
+install -m 644 "$repo_dir/ops/systemd/infraege-account-purge.service" /etc/systemd/system/
+install -m 644 "$repo_dir/ops/systemd/infraege-account-purge.timer" /etc/systemd/system/
 systemctl daemon-reload
-systemctl enable --now infraege-backup.timer infraege-restore-check.timer
+systemctl enable --now infraege-backup.timer infraege-restore-check.timer infraege-account-purge.timer

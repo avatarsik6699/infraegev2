@@ -1,79 +1,77 @@
-import { persist } from "zustand/middleware";
 import { createStore } from "zustand/vanilla";
 import type { LessonProgressTypes } from "../lesson-progress.types";
-import {
-  lessonProgressStorage,
-  type PersistedLessonProgress,
-} from "./lesson-progress-storage";
 import { emptyLessonProgress, markTaskSolved } from "./lesson-progress-state";
 
 type RegistryState = {
   hydrated: boolean;
+  status: "guest" | "loading" | "ready" | "error";
   lessons: Readonly<Record<string, LessonProgressTypes.Snapshot>>;
   clear: (lessonId: string) => void;
+  clearAll: () => void;
   ensureLesson: (lessonId: string) => void;
   markSolved: (
     lessonId: string,
     taskId: string,
-    acceptedAnswer: string,
     solutionRevision?: number,
   ) => LessonProgressTypes.Snapshot;
   setHydrated: () => void;
+  setUnavailable: () => void;
+  replaceFromServer: (
+    results: readonly {
+      context_kind: string;
+      context_id: string;
+      task_id: string;
+      solution_revision: number;
+    }[],
+  ) => void;
 };
 
-export function createLessonProgressRegistry() {
-  return createStore<RegistryState>()(
-    persist<RegistryState, [], [], PersistedLessonProgress>(
-      (set, get) => ({
-        hydrated: false,
-        lessons: {},
-        clear: (lessonId) => {
-          set((state) => ({
-            lessons: {
-              ...state.lessons,
-              [lessonId]: emptyLessonProgress,
-            },
-          }));
-          lessonProgressStorage.removeLegacy(lessonId);
+export function createLessonProgressRegistry(accountId?: string) {
+  return createStore<RegistryState>()((set, get) => ({
+    hydrated: false,
+    status: accountId ? "loading" : "guest",
+    lessons: {},
+    clear: (lessonId) => {
+      set((state) => ({
+        lessons: {
+          ...state.lessons,
+          [lessonId]: emptyLessonProgress,
         },
-        ensureLesson: (lessonId) => {
-          const state = get();
-          if (!state.hydrated || state.lessons[lessonId]) return;
-          const legacyProgress = lessonProgressStorage.readLegacy(lessonId);
-          const progress = legacyProgress ?? emptyLessonProgress;
-          set({ lessons: { ...state.lessons, [lessonId]: progress } });
-          if (legacyProgress) lessonProgressStorage.removeLegacy(lessonId);
-        },
-        markSolved: (lessonId, taskId, acceptedAnswer, solutionRevision) => {
-          const state = get();
-          const legacyProgress = lessonProgressStorage.readLegacy(lessonId);
-          const current =
-            state.lessons[lessonId] ?? legacyProgress ?? emptyLessonProgress;
-          const progress = markTaskSolved(
-            current,
-            taskId,
-            acceptedAnswer,
-            solutionRevision,
-          );
-          if (progress === current && !legacyProgress) return current;
-          set({ lessons: { ...state.lessons, [lessonId]: progress } });
-          if (legacyProgress) lessonProgressStorage.removeLegacy(lessonId);
-          return progress;
-        },
-        setHydrated: () => set({ hydrated: true }),
-      }),
-      {
-        name: "infraege:lesson-progress:v2",
-        partialize: (state) => ({ lessons: state.lessons }),
-        skipHydration: true,
-        storage: lessonProgressStorage.persistStorage,
-        merge: (persisted, current) => ({
-          ...current,
-          lessons: (persisted as PersistedLessonProgress).lessons,
-        }),
-      },
-    ),
-  );
+      }));
+    },
+    clearAll: () => set({ lessons: {} }),
+    ensureLesson: (lessonId) => {
+      const state = get();
+      if (!state.hydrated || state.lessons[lessonId]) return;
+      set({ lessons: { ...state.lessons, [lessonId]: emptyLessonProgress } });
+    },
+    markSolved: (lessonId, taskId, solutionRevision) => {
+      const state = get();
+      const current = state.lessons[lessonId] ?? emptyLessonProgress;
+      if (!accountId) return current;
+      const progress = markTaskSolved(current, taskId, solutionRevision);
+      if (progress === current) return current;
+      set({ lessons: { ...state.lessons, [lessonId]: progress } });
+      return progress;
+    },
+    setHydrated: () => set({ hydrated: true, status: "ready" }),
+    setUnavailable: () => set({ hydrated: false, status: "error" }),
+    replaceFromServer: (results) => {
+      const lessons: Record<string, LessonProgressTypes.Snapshot> = {};
+      for (const result of results) {
+        if (result.context_kind === "standalone") continue;
+        const lesson = lessons[result.context_id] ?? emptyLessonProgress;
+        lessons[result.context_id] = {
+          solvedTaskIds: [...lesson.solvedTaskIds, result.task_id],
+          solvedRevisions: {
+            ...lesson.solvedRevisions,
+            [result.task_id]: { [String(result.solution_revision)]: true },
+          },
+        };
+      }
+      set({ lessons, hydrated: true, status: "ready" });
+    },
+  }));
 }
 
 export type LessonProgressRegistry = ReturnType<

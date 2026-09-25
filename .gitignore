@@ -18,5 +18,9 @@ __pycache__/
 .env.*
 !.env.example
 
+# Local Athanor configuration and encrypted SMTP vault are not release inputs.
+athanor.yaml
+secrets.enc.yaml
+
 *.log
 .DS_Store

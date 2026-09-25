@@ -53,3 +53,19 @@ Recheck inventory and obtain the explicit initial-bank selection required by ste
 Missing/corrupt backup, parity mismatch, unknown data owner, insufficient disk, wrong role/schema,
 unverified restore/rollback, or a failed required gate stops the release. No automatic deletion of
 old databases, volumes, historical packages or off-site resources is part of this procedure.
+
+## Additive account transition (Change 140)
+
+`140_01` is an additive migration on the retained `infraege_postgres122-data` volume, not another
+bank import. Before the first authorized account release: take a current backup, provision the
+separate `infraege_app` credential, apply the migration, and run an isolated restore from the new
+bundle. The restore must confirm account/identity/password-credential/session/token/provider-state
+and per-context result rows, no stored answer text, and grants limited to `infraege_app` for account
+writes. Exercise a failed candidate rollback to the retained `122_01` application release against
+the same disposable restored volume; it must become ready without a schema downgrade.
+
+Only after that evidence is accepted, write `140_01 <full-candidate-sha>` to root-owned mode-600
+`/etc/infraege/accounts-schema-ready`. Deployment preflight refuses the first account transition
+without that exact attestation. Configure SMTP and provider callback origins separately under the
+production runbook; no production credentials or provider-console mutation is authorized by a local
+work session.

@@ -50,6 +50,10 @@ counter; stale submissions return 409. Metadata-only edits preserve it. Existing
 is associated with task ID + solution revision. There is no audit log or automatic conflict merge.
 
 Runtime role is read-only; migration/import/backup credentials stay out of web/API runtime.
+Account/progress records are not part of a practice-bank import or export: `infraege_app` alone
+writes them, and no submitted answer text or guest attempt belongs in the database. A bank import
+may advance a task solution revision; account progress remains historical and projections select the
+current revision rather than mutating account facts.
 Public projections omit checker and nonpublic provenance. Nginx serves only validated file usages
 through internal X-Accel-Redirect; it cannot list the storage directory. Import sets the dedicated
 attachment directory to 0755 and validated attachment bytes to 0644 for the separate Nginx UID.

@@ -7,8 +7,7 @@ export namespace LessonPracticeTypes {
     onRefresh?: () => Promise<unknown>;
     tasks: readonly PracticeTaskTypes.Task[];
     solvedTaskIds: readonly string[];
-    acceptedAnswers: Readonly<Record<string, string>>;
-    onTaskSolved: (taskId: string, acceptedAnswer: string) => number;
+    onTaskSolved: (taskId: string) => number;
     checkAnswer: PracticeTaskTypes.Checker;
   };
 

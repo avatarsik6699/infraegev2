@@ -9,8 +9,8 @@
 
 | Field | Value |
 |-------|-------|
-| Document Version | `v2.20` |
-| Date | `2026-09-23` |
+| Document Version | `v2.21` |
+| Date | `2026-09-24` |
 | Architect / Owner | `v.godlevskiy` |
 | Stack | See [docs/STACK.md](./STACK.md) |
 | Domain | Платформа подготовки к ЕГЭ по информатике — самостоятельные темы экзамена и мини-курсы с теорией, визуализацией и практикой |
@@ -56,19 +56,19 @@ sdamgia.ru, kpolyakov.spb.ru), ни новыми AI-ботами (решают �
 
 | Included (MVP) | Excluded (сознательно не входит в MVP) |
 |-----------------|------------------------------------------|
-| Полная публичная карта заданий ЕГЭ и 2 проверенные TopicLesson как содержательный MVP baseline | Аккаунты и синхронизация прогресса между устройствами |
-| 1 мини-курс — Python (закрывает больше всего номеров: 6, 8, 11, 14, 15, 16, 17, 18, 20–27) | Полноценный тренажёр-пробник ЕГЭ с таймером на весь вариант |
+| Полная публичная карта заданий ЕГЭ и 2 проверенные TopicLesson как содержательный MVP baseline | Полноценный тренажёр-пробник ЕГЭ с таймером на весь вариант |
+| 1 мини-курс — Python (закрывает больше всего номеров: 6, 8, 11, 14, 15, 16, 17, 18, 20–27) | Автоматическая персональная рекомендация следующей темы |
 | Завершённый самостоятельный мини-курс Python с отдельным Course/CourseLesson flow | Платные функции любого вида |
 | Публичные, индексируемые страницы тем и уроков (SSR/SSG) | AI внутри продукта (только как инструмент автора при подготовке контента) |
 | Практика по каждой опубликованной TopicLesson: 5–10 заданий с проверкой ответа, без адаптивного подбора сложности | Мини-курс Excel и полные TopicLesson для остальных заданий ЕГЭ — вторая волна, по той же структуре |
-| Прогресс на уровне браузера (localStorage), без обязательной регистрации | i18n/локализация (аудитория исключительно русскоязычная) |
+| Необязательный аккаунт и серверный прогресс после Change 140; все текущие учебные действия доступны гостю | i18n/локализация (аудитория исключительно русскоязычная) |
 | | Полноценный поиск по сайту (линейная карта из 25 тем остаётся обозримой без отдельного поиска) |
 
 Текущий baseline: два опубликованных TopicLesson, независимый Python Course с 28
 последовательными CourseLesson и 140 server-owned задачами; финал — четыре стадии одного
 терминального менеджера задач. Все уроки прошли содержательную и визуальную оценку.
 Первоначальная 19-шаговая редакция не получила финального одобрения и не является baseline.
-Лаборатории удалены. Новые Topic-связи и аккаунты не следуют из публикации курса.
+Лаборатории удалены. Новые Topic-связи не следуют из публикации курса.
 Релизная история хранится в archive; текущий deployed SHA проверяется через `/health/ready`,
 а не выводится из local `main`, `origin/main` или старого успешного релиза.
 
@@ -99,8 +99,9 @@ sdamgia.ru, kpolyakov.spb.ru), ни новыми AI-ботами (решают �
 Роли идут только в этом порядке; опциональные роли можно пропускать, но нельзя переставлять.
 Контент включается только когда помогает понять материал, решить задачу или выбрать следующий шаг.
 
-Подсказки и решение доступны сразу и не меняют прогресс. Прогресс хранит только принятые ответы и
-вычисленные из них solved/mastery-состояния текущего урока; `result` показывает этот итог и
+Подсказки и решение доступны сразу и не меняют прогресс. Для вошедшего ученика прогресс хранит
+факты верного решения текущей версии задачи в контексте урока без текста ответа;
+solved/mastery вычисляются из этих фактов и текущего состава урока. `result` показывает итог и
 registry-derived список доступных опубликованных материалов, не выдавая его за персональную
 рекомендацию. Отдельного финального испытания без подсказок, таймеров, задержек,
 assisted-solution scoring, оценки уверенности или персонализированного повторения нет. Их нельзя
@@ -121,7 +122,8 @@ CourseLesson принадлежит Course, но не связан с Topic бе
 
 | Role | Capabilities | Restrictions |
 |------|-------------|--------------|
-| `Anonymous learner` | Читает теорию, решает практику, прогресс сохраняется в localStorage браузера | Нет аккаунта на MVP — прогресс не синхронизируется между устройствами |
+| `Anonymous learner` | Читает теорию, решает практику, получает обратную связь по ответу | Прогресс не сохраняется и не засчитывается после ухода или перезагрузки страницы |
+| `Signed-in learner` | Всё доступное гостю; хранит прогресс уроков и самостоятельной практики в аккаунте и управляет способами входа | Факт входа не даёт прав автора, оператора или платного доступа |
 | `Content author` (архитектор + AI как инструмент) | Пишет типизированную теорию в `apps/web/src/entities/lesson/content/*.lesson.tsx` и практику в `content/practice-bank/bank.json`, ревьюит AI-черновики через git diff; для теории переводит `draft → review → published`, для задач использует операторский импорт | Публикация теории проходит Content Quality Gate (§2.3); импорт задач — по §3 и runbook practice; AI не публикует напрямую |
 | `Architect` | Владеет `docs/SPEC.md`, принимает архитектурные решения, ревьюит контент перед `published` | — |
 | `AI_Agent` | Реализует изменения через `/work`, генерирует черновики контента по промптам с чек-листом из [Content Quality Gate](#23-content-quality-gate-definition-of-done) (§2.3), запускает гейты через `/ship` | Не переводит контент в `published` самостоятельно; нет прямого push в `main` вне `/ship` |
@@ -144,9 +146,19 @@ PostgreSQL (§3). Задача самостоятельна и может име
 читаются из PostgreSQL. `content/practice-bank` — проверяемый исходный банк для явного импорта,
 а `content/tasks` — исторические тестовые fixtures без runtime-потребителей. Course metadata и CourseLesson theory имеют
 единственного frontend-consumer и поэтому остаются типизированным content-as-code, а не получают
-параллельную JSON-модель. Состояние пользователя (прогресс) — на MVP только localStorage на
-клиенте в едином app-scoped lesson-progress registry; course progress вычисляется из записей
-опубликованных уроков в этом реестре и отдельно не сохраняется.
+параллельную JSON-модель. После Change 140 постоянное состояние ученика принадлежит серверу:
+аккаунт с устойчивым ID, отдельные способы входа и отзывные сеансы, а также факты верного
+решения. Каждый факт имеет контекст `topic_lesson`, `course_lesson` или `standalone`, ID контекста,
+ID задачи, `solution_revision` на момент проверки и время. Для `standalone` используется
+фиксированный ID контекста, без nullable-части уникального ключа. Повторная успешная отправка
+для одной пары ученик/контекст/задача/версия идемпотентна; новая версия требует нового решения.
+Одна задача считается решённой отдельно в каждом уроке; самостоятельная практика тоже отдельна.
+Текст ответа, ошибочные попытки, черновики и готовые mastery-счётчики не сохраняются. Прогресс
+курса вычисляется из результатов опубликованных уроков; будущая статистика уникальных задач
+считает distinct task ID независимо от числа контекстов. Ручная отметка «пройдено» и права
+подписки, если будут введены, не подменяют факт верного ответа и имеют отдельное владение.
+Аккаунт и видимый «Профиль» — разные понятия; отдельная таблица профиля не нужна до появления
+собственных редактируемых полей. Старые localStorage-записи не импортируются.
 
 Публичный каталог тем хранит 25 записей, которые покрывают номера ЕГЭ 1–27 ровно по одному разу.
 Запись 19–21 — одна тема «Выигрышная стратегия»; другие объединения требуют отдельного
@@ -262,6 +274,14 @@ structure, database integrity, bounded input and safe file paths remain mandator
 editing, package ledgers, revision history, background jobs and garbage collection are deferred.
 Old database volumes and source snapshots are retained; no destructive in-place migration.
 
+Change 140 adds server-owned account, verified identity, revocable session and progress records
+through additive schema migrations. A result is keyed by user, task, solution revision and
+learning context (topic lesson, course lesson or standalone practice); the same task in two
+lessons has two independent results. A later answer revision invalidates the previous result
+for current-progress projections without erasing its historical fact. No submitted answer text,
+draft, incorrect attempt or guest result is stored. Lesson/course totals are derived from
+published memberships and current revisions, not separately synchronized counters.
+
 ## 4. API / Backend Contract
 
 Existing `/api/tasks` detail/check/file and lesson-practice/course-summary capabilities remain.
@@ -275,7 +295,16 @@ Public projections exclude
 checker answers and private sources. Wrong answers, missing tasks, stale solution counters and
 unavailable services remain distinct. Regenerate OpenAPI/client types with implementation.
 Runtime reads PostgreSQL, never silently falls back to historical JSON. API owns comparison and
-normalization; browser state records only local learning progress. No public write/admin API.
+normalization. Anonymous `POST /api/tasks/{id}/check` remains read-only. A separate authenticated
+check-and-save command requires an active session and a valid published lesson membership or
+standalone task; it checks the answer and revision, then records success in one database
+transaction. An expired session returns 401, never silently downgrades to an unsaved guest attempt;
+stale revisions retain 409. Repeating a successful request returns the already saved result.
+Personal read endpoints derive progress from current task revisions and published memberships;
+they return no-store data only to the owning account. The checker response distinguishes correct
+from saved; a write failure never claims that progress was saved. Public catalog/lesson reads and
+checker answers remain available without registration. Regenerate OpenAPI clients with the API.
+No public task-bank write/admin API.
 
 ## 5. Frontend / Client Contract
 
@@ -310,9 +339,21 @@ No-JS retains GET controls, native multiple selection and detail reading. Empty 
 no-results feedback. Compact rows show difficulty, actual answer format, public sources and a disabled
 favorite affordance. Expanded statements precede answer/check/help actions; theory sits beside the topic heading above the statement. Catalog and detail share compact solving controls; lessons keep their presentation. Base UI owns controls,
 Lucide owns icons, and shadcn/HeroUI are visual references only, without added dependencies.
-Existing filters, numbered pagination, local progress remain. Detail pages have one context-preserving return link and no next-task navigation. Remove persisted answer drafts and special row/scroll restoration; return links
-carry filters and page. No telemetry consent, analytics or client-error collector. No new
-accounts, editing UI, global stores, dependencies or speculative abstractions.
+Existing filters and numbered pagination remain. Detail pages have one context-preserving return
+link and no next-task navigation. Remove persisted answer drafts and special row/scroll restoration;
+return links carry filters and page. No telemetry consent or client-error collector. Change 140
+adds account screens and the smallest cross-route session/progress owner; no generic global state
+layer or speculative profile fields. Guest progress surfaces in topic/course catalogs, course
+overview and lesson rail/result show visual `0 из N` values derived from public memberships plus
+an explicit sign-in invitation; these zeroes are not results, cannot drive saved-progress filters
+or continuation and are not persisted. A locked progress block is a real sign-in link with
+hover, keyboard-focus and touch activation: desktop hover/focus blurs the scale and reveals a
+24px lock and the label “Войти, чтобы сохранять прогресс”, without tooltip or underline;
+the invitation remains visible on touch. Catalog, course overview and lesson scales reuse this
+interaction without separate duplicate login actions. Correct-answer feedback
+stays visible until the page is left, but a guest success is never represented as saved.
+Signed-in loading/errors and logout/account-switch transitions must not show another account's
+snapshot. Public lesson theory, navigation and practice remain SSR-readable without a session.
 
 ### EGE catalog (Change 126)
 
@@ -329,9 +370,11 @@ independently of filtering; standalone practice and course progress remain separ
 
 `GET /api/topics/practice-summary` returns `{topics: [{id, tasks: [{id, solution_revision}]}]}`
 for published topic memberships and nonarchived tasks, without statements or checker data.
-It uses the existing read-only session and no-store/error policy. No data migration is required.
-The browser compares the summary with revision-aware lesson progress. Missing topic summaries
-are unavailable, never fabricated zero totals. Existing storage keys remain compatible.
+It uses the existing read-only session and no-store/error policy. Its original introduction
+required no data migration; Change 140 adds separate account/progress migrations (§3).
+The authenticated progress projection compares the summary with revision-aware lesson results.
+Missing topic summaries are unavailable, never fabricated zero totals. Old browser progress keys
+are ignored, not imported.
 The route remains prerendered without database reads; summary loading is client enhancement.
 No-JS retains the complete readable catalog and published links. Search/status controls are
 hidden via scripting CSS when JavaScript is disabled; hydration never inserts their geometry.
@@ -343,19 +386,54 @@ auto-resume scrolling and production delivery are out of scope.
 
 ## 6. Auth & Access Model
 
-Для серверного банка (§3) используются разные DB credentials: HTTP runtime read-only (включая
-checker), операторский CLI/import ограниченная запись без DDL, migrations отдельная роль,
-backup/restore с достаточными отдельными правами. Production PostgreSQL не открыт в интернет;
-оператор использует принятый защищённый доступ к VPS, не меняя текущий SSH-контракт.
+С Change 140 ученик может зарегистрироваться по подтверждённому email и паролю либо войти через
+VK ID, Яндекс ID или Telegram. Каждый способ входа привязывается к внутреннему `user_id` по
+проверенному идентификатору провайдера (`provider`, `subject`); email провайдера не является
+ключом объединения. Социальный аккаунт может не иметь email. Привязка нового способа входа
+выполняется только из уже открытого аккаунта после повторного подтверждения, отвязка последнего
+способа запрещена. Автоматическое объединение двух аккаунтов, перенос локального прогресса и
+учебного прогресса между аккаунтами отсутствуют. У страницы «Профиль» пока нет отдельной таблицы.
 
-Нет аутентификации на MVP. Публичные страницы и `POST /api/tasks/{id}/check` анонимны; прогресс
-урока хранится только в localStorage текущего браузера и не синхронизируется. Ограничение на уровне
-инфраструктуры (не auth) — rate limiting чекер-эндпоинта на Nginx (§4, §8) против автоматического
-перебора банка ответов.
+Аккаунт, созданный через провайдера, может после недавнего повторного подтверждения входа
+добавить почту и пароль как запасной способ входа. До подтверждения адреса одноразовой ссылкой
+этот способ не работает; исправление ожидающего подтверждения адреса отзывает прежние ссылки.
+Адрес, уже занятый другим аккаунтом, привязать нельзя: совпадение email не объединяет аккаунты.
 
-Поле `access_tier: free | paid` в модели `Topic`/`CourseLesson` — задел под будущую монетизацию
-(§8), не enforced ни на backend, ни на frontend на MVP; все `published`-записи считаются `free`.
-Аккаунты, роли пользователей и платный доступ — вне MVP (§10).
+Вход через провайдера использует серверный authorization-code redirect/callback с одноразовыми
+state/PKCE и проверкой issuer/подписи/получателя, где они применимы. Возврат разрешён только на
+внутренний проверенный путь. Токены провайдеров не хранятся в браузере и после получения своего
+сеанса не удерживаются без нужды. Email/пароль требуют подтверждения адреса, стойкого хеша
+пароля и восстановления доступа через ограниченный по времени одноразовый токен. Запрос
+восстановления не раскрывает наличие аккаунта. Потеря провайдера лечится другим привязанным
+способом входа; доступ к чужому аккаунту по совпавшему адресу почты не выдаётся.
+VK ID, Яндекс ID и Telegram по умолчанию выключены отдельными release-флагами. Пока флаг
+выключен, вход, привязка, повторное подтверждение и callback не доступны; интерфейс явно
+показывает способ как недоступный. Включение каждого флага требует проверенных учётных данных,
+callback и сценария входа, а также проверки, что существующие пользователи не теряют единственный
+способ входа при последующем выключении.
+Повторное письмо подтверждения или восстановления фактически отправляется не чаще одного раза
+в 60 секунд и не более пяти раз за скользящий час для адреса и назначения письма. Публичный
+ответ остаётся одинаковым для подходящего и неподходящего адреса, а интерфейс предлагает
+проверить «Спам», повторить запрос после ожидания или исправить введённый адрес.
+
+Сайт выдаёт собственную отзывную серверную сессию в host-only `Secure`, `HttpOnly`, `SameSite`
+cookie. Идентификатор сессии хранится на сервере только в виде проверяемого хеша; вход и
+чувствительные изменения обновляют/отзывают сессии. Для мутаций действуют CSRF-защита, проверка
+владельца, отдельные лимиты входа/регистрации/писем и защита от перебора. Персональные ответы
+имеют `Cache-Control: no-store`; SSR не подмешивает данные другого аккаунта в публичный HTML.
+Сеанс не превращает технические роли автора/оператора/БД в пользовательские права.
+
+Отдельная ограниченная роль приложения читает нужные записи checker и записывает только таблицы
+аккаунтов, сессий и прогресса; `infraege_runtime` остаётся read-only для публичных reads, а
+`infraege_import` не используется для ученических записей. Production PostgreSQL не открыт в
+интернет; операторский SSH-контракт не меняется. Публичные страницы и анонимный checker работают
+без сессии. Настройки входа, подтверждения и удаления аккаунта принадлежат пользователю; удаление
+отзывает сеансы и удаляет его учебные результаты. Сброс прогресса урока затрагивает только этот
+контекст и требует подтверждения.
+
+`access_tier: free | paid` в Topic/CourseLesson пока лишь metadata: все опубликованные материалы
+остаются бесплатными. Будущие entitlement и оплата отделены от идентичности; скрытие ссылки в UI
+не может служить защитой платного контента, особенно для TSX-уроков в web bundle.
 
 ---
 
@@ -382,6 +460,10 @@ Production использует immutable SHA images. Deploy — явный work
 архитектора (Change 139): проверка показала пустую базу `infraege` и только тестовые данные
 выведенного Umami. Rollback на любой хранимый релиз использует тот же `infraege_postgres122-data`.
 Content validation и OpenAPI drift проверяются до merge. Подробности в STACK и runbooks.
+Change 140 requires an additive database-schema bump across migrations, runtime checks,
+deploy preflight and restore verifier; new write-role grants must be narrower than importer
+grants. Provider credentials, callback origins and mail delivery are environment-specific and
+must be validated before release. Rollback compatibility requires an isolated restore check.
 
 ### 7.3 Minimal operations
 
@@ -437,6 +519,10 @@ simpler model on a new isolated volume; verify IDs, content, checker, membership
 parity. Keep source database/files. Scheduled backup covers database and referenced files;
 restore runs into an empty isolated target. Production transfer and retirement of installed
 monitoring services require explicit release authorization and Full/Release Gate.
+Before releasing accounts, restore-check identities, session revocation and per-context progress
+on an isolated target. Existing guest browser progress is intentionally abandoned, not migrated.
+Release requires verified provider callbacks, password-mail delivery and updated privacy text;
+local acceptance alone is not production authorization.
 
 ### 8.2 Existing non-functional baseline
 
@@ -450,35 +536,37 @@ monitoring services require explicit release authorization and Full/Release Gate
 | SEO | `/`, `/privacy`, published topics, courses и CourseLesson имеют canonical, уникальные metadata, SSR content, общий crawlable social preview и входят в sitemap/prerender; root document публикует browser-only manifest, SVG/PNG/ICO favicon и Apple touch icon из production-знака, а `/` — правдивый `WebSite` JSON-LD без выдуманной Organization; review routes остаются unlisted, `noindex,nofollow` и исключены из public discovery; Lighthouse SEO для публичных маршрутов проходит без ошибок |
 | Mobile / no-JS readability | TopicLesson, Course overview и CourseLesson сохраняют текст, программу, подписи, решения и section anchors в SSR HTML; интерактивная проверка и персональный progress остаются progressive enhancement |
 | Client resilience / API drift | Route failures восстанавливаемы без белого экрана; loading/empty/error/not-found состояния доступны с клавиатуры и скринридера; OpenAPI schema/types drift ломает gate до merge; runtime HTTP имеет timeout/abort и не делает скрытый retry мутаций |
-| Юридическое (152-ФЗ) | `/privacy` публикует фактические цели, состав, сроки и получателей обработки, `avatarsik6699@gmail.com` и Telegram invite как каналы связи, но по явному решению архитектора не публикует ФИО и адрес оператора с принятием сопутствующего риска. Браузерная аналитика возвращена (2026-09-22, архитектор пересмотрел прежний отказ, §1.2/§7.3): self-hosted `smotryashchiy`, без cookie, без persistent identifier — visitor-хэш `sha256(daily_salt+site+IP+UA)` с посуточной ротацией соли, сырой IP не сохраняется, referrer усекается до hostname. Архитектор трактует это как не требующее отдельного consent UI (нет постоянной идентификации, нет межсуточного связывания посетителя, обработка сопоставима по характеру с обычными access-логами) — это архитекторская интерпретация, не формальное юридическое заключение. `/privacy` обновляется отдельным пунктом, описывающим эту обработку и получателя (тот же оператор, отдельный сервис). Формальная проверка уведомления РКН, локализации, текста политики и этой трактовки юристом остаётся обязательным внешним follow-up, а не заявляется выполненной |
+| Account security | Passwords use a current password-hashing scheme; verification/reset tokens expire and are single-use; sessions are server-revocable, HttpOnly/Secure/SameSite and protected from CSRF. Auth endpoints have targeted abuse limits, generic recovery responses and no sensitive URL/query/access-log leakage. Authentication does not grant editorial, operator or paid access. |
+| Personal-data isolation | Progress and account reads/writes are owner-scoped and no-store; logout and account switching clear in-memory personalized state. Guest checking remains anonymous and read-only. Account/identity/progress data and new role grants are covered by isolated backup/restore checks. |
+| Юридическое (152-ФЗ) | `/privacy` публикует фактические цели, состав, сроки и получателей обработки; регистрация по email требует отдельной неотмеченной по умолчанию галочки со ссылкой на версионированное согласие, а API фиксирует версию и время. Контакт — `avatarsik6699@gmail.com`. По явному решению архитектора ФИО и адрес оператора не публикуются, возраст и полномочия представителя при регистрации не проверяются, уведомление РКН переносится на отдельный пункт после релиза. Эти решения оставляют существенный юридический риск и не являются заявлением о соответствии закону; надпись «18+» для фактически школьной аудитории не используется как фиктивное освобождение от обязанностей. Гости любого возраста могут читать уроки и проверять ответы без регистрации. Браузерная аналитика возвращена (2026-09-22, архитектор пересмотрел прежний отказ, §1.2/§7.3): self-hosted `smotryashchiy`, без cookie и постоянного идентификатора — visitor-хэш `sha256(daily_salt+site+IP+UA)` с посуточной ротацией соли, сырой IP не сохраняется, referrer усекается до hostname. Отсутствие отдельного consent UI для этой аналитики — интерпретация архитектора, не юридическое заключение. Формальная проверка уведомления РКН, локализации, текста политики, детей и этой трактовки юристом остаётся внешним follow-up. |
 | Юридическое (436-ФЗ) | Возрастная маркировка для обычного сайта не вводится: существующая `12+` удаляется без замены на `18+` |
 | Происхождение контента | Существующие уроки сохраняют Content Quality Gate (§2.3). Для нового банка принято импортируемое содержимое с явным provenance (§3); происхождение, атрибуция и допустимость использования проверяются при подготовке импорта, не выводятся автоматически из URL и не заменяются технической валидацией |
-| Other (юридический ориентир, не консультация) | Открытые источники используются как инженерный ориентир; формальная юридическая проверка и РКН составляют принятый бессрочно отложенный риск, а не пункт текущего roadmap |
+| Other (юридический ориентир, не консультация) | Открытые источники используются как инженерный ориентир; формальная юридическая проверка, данные оператора, оформление доступа детей и уведомление РКН не закрыты. Архитектор принял риск выпуска без них и планирует РКН отдельным пунктом после релиза; это не меняет установленного законом срока подачи уведомления до обработки, если исключение неприменимо. |
 
 ---
 
 ## 9. Roadmap
 
-Change 122 archived the minimalist UI, simplified server practice and reduced operations while
-preserving source history and data. Change 123 owns Full/Release verification and all resulting
-corrective maintenance in one change. Existing history remains in COMPACTED and immutable archives.
-The next change reinstates cookieless browser analytics (self-hosted `smotryashchiy`, §7.3/§8.2),
-reversing the 152-ФЗ-driven removal after an explicit architect reconsideration: no site was ever
-actually connected, and the earlier consent-avoidance rationale is superseded by a cookieless,
-non-persistent-identifier design the architect judges not to need consent UI (§8.2). Future
-capabilities need demonstrated use.
+Changes 122–139 established the simplified practice and local/production baseline; their
+immutable history remains in archives. Change 140 introduces optional accounts and server-owned
+progress without reducing guest functionality or importing old browser progress. Later product
+decisions may add manual completion, richer statistics and premium entitlements; those are not
+implemented by Change 140. Payment processing and paywall enforcement require separate design.
 
 ## 10. Out of Scope
 
-Production deployment/host mutations in local work; deleting old volumes; accounts/payments;
+Production deployment/host mutations in local work; deleting old volumes; payments;
 collaborative editing; editorial audit history; automatic import conflict resolution; background
 imports/file garbage collection; hosting analytics dashboards or a monitoring stack in this repo
 (dashboards remain in the separate `smotryashchiy` deploy — this repo only allowlists its origin
-in CSP, §7.3); decorative systems and labs. Single-operator sequential imports and ordinary
-pagination are intentional first-version limits. Formal legal review, off-site backup, key-only
-SSH and new content remain separate decisions.
+in CSP, §7.3); decorative systems and labs. Automatic account merging, guest-progress import,
+saved answer text, standalone profile table, manual completion, advanced statistics and premium
+entitlements are out of Change 140. Single-operator sequential imports and ordinary pagination
+are intentional first-version limits. Formal legal review, off-site backup, key-only SSH and new
+content remain separate decisions.
 
 ## 11. Open Questions
 
-None for the approved Change 122 scope. Verify actual source data before migration; never infer
-live database contents from archived acceptance counts.
+The architect confirmed account deletion and lesson-scoped reset on 2026-09-24. Before production release, register and
+verify provider applications/callbacks and mail delivery, review the updated privacy policy and
+confirm account-data backup/restore. These are release prerequisites, not claims of completion.

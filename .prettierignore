@@ -15,6 +15,10 @@ pnpm-lock.yaml
 # Machine-local editor state is not repository formatting scope.
 .claude/settings.local.json
 
+# Athanor owns these local vault files; never format encrypted secret material.
+athanor.yaml
+secrets.enc.yaml
+
 # Frozen migration inputs preserve authored bytes and deterministic package identity.
 content/practice-migration/**
 

@@ -8,6 +8,9 @@ for (const path of [
   "/ege",
   "/ege/16-rekursiya",
   "/privacy",
+  "/sign-in",
+  "/register",
+  "/account",
   "/removed-route",
 ]) {
   test(`no serious accessibility violations on ${path}`, async ({

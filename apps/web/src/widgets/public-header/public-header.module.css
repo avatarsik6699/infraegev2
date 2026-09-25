@@ -16,7 +16,7 @@
 
 .root[data-expanded="true"] .inner {
   display: grid;
-  grid-template-columns: auto 1px minmax(0, 1fr);
+  grid-template-columns: auto 1px minmax(0, 1fr) auto;
   gap: clamp(var(--space-3), 2.5vw, var(--space-5));
   min-height: 7.5rem;
 }
@@ -130,6 +130,86 @@
   font-size: var(--text-base);
   font-weight: 400;
   text-decoration: none;
+}
+
+.accountLink {
+  display: inline-flex;
+  gap: var(--space-0-5);
+  align-items: center;
+  justify-self: end;
+  min-height: 2.5rem;
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.accountNavigation {
+  display: inline-flex;
+  gap: var(--space-2);
+  align-items: center;
+  justify-self: end;
+  min-width: 0;
+}
+
+.progressLink {
+  min-height: 2.5rem;
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  white-space: nowrap;
+}
+
+.accountDivider {
+  width: 1px;
+  height: 1.75rem;
+  background: color-mix(in srgb, var(--color-brand-ink) 14%, transparent);
+}
+
+.avatarLink {
+  text-decoration: none;
+}
+
+.avatarLink [data-profile-avatar] {
+  transition: background-color var(--motion-duration) var(--motion-easing);
+}
+
+.avatarLink:hover [data-profile-avatar] {
+  background: color-mix(in srgb, var(--color-brand-ink) 15%, transparent);
+}
+
+.avatarLink:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+.avatarLink[data-provider-only="true"] [data-profile-avatar] {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+}
+
+.sessionStatus {
+  display: inline-flex;
+  gap: var(--space-1);
+  align-items: center;
+  justify-self: end;
+  min-height: 2.5rem;
+  color: var(--color-brand-muted);
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+}
+
+.sessionStatus[data-header-session="loading"]::before {
+  width: 2.5rem;
+  height: 2.5rem;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-brand-ink) 8%, transparent);
+  content: "";
+}
+
+.sessionRetry {
+  min-height: 2.5rem;
 }
 
 .sectionLink[data-current="true"] {
@@ -269,7 +349,24 @@ a.brand:hover {
   .root[data-expanded="true"] .inner {
     display: flex;
     flex-wrap: wrap;
+    min-height: 9.375rem;
     padding-block: var(--space-2);
+  }
+  .root[data-expanded="true"] .inner > .accountLink {
+    justify-content: center;
+    min-width: 5.5rem;
+  }
+
+  .accountNavigation {
+    gap: var(--space-1);
+  }
+
+  .progressLink {
+    font-size: var(--text-xs);
+  }
+
+  .accountDivider {
+    height: 1.5rem;
   }
   .brand {
     flex: 1 1 14rem;

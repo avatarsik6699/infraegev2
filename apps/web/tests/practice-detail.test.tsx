@@ -9,12 +9,25 @@ const mocks = vi.hoisted(() => ({
   check: vi.fn(),
   refresh: vi.fn(),
   invalidate: vi.fn(),
+  session: {
+    account: null as { id: string } | null,
+    csrfToken: null as string | null,
+    status: "ready" as const,
+    refresh: vi.fn(),
+  },
 }));
 vi.mock("~/widgets/practice-task/api/get-practice-task", () => ({
   getPracticeTask: mocks.refresh,
 }));
-vi.mock("~/features/lesson-practice/api/check-practice-answer", () => ({
-  checkPracticeAnswer: mocks.check,
+vi.mock(
+  "~/features/lesson-practice/api/check-practice-answer",
+  async (importOriginal: () => Promise<object>) => ({
+    ...(await importOriginal()),
+    checkPracticeAnswer: mocks.check,
+  }),
+);
+vi.mock("~/features/account", () => ({
+  useAccountSession: () => mocks.session,
 }));
 vi.mock("@tanstack/react-router", () => ({
   useRouter: () => ({ invalidate: mocks.invalidate }),
@@ -75,10 +88,11 @@ const result: PracticeTaskWidgetTypes.Result = {
     estimatedMinutes: null,
   },
 };
-function page(value = result) {
+function page(value = result, key = "initial") {
   return (
-    <PracticeProgressProvider>
+    <PracticeProgressProvider accountId={mocks.session.account?.id}>
       <PracticeTaskPage
+        key={key}
         result={value}
         search={{
           topics: ["ege-16"],
@@ -94,6 +108,8 @@ function page(value = result) {
 beforeEach(() => {
   localStorage.clear();
   vi.clearAllMocks();
+  mocks.session.account = null;
+  mocks.session.csrfToken = null;
 });
 it("renders the compact detail and one context-preserving return link in SSR", () => {
   const html = renderToStaticMarkup(page());
@@ -122,26 +138,23 @@ it("renders the compact detail and one context-preserving return link in SSR", (
   expect(url.searchParams.get("limit")).toBe("10");
   expect(url.searchParams.get("sort")).toBe("difficulty_desc");
 });
-it("keeps one retry action next to an accepted answer and preserves progress on reload", async () => {
+it("keeps retry feedback locally but no guest progress after reload", async () => {
   mocks.check.mockResolvedValue({ correct: true, explanation: "" });
   const view = render(page());
   const input = await screen.findByRole("textbox", { name: "Ваш ответ" });
   await waitFor(() => expect((input as HTMLInputElement).disabled).toBe(false));
   fireEvent.change(input, { target: { value: "42" } });
   fireEvent.click(screen.getByRole("button", { name: "Проверить" }));
-  await screen.findByRole("button", { name: "Решить ещё раз" });
-  expect(
-    screen.getAllByRole("button", { name: "Решить ещё раз" }),
-  ).toHaveLength(1);
+  await screen.findByText("Верно.");
+  expect(screen.queryByRole("button", { name: "Решить ещё раз" })).toBeNull();
   expect((input as HTMLInputElement).disabled).toBe(true);
-  view.unmount();
-  render(page());
-  await screen.findByRole("button", { name: "Решить ещё раз" });
-  expect((screen.getByRole("textbox") as HTMLInputElement).value).toBe("42");
-  fireEvent.click(screen.getByRole("button", { name: "Решить ещё раз" }));
-  expect((screen.getByRole("textbox") as HTMLInputElement).disabled).toBe(
-    false,
+  view.rerender(page(result, "after-navigation"));
+  await waitFor(() =>
+    expect((screen.getByRole("textbox") as HTMLInputElement).disabled).toBe(
+      false,
+    ),
   );
+  expect((screen.getByRole("textbox") as HTMLInputElement).value).toBe("");
   fireEvent.click(screen.getByRole("button", { name: "Подсказка" }));
   fireEvent.click(screen.getByRole("button", { name: "Решение" }));
   expect(
@@ -151,6 +164,44 @@ it("keeps one retry action next to an accepted answer and preserves progress on 
     screen.getByRole("heading", { name: "Решение", level: 2 }),
   ).not.toBeNull();
 });
+it("saves a signed-in standalone result under the canonical context", async () => {
+  mocks.session.account = { id: "account-1" };
+  mocks.session.csrfToken = "csrf";
+  const fetchMock = vi.fn().mockResolvedValue(
+    new Response(
+      JSON.stringify({
+        correct: true,
+        saved: true,
+        solution_revision: 1,
+        explanation: [{ type: "text", data: { markdown: "Разбор" } }],
+      }),
+      { status: 200, headers: { "Content-Type": "application/json" } },
+    ),
+  );
+  vi.stubGlobal("fetch", fetchMock);
+
+  render(page());
+  const input = await screen.findByRole("textbox", { name: "Ваш ответ" });
+  await waitFor(() => expect((input as HTMLInputElement).disabled).toBe(false));
+  fireEvent.change(input, { target: { value: "42" } });
+  fireEvent.click(screen.getByRole("button", { name: "Проверить" }));
+  await waitFor(() =>
+    expect(
+      fetchMock.mock.calls.some((call: readonly unknown[]) =>
+        (call[0] as Request).url.includes("/check-and-save"),
+      ),
+    ).toBe(true),
+  );
+
+  const request = fetchMock.mock.calls
+    .map((call: readonly unknown[]) => call[0] as Request)
+    .find((request: Request) => request.url.includes("/check-and-save"));
+  expect(request).toBeDefined();
+  await expect(request!.json()).resolves.toMatchObject({
+    context_kind: "standalone",
+    context_id: "standalone",
+  });
+});
 it("retains the answer on checker failure and associates feedback with its field", async () => {
   mocks.check.mockRejectedValue(new Error("offline"));
   render(page());
@@ -158,7 +209,7 @@ it("retains the answer on checker failure and associates feedback with its field
   await waitFor(() => expect((input as HTMLInputElement).disabled).toBe(false));
   fireEvent.change(input, { target: { value: "123" } });
   fireEvent.click(screen.getByRole("button", { name: "Проверить" }));
-  await screen.findByRole("alert");
+  await screen.findByRole("status");
   expect((input as HTMLInputElement).value).toBe("123");
   expect(
     document.getElementById(input.getAttribute("aria-describedby")!)

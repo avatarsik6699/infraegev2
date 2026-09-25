@@ -33,18 +33,18 @@ export class PracticeCutoverPage {
       }),
     );
     await panel.getByRole("button", { name: "Проверить", exact: true }).click();
-    await expect(panel.getByRole("alert")).toContainText("Задача изменилась");
+    await expect(panel.getByRole("status")).toContainText("Задача изменилась");
     await expect(input).toHaveValue("32");
     await expect(
       panel.getByRole("button", { name: "Проверить", exact: true }),
     ).toBeDisabled();
     await this.page.unroute("**/api/tasks/*/check");
     await panel.getByRole("button", { name: "Обновить условие" }).click();
-    await expect(panel.getByRole("alert")).toHaveCount(0);
+    await expect(panel.getByRole("status")).toHaveCount(0);
     await expect(input).toHaveValue("32");
     await expect(input).toBeEnabled({ timeout: 15000 });
     await input.press("Enter");
-    await expect(panel).toHaveAttribute("data-solved", "true");
+    await this.expectGuestCorrectness(panel);
   }
 
   async expectFailedCheckPreservesInput(): Promise<void> {
@@ -55,13 +55,18 @@ export class PracticeCutoverPage {
       route.abort("failed"),
     );
     await input.press("Enter");
-    await expect(this.page.getByRole("alert")).toContainText(
-      "Не удалось проверить ответ",
-    );
+    await expect(
+      this.page
+        .locator('[data-practice-task="rekursiya-base-sequence"]')
+        .getByRole("status"),
+    ).toContainText("Не удалось проверить ответ");
     await expect(input).toHaveValue("32");
     await this.page.unroute("**/api/tasks/*/check");
     await input.press("Enter");
     await expect(input).toBeDisabled();
+    await this.expectGuestCorrectness(
+      this.page.locator('[data-practice-task="rekursiya-base-sequence"]'),
+    );
   }
 
   async expectNoJavaScriptPractice(): Promise<void> {
@@ -100,18 +105,16 @@ export class PracticeCutoverPage {
       panel.getByRole("button", { name: "Проверяем" }),
     ).toBeDisabled();
     release();
-    await expect(panel).toHaveAttribute("data-solved", "true");
+    await this.expectGuestCorrectness(panel);
     expect(requests).toBe(1);
   }
 
-  async expectPythonAndCourseProgress(): Promise<void> {
+  async expectLegacyBrowserProgressIsIgnored(): Promise<void> {
     await this.page.goto("/courses/python/pervaya-programma");
     await expect(
       this.page.locator("#answer-python-first-program-output-order"),
     ).toBeEnabled();
     await this.page.evaluate(() => {
-      localStorage.removeItem("infraege:lesson-progress:v2");
-      localStorage.removeItem("infraege:lesson-progress");
       localStorage.setItem(
         "infraege:lesson:python-first-program:progress",
         JSON.stringify({
@@ -131,16 +134,27 @@ export class PracticeCutoverPage {
     await this.page.reload();
     await expect(
       this.page.locator("#answer-python-first-program-output-order"),
-    ).toBeDisabled();
+    ).toBeEnabled();
     await this.page.goto("/courses/python");
     await expect(
-      this.page.getByRole("progressbar", { name: "Решённые задачи курса" }),
-    ).toHaveAttribute("aria-valuenow", "4");
+      this.page.locator("[data-guest-progress-lock]").getByRole("link"),
+    ).toHaveAccessibleName(
+      "Прогресс: 0 из 140. Войти, чтобы сохранять прогресс",
+    );
+    await expect(this.page.locator('[role="progressbar"]')).toHaveAttribute(
+      "aria-valuenow",
+      "0",
+    );
     await this.page.goto("/courses");
     await expect(
       this.page
         .locator("[data-course-progress]")
-        .getByText("Освоено 1 из 28 уроков", { exact: true }),
+        .getByText("Освоено 0 из 28 уроков", { exact: true }),
     ).toBeVisible();
+  }
+
+  private async expectGuestCorrectness(panel: ReturnType<Page["locator"]>) {
+    await expect(panel.getByRole("status")).toContainText("Верно.");
+    await expect(panel).not.toHaveAttribute("data-solved");
   }
 }

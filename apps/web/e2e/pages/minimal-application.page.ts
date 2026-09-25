@@ -449,9 +449,8 @@ export class MinimalApplicationPage {
       .getByRole("textbox")
       .fill(visibleTasks[0].task.checker.answer_variants[0]);
     await first.getByRole("button", { name: "Проверить", exact: true }).click();
-    await expect(
-      first.getByRole("button", { name: "Решить ещё раз" }),
-    ).toBeVisible();
+    await expect(first.getByRole("status")).toContainText("Верно.");
+    await expect(first).not.toHaveAttribute("data-solved");
     await expect(this.page).toHaveURL(/\/practice$/);
     await expect(second.getByRole("textbox")).toHaveValue("draft-two");
     await expectNoHorizontalOverflow(this.page);
@@ -459,7 +458,8 @@ export class MinimalApplicationPage {
     await first
       .getByRole("button", { name: visibleTasks[0].task.title, exact: true })
       .click();
-    await expect(first.getByRole("textbox")).toBeDisabled();
+    await expect(first.getByRole("textbox")).toBeEnabled();
+    await expect(first.getByRole("textbox")).toHaveValue("");
     await second
       .getByRole("button", { name: visibleTasks[1].task.title, exact: true })
       .click();
@@ -482,7 +482,7 @@ export class MinimalApplicationPage {
     ).toHaveAttribute("href", "/practice?exam_number=16");
     await expectNoHorizontalOverflow(this.page);
   }
-  async expectSolveAndProgress() {
+  async expectGuestSolveHasTransientFeedback() {
     const { task } = visibleTasks[0];
     await this.page.goto(`/practice/${task.id}`);
     const input = this.page.getByRole("textbox", {
@@ -494,14 +494,10 @@ export class MinimalApplicationPage {
     await this.page
       .getByRole("button", { name: "Проверить", exact: true })
       .click();
-    await expect(
-      this.page.getByRole("button", { name: "Решить ещё раз" }),
-    ).toBeVisible();
+    await expect(this.page.getByRole("status")).toContainText("Верно.");
     await this.page.reload();
-    await expect(input).toBeDisabled();
-    await expect(input).toHaveValue(task.checker.answer_variants[0]);
-    await this.page.getByRole("button", { name: "Решить ещё раз" }).click();
     await expect(input).toBeEnabled();
+    await expect(input).toHaveValue("");
     await input.fill("unsubmitted");
     await this.page.reload();
     await expect(input).not.toHaveValue("unsubmitted");
@@ -528,16 +524,16 @@ export class MinimalApplicationPage {
     await this.page
       .getByRole("button", { name: "Проверить", exact: true })
       .click();
-    await expect(this.page.getByRole("alert")).toBeVisible();
+    await expect(this.page.getByRole("status")).toContainText(
+      "Не удалось проверить ответ",
+    );
     await expect(input).toHaveValue("123");
     await this.page.unroute("**/api/tasks/*/check");
     await input.fill(visibleTasks[1].task.checker.answer_variants[0]);
     await this.page
       .getByRole("button", { name: "Проверить", exact: true })
       .click();
-    await expect(
-      this.page.getByRole("button", { name: "Решить ещё раз" }),
-    ).toBeVisible();
+    await expect(this.page.getByRole("status")).toContainText("Верно.");
   }
   async expectReadablePractice() {
     const response = await this.page.goto(

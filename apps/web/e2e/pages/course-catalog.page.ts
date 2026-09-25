@@ -33,9 +33,7 @@ export class CourseCatalogPage {
     if (noScripts) {
       await expect(this.page.locator("[data-course-progress]")).toBeHidden();
     } else {
-      await expect(
-        this.page.locator("[data-course-progress]").getByRole("status"),
-      ).toHaveText("Освоено 0 из 28 уроков");
+      await this.expectGuestProgress();
     }
     await this.expectUniformCards();
     await expectNoHorizontalOverflow(this.page);
@@ -89,12 +87,13 @@ export class CourseCatalogPage {
       );
       const before = await this.geometry();
       await expect(
+        this.page.locator("[data-course-summary]").getByRole("status"),
+      ).toHaveText("Проверяем вход");
+      await expect(
         this.page.locator("[data-course-progress]").getByRole("status"),
       ).toHaveText("Прогресс загружается");
       releaseScripts();
-      await expect(
-        this.page.locator("[data-course-progress]").getByRole("status"),
-      ).toHaveText("Освоено 0 из 28 уроков");
+      await this.expectGuestProgress();
       expect(await this.geometry()).toEqual(before);
       releaseAssets();
       await this.page.waitForLoadState("load");
@@ -126,17 +125,7 @@ export class CourseCatalogPage {
     await expect(link).toHaveAttribute("data-hierarchy", "primary");
     await expect(link).toHaveCSS("background-color", "rgb(23, 23, 23)");
     await expect(link).toHaveCSS("color", "rgb(255, 255, 255)");
-    const track = card.getByRole("progressbar").locator(":scope > div");
-    await expect(track).toHaveCSS("background-color", "rgb(245, 245, 245)");
-    await expect
-      .poll(
-        async () =>
-          (await card.evaluate(
-            (el) => getComputedStyle(el).backgroundColor,
-          )) !==
-          (await track.evaluate((el) => getComputedStyle(el).backgroundColor)),
-      )
-      .toBe(true);
+    await this.expectGuestProgress(card);
     await expect(card).toHaveCSS("background-color", "rgb(255, 255, 255)");
     await link.hover();
     await expect(card).toHaveCSS("background-color", "rgb(255, 255, 255)");
@@ -168,9 +157,7 @@ export class CourseCatalogPage {
     await this.page.setViewportSize({ width: 390, height: 900 });
     await this.expectUniformCards();
     await expectNoHorizontalOverflow(this.page);
-    const copyBox = await card.getByRole("status").boundingBox();
-    const trackBox = await track.boundingBox();
-    expect(copyBox!.y + copyBox!.height).toBeLessThanOrEqual(trackBox!.y);
+    await this.expectGuestProgress(card);
     await link.press("Enter");
     await expect(this.page).toHaveURL(/\/courses\/python$/);
   }
@@ -188,6 +175,22 @@ export class CourseCatalogPage {
       expect(Math.abs(size.width - sizes[0]!.width)).toBeLessThan(1);
       expect(Math.abs(size.height - sizes[0]!.height)).toBeLessThan(1);
     }
+  }
+
+  private async expectGuestProgress(scope = this.page.locator("body")) {
+    const progress = scope.locator("[data-course-progress]");
+    await expect(progress.locator('[role="status"]')).toHaveText(
+      "Освоено 0 из 28 уроков",
+    );
+    await expect(progress.locator('[role="progressbar"]')).toHaveAttribute(
+      "aria-valuenow",
+      "0",
+    );
+    await expect(
+      scope.locator("[data-guest-progress-lock]").getByRole("link"),
+    ).toHaveAccessibleName(
+      "Прогресс: 0 из 28. Войти, чтобы сохранять прогресс",
+    );
   }
 
   private async geometry() {

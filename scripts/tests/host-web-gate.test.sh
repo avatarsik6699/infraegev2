@@ -46,6 +46,7 @@ PATH="$fake_bin:$PATH" bash "$repo_dir/scripts/run-host-web-gate.sh" true
 rendered=$(POSTGRES_PASSWORD=contract-only \
   DB_RUNTIME_PASSWORD=contract-runtime DB_IMPORT_PASSWORD=contract-import \
   DB_MIGRATION_PASSWORD=contract-migration DB_BACKUP_PASSWORD=contract-backup \
+  DB_APP_PASSWORD=contract-app AUTH_CSRF_SECRET=contract-csrf-secret \
   docker compose --project-name infraege-full-gate \
   -f "$repo_dir/infra/docker-compose.yml" \
   -f "$repo_dir/infra/docker-compose.override.yml" config --format json)

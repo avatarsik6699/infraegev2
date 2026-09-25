@@ -348,18 +348,8 @@
 }
 
 .answerAcceptedIcon {
-  position: absolute;
-  top: calc(var(--input-min-height) / 2);
-  right: var(--input-padding-inline);
-  width: 1.125rem;
-  height: 1.125rem;
   color: var(--learning-success, var(--color-success));
   pointer-events: none;
-  transform: translateY(-50%);
-}
-
-.answerRow .solvedAnswer {
-  padding-inline-end: calc(var(--input-padding-inline) + 1.625rem);
 }
 
 .answerRow .solvedAnswer:disabled {
@@ -419,12 +409,7 @@
 
 [data-standalone] .answerRow {
   grid-template-columns: minmax(10rem, 1fr) auto;
-  align-items: end;
-}
-[data-standalone] .answerAcceptedIcon {
-  top: auto;
-  bottom: calc((var(--input-min-height) - 1.125rem) / 2);
-  transform: none;
+  align-items: start;
 }
 @media (max-width: 40rem) {
   [data-standalone] .answerRow {
@@ -447,14 +432,12 @@
 }
 .practiceForm[data-layout="compact"] .answerRow {
   max-width: 34rem;
-  align-items: end;
+  align-items: start;
 }
 .practiceForm[data-layout="compact"] .feedback {
   margin-block-start: var(--space-1);
 }
-.answerError {
-  color: var(--color-danger);
-  font-size: var(--text-sm);
+.answerRefresh {
   margin-top: var(--space-1);
 }
 .practiceSet[data-layout="compact"] {
@@ -508,11 +491,6 @@
 .practiceForm[data-layout="compact"] .solvedAnswer:disabled {
   border-color: var(--color-success);
 }
-.practiceForm[data-layout="compact"] .answerAcceptedIcon {
-  top: calc(var(--input-min-height) / 2);
-  bottom: auto;
-  transform: translateY(-50%);
-}
 .visuallyHidden {
   composes: visuallyHidden from "../../shared/styles/patterns.module.css";
 }
@@ -542,17 +520,24 @@
 }
 
 .practiceForm[data-layout="compact"] .answerRow {
-  grid-template-columns: minmax(0, 1fr) 9.5rem;
+  grid-template-columns: minmax(0, 1fr) max-content;
 }
 .practiceForm[data-layout="compact"] .answerRow > button {
   width: 100%;
 }
 @media (max-width: 40rem) {
   .practiceForm[data-layout="compact"] .answerRow {
-    grid-template-columns: minmax(0, 1fr) 8rem;
+    grid-template-columns: minmax(0, 1fr) max-content;
   }
-  .practiceForm[data-layout="compact"] .answerField {
-    min-height: 7.5rem;
+}
+
+@media (max-width: 24rem) {
+  .practiceForm[data-layout="compact"] .answerRow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .catalogHelpActions {
+    flex-direction: column;
+    align-items: stretch;
   }
 }
 

@@ -25,3 +25,7 @@
 .status {
   composes: progressStatus from "../../shared/styles/patterns.module.css";
 }
+
+.guestLessonLocked {
+  min-height: 6.25rem;
+}

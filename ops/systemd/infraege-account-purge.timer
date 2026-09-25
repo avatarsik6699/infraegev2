@@ -1,0 +1,10 @@
+[Unit]
+Description=Hourly infraege account authentication-artifact cleanup
+
+[Timer]
+OnCalendar=hourly
+RandomizedDelaySec=10m
+Persistent=true
+
+[Install]
+WantedBy=timers.target

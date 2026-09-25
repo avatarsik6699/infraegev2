@@ -30,7 +30,7 @@ export const CourseCatalogCard: React.FC<Props> = (props) => (
         Скоро
       </Badge>
     )}
-    <CourseCatalogIllustration id={props.entry.id} />
+    <CourseCatalogIllustration illustration={props.entry.illustration} />
     <div className={styles.cardContent}>
       <Typography.Title order={2} className={styles.cardTitle}>
         {props.entry.title}
@@ -55,12 +55,12 @@ export const CourseCatalogCard: React.FC<Props> = (props) => (
       <div className={styles.cardFooter}>
         <CourseCatalogProgress
           progress={props.progress ?? { status: "loading" }}
+          total={props.entry.lessonCount}
           title={props.entry.title}
         />
         <ActionLink
           presentation="button"
           hierarchy="primary"
-          hoverEffect="scale"
           to="/courses/$courseSlug"
           params={{ courseSlug: props.entry.routeSlug }}
           className={styles.courseAction}

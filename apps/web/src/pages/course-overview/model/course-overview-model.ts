@@ -20,6 +20,8 @@ const calculate = (
   props: CourseOverviewPageTypes.Props,
   saved: Readonly<Record<string, CourseProgressTypes.LessonProgress>>,
   hydrated: boolean,
+  progressUnavailable = false,
+  guest = false,
 ): CourseOverviewPageTypes.Model => {
   const definitions = new Map(
     props.lessons.map((lesson) => [lesson.id, lesson]),
@@ -42,11 +44,14 @@ const calculate = (
     tasks: summaries.get(lesson.id)?.tasks ?? [],
     masteryThreshold: lesson.masteryThreshold,
   }));
-  const practice = courseProgress.calculatePractice(progressLessons, saved);
+  const practice = courseProgress.calculatePractice(
+    progressLessons,
+    guest ? {} : saved,
+  );
   const pending: CourseOverviewPageTypes.Progress = {
-    status: complete ? "loading" : "unavailable",
+    status: complete && !progressUnavailable ? "loading" : "unavailable",
   };
-  const ready = complete && hydrated;
+  const ready = complete && (hydrated || guest);
   const allMastered =
     published.length > 0 &&
     published.every((lesson) => practice.byLessonId[lesson.id]?.mastered);
@@ -55,7 +60,7 @@ const calculate = (
   );
   const first = published[0];
   const target = ready ? (next ?? first) : first;
-  const continuing = ready && practice.solved > 0 && !allMastered;
+  const continuing = ready && !guest && practice.solved > 0 && !allMastered;
   let actionLabel = "Открыть первый урок";
   if (ready) {
     actionLabel = "Начать курс";
@@ -130,7 +135,7 @@ const calculate = (
 
 const progressNote = (progress: CourseOverviewPageTypes.Progress): string => {
   if (progress.status === "unavailable") return "Прогресс временно недоступен";
-  if (progress.status === "loading") return "Прогресс на этом устройстве";
+  if (progress.status === "loading") return "Прогресс загружается";
   if (progress.mastered) return "Все уроки освоены";
   if (progress.total === 0) return "Практика пока не добавлена";
   return "";

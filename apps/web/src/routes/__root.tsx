@@ -2,6 +2,7 @@ import {
   createRootRouteWithContext,
   Outlet,
   Scripts,
+  useRouterState,
 } from "@tanstack/react-router";
 import type { AppRouterContext } from "~/router";
 import { AppDocumentHead, AppProviders, RouteError } from "~/app";
@@ -82,17 +83,31 @@ function RootComponent() {
 }
 
 function RootDocument(props: { children: React.ReactNode }) {
+  const pathname = useRouterState({
+    select: (state) => state.location.pathname,
+  });
+  const allowAnalytics =
+    !pathname.startsWith("/account/") &&
+    ![
+      "/account",
+      "/sign-in",
+      "/register",
+      "/verify-email",
+      "/password-reset",
+    ].includes(pathname);
   return (
     <html lang="ru">
       <head>
         <AppDocumentHead />
-        {/* An async script is a React resource: inserted once per document, never re-appended on
-            navigation, unlike a head() script asset (which re-executes the snippet). */}
-        <script
-          async
-          src="https://sre.infraege.ru/track.js"
-          data-site="a98eb46cb1aa5116e1b5cefd"
-        />
+        {allowAnalytics ? (
+          /* The external tracker is public-page only: it must never observe account
+             routes or URL tokens used for verification and recovery. */
+          <script
+            async
+            src="https://sre.infraege.ru/track.js"
+            data-site="a98eb46cb1aa5116e1b5cefd"
+          />
+        ) : null}
       </head>
       <body>
         <AppProviders>{props.children}</AppProviders>

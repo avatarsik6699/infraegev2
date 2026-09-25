@@ -1,20 +1,13 @@
 export namespace LessonProgressTypes {
   export type Snapshot = {
     outdatedTaskIds?: readonly string[];
-    solvedRevisions?: Readonly<
-      Record<string, Readonly<Record<string, string>>>
-    >;
+    solvedRevisions?: Readonly<Record<string, Readonly<Record<string, true>>>>;
     solvedTaskIds: readonly string[];
-    acceptedAnswers: Readonly<Record<string, string>>;
   };
 
   export type Model = Snapshot & {
     clear: () => void;
-    markSolved: (
-      taskId: string,
-      acceptedAnswer: string,
-      solutionRevision?: number,
-    ) => Snapshot;
+    markSolved: (taskId: string, solutionRevision?: number) => Snapshot;
   };
 
   export type Props = {
@@ -28,5 +21,6 @@ export namespace LessonProgressTypes {
 
   export type ProviderProps = {
     children: React.ReactNode;
+    accountId?: string;
   };
 }

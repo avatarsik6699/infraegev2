@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ActionLink } from "~/shared/components/action-link";
+import { PublicHeaderAccountNavigation } from "./public-header-account-navigation";
 import { PublicHeaderIdentity } from "./public-header-identity";
 import styles from "./public-header.module.css";
 
@@ -80,6 +81,7 @@ export const PublicHeader: React.FC<PublicHeaderProps> = ({
           <>
             <span className={styles.divider} aria-hidden="true" />
             <PublicNavigation activeSection={activeSection} />
+            <PublicHeaderAccountNavigation />
             <details className={styles.mobileMenu}>
               <summary>Меню</summary>
               <PublicNavigation activeSection={activeSection} compact />

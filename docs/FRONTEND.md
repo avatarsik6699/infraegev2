@@ -90,6 +90,11 @@ app → routes → pages → widgets → features → entities → shared
 - Keep transient state in its owning component or slice-local model hook. Use an injected domain
   store only when state must persist or outlive one component. Do not add a global store without a
   demonstrated cross-route owner.
+- Before adding a visual component, icon, card or layout pattern, inspect the existing shared
+  primitives and the closest real consumer. Reuse them when semantics and data contracts match;
+  extract a lower-layer primitive when multiple consumers genuinely share it. Never import a
+  page-private component into another page or duplicate its markup/styles merely for visual
+  similarity. Record any intentional divergence in the active change.
 - Browser globals and storage belong to focused `shared/lib` adapters; network access belongs to
   the consuming slice's `api/`; server environment reads belong to `*.server.ts`. Production
   components do not call `window`, `document`, storage, `navigator`, `fetch` or `process` ad hoc.
@@ -118,8 +123,9 @@ Planned content is text, never a fake/disabled link. Maintain two ordinary text 
 ## 5. Learning and state
 
 Preserve authored theory, ordering, task IDs, examples, figures and accessible descriptions.
-Course/topic domains stay independent. API owns tasks/checking; frontend owns transient input
-and browser learning progress. Keep known progress keys/counters compatible. Remove persisted
+Course/topic domains stay independent. API owns tasks/checking and authenticated progress;
+frontend owns transient input only. Guest progress is not counted or persisted, and old browser
+progress keys are ignored without import. Remove persisted
 answer drafts and custom catalog-row restoration. Catalog task forms preserve transient input
 and help state while collapsed, until the selection/page changes or the page is left/reloaded.
 Bulk disclosure belongs to the current result list: expand loads every visible-page statement into
@@ -127,8 +133,56 @@ the document for browser find; collapse retains mounted forms and drafts. Indivi
 independent, and changing the selection/page resets disclosure. Hide bulk actions without scripting.
 Hidden forms never steal focus; stale refresh preserves input and updates the checked revision. Return links carry filters and numbered page.
 Distinguish wrong answers, missing data, stale tasks and service failure; retain entered input
-on service failure. Help disclosure never marks a task solved. No analytics/client telemetry.
+on service failure. Help disclosure never marks a task solved. Correctness and persistence are
+separate feedback states: a guest can solve, but cannot save progress. Personal progress is
+account-scoped server data, cleared from memory on logout/account switch; do not store session
+tokens, answers or progress in browser storage. Guest progress uses a visual `0 из N` starting
+state derived only from public totals, with an accessible sign-in invitation; it is never a saved
+result and cannot drive saved-progress filters or continuation.
+Guest progress scales share a stationary hover/focus wrapper: blur the zero progress content,
+then overlay a 24px lock and “Войти, чтобы сохранять прогресс”, with no underline or tooltip.
+Touch shows the invitation continuously; reduced motion disables transitions. Do not add a second
+login invitation beside the scale. Loading and failed session/progress states remain distinct.
+Do not add account or answer data to browser analytics or client-error telemetry; the existing cookieless public-page tracker remains governed by SPEC.
 Keep shared modal reset confirmation, keyboard navigation and focus return.
+Email registration and recovery have an explicit check-mail state, a bounded resend action and
+routes back from missing/expired links. Verification resend stays inside registration rather
+than on a separate public form; the browser's non-identifying cooldown survives refresh and
+tabs, while the server remains authoritative for the 60-second and hourly limits. Successful
+password reset returns directly to sign-in. Never claim that mail definitely went to an ineligible
+address or reveal whether an address has an account. Profile shows a pending email method until
+verification, offers correction and resend guidance, and keeps failed destructive confirmation
+open with a recovery action. A provider-only member can add email/password to the same account
+after recent reauthentication; matching email never implies an account merge.
+Email registration alone has a separate, initially unchecked privacy-consent checkbox linked to
+its own versioned document and the policy; the API records the accepted version and server time.
+Do not present the checkbox as proof of parental authority. Age and guardian authority are not
+checked in this release by the architect's acknowledged risk decision; do not invent an 18+ rule
+for this school-oriented product. Provider-created accounts need their own consent flow before
+those providers are enabled later.
+Change 140 account surfaces reuse the public site header and layout on every auth/recovery route,
+without a separate auth header or return-to-learning link. They keep one narrow form column,
+explicit check-mail and reset outcomes, and compact VK ID,
+Yandex ID and Telegram alternatives. Providers are visibly disabled until explicitly enabled
+for release on the server. SSR and client views use its public availability contract. Auth
+fields use helpful placeholders, shared help popovers beside labels and an icon-only password
+visibility control with no hover underlay; no-JavaScript hints use CSS scripting media without hydration
+shifts. Every credential-bearing form renders `method="post"` in SSR so an unenhanced submit never
+places a password in the URL; auth submit controls stay disabled until enhancement is ready.
+Password visibility is an accessible local control;
+the password minimum stays 12 characters. Do not add name fields or a remember-me option.
+The account route is one page, not tabbed: an empty state appears only when the member has no
+current-revision saved results. Account continuation and empty-state cards use neutral surfaces and
+text, without decorative illustrations or separate image backings. Otherwise, up to one compact
+continuation each for a mini-course, an EGE topic and standalone practice uses existing
+account-scoped progress and published content;
+do not claim recency without a timestamp. Login methods share one compact visual vocabulary,
+with reauthentication guidance beside the heading and a contextual recovery action only when
+needed. Logout belongs to profile identity; the safety section contains only account deletion.
+Unavailable signed-in progress is never shown as zero or as an empty account. Activity calendars, history, XP and
+achievements require a later data contract. The public header shows signed-in progress and a
+profile initial, reserves stable geometry during session loading, and does not treat a failed
+session fetch as a guest sign-in state.
 
 ## 6. Delivery and verification
 
@@ -153,7 +207,12 @@ no new typography or image-generation dependency is required for this simplifica
 ## 8. Action and link hierarchy
 
 Base UI Button owns actions: primary (ink), secondary (outline), soft (neutral fill), quiet
-(transparent) and destructive (danger, only destructive confirmations). Buttons never underline.
+(transparent) and destructive (danger, only entry to and confirmation of destructive actions).
+Buttons never underline or wrap their labels; layouts wrap the whole action instead.
+Primary actions share a constant ink background and transform-only hover/focus scale of 1.02,
+with a .98 press scale. Disabled/loading states do not scale; reduced motion disables transforms.
+Field adornment icons share a 20px size and do not shrink. Practice controls align independently
+of their descriptions/errors; messages remain in normal flow below the field.
 Practice uses primary checking, secondary retry, soft hint and soft solution. Expanded help
 has a neutral selected surface; labels reserve enough width to avoid moving neighbours.
 Button press scales to .98 over 140ms without layout changes; reduced motion disables scaling.
@@ -248,8 +307,9 @@ Bulk controls remain hidden before enhancement. No animated program height or au
 
 Existing revision-aware lesson progress drives counts, module states and first-unmastered continuation
 using each lesson's mastery threshold (default 80%). A zero-task lesson is not mastered. Course
-practice counts sum lesson task memberships, consistently with per-lesson progress. No reading state,
-new persistence, API or database change. The catalog keeps its existing mastered-lesson semantics.
+practice counts sum lesson task memberships, consistently with per-lesson progress. No reading
+state or browser persistence. The catalog keeps its existing mastered-lesson semantics. Guest visitors see
+the same zero-of-total indicators from public memberships, but no synthetic mastery, saved counts or personalized continuation.
 Use “Не начат”, “В процессе”, “Освоен”; exact task counts remain visible even at mastery.
 No progress gives “Начать курс”; partial progress selects the first unmastered lesson; complete mastery
 gives “Все уроки освоены” and “Повторить курс”. Before hydration or on unavailable/incomplete summaries,
@@ -262,6 +322,9 @@ Lesson outline rows have no extra group gaps, with 32px minimum mouse targets an
 targets. Preserve nested lists, current-location indication and stable SSR/mobile disclosure.
 Lesson progress reset is a compact, content-width, bare action with secondary text and normal
 weight; the destructive confirmation remains in the shared dialog.
+For guests the lesson-rail progress block renders `0 из N`; on hover or keyboard focus its content
+blurs and a lock with a sign-in tooltip appears. On touch the lock layer remains visible and links
+to sign-in. Signed-in reset changes only the current lesson context.
 
 Inline Notation uses its data font without a background or padding by default, across lessons,
 catalog and task detail. Only explicit `emphasis="highlight"` opts into a backing; semantic

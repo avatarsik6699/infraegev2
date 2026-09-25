@@ -1,0 +1,73 @@
+.root {
+  position: relative;
+  display: grid;
+}
+.content {
+  grid-area: 1 / 1;
+  align-self: center;
+  min-height: inherit;
+  transition:
+    filter var(--motion-duration) var(--motion-easing),
+    opacity var(--motion-duration) var(--motion-easing);
+}
+.link {
+  position: relative;
+  grid-area: 1 / 1;
+  min-width: 0;
+  display: grid;
+  place-content: center;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  color: var(--color-text);
+  opacity: 0;
+  text-align: center;
+  text-decoration: none;
+  transition: opacity var(--motion-duration) var(--motion-easing);
+}
+.link > span {
+  display: inline-flex;
+  flex-direction: column;
+  font-size: var(--text-xs);
+  gap: var(--space-1);
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.link svg {
+  flex: none;
+  width: 24px;
+  height: 24px;
+}
+.link:visited {
+  color: var(--color-text);
+}
+.root:hover .content,
+.root:focus-within .content {
+  filter: blur(2px);
+  opacity: 0.38;
+}
+.root:hover .link,
+.root:focus-within .link {
+  opacity: 1;
+}
+.link:focus-visible {
+  border-radius: var(--radius-control);
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+}
+@media (any-hover: none) {
+  .content {
+    filter: blur(2px);
+    opacity: 0.38;
+  }
+  .link {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .content,
+  .link {
+    transition: none;
+  }
+}

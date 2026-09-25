@@ -2,6 +2,8 @@
   position: relative;
   display: inline-flex;
   min-width: 0;
+  flex-shrink: 0;
+  white-space: nowrap;
   min-height: var(--control-height);
   gap: var(--space-1);
   align-items: center;
@@ -31,7 +33,7 @@
 }
 
 .root[data-hierarchy="primary"]:hover:not(:disabled) {
-  background: var(--control-primary-bg-hover);
+  background: var(--control-primary-bg);
   color: var(--control-primary-text);
 }
 
@@ -187,27 +189,24 @@
   box-shadow: none;
 }
 
-.root[data-hierarchy="primary"][data-hover-effect="scale"]:hover:not(
-    :disabled
-  ) {
+.root[data-hierarchy="primary"]:hover:not(:disabled) {
   background: var(--control-primary-bg);
   color: var(--control-primary-text);
 }
-.root[data-hierarchy="primary"][data-hover-effect="scale"]:is(
-    :hover,
-    :focus-visible
-  ) {
+.root[data-hierarchy="primary"]:not(:disabled):not([aria-disabled="true"]):not(
+    [aria-busy="true"]
+  ):is(:hover, :focus-visible) {
   transform: scale(1.02);
 }
-.root[data-hierarchy="primary"][data-hover-effect="scale"]:active {
+.root[data-hierarchy="primary"]:not(:disabled):not([aria-disabled="true"]):not(
+    [aria-busy="true"]
+  ):active {
   transform: scale(0.98);
 }
 @media (prefers-reduced-motion: reduce) {
-  .root[data-hierarchy="primary"][data-hover-effect="scale"]:is(
-      :hover,
-      :focus-visible,
-      :active
-    ) {
+  .root[data-hierarchy="primary"]:not(:disabled):not(
+      [aria-disabled="true"]
+    ):not([aria-busy="true"]):is(:hover, :focus-visible, :active) {
     transform: none;
   }
 }

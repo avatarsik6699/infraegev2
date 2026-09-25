@@ -8,7 +8,11 @@ import {
   LessonTheory,
   LessonSectionHeading,
 } from "~/shared/components/learning-content";
-import { checkPracticeAnswer } from "~/features/lesson-practice";
+import { useAccountSession } from "~/features/account";
+import {
+  checkPracticeAnswer,
+  createCheckAndSaveAnswer,
+} from "~/features/lesson-practice";
 import { ReadingPositionIndicator } from "~/features/reading-position";
 import { LessonOutline } from "~/widgets/lesson-outline";
 import { LessonPracticeFlow } from "~/widgets/lesson-practice-flow";
@@ -23,6 +27,7 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
   props,
 ) => {
   const router = useRouter();
+  const session = useAccountSession();
   const articleRef = useRef<HTMLElement>(null);
   const publishedLessons = getCourseLessons(props.course).filter(
     (lesson) => lesson.status === "published",
@@ -96,7 +101,16 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
               onRefresh={() => router.invalidate()}
               tasks={props.tasks}
               lessonId={props.lesson.id}
-              checkAnswer={checkPracticeAnswer}
+              contextKind="course_lesson"
+              checkAnswer={
+                session.account
+                  ? createCheckAndSaveAnswer(
+                      "course_lesson",
+                      props.lesson.id,
+                      session.csrfToken,
+                    )
+                  : checkPracticeAnswer
+              }
             />
           </section>
 

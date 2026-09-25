@@ -32,7 +32,7 @@ export const TopicCatalogCard: React.FC<Props> = (props) => (
         {topicCatalog.formatTaskNumbers(props.entry.taskNumbers)}
       </span>
     </span>
-    <TopicCatalogIllustration topicId={props.entry.id} />
+    <TopicCatalogIllustration illustration={props.entry.illustration} />
     <div className={styles.cardContent}>
       <Typography.Title order={2} className={styles.cardTitle}>
         {props.entry.status === "published" ? (

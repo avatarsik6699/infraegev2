@@ -18,7 +18,13 @@ export const CourseOverviewPage: React.FC<CourseOverviewPageTypes.Props> = (
       <PageContainer component="main" measure="wide" className={styles.root}>
         <div className={styles.courseSummary} data-course-summary>
           <CourseOverviewIntro course={props.course} overview={overview} />
-          <CourseOverviewProgress progress={overview.progress} />
+          <CourseOverviewProgress
+            progress={overview.progress}
+            guestTotal={props.practiceSummary?.reduce(
+              (total, lesson) => total + lesson.tasks.length,
+              0,
+            )}
+          />
         </div>
         <CourseOverviewCurriculum
           courseRouteSlug={props.course.routeSlug}

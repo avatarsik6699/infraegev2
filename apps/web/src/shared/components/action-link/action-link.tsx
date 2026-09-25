@@ -1,5 +1,5 @@
 import { createLink } from "@tanstack/react-router";
-import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, LogIn } from "lucide-react";
 import { forwardRef } from "react";
 import { cssUtils } from "~/shared/lib/css-utils";
 import type { ActionLinkTypes } from "./action-link.types";
@@ -10,7 +10,6 @@ const ActionLinkRoot = forwardRef<HTMLAnchorElement, ActionLinkTypes.RootProps>(
     {
       hierarchy = "secondary",
       presentation = "action",
-      hoverEffect,
       children,
       className,
       ariaLabel,
@@ -30,7 +29,6 @@ const ActionLinkRoot = forwardRef<HTMLAnchorElement, ActionLinkTypes.RootProps>(
         data-hierarchy={hierarchy}
         data-presentation={presentation}
         data-icon={icon}
-        data-hover-effect={hoverEffect}
         className={cssUtils.cx(
           styles.root,
           presentation === "button" ? styles.button : undefined,
@@ -50,6 +48,9 @@ const ActionLinkRoot = forwardRef<HTMLAnchorElement, ActionLinkTypes.RootProps>(
               (presentation === "inline" || presentation === "action"))) && (
             <ArrowRight className={styles.icon} aria-hidden="true" />
           )}
+        {icon === "login" ? (
+          <LogIn className={styles.icon} aria-hidden="true" />
+        ) : null}
         {linkProps.target === "_blank" && (
           <span className={styles.visuallyHidden}>
             {" "}

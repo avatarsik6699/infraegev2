@@ -32,6 +32,11 @@ const definitions: readonly TopicCatalogTypes.Definition[] = [
   },
   {
     id: "preobrazovanie-zapisey-chisel",
+    illustration: {
+      src: "/images/topics/number-record.svg",
+      width: 144,
+      height: 88,
+    },
     taskNumbers: [5],
     title: "Преобразование записей чисел",
     summary:
@@ -107,6 +112,11 @@ const definitions: readonly TopicCatalogTypes.Definition[] = [
   },
   {
     id: "rekursiya",
+    illustration: {
+      src: "/images/topics/recursion.svg",
+      width: 144,
+      height: 88,
+    },
     taskNumbers: [16],
     title: "Рекурсивные алгоритмы",
     summary:

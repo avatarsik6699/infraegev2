@@ -6,10 +6,10 @@ test("numbered pages, filters and empty/invalid selections", async ({
   await minimalPage.expectCatalog();
 });
 
-test("accepted progress survives reload while drafts remain transient", async ({
+test("guest correctness feedback and drafts remain transient", async ({
   minimalPage,
 }) => {
-  await minimalPage.expectSolveAndProgress();
+  await minimalPage.expectGuestSolveHasTransientFeedback();
 });
 
 test("failed checks preserve input and support explicit retry", async ({

@@ -1,0 +1,19 @@
+.root {
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-brand-ink) 8%, transparent);
+  color: var(--color-brand-ink);
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  line-height: 1;
+}
+.root[data-size="large"] {
+  width: 3.75rem;
+  height: 3.75rem;
+  font-size: var(--text-2xl);
+}

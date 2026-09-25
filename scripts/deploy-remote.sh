@@ -58,7 +58,7 @@ run_compose() {
 source "$release_dir/scripts/lib/application-db-release.sh"
 # Change 122 adopts a separate database. Transfer/import/restore is an explicit operator step.
 # A normal deploy must never silently replace the installed production data volume.
-application_schema_preflight "$release_dir" "$previous_release" /etc/infraege/minimal-bank-ready
+application_schema_preflight "$release_dir" "$previous_release" /etc/infraege/accounts-schema-ready
 trap 'application_deploy_exit "$?" "$previous_release"' EXIT
 trap 'exit 130' INT
 trap 'exit 143' TERM
@@ -79,6 +79,7 @@ fi
 # Prepared DB must already contain the reviewed bank; deploy never reimports content.
 run_compose "$release_dir" "$DEPLOY_SHA" up --detach --wait --wait-timeout 60 postgres
 DB_ENV=prod DB_PROJECT=infraege bash "$release_dir/scripts/backup.sh" "$env_file"
+run_compose "$release_dir" "$DEPLOY_SHA" run --rm --no-deps db-provision
 run_compose "$release_dir" "$DEPLOY_SHA" run --rm --no-deps db-migrate
 run_compose "$release_dir" "$DEPLOY_SHA" up --detach --remove-orphans --wait --wait-timeout 180
 ln -sfn "$release_dir" "$root/database-current"

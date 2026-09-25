@@ -8,9 +8,9 @@ import unittest
 import uuid
 from dataclasses import asdict
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
-from scripts.lib.application_db import bundle, recovery
+from scripts.lib.application_db import bundle, recovery, sql
 from scripts.lib.application_db.postgres import Database, docker
 
 
@@ -128,6 +128,20 @@ class BundleTests(unittest.TestCase):
                 )
                 self.assertTrue(run.call_args.kwargs["check"])
                 self.assertEqual(storage.stat().st_mode & 0o777, 0o700)
+
+    def test_account_restore_rejects_missing_grants_or_progress_contract(self):
+        restored = Mock()
+        restored.query.side_effect = ["140_01", "f"]
+        with (
+            patch.object(recovery, "require_disposable"),
+            patch.object(recovery, "docker", return_value="0"),
+            patch.object(recovery, "Database", return_value=restored),
+            patch.object(recovery.subprocess, "run"),
+            patch.object(recovery, "schema_version", return_value="140_01"),
+        ):
+            with self.assertRaisesRegex(ValueError, "account schema or application grants"):
+                recovery.restore(self.root, "isolated-restore")
+        restored.query.assert_called_once_with(sql.ACCOUNT_RESTORE)
 
 
 @unittest.skipUnless(

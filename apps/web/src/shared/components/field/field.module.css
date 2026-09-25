@@ -10,6 +10,12 @@
   font-weight: 600;
 }
 
+.labelRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-0-5);
+}
+
 .visuallyHidden {
   composes: visuallyHidden from "../../styles/patterns.module.css";
 }
@@ -51,6 +57,20 @@
 }
 .controlGroup > button {
   flex-shrink: 0;
+}
+
+.controlGroup svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex: none;
+}
+
+.controlGroup > svg {
+  margin-inline: var(--space-1);
+}
+
+.controlGroup:has(input[data-solved])::after {
+  border-color: var(--color-success);
 }
 
 .controlGroup::after {

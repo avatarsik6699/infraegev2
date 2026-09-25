@@ -27,7 +27,7 @@ export function useLessonsProgress(
         versions.map((lesson) => [
           lesson.id,
           currentLessonProgress(
-            lessons[lesson.id] ?? { solvedTaskIds: [], acceptedAnswers: {} },
+            lessons[lesson.id] ?? { solvedTaskIds: [] },
             lesson.tasks,
           ),
         ]),

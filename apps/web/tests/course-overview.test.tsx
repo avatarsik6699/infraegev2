@@ -14,6 +14,26 @@ import { courseOverviewModel } from "~/pages/course-overview/model/course-overvi
 import type { CourseOverviewPageTypes } from "~/pages/course-overview/course-overview-page.types";
 import { courseProgress, type CourseTypes } from "~/entities/course";
 
+const progressFixture = vi.hoisted(() => ({
+  results: [] as {
+    context_kind: "course_lesson";
+    context_id: string;
+    task_id: string;
+    solution_revision: number;
+  }[],
+}));
+const sessionFixture = vi.hoisted(() => ({
+  account: { id: "member" } as { id: string } | null,
+  status: "ready" as "loading" | "ready" | "error",
+}));
+vi.mock("~/features/account", () => ({
+  useAccountSession: () => ({
+    account: sessionFixture.account,
+    status: sessionFixture.status,
+    csrfToken: "test",
+  }),
+}));
+
 vi.mock(
   "@tanstack/react-router",
   async (
@@ -42,6 +62,7 @@ vi.mock(
 
     return {
       ...actual,
+      useRouterState: () => "/courses/python",
       createLink:
         (Component: React.ComponentType<React.ComponentProps<"a">>) =>
         ({
@@ -128,43 +149,46 @@ const props: CourseOverviewPageTypes.Props = {
     })),
   })),
 };
-const model = (saved = {}, hydrated = true, input = props) =>
-  courseOverviewModel.calculate(input, saved, hydrated);
+const model = (saved = {}, hydrated = true, input = props, guest = false) =>
+  courseOverviewModel.calculate(input, saved, hydrated, false, guest);
 const solved = (id: string, count: number) => ({
   solvedTaskIds: Array.from(
     { length: count },
     (_, index) => `${id}-${String(index)}`,
   ),
 });
-const overview = (input = props) => (
-  <LessonProgressProvider>
+const overview = (input = props, accountId: string | undefined = "member") => (
+  <LessonProgressProvider accountId={accountId}>
     <CourseOverviewPage {...input} />
   </LessonProgressProvider>
 );
 const seed = (count: number, revision = 2) => {
-  localStorage.setItem(
-    "infraege:lesson-progress:v2",
-    JSON.stringify({
-      version: 1,
-      data: {
-        lessons: {
-          first: {
-            ...solved("first", count),
-            acceptedAnswers: {},
-            solvedRevisions: Object.fromEntries(
-              solved("first", count).solvedTaskIds.map((id) => [
-                id,
-                { [String(revision)]: "5" },
-              ]),
-            ),
-          },
-        },
-      },
+  progressFixture.results = solved("first", count).solvedTaskIds.map(
+    (taskId) => ({
+      context_kind: "course_lesson" as const,
+      context_id: "first",
+      task_id: taskId,
+      solution_revision: revision,
     }),
   );
 };
-beforeEach(() => localStorage.clear());
-afterEach(cleanup);
+beforeEach(() => {
+  progressFixture.results = [];
+  sessionFixture.account = { id: "member" };
+  sessionFixture.status = "ready";
+  vi.stubGlobal(
+    "fetch",
+    vi
+      .fn()
+      .mockImplementation(() =>
+        Promise.resolve(Response.json({ results: progressFixture.results })),
+      ),
+  );
+});
+afterEach(() => {
+  cleanup();
+  vi.unstubAllGlobals();
+});
 
 describe("course overview model", () => {
   it("starts at the first lesson and exposes real counts", () => {
@@ -263,6 +287,39 @@ describe("course overview model", () => {
     });
     expect(model({}, false).action?.label).toBe("Открыть первый урок");
   });
+  it("renders guest lesson and module totals as zero without a continuation", () => {
+    const result = model({}, false, props, true);
+    expect(result.progress).toEqual({
+      status: "ready",
+      solved: 0,
+      total: 15,
+      mastered: false,
+    });
+    expect(result.action).toMatchObject({
+      label: "Начать курс",
+      continuing: false,
+      lesson: { id: "first" },
+    });
+    expect(result.modules.map((module) => module.status)).toEqual([
+      "Не начат",
+      "Не начат",
+    ]);
+    expect(result.modules[0]?.lessons[0]?.progress).toEqual({
+      status: "ready",
+      solved: 0,
+      total: 5,
+      mastered: false,
+    });
+  });
+  it("keeps loading and unavailable lesson rows neutral outside the ready guest state", () => {
+    expect(model({}, false).modules[0]?.lessons[0]?.progress).toEqual({
+      status: "loading",
+    });
+    expect(
+      courseOverviewModel.calculate(props, {}, false, true).modules[0]
+        ?.lessons[0]?.progress,
+    ).toEqual({ status: "unavailable" });
+  });
   it("uses curriculum order rather than definition or summary order", () => {
     expect(
       model({}, true, {
@@ -303,6 +360,27 @@ describe("course overview model", () => {
 });
 
 describe("course overview UI", () => {
+  it.each(["loading", "error"] as const)(
+    "keeps %s session rows neutral even though the guest registry starts empty",
+    (status) => {
+      sessionFixture.account = null;
+      sessionFixture.status = status;
+      render(overview(props, undefined));
+      expect(screen.getAllByText("— из —")).toHaveLength(4);
+      expect(screen.queryByText("Практика: 0 из 5")).toBeNull();
+    },
+  );
+  it("renders ready guest rows with public zero totals", () => {
+    sessionFixture.account = null;
+    render(overview(props, undefined));
+    expect(screen.getAllByText("0 из 5")).toHaveLength(3);
+    expect(
+      screen.queryByText("Ответы проверяются без сохранения прогресса"),
+    ).toBeNull();
+    expect(screen.getAllByText(/Не начат/)).toHaveLength(2);
+    expect(screen.getByRole("link", { name: "Начать курс" })).not.toBeNull();
+    expect(screen.queryByRole("link", { name: /Продолжить:/ })).toBeNull();
+  });
   it("renders a usable native SSR curriculum with the same initial disclosure", () => {
     const html = renderToString(overview());
     const root = document.createElement("div");
@@ -374,11 +452,13 @@ describe("course overview UI", () => {
       "0",
     );
   });
-  it("retains lesson navigation when progress is unavailable", () => {
+  it("retains lesson navigation when progress is unavailable", async () => {
     render(overview({ ...props, practiceSummary: null }));
     expect(screen.queryByRole("progressbar")).toBeNull();
-    expect(screen.getByRole("status").textContent).toBe(
-      "Прогресс временно недоступен",
+    await waitFor(() =>
+      expect(screen.getByRole("status").textContent).toBe(
+        "Прогресс временно недоступен",
+      ),
     );
     expect(
       screen

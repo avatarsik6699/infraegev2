@@ -33,10 +33,19 @@ class RequestContextMiddleware(BaseHTTPMiddleware):
         response = await call_next(request)
         duration_ms = round((time.monotonic() - start) * 1000, 2)
 
+        path = request.url.path
+        if (
+            path.startswith("/api/auth/")
+            or path == "/api/progress"
+            or path.startswith("/api/progress/")
+            or (path.startswith("/api/tasks/") and path.endswith("/check-and-save"))
+        ):
+            response.headers["Cache-Control"] = "no-store"
+
         logger.info(
             "request.completed",
             method=request.method,
-            path=request.url.path,
+            path=path,
             status_code=response.status_code,
             duration_ms=duration_ms,
         )

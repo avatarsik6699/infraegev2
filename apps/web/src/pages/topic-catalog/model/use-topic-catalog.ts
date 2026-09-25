@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { topicCatalog } from "~/entities/topic-catalog";
 import {
   useLessonProgressHydrated,
+  useLessonProgressStatus,
   useLessonsProgress,
 } from "~/features/lesson-progress";
 import { getTopicPracticeSummary } from "../api/get-topic-practice-summary";
@@ -20,6 +21,7 @@ export const useTopicCatalog = () => {
     useState<TopicCatalogPageTypes.LoadState>("loading");
   const [attempt, setAttempt] = useState(0);
   const hydrated = useLessonProgressHydrated();
+  const progressStatus = useLessonProgressStatus();
   const lessons = useMemo(
     () => summary.filter((topic) => publishedIds.includes(topic.id)),
     [summary],
@@ -43,9 +45,19 @@ export const useTopicCatalog = () => {
     [attempt],
   );
 
+  const hasVisualProgress =
+    loadState === "ready" && (hydrated || progressStatus === "guest");
   const ready = hydrated && loadState === "ready";
-  const aggregate = topicCatalogModel.aggregate(ready ? lessons : [], progress);
-  const incomplete = ready && publishedIds.some((id) => !aggregate.byId[id]);
+  const aggregate = topicCatalogModel.aggregate(
+    hasVisualProgress ? lessons : [],
+    progress,
+  );
+  const incomplete =
+    hasVisualProgress && publishedIds.some((id) => !aggregate.byId[id]);
+  let effectiveLoadState: TopicCatalogPageTypes.LoadState = loadState;
+  if (progressStatus === "error") effectiveLoadState = "error";
+  else if (loadState === "ready" && !hydrated && progressStatus !== "guest")
+    effectiveLoadState = "loading";
   return {
     totalTopics: topicCatalog.entries.length,
     publishedTopics: publishedIds.length,
@@ -55,10 +67,11 @@ export const useTopicCatalog = () => {
     setFilter,
     byId: aggregate.byId,
     ready,
-    loadState:
-      loadState === "ready" && !hydrated ? ("loading" as const) : loadState,
-    totalSolved: ready && !incomplete ? aggregate.totalSolved : null,
-    unavailable: loadState === "error" || incomplete,
+    loadState: effectiveLoadState,
+    totalSolved:
+      hasVisualProgress && !incomplete ? aggregate.totalSolved : null,
+    unavailable:
+      loadState === "error" || progressStatus === "error" || incomplete,
     entries: topicCatalog.entries.filter((entry) =>
       topicCatalogModel.matches(entry, query, filter, aggregate.byId[entry.id]),
     ),

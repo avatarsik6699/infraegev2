@@ -64,6 +64,24 @@ services:
     environment:
       - APP_ENV=${APP_ENV:-production}
       - DATABASE_URL=postgresql://infraege_runtime:${DB_RUNTIME_PASSWORD:?DB_RUNTIME_PASSWORD is required}@postgres:5432/${POSTGRES_DB:-infraege}
+      - ACCOUNT_DATABASE_URL=postgresql://infraege_app:${DB_APP_PASSWORD:?DB_APP_PASSWORD is required}@postgres:5432/${POSTGRES_DB:-infraege}
+      - AUTH_CSRF_SECRET=${AUTH_CSRF_SECRET:?AUTH_CSRF_SECRET is required}
+      - PUBLIC_ORIGIN=${PUBLIC_ORIGIN:-http://localhost:8080}
+      - SMTP_HOST=${SMTP_HOST:-}
+      - SMTP_PORT=${SMTP_PORT:-587}
+      - SMTP_USERNAME=${SMTP_USERNAME:-}
+      - SMTP_PASSWORD=${SMTP_PASSWORD:-}
+      - MAIL_FROM=${MAIL_FROM:-}
+      - VK_CLIENT_ID=${VK_CLIENT_ID:-}
+      - VK_CLIENT_SECRET=${VK_CLIENT_SECRET:-}
+      - VK_APP_ID=${VK_APP_ID:-}
+      - VK_ENABLED=${VK_ENABLED:-false}
+      - YANDEX_CLIENT_ID=${YANDEX_CLIENT_ID:-}
+      - YANDEX_CLIENT_SECRET=${YANDEX_CLIENT_SECRET:-}
+      - YANDEX_ENABLED=${YANDEX_ENABLED:-false}
+      - TELEGRAM_CLIENT_ID=${TELEGRAM_CLIENT_ID:-}
+      - TELEGRAM_CLIENT_SECRET=${TELEGRAM_CLIENT_SECRET:-}
+      - TELEGRAM_ENABLED=${TELEGRAM_ENABLED:-false}
       - DEPLOY_SHA=${DEPLOY_SHA:-development}
       - TASK_FILES_DIR=/task-files
     volumes:
@@ -103,6 +121,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      db-provision:
+        condition: service_completed_successfully
     restart: "no"
     <<: *json-file-logging
 
@@ -118,6 +138,7 @@ services:
       - DB_IMPORT_PASSWORD=${DB_IMPORT_PASSWORD:?DB_IMPORT_PASSWORD is required}
       - DB_MIGRATION_PASSWORD=${DB_MIGRATION_PASSWORD:?DB_MIGRATION_PASSWORD is required}
       - DB_BACKUP_PASSWORD=${DB_BACKUP_PASSWORD:?DB_BACKUP_PASSWORD is required}
+      - DB_APP_PASSWORD=${DB_APP_PASSWORD:?DB_APP_PASSWORD is required}
     volumes:
       - postgres122-data:/var/lib/postgresql
       - ../scripts/db-provision-roles.sh:/docker-entrypoint-initdb.d/10-application-roles.sh:ro
@@ -128,6 +149,30 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    <<: *json-file-logging
+
+  # Re-applies grants for existing volumes before migrations. The initdb hook above only runs
+  # on a fresh volume, while account writes require the additive infraege_app role on upgrades.
+  db-provision:
+    image: postgres:18.6-alpine3.24@sha256:d3e1620b530c944afa6e887d22eb899824da68e19c52024bf98f5220c88a65b2
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-infraege}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+      - PGHOST=postgres
+      - PGPASSWORD=${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+      - POSTGRES_DB=${POSTGRES_DB:-infraege}
+      - DB_RUNTIME_PASSWORD=${DB_RUNTIME_PASSWORD:?DB_RUNTIME_PASSWORD is required}
+      - DB_IMPORT_PASSWORD=${DB_IMPORT_PASSWORD:?DB_IMPORT_PASSWORD is required}
+      - DB_MIGRATION_PASSWORD=${DB_MIGRATION_PASSWORD:?DB_MIGRATION_PASSWORD is required}
+      - DB_BACKUP_PASSWORD=${DB_BACKUP_PASSWORD:?DB_BACKUP_PASSWORD is required}
+      - DB_APP_PASSWORD=${DB_APP_PASSWORD:?DB_APP_PASSWORD is required}
+    volumes:
+      - ../scripts/db-provision-roles.sh:/db-provision-roles.sh:ro
+    entrypoint: ["/db-provision-roles.sh"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
     <<: *json-file-logging
 
 volumes:

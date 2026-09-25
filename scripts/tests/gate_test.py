@@ -235,6 +235,7 @@ class GateTest(unittest.TestCase):
             "MIGRATION_DATABASE_URL": "postgresql://infraege_migration:secret@127.0.0.1:15432/infraege",
             "IMPORT_DATABASE_URL": "postgresql://infraege_import:secret@127.0.0.1:15432/infraege",
             "DATABASE_URL": "postgresql://infraege_runtime:secret@127.0.0.1:15432/infraege",
+            "ACCOUNT_DATABASE_URL": "postgresql://infraege_app:secret@127.0.0.1:15432/infraege",
         }
         with patch.dict(os.environ, environment):
             plan = core.build_plan(self.repo, "release", self.base, prepared_environment=True)
@@ -255,6 +256,7 @@ class GateTest(unittest.TestCase):
             "MIGRATION_DATABASE_URL": "postgresql://infraege_migration:secret@db:5432/infraege",
             "IMPORT_DATABASE_URL": "postgresql://infraege_import:secret@db:5432/infraege",
             "DATABASE_URL": "postgresql://infraege_runtime:secret@db:5432/infraege",
+            "ACCOUNT_DATABASE_URL": "postgresql://infraege_app:secret@db:5432/infraege",
         }
         with patch.dict(os.environ, environment):
             plan = core.build_plan(self.repo, "full", self.base, prepared_environment=True)

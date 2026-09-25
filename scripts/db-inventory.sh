@@ -31,7 +31,7 @@ SELECT nspname, pg_get_userbyid(nspowner) AS owner, nspacl
 FROM pg_namespace WHERE nspname NOT LIKE 'pg_%' AND nspname <> 'information_schema';
 SELECT rolname, rolsuper, rolcreatedb, rolcreaterole, rolcanlogin
 FROM pg_roles WHERE rolname = current_user OR rolname IN
-('infraege_runtime', 'infraege_import', 'infraege_migration', 'infraege_backup');
+('infraege_runtime', 'infraege_import', 'infraege_migration', 'infraege_backup', 'infraege_app');
 SELECT schemaname, tablename, tableowner FROM pg_tables
 WHERE schemaname NOT IN ('pg_catalog', 'information_schema');
 SELECT extname, extversion FROM pg_extension;

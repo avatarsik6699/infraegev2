@@ -24,27 +24,20 @@ export class TopicCatalogPage {
     await this.page.route("**/api/topics/practice-summary", (route) =>
       route.fulfill({ json: summary }),
     );
-    await this.page.addInitScript(() => {
-      localStorage.setItem(
-        "infraege:lesson-progress:v2",
-        JSON.stringify({
-          version: 1,
-          data: {
-            lessons: {
-              rekursiya: {
-                solvedTaskIds: ["r1", "r2", "gone"],
-                acceptedAnswers: {},
-                solvedRevisions: {
-                  r1: { "1": "42" },
-                  r2: { "1": "12" },
-                  gone: { "1": "1" },
-                },
-              },
+    await this.page.route("**/api/progress", (route) =>
+      route.fulfill({
+        json: {
+          results: [
+            {
+              context_kind: "topic_lesson",
+              context_id: "rekursiya",
+              task_id: "r1",
+              solution_revision: 1,
             },
-          },
-        }),
-      );
-    });
+          ],
+        },
+      }),
+    );
     await this.page.goto("/ege");
     await expect(this.page.getByText("Решено 1 из 2")).toBeVisible();
     await expect(this.page.getByText("Решено задач в темах: 1")).toBeVisible();
@@ -127,7 +120,7 @@ export class TopicCatalogPage {
         await data;
         return route.fulfill({ json: summary });
       }
-      return route.continue();
+      return route.fallback();
     });
     try {
       await this.page.goto("/ege", { waitUntil: "commit" });
@@ -200,7 +193,7 @@ export class TopicCatalogPage {
     await this.page.goto("/ege");
     await expect(this.page.locator("[data-topic-card]")).toHaveCount(25);
     await expect(
-      this.page.locator('[data-topic-status="published"] a'),
+      this.page.locator('[data-topic-status="published"] h2 a'),
     ).toHaveCount(2);
     await expect(
       this.page.locator('[data-topic-status="planned"] a'),

@@ -29,6 +29,17 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
 
 ## Gotcha Log
 
+### Client-handled credential forms can leak passwords through native GET submission
+
+- **Symptoms:** a sign-in, registration or recovery form looks protected when JavaScript runs,
+  but submitting before hydration or with scripts disabled places its named password field in
+  the page URL.
+- **Cause:** an HTML form without `method` defaults to GET at its current URL; a React
+  `onSubmit` handler cannot prevent a submission that runs before hydration.
+- **Fix:** render `method="post"` in SSR for every credential-bearing form, even when enhanced
+  JavaScript owns the normal request. Keep `preventDefault()` in the enhanced handler and test
+  a real no-JavaScript submission without a credential query string.
+
 ### Hydration-only control swaps cause catalog layout shifts
 
 - **Symptoms:** a tall native select flashes before the compact combobox, rows move and controls
@@ -326,6 +337,19 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
   with stdin closed, and verify the public SHA in an independent GitHub step. Resume an interrupted
   release only after inspecting the live DB, volumes and previous application identity.
 
+### First account-schema deploy cannot attest itself after migration
+
+- **Symptoms**: `140_01` deploy preflight rejects the candidate because
+  `/etc/infraege/accounts-schema-ready` is absent, while an older runbook suggests creating it
+  from a backup taken only after production migration.
+- **Cause**: the attestation must authorize migration, so post-migration restore evidence cannot
+  satisfy the pre-migration gate. A routine restore of a `122_01` bundle also does not test the
+  account schema.
+- **Fix**: after exact-SHA image publication, run the dedicated cutover rehearsal on a fresh
+  protected production backup: migrate one networkless disposable copy, back it up, restore a
+  second copy and verify synthetic account/session/progress facts. Only then write the exact-SHA
+  root-owned proof; never migrate the live database or bypass preflight to break the cycle.
+
 ### Public privacy text does not complete formal legal review
 
 - **Symptoms**: published contacts or an older archive are mistaken for completed specialist review.
@@ -437,6 +461,19 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
   `max_by(.time)` while retaining its full immutable ID. Do not infer it from array position or
   deprecated `short_id`.
 
+### A self-validated extracted bundle is not cutover provenance
+
+- **Symptoms:** a rehearsal accepts a plausible directory with `metadata.json` and checksums, but
+  the operator cannot show that it came from the fresh encrypted production backup selected for
+  this candidate.
+- **Root cause:** bundle checksums prove only consistency with files in that directory; they do
+  not authenticate its origin, nor bind a nearby source checkout to the candidate image.
+- **Fix:** pass the full 64-character Restic snapshot ID to the cutover command. It must use
+  `restic cat snapshot` and `restic restore` with that exact ID, then require exactly one restored
+  `122_01` production bundle. Run only from a clean checkout at the candidate SHA and require the
+  SHA tag's matching immutable API digest. Never replace this with `latest`, a prefix, or a
+  manually extracted bundle.
+
 ### Windows-hosted browser MCP can interpret WSL screenshot paths as a C: path
 
 - **Symptoms:** screenshot saving rejects `/home/...` with `Access denied` and reports a canonical
@@ -509,6 +546,8 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
   their cascade order.
 - **Fix:** qualify the owning page override with the existing `[data-measure]` attribute. Keep
   the shared container defaults and the page's intended spacing; do not weaken CLS assertions.
+  Check every spacing token in the override: an undefined custom property inside `clamp()`
+  invalidates the whole declaration and can silently leave the form flush against the header.
 - **Verification:** all eight delayed/failed asset EGE scenarios pass with zero reported shifts.
 
 ### Third-party scripts: use a React `<script async>` resource, not a `head()` script asset

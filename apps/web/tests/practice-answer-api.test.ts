@@ -1,5 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
-import { checkPracticeAnswer } from "~/features/lesson-practice/api/check-practice-answer";
+import {
+  checkPracticeAnswer,
+  createCheckAndSaveAnswer,
+} from "~/features/lesson-practice/api/check-practice-answer";
 
 const jsonResponse = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), {
@@ -49,6 +52,36 @@ describe("practice answer API", () => {
     await expect(checkPracticeAnswer("task-1", "42", 1)).rejects.toMatchObject({
       name: "ApiError",
       kind: "protocol",
+    });
+  });
+
+  it("uses the canonical standalone context when saving an account answer", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      jsonResponse({
+        correct: true,
+        saved: true,
+        solution_revision: 1,
+        explanation: [{ type: "text", data: { markdown: "Разбор" } }],
+      }),
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(
+      createCheckAndSaveAnswer("standalone", "standalone", "csrf")(
+        "task-1",
+        "42",
+        1,
+      ),
+    ).resolves.toEqual({
+      correct: true,
+      saved: true,
+      explanation: "Разбор",
+    });
+
+    const request = fetchMock.mock.calls[0]?.[0] as Request;
+    await expect(request.json()).resolves.toMatchObject({
+      context_kind: "standalone",
+      context_id: "standalone",
     });
   });
 

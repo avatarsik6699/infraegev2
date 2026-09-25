@@ -21,10 +21,10 @@ test("network failure retains input and supports retry", async ({
   await practiceCutoverPage.expectFailedCheckPreservesInput();
 });
 
-test("legacy Python progress agrees in lesson, overview and catalog", async ({
+test("legacy browser progress does not impersonate account progress", async ({
   practiceCutoverPage,
 }) => {
-  await practiceCutoverPage.expectPythonAndCourseProgress();
+  await practiceCutoverPage.expectLegacyBrowserProgressIsIgnored();
 });
 
 test("mobile no-JS retains practice and hides checker data", async ({

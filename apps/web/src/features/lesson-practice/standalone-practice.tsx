@@ -74,9 +74,7 @@ export const StandalonePractice: React.FC<
           }}
         />
       </PracticeCatalogHelp>
-      {props.layout !== "compact" && (
-        <PracticeTaskFeedback feedback="" state={model.stateFor(task.id)} />
-      )}
+      <PracticeTaskFeedback feedback="" state={model.stateFor(task.id)} />
       {props.layout !== "compact" && (
         <PracticeTaskHelp
           key={String(model.isSolved(task.id))}

@@ -9,6 +9,11 @@ export const EmptyState: React.FC<EmptyStateTypes.Props> = (props) => {
 
   return (
     <section className={styles.root} aria-labelledby={headingId}>
+      {props.icon ? (
+        <span className={styles.icon} aria-hidden="true">
+          {props.icon}
+        </span>
+      ) : null}
       <Typography.Title order={props.headingOrder ?? 2} id={headingId}>
         {props.title}
       </Typography.Title>

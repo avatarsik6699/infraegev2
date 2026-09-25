@@ -2,20 +2,17 @@ import type { LessonProgressTypes } from "../lesson-progress.types";
 
 export const emptyLessonProgress: LessonProgressTypes.Snapshot = {
   solvedTaskIds: [],
-  acceptedAnswers: {},
 };
 
 export function markTaskSolved(
   current: LessonProgressTypes.Snapshot,
   taskId: string,
-  acceptedAnswer: string,
   solutionRevision = 1,
 ): LessonProgressTypes.Snapshot {
   const alreadySolved = current.solvedTaskIds.includes(taskId);
   if (
     alreadySolved &&
-    current.solvedRevisions?.[taskId]?.[String(solutionRevision)] ===
-      acceptedAnswer
+    current.solvedRevisions?.[taskId]?.[String(solutionRevision)] === true
   )
     return current;
 
@@ -24,10 +21,9 @@ export function markTaskSolved(
       ...current.solvedRevisions,
       [taskId]: {
         ...current.solvedRevisions?.[taskId],
-        [String(solutionRevision)]: acceptedAnswer,
+        [String(solutionRevision)]: true,
       },
     },
-    acceptedAnswers: { ...current.acceptedAnswers, [taskId]: acceptedAnswer },
     solvedTaskIds: alreadySolved
       ? current.solvedTaskIds
       : [...current.solvedTaskIds, taskId],
@@ -53,14 +49,6 @@ export function currentLessonProgress(
       )
       .map((task) => task.id),
     solvedTaskIds: solved.map((task) => task.id),
-    acceptedAnswers: Object.fromEntries(
-      solved.map((task) => [
-        task.id,
-        progress.solvedRevisions?.[task.id]?.[
-          String(task.solutionRevision ?? 1)
-        ] ?? "",
-      ]),
-    ),
     solvedRevisions: progress.solvedRevisions,
   };
 }

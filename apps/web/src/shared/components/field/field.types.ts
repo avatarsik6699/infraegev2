@@ -6,6 +6,7 @@ export namespace FieldTypes {
     endAdornment?: React.ReactNode;
     labelVisibility?: "visible" | "sr-only";
     description?: string;
+    help?: React.ReactNode;
     error?: string;
   };
 }

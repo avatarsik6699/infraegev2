@@ -7,8 +7,9 @@ set -euo pipefail
 : "${DB_IMPORT_PASSWORD:?import password required}"
 : "${DB_MIGRATION_PASSWORD:?migration password required}"
 : "${DB_BACKUP_PASSWORD:?backup password required}"
+: "${DB_APP_PASSWORD:?application write password required}"
 [[ $POSTGRES_DB == infraege ]] || { echo 'unexpected application database' >&2; exit 64; }
-for credential in DB_RUNTIME_PASSWORD DB_IMPORT_PASSWORD DB_MIGRATION_PASSWORD DB_BACKUP_PASSWORD; do
+for credential in DB_RUNTIME_PASSWORD DB_IMPORT_PASSWORD DB_MIGRATION_PASSWORD DB_BACKUP_PASSWORD DB_APP_PASSWORD; do
   [[ ${!credential} =~ ^[A-Za-z0-9_-]{16,}$ ]] || {
     echo 'application passwords require at least 16 URL-safe characters' >&2; exit 64;
   }
@@ -17,12 +18,16 @@ done
    $DB_IMPORT_PASSWORD != "$POSTGRES_PASSWORD" &&
    $DB_MIGRATION_PASSWORD != "$POSTGRES_PASSWORD" &&
    $DB_BACKUP_PASSWORD != "$POSTGRES_PASSWORD" &&
+   $DB_APP_PASSWORD != "$POSTGRES_PASSWORD" &&
    $DB_RUNTIME_PASSWORD != "$DB_IMPORT_PASSWORD" &&
    $DB_RUNTIME_PASSWORD != "$DB_MIGRATION_PASSWORD" &&
    $DB_RUNTIME_PASSWORD != "$DB_BACKUP_PASSWORD" &&
    $DB_IMPORT_PASSWORD != "$DB_MIGRATION_PASSWORD" &&
    $DB_IMPORT_PASSWORD != "$DB_BACKUP_PASSWORD" &&
-   $DB_MIGRATION_PASSWORD != "$DB_BACKUP_PASSWORD" ]] || {
+   $DB_IMPORT_PASSWORD != "$DB_APP_PASSWORD" &&
+   $DB_MIGRATION_PASSWORD != "$DB_BACKUP_PASSWORD" &&
+   $DB_MIGRATION_PASSWORD != "$DB_APP_PASSWORD" &&
+   $DB_BACKUP_PASSWORD != "$DB_APP_PASSWORD" ]] || {
   echo 'database credentials must be distinct' >&2; exit 64;
 }
 # Do not expose a failing password-bearing SQL statement in container/deploy logs.
@@ -30,26 +35,38 @@ if ! psql -X -q -U "$POSTGRES_USER" -d "$POSTGRES_DB" -v ON_ERROR_STOP=1 >/dev/n
 BEGIN;
 SELECT pg_advisory_xact_lock(113, 1);
 SELECT format('CREATE ROLE %I NOLOGIN', role_name)
-FROM unnest(ARRAY['infraege_runtime','infraege_import','infraege_migration','infraege_backup']) role_name
+FROM unnest(ARRAY['infraege_runtime','infraege_import','infraege_migration','infraege_backup','infraege_app']) role_name
 WHERE NOT EXISTS (SELECT FROM pg_roles WHERE rolname = role_name) \gexec
 \getenv runtime_password DB_RUNTIME_PASSWORD
 \getenv import_password DB_IMPORT_PASSWORD
 \getenv migration_password DB_MIGRATION_PASSWORD
 \getenv backup_password DB_BACKUP_PASSWORD
+\getenv app_password DB_APP_PASSWORD
 ALTER ROLE infraege_runtime LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS PASSWORD :'runtime_password';
 ALTER ROLE infraege_import LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS PASSWORD :'import_password';
 ALTER ROLE infraege_migration LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS PASSWORD :'migration_password';
 ALTER ROLE infraege_backup LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS PASSWORD :'backup_password';
+ALTER ROLE infraege_app LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS PASSWORD :'app_password';
 REVOKE ALL ON DATABASE infraege FROM PUBLIC;
 REVOKE ALL ON DATABASE postgres FROM PUBLIC;
 REVOKE ALL ON DATABASE template1 FROM PUBLIC;
-GRANT CONNECT ON DATABASE infraege TO infraege_runtime, infraege_import, infraege_migration, infraege_backup;
+GRANT CONNECT ON DATABASE infraege TO infraege_runtime, infraege_import, infraege_migration, infraege_backup, infraege_app;
 REVOKE CREATE ON SCHEMA public FROM PUBLIC;
 CREATE SCHEMA IF NOT EXISTS practice AUTHORIZATION infraege_migration;
-GRANT USAGE ON SCHEMA practice TO infraege_runtime, infraege_import, infraege_backup;
-GRANT SELECT ON ALL TABLES IN SCHEMA practice TO infraege_runtime, infraege_backup;
-GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA practice TO infraege_import;
-GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA practice TO infraege_import;
+GRANT USAGE ON SCHEMA practice TO infraege_runtime, infraege_import, infraege_backup, infraege_app;
+-- Runtime and importer access is deliberately limited to the task bank. Account data is
+-- application-owned; a future additive table must never inherit either role's privileges.
+SELECT format('GRANT SELECT ON TABLE %s TO infraege_runtime', relation)
+FROM unnest(ARRAY['practice.task', 'practice.task_checker', 'practice.lesson_task', 'practice.file_object'])
+  AS relation
+WHERE to_regclass(relation) IS NOT NULL \gexec
+SELECT format('GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE %s TO infraege_import', relation)
+FROM unnest(ARRAY['practice.task', 'practice.task_checker', 'practice.lesson_task', 'practice.file_object'])
+  AS relation
+WHERE to_regclass(relation) IS NOT NULL \gexec
+GRANT SELECT ON ALL TABLES IN SCHEMA practice TO infraege_backup;
+SELECT format('GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA %I TO infraege_import', nspname)
+FROM pg_namespace WHERE nspname = 'practice' \gexec
 GRANT SELECT ON ALL SEQUENCES IN SCHEMA practice TO infraege_backup;
 -- The dump covers the whole application database, including restored legacy schemas.
 -- Grant only local object reads; no cluster-wide role membership or RLS bypass.
@@ -61,9 +78,10 @@ SELECT format('GRANT USAGE ON SCHEMA %I TO infraege_backup', nspname),
 FROM pg_namespace
 WHERE nspname <> 'information_schema' AND nspname !~ '^pg_'
 ORDER BY nspname \gexec
-ALTER DEFAULT PRIVILEGES FOR ROLE infraege_migration IN SCHEMA practice GRANT SELECT ON TABLES TO infraege_runtime, infraege_backup;
-ALTER DEFAULT PRIVILEGES FOR ROLE infraege_migration IN SCHEMA practice GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO infraege_import;
-ALTER DEFAULT PRIVILEGES FOR ROLE infraege_migration IN SCHEMA practice GRANT USAGE, SELECT ON SEQUENCES TO infraege_import;
+ALTER DEFAULT PRIVILEGES FOR ROLE infraege_migration IN SCHEMA practice REVOKE SELECT ON TABLES FROM infraege_runtime;
+ALTER DEFAULT PRIVILEGES FOR ROLE infraege_migration IN SCHEMA practice REVOKE SELECT, INSERT, UPDATE, DELETE ON TABLES FROM infraege_import;
+ALTER DEFAULT PRIVILEGES FOR ROLE infraege_migration IN SCHEMA practice GRANT SELECT ON TABLES TO infraege_backup;
+ALTER DEFAULT PRIVILEGES FOR ROLE infraege_migration IN SCHEMA practice REVOKE USAGE, SELECT ON SEQUENCES FROM infraege_import;
 ALTER DEFAULT PRIVILEGES FOR ROLE infraege_migration IN SCHEMA practice GRANT SELECT ON SEQUENCES TO infraege_backup;
 ALTER DEFAULT PRIVILEGES FOR ROLE infraege_migration REVOKE EXECUTE ON FUNCTIONS FROM PUBLIC;
 DO $$ BEGIN

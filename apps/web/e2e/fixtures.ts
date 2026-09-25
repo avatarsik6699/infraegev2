@@ -1,4 +1,5 @@
 import { CourseCatalogPage } from "./pages/course-catalog.page";
+import { AccountPage } from "./pages/account.page";
 import { MinimalApplicationPage } from "./pages/minimal-application.page";
 import { PracticeCutoverPage } from "./pages/practice-cutover.page";
 import { test as base } from "@playwright/test";
@@ -10,6 +11,8 @@ import { TopicLessonPage } from "./pages/topic-lesson.page";
 import { TopicCatalogPage } from "./pages/topic-catalog.page";
 
 type AppFixtures = {
+  accountPage: AccountPage;
+  noJavaScriptAccountPage: AccountPage;
   courseCatalogPage: CourseCatalogPage;
   noJavaScriptCourseCatalogPage: CourseCatalogPage;
   topicCatalogPage: TopicCatalogPage;
@@ -28,6 +31,21 @@ type AppFixtures = {
 };
 
 export const test = base.extend<AppFixtures>({
+  accountPage: async ({ page }, use) => {
+    await use(new AccountPage(page));
+  },
+  noJavaScriptAccountPage: async ({ baseURL, browser }, use) => {
+    const context = await browser.newContext({
+      baseURL,
+      javaScriptEnabled: false,
+      viewport: { width: 390, height: 844 },
+    });
+    try {
+      await use(new AccountPage(await context.newPage()));
+    } finally {
+      await context.close();
+    }
+  },
   courseCatalogPage: async ({ page }, use) => {
     await use(new CourseCatalogPage(page));
   },
@@ -44,6 +62,21 @@ export const test = base.extend<AppFixtures>({
     }
   },
   topicCatalogPage: async ({ page }, use) => {
+    await page.route("**/api/auth/session", (route) =>
+      route.fulfill({
+        json: {
+          account: {
+            id: "catalog-member",
+            email: "member@example.test",
+            methods: [{ provider: "email", subject_hint: null }],
+          },
+          csrf_token: "test-csrf",
+        },
+      }),
+    );
+    await page.route("**/api/progress", (route) =>
+      route.fulfill({ json: { results: [] } }),
+    );
     await use(new TopicCatalogPage(page));
   },
   noJavaScriptTopicCatalogPage: async ({ baseURL, browser }, use) => {

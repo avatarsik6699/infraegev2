@@ -254,6 +254,12 @@ export default tseslint.config(
     },
   },
   {
+    files: ["src/shared/lib/auth-provider-navigation/browser-adapter.ts"],
+    rules: {
+      "no-restricted-globals": restrictedPlatformGlobals("window"),
+    },
+  },
+  {
     files: ["src/shared/lib/analytics/browser-adapter.ts"],
     rules: {
       "no-restricted-globals": restrictedPlatformGlobals("window", "document"),

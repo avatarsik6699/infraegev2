@@ -166,6 +166,7 @@ def prepared_environment_error() -> str | None:
         ("MIGRATION_DATABASE_URL", "infraege_migration"),
         ("IMPORT_DATABASE_URL", "infraege_import"),
         ("DATABASE_URL", "infraege_runtime"),
+        ("ACCOUNT_DATABASE_URL", "infraege_app"),
     ):
         try:
             parsed = urlparse(os.environ.get(key, ""))

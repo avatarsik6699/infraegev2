@@ -92,7 +92,6 @@ describe("rich practice content", () => {
       <LessonPractice
         tasks={[]}
         solvedTaskIds={[]}
-        acceptedAnswers={{}}
         checkAnswer={vi.fn()}
         onTaskSolved={() => 0}
       />,
@@ -112,7 +111,6 @@ describe("rich practice content", () => {
       <LessonPractice
         tasks={[task]}
         solvedTaskIds={[]}
-        acceptedAnswers={{}}
         checkAnswer={checker}
         onTaskSolved={() => 1}
       />,
@@ -122,13 +120,61 @@ describe("rich practice content", () => {
     }) as HTMLInputElement;
     fireEvent.change(input, { target: { value: "2" } });
     fireEvent.click(screen.getByRole("button", { name: "Проверить" }));
-    await screen.findByRole("alert");
+    await screen.findByRole("status");
     expect(input.value).toBe("2");
-    expect(input.getAttribute("aria-invalid")).not.toBe("true");
+    expect(input.getAttribute("aria-invalid")).toBe("true");
     expect(checker).toHaveBeenCalledTimes(1);
     fireEvent.click(screen.getByRole("button", { name: "Проверить" }));
     await waitFor(() => expect(checker).toHaveBeenCalledTimes(2));
     await waitFor(() => expect(screen.queryByRole("alert")).toBeNull());
+  });
+
+  it("keeps guest correctness local without passing an answer into progress", async () => {
+    const onTaskSolved = vi.fn();
+    render(
+      <LessonPractice
+        tasks={[task]}
+        solvedTaskIds={[]}
+        checkAnswer={vi.fn().mockResolvedValue({
+          correct: true,
+          explanation: "Верно.",
+        })}
+        onTaskSolved={onTaskSolved}
+      />,
+    );
+
+    const input = screen.getByRole("textbox", { name: "Ответ" });
+    fireEvent.change(input, { target: { value: "2" } });
+    fireEvent.click(screen.getByRole("button", { name: "Проверить" }));
+
+    await screen.findByText("Верно. Верно.");
+    expect(onTaskSolved).not.toHaveBeenCalled();
+    expect((input as HTMLInputElement).value).toBe("2");
+    expect((input as HTMLInputElement).disabled).toBe(true);
+  });
+
+  it("stores a saved member result as a fact without its submitted answer", async () => {
+    const onTaskSolved = vi.fn();
+    render(
+      <LessonPractice
+        tasks={[task]}
+        solvedTaskIds={[]}
+        checkAnswer={vi.fn().mockResolvedValue({
+          correct: true,
+          saved: true,
+          explanation: "Верно.",
+        })}
+        onTaskSolved={onTaskSolved}
+      />,
+    );
+
+    fireEvent.change(screen.getByRole("textbox", { name: "Ответ" }), {
+      target: { value: "2" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Проверить" }));
+
+    await waitFor(() => expect(onTaskSolved).toHaveBeenCalledWith("rich-task"));
+    expect(onTaskSolved).toHaveBeenCalledTimes(1);
   });
   it("does not persist unsubmitted drafts across remounts", async () => {
     const draftTask = {
@@ -139,7 +185,6 @@ describe("rich practice content", () => {
     const props = {
       tasks: [draftTask],
       solvedTaskIds: [],
-      acceptedAnswers: {},
       checkAnswer: vi.fn(),
       onTaskSolved: () => 0,
     };
@@ -179,7 +224,6 @@ describe("rich practice content", () => {
       <LessonPractice
         tasks={[task]}
         solvedTaskIds={[]}
-        acceptedAnswers={{}}
         checkAnswer={createLocalPracticeChecker([task])}
         onTaskSolved={() => 0}
       />,
@@ -213,7 +257,6 @@ describe("rich practice content", () => {
       <LessonPractice
         tasks={[task]}
         solvedTaskIds={[]}
-        acceptedAnswers={{}}
         checkAnswer={createLocalPracticeChecker([task])}
         onTaskSolved={() => 0}
       />,

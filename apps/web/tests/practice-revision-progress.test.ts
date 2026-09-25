@@ -3,6 +3,7 @@ import {
   currentLessonProgress,
   markTaskSolved,
 } from "~/features/lesson-progress/model/lesson-progress-state";
+import { createLessonProgressRegistry } from "~/features/lesson-progress/model/lesson-progress-registry";
 import { lessonProgressStorage } from "~/features/lesson-progress/model/lesson-progress-storage";
 import { courseProgress } from "~/entities/course";
 
@@ -26,9 +27,10 @@ describe("revision-aware lesson progress", () => {
       }),
     );
     const loaded = await lessonProgressStorage.persistStorage.getItem("unused");
+    expect(JSON.stringify(loaded)).not.toContain("42");
     expect(
       loaded?.state.lessons["python-first-program"]?.solvedRevisions?.[task],
-    ).toEqual({ "1": "42" });
+    ).toEqual({ "1": true });
     if (!loaded) throw new Error("missing migrated state");
     await lessonProgressStorage.persistStorage.setItem("unused", loaded);
     localStorage.setItem(
@@ -40,14 +42,9 @@ describe("revision-aware lesson progress", () => {
     ).toEqual(loaded);
   });
 
-  it("retains historical answers while only the displayed revision counts", () => {
+  it("retains historical revision facts while only the displayed revision counts", () => {
     const taskId = "python-first-program-output-order";
-    const historical = markTaskSolved(
-      { solvedTaskIds: [], acceptedAnswers: {} },
-      taskId,
-      "old",
-      1,
-    );
+    const historical = markTaskSolved({ solvedTaskIds: [] }, taskId, 1);
     expect(
       currentLessonProgress(historical, [{ id: taskId, solutionRevision: 1 }])
         .solvedTaskIds,
@@ -56,15 +53,14 @@ describe("revision-aware lesson progress", () => {
       currentLessonProgress(historical, [{ id: taskId, solutionRevision: 2 }])
         .solvedTaskIds,
     ).toEqual([]);
-    const current = markTaskSolved(historical, taskId, "new", 2);
+    const current = markTaskSolved(historical, taskId, 2);
     expect(current.solvedRevisions?.[taskId]).toEqual({
-      "1": "old",
-      "2": "new",
+      "1": true,
+      "2": true,
     });
     const projected = currentLessonProgress(current, [
       { id: taskId, solutionRevision: 2 },
     ]);
-    expect(projected.acceptedAnswers[taskId]).toBe("new");
     const lessons = [
       { id: "lesson", tasks: [{ id: taskId, solutionRevision: 2 }] },
     ];
@@ -81,12 +77,7 @@ describe("revision-aware lesson progress", () => {
 
   it("does not grant a task success to another lesson", () => {
     const task = { id: "shared-task", solutionRevision: 1 };
-    const first = markTaskSolved(
-      { solvedTaskIds: [], acceptedAnswers: {} },
-      task.id,
-      "42",
-      1,
-    );
+    const first = markTaskSolved({ solvedTaskIds: [] }, task.id, 1);
     expect(
       courseProgress.calculate(
         [
@@ -96,6 +87,22 @@ describe("revision-aware lesson progress", () => {
         { first: currentLessonProgress(first, [task]) },
       ).masteredLessonIds,
     ).toEqual(["first"]);
+  });
+
+  it("rejects guest store writes while retaining member revision facts", () => {
+    const guest = createLessonProgressRegistry();
+    const guestResult = guest.getState().markSolved("lesson", "task", 1);
+    expect(guestResult).toEqual({ solvedTaskIds: [] });
+    expect(guest.getState().lessons).toEqual({});
+
+    const member = createLessonProgressRegistry("account-1");
+    member.getState().markSolved("lesson", "task", 1);
+    expect(member.getState().lessons).toEqual({
+      lesson: {
+        solvedTaskIds: ["task"],
+        solvedRevisions: { task: { "1": true } },
+      },
+    });
   });
 
   it("migrates only verified first-import task membership from legacy lesson storage", () => {
@@ -111,7 +118,7 @@ describe("revision-aware lesson progress", () => {
     );
     const progress = lessonProgressStorage.readLegacy("python-first-program");
     expect(progress?.solvedRevisions).toEqual({
-      "python-first-program-output-order": { "1": "42" },
+      "python-first-program-output-order": { "1": true },
     });
     expect(progress?.solvedTaskIds).toContain("unrelated");
   });

@@ -19,7 +19,7 @@
 |-------|-----------|
 | Frontend | React + TanStack Start (SSR/SSG, file-based routing and automatic route splitting) on Vite **8.2.1 exact** (Rolldown/Oxc); Base UI **1.7.0 exact** with local CSS Modules; Zustand **5.0.12 exact** for the cross-route lesson-progress registry; synchronous Python tokenization through `@speed-highlight/core` **2.0.0 exact**; TanStack Query for future server state; generated `openapi-typescript` contracts with `openapi-fetch` transport |
 | Backend | Python/FastAPI (`apps/api`) |
-| Database | PostgreSQL 18.6, separate runtime/import/migration/backup roles; Alembic `122_01`, new isolated volume and current bank |
+| Database | PostgreSQL 18.6, separate runtime/app/import/migration/backup roles; Alembic `140_01`, additive account/progress schema on the isolated bank volume |
 | Cache | — (not needed on M0) |
 | Observability | Health, structured server logs, fail2ban and scheduled external availability/TLS probe |
 | Infra | Application Docker Compose on Ubuntu 24.04: Nginx → web/API/PostgreSQL; systemd, journald, fail2ban, Restic |
@@ -34,8 +34,11 @@
 ### Practice persistence
 
 PostgreSQL 18.6, SQLAlchemy 2.0.52, Alembic 1.20.0 and asyncpg 0.31.0 are locked.
-Schema `122_01` has current task JSON, separate private checker, lesson membership and file objects.
-Runtime is SELECT-only; import/migration/backup use separate roles. Every datetime is timezone-aware.
+Schema `140_01` retains task JSON, private checker, lesson membership and file objects and adds
+accounts, identities, credentials, sessions, one-time tokens, provider challenges and per-context
+solved results. `infraege_runtime` is SELECT-only on the bank and has no account-table rights;
+`infraege_app` has narrow account/progress writes and checker reads. Import/migration/backup use
+separate roles. Every datetime is timezone-aware.
 No revision history, package engine, release import or automatic data migration remains.
 
 `make dev` owns a NEW `infraege-dev_postgres122-data` volume; older volumes are retained.
@@ -86,6 +89,16 @@ when they change, `make dev` rebuilds before starting; otherwise it keeps the fa
 development bind mounts; the API publication registry and migrations are image-owned. Use `make stop` for a fast resumable halt; use `make down` only when the
 owned containers and network must be recreated. Both paths preserve the named PostgreSQL volume.
 
+When this checkout has `athanor.yaml`, `make dev`, `make rebuild` and `make restart` run through
+the Athanor CLI and require nonempty `SMTP_USERNAME` and `SMTP_PASSWORD` in its vault. The local
+Postbox defaults are `SMTP_HOST=postbox.cloud.yandex.net`, `SMTP_PORT=587` and
+`MAIL_FROM=accounts@infraege.ru`; process-scoped overrides remain possible. A missing CLI, locked
+vault or incomplete SMTP credentials fails before Docker changes anything. Without the manifest,
+the original no-mail, no-Athanor development path remains available. `make stop` and `make down`
+never need to unlock the vault. `athanor.yaml` and `secrets.enc.yaml` are ignored local files,
+not release inputs; neither belongs in a Change 140 commit. No plaintext SMTP secret is written
+to `.env` or a tracked file.
+
 Lifecycle mutations are serialized for the `infraege-dev` Compose project: if a previous
 `make dev`, `make rebuild`, `make stop`, `make down` or `make restart` is still running, a second
 command fails immediately instead of racing the first one. Docker Desktop may also show a separate
@@ -97,8 +110,9 @@ typed adapter and `API_INTERNAL_URL` (`http://api:8000` in Compose). Topic and C
 content-as-code. Only `/` and `/ege` are prerendered; DB-dependent lesson/course pages are SSR.
 Legacy `content/tasks` JSON remains only as historical test fixtures; it is neither packaged
 into application images nor mounted/read at runtime.
-`/practice` and `/practice/$taskId` use request-time API reads; standalone task progress uses its
-own browser key and does not change lesson progress. `/sitemap.xml` is a runtime index with the
+`/practice` and `/practice/$taskId` use request-time API reads; signed-in standalone task
+progress is account-owned and context-separated from lesson progress. Guest answers are checked
+without accumulating progress. `/sitemap.xml` is a runtime index with the
 release-owned `/sitemap-static.xml` and bounded `/sitemap-practice/$page` partitions. Neither page
 builds nor static publication metadata read the database. Practice API reads, SSR learning pages,
 dynamic sitemaps and `/_serverFn` requests share one Nginx per-IP limit: 120/minute, burst 110,
@@ -228,7 +242,8 @@ Run in one host shell with the frozen pnpm/API environments installed. Use a fre
 `infraege-full-gate` database; never supply production credentials or reuse development storage.
 Before bootstrap, export `POSTGRES_USER=infraege`, `POSTGRES_DB=infraege` and distinct random
 URL-safe values of at least 16 characters for `POSTGRES_PASSWORD`, `DB_RUNTIME_PASSWORD`,
-`DB_IMPORT_PASSWORD`, `DB_MIGRATION_PASSWORD`, `DB_BACKUP_PASSWORD`. `openssl rand -hex 24`
+`DB_APP_PASSWORD`, `DB_IMPORT_PASSWORD`, `DB_MIGRATION_PASSWORD`, `DB_BACKUP_PASSWORD`, plus an
+independent `AUTH_CSRF_SECRET` of at least 32 characters. `openssl rand -hex 24`
 generates a suitable value. Keep these process-scoped or in a mode-600 file outside Git; do not
 print the environment or rendered Compose secrets. Set `TASK_FILES_DIR` to a dedicated absolute
 temporary directory, `APP_ENV=development` and `DEPLOY_SHA=development`.
@@ -240,8 +255,9 @@ the migration row. Import `../../content/practice-bank` through the host CLI wit
 `postgresql://ROLE:PASSWORD@127.0.0.1:15432/infraege`; passwords come from the protected environment.
 The migration job alone creates an empty schema and is not a seeded-bank acceptance.
 
-For Playwright/axe, export the read-only `DATABASE_URL` for `infraege_runtime` on port 15432 and
-retain `TASK_FILES_DIR`. For Lighthouse and host SSR, set
+For Playwright/axe, export the read-only `DATABASE_URL` for `infraege_runtime` and
+`ACCOUNT_DATABASE_URL` for `infraege_app` on port 15432, and retain `TASK_FILES_DIR`.
+For Lighthouse and host SSR, set
 `API_INTERNAL_URL=http://127.0.0.1:18000`. Run security scans after browser/build/performance jobs
 finish: generated trace/report files change during those jobs and can invalidate filesystem scans.
 Keep the same environment for `run-host-web-gate.sh` so Compose interpolation succeeds. Finish
@@ -260,6 +276,7 @@ of an already completed push. See the [verification runbook](runbooks/verificati
 | Check | Command | Preconditions / notes |
 |-------|---------|-----------------------|
 | Published image build + scan | successful exact-SHA `images.yml` run, verified by release checkpoint tool | after push, before deploy: the workflow scans all three published digests for fixed HIGH/CRITICAL findings and emits SBOM/provenance. `pnpm audit:images` remains an optional local diagnostic, not a second mandatory build/scan |
+| First account-schema cutover | `bash scripts/rehearse-account-cutover.sh --validate FULL_RESTIC_SNAPSHOT_ID SHA API_DIGEST` then `--run` with the same inputs | after published-image verification and before deploy dispatch, only when moving from `122_01` to `140_01`; follow [backup and restore](runbooks/backup-restore.md). The command authenticates and restores the exact Restic snapshot, checks the published digest and writes root-owned `/etc/infraege/accounts-schema-ready` only after a passing second restore; missing evidence blocks deploy |
 | Production Compose render | `scripts/render-production-config.sh /etc/infraege/production.env >/dev/null` | run on the provisioned VPS or against a complete temporary env |
 | Health/deploy verification | `scripts/check-release-target.sh` | Before the first successful deploy, permits an unavailable site only when the deploy workflow has no successful run and both public A records match the VPS. Later releases fail closed unless current production health reports a 40-character SHA. After push, the deploy workflow checks the public page/readiness and rolls back on failure. |
 | `gh` repository/environment | `gh auth status && gh repo view avatarsik6699/infraegev2` | verify the documented no-reviewer production policy, `can_admins_bypass`, and required secrets/vars |
@@ -461,11 +478,10 @@ never reused between requests. No product query currently consumes it. Future do
 use the single generated `shared/api` transport. Regenerate `contracts/openapi.json` and
 `shared/api/schema.ts` with `pnpm api:generate`; prove no drift with `pnpm api:check`.
 
-The lesson-progress feature is the one proven cross-route client-state owner: an app/provider-scoped
-Zustand vanilla registry holds all lesson snapshots, persists them through the shared versioned
-storage adapter and exposes semantic feature hooks. Course progress remains a pure derived selector
-over that registry and is not persisted separately. Transient feature state stays in the owning
-component or a slice-local model hook; no global service locator is used.
+The account feature owns session and server progress reads. Lesson and standalone practice keep
+only transient answer/input feedback in memory; old browser progress is ignored without migration.
+Course progress remains a derived selector over current revision-aware server results. No account,
+answer or progress data is persisted in browser storage.
 
 Route error/not-found UI and delayed navigation progress are application-level defaults.
 Client transitions keep the current page until the next route is ready; the progress bar appears

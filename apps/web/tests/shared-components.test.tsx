@@ -5,12 +5,15 @@ import { Badge } from "~/shared/components/badge";
 import { Accordion } from "~/shared/components/accordion";
 import { Button } from "~/shared/components/button";
 import { CodeBlock } from "~/shared/components/code-block";
+import { ConfirmationDialog } from "~/shared/components/confirmation-dialog";
 import { ExternalLink } from "~/shared/components/external-link";
 import { Field } from "~/shared/components/field";
 import { Image } from "~/shared/components/image";
 import { Notation } from "~/shared/components/notation";
+import { PasswordConfirmationDialog } from "~/shared/components/password-confirmation-dialog";
 import { PageContainer } from "~/shared/components/page-container";
 import { Progress } from "~/shared/components/progress";
+import { ProfileAvatar } from "~/shared/components/profile-avatar";
 import {
   TabsList,
   TabsPanel,
@@ -218,6 +221,65 @@ describe("Button", () => {
   });
 });
 
+describe("ProfileAvatar", () => {
+  it("renders the supplied initial as a decorative shared display primitive", () => {
+    const result = render(<ProfileAvatar initial="В" />);
+
+    expect(
+      result.container.querySelector("[data-profile-avatar]")?.textContent,
+    ).toBe("В");
+    expect(
+      result.container
+        .querySelector("[data-profile-avatar]")
+        ?.getAttribute("aria-hidden"),
+    ).toBe("true");
+  });
+});
+
+describe("ConfirmationDialog", () => {
+  it("keeps destructive trigger styling opt-in and cancellation quiet", () => {
+    render(
+      <ConfirmationDialog
+        triggerAppearance="danger"
+        triggerLabel="Удалить аккаунт"
+        title="Удалить аккаунт?"
+        description="Удалит данные."
+        confirmLabel="Удалить"
+        onConfirm={async () => undefined}
+      />,
+    );
+
+    const trigger = screen.getByRole("button", { name: "Удалить аккаунт" });
+    expect(trigger.getAttribute("data-hierarchy")).toBe("destructive");
+    expect(trigger.querySelector("svg.lucide-trash-2")).not.toBeNull();
+
+    fireEvent.click(trigger);
+    const cancel = screen.getByRole("button", { name: "Отмена" });
+    expect(cancel.getAttribute("data-hierarchy")).toBe("quiet");
+    expect(cancel.getAttribute("data-surface")).toBe("bare");
+  });
+
+  it("offers the same opt-in danger trigger for password confirmation", () => {
+    render(
+      <PasswordConfirmationDialog
+        email="learner@example.com"
+        triggerAppearance="danger"
+        triggerLabel="Удалить аккаунт"
+        triggerAriaLabel="Удалить аккаунт"
+        title="Удалить аккаунт?"
+        description="Подтвердите пароль."
+        confirmLabel="Удалить"
+        errorMessage={() => "Не удалось удалить аккаунт."}
+        onConfirm={async () => undefined}
+      />,
+    );
+
+    const trigger = screen.getByRole("button", { name: "Удалить аккаунт" });
+    expect(trigger.getAttribute("data-hierarchy")).toBe("destructive");
+    expect(trigger.querySelector("svg.lucide-trash-2")).not.toBeNull();
+  });
+});
+
 describe("CodeBlock", () => {
   const longCode = Array.from(
     { length: 9 },
@@ -359,6 +421,22 @@ describe("Field and feedback", () => {
         .getByRole("textbox", { name: "Ответ" })
         .getAttribute("placeholder"),
     ).toBe("Без единиц измерения");
+  });
+
+  it("renders optional field help beside the label with an accessible name", () => {
+    render(
+      <Field
+        label="Пароль"
+        description="Не менее 12 символов"
+        help="Используйте уникальную длинную фразу."
+      />,
+    );
+
+    expect(screen.getByRole("textbox", { name: "Пароль" })).toBeTruthy();
+    expect(
+      screen.getByRole("button", { name: "Справка: Пароль" }),
+    ).toBeTruthy();
+    expect(screen.getByText("Не менее 12 символов")).toBeTruthy();
   });
 });
 

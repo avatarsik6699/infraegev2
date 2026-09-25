@@ -2,7 +2,10 @@ import { useState } from "react";
 import {
   StandalonePractice,
   checkPracticeAnswer,
+  createCheckAndSaveAnswer,
+  STANDALONE_CONTEXT_ID,
 } from "~/features/lesson-practice";
+import { useAccountSession } from "~/features/account";
 import { usePracticeProgress } from "~/features/practice-progress";
 import { Typography } from "~/shared/components/typography";
 import { PracticeTheory } from "./practice-theory";
@@ -13,12 +16,12 @@ export const PracticeTask: React.FC<PracticeTaskWidgetTypes.Props> = (
   props,
 ) => {
   const history = usePracticeProgress((state) => state.history[props.task.id]);
+  const session = useAccountSession();
   const markSolved = usePracticeProgress((state) => state.markSolved);
   const hydrated = usePracticeProgress((state) => state.hydrated);
   const [attempt, setAttempt] = useState(0);
   const [repeating, setRepeating] = useState(false);
-  const accepted = history?.[props.task.solutionRevision];
-  const solved = accepted !== undefined;
+  const solved = history?.[props.task.solutionRevision] === true;
   return (
     <section
       className={styles.solving}
@@ -48,13 +51,18 @@ export const PracticeTask: React.FC<PracticeTaskWidgetTypes.Props> = (
             : undefined
         }
         tasks={[props.task]}
-        checkAnswer={checkPracticeAnswer}
-        solvedTaskIds={solved && !repeating ? [props.task.id] : []}
-        acceptedAnswers={
-          solved && !repeating ? { [props.task.id]: accepted } : {}
+        checkAnswer={
+          session.account
+            ? createCheckAndSaveAnswer(
+                "standalone",
+                STANDALONE_CONTEXT_ID,
+                session.csrfToken,
+              )
+            : checkPracticeAnswer
         }
-        onTaskSolved={(id, answer) => {
-          markSolved(id, props.task.solutionRevision, answer);
+        solvedTaskIds={solved && !repeating ? [props.task.id] : []}
+        onTaskSolved={(id) => {
+          markSolved(id, props.task.solutionRevision);
           setRepeating(false);
           return 1;
         }}

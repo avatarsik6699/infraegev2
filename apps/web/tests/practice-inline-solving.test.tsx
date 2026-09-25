@@ -170,6 +170,14 @@ describe("inline solving", () => {
     );
     fireEvent.click(row(0).getByRole("button", { name: "Проверить" }));
     await screen.findByRole("button", { name: "Обновить условие" });
+    expect(row(0).getByRole("textbox").getAttribute("aria-invalid")).toBe(
+      "true",
+    );
+    expect(
+      row(0)
+        .getByText(/Задача изменилась/)
+        .getAttribute("role"),
+    ).toBe("status");
     mocks.load.mockRejectedValueOnce(new Error("offline"));
     fireEvent.click(row(0).getByRole("button", { name: "Обновить условие" }));
     await screen.findByText(/Не удалось проверить ответ/);
@@ -189,25 +197,16 @@ describe("inline solving", () => {
     expect((row(0).getByRole("textbox") as HTMLInputElement).value).toBe("42");
     mocks.check.mockResolvedValueOnce({ correct: true, explanation: "" });
     fireEvent.click(row(0).getByRole("button", { name: "Проверить" }));
-    await screen.findByRole("button", { name: "Решить ещё раз" });
+    await screen.findByText("Верно.");
     expect(mocks.check).toHaveBeenLastCalledWith("first", "42", 2);
-    expect(row(0).getByRole("status").textContent).toBe("Ответ принят");
-    expect(row(0).queryByText("Верно.")).toBeNull();
+    expect(row(0).getByRole("status").textContent).toBe("Верно. ");
     expect(row(0).queryByText("Эта версия задачи решена.")).toBeNull();
-    expect(row(0).getByRole("textbox").getAttribute("data-solved")).toBe(
-      "true",
+    expect(row(0).getByRole("textbox").getAttribute("data-solved")).toBeNull();
+    expect((row(0).getByRole("textbox") as HTMLInputElement).disabled).toBe(
+      true,
     );
-    fireEvent.click(row(0).getByRole("button", { name: "Решить ещё раз" }));
-    await waitFor(() =>
-      expect((row(0).getByRole("textbox") as HTMLInputElement).disabled).toBe(
-        false,
-      ),
-    );
-    expect(document.activeElement).toBe(row(0).getByRole("textbox"));
 
-    expect(localStorage.getItem("infraege:practice-progress")).toContain(
-      '"2":"42"',
-    );
+    expect(localStorage.getItem("infraege:practice-progress")).toBeNull();
     expect(localStorage.getItem("infraege:lesson-progress:v2")).toBeNull();
   });
   it("does not steal focus when a hidden check completes or is reopened", async () => {

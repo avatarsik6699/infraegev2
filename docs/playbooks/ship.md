@@ -97,11 +97,17 @@ Run only after the selected local release coverage and local merge succeed.
 3. Use the release checkpoint utility to fetch fresh successful CI and images evidence for that
    exact SHA. The images workflow scans the actual published digests; no second local image build
    is required. Pending/missing/failed runs block deploy.
-4. Dispatch the existing deploy workflow once for that SHA. On interruption, inspect existing
+4. For a first account-schema cutover, pause before dispatch. The operator must rehearse this
+   exact candidate against isolated copies of production data, verify the second-stage restore,
+   and record the root-owned SHA attestation described in the production and backup runbooks.
+   Missing or failed rehearsal blocks deploy; a pre-migration production backup or a local drill
+   alone is not sufficient. Use the dedicated candidate rehearsal command, not the routine
+   restore-check command, for this proof.
+5. Dispatch the existing deploy workflow once for that SHA. On interruption, inspect existing
    runs before deciding whether any dispatch is needed; a checkpoint never repeats a mutation.
-5. Verify the exact deploy target and independent public readiness SHA/homepage using the
+6. Verify the exact deploy target and independent public readiness SHA/homepage using the
    checkpoint utility. Saved statuses are history, never current production truth.
-6. Failure before push blocks push; failure after push blocks deploy or completion. Report the
+7. Failure before push blocks push; failure after push blocks deploy or completion. Report the
    actual reached phase. Do not undo a completed merge/push or repeat bank imports automatically.
 
 ## Report

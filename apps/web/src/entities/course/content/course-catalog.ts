@@ -7,6 +7,11 @@ import {
 const definitions: readonly CourseCatalogTypes.Definition[] = [
   {
     id: "python",
+    illustration: {
+      src: "/images/courses/python-v2.webp",
+      width: 640,
+      height: 640,
+    },
     level: "Начальный",
     outcome:
       "Научитесь писать простые программы, решать задачи и работать с файлами.",
@@ -16,18 +21,33 @@ const definitions: readonly CourseCatalogTypes.Definition[] = [
   },
   {
     id: "advanced-problems",
+    illustration: {
+      src: "/images/courses/advanced-problems-v2.webp",
+      width: 640,
+      height: 640,
+    },
     title: "Решение задач повышенной сложности",
     summary:
       "Разбор нестандартных задач: от выбора идеи до проверки корректности и сложности решения.",
   },
   {
     id: "algorithms-data-structures",
+    illustration: {
+      src: "/images/courses/algorithms-data-structures-v2.webp",
+      width: 640,
+      height: 640,
+    },
     title: "Алгоритмы и структуры данных",
     summary:
       "Базовые структуры данных и алгоритмы для более уверенного решения задач и написания программ.",
   },
   {
     id: "excel",
+    illustration: {
+      src: "/images/courses/excel-v2.webp",
+      width: 640,
+      height: 640,
+    },
     title: "Excel с нуля",
     summary:
       "Формулы, ссылки, фильтрация и анализ данных в электронных таблицах.",

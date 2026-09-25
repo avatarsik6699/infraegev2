@@ -11,6 +11,22 @@ import { topicCatalog } from "~/entities/topic-catalog";
 import { topicCatalogModel } from "~/pages/topic-catalog/model/topic-catalog-model";
 import { TopicCatalogPage } from "~/pages/topic-catalog";
 
+const progressFixture = vi.hoisted(() => ({
+  results: [] as {
+    context_kind: "topic_lesson" | "course_lesson";
+    context_id: string;
+    task_id: string;
+    solution_revision: number;
+  }[],
+}));
+vi.mock("~/features/account", () => ({
+  useAccountSession: () => ({
+    account: { id: "member" },
+    status: "ready",
+    csrfToken: "test",
+  }),
+}));
+
 vi.mock(
   "@tanstack/react-router",
   async (
@@ -82,16 +98,25 @@ const summary = {
 };
 const renderCatalog = () =>
   render(
-    <LessonProgressProvider>
+    <LessonProgressProvider accountId="member">
       <TopicCatalogPage />
     </LessonProgressProvider>,
   );
 
 beforeEach(() => {
-  localStorage.clear();
+  progressFixture.results = [];
   vi.stubGlobal(
     "fetch",
-    vi.fn().mockImplementation(() => Promise.resolve(Response.json(summary))),
+    vi.fn().mockImplementation((input: RequestInfo | URL) => {
+      const url = input instanceof Request ? input.url : String(input);
+      return Promise.resolve(
+        Response.json(
+          url.includes("/api/progress")
+            ? { results: progressFixture.results }
+            : summary,
+        ),
+      );
+    }),
   );
 });
 afterEach(() => {
@@ -158,35 +183,32 @@ it("combines live search and status filters, clears input and resets empty resul
 });
 
 it("counts only current topic answers, keeps completed in All and excludes stale/removed/course tasks", async () => {
-  localStorage.setItem(
-    "infraege:lesson-progress:v2",
-    JSON.stringify({
-      version: 1,
-      data: {
-        lessons: {
-          rekursiya: {
-            solvedTaskIds: ["r1", "r2", "gone"],
-            acceptedAnswers: {},
-            solvedRevisions: {
-              r1: { "1": "1" },
-              r2: { "1": "2" },
-              gone: { "1": "3" },
-            },
-          },
-          "preobrazovanie-zapisey-chisel": {
-            solvedTaskIds: ["n1"],
-            acceptedAnswers: {},
-            solvedRevisions: { n1: { "1": "4" } },
-          },
-          python: {
-            solvedTaskIds: ["python1"],
-            acceptedAnswers: {},
-            solvedRevisions: { python1: { "1": "5" } },
-          },
-        },
-      },
-    }),
-  );
+  progressFixture.results = [
+    {
+      context_kind: "topic_lesson",
+      context_id: "rekursiya",
+      task_id: "r1",
+      solution_revision: 1,
+    },
+    {
+      context_kind: "topic_lesson",
+      context_id: "rekursiya",
+      task_id: "r2",
+      solution_revision: 1,
+    },
+    {
+      context_kind: "topic_lesson",
+      context_id: "preobrazovanie-zapisey-chisel",
+      task_id: "n1",
+      solution_revision: 1,
+    },
+    {
+      context_kind: "course_lesson",
+      context_id: "python",
+      task_id: "python1",
+      solution_revision: 1,
+    },
+  ];
   const view = renderCatalog();
   await screen.findByText("Решено задач в темах: 2");
   expect(screen.getByText("Решено 1 из 2")).not.toBeNull();
@@ -202,12 +224,19 @@ it("counts only current topic answers, keeps completed in All and excludes stale
 });
 
 it("keeps navigation/search usable on API error and retries without inventing zero totals", async () => {
+  let failed = false;
   vi.stubGlobal(
     "fetch",
-    vi
-      .fn()
-      .mockRejectedValueOnce(new Error("offline"))
-      .mockImplementation(() => Promise.resolve(Response.json(summary))),
+    vi.fn().mockImplementation((input: RequestInfo | URL) => {
+      const url = input instanceof Request ? input.url : String(input);
+      if (url.includes("/api/progress"))
+        return Promise.resolve(Response.json({ results: [] }));
+      if (!failed) {
+        failed = true;
+        return Promise.reject(new Error("offline"));
+      }
+      return Promise.resolve(Response.json(summary));
+    }),
   );
   renderCatalog();
   await screen.findByText("Прогресс временно недоступен");
@@ -226,14 +255,18 @@ it("keeps navigation/search usable on API error and retries without inventing ze
 });
 
 it("treats missing summaries as unavailable and recovers corrupt storage", async () => {
-  localStorage.setItem("infraege:lesson-progress:v2", "broken");
   vi.stubGlobal(
     "fetch",
-    vi
-      .fn()
-      .mockImplementation(() =>
-        Promise.resolve(Response.json({ topics: [summary.topics[0]] })),
-      ),
+    vi.fn().mockImplementation((input: RequestInfo | URL) => {
+      const url = input instanceof Request ? input.url : String(input);
+      return Promise.resolve(
+        Response.json(
+          url.includes("/api/progress")
+            ? { results: [] }
+            : { topics: [summary.topics[0]] },
+        ),
+      );
+    }),
   );
   renderCatalog();
   await screen.findByText("Прогресс временно недоступен");
@@ -245,12 +278,14 @@ it("does not flash zero progress while summary is pending", async () => {
   let resolve!: (value: Response) => void;
   vi.stubGlobal(
     "fetch",
-    vi.fn().mockImplementation(
-      () =>
-        new Promise<Response>((done) => {
-          resolve = done;
-        }),
-    ),
+    vi.fn().mockImplementation((input: RequestInfo | URL) => {
+      const url = input instanceof Request ? input.url : String(input);
+      if (url.includes("/api/progress"))
+        return Promise.resolve(Response.json({ results: [] }));
+      return new Promise<Response>((done) => {
+        resolve = done;
+      });
+    }),
   );
   renderCatalog();
   expect(screen.getAllByText("Прогресс загружается")).toHaveLength(2);

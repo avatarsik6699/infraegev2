@@ -9,9 +9,13 @@ from __future__ import annotations
 
 from fastapi import APIRouter
 
+from app.modules.account.api import router as account_router
+from app.modules.account.progress_api import router as progress_router
 from app.modules.practice.api import router as practice_router
 from app.modules.tasks.api import router as tasks_router
 
 api_router = APIRouter(prefix="/api")
 api_router.include_router(tasks_router)
 api_router.include_router(practice_router)
+api_router.include_router(account_router)
+api_router.include_router(progress_router)

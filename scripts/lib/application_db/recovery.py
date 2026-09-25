@@ -58,6 +58,8 @@ def restore(bundle: Path, container: str) -> None:
     db = Database(container)
     if schema_version(db) != metadata.schemaVersion:
         raise ValueError("restored schema differs from metadata")
+    if metadata.schemaVersion == "140_01" and db.query(sql.ACCOUNT_RESTORE).strip() != "t":
+        raise ValueError("restored account schema or application grants mismatch")
     checks = [("data-checks.txt", sql.FINGERPRINT), ("schema.txt", sql.SCHEMAS)]
     if metadata.schemaVersion in TASK_SCHEMAS:
         checks.append(("file-references.txt", sql.REFERENCES))

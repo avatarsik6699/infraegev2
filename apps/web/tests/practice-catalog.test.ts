@@ -2,7 +2,6 @@ import { routerSearch } from "~/app/lib/router-search";
 import { beforeEach, describe, expect, it } from "vitest";
 import { practiceCatalog } from "~/entities/practice-task/practice-catalog";
 import { practiceProgress } from "~/features/practice-progress/model/practice-progress";
-import { safeLs } from "~/shared/lib/safe-ls";
 import { practiceAnswerFormat } from "~/entities/practice-task/practice-answer-format";
 
 it("uses authored answer guidance without guessing unclassified formats", () => {
@@ -115,39 +114,45 @@ describe("practice catalog URL state", () => {
   });
 });
 
-describe("independent practice history", () => {
+describe("account-scoped practice history", () => {
   beforeEach(() => localStorage.clear());
-  it("preserves previous revision answers without granting the new revision", () => {
-    const first = practiceProgress.record({}, "task", 1, "old");
+  it("retains revision facts without retaining submitted answers", () => {
+    const first = practiceProgress.record({}, "task", 1);
     expect(first.task?.[2]).toBeUndefined();
-    expect(practiceProgress.record(first, "task", 2, "new")).toEqual({
-      task: { "1": "old", "2": "new" },
+    expect(practiceProgress.record(first, "task", 2)).toEqual({
+      task: { "1": true, "2": true },
     });
-    expect(practiceProgress.record(first, "task", 1, "repeated")).toEqual({
-      task: { "1": "repeated" },
+    expect(practiceProgress.record(first, "task", 1)).toEqual({
+      task: { "1": true },
     });
   });
-  it("persists accepted values across stores without touching lesson progress", async () => {
+  it("rejects guest writes while retaining member facts outside browser storage", () => {
     const oldLesson = '{"version":1,"data":{"lessons":{}}}';
     localStorage.setItem("infraege:lesson-progress:v2", oldLesson);
-    const store = practiceProgress.create();
-    await store.persist.rehydrate();
-    store.getState().markSolved("task", 1, "42");
+    localStorage.setItem(
+      "infraege:practice-progress",
+      '{"history":{"task":{"1":"old"}}}',
+    );
+    const guestStore = practiceProgress.create();
+    guestStore.getState().markSolved("task", 1);
+    expect(guestStore.getState().history).toEqual({});
+
+    const store = practiceProgress.create("account-1");
+    store.getState().markSolved("task", 1);
     const second = practiceProgress.create();
-    await second.persist.rehydrate();
-    expect(second.getState().history).toEqual({ task: { "1": "42" } });
+    expect(store.getState().history).toEqual({ task: { "1": true } });
+    expect(second.getState().history).toEqual({});
     expect(localStorage.getItem("infraege:lesson-progress:v2")).toBe(oldLesson);
-    expect(safeLs.get(practiceProgress.definition)?.history).toEqual({
-      task: { "1": "42" },
-    });
+    expect(localStorage.getItem("infraege:practice-progress")).toContain("old");
   });
-  it.each([
-    null,
-    { history: [] },
-    { history: { task: { "0": "42" } } },
-    { history: { task: { "1": 42 } } },
-  ])("rejects corrupt storage %j", (value) => {
-    expect(practiceProgress.isStored(value)).toBe(false);
+  it("hydrates only standalone results from the server projection", () => {
+    const store = practiceProgress.create();
+    store.getState().replaceFromServer([
+      { context_kind: "standalone", task_id: "task", solution_revision: 2 },
+      { context_kind: "topic_lesson", task_id: "other", solution_revision: 2 },
+    ]);
+    expect(store.getState().history).toEqual({ task: { "2": true } });
+    expect(store.getState().hydrated).toBe(true);
   });
 });
 

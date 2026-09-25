@@ -2,11 +2,18 @@
 
 application_schema_preflight() {
   local candidate=$1 previous=$2 proof=$3
-  [[ $(cat "$candidate/infra/database-schema") == 122_01 ]] || return 1
-  if [[ -n $previous && $(cat "$previous/infra/database-schema" 2>/dev/null || true) == 122_01 ]]; then return 0; fi
+  local candidate_schema previous_schema
+  candidate_schema=$(cat "$candidate/infra/database-schema")
+  previous_schema=$(cat "$previous/infra/database-schema" 2>/dev/null || true)
+  [[ $candidate_schema == 122_01 || $candidate_schema == 140_01 ]] || return 1
+  # 140_01 is additive: a retained 122_01 application release can read its own task schema
+  # after a failed activation. A first account-schema deployment still needs a fresh isolated
+  # restore acceptance for this exact image before migration is allowed.
+  if [[ $candidate_schema == 140_01 && $previous_schema == 140_01 ]]; then return 0; fi
+  if [[ $candidate_schema == 122_01 && $previous_schema == 122_01 ]]; then return 0; fi
   [[ -f $proof && $(stat -c '%u:%a' "$proof") == 0:600 &&
-     $(cat "$proof") == "122_01 $DEPLOY_SHA" ]] || {
-    echo 'Change 122 requires explicit bank transfer/restore acceptance for this exact SHA before deployment' >&2
+     $(cat "$proof") == "$candidate_schema $DEPLOY_SHA" ]] || {
+    echo "Schema $candidate_schema requires explicit isolated restore acceptance for this exact SHA before deployment" >&2
     return 1
   }
 }

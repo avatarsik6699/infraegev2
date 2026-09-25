@@ -30,13 +30,8 @@ export function useLessonProgress(
   return {
     ...(tasks ? currentLessonProgress(progress, tasks) : progress),
     clear: () => clearLesson(lessonId),
-    markSolved: (taskId, acceptedAnswer, solutionRevision) => {
-      const next = markLessonSolved(
-        lessonId,
-        taskId,
-        acceptedAnswer,
-        solutionRevision,
-      );
+    markSolved: (taskId, solutionRevision) => {
+      const next = markLessonSolved(lessonId, taskId, solutionRevision);
       return tasks ? currentLessonProgress(next, tasks) : next;
     },
   };

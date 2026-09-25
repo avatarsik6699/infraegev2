@@ -174,6 +174,15 @@ const forbiddenPatterns = [
     ),
   },
   {
+    name: "network access in provider navigation",
+    ruleId: "no-restricted-globals",
+    source: 'export const load = () => fetch("/api/value");',
+    filePath: path.join(
+      workspaceRoot,
+      "src/shared/lib/auth-provider-navigation/browser-adapter.ts",
+    ),
+  },
+  {
     name: "document access in a media-query adapter",
     ruleId: "no-restricted-globals",
     source: "export const title = document.title;",
@@ -246,6 +255,13 @@ assert.deepEqual(
 );
 
 const validServerBoundaries = [
+  [
+    path.join(
+      workspaceRoot,
+      "src/shared/lib/auth-provider-navigation/browser-adapter.ts",
+    ),
+    "export const navigation = { leave: (url: string) => window.location.assign(url) };",
+  ],
   [
     path.join(workspaceRoot, "src/shared/lib/scroll-to-top/browser-adapter.ts"),
     "export const scroll = { top: () => window.scrollTo({ top: 0 }), focus: (id: string) => document.getElementById(id)?.focus() };",

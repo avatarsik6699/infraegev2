@@ -5,9 +5,10 @@ import { createSafeLsPersistStorage } from "~/shared/lib/zustand-persistence";
 import type { LessonProgressTypes } from "../lesson-progress.types";
 
 type StoredLessonProgress = {
-  solvedRevisions?: Readonly<Record<string, Readonly<Record<string, string>>>>;
+  solvedRevisions?: Readonly<
+    Record<string, Readonly<Record<string, string | true>>>
+  >;
   solvedTaskIds: readonly string[];
-  acceptedAnswers?: Readonly<Record<string, string>>;
 };
 
 export type PersistedLessonProgress = {
@@ -91,22 +92,30 @@ function normalizeProgress(
   lessonId: string,
 ): LessonProgressTypes.Snapshot {
   const solvedTaskIds = [...new Set(progress.solvedTaskIds)];
-  const solvedTaskIdSet = new Set(solvedTaskIds);
-  const acceptedAnswers = Object.fromEntries(
-    Object.entries(progress.acceptedAnswers ?? {}).filter(([taskId]) =>
-      solvedTaskIdSet.has(taskId),
-    ),
-  );
   const mapping =
     (firstImport as Record<string, Record<string, number>>)[lessonId] ?? {};
   const solvedRevisions =
-    progress.solvedRevisions ??
+    (progress.solvedRevisions
+      ? Object.fromEntries(
+          Object.entries(progress.solvedRevisions).map(
+            ([taskId, revisions]) => [
+              taskId,
+              Object.fromEntries(
+                Object.keys(revisions).map((revision) => [
+                  revision,
+                  true as const,
+                ]),
+              ),
+            ],
+          ),
+        )
+      : undefined) ??
     Object.fromEntries(
       solvedTaskIds
         .filter((id) => mapping[id] === 1)
-        .map((id) => [id, { "1": acceptedAnswers[id] ?? "" }]),
+        .map((id) => [id, { "1": true }]),
     );
-  return { acceptedAnswers, solvedTaskIds, solvedRevisions };
+  return { solvedTaskIds, solvedRevisions };
 }
 
 function isStoredLessons(
@@ -128,22 +137,23 @@ function isStoredProgress(value: unknown): value is StoredLessonProgress {
       (typeof value.solvedRevisions === "object" &&
         value.solvedRevisions !== null &&
         !Array.isArray(value.solvedRevisions) &&
-        Object.values(value.solvedRevisions).every(isAcceptedAnswers))) &&
+        Object.values(value.solvedRevisions).every(isStoredRevisions))) &&
     "solvedTaskIds" in value &&
     Array.isArray(value.solvedTaskIds) &&
-    value.solvedTaskIds.every((id) => typeof id === "string") &&
-    (!("acceptedAnswers" in value) || isAcceptedAnswers(value.acceptedAnswers))
+    value.solvedTaskIds.every((id) => typeof id === "string")
   );
 }
 
-function isAcceptedAnswers(
+function isStoredRevisions(
   value: unknown,
-): value is Readonly<Record<string, string>> {
+): value is Readonly<Record<string, string | true>> {
   return (
     typeof value === "object" &&
     value !== null &&
     !Array.isArray(value) &&
-    Object.values(value).every((answer) => typeof answer === "string")
+    Object.values(value).every(
+      (answer) => typeof answer === "string" || answer === true,
+    )
   );
 }
 

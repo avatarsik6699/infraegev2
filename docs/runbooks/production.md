@@ -8,12 +8,26 @@ access during credential rotation. Store secrets outside Git, mode 600; never pu
 
 1. Configure DNS for the intended VPS and verify its host key. Run `ops/bootstrap-vps.sh` from
    the reviewed release. Verify a second SSH session before closing the recovery console.
-2. Create `/etc/infraege/production.env` from `infra/.env.example`, with distinct independent
-   bootstrap/runtime/import/migration/backup passwords. Keep `TASK_FILES_DIR=/var/lib/infraege/task-files`.
-   Create `/etc/infraege/restic-password` separately. Production must never reuse dev credentials.
-3. Obtain initial TLS with `ops/obtain-initial-certificate.sh` and the required `PUBLIC_IPV4` and
+2. Create `/etc/infraege/production.env` from `infra/.env.example`, mode 600, with distinct
+   independent bootstrap/runtime/import/migration/backup/application-write passwords. Set a random
+   `AUTH_CSRF_SECRET` (at least 32 characters), `PUBLIC_ORIGIN=https://infraege.ru` and keep
+   `TASK_FILES_DIR=/var/lib/infraege/task-files`. Create `/etc/infraege/restic-password` separately.
+   Production must never reuse dev credentials.
+3. Before enabling accounts, configure SMTP delivery (`SMTP_*`, `MAIL_FROM`) and create provider
+   applications with the exact HTTPS callback origins
+   `https://infraege.ru/api/auth/providers/vk/callback`,
+   `https://infraege.ru/api/auth/providers/yandex/callback` and
+   `https://infraege.ru/api/auth/providers/telegram/callback`. Store client IDs/secrets only in the
+   protected environment; do not paste callback `code`, `state`, mail links or tokens into tickets,
+   shell history or journals. Provider methods also require the explicit per-provider
+   `VK_ENABLED`, `YANDEX_ENABLED`, or `TELEGRAM_ENABLED` release flag (default `false`), only
+   after the real callback and account-entry flows pass. Before disabling a previously enabled
+   provider, verify that no member depends on it as the sole login method. A missing
+   provider/mail setting is a bounded unavailable flow, not a
+   reason to disable origin, CSRF or callback validation.
+4. Obtain initial TLS with `ops/obtain-initial-certificate.sh` and the required `PUBLIC_IPV4` and
    `TLS_EMAIL` environment; configure renewal with `ops/configure-certificate-renewal.sh`.
-4. Prepare the application database/bank using [practice-transition](practice-transition.md),
+5. Prepare the application database/bank using [practice-transition](practice-transition.md),
    then perform the explicit release. Install application backup/restore timers only when
    `/opt/infraege/database-current` points to the matching reviewed release.
 
@@ -45,7 +59,8 @@ readiness against the requested full SHA and requests the homepage after remote 
 
 The release is unpacked at `/opt/infraege/releases/<sha>` and deploy mutations use a host lock.
 Preflight checks environment, schema-transition attestation, images and TLS readability. It backs
-up the prepared DB, runs migration, activates Compose, verifies health version and public HTTP,
+up the prepared DB, re-provisions restricted roles (including `infraege_app`), runs migration,
+activates Compose, verifies health version and public HTTP,
 then updates `current`, `database-current`, deployment status and environment SHA. It never
 imports content automatically. Preserve candidate and previous images for recovery.
 
@@ -58,15 +73,34 @@ prints a warning and never fails the deploy. Set `KEEP_RELEASES` (at least 2) to
 A failure invokes one verified rollback and retains its original error status. The data volume
 `infraege_postgres122-data` is shared by every kept release, so rollback never switches volumes. Missing previous release or failed rollback
 requires manual recovery, not a destructive schema downgrade. Consult [backup](backup-restore.md).
+The `140_01` account migration is additive, so a retained `122_01` release remains rollback-safe
+against the same volume; no automatic downgrade runs. Before the first account release, run the
+two-stage candidate migration/restore rehearsal on isolated production-data copies described in
+[backup](backup-restore.md), then record the exact candidate as root-owned mode-600
+`/etc/infraege/accounts-schema-ready` containing `140_01 <full-candidate-sha>`. This must happen
+after exact-SHA image verification and before deploy dispatch; routine restore-check of an old
+`122_01` bundle alone cannot attest the new schema. Do not bypass the preflight or migrate the live
+database to break the ordering cycle.
 
 ## Routine operation
 
 Use `docker compose` with the explicit production environment/project and installed release files,
-`systemctl` and `journalctl` for application/TLS/backup/security status. `/health/live` is process
+`systemctl` and `journalctl` for application/TLS/backup/security status. Confirm the daily backup,
+monthly isolated restore and hourly `infraege-account-purge.timer` are enabled after deployment;
+the purge timer reports only aggregate cleanup counts and must not be replaced by host SQL access.
+Account recovery from a snapshot remains an isolated, reconciled procedure — see the deletion and
+restore gate in [backup](backup-restore.md#account-deletion-after-a-backup). `/health/live` is process
 liveness; `/health/ready` checks database/schema readiness. A scheduled GitHub probe checks public
 availability and TLS. Preserve bounded logs and rate limits. Browser analytics is the cookieless
 `smotryashchiy` snippet allowlisted in CSP (SPEC §7.3); there is no consent UI or client-error
 ingestion.
+
+Auth endpoints have an independent Nginx per-IP limit (10/minute, burst 10, immediate 429), separate
+from practice reads/checker. Production access logs use a query-free request format and provider
+callbacks disable edge access logging and suppress query-bearing proxy warnings; Uvicorn access logs
+are disabled because they include request queries. The API's structured events retain path, status and
+request ID only. Treat a callback query,
+verification/reset link, password, cookie and CSRF value as a secret even when debugging.
 
 Host packages are patched by unattended upgrades. They stop silently if `dpkg` was interrupted,
 because every later `apt` run then fails. Check this monthly:

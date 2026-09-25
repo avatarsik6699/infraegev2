@@ -63,10 +63,14 @@
 }
 .actionCopy {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   align-items: center;
 }
 .actionCopy > span {
   grid-area: 1 / 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .actionMeasure {
   visibility: hidden;

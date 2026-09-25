@@ -4,8 +4,10 @@ export namespace ConfirmationDialogTypes {
     description: React.ReactNode;
     triggerLabel: string;
     triggerAriaLabel?: string;
-    triggerAppearance?: "default" | "subtle";
+    triggerAppearance?: "default" | "subtle" | "danger";
     confirmLabel: string;
-    onConfirm: () => void;
+    onConfirm: () => void | Promise<void>;
+    errorMessage?: (reason: unknown) => string;
+    onError?: (reason: unknown) => void;
   };
 }

@@ -1,4 +1,5 @@
 import { Field as BaseField } from "@base-ui/react/field";
+import { InfoPopover } from "~/shared/components/info-popover";
 import { Input } from "~/shared/components/input";
 import type { FieldTypes } from "./field.types";
 import styles from "./field.module.css";
@@ -8,6 +9,7 @@ export const Field: React.FC<FieldTypes.Props> = ({
   endAdornment,
   labelVisibility = "visible",
   description,
+  help,
   error,
   invalid = Boolean(error),
   disabled,
@@ -15,13 +17,24 @@ export const Field: React.FC<FieldTypes.Props> = ({
   ...inputProps
 }) => (
   <BaseField.Root className={styles.root} invalid={invalid} disabled={disabled}>
-    <BaseField.Label
+    <div
       className={
-        labelVisibility === "sr-only" ? styles.visuallyHidden : styles.label
+        labelVisibility === "sr-only" && !help
+          ? styles.visuallyHidden
+          : styles.labelRow
       }
     >
-      {label}
-    </BaseField.Label>
+      <BaseField.Label
+        className={
+          labelVisibility === "sr-only" ? styles.visuallyHidden : styles.label
+        }
+      >
+        {label}
+      </BaseField.Label>
+      {help ? (
+        <InfoPopover label={`Справка: ${label}`}>{help}</InfoPopover>
+      ) : null}
+    </div>
     {description ? (
       <BaseField.Description className={styles.description}>
         {description}

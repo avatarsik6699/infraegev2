@@ -11,45 +11,47 @@ import styles from "./practice-catalog-page.module.css";
 
 export const PracticeCatalogPage: React.FC<PracticeCatalogPageTypes.Props> = (
   props,
-) => (
-  <div className={styles.page}>
-    <PublicHeader activeSection="practice" />
-    <PageContainer component="main" className={styles.main}>
-      <header className={styles.heading}>
-        <Typography.Title
-          order={1}
-          variant="catalog"
-          className={styles.pageTitle}
-        >
-          Практика
-        </Typography.Title>
-        <div className={styles.subtitle}>
-          <Typography.Text tone="muted">
-            Решай задачи и закрепляй теорию
-          </Typography.Text>
-          <InfoPopover label="Как работает практика">
-            <ul>
-              <li>
-                Черновики сохраняются при сворачивании. При смене поиска, тем,
-                сортировки или страницы, уходе и перезагрузке они сбросятся.
-              </li>
-              <li>
-                Отметки решения сохраняются в этом браузере отдельно от уроков.
-              </li>
-            </ul>
-          </InfoPopover>
-        </div>
-      </header>
-      <PracticeFilters
-        key={practiceCatalog.href(props.search)}
-        search={props.search}
-        facets={props.result.facets}
-      />
-      <PracticeResults
-        key={`results:${practiceCatalog.href(props.search)}`}
-        {...props}
-      />
-    </PageContainer>
-    <PublicFooter />
-  </div>
-);
+) => {
+  return (
+    <div className={styles.page}>
+      <PublicHeader activeSection="practice" />
+      <PageContainer component="main" className={styles.main}>
+        <header className={styles.heading}>
+          <Typography.Title
+            order={1}
+            variant="catalog"
+            className={styles.pageTitle}
+          >
+            Практика
+          </Typography.Title>
+          <div className={styles.subtitle}>
+            <Typography.Text tone="muted">
+              Решай задачи и закрепляй теорию
+            </Typography.Text>
+            <InfoPopover label="Как работает практика">
+              <ul>
+                <li>
+                  Черновики сохраняются при сворачивании. При смене поиска, тем,
+                  сортировки или страницы, уходе и перезагрузке они сбросятся.
+                </li>
+                <li>
+                  В аккаунте решения сохраняются отдельно для каждого контекста.
+                </li>
+              </ul>
+            </InfoPopover>
+          </div>
+        </header>
+        <PracticeFilters
+          key={practiceCatalog.href(props.search)}
+          search={props.search}
+          facets={props.result.facets}
+        />
+        <PracticeResults
+          key={`results:${practiceCatalog.href(props.search)}`}
+          {...props}
+        />
+      </PageContainer>
+      <PublicFooter />
+    </div>
+  );
+};

@@ -26,6 +26,7 @@ apps/api/practice-registry.json
 apps/api/practice-catalog-topics.json
 apps/api/migrations/env.py
 apps/api/migrations/versions/122_01_minimal_bank.py
+apps/api/migrations/versions/140_01_accounts_server_progress.py
 infra/database-schema
 "}
 
@@ -49,15 +50,35 @@ if ! command -v flock >/dev/null 2>&1; then
   exit 1
 fi
 
+REPO_ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+cd "$REPO_ROOT"
+
+# Athanor is opt-in per checkout. Keep the no-manifest development stack unchanged.
+# Re-enter through Athanor before taking the Docker lock so its environment reaches Compose.
+if [ -f athanor.yaml ] && [ "$ACTION" != stop ] && [ "$ACTION" != down ]; then
+  if [ "${INFRAEGE_ATHANOR_ACTIVE:-}" != 1 ]; then
+    if ! command -v athanor >/dev/null 2>&1; then
+      echo "Athanor is configured, but its CLI is unavailable. Install Athanor before starting the development stack." >&2
+      exit 1
+    fi
+    SMTP_HOST=${SMTP_HOST:-postbox.cloud.yandex.net}
+    SMTP_PORT=${SMTP_PORT:-587}
+    MAIL_FROM=${MAIL_FROM:-accounts@infraege.ru}
+    export SMTP_HOST SMTP_PORT MAIL_FROM
+    exec athanor run -- env INFRAEGE_ATHANOR_ACTIVE=1 "$0" "$ACTION"
+  fi
+  if [ -z "${SMTP_USERNAME:-}" ] || [ -z "${SMTP_PASSWORD:-}" ]; then
+    echo "Athanor is configured, but SMTP_USERNAME or SMTP_PASSWORD is missing. Complete the vault before starting the development stack." >&2
+    exit 1
+  fi
+fi
+
 exec 9>"$LOCK_FILE"
 if ! flock -n 9; then
   echo "Another infraege Docker lifecycle command is still running." >&2
   echo "Wait for it to finish instead of starting '$ACTION' concurrently." >&2
   exit 75
 fi
-
-REPO_ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
-cd "$REPO_ROOT"
 
 compose() {
   POSTGRES_USER=infraege \
@@ -66,6 +87,8 @@ compose() {
     DB_IMPORT_PASSWORD=infraege-dev-import-only \
     DB_MIGRATION_PASSWORD=infraege-dev-migration-only \
     DB_BACKUP_PASSWORD=infraege-dev-backup-only \
+    DB_APP_PASSWORD=infraege-dev-app-only \
+    AUTH_CSRF_SECRET=infraege-dev-csrf-secret-only-adequate-length \
     POSTGRES_DB=infraege \
     DB_ENV=dev DB_PROJECT=infraege-dev TASK_FILES_DIR="$REPO_ROOT/infra/task-files.local" \
     APP_ENV=development \

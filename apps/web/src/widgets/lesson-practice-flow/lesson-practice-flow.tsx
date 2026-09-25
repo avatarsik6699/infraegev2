@@ -6,9 +6,10 @@ import { useLessonProgress } from "~/features/lesson-progress";
 
 type LessonPracticeFlowProps = Omit<
   LessonPracticeTypes.Props,
-  "acceptedAnswers" | "onTaskSolved" | "solvedTaskIds"
+  "onTaskSolved" | "solvedTaskIds"
 > & {
   lessonId: string;
+  contextKind: "topic_lesson" | "course_lesson";
 };
 
 export const LessonPracticeFlow: React.FC<LessonPracticeFlowProps> = (
@@ -20,11 +21,9 @@ export const LessonPracticeFlow: React.FC<LessonPracticeFlowProps> = (
     <LessonPractice
       {...props}
       outdatedTaskIds={progress.outdatedTaskIds}
-      acceptedAnswers={progress.acceptedAnswers}
-      onTaskSolved={(taskId, acceptedAnswer) =>
+      onTaskSolved={(taskId) =>
         progress.markSolved(
           taskId,
-          acceptedAnswer,
           props.tasks.find((task) => task.id === taskId)?.solutionRevision,
         ).solvedTaskIds.length
       }

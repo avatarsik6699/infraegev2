@@ -90,7 +90,11 @@ export namespace PracticeTaskTypes {
     explanation: string;
   };
 
-  export type CheckResult = { correct: boolean; explanation: string };
+  export type CheckResult = {
+    correct: boolean;
+    explanation: string;
+    saved?: boolean;
+  };
   export type Checker = (
     taskId: string,
     answer: string,

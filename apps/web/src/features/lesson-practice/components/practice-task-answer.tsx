@@ -56,6 +56,9 @@ export const PracticeTaskAnswer: React.FC<PracticeTaskAnswerProps> = (
   const placeholder = props.answerInstruction
     ? "Введите ответ"
     : "Без единиц измерения";
+  const error = answerError(props.state);
+  const needsRefresh = props.state === "stale" || props.state === "unavailable";
+  const accepted = props.alreadySolved || props.state === "correct";
   return (
     <form
       className={styles.practiceForm}
@@ -69,65 +72,57 @@ export const PracticeTaskAnswer: React.FC<PracticeTaskAnswerProps> = (
         />
       )}
       <div className={styles.answerPanel}>
+        {props.layout !== "compact" &&
+        props.answerInstruction &&
+        props.answerInstruction.trim() !==
+          "Запишите целое число в десятичной системе счисления." ? (
+          <Typography.Text
+            id={`${props.inputId}-instruction`}
+            className={styles.catalogInstruction}
+          >
+            {props.answerInstruction}
+          </Typography.Text>
+        ) : null}
         <div className={styles.answerRow}>
           <div className={styles.answerField}>
             <Field
-              className={props.alreadySolved ? styles.solvedAnswer : undefined}
+              className={accepted ? styles.solvedAnswer : undefined}
               data-solved={props.alreadySolved || undefined}
               ref={inputRef}
               id={props.inputId}
               name="answer"
               label={props.layout === "compact" ? "Ваш ответ" : "Ответ"}
-              labelVisibility={
-                props.layout !== "compact" && props.answerInstruction
-                  ? "visible"
-                  : "sr-only"
-              }
-              description={
-                props.layout === "compact" ||
-                props.answerInstruction?.trim() ===
-                  "Запишите целое число в десятичной системе счисления."
-                  ? undefined
-                  : props.answerInstruction
-              }
-              maxLength={500}
-              placeholder={
-                props.alreadySolved ? "Этот ответ уже принят" : placeholder
-              }
-              error={answerError(props.state)}
-              invalid={props.state === "incorrect"}
+              labelVisibility="sr-only"
               aria-describedby={
-                props.layout === "compact" && props.state === "error"
-                  ? `${props.inputId}-feedback`
+                props.layout !== "compact" &&
+                props.answerInstruction &&
+                props.answerInstruction.trim() !==
+                  "Запишите целое число в десятичной системе счисления."
+                  ? `${props.inputId}-instruction`
                   : undefined
               }
-              autoComplete="off"
-              disabled={
-                !props.enhanced || props.alreadySolved || props.checking
+              maxLength={500}
+              placeholder={accepted ? "Этот ответ уже принят" : placeholder}
+              error={error}
+              endAdornment={
+                accepted ? (
+                  <CircleCheck
+                    className={styles.answerAcceptedIcon}
+                    data-answer-accepted-icon
+                    aria-hidden="true"
+                    size={20}
+                    strokeWidth={1.8}
+                  />
+                ) : undefined
               }
+              invalid={Boolean(error)}
+              autoComplete="off"
+              disabled={!props.enhanced || accepted || props.checking}
               value={props.answer}
               onChange={(event) =>
                 props.onAnswerChange(event.currentTarget.value)
               }
             />
-            {props.alreadySolved ? (
-              <CircleCheck
-                className={styles.answerAcceptedIcon}
-                data-answer-accepted-icon
-                aria-hidden="true"
-                size={18}
-                strokeWidth={1.8}
-              />
-            ) : null}
-            {props.layout === "compact" && props.state === "error" && (
-              <Typography.Text
-                id={`${props.inputId}-feedback`}
-                className={styles.answerError}
-                role="alert"
-              >
-                Не удалось проверить ответ. Попробуйте ещё раз.
-              </Typography.Text>
-            )}
             {props.layout === "compact" && props.alreadySolved && (
               <span className={styles.visuallyHidden} role="status">
                 Ответ принят
@@ -146,7 +141,7 @@ export const PracticeTaskAnswer: React.FC<PracticeTaskAnswerProps> = (
               loading={props.checking}
               disabled={
                 !props.enhanced ||
-                props.alreadySolved ||
+                accepted ||
                 props.state === "stale" ||
                 props.state === "unavailable"
               }
@@ -155,20 +150,14 @@ export const PracticeTaskAnswer: React.FC<PracticeTaskAnswerProps> = (
             </Button>
           )}
         </div>
-        {props.state === "stale" || props.state === "unavailable" ? (
-          <div role="alert">
-            <Typography.Text tone="muted">
-              {props.state === "stale"
-                ? "Задача изменилась. Обновите условие и проверьте ответ заново. Введённый ответ сохранён."
-                : "Задача больше недоступна. Обновите страницу или выберите другую задачу."}
-            </Typography.Text>
-            <Button onClick={props.onRefresh}>Обновить условие</Button>
-          </div>
-        ) : null}
-        {props.state === "error" && props.layout !== "compact" ? (
-          <Typography.Text role="alert" tone="muted">
-            Не удалось проверить ответ. Попробуйте ещё раз.
-          </Typography.Text>
+        {needsRefresh ? (
+          <Button
+            className={styles.answerRefresh}
+            hierarchy="quiet"
+            onClick={props.onRefresh}
+          >
+            Обновить условие
+          </Button>
         ) : null}
       </div>
     </form>
@@ -179,5 +168,13 @@ function answerError(state: LessonPracticeTypes.State): string | undefined {
   if (state === "incorrect") {
     return "Ответ пока не подходит. Попробуйте ещё раз или откройте подсказку.";
   }
+  if (state === "stale") {
+    return "Задача изменилась. Обновите условие и проверьте ответ заново. Введённый ответ сохранён.";
+  }
+  if (state === "unavailable") {
+    return "Задача больше недоступна. Обновите страницу или выберите другую задачу.";
+  }
+  if (state === "error")
+    return "Не удалось проверить ответ. Попробуйте ещё раз.";
   return undefined;
 }

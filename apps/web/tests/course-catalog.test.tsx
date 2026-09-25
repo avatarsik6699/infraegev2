@@ -6,6 +6,22 @@ import { CourseCatalogPage } from "~/pages/course-catalog";
 import { courseCatalogModel } from "~/pages/course-catalog/model/course-catalog-model";
 import type { CourseCatalogTypes } from "~/entities/course";
 
+const progressFixture = vi.hoisted(() => ({
+  results: [] as {
+    context_kind: "course_lesson";
+    context_id: string;
+    task_id: string;
+    solution_revision: number;
+  }[],
+}));
+vi.mock("~/features/account", () => ({
+  useAccountSession: () => ({
+    account: { id: "member" },
+    status: "ready",
+    csrfToken: "test",
+  }),
+}));
+
 vi.mock(
   "@tanstack/react-router",
   async (
@@ -65,35 +81,36 @@ const lessons = Array.from({ length: 28 }, (_, index) => ({
   tasks: [{ id: `task-${String(index)}`, solutionRevision: 2 }],
 }));
 const catalog = (summaries = { python: lessons }) => (
-  <LessonProgressProvider>
+  <LessonProgressProvider accountId="member">
     <CourseCatalogPage summaries={summaries} />
   </LessonProgressProvider>
 );
-beforeEach(() => localStorage.clear());
-afterEach(cleanup);
+beforeEach(() => {
+  progressFixture.results = [];
+  vi.stubGlobal(
+    "fetch",
+    vi
+      .fn()
+      .mockImplementation(() =>
+        Promise.resolve(Response.json({ results: progressFixture.results })),
+      ),
+  );
+});
+afterEach(() => {
+  cleanup();
+  vi.unstubAllGlobals();
+});
 
 describe("mini-course catalog", () => {
   it.each([0, 1, 28])(
     "shares %i mastered lessons across header and card",
     async (count: number) => {
-      localStorage.setItem(
-        "infraege:lesson-progress:v2",
-        JSON.stringify({
-          version: 1,
-          data: {
-            lessons: Object.fromEntries(
-              lessons.slice(0, count).map((lesson) => [
-                lesson.id,
-                {
-                  solvedTaskIds: [lesson.tasks[0]!.id],
-                  acceptedAnswers: {},
-                  solvedRevisions: { [lesson.tasks[0]!.id]: { "2": "5" } },
-                },
-              ]),
-            ),
-          },
-        }),
-      );
+      progressFixture.results = lessons.slice(0, count).map((lesson) => ({
+        context_kind: "course_lesson" as const,
+        context_id: lesson.id,
+        task_id: lesson.tasks[0]!.id,
+        solution_revision: 2,
+      }));
       const view = render(catalog());
       await waitFor(() =>
         expect(
@@ -125,21 +142,14 @@ describe("mini-course catalog", () => {
   );
 
   it("invalidates old revisions without changing catalog totals", async () => {
-    localStorage.setItem(
-      "infraege:lesson-progress:v2",
-      JSON.stringify({
-        version: 1,
-        data: {
-          lessons: {
-            "lesson-0": {
-              solvedTaskIds: ["task-0"],
-              acceptedAnswers: {},
-              solvedRevisions: { "task-0": { "1": "5" } },
-            },
-          },
-        },
-      }),
-    );
+    progressFixture.results = [
+      {
+        context_kind: "course_lesson",
+        context_id: "lesson-0",
+        task_id: "task-0",
+        solution_revision: 1,
+      },
+    ];
     render(catalog());
     await waitFor(() =>
       expect(screen.getAllByText("Освоено 0 из 28 уроков")).toHaveLength(2),
@@ -157,7 +167,7 @@ describe("mini-course catalog", () => {
 
   it("preserves navigation and totals on missing summaries without a false zero", async () => {
     render(
-      <LessonProgressProvider>
+      <LessonProgressProvider accountId="member">
         <CourseCatalogPage summaries={{ python: null }} />
       </LessonProgressProvider>,
     );

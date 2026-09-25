@@ -7,6 +7,7 @@ from alembic import context
 from sqlalchemy import Connection, text
 
 from app.core.database import SCHEMA_LOCK, Base, database_engine
+from app.modules.account import models as account_models  # noqa: F401
 from app.modules.practice import models  # noqa: F401
 
 

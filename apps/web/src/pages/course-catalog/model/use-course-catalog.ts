@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { courseCatalog } from "~/entities/course";
 import {
   useLessonProgressHydrated,
+  useLessonProgressStatus,
   useLessonsProgress,
 } from "~/features/lesson-progress";
 import type { CourseCatalogPageTypes } from "../course-catalog-page.types";
@@ -23,10 +24,12 @@ export const useCourseCatalog = (
   );
   const progressByLessonId = useLessonsProgress(lessonIds, lessons);
   const hydrated = useLessonProgressHydrated();
+  const progressStatus = useLessonProgressStatus();
   return courseCatalogModel.calculate(
     courseCatalog.entries,
     summaries,
     progressByLessonId,
     hydrated,
+    progressStatus === "error",
   );
 };

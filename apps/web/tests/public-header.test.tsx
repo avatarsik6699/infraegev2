@@ -3,6 +3,21 @@ import { describe, expect, it, vi } from "vitest";
 import { PublicHeader } from "~/widgets/public-header";
 import { PublicFooter } from "~/widgets/public-footer";
 
+const accountSession = vi.hoisted(() => ({
+  account: null as {
+    email: string | null;
+    id: string;
+    methods: [];
+  } | null,
+  csrfToken: null as string | null,
+  refresh: vi.fn<() => Promise<void>>().mockResolvedValue(undefined),
+  status: "ready" as "loading" | "ready" | "error",
+}));
+
+vi.mock("~/features/account", () => ({
+  useAccountSession: () => accountSession,
+}));
+
 vi.mock(
   "@tanstack/react-router",
   async (importOriginal: <T>() => Promise<T>) => {
@@ -57,7 +72,52 @@ vi.mock(
 );
 
 describe("PublicHeader", () => {
+  it.each([
+    ["loading", null, "Проверяем вход"],
+    ["error", null, "Не удалось проверить вход"],
+  ] as const)(
+    "does not show the guest action while the session is %s",
+    (status, account, label) => {
+      accountSession.status = status;
+      accountSession.account = account;
+      render(<PublicHeader />);
+
+      expect(screen.getByText(label)).not.toBeNull();
+      expect(screen.queryByRole("link", { name: "Войти" })).toBeNull();
+    },
+  );
+
+  it("shows signed-in progress navigation and an email initial", () => {
+    accountSession.status = "ready";
+    accountSession.account = {
+      email: "vlad@example.com",
+      id: "account-1",
+      methods: [],
+    };
+    render(<PublicHeader />);
+
+    expect(
+      screen.getByRole("link", { name: "Мой прогресс" }).getAttribute("href"),
+    ).toBe("/account");
+    expect(
+      screen.getByRole("link", { name: "Открыть профиль" }).textContent,
+    ).toBe("V");
+    expect(screen.queryByRole("link", { name: "Войти" })).toBeNull();
+  });
+
+  it("uses a neutral initial for a provider-only account", () => {
+    accountSession.status = "ready";
+    accountSession.account = { email: null, id: "account-1", methods: [] };
+    render(<PublicHeader />);
+
+    expect(
+      screen.getByRole("link", { name: "Открыть профиль" }).textContent,
+    ).toBe("П");
+  });
+
   it("renders the infraege identity and honest home navigation", () => {
+    accountSession.status = "ready";
+    accountSession.account = null;
     const { container } = render(<PublicHeader home />);
 
     expect(container.querySelector("[data-public-header]")).not.toBeNull();
@@ -100,7 +160,12 @@ describe("PublicHeader", () => {
     expect(
       screen.getAllByRole("link", { name: "Практика" })[0].getAttribute("href"),
     ).toBe("/practice");
-    expect(screen.queryByText("Войти", { exact: true })).toBeNull();
+    expect(screen.getAllByRole("link", { name: "Войти" })).toHaveLength(1);
+    const signInLink = screen.getByRole("link", { name: "Войти" });
+    expect(signInLink.getAttribute("data-hierarchy")).toBe("text");
+    expect(signInLink.querySelector("svg.lucide-log-in")).not.toBeNull();
+    expect(signInLink.querySelector("svg.lucide-arrow-right")).toBeNull();
+    expect(signInLink.querySelector("[data-action-underline]")).toBeNull();
     expect(screen.queryByText("Регистрация", { exact: true })).toBeNull();
     expect(screen.queryByRole("link", { name: "Регистрация" })).toBeNull();
   });

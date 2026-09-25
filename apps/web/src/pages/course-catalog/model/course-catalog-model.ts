@@ -12,6 +12,7 @@ const calculate = (
     Record<string, CourseProgressTypes.LessonProgress>
   >,
   hydrated: boolean,
+  progressUnavailable = false,
 ) => {
   const byId: Partial<
     Record<CourseCatalogTypes.Id, CourseCatalogPageTypes.Progress>
@@ -27,7 +28,10 @@ const calculate = (
       byId[entry.id] = { status: "unavailable" };
       unavailable = true;
     } else if (!hydrated) {
-      byId[entry.id] = { status: "loading" };
+      byId[entry.id] = {
+        status: progressUnavailable ? "unavailable" : "loading",
+      };
+      unavailable ||= progressUnavailable;
     } else {
       const progress = courseProgress.calculate(lessons, progressByLessonId);
       const count = progress.masteredLessonIds.length;
