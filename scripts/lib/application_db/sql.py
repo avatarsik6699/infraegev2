@@ -12,7 +12,8 @@ UNKNOWN_ROLES = r"""
 SELECT DISTINCT r.rolname FROM pg_shdepend d JOIN pg_roles r ON r.oid=d.refobjid
 WHERE d.dbid=(SELECT oid FROM pg_database WHERE datname=current_database())
 AND d.refclassid='pg_authid'::regclass AND r.rolname NOT IN
-('infraege','infraege_runtime','infraege_import','infraege_migration','infraege_backup','infraege_app')
+('infraege','infraege_runtime','infraege_import','infraege_migration',
+ 'infraege_backup','infraege_app')
 AND r.rolname NOT LIKE 'pg_%';
 """
 
@@ -23,12 +24,14 @@ CASE WHEN rolcreatedb THEN 'CREATEDB' ELSE 'NOCREATEDB' END,
 CASE WHEN rolcreaterole THEN 'CREATEROLE' ELSE 'NOCREATEROLE' END,
 CASE WHEN rolbypassrls THEN 'BYPASSRLS' ELSE 'NOBYPASSRLS' END)
 FROM pg_roles WHERE rolname IN
-('infraege','infraege_runtime','infraege_import','infraege_migration','infraege_backup','infraege_app') ORDER
+('infraege','infraege_runtime','infraege_import','infraege_migration',
+ 'infraege_backup','infraege_app') ORDER
 BY rolname;
 SELECT format('ALTER ROLE %I SET %I = %L;', rolname, split_part(setting,'=',1),
 substr(setting,strpos(setting,'=')+1))
 FROM pg_roles CROSS JOIN LATERAL unnest(rolconfig) setting WHERE rolname IN
-('infraege','infraege_runtime','infraege_import','infraege_migration','infraege_backup','infraege_app') ORDER
+('infraege','infraege_runtime','infraege_import','infraege_migration',
+ 'infraege_backup','infraege_app') ORDER
 BY rolname,setting;
 SELECT format('GRANT %I TO %I%s;', granted.rolname, member.rolname,
 CASE WHEN m.admin_option THEN ' WITH ADMIN OPTION' ELSE '' END)
@@ -67,16 +70,24 @@ WITH expected(tablename) AS (
   WHERE table_schema = 'practice' AND table_name = 'progress_result'
     AND column_name ILIKE '%answer%'
 )
-SELECT (SELECT count(*) FROM expected) = (SELECT count(*) FROM expected JOIN actual USING (tablename))
+SELECT (SELECT count(*) FROM expected) =
+  (SELECT count(*) FROM expected JOIN actual USING (tablename))
   AND NOT EXISTS (SELECT 1 FROM answer_columns)
   AND has_schema_privilege('infraege_app', 'practice', 'USAGE')
-  AND has_table_privilege('infraege_app', 'practice.account_user', 'SELECT, INSERT, UPDATE, DELETE')
-  AND has_table_privilege('infraege_app', 'practice.account_identity', 'SELECT, INSERT, UPDATE, DELETE')
-  AND has_table_privilege('infraege_app', 'practice.account_password', 'SELECT, INSERT, UPDATE, DELETE')
-  AND has_table_privilege('infraege_app', 'practice.account_session', 'SELECT, INSERT, UPDATE, DELETE')
-  AND has_table_privilege('infraege_app', 'practice.account_token', 'SELECT, INSERT, UPDATE, DELETE')
-  AND has_table_privilege('infraege_app', 'practice.account_provider_challenge', 'SELECT, INSERT, UPDATE, DELETE')
-  AND has_table_privilege('infraege_app', 'practice.progress_result', 'SELECT, INSERT, UPDATE, DELETE')
+  AND has_table_privilege(
+    'infraege_app', 'practice.account_user', 'SELECT, INSERT, UPDATE, DELETE')
+  AND has_table_privilege(
+    'infraege_app', 'practice.account_identity', 'SELECT, INSERT, UPDATE, DELETE')
+  AND has_table_privilege(
+    'infraege_app', 'practice.account_password', 'SELECT, INSERT, UPDATE, DELETE')
+  AND has_table_privilege(
+    'infraege_app', 'practice.account_session', 'SELECT, INSERT, UPDATE, DELETE')
+  AND has_table_privilege(
+    'infraege_app', 'practice.account_token', 'SELECT, INSERT, UPDATE, DELETE')
+  AND has_table_privilege(
+    'infraege_app', 'practice.account_provider_challenge', 'SELECT, INSERT, UPDATE, DELETE')
+  AND has_table_privilege(
+    'infraege_app', 'practice.progress_result', 'SELECT, INSERT, UPDATE, DELETE')
   AND has_table_privilege('infraege_app', 'practice.task', 'SELECT')
   AND has_table_privilege('infraege_app', 'practice.task_checker', 'SELECT')
   AND has_table_privilege('infraege_app', 'practice.lesson_task', 'SELECT');
