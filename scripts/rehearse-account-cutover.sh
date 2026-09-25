@@ -58,10 +58,15 @@ snapshot_bytes=$(jq -er '.summary.total_bytes_processed | select(type == "number
 [[ $(git -C "$repo_dir" rev-parse --verify HEAD) == "$candidate_sha" ]] || {
   db_fail 'candidate SHA does not match this source checkout'; exit 1;
 }
-git -C "$repo_dir" diff --quiet && git -C "$repo_dir" diff --cached --quiet &&
-  [[ -z $(git -C "$repo_dir" status --porcelain --untracked-files=all) ]] || {
+if ! git -C "$repo_dir" diff --quiet || ! git -C "$repo_dir" diff --cached --quiet; then
   db_fail 'candidate source checkout must be clean and exact'; exit 1;
+fi
+checkout_status=$(git -C "$repo_dir" status --porcelain --untracked-files=all) || {
+  db_fail 'candidate source checkout status could not be verified'; exit 1;
 }
+if [[ -n $checkout_status ]]; then
+  db_fail 'candidate source checkout must be clean and exact'; exit 1;
+fi
 image="ghcr.io/avatarsik6699/infraegev2-api:$candidate_sha"
 image_digest="ghcr.io/avatarsik6699/infraegev2-api@$candidate_digest"
 docker image inspect "$image" --format '{{json .RepoDigests}}' |
