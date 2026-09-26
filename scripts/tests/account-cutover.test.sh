@@ -53,6 +53,10 @@ for migration_source in "$repo_dir/scripts/rehearse-account-cutover.sh" \
     exit 1
   fi
 done
+# Check a literal shell variable in the reviewed script.
+# shellcheck disable=SC2016
+grep -Fq 'docker exec -i "$second" psql -X -qAt' \
+  "$repo_dir/scripts/rehearse-account-cutover.sh"
 
 reject() {
   : >"$CUTOVER_TEST_LOG"

@@ -251,7 +251,7 @@ created_first_volume=false
 create_isolated "$second" "$second_volume" postgres ''
 db_restore_bundle "$work_dir/candidate-bundle" "$second"
 db_restore_practice_smoke "$work_dir/candidate-bundle" "$second"
-[[ $(docker exec "$second" psql -X -qAt -U restore_admin -d infraege \
+[[ $(docker exec -i "$second" psql -X -qAt -U restore_admin -d infraege \
   -v ON_ERROR_STOP=1 <"$repo_dir/scripts/sql/account-cutover-assert.sql") == fixture-ok ]] || {
   db_fail 'synthetic account data did not survive candidate restore'; exit 1;
 }
