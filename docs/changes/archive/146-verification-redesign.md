@@ -7,7 +7,7 @@
 | Change | `146` |
 | Slug | `verification-redesign` |
 | Title | Simplify SDD and delivery |
-| Status | `active — simplification implementation resumed` |
+| Status | `archived` |
 | Branch | `feature/146-verification-redesign` |
 | Source | Architect's explicit simplification request, 2026-09-26 |
 
@@ -20,8 +20,8 @@ Prefer fewer executions and clear ownership over optimizing an unnecessarily lar
 This revision supersedes the original 146 infrastructure plan: daily audits, mandatory Lighthouse
 on styles, compatibility Full, evidence platform and snapshot scheduler are cancelled requirements.
 Earlier work is a sunk cost, not a reason to finish it. The earlier
-[research](../artifacts/sdd-verification-redesign-2026-09-26.md) and
-[pilot](../artifacts/verification-pilot-146.md) are historical inputs, not current obligations.
+[research](../../artifacts/sdd-verification-redesign-2026-09-26.md) and
+[pilot](../../artifacts/verification-pilot-146.md) are historical inputs, not current obligations.
 
 Planning did not authorize push/deploy or activate workflows. The architect resumed the remaining
 simplification implementation after T8 preparation. Keep the same change and branch; reconcile
