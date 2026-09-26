@@ -7,7 +7,7 @@
 | Change | `148` |
 | Slug | `ci-python-test-line-length` |
 | Title | CI Python test line length |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/148-ci-python-test-line-length` |
 
 ---
