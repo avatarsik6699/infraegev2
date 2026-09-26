@@ -7,7 +7,7 @@
 | Change | `147` |
 | Slug | `release-safety-followup` |
 | Title | Release safety follow-up |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/147-release-safety-followup` |
 
 ---
