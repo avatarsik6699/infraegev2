@@ -204,8 +204,10 @@ if [[ "${SECURITY_UV_EXPORT_FAILURE:-}" == 1 ]]; then exit 17; fi
         self.assertIn("pnpm audit --audit-level high", self.logged_calls())
 
     def test_pyproject_test_marker_only_change_skips_python_audit(self):
-        before = '[project]\nname = "example"\ndependencies = ["fastapi"]\n\n[tool.pytest.ini_options]\nmarkers = ["pure"]\n'
-        after = '[project]\nname = "example"\ndependencies = ["fastapi"]\n\n[tool.pytest.ini_options]\nmarkers = ["pure", "db"]\n'
+        prefix = '[project]\nname = "example"\ndependencies = ["fastapi"]\n'
+        prefix += "\n[tool.pytest.ini_options]\n"
+        before = prefix + 'markers = ["pure"]\n'
+        after = prefix + 'markers = ["pure", "db"]\n'
         result = self.run_gate(
             "changed-dependencies",
             BASE,
