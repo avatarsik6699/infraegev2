@@ -27,7 +27,7 @@ test("legacy browser progress does not impersonate account progress", async ({
   await practiceCutoverPage.expectLegacyBrowserProgressIsIgnored();
 });
 
-test("mobile no-JS retains practice and hides checker data", async ({
+test("mobile no-JS retains practice and hides checker data @no-js", async ({
   noJavaScriptPracticeCutoverPage,
 }) => {
   await noJavaScriptPracticeCutoverPage.openTopic();

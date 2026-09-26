@@ -18,7 +18,7 @@ test("failed checks preserve input and support explicit retry", async ({
   await minimalPage.expectFailedCheck();
 });
 
-test("standalone practice is mobile SSR-readable", async ({
+test("standalone practice is mobile SSR-readable @no-js", async ({
   noJavaScriptMinimalPage,
 }) => {
   await noJavaScriptMinimalPage.expectReadablePractice();
@@ -30,7 +30,7 @@ test("solve multiple tasks inside catalog with transient drafts", async ({
   await minimalPage.expectInlineSolving();
 });
 
-test("catalog links retain context without JavaScript", async ({
+test("catalog links retain context without JavaScript @no-js", async ({
   noJavaScriptMinimalPage,
 }) => {
   await noJavaScriptMinimalPage.expectCatalogWithoutJavaScript();
@@ -42,7 +42,7 @@ test("practice filters apply together and preserve the remaining selection", asy
   await minimalPage.expectCombinedPracticeFilters();
 });
 
-test("combined practice filters work without JavaScript", async ({
+test("combined practice filters work without JavaScript @no-js", async ({
   noJavaScriptMinimalPage,
 }) => {
   await noJavaScriptMinimalPage.expectCombinedPracticeFilters(true);

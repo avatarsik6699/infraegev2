@@ -6,7 +6,7 @@ test("course catalog exposes one overview action and truthful metadata", async (
   await courseCatalogPage.expectCatalog();
 });
 
-test("course catalog stays usable without scripts", async ({
+test("course catalog stays usable without scripts @no-js", async ({
   noJavaScriptCourseCatalogPage,
 }) => {
   await noJavaScriptCourseCatalogPage.expectCatalog(true);

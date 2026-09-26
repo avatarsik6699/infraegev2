@@ -5,12 +5,18 @@ const BACKEND_URL = "http://127.0.0.2:8100";
 
 export default defineConfig({
   testDir: "./e2e",
-  testIgnore: "layout-stability.spec.ts",
+  testIgnore: [
+    "layout-stability.spec.ts",
+    "production-smoke.spec.ts",
+    "account-integration.spec.ts",
+  ],
   // Keep traces outside Vite's app root; writing them under apps/web makes the dev watcher reload
   // the page mid-test and clears controlled input state.
   outputDir: "../../.output/playwright",
   reporter: "list",
   fullyParallel: false,
+  timeout: 45_000,
+  retries: 0,
   use: {
     baseURL: FRONTEND_URL,
     trace: "retain-on-failure",

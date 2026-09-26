@@ -1,5 +1,9 @@
+import pytest
+
 from app.modules.content.schemas import Task
 from app.modules.tasks.service import is_correct
+
+pytestmark = pytest.mark.pure
 
 
 def text_blocks(text: str) -> list[dict[str, object]]:

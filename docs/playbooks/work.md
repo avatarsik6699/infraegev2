@@ -139,15 +139,9 @@ Before planning code changes for an item:
 
 ### 7. Plan
 
-For each item that is `partial`, `not-started`, or a verified Review Note, write a short plan
-before editing code:
-
-- **Done when:** concrete completion condition
-- **Files:** exact paths expected to change
-- **Steps:** short ordered implementation steps
-- **Checks:** which Critical Gate rows apply, plus any focused test commands
-- **Required tooling:** which row(s) of `docs/STACK.md`'s Required Tooling table apply to this
-  item's domain (e.g. frontend UI → Playwright/chrome-devtools MCP; TS/Python → LSP)
+Before a coherent target set, identify its completion condition, affected files, relevant checks
+and required tooling. A brief note is enough when the implementation is clear. Elaborate a design
+only for an unresolved technical choice; do not prepare a separate ceremony for every checkbox.
 
 For frontend work, read `docs/FRONTEND.md` and use the existing minimal public pages and shared
 semantic controls. Keep composition with the page; introduce a reusable mechanism only for a
@@ -175,8 +169,8 @@ For each planned item:
 Before verifying and checking off an item, consult `docs/STACK.md`'s Required Tooling table for
 the item's domain and confirm the mandated tool/skill was actually used:
 
-- Frontend UI change → take a screenshot via Playwright/chrome-devtools MCP and check the browser
-  console for new errors/warnings.
+- Frontend UI change → use Playwriter first for a screenshot and browser-console check; follow
+  STACK's documented connection/fallback procedure when unavailable.
 - TypeScript/Python change → run an LSP diagnostics pass on the changed files.
 - New/changed API surface → regenerate types (`openapi-typescript` or the project's declared
   equivalent) and re-typecheck the frontend consumer.
@@ -205,8 +199,8 @@ After implementing the complete target set:
    Analyze any reports and metrics before the final Repository hygiene row removes them. The row is
    mandatory even when earlier checks produced only caches; never replace its allowlisted commands
    with broad ignored-file cleanup.
-   Print and execute the supported runner plan from [verification](../runbooks/verification.md);
-   record a reason for any reviewed scope override. An unknown path requires a coverage decision,
+   Follow the supported command groups in [verification](../runbooks/verification.md); record the
+   affected-check rationale. An unknown path requires a coverage decision,
    not an automatic expensive Full run. Only the parent runs shared gates; delegated workers
    return focused evidence according to [agent workflow](../runbooks/agent-workflow.md).
 3. Report the commands run and their results; if a check was not run, state the reason.
@@ -218,8 +212,7 @@ After implementing the complete target set:
 Only check off an item after verification succeeds, the fix is re-verified, or the task is
 explicitly already implemented.
 
-Do not run the Full Gate or merge/archive. Full Gate requires explicit `/ship --full` or
-`/ship --release`.
+Do not run the Full Gate or merge/archive. Full Gate requires explicit `/ship --full`.
 
 ### 11. Report
 

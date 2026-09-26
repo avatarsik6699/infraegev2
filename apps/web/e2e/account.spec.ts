@@ -78,13 +78,13 @@ test("server-owned lesson progress is cleared from the UI on logout", async ({
   await accountPage.expectProgressClearsOnLogout();
 });
 
-test("sign-in remains readable without JavaScript", async ({
+test("sign-in remains readable without JavaScript @no-js", async ({
   noJavaScriptAccountPage,
 }) => {
   await noJavaScriptAccountPage.expectNoJavaScriptSignIn();
 });
 
-test("credential forms never fall back to a GET request", async ({
+test("credential forms never fall back to a GET request @no-js", async ({
   accountPage,
   noJavaScriptAccountPage,
 }) => {
@@ -92,7 +92,7 @@ test("credential forms never fall back to a GET request", async ({
   await accountPage.expectEmailMethodFormUsesPost();
 });
 
-test("verification link offers recovery without JavaScript", async ({
+test("verification link offers recovery without JavaScript @no-js", async ({
   noJavaScriptAccountPage,
 }) => {
   await noJavaScriptAccountPage.expectNoJavaScriptVerification();

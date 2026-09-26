@@ -25,7 +25,7 @@
 | Infra | Application Docker Compose on Ubuntu 24.04: Nginx → web/API/PostgreSQL; systemd, journald, fail2ban, Restic |
 | Package managers | uv (`apps/api`), pnpm workspace (`apps/web`, root) |
 | Formatting | Prettier 3.9.6 exact for supported repository files; Ruff from the API lock for Python; EditorConfig for cross-editor whitespace defaults |
-| CI/CD | GitHub Actions on pinned Ubuntu 24.04 runners: static/security/audit checks without tests; GHCR SHA images with SBOM/provenance; serialized SSH deploy with rollback triggered by `workflow_dispatch` with an explicit SHA; scheduled uptime/TLS probe. The `production` GitHub Environment has no required reviewers (architect decision, 2026-09-04) — image publish and deploy run unattended once dispatched; `can_admins_bypass` stays the only remaining safety property |
+| CI/CD | GitHub Actions on pinned Ubuntu 24.04 runners: ordinary static quality, weekly/manual security and browser audits, GHCR SHA images with SBOM/provenance, and serialized explicit-SHA deploy with rollback. The `production` GitHub Environment has no required reviewers (architect decision, 2026-09-04) — image publish and deploy run unattended once dispatched; `can_admins_bypass` stays the only remaining safety property |
 
 ---
 
@@ -183,23 +183,22 @@ editors beyond VS Code.
 
 ## Critical Gate
 
-Run once after the complete target set of a `/work` invocation and by default local `/ship`, scoped
-to the touched area only. It proves that changed code is internally consistent without replaying
+Run once after the complete target set of a `/work` invocation; local `/ship` reruns only rows whose
+inputs changed or whose evidence is missing. It proves changed code is internally consistent without replaying
 the full regression, browser, infrastructure, security, accessibility, or performance suites.
 Fill every applicable row and report the rest as `SKIPPED` with a reason.
 
-Use the supported gate runner and [verification runbook](runbooks/verification.md) to print
-the plan and retain timing/status outside the worktree. A Critical plan that cannot map a
-changed path requires an explicit affected-check decision; it never launches Full implicitly.
+Use the supported gate command groups and [verification runbook](runbooks/verification.md).
+An uncertain path requires an explicit affected-check decision; it never launches Full implicitly.
 One parent owns the gate. Do not repeat it independently in every worker.
 
 | Check | Command | Preconditions / notes |
 |-------|---------|-----------------------|
-| Format | `pnpm format:check` | run once for the target set; scope is repository-wide because formatting configuration is shared |
+| Format | `pnpm format:check` | run once when formatted files/config changed; Markdown-only changes are excluded |
 | Lint | `pnpm --filter web lint` · `pnpm lint:tooling` · `cd apps/api && uv run ruff check app tests migrations` · `pnpm lint:shell` · `bash -n <other-changed-shell-files>` | scope to touched workspace or scripts; `pnpm lint` combines root tooling and web |
 | Type-check (affected) | `pnpm --filter web typecheck` · `cd apps/api && pnpm exec pyright app tests migrations` | app pyright reads `[tool.pyright]` in `apps/api/pyproject.toml`; shell changes have no type-check row |
 | Focused tests | `pnpm --filter web exec vitest run <changed-test-files>` · `cd apps/api && uv run pytest <changed-test-files-or-nodeids>` · `bash scripts/tests/<changed-contract>.test.sh` · `pnpm test:content-assets` | run only tests directly covering changed behavior; `test:content-assets` owns the isolated task-asset validator contract while `validate:content` checks the real content tree; documentation-only changes are `SKIPPED`; never expand this row to the full suite |
-| LSP diagnostics | available: yes | `python-lsp` (Pyright) and `typescript-lsp` MCP servers; repository type-check commands remain complementary gate evidence |
+| LSP diagnostics | available: yes | `python-lsp` (Pyright) and `typescript-lsp` MCP servers are auxiliary changed-file diagnostics; repository compiler/type-check commands are binding |
 | API type regen (`openapi-typescript` or equivalent) | `pnpm api:check` | only when the public API surface or its generated consumer changed; fails on tracked drift |
 | Repository hygiene | analyze required reports, then `make clean-dry-run && make clean && make clean-check` | always run last; the allowlist preserves dependencies, environments, secrets, authored evidence and data; never use `git clean -fdX` as a replacement |
 
@@ -207,11 +206,9 @@ One parent owns the gate. Do not repeat it independently in every worker.
 
 ## Full Gate
 
-Run when explicitly requested through `/ship --full`, or when release risk selection falls
-back to Full. It is intentionally expensive and is not part of routine task completion or
-default local shipping. `/ship --release` selects affected coverage against the last verified
-production SHA; an unknown baseline, shared dependencies, infrastructure or unmapped changes
-require Full. Fresh security and Release Gate remain mandatory for every release.
+Run only when explicitly requested through `/ship --full`. It is intentionally expensive and is
+not part of routine task completion, default local shipping, or every release. Release selects
+the missing affected checks, fresh candidate security/image evidence and the Release Gate.
 
 | Check | Command | Preconditions / notes |
 |-------|---------|-----------------------|
@@ -228,13 +225,15 @@ require Full. Fresh security and Release Gate remain mandatory for every release
 | E2E (Playwright) | `pnpm --filter web test:e2e` | local only, never CI'd; starts local Vite + Uvicorn through Playwright `webServer` and verifies public routes, all published course lessons without JS, practice, degraded states, reading layout and accessibility in Chromium; requires the seeded isolated bank described below |
 | Smoke | `curl -f http://localhost:18000/health/ready` (backend) — frontend smoke is the build prerender crawl | Full Gate API port from `docker-compose.override.yml` |
 | Accessibility audit | covered by `pnpm --filter web test:e2e` above | complete E2E includes `e2e/accessibility.spec.ts`; do not run it twice. `pnpm audit:a11y` remains the focused command when E2E was not selected |
-| Performance budget | `scripts/run-host-web-gate.sh pnpm audit:performance` | consumes the successful build above in the same verified run; rebuild if inputs or output changed. Restores the repository-owned `infraege-full-gate` web service on success/failure; local Chrome against `/`, `/ege`, `/courses`, `/courses/python` and `/ege/16-rekursiya`; median of 3, enforced LCP ceiling ≤4.0s, CLS ≤0.1, TBT ≤200ms as lab proxy for INP. LCP ≤2.8s remains the product target to restore when stable measurement and optimization evidence support tightening the gate |
 | Content validation | `pnpm test:content-assets && pnpm validate:content` | the isolated validator tests reject unsafe paths and invalid asset metadata before the real-tree pass; `validate:content` checks Course/module/lesson membership and titles, generated publication registry, and the complete canonical bank through the API CLI (schema, lesson positions, theory material/section references and file bytes). Requires uv and the frozen API environment; no database or credentials. The legacy asset tests retain historical fixture coverage |
-| SAST / secrets / dependency audit | `pnpm audit:security` | Docker required for pinned Gitleaks 8.30.1 and Trivy 0.73.0; Semgrep 1.172.0 and pip-audit 2.10.1 run through uvx |
 | Repository hygiene | analyze all gate reports, then `make clean-dry-run && make clean && make clean-check` | always run last; Lighthouse removes its external Chrome profile on every exit, while this terminal step removes retained reports, builds and caches from the repository |
 
-Tests remain local-only; the security command is also mirrored in GitHub Actions without invoking
-pytest, Vitest or Playwright.
+Tests remain local-only. Weekly/manual GitHub audits are the only browser exception and never add
+ordinary pytest, Vitest or database suites to push/PR quality jobs.
+Broad security (`pnpm audit:security`) and performance (`scripts/run-host-web-gate.sh pnpm audit:performance`)
+are separate weekly/manual or specifically requested checks, not implicit Full rows. Performance
+consumes an existing successful build only when inputs are unchanged; its current lab ceilings are
+LCP ≤4.0s, CLS ≤0.1 and TBT ≤200ms, while LCP ≤2.8s remains the product target.
 
 ### Full Gate environment
 
@@ -275,6 +274,8 @@ of an already completed push. See the [verification runbook](runbooks/verificati
 
 | Check | Command | Preconditions / notes |
 |-------|---------|-----------------------|
+| Unpublished commit secrets | `bash scripts/security-gate.sh pre-push FULL_BASE_SHA FULL_HEAD_SHA` | before push, scan every commit in the explicit base..head range; base is the verified remote publication tip, head is the candidate merge SHA. Missing/ambiguous ancestry blocks publication; do not treat a tree-only scan as equivalent |
+| Changed dependencies | `bash scripts/security-gate.sh changed-dependencies FULL_BASE_SHA FULL_HEAD_SHA` | before push, audit only changed pnpm/Python ecosystems; checked-out head must match and dependency manifests/locks must be clean. Other changed trust boundaries require their owning targeted checks |
 | Published image build + scan | successful exact-SHA `images.yml` run, verified by release checkpoint tool | after push, before deploy: the workflow scans all three published digests for fixed HIGH/CRITICAL findings and emits SBOM/provenance. `pnpm audit:images` remains an optional local diagnostic, not a second mandatory build/scan |
 | First account-schema cutover | `bash scripts/rehearse-account-cutover.sh --validate FULL_RESTIC_SNAPSHOT_ID SHA API_DIGEST` then `--run` with the same inputs | after published-image verification and before deploy dispatch, only when moving from `122_01` to `140_01`; follow [backup and restore](runbooks/backup-restore.md). The command authenticates and restores the exact Restic snapshot, checks the published digest and writes root-owned `/etc/infraege/accounts-schema-ready` only after a passing second restore; missing evidence blocks deploy |
 | Production Compose render | `scripts/render-production-config.sh /etc/infraege/production.env >/dev/null` | run on the provisioned VPS or against a complete temporary env |
@@ -290,7 +291,7 @@ tool that isn't available must be reported as skipped with a reason, never silen
 
 | Domain | Required tool/skill | When | Available in this project |
 |--------|----------------------|------|-----------------------------|
-| Frontend UI change | Playwright MCP / chrome-devtools MCP (screenshot + console check) | after implementing, before checking off | yes |
+| Frontend UI change | Playwriter first (screenshot + console check); fallback per the browser connection procedure | after implementing, before checking off | yes |
 | E2E test change | Playwright + Page Object Model + E2E policy lint | during implementation and verification; use typed fixtures, `e2e/pages/*.page.ts`, user-visible locators, and run `pnpm --filter web lint` | yes |
 | TypeScript / Python change | LSP diagnostics | after implementing, before checking off | yes |
 | New/changed API surface | `openapi-typescript` regen + frontend re-typecheck | after backend contract change | yes — `pnpm api:generate` updates tracked artifacts; `pnpm api:check` proves no drift |
@@ -341,10 +342,11 @@ Repository-prescribed automated Playwright tests keep their existing runner.
 
 ## Testing Policy
 
-Unit tests (Vitest and pytest) and browser e2e tests (Playwright) run **only locally in the
-developer's own environment**. They must never be containerized and must never be added to CI,
-including after a CI pipeline exists for non-test checks such as lint or build. This is a durable
-architect decision, not a temporary gap in the current CI setup.
+Unit tests (Vitest and pytest), database acceptance, and ordinary Playwright E2E run **only
+locally**. They must never be containerized or added to push/PR quality jobs. The narrow exception
+is weekly/manual `audit-browser.yml`: a host runner may use disposable synthetic data for the
+browser portfolio and a separate unauthenticated read-only public Lighthouse observation. It has
+no production credentials or writes and does not make a broad browser suite routine CI.
 
 Docker may serve the application for unrelated infrastructure verification, but no test runner or
 browser is installed or executed inside an application image or Compose service. The Playwright
@@ -405,8 +407,9 @@ pnpm --filter web test:e2e
   and backend processes on dedicated `127.0.0.2:3100` / `127.0.0.2:8100` ports with strict port
   binding; it never reuses an arbitrary process that may serve a stale checkout.
 
-E2E requires a seeded bank. Prefer the isolated Full Gate database described above for release
-verification. For ordinary development run `make dev` and explicit `make practice-bootstrap` first,
+E2E requires a seeded bank. Use an isolated database for selected release verification; the
+weekly browser launcher owns its disposable synthetic database. For ordinary development run
+`make dev` and explicit `make practice-bootstrap` first,
 then provide the read-only runtime `DATABASE_URL` to the host runner, using the allocated
 loopback port from `docker port infraege-dev-postgres-1 5432`. Set `TASK_FILES_DIR` to the absolute
 local task-files directory for file delivery. Never point a test runner at production. No test
@@ -541,6 +544,13 @@ Gate/checkpoint tooling follows the same stdlib-only boundary. Its focused lint 
 ../../scripts/tests/release_checkpoint_test.py`. These checks exercise fake commands/transports;
 testing orchestration does not require running application Full Gate or contacting production.
 See [verification](runbooks/verification.md) and [agent workflow](runbooks/agent-workflow.md).
+
+Native Codex setup: `.codex/config.toml` selects Sol and caps children at two;
+`.codex/agents/*.toml` defines bounded Luna roles, Sol design/review and Astra escalation.
+`bash scripts/codex-orchestrator.sh` launches from this repository with normal CLI arguments.
+New trusted-repository sessions load the roles; existing sessions keep their runtime settings.
+Agent-config acceptance uses TOML parsing, Codex strict config loading and a read-only delegation
+smoke; launcher changes use `pnpm lint:shell`. No application build/DB/browser suite is needed.
 
 
 ## Common operations

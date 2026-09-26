@@ -1,129 +1,92 @@
 # Verification and release evidence
 
-Use one deterministic runner for local checks. Models select the intended scope,
-interpret failures and review behavior; they do not reconstruct a long shell sequence
-for every change. STACK defines the coverage obligations; the runner executes them.
+This project favors a short development loop over a custom verification platform. Use existing
+package commands, GitHub Actions and release workflows; do not add a result cache, snapshot runner,
+audit importer, evidence TTL ledger or command DSL.
 
-## Scope and risk
+## Local work
 
-Critical runs once per complete `/work` target set, then at local `/ship`. Run focused
-tests during implementation when they answer a concrete question. Do not replay a
-gate for every checkbox or every small visual adjustment. Required browser/LSP evidence
-and unchecked review notes still matter; a command exit code cannot replace them.
+For one coherent `/work` set, choose the affected rows from STACK's Critical Gate and run them once:
 
-Release compares the whole candidate against the last independently verified production
-SHA. Read current public health, confirm that SHA belongs to the repository, and supply
-the full SHA as the baseline. Local `main` is not a production baseline. If production
-cannot be identified, choose Full and resolve the target-health failure before deploy.
+- format where applicable;
+- lint/type checks for modified workspace or maintenance script;
+- focused test(s) that directly exercise changed behavior;
+- browser observation for changed UI behavior;
+- API generation only when the public API changed.
 
-| Area | Release coverage |
-|------|------------------|
-| Ordinary documentation | Format and fresh security |
-| Known host operations scripts | Format, host checks, relevant operations contracts, fresh security |
-| Web implementation | Web build, unit/E2E including accessibility, performance, fresh security |
-| API implementation | API checks, migrations where selected, contract drift, integration/E2E, fresh security |
-| Content | Canonical content/assets validation and affected consumers |
-| Shared dependencies, infrastructure, gate policy, unknown inputs or missing baseline | Full |
+Record the reviewed revision/diff, command and outcome in the active change. At local `/ship`,
+compare relevant source, tests, configuration and locks with that record. Do not repeat an unchanged
+check. Re-run only the check whose inputs changed, evidence is missing, or environment is uncertain.
+Runtime/browser/database checks are fresh when selected. A command result is not production proof.
 
-The printed runner plan is authoritative for the actual path classification and union
-of affected areas. Conservative fallback is expected for unrecognized paths. Never
-silently omit a path to obtain a cheaper plan. Critical can record a reviewed scope
-decision with a reason and explicit focused tests; release fallback cannot be overridden
-that way. Explicit `/ship --full` remains available.
+Unknown impact requires a written coverage decision or a focused architect question. It does not
+automatically invoke Full. Full is only `/ship --full`.
 
-## Local execution
+The thin selector is optional: `python3 scripts/gate.py checks` lists commands, and
+`python3 scripts/gate.py run --group web-lint --group web-typecheck` runs only those groups. It
+does not infer scope or cache a PASS. Use the owning package/test command directly when clearer.
 
-```bash
-python3 scripts/gate.py plan --profile critical --base main
-python3 scripts/gate.py plan --profile full --base main
-python3 scripts/gate.py plan --profile release --base <verified-production-40-char-sha>
-```
+## Scope reminders
 
-Inspect the selected commands and prerequisites before changing `plan` to `run`.
-Pass focused tests explicitly for changed behavior with `--test NAME=COMMAND`.
-Commands are trusted operator input, not an API for untrusted users; do not put credentials
-in them. Use the command's `--help` for prepared-environment and resume options.
+- Docs: links/structure and relevant formatter only.
+- Content: content validation and affected SSR/rendering.
+- UI: web lint/types plus owning behavior; use focused no-JS/a11y/layout only when relevant.
+  Lighthouse is weekly/manual or a specific performance investigation, not every CSS change.
+- API: API lint/types and owning tests; OpenAPI only for public contract changes.
+- Auth/progress: negative/owner-isolation coverage and real account integration before release.
+- Schema/data: owning isolated migration/restore and permission checks.
+- Dependencies: changed ecosystem audit; candidate images are scanned once by `images.yml`.
+- Host scripts: owning fake contracts and relevant real boundary checks, not web performance.
 
-For reviewed host-tool changes with paths the automatic selector cannot prove safe, use
-`--reviewed-scope ops --reason 'concrete coverage rationale'` plus explicit `--test` arguments.
-This applies only to Critical; it preserves the original path classifications in the report.
-Do not use it to bypass release fallback. Run `resume` with the same profile, base, scope
-and test arguments; mismatches fail instead of reusing another plan's evidence.
+## CI and periodic audits
 
-Full and database/browser-dependent profiles require the isolated environment in STACK.
-Preparing the database and importing a local bank is a separate explicit step; the runner
-does not discover production credentials, bootstrap production or import production data.
-Never pass a production database URL to local checks.
-After the documented bootstrap, health and seed validation, pass `--prepared-environment`.
-The runner additionally rejects non-development environments and database URLs outside the
-declared loopback port/role/database boundary. This flag is an operator attestation of the
-bootstrap and seed checks, not automated proof that those manual prerequisites happened.
+Ordinary quality CI remains static and must not run normal pytest, Vitest, DB or browser suites.
+Use native dependency caching and workflow concurrency; do not cache test validity. Avoid required
+workflow path filters that can leave a check Pending.
 
-The runner writes protected JSON under `$XDG_STATE_HOME/infraegev2/gates`, defaulting to
-`~/.local/state/infraegev2/gates`. It records status, elapsed time, selected checks and input
-identity. These files survive repository cleanup and a pause until tomorrow. Keep required
-human observations separately; JSON is evidence about command execution, not every aspect
-of readiness. Do not commit local reports or credentials.
+`audit-security.yml` and `audit-browser.yml` run weekly and manually. They report directly through
+GitHub Actions logs/artifacts and standard notifications. Security covers main repository/locks;
+browser uses a disposable synthetic environment, while public Lighthouse is separately read-only.
+A missed periodic run is noticed and rerun manually. It is not green and does not trigger Full for
+unrelated work. A confirmed critical account/data finding or applicable candidate-image vulnerability
+blocks the affected release; noncritical findings become ordinary Backlog work.
 
-Resume reuses only successful steps whose complete recorded inputs still match. Changed
-source, command selection, relevant environment or tools invalidate reuse. Failed and
-interrupted steps rerun. Artifact-dependent stages also require their output; cleanup can
-force a rebuild. Current security is required for every release attempt. Exact-input resume
-does not claim that a PASS on one source revision proves another revision.
-Database, live-service, browser and performance steps rerun on resume because source/tool
-hashes do not establish their external state. Static checks and a verified build can be reused;
-this implementation does not maintain a cross-revision result cache.
+After separately authorized workflow publication, manually run each normal audit once, inspect the
+reports and confirm the intended GitHub Actions notification recipient/schedule actor. Until then,
+record that remote activation is pending; never fabricate a remote PASS.
+The local equivalents are `bash scripts/security-gate.sh weekly` and
+`bash scripts/run-isolated-browser-audit.sh` (plus `INFRAEGE_LIGHTHOUSE_TARGET=production pnpm
+audit:performance` for the separate public observation). These broad commands are not the routine
+work/ship handoff.
 
-The build is executed once before performance; performance uses that same output. Complete
-E2E already includes accessibility, so a separate `audit:a11y` is unnecessary in that run.
-The focused accessibility command remains useful when complete E2E is not selected.
+## Release
 
-On failure, inspect the failing contract rather than restarting Full blindly. Stop dependent
-work, fix the issue under `/work`, and re-plan. On cancellation, terminate the runner's owned
-process group; do not kill unrelated browser/Docker/user processes. After analyzing results,
-inspect `make clean-dry-run`, run `make clean`, then `make clean-check`. Durable JSON stays outside
-that allowlist; repository artifacts do not stay merely to make a later run look faster.
+`/ship --release` keeps the existing separation:
 
-## Publication and resume
+1. Run missing affected local checks and merge locally after the change is accepted.
+2. Before pushing the final merged SHA, check its complete unpublished commit range for secrets
+   and audit changed dependencies: `bash scripts/security-gate.sh pre-push FULL_BASE_SHA
+   FULL_HEAD_SHA` and `bash scripts/security-gate.sh changed-dependencies FULL_BASE_SHA
+   FULL_HEAD_SHA`. Resolve the actual full SHAs from the verified remote tip and checked-out
+   candidate; missing or ambiguous range blocks publication. Push only under release authority
+   after these checks pass.
+3. Verify exact-SHA quality/images workflow results. Images owns digest scan, SBOM and provenance;
+   do not duplicate it with a mandatory local image scan.
+4. Dispatch deploy once for that exact SHA and verify fresh public health/readiness plus homepage.
+   Never use saved local evidence as current production health or repeat a mutation automatically.
+5. The first account-schema cutover retains its separate candidate restore/rehearsal, provider/mail
+   and environment acceptance. It is exceptional, not a template for ordinary releases.
 
-There are three distinct evidence boundaries:
+Finish after analysis with `make clean-dry-run`, inspect its allowlist, then `make clean` and
+`make clean-check`. Do not use `git clean -fdX`.
 
-1. **Before push:** selected local coverage, fresh security, final source reconciliation,
-   production Compose render, current target health, GitHub environment/access/secrets policy.
-2. **After push, before deploy:** successful CI and images workflows for the exact published
-   SHA. `images.yml` scans all three actual published digests and produces SBOM/provenance.
-   This is the mandatory image scan. `pnpm audit:images` is an optional local diagnostic.
-3. **After deploy:** successful workflow targeting the requested SHA plus independent public
-   readiness returning that SHA and a successful homepage response.
+## Lightweight timing check
 
-A successful push or a green workflow alone is not deployment acceptance. A failed post-push
-check blocks dispatch; it cannot retroactively mean that nothing was pushed. Report the phase
-actually reached. Release checkpoints are read-only observations, never instructions to repeat
-push, dispatch, import, restore or migration.
-
-```bash
-python3 scripts/release-checkpoint.py predeploy --sha <published-40-char-sha>
-python3 scripts/release-checkpoint.py postdeploy --sha <deployed-40-char-sha>
-```
-
-The utility fetches fresh GitHub/public observations each time and stores them under
-`$XDG_STATE_HOME/infraegev2/releases` (default `~/.local/state/infraegev2/releases`).
-It requires completed successful scan steps for web, API and Nginx. The deploy workflow's
-evaluated `Deploy <sha>` run name proves its dispatch target; `head_sha` alone identifies
-the workflow ref and is insufficient. Older runs without this marker require manual
-historical investigation rather than an automatic checkpoint PASS. The checkpoint records
-workflow and scan-step evidence, not independently extracted OCI digests.
-The default observation target is `https://infraege.ru`. Explicit endpoint overrides select
-an operator-owned alternate environment and are recorded in the checkpoint; they do not prove
-the default production target. Health/home must share an HTTPS origin and neither may redirect.
-
-When resuming, inspect saved run IDs and fetch fresh workflow/production state. If a matching
-deploy is already running, observe it. If it succeeded, verify public state. If it failed,
-diagnose before another dispatch. Bank transfer and rollback remain separately authorized
-operations, not retry steps. State files retain only non-secret release evidence outside Git.
-
-## Measurement
-
-Compare wall time and actual command executions before/after, counting retries and reused steps.
-Separate environment recovery from application validation. Agent model/cost measurement follows
-[agent workflow](agent-workflow.md); do not infer tokens or charges from gate duration.
+The historical 2026-09-25 sample contained nine Full attempts and 3690.864 seconds of summed
+command time; one successful attempt spent 482.768 seconds, including 187.300 on Lighthouse and
+110.165 on E2E. These are neither delivery wall time nor a comparable post-change benchmark.
+For up to five subsequent real changes, note the affected area, local work/ship wall time,
+environment setup, browser runs, builds, repeats and any escaped defect in the change's ordinary
+handoff. Record actual observations only; no new reports, timers, result cache, fixed benchmark
+ceremony or wait for all five changes is required. Investigate a dominant repeated step before
+adding orchestration.

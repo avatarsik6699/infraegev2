@@ -15,13 +15,13 @@ tooling live in [`docs/STACK.md`](docs/STACK.md).
 3. **No Guessing**: If a requirement is genuinely ambiguous and risky, ask a concise question
    instead of inventing behavior.
 4. **Proportional Gates**: `/work` runs one affected-area Critical Gate for its complete target
-   set; default `/ship` repeats that compact gate before merging. Full Gate runs only for explicit
-   `/ship --full` or as the conservative fallback of risk-selected `/ship --release`. Fresh security
-   and Release Gate remain mandatory for every release. Automated green is not enough when
-   Backlog or `Architect Review Notes` has unchecked items.
+   set; default `/ship` runs only checks invalidated since that result. Full Gate runs only on
+   explicit `/ship --full`. Release requires affected coverage, unpublished-commit secrets,
+   relevant dependency checks, exact-SHA image scan and Release Gate. Unchecked Backlog or
+   `Architect Review Notes` still block shipping.
 5. **Security**: No hardcoded secrets. Use `.env`, environment variables, and typed settings
-   appropriate to the stack. When Full Gate is requested, its secrets scan and dependency audit
-   are mandatory; `/ship --release` always includes them.
+   appropriate to the stack. Broad scans are weekly/manual; `/ship --release` checks every
+   unpublished commit for secrets, audits changed dependencies and verifies applicable images.
 6. **Open Backlog**: When the architect reports a finding, bug, or follow-up in chat mid-session,
    append it to the active change's Backlog with a new ID before acting on it — never fix it
    off-list. See `docs/playbooks/work.md` § Backlog append.
@@ -46,6 +46,15 @@ tooling live in [`docs/STACK.md`](docs/STACK.md).
     `make clean-dry-run`, review the allowlist, then run `make clean` and `make clean-check`.
     Never substitute `git clean -fdX`: ignored dependencies, environments, secrets and data are
     protected. Temporary tools such as Lighthouse must clean their own external workspaces on exit.
+
+## Verification cadence
+
+One affected-area Critical completes a coherent `/work` set. `/ship` runs only checks invalidated
+since that observation; it does not repeat unchanged evidence. Full is explicit (`/ship --full`),
+never an automatic response to a shared path or release. Broad security, browser and Lighthouse
+audits are weekly/manual. Auth, schema, dependency and release-image checks stay mandatory when
+their own boundary changes. Do not build local evidence caches, schedulers, snapshots or audit
+import services to implement this policy.
 
 ## Interactive browser connection
 
@@ -133,7 +142,7 @@ fix. If no gotcha entry exists, ask how to proceed and add the resolution to `KN
 4. `/ship` runs the Critical Gate by default; `/ship --full` runs the manually requested Full
    Gate. On PASS either mode commits outstanding work, merges `feature/NN-slug` into local `main`,
    and archives the change file. Do not merge or push outside of `/ship`.
-5. `/ship --release` runs risk-selected coverage (Full on unknown/shared inputs), fresh security,
+5. `/ship --release` runs affected coverage and fresh candidate security,
    prepublication checks, then pushes `main`, verifies exact-SHA CI/published images, and verifies
    the resulting deploy via `gh` and public health. Do not push to `origin/main` any other way without
    explicit instruction.
@@ -142,19 +151,25 @@ fix. If no gotcha entry exists, ask how to proceed and add the resolution to `KN
 
 ### Model routing and delegation
 
-Use GPT-5.6 Terra for everyday tasks and bounded subagents. Use GPT-6 Astra for
-planning, orchestration, consequential cross-domain decisions and difficult diagnosis.
-The project `.codex/config.toml` sets Terra defaults; `bash scripts/codex-orchestrator.sh`
-explicitly selects Astra without changing global settings. Existing sessions keep their
-runtime model selection.
+Use native Codex orchestration automatically for substantial parallelizable work.
+The project `.codex/config.toml` selects GPT-6 Sol (medium) for the primary agent;
+`.codex/agents/` defines Luna (high) `explorer`, `worker`, `tester`, Sol (high)
+`architect`, `reviewer`, and Astra (high) `escalation`. Custom roles load in new
+trusted-repository sessions. `bash scripts/codex-orchestrator.sh` launches from the
+repository and forwards normal CLI overrides; existing sessions keep their selection.
 
-Delegate independent, sufficiently substantial tasks to Terra while doing useful work
-locally; do simple sequential tasks directly. Limit concurrent children to two and
-assign disjoint file ownership, acceptance criteria and a concise context. Workers are
-not alone and must preserve others' edits. No nested delegation by default. One parent
-owns integration, shared gates, cleanup, Git and release; deterministic commands belong
-in the runner rather than repeated model-driven shell sequences. Escalate after two
-unsuccessful distinct focused attempts, or immediately for ambiguous high-risk work.
+Do simple sequential tasks directly. For substantial work, decompose the authorized
+Backlog, delegate bounded independent tasks while doing useful work locally, integrate,
+obtain independent review, resolve findings and run one affected acceptance set.
+Skip roles with no concrete deliverable; this is not a mandatory six-agent ceremony.
+Use `architect` for unsettled design, `explorer` for a specific unknown, `worker` for
+settled implementation and `tester` for isolated reproduction/behavioral tests.
+Limit concurrent children to two; assign disjoint file ownership, acceptance criteria
+and concise context. Workers are not alone and must preserve others' edits. Children
+must not delegate. One parent owns Backlog updates, integration, shared gates, Docker
+lifecycle, cleanup, Git and release. Deterministic commands belong in existing runners.
+After two distinct failed focused attempts, or immediately for ambiguous high-risk
+work, consult `escalation`; the technical `architect` cannot grant human approval.
 See [agent workflow](docs/runbooks/agent-workflow.md) for the full handoff and measurement policy.
 
 The SDD workflows are defined in `docs/playbooks/`:
@@ -164,8 +179,9 @@ The SDD workflows are defined in `docs/playbooks/`:
 - [`work`](docs/playbooks/work.md) — implement Backlog tasks (default) or fix Architect Review
   Notes (`/work [XX] review`) through the agent execution loop, absorbing mid-session findings and
   running one affected-area Critical Gate
-- [`ship`](docs/playbooks/ship.md) — run the Critical Gate by default or the Full Gate with
-  `--full`, merge to `main`, archive the change, and (with `--release`) push and verify the deploy
+- [`ship`](docs/playbooks/ship.md) — run missing/invalidated Critical checks by default or the
+  manual Full Gate with `--full`, merge to `main`, archive the change, and (with `--release`)
+  push and verify the deploy
 
 Runtime wrappers are thin stubs. Workflow logic belongs in the playbooks.
 
@@ -181,9 +197,9 @@ Runtime wrappers are thin stubs. Workflow logic belongs in the playbooks.
 5. Architect manually verifies product behavior
 6. Architect adds unchecked items to Architect Review Notes if fixes are needed
 7. /work NN review                     -> agent fixes review notes; repeat 5-7 until clean
-8. /ship NN                            -> Critical Gate; on PASS: merge to main, archive
+8. /ship NN                            -> missing/invalidated Critical checks; on PASS: merge to main, archive
 9. /ship NN --full                     -> manual Full Gate; on PASS: merge to main, archive
-10. /ship NN --release                 -> Risk-selected + Release Gates; push and verify deploy
+10. /ship NN --release                 -> affected checks + Release Gate; push and verify deploy
 ```
 
 ## Implementation Notes

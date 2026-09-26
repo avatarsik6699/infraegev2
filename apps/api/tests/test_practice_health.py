@@ -6,6 +6,8 @@ from fastapi import HTTPException
 from app.core.config import settings
 from app.modules.health.api import liveness, require_database
 
+pytestmark = pytest.mark.pure
+
 
 def test_sql_readiness_missing_database_in_production(monkeypatch):
     monkeypatch.setattr(settings, "database_url", "")

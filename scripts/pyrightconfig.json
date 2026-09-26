@@ -1,5 +1,8 @@
 {
   "include": [
+    "tests/account_cutover_drill_test.py",
+    "test-account-server.py",
+    "tests/test_account_server.py",
     "application_db.py",
     "lib/application_db",
     "tests/application_db_test.py",
@@ -8,10 +11,13 @@
     "gate.py",
     "lib/gate",
     "tests/gate_test.py",
+    "tests/security_gate_test.py",
     "release-checkpoint.py",
     "release_checkpoint.py",
     "tests/release_checkpoint_test.py"
   ],
-  "extraPaths": [".."],
+  "extraPaths": ["..", "../apps/api"],
+  "venvPath": "../apps/api",
+  "venv": ".venv",
   "pythonVersion": "3.12"
 }

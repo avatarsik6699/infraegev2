@@ -5,6 +5,7 @@ umask 077
 
 repo_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 source "$repo_dir/scripts/lib/application-db.sh"
+source "$repo_dir/scripts/lib/account-cutover.sh"
 
 usage() {
   echo "usage: $0 --validate|--run FULL_RESTIC_SNAPSHOT_ID FULL_CANDIDATE_SHA API_IMAGE_DIGEST" >&2
@@ -135,137 +136,31 @@ created_second_volume=false
 cleanup() {
   local status=$?
   trap - EXIT
-  if $created_second; then docker rm --force "$second" >/dev/null || status=1; fi
-  if $created_first; then docker rm --force "$first" >/dev/null || status=1; fi
-  if $created_second_volume; then docker volume rm "$second_volume" >/dev/null || status=1; fi
-  if $created_first_volume; then docker volume rm "$first_volume" >/dev/null || status=1; fi
-  rm -rf -- "$work_dir" || status=1
+  cutover_cleanup_disposable || status=1
   exit "$status"
 }
 trap cleanup EXIT
 
-# The only source bundle used below comes from the immutable authenticated snapshot selected
-# above. Restic preserves the original backup path under this new root.
-restic restore "$snapshot_id" --target "$work_dir/source-snapshot" >/dev/null
-mapfile -t manifests < <(find "$work_dir/source-snapshot" -type f -name metadata.json -print)
-[[ ${#manifests[@]} == 1 ]] || { db_fail 'requested snapshot must restore exactly one bundle'; exit 1; }
-source_bundle=$(dirname -- "${manifests[0]}")
-[[ $source_bundle == "$work_dir/source-snapshot/"* && ! -L $source_bundle ]] || {
-  db_fail 'restored bundle escaped the owned snapshot target'; exit 1;
-}
-db_validate_bundle "$source_bundle"
-metadata="$source_bundle/metadata.json"
-jq -e --arg schema 122_01 '
-  .environment == "prod" and .project == "infraege" and .schemaVersion == $schema and
-  (.release | test("^[a-f0-9]{40}$"))
-' "$metadata" >/dev/null || { db_fail 'authenticated snapshot is not a production 122_01 bundle'; exit 1; }
-[[ $(<"$current_release") == "$(jq -r '.release' "$metadata")" ]] || {
-  db_fail 'production release changed since source snapshot'; exit 1;
-}
-wait_postgres() {
-  local container=$1
-  for _attempt in $(seq 1 60); do
-    if docker exec "$container" pg_isready -h 127.0.0.1 -U restore_admin >/dev/null 2>&1; then
-      return 0
-    fi
-    sleep 1
-  done
-  db_fail 'isolated PostgreSQL failed to become ready'
-  return 1
-}
-create_isolated() {
-  local container=$1 volume=$2 database=$3 assets=$4
-  ! docker volume inspect "$volume" >/dev/null 2>&1 || {
-    db_fail 'isolated volume name already exists'; return 1;
-  }
-  docker volume create --label com.infraege.db-purpose=restore "$volume" >/dev/null
-  if [[ $container == "$first" ]]; then created_first_volume=true; else created_second_volume=true; fi
-  local mount_args=()
-  if [[ -n $assets ]]; then
-    mount_args=(--mount "type=bind,source=$assets,target=/task-files,readonly")
-  fi
-  docker run --detach --name "$container" --network none \
-    --label com.infraege.db-purpose=restore \
-    --label "com.docker.compose.project=$project" \
-    --label com.docker.compose.service=postgres \
-    --label "com.infraege.version=$candidate_sha" \
-    --mount "type=volume,source=$volume,target=/var/lib/postgresql" \
-    "${mount_args[@]}" \
-    --env POSTGRES_USER=restore_admin --env "POSTGRES_DB=$database" \
-    --env "POSTGRES_PASSWORD=$admin_password" \
-    --env PGDATA=/var/lib/postgresql/18/docker "$DB_IMAGE" >/dev/null
-  if [[ $container == "$first" ]]; then created_first=true; else created_second=true; fi
-  wait_postgres "$container"
-}
+CUTOVER_REPO_DIR=$repo_dir CUTOVER_SNAPSHOT_ID=$snapshot_id CUTOVER_WORK_DIR=$work_dir
+CUTOVER_PROJECT=$project CUTOVER_FIRST=$first CUTOVER_SECOND=$second
+CUTOVER_FIRST_VOLUME=$first_volume CUTOVER_SECOND_VOLUME=$second_volume
+CUTOVER_CANDIDATE_SHA=$candidate_sha CUTOVER_IMAGE=$image CUTOVER_IMAGE_ID=$image_id
+CUTOVER_ENV_FILE=$env_file CUTOVER_CURRENT_RELEASE=$current_release
+CUTOVER_ADMIN_PASSWORD=$admin_password CUTOVER_CREATED_FIRST=$created_first
+CUTOVER_CREATED_SECOND=$created_second CUTOVER_CREATED_FIRST_VOLUME=$created_first_volume
+CUTOVER_CREATED_SECOND_VOLUME=$created_second_volume
+cutover_disposable_phase
+created_first=$CUTOVER_CREATED_FIRST
+created_second=$CUTOVER_CREATED_SECOND
+created_first_volume=$CUTOVER_CREATED_FIRST_VOLUME
+created_second_volume=$CUTOVER_CREATED_SECOND_VOLUME
 
-# Stage one: restore the pre-migration production bundle into a networkless copy.
-create_isolated "$first" "$first_volume" postgres "$source_bundle/task-files"
-db_restore_bundle "$source_bundle" "$first"
-db_restore_practice_smoke "$source_bundle" "$first"
-
-# Restart only the disposable copy so bundle tooling sees POSTGRES_DB=infraege.
-docker rm --force "$first" >/dev/null
-created_first=false
-docker run --detach --name "$first" --network none \
-  --label com.infraege.db-purpose=restore \
-  --label "com.docker.compose.project=$project" \
-  --label com.docker.compose.service=postgres \
-  --label "com.infraege.version=$candidate_sha" \
-  --mount "type=volume,source=$first_volume,target=/var/lib/postgresql" \
-  --mount "type=bind,source=$source_bundle/task-files,target=/task-files,readonly" \
-  --env POSTGRES_USER=restore_admin --env POSTGRES_DB=infraege \
-  --env "POSTGRES_PASSWORD=$admin_password" \
-  --env PGDATA=/var/lib/postgresql/18/docker "$DB_IMAGE" >/dev/null
-created_first=true
-wait_postgres "$first"
-
-# Provision and migrate only through the first copy's loopback-only network namespace.
-docker run --rm --network "container:$first" \
-  --mount "type=bind,source=$repo_dir/scripts/db-provision-roles.sh,target=/db-provision-roles.sh,readonly" \
-  --env POSTGRES_USER=restore_admin --env POSTGRES_DB=infraege \
-  --env POSTGRES_PASSWORD --env DB_RUNTIME_PASSWORD --env DB_IMPORT_PASSWORD \
-  --env DB_MIGRATION_PASSWORD --env DB_BACKUP_PASSWORD --env DB_APP_PASSWORD \
-  --env PGHOST=127.0.0.1 --env "PGPASSWORD=$admin_password" \
-  --entrypoint /bin/bash "$DB_IMAGE" /db-provision-roles.sh >/dev/null
-docker run --rm --network "container:$first" \
-  --env "MIGRATION_DATABASE_URL=postgresql://infraege_migration:$DB_MIGRATION_PASSWORD@127.0.0.1:5432/infraege" \
-  --entrypoint /bin/sh "$image_id" -ec '.venv/bin/alembic upgrade head'
-[[ $(docker image inspect "$image" --format '{{.Id}}') == "$image_id" ]] || {
-  db_fail 'candidate image changed during rehearsal'; exit 1;
-}
-
-# Synthetic account facts exist only on the copy and must survive the second restore.
-docker exec -i "$first" psql -X -q -U restore_admin -d infraege -v ON_ERROR_STOP=1 \
-  <"$repo_dir/scripts/sql/account-cutover-fixture.sql"
-PRACTICE_TEST_IMAGE="$image" python3 "$repo_dir/scripts/application_db.py" bundle \
-  "$first" "$work_dir/candidate-bundle" "$env_file" test "$project"
-[[ $(jq -r '.schemaVersion' "$work_dir/candidate-bundle/metadata.json") == 140_01 ]] || {
-  db_fail 'candidate backup does not contain 140_01'; exit 1;
-}
-docker rm --force "$first" >/dev/null
-created_first=false
-docker volume rm "$first_volume" >/dev/null
-created_first_volume=false
-
-# Stage two: restore and verify the migrated bundle into another fresh volume.
-create_isolated "$second" "$second_volume" postgres ''
-db_restore_bundle "$work_dir/candidate-bundle" "$second"
-db_restore_practice_smoke "$work_dir/candidate-bundle" "$second"
-[[ $(docker exec -i "$second" psql -X -qAt -U restore_admin -d infraege \
-  -v ON_ERROR_STOP=1 <"$repo_dir/scripts/sql/account-cutover-assert.sql") == fixture-ok ]] || {
-  db_fail 'synthetic account data did not survive candidate restore'; exit 1;
-}
-
-[[ $(<"$current_release") == "$(jq -r '.release' "$metadata")" ]] || {
+[[ $(<"$current_release") == "$(jq -r '.release' "$CUTOVER_SOURCE_METADATA")" ]] || {
   db_fail 'production release changed during rehearsal'; exit 1;
 }
 
 # Remove disposable resources before creating an attestation; cleanup failure is not a pass.
-docker rm --force "$second" >/dev/null
-created_second=false
-docker volume rm "$second_volume" >/dev/null
-created_second_volume=false
-rm -rf -- "$work_dir"
+cutover_cleanup_disposable
 trap - EXIT
 
 proof_tmp=$(mktemp /etc/infraege/accounts-schema-ready.XXXXXXXX)

@@ -2,6 +2,12 @@ const { execFileSync } = require("node:child_process");
 const { isAbsolute } = require("node:path");
 
 const lighthouseProfileDir = process.env.INFRAEGE_LIGHTHOUSE_PROFILE_DIR;
+const target = process.env.INFRAEGE_LIGHTHOUSE_TARGET || "local";
+if (!["local", "production"].includes(target)) {
+  throw new Error("Lighthouse target must be local or production");
+}
+const production = target === "production";
+const origin = production ? "https://infraege.ru" : "http://127.0.0.2:3200";
 
 if (!lighthouseProfileDir || !isAbsolute(lighthouseProfileDir)) {
   throw new Error(
@@ -28,15 +34,20 @@ module.exports = {
   ci: {
     collect: {
       numberOfRuns: 3,
-      startServerCommand: "HOST=127.0.0.2 PORT=3200 pnpm --filter web start",
+      ...(production
+        ? {}
+        : {
+            startServerCommand:
+              "HOST=127.0.0.2 PORT=3200 pnpm --filter web start",
+          }),
       startServerReadyPattern: "Listening on",
       startServerReadyTimeout: 30000,
       url: [
-        "http://127.0.0.2:3200/",
-        "http://127.0.0.2:3200/ege",
-        "http://127.0.0.2:3200/courses",
-        "http://127.0.0.2:3200/courses/python",
-        "http://127.0.0.2:3200/ege/16-rekursiya",
+        `${origin}/`,
+        `${origin}/ege`,
+        `${origin}/courses`,
+        `${origin}/courses/python`,
+        `${origin}/ege/16-rekursiya`,
       ],
       chromePath,
       settings: {

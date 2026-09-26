@@ -12,11 +12,14 @@ export default defineConfig({
   outputDir: "../../.output/playwright-layout",
   reporter: "list",
   workers: 1,
+  timeout: 45_000,
+  retries: 0,
   use: { baseURL, trace: "retain-on-failure", reducedMotion: "reduce" },
   projects: [{ name: "chromium", use: { browserName: "chromium" } }],
   webServer: {
     command: "HOST=127.0.0.2 PORT=3200 pnpm start",
     url: baseURL,
     reuseExistingServer: false,
+    timeout: 120_000,
   },
 });

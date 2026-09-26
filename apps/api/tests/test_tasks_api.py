@@ -11,6 +11,8 @@ from app.modules.content.schemas import Task
 from app.modules.health.api import require_database
 from app.modules.tasks.service import is_correct
 
+pytestmark = pytest.mark.pure
+
 NEW_PYTHON_COURSE_LESSON_IDS = {
     "python-numbers",
     "python-compound-conditions",

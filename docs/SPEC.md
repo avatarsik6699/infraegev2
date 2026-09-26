@@ -9,8 +9,8 @@
 
 | Field | Value |
 |-------|-------|
-| Document Version | `v2.21` |
-| Date | `2026-09-24` |
+| Document Version | `v2.23` |
+| Date | `2026-09-26` |
 | Architect / Owner | `v.godlevskiy` |
 | Stack | See [docs/STACK.md](./STACK.md) |
 | Domain | Платформа подготовки к ЕГЭ по информатике — самостоятельные темы экзамена и мини-курсы с теорией, визуализацией и практикой |
@@ -452,7 +452,17 @@ cookie. Идентификатор сессии хранится на серве
 
 ### 7.2 Deploy / CI
 
-CI выполняет static/build/security checks, тесты запускаются только локально.
+CI выполняет static/build/security checks; обычные pytest/Vitest/unit/DB suites остаются
+локальными. Решение архитектора 2026-09-26 (Change 146) разрешает узкое исключение:
+периодические browser/no-JS/accessibility/layout и Lighthouse-аудиты в GitHub Actions,
+на host runner с синтетическими данными, не внутри application image и не на каждом PR/push.
+Публичный production-аудит отделён от аудита main: только чтение, без входа и мутаций.
+После пересмотра Change 146 результаты аудитов остаются в GitHub Actions: статус, журнал и
+обычные artifacts. Собственный импорт/checkpoint периодических аудитов не нужен. Отсутствующий
+или неуспешный запуск не является PASS, но сам по себе не запускает Full и не блокирует
+несвязанное изменение. Известная критическая проблема аккаунтов, данных или выпускаемого
+артефакта требует устранения до затронутого релиза. Целевая периодичность — раз в неделю
+и по явному запросу; внедрение и отдельная удалённая активация описаны в Change 146.
 Production использует immutable SHA images. Deploy — явный workflow_dispatch, с health/smoke
 и rollback на предыдущий release. Первый переход на 122_01 требует отдельного переноса банка
 в новый volume и restore acceptance для выбранного SHA; обычный deploy не импортирует контент.
@@ -518,7 +528,8 @@ Before changing persistence, preserve and restore-check the actual local bank/fi
 simpler model on a new isolated volume; verify IDs, content, checker, memberships and file
 parity. Keep source database/files. Scheduled backup covers database and referenced files;
 restore runs into an empty isolated target. Production transfer and retirement of installed
-monitoring services require explicit release authorization and Full/Release Gate.
+monitoring services require explicit release authorization, affected migration/restore checks
+and Release Gate; a blanket Full Gate is not an automatic prerequisite.
 Before releasing accounts, restore-check identities, session revocation and per-context progress
 on an isolated target. Existing guest browser progress is intentionally abandoned, not migrated.
 Release requires verified provider callbacks, password-mail delivery and updated privacy text;
@@ -530,7 +541,7 @@ local acceptance alone is not production authorization.
 |---------|-------------|
 | Security headers / CORS | Rate limiting чекер-эндпоинта на Nginx: `limit_req_zone` 20 req/min/IP, burst 5, `nodelay` (см. §4) — против автоматизированного перебора банка ответов; конкретную цифру пересмотреть по факту логов после запуска. Основной public root/password SSH использует принятый архитектором минимум 12 символов, pinned host key, UFW и fail2ban; production Environment не имеет required reviewers по решению архитектора от 2026-09-04, `can_admins_bypass` остаётся единственным environment safety property. Повышенный риск перебора и полного захвата VPS при компрометации более короткого пароля осознанно принят, key-only migration не запланирована. |
 | Accessibility target | Public pages не имеют serious/critical axe violations; lesson outline сохраняет вложенный semantic list, anchors, keyboard focus, различимый текущий пункт и корректный source order, а сложный визуал имеет видимую полную текстовую альтернативу |
-| Performance budget | Текущий release gate ограничивает median LCP значением ≤4.0s на мобильном 4G-профиле; продуктовая цель остаётся LCP ≤2.8s, и порог следует вернуть к ней после подтверждённой оптимизации или на стабильном измерительном runner. CLS < 0.1, INP < 200ms; release evidence измеряет `/`, `/ege`, `/courses`, `/courses/python` и `/ege/16-rekursiya`, отдельно проверяет cold-load font/layout shifts и не подменяет route-level метрики общей оценкой технической страницы |
+| Performance budget | Lighthouse-аудит раз в неделю или по запросу сохраняет median LCP ≤4.0s на мобильном 4G-профиле; продуктовая цель остаётся LCP ≤2.8s. CLS < 0.1, INP < 200ms. Измеряются `/`, `/ege`, `/courses`, `/courses/python` и `/ege/16-rekursiya`; cold-load font/layout shifts проверяются отдельно. Lighthouse не является обязательным шагом каждого релиза или изменения CSS; подозрение на регрессию требует целевого измерения, а не автоматического Full Gate. Порог не ослабляется ради ускорения |
 | Observability | Health, structured server logs and scheduled external availability/TLS probe, plus a cookieless browser-analytics beacon (`smotryashchiy`, self-hosted at `sre.infraege.ru`, separate repo/deploy, §7.3) allowlisted in CSP; no cookies, no persistent visitor id, no consent UI, no dashboards or monitoring stack hosted in this repo |
 | Backup / restore | Application DB, files, roles and protected environment in encrypted Restic; 7 daily + 4 weekly + 3 monthly, monthly isolated restore. Same-host backup loss remains accepted until off-site storage exists |
 | SEO | `/`, `/privacy`, published topics, courses и CourseLesson имеют canonical, уникальные metadata, SSR content, общий crawlable social preview и входят в sitemap/prerender; root document публикует browser-only manifest, SVG/PNG/ICO favicon и Apple touch icon из production-знака, а `/` — правдивый `WebSite` JSON-LD без выдуманной Organization; review routes остаются unlisted, `noindex,nofollow` и исключены из public discovery; Lighthouse SEO для публичных маршрутов проходит без ошибок |
@@ -544,6 +555,48 @@ local acceptance alone is not production authorization.
 | Other (юридический ориентир, не консультация) | Открытые источники используются как инженерный ориентир; формальная юридическая проверка, данные оператора, оформление доступа детей и уведомление РКН не закрыты. Архитектор принял риск выпуска без них и планирует РКН отдельным пунктом после релиза; это не меняет установленного законом срока подачи уведомления до обработки, если исключение неприменимо. |
 
 ---
+
+### 8.3 Proportional verification (Change 146)
+
+Пересмотр архитектора 2026-09-26: для простой учебной платформы приоритет — скорость разработки
+и доставки с достаточной защитой учебных сценариев, аккаунтов и данных. Собственная CI/CD-платформа,
+универсальный scheduler, snapshot runtime, artifact cache и ledger доказательств не входят в цель.
+Это целевой контракт; действующие команды и правила перехода обновляются в рамках Change 146,
+а не считаются уже внедрёнными вследствие изменения SPEC.
+
+Во время разработки выполняются только проверки, отвечающие на конкретный вопрос. Один
+affected-area Critical завершает связный набор работ. `/ship` проверяет полноту приёмки и изменения
+после последнего прохода, но не повторяет весь набор для неизменённых входов. Достаточно короткой
+записи команд, результата и проверенной ревизии/изменений в change; отдельное хранилище и механизм
+автоматического признания результатов не требуются. При неопределённости повторяется затронутая
+проверка, а не весь Full. Неизвестные пути требуют явного выбора покрытия.
+
+Full — только явный запрос полной функциональной регрессии; ни shared/config изменения, ни
+release автоматически его не включают. Глубокие security, browser, accessibility, no-JS,
+layout и Lighthouse-аудиты выполняются еженедельно или по запросу. Существующие pytest/Vitest/DB
+suites остаются локальными; узкое исключение для периодического host browser runner сохраняется.
+Точные команды и принадлежность проверок определяются STACK, а не дублируются в каждом playbook.
+
+Секреты новых публикуемых коммитов проверяются до push. Изменённые зависимости требуют dependency
+audit; изменения auth, прав доступа, сессий и прогресса — соответствующих функциональных и
+security-boundary проверок; schema/data изменения — миграционной и restore-приёмки. SAST/config
+в delivery path выбирается по конкретному риску, а не запускается всегда. Каждый новый release
+image сканируется по digest в существующем images workflow перед deploy; второй обязательный
+локальный build/scan не нужен. Production health проверяется заново. Периодический отчёт не
+подменяет эти проверки и не служит универсальным release gate.
+
+GitHub Actions отвечает за CI jobs, стандартные кэши зависимостей, artifacts и уведомления;
+локальные команды остаются простыми. Ни новый сервис, ни платформа монорепозитория, ни собственная
+подпись/attestation-цепочка не вводятся без отдельной доказанной потребности. Сохраняются точный
+release SHA, проверка опубликованных образов, явный deploy, health/smoke и rollback, особая
+приёмка первого account-schema cutover и запрет автоматического повторения мутаций.
+
+Разрешение локального ship не означает разрешение push/deploy. Нерелевантный или пропущенный
+еженедельный аудит не блокирует обычную разработку; подтверждённые критические находки для
+выпускаемой функции/артефакта блокируют затронутый релиз. Архитектор просматривает недельные
+результаты через стандартные уведомления GitHub, без обязательного remote fetch перед каждым
+plan/work/ship. Измеряется фактическое время нескольких следующих changes без дополнительного
+benchmark framework и без требования дождаться их для закрытия 146.
 
 ## 9. Roadmap
 

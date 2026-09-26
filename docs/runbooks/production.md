@@ -45,11 +45,13 @@ and the fail2ban sshd jail, whose bans grow for repeat offenders (Change 136). T
 
 GitHub Environment `production` contains `PROD_HOST`, `PROD_ROOT_PASSWORD`, `PROD_SSH_HOST_KEY`.
 The previously accepted no-required-reviewers policy is unchanged. CI publishes immutable full-SHA
-GHCR images after static/security checks. Tests run locally, not in CI or application containers.
+GHCR images after static quality checks; the image workflow owns digest security scans. Tests run
+locally, not in ordinary CI or application containers.
 Deploy workflow_dispatch selects a full commit on remote main. `/ship --release` requires
-risk-selected local coverage (Full for unknown/shared inputs), fresh security and all Release
-Gate phases; ordinary `/work` and `/ship` do not deploy. Use the durable evidence and resume
-procedure in [verification](verification.md); published-digest scans are checked after push
+missing affected local coverage, unpublished-commit secrets checks, changed-dependency audits and
+all Release Gate phases. Full is manual; unknown/shared inputs require an explicit coverage
+decision. Ordinary `/work` and `/ship` do not deploy. Use the evidence and resume procedure in
+[verification](verification.md); published-digest scans are checked after push
 and before dispatch, and live SHA is checked independently after deploy.
 
 The workflow uploads the checked-out deployment script to a SHA-specific root-owned path and

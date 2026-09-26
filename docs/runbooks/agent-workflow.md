@@ -1,69 +1,103 @@
-# Agent execution and cost
+# Native Codex agent workflow
 
-The project default is **GPT-5.6 Terra, medium effort**, including spawned agents.
-Use `codex` from this trusted repository for everyday implementation, exploration,
-focused tests and routine review. For planning across domains, ambiguous production
-failures, security decisions or difficult diagnosis, run:
+The primary agent automatically delegates substantial independent work under AGENTS.md.
+Simple sequential tasks stay with the primary. This is native model-directed orchestration,
+not a deterministic scheduler or a promise of reduced token cost.
+
+## Launch and roles
+
+Start a new Codex session in this trusted repository, or from any directory run:
 
 ```bash
-bash scripts/codex-orchestrator.sh
+bash /home/niquetamerewsl/projects/infraegev2/scripts/codex-orchestrator.sh
 ```
 
-This explicitly selects **GPT-6 Astra** while keeping Terra as the subagent default.
-The launcher forwards normal Codex arguments. It does not change permissions,
-global configuration, already-running conversations or another client's selected model.
-An explicit model selected in the client takes precedence over repository defaults.
-Inspect the client's actual selected model before attributing costs to this policy.
+Then invoke the existing work skill, for example `$work 146 T5`. The launcher changes to the
+repository and forwards normal Codex arguments. It does not change global settings, permissions
+or an existing session's model. Explicit client selections override the project default.
+Use `/status` and `/agent` to inspect the actual primary and child sessions.
 
-Project config is loaded only for trusted repositories. Current Codex profiles live
-in user-level files and have lower precedence than project config; the launcher uses
-an explicit model flag so the project Terra default cannot mask the Astra selection.
-See [configuration precedence](https://learn.chatgpt.com/docs/config-file/config-basic#configuration-precedence)
-and [subagent configuration](https://learn.chatgpt.com/docs/subagents).
+| Role | Model / effort | Deliverable |
+|------|----------------|-------------|
+| Primary / unclassified fallback | Sol / medium | Scope, decomposition, integration, acceptance |
+| `explorer` | Luna / high | A bounded code-path or dependency map with references |
+| `worker` | Luna / high | Settled implementation in explicitly owned files |
+| `tester` | Luna / high | Isolated reproduction or owned behavioral tests |
+| `architect` | Sol / high | Cross-module design, dependencies and acceptance plan |
+| `reviewer` | Sol / high | Independent findings on the completed scoped diff |
+| `escalation` | Astra / high | Difficult diagnosis or consequential risk decision advice |
 
-## Delegation contract
+The standalone `.codex/agents/*.toml` files supply `name`, `description` and
+`developer_instructions`, plus model/effort and sandbox defaults. Codex discovers these files;
+no duplicate `[agents.<role>]` registry is needed. `explorer` and `worker` intentionally override
+the built-in roles. Unclassified subagents default to Sol; only explicitly bounded roles use Luna.
+The concurrency cap is **two children**, excluding the primary.
 
-Delegate to Terra when a concrete independent task can proceed alongside useful work
-by the parent: map an unfamiliar module, implement a bounded file set, investigate a
-specific failure, or review a consequential change. Do small linear edits directly.
-Do not spawn an agent simply to run a known command or poll a long-running process.
-Scripts execute deterministic checks; models interpret failures and make decisions.
+Custom role model/effort settings take precedence over the initial resolution from explicit
+spawn settings, `[agents]` defaults and parent settings. Use a fresh or short context when
+delegating. If an older running session cannot see these custom roles, start a new session;
+do not claim role activation from the presence of TOML alone. If a model is unavailable, report
+the failure and use the capable primary for the task; do not silently change model or retry forever.
 
-The parent owns scope, the active change, integration, gate selection and the final
-report. At most two child agents work concurrently; use one initially unless there
-are two independent deliverables. Only the parent runs shared gates, Docker lifecycle,
-cleanup, Git merge/push and release operations. Workers may run isolated focused tests.
-No nested delegation by default. Subagents never expand production authorization.
+Read-only role defaults are defense in depth, not an absolute boundary: Codex reapplies live
+parent permission overrides when spawning. All read-only assignments must explicitly prohibit
+mutations even when the parent runs with full access. No role increases production authority.
+
+## Automatic execution loop
+
+1. Parent resolves the authorized change/Backlog and dependencies through the existing work
+   playbook. Append architect findings before acting. New scope uses the existing plan workflow.
+2. Parent splits substantial work into concrete deliverables. Use an explorer only for a real
+   unknown, or an architect for unsettled design. Run independent reads alongside useful local work.
+3. Delegate settled implementation to workers with disjoint ownership. Normally use one writer
+   plus a read-only child; a second writer is allowed only with demonstrably independent files and
+   no shared generated outputs, fixtures, browser state or environment mutations. Serialize shared
+   dependencies. Do not introduce worktrees/snapshots just to force parallelism.
+4. Integrate completed writes before testing their behavior. A tester may write only assigned
+   test/support files and run agreed isolated checks. The parent owns shared acceptance commands.
+5. Obtain an independent reviewer for substantial implementation after the scoped diff settles.
+   Parent resolves findings through a bounded worker follow-up or locally, then checks the affected
+   behavior. Stop blind retries after two distinct failed attempts and consult `escalation` with
+   reproduction, observations and rejected hypotheses. Ambiguous high-risk work goes there directly.
+6. Parent runs one affected Critical for the coherent target set, performs repository hygiene,
+   updates Backlog status and reports remaining gaps. Do not repeat worker evidence without changed
+   inputs or a concrete concern. Local ship/release remain separately authorized workflows.
+
+Skip any role that has no useful deliverable. Children never spawn children or run a separate
+complete `/work` cycle. Only the parent updates the Backlog, changes branches, commits, merges,
+pushes, operates Docker, cleans artifacts or releases. A technical `architect` is advisory and
+cannot grant the human architect's approval. Permission failures follow AGENTS.md immediately.
 
 Every assignment contains:
 
-- The backlog ID, expected result and acceptance criteria.
-- Owned files or a read-only boundary; dependencies and forbidden operations.
-- Relevant paths and a concise context summary; use a fresh context when possible.
-- Checks permitted and results to return: files changed, evidence, risks and blockers.
-- The reminder that others share the workspace: preserve their edits.
+- Backlog ID, expected result and acceptance criteria.
+- Exact owned files or a read-only boundary; dependencies and forbidden operations.
+- Relevant contract paths and concise context; avoid entire conversation dumps.
+- Permitted focused checks, and the reminder: you are not alone; preserve others' edits.
+- Required return: files changed, concise evidence, commands/results, risks and blockers.
 
-Prefer disjoint writes. Do not assign two workers the same files or reproduce a completed
-explorer investigation in the parent. The parent reviews the diff and supporting
-evidence; it reruns a check only after relevant changes, incomplete evidence or a
-concrete concern. Review is not a second implementation pass.
+Reuse an existing child for a related correction. Finish or close completed child threads when
+the client supports it; avoid holding idle threads against the cap. Parent work must not duplicate
+a completed exploration. Deterministic commands belong in existing runners, not extra model turns.
 
-Use Terra medium first. Escalate to Astra when the task needs a cross-domain decision,
-has unclear safety implications, or two materially different focused attempts have
-not resolved a failure. Stop blind retries; send Astra the minimal reproduction,
-observations and rejected hypotheses. A difficult task can start on Astra immediately.
-Do not switch to Luna or silently increase reasoning effort to its maximum.
+## Verification and handoff
 
-## Measurement pilot
+For config changes, parse TOML, use the installed Codex strict-config loader, inspect available
+roles/model settings in a fresh session, and run a small read-only delegation smoke. A catalog
+entry proves advertised availability; a successful child turn proves that model route responded.
+Inspect runtime metadata when asserting the selected model; a model's self-report is not proof.
+Do not read secrets or run app gates for agent configuration. For the shell launcher use the
+repository `pnpm lint:shell` command and verify argument forwarding. Finish with reviewed
+`make clean-dry-run`, `make clean`, `make clean-check`.
 
-For the next five changes, retain the gate JSON outside the repository and record
-wall time, check executions/reuse, failed attempts, agent count and actual selected
-models in the completion report. Compare similar changes, separating coding time,
-gate time, environment recovery and waiting for user/external services.
+Change 146 preparation is T8. Completing it does not complete T5–T7 or the remaining infrastructure
+and product acceptance tasks. Resume with `$work 146` (or `$work 146 T5` for a bounded first set)
+in the new session, which must reread the current change and preserve the dirty tree.
 
-Report token usage or money only when the client supplies usage and the applicable
-billing basis. Otherwise write `unavailable`; elapsed time is not token usage and API
-list prices do not establish the cost of a subscription session. Assess cost per
-successfully completed change, including rework, rather than per model call.
-After five changes, retain delegation patterns that reduced end-to-end work without
-increasing regressions. No automatic model promotion or paid background benchmark.
+When a real change feels slow, report the dominant step. Compare subsequent changes opportunistically;
+do not create a benchmark platform, force all roles to run, or claim cost savings without usage data.
+
+Configuration reference checked 2026-09-26 with Codex CLI 0.157.1:
+[OpenAI subagents](https://learn.chatgpt.com/docs/agent-configuration/subagents) and
+[configuration precedence](https://learn.chatgpt.com/docs/config-file/config-basic#configuration-precedence).
+The user-supplied `docs/artifacts/multiagents.md` is source research, not the binding runtime contract.

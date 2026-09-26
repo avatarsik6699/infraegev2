@@ -17,6 +17,8 @@ from app.modules.account.providers import (
     authorization_url,
 )
 
+pytestmark = pytest.mark.pure
+
 CALLBACK_URL = "https://infraege.example/api/auth/providers/telegram/callback"
 SETTINGS = ProviderSettings(
     vk_client_id="vk-client",

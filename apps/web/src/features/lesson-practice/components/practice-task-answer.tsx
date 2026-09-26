@@ -139,6 +139,7 @@ export const PracticeTaskAnswer: React.FC<PracticeTaskAnswerProps> = (
             <Button
               type="submit"
               loading={props.checking}
+              aria-label={props.checking ? "Проверяем" : undefined}
               disabled={
                 !props.enhanced ||
                 accepted ||
@@ -146,7 +147,7 @@ export const PracticeTaskAnswer: React.FC<PracticeTaskAnswerProps> = (
                 props.state === "unavailable"
               }
             >
-              {props.checking ? "Проверяем" : "Проверить"}
+              Проверить
             </Button>
           )}
         </div>

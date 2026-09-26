@@ -1,0 +1,80 @@
+name: Weekly browser audit
+
+on:
+  schedule:
+    - cron: "23 3 * * 2"
+  workflow_dispatch:
+
+concurrency:
+  group: browser-audit
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic-browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86
+        with:
+          version: 10.33.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: "22.23.2"
+          cache: pnpm
+      - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9
+        with:
+          version: "0.12.3"
+          enable-cache: true
+          prune-cache: true
+      - name: Install frozen dependencies
+        run: |
+          pnpm install --frozen-lockfile
+          uv sync --project apps/api --frozen --dev
+      - name: Install Chromium
+        run: pnpm --filter web test:e2e:install
+      - name: Run isolated synthetic account and broad browser portfolios
+        run: bash scripts/run-isolated-browser-audit.sh account full production
+      - name: Upload non-account browser failure traces
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: browser-audit-${{ github.sha }}
+          path: |
+            .output/playwright/
+            .output/playwright-layout/
+            .output/playwright-production/
+          if-no-files-found: ignore
+
+  public-lighthouse:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86
+        with:
+          version: 10.33.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: "22.23.2"
+          cache: pnpm
+      - name: Install frozen dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Install Chromium for Lighthouse
+        run: pnpm --filter web test:e2e:install
+      - name: Observe public production pages with Lighthouse
+        env:
+          INFRAEGE_LIGHTHOUSE_TARGET: production
+        run: |
+          printf 'target=https://infraege.ru observed_at=%s workflow_sha=%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$GITHUB_SHA"
+          pnpm audit:performance
+      - name: Upload public Lighthouse reports
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: public-lighthouse-${{ github.sha }}
+          path: .lighthouseci/reports/
+          if-no-files-found: ignore

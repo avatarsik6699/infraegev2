@@ -24,7 +24,7 @@ test("practice toolbar stays fixed through answer feedback", async ({
   await minimalPage.expectPracticeToolbarStability();
 });
 
-test("practice navigation remains usable without JavaScript", async ({
+test("practice navigation remains usable without JavaScript @no-js", async ({
   noJavaScriptMinimalPage,
 }) => {
   await noJavaScriptMinimalPage.expectCatalogWithoutJavaScript();

@@ -368,7 +368,7 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
 ### The WSL Lighthouse runner needs a separate enforced LCP ceiling and product target
 
 - **Symptoms**: an enforced `largest-contentful-paint` ceiling of `≤2800ms` made
-  `pnpm audit:performance` (Full Gate) repeatedly fail both `/` and `/ege/16-rekursiya` on this
+  `pnpm audit:performance` (historically included in Full Gate) repeatedly fail both `/` and `/ege/16-rekursiya` on this
   devbox, commonly reporting about 4000–4400ms across repeat runs.
 - **Root cause**: not a code regression. Confirmed by running the identical Full Gate performance
   step against `main` as of the pre-Change-85 baseline (commit `7150078`, archived Change 84): the
@@ -378,7 +378,7 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
   (`cpuSlowdownMultiplier: 4`, slow-4G network) interacting with this specific WSL/Docker-Desktop
   devbox's real CPU contention, not page weight (`total-byte-weight` ~522 KiB, reasonable) or
   render-blocking resources.
-- **Fix**: enforce median LCP `≤4000ms` for the current local/release audit so the known runner
+- **Fix**: enforce median LCP `≤4000ms` for the weekly/manual or explicitly selected performance audit so the known runner
   variance does not repeatedly block unrelated work. Keep `≤2800ms` as the explicit product target,
   measure it on the deployed production environment or a stable dedicated runner, and tighten the
   gate back when optimization and repeatable evidence support it. Do not hide a regression beyond

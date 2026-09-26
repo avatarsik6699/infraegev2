@@ -1,11 +1,11 @@
-name: Static quality and security
+name: Static quality
 
 on:
   pull_request:
+  workflow_dispatch:
   push:
     branches:
       - main
-      - "feature/**"
 
 concurrency:
   group: quality-${{ github.ref }}
@@ -32,6 +32,8 @@ jobs:
           version: "0.12.3"
           enable-cache: true
           prune-cache: true
+      - name: Current-tree secrets defense in depth
+        run: bash scripts/security-gate.sh secrets
       - run: pnpm install --frozen-lockfile
       - name: Shell maintenance static checks
         run: |
@@ -42,7 +44,6 @@ jobs:
         run: |
           pnpm lint
           pnpm --filter web typecheck
-          pnpm --filter web build
           node scripts/validate-content-links.mjs
           node scripts/practice-registry.mjs --check
       - name: Backend static checks
@@ -51,60 +52,7 @@ jobs:
           uv sync --frozen --dev
           uv run ruff check app tests migrations
           pnpm exec pyright app tests migrations
-          uv run ruff check ../../scripts/practice-local.py ../../scripts/application_db.py ../../scripts/lib/application_db ../../scripts/tests/application_db_test.py ../../scripts/tests/deploy_orchestration_test.py
+          uv run ruff check ../../scripts/practice-local.py ../../scripts/application_db.py ../../scripts/lib/application_db ../../scripts/gate.py ../../scripts/lib/gate ../../scripts/release_checkpoint.py ../../scripts/test-account-server.py ../../scripts/tests
           pnpm exec pyright --project ../../scripts/pyrightconfig.json
       - name: Generated API contract drift
         run: pnpm api:check
-
-  security:
-    runs-on: ubuntu-24.04
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-        with:
-          fetch-depth: 0
-      - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9
-        with:
-          version: "0.12.3"
-          enable-cache: true
-          prune-cache: true
-      - name: Gitleaks filesystem scan
-        run: |
-          docker run --rm --volume "$PWD:/src:ro" \
-            zricethezav/gitleaks@sha256:c00b6bd0aeb3071cbcb79009cb16a60dd9e0a7c60e2be9ab65d25e6bc8abbb7f \
-            detect --source=/src --config=/src/.gitleaks.toml --no-banner --redact --no-git
-      - name: Semgrep SAST
-        run: uvx --from semgrep==1.172.0 semgrep scan --config p/default --error
-      - name: Trivy repository scan
-        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25
-        with:
-          scan-type: fs
-          scan-ref: .
-          scanners: vuln,misconfig,secret
-          severity: HIGH,CRITICAL
-          ignore-unfixed: true
-          exit-code: "1"
-          trivyignores: .trivyignore.yaml
-
-  dependency-audit:
-    runs-on: ubuntu-24.04
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86
-        with:
-          version: 10.33.0
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
-        with:
-          node-version: "22.23.2"
-          cache: pnpm
-      - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9
-        with:
-          version: "0.12.3"
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm audit --prod --audit-level high
-      - name: Audit locked Python dependencies
-        working-directory: apps/api
-        run: |
-          uv export --frozen --no-dev --no-emit-project --format requirements-txt --output-file /tmp/infraege-requirements.txt
-          uvx --from pip-audit==2.10.1 pip-audit --requirement /tmp/infraege-requirements.txt

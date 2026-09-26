@@ -22,7 +22,7 @@ test("topic summary recovers without moving rows", async ({
   await topicCatalogPage.expectErrorRecovery();
 });
 
-test("topic catalog remains readable without JavaScript", async ({
+test("topic catalog remains readable without JavaScript @no-js", async ({
   noJavaScriptTopicCatalogPage,
 }) => {
   await noJavaScriptTopicCatalogPage.expectReadableWithoutScripts();

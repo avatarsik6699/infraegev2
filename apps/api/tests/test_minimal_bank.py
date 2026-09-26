@@ -23,6 +23,8 @@ from app.modules.practice.models import TaskRecord
 from app.modules.practice.schemas import Bank, TheoryLink
 from app.modules.practice.service import export_bank, import_bank
 
+pytestmark = pytest.mark.db
+
 ROOT = Path(__file__).resolve().parents[3]
 BANK = ROOT / "content/practice-bank"
 IMAGE = (

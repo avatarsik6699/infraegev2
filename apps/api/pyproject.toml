@@ -35,6 +35,12 @@ venvPath = "."
 venv = ".venv"
 include = ["app", "tests", "migrations"]
 
+[tool.pytest.ini_options]
+markers = [
+  "pure: deterministic API or protocol contract with no Docker or PostgreSQL fixture",
+  "db: isolated PostgreSQL integration contract; starts a disposable pinned database",
+]
+
 [tool.ruff]
 line-length = 100
 target-version = "py312"

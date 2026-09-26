@@ -1,5 +1,6 @@
 import { CourseCatalogPage } from "./pages/course-catalog.page";
 import { AccountPage } from "./pages/account.page";
+import { AccountIntegrationPage } from "./pages/account-integration.page";
 import { MinimalApplicationPage } from "./pages/minimal-application.page";
 import { PracticeCutoverPage } from "./pages/practice-cutover.page";
 import { test as base } from "@playwright/test";
@@ -9,9 +10,16 @@ import { PublicDiscoveryPage } from "./pages/public-discovery.page";
 import { TopicLessonPage } from "./pages/topic-lesson.page";
 
 import { TopicCatalogPage } from "./pages/topic-catalog.page";
+import {
+  readVerificationLink,
+  removeAccountMailbox,
+} from "./support/account-mailbox";
 
 type AppFixtures = {
   accountPage: AccountPage;
+  accountIdentity: { email: string; password: string };
+  accountIntegrationPage: AccountIntegrationPage;
+  accountMailbox: { readVerificationLink(): string };
   noJavaScriptAccountPage: AccountPage;
   courseCatalogPage: CourseCatalogPage;
   noJavaScriptCourseCatalogPage: CourseCatalogPage;
@@ -33,6 +41,27 @@ type AppFixtures = {
 export const test = base.extend<AppFixtures>({
   accountPage: async ({ page }, use) => {
     await use(new AccountPage(page));
+  },
+  accountIntegrationPage: async ({ page }, use) => {
+    await use(new AccountIntegrationPage(page));
+  },
+  accountIdentity: async ({ browser }, use, testInfo) => {
+    void browser;
+    await use({
+      email: `account-browser-${String(testInfo.workerIndex)}@example.com`,
+      password: "correct horse battery",
+    });
+  },
+  accountMailbox: async ({ browser }, use) => {
+    void browser;
+    const mailbox = process.env.INFRAEGE_ACCOUNT_MAILBOX;
+    if (!mailbox)
+      throw new Error("account integration mailbox is not configured");
+    try {
+      await use({ readVerificationLink: () => readVerificationLink(mailbox) });
+    } finally {
+      removeAccountMailbox();
+    }
   },
   noJavaScriptAccountPage: async ({ baseURL, browser }, use) => {
     const context = await browser.newContext({

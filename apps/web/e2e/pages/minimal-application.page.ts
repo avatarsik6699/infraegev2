@@ -36,6 +36,16 @@ export class MinimalApplicationPage {
       ).toBeVisible();
     }
   }
+
+  async expectProductionRenderingSmoke() {
+    for (const path of ["/", "/ege", "/courses", "/privacy"]) {
+      const response = await this.page.goto(path);
+      expect(response?.status()).toBe(200);
+      await expect(this.page.getByRole("heading", { level: 1 })).toBeVisible();
+      await expect(this.page.locator("[data-infraege-mark]")).toBeVisible();
+      await expectNoHorizontalOverflow(this.page);
+    }
+  }
   async expectPublishedLesson(index: number) {
     const lesson = courseLessonPublications[index];
     const response = await this.page.goto(
@@ -266,6 +276,9 @@ export class MinimalApplicationPage {
           exact: true,
         });
         const buttonBefore = (await checkButton.boundingBox())!;
+        const buttonTopBefore = await checkButton.evaluate(
+          (el) => el.getBoundingClientRect().top + scrollY,
+        );
         await checkButton.click();
         const busyButton = row.getByRole("button", {
           name: "Проверяем",
@@ -273,6 +286,8 @@ export class MinimalApplicationPage {
         });
         try {
           await expect(busyButton).toHaveAttribute("aria-busy", "true");
+          // Keep the intrinsic label footprint while the accessible name reports progress.
+          await expect(busyButton).toHaveText("Проверить");
           const buttonBox = (await busyButton.boundingBox())!;
           const spinnerBox = (await busyButton
             .locator("[data-button-spinner]")
@@ -305,14 +320,20 @@ export class MinimalApplicationPage {
         if (state === "incorrect")
           await expect(input).toHaveAttribute("aria-invalid", "true");
         if (state === "error")
-          await expect(row.getByRole("alert")).toContainText(
+          await expect(row.getByRole("status")).toContainText(
             "Не удалось проверить ответ",
           );
         if (state === "correct") await expect(input).toBeDisabled();
         const after = await hint.evaluate(
           (el) => el.getBoundingClientRect().top + scrollY,
         );
-        expect(Math.abs(after - before)).toBeLessThan(1);
+        // Desktop help shares the control row. On mobile it is below the field's
+        // normal-flow error message and must move down rather than overlap that message.
+        if (width === 1440) expect(Math.abs(after - before)).toBeLessThan(1);
+        const buttonTopAfter = await checkButton.evaluate(
+          (el) => el.getBoundingClientRect().top + scrollY,
+        );
+        expect(Math.abs(buttonTopAfter - buttonTopBefore)).toBeLessThan(1);
         const inputTop = await input.evaluate(
           (el) => el.getBoundingClientRect().top + scrollY,
         );
@@ -337,6 +358,12 @@ export class MinimalApplicationPage {
             inputBox.y + inputBox.height,
           );
           expect(Math.abs(errorBox.x - inputBox.x)).toBeLessThan(1);
+          if (width === 390) {
+            const hintBox = (await hint.boundingBox())!;
+            expect(hintBox.y).toBeGreaterThanOrEqual(
+              errorBox.y + errorBox.height,
+            );
+          }
         }
         await this.page.unrouteAll({ behavior: "wait" });
       }
@@ -366,9 +393,9 @@ export class MinimalApplicationPage {
         row.getByRole("heading", { name: "Решение", exact: true }),
       ).toBeVisible();
       await expectNoHorizontalOverflow(this.page);
-      await row.getByRole("button", { name: "Решить ещё раз" }).click();
-      await expect(input).toBeEnabled();
-      await expect(input).toBeFocused();
+      await expect(
+        row.getByRole("button", { name: "Решить ещё раз", exact: true }),
+      ).toHaveCount(0);
       await collapse.click();
       await this.page.evaluate(() =>
         localStorage.removeItem("infraege:practice-progress"),
