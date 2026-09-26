@@ -7,7 +7,7 @@
 | Change | `145` |
 | Slug | `cutover-assert-stdin` |
 | Title | Cutover assertion stdin |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/145-cutover-assert-stdin` |
 
 ## Goal
