@@ -78,7 +78,12 @@ if ! run_compose "$release_dir" "$DEPLOY_SHA" run --rm --no-deps --interactive=f
 fi
 # Prepared DB must already contain the reviewed bank; deploy never reimports content.
 run_compose "$release_dir" "$DEPLOY_SHA" up --detach --wait --wait-timeout 60 postgres
-DB_ENV=prod DB_PROJECT=infraege bash "$release_dir/scripts/backup.sh" "$env_file"
+backup_args=("$env_file")
+backup_mode=$(application_backup_mode "$release_dir" "$previous_release") || exit 1
+if [[ $backup_mode == recovery-hold ]]; then
+  backup_args+=(--recovery-hold)
+fi
+DB_ENV=prod DB_PROJECT=infraege bash "$release_dir/scripts/backup.sh" "${backup_args[@]}"
 run_compose "$release_dir" "$DEPLOY_SHA" run --rm --no-deps db-provision
 run_compose "$release_dir" "$DEPLOY_SHA" run --rm --no-deps db-migrate
 run_compose "$release_dir" "$DEPLOY_SHA" up --detach --remove-orphans --wait --wait-timeout 180

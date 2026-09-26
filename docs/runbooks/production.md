@@ -65,6 +65,11 @@ up the prepared DB, re-provisions restricted roles (including `infraege_app`), r
 activates Compose, verifies health version and public HTTP,
 then updates `current`, `database-current`, deployment status and environment SHA. It never
 imports content automatically. Preserve candidate and previous images for recovery.
+On a reviewed schema transition, the pre-migration deploy backup carries a recovery hold;
+record its exact full snapshot ID from `backup-status.json` before the next timer backup. Ordinary
+deploys and daily backups do not create holds. Review and manually release a hold after 30 days
+only through the [backup procedure](backup-restore.md#recovery-hold-review-and-release), never by
+an automatic retention timer.
 
 After the release is healthy and recorded, `scripts/prune-releases.sh` keeps the three newest
 releases plus whatever `current` and `database-current` point to, and removes the other releases'

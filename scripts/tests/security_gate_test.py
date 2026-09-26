@@ -28,6 +28,25 @@ class SecurityGateTests(unittest.TestCase):
 set -eu
 printf 'git %s\\n' "$*" >> "$SECURITY_CALLS"
 case " $* " in
+  *' show '*)
+    last=${!#}
+    revision=${last%%:*}
+    if [[ "$revision" == "$SECURITY_BASE" ]]; then
+      if [[ -v SECURITY_BASE_MANIFEST_CONTENT ]]; then
+        printf '%s' "$SECURITY_BASE_MANIFEST_CONTENT"
+      else
+        printf '{}'
+      fi
+    elif [[ "$revision" == "$SECURITY_HEAD" ]]; then
+      if [[ -v SECURITY_HEAD_MANIFEST_CONTENT ]]; then
+        printf '%s' "$SECURITY_HEAD_MANIFEST_CONTENT"
+      else
+        printf '{}'
+      fi
+    else
+      exit 1
+    fi
+    ;;
   *' rev-parse --verify HEAD '*) printf '%s\\n' "$SECURITY_HEAD" ;;
   *' rev-parse --verify '*)
     last=${!#}
@@ -87,6 +106,7 @@ if [[ "${SECURITY_UV_EXPORT_FAILURE:-}" == 1 ]]; then exit 17; fi
             {
                 "PATH": f"{self.bin}{os.pathsep}{env['PATH']}",
                 "SECURITY_CALLS": str(self.calls),
+                "SECURITY_BASE": BASE,
                 "SECURITY_HEAD": HEAD,
                 **extra_env,
             }
@@ -155,6 +175,96 @@ if [[ "${SECURITY_UV_EXPORT_FAILURE:-}" == 1 ]]; then exit 17; fi
         self.assertEqual(result.returncode, 17)
         self.assertIn("uv export --locked --all-groups", self.logged_calls())
         self.assertNotIn("uvx ", self.logged_calls())
+
+    def test_package_scripts_only_change_skips_pnpm_audit(self):
+        result = self.run_gate(
+            "changed-dependencies",
+            BASE,
+            HEAD,
+            SECURITY_CHANGED_PATHS="apps/web/package.json",
+            SECURITY_BASE_MANIFEST_CONTENT='{"scripts":{"test":"old"}}',
+            SECURITY_HEAD_MANIFEST_CONTENT='{"scripts":{"test":"new"}}',
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertNotIn("\npnpm ", self.logged_calls())
+        self.assertIn("no ecosystem audit needed", result.stdout)
+
+    def test_package_dependency_change_runs_pnpm_audit(self):
+        result = self.run_gate(
+            "changed-dependencies",
+            BASE,
+            HEAD,
+            SECURITY_CHANGED_PATHS="apps/web/package.json",
+            SECURITY_BASE_MANIFEST_CONTENT='{"dependencies":{"old":"1.0.0"}}',
+            SECURITY_HEAD_MANIFEST_CONTENT='{"dependencies":{"new":"1.0.0"}}',
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("pnpm audit --audit-level high", self.logged_calls())
+
+    def test_pyproject_test_marker_only_change_skips_python_audit(self):
+        before = '[project]\nname = "example"\ndependencies = ["fastapi"]\n\n[tool.pytest.ini_options]\nmarkers = ["pure"]\n'
+        after = '[project]\nname = "example"\ndependencies = ["fastapi"]\n\n[tool.pytest.ini_options]\nmarkers = ["pure", "db"]\n'
+        result = self.run_gate(
+            "changed-dependencies",
+            BASE,
+            HEAD,
+            SECURITY_CHANGED_PATHS="apps/api/pyproject.toml",
+            SECURITY_BASE_MANIFEST_CONTENT=before,
+            SECURITY_HEAD_MANIFEST_CONTENT=after,
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertNotIn("\nuv export ", self.logged_calls())
+        self.assertIn("no ecosystem audit needed", result.stdout)
+
+    def test_dependency_group_change_runs_python_audit(self):
+        result = self.run_gate(
+            "changed-dependencies",
+            BASE,
+            HEAD,
+            SECURITY_CHANGED_PATHS="apps/api/pyproject.toml",
+            SECURITY_BASE_MANIFEST_CONTENT='[dependency-groups]\ndev = ["pytest"]\n',
+            SECURITY_HEAD_MANIFEST_CONTENT='[dependency-groups]\ndev = ["pytest", "ruff"]\n',
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("uv export --locked --all-groups", self.logged_calls())
+        self.assertIn("uvx --from pip-audit==2.10.1", self.logged_calls())
+
+    def test_malformed_dependency_manifest_fails_closed(self):
+        malformed = (
+            ("apps/web/package.json", "not json", "{}"),
+            ("apps/api/pyproject.toml", "not toml", "[project]\nname = 'ok'\n"),
+        )
+        for path, before, after in malformed:
+            with self.subTest(path=path):
+                self.calls.unlink(missing_ok=True)
+                result = self.run_gate(
+                    "changed-dependencies",
+                    BASE,
+                    HEAD,
+                    SECURITY_CHANGED_PATHS=path,
+                    SECURITY_BASE_MANIFEST_CONTENT=before,
+                    SECURITY_HEAD_MANIFEST_CONTENT=after,
+                )
+
+                self.assertEqual(result.returncode, 2)
+                self.assertIn("could not classify dependency fields", result.stderr)
+                self.assertNotIn("\npnpm ", self.logged_calls())
+                self.assertNotIn("\nuv export ", self.logged_calls())
+
+    def test_pnpm_lockfile_and_workspace_policy_always_run_audit(self):
+        for changed_path in ("pnpm-lock.yaml", "pnpm-workspace.yaml"):
+            with self.subTest(changed_path=changed_path):
+                self.calls.unlink(missing_ok=True)
+                result = self.run_gate(
+                    "changed-dependencies", BASE, HEAD, SECURITY_CHANGED_PATHS=changed_path
+                )
+
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertIn("pnpm audit --audit-level high", self.logged_calls())
 
 
 if __name__ == "__main__":

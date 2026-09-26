@@ -73,6 +73,40 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
   Keep the shared Restic lock and operations tag boundary. Change 113's real isolated Restic
   rehearsal exposed this; the operations policy is outside that change's mutation scope.
 
+### Same-day backup retention can prune the exact pre-migration recovery point
+
+- **Symptoms:** the post-release backup succeeds, but the exact full ID of the preceding
+  pre-migration backup no longer authenticates; an older backup may still exist.
+- **Cause:** ordinary daily retention keeps only one point in a calendar-day group. During the
+  first account cutover, the later same-day backup displaced the selected pre-migration point.
+- **Fix:** a reviewed schema-changing deploy creates its backup with the separate
+  `infraege-recovery-hold` tag from the outset. Routine `forget` includes `--keep-tag` and
+  checks the returned full ID after pruning. Record that ID outside the rotating status file,
+  review it at 30 days, and remove the hold manually only after recovery checks. Tagging an old
+  point changes its full ID; never claim the original point was restored by a tag change.
+
+### Isolated Restic Docker tests must write as the host user
+
+- **Symptoms:** a disposable test repository under `/tmp` passes retention checks, but its
+  cleanup fails with `Permission denied` on root-owned Restic files; a non-root container may
+  warn that `/.cache` is unwritable.
+- **Cause:** Docker defaults to root and Restic defaults its cache under the container home.
+- **Fix:** mount only the test directory, pass the host UID/GID with `--user`, and set
+  `RESTIC_CACHE_DIR` to a writable directory inside that mount. For an already affected, exact
+  disposable test path, repair ownership through the agent's root-capable container and clean
+  only that verified path; never broaden the target to `/tmp` or project data.
+
+### Historical practice checksum manifest can look like four API keys
+
+- **Symptoms:** weekly Gitleaks reports four `generic-api-key` findings in
+  `content/practice-migration/snapshot.json`, preventing later audit steps.
+- **Cause:** four 64-hex input values are SHA-256 checksums of public task JSON files; each was
+  verified against its source file at the reported historical commit, without printing a
+  potential secret value during triage.
+- **Fix:** `.gitleaks.toml` allows only those four exact digests at that exact historical path.
+  Keep the negative control: the same digest outside that path must still be detected. A new
+  finding, path or value needs independent investigation, not a broader regex or disabled rule.
+
 ### Linux Chromium under WSL can leave Windows-named Lighthouse profiles in the repository
 
 - **Symptoms:** after `pnpm audit:performance`, the repository root contains literal directories

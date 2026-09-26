@@ -51,9 +51,18 @@ A missed periodic run is noticed and rerun manually. It is not green and does no
 unrelated work. A confirmed critical account/data finding or applicable candidate-image vulnerability
 blocks the affected release; noncritical findings become ordinary Backlog work.
 
-After separately authorized workflow publication, manually run each normal audit once, inspect the
-reports and confirm the intended GitHub Actions notification recipient/schedule actor. Until then,
-record that remote activation is pending; never fabricate a remote PASS.
+The first manual activation on 2026-09-26 used the published account-release SHA
+`bb0c0aea936b2949faee415510a17c8930f676fd`: the browser audit passed, including isolated
+synthetic journeys and public Lighthouse; the security audit failed at Git-history Gitleaks with
+four findings, before SAST, config and dependency steps ran. This is not a security PASS and the
+four findings, before SAST, config and dependency steps ran. A subsequent local triage confirmed
+each was the exact SHA-256 of its public source task file in the historical migration snapshot;
+the architect approved four value-and-path-specific Gitleaks exceptions. The local full-history
+scan then passed, but that is not a retroactive PASS for the earlier remote run or for the steps
+it never reached. Both workflows report through standard
+GitHub Actions status/notifications; the repository can verify the run status and actor, not
+whether an individual email was delivered. Future schedules remain Tuesday 03:23 UTC (browser)
+and 04:23 UTC (security); inspect missed runs rather than assuming a PASS.
 The local equivalents are `bash scripts/security-gate.sh weekly` and
 `bash scripts/run-isolated-browser-audit.sh` (plus `INFRAEGE_LIGHTHOUSE_TARGET=production pnpm
 audit:performance` for the separate public observation). These broad commands are not the routine

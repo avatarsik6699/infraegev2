@@ -88,7 +88,8 @@ run_dependency_audits() {
 }
 
 audit_changed_dependencies() {
-  local base=$1 head=$2 changed_paths="" path pnpm_changed=false python_changed=false
+  local base=$1 head=$2 changed_paths="" path classification_status
+  local pnpm_changed=false python_changed=false
   check_range "$base" "$head"
   git -C "$repo_dir" diff --quiet "$head" -- \
     ':(glob)**/package.json' pnpm-lock.yaml pnpm-workspace.yaml apps/api/pyproject.toml apps/api/uv.lock ||
@@ -97,8 +98,32 @@ audit_changed_dependencies() {
     die "could not inspect changed paths in the requested range"
   while IFS= read -r path; do
     case "$path" in
-      */package.json|package.json|pnpm-lock.yaml|pnpm-workspace.yaml) pnpm_changed=true ;;
-      apps/api/pyproject.toml|apps/api/uv.lock) python_changed=true ;;
+      pnpm-lock.yaml|pnpm-workspace.yaml) pnpm_changed=true ;;
+      */package.json|package.json)
+        if manifest_dependencies_changed "$base" "$head" "$path" package; then
+          :
+        else
+          classification_status=$?
+          if [[ "$classification_status" -eq 1 ]]; then
+            pnpm_changed=true
+          else
+            die "could not classify dependency fields in $path"
+          fi
+        fi
+        ;;
+      apps/api/pyproject.toml)
+        if manifest_dependencies_changed "$base" "$head" "$path" python; then
+          :
+        else
+          classification_status=$?
+          if [[ "$classification_status" -eq 1 ]]; then
+            python_changed=true
+          else
+            die "could not classify dependency fields in $path"
+          fi
+        fi
+        ;;
+      apps/api/uv.lock) python_changed=true ;;
     esac
   done <<< "$changed_paths"
 
@@ -113,6 +138,101 @@ audit_changed_dependencies() {
       "$base" "$head"
   fi
 }
+
+manifest_dependencies_changed() (
+  local base=$1 head=$2 path=$3 kind=$4 before after
+  before=$(mktemp /tmp/infraege-manifest-before.XXXXXX) ||
+    die "could not create temporary manifest file"
+  after=$(mktemp /tmp/infraege-manifest-after.XXXXXX) || {
+    rm -f -- "$before"
+    die "could not create temporary manifest file"
+  }
+  trap 'rm -f -- "$before" "$after"' EXIT
+  git -C "$repo_dir" show "$base:$path" >"$before" 2>/dev/null ||
+    die "could not read $path from base revision"
+  git -C "$repo_dir" show "$head:$path" >"$after" 2>/dev/null ||
+    die "could not read $path from candidate revision"
+
+  python3 - "$kind" "$path" "$before" "$after" <<'PY'
+import json
+import sys
+import tomllib
+from pathlib import Path
+
+kind, path, before_path, after_path = sys.argv[1:]
+
+PACKAGE_FIELDS = (
+    "dependencies",
+    "devDependencies",
+    "optionalDependencies",
+    "peerDependencies",
+    "peerDependenciesMeta",
+    "bundledDependencies",
+    "overrides",
+    "resolutions",
+    "packageManager",
+    "engines",
+    "os",
+    "cpu",
+    "trustedDependencies",
+    "workspaces",
+    "pnpm",
+)
+PROJECT_FIELDS = ("dependencies", "optional-dependencies", "requires-python", "dynamic")
+
+
+def selected(pathname: str) -> object:
+    raw = Path(pathname).read_bytes()
+    if kind == "package":
+        document = json.loads(raw)
+        if not isinstance(document, dict):
+            raise ValueError("package manifest root must be an object")
+        return {key: document[key] for key in PACKAGE_FIELDS if key in document}
+
+    document = tomllib.loads(raw.decode("utf-8"))
+    if not isinstance(document, dict):
+        raise ValueError("Python project manifest root must be a table")
+    project = document.get("project", {})
+    dependency_groups = document.get("dependency-groups", {})
+    build_system = document.get("build-system", {})
+    tool = document.get("tool", {})
+    if not isinstance(tool, dict):
+        raise ValueError("tool must be a table")
+    tool_uv = tool.get("uv", {})
+    for name, value in (
+        ("project", project),
+        ("dependency-groups", dependency_groups),
+        ("build-system", build_system),
+        ("tool.uv", tool_uv),
+    ):
+        if not isinstance(value, dict):
+            raise ValueError(f"{name} must be a table")
+    return {
+        "project": {key: project[key] for key in PROJECT_FIELDS if key in project},
+        "dependency-groups": dependency_groups,
+        "build-system": build_system,
+        "tool.uv": tool_uv,
+    }
+
+
+try:
+    left = selected(before_path)
+    right = selected(after_path)
+except (
+    OSError,
+    UnicodeError,
+    ValueError,
+    TypeError,
+    AttributeError,
+    json.JSONDecodeError,
+    tomllib.TOMLDecodeError,
+) as exc:
+    print(f"security-gate: could not classify {path}: {exc}", file=sys.stderr)
+    raise SystemExit(2)
+
+raise SystemExit(0 if left == right else 1)
+PY
+)
 
 run_weekly_audit() {
   # Checkout must fetch full history. --all includes every locally fetched branch and tag.

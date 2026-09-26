@@ -1,5 +1,17 @@
 #!/usr/bin/env bash
 
+application_backup_mode() {
+  local candidate=$1 previous=$2 candidate_schema previous_schema
+  candidate_schema=$(cat "$candidate/infra/database-schema") || return 1
+  previous_schema=$(cat "$previous/infra/database-schema" 2>/dev/null || true)
+  [[ $candidate_schema == 122_01 || $candidate_schema == 140_01 ]] || return 1
+  if [[ $candidate_schema == "$previous_schema" ]]; then
+    printf 'ordinary\n'
+  else
+    printf 'recovery-hold\n'
+  fi
+}
+
 application_schema_preflight() {
   local candidate=$1 previous=$2 proof=$3
   local candidate_schema previous_schema

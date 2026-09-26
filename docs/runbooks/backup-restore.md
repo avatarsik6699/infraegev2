@@ -5,7 +5,11 @@ allowlisted roles/privileges (including the least-privilege `infraege_app` accou
 environment and SQL fingerprints. Retention is 7 daily + 4 weekly + 3 monthly. Thus an account
 deleted from the live database is removed there immediately, but can remain in an immutable encrypted
 snapshot until the applicable retention groups are pruned (normally up to about three calendar months,
-plus timer/retention timing). Individual records are never edited out of Restic snapshots. Jobs serialize with
+plus timer/retention timing). A schema-transition deploy additionally creates one
+`infraege-recovery-hold` snapshot; routine retention keeps that exact full ID until an operator
+removes the hold. Review and manually release it after 30 days, after confirming recovery is no
+longer needed. This is a bounded operational review, not an automatic deletion timer. Individual
+records are never edited out of Restic snapshots. Jobs serialize with
 `/run/lock/infraege-restic.lock`. Local same-host backups do not survive loss of the VPS; off-site
 storage remains an accepted unresolved risk.
 
@@ -40,6 +44,12 @@ challenges per table per run. It never removes a live session, an unexpired mail
 that can still contribute to the one-hour resend cap.
 `/opt/infraege/database-current` selects the maintenance release that matches the DB. Inspect
 `backup-status.json`, `restore-status.json`, `systemctl list-timers` and journald for status. The
+deploy backup's `backup-status.json` contains its full `snapshotId` and `recoveryHold=true` when
+the deployed candidate changes the recorded schema. Record that full ID with the release evidence
+before a later routine backup overwrites the status file. A schema-unchanged deploy and daily timer
+remain ordinary backups. Every backup authenticates its returned full ID before and after retention;
+missing or malformed ID proof fails the backup before recording success.
+The
 purge emits aggregate counts only; account addresses, identifiers and token values must not be copied
 to shell history, tickets or logs.
 The source of timer truth is `ops/systemd/`; no separate monitoring stack is required.
@@ -155,6 +165,41 @@ command removes its own disposable Docker resources and internal working directo
 After a healthy first deploy, create a fresh *live* `140_01` backup and run the routine isolated
 restore check again; this confirms the actual post-cutover data. Preserve the pre-migration backup
 for recovery. Do not claim this post-deploy check as the proof that authorized the preceding
-migration.
+migration. After that fresh backup has run its retention, re-authenticate the previously recorded
+held **full ID** and assert both tags under the shared lock; the newer backup overwrites
+`backup-status.json`, so that file cannot recover the earlier ID:
+
+```bash
+set -o pipefail
+export RESTIC_REPOSITORY=/var/backups/infraege/restic
+export RESTIC_PASSWORD_FILE=/etc/infraege/restic-password
+flock -n /run/lock/infraege-restic.lock restic cat snapshot FULL_HELD_SNAPSHOT_ID |
+  jq -e '(.tags | index("infraege-application")) != null and
+    (.tags | index("infraege-recovery-hold")) != null'
+```
+
+An absent ID or either tag is a failed recovery check, not a successful post-release backup.
+
+### Recovery hold review and release
+
+At 30 days after a schema transition, an operator checks the recorded full 64-character held
+snapshot ID, current live schema/health, successful recent backup and isolated restore, and any
+open recovery incident. Never release a hold just because the calendar date arrived. Under the
+shared `/run/lock/infraege-restic.lock`, authenticate the exact ID with `restic cat snapshot`,
+confirm both `infraege-application` and `infraege-recovery-hold` tags, and inspect
+`restic forget --tag infraege-application --group-by host,tags --keep-daily 7 --keep-weekly 4
+--keep-monthly 3 --keep-tag infraege-recovery-hold --dry-run` before changing it. If approved,
+remove only the `infraege-recovery-hold` tag from that exact snapshot with `restic tag --remove
+infraege-recovery-hold FULL_SNAPSHOT_ID`; Restic changes the snapshot ID when tags change, so
+record the new full ID and authenticate it. The next routine retention may prune it. Never run
+`forget --prune` manually as part of releasing a hold, and never use `latest` or a prefix in this
+procedure. The retained pre-migration point can contain later-deleted accounts; the deletion
+reconciliation rule above applies before any restoration to production.
+
+The exact 2026-09-26 pre-migration `122_01` snapshot from the first account cutover was pruned by
+same-day post-release retention before this protection existed. It cannot be recovered from the
+remaining repository. The older retained `122_01` point is a different, earlier backup and is
+not interchangeable with that exact cutover point; verify its ID, schema and account-deletion
+window before relying on it. Protecting an older point now does not recreate the lost one.
 Retired operations snapshots/services are not altered by local code removal. Their eventual
 retirement must be explicit; preserve any shared Restic data and application timers.

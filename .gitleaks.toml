@@ -17,3 +17,14 @@ description = "Verified SHA-256 of the public six-byte practice attachment"
 condition = "AND"
 paths = ['''(^|/)content/practice-bank/bank\.json$''']
 regexes = ['''^a3ffa225a17d35ef0f8185b42bf373fcc9fd45c2494e7e9c6ee01dbc2c6aecaf$''']
+
+[[rules.allowlists]]
+description = "Verified public task SHA-256 digests in the historical migration snapshot"
+condition = "AND"
+paths = ['''(^|/)content/practice-migration/snapshot\.json$''']
+regexes = [
+  '''^73f327ef48f94f996bddee2a31de276f655974e38feea8d7d382c5361df31e79$''',
+  '''^df7023bff03a4e6bb565f03509f1713b30892ebe0268565ac5af9194e2bf7747$''',
+  '''^513f50e1986542c2507065497fc35851925c54d9b018c062a8c1bbf263e89b29$''',
+  '''^4de9c4f8a0065151b4555c305a2ba1fe421a1b06673e0da1df3cdb08f6e780ab$''',
+]
