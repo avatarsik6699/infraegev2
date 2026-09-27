@@ -7,7 +7,7 @@
 | Change | `149` |
 | Slug | `number-sequences-lesson` |
 | Title | Number sequences lesson |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/149-number-sequences-lesson` |
 
 ---
@@ -95,7 +95,7 @@ See `docs/SPEC.md` §1.4, §2.2–2.3, §3–§5, `docs/FRONTEND.md` §5 and the
 
 ## Gate Checks
 
-Use the affected Critical Gate from `../STACK.md`: format, web lint/typecheck, focused content and bank tests, content validation, changed-file LSP and repository hygiene. Playwriter inspects the complete locally published page; repository Playwright keeps its Page Object/fixture policy. Manual content review precedes `/ship` and findings return to this Backlog. No Full Gate or release is implied.
+Use the affected Critical Gate from `../../STACK.md`: format, web lint/typecheck, focused content and bank tests, content validation, changed-file LSP and repository hygiene. Playwriter inspects the complete locally published page; repository Playwright keeps its Page Object/fixture policy. Manual content review precedes `/ship` and findings return to this Backlog. No Full Gate or release is implied.
 
 ---
 
