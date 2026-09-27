@@ -38,9 +38,20 @@ export const stringProcessingLessonPublication = Object.freeze({
   status: "published",
 });
 
+export const integerProcessingLessonPublication = Object.freeze({
+  id: "integer-processing",
+  routeSlug: "25-obrabotka-celyh-chisel",
+  taskNumbers: Object.freeze([25]),
+  title: "Обработка целых чисел",
+  summary:
+    "Как проверять цифры и делители числа, перебирать пары и находить подходящие значения в заданном диапазоне.",
+  status: "published",
+});
+
 export const lessonPublications = Object.freeze([
   rekursiyaLessonPublication,
   preobrazovanieZapiseyChiselLessonPublication,
   numberSequencesLessonPublication,
   stringProcessingLessonPublication,
+  integerProcessingLessonPublication,
 ]);

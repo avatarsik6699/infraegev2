@@ -192,6 +192,10 @@ Python подставляет title, summary, route и состав уроков
 подготовке и локальной проверке каждого урока; формальная автоматизация не заменяет проверку
 архитектора до `/ship`.
 
+Практический порядок работы для следующих уроков Python и ЕГЭ — в
+[руководстве по подготовке урока](runbooks/lesson-authoring.md); оно поясняет этот checklist,
+не заменяя его.
+
 **Педагогика:**
 - [ ] Новое понятие сначала вводится через понятную ситуацию и объяснение своими словами;
   специальный термин, обозначение и код появляются после смысловой подводки. Уже подробно
@@ -376,8 +380,9 @@ snapshot. Public lesson theory, navigation and practice remain SSR-readable with
 link to their existing lesson; planned topics say “Скоро”, with no links or invented counts.
 The reference is `docs/artifacts/references/13_50_05.png`: large numbers, quiet separators,
 topic text and thin progress. Topics 5/16 have mathematical miniatures faithful to the reference;
-topic 17 uses the architect's sequence illustration, and topic 24 has an original
-string-fragment miniature. Other topics share a Lucide BookOpen
+topic 17 uses the architect's sequence illustration, topic 24 has an original
+string-fragment miniature, and topic 25 uses an original prime/composite number-row miniature.
+Other topics share a Lucide BookOpen
 placeholder. These are allowed educational catalog figures.
 Search matches title, summary and numbers while typing, ignoring case and е/ё. Status filters
 are All, In progress (0 < solved < total), and Not started (solved = 0), with the latter two

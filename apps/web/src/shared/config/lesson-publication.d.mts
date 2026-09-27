@@ -43,4 +43,13 @@ export const stringProcessingLessonPublication: Readonly<{
   status: "published";
 }>;
 
+export const integerProcessingLessonPublication: Readonly<{
+  id: "integer-processing";
+  routeSlug: "25-obrabotka-celyh-chisel";
+  taskNumbers: readonly [25];
+  title: "Обработка целых чисел";
+  summary: "Как проверять цифры и делители числа, перебирать пары и находить подходящие значения в заданном диапазоне.";
+  status: "published";
+}>;
+
 export const lessonPublications: readonly LessonPublication[];

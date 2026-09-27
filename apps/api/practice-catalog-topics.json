@@ -28,6 +28,13 @@
     "material_ids": []
   },
   {
+    "id": "ege-25",
+    "label": "25 номер. Обработка целых чисел",
+    "group": "ЕГЭ",
+    "exam_number": 25,
+    "material_ids": []
+  },
+  {
     "id": "python-start",
     "label": "Python · Старт и отладка",
     "group": "Мини-курсы",

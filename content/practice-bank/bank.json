@@ -112338,6 +112338,695 @@
         }
       },
       "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-25-01",
+        "title": "Посчитайте числа с двумя условиями",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 6,
+        "answer_instruction": "Введите количество значений.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Среди целых чисел от 100 до 199 включительно сколько делятся на 6 без остатка и оканчиваются цифрой 2?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Переберите включённые границы. Для каждого значения отдельно проверьте остаток при делении на 6 и последнюю цифру. Оба условия должны выполняться одновременно."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Подходят 102, 132, 162 и 192: каждое число оканчивается цифрой 2 и делится на 6 без остатка. Всего их 4. Союз «и» означает, что значение засчитывается только после обеих успешных проверок."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "count = 0\nfor number in range(100, 200):\n    if number % 6 == 0 and number % 10 == 2:\n        count += 1\nprint(count)",
+              "caption": "Перебираем включённый диапазон и считаем значения, прошедшие обе проверки"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 0,
+            "material_id": "integer-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Проверьте делимость по остатку",
+            "section": "divisibility-remainder",
+            "material_id": "integer-processing"
+          },
+          {
+            "label": "Найдите последнюю цифру",
+            "section": "decimal-digits",
+            "material_id": "integer-processing"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["4"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-25-02",
+        "title": "Найдите наибольшее число по сумме цифр",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 7,
+        "answer_instruction": "Введите наибольшее подходящее число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Рассматриваются целые числа от 300 до 450 включительно. Найдите наибольшее число, сумма цифр которого равна 12 и которое делится на 5 без остатка."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "На 5 делятся числа, оканчивающиеся на 0 или 5. Для каждого сложите все цифры и сравните сумму с 12. Идите по возрастанию и сохраняйте последнее подходящее значение."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В диапазоне условиям о сумме цифр и делимости на 5 отвечают 345, 390 и 435. Например, 4 + 3 + 5 = 12. Наибольшее из этих чисел — 435. Последняя цифра проверяет делимость на 5, но сумму всё равно нужно вычислить отдельно. Начальное значение maximum = 0 означает, что подходящее положительное число пока не найдено. Перебор идёт по возрастанию, поэтому каждое новое подходящее число заменяет предыдущее."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "maximum = 0\nfor number in range(300, 451):\n    if number % 5 == 0:\n        remaining = number\n        digit_sum = 0\n        while remaining > 0:\n            digit_sum += remaining % 10\n            remaining = remaining // 10\n        if digit_sum == 12:\n            maximum = number\nprint(maximum)",
+              "caption": "Складываем цифры и сохраняем наибольшее подходящее число"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 1,
+            "material_id": "integer-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Разберите число на цифры",
+            "section": "decimal-digits",
+            "material_id": "integer-processing"
+          },
+          {
+            "label": "Проверьте делимость на 5",
+            "section": "divisibility-remainder",
+            "material_id": "integer-processing"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["435"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-25-03",
+        "title": "Посчитайте собственные делители",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 7,
+        "answer_instruction": "Введите количество собственных делителей.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Делитель — положительное целое число, на которое данное число делится без остатка. Собственный делитель меньше самого числа. Сколько собственных делителей у 36?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Проверьте делители от 1 до 35 включительно: если остаток при делении 36 на кандидат равен нулю, он подходит."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Собственные делители числа 36: 1, 2, 3, 4, 6, 9, 12 и 18. Их восемь. Единица входит, а само число 36 исключается: оно не меньше самого себя и потому не является собственным делителем."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "count = 0\nfor divisor in range(1, 36):\n    if 36 % divisor == 0:\n        count += 1\nprint(count)",
+              "caption": "Перебираем только числа меньше 36"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 2,
+            "material_id": "integer-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Исключите из списка делителей само число",
+            "section": "divisors",
+            "material_id": "integer-processing"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["8"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-25-04",
+        "title": "Посчитайте простые числа в диапазоне",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 8,
+        "answer_instruction": "Введите количество простых чисел.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Простое число — натуральное число больше 1, у которого ровно два натуральных делителя: 1 и само число. Сколько простых чисел от 90 до 110 включительно?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Для каждого кандидата переберите делители от 2 до числа на единицу меньше. Одного делителя без остатка достаточно, чтобы признать число составным. 1 простым не считается."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Подходят 97, 101, 103, 107 и 109 — всего пять чисел. У каждого нет делителя между 1 и самим числом. У остальных значений такой делитель есть. Программа считает делители каждого кандидата от 1 до него включительно: у простого числа их ровно два, а у числа 1 — только один, поэтому оно автоматически не попадёт в результат."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "prime_count = 0\nfor number in range(90, 111):\n    divisor_count = 0\n    for divisor in range(1, number + 1):\n        if number % divisor == 0:\n            divisor_count += 1\n    if divisor_count == 2:\n        prime_count += 1\nprint(prime_count)",
+              "caption": "Считаем все натуральные делители каждого кандидата; простому числу соответствуют ровно два"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 3,
+            "material_id": "integer-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Проверьте, есть ли лишний делитель",
+            "section": "primes",
+            "material_id": "integer-processing"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["5"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-25-05",
+        "title": "Найдите первое число с тремя делителями",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 3,
+        "estimated_minutes": 8,
+        "answer_instruction": "Введите первое подходящее число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Рассматривайте натуральные числа от 40 до 70 включительно, по возрастанию. Найдите первое число, у которого ровно три натуральных делителя, включая 1 и само число."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Для каждого значения сначала проверьте все возможные делители от 1 до самого числа включительно. Только после полного подсчёта сравните количество с тройкой. Как только найдёте первое число с ровно тремя делителями, завершите внешний перебор."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Первое подходящее число — 49: его делители 1, 7 и 49. Это квадрат простого числа 7. У числа 48 делителей больше трёх (например, 1, 2, 3, 4, 6 и 8), как и у 50 (1, 2, 5, 10 и 25). Программа проверяет число делителей прямо, а не подставляет ответ из известного свойства квадратов простых чисел. Начальное значение answer = 0 означает, что подходящее положительное число пока не найдено. Слово break в коде завершает внешний цикл сразу после первого найденного ответа; его подробный разбор есть в последнем разделе теории."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "answer = 0\nfor number in range(40, 71):\n    divisor_count = 0\n    for divisor in range(1, number + 1):\n        if number % divisor == 0:\n            divisor_count += 1\n    if divisor_count == 3:\n        answer = number\n        break\nprint(answer)",
+              "caption": "Считаем делители и останавливаемся на первом числе с количеством 3"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 4,
+            "material_id": "integer-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Посчитайте натуральные делители",
+            "section": "divisors",
+            "material_id": "integer-processing"
+          },
+          {
+            "label": "Повторите определение простого числа",
+            "section": "primes",
+            "material_id": "integer-processing"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["49"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-25-06",
+        "title": "Отберите делители по последней цифре",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 3,
+        "estimated_minutes": 9,
+        "answer_instruction": "Введите наибольший подходящий собственный делитель.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Найдите наибольший собственный натуральный делитель числа 216, который оканчивается цифрой 4."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Делители можно искать парами: если d делит 216, второй член пары равен 216 // d. Проверьте дополнительное условие отдельно у обоих членов и исключите само 216."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Подходящие собственные делители 216, оканчивающиеся на 4, — 4, 24 и 54. Наибольший — 54. Проверка обоих членов каждой пары нужна потому, что дополнительному условию может соответствовать только один из них. Когда число является квадратом, средний делитель пары совпадает сам с собой; здесь 216 не квадрат, но код всё равно защищён от повторного учёта этой границы."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "number = 216\nmaximum = 0\ndivisor = 1\nwhile divisor * divisor <= number:\n    if number % divisor == 0:\n        paired_divisor = number // divisor\n        if divisor < number and divisor % 10 == 4:\n            if divisor > maximum:\n                maximum = divisor\n        if paired_divisor != divisor and paired_divisor < number:\n            if paired_divisor % 10 == 4 and paired_divisor > maximum:\n                maximum = paired_divisor\n    divisor += 1\nprint(maximum)",
+              "caption": "Проверяем оба члена каждой пары и не считаем середину дважды"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 5,
+            "material_id": "integer-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Проверьте оба числа пары и границу квадрата",
+            "section": "divisor-pairs",
+            "material_id": "integer-processing"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["54"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-25-07",
+        "title": "Посчитайте числа по маске",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 3,
+        "estimated_minutes": 10,
+        "answer_instruction": "Введите количество подходящих четырёхзначных чисел.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Маска 3?5? задаёт четырёхзначное число: каждый знак вопроса заменяется ровно одной цифрой от 0 до 9. Сколько чисел этой маски одновременно чётные и делятся на 9 без остатка? Например, 3250 чётное, но при делении на 9 даёт остаток 1, поэтому оно не подходит."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Чётность определяется последней цифрой: она должна быть 0, 2, 4, 6 или 8. Для делимости на 9 проверьте, что остаток самого числа при делении на 9 равен нулю. Переберите обе позиции вопросительных знаков отдельно от 0 до 9."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Подходят 3150, 3258, 3456, 3654 и 3852 — всего пять чисел. У каждого последняя цифра чётная, а остаток самого числа при делении на 9 равен нулю. Например, 3250 чётное, но 3250 % 9 равно 1, значит, оно не подходит. В маске каждый вопросительный знак обозначает одну цифру, в том числе ноль."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "count = 0\nfor hundreds_digit in range(0, 10):\n    for units_digit in range(0, 10):\n        number = 3000 + hundreds_digit * 100 + 50 + units_digit\n        if units_digit % 2 == 0 and number % 9 == 0:\n            count += 1\nprint(count)",
+              "caption": "Подставляем каждую цифру в маску и проверяем два условия"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 6,
+            "material_id": "integer-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Переберите цифры в отмеченных позициях",
+            "section": "decimal-mask",
+            "material_id": "integer-processing"
+          },
+          {
+            "label": "Проверьте делимость по остатку",
+            "section": "divisibility-remainder",
+            "material_id": "integer-processing"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["5"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-25-08",
+        "title": "Найдите сумму для первых пяти подходящих чисел",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 3,
+        "estimated_minutes": 12,
+        "answer_instruction": "Введите сумму пяти выбранных делителей.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Переберите целые n от 500000 до 505000 включительно по возрастанию. Подходящим считается n, у которого есть собственный натуральный делитель d больше 7, оканчивающийся цифрой 7. Для каждого из первых пяти подходящих n выберите наибольший такой d. В ответ запишите сумму пяти выбранных делителей."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ищите делители парами, пока d * d не превысит n. Если d делит n, проверьте и второй член пары n // d; отдельно исключите n и повторно не учитывайте середину пары. Для каждого n сохраните наибольший подходящий делитель. После пятого n остановите внешний перебор."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Первые пять подходящих пар «n — выбранный делитель»: 500001 — 166667; 500002 — 4717; 500004 — 41667; 500010 — 16667; 500011 — 107. Сумма делителей равна 166667 + 4717 + 41667 + 16667 + 107 = 229825. Нужно проверять оба члена пары: наибольший подходящий делитель может быть больше того, который первым встретился в переборе. Внешний диапазон включён с обеих сторон, а поиск прекращается после пятого совпадения."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "total = 0\nfound = 0\nfor number in range(500000, 505001):\n    best_divisor = 0\n    divisor = 1\n    while divisor * divisor <= number:\n        if number % divisor == 0:\n            paired_divisor = number // divisor\n            if divisor > 7 and divisor < number and divisor % 10 == 7:\n                if divisor > best_divisor:\n                    best_divisor = divisor\n            if paired_divisor != divisor and paired_divisor > 7 and paired_divisor < number:\n                if paired_divisor % 10 == 7 and paired_divisor > best_divisor:\n                    best_divisor = paired_divisor\n        divisor += 1\n    if best_divisor > 0:\n        total += best_divisor\n        found += 1\n        if found == 5:\n            break\nprint(total)",
+              "caption": "Ищем первые пять чисел с подходящим делителем и складываем наибольший выбор для каждого"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 7,
+            "material_id": "integer-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Соедините ограниченный перебор с проверкой делителей",
+            "section": "bounded-search",
+            "material_id": "integer-processing"
+          },
+          {
+            "label": "Проверьте оба числа каждой пары",
+            "section": "divisor-pairs",
+            "material_id": "integer-processing"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["229825"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
     }
   ],
   "files": [
@@ -112455,6 +113144,22 @@
     }
   ],
   "materials": [
+    {
+      "id": "integer-processing",
+      "sections": [
+        "integer-range",
+        "divisibility-remainder",
+        "decimal-digits",
+        "divisors",
+        "primes",
+        "divisor-pairs",
+        "decimal-mask",
+        "bounded-search"
+      ],
+      "kind": "topic",
+      "status": "published",
+      "course_id": null
+    },
     {
       "id": "number-sequences",
       "sections": [

@@ -2,6 +2,22 @@
   "format": 1,
   "materials": [
     {
+      "id": "integer-processing",
+      "sections": [
+        "integer-range",
+        "divisibility-remainder",
+        "decimal-digits",
+        "divisors",
+        "primes",
+        "divisor-pairs",
+        "decimal-mask",
+        "bounded-search"
+      ],
+      "kind": "topic",
+      "status": "published",
+      "course_id": null
+    },
+    {
       "id": "number-sequences",
       "sections": [
         "sequence-from-file",

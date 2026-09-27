@@ -30,6 +30,40 @@ export class TopicLessonPage {
     private readonly config: TopicLessonPageConfig = recursionLessonConfig,
   ) {}
 
+  private async expectPublishedTopicIdentity(): Promise<void> {
+    await expectPublicReleaseIdentity(this.page);
+    await expect(this.page).toHaveTitle(this.config.title + " — infraege");
+    await expect(
+      this.page.getByRole("heading", {
+        level: 1,
+        name: this.config.title,
+      }),
+    ).toBeVisible();
+    await expect(this.page.locator('meta[name="robots"]')).toHaveAttribute(
+      "content",
+      "index,follow",
+    );
+    await expect(this.page.locator('link[rel="canonical"]')).toHaveAttribute(
+      "href",
+      "https://infraege.ru" + this.config.route,
+    );
+  }
+
+  private async expectEightTaskPractice(noJavaScript: boolean): Promise<void> {
+    await expect(this.page.locator("[data-practice-form]")).toHaveCount(1);
+    if (noJavaScript) {
+      await expect(this.page.locator("[data-practice-form] form")).toHaveCount(
+        8,
+      );
+      await expect(
+        this.page.locator("[data-practice-form] [data-unenhanced-accordion]"),
+      ).toHaveCount(8);
+    } else {
+      await expect(this.page.locator("[data-practice-task]")).toHaveCount(8);
+      await expect(this.page.getByRole("tab")).toHaveCount(8);
+    }
+  }
+
   private async expectCodeContrast(block: Locator): Promise<void> {
     const colors = await block.evaluate((element) => {
       const lightness = (color: string) =>
@@ -289,24 +323,7 @@ export class TopicLessonPage {
   async expectPublishedNumberSequencesContent(
     noJavaScript = false,
   ): Promise<void> {
-    await expectPublicReleaseIdentity(this.page);
-    await expect(this.page).toHaveTitle(
-      "Числовые последовательности — infraege",
-    );
-    await expect(
-      this.page.getByRole("heading", {
-        level: 1,
-        name: "Числовые последовательности",
-      }),
-    ).toBeVisible();
-    await expect(this.page.locator('meta[name="robots"]')).toHaveAttribute(
-      "content",
-      "index,follow",
-    );
-    await expect(this.page.locator('link[rel="canonical"]')).toHaveAttribute(
-      "href",
-      "https://infraege.ru/ege/17-chislovye-posledovatelnosti",
-    );
+    await this.expectPublishedTopicIdentity();
     for (const anchor of [
       "sequence-from-file",
       "single-values",
@@ -334,16 +351,8 @@ export class TopicLessonPage {
       name: "Дополнить условие второго прохода",
     });
     await this.expectCodeContrast(partialExample);
-    if (noJavaScript) {
-      await expect(this.page.locator("[data-practice-form] form")).toHaveCount(
-        8,
-      );
-      await expect(
-        this.page.locator("[data-practice-form] [data-unenhanced-accordion]"),
-      ).toHaveCount(8);
-    } else {
-      await expect(this.page.locator("[data-practice-task]")).toHaveCount(8);
-      await expect(this.page.getByRole("tab")).toHaveCount(8);
+    await this.expectEightTaskPractice(noJavaScript);
+    if (!noJavaScript) {
       await expect(this.page.locator("[data-result-progress]")).toContainText(
         "0 / 8",
       );
@@ -354,24 +363,7 @@ export class TopicLessonPage {
   async expectPublishedStringProcessingContent(
     noJavaScript = false,
   ): Promise<void> {
-    await expectPublicReleaseIdentity(this.page);
-    await expect(this.page).toHaveTitle(
-      "Обработка символьных строк — infraege",
-    );
-    await expect(
-      this.page.getByRole("heading", {
-        level: 1,
-        name: "Обработка символьных строк",
-      }),
-    ).toBeVisible();
-    await expect(this.page.locator('meta[name="robots"]')).toHaveAttribute(
-      "content",
-      "index,follow",
-    );
-    await expect(this.page.locator('link[rel="canonical"]')).toHaveAttribute(
-      "href",
-      "https://infraege.ru/ege/24-obrabotka-simvolnyh-strok",
-    );
+    await this.expectPublishedTopicIdentity();
     for (const anchor of [
       "file-and-string",
       "positions-and-fragments",
@@ -395,18 +387,7 @@ export class TopicLessonPage {
         name: "За один проход найти длину завершённого выражения",
       }),
     );
-    await expect(this.page.locator("[data-practice-form]")).toHaveCount(1);
-    if (noJavaScript) {
-      await expect(this.page.locator("[data-practice-form] form")).toHaveCount(
-        8,
-      );
-      await expect(
-        this.page.locator("[data-practice-form] [data-unenhanced-accordion]"),
-      ).toHaveCount(8);
-    } else {
-      await expect(this.page.locator("[data-practice-task]")).toHaveCount(8);
-      await expect(this.page.getByRole("tab")).toHaveCount(8);
-    }
+    await this.expectEightTaskPractice(noJavaScript);
     await expect(this.page.locator("#practice a[download]")).toHaveCount(8);
     if (!noJavaScript) {
       await this.expectStudyNavigationAndAccessibility();
@@ -414,6 +395,44 @@ export class TopicLessonPage {
         "За один проход найти длину завершённого выражения",
       );
     }
+  }
+
+  async expectPublishedIntegerProcessingContent(
+    noJavaScript = false,
+  ): Promise<void> {
+    await this.expectPublishedTopicIdentity();
+    for (const anchor of [
+      "integer-range",
+      "divisibility-remainder",
+      "decimal-digits",
+      "divisors",
+      "primes",
+      "divisor-pairs",
+      "decimal-mask",
+      "bounded-search",
+    ]) {
+      await expect(this.page.locator("#" + anchor)).toHaveCount(1);
+    }
+    for (const slug of [
+      "for-i-range",
+      "while",
+      "tsifry-chisla",
+      "spiski",
+      "chisla-i-vyrazheniya",
+    ]) {
+      await expect(
+        this.page.locator('#theory a[href="/courses/python/' + slug + '"]'),
+      ).not.toHaveCount(0);
+    }
+    await this.expectCodeContrast(
+      this.page.getByRole("group", {
+        name: "Найти первые пять чисел от 100 до 1000 с тремя делителями",
+      }),
+    );
+    await expect(this.page.getByLabel("Проверьте себя")).toHaveCount(1);
+    await this.expectEightTaskPractice(noJavaScript);
+    await expect(this.page.locator("#practice a[download]")).toHaveCount(0);
+    await this.expectNoHorizontalOverflow();
   }
 
   async expectPublishedNumberRecordLesson(): Promise<void> {

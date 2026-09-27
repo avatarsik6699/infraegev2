@@ -176,6 +176,11 @@ const definitions: readonly TopicCatalogTypes.Definition[] = [
   },
   {
     id: "integer-processing",
+    illustration: {
+      src: "/images/topics/integer-processing.svg",
+      width: 144,
+      height: 88,
+    },
     taskNumbers: [25],
     title: "Обработка целых чисел",
     summary:

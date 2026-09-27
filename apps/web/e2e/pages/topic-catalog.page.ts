@@ -28,6 +28,13 @@ const summary = {
       ],
     },
     {
+      id: "integer-processing",
+      tasks: Array.from({ length: 8 }, (_, index) => ({
+        id: "task-25-" + String(index + 1).padStart(2, "0"),
+        solution_revision: 1,
+      })),
+    },
+    {
       id: "string-processing",
       tasks: Array.from({ length: 8 }, (_, index) => ({
         id: `task-24-${String(index + 1).padStart(2, "0")}`,
@@ -75,12 +82,19 @@ export class TopicCatalogPage {
       }),
     ).toHaveAttribute("href", "/ege/24-obrabotka-simvolnyh-strok");
     await expect(
+      this.page.getByRole("link", {
+        name: "Обработка целых чисел",
+        exact: true,
+      }),
+    ).toHaveAttribute("href", "/ege/25-obrabotka-celyh-chisel");
+    await expect(
       this.page
         .locator('[data-topic-id="number-sequences"]')
         .getByText("Решено 0 из 8"),
     ).toBeVisible();
     await this.expectTopic17Illustration();
     await this.expectTopic24Illustration();
+    await this.expectTopic25Illustration();
     await expect(
       this.page.locator('[data-topic-status="planned"] a'),
     ).toHaveCount(0);
@@ -104,7 +118,7 @@ export class TopicCatalogPage {
     await expect(this.page.getByRole("searchbox")).toHaveValue("");
     await expect(this.page.locator("[data-topic-card]")).toHaveCount(25);
     await this.page.getByRole("button", { name: "Не начаты" }).click();
-    await expect(this.page.locator("[data-topic-card]")).toHaveCount(3);
+    await expect(this.page.locator("[data-topic-card]")).toHaveCount(4);
     await expect(
       this.page.getByRole("link", {
         name: "Преобразование записей чисел",
@@ -233,9 +247,10 @@ export class TopicCatalogPage {
     await expect(this.page.locator("[data-topic-card]")).toHaveCount(25);
     await this.expectTopic17Illustration();
     await this.expectTopic24Illustration();
+    await this.expectTopic25Illustration();
     await expect(
       this.page.locator('[data-topic-status="published"] h2 a'),
-    ).toHaveCount(4);
+    ).toHaveCount(5);
     await expect(
       this.page.locator('[data-topic-status="planned"] a'),
     ).toHaveCount(0);
@@ -270,6 +285,23 @@ export class TopicCatalogPage {
       .locator('[data-topic-id="string-processing"]')
       .locator('img[src="/images/topics/string-processing.svg"]');
     await expect(illustration).toBeVisible();
+    await expect
+      .poll(() =>
+        illustration.evaluate(
+          (image: HTMLImageElement) =>
+            image.complete && image.naturalWidth === 144,
+        ),
+      )
+      .toBe(true);
+  }
+
+  private async expectTopic25Illustration() {
+    const illustration = this.page
+      .locator('[data-topic-id="integer-processing"]')
+      .locator('img[src="/images/topics/integer-processing.svg"]');
+    await expect(illustration).toBeVisible();
+    await expect(illustration).toHaveAttribute("width", "144");
+    await expect(illustration).toHaveAttribute("height", "88");
     await expect
       .poll(() =>
         illustration.evaluate(

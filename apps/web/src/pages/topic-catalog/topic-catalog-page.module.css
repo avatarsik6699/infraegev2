@@ -98,6 +98,9 @@
 .card[data-topic-id="number-sequences"] .illustration > * {
   transform: scale(1.12);
 }
+.card[data-topic-id="integer-processing"] .illustration > * {
+  transform: scale(1.12);
+}
 .placeholder {
   color: var(--color-muted);
 }
@@ -236,6 +239,12 @@
   .illustration {
     width: 8rem;
     height: 4.5rem;
+  }
+  .card[data-topic-id="integer-processing"] .illustration {
+    height: 5.5rem;
+  }
+  .card[data-topic-id="integer-processing"] .illustration > * {
+    transform: scale(1.4);
   }
   .cardContent {
     grid-column: 1 / -1;
