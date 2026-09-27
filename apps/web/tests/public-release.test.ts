@@ -67,6 +67,13 @@ describe("public release metadata", () => {
         title: "Обработка данных: сортировка и отбор",
         status: "published",
       }),
+      expect.objectContaining({
+        id: "data-analysis",
+        routeSlug: "27-analiz-dannyh-i-klasterizatsiya",
+        taskNumbers: [27],
+        title: "Анализ данных: кластеризация",
+        status: "published",
+      }),
     ]);
     expect(
       lessonPublications
@@ -79,6 +86,7 @@ describe("public release metadata", () => {
       "24-obrabotka-simvolnyh-strok",
       "25-obrabotka-celyh-chisel",
       "26-sortirovka-i-otbor",
+      "27-analiz-dannyh-i-klasterizatsiya",
     ]);
     expect(new Set(lessonPublications.map((lesson) => lesson.id)).size).toBe(
       lessonPublications.length,
@@ -117,6 +125,7 @@ describe("public release metadata", () => {
       ["string-processing", "24-obrabotka-simvolnyh-strok"],
       ["integer-processing", "25-obrabotka-celyh-chisel"],
       ["array-processing", "26-sortirovka-i-otbor"],
+      ["data-analysis", "27-analiz-dannyh-i-klasterizatsiya"],
     ]);
     expect(topicCatalog.formatTaskNumbers([5])).toBe("Задание 5");
     expect(topicCatalog.formatTaskNumbers([19, 20, 21])).toBe("Задания 19–21");

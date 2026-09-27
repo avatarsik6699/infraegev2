@@ -61,4 +61,13 @@ export const arrayProcessingLessonPublication: Readonly<{
   status: "published";
 }>;
 
+export const dataAnalysisLessonPublication: Readonly<{
+  id: "data-analysis";
+  routeSlug: "27-analiz-dannyh-i-klasterizatsiya";
+  taskNumbers: readonly [27];
+  title: "Анализ данных: кластеризация";
+  summary: string;
+  status: "published";
+}>;
+
 export const lessonPublications: readonly LessonPublication[];

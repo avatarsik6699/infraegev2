@@ -382,7 +382,8 @@ The reference is `docs/artifacts/references/13_50_05.png`: large numbers, quiet 
 topic text and thin progress. Topics 5/16 have mathematical miniatures faithful to the reference;
 topic 17 uses the architect's sequence illustration, topic 24 has an original
 string-fragment miniature, topic 25 uses an original prime/composite number-row miniature,
-and topic 26 uses an original sorting-and-selection miniature. Other topics share a Lucide
+topic 26 uses an original sorting-and-selection miniature, and topic 27 uses an original
+cluster-and-centre miniature. Other topics share a Lucide
 BookOpen placeholder. These are allowed educational catalog figures.
 Search matches title, summary and numbers while typing, ignoring case and е/ё. Status filters
 are All, In progress (0 < solved < total), and Not started (solved = 0), with the latter two

@@ -42,6 +42,13 @@
     "material_ids": []
   },
   {
+    "id": "ege-27",
+    "label": "27 номер. Анализ данных: кластеризация",
+    "group": "ЕГЭ",
+    "exam_number": 27,
+    "material_ids": []
+  },
+  {
     "id": "python-start",
     "label": "Python · Старт и отладка",
     "group": "Мини-курсы",

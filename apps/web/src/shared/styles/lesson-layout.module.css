@@ -190,6 +190,10 @@
   .contextLesson {
     min-height: 3.25rem;
     padding-inline: var(--lesson-column-gutter);
+    padding-block: var(--space-1);
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
   }
 
   .article {

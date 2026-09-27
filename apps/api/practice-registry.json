@@ -16,6 +16,21 @@
       "course_id": null
     },
     {
+      "id": "data-analysis",
+      "sections": [
+        "points-and-records",
+        "spatial-clusters",
+        "energy-clusters",
+        "cluster-centre",
+        "distance-and-filter",
+        "combined-result",
+        "independent-check"
+      ],
+      "kind": "topic",
+      "status": "published",
+      "course_id": null
+    },
+    {
       "id": "integer-processing",
       "sections": [
         "integer-range",

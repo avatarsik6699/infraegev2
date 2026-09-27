@@ -42,6 +42,13 @@ const summary = {
       })),
     },
     {
+      id: "data-analysis",
+      tasks: Array.from({ length: 7 }, (_, index) => ({
+        id: "task-27-" + String(index + 1).padStart(2, "0"),
+        solution_revision: 1,
+      })),
+    },
+    {
       id: "string-processing",
       tasks: Array.from({ length: 8 }, (_, index) => ({
         id: `task-24-${String(index + 1).padStart(2, "0")}`,
@@ -101,6 +108,12 @@ export class TopicCatalogPage {
       }),
     ).toHaveAttribute("href", "/ege/26-sortirovka-i-otbor");
     await expect(
+      this.page.getByRole("link", {
+        name: "Анализ данных: кластеризация",
+        exact: true,
+      }),
+    ).toHaveAttribute("href", "/ege/27-analiz-dannyh-i-klasterizatsiya");
+    await expect(
       this.page
         .locator('[data-topic-id="number-sequences"]')
         .getByText("Решено 0 из 8"),
@@ -109,6 +122,7 @@ export class TopicCatalogPage {
     await this.expectTopic24Illustration();
     await this.expectTopicSvgIllustration("integer-processing");
     await this.expectTopicSvgIllustration("array-processing");
+    await this.expectTopicSvgIllustration("data-analysis");
     await expect(
       this.page.locator('[data-topic-status="planned"] a'),
     ).toHaveCount(0);
@@ -132,7 +146,7 @@ export class TopicCatalogPage {
     await expect(this.page.getByRole("searchbox")).toHaveValue("");
     await expect(this.page.locator("[data-topic-card]")).toHaveCount(25);
     await this.page.getByRole("button", { name: "Не начаты" }).click();
-    await expect(this.page.locator("[data-topic-card]")).toHaveCount(5);
+    await expect(this.page.locator("[data-topic-card]")).toHaveCount(6);
     await expect(
       this.page.getByRole("link", {
         name: "Преобразование записей чисел",
@@ -263,9 +277,10 @@ export class TopicCatalogPage {
     await this.expectTopic24Illustration();
     await this.expectTopicSvgIllustration("integer-processing");
     await this.expectTopicSvgIllustration("array-processing");
+    await this.expectTopicSvgIllustration("data-analysis");
     await expect(
       this.page.locator('[data-topic-status="published"] h2 a'),
-    ).toHaveCount(6);
+    ).toHaveCount(7);
     await expect(
       this.page.locator('[data-topic-status="planned"] a'),
     ).toHaveCount(0);
@@ -311,7 +326,7 @@ export class TopicCatalogPage {
   }
 
   private async expectTopicSvgIllustration(
-    topicId: "integer-processing" | "array-processing",
+    topicId: "integer-processing" | "array-processing" | "data-analysis",
   ) {
     const illustration = this.page
       .locator(`[data-topic-id="${topicId}"]`)

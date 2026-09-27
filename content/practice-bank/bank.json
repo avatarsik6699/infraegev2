@@ -113690,6 +113690,637 @@
         }
       },
       "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-27-01",
+        "title": "Посчитайте точки внутри заданной границы",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 7,
+        "answer_instruction": "Введите одно целое число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "На плоскости расположены точки A(0, 0), B(1, 0), C(1, 1), D(2, 2), E(5, 5), F(5, 6), G(7, 1) и H(9, 0). В центральную область попадают точки, для которых `2 <= x < 7`: нижняя граница включается, верхняя не включается. Сколько точек находится в этой области?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Для каждой точки проверьте координату x отдельно от y. Условие состоит из двух частей: x не меньше 2 и x меньше 7. Значение x=2 подходит, а x=7 — уже нет."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Проверяем только координату x. D имеет x=2 и входит по включённой нижней границе. E и F имеют x=5 и тоже входят. Всего в области три точки. A, B и C находятся левее; G с x=7 уже не входит из-за строгой верхней границы, а H находится ещё правее."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "points = [(0, 0), (1, 0), (1, 1), (2, 2), (5, 5), (5, 6), (7, 1), (9, 0)]\ninside = []\nfor point in points:\n    if 2 <= point[0] and point[0] < 7:\n        inside.append(point)\nprint(len(inside))",
+              "caption": "Один из вариантов решения"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 0,
+            "material_id": "data-analysis"
+          }
+        ],
+        "theory_links": [
+          {
+            "material_id": "data-analysis",
+            "section": "spatial-clusters",
+            "label": "Повторите этот приём"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "kind": "original",
+            "role": "original",
+            "primary": true,
+            "title": null,
+            "author": null,
+            "original_id": null,
+            "url": null,
+            "year": null,
+            "adaptation": null,
+            "is_public": true
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["3"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-27-02",
+        "title": "Найдите центральную точку группы",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 9,
+        "answer_instruction": "Введите два целых числа через пробел в указанном порядке.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В группе четыре точки: P(0, 0), Q(2, 0), R(0, 2), S(1, 1). Центром называют одну из этих точек, для которой сумма обычных евклидовых расстояний до остальных минимальна. Выведите координаты центра через пробел: сначала x, затем y."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Для каждой точки сложите расстояния до трёх остальных. Между (x1, y1) и (x2, y2) расстояние равно `(dx*dx + dy*dy) ** 0.5`, где dx и dy — разности координат. Сравните четыре суммы; центр обязательно должен быть одной из записанных точек."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "У S(1, 1) расстояния до трёх угловых точек равны √2, сумма примерно 4,24. У P(0, 0) сумма 2 + 2 + √2, примерно 5,41; у Q и R суммы одинаковы друг с другом: 2 + √8 + √2, примерно 6,24. Единственная точка с наименьшей суммой — S(1, 1). В программе `** 0.5` извлекает квадратный корень. Сначала сумма считается для первой точки, а затем заменяется только тогда, когда найдена меньшая."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "points = [(0, 0), (2, 0), (0, 2), (1, 1)]\nbest_point = points[0]\nbest_total = 0\nfor other in points:\n    dx = best_point[0] - other[0]\n    dy = best_point[1] - other[1]\n    best_total += (dx * dx + dy * dy) ** 0.5\n\nfor candidate_index in range(1, len(points)):\n    candidate = points[candidate_index]\n    total = 0\n    for other in points:\n        dx = candidate[0] - other[0]\n        dy = candidate[1] - other[1]\n        total += (dx * dx + dy * dy) ** 0.5\n    if total < best_total:\n        best_point = candidate\n        best_total = total\n\nprint(best_point[0], best_point[1])",
+              "caption": "Один из вариантов решения"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 1,
+            "material_id": "data-analysis"
+          }
+        ],
+        "theory_links": [
+          {
+            "material_id": "data-analysis",
+            "section": "spatial-clusters",
+            "label": "Повторите этот приём"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "kind": "original",
+            "role": "original",
+            "primary": true,
+            "title": null,
+            "author": null,
+            "original_id": null,
+            "url": null,
+            "year": null,
+            "adaptation": null,
+            "is_public": true
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["1 1"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-27-03",
+        "title": "Найдите размер самого большого энергетического кластера",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 8,
+        "answer_instruction": "Введите одно целое число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Энергии частиц: 1, 3, 5, 8, 12, 14. Сначала расположите значения по возрастанию. Начните кластер с наименьшей ещё не распределённой энергии и добавляйте следующие по порядку значения, пока разность между наибольшей и наименьшей энергиями этого кластера не превысит 4. Когда очередное значение уже не помещается, завершите кластер и начните новый с этого значения. Найдите количество частиц в самом большом кластере."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сортировка задаёт порядок. Для каждого кластера запомните его первую, то есть наименьшую, энергию. Если очередное значение превышает её на 4, закройте текущую группу и начните следующую с этого значения. Равенство 4 допускается."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "После сортировки первый кластер начинается с 1. Значения 3 и 5 помещаются, потому что их разность с 1 не больше 4. Значение 8 уже не помещается: 8−1=7. Поэтому первый кластер — 1, 3, 5. Следующий начинается с 8; значение 12 помещается на границе, так как 12−8=4. Значение 14 начинает третий кластер, потому что 14−8=6. Размеры групп — 3, 2 и 1; самый большой содержит 3 частицы. Проверка только соседних промежутков ошибочно объединила бы 1, 3, 5, 8. В последней строке программы `max(cluster_sizes)` выбирает наибольший размер из списка размеров групп."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "energies = sorted([1, 3, 5, 8, 12, 14])\nlimit = 4\ncluster_sizes = []\nfirst_energy = energies[0]\ncurrent_size = 0\nfor energy in energies:\n    if energy - first_energy > limit:\n        cluster_sizes.append(current_size)\n        first_energy = energy\n        current_size = 0\n    current_size += 1\ncluster_sizes.append(current_size)\nprint(max(cluster_sizes))",
+              "caption": "Один из вариантов решения"
+            }
+          }
+        ],
+        "skills": ["sorting"],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 2,
+            "material_id": "data-analysis"
+          }
+        ],
+        "theory_links": [
+          {
+            "material_id": "data-analysis",
+            "section": "energy-clusters",
+            "label": "Повторите этот приём"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "kind": "original",
+            "role": "original",
+            "primary": true,
+            "title": null,
+            "author": null,
+            "original_id": null,
+            "url": null,
+            "year": null,
+            "adaptation": null,
+            "is_public": true
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["3"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-27-04",
+        "title": "Найдите единственный центр на прямой",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 7,
+        "answer_instruction": "Введите одно целое число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Координаты пяти частиц на прямой: 2, 7, 10, 12, 20. Центром считают одну из частиц, для которой сумма расстояний до остальных минимальна. Выведите координату центра."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Расположите значения по возрастанию. Здесь пять разных координат, поэтому среднее по порядку значение задаёт единственный центр. При повторяющихся средних значениях несколько исходных частиц могут делить минимум."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Среднее, третье значение — 10. Если выбрать значение левее, возрастут расстояния до правых частиц; если правее — до левых. Поэтому сумма минимальна у частицы с координатой 10."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "coordinates = sorted([2, 7, 10, 12, 20])\ncenter_index = len(coordinates) // 2\nprint(coordinates[center_index])",
+              "caption": "Один из вариантов решения"
+            }
+          }
+        ],
+        "skills": ["sorting"],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 3,
+            "material_id": "data-analysis"
+          }
+        ],
+        "theory_links": [
+          {
+            "material_id": "data-analysis",
+            "section": "cluster-centre",
+            "label": "Повторите этот приём"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "kind": "original",
+            "role": "original",
+            "primary": true,
+            "title": null,
+            "author": null,
+            "original_id": null,
+            "url": null,
+            "year": null,
+            "adaptation": null,
+            "is_public": true
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["10"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-27-05",
+        "title": "Найдите самую удалённую пару частиц типа II",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 3,
+        "estimated_minutes": 11,
+        "answer_instruction": "Введите одно целое число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В файле указаны кластер, тип частицы, координаты x и y. Среди частиц типа II найдите наибольшее евклидово расстояние между двумя частицами одного кластера. Данные подобраны так, что наибольшее расстояние — целое число; выведите его как целое. Сначала исключите другие типы, затем сравнивайте пары внутри каждой группы."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "input-file"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Не сравнивайте точки из разных кластеров. Сначала сравнивайте квадраты расстояний (x1−x2)²+(y1−y2)²; только для выбранной пары вычислите корень."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "После фильтра по типу II в кластере A есть пара (0,0) и (3,4) с расстоянием 5. В B пара (10,10) и (16,18) имеет расстояние √(6²+8²)=10. В C расстояние равно √2. Максимум — ровно 10, поэтому `int` в последней строке лишь записывает его в требуемом целом формате. Для произвольного нецелого расстояния отбрасывать дробную часть нельзя. В программе словарь хранит список точек отдельно для каждого имени кластера. `points_by_cluster.values()` перебирает сами эти списки; имя кластера для сравнения уже не нужно."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "points_by_cluster = {}\nwith open(\"points-27-05.txt\", encoding=\"utf-8\") as file:\n    for line in file:\n        cluster, particle_type, raw_x, raw_y = line.split()\n        if particle_type == \"II\":\n            if cluster not in points_by_cluster:\n                points_by_cluster[cluster] = []\n            points_by_cluster[cluster].append((int(raw_x), int(raw_y)))\nmaximum_squared = 0\nfor points in points_by_cluster.values():\n    for first_index in range(len(points)):\n        for second_index in range(first_index + 1, len(points)):\n            dx = points[first_index][0] - points[second_index][0]\n            dy = points[first_index][1] - points[second_index][1]\n            squared_distance = dx * dx + dy * dy\n            if squared_distance > maximum_squared:\n                maximum_squared = squared_distance\nprint(int(maximum_squared ** 0.5))",
+              "caption": "Один из вариантов решения"
+            }
+          }
+        ],
+        "skills": ["file-processing"],
+        "exam_numbers": [],
+        "files": [
+          {
+            "id": "input-file",
+            "purpose": "attachment",
+            "checksum": "88eb8b290f1edaa1b562314460e30428e61d56315f9cc75eab5490c9363adf50",
+            "filename": "points-27-05.txt",
+            "description": "Группы точек с типом и координатами",
+            "attribution": null
+          }
+        ],
+        "lessons": [
+          {
+            "position": 4,
+            "material_id": "data-analysis"
+          }
+        ],
+        "theory_links": [
+          {
+            "material_id": "data-analysis",
+            "section": "distance-and-filter",
+            "label": "Повторите этот приём"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "kind": "original",
+            "role": "original",
+            "primary": true,
+            "title": null,
+            "author": null,
+            "original_id": null,
+            "url": null,
+            "year": null,
+            "adaptation": null,
+            "is_public": true
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["10"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-27-06",
+        "title": "Найдите число энергетических кластеров и центр крупнейшего",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 3,
+        "estimated_minutes": 12,
+        "answer_instruction": "Введите два целых числа через пробел в указанном порядке.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В файле записаны номер частицы, координата x и энергия; десятичная часть отделена запятой. Все координаты x — целые числа, хотя в файле записаны как десятичные. В ответе координату запишите целым числом. После сортировки начните кластер с наименьшей ещё не распределённой энергии. Добавляйте следующие по порядку частицы, пока размах max(E)−min(E) не превышает 1,5. Как только следующая частица не помещается, завершите текущий кластер и начните новый с неё. Найдите общее число кластеров и координату x центра крупнейшего: центр — частица с медианной энергией. Выведите эти числа через пробел."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "input-file"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Замените десятичную запятую на точку и превратите значение в `float`. После сортировки сравнивайте каждую энергию с первой энергией текущего кластера. Размах ровно 1,5 допустим."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Отсортированные энергии: 1,0; 1,5; 2,0; 2,3; 2,4; 5,0; 6,5; 10,0; 12,0. Первый кластер содержит пять частиц и имеет размах 1,4. Второй содержит 5,0 и 6,5: размах ровно 1,5, поэтому обе частицы остаются вместе. 10,0 и 12,0 образуют ещё два кластера. Всего четыре; у крупнейшего медианная энергия 2,0, ей соответствует x=4,0. По условию координату в ответе записываем целым числом 4."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "records = []\nwith open(\"particles-27-06.txt\", encoding=\"utf-8\") as file:\n    for line in file:\n        particle_id, raw_x, raw_energy = line.split()\n        x = float(raw_x.replace(\",\", \".\"))\n        energy = float(raw_energy.replace(\",\", \".\"))\n        records.append((energy, x, particle_id))\nrecords.sort(key=lambda record: record[0])\nclusters = []\nfor record in records:\n    if not clusters or record[0] - clusters[-1][0][0] > 1.5:\n        clusters.append([])\n    clusters[-1].append(record)\nlargest_cluster = clusters[0]\nfor cluster in clusters:\n    if len(cluster) > len(largest_cluster):\n        largest_cluster = cluster\ncenter = largest_cluster[len(largest_cluster) // 2]\nprint(len(clusters), int(center[1]))",
+              "caption": "Один из вариантов решения"
+            }
+          }
+        ],
+        "skills": ["sorting", "file-processing"],
+        "exam_numbers": [],
+        "files": [
+          {
+            "id": "input-file",
+            "purpose": "attachment",
+            "checksum": "457d25f7608d15f23dd2bd48a66166f65cd34f7cc8fc108098220576b07d7e4d",
+            "filename": "particles-27-06.txt",
+            "description": "Частицы с десятичными координатами и энергиями",
+            "attribution": null
+          }
+        ],
+        "lessons": [
+          {
+            "position": 5,
+            "material_id": "data-analysis"
+          }
+        ],
+        "theory_links": [
+          {
+            "material_id": "data-analysis",
+            "section": "combined-result",
+            "label": "Повторите этот приём"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "kind": "original",
+            "role": "original",
+            "primary": true,
+            "title": null,
+            "author": null,
+            "original_id": null,
+            "url": null,
+            "year": null,
+            "adaptation": null,
+            "is_public": true
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["4 4"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-27-07",
+        "title": "Рассчитайте пространственный и энергетический результаты",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 3,
+        "estimated_minutes": 16,
+        "answer_instruction": "Введите два целых числа через пробел в указанном порядке.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Файл содержит x, y, vx, vy, массу m и код типа частицы: 1 означает тип I, 2 — тип II. Для каждой строки вычислите кинетическую энергию E=m*(vx*vx+vy*vy)/2. Упорядочите частицы по E. Начните кластер с наименьшей ещё не распределённой энергии и добавляйте следующие по порядку, пока полный размах max(E)−min(E) не превышает R=2. Если следующая частица уже не помещается, завершите кластер и начните новый с неё. Сравнивайте новую энергию с минимальной энергией текущего кластера, а не только с предыдущей. Центр — частица с медианной энергией.\n\nQ1 — максимальное евклидово расстояние между двумя частицами типа II одного кластера. Q2 — максимальная энергия центра. Выведите int(Q1*10000) и int(Q2*10000) через пробел. Функция int отбрасывает дробную часть."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "input-file"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сначала рассчитайте E в каждой записи и сортируйте по ней. В каждом кластере выберите среднюю по порядку частицу. Для Q1 сначала отберите тип II и сравнивайте пары внутри одного кластера; квадраты расстояний помогут найти максимум до извлечения корня. Умножьте оба результата на 10000, затем отбросьте дробную часть."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Энергии равны m/2, так как во всех строках vx=1 и vy=0: 1; 1,5; 2; 5; 5,5; 6; 9; 9,5; 10; 13; 13,5; 14. Это четыре кластера по три частицы с размахом 1 каждый. Медианные энергии: 1,5; 5,5; 9,5; 13,5. Поэтому Q2=13,5 и масштабированный результат равен 135000.\n\nНаибольшие расстояния между частицами типа II внутри кластеров: 1, 1, 3 и √13. Квадрат наибольшего расстояния равен 13. Корень вычисляется один раз после сравнения пар: √13 примерно равно 3,60555; после умножения на 10000 и отбрасывания дробной части получаем 36055. Ответ: 36055 135000."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "particles = []\nwith open(\"particles-27-07.txt\", encoding=\"utf-8\") as file:\n    for line in file:\n        raw_x, raw_y, raw_vx, raw_vy, raw_mass, particle_type = line.split()\n        x = float(raw_x)\n        y = float(raw_y)\n        vx = float(raw_vx)\n        vy = float(raw_vy)\n        mass = float(raw_mass)\n        energy = mass * (vx * vx + vy * vy) / 2\n        particles.append((energy, x, y, particle_type))\nparticles.sort(key=lambda particle: particle[0])\nclusters = []\nfor particle in particles:\n    if not clusters or particle[0] - clusters[-1][0][0] > 2:\n        clusters.append([])\n    clusters[-1].append(particle)\ncenter_energies = []\nmaximum_distance_squared = 0\nfor cluster in clusters:\n    center = cluster[len(cluster) // 2]\n    center_energies.append(center[0])\n    type_two = []\n    for particle in cluster:\n        if particle[3] == \"2\":\n            type_two.append(particle)\n    for first_index in range(len(type_two)):\n        for second_index in range(first_index + 1, len(type_two)):\n            dx = type_two[first_index][1] - type_two[second_index][1]\n            dy = type_two[first_index][2] - type_two[second_index][2]\n            distance_squared = dx * dx + dy * dy\n            if distance_squared > maximum_distance_squared:\n                maximum_distance_squared = distance_squared\nq1 = int(maximum_distance_squared ** 0.5 * 10000)\nq2 = int(max(center_energies) * 10000)\nprint(q1, q2)",
+              "caption": "Один из вариантов решения"
+            }
+          }
+        ],
+        "skills": ["sorting", "file-processing"],
+        "exam_numbers": [],
+        "files": [
+          {
+            "id": "input-file",
+            "purpose": "attachment",
+            "checksum": "acb425622e23b446b2f0089845f9c6f5baa83170648f2e3d5974adad8bd8edaa",
+            "filename": "particles-27-07.txt",
+            "description": "Частицы с координатами, скоростями, массой и типом",
+            "attribution": null
+          }
+        ],
+        "lessons": [
+          {
+            "position": 6,
+            "material_id": "data-analysis"
+          }
+        ],
+        "theory_links": [
+          {
+            "material_id": "data-analysis",
+            "section": "independent-check",
+            "label": "Повторите этот приём"
+          },
+          {
+            "material_id": "data-analysis",
+            "section": "combined-result",
+            "label": "Повторите общий расчёт"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "kind": "original",
+            "role": "original",
+            "primary": true,
+            "title": null,
+            "author": null,
+            "original_id": null,
+            "url": null,
+            "year": null,
+            "adaptation": null,
+            "is_public": true
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["36055 135000"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
     }
   ],
   "files": [
@@ -113832,6 +114463,27 @@
       "mime_type": "text/plain",
       "size_bytes": 104,
       "storage_key": "1138ce52acb349f9721778bf7623693b066e64e1ad65b4c8e1ec6cebcb8d1e93"
+    },
+    {
+      "format": "txt",
+      "checksum": "88eb8b290f1edaa1b562314460e30428e61d56315f9cc75eab5490c9363adf50",
+      "mime_type": "text/plain",
+      "size_bytes": 80,
+      "storage_key": "88eb8b290f1edaa1b562314460e30428e61d56315f9cc75eab5490c9363adf50"
+    },
+    {
+      "format": "txt",
+      "checksum": "457d25f7608d15f23dd2bd48a66166f65cd34f7cc8fc108098220576b07d7e4d",
+      "mime_type": "text/plain",
+      "size_bytes": 96,
+      "storage_key": "457d25f7608d15f23dd2bd48a66166f65cd34f7cc8fc108098220576b07d7e4d"
+    },
+    {
+      "format": "txt",
+      "checksum": "acb425622e23b446b2f0089845f9c6f5baa83170648f2e3d5974adad8bd8edaa",
+      "mime_type": "text/plain",
+      "size_bytes": 171,
+      "storage_key": "acb425622e23b446b2f0089845f9c6f5baa83170648f2e3d5974adad8bd8edaa"
     }
   ],
   "materials": [
@@ -113843,6 +114495,21 @@
         "capacity-selection",
         "secondary-optimum",
         "event-stream",
+        "independent-check"
+      ],
+      "kind": "topic",
+      "status": "published",
+      "course_id": null
+    },
+    {
+      "id": "data-analysis",
+      "sections": [
+        "points-and-records",
+        "spatial-clusters",
+        "energy-clusters",
+        "cluster-centre",
+        "distance-and-filter",
+        "combined-result",
         "independent-check"
       ],
       "kind": "topic",

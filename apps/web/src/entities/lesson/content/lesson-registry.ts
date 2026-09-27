@@ -5,6 +5,7 @@ import { preobrazovanieZapiseyChiselLesson } from "./preobrazovanie-zapisey-chis
 import { rekursiyaLesson } from "./rekursiya.lesson";
 import { integerProcessingLesson } from "./integer-processing.lesson";
 import { arrayProcessingLesson } from "./array-processing.lesson";
+import { dataAnalysisLesson } from "./data-analysis.lesson";
 
 const lessons: readonly LessonContent.Definition[] = [
   rekursiyaLesson,
@@ -13,6 +14,7 @@ const lessons: readonly LessonContent.Definition[] = [
   stringProcessingLesson,
   integerProcessingLesson,
   arrayProcessingLesson,
+  dataAnalysisLesson,
 ];
 
 export function findLessonByRouteSlug(

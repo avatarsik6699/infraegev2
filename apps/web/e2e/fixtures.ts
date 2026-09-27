@@ -44,6 +44,8 @@ type AppFixtures = {
   noJavaScriptIntegerProcessingLessonPage: TopicLessonPage;
   arrayProcessingLessonPage: TopicLessonPage;
   noJavaScriptArrayProcessingLessonPage: TopicLessonPage;
+  dataAnalysisLessonPage: TopicLessonPage;
+  noJavaScriptDataAnalysisLessonPage: TopicLessonPage;
 };
 
 const numberRecordLessonConfig = {
@@ -77,6 +79,13 @@ const arrayProcessingLessonConfig = {
   route: "/ege/26-sortirovka-i-otbor",
   title: "Обработка данных: сортировка и отбор",
   taskNumber: 26,
+  taskCount: 7,
+};
+
+const dataAnalysisLessonConfig = {
+  route: "/ege/27-analiz-dannyh-i-klasterizatsiya",
+  title: "Анализ данных: кластеризация",
+  taskNumber: 27,
   taskCount: 7,
 };
 
@@ -237,6 +246,9 @@ export const test = base.extend<AppFixtures>({
   arrayProcessingLessonPage: async ({ page }, use) => {
     await use(new TopicLessonPage(page, arrayProcessingLessonConfig));
   },
+  dataAnalysisLessonPage: async ({ page }, use) => {
+    await use(new TopicLessonPage(page, dataAnalysisLessonConfig));
+  },
   noJavaScriptTopicLessonPage: async ({ baseURL, browser }, use) => {
     await useNoJavaScriptTopicLesson(browser, baseURL, use);
   },
@@ -281,6 +293,14 @@ export const test = base.extend<AppFixtures>({
       baseURL,
       use,
       arrayProcessingLessonConfig,
+    );
+  },
+  noJavaScriptDataAnalysisLessonPage: async ({ baseURL, browser }, use) => {
+    await useNoJavaScriptTopicLesson(
+      browser,
+      baseURL,
+      use,
+      dataAnalysisLessonConfig,
     );
   },
 });

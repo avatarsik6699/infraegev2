@@ -200,10 +200,15 @@ const definitions: readonly TopicCatalogTypes.Definition[] = [
   },
   {
     id: "data-analysis",
+    illustration: {
+      src: "/images/topics/data-analysis.svg",
+      width: 144,
+      height: 88,
+    },
     taskNumbers: [27],
-    title: "Анализ данных",
+    title: "Анализ данных: кластеризация",
     summary:
-      "Построение модели, преобразование данных и интерпретация результата программы.",
+      "Группировка записей по признаку, поиск центра и проверка результатов.",
   },
 ];
 

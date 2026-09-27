@@ -58,6 +58,16 @@ export const arrayProcessingLessonPublication = Object.freeze({
   status: "published",
 });
 
+export const dataAnalysisLessonPublication = Object.freeze({
+  id: "data-analysis",
+  routeSlug: "27-analiz-dannyh-i-klasterizatsiya",
+  taskNumbers: Object.freeze([27]),
+  title: "Анализ данных: кластеризация",
+  summary:
+    "Как группировать записи по вычисленному признаку, находить центр группы и независимо проверять два результата.",
+  status: "published",
+});
+
 export const lessonPublications = Object.freeze([
   rekursiyaLessonPublication,
   preobrazovanieZapiseyChiselLessonPublication,
@@ -65,4 +75,5 @@ export const lessonPublications = Object.freeze([
   stringProcessingLessonPublication,
   integerProcessingLessonPublication,
   arrayProcessingLessonPublication,
+  dataAnalysisLessonPublication,
 ]);

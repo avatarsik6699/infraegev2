@@ -444,21 +444,17 @@ export class TopicLessonPage {
     noJavaScript = false,
   ): Promise<void> {
     await this.expectPublishedTopicIdentity();
-    for (const anchor of [
-      "sorted-order",
-      "file-records",
-      "capacity-selection",
-      "secondary-optimum",
-      "event-stream",
-      "independent-check",
-    ]) {
-      await expect(this.page.locator("#" + anchor)).toHaveCount(1);
-    }
-    for (const slug of ["spiski", "sortirovka-i-poisk", "fayly", "slovari"]) {
-      await expect(
-        this.page.locator('#theory a[href="/courses/python/' + slug + '"]'),
-      ).not.toHaveCount(0);
-    }
+    await this.expectTheorySectionsAndLinks(
+      [
+        "sorted-order",
+        "file-records",
+        "capacity-selection",
+        "secondary-optimum",
+        "event-stream",
+        "independent-check",
+      ],
+      ["spiski", "sortirovka-i-poisk", "fayly", "slovari"],
+    );
     await this.expectCodeContrast(
       this.page.getByRole("group", {
         name: "Сортировать целые записи по очкам",
@@ -487,6 +483,57 @@ export class TopicLessonPage {
       ).toBeVisible();
     }
     await this.expectNoHorizontalOverflow();
+  }
+
+  async expectPublishedDataAnalysisContent(
+    noJavaScript = false,
+  ): Promise<void> {
+    await this.expectPublishedTopicIdentity();
+    await this.expectTheorySectionsAndLinks(
+      [
+        "points-and-records",
+        "spatial-clusters",
+        "energy-clusters",
+        "cluster-centre",
+        "distance-and-filter",
+        "combined-result",
+        "independent-check",
+      ],
+      ["fayly", "spiski", "sortirovka-i-poisk", "slovari"],
+    );
+    await this.expectCodeContrast(
+      this.page.getByRole("group", {
+        name: "Разделить отсортированные энергии по размаху",
+      }),
+    );
+    await expect(this.page.getByLabel("Проверьте себя")).toHaveCount(1);
+    await this.expectTaskPractice(noJavaScript, 7);
+    if (noJavaScript) {
+      await expect(this.page.locator("#practice a[download]")).toHaveCount(3);
+    } else {
+      await expect(this.page.locator("[data-result-progress]")).toContainText(
+        "0 / 7",
+      );
+      await this.page.getByRole("tab").nth(4).click();
+      await expect(
+        this.page.locator('[data-practice-task="task-27-05"] a[download]'),
+      ).toBeVisible();
+    }
+    await this.expectNoHorizontalOverflow();
+  }
+
+  private async expectTheorySectionsAndLinks(
+    anchors: readonly string[],
+    courseSlugs: readonly string[],
+  ): Promise<void> {
+    for (const anchor of anchors) {
+      await expect(this.page.locator("#" + anchor)).toHaveCount(1);
+    }
+    for (const slug of courseSlugs) {
+      await expect(
+        this.page.locator('#theory a[href="/courses/python/' + slug + '"]'),
+      ).not.toHaveCount(0);
+    }
   }
 
   async expectPublishedNumberRecordLesson(): Promise<void> {
