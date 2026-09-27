@@ -7,7 +7,7 @@
 | Change | `150` |
 | Slug | `string-processing-lesson` |
 | Title | String processing lesson |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/150-string-processing-lesson` |
 
 ---
@@ -87,7 +87,7 @@ See `docs/SPEC.md` §1.4, §2.2–2.3, §3–§5, `docs/FRONTEND.md` §5 and §9
 
 ## Gate Checks
 
-Use the affected Critical Gate from [`docs/STACK.md`](../STACK.md): format, web lint/typecheck, focused web/API/content tests, changed-file LSP and repository hygiene. Playwriter checks the complete locally published page; repository E2E retains its Page Object/fixture policy. Manual content review precedes a separate `/ship`. No Full Gate or production release is implied.
+Use the affected Critical Gate from [`docs/STACK.md`](../../STACK.md): format, web lint/typecheck, focused web/API/content tests, changed-file LSP and repository hygiene. Playwriter checks the complete locally published page; repository E2E retains its Page Object/fixture policy. Manual content review precedes a separate `/ship`. No Full Gate or production release is implied.
 
 ---
 
