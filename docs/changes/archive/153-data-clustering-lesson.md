@@ -7,7 +7,7 @@
 | Change | `153` |
 | Slug | `data-clustering-lesson` |
 | Title | Data analysis and clustering lesson |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/153-data-clustering-lesson` |
 
 ---
@@ -90,7 +90,7 @@ See `docs/SPEC.md` §1.4 and §2.3–§5, `docs/FRONTEND.md` §5 and §9, `docs/
 
 ## Gate Checks
 
-Use the affected Critical Gate from [`docs/STACK.md`](../STACK.md): format, web/API lint and typecheck, focused web/API/content tests, changed-file LSP and repository hygiene. Playwriter checks the locally published page and catalog. No Full Gate or production release is implied.
+Use the affected Critical Gate from [`docs/STACK.md`](../../STACK.md): format, web/API lint and typecheck, focused web/API/content tests, changed-file LSP and repository hygiene. Playwriter checks the locally published page and catalog. No Full Gate or production release is implied.
 
 ---
 
