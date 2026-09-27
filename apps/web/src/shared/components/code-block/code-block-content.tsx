@@ -18,6 +18,7 @@ export const CodeBlockContent: React.FC<CodeBlockContentProps> = (props) => {
       data-code-scroll
       data-collapsed={props.collapsed || undefined}
       id={props.id}
+      tabIndex={0}
     >
       <code className={styles.code} data-language={props.language}>
         {lines.map((line, lineIndex) => (

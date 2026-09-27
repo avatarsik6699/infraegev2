@@ -107,6 +107,13 @@ const summary = {
         { id: "task-17-08", solution_revision: 1 },
       ],
     },
+    {
+      id: "string-processing",
+      tasks: Array.from({ length: 8 }, (_, index) => ({
+        id: `task-24-${String(index + 1).padStart(2, "0")}`,
+        solution_revision: 1,
+      })),
+    },
   ],
 };
 const renderCatalog = () =>
@@ -148,13 +155,13 @@ describe("TopicCatalogPage", () => {
     expect(cards).toHaveLength(25);
     expect(
       container.querySelectorAll('[data-topic-status="published"]'),
-    ).toHaveLength(3);
+    ).toHaveLength(4);
     expect(
       container.querySelectorAll('[data-topic-status="planned"]'),
-    ).toHaveLength(22);
+    ).toHaveLength(21);
     expect(
       container.querySelectorAll('[data-topic-status="published"] a'),
-    ).toHaveLength(3);
+    ).toHaveLength(4);
     expect(
       container.querySelectorAll('[data-topic-status="planned"] a'),
     ).toHaveLength(0);
@@ -173,8 +180,13 @@ describe("TopicCatalogPage", () => {
         .getByRole("link", { name: "Числовые последовательности" })
         .getAttribute("href"),
     ).toBe("/ege/17-chislovye-posledovatelnosti");
+    expect(
+      screen
+        .getByRole("link", { name: "Обработка символьных строк" })
+        .getAttribute("href"),
+    ).toBe("/ege/24-obrabotka-simvolnyh-strok");
     expect(screen.getByText("Задания 19–21")).not.toBeNull();
-    expect(screen.getAllByText("Скоро")).toHaveLength(22);
+    expect(screen.getAllByText("Скоро")).toHaveLength(21);
     await screen.findByText("Решено 0 из 2");
   });
 });
@@ -183,14 +195,14 @@ it("combines live search and status filters, clears input and resets empty resul
   const view = renderCatalog();
   await screen.findByText("Решено 0 из 2");
   fireEvent.click(screen.getByRole("button", { name: "Не начаты" }));
-  expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(3);
+  expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(4);
   fireEvent.change(screen.getByRole("searchbox"), {
     target: { value: "РЕКУРС" },
   });
   expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(1);
   fireEvent.click(screen.getByRole("button", { name: "Очистить поиск" }));
   expect((screen.getByRole("searchbox") as HTMLInputElement).value).toBe("");
-  expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(3);
+  expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(4);
   fireEvent.change(screen.getByRole("searchbox"), {
     target: { value: "unknown" },
   });
@@ -238,9 +250,12 @@ it("counts only current topic answers, keeps completed in All and excludes stale
   ).not.toBeNull();
   expect(screen.getByText("Решено задач в темах: 2")).not.toBeNull();
   fireEvent.click(screen.getByRole("button", { name: "Не начаты" }));
-  expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(1);
+  expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(2);
   expect(
     screen.getByRole("link", { name: "Числовые последовательности" }),
+  ).not.toBeNull();
+  expect(
+    screen.getByRole("link", { name: "Обработка символьных строк" }),
   ).not.toBeNull();
 });
 
@@ -292,7 +307,7 @@ it("treats missing summaries as unavailable and recovers corrupt storage", async
   renderCatalog();
   await screen.findByText("Прогресс временно недоступен");
   expect(screen.getByText("Решено 0 из 2")).not.toBeNull();
-  expect(screen.getAllByText("Прогресс недоступен")).toHaveLength(2);
+  expect(screen.getAllByText("Прогресс недоступен")).toHaveLength(3);
 });
 
 it("does not flash zero progress while summary is pending", async () => {
@@ -309,7 +324,7 @@ it("does not flash zero progress while summary is pending", async () => {
     }),
   );
   renderCatalog();
-  expect(screen.getAllByText("Прогресс загружается")).toHaveLength(3);
+  expect(screen.getAllByText("Прогресс загружается")).toHaveLength(4);
   expect(screen.queryByRole("progressbar")).toBeNull();
   await waitFor(() => expect(resolve).toBeTypeOf("function"));
   resolve(Response.json(summary));

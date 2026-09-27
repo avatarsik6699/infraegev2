@@ -28,8 +28,19 @@ export const numberSequencesLessonPublication = Object.freeze({
   status: "published",
 });
 
+export const stringProcessingLessonPublication = Object.freeze({
+  id: "string-processing",
+  routeSlug: "24-obrabotka-simvolnyh-strok",
+  taskNumbers: Object.freeze([24]),
+  title: "Обработка символьных строк",
+  summary:
+    "Как находить подходящие непрерывные фрагменты строки и проверять, что запись арифметического выражения устроена правильно.",
+  status: "published",
+});
+
 export const lessonPublications = Object.freeze([
   rekursiyaLessonPublication,
   preobrazovanieZapiseyChiselLessonPublication,
   numberSequencesLessonPublication,
+  stringProcessingLessonPublication,
 ]);

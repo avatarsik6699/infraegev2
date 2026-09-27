@@ -323,6 +323,7 @@ describe("CodeBlock", () => {
     const toggle = screen.getByRole("button", { name: "Показать весь код" });
 
     expect(content?.getAttribute("data-collapsed")).toBe("true");
+    expect(content?.getAttribute("tabindex")).toBe("0");
     expect(toggle.getAttribute("aria-expanded")).toBe("false");
     expect(toggle.getAttribute("aria-controls")).toBe(content?.id);
     expect(toggle.querySelector("svg")).toBeTruthy();

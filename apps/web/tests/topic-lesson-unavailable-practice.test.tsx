@@ -1,6 +1,11 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { numberSequencesLesson, rekursiyaLesson } from "~/entities/lesson";
+import {
+  numberSequencesLesson,
+  rekursiyaLesson,
+  stringProcessingLesson,
+} from "~/entities/lesson";
+import type { LessonContent } from "~/entities/lesson";
 import { TopicLessonPage } from "~/pages/topic-lesson";
 import type { PracticeTaskTypes } from "~/entities/practice-task";
 
@@ -79,20 +84,28 @@ const createTasks = (count: number): PracticeTaskTypes.Task[] =>
   })) as PracticeTaskTypes.Task[];
 
 describe("topic lesson with unavailable practice", () => {
-  it("does not imply there are zero tasks or completed progress", () => {
-    render(
-      <TopicLessonPage
-        lesson={numberSequencesLesson}
-        tasks={[]}
-        practiceUnavailable
-      />,
-    );
+  it.each([
+    { lesson: numberSequencesLesson, number: 17 },
+    { lesson: stringProcessingLesson, number: 24 },
+  ])(
+    "keeps topic $number readable when practice is unavailable",
+    ({
+      lesson,
+      number,
+    }: {
+      lesson: LessonContent.Definition;
+      number: number;
+    }) => {
+      render(
+        <TopicLessonPage lesson={lesson} tasks={[]} practiceUnavailable />,
+      );
 
-    expect(screen.getByText("Задание 17")).toBeTruthy();
-    expect(screen.queryByText(/0 задач/)).toBeNull();
-    expect(screen.queryByTestId("topic-lesson-progress")).toBeNull();
-    expect(screen.getByText("Практика урока")).toBeTruthy();
-  });
+      expect(screen.getByText(`Задание ${number}`)).toBeTruthy();
+      expect(screen.queryByText(/0 задач/)).toBeNull();
+      expect(screen.queryByTestId("topic-lesson-progress")).toBeNull();
+      expect(screen.getByText("Практика урока")).toBeTruthy();
+    },
+  );
 
   it("shows the task count and progress when eight published tasks are available", () => {
     render(

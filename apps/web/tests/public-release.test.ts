@@ -46,6 +46,13 @@ describe("public release metadata", () => {
         title: "Числовые последовательности",
         status: "published",
       }),
+      expect.objectContaining({
+        id: "string-processing",
+        routeSlug: "24-obrabotka-simvolnyh-strok",
+        taskNumbers: [24],
+        title: "Обработка символьных строк",
+        status: "published",
+      }),
     ]);
     expect(
       lessonPublications
@@ -55,6 +62,7 @@ describe("public release metadata", () => {
       "16-rekursiya",
       "5-preobrazovanie-zapisey-chisel",
       "17-chislovye-posledovatelnosti",
+      "24-obrabotka-simvolnyh-strok",
     ]);
     expect(new Set(lessonPublications.map((lesson) => lesson.id)).size).toBe(
       lessonPublications.length,
@@ -90,6 +98,7 @@ describe("public release metadata", () => {
       ["preobrazovanie-zapisey-chisel", "5-preobrazovanie-zapisey-chisel"],
       ["rekursiya", "16-rekursiya"],
       ["number-sequences", "17-chislovye-posledovatelnosti"],
+      ["string-processing", "24-obrabotka-simvolnyh-strok"],
     ]);
     expect(topicCatalog.formatTaskNumbers([5])).toBe("Задание 5");
     expect(topicCatalog.formatTaskNumbers([19, 20, 21])).toBe("Задания 19–21");

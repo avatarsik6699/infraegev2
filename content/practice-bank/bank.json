@@ -111554,6 +111554,790 @@
         }
       },
       "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-24-01",
+        "title": "Посчитайте перекрывающиеся вхождения",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 8,
+        "answer_instruction": "Введите одно целое число — количество строк, длину фрагмента или число вхождений.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В файле записана одна строка. Сколько раз в ней встречается фрагмент `ABA`? Вхождения могут пересекаться: если они используют общие символы, считайте оба."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "source-file"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Проверяйте каждую возможную позицию начала. Для строки `ABABA` шаблон начинается с позиции 0 и с позиции 2: эти вхождения имеют общие символы, но оба считаются."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Идём по всем позициям, с которых шаблон `ABA` ещё может поместиться. Начало строки даёт первое вхождение (`ABA`), позиция 2 — второе; дальше шаблон встречается ещё на позициях 6 и 8. Итого 4. Если после найденного шаблона сдвигаться сразу на три символа, второе вхождение в `ABABA` будет пропущено: соседние вхождения могут перекрываться."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "text = open(\"pattern.txt\", encoding=\"utf-8\").read().strip()\npattern = \"ABA\"\ncount = 0\nfor start in range(len(text) - len(pattern) + 1):\n    if text[start:start + len(pattern)] == pattern:\n        count += 1\nprint(count)",
+              "caption": "Один из вариантов решения"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [
+          {
+            "id": "source-file",
+            "purpose": "attachment",
+            "checksum": "cf66e3942f701c67eb4825bad8a45c91bf45bd1997cc134a7e46f305d279d3cf",
+            "filename": "pattern.txt",
+            "description": "Строка для поиска перекрывающихся вхождений ABA",
+            "attribution": null
+          }
+        ],
+        "lessons": [
+          {
+            "position": 0,
+            "material_id": "string-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Повторите этот приём",
+            "section": "adjacent-and-overlapping",
+            "material_id": "string-processing"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["4"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-24-02",
+        "title": "Найдите самый длинный фрагмент из A, B и C",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 9,
+        "answer_instruction": "Введите одно целое число — количество строк, длину фрагмента или число вхождений.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В файле записана одна строка. Найдите длину самого длинного непрерывного фрагмента, состоящего только из букв `A`, `B` и `C`."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "source-file"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Идите по строке слева направо. Пока очередной символ входит в разрешённый набор, продолжайте текущий фрагмент; на другом символе завершите его и начните новый."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Разобьём строку на участки между символами, которых нет среди `A`, `B`, `C`. Первый участок — `ABC`, его длина 3. После `Y` начинается участок `ABCCB` длины 5, затем `ZZ` обрывает его; последняя `A` даёт участок длины 1. Максимальная длина равна 5. Важно завершить проверку и для последнего участка: иногда строка заканчивается разрешёнными символами."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "text = open(\"allowed.txt\", encoding=\"utf-8\").read().strip()\nallowed = \"ABC\"\nbest = current = 0\nfor char in text:\n    if char in allowed:\n        current += 1\n        best = max(best, current)\n    else:\n        current = 0\nprint(best)",
+              "caption": "Один из вариантов решения"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [
+          {
+            "id": "source-file",
+            "purpose": "attachment",
+            "checksum": "78ff519804b671e908d5030e1459e3dad4b86cb6217dce66e67d494daeeaceb5",
+            "filename": "allowed.txt",
+            "description": "Строка; ищите непрерывные фрагменты только из A, B и C",
+            "attribution": null
+          }
+        ],
+        "lessons": [
+          {
+            "position": 1,
+            "material_id": "string-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Повторите этот приём",
+            "section": "longest-valid-run",
+            "material_id": "string-processing"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["5"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-24-03",
+        "title": "Обойдите соседнюю пару XY",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 10,
+        "answer_instruction": "Введите одно целое число — количество строк, длину фрагмента или число вхождений.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В файле записана одна строка. Найдите длину самого длинного непрерывного фрагмента, в котором нигде не стоят рядом сначала `X`, а сразу после неё `Y`."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "source-file"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Как только встретили `XY`, фрагмент слева от пары уже нельзя продолжать через неё. Начните поиск после `X` и не забудьте проверить конец строки."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Запрещённая пара `XY` начинается в двух местах. После первого `XY` остаётся участок `YBCXXZ` длины 6; до второго `XY` в него можно включить ещё `X`, поэтому самый длинный допустимый фрагмент — `YBCXXZX`, длина 7. Проверяется именно порядок соседей `XY`: одиночные `X` и `Y` разрешены."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "text = open(\"forbidden.txt\", encoding=\"utf-8\").read().strip()\nleft = 0\nbest = 0\nfor right in range(len(text)):\n    if right > 0 and text[right - 1:right + 1] == \"XY\":\n        left = right  # новый фрагмент начинается с Y\n    best = max(best, right - left + 1)\nprint(best)",
+              "caption": "Один из вариантов решения"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [
+          {
+            "id": "source-file",
+            "purpose": "attachment",
+            "checksum": "671664592c4b31ef4ae7270a4858d851fc7d77e8533a1570bc9fea6248995c15",
+            "filename": "forbidden.txt",
+            "description": "Строка; в подходящем фрагменте не должно быть соседней пары XY",
+            "attribution": null
+          }
+        ],
+        "lessons": [
+          {
+            "position": 2,
+            "material_id": "string-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Повторите этот приём",
+            "section": "longest-valid-run",
+            "material_id": "string-processing"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["7"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-24-04",
+        "title": "Ограничьте число вхождений шаблона",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 11,
+        "answer_instruction": "Введите одно целое число — количество строк, длину фрагмента или число вхождений.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В файле записана одна строка. Найдите длину самого длинного непрерывного фрагмента, в котором не больше двух вхождений `ABA`. Вхождения считаются и тогда, когда они перекрываются."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "source-file"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Добавляйте символы справа. Каждый раз, когда справа завершился `ABA`, увеличьте счётчик. Если в текущем фрагменте стало три вхождения, передвигайте левую границу, пока их снова не останется не больше двух."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Для подстроки `BABAXABAB` (позиции 1–9) длина равна 9, и в ней ровно два вхождения `ABA`. Вся строка содержит четыре вхождения и условию не подходит. Когда добавленный справа символ завершает `ABA`, увеличьте счётчик. Если в окне стало три вхождения, двигайте левую границу; при удалении начала уже посчитанного `ABA` уменьшите счётчик. Так получится найти максимум 9, не пересчитывая все подстроки."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "text = open(\"limited.txt\", encoding=\"utf-8\").read().strip()\npattern = \"ABA\"\nlimit = 2\nleft = occurrences = best = 0\nfor right in range(len(text)):\n    if right >= len(pattern) - 1 and text[right - len(pattern) + 1:right + 1] == pattern:\n        occurrences += 1\n    while occurrences > limit:\n        if text[left:left + len(pattern)] == pattern:\n            occurrences -= 1\n        left += 1\n    best = max(best, right - left + 1)\nprint(best)",
+              "caption": "Один из вариантов решения"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [
+          {
+            "id": "source-file",
+            "purpose": "attachment",
+            "checksum": "cf66e3942f701c67eb4825bad8a45c91bf45bd1997cc134a7e46f305d279d3cf",
+            "filename": "limited.txt",
+            "description": "Строка для поиска фрагмента максимум с двумя вхождениями ABA",
+            "attribution": null
+          }
+        ],
+        "lessons": [
+          {
+            "position": 3,
+            "material_id": "string-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Повторите этот приём",
+            "section": "occurrence-limit",
+            "material_id": "string-processing"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["9"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-24-05",
+        "title": "Отберите выражения без нуля",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 12,
+        "answer_instruction": "Введите одно целое число — количество строк, длину фрагмента или число вхождений.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В файле записаны строки-кандидаты, по одной в строке. Посчитайте, сколько строк целиком являются выражениями из чисел, записанных только цифрами `6`, `7`, `8`, `9`, и бинарных знаков `-` или `*`. Ноль в этом задании запрещён. Числа и знаки должны чередоваться, строка начинается и заканчивается числом."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "source-file"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Проверяйте строку целиком: сначала число, затем повторяющиеся пары «знак и число». В этой задаче число состоит только из цифр 6–9; строка с одним числом тоже подходит."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сначала прочитаем файл целиком. Метод `splitlines()` разбивает полученный текст на отдельные строки и убирает переводы строк между ними. Внутри `is_expression` есть маленькая функция `read_number`: ей передаём индекс, с которого может начинаться число, а она возвращает индекс первого символа после него. Если число с этой позиции начать нельзя, она возвращает тот же индекс. Помощник нужен только для проверки одной строки, поэтому он расположен внутри `is_expression` и читает эту строку. Затем знакомый цикл проверяет строки по одной и увеличивает счётчик для каждой подходящей.\n\nПроверка строки целиком оставляет четыре выражения: `7*68`, `89-7`, `99` и `6-7*8`. Строка `067` начинается с ведущего нуля; `7-0` здесь запрещено условием; `-68`, `6**8` и `89*` нарушают порядок числа и знаков. Подсчёт по строкам не позволяет случайно принять подходящий кусок неправильной строки."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def is_expression(text):\n    position = 0\n    length = len(text)\n\n    def read_number(start):\n        if start >= length or text[start] not in \"6789\":\n            return start\n        position = start + 1\n        while position < length and text[position] in \"6789\":\n            position += 1\n        return position\n\n    position = read_number(position)\n    if position == 0:\n        return False\n    while position < length:\n        if text[position] not in \"-*\":\n            return False\n        next_position = read_number(position + 1)\n        if next_position == position + 1:\n            return False\n        position = next_position\n    return True\n\nlines = open(\"expressions-no-zero.txt\", encoding=\"utf-8\").read().splitlines()\ncount = 0\nfor line in lines:\n    if is_expression(line):\n        count += 1\nprint(count)",
+              "caption": "Один из вариантов решения"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [
+          {
+            "id": "source-file",
+            "purpose": "attachment",
+            "checksum": "170bb275beafcb133b36a36cc5cea56ee67d2e41b2b717531b1fde2ee3467d4e",
+            "filename": "expressions-no-zero.txt",
+            "description": "Кандидаты на выражения, по одному в строке; ноль запрещён",
+            "attribution": null
+          }
+        ],
+        "lessons": [
+          {
+            "position": 4,
+            "material_id": "string-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Повторите этот приём",
+            "section": "expression-grammar",
+            "material_id": "string-processing"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["4"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-24-06",
+        "title": "Распознайте отдельный ноль и ведущий ноль",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 3,
+        "estimated_minutes": 13,
+        "answer_instruction": "Введите одно целое число — количество строк, длину фрагмента или число вхождений.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В файле записаны строки-кандидаты, по одной в строке. Сколько из них целиком являются выражениями по правилу: число — это либо отдельный `0`, либо запись, начинающаяся с `6`, `7`, `8` или `9` и продолжающаяся цифрами `0`, `6`, `7`, `8`, `9`; между числами стоит ровно один знак `-` или `*`? Например, `7-0` и `0*8` подходят, а `07`, `8-09`, `-0`, `6**7` и `7*` — нет."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "source-file"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сначала решите, допустим ли первый символ числа. Если это `0`, сразу после него должно закончиться число: следующая цифра означала бы запись с ведущим нулём. После полного числа допустим конец строки или один знак и ещё одно число."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сначала прочитаем файл целиком. Метод `splitlines()` разбивает полученный текст на отдельные строки и убирает переводы строк между ними. Внутри `is_expression` есть маленькая функция `read_number`: ей передаём индекс, с которого может начинаться число, а она возвращает индекс первого символа после него. Если число с этой позиции начать нельзя, она возвращает тот же индекс. Помощник нужен только для проверки одной строки, поэтому он расположен внутри `is_expression` и читает эту строку. Затем знакомый цикл проверяет строки по одной и увеличивает счётчик для каждой подходящей.\n\nПравило принимает шесть строк: `7-0`, `0*8`, `80-0`, `90-6`, `9-0*8` и отдельное число `0`. Записи `07`, `8-09` начинаются одним числом с ведущим нулём; начальный `-0` не имеет левого числа; в `6**7` два знака стоят рядом; `7*` заканчивается знаком; `00` продолжает отдельный ноль ещё одной цифрой. Эти случаи показывают, почему ноль — допустимое число сам по себе, но не начало записи многозначного числа."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def is_expression(text):\n    position = 0\n    length = len(text)\n\n    def read_number(start):\n        if start >= length:\n            return start\n        if text[start] == \"0\":\n            return start + 1\n        if text[start] not in \"6789\":\n            return start\n        position = start + 1\n        while position < length and text[position] in \"06789\":\n            position += 1\n        return position\n\n    position = read_number(position)\n    if position == 0:\n        return False\n    while position < length:\n        if text[position] not in \"-*\":\n            return False\n        next_position = read_number(position + 1)\n        if next_position == position + 1:\n            return False\n        position = next_position\n    return True\n\nlines = open(\"expressions-zero.txt\", encoding=\"utf-8\").read().splitlines()\ncount = 0\nfor line in lines:\n    if is_expression(line):\n        count += 1\nprint(count)",
+              "caption": "Один из вариантов решения"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [
+          {
+            "id": "source-file",
+            "purpose": "attachment",
+            "checksum": "06d3a52f2c46b63676a5ef1cf081b80b7c4b271ac02828cde37236d0fc8aaf31",
+            "filename": "expressions-zero.txt",
+            "description": "Кандидаты на выражения, по одному в строке; ноль допустим отдельным числом",
+            "attribution": null
+          }
+        ],
+        "lessons": [
+          {
+            "position": 5,
+            "material_id": "string-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Повторите этот приём",
+            "section": "expression-grammar",
+            "material_id": "string-processing"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["6"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-24-07",
+        "title": "Найдите выражение с вычитанием",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 3,
+        "estimated_minutes": 14,
+        "answer_instruction": "Введите одно целое число — количество строк, длину фрагмента или число вхождений.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В файле записана строка с несколькими фрагментами, разделёнными символом `|`. Найдите длину самого длинного корректного выражения, которое можно выделить как непрерывный фрагмент. Разрешены оба знака `-` и `*`; минус всегда бинарный — он стоит между двумя числами. Поэтому `7-0` допустимо, но `-0*7`, `6--7` и `7*` не являются выражениями целиком. Число с ведущим нулём, например `08`, тоже недопустимо."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "source-file"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Проверяйте выражение с каждой позиции, где может начаться число. После числа запоминайте его конец как допустимую границу ответа; знак сам по себе не завершает выражение — после него обязательно нужно прочитать ещё одно число."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В решении есть короткая функция `read_number`: она получает индекс начала числа и возвращает индекс первого символа после корректного числа. Если число с этого места не начинается, индекс не меняется. Основной цикл пробует возможное начало выражения на каждой позиции; после каждого полного числа обновляет длину ответа.\n\nСамый длинный допустимый фрагмент — `9-68-7*0`, его длина 8. Минус здесь каждый раз стоит между числами, поэтому это бинарная операция. Начальный минус в `-0*7` не входит в выражение; при поиске подходящий фрагмент может начинаться после него. `08*9` недопустимо целиком из-за ведущего нуля, но с позиции цифры 8 начинается подходящий фрагмент `8*9`; `6--7` содержит соседние знаки, а конечный `7*` неполон. При подсчёте длины нельзя включать знак, после которого число не прочитано."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "text = open(\"expressions-boundaries.txt\", encoding=\"utf-8\").read().strip()\n\ndef read_number(start):\n    if start >= len(text):\n        return start\n    if text[start] == \"0\":\n        return start + 1\n    if text[start] not in \"6789\":\n        return start\n    end = start + 1\n    while end < len(text) and text[end] in \"06789\":\n        end += 1\n    return end\n\nbest = 0\nfor start in range(len(text)):\n    end = read_number(start)\n    if end == start:\n        continue\n    best = max(best, end - start)\n    while end < len(text) and text[end] in \"-*\":\n        next_end = read_number(end + 1)\n        if next_end == end + 1:\n            break\n        end = next_end\n        best = max(best, end - start)\nprint(best)",
+              "caption": "Один из вариантов решения"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [
+          {
+            "id": "source-file",
+            "purpose": "attachment",
+            "checksum": "1da8903113121ffae06ea3bdaf888595a0115ed42615f79be62c17dee96a1a7a",
+            "filename": "expressions-boundaries.txt",
+            "description": "Более восьми тысяч символов с 1025 различающимися фрагментами; проверьте границы выражений с бинарным и ошибочным минусом",
+            "attribution": null
+          }
+        ],
+        "lessons": [
+          {
+            "position": 6,
+            "material_id": "string-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Повторите этот приём",
+            "section": "expression-grammar",
+            "material_id": "string-processing"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["8"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-24-08",
+        "title": "Найдите самое длинное выражение в большом файле",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 3,
+        "estimated_minutes": 15,
+        "answer_instruction": "Введите одно целое число — количество строк, длину фрагмента или число вхождений.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В файле записана длинная строка из символов цифр `0`, `6`, `7`, `8`, `9`, знаков `-`, `*` и разделителя `|`. Найдите длину самого длинного непрерывного фрагмента, который целиком является выражением по правилу: число — отдельный `0` либо цифра `6`–`9` с последующими цифрами `0`, `6`–`9`; между числами стоит один бинарный знак `-` или `*`. Перебор всех подстрок для такого файла слишком медленный; просмотрите строку одним проходом и сбрасывайте текущий фрагмент при нарушении правила."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "source-file"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Поддерживайте состояние текущего фрагмента: читается число или после знака ожидается новое число. После отдельного нуля следующая цифра незаконна; начните новый кандидат с этой цифры. Запоминайте максимальную длину только после полного числа."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Однопроходная проверка находит выражение длины 81, вставленное в файл один раз. Кандидат начинается с `9` и содержит 40 пар `*8`, то есть его длина равна `1 + 40 × 2 = 81`. Разделитель `|` разрывает соседние фрагменты. Остальная часть файла составлена из более коротких допустимых выражений; чтобы подтвердить максимум по всему файлу, программа проходит все символы, не проверяя каждую подстроку отдельно. При равной длине ответ остаётся 81."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "text = open(\"large-expressions.txt\", encoding=\"utf-8\").read().strip()\nbest = 0\nstart = None\nstate = \"start\"\nzero = False\n\nfor position in range(len(text)):\n    char = text[position]\n    starts_number = char == \"0\" or char in \"6789\"\n\n    if start is None:\n        if starts_number:\n            start = position\n            state = \"number\"\n            zero = char == \"0\"\n            best = max(best, 1)\n        continue\n\n    if state == \"number\":\n        if zero:\n            if char in \"-*\":\n                state = \"operand\"\n                continue\n            # После отдельного нуля цифра уже не может продолжать это число.\n            start = None\n            if starts_number:\n                start = position\n                state = \"number\"\n                zero = char == \"0\"\n                best = max(best, 1)\n            continue\n        if char in \"06789\":\n            best = max(best, position - start + 1)\n            continue\n        if char in \"-*\":\n            state = \"operand\"\n            continue\n        start = None\n        if starts_number:\n            start = position\n            state = \"number\"\n            zero = char == \"0\"\n            best = max(best, 1)\n        continue\n\n    # После знака обязательно должно начаться новое число.\n    if state == \"operand\":\n        if starts_number:\n            state = \"number\"\n            zero = char == \"0\"\n            best = max(best, position - start + 1)\n        else:\n            start = None\n            state = \"start\"\n\nprint(best)",
+              "caption": "Один из вариантов решения"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [
+          {
+            "id": "source-file",
+            "purpose": "attachment",
+            "checksum": "06db60344dd39c2f873ce19199684d37d2450224aa1d522170da27d9b4fa1e26",
+            "filename": "large-expressions.txt",
+            "description": "Около 130 тысяч символов с непериодическими блоками и разделителями; найдите длину самого длинного корректного выражения",
+            "attribution": null
+          }
+        ],
+        "lessons": [
+          {
+            "position": 7,
+            "material_id": "string-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Повторите этот приём",
+            "section": "linear-expression-scan",
+            "material_id": "string-processing"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["81"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
     }
   ],
   "files": [
@@ -111619,6 +112403,55 @@
       "format": "txt",
       "mime_type": "text/plain",
       "size_bytes": 400
+    },
+    {
+      "format": "txt",
+      "checksum": "cf66e3942f701c67eb4825bad8a45c91bf45bd1997cc134a7e46f305d279d3cf",
+      "mime_type": "text/plain",
+      "size_bytes": 12,
+      "storage_key": "cf66e3942f701c67eb4825bad8a45c91bf45bd1997cc134a7e46f305d279d3cf"
+    },
+    {
+      "format": "txt",
+      "checksum": "78ff519804b671e908d5030e1459e3dad4b86cb6217dce66e67d494daeeaceb5",
+      "mime_type": "text/plain",
+      "size_bytes": 14,
+      "storage_key": "78ff519804b671e908d5030e1459e3dad4b86cb6217dce66e67d494daeeaceb5"
+    },
+    {
+      "format": "txt",
+      "checksum": "671664592c4b31ef4ae7270a4858d851fc7d77e8533a1570bc9fea6248995c15",
+      "mime_type": "text/plain",
+      "size_bytes": 12,
+      "storage_key": "671664592c4b31ef4ae7270a4858d851fc7d77e8533a1570bc9fea6248995c15"
+    },
+    {
+      "format": "txt",
+      "checksum": "170bb275beafcb133b36a36cc5cea56ee67d2e41b2b717531b1fde2ee3467d4e",
+      "mime_type": "text/plain",
+      "size_bytes": 43,
+      "storage_key": "170bb275beafcb133b36a36cc5cea56ee67d2e41b2b717531b1fde2ee3467d4e"
+    },
+    {
+      "format": "txt",
+      "checksum": "06d3a52f2c46b63676a5ef1cf081b80b7c4b271ac02828cde37236d0fc8aaf31",
+      "mime_type": "text/plain",
+      "size_bytes": 50,
+      "storage_key": "06d3a52f2c46b63676a5ef1cf081b80b7c4b271ac02828cde37236d0fc8aaf31"
+    },
+    {
+      "format": "txt",
+      "checksum": "1da8903113121ffae06ea3bdaf888595a0115ed42615f79be62c17dee96a1a7a",
+      "mime_type": "text/plain",
+      "size_bytes": 8544,
+      "storage_key": "1da8903113121ffae06ea3bdaf888595a0115ed42615f79be62c17dee96a1a7a"
+    },
+    {
+      "format": "txt",
+      "checksum": "06db60344dd39c2f873ce19199684d37d2450224aa1d522170da27d9b4fa1e26",
+      "mime_type": "text/plain",
+      "size_bytes": 133247,
+      "storage_key": "06db60344dd39c2f873ce19199684d37d2450224aa1d522170da27d9b4fa1e26"
     }
   ],
   "materials": [
@@ -111889,6 +112722,22 @@
         "repeated-work-motivates-storage",
         "large-arguments-algebraic-shortcut",
         "general-method"
+      ],
+      "kind": "topic",
+      "status": "published",
+      "course_id": null
+    },
+    {
+      "id": "string-processing",
+      "sections": [
+        "file-and-string",
+        "positions-and-fragments",
+        "adjacent-and-overlapping",
+        "longest-valid-run",
+        "occurrence-limit",
+        "expression-grammar",
+        "linear-expression-scan",
+        "independent-verification"
       ],
       "kind": "topic",
       "status": "published",

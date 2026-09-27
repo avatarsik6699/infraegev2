@@ -9,6 +9,10 @@ import {
 } from "~/entities/lesson";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { publicPaths } from "~/pages/site-discovery/public-paths";
+import {
+  codeFromBlock,
+  renderAuthoredLessonContent,
+} from "./lesson-content-test-utils";
 
 const courseLessonPaths = [
   "/courses/python/schetchiki-i-nakopiteli",
@@ -22,33 +26,6 @@ const authoredContent = [
   numberSequencesLesson.examFocus,
   numberSequencesLesson.result,
 ];
-
-function renderAuthoredContent() {
-  const container = document.createElement("div");
-  container.innerHTML = renderToStaticMarkup(
-    <div>
-      {authoredContent.map((content, index) => (
-        <div key={index}>{content}</div>
-      ))}
-    </div>,
-  );
-  return container;
-}
-
-function codeFromBlock(container: HTMLElement, label: string) {
-  const block = [...container.querySelectorAll('[role="group"]')].find(
-    (element) => element.getAttribute("aria-label") === label,
-  );
-  expect(block, `Code block: ${label}`).toBeDefined();
-  const lines = [...block!.querySelectorAll("pre > code > span")];
-  expect(lines.length, `Code lines: ${label}`).toBeGreaterThan(0);
-  return lines
-    .map(
-      (line) =>
-        line.lastElementChild?.textContent?.replace(/\u00a0/gu, "") ?? "",
-    )
-    .join("\n");
-}
 
 vi.mock("@tanstack/react-router", () => ({
   Link: ({
@@ -166,7 +143,7 @@ describe("task 17 number sequences lesson", () => {
   });
 
   it("preserves spaces between inline components and following Russian words", () => {
-    const html = renderAuthoredContent().innerHTML.replace(
+    const html = renderAuthoredLessonContent(authoredContent).innerHTML.replace(
       /<pre\b[^>]*>[\s\S]*?<\/pre>/gu,
       "",
     );
@@ -192,7 +169,7 @@ describe("task 17 number sequences lesson", () => {
   });
 
   it("runs each complete Python example with its explained output", () => {
-    const container = renderAuthoredContent();
+    const container = renderAuthoredLessonContent(authoredContent);
     const examples = [
       ["Подсчёт отдельных чисел по условию", "2"],
       ["Перебрать все соседние пары", "3"],
@@ -216,7 +193,7 @@ describe("task 17 number sequences lesson", () => {
 
   it("runs the second-pass exercise after filling its stated condition", () => {
     const code = codeFromBlock(
-      renderAuthoredContent(),
+      renderAuthoredLessonContent(authoredContent),
       "Дополнить условие второго прохода",
     );
     const result = spawnSync(

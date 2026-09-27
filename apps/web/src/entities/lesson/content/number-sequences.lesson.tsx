@@ -1,4 +1,3 @@
-import { Link } from "@tanstack/react-router";
 import { Callout } from "~/shared/components/callout";
 import { CodeBlock } from "~/shared/components/code-block";
 import { Notation } from "~/shared/components/notation";
@@ -10,22 +9,7 @@ import {
 } from "~/shared/components/learning-content";
 import { defineLesson } from "../lib/define-lesson";
 import { numberSequencesLessonPublication } from "~/shared/config/lesson-publication.mjs";
-
-type PythonCourseLessonLinkProps = {
-  children: React.ReactNode;
-  lessonSlug: string;
-};
-
-const PythonCourseLessonLink: React.FC<PythonCourseLessonLinkProps> = (
-  props,
-) => (
-  <Link
-    to="/courses/$courseSlug/$lessonSlug"
-    params={{ courseSlug: "python", lessonSlug: props.lessonSlug }}
-  >
-    {props.children}
-  </Link>
-);
+import { PythonCourseLessonLink } from "./python-course-lesson-link";
 
 export const numberSequencesLesson = defineLesson({
   ...numberSequencesLessonPublication,

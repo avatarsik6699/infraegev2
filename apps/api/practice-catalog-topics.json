@@ -21,6 +21,13 @@
     "material_ids": []
   },
   {
+    "id": "ege-24",
+    "label": "24 номер. Обработка символьных строк",
+    "group": "ЕГЭ",
+    "exam_number": 24,
+    "material_ids": []
+  },
+  {
     "id": "python-start",
     "label": "Python · Старт и отладка",
     "group": "Мини-курсы",

@@ -38,6 +38,8 @@ type AppFixtures = {
   noJavaScriptNumberRecordLessonPage: TopicLessonPage;
   numberSequencesLessonPage: TopicLessonPage;
   noJavaScriptNumberSequencesLessonPage: TopicLessonPage;
+  stringProcessingLessonPage: TopicLessonPage;
+  noJavaScriptStringProcessingLessonPage: TopicLessonPage;
 };
 
 const numberRecordLessonConfig = {
@@ -50,6 +52,13 @@ const numberSequencesLessonConfig = {
   route: "/ege/17-chislovye-posledovatelnosti",
   title: "Числовые последовательности",
   taskNumber: 17,
+  taskCount: 8,
+};
+
+const stringProcessingLessonConfig = {
+  route: "/ege/24-obrabotka-simvolnyh-strok",
+  title: "Обработка символьных строк",
+  taskNumber: 24,
   taskCount: 8,
 };
 
@@ -201,6 +210,9 @@ export const test = base.extend<AppFixtures>({
   numberSequencesLessonPage: async ({ page }, use) => {
     await use(new TopicLessonPage(page, numberSequencesLessonConfig));
   },
+  stringProcessingLessonPage: async ({ page }, use) => {
+    await use(new TopicLessonPage(page, stringProcessingLessonConfig));
+  },
   noJavaScriptTopicLessonPage: async ({ baseURL, browser }, use) => {
     await useNoJavaScriptTopicLesson(browser, baseURL, use);
   },
@@ -218,6 +230,14 @@ export const test = base.extend<AppFixtures>({
       baseURL,
       use,
       numberSequencesLessonConfig,
+    );
+  },
+  noJavaScriptStringProcessingLessonPage: async ({ baseURL, browser }, use) => {
+    await useNoJavaScriptTopicLesson(
+      browser,
+      baseURL,
+      use,
+      stringProcessingLessonConfig,
     );
   },
 });

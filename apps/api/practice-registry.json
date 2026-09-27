@@ -272,6 +272,22 @@
       "kind": "topic",
       "status": "published",
       "course_id": null
+    },
+    {
+      "id": "string-processing",
+      "sections": [
+        "file-and-string",
+        "positions-and-fragments",
+        "adjacent-and-overlapping",
+        "longest-valid-run",
+        "occurrence-limit",
+        "expression-grammar",
+        "linear-expression-scan",
+        "independent-verification"
+      ],
+      "kind": "topic",
+      "status": "published",
+      "course_id": null
     }
   ],
   "courses": [

@@ -1,4 +1,4 @@
-import { expect, type Page } from "@playwright/test";
+import { expect, type Locator, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { expectPublicReleaseIdentity } from "./public-header.assertions";
 import {
@@ -29,6 +29,44 @@ export class TopicLessonPage {
     private readonly page: Page,
     private readonly config: TopicLessonPageConfig = recursionLessonConfig,
   ) {}
+
+  private async expectCodeContrast(block: Locator): Promise<void> {
+    const colors = await block.evaluate((element) => {
+      const lightness = (color: string) =>
+        Number(/^oklch\((\d*\.?\d+)/.exec(color)?.[1] ?? 0);
+      const code = element.querySelector("code")!;
+      return {
+        text: getComputedStyle(code).color,
+        foregroundToken: getComputedStyle(document.documentElement)
+          .getPropertyValue("--theme-code-ink")
+          .trim(),
+        background: getComputedStyle(element).backgroundColor,
+        backgroundToken: getComputedStyle(document.documentElement)
+          .getPropertyValue("--theme-code")
+          .trim(),
+        plainLightness: lightness(getComputedStyle(code).color),
+        tokenLightness: [...code.querySelectorAll("[data-token]")].map(
+          (token) => lightness(getComputedStyle(token).color),
+        ),
+      };
+    });
+    expect(colors.text).toBe(colors.foregroundToken);
+    expect(colors.background).toBe(colors.backgroundToken);
+    expect(colors.plainLightness).toBeGreaterThan(0.65);
+    expect(colors.tokenLightness.length).toBeGreaterThan(0);
+    for (const value of colors.tokenLightness) {
+      expect(value).toBeGreaterThan(0.65);
+    }
+  }
+
+  async expectCodeKeyboardFocus(label: string): Promise<void> {
+    const scrollArea = this.page
+      .getByRole("group", { name: label })
+      .locator("[data-code-scroll]");
+    await scrollArea.press("Home");
+    await expect(scrollArea).toHaveCSS("outline-style", "solid");
+    await expect(scrollArea).toHaveCSS("outline-width", "2px");
+  }
 
   async open(): Promise<void> {
     await openLessonAtTop(this.page, this.config.route);
@@ -295,32 +333,7 @@ export class TopicLessonPage {
     const partialExample = averageCallout.getByRole("group", {
       name: "Дополнить условие второго прохода",
     });
-    const codeColors = await partialExample.evaluate((block) => {
-      const lightness = (color: string) =>
-        Number(/^oklch\((\d*\.?\d+)/.exec(color)?.[1] ?? 0);
-      const code = block.querySelector("code")!;
-      return {
-        text: getComputedStyle(code).color,
-        foregroundToken: getComputedStyle(document.documentElement)
-          .getPropertyValue("--theme-code-ink")
-          .trim(),
-        background: getComputedStyle(block).backgroundColor,
-        backgroundToken: getComputedStyle(document.documentElement)
-          .getPropertyValue("--theme-code")
-          .trim(),
-        plainLightness: lightness(getComputedStyle(code).color),
-        tokenLightness: [...code.querySelectorAll("[data-token]")].map(
-          (token) => lightness(getComputedStyle(token).color),
-        ),
-      };
-    });
-    expect(codeColors.text).toBe(codeColors.foregroundToken);
-    expect(codeColors.background).toBe(codeColors.backgroundToken);
-    expect(codeColors.plainLightness).toBeGreaterThan(0.65);
-    expect(codeColors.tokenLightness.length).toBeGreaterThan(0);
-    for (const value of codeColors.tokenLightness) {
-      expect(value).toBeGreaterThan(0.65);
-    }
+    await this.expectCodeContrast(partialExample);
     if (noJavaScript) {
       await expect(this.page.locator("[data-practice-form] form")).toHaveCount(
         8,
@@ -336,6 +349,71 @@ export class TopicLessonPage {
       );
     }
     await this.expectNoHorizontalOverflow();
+  }
+
+  async expectPublishedStringProcessingContent(
+    noJavaScript = false,
+  ): Promise<void> {
+    await expectPublicReleaseIdentity(this.page);
+    await expect(this.page).toHaveTitle(
+      "Обработка символьных строк — infraege",
+    );
+    await expect(
+      this.page.getByRole("heading", {
+        level: 1,
+        name: "Обработка символьных строк",
+      }),
+    ).toBeVisible();
+    await expect(this.page.locator('meta[name="robots"]')).toHaveAttribute(
+      "content",
+      "index,follow",
+    );
+    await expect(this.page.locator('link[rel="canonical"]')).toHaveAttribute(
+      "href",
+      "https://infraege.ru/ege/24-obrabotka-simvolnyh-strok",
+    );
+    for (const anchor of [
+      "file-and-string",
+      "positions-and-fragments",
+      "adjacent-and-overlapping",
+      "longest-valid-run",
+      "occurrence-limit",
+      "expression-grammar",
+      "linear-expression-scan",
+      "independent-verification",
+    ]) {
+      await expect(this.page.locator(`#${anchor}`)).toHaveCount(1);
+    }
+    await expect(
+      this.page.locator('#theory a[href="/courses/python/stroki"]'),
+    ).not.toHaveCount(0);
+    await expect(
+      this.page.locator('#theory a[href="/courses/python/fayly"]'),
+    ).not.toHaveCount(0);
+    await this.expectCodeContrast(
+      this.page.getByRole("group", {
+        name: "За один проход найти длину завершённого выражения",
+      }),
+    );
+    await expect(this.page.locator("[data-practice-form]")).toHaveCount(1);
+    if (noJavaScript) {
+      await expect(this.page.locator("[data-practice-form] form")).toHaveCount(
+        8,
+      );
+      await expect(
+        this.page.locator("[data-practice-form] [data-unenhanced-accordion]"),
+      ).toHaveCount(8);
+    } else {
+      await expect(this.page.locator("[data-practice-task]")).toHaveCount(8);
+      await expect(this.page.getByRole("tab")).toHaveCount(8);
+    }
+    await expect(this.page.locator("#practice a[download]")).toHaveCount(8);
+    if (!noJavaScript) {
+      await this.expectStudyNavigationAndAccessibility();
+      await this.expectCodeKeyboardFocus(
+        "За один проход найти длину завершённого выражения",
+      );
+    }
   }
 
   async expectPublishedNumberRecordLesson(): Promise<void> {

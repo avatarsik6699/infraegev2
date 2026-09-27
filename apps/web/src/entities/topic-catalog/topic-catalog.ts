@@ -164,10 +164,15 @@ const definitions: readonly TopicCatalogTypes.Definition[] = [
   },
   {
     id: "string-processing",
+    illustration: {
+      src: "/images/topics/string-processing.svg",
+      width: 144,
+      height: 88,
+    },
     taskNumbers: [24],
     title: "Обработка символьных строк",
     summary:
-      "Поиск и замена подстрок, подсчёт символов и разбор текстовых данных.",
+      "Поиск самых длинных непрерывных фрагментов и проверка условий на соседние символы и выражения.",
   },
   {
     id: "integer-processing",
