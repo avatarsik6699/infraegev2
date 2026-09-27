@@ -3,7 +3,7 @@ import { AccountPage } from "./pages/account.page";
 import { AccountIntegrationPage } from "./pages/account-integration.page";
 import { MinimalApplicationPage } from "./pages/minimal-application.page";
 import { PracticeCutoverPage } from "./pages/practice-cutover.page";
-import { test as base } from "@playwright/test";
+import { test as base, type Browser } from "@playwright/test";
 import { AccessibilityPage } from "./pages/accessibility.page";
 import { BrowserSession } from "./pages/browser-session.page";
 import { PublicDiscoveryPage } from "./pages/public-discovery.page";
@@ -36,7 +36,40 @@ type AppFixtures = {
   noJavaScriptTopicLessonPage: TopicLessonPage;
   numberRecordLessonPage: TopicLessonPage;
   noJavaScriptNumberRecordLessonPage: TopicLessonPage;
+  numberSequencesLessonPage: TopicLessonPage;
+  noJavaScriptNumberSequencesLessonPage: TopicLessonPage;
 };
+
+const numberRecordLessonConfig = {
+  route: "/ege/5-preobrazovanie-zapisey-chisel",
+  title: "Преобразование записей чисел",
+  taskNumber: 5,
+};
+
+const numberSequencesLessonConfig = {
+  route: "/ege/17-chislovye-posledovatelnosti",
+  title: "Числовые последовательности",
+  taskNumber: 17,
+  taskCount: 8,
+};
+
+async function useNoJavaScriptTopicLesson(
+  browser: Browser,
+  baseURL: string | undefined,
+  use: (page: TopicLessonPage) => Promise<void>,
+  config?: ConstructorParameters<typeof TopicLessonPage>[1],
+) {
+  const context = await browser.newContext({
+    baseURL,
+    javaScriptEnabled: false,
+    viewport: { width: 390, height: 844 },
+  });
+  try {
+    await use(new TopicLessonPage(await context.newPage(), config));
+  } finally {
+    await context.close();
+  }
+}
 
 export const test = base.extend<AppFixtures>({
   accountPage: async ({ page }, use) => {
@@ -163,42 +196,28 @@ export const test = base.extend<AppFixtures>({
     await use(new TopicLessonPage(page));
   },
   numberRecordLessonPage: async ({ page }, use) => {
-    await use(
-      new TopicLessonPage(page, {
-        route: "/ege/5-preobrazovanie-zapisey-chisel",
-        title: "Преобразование записей чисел",
-        taskNumber: 5,
-      }),
-    );
+    await use(new TopicLessonPage(page, numberRecordLessonConfig));
+  },
+  numberSequencesLessonPage: async ({ page }, use) => {
+    await use(new TopicLessonPage(page, numberSequencesLessonConfig));
   },
   noJavaScriptTopicLessonPage: async ({ baseURL, browser }, use) => {
-    const context = await browser.newContext({
-      baseURL,
-      javaScriptEnabled: false,
-      viewport: { width: 390, height: 844 },
-    });
-    try {
-      await use(new TopicLessonPage(await context.newPage()));
-    } finally {
-      await context.close();
-    }
+    await useNoJavaScriptTopicLesson(browser, baseURL, use);
   },
   noJavaScriptNumberRecordLessonPage: async ({ baseURL, browser }, use) => {
-    const context = await browser.newContext({
+    await useNoJavaScriptTopicLesson(
+      browser,
       baseURL,
-      javaScriptEnabled: false,
-      viewport: { width: 390, height: 844 },
-    });
-    try {
-      await use(
-        new TopicLessonPage(await context.newPage(), {
-          route: "/ege/5-preobrazovanie-zapisey-chisel",
-          title: "Преобразование записей чисел",
-          taskNumber: 5,
-        }),
-      );
-    } finally {
-      await context.close();
-    }
+      use,
+      numberRecordLessonConfig,
+    );
+  },
+  noJavaScriptNumberSequencesLessonPage: async ({ baseURL, browser }, use) => {
+    await useNoJavaScriptTopicLesson(
+      browser,
+      baseURL,
+      use,
+      numberSequencesLessonConfig,
+    );
   },
 });

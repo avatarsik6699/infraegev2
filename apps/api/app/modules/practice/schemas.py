@@ -232,13 +232,13 @@ class MaterialDefinition(StrictModel):
     id: Identifier
     sections: list[Identifier]
     kind: Literal["topic", "course"] = "topic"
-    status: Literal["draft", "review", "published"] = "draft"
+    status: Literal["draft", "published"] = "draft"
     course_id: Identifier | None = None
 
 
 class CourseDefinition(StrictModel):
     id: Identifier
-    status: Literal["draft", "review", "published"]
+    status: Literal["draft", "published"]
     lesson_ids: list[Identifier]
 
 

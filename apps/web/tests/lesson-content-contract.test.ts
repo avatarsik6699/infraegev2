@@ -23,7 +23,7 @@ const definition: LessonContent.Definition = {
     },
   ],
   result: "Итог урока",
-  status: "review",
+  status: "draft",
   accessTier: "free",
 };
 

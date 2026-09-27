@@ -94,6 +94,19 @@ const summary = {
       id: "preobrazovanie-zapisey-chisel",
       tasks: [{ id: "n1", solution_revision: 1 }],
     },
+    {
+      id: "number-sequences",
+      tasks: [
+        { id: "task-17-01", solution_revision: 1 },
+        { id: "task-17-02", solution_revision: 1 },
+        { id: "task-17-03", solution_revision: 1 },
+        { id: "task-17-04", solution_revision: 1 },
+        { id: "task-17-05", solution_revision: 1 },
+        { id: "task-17-06", solution_revision: 1 },
+        { id: "task-17-07", solution_revision: 1 },
+        { id: "task-17-08", solution_revision: 1 },
+      ],
+    },
   ],
 };
 const renderCatalog = () =>
@@ -135,13 +148,13 @@ describe("TopicCatalogPage", () => {
     expect(cards).toHaveLength(25);
     expect(
       container.querySelectorAll('[data-topic-status="published"]'),
-    ).toHaveLength(2);
+    ).toHaveLength(3);
     expect(
       container.querySelectorAll('[data-topic-status="planned"]'),
-    ).toHaveLength(23);
+    ).toHaveLength(22);
     expect(
       container.querySelectorAll('[data-topic-status="published"] a'),
-    ).toHaveLength(2);
+    ).toHaveLength(3);
     expect(
       container.querySelectorAll('[data-topic-status="planned"] a'),
     ).toHaveLength(0);
@@ -155,8 +168,13 @@ describe("TopicCatalogPage", () => {
         .getByRole("link", { name: "Рекурсивные алгоритмы" })
         .getAttribute("href"),
     ).toBe("/ege/16-rekursiya");
+    expect(
+      screen
+        .getByRole("link", { name: "Числовые последовательности" })
+        .getAttribute("href"),
+    ).toBe("/ege/17-chislovye-posledovatelnosti");
     expect(screen.getByText("Задания 19–21")).not.toBeNull();
-    expect(screen.getAllByText("Скоро")).toHaveLength(23);
+    expect(screen.getAllByText("Скоро")).toHaveLength(22);
     await screen.findByText("Решено 0 из 2");
   });
 });
@@ -165,14 +183,14 @@ it("combines live search and status filters, clears input and resets empty resul
   const view = renderCatalog();
   await screen.findByText("Решено 0 из 2");
   fireEvent.click(screen.getByRole("button", { name: "Не начаты" }));
-  expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(2);
+  expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(3);
   fireEvent.change(screen.getByRole("searchbox"), {
     target: { value: "РЕКУРС" },
   });
   expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(1);
   fireEvent.click(screen.getByRole("button", { name: "Очистить поиск" }));
   expect((screen.getByRole("searchbox") as HTMLInputElement).value).toBe("");
-  expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(2);
+  expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(3);
   fireEvent.change(screen.getByRole("searchbox"), {
     target: { value: "unknown" },
   });
@@ -220,7 +238,10 @@ it("counts only current topic answers, keeps completed in All and excludes stale
   ).not.toBeNull();
   expect(screen.getByText("Решено задач в темах: 2")).not.toBeNull();
   fireEvent.click(screen.getByRole("button", { name: "Не начаты" }));
-  expect(screen.getByText("Темы не найдены")).not.toBeNull();
+  expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(1);
+  expect(
+    screen.getByRole("link", { name: "Числовые последовательности" }),
+  ).not.toBeNull();
 });
 
 it("keeps navigation/search usable on API error and retries without inventing zero totals", async () => {
@@ -271,7 +292,7 @@ it("treats missing summaries as unavailable and recovers corrupt storage", async
   renderCatalog();
   await screen.findByText("Прогресс временно недоступен");
   expect(screen.getByText("Решено 0 из 2")).not.toBeNull();
-  expect(screen.getAllByText("Прогресс недоступен")).toHaveLength(1);
+  expect(screen.getAllByText("Прогресс недоступен")).toHaveLength(2);
 });
 
 it("does not flash zero progress while summary is pending", async () => {
@@ -288,7 +309,7 @@ it("does not flash zero progress while summary is pending", async () => {
     }),
   );
   renderCatalog();
-  expect(screen.getAllByText("Прогресс загружается")).toHaveLength(2);
+  expect(screen.getAllByText("Прогресс загружается")).toHaveLength(3);
   expect(screen.queryByRole("progressbar")).toBeNull();
   await waitFor(() => expect(resolve).toBeTypeOf("function"));
   resolve(Response.json(summary));

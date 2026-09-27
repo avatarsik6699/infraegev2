@@ -29,6 +29,16 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
 
 ## Gotcha Log
 
+### Inline code styles can make nested code blocks unreadable
+
+- **Symptoms:** syntax-highlighted words remain visible, but ordinary identifiers and punctuation
+  disappear into a dark CodeBlock inside a Callout.
+- **Cause:** a broad `.body code` selector for inline notation has higher specificity than the
+  CodeBlock's `.code` rule and overrides its light foreground.
+- **Fix:** scope the Callout selector to inline code without CodeBlock's `data-language` marker;
+  inspect the computed colour of an unclassified fragment as well as highlighted tokens in the
+  browser.
+
 ### Client-handled credential forms can leak passwords through native GET submission
 
 - **Symptoms:** a sign-in, registration or recovery form looks protected when JavaScript runs,

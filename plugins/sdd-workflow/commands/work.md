@@ -1,5 +1,5 @@
 ---
-description: Implement Backlog tasks (default) or fix Architect Review Notes (review), absorbing findings and running one affected-area Critical Gate. Usage: /work [change] [task-id|group|review [R#]|--force]
+description: Implement Backlog tasks and manual-review findings, running one affected-area Critical Gate. Usage: /work [change] [task-id|group|--force]
 ---
 
 # /work

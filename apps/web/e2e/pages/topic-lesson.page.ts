@@ -15,6 +15,7 @@ type TopicLessonPageConfig = {
   route: string;
   title: string;
   taskNumber: number;
+  taskCount?: number;
 };
 
 const recursionLessonConfig: TopicLessonPageConfig = {
@@ -188,7 +189,7 @@ export class TopicLessonPage {
       "1px",
     );
     await expect(this.page.locator("[data-result-progress]")).toContainText(
-      "0 / 5",
+      `0 / ${this.config.taskCount ?? 5}`,
     );
     await this.expectStudyDensity();
     await this.page.setViewportSize({ width: 390, height: 844 });
@@ -245,6 +246,96 @@ export class TopicLessonPage {
     });
     const accessibility = await new AxeBuilder({ page: this.page }).analyze();
     expect(accessibility.violations).toEqual([]);
+  }
+
+  async expectPublishedNumberSequencesContent(
+    noJavaScript = false,
+  ): Promise<void> {
+    await expectPublicReleaseIdentity(this.page);
+    await expect(this.page).toHaveTitle(
+      "Числовые последовательности — infraege",
+    );
+    await expect(
+      this.page.getByRole("heading", {
+        level: 1,
+        name: "Числовые последовательности",
+      }),
+    ).toBeVisible();
+    await expect(this.page.locator('meta[name="robots"]')).toHaveAttribute(
+      "content",
+      "index,follow",
+    );
+    await expect(this.page.locator('link[rel="canonical"]')).toHaveAttribute(
+      "href",
+      "https://infraege.ru/ege/17-chislovye-posledovatelnosti",
+    );
+    for (const anchor of [
+      "sequence-from-file",
+      "single-values",
+      "neighbor-pairs",
+      "neighbor-triples",
+      "two-passes",
+      "verify-boundaries",
+    ]) {
+      await expect(this.page.locator(`#${anchor}`)).toHaveCount(1);
+    }
+    for (const slug of [
+      "schetchiki-i-nakopiteli",
+      "spiski",
+      "fayly",
+      "otbor-rezultata",
+    ]) {
+      await expect(
+        this.page.locator(`#theory a[href="/courses/python/${slug}"]`),
+      ).not.toHaveCount(0);
+    }
+    const averageCallout = this.page.locator(
+      'aside[aria-label="Среднее уже найдено"]',
+    );
+    const partialExample = averageCallout.getByRole("group", {
+      name: "Дополнить условие второго прохода",
+    });
+    const codeColors = await partialExample.evaluate((block) => {
+      const lightness = (color: string) =>
+        Number(/^oklch\((\d*\.?\d+)/.exec(color)?.[1] ?? 0);
+      const code = block.querySelector("code")!;
+      return {
+        text: getComputedStyle(code).color,
+        foregroundToken: getComputedStyle(document.documentElement)
+          .getPropertyValue("--theme-code-ink")
+          .trim(),
+        background: getComputedStyle(block).backgroundColor,
+        backgroundToken: getComputedStyle(document.documentElement)
+          .getPropertyValue("--theme-code")
+          .trim(),
+        plainLightness: lightness(getComputedStyle(code).color),
+        tokenLightness: [...code.querySelectorAll("[data-token]")].map(
+          (token) => lightness(getComputedStyle(token).color),
+        ),
+      };
+    });
+    expect(codeColors.text).toBe(codeColors.foregroundToken);
+    expect(codeColors.background).toBe(codeColors.backgroundToken);
+    expect(codeColors.plainLightness).toBeGreaterThan(0.65);
+    expect(codeColors.tokenLightness.length).toBeGreaterThan(0);
+    for (const value of codeColors.tokenLightness) {
+      expect(value).toBeGreaterThan(0.65);
+    }
+    if (noJavaScript) {
+      await expect(this.page.locator("[data-practice-form] form")).toHaveCount(
+        8,
+      );
+      await expect(
+        this.page.locator("[data-practice-form] [data-unenhanced-accordion]"),
+      ).toHaveCount(8);
+    } else {
+      await expect(this.page.locator("[data-practice-task]")).toHaveCount(8);
+      await expect(this.page.getByRole("tab")).toHaveCount(8);
+      await expect(this.page.locator("[data-result-progress]")).toContainText(
+        "0 / 8",
+      );
+    }
+    await this.expectNoHorizontalOverflow();
   }
 
   async expectPublishedNumberRecordLesson(): Promise<void> {

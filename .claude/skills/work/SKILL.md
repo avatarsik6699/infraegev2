@@ -1,8 +1,8 @@
 ---
 name: work
-description: Implement Backlog tasks (default) or fix Architect Review Notes (`review` argument) through the agent execution loop. Confirms the feature branch, absorbs mid-session findings, enforces required tooling, and runs one affected-area Critical Gate for the target set.
+description: Implement Backlog tasks and findings from local manual review through the agent execution loop. Confirms the feature branch, absorbs mid-session findings, enforces required tooling, and runs one affected-area Critical Gate for the target set.
 allowed-tools: Read, Write, Edit, Glob, Bash
-argument-hint: "[change] [task-id | group | review [R#] | --force]"
+argument-hint: "[change] [task-id | group | --force]"
 ---
 
 You are running the SDD `work` workflow.
@@ -10,8 +10,8 @@ You are running the SDD `work` workflow.
 **Arguments**: $ARGUMENTS
 
 Execute the canonical playbook in [docs/playbooks/work.md](../../../docs/playbooks/work.md). That
-file is the source of truth for the branch check, task-source resolution (Backlog vs. `review`),
-Backlog-append handling, dependency/safety checks, required-tooling enforcement, the Critical Gate, and
+file is the source of truth for the branch check, Backlog target resolution and append handling,
+dependency/safety checks, required-tooling enforcement, the Critical Gate, and
 the final report format.
 
-If `$ARGUMENTS` is empty, ask: "Which change? e.g. /work 01, /work 01 B3, or /work 01 review"
+If `$ARGUMENTS` is empty, ask: "Which change? e.g. /work 01 or /work 01 B3"

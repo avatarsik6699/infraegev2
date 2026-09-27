@@ -39,12 +39,23 @@ describe("public release metadata", () => {
         title: "Преобразование записей чисел",
         status: "published",
       }),
+      expect.objectContaining({
+        id: "number-sequences",
+        routeSlug: "17-chislovye-posledovatelnosti",
+        taskNumbers: [17],
+        title: "Числовые последовательности",
+        status: "published",
+      }),
     ]);
     expect(
       lessonPublications
         .filter((lesson) => lesson.status === "published")
         .map((lesson) => lesson.routeSlug),
-    ).toEqual(["16-rekursiya", "5-preobrazovanie-zapisey-chisel"]);
+    ).toEqual([
+      "16-rekursiya",
+      "5-preobrazovanie-zapisey-chisel",
+      "17-chislovye-posledovatelnosti",
+    ]);
     expect(new Set(lessonPublications.map((lesson) => lesson.id)).size).toBe(
       lessonPublications.length,
     );
@@ -78,6 +89,7 @@ describe("public release metadata", () => {
     ).toEqual([
       ["preobrazovanie-zapisey-chisel", "5-preobrazovanie-zapisey-chisel"],
       ["rekursiya", "16-rekursiya"],
+      ["number-sequences", "17-chislovye-posledovatelnosti"],
     ]);
     expect(topicCatalog.formatTaskNumbers([5])).toBe("Задание 5");
     expect(topicCatalog.formatTaskNumbers([19, 20, 21])).toBe("Задания 19–21");
@@ -93,8 +105,10 @@ describe("public release metadata", () => {
     ]);
     expect(courseLessonPublications).toHaveLength(28);
     expect(
-      courseLessonPublications.filter((lesson) => lesson.status === "review"),
-    ).toHaveLength(0);
+      courseLessonPublications.every((lesson) =>
+        ["draft", "published"].includes(lesson.status),
+      ),
+    ).toBe(true);
     expect(
       courseLessonPublications
         .filter((lesson) => lesson.status === "published")

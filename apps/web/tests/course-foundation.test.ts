@@ -32,8 +32,10 @@ describe("Python course foundation", () => {
       ),
     ).toHaveLength(28);
     expect(
-      courseLessonPublications.filter((lesson) => lesson.status === "review"),
-    ).toHaveLength(0);
+      courseLessonPublications.every((lesson) =>
+        ["draft", "published"].includes(lesson.status),
+      ),
+    ).toBe(true);
     expect(
       courseLessonPublications.find(
         (lesson) => lesson.id === "python-todo-start",

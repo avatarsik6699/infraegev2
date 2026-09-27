@@ -39,7 +39,7 @@ export const expectPublicReleaseIdentity = async (
         ? lessonArticle.getBoundingClientRect().left
         : 0;
     return {
-      viewportWidth: document.documentElement.clientWidth,
+      viewportWidth: document.body.getBoundingClientRect().right,
       expectedFooterLeft,
       headerLeft: headerRect.left,
       headerRight: headerRect.right,

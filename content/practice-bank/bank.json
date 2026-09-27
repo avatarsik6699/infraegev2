@@ -110770,6 +110770,790 @@
         "content_schema_version": 1
       },
       "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-17-01",
+        "title": "Посчитайте подходящие числа",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 8,
+        "answer_instruction": "Введите одно целое число — результат подсчёта или найденный максимум.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В файле записаны целые числа, по одному в строке. Сколько чисел больше 20 и делятся на 3?"
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "numbers-file"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Проверяйте каждое число отдельно: подходит ли оно под оба условия сразу? Для каждого подходящего значения прибавляйте к счётчику единицу."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Нужно посчитать числа, которые одновременно больше 20 и делятся на 3 без остатка. В файле это 21, 27, 30, 42, 33, 24 и 36 — всего семь. Число 15 делится на 3, но не больше 20, поэтому его не считаем. Оба условия соединены словом «и»: достаточно не выполнить хотя бы одно, чтобы число не подошло."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "count = 0\nwith open(\"numbers.txt\", encoding=\"utf-8\") as file:\n    for line in file:\n        number = int(line)\n        if number > 20 and number % 3 == 0:\n            count += 1\nprint(count)",
+              "caption": "Один из вариантов решения"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [
+          {
+            "id": "numbers-file",
+            "purpose": "attachment",
+            "checksum": "3d9b784c90a799e17a8c0615e5982cc58b0ab9e8c9a52e87bfcdd3e9630abbb5",
+            "filename": "numbers.txt",
+            "description": "16 целых чисел, по одному в строке",
+            "attribution": null
+          }
+        ],
+        "lessons": [
+          {
+            "position": 0,
+            "material_id": "number-sequences"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Вернитесь к этому приёму",
+            "section": "single-values",
+            "material_id": "number-sequences"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "unknown",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["7"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-17-02",
+        "title": "Найдите наибольшее число с заданным свойством",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 8,
+        "answer_instruction": "Введите одно целое число — результат подсчёта или найденный максимум.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сколько бы ни было строк, запишите программу, которая найдёт наибольшее число больше 20, делящееся на 4. В ответе укажите найденное число."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "numbers-file"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сначала отбрасывайте числа, которые не делятся на 4 или не больше 20. Среди оставшихся храните самое большое из уже встреченных значений."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Кандидатами могут быть только числа больше 20, у которых остаток при делении на 4 равен нулю: 28, 40, 52 и 44. Самое большое из них — 52. В программе удобно сравнивать каждый подходящий кандидат с текущим максимумом. Первое найденное подходящее число нужно принять за начальный максимум: так программа не зависит от выдуманной границы."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "maximum = None\nwith open(\"numbers.txt\", encoding=\"utf-8\") as file:\n    for line in file:\n        number = int(line)\n        if number > 20 and number % 4 == 0:\n            if maximum is None or number > maximum:\n                maximum = number\nprint(maximum)",
+              "caption": "Один из вариантов решения"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [
+          {
+            "id": "numbers-file",
+            "purpose": "attachment",
+            "checksum": "36fd02da42ad78d7d1f8dd3f977e10a5f6fec868fe25451582a348f4fc4e98c4",
+            "filename": "numbers.txt",
+            "description": "16 целых чисел, по одному в строке",
+            "attribution": null
+          }
+        ],
+        "lessons": [
+          {
+            "position": 1,
+            "material_id": "number-sequences"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Вернитесь к этому приёму",
+            "section": "single-values",
+            "material_id": "number-sequences"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "unknown",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["52"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-17-03",
+        "title": "Посчитайте подходящие соседние пары",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 8,
+        "answer_instruction": "Введите одно целое число — результат подсчёта или найденный максимум.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сколько пар соседних чисел имеют сумму, которая делится на 5 без остатка?"
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "numbers-file"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Смотрите на сумму двух соседних значений. Сдвигайте начало пары ровно на одну строку, чтобы не пропустить пары, которые имеют общее число."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "У пары важны оба числа и их соседство в файле. Суммы последовательных пар здесь: 11, 10, 5, 10, 9, 10, 15, 11, 15, 21, 15, 17, 15, 9, 15. Девять сумм делятся на 5 без остатка. Пары пересекаются: например, в парах (7, 3) и (3, 2) число 3 используется дважды — это разные соседства, и оба нужно проверить."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "count = 0\nwith open(\"numbers.txt\", encoding=\"utf-8\") as file:\n    numbers = [int(line) for line in file]\nfor i in range(len(numbers) - 1):\n    if (numbers[i] + numbers[i + 1]) % 5 == 0:\n        count += 1\nprint(count)",
+              "caption": "Один из вариантов решения"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [
+          {
+            "id": "numbers-file",
+            "purpose": "attachment",
+            "checksum": "5e894e3f2c1a1b5ac6b43f42c77191582a8788bfb692fdc4aadc332f96793b49",
+            "filename": "numbers.txt",
+            "description": "16 целых чисел, по одному в строке",
+            "attribution": null
+          }
+        ],
+        "lessons": [
+          {
+            "position": 2,
+            "material_id": "number-sequences"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Вернитесь к этому приёму",
+            "section": "neighbor-pairs",
+            "material_id": "number-sequences"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "unknown",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["9"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-17-04",
+        "title": "Найдите наибольшую сумму соседней пары",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 10,
+        "answer_instruction": "Введите одно целое число — результат подсчёта или найденный максимум.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Найдите наибольшую сумму пары соседних чисел, в которой первое число чётное, а второе нечётное."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "numbers-file"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Пара подходит, только если первое число чётное, а второе нечётное. После этого сравнивайте её сумму с лучшей подходящей суммой, найденной раньше."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Перебираем все начала пар, кроме последнего числа: у последнего нет соседа справа. Из пар оставляем те, где левое число чётное, а правое нечётное. Их суммы по порядку: 7, 11, 9, 17, 11, 17, 17 и 23. Последняя подходящая пара (16, 7) даёт наибольшую сумму 23. Здесь важно проверять порядок: условие для пары (чётное, нечётное) не означает то же самое для обратной пары."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "maximum = None\nwith open(\"numbers.txt\", encoding=\"utf-8\") as file:\n    numbers = [int(line) for line in file]\nfor i in range(len(numbers) - 1):\n    left, right = numbers[i], numbers[i + 1]\n    if left % 2 == 0 and right % 2 != 0:\n        pair_sum = left + right\n        if maximum is None or pair_sum > maximum:\n            maximum = pair_sum\nprint(maximum)",
+              "caption": "Один из вариантов решения"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [
+          {
+            "id": "numbers-file",
+            "purpose": "attachment",
+            "checksum": "422767daaa2ab859ebbd5f0201b01eb1281c1e40c6ee4ce39eb2fa9a75d3c0a8",
+            "filename": "numbers.txt",
+            "description": "16 целых чисел, по одному в строке",
+            "attribution": null
+          }
+        ],
+        "lessons": [
+          {
+            "position": 3,
+            "material_id": "number-sequences"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Вернитесь к этому приёму",
+            "section": "neighbor-pairs",
+            "material_id": "number-sequences"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "unknown",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["23"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-17-05",
+        "title": "Посчитайте вершины среди троек",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 10,
+        "answer_instruction": "Введите одно целое число — результат подсчёта или найденный максимум.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Посчитайте тройки соседних чисел, в которых число посередине тройки строго больше обоих крайних чисел."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "numbers-file"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "У числа посередине тройки должны быть соседи и слева, и справа. Для каждой такой позиции отдельно проверьте оба сравнения: середина должна быть строго больше каждого из двух чисел рядом."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Тройка — это три значения, стоящие подряд; проверяемое число находится посередине. В файле есть пять строгих вершин: 7, 9, 8, 10 и 12. Ещё одна тройка заканчивается значениями (15, 17, 17): число посередине равно правому соседу. Она не подходит, потому что нужно именно строгое превосходство; замена знака `>` на `>=` ошибочно увеличила бы ответ до 6. Первый и последний элементы файла не могут быть серединой тройки: у них нет соседа с одной стороны."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "count = 0\nwith open(\"numbers.txt\", encoding=\"utf-8\") as file:\n    numbers = [int(line) for line in file]\nfor i in range(1, len(numbers) - 1):\n    if numbers[i] > numbers[i - 1] and numbers[i] > numbers[i + 1]:\n        count += 1\nprint(count)",
+              "caption": "Один из вариантов решения"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [
+          {
+            "id": "numbers-file",
+            "purpose": "attachment",
+            "checksum": "f6103e8629977b89ddb372201c5070f6d1e7c9351c1832caa0273f370261afd5",
+            "filename": "numbers.txt",
+            "description": "22 целых числа, по одному в строке",
+            "attribution": null
+          }
+        ],
+        "lessons": [
+          {
+            "position": 4,
+            "material_id": "number-sequences"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Вернитесь к этому приёму",
+            "section": "neighbor-triples",
+            "material_id": "number-sequences"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "unknown",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["5"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-17-06",
+        "title": "Найдите наибольшую сумму тройки",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 10,
+        "answer_instruction": "Введите одно целое число — результат подсчёта или найденный максимум.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Найдите наибольшую сумму тройки соседних чисел, если число посередине тройки делится на 4."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "numbers-file"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Перечислите только те тройки, у которых число посередине делится на 4. Для каждой такой тройки сложите все три числа и сохраните наибольшую сумму."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Серединой тройки может быть только число, у которого есть сосед и слева, и справа. Среди этих середин условие делимости на 4 выполняют 8, 12, 4, 16, 20, 24 и 28. Соответствующие суммы троек: 16, 22, 23, 25, 30, 41 и 44. Максимум — 44. Перебор начинается со второй строки и заканчивается предпоследней; иначе обращение к одному из соседей выйдет за границы списка."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "maximum = None\nwith open(\"numbers.txt\", encoding=\"utf-8\") as file:\n    numbers = [int(line) for line in file]\nfor i in range(1, len(numbers) - 1):\n    if numbers[i] % 4 == 0:\n        triple_sum = numbers[i - 1] + numbers[i] + numbers[i + 1]\n        if maximum is None or triple_sum > maximum:\n            maximum = triple_sum\nprint(maximum)",
+              "caption": "Один из вариантов решения"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [
+          {
+            "id": "numbers-file",
+            "purpose": "attachment",
+            "checksum": "7fd0e1df6b386e33e0ecb78394a0f8d37883fa7bbf5b42e0f619425c892e14f8",
+            "filename": "numbers.txt",
+            "description": "18 целых чисел, по одному в строке",
+            "attribution": null
+          }
+        ],
+        "lessons": [
+          {
+            "position": 5,
+            "material_id": "number-sequences"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Вернитесь к этому приёму",
+            "section": "neighbor-triples",
+            "material_id": "number-sequences"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "unknown",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["44"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-17-07",
+        "title": "Сравните суммы пар со средним по файлу",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 3,
+        "estimated_minutes": 12,
+        "answer_instruction": "Введите одно целое число — результат подсчёта или найденный максимум.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сначала найдите среднее арифметическое всех чисел файла. Затем посчитайте соседние пары, сумма которых строго больше этого среднего."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "numbers-file"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сначала найдите сумму и количество всех чисел, чтобы вычислить среднее арифметическое файла. Затем отдельным проходом сравните с ним суммы соседних пар."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В файле 120 чисел; их сумма — 6000, поэтому среднее арифметическое равно 6000 / 120 = 50. Затем проверяем все 119 соседних пар. Десять пар имеют сумму ровно 50 — например, первая пара (12, 38), и такая граница повторяется по одной в каждом блоке данных. Равенство не подходит: требуется сумма строго больше среднего. Остальные 109 пар имеют сумму больше 50, это и есть ответ. Если заменить `>` на `>=`, в ответ ошибочно попадут ещё десять граничных пар."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "with open(\"numbers.txt\", encoding=\"utf-8\") as file:\n    numbers = [int(line) for line in file]\naverage = sum(numbers) / len(numbers)\ncount = 0\nfor i in range(len(numbers) - 1):\n    if numbers[i] + numbers[i + 1] > average:\n        count += 1\nprint(count)",
+              "caption": "Один из вариантов решения"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [
+          {
+            "id": "numbers-file",
+            "purpose": "attachment",
+            "checksum": "b044f13f22b2a0b16f131b8e9456bebce811b2667637dddc50130bff7278ea0d",
+            "filename": "numbers.txt",
+            "description": "120 целых чисел, по одному в строке",
+            "attribution": null
+          }
+        ],
+        "lessons": [
+          {
+            "position": 6,
+            "material_id": "number-sequences"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Вернитесь к этому приёму",
+            "section": "two-passes",
+            "material_id": "number-sequences"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "unknown",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["109"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-17-08",
+        "title": "Найдите пики относительно среднего по файлу",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 3,
+        "estimated_minutes": 12,
+        "answer_instruction": "Введите одно целое число — результат подсчёта или найденный максимум.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Найдите среднее арифметическое всех чисел. Посчитайте тройки соседних чисел, у которых число посередине тройки выше этого среднего, а оба крайних числа ниже него."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "numbers-file"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сначала получите среднее арифметическое по всему файлу. Затем перебирайте только те позиции, у которых есть значения слева и справа; сравните все три числа с вычисленным средним."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В файле 128 чисел, их сумма равна 6400. Значит, среднее арифметическое файла — 6400 / 128 = 50. Во втором проходе проверяем число посередине каждой тройки: оно должно быть выше 50, а оба соседних числа — ниже 50. Получаем 31 подходящую тройку. Числа, равные 50, условие не выполняют: в каждом блоке есть середины на самой границе среднего. У блоков также проверяется переход через границу: последнее число одного блока может быть серединой тройки вместе с первым числом следующего. У последнего числа всего файла правого соседа нет, поэтому оно не может быть серединой."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "with open(\"numbers.txt\", encoding=\"utf-8\") as file:\n    numbers = [int(line) for line in file]\naverage = sum(numbers) / len(numbers)\ncount = 0\nfor i in range(1, len(numbers) - 1):\n    if (numbers[i] > average\n            and numbers[i - 1] < average\n            and numbers[i + 1] < average):\n        count += 1\nprint(count)",
+              "caption": "Один из вариантов решения"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [
+          {
+            "id": "numbers-file",
+            "purpose": "attachment",
+            "checksum": "93f756740ca46c1be17057122bc1a023892de573a9ecb6d4c25f60c3e6a70866",
+            "filename": "numbers.txt",
+            "description": "128 целых чисел, по одному в строке",
+            "attribution": null
+          }
+        ],
+        "lessons": [
+          {
+            "position": 7,
+            "material_id": "number-sequences"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Вернитесь к этому приёму",
+            "section": "verify-boundaries",
+            "material_id": "number-sequences"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "unknown",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["31"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
     }
   ],
   "files": [
@@ -110779,9 +111563,79 @@
       "mime_type": "text/plain",
       "size_bytes": 6,
       "storage_key": "a3ffa225a17d35ef0f8185b42bf373fcc9fd45c2494e7e9c6ee01dbc2c6aecaf"
+    },
+    {
+      "checksum": "3d9b784c90a799e17a8c0615e5982cc58b0ab9e8c9a52e87bfcdd3e9630abbb5",
+      "storage_key": "3d9b784c90a799e17a8c0615e5982cc58b0ab9e8c9a52e87bfcdd3e9630abbb5",
+      "format": "txt",
+      "mime_type": "text/plain",
+      "size_bytes": 47
+    },
+    {
+      "checksum": "36fd02da42ad78d7d1f8dd3f977e10a5f6fec868fe25451582a348f4fc4e98c4",
+      "storage_key": "36fd02da42ad78d7d1f8dd3f977e10a5f6fec868fe25451582a348f4fc4e98c4",
+      "format": "txt",
+      "mime_type": "text/plain",
+      "size_bytes": 47
+    },
+    {
+      "checksum": "5e894e3f2c1a1b5ac6b43f42c77191582a8788bfb692fdc4aadc332f96793b49",
+      "storage_key": "5e894e3f2c1a1b5ac6b43f42c77191582a8788bfb692fdc4aadc332f96793b49",
+      "format": "txt",
+      "mime_type": "text/plain",
+      "size_bytes": 35
+    },
+    {
+      "checksum": "422767daaa2ab859ebbd5f0201b01eb1281c1e40c6ee4ce39eb2fa9a75d3c0a8",
+      "storage_key": "422767daaa2ab859ebbd5f0201b01eb1281c1e40c6ee4ce39eb2fa9a75d3c0a8",
+      "format": "txt",
+      "mime_type": "text/plain",
+      "size_bytes": 36
+    },
+    {
+      "checksum": "f6103e8629977b89ddb372201c5070f6d1e7c9351c1832caa0273f370261afd5",
+      "storage_key": "f6103e8629977b89ddb372201c5070f6d1e7c9351c1832caa0273f370261afd5",
+      "format": "txt",
+      "mime_type": "text/plain",
+      "size_bytes": 53
+    },
+    {
+      "checksum": "7fd0e1df6b386e33e0ecb78394a0f8d37883fa7bbf5b42e0f619425c892e14f8",
+      "storage_key": "7fd0e1df6b386e33e0ecb78394a0f8d37883fa7bbf5b42e0f619425c892e14f8",
+      "format": "txt",
+      "mime_type": "text/plain",
+      "size_bytes": 43
+    },
+    {
+      "checksum": "b044f13f22b2a0b16f131b8e9456bebce811b2667637dddc50130bff7278ea0d",
+      "storage_key": "b044f13f22b2a0b16f131b8e9456bebce811b2667637dddc50130bff7278ea0d",
+      "format": "txt",
+      "mime_type": "text/plain",
+      "size_bytes": 360
+    },
+    {
+      "checksum": "93f756740ca46c1be17057122bc1a023892de573a9ecb6d4c25f60c3e6a70866",
+      "storage_key": "93f756740ca46c1be17057122bc1a023892de573a9ecb6d4c25f60c3e6a70866",
+      "format": "txt",
+      "mime_type": "text/plain",
+      "size_bytes": 400
     }
   ],
   "materials": [
+    {
+      "id": "number-sequences",
+      "sections": [
+        "sequence-from-file",
+        "single-values",
+        "neighbor-pairs",
+        "neighbor-triples",
+        "two-passes",
+        "verify-boundaries"
+      ],
+      "kind": "topic",
+      "status": "published",
+      "course_id": null
+    },
     {
       "id": "preobrazovanie-zapisey-chisel",
       "sections": [

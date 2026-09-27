@@ -23,7 +23,10 @@ export const LessonIntro: React.FC<LessonIntroTypes.Props> = (props) => (
     </Typography.Text>
 
     <Typography.Text className={styles.studyMeta}>
-      {props.eyebrow} · {russianCount.tasks(props.taskCount)}
+      {props.eyebrow}
+      {props.taskCount !== undefined ? (
+        <> · {russianCount.tasks(props.taskCount)}</>
+      ) : null}
       {props.accessTier === "paid" ? " · По подписке" : null}
     </Typography.Text>
   </header>

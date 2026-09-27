@@ -125,9 +125,15 @@ Planned content is text, never a fake/disabled link. Maintain two ordinary text 
 Preserve authored theory, ordering, task IDs, examples, figures and accessible descriptions.
 Course/topic domains stay independent. API owns tasks/checking and authenticated progress;
 frontend owns transient input only. Guest progress is not counted or persisted, and old browser
-progress keys are ignored without import. Remove persisted
-answer drafts and custom catalog-row restoration. Catalog task forms preserve transient input
-and help state while collapsed, until the selection/page changes or the page is left/reloaded.
+progress keys are ignored without import.
+Authored TopicLesson prose may link to a published Python CourseLesson that explains a specific
+technique used at that point. Keep these as ordinary contextual links, verify their destinations,
+and do not derive prerequisite, recommendation, membership or shared-progress state from them.
+Introduce a new concept in plain language before its technical name or code; briefly remind the
+reader of existing Python basics at their point of use and link to the full course explanation.
+Remove persisted answer drafts and custom catalog-row restoration. Catalog task forms preserve
+transient input and help state while collapsed, until the selection/page changes or the page is
+left/reloaded.
 Bulk disclosure belongs to the current result list: expand loads every visible-page statement into
 the document for browser find; collapse retains mounted forms and drafts. Individual toggles remain
 independent, and changing the selection/page resets disclosure. Hide bulk actions without scripting.
@@ -251,8 +257,8 @@ Use the existing SearchField, Button, Progress, ActionLink, Typography and PageC
 SearchField supports optional controlled value/onValueChange without changing existing practice
 submission semantics. Topic status buttons use pressed semantics; targets remain at least 40px.
 Topic progress scopes `--progress-height: 8px` locally, preserving the original shared light track and semantic states. Hover/focus uses a slightly darker neutral row surface so the track remains distinct.
-All interface icons are Lucide. Only topic 5 and 16 have authored mathematical SVG miniatures,
-faithful to the supplied reference; other topics share a neutral BookOpen placeholder.
+All interface icons are Lucide. Topics 5 and 16 have authored mathematical SVG miniatures;
+topic 17 has a matching monochrome sequence miniature. Other topics share a neutral BookOpen placeholder.
 Published rows expose one navigable link and hover/focus surface; planned rows have no action.
 Place total/published topic counts and lesson practice progress below the page title, without a generic subtitle. Counts reflect the full catalog, independently of filtering.
 Reserve image, progress, status, header-summary and action geometry on first paint, including

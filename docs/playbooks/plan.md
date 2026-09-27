@@ -154,8 +154,8 @@ marker.
     "do NOT touch" paths.
   - **Contracts**: a one-line pointer — "see `docs/SPEC.md` §3–§4 and the Files list above" — do
     not hand-copy schema/endpoint/type details into the change file.
-  - Leave Architect Review Notes at its default (`No architect review issues recorded`) and
-    Implementation Notes empty.
+  - Leave Implementation Notes empty. Findings from the architect's local manual review become
+    new Backlog items in the same change.
   - Fill the Commit Message placeholder: `feat(change-[NN]): [title] — [2–4 key deliverables]`,
     under 72 chars.
 

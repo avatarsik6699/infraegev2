@@ -14,6 +14,19 @@ const summary = {
       id: "preobrazovanie-zapisey-chisel",
       tasks: [{ id: "n1", solution_revision: 1 }],
     },
+    {
+      id: "number-sequences",
+      tasks: [
+        { id: "task-17-01", solution_revision: 1 },
+        { id: "task-17-02", solution_revision: 1 },
+        { id: "task-17-03", solution_revision: 1 },
+        { id: "task-17-04", solution_revision: 1 },
+        { id: "task-17-05", solution_revision: 1 },
+        { id: "task-17-06", solution_revision: 1 },
+        { id: "task-17-07", solution_revision: 1 },
+        { id: "task-17-08", solution_revision: 1 },
+      ],
+    },
   ],
 };
 
@@ -43,6 +56,14 @@ export class TopicCatalogPage {
     await expect(this.page.getByText("Решено задач в темах: 1")).toBeVisible();
     await expect(this.page.locator("[data-topic-card]")).toHaveCount(25);
     await expect(
+      this.page.getByRole("link", {
+        name: "Числовые последовательности",
+        exact: true,
+      }),
+    ).toHaveAttribute("href", "/ege/17-chislovye-posledovatelnosti");
+    await expect(this.page.getByText("Решено 0 из 8")).toBeVisible();
+    await this.expectTopic17Illustration();
+    await expect(
       this.page.locator('[data-topic-status="planned"] a'),
     ).toHaveCount(0);
     await this.page.getByRole("button", { name: "В процессе" }).click();
@@ -65,7 +86,7 @@ export class TopicCatalogPage {
     await expect(this.page.getByRole("searchbox")).toHaveValue("");
     await expect(this.page.locator("[data-topic-card]")).toHaveCount(25);
     await this.page.getByRole("button", { name: "Не начаты" }).click();
-    await expect(this.page.locator("[data-topic-card]")).toHaveCount(1);
+    await expect(this.page.locator("[data-topic-card]")).toHaveCount(2);
     await expect(
       this.page.getByRole("link", {
         name: "Преобразование записей чисел",
@@ -192,9 +213,10 @@ export class TopicCatalogPage {
   async expectReadableWithoutScripts() {
     await this.page.goto("/ege");
     await expect(this.page.locator("[data-topic-card]")).toHaveCount(25);
+    await this.expectTopic17Illustration();
     await expect(
       this.page.locator('[data-topic-status="published"] h2 a'),
-    ).toHaveCount(2);
+    ).toHaveCount(3);
     await expect(
       this.page.locator('[data-topic-status="planned"] a'),
     ).toHaveCount(0);
@@ -203,6 +225,25 @@ export class TopicCatalogPage {
       this.page.getByRole("button", { name: "В процессе" }),
     ).toBeHidden();
     await expectNoHorizontalOverflow(this.page);
+  }
+
+  private async expectTopic17Illustration() {
+    const illustration = this.page
+      .locator("[data-topic-card]")
+      .filter({
+        has: this.page.getByRole("heading", {
+          name: "Числовые последовательности",
+        }),
+      })
+      .locator('img[src="/images/topics/number-sequences.png"]');
+    await expect(illustration).toBeVisible();
+    await expect
+      .poll(() =>
+        illustration.evaluate(
+          (image: HTMLImageElement) => image.complete && image.naturalWidth > 0,
+        ),
+      )
+      .toBe(true);
   }
 
   async expectTextZoom() {

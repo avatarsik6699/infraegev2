@@ -70,7 +70,7 @@
   margin-top: 0;
 }
 
-.body code {
+.body code:not([data-language]) {
   color: var(--notation-color, var(--color-accent-dark));
   font-family: var(--font-data);
   font-size: var(--text-inline-code);

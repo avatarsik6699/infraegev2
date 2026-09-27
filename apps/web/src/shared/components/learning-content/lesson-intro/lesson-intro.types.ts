@@ -4,7 +4,7 @@ export namespace LessonIntroTypes {
     className?: string;
     eyebrow: React.ReactNode;
     summary: string;
-    taskCount: number;
+    taskCount?: number;
     title: string;
   };
 }

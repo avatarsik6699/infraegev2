@@ -21,7 +21,7 @@ This document is the single source of truth for the `ship` workflow. Runtime wra
 
 ## Required reads
 
-- `docs/changes/NN-slug.md` — Backlog, Gate Checks, and Architect Review Notes
+- `docs/changes/NN-slug.md` — Backlog and Gate Checks
 - `docs/STACK.md` — Critical, Full, and Release Gate command tables
 - Current git branch and `docs/changes/` when `NN` is omitted
 
@@ -33,8 +33,8 @@ This document is the single source of truth for the `ship` workflow. Runtime wra
   COMPACTED.md does not participate in active Backlog checks.
 - Resolve the change file and confirm the current branch is its `feature/NN-slug` branch. Stop
   before gating or merging if it is not.
-- Count unchecked Backlog and Architect Review Note items. Either kind blocks shipping regardless
-  of automated results.
+- Count unchecked Backlog items, including findings from local manual review. They block shipping
+  regardless of automated results.
 - Read change-specific `Gate Checks`; applicable overrides add to the selected standard gate.
 
 ### 2. Select and run the gate
@@ -62,8 +62,7 @@ This document is the single source of truth for the `ship` workflow. Runtime wra
    results. Unknown inputs require an explicit coverage decision.
 4. Analyze reports before repository hygiene.
 
-For either mode, PASS requires every executed row to be green and no unchecked Backlog or
-Architect Review Note items.
+For either mode, PASS requires every executed row to be green and no unchecked Backlog items.
 
 ### 3. On FAIL
 
@@ -120,7 +119,6 @@ Gate mode: affected Critical / Full / affected Release (or explicit Full + Relea
   [row] — PASS
   [row] — SKIPPED ([reason])
 Backlog: [count] unresolved
-Architect Review Notes: [count] unresolved
 
 Result: PASS / FAIL
 Merged: feature/[NN]-slug -> main (fast-forward / merge commit)
@@ -140,7 +138,7 @@ Deploy status: [live status via gh, or "not applicable"]
 - Run the Full Gate only for explicit `--full`.
 - Publication safety is not optional: `--release` must pass affected coverage, candidate security
   and all Release Gate phases. Unknown/shared inputs require an explicit coverage decision.
-- Unchecked Backlog or Architect Review Note items block every ship mode.
+- Unchecked Backlog items block every ship mode.
 - Never force-push, rewrite history, or delete branches without explicit confirmation.
 - Push `origin/main` only for `--release` after all mandatory gates pass.
 - When the stack changes, update `docs/STACK.md`, not this playbook.

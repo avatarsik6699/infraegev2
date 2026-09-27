@@ -7,9 +7,8 @@ All workflow logic lives in `docs/playbooks/`; plugin files are thin wrappers.
 
 - `/plan` — select the next scope from project docs or use a brief, refresh `docs/SPEC.md` when
   needed, and scaffold a new change with its feature branch
-- `/work` — implement Backlog tasks (default) or fix unchecked Architect Review Notes
-  (`/work [XX] review`) through the same agent execution loop, absorbing mid-session findings and
-  running one affected-area Critical Gate
+- `/work` — implement Backlog tasks, including findings from local manual review, through
+  the same agent execution loop and run one affected-area Critical Gate
 - `/ship` — run the Critical Gate by default or Full Gate with `--full`, merge to `main`, archive
   the change, and (with `--release`) push and verify the deploy
 

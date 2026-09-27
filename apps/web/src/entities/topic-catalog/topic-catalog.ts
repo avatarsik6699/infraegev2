@@ -124,6 +124,11 @@ const definitions: readonly TopicCatalogTypes.Definition[] = [
   },
   {
     id: "number-sequences",
+    illustration: {
+      src: "/images/topics/number-sequences.png",
+      width: 144,
+      height: 88,
+    },
     taskNumbers: [17],
     title: "Числовые последовательности",
     summary:

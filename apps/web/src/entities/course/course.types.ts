@@ -1,5 +1,5 @@
 export namespace CourseTypes {
-  export type Status = "draft" | "review" | "published";
+  export type Status = "draft" | "published";
   export type AccessTier = "free" | "paid";
   export type Stage = "early_access" | "complete";
 

@@ -18,7 +18,18 @@ export const preobrazovanieZapiseyChiselLessonPublication = Object.freeze({
   status: "published",
 });
 
+export const numberSequencesLessonPublication = Object.freeze({
+  id: "number-sequences",
+  routeSlug: "17-chislovye-posledovatelnosti",
+  taskNumbers: Object.freeze([17]),
+  title: "Числовые последовательности",
+  summary:
+    "Как читать числовые данные и находить отдельные элементы, соседние пары и тройки по условиям задания 17.",
+  status: "published",
+});
+
 export const lessonPublications = Object.freeze([
   rekursiyaLessonPublication,
   preobrazovanieZapiseyChiselLessonPublication,
+  numberSequencesLessonPublication,
 ]);

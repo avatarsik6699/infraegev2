@@ -4,7 +4,7 @@ export type LessonPublication = {
   taskNumbers: readonly [number, ...number[]];
   title: string;
   summary: string;
-  status: "draft" | "review" | "published";
+  status: "draft" | "published";
 };
 
 export const rekursiyaLessonPublication: Readonly<{
@@ -22,6 +22,15 @@ export const preobrazovanieZapiseyChiselLessonPublication: Readonly<{
   taskNumbers: readonly [5];
   title: "Преобразование записей чисел";
   summary: "Как перевести число в заданную систему, изменить запись по алгоритму и безопасно найти исходное число или результат.";
+  status: "published";
+}>;
+
+export const numberSequencesLessonPublication: Readonly<{
+  id: "number-sequences";
+  routeSlug: "17-chislovye-posledovatelnosti";
+  taskNumbers: readonly [17];
+  title: "Числовые последовательности";
+  summary: "Как читать числовые данные и находить отдельные элементы, соседние пары и тройки по условиям задания 17.";
   status: "published";
 }>;
 

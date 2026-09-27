@@ -91,23 +91,6 @@ If this change needs a custom smoke target or other change-specific note, record
 
 ---
 
-## Architect Review Notes
-
-Use this section after manual product, UX, API, or workflow verification. This is the human-facing
-channel for post-implementation fixes.
-
-Add one unchecked checkbox per issue the agent must fix before the change can ship. Keep each item
-independently fixable and describe observed behavior plus expected behavior. If the fix may change
-SPEC/API/schema/security behavior, say so explicitly in the note.
-
-The agent resolves these items through `/work [XX] review`. Leave an item unchecked while it is
-still open. Check it off only after the fix is implemented and re-verified. If manual verification
-found nothing, keep the default checked line below.
-
-- [x] No architect review issues recorded
-
----
-
 ## Implementation Notes
 
 <!-- Optional. The agent adds a short bullet here only when something isn't already visible from

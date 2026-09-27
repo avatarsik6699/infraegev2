@@ -3,10 +3,8 @@
 Implement one or more uncompleted items from a change file through a deterministic agent-only
 cycle: confirm the right branch, read the change contract, explore the codebase, implement,
 verify with the domain's mandated tooling and one compact Critical Gate, and update the change file only after
-the code satisfies the item's contract. An "item" is either a **Backlog task** (`B1`, `F2`, …) or
-an **Architect Review Note** (`R1`, `R2`, …) — both go through the same loop, just with a different
-source location and a different checkbox to flip. Findings the architect reports mid-session are
-appended to the Backlog, not fixed off-list.
+the code satisfies the Backlog item's contract. Findings from the architect's local manual
+review are appended to the same Backlog, implemented and checked before `/ship`.
 
 This document is the single source of truth for the `work` workflow.
 
@@ -20,8 +18,6 @@ In an integrated project, runtime wrappers under `.claude/skills/work/SKILL.md` 
 /work [NN]                 — full change (all unchecked Backlog tasks)
 /work [NN] [ID]             — single Backlog task, e.g. B3
 /work [NN] [group]          — Backlog group, e.g. backend | frontend | infra | data
-/work [NN] review           — all unchecked Architect Review Notes
-/work [NN] R[N]              — one Architect Review Note by generated ID, e.g. R2
 /work [NN] ... --force       — revisit even if checked/resolved
 ```
 
@@ -29,14 +25,11 @@ In an integrated project, runtime wrappers under `.claude/skills/work/SKILL.md` 
 - `ID` — Backlog task identifier, e.g. `B3`, `F1`
 - Group names resolve by prefix: `backend` -> `B*`, `frontend` -> `F*`, `infra` -> `I*`,
   `data` -> `D*`, `other` -> `T*`
-- `review` — targets all unchecked items in § Architect Review Notes instead of § Backlog
-- `R[N]` — targets one Architect Review Note by ordinal, counted top to bottom after ignoring the
-  default `No architect review issues recorded` line
 - `--force` — include checked/resolved items and re-verify/rework them if needed
 
 ## Required reads
 
-- `docs/changes/NN-slug.md` — Backlog checklist, Architect Review Notes, Files, dependencies,
+- `docs/changes/NN-slug.md` — Backlog checklist, Files, dependencies,
   Gate Checks override, existing Implementation Notes
 - `docs/SPEC.md` §3–§4 (and others as relevant) — the actual contract; the change file only
   points here, it doesn't duplicate it
@@ -59,25 +52,20 @@ archive metadata, never an active unit. Read original compacted files only when 
 needs their evidence, using STACK’s history commands. Invalid metadata or missing source blocks
 history-dependent work; fetch the recorded source instead of guessing.
 
-### 2. Validate input and resolve the target source
+### 2. Validate input and resolve the target Backlog
 
 - If no change number, ask: "Which change? e.g. /work 01 or /work 01 B3"
 - Normalize the change number to two digits.
 - If `docs/changes/NN-slug.md` does not exist, stop and report the missing file.
-- Resolve the item source:
-  - Argument is `review` or `R[N]` (or absent but explicitly targeting review) → source is
-    § Architect Review Notes. Ignore the default checked line. Assign stable in-run IDs by
-    checkbox order: `R1`, `R2`, …. Default target set: unchecked notes only; a specific `R[N]`
-    narrows to one.
-  - Otherwise → source is § Backlog. Resolve the target task list from the optional ID/group
-    argument. Default to all unchecked tasks.
-- `--force` widens the default target set to include checked/resolved items.
-- If there are no target items in the resolved source, report that and stop.
+- Resolve the target task list from the optional Backlog ID/group argument. Default to all
+  unchecked tasks.
+- `--force` widens the target set to include checked items.
+- If there are no target items, report that and stop.
 
 ### 3. Backlog append (mid-session findings)
 
-Before or during implementation, if the architect's chat message (not the command arguments)
-describes a finding, bug, or follow-up rather than an instruction about the current item:
+Before or during implementation, if the architect reports a finding, bug, or follow-up from
+local manual review or the current work:
 
 1. Classify it: fix, enhancement, or new task.
 2. Decompose it into one or more concrete items if it isn't already scoped small.
@@ -89,7 +77,7 @@ describes a finding, bug, or follow-up rather than an instruction about the curr
 Do not fix a reported finding silently without adding it to the Backlog first — the checklist must
 stay the accurate record of what happened.
 
-### 4. Dependency check (Backlog tasks only)
+### 4. Dependency check
 
 For each target Backlog task, read its `Depends on:` field.
 
@@ -98,7 +86,6 @@ For each target Backlog task, read its `Depends on:` field.
 - Do not silently add dependency tasks to the queue. The implementation scope must stay explicit.
 - Implement target tasks in dependency order when dependencies are included in the same run.
 
-Architect Review Notes have no dependency field — skip this step for review-note targets.
 
 ### 5. Safety check
 
@@ -114,7 +101,7 @@ If yes, stop before implementation and report:
 
 ```text
 Needs architect confirmation before implementation:
-[ID] — [task or note text]
+[ID] — [task text]
 Reason: [schema/API/security/spec-level contract impact]
 ```
 
@@ -124,18 +111,13 @@ Do not run `/ship` automatically from this workflow.
 
 Before planning code changes for an item:
 
-1. Read the item's contract: for a Backlog task, the item line, dependencies, files, and the
-   relevant `docs/SPEC.md` sections it points to; for a Review Note, the note text and the
-   original Backlog/SPEC context it relates to.
+1. Read the Backlog item, dependencies, files and relevant `docs/SPEC.md` sections it points to.
 2. Inspect the relevant source files, tests, and recent git history for that area.
 3. Decide the current state:
    - `implemented` — contract/fix is already satisfied in code; skip unless `--force`.
    - `partial` — some implementation exists but misses contract details.
-   - `not-started` — required code/tests are absent (Backlog tasks only).
+   - `not-started` — required code/tests are absent.
    - `blocked` — cannot proceed without clarification or missing dependency.
-   - For Review Notes specifically: if the issue cannot be verified or needs a product/architecture
-     decision, set the verdict to `needs-clarification: [specific question]` and do not plan or
-     implement that note.
 
 ### 7. Plan
 
@@ -148,8 +130,7 @@ semantic controls. Keep composition with the page; introduce a reusable mechanis
 real consumer. Compare desktop/mobile and degraded states in the required browser pass. Labs
 and decorative specimens are not part of the current product.
 
-The plan must stay inside the active change's contract (for Backlog tasks) or narrowly inside the
-targeted note (for Review Notes) — do not use a review-note fix to broaden scope.
+The plan must stay inside the active change's Backlog contract.
 
 ### 8. Implement
 
@@ -188,7 +169,7 @@ as if the tool had run.
 
 After implementing the complete target set:
 
-1. Re-read the changed files and confirm every targeted contract/note is satisfied. During
+1. Re-read the changed files and confirm every targeted Backlog contract is satisfied. During
    implementation, run a focused test immediately only when it provides useful feedback; do not
    replay the gate after every individual checkbox.
 2. Run the `docs/STACK.md` **Critical Gate** once, selecting only rows relevant to the touched
@@ -204,10 +185,7 @@ After implementing the complete target set:
    not an automatic expensive Full run. Only the parent runs shared gates; delegated workers
    return focused evidence according to [agent workflow](../runbooks/agent-workflow.md).
 3. Report the commands run and their results; if a check was not run, state the reason.
-4. Mark the item:
-   - Backlog task → check off the matching item in `docs/changes/NN-slug.md` § Backlog.
-   - Review Note → check off the matching item in `docs/changes/NN-slug.md` § Architect Review
-     Notes.
+4. Check off each verified item in `docs/changes/NN-slug.md` § Backlog.
 
 Only check off an item after verification succeeds, the fix is re-verified, or the task is
 explicitly already implemented.
@@ -221,14 +199,13 @@ Do not run the Full Gate or merge/archive. Full Gate requires explicit `/ship --
 
 Change: docs/changes/NN-slug.md
 Branch: feature/NN-slug
-Source: backlog | review
 Scope: [resolved item list]
 
 Backlog additions this session:
   [ID] — [item] (from architect finding)
 
 Done:
-  [ID] — [task/note name]: checked off, tooling used: [list]
+  [ID] — [task name]: checked off, tooling used: [list]
 
 Skipped:
   [ID] — already implemented / already resolved
@@ -243,8 +220,8 @@ Critical Gate:
   [row] — PASS
   [row] — SKIPPED ([reason])
 
-Next: manually verify the product, add any findings to Architect Review Notes or let /work absorb
-them next session, then run `/work [NN] review` or `/ship [NN]` when the change is complete.
+Next: manually verify the production-equivalent local product. Add any findings to the same
+Backlog and run `/work [NN]` again; run `/ship [NN]` when the change is complete.
 ```
 
 ## Rules
@@ -253,10 +230,9 @@ them next session, then run `/work [NN] review` or `/ship [NN]` when the change 
 - Verify by reading actual code and recent git history. A checked checkbox is a hint, not proof.
 - Do not wait for human approval after writing a plan unless the safety check triggers or the
   change explicitly requires confirmation.
-- Do not broaden scope beyond the active change's contract or the targeted review note.
+- Do not broaden scope beyond the active change's Backlog contract.
 - Do not run `/ship`.
 - Do not commit automatically.
-- Do not classify a Review Note as a new Backlog task, bug, chore, or scope item.
 - Follow all rules in `AGENTS.md` and stack-specific rules in `docs/STACK.md`.
 
 ## Done when
@@ -264,7 +240,6 @@ them next session, then run `/work [NN] review` or `/ship [NN]` when the change 
 - Every targeted item is implemented/fixed, skipped as already done, or reported as blocked/needs
   clarification.
 - Done Backlog tasks have their checkboxes checked in `docs/changes/NN-slug.md` § Backlog.
-- Fixed Review Notes have their checkboxes checked in § Architect Review Notes.
 - Any mid-session architect findings are recorded as new Backlog items, not silently fixed.
 - Required tooling for each done item's domain was used, or explicitly reported as skipped with a
   reason.

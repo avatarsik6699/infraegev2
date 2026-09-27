@@ -2,6 +2,20 @@
   "format": 1,
   "materials": [
     {
+      "id": "number-sequences",
+      "sections": [
+        "sequence-from-file",
+        "single-values",
+        "neighbor-pairs",
+        "neighbor-triples",
+        "two-passes",
+        "verify-boundaries"
+      ],
+      "kind": "topic",
+      "status": "published",
+      "course_id": null
+    },
+    {
       "id": "preobrazovanie-zapisey-chisel",
       "sections": [
         "four-stage-model",

@@ -36,9 +36,11 @@ sdamgia.ru, kpolyakov.spb.ru), ни новыми AI-ботами (решают �
    решением и становится частью модели, а не рекламной ссылкой в тексте.
 3. **Проверяемая единица качества.** Каждый TopicLesson или CourseLesson отдельно проходит полный
    путь «теория → практика → результат» и Content Quality Gate. После доказанного early-access
-   flow архитектор может объединить завершение связной программы в один change, но публикация
-   каждого входящего урока всё равно требует содержательного и визуального одобрения. Пока change
-   не завершён, публичный курс честно показывает только действительно доступные уроки.
+   flow архитектор может объединить завершение связной программы в один change. Каждый входящий
+   урок доводится в feature-ветке до вида опубликованного: архитектор проверяет содержание и
+   визуальный результат локально до `/ship`, а найденные проблемы исправляются в том же change.
+   Production получает новые уроки только через выпуск; действующий публичный курс показывает
+   только действительно доступные уроки.
 
 ### 1.2 Goal and Success Metrics
 
@@ -124,9 +126,9 @@ CourseLesson принадлежит Course, но не связан с Topic бе
 |------|-------------|--------------|
 | `Anonymous learner` | Читает теорию, решает практику, получает обратную связь по ответу | Прогресс не сохраняется и не засчитывается после ухода или перезагрузки страницы |
 | `Signed-in learner` | Всё доступное гостю; хранит прогресс уроков и самостоятельной практики в аккаунте и управляет способами входа | Факт входа не даёт прав автора, оператора или платного доступа |
-| `Content author` (архитектор + AI как инструмент) | Пишет типизированную теорию в `apps/web/src/entities/lesson/content/*.lesson.tsx` и практику в `content/practice-bank/bank.json`, ревьюит AI-черновики через git diff; для теории переводит `draft → review → published`, для задач использует операторский импорт | Публикация теории проходит Content Quality Gate (§2.3); импорт задач — по §3 и runbook practice; AI не публикует напрямую |
-| `Architect` | Владеет `docs/SPEC.md`, принимает архитектурные решения, ревьюит контент перед `published` | — |
-| `AI_Agent` | Реализует изменения через `/work`, генерирует черновики контента по промптам с чек-листом из [Content Quality Gate](#23-content-quality-gate-definition-of-done) (§2.3), запускает гейты через `/ship` | Не переводит контент в `published` самостоятельно; нет прямого push в `main` вне `/ship` |
+| `Content author` (архитектор + AI как инструмент) | Пишет типизированную теорию в `apps/web/src/entities/lesson/content/*.lesson.tsx` и практику в `content/practice-bank/bank.json`; в feature-ветке помечает готовый к локальной проверке урок `published` и импортирует задачи обычным операторским путём | Content Quality Gate (§2.3) применяется до `/ship`; импорт задач — по §3 и runbook practice; локальный статус не выпускает материал в production |
+| `Architect` | Владеет `docs/SPEC.md`, принимает архитектурные решения, вручную проверяет готовый локальный урок и сообщает замечания в активный Backlog до `/ship` | — |
+| `AI_Agent` | Реализует изменения через `/work`, готовит и исправляет контент по [Content Quality Gate](#23-content-quality-gate-definition-of-done) (§2.3), запускает предусмотренные проверки | Не делает `/ship` или push в `main` без соответствующей команды; локальный `published` не означает production-выпуск |
 
 ### 2.2 Key Entities
 
@@ -141,6 +143,10 @@ PostgreSQL (§3). Задача самостоятельна и может име
 
 Связи `Topic ↔ CourseLesson` отсутствуют в текущей модели намеренно. Их нельзя имитировать через
 совместное владение Task, prerequisites, unlocks или навигационные рекомендации.
+Уместная ссылка в авторском тексте TopicLesson на уже опубликованный урок Python допускается как
+пояснение используемого приёма. Такая ссылка не создаёт отношение между сущностями, обязательный
+предшествующий урок или общий учебный прогресс; она должна вести к действительно объясняющему
+материалу и проверяться при публикации.
 
 Теория и publication metadata живут в типизированном TSX/модулях `apps/web`; практика и checker
 читаются из PostgreSQL. `content/practice-bank` — проверяемый исходный банк для явного импорта,
@@ -172,16 +178,25 @@ Python подставляет title, summary, route и состав уроков
 
 ### 2.3 Content Quality Gate (Definition of Done)
 
-Для теории и публикации уроков сохраняется следующий human gate. Для банка задач принят отдельный
-операторский путь (§3): подготовка → проверка `validate` без записи → импорт → немедленная доступность.
-Редактор и отдельное согласование публикации задач не вводятся. Автоматическая валидация не
-доказывает корректность решения: содержательная проверка и происхождение — ответственность
-подготовки пакета. Переезд старого упражнения в БД сам по себе не включает его в общий каталог.
+Теория и практика готовятся вместе в feature-ветке. Когда урок готов к ручной проверке, его
+локальная публикационная метка — `published`, а обычный импорт банка делает задачи доступными
+без временного переключения БД. Архитектор проверяет факты, педагогику и визуальный результат
+в таком же пользовательском состоянии, какое будет после выпуска, и сообщает замечания в Backlog
+до `/ship`. Отдельной стадии `review` в данных и маршрутах нет. Production меняется только при
+выпуске и предусмотренном операторском импорте.
 
-Этот checklist обязателен в AI authoring prompt и до `review`; публикация дополнительно требует
-ручной проверки фактов и визуального результата. Формальная автоматизация не заменяет human gate.
+Для банка задач сохраняется путь (§3): подготовка → проверка `validate` без записи → импорт →
+немедленная доступность. Автоматическая валидация не доказывает корректность решения:
+содержательная проверка и происхождение — ответственность подготовки пакета. Переезд старого
+упражнения в БД сам по себе не включает его в общий каталог. Этот checklist обязателен при
+подготовке и локальной проверке каждого урока; формальная автоматизация не заменяет проверку
+архитектора до `/ship`.
 
 **Педагогика:**
+- [ ] Новое понятие сначала вводится через понятную ситуацию и объяснение своими словами;
+  специальный термин, обозначение и код появляются после смысловой подводки. Уже подробно
+  объяснённые основы Python кратко напоминаются по месту и сопровождаются точной ссылкой на
+  опубликованный урок мини-курса без повторного преподавания всего раздела.
 - [ ] Для нового понятия: полный worked example → completion problem → самостоятельная задача;
   помощь сокращается с опытом (expertise reversal). Productive failure допустим только при
   настоящих смежных знаниях, с последующим разбором ошибочного подхода, не для нового синтаксиса.
@@ -360,8 +375,9 @@ snapshot. Public lesson theory, navigation and practice remain SSR-readable with
 `/ege` retains 25 topics ordered by exam number, with 19–21 grouped. Published topics
 link to their existing lesson; planned topics say “Скоро”, with no links or invented counts.
 The reference is `docs/artifacts/references/13_50_05.png`: large numbers, quiet separators,
-topic text and thin progress. Only 5/16 have mathematical miniatures faithful to the reference;
-other topics share a Lucide BookOpen placeholder. These are allowed educational catalog figures.
+topic text and thin progress. Topics 5/16 have mathematical miniatures faithful to the reference;
+topic 17 uses the architect's sequence illustration. Other topics share a Lucide BookOpen
+placeholder. These are allowed educational catalog figures.
 Search matches title, summary and numbers while typing, ignoring case and е/ё. Status filters
 are All, In progress (0 < solved < total), and Not started (solved = 0), with the latter two
 restricted to published topics with available practice. Completed topics remain in All.
@@ -544,7 +560,7 @@ local acceptance alone is not production authorization.
 | Performance budget | Lighthouse-аудит раз в неделю или по запросу сохраняет median LCP ≤4.0s на мобильном 4G-профиле; продуктовая цель остаётся LCP ≤2.8s. CLS < 0.1, INP < 200ms. Измеряются `/`, `/ege`, `/courses`, `/courses/python` и `/ege/16-rekursiya`; cold-load font/layout shifts проверяются отдельно. Lighthouse не является обязательным шагом каждого релиза или изменения CSS; подозрение на регрессию требует целевого измерения, а не автоматического Full Gate. Порог не ослабляется ради ускорения |
 | Observability | Health, structured server logs and scheduled external availability/TLS probe, plus a cookieless browser-analytics beacon (`smotryashchiy`, self-hosted at `sre.infraege.ru`, separate repo/deploy, §7.3) allowlisted in CSP; no cookies, no persistent visitor id, no consent UI, no dashboards or monitoring stack hosted in this repo |
 | Backup / restore | Application DB, files, roles and protected environment in encrypted Restic; 7 daily + 4 weekly + 3 monthly, monthly isolated restore. Same-host backup loss remains accepted until off-site storage exists |
-| SEO | `/`, `/privacy`, published topics, courses и CourseLesson имеют canonical, уникальные metadata, SSR content, общий crawlable social preview и входят в sitemap/prerender; root document публикует browser-only manifest, SVG/PNG/ICO favicon и Apple touch icon из production-знака, а `/` — правдивый `WebSite` JSON-LD без выдуманной Organization; review routes остаются unlisted, `noindex,nofollow` и исключены из public discovery; Lighthouse SEO для публичных маршрутов проходит без ошибок |
+| SEO | `/`, `/privacy`, published topics, courses и CourseLesson имеют canonical, уникальные metadata, SSR content, общий crawlable social preview и входят в sitemap/prerender; root document публикует browser-only manifest, SVG/PNG/ICO favicon и Apple touch icon из production-знака, а `/` — правдивый `WebSite` JSON-LD без выдуманной Organization; черновые маршруты остаются unlisted, `noindex,nofollow` и исключены из public discovery; Lighthouse SEO для публичных маршрутов проходит без ошибок |
 | Mobile / no-JS readability | TopicLesson, Course overview и CourseLesson сохраняют текст, программу, подписи, решения и section anchors в SSR HTML; интерактивная проверка и персональный progress остаются progressive enhancement |
 | Client resilience / API drift | Route failures восстанавливаемы без белого экрана; loading/empty/error/not-found состояния доступны с клавиатуры и скринридера; OpenAPI schema/types drift ломает gate до merge; runtime HTTP имеет timeout/abort и не делает скрытый retry мутаций |
 | Account security | Passwords use a current password-hashing scheme; verification/reset tokens expire and are single-use; sessions are server-revocable, HttpOnly/Secure/SameSite and protected from CSRF. Auth endpoints have targeted abuse limits, generic recovery responses and no sensitive URL/query/access-log leakage. Authentication does not grant editorial, operator or paid access. |

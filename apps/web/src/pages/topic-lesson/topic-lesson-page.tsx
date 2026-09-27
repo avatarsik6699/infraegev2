@@ -78,7 +78,9 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
             accessTier={props.lesson.accessTier}
             eyebrow={topicCatalog.formatTaskNumbers(props.lesson.taskNumbers)}
             summary={props.lesson.summary}
-            taskCount={props.tasks.length}
+            taskCount={
+              props.practiceUnavailable ? undefined : props.tasks.length
+            }
             title={props.lesson.title}
           />
         </div>
@@ -86,11 +88,13 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
           <div className={styles.railContents}>
             <LessonOutline groups={outline} />
             <div className={styles.railSpacer} aria-hidden="true" />
-            <TopicLessonProgress
-              masteryThreshold={props.lesson.masteryThreshold ?? 0.8}
-              lessonId={props.lesson.id}
-              tasks={props.tasks}
-            />
+            {props.practiceUnavailable ? null : (
+              <TopicLessonProgress
+                masteryThreshold={props.lesson.masteryThreshold ?? 0.8}
+                lessonId={props.lesson.id}
+                tasks={props.tasks}
+              />
+            )}
           </div>
         </aside>
 

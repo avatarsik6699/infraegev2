@@ -9,16 +9,16 @@ tooling live in [`docs/STACK.md`](docs/STACK.md).
 
 1. **Backlog Lock**: Do only what is specified in the active `docs/changes/*.md`'s Backlog, plus
    whatever the architect reports mid-session (see Rule 6). Do not assume future changes.
-2. **Agent-Only Implementation**: Code changes happen through `/work` (Backlog tasks by default, or
-   Architect Review Notes via `/work [XX] review`). Humans define intent, scope, and review notes;
-   agents implement.
+2. **Agent-Only Implementation**: Code changes happen through `/work` Backlog tasks. Humans define
+   intent, scope and findings from local manual review; agents append those findings to the same
+   change's Backlog and implement them before `/ship`.
 3. **No Guessing**: If a requirement is genuinely ambiguous and risky, ask a concise question
    instead of inventing behavior.
 4. **Proportional Gates**: `/work` runs one affected-area Critical Gate for its complete target
    set; default `/ship` runs only checks invalidated since that result. Full Gate runs only on
    explicit `/ship --full`. Release requires affected coverage, unpublished-commit secrets,
-   relevant dependency checks, exact-SHA image scan and Release Gate. Unchecked Backlog or
-   `Architect Review Notes` still block shipping.
+   relevant dependency checks, exact-SHA image scan and Release Gate. Unchecked Backlog still
+   blocks shipping.
 5. **Security**: No hardcoded secrets. Use `.env`, environment variables, and typed settings
    appropriate to the stack. Broad scans are weekly/manual; `/ship --release` checks every
    unpublished commit for secrets, audits changed dependencies and verifies applicable images.
@@ -176,9 +176,8 @@ The SDD workflows are defined in `docs/playbooks/`:
 
 - [`plan`](docs/playbooks/plan.md) — select the next scope from project docs or use an explicit
   brief, refresh `docs/SPEC.md` when needed, and scaffold a new change with its feature branch
-- [`work`](docs/playbooks/work.md) — implement Backlog tasks (default) or fix Architect Review
-  Notes (`/work [XX] review`) through the agent execution loop, absorbing mid-session findings and
-  running one affected-area Critical Gate
+- [`work`](docs/playbooks/work.md) — implement Backlog tasks through the agent execution loop,
+  absorbing findings from local manual review and running one affected-area Critical Gate
 - [`ship`](docs/playbooks/ship.md) — run missing/invalidated Critical checks by default or the
   manual Full Gate with `--full`, merge to `main`, archive the change, and (with `--release`)
   push and verify the deploy
@@ -194,9 +193,9 @@ Runtime wrappers are thin stubs. Workflow logic belongs in the playbooks.
 3. Architect approves docs/SPEC.md (first time / on pivots only)
 4. /work NN                            -> agent implements Backlog items, absorbing any
                                           findings the architect reports mid-session
-5. Architect manually verifies product behavior
-6. Architect adds unchecked items to Architect Review Notes if fixes are needed
-7. /work NN review                     -> agent fixes review notes; repeat 5-7 until clean
+5. Architect manually verifies the production-equivalent local result
+6. Architect reports findings; agent appends new Backlog items in the same change
+7. /work NN                            -> agent fixes those items; repeat 5-7 until clean
 8. /ship NN                            -> missing/invalidated Critical checks; on PASS: merge to main, archive
 9. /ship NN --full                     -> manual Full Gate; on PASS: merge to main, archive
 10. /ship NN --release                 -> affected checks + Release Gate; push and verify deploy
@@ -215,7 +214,7 @@ section exists only for what git can't tell you.
 | File | Role | Change cadence |
 |------|------|----------------|
 | `docs/SPEC.md` | Strategic product and system intent | Rarely; architect-approved |
-| `docs/changes/NN-slug.md` | Active unit of work: Backlog, files, gate overrides, review notes, implementation notes | Continuously while active |
+| `docs/changes/NN-slug.md` | Active unit of work: Backlog, files, gate overrides, implementation notes | Continuously while active |
 | `docs/changes/archive/NN-slug.md` | Completed unit of work, kept as history | Written once, by `/ship` |
 | `docs/changes/archive/COMPACTED.md` | Verified historical checkpoint and immutable source index | Only an approved compaction change |
 | `docs/STACK.md` | Stack-specific commands, Critical/Full/Release gate tables, required tooling | When tooling changes |

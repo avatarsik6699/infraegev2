@@ -1,6 +1,6 @@
 // TSX-as-content authoring contract (docs/SPEC.md §3).
 export namespace LessonContent {
-  export type Status = "draft" | "review" | "published";
+  export type Status = "draft" | "published";
   export type AccessTier = "free" | "paid";
 
   export type CheckpointItem = {

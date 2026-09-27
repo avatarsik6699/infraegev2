@@ -95,6 +95,9 @@
   display: grid;
   place-items: center;
 }
+.card[data-topic-id="number-sequences"] .illustration > * {
+  transform: scale(1.12);
+}
 .placeholder {
   color: var(--color-muted);
 }
