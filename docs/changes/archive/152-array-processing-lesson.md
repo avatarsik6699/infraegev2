@@ -7,7 +7,7 @@
 | Change | `152` |
 | Slug | `array-processing-lesson` |
 | Title | Sorting and selection lesson |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/152-array-processing-lesson` |
 
 ---
@@ -84,7 +84,7 @@ See `docs/SPEC.md` §1.4, §2.2–2.3, §3–§5, `docs/FRONTEND.md` §5 and §9
 
 ## Gate Checks
 
-Use the affected Critical Gate from [`docs/STACK.md`](../STACK.md): format, web lint/typecheck, focused web/API/content tests, changed-file LSP and repository hygiene. Playwriter checks the locally published page and catalog. No Full Gate or production release is implied.
+Use the affected Critical Gate from [`docs/STACK.md`](../../STACK.md): format, web lint/typecheck, focused web/API/content tests, changed-file LSP and repository hygiene. Playwriter checks the locally published page and catalog. No Full Gate or production release is implied.
 
 ---
 
