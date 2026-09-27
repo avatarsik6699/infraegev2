@@ -49,18 +49,23 @@ export class TopicLessonPage {
     );
   }
 
-  private async expectEightTaskPractice(noJavaScript: boolean): Promise<void> {
+  private async expectTaskPractice(
+    noJavaScript: boolean,
+    count = 8,
+  ): Promise<void> {
     await expect(this.page.locator("[data-practice-form]")).toHaveCount(1);
     if (noJavaScript) {
       await expect(this.page.locator("[data-practice-form] form")).toHaveCount(
-        8,
+        count,
       );
       await expect(
         this.page.locator("[data-practice-form] [data-unenhanced-accordion]"),
-      ).toHaveCount(8);
+      ).toHaveCount(count);
     } else {
-      await expect(this.page.locator("[data-practice-task]")).toHaveCount(8);
-      await expect(this.page.getByRole("tab")).toHaveCount(8);
+      await expect(this.page.locator("[data-practice-task]")).toHaveCount(
+        count,
+      );
+      await expect(this.page.getByRole("tab")).toHaveCount(count);
     }
   }
 
@@ -351,7 +356,7 @@ export class TopicLessonPage {
       name: "Дополнить условие второго прохода",
     });
     await this.expectCodeContrast(partialExample);
-    await this.expectEightTaskPractice(noJavaScript);
+    await this.expectTaskPractice(noJavaScript);
     if (!noJavaScript) {
       await expect(this.page.locator("[data-result-progress]")).toContainText(
         "0 / 8",
@@ -387,7 +392,7 @@ export class TopicLessonPage {
         name: "За один проход найти длину завершённого выражения",
       }),
     );
-    await this.expectEightTaskPractice(noJavaScript);
+    await this.expectTaskPractice(noJavaScript);
     await expect(this.page.locator("#practice a[download]")).toHaveCount(8);
     if (!noJavaScript) {
       await this.expectStudyNavigationAndAccessibility();
@@ -430,8 +435,57 @@ export class TopicLessonPage {
       }),
     );
     await expect(this.page.getByLabel("Проверьте себя")).toHaveCount(1);
-    await this.expectEightTaskPractice(noJavaScript);
+    await this.expectTaskPractice(noJavaScript);
     await expect(this.page.locator("#practice a[download]")).toHaveCount(0);
+    await this.expectNoHorizontalOverflow();
+  }
+
+  async expectPublishedArrayProcessingContent(
+    noJavaScript = false,
+  ): Promise<void> {
+    await this.expectPublishedTopicIdentity();
+    for (const anchor of [
+      "sorted-order",
+      "file-records",
+      "capacity-selection",
+      "secondary-optimum",
+      "event-stream",
+      "independent-check",
+    ]) {
+      await expect(this.page.locator("#" + anchor)).toHaveCount(1);
+    }
+    for (const slug of ["spiski", "sortirovka-i-poisk", "fayly", "slovari"]) {
+      await expect(
+        this.page.locator('#theory a[href="/courses/python/' + slug + '"]'),
+      ).not.toHaveCount(0);
+    }
+    await this.expectCodeContrast(
+      this.page.getByRole("group", {
+        name: "Сортировать целые записи по очкам",
+      }),
+    );
+    await expect(this.page.getByLabel("Проверьте себя")).toHaveCount(1);
+    await this.expectTaskPractice(noJavaScript, 7);
+    if (noJavaScript) {
+      await expect(this.page.locator("#practice a[download]")).toHaveCount(4);
+    } else {
+      await expect(this.page.locator("[data-result-progress]")).toContainText(
+        "0 / 7",
+      );
+      await this.page
+        .getByRole("tab", { name: /Найдите третью запись после сортировки/ })
+        .click();
+      await expect(this.page.locator("#practice a[download]")).toHaveCount(4);
+      await expect(
+        this.page.locator('[data-practice-task="task-26-04"] a[download]'),
+      ).toBeVisible();
+      await this.page
+        .getByRole("tab", { name: /Найдите клиента с наибольшим объёмом/ })
+        .click();
+      await expect(
+        this.page.locator('[data-practice-task="task-26-07"] a[download]'),
+      ).toBeVisible();
+    }
     await this.expectNoHorizontalOverflow();
   }
 

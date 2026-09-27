@@ -52,4 +52,13 @@ export const integerProcessingLessonPublication: Readonly<{
   status: "published";
 }>;
 
+export const arrayProcessingLessonPublication: Readonly<{
+  id: "array-processing";
+  routeSlug: "26-sortirovka-i-otbor";
+  taskNumbers: readonly [26];
+  title: "Обработка данных: сортировка и отбор";
+  summary: string;
+  status: "published";
+}>;
+
 export const lessonPublications: readonly LessonPublication[];

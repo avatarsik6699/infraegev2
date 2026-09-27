@@ -42,6 +42,8 @@ type AppFixtures = {
   noJavaScriptStringProcessingLessonPage: TopicLessonPage;
   integerProcessingLessonPage: TopicLessonPage;
   noJavaScriptIntegerProcessingLessonPage: TopicLessonPage;
+  arrayProcessingLessonPage: TopicLessonPage;
+  noJavaScriptArrayProcessingLessonPage: TopicLessonPage;
 };
 
 const numberRecordLessonConfig = {
@@ -69,6 +71,13 @@ const integerProcessingLessonConfig = {
   title: "Обработка целых чисел",
   taskNumber: 25,
   taskCount: 8,
+};
+
+const arrayProcessingLessonConfig = {
+  route: "/ege/26-sortirovka-i-otbor",
+  title: "Обработка данных: сортировка и отбор",
+  taskNumber: 26,
+  taskCount: 7,
 };
 
 async function useNoJavaScriptTopicLesson(
@@ -225,6 +234,9 @@ export const test = base.extend<AppFixtures>({
   integerProcessingLessonPage: async ({ page }, use) => {
     await use(new TopicLessonPage(page, integerProcessingLessonConfig));
   },
+  arrayProcessingLessonPage: async ({ page }, use) => {
+    await use(new TopicLessonPage(page, arrayProcessingLessonConfig));
+  },
   noJavaScriptTopicLessonPage: async ({ baseURL, browser }, use) => {
     await useNoJavaScriptTopicLesson(browser, baseURL, use);
   },
@@ -261,6 +273,14 @@ export const test = base.extend<AppFixtures>({
       baseURL,
       use,
       integerProcessingLessonConfig,
+    );
+  },
+  noJavaScriptArrayProcessingLessonPage: async ({ baseURL, browser }, use) => {
+    await useNoJavaScriptTopicLesson(
+      browser,
+      baseURL,
+      use,
+      arrayProcessingLessonConfig,
     );
   },
 });

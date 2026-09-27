@@ -5,6 +5,7 @@ export { findLessonByRouteSlug } from "./content/lesson-registry";
 export { numberSequencesLesson } from "./content/number-sequences.lesson";
 export { stringProcessingLesson } from "./content/string-processing.lesson";
 export { integerProcessingLesson } from "./content/integer-processing.lesson";
+export { arrayProcessingLesson } from "./content/array-processing.lesson";
 export { defineLesson } from "./lib/define-lesson";
 export type { LessonContent } from "./lib/define-lesson.types";
 export type { LessonTypes } from "./lesson.types";

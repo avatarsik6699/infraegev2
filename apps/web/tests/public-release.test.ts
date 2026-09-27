@@ -60,6 +60,13 @@ describe("public release metadata", () => {
         title: "Обработка целых чисел",
         status: "published",
       }),
+      expect.objectContaining({
+        id: "array-processing",
+        routeSlug: "26-sortirovka-i-otbor",
+        taskNumbers: [26],
+        title: "Обработка данных: сортировка и отбор",
+        status: "published",
+      }),
     ]);
     expect(
       lessonPublications
@@ -71,6 +78,7 @@ describe("public release metadata", () => {
       "17-chislovye-posledovatelnosti",
       "24-obrabotka-simvolnyh-strok",
       "25-obrabotka-celyh-chisel",
+      "26-sortirovka-i-otbor",
     ]);
     expect(new Set(lessonPublications.map((lesson) => lesson.id)).size).toBe(
       lessonPublications.length,
@@ -108,6 +116,7 @@ describe("public release metadata", () => {
       ["number-sequences", "17-chislovye-posledovatelnosti"],
       ["string-processing", "24-obrabotka-simvolnyh-strok"],
       ["integer-processing", "25-obrabotka-celyh-chisel"],
+      ["array-processing", "26-sortirovka-i-otbor"],
     ]);
     expect(topicCatalog.formatTaskNumbers([5])).toBe("Задание 5");
     expect(topicCatalog.formatTaskNumbers([19, 20, 21])).toBe("Задания 19–21");

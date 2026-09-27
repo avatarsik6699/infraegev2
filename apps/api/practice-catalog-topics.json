@@ -35,6 +35,13 @@
     "material_ids": []
   },
   {
+    "id": "ege-26",
+    "label": "26 номер. Обработка данных: сортировка и отбор",
+    "group": "ЕГЭ",
+    "exam_number": 26,
+    "material_ids": []
+  },
+  {
     "id": "python-start",
     "label": "Python · Старт и отладка",
     "group": "Мини-курсы",

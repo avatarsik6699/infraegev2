@@ -188,10 +188,15 @@ const definitions: readonly TopicCatalogTypes.Definition[] = [
   },
   {
     id: "array-processing",
+    illustration: {
+      src: "/images/topics/array-processing.svg",
+      width: 144,
+      height: 88,
+    },
     taskNumbers: [26],
-    title: "Обработка и сортировка массивов",
+    title: "Обработка данных: сортировка и отбор",
     summary:
-      "Однопроходные алгоритмы, поиск экстремумов и упорядочивание данных.",
+      "Чтение файлов, сортировка записей, отбор при ограничении и обработка событий.",
   },
   {
     id: "data-analysis",

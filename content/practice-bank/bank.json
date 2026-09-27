@@ -113027,6 +113027,669 @@
         }
       },
       "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-26-01",
+        "title": "Найдите третье значение после сортировки",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 6,
+        "answer_instruction": "Введите одно целое число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Дан список чисел: `18, 12, 18, 7, 12, 20`. Расположите значения по возрастанию и найдите число, стоящее на третьем месте. Одинаковые числа остаются в списке: каждое занимает отдельное место."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сначала запишите весь список после упорядочивания, не удаляя повторения. Затем считайте места с единицы: первое, второе, третье."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "После сортировки получается `7, 12, 12, 18, 18, 20`. Повторяющиеся числа не склеиваются: обе двенадцатки занимают свои позиции. На третьем месте стоит `12`. Нельзя брать `values[3]`: в Python первая позиция имеет индекс 0, поэтому третьему месту соответствует индекс 2."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "values = [18, 12, 18, 7, 12, 20]\nvalues.sort()\nprint(values[2])",
+              "caption": "Один из вариантов решения"
+            }
+          }
+        ],
+        "skills": ["sorting", "selection"],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 0,
+            "material_id": "array-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "material_id": "array-processing",
+            "section": "sorted-order",
+            "label": "Повторите этот приём"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "kind": "original",
+            "role": "original",
+            "primary": true,
+            "title": null,
+            "author": null,
+            "original_id": null,
+            "url": null,
+            "year": null,
+            "adaptation": null,
+            "is_public": true
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["12"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-26-02",
+        "title": "Возьмите как можно больше предметов",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 8,
+        "answer_instruction": "Введите одно целое число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Есть предметы массой `7, 3, 5, 4, 6, 2` кг. Вместе можно взять не более `13` кг. Выберите предметы так, чтобы их количество было наибольшим. Какое количество предметов удастся взять?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Для наибольшего количества сначала рассматривайте самые лёгкие предметы. После каждого добавления проверяйте, не превысит ли общая масса 13 кг."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "После сортировки массы идут так: `2, 3, 4, 5, 6, 7`. Берём три лёгких предмета: их общая масса равна 9 кг. Следующий по лёгкости весит 5 кг, а `9 + 5 = 14`, поэтому четвёртый предмет уже не помещается. Любые четыре предмета весят не меньше этих четырёх лёгких: `2 + 3 + 4 + 5 = 14`. Значит, три — максимально возможное количество. Если начинать с тяжёлых предметов, можно получить меньше вещей."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "weights = [7, 3, 5, 4, 6, 2]\ncapacity = 13\nweights.sort()\nselected = []\ntotal = 0\nfor weight in weights:\n    if total + weight <= capacity:\n        selected.append(weight)\n        total += weight\nprint(len(selected))",
+              "caption": "Один из вариантов решения"
+            }
+          }
+        ],
+        "skills": ["sorting", "selection"],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 1,
+            "material_id": "array-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "material_id": "array-processing",
+            "section": "capacity-selection",
+            "label": "Повторите этот приём"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "kind": "original",
+            "role": "original",
+            "primary": true,
+            "title": null,
+            "author": null,
+            "original_id": null,
+            "url": null,
+            "year": null,
+            "adaptation": null,
+            "is_public": true
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["3"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-26-03",
+        "title": "Увеличьте последний выбранный размер",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 10,
+        "answer_instruction": "Введите одно целое число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Размеры деталей: `2, 3, 4, 5, 7, 8, 9, 10`. В коробку помещается не более `18` единиц. Сначала нужно взять максимальное возможное количество деталей, а затем среди наборов с таким количеством сделать размер самой большой детали максимальным. Каков этот размер?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Пять самых маленьких деталей уже весят больше 18. Поэтому начните с четырёх самых маленьких. Сохраните первые три, а последнюю заменяйте следующей по размеру деталью, пока коробка это позволяет."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Пять самых маленьких размеров дают `2 + 3 + 4 + 5 + 7 = 21`, поэтому взять пять деталей нельзя. Четыре самые маленькие весят 14, значит, максимальное количество равно четырём. Чтобы увеличить наибольшую деталь, оставим три самых маленьких: `2 + 3 + 4 = 9`. Вместо детали размера 5 можно поставить 7, 8 или 9: итоговые массы будут 16, 17 и 18. Деталь размера 10 дала бы 19 и не поместилась бы. Значит, наибольший возможный размер — 9. Простая жадная остановка после выбора первых четырёх оставила бы размер 5 и пропустила улучшение."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "sizes = [2, 3, 4, 5, 7, 8, 9, 10]\ncapacity = 18\nsizes.sort()\ncount = 4\nchosen = sizes[:count]\ntotal = sum(chosen)\nfor candidate in sizes[count:]:\n    new_total = total - chosen[-1] + candidate\n    if new_total <= capacity:\n        chosen[-1] = candidate\n        total = new_total\nprint(chosen[-1])",
+              "caption": "Один из вариантов решения"
+            }
+          }
+        ],
+        "skills": ["sorting", "selection"],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 2,
+            "material_id": "array-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "material_id": "array-processing",
+            "section": "secondary-optimum",
+            "label": "Повторите этот приём"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "kind": "original",
+            "role": "original",
+            "primary": true,
+            "title": null,
+            "author": null,
+            "original_id": null,
+            "url": null,
+            "year": null,
+            "adaptation": null,
+            "is_public": true
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["9"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-26-04",
+        "title": "Найдите третью запись после сортировки",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 8,
+        "answer_instruction": "Введите одно целое число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Первая строка файла сообщает количество записей; далее в каждой строке указаны номер и набранные очки. Первая строка не участвует в сортировке. Отсортируйте записи по убыванию очков. Если очки равны, оставьте такие записи в исходном порядке. Какой номер записан в третьей строке после сортировки?"
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "input-file"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Переставляйте записи целиком, а не только числа очков. При одинаковом количестве очков более ранняя строка файла должна остаться раньше."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Первая строка 8 — это количество записей, а не номер с очками. Сначала идёт запись 18 с 95 очками. Далее стоят три записи с 91 очком — 12, 14 и 16 — в том же порядке, что и в файле. Третья запись после сортировки имеет номер 14. Если отсортировать только столбец с очками, связь с номерами потеряется; если развернуть весь список после сортировки, порядок равных очков может измениться."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "records = []\nwith open(\"records-26-04.txt\", encoding=\"utf-8\") as file:\n    file.readline()  # пропускаем строку с количеством записей\n    for line in file:\n        parts = line.split()\n        number = int(parts[0])\n        points = int(parts[1])\n        records.append([number, points])\nrecords.sort(key=lambda record: record[1], reverse=True)\nprint(records[2][0])",
+              "caption": "Один из вариантов решения"
+            }
+          }
+        ],
+        "skills": ["sorting", "file-processing"],
+        "exam_numbers": [],
+        "files": [
+          {
+            "id": "input-file",
+            "purpose": "attachment",
+            "checksum": "f314402a6934001c2484ca6d36ba4c08851fab93666e9ea08a02c5a1f25ba5c0",
+            "filename": "records-26-04.txt",
+            "description": "Номер записи и очки, по одной записи в строке",
+            "attribution": null
+          }
+        ],
+        "lessons": [
+          {
+            "position": 3,
+            "material_id": "array-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "material_id": "array-processing",
+            "section": "file-records",
+            "label": "Повторите этот приём"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "kind": "original",
+            "role": "original",
+            "primary": true,
+            "title": null,
+            "author": null,
+            "original_id": null,
+            "url": null,
+            "year": null,
+            "adaptation": null,
+            "is_public": true
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["14"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-26-05",
+        "title": "Посчитайте группы, достигшие порога к сроку",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 3,
+        "estimated_minutes": 10,
+        "answer_instruction": "Введите одно целое число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Файл содержит упорядоченные по времени события в формате `HH:MM`: время, код группы и добавленное число баллов. Для каждой группы складывайте баллы до 10:00 включительно. Сколько групп набрали к этому времени не меньше 7 баллов? События после 10:00 не учитываются."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "input-file"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Заведите отдельную сумму для каждой группы. Когда событие не позже 10:00, прибавьте его баллы к сумме этой группы. После чтения файла посчитайте группы с суммой от 7 и выше."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В строке `time, group, points = line.split()` три части строки по порядку попадают в три переменные: время, код группы и баллы. До 10:00 включительно группа A получает 4 и 3 балла, всего 7. Группа B получает только 6 баллов, потому что её следующие 5 записаны после срока. Группа C получает 9 баллов ровно в 10:00; событие на границе включается. Условие выполнили A и C, всего две группы. Если прочитать весь файл без проверки срока, группа B тоже наберёт 11 и ответ ошибочно станет 3."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "totals = {}\nwith open(\"events-26-05.txt\", encoding=\"utf-8\") as file:\n    for line in file:\n        time, group, points = line.split()\n        if time <= \"10:00\":\n            if group not in totals:\n                totals[group] = 0\n            totals[group] += int(points)\ncount = 0\nfor group in totals:\n    if totals[group] >= 7:\n        count += 1\nprint(count)",
+              "caption": "Один из вариантов решения"
+            }
+          }
+        ],
+        "skills": ["sorting", "file-processing"],
+        "exam_numbers": [],
+        "files": [
+          {
+            "id": "input-file",
+            "purpose": "attachment",
+            "checksum": "fe43dac2222f76c80461affa9d2a832e09e171afc01a0aa83da57688ba6c0803",
+            "filename": "events-26-05.txt",
+            "description": "События групп: время, код группы и добавленные баллы",
+            "attribution": null
+          }
+        ],
+        "lessons": [
+          {
+            "position": 4,
+            "material_id": "array-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "material_id": "array-processing",
+            "section": "event-stream",
+            "label": "Повторите этот приём"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "kind": "original",
+            "role": "original",
+            "primary": true,
+            "title": null,
+            "author": null,
+            "original_id": null,
+            "url": null,
+            "year": null,
+            "adaptation": null,
+            "is_public": true
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["2"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-26-06",
+        "title": "Определите две самые большие завершённые копии",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 3,
+        "estimated_minutes": 12,
+        "answer_instruction": "Введите два целых числа через пробел: сначала наибольший размер, затем второй по величине.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сервер накапливает данные запросов в буфере вместимостью 10 условных единиц. В файле перечислены запросы по времени в формате `HH:MM:SS`: время и размер. Запрос добавляется в буфер, если после добавления размер не превысит 10. Если не помещается, сервер сначала завершает копию всего текущего буфера в момент этого запроса, очищает буфер, а затем кладёт запрос в новый буфер. Учитывайте только копии, завершённые не позже 11:59:59 включительно. При одинаковом времени строки обрабатываются в порядке файла. Выведите размеры двух наибольших учитываемых копий: сначала больший, затем следующий."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "input-file"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Проверяйте каждый запрос в указанном порядке. Равенство вместимости допустимо: при сумме ровно 10 копия не создаётся. Копия появляется только если очередной запрос уже не помещается; время такой копии берите из строки этого запроса. Событие после срока может запустить копию, но она не входит в ответ."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В строке `time, size = line.split()` две части строки по порядку попадают в переменные времени и размера; размер затем превращается в число. Первые запросы 6 и 4 заполняют буфер ровно до 10; это допустимо и копию не создаёт. Запрос 3 в 09:20 не помещается, поэтому завершается копия размера 10. Запросы 1 и 1 доводят новый буфер до 5; запрос 6 в 10:30 завершает копию размера 5. К началу строк 11:59:59 в буфере лежат 6 единиц. По первой строке этого времени запрос 8 не помещается, поэтому завершается копия размера 6; затем запрос 2 заполняет буфер до 10. Запрос в 12:00 запускает ещё одну копию размера 10, но время завершения позже срока, поэтому её исключаем. До срока завершены копии размеров 10, 5 и 6; два наибольших — 10 и 6. Если переставить две строки с временем 11:59:59, вместо копии размера 6 получится копия размера 8 и ошибочный ответ 10 8. Поэтому порядок файла является частью условия."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "capacity = 10\ncutoff = \"11:59:59\"\nbuffer = 0\ncompleted = []\nwith open(\"backup-events-26-06.txt\", encoding=\"utf-8\") as file:\n    for line in file:\n        time, size = line.split()\n        size = int(size)\n        if buffer + size > capacity:\n            if time <= cutoff:\n                completed.append(buffer)\n            buffer = 0\n        buffer += size\ncompleted.sort(reverse=True)\nprint(completed[0], completed[1])",
+              "caption": "Один из вариантов решения"
+            }
+          }
+        ],
+        "skills": ["sorting", "file-processing"],
+        "exam_numbers": [],
+        "files": [
+          {
+            "id": "input-file",
+            "purpose": "attachment",
+            "checksum": "0f023df107a27f47ddbafa76c7d8ec1e0da9ab94cf6ddce86b6785834f96c28a",
+            "filename": "backup-events-26-06.txt",
+            "description": "Упорядоченные запросы для пошаговой симуляции буфера",
+            "attribution": null
+          }
+        ],
+        "lessons": [
+          {
+            "position": 5,
+            "material_id": "array-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "material_id": "array-processing",
+            "section": "independent-check",
+            "label": "Повторите этот приём"
+          },
+          {
+            "material_id": "array-processing",
+            "section": "event-stream",
+            "label": "Сверьте порядок обработки"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "kind": "original",
+            "role": "original",
+            "primary": true,
+            "title": null,
+            "author": null,
+            "original_id": null,
+            "url": null,
+            "year": null,
+            "adaptation": null,
+            "is_public": true
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["10 6"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-26-07",
+        "title": "Найдите клиента с наибольшим объёмом и сумму двух копий",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 3,
+        "estimated_minutes": 14,
+        "answer_instruction": "Введите два целых числа через пробел: сначала номер клиента с наибольшим суммарным объёмом запросов, затем сумму размеров двух наибольших копий, завершённых не позже 11:59:59 включительно.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сервер обрабатывает запросы клиентов и накапливает их данные в буфере вместимостью 10 условных единиц. В приложенном файле каждая строка содержит время `HH:MM:SS`, номер клиента и объём запроса. Строки уже упорядочены по времени; строки с одинаковым временем обрабатываются в порядке файла. Клиентский итог включает объёмы всех запросов, в том числе запросов после 11:59:59. Если очередной запрос не помещается в буфер, сервер сначала завершает копию всего уже накопленного буфера в момент этого запроса, очищает буфер, а затем добавляет запрос в новый буфер. Ровно 10 единиц помещаются. Для второго числа учитывайте только копии, завершённые не позже 11:59:59 включительно. Найдите номер клиента со строго наибольшим суммарным объёмом запросов и сумму размеров двух наибольших копий, учитываемых для второго числа."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "input-file"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сначала заведите отдельную сумму для каждого клиента и добавляйте к ней объём каждой строки. Запрос после срока тоже влияет на итог клиента. Для копий отдельно пройдите строки по порядку: при переполнении запомните размер старого буфера и проверьте время этой строки, затем очистите буфер и добавьте запрос. При равенстве вместимости переполнения нет."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Проверьте границу времени: запрос в 11:59:59 включён, а запрос в 12:00:00 уже нет для списка завершённых копий. При этом объём запроса в 12:00:00 всё равно входит в сумму его клиента. Сначала выберите двух наибольших размеров копий и сложите их."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Для суммы по клиентам просматриваем все восемь строк, не останавливаясь на сроке. Клиент 4 получил `6 + 3 = 9` единиц, клиент 2 — `4 + 4 + 2 = 10`, клиент 1 — `5 + 7 = 12`, клиент 3 — `3`. Последние 2 единицы клиента 2 переданы в 12:00:00: они не участвуют в результате по копиям, но входят в итог клиента. Строго наибольший итог — 12 у клиента 1. В коде `client_totals.get(client_id, 0)` берёт прежнюю сумму клиента или ноль, если он встретился впервые; `client_totals.items()` даёт пары «номер клиента — сумма». Оба приёма подробно показаны в связанном уроке Python о словарях."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Теперь отдельно проследим за буфером. Запросы 6 и 4 заполняют его ровно до 10. Запрос 3 в 09:20 не помещается, поэтому в этот момент завершается копия размера 10. После первой копии в новом буфере лежит запрос объёмом 3. Запрос объёмом 5 доводит его до 8; запрос объёмом 4 в 10:05 уже не помещается, и завершается копия размера 8. Затем в буфере лежат 4 единицы. Запрос 7 в 11:59:59 не помещается: завершается копия размера 4, а новый буфер получает 7. Следующий запрос того же времени добавляет 3, ровно заполняя буфер до 10. Наконец, запрос 2 в 12:00:00 запускает копию размера 10, но она завершена после срока и не учитывается. До срока завершены копии `10`, `8` и `4`; две наибольшие дают `10 + 8 = 18`."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "capacity = 10\ncutoff = \"11:59:59\"\nclient_totals = {}\nbuffer = 0\ncompleted = []\n\nwith open(\"client-backups-26-07.txt\", encoding=\"utf-8\") as file:\n    for line in file:\n        time, client_id, raw_volume = line.split()\n        volume = int(raw_volume)\n\n        client_totals[client_id] = client_totals.get(client_id, 0) + volume\n\n        if buffer + volume > capacity:\n            if time <= cutoff:\n                completed.append(buffer)\n            buffer = 0\n        buffer += volume\n\nbest_client = \"\"\nbest_total = -1\nfor client_id, total in client_totals.items():\n    if total > best_total:\n        best_client = client_id\n        best_total = total\n\ncompleted.sort(reverse=True)\nprint(best_client, completed[0] + completed[1])",
+              "caption": "Один из вариантов решения"
+            }
+          }
+        ],
+        "skills": ["sorting", "file-processing"],
+        "exam_numbers": [],
+        "files": [
+          {
+            "id": "input-file",
+            "purpose": "attachment",
+            "checksum": "1138ce52acb349f9721778bf7623693b066e64e1ad65b4c8e1ec6cebcb8d1e93",
+            "filename": "client-backups-26-07.txt",
+            "description": "Хронологические запросы клиентов для подсчёта объёмов и симуляции буфера",
+            "attribution": null
+          }
+        ],
+        "lessons": [
+          {
+            "position": 6,
+            "material_id": "array-processing"
+          }
+        ],
+        "theory_links": [
+          {
+            "material_id": "array-processing",
+            "section": "event-stream",
+            "label": "Повторите обработку журнала событий"
+          },
+          {
+            "material_id": "array-processing",
+            "section": "independent-check",
+            "label": "Сверьте оба результата"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "kind": "original",
+            "role": "original",
+            "primary": true,
+            "title": null,
+            "author": null,
+            "original_id": null,
+            "url": null,
+            "year": null,
+            "adaptation": null,
+            "is_public": true
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["1 18"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
     }
   ],
   "files": [
@@ -113141,9 +113804,51 @@
       "mime_type": "text/plain",
       "size_bytes": 133247,
       "storage_key": "06db60344dd39c2f873ce19199684d37d2450224aa1d522170da27d9b4fa1e26"
+    },
+    {
+      "checksum": "f314402a6934001c2484ca6d36ba4c08851fab93666e9ea08a02c5a1f25ba5c0",
+      "storage_key": "f314402a6934001c2484ca6d36ba4c08851fab93666e9ea08a02c5a1f25ba5c0",
+      "format": "txt",
+      "mime_type": "text/plain",
+      "size_bytes": 50
+    },
+    {
+      "checksum": "fe43dac2222f76c80461affa9d2a832e09e171afc01a0aa83da57688ba6c0803",
+      "storage_key": "fe43dac2222f76c80461affa9d2a832e09e171afc01a0aa83da57688ba6c0803",
+      "format": "txt",
+      "mime_type": "text/plain",
+      "size_bytes": 60
+    },
+    {
+      "checksum": "0f023df107a27f47ddbafa76c7d8ec1e0da9ab94cf6ddce86b6785834f96c28a",
+      "storage_key": "0f023df107a27f47ddbafa76c7d8ec1e0da9ab94cf6ddce86b6785834f96c28a",
+      "format": "txt",
+      "mime_type": "text/plain",
+      "size_bytes": 110
+    },
+    {
+      "format": "txt",
+      "checksum": "1138ce52acb349f9721778bf7623693b066e64e1ad65b4c8e1ec6cebcb8d1e93",
+      "mime_type": "text/plain",
+      "size_bytes": 104,
+      "storage_key": "1138ce52acb349f9721778bf7623693b066e64e1ad65b4c8e1ec6cebcb8d1e93"
     }
   ],
   "materials": [
+    {
+      "id": "array-processing",
+      "sections": [
+        "sorted-order",
+        "file-records",
+        "capacity-selection",
+        "secondary-optimum",
+        "event-stream",
+        "independent-check"
+      ],
+      "kind": "topic",
+      "status": "published",
+      "course_id": null
+    },
     {
       "id": "integer-processing",
       "sections": [

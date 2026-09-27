@@ -2,6 +2,20 @@
   "format": 1,
   "materials": [
     {
+      "id": "array-processing",
+      "sections": [
+        "sorted-order",
+        "file-records",
+        "capacity-selection",
+        "secondary-optimum",
+        "event-stream",
+        "independent-check"
+      ],
+      "kind": "topic",
+      "status": "published",
+      "course_id": null
+    },
+    {
       "id": "integer-processing",
       "sections": [
         "integer-range",

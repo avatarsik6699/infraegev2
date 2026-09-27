@@ -101,6 +101,9 @@
 .card[data-topic-id="integer-processing"] .illustration > * {
   transform: scale(1.12);
 }
+.card[data-topic-id="array-processing"] .illustration > * {
+  transform: scale(1.12);
+}
 .placeholder {
   color: var(--color-muted);
 }
@@ -245,6 +248,9 @@
   }
   .card[data-topic-id="integer-processing"] .illustration > * {
     transform: scale(1.4);
+  }
+  .card[data-topic-id="array-processing"] .illustration > * {
+    transform: scale(1.25);
   }
   .cardContent {
     grid-column: 1 / -1;

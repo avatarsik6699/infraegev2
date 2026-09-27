@@ -257,7 +257,7 @@ Use the existing SearchField, Button, Progress, ActionLink, Typography and PageC
 SearchField supports optional controlled value/onValueChange without changing existing practice
 submission semantics. Topic status buttons use pressed semantics; targets remain at least 40px.
 Topic progress scopes `--progress-height: 8px` locally, preserving the original shared light track and semantic states. Hover/focus uses a slightly darker neutral row surface so the track remains distinct.
-All interface icons are Lucide. Published topics 5, 16, 17, 24 and 25 have authored
+All interface icons are Lucide. Published topics 5, 16, 17, 24, 25 and 26 have authored
 monochrome miniatures that illustrate their subject. Other topics share a neutral BookOpen placeholder.
 Published rows expose one navigable link and hover/focus surface; planned rows have no action.
 Place total/published topic counts and lesson practice progress below the page title, without a generic subtitle. Counts reflect the full catalog, independently of filtering.

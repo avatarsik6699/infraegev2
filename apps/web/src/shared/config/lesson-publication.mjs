@@ -48,10 +48,21 @@ export const integerProcessingLessonPublication = Object.freeze({
   status: "published",
 });
 
+export const arrayProcessingLessonPublication = Object.freeze({
+  id: "array-processing",
+  routeSlug: "26-sortirovka-i-otbor",
+  taskNumbers: Object.freeze([26]),
+  title: "Обработка данных: сортировка и отбор",
+  summary:
+    "Как читать файлы, сортировать записи, отбирать данные при ограничении и обрабатывать события по порядку.",
+  status: "published",
+});
+
 export const lessonPublications = Object.freeze([
   rekursiyaLessonPublication,
   preobrazovanieZapiseyChiselLessonPublication,
   numberSequencesLessonPublication,
   stringProcessingLessonPublication,
   integerProcessingLessonPublication,
+  arrayProcessingLessonPublication,
 ]);
