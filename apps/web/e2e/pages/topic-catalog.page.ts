@@ -118,11 +118,7 @@ export class TopicCatalogPage {
         .locator('[data-topic-id="number-sequences"]')
         .getByText("Решено 0 из 8"),
     ).toBeVisible();
-    await this.expectTopic17Illustration();
-    await this.expectTopic24Illustration();
-    await this.expectTopicSvgIllustration("integer-processing");
-    await this.expectTopicSvgIllustration("array-processing");
-    await this.expectTopicSvgIllustration("data-analysis");
+    await this.expectIllustrations();
     await expect(
       this.page.locator('[data-topic-status="planned"] a'),
     ).toHaveCount(0);
@@ -209,6 +205,10 @@ export class TopicCatalogPage {
         this.page.getByRole("heading", { name: "Темы ЕГЭ", exact: true }),
       ).toBeVisible();
       await expect(this.page.locator("[data-topic-card]")).toHaveCount(25);
+      await expect(this.page.locator("[data-topic-card]").first()).toHaveCSS(
+        "display",
+        "grid",
+      );
       const before = await this.geometry();
       releaseScripts();
       await this.page.waitForRequest("**/api/topics/practice-summary");
@@ -225,6 +225,7 @@ export class TopicCatalogPage {
           ),
       );
       expect(await this.geometry()).toEqual(before);
+      if (!failAssets) await this.expectIllustrations();
       await expectNoHorizontalOverflow(this.page);
       const shifts = await this.page.evaluate(
         () =>
@@ -273,11 +274,7 @@ export class TopicCatalogPage {
   async expectReadableWithoutScripts() {
     await this.page.goto("/ege");
     await expect(this.page.locator("[data-topic-card]")).toHaveCount(25);
-    await this.expectTopic17Illustration();
-    await this.expectTopic24Illustration();
-    await this.expectTopicSvgIllustration("integer-processing");
-    await this.expectTopicSvgIllustration("array-processing");
-    await this.expectTopicSvgIllustration("data-analysis");
+    await this.expectIllustrations();
     await expect(
       this.page.locator('[data-topic-status="published"] h2 a'),
     ).toHaveCount(7);
@@ -291,57 +288,54 @@ export class TopicCatalogPage {
     await expectNoHorizontalOverflow(this.page);
   }
 
-  private async expectTopic17Illustration() {
-    const illustration = this.page
-      .locator("[data-topic-card]")
-      .filter({
-        has: this.page.getByRole("heading", {
-          name: "Числовые последовательности",
-        }),
-      })
-      .locator('img[src="/images/topics/number-sequences.png"]');
-    await expect(illustration).toBeVisible();
-    await expect
-      .poll(() =>
-        illustration.evaluate(
-          (image: HTMLImageElement) => image.complete && image.naturalWidth > 0,
-        ),
-      )
-      .toBe(true);
-  }
-
-  private async expectTopic24Illustration() {
-    const illustration = this.page
-      .locator('[data-topic-id="string-processing"]')
-      .locator('img[src="/images/topics/string-processing.svg"]');
-    await expect(illustration).toBeVisible();
-    await expect
-      .poll(() =>
-        illustration.evaluate(
-          (image: HTMLImageElement) =>
-            image.complete && image.naturalWidth === 144,
-        ),
-      )
-      .toBe(true);
-  }
-
-  private async expectTopicSvgIllustration(
-    topicId: "integer-processing" | "array-processing" | "data-analysis",
-  ) {
-    const illustration = this.page
-      .locator(`[data-topic-id="${topicId}"]`)
-      .locator(`img[src="/images/topics/${topicId}.svg"]`);
-    await expect(illustration).toBeVisible();
-    await expect(illustration).toHaveAttribute("width", "144");
-    await expect(illustration).toHaveAttribute("height", "88");
-    await expect
-      .poll(() =>
-        illustration.evaluate(
-          (image: HTMLImageElement) =>
-            image.complete && image.naturalWidth === 144,
-        ),
-      )
-      .toBe(true);
+  private async expectIllustrations() {
+    for (const [topicId, asset] of [
+      ["information-models", "information-models"],
+      ["preobrazovanie-zapisey-chisel", "number-record"],
+      ["branching-and-enumeration", "branching-and-enumeration"],
+      ["rekursiya", "recursion"],
+      ["number-sequences", "number-sequences"],
+      ["winning-strategy", "winning-strategy"],
+      ["parallel-computing", "parallel-computing"],
+      ["graph-analysis", "graph-analysis"],
+      ["string-processing", "string-processing"],
+      ["integer-processing", "integer-processing"],
+      ["array-processing", "array-processing"],
+      ["data-analysis", "data-analysis"],
+    ]) {
+      const row = this.page.locator(`[data-topic-id="${topicId}"]`);
+      const illustration = row.locator(
+        `img[src="/images/topics/${asset}.webp"]`,
+      );
+      await expect(illustration).toBeVisible();
+      await expect(illustration).toHaveAttribute("width", "192");
+      await expect(illustration).toHaveAttribute("height", "104");
+      await expect
+        .poll(() =>
+          illustration.evaluate(
+            (image: HTMLImageElement) =>
+              image.complete &&
+              image.naturalWidth === 576 &&
+              image.naturalHeight === 312,
+          ),
+        )
+        .toBe(true);
+      const imageBox = await illustration.boundingBox();
+      const slotBox = await illustration.locator("../..").boundingBox();
+      const titleBox = await row.locator("h2").boundingBox();
+      expect(imageBox!.x).toBeGreaterThanOrEqual(slotBox!.x);
+      expect(imageBox!.y).toBeGreaterThanOrEqual(slotBox!.y);
+      expect(imageBox!.x + imageBox!.width).toBeLessThanOrEqual(
+        slotBox!.x + slotBox!.width,
+      );
+      expect(imageBox!.y + imageBox!.height).toBeLessThanOrEqual(
+        slotBox!.y + slotBox!.height,
+      );
+      expect(
+        imageBox!.x + imageBox!.width <= titleBox!.x ||
+          imageBox!.y + imageBox!.height <= titleBox!.y,
+      ).toBe(true);
+    }
   }
 
   async expectTextZoom() {

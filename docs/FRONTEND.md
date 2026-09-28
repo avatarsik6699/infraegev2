@@ -258,8 +258,16 @@ Use the existing SearchField, Button, Progress, ActionLink, Typography and PageC
 SearchField supports optional controlled value/onValueChange without changing existing practice
 submission semantics. Topic status buttons use pressed semantics; targets remain at least 40px.
 Topic progress scopes `--progress-height: 8px` locally, preserving the original shared light track and semantic states. Hover/focus uses a slightly darker neutral row surface so the track remains distinct.
-All interface icons are Lucide. Published topics 5, 16, 17, 24, 25, 26 and 27 have authored
-monochrome miniatures that illustrate their subject. Other topics share a neutral BookOpen placeholder.
+All interface icons are Lucide. Topics 5 and 16 retain their approved mathematical compositions as high-resolution raster derivatives.
+Topics 1, 13, 17, 19–21, 22, 23 and 24–27 use high-quality raster edits of the architect-supplied transparent monochrome
+illustrations, matched by source filename prefixes. All figures share fine near-black lines and restrained
+mathematical lettering; preserve the source compositions, labels and connections. High-resolution PNG
+masters remain with the references; serve lossless transparent WebP. Derivatives remove empty source margins and
+reserve a shared 192×104 composition (576×312 raster pixels for high DPI); preserve aspect ratio
+and contain the full drawing without topic-specific CSS scaling. Mobile rows share one image
+slot height; raster illustrations use the available width while topics 5/16 retain their approved
+rendered scale. Desktop/tablet image columns adapt with the text and progress columns; illustrations must not overlap the number, title, progress or action. Other topics
+share a neutral BookOpen placeholder. Illustrations do not change publication status.
 Published rows expose one navigable link and hover/focus surface; planned rows have no action.
 Place total/published topic counts and lesson practice progress below the page title, without a generic subtitle. Counts reflect the full catalog, independently of filtering.
 Reserve image, progress, status, header-summary and action geometry on first paint, including

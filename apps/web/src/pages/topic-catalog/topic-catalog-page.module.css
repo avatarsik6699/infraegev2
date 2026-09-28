@@ -2,7 +2,7 @@
   composes: pageFrame from "../../shared/styles/patterns.module.css";
 }
 .catalogSection[data-measure] {
-  --topic-columns: 5rem 9rem minmax(0, 1fr) 14rem 7.5rem;
+  --topic-columns: 5rem 12rem minmax(0, 1fr) 14rem 7.5rem;
   padding-block: var(--space-5);
   container-type: inline-size;
 }
@@ -90,19 +90,11 @@
   font-size: var(--text-2xl);
 }
 .illustration {
-  width: 9rem;
-  height: 5.5rem;
+  width: 12rem;
+  height: 6.5rem;
   display: grid;
   place-items: center;
-}
-.card[data-topic-id="number-sequences"] .illustration > * {
-  transform: scale(1.12);
-}
-.card[data-topic-id="integer-processing"] .illustration > * {
-  transform: scale(1.12);
-}
-.card[data-topic-id="array-processing"] .illustration > * {
-  transform: scale(1.12);
+  justify-self: center;
 }
 .placeholder {
   color: var(--color-muted);
@@ -185,19 +177,22 @@
   font-size: var(--text-sm);
 }
 @media (max-width: 72rem) {
-  .catalogSection {
-    --topic-columns: 4rem 8rem minmax(0, 1fr) 12rem 2rem;
+  .catalogSection[data-measure] {
+    --topic-columns: 4rem 11rem minmax(0, 1fr) 12rem 2rem;
   }
   .illustration {
-    width: 8rem;
+    width: 11rem;
   }
   .resume {
     display: none;
   }
 }
 @media (max-width: 56rem) {
-  .catalogSection {
-    --topic-columns: 4rem 8rem minmax(0, 1fr) 2rem;
+  .catalogSection[data-measure] {
+    --topic-columns: 4rem 12rem minmax(0, 1fr) 2rem;
+  }
+  .illustration {
+    width: 12rem;
   }
   .summary {
     grid-template-columns: minmax(0, 1fr) 6.5rem;
@@ -240,17 +235,7 @@
     row-gap: var(--space-1);
   }
   .illustration {
-    width: 8rem;
-    height: 4.5rem;
-  }
-  .card[data-topic-id="integer-processing"] .illustration {
-    height: 5.5rem;
-  }
-  .card[data-topic-id="integer-processing"] .illustration > * {
-    transform: scale(1.4);
-  }
-  .card[data-topic-id="array-processing"] .illustration > * {
-    transform: scale(1.25);
+    width: min(12rem, 100%);
   }
   .cardContent {
     grid-column: 1 / -1;

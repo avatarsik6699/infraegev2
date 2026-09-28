@@ -381,12 +381,14 @@ snapshot. Public lesson theory, navigation and practice remain SSR-readable with
 link to their existing lesson; planned topics say “Скоро”, with no links or invented counts.
 The historical reference `docs/artifacts/references/13_50_05.png` is recoverable through
 [COMPACTED](changes/archive/COMPACTED.md): large numbers, quiet separators,
-topic text and thin progress. Topics 5/16 have mathematical miniatures faithful to the reference;
-topic 17 uses the architect's sequence illustration, topic 24 has an original
-string-fragment miniature, topic 25 uses an original prime/composite number-row miniature,
-topic 26 uses an original sorting-and-selection miniature, and topic 27 uses an original
-cluster-and-centre miniature. Other topics share a Lucide
-BookOpen placeholder. These are allowed educational catalog figures.
+topic text and thin progress. Topics 5/16 retain their approved mathematical compositions as raster derivatives;
+topics 1, 13, 17, 19–21, 22, 23 and 24–27 use the architect's transparent monochrome figures from
+`docs/artifacts/references/ege_themes_illustrations/generated/`, assigned by filename prefix. High-quality raster edits unify fine monochrome strokes and
+mathematical lettering while preserving source compositions, labels and connections. Compact WebP
+derivatives preserve the full drawing and its proportions, remove excessive transparent source
+margins and occupy the shared reserved illustration slot without displacing readable content.
+Other topics share a Lucide BookOpen placeholder. These are allowed educational catalog figures;
+illustrations alone do not publish a planned topic.
 Search matches title, summary and numbers while typing, ignoring case and е/ё. Status filters
 are All, In progress (0 < solved < total), and Not started (solved = 0), with the latter two
 restricted to published topics with available practice. Completed topics remain in All.
