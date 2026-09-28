@@ -9,8 +9,8 @@
 
 | Field | Value |
 |-------|-------|
-| Document Version | `v2.23` |
-| Date | `2026-09-26` |
+| Document Version | `v2.24` |
+| Date | `2026-09-28` |
 | Architect / Owner | `v.godlevskiy` |
 | Stack | See [docs/STACK.md](./STACK.md) |
 | Domain | Платформа подготовки к ЕГЭ по информатике — самостоятельные темы экзамена и мини-курсы с теорией, визуализацией и практикой |
@@ -66,7 +66,8 @@ sdamgia.ru, kpolyakov.spb.ru), ни новыми AI-ботами (решают �
 | Необязательный аккаунт и серверный прогресс после Change 140; все текущие учебные действия доступны гостю | i18n/локализация (аудитория исключительно русскоязычная) |
 | | Полноценный поиск по сайту (линейная карта из 25 тем остаётся обозримой без отдельного поиска) |
 
-Текущий baseline: два опубликованных TopicLesson, независимый Python Course с 28
+Текущий source-tree baseline: семь опубликованных TopicLesson (№ 5, 16, 17, 24–27),
+независимый Python Course с 28
 последовательными CourseLesson и 140 server-owned задачами; финал — четыре стадии одного
 терминального менеджера задач. Все уроки прошли содержательную и визуальную оценку.
 Первоначальная 19-шаговая редакция не получила финального одобрения и не является baseline.
@@ -378,7 +379,8 @@ snapshot. Public lesson theory, navigation and practice remain SSR-readable with
 
 `/ege` retains 25 topics ordered by exam number, with 19–21 grouped. Published topics
 link to their existing lesson; planned topics say “Скоро”, with no links or invented counts.
-The reference is `docs/artifacts/references/13_50_05.png`: large numbers, quiet separators,
+The historical reference `docs/artifacts/references/13_50_05.png` is recoverable through
+[COMPACTED](changes/archive/COMPACTED.md): large numbers, quiet separators,
 topic text and thin progress. Topics 5/16 have mathematical miniatures faithful to the reference;
 topic 17 uses the architect's sequence illustration, topic 24 has an original
 string-fragment miniature, topic 25 uses an original prime/composite number-row miniature,
@@ -487,8 +489,10 @@ CI выполняет static/build/security checks; обычные pytest/Vitest
 артефакта требует устранения до затронутого релиза. Целевая периодичность — раз в неделю
 и по явному запросу; внедрение и отдельная удалённая активация описаны в Change 146.
 Production использует immutable SHA images. Deploy — явный workflow_dispatch, с health/smoke
-и rollback на предыдущий release. Первый переход на 122_01 требует отдельного переноса банка
-в новый volume и restore acceptance для выбранного SHA; обычный deploy не импортирует контент.
+и rollback на предыдущий release. Исходный перенос банка на `122_01` описан в
+истории Change 122/123; это исторический cutover, а не действие каждого deploy. Обычный deploy
+не импортирует контент. Первый переход с `122_01` на `140_01` требует отдельной
+exact-SHA account-schema restore-приёмки по STACK и runbook backup/restore.
 Старый volume (`infraege_postgres-data`, PostgreSQL 16) хранился до 2026-09-23 и удалён по решению
 архитектора (Change 139): проверка показала пустую базу `infraege` и только тестовые данные
 выведенного Umami. Rollback на любой хранимый релиз использует тот же `infraege_postgres122-data`.

@@ -12,7 +12,7 @@ from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy import select
+from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
@@ -242,7 +242,7 @@ def test_pagination_next_and_lesson_membership(database):
                     if material.status == "published" and expected:
                         result = await readers.lesson(session, material.kind, material.id)
                         assert [t.id for t in result.tasks] == [i for _, i in expected]
-                assert len(list(await session.scalars(select(TaskRecord.id)))) == 697
+                assert len(list(await session.scalars(select(TaskRecord.id)))) == 735
         finally:
             await engine.dispose()
 
@@ -344,7 +344,7 @@ def test_validate_cli_checks_canonical_bank_without_database_or_legacy_json(tmp_
 
     result = validate()
     assert result.returncode == 0, result.stderr
-    assert json.loads(result.stdout)["tasks"] == 697
+    assert json.loads(result.stdout)["tasks"] == 735
     task["task"]["theory_links"][0]["section"] = "missing-section"
     result = validate()
     assert result.returncode != 0 and "unknown theory section" in result.stderr
@@ -546,7 +546,15 @@ def test_topic_summary_matches_published_lessons_and_excludes_hidden_tasks(datab
         assert response.status_code == 200
         assert response.headers["cache-control"] == "no-store"
         topics = response.json()["topics"]
-        assert {topic["id"] for topic in topics} == {"rekursiya", "preobrazovanie-zapisey-chisel"}
+        assert {topic["id"] for topic in topics} == {
+            "rekursiya",
+            "preobrazovanie-zapisey-chisel",
+            "number-sequences",
+            "string-processing",
+            "integer-processing",
+            "array-processing",
+            "data-analysis",
+        }
         for topic in topics:
             assert set(topic) == {"id", "tasks"}
             lesson = client.get(f"/api/learning-materials/topic/{topic['id']}/practice").json()
@@ -580,7 +588,16 @@ def test_topic_summary_matches_published_lessons_and_excludes_hidden_tasks(datab
                 assert hidden_id not in ids
                 assert archived_id not in ids
                 assert all(
-                    topic.id in {"rekursiya", "preobrazovanie-zapisey-chisel"}
+                    topic.id
+                    in {
+                        "rekursiya",
+                        "preobrazovanie-zapisey-chisel",
+                        "number-sequences",
+                        "string-processing",
+                        "integer-processing",
+                        "array-processing",
+                        "data-analysis",
+                    }
                     for topic in summary.topics
                 )
                 await session.rollback()
@@ -1599,3 +1616,71 @@ def test_provider_release_flags_default_off_and_close_every_entry_boundary(datab
         monkeypatch.setattr(settings, "vk_enabled", True)
         monkeypatch.setattr(settings, "telegram_enabled", True)
         assert client.get("/api/auth/providers").json() == {"enabled": ["vk", "telegram"]}
+
+
+def test_database_roles_deny_cross_boundary_access(database):
+    """The actual migrated DB must deny bank writes and account reads to wrong roles."""
+    account_tables = (
+        "account_user",
+        "account_identity",
+        "account_password",
+        "account_session",
+        "account_token",
+        "account_provider_challenge",
+        "progress_result",
+    )
+    bank_tables = ("task", "task_checker", "lesson_task", "file_object")
+
+    async def scenario():
+        engine = database_engine(database("migration"))
+        try:
+            async with AsyncSession(engine) as session:
+                for role in ("infraege_runtime", "infraege_import"):
+                    for table in account_tables:
+                        for privilege in ("SELECT", "INSERT", "UPDATE", "DELETE", "TRUNCATE"):
+                            result = await session.execute(
+                                text("SELECT has_table_privilege(:role, :table, :privilege)"),
+                                {
+                                    "role": role,
+                                    "table": f"practice.{table}",
+                                    "privilege": privilege,
+                                },
+                            )
+                            assert result.scalar_one() is False, (role, table, privilege)
+                            if privilege in ("SELECT", "INSERT", "UPDATE"):
+                                columns = await session.execute(
+                                    text(
+                                        "SELECT has_any_column_privilege(:role, :table, :privilege)"
+                                    ),
+                                    {
+                                        "role": role,
+                                        "table": f"practice.{table}",
+                                        "privilege": privilege,
+                                    },
+                                )
+                                assert columns.scalar_one() is False, (role, table, privilege)
+                for table in bank_tables:
+                    for privilege in ("INSERT", "UPDATE", "DELETE", "TRUNCATE"):
+                        result = await session.execute(
+                            text("SELECT has_table_privilege(:role, :table, :privilege)"),
+                            {
+                                "role": "infraege_app",
+                                "table": f"practice.{table}",
+                                "privilege": privilege,
+                            },
+                        )
+                        assert result.scalar_one() is False, (table, privilege)
+                        if privilege in ("INSERT", "UPDATE"):
+                            columns = await session.execute(
+                                text("SELECT has_any_column_privilege(:role, :table, :privilege)"),
+                                {
+                                    "role": "infraege_app",
+                                    "table": f"practice.{table}",
+                                    "privilege": privilege,
+                                },
+                            )
+                            assert columns.scalar_one() is False, (table, privilege)
+        finally:
+            await engine.dispose()
+
+    asyncio.run(scenario())

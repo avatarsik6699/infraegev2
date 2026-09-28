@@ -100,4 +100,5 @@ do not create a benchmark platform, force all roles to run, or claim cost saving
 Configuration reference checked 2026-09-26 with Codex CLI 0.157.1:
 [OpenAI subagents](https://learn.chatgpt.com/docs/agent-configuration/subagents) and
 [configuration precedence](https://learn.chatgpt.com/docs/config-file/config-basic#configuration-precedence).
-The user-supplied `docs/artifacts/multiagents.md` is source research, not the binding runtime contract.
+The user-supplied `docs/artifacts/multiagents.md` is historical source research, recoverable through
+[COMPACTED](../changes/archive/COMPACTED.md), not the binding runtime contract.

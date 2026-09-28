@@ -12,6 +12,16 @@ from pathlib import Path, PurePosixPath
 NUMBERED = re.compile(r"([0-9]{2,})-[a-z0-9-]+\.md\Z")
 CHECKPOINT = Path("docs/changes/archive/COMPACTED.md")
 MARKER = "<!-- compacted-metadata -->"
+LEGACY_FIELDS = {
+    "covered_through",
+    "source_commit",
+    "date",
+    "missing_numbers",
+    "source_paths",
+    "source_digest",
+}
+SNAPSHOT_FIELDS = LEGACY_FIELDS | {"covered_from"}
+SNAPSHOT_ROOT_FIELDS = {"version", "snapshots"}
 
 
 class HistoryError(ValueError):
@@ -42,8 +52,9 @@ def checked_paths(value: object) -> list[str]:
         if not isinstance(item, str):
             raise HistoryError("Source paths must be strings")
         path = PurePosixPath(item)
+        allowed = item.startswith("docs/") or item.startswith(".impeccable/critique/")
         if (
-            not item.startswith("docs/")
+            not allowed
             or ".." in path.parts
             or str(path) != item
             or "\\" in item
@@ -62,29 +73,38 @@ def digest(root: Path, source: str, paths: list[str], checkout: bool = False) ->
     for path in paths:
         blob = source_blob(root, source, path)
         if checkout:
-            local = root / path
-            if local.is_symlink() or not local.is_file() or local.read_bytes() != blob:
+            resolved_root = root.resolve()
+            local = resolved_root / path
+            current = resolved_root
+            symlinked = False
+            for part in PurePosixPath(path).parts:
+                current /= part
+                if current.is_symlink():
+                    symlinked = True
+                    break
+            if symlinked or not local.is_file() or local.read_bytes() != blob:
                 raise HistoryError(f"Checkout differs from snapshot: {path}")
         result.update(path.encode() + b"\0" + hashlib.sha256(blob).digest())
     return result.hexdigest()
 
 
-def validate_metadata(root: Path, data: object) -> dict:
-    if not isinstance(data, dict):
-        raise HistoryError("Checkpoint metadata must be an object")
-    expected = {
-        "covered_through",
-        "source_commit",
-        "date",
-        "missing_numbers",
-        "source_paths",
-        "source_digest",
-    }
-    if set(data) != expected:
-        raise HistoryError("Missing or unknown checkpoint metadata fields")
+def _archive_number(path: str) -> int | None:
+    candidate = PurePosixPath(path)
+    match = NUMBERED.fullmatch(candidate.name)
+    if candidate.parent == CHECKPOINT.parent and match:
+        return int(match[1])
+    return None
+
+
+def _validate_snapshot(root: Path, data: object, start: int) -> dict:
+    if not isinstance(data, dict) or set(data) != SNAPSHOT_FIELDS:
+        raise HistoryError("Missing or unknown snapshot metadata fields")
+    covered_from = data["covered_from"]
     through = data["covered_through"]
-    if type(through) is not int or through < 1:
-        raise HistoryError("covered_through must be a positive integer")
+    if type(covered_from) is not int or covered_from != start or covered_from < 1:
+        raise HistoryError("Snapshot ranges must be sequential and start at the next number")
+    if type(through) is not int or through < covered_from:
+        raise HistoryError("covered_through must be at least covered_from")
     source = data["source_commit"]
     if not isinstance(source, str) or not re.fullmatch(r"[0-9a-f]{40}", source):
         raise HistoryError("source_commit must be a full immutable SHA")
@@ -93,36 +113,71 @@ def validate_metadata(root: Path, data: object) -> dict:
     try:
         date.fromisoformat(data["date"])
     except (TypeError, ValueError) as exc:
-        raise HistoryError("Invalid checkpoint date") from exc
+        raise HistoryError("Invalid snapshot date") from exc
     missing = data["missing_numbers"]
     if (
         not isinstance(missing, list)
-        or any(type(n) is not int or not 1 <= n <= through for n in missing)
+        or any(type(n) is not int or not covered_from <= n <= through for n in missing)
         or missing != sorted(set(missing))
     ):
         raise HistoryError("Invalid missing_numbers")
     paths = checked_paths(data["source_paths"])
-    archived = []
-    for path in paths:
-        match = NUMBERED.fullmatch(PurePosixPath(path).name)
-        if PurePosixPath(path).parent == CHECKPOINT.parent and match:
-            archived.append(int(match[1]))
-        elif path.startswith("docs/changes/"):
+    archived = [_archive_number(path) for path in paths]
+    for path, number in zip(paths, archived, strict=True):
+        if path.startswith("docs/changes/") and number is None:
             raise HistoryError("Only numbered archived changes may enter the snapshot")
-    if sorted(archived) != [n for n in range(1, through + 1) if n not in missing]:
-        raise HistoryError("Archive coverage does not match covered_through/missing_numbers")
-    # Missing numbers cannot hide an archived source document.
+        if number is not None and not covered_from <= number <= through:
+            raise HistoryError("Snapshot archive path is outside its covered range")
+    archive_numbers = [number for number in archived if number is not None]
+    expected = [n for n in range(covered_from, through + 1) if n not in missing]
+    if sorted(archive_numbers) != expected:
+        raise HistoryError("Archive coverage does not match covered range/missing_numbers")
+    # Missing numbers cannot hide an archived source document in this range.
     source_archives = (
         git(root, "ls-tree", "--name-only", source, "docs/changes/archive/").decode().splitlines()
     )
-    represented = set(paths)
+    represented = {path for path, number in zip(paths, archived, strict=True) if number}
     for path in source_archives:
-        match = NUMBERED.fullmatch(PurePosixPath(path).name)
-        if match and int(match[1]) <= through and path not in represented:
+        number = _archive_number(path)
+        if number is not None and covered_from <= number <= through and path not in represented:
             raise HistoryError(f"Unrepresented source archive: {path}")
     if data["source_digest"] != digest(root, source, paths):
         raise HistoryError("Snapshot digest mismatch")
     return data
+
+
+def validate_metadata(root: Path, data: object) -> dict:
+    """Validate legacy v1 metadata and normalize it to the v2 in-memory form."""
+    if not isinstance(data, dict):
+        raise HistoryError("Checkpoint metadata must be an object")
+    if set(data) == LEGACY_FIELDS:
+        # v1 implicitly covered 1..covered_through. Preserve every original proof value.
+        legacy = dict(data)
+        normalized = {"covered_from": 1, **legacy}
+        return {"version": 2, "snapshots": [_validate_snapshot(root, normalized, 1)]}
+    if (
+        set(data) != SNAPSHOT_ROOT_FIELDS
+        or type(data["version"]) is not int
+        or data["version"] != 2
+    ):
+        raise HistoryError("Expected legacy checkpoint metadata or version 2 snapshots")
+    snapshots = data["snapshots"]
+    if not isinstance(snapshots, list) or not snapshots:
+        raise HistoryError("Version 2 checkpoint must contain snapshots")
+    validated: list[dict] = []
+    seen_source_paths: set[tuple[str, str]] = set()
+    next_number = 1
+    for snapshot_data in snapshots:
+        snapshot = _validate_snapshot(root, snapshot_data, next_number)
+        source = snapshot["source_commit"]
+        for path in snapshot["source_paths"]:
+            key = source, path
+            if key in seen_source_paths:
+                raise HistoryError("Duplicate source/path proof across snapshots")
+            seen_source_paths.add(key)
+        validated.append(snapshot)
+        next_number = snapshot["covered_through"] + 1
+    return {"version": 2, "snapshots": validated}
 
 
 def checkpoint(root: Path) -> dict | None:
@@ -147,7 +202,7 @@ def checkpoint(root: Path) -> dict | None:
 
 def inspect(root: Path) -> dict:
     metadata = checkpoint(root)
-    covered = metadata["covered_through"] if metadata else 0
+    covered = metadata["snapshots"][-1]["covered_through"] if metadata else 0
     active: list[str] = []
     numbers: set[int] = set()
     for folder in (root / "docs/changes", root / "docs/changes/archive"):
@@ -169,24 +224,47 @@ def inspect(root: Path) -> dict:
 
 
 def snapshot(root: Path, source: str, through: int, paths: list[str]) -> dict:
-    checked_paths(paths)
     if not re.fullmatch(r"[0-9a-f]{40}", source):
         raise HistoryError("Snapshot source must be a full SHA")
-    archived = {
-        int(match[1])
-        for path in paths
-        if PurePosixPath(path).parent == CHECKPOINT.parent
-        and (match := NUMBERED.fullmatch(PurePosixPath(path).name))
-    }
+    previous = checkpoint(root)
+    existing = previous["snapshots"] if previous else []
+    start = existing[-1]["covered_through"] + 1 if existing else 1
+    checked_paths(paths)
     data = {
+        "covered_from": start,
         "covered_through": through,
         "source_commit": source,
         "date": date.today().isoformat(),
-        "missing_numbers": [n for n in range(1, through + 1) if n not in archived],
+        "missing_numbers": [
+            n
+            for n in range(start, through + 1)
+            if n not in {_archive_number(path) for path in paths}
+        ],
         "source_paths": paths,
         "source_digest": digest(root, source, paths, checkout=True),
     }
-    return validate_metadata(root, data)
+    _validate_snapshot(root, data, start)
+    result = {"version": 2, "snapshots": [*existing, data]}
+    return validate_metadata(root, result)
+
+
+def read(root: Path, path: str, source: str | None = None) -> bytes:
+    if source is not None and not re.fullmatch(r"[0-9a-f]{40}", source):
+        raise HistoryError("Selected source must be a full SHA")
+    metadata = checkpoint(root)
+    if not metadata:
+        raise HistoryError("Path is not represented by the checkpoint")
+    matches = [
+        snapshot_data
+        for snapshot_data in metadata["snapshots"]
+        if path in snapshot_data["source_paths"]
+        and (source is None or snapshot_data["source_commit"] == source)
+    ]
+    if not matches:
+        raise HistoryError("Path is not represented by the selected checkpoint source")
+    if len(matches) > 1:
+        raise HistoryError("Path appears in multiple snapshots; specify --source SHA")
+    return source_blob(root, matches[0]["source_commit"], path)
 
 
 def main() -> int:
@@ -195,8 +273,9 @@ def main() -> int:
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("inspect")
     sub.add_parser("next")
-    read = sub.add_parser("read")
-    read.add_argument("path")
+    read_command = sub.add_parser("read")
+    read_command.add_argument("path")
+    read_command.add_argument("--source", help="select the full source commit SHA")
     create = sub.add_parser("snapshot")
     create.add_argument("source")
     create.add_argument("through", type=int)
@@ -209,10 +288,7 @@ def main() -> int:
                 root, args.source, args.through, args.paths_file.read_text().splitlines()
             )
         elif args.command == "read":
-            metadata = checkpoint(root)
-            if not metadata or args.path not in metadata["source_paths"]:
-                raise HistoryError("Path is not represented by the checkpoint")
-            sys.stdout.buffer.write(source_blob(root, metadata["source_commit"], args.path))
+            sys.stdout.buffer.write(read(root, args.path, args.source))
             return 0
         else:
             result = inspect(root)
@@ -229,4 +305,4 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(main())

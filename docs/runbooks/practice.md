@@ -1,7 +1,8 @@
 # Practice operator workflow
 
-Schema `122_01` stores current task JSON, a separate private checker, ordered lesson memberships
-and content-addressed files. PostgreSQL is the only runtime bank. Theory/publication definitions
+Migration head `140_01` retains the bank introduced by `122_01`: current task JSON, a separate
+private checker, ordered lesson memberships and content-addressed files; it adds accounts and
+server progress. PostgreSQL is the only runtime bank. Theory/publication definitions
 remain authored in the web tree and `apps/api/practice-registry.json` (generated/checkable with
 `node scripts/practice-registry.mjs --check`). There is no history/package/release-import engine.
 
@@ -46,8 +47,9 @@ tasks are retained. To withdraw a task explicitly set archived=true, catalog_vis
 clear its lessons. Concurrent editorial writes are unsupported: run one operator at a time.
 
 Solution-affecting changes (statement, instruction, file usages, checker) advance the solution
-counter; stale submissions return 409. Metadata-only edits preserve it. Existing local progress
-is associated with task ID + solution revision. There is no audit log or automatic conflict merge.
+counter; stale submissions return 409. Metadata-only edits preserve it. Account progress
+is associated with learning context + task ID + solution revision; guests do not save results.
+There is no editorial audit log or automatic conflict merge.
 
 Runtime role is read-only; migration/import/backup credentials stay out of web/API runtime.
 Account/progress records are not part of a practice-bank import or export: `infraege_app` alone

@@ -9,6 +9,8 @@
     "tests/deploy_orchestration_test.py",
     "practice-local.py",
     "gate.py",
+    "change_history.py",
+    "tests/change_history_test.py",
     "lib/gate",
     "tests/gate_test.py",
     "tests/security_gate_test.py",

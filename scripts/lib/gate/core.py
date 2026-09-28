@@ -46,6 +46,7 @@ GROUPS: dict[str, Group] = {
                 "-lc",
                 "cd apps/api && uv run ruff check ../../scripts/application_db.py "
                 "../../scripts/practice-local.py ../../scripts/gate.py "
+                "../../scripts/change_history.py "
                 "../../scripts/release_checkpoint.py ../../scripts/test-account-server.py "
                 "../../scripts/lib/application_db ../../scripts/lib/gate ../../scripts/tests",
             ),

@@ -7,9 +7,9 @@ from fastapi.testclient import TestClient
 
 from app.core.config import settings
 from app.main import app
-from app.modules.content.schemas import Task
 from app.modules.health.api import require_database
-from app.modules.tasks.service import is_correct
+from app.shared.checker import is_correct
+from tests.legacy_task import Task
 
 pytestmark = pytest.mark.pure
 

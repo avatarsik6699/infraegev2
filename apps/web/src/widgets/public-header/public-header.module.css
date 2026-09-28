@@ -224,14 +224,6 @@ a.brand:focus-visible,
   outline-offset: 0.25rem;
 }
 
-.futureItem {
-  display: inline-flex;
-  align-items: center;
-  color: var(--color-brand-muted);
-  cursor: default;
-  opacity: 0.58;
-}
-
 .mobileMenu {
   display: none;
   justify-self: end;
@@ -332,11 +324,6 @@ a.brand:hover {
 @media (prefers-contrast: more) {
   .divider {
     background: var(--color-brand-ink);
-  }
-
-  .futureItem {
-    color: var(--color-brand-ink);
-    opacity: 0.72;
   }
 
   .mobileMenu summary,

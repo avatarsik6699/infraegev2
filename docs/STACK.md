@@ -41,7 +41,7 @@ solved results. `infraege_runtime` is SELECT-only on the bank and has no account
 separate roles. Every datetime is timezone-aware.
 No revision history, package engine, release import or automatic data migration remains.
 
-`make dev` owns a NEW `infraege-dev_postgres122-data` volume; older volumes are retained.
+`make dev` owns the dedicated `infraege-dev_postgres122-data` volume; lifecycle commands preserve it.
 `make practice-bootstrap` explicitly imports `content/practice-bank` into local dev, including
 updates: export/backup operator edits before reimporting. `python3 scripts/practice-local.py export
 /path/to/new-directory` exports the actual local bank and referenced files. This helper refuses
@@ -51,7 +51,8 @@ other container identities. Production import requires explicit protected creden
 Focused persistence acceptance: `cd apps/api && uv run pytest tests/test_minimal_bank.py`.
 It creates/disposes an isolated PG18 instance, runs migrations and validates nonempty parity,
 transaction rollback, HTTP privacy, checker, filters, paging, files and published lesson ordering.
-No tests run in Docker or CI; Docker contains only PostgreSQL. Backup verification additionally
+Tests run on the host; only weekly/manual browser audits run in CI. Disposable acceptance
+databases run in Docker, while test processes stay on the host. Backup verification additionally
 uses the shipped read-only `app.modules.practice.verify` and isolated restore machinery.
 `node scripts/practice-registry.mjs --check` checks authored publication metadata.
 Task files are persistent data (`infra/task-files.local` / `/var/lib/infraege/task-files`), outside cleanup.
@@ -213,16 +214,16 @@ the missing affected checks, fresh candidate security/image evidence and the Rel
 | Check | Command | Preconditions / notes |
 |-------|---------|-----------------------|
 | Formatting | `pnpm format:check` | Prettier and Ruff; Markdown and generated/dependency-owned files are explicitly ignored |
-| Infrastructure / bootstrap | `docker compose --project-name infraege-full-gate -f infra/docker-compose.yml -f infra/docker-compose.override.yml up --build -d` | The explicit project name and overlay ports `18080/13000/18000/15432` isolate the gate from unrelated Compose directories and common development ports. Verified live in change 03 on Docker Desktop/BuildKit: all four services become healthy; frontend and `/health` return 200 through Nginx. Change 02 also verified `POST /api/tasks/{id}/check` and the `/api/tasks/` rate limit (`503` past its burst — Nginx's default `limit_req_status`, not `429`) |
-| Operations contracts | `bash scripts/tests/backup-restore.test.sh && bash scripts/tests/backup-retention.test.sh && bash scripts/tests/deploy-preflight.test.sh && bash scripts/tests/host-web-gate.test.sh && bash scripts/tests/host-access-policy.test.sh && bash scripts/tests/root-password-access.test.sh && bash scripts/tests/release-retention.test.sh && bash scripts/tests/web-image-build.test.sh` | local/fake transport only; `backup-restic-integration.test.sh` is an explicit isolated manual check, not a routine gate |
-| Host Python contracts | `python3 -m unittest scripts.tests.application_db_test scripts.tests.deploy_orchestration_test scripts.tests.gate_test scripts.tests.release_checkpoint_test` | includes restore/deploy boundaries and verification orchestration; local fake transports |
+| Infrastructure / bootstrap | `docker compose --project-name infraege-full-gate -f infra/docker-compose.yml -f infra/docker-compose.override.yml up --build -d` | The explicit project name and overlay ports `18080/13000/18000/15432` isolate the gate from unrelated Compose directories and common development ports. Verified live in change 03 on Docker Desktop/BuildKit: all four services become healthy; frontend and `/health` return 200 through Nginx. Current practice/checker budgets and explicit `429` responses follow Initial setup and the owning Nginx contract tests |
+| Operations contracts | `bash scripts/tests/backup-restore.test.sh && bash scripts/tests/backup-retention.test.sh && bash scripts/tests/deploy-preflight.test.sh && bash scripts/tests/host-web-gate.test.sh && bash scripts/tests/host-access-policy.test.sh && bash scripts/tests/root-password-access.test.sh && bash scripts/tests/release-retention.test.sh && bash scripts/tests/web-image-build.test.sh && bash scripts/tests/clean-local-artifacts.test.sh` | local/fake transport only; `backup-restic-integration.test.sh` is an explicit isolated manual check, not a routine gate |
+| Host Python contracts | `python3 -m unittest scripts.tests.application_db_test scripts.tests.deploy_orchestration_test scripts.tests.gate_test scripts.tests.release_checkpoint_test scripts.tests.change_history_test` | includes restore/deploy boundaries and verification orchestration; local fake transports |
 | Migrations | `cd apps/api && uv run alembic upgrade head && uv run alembic current && uv run alembic check` | explicit isolated gate DB and migration-role URL; Compose runs its own separate migration job before API startup; never CI or production |
 | Backend test suite | `cd apps/api && uv run pytest` | local only |
 | API contract drift | `pnpm api:check` | requires the frozen API and pnpm environments; tracked schema and generated TypeScript must match |
 | Frontend build | `scripts/run-host-web-gate.sh pnpm --filter web build` | temporarily stops only the `infraege-full-gate` Compose web service (host port 13000), runs the host build/prerender, then restores that service on success/failure; fails if any crawled page 500s |
 | Frontend unit tests | `pnpm --filter web test` | local only |
-| E2E lint / determinism | `pnpm --filter web exec playwright test --list` | local only, never CI'd; validates Playwright config/spec collection without running the journey |
-| E2E (Playwright) | `pnpm --filter web test:e2e` | local only, never CI'd; starts local Vite + Uvicorn through Playwright `webServer` and verifies public routes, all published course lessons without JS, practice, degraded states, reading layout and accessibility in Chromium; requires the seeded isolated bank described below |
+| E2E lint / determinism | `pnpm --filter web exec playwright test --list` | local delivery check; also collected by the weekly/manual browser audit; validates Playwright config/spec collection without running the journey |
+| E2E (Playwright) | `pnpm --filter web test:e2e` | local delivery check; also executed by the weekly/manual browser audit; starts local Vite + Uvicorn through Playwright `webServer` and verifies public routes, all published course lessons without JS, practice, degraded states, reading layout and accessibility in Chromium; requires the seeded isolated bank described below |
 | Smoke | `curl -f http://localhost:18000/health/ready` (backend) — frontend smoke is the build prerender crawl | Full Gate API port from `docker-compose.override.yml` |
 | Accessibility audit | covered by `pnpm --filter web test:e2e` above | complete E2E includes `e2e/accessibility.spec.ts`; do not run it twice. `pnpm audit:a11y` remains the focused command when E2E was not selected |
 | Content validation | `pnpm test:content-assets && pnpm validate:content` | the isolated validator tests reject unsafe paths and invalid asset metadata before the real-tree pass; `validate:content` checks Course/module/lesson membership and titles, generated publication registry, and the complete canonical bank through the API CLI (schema, lesson positions, theory material/section references and file bytes). Requires uv and the frozen API environment; no database or credentials. The legacy asset tests retain historical fixture coverage |
@@ -499,7 +500,8 @@ api/         router.py — aggregates every module's router under one prefix (`/
              — see SPEC §4 for the current API contract).
 core/        cross-cutting infra with no HTTP surface of its own: config (Settings), exceptions
              (AppException base), logging (structlog), middleware (request IDs and request logging). Modules may import from core/; core/ must not import modules/.
-modules/     one package per bounded context — health/, content/, tasks/, practice/. Each holds only the
+modules/     health/, tasks/, practice/ and account/ (authentication, identities and progress).
+             content/ owns shared content-block DTOs; it does not expose an HTTP router. Each holds only the
              files it needs: api.py (routes), service.py (logic), schemas.py (Pydantic DTOs),
              exceptions.py (module-specific AppException subclasses).
 shared/      cross-module code used by >= 2 modules — stays an empty placeholder until that's
@@ -595,21 +597,28 @@ active file, covered range and next number. `python3 scripts/change_history.py n
 planning until the active change is shipped. COMPACTED.md is not an active change. Numbering uses
 `max(covered_through, active numbers, remaining archived numbers) + 1` (at least two digits).
 
-For approved initial compaction, list exact repository-relative files in a temporary sorted path
+For approved compaction, list exact repository-relative files in a temporary sorted path
 file, then run `python3 scripts/change_history.py snapshot <full-source-sha> <covered-through>
 <paths-file>`. The source must contain every represented original; output is JSON metadata for one
 `<!-- compacted-metadata -->` fenced `json` block in `docs/changes/archive/COMPACTED.md`. The command
 compares every local file byte-for-byte with its Git blob, rejects symlinks/unsafe paths and checks
 complete archive coverage, including explicitly missing numbers. It does not remove any file.
-The digest binds ordered paths and their SHA-256 blob hashes. Add compact human-readable decisions,
-risks and approvals beside the metadata before deleting only verified originals. A later compaction
-must preserve prior source snapshots; this initial format deliberately rejects incomplete coverage.
+The digest binds ordered paths and their SHA-256 blob hashes. Version 2 metadata contains ordered
+`snapshots`, each with `covered_from`, `covered_through`, a full `source_commit`, `source_paths`,
+`source_digest`, date and missing numbers. Ranges must be contiguous from 1. Legacy flat metadata
+is still accepted and normalized; appending a snapshot retains every previous SHA/hash/path value.
+Only `docs/` sources and completed `.impeccable/critique/` artifacts are allowed; active changes
+and COMPACTED.md cannot be snapshot inputs. Add compact human-readable decisions, risks and
+approvals beside the metadata before deleting only verified originals. The snapshot command
+appends the next verified range in its output; it never edits metadata or deletes files itself.
 
 Read original content without overwriting the checkout:
 
 ```bash
 python3 scripts/change_history.py read docs/changes/archive/01-project-foundation.md
 # Or inspect another exact source_paths entry from COMPACTED.md.
+# A path present in multiple snapshots requires the original full source SHA:
+python3 scripts/change_history.py read docs/artifacts/repository-hygiene-audit.md --source a443c286f6928c9501c5fee4365cf93aba00184b
 ```
 
 Binary reads write exact bytes to stdout; redirect to a new temporary path when needed. The recorded

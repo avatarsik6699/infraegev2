@@ -29,6 +29,16 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
 
 ## Gotcha Log
 
+### Cleanup or compaction refuses a symlinked parent directory
+
+- **Symptoms:** cleanup reports `refusing cleanup through symlink`, or snapshot byte verification
+  rejects files whose bytes otherwise match the source commit.
+- **Cause:** a repository-looking path can traverse a symlink into another checkout or external
+  data. Matching bytes or a lexical repository prefix do not establish ownership.
+- **Fix:** inspect the named path and use the actual owning checkout. Preserve the external
+  target; do not bypass the guard or delete external files to make cleanup pass. Leaf artifact
+  symlinks may be unlinked by cleanup, but snapshot inputs cannot contain symlink components.
+
 ### Inline code styles can make nested code blocks unreadable
 
 - **Symptoms:** syntax-highlighted words remain visible, but ordinary identifiers and punctuation

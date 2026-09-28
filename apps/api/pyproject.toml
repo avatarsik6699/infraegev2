@@ -1,7 +1,7 @@
 [project]
 name = "infraege-api"
 version = "0.1.0"
-description = "infraege backend — practice checker API (docs/SPEC.md §4)"
+description = "infraege backend — accounts, progress and practice API (docs/SPEC.md §4)"
 requires-python = ">=3.12"
 dependencies = [
   "fastapi>=0.115",

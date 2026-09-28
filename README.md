@@ -1,14 +1,15 @@
 # infraege
 
-Веб-приложение для подготовки к ЕГЭ по информатике с двумя опубликованными полными темами,
-завершённым самостоятельным мини-курсом Python из 28 уроков, server-owned практикой и локальным
-прогрессом ученика. Темы ЕГЭ и CourseLesson остаются независимыми учебными траекториями.
-Текущий candidate возвращает минимальное монохромное оформление; аналитический стек удалён.
+Веб-приложение для подготовки к ЕГЭ по информатике с семью опубликованными в source tree темами,
+завершённым самостоятельным мини-курсом Python из 28 уроков, server-owned практикой и необязательным
+аккаунтом для сохранения прогресса на сервере. Гости читают и проверяют ответы без сохранения
+результатов. Темы ЕГЭ и CourseLesson остаются независимыми учебными траекториями.
 
 Технический контракт проекта находится в [`docs/SPEC.md`](docs/SPEC.md), команды и версии стека —
 в [`docs/STACK.md`](docs/STACK.md). Production-контур для `infraege.ru` описан в
 [`docs/runbooks/production.md`](docs/runbooks/production.md). Production работает на
-`infraege.ru`; application использует один Compose project; мониторинг удалён из текущего candidate.
+`infraege.ru`; application использует один Compose project. Внешняя cookieless-аналитика
+остаётся отдельным сервисом; её стек не входит в application Compose.
 
 Статус `complete`/`archived` в change-файлах описывает код в локальной истории репозитория, а не
 факт публикации. GitHub может отставать от локального `main`, а production — от GitHub; фактически
@@ -25,6 +26,9 @@
 make dev
 make practice-bootstrap  # первый явный импорт учебного банка
 ```
+
+Если в checkout есть локальный `athanor.yaml`, запуск требует Athanor CLI и разблокированного
+SMTP vault; без manifest действует no-mail режим. См. [STACK](docs/STACK.md#initial-setup).
 
 При первом запуске команда сама:
 
@@ -100,10 +104,13 @@ pnpm --filter web test:e2e:install
 ## Альтернативный запуск без Docker
 
 Этот вариант предназначен для отладки отдельных процессов. Полный учебный flow требует
-PostgreSQL со схемой `122_01` и импортированным банком. Подготовьте локальную базу через
+PostgreSQL с текущим migration head `140_01` и импортированным банком. Подготовьте локальную базу через
 `make dev` и `make practice-bootstrap`, передайте backend read-only `DATABASE_URL` с loopback-портом
 из `docker port infraege-dev-postgres-1 5432` и абсолютный `TASK_FILES_DIR`. Без базы доступны
 статические страницы и liveness; практика и readiness будут недоступны.
+Для аккаунтов и сохранения прогресса также требуются отдельный `ACCOUNT_DATABASE_URL` роли
+`infraege_app`, `AUTH_CSRF_SECRET` и согласованный `PUBLIC_ORIGIN`; почта и провайдеры включаются
+только после настройки. См. [accounts](docs/runbooks/accounts.md).
 
 Откройте два терминала.
 
@@ -144,9 +151,10 @@ pnpm dev
 make dev
 ```
 
-Он использует отдельный `infra/docker-compose.dev.yml`. Никакие `.env`, пароли, токены или
-локально установленные Node/Python-пакеты не требуются. Встроенные значения существуют только в
-процессе команды и предназначены исключительно для локального disposable PostgreSQL.
+Он использует отдельный `infra/docker-compose.dev.yml`. В режиме без локального Athanor manifest
+`.env` и почтовые секреты не требуются; при наличии manifest действуют SMTP-предусловия выше.
+Встроенные значения существуют только в процессе команды и предназначены исключительно для
+локального disposable PostgreSQL. Импорт банка требует Python и uv на host.
 
 Проверить состояние:
 
@@ -250,12 +258,14 @@ Playwright сам поднимает свежие frontend/backend на изол
 проверяют публичный вход, опубликованные уроки, no-JS чтение, desktop/mobile viewport, общий 404
 и восстановление после ошибок. Перед запуском передайте `DATABASE_URL` read-only роли
 локальной базы с импортированным банком и абсолютный `TASK_FILES_DIR`; подробности в
-[STACK](docs/STACK.md#testing). Браузерная телеметрия удалена.
+[STACK](docs/STACK.md#testing). Публичный cookieless tracker сохраняется; account/answer data
+не передаются в аналитику.
 
-Production-гейты (подробные предусловия — в `docs/STACK.md`):
+Периодические/ручные аудиты и отдельная локальная диагностика образов
+(предусловия и границы — в [STACK](docs/STACK.md#full-gate)):
 
 ```bash
-pnpm audit:a11y       # локальный Playwright + axe; никогда не запускается в CI
+pnpm audit:a11y       # focused Playwright + axe; также входит в weekly browser audit
 pnpm audit:performance
 pnpm audit:security
 pnpm audit:images
@@ -264,10 +274,11 @@ pnpm audit:images
 ## Production и эксплуатация
 
 Один application Compose: Nginx с TLS, web, API и PostgreSQL. Сохраняются health, журналы,
-fail2ban, application backup/restore и явный SHA deploy. Аналитический и monitoring стек удалён
-из candidate; локальная работа не останавливает уже установленные сервисы VPS.
+fail2ban, application backup/restore и явный SHA deploy. Аналитический и monitoring стек не входит
+в application; публичный tracker обращается к отдельному cookieless-сервису. Локальная работа
+не изменяет сервисы VPS.
 
-Практика хранится в PostgreSQL (`122_01`), импорт/экспорт описан в
+Практика хранится в PostgreSQL (migration head `140_01`, исходная схема банка `122_01`), импорт/экспорт описан в
 [practice](docs/runbooks/practice.md), перенос на новую схему — в
 [transition](docs/runbooks/practice-transition.md). `make practice-bootstrap` импортирует
 полный проверенный банк в локальную базу. Перед повторным импортом экспортируйте свои правки.

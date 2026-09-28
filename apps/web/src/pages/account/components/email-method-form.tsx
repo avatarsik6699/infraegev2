@@ -23,7 +23,9 @@ export const EmailMethodForm: React.FC<Props> = (props) => {
     const timer = setInterval(update, 1000);
     return () => clearInterval(timer);
   }, []);
-  const submit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const submit = async (
+    event: Parameters<NonNullable<React.ComponentProps<"form">["onSubmit"]>>[0],
+  ) => {
     event.preventDefault();
     if (pending) return;
     const form = event.currentTarget;

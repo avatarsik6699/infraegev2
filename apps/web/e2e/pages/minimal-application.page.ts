@@ -101,8 +101,8 @@ export class MinimalApplicationPage {
       await filters.getByRole("button", { name: "Применить" }).click();
     } else {
       await this.openTopicChooser();
-      await this.page.getByRole("option", { name: /16 номер/ }).click();
-      await this.page.getByRole("option", { name: /5 номер/ }).click();
+      await this.page.getByRole("option", { name: /^16 номер\./ }).click();
+      await this.page.getByRole("option", { name: /^5 номер\./ }).click();
       await expect(this.page).toHaveURL(/page=2/);
       await this.page
         .getByRole("button", { name: "Применить", exact: true })

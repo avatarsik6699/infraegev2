@@ -4,7 +4,7 @@ import {
   markTaskSolved,
 } from "~/features/lesson-progress/model/lesson-progress-state";
 import { createLessonProgressRegistry } from "~/features/lesson-progress/model/lesson-progress-registry";
-import { lessonProgressStorage } from "~/features/lesson-progress/model/lesson-progress-storage";
+import { lessonProgressStorage } from "./fixtures/legacy-progress/lesson-progress-storage";
 import { courseProgress } from "~/entities/course";
 
 describe("revision-aware lesson progress", () => {

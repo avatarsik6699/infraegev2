@@ -38,6 +38,23 @@ does not infer scope or cache a PASS. Use the owning package/test command direct
 - Dependencies: changed ecosystem audit; candidate images are scanned once by `images.yml`.
 - Host scripts: owning fake contracts and relevant real boundary checks, not web performance.
 
+Full's STACK rows enumerate their contract set; they do not mean every test in `scripts/tests`
+runs in Full or ordinary CI. Select these additional local contracts when their owner changes:
+
+| Owner | Specialized contract |
+|---|---|
+| Account cutover | `bash scripts/tests/account-cutover.test.sh` (also wrapped by `python3 -m unittest scripts.tests.account_cutover_drill_test`) |
+| Account artifact retention | `bash scripts/tests/account-retention.test.sh` |
+| Nginx auth/progress edge | `bash scripts/tests/auth-edge.test.sh` |
+| Practice read throttling | `bash scripts/tests/practice-read-limit.test.sh` |
+| Local Docker lifecycle | `bash scripts/tests/docker-dev-lifecycle.test.sh` |
+| Production environment rendering | `bash scripts/tests/production-env.test.sh` |
+| Security selection/orchestration | `python3 -m unittest scripts.tests.security_gate_test` |
+| Synthetic account server | `python3 -m unittest scripts.tests.test_account_server` |
+
+These suites remain affected-area checks, alongside the isolated manual Restic integration.
+Their absence from an unrelated check's command is not evidence that their behavior passed.
+
 ## CI and periodic audits
 
 Ordinary quality CI remains static and must not run normal pytest, Vitest, DB or browser suites.
@@ -54,8 +71,8 @@ blocks the affected release; noncritical findings become ordinary Backlog work.
 The first manual activation on 2026-09-26 used the published account-release SHA
 `bb0c0aea936b2949faee415510a17c8930f676fd`: the browser audit passed, including isolated
 synthetic journeys and public Lighthouse; the security audit failed at Git-history Gitleaks with
-four findings, before SAST, config and dependency steps ran. This is not a security PASS and the
-four findings, before SAST, config and dependency steps ran. A subsequent local triage confirmed
+four findings, before SAST, config and dependency steps ran. This is not a security PASS.
+A subsequent local triage confirmed
 each was the exact SHA-256 of its public source task file in the historical migration snapshot;
 the architect approved four value-and-path-specific Gitleaks exceptions. The local full-history
 scan then passed, but that is not a retroactive PASS for the earlier remote run or for the steps

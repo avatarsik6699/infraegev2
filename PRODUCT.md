@@ -28,7 +28,9 @@ introduced only when the authored material proves that relationship.
 
 ## Operating Context
 
-Learners read on desktop or mobile without an account. Progress is optional browser-local state.
+Learners read and check answers on desktop or mobile without an account. Optional accounts save
+successful results on the server; guests do not accumulate saved progress. Lesson/course/standalone
+contexts remain separate, and old browser progress is not imported.
 Python practice combines on-site prediction and short-answer checks with programs run in a local
 Python 3 environment; a named online editor may be offered only as an explicit third-party
 fallback.
@@ -39,11 +41,12 @@ fallback.
 - Checker answers stay on the server; the browser never executes untrusted Python code.
 - The Python course has a complete 28-step path from the first program to one terminal task
   manager. All lessons have passed publication approval; current deployment is verified separately. Progress is derived from the
-  published lessons and remains optional browser-local state.
+  published lessons and current answer revisions and is saved only for signed-in learners.
 - The compact course overview retains full lesson titles and links to published lessons; authored
   learning outcomes remain in course content, while overview rows show practice counts.
   Future curriculum expansion must not appear as available before its own approval.
-- Accounts, synchronized progress, hard lesson locks, payments and in-product AI are out of scope.
+- Optional accounts and synchronized progress are implemented. Hard lesson locks, payments and
+  in-product AI remain out of scope; enabled sign-in methods depend on deployment configuration.
 
 ## Brand Commitments
 
@@ -60,8 +63,11 @@ See [FRONTEND](docs/FRONTEND.md) for implementation contracts.
 ## Current scope
 
 All public learning routes, the complete server-owned bank, filters, answer checking, help,
-attachments and local progress remain. Catalog pages offer 10/30/50/100 tasks, default 30, with
+attachments and account-owned server progress remain. Catalog pages offer 10/30/50/100 tasks, default 30, with
 inline solving, topic selection and sorting. Detail has one context-preserving return link;
 next-task navigation is absent. Unsubmitted drafts survive row collapse but reset on selection,
-page changes, leaving or reloading. Labs and browser analytics are removed. Changes 122–124
-established this baseline; original work is recoverable from `snapshot/pre-minimalism-2026-09-17`.
+page changes, leaving or reloading. Labs are removed. Public pages retain an external cookieless
+tracker without account/answer data; the analytics stack is outside this application repository.
+The publication registry is the current lesson inventory; source-tree publication does not prove
+production deployment. Historical decisions and original evidence are recoverable through
+[COMPACTED](docs/changes/archive/COMPACTED.md).

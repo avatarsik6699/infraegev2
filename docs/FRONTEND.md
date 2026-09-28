@@ -37,7 +37,7 @@ Adapt [shadcn Combobox](https://ui.shadcn.com/docs/components/base/combobox) and
 [Pagination](https://ui.shadcn.com/docs/components/base/pagination) visually through local CSS Modules;
 no shadcn dependency. Use Lucide interface icons. Quiet small pagination still has 40px targets.
 Search uses a shared Field with inline clear/submit actions; clear is visible whenever text is
-entered after enhancement. Field, SelectField and MultiCombobox reuse the same label style.
+entered after enhancement. Field and MultiCombobox reuse the same label style.
 Topic popup height is bounded by available viewport space; pointer opening does not autofocus
 its search, keyboard opening does. Apply commits and Reset clears the draft. Active filter text
 is a quiet badge, its cross removes it, and reset-all stays a separate unadorned action.
@@ -199,8 +199,9 @@ Responsive lesson outlines must have stable first-paint geometry through hydrati
 render an expanded mobile outline and collapse it only after JavaScript starts. Preserve the
 complete usable outline when scripting is disabled.
 
-E2E uses domain fixtures and Page Objects exclusively. UI changes require MCP screenshots and
-console inspection, desktop/mobile and affected degraded states. TypeScript changes require
+E2E uses domain fixtures and Page Objects exclusively. UI changes require Playwriter screenshots and
+console inspection, desktop/mobile and affected degraded states; use the documented STACK browser
+fallback only when needed. TypeScript changes require
 LSP and repository typecheck. Validate real pages, not internal lab specimens. Use repository
 format/lint commands and finish with allowlisted cleanup. Gate scope comes from STACK.
 
@@ -274,7 +275,8 @@ status/count and the progress track align at the bottom of the text area. The ro
 ## 10. Mini-course catalog
 
 The approved `/courses` reference permits four subject-specific hand-drawn raster illustrations
-as a local exception to §4. Preserve transparent PNG masters and serve optimized WebP with
+as a local exception to §4. Preserve transparent PNG masters in the verified Git snapshot
+(documented in `docs/changes/archive/COMPACTED.md`) and serve optimized WebP with
 explicit dimensions, empty alt and reserved geometry. No SVG substitutes or background scenes.
 Use existing Typography, PageContainer, ActionLink and Progress; two columns become one on mobile.
 Retain registry order, titles and descriptions. Planned directions have a shared corner “Скоро” badge and aria-disabled state, no links,
@@ -294,7 +296,8 @@ against the constant white surface. Illustrations reserve a 13rem square (bounde
 
 ## 11. Course overview
 
-`/courses/python` follows `docs/artifacts/references/20_30_50.png` with actual published curriculum:
+`/courses/python` follows the historical reference `docs/artifacts/references/20_30_50.png`
+(recoverable through [COMPACTED](changes/archive/COMPACTED.md)) with actual published curriculum:
 28 lessons, nine modules and the four-lesson task-manager project. Preserve full authored titles,
 order, URLs, and content. Hide module descriptions, per-lesson outcomes and the long outcomes list
 on this compact overview only. Reading tracking is excluded; header/footer and lesson UI stay shared.
@@ -329,7 +332,8 @@ targets. Preserve nested lists, current-location indication and stable SSR/mobil
 Lesson progress reset is a compact, content-width, bare action with secondary text and normal
 weight; the destructive confirmation remains in the shared dialog.
 For guests the lesson-rail progress block renders `0 из N`; on hover or keyboard focus its content
-blurs and a lock with a sign-in tooltip appears. On touch the lock layer remains visible and links
+blurs and a lock with the invitation “Войти, чтобы сохранять прогресс” appears, without a tooltip.
+On touch the lock layer remains visible and links
 to sign-in. Signed-in reset changes only the current lesson context.
 
 Inline Notation uses its data font without a background or padding by default, across lessons,

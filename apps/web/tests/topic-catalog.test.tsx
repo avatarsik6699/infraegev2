@@ -114,6 +114,18 @@ const summary = {
         solution_revision: 1,
       })),
     },
+    {
+      id: "integer-processing",
+      tasks: [{ id: "task-25-01", solution_revision: 1 }],
+    },
+    {
+      id: "array-processing",
+      tasks: [{ id: "task-26-01", solution_revision: 1 }],
+    },
+    {
+      id: "data-analysis",
+      tasks: [{ id: "task-27-01", solution_revision: 1 }],
+    },
   ],
 };
 const renderCatalog = () =>
@@ -155,13 +167,13 @@ describe("TopicCatalogPage", () => {
     expect(cards).toHaveLength(25);
     expect(
       container.querySelectorAll('[data-topic-status="published"]'),
-    ).toHaveLength(4);
+    ).toHaveLength(7);
     expect(
       container.querySelectorAll('[data-topic-status="planned"]'),
-    ).toHaveLength(21);
+    ).toHaveLength(18);
     expect(
       container.querySelectorAll('[data-topic-status="published"] a'),
-    ).toHaveLength(4);
+    ).toHaveLength(7);
     expect(
       container.querySelectorAll('[data-topic-status="planned"] a'),
     ).toHaveLength(0);
@@ -186,7 +198,22 @@ describe("TopicCatalogPage", () => {
         .getAttribute("href"),
     ).toBe("/ege/24-obrabotka-simvolnyh-strok");
     expect(screen.getByText("Задания 19–21")).not.toBeNull();
-    expect(screen.getAllByText("Скоро")).toHaveLength(21);
+    expect(
+      screen
+        .getByRole("link", { name: "Обработка целых чисел" })
+        .getAttribute("href"),
+    ).toBe("/ege/25-obrabotka-celyh-chisel");
+    expect(
+      screen
+        .getByRole("link", { name: "Обработка данных: сортировка и отбор" })
+        .getAttribute("href"),
+    ).toBe("/ege/26-sortirovka-i-otbor");
+    expect(
+      screen
+        .getByRole("link", { name: "Анализ данных: кластеризация" })
+        .getAttribute("href"),
+    ).toBe("/ege/27-analiz-dannyh-i-klasterizatsiya");
+    expect(screen.getAllByText("Скоро")).toHaveLength(18);
     await screen.findByText("Решено 0 из 2");
   });
 });
@@ -195,14 +222,14 @@ it("combines live search and status filters, clears input and resets empty resul
   const view = renderCatalog();
   await screen.findByText("Решено 0 из 2");
   fireEvent.click(screen.getByRole("button", { name: "Не начаты" }));
-  expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(4);
+  expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(7);
   fireEvent.change(screen.getByRole("searchbox"), {
     target: { value: "РЕКУРС" },
   });
   expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(1);
   fireEvent.click(screen.getByRole("button", { name: "Очистить поиск" }));
   expect((screen.getByRole("searchbox") as HTMLInputElement).value).toBe("");
-  expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(4);
+  expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(7);
   fireEvent.change(screen.getByRole("searchbox"), {
     target: { value: "unknown" },
   });
@@ -228,6 +255,12 @@ it("counts only current topic answers, keeps completed in All and excludes stale
     },
     {
       context_kind: "topic_lesson",
+      context_id: "rekursiya",
+      task_id: "removed-r3",
+      solution_revision: 1,
+    },
+    {
+      context_kind: "topic_lesson",
       context_id: "preobrazovanie-zapisey-chisel",
       task_id: "n1",
       solution_revision: 1,
@@ -235,8 +268,14 @@ it("counts only current topic answers, keeps completed in All and excludes stale
     {
       context_kind: "course_lesson",
       context_id: "python",
-      task_id: "python1",
+      task_id: "r1",
       solution_revision: 1,
+    },
+    {
+      context_kind: "course_lesson",
+      context_id: "python",
+      task_id: "r2",
+      solution_revision: 2,
     },
   ];
   const view = renderCatalog();
@@ -250,7 +289,7 @@ it("counts only current topic answers, keeps completed in All and excludes stale
   ).not.toBeNull();
   expect(screen.getByText("Решено задач в темах: 2")).not.toBeNull();
   fireEvent.click(screen.getByRole("button", { name: "Не начаты" }));
-  expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(2);
+  expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(5);
   expect(
     screen.getByRole("link", { name: "Числовые последовательности" }),
   ).not.toBeNull();
@@ -307,7 +346,7 @@ it("treats missing summaries as unavailable and recovers corrupt storage", async
   renderCatalog();
   await screen.findByText("Прогресс временно недоступен");
   expect(screen.getByText("Решено 0 из 2")).not.toBeNull();
-  expect(screen.getAllByText("Прогресс недоступен")).toHaveLength(3);
+  expect(screen.getAllByText("Прогресс недоступен")).toHaveLength(6);
 });
 
 it("does not flash zero progress while summary is pending", async () => {
@@ -324,7 +363,7 @@ it("does not flash zero progress while summary is pending", async () => {
     }),
   );
   renderCatalog();
-  expect(screen.getAllByText("Прогресс загружается")).toHaveLength(4);
+  expect(screen.getAllByText("Прогресс загружается")).toHaveLength(7);
   expect(screen.queryByRole("progressbar")).toBeNull();
   await waitFor(() => expect(resolve).toBeTypeOf("function"));
   resolve(Response.json(summary));

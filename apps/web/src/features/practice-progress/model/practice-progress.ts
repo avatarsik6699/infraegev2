@@ -1,8 +1,8 @@
 import { createStore } from "zustand/vanilla";
 import { createZustandScope } from "~/shared/lib/create-zustand-scope";
 
-export type PracticeHistory = Record<string, Record<string, true>>;
-export type PracticeProgressStatus = "guest" | "loading" | "ready" | "error";
+type PracticeHistory = Record<string, Record<string, true>>;
+type PracticeProgressStatus = "guest" | "loading" | "ready" | "error";
 type State = {
   history: PracticeHistory;
   hydrated: boolean;

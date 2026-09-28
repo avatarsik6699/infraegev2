@@ -33,7 +33,7 @@ export namespace LessonContent {
     /** Share of correct Task answers counted as "mastered". Defaults to 0.8. */
     masteryThreshold?: number;
     learningOutcomes: readonly string[];
-    /** References content/tasks/**. */
+    /** Authored theory blocks; task membership belongs to the canonical practice bank. */
     theory: readonly ConceptBlock[];
     examFocus?: React.ReactNode;
     /** The lesson's single formative, think-then-reveal self-check, rendered inside `result`

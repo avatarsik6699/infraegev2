@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-repo_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
+repo_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)
 mode=${1:---apply}
 artifacts_found=0
 
@@ -10,12 +10,25 @@ if [[ $mode != --apply && $mode != --dry-run && $mode != --check ]]; then
   exit 2
 fi
 
-remove_path() {
+require_local_parent() {
   local target=$1
   [[ $target == "$repo_dir"/* ]] || {
     echo "refusing path outside repository: $target" >&2
     exit 2
   }
+  local parent=${target%/*}
+  while [[ $parent != "$repo_dir" ]]; do
+    if [[ -L $parent ]]; then
+      echo "refusing cleanup through symlink: ${parent#"$repo_dir"/}" >&2
+      exit 2
+    fi
+    parent=${parent%/*}
+  done
+}
+
+remove_path() {
+  local target=$1
+  require_local_parent "$target"
   [[ -e $target || -L $target ]] || return 0
   case $mode in
     --dry-run)
@@ -60,6 +73,7 @@ done < <(
 )
 
 for search_root in "$repo_dir/apps/api" "$repo_dir/ops" "$repo_dir/scripts"; do
+  require_local_parent "$search_root/cache"
   [[ -d $search_root ]] || continue
   while IFS= read -r cache_dir; do
     remove_path "$cache_dir"
@@ -81,6 +95,7 @@ empty_candidates=(
 
 for relative_path in "${empty_candidates[@]}"; do
   target=$repo_dir/$relative_path
+  require_local_parent "$target/entry"
   [[ -d $target ]] || continue
   if [[ -z $(find "$target" -mindepth 1 -print -quit) ]]; then
     remove_path "$target"
@@ -89,6 +104,7 @@ done
 
 for relative_path in apps/web/.impeccable/live apps/web/.impeccable; do
   target=$repo_dir/$relative_path
+  require_local_parent "$target/entry"
   [[ -d $target ]] || continue
   if [[ -z $(find "$target" -mindepth 1 -print -quit) ]]; then
     remove_path "$target"
