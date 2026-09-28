@@ -6,7 +6,7 @@
 |---|---|
 | Change | `154` |
 | Slug | `repository-audit-cleanup` |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/154-repository-audit-cleanup` |
 
 ## Goal
