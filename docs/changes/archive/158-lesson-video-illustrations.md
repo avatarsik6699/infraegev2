@@ -9,14 +9,14 @@
 | Change | `158` |
 | Slug | `lesson-video-illustrations` |
 | Title | Короткие видео и рисованные иллюстрации в теории |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/158-lesson-video-illustrations` |
 
 ---
 
 ## Goal
 
-Дать теории уроков способ показывать идею движением, не прибегая к GIF, кнопкам и SVG: короткое немое зацикленное видео с постером в общей рамке `LearningVisualFrame`. Кадры генерирует воспроизводимый скрипт (Pillow + ffmpeg) в манере рисованных иллюстраций книги «Грокаем алгоритмы»: неровные линии с разрывами, рукописные заглавные подписи, штриховые рамки, один оранжевый акцент. Пилот — два ролика в уроке «Рекурсия»: цепочка «база и шаг» и дерево вызовов `F(5)` с повторами. Контракт — [SPEC](../SPEC.md) §2.3 (правила ролика уже внесены при планировании).
+Дать теории уроков способ показывать идею движением, не прибегая к GIF, кнопкам и SVG: короткое немое зацикленное видео с постером в общей рамке `LearningVisualFrame`. Кадры генерирует воспроизводимый скрипт (Pillow + ffmpeg) в манере рисованных иллюстраций книги «Грокаем алгоритмы»: неровные линии с разрывами, рукописные заглавные подписи, штриховые рамки, один оранжевый акцент. Пилот — два ролика в уроке «Рекурсия»: цепочка «база и шаг» и дерево вызовов `F(5)` с повторами. Контракт — [SPEC](../../SPEC.md) §2.3 (правила ролика уже внесены при планировании).
 
 **Решения архитектора.** Статика — растр, не SVG. Анимация — WebM + MP4, без GIF и без пошаговых степперов. Кадры не рисуются вручную. _Пересмотрено 2026-09-29 после первого просмотра:_ у ролика есть минималистичные кнопка play/pause и полоса времени с перемоткой, чтобы поведение было очевидным; подпись под роликом одна. Ориентир длины 5 секунд, допустимо дольше: важнее качество и подача. Идеи и манера рисования — из книги; сами иллюстрации не копируются, референсы в репозиторий не кладутся.
 
@@ -66,7 +66,7 @@
 
 ### Other
 - [x] `T1` Тесты: unit `LessonVideo` (атрибуты, источники, постер, размеры, reduced motion, пауза по клику и клавиатуре), обновить контракт урока и E2E page object, если меняется разметка — _Depends on:_ F2, F4
-- [x] `T2` Документы: правила видео в `docs/FRONTEND.md` (без observers, reduced motion, размеры) и в [руководстве по урокам](../runbooks/lesson-authoring.md); запись в `docs/artifacts/lessons/16-rekursiya.quality.md` (карта «понятие → ролик») — _Depends on:_ F4
+- [x] `T2` Документы: правила видео в `docs/FRONTEND.md` (без observers, reduced motion, размеры) и в [руководстве по урокам](../../runbooks/lesson-authoring.md); запись в `docs/artifacts/lessons/16-rekursiya.quality.md` (карта «понятие → ролик») — _Depends on:_ F4
 - [x] `T3` Проверка страницы как ученик: Playwriter (снимки 390/1440, пауза и запуск по клику, консоль), изолированный E2E 190/190 с тремя новыми тестами роликов; `reduced motion`, no-JS — _Depends on:_ T1, D5
 
 - [x] `T4` Документы: SPEC §2.3 (одна подпись без служебного заголовка; видимые play/pause и полоса времени вместо «без кнопок»; ролик идёт после иллюстрируемого текста; блоки кода схлопываются: код и его вывод, код и дерево вызовов в одном блоке), `docs/FRONTEND.md`, руководство по урокам, `STYLE.md`; обновить память проекта о направлении — _Depends on:_ F6, F10
@@ -114,7 +114,7 @@ of truth; this file only tracks what to build and what's left.
 ## Gate Checks
 
 > Critical Gate runs once per `/work` target set and by default in `/ship`; Full Gate runs only
-> with explicit `--full`; release selects affected checks and Release Gate. All gates are defined in [docs/STACK.md](../STACK.md) — this section only records
+> with explicit `--full`; release selects affected checks and Release Gate. All gates are defined in [docs/STACK.md](../../STACK.md) — this section only records
 > change-specific overrides.
 
 Дополнительно к Critical Gate: `pnpm validate:content`, `pnpm test:content-assets`, `bash scripts/tests/lesson-media-nginx.test.sh`, изолированный E2E (`bash scripts/run-isolated-browser-audit.sh`) для `/ege/16-rekursiya` и `accessibility`. Кадры воспроизводимы (seed), но байты WebM/MP4 зависят от версии ffmpeg, поэтому ассеты пересобираются командой из README, а не сверяются побайтно.
