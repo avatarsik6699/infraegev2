@@ -1,6 +1,7 @@
 import { expect, type Page } from "@playwright/test";
 import bank from "../../../../content/practice-bank/bank.json" with { type: "json" };
 import { courseLessonPublications } from "../../src/entities/course/content/course-publication.mjs";
+import { lessonPublications } from "../../src/shared/config/lesson-publication.mjs";
 import { expectNoHorizontalOverflow } from "./layout.assertions";
 
 const visibleTasks = bank.tasks
@@ -9,6 +10,87 @@ const visibleTasks = bank.tasks
 
 export class MinimalApplicationPage {
   constructor(private readonly page: Page) {}
+
+  async expectUnifiedLesson(index: number, noJavaScript = false) {
+    // These are reading/disclosure checks; isolate the guest session so traversing
+    // the full publication registry does not exercise auth rate limits.
+    if (!noJavaScript) {
+      await this.page.route("**/api/auth/session", (route) =>
+        route.fulfill({ json: { account: null, csrf_token: null } }),
+      );
+    }
+    const lessons = [
+      ...lessonPublications
+        .filter((lesson) => lesson.status === "published")
+        .map((lesson) => ({ ...lesson, route: `/ege/${lesson.routeSlug}` })),
+      ...courseLessonPublications
+        .filter((lesson) => lesson.status === "published")
+        .map((lesson) => ({
+          ...lesson,
+          route: `/courses/python/${lesson.routeSlug}`,
+        })),
+    ];
+    const lesson = lessons[index];
+    await this.page.setViewportSize({ width: 390, height: 844 });
+    expect((await this.page.goto(lesson.route))?.status()).toBe(200);
+    await expect(this.page.getByRole("heading", { level: 1 })).toHaveText(
+      lesson.title,
+    );
+    await expect(this.page.locator("[data-learning-profile]")).toHaveCount(0);
+    for (const heading of await this.page
+      .locator("#theory section[id] > h3")
+      .all()) {
+      await expect(heading).toHaveCSS("border-bottom-width", "1px");
+    }
+    const verifyType = async (scale: number) => {
+      const sizes = await this.page
+        .locator("#theory pre code, #theory [data-kind]")
+        .evaluateAll((elements) =>
+          elements.map((element) => ({
+            actual: parseFloat(getComputedStyle(element).fontSize),
+            expected: element.closest("pre")
+              ? parseFloat(
+                  getComputedStyle(document.documentElement).fontSize,
+                ) * 0.9
+              : parseFloat(getComputedStyle(element.parentElement!).fontSize) *
+                0.9,
+          })),
+        );
+      expect(sizes.length).toBeGreaterThan(0);
+      for (const size of sizes)
+        expect(Math.abs(size.actual - size.expected)).toBeLessThan(0.05);
+      for (const block of await this.page.locator("#theory pre code").all())
+        await expect(block).toHaveCSS("font-size", `${14.4 * scale}px`);
+      await expectNoHorizontalOverflow(this.page);
+    };
+    await verifyType(1);
+    const checkpoint = this.page.getByRole("region", {
+      name: "Проверьте себя",
+    });
+    const disclosure = noJavaScript
+      ? checkpoint.locator("summary").first()
+      : checkpoint.getByRole("button").first();
+    await expect(disclosure).toBeVisible();
+    if (noJavaScript) {
+      await expect(checkpoint.locator("details[open]")).toHaveCount(0);
+      await disclosure.click();
+      await expect(checkpoint.locator("details[open]")).toHaveCount(1);
+    } else {
+      await disclosure.focus();
+      await disclosure.press("Enter");
+      await expect(disclosure).toHaveAttribute("aria-expanded", "true");
+    }
+    await this.page.evaluate(() => {
+      document.documentElement.style.fontSize = "200%";
+    });
+    try {
+      await verifyType(2);
+    } finally {
+      await this.page.evaluate(() => {
+        document.documentElement.style.removeProperty("font-size");
+      });
+    }
+  }
   async expectPublicPages() {
     for (const path of [
       "/",
@@ -521,7 +603,9 @@ export class MinimalApplicationPage {
     await this.page
       .getByRole("button", { name: "Проверить", exact: true })
       .click();
-    await expect(this.page.getByRole("status")).toContainText("Верно.");
+    await expect(this.page.getByRole("main").getByRole("status")).toContainText(
+      "Верно.",
+    );
     await this.page.reload();
     await expect(input).toBeEnabled();
     await expect(input).toHaveValue("");
@@ -551,7 +635,7 @@ export class MinimalApplicationPage {
     await this.page
       .getByRole("button", { name: "Проверить", exact: true })
       .click();
-    await expect(this.page.getByRole("status")).toContainText(
+    await expect(this.page.getByRole("main").getByRole("status")).toContainText(
       "Не удалось проверить ответ",
     );
     await expect(input).toHaveValue("123");
@@ -560,7 +644,9 @@ export class MinimalApplicationPage {
     await this.page
       .getByRole("button", { name: "Проверить", exact: true })
       .click();
-    await expect(this.page.getByRole("status")).toContainText("Верно.");
+    await expect(this.page.getByRole("main").getByRole("status")).toContainText(
+      "Верно.",
+    );
   }
   async expectReadablePractice() {
     const response = await this.page.goto(

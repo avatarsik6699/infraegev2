@@ -336,6 +336,13 @@ The reference is production commit `a5b0bf5`: white canvas, ink, compact text li
 reading. Keep infraege stone identity, current self-hosted Alegreya/Golos Text/JetBrains Mono,
 and small orange accents for brand identity. Controls and navigation remain monochrome. Remove decorative imagery, grids,
 textures, light effects and animation infrastructure. Keep educational figures and attachments.
+Change 156 adopts blue text links/current outline position across the project after architect
+visual approval. Links underline only on hover/focus; controls/navigation and tab indicators
+remain neutral. Following approval of lesson 16, Change 156 promotes its reading typography, subtle
+content-heading rules, semantic feedback and disclosure hierarchy across all lessons
+and site page families. Code/formulas use the approved 0.9 scale; added decorative
+prose emphasis remains rejected. Existing compositions, artwork, authored learning
+content and functional contracts remain. See FRONTEND §4.
 The `/courses` catalog is a scoped exception: four subject-specific hand-drawn raster miniatures,
 quiet shadowed cards in two desktop columns (one on mobile), and motion-only hover/focus feedback.
 Keep all four directions in registry order, published-only lesson counts, an overview CTA and

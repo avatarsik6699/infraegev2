@@ -5,7 +5,7 @@
   transition: color var(--motion-duration) var(--motion-easing);
 }
 .root > span:first-of-type {
-  text-decoration-line: underline;
+  text-decoration-line: none;
   text-decoration-color: var(--color-link-decoration);
   text-decoration-thickness: 1px;
   text-underline-offset: 0.2em;
@@ -14,7 +14,9 @@
 .root:hover {
   color: var(--color-text-soft);
 }
-.root:hover > span:first-of-type {
+.root:hover > span:first-of-type,
+.root:focus-visible > span:first-of-type {
+  text-decoration-line: underline;
   text-decoration-color: currentColor;
 }
 .root:active {
@@ -24,16 +26,36 @@
   outline: 2px solid var(--color-focus);
   outline-offset: 3px;
 }
+.root:not([data-presentation="button"]):not([data-presentation="navigation"]) {
+  color: var(--color-link);
+}
+.root:not([data-presentation="button"]):not(
+    [data-presentation="navigation"]
+  ):hover {
+  color: var(--color-link-hover);
+}
+.root:not([data-presentation="button"]):not(
+    [data-presentation="navigation"]
+  ):active {
+  color: var(--color-link-active);
+}
 .root[data-presentation="action"],
 .root[data-presentation="navigation"] {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-1);
+  gap: 0.25em;
   min-height: var(--control-height);
+}
+.root[data-presentation="navigation"] {
+  gap: var(--space-1);
 }
 .root[data-presentation="navigation"] > span:first-of-type,
 .root[data-presentation="button"] > span:first-of-type {
   text-decoration: none;
+}
+.root[data-presentation="action"] > .icon,
+.root[data-presentation="navigation"] > .icon {
+  margin-inline: 0;
 }
 .icon {
   flex: none;

@@ -24,7 +24,7 @@
 }
 
 .tab[data-active] {
-  border-bottom-color: var(--color-link-decoration);
+  border-bottom-color: var(--color-rule-strong);
   color: var(--color-text);
   font-weight: 600;
 }

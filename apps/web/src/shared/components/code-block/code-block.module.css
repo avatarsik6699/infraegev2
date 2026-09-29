@@ -48,7 +48,7 @@
   overflow-x: auto;
   background: transparent;
   font-family: var(--font-data);
-  font-size: var(--text-xs);
+  font-size: var(--text-learning-code);
   font-variant-ligatures: none;
   line-height: 1.65;
 }
@@ -69,7 +69,7 @@
   padding: var(--space-1-5) var(--space-2);
   color: var(--color-code-text);
   font-family: inherit;
-  font-size: var(--text-xs);
+  font-size: var(--text-learning-code);
   line-height: inherit;
   tab-size: 4;
 }
@@ -153,11 +153,11 @@
 @media (max-width: 34rem) {
   .code {
     padding-inline: 1rem;
-    font-size: var(--text-2xs);
+    font-size: var(--text-learning-code-mobile);
   }
 
   .scrollArea {
-    font-size: var(--text-2xs);
+    font-size: var(--text-learning-code-mobile);
   }
 }
 

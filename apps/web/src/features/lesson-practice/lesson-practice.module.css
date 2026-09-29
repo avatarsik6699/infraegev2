@@ -91,7 +91,7 @@
 
 .taskTheoryLinks {
   min-width: 0;
-  text-align: right;
+  text-align: left;
   font-family: var(--font-ui);
   font-size: var(--text-xs);
   line-height: 1.4;
@@ -99,6 +99,7 @@
 
 .taskTheoryLinks ul {
   display: grid;
+  justify-items: end;
   gap: 0;
   padding: 0;
   margin: 0;
@@ -115,12 +116,8 @@
   max-width: 100%;
   min-height: 2.5rem;
   align-items: center;
-  color: var(--color-text-soft);
-  text-underline-offset: 0.18em;
-}
-
-.taskTheoryLinks a:hover {
-  color: var(--color-text);
+  justify-content: flex-start;
+  text-align: left;
 }
 
 .taskContent {
@@ -134,7 +131,7 @@
 }
 
 .taskContent[data-content-context="hint"] {
-  color: var(--color-muted);
+  color: var(--practice-help-color, var(--color-muted));
 }
 
 .contentText,
@@ -143,15 +140,15 @@
   margin: 0;
   font-family: var(--font-reading);
   font-size: var(--text-base);
-  line-height: 1.62;
+  line-height: 1.68;
 }
 
 .taskContent[data-content-context="hint"] .contentText,
 .taskContent[data-content-context="solution"] .contentText,
 .taskContent[data-content-context="hint"] .contentSteps p,
 .taskContent[data-content-context="solution"] .contentSteps p {
-  font-size: var(--text-sm);
-  line-height: 1.58;
+  font-size: var(--text-practice-help);
+  line-height: var(--practice-help-leading, 1.58);
 }
 
 .contentList {
@@ -297,6 +294,11 @@
 
 .attachmentCopy strong {
   font-weight: 600;
+  text-decoration: none;
+}
+
+.contentAttachment:hover .attachmentCopy strong,
+.contentAttachment:focus-visible .attachmentCopy strong {
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.18em;
@@ -457,8 +459,8 @@
 .practiceSet[data-layout="compact"] .contentText,
 .practiceSet[data-layout="compact"] .contentSteps p,
 .practiceSet[data-layout="compact"] .contentList {
-  font-size: var(--text-sm);
-  line-height: 1.5;
+  font-size: var(--text-base);
+  line-height: 1.68;
 }
 .catalogInstruction {
   margin-top: var(--space-1);
@@ -498,7 +500,7 @@
   margin: 0 0 var(--space-0-5);
   font-family: var(--font-ui);
   font-size: var(--text-sm);
-  font-weight: 600;
+  font-weight: 500;
 }
 @media (max-width: 40rem) {
   .catalogToolbar > form {
@@ -558,5 +560,9 @@
 
   .taskTheoryLinks {
     text-align: left;
+  }
+
+  .taskTheoryLinks ul {
+    justify-items: start;
   }
 }

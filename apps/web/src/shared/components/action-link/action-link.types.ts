@@ -9,6 +9,6 @@ export namespace ActionLinkTypes {
   export type Props = RootProps & {
     to: string;
     params?: Record<string, string>;
-    search?: { returnTo: string };
+    search?: { returnTo: string; token?: string };
   };
 }

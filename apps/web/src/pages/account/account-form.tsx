@@ -1,4 +1,3 @@
-import { Link } from "@tanstack/react-router";
 import { ActionLink } from "~/shared/components/action-link";
 import { Button } from "~/shared/components/button";
 import { Field } from "~/shared/components/field";
@@ -95,9 +94,14 @@ export const AccountForm: React.FC<AccountFormTypes.Props> = (props) => {
           />
           <label htmlFor="privacy-consent">
             Даю{" "}
-            <Link to="/consent">согласие на обработку персональных данных</Link>
+            <ActionLink presentation="inline" icon="none" to="/consent">
+              согласие на обработку персональных данных
+            </ActionLink>
             . Сведения о работе сайта — в{" "}
-            <Link to="/privacy">политике обработки данных</Link>.
+            <ActionLink presentation="inline" icon="none" to="/privacy">
+              политике обработки данных
+            </ActionLink>
+            .
           </label>
         </div>
       ) : null}

@@ -88,25 +88,30 @@
   line-height: 1.4;
 }
 
-.childLink[aria-current="location"]::before {
+.childLink[aria-current="location"]::before,
+.groupLink[aria-current="location"]::before {
   position: absolute;
   top: 0.45rem;
   bottom: 0.45rem;
   left: calc(-1 * var(--space-1));
   width: 2px;
   border-radius: var(--radius-pill);
-  background: var(--color-text);
+  background: var(--color-current-location);
   content: "";
+}
+
+.groupLink[aria-current="location"]::before {
+  display: var(--outline-group-marker-display, none);
 }
 
 .groupLink[data-active-branch="true"],
 .childLink[aria-current="location"] {
-  color: var(--color-text);
+  color: var(--color-current-location);
 }
 
 .groupLink:hover,
 .childLink:hover {
-  color: var(--color-text);
+  color: var(--color-current-location);
 }
 
 .groupLink:focus-visible,

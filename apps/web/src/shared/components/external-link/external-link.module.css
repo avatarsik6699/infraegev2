@@ -11,3 +11,16 @@
 .visuallyHidden {
   composes: visuallyHidden from "../../styles/patterns.module.css";
 }
+
+.root [data-external-link-icon] {
+  transition: transform var(--motion-duration) var(--motion-easing);
+}
+.root:hover [data-external-link-icon] {
+  transform: translate(2px, -2px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .root:hover [data-external-link-icon] {
+    transform: none;
+    transition: none;
+  }
+}

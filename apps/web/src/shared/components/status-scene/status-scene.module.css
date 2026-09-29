@@ -4,6 +4,10 @@
   max-width: 65ch;
   padding-block: var(--space-5);
 }
+
+.icon {
+  color: var(--color-danger);
+}
 .actions {
   composes: controlsRow from "../../styles/patterns.module.css";
 }

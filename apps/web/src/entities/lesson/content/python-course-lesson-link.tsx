@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { ActionLink } from "~/shared/components/action-link";
 
 type PythonCourseLessonLinkProps = {
   children: React.ReactNode;
@@ -8,10 +8,12 @@ type PythonCourseLessonLinkProps = {
 export const PythonCourseLessonLink: React.FC<PythonCourseLessonLinkProps> = (
   props,
 ) => (
-  <Link
+  <ActionLink
+    presentation="inline"
+    icon="none"
     to="/courses/$courseSlug/$lessonSlug"
     params={{ courseSlug: "python", lessonSlug: props.lessonSlug }}
   >
     {props.children}
-  </Link>
+  </ActionLink>
 );

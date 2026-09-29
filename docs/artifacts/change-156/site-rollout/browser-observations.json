@@ -1,0 +1,540 @@
+[
+  {
+    "name": "home",
+    "size": "desktop",
+    "path": "/",
+    "status": 200,
+    "viewport": 1440,
+    "scrollWidth": 1434,
+    "heading": "Подготовка к ЕГЭ по информатике",
+    "enlarged": {
+      "viewport": 1440,
+      "scrollWidth": 1434
+    },
+    "errors": [],
+    "failed": []
+  },
+  {
+    "name": "home",
+    "size": "mobile",
+    "path": "/",
+    "status": 200,
+    "viewport": 390,
+    "scrollWidth": 384,
+    "heading": "Подготовка к ЕГЭ по информатике",
+    "enlarged": {
+      "viewport": 390,
+      "scrollWidth": 387
+    },
+    "errors": [],
+    "failed": []
+  },
+  {
+    "name": "ege",
+    "size": "desktop",
+    "path": "/ege",
+    "status": 200,
+    "viewport": 1440,
+    "scrollWidth": 1434,
+    "heading": "Темы ЕГЭ",
+    "enlarged": {
+      "viewport": 1440,
+      "scrollWidth": 1434
+    },
+    "errors": [],
+    "failed": []
+  },
+  {
+    "name": "ege",
+    "size": "mobile",
+    "path": "/ege",
+    "status": 200,
+    "viewport": 390,
+    "scrollWidth": 384,
+    "heading": "Темы ЕГЭ",
+    "enlarged": {
+      "viewport": 390,
+      "scrollWidth": 384
+    },
+    "errors": [],
+    "failed": []
+  },
+  {
+    "name": "courses",
+    "size": "desktop",
+    "path": "/courses",
+    "status": 200,
+    "viewport": 1440,
+    "scrollWidth": 1434,
+    "heading": "Мини-курсы",
+    "enlarged": {
+      "viewport": 1440,
+      "scrollWidth": 1434
+    },
+    "errors": [],
+    "failed": []
+  },
+  {
+    "name": "courses",
+    "size": "mobile",
+    "path": "/courses",
+    "status": 200,
+    "viewport": 390,
+    "scrollWidth": 384,
+    "heading": "Мини-курсы",
+    "enlarged": {
+      "viewport": 390,
+      "scrollWidth": 384
+    },
+    "errors": [],
+    "failed": []
+  },
+  {
+    "name": "python-overview",
+    "size": "desktop",
+    "path": "/courses/python",
+    "status": 200,
+    "viewport": 1440,
+    "scrollWidth": 1434,
+    "heading": "Python с нуля для ЕГЭ",
+    "enlarged": {
+      "viewport": 1440,
+      "scrollWidth": 1434
+    },
+    "errors": [],
+    "failed": []
+  },
+  {
+    "name": "python-overview",
+    "size": "mobile",
+    "path": "/courses/python",
+    "status": 200,
+    "viewport": 390,
+    "scrollWidth": 384,
+    "heading": "Python с нуля для ЕГЭ",
+    "enlarged": {
+      "viewport": 390,
+      "scrollWidth": 384
+    },
+    "errors": [],
+    "failed": []
+  },
+  {
+    "name": "practice-detail",
+    "size": "desktop",
+    "path": "/practice/0057847f-c35a-4f0c-9615-5cdc5b249926",
+    "status": 200,
+    "viewport": 1440,
+    "scrollWidth": 1434,
+    "heading": "16 номер. Рекурсия",
+    "enlarged": {
+      "viewport": 1440,
+      "scrollWidth": 1434
+    },
+    "errors": [],
+    "failed": []
+  },
+  {
+    "name": "practice-detail",
+    "size": "mobile",
+    "path": "/practice/0057847f-c35a-4f0c-9615-5cdc5b249926",
+    "status": 200,
+    "viewport": 390,
+    "scrollWidth": 384,
+    "heading": "16 номер. Рекурсия",
+    "enlarged": {
+      "viewport": 390,
+      "scrollWidth": 384
+    },
+    "errors": [],
+    "failed": []
+  },
+  {
+    "name": "sign-in",
+    "size": "desktop",
+    "path": "/sign-in",
+    "status": 200,
+    "viewport": 1440,
+    "scrollWidth": 1434,
+    "heading": "Войти",
+    "enlarged": {
+      "viewport": 1440,
+      "scrollWidth": 1434
+    },
+    "errors": [],
+    "failed": []
+  },
+  {
+    "name": "sign-in",
+    "size": "mobile",
+    "path": "/sign-in",
+    "status": 200,
+    "viewport": 390,
+    "scrollWidth": 384,
+    "heading": "Войти",
+    "enlarged": {
+      "viewport": 390,
+      "scrollWidth": 384
+    },
+    "errors": [],
+    "failed": []
+  },
+  {
+    "name": "register",
+    "size": "desktop",
+    "path": "/register",
+    "status": 200,
+    "viewport": 1440,
+    "scrollWidth": 1434,
+    "heading": "Создать аккаунт",
+    "enlarged": {
+      "viewport": 1440,
+      "scrollWidth": 1434
+    },
+    "errors": [],
+    "failed": []
+  },
+  {
+    "name": "register",
+    "size": "mobile",
+    "path": "/register",
+    "status": 200,
+    "viewport": 390,
+    "scrollWidth": 384,
+    "heading": "Создать аккаунт",
+    "enlarged": {
+      "viewport": 390,
+      "scrollWidth": 384
+    },
+    "errors": [],
+    "failed": []
+  },
+  {
+    "name": "password-reset",
+    "size": "desktop",
+    "path": "/password-reset",
+    "status": 200,
+    "viewport": 1440,
+    "scrollWidth": 1434,
+    "heading": "Восстановить пароль",
+    "enlarged": {
+      "viewport": 1440,
+      "scrollWidth": 1434
+    },
+    "errors": [],
+    "failed": []
+  },
+  {
+    "name": "password-reset",
+    "size": "mobile",
+    "path": "/password-reset",
+    "status": 200,
+    "viewport": 390,
+    "scrollWidth": 384,
+    "heading": "Восстановить пароль",
+    "enlarged": {
+      "viewport": 390,
+      "scrollWidth": 384
+    },
+    "errors": [],
+    "failed": []
+  },
+  {
+    "name": "privacy",
+    "size": "desktop",
+    "path": "/privacy",
+    "status": 200,
+    "viewport": 1440,
+    "scrollWidth": 1434,
+    "heading": "Обработка персональных данных",
+    "enlarged": {
+      "viewport": 1440,
+      "scrollWidth": 1434
+    },
+    "errors": [],
+    "failed": []
+  },
+  {
+    "name": "privacy",
+    "size": "mobile",
+    "path": "/privacy",
+    "status": 200,
+    "viewport": 390,
+    "scrollWidth": 384,
+    "heading": "Обработка персональных данных",
+    "enlarged": {
+      "viewport": 390,
+      "scrollWidth": 384
+    },
+    "errors": [],
+    "failed": []
+  },
+  {
+    "name": "consent",
+    "size": "desktop",
+    "path": "/consent",
+    "status": 200,
+    "viewport": 1440,
+    "scrollWidth": 1434,
+    "heading": "Согласие на обработку персональных данных",
+    "enlarged": {
+      "viewport": 1440,
+      "scrollWidth": 1434
+    },
+    "errors": [],
+    "failed": []
+  },
+  {
+    "name": "consent",
+    "size": "mobile",
+    "path": "/consent",
+    "status": 200,
+    "viewport": 390,
+    "scrollWidth": 384,
+    "heading": "Согласие на обработку персональных данных",
+    "enlarged": {
+      "viewport": 390,
+      "scrollWidth": 384
+    },
+    "errors": [],
+    "failed": []
+  },
+  {
+    "name": "not-found",
+    "size": "desktop",
+    "path": "/missing-page",
+    "status": 404,
+    "viewport": 1440,
+    "scrollWidth": 1434,
+    "heading": "Такой страницы нет",
+    "enlarged": {
+      "viewport": 1440,
+      "scrollWidth": 1434
+    },
+    "errors": [
+      "Failed to load resource: the server responded with a status of 404 ()"
+    ],
+    "failed": [
+      {
+        "url": "http://127.0.0.2:3200/missing-page",
+        "status": 404
+      }
+    ]
+  },
+  {
+    "name": "not-found",
+    "size": "mobile",
+    "path": "/missing-page",
+    "status": 404,
+    "viewport": 390,
+    "scrollWidth": 384,
+    "heading": "Такой страницы нет",
+    "enlarged": {
+      "viewport": 390,
+      "scrollWidth": 384
+    },
+    "errors": [
+      "Failed to load resource: the server responded with a status of 404 ()"
+    ],
+    "failed": [
+      {
+        "url": "http://127.0.0.2:3200/missing-page",
+        "status": 404
+      }
+    ]
+  },
+  {
+    "name": "recursion",
+    "size": "desktop",
+    "path": "/ege/16-rekursiya",
+    "status": 200,
+    "viewport": 1440,
+    "scrollWidth": 1434,
+    "heading": "Рекурсивные алгоритмы",
+    "enlarged": {
+      "viewport": 1440,
+      "scrollWidth": 1434
+    },
+    "errors": [],
+    "failed": []
+  },
+  {
+    "name": "recursion",
+    "size": "mobile",
+    "path": "/ege/16-rekursiya",
+    "status": 200,
+    "viewport": 390,
+    "scrollWidth": 384,
+    "heading": "Рекурсивные алгоритмы",
+    "enlarged": {
+      "viewport": 390,
+      "scrollWidth": 384
+    },
+    "errors": [],
+    "failed": []
+  },
+  {
+    "name": "python-lesson",
+    "size": "desktop",
+    "path": "/courses/python/pervaya-programma",
+    "status": 200,
+    "viewport": 1440,
+    "scrollWidth": 1434,
+    "heading": "Первая программа: ввод, вычисление и вывод",
+    "enlarged": {
+      "viewport": 1440,
+      "scrollWidth": 1434
+    },
+    "errors": [],
+    "failed": []
+  },
+  {
+    "name": "python-lesson",
+    "size": "mobile",
+    "path": "/courses/python/pervaya-programma",
+    "status": 200,
+    "viewport": 390,
+    "scrollWidth": 384,
+    "heading": "Первая программа: ввод, вычисление и вывод",
+    "enlarged": {
+      "viewport": 390,
+      "scrollWidth": 384
+    },
+    "errors": [],
+    "failed": []
+  },
+  {
+    "name": "account",
+    "size": "desktop",
+    "path": "/account",
+    "status": 200,
+    "viewport": 1440,
+    "scrollWidth": 1434,
+    "heading": "Аккаунт",
+    "enlarged": {
+      "viewport": 1440,
+      "scrollWidth": 1434
+    },
+    "errors": [],
+    "failed": []
+  },
+  {
+    "name": "account",
+    "size": "mobile",
+    "path": "/account",
+    "status": 200,
+    "viewport": 390,
+    "scrollWidth": 384,
+    "heading": "Аккаунт",
+    "enlarged": {
+      "viewport": 390,
+      "scrollWidth": 384
+    },
+    "errors": [],
+    "failed": []
+  },
+  {
+    "name": "verification-success",
+    "size": "desktop",
+    "path": "/verify-email?token=visual-proof",
+    "status": 200,
+    "viewport": 1440,
+    "scrollWidth": 1434,
+    "heading": "Подтвердить почту",
+    "enlarged": {
+      "viewport": 1440,
+      "scrollWidth": 1434
+    },
+    "errors": [],
+    "failed": []
+  },
+  {
+    "name": "verification-success",
+    "size": "mobile",
+    "path": "/verify-email?token=visual-proof",
+    "status": 200,
+    "viewport": 390,
+    "scrollWidth": 384,
+    "heading": "Подтвердить почту",
+    "enlarged": {
+      "viewport": 390,
+      "scrollWidth": 384
+    },
+    "errors": [],
+    "failed": []
+  },
+  {
+    "name": "verification-error",
+    "size": "desktop",
+    "path": "/verify-email?token=visual-error",
+    "status": 200,
+    "viewport": 1440,
+    "scrollWidth": 1434,
+    "heading": "Подтвердить почту",
+    "enlarged": {
+      "viewport": 1440,
+      "scrollWidth": 1434
+    },
+    "errors": [
+      "Failed to load resource: the server responded with a status of 400 (Bad Request)"
+    ],
+    "failed": [
+      {
+        "url": "http://127.0.0.2:3200/api/auth/verify-email",
+        "status": 400
+      }
+    ]
+  },
+  {
+    "name": "verification-error",
+    "size": "mobile",
+    "path": "/verify-email?token=visual-error",
+    "status": 200,
+    "viewport": 390,
+    "scrollWidth": 384,
+    "heading": "Подтвердить почту",
+    "enlarged": {
+      "viewport": 390,
+      "scrollWidth": 384
+    },
+    "errors": [
+      "Failed to load resource: the server responded with a status of 400 (Bad Request)"
+    ],
+    "failed": [
+      {
+        "url": "http://127.0.0.2:3200/api/auth/verify-email",
+        "status": 400
+      }
+    ]
+  },
+  {
+    "name": "practice",
+    "size": "desktop",
+    "path": "/practice",
+    "status": 200,
+    "viewport": 1440,
+    "scrollWidth": 1434,
+    "heading": "Практика",
+    "enlarged": {
+      "viewport": 1440,
+      "scrollWidth": 1434
+    },
+    "errors": [],
+    "failed": []
+  },
+  {
+    "name": "practice",
+    "size": "mobile",
+    "path": "/practice",
+    "status": 200,
+    "viewport": 390,
+    "scrollWidth": 384,
+    "heading": "Практика",
+    "enlarged": {
+      "viewport": 390,
+      "scrollWidth": 384
+    },
+    "errors": [],
+    "failed": []
+  }
+]

@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 import { LogOut } from "lucide-react";
 import { useState } from "react";
 import { accountApi, useAccountSession } from "~/features/account";
@@ -233,9 +233,14 @@ export const AccountProfile: React.FC<AccountProfileTypes.Props> = (props) => {
           </Typography.Text>
         ) : null}
         {needsReauthentication && hasPassword ? (
-          <Link to="/sign-in" search={{ returnTo: "/account" }}>
+          <ActionLink
+            presentation="inline"
+            icon="none"
+            to="/sign-in"
+            search={{ returnTo: "/account" }}
+          >
             Войти повторно
-          </Link>
+          </ActionLink>
         ) : null}
       </section>
       <section className={styles.profileSafety} aria-labelledby="safety-title">

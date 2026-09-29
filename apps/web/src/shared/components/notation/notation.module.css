@@ -7,6 +7,16 @@
   box-decoration-break: clone;
 }
 
+.root[data-kind="formula"] {
+  font-size: var(--text-learning-formula);
+}
+
+.root [data-formula-term] {
+  display: var(--learning-formula-term-display, inline);
+  max-width: var(--learning-formula-term-max-width, none);
+  white-space: var(--learning-formula-term-white-space, normal);
+}
+
 .root[data-emphasis="highlight"] {
   padding: 0.08em var(--notation-padding-inline, 0.2em);
   border-radius: var(--notation-radius, 0.125rem);

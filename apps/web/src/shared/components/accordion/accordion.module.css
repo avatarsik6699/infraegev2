@@ -22,7 +22,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: var(--space-1);
-  align-items: center;
+  align-items: start;
   min-height: var(--accordion-trigger-height);
   padding: var(--accordion-trigger-padding);
   color: var(--color-text);
@@ -34,7 +34,8 @@
   width: 100%;
   min-height: var(--accordion-trigger-height);
   gap: var(--space-1);
-  align-items: center;
+  align-items: start;
+  line-height: var(--accordion-title-leading);
   padding: var(--accordion-trigger-padding);
   border: 0;
   background: transparent;
@@ -81,14 +82,15 @@
 .title {
   min-width: 0;
   font-family: var(--font-ui);
-  font-size: var(--text-sm);
+  font-size: var(--text-accordion-title);
   font-weight: 500;
-  line-height: 1.45;
+  line-height: var(--accordion-title-leading, 1.45);
 }
 
 .chevron {
   display: block;
   justify-self: end;
+  margin-top: 0.28rem;
   color: var(--color-muted);
   transition: var(--accordion-chevron-transition);
 }
@@ -116,11 +118,14 @@
 .content {
   min-height: 0;
   overflow: hidden;
+  margin-inline: var(--accordion-content-margin-inline, 0);
+  margin-bottom: var(--accordion-content-margin-bottom, 0);
+  border-inline-start: var(--accordion-content-border, 0 solid transparent);
   padding: var(--accordion-content-padding);
-  color: var(--color-text-soft);
+  color: var(--accordion-content-color, var(--color-text-soft));
   font-family: var(--font-reading);
-  font-size: var(--text-sm);
-  line-height: 1.58;
+  font-size: var(--text-accordion-content);
+  line-height: var(--accordion-content-leading, 1.58);
   transition: var(--accordion-content-transition);
 }
 

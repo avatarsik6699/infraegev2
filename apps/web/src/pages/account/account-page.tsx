@@ -1,4 +1,6 @@
-import { Link, useNavigate } from "@tanstack/react-router";
+import { CircleCheck, CircleAlert, Info } from "lucide-react";
+import { cssUtils } from "~/shared/lib/css-utils";
+import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import {
   accountApi,
@@ -25,7 +27,10 @@ export const AccountPage: React.FC<AccountPageTypes.Props> = (props) => {
   const refreshSession = session.refresh;
   const navigate = useNavigate();
   const [pending, setPending] = useState(false);
-  const [notice, setNotice] = useState<string | null>(null);
+  const [notice, setNotice] = useState<{
+    message: string;
+    tone: "success" | "info";
+  } | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [delivery, setDelivery] = useState<{
     purpose: AccountPageTypes.DeliveryPurpose;
@@ -53,7 +58,8 @@ export const AccountPage: React.FC<AccountPageTypes.Props> = (props) => {
         async () => {
           if (!active) return;
           await refreshSession();
-          if (active) setNotice("Почта подтверждена.");
+          if (active)
+            setNotice({ message: "Почта подтверждена.", tone: "success" });
         },
         (reason) => {
           if (!active) return;
@@ -171,9 +177,11 @@ export const AccountPage: React.FC<AccountPageTypes.Props> = (props) => {
         await accountApi.requestPasswordReset(delivery.email, destination);
       }
       mailCooldown.markSent(delivery.purpose);
-      setNotice(
-        "Запрос отправлен. Если отправка возможна, проверьте почту и папку «Спам».",
-      );
+      setNotice({
+        message:
+          "Запрос отправлен. Если отправка возможна, проверьте почту и папку «Спам».",
+        tone: "info",
+      });
       return true;
     } catch (reason) {
       setError(accountPageHelpers.deliveryError(reason));
@@ -220,13 +228,26 @@ export const AccountPage: React.FC<AccountPageTypes.Props> = (props) => {
             </header>
           ) : null}
           {notice ? (
-            <Typography.Text className={styles.notice} role="status">
-              {notice}
+            <Typography.Text
+              className={cssUtils.cx(styles.notice, styles.feedbackMessage)}
+              data-feedback-tone={notice.tone}
+              role="status"
+            >
+              {notice.tone === "success" ? (
+                <CircleCheck aria-hidden="true" size={18} strokeWidth={1.75} />
+              ) : (
+                <Info aria-hidden="true" size={18} strokeWidth={1.75} />
+              )}
+              <span>{notice.message}</span>
             </Typography.Text>
           ) : null}
           {error ? (
-            <Typography.Text className={styles.error} role="alert">
-              {error}
+            <Typography.Text
+              className={cssUtils.cx(styles.error, styles.feedbackMessage)}
+              role="alert"
+            >
+              <CircleAlert aria-hidden="true" size={18} strokeWidth={1.75} />
+              <span>{error}</span>
             </Typography.Text>
           ) : null}
           {props.mode === "profile" ? (
@@ -276,15 +297,22 @@ export const AccountPage: React.FC<AccountPageTypes.Props> = (props) => {
           ) : null}
           {props.mode === "sign-in" ? (
             <div className={styles.secondary}>
-              <Link to="/register" search={{ returnTo: destination }}>
+              <ActionLink
+                presentation="inline"
+                icon="none"
+                to="/register"
+                search={{ returnTo: destination }}
+              >
                 Создать аккаунт
-              </Link>
-              <Link
+              </ActionLink>
+              <ActionLink
+                presentation="inline"
+                icon="none"
                 to="/password-reset"
                 search={{ token: undefined, returnTo: destination }}
               >
                 Не помню пароль
-              </Link>
+              </ActionLink>
             </div>
           ) : null}
           {props.mode === "sign-in" || props.mode === "register" ? (

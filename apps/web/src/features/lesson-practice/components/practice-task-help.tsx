@@ -5,6 +5,7 @@ import { PracticeTaskContent } from "./practice-task-content";
 
 type PracticeTaskHelpProps = {
   task: PracticeTaskTypes.Task;
+  nativeFallback?: boolean;
   solutionTitle?: string;
   revealSolution?: boolean;
 };
@@ -13,6 +14,7 @@ export const PracticeTaskHelp: React.FC<PracticeTaskHelpProps> = (props) => (
   <Accordion
     className={styles.taskHelp}
     multiple
+    nativeFallback={props.nativeFallback ?? true}
     defaultOpen={props.revealSolution ? [`${props.task.id}-solution`] : []}
     items={[
       {

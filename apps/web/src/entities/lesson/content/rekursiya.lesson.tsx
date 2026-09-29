@@ -49,7 +49,17 @@ export const rekursiyaLesson = defineLesson({
       ),
       workedExample: (
         <WorkedExample
-          title="Найдите F(5), если F(1) = 1 и F(n) = 2·F(n − 1) + 1"
+          title={
+            <>
+              Найдите <Notation kind="formula">F(5)</Notation>, если{" "}
+              <span data-example-definition>
+                <Notation kind="formula">F(1) = 1</Notation> и{" "}
+                <Notation kind="formula">
+                  F(n) = <span data-formula-term>2·F(n − 1) + 1</span>
+                </Notation>
+              </span>
+            </>
+          }
           prompt={
             <>
               Каждое следующее значение выражается через предыдущее — начнём с
@@ -202,7 +212,7 @@ export const rekursiyaLesson = defineLesson({
             <Notation>return</Notation> делает две вещи одновременно: завершает
             текущий вызов и передаёт вычисленное число туда, откуда функция была
             вызвана. В строке <Notation>return 2 * F(n - 1) + 1</Notation>{" "}
-            выражение <Notation kind="formula">F(n - 1)</Notation> — это не
+            выражение <Notation kind="formula">F(n − 1)</Notation> — это не
             текст и не номер, а конкретное число, которое вернул вложенный
             вызов.
           </Typography.Text>
@@ -212,18 +222,18 @@ export const rekursiyaLesson = defineLesson({
         <Mistake
           claim={
             <>
-              <Notation kind="formula">F(n - 1)</Notation> и{" "}
-              <Notation kind="formula">F(n) - 1</Notation> — примерно одно и то
+              <Notation kind="formula">F(n − 1)</Notation> и{" "}
+              <Notation kind="formula">F(n) − 1</Notation> — примерно одно и то
               же, в обоих случаях просто «минус один».
             </>
           }
           explanation={
             <>
-              Это разные выражения. <Notation kind="formula">F(n - 1)</Notation>{" "}
+              Это разные выражения. <Notation kind="formula">F(n − 1)</Notation>{" "}
               — значение функции для аргумента{" "}
               <Notation kind="formula">n − 1</Notation> (нужно снова вызывать{" "}
               <Notation kind="formula">F</Notation>
-              ). <Notation kind="formula">F(n) - 1</Notation> — значение{" "}
+              ). <Notation kind="formula">F(n) − 1</Notation> — значение{" "}
               <Notation kind="formula">F(n)</Notation>, из которого потом вычли
               единицу. Перепутав их, можно получить синтаксически похожую, но
               математически совсем другую формулу.
@@ -310,7 +320,19 @@ export const rekursiyaLesson = defineLesson({
       ),
       workedExample: (
         <WorkedExample
-          title="Найдите F(6), если F(1) = 2, F(2) = 3 и F(n) = F(n − 1) + F(n − 2)"
+          title={
+            <>
+              Найдите <Notation kind="formula">F(6)</Notation>, если{" "}
+              <span data-example-definition>
+                <Notation kind="formula">F(1) = 2</Notation>,{" "}
+                <Notation kind="formula">F(2) = 3</Notation> и{" "}
+                <Notation kind="formula">
+                  F(n) = <span data-formula-term>F(n − 1)</span>{" "}
+                  <span data-formula-term>+ F(n − 2)</span>
+                </Notation>
+              </span>
+            </>
+          }
           prompt={
             <>
               Как и раньше, поднимаемся от известных значений вверх — только
@@ -473,7 +495,17 @@ export const rekursiyaLesson = defineLesson({
       ),
       workedExample: (
         <WorkedExample
-          title="Найдите F(100) / F(98), если F(1) = 2 и F(n) = n·F(n − 1)"
+          title={
+            <>
+              Найдите <Notation kind="formula">F(100) / F(98)</Notation>, если{" "}
+              <span data-example-definition>
+                <Notation kind="formula">F(1) = 2</Notation> и{" "}
+                <Notation kind="formula">
+                  F(n) = <span data-formula-term>n·F(n − 1)</span>
+                </Notation>
+              </span>
+            </>
+          }
           prompt={
             <>
               Выразим <Notation kind="formula">F(100)</Notation> и{" "}
@@ -597,18 +629,25 @@ export const rekursiyaLesson = defineLesson({
         <>
           Дано <Notation kind="formula">F(1) = 5</Notation> и{" "}
           <Notation kind="formula">F(n) = F(n − 1) + 3</Notation> при{" "}
-          <Notation kind="formula">n &gt; 1</Notation>. Можно ли подставить{" "}
-          <Notation kind="formula">n = 1</Notation> в рекуррентную формулу,
-          чтобы найти ещё одно значение?
+          <Notation kind="formula">
+            <span data-formula-term>n &gt; 1</span>
+          </Notation>
+          . Можно ли подставить{" "}
+          <Notation kind="formula">
+            <span data-formula-term>n = 1</span>
+          </Notation>{" "}
+          в рекуррентную формулу, чтобы найти ещё одно значение?
         </>
       ),
       reveal: (
         <>
           Нет. Формула работает только при{" "}
-          <Notation kind="formula">n &gt; 1</Notation>, а{" "}
-          <Notation kind="formula">F(1)</Notation> — отдельно заданный базовый
-          случай. Такая подстановка потребовала бы не определённое в условии
-          значение <Notation kind="formula">F(0)</Notation>.
+          <Notation kind="formula">
+            <span data-formula-term>n &gt; 1</span>
+          </Notation>
+          , а <Notation kind="formula">F(1)</Notation> — отдельно заданный
+          базовый случай. Такая подстановка потребовала бы не определённое в
+          условии значение <Notation kind="formula">F(0)</Notation>.
         </>
       ),
     },

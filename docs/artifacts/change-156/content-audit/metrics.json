@@ -1,0 +1,89 @@
+{
+  "target": "http://localhost:8080/ege/16-rekursiya",
+  "method": "Playwriter computed DOM/styles, Range line measurement; CSS zoom diagnostic is not browser-menu zoom",
+  "fonts": ["Golos Text", "Alegreya", "JetBrains Mono"],
+  "weights": [400, 500, 600],
+  "core_sizes_px": [12, 13, 14, 16, 18, 24, 28],
+  "derived_notation_sizes_px": [12.04, 13.76],
+  "inventory": {
+    "theory_concepts": 9,
+    "authored_theory_paragraphs": 19,
+    "worked_examples": 3,
+    "procedure_figures": 1,
+    "mistake_pairs": 5,
+    "theory_code_blocks": 7,
+    "practice_code_blocks": 3,
+    "practice_tasks": 5,
+    "outcome_paragraphs": 2,
+    "review_prompts": 7,
+    "dom_paragraphs_including_closed_details": 41,
+    "dom_h2": 3,
+    "dom_h3": 32
+  },
+  "viewports": [
+    {
+      "width": 1440,
+      "max_paragraph_width_px": 725,
+      "median_line_chars": 46,
+      "p90_line_chars": 63,
+      "max_line_chars": 66,
+      "page_overflow": false
+    },
+    {
+      "width": 768,
+      "max_paragraph_width_px": 730,
+      "median_line_chars": 46,
+      "p90_line_chars": 63,
+      "max_line_chars": 66,
+      "page_overflow": false
+    },
+    {
+      "width": 390,
+      "max_paragraph_width_px": 353,
+      "median_line_chars": 29,
+      "p90_line_chars": 35,
+      "max_line_chars": 36,
+      "page_overflow": false
+    },
+    {
+      "width": 320,
+      "max_paragraph_width_px": 283,
+      "median_line_chars": 23,
+      "p90_line_chars": 28,
+      "max_line_chars": 30,
+      "page_overflow": false
+    }
+  ],
+  "contrast": {
+    "ink_on_white": 17.93,
+    "muted_on_white": 6.29,
+    "blue_on_white": 4.67,
+    "ink_on_danger_surface": 14.17,
+    "ink_on_success_surface": 14.55,
+    "danger_label": 5.23,
+    "success_label": 5.56
+  },
+  "text_spacing_390": {
+    "result": "no content clipping candidate except intentionally visually-hidden label",
+    "document_client_scroll_px": [384, 384]
+  },
+  "css_zoom_2_at_390": {
+    "result": "diagnostic overflow; native browser zoom not tested",
+    "document_client_scroll_px": [379, 396],
+    "article_client_scroll_px": [189, 198]
+  },
+  "detector": {
+    "targets": [
+      "apps/web/src/pages/topic-lesson/topic-lesson-page.tsx",
+      "apps/web/src/entities/lesson/content/rekursiya.lesson.tsx"
+    ],
+    "issues": []
+  },
+  "overlay": {
+    "injected": false,
+    "reason": "evidence agent read-only role",
+    "server_started": false
+  },
+  "console_app_errors": 0,
+  "resource_status_400_plus": 0
+}

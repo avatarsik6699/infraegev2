@@ -123,6 +123,12 @@ export class AccountPage {
       "Почта подтверждена",
     );
     expect(submittedToken).toBe("abcdefghijklmnopqrstuvwxyz012345");
+    const success = this.page
+      .getByRole("status")
+      .filter({ hasText: "Почта подтверждена." });
+    await expect(success).toHaveAttribute("data-feedback-tone", "success");
+    await expect(success.locator("svg")).toBeVisible();
+    await expect(success).toHaveCSS("color", "oklch(0.46 0.08 145)");
     await expect(this.page.locator('script[src*="track.js"]')).toHaveCount(0);
   }
 

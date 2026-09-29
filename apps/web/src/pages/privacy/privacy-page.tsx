@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { ActionLink } from "~/shared/components/action-link";
 import { ExternalLink } from "~/shared/components/external-link";
 import { PageContainer } from "~/shared/components/page-container";
 import { Typography } from "~/shared/components/typography";
@@ -42,11 +42,14 @@ export const PrivacyPage: React.FC = () => (
         <Typography.Text>
           Для регистрации по email мы обрабатываем адрес электронной почты,
           подтверждение адреса, версию и время отдельно отмеченного вами
-          <Link to="/consent"> согласия на обработку данных</Link> и стойкий хеш
-          пароля. Сам пароль в открытом виде не храним. Для входа через VK ID,
-          Яндекс ID или Telegram сохраняется проверенный идентификатор
-          выбранного провайдера, связанный с аккаунтом; совпавший email не
-          объединяет аккаунты автоматически.
+          <ActionLink presentation="inline" icon="none" to="/consent">
+            {" "}
+            согласия на обработку данных
+          </ActionLink>{" "}
+          и стойкий хеш пароля. Сам пароль в открытом виде не храним. Для входа
+          через VK ID, Яндекс ID или Telegram сохраняется проверенный
+          идентификатор выбранного провайдера, связанный с аккаунтом; совпавший
+          email не объединяет аккаунты автоматически.
         </Typography.Text>
         <Typography.Text>
           Неподтверждённая регистрация, у которой нет другого способа входа,

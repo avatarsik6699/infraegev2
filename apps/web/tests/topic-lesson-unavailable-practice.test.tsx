@@ -9,7 +9,8 @@ import type { LessonContent } from "~/entities/lesson";
 import { TopicLessonPage } from "~/pages/topic-lesson";
 import type { PracticeTaskTypes } from "~/entities/practice-task";
 
-vi.mock("@tanstack/react-router", () => ({
+vi.mock("@tanstack/react-router", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@tanstack/react-router")>()),
   useRouter: () => ({ invalidate: () => undefined }),
 }));
 

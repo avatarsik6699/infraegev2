@@ -110,9 +110,30 @@ Change 122 supersedes decorative scenes and lab-first review. Visual reference: 
 `a5b0bf5`, with current infraege identity. White canvas, ink, neutral controls, text lists,
 restrained separators and readable line lengths. Keep Alegreya display, Golos Text UI/reading,
 JetBrains Mono code; font fallbacks and stable loading remain. Orange identifies the stone
-brand; controls, navigation and link affordances are monochrome. Focus, text selection and input carets are monochrome. Semantic feedback and syntax remain legible.
+brand; controls and navigation surfaces are monochrome; text links and outline locations are blue. Focus, text selection and input carets are monochrome. Semantic feedback and syntax remain legible.
 No decorative raster scenes, background patterns, light effects, drawn links or idle animation.
 Educational illustrations/content blocks remain. Remove labs rather than preserving demo APIs.
+
+Change 156 adopts architect-approved blue text links and current outline branch/location/marker
+through shared semantic tokens across the project. Buttons, neutral navigation surfaces and
+active tab rules remain ink/neutral. Text-link underlines appear on hover and keyboard focus,
+never at rest; only the label underlines. Link arrows stay close to their label and shift 2px
+in their direction on hover; reduced motion suppresses the shift.
+After approval, Change 156 promotes the lesson 16 design to shared defaults across
+all lessons and site page families; no lesson ID or pilot selector controls styling.
+Subtle rules separate theory/outcome and prose subsection headings. Examples keep conditions, explanations and
+steps at 16px/400 with primary text color, formulas at 0.9 of surrounding text size, compact labels,
+and code at 0.9rem (14.4px with 16px root) on desktop/mobile. Inline code and formulas use 0.9em; algorithm explanations use the same 16px reading role. Conditions can separate their definition and group short mathematical
+terms without preventing whole-formula wrapping; grouped terms fit the container and can wrap internally under enlarged text. Long lesson/context words can wrap when needed. Added prose em/strong was rejected and removed;
+authored wording and order remain. Shared learning components also use 16px/400 reading text for
+self-check reveals, mistake explanations and practice help; disclosure prompts use 16px/500 with modest indentation separating the answer, without a side rule; short contextual labels use
+14px/500. Self-check has no colored surface or blue label; its help icon remains. Worked examples include a decorative Lucide icon by default and the same neutral contextual label as applicability callouts. Their step markers align with the first reading line. Icon/label rows do not indent entire explanatory paragraphs. The result title rule
+belongs to its direct heading, never to nested accordion headings. Self-check and
+practice help use the existing native details fallback by default to keep answers closed until the
+learner reveals them before enhancement and without JavaScript. General Accordion retains its explicit opt-in fallback contract; course overview
+keeps its own initially open module. Compact UI metadata stays compact; educational
+reading lists and practice explanations use the body role. Page families retain
+their layouts and approved illustrations while sharing type/color/spacing roles.
 
 Shared controls own accessible semantics; Base UI remains behind their existing local APIs.
 Theme values feed semantic tokens and CSS Modules. Do not add a replacement component system.
@@ -225,7 +246,7 @@ has a neutral selected surface; labels reserve enough width to avoid moving neig
 Button press scales to .98 over 140ms without layout changes; reduced motion disables scaling.
 Inline search icons retain their single composite surface; disclosure rows do not scale.
 
-Shared link CSS owns neutral text underlines and hover/active/focus. Text links use Lucide
+Shared link CSS owns blue text links and hover/active/focus; label underlines appear only on hover/focus-visible. Text links use Lucide
 ArrowRight internally and ArrowUpRight externally or for new tabs; back, download and mail
 use their semantic icons. Only link text is underlined. Navigation surfaces (menu, cards,
 outline, pagination and task IDs) opt out of text-link arrows/underlines. Button-looking links

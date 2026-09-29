@@ -12,6 +12,14 @@
 
 @media (max-width: 72rem) {
   .root {
+    pointer-events: none;
+  }
+
+  .root > button {
+    pointer-events: auto;
+  }
+
+  .root {
     inset: auto 0 0;
     display: flex;
     justify-content: flex-end;

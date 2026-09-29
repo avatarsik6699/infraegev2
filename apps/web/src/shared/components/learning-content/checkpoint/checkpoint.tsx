@@ -11,6 +11,7 @@ type CheckpointItem = {
 
 type Props = {
   items: readonly CheckpointItem[];
+  nativeFallback?: boolean;
 };
 
 export const Checkpoint: React.FC<Props> = (props) => {
@@ -34,6 +35,7 @@ export const Checkpoint: React.FC<Props> = (props) => {
       <Accordion
         className={styles.content}
         multiple
+        nativeFallback={props.nativeFallback ?? true}
         items={props.items.map((item) => ({
           id: item.id,
           title: item.prompt,

@@ -28,6 +28,7 @@
 }
 .profileIdentity {
   display: flex;
+  flex-wrap: wrap;
   gap: var(--space-2);
   align-items: center;
   padding-bottom: var(--space-3);
@@ -35,7 +36,9 @@
   grid-column: 1 / -1;
 }
 .identityText {
+  flex: 1 1 12rem;
   min-width: 0;
+  overflow-wrap: anywhere;
 }
 .logout {
   margin-left: auto;
@@ -219,6 +222,20 @@
   padding: var(--space-2);
   background: var(--color-surface-quiet);
   color: var(--color-text-soft);
+}
+.notice[data-feedback-tone="success"] {
+  color: var(--color-success);
+  background: var(--color-success-soft);
+}
+.feedbackMessage {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-1);
+  align-items: start;
+  overflow-wrap: anywhere;
+}
+.feedbackMessage > svg {
+  margin-top: 0.25em;
 }
 .noScriptOnly {
   display: none;

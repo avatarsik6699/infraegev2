@@ -111,6 +111,559 @@ export class TopicLessonPage {
     await openLessonAtTop(this.page, this.config.route);
   }
 
+  async expectRecursionStylePilot(noJavaScript = false): Promise<void> {
+    const frame = this.page.locator("[data-topic-lesson-page]");
+    await expect(frame).not.toHaveAttribute("data-learning-profile");
+    const headings = this.page.locator("#theory section[id] > h3");
+    await expect(headings).toHaveCount(9);
+    for (const heading of await headings.all()) {
+      await expect(heading).toHaveCSS("border-bottom-width", "1px");
+      await expect(heading).toHaveCSS(
+        "border-bottom-color",
+        "rgb(234, 236, 239)",
+      );
+    }
+    await this.expectRecursionContentTypography(noJavaScript);
+    await expect(this.page.locator("#theory em")).toHaveCount(0);
+    await expect(
+      this.page
+        .locator("#theory strong")
+        .filter({ hasText: "считать всю последовательность необязательно" }),
+    ).toHaveCount(0);
+    const link = this.page.locator("[data-topic-lesson-context] a").first();
+    await expect(link).toHaveCSS("color", "rgb(0, 112, 210)");
+    await expect(link.locator("span").first()).toHaveCSS(
+      "text-decoration-line",
+      "none",
+    );
+    if (!noJavaScript) {
+      await link.hover();
+      await expect(link.locator("span").first()).toHaveCSS(
+        "text-decoration-line",
+        "underline",
+      );
+      await this.page.mouse.move(0, 0);
+    }
+    const semanticColors = await frame.evaluate((element) => {
+      const style = getComputedStyle(element);
+      return {
+        success: style.getPropertyValue("--color-success").trim(),
+        danger: style.getPropertyValue("--color-danger").trim(),
+      };
+    });
+    const correct = this.page
+      .locator('#theory [data-status="correct"] svg')
+      .first();
+    const incorrect = this.page
+      .locator('#theory [data-status="incorrect"] svg')
+      .first();
+    await expect(correct).toHaveCSS("color", semanticColors.success);
+    await expect(incorrect).toHaveCSS("color", semanticColors.danger);
+    await this.expectNoHorizontalOverflow();
+    if (noJavaScript) {
+      await expect(
+        this.page.locator("[data-outline-link-id]").first(),
+      ).toBeVisible();
+      return;
+    }
+
+    await this.page.setViewportSize({ width: 1440, height: 900 });
+    const destination = this.page.locator(
+      '[data-outline-link-id="base-case-and-step"]',
+    );
+    await destination.click();
+    await expect(destination).toHaveAttribute("aria-current", "location");
+    await expect(destination).toHaveCSS("color", "rgb(0, 112, 210)");
+    const marker = await destination.evaluate(
+      (element) => getComputedStyle(element, "::before").backgroundColor,
+    );
+    expect(marker).toBe("rgb(0, 112, 210)");
+    await expect(
+      this.page.locator('[data-outline-link-id="theory"]'),
+    ).toHaveCSS("color", "rgb(0, 112, 210)");
+    await this.page.locator("#why-it-works").evaluate((element) => {
+      element.scrollIntoView({ block: "start", behavior: "instant" });
+    });
+    await expect(
+      this.page.locator('[data-outline-link-id="why-it-works"]'),
+    ).toHaveAttribute("aria-current", "location");
+
+    await this.page.setViewportSize({ width: 390, height: 844 });
+    const outline = this.page.getByRole("button", {
+      name: "Содержание урока",
+      exact: true,
+    });
+    await outline.click();
+    await destination.focus();
+    await destination.press("Enter");
+    await expect(outline).toHaveAttribute("aria-expanded", "false");
+    await expect(this.page.locator("#base-case-and-step")).toBeFocused();
+    await this.expectNoHorizontalOverflow();
+
+    await this.page.getByRole("tab", { name: /Задача 1 из 5/ }).click();
+    const task = this.page.locator(
+      '[data-practice-task="rekursiya-base-sequence"]',
+    );
+    await expect(this.page.getByRole("tab", { selected: true })).toHaveCSS(
+      "border-bottom-color",
+      "rgb(96, 96, 96)",
+    );
+    const theoryLink = task.getByRole("link", {
+      name: "Шаблон для одного предыдущего значения",
+    });
+    await expect(theoryLink).toHaveCSS("color", "rgb(0, 112, 210)");
+    await expect(theoryLink).toHaveCSS("text-align", "left");
+    const iconGap = await theoryLink.evaluate((element) => {
+      const icon = element.querySelector("svg")!.getBoundingClientRect();
+      const label = element.querySelector("span")!.getBoundingClientRect();
+      return label.left - icon.right;
+    });
+    expect(iconGap).toBeLessThanOrEqual(8);
+    expect(iconGap).toBeGreaterThanOrEqual(0);
+    const answer = task.getByRole("textbox", { name: "Ответ", exact: true });
+    const check = task.getByRole("button", { name: "Проверить", exact: true });
+    await expect(check).toHaveCSS("background-color", "rgb(23, 23, 23)");
+    await answer.fill("31");
+    await check.evaluate((element) => {
+      const bounds = element.getBoundingClientRect();
+      window.scrollBy({
+        top: bounds.top + bounds.height / 2 - (innerHeight - 14),
+        behavior: "instant",
+      });
+    });
+    await check.click();
+    await expect(task.getByRole("status")).toHaveCSS(
+      "color",
+      semanticColors.danger,
+    );
+    await expect(task.getByRole("status")).toContainText(
+      "Ответ пока не подходит",
+    );
+    await expect(answer).toBeFocused();
+    await expect(answer).toHaveValue("31");
+    await answer.fill("32");
+    await check.click();
+    await expect(task.getByRole("status")).toContainText("Верно");
+    await expect(task.getByRole("status")).toHaveCSS(
+      "color",
+      semanticColors.success,
+    );
+    await expect(task.locator("[data-answer-accepted-icon]")).toHaveCSS(
+      "color",
+      semanticColors.success,
+    );
+    await this.page.setViewportSize({ width: 1440, height: 900 });
+    await this.page.emulateMedia({ reducedMotion: "no-preference" });
+    const forward = this.page.getByRole("link", {
+      name: "Обработка данных",
+      exact: true,
+    });
+    const external = this.page.getByRole("link", { name: /Telegram-канал/ });
+    await this.page.mouse.move(0, 0);
+    await expect(forward.locator("span").first()).toHaveCSS(
+      "text-decoration-line",
+      "none",
+    );
+    await forward.evaluate((element) =>
+      element.scrollIntoView({ block: "center", behavior: "instant" }),
+    );
+    await forward.hover();
+    await expect(forward.locator("span").first()).toHaveCSS(
+      "text-decoration-line",
+      "underline",
+    );
+    await expect(forward.locator("svg")).toHaveCSS(
+      "transform",
+      "matrix(1, 0, 0, 1, 2, 0)",
+    );
+    await external.hover();
+    await expect(external.locator("[data-external-link-icon]")).toHaveCSS(
+      "transform",
+      "matrix(1, 0, 0, 1, 2, -2)",
+    );
+    await this.page.emulateMedia({ reducedMotion: "reduce" });
+    await expect(external.locator("[data-external-link-icon]")).toHaveCSS(
+      "transform",
+      "none",
+    );
+    await forward.evaluate((element) =>
+      element.scrollIntoView({ block: "center", behavior: "instant" }),
+    );
+    await forward.hover();
+    await expect(forward.locator("svg")).toHaveCSS("transform", "none");
+    await this.page.mouse.move(0, 0);
+    await external.focus();
+    await external.press("Shift+Tab");
+    await expect(forward).toBeFocused();
+    await expect(forward.locator("span").first()).toHaveCSS(
+      "text-decoration-line",
+      "underline",
+    );
+  }
+
+  private async expectRecursionContentTypography(
+    noJavaScript: boolean,
+  ): Promise<void> {
+    const examples = this.page.locator("#theory figure").filter({
+      has: this.page.locator("figcaption", { hasText: "Разберём на примере" }),
+    });
+    await expect(examples).toHaveCount(3);
+    for (const example of await examples.all()) {
+      for (const text of await example
+        .locator(":scope > div, ol li > div")
+        .all()) {
+        await expect(text).toHaveCSS("font-size", "16px");
+        await expect(text).toHaveCSS("font-weight", "400");
+        await expect(text).toHaveCSS("color", "rgb(23, 23, 23)");
+      }
+      for (const formula of await example
+        .locator('[data-kind="formula"]')
+        .all()) {
+        await expect(formula).toHaveCSS("font-size", "14.4px");
+      }
+    }
+    const outcome = this.page.getByRole("heading", {
+      name: "Что получилось",
+      exact: true,
+    });
+    for (const width of [320, 390, 1440]) {
+      await this.page.setViewportSize({ width, height: 900 });
+      await expect(outcome).toHaveCSS("border-bottom-width", "1px");
+      await expect(outcome).toHaveCSS(
+        "border-bottom-color",
+        "rgb(234, 236, 239)",
+      );
+      const theorySize = await this.page
+        .locator("#theory section[id] > h3")
+        .first()
+        .evaluate((element) => getComputedStyle(element).fontSize);
+      await expect(outcome).toHaveCSS("font-size", theorySize);
+      await expect(this.page.locator("#theory pre code").first()).toHaveCSS(
+        "font-size",
+        "14.4px",
+      );
+      const terms = await examples
+        .locator("[data-formula-term]")
+        .evaluateAll((elements) =>
+          elements.map((element) => {
+            const bounds = element.getBoundingClientRect();
+            const container = element
+              .closest("figure")!
+              .getBoundingClientRect();
+            return {
+              singleLine:
+                bounds.height <=
+                parseFloat(getComputedStyle(element).lineHeight) + 1,
+              contained:
+                bounds.left >= container.left - 1 &&
+                bounds.right <= container.right + 1,
+            };
+          }),
+        );
+      for (const term of terms) {
+        expect(term.singleLine).toBe(true);
+        expect(term.contained).toBe(true);
+      }
+      const calloutLabel = this.page
+        .getByRole("complementary", {
+          name: "Когда применим этот приём",
+          exact: true,
+        })
+        .locator(":scope > div > span");
+      for (const example of await examples.all()) {
+        const label = example.locator("figcaption");
+        await expect(label).toHaveCSS("font-size", "14px");
+        await expect(label).toHaveCSS("font-weight", "500");
+        await expect(label).toHaveCSS(
+          "color",
+          await calloutLabel.evaluate(
+            (element) => getComputedStyle(element).color,
+          ),
+        );
+        await expect(label.locator('svg[aria-hidden="true"]')).toHaveCount(1);
+        for (const step of await example.locator("ol li").all()) {
+          const geometry = await step.evaluate((element) => {
+            const marker = element.firstElementChild!;
+            const body = element.lastElementChild!;
+            return {
+              aligned:
+                Math.abs(
+                  marker.getBoundingClientRect().top -
+                    body.getBoundingClientRect().top,
+                ) <= 1,
+              sameFirstLineHeight:
+                Math.abs(
+                  marker.getBoundingClientRect().height -
+                    parseFloat(getComputedStyle(body).lineHeight),
+                ) <= 1,
+            };
+          });
+          expect(geometry.aligned).toBe(true);
+          expect(geometry.sameFirstLineHeight).toBe(true);
+        }
+      }
+      for (const code of await this.page.locator("#theory code").all()) {
+        await expect(code).toHaveCSS("font-size", "14.4px");
+      }
+      await this.expectNoHorizontalOverflow();
+      if (width === 390 && !noJavaScript) {
+        const code = this.page.locator("#theory pre").first();
+        await code.focus();
+        await code.press("ArrowRight");
+        await expect
+          .poll(() => code.evaluate((element) => element.scrollLeft))
+          .toBeGreaterThan(0);
+      }
+    }
+    await this.page.setViewportSize({ width: 390, height: 844 });
+    await this.page.evaluate(() => {
+      document.documentElement.style.fontSize = "200%";
+    });
+    try {
+      await expect(examples.first().locator("ol li > div").first()).toHaveCSS(
+        "font-size",
+        "32px",
+      );
+      await expect(
+        examples.first().locator('ol [data-kind="formula"]').first(),
+      ).toHaveCSS("font-size", "28.8px");
+      await expect(this.page.locator("#theory pre code").first()).toHaveCSS(
+        "font-size",
+        "28.8px",
+      );
+      for (const width of [320, 390, 900]) {
+        await this.page.setViewportSize({ width, height: 900 });
+        await this.expectNoHorizontalOverflow();
+        for (const group of await examples
+          .locator("[data-formula-term]")
+          .all()) {
+          const fits = await group.evaluate((element) => {
+            const bounds = element.getBoundingClientRect();
+            const container = element
+              .closest("figure")!
+              .getBoundingClientRect();
+            return (
+              bounds.left >= container.left - 1 &&
+              bounds.right <= container.right + 1
+            );
+          });
+          expect(fits).toBe(true);
+        }
+      }
+    } finally {
+      await this.page.evaluate(() => {
+        document.documentElement.style.removeProperty("font-size");
+      });
+      await this.page.setViewportSize({ width: 1440, height: 900 });
+    }
+  }
+
+  async expectRecursionLearningBlocks(noJavaScript = false): Promise<void> {
+    await this.page.emulateMedia({ reducedMotion: "reduce" });
+    const checkpoint = this.page.getByRole("region", {
+      name: "Проверьте себя",
+      exact: true,
+    });
+    const questions = checkpoint.locator(
+      noJavaScript ? "summary" : "button[aria-expanded]",
+    );
+    await expect(questions).toHaveCount(7);
+    const firstQuestion = questions.first();
+    const firstAnswer = noJavaScript
+      ? checkpoint.locator("details").first().locator(":scope > div")
+      : checkpoint.locator(
+          `[aria-labelledby="${await firstQuestion.getAttribute("id")}"] > div`,
+        );
+    await expect(firstAnswer).toBeHidden();
+    await firstQuestion.focus();
+    await firstQuestion.press("Enter");
+    await expect(firstAnswer).toBeVisible();
+    await expect(firstAnswer).toContainText("Нет. Формула работает только при");
+    await expect(firstQuestion).toBeFocused();
+    await expect(firstQuestion.locator("svg")).toHaveCSS(
+      "transform",
+      "matrix(-1, 0, 0, -1, 0, 0)",
+    );
+    await questions.nth(1).focus();
+    await questions.nth(1).press("Enter");
+    await expect(firstAnswer).toBeVisible();
+    if (!noJavaScript) {
+      await expect(questions.nth(1)).toHaveAttribute("aria-expanded", "true");
+      await expect(checkpoint.locator("h3").first()).toHaveCSS(
+        "border-bottom-width",
+        "0px",
+      );
+    } else {
+      await expect(checkpoint.locator("details[open]")).toHaveCount(2);
+    }
+    for (const width of [320, 390, 768, 1440]) {
+      await this.page.setViewportSize({ width, height: 900 });
+      await expect(firstQuestion.locator("span").first()).toHaveCSS(
+        "font-size",
+        "16px",
+      );
+      await expect(firstQuestion.locator("span").first()).toHaveCSS(
+        "font-weight",
+        "500",
+      );
+      await expect(firstAnswer).toHaveCSS("font-size", "16px");
+      await expect(firstAnswer).toHaveCSS("color", "rgb(23, 23, 23)");
+      await expect(firstAnswer).toHaveCSS("border-inline-start-width", "0px");
+      await expect(firstAnswer).toHaveCSS("padding-inline-start", "16px");
+      await expect(checkpoint).toHaveCSS(
+        "background-color",
+        "rgba(0, 0, 0, 0)",
+      );
+      await expect(checkpoint.locator(":scope > div > div").first()).toHaveCSS(
+        "color",
+        "rgb(23, 23, 23)",
+      );
+      await expect(checkpoint.locator(":scope > div > svg")).toHaveCount(1);
+      const readableWidth = await checkpoint.evaluate((element) => {
+        const content = element.lastElementChild!;
+        return (
+          content.getBoundingClientRect().left -
+          element.getBoundingClientRect().left
+        );
+      });
+      expect(readableWidth).toBeLessThanOrEqual(17);
+      const comparisons = this.page.locator(
+        '#theory [role="note"] [data-status]',
+      );
+      await expect(comparisons).toHaveCount(10);
+      for (const comparison of await comparisons.all()) {
+        const copy = comparison.locator(":scope > div > div");
+        await expect(copy).toHaveCSS("font-size", "16px");
+        await expect(copy).toHaveCSS("font-weight", "400");
+        const bodyUsesPanelWidth = await copy.evaluate((element) => {
+          const panel = element.closest("[data-status]")!;
+          const style = getComputedStyle(panel);
+          return (
+            panel.getBoundingClientRect().width -
+            parseFloat(style.paddingLeft) -
+            parseFloat(style.paddingRight) -
+            element.getBoundingClientRect().width
+          );
+        });
+        expect(Math.abs(bodyUsesPanelWidth)).toBeLessThanOrEqual(1);
+      }
+      const callout = this.page.getByRole("complementary", {
+        name: "Когда применим этот приём",
+        exact: true,
+      });
+      await expect(callout.locator(":scope > div > span")).toHaveCSS(
+        "font-size",
+        "14px",
+      );
+      await expect(callout.locator(":scope > div > span")).toHaveCSS(
+        "font-weight",
+        "500",
+      );
+      await expect(callout.locator(":scope > div > div")).toHaveCSS(
+        "font-size",
+        "16px",
+      );
+      await this.expectNoHorizontalOverflow();
+    }
+    await this.page.setViewportSize({ width: 390, height: 844 });
+    const task = this.page.locator(
+      '[data-practice-task="rekursiya-base-sequence"]',
+    );
+    const hintTrigger = noJavaScript
+      ? task.locator("summary").filter({ hasText: /^Подсказка$/ })
+      : task.getByRole("button", { name: "Подсказка", exact: true });
+    const solutionTrigger = noJavaScript
+      ? task.locator("summary").filter({ hasText: /^Решение$/ })
+      : task.getByRole("button", { name: "Решение", exact: true });
+    const hint = task.locator('[data-content-context="hint"]');
+    const solution = task.locator('[data-content-context="solution"]');
+    await expect(hint).toBeHidden();
+    await expect(solution).toBeHidden();
+    await hintTrigger.focus();
+    await hintTrigger.press("Enter");
+    await expect(hint).toBeVisible();
+    await expect(solution).toBeHidden();
+    await solutionTrigger.focus();
+    await solutionTrigger.press("Enter");
+    await expect(solution).toBeVisible();
+    await expect(hint).toBeVisible();
+    await expect(solutionTrigger).toBeFocused();
+    for (const paragraph of await task
+      .locator(
+        '[data-content-context="hint"] p, [data-content-context="solution"] p',
+      )
+      .all()) {
+      await expect(paragraph).toHaveCSS("font-size", "16px");
+      await expect(paragraph).toHaveCSS("color", "rgb(23, 23, 23)");
+    }
+    for (const trigger of [hintTrigger, solutionTrigger]) {
+      await expect(trigger.locator("span").first()).toHaveCSS(
+        "font-weight",
+        "500",
+      );
+    }
+    for (const content of [hint, solution]) {
+      await expect(content.locator("..")).toHaveCSS(
+        "border-inline-start-width",
+        "0px",
+      );
+    }
+    await solutionTrigger.press("Enter");
+    await expect(solution).toBeHidden();
+    await expect(hint).toBeVisible();
+    await this.page.evaluate(() => {
+      document.documentElement.style.fontSize = "200%";
+    });
+    try {
+      await expect(hint.locator("p").first()).toHaveCSS("font-size", "32px");
+      await expect(firstQuestion.locator("span").first()).toHaveCSS(
+        "font-size",
+        "32px",
+      );
+      await expect(
+        this.page
+          .locator('#theory [role="note"] [data-status] > div > div')
+          .first(),
+      ).toHaveCSS("font-size", "32px");
+      await this.page.setViewportSize({ width: 900, height: 900 });
+      await this.expectNoHorizontalOverflow();
+    } finally {
+      await this.page.evaluate(() => {
+        document.documentElement.style.removeProperty("font-size");
+      });
+    }
+    await firstQuestion.focus();
+    await firstQuestion.press("Enter");
+    await expect(firstAnswer).toBeHidden();
+  }
+
+  async expectSharedLearningLinkStyle(): Promise<void> {
+    await expect(this.page.locator("[data-learning-profile]")).toHaveCount(0);
+    await expect(
+      this.page.locator("#theory section[id] > h3").first(),
+    ).toHaveCSS("border-bottom-width", "1px");
+    const headingSize = await this.page
+      .locator("#theory section[id] > h3")
+      .first()
+      .evaluate((element) => getComputedStyle(element).fontSize);
+    await expect(this.page.locator("#result h3").first()).toHaveCSS(
+      "font-size",
+      headingSize,
+    );
+    await this.page.setViewportSize({ width: 390, height: 844 });
+    await expect(this.page.locator("#theory pre code").first()).toHaveCSS(
+      "font-size",
+      "14.4px",
+    );
+    await this.page.setViewportSize({ width: 1440, height: 900 });
+    await expect(
+      this.page.locator("[data-topic-lesson-context] a").first(),
+    ).toHaveCSS("color", "rgb(0, 112, 210)");
+    await expect(
+      this.page.locator("[data-outline-link-id][aria-current]").first(),
+    ).toHaveCSS("color", "rgb(0, 112, 210)");
+  }
+
   async expectCodeDisclosureAndReturnToTop(): Promise<void> {
     await this.page.emulateMedia({ reducedMotion: "reduce" });
     const top = this.page.getByRole("button", { name: "К началу урока" });
@@ -814,7 +1367,7 @@ export class TopicLessonPage {
     expect(lessonNavigationGeometry.outlineIsSingleColumn).toBe(true);
     expect(lessonNavigationGeometry.mistakeIsVertical).toBe(true);
     expect(lessonNavigationGeometry.mistakeHasTintedFill).toBe(true);
-    expect(lessonNavigationGeometry.checkpointHasTintedFill).toBe(true);
+    expect(lessonNavigationGeometry.checkpointHasTintedFill).toBe(false);
     expect(lessonNavigationGeometry.learningBlockGeometryMatches).toBe(true);
     await expect(
       this.page.getByRole("heading", { name: "Теперь вы умеете" }),

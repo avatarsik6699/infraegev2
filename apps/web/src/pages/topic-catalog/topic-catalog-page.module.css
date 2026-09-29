@@ -102,12 +102,14 @@
 .cardContent {
   min-width: 0;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-0-5);
   align-self: stretch;
   align-content: start;
 }
 .cardTitle {
   font-size: var(--text-topic-title);
+  overflow-wrap: anywhere;
 }
 .topicLink::after {
   content: "";

@@ -1,8 +1,17 @@
+import { CircleAlert } from "lucide-react";
 import { Typography } from "~/shared/components/typography";
 import type { StatusSceneTypes } from "./status-scene.types";
 import styles from "./status-scene.module.css";
 export const StatusScene: React.FC<StatusSceneTypes.Props> = (props) => (
   <div className={styles.root} data-status-scene data-kind={props.kind}>
+    {props.kind === "error" ? (
+      <CircleAlert
+        className={styles.icon}
+        aria-hidden="true"
+        size={20}
+        strokeWidth={1.75}
+      />
+    ) : null}
     {props.kind === "code" ? (
       <Typography.Text tone="muted">Ошибка {props.code}</Typography.Text>
     ) : null}

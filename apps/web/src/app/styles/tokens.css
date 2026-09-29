@@ -1,7 +1,7 @@
 :root {
   --learning-text-soft: var(--color-learning-muted);
-  --learning-danger: var(--color-learning-danger);
-  --learning-success: var(--color-learning-success);
+  --learning-danger: var(--color-danger);
+  --learning-success: var(--color-success);
   --learning-info: var(--color-learning-info);
   --learning-danger-background: color-mix(
     in srgb,
@@ -46,6 +46,56 @@
   );
   --learning-callout-notation-color: var(--color-text);
 
+  --text-learning-formula: var(--text-inline-code);
+  --text-learning-code: 0.9rem;
+  --text-learning-code-mobile: var(--text-learning-code);
+  --text-learning-procedure: var(--text-base);
+  --text-learning-example-step: var(--text-base);
+  --text-lesson-result-title: var(--text-2xl);
+  --text-accordion-title: var(--text-base);
+  --text-accordion-content: var(--text-base);
+  --text-learning-label: var(--text-sm);
+  --text-learning-comparison: var(--text-base);
+  --text-callout-title: var(--text-sm);
+  --text-practice-help: var(--text-base);
+  --lesson-concept-rule: var(--theme-section-rule);
+  --lesson-concept-rule-width: 1px;
+  --lesson-concept-title-padding: var(--space-1);
+  --learning-example-prompt-color: var(--color-text);
+  --learning-example-step-color: var(--color-text);
+  --learning-example-step-leading: 1.68;
+  --learning-example-steps-gap: var(--space-1);
+  --learning-example-definition-display: block;
+  --learning-formula-term-display: inline-block;
+  --learning-formula-term-max-width: 100%;
+  --learning-formula-term-white-space: normal;
+  --learning-procedure-leading: 1.68;
+  --learning-procedure-color: var(--color-text);
+  --learning-alert-padding: var(--space-2);
+  --lesson-result-title-gap: var(--rhythm-content-flow);
+  --lesson-result-title-leading: 1.18;
+  --lesson-result-title-tracking: -0.02em;
+  --accordion-title-leading: 1.68;
+  --accordion-content-leading: 1.68;
+  --accordion-content-color: var(--color-text);
+  --learning-checkpoint-indent: 0;
+  --learning-checkpoint-gap: var(--space-1);
+  --learning-checkpoint-padding: 0;
+  --learning-checkpoint-background: transparent;
+  --learning-checkpoint-color: var(--color-text);
+  --learning-checkpoint-icon-color: var(--color-text-soft);
+  --learning-comparison-padding: var(--space-2);
+  --learning-comparison-gap: var(--space-1);
+  --learning-comparison-copy-display: contents;
+  --learning-comparison-body-column: 1 / -1;
+  --learning-comparison-leading: 1.68;
+  --callout-content-display: contents;
+  --callout-body-column: 1 / -1;
+  --callout-body-gap: 0;
+  --callout-body-leading: 1.68;
+  --callout-padding: var(--space-2);
+  --practice-help-leading: 1.68;
+  --practice-help-color: var(--color-text);
   --text-catalog-card-title: 2rem;
   --shadow-metadata: 0 1px 5px
     color-mix(in srgb, var(--color-brand-ink) 5%, transparent);
@@ -72,7 +122,7 @@
   --text-topic-index: clamp(2.75rem, 4vw, 3.25rem);
   --text-topic-title: 1.5rem;
   --text-topic-heading: clamp(2.5rem, 4vw, 3.5rem);
-  --text-inline-code: 0.86em;
+  --text-inline-code: 0.9em;
 
   /* Semantic color roles */
   --color-bg: var(--theme-page);
@@ -95,7 +145,12 @@
   --color-accent-soft: var(--theme-interactive-muted);
   --color-focus: var(--theme-ring);
   --color-selection: var(--theme-rule);
-  --color-link-decoration: var(--color-rule-strong);
+  --color-link-decoration: var(--theme-link);
+  --outline-group-marker-display: block;
+  --color-link: var(--theme-link);
+  --color-link-hover: var(--theme-link-hover);
+  --color-link-active: var(--theme-link-hover);
+  --color-current-location: var(--theme-link);
   --color-success: var(--theme-success);
   --color-info: var(--theme-info);
   --color-warning: var(--theme-warning);
@@ -186,9 +241,15 @@
   --accordion-item-border: 1px solid var(--color-rule);
   --accordion-radius: 0;
   --accordion-trigger-height: 2.75rem;
-  --accordion-trigger-padding: var(--space-1) 0;
-  --accordion-content-padding: 0 0 var(--space-1-5);
-  --accordion-hover-background: transparent;
+  --accordion-trigger-padding: var(--space-1-5) var(--space-1);
+  --accordion-content-padding: 0 0 0 var(--space-2);
+  --accordion-content-margin-inline: var(--space-1);
+  --accordion-content-margin-bottom: var(--space-2);
+  --accordion-hover-background: color-mix(
+    in srgb,
+    var(--color-text) 3%,
+    transparent
+  );
   --accordion-title-hover-decoration: none;
   --accordion-chevron-transition: transform var(--motion-duration)
     var(--motion-easing);

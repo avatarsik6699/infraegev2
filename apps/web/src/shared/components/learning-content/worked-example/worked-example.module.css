@@ -14,26 +14,44 @@
 }
 
 .eyebrow {
-  color: var(--learning-text-soft, var(--color-text-soft));
+  color: var(--color-text);
   font-family: var(--font-reading);
-  font-size: var(--text-sm);
+  font-size: var(--text-learning-label);
   font-weight: 500;
-  line-height: 1.4;
+  line-height: 1.3;
+}
+
+.eyebrow[data-has-icon="true"] {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.icon {
+  flex: 0 0 auto;
+  color: var(--color-text-soft);
 }
 
 .title {
   color: var(--color-text);
   font-family: var(--font-reading);
-  font-weight: 600;
+  font-weight: 400;
+}
+
+.title [data-example-definition] {
+  display: var(--learning-example-definition-display, inline);
 }
 
 .prompt {
-  color: var(--learning-text-soft, var(--color-text-soft));
+  color: var(
+    --learning-example-prompt-color,
+    var(--learning-text-soft, var(--color-text-soft))
+  );
 }
 
 .steps {
   display: grid;
-  gap: var(--space-0-5);
+  gap: var(--learning-example-steps-gap, var(--space-0-5));
   margin: var(--space-0-5) 0 0;
   padding: 0;
   list-style: none;
@@ -48,22 +66,21 @@
 }
 
 .step > [data-variant] {
-  font-size: var(--text-sm);
-  line-height: 1.6;
+  min-width: 0;
+  color: var(--learning-example-step-color, var(--color-text));
+  font-size: var(--text-learning-example-step);
+  line-height: var(--learning-example-step-leading, 1.6);
+  font-weight: 400;
 }
 
 .stepBadge {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.3rem;
-  height: 1.3rem;
+  display: block;
+  height: auto;
   color: var(--learning-text-soft, var(--color-muted));
   font-family: var(--font-data);
-  font-size: var(--text-2xs);
-  font-weight: 600;
+  font-size: var(--text-learning-example-step);
+  font-weight: 400;
+  line-height: var(--learning-example-step-leading, 1.6);
 }
 
 .content {

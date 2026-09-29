@@ -13,3 +13,35 @@
 .visuallyHidden {
   composes: visuallyHidden from "../../styles/patterns.module.css";
 }
+
+.root:not([data-presentation="button"]):not(
+    [data-presentation="navigation"]
+  ):not([data-icon="back"]):not([data-icon="login"])
+  .icon:last-of-type {
+  transition: transform var(--motion-duration) var(--motion-easing);
+}
+.root:not([data-presentation="button"]):not(
+    [data-presentation="navigation"]
+  ):not([data-icon="back"]):not([data-icon="login"]):hover
+  .icon:last-of-type {
+  transform: translateX(2px);
+}
+.root:not([data-presentation="button"]):not(
+    [data-presentation="navigation"]
+  )[target="_blank"]:hover
+  .icon:last-of-type {
+  transform: translate(2px, -2px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .root:not([data-presentation="button"]):not(
+      [data-presentation="navigation"]
+    ):not([data-icon="back"]):not([data-icon="login"]):hover
+    .icon:last-of-type,
+  .root:not([data-presentation="button"]):not(
+      [data-presentation="navigation"]
+    )[target="_blank"]:hover
+    .icon:last-of-type {
+    transition: none;
+    transform: none;
+  }
+}

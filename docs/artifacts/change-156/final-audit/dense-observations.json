@@ -1,0 +1,23 @@
+[
+  {
+    "width": 1440,
+    "scale": 1,
+    "body": "Element: div._body_1p1on_52\nBox: x=329 y=791 w=776 h=54\nChildren: 2  Text length: 122\nScroll Y: size=54 client=54 overflowing=false top=0\nScroll X: size=776 client=776 overflowing=false left=0\nStyles: font-size=16px font-weight=400 line-height=26.88px",
+    "code": "Element: code._root_1oly4_1\nBox: x=412 y=795 w=32 h=19\nChildren: 0  Text length: 4\nScroll Y: size=0 client=0 overflowing=false top=0\nScroll X: size=0 client=0 overflowing=false left=0\nStyles: font-size=14.4px font-family=\"Infraege JetBrains Mono\", \"JetBrains Mono Fallback\", monospace",
+    "panel": "Element: section\nBox: x=301 y=739 w=832 h=129\nChildren: 1  Text length: 139\nScroll Y: size=129 client=129 overflowing=false top=0\nScroll X: size=832 client=832 overflowing=false left=0\nStyles: overflow-y=visible overflow-x=visible position=static max-height=none display=block flex-direction=row flex-shrink=1"
+  },
+  {
+    "width": 390,
+    "scale": 1,
+    "body": "Element: div._body_1p1on_52\nBox: x=28 y=1138 w=329 h=107\nChildren: 2  Text length: 122\nScroll Y: size=107 client=107 overflowing=false top=0\nScroll X: size=329 client=329 overflowing=false left=0\nStyles: font-size=16px font-weight=400 line-height=26.88px",
+    "code": "Element: code._root_1oly4_1\nBox: x=111 y=1142 w=35 h=19\nChildren: 0  Text length: 4\nScroll Y: size=0 client=0 overflowing=false top=0\nScroll X: size=0 client=0 overflowing=false left=0\nStyles: font-size=14.4px font-family=\"Infraege JetBrains Mono\", \"JetBrains Mono Fallback\", monospace",
+    "panel": "Element: section\nBox: x=0 y=1087 w=384 h=183\nChildren: 1  Text length: 139\nScroll Y: size=183 client=183 overflowing=false top=0\nScroll X: size=384 client=384 overflowing=false left=0\nStyles: overflow-y=visible overflow-x=visible position=static max-height=none display=block flex-direction=row flex-shrink=1"
+  },
+  {
+    "width": 390,
+    "scale": 2,
+    "body": "Element: div._body_1p1on_52\nBox: x=56 y=5412 w=273 h=537\nChildren: 2  Text length: 122\nScroll Y: size=537 client=537 overflowing=false top=0\nScroll X: size=275 client=273 overflowing=true left=0\nStyles: font-size=32px font-weight=400 line-height=53.76px",
+    "code": "Element: code._root_1oly4_1\nBox: x=223 y=5421 w=69 h=38\nChildren: 0  Text length: 4\nScroll Y: size=0 client=0 overflowing=false top=0\nScroll X: size=0 client=0 overflowing=false left=0\nStyles: font-size=28.8px",
+    "panel": "Element: section\nBox: x=0 y=5275 w=384 h=722\nChildren: 1  Text length: 139\nScroll Y: size=722 client=722 overflowing=false top=0\nScroll X: size=384 client=384 overflowing=false left=0\nStyles: overflow-y=visible overflow-x=visible position=static max-height=none display=block flex-direction=row flex-shrink=1"
+  }
+]

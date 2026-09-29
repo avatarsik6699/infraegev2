@@ -193,10 +193,13 @@
   align-items: center;
   justify-self: end;
   min-height: 2.5rem;
+  min-width: 0;
   color: var(--color-brand-muted);
   font-family: var(--font-ui);
   font-size: var(--text-xs);
-  white-space: nowrap;
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .sessionStatus[data-header-session="loading"]::before {

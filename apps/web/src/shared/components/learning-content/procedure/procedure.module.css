@@ -5,7 +5,7 @@
 .title {
   color: var(--color-text);
   font-family: var(--font-reading);
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .steps {
@@ -16,13 +16,13 @@
 }
 
 .step {
-  color: var(--color-text-soft);
+  color: var(--learning-procedure-color, var(--color-text-soft));
   padding-left: var(--space-0-5);
 }
 
 .step > [data-variant] {
-  font-size: var(--text-sm);
-  line-height: 1.6;
+  font-size: var(--text-learning-procedure);
+  line-height: var(--learning-procedure-leading, 1.6);
 }
 
 .step::marker {
@@ -34,5 +34,5 @@
 
 .stepLabel {
   color: var(--color-text);
-  font-weight: 600;
+  font-weight: 500;
 }

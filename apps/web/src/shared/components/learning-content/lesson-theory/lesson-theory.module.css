@@ -20,6 +20,9 @@
   font-size: var(--text-2xl);
   line-height: 1.18;
   letter-spacing: -0.02em;
+  padding-bottom: var(--lesson-concept-title-padding, 0);
+  border-bottom: var(--lesson-concept-rule-width, 0) solid
+    var(--lesson-concept-rule, transparent);
 }
 
 .conceptExplanation {
