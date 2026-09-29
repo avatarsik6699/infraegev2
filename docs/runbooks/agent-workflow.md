@@ -17,15 +17,15 @@ repository and forwards normal Codex arguments. It does not change global settin
 or an existing session's model. Explicit client selections override the project default.
 Use `/status` and `/agent` to inspect the actual primary and child sessions.
 
-| Role | Model / effort | Deliverable |
-|------|----------------|-------------|
-| Primary / unclassified fallback | Sol / medium | Scope, decomposition, integration, acceptance |
-| `explorer` | Luna / high | A bounded code-path or dependency map with references |
-| `worker` | Luna / high | Settled implementation in explicitly owned files |
-| `tester` | Luna / high | Isolated reproduction or owned behavioral tests |
-| `architect` | Sol / high | Cross-module design, dependencies and acceptance plan |
-| `reviewer` | Sol / high | Independent findings on the completed scoped diff |
-| `escalation` | Astra / high | Difficult diagnosis or consequential risk decision advice |
+| Role                            | Model / effort | Deliverable                                               |
+| ------------------------------- | -------------- | --------------------------------------------------------- |
+| Primary / unclassified fallback | Sol / medium   | Scope, decomposition, integration, acceptance             |
+| `explorer`                      | Luna / high    | A bounded code-path or dependency map with references     |
+| `worker`                        | Luna / high    | Settled implementation in explicitly owned files          |
+| `tester`                        | Luna / high    | Isolated reproduction or owned behavioral tests           |
+| `architect`                     | Sol / high     | Cross-module design, dependencies and acceptance plan     |
+| `reviewer`                      | Sol / high     | Independent findings on the completed scoped diff         |
+| `escalation`                    | Astra / high   | Difficult diagnosis or consequential risk decision advice |
 
 The standalone `.codex/agents/*.toml` files supply `name`, `description` and
 `developer_instructions`, plus model/effort and sandbox defaults. Codex discovers these files;

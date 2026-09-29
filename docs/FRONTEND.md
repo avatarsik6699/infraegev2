@@ -162,6 +162,21 @@ The control row under the video is minimal: one quiet icon button (play/pause, s
 and a thin native range timeline; clicking the picture also toggles. Scrubbing does not pause.
 Controls are hidden without scripting. Reduced motion shows the poster and the button starts it.
 Video files are served by Nginx (Range/206), never by the Node server; Vite dev serves ranges too.
+`CodeBlock` is a quiet light block without a frame: a soft tonal surface (`--theme-code`, rounded, no border or
+dark bar), a small muted language label, a quiet copy button and line numbers by default, like an editor
+(a sticky muted gutter that is not selected or copied; `showLineNumbers={false}` opts out). Syntax colours
+come from the `--theme-code-*` tokens on that surface (text colours at least 4.5:1). Long blocks still collapse to a fade with the "show all code" button and expand
+again; copy, line numbers and keyboard focus stay. The site is light only, so no dark variant exists. A
+Inline code (`Notation kind="code"`) is a quiet chip; formulas (`kind="formula"`) stay plain text, so only code is marked.
+`WorkedExample` is a soft tinted panel with one text size, colour and weight for title, prompt and steps
+(hierarchy comes from spacing and round step badges joined by a faint thread); code blocks inside it are
+white cards on the panel. A small table goes in as comments inside the example's single code block; code blocks are never placed side by side.
+A drawn still illustration goes through `LessonFigure` (SPEC §2.3): a WebP with reserved size, lazy
+loading, `alt` and one caption under it, sharing the caption styles with `LessonVideo`. It follows the
+paragraph it illustrates, never a code block or another block. Balance: few illustrations (about one per
+three sections) and at least two blocks between a figure and any video; the contract test
+`lesson-media-placement` enforces the order and the distance. `LearningVisualFrame` remains only for the
+practice task content.
 Remove persisted answer drafts and custom catalog-row restoration. Catalog task forms preserve
 transient input and help state while collapsed, until the selection/page changes or the page is
 left/reloaded.
@@ -282,7 +297,6 @@ to that task group, immediately above its statement with a space-1 interval.
 Known public sources stay in metadata; unknown-source filler and duplicate progress/actions are omitted.
 Keep one context-preserving return link; no next-task navigation. Progress explanations live in an info popover.
 
-
 ## 9. EGE catalog
 
 Use the existing SearchField, Button, Progress, ActionLink, Typography and PageContainer.
@@ -331,7 +345,6 @@ the shared opt-in scale effect (1.02, no button translation) and a 4px arrow tra
 foreground and shadow remain unchanged. Reduced motion disables all transforms/transitions.
 Do not change shared control colors per page. The shared light progress track remains visible
 against the constant white surface. Illustrations reserve a 13rem square (bounded on mobile).
-
 
 ## 11. Course overview
 

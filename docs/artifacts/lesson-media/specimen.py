@@ -19,6 +19,7 @@ from handdrawn import (
     curve,
     dashed_ellipse,
     line,
+    number_line,
     polyline,
     underline,
 )
@@ -26,7 +27,7 @@ from handdrawn import (
 NAME = "specimen"
 LESSON = None  # не урок: собирается в reference/
 KIND = "still"
-W, H = 1600, 1000
+W, H = 1600, 1190
 
 
 def build():
@@ -99,4 +100,9 @@ def build():
     # 7. размеры текста
     text("МИНИМУМ ДЛЯ ТЕЛЕФОНА: 48 НА ХОЛСТЕ 1600", (60, 900), 48, "s1", anchor="l")
     text("ЛУЧШЕ КРУПНЕЕ: 56–74", (60, 960), 56, "s2", anchor="l")
+    # 8. числовая ось и составные знаки
+    text("ОСЬ И ЗНАКИ", (60, 1060), 56, "h8", anchor="l")
+    ink(underline(60, 320, 1096, scene.rng("u8")), "u8", width=4 * SS)
+    ink(number_line(480, 860, 1130, [540, 680, 820], scene.rng("nl")), "nl")
+    text("n ≥ 4200 · n ≤ 4200", (1110, 1120), 56, "cg")
     return scene, {"alt": "Лист образцов примитивов движка рисования"}

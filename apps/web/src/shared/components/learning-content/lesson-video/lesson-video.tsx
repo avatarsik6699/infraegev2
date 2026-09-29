@@ -6,6 +6,7 @@ import { useInViewport } from "~/shared/lib/use-in-viewport";
 import { useMediaQuery } from "~/shared/lib/media-query";
 import { useIsEnhanced } from "~/shared/lib/use-is-enhanced";
 import type { LessonVideoTypes } from "./lesson-video.types";
+import mediaStyles from "../lesson-media/lesson-media.module.css";
 import styles from "./lesson-video.module.css";
 
 const REDUCED_MOTION = "(prefers-reduced-motion: reduce)";
@@ -88,7 +89,7 @@ export const LessonVideo: React.FC<LessonVideoTypes.Props> = (props) => {
 
   return (
     <figure
-      className={cssUtils.cx(styles.root, props.className)}
+      className={cssUtils.cx(mediaStyles.figure, props.className)}
       data-lesson-video-figure
     >
       <video
@@ -147,7 +148,7 @@ export const LessonVideo: React.FC<LessonVideoTypes.Props> = (props) => {
           data-lesson-video-timeline
         />
       </div>
-      <figcaption className={styles.caption}>{props.caption}</figcaption>
+      <figcaption className={mediaStyles.caption}>{props.caption}</figcaption>
     </figure>
   );
 };

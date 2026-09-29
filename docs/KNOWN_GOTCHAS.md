@@ -45,7 +45,7 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
 - **Root cause**: Neucha has no `−` (use `-`); a Pillow glyph outside the canvas is silently clipped;
   a keyframe every 0.5 s re-encodes a whole static frame each time.
 - **Fix**: `Text` raises on a missing glyph, `Scene.warnings()` reports out-of-canvas and too small
-  captions, and `build.py` uses a keyframe every 2 s. WebM bytes are not reproducible between runs
+  captions, and `build.py` uses a keyframe every 5 s, width up to 1200 px and CRF 40/30 (a two-function clip weighed 1.4 MB with a keyframe every 2 s at full width). WebM bytes are not reproducible between runs
   (libvpx threads), MP4 and posters are: do not diff WebM.
 
 

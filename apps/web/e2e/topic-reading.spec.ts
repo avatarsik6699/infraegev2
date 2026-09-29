@@ -4,6 +4,8 @@ test("approved shared reading style keeps semantic feedback and responsive outli
   topicLessonPage,
   browserSession,
 }) => {
+  // Страница урока с рисунками и роликами длиннее, а проверка типографики гоняет её по размерам шрифта.
+  test.setTimeout(90_000);
   await topicLessonPage.open();
   await topicLessonPage.expectRecursionStylePilot();
   browserSession.expectCleanConsole();
@@ -111,4 +113,20 @@ test("lesson videos keep poster, sources and an inert control without scripts @n
 }) => {
   await noJavaScriptTopicLessonPage.open();
   await noJavaScriptTopicLessonPage.expectLessonVideos(true);
+});
+
+test("lesson figures load, carry one caption and keep the reading column intact", async ({
+  topicLessonPage,
+  browserSession,
+}) => {
+  await topicLessonPage.open();
+  await topicLessonPage.expectLessonFigures();
+  browserSession.expectCleanConsole();
+});
+
+test("lesson figures are readable without scripts @no-js", async ({
+  noJavaScriptTopicLessonPage,
+}) => {
+  await noJavaScriptTopicLessonPage.open();
+  await noJavaScriptTopicLessonPage.expectLessonFigures(true);
 });

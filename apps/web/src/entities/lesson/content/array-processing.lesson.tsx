@@ -148,7 +148,7 @@ export const arrayProcessingLesson = defineLesson({
           </Typography.Text>
           <CodeBlock
             code={
-              "records = [[1, 75], [2, 92], [3, 92], [4, 84], [5, 75], [6, 92]]\nordered = sorted(records, key=lambda record: record[1], reverse=True)\nprint(ordered)        # [[2, 92], [3, 92], [6, 92], [4, 84], [1, 75], [5, 75]]\nprint(ordered[2][0])  # 6"
+              "records = [[1, 75], [2, 92], [3, 92],\n           [4, 84], [5, 75], [6, 92]]\nordered = sorted(records, key=lambda r: r[1], reverse=True)\nprint(ordered)\n# [[2, 92], [3, 92], [6, 92], [4, 84], [1, 75], [5, 75]]\nprint(ordered[2][0])  # 6"
             }
             label="Сортировать целые записи по очкам"
             language="python"

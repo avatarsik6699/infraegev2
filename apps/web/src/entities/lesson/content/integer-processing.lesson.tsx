@@ -433,7 +433,7 @@ export const integerProcessingLesson = defineLesson({
           </Typography.Text>
           <CodeBlock
             code={
-              "number = 24\nselected = []\ncandidate = 1\n\nwhile candidate * candidate <= number:\n    if number % candidate == 0:\n        paired = number // candidate\n        if candidate > 5 and candidate < number:\n            selected.append(candidate)\n        if paired != candidate and paired > 5 and paired < number:\n            selected.append(paired)\n    candidate += 1\n\nprint(selected)  # [12, 8, 6]"
+              "number = 24\nselected = []\ncandidate = 1\n\nwhile candidate * candidate <= number:\n    if number % candidate == 0:\n        paired = number // candidate\n        if candidate > 5 and candidate < number:\n            selected.append(candidate)\n        if paired != candidate and 5 < paired < number:\n            selected.append(paired)\n    candidate += 1\n\nprint(selected)  # [12, 8, 6]"
             }
             label="Проверить обе части каждой пары и отобрать собственные делители"
             language="python"

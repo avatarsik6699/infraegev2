@@ -3,6 +3,7 @@ import { CodeBlock } from "~/shared/components/code-block";
 import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
 import {
+  LessonFigure,
   LessonVideo,
   Mistake,
   Procedure,
@@ -217,6 +218,13 @@ export const rekursiyaLesson = defineLesson({
             <Notation>F(n - 1)</Notation> — уже не запись, а конкретное число,
             которое вернул вложенный вызов.
           </Typography.Text>
+          <LessonFigure
+            src="/lesson-media/rekursiya/rekursiya-call-stack.webp"
+            width={1320}
+            height={800}
+            alt="стопка ожидающих вызовов F(4), F(3), F(2), F(1)"
+            caption="Вызовы уходят вверх, пока не дойдут до базы F(1) = 1, а ожидающие ждут в стопке. Ответы возвращаются вниз: 1, 3, 7, и F(4) = 15."
+          />
           <Typography.Text>
             У стека есть предел: по умолчанию Python допускает около 1000
             вложенных вызовов. Для функции{" "}
@@ -234,7 +242,7 @@ export const rekursiyaLesson = defineLesson({
             запасом:
           </Typography.Text>
           <CodeBlock
-            code={`import sys\n\nsys.setrecursionlimit(5000)  # Глубина цепочки 2024, лимит чуть больше\n\ndef F(n):\n    if n == 1:\n        return 1\n    return n * F(n - 1)\n\nprint(F(2024) // F(2022))  # 4094552`}
+            code={`import sys\n\n# Глубина цепочки 2024, лимит чуть больше\nsys.setrecursionlimit(5000)\n\ndef F(n):\n    if n == 1:\n        return 1\n    return n * F(n - 1)\n\nprint(F(2024) // F(2022))  # 4094552`}
             label="Поднимаем лимит рекурсии"
             language="python"
           />
@@ -244,27 +252,6 @@ export const rekursiyaLesson = defineLesson({
             когда какой выбирать.
           </Typography.Text>
         </>
-      ),
-      mistake: (
-        <Mistake
-          claim={
-            <>
-              Достаточно поставить{" "}
-              <Notation>sys.setrecursionlimit(10**9)</Notation> — и рекурсия
-              справится с любым <Notation kind="formula">n</Notation>.
-            </>
-          }
-          explanation={
-            <>
-              Лимит — это защита, а не ресурс. Каждый ожидающий вызов занимает
-              память, и при очень глубокой цепочке программа может завершиться
-              аварийно ещё до того, как упрётся в лимит. Поэтому лимит поднимают
-              ненамного выше реальной длины цепочки, а если цепочка очень
-              длинная, выбирают способ, который не копит вызовы: цикл или
-              прогрев кеша (разделы ниже).
-            </>
-          }
-        />
       ),
     },
     {
@@ -344,27 +331,6 @@ export const rekursiyaLesson = defineLesson({
           />
         </WorkedExample>
       ),
-      mistake: (
-        <Mistake
-          claim={
-            <>
-              В <Notation>range(первое_n, последнее_n + 1)</Notation> неважно,
-              какую именно верхнюю границу писать — Python сам разберётся.
-            </>
-          }
-          explanation={
-            <>
-              <Notation>range(a, b)</Notation> не включает{" "}
-              <Notation kind="formula">b</Notation>. Чтобы дойти до значения{" "}
-              <Notation kind="formula">F(target)</Notation> включительно,
-              верхнюю границу нужно писать как{" "}
-              <Notation kind="formula">target + 1</Notation> — иначе последний
-              нужный шаг цикла просто не выполнится. Эта же граница понадобится
-              снова, когда мы будем перебирать аргументы.
-            </>
-          }
-        />
-      ),
     },
     {
       id: "several-previous-values",
@@ -442,29 +408,6 @@ export const rekursiyaLesson = defineLesson({
           ]}
         />
       ),
-      mistake: (
-        <Mistake
-          claim={
-            <>
-              В формуле{" "}
-              <Notation kind="formula">F(n) = 3·F(n − 1) − 2·F(n − 2)</Notation>{" "}
-              коэффициенты можно переставить местами — какая разница, у какого
-              слагаемого какой множитель.
-            </>
-          }
-          explanation={
-            <>
-              Разница есть: коэффициент <Notation kind="formula">3</Notation>{" "}
-              обязательно стоит при ближайшем предыдущем значении{" "}
-              <Notation kind="formula">F(n − 1)</Notation>, а{" "}
-              <Notation kind="formula">−2</Notation> — при значении через одно,{" "}
-              <Notation kind="formula">F(n − 2)</Notation>. Перестановка
-              коэффициентов даёт другую последовательность чисел, даже если
-              формула выглядит похоже.
-            </>
-          }
-        />
-      ),
     },
     {
       id: "repeated-work-motivates-storage",
@@ -522,13 +465,23 @@ export const rekursiyaLesson = defineLesson({
           />
           <Typography.Text>
             Теперь каждое значение вычисляется один раз, а при повторном
-            обращении берётся из памяти. Аргумент <Notation>None</Notation> —
-            «не ограничивать размер кеша». Если написать{" "}
-            <Notation>@lru_cache()</Notation> без аргумента, Python по умолчанию
-            запомнит лишь 128 последних значений, а более старые забудет, и
-            часть работы снова будет повторяться. (Начиная с Python 3.9 есть
-            краткая запись <Notation>@cache</Notation> — то же самое, что{" "}
-            <Notation>lru_cache(None)</Notation>; запись с{" "}
+            обращении берётся из памяти. Сравните деревья вызовов без кеша и с
+            кешем:
+          </Typography.Text>
+          <LessonFigure
+            src="/lesson-media/rekursiya/rekursiya-cache-before-after.webp"
+            width={1600}
+            height={800}
+            alt="дерево вызовов F(5) без кеша и с кешем"
+            caption="Без кеша F(5) порождает 9 вызовов, и четыре из них повторяют уже найденное (оранжевые). С кешем настоящих вызовов 5: повторы заменены ответом из кеша."
+          />
+          <Typography.Text>
+            Аргумент <Notation>None</Notation> — «не ограничивать размер кеша».
+            Если написать <Notation>@lru_cache()</Notation> без аргумента,
+            Python по умолчанию запомнит лишь 128 последних значений, а более
+            старые забудет, и часть работы снова будет повторяться. (Начиная с
+            Python 3.9 есть краткая запись <Notation>@cache</Notation> — то же
+            самое, что <Notation>lru_cache(None)</Notation>; запись с{" "}
             <Notation>None</Notation> работает везде.)
           </Typography.Text>
           <Typography.Text>
@@ -537,7 +490,7 @@ export const rekursiyaLesson = defineLesson({
             два последних, поэтому хватит и двух переменных:
           </Typography.Text>
           <CodeBlock
-            code={`# Способ 1: список, индекс — это аргумент\ntarget = 6\nF = [0] * (target + 1)\n\n# Два базовых значения нужны до первого шага\nF[1] = 2\nF[2] = 3\n\nfor n in range(3, target + 1):\n    F[n] = F[n - 1] + F[n - 2]  # Сохраняем один раз\n\nprint(F[target])\n\n# Способ 2: две переменные вместо списка\nf_prev2, f_prev1 = 2, 3\n\nfor n in range(3, 7):\n    # Правая часть использует оба старых значения до присваивания\n    f_prev2, f_prev1 = f_prev1, f_prev1 + f_prev2\n\nprint(f_prev1)`}
+            code={`# Способ 1: список, индекс — это аргумент\ntarget = 6\nF = [0] * (target + 1)\n\n# Два базовых значения нужны до первого шага\nF[1] = 2\nF[2] = 3\n\nfor n in range(3, target + 1):\n    F[n] = F[n - 1] + F[n - 2]  # Сохраняем один раз\n\nprint(F[target])\n\n# Способ 2: две переменные вместо списка\nf_prev2, f_prev1 = 2, 3\n\nfor n in range(3, 7):\n    # Правая часть берёт оба старых значения\n    f_prev2, f_prev1 = f_prev1, f_prev1 + f_prev2\n\nprint(f_prev1)`}
             label="Два способа без кеша: список и две переменные"
             language="python"
           />
@@ -706,6 +659,14 @@ export const rekursiyaLesson = defineLesson({
             разворачивать сверху вниз: записывать, какая ветка применяется на
             каждом шаге, а затем подниматься.
           </Typography.Text>
+          <LessonVideo
+            src="/lesson-media/rekursiya/rekursiya-branch-path"
+            poster="/lesson-media/rekursiya/rekursiya-branch-path-poster.webp"
+            width={1780}
+            height={880}
+            alt="путь по развилке для F(21)"
+            caption="Для F(21) вопросы идут вниз по чётности: 21 нечётно, берём n-1, а 20 и 10 чётны, делим пополам, и так до базы F(1) = 1. Ответы поднимаются с добавками +3 для чётных и +1 для нечётных: 4, 7, 8, 11, 14, 15."
+          />
         </>
       ),
       workedExample: (
@@ -825,6 +786,13 @@ export const rekursiyaLesson = defineLesson({
             зависела от <Notation kind="formula">F(n − 1)</Notation>, порядок
             был бы обратным: от малых к большим.
           </Typography.Text>
+          <LessonFigure
+            src="/lesson-media/rekursiya/rekursiya-warmup-direction.webp"
+            width={1300}
+            height={760}
+            alt="числовая ось n: стрелки зависимости вправо, прогрев кеша справа налево"
+            caption="Стрелки зависимости идут вправо, от n к n + 4, поэтому кеш прогревают справа налево, начиная с базы n ≥ 4200. От F(100) до базы 1025 шагов, больше лимита 1000."
+          />
         </>
       ),
       workedExample: (
@@ -879,32 +847,11 @@ export const rekursiyaLesson = defineLesson({
           ]}
         >
           <CodeBlock
-            code={`from functools import lru_cache\n\n@lru_cache(None)\ndef F(n):\n    if n >= 4200:\n        return 7\n    return F(n + 4) + 2\n\nfor n in range(4200, 95, -1):  # F(n) требует F(n + 4): идём от больших n к малым\n    F(n)\n\nprint(F(100), F(100) - F(96))  # 2057 -2`}
+            code={`from functools import lru_cache\n\n@lru_cache(None)\ndef F(n):\n    if n >= 4200:\n        return 7\n    return F(n + 4) + 2\n\n# F(n) требует F(n + 4): идём от больших n к малым\nfor n in range(4200, 95, -1):\n    F(n)\n\nprint(F(100), F(100) - F(96))  # 2057 -2`}
             label="Прогрев кеша против направления зависимости"
             language="python"
           />
         </WorkedExample>
-      ),
-      mistake: (
-        <Mistake
-          claim={
-            <>
-              Кеш можно прогревать в любом порядке — например, от малых{" "}
-              <Notation kind="formula">n</Notation> к большим.
-            </>
-          }
-          explanation={
-            <>
-              Порядок решает всё. Первый же вызов{" "}
-              <Notation kind="formula">F(96)</Notation> потребует{" "}
-              <Notation kind="formula">F(100)</Notation>, затем{" "}
-              <Notation kind="formula">F(104)</Notation> и так до базы, а в кеше
-              пока нет ни одного значения — получится та же длинная цепочка и{" "}
-              <Notation>RecursionError</Notation>. Прогрев помогает только
-              тогда, когда каждое новое значение опирается на уже сохранённое.
-            </>
-          }
-        />
       ),
     },
     {
@@ -923,22 +870,32 @@ export const rekursiyaLesson = defineLesson({
             <Notation kind="formula">n</Notation>. В программе обе функции
             получают свой <Notation>@lru_cache(None)</Notation>.
           </Typography.Text>
+          <LessonVideo
+            src="/lesson-media/rekursiya/rekursiya-two-functions"
+            poster="/lesson-media/rekursiya/rekursiya-two-functions-poster.webp"
+            width={1500}
+            height={940}
+            alt="таблица F и G заполняется строка за строкой"
+            caption="Каждая ячейка считается по двум уже найденным: F(n) по F(n-1) из своего столбца и G(n-2) из соседнего, G(n) по G(n-1) и F(n-1). Так строка за строкой получается F(8) = 44."
+          />
         </>
       ),
       workedExample: (
         <WorkedExample
           title={
             <>
-              Найдите <Notation kind="formula">F(8)</Notation>, если{" "}
+              Найдите <Notation kind="formula">F(8)</Notation>, если
+              <br />
               <span data-example-definition>
                 <Notation kind="formula">F(n) = 1</Notation>,{" "}
                 <Notation kind="formula">G(n) = 2</Notation> при{" "}
-                <Notation kind="formula">n ≤ 2</Notation>, а при{" "}
-                <Notation kind="formula">n &gt; 2</Notation>{" "}
+                <Notation kind="formula">n ≤ 2</Notation>,
+                <br />а при <Notation kind="formula">n &gt; 2</Notation>:{" "}
                 <Notation kind="formula">
                   F(n) = <span data-formula-term>F(n − 1) + G(n − 2)</span>
                 </Notation>
-                ,{" "}
+                ,
+                <br />
                 <Notation kind="formula">
                   G(n) = <span data-formula-term>G(n − 1) + F(n − 1)</span>
                 </Notation>
@@ -956,41 +913,33 @@ export const rekursiyaLesson = defineLesson({
           }
           steps={[
             <>
-              <Notation kind="formula">n = 1, 2</Notation>: базовые значения{" "}
-              <Notation kind="formula">F = 1</Notation>,{" "}
-              <Notation kind="formula">G = 2</Notation>.
+              <Notation kind="formula">n = 1, 2</Notation>: базовые значения
+              даны, <Notation kind="formula">F = 1</Notation> и{" "}
+              <Notation kind="formula">G = 2</Notation>. Это первые две строки
+              таблицы.
             </>,
             <>
               <Notation kind="formula">n = 3</Notation>:{" "}
               <Notation kind="formula">F(3) = F(2) + G(1) = 1 + 2 = 3</Notation>
               ;{" "}
               <Notation kind="formula">G(3) = G(2) + F(2) = 2 + 1 = 3</Notation>
-              .
+              . Каждая функция берёт одно значение из своего столбца и одно из
+              соседнего.
             </>,
             <>
-              <Notation kind="formula">n = 4</Notation>:{" "}
-              <Notation kind="formula">F(4) = 3 + 2 = 5</Notation>,{" "}
-              <Notation kind="formula">G(4) = 3 + 3 = 6</Notation>.
+              Остальные строки считаются так же по уже заполненным: сначала{" "}
+              <Notation kind="formula">F(n)</Notation>, потом{" "}
+              <Notation kind="formula">G(n)</Notation>. Вся таблица ниже.
             </>,
             <>
-              <Notation kind="formula">n = 5</Notation>:{" "}
-              <Notation kind="formula">F(5) = 5 + 3 = 8</Notation>,{" "}
-              <Notation kind="formula">G(5) = 6 + 5 = 11</Notation>;{" "}
-              <Notation kind="formula">n = 6</Notation>:{" "}
-              <Notation kind="formula">F(6) = 8 + 6 = 14</Notation>,{" "}
-              <Notation kind="formula">G(6) = 11 + 8 = 19</Notation>.
-            </>,
-            <>
-              <Notation kind="formula">n = 7</Notation>:{" "}
-              <Notation kind="formula">F(7) = 14 + 11 = 25</Notation>,{" "}
-              <Notation kind="formula">G(7) = 19 + 14 = 33</Notation>;{" "}
-              <Notation kind="formula">n = 8</Notation>:{" "}
-              <Notation kind="formula">F(8) = 25 + 19 = 44</Notation>.
+              Ответ стоит в строке <Notation kind="formula">n = 8</Notation>{" "}
+              столбца <Notation kind="formula">F</Notation>:{" "}
+              <Notation kind="formula">F(8) = 44</Notation>.
             </>,
           ]}
         >
           <CodeBlock
-            code={`from functools import lru_cache\n\n@lru_cache(None)\ndef F(n):\n    if n <= 2:\n        return 1\n    return F(n - 1) + G(n - 2)\n\n@lru_cache(None)\ndef G(n):\n    if n <= 2:\n        return 2\n    return G(n - 1) + F(n - 1)\n\nprint(F(8))   # 44 — совпало с таблицей\nprint(F(10))  # 135`}
+            code={`from functools import lru_cache\n\n@lru_cache(None)\ndef F(n):\n    if n <= 2:\n        return 1\n    return F(n - 1) + G(n - 2)\n\n@lru_cache(None)\ndef G(n):\n    if n <= 2:\n        return 2\n    return G(n - 1) + F(n - 1)\n\n# Значения, которые считает программа:\n#   n       1   2   3   4   5   6   7   8\n#   F(n)    1   1   3   5   8  14  25  44\n#   G(n)    2   2   3   6  11  19  33  58\nprint(F(8))   # 44 — совпало с таблицей\nprint(F(10))  # 135`}
             label="Две функции с кешем"
             language="python"
           />
@@ -1085,31 +1034,11 @@ export const rekursiyaLesson = defineLesson({
           ]}
         >
           <CodeBlock
-            code={`count = 0\nfor n in range(1, 501):  # 501: 500 должно войти в перебор\n    if F(n) == 16:\n        count += 1\n\nprint(count)  # 5\nprint([n for n in range(1, 501) if F(n) == 16])  # [23, 27, 29, 30, 32]`}
+            code={`count = 0\nfor n in range(1, 501):  # 501: 500 должно войти в перебор\n    if F(n) == 16:\n        count += 1\n\nprint(count)  # 5\nprint([n for n in range(1, 501) if F(n) == 16])\n# [23, 27, 29, 30, 32]`}
             label="Подсчёт аргументов (функция F как выше)"
             language="python"
           />
         </WorkedExample>
-      ),
-      mistake: (
-        <Mistake
-          claim={
-            <>
-              <Notation>range(1, 500)</Notation> перебирает все{" "}
-              <Notation kind="formula">n</Notation> от 1 до 500 включительно.
-            </>
-          }
-          explanation={
-            <>
-              Правая граница <Notation>range</Notation> не входит в перебор.
-              Здесь ответ не изменится, потому что 500 не подходит, но при
-              границе <Notation kind="formula">n ≤ 32</Notation> запись{" "}
-              <Notation>range(1, 32)</Notation> потеряла бы подходящее{" "}
-              <Notation kind="formula">n = 32</Notation> и дала бы 4 вместо 5.
-              Верхняя граница перебора — это «последнее нужное значение + 1».
-            </>
-          }
-        />
       ),
     },
     {
@@ -1139,6 +1068,13 @@ export const rekursiyaLesson = defineLesson({
             </Notation>
             .
           </Typography.Text>
+          <LessonFigure
+            src="/lesson-media/rekursiya/rekursiya-cancel.webp"
+            width={1600}
+            height={760}
+            alt="сокращение F(100) на F(98): два шага, два множителя"
+            caption="Между F(98) и F(100) два шага, поэтому F(100) = 100·99·F(98). Общий множитель F(98) сокращается, остаётся 100·99 = 9900."
+          />
           <Callout tone="idea" title="Когда применим этот приём">
             Помогает, если в условии — огромный аргумент, а требуется дробь или
             разность соседних значений функции:{" "}
@@ -1189,28 +1125,6 @@ export const rekursiyaLesson = defineLesson({
               .
             </>,
           ]}
-        />
-      ),
-      mistake: (
-        <Mistake
-          claim={
-            <>
-              <Notation kind="formula">F(100) / F(98)</Notation> равно просто{" "}
-              <Notation kind="formula">100 / 98</Notation>: значения функции
-              сократились, остались аргументы.
-            </>
-          }
-          explanation={
-            <>
-              На каждом шаге определения появляется свой множитель:{" "}
-              <Notation kind="formula">F(100) = 100·F(99)</Notation>, а{" "}
-              <Notation kind="formula">F(99) = 99·F(98)</Notation>. Поэтому от{" "}
-              <Notation kind="formula">F(98)</Notation> до{" "}
-              <Notation kind="formula">F(100)</Notation> набегает два множителя,{" "}
-              <Notation kind="formula">100·99</Notation>, а не один. Число
-              множителей всегда равно разности аргументов.
-            </>
-          }
         />
       ),
     },
@@ -1343,7 +1257,7 @@ export const rekursiyaLesson = defineLesson({
             конкретную проблему, которую мы уже видели:
           </Typography.Text>
           <CodeBlock
-            code={`import sys\nfrom functools import lru_cache\n\nsys.setrecursionlimit(10000)  # Если цепочка вызовов длиннее 1000\n\n@lru_cache(None)  # Значение считается один раз\ndef F(n):\n    if n <= 3:  # База проверяется первой\n        return ...\n    if n % 2 == 0:  # Ветви в порядке условия\n        return ...\n    return ...\n\n# for n in range(...): F(n)  # Прогрев кеша, если цепочка слишком длинная\nprint(F(...))`}
+            code={`import sys\nfrom functools import lru_cache\n\n# Если цепочка вызовов длиннее 1000\nsys.setrecursionlimit(10000)\n\n@lru_cache(None)  # Значение считается один раз\ndef F(n):\n    if n <= 3:  # База проверяется первой\n        return ...\n    if n % 2 == 0:  # Ветви в порядке условия\n        return ...\n    return ...\n\n# Прогрев кеша, если цепочка слишком длинная:\n# for n in range(...): F(n)\nprint(F(...))`}
             label="Шаблон: кеш, лимит, база, ветви, прогрев"
             language="python"
           />
@@ -1413,26 +1327,6 @@ export const rekursiyaLesson = defineLesson({
             language="python"
           />
         </WorkedExample>
-      ),
-      mistake: (
-        <Mistake
-          claim={
-            <>
-              Если программа выдала число без ошибок, ответ можно записывать
-              сразу.
-            </>
-          }
-          explanation={
-            <>
-              Программа выполняет то, что в ней написано, а не то, что имелось в
-              виду: неверное условие ветви или граница{" "}
-              <Notation>range</Notation> тоже дают «красивое» число. Поэтому
-              ответ подтверждают: проверяют функцию на малых значениях, которые
-              считаются вручную, и, когда возможно, вторым способом (упрощением,
-              циклом).
-            </>
-          }
-        />
       ),
     },
     {
@@ -1537,6 +1431,13 @@ export const rekursiyaLesson = defineLesson({
         значений. И в любом случае ответ проверяют: на малых значениях и вторым
         способом.
       </Typography.Text>
+      <LessonFigure
+        src="/lesson-media/rekursiya/rekursiya-choose-method.webp"
+        width={1600}
+        height={1160}
+        alt="карта выбора способа для задания 16"
+        caption="Сначала упрощаем: огромный аргумент и отношение сокращаем. Затем выбираем инструмент по условию: рекурсия с кешем, цикл, поднятый лимит или прогрев кеша. В любом случае проверяем на малом n и вторым способом."
+      />
     </>
   ),
   checkpoint: [

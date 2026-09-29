@@ -83,7 +83,7 @@ and 04:23 UTC (security); inspect missed runs rather than assuming a PASS.
 The local equivalents are `bash scripts/security-gate.sh weekly` and
 `bash scripts/run-isolated-browser-audit.sh` (plus `INFRAEGE_LIGHTHOUSE_TARGET=production pnpm
 audit:performance` for the separate public observation). These broad commands are not the routine
-work/ship handoff.
+work/ship handoff. `E2E_ARGS="e2e/topic-reading.spec.ts"` limits the `full` portfolio of the isolated audit to selected specs.
 
 ## Release
 

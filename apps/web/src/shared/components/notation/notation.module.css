@@ -22,3 +22,10 @@
   border-radius: var(--notation-radius, 0.125rem);
   background: var(--notation-bg, var(--color-surface-quiet));
 }
+
+/* Код в прозе — тихий чип; формулы (`var`) остаются обычным текстом. */
+.root[data-kind="code"] {
+  padding: 0.08em var(--notation-code-padding-inline, 0.3em);
+  border-radius: var(--notation-code-radius, 0.25em);
+  background: var(--notation-code-bg, var(--notation-bg));
+}

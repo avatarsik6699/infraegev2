@@ -8,6 +8,8 @@ import math
 import random
 from collections import Counter
 
+from blocks_tree import expand, flatten, layout, ring_around, subtree
+
 from handdrawn import (
     ACCENT,
     INK,
@@ -28,71 +30,6 @@ KIND = "video"
 TOP = 5
 NODE_R = 56
 STEP = 0.3  # секунд на один вызов
-
-
-def expand(n):
-    """Вызовы F(n) при F(1) = F(2) = 1 и F(n) = F(n-1) + F(n-2)."""
-    return {"n": n, "kids": [] if n <= 2 else [expand(n - 1), expand(n - 2)]}
-
-
-def flatten(node, depth=0, out=None):
-    """Вершины в порядке вызова (обход в глубину), у каждой — глубина и родитель."""
-    out = [] if out is None else out
-    node["depth"] = depth
-    out.append(node)
-    for kid in node["kids"]:
-        kid["parent"] = node
-        flatten(kid, depth + 1, out)
-    return out
-
-
-def subtree(node):
-    yield node
-    for kid in node["kids"]:
-        yield from subtree(kid)
-
-
-def layout(root):
-    """Листья равномерно слева направо, внутренние вершины над серединой детей."""
-    leaves = [v for v in flatten_in_order(root) if not v["kids"]]
-    x0, x1 = 220, 1380
-    for i, leaf in enumerate(leaves):
-        leaf["x"] = x0 + (x1 - x0) * i / (len(leaves) - 1)
-
-    def place(node):
-        for kid in node["kids"]:
-            place(kid)
-        if node["kids"]:
-            node["x"] = sum(k["x"] for k in node["kids"]) / len(node["kids"])
-        node["y"] = 120 + 190 * node["depth"]
-
-    place(root)
-
-
-def flatten_in_order(node):
-    yield node
-    for kid in node["kids"]:
-        yield from flatten_in_order(kid)
-
-
-def ring_around(nodes, margin=24):
-    """Наименьший эллипс с центром в середине группы, вмещающий все круги с запасом."""
-    cx = (min(v["x"] for v in nodes) + max(v["x"] for v in nodes)) / 2
-    cy = (min(v["y"] for v in nodes) + max(v["y"] for v in nodes)) / 2
-    base_x = max(abs(v["x"] - cx) for v in nodes) + NODE_R + margin
-    base_y = max(abs(v["y"] - cy) for v in nodes) + NODE_R + margin
-    k = 1.0
-    while True:
-        rx, ry = base_x * k, base_y * k
-        if all(
-            ((v["x"] - cx + (NODE_R + margin) * math.cos(a)) / rx) ** 2
-            + ((v["y"] - cy + (NODE_R + margin) * math.sin(a)) / ry) ** 2
-            <= 1
-            for v in nodes
-            for a in [i * math.pi / 6 for i in range(12)]
-        ):
-            return cx, cy, rx, ry
-        k += 0.02
 
 
 def build():
@@ -151,7 +88,7 @@ def build():
     for v in calls:
         if v["n"] == repeated:
             group = list(subtree(v))
-            cx, cy, rx, ry = ring_around(group)
+            cx, cy, rx, ry = ring_around(group, NODE_R)
             rings.append((cx, cy, rx, ry))
             scene.add(
                 Ink(

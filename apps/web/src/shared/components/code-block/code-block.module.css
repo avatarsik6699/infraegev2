@@ -1,6 +1,6 @@
 .root {
-  --scrollbar-thumb: var(--color-scrollbar-dark);
-  --scrollbar-thumb-hover: var(--color-scrollbar-dark-hover);
+  --scrollbar-thumb: var(--color-scrollbar);
+  --scrollbar-thumb-hover: var(--color-scrollbar-hover);
   position: relative;
   width: min(100%, 46rem);
   min-width: 0;
@@ -8,7 +8,7 @@
   overflow: hidden;
   border: 0;
   border-radius: var(--radius-surface);
-  background: var(--color-code);
+  background: var(--code-block-surface, var(--color-code));
   color: var(--color-code-text);
 }
 
@@ -17,11 +17,9 @@
   gap: var(--space-1);
   align-items: center;
   justify-content: space-between;
-  min-height: 2rem;
-  padding: var(--space-0-5) var(--space-0-5) var(--space-0-5) var(--space-1-5);
-  border-bottom: 1px solid
-    color-mix(in srgb, var(--color-code-text) 14%, transparent);
-  background: var(--color-code-top);
+  min-height: 1.75rem;
+  padding: var(--space-0-5) var(--space-0-5) 0 var(--space-2);
+  background: var(--code-block-surface, var(--color-code-top));
 }
 
 .meta {
@@ -31,7 +29,7 @@
 }
 
 .language {
-  color: var(--color-code-text);
+  color: var(--color-code-comment);
   font-family: var(--font-data);
   font-size: var(--text-2xs);
   font-weight: 600;
@@ -66,7 +64,7 @@
 .code {
   display: block;
   min-width: 100%;
-  padding: var(--space-1-5) var(--space-2);
+  padding: var(--space-0-5) var(--space-2) var(--space-1-5);
   color: var(--color-code-text);
   font-family: inherit;
   font-size: var(--text-learning-code);
@@ -81,10 +79,15 @@
 }
 
 .lineNumber {
+  position: sticky;
+  z-index: 1;
+  left: 0;
   display: inline-block;
-  width: 2rem;
-  margin-right: 1rem;
-  color: var(--color-code-comment);
+  min-width: 2.25em;
+  margin-right: var(--space-1-5);
+  padding-right: var(--space-1);
+  background: var(--code-block-surface, var(--color-code));
+  color: var(--color-code-line-number);
   text-align: right;
   user-select: none;
 }
@@ -128,7 +131,7 @@
   display: flex;
   justify-content: center;
   padding: var(--space-0-5) var(--space-1) var(--space-1);
-  background: var(--color-code);
+  background: var(--code-block-surface, var(--color-code));
 }
 
 .disclosure[data-collapsed] {
@@ -139,7 +142,11 @@
   left: 0;
   padding-top: var(--space-5);
   border-top: 0;
-  background: linear-gradient(to bottom, transparent, var(--color-code) 68%);
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--code-block-surface, var(--color-code)) 68%
+  );
 }
 
 .disclosureIcon {

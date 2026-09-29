@@ -9,8 +9,6 @@
   --theme-learning-info: #3e5e76;
   --theme-scrollbar: #e4e4e4;
   --theme-scrollbar-hover: #d2d2d2;
-  --theme-scrollbar-dark: #2d2d2d;
-  --theme-scrollbar-dark-hover: #414141;
   --theme-page: #ffffff;
   --theme-surface: #ffffff;
   --theme-surface-muted: #f5f5f5;
@@ -35,15 +33,17 @@
   --theme-info-rule: oklch(0.82 0.055 245);
   --theme-warning: oklch(0.48 0.12 65);
   --theme-danger: oklch(0.5 0.18 25);
-  --theme-code: oklch(0.205 0 0);
-  --theme-code-top: oklch(0.145 0 0);
-  --theme-code-ink: oklch(0.985 0 0);
-  --theme-code-keyword: oklch(0.78 0.12 25);
-  --theme-code-string: oklch(0.82 0.1 145);
-  --theme-code-comment: oklch(0.68 0 0);
-  --theme-code-number: oklch(0.8 0.1 75);
-  --theme-code-function: oklch(0.82 0.09 255);
-  --theme-code-operator: oklch(0.86 0.05 300);
+  /* Code on a quiet tonal surface without a frame; every text colour is at least 4.5:1 on --theme-code. */
+  --theme-code: #f3f3f3;
+  --theme-code-top: #f3f3f3;
+  --theme-code-ink: #171717;
+  --theme-code-keyword: #005fb8;
+  --theme-code-string: #1a7f37;
+  --theme-code-comment: #636a75;
+  --theme-code-number: #b84400;
+  --theme-code-function: #6f42c1;
+  --theme-code-operator: #474747;
+  --theme-code-line-number: #858b94;
 
   --theme-font-display:
     "Infraege Alegreya", "Alegreya Fallback", Georgia, serif;

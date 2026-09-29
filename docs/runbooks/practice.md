@@ -28,7 +28,6 @@ For a prepared directory, run `uv run python -m app.modules.practice.cli validat
 `apps/api`. This is read-only validation, not a simulation against existing database state;
 conflicts with retained DB rows are still rejected transactionally during import.
 
-
 Use `uv run python -m app.modules.practice.cli import DIRECTORY` or `export DIRECTORY` from
 `apps/api`, with `IMPORT_DATABASE_URL` for `infraege_import` and `TASK_FILES_DIR` supplied from a
 protected environment. Production requires explicit environment/project selection and prior backup.

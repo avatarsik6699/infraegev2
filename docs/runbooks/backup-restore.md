@@ -85,7 +85,7 @@ restore attestation **before** it will migrate production. After that SHA's imag
 verified, take a fresh pre-migration production backup. Restore it into a disposable, isolated
 database and task-files copy; never migrate the live database as part of the rehearsal. Apply the
 candidate migration to that copy, create a candidate-schema backup from it, and restore that
-backup into a *second* fresh isolated target. Verify data/roles/fingerprints, account identities,
+backup into a _second_ fresh isolated target. Verify data/roles/fingerprints, account identities,
 session revocation, per-context progress and `infraege_app` grants there. Only after all checks pass
 may the operator record `140_01 <full-candidate-sha>` in
 `/etc/infraege/accounts-schema-ready` (root-owned, mode 600), then permit deployment. A failed or
@@ -115,7 +115,7 @@ bash scripts/rehearse-account-cutover.sh --run FULL_RESTIC_SNAPSHOT_ID FULL_SHA 
 
 ### Candidate source and Restic credentials
 
-The normal deploy workflow creates and uploads `/root/infraege-<sha>.tar.gz` only *after* deploy
+The normal deploy workflow creates and uploads `/root/infraege-<sha>.tar.gz` only _after_ deploy
 dispatch, so it is not available for this pre-dispatch proof and is not a replacement for a Git
 checkout. After the SHA has been pushed and its exact-SHA image evidence has passed, create a
 root-only disposable checkout on the production host from the canonical repository, then verify
@@ -162,7 +162,7 @@ is not production evidence. After preserving the encrypted Restic snapshot and r
 result, remove only the exact temporary extraction directory selected for this rehearsal; the
 command removes its own disposable Docker resources and internal working directory.
 
-After a healthy first deploy, create a fresh *live* `140_01` backup and run the routine isolated
+After a healthy first deploy, create a fresh _live_ `140_01` backup and run the routine isolated
 restore check again; this confirms the actual post-cutover data. Preserve the pre-migration backup
 for recovery. Do not claim this post-deploy check as the proof that authorized the preceding
 migration. After that fresh backup has run its retention, re-authenticate the previously recorded

@@ -111,6 +111,7 @@ verification/reset link, password, cookie and CSRF value as a secret even when d
 
 Host packages are patched by unattended upgrades. They stop silently if `dpkg` was interrupted,
 because every later `apt` run then fails. Check this monthly:
+
 - `dpkg --audit` must print nothing;
 - `apt list --upgradable` must stay short;
 - `/var/run/reboot-required` means a pending reboot.
@@ -137,6 +138,7 @@ its own PostgreSQL, timers `infraege-ops-backup`, `infraege-ops-analytics-retent
 `infraege-ops-restore-check`, installed from `/opt/infraege-ops`) kept running after Change 122 until
 the Change 136 release removed it completely, volumes included, by architect decision (SPEC §7.3).
 Nothing on the host depends on it. Change 138 removed the rest of it by architect decision:
+
 - the WireGuard tunnel `wg0` (packages, `/etc/wireguard/`, its UFW rules);
 - the `systemd-journal-remote` package with the journal gateway socket;
 - the env files in `/etc/infraege/ops` and `/var/backups/infraege-ops`;

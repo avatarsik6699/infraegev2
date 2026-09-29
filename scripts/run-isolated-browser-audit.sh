@@ -4,6 +4,8 @@ set -euo pipefail
 repo_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 cd "$repo_dir"
 portfolios=("$@")
+# Optional Playwright arguments for the `full` portfolio (for example a spec file), space separated.
+read -r -a e2e_args <<<"${E2E_ARGS:-}"
 if (( ${#portfolios[@]} == 0 )); then
   portfolios=(account full production)
 fi
@@ -97,7 +99,7 @@ for portfolio in "${portfolios[@]}"; do
   fi
   case "$portfolio" in
     account) pnpm --filter web exec playwright test --config playwright.account.config.ts ;;
-    full) pnpm --filter web test:e2e ;;
+    full) pnpm --filter web test:e2e "${e2e_args[@]}" ;;
     production) pnpm --filter web test:browser:production:once ;;
     no-js) pnpm --filter web test:browser:no-js ;;
     accessibility) pnpm --filter web test:browser:accessibility ;;

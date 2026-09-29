@@ -19,7 +19,12 @@
     var(--color-bg)
   );
   --learning-panel-background: transparent;
-  --learning-example-padding: 0;
+  --learning-example-background: color-mix(
+    in oklch,
+    var(--color-accent) 5%,
+    var(--color-bg)
+  );
+  --learning-example-padding: var(--space-2);
   --learning-block-measure: var(--measure-reading);
   --notation-bg: color-mix(in srgb, var(--color-text) 6%, var(--color-bg));
   --notation-padding-inline: 0.2em;
@@ -176,6 +181,7 @@
   --color-code-keyword: var(--theme-code-keyword);
   --color-code-string: var(--theme-code-string);
   --color-code-comment: var(--theme-code-comment);
+  --color-code-line-number: var(--theme-code-line-number);
   --color-code-number: var(--theme-code-number);
   --color-code-function: var(--theme-code-function);
   --color-code-operator: var(--theme-code-operator);
@@ -186,8 +192,6 @@
   --color-learning-info: var(--theme-learning-info);
   --color-scrollbar: var(--theme-scrollbar);
   --color-scrollbar-hover: var(--theme-scrollbar-hover);
-  --color-scrollbar-dark: var(--theme-scrollbar-dark);
-  --color-scrollbar-dark-hover: var(--theme-scrollbar-dark-hover);
 
   /* Semantic spacing and geometry */
   --space-0-5: 0.25rem;

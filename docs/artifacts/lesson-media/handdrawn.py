@@ -11,9 +11,14 @@ import random
 
 from PIL import Image, ImageDraw, ImageFont
 
+import brand as brand_mark
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 FONT_PATH = os.path.join(HERE, "fonts", "Neucha.ttf")
 LETTER_STROKE = 0.7  # добавочная толщина букв, px на холсте 1600
+# Знаки, которых нет в Neucha, но которые рисуются из имеющихся: основной знак и черта под ним.
+COMPOSED = {"\u2265": ">", "\u2264": "<"}
+WOBBLE = 0.65  # общая неровность линий, рамок и окружностей (1 — как в первых роликах)
 MIN_TEXT_SIZE = 48  # мельче на телефоне не читается (холст 1600 px сжимается примерно до 350 px)
 
 SS = 2  # рисуем в двойном разрешении, затем уменьшаем
@@ -62,6 +67,7 @@ def wobble(pts, rng, amp=2.2, step=10):
                 )
             )
     samples.append((*pts[-1], pts[-1][0] - pts[-2][0], pts[-1][1] - pts[-2][1]))
+    amp *= WOBBLE
     f1, f2 = rng.uniform(0.02, 0.05), rng.uniform(0.025, 0.05)
     p1, p2 = rng.uniform(0, 6.28), rng.uniform(0, 6.28)
     a1, a2 = amp * rng.uniform(0.7, 1.1), amp * rng.uniform(0.1, 0.25)
@@ -111,7 +117,7 @@ def circle(center, r, rng, overshoot=True):
         t = i / n
         a = a0 + sweep * t
         rr = (
-            r * (1 + 0.022 * math.sin(a * 2 + ph) + 0.012 * math.sin(a * 3 + ph2))
+            r * (1 + WOBBLE * (0.022 * math.sin(a * 2 + ph) + 0.012 * math.sin(a * 3 + ph2)))
             + 0.9 * SS * t
         )
         pts.append((cx + rr * math.cos(a), cy + rr * math.sin(a)))
@@ -126,7 +132,7 @@ def dashed_ellipse(center, rx, ry, rng):
     pts = []
     for i in range(n + 1):
         a = 6.28 * i / n
-        k = 1 + 0.03 * math.sin(a * 2 + ph)
+        k = 1 + WOBBLE * 0.03 * math.sin(a * 2 + ph)
         pts.append((cx + rx * SS * k * math.cos(a), cy + ry * SS * k * math.sin(a)))
     strokes, i = [], 0
     while i < n - 6:
@@ -178,7 +184,7 @@ def curve(p0, p1, p2, rng, head=True):
 
 def underline(x0, x1, y, rng):
     """Подчёркивание надписи: слегка наклонная неровная линия."""
-    tilt = rng.uniform(-4, 4)
+    tilt = rng.uniform(-4, 4) * WOBBLE
     return line((x0, y), (x1, y + tilt), rng)
 
 
@@ -221,6 +227,32 @@ def axes(origin, width, height, rng):
     """Оси графика со стрелками: вправо на width и вверх на height от origin."""
     ox, oy = origin
     return arrow((ox, oy), (ox + width, oy), rng) + arrow((ox, oy), (ox, oy - height), rng)
+
+
+def number_line(x0, x1, y, ticks, rng, tick_len=22, head=True):
+    """Числовая ось слева направо со стрелкой и засечками в точках ticks (координаты x)."""
+    strokes = arrow((x0, y), (x1, y), rng, head=head)
+    for x in ticks:
+        strokes += line((x, y - tick_len / 2), (x, y + tick_len / 2), rng)
+    return strokes
+
+
+def text_width(text, size, font_path=None):
+    """Ширина строки в px итогового кадра (для расстановки соседних надписей и зачёркиваний)."""
+    font = ImageFont.truetype(font_path or FONT_PATH, size * SS)
+    return sum(font.getlength(ch) for ch in text) / SS
+
+
+def glyph_support(text, font_path=None):
+    """Символы текста, которых не получится нарисовать (нет глифа и нет составной замены)."""
+    font = ImageFont.truetype(font_path or FONT_PATH, 40)
+    return sorted(
+        {
+            ch
+            for ch in text
+            if ch not in " \n" and ch not in COMPOSED and font.getmask(ch).getbbox() is None
+        }
+    )
 
 
 class Ink:
@@ -310,7 +342,7 @@ class Text:
             for ch in row:
                 adv = font.getlength(ch)
                 if ch != " ":
-                    if font.getmask(ch).getbbox() is None:
+                    if ch not in COMPOSED and font.getmask(ch).getbbox() is None:
                         raise ValueError(
                             f"В шрифте нет глифа {ch!r} (U+{ord(ch):04X}) для надписи {text!r}"
                         )
@@ -323,15 +355,20 @@ class Text:
     def _glyph(font, ch, cx, cy, size, rng):
         pad = size * SS
         mask = Image.new("L", (pad * 2, pad * 2), 0)
-        ImageDraw.Draw(mask).text(
+        drawer = ImageDraw.Draw(mask)
+        drawer.text(
             (pad, pad),
-            ch,
+            COMPOSED.get(ch, ch),
             font=font,
             fill=255,
             anchor="mm",
             stroke_width=round(LETTER_STROKE * SS),
             stroke_fill=255,
         )
+        if ch in COMPOSED:
+            half = font.getlength(COMPOSED[ch]) * 0.55
+            y = pad + size * SS * 0.42
+            drawer.line((pad - half, y, pad + half, y), fill=255, width=round(0.09 * size * SS))
         mask = mask.rotate(rng.uniform(-4, 4), resample=Image.Resampling.BICUBIC)
         return mask, (round(cx - pad), round(cy - pad + rng.uniform(-1.6, 1.6) * SS))
 
@@ -374,7 +411,8 @@ class Scene:
     «почерк» остальных. Старые сцены берут один общий random.Random и остаются прежними.
     """
 
-    def __init__(self, width, height, fade_start, duration, seed=0):
+    def __init__(self, width, height, fade_start, duration, seed=0, brand=True):
+        self.brand = brand
         self.width, self.height = width, height
         self.fade_start, self.duration = fade_start, duration
         self.seed = seed
@@ -387,6 +425,25 @@ class Scene:
     def add(self, element):
         self.elements.append(element)
         return element
+
+    def shape(self, func, *args, key, t0=0, dur=0, color=None, width=None, accent_at=None, **geo):
+        """Фигура одной строкой: `scene.shape(box, x0, y0, x1, y1, key="b1", color=ACCENT)`.
+
+        func — примитив, последний позиционный параметр которого rng; сиды берутся из key,
+        поэтому правка одной фигуры не меняет остальные.
+        """
+        strokes = func(*args, self.rng(f"{key}:shape"), **geo)
+        kwargs = {}
+        if color:
+            kwargs["color"] = color
+        if width:
+            kwargs["width"] = width
+        return self.add(Ink(strokes, t0, dur, self.rng(f"{key}:ink"), accent_at=accent_at, **kwargs))
+
+    def label(self, text, center, size, *, key, t0=0, dur=0, **kwargs):
+        """Подпись одной строкой: `scene.label("F(4)", (x, y), 72, key="t1")`."""
+        kwargs = {k: v for k, v in kwargs.items() if v is not None}
+        return self.add(Text(text, center, size, t0, dur, self.rng(f"{key}:text"), **kwargs))
 
     @property
     def settled_at(self):
@@ -418,7 +475,21 @@ class Scene:
         """Всё, на что стоит посмотреть перед публикацией сцены."""
         out = [f"{what} выходит за холст: {box}" for what, box in self.out_of_bounds()]
         out += [f"мелкая надпись {size}: {text!r}" for size, text in self.small_text()]
+        out += [f"знак бренда задевает {what} {box}" for what, box in self.brand_collisions()]
         return out
+
+    def brand_collisions(self, pad=14):
+        """Элементы, подходящие к знаку бренда ближе pad px: [(имя, границы)]."""
+        if not self.brand:
+            return []
+        bx0, by0, bx1, by1 = brand_mark.brand_box(self.width, self.height)
+        hits = []
+        for e in self.elements:
+            x0, y0, x1, y1 = e.bbox()
+            if x1 > bx0 - pad and x0 < bx1 + pad and y1 > by0 - pad and y0 < by1 + pad:
+                what = getattr(e, "glyphs", None) is not None and "Text" or "Ink"
+                hits.append((what, tuple(round(v) for v in (x0, y0, x1, y1))))
+        return hits
 
     def render(self, t):
         im = Image.new("RGB", (self.width * SS, self.height * SS), PAPER)
@@ -426,6 +497,8 @@ class Scene:
         for e in self.elements:
             e.draw(im, d, t)
         im = im.resize((self.width, self.height), Image.Resampling.LANCZOS)
+        if self.brand:
+            brand_mark.paint_brand(im)
         if t > self.fade_start and self.duration > self.fade_start:
             fade = 1 - ease((t - self.fade_start) / (self.duration - self.fade_start))
             im = Image.blend(Image.new("RGB", im.size, PAPER), im, fade)

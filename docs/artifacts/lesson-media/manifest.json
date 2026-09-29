@@ -7,14 +7,11 @@
     "height": 740,
     "duration_s": 17.8,
     "size_kb": {
-      "webm": 552,
-      "mp4": 457,
+      "webm": 215,
+      "mp4": 149,
       "poster": 59
     },
-    "warnings": [
-      "webm 552 КБ выше ориентира 300 КБ",
-      "mp4 457 КБ выше ориентира 300 КБ"
-    ],
+    "warnings": [],
     "alt": "цепочка F(5) … F(1): вопросы идут вниз до известного F(1) = 1, ответы поднимаются вверх",
     "values": {
       "F(1)": 1,
@@ -25,6 +22,68 @@
     }
   },
   {
+    "name": "rekursiya-branch-path",
+    "lesson": "rekursiya",
+    "kind": "video",
+    "width": 1780,
+    "height": 880,
+    "duration_s": 23.5,
+    "size_kb": {
+      "webm": 288,
+      "mp4": 209,
+      "poster": 76
+    },
+    "warnings": [],
+    "alt": "Путь по развилке для F(21): вопросы идут 21, 20, 10, 5, 4, 2, 1 с выбором ветви по чётности, ответы поднимаются 1, 4, 7, 8, 11, 14, 15",
+    "path": [21, 20, 10, 5, 4, 2, 1],
+    "values": {
+      "F(1)": 1,
+      "F(2)": 4,
+      "F(4)": 7,
+      "F(5)": 8,
+      "F(10)": 11,
+      "F(20)": 14,
+      "F(21)": 15
+    }
+  },
+  {
+    "name": "rekursiya-cache-before-after",
+    "lesson": "rekursiya",
+    "kind": "still",
+    "width": 1600,
+    "height": 800,
+    "duration_s": null,
+    "size_kb": {
+      "webp": 81
+    },
+    "warnings": [],
+    "alt": "Два дерева вызовов F(5): без кеша 9 вызовов, из них 4 повторяют найденное; с кешем 5 вызовов, повторы заменены ответом из кеша",
+    "calls": {
+      "without_cache": 9,
+      "with_cache": 5,
+      "repeats": 4
+    }
+  },
+  {
+    "name": "rekursiya-call-stack",
+    "lesson": "rekursiya",
+    "kind": "still",
+    "width": 1320,
+    "height": 800,
+    "duration_s": null,
+    "size_kb": {
+      "webp": 58
+    },
+    "warnings": [],
+    "alt": "Стопка ожидающих вызовов F(4), F(3), F(2), F(1): вызовы идут вверх до базы, ответы 1, 3, 7, 15 возвращаются вниз",
+    "values": {
+      "F(1)": 1,
+      "F(2)": 3,
+      "F(3)": 7,
+      "F(4)": 15
+    }
+  },
+  {
     "name": "rekursiya-call-tree",
     "lesson": "rekursiya",
     "kind": "video",
@@ -32,9 +91,9 @@
     "height": 900,
     "duration_s": 6.5,
     "size_kb": {
-      "webm": 296,
-      "mp4": 197,
-      "poster": 59
+      "webm": 136,
+      "mp4": 83,
+      "poster": 60
     },
     "warnings": [],
     "alt": "Дерево вызовов F(5): значение F(3) вычисляется дважды, эти поддеревья обведены",
@@ -46,6 +105,34 @@
     }
   },
   {
+    "name": "rekursiya-cancel",
+    "lesson": "rekursiya",
+    "kind": "still",
+    "width": 1600,
+    "height": 760,
+    "duration_s": null,
+    "size_kb": {
+      "webp": 47
+    },
+    "warnings": [],
+    "alt": "Цепочка F(98), F(99), F(100) с множителями 99 и 100; в дроби F(100) на F(98) общее F(98) зачёркнуто, остаётся 100 на 99, то есть 9900",
+    "product": 9900
+  },
+  {
+    "name": "rekursiya-choose-method",
+    "lesson": "rekursiya",
+    "kind": "still",
+    "width": 1600,
+    "height": 1160,
+    "duration_s": null,
+    "size_kb": {
+      "webp": 153
+    },
+    "warnings": [],
+    "alt": "Карта выбора способа: огромный аргумент и отношение — сократить; ветви, два вызова, шаг не на 1, две функции — рекурсия с кешем; линейная цепочка — цикл; чуть длиннее 1000 — поднять лимит; очень длинная или вверх — прогреть кеш; всегда проверять двумя способами",
+    "rows": 5
+  },
+  {
     "name": "rekursiya-no-base",
     "lesson": "rekursiya",
     "kind": "video",
@@ -53,25 +140,77 @@
     "height": 740,
     "duration_s": 13.6,
     "size_kb": {
-      "webm": 447,
-      "mp4": 342,
-      "poster": 65
+      "webm": 170,
+      "mp4": 109,
+      "poster": 66
+    },
+    "warnings": [],
+    "alt": "цепочка вопросов F(5), F(4), F(3), F(2), F(1), F(0), F(-1) без базы не останавливается"
+  },
+  {
+    "name": "rekursiya-two-functions",
+    "lesson": "rekursiya",
+    "kind": "video",
+    "width": 1500,
+    "height": 940,
+    "duration_s": 30.9,
+    "size_kb": {
+      "webm": 546,
+      "mp4": 406,
+      "poster": 60
     },
     "warnings": [
-      "webm 447 КБ выше ориентира 300 КБ",
-      "mp4 342 КБ выше ориентира 300 КБ"
+      "webm 546 КБ выше ориентира 300 КБ",
+      "mp4 406 КБ выше ориентира 300 КБ"
     ],
-    "alt": "цепочка вопросов F(5), F(4), F(3), F(2), F(1), F(0), F(-1) без базы не останавливается"
+    "alt": "Таблица значений F и G для n от 1 до 8: каждая ячейка считается по двум уже найденным, перекрёстно, в итоге F(8) = 44",
+    "F": {
+      "1": 1,
+      "2": 1,
+      "3": 3,
+      "4": 5,
+      "5": 8,
+      "6": 14,
+      "7": 25,
+      "8": 44
+    },
+    "G": {
+      "1": 2,
+      "2": 2,
+      "3": 3,
+      "4": 6,
+      "5": 11,
+      "6": 19,
+      "7": 33,
+      "8": 58
+    }
+  },
+  {
+    "name": "rekursiya-warmup-direction",
+    "lesson": "rekursiya",
+    "kind": "still",
+    "width": 1300,
+    "height": 760,
+    "duration_s": null,
+    "size_kb": {
+      "webp": 74
+    },
+    "warnings": [],
+    "alt": "Числовая ось n со стрелками зависимости вправо от n к n + 4 и порядком прогрева кеша справа налево от базы n ≥ 4200 до F(100)",
+    "chain": {
+      "steps": 1025,
+      "limit": 1000
+    }
   },
   {
     "name": "specimen",
     "lesson": null,
     "kind": "still",
     "width": 1600,
-    "height": 1000,
+    "height": 1190,
     "duration_s": null,
     "size_kb": {
-      "png": 329
+      "png": 368
     },
     "warnings": [],
     "alt": "Лист образцов примитивов движка рисования"

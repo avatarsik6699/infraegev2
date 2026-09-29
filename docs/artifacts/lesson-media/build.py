@@ -22,7 +22,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
 FPS = 24
-KEYFRAME_EVERY = 48  # ключевой кадр каждые 2 с: перемотка полосой времени без задержек, вес умеренный
+KEYFRAME_EVERY = 120  # ключевой кадр каждые 5 с: чаще файлы сильно тяжелее, реже перемотка запаздывает
+MAX_WIDTH = 1200  # шире не нужно: в колонке чтения ролик занимает около 640 px (1280 на плотных экранах)
 BUDGET_KB = 300  # ориентир, не запрет: важнее понятность
 NOT_SCENES = {"handdrawn", "build"}
 PUBLIC = os.path.join(HERE, "..", "..", "..", "apps", "web", "public", "lesson-media")
@@ -51,15 +52,15 @@ def out_dir_for(module, override):
 
 def encode(frames, out_dir, name):
     src = os.path.join(frames, "f%04d.png")
-    base = ["ffmpeg", "-y", "-loglevel", "error", "-framerate", str(FPS), "-i", src, "-an", "-pix_fmt", "yuv420p"]
+    base = ["ffmpeg", "-y", "-loglevel", "error", "-framerate", str(FPS), "-i", src, "-an", "-pix_fmt", "yuv420p", "-vf", f"scale='min({MAX_WIDTH},iw)':-2:flags=lanczos"]
     gop = ["-g", str(KEYFRAME_EVERY)]
     subprocess.run(
-        base + ["-c:v", "libvpx-vp9", "-crf", "36", "-b:v", "0", "-deadline", "good", "-cpu-used", "1", *gop]
+        base + ["-c:v", "libvpx-vp9", "-crf", "40", "-b:v", "0", "-deadline", "good", "-cpu-used", "1", *gop]
         + [os.path.join(out_dir, f"{name}.webm")],
         check=True,
     )
     subprocess.run(
-        base + ["-c:v", "libx264", "-crf", "26", "-preset", "slow", *gop, "-keyint_min", str(KEYFRAME_EVERY), "-sc_threshold", "0", "-movflags", "+faststart"]
+        base + ["-c:v", "libx264", "-crf", "30", "-preset", "slow", *gop, "-keyint_min", str(KEYFRAME_EVERY), "-sc_threshold", "0", "-movflags", "+faststart"]
         + [os.path.join(out_dir, f"{name}.mp4")],
         check=True,
     )
@@ -134,7 +135,7 @@ def write_manifest(entries):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--only", help="собрать одну сцену по NAME")
+    parser.add_argument("--only", help="собрать сцены по NAME (несколько через запятую)")
     parser.add_argument("--list", action="store_true", help="показать найденные сцены и выйти")
     parser.add_argument("--out", help="каталог вместо apps/web/public/lesson-media (или reference/)")
     args = parser.parse_args()
@@ -143,7 +144,8 @@ def main():
         for m in scenes:
             print(f"{m.NAME}\t{getattr(m, 'LESSON', None)}\t{getattr(m, 'KIND', 'video')}")
         return
-    chosen = [m for m in scenes if args.only in (None, m.NAME)]
+    wanted = args.only.split(",") if args.only else None
+    chosen = [m for m in scenes if wanted is None or m.NAME in wanted]
     if not chosen:
         sys.exit(f"нет сцены {args.only!r}; доступные: {', '.join(m.NAME for m in scenes)}")
     entries = [build_scene(m, args.out) for m in chosen]

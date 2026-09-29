@@ -47,7 +47,7 @@ export const CodeBlock: React.FC<CodeBlockTypes.Props> = (props) => {
       <CodeBlockContent
         code={props.code}
         language={props.language}
-        showLineNumbers={props.showLineNumbers}
+        showLineNumbers={props.showLineNumbers ?? true}
         id={contentId}
         collapsed={collapsed}
       />

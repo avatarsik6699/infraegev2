@@ -72,30 +72,52 @@ export class TopicLessonPage {
 
   private async expectCodeContrast(block: Locator): Promise<void> {
     const colors = await block.evaluate((element) => {
-      const lightness = (color: string) =>
-        Number(/^oklch\((\d*\.?\d+)/.exec(color)?.[1] ?? 0);
+      const normalise = (color: string) => {
+        const probe = document.createElement("span");
+        probe.style.color = color;
+        document.body.append(probe);
+        const value = getComputedStyle(probe).color;
+        probe.remove();
+        return value;
+      };
+      const channels = (color: string) =>
+        color
+          .match(/\d+(\.\d+)?/gu)!
+          .slice(0, 3)
+          .map(Number);
+      const luminance = (color: string) => {
+        const [r, g, b] = channels(color).map((value) => {
+          const unit = value / 255;
+          return unit <= 0.03928
+            ? unit / 12.92
+            : ((unit + 0.055) / 1.055) ** 2.4;
+        });
+        return 0.2126 * r! + 0.7152 * g! + 0.0722 * b!;
+      };
+      const ratio = (a: string, b: string) => {
+        const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+        return (hi! + 0.05) / (lo! + 0.05);
+      };
+      const root = getComputedStyle(document.documentElement);
       const code = element.querySelector("code")!;
+      const background = getComputedStyle(element).backgroundColor;
       return {
         text: getComputedStyle(code).color,
-        foregroundToken: getComputedStyle(document.documentElement)
-          .getPropertyValue("--theme-code-ink")
-          .trim(),
-        background: getComputedStyle(element).backgroundColor,
-        backgroundToken: getComputedStyle(document.documentElement)
-          .getPropertyValue("--theme-code")
-          .trim(),
-        plainLightness: lightness(getComputedStyle(code).color),
-        tokenLightness: [...code.querySelectorAll("[data-token]")].map(
-          (token) => lightness(getComputedStyle(token).color),
+        foregroundToken: normalise(root.getPropertyValue("--theme-code-ink")),
+        background,
+        backgroundToken: normalise(root.getPropertyValue("--theme-code")),
+        plainRatio: ratio(getComputedStyle(code).color, background),
+        tokenRatios: [...code.querySelectorAll("[data-token]")].map((token) =>
+          ratio(getComputedStyle(token).color, background),
         ),
       };
     });
     expect(colors.text).toBe(colors.foregroundToken);
     expect(colors.background).toBe(colors.backgroundToken);
-    expect(colors.plainLightness).toBeGreaterThan(0.65);
-    expect(colors.tokenLightness.length).toBeGreaterThan(0);
-    for (const value of colors.tokenLightness) {
-      expect(value).toBeGreaterThan(0.65);
+    expect(colors.plainRatio).toBeGreaterThanOrEqual(4.5);
+    expect(colors.tokenRatios.length).toBeGreaterThan(0);
+    for (const value of colors.tokenRatios) {
+      expect(value).toBeGreaterThanOrEqual(4.5);
     }
   }
 
@@ -365,38 +387,38 @@ export class TopicLessonPage {
         expect(term.singleLine).toBe(true);
         expect(term.contained).toBe(true);
       }
-      const calloutLabel = this.page
-        .getByRole("complementary", {
-          name: "Когда применим этот приём",
-          exact: true,
-        })
-        .locator(":scope > div > span");
       for (const example of await examples.all()) {
         const label = example.locator("figcaption");
         await expect(label).toHaveCSS("font-size", "14px");
-        await expect(label).toHaveCSS("font-weight", "500");
+        await expect(label).toHaveCSS("font-weight", "400");
         await expect(label).toHaveCSS(
           "color",
-          await calloutLabel.evaluate(
-            (element) => getComputedStyle(element).color,
-          ),
+          await this.page.evaluate(() => {
+            const probe = document.createElement("span");
+            probe.style.color = "var(--color-text-soft)";
+            document.body.append(probe);
+            const color = getComputedStyle(probe).color;
+            probe.remove();
+            return color;
+          }),
         );
         await expect(label.locator('svg[aria-hidden="true"]')).toHaveCount(1);
         for (const step of await example.locator("ol li").all()) {
           const geometry = await step.evaluate((element) => {
             const marker = element.firstElementChild!;
             const body = element.lastElementChild!;
+            const markerBox = marker.getBoundingClientRect();
+            const bodyBox = body.getBoundingClientRect();
+            const firstLineCentre =
+              bodyBox.top + parseFloat(getComputedStyle(body).lineHeight) / 2;
             return {
               aligned:
                 Math.abs(
-                  marker.getBoundingClientRect().top -
-                    body.getBoundingClientRect().top,
-                ) <= 1,
+                  markerBox.top + markerBox.height / 2 - firstLineCentre,
+                ) <= 1.5,
               sameFirstLineHeight:
-                Math.abs(
-                  marker.getBoundingClientRect().height -
-                    parseFloat(getComputedStyle(body).lineHeight),
-                ) <= 1,
+                markerBox.height <=
+                parseFloat(getComputedStyle(body).lineHeight) + 1,
             };
           });
           expect(geometry.aligned).toBe(true);
@@ -461,7 +483,7 @@ export class TopicLessonPage {
 
   async expectLessonVideos(noJavaScript = false): Promise<void> {
     const videos = this.page.locator("#theory video");
-    await expect(videos).toHaveCount(3);
+    await expect(videos).toHaveCount(5);
     for (const figure of await this.page
       .locator("#theory figure[data-lesson-video-figure]")
       .all()) {
@@ -527,6 +549,36 @@ export class TopicLessonPage {
     await expect.poll(async () => (await state()).paused).toBe(true);
     await first.scrollIntoViewIfNeeded();
     await expect.poll(async () => (await state()).paused).toBe(false);
+  }
+
+  async expectLessonFigures(noJavaScript = false): Promise<void> {
+    const figures = this.page.locator("figure[data-lesson-figure]");
+    await expect(figures).toHaveCount(5);
+    for (const figure of await figures.all()) {
+      await figure.scrollIntoViewIfNeeded();
+      const image = figure.locator("img");
+      await expect(image).toHaveAttribute("alt", /\S/u);
+      await expect
+        .poll(() =>
+          image.evaluate(
+            (element: HTMLImageElement) =>
+              element.complete && element.naturalWidth > 0,
+          ),
+        )
+        .toBe(true);
+      await expect(figure.locator("figcaption")).toHaveCount(1);
+      await expect(figure).not.toContainText("Текстовое описание");
+    }
+    if (noJavaScript) return;
+    for (const width of [390, 1440]) {
+      await this.page.setViewportSize({ width, height: 900 });
+      const overflow = await this.page.evaluate(
+        () =>
+          document.documentElement.scrollWidth -
+          document.documentElement.clientWidth,
+      );
+      expect(overflow).toBeLessThanOrEqual(0);
+    }
   }
 
   async expectLessonVideosRespectReducedMotion(): Promise<void> {
@@ -619,7 +671,7 @@ export class TopicLessonPage {
       const comparisons = this.page.locator(
         '#theory [role="note"] [data-status]',
       );
-      await expect(comparisons).toHaveCount(24);
+      await expect(comparisons).toHaveCount(10);
       for (const comparison of await comparisons.all()) {
         const copy = comparison.locator(":scope > div > div");
         await expect(copy).toHaveCSS("font-size", "16px");
@@ -813,7 +865,7 @@ export class TopicLessonPage {
       radius: "0px",
       button: "none",
       tabs: "auto",
-      code: "rgb(45, 45, 45)",
+      code: "rgb(228, 228, 228)",
     });
     await this.page.emulateMedia({ forcedColors: "active" });
     await expect(this.page.locator("html")).toHaveCSS(
@@ -872,12 +924,19 @@ export class TopicLessonPage {
           width: node.getBoundingClientRect().width,
           background: getComputedStyle(node).backgroundColor,
           figure: node.tagName === "FIGURE",
+          worked:
+            node.querySelector(":scope > figcaption")?.textContent ===
+            "Разберём на примере",
         })),
       );
     expect(blocks.length).toBeGreaterThan(0);
     for (const block of blocks) {
       expect(block.width).toBeLessThanOrEqual(explanation!.width + 1);
-      if (block.figure) expect(block.background).toBe("rgba(0, 0, 0, 0)");
+      if (block.worked) {
+        expect(block.background).not.toBe("rgba(0, 0, 0, 0)");
+      } else if (block.figure) {
+        expect(block.background).toBe("rgba(0, 0, 0, 0)");
+      }
     }
     const rail = await this.page.locator("[data-outline-rail]").boundingBox();
     const footer = await this.page

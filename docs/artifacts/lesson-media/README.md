@@ -22,6 +22,7 @@ uv run --no-project --with pillow python -m unittest discover -s scripts/tests -
 
 | Файл | Назначение |
 | --- | --- |
+| `brand.py` | Знак бренда и адрес сайта в углу сцены |
 | `handdrawn.py` | Ядро: примитивы, штрихи, рукописный текст, таймлайн сцены, проверки |
 | `rekursiya_chain.py` | Общие детали роликов про цепочку значений (ряд кругов, дуги вопросов и ответов) |
 | `rekursiya_base_step.py`, `rekursiya_no_base.py`, `rekursiya_call_tree.py` | Сцены урока «Рекурсия» |
