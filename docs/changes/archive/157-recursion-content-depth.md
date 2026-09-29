@@ -9,14 +9,14 @@
 | Change | `157` |
 | Slug | `recursion-content-depth` |
 | Title | Глубина урока «Рекурсия»: реальные приёмы задания 16 |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/157-recursion-content-depth` |
 
 ---
 
 ## Goal
 
-Довести урок `rekursiya` до покрытия приёмов, которые реально встречаются в задании 16: ветвление по чётности и порогу, шаги не на 1 (`//`, `%`), рекурсия вверх, две функции, «сколько n», дерево вызовов, разность и отношение при огромных аргументах. Упор — на рекурсию с кешем `@lru_cache(None)`, цикл — второй инструмент. Основание — [аудит](artifacts/lessons/16-rekursiya.audit.md) (сверка с 255 задачами банка, ФИПИ-2026 и авторскими статьями Яндекс Образования); контракт качества — [SPEC](SPEC.md) §2.3.
+Довести урок `rekursiya` до покрытия приёмов, которые реально встречаются в задании 16: ветвление по чётности и порогу, шаги не на 1 (`//`, `%`), рекурсия вверх, две функции, «сколько n», дерево вызовов, разность и отношение при огромных аргументах. Упор — на рекурсию с кешем `@lru_cache(None)`, цикл — второй инструмент. Основание — [аудит](../../artifacts/lessons/16-rekursiya.audit.md) (сверка с 255 задачами банка, ФИПИ-2026 и авторскими статьями Яндекс Образования); контракт качества — [SPEC](../../SPEC.md) §2.3.
 
 **Принципы.** Смысл важнее заучивания: каждый приём вводится как «проблема → наблюдение → идея → приём → проверка», с «почему работает» и «когда не сработает», со сверкой вторым способом (кеш ↔ упрощение, вверх ↔ вниз). Порядок решения: упростить → выбрать инструмент (кеш, прогрев кеша, `setrecursionlimit`, цикл) → проверить условие завершения. Пререквизиты — ссылками на уроки Python `funktsii` и `rekursiya` (`PythonCourseLessonLink`), без дублирования. Идеи внешних статей переформулируются; их тексты и задачи не переносятся.
 
@@ -55,7 +55,7 @@
 - [x] `D1` Независимо проверить ответы задач банка вторым способом (скрипт): подтверждено 154 из 255, расхождений нет; остаток — вне change (см. ~~D5~~). Калибровка `difficulty` рассмотрена, без изменений (нет данных о решаемости) — _Depends on:_ —
 - [x] `D2` Задачи «наблюдай и объясни»: `/` vs `//` (`rekursiya-true-division`) и подсчёт вызовов (`rekursiya-repeated-calls`); прогрев и `RecursionError` — в примере и вопросе самопроверки — _Depends on:_ F7, D1
 - [x] `D3` +10–12 учебных задач по нарастающей (по одной на приём), формулировки собственные, у каждой `theory_links.hash` на реальный подраздел; задачи и обе проверки (верный/неверный ответ) в `content/practice-bank/bank.json` — _Depends on:_ F10, D1
-- [x] `D4` Проставить `theory_links.section` для 255 задач банка по [тегам аудита](artifacts/lessons/16-rekursiya.bank-tags.json); пересмотреть `difficulty` — _Depends on:_ F10, D1
+- [x] `D4` Проставить `theory_links.section` для 255 задач банка по [тегам аудита](../../artifacts/lessons/16-rekursiya.bank-tags.json); пересмотреть `difficulty` — _Depends on:_ F10, D1
 
 ### Data (дополнения)
 - ~~D5~~ (removed) Проверка оставшихся 101 задачи банка (процедуры, «сколько n», нестандартные форматы): вне задачи углубления урока, каждая требует отдельного разбора. Задачи не менялись; риск принят, список — `docs/artifacts/lessons/16-rekursiya.checks/bank-check.json`.
@@ -64,7 +64,7 @@
 - [x] `T1` Сверка с методическими рекомендациями ФИПИ-2026: упрощать до программы, условие завершения, лимит вызовов; решение — `@lru_cache(None)` (выполнено при аудите)
 - [x] `T2` Сверено с демоверсией ФИПИ 2027 (задание 16: `F(n) = n·F(n−1)`, выражение `(F(n) + 5·F(n−1)) / F(n−2)`): приём «выразить всё через наименьшее значение и сократить» добавлен в раздел про большие n; остальные приёмы демоверсии — в уроке. Полные подборки sdamgia не просматривались — _Depends on:_ —
 - [x] `T3` Обновить `lesson-content-contract.test.ts` (порядок id теории/задач) и page object/E2E при смене разметки — _Depends on:_ F17, D3
-- [x] `T4` Запись качества `docs/artifacts/lessons/16-rekursiya.quality.md` по [runbook](runbooks/lesson-authoring.md) §5: карта «понятие → задача», независимые ответы, граничные случаи — _Depends on:_ D3, D4
+- [x] `T4` Запись качества `docs/artifacts/lessons/16-rekursiya.quality.md` по [runbook](../../runbooks/lesson-authoring.md) §5: карта «понятие → задача», независимые ответы, граничные случаи — _Depends on:_ D3, D4
 - [x] `T5` Проверка страницы как ученик: 390/1440 и no-JS в изолированном E2E, скриншоты просмотрены; Playwriter не использован (нужна засеянная БД) — _Depends on:_ T3
 
 <!-- Test execution is governed by `docs/STACK.md`'s Critical Gate and opt-in Full Gate.
@@ -102,7 +102,7 @@ of truth; this file only tracks what to build and what's left.
 ## Gate Checks
 
 > Critical Gate runs once per `/work` target set and by default in `/ship`; Full Gate runs only
-> with explicit `--full`; release selects affected checks and Release Gate. All gates are defined in [docs/STACK.md](../STACK.md) — this section only records
+> with explicit `--full`; release selects affected checks and Release Gate. All gates are defined in [docs/STACK.md](../../STACK.md) — this section only records
 > change-specific overrides.
 
 Дополнительно к Critical Gate: `pnpm validate:content`, `node scripts/practice-registry.mjs --check`, API-тесты банка (`test_minimal_bank.py`, `test_tasks_api.py`), изолированный E2E (`bash scripts/run-isolated-browser-audit.sh`) для страницы `/ege/16-rekursiya` и `accessibility`; все новые примеры и ответы запускаются в Python.
