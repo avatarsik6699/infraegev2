@@ -7,7 +7,7 @@
 | Change | `156` |
 | Slug | `recursion-style-pilot` |
 | Title | Единый визуальный стиль уроков и сайта |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/156-recursion-style-pilot` |
 
 ## Goal
@@ -137,7 +137,7 @@ See `docs/SPEC.md` §5, `docs/FRONTEND.md` §4/§8 and the Files list above.
 
 ## Gate Checks
 
-Affected frontend Critical Gate per [STACK](../STACK.md), shared-reading acceptance
+Affected frontend Critical Gate per [STACK](../../STACK.md), shared-reading acceptance
 for all published lessons, representative site-page/degraded states and production
 SSR/hydration checks. Historical pilot isolation assertions are superseded by
 F25–F27 rollout. Final audit precedes the architect-authorized local ship.
@@ -158,8 +158,8 @@ No Full Gate or release.
   destinations unchanged; console has no application errors. Its screenshot
   capture timed out; Chrome DevTools supplied desktop evidence, then screenshot
   capture stalled there too. Repository Playwright supplied final desktop/mobile
-  captures: [desktop](../artifacts/change-156/links-desktop.png),
-  [mobile](../artifacts/change-156/links-mobile.png). No horizontal overflow or page errors.
+  captures: [desktop](../../artifacts/change-156/links-desktop.png),
+  [mobile](../../artifacts/change-156/links-mobile.png). No horizontal overflow or page errors.
 - Blue on white: 4.67:1 (после F35 — `#0070d2`: 4.94:1 на белом, 4.53:1 на `#f5f5f5`). Buttons/header/cards retain neutral semantics; other
   lesson rules keep their baseline. At the F5–F9 checkpoint, recursion content was byte-identical to HEAD; later readability changes preserve authored wording and sequence.
 - Independent F5–F9 review: no remaining findings. Impeccable detector: `[]`.
@@ -183,7 +183,7 @@ No Full Gate or release.
   errors or >=400 resources. Earlier edited/override tab emitted a hydration warning;
   fresh-load browser acceptance and fresh Chrome tab did not reproduce it.
   Screenshot capture supplied initial images but timed out on the batch, so final
-  [desktop/mobile evidence](../artifacts/change-156/content-pilot/verification.md)
+  [desktop/mobile evidence](../../artifacts/change-156/content-pilot/verification.md)
   uses repository Chromium. All five authored captures inspected.
 - API/backend/schema/security/dependency/Full/build rows skipped: no corresponding
   boundary change. Existing explicitly authorized dual-active Change155/156 state
@@ -206,7 +206,7 @@ No Full Gate or release.
   reduced motion, 200% text. Fresh Playwriter reload: no application errors or
   failed resources. Desktop/mobile screenshots inspected; repository Chromium
   supplied exact-size batch captures because Playwriter rounds viewport dimensions.
-  [Evidence](../artifacts/change-156/learning-blocks/verification.md).
+  [Evidence](../../artifacts/change-156/learning-blocks/verification.md).
 - Affected checks only; no API/backend/schema/dependency/Full/build boundary change.
   No ship, commit, merge or release. Final hygiene recorded in the evidence report.
 
@@ -224,7 +224,7 @@ No Full Gate or release.
   40 focused unit tests and10 topic-reading scenarios PASS. Independent review:
   no remaining findings. Detector type scope: []. Degraded and outside-pilot
   acceptance retained. Auth/API/backend/dependencies/build/Full unchanged.
-- [Research and final desktop/mobile evidence](../artifacts/change-156/final-polish/verification.md).
+- [Research and final desktop/mobile evidence](../../artifacts/change-156/final-polish/verification.md).
   Playwriter used first for real Chrome; screenshot timeout required repository
   Chromium capture. Fresh console/network clean. Final allowlisted hygiene PASS.
 
@@ -235,7 +235,7 @@ No Full Gate or release.
   200% text. Block code uses rem to avoid nested relative scaling.
 - Format, lint, focused E2E compiler and four desktop/mobile/no-JS browser
   scenarios PASS. Desktop/mobile screenshots inspected; no application errors
-  observed. [Evidence](../artifacts/change-156/scale-followup/verification.md).
+  observed. [Evidence](../../artifacts/change-156/scale-followup/verification.md).
 - Other lesson defaults and authored content unchanged. Final hygiene PASS.
 
 ### F24 balanced code and formula scale
@@ -245,7 +245,7 @@ No Full Gate or release.
 - Format/lint/focused E2E compiler and four browser scenarios PASS. Desktop/mobile
   screenshots inspected. E2E LSP retains its known inferred-project import errors;
   explicit strict compilation PASS. Type detector: no findings. Hygiene PASS.
-  [Evidence](../artifacts/change-156/balanced-scale/verification.md).
+  [Evidence](../../artifacts/change-156/balanced-scale/verification.md).
 
 ## Implementation Notes
 
@@ -280,7 +280,7 @@ feat(change-156): unify lesson and site visual style
 - Final production build and source/compiler/lint/content/focused-unit checks
   pass. Independent reviewer findings resolved, including the fixed mobile
   pagination grid override; final re-review has no findings.
-- Final authored [report and desktop/mobile evidence](../artifacts/change-156/site-rollout/verification.md)
+- Final authored [report and desktop/mobile evidence](../../artifacts/change-156/site-rollout/verification.md)
   covers17 routes/states, 820px course catalog, enlarged sort/pagination, and
   native pagination. All34 route/viewport observations have no ordinary/200%
   horizontal overflow and no unexpected app/resource errors.
@@ -292,5 +292,5 @@ feat(change-156): unify lesson and site visual style
 - Two independent final reviews completed; dense practice callout typography gap
   corrected. Fresh format/lint/build,46 focused unit cases and desktop/mobile/200%
   Playwriter fixture checks PASS. No remaining P1/P2 findings.
-- Final [audit report](../artifacts/change-156/final-audit/verification.md) records
+- Final [audit report](../../artifacts/change-156/final-audit/verification.md) records
   accepted unchanged rollout evidence and the unresolved155/156 history boundary.

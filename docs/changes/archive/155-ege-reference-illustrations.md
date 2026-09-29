@@ -7,7 +7,7 @@
 | Change | `155` |
 | Slug | `ege-reference-illustrations` |
 | Title | Иллюстрации каталога ЕГЭ по подготовленным исходникам |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/155-ege-reference-illustrations` |
 
 ## Goal
@@ -86,7 +86,7 @@ See `docs/SPEC.md` §5 and `docs/FRONTEND.md` §9 and the Files list above.
 
 ## Gate Checks
 
-Critical Gate: [STACK](../STACK.md). Аffected frontend static checks plus focused catalog browser
+Critical Gate: [STACK](../../STACK.md). Аffected frontend static checks plus focused catalog browser
 acceptance; no Full Gate or release. High-quality raster edits preserve source compositions; baseline5/16 are rasterized without redesign.
 
 ## Implementation Notes
