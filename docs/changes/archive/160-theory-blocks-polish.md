@@ -9,14 +9,14 @@
 | Change | `160`                                       |
 | Slug   | `theory-blocks-polish`                      |
 | Title  | Доводка блоков теории и тестов уроков       |
-| Status | `active`                                    |
+| Status | `archived`                                    |
 | Branch | `feature/160-theory-blocks-polish`          |
 
 ---
 
 ## Goal
 
-После Change 159 блок «Разберём на примере» и код в тексте оформлены заново; остальные блоки теории (`Procedure`, `Callout`, `Checkpoint`, `Mistake`) живут в прежнем стиле и на его фоне выглядят шумно. Change приводит их к одному спокойному языку (одна типографика, приглушённые метки, единый бейдж номера), проверяет вертикальный ритм и длинные формулы на 390 px, убирает слабые секции `mistake` в уроке 15 (оставляем только настоящие ловушки) и чинит пять файлов Vitest уроков, сломанных с Change 157. Правила — [SPEC](../SPEC.md) §2.3, [FRONTEND](../FRONTEND.md).
+После Change 159 блок «Разберём на примере» и код в тексте оформлены заново; остальные блоки теории (`Procedure`, `Callout`, `Checkpoint`, `Mistake`) живут в прежнем стиле и на его фоне выглядят шумно. Change приводит их к одному спокойному языку (одна типографика, приглушённые метки, единый бейдж номера), проверяет вертикальный ритм и длинные формулы на 390 px, убирает слабые секции `mistake` в уроке 15 (оставляем только настоящие ловушки) и чинит пять файлов Vitest уроков, сломанных с Change 157. Правила — [SPEC](../../SPEC.md) §2.3, [FRONTEND](../../FRONTEND.md).
 
 **Решения архитектора (из чата, действуют).** Меньше шума в типографике (один размер, цвет и вес внутри блока), второстепенное приглушено; код в тексте — плашка, формула — обычный текст; два блока кода рядом не ставим; строки кода не длиннее 64 символов; блок `mistake` только для настоящей ловушки.
 
@@ -85,7 +85,7 @@ See `docs/SPEC.md` §2.3 and §5, `docs/FRONTEND.md` and the Files list above. D
 ## Gate Checks
 
 > Critical Gate runs once per `/work` target set and by default in `/ship`; Full Gate runs only
-> with explicit `--full`; release selects affected checks and Release Gate. All gates are defined in [docs/STACK.md](../STACK.md) — this section only records
+> with explicit `--full`; release selects affected checks and Release Gate. All gates are defined in [docs/STACK.md](../../STACK.md) — this section only records
 > change-specific overrides.
 
 Дополнительно: сфокусированные Vitest для затронутых уроков и компонентов; E2E затронутых спеков один раз перед ship.
