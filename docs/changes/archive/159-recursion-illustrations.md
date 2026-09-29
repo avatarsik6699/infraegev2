@@ -9,14 +9,14 @@
 | Change | `159`                                     |
 | Slug   | `recursion-illustrations`                 |
 | Title  | Рисованные иллюстрации в уроке «Рекурсия» |
-| Status | `active`                                  |
+| Status | `archived`                                  |
 | Branch | `feature/159-recursion-illustrations`     |
 
 ---
 
 ## Goal
 
-Добавить в урок 16 статичные рисованные иллюстрации в манере роликов Change 158 там, где структуру, связи или динамику трудно увидеть из текста и кода, и не дублировать ролики. Пилот проверяет, что движок из `docs/artifacts/lesson-media/` справляется с более сложными схемами (стопки, деревья, таблицы, числовая ось, дроби, карты выбора). Правила — [SPEC](../SPEC.md) §2.3; устройство — [ENGINE](../artifacts/lesson-media/ENGINE.md), манера — [STYLE](../artifacts/lesson-media/STYLE.md).
+Добавить в урок 16 статичные рисованные иллюстрации в манере роликов Change 158 там, где структуру, связи или динамику трудно увидеть из текста и кода, и не дублировать ролики. Пилот проверяет, что движок из `docs/artifacts/lesson-media/` справляется с более сложными схемами (стопки, деревья, таблицы, числовая ось, дроби, карты выбора). Правила — [SPEC](../../SPEC.md) §2.3; устройство — [ENGINE](../../artifacts/lesson-media/ENGINE.md), манера — [STYLE](../../artifacts/lesson-media/STYLE.md).
 
 **Отбор и баланс (решение архитектора).** Не заваливать урок: рисунок нужен, только если показывает то, что тяжело увидеть из кода и слов (структуру, направление, «до и после»), и не повторяет ролик. Рисунков в уроке немного, примерно один на три раздела; между рисунком и роликом не меньше двух блоков (рисунок не идёт сразу до или после ролика). Отобрано **пять**: стопка ожидающих вызовов; дерево до и после кеша; направление прогрева кеша против стрелок зависимости; сокращение отношения; карта выбора способа. Остальные кандидаты (анатомия определения, лимит 1000, одна ячейка, окно из двух значений, цифры с `//` и `%`, путь по развилке `F(12)`, две функции, лесенка прогрессии, конвейер) откладываются в очередь `AUDIT.md`: на них не хватает баланса или их смысл уже держат ролики и примеры.
 
@@ -123,7 +123,7 @@ of truth; this file only tracks what to build and what's left.
 ## Gate Checks
 
 > Critical Gate runs once per `/work` target set and by default in `/ship`; Full Gate runs only
-> with explicit `--full`; release selects affected checks and Release Gate. All gates are defined in [docs/STACK.md](../STACK.md) — this section only records
+> with explicit `--full`; release selects affected checks and Release Gate. All gates are defined in [docs/STACK.md](../../STACK.md) — this section only records
 > change-specific overrides.
 
 Дополнительно к Critical Gate (один раз на набор задач, только затронутые строки): `pnpm validate:content`, тесты движка (`uv run --no-project --with pillow python -m unittest discover -s scripts/tests -p lesson_media_engine_test.py`) и сфокусированные Vitest-файлы; просмотр рисунков и роликов глазами на компьютере и в масштабе телефона. Браузерные проверки (изолированный E2E) в `/work` не запускаются: один раз перед `/ship`, только затронутые спеки (`topic-reading`, страницы уроков), полный набор — только по явной просьбе (`--full`).
