@@ -39,10 +39,10 @@
 }
 
 .label {
-  color: var(--learning-checkpoint-color, var(--color-text));
-  font-family: var(--font-ui);
+  color: var(--learning-checkpoint-color, var(--color-text-soft));
+  font-family: var(--font-reading);
   font-size: var(--text-learning-label);
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1.4;
 }
 

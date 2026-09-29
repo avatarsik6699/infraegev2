@@ -27,8 +27,8 @@ const authoredContent = [
   numberSequencesLesson.result,
 ];
 
-vi.mock("@tanstack/react-router", () => ({
-  Link: ({
+vi.mock("@tanstack/react-router", () => {
+  const Link = ({
     children,
     to,
     params,
@@ -44,8 +44,9 @@ vi.mock("@tanstack/react-router", () => ({
     >
       {children}
     </span>
-  ),
-}));
+  );
+  return { Link, createLink: () => Link };
+});
 
 describe("task 17 number sequences lesson", () => {
   it("keeps the six authored theory anchors in the agreed order", () => {

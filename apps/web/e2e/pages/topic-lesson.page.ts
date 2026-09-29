@@ -698,7 +698,7 @@ export class TopicLessonPage {
       );
       await expect(callout.locator(":scope > div > span")).toHaveCSS(
         "font-weight",
-        "500",
+        "400",
       );
       await expect(callout.locator(":scope > div > div")).toHaveCSS(
         "font-size",

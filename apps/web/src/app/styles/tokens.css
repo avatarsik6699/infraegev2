@@ -5,12 +5,12 @@
   --learning-info: var(--color-learning-info);
   --learning-danger-background: color-mix(
     in srgb,
-    var(--color-danger) 14%,
+    var(--color-danger) 8%,
     var(--color-bg)
   );
   --learning-success-background: color-mix(
     in srgb,
-    var(--color-success) 14%,
+    var(--color-success) 8%,
     var(--color-bg)
   );
   --learning-info-background: color-mix(

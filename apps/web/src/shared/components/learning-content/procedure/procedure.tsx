@@ -19,7 +19,7 @@ export const Procedure: React.FC<Props> = (props) => {
           {props.title}
         </Typography.Text>
       </figcaption>
-      <ol className={styles.steps}>
+      <ol className={styles.steps} role="list">
         {props.steps.map((step) => (
           <li key={step.label} className={styles.step}>
             <Typography.Text component="div">

@@ -16,8 +16,8 @@ import {
   renderAuthoredLessonContent,
 } from "./lesson-content-test-utils";
 
-vi.mock("@tanstack/react-router", () => ({
-  Link: ({
+vi.mock("@tanstack/react-router", () => {
+  const Link = ({
     children,
     to,
     params,
@@ -33,8 +33,9 @@ vi.mock("@tanstack/react-router", () => ({
     >
       {children}
     </span>
-  ),
-}));
+  );
+  return { Link, createLink: () => Link };
+});
 
 const sections = [
   "sorted-order",
@@ -79,9 +80,9 @@ describe("task 26 sorting and selection lesson", () => {
       summary:
         "Как читать файлы, сортировать записи, отбирать данные при ограничении и обрабатывать события по порядку.",
       illustration: {
-        src: "/images/topics/array-processing.svg",
-        width: 144,
-        height: 88,
+        src: "/images/topics/array-processing.webp",
+        width: 192,
+        height: 104,
       },
     });
     expect(publicPaths).toContain("/ege/26-sortirovka-i-otbor");

@@ -31,8 +31,8 @@ const authoredContent = [
   stringProcessingLesson.result,
 ];
 
-vi.mock("@tanstack/react-router", () => ({
-  Link: ({
+vi.mock("@tanstack/react-router", () => {
+  const Link = ({
     children,
     to,
     params,
@@ -48,8 +48,9 @@ vi.mock("@tanstack/react-router", () => ({
     >
       {children}
     </span>
-  ),
-}));
+  );
+  return { Link, createLink: () => Link };
+});
 
 describe("task 24 string processing lesson", () => {
   it("keeps all concepts in the planned teaching order", () => {
@@ -81,9 +82,9 @@ describe("task 24 string processing lesson", () => {
       taskNumbers: [24],
       routeSlug: "24-obrabotka-simvolnyh-strok",
       illustration: {
-        src: "/images/topics/string-processing.svg",
-        width: 144,
-        height: 88,
+        src: "/images/topics/string-processing.webp",
+        width: 192,
+        height: 104,
       },
     });
     expect(publicPaths).toContain("/ege/24-obrabotka-simvolnyh-strok");

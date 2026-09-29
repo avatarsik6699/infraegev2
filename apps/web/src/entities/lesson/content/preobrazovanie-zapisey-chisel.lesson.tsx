@@ -222,12 +222,6 @@ export const preobrazovanieZapiseyChiselLesson = defineLesson({
           </Typography.Text>
         </>
       ),
-      mistake: (
-        <Mistake
-          claim="s + '1' и '1' + s означают одно и то же: к записи добавляется единица."
-          explanation="Первый вариант приписывает цифру справа, второй — слева, поэтому меняются разные разряды и получаются разные числа."
-        />
-      ),
     },
     {
       id: "appending-and-place-value",
@@ -443,12 +437,6 @@ export const preobrazovanieZapiseyChiselLesson = defineLesson({
             language="python"
           />
         </>
-      ),
-      mistake: (
-        <Mistake
-          claim="После первого R > 500 все следующие N можно не проверять."
-          explanation="Это допустимо только после доказательства монотонности. Здесь соседние числа попадают в разные ветви, и R после скачка может уменьшиться."
-        />
       ),
     },
     {

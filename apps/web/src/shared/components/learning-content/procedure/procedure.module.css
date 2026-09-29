@@ -8,28 +8,44 @@
   font-weight: 500;
 }
 
-.steps {
+.root .steps {
   display: grid;
   gap: var(--space-1);
   margin: 0;
-  padding-left: 1.5rem;
+  padding: 0;
+  list-style: none;
+  counter-reset: procedure-step;
 }
 
+/* Номер — тот же круглый бейдж, что в «Разберём на примере», на белой странице чуть темнее. */
 .step {
-  color: var(--learning-procedure-color, var(--color-text-soft));
-  padding-left: var(--space-0-5);
+  display: grid;
+  grid-template-columns: 1.5rem minmax(0, 1fr);
+  gap: var(--space-1);
+  align-items: start;
+  counter-increment: procedure-step;
+  color: var(--learning-procedure-color, var(--color-text));
+}
+
+.step::before {
+  content: counter(procedure-step);
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-top: 0.1rem;
+  border-radius: 50%;
+  background: var(--color-surface-quiet);
+  color: var(--color-text-soft);
+  font-family: var(--font-reading);
+  font-size: var(--text-sm);
+  line-height: 1;
 }
 
 .step > [data-variant] {
+  min-width: 0;
   font-size: var(--text-learning-procedure);
   line-height: var(--learning-procedure-leading, 1.6);
-}
-
-.step::marker {
-  color: var(--color-text-soft);
-  font-family: var(--font-data);
-  font-size: var(--text-sm);
-  font-variant-numeric: tabular-nums;
 }
 
 .stepLabel {

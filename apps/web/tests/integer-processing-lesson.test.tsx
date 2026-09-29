@@ -31,8 +31,8 @@ const authoredContent = [
   integerProcessingLesson.result,
 ];
 
-vi.mock("@tanstack/react-router", () => ({
-  Link: ({
+vi.mock("@tanstack/react-router", () => {
+  const Link = ({
     children,
     to,
     params,
@@ -48,8 +48,9 @@ vi.mock("@tanstack/react-router", () => ({
     >
       {children}
     </span>
-  ),
-}));
+  );
+  return { Link, createLink: () => Link };
+});
 
 describe("task 25 integer processing lesson", () => {
   it("keeps the eight concepts in the authored teaching order", () => {
@@ -86,9 +87,9 @@ describe("task 25 integer processing lesson", () => {
       status: "published",
       routeSlug: "25-obrabotka-celyh-chisel",
       illustration: {
-        src: "/images/topics/integer-processing.svg",
-        width: 144,
-        height: 88,
+        src: "/images/topics/integer-processing.webp",
+        width: 192,
+        height: 104,
       },
     });
     expect(publicPaths).toContain("/ege/25-obrabotka-celyh-chisel");

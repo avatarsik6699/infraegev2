@@ -16,8 +16,8 @@ import {
   renderAuthoredLessonContent,
 } from "./lesson-content-test-utils";
 
-vi.mock("@tanstack/react-router", () => ({
-  Link: ({
+vi.mock("@tanstack/react-router", () => {
+  const Link = ({
     children,
     to,
     params,
@@ -33,8 +33,9 @@ vi.mock("@tanstack/react-router", () => ({
     >
       {children}
     </span>
-  ),
-}));
+  );
+  return { Link, createLink: () => Link };
+});
 
 const sections = [
   "points-and-records",
@@ -78,9 +79,9 @@ describe("task 27 data analysis lesson", () => {
       routeSlug: "27-analiz-dannyh-i-klasterizatsiya",
       title: "Анализ данных: кластеризация",
       illustration: {
-        src: "/images/topics/data-analysis.svg",
-        width: 144,
-        height: 88,
+        src: "/images/topics/data-analysis.webp",
+        width: 192,
+        height: 104,
       },
     });
     expect(publicPaths).toContain("/ege/27-analiz-dannyh-i-klasterizatsiya");

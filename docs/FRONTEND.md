@@ -168,6 +168,8 @@ dark bar), a small muted language label, a quiet copy button and line numbers by
 come from the `--theme-code-*` tokens on that surface (text colours at least 4.5:1). Long blocks still collapse to a fade with the "show all code" button and expand
 again; copy, line numbers and keyboard focus stay. The site is light only, so no dark variant exists. A
 Inline code (`Notation kind="code"`) is a quiet chip; formulas (`kind="formula"`) stay plain text, so only code is marked.
+Study blocks share one quiet language: labels are 14px regular in the soft text colour (`Mistake` keeps a semantic
+colour), `Mistake` panels are lightly tinted (8 %), and step numbers in `Procedure` and `WorkedExample` are the same round badge.
 `WorkedExample` is a soft tinted panel with one text size, colour and weight for title, prompt and steps
 (hierarchy comes from spacing and round step badges joined by a faint thread); code blocks inside it are
 white cards on the panel. A small table goes in as comments inside the example's single code block; code blocks are never placed side by side.
