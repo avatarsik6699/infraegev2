@@ -459,6 +459,94 @@ export class TopicLessonPage {
     }
   }
 
+  async expectLessonVideos(noJavaScript = false): Promise<void> {
+    const videos = this.page.locator("#theory video");
+    await expect(videos).toHaveCount(3);
+    for (const figure of await this.page
+      .locator("#theory figure[data-lesson-video-figure]")
+      .all()) {
+      await expect(figure.locator("figcaption")).toHaveCount(1);
+      await expect(figure).not.toContainText("Текстовое описание");
+    }
+    for (const video of await videos.all()) {
+      await expect(video).toHaveAttribute("poster", /-poster\.webp$/u);
+      await expect(video.locator("source")).toHaveCount(2);
+      await expect(video).not.toHaveAttribute("autoplay");
+      await expect(video).toHaveJSProperty("muted", true);
+      await expect(video).toHaveJSProperty("loop", true);
+    }
+    const toggle = this.page.locator("[data-lesson-video-toggle]").first();
+    if (noJavaScript) {
+      await expect(toggle).toBeHidden();
+      return;
+    }
+    for (const width of [390, 1440]) {
+      await this.page.setViewportSize({ width, height: 900 });
+      const overflow = await this.page.evaluate(
+        () =>
+          document.documentElement.scrollWidth -
+          document.documentElement.clientWidth,
+      );
+      expect(overflow).toBeLessThanOrEqual(0);
+    }
+    const first = videos.first();
+    await first.scrollIntoViewIfNeeded();
+    const state = () =>
+      first.evaluate((element: HTMLVideoElement) => ({
+        paused: element.paused,
+        time: element.currentTime,
+        duration: element.duration,
+      }));
+    await expect.poll(async () => (await state()).paused).toBe(false);
+    await expect(toggle).toHaveAccessibleName(/^Пауза: /u);
+    await toggle.click();
+    await expect.poll(async () => (await state()).paused).toBe(true);
+    await expect(toggle).toHaveAccessibleName(/^Воспроизвести: /u);
+    const timeline = this.page.locator("[data-lesson-video-timeline]").first();
+    await timeline.fill("500");
+    await expect
+      .poll(async () => {
+        const { time, duration } = await state();
+        return Math.abs(time - duration / 2) < 0.6;
+      })
+      .toBe(true);
+    await expect(timeline).toHaveAttribute("aria-valuetext", / из \d+ с$/u);
+    const captionGap = await first.evaluate((element) => {
+      const figure = element.closest("figure")!;
+      const controls = figure.querySelector("[data-lesson-video-controls]")!;
+      const caption = figure.querySelector("figcaption")!;
+      return (
+        caption.getBoundingClientRect().top -
+        controls.getBoundingClientRect().bottom
+      );
+    });
+    expect(captionGap).toBeLessThanOrEqual(8);
+    await toggle.click();
+    await expect.poll(async () => (await state()).paused).toBe(false);
+    await this.page.evaluate(() => window.scrollTo(0, 0));
+    await expect.poll(async () => (await state()).paused).toBe(true);
+    await first.scrollIntoViewIfNeeded();
+    await expect.poll(async () => (await state()).paused).toBe(false);
+  }
+
+  async expectLessonVideosRespectReducedMotion(): Promise<void> {
+    await this.page.emulateMedia({ reducedMotion: "reduce" });
+    await this.page.reload();
+    const first = this.page.locator("#theory video").first();
+    await first.scrollIntoViewIfNeeded();
+    await expect
+      .poll(() =>
+        first.evaluate((element: HTMLVideoElement) => element.readyState),
+      )
+      .toBeGreaterThan(0);
+    await expect(first).toHaveJSProperty("paused", true);
+    await expect(first).toHaveJSProperty("currentTime", 0);
+    const toggle = this.page.locator("[data-lesson-video-toggle]").first();
+    await expect(toggle).toHaveAccessibleName(/^Воспроизвести: /u);
+    await toggle.click();
+    await expect(first).toHaveJSProperty("paused", false);
+  }
+
   async expectRecursionLearningBlocks(noJavaScript = false): Promise<void> {
     await this.page.emulateMedia({ reducedMotion: "reduce" });
     const checkpoint = this.page.getByRole("region", {
@@ -531,7 +619,7 @@ export class TopicLessonPage {
       const comparisons = this.page.locator(
         '#theory [role="note"] [data-status]',
       );
-      await expect(comparisons).toHaveCount(26);
+      await expect(comparisons).toHaveCount(24);
       for (const comparison of await comparisons.all()) {
         const copy = comparison.locator(":scope > div > div");
         await expect(copy).toHaveCSS("font-size", "16px");

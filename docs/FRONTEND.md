@@ -152,6 +152,16 @@ technique used at that point. Keep these as ordinary contextual links, verify th
 and do not derive prerequisite, recommendation, membership or shared-progress state from them.
 Introduce a new concept in plain language before its technical name or code; briefly remind the
 reader of existing Python basics at their point of use and link to the full course explanation.
+Lesson theory may embed a silent looping video through `LessonVideo` (SPEC §2.3): both WebM and
+MP4, a poster, reserved dimensions and one caption under it that states the idea. A video follows
+the paragraph it illustrates, never a code block or another block, and has no fixed length limit.
+The `<video>` has no `autoplay` attribute: without scripting only the poster shows. With scripting
+it starts from the beginning when at least half visible (`useInViewport`; an instructional
+observer, not a decorative one) and pauses off-screen; a pause chosen by the learner is kept.
+The control row under the video is minimal: one quiet icon button (play/pause, shared `Button`)
+and a thin native range timeline; clicking the picture also toggles. Scrubbing does not pause.
+Controls are hidden without scripting. Reduced motion shows the poster and the button starts it.
+Video files are served by Nginx (Range/206), never by the Node server; Vite dev serves ranges too.
 Remove persisted answer drafts and custom catalog-row restoration. Catalog task forms preserve
 transient input and help state while collapsed, until the selection/page changes or the page is
 left/reloaded.

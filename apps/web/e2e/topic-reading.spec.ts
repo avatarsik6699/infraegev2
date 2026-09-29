@@ -89,3 +89,26 @@ test("recursion learning blocks disclose hints and answers without scripts @no-j
   await noJavaScriptTopicLessonPage.open();
   await noJavaScriptTopicLessonPage.expectRecursionLearningBlocks(true);
 });
+
+test("lesson videos autoplay silently, toggle on click and keep the reading column intact", async ({
+  topicLessonPage,
+  browserSession,
+}) => {
+  await topicLessonPage.open();
+  await topicLessonPage.expectLessonVideos();
+  browserSession.expectCleanConsole();
+});
+
+test("lesson videos show the poster without autoplay for reduced motion", async ({
+  topicLessonPage,
+}) => {
+  await topicLessonPage.open();
+  await topicLessonPage.expectLessonVideosRespectReducedMotion();
+});
+
+test("lesson videos keep poster, sources and an inert control without scripts @no-js", async ({
+  noJavaScriptTopicLessonPage,
+}) => {
+  await noJavaScriptTopicLessonPage.open();
+  await noJavaScriptTopicLessonPage.expectLessonVideos(true);
+});

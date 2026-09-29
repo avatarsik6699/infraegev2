@@ -29,6 +29,26 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
 
 ## Gotcha Log
 
+### Lesson videos do not play in Safari when served by the Node application server
+
+- **Symptoms**: a lesson video plays in Chrome but stays blank in Safari; `curl -H 'Range: bytes=0-99'`
+  returns `200` with the whole file and no `Accept-Ranges`.
+- **Root cause**: the Nitro/Node server serves `public/` files without HTTP Range support, and Safari
+  refuses media that cannot answer a `206` range request. Seeking with the timeline also needs ranges.
+- **Fix**: lesson media is baked into the Nginx image (`infra/nginx/snippets/lesson-media.conf`,
+  `COPY apps/web/public/lesson-media/`) and served by Nginx. Guard: `scripts/tests/lesson-media-nginx.test.sh`.
+
+### Hand-drawn engine: a missing font glyph, a clipped caption and file size
+
+- **Symptoms**: a minus sign (`−`) rendered as a gap in a caption; a caption cut off at the canvas
+  edge; a WebM growing five times larger.
+- **Root cause**: Neucha has no `−` (use `-`); a Pillow glyph outside the canvas is silently clipped;
+  a keyframe every 0.5 s re-encodes a whole static frame each time.
+- **Fix**: `Text` raises on a missing glyph, `Scene.warnings()` reports out-of-canvas and too small
+  captions, and `build.py` uses a keyframe every 2 s. WebM bytes are not reproducible between runs
+  (libvpx threads), MP4 and posters are: do not diff WebM.
+
+
 ### Cleanup or compaction refuses a symlinked parent directory
 
 - **Symptoms:** cleanup reports `refusing cleanup through symlink`, or snapshot byte verification

@@ -534,6 +534,8 @@ python3 -m unittest discover -s scripts/tests -p application_db_test.py
 python3 -m unittest discover -s scripts/tests -p deploy_orchestration_test.py
 python3 -m unittest discover -s scripts/tests -p gate_test.py
 python3 -m unittest discover -s scripts/tests -p release_checkpoint_test.py
+uv run --no-project --with pillow python -m unittest discover -s scripts/tests -p lesson_media_engine_test.py
+bash scripts/tests/lesson-media-nginx.test.sh
 ```
 
 The optional snapshot integration test requires an explicitly selected `PRACTICE_BACKUP_CONTAINER`; never run it in CI. `pnpm format:check` includes maintenance Python. Lint from `apps/api` with

@@ -3,6 +3,7 @@ import { CodeBlock } from "~/shared/components/code-block";
 import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
 import {
+  LessonVideo,
   Mistake,
   Procedure,
   WorkedExample,
@@ -117,20 +118,44 @@ export const rekursiyaLesson = defineLesson({
             как получить следующее значение из предыдущего.
           </Typography.Text>
           <Typography.Text>
-            Работает это как ряд костяшек домино:{" "}
-            <Notation kind="formula">F(1)</Notation> — костяшка, которую
-            толкнули вручную, а правило перехода — то, что заставляет каждую
-            следующую костяшку падать от предыдущей. Без первого толчка (без
-            базового случая) ни одна костяшка не упадёт, и цепочка{" "}
-            <Notation kind="formula">F(5) → F(4) → F(3) → …</Notation> никогда
-            не остановится.
+            Посмотрим, как обе части работают вместе. Чтобы найти{" "}
+            <Notation kind="formula">F(5)</Notation>, правило требует{" "}
+            <Notation kind="formula">F(4)</Notation>, для него нужно{" "}
+            <Notation kind="formula">F(3)</Notation>, и так далее: вопросы идут
+            вниз. Они останавливаются на{" "}
+            <Notation kind="formula">F(1)</Notation> — это значение дано. С него
+            ответы поднимаются вверх: из каждого найденного значения получается
+            следующее.
           </Typography.Text>
+          <LessonVideo
+            src="/lesson-media/rekursiya/rekursiya-base-step"
+            poster="/lesson-media/rekursiya/rekursiya-base-step-poster.webp"
+            width={1600}
+            height={740}
+            alt="вопросы идут вниз до F(1), ответы поднимаются вверх"
+            caption="Вопросы идут от F(5) вниз, пока не встретится известное значение F(1) = 1. Оттуда ответы поднимаются вверх: F(2) = 3, F(3) = 7, F(4) = 15, F(5) = 31."
+          />
           <Typography.Text>
-            Похоже на логический круг: чтобы найти{" "}
-            <Notation kind="formula">F(5)</Notation>, нужно знать{" "}
-            <Notation kind="formula">F(4)</Notation>, и так далее. Круга нет,
-            потому что каждое значение опирается только на уже найденное: из{" "}
-            <Notation kind="formula">F(1)</Notation> однозначно получается{" "}
+            Теперь уберём базу. Если в определении нет значения{" "}
+            <Notation kind="formula">F(1)</Notation>, то вопрос «чему равно{" "}
+            <Notation kind="formula">F(1)</Notation>?» тоже требует предыдущего
+            значения <Notation kind="formula">F(0)</Notation>, затем{" "}
+            <Notation kind="formula">F(-1)</Notation> и так без конца. Это как
+            ряд костяшек домино: без первого толчка (без базового случая) ни
+            одна костяшка не упадёт.
+          </Typography.Text>
+          <LessonVideo
+            src="/lesson-media/rekursiya/rekursiya-no-base"
+            poster="/lesson-media/rekursiya/rekursiya-no-base-poster.webp"
+            width={1600}
+            height={740}
+            alt="без базы вопросы не останавливаются"
+            caption="Без базы вопросы не останавливаются: для F(1) нужно F(0), для F(0) — F(-1) и так дальше, ни одного значения найти не удастся."
+          />
+          <Typography.Text>
+            С базой определение не ходит по кругу: вопросы упираются в известное
+            значение, а дальше каждое значение опирается только на уже найденное
+            — из <Notation kind="formula">F(1)</Notation> однозначно получается{" "}
             <Notation kind="formula">F(2)</Notation>, из него —{" "}
             <Notation kind="formula">F(3)</Notation>, и так для любого{" "}
             <Notation kind="formula">n</Notation>. Это тот же принцип, что у
@@ -172,14 +197,9 @@ export const rekursiyaLesson = defineLesson({
             рекурсивного вызова:
           </Typography.Text>
           <CodeBlock
-            code={`def F(n):\n    print("вызов", n)\n    if n == 1:\n        print("база", n)\n        return 1\n    result = 2 * F(n - 1) + 1\n    print("возврат", n, "->", result)\n    return result\n\nF(4)`}
-            label="Функция F с печатью вызовов"
+            code={`def F(n):\n    print("вызов", n)\n    if n == 1:\n        print("база", n)\n        return 1\n    result = 2 * F(n - 1) + 1\n    print("возврат", n, "->", result)\n    return result\n\nF(4)\n\n# Программа напечатает:\n# вызов 4\n# вызов 3\n# вызов 2\n# вызов 1\n# база 1\n# возврат 2 -> 3\n# возврат 3 -> 7\n# возврат 4 -> 15`}
+            label="Функция F с печатью вызовов и её вывод"
             language="python"
-          />
-          <CodeBlock
-            code={`вызов 4\nвызов 3\nвызов 2\nвызов 1\nбаза 1\nвозврат 2 -> 3\nвозврат 3 -> 7\nвозврат 4 -> 15`}
-            label="Что напечатает программа"
-            language="text"
           />
           <Typography.Text>
             Сначала вызовы уходят вглубь — <Notation kind="formula">4</Notation>
@@ -259,16 +279,8 @@ export const rekursiyaLesson = defineLesson({
             вызовы:
           </Typography.Text>
           <CodeBlock
-            code={`f = 1  # Начинаем с известного F(1)\n\nfor n in range(2, 2025):\n    f = n * f  # Новое значение заменяет предыдущее\n\nprint(f)`}
-            label="Цикл вместо цепочки вызовов"
-            language="python"
-          />
-          <Typography.Text>
-            Общий шаблон для функции с одним предыдущим значением:
-          </Typography.Text>
-          <CodeBlock
-            code={`f = base_value\n\nfor n in range(first_n, target + 1):\n    f = ...  # Формула через предыдущее значение f\n\nprint(f)`}
-            label="Шаблон: одно предыдущее значение"
+            code={`f = 1  # Начинаем с известного F(1)\n\nfor n in range(2, 2025):\n    f = n * f  # Новое значение заменяет предыдущее\n\nprint(f)\n\n# Общий шаблон для одного предыдущего значения:\n#   f = базовое_значение\n#   for n in range(первое_n, target + 1):\n#       f = ...  # формула через предыдущее значение f\n#   print(f)`}
+            label="Цикл вместо цепочки вызовов и общий шаблон"
             language="python"
           />
           <Typography.Text>
@@ -462,39 +474,37 @@ export const rekursiyaLesson = defineLesson({
           <Typography.Text>
             Для зависимости от одного значения главной опасностью была глубина
             стека. У рекурсивной функции с двумя предыдущими значениями
-            появляется другая проблема. Возьмём числа Фибоначчи и запишем их
-            рекурсивно:
-          </Typography.Text>
-          <CodeBlock
-            code={`def F(n):\n    if n <= 2:\n        return 1\n    return F(n - 1) + F(n - 2)`}
-            label="Рекурсия с двумя предыдущими значениями"
-            language="python"
-          />
-          <Typography.Text>
-            Нарисуем, какие вызовы порождает{" "}
+            появляется другая проблема. Возьмём числа Фибоначчи, запишем их
+            рекурсивно и выпишем, какие вызовы порождает{" "}
             <Notation kind="formula">F(5)</Notation>:
           </Typography.Text>
           <CodeBlock
-            code={`F(5)\n├─ F(4)\n│  ├─ F(3)\n│  │  ├─ F(2)\n│  │  └─ F(1)\n│  └─ F(2)\n└─ F(3)\n   ├─ F(2)\n   └─ F(1)`}
-            label="Дерево вызовов для F(5)"
-            language="text"
+            code={`def F(n):\n    if n <= 2:\n        return 1\n    return F(n - 1) + F(n - 2)\n\n# Вызовы, которые порождает F(5):\n# F(5)\n# ├─ F(4)\n# │  ├─ F(3)\n# │  │  ├─ F(2)\n# │  │  └─ F(1)\n# │  └─ F(2)\n# └─ F(3)\n#    ├─ F(2)\n#    └─ F(1)`}
+            label="Рекурсия с двумя предыдущими значениями и дерево вызовов"
+            language="python"
           />
           <Typography.Text>
-            <Notation kind="formula">F(3)</Notation> вычисляется дважды, а{" "}
-            <Notation kind="formula">F(2)</Notation> — трижды: одно и то же
-            значение считается заново, хотя уже было найдено. Измерим, насколько
-            это плохо. Будем считать, сколько раз вычисляется{" "}
+            В дереве вызовов <Notation kind="formula">F(3)</Notation>{" "}
+            вычисляется дважды, а <Notation kind="formula">F(2)</Notation> —
+            трижды: одно и то же значение считается заново, хотя уже было
+            найдено.
+          </Typography.Text>
+          <LessonVideo
+            src="/lesson-media/rekursiya/rekursiya-call-tree"
+            poster="/lesson-media/rekursiya/rekursiya-call-tree-poster.webp"
+            width={1600}
+            height={900}
+            alt="дерево вызовов F(5), в котором F(3) вычисляется дважды"
+            caption="Дерево вызовов F(5): значение F(3) вычисляется дважды, F(2) — трижды. Два поддерева с F(3) обведены штриховыми рамками."
+          />
+          <Typography.Text>
+            Измерим, насколько это плохо. Будем считать, сколько раз вычисляется{" "}
             <Notation kind="formula">F(3)</Notation>:
           </Typography.Text>
           <CodeBlock
-            code={`count = 0\n\ndef F(n):\n    global count\n    if n == 3:\n        count += 1  # Считаем повторы F(3)\n    if n <= 2:\n        return 1\n    return F(n - 1) + F(n - 2)\n\nfor n in (10, 15, 20, 25):\n    count = 0\n    F(n)\n    print(n, count)`}
-            label="Считаем повторы F(3)"
+            code={`count = 0\n\ndef F(n):\n    global count\n    if n == 3:\n        count += 1  # Считаем повторы F(3)\n    if n <= 2:\n        return 1\n    return F(n - 1) + F(n - 2)\n\nfor n in (10, 15, 20, 25):\n    count = 0\n    F(n)\n    print(n, count)\n\n# Программа напечатает:\n# 10 21\n# 15 233\n# 20 2584\n# 25 28657`}
+            label="Считаем повторы F(3) и результат измерения"
             language="python"
-          />
-          <CodeBlock
-            code={`10 21\n15 233\n20 2584\n25 28657`}
-            label="Результат измерения"
-            language="text"
           />
           <Typography.Text>
             Число повторов растёт так же быстро, как сами числа Фибоначчи. Для{" "}
@@ -523,20 +533,12 @@ export const rekursiyaLesson = defineLesson({
           </Typography.Text>
           <Typography.Text>
             Есть и способы обойтись без кеша. Можно хранить значения в списке,
-            где индекс — это аргумент:
+            где индекс — это аргумент, а для следующего значения нужны только
+            два последних, поэтому хватит и двух переменных:
           </Typography.Text>
           <CodeBlock
-            code={`target = 6\nF = [0] * (target + 1)\n\n# Два базовых значения нужны до первого шага\nF[1] = 2\nF[2] = 3\n\nfor n in range(3, target + 1):\n    F[n] = F[n - 1] + F[n - 2]  # Сохраняем один раз\n\nprint(F[target])`}
-            label="Список вместо повторного пересчёта"
-            language="python"
-          />
-          <Typography.Text>
-            А для следующего значения нужны только два последних, поэтому хватит
-            двух переменных:
-          </Typography.Text>
-          <CodeBlock
-            code={`f_prev2, f_prev1 = 2, 3\n\nfor n in range(3, 7):\n    # Правая часть использует оба старых значения до присваивания\n    f_prev2, f_prev1 = f_prev1, f_prev1 + f_prev2\n\nprint(f_prev1)`}
-            label="Две переменные вместо списка"
+            code={`# Способ 1: список, индекс — это аргумент\ntarget = 6\nF = [0] * (target + 1)\n\n# Два базовых значения нужны до первого шага\nF[1] = 2\nF[2] = 3\n\nfor n in range(3, target + 1):\n    F[n] = F[n - 1] + F[n - 2]  # Сохраняем один раз\n\nprint(F[target])\n\n# Способ 2: две переменные вместо списка\nf_prev2, f_prev1 = 2, 3\n\nfor n in range(3, 7):\n    # Правая часть использует оба старых значения до присваивания\n    f_prev2, f_prev1 = f_prev1, f_prev1 + f_prev2\n\nprint(f_prev1)`}
+            label="Два способа без кеша: список и две переменные"
             language="python"
           />
         </>

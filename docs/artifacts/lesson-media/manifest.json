@@ -1,0 +1,79 @@
+[
+  {
+    "name": "rekursiya-base-step",
+    "lesson": "rekursiya",
+    "kind": "video",
+    "width": 1600,
+    "height": 740,
+    "duration_s": 17.8,
+    "size_kb": {
+      "webm": 552,
+      "mp4": 457,
+      "poster": 59
+    },
+    "warnings": [
+      "webm 552 КБ выше ориентира 300 КБ",
+      "mp4 457 КБ выше ориентира 300 КБ"
+    ],
+    "alt": "цепочка F(5) … F(1): вопросы идут вниз до известного F(1) = 1, ответы поднимаются вверх",
+    "values": {
+      "F(1)": 1,
+      "F(2)": 3,
+      "F(3)": 7,
+      "F(4)": 15,
+      "F(5)": 31
+    }
+  },
+  {
+    "name": "rekursiya-call-tree",
+    "lesson": "rekursiya",
+    "kind": "video",
+    "width": 1600,
+    "height": 900,
+    "duration_s": 6.5,
+    "size_kb": {
+      "webm": 296,
+      "mp4": 197,
+      "poster": 59
+    },
+    "warnings": [],
+    "alt": "Дерево вызовов F(5): значение F(3) вычисляется дважды, эти поддеревья обведены",
+    "calls": 9,
+    "repeats": {
+      "F(3)": 2,
+      "F(2)": 3,
+      "F(1)": 2
+    }
+  },
+  {
+    "name": "rekursiya-no-base",
+    "lesson": "rekursiya",
+    "kind": "video",
+    "width": 1600,
+    "height": 740,
+    "duration_s": 13.6,
+    "size_kb": {
+      "webm": 447,
+      "mp4": 342,
+      "poster": 65
+    },
+    "warnings": [
+      "webm 447 КБ выше ориентира 300 КБ",
+      "mp4 342 КБ выше ориентира 300 КБ"
+    ],
+    "alt": "цепочка вопросов F(5), F(4), F(3), F(2), F(1), F(0), F(-1) без базы не останавливается"
+  },
+  {
+    "name": "specimen",
+    "lesson": null,
+    "kind": "still",
+    "width": 1600,
+    "height": 1000,
+    "duration_s": null,
+    "size_kb": {
+      "png": 329
+    },
+    "warnings": [],
+    "alt": "Лист образцов примитивов движка рисования"
+  }
+]

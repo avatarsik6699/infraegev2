@@ -2,6 +2,7 @@ export { Checkpoint } from "./checkpoint";
 export { Diagram } from "./diagram";
 export { LessonSectionHeading } from "./lesson-section-heading";
 export { LessonIntro } from "./lesson-intro";
+export { LessonVideo } from "./lesson-video";
 export { LessonTheory, type LessonTheoryTypes } from "./lesson-theory";
 export { Mistake } from "./mistake";
 export { Procedure } from "./procedure";
