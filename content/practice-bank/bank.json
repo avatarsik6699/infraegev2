@@ -190,8 +190,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Деление аргумента: // и %",
+            "section": "argument-steps",
             "material_id": "rekursiya"
           }
         ],
@@ -701,8 +701,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Ветвление по чётности",
+            "section": "branching-conditions",
             "material_id": "rekursiya"
           }
         ],
@@ -1274,8 +1274,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -1809,8 +1809,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Ветвление по условию",
+            "section": "branching-conditions",
             "material_id": "rekursiya"
           }
         ],
@@ -2028,8 +2028,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Несколько предыдущих значений",
+            "section": "several-previous-values",
             "material_id": "rekursiya"
           }
         ],
@@ -2265,8 +2265,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -2477,8 +2477,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Подсчёт аргументов",
+            "section": "count-arguments",
             "material_id": "rekursiya"
           }
         ],
@@ -2714,8 +2714,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Общий алгоритм решения",
+            "section": "general-method",
             "material_id": "rekursiya"
           }
         ],
@@ -3252,8 +3252,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -4402,8 +4402,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Рекурсия вверх и прогрев кеша",
+            "section": "upward-recursion-cache-warmup",
             "material_id": "rekursiya"
           }
         ],
@@ -5035,8 +5035,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Рекурсивные вызовы и стек",
+            "section": "code-and-call-stack",
             "material_id": "rekursiya"
           }
         ],
@@ -5541,8 +5541,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -6083,8 +6083,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Деление аргумента: // и %",
+            "section": "argument-steps",
             "material_id": "rekursiya"
           }
         ],
@@ -6423,8 +6423,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Ветвление по условию",
+            "section": "branching-conditions",
             "material_id": "rekursiya"
           }
         ],
@@ -7320,8 +7320,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Две связанные функции",
+            "section": "two-functions",
             "material_id": "rekursiya"
           }
         ],
@@ -8224,8 +8224,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Две связанные функции",
+            "section": "two-functions",
             "material_id": "rekursiya"
           }
         ],
@@ -8593,8 +8593,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Ветвление по чётности",
+            "section": "branching-conditions",
             "material_id": "rekursiya"
           }
         ],
@@ -8785,8 +8785,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -9309,8 +9309,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -9483,8 +9483,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Большие n: сокращаем, а не считаем",
+            "section": "large-arguments-algebraic-shortcut",
             "material_id": "rekursiya"
           }
         ],
@@ -10514,8 +10514,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -11085,8 +11085,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Ветвление по чётности",
+            "section": "branching-conditions",
             "material_id": "rekursiya"
           }
         ],
@@ -11283,8 +11283,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Большие n: сокращаем, а не считаем",
+            "section": "large-arguments-algebraic-shortcut",
             "material_id": "rekursiya"
           }
         ],
@@ -12010,8 +12010,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Деление аргумента: // и %",
+            "section": "argument-steps",
             "material_id": "rekursiya"
           }
         ],
@@ -12412,8 +12412,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Подсчёт аргументов",
+            "section": "count-arguments",
             "material_id": "rekursiya"
           }
         ],
@@ -12595,8 +12595,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Ветвление по условию",
+            "section": "branching-conditions",
             "material_id": "rekursiya"
           }
         ],
@@ -12950,8 +12950,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Подсчёт аргументов",
+            "section": "count-arguments",
             "material_id": "rekursiya"
           }
         ],
@@ -13777,8 +13777,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Ветвление по чётности",
+            "section": "branching-conditions",
             "material_id": "rekursiya"
           }
         ],
@@ -13975,8 +13975,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Несколько предыдущих значений",
+            "section": "several-previous-values",
             "material_id": "rekursiya"
           }
         ],
@@ -14311,8 +14311,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Отношение при больших n",
+            "section": "large-arguments-algebraic-shortcut",
             "material_id": "rekursiya"
           }
         ],
@@ -14515,8 +14515,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Большие n: сокращаем, а не считаем",
+            "section": "large-arguments-algebraic-shortcut",
             "material_id": "rekursiya"
           }
         ],
@@ -14739,8 +14739,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Две связанные функции",
+            "section": "two-functions",
             "material_id": "rekursiya"
           }
         ],
@@ -15462,8 +15462,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -15683,8 +15683,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Две связанные функции",
+            "section": "two-functions",
             "material_id": "rekursiya"
           }
         ],
@@ -15920,8 +15920,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -16735,8 +16735,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Ветвление по чётности",
+            "section": "branching-conditions",
             "material_id": "rekursiya"
           }
         ],
@@ -17066,8 +17066,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Ветвление по условию",
+            "section": "branching-conditions",
             "material_id": "rekursiya"
           }
         ],
@@ -17242,8 +17242,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Общий алгоритм решения",
+            "section": "general-method",
             "material_id": "rekursiya"
           }
         ],
@@ -17625,8 +17625,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Подсчёт аргументов",
+            "section": "count-arguments",
             "material_id": "rekursiya"
           }
         ],
@@ -17782,8 +17782,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Общий алгоритм решения",
+            "section": "general-method",
             "material_id": "rekursiya"
           }
         ],
@@ -18116,8 +18116,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -18468,8 +18468,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Отношение при больших n",
+            "section": "large-arguments-algebraic-shortcut",
             "material_id": "rekursiya"
           }
         ],
@@ -18859,8 +18859,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -19262,8 +19262,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -20081,8 +20081,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Деление аргумента: // и %",
+            "section": "argument-steps",
             "material_id": "rekursiya"
           }
         ],
@@ -21073,8 +21073,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Отношение при больших n",
+            "section": "large-arguments-algebraic-shortcut",
             "material_id": "rekursiya"
           }
         ],
@@ -21508,8 +21508,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Две связанные функции",
+            "section": "two-functions",
             "material_id": "rekursiya"
           }
         ],
@@ -21655,8 +21655,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Рекурсивные вызовы и стек",
+            "section": "code-and-call-stack",
             "material_id": "rekursiya"
           }
         ],
@@ -22435,8 +22435,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Деление аргумента: // и %",
+            "section": "argument-steps",
             "material_id": "rekursiya"
           }
         ],
@@ -22855,8 +22855,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Ветвление по условию",
+            "section": "branching-conditions",
             "material_id": "rekursiya"
           }
         ],
@@ -23059,8 +23059,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Большие n: сокращаем, а не считаем",
+            "section": "large-arguments-algebraic-shortcut",
             "material_id": "rekursiya"
           }
         ],
@@ -23754,8 +23754,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Рекурсия вверх и прогрев кеша",
+            "section": "upward-recursion-cache-warmup",
             "material_id": "rekursiya"
           }
         ],
@@ -24094,8 +24094,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Две связанные функции",
+            "section": "two-functions",
             "material_id": "rekursiya"
           }
         ],
@@ -24315,8 +24315,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -24513,8 +24513,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Подсчёт аргументов",
+            "section": "count-arguments",
             "material_id": "rekursiya"
           }
         ],
@@ -25225,8 +25225,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Несколько предыдущих значений",
+            "section": "several-previous-values",
             "material_id": "rekursiya"
           }
         ],
@@ -25489,8 +25489,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Ветвление по чётности",
+            "section": "branching-conditions",
             "material_id": "rekursiya"
           }
         ],
@@ -25717,8 +25717,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Две связанные функции",
+            "section": "two-functions",
             "material_id": "rekursiya"
           }
         ],
@@ -26292,8 +26292,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Отношение при больших n",
+            "section": "large-arguments-algebraic-shortcut",
             "material_id": "rekursiya"
           }
         ],
@@ -26484,8 +26484,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -26603,8 +26603,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Рекурсивные вызовы и стек",
+            "section": "code-and-call-stack",
             "material_id": "rekursiya"
           }
         ],
@@ -26789,8 +26789,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Большие n: сокращаем, а не считаем",
+            "section": "large-arguments-algebraic-shortcut",
             "material_id": "rekursiya"
           }
         ],
@@ -27380,8 +27380,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Две связанные функции",
+            "section": "two-functions",
             "material_id": "rekursiya"
           }
         ],
@@ -27578,8 +27578,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Отношение при больших n",
+            "section": "large-arguments-algebraic-shortcut",
             "material_id": "rekursiya"
           }
         ],
@@ -27921,8 +27921,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Рекурсия вверх и прогрев кеша",
+            "section": "upward-recursion-cache-warmup",
             "material_id": "rekursiya"
           }
         ],
@@ -28119,8 +28119,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -28618,8 +28618,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Отношение при больших n",
+            "section": "large-arguments-algebraic-shortcut",
             "material_id": "rekursiya"
           }
         ],
@@ -28815,8 +28815,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Две связанные функции",
+            "section": "two-functions",
             "material_id": "rekursiya"
           }
         ],
@@ -29469,8 +29469,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Отношение при больших n",
+            "section": "large-arguments-algebraic-shortcut",
             "material_id": "rekursiya"
           }
         ],
@@ -29706,8 +29706,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -30744,8 +30744,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Две связанные функции",
+            "section": "two-functions",
             "material_id": "rekursiya"
           }
         ],
@@ -30936,8 +30936,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -31112,8 +31112,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Рекурсия вверх и прогрев кеша",
+            "section": "upward-recursion-cache-warmup",
             "material_id": "rekursiya"
           }
         ],
@@ -31592,8 +31592,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Деление аргумента: // и %",
+            "section": "argument-steps",
             "material_id": "rekursiya"
           }
         ],
@@ -31784,8 +31784,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -32264,8 +32264,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -32453,8 +32453,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Ветвление по условию",
+            "section": "branching-conditions",
             "material_id": "rekursiya"
           }
         ],
@@ -32672,8 +32672,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Общий алгоритм решения",
+            "section": "general-method",
             "material_id": "rekursiya"
           }
         ],
@@ -32869,8 +32869,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Ветвление по чётности",
+            "section": "branching-conditions",
             "material_id": "rekursiya"
           }
         ],
@@ -33410,8 +33410,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -33941,8 +33941,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Ветвление по чётности",
+            "section": "branching-conditions",
             "material_id": "rekursiya"
           }
         ],
@@ -34334,8 +34334,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Подсчёт аргументов",
+            "section": "count-arguments",
             "material_id": "rekursiya"
           }
         ],
@@ -34739,8 +34739,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Подсчёт аргументов",
+            "section": "count-arguments",
             "material_id": "rekursiya"
           }
         ],
@@ -35256,8 +35256,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -35477,8 +35477,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Две связанные функции",
+            "section": "two-functions",
             "material_id": "rekursiya"
           }
         ],
@@ -35847,8 +35847,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Несколько предыдущих значений",
+            "section": "several-previous-values",
             "material_id": "rekursiya"
           }
         ],
@@ -36045,8 +36045,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Рекурсия вверх и прогрев кеша",
+            "section": "upward-recursion-cache-warmup",
             "material_id": "rekursiya"
           }
         ],
@@ -36886,8 +36886,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -37261,8 +37261,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Две связанные функции",
+            "section": "two-functions",
             "material_id": "rekursiya"
           }
         ],
@@ -37449,8 +37449,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Несколько предыдущих значений",
+            "section": "several-previous-values",
             "material_id": "rekursiya"
           }
         ],
@@ -37670,8 +37670,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Несколько предыдущих значений",
+            "section": "several-previous-values",
             "material_id": "rekursiya"
           }
         ],
@@ -37873,8 +37873,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Две связанные функции",
+            "section": "two-functions",
             "material_id": "rekursiya"
           }
         ],
@@ -38185,8 +38185,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -39019,8 +39019,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Две связанные функции",
+            "section": "two-functions",
             "material_id": "rekursiya"
           }
         ],
@@ -39222,8 +39222,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Две связанные функции",
+            "section": "two-functions",
             "material_id": "rekursiya"
           }
         ],
@@ -39902,8 +39902,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Рекурсия вверх и прогрев кеша",
+            "section": "upward-recursion-cache-warmup",
             "material_id": "rekursiya"
           }
         ],
@@ -40132,8 +40132,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Деление аргумента: // и %",
+            "section": "argument-steps",
             "material_id": "rekursiya"
           }
         ],
@@ -40334,8 +40334,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Большие n: сокращаем, а не считаем",
+            "section": "large-arguments-algebraic-shortcut",
             "material_id": "rekursiya"
           }
         ],
@@ -41033,8 +41033,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -41351,8 +41351,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -41769,8 +41769,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Деление аргумента: // и %",
+            "section": "argument-steps",
             "material_id": "rekursiya"
           }
         ],
@@ -41967,8 +41967,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Отношение при больших n",
+            "section": "large-arguments-algebraic-shortcut",
             "material_id": "rekursiya"
           }
         ],
@@ -42165,8 +42165,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Несколько предыдущих значений",
+            "section": "several-previous-values",
             "material_id": "rekursiya"
           }
         ],
@@ -42896,8 +42896,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Две связанные функции",
+            "section": "two-functions",
             "material_id": "rekursiya"
           }
         ],
@@ -43135,8 +43135,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Общий алгоритм решения",
+            "section": "general-method",
             "material_id": "rekursiya"
           }
         ],
@@ -43311,8 +43311,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Общий алгоритм решения",
+            "section": "general-method",
             "material_id": "rekursiya"
           }
         ],
@@ -43503,8 +43503,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -43736,8 +43736,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Деление аргумента: // и %",
+            "section": "argument-steps",
             "material_id": "rekursiya"
           }
         ],
@@ -44456,8 +44456,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -44636,8 +44636,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Две связанные функции",
+            "section": "two-functions",
             "material_id": "rekursiya"
           }
         ],
@@ -45112,8 +45112,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -45768,8 +45768,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Общий алгоритм решения",
+            "section": "general-method",
             "material_id": "rekursiya"
           }
         ],
@@ -45962,8 +45962,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -46193,8 +46193,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Деление аргумента: // и %",
+            "section": "argument-steps",
             "material_id": "rekursiya"
           }
         ],
@@ -47299,8 +47299,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Ветвление по условию",
+            "section": "branching-conditions",
             "material_id": "rekursiya"
           }
         ],
@@ -48365,8 +48365,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Деление аргумента: // и %",
+            "section": "argument-steps",
             "material_id": "rekursiya"
           }
         ],
@@ -48555,8 +48555,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Отношение при больших n",
+            "section": "large-arguments-algebraic-shortcut",
             "material_id": "rekursiya"
           }
         ],
@@ -48753,8 +48753,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Отношение при больших n",
+            "section": "large-arguments-algebraic-shortcut",
             "material_id": "rekursiya"
           }
         ],
@@ -48945,8 +48945,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -49439,8 +49439,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Отношение при больших n",
+            "section": "large-arguments-algebraic-shortcut",
             "material_id": "rekursiya"
           }
         ],
@@ -49830,8 +49830,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Деление аргумента: // и %",
+            "section": "argument-steps",
             "material_id": "rekursiya"
           }
         ],
@@ -50188,8 +50188,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Отношение при больших n",
+            "section": "large-arguments-algebraic-shortcut",
             "material_id": "rekursiya"
           }
         ],
@@ -50403,8 +50403,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -50601,8 +50601,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Отношение при больших n",
+            "section": "large-arguments-algebraic-shortcut",
             "material_id": "rekursiya"
           }
         ],
@@ -50777,8 +50777,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Общий алгоритм решения",
+            "section": "general-method",
             "material_id": "rekursiya"
           }
         ],
@@ -51014,8 +51014,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Ветвление по чётности",
+            "section": "branching-conditions",
             "material_id": "rekursiya"
           }
         ],
@@ -51338,8 +51338,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Большие n: сокращаем, а не считаем",
+            "section": "large-arguments-algebraic-shortcut",
             "material_id": "rekursiya"
           }
         ],
@@ -51571,8 +51571,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -52379,8 +52379,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Большие n: сокращаем, а не считаем",
+            "section": "large-arguments-algebraic-shortcut",
             "material_id": "rekursiya"
           }
         ],
@@ -52555,8 +52555,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -52749,8 +52749,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Отношение при больших n",
+            "section": "large-arguments-algebraic-shortcut",
             "material_id": "rekursiya"
           }
         ],
@@ -52970,8 +52970,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Две связанные функции",
+            "section": "two-functions",
             "material_id": "rekursiya"
           }
         ],
@@ -53479,8 +53479,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Ветвление по чётности",
+            "section": "branching-conditions",
             "material_id": "rekursiya"
           }
         ],
@@ -53671,8 +53671,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -54029,8 +54029,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -54438,8 +54438,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -54837,8 +54837,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Две связанные функции",
+            "section": "two-functions",
             "material_id": "rekursiya"
           }
         ],
@@ -55835,8 +55835,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Отношение при больших n",
+            "section": "large-arguments-algebraic-shortcut",
             "material_id": "rekursiya"
           }
         ],
@@ -56335,8 +56335,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Большие n: сокращаем, а не считаем",
+            "section": "large-arguments-algebraic-shortcut",
             "material_id": "rekursiya"
           }
         ],
@@ -56898,8 +56898,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Деление аргумента: // и %",
+            "section": "argument-steps",
             "material_id": "rekursiya"
           }
         ],
@@ -57629,8 +57629,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Подсчёт аргументов",
+            "section": "count-arguments",
             "material_id": "rekursiya"
           }
         ],
@@ -57810,8 +57810,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Деление аргумента: // и %",
+            "section": "argument-steps",
             "material_id": "rekursiya"
           }
         ],
@@ -58165,8 +58165,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -58618,8 +58618,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Общий алгоритм решения",
+            "section": "general-method",
             "material_id": "rekursiya"
           }
         ],
@@ -58851,8 +58851,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Деление аргумента: // и %",
+            "section": "argument-steps",
             "material_id": "rekursiya"
           }
         ],
@@ -59097,8 +59097,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Деление аргумента: // и %",
+            "section": "argument-steps",
             "material_id": "rekursiya"
           }
         ],
@@ -59353,8 +59353,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Деление аргумента: // и %",
+            "section": "argument-steps",
             "material_id": "rekursiya"
           }
         ],
@@ -59577,8 +59577,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Деление аргумента: // и %",
+            "section": "argument-steps",
             "material_id": "rekursiya"
           }
         ],
@@ -59765,8 +59765,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -60012,8 +60012,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Ветвление по условию",
+            "section": "branching-conditions",
             "material_id": "rekursiya"
           }
         ],
@@ -60243,8 +60243,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -60539,8 +60539,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -60737,8 +60737,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -61306,8 +61306,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Ветвление по чётности",
+            "section": "branching-conditions",
             "material_id": "rekursiya"
           }
         ],
@@ -61830,8 +61830,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Отношение при больших n",
+            "section": "large-arguments-algebraic-shortcut",
             "material_id": "rekursiya"
           }
         ],
@@ -62176,8 +62176,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -62510,8 +62510,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Общий алгоритм решения",
+            "section": "general-method",
             "material_id": "rekursiya"
           }
         ],
@@ -62702,8 +62702,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -63225,8 +63225,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Деление аргумента: // и %",
+            "section": "argument-steps",
             "material_id": "rekursiya"
           }
         ],
@@ -63604,8 +63604,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Подсчёт аргументов",
+            "section": "count-arguments",
             "material_id": "rekursiya"
           }
         ],
@@ -63751,8 +63751,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Рекурсивные вызовы и стек",
+            "section": "code-and-call-stack",
             "material_id": "rekursiya"
           }
         ],
@@ -64249,8 +64249,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -64425,8 +64425,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Ветвление по условию",
+            "section": "branching-conditions",
             "material_id": "rekursiya"
           }
         ],
@@ -64821,8 +64821,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Деление аргумента: // и %",
+            "section": "argument-steps",
             "material_id": "rekursiya"
           }
         ],
@@ -65058,8 +65058,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Ветвление по чётности",
+            "section": "branching-conditions",
             "material_id": "rekursiya"
           }
         ],
@@ -65295,8 +65295,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -65496,8 +65496,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Ветвление по чётности",
+            "section": "branching-conditions",
             "material_id": "rekursiya"
           }
         ],
@@ -65871,8 +65871,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -66069,8 +66069,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Общий алгоритм решения",
+            "section": "general-method",
             "material_id": "rekursiya"
           }
         ],
@@ -66427,8 +66427,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Большие n: сокращаем, а не считаем",
+            "section": "large-arguments-algebraic-shortcut",
             "material_id": "rekursiya"
           }
         ],
@@ -66625,8 +66625,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Отношение при больших n",
+            "section": "large-arguments-algebraic-shortcut",
             "material_id": "rekursiya"
           }
         ],
@@ -66817,8 +66817,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -67155,8 +67155,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -67353,8 +67353,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Отношение при больших n",
+            "section": "large-arguments-algebraic-shortcut",
             "material_id": "rekursiya"
           }
         ],
@@ -68526,8 +68526,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -69348,8 +69348,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Большие n: сокращаем, а не считаем",
+            "section": "large-arguments-algebraic-shortcut",
             "material_id": "rekursiya"
           }
         ],
@@ -69569,8 +69569,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Две связанные функции",
+            "section": "two-functions",
             "material_id": "rekursiya"
           }
         ],
@@ -69806,8 +69806,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -70103,8 +70103,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Рекурсивные вызовы и стек",
+            "section": "code-and-call-stack",
             "material_id": "rekursiya"
           }
         ],
@@ -70332,8 +70332,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Ветвление по чётности",
+            "section": "branching-conditions",
             "material_id": "rekursiya"
           }
         ],
@@ -70970,8 +70970,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Ветвление по условию",
+            "section": "branching-conditions",
             "material_id": "rekursiya"
           }
         ],
@@ -71436,8 +71436,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Несколько предыдущих значений",
+            "section": "several-previous-values",
             "material_id": "rekursiya"
           }
         ],
@@ -71857,8 +71857,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -72094,8 +72094,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -72463,8 +72463,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Подсчёт аргументов",
+            "section": "count-arguments",
             "material_id": "rekursiya"
           }
         ],
@@ -72680,8 +72680,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Ветвление по чётности",
+            "section": "branching-conditions",
             "material_id": "rekursiya"
           }
         ],
@@ -73701,8 +73701,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -73865,8 +73865,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Несколько предыдущих значений",
+            "section": "several-previous-values",
             "material_id": "rekursiya"
           }
         ],
@@ -74754,8 +74754,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Рекурсия вверх и прогрев кеша",
+            "section": "upward-recursion-cache-warmup",
             "material_id": "rekursiya"
           }
         ],
@@ -74958,8 +74958,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Ветвление по условию",
+            "section": "branching-conditions",
             "material_id": "rekursiya"
           }
         ],
@@ -75351,8 +75351,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Две связанные функции",
+            "section": "two-functions",
             "material_id": "rekursiya"
           }
         ],
@@ -75720,8 +75720,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -76048,8 +76048,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -76272,8 +76272,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Две связанные функции",
+            "section": "two-functions",
             "material_id": "rekursiya"
           }
         ],
@@ -76642,8 +76642,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Общий алгоритм решения",
+            "section": "general-method",
             "material_id": "rekursiya"
           }
         ],
@@ -77331,8 +77331,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Ветвление по чётности",
+            "section": "branching-conditions",
             "material_id": "rekursiya"
           }
         ],
@@ -77564,8 +77564,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Ветвление по чётности",
+            "section": "branching-conditions",
             "material_id": "rekursiya"
           }
         ],
@@ -77981,8 +77981,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Две связанные функции",
+            "section": "two-functions",
             "material_id": "rekursiya"
           }
         ],
@@ -78224,8 +78224,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Отношение при больших n",
+            "section": "large-arguments-algebraic-shortcut",
             "material_id": "rekursiya"
           }
         ],
@@ -78418,8 +78418,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Рекурсия вверх и прогрев кеша",
+            "section": "upward-recursion-cache-warmup",
             "material_id": "rekursiya"
           }
         ],
@@ -78769,8 +78769,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Две связанные функции",
+            "section": "two-functions",
             "material_id": "rekursiya"
           }
         ],
@@ -78998,8 +78998,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Подсчёт аргументов",
+            "section": "count-arguments",
             "material_id": "rekursiya"
           }
         ],
@@ -79865,8 +79865,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -80600,8 +80600,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Ветвление по чётности",
+            "section": "branching-conditions",
             "material_id": "rekursiya"
           }
         ],
@@ -81094,8 +81094,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -81772,8 +81772,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Отношение при больших n",
+            "section": "large-arguments-algebraic-shortcut",
             "material_id": "rekursiya"
           }
         ],
@@ -82456,8 +82456,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Большие n: сокращаем, а не считаем",
+            "section": "large-arguments-algebraic-shortcut",
             "material_id": "rekursiya"
           }
         ],
@@ -83115,8 +83115,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -83340,8 +83340,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Подсчёт аргументов",
+            "section": "count-arguments",
             "material_id": "rekursiya"
           }
         ],
@@ -83538,8 +83538,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Большие n: сокращаем, а не считаем",
+            "section": "large-arguments-algebraic-shortcut",
             "material_id": "rekursiya"
           }
         ],
@@ -83861,8 +83861,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Общий алгоритм решения",
+            "section": "general-method",
             "material_id": "rekursiya"
           }
         ],
@@ -85077,8 +85077,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Несколько предыдущих значений",
+            "section": "several-previous-values",
             "material_id": "rekursiya"
           }
         ],
@@ -85603,8 +85603,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Две связанные функции",
+            "section": "two-functions",
             "material_id": "rekursiya"
           }
         ],
@@ -85801,8 +85801,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Ветвление по условию",
+            "section": "branching-conditions",
             "material_id": "rekursiya"
           }
         ],
@@ -85959,8 +85959,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -86196,8 +86196,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Рекурсия вверх и прогрев кеша",
+            "section": "upward-recursion-cache-warmup",
             "material_id": "rekursiya"
           }
         ],
@@ -86491,8 +86491,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Рекурсивные вызовы и стек",
+            "section": "code-and-call-stack",
             "material_id": "rekursiya"
           }
         ],
@@ -86849,8 +86849,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -87038,8 +87038,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Общий алгоритм решения",
+            "section": "general-method",
             "material_id": "rekursiya"
           }
         ],
@@ -87534,8 +87534,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Общий алгоритм решения",
+            "section": "general-method",
             "material_id": "rekursiya"
           }
         ],
@@ -87739,8 +87739,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Несколько предыдущих значений",
+            "section": "several-previous-values",
             "material_id": "rekursiya"
           }
         ],
@@ -87942,8 +87942,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Две связанные функции",
+            "section": "two-functions",
             "material_id": "rekursiya"
           }
         ],
@@ -88140,8 +88140,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Отношение при больших n",
+            "section": "large-arguments-algebraic-shortcut",
             "material_id": "rekursiya"
           }
         ],
@@ -88436,8 +88436,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Две связанные функции",
+            "section": "two-functions",
             "material_id": "rekursiya"
           }
         ],
@@ -88767,8 +88767,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -88965,8 +88965,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Отношение при больших n",
+            "section": "large-arguments-algebraic-shortcut",
             "material_id": "rekursiya"
           }
         ],
@@ -89163,8 +89163,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Ветвление по условию",
+            "section": "branching-conditions",
             "material_id": "rekursiya"
           }
         ],
@@ -89498,8 +89498,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Две связанные функции",
+            "section": "two-functions",
             "material_id": "rekursiya"
           }
         ],
@@ -89933,8 +89933,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Две связанные функции",
+            "section": "two-functions",
             "material_id": "rekursiya"
           }
         ],
@@ -90291,8 +90291,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Ветвление по условию",
+            "section": "branching-conditions",
             "material_id": "rekursiya"
           }
         ],
@@ -90685,8 +90685,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Ветвление по чётности",
+            "section": "branching-conditions",
             "material_id": "rekursiya"
           }
         ],
@@ -90902,8 +90902,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Подсчёт аргументов",
+            "section": "count-arguments",
             "material_id": "rekursiya"
           }
         ],
@@ -91059,8 +91059,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -91462,8 +91462,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -92016,8 +92016,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Две связанные функции",
+            "section": "two-functions",
             "material_id": "rekursiya"
           }
         ],
@@ -92231,8 +92231,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -92378,8 +92378,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Рекурсивные вызовы и стек",
+            "section": "code-and-call-stack",
             "material_id": "rekursiya"
           }
         ],
@@ -92602,8 +92602,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Две связанные функции",
+            "section": "two-functions",
             "material_id": "rekursiya"
           }
         ],
@@ -92999,8 +92999,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Ветвление по чётности",
+            "section": "branching-conditions",
             "material_id": "rekursiya"
           }
         ],
@@ -93370,8 +93370,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Две связанные функции",
+            "section": "two-functions",
             "material_id": "rekursiya"
           }
         ],
@@ -93594,8 +93594,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Две связанные функции",
+            "section": "two-functions",
             "material_id": "rekursiya"
           }
         ],
@@ -93831,8 +93831,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Ветвление по чётности",
+            "section": "branching-conditions",
             "material_id": "rekursiya"
           }
         ],
@@ -94052,8 +94052,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -95068,8 +95068,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -95239,8 +95239,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Общий алгоритм решения",
+            "section": "general-method",
             "material_id": "rekursiya"
           }
         ],
@@ -95950,8 +95950,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Деление аргумента: // и %",
+            "section": "argument-steps",
             "material_id": "rekursiya"
           }
         ],
@@ -96268,8 +96268,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -96937,8 +96937,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Деление аргумента: // и %",
+            "section": "argument-steps",
             "material_id": "rekursiya"
           }
         ],
@@ -97128,8 +97128,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Ветвление по условию",
+            "section": "branching-conditions",
             "material_id": "rekursiya"
           }
         ],
@@ -97640,8 +97640,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
             "material_id": "rekursiya"
           }
         ],
@@ -98002,8 +98002,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Ветвление по чётности",
+            "section": "branching-conditions",
             "material_id": "rekursiya"
           }
         ],
@@ -98200,8 +98200,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Несколько предыдущих значений",
+            "section": "several-previous-values",
             "material_id": "rekursiya"
           }
         ],
@@ -98382,8 +98382,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Общий алгоритм решения",
+            "section": "general-method",
             "material_id": "rekursiya"
           }
         ],
@@ -98701,8 +98701,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Рекурсивные вызовы и стек",
+            "section": "code-and-call-stack",
             "material_id": "rekursiya"
           }
         ],
@@ -99106,8 +99106,8 @@
         "exam_numbers": [16],
         "theory_links": [
           {
-            "label": "Рекурсия",
-            "section": null,
+            "label": "Две связанные функции",
+            "section": "two-functions",
             "material_id": "rekursiya"
           }
         ],
@@ -110425,6 +110425,87 @@
     },
     {
       "task": {
+        "id": "rekursiya-branch-doubling",
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Для каждого n сначала определите чётность и выберите ветку. Разверните цепочку от 19 вниз до F(1), затем поднимитесь."
+            }
+          }
+        ],
+        "files": [],
+        "title": "Удвоение и шаг назад",
+        "skills": [],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["51"],
+          "numeric_tolerance": null
+        },
+        "lessons": [
+          {
+            "position": 6,
+            "material_id": "rekursiya"
+          }
+        ],
+        "sources": [
+          {
+            "url": null,
+            "kind": "unknown",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "archived": false,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "F(1) = 3; F(n) = 2·F(n / 2) при чётном n > 1; F(n) = F(n − 1) + 1 при нечётном n > 1. Найдите F(19)."
+            }
+          }
+        ],
+        "difficulty": 2,
+        "explanation": [
+          {
+            "type": "worked_example",
+            "data": {
+              "prompt": "Выбираем ветку по чётности на каждом шаге.",
+              "steps": [
+                "19 нечётно: F(19) = F(18) + 1; 18 чётно: F(18) = 2·F(9)",
+                "9 нечётно: F(9) = F(8) + 1; 8 чётно: F(8) = 2·F(4); 4 чётно: F(4) = 2·F(2); 2 чётно: F(2) = 2·F(1) = 6",
+                "Поднимаемся: F(4) = 12, F(8) = 24, F(9) = 25",
+                "F(18) = 2·25 = 50, F(19) = 50 + 1 = 51"
+              ]
+            }
+          }
+        ],
+        "exam_numbers": [],
+        "theory_links": [
+          {
+            "label": "Ветвление по чётности",
+            "section": "branching-conditions",
+            "material_id": "rekursiya"
+          }
+        ],
+        "catalog_visible": false,
+        "explanation_kind": "unclassified",
+        "interaction_type": "production",
+        "estimated_minutes": null,
+        "short_description": null,
+        "answer_instruction": "Введите целое число.",
+        "content_schema_version": 1
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
         "id": "rekursiya-call-stack-trace",
         "hint": [
           {
@@ -110522,6 +110603,331 @@
     },
     {
       "task": {
+        "id": "rekursiya-count-arguments",
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Напишите функцию с кешем и переберите n в цикле. Правая граница range не входит в перебор."
+            }
+          }
+        ],
+        "files": [],
+        "title": "Сколько подходящих n",
+        "skills": [],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["8"],
+          "numeric_tolerance": null
+        },
+        "lessons": [
+          {
+            "position": 9,
+            "material_id": "rekursiya"
+          }
+        ],
+        "sources": [
+          {
+            "url": null,
+            "kind": "unknown",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "archived": false,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "F(1) = 1; F(n) = F(n / 2) + 3 при чётном n > 1; F(n) = F(n − 1) + 1 при нечётном n > 1. Сколько существует значений n, 1 ≤ n ≤ 50, для которых F(n) = 18?"
+            }
+          }
+        ],
+        "difficulty": 3,
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Подходят n = 35, 37, 38, 41, 42, 44, 49, 50 — всего 8. Значение n = 50 входит в перебор, поэтому граница цикла `range(1, 51)`: при `range(1, 50)` получилось бы 7."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from functools import lru_cache\n\n@lru_cache(None)\ndef F(n):\n    if n == 1:\n        return 1\n    if n % 2 == 0:\n        return F(n // 2) + 3\n    return F(n - 1) + 1\n\nprint(sum(1 for n in range(1, 51) if F(n) == 18))  # 8",
+              "caption": "Подсчёт по всем n"
+            }
+          }
+        ],
+        "exam_numbers": [],
+        "theory_links": [
+          {
+            "label": "Подсчёт аргументов",
+            "section": "count-arguments",
+            "material_id": "rekursiya"
+          }
+        ],
+        "catalog_visible": false,
+        "explanation_kind": "unclassified",
+        "interaction_type": "production",
+        "estimated_minutes": null,
+        "short_description": null,
+        "answer_instruction": "Введите целое число.",
+        "content_schema_version": 1
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "rekursiya-difference-terms",
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Разность соседних значений — это добавка на одном шаге. Запишите четыре добавки для n = 2000, 1999, 1998, 1997."
+            }
+          }
+        ],
+        "files": [],
+        "title": "Разность через добавки",
+        "skills": [],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["23978"],
+          "numeric_tolerance": null
+        },
+        "lessons": [
+          {
+            "position": 11,
+            "material_id": "rekursiya"
+          }
+        ],
+        "sources": [
+          {
+            "url": null,
+            "kind": "unknown",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "archived": false,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "F(1) = 4; F(n) = F(n − 1) + 3n − 1 при n > 1. Найдите F(2000) − F(1996)."
+            }
+          }
+        ],
+        "difficulty": 3,
+        "explanation": [
+          {
+            "type": "worked_example",
+            "data": {
+              "prompt": "Раскрываем четыре шага.",
+              "steps": [
+                "F(2000) − F(1996) = (3·2000 − 1) + (3·1999 − 1) + (3·1998 − 1) + (3·1997 − 1)",
+                "5999 + 5996 + 5993 + 5990 = 23978"
+              ]
+            }
+          }
+        ],
+        "exam_numbers": [],
+        "theory_links": [
+          {
+            "label": "Разность значений",
+            "section": "large-arguments-differences",
+            "material_id": "rekursiya"
+          }
+        ],
+        "catalog_visible": false,
+        "explanation_kind": "unclassified",
+        "interaction_type": "production",
+        "estimated_minutes": null,
+        "short_description": null,
+        "answer_instruction": "Введите целое число.",
+        "content_schema_version": 1
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "rekursiya-digit-steps",
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Каждый шаг отрезает последнюю цифру: n % 10 — это цифра, n // 10 — число без неё. Спуститесь до однозначного числа и поднимитесь обратно."
+            }
+          }
+        ],
+        "files": [],
+        "title": "Отрезаем цифры",
+        "skills": [],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["76"],
+          "numeric_tolerance": null
+        },
+        "lessons": [
+          {
+            "position": 4,
+            "material_id": "rekursiya"
+          }
+        ],
+        "sources": [
+          {
+            "url": null,
+            "kind": "unknown",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "archived": false,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "F(n) = n при n < 10; F(n) = n % 10 + 3·F(n // 10) при n ≥ 10. Найдите F(2057)."
+            }
+          }
+        ],
+        "difficulty": 2,
+        "explanation": [
+          {
+            "type": "worked_example",
+            "data": {
+              "prompt": "Спускаемся, отрезая цифры, затем поднимаемся.",
+              "steps": [
+                "F(2057) = 7 + 3·F(205)",
+                "F(205) = 5 + 3·F(20)",
+                "F(20) = 0 + 3·F(2), а F(2) = 2, поэтому F(20) = 6",
+                "F(205) = 5 + 3·6 = 23",
+                "F(2057) = 7 + 3·23 = 76"
+              ]
+            }
+          }
+        ],
+        "exam_numbers": [],
+        "theory_links": [
+          {
+            "label": "Деление аргумента: // и %",
+            "section": "argument-steps",
+            "material_id": "rekursiya"
+          }
+        ],
+        "catalog_visible": false,
+        "explanation_kind": "unclassified",
+        "interaction_type": "production",
+        "estimated_minutes": null,
+        "short_description": null,
+        "answer_instruction": "Введите целое число.",
+        "content_schema_version": 1
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "rekursiya-inexact-ratio",
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Раскройте три шага и сгруппируйте: получится главное слагаемое, умноженное на F(97), и небольшая добавка."
+            }
+          }
+        ],
+        "files": [],
+        "title": "Отношение с поправкой",
+        "skills": [],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["970200"],
+          "numeric_tolerance": null
+        },
+        "lessons": [
+          {
+            "position": 12,
+            "material_id": "rekursiya"
+          }
+        ],
+        "sources": [
+          {
+            "url": null,
+            "kind": "unknown",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "archived": false,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "F(1) = 1; F(n) = n·F(n − 1) + 1 при n > 1. Найдите целую часть значения F(100) / F(97)."
+            }
+          }
+        ],
+        "difficulty": 3,
+        "explanation": [
+          {
+            "type": "worked_example",
+            "data": {
+              "prompt": "Раскрываем F(100) через F(97).",
+              "steps": [
+                "F(100) = 100·F(99) + 1, F(99) = 99·F(98) + 1, F(98) = 98·F(97) + 1",
+                "F(100) = 100·(99·(98·F(97) + 1) + 1) + 1 = 970200·F(97) + 10001",
+                "F(100) / F(97) = 970200 + 10001 / F(97)",
+                "Значение F(97) огромно, поэтому дробь положительна и меньше 1, а целая часть равна 970200"
+              ]
+            }
+          }
+        ],
+        "exam_numbers": [],
+        "theory_links": [
+          {
+            "label": "Отношение, которое не сокращается точно",
+            "section": "large-arguments-differences",
+            "material_id": "rekursiya"
+          }
+        ],
+        "catalog_visible": false,
+        "explanation_kind": "unclassified",
+        "interaction_type": "production",
+        "estimated_minutes": null,
+        "short_description": null,
+        "answer_instruction": "Введите целое число.",
+        "content_schema_version": 1
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
         "id": "rekursiya-large-ratio",
         "hint": [
           {
@@ -110541,7 +110947,7 @@
         },
         "lessons": [
           {
-            "position": 4,
+            "position": 10,
             "material_id": "rekursiya"
           }
         ],
@@ -110596,6 +111002,95 @@
         "estimated_minutes": null,
         "short_description": null,
         "answer_instruction": "Введите ответ по условию задачи. Порядок значений важен.",
+        "content_schema_version": 1
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "rekursiya-program-parity-pair",
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Составьте программу с кешем: база, две ветви по чётности. Сначала проверьте её на F(6), посчитанном вручную."
+            }
+          }
+        ],
+        "files": [],
+        "title": "Программа с двумя ветвями",
+        "skills": [],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["5342"],
+          "numeric_tolerance": null
+        },
+        "lessons": [
+          {
+            "position": 13,
+            "material_id": "rekursiya"
+          }
+        ],
+        "sources": [
+          {
+            "url": null,
+            "kind": "unknown",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "archived": false,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "F(n) = 3 при n ≤ 2; F(n) = F(n − 1) + F(n − 2) − n при чётном n > 2; F(n) = F(n − 2) + 2n при нечётном n > 2. Найдите F(40)."
+            }
+          }
+        ],
+        "difficulty": 3,
+        "explanation": [
+          {
+            "type": "worked_example",
+            "data": {
+              "prompt": "Проверим функцию на малых значениях.",
+              "steps": [
+                "F(3) = F(1) + 6 = 9",
+                "F(4) = F(3) + F(2) − 4 = 9 + 3 − 4 = 8",
+                "F(5) = F(3) + 10 = 19",
+                "F(6) = F(5) + F(4) − 6 = 19 + 8 − 6 = 21"
+              ]
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from functools import lru_cache\n\n@lru_cache(None)\ndef F(n):\n    if n <= 2:\n        return 3\n    if n % 2 == 0:\n        return F(n - 1) + F(n - 2) - n\n    return F(n - 2) + 2 * n\n\nprint(F(6))   # 21 — как при ручной проверке\nprint(F(40))  # 5342",
+              "caption": "Программа с кешем"
+            }
+          }
+        ],
+        "exam_numbers": [],
+        "theory_links": [
+          {
+            "label": "Шаблон программы для задания 16",
+            "section": "exam-program-template",
+            "material_id": "rekursiya"
+          }
+        ],
+        "catalog_visible": false,
+        "explanation_kind": "unclassified",
+        "interaction_type": "production",
+        "estimated_minutes": null,
+        "short_description": null,
+        "answer_instruction": "Введите целое число.",
         "content_schema_version": 1
       },
       "solution_revision": 1
@@ -110697,6 +111192,171 @@
     },
     {
       "task": {
+        "id": "rekursiya-true-division",
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Вспомните, чем `/` отличается от `//`: одна операция всегда возвращает дробное число."
+            }
+          }
+        ],
+        "files": [],
+        "title": "Обычное и целочисленное деление",
+        "skills": [],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["3.0"],
+          "numeric_tolerance": null
+        },
+        "lessons": [
+          {
+            "position": 5,
+            "material_id": "rekursiya"
+          }
+        ],
+        "sources": [
+          {
+            "url": null,
+            "kind": "unknown",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "archived": false,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Что выведет программа `print(9 / 3)`? Запишите результат так, как его выведет Python."
+            }
+          }
+        ],
+        "difficulty": 1,
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Оператор `/` всегда возвращает дробное число (float), даже если деление выполняется без остатка, поэтому программа выведет `3.0`. Целое число дал бы оператор `//`."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "print(9 / 3)   # 3.0\nprint(9 // 3)  # 3",
+              "caption": "Два вида деления"
+            }
+          }
+        ],
+        "exam_numbers": [],
+        "theory_links": [
+          {
+            "label": "Деление аргумента: // и %",
+            "section": "argument-steps",
+            "material_id": "rekursiya"
+          }
+        ],
+        "catalog_visible": false,
+        "explanation_kind": "unclassified",
+        "interaction_type": "production",
+        "estimated_minutes": null,
+        "short_description": null,
+        "answer_instruction": "Введите то, что напечатает программа, ровно как в консоли.",
+        "content_schema_version": 1
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "rekursiya-two-functions-table",
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ведите таблицу с двумя столбцами: для каждого n сначала F(n), потом G(n), используя уже найденные строки."
+            }
+          }
+        ],
+        "files": [],
+        "title": "Таблица для F и G",
+        "skills": [],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["25"],
+          "numeric_tolerance": null
+        },
+        "lessons": [
+          {
+            "position": 8,
+            "material_id": "rekursiya"
+          }
+        ],
+        "sources": [
+          {
+            "url": null,
+            "kind": "unknown",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "archived": false,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "F(1) = 1, G(1) = 2; при n > 1: F(n) = G(n − 1) + 2 и G(n) = F(n − 1) + n. Найдите F(8)."
+            }
+          }
+        ],
+        "difficulty": 2,
+        "explanation": [
+          {
+            "type": "worked_example",
+            "data": {
+              "prompt": "Заполняем таблицу по строкам.",
+              "steps": [
+                "n = 2: F = G(1) + 2 = 4, G = F(1) + 2 = 3",
+                "n = 3: F = G(2) + 2 = 5, G = F(2) + 3 = 7",
+                "n = 4: F = 9, G = F(3) + 4 = 9; n = 5: F = 11, G = F(4) + 5 = 14",
+                "n = 6: F = 16, G = F(5) + 6 = 17; n = 7: F = 19, G = F(6) + 7 = 23",
+                "n = 8: F = G(7) + 2 = 25"
+              ]
+            }
+          }
+        ],
+        "exam_numbers": [],
+        "theory_links": [
+          {
+            "label": "Две связанные функции",
+            "section": "two-functions",
+            "material_id": "rekursiya"
+          }
+        ],
+        "catalog_visible": false,
+        "explanation_kind": "unclassified",
+        "interaction_type": "production",
+        "estimated_minutes": null,
+        "short_description": null,
+        "answer_instruction": "Введите целое число.",
+        "content_schema_version": 1
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
         "id": "rekursiya-two-values",
         "hint": [
           {
@@ -110767,6 +111427,100 @@
         "estimated_minutes": null,
         "short_description": null,
         "answer_instruction": "Введите ответ по условию задачи. Порядок значений важен.",
+        "content_schema_version": 1
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "rekursiya-upward-chain",
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Цепочка идёт вверх, к базе. Посчитайте, сколько шагов по 2 нужно от 1500 до 3000."
+            }
+          }
+        ],
+        "files": [],
+        "title": "Рекурсия вверх",
+        "skills": [],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["2255"],
+          "numeric_tolerance": null
+        },
+        "lessons": [
+          {
+            "position": 7,
+            "material_id": "rekursiya"
+          }
+        ],
+        "sources": [
+          {
+            "url": null,
+            "kind": "unknown",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "archived": false,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "F(n) = 5 при n ≥ 3000; F(n) = F(n + 2) + 3 при n < 3000. Найдите F(1500)."
+            }
+          }
+        ],
+        "difficulty": 3,
+        "explanation": [
+          {
+            "type": "worked_example",
+            "data": {
+              "prompt": "Считаем шаги до базы.",
+              "steps": [
+                "От 1500 до 3000 с шагом 2 нужно (3000 − 1500) / 2 = 750 шагов",
+                "Каждый шаг добавляет 3, а в базе значение 5",
+                "F(1500) = 5 + 3·750 = 2255"
+              ]
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Если считать программой, кеш следует прогреть от больших n к малым, потому что F(n) зависит от F(n + 2)."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from functools import lru_cache\n\n@lru_cache(None)\ndef F(n):\n    if n >= 3000:\n        return 5\n    return F(n + 2) + 3\n\nfor n in range(3000, 1499, -1):\n    F(n)\n\nprint(F(1500))  # 2255",
+              "caption": "Проверка программой"
+            }
+          }
+        ],
+        "exam_numbers": [],
+        "theory_links": [
+          {
+            "label": "Рекурсия вверх и прогрев кеша",
+            "section": "upward-recursion-cache-warmup",
+            "material_id": "rekursiya"
+          }
+        ],
+        "catalog_visible": false,
+        "explanation_kind": "unclassified",
+        "interaction_type": "production",
+        "estimated_minutes": null,
+        "short_description": null,
+        "answer_instruction": "Введите целое число.",
         "content_schema_version": 1
       },
       "solution_revision": 1
@@ -114792,12 +115546,18 @@
       "sections": [
         "concrete-computation",
         "base-case-and-step",
-        "why-it-works",
         "code-and-call-stack",
         "loop-instead-of-recursion",
         "several-previous-values",
         "repeated-work-motivates-storage",
+        "argument-steps",
+        "branching-conditions",
+        "upward-recursion-cache-warmup",
+        "two-functions",
+        "count-arguments",
         "large-arguments-algebraic-shortcut",
+        "large-arguments-differences",
+        "exam-program-template",
         "general-method"
       ],
       "kind": "topic",

@@ -73,16 +73,22 @@ describe("defineLesson", () => {
     expect(preobrazovanieZapiseyChiselLesson.status).toBe("published");
   });
 
-  it("preserves the recursion editorial pilot structure and tasks", () => {
+  it("keeps the recursion lesson section order and practice sequence", () => {
     expect(rekursiyaLesson.theory.map((concept) => concept.id)).toEqual([
       "concrete-computation",
       "base-case-and-step",
-      "why-it-works",
       "code-and-call-stack",
       "loop-instead-of-recursion",
       "several-previous-values",
       "repeated-work-motivates-storage",
+      "argument-steps",
+      "branching-conditions",
+      "upward-recursion-cache-warmup",
+      "two-functions",
+      "count-arguments",
       "large-arguments-algebraic-shortcut",
+      "large-arguments-differences",
+      "exam-program-template",
       "general-method",
     ]);
     expect(migrationTaskIds(rekursiyaLesson.id)).toEqual([
@@ -90,7 +96,16 @@ describe("defineLesson", () => {
       "rekursiya-call-stack-trace",
       "rekursiya-two-values",
       "rekursiya-repeated-calls",
+      "rekursiya-digit-steps",
+      "rekursiya-true-division",
+      "rekursiya-branch-doubling",
+      "rekursiya-upward-chain",
+      "rekursiya-two-functions-table",
+      "rekursiya-count-arguments",
       "rekursiya-large-ratio",
+      "rekursiya-difference-terms",
+      "rekursiya-inexact-ratio",
+      "rekursiya-program-parity-pair",
     ]);
     expect(rekursiyaLesson).toMatchObject({
       accessTier: "free",

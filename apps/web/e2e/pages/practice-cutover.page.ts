@@ -75,7 +75,7 @@ export class PracticeCutoverPage {
         exact: false,
       }),
     ).toBeVisible();
-    await expect(this.page.locator("[data-practice-task]")).toHaveCount(5);
+    await expect(this.page.locator("[data-practice-task]")).toHaveCount(14);
     await expect(
       this.page.getByRole("textbox", { name: "Ответ" }).first(),
     ).toBeDisabled();

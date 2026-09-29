@@ -22,6 +22,7 @@ const recursionLessonConfig: TopicLessonPageConfig = {
   route: "/ege/16-rekursiya",
   title: "Рекурсивные алгоритмы",
   taskNumber: 16,
+  taskCount: 14,
 };
 
 export class TopicLessonPage {
@@ -115,7 +116,7 @@ export class TopicLessonPage {
     const frame = this.page.locator("[data-topic-lesson-page]");
     await expect(frame).not.toHaveAttribute("data-learning-profile");
     const headings = this.page.locator("#theory section[id] > h3");
-    await expect(headings).toHaveCount(9);
+    await expect(headings).toHaveCount(15);
     for (const heading of await headings.all()) {
       await expect(heading).toHaveCSS("border-bottom-width", "1px");
       await expect(heading).toHaveCSS(
@@ -181,11 +182,11 @@ export class TopicLessonPage {
     await expect(
       this.page.locator('[data-outline-link-id="theory"]'),
     ).toHaveCSS("color", "rgb(0, 112, 210)");
-    await this.page.locator("#why-it-works").evaluate((element) => {
+    await this.page.locator("#argument-steps").evaluate((element) => {
       element.scrollIntoView({ block: "start", behavior: "instant" });
     });
     await expect(
-      this.page.locator('[data-outline-link-id="why-it-works"]'),
+      this.page.locator('[data-outline-link-id="argument-steps"]'),
     ).toHaveAttribute("aria-current", "location");
 
     await this.page.setViewportSize({ width: 390, height: 844 });
@@ -200,7 +201,7 @@ export class TopicLessonPage {
     await expect(this.page.locator("#base-case-and-step")).toBeFocused();
     await this.expectNoHorizontalOverflow();
 
-    await this.page.getByRole("tab", { name: /Задача 1 из 5/ }).click();
+    await this.page.getByRole("tab", { name: /Задача 1 из 14/ }).click();
     const task = this.page.locator(
       '[data-practice-task="rekursiya-base-sequence"]',
     );
@@ -307,7 +308,7 @@ export class TopicLessonPage {
     const examples = this.page.locator("#theory figure").filter({
       has: this.page.locator("figcaption", { hasText: "Разберём на примере" }),
     });
-    await expect(examples).toHaveCount(3);
+    await expect(examples).toHaveCount(11);
     for (const example of await examples.all()) {
       for (const text of await example
         .locator(":scope > div, ol li > div")
@@ -467,7 +468,7 @@ export class TopicLessonPage {
     const questions = checkpoint.locator(
       noJavaScript ? "summary" : "button[aria-expanded]",
     );
-    await expect(questions).toHaveCount(7);
+    await expect(questions).toHaveCount(12);
     const firstQuestion = questions.first();
     const firstAnswer = noJavaScript
       ? checkpoint.locator("details").first().locator(":scope > div")
@@ -530,7 +531,7 @@ export class TopicLessonPage {
       const comparisons = this.page.locator(
         '#theory [role="note"] [data-status]',
       );
-      await expect(comparisons).toHaveCount(10);
+      await expect(comparisons).toHaveCount(26);
       for (const comparison of await comparisons.all()) {
         const copy = comparison.locator(":scope > div > div");
         await expect(copy).toHaveCSS("font-size", "16px");
@@ -1544,7 +1545,7 @@ export class TopicLessonPage {
   async expectPracticeSolutions(): Promise<void> {
     await this.page
       .getByRole("tab", {
-        name: /Задача 1 из 5/,
+        name: /Задача 1 из 14/,
       })
       .click();
     const firstPanel = this.page.locator("[data-practice-task]").first();
@@ -1553,7 +1554,7 @@ export class TopicLessonPage {
 
     await this.page
       .getByRole("tab", {
-        name: /Задача 2 из 5: Проследите рекурсивные вызовы/,
+        name: /Задача 2 из 14: Проследите рекурсивные вызовы/,
       })
       .click();
     const tracePanel = this.page.locator(
@@ -1569,7 +1570,7 @@ export class TopicLessonPage {
 
   async expectDistilledSolvedTask(): Promise<void> {
     const firstTab = this.page.getByRole("tab", {
-      name: /Задача 1 из 5/,
+      name: /Задача 1 из 14/,
     });
     await firstTab.click();
     const firstPanel = this.page.locator(
@@ -1600,7 +1601,7 @@ export class TopicLessonPage {
 
     await expect(firstTab).toHaveAttribute(
       "aria-label",
-      /Задача 1 из 5:.*решена/,
+      /Задача 1 из 14:.*решена/,
     );
     await expect(firstTab).toHaveAttribute("data-solved", "true");
     const solvedColors = await answer.evaluate((element) => {
@@ -1611,7 +1612,7 @@ export class TopicLessonPage {
       };
     });
 
-    const secondTab = this.page.getByRole("tab", { name: /Задача 2 из 5/ });
+    const secondTab = this.page.getByRole("tab", { name: /Задача 2 из 14/ });
     await secondTab.click();
     await expect(secondTab).toHaveAttribute("aria-selected", "true");
     const unsolvedColors = await this.page
@@ -1696,13 +1697,27 @@ export class TopicLessonPage {
 
     await firstCheck.click();
     await expect(firstPanel.getByRole("status")).toContainText("Верно");
-    await this.solveTask("rekursiya-call-stack-trace", 2, "16");
-    await this.solveTask("rekursiya-two-values", 3, "29");
-    await this.solveTask("rekursiya-repeated-calls", 4, "25");
+    // Mastery is 80%: 12 of 14 lesson tasks are the first passing count.
+    const solvedAnswers = [
+      ["rekursiya-call-stack-trace", "16"],
+      ["rekursiya-two-values", "29"],
+      ["rekursiya-repeated-calls", "25"],
+      ["rekursiya-digit-steps", "76"],
+      ["rekursiya-true-division", "3.0"],
+      ["rekursiya-branch-doubling", "51"],
+      ["rekursiya-upward-chain", "2255"],
+      ["rekursiya-two-functions-table", "25"],
+      ["rekursiya-count-arguments", "8"],
+      ["rekursiya-large-ratio", "9900"],
+      ["rekursiya-difference-terms", "23978"],
+    ] as const;
+    for (const [index, [taskId, answer]] of solvedAnswers.entries()) {
+      await this.solveTask(taskId, index + 2, answer, 14);
+    }
 
     const resultProgress = this.page.locator("[data-result-progress]");
     await expect(
-      resultProgress.getByText("4 / 5", { exact: true }),
+      resultProgress.getByText("12 / 14", { exact: true }),
     ).toBeVisible();
     await expect(resultProgress.getByText("Урок пройден")).toBeVisible();
 
@@ -1738,7 +1753,7 @@ export class TopicLessonPage {
     await confirm.press("Enter");
     await expect(reset).toBeFocused();
     await expect(
-      resultProgress.getByText("0 / 5", { exact: true }),
+      resultProgress.getByText("0 / 14", { exact: true }),
     ).toBeVisible();
     await expect(
       resultProgress.getByText("Вы ещё не решали задания"),
@@ -1848,10 +1863,12 @@ export class TopicLessonPage {
   async expectReadableWithoutJavaScript(): Promise<void> {
     await this.open();
     await this.expectPublishedLesson();
-    await expect(this.page.locator("[data-practice-form] form")).toHaveCount(5);
+    await expect(this.page.locator("[data-practice-form] form")).toHaveCount(
+      14,
+    );
     await expect(
       this.page.locator("[data-practice-form] [data-unenhanced-accordion]"),
-    ).toHaveCount(5);
+    ).toHaveCount(14);
     await expect(
       this.page.getByText(/Раскрываем вызовы снизу вверх/),
     ).toBeVisible();
@@ -1880,13 +1897,14 @@ export class TopicLessonPage {
     taskId: string,
     index: number,
     answer: string,
+    total = 5,
   ): Promise<void> {
     await expect(
       this.page.locator("[data-practice-form][data-enhanced]"),
     ).toBeVisible();
     await this.page
       .getByRole("tab", {
-        name: `Задача ${String(index)} из 5`,
+        name: `Задача ${String(index)} из ${String(total)}`,
       })
       .click();
     const panel = this.page.locator(`[data-practice-task="${taskId}"]`);

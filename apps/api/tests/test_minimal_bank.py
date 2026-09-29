@@ -242,7 +242,7 @@ def test_pagination_next_and_lesson_membership(database):
                     if material.status == "published" and expected:
                         result = await readers.lesson(session, material.kind, material.id)
                         assert [t.id for t in result.tasks] == [i for _, i in expected]
-                assert len(list(await session.scalars(select(TaskRecord.id)))) == 735
+                assert len(list(await session.scalars(select(TaskRecord.id)))) == 744
         finally:
             await engine.dispose()
 
@@ -344,7 +344,7 @@ def test_validate_cli_checks_canonical_bank_without_database_or_legacy_json(tmp_
 
     result = validate()
     assert result.returncode == 0, result.stderr
-    assert json.loads(result.stdout)["tasks"] == 735
+    assert json.loads(result.stdout)["tasks"] == 744
     task["task"]["theory_links"][0]["section"] = "missing-section"
     result = validate()
     assert result.returncode != 0 and "unknown theory section" in result.stderr
@@ -1684,3 +1684,32 @@ def test_database_roles_deny_cross_boundary_access(database):
             await engine.dispose()
 
     asyncio.run(scenario())
+
+
+def test_recursion_lesson_tasks_check_answers_and_link_to_real_sections():
+    from app.shared.checker import is_correct
+
+    bank = Bank.model_validate_json((BANK / "bank.json").read_bytes())
+    sections = next(m.sections for m in bank.materials if m.id == "rekursiya")
+    lesson_tasks = sorted(
+        (link.position, entry.task)
+        for entry in bank.tasks
+        for link in entry.task.lessons
+        if link.material_id == "rekursiya"
+    )
+    assert [position for position, _ in lesson_tasks] == list(range(14))
+    for _, task in lesson_tasks:
+        answer = task.checker.answer_variants[0]
+        assert is_correct(task.checker, answer), task.id
+        assert not is_correct(task.checker, answer + "0"), task.id
+        assert not is_correct(task.checker, "неверно"), task.id
+    catalog_tasks = [
+        entry.task
+        for entry in bank.tasks
+        if any(link.material_id == "rekursiya" for link in entry.task.theory_links)
+    ]
+    assert len(catalog_tasks) >= 255
+    for task in catalog_tasks:
+        for link in task.theory_links:
+            if link.material_id == "rekursiya":
+                assert link.section in sections, (task.id, link.section)
