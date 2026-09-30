@@ -7,14 +7,14 @@
 | Change | `161` |
 | Slug | `production-runtime-reliability` |
 | Title | Надёжность обслуживания production API |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/161-production-runtime-reliability` |
 
 ---
 
 ## Goal
 
-Восстановить почасовую ограниченную очистку артефактов аккаунтов по действующему контракту [SPEC](../SPEC.md) §7–8 и [runbook](../runbooks/backup-restore.md). На production с 2026-09-26 таймер завершился ошибкой не менее 80 раз: скрипт запускает системный `python`, который не видит SQLAlchemy из `/app/.venv`. В том же change установить причину высокого расхода памяти API-контейнера (около 93–96% лимита 384 МиБ при проверке 2026-09-29), прежде чем менять код или лимит.
+Восстановить почасовую ограниченную очистку артефактов аккаунтов по действующему контракту [SPEC](../../SPEC.md) §7–8 и [runbook](../../runbooks/backup-restore.md). На production с 2026-09-26 таймер завершился ошибкой не менее 80 раз: скрипт запускает системный `python`, который не видит SQLAlchemy из `/app/.venv`. В том же change установить причину высокого расхода памяти API-контейнера (около 93–96% лимита 384 МиБ при проверке 2026-09-29), прежде чем менять код или лимит.
 
 ---
 
@@ -79,7 +79,7 @@ See `docs/SPEC.md` §7–§8, `docs/runbooks/backup-restore.md` and the Files li
 
 ## Gate Checks
 
-> Critical Gate and Release Gate are defined in [docs/STACK.md](../STACK.md); this section records change-specific evidence.
+> Critical Gate and Release Gate are defined in [docs/STACK.md](../../STACK.md); this section records change-specific evidence.
 
 - Контрактный тест должен запускать production-команду через fake Docker и отклонять системный `python`; дополнительно нужен успешный запуск модуля в реальном API-образе с изолированной БД. Никакой тест не обращается к production-базе.
 - Проверка T1 использует read-only метрики/инвентаризацию. Если появится правка памяти, её критерии и затронутые проверки добавляются в этот Backlog до исполнения.
