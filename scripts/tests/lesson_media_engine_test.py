@@ -2,7 +2,8 @@
 
 Запуск (нужен Pillow, ffmpeg не нужен):
 
-    uv run --no-project --with pillow python -m unittest discover -s scripts/tests -p lesson_media_engine_test.py
+    uv run --no-project --with pillow python -m unittest discover \
+        -s scripts/tests -p lesson_media_engine_test.py
 """
 
 import os
