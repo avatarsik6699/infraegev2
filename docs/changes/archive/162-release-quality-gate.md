@@ -7,7 +7,7 @@
 | Change | `162` |
 | Slug | `release-quality-gate` |
 | Title | Восстановить зелёный релизный CI |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/162-release-quality-gate` |
 
 ---
