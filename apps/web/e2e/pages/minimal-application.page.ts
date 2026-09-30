@@ -357,11 +357,14 @@ export class MinimalApplicationPage {
           name: "Проверить",
           exact: true,
         });
+        // Hover scales primary buttons; measure the layout without that pointer effect.
+        await this.page.mouse.move(0, 0);
         const buttonBefore = (await checkButton.boundingBox())!;
         const buttonTopBefore = await checkButton.evaluate(
           (el) => el.getBoundingClientRect().top + scrollY,
         );
         await checkButton.click();
+        await this.page.mouse.move(0, 0);
         const busyButton = row.getByRole("button", {
           name: "Проверяем",
           exact: true,

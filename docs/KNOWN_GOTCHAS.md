@@ -29,6 +29,16 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
 
 ## Gotcha Log
 
+### Account purge timer uses the API image virtual environment
+
+- **Symptoms:** `infraege-account-purge.service` fails with `ModuleNotFoundError: sqlalchemy`,
+  even though the API serves requests normally.
+- **Cause:** the timer runs `docker compose exec` inside the API container; its system
+  `python` does not contain the packages installed under `/app/.venv`.
+- **Fix:** invoke `/app/.venv/bin/python -m app.modules.account.purge` inside the running
+  API container. Confirm two scheduled successful runs after release using aggregate counts
+  and the service journal; never substitute host SQL or expose account data.
+
 ### Lesson videos do not play in Safari when served by the Node application server
 
 - **Symptoms**: a lesson video plays in Chrome but stays blank in Safari; `curl -H 'Range: bytes=0-99'`

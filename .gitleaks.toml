@@ -19,6 +19,35 @@ paths = ['''(^|/)content/practice-bank/bank\.json$''']
 regexes = ['''^a3ffa225a17d35ef0f8185b42bf373fcc9fd45c2494e7e9c6ee01dbc2c6aecaf$''']
 
 [[rules.allowlists]]
+description = "Verified SHA-256 digests of public practice attachments"
+condition = "AND"
+paths = ['''(^|/)content/practice-bank/bank\.json$''']
+regexes = [
+  '''^3d9b784c90a799e17a8c0615e5982cc58b0ab9e8c9a52e87bfcdd3e9630abbb5$''',
+  '''^36fd02da42ad78d7d1f8dd3f977e10a5f6fec868fe25451582a348f4fc4e98c4$''',
+  '''^5e894e3f2c1a1b5ac6b43f42c77191582a8788bfb692fdc4aadc332f96793b49$''',
+  '''^422767daaa2ab859ebbd5f0201b01eb1281c1e40c6ee4ce39eb2fa9a75d3c0a8$''',
+  '''^f6103e8629977b89ddb372201c5070f6d1e7c9351c1832caa0273f370261afd5$''',
+  '''^7fd0e1df6b386e33e0ecb78394a0f8d37883fa7bbf5b42e0f619425c892e14f8$''',
+  '''^b044f13f22b2a0b16f131b8e9456bebce811b2667637dddc50130bff7278ea0d$''',
+  '''^93f756740ca46c1be17057122bc1a023892de573a9ecb6d4c25f60c3e6a70866$''',
+  '''^cf66e3942f701c67eb4825bad8a45c91bf45bd1997cc134a7e46f305d279d3cf$''',
+  '''^78ff519804b671e908d5030e1459e3dad4b86cb6217dce66e67d494daeeaceb5$''',
+  '''^671664592c4b31ef4ae7270a4858d851fc7d77e8533a1570bc9fea6248995c15$''',
+  '''^170bb275beafcb133b36a36cc5cea56ee67d2e41b2b717531b1fde2ee3467d4e$''',
+  '''^06d3a52f2c46b63676a5ef1cf081b80b7c4b271ac02828cde37236d0fc8aaf31$''',
+  '''^1da8903113121ffae06ea3bdaf888595a0115ed42615f79be62c17dee96a1a7a$''',
+  '''^06db60344dd39c2f873ce19199684d37d2450224aa1d522170da27d9b4fa1e26$''',
+  '''^f314402a6934001c2484ca6d36ba4c08851fab93666e9ea08a02c5a1f25ba5c0$''',
+  '''^fe43dac2222f76c80461affa9d2a832e09e171afc01a0aa83da57688ba6c0803$''',
+  '''^0f023df107a27f47ddbafa76c7d8ec1e0da9ab94cf6ddce86b6785834f96c28a$''',
+  '''^1138ce52acb349f9721778bf7623693b066e64e1ad65b4c8e1ec6cebcb8d1e93$''',
+  '''^88eb8b290f1edaa1b562314460e30428e61d56315f9cc75eab5490c9363adf50$''',
+  '''^457d25f7608d15f23dd2bd48a66166f65cd34f7cc8fc108098220576b07d7e4d$''',
+  '''^acb425622e23b446b2f0089845f9c6f5baa83170648f2e3d5974adad8bd8edaa$''',
+]
+
+[[rules.allowlists]]
 description = "Verified public task SHA-256 digests in the historical migration snapshot"
 condition = "AND"
 paths = ['''(^|/)content/practice-migration/snapshot\.json$''']

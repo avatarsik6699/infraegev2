@@ -38,7 +38,8 @@ def discover():
         name = os.path.splitext(os.path.basename(path))[0]
         if name in NOT_SCENES or name.startswith("_") or name.endswith("_test"):
             continue
-        module = importlib.import_module(name)
+        # Only Python files discovered in this repository-owned directory are imported.
+        module = importlib.import_module(name)  # nosemgrep: python.lang.security.audit.non-literal-import.non-literal-import
         if hasattr(module, "NAME") and callable(getattr(module, "build", None)):
             scenes.append(module)
     return scenes

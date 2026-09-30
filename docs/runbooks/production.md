@@ -95,6 +95,14 @@ Use `docker compose` with the explicit production environment/project and instal
 `systemctl` and `journalctl` for application/TLS/backup/security status. Confirm the daily backup,
 monthly isolated restore and hourly `infraege-account-purge.timer` are enabled after deployment;
 the purge timer reports only aggregate cleanup counts and must not be replaced by host SQL access.
+After a release that changes account purge, the release operator must keep the incident open until
+`systemctl list-timers infraege-account-purge.timer` and
+`journalctl -u infraege-account-purge.service --since <release-time> --no-pager` show the first
+successful scheduled run and the next hourly run. Record both timestamps, service exit status and
+aggregate JSON counts in release evidence; confirm neither run contains the previous Python import
+error. Do not record account identifiers or token values. If either run fails, retain the incident
+as open, capture the sanitized error, and add a Backlog fix before another release. Local `/ship`
+alone does not establish that the installed timer resumed.
 Account recovery from a snapshot remains an isolated, reconciled procedure — see the deletion and
 restore gate in [backup](backup-restore.md#account-deletion-after-a-backup). `/health/live` is process
 liveness; `/health/ready` checks database/schema readiness. A scheduled GitHub probe checks public

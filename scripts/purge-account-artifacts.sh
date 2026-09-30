@@ -19,4 +19,4 @@ env_file=/etc/infraege/production.env
 docker compose --env-file "$env_file" --project-name infraege \
   -f "$release_dir/infra/docker-compose.yml" \
   -f "$release_dir/infra/docker-compose.prod.yml" \
-  exec -T api python -m app.modules.account.purge
+  exec -T api /app/.venv/bin/python -m app.modules.account.purge
