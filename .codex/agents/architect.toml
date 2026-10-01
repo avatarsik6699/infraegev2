@@ -1,6 +1,6 @@
 name = "architect"
 description = "Read-only design and decomposition for cross-module work, API/data boundaries or unclear implementation choices; recommend an actionable bounded plan."
-model = "gpt-6-sol"
+model = "gpt-6.1-sol"
 model_reasoning_effort = "high"
 sandbox_mode = "read-only"
 developer_instructions = """

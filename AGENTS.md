@@ -152,8 +152,8 @@ fix. If no gotcha entry exists, ask how to proceed and add the resolution to `KN
 ### Model routing and delegation
 
 Use native Codex orchestration automatically for substantial parallelizable work.
-The project `.codex/config.toml` selects GPT-6 Sol (medium) for the primary agent;
-`.codex/agents/` defines Luna (high) `explorer`, `worker`, `tester`, Sol (high)
+The project `.codex/config.toml` selects GPT-6.1 Sol (medium) for the primary agent;
+`.codex/agents/` defines Luna (high) `explorer`, `worker`, `tester`, GPT-6.1 Sol (high)
 `architect`, `reviewer`, and Astra (high) `escalation`. Custom roles load in new
 trusted-repository sessions. `bash scripts/codex-orchestrator.sh` launches from the
 repository and forwards normal CLI overrides; existing sessions keep their selection.

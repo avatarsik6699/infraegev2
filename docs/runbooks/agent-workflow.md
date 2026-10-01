@@ -12,26 +12,32 @@ Start a new Codex session in this trusted repository, or from any directory run:
 bash /home/niquetamerewsl/projects/infraegev2/scripts/codex-orchestrator.sh
 ```
 
-Then invoke the existing work skill, for example `$work 146 T5`. The launcher changes to the
+Then invoke the existing work skill with the active change number and optional Backlog ID. The launcher changes to the
 repository and forwards normal Codex arguments. It does not change global settings, permissions
 or an existing session's model. Explicit client selections override the project default.
 Use `/status` and `/agent` to inspect the actual primary and child sessions.
 
 | Role                            | Model / effort | Deliverable                                               |
 | ------------------------------- | -------------- | --------------------------------------------------------- |
-| Primary / unclassified fallback | Sol / medium   | Scope, decomposition, integration, acceptance             |
+| Primary / unclassified fallback | GPT-6.1 Sol / medium   | Scope, decomposition, integration, acceptance             |
 | `explorer`                      | Luna / high    | A bounded code-path or dependency map with references     |
 | `worker`                        | Luna / high    | Settled implementation in explicitly owned files          |
 | `tester`                        | Luna / high    | Isolated reproduction or owned behavioral tests           |
-| `architect`                     | Sol / high     | Cross-module design, dependencies and acceptance plan     |
-| `reviewer`                      | Sol / high     | Independent findings on the completed scoped diff         |
+| `architect`                     | GPT-6.1 Sol / high     | Cross-module design, dependencies and acceptance plan     |
+| `reviewer`                      | GPT-6.1 Sol / high     | Independent findings on the completed scoped diff         |
 | `escalation`                    | Astra / high   | Difficult diagnosis or consequential risk decision advice |
 
 The standalone `.codex/agents/*.toml` files supply `name`, `description` and
 `developer_instructions`, plus model/effort and sandbox defaults. Codex discovers these files;
 no duplicate `[agents.<role>]` registry is needed. `explorer` and `worker` intentionally override
-the built-in roles. Unclassified subagents default to Sol; only explicitly bounded roles use Luna.
+the built-in roles. Unclassified subagents default to GPT-6.1 Sol; only explicitly bounded roles use Luna.
 The concurrency cap is **two children**, excluding the primary.
+
+Use the project `reviewer` for independent change acceptance. A global `code-reviewer` is
+for repositories without that role or an explicitly different review scope. Use `tester`
+for reproduction and tests; assign `test-debugger` only a concrete failing Backlog task
+with production-file ownership when an implementation fix is required. Do not duplicate
+review or test passes merely because both role names are available.
 
 Custom role model/effort settings take precedence over the initial resolution from explicit
 spawn settings, `[agents]` defaults and parent settings. Use a fresh or short context when
@@ -90,9 +96,7 @@ Do not read secrets or run app gates for agent configuration. For the shell laun
 repository `pnpm lint:shell` command and verify argument forwarding. Finish with reviewed
 `make clean-dry-run`, `make clean`, `make clean-check`.
 
-Change 146 preparation is T8. Completing it does not complete T5–T7 or the remaining infrastructure
-and product acceptance tasks. Resume with `$work 146` (or `$work 146 T5` for a bounded first set)
-in the new session, which must reread the current change and preserve the dirty tree.
+Resume the active change and its assigned Backlog in a new session; preserve existing edits.
 
 When a real change feels slow, report the dominant step. Compare subsequent changes opportunistically;
 do not create a benchmark platform, force all roles to run, or claim cost savings without usage data.

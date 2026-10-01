@@ -549,8 +549,8 @@ Gate/checkpoint tooling follows the same stdlib-only boundary. Its focused lint 
 testing orchestration does not require running application Full Gate or contacting production.
 See [verification](runbooks/verification.md) and [agent workflow](runbooks/agent-workflow.md).
 
-Native Codex setup: `.codex/config.toml` selects Sol and caps children at two;
-`.codex/agents/*.toml` defines bounded Luna roles, Sol design/review and Astra escalation.
+Native Codex setup: `.codex/config.toml` selects GPT-6.1 Sol and caps children at two;
+`.codex/agents/*.toml` defines bounded Luna roles, GPT-6.1 Sol design/review and Astra escalation.
 `bash scripts/codex-orchestrator.sh` launches from this repository with normal CLI arguments.
 New trusted-repository sessions load the roles; existing sessions keep their runtime settings.
 Agent-config acceptance uses TOML parsing, Codex strict config loading and a read-only delegation

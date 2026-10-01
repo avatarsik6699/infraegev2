@@ -1,10 +1,10 @@
 # Native project orchestration; explicit client/runtime selections take precedence.
-model = "gpt-6-sol"
+model = "gpt-6.1-sol"
 model_reasoning_effort = "medium"
 
 [agents]
 enabled = true
 # Unclassified work stays on Sol; bounded roles explicitly select Luna.
-default_subagent_model = "gpt-6-sol"
+default_subagent_model = "gpt-6.1-sol"
 default_subagent_reasoning_effort = "medium"
 max_concurrent_threads_per_session = 2
