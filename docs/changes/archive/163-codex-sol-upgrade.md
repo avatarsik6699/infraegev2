@@ -7,7 +7,7 @@
 | Change | `163` |
 | Slug | `codex-sol-upgrade` |
 | Title | Upgrade Codex models and align the local development environment |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/163-codex-sol-upgrade` |
 
 ## Goal
@@ -64,12 +64,12 @@ External: metadata-only history audit/recovery evidence under ~/.local/share/
 
 ## Contracts
 
-See [STACK](../STACK.md) native Codex acceptance and
-[agent workflow](../runbooks/agent-workflow.md). SPEC product/runtime contracts are unchanged.
+See [STACK](../../STACK.md) native Codex acceptance and
+[agent workflow](../../runbooks/agent-workflow.md). SPEC product/runtime contracts are unchanged.
 
 ## Gate Checks
 
-Use the affected Critical Gate from [STACK](../STACK.md): TOML parsing, strict Codex
+Use the affected Critical Gate from [STACK](../../STACK.md): TOML parsing, strict Codex
 configuration loading, fresh session/delegation runtime evidence and repository hygiene.
 Application lint, types, LSP, API regeneration and browser checks are inapplicable to TOML/docs.
 For external shell launchers, run Bash/POSIX syntax and behavior checks. Validate modified skills;
