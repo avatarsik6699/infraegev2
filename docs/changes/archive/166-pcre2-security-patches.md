@@ -7,7 +7,7 @@
 | Change | `166` |
 | Slug | `pcre2-security-patches` |
 | Title | PCRE2 release security patches |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/166-pcre2-security-patches` |
 
 ## Goal
