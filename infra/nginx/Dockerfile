@@ -4,10 +4,11 @@ FROM nginx:1.30.4-alpine@sha256:97d490c12ba55b4946b01546d1c3ed324e8d41ab1c9fcb2a
 
 RUN apk update \
     && apk add --upgrade --no-cache \
-        libcrypto3=3.5.8-r0 \
-        libssl3=3.5.8-r0 \
+        libcrypto3=3.5.9-r0 \
+        libssl3=3.5.9-r0 \
         libexpat=2.8.5-r0 \
         libuuid=2.42.3-r1 \
+        pcre2=10.49-r0 \
     && rm -rf /var/cache/apk/*
 
 COPY infra/nginx/nginx.conf /etc/nginx/nginx.conf
