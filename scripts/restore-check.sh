@@ -45,10 +45,10 @@ POSTGRES_PASSWORD=$(od -An -N24 -tx1 /dev/urandom | tr -d ' \n')
 docker run --detach --name "$container_name" --network none   --label com.infraege.db-purpose=restore --label com.docker.compose.project=infraege-restore   --mount "type=volume,source=$volume_name,target=/var/lib/postgresql"   --env POSTGRES_USER=restore_admin --env POSTGRES_DB=postgres --env POSTGRES_PASSWORD   --env PGDATA=/var/lib/postgresql/18/docker "$DB_IMAGE" >/dev/null
 created_container=true
 for _attempt in $(seq 1 60); do
-  docker exec "$container_name" pg_isready -h 127.0.0.1 -U restore_admin >/dev/null 2>&1 && break
+  docker exec "$container_name" pg_isready -h 127.0.0.1 -U restore_admin -d postgres >/dev/null 2>&1 && break
   sleep 1
 done
-docker exec "$container_name" pg_isready -h 127.0.0.1 -U restore_admin >/dev/null
+docker exec "$container_name" pg_isready -h 127.0.0.1 -U restore_admin -d postgres >/dev/null
 db_restore_bundle "$bundle" "$container_name"
 db_restore_practice_smoke "$bundle" "$container_name"
 cleanup

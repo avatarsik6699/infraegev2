@@ -1,5 +1,19 @@
 # Known Gotchas
 
+### Successful restore drill emits `database "restore_admin" does not exist`
+
+- The disposable restore container creates database `postgres` and user `restore_admin`.
+  `pg_isready -U restore_admin` defaults its database to the user name, so PostgreSQL logs
+  `FATAL` even though the probe can return success because the server accepts connections.
+- Both readiness calls must pass `-d postgres`. This removes the false connection error;
+  SQL restore and application verification remain the proof of a valid backup.
+- Reproduce without production IO: `bash scripts/tests/restore-readiness.test.sh`.
+- The 2026-10-02 audit also found guest disk stalls (122–245 s), unexplained HTTP 500 and
+  a homepage-only uptime target. Those are separate follow-ups: correlate journal/I/O evidence,
+  retain sanitized request timing evidence, and verify application readiness independently.
+  This probe fix does not establish their cause or repair the VPS storage.
+- Reference: [PostgreSQL pg_isready notes](https://www.postgresql.org/docs/18/app-pg-isready.html).
+
 ### Change 17 was abandoned before commit and has no archive file
 
 - **Symptoms**: the numbered archive jumps from Change 16 to Change 18, while a stale local branch

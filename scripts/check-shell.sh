@@ -5,6 +5,7 @@ repo_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 cd "$repo_dir"
 scripts=(
   scripts/check-shell.sh scripts/backup.sh scripts/restore-check.sh scripts/db-export.sh
+  scripts/tests/restore-readiness.test.sh
   scripts/clean-local-artifacts.sh scripts/tests/clean-local-artifacts.test.sh
   scripts/purge-account-artifacts.sh scripts/tests/account-retention.test.sh
   ops/install-backup-timers.sh
