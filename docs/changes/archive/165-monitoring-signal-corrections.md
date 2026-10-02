@@ -7,7 +7,7 @@
 | Change | `165` |
 | Slug | `monitoring-signal-corrections` |
 | Title | Correct restore readiness probes |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/165-monitoring-signal-corrections` |
 
 ## Goal
@@ -50,7 +50,7 @@ SPEC is unchanged: this corrects a probe of the existing isolated database.
 
 ## Gate Checks
 
-Use the affected shell Critical Gate in [STACK](../STACK.md), including the focused readiness
+Use the affected shell Critical Gate in [STACK](../../STACK.md), including the focused readiness
 contract and existing backup/restore contract. No app build, browser or DB migration is involved.
 
 Verification (2026-10-02): `bash scripts/tests/restore-readiness.test.sh` and
