@@ -1,4 +1,4 @@
-import { useEffect, useRef, type ComponentProps } from "react";
+import { useEffect, useRef, useState, type ComponentProps } from "react";
 import { CircleCheck } from "lucide-react";
 import type { PracticeTaskTypes } from "~/entities/practice-task";
 import { Button } from "~/shared/components/button";
@@ -32,6 +32,7 @@ export const PracticeTaskAnswer: React.FC<PracticeTaskAnswerProps> = (
   const inputRef = useRef<HTMLInputElement>(null);
   const wasRepeating = useRef(false);
   const previousState = useRef(props.state);
+  const [emptyAttempt, setEmptyAttempt] = useState(false);
   useEffect(
     function focusRepeatAnswerFx() {
       if (props.focusOnMount && !wasRepeating.current && props.active !== false)
@@ -42,9 +43,10 @@ export const PracticeTaskAnswer: React.FC<PracticeTaskAnswerProps> = (
   );
   useEffect(
     function focusInvalidAnswerFx() {
+      const refocus = props.state === "incorrect" || props.state === "error";
       if (
-        props.state === "incorrect" &&
-        previousState.current !== "incorrect" &&
+        refocus &&
+        previousState.current !== props.state &&
         props.active !== false
       )
         inputRef.current?.focus();
@@ -56,14 +58,26 @@ export const PracticeTaskAnswer: React.FC<PracticeTaskAnswerProps> = (
   const placeholder = props.answerInstruction
     ? "Введите ответ"
     : "Без единиц измерения";
-  const error = answerError(props.state);
+  const error = emptyAttempt
+    ? "Введите ответ, чтобы проверить."
+    : answerError(props.state);
   const needsRefresh = props.state === "stale" || props.state === "unavailable";
   const accepted = props.alreadySolved || props.state === "correct";
   return (
     <form
       className={styles.practiceForm}
       data-layout={props.layout ?? "stacked"}
-      onSubmit={props.onSubmit}
+      onSubmit={(event) => {
+        // An empty answer is a local input problem, not a failed check.
+        if (props.answer.trim() === "") {
+          event.preventDefault();
+          setEmptyAttempt(true);
+          inputRef.current?.focus();
+          return;
+        }
+        setEmptyAttempt(false);
+        props.onSubmit(event);
+      }}
     >
       {props.layout !== "compact" && (
         <PracticeTaskContent
@@ -119,9 +133,10 @@ export const PracticeTaskAnswer: React.FC<PracticeTaskAnswerProps> = (
               autoComplete="off"
               disabled={!props.enhanced || accepted || props.checking}
               value={props.answer}
-              onChange={(event) =>
-                props.onAnswerChange(event.currentTarget.value)
-              }
+              onChange={(event) => {
+                setEmptyAttempt(false);
+                props.onAnswerChange(event.currentTarget.value);
+              }}
             />
             {props.layout === "compact" && props.alreadySolved && (
               <span className={styles.visuallyHidden} role="status">

@@ -77,7 +77,7 @@ Target coverage (see `docs/SPEC.md`'s own section numbering):
 2. Domain Context
 3. Data Model
 4. API/Backend Contract
-5. Frontend/Client Contract (see step 3 for §5.3 Design System)
+5. Frontend/Client Contract (see step 3 for the Design System; the visual system lives in `DESIGN.md`)
 6. Auth & Access Model
 7. Infrastructure and Deploy/CI
 8. Non-Functional Requirements — start from the pre-seeded web checklist in the template
@@ -104,9 +104,10 @@ flow.
   (Pages) / §5.2 (Components) concretely and list them under §5.3 Design References.
 - If there are none: do not leave §5.3 as a placeholder.
   1. Analyze the domain, audience, and tone implied by the spec.
-  2. Use the available frontend design capability to define a replacement visual world. Persist
-     product truth in `docs/SPEC.md` and durable frontend rules in `docs/FRONTEND.md`; do not create
-     competing product/design contract files under `apps/web`.
+  2. Use the `impeccable` skill to define a replacement visual world, verified with static
+     mockups before app code. Persist product truth in `docs/SPEC.md`, the visual system in the
+     root `DESIGN.md` (`impeccable document`) and durable implementation rules in
+     `docs/FRONTEND.md`; do not create competing product/design contract files under `apps/web`.
   3. Ask a short set of preference questions (max 5): visual tone, light/dark default, density,
      any hard constraints (existing brand colors, accessibility requirements).
   4. Record the chosen direction in §5.3 as the project's Design System baseline.
@@ -115,8 +116,8 @@ flow.
 
 ### 3.1 Existing visual language for frontend changes
 
-For frontend work, read `docs/FRONTEND.md` and use the existing minimal public pages and shared
-semantic controls. Keep composition with the page; introduce a reusable mechanism only for a
+For frontend work, read `docs/FRONTEND.md` and `DESIGN.md` and use the existing public pages and
+shared semantic controls. Keep composition with the page; introduce a reusable mechanism only for a
 real consumer. Compare desktop/mobile and degraded states in the required browser pass. Labs
 and decorative specimens are not part of the current product.
 

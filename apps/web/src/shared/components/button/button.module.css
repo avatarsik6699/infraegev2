@@ -8,13 +8,13 @@
   gap: var(--space-1);
   align-items: center;
   justify-content: center;
-  padding: 0 var(--space-1-5);
+  padding: 0 1.25rem;
   border: 1px solid transparent;
   border-radius: var(--radius-control);
   background: transparent;
   color: var(--color-text);
   font-family: var(--font-ui);
-  font-size: var(--text-sm);
+  font-size: var(--text-control);
   font-weight: 600;
   line-height: 1;
   cursor: pointer;
@@ -33,7 +33,7 @@
 }
 
 .root[data-hierarchy="primary"]:hover:not(:disabled) {
-  background: var(--control-primary-bg);
+  background: var(--control-primary-bg-hover);
   color: var(--control-primary-text);
 }
 
@@ -45,7 +45,7 @@
 }
 
 .root[data-hierarchy="secondary"]:hover:not(:disabled) {
-  background: var(--control-quiet-bg-hover);
+  border-color: var(--color-text);
   color: var(--color-text);
 }
 
@@ -60,9 +60,9 @@
 }
 
 .root[data-density="compact"] {
-  min-height: var(--control-height);
-  padding-inline: var(--space-1);
-  font-size: var(--text-xs);
+  min-height: 2.5rem;
+  padding-inline: 0.875rem;
+  font-size: var(--text-sm);
 }
 
 .root[data-full-width] {
@@ -136,11 +136,17 @@
   background: color-mix(in srgb, var(--color-text) 10%, var(--color-surface));
 }
 .root[data-hierarchy="destructive"] {
-  background: var(--color-danger);
-  color: var(--control-primary-text);
+  border-color: color-mix(
+    in srgb,
+    var(--color-danger) 40%,
+    var(--color-surface)
+  );
+  background: var(--color-surface);
+  color: var(--color-danger);
 }
 .root[data-hierarchy="destructive"]:hover:not(:disabled) {
-  background: color-mix(in srgb, var(--color-danger) 88%, black);
+  border-color: var(--color-danger);
+  background: var(--color-danger-soft);
 }
 .root:focus-visible {
   outline: 2px solid var(--color-focus);
@@ -187,26 +193,4 @@
 .root[data-surface="bare"][aria-expanded="true"]:not(:disabled) {
   background: transparent;
   box-shadow: none;
-}
-
-.root[data-hierarchy="primary"]:hover:not(:disabled) {
-  background: var(--control-primary-bg);
-  color: var(--control-primary-text);
-}
-.root[data-hierarchy="primary"]:not(:disabled):not([aria-disabled="true"]):not(
-    [aria-busy="true"]
-  ):is(:hover, :focus-visible) {
-  transform: scale(1.02);
-}
-.root[data-hierarchy="primary"]:not(:disabled):not([aria-disabled="true"]):not(
-    [aria-busy="true"]
-  ):active {
-  transform: scale(0.98);
-}
-@media (prefers-reduced-motion: reduce) {
-  .root[data-hierarchy="primary"]:not(:disabled):not(
-      [aria-disabled="true"]
-    ):not([aria-busy="true"]):is(:hover, :focus-visible, :active) {
-    transform: none;
-  }
 }

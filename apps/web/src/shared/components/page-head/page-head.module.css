@@ -1,0 +1,61 @@
+/* Full-width page head with the engineering grid (DESIGN.md › Layout). */
+.root {
+  position: relative;
+  isolation: isolate;
+  border-bottom: 1px solid var(--color-rule);
+  background: var(--color-bg);
+}
+
+.root::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background-image:
+    linear-gradient(90deg, var(--grid-line-major) 1px, transparent 1px),
+    linear-gradient(var(--grid-line-major) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line-minor) 1px, transparent 1px),
+    linear-gradient(var(--grid-line-minor) 1px, transparent 1px);
+  background-position: -1px -1px;
+  background-size:
+    80px 48px,
+    80px 48px,
+    16px 12px,
+    16px 12px;
+  content: "";
+  mask-image: var(--grid-fade);
+  pointer-events: none;
+}
+
+.inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: var(--measure-wide);
+  margin-inline: auto;
+  padding: var(--space-4) clamp(var(--space-2), 3vw, var(--space-4))
+    var(--space-4);
+}
+
+.copy {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+  flex: 1 1 28rem;
+}
+
+.aside {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 44rem) {
+  .inner {
+    padding-block: var(--space-3);
+  }
+
+  .aside {
+    display: none;
+  }
+}

@@ -339,7 +339,7 @@
 
 .answerRow button {
   width: auto;
-  min-height: 2.5rem;
+  min-height: var(--control-height);
   min-width: 8rem;
   justify-self: start;
 }
@@ -564,5 +564,12 @@
 
   .taskTheoryLinks ul {
     justify-items: start;
+  }
+}
+
+/* Very narrow screens: the answer field takes the full row so its hint is not clipped. */
+@media (max-width: 26.25rem) {
+  .practiceForm[data-layout="compact"] .answerRow {
+    grid-template-columns: minmax(0, 1fr);
   }
 }

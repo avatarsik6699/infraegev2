@@ -74,7 +74,7 @@ export async function expectPublishedLessonDocument(
   await expect(theoryStage).not.toHaveAttribute("data-title-role", /.+/);
   await expect(theoryStage).toHaveCSS("font-size", "12px");
   await expect(theoryStage).toHaveCSS("font-weight", "500");
-  await expect(theoryStage).toHaveCSS("font-family", /Infraege Golos Text/);
+  await expect(theoryStage).toHaveCSS("font-family", /Infraege Onest/);
   await expect(theoryStage).toHaveCSS("text-transform", "uppercase");
 }
 
@@ -203,7 +203,7 @@ export async function expectLessonInteractiveTargets(
   // Legacy LessonOutline links (Change 91) have a compact visible row but extend
   // their actual clickable area to the 40px floor via an absolutely
   // positioned ::after pseudo-element — measure that hit area, not the
-  // shrunk visible box, per docs/FRONTEND.md §5.
+  // shrunk visible box, per docs/FRONTEND.md §4.
   const outlineHitHeights = await page.evaluate(() => {
     return Array.from(
       document.querySelectorAll<HTMLElement>("[data-outline-link-id]"),

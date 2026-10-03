@@ -87,7 +87,7 @@ curl -sS -H 'Accept: application/json' http://127.0.0.1:18082/asset.js | grep -q
 for target in missing broken; do
   curl -sS -H 'Accept: text/html' "http://127.0.0.1:18082/$target" | grep -q 'application'
 done
-for asset in styles.css infraege-mark.svg fonts/alegreya/alegreya-cyrillic-wght-normal.woff2 fonts/golos-text/golos-text-cyrillic-wght-normal.woff2; do
+for asset in styles.css infraege-mark.svg fonts/onest/onest-cyrillic-wght-normal.woff2; do
   test "$(curl -sS -o /dev/null -w '%{http_code}' "http://127.0.0.1:18082/_infraege/$asset")" = 200
 done
 curl -sSI http://127.0.0.1:18082/_infraege/infraege-mark.svg | grep -qi 'Content-Type: image/svg+xml'

@@ -38,9 +38,10 @@ tooling live in [`docs/STACK.md`](docs/STACK.md).
    in `*.server.ts`; consume semantic functions elsewhere. Extend the boundary and its lint
    self-test instead of adding an inline bypass.
 10. **Frontend Contract**: Before writing or reviewing any `apps/web/src` code, read
-    [`docs/FRONTEND.md`](docs/FRONTEND.md) — the binding architecture, code-shape, interaction and
-    visual-system contract for that layer tree. Follow it exactly; where it and this file overlap
-    on a frontend specific, `FRONTEND.md` governs.
+    [`docs/FRONTEND.md`](docs/FRONTEND.md) — the binding architecture, code-shape, state,
+    accessibility, SSR and interaction contract for that layer tree — and, for any visual work,
+    [`DESIGN.md`](DESIGN.md), the visual system maintained through the `impeccable` skill. Follow
+    them exactly; where they and this file overlap on a frontend specific, they govern.
 11. **Repository Hygiene**: Reports, build outputs and caches may remain only until their evidence
     has been analyzed. Finish `/work`, `/ship` and ad-hoc test/lint/build sessions with
     `make clean-dry-run`, review the allowlist, then run `make clean` and `make clean-check`.
@@ -71,7 +72,7 @@ Explain any fallback after those checks. Automated repository test runners stay 
 ## Reading scope
 
 Read the active change, STACK gate/tooling rows and the SPEC sections affected by the task.
-Use SPEC §2.3 for content, §3–§4 for data/API, §5 plus FRONTEND for web, §7–§8 plus the owning
+Use SPEC §2.3 for content, §3–§4 for data/API, §5 plus FRONTEND and DESIGN for web, §7–§8 plus the owning
 runbook for operations. Read SPEC fully for initial planning or a product/system pivot.
 Search KNOWN_GOTCHAS by the affected area; the filesystem permission handoff always applies.
 Archive/history is on-demand evidence, not mandatory context for every task.
@@ -218,5 +219,6 @@ section exists only for what git can't tell you.
 | `docs/changes/archive/NN-slug.md` | Completed unit of work, kept as history | Written once, by `/ship` |
 | `docs/changes/archive/COMPACTED.md` | Verified historical checkpoint and immutable source index | Only an approved compaction change |
 | `docs/STACK.md` | Stack-specific commands, Critical/Full/Release gate tables, required tooling | When tooling changes |
-| `docs/FRONTEND.md` | Binding architecture, code, interaction and visual-system contract for `apps/web` | When frontend rules change |
+| `docs/FRONTEND.md` | Binding architecture, code, state, accessibility, SSR and interaction contract for `apps/web` | When frontend rules change |
+| `DESIGN.md` | Visual system for `apps/web`: tokens, typography, layout, components, do's and don'ts | Through `impeccable document` when the visual system changes |
 | `docs/KNOWN_GOTCHAS.md` | Recurring pitfall log | When new traps are discovered |

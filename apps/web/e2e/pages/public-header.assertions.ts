@@ -11,10 +11,10 @@ export const expectPublicReleaseIdentity = async (
   ).toHaveCount(1);
   await expect(header.getByText("beta", { exact: true })).toHaveCount(0);
   await expect(header.getByText("v1.0.0", { exact: true })).toHaveCount(0);
-  await expect(header).toHaveCSS("border-bottom-width", "0px");
+  await expect(header).toHaveCSS("border-bottom-width", "1px");
   await expect(page.getByRole("contentinfo")).toHaveCSS(
     "border-top-width",
-    "0px",
+    "1px",
   );
   const chromeGeometry = await page.evaluate(() => {
     const headerInner = document.querySelector<HTMLElement>(
@@ -34,9 +34,14 @@ export const expectPublicReleaseIdentity = async (
     );
     const hasStudyColumns =
       lessonFrame && getComputedStyle(lessonFrame).display === "grid";
+    // The lesson footer starts at the reading column track, next to the subtopic rail.
+    const tracks = lessonFrame
+      ? getComputedStyle(lessonFrame).gridTemplateColumns.split(" ")
+      : [];
+    const firstTrack = tracks.length > 1 ? parseFloat(tracks[0]!) : 0;
     const expectedFooterLeft =
-      hasStudyColumns && lessonArticle
-        ? lessonArticle.getBoundingClientRect().left
+      hasStudyColumns && lessonArticle && lessonFrame
+        ? lessonFrame.getBoundingClientRect().left + firstTrack
         : 0;
     return {
       viewportWidth: document.body.getBoundingClientRect().right,

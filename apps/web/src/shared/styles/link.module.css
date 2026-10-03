@@ -5,10 +5,10 @@
   transition: color var(--motion-duration) var(--motion-easing);
 }
 .root > span:first-of-type {
-  text-decoration-line: none;
-  text-decoration-color: var(--color-link-decoration);
+  text-decoration-line: underline;
+  text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
   text-decoration-thickness: 1px;
-  text-underline-offset: 0.2em;
+  text-underline-offset: 3px;
   transition: text-decoration-color var(--motion-duration) var(--motion-easing);
 }
 .root:hover {
@@ -24,7 +24,7 @@
 }
 .root:focus-visible {
   outline: 2px solid var(--color-focus);
-  outline-offset: 3px;
+  outline-offset: 2px;
 }
 .root:not([data-presentation="button"]):not([data-presentation="navigation"]) {
   color: var(--color-link);
@@ -48,6 +48,16 @@
 }
 .root[data-presentation="navigation"] {
   gap: var(--space-1);
+}
+.root[data-presentation="action"] {
+  font-weight: 600;
+}
+.root[data-presentation="action"] > span:first-of-type {
+  text-decoration-line: none;
+}
+.root[data-presentation="action"]:is(:hover, :focus-visible)
+  > span:first-of-type {
+  text-decoration-line: underline;
 }
 .root[data-presentation="navigation"] > span:first-of-type,
 .root[data-presentation="button"] > span:first-of-type {

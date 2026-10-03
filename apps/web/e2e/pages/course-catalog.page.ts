@@ -26,7 +26,7 @@ export class CourseCatalogPage {
       await expect(card).toHaveAttribute("aria-disabled", "true");
       await expect(card.locator("[data-badge]")).toHaveCSS(
         "background-color",
-        "rgb(245, 245, 245)",
+        "rgb(248, 248, 246)",
       );
       await expect(card).toHaveCSS("background-color", "rgb(255, 255, 255)");
     }
@@ -120,18 +120,19 @@ export class CourseCatalogPage {
     await link.focus();
     await expect(link).toBeFocused();
     const card = this.page.locator('[data-course-card="python"]');
-    await expect(card).toHaveCSS("transform", "matrix(1, 0, 0, 1, 0, -2)");
-    const before = await card.boundingBox();
+    await expect(card).toHaveCSS("transform", "none");
     await expect(link).toHaveAttribute("data-hierarchy", "primary");
-    await expect(link).toHaveCSS("background-color", "rgb(23, 23, 23)");
+    await expect(link).toHaveCSS("background-color", "rgb(23, 25, 30)");
     await expect(link).toHaveCSS("color", "rgb(255, 255, 255)");
     await this.expectGuestProgress(card);
+    // Measure after progress settles; hydration stability has its own delivery check.
+    const before = await card.boundingBox();
     await expect(card).toHaveCSS("background-color", "rgb(255, 255, 255)");
     await link.hover();
     await expect(card).toHaveCSS("background-color", "rgb(255, 255, 255)");
-    await expect(link).toHaveCSS("background-color", "rgb(23, 23, 23)");
+    await expect(link).toHaveCSS("background-color", "rgb(42, 45, 52)");
     await expect(link).toHaveCSS("color", "rgb(255, 255, 255)");
-    await expect(link).toHaveCSS("transform", "matrix(1.02, 0, 0, 1.02, 0, 0)");
+    await expect(link).toHaveCSS("transform", "none");
     await expect(link.locator("span").last()).toHaveCSS(
       "color",
       "rgb(255, 255, 255)",

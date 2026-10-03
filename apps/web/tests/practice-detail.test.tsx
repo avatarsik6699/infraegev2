@@ -216,6 +216,21 @@ it("retains the answer on checker failure and associates feedback with its field
       ?.textContent,
   ).toBe("Не удалось проверить ответ. Попробуйте ещё раз.");
 });
+it("asks for an answer instead of checking an empty field", async () => {
+  render(page());
+  const input = screen.getByRole("textbox", { name: "Ваш ответ" });
+  await waitFor(() => expect((input as HTMLInputElement).disabled).toBe(false));
+  fireEvent.change(input, { target: { value: "   " } });
+  fireEvent.click(screen.getByRole("button", { name: "Проверить" }));
+  expect(mocks.check).not.toHaveBeenCalled();
+  expect(
+    document.getElementById(input.getAttribute("aria-describedby")!)
+      ?.textContent,
+  ).toBe("Введите ответ, чтобы проверить.");
+  expect(document.activeElement).toBe(input);
+  fireEvent.change(input, { target: { value: "1" } });
+  expect(screen.queryByText("Введите ответ, чтобы проверить.")).toBeNull();
+});
 it("shows an icon-only return link with a keyboard tooltip", async () => {
   render(page());
   const back = screen.getByRole("link", { name: "К списку задач" });

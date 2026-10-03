@@ -9,6 +9,12 @@ import { ConfirmationDialog } from "~/shared/components/confirmation-dialog";
 import { InfoPopover } from "~/shared/components/info-popover";
 import { PasswordConfirmationDialog } from "~/shared/components/password-confirmation-dialog";
 import { ProfileAvatar } from "~/shared/components/profile-avatar";
+import {
+  TabsList,
+  TabsPanel,
+  TabsRoot,
+  TabsTab,
+} from "~/shared/components/tabs";
 import { Typography } from "~/shared/components/typography";
 import { authProviderNavigation } from "~/shared/lib/auth-provider-navigation";
 import { AccountOverview } from "./components/account-overview";
@@ -24,6 +30,7 @@ export const AccountProfile: React.FC<AccountProfileTypes.Props> = (props) => {
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [needsReauthentication, setNeedsReauthentication] = useState(false);
+  const [tab, setTab] = useState("overview");
   if (session.status === "loading")
     return (
       <Typography.Text className={styles.notice} role="status">
@@ -88,7 +95,7 @@ export const AccountProfile: React.FC<AccountProfileTypes.Props> = (props) => {
         />
         <div className={styles.identityText}>
           <Typography.Title order={1} id="account-title">
-            Аккаунт
+            Профиль
           </Typography.Title>
           <Typography.Text tone="muted">
             {session.account.email ?? "Аккаунт без адреса почты"}
@@ -112,174 +119,192 @@ export const AccountProfile: React.FC<AccountProfileTypes.Props> = (props) => {
           Выйти
         </Button>
       </header>
-      <AccountOverview practiceSummary={props.practiceSummary} />
-      <section
-        className={styles.profileSettings}
-        id="settings"
-        aria-labelledby="methods-title"
-      >
-        <div className={styles.sectionHeading}>
-          <Typography.Title order={2} id="methods-title">
-            Способы входа
-          </Typography.Title>
-          <InfoPopover label="О повторном подтверждении входа">
-            Чтобы изменить способы входа, войдите повторно.
-          </InfoPopover>
-        </div>
-        <ul className={styles.methods}>
-          <li className={styles.method}>
-            <LoginMethodIcon provider="email" />
-            <div className={styles.methodIdentity}>
-              <Typography.Text>Почта и пароль</Typography.Text>
-              <Typography.Text tone="muted" className={styles.methodStatus}>
-                {emailMethodStatus}
-              </Typography.Text>
+      <TabsRoot value={tab} onValueChange={setTab} className={styles.tabs}>
+        <TabsList label="Разделы профиля" className={styles.tabList}>
+          <TabsTab value="overview">Обзор</TabsTab>
+          <TabsTab value="settings">Настройки</TabsTab>
+        </TabsList>
+        <TabsPanel value="overview" className={styles.tabPanel}>
+          <AccountOverview practiceSummary={props.practiceSummary} />
+        </TabsPanel>
+        <TabsPanel value="settings" className={styles.tabPanel}>
+          <section
+            className={styles.profileSettings}
+            id="settings"
+            aria-labelledby="methods-title"
+          >
+            <div className={styles.sectionHeading}>
+              <Typography.Title order={2} id="methods-title">
+                Способы входа
+              </Typography.Title>
+              <InfoPopover label="О повторном подтверждении входа">
+                Чтобы изменить способы входа, войдите повторно.
+              </InfoPopover>
             </div>
-          </li>
-          {accountPageHelpers.providers.map((provider) => {
-            const connected = methods.some(
-              (method) => method.provider === provider,
-            );
-            const enabled = props.enabledProviders.includes(provider);
-            let methodStatus = "Пока недоступно";
-            if (enabled) methodStatus = "Не подключено";
-            if (connected) methodStatus = "Подключено";
-            return (
-              <li className={styles.method} key={provider}>
-                <LoginMethodIcon provider={provider} />
+            <ul className={styles.methods}>
+              <li className={styles.method}>
+                <LoginMethodIcon provider="email" />
                 <div className={styles.methodIdentity}>
-                  <Typography.Text>
-                    {accountPageHelpers.providerLabels[provider]}
-                  </Typography.Text>
+                  <Typography.Text>Почта и пароль</Typography.Text>
                   <Typography.Text tone="muted" className={styles.methodStatus}>
-                    {methodStatus}
+                    {emailMethodStatus}
                   </Typography.Text>
-                </div>
-                <div className={styles.methodActions}>
-                  {connected && enabled ? (
-                    <Button
-                      type="button"
-                      hierarchy="quiet"
-                      density="compact"
-                      disabled={pending}
-                      onClick={() => {
-                        void act(async () => {
-                          const url = await accountApi.reauthenticateProvider(
-                            provider,
-                            session.csrfToken,
-                          );
-                          if (!url) throw new Error("Provider URL missing");
-                          authProviderNavigation.leave(url);
-                        });
-                      }}
-                    >
-                      Подтвердить вход
-                    </Button>
-                  ) : null}
-                  {connected && methods.length > 1 ? (
-                    <ConfirmationDialog
-                      triggerLabel="Отвязать"
-                      triggerAppearance="subtle"
-                      triggerAriaLabel={`Отвязать ${accountPageHelpers.providerLabels[provider]}`}
-                      title={`Отвязать ${accountPageHelpers.providerLabels[provider]}?`}
-                      description="После отвязки этот способ больше не позволит войти в аккаунт. Сохранённый прогресс останется здесь."
-                      confirmLabel="Отвязать способ входа"
-                      errorMessage={accountPageHelpers.unlinkError}
-                      onError={(reason) => {
-                        setNeedsReauthentication(
-                          reason instanceof ApiError && reason.status === 403,
-                        );
-                      }}
-                      onConfirm={async () => {
-                        await accountApi.unlinkProvider(
-                          provider,
-                          session.csrfToken,
-                        );
-                        await session.refresh();
-                      }}
-                    />
-                  ) : null}
-                  {!connected && enabled ? (
-                    <Button
-                      type="button"
-                      hierarchy="quiet"
-                      density="compact"
-                      disabled={pending}
-                      onClick={() => {
-                        void act(async () => {
-                          const url = await accountApi.linkProvider(
-                            provider,
-                            session.csrfToken,
-                          );
-                          if (!url) throw new Error("Provider URL missing");
-                          authProviderNavigation.leave(url);
-                        });
-                      }}
-                    >
-                      Добавить
-                    </Button>
-                  ) : null}
                 </div>
               </li>
-            );
-          })}
-        </ul>
-        {!hasPassword ? (
-          <EmailMethodForm pendingEmail={session.account.email ?? null} />
-        ) : null}
-        {error ? (
-          <Typography.Text className={styles.error} role="alert">
-            {error}
-          </Typography.Text>
-        ) : null}
-        {needsReauthentication && hasPassword ? (
-          <ActionLink
-            presentation="inline"
-            icon="none"
-            to="/sign-in"
-            search={{ returnTo: "/account" }}
+              {accountPageHelpers.providers.map((provider) => {
+                const connected = methods.some(
+                  (method) => method.provider === provider,
+                );
+                const enabled = props.enabledProviders.includes(provider);
+                let methodStatus = "Пока недоступно";
+                if (enabled) methodStatus = "Не подключено";
+                if (connected) methodStatus = "Подключено";
+                return (
+                  <li className={styles.method} key={provider}>
+                    <LoginMethodIcon provider={provider} />
+                    <div className={styles.methodIdentity}>
+                      <Typography.Text>
+                        {accountPageHelpers.providerLabels[provider]}
+                      </Typography.Text>
+                      <Typography.Text
+                        tone="muted"
+                        className={styles.methodStatus}
+                      >
+                        {methodStatus}
+                      </Typography.Text>
+                    </div>
+                    <div className={styles.methodActions}>
+                      {connected && enabled ? (
+                        <Button
+                          type="button"
+                          hierarchy="quiet"
+                          density="compact"
+                          disabled={pending}
+                          onClick={() => {
+                            void act(async () => {
+                              const url =
+                                await accountApi.reauthenticateProvider(
+                                  provider,
+                                  session.csrfToken,
+                                );
+                              if (!url) throw new Error("Provider URL missing");
+                              authProviderNavigation.leave(url);
+                            });
+                          }}
+                        >
+                          Подтвердить вход
+                        </Button>
+                      ) : null}
+                      {connected && methods.length > 1 ? (
+                        <ConfirmationDialog
+                          triggerLabel="Отвязать"
+                          triggerAppearance="subtle"
+                          triggerAriaLabel={`Отвязать ${accountPageHelpers.providerLabels[provider]}`}
+                          title={`Отвязать ${accountPageHelpers.providerLabels[provider]}?`}
+                          description="После отвязки этот способ больше не позволит войти в аккаунт. Сохранённый прогресс останется здесь."
+                          confirmLabel="Отвязать способ входа"
+                          errorMessage={accountPageHelpers.unlinkError}
+                          onError={(reason) => {
+                            setNeedsReauthentication(
+                              reason instanceof ApiError &&
+                                reason.status === 403,
+                            );
+                          }}
+                          onConfirm={async () => {
+                            await accountApi.unlinkProvider(
+                              provider,
+                              session.csrfToken,
+                            );
+                            await session.refresh();
+                          }}
+                        />
+                      ) : null}
+                      {!connected && enabled ? (
+                        <Button
+                          type="button"
+                          hierarchy="quiet"
+                          density="compact"
+                          disabled={pending}
+                          onClick={() => {
+                            void act(async () => {
+                              const url = await accountApi.linkProvider(
+                                provider,
+                                session.csrfToken,
+                              );
+                              if (!url) throw new Error("Provider URL missing");
+                              authProviderNavigation.leave(url);
+                            });
+                          }}
+                        >
+                          Добавить
+                        </Button>
+                      ) : null}
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+            {!hasPassword ? (
+              <EmailMethodForm pendingEmail={session.account.email ?? null} />
+            ) : null}
+            {error ? (
+              <Typography.Text className={styles.error} role="alert">
+                {error}
+              </Typography.Text>
+            ) : null}
+            {needsReauthentication && hasPassword ? (
+              <ActionLink
+                presentation="inline"
+                icon="none"
+                to="/sign-in"
+                search={{ returnTo: "/account" }}
+              >
+                Войти повторно
+              </ActionLink>
+            ) : null}
+          </section>
+          <section
+            className={styles.profileSafety}
+            aria-labelledby="safety-title"
           >
-            Войти повторно
-          </ActionLink>
-        ) : null}
-      </section>
-      <section className={styles.profileSafety} aria-labelledby="safety-title">
-        <Typography.Title order={2} id="safety-title">
-          Безопасность аккаунта
-        </Typography.Title>
-        {hasPassword ? (
-          <PasswordConfirmationDialog
-            email={session.account.email ?? ""}
-            triggerLabel="Удалить аккаунт"
-            triggerAriaLabel="Удалить аккаунт и прогресс"
-            triggerAppearance="danger"
-            title="Удалить аккаунт?"
-            description="Все сеансы будут отозваны, а сохранённый прогресс удалён без возможности восстановления. Для подтверждения введите текущий пароль."
-            confirmLabel="Удалить аккаунт"
-            errorMessage={accountPageHelpers.deletionError}
-            onConfirm={async (password) => {
-              await accountApi.deleteAccount(session.csrfToken, password);
-              await session.refresh();
-              await navigate({ to: "/" });
-            }}
-          />
-        ) : (
-          <ConfirmationDialog
-            triggerLabel="Удалить аккаунт"
-            triggerAriaLabel="Удалить аккаунт и прогресс"
-            triggerAppearance="danger"
-            title="Удалить аккаунт?"
-            description="Все сеансы будут отозваны, а сохранённый прогресс удалён без возможности восстановления."
-            confirmLabel="Удалить аккаунт"
-            errorMessage={accountPageHelpers.providerDeletionError}
-            onConfirm={async () => {
-              await accountApi.deleteAccount(session.csrfToken);
-              await session.refresh();
-              await navigate({ to: "/" });
-            }}
-          />
-        )}
-      </section>
+            <Typography.Title order={2} id="safety-title">
+              Безопасность аккаунта
+            </Typography.Title>
+            {hasPassword ? (
+              <PasswordConfirmationDialog
+                email={session.account.email ?? ""}
+                triggerLabel="Удалить аккаунт"
+                triggerAriaLabel="Удалить аккаунт и прогресс"
+                triggerAppearance="danger"
+                title="Удалить аккаунт?"
+                description="Все сеансы будут отозваны, а сохранённый прогресс удалён без возможности восстановления. Для подтверждения введите текущий пароль."
+                confirmLabel="Удалить аккаунт"
+                errorMessage={accountPageHelpers.deletionError}
+                onConfirm={async (password) => {
+                  await accountApi.deleteAccount(session.csrfToken, password);
+                  await session.refresh();
+                  await navigate({ to: "/" });
+                }}
+              />
+            ) : (
+              <ConfirmationDialog
+                triggerLabel="Удалить аккаунт"
+                triggerAriaLabel="Удалить аккаунт и прогресс"
+                triggerAppearance="danger"
+                title="Удалить аккаунт?"
+                description="Все сеансы будут отозваны, а сохранённый прогресс удалён без возможности восстановления."
+                confirmLabel="Удалить аккаунт"
+                errorMessage={accountPageHelpers.providerDeletionError}
+                onConfirm={async () => {
+                  await accountApi.deleteAccount(session.csrfToken);
+                  await session.refresh();
+                  await navigate({ to: "/" });
+                }}
+              />
+            )}
+          </section>
+        </TabsPanel>
+      </TabsRoot>
     </div>
   );
 };

@@ -65,7 +65,7 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
         courseTitle={props.course.title}
         lessonTitle={props.lesson.title}
       />
-      <main className={styles.lesson} data-lesson-frame>
+      <main id="main-content" className={styles.lesson} data-lesson-frame>
         <div className={styles.intro}>
           <LessonIntro
             accessTier={props.lesson.accessTier}
