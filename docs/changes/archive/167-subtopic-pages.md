@@ -9,7 +9,7 @@
 | Change | `167` |
 | Slug | `subtopic-pages` |
 | Title | Subtopic pages for EGE topics |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/167-subtopic-pages` |
 
 ---
@@ -20,17 +20,17 @@ Finish the lesson layout of Change 164 (follow-up T6): split every published EGE
 authored subtopic pages with their own URLs, a two-level left panel, «Подтема N из M»,
 previous/next navigation and a right “on this page” rail, as in the approved v5 mockups.
 Authored wording and order, SSR/no-JS reading, progress semantics and existing links keep
-working. Contract: [SPEC](../SPEC.md) §2 (learning path), §3 (model), §5 (routes).
+working. Contract: [SPEC](../../SPEC.md) §2 (learning path), §3 (model), §5 (routes).
 
 ---
 
 ## Design References
 
-- Lesson page — [mockups/lesson.html](../artifacts/change-164/mockups/lesson.html): left panel
+- Lesson page — [mockups/lesson.html](../../artifacts/change-164/mockups/lesson.html): left panel
   (← Все темы ЕГЭ, topic title, «Задание 16 · 6 подтем», practice summary, numbered subtopics
   with ✓, “Практика · Задачи по теме”), breadcrumb, «Подтема 2 из 6» in `--or`, subtopic
   theory, subtopic practice («Задание 1 из 4»), previous/next pager, right rail «На этой
-  странице». Visual system: [DESIGN](../../DESIGN.md).
+  странице». Visual system: [DESIGN](../../../DESIGN.md).
 
 Architect decisions (2026-10-03):
 - A subtopic is an authored group of adjacent `ConceptBlock`s (about 4–7 per topic); Claude
@@ -114,7 +114,7 @@ of truth; this file only tracks what to build and what's left.
 ## Gate Checks
 
 > Critical Gate runs once per `/work` target set and by default in `/ship`; Full Gate runs only
-> with explicit `--full`; release selects affected checks and Release Gate. All gates are defined in [docs/STACK.md](../STACK.md) — this section only records
+> with explicit `--full`; release selects affected checks and Release Gate. All gates are defined in [docs/STACK.md](../../STACK.md) — this section only records
 > change-specific overrides.
 
 Per the architect (2026-10-03), e2e (including the affected topic lesson specs), Lighthouse and the
