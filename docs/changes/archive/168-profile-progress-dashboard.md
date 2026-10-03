@@ -9,7 +9,7 @@
 | Change | `168` |
 | Slug | `profile-progress-dashboard` |
 | Title | Profile progress dashboard |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/168-profile-progress-dashboard` |
 
 ---
@@ -19,16 +19,16 @@
 Build the profile «Обзор» dashboard from the approved v5 mockup, deferred by Change 164: one next
 step plate, three progress tiles (Python course, EGE topics, practice), per-topic progress, the
 continuation list and a «Попробуйте задачу» card. Everything is derived from existing read
-endpoints and saved progress; no API or schema change. Contract: [SPEC](../SPEC.md) §4–§5.
+endpoints and saved progress; no API or schema change. Contract: [SPEC](../../SPEC.md) §4–§5.
 
 ---
 
 ## Design References
 
-- Profile — [mockups/account.html](../artifacts/change-164/mockups/account.html): sky next-step plate
+- Profile — [mockups/account.html](../../artifacts/change-164/mockups/account.html): sky next-step plate
   with «Продолжить», three white tiles with a big number, caption and bar, «Прогресс по темам
   ЕГЭ» rows (title, «Задание N», bar, «X из Y»), «Продолжить» cards and «Попробуйте задачу».
-  Visual system: [DESIGN](../../DESIGN.md).
+  Visual system: [DESIGN](../../../DESIGN.md).
 
 Defaults (Claude, 2026-10-03; within the approved mockup):
 - Data: course summary (existing loader), topic summary `/api/topics/practice-summary` loaded by the
@@ -87,7 +87,7 @@ of truth; this file only tracks what to build and what's left.
 ## Gate Checks
 
 > Critical Gate runs once per `/work` target set and by default in `/ship`; Full Gate runs only
-> with explicit `--full`; release selects affected checks and Release Gate. All gates are defined in [docs/STACK.md](../STACK.md) — this section only records
+> with explicit `--full`; release selects affected checks and Release Gate. All gates are defined in [docs/STACK.md](../../STACK.md) — this section only records
 > change-specific overrides.
 
 Per the architect (2026-10-03), e2e (including account specs), Lighthouse and dev-bank data
