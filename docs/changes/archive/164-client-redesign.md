@@ -9,7 +9,7 @@
 | Change | `164` |
 | Slug | `client-redesign` |
 | Title | Client redesign: new design system and new UX of key pages |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/164-client-redesign` |
 
 ---
@@ -31,10 +31,10 @@ Direction is chosen visually before app code: F1 builds throwaway static HTML co
 pilot surface (outside `apps/web`), captured with Playwriter and published as a private Artifact.
 
 Approved full page mockups (v5 "notebook", 2026-10-03; colourful home, calm white pages,
-barely visible engineering grid in page heads): [mockups](../artifacts/change-164/mockups/README.md).
-Earlier variants v1–v4 were removed. Illustration prompts: [prompts](../artifacts/change-164/illustrations/prompts.md).
-Architect taste brief: [references/for_new_design/readme.md](../artifacts/references/for_new_design/readme.md).
-Approved direction (2026-10-02): candidate Ж, [zh-docs-textbook](../artifacts/change-164/candidates/zh-docs-textbook/README.md). Variants Ж2–Ж4 were rejected.
+barely visible engineering grid in page heads): [mockups](../../artifacts/change-164/mockups/README.md).
+Earlier variants v1–v4 were removed. Illustration prompts: [prompts](../../artifacts/change-164/illustrations/prompts.md).
+Architect taste brief: [references/for_new_design/readme.md](../../artifacts/references/for_new_design/readme.md).
+Approved direction (2026-10-02): candidate Ж, [zh-docs-textbook](../../artifacts/change-164/candidates/zh-docs-textbook/README.md). Variants Ж2–Ж4 were rejected.
 Decisions after rounds 1–2 and the brief (2026-10-02):
 - Light theme only in the first version; dark and terminal-style looks are anti-references.
 - Documentation-style lesson layout is kept: global/topic navigation on the left, content in the
@@ -129,7 +129,7 @@ of truth; this file only tracks what to build and what's left.
 ## Gate Checks
 
 > Critical Gate runs once per `/work` target set and by default in `/ship`; Full Gate runs only
-> with explicit `--full`; release selects affected checks and Release Gate. All gates are defined in [docs/STACK.md](../STACK.md) — this section only records
+> with explicit `--full`; release selects affected checks and Release Gate. All gates are defined in [docs/STACK.md](../../STACK.md) — this section only records
 > change-specific overrides.
 
 Before ship, run the affected frontend e2e, `test:layout`, `@no-js` and axe specs once, plus
