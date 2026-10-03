@@ -15,5 +15,7 @@ export namespace AccordionTypes {
     nativeFallback?: boolean;
     multiple?: boolean;
     className?: string;
+    /** Heading level of the item headers when enhanced (Base UI default is h3). */
+    headingLevel?: 2 | 3 | 4 | 5 | 6;
   };
 }

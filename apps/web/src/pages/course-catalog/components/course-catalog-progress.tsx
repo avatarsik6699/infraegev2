@@ -19,12 +19,6 @@ export const CourseCatalogProgress: React.FC<Props> = (props) => {
   return (
     <GuestProgressLoginLock enabled={isGuest} total={props.total}>
       <div className={styles.personalProgress} data-course-progress>
-        <div className={styles.progressCopy}>
-          <span className={styles.progressReserve} aria-hidden="true">
-            {courseCatalogModel.progressText({ status: "unavailable" })}
-          </span>
-          <span role="status">{courseCatalogModel.progressText(progress)}</span>
-        </div>
         {progress.status === "ready" && progress.total > 0 ? (
           <Progress
             className={styles.progress}
@@ -36,6 +30,12 @@ export const CourseCatalogProgress: React.FC<Props> = (props) => {
         ) : (
           <span className={styles.progressPlaceholder} aria-hidden="true" />
         )}
+        <div className={styles.progressCopy}>
+          <span className={styles.progressReserve} aria-hidden="true">
+            {courseCatalogModel.progressText({ status: "unavailable" })}
+          </span>
+          <span role="status">{courseCatalogModel.progressText(progress)}</span>
+        </div>
       </div>
     </GuestProgressLoginLock>
   );

@@ -1,6 +1,7 @@
 import { courseCatalog } from "~/entities/course";
 import { useAccountSession } from "~/features/account";
 import { PageContainer } from "~/shared/components/page-container";
+import { IllustrationPlaceholder } from "~/shared/components/illustration-placeholder";
 import { PageHead } from "~/shared/components/page-head";
 import { Typography } from "~/shared/components/typography";
 import { PublicFooter } from "~/widgets/public-footer";
@@ -28,7 +29,14 @@ export const CourseCatalogPage: React.FC<CourseCatalogPageTypes.Props> = (
     <div className={styles.page} data-course-catalog-page>
       <PublicHeader activeSection="courses" />
       <main id="main-content" className={styles.root}>
-        <PageHead>
+        <PageHead
+          aside={
+            <IllustrationPlaceholder
+              tone="outline"
+              className={styles.headIllustration}
+            />
+          }
+        >
           <header className={styles.catalogHeading}>
             <Typography.Title
               id="course-catalog-heading"

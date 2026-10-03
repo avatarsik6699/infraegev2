@@ -1,10 +1,10 @@
-import { ArrowRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { topicCatalog, type TopicCatalogTypes } from "~/entities/topic-catalog";
 import { ActionLink } from "~/shared/components/action-link";
+import { IllustrationPlaceholder } from "~/shared/components/illustration-placeholder";
 import { Typography } from "~/shared/components/typography";
 import type { TopicCatalogPageTypes } from "../topic-catalog-page.types";
 import { topicCatalogModel } from "../model/topic-catalog-model";
-import { TopicCatalogIllustration } from "./topic-catalog-illustration";
 import { TopicCatalogProgress } from "./topic-catalog-progress";
 import patterns from "~/shared/styles/patterns.module.css";
 import styles from "../topic-catalog-page.module.css";
@@ -32,7 +32,7 @@ export const TopicCatalogCard: React.FC<Props> = (props) => (
         {topicCatalog.formatTaskNumbers(props.entry.taskNumbers)}
       </span>
     </span>
-    <TopicCatalogIllustration illustration={props.entry.illustration} />
+    <IllustrationPlaceholder className={styles.illustration} />
     <div className={styles.cardContent}>
       <Typography.Title order={2} className={styles.cardTitle}>
         {props.entry.status === "published" ? (
@@ -48,7 +48,11 @@ export const TopicCatalogCard: React.FC<Props> = (props) => (
           props.entry.title
         )}
       </Typography.Title>
-      <Typography.Text tone="muted">{props.entry.summary}</Typography.Text>
+      {props.entry.status === "published" ? (
+        <Typography.Text tone="muted" className={styles.cardSummary}>
+          {props.entry.summary}
+        </Typography.Text>
+      ) : null}
     </div>
     {props.entry.status === "published" ? (
       <TopicCatalogProgress
@@ -60,21 +64,9 @@ export const TopicCatalogCard: React.FC<Props> = (props) => (
       <span className={styles.planned}>Скоро</span>
     )}
     <span className={styles.rowAction} aria-hidden="true">
-      {props.entry.status === "published" && (
-        <>
-          <span
-            className={styles.resume}
-            data-visible={Boolean(
-              props.progress &&
-              props.progress.solved > 0 &&
-              props.progress.solved < props.progress.total,
-            )}
-          >
-            Продолжить
-          </span>
-          <ArrowRight className={styles.arrow} size={22} strokeWidth={1.5} />
-        </>
-      )}
+      {props.entry.status === "published" ? (
+        <ChevronRight className={styles.arrow} size={20} strokeWidth={1.5} />
+      ) : null}
     </span>
   </li>
 );

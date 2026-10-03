@@ -1,0 +1,82 @@
+/* Course lesson (Change 169) on the shared lesson frame. */
+.page {
+  composes: page from "../../shared/styles/lesson-frame.module.css";
+}
+
+.lesson {
+  composes: lesson from "../../shared/styles/lesson-frame.module.css";
+}
+
+.rail {
+  composes: rail from "../../shared/styles/lesson-frame.module.css";
+}
+
+.railContents {
+  composes: railContents from "../../shared/styles/lesson-frame.module.css";
+}
+
+.article {
+  composes: article from "../../shared/styles/lesson-frame.module.css";
+}
+
+.pageRail {
+  composes: pageRail from "../../shared/styles/lesson-frame.module.css";
+}
+
+.pageRailContents {
+  composes: pageRailContents from "../../shared/styles/lesson-frame.module.css";
+}
+
+.breadcrumbs {
+  composes: breadcrumbs from "../../shared/styles/lesson-frame.module.css";
+}
+
+.head {
+  composes: pageHead from "../../shared/styles/lesson-frame.module.css";
+}
+
+.position {
+  composes: position from "../../shared/styles/lesson-frame.module.css";
+}
+
+.title {
+  composes: pageTitle from "../../shared/styles/lesson-frame.module.css";
+}
+
+.section {
+  composes: section from "../../shared/styles/lesson-frame.module.css";
+}
+
+.sectionTitle {
+  composes: sectionTitle from "../../shared/styles/lesson-frame.module.css";
+}
+
+.pager {
+  composes: pager from "../../shared/styles/lesson-frame.module.css";
+}
+
+.pagerLink {
+  composes: pagerLink from "../../shared/styles/lesson-frame.module.css";
+}
+
+.pagerLabel {
+  composes: pagerLabel from "../../shared/styles/lesson-frame.module.css";
+}
+
+.pagerTitle {
+  composes: pagerTitle from "../../shared/styles/lesson-frame.module.css";
+}
+
+.footer {
+  composes: footer from "../../shared/styles/lesson-frame.module.css";
+}
+
+.summary {
+  max-width: 40rem;
+  line-height: 1.55;
+}
+
+.meta {
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+}

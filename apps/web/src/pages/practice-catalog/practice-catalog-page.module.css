@@ -38,9 +38,15 @@
 .subtitle > :first-child {
   overflow-wrap: anywhere;
 }
+.headIllustration {
+  width: 14.375rem;
+  height: 6rem;
+}
+
 .filters {
   display: grid;
-  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  grid-template-columns: minmax(0, 27.5rem) minmax(12rem, 16rem) auto;
+  justify-content: start;
   gap: var(--space-2);
   align-items: end;
 }
@@ -259,9 +265,41 @@
 .state {
   justify-items: center;
   align-content: center;
-  text-align: center;
-  padding-block: var(--space-4);
+  width: min(100%, 26rem);
   min-height: 12rem;
+  margin: var(--space-3) auto;
+  padding: var(--space-3);
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-tile);
+  text-align: center;
+}
+
+.stateIllustration {
+  justify-self: stretch;
+  height: 5.5rem;
+}
+
+/* Practice/filter errors (mockup `states.html`): a soft danger block. */
+.alertState {
+  display: grid;
+  gap: var(--space-1);
+  justify-items: start;
+  margin-block: var(--space-3);
+  padding: var(--space-2);
+  border-radius: var(--radius-surface);
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
+}
+
+.alertState .alertTitle[data-order] {
+  margin: 0;
+  color: var(--color-danger);
+  font-size: var(--text-base);
+  font-weight: 600;
+}
+
+.alertState > :last-child {
+  margin-top: var(--space-1);
 }
 .paginationBar {
   display: flex;

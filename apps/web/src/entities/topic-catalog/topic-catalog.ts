@@ -4,11 +4,6 @@ import type { TopicCatalogTypes } from "./topic-catalog.types";
 const definitions: readonly TopicCatalogTypes.Definition[] = [
   {
     id: "information-models",
-    illustration: {
-      src: "/images/topics/information-models.webp",
-      width: 192,
-      height: 104,
-    },
     taskNumbers: [1],
     title: "Анализ информационных моделей",
     summary:
@@ -37,11 +32,6 @@ const definitions: readonly TopicCatalogTypes.Definition[] = [
   },
   {
     id: "preobrazovanie-zapisey-chisel",
-    illustration: {
-      src: "/images/topics/number-record.webp",
-      width: 192,
-      height: 104,
-    },
     taskNumbers: [5],
     title: "Преобразование записей чисел",
     summary:
@@ -96,11 +86,6 @@ const definitions: readonly TopicCatalogTypes.Definition[] = [
   },
   {
     id: "branching-and-enumeration",
-    illustration: {
-      src: "/images/topics/branching-and-enumeration.webp",
-      width: 192,
-      height: 104,
-    },
     taskNumbers: [13],
     title: "Ветвления и перебор вариантов",
     summary:
@@ -122,11 +107,6 @@ const definitions: readonly TopicCatalogTypes.Definition[] = [
   },
   {
     id: "rekursiya",
-    illustration: {
-      src: "/images/topics/recursion.webp",
-      width: 192,
-      height: 104,
-    },
     taskNumbers: [16],
     title: "Рекурсивные алгоритмы",
     summary:
@@ -134,11 +114,6 @@ const definitions: readonly TopicCatalogTypes.Definition[] = [
   },
   {
     id: "number-sequences",
-    illustration: {
-      src: "/images/topics/number-sequences.webp",
-      width: 192,
-      height: 104,
-    },
     taskNumbers: [17],
     title: "Числовые последовательности",
     summary:
@@ -153,11 +128,6 @@ const definitions: readonly TopicCatalogTypes.Definition[] = [
   },
   {
     id: "winning-strategy",
-    illustration: {
-      src: "/images/topics/winning-strategy.webp",
-      width: 192,
-      height: 104,
-    },
     taskNumbers: [19, 20, 21],
     title: "Выигрышная стратегия",
     summary:
@@ -165,11 +135,6 @@ const definitions: readonly TopicCatalogTypes.Definition[] = [
   },
   {
     id: "parallel-computing",
-    illustration: {
-      src: "/images/topics/parallel-computing.webp",
-      width: 192,
-      height: 104,
-    },
     taskNumbers: [22],
     title: "Параллельные вычисления",
     summary:
@@ -177,11 +142,6 @@ const definitions: readonly TopicCatalogTypes.Definition[] = [
   },
   {
     id: "graph-analysis",
-    illustration: {
-      src: "/images/topics/graph-analysis.webp",
-      width: 192,
-      height: 104,
-    },
     taskNumbers: [23],
     title: "Анализ графов",
     summary:
@@ -189,11 +149,6 @@ const definitions: readonly TopicCatalogTypes.Definition[] = [
   },
   {
     id: "string-processing",
-    illustration: {
-      src: "/images/topics/string-processing.webp",
-      width: 192,
-      height: 104,
-    },
     taskNumbers: [24],
     title: "Обработка символьных строк",
     summary:
@@ -201,11 +156,6 @@ const definitions: readonly TopicCatalogTypes.Definition[] = [
   },
   {
     id: "integer-processing",
-    illustration: {
-      src: "/images/topics/integer-processing.webp",
-      width: 192,
-      height: 104,
-    },
     taskNumbers: [25],
     title: "Обработка целых чисел",
     summary:
@@ -213,11 +163,6 @@ const definitions: readonly TopicCatalogTypes.Definition[] = [
   },
   {
     id: "array-processing",
-    illustration: {
-      src: "/images/topics/array-processing.webp",
-      width: 192,
-      height: 104,
-    },
     taskNumbers: [26],
     title: "Обработка данных: сортировка и отбор",
     summary:
@@ -225,11 +170,6 @@ const definitions: readonly TopicCatalogTypes.Definition[] = [
   },
   {
     id: "data-analysis",
-    illustration: {
-      src: "/images/topics/data-analysis.webp",
-      width: 192,
-      height: 104,
-    },
     taskNumbers: [27],
     title: "Анализ данных: кластеризация",
     summary:

@@ -7,6 +7,11 @@ export const topicCatalogModel = {
     { value: "started", label: "В процессе" },
     { value: "not-started", label: "Не начаты" },
   ] as const,
+  /** Published topics first, then planned ones; exam order inside each group (v5 mockup). */
+  order: (entries: readonly TopicCatalogTypes.Entry[]) => [
+    ...entries.filter((entry) => entry.status === "published"),
+    ...entries.filter((entry) => entry.status !== "published"),
+  ],
   normalize: (value: string) =>
     value.toLocaleLowerCase("ru").replaceAll("ё", "е").trim(),
   number: (numbers: TopicCatalogTypes.TaskNumbers) =>

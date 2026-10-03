@@ -1,4 +1,3 @@
-import { RotateCw } from "lucide-react";
 import {
   useRouter,
   useRouterState,
@@ -45,8 +44,7 @@ export const RouteError: React.FC<ErrorComponentProps> = (props) => {
         description="Попробуйте ещё раз или вернитесь на главную."
       >
         <Button
-          hierarchy="quiet"
-          iconStart={<RotateCw aria-hidden="true" size={18} />}
+          hierarchy="primary"
           loading={retrying}
           onClick={() => {
             void retry();
@@ -54,7 +52,12 @@ export const RouteError: React.FC<ErrorComponentProps> = (props) => {
         >
           {chunkError ? "Обновить страницу" : "Повторить"}
         </Button>
-        <ActionLink to="/" hierarchy="text" icon="back">
+        <ActionLink
+          to="/"
+          presentation="button"
+          hierarchy="secondary"
+          icon="none"
+        >
           На главную
         </ActionLink>
       </StatusScene>

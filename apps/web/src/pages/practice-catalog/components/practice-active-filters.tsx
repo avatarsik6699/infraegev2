@@ -21,8 +21,9 @@ export const PracticeActiveFilters: React.FC<{
         ]
       : []),
     ...(props.search.topics ?? []).map((topic) => {
-      const label =
-        props.facets?.topics?.find((item) => item.id === topic)?.label ?? topic;
+      const label = practiceCatalog.topicLabel(
+        props.facets?.topics?.find((item) => item.id === topic)?.label ?? topic,
+      );
       return {
         label,
         action: `Убрать тему: ${label}`,
@@ -56,7 +57,7 @@ export const PracticeActiveFilters: React.FC<{
     ...(props.search.difficulty
       ? [
           {
-            label: practiceCatalog.difficultyLabel(props.search.difficulty),
+            label: `Сложность: ${practiceCatalog.difficultyLabel(props.search.difficulty)}`,
             action: "Убрать сложность",
             search: { ...props.search, difficulty: undefined },
           },

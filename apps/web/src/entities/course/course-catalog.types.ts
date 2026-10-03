@@ -6,15 +6,8 @@ export namespace CourseCatalogTypes {
     id: Id;
     title: string;
     summary: string;
-    illustration: Illustration;
     level?: string;
     outcome?: string;
-  };
-
-  export type Illustration = {
-    src: string;
-    width: number;
-    height: number;
   };
 
   export type PlannedEntry = Definition & {

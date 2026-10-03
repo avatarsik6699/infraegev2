@@ -22,6 +22,7 @@ export const FoundationTryTask: React.FC<FoundationPageTypes.Props> = (
       task={detail.task}
       links={result.links}
       onRefresh={refresh}
+      presentation="embed"
     />
   );
 };

@@ -111,10 +111,10 @@ beforeEach(() => {
   mocks.session.account = null;
   mocks.session.csrfToken = null;
 });
-it("renders the compact detail and one context-preserving return link in SSR", () => {
+it("renders the detail layout and one context-preserving return link in SSR", () => {
   const html = renderToStaticMarkup(page());
-  expect(html).toContain("16 номер. Рекурсия");
-  expect(html).toContain('data-layout="compact"');
+  expect(html).toContain("ЕГЭ 16 · Рекурсия");
+  expect(html).toContain('data-layout="detail"');
   expect(html).toContain("Вычислите F(5).");
   expect(html).toContain("Начните с базы.");
   expect(html).toContain("Получится 42.");
@@ -122,12 +122,9 @@ it("renders the compact detail and one context-preserving return link in SSR", (
   expect(html).not.toContain("Следующая задача");
   render(page());
   expect(screen.getByRole("heading", { level: 1 }).textContent).toBe(
-    "16 номер. Рекурсия",
+    "Вычисление функции",
   );
-  expect(
-    screen.queryByRole("heading", { name: "Вычисление функции" }),
-  ).toBeNull();
-  expect(screen.getByText("Вычисление функции").tagName).toBe("P");
+  expect(screen.getByText("ЕГЭ 16 · Рекурсия").tagName).toBe("P");
   expect(screen.getByText("Средняя")).not.toBeNull();
   expect(screen.getByText("Целое число", { exact: true })).not.toBeNull();
   const back = screen.getByRole("link", { name: "К списку задач" });
@@ -156,13 +153,9 @@ it("keeps retry feedback locally but no guest progress after reload", async () =
   );
   expect((screen.getByRole("textbox") as HTMLInputElement).value).toBe("");
   fireEvent.click(screen.getByRole("button", { name: "Подсказка" }));
-  fireEvent.click(screen.getByRole("button", { name: "Решение" }));
-  expect(
-    screen.getByRole("heading", { name: "Подсказка", level: 2 }),
-  ).not.toBeNull();
-  expect(
-    screen.getByRole("heading", { name: "Решение", level: 2 }),
-  ).not.toBeNull();
+  fireEvent.click(screen.getByRole("button", { name: "Разбор" }));
+  expect(screen.getByText("Начните с базы.")).not.toBeNull();
+  expect(screen.getByText("Получится 42.")).not.toBeNull();
 });
 it("saves a signed-in standalone result under the canonical context", async () => {
   mocks.session.account = { id: "account-1" };

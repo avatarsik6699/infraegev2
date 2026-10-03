@@ -1,5 +1,6 @@
 import { Accordion as BaseAccordion } from "@base-ui/react/accordion";
 import { ChevronDown } from "lucide-react";
+import { createElement } from "react";
 import { useIsEnhanced } from "~/shared/lib/use-is-enhanced";
 import { cssUtils } from "~/shared/lib/css-utils";
 import type { AccordionTypes } from "./accordion.types";
@@ -14,6 +15,7 @@ export const Accordion: React.FC<AccordionTypes.Props> = ({
   nativeFallback = false,
   multiple = false,
   className,
+  headingLevel,
 }) => {
   const enhanced = useIsEnhanced();
 
@@ -70,7 +72,14 @@ export const Accordion: React.FC<AccordionTypes.Props> = ({
           key={item.id}
           value={item.id}
         >
-          <BaseAccordion.Header className={styles.header}>
+          <BaseAccordion.Header
+            className={styles.header}
+            render={
+              headingLevel
+                ? createElement(`h${String(headingLevel)}`)
+                : undefined
+            }
+          >
             <BaseAccordion.Trigger
               className={styles.trigger}
               data-has-leading={item.icon ? "true" : undefined}

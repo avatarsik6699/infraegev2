@@ -378,10 +378,13 @@ self-hosted Onest, JetBrains Mono and Caveat (lesson diagram labels only). EGE t
 have a left panel with the topic and its subtopic pages (Change 167: `/ege/{topic}/{subtopic}`,
 «Подтема N из M», previous/next, a right “on this page” rail; `/ege/{topic}` redirects to the first
 subtopic and old `#section` links resolve to the owning subtopic); course lessons keep in-page
-anchors; course overview, catalogs and profile have
+anchors but use the same three-column lesson frame (Change 169: the course and its lessons on the
+left, the lesson in the centre, «На этой странице» on the right); course overview, catalogs and profile have
 no left panel; the profile has an overview dashboard (Change 168: next step, course/topic/practice tiles, per-topic progress, continuations and a next bank task, all derived from existing summaries and saved progress) and a settings tab. Keep educational
-figures and attachments; hand-drawn monochrome illustrations are supplied by the architect and
-use reserved placeholders until then.
+figures and attachments (lesson media stays); hand-drawn monochrome illustrations are supplied by
+the architect and use neutral reserved placeholders until then (Change 169: the earlier topic and
+course catalog drawings are retired from home, catalogs and the course overview). Every page follows
+its approved v5 mockup (`docs/artifacts/change-164/mockups/`).
 The `/courses` catalog keeps all four directions in registry order, published-only lesson
 counts, an overview CTA and a header summary of catalog totals and revision-aware mastered
 lessons. No filters or planned links.
@@ -403,7 +406,7 @@ counts below labels, and Apply/cancel; selected topics appear as removable chips
 stable UUID order; optional difficulty directions and compact numbered pagination retain URL context.
 No-JS retains GET controls, native multiple selection and detail reading. Empty topics show ordinary
 no-results feedback. Compact rows show difficulty, actual answer format, public sources and a disabled
-favorite affordance. Expanded statements precede answer/check/help actions; theory sits beside the topic heading above the statement. Catalog and detail share compact solving controls; lessons keep their presentation. Base UI owns controls,
+favorite affordance. Expanded statements precede answer/check/help actions; theory sits beside the topic heading above the statement. The catalog keeps compact solving controls; the detail page follows the v5 mockup (Change 169: topic eyebrow, task title as the heading, a visible «Ваш ответ» caption, the instruction under the input, hint/solution disclosures and a source card); lessons keep their presentation. Base UI owns controls,
 Lucide owns icons; no shadcn/HeroUI dependencies are added.
 Existing filters and numbered pagination remain. Detail pages have one context-preserving return
 link and no next-task navigation. Remove persisted answer drafts and special row/scroll restoration;
@@ -421,20 +424,14 @@ stays visible until the page is left, but a guest success is never represented a
 Signed-in loading/errors and logout/account-switch transitions must not show another account's
 snapshot. Public lesson theory, navigation and practice remain SSR-readable without a session.
 
-### EGE catalog (Change 126)
+### EGE catalog (Change 126, layout Change 169)
 
-`/ege` retains 25 topics ordered by exam number, with 19–21 grouped. Published topics
-link to their existing lesson; planned topics say “Скоро”, with no links or invented counts.
-The historical reference `docs/artifacts/references/13_50_05.png` is recoverable through
-[COMPACTED](changes/archive/COMPACTED.md): large numbers, quiet separators,
-topic text and thin progress. Topics 5/16 retain their approved mathematical compositions as raster derivatives;
-topics 1, 13, 17, 19–21, 22, 23 and 24–27 use the architect's transparent monochrome figures from
-`docs/artifacts/references/ege_themes_illustrations/generated/`, assigned by filename prefix. High-quality raster edits unify fine monochrome strokes and
-mathematical lettering while preserving source compositions, labels and connections. Compact WebP
-derivatives preserve the full drawing and its proportions, remove excessive transparent source
-margins and occupy the shared reserved illustration slot without displacing readable content.
-Other topics share a Lucide BookOpen placeholder. These are allowed educational catalog figures;
-illustrations alone do not publish a planned topic.
+`/ege` retains 25 topics with 19–21 grouped. Following the v5 mockup, published topics come first
+in exam-number order as compact rows (number, placeholder plate, title and one-line summary,
+«Теория · N задач · Практика …», thin progress bar with «Решено X из Y» and the continuation link);
+planned topics follow as compact muted «Скоро» rows with no links, summaries or invented counts.
+Search and the status filter share one row above the list. The page head carries a neutral
+illustration placeholder. Illustrations alone do not publish a planned topic.
 Search matches title, summary and numbers while typing, ignoring case and е/ё. Status filters
 are All, In progress (0 < solved < total), and Not started (solved = 0), with the latter two
 restricted to published topics with available practice. Completed topics remain in All.

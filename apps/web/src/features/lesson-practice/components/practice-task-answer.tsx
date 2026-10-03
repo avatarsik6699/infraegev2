@@ -9,7 +9,8 @@ import styles from "../lesson-practice.module.css";
 import { PracticeTaskContent } from "./practice-task-content";
 
 type PracticeTaskAnswerProps = {
-  layout?: "stacked" | "compact";
+  /** `detail`: the standalone task page (Change 169): visible label, instruction under the input. */
+  layout?: "stacked" | "compact" | "detail";
   focusOnMount?: boolean;
   active?: boolean;
   onRepeat?: () => void;
@@ -63,6 +64,12 @@ export const PracticeTaskAnswer: React.FC<PracticeTaskAnswerProps> = (
     : answerError(props.state);
   const needsRefresh = props.state === "stale" || props.state === "unavailable";
   const accepted = props.alreadySolved || props.state === "correct";
+  const stacked = (props.layout ?? "stacked") === "stacked";
+  const detail = props.layout === "detail";
+  const customInstruction =
+    props.answerInstruction &&
+    props.answerInstruction.trim() !==
+      "Запишите целое число в десятичной системе счисления.";
   return (
     <form
       className={styles.practiceForm}
@@ -86,10 +93,7 @@ export const PracticeTaskAnswer: React.FC<PracticeTaskAnswerProps> = (
         />
       )}
       <div className={styles.answerPanel}>
-        {props.layout !== "compact" &&
-        props.answerInstruction &&
-        props.answerInstruction.trim() !==
-          "Запишите целое число в десятичной системе счисления." ? (
+        {stacked && customInstruction ? (
           <Typography.Text
             id={`${props.inputId}-instruction`}
             className={styles.catalogInstruction}
@@ -105,13 +109,11 @@ export const PracticeTaskAnswer: React.FC<PracticeTaskAnswerProps> = (
               ref={inputRef}
               id={props.inputId}
               name="answer"
-              label={props.layout === "compact" ? "Ваш ответ" : "Ответ"}
-              labelVisibility="sr-only"
+              label={stacked ? "Ответ" : "Ваш ответ"}
+              labelVisibility={detail ? "visible" : "sr-only"}
               aria-describedby={
-                props.layout !== "compact" &&
-                props.answerInstruction &&
-                props.answerInstruction.trim() !==
-                  "Запишите целое число в десятичной системе счисления."
+                (stacked && customInstruction) ||
+                (detail && props.answerInstruction)
                   ? `${props.inputId}-instruction`
                   : undefined
               }
@@ -138,15 +140,13 @@ export const PracticeTaskAnswer: React.FC<PracticeTaskAnswerProps> = (
                 props.onAnswerChange(event.currentTarget.value);
               }}
             />
-            {props.layout === "compact" && props.alreadySolved && (
+            {!stacked && props.alreadySolved && (
               <span className={styles.visuallyHidden} role="status">
                 Ответ принят
               </span>
             )}
           </div>
-          {props.layout === "compact" &&
-          props.alreadySolved &&
-          props.onRepeat ? (
+          {!stacked && props.alreadySolved && props.onRepeat ? (
             <Button hierarchy="secondary" onClick={props.onRepeat}>
               Решить ещё раз
             </Button>
@@ -166,6 +166,14 @@ export const PracticeTaskAnswer: React.FC<PracticeTaskAnswerProps> = (
             </Button>
           )}
         </div>
+        {detail && props.answerInstruction ? (
+          <Typography.Text
+            id={`${props.inputId}-instruction`}
+            className={styles.detailInstruction}
+          >
+            {props.answerInstruction}
+          </Typography.Text>
+        ) : null}
         {needsRefresh ? (
           <Button
             className={styles.answerRefresh}

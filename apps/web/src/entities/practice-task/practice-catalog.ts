@@ -111,8 +111,13 @@ function countLabel(count: number) {
   return `${count} ${word}`;
 }
 
+/** «16 номер. Рекурсия» (API facet label) → «ЕГЭ 16 · Рекурсия» (v5 mockup). */
+const topicLabel = (label: string): string =>
+  label.replace(/^(\d+(?:–\d+)?) номер\.\s*/u, "ЕГЭ $1 · ");
+
 export const practiceCatalog = {
   countLabel,
+  topicLabel,
   search,
   href,
   taskSearch,

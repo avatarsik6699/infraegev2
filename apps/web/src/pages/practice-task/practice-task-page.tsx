@@ -49,29 +49,19 @@ export const PracticeTaskPage: React.FC<PracticeTaskPageTypes.Props> = (
               <PracticeBackLink
                 href={practiceCatalog.returnHref(props.search)}
               />
-              <div className={styles.titleRow}>
-                <Typography.Title
-                  order={1}
-                  variant="lesson"
-                  className={styles.title}
-                >
-                  {practiceTopic.label(detail)}
-                </Typography.Title>
-                <InfoPopover label="Как работает практика">
-                  <ul>
-                    <li>
-                      Отметки решения сохраняются в этом браузере отдельно от
-                      уроков.
-                    </li>
-                    <li>
-                      Введённый ответ сбросится при уходе со страницы или
-                      перезагрузке.
-                    </li>
-                  </ul>
-                </InfoPopover>
-              </div>
+              <Typography.Text className={styles.topic}>
+                {practiceTopic.label(detail)}
+              </Typography.Text>
+              <Typography.Title
+                order={1}
+                variant="lesson"
+                className={styles.title}
+              >
+                {detail.task.title}
+              </Typography.Title>
               <div className={styles.metadata}>
                 <span
+                  className={styles.id}
                   title={detail.task.id}
                   aria-label={`ID: ${detail.task.id}`}
                 >
@@ -91,14 +81,22 @@ export const PracticeTaskPage: React.FC<PracticeTaskPageTypes.Props> = (
                     Около {detail.estimatedMinutes} мин
                   </span>
                 ) : null}
-                <PracticeSources sources={detail.sources} />
                 <PracticeTheory links={result.links} />
+                <InfoPopover label="Как работает практика">
+                  <ul>
+                    <li>
+                      Отметки решения сохраняются в этом браузере отдельно от
+                      уроков.
+                    </li>
+                    <li>
+                      Введённый ответ сбросится при уходе со страницы или
+                      перезагрузке.
+                    </li>
+                  </ul>
+                </InfoPopover>
               </div>
             </header>
             <div className={styles.task}>
-              <Typography.Text tone="muted" className={styles.subtitle}>
-                {detail.task.title}
-              </Typography.Text>
               <PracticeTask
                 key={detail.task.id}
                 task={detail.task}
@@ -106,6 +104,7 @@ export const PracticeTaskPage: React.FC<PracticeTaskPageTypes.Props> = (
                 onRefresh={refresh}
               />
             </div>
+            <PracticeSources sources={detail.sources} />
           </>
         ) : (
           <section className={styles.state}>

@@ -104,8 +104,7 @@ export const AccountProfile: React.FC<AccountProfileTypes.Props> = (props) => {
         <Button
           className={styles.logout}
           type="button"
-          hierarchy="quiet"
-          surface="bare"
+          hierarchy="secondary"
           iconStart={<LogOut size={18} aria-hidden="true" />}
           disabled={pending}
           onClick={() => {

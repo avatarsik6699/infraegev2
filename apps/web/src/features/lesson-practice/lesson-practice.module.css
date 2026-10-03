@@ -40,9 +40,8 @@
 }
 
 .tabSolved {
-  position: absolute;
-  top: var(--space-0-5);
-  right: var(--space-0-5);
+  position: static;
+  flex: none;
   fill: none;
   stroke: var(--learning-success, var(--color-success));
   stroke-linecap: round;
@@ -464,6 +463,21 @@
 }
 .catalogInstruction {
   margin-top: var(--space-1);
+  font-size: var(--text-sm);
+}
+
+.practiceForm[data-layout="detail"] .answerRow {
+  grid-template-columns: minmax(10rem, 15rem) auto;
+}
+
+/* Align «Проверить» with the input under the visible «Ваш ответ» label. */
+.practiceForm[data-layout="detail"] .answerRow > button {
+  margin-top: calc(var(--text-sm) * 1.25 + var(--space-0-5));
+}
+
+.detailInstruction {
+  margin-top: var(--space-1);
+  color: var(--color-text-soft);
   font-size: var(--text-sm);
 }
 .catalogToolbar {

@@ -86,11 +86,6 @@ describe("task 25 integer processing lesson", () => {
       title: "Обработка целых чисел",
       status: "published",
       routeSlug: "25-obrabotka-celyh-chisel",
-      illustration: {
-        src: "/images/topics/integer-processing.webp",
-        width: 192,
-        height: 104,
-      },
     });
     expect(publicPaths).toContain("/ege/25-obrabotka-celyh-chisel/praktika");
   });

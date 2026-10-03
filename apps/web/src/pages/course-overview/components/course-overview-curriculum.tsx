@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowDown, ArrowUp, Flag } from "lucide-react";
+import { Flag } from "lucide-react";
 import { Accordion } from "~/shared/components/accordion";
 import { Button } from "~/shared/components/button";
 import { Typography } from "~/shared/components/typography";
@@ -38,12 +38,11 @@ export const CourseOverviewCurriculum: React.FC<Props> = (props) => {
           Программа курса
         </Typography.Title>
         <Button
-          hierarchy="quiet"
+          hierarchy="secondary"
           density="compact"
           className={styles.bulkAction}
           disabled={!enhanced}
           data-enhanced={enhanced || undefined}
-          iconEnd={allOpen ? <ArrowUp size={16} /> : <ArrowDown size={16} />}
           onClick={() =>
             setOpen(allOpen ? [] : props.modules.map((module) => module.id))
           }
@@ -64,7 +63,7 @@ export const CourseOverviewCurriculum: React.FC<Props> = (props) => {
               {module.finalProject ? (
                 <Flag size={18} strokeWidth={1.5} />
               ) : (
-                module.number
+                Number(module.number)
               )}
             </span>
           ),

@@ -281,7 +281,7 @@ it("counts only current topic answers, keeps completed in All and excludes stale
   const view = renderCatalog();
   await screen.findByText("Решено задач в темах: 2");
   expect(screen.getByText("Решено 1 из 2")).not.toBeNull();
-  expect(screen.getByText("Практика завершена")).not.toBeNull();
+  expect(screen.getByText(/Практика завершена/)).not.toBeNull();
   fireEvent.click(screen.getByRole("button", { name: "В процессе" }));
   expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(1);
   expect(

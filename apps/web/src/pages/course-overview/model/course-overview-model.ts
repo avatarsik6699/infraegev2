@@ -67,8 +67,12 @@ const calculate = (
     if (allMastered) actionLabel = "Повторить курс";
     else if (continuing && target) actionLabel = `Продолжить: ${target.title}`;
   }
+  const masteredLessons = published.filter(
+    (lesson) => practice.byLessonId[lesson.id]?.mastered,
+  ).length;
   return {
     lessonCount: published.length,
+    masteredLessons: ready ? masteredLessons : undefined,
     level: courseCatalog.entries.find((entry) => entry.id === props.course.id)
       ?.level,
     action: target
@@ -103,6 +107,10 @@ const calculate = (
         },
       );
       const available = lessons.filter((lesson) => lesson.routeSlug);
+      const mastered = available.filter(
+        (lesson) =>
+          lesson.progress.status === "ready" && lesson.progress.mastered,
+      ).length;
       let status = "Не начат";
       if (available.length === 0) status = "В плане";
       else if (!ready) status = "—";
@@ -128,6 +136,10 @@ const calculate = (
           props.course.id === "python" && module.id === "final-program",
         lessons,
         status,
+        progress:
+          ready && available.length > 0
+            ? { mastered, total: available.length }
+            : undefined,
       };
     }),
   };

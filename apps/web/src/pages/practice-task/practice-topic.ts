@@ -10,7 +10,7 @@ export const practiceTopic = {
           item.status === "published" && item.taskNumbers.includes(number),
       );
       const title = number === 16 ? "Рекурсия" : publication?.title;
-      return `${number} номер${title ? `. ${title}` : ""}`;
+      return `ЕГЭ ${String(number)}${title ? ` · ${title}` : ""}`;
     });
     if (exams.length) return exams.join(" · ");
     const materialIds = new Set(

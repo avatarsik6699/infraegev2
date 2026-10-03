@@ -14,7 +14,7 @@ export const StandalonePractice: React.FC<
     active?: boolean;
     helpHeadingOrder?: 2 | 3 | 4;
     onRepeat?: () => void;
-    layout?: "stacked" | "compact";
+    layout?: "stacked" | "compact" | "detail";
   }
 > = (props) => {
   const task = props.tasks[0];
@@ -80,6 +80,7 @@ export const StandalonePractice: React.FC<
           key={String(model.isSolved(task.id))}
           task={task}
           revealSolution={model.isSolved(task.id)}
+          headingLevel={props.helpHeadingOrder}
           solutionTitle={
             {
               method: "Идея решения",

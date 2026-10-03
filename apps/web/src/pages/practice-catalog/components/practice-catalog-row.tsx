@@ -105,7 +105,14 @@ export const PracticeCatalogRow: React.FC<{
         </div>
         <span className={styles.topicCell}>
           {props.task.exam_numbers
-            .map((number) => `ЕГЭ ${number}`)
+            .map((number) => {
+              const facet = props.topics?.find(
+                (topic) => topic.id === `ege-${String(number)}`,
+              );
+              return facet
+                ? practiceCatalog.topicLabel(facet.label)
+                : `ЕГЭ ${String(number)}`;
+            })
             .join(", ") ||
             props.task.topics
               ?.map(
@@ -189,10 +196,10 @@ export const PracticeCatalogRow: React.FC<{
                       (number) => topic.id === `ege-${number}`,
                     ),
                 )
-                .map((topic) => topic.label)
+                .map((topic) => practiceCatalog.topicLabel(topic.label))
                 .join(" · ") ||
               props.task.exam_numbers
-                .map((number) => `${number} номер`)
+                .map((number) => `ЕГЭ ${String(number)}`)
                 .join(" · ") ||
               props.task.title
             }

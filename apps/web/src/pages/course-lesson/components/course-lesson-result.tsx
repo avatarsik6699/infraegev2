@@ -1,14 +1,10 @@
 import type { CourseTypes } from "~/entities/course";
-import { ActionLink } from "~/shared/components/action-link";
 import { Checkpoint } from "~/shared/components/learning-content";
 import { Typography } from "~/shared/components/typography";
 import styles from "~/shared/styles/lesson-layout.module.css";
 
 type Props = {
-  course: CourseTypes.Definition;
   lesson: CourseTypes.LessonDefinition;
-  previousLesson?: CourseTypes.LessonDefinition;
-  nextLesson?: CourseTypes.LessonDefinition;
 };
 
 export const CourseLessonResult: React.FC<Props> = (props) => (
@@ -19,29 +15,5 @@ export const CourseLessonResult: React.FC<Props> = (props) => (
         <Checkpoint items={props.lesson.checkpoint} />
       ) : null}
     </div>
-    <nav className={styles.resultNavigation} aria-label="Продолжение курса">
-      <div className={styles.resultLinks}>
-        {props.previousLesson ? (
-          <ActionLink
-            presentation="action"
-            hierarchy="text"
-            icon="back"
-            to={`/courses/${props.course.routeSlug}/${props.previousLesson.routeSlug}`}
-          >
-            {`Предыдущий урок: ${props.previousLesson.title}`}
-          </ActionLink>
-        ) : null}
-        {props.nextLesson ? (
-          <ActionLink
-            presentation="action"
-            hierarchy="text"
-            icon="forward"
-            to={`/courses/${props.course.routeSlug}/${props.nextLesson.routeSlug}`}
-          >
-            {props.nextLesson.title}
-          </ActionLink>
-        ) : null}
-      </div>
-    </nav>
   </div>
 );

@@ -289,53 +289,12 @@ export class TopicCatalogPage {
   }
 
   private async expectIllustrations() {
-    for (const [topicId, asset] of [
-      ["information-models", "information-models"],
-      ["preobrazovanie-zapisey-chisel", "number-record"],
-      ["branching-and-enumeration", "branching-and-enumeration"],
-      ["rekursiya", "recursion"],
-      ["number-sequences", "number-sequences"],
-      ["winning-strategy", "winning-strategy"],
-      ["parallel-computing", "parallel-computing"],
-      ["graph-analysis", "graph-analysis"],
-      ["string-processing", "string-processing"],
-      ["integer-processing", "integer-processing"],
-      ["array-processing", "array-processing"],
-      ["data-analysis", "data-analysis"],
-    ]) {
-      const row = this.page.locator(`[data-topic-id="${topicId}"]`);
-      const illustration = row.locator(
-        `img[src="/images/topics/${asset}.webp"]`,
-      );
-      await expect(illustration).toBeVisible();
-      await expect(illustration).toHaveAttribute("width", "192");
-      await expect(illustration).toHaveAttribute("height", "104");
-      await expect
-        .poll(() =>
-          illustration.evaluate(
-            (image: HTMLImageElement) =>
-              image.complete &&
-              image.naturalWidth === 576 &&
-              image.naturalHeight === 312,
-          ),
-        )
-        .toBe(true);
-      const imageBox = await illustration.boundingBox();
-      const slotBox = await illustration.locator("../..").boundingBox();
-      const titleBox = await row.locator("h2").boundingBox();
-      expect(imageBox!.x).toBeGreaterThanOrEqual(slotBox!.x);
-      expect(imageBox!.y).toBeGreaterThanOrEqual(slotBox!.y);
-      expect(imageBox!.x + imageBox!.width).toBeLessThanOrEqual(
-        slotBox!.x + slotBox!.width,
-      );
-      expect(imageBox!.y + imageBox!.height).toBeLessThanOrEqual(
-        slotBox!.y + slotBox!.height,
-      );
-      expect(
-        imageBox!.x + imageBox!.width <= titleBox!.x ||
-          imageBox!.y + imageBox!.height <= titleBox!.y,
-      ).toBe(true);
-    }
+    // Change 169: catalog drawings are retired; every row keeps a neutral placeholder.
+    const rows = this.page.locator("[data-topic-card]");
+    await expect(rows.locator("[data-illustration-placeholder]")).toHaveCount(
+      await rows.count(),
+    );
+    await expect(rows.locator("img")).toHaveCount(0);
   }
 
   async expectTextZoom() {

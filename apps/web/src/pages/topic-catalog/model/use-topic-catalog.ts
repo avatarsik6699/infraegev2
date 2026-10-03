@@ -72,9 +72,16 @@ export const useTopicCatalog = () => {
       hasVisualProgress && !incomplete ? aggregate.totalSolved : null,
     unavailable:
       loadState === "error" || progressStatus === "error" || incomplete,
-    entries: topicCatalog.entries.filter((entry) =>
-      topicCatalogModel.matches(entry, query, filter, aggregate.byId[entry.id]),
-    ),
+    entries: topicCatalogModel
+      .order(topicCatalog.entries)
+      .filter((entry) =>
+        topicCatalogModel.matches(
+          entry,
+          query,
+          filter,
+          aggregate.byId[entry.id],
+        ),
+      ),
     retry: () => {
       setLoadState("loading");
       setAttempt((value) => value + 1);

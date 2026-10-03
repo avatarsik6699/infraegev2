@@ -1,30 +1,34 @@
-import { Progress } from "~/shared/components/progress";
 import { useAccountSession } from "~/features/account";
 import { GuestProgressLoginLock } from "~/features/lesson-progress";
-import { Typography } from "~/shared/components/typography";
 import type { CourseOverviewPageTypes } from "../course-overview-page.types";
 import styles from "../course-overview-page.module.css";
 import { courseOverviewModel } from "../model/course-overview-model";
 
 type Props = {
   progress: CourseOverviewPageTypes.Progress;
+  lessonCount: number;
+  masteredLessons?: number;
   guestTotal?: number;
 };
 
+const count = (value: number | undefined, total: number | undefined) =>
+  value !== undefined && total !== undefined
+    ? `${String(value)} из ${String(total)}`
+    : "— из —";
+
+/** Two head stats from the mockup: mastered lessons and solved practice tasks. */
 export const CourseOverviewProgress: React.FC<Props> = (props) => {
   const session = useAccountSession();
   const isGuest = session.status === "ready" && !session.account;
-  const memberProgress =
-    props.progress.status === "ready" ? props.progress : undefined;
-  const total = isGuest ? props.guestTotal : memberProgress?.total;
-  const solved = isGuest ? 0 : (memberProgress?.solved ?? 0);
-  const progressReady =
-    (isGuest && total !== undefined) || props.progress.status === "ready";
-  let progressNote = courseOverviewModel.progressNote(props.progress);
+  const member = props.progress.status === "ready" ? props.progress : undefined;
+  const total = isGuest ? props.guestTotal : member?.total;
+  const solved = isGuest ? 0 : member?.solved;
+  const mastered = isGuest ? 0 : props.masteredLessons;
+  let note = courseOverviewModel.progressNote(props.progress);
   if (!session.account) {
-    if (isGuest) progressNote = "";
-    else if (session.status === "loading") progressNote = "Проверяем вход";
-    else progressNote = "Не удалось проверить вход";
+    if (isGuest) note = "";
+    else if (session.status === "loading") note = "Проверяем вход";
+    else note = "Не удалось проверить вход";
   }
   return (
     <GuestProgressLoginLock
@@ -33,37 +37,26 @@ export const CourseOverviewProgress: React.FC<Props> = (props) => {
     >
       <section
         className={styles.progress}
-        aria-labelledby="course-progress"
-        data-progress-ready={progressReady || undefined}
+        aria-label="Ваш прогресс"
+        data-progress-ready={
+          (isGuest && total !== undefined) || member !== undefined || undefined
+        }
       >
-        <Typography.Title
-          order={2}
-          id="course-progress"
-          className={styles.smallHeading}
-        >
-          Ваш прогресс
-        </Typography.Title>
-        <div className={styles.progressRow}>
-          <span>Практика</span>
-          <span className={styles.progressCount}>
-            {progressReady && total !== undefined
-              ? `${String(solved)} из ${String(total)}`
-              : "— из —"}
-          </span>
-          {progressReady && total && total > 0 ? (
-            <Progress
-              label="Решённые задачи курса"
-              value={solved}
-              max={total}
-              valueText={`Решено ${String(solved)} из ${String(total)} задач`}
-            />
-          ) : (
-            <span className={styles.progressPlaceholder} aria-hidden="true" />
-          )}
-        </div>
-        {progressNote ? (
+        <dl className={styles.stats}>
+          <div className={styles.stat}>
+            <dt className={styles.statLabel}>уроков освоено</dt>
+            <dd className={styles.statValue}>
+              {count(mastered, props.lessonCount)}
+            </dd>
+          </div>
+          <div className={styles.stat}>
+            <dt className={styles.statLabel}>практика</dt>
+            <dd className={styles.statValue}>{count(solved, total)}</dd>
+          </div>
+        </dl>
+        {note ? (
           <div className={styles.progressNote} role="status">
-            {progressNote}
+            {note}
           </div>
         ) : null}
       </section>

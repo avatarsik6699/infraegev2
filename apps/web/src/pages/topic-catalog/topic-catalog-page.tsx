@@ -2,6 +2,7 @@ import { Button } from "~/shared/components/button";
 import { SearchField } from "~/shared/components/search-field";
 import { ExternalLink } from "~/shared/components/external-link";
 import { PageContainer } from "~/shared/components/page-container";
+import { IllustrationPlaceholder } from "~/shared/components/illustration-placeholder";
 import { PageHead } from "~/shared/components/page-head";
 import { Typography } from "~/shared/components/typography";
 import { PublicFooter } from "~/widgets/public-footer";
@@ -17,7 +18,14 @@ export const TopicCatalogPage: React.FC = () => {
     <div className={styles.page} data-topic-catalog-page>
       <PublicHeader activeSection="topics" />
       <main id="main-content">
-        <PageHead>
+        <PageHead
+          aside={
+            <IllustrationPlaceholder
+              tone="outline"
+              className={styles.headIllustration}
+            />
+          }
+        >
           <header className={styles.catalogHeading}>
             <Typography.Title
               id="exam-map-heading"
@@ -29,7 +37,7 @@ export const TopicCatalogPage: React.FC = () => {
             <div className={styles.summary} data-topic-summary>
               <span className={styles.catalogMetadata}>
                 Всего тем: {catalog.totalTopics} · Доступно:{" "}
-                {catalog.publishedTopics}
+                {catalog.publishedTopics} ·
               </span>
               <span className={styles.summaryText} role="status">
                 {topicCatalogModel.summaryText(
@@ -80,9 +88,7 @@ export const TopicCatalogPage: React.FC = () => {
               {topicCatalogModel.filters.map((filter) => (
                 <Button
                   key={filter.value}
-                  hierarchy={
-                    catalog.filter === filter.value ? "primary" : "soft"
-                  }
+                  hierarchy="quiet"
                   aria-pressed={catalog.filter === filter.value}
                   disabled={filter.value !== "all" && !catalog.ready}
                   onClick={() => catalog.setFilter(filter.value)}
@@ -113,7 +119,10 @@ export const TopicCatalogPage: React.FC = () => {
           </ol>
           {catalog.entries.length === 0 && (
             <div className={styles.empty} role="status">
-              <Typography.Title order={2}>Темы не найдены</Typography.Title>
+              <IllustrationPlaceholder className={styles.emptyIllustration} />
+              <Typography.Title order={2} className={styles.emptyTitle}>
+                Темы не найдены
+              </Typography.Title>
               <Typography.Text tone="muted">
                 Попробуйте другой запрос или сбросьте фильтры.
               </Typography.Text>
@@ -127,10 +136,7 @@ export const TopicCatalogPage: React.FC = () => {
             aria-label="Примечание о структуре экзамена"
           >
             <Typography.Text tone="muted">
-              25 тем для всех 27 заданий. Задания 19–21 собраны в одну тему: в
-              них используется общая игровая модель. Названия будущих тем
-              сверены с проектом спецификации ЕГЭ 2027 и будут перепроверены
-              после выхода финальной редакции.
+              25 тем для всех 27 заданий. Задания 19–21 собраны в одну тему.
             </Typography.Text>
             <ExternalLink
               href="https://fipi.ru/ege/demoversii-specifikacii-kodifikatory"

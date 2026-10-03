@@ -366,14 +366,15 @@ describe("course overview UI", () => {
       sessionFixture.account = null;
       sessionFixture.status = status;
       render(overview(props, undefined));
-      expect(screen.getAllByText("— из —")).toHaveLength(4);
+      // Two head stats and three lesson rows stay neutral.
+      expect(screen.getAllByText(/— из —/)).toHaveLength(5);
       expect(screen.queryByText("Практика: 0 из 5")).toBeNull();
     },
   );
   it("renders ready guest rows with public zero totals", () => {
     sessionFixture.account = null;
     render(overview(props, undefined));
-    expect(screen.getAllByText("0 из 5")).toHaveLength(3);
+    expect(screen.getAllByText("Практика: 0 из 5")).toHaveLength(3);
     expect(
       screen.queryByText("Ответы проверяются без сохранения прогресса"),
     ).toBeNull();
@@ -429,10 +430,8 @@ describe("course overview UI", () => {
       ).toBe("/courses/python/second"),
     );
     expect(
-      screen
-        .getByRole("progressbar", { name: "Решённые задачи курса" })
-        .getAttribute("aria-valuenow"),
-    ).toBe("4");
+      screen.getByRole("region", { name: "Ваш прогресс" }).textContent,
+    ).toMatch(/практика4 из \d+/);
     expect(
       screen.getByRole("link", { name: /Урок first Урок освоен/ }),
     ).not.toBeNull();
@@ -448,9 +447,9 @@ describe("course overview UI", () => {
     await waitFor(() =>
       expect(screen.getByRole("link", { name: "Начать курс" })).not.toBeNull(),
     );
-    expect(screen.getByRole("progressbar").getAttribute("aria-valuenow")).toBe(
-      "0",
-    );
+    expect(
+      screen.getByRole("region", { name: "Ваш прогресс" }).textContent,
+    ).toMatch(/практика0 из \d+/);
   });
   it("retains lesson navigation when progress is unavailable", async () => {
     render(overview({ ...props, practiceSummary: null }));

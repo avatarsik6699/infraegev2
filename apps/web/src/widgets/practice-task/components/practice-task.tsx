@@ -37,7 +37,9 @@ export const PracticeTask: React.FC<PracticeTaskWidgetTypes.Props> = (
         </header>
       )}
       <StandalonePractice
-        layout="compact"
+        layout={
+          (props.presentation ?? "detail") === "detail" ? "detail" : "compact"
+        }
         helpHeadingOrder={props.presentation === "catalog" ? 4 : 2}
         key={attempt}
         focusOnMount={repeating}

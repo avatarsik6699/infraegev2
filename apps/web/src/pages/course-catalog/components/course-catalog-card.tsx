@@ -1,11 +1,11 @@
-import { ArrowRight, GraduationCap } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import type { CourseCatalogTypes } from "~/entities/course";
 import { ActionLink } from "~/shared/components/action-link";
 import { Badge } from "~/shared/components/badge";
+import { IllustrationPlaceholder } from "~/shared/components/illustration-placeholder";
 import { Typography } from "~/shared/components/typography";
 import type { CourseCatalogPageTypes } from "../course-catalog-page.types";
 import { courseCatalogModel } from "../model/course-catalog-model";
-import { CourseCatalogIllustration } from "./course-catalog-illustration";
 import { CourseCatalogProgress } from "./course-catalog-progress";
 import styles from "../course-catalog-page.module.css";
 
@@ -21,26 +21,26 @@ export const CourseCatalogCard: React.FC<Props> = (props) => (
     data-course-status={props.entry.status}
     aria-disabled={props.entry.status === "planned" || undefined}
   >
-    {props.entry.status === "planned" && (
-      <Badge
-        presentation="metadata"
-        surface="quiet"
-        className={styles.plannedBadge}
-      >
-        Скоро
-      </Badge>
-    )}
-    <CourseCatalogIllustration illustration={props.entry.illustration} />
+    <IllustrationPlaceholder className={styles.illustration} />
     <div className={styles.cardContent}>
       <Typography.Title order={2} className={styles.cardTitle}>
         {props.entry.title}
       </Typography.Title>
-      <Typography.Text tone="muted" className={styles.cardDescription}>
-        {props.entry.summary}
-      </Typography.Text>
+      {props.entry.status === "planned" ? (
+        <Badge
+          presentation="metadata"
+          surface="quiet"
+          className={styles.plannedBadge}
+        >
+          Скоро
+        </Badge>
+      ) : (
+        <Typography.Text tone="muted" className={styles.cardDescription}>
+          {props.entry.summary}
+        </Typography.Text>
+      )}
       {props.entry.status === "published" && (
         <div className={styles.metadata}>
-          <GraduationCap size={18} aria-hidden="true" />
           <span>{courseCatalogModel.lessonCount(props.entry.lessonCount)}</span>
           {props.entry.level && <span>· {props.entry.level}</span>}
         </div>

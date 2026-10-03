@@ -81,11 +81,6 @@ describe("task 24 string processing lesson", () => {
       status: "published",
       taskNumbers: [24],
       routeSlug: "24-obrabotka-simvolnyh-strok",
-      illustration: {
-        src: "/images/topics/string-processing.webp",
-        width: 192,
-        height: 104,
-      },
     });
     expect(publicPaths).toContain("/ege/24-obrabotka-simvolnyh-strok/praktika");
   });

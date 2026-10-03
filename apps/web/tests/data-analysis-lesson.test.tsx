@@ -78,11 +78,6 @@ describe("task 27 data analysis lesson", () => {
       status: "published",
       routeSlug: "27-analiz-dannyh-i-klasterizatsiya",
       title: "Анализ данных: кластеризация",
-      illustration: {
-        src: "/images/topics/data-analysis.webp",
-        width: 192,
-        height: 104,
-      },
     });
     expect(publicPaths).toContain(
       "/ege/27-analiz-dannyh-i-klasterizatsiya/praktika",

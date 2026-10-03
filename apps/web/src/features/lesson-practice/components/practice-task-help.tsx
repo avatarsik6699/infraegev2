@@ -8,12 +8,14 @@ type PracticeTaskHelpProps = {
   nativeFallback?: boolean;
   solutionTitle?: string;
   revealSolution?: boolean;
+  headingLevel?: 2 | 3 | 4;
 };
 
 export const PracticeTaskHelp: React.FC<PracticeTaskHelpProps> = (props) => (
   <Accordion
     className={styles.taskHelp}
     multiple
+    headingLevel={props.headingLevel}
     nativeFallback={props.nativeFallback ?? true}
     defaultOpen={props.revealSolution ? [`${props.task.id}-solution`] : []}
     items={[

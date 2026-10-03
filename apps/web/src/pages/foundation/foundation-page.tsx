@@ -2,7 +2,7 @@ import { BookOpen, Code2, ListChecks } from "lucide-react";
 import { courseCatalog } from "~/entities/course";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { ActionLink } from "~/shared/components/action-link";
-import { Image } from "~/shared/components/image";
+import { IllustrationPlaceholder } from "~/shared/components/illustration-placeholder";
 import { PageContainer } from "~/shared/components/page-container";
 import { PageHead } from "~/shared/components/page-head";
 import { Typography } from "~/shared/components/typography";
@@ -149,18 +149,7 @@ export const FoundationPage: React.FC<FoundationPageTypes.Props> = (props) => (
               .slice(0, foundation.featuredTopicCount)
               .map((topic) => (
                 <li key={topic.id} className={styles.topic}>
-                  <div className={styles.topicPlate} aria-hidden="true">
-                    {topic.illustration ? (
-                      <Image
-                        src={topic.illustration.src}
-                        decorative
-                        layout="fill"
-                        fit="contain"
-                        width={topic.illustration.width}
-                        height={topic.illustration.height}
-                      />
-                    ) : null}
-                  </div>
+                  <IllustrationPlaceholder className={styles.topicPlate} />
                   <div className={styles.topicBody}>
                     <span className={styles.topicNumber}>
                       {topicCatalog.formatTaskNumbers(topic.taskNumbers)}
@@ -228,18 +217,7 @@ export const FoundationPage: React.FC<FoundationPageTypes.Props> = (props) => (
                 Открыть курс
               </ActionLink>
             </div>
-            {foundation.course.illustration ? (
-              <div className={styles.coursePlate} aria-hidden="true">
-                <Image
-                  src={foundation.course.illustration.src}
-                  decorative
-                  layout="fill"
-                  fit="contain"
-                  width={foundation.course.illustration.width}
-                  height={foundation.course.illustration.height}
-                />
-              </div>
-            ) : null}
+            <IllustrationPlaceholder className={styles.coursePlate} />
           </section>
         ) : null}
       </PageContainer>

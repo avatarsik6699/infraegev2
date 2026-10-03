@@ -27,15 +27,16 @@ const scroll = (headingId: string): void => {
   });
 };
 
-let initialPageShown = false;
+let lastPath: string | null = null;
 
-/** Moves focus to a new page heading after client navigation, never on the first load. */
+/** Moves focus to a new page heading after client navigation, never on the first load.
+ *  Repeated calls for the same path (StrictMode re-runs effects) are ignored. */
 const focusHeadingAfterNavigation = (headingId: string): void => {
-  if (!initialPageShown) {
-    initialPageShown = true;
-    return;
-  }
-  if (window.location.hash) return;
+  const path = window.location.pathname + window.location.search;
+  const first = lastPath === null;
+  const same = lastPath === path;
+  lastPath = path;
+  if (first || same || window.location.hash) return;
   document.getElementById(headingId)?.focus({ preventScroll: true });
 };
 

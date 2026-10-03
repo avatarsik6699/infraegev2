@@ -251,7 +251,7 @@ describe("inline solving", () => {
         "Запишите целое число в десятичной системе счисления.",
       ),
     ).toBeNull();
-    expect(row(0).getByRole("heading", { name: "16 номер" })).toBeTruthy();
+    expect(row(0).getByRole("heading", { name: "ЕГЭ 16" })).toBeTruthy();
   });
   it("deduplicates loading, retries locally and isolates missing tasks", async () => {
     let resolve!: (value: PracticeTaskWidgetTypes.Result) => void;

@@ -185,10 +185,10 @@
   background: var(--color-surface);
 }
 
-.topicPlate {
+.topic .topicPlate {
   position: relative;
   height: 8.5rem;
-  padding: var(--space-2);
+  border-radius: 0;
 }
 
 .topic:nth-child(4n + 1) .topicPlate {

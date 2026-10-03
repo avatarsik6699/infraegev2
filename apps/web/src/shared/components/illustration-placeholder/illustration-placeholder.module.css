@@ -1,0 +1,10 @@
+.root {
+  min-width: 0;
+  border-radius: var(--radius-surface);
+  background: var(--color-surface-quiet);
+}
+
+.root[data-tone="outline"] {
+  border: 1px dashed var(--color-rule-strong);
+  background: var(--color-surface);
+}

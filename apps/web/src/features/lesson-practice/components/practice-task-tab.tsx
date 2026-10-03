@@ -25,7 +25,9 @@ export const PracticeTaskTab: React.FC<PracticeTaskTabProps> = (props) => (
     }}
   >
     <PracticeDifficultyGlyph level={props.task.difficulty} />
-    <span className={styles.tabLabel}>{props.task.difficultyLabel}</span>
+    <span
+      className={styles.tabLabel}
+    >{`Задача ${String(props.index + 1)}`}</span>
     {props.solved ? (
       <Check
         className={styles.tabSolved}

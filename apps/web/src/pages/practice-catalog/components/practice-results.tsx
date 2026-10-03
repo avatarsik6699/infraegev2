@@ -4,6 +4,7 @@ import { useRouter } from "@tanstack/react-router";
 import { practiceCatalog } from "~/entities/practice-task";
 import { Typography } from "~/shared/components/typography";
 import { EmptyState } from "~/shared/components/empty-state";
+import { IllustrationPlaceholder } from "~/shared/components/illustration-placeholder";
 import { Button } from "~/shared/components/button";
 import { ActionLink } from "~/shared/components/action-link";
 import type { PracticeCatalogPageTypes } from "../practice-catalog-page.types";
@@ -17,12 +18,13 @@ export const PracticeResults: React.FC<PracticeCatalogPageTypes.Props> = (
   const router = useRouter();
   if (props.result.status === "unavailable")
     return (
-      <section className={styles.state} role="alert">
-        <Typography.Title order={2}>
+      <section className={styles.alertState} role="alert">
+        <Typography.Title order={2} className={styles.alertTitle}>
           Не удалось загрузить задачи
         </Typography.Title>
         <Typography.Text>Попробуйте ещё раз немного позже.</Typography.Text>
         <Button
+          hierarchy="secondary"
           onClick={() => {
             void router.invalidate();
           }}
@@ -33,14 +35,14 @@ export const PracticeResults: React.FC<PracticeCatalogPageTypes.Props> = (
     );
   if (props.result.status === "invalid")
     return (
-      <section className={styles.state} role="alert">
-        <Typography.Title order={2}>
+      <section className={styles.alertState} role="alert">
+        <Typography.Title order={2} className={styles.alertTitle}>
           Не удалось применить фильтры
         </Typography.Title>
         <Typography.Text>
           Проверьте значения или начните поиск заново.
         </Typography.Text>
-        <ActionLink to="/practice" presentation="button">
+        <ActionLink to="/practice" presentation="button" hierarchy="secondary">
           Сбросить фильтры
         </ActionLink>
       </section>
@@ -73,6 +75,7 @@ export const PracticeResults: React.FC<PracticeCatalogPageTypes.Props> = (
       </div>
       {!page.tasks.length && (
         <div className={styles.state}>
+          <IllustrationPlaceholder className={styles.stateIllustration} />
           <EmptyState
             title="Пока ничего не нашлось"
             description="Попробуйте другие слова или выберите другую тему."
@@ -87,7 +90,11 @@ export const PracticeResults: React.FC<PracticeCatalogPageTypes.Props> = (
               На последнюю страницу
             </ActionLink>
           ) : (
-            <ActionLink to="/practice" presentation="button">
+            <ActionLink
+              to="/practice"
+              presentation="button"
+              hierarchy="secondary"
+            >
               Сбросить фильтры
             </ActionLink>
           )}

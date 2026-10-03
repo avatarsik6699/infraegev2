@@ -21,6 +21,8 @@ export namespace CourseOverviewPageTypes {
     finalProject: boolean;
     status: string;
     lessons: readonly Lesson[];
+    /** Mastered of published lessons; absent until progress is ready. */
+    progress?: { mastered: number; total: number };
   };
 
   export type Action = {
@@ -32,6 +34,8 @@ export namespace CourseOverviewPageTypes {
   export type Model = {
     modules: readonly Module[];
     lessonCount: number;
+    /** Mastered published lessons; absent until progress is ready. */
+    masteredLessons?: number;
     level?: string;
     action?: Action;
     progress: Progress;

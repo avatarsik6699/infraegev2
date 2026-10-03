@@ -6,6 +6,7 @@ import {
   practiceCatalog,
   type PracticeCatalogTypes,
 } from "~/entities/practice-task";
+import { InlineSelect } from "~/shared/components/inline-select";
 import { MultiCombobox } from "~/shared/components/multi-combobox";
 import { SearchField } from "~/shared/components/search-field";
 import { Button } from "~/shared/components/button";
@@ -63,7 +64,7 @@ export const PracticeFilters: React.FC<{
           emptyLabel="Темы не найдены"
           options={options.map((topic) => ({
             value: topic.id,
-            label: topic.label,
+            label: practiceCatalog.topicLabel(topic.label),
             group: topic.group,
             description: practiceCatalog.countLabel(topic.count),
           }))}
@@ -89,7 +90,8 @@ export const PracticeFilters: React.FC<{
                   .filter((topic) => topic.group === group)
                   .map((topic) => (
                     <option key={topic.id} value={topic.id}>
-                      {topic.label} — {practiceCatalog.countLabel(topic.count)}
+                      {practiceCatalog.topicLabel(topic.label)} —{" "}
+                      {practiceCatalog.countLabel(topic.count)}
                     </option>
                   ))}
               </optgroup>
@@ -119,13 +121,19 @@ export const PracticeFilters: React.FC<{
           value={props.search.exam_number}
         />
       )}
-      {props.search.difficulty && (
-        <input
-          type="hidden"
-          name="difficulty"
-          value={props.search.difficulty}
-        />
-      )}
+      <InlineSelect
+        label="Сложность"
+        form="practice-filters"
+        name="difficulty"
+        defaultValue={String(props.search.difficulty ?? "")}
+        options={[
+          { value: "", label: "Любая" },
+          ...[1, 2, 3].map((level) => ({
+            value: String(level),
+            label: practiceCatalog.difficultyLabel(level),
+          })),
+        ]}
+      />
       {props.search.limit && (
         <input type="hidden" name="limit" value={props.search.limit} />
       )}

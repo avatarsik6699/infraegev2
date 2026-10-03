@@ -133,7 +133,9 @@ describe("mini-course catalog", () => {
       ).toBe("/courses/python");
       expect(screen.queryByRole("searchbox")).toBeNull();
       expect(
-        view.container.querySelectorAll("[data-course-card] img[alt='']"),
+        view.container.querySelectorAll(
+          "[data-course-card] [data-illustration-placeholder]",
+        ),
       ).toHaveLength(4);
       expect(
         view.container.querySelector("[data-course-summary]")?.textContent,

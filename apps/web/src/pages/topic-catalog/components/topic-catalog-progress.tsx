@@ -11,21 +11,28 @@ type Props = {
   title: string;
 };
 
-export const TopicCatalogProgress: React.FC<Props> = (props) => (
-  <TopicCatalogProgressContent {...props} />
-);
-
-const TopicCatalogProgressContent: React.FC<Props> = (props) => {
+export const TopicCatalogProgress: React.FC<Props> = (props) => {
   const session = useAccountSession();
   const isGuest = session.status === "ready" && !session.account;
   let progress = props.progress;
   if (isGuest && progress) progress = { solved: 0, total: progress.total };
+  const resume = Boolean(
+    !isGuest &&
+    progress &&
+    progress.solved > 0 &&
+    progress.solved < progress.total,
+  );
   return (
     <div className={styles.progressSlot} data-topic-progress>
       <span className={styles.metadata}>
         {props.progress
           ? `Теория · ${topicCatalogModel.taskCount(props.progress.total)}`
           : "Теория"}
+        {progress ? (
+          <span className={styles.progressStatus}>
+            {` · ${topicCatalogModel.progressStatus(progress)}`}
+          </span>
+        ) : null}
       </span>
       <GuestProgressLoginLock
         enabled={isGuest && progress !== undefined}
@@ -34,12 +41,6 @@ const TopicCatalogProgressContent: React.FC<Props> = (props) => {
         <div className={styles.personalProgress}>
           {progress ? (
             <>
-              <span className={styles.progressStatus}>
-                {topicCatalogModel.progressStatus(progress)}
-              </span>
-              <span>
-                Решено {progress.solved} из {progress.total}
-              </span>
               <Progress
                 className={styles.progress}
                 value={progress.solved}
@@ -47,6 +48,14 @@ const TopicCatalogProgressContent: React.FC<Props> = (props) => {
                 label={`Практика: ${props.title}`}
                 valueText={`Решено ${String(progress.solved)} из ${String(progress.total)} задач`}
               />
+              <span>
+                Решено {progress.solved} из {progress.total}
+                {resume ? (
+                  <span className={styles.resume} aria-hidden="true">
+                    {" · Продолжить"}
+                  </span>
+                ) : null}
+              </span>
             </>
           ) : (
             <span className={styles.progressStatus}>

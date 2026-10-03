@@ -1,4 +1,4 @@
-import { ArrowRight, Circle, CircleCheck } from "lucide-react";
+import { ChevronRight, Circle, CircleCheck } from "lucide-react";
 import type { CourseOverviewPageTypes } from "../course-overview-page.types";
 import styles from "../course-overview-page.module.css";
 import { courseOverviewModel } from "../model/course-overview-model";
@@ -21,14 +21,17 @@ export const CourseOverviewLessonContent: React.FC<Props> = (props) => (
         props.lesson.progress.mastered
           ? "Урок освоен. "
           : ""}
-        Практика:{" "}
       </span>
       {!props.lesson.routeSlug
         ? "В плане"
-        : courseOverviewModel.practiceCount(props.lesson.progress)}
+        : `Практика: ${courseOverviewModel.practiceCount(props.lesson.progress)}`}
     </span>
     {props.lesson.routeSlug ? (
-      <ArrowRight className={styles.lessonArrow} size={16} aria-hidden="true" />
+      <ChevronRight
+        className={styles.lessonArrow}
+        size={18}
+        aria-hidden="true"
+      />
     ) : null}
   </span>
 );

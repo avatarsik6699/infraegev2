@@ -6,13 +6,6 @@ export namespace TopicCatalogTypes {
     taskNumbers: TaskNumbers;
     title: string;
     summary: string;
-    illustration?: Illustration;
-  };
-
-  export type Illustration = {
-    src: string;
-    width: number;
-    height: number;
   };
 
   export type PlannedEntry = Definition & {

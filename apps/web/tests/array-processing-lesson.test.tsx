@@ -79,11 +79,6 @@ describe("task 26 sorting and selection lesson", () => {
       title: "Обработка данных: сортировка и отбор",
       summary:
         "Как читать файлы, сортировать записи, отбирать данные при ограничении и обрабатывать события по порядку.",
-      illustration: {
-        src: "/images/topics/array-processing.webp",
-        width: 192,
-        height: 104,
-      },
     });
     expect(publicPaths).toContain("/ege/26-sortirovka-i-otbor/praktika");
   });
