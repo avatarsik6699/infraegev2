@@ -379,7 +379,7 @@ have a left panel with the topic and its subtopic pages (Change 167: `/ege/{topi
 «Подтема N из M», previous/next, a right “on this page” rail; `/ege/{topic}` redirects to the first
 subtopic and old `#section` links resolve to the owning subtopic); course lessons keep in-page
 anchors; course overview, catalogs and profile have
-no left panel; the profile has an overview dashboard and a settings tab. Keep educational
+no left panel; the profile has an overview dashboard (Change 168: next step, course/topic/practice tiles, per-topic progress, continuations and a next bank task, all derived from existing summaries and saved progress) and a settings tab. Keep educational
 figures and attachments; hand-drawn monochrome illustrations are supplied by the architect and
 use reserved placeholders until then.
 The `/courses` catalog keeps all four directions in registry order, published-only lesson

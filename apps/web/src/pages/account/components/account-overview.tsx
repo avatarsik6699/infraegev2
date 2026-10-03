@@ -1,9 +1,6 @@
+import { BookOpen, Code2, ListChecks } from "lucide-react";
 import { useMemo } from "react";
-import {
-  courseProgress,
-  findCourseByRouteSlug,
-  getCourseLessons,
-} from "~/entities/course";
+import { findCourseByRouteSlug, getCourseLessons } from "~/entities/course";
 import { practiceCatalog } from "~/entities/practice-task";
 import { topicCatalog, type TopicCatalogTypes } from "~/entities/topic-catalog";
 import {
@@ -13,8 +10,14 @@ import {
 } from "~/features/lesson-progress";
 import { usePracticeProgress } from "~/features/practice-progress";
 import { ActionLink } from "~/shared/components/action-link";
-import { EmptyState } from "~/shared/components/empty-state";
+import { Progress } from "~/shared/components/progress";
 import { Typography } from "~/shared/components/typography";
+import { russianCount } from "~/shared/lib/russian-count";
+import {
+  accountDashboard,
+  type AccountDashboardTypes,
+} from "../model/account-dashboard";
+import { AccountTryTask } from "./account-try-task";
 import type { AccountOverviewTypes } from "./account-overview.types";
 import styles from "./account-overview.module.css";
 
@@ -24,11 +27,72 @@ const publishedTopics = topicCatalog.entries.filter(
     entry.status === "published",
 );
 
+const StepLink: React.FC<{
+  step: AccountDashboardTypes.Step;
+  primary?: boolean;
+}> = ({ step, primary }) => {
+  const look = primary
+    ? ({ hierarchy: "primary", presentation: "button" } as const)
+    : ({ hierarchy: "text", presentation: "action" } as const);
+  if (step.kind === "course" && !step.lessonRouteSlug)
+    return (
+      <ActionLink
+        {...look}
+        className={styles.stepAction}
+        to="/courses/$courseSlug"
+        params={{ courseSlug: step.courseRouteSlug }}
+      >
+        {step.action}
+      </ActionLink>
+    );
+  if (step.kind === "course")
+    return (
+      <ActionLink
+        {...look}
+        className={styles.stepAction}
+        to="/courses/$courseSlug/$lessonSlug"
+        params={{
+          courseSlug: step.courseRouteSlug,
+          lessonSlug: step.lessonRouteSlug ?? "",
+        }}
+      >
+        {step.action}
+      </ActionLink>
+    );
+  if (step.kind === "topic")
+    return (
+      <ActionLink
+        {...look}
+        className={styles.stepAction}
+        to="/ege/$slug"
+        params={{ slug: step.routeSlug }}
+      >
+        {step.action}
+      </ActionLink>
+    );
+  return (
+    <ActionLink
+      {...look}
+      className={styles.stepAction}
+      to={step.kind === "practice" ? "/practice" : "/ege"}
+    >
+      {step.action}
+    </ActionLink>
+  );
+};
+
+const stepKind: Record<AccountDashboardTypes.Step["kind"], string> = {
+  course: "Мини-курс",
+  topic: "Тема ЕГЭ",
+  practice: "Практика",
+  start: "С чего начать",
+};
+
 export const AccountOverview: React.FC<AccountOverviewTypes.Props> = (
   props,
 ) => {
   const course = findCourseByRouteSlug("python");
-  const publishedLessons = useMemo(
+  const courseLessons = useMemo(
     () =>
       course
         ? getCourseLessons(course).filter(
@@ -37,185 +101,249 @@ export const AccountOverview: React.FC<AccountOverviewTypes.Props> = (
         : [],
     [course],
   );
-  const summaries = useMemo(
-    () => props.practiceSummary ?? [],
-    [props.practiceSummary],
+  const versions = useMemo(
+    () => [...(props.practiceSummary ?? []), ...(props.topicSummary ?? [])],
+    [props.practiceSummary, props.topicSummary],
   );
   const lessonIds = useMemo(
-    () => publishedLessons.map((lesson) => lesson.id),
-    [publishedLessons],
+    () => [
+      ...courseLessons.map((lesson) => lesson.id),
+      ...publishedTopics.map((topic) => topic.id),
+    ],
+    [courseLessons],
   );
-  const saved = useLessonsProgress(lessonIds, summaries);
-  const lessonResults = useLessonsProgress(noLessonIds);
+  const progress = useLessonsProgress(lessonIds, versions);
   const hydrated = useLessonProgressHydrated();
   const lessonProgressStatus = useLessonProgressStatus();
   const practiceHistory = usePracticeProgress((state) => state.history);
   const practiceProgressStatus = usePracticeProgress((state) => state.status);
-  const byLesson = new Map(summaries.map((lesson) => [lesson.id, lesson]));
-  const courseSummaryReady =
-    props.practiceSummary !== null &&
-    publishedLessons.length > 0 &&
-    publishedLessons.every((lesson) => byLesson.has(lesson.id));
-  const courseReady =
-    courseSummaryReady && hydrated && lessonProgressStatus === "ready";
-  const lessons = publishedLessons.map((lesson) => ({
-    id: lesson.id,
-    tasks: byLesson.get(lesson.id)?.tasks ?? [],
-    masteryThreshold: lesson.masteryThreshold,
-  }));
-  const progress = courseProgress.calculatePractice(lessons, saved);
-  const nextLesson = publishedLessons.find(
-    (lesson) => !progress.byLessonId[lesson.id]?.mastered,
+
+  const saved = useLessonsProgress(noLessonIds);
+  const courseById = new Map(
+    (props.practiceSummary ?? []).map((lesson) => [lesson.id, lesson]),
   );
-  const courseTarget = nextLesson ?? publishedLessons[0];
-  const courseContinuation = courseReady && progress.solved > 0;
-  const courseStarted = publishedLessons.some(
-    (lesson) => (lessonResults[lesson.id]?.solvedTaskIds.length ?? 0) > 0,
+  const topicById = new Map(
+    (props.topicSummary ?? []).map((topic) => [topic.id, topic]),
   );
-  const topicContinuation = publishedTopics.find(
-    (entry) => (lessonResults[entry.id]?.solvedTaskIds.length ?? 0) > 0,
+  const progressReady = hydrated && lessonProgressStatus === "ready";
+  const courseComplete =
+    courseLessons.length > 0 &&
+    courseLessons.every((lesson) => courseById.has(lesson.id));
+  const topicsComplete = publishedTopics.every((topic) =>
+    topicById.has(topic.id),
   );
-  const standaloneSolvedCount = Object.values(practiceHistory).filter(
-    (revisions) => Object.keys(revisions).length > 0,
-  ).length;
-  const topicReady = hydrated && lessonProgressStatus === "ready";
   const practiceReady = practiceProgressStatus === "ready";
-  const allSourcesReady = courseReady && practiceReady;
   const unavailable =
-    !courseSummaryReady ||
+    (props.practiceSummary !== undefined && !courseComplete) ||
+    (props.topicSummary !== undefined && !topicsComplete) ||
     lessonProgressStatus === "error" ||
     practiceProgressStatus === "error";
-  const hasContinuation = Boolean(
-    (topicReady && courseStarted) ||
-    (topicReady && topicContinuation) ||
-    (practiceReady && standaloneSolvedCount > 0),
-  );
-  let courseDescription =
-    "Есть сохранённые решения. Продолжение временно недоступно.";
-  if (courseContinuation)
-    courseDescription = nextLesson
-      ? `Следующий урок: ${nextLesson.title}`
-      : "Все уроки освоены";
+  const savedTaskIds = Object.entries(practiceHistory)
+    .filter(([, revisions]) => Object.keys(revisions).length > 0)
+    .map(([id]) => id);
+
+  const dashboard = accountDashboard({
+    courseTitle: course?.title,
+    courseRouteSlug: course?.routeSlug,
+    courseLessons: courseLessons.map((lesson) => ({
+      id: lesson.id,
+      title: lesson.title,
+      routeSlug: lesson.routeSlug,
+      masteryThreshold: lesson.masteryThreshold,
+      tasks: courseById.get(lesson.id)?.tasks ?? [],
+    })),
+    topics: publishedTopics.map((topic) => ({
+      id: topic.id,
+      title: topic.title,
+      routeSlug: topic.routeSlug,
+      taskLabel: topicCatalog.formatTaskNumbers(topic.taskNumbers),
+      tasks: topicById.get(topic.id)?.tasks ?? [],
+    })),
+    progress,
+    saved: progressReady ? saved : {},
+    course: { ready: progressReady && courseComplete },
+    topicsSource: { ready: progressReady && topicsComplete },
+    practice: { ready: practiceReady, saved: savedTaskIds.length },
+  });
+  const allReady =
+    progressReady && courseComplete && topicsComplete && practiceReady;
 
   return (
     <section
       className={styles.root}
       id="progress"
       aria-labelledby="progress-title"
+      data-account-dashboard
     >
-      <div className={styles.heading}>
-        <Typography.Title order={2} id="progress-title">
-          Продолжить обучение
-        </Typography.Title>
-        <Typography.Text tone="muted">
-          Ваши результаты сохраняются в аккаунте.
-        </Typography.Text>
-      </div>
-      {hasContinuation ? (
-        <div className={styles.continuations}>
-          {topicReady && courseStarted && course ? (
-            <article className={styles.continuation} data-continuation="course">
-              <div className={styles.continuationDetails}>
-                <Typography.Text className={styles.kind}>
-                  Мини-курс
-                </Typography.Text>
-                <Typography.Title order={3}>{course.title}</Typography.Title>
-                <Typography.Text tone="muted">
-                  {courseDescription}
-                </Typography.Text>
-              </div>
-              {courseContinuation && courseTarget ? (
-                <ActionLink
-                  to="/courses/$courseSlug/$lessonSlug"
-                  params={{
-                    courseSlug: course.routeSlug,
-                    lessonSlug: courseTarget.routeSlug,
-                  }}
-                  hierarchy="primary"
-                  presentation="button"
-                  className={styles.continuationAction}
-                >
-                  {nextLesson ? "Продолжить" : "Повторить курс"}
-                </ActionLink>
-              ) : (
-                <ActionLink
-                  to="/courses/$courseSlug"
-                  params={{ courseSlug: course.routeSlug }}
-                  hierarchy="primary"
-                  presentation="button"
-                  className={styles.continuationAction}
-                >
-                  Открыть курс
-                </ActionLink>
-              )}
-            </article>
-          ) : null}
-          {topicReady && topicContinuation ? (
-            <article className={styles.continuation} data-continuation="topic">
-              <div className={styles.continuationDetails}>
-                <Typography.Text className={styles.kind}>
-                  Тема ЕГЭ
-                </Typography.Text>
-                <Typography.Title order={3}>
-                  {topicContinuation.title}
-                </Typography.Title>
-                <Typography.Text tone="muted">
-                  Есть сохранённые решения
-                </Typography.Text>
-              </div>
-              <ActionLink
-                to="/ege/$slug"
-                params={{ slug: topicContinuation.routeSlug }}
-                hierarchy="primary"
-                presentation="button"
-                className={styles.continuationAction}
-              >
-                Открыть тему
-              </ActionLink>
-            </article>
-          ) : null}
-          {practiceReady && standaloneSolvedCount > 0 ? (
-            <article
-              className={styles.continuation}
-              data-continuation="practice"
-            >
-              <div className={styles.continuationDetails}>
-                <Typography.Text className={styles.kind}>
-                  Практика
-                </Typography.Text>
-                <Typography.Title order={3}>
-                  Самостоятельные задания
-                </Typography.Title>
-                <Typography.Text tone="muted">
-                  Сохранено: {practiceCatalog.countLabel(standaloneSolvedCount)}
-                </Typography.Text>
-              </div>
-              <ActionLink
-                to="/practice"
-                hierarchy="primary"
-                presentation="button"
-                className={styles.continuationAction}
-              >
-                Открыть практику
-              </ActionLink>
-            </article>
-          ) : null}
-        </div>
-      ) : null}
-      {allSourcesReady && !hasContinuation ? (
-        <div className={styles.emptyCard}>
-          <EmptyState
-            title="Пока нет сохранённых результатов"
-            description="Решайте задания в курсе, темах ЕГЭ или практике — здесь появится продолжение."
-            headingOrder={3}
-          />
-        </div>
-      ) : null}
-      {!allSourcesReady ? (
+      <Typography.Title
+        order={2}
+        id="progress-title"
+        className={styles.visuallyHidden}
+      >
+        Прогресс
+      </Typography.Title>
+
+      {!allReady ? (
         <Typography.Text tone="muted" role={unavailable ? "alert" : "status"}>
           {unavailable ? "Прогресс временно недоступен" : "Загружаем прогресс…"}
         </Typography.Text>
       ) : null}
+
+      {dashboard.nextStep ? (
+        <article
+          className={styles.nextStep}
+          data-continuation={dashboard.nextStep.kind}
+        >
+          <div className={styles.stepDetails}>
+            <Typography.Text className={styles.kind}>
+              Следующий шаг
+            </Typography.Text>
+            <Typography.Title order={3} className={styles.nextTitle}>
+              {dashboard.nextStep.kind === "start"
+                ? dashboard.nextStep.title
+                : `${stepKind[dashboard.nextStep.kind]} · ${dashboard.nextStep.title}`}
+            </Typography.Title>
+            <Typography.Text tone="muted">
+              {dashboard.nextStep.description}
+            </Typography.Text>
+          </div>
+          <StepLink step={dashboard.nextStep} primary />
+        </article>
+      ) : null}
+
+      {dashboard.course || dashboard.topics || dashboard.practice ? (
+        <ul className={styles.tiles} aria-label="Итоги">
+          {dashboard.course ? (
+            <li className={styles.tile}>
+              <Code2 className={styles.tileIcon} aria-hidden="true" />
+              <Typography.Text className={styles.kind}>
+                {course?.title ?? "Мини-курс"}
+              </Typography.Text>
+              <Typography.Text className={styles.tileValue}>
+                {`${String(dashboard.course.mastered)} из ${String(dashboard.course.total)}`}
+              </Typography.Text>
+              <Typography.Text tone="muted">уроков освоено</Typography.Text>
+              <Progress
+                className={styles.tileBar}
+                value={dashboard.course.mastered}
+                max={Math.max(dashboard.course.total, 1)}
+                label="Освоено уроков мини-курса"
+                valueText={`${String(dashboard.course.mastered)} из ${String(dashboard.course.total)}`}
+              />
+            </li>
+          ) : null}
+          {dashboard.topics ? (
+            <li className={styles.tile}>
+              <BookOpen className={styles.tileIcon} aria-hidden="true" />
+              <Typography.Text className={styles.kind}>
+                Темы ЕГЭ
+              </Typography.Text>
+              <Typography.Text className={styles.tileValue}>
+                {russianCount.tasks(dashboard.topics.solved)}
+              </Typography.Text>
+              <Typography.Text tone="muted">
+                {`решено в ${String(dashboard.topics.started)} из ${String(dashboard.topics.rows.length)} тем`}
+              </Typography.Text>
+              <Progress
+                className={styles.tileBar}
+                value={dashboard.topics.solved}
+                max={Math.max(dashboard.topics.total, 1)}
+                label="Решено задач в темах ЕГЭ"
+                valueText={`${String(dashboard.topics.solved)} из ${String(dashboard.topics.total)}`}
+              />
+            </li>
+          ) : null}
+          {dashboard.practice ? (
+            <li className={styles.tile}>
+              <ListChecks className={styles.tileIcon} aria-hidden="true" />
+              <Typography.Text className={styles.kind}>
+                Практика
+              </Typography.Text>
+              <Typography.Text className={styles.tileValue}>
+                {String(dashboard.practice.saved)}
+              </Typography.Text>
+              <Typography.Text tone="muted">
+                {`${practiceCatalog
+                  .countLabel(dashboard.practice.saved)
+                  .replace(/^\d+\s/, "")} сохранено`}
+              </Typography.Text>
+            </li>
+          ) : null}
+        </ul>
+      ) : null}
+
+      <div className={styles.columns}>
+        {dashboard.topics ? (
+          <section className={styles.card} aria-labelledby="topics-title">
+            <Typography.Title order={3} id="topics-title">
+              Прогресс по темам ЕГЭ
+            </Typography.Title>
+            <ul className={styles.topicRows}>
+              {dashboard.topics.rows.map((row) => (
+                <li key={row.id} className={styles.topicRow}>
+                  <div className={styles.topicName}>
+                    <ActionLink
+                      presentation="inline"
+                      hierarchy="text"
+                      icon="none"
+                      to="/ege/$slug"
+                      params={{ slug: row.routeSlug }}
+                    >
+                      {row.title}
+                    </ActionLink>
+                    <Typography.Text tone="muted" className={styles.small}>
+                      {row.taskLabel}
+                    </Typography.Text>
+                  </div>
+                  <Progress
+                    className={styles.topicBar}
+                    value={row.solved}
+                    max={Math.max(row.total, 1)}
+                    label={`Решено задач: ${row.title}`}
+                    valueText={`${String(row.solved)} из ${String(row.total)}`}
+                  />
+                  <Typography.Text className={styles.topicCount}>
+                    {`${String(row.solved)} из ${String(row.total)}`}
+                  </Typography.Text>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
+
+        <div className={styles.side}>
+          {dashboard.continuations.length ? (
+            <section className={styles.card} aria-labelledby="continue-title">
+              <Typography.Title order={3} id="continue-title">
+                Продолжить
+              </Typography.Title>
+              <ul className={styles.continuations}>
+                {dashboard.continuations.map((step) => (
+                  <li
+                    key={step.kind}
+                    className={styles.continuation}
+                    data-continuation={step.kind}
+                  >
+                    <Typography.Text className={styles.kind}>
+                      {stepKind[step.kind]}
+                    </Typography.Text>
+                    <Typography.Text className={styles.continuationTitle}>
+                      {step.title}
+                    </Typography.Text>
+                    <Typography.Text tone="muted" className={styles.small}>
+                      {step.description}
+                    </Typography.Text>
+                    <StepLink step={step} />
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ) : null}
+          {practiceReady ? (
+            <AccountTryTask savedTaskIds={savedTaskIds} />
+          ) : null}
+        </div>
+      </div>
     </section>
   );
 };

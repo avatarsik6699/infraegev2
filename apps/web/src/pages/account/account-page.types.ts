@@ -10,6 +10,7 @@ export namespace AccountPageTypes {
     returnTo?: string;
     token?: string;
     practiceSummary?: readonly CourseProgressTypes.Lesson[] | null;
+    topicSummary?: readonly CourseProgressTypes.Lesson[] | null;
     enabledProviders?: readonly Provider[];
   };
   export type DeliveryPurpose = MailPurpose;

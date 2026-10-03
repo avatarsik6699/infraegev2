@@ -11,6 +11,9 @@ export const loadLessonPractice = createServerOnlyFn(
 export const loadCoursePracticeSummary = createServerOnlyFn((id: string) =>
   lessons.loadCoursePracticeSummary(id),
 );
+export const loadTopicPracticeSummary = createServerOnlyFn(() =>
+  lessons.loadTopicPracticeSummary(),
+);
 export const loadPracticeCatalog = createServerOnlyFn(
   (search: PracticeCatalogTypes.Search) => catalog.loadPracticeCatalog(search),
 );

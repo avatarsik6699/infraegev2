@@ -449,3 +449,27 @@ export async function loadCoursePracticeSummary(courseId: string) {
     return null;
   }
 }
+
+export async function loadTopicPracticeSummary() {
+  try {
+    const result = await practiceServerClient.GET(
+      "/api/topics/practice-summary",
+      { cache: "no-store", signal: AbortSignal.timeout(6000) },
+    );
+    return result.response.ok && result.data
+      ? result.data.topics.map(
+          (topic: components["schemas"]["LessonSummary"]) => ({
+            id: topic.id,
+            tasks: topic.tasks.map(
+              (task: components["schemas"]["TaskVersion"]) => ({
+                id: task.id,
+                solutionRevision: task.solution_revision,
+              }),
+            ),
+          }),
+        )
+      : null;
+  } catch {
+    return null;
+  }
+}

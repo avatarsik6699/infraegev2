@@ -253,6 +253,7 @@ export const AccountPage: React.FC<AccountPageTypes.Props> = (props) => {
           {props.mode === "profile" ? (
             <AccountProfile
               practiceSummary={props.practiceSummary ?? null}
+              topicSummary={props.topicSummary ?? null}
               enabledProviders={props.enabledProviders ?? []}
             />
           ) : null}

@@ -201,8 +201,11 @@ Progress and accounts:
   accessible control; the minimum stays 12 characters. No name fields or remember-me option.
 - The account route shows an empty state only when the member has no current-revision saved
   results; otherwise up to one continuation each for a mini-course, an EGE topic and standalone
-  practice from account-scoped progress and published content. Do not claim recency without a
-  timestamp. Logout belongs to profile identity; the safety area contains only account deletion.
+  practice from account-scoped progress and published content; the first becomes the single
+  «Следующий шаг» plate (Change 168). Course, topic and practice tiles and per-topic rows render
+  only when their own summary and progress are loaded, so one failing source never hides the
+  others or shows invented zeros. Do not claim recency without a timestamp: «Попробуйте задачу»
+  is the bank task after the highest-id saved one in the default order. Logout belongs to profile identity; the safety area contains only account deletion.
   Activity calendars, history, XP and achievements require a later data contract.
 - The public header shows signed-in progress and a profile initial, reserves stable geometry
   during session loading, and does not treat a failed session fetch as a guest state.

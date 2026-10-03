@@ -90,6 +90,13 @@ const summary: CourseProgressTypes.Lesson[] = published.map((lesson) => ({
   id: lesson.id,
   tasks: [{ id: `${lesson.id}-task`, solutionRevision: 1 }],
 }));
+const topicSummary: CourseProgressTypes.Lesson[] = topicCatalog.entries
+  .filter((entry) => entry.status === "published")
+  .map((entry) => ({
+    id: entry.id,
+    tasks: [{ id: "topic-task", solutionRevision: 1 }],
+  }));
+
 const topic = topicCatalog.entries.find(
   (entry) => entry.status === "published",
 );
@@ -108,10 +115,12 @@ describe("AccountOverview", () => {
   });
 
   it("shows a text-only empty state only after every progress source is ready", () => {
-    const { container } = render(<AccountOverview practiceSummary={summary} />);
+    render(
+      <AccountOverview practiceSummary={summary} topicSummary={topicSummary} />,
+    );
 
     expect(screen.getByText("Пока нет сохранённых результатов")).not.toBeNull();
-    expect(container.querySelector("img, svg")).toBeNull();
+    expect(screen.queryByRole("link", { name: "Открыть тему" })).toBeNull();
     expect(screen.queryByText("Курс Python")).toBeNull();
   });
 
@@ -123,7 +132,9 @@ describe("AccountOverview", () => {
         solvedTaskIds: progressFixture.solvedTaskIds,
       },
     };
-    render(<AccountOverview practiceSummary={summary} />);
+    render(
+      <AccountOverview practiceSummary={summary} topicSummary={topicSummary} />,
+    );
 
     expect(
       screen.getByRole("link", { name: "Продолжить" }).getAttribute("href"),
@@ -134,7 +145,9 @@ describe("AccountOverview", () => {
     progressFixture.lessonResults = {
       [published[0]?.id ?? ""]: { solvedTaskIds: ["saved-task"] },
     };
-    render(<AccountOverview practiceSummary={null} />);
+    render(
+      <AccountOverview practiceSummary={null} topicSummary={topicSummary} />,
+    );
 
     expect(screen.getByRole("link", { name: "Открыть курс" })).not.toBeNull();
     expect(screen.getByText("Прогресс временно недоступен")).not.toBeNull();
@@ -142,7 +155,9 @@ describe("AccountOverview", () => {
   });
 
   it("treats an incomplete course summary as unavailable instead of loading indefinitely", () => {
-    render(<AccountOverview practiceSummary={[]} />);
+    render(
+      <AccountOverview practiceSummary={[]} topicSummary={topicSummary} />,
+    );
 
     expect(screen.getByText("Прогресс временно недоступен")).not.toBeNull();
     expect(screen.queryByText("Загружаем прогресс…")).toBeNull();
@@ -153,11 +168,15 @@ describe("AccountOverview", () => {
     progressFixture.lessonResults = {
       [topic.id]: { solvedTaskIds: ["topic-task"] },
     };
+    progressFixture.solvedLessonId = topic.id;
+    progressFixture.solvedTaskIds = ["topic-task"];
     progressFixture.practiceHistory = {
       "z-task": { "1": "" },
       "a-task": { "1": "" },
     };
-    render(<AccountOverview practiceSummary={summary} />);
+    render(
+      <AccountOverview practiceSummary={summary} topicSummary={topicSummary} />,
+    );
 
     expect(
       screen.getByRole("link", { name: "Открыть тему" }).getAttribute("href"),
@@ -174,8 +193,12 @@ describe("AccountOverview", () => {
     progressFixture.lessonResults = {
       [topic.id]: { solvedTaskIds: ["topic-task"] },
     };
+    progressFixture.solvedLessonId = topic.id;
+    progressFixture.solvedTaskIds = ["topic-task"];
     progressFixture.practiceHistory = { "task-id": { "1": "" } };
-    render(<AccountOverview practiceSummary={null} />);
+    render(
+      <AccountOverview practiceSummary={null} topicSummary={topicSummary} />,
+    );
 
     expect(screen.getByText("Прогресс временно недоступен")).not.toBeNull();
     expect(screen.getByRole("link", { name: "Открыть тему" })).not.toBeNull();

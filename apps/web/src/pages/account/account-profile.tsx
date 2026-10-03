@@ -125,7 +125,10 @@ export const AccountProfile: React.FC<AccountProfileTypes.Props> = (props) => {
           <TabsTab value="settings">Настройки</TabsTab>
         </TabsList>
         <TabsPanel value="overview" className={styles.tabPanel}>
-          <AccountOverview practiceSummary={props.practiceSummary} />
+          <AccountOverview
+            practiceSummary={props.practiceSummary}
+            topicSummary={props.topicSummary}
+          />
         </TabsPanel>
         <TabsPanel value="settings" className={styles.tabPanel}>
           <section

@@ -1,71 +1,197 @@
 .root {
   display: grid;
-  gap: var(--space-3);
-  align-content: start;
-}
-
-.heading {
-  display: grid;
-  gap: var(--space-0-5);
-}
-
-.continuations {
-  display: grid;
   gap: var(--space-2);
+  align-content: start;
+  min-width: 0;
 }
 
-.continuation {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-3);
-  border: 1px solid var(--color-rule);
-  background: var(--color-surface);
-  border-radius: var(--radius-surface);
+.visuallyHidden {
+  composes: visuallyHidden from "../../../shared/styles/patterns.module.css";
+}
+
+.kind {
+  color: var(--color-text-soft);
+  font-size: var(--text-sm);
+}
+
+.small {
+  font-size: var(--text-sm);
 }
 
 /* The main next step is the one pastel plate on the profile (DESIGN.md › The Cover Rule). */
-.continuation:first-child {
-  border-color: transparent;
+.nextStep {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-3);
+  align-items: center;
+  padding: var(--space-3);
+  border-radius: var(--radius-tile);
   background: var(--color-plate-sky);
 }
 
-.continuationAction {
-  flex: none;
-  white-space: nowrap;
-}
-
-.continuationDetails {
+.stepDetails {
   display: grid;
   gap: var(--space-0-5);
   min-width: 0;
 }
 
-.kind {
-  font-size: var(--text-xs);
+.nextStep .nextTitle[data-order] {
+  margin: 0;
+  font-size: var(--text-lg);
+  font-weight: 600;
 }
 
-.emptyCard {
-  display: block;
-  padding: var(--space-3) var(--space-4);
+.stepAction {
+  justify-self: start;
+  white-space: nowrap;
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tile {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: var(--space-0-5);
+  min-width: 0;
+  padding: var(--space-3);
+  border: 1px solid var(--color-rule);
   border-radius: var(--radius-surface);
-  background: var(--color-surface-quiet);
+  background: var(--color-surface);
+}
+
+.tileIcon {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  width: 2rem;
+  height: 2rem;
+  color: var(--color-text);
+  stroke-width: 1.5;
+}
+
+.tileValue {
+  margin: 0;
+  color: var(--color-text);
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.tileBar {
+  margin-top: var(--space-1-5);
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: var(--space-2);
+  align-items: start;
+}
+
+.side {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.card {
+  display: grid;
+  gap: var(--space-1-5);
+  align-content: start;
+  min-width: 0;
+  padding: var(--space-3);
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-surface);
+  background: var(--color-surface);
+}
+
+.card h3 {
+  margin: 0;
+  font-size: var(--text-lg);
+}
+
+.topicRows,
+.continuations {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.topicRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(5rem, 7rem) 4.5rem;
+  gap: var(--space-2);
+  align-items: center;
+  padding-block: var(--space-1-5);
+  border-bottom: 1px solid var(--color-rule);
+}
+
+.topicRow:last-child {
+  border-bottom: 0;
+}
+
+.topicName {
+  display: grid;
+  gap: 0.125rem;
+  min-width: 0;
+}
+
+.topicCount {
+  margin: 0;
+  color: var(--color-text-soft);
+  font-family: var(--font-data);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+  white-space: nowrap;
+}
+
+.continuations {
+  gap: var(--space-1-5);
+}
+
+.continuation {
+  display: grid;
+  gap: var(--space-0-5);
+  padding: var(--space-2);
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-surface);
+}
+
+.continuationTitle {
+  margin: 0;
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+@media (max-width: 60rem) {
+  .tiles,
+  .columns {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 @media (max-width: 40rem) {
-  .continuation {
-    align-items: stretch;
+  .nextStep {
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--space-2);
   }
 
-  .continuationAction {
+  .topicRow {
+    grid-template-columns: minmax(0, 1fr) 4.5rem;
+  }
+
+  .topicBar {
     grid-column: 1 / -1;
-    justify-self: start;
-  }
-
-  .emptyCard {
-    padding: var(--space-3);
+    grid-row: 2;
   }
 }
