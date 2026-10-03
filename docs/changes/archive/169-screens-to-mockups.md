@@ -9,7 +9,7 @@
 | Change | `169` |
 | Slug | `screens-to-mockups` |
 | Title | Screens to the v5 mockups |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/169-screens-to-mockups` |
 
 ---
@@ -21,13 +21,13 @@ lesson, practice task, Python course, EGE catalog, mini-course catalog and statu
 diverging, plus smaller gaps elsewhere. Architect directive: all pages must match the design plan,
 not only the named ones; the earlier topic/course drawings reused across pages are retired in
 favour of neutral placeholders until the architect supplies new illustrations.
-Contract: [SPEC](../SPEC.md) §5.
+Contract: [SPEC](../../SPEC.md) §5.
 
 ---
 
 ## Design References
 
-- Mockups: [mockups](../artifacts/change-164/mockups/README.md) (`single.html` holds all pages);
+- Mockups: [mockups](../../artifacts/change-164/mockups/README.md) (`single.html` holds all pages);
   visual system: [DESIGN](../../DESIGN.md).
 - Per page: `home.html`, `ege.html`, `lesson.html` (EGE and course lessons), `practice.html`,
   `practice-task.html`, `courses.html`, `course-python.html`, `account.html`, `auth.html`,
@@ -94,7 +94,7 @@ of truth; this file only tracks what to build and what's left.
 ## Gate Checks
 
 > Critical Gate runs once per `/work` target set and by default in `/ship`; Full Gate runs only
-> with explicit `--full`; release selects affected checks and Release Gate. All gates are defined in [docs/STACK.md](../STACK.md) — this section only records
+> with explicit `--full`; release selects affected checks and Release Gate. All gates are defined in [docs/STACK.md](../../STACK.md) — this section only records
 > change-specific overrides.
 
 Per the architect (2026-10-03), e2e, Lighthouse and dev-bank data failures are deferred to the
