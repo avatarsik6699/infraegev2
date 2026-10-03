@@ -28,7 +28,7 @@ Contract: [SPEC](../../SPEC.md) §5.
 ## Design References
 
 - Mockups: [mockups](../../artifacts/change-164/mockups/README.md) (`single.html` holds all pages);
-  visual system: [DESIGN](../../DESIGN.md).
+  visual system: [DESIGN](../../../DESIGN.md).
 - Per page: `home.html`, `ege.html`, `lesson.html` (EGE and course lessons), `practice.html`,
   `practice-task.html`, `courses.html`, `course-python.html`, `account.html`, `auth.html`,
   `privacy.html`, `states.html`, `components.html`.
