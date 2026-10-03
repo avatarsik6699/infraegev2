@@ -22,6 +22,23 @@ export const numberSequencesLesson = defineLesson({
     "Проверять ответ на коротком примере и объяснять границы перебора",
   ],
   accessTier: "free",
+  subtopics: [
+    {
+      slug: "chisla-iz-fayla",
+      title: "Числа из файла",
+      conceptIds: ["sequence-from-file", "single-values"],
+    },
+    {
+      slug: "sosednie-elementy",
+      title: "Соседние пары и тройки",
+      conceptIds: ["neighbor-pairs", "neighbor-triples"],
+    },
+    {
+      slug: "proverka",
+      title: "Два прохода и проверка",
+      conceptIds: ["two-passes", "verify-boundaries"],
+    },
+  ],
   theory: [
     {
       id: "sequence-from-file",

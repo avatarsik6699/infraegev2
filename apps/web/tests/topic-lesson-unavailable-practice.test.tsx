@@ -5,8 +5,8 @@ import {
   rekursiyaLesson,
   stringProcessingLesson,
 } from "~/entities/lesson";
-import type { LessonContent } from "~/entities/lesson";
-import { TopicLessonPage } from "~/pages/topic-lesson";
+import { lessonSubtopics, type LessonContent } from "~/entities/lesson";
+import { TopicPracticePage, TopicSubtopicPage } from "~/pages/topic-lesson";
 import type { PracticeTaskTypes } from "~/entities/practice-task";
 
 vi.mock("@tanstack/react-router", async (importOriginal) => ({
@@ -54,7 +54,29 @@ vi.mock(
 );
 
 vi.mock("~/widgets/lesson-outline", () => ({
-  LessonOutline: () => <nav>Оглавление урока</nav>,
+  PageOutline: () => <nav>На этой странице</nav>,
+}));
+
+vi.mock("~/widgets/subtopic-navigation", () => ({
+  SubtopicNavigation: (props: { progress?: React.ReactNode }) => (
+    <nav>{props.progress}</nav>
+  ),
+}));
+
+vi.mock("~/widgets/public-header", () => ({
+  PublicHeader: () => null,
+}));
+
+vi.mock("~/pages/topic-lesson/components/topic-lesson-breadcrumbs", () => ({
+  TopicLessonBreadcrumbs: () => null,
+}));
+
+vi.mock("~/pages/topic-lesson/components/topic-lesson-pager", () => ({
+  TopicLessonPager: () => null,
+}));
+
+vi.mock("~/pages/topic-lesson/components/legacy-section-redirect", () => ({
+  LegacySectionRedirect: () => null,
 }));
 
 vi.mock("~/widgets/lesson-practice-flow", () => ({
@@ -63,10 +85,6 @@ vi.mock("~/widgets/lesson-practice-flow", () => ({
 
 vi.mock("~/widgets/public-footer", () => ({
   PublicFooter: () => null,
-}));
-
-vi.mock("~/pages/topic-lesson/components/topic-lesson-header", () => ({
-  TopicLessonHeader: () => null,
 }));
 
 vi.mock("~/pages/topic-lesson/components/topic-lesson-progress", () => ({
@@ -82,7 +100,11 @@ vi.mock("~/pages/topic-lesson/components/topic-lesson-result", () => ({
 const createTasks = (count: number): PracticeTaskTypes.Task[] =>
   Array.from({ length: count }, (_, index) => ({
     id: "task-" + String(index + 1),
+    theoryLinks: [],
   })) as PracticeTaskTypes.Task[];
+
+const firstSubtopic = (lesson: LessonContent.Definition) =>
+  lessonSubtopics(lesson)[0];
 
 describe("topic lesson with unavailable practice", () => {
   it.each([
@@ -97,21 +119,32 @@ describe("topic lesson with unavailable practice", () => {
       lesson: LessonContent.Definition;
       number: number;
     }) => {
-      render(
-        <TopicLessonPage lesson={lesson} tasks={[]} practiceUnavailable />,
+      const { unmount } = render(
+        <TopicSubtopicPage
+          lesson={lesson}
+          subtopic={firstSubtopic(lesson)}
+          tasks={[]}
+          practiceUnavailable
+        />,
       );
 
       expect(screen.getByText(`Задание ${number}`)).toBeTruthy();
       expect(screen.queryByText(/0 задач/)).toBeNull();
       expect(screen.queryByTestId("topic-lesson-progress")).toBeNull();
+      unmount();
+
+      render(
+        <TopicPracticePage lesson={lesson} tasks={[]} practiceUnavailable />,
+      );
       expect(screen.getByText("Практика урока")).toBeTruthy();
     },
   );
 
   it("shows the task count and progress when eight published tasks are available", () => {
     render(
-      <TopicLessonPage
+      <TopicSubtopicPage
         lesson={numberSequencesLesson}
+        subtopic={firstSubtopic(numberSequencesLesson)}
         tasks={createTasks(8)}
         practiceUnavailable={false}
       />,
@@ -123,8 +156,9 @@ describe("topic lesson with unavailable practice", () => {
 
   it("keeps the published lesson count and progress presentation", () => {
     render(
-      <TopicLessonPage
+      <TopicSubtopicPage
         lesson={rekursiyaLesson}
+        subtopic={firstSubtopic(rekursiyaLesson)}
         tasks={createTasks(5)}
         practiceUnavailable={false}
       />,

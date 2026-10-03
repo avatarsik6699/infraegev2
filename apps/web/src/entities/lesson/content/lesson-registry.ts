@@ -7,7 +7,7 @@ import { integerProcessingLesson } from "./integer-processing.lesson";
 import { arrayProcessingLesson } from "./array-processing.lesson";
 import { dataAnalysisLesson } from "./data-analysis.lesson";
 
-const lessons: readonly LessonContent.Definition[] = [
+export const topicLessons: readonly LessonContent.Definition[] = [
   rekursiyaLesson,
   preobrazovanieZapiseyChiselLesson,
   numberSequencesLesson,
@@ -20,5 +20,5 @@ const lessons: readonly LessonContent.Definition[] = [
 export function findLessonByRouteSlug(
   routeSlug: string,
 ): LessonContent.Definition | undefined {
-  return lessons.find((lesson) => lesson.routeSlug === routeSlug);
+  return topicLessons.find((lesson) => lesson.routeSlug === routeSlug);
 }

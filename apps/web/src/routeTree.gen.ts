@@ -28,6 +28,8 @@ import { Route as PracticeIndexRouteImport } from './routes/practice.index'
 import { Route as PracticeTaskIdRouteImport } from './routes/practice.$taskId'
 import { Route as SitemapPracticePageRouteImport } from './routes/sitemap-practice.$page'
 import { Route as CoursesCourseSlugLessonSlugRouteImport } from './routes/courses_.$courseSlug.$lessonSlug'
+import { Route as EgeSlugSubtopicRouteImport } from './routes/ege_.$slug.$subtopic'
+import { Route as EgeSlugPraktikaRouteImport } from './routes/ege_.$slug.praktika'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -125,6 +127,16 @@ const CoursesCourseSlugLessonSlugRoute =
     path: '/courses/$courseSlug/$lessonSlug',
     getParentRoute: () => rootRouteImport,
   } as any)
+const EgeSlugSubtopicRoute = EgeSlugSubtopicRouteImport.update({
+  id: '/ege_/$slug/$subtopic',
+  path: '/ege/$slug/$subtopic',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EgeSlugPraktikaRoute = EgeSlugPraktikaRouteImport.update({
+  id: '/ege_/$slug/praktika',
+  path: '/ege/$slug/praktika',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -146,6 +158,8 @@ export interface FileRoutesByFullPath {
   '/ege/': typeof EgeIndexRoute
   '/practice/': typeof PracticeIndexRoute
   '/courses/$courseSlug/$lessonSlug': typeof CoursesCourseSlugLessonSlugRoute
+  '/ege/$slug/$subtopic': typeof EgeSlugSubtopicRoute
+  '/ege/$slug/praktika': typeof EgeSlugPraktikaRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -167,6 +181,8 @@ export interface FileRoutesByTo {
   '/ege': typeof EgeIndexRoute
   '/practice': typeof PracticeIndexRoute
   '/courses/$courseSlug/$lessonSlug': typeof CoursesCourseSlugLessonSlugRoute
+  '/ege/$slug/$subtopic': typeof EgeSlugSubtopicRoute
+  '/ege/$slug/praktika': typeof EgeSlugPraktikaRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -189,6 +205,8 @@ export interface FileRoutesById {
   '/ege/': typeof EgeIndexRoute
   '/practice/': typeof PracticeIndexRoute
   '/courses_/$courseSlug/$lessonSlug': typeof CoursesCourseSlugLessonSlugRoute
+  '/ege_/$slug/$subtopic': typeof EgeSlugSubtopicRoute
+  '/ege_/$slug/praktika': typeof EgeSlugPraktikaRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -212,6 +230,8 @@ export interface FileRouteTypes {
     | '/ege/'
     | '/practice/'
     | '/courses/$courseSlug/$lessonSlug'
+    | '/ege/$slug/$subtopic'
+    | '/ege/$slug/praktika'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -233,6 +253,8 @@ export interface FileRouteTypes {
     | '/ege'
     | '/practice'
     | '/courses/$courseSlug/$lessonSlug'
+    | '/ege/$slug/$subtopic'
+    | '/ege/$slug/praktika'
   id:
     | '__root__'
     | '/'
@@ -254,6 +276,8 @@ export interface FileRouteTypes {
     | '/ege/'
     | '/practice/'
     | '/courses_/$courseSlug/$lessonSlug'
+    | '/ege_/$slug/$subtopic'
+    | '/ege_/$slug/praktika'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -276,6 +300,8 @@ export interface RootRouteChildren {
   EgeIndexRoute: typeof EgeIndexRoute
   PracticeIndexRoute: typeof PracticeIndexRoute
   CoursesCourseSlugLessonSlugRoute: typeof CoursesCourseSlugLessonSlugRoute
+  EgeSlugSubtopicRoute: typeof EgeSlugSubtopicRoute
+  EgeSlugPraktikaRoute: typeof EgeSlugPraktikaRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -413,6 +439,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CoursesCourseSlugLessonSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ege_/$slug/$subtopic': {
+      id: '/ege_/$slug/$subtopic'
+      path: '/ege/$slug/$subtopic'
+      fullPath: '/ege/$slug/$subtopic'
+      preLoaderRoute: typeof EgeSlugSubtopicRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ege_/$slug/praktika': {
+      id: '/ege_/$slug/praktika'
+      path: '/ege/$slug/praktika'
+      fullPath: '/ege/$slug/praktika'
+      preLoaderRoute: typeof EgeSlugPraktikaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -436,6 +476,8 @@ const rootRouteChildren: RootRouteChildren = {
   EgeIndexRoute: EgeIndexRoute,
   PracticeIndexRoute: PracticeIndexRoute,
   CoursesCourseSlugLessonSlugRoute: CoursesCourseSlugLessonSlugRoute,
+  EgeSlugSubtopicRoute: EgeSlugSubtopicRoute,
+  EgeSlugPraktikaRoute: EgeSlugPraktikaRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

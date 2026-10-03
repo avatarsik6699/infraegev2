@@ -22,6 +22,23 @@ export const dataAnalysisLesson = defineLesson({
     "Оценивать число проверок и независимо сверять оба результата на малом файле",
   ],
   accessTier: "free",
+  subtopics: [
+    {
+      slug: "gruppy",
+      title: "Файл и группы точек",
+      conceptIds: ["points-and-records", "spatial-clusters", "energy-clusters"],
+    },
+    {
+      slug: "raschety",
+      title: "Выбор центра и второй расчёт",
+      conceptIds: ["cluster-centre", "distance-and-filter"],
+    },
+    {
+      slug: "rezultat",
+      title: "Результаты и проверка",
+      conceptIds: ["combined-result", "independent-check"],
+    },
+  ],
   theory: [
     {
       id: "points-and-records",

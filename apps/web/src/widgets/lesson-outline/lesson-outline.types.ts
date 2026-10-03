@@ -16,4 +16,7 @@ export namespace LessonOutlineTypes {
     activeId?: string;
     className?: string;
   };
+  export type PageProps = {
+    items: readonly LessonTypes.OutlineItem[];
+  };
 }

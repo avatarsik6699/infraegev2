@@ -87,7 +87,7 @@ describe("task 24 string processing lesson", () => {
         height: 104,
       },
     });
-    expect(publicPaths).toContain("/ege/24-obrabotka-simvolnyh-strok");
+    expect(publicPaths).toContain("/ege/24-obrabotka-simvolnyh-strok/praktika");
   });
 
   it("links only to published Python lessons and keeps word boundaries", () => {

@@ -25,6 +25,23 @@ export const integerProcessingLesson = defineLesson({
     "Соединять проверки в ограниченном поиске и независимо проверять итог",
   ],
   accessTier: "free",
+  subtopics: [
+    {
+      slug: "perebor-i-cifry",
+      title: "Перебор, делимость и цифры",
+      conceptIds: ["integer-range", "divisibility-remainder", "decimal-digits"],
+    },
+    {
+      slug: "deliteli",
+      title: "Делители и простые числа",
+      conceptIds: ["divisors", "primes", "divisor-pairs"],
+    },
+    {
+      slug: "maska-i-poisk",
+      title: "Маска числа и общий поиск",
+      conceptIds: ["decimal-mask", "bounded-search"],
+    },
+  ],
   theory: [
     {
       id: "integer-range",

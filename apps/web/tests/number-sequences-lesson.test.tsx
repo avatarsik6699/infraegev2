@@ -90,7 +90,9 @@ describe("task 17 number sequences lesson", () => {
     expect(
       topicCatalog.entries.find((entry) => entry.id === "number-sequences"),
     ).toHaveProperty("routeSlug", "17-chislovye-posledovatelnosti");
-    expect(publicPaths).toContain("/ege/17-chislovye-posledovatelnosti");
+    expect(publicPaths).toContain(
+      "/ege/17-chislovye-posledovatelnosti/praktika",
+    );
   });
 
   it("renders ordinary links only to the four published Python lessons", () => {

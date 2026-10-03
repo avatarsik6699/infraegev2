@@ -22,6 +22,15 @@ export namespace LessonContent {
     mistake?: React.ReactNode;
   };
 
+  /** Authored page of an EGE topic: adjacent theory blocks under one URL (Change 167). */
+  export type Subtopic = {
+    /** Public path segment: /ege/{routeSlug}/{slug}. */
+    slug: string;
+    title: string;
+    /** Adjacent `ConceptBlock` ids in authored order. */
+    conceptIds: readonly [string, ...string[]];
+  };
+
   export type Definition = {
     id: string;
     /** Public path segment: /ege/{routeSlug}. */
@@ -35,6 +44,8 @@ export namespace LessonContent {
     learningOutcomes: readonly string[];
     /** Authored theory blocks; task membership belongs to the canonical practice bank. */
     theory: readonly ConceptBlock[];
+    /** Splits `theory` into subtopic pages without changing its order; required once published. */
+    subtopics?: readonly Subtopic[];
     examFocus?: React.ReactNode;
     /** The lesson's single formative, think-then-reveal self-check, rendered inside `result`
      *  («Итоги»), after the result copy — not counted toward masteryThreshold. */

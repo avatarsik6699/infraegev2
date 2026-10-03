@@ -23,6 +23,31 @@ export const stringProcessingLesson = defineLesson({
     "Проверять границы и ответ на коротком примере перед обработкой большого файла",
   ],
   accessTier: "free",
+  subtopics: [
+    {
+      slug: "stroka-i-pozicii",
+      title: "Строка, позиции и фрагменты",
+      conceptIds: ["file-and-string", "positions-and-fragments"],
+    },
+    {
+      slug: "fragmenty",
+      title: "Подходящие фрагменты",
+      conceptIds: [
+        "adjacent-and-overlapping",
+        "longest-valid-run",
+        "occurrence-limit",
+      ],
+    },
+    {
+      slug: "vyrazheniya",
+      title: "Выражения в строке",
+      conceptIds: [
+        "expression-grammar",
+        "linear-expression-scan",
+        "independent-verification",
+      ],
+    },
+  ],
   theory: [
     {
       id: "file-and-string",

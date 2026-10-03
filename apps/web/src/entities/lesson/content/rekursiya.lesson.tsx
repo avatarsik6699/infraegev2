@@ -24,6 +24,50 @@ export const rekursiyaLesson = defineLesson({
     "Сокращать отношение и разность значений функции, объясняя, когда сокращение не работает, и проверять ответ вторым способом",
   ],
   accessTier: "free",
+  subtopics: [
+    {
+      slug: "osnovy",
+      title: "Как считается рекурсия",
+      conceptIds: ["concrete-computation", "base-case-and-step"],
+    },
+    {
+      slug: "funkciya-i-cikl",
+      title: "Функция, стек вызовов и цикл",
+      conceptIds: ["code-and-call-stack", "loop-instead-of-recursion"],
+    },
+    {
+      slug: "predydushchie-znacheniya",
+      title: "Несколько предыдущих значений и кеш",
+      conceptIds: [
+        "several-previous-values",
+        "repeated-work-motivates-storage",
+      ],
+    },
+    {
+      slug: "slozhnye-pravila",
+      title: "Сложные правила перехода",
+      conceptIds: [
+        "argument-steps",
+        "branching-conditions",
+        "upward-recursion-cache-warmup",
+        "two-functions",
+      ],
+    },
+    {
+      slug: "bolshie-argumenty",
+      title: "Подсчёт и большие аргументы",
+      conceptIds: [
+        "count-arguments",
+        "large-arguments-algebraic-shortcut",
+        "large-arguments-differences",
+      ],
+    },
+    {
+      slug: "shablon",
+      title: "Шаблон программы и общий алгоритм",
+      conceptIds: ["exam-program-template", "general-method"],
+    },
+  ],
   theory: [
     {
       id: "concrete-computation",

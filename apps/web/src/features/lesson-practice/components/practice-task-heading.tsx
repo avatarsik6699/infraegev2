@@ -1,4 +1,5 @@
 import type { PracticeTaskTypes } from "~/entities/practice-task";
+import { ActionLink } from "~/shared/components/action-link";
 import { FragmentLink } from "~/shared/components/fragment-link";
 import { Typography } from "~/shared/components/typography";
 import styles from "../lesson-practice.module.css";
@@ -23,13 +24,23 @@ export const PracticeTaskHeading: React.FC<PracticeTaskHeadingProps> = (
         <ul>
           {props.task.theoryLinks.map((link) => (
             <li key={link.hash}>
-              <FragmentLink
-                presentation="action"
-                hierarchy="text"
-                hash={link.hash}
-              >
-                {link.label}
-              </FragmentLink>
+              {link.href ? (
+                <ActionLink
+                  presentation="action"
+                  hierarchy="text"
+                  to={link.href}
+                >
+                  {link.label}
+                </ActionLink>
+              ) : (
+                <FragmentLink
+                  presentation="action"
+                  hierarchy="text"
+                  hash={link.hash}
+                >
+                  {link.label}
+                </FragmentLink>
+              )}
             </li>
           ))}
         </ul>

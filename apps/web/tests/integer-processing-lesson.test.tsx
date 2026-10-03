@@ -92,7 +92,7 @@ describe("task 25 integer processing lesson", () => {
         height: 104,
       },
     });
-    expect(publicPaths).toContain("/ege/25-obrabotka-celyh-chisel");
+    expect(publicPaths).toContain("/ege/25-obrabotka-celyh-chisel/praktika");
   });
 
   it("links to published Python lessons and keeps word boundaries", () => {

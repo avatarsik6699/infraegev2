@@ -2,7 +2,12 @@ import {
   courseLessonPublications,
   coursePublications,
 } from "~/entities/course";
-import { lessonPublications } from "~/entities/lesson";
+import {
+  findLessonByRouteSlug,
+  lessonPracticeSlug,
+  lessonPublications,
+  lessonSubtopics,
+} from "~/entities/lesson";
 
 const publicPaths = [
   "/",
@@ -12,7 +17,18 @@ const publicPaths = [
   "/practice",
   ...lessonPublications
     .filter((lesson) => lesson.status === "published")
-    .map((lesson) => `/ege/${lesson.routeSlug}`),
+    .flatMap((publication) => {
+      const lesson = findLessonByRouteSlug(publication.routeSlug);
+      const base = `/ege/${publication.routeSlug}`;
+      return lesson
+        ? [
+            ...lessonSubtopics(lesson).map(
+              (subtopic) => `${base}/${subtopic.slug}`,
+            ),
+            `${base}/${lessonPracticeSlug}`,
+          ]
+        : [];
+    }),
   ...coursePublications
     .filter((course) => course.status === "published")
     .flatMap((course) => [

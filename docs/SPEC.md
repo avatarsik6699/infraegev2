@@ -100,6 +100,14 @@ sdamgia.ru, kpolyakov.spb.ru), ни новыми AI-ботами (решают �
    после итогового текста; не учитывается как выполненная практика.
 
 Роли идут только в этом порядке; опциональные роли можно пропускать, но нельзя переставлять.
+
+Тема ЕГЭ (Change 167) делится на авторские подтемы — группы соседних `ConceptBlock` без изменения
+их текста и порядка. Каждая подтема — отдельная страница `/ege/{topic}/{subtopic}`; первая
+открывается по адресу темы (редирект) и начинается с введения. После подтем идёт страница «Практика и итог»
+с ролями 2–4. Страница подтемы дополнительно показывает те задачи урока, у которых есть
+theory link на её разделы: это представление той же практики урока, а не отдельный набор задач
+или прогресс. Отметка пройденной подтемы вычисляется из уже сохранённых решений этих задач;
+подтема без задач отметки не имеет. Мини-курсы Python остаются одностраничными уроками.
 Контент включается только когда помогает понять материал, решить задачу или выбрать следующий шаг.
 
 Подсказки и решение доступны сразу и не меняют прогресс. Для вошедшего ученика прогресс хранит
@@ -139,6 +147,7 @@ PostgreSQL (§3). Задача самостоятельна и может име
 `TopicCatalogEntry` (учебная тема) `→` непустой упорядоченный `taskNumbers[]` (один или несколько
 номеров ЕГЭ) `→` опциональный опубликованный `TopicLesson`
 `TopicLesson` `→` `ConceptBlock[]` (смысловые разделы типизированной TSX-теории)
+`TopicLesson` `→` `Subtopic[]` (авторская группировка соседних `ConceptBlock` со своим slug, Change 167)
 `Course` `→` `CourseModule[]` `→` `CourseLesson[]` (упорядоченная самостоятельная траектория)
 `TopicLesson` / `CourseLesson` `→` `Task[]` через `lessons[{material_id, position}]`
 
@@ -365,9 +374,11 @@ Change 164 replaces the minimal Change 122/156 profile with the "Clean Textbook"
 in [DESIGN](../DESIGN.md), approved by the architect from full-page mockups. Keep the infraege
 stone identity; the home page is the colourful entry point, every other page is a calm white
 reading surface where colour appears only where it carries meaning; light theme only. Fonts are
-self-hosted Onest, JetBrains Mono and Caveat (lesson diagram labels only). Lessons keep a left
-panel with the topic and its subtopics (in-page anchors until subtopic pages land in a separate
-change), the reading column and an on-page outline; course overview, catalogs and profile have
+self-hosted Onest, JetBrains Mono and Caveat (lesson diagram labels only). EGE topic lessons
+have a left panel with the topic and its subtopic pages (Change 167: `/ege/{topic}/{subtopic}`,
+«Подтема N из M», previous/next, a right “on this page” rail; `/ege/{topic}` redirects to the first
+subtopic and old `#section` links resolve to the owning subtopic); course lessons keep in-page
+anchors; course overview, catalogs and profile have
 no left panel; the profile has an overview dashboard and a settings tab. Keep educational
 figures and attachments; hand-drawn monochrome illustrations are supplied by the architect and
 use reserved placeholders until then.

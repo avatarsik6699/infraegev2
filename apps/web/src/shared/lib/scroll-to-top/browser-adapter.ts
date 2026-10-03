@@ -27,4 +27,16 @@ const scroll = (headingId: string): void => {
   });
 };
 
-export const scrollToTop = { observe, scroll };
+let initialPageShown = false;
+
+/** Moves focus to a new page heading after client navigation, never on the first load. */
+const focusHeadingAfterNavigation = (headingId: string): void => {
+  if (!initialPageShown) {
+    initialPageShown = true;
+    return;
+  }
+  if (window.location.hash) return;
+  document.getElementById(headingId)?.focus({ preventScroll: true });
+};
+
+export const scrollToTop = { observe, scroll, focusHeadingAfterNavigation };

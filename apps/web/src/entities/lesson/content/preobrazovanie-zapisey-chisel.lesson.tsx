@@ -21,6 +21,44 @@ export const preobrazovanieZapiseyChiselLesson = defineLesson({
     "Выбирать безопасный поиск минимума или максимума и обосновывать границы перебора",
   ],
   accessTier: "free",
+  subtopics: [
+    {
+      slug: "model-algoritma",
+      title: "Как устроен алгоритм",
+      conceptIds: [
+        "four-stage-model",
+        "number-and-representation",
+        "five-step-execution",
+      ],
+    },
+    {
+      slug: "operacii-s-zapisyu",
+      title: "Операции с записью числа",
+      conceptIds: [
+        "string-operations",
+        "appending-and-place-value",
+        "repeated-parity",
+      ],
+    },
+    {
+      slug: "poisk-i-granicy",
+      title: "Поиск ответа и границы перебора",
+      conceptIds: [
+        "minimum-search",
+        "branched-base-three",
+        "safe-search-bounds",
+      ],
+    },
+    {
+      slug: "shablon",
+      title: "Замена и универсальный шаблон",
+      conceptIds: [
+        "simultaneous-replacement",
+        "digit-sum-and-general-template",
+        "final-solution-algorithm",
+      ],
+    },
+  ],
   theory: [
     {
       id: "four-stage-model",

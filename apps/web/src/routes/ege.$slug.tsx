@@ -1,45 +1,24 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
-import { findLessonByRouteSlug, lessonPublications } from "~/entities/lesson";
-import { getTopicLessonRouteData, TopicLessonPage } from "~/pages/topic-lesson";
-import { pageHead } from "~/shared/lib/seo";
+import { createFileRoute, notFound, redirect } from "@tanstack/react-router";
+import {
+  findLessonByRouteSlug,
+  findSubtopicBySection,
+  lessonSubtopics,
+} from "~/entities/lesson";
 
+// The topic URL opens its first subtopic page (Change 167). The browser keeps an old
+// `#section` across the server redirect; client navigations resolve it here directly.
 export const Route = createFileRoute("/ege/$slug")({
-  loader: async ({ params }: { params: { slug: string } }) => {
-    const lesson = lessonPublications.find(
-      (publication) => publication.routeSlug === params.slug,
-    );
-    if (!lesson) throw notFound();
-    const routeData = await getTopicLessonRouteData({ data: params.slug });
-    if (!routeData) throw notFound();
-    return routeData;
+  beforeLoad: ({ params, location }) => {
+    const lesson = findLessonByRouteSlug(params.slug);
+    const first = lesson ? lessonSubtopics(lesson)[0] : undefined;
+    if (!lesson || lesson.status !== "published" || !first) throw notFound();
+    const hash = location.hash || undefined;
+    const owner = hash ? findSubtopicBySection(lesson, hash) : undefined;
+    throw redirect({
+      to: "/ege/$slug/$subtopic",
+      params: { slug: params.slug, subtopic: (owner ?? first).slug },
+      hash,
+      statusCode: 301,
+    });
   },
-  head: ({ params }: { params: { slug: string } }) => {
-    const lesson = lessonPublications.find(
-      (publication) => publication.routeSlug === params.slug,
-    );
-    return lesson
-      ? pageHead.create({
-          title: `${lesson.title} — infraege`,
-          description: lesson.summary,
-          path: `/ege/${lesson.routeSlug}`,
-          type: "article",
-          noIndex: lesson.status !== "published",
-        })
-      : {};
-  },
-  component: TopicLessonRoute,
 });
-
-function TopicLessonRoute() {
-  const params = Route.useParams();
-  const data = Route.useLoaderData();
-  const lesson = findLessonByRouteSlug(params.slug);
-  if (!lesson) return null;
-  return (
-    <TopicLessonPage
-      lesson={lesson}
-      tasks={data.tasks}
-      practiceUnavailable={data.practiceUnavailable}
-    />
-  );
-}

@@ -4,13 +4,15 @@ import styles from "./lesson-theory.module.css";
 
 type LessonTheoryConceptProps = {
   concept: LessonTheoryTypes.Concept;
+  headingOrder?: 2 | 3;
 };
 
 export const LessonTheoryConcept: React.FC<LessonTheoryConceptProps> = ({
   concept,
+  headingOrder = 3,
 }) => (
   <section className={styles.concept} id={concept.id}>
-    <Typography.Title order={3} className={styles.conceptTitle}>
+    <Typography.Title order={headingOrder} className={styles.conceptTitle}>
       {concept.navLabel}
     </Typography.Title>
     <Typography.Prose

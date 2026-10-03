@@ -1,5 +1,6 @@
 export namespace PracticeTaskTypes {
-  export type TheoryLink = { hash: string; label: string };
+  /** `href` points at another page that owns the section (topic subtopic pages). */
+  export type TheoryLink = { hash: string; label: string; href?: string };
 
   export type AttachmentMimeType =
     | "text/plain"

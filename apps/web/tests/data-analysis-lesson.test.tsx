@@ -84,7 +84,9 @@ describe("task 27 data analysis lesson", () => {
         height: 104,
       },
     });
-    expect(publicPaths).toContain("/ege/27-analiz-dannyh-i-klasterizatsiya");
+    expect(publicPaths).toContain(
+      "/ege/27-analiz-dannyh-i-klasterizatsiya/praktika",
+    );
   });
 
   it("links only to published Python explanations and keeps inline spaces", () => {

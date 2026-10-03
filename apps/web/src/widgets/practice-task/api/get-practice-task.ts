@@ -4,7 +4,12 @@ import {
   setResponseStatus,
 } from "@tanstack/react-start/server";
 import { loadStandaloneTask } from "~/entities/practice-task";
-import { lessonPublications } from "~/entities/lesson";
+import {
+  findLessonByRouteSlug,
+  findSubtopicBySection,
+  lessonPublications,
+  lessonSubtopics,
+} from "~/entities/lesson";
 import {
   courseLessonPublications,
   coursePublications,
@@ -32,13 +37,21 @@ export const getPracticeTask = createServerFn({ method: "GET" })
       const topic = lessonPublications.find(
         (item) => item.id === link.material_id && item.status === "published",
       );
-      if (topic)
+      if (topic) {
+        const lesson = findLessonByRouteSlug(topic.routeSlug);
+        const subtopic = lesson
+          ? (link.section && findSubtopicBySection(lesson, link.section)) ||
+            lessonSubtopics(lesson)[0]
+          : undefined;
         return [
           {
-            href: `/ege/${topic.routeSlug}${hash}`,
+            href: subtopic
+              ? `/ege/${topic.routeSlug}/${subtopic.slug}${hash}`
+              : `/ege/${topic.routeSlug}${hash}`,
             label: link.label,
           },
         ];
+      }
       const lesson = courseLessonPublications.find(
         (item) => item.id === link.material_id && item.status === "published",
       );

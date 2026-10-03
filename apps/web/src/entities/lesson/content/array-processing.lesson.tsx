@@ -23,6 +23,23 @@ export const arrayProcessingLesson = defineLesson({
     "Проверять граничные случаи и два числа ответа на небольших данных",
   ],
   accessTier: "free",
+  subtopics: [
+    {
+      slug: "dannye",
+      title: "Порядок и данные из файла",
+      conceptIds: ["sorted-order", "file-records"],
+    },
+    {
+      slug: "otbor",
+      title: "Отбор при ограничении",
+      conceptIds: ["capacity-selection", "secondary-optimum"],
+    },
+    {
+      slug: "sobytiya",
+      title: "Журнал событий и проверка",
+      conceptIds: ["event-stream", "independent-check"],
+    },
+  ],
   theory: [
     {
       id: "sorted-order",

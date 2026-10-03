@@ -6,13 +6,26 @@ import styles from "./lesson-theory.module.css";
 export const LessonTheory: React.FC<LessonTheoryTypes.Props> = ({
   concepts,
   className,
-}) => (
-  <section id="theory" className={`${styles.root} ${className ?? ""}`}>
-    <LessonSectionHeading index={1}>Теория</LessonSectionHeading>
-    <div className={styles.concepts}>
+  variant = "lesson",
+  conceptHeadingOrder = 3,
+}) =>
+  variant === "page" ? (
+    <div id="theory" className={`${styles.concepts} ${className ?? ""}`}>
       {concepts.map((concept) => (
-        <LessonTheoryConcept key={concept.id} concept={concept} />
+        <LessonTheoryConcept
+          key={concept.id}
+          concept={concept}
+          headingOrder={conceptHeadingOrder}
+        />
       ))}
     </div>
-  </section>
-);
+  ) : (
+    <section id="theory" className={`${styles.root} ${className ?? ""}`}>
+      <LessonSectionHeading index={1}>Теория</LessonSectionHeading>
+      <div className={styles.concepts}>
+        {concepts.map((concept) => (
+          <LessonTheoryConcept key={concept.id} concept={concept} />
+        ))}
+      </div>
+    </section>
+  );

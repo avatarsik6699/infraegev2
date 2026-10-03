@@ -85,7 +85,7 @@ describe("task 26 sorting and selection lesson", () => {
         height: 104,
       },
     });
-    expect(publicPaths).toContain("/ege/26-sortirovka-i-otbor");
+    expect(publicPaths).toContain("/ege/26-sortirovka-i-otbor/praktika");
   });
 
   it("keeps course links real and spaces around inline elements", () => {

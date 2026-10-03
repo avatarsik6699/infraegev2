@@ -218,6 +218,12 @@ Progress and accounts:
 - Responsive lesson outlines keep stable first-paint geometry through hydration: never render an
   expanded mobile outline and collapse it only after JavaScript starts. The complete outline stays
   usable without scripting.
+- EGE topics are subtopic pages (Change 167): `/ege/{topic}` redirects to the first subtopic,
+  `/ege/{topic}/{subtopic}` and `/ege/{topic}/praktika` are real links (never fragment-only), and an
+  old `#section` resolves to the page that owns it. Subtopic grouping lives in the lesson
+  definition and is validated by `subtopicErrors`. Task theory links point at the owning subtopic
+  URL. After client navigation between topic pages focus moves to the new page heading; the
+  first load keeps browser focus.
 - Use CSS breakpoints, not post-mount viewport detection, for layout. No animated list geometry or
   automatic scrolling when filters change. Reserve image, progress, status and action geometry on
   first paint, including loading, API errors, retry, font failures and delayed hydration.
