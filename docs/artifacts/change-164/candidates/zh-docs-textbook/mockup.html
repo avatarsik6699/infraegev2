@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ж — Документация-учебник</title>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Caveat:wght@500;600&display=swap&subset=cyrillic" rel="stylesheet">
+<style>
+:root{--bg:#fff;--side:#fafaf8;--ink:#17191e;--mu:#626874;--line:#ececea;--or:#f26a0a;--orink:#b84500;--link:#1f4fd0;--ok:#1d7a46;--wash:#f4f4f1;--r:6px;--sans:Onest,system-ui,sans-serif;--mono:"JetBrains Mono",monospace;--hand:Caveat,cursive}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.7 var(--sans)}
+.tag{background:#17191e;color:#fff;font:500 13px var(--mono);padding:6px 16px;position:sticky;top:0;z-index:9}
+.top{display:flex;align-items:center;gap:20px;height:60px;padding:0 24px;border-bottom:1px solid var(--line)}
+.brand{display:flex;gap:9px;align-items:center;font:600 20px var(--sans);color:var(--ink);text-decoration:none}.brand svg{width:20px;height:27px}
+.top nav{display:flex;gap:2px;margin-left:12px}.top nav a{font:500 15px var(--sans);color:var(--mu);text-decoration:none;padding:0 12px;min-height:40px;display:inline-flex;align-items:center;border-radius:var(--r)}
+.top nav a:hover{background:var(--wash)}.top nav a[aria-current]{color:var(--ink);background:var(--wash)}
+.srch{margin-left:auto;font:400 14px var(--sans);color:var(--mu);border:1px solid var(--line);border-radius:var(--r);padding:0 14px;min-height:38px;display:flex;align-items:center;gap:30px;min-width:220px}.srch kbd{font:500 12px var(--mono);border:1px solid var(--line);border-radius:4px;padding:0 6px}
+.login{font:500 15px var(--sans);border:1px solid var(--line);border-radius:var(--r);padding:0 14px;min-height:38px;display:inline-flex;align-items:center;color:var(--ink);text-decoration:none}
+/* 3 columns */
+.app{display:grid;grid-template-columns:272px minmax(0,1fr) 224px;min-height:640px}
+.lp{background:var(--side);border-right:1px solid var(--line);padding:22px 14px 28px 20px;font:400 15px/1.4 var(--sans)}
+.lp .all{display:inline-flex;font:500 13px var(--sans);color:var(--mu);text-decoration:none;margin-bottom:14px;min-height:32px;align-items:center}
+.lp h2{font:600 17px/1.3 var(--sans);margin:0 0 2px}.lp .sub{font:400 13px var(--sans);color:var(--mu);margin-bottom:12px}
+.bar{height:4px;background:var(--line);border-radius:2px;margin:6px 0 14px;overflow:hidden}.bar i{display:block;height:100%;background:var(--ink);width:33%}
+.lp ol{list-style:none;margin:0;padding:0}
+.lp li a{display:grid;grid-template-columns:20px 1fr;gap:8px;padding:8px 10px;margin-left:-10px;border-radius:var(--r);color:var(--ink);text-decoration:none;min-height:40px;align-items:start;position:relative}
+.lp li a:hover{background:var(--wash)}
+.lp li a i{font:500 12px var(--mono);color:var(--mu);padding-top:2px;font-style:normal}
+.lp li a.d i{color:var(--ok)}
+.lp li a[aria-current]{background:#fff;box-shadow:0 0 0 1px var(--line);font-weight:600}
+.lp li a[aria-current]::before{content:"";position:absolute;left:-1px;top:8px;bottom:8px;width:3px;border-radius:2px;background:var(--or)}
+.lp .grp{font:500 12px var(--sans);color:var(--mu);margin:22px 0 6px;letter-spacing:.02em}
+.main{padding:30px 48px 56px;min-width:0}
+.crumb{display:flex;justify-content:space-between;gap:12px;font:400 14px var(--sans);color:var(--mu);margin-bottom:26px;flex-wrap:wrap}.crumb b{color:var(--ink);font-weight:500}
+.rp{padding:30px 20px 28px 0;font:400 14px/1.45 var(--sans);position:sticky;top:0;align-self:start}
+.rp h3{font:600 13px var(--sans);margin:0 0 10px}.rp a{display:block;color:var(--mu);text-decoration:none;padding:5px 0 5px 12px;border-left:2px solid var(--line)}.rp a[aria-current]{color:var(--ink);border-left-color:var(--or);font-weight:500}
+.art{max-width:690px}
+.lab{display:inline-flex;gap:8px;align-items:center;font:500 13px var(--sans);color:var(--orink);margin-bottom:8px}.lab::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--or)}
+.art h1{font:700 clamp(30px,3.6vw,40px)/1.15 var(--sans);letter-spacing:-.02em;margin:0 0 20px}
+.art h2{font:600 24px/1.3 var(--sans);margin:34px 0 12px;letter-spacing:-.01em}
+.art p{margin:0 0 16px}.art em{font-style:italic}.art a{color:var(--link);text-decoration-color:rgba(31,79,208,.35);text-underline-offset:3px}
+.f{font:500 .88em var(--mono);background:var(--wash);padding:1px 6px;border-radius:4px;white-space:nowrap}
+.ex{border:1px solid var(--line);border-radius:var(--r);margin:24px 0}.ex .hd{font:500 13px var(--sans);color:var(--mu);padding:10px 18px;border-bottom:1px solid var(--line)}
+.ex .bd{padding:14px 18px 8px}.ex h3{font:600 17px/1.5 var(--sans);margin:0 0 8px}
+.ex ol{margin:0;padding:0;list-style:none;font:500 15.5px/2 var(--mono)}.ex li{display:flex;gap:14px}.ex li::before{content:attr(data-n);color:var(--mu);width:14px}
+.ex li:last-child{color:var(--orink)}
+figure{margin:26px 0}figcaption{font:400 14px var(--sans);color:var(--mu);margin-top:6px}
+.sk{width:100%;height:auto;display:block}
+.sk text{font-family:var(--mono);fill:var(--ink);font-size:15px}.sk .hw{font-family:var(--hand);font-size:22px;fill:var(--orink)}
+/* home */
+.hero{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:center;padding:56px 24px 28px;max-width:1160px;margin:0 auto}
+.hero h1{font:700 clamp(34px,4.6vw,54px)/1.08 var(--sans);letter-spacing:-.025em;margin:0 0 16px;max-width:15ch}
+.hero p{font-size:19px;color:var(--mu);margin:0;max-width:42ch}
+.paths{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:1160px;margin:0 auto;padding:0 24px 28px}
+.pc{border:1px solid var(--line);border-radius:var(--r);padding:24px 26px 22px;text-decoration:none;color:var(--ink);display:flex;flex-direction:column;gap:6px;min-height:220px}
+.pc:hover{border-color:#cfcfca;background:var(--side)}
+.pc .n{font:700 44px/1 var(--sans);letter-spacing:-.03em}.pc h2{font:600 22px var(--sans);margin:10px 0 0}.pc p{margin:0;font-size:15.5px;color:var(--mu);line-height:1.5}
+.pc .go{margin-top:auto;font:500 15px var(--sans);color:var(--link)}
+.resume{max-width:1160px;margin:0 auto;padding:4px 24px 56px;font:400 15px var(--sans);color:var(--mu)}.resume a{color:var(--link)}
+/* task */
+.stmt pre{font:500 16px/1.75 var(--mono);background:var(--wash);border-radius:var(--r);padding:14px 18px;margin:14px 0;overflow:auto}
+label{display:block;font:500 14px var(--sans);margin:26px 0 6px}
+.in{display:flex;gap:10px;flex-wrap:wrap}
+input{font:500 20px var(--mono);padding:0 14px;min-height:46px;border:1px solid #cfcfca;border-radius:var(--r);background:#fff;color:var(--ink);width:180px}
+input:focus{outline:2px solid var(--or);outline-offset:1px;border-color:var(--ink)}
+.btn{font:600 15px var(--sans);min-height:46px;padding:0 22px;border-radius:var(--r);border:1px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer}.btn.s2{background:#fff;color:var(--ink);border-color:#cfcfca}
+.btn:focus-visible{outline:2px solid var(--or);outline-offset:2px}
+.ok{margin-top:16px;padding:12px 16px;border-radius:var(--r);background:#f1f8f4;color:var(--ok);font:500 15px/1.5 var(--sans);display:flex;gap:10px}
+.hint{border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;margin-bottom:14px}.hint b{display:block;font:600 13px var(--sans);margin-bottom:2px}
+@media(max-width:1020px){.app{grid-template-columns:minmax(0,1fr)}.lp{border-right:0;border-bottom:1px solid var(--line)}.rp{display:none}.main{padding:24px 16px 40px}.hero,.paths{grid-template-columns:1fr}.top nav{display:none}.srch{display:none}.top{padding:0 16px}.hero{padding:32px 16px 16px}.paths{padding:0 16px 24px}}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<filter id="rough" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="4" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="3.2"/></filter>
+<symbol id="m" viewBox="0 0 120 156"><path fill="#FF6A00" d="M85.4 16.5c8.2 4.7 9.7 12.3 3 18-7.3 6.3-29.7 8.2-41.2 2.2-9.4-5-9.4-12.3-.5-18.1 9.5-6.2 28.9-7.7 38.7-2.1Z"/><path fill="currentColor" d="M88.8 57.2c8.5 5.2 7 12.7-1.6 17.8-10 6-34 7.5-45.8 1.4-10.8-5.6-9.6-13.1.9-18.5 11.1-5.8 36.5-6.8 46.5-.7Z"/><path fill="currentColor" d="M97.4 98.3c11.9 5.8 16.3 15.8 8.7 24.3-8.4 9.4-28.7 15.2-49.5 14.3-19.4-.8-36.5-6.2-41.8-14.4-5.4-8.4 2.7-17.6 17-22.3 13.9-4.6 24.9-3.7 37.9-6.3 10.2-2 20.4.8 27.7 4.4Z"/></symbol></defs></svg>
+
+<div class="tag">Ж · Документация-учебник — 1/3 Главная</div>
+<header class="top"><a class="brand" href="#"><svg><use href="#m"/></svg>infraege</a><nav><a href="#">Темы ЕГЭ</a><a href="#">Курсы</a><a href="#">Практика</a></nav><div class="srch">Поиск по темам <kbd>/</kbd></div><a class="login" href="#">Войти</a></header>
+<section class="hero"><div><h1>Понять, почему это работает, и решить самому</h1><p>Объяснение, разобранные примеры и задачи в одном месте. Выберите, с чего начать.</p></div>
+<svg class="sk" viewBox="0 0 480 300" role="img" aria-label="Схема вызовов F(4)"><g filter="url(#rough)" fill="none" stroke="#17191e" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+<path d="M240 58 L140 118M240 58 L340 118M140 150 L90 208M140 150 L190 208M340 150 L300 208M340 150 L385 208"/>
+<rect x="205" y="20" width="70" height="40" rx="8"/><rect x="105" y="112" width="70" height="40" rx="8"/><rect x="305" y="112" width="70" height="40" rx="8"/>
+<rect x="55" y="206" width="70" height="40" rx="8"/><rect x="155" y="206" width="70" height="40" rx="8" stroke="#f26a0a"/><rect x="265" y="206" width="70" height="40" rx="8"/><rect x="350" y="206" width="70" height="40" rx="8" stroke="#f26a0a"/></g>
+<g class="x" text-anchor="middle"><text x="240" y="47">F(4)</text><text x="140" y="139">F(3)</text><text x="340" y="139">F(2)</text><text x="90" y="233">F(2)</text><text x="190" y="233">F(1)</text><text x="300" y="233">F(1)</text><text x="385" y="233">F(0)</text></g>
+<text class="hw" x="300" y="282">база: дано сразу</text><path d="M255 266 C 235 262 232 254 228 248" fill="none" stroke="#b84500" stroke-width="2" filter="url(#rough)"/></svg></section>
+<div class="paths"><a class="pc" href="#"><span class="n">8</span><h2>Темы ЕГЭ</h2><p>Теория, разобранные примеры и задачи с проверкой по каждой теме.</p><span class="go">Выбрать тему →</span></a>
+<a class="pc" href="#"><span class="n">28</span><h2>Курс Python</h2><p>От первой программы до консольного менеджера задач. Без опыта.</p><span class="go">Начать курс →</span></a>
+<a class="pc" href="#"><span class="n">∞</span><h2>Банк задач</h2><p>Фильтры по темам, проверка ответа и подсказки.</p><span class="go">Решать задачи →</span></a></div>
+<p class="resume">Вы остановились: <a href="#">Рекурсия, шаг 3 из 6</a></p>
+
+<div class="tag">Ж · Документация-учебник — 2/3 Урок</div>
+<header class="top"><a class="brand" href="#"><svg><use href="#m"/></svg>infraege</a><nav><a href="#" aria-current="page">Темы ЕГЭ</a><a href="#">Курсы</a><a href="#">Практика</a></nav><div class="srch">Поиск по темам <kbd>/</kbd></div><a class="login" href="#">Войти</a></header>
+<div class="app"><aside class="lp" aria-label="Тема"><a class="all" href="#">← Все темы ЕГЭ</a><h2>Рекурсия</h2><div class="sub">Задание 16 · 6 подтем</div><div class="bar"><i></i></div>
+<ol><li><a class="d" href="#"><i>✓</i>Вычисляем F(5) по правилу</a></li><li><a href="#" aria-current="step"><i>2</i>Зачем нужны база и шаг</a></li><li><a href="#"><i>3</i>Несколько предыдущих значений</a></li><li><a href="#"><i>4</i>Лимит глубины и кеш</a></li><li><a href="#"><i>5</i>Программа на Python</a></li><li><a href="#"><i>6</i>Огромные аргументы</a></li></ol>
+<div class="grp">Практика</div><ol><li><a href="#"><i>▸</i>Задачи по теме · 30</a></li></ol></aside>
+<main class="main"><div class="crumb"><span>ЕГЭ › Задание 16 › <b>Рекурсия</b></span><span>5 мин чтения</span></div>
+<article class="art"><span class="lab">Подтема 2 из 6</span><h1>Зачем нужны база и шаг</h1>
+<p>В первом примере мы использовали две части определения. Первая — начальное значение, от которого можно начать вычисления. Его называют <em>базовым случаем</em>: <span class="f">F(1) = 1</span> просто дано, вычислять его не нужно.</p>
+<p>Вторая часть — правило перехода: <span class="f">F(n) = 2·F(n − 1) + 1</span> при <span class="f">n &gt; 1</span>, которое показывает, как получить следующее значение из предыдущего.</p>
+<h2 id="s1">Как это выглядит на схеме</h2>
+<figure><svg class="sk" viewBox="0 0 640 170" role="img" aria-label="Цепочка F(1) до F(5)"><g filter="url(#rough)" fill="none" stroke="#17191e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+<rect x="14" y="40" width="86" height="44" rx="8" stroke="#f26a0a"/><rect x="146" y="40" width="86" height="44" rx="8"/><rect x="278" y="40" width="86" height="44" rx="8"/><rect x="410" y="40" width="86" height="44" rx="8"/><rect x="542" y="40" width="86" height="44" rx="8"/>
+<path d="M102 62 L142 62M234 62 L274 62M366 62 L406 62M498 62 L538 62"/><path d="M134 56 L144 62 L134 68M266 56 L276 62 L266 68M398 56 L408 62 L398 68M530 56 L540 62 L530 68"/></g>
+<g text-anchor="middle"><text x="57" y="68">F(1)</text><text x="189" y="68">F(2)</text><text x="321" y="68">F(3)</text><text x="453" y="68">F(4)</text><text x="585" y="68">F(5)</text>
+<text x="57" y="112">1</text><text x="189" y="112">3</text><text x="321" y="112">7</text><text x="453" y="112">15</text><text x="585" y="112">31</text></g>
+<text class="hw" x="14" y="150">база</text><text class="hw" x="300" y="150">шаг: ×2 + 1</text></svg><figcaption>Каждое значение получается из предыдущего. Начало цепочки — базовый случай.</figcaption></figure>
+<div class="ex"><div class="hd">Разобранный пример</div><div class="bd"><h3>Найдите F(5), если F(1) = 1 и F(n) = 2·F(n − 1) + 1</h3><ol><li data-n="1">F(1) = 1</li><li data-n="2">F(2) = 2·1 + 1 = 3</li><li data-n="3">F(3) = 2·3 + 1 = 7</li><li data-n="4">F(4) = 2·7 + 1 = 15</li><li data-n="5">F(5) = 2·15 + 1 = 31</li></ol></div></div>
+<p>Дальше посмотрим, что меняется, если для расчёта нужно <a href="#">несколько предыдущих значений</a>.</p></article></main>
+<aside class="rp"><h3>На этой странице</h3><a href="#" aria-current="true">Определение</a><a href="#">Как это выглядит на схеме</a><a href="#">Разобранный пример</a><a href="#">Что дальше</a></aside></div>
+
+<div class="tag">Ж · Документация-учебник — 3/3 Решение задачи</div>
+<header class="top"><a class="brand" href="#"><svg><use href="#m"/></svg>infraege</a><nav><a href="#">Темы ЕГЭ</a><a href="#">Курсы</a><a href="#" aria-current="page">Практика</a></nav><div class="srch">Поиск по темам <kbd>/</kbd></div><a class="login" href="#">Войти</a></header>
+<div class="app"><aside class="lp"><a class="all" href="#">← Все задачи</a><h2>Рекурсия</h2><div class="sub">Задание 16 · задачи 12 из 30</div><div class="bar"><i style="width:40%"></i></div>
+<ol><li><a class="d" href="#"><i>✓</i>Значение по правилу</a></li><li><a class="d" href="#"><i>✓</i>Две предыдущие функции</a></li><li><a href="#" aria-current="step"><i>12</i>Числа Фибоначчи</a></li><li><a href="#"><i>13</i>Шаг не на 1</a></li><li><a href="#"><i>14</i>Связанные функции</a></li></ol><div class="grp">Теория</div><ol><li><a href="#"><i>▸</i>Вернуться к уроку</a></li></ol></aside>
+<main class="main"><div class="crumb"><span>Практика › Задание 16 › <b>Рекурсия</b></span><span>Задача 12 из 30</span></div>
+<article class="art stmt"><span class="lab">Задание 16</span><h1>Числа Фибоначчи</h1><p>Алгоритм вычисления функции <span class="f">F(n)</span> задан соотношениями:</p><pre>F(n) = 1 при n ≤ 2
+F(n) = F(n − 1) + F(n − 2) при n &gt; 2</pre><p>Чему равно значение <span class="f">F(7)</span>?</p>
+<label for="h">Ваш ответ</label><div class="in"><input id="h" value="13" inputmode="numeric"><button class="btn">Проверить</button><button class="btn s2">Сбросить</button></div><div class="ok" role="status"><b>✓</b><span>Верно: 1, 1, 2, 3, 5, 8, 13</span></div></article></main>
+<aside class="rp"><div class="hint"><b>Подсказка</b>Постройте значения по порядку: каждое следующее — сумма двух предыдущих.</div><div class="hint"><b>Теория</b><a href="#" style="padding:0;border:0;color:var(--link)">Несколько предыдущих значений</a></div></aside></div>
+</body></html>
