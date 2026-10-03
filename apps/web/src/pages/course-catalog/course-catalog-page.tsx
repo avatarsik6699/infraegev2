@@ -27,7 +27,7 @@ export const CourseCatalogPage: React.FC<CourseCatalogPageTypes.Props> = (
   return (
     <div className={styles.page} data-course-catalog-page>
       <PublicHeader activeSection="courses" />
-      <main className={styles.root}>
+      <main id="main-content" className={styles.root}>
         <PageHead>
           <header className={styles.catalogHeading}>
             <Typography.Title

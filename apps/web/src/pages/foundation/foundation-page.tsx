@@ -25,7 +25,7 @@ const foundation = {
 export const FoundationPage: React.FC<FoundationPageTypes.Props> = (props) => (
   <div className={styles.page}>
     <PublicHeader home />
-    <main className={styles.main} data-foundation-layout>
+    <main id="main-content" className={styles.main} data-foundation-layout>
       <PageHead
         className={styles.hero}
         aside={
@@ -72,20 +72,17 @@ export const FoundationPage: React.FC<FoundationPageTypes.Props> = (props) => (
             Выберите путь
           </Typography.Title>
           <Typography.Text className={styles.sectionLead}>
-            Три входа в одну систему. Прогресс общий для всех.
+            Теория по темам, курс с нуля или сразу задачи.
           </Typography.Text>
           <ul className={styles.paths}>
             <li className={styles.path} data-tone="sage">
               <BookOpen className={styles.pathIcon} aria-hidden="true" />
-              <span className={styles.pathNumber}>
-                {foundation.publishedTopics.length}
-              </span>
               <Typography.Title order={3} className={styles.pathTitle}>
                 Темы ЕГЭ
               </Typography.Title>
               <Typography.Text className={styles.pathText}>
-                Теория, примеры и задачи по каждой теме. Всего в плане{" "}
-                {foundation.plannedTopicCount} тем.
+                Теория, разобранные примеры и задачи с проверкой по каждому
+                заданию экзамена.
               </Typography.Text>
               <ActionLink
                 className={styles.pathLink}
@@ -98,14 +95,12 @@ export const FoundationPage: React.FC<FoundationPageTypes.Props> = (props) => (
             {foundation.course?.status === "published" ? (
               <li className={styles.path} data-tone="sky">
                 <Code2 className={styles.pathIcon} aria-hidden="true" />
-                <span className={styles.pathNumber}>
-                  {foundation.course.lessonCount}
-                </span>
                 <Typography.Title order={3} className={styles.pathTitle}>
                   {foundation.course.title}
                 </Typography.Title>
                 <Typography.Text className={styles.pathText}>
-                  {foundation.course.summary}
+                  Можно начинать без опыта: в каждом уроке объяснение,
+                  разобранный пример и практика.
                 </Typography.Text>
                 <ActionLink
                   className={styles.pathLink}
@@ -178,6 +173,7 @@ export const FoundationPage: React.FC<FoundationPageTypes.Props> = (props) => (
                     </Typography.Text>
                     <ActionLink
                       className={styles.topicLink}
+                      ariaLabel={`Открыть тему: ${topic.title}`}
                       hierarchy="text"
                       to="/ege/$slug"
                       params={{ slug: topic.routeSlug }}

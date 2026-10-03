@@ -72,7 +72,7 @@ export const TopicLessonPage: React.FC<TopicLessonPageTypes.Props> = (
         title={props.lesson.title}
       />
 
-      <main className={styles.lesson} data-lesson-frame>
+      <main id="main-content" className={styles.lesson} data-lesson-frame>
         <div className={styles.intro}>
           <LessonIntro
             accessTier={props.lesson.accessTier}

@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ActionLink } from "~/shared/components/action-link";
+import { FragmentLink } from "~/shared/components/fragment-link";
 import { PublicHeaderAccountNavigation } from "./public-header-account-navigation";
 import { PublicHeaderIdentity } from "./public-header-identity";
 import styles from "./public-header.module.css";
@@ -59,6 +60,13 @@ export const PublicHeader: React.FC<PublicHeaderProps> = ({
       data-expanded={expanded || undefined}
       data-home={home || undefined}
     >
+      <FragmentLink
+        className={styles.skipLink}
+        hash="main-content"
+        icon={false}
+      >
+        К содержанию
+      </FragmentLink>
       <div className={styles.inner}>
         {home ? (
           <span

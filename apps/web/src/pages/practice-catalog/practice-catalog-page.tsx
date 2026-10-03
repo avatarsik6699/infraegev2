@@ -16,7 +16,7 @@ export const PracticeCatalogPage: React.FC<PracticeCatalogPageTypes.Props> = (
   return (
     <div className={styles.page}>
       <PublicHeader activeSection="practice" />
-      <main className={styles.mainFrame}>
+      <main id="main-content" className={styles.mainFrame}>
         <PageHead>
           <header className={styles.heading}>
             <Typography.Title

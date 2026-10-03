@@ -16,7 +16,7 @@ export const TopicCatalogPage: React.FC = () => {
   return (
     <div className={styles.page} data-topic-catalog-page>
       <PublicHeader activeSection="topics" />
-      <main>
+      <main id="main-content">
         <PageHead>
           <header className={styles.catalogHeading}>
             <Typography.Title

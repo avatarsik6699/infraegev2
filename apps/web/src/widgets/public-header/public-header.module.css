@@ -1,6 +1,30 @@
 .root {
+  position: relative;
   border-bottom: 1px solid var(--color-rule);
   background: var(--color-bg);
+}
+
+/* Skip link: hidden until keyboard focus (DESIGN.md › Navigation). */
+.skipLink {
+  position: absolute;
+  z-index: var(--layer-modal);
+  top: var(--space-1);
+  left: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-control);
+  background: var(--control-primary-bg);
+  color: var(--control-primary-text);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+
+.skipLink:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+  transform: none;
 }
 
 .inner {
@@ -293,7 +317,7 @@ a.brand:hover .wordmark {
     gap: var(--space-1);
   }
 
-  .progressLink {
+  .accountNavigation .progressLink[data-presentation] {
     display: none;
   }
 }

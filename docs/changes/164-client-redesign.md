@@ -78,7 +78,7 @@ Decisions on the approved v5 mockups (2026-10-03):
 - [x] `F8` Practice catalog and task solving — _Depends on:_ F5
 - [x] `F9` Courses catalog, Python course overview, topic catalog, account, privacy — _Depends on:_ F7
 - [x] `F10` Update visual-coupled e2e page objects (`course-catalog.page.ts`, `lesson-page.assertions.ts`, `public-header.assertions.ts`, `minimal-application.page.ts`, `account.page.ts`) and layout specs; keep behavior, `@no-js` and axe specs — _Depends on:_ F9
-- [ ] `F11` impeccable `critique` + `audit` on pilots and page families, one batched fix round, `polish`; Playwriter desktop+mobile screenshots; axe; Lighthouse on the five audited URLs — _Depends on:_ F10
+- [x] `F11` impeccable `critique` + `audit` on pilots and page families, one batched fix round, `polish`; Playwriter desktop+mobile screenshots; axe; Lighthouse on the five audited URLs — _Depends on:_ F10
 
 <!-- Test execution is governed by `docs/STACK.md`'s Critical Gate and opt-in Full Gate.
      Do not duplicate that list here. -->
@@ -187,6 +187,32 @@ Lighthouse on `/`, `/ege`, `/courses`, `/courses/python` and `/ege/16-rekursiya`
   the seeded 14); they need `make practice-bootstrap`, not code changes.
 - Architect decisions 2026-10-03: skip `make practice-bootstrap` for this change (the four
   data-bound e2e failures stay known); profile progress tiles (dashboard) move to a separate change.
+- F11 done (2026-10-03). Evidence and the single fix round:
+  - Lighthouse (local build, API via dev nginx): a11y/SEO/CLS/TBT pass; LCP medians `/` 3.77s,
+    `/courses` 3.70s, `/courses/python` 3.93s, `/ege` 4.02s (budget 4.0s), `/ege/16-rekursiya`
+    5.22s. LCP element is a body paragraph with 3.5–5s render delay; CSS 21 KB, JS 305 KB.
+    Pre-redesign baseline `01252a9`, same setup: `/ege/16-rekursiya` 5.01s, `/ege` 3.92s,
+    `/courses/python` 3.92s — the lesson LCP failure is pre-existing (render delay on the long
+    SSR lesson), not a redesign regression; `/ege` sits at the 4.0s edge in both builds. Left for a
+    separate performance change.
+  - impeccable detector over `apps/web/src`: only the accepted page-head grid advisory.
+  - Critique of `/` (two isolated assessments), batched fix list for the next session:
+    1. Remove the false claim "Прогресс общий для всех" (progress contexts are separate).
+    2. Reduce repetition on home: counts in one place, drop `.pathNumber` from tiles (also fixes
+       uneven tile rhythm), the course band must not repeat the course tile summary.
+    3. Practice answer (shared `practice-task-answer.tsx`): validate empty input on the client
+       ("Введите ответ") instead of a 422 shown as "Не удалось проверить"; restore focus after
+       correct/error states; answer input clipped at ≤420px in the compact layout
+       (`lesson-practice.module.css` `.answerRow`); "Проверить" min-height 2.5rem → 2.75rem.
+    4. Unique accessible names for the four home "Открыть тему" links; add a skip link to main.
+    5. Home try block: tighter mobile padding; facts chips as pills.
+  - All five fixed in one round and verified with Playwriter: truthful paths lead, no repeated
+    counts or summaries, tiles start with the icon; empty answers stay local
+    ("Введите ответ, чтобы проверить.", unit test added), focus returns on incorrect/error,
+    the compact answer row stacks at ≤26.25rem, controls are 44px; topic links have unique names;
+    a header skip link targets `#main-content` on every page.
+  - Final e2e: 186 passed; the only failures left are the four known dev-bank data tests. The run
+    also caught a member-header wrap at 360px ("Мой прогресс" stayed visible) — fixed and rerun.
 
 ---
 

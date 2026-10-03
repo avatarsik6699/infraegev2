@@ -11,6 +11,7 @@ export const PageContainer: React.FC<PageContainerTypes.Props> = ({
 }) => {
   return (
     <Component
+      id={Component === "main" ? "main-content" : undefined}
       {...containerProps}
       data-measure={measure}
       className={cssUtils.cx(styles.root, className)}

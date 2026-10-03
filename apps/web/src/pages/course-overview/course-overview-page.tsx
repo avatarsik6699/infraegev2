@@ -21,7 +21,7 @@ export const CourseOverviewPage: React.FC<CourseOverviewPageTypes.Props> = (
   return (
     <div className={styles.page} data-course-overview-page>
       <PublicHeader activeSection="courses" />
-      <main className={styles.main}>
+      <main id="main-content" className={styles.main}>
         <PageHead
           aside={
             illustration ? (
