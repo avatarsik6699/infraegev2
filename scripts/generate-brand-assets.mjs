@@ -110,19 +110,19 @@ runFfmpeg([
   resolve(publicDir, "favicon.ico"),
 ]);
 
-const alegreyaPath = resolve(
+const onestCyrillicPath = resolve(
   publicDir,
-  "fonts/alegreya/alegreya-latin-wght-normal.woff2",
+  "fonts/onest/onest-cyrillic-wght-normal.woff2",
 );
-const golosPath = resolve(
+const onestLatinPath = resolve(
   publicDir,
-  "fonts/golos-text/golos-text-cyrillic-wght-normal.woff2",
+  "fonts/onest/onest-latin-wght-normal.woff2",
 );
 const socialFilter = [
   "[1:v]scale=190:-1:flags=lanczos[mark]",
   "[0:v][mark]overlay=250:(H-h)/2:format=auto[lockup]",
-  `[lockup]drawtext=fontfile='${alegreyaPath}':text='infraege':fontcolor=0x1A1A1A:fontsize=112:x=465:y=188`,
-  `drawtext=fontfile='${golosPath}':text='подготовка к ЕГЭ по информатике':fontcolor=0x777777:fontsize=31:x=470:y=326`,
+  `[lockup]drawtext=fontfile='${onestLatinPath}':text='infraege':fontcolor=0x17191E:fontsize=112:x=465:y=188`,
+  `drawtext=fontfile='${onestCyrillicPath}':text='подготовка к ЕГЭ по информатике':fontcolor=0x4D535E:fontsize=31:x=470:y=326`,
   "format=rgb24[out]",
 ].join(",");
 

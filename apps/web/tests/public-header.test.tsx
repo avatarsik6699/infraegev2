@@ -126,12 +126,7 @@ describe("PublicHeader", () => {
     expect(
       screen.getByText("подготовка к ЕГЭ по информатике", { exact: true }),
     ).not.toBeNull();
-    expect(screen.getByText("просто", { exact: true })).not.toBeNull();
-    expect(screen.getByText("понятно", { exact: true })).not.toBeNull();
-    expect(screen.getByText("бесплатно", { exact: true })).not.toBeNull();
-    expect(
-      container.querySelectorAll("[data-infraege-benefits] i"),
-    ).toHaveLength(2);
+    expect(container.querySelector("[data-infraege-benefits]")).toBeNull();
     expect(screen.queryByText("beta", { exact: true })).toBeNull();
     expect(screen.queryByText("v1.0.0", { exact: true })).toBeNull();
     expect(screen.getByLabelText("infraege — ЕГЭ информатика")).not.toBeNull();
@@ -175,7 +170,9 @@ describe("PublicHeader", () => {
     const footer = container.querySelector("footer");
 
     expect(footer).not.toBeNull();
-    expect(footer?.textContent).not.toContain("infraege");
+    expect(footer?.querySelector("[data-footer-signature]")?.textContent).toBe(
+      "infraege",
+    );
     expect(
       screen
         .getByRole("link", { name: "Обработка данных" })
@@ -223,7 +220,6 @@ describe("PublicHeader", () => {
     expect(
       screen.getAllByRole("navigation", { name: "Разделы сайта" }),
     ).toHaveLength(2);
-    expect(screen.getByText("просто", { exact: true })).not.toBeNull();
     expect(
       screen
         .getAllByRole("link", { name: "Темы" })[0]

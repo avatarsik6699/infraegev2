@@ -7,6 +7,10 @@ import styles from "./public-footer.module.css";
 export const PublicFooter: React.FC = () => (
   <footer className={styles.root}>
     <div className={styles.inner}>
+      <span className={styles.signature} data-footer-signature>
+        <span className={styles.mark} aria-hidden="true" />
+        infraege
+      </span>
       <nav className={styles.links} aria-label="Ссылки в подвале">
         <ActionLink hierarchy="text" to="/privacy">
           Обработка данных

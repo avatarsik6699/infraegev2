@@ -9,6 +9,17 @@ const member = {
 export class AccountPage {
   constructor(private readonly page: Page) {}
 
+  /** Profile settings live in the "Настройки" tab; without JavaScript both panels render. */
+  private async openSettings(): Promise<void> {
+    await expect(
+      this.page.getByRole("heading", { level: 1, name: "Профиль" }),
+    ).toBeVisible();
+    const tab = this.page.getByRole("tab", { name: "Настройки" });
+    if (!(await tab.isVisible())) return;
+    await tab.click();
+    await expect(tab).toHaveAttribute("aria-selected", "true");
+  }
+
   async expectGuestSignIn(): Promise<void> {
     await this.page.setViewportSize({ width: 390, height: 844 });
     await this.page.goto("/sign-in");
@@ -128,7 +139,7 @@ export class AccountPage {
       .filter({ hasText: "Почта подтверждена." });
     await expect(success).toHaveAttribute("data-feedback-tone", "success");
     await expect(success.locator("svg")).toBeVisible();
-    await expect(success).toHaveCSS("color", "oklch(0.46 0.08 145)");
+    await expect(success).toHaveCSS("color", "rgb(29, 122, 70)");
     await expect(this.page.locator('script[src*="track.js"]')).toHaveCount(0);
   }
 
@@ -394,6 +405,7 @@ export class AccountPage {
     await expect(
       this.page.getByRole("heading", { name: "Продолжить обучение" }),
     ).toBeVisible();
+    await this.openSettings();
     await expect(
       this.page.getByRole("heading", { name: "Способы входа" }),
     ).toBeVisible();
@@ -441,6 +453,7 @@ export class AccountPage {
     });
 
     await this.page.goto("/account");
+    await this.openSettings();
     await expect(
       this.page.getByText("Для удаления аккаунта потребуется текущий пароль."),
     ).toHaveCount(0);
@@ -513,6 +526,7 @@ export class AccountPage {
       await route.fulfill({ status: 204 });
     });
     await this.page.goto("/account");
+    await this.openSettings();
     await expect(
       this.page.getByRole("button", {
         name: "О повторном подтверждении входа",
@@ -570,6 +584,7 @@ export class AccountPage {
       await route.fulfill({ status: 202, json: { status: "sent" } });
     });
     await this.page.goto("/account");
+    await this.openSettings();
     await expect(
       this.page.getByRole("heading", { name: "Добавить почту и пароль" }),
     ).toBeVisible();
@@ -599,6 +614,7 @@ export class AccountPage {
       "Почта подтверждена",
     );
     await this.page.getByRole("link", { name: "Вернуться к аккаунту" }).click();
+    await this.openSettings();
     await expect(this.page.getByText("Почта и пароль")).toBeVisible();
     await expect(
       this.page.getByRole("heading", { name: "Почта ожидает подтверждения" }),
@@ -630,6 +646,7 @@ export class AccountPage {
       });
     });
     await this.page.goto("/account");
+    await this.openSettings();
     await this.page.getByRole("button", { name: "Отвязать VK ID" }).click();
     const dialog = this.page.getByRole("alertdialog");
     await expect(dialog).toContainText("После отвязки");
@@ -666,6 +683,7 @@ export class AccountPage {
       route.fulfill({ status: 403, json: { detail: "recent auth required" } }),
     );
     await this.page.goto("/account");
+    await this.openSettings();
     await expect(
       this.page.getByRole("link", { name: "Войти повторно" }),
     ).toHaveCount(0);
@@ -794,6 +812,7 @@ export class AccountPage {
       route.fulfill({ json: { results: [] } }),
     );
     await this.page.goto("/account");
+    await this.openSettings();
     await expect(
       this.page.getByRole("heading", { name: "Добавить почту и пароль" }),
     ).toBeVisible();

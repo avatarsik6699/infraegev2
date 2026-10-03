@@ -9,7 +9,7 @@
   color: var(--color-text);
   box-shadow: var(--input-shadow);
   font: inherit;
-  font-size: var(--text-sm);
+  font-size: var(--text-base);
   line-height: 1.4;
   transition:
     box-shadow var(--motion-duration) var(--motion-easing),
@@ -19,19 +19,20 @@
 
 .root::placeholder {
   color: var(--input-placeholder-color);
-  font-size: var(--text-xs);
   opacity: 1;
 }
 
 .root:hover:not(:disabled) {
-  border-color: var(--color-text-soft);
+  border-color: var(--color-indicator);
 }
 
 .root:focus-visible {
   border-color: var(--color-focus);
   border-radius: var(--radius-control);
   outline: none;
-  box-shadow: var(--input-shadow), var(--focus-ring);
+  box-shadow:
+    var(--input-shadow),
+    0 0 0 1px var(--color-focus);
 }
 
 .root[aria-invalid="true"] {

@@ -140,11 +140,7 @@ export class TopicLessonPage {
     const headings = this.page.locator("#theory section[id] > h3");
     await expect(headings).toHaveCount(15);
     for (const heading of await headings.all()) {
-      await expect(heading).toHaveCSS("border-bottom-width", "1px");
-      await expect(heading).toHaveCSS(
-        "border-bottom-color",
-        "rgb(234, 236, 239)",
-      );
+      await expect(heading).toHaveCSS("border-bottom-width", "0px");
     }
     await this.expectRecursionContentTypography(noJavaScript);
     await expect(this.page.locator("#theory em")).toHaveCount(0);
@@ -154,7 +150,7 @@ export class TopicLessonPage {
         .filter({ hasText: "считать всю последовательность необязательно" }),
     ).toHaveCount(0);
     const link = this.page.locator("[data-topic-lesson-context] a").first();
-    await expect(link).toHaveCSS("color", "rgb(0, 112, 210)");
+    await expect(link).toHaveCSS("color", "rgb(31, 79, 208)");
     await expect(link.locator("span").first()).toHaveCSS(
       "text-decoration-line",
       "none",
@@ -167,11 +163,19 @@ export class TopicLessonPage {
       );
       await this.page.mouse.move(0, 0);
     }
+    // Resolve the semantic tokens to computed colours so hex and oklch themes compare alike.
     const semanticColors = await frame.evaluate((element) => {
-      const style = getComputedStyle(element);
+      const resolve = (token: string) => {
+        const probe = document.createElement("span");
+        probe.style.color = `var(${token})`;
+        element.append(probe);
+        const color = getComputedStyle(probe).color;
+        probe.remove();
+        return color;
+      };
       return {
-        success: style.getPropertyValue("--color-success").trim(),
-        danger: style.getPropertyValue("--color-danger").trim(),
+        success: resolve("--color-success"),
+        danger: resolve("--color-danger"),
       };
     });
     const correct = this.page
@@ -196,14 +200,14 @@ export class TopicLessonPage {
     );
     await destination.click();
     await expect(destination).toHaveAttribute("aria-current", "location");
-    await expect(destination).toHaveCSS("color", "rgb(0, 112, 210)");
+    await expect(destination).toHaveCSS("color", "rgb(23, 25, 30)");
     const marker = await destination.evaluate(
       (element) => getComputedStyle(element, "::before").backgroundColor,
     );
-    expect(marker).toBe("rgb(0, 112, 210)");
+    expect(marker).toBe("rgb(194, 76, 0)");
     await expect(
       this.page.locator('[data-outline-link-id="theory"]'),
-    ).toHaveCSS("color", "rgb(0, 112, 210)");
+    ).toHaveCSS("color", "rgb(23, 25, 30)");
     await this.page.locator("#argument-steps").evaluate((element) => {
       element.scrollIntoView({ block: "start", behavior: "instant" });
     });
@@ -229,12 +233,12 @@ export class TopicLessonPage {
     );
     await expect(this.page.getByRole("tab", { selected: true })).toHaveCSS(
       "border-bottom-color",
-      "rgb(96, 96, 96)",
+      "rgb(194, 76, 0)",
     );
     const theoryLink = task.getByRole("link", {
       name: "Шаблон для одного предыдущего значения",
     });
-    await expect(theoryLink).toHaveCSS("color", "rgb(0, 112, 210)");
+    await expect(theoryLink).toHaveCSS("color", "rgb(31, 79, 208)");
     await expect(theoryLink).toHaveCSS("text-align", "left");
     const iconGap = await theoryLink.evaluate((element) => {
       const icon = element.querySelector("svg")!.getBoundingClientRect();
@@ -245,7 +249,7 @@ export class TopicLessonPage {
     expect(iconGap).toBeGreaterThanOrEqual(0);
     const answer = task.getByRole("textbox", { name: "Ответ", exact: true });
     const check = task.getByRole("button", { name: "Проверить", exact: true });
-    await expect(check).toHaveCSS("background-color", "rgb(23, 23, 23)");
+    await expect(check).toHaveCSS("background-color", "rgb(23, 25, 30)");
     await answer.fill("31");
     await check.evaluate((element) => {
       const bounds = element.getBoundingClientRect();
@@ -332,17 +336,15 @@ export class TopicLessonPage {
     });
     await expect(examples).toHaveCount(11);
     for (const example of await examples.all()) {
-      for (const text of await example
-        .locator(":scope > div, ol li > div")
-        .all()) {
-        await expect(text).toHaveCSS("font-size", "16px");
+      for (const text of await example.locator("ol li > div").all()) {
+        await expect(text).toHaveCSS("font-size", "17px");
         await expect(text).toHaveCSS("font-weight", "400");
-        await expect(text).toHaveCSS("color", "rgb(23, 23, 23)");
+        await expect(text).toHaveCSS("color", "rgb(23, 25, 30)");
       }
       for (const formula of await example
         .locator('[data-kind="formula"]')
         .all()) {
-        await expect(formula).toHaveCSS("font-size", "14.4px");
+        await expect(formula).toHaveCSS("font-size", "15.3px");
       }
     }
     const outcome = this.page.getByRole("heading", {
@@ -351,11 +353,7 @@ export class TopicLessonPage {
     });
     for (const width of [320, 390, 1440]) {
       await this.page.setViewportSize({ width, height: 900 });
-      await expect(outcome).toHaveCSS("border-bottom-width", "1px");
-      await expect(outcome).toHaveCSS(
-        "border-bottom-color",
-        "rgb(234, 236, 239)",
-      );
+      await expect(outcome).toHaveCSS("border-bottom-width", "0px");
       const theorySize = await this.page
         .locator("#theory section[id] > h3")
         .first()
@@ -363,7 +361,7 @@ export class TopicLessonPage {
       await expect(outcome).toHaveCSS("font-size", theorySize);
       await expect(this.page.locator("#theory pre code").first()).toHaveCSS(
         "font-size",
-        "14.4px",
+        "15px",
       );
       const terms = await examples
         .locator("[data-formula-term]")
@@ -389,8 +387,8 @@ export class TopicLessonPage {
       }
       for (const example of await examples.all()) {
         const label = example.locator("figcaption");
-        await expect(label).toHaveCSS("font-size", "14px");
-        await expect(label).toHaveCSS("font-weight", "400");
+        await expect(label).toHaveCSS("font-size", "13px");
+        await expect(label).toHaveCSS("font-weight", "500");
         await expect(label).toHaveCSS(
           "color",
           await this.page.evaluate(() => {
@@ -425,8 +423,8 @@ export class TopicLessonPage {
           expect(geometry.sameFirstLineHeight).toBe(true);
         }
       }
-      for (const code of await this.page.locator("#theory code").all()) {
-        await expect(code).toHaveCSS("font-size", "14.4px");
+      for (const code of await this.page.locator("#theory pre code").all()) {
+        await expect(code).toHaveCSS("font-size", "15px");
       }
       await this.expectNoHorizontalOverflow();
       if (width === 390 && !noJavaScript) {
@@ -445,14 +443,14 @@ export class TopicLessonPage {
     try {
       await expect(examples.first().locator("ol li > div").first()).toHaveCSS(
         "font-size",
-        "32px",
+        "34px",
       );
       await expect(
         examples.first().locator('ol [data-kind="formula"]').first(),
-      ).toHaveCSS("font-size", "28.8px");
+      ).toHaveCSS("font-size", "30.6px");
       await expect(this.page.locator("#theory pre code").first()).toHaveCSS(
         "font-size",
-        "28.8px",
+        "30px",
       );
       for (const width of [320, 390, 900]) {
         await this.page.setViewportSize({ width, height: 900 });
@@ -647,8 +645,8 @@ export class TopicLessonPage {
         "font-weight",
         "500",
       );
-      await expect(firstAnswer).toHaveCSS("font-size", "16px");
-      await expect(firstAnswer).toHaveCSS("color", "rgb(23, 23, 23)");
+      await expect(firstAnswer).toHaveCSS("font-size", "17px");
+      await expect(firstAnswer).toHaveCSS("color", "rgb(23, 25, 30)");
       await expect(firstAnswer).toHaveCSS("border-inline-start-width", "0px");
       await expect(firstAnswer).toHaveCSS("padding-inline-start", "16px");
       await expect(checkpoint).toHaveCSS(
@@ -657,7 +655,7 @@ export class TopicLessonPage {
       );
       await expect(checkpoint.locator(":scope > div > div").first()).toHaveCSS(
         "color",
-        "rgb(23, 23, 23)",
+        "rgb(23, 25, 30)",
       );
       await expect(checkpoint.locator(":scope > div > svg")).toHaveCount(1);
       const readableWidth = await checkpoint.evaluate((element) => {
@@ -674,7 +672,7 @@ export class TopicLessonPage {
       await expect(comparisons).toHaveCount(10);
       for (const comparison of await comparisons.all()) {
         const copy = comparison.locator(":scope > div > div");
-        await expect(copy).toHaveCSS("font-size", "16px");
+        await expect(copy).toHaveCSS("font-size", "17px");
         await expect(copy).toHaveCSS("font-weight", "400");
         const bodyUsesPanelWidth = await copy.evaluate((element) => {
           const panel = element.closest("[data-status]")!;
@@ -698,11 +696,11 @@ export class TopicLessonPage {
       );
       await expect(callout.locator(":scope > div > span")).toHaveCSS(
         "font-weight",
-        "400",
+        "600",
       );
       await expect(callout.locator(":scope > div > div")).toHaveCSS(
         "font-size",
-        "16px",
+        "17px",
       );
       await this.expectNoHorizontalOverflow();
     }
@@ -734,8 +732,8 @@ export class TopicLessonPage {
         '[data-content-context="hint"] p, [data-content-context="solution"] p',
       )
       .all()) {
-      await expect(paragraph).toHaveCSS("font-size", "16px");
-      await expect(paragraph).toHaveCSS("color", "rgb(23, 23, 23)");
+      await expect(paragraph).toHaveCSS("font-size", "17px");
+      await expect(paragraph).toHaveCSS("color", "rgb(23, 25, 30)");
     }
     for (const trigger of [hintTrigger, solutionTrigger]) {
       await expect(trigger.locator("span").first()).toHaveCSS(
@@ -756,7 +754,7 @@ export class TopicLessonPage {
       document.documentElement.style.fontSize = "200%";
     });
     try {
-      await expect(hint.locator("p").first()).toHaveCSS("font-size", "32px");
+      await expect(hint.locator("p").first()).toHaveCSS("font-size", "34px");
       await expect(firstQuestion.locator("span").first()).toHaveCSS(
         "font-size",
         "32px",
@@ -765,7 +763,7 @@ export class TopicLessonPage {
         this.page
           .locator('#theory [role="note"] [data-status] > div > div')
           .first(),
-      ).toHaveCSS("font-size", "32px");
+      ).toHaveCSS("font-size", "34px");
       await this.page.setViewportSize({ width: 900, height: 900 });
       await this.expectNoHorizontalOverflow();
     } finally {
@@ -782,7 +780,7 @@ export class TopicLessonPage {
     await expect(this.page.locator("[data-learning-profile]")).toHaveCount(0);
     await expect(
       this.page.locator("#theory section[id] > h3").first(),
-    ).toHaveCSS("border-bottom-width", "1px");
+    ).toHaveCSS("border-bottom-width", "0px");
     const headingSize = await this.page
       .locator("#theory section[id] > h3")
       .first()
@@ -794,15 +792,15 @@ export class TopicLessonPage {
     await this.page.setViewportSize({ width: 390, height: 844 });
     await expect(this.page.locator("#theory pre code").first()).toHaveCSS(
       "font-size",
-      "14.4px",
+      "15px",
     );
     await this.page.setViewportSize({ width: 1440, height: 900 });
     await expect(
       this.page.locator("[data-topic-lesson-context] a").first(),
-    ).toHaveCSS("color", "rgb(0, 112, 210)");
+    ).toHaveCSS("color", "rgb(31, 79, 208)");
     await expect(
       this.page.locator("[data-outline-link-id][aria-current]").first(),
-    ).toHaveCSS("color", "rgb(0, 112, 210)");
+    ).toHaveCSS("color", "rgb(23, 25, 30)");
   }
 
   async expectCodeDisclosureAndReturnToTop(): Promise<void> {
@@ -830,7 +828,7 @@ export class TopicLessonPage {
     await expect(top).toBeVisible();
     await expect(this.page.locator("[data-scroll-to-top]")).toHaveCSS(
       "height",
-      "40px",
+      "44px",
     );
     const answer = this.page
       .getByRole("textbox", { name: "Ответ", exact: true })

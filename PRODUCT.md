@@ -51,14 +51,13 @@ fallback.
 ## Brand Commitments
 
 The public identity is `infraege`: three organic stones, orange at the top and ink below,
-with an accessible lowercase wordmark. Retain Alegreya, Golos Text and JetBrains Mono.
-The approved presentation is white, monochrome, text-led and minimal, following remote main
-`a5b0bf5`; orange is a small functional accent. No background patterns, decorative illustrations,
-glints, drawn underlines or idle animation. Educational figures remain part of lessons. The approved `/courses` catalog is a local exception:
-four subject-specific hand-drawn raster miniatures, quiet cards and hover/focus-only feedback.
-The Python overview remains text-only.
-Homepage gives direct access to published topics and the Python course; navigation includes Practice.
-See [FRONTEND](docs/FRONTEND.md) for implementation contracts.
+with an accessible lowercase wordmark. The presentation is a calm, light "clean textbook":
+white reading surfaces, a more colourful home page that invites learners in, and colour elsewhere
+only where it carries meaning. Hand-drawn monochrome line illustrations and rare characters
+support the material; educational figures remain part of lessons. Light theme only.
+Homepage gives direct access to published topics, the Python course and practice; navigation
+includes Practice. The visual system lives in [DESIGN](DESIGN.md); implementation contracts live
+in [FRONTEND](docs/FRONTEND.md).
 
 ## Current scope
 

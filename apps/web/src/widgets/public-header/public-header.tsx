@@ -65,7 +65,7 @@ export const PublicHeader: React.FC<PublicHeaderProps> = ({
             className={styles.brand}
             aria-label="infraege — ЕГЭ информатика"
           >
-            <PublicHeaderIdentity expanded />
+            <PublicHeaderIdentity />
           </span>
         ) : (
           <Link
@@ -73,13 +73,12 @@ export const PublicHeader: React.FC<PublicHeaderProps> = ({
             className={styles.brand}
             to="/"
           >
-            <PublicHeaderIdentity expanded={expanded} />
+            <PublicHeaderIdentity />
           </Link>
         )}
 
         {expanded ? (
           <>
-            <span className={styles.divider} aria-hidden="true" />
             <PublicNavigation activeSection={activeSection} />
             <PublicHeaderAccountNavigation />
             <details className={styles.mobileMenu}>

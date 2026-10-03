@@ -24,7 +24,8 @@ colors:
   error-bg: "#fdf0ee"
   code-keyword: "#5b3b9a"
   code-string: "#2a6a3a"
-  code-comment: "#8a8f99"
+  code-comment: "#636a75"
+  code-number: "#0b6e75"
 typography:
   display:
     fontFamily: "Onest, system-ui, sans-serif"
@@ -213,7 +214,8 @@ one orange for position.
 ### Status and code
 - **Success / Error** (success, error with their -bg pairs): answer-check results and destructive
   actions only, never decoration.
-- **Code** (code-keyword violet, code-string green, code-comment grey) inside code blocks only.
+- **Code** (code-keyword violet, code-string green, code-number teal, code-comment grey) inside code
+  blocks only; every code colour keeps at least 4.5:1 on the code surface.
 
 ### Named Rules
 **The Cover Rule.** Pastel colour belongs to the home page. Any other page gets at most one pastel
@@ -347,5 +349,7 @@ neutral (elsewhere) plates.
 - **Don't** use yellow or blush plates, or red outside errors and destructive actions.
 - **Don't** add AI-template badges, cairn progress indicators or handwritten signatures.
 - **Don't** spread a tinted surface across whole pages.
+- **Don't** mark callouts, cards or list items with a thick coloured side bar; callouts are
+  told apart by their icon and title on the side surface.
 - **Don't** add a left panel to pages where it would duplicate content (course overview,
   catalogs, profile, privacy).

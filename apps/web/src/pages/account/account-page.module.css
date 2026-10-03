@@ -23,16 +23,14 @@
 }
 .profile {
   display: grid;
-  grid-template-columns: minmax(0, 1.65fr) minmax(18rem, 1fr);
-  gap: var(--space-4) var(--space-5);
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3);
 }
 .profileIdentity {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
   align-items: center;
-  padding-bottom: var(--space-3);
-  border-bottom: 1px solid var(--color-rule);
   grid-column: 1 / -1;
 }
 .identityText {
@@ -52,11 +50,9 @@
 }
 .profileSettings {
   align-content: start;
-  padding-left: var(--space-3);
-  border-left: 1px solid var(--color-rule);
 }
 .profileSafety {
-  grid-column: 2;
+  grid-column: auto;
   align-content: start;
   padding: var(--space-3) 0 0;
   border-top: 1px solid var(--color-rule);
@@ -279,13 +275,23 @@
   .profileSafety {
     grid-column: 1;
   }
-  .profileSettings {
-    padding-top: var(--space-3);
-    padding-left: 0;
-    border-top: 1px solid var(--color-rule);
-    border-left: 0;
-  }
   .profileSafety {
     padding-left: 0;
   }
+}
+
+.tabs {
+  display: grid;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.tabPanel {
+  display: grid;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.tabPanel[hidden] {
+  display: none;
 }

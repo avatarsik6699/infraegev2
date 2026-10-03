@@ -17,7 +17,7 @@
 }
 
 .root[data-complete] .indicator {
-  background: var(--color-success);
+  background: var(--progress-indicator-background);
 }
 
 .root[data-indeterminate] .indicator {

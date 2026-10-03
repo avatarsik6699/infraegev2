@@ -361,23 +361,22 @@ All public learning routes remain: `/`, `/ege`, `/courses`, course overview, pub
 course lessons, `/practice`, task detail and `/privacy`. Planned entries remain non-links.
 Internal `/lab/design-system` and `/lab/lesson` and their demos are retired.
 
-The reference is production commit `a5b0bf5`: white canvas, ink, compact text lists and quiet
-reading. Keep infraege stone identity, current self-hosted Alegreya/Golos Text/JetBrains Mono,
-and small orange accents for brand identity. Controls and navigation remain monochrome. Remove decorative imagery, grids,
-textures, light effects and animation infrastructure. Keep educational figures and attachments.
-Change 156 adopts blue text links/current outline position across the project after architect
-visual approval. Links underline only on hover/focus; controls/navigation and tab indicators
-remain neutral. Following approval of lesson 16, Change 156 promotes its reading typography, subtle
-content-heading rules, semantic feedback and disclosure hierarchy across all lessons
-and site page families. Code/formulas use the approved 0.9 scale; added decorative
-prose emphasis remains rejected. Existing compositions, artwork, authored learning
-content and functional contracts remain. See FRONTEND §4.
-The `/courses` catalog is a scoped exception: four subject-specific hand-drawn raster miniatures,
-quiet shadowed cards in two desktop columns (one on mobile), and motion-only hover/focus feedback.
-Keep all four directions in registry order, published-only lesson counts, an overview CTA and
-a header summary of catalog totals and revision-aware mastered lessons. No filters or planned links.
+Change 164 replaces the minimal Change 122/156 profile with the "Clean Textbook" visual system
+in [DESIGN](../DESIGN.md), approved by the architect from full-page mockups. Keep the infraege
+stone identity; the home page is the colourful entry point, every other page is a calm white
+reading surface where colour appears only where it carries meaning; light theme only. Fonts are
+self-hosted Onest, JetBrains Mono and Caveat (lesson diagram labels only). Lessons keep a left
+panel with the topic and its subtopics (in-page anchors until subtopic pages land in a separate
+change), the reading column and an on-page outline; course overview, catalogs and profile have
+no left panel; the profile has an overview dashboard and a settings tab. Keep educational
+figures and attachments; hand-drawn monochrome illustrations are supplied by the architect and
+use reserved placeholders until then.
+The `/courses` catalog keeps all four directions in registry order, published-only lesson
+counts, an overview CTA and a header summary of catalog totals and revision-aware mastered
+lessons. No filters or planned links.
 Shared semantic controls, accessible focus/errors/loading, stable fonts and retained-page
-navigation stay. FRONTEND is the binding implementation contract.
+navigation stay. FRONTEND is the binding implementation contract; DESIGN is the binding visual
+contract.
 
 Practice uses the catalog as its primary solving surface: multiple independently expandable
 rows expose statements, checking, help, files, published theory links and public sources.
@@ -394,7 +393,7 @@ stable UUID order; optional difficulty directions and compact numbered paginatio
 No-JS retains GET controls, native multiple selection and detail reading. Empty topics show ordinary
 no-results feedback. Compact rows show difficulty, actual answer format, public sources and a disabled
 favorite affordance. Expanded statements precede answer/check/help actions; theory sits beside the topic heading above the statement. Catalog and detail share compact solving controls; lessons keep their presentation. Base UI owns controls,
-Lucide owns icons, and shadcn/HeroUI are visual references only, without added dependencies.
+Lucide owns icons; no shadcn/HeroUI dependencies are added.
 Existing filters and numbered pagination remain. Detail pages have one context-preserving return
 link and no next-task navigation. Remove persisted answer drafts and special row/scroll restoration;
 return links carry filters and page. No telemetry consent or client-error collector. Change 140
@@ -677,7 +676,7 @@ Production deployment/host mutations in local work; deleting old volumes; paymen
 collaborative editing; editorial audit history; automatic import conflict resolution; background
 imports/file garbage collection; hosting analytics dashboards or a monitoring stack in this repo
 (dashboards remain in the separate `smotryashchiy` deploy — this repo only allowlists its origin
-in CSP, §7.3); decorative systems and labs. Automatic account merging, guest-progress import,
+in CSP, §7.3); labs and internal design specimens. Automatic account merging, guest-progress import,
 saved answer text, standalone profile table, manual completion, advanced statistics and premium
 entitlements are out of Change 140. Single-operator sequential imports and ordinary pagination
 are intentional first-version limits. Formal legal review, off-site backup, key-only SSH and new

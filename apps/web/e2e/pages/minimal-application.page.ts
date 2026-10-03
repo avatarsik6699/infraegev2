@@ -40,7 +40,7 @@ export class MinimalApplicationPage {
     for (const heading of await this.page
       .locator("#theory section[id] > h3")
       .all()) {
-      await expect(heading).toHaveCSS("border-bottom-width", "1px");
+      await expect(heading).toHaveCSS("border-bottom-width", "0px");
     }
     const verifyType = async (scale: number) => {
       const sizes = await this.page
@@ -51,7 +51,7 @@ export class MinimalApplicationPage {
             expected: element.closest("pre")
               ? parseFloat(
                   getComputedStyle(document.documentElement).fontSize,
-                ) * 0.9
+                ) * 0.9375
               : parseFloat(getComputedStyle(element.parentElement!).fontSize) *
                 0.9,
           })),
@@ -60,7 +60,7 @@ export class MinimalApplicationPage {
       for (const size of sizes)
         expect(Math.abs(size.actual - size.expected)).toBeLessThan(0.05);
       for (const block of await this.page.locator("#theory pre code").all())
-        await expect(block).toHaveCSS("font-size", `${14.4 * scale}px`);
+        await expect(block).toHaveCSS("font-size", `${15 * scale}px`);
       await expectNoHorizontalOverflow(this.page);
     };
     await verifyType(1);

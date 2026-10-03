@@ -46,8 +46,8 @@
 
 .studyLessonFrame {
   composes: pageFrame lessonPage;
-  --lesson-frame-columns: minmax(15rem, 16.25rem) minmax(0, 1fr)
-    minmax(12rem, 16.25rem);
+  /* Two columns until subtopic pages bring a real "on this page" rail. */
+  --lesson-frame-columns: minmax(15rem, 16.25rem) minmax(0, 1fr);
   grid-template-rows: auto auto 1fr auto;
   min-width: 0;
 }

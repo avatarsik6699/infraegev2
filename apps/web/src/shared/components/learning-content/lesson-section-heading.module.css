@@ -5,11 +5,9 @@
   margin: 0;
   color: var(--color-muted);
   font-family: var(--font-ui);
-  font-size: var(--text-2xs);
+  font-size: var(--text-xs);
   font-weight: 500;
   line-height: 1.4;
-  letter-spacing: 0.055em;
-  text-transform: uppercase;
 }
 
 .heading > span:last-child {

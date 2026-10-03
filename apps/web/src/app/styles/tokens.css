@@ -19,11 +19,7 @@
     var(--color-bg)
   );
   --learning-panel-background: transparent;
-  --learning-example-background: color-mix(
-    in oklch,
-    var(--color-accent) 5%,
-    var(--color-bg)
-  );
+  --learning-example-background: var(--color-surface);
   --learning-example-padding: var(--space-2);
   --learning-block-measure: var(--measure-reading);
   --notation-bg: color-mix(in srgb, var(--color-text) 6%, var(--color-bg));
@@ -52,20 +48,20 @@
   --learning-callout-notation-color: var(--color-text);
 
   --text-learning-formula: var(--text-inline-code);
-  --text-learning-code: 0.9rem;
+  --text-learning-code: 0.9375rem;
   --text-learning-code-mobile: var(--text-learning-code);
-  --text-learning-procedure: var(--text-base);
-  --text-learning-example-step: var(--text-base);
+  --text-learning-procedure: var(--text-reading);
+  --text-learning-example-step: var(--text-reading);
   --text-lesson-result-title: var(--text-2xl);
   --text-accordion-title: var(--text-base);
-  --text-accordion-content: var(--text-base);
-  --text-learning-label: var(--text-sm);
-  --text-learning-comparison: var(--text-base);
+  --text-accordion-content: var(--text-reading);
+  --text-learning-label: var(--text-xs);
+  --text-learning-comparison: var(--text-reading);
   --text-callout-title: var(--text-sm);
-  --text-practice-help: var(--text-base);
-  --lesson-concept-rule: var(--theme-section-rule);
-  --lesson-concept-rule-width: 1px;
-  --lesson-concept-title-padding: var(--space-1);
+  --text-practice-help: var(--text-reading);
+  --lesson-concept-rule: var(--color-rule);
+  --lesson-concept-rule-width: 0;
+  --lesson-concept-title-padding: 0;
   --learning-example-prompt-color: var(--color-text);
   --learning-example-step-color: var(--color-text);
   --learning-example-step-leading: 1.68;
@@ -101,7 +97,7 @@
   --callout-padding: var(--space-2);
   --practice-help-leading: 1.68;
   --practice-help-color: var(--color-text);
-  --text-catalog-card-title: 2rem;
+  --text-catalog-card-title: 1.25rem;
   --shadow-metadata: 0 1px 5px
     color-mix(in srgb, var(--color-brand-ink) 5%, transparent);
   /* App overlays: reading < navigation < consent < modal. */
@@ -111,9 +107,9 @@
   --layer-modal-backdrop: 40;
   --layer-modal: 41;
   /* Semantic typography */
-  --font-display: var(--theme-font-display);
-  --font-ui: var(--theme-font-ui);
-  --font-reading: var(--theme-font-reading);
+  --font-display: var(--theme-font-sans);
+  --font-ui: var(--theme-font-sans);
+  --font-reading: var(--theme-font-sans);
   --font-data: var(--theme-font-data);
   --text-2xs: 0.75rem;
   --text-xs: 0.8125rem;
@@ -121,9 +117,11 @@
   --text-base: 1rem;
   --text-lg: 1.125rem;
   --text-xl: 1.25rem;
-  --text-2xl: clamp(1.5rem, 2vw, 1.75rem);
-  --text-3xl: clamp(2rem, 3vw, 2.5rem);
-  --text-display: clamp(3.25rem, 6.5vw, 6rem);
+  --text-reading: 1.0625rem;
+  --text-control: 0.9375rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: clamp(1.875rem, 3.6vw, 2.625rem);
+  --text-display: clamp(2.25rem, 4.8vw, 3.625rem);
   --text-topic-index: clamp(2.75rem, 4vw, 3.25rem);
   --text-topic-title: 1.5rem;
   --text-topic-heading: clamp(2.5rem, 4vw, 3.5rem);
@@ -132,51 +130,52 @@
   /* Semantic color roles */
   --color-bg: var(--theme-page);
   --color-surface: var(--theme-surface);
-  --color-surface-quiet: var(--theme-surface-muted);
+  --color-surface-quiet: var(--theme-surface-soft);
+  --color-surface-side: var(--theme-surface-side);
+  --color-wash: var(--theme-wash);
   --color-text: var(--theme-ink);
   --color-text-soft: var(--theme-ink-secondary);
-  --color-muted: var(--theme-ink-secondary);
-  --color-faint: var(--theme-ink-secondary);
+  --color-muted: var(--theme-ink-muted);
+  --color-faint: var(--theme-ink-muted);
   --color-rule: var(--theme-rule);
   --color-rule-strong: var(--theme-rule-strong);
+  --color-rule-input: var(--theme-rule-input);
+  --color-indicator: var(--theme-indicator);
   --color-brand-canvas: var(--color-bg);
   --color-brand-ink: var(--color-text);
   --color-brand-muted: var(--color-text-soft);
   --color-brand-orange: var(--theme-brand-orange);
-  --color-brand-orange-text: var(--theme-brand-orange-text);
-  --color-brand-orange-soft: var(--theme-brand-orange-soft);
   --color-accent: var(--theme-primary);
   --color-accent-dark: var(--theme-primary-hover);
-  --color-accent-soft: var(--theme-interactive-muted);
+  --color-accent-soft: var(--theme-wash);
   --color-focus: var(--theme-ring);
-  --color-selection: var(--theme-rule);
+  --color-selection: var(--theme-selection);
   --color-link-decoration: var(--theme-link);
   --outline-group-marker-display: block;
   --color-link: var(--theme-link);
   --color-link-hover: var(--theme-link-hover);
   --color-link-active: var(--theme-link-hover);
-  --color-current-location: var(--theme-link);
+  --color-current-location: var(--theme-here);
+  --color-plate-sky: var(--theme-pastel-sky);
+  --color-plate-sage: var(--theme-pastel-sage);
+  --color-plate-lilac: var(--theme-pastel-lilac);
+  --color-plate-apricot: var(--theme-pastel-apricot);
+  --grid-line-major: var(--theme-grid-major);
+  --grid-line-minor: var(--theme-grid-minor);
+  --grid-fade: var(--theme-grid-fade);
   --color-success: var(--theme-success);
   --color-info: var(--theme-info);
   --color-warning: var(--theme-warning);
   --color-danger: var(--theme-danger);
-  --color-danger-soft: color-mix(
-    in oklch,
-    var(--color-danger) 8%,
-    var(--color-surface)
-  );
-  --color-success-soft: color-mix(
-    in oklch,
-    var(--color-success) 8%,
-    var(--color-surface)
-  );
+  --color-danger-soft: var(--theme-danger-soft);
+  --color-success-soft: var(--theme-success-soft);
   --color-info-soft: color-mix(
     in oklch,
     var(--color-info) 8%,
     var(--color-surface)
   );
   --color-code: var(--theme-code);
-  --color-code-top: var(--theme-code-top);
+  --color-code-top: var(--theme-code);
   --color-code-text: var(--theme-code-ink);
   --color-code-keyword: var(--theme-code-keyword);
   --color-code-string: var(--theme-code-string);
@@ -186,10 +185,10 @@
   --color-code-function: var(--theme-code-function);
   --color-code-operator: var(--theme-code-operator);
 
-  --color-learning-muted: var(--theme-learning-muted);
-  --color-learning-danger: var(--theme-learning-danger);
-  --color-learning-success: var(--theme-learning-success);
-  --color-learning-info: var(--theme-learning-info);
+  --color-learning-muted: var(--theme-ink-muted);
+  --color-learning-danger: var(--theme-danger);
+  --color-learning-success: var(--theme-success);
+  --color-learning-info: var(--theme-info);
   --color-scrollbar: var(--theme-scrollbar);
   --color-scrollbar-hover: var(--theme-scrollbar-hover);
 
@@ -208,13 +207,14 @@
   --rhythm-concept-separation: var(--space-5);
   --rhythm-section-separation: var(--space-6);
   --space-section-break: clamp(2.25rem, 3vw, 3rem);
-  --radius-control: var(--theme-radius-sm);
-  --radius-surface: var(--theme-radius-md);
+  --radius-control: var(--theme-radius-control);
+  --radius-surface: var(--theme-radius-card);
+  --radius-tile: var(--theme-radius-tile);
   --radius-pill: 999px;
-  --max-content-width: 76rem;
-  --measure-reading: 40rem;
-  --measure-lesson: 48rem;
-  --measure-wide: 76rem;
+  --max-content-width: 72.5rem;
+  --measure-reading: 43.125rem;
+  --measure-lesson: 46rem;
+  --measure-wide: 72.5rem;
   --page-chrome-gutter: clamp(var(--space-2), 3vw, var(--space-4));
 
   /* Semantic component roles */
@@ -232,11 +232,11 @@
   --control-quiet-bg-hover: var(--color-accent-soft);
   --control-disabled-bg: var(--color-surface-quiet);
   --control-disabled-text: var(--color-muted);
-  --control-height: 2.5rem;
-  --input-min-height: var(--control-height);
+  --control-height: 2.75rem;
+  --input-min-height: 2.875rem;
   --input-padding-block: var(--space-1);
   --input-padding-inline: var(--space-1-5);
-  --input-border-color: var(--color-rule);
+  --input-border-color: var(--color-rule-input);
   --input-background: var(--control-secondary-bg);
   --input-radius: var(--radius-control);
   --input-shadow: none;
@@ -266,9 +266,9 @@
   --accordion-content-collapsed-transform: translateY(-0.25rem);
   --accordion-content-collapsed-opacity: 0;
   --badge-height: 1.375rem;
-  --badge-radius: var(--radius-control);
+  --badge-radius: var(--radius-pill);
   --progress-height: 0.375rem;
-  --progress-track-background: var(--color-surface-quiet);
+  --progress-track-background: var(--color-wash);
   --progress-indicator-background: var(--color-text);
   --surface-tonal-1: color-mix(
     in oklch,
@@ -282,16 +282,15 @@
   );
 
   /* Controls retain their geometry; composed surfaces own decorative depth. */
-  --shadow-mini-course: 0 2px 12px
-    color-mix(in srgb, var(--color-brand-ink) 8%, transparent);
+  --shadow-mini-course: none;
   --shadow-catalog: none;
   --shadow-control: none;
-  --shadow-overlay: 0 0.875rem 3.125rem var(--theme-overlay-shadow);
+  --shadow-overlay: 0 1.125rem 3.125rem var(--theme-overlay-shadow);
+  --shadow-popover: 0 0.5rem 1.75rem var(--theme-popover-shadow);
 
   --motion-duration: var(--theme-motion-duration);
   --motion-easing: var(--theme-motion-easing);
-  --focus-ring: 0 0 0 3px
-    color-mix(in srgb, var(--color-focus) 35%, transparent);
+  --focus-ring: 0 0 0 2px var(--color-focus);
   --surface-quiet-background: var(--color-surface-quiet);
   --surface-quiet-shadow: none;
   --surface-accent-background: var(--color-surface);

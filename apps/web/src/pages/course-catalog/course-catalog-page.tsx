@@ -1,6 +1,7 @@
 import { courseCatalog } from "~/entities/course";
 import { useAccountSession } from "~/features/account";
 import { PageContainer } from "~/shared/components/page-container";
+import { PageHead } from "~/shared/components/page-head";
 import { Typography } from "~/shared/components/typography";
 import { PublicFooter } from "~/widgets/public-footer";
 import { PublicHeader } from "~/widgets/public-header";
@@ -27,11 +28,7 @@ export const CourseCatalogPage: React.FC<CourseCatalogPageTypes.Props> = (
     <div className={styles.page} data-course-catalog-page>
       <PublicHeader activeSection="courses" />
       <main className={styles.root}>
-        <PageContainer
-          className={styles.catalogSection}
-          component="section"
-          aria-labelledby="course-catalog-heading"
-        >
+        <PageHead>
           <header className={styles.catalogHeading}>
             <Typography.Title
               id="course-catalog-heading"
@@ -53,6 +50,12 @@ export const CourseCatalogPage: React.FC<CourseCatalogPageTypes.Props> = (
               </span>
             </div>
           </header>
+        </PageHead>
+        <PageContainer
+          className={styles.catalogSection}
+          component="section"
+          aria-labelledby="course-catalog-heading"
+        >
           <ol
             className={styles.courseList}
             data-course-list

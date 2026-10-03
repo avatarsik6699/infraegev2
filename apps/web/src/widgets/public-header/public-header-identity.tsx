@@ -1,8 +1,6 @@
 import styles from "./public-header.module.css";
 
-export const PublicHeaderIdentity: React.FC<{ expanded?: boolean }> = ({
-  expanded = false,
-}) => (
+export const PublicHeaderIdentity: React.FC = () => (
   <>
     <span className={styles.mark} data-infraege-mark aria-hidden="true" />
     <span className={styles.name} data-infraege-name>
@@ -12,15 +10,6 @@ export const PublicHeaderIdentity: React.FC<{ expanded?: boolean }> = ({
       <span className={styles.subtitle} data-infraege-subtitle>
         подготовка к ЕГЭ по информатике
       </span>
-      {expanded ? (
-        <span className={styles.benefits} data-infraege-benefits>
-          <span>просто</span>
-          <i aria-hidden="true" />
-          <span>понятно</span>
-          <i aria-hidden="true" />
-          <span>бесплатно</span>
-        </span>
-      ) : null}
     </span>
   </>
 );

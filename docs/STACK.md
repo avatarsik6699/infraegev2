@@ -298,6 +298,7 @@ tool that isn't available must be reported as skipped with a reason, never silen
 | New/changed API surface | `openapi-typescript` regen + frontend re-typecheck | after backend contract change | yes — `pnpm api:generate` updates tracked artifacts; `pnpm api:check` proves no drift |
 | Frontend architecture decision | `frontend-architecture` skill | during planning and architecture review | yes — installed in the local Codex skill catalog |
 | Backend architecture decision | `backend-architecture` skill | during planning and architecture review | yes — installed in the local Codex skill catalog |
+| Frontend UI/design change | `impeccable` skill (`critique` before; `polish` + `audit` and its detector before check-off; `document` when the visual system changes) against `DESIGN.md`; Playwriter stays the browser check and `dsh-ui-review` the visual/a11y review | during design, implementation and before check-off | yes — user-level skill; `frontend-design` plugin disabled in `.claude/settings.json` |
 
 Mark a row `no` (not available) rather than leaving it blank — an unmarked row is otherwise
 ambiguous between "not asked" and "not needed."

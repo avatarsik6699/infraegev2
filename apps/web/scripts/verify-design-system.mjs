@@ -57,7 +57,7 @@ for (const [source, file, expected] of [
   assert.deepEqual(themeViolations(source, file), expected);
 }
 
-// Narrow structural regressions confirmed by the full consumer audit.
+// Component-boundary rules: consumers use public component APIs, not their internals.
 const adoptionViolations = (source, file) => {
   const clean = source.replace(/\/\*[\s\S]*?\*\//g, "");
   const consumerCss = file.startsWith("pages/") && file.endsWith(".css");
@@ -68,12 +68,6 @@ const adoptionViolations = (source, file) => {
     consumerCss &&
       /[\s>]img\b[^{}]*\{/.test(clean) &&
       "consumer overrides Image internals",
-    consumerCss &&
-      /\.cardTitle\[data-order\]/.test(clean) &&
-      "catalog title bypasses Typography role",
-    /\.tsx?$/.test(file) &&
-      /(?<![\w-])presentation=["']study["']/.test(clean) &&
-      "retired learning presentation API",
     file.startsWith("pages/topic-lesson/") &&
       /\.tsx$/.test(file) &&
       /<(?:code|var)(?:\s|>)/.test(clean) &&
@@ -92,27 +86,12 @@ for (const [source, file, expected] of [
     ["consumer overrides Image internals"],
   ],
   [
-    ".cardTitle[data-order] { font-size: 2rem; }",
-    "pages/catalog/page.module.css",
-    ["catalog title bypasses Typography role"],
-  ],
-  [
-    '<LessonPractice presentation="study" />',
-    "pages/lesson/page.tsx",
-    ["retired learning presentation API"],
-  ],
-  [
     "<var>n</var>",
     "pages/topic-lesson/proof.tsx",
     ["lesson notation bypasses Notation"],
   ],
   [".image { height: 100%; }", "shared/components/image/image.module.css", []],
   [".art { grid-column: 2; }", "pages/catalog/page.module.css", []],
-  [
-    '<div data-presentation="study" />',
-    "shared/components/lesson/lesson.tsx",
-    [],
-  ],
   ['<ExternalLink presentation="inline" />', "pages/privacy/page.tsx", []],
   ["<Notation kind='formula'>n</Notation>", "pages/topic-lesson/proof.tsx", []],
 ])

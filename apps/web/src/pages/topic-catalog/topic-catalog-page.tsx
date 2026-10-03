@@ -2,6 +2,7 @@ import { Button } from "~/shared/components/button";
 import { SearchField } from "~/shared/components/search-field";
 import { ExternalLink } from "~/shared/components/external-link";
 import { PageContainer } from "~/shared/components/page-container";
+import { PageHead } from "~/shared/components/page-head";
 import { Typography } from "~/shared/components/typography";
 import { PublicFooter } from "~/widgets/public-footer";
 import { PublicHeader } from "~/widgets/public-header";
@@ -16,11 +17,7 @@ export const TopicCatalogPage: React.FC = () => {
     <div className={styles.page} data-topic-catalog-page>
       <PublicHeader activeSection="topics" />
       <main>
-        <PageContainer
-          className={styles.catalogSection}
-          component="section"
-          aria-labelledby="exam-map-heading"
-        >
+        <PageHead>
           <header className={styles.catalogHeading}>
             <Typography.Title
               id="exam-map-heading"
@@ -52,6 +49,12 @@ export const TopicCatalogPage: React.FC = () => {
               </Button>
             </div>
           </header>
+        </PageHead>
+        <PageContainer
+          className={styles.catalogSection}
+          component="section"
+          aria-labelledby="exam-map-heading"
+        >
           <form
             className={styles.toolbar}
             aria-label="Поиск и фильтры тем"

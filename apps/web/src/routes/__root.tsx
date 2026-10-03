@@ -21,28 +21,14 @@ export const Route = createRootRouteWithContext<AppRouterContext>()({
     links: [
       {
         rel: "preload",
-        href: "/fonts/alegreya/alegreya-cyrillic-wght-normal.woff2",
+        href: "/fonts/onest/onest-cyrillic-wght-normal.woff2",
         as: "font",
         type: "font/woff2",
         crossOrigin: "anonymous",
       },
       {
         rel: "preload",
-        href: "/fonts/alegreya/alegreya-latin-wght-normal.woff2",
-        as: "font",
-        type: "font/woff2",
-        crossOrigin: "anonymous",
-      },
-      {
-        rel: "preload",
-        href: "/fonts/golos-text/golos-text-cyrillic-wght-normal.woff2",
-        as: "font",
-        type: "font/woff2",
-        crossOrigin: "anonymous",
-      },
-      {
-        rel: "preload",
-        href: "/fonts/golos-text/golos-text-latin-wght-normal.woff2",
+        href: "/fonts/onest/onest-latin-wght-normal.woff2",
         as: "font",
         type: "font/woff2",
         crossOrigin: "anonymous",

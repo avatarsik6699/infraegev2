@@ -5,15 +5,15 @@
   flex: 0 0 auto;
   place-items: center;
   border-radius: 50%;
-  background: color-mix(in srgb, var(--color-brand-ink) 8%, transparent);
-  color: var(--color-brand-ink);
-  font-family: var(--font-display);
-  font-size: var(--text-lg);
+  background: var(--color-text);
+  color: var(--control-primary-text);
+  font-family: var(--font-ui);
+  font-size: var(--text-base);
   font-weight: 600;
   line-height: 1;
 }
 .root[data-size="large"] {
-  width: 3.75rem;
-  height: 3.75rem;
+  width: 4.5rem;
+  height: 4.5rem;
   font-size: var(--text-2xl);
 }

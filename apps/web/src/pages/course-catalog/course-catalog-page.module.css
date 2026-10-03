@@ -6,13 +6,13 @@
 }
 .catalogSection[data-measure] {
   container-type: inline-size;
-  padding-block: var(--space-5);
+  padding-block: var(--space-4) var(--space-6);
 }
 .catalogHeading {
-  margin-bottom: var(--space-4);
+  margin: 0;
 }
-.heading {
-  font-size: var(--text-topic-heading);
+.heading[data-order] {
+  font-size: var(--text-3xl);
 }
 .catalogLead {
   color: var(--color-muted);
@@ -30,7 +30,9 @@
   font-variant-numeric: tabular-nums;
 }
 .summaryProgress {
-  flex: 0 0 19rem;
+  flex: 0 1 19rem;
+  min-width: 0;
+  max-width: 100%;
   min-height: 1.5em;
 }
 .courseList {
@@ -53,14 +55,13 @@
   min-width: 0;
   padding: var(--space-2);
   background: var(--color-surface);
-  border: 1px solid
-    color-mix(in srgb, var(--color-rule) 40%, var(--color-surface));
+  border: 1px solid var(--color-rule);
   box-shadow: var(--shadow-mini-course);
-  border-radius: var(--radius-control);
+  border-radius: var(--radius-surface);
   transition: transform var(--motion-duration) var(--motion-easing);
 }
 .card[data-course-status="published"]:is(:hover, :focus-within) {
-  transform: translateY(-2px);
+  border-color: var(--color-rule-strong);
 }
 .card[data-course-status="planned"] {
   padding-bottom: calc(var(--badge-height) + var(--space-3));

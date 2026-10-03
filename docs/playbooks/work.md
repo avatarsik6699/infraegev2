@@ -125,8 +125,8 @@ Before a coherent target set, identify its completion condition, affected files,
 and required tooling. A brief note is enough when the implementation is clear. Elaborate a design
 only for an unresolved technical choice; do not prepare a separate ceremony for every checkbox.
 
-For frontend work, read `docs/FRONTEND.md` and use the existing minimal public pages and shared
-semantic controls. Keep composition with the page; introduce a reusable mechanism only for a
+For frontend work, read `docs/FRONTEND.md` and `DESIGN.md` and use the existing public pages and
+shared semantic controls. Keep composition with the page; introduce a reusable mechanism only for a
 real consumer. Compare desktop/mobile and degraded states in the required browser pass. Labs
 and decorative specimens are not part of the current product.
 
@@ -159,7 +159,10 @@ the item's domain and confirm the mandated tool/skill was actually used:
   during planning or architecture review.
 - Backend architecture/API design decision → the `backend-architecture` skill must have been
   consulted during planning or architecture review.
-- Frontend UI/design decision → the `impeccable` skill must have been consulted.
+- Frontend UI/design change → `impeccable` is the single design authority: run `critique` on the
+  target before changing it, implement against `DESIGN.md`, and run `polish` and `audit` (plus
+  the detector it requests) before the item is checked off. A visual-system change also updates
+  `DESIGN.md` through `impeccable document`. Other frontend design plugins or skills stay disabled.
 
 This is not optional or "if convenient." If a mandated tool genuinely isn't available in this
 environment, report it explicitly as skipped with the reason — do not check off the item silently

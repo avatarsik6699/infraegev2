@@ -6,8 +6,8 @@
   min-width: 0;
   max-width: var(--learning-block-measure, 100%);
   overflow: hidden;
-  border: 0;
-  border-radius: var(--radius-surface);
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-control);
   background: var(--code-block-surface, var(--color-code));
   color: var(--color-code-text);
 }
@@ -17,9 +17,10 @@
   gap: var(--space-1);
   align-items: center;
   justify-content: space-between;
-  min-height: 1.75rem;
-  padding: var(--space-0-5) var(--space-0-5) 0 var(--space-2);
-  background: var(--code-block-surface, var(--color-code-top));
+  min-height: 2.25rem;
+  padding: var(--space-0-5) var(--space-0-5) var(--space-0-5) var(--space-2);
+  border-bottom: 1px solid var(--color-rule);
+  background: var(--color-surface);
 }
 
 .meta {
@@ -31,10 +32,9 @@
 .language {
   color: var(--color-code-comment);
   font-family: var(--font-data);
-  font-size: var(--text-2xs);
-  font-weight: 600;
+  font-size: var(--text-xs);
+  font-weight: 500;
   line-height: 1.2;
-  letter-spacing: 0.08em;
 }
 
 .copyStatus {
@@ -48,7 +48,7 @@
   font-family: var(--font-data);
   font-size: var(--text-learning-code);
   font-variant-ligatures: none;
-  line-height: 1.65;
+  line-height: 1.75;
 }
 
 .scrollArea:focus-visible {
@@ -64,7 +64,7 @@
 .code {
   display: block;
   min-width: 100%;
-  padding: var(--space-0-5) var(--space-2) var(--space-1-5);
+  padding: var(--space-1-5) var(--space-2);
   color: var(--color-code-text);
   font-family: inherit;
   font-size: var(--text-learning-code);
