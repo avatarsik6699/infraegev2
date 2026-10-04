@@ -12,11 +12,6 @@
   padding-block: var(--space-3) var(--space-6);
 }
 
-.headIllustration {
-  width: 14.375rem;
-  height: 6rem;
-}
-
 .catalogHeading {
   display: grid;
   gap: var(--space-1);

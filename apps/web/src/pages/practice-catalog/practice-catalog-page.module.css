@@ -38,11 +38,6 @@
 .subtitle > :first-child {
   overflow-wrap: anywhere;
 }
-.headIllustration {
-  width: 14.375rem;
-  height: 6rem;
-}
-
 .filters {
   display: grid;
   grid-template-columns: minmax(0, 27.5rem) minmax(12rem, 16rem) auto;
@@ -262,21 +257,19 @@
   gap: var(--space-2);
   justify-items: start;
 }
+/* Open block, no card: the scene leads, the message and the way back follow. */
 .state {
   justify-items: center;
   align-content: center;
-  width: min(100%, 26rem);
-  min-height: 12rem;
-  margin: var(--space-3) auto;
-  padding: var(--space-3);
-  border: 1px solid var(--color-rule);
-  border-radius: var(--radius-tile);
+  width: min(100%, 40rem);
+  margin: var(--space-5) auto;
   text-align: center;
 }
 
+/* At most 34rem wide; the scene keeps its 4.2:1 frame. */
 .stateIllustration {
-  justify-self: stretch;
-  height: 5.5rem;
+  width: min(100%, 34rem);
+  margin-bottom: var(--space-1);
 }
 
 /* Practice/filter errors (mockup `states.html`): a soft danger block. */

@@ -10,6 +10,9 @@ const sceneSizes: Record<
   "home-hero": { width: 360, height: 300 },
   "sign-in": { width: 1074, height: 910 },
   register: { width: 906, height: 894 },
+  "not-found": { width: 1200, height: 375 },
+  error: { width: 1200, height: 375 },
+  "empty-search": { width: 1260, height: 300 },
 };
 
 /**

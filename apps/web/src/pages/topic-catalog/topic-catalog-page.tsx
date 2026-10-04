@@ -2,7 +2,7 @@ import { Button } from "~/shared/components/button";
 import { SearchField } from "~/shared/components/search-field";
 import { ExternalLink } from "~/shared/components/external-link";
 import { PageContainer } from "~/shared/components/page-container";
-import { IllustrationPlaceholder } from "~/shared/components/illustration-placeholder";
+import { MascotScene } from "~/shared/components/mascot-scene";
 import { PageHead } from "~/shared/components/page-head";
 import { Typography } from "~/shared/components/typography";
 import { PublicFooter } from "~/widgets/public-footer";
@@ -18,14 +18,7 @@ export const TopicCatalogPage: React.FC = () => {
     <div className={styles.page} data-topic-catalog-page>
       <PublicHeader activeSection="topics" />
       <main id="main-content">
-        <PageHead
-          aside={
-            <IllustrationPlaceholder
-              tone="outline"
-              className={styles.headIllustration}
-            />
-          }
-        >
+        <PageHead>
           <header className={styles.catalogHeading}>
             <Typography.Title
               id="exam-map-heading"
@@ -124,7 +117,10 @@ export const TopicCatalogPage: React.FC = () => {
           </ol>
           {catalog.entries.length === 0 && (
             <div className={styles.empty} role="status">
-              <IllustrationPlaceholder className={styles.emptyIllustration} />
+              <MascotScene
+                scene="empty-search"
+                className={styles.emptyIllustration}
+              />
               <Typography.Title order={2} className={styles.emptyTitle}>
                 Темы не найдены
               </Typography.Title>

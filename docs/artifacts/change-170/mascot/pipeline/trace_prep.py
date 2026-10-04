@@ -1,11 +1,14 @@
 """Prepares a generated scene PNG for tracing (trace.mjs).
 
 Usage: python3 trace_prep.py <scene.png> <work-dir> [crop=x0,y0,x1,y1] [face=x0,y0,x1,y1]
+                             [move=none|x0,y0,x1,y1/x0,y0,x1,y1...]
 
 Crops the scene (to `crop`, or to its drawing plus a margin), splits it
 into ink and orange masks at TRACE_SCALE, and lifts small free-standing
 ink pieces (sparkles, light rays, pencil marks) into their own masks so the scene
-can animate them. Pieces enclosed by a larger outline (eyes, keyhole) stay put.
+can animate them. Pieces enclosed by a larger outline (eyes, keyhole) stay put;
+`move` limits the moving pieces to the given boxes (source pixels) or turns
+them off, so trail dashes stay still.
 Face lines inside the `face` box (source pixels) leave the trace and are kept
 as centrelines, so trace.mjs redraws them with the pen like the approved poses.
 Writes <work-dir>/scene.json and the masks next to it.
@@ -30,6 +33,20 @@ from prepare import (
 TRACE_SCALE = 2
 MARGIN = 24
 SMALL = 120  # px in the source: larger pieces are part of the drawing
+
+
+def move_zones(option, box):
+    """Boxes (trace pixels) where pieces may move: None means anywhere."""
+    if option is None:
+        return None
+    if option == "none":
+        return []
+    zones = []
+    for zone in option.split("/"):
+        x0, y0, x1, y1 = (int(v) for v in zone.split(","))
+        dx, dy, s = box[0], box[1], TRACE_SCALE
+        zones.append(((x0 - dx) * s, (y0 - dy) * s, (x1 - dx) * s, (y1 - dy) * s))
+    return zones
 
 
 def main():
@@ -95,12 +112,18 @@ def main():
     ]
     items, still = [], set(ink)
     limit = SMALL * TRACE_SCALE
+    zones = move_zones(options.get("move"), box)
     for comp in components(ink):
         xs, ys = [p[0] for p in comp], [p[1] for p in comp]
         x0, y0, x1, y1 = min(xs), min(ys), max(xs), max(ys)
         if max(x1 - x0, y1 - y0) >= limit or comp[0] in enclosed:
             continue
         if any(x0 <= cx <= x1 and y0 <= cy <= y1 for cx, cy in inner):
+            continue
+        if zones is not None and not any(
+            zx0 <= x0 and x1 <= zx1 and zy0 <= y0 and y1 <= zy1
+            for zx0, zy0, zx1, zy1 in zones
+        ):
             continue
         still.difference_update(comp)
         items.append((x0, y0, x1, y1, comp))

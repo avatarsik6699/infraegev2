@@ -9,11 +9,6 @@
   container-type: inline-size;
 }
 
-.headIllustration {
-  width: 14.375rem;
-  height: 6rem;
-}
-
 .catalogHeading {
   display: grid;
   gap: var(--space-1);
@@ -253,26 +248,25 @@
   transform: translateX(var(--space-0-5));
 }
 
+/* Open block, no card: the scene leads, the message and the reset follow. */
 .empty {
   display: grid;
   justify-items: center;
   gap: var(--space-1-5);
-  width: min(100%, 26rem);
-  margin: var(--space-4) auto;
-  padding: var(--space-3);
-  border: 1px solid var(--color-rule);
-  border-radius: var(--radius-tile);
+  width: min(100%, 40rem);
+  margin: var(--space-5) auto;
   text-align: center;
 }
 
+/* At most 34rem wide; the scene keeps its 4.2:1 frame. */
 .emptyIllustration {
-  justify-self: stretch;
-  height: 5.5rem;
+  width: min(100%, 34rem);
+  margin-bottom: var(--space-1);
 }
 
 .emptyTitle[data-order] {
   margin: 0;
-  font-size: var(--text-xl);
+  font-size: var(--text-2xl);
 }
 
 .sourceNote {

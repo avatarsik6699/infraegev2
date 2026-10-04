@@ -6,7 +6,8 @@
 
 Маскот (решение архитектора 2026-10-04): живая стопка из трёх камней логотипа, лицо на большом
 нижнем камне, только обводка, оранжевая обводка у верхнего камня, тонкие руки и ноги. Маскот
-используется в hero, входе, 404, ошибке, пустом поиске и шапках каталогов; темы и курс Python
+используется в hero, входе, 404, ошибке и пустом поиске (сцены для шапок каталогов
+пробовали и убрали 2026-10-04: в шапке они спорили с заголовком); темы и курс Python
 остаются предметными иллюстрациями. Программные наброски, лист персонажа и сцены:
 [change-170/mascot](../../change-170/mascot/) (`mascot-lab-v3-sheet.html`).
 
@@ -39,20 +40,20 @@
 | Главная, hero (заменяет плашку с заметками) | 30rem, 6:5 | `ill-hero` + слои | да |
 | Главная, плашки 4 тем | ≥14rem × 8.5rem | `ill-topic-*` | нет |
 | Главная, блок курса | 3:2 | `ill-course-python` | нет |
-| `/ege`, шапка | 14.4rem × 6rem | `ill-head-ege` | да |
+| `/ege`, шапка | — | без иллюстрации (убрано 2026-10-04) | — |
 | `/ege`, строки опубликованных тем | 7rem × 4.5rem | `ill-topic-*` | нет |
 | `/ege`, строки тем «Скоро» | 7rem × 4.5rem | остаётся заглушка | — |
-| `/ege`, пусто «Темы не найдены» | ≤26rem × 5.5rem | `ill-empty-search` | да |
-| `/courses`, шапка | 14.4rem × 6rem | `ill-head-courses` | да |
+| `/ege`, пусто «Темы не найдены» | ≤34rem, 4.2:1 | `ill-empty-search` | да |
+| `/courses`, шапка | — | без иллюстрации (убрано 2026-10-04) | — |
 | `/courses`, карточка Python | ≈30rem × 9.4rem | `ill-course-python-wide` | нет |
 | `/courses`, карточки курсов «Скоро» | ≈30rem × 9.4rem | остаётся заглушка | — |
 | `/courses/python`, шапка | 3:2 | `ill-course-python` | нет |
-| `/practice`, шапка | 14.4rem × 6rem | `ill-head-practice` | да |
-| `/practice`, пусто «Пока ничего не нашлось» | ≤26rem × 5.5rem | `ill-empty-search` | да |
+| `/practice`, шапка | — | без иллюстрации (убрано 2026-10-04) | — |
+| `/practice`, пусто «Пока ничего не нашлось» | ≤34rem, 4.2:1 | `ill-empty-search` | да |
 | Вход, справа от формы (и восстановление пароля) | 30rem, 6:5 | `ill-sign-in` | да |
 | Регистрация, справа от формы (и подтверждение почты) | 30rem, 6:5 | `ill-register` | да |
-| 404 (страница и задача) | ≤24rem × 7.5rem | `ill-404` | да |
-| Ошибка загрузки, 503 задачи | ≤24rem × 7.5rem | `ill-error` | да |
+| 404 (страница и задача) | ≤50rem, 3.2:1 | `ill-404` | да |
+| Ошибка загрузки, 503 задачи | ≤50rem, 3.2:1 | `ill-error` | да |
 
 ## Блок стиля
 
@@ -125,24 +126,6 @@ only on the mascot's top pebble. Nothing touches the edges of the image. No word
 Размер: 4:1, 1400×350. Состав: стиль + маскот + сцена.
 
 Сцена: Wide, low composition. The mascot points at an empty cardboard box lying on its side, a few dust specks drifting out.
-
-## ill-head-ege
-
-Размер: 12:5, 1200×500. Состав: стиль + маскот + сцена.
-
-Сцена: Wide composition. The mascot jumps between flat stepping stones towards a small blank flag on the last stone.
-
-## ill-head-courses
-
-Размер: 12:5, 1200×500. Состав: стиль + маскот + сцена.
-
-Сцена: Wide composition. The mascot pulls a notebook from a short shelf of notebooks; a small potted plant at the end of the shelf.
-
-## ill-head-practice
-
-Размер: 12:5, 1200×500. Состав: стиль + маскот + сцена.
-
-Сцена: Wide composition. The mascot holds a pencil by a small table with three task cards: one checked, one half-filled, one blank; a small stopwatch on the table.
 
 ## ill-topic-16
 

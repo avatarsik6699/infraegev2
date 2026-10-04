@@ -130,11 +130,12 @@ function floaters(svg, defs, name, seed, items) {
   }
 }
 
+// Each scene: the seed of its marks and the marks themselves.
 const SCENES = {
   // Sign-in: the mascot unlocks the door, light rays shimmer through the gap.
-  async "sign-in"() {
-    const { svg, defs } = await traced("sign-in");
-    floaters(svg, defs, "sign-in", 131, [
+  "sign-in": {
+    seed: 131,
+    marks: [
       ["sparkle", 70, 90, 3],
       ["ring", 390, 50, 3],
       ["sparkle", 150, 330, 2.6],
@@ -143,15 +144,13 @@ const SCENES = {
       ["ring", 1040, 430, 2.6],
       ["sparkle", 1030, 770, 2.8],
       ["ring", 60, 600, 2.6],
-    ]);
-    return svg;
+    ],
   },
-
   // Registration: the mascot fills in its own sign-up form on a clipboard;
   // the marks at the pencil tip shimmer.
-  async register() {
-    const { svg, defs } = await traced("register");
-    floaters(svg, defs, "register", 137, [
+  register: {
+    seed: 137,
+    marks: [
       ["ring", 60, 80, 3],
       ["sparkle", 250, 50, 3],
       ["ring", 410, 50, 2.6],
@@ -159,11 +158,50 @@ const SCENES = {
       ["ring", 330, 330, 2.6],
       ["sparkle", 40, 500, 2.8],
       ["sparkle", 370, 860, 2.6],
-    ]);
-    return svg;
+    ],
+  },
+  // 404: the mascot peeks through an open door into nowhere, a signpost aside.
+  "not-found": {
+    seed: 139,
+    marks: [
+      ["sparkle", 150, 90, 3.5],
+      ["ring", 300, 170, 3],
+      ["ring", 920, 90, 3],
+      ["sparkle", 1100, 70, 3.5],
+      ["ring", 1160, 250, 3],
+    ],
+  },
+  // Error: the mascot holds the unplugged cord of a sparking server.
+  error: {
+    seed: 149,
+    marks: [
+      ["sparkle", 100, 80, 3.5],
+      ["ring", 560, 70, 3],
+      ["sparkle", 640, 160, 3],
+      ["ring", 1000, 130, 3],
+      ["sparkle", 1120, 210, 3.5],
+      ["ring", 90, 300, 3],
+    ],
+  },
+  // Nothing found: the mascot looks into an empty box with a magnifier.
+  "empty-search": {
+    seed: 151,
+    marks: [
+      ["ring", 100, 70, 3],
+      ["sparkle", 340, 40, 3.5],
+      ["sparkle", 920, 70, 3.5],
+      ["ring", 1170, 120, 3],
+      ["sparkle", 1220, 260, 3],
+      ["ring", 40, 260, 3],
+    ],
   },
 };
 
-for (const [name, build] of Object.entries(SCENES)) {
-  writeScene(out, name, await build());
+// `node trace.mjs <work> <out> [scene...]` rebuilds only the named scenes.
+const only = process.argv.slice(4);
+for (const [name, { seed, marks }] of Object.entries(SCENES)) {
+  if (only.length && !only.includes(name)) continue;
+  const { svg, defs } = await traced(name);
+  floaters(svg, defs, name, seed, marks);
+  writeScene(out, name, svg);
 }

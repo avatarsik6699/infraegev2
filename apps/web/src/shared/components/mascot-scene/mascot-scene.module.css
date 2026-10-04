@@ -1,5 +1,7 @@
-/* Mascot scene: baked SVG, motion inside the file (docs/artifacts/references/mascot). */
-.root {
+/* Mascot scene: baked SVG, motion inside the file (docs/artifacts/references/mascot).
+   Zero specificity, so the slot class of the page (size, display: none at a
+   breakpoint) always wins, whatever order the stylesheets arrive in. */
+:where(.root) {
   display: block;
   min-width: 0;
   height: auto;

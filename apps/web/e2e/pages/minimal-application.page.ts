@@ -231,7 +231,7 @@ export class MinimalApplicationPage {
       ).toBeVisible();
       await expect(this.page.locator("[data-status-scene]")).toBeVisible();
       await expect(
-        this.page.locator("[data-illustration-placeholder]"),
+        this.page.locator('[data-mascot-scene="not-found"]'),
       ).toBeVisible();
     }
   }

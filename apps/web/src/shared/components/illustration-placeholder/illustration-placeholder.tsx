@@ -9,7 +9,6 @@ export const IllustrationPlaceholder: React.FC<
   <div
     className={cssUtils.cx(styles.root, props.className)}
     data-illustration-placeholder
-    data-tone={props.tone ?? "soft"}
     aria-hidden="true"
   />
 );

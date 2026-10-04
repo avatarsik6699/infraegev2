@@ -43,6 +43,14 @@
   .auth .submit { height: 44px; border-radius: 6px; background: var(--ink); }
   .auth img { display: block; justify-self: center; width: 100%; max-height: 25rem; object-fit: contain; }
   @media (max-width: 56rem) { .auth { grid-template-columns: minmax(0, 1fr); } }
+  .status { display: grid; justify-items: center; gap: 0.8rem; padding: 2.5rem 0; border-top: 1px solid var(--rule); text-align: center; }
+  .status img { display: block; width: min(100%, 50rem); height: auto; }
+  .status.small img { width: min(100%, 34rem); }
+  .status b { font-size: clamp(1.875rem, 3.6vw, 2.625rem); line-height: 1.15; }
+  .status.small b { font-size: 1.5rem; }
+  .status .submit { width: 10rem; height: 44px; border-radius: 6px; background: var(--ink); }
+  .status .ghost { background: none; border: 1px solid #c9c6bd; }
+  .actions-row { display: flex; gap: 0.75rem; }
   .hero .text { display: grid; gap: 0.75rem; min-width: 0; }
   .btn { font: 600 14px var(--font-ui); color: var(--ink); background: var(--page); border: 1px solid #c9c6bd; border-radius: 6px; padding: 0.5rem 0.9rem; cursor: pointer; }
   .btn:hover, .btn[aria-pressed="true"] { border-color: var(--ink); }
@@ -118,6 +126,17 @@
       <div class="form"><b>Создать аккаунт</b><div class="field"></div><div class="field"></div><div class="submit"></div></div>
       <img src="{{scene:register}}" alt="" width="906" height="894">
     </div>
+  </section>
+  <section class="section" aria-labelledby="states-title">
+    <h2 id="states-title">404 и ошибка</h2>
+    <p class="muted">Открытая страница без карточки: крупная сцена (до 50rem), под ней заголовок, текст и кнопки, без крупных цифр кода. Двигаются молнии и искры у вилки и редкие звёздочки и кружки по краям; пунктир следов стоит.</p>
+    <div class="status"><img src="{{scene:not-found}}" alt="" width="1200" height="375"><b>Такой страницы нет</b><span class="muted">Проверьте адрес или вернитесь на главную.</span><div class="submit"></div></div>
+    <div class="status"><img src="{{scene:error}}" alt="" width="1200" height="375"><b>Не удалось загрузить страницу</b><span class="muted">Попробуйте ещё раз или вернитесь на главную.</span><div class="actions-row"><div class="submit"></div><div class="submit ghost"></div></div></div>
+  </section>
+  <section class="section" aria-labelledby="empty-title">
+    <h2 id="empty-title">Пустой поиск</h2>
+    <p class="muted">Темы и практика: открытый блок без карточки, сцена до 34rem, заголовок и действие под ней. Мерцает комок с чёрточками и метки по краям.</p>
+    <div class="status small"><img src="{{scene:empty-search}}" alt="" width="1260" height="300"><b>Темы не найдены</b><span class="muted">Попробуйте другой запрос или сбросьте фильтры.</span><div class="submit ghost"></div></div>
   </section>
 </div>
 

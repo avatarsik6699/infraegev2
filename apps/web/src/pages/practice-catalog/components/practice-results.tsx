@@ -4,7 +4,7 @@ import { useRouter } from "@tanstack/react-router";
 import { practiceCatalog } from "~/entities/practice-task";
 import { Typography } from "~/shared/components/typography";
 import { EmptyState } from "~/shared/components/empty-state";
-import { IllustrationPlaceholder } from "~/shared/components/illustration-placeholder";
+import { MascotScene } from "~/shared/components/mascot-scene";
 import { Button } from "~/shared/components/button";
 import { ActionLink } from "~/shared/components/action-link";
 import type { PracticeCatalogPageTypes } from "../practice-catalog-page.types";
@@ -75,7 +75,10 @@ export const PracticeResults: React.FC<PracticeCatalogPageTypes.Props> = (
       </div>
       {!page.tasks.length && (
         <div className={styles.state}>
-          <IllustrationPlaceholder className={styles.stateIllustration} />
+          <MascotScene
+            scene="empty-search"
+            className={styles.stateIllustration}
+          />
           <EmptyState
             title="Пока ничего не нашлось"
             description="Попробуйте другие слова или выберите другую тему."
