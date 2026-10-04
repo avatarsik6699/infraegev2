@@ -1,0 +1,152 @@
+<title>Маскот infraege</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;600;700&family=JetBrains+Mono:wght@400&display=swap">
+<style>
+  /* Layout: working sheet — the generated character sheet as vector poses, then the hero scene with CSS motion. Light only, as on the site. */
+  :root {
+    --page: #ffffff;
+    --soft: #f8f8f6;
+    --ink: #17191e;
+    --muted: #4d535e;
+    --rule: #e6e4de;
+    --orange: #ff6a00;
+    --font-ui: "Onest", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --font-data: "JetBrains Mono", ui-monospace, monospace;
+    color-scheme: light;
+  }
+  body { background: var(--page); color: var(--ink); font-family: var(--font-ui); font-size: 15px; line-height: 1.5; }
+  .wrap { max-width: 72rem; margin: 0 auto; padding-inline: 16px; padding-block: 2.5rem 4rem; display: grid; gap: 3.5rem; }
+  h1, h2, h3 { margin: 0; text-wrap: balance; font-weight: 700; letter-spacing: -0.01em; }
+  h1 { font-size: 2rem; line-height: 1.15; }
+  h2 { font-size: 1.35rem; }
+  h3 { font-size: 1rem; font-weight: 600; }
+  p { margin: 0; max-width: 66ch; }
+  .muted { color: var(--muted); }
+  .intro, .section, .sub { display: grid; gap: 0.75rem; }
+  .section { gap: 1.25rem; }
+  .section-head { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; align-items: baseline; justify-content: space-between; }
+  .actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .row { display: grid; grid-template-columns: repeat(var(--cols, 5), minmax(0, 1fr)); gap: 0.75rem; }
+  .tile { display: grid; gap: 0.4rem; min-width: 0; margin: 0; align-content: start; }
+  .stage { border-radius: 12px; background: var(--soft); max-width: 100%; width: 100%; overflow: hidden; aspect-ratio: var(--ratio, 1); display: grid; place-items: center; }
+  .stage > svg, .stage > img { width: 84%; height: 84%; display: block; object-fit: contain; }
+  .label { font-family: var(--font-data); font-size: 12px; color: var(--muted); }
+  .compare { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem; max-width: 60rem; }
+  .hero { display: grid; grid-template-columns: minmax(0, 30rem) minmax(0, 1fr); gap: 1.5rem; align-items: start; }
+  .hero .stage { --ratio: 6 / 5; box-shadow: inset 0 0 0 1px var(--rule); }
+  .hero .stage > svg { width: 100%; height: 100%; }
+  .hero .text { display: grid; gap: 0.75rem; min-width: 0; }
+  .btn { font: 600 14px var(--font-ui); color: var(--ink); background: var(--page); border: 1px solid #c9c6bd; border-radius: 6px; padding: 0.5rem 0.9rem; cursor: pointer; }
+  .btn:hover, .btn[aria-pressed="true"] { border-color: var(--ink); }
+  .btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  .notes { display: grid; gap: 0.35rem; padding-left: 1.1rem; margin: 0; color: var(--muted); max-width: 64ch; }
+
+  /* Hero motion: the same CSS as apps/web/src/shared/components/mascot-scene. */
+  @media (prefers-reduced-motion: no-preference) {
+    .mascot-float { animation: float 5.2s ease-in-out infinite; }
+    .mascot-bob { transform-box: fill-box; transform-origin: center; animation: bob var(--d, 6s) ease-in-out var(--delay, 0s) infinite; }
+    .mascot-twinkle { animation: twinkle var(--d, 3s) ease-in-out var(--delay, 0s) infinite; }
+  }
+  @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+  @keyframes bob {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    33% { transform: translate(var(--x, 3px), -5px) rotate(var(--r, 4deg)); }
+    66% { transform: translate(calc(var(--x, 3px) * -0.6), 3px) rotate(calc(var(--r, 4deg) * -0.5)); }
+  }
+  @keyframes twinkle { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
+  .paused .mascot-float, .paused .mascot-bob, .paused .mascot-twinkle { animation-play-state: paused; }
+
+  @media (max-width: 56rem) {
+    .row { --cols: 3 !important; }
+    .hero { grid-template-columns: minmax(0, 1fr); }
+    h1 { font-size: 1.6rem; }
+  }
+  @media (max-width: 30rem) { .row { --cols: 2 !important; } }
+</style>
+
+<div class="wrap">
+  <header class="intro">
+    <h1>Маскот: лист персонажа и hero</h1>
+    <p class="muted">Утверждённый маскот: камни и конечности — трассировка сгенерированного листа, глаза, рот и брови прорисованы пером. Позы: docs/artifacts/references/mascot/poses. Сцены для сайта собирает pipeline/scenes.mjs, эта страница показывает те же файлы.</p>
+  </header>
+
+  <section class="section" aria-labelledby="sheet-title">
+    <h2 id="sheet-title">Лист персонажа</h2>
+    <div class="sub"><h3>Ракурсы</h3><div class="row" style="--cols: 5" id="views"></div></div>
+    <div class="sub"><h3>Позы</h3><div class="row" id="poses"></div></div>
+    <div class="sub"><h3>Эмоции</h3><div class="row" id="moods"></div></div>
+  </section>
+
+  <section class="section" aria-labelledby="hero-title">
+    <div class="section-head">
+      <h2 id="hero-title">Hero главной</h2>
+      <button class="btn" id="motion" type="button" aria-pressed="true">Остановить движение</button>
+    </div>
+    <div class="hero">
+      <figure class="tile">
+        <div class="stage" id="hero-stage">{{scene:home-hero}}</div>
+        <figcaption class="label">слот 30rem, 6:5, без подложки · заменяет плашку с заметками</figcaption>
+      </figure>
+      <div class="text">
+        <p class="muted">Маскот в позе лотоса медленно парит. Вокруг покачиваются предметы из учёбы: змейка Python, пузырь с галочкой, клетки бланка ЕГЭ с ответом 27, таблица, 1 0 1, фигурные скобки, блок-схема и дерево. Звёздочки мерцают.</p>
+        <h3>Подложка</h3>
+        <div class="actions" id="bg"></div>
+        <ul class="notes">
+          <li>Анимация на чистом CSS, без JavaScript: парение 5 с, у каждого предмета свой период и сдвиг.</li>
+          <li>При системной настройке «уменьшить движение» всё стоит на месте.</li>
+          <li>Маскот и предметы — отдельные слои; на сайте это один лёгкий inline SVG.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+
+<script>
+(() => {
+  // Generated by pipeline/demo.mjs: approved poses and baked scenes.
+  const POSES = {{poses}};
+
+  function pose(name) {
+    const svg = new DOMParser().parseFromString(POSES[name], "image/svg+xml").documentElement;
+    svg.setAttribute("role", "img");
+    return document.importNode(svg, true);
+  }
+  function tile(name, label, host) {
+    const t = document.createElement("figure"); t.className = "tile";
+    const stage = document.createElement("div"); stage.className = "stage";
+    const svg = pose(name); svg.setAttribute("aria-label", "Маскот: " + label);
+    stage.appendChild(svg);
+    const cap = document.createElement("figcaption"); cap.className = "label"; cap.textContent = label;
+    t.append(stage, cap); host.appendChild(t);
+  }
+  [["front", "анфас"], ["side", "профиль"], ["back", "со спины"]].forEach(([n, l]) => tile(n, l, document.getElementById("views")));
+  [["stand", "стоит"], ["wave", "машет"], ["point", "указывает"], ["jump", "прыгает"], ["lotus", "лотос"]].forEach(([n, l]) => tile(n, l, document.getElementById("poses")));
+  [["happy", "рад"], ["think", "думает"], ["sad", "грустит"], ["surprised", "удивлён"], ["calm", "спокоен"]].forEach(([n, l]) => tile(n, l, document.getElementById("moods")));
+
+  // Hero plate colours for comparison; the site shows the scene without a plate.
+  const BGS = [["#ffffff", "Без подложки"], ["#fffaf5", "Едва заметная"], ["#ffeadb", "Абрикосовая"]];
+  const stage = document.getElementById("hero-stage");
+  const bgHost = document.getElementById("bg");
+  const setBg = (color) => {
+    stage.style.background = color;
+    [...bgHost.children].forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.color === color)));
+  };
+  BGS.forEach(([color, label]) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "btn"; b.textContent = label; b.dataset.color = color;
+    b.addEventListener("click", () => setBg(color));
+    bgHost.appendChild(b);
+  });
+  setBg("#ffffff");
+
+  const motion = document.getElementById("motion");
+  motion.addEventListener("click", () => {
+    const paused = document.body.classList.toggle("paused");
+    motion.textContent = paused ? "Запустить движение" : "Остановить движение";
+    motion.setAttribute("aria-pressed", String(!paused));
+  });
+})();
+</script>

@@ -192,12 +192,12 @@ one orange for position.
 - **Here Orange** (here-orange): the "you are here" mark only: the 2px line under the current
   nav item and selected tab, the 3px bar at the current lesson subtopic and page-rail item, and the
   small "Подтема N из M" label. 4.85:1 on white.
-- **Logo Orange** (logo-orange): the top stone of the logo and the single marker underline under
-  the key phrase of the home hero. Nowhere else.
+- **Logo Orange** (logo-orange): the top stone of the logo and of the mascot, and the single
+  marker underline under the key phrase of the home hero. Nowhere else.
 
 ### Tertiary
 - **Cover Pastels** (pastel-sky, pastel-sage, pastel-lilac, pastel-apricot): home-page path
-  tiles, topic illustration plates, the course band and the hero illustration plate. Outside home,
+  tiles, topic illustration plates and the course band. Outside home,
   one pastel plate per page for the main next step (course illustration, profile "Следующий шаг").
   Pastels rotate in a fixed order and carry no meaning; they are never assigned to a section.
 
@@ -288,7 +288,7 @@ border or fill, not elevation.
 Small, calm corners: 6px on controls (buttons, inputs, segmented controls), 12px on cards and
 plates, 14px on home path tiles, full pills for chips and badges. Borders are 1px hairlines.
 Illustrations are hand-drawn monochrome lines with one orange accent, on pastel (home) or soft
-neutral (elsewhere) plates.
+neutral (elsewhere) plates. Mascot scenes have no plate: they sit directly on the page head grid.
 
 ## Components
 
@@ -331,6 +331,19 @@ neutral (elsewhere) plates.
 ### Lesson subtopic panel (signature)
 - Topic title, "Задание N · M подтем", practice count, numbered subtopics; done items show a
   success check, the current one a white fill, 1px ring and a 3px Here Orange bar.
+
+### Mascot
+- A living stack of the three logo stones: face on the big bottom stone, the top stone outlined in
+  Logo Orange, thin arms with round hands, short legs. Outline only, uneven hand-drawn line.
+- Approved poses and rules: `docs/artifacts/references/mascot`. Scenes are baked by its pipeline
+  into `apps/web/public/images/mascot` and shown by the shared `MascotScene` (a lazy decorative
+  image, sized 6:5).
+- Places: home hero (lotus with floating learning objects), then sign-in, 404, error, empty search
+  and catalog heads, each approved on the demo page first. Topics and courses keep object
+  illustrations without the mascot.
+- Motion is CSS inside the scene file: a slow float, gentle sway, sparkles; off under
+  `prefers-reduced-motion`. The home hero scene is hidden below 960px, where it would wrap
+  under the copy at a reduced size.
 
 ## Do's and Don'ts
 

@@ -9,6 +9,7 @@ import { ConfirmationDialog } from "~/shared/components/confirmation-dialog";
 import { ExternalLink } from "~/shared/components/external-link";
 import { Field } from "~/shared/components/field";
 import { Image } from "~/shared/components/image";
+import { MascotScene } from "~/shared/components/mascot-scene";
 import { Notation } from "~/shared/components/notation";
 import { PasswordConfirmationDialog } from "~/shared/components/password-confirmation-dialog";
 import { PageContainer } from "~/shared/components/page-container";
@@ -202,6 +203,20 @@ describe("Image", () => {
     ) as HTMLElement | null;
     expect(placeholder?.getAttribute("aria-hidden")).toBe("true");
     expect(placeholder?.textContent).toBe("");
+  });
+});
+
+describe("MascotScene", () => {
+  it("loads the baked scene as a lazy decorative image with a reserved size", () => {
+    const { container } = render(<MascotScene scene="home-hero" />);
+    const scene = container.querySelector("img[data-mascot-scene]");
+    expect(scene?.getAttribute("src")).toBe("/images/mascot/home-hero.svg");
+    expect(scene?.getAttribute("alt")).toBe("");
+    expect(scene?.getAttribute("loading")).toBe("lazy");
+    expect([
+      scene?.getAttribute("width"),
+      scene?.getAttribute("height"),
+    ]).toEqual(["360", "300"]);
   });
 });
 

@@ -1,0 +1,6 @@
+/* Mascot scene: baked SVG, motion inside the file (docs/artifacts/references/mascot). */
+.root {
+  display: block;
+  min-width: 0;
+  height: auto;
+}

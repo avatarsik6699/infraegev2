@@ -113,7 +113,26 @@ Lighthouse observations above preceded the final enlarged-text navigation-title 
 
 ## Remaining work
 
-F6 awaits the architect-supplied illustrations. D2's fresh/resumed schema safeguard is complete and verified; its historical root cause cannot be proven without the pre-repair state, and the architect accepted closing D2 on that basis (2026-10-04). T1 still needs formal policy acceptance and fresh production account restore proof. T2 remains unperformed and requires completion of those prerequisites plus explicit release authorization. No commit, merge, push or deployment was performed.
+F6: the home hero mascot scene is done (see Mascot scenes); the other mascot scenes follow one by one after demo approval. F8 awaits the architect-supplied object illustrations. D2's fresh/resumed schema safeguard is complete and verified; its historical root cause cannot be proven without the pre-repair state, and the architect accepted closing D2 on that basis (2026-10-04). T1 still needs formal policy acceptance and fresh production account restore proof. T2 remains unperformed and requires completion of those prerequisites plus explicit release authorization. No commit, merge, push or deployment was performed.
 
 
 Repository cleanup passed: the dry-run allowlist was reviewed, generated reports/build outputs/caches were removed with `make clean`, and `make clean-check` passed. `.impeccable/`, dependency environments, authored evidence, dev database/task files and the pre-bootstrap bank export are preserved. The local dev stack remains running at `http://localhost:8080`.
+
+## Mascot scenes (F6)
+
+Home hero (2026-10-04): the approved lotus pose with eight floating learning objects replaces the
+plate with code notes, without a plate, per the architect. The scene is a separate SVG
+(`apps/web/public/images/mascot/home-hero.svg`, 8.4 KB transferred) with CSS motion inside, off
+under `prefers-reduced-motion`; `MascotScene` shows it as a lazy decorative image with reserved
+6:5 size. Hidden below 60rem (960 px), where it would wrap under the copy at a reduced size
+(architect, 2026-10-04); a hidden lazy image is never fetched.
+
+Inlining the SVG was tried first and rejected: it added the scene to both the HTML and the JS
+bundle, and the home mobile LCP median rose from 3245 to 3974 ms in the same local environment.
+
+Lighthouse on `/` (local production build, three mobile runs, median): LCP 3253 ms against
+3245 ms without the scene, CLS 0, accessibility 1, SEO 1, no mascot request. One desktop run:
+LCP 706 ms (the scene is the LCP element), CLS 0.001. Real Chrome at 1440 px: scene renders and
+animates; reduced motion stops all three layers; at 959 px and below the scene is hidden, from
+961 px it sits beside the copy; no horizontal overflow at 390–1440 px.
+

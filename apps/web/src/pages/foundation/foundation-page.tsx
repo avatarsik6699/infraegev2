@@ -3,6 +3,7 @@ import { courseCatalog } from "~/entities/course";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { ActionLink } from "~/shared/components/action-link";
 import { IllustrationPlaceholder } from "~/shared/components/illustration-placeholder";
+import { MascotScene } from "~/shared/components/mascot-scene";
 import { PageContainer } from "~/shared/components/page-container";
 import { PageHead } from "~/shared/components/page-head";
 import { Typography } from "~/shared/components/typography";
@@ -18,7 +19,6 @@ const foundation = {
   ),
   plannedTopicCount: topicCatalog.entries.length,
   course: courseCatalog.entries.find((entry) => entry.status === "published"),
-  heroNotes: ["F(5) = 31", "for i in range", "n % 10", "✓ верно"],
   featuredTopicCount: 4,
 } as const;
 
@@ -28,15 +28,7 @@ export const FoundationPage: React.FC<FoundationPageTypes.Props> = (props) => (
     <main id="main-content" className={styles.main} data-foundation-layout>
       <PageHead
         className={styles.hero}
-        aside={
-          <div className={styles.heroPlate} aria-hidden="true">
-            {foundation.heroNotes.map((note) => (
-              <span key={note} className={styles.heroNote}>
-                {note}
-              </span>
-            ))}
-          </div>
-        }
+        aside={<MascotScene scene="home-hero" className={styles.heroScene} />}
       >
         <Typography.Title order={1} className={styles.heroTitle}>
           Понять, <span className={styles.highlight}>почему это работает</span>,

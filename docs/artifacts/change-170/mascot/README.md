@@ -4,10 +4,14 @@
 
 ## Содержимое
 
-- `demo.html` — демо-страница для согласования: лист персонажа и hero главной с
-  CSS-анимацией. Опубликована как артефакт
-  <https://claude.ai/artifact/MYcF3uXTzpP9mBtpND7y16>. Позы встроены из `references/mascot/poses`.
-- `pipeline/` — разовая сборка поз из сгенерированного листа. Не часть сборки приложения.
+- `demo.html` — демо-страница для согласования: лист персонажа и сцены в том виде, в каком их
+  показывает сайт. Собирается `pipeline/demo.mjs`, руками не правится. Опубликована как артефакт
+  <https://claude.ai/artifact/MYcF3uXTzpP9mBtpND7y16>.
+- `pipeline/` — сборка поз, сцен и демо. Не часть сборки приложения:
+  - `prepare.py`, `build.mjs` — позы из сгенерированного листа;
+  - `pen.mjs` — общее перо (штрих с нажимом, капля туши);
+  - `scenes.mjs` — сцены сайта: поза плюс предметы, CSS-анимация внутри файла;
+  - `demo.mjs`, `demo.template.html` — демо-страница.
 
 ## Пересборка поз
 
@@ -25,6 +29,19 @@ node build.mjs /tmp/mascot-work ../../../references/mascot/poses
    фиксированным seed и пишет оптимизированные SVG.
 
 Результат детерминирован: повторный запуск даёт те же файлы.
+
+## Сцены и демо
+
+```bash
+cd docs/artifacts/change-170/mascot/pipeline
+node scenes.mjs ../../../references/mascot/poses ../../../../../apps/web/public/images/mascot
+node demo.mjs ../../../references/mascot/poses ../../../../../apps/web/public/images/mascot ../demo.html
+```
+
+Новая сцена: функция в `SCENES` (`scenes.mjs`), её место на демо-странице
+(`{{scene:<имя>}}` в шаблоне), согласование на демо, затем имя в `MascotSceneTypes.Scene` и
+использование `MascotScene` на странице. Подписи («1 0 1», «{ }») переводятся в контуры шрифтом
+Caveat, на сайте шрифт не нужен.
 
 ## Как пришли к результату
 

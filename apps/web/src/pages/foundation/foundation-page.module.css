@@ -59,44 +59,9 @@
   color: var(--color-text);
 }
 
-.heroPlate {
-  position: relative;
+.heroScene {
   width: min(30rem, 40vw);
   aspect-ratio: 6 / 5;
-  border-radius: var(--radius-surface);
-  background: var(--color-plate-apricot);
-}
-
-.heroNote {
-  position: absolute;
-  padding: var(--space-0-5) var(--space-1);
-  border: 1.5px solid var(--color-text);
-  border-radius: var(--radius-surface);
-  background: var(--color-surface);
-  color: var(--color-text);
-  font-family: var(--font-data);
-  font-size: var(--text-sm);
-  white-space: nowrap;
-}
-
-.heroNote:nth-child(1) {
-  top: 10%;
-  left: 7%;
-}
-
-.heroNote:nth-child(2) {
-  top: 7%;
-  right: 8%;
-}
-
-.heroNote:nth-child(3) {
-  right: 7%;
-  bottom: 16%;
-}
-
-.heroNote:nth-child(4) {
-  bottom: 12%;
-  left: 12%;
 }
 
 .content {
@@ -288,6 +253,11 @@
 }
 
 @media (max-width: 60rem) {
+  /* The scene would wrap under the copy at a reduced size; a lazy hidden image is never fetched. */
+  .heroScene {
+    display: none;
+  }
+
   .try,
   .course {
     grid-template-columns: minmax(0, 1fr);
