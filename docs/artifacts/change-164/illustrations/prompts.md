@@ -4,40 +4,112 @@
 каждом промпте — это пропорция реального слота, указан с запасом под 2× экраны. Объект держать
 по центру с полями: слот может слегка обрезать края.
 
+Маскот (решение архитектора 2026-10-04): живая стопка из трёх камней логотипа, лицо на большом
+нижнем камне, только обводка, оранжевая обводка у верхнего камня, тонкие руки и ноги. Маскот
+используется в hero, входе, 404, ошибке, пустом поиске и шапках каталогов; темы и курс Python
+остаются предметными иллюстрациями. Программные наброски, лист персонажа и сцены:
+[change-170/mascot](../../change-170/mascot/) (`mascot-lab-v3-sheet.html`).
+
+> Маскот утверждён 2026-10-04 и больше не генерируется по этим промптам: позы лежат в
+> [references/mascot](../../references/mascot/README.md), сцены с маскотом собираются кодом из
+> поз. Промпты маскота ниже сохранены как история; промпты тем и курса по-прежнему актуальны.
+
+## Как собирать промпт
+
+Каждый промпт = блок стиля + описание маскота (если он в сцене) + сцена. Референсы не нужны.
+Если генератор умеет держать персонажа по картинке, к сценам можно прикладывать свой лучший
+сгенерированный лист персонажа. Для анимации hero маскот и предметы генерируются отдельными
+слоями.
+
 ## Карта слотов
 
-| Слот в интерфейсе | Размер слота (desktop) | Файл |
-|---|---|---|
-| Главная, hero (заменяет плашку с заметками) | 30rem, 6:5 | `ill-hero` |
-| Главная, плашки 4 тем | ≥14rem × 8.5rem | `ill-topic-*` |
-| Главная, блок курса | 3:2 | `ill-course-python` |
-| `/ege`, шапка | 14.4rem × 6rem | `ill-head-ege` |
-| `/ege`, строки опубликованных тем | 7rem × 4.5rem | `ill-topic-*` |
-| `/ege`, строки тем «Скоро» | 7rem × 4.5rem | остаётся заглушка, картинки нет |
-| `/ege`, пусто «Темы не найдены» | ≤26rem × 5.5rem | `ill-empty-search` |
-| `/courses`, шапка | 14.4rem × 6rem | `ill-head-courses` |
-| `/courses`, карточка Python | ≈30rem × 9.4rem | `ill-course-python-wide` |
-| `/courses`, карточки курсов «Скоро» | ≈30rem × 9.4rem | остаётся заглушка, картинки нет |
-| `/courses/python`, шапка | 3:2 | `ill-course-python` |
-| `/practice`, шапка | 14.4rem × 6rem | `ill-head-practice` |
-| `/practice`, пусто «Пока ничего не нашлось» | ≤26rem × 5.5rem | `ill-empty-search` |
-| Вход и регистрация, полоса | ≤62rem × 6.25rem | `ill-auth` |
-| 404 (страница и задача) | ≤24rem × 7.5rem | `ill-404` |
-| Ошибка загрузки, 503 задачи | ≤24rem × 7.5rem | `ill-error` |
+| Слот в интерфейсе | Размер слота (desktop) | Файл | Маскот |
+|---|---|---|---|
+| Главная, hero (заменяет плашку с заметками) | 30rem, 6:5 | `ill-hero` + слои | да |
+| Главная, плашки 4 тем | ≥14rem × 8.5rem | `ill-topic-*` | нет |
+| Главная, блок курса | 3:2 | `ill-course-python` | нет |
+| `/ege`, шапка | 14.4rem × 6rem | `ill-head-ege` | да |
+| `/ege`, строки опубликованных тем | 7rem × 4.5rem | `ill-topic-*` | нет |
+| `/ege`, строки тем «Скоро» | 7rem × 4.5rem | остаётся заглушка | — |
+| `/ege`, пусто «Темы не найдены» | ≤26rem × 5.5rem | `ill-empty-search` | да |
+| `/courses`, шапка | 14.4rem × 6rem | `ill-head-courses` | да |
+| `/courses`, карточка Python | ≈30rem × 9.4rem | `ill-course-python-wide` | нет |
+| `/courses`, карточки курсов «Скоро» | ≈30rem × 9.4rem | остаётся заглушка | — |
+| `/courses/python`, шапка | 3:2 | `ill-course-python` | нет |
+| `/practice`, шапка | 14.4rem × 6rem | `ill-head-practice` | да |
+| `/practice`, пусто «Пока ничего не нашлось» | ≤26rem × 5.5rem | `ill-empty-search` | да |
+| Вход и регистрация, полоса | ≤62rem × 6.25rem | `ill-auth` | да |
+| 404 (страница и задача) | ≤24rem × 7.5rem | `ill-404` | да |
+| Ошибка загрузки, 503 задачи | ≤24rem × 7.5rem | `ill-error` | да |
 
-## Общий стиль (вставлять в каждый промпт)
+## Блок стиля
 
-Hand-drawn black ink line illustration on a transparent background (the site places it on a soft pastel colour plate). Slightly wobbly, imperfect marker/pen lines, uniform line weight about 3px, no gradients, no shading, no textures, no drop shadows. Mostly monochrome black line art; use ONE accent colour only, orange #f26a0a, in at most one or two small elements. Friendly, calm, minimal, educational mood. Characters are simple Eduix-style doodles: round heads, dot eyes, tiny smile, simple clothes, teenage student, gender-neutral. No text, no letters, no logos inside the image (labels are added in HTML). Flat 2D, lots of empty space around the subject, clean edges, PNG with transparent background.
+Hand-drawn ink doodle made with a worn black brush marker on rough white paper. Every line is wobbly and uneven: it swells and thins, has a grainy dry-brush texture with slightly broken edges, and overshoots a little where strokes meet. Nothing is geometric or symmetrical. Outlines only, no fills, no shading. Black ink plus a single orange #ff6a00 accent. White background, lots of empty space, no text.
 
-Avoid: colourful cartoon style, 3D, gradients, glossy icons, photo realism, neon, dark background, clutter, mascot costumes, text and watermarks.
+Avoid: vector, clean line art, smooth uniform lines, perfect ellipses, symmetry, digital look, 3D.
 
-Для широких слотов (2.4:1 и шире) добавлять: Wide horizontal composition, subject spread along the horizontal axis, keep the vertical extent compact.
+## Маскот
+
+A cute minimal mascot: a stack of three lopsided, asymmetric pebbles with small gaps between them. The big bottom pebble is the body, with a tiny face: two dot eyes and a small curved smile. On it a smaller flat pebble, and on top a small flat pebble outlined in orange. Thin stick arms with small round hands, two short stick legs.
+
+## mascot-sheet
+
+Размер: 16:9, 2400×1350. Состав: стиль + маскот + сцена.
+
+Сцена: Sketchbook page of studies of this mascot, evenly spaced, no labels: front, side and back views; standing, waving, pointing, jumping, meditating cross-legged; faces happy, thinking, confused, surprised, calm with closed eyes.
 
 ## ill-hero
 
-Где: Главная, крупный блок справа, вместо плашки с заметками. Размер: 6:5 (1440×1200).
+Размер: 6:5, 1440×1200. Состав: стиль + маскот + сцена.
 
-Промпт: A teenage student sits cross-legged on the floor with a laptop, thoughtfully holding a pencil to the chin. Around the student float six hand-drawn rounded speech bubbles and chips with simple abstract symbols (a tiny flowchart, an arrow loop, a check mark, curly braces, a binary 1 0 1, a small tree diagram). A few doodle sparkles and a dotted arrow. One small accent element in orange (the check mark bubble).
+Сцена: The mascot floats cross-legged in meditation, eyes closed, calm smile, hands on its knees, two short float lines beneath. Around it float small doodles: a curly snake, a tiny spreadsheet grid with a check, the digits 1 0 1, curly braces, a speech bubble with a check, two answer boxes with 2 and 7, a mini flowchart, a three-node tree.
+
+Слои для анимации (CSS-парение, выключается при `prefers-reduced-motion`; hero — кандидат LCP, слои — лёгкие WebP с размерами):
+
+- Слой маскота, 1:1, 1200×1200, стиль + маскот + сцена: The mascot alone, floating cross-legged in meditation, eyes closed, calm smile, hands on its knees. Centred, nothing else.
+- Слои предметов, 1:1, 600×600, по одному, стиль + сцена: One small doodle, centred, nothing else: [a curly snake | a tiny spreadsheet grid with a check | the digits 1 0 1 | curly braces | a speech bubble with a check | two answer boxes with 2 and 7 | a mini flowchart | a three-node tree].
+
+## ill-auth
+
+Размер: 10:1, 2000×200. Состав: стиль + маскот + сцена.
+
+Сцена: Very wide, very low strip. On the right the mascot peeks up from the bottom edge and holds up a small key; beside it an open padlock. The rest stays empty.
+
+## ill-404
+
+Размер: 16:5, 1200×375. Состав: стиль + маскот + сцена.
+
+Сцена: Wide, low composition. The mascot stands next to a signpost with two blank arrows pointing opposite ways, holding a map upside down, a question mark above it.
+
+## ill-error
+
+Размер: 16:5, 1200×375. Состав: стиль + маскот + сцена.
+
+Сцена: Wide, low composition. The orange top pebble has just fallen off the mascot and lies at its feet with small impact lines; the mascot looks at it, surprised.
+
+## ill-empty-search
+
+Размер: 4:1, 1400×350. Состав: стиль + маскот + сцена.
+
+Сцена: Wide, low composition. The mascot points at an empty cardboard box lying on its side, a few dust specks drifting out.
+
+## ill-head-ege
+
+Размер: 12:5, 1200×500. Состав: стиль + маскот + сцена.
+
+Сцена: Wide composition. The mascot jumps between flat stepping stones towards a small blank flag on the last stone.
+
+## ill-head-courses
+
+Размер: 12:5, 1200×500. Состав: стиль + маскот + сцена.
+
+Сцена: Wide composition. The mascot pulls a notebook from a short shelf of notebooks; a small potted plant at the end of the shelf.
+
+## ill-head-practice
+
+Размер: 12:5, 1200×500. Состав: стиль + маскот + сцена.
+
+Сцена: Wide composition. The mascot holds a pencil by a small table with three task cards: one checked, one half-filled, one blank; a small stopwatch on the table.
 
 ## ill-topic-16
 
@@ -92,45 +164,3 @@ Avoid: colourful cartoon style, 3D, gradients, glossy icons, photo realism, neon
 Где: Карточка курса Python на `/courses`. Размер: 16:5 (1600×500).
 
 Промпт: Wide horizontal composition, subject spread along the horizontal axis. On the left a laptop with an abstract code block on the screen (just lines and indents, no readable text); a long friendly snake doodle stretches from the keyboard to the right, passing a mug and a small stack of two books. One orange line of code.
-
-## ill-head-ege
-
-Где: Шапка каталога `/ege`. Размер: 12:5 (1200×500).
-
-Промпт: Wide horizontal composition, subject spread along the horizontal axis. A dotted path winds from left to right through a row of five small round stepping stones; a doodle student walks on the second stone holding a pencil, and a tiny flag stands on the last stone. One orange flag.
-
-## ill-head-courses
-
-Где: Шапка каталога `/courses`. Размер: 12:5 (1200×500).
-
-Промпт: Wide horizontal composition, subject spread along the horizontal axis. A short shelf with four simple notebooks of different heights standing upright, one notebook pulled slightly forward and open, a small potted plant at the end of the shelf. One orange bookmark ribbon in the open notebook.
-
-## ill-head-practice
-
-Где: Шапка каталога задач `/practice`. Размер: 12:5 (1200×500).
-
-Промпт: Wide horizontal composition, subject spread along the horizontal axis. A row of three small task cards laid on a table, the first with a check mark, the second with a pencil resting across it, the third blank; a stopwatch doodle at the right edge. One orange check mark.
-
-## ill-auth
-
-Где: Страница входа и регистрации, узкая полоса над формой. Размер: 10:1 (2000×200).
-
-Промпт: Very wide, very low horizontal frieze composition with the subject centred and empty space to both sides. A key and a small padlock lying on a stack of three smooth stones (orange stone on top, two black stones below), with a few sparkles on both sides. Minimal and calm.
-
-## ill-404
-
-Где: Страница 404 и «Задача не найдена». Размер: 16:5 (1200×375).
-
-Промпт: Wide horizontal composition, subject spread along the horizontal axis. A confused doodle student holding a folded map upside down, a dotted path that runs sideways and ends nowhere, a question mark made of a line and a dot. One orange dot of the question mark.
-
-## ill-error
-
-Где: Ошибка загрузки страницы и 503 у задачи. Размер: 16:5 (1200×375).
-
-Промпт: Wide horizontal composition, subject spread along the horizontal axis. A cable unplugged from a socket with a tiny spark, a plant pot beside it, a patient calm mood. One orange spark.
-
-## ill-empty-search
-
-Где: Пустой результат на `/practice` и «Темы не найдены» на `/ege`. Размер: 4:1 (1400×350).
-
-Промпт: Wide horizontal composition, subject spread along the horizontal axis. An empty open box with a magnifying glass floating beside it, a few dust sparkles drifting to both sides. One orange magnifier rim.

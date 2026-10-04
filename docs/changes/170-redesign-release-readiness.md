@@ -60,7 +60,8 @@ the architect's untracked work).
 - [x] `F3` Run the full frontend e2e, `test:layout`, `@no-js` and axe specs once; fix real regressions in code, adjust only contract-obsolete expectations — _Depends on:_ F1, F2, D1
 - [x] `F4` Lesson LCP: `/ege/{topic}/{subtopic}` measured 5.22 s on the old single-page lesson (budget 4.0 s; render delay on a long SSR body paragraph, pre-existing since `01252a9`). Re-measure on the subtopic pages (shorter, likely better) and on `/ege` (was 4.02 s); apply low-risk improvements where useful; record residual deviations without chasing the 4.0 s target — _Depends on:_ —
 - [x] `F5` Lighthouse CI on `/`, `/ege`, `/courses`, `/courses/python`, one EGE subtopic page and one course lesson (update `lighthouserc.cjs` URLs: `/ege/16-rekursiya` now redirects); reference budgets a11y = 1, SEO = 1, LCP ≤ 4 s, CLS ≤ 0.1, TBT ≤ 200 ms; per architect clarification, modest performance deviations are acceptable with recorded measurements — _Depends on:_ F4
-- [ ] `F6` Illustrations: when the architect supplies images generated from the prompts, replace `IllustrationPlaceholder` slots (home hero and plates, `/ege` head and rows, `/courses` head and cards, `/courses/python` plate, practice head, auth band, status/empty cards) with the assets; keep CLS ≤ 0.1, add width/height, WebP, decorative `alt=""`. Slot map and prompts: [prompts](../artifacts/change-164/illustrations/prompts.md) (checked 2026-10-04). Architect decisions: the home hero plate with code notes is replaced by `ill-hero`; planned («Скоро») topic rows and course cards keep `IllustrationPlaceholder`. **Blocked until images arrive; ask the architect before starting.** — _Depends on:_ —
+- [ ] `F6` Mascot scenes: replace the mascot slots with scenes built in code from the approved poses ([references/mascot](../artifacts/references/mascot/README.md), approved 2026-10-04; pipeline and demo: [change-170/mascot](../artifacts/change-170/mascot/README.md)). Order: home hero first (lotus layer plus learning objects, CSS float, off under `prefers-reduced-motion`; replaces the plate with code notes; it is the LCP candidate, so re-measure), then auth band, 404, error, empty search and the `/ege`, `/courses`, `/practice` heads, each approved on the demo page before it ships. Keep CLS ≤ 0.1, explicit sizes, decorative `alt=""`/`aria-hidden`; record the mascot in `DESIGN.md`. Planned («Скоро») topic rows and course cards keep `IllustrationPlaceholder` — _Depends on:_ —
+- [ ] `F8` Object illustrations: topic plates and rows, `/courses/python` plate and card from [prompts](../artifacts/change-164/illustrations/prompts.md) (slot map checked 2026-10-04). **Blocked until the architect supplies images; ask before starting.** — _Depends on:_ —
 - [x] `F7` Fix the Lighthouse-discovered contrast regression in planned `/ege` rows (opacity reduces number contrast to 3.37:1); preserve the muted planned state with semantic colours and confirm accessibility = 1 — _Depends on:_ —
 
 ### Data
@@ -69,7 +70,7 @@ the architect's untracked work).
 
 ### Other
 - [ ] `T1` Release prerequisites from SPEC §11 checked with the architect: provider applications and callbacks (VK ID, Яндекс ID, Telegram), mail delivery, privacy policy review, account-data backup/restore — _Depends on:_ —
-- [ ] `T2` `/ship 170 --release`: affected coverage and Release Gate per STACK, push `main`, deploy the exact SHA, verify public readiness — only after F1–F6, D1–D2, T1 and explicit architect authorisation — _Depends on:_ F3, F5, F6, D1, D2, T1
+- [ ] `T2` `/ship 170 --release`: affected coverage and Release Gate per STACK, push `main`, deploy the exact SHA, verify public readiness — only after F1–F8, D1–D2, T1 and explicit architect authorisation — _Depends on:_ F3, F5, F6, F8, D1, D2, T1
 - [x] `T3` Architect clarification (2026-10-03): mail delivery is implemented; VK ID, Яндекс ID and Telegram remain deferred. Verify disabled-provider behaviour and examine repository privacy and account backup/restore evidence for T1; distinguish technical acceptance from external legal review and fresh production restore proof — _Depends on:_ —
 
 ---
@@ -79,8 +80,10 @@ the architect's untracked work).
 ### Create / modify
 ~~~
 apps/web/e2e/** (specs and page objects)
-apps/web/src/** (only regressions found by F3/F4, and F6 illustration slots)
-apps/web/public/images/** (F6 assets)
+apps/web/src/** (only regressions found by F3/F4, and F6/F8 illustration slots)
+apps/web/public/images/** (F6/F8 assets)
+docs/artifacts/references/mascot/** (approved poses; rebuild only through the pipeline)
+docs/artifacts/change-170/mascot/** (pipeline and demo)
 lighthouserc.cjs
 Makefile / infra dev bootstrap (D2)
 docs/SPEC.md, docs/KNOWN_GOTCHAS.md (if findings require)
