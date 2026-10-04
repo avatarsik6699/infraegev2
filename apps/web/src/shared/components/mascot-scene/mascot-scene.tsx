@@ -2,8 +2,15 @@ import { cssUtils } from "~/shared/lib/css-utils";
 import type { MascotSceneTypes } from "./mascot-scene.types";
 import styles from "./mascot-scene.module.css";
 
-/** Every scene shares the 6:5 viewBox of the pipeline. */
-const sceneSize = { width: 360, height: 300 } as const;
+/** viewBox of each scene file, reserved as the image size. */
+const sceneSizes: Record<
+  MascotSceneTypes.Scene,
+  { width: number; height: number }
+> = {
+  "home-hero": { width: 360, height: 300 },
+  "sign-in": { width: 1074, height: 910 },
+  register: { width: 906, height: 894 },
+};
 
 /**
  * Decorative mascot scene (DESIGN.md › Illustrations). A separate SVG file
@@ -16,8 +23,8 @@ export const MascotScene: React.FC<MascotSceneTypes.Props> = (props) => (
     data-mascot-scene={props.scene}
     src={`/images/mascot/${props.scene}.svg`}
     alt=""
-    width={sceneSize.width}
-    height={sceneSize.height}
+    width={sceneSizes[props.scene].width}
+    height={sceneSizes[props.scene].height}
     loading="lazy"
     decoding="async"
   />

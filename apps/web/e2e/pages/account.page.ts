@@ -27,9 +27,7 @@ export class AccountPage {
     const authPage = this.page.locator("[data-auth-page]");
     const authCard = authPage.locator("[data-auth-surface]");
     await expect(authCard).toBeVisible();
-    await expect(
-      authPage.locator("[data-illustration-placeholder]"),
-    ).toHaveCount(1);
+    await expect(authPage.locator("[data-mascot-scene]")).toHaveCount(1);
     await expect(authCard.locator("form")).toBeVisible();
     const authGeometry = await authCard.boundingBox();
     expect(authGeometry?.width ?? 0).toBeLessThanOrEqual(432);

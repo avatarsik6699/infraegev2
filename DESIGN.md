@@ -337,13 +337,20 @@ neutral (elsewhere) plates. Mascot scenes have no plate: they sit directly on th
   Logo Orange, thin arms with round hands, short legs. Outline only, uneven hand-drawn line.
 - Approved poses and rules: `docs/artifacts/references/mascot`. Scenes are baked by its pipeline
   into `apps/web/public/images/mascot` and shown by the shared `MascotScene` (a lazy decorative
-  image, sized 6:5).
-- Places: home hero (lotus with floating learning objects), then sign-in, 404, error, empty search
-  and catalog heads, each approved on the demo page first. Topics and courses keep object
-  illustrations without the mascot.
+  image at the scene's own viewBox size).
+- Places: home hero (lotus with floating learning objects), sign-in (unlocking a door) and
+  registration (filling in a clipboard form); then 404, error, empty search and catalog heads,
+  each approved on the demo page first. Topics and courses keep object illustrations without the
+  mascot.
+- Scenes after the hero are drawn as PNG by the architect and traced by the pipeline; the face is
+  redrawn with the pen of the poses. Around a scene only small monochrome abstract marks
+  (sparkles, rings), spread out, never clustered at the mascot; no colour, confetti or large
+  floating objects.
+- Sign-in and registration: white page, the form on the left without a card, the scene on the
+  right, centred together with a `--space-5` gap; the scene stays lower than the form.
 - Motion is CSS inside the scene file: a slow float, gentle sway, sparkles; off under
-  `prefers-reduced-motion`. The home hero scene is hidden below 960px, where it would wrap
-  under the copy at a reduced size.
+  `prefers-reduced-motion`. Scenes are hidden below 960px (home hero wraps under the copy, auth
+  falls back to one column).
 
 ## Do's and Don'ts
 

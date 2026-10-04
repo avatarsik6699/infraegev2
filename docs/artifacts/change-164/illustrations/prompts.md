@@ -10,9 +10,20 @@
 остаются предметными иллюстрациями. Программные наброски, лист персонажа и сцены:
 [change-170/mascot](../../change-170/mascot/) (`mascot-lab-v3-sheet.html`).
 
-> Маскот утверждён 2026-10-04 и больше не генерируется по этим промптам: позы лежат в
-> [references/mascot](../../references/mascot/README.md), сцены с маскотом собираются кодом из
-> поз. Промпты маскота ниже сохранены как история; промпты тем и курса по-прежнему актуальны.
+> Маскот утверждён 2026-10-04: позы лежат в [references/mascot](../../references/mascot/README.md).
+> Hero собран кодом из поз. Остальные сцены с маскотом кодом не получились (отклонены
+> архитектором), поэтому они снова генерируются по промптам ниже, по одной, с листом
+> [`mascote_list.png`](../../references/for_new_design/mascote_list.png) как
+> референсом персонажа. PNG переводится в SVG конвейером
+> [change-170/mascot](../../change-170/mascot/README.md). Порядок: вход и регистрация, затем
+> остальные экраны, каждый после одобрения предыдущего.
+
+### Требования к PNG для конвейера
+
+- Чисто белый фон без фактуры бумаги, без серого, без теней.
+- Только чёрная тушь и оранжевый `#ff6a00`; оранжевым — только верхний камень маскота.
+- Маскот такой же, как на листе: те же камни, руки, ноги и лицо.
+- Ничего не обрезано краем кадра, вокруг сцены поля.
 
 ## Как собирать промпт
 
@@ -38,7 +49,8 @@
 | `/courses/python`, шапка | 3:2 | `ill-course-python` | нет |
 | `/practice`, шапка | 14.4rem × 6rem | `ill-head-practice` | да |
 | `/practice`, пусто «Пока ничего не нашлось» | ≤26rem × 5.5rem | `ill-empty-search` | да |
-| Вход и регистрация, полоса | ≤62rem × 6.25rem | `ill-auth` | да |
+| Вход, справа от формы (и восстановление пароля) | 30rem, 6:5 | `ill-sign-in` | да |
+| Регистрация, справа от формы (и подтверждение почты) | 30rem, 6:5 | `ill-register` | да |
 | 404 (страница и задача) | ≤24rem × 7.5rem | `ill-404` | да |
 | Ошибка загрузки, 503 задачи | ≤24rem × 7.5rem | `ill-error` | да |
 
@@ -69,11 +81,32 @@ A cute minimal mascot: a stack of three lopsided, asymmetric pebbles with small 
 - Слой маскота, 1:1, 1200×1200, стиль + маскот + сцена: The mascot alone, floating cross-legged in meditation, eyes closed, calm smile, hands on its knees. Centred, nothing else.
 - Слои предметов, 1:1, 600×600, по одному, стиль + сцена: One small doodle, centred, nothing else: [a curly snake | a tiny spreadsheet grid with a check | the digits 1 0 1 | curly braces | a speech bubble with a check | two answer boxes with 2 and 7 | a mini flowchart | a three-node tree].
 
-## ill-auth
+## ill-sign-in
 
-Размер: 10:1, 2000×200. Состав: стиль + маскот + сцена.
+Размер: 6:5, 1440×1200. Состав: стиль + маскот + сцена + концовка. Приложить `mascote_list.png`
+как референс персонажа. Только символы входа: дверь, ключ, замок, пароль. Без учебных предметов.
 
-Сцена: Very wide, very low strip. On the right the mascot peeks up from the bottom edge and holds up a small key; beside it an open padlock. The rest stays empty.
+Сцена: The mascot stands at a big half-open door and turns a large key in its keyhole with
+both hands; warm light lines spill out through the gap. On the door hangs an open padlock. Beside
+the door floats a password field drawn as a rounded box with four dots and a small eye. A small
+doormat lies under the mascot's feet. Rich but clear composition, every object about signing in.
+
+## ill-register
+
+Размер: 6:5, 1440×1200. Состав: стиль + маскот + сцена + концовка. Приложить `mascote_list.png`
+как референс персонажа. Один крупный предмет рядом с маскотом, по масштабу как дверь на входе.
+Фон (кружки, крестики, маленькие галочки) дорисовывается кодом: в картинке их нет.
+
+Итог (2026-10-04): первая версия (карточка участника, конфетти, зелёная галочка) и три варианта
+ниже отклонены; архитектор нарисовал свою сцену — маскот карандашом заполняет анкету со своим
+портретом на планшете ([`ill-register.png`](../../references/for_new_design/ill-register.png)).
+Фоновые узоры не добавляются ни на вход, ни на регистрацию.
+
+## Концовка для ill-sign-in и ill-register
+
+Keep the mascot exactly as in the attached character sheet, including its uneven hand-drawn face
+lines. Plain pure white background, no paper texture, no grey, no shadows. Black ink only; orange
+only on the mascot's top pebble. Nothing touches the edges of the image. No words or letters.
 
 ## ill-404
 

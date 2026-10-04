@@ -35,7 +35,14 @@
   .compare { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem; max-width: 60rem; }
   .hero { display: grid; grid-template-columns: minmax(0, 30rem) minmax(0, 1fr); gap: 1.5rem; align-items: start; }
   .hero .stage { --ratio: 6 / 5; box-shadow: inset 0 0 0 1px var(--rule); }
-  .hero .stage > svg { width: 100%; height: 100%; }
+  .hero .stage > img { width: 100%; height: 100%; }
+  .auth { display: grid; grid-template-columns: minmax(0, 27rem) minmax(0, 29rem); gap: 3rem; justify-content: center; align-items: center; padding: 2rem 0; border-top: 1px solid var(--rule); }
+  .auth .form { display: grid; gap: 0.7rem; }
+  .auth .form b { font-size: 1.6rem; letter-spacing: -0.02em; }
+  .auth .field { height: 44px; border: 1px solid #cfcfca; border-radius: 6px; }
+  .auth .submit { height: 44px; border-radius: 6px; background: var(--ink); }
+  .auth img { display: block; justify-self: center; width: 100%; max-height: 25rem; object-fit: contain; }
+  @media (max-width: 56rem) { .auth { grid-template-columns: minmax(0, 1fr); } }
   .hero .text { display: grid; gap: 0.75rem; min-width: 0; }
   .btn { font: 600 14px var(--font-ui); color: var(--ink); background: var(--page); border: 1px solid #c9c6bd; border-radius: 6px; padding: 0.5rem 0.9rem; cursor: pointer; }
   .btn:hover, .btn[aria-pressed="true"] { border-color: var(--ink); }
@@ -85,7 +92,7 @@
     </div>
     <div class="hero">
       <figure class="tile">
-        <div class="stage" id="hero-stage">{{scene:home-hero}}</div>
+        <div class="stage" id="hero-stage"><img src="{{scene:home-hero}}" alt="" width="360" height="300"></div>
         <figcaption class="label">слот 30rem, 6:5, без подложки · заменяет плашку с заметками</figcaption>
       </figure>
       <div class="text">
@@ -100,9 +107,19 @@
       </div>
     </div>
   </section>
+  <section class="section" aria-labelledby="auth-title">
+    <h2 id="auth-title">Вход и регистрация</h2>
+    <p class="muted">Сцены из PNG архитектора, переведённые в вектор; мимика перерисована пером, как в листе персонажа. Справа от формы, колонка 29rem и не выше 25rem, вплотную к форме, чтобы форма оставалась главной; ниже 960 px сцена скрыта. Вокруг по всей площади рассыпаны только звёздочки и кружки: звёздочки мерцают, кружки покачиваются.</p>
+    <div class="auth">
+      <div class="form"><b>Войти</b><div class="field"></div><div class="field"></div><div class="submit"></div></div>
+      <img src="{{scene:sign-in}}" alt="" width="1074" height="910">
+    </div>
+    <div class="auth">
+      <div class="form"><b>Создать аккаунт</b><div class="field"></div><div class="field"></div><div class="submit"></div></div>
+      <img src="{{scene:register}}" alt="" width="906" height="894">
+    </div>
+  </section>
 </div>
-
-<script>
 
 <script>
 (() => {

@@ -18,8 +18,12 @@ const poses = Object.fromEntries(
 );
 const page = read(here, "demo.template.html")
   .replace("{{poses}}", () => JSON.stringify(poses))
-  .replace(/\{\{scene:([\w-]+)\}\}/g, (_, name) =>
-    read(scenesDir, `${name}.svg`),
+  // Scenes go in as <img> sources, exactly as the site loads them.
+  .replace(
+    /\{\{scene:([\w-]+)\}\}/g,
+    (_, name) =>
+      "data:image/svg+xml;base64," +
+      Buffer.from(read(scenesDir, `${name}.svg`)).toString("base64"),
   );
 writeFileSync(out, page + "\n");
 console.log(`${out} ${(page.length / 1024).toFixed(1)} KB`);

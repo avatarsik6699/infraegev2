@@ -270,7 +270,7 @@ def simplify(pts, eps):
     return [a, b]
 
 
-def centrelines(pixels, scale):
+def centrelines(pixels, scale, dot_max=36):
     """Strokes (centrelines with measured width) and dots for the given ink pixels."""
     dots, skeleton, widths = [], set(), {}
     for comp in components(pixels):
@@ -279,7 +279,7 @@ def centrelines(pixels, scale):
         xs, ys = [u[0] for u in comp], [u[1] for u in comp]
         bw, bh = max(xs) - min(xs) + 1, max(ys) - min(ys) + 1
         if (
-            max(bw, bh) < 36
+            max(bw, bh) < dot_max
             and len(comp) / (bw * bh) > 0.5
             and max(bw, bh) / min(bw, bh) < 2.2
         ):
