@@ -24,7 +24,15 @@ export const PracticeCatalogHelp: React.FC<{
             aria-controls={`hint-${props.task.id}`}
             onClick={() => setHint(!hint)}
           >
-            {hint ? "Скрыть подсказку" : "Подсказка"}
+            <span className={styles.catalogHelpLabel}>
+              <span
+                className={styles.catalogHelpLabelReserve}
+                aria-hidden="true"
+              >
+                Скрыть подсказку
+              </span>
+              <span>{hint ? "Скрыть подсказку" : "Подсказка"}</span>
+            </span>
           </Button>
           <Button
             hierarchy="soft"
@@ -32,7 +40,15 @@ export const PracticeCatalogHelp: React.FC<{
             aria-controls={`solution-${props.task.id}`}
             onClick={() => setSolution(!solution)}
           >
-            {solution ? "Скрыть решение" : "Решение"}
+            <span className={styles.catalogHelpLabel}>
+              <span
+                className={styles.catalogHelpLabelReserve}
+                aria-hidden="true"
+              >
+                Скрыть решение
+              </span>
+              <span>{solution ? "Скрыть решение" : "Решение"}</span>
+            </span>
           </Button>
         </div>
       </div>

@@ -24,6 +24,16 @@ export class AccountPage {
     await this.page.setViewportSize({ width: 390, height: 844 });
     await this.page.goto("/sign-in");
     await expect(this.page.locator("[data-public-header]")).toBeVisible();
+    const authPage = this.page.locator("[data-auth-page]");
+    const authCard = authPage.locator("[data-auth-surface]");
+    await expect(authCard).toBeVisible();
+    await expect(
+      authPage.locator("[data-illustration-placeholder]"),
+    ).toHaveCount(1);
+    await expect(authCard.locator("form")).toBeVisible();
+    const authGeometry = await authCard.boundingBox();
+    expect(authGeometry?.width ?? 0).toBeLessThanOrEqual(432);
+    expect(authGeometry?.width ?? 0).toBeGreaterThan(300);
     await expect(
       this.page.getByRole("link", { name: "Вернуться к обучению" }),
     ).toHaveCount(0);
@@ -139,7 +149,15 @@ export class AccountPage {
       .filter({ hasText: "Почта подтверждена." });
     await expect(success).toHaveAttribute("data-feedback-tone", "success");
     await expect(success.locator("svg")).toBeVisible();
-    await expect(success).toHaveCSS("color", "rgb(29, 122, 70)");
+    const successColor = await success.evaluate((element) => {
+      const probe = document.createElement("span");
+      probe.style.color = "var(--color-success)";
+      element.append(probe);
+      const color = getComputedStyle(probe).color;
+      probe.remove();
+      return color;
+    });
+    await expect(success).toHaveCSS("color", successColor);
     await expect(this.page.locator('script[src*="track.js"]')).toHaveCount(0);
   }
 
@@ -402,8 +420,25 @@ export class AccountPage {
     await expect(
       this.page.getByRole("link", { name: "Мой прогресс" }),
     ).toBeVisible();
+    const dashboard = this.page.locator("[data-account-dashboard]");
+    await expect(dashboard).toBeVisible();
     await expect(
-      this.page.getByRole("heading", { name: "Продолжить обучение" }),
+      dashboard.getByText("Следующий шаг", { exact: true }),
+    ).toBeVisible();
+    await expect(
+      dashboard.locator("[data-continuation]").first(),
+    ).toBeVisible();
+    await expect(
+      dashboard.getByRole("list", { name: "Итоги" }).getByRole("listitem"),
+    ).toHaveCount(3);
+    await expect(
+      dashboard.getByRole("heading", { name: "Прогресс по темам ЕГЭ" }),
+    ).toBeVisible();
+    await expect(
+      dashboard.locator('[aria-labelledby="topics-title"] li'),
+    ).toHaveCount(7);
+    await expect(
+      dashboard.getByRole("heading", { name: "Попробуйте задачу" }),
     ).toBeVisible();
     await this.openSettings();
     await expect(

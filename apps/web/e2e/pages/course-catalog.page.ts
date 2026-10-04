@@ -7,6 +7,20 @@ export class CourseCatalogPage {
   async expectCatalog(noScripts = false) {
     await this.page.goto("/courses");
     await expect(this.page.locator("[data-course-card]")).toHaveCount(4);
+    const published = this.page.locator('[data-course-card="python"]');
+    await expect(
+      published.locator("[data-illustration-placeholder]"),
+    ).toHaveCount(1);
+    await expect(published.locator("p").first()).toBeVisible();
+    await expect(published).toContainText("28 уроков");
+    await expect(
+      published.getByRole("link", { name: "Открыть курс" }),
+    ).toBeVisible();
+    if (noScripts) {
+      await expect(published.locator("[data-course-progress]")).toBeHidden();
+    } else {
+      await expect(published.locator("[data-course-progress]")).toBeVisible();
+    }
     await expect(
       this.page.locator(
         '[data-course-status="planned"] a, [data-course-status="planned"] button',
@@ -17,6 +31,9 @@ export class CourseCatalogPage {
     );
     await expect(this.page.getByRole("searchbox")).toHaveCount(0);
     const planned = this.page.locator('[data-course-status="planned"]');
+    await expect(
+      planned.locator("[data-illustration-placeholder]"),
+    ).toHaveCount(3);
     await expect(planned.locator("[data-badge]")).toHaveText([
       "Скоро",
       "Скоро",
@@ -30,9 +47,7 @@ export class CourseCatalogPage {
       );
       await expect(card).toHaveCSS("background-color", "rgb(255, 255, 255)");
     }
-    if (noScripts) {
-      await expect(this.page.locator("[data-course-progress]")).toBeHidden();
-    } else {
+    if (!noScripts) {
       await this.expectGuestProgress();
     }
     await this.expectUniformCards();
@@ -63,7 +78,7 @@ export class CourseCatalogPage {
         await assets;
         if (failedAssets) return route.abort();
       }
-      return route.continue();
+      return route.fallback();
     });
     try {
       await this.page.goto("/courses", { waitUntil: "commit" });
@@ -115,6 +130,10 @@ export class CourseCatalogPage {
 
   async expectKeyboardAndMotion() {
     await this.page.goto("/courses");
+    await expect(
+      this.page.getByRole("link", { name: "Войти", exact: true }),
+    ).toBeVisible();
+    await this.page.evaluate(() => document.fonts.ready);
     await this.page.emulateMedia({ reducedMotion: "no-preference" });
     const link = this.page.getByRole("link", { name: "Открыть курс" });
     await link.focus();
@@ -126,7 +145,18 @@ export class CourseCatalogPage {
     await expect(link).toHaveCSS("color", "rgb(255, 255, 255)");
     await this.expectGuestProgress(card);
     // Measure after progress settles; hydration stability has its own delivery check.
-    const before = await card.boundingBox();
+    const cardDocumentGeometry = async () => {
+      return card.evaluate((element) => {
+        const box = element.getBoundingClientRect();
+        return {
+          x: box.x + window.scrollX,
+          y: box.y + window.scrollY,
+          width: box.width,
+          height: box.height,
+        };
+      });
+    };
+    const before = await cardDocumentGeometry();
     await expect(card).toHaveCSS("background-color", "rgb(255, 255, 255)");
     await link.hover();
     await expect(card).toHaveCSS("background-color", "rgb(255, 255, 255)");
@@ -142,11 +172,13 @@ export class CourseCatalogPage {
     ).not.toBe(
       await card.evaluate((el) => getComputedStyle(el).backgroundColor),
     );
-    const image = card.locator("img");
-    expect((await image.boundingBox())!.width).toBeGreaterThanOrEqual(208);
+    const illustration = card.locator("[data-illustration-placeholder]");
+    expect((await illustration.boundingBox())!.width).toBeGreaterThanOrEqual(
+      208,
+    );
     const arrow = link.locator("svg");
     await expect(arrow).toHaveCSS("transform", "matrix(1, 0, 0, 1, 4, 0)");
-    expect(await card.boundingBox()).toEqual(before);
+    expect(await cardDocumentGeometry()).toEqual(before);
     await this.page.emulateMedia({ reducedMotion: "reduce" });
     await expect(arrow).toHaveCSS("transform", "none");
     await expect(card).toHaveCSS("transform", "none");
@@ -169,12 +201,39 @@ export class CourseCatalogPage {
       .evaluateAll((cards) =>
         cards.map((card) => {
           const box = card.getBoundingClientRect();
-          return { width: box.width, height: box.height };
+          const illustration = card.querySelector<HTMLElement>(
+            "[data-illustration-placeholder]",
+          );
+          if (!illustration)
+            throw new Error("Course card has no illustration placeholder");
+          const illustrationBox = illustration.getBoundingClientRect();
+          return {
+            x: box.x,
+            y: box.y,
+            width: box.width,
+            height: box.height,
+            illustrationWidth: illustrationBox.width,
+            illustrationHeight: illustrationBox.height,
+          };
         }),
       );
     for (const size of sizes) {
       expect(Math.abs(size.width - sizes[0]!.width)).toBeLessThan(1);
-      expect(Math.abs(size.height - sizes[0]!.height)).toBeLessThan(1);
+      expect(
+        Math.abs(size.illustrationWidth - sizes[0]!.illustrationWidth),
+      ).toBeLessThan(1);
+      expect(
+        Math.abs(size.illustrationHeight - sizes[0]!.illustrationHeight),
+      ).toBeLessThan(1);
+    }
+    for (let left = 0; left < sizes.length; left++) {
+      for (let right = left + 1; right < sizes.length; right++) {
+        if (Math.abs(sizes[left]!.y - sizes[right]!.y) < 1) {
+          expect(
+            Math.abs(sizes[left]!.height - sizes[right]!.height),
+          ).toBeLessThan(1);
+        }
+      }
     }
   }
 

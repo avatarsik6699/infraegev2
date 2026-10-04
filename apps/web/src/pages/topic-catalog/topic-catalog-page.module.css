@@ -35,8 +35,17 @@
   font-variant-numeric: tabular-nums;
 }
 
+.summaryStatus {
+  display: grid;
+}
+
+.summaryStatus > span {
+  grid-area: 1 / 1;
+}
+
+.summaryReserve,
 .retry:not([data-visible="true"]) {
-  display: none;
+  visibility: hidden;
 }
 
 .toolbar {
@@ -185,7 +194,13 @@
 }
 
 .metadata {
-  min-height: 1.4em;
+  min-height: 2.8em;
+}
+
+.personalProgressSlot {
+  display: grid;
+  min-height: 4.5rem;
+  align-content: center;
 }
 
 .personalProgress {
@@ -215,7 +230,12 @@
   font-size: var(--text-sm);
 }
 
-.card[data-topic-status="planned"] > :not(.planned) {
+.card[data-topic-status="planned"] .cardIndex,
+.card[data-topic-status="planned"] .cardTitle {
+  color: var(--color-muted);
+}
+
+.card[data-topic-status="planned"] .illustration {
   opacity: 0.62;
 }
 
@@ -289,6 +309,10 @@
 }
 
 @media (scripting: none) {
+  .personalProgressSlot {
+    min-height: 0;
+  }
+
   .toolbar,
   .retry,
   .personalProgress {

@@ -25,6 +25,40 @@
   history, and do not recreate `docs/changes/archive/17-*.md`. The obsolete local stash and merged
   branch may be deleted after verifying their names and merge state.
 
+### Redesign programme (Changes 164–169): local dev pitfalls
+
+- **Route tree generation fails in the web container with `EXDEV`.** After adding or renaming
+  files in `apps/web/src/routes`, regenerate `src/routeTree.gen.ts` on the host: import
+  `@tanstack/router-generator` from `node_modules/.pnpm/@tanstack+router-generator@*/...`, call
+  `getConfig({ target: "react", routesDirectory: "./src/routes", generatedRouteTree:
+  "./src/routeTree.gen.ts" }, root)` and `new Generator({ config, root }).run()`.
+- **Never run Prettier over the whole `src`.** It reformats the generated
+  `shared/api/schema.ts` and breaks `pnpm api:check`; format the changed files only (revert
+  with `git checkout` if it happens).
+- **Python string edits with `str.replace(old, new)` where `old` is a computed slice.** If the slice
+  is empty (start/end markers found in the wrong order), `replace` inserts `new` between every
+  character and destroys the file. Assert the slice is non-empty or use exact literal anchors.
+- **Dev account DB can miss migration `140_01`.** Registration then fails because
+  `privacy_consent_version`/`privacy_consented_at` are absent. The committed migration already
+  contains both fields; the pre-repair local database/image history is unavailable, so the
+  historical cause remains unproven. Change 170 makes the dev migration job run `upgrade head`
+  followed by `alembic check`, and checks the retained schema on every successful `make dev`,
+  including unchanged-input resumes. A revision stamp alone does not prove schema consistency.
+  Schema drift must fail startup and show migration logs; do not silently stamp or repair it.
+- **Dev SMTP is real Yandex Postbox.** Never register made-up addresses through the UI; the email
+  validator also rejects `.invalid`. Use a seeded account in the dev account DB for UI checks.
+- **Temporary shell wrappers may be non-executable.** A test wrapper created under `/tmp` with
+  mode `644` must be invoked with `bash /tmp/<wrapper>.sh`, rather than executed directly.
+  Change 170 hit `Permission denied` on a direct invocation; after the architect's `continue`,
+  it resumed through `bash` without changing permissions.
+- **`Route.useParams()` is typed `any` for these routes**, and ESLint rejects unsafe access:
+  annotate it, e.g. `const params: { slug: string; subtopic: string } = Route.useParams();`.
+- **StrictMode runs mount effects twice in dev.** One-shot «first load» flags in module scope
+  flip on the first run and act on the second; key such logic on the path instead
+  (see `shared/lib/scroll-to-top/browser-adapter.ts`).
+- **Playwriter sessions start without a page.** In a `-f` script use
+  `state.page = state.page ?? await context.newPage()` before `bringToFront()`.
+
 > Project memory file. Capture recurring pitfalls that repeatedly waste time during coding,
 > testing, or deploys.
 
@@ -316,6 +350,10 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
 - **Fix**: keep route data and assertions in the Course Page Object, but give each crawled lesson
   its own Playwright test/context. For multi-viewport visual checks, navigate once and resize the
   same hydrated page instead of issuing another `page.goto` for every viewport.
+- EGE subtopic crawls reproduced this under three workers, including a Chromium
+  `ERR_INSUFFICIENT_RESOURCES` refusal. Use real subtopic links for continuous JavaScript
+  journeys and wait for the destination URL, current navigation item and canonical. Keep
+  first-entry, explicit reload/SSR and no-JavaScript checks as full document navigation.
 
 ### Streamed SSR markup is visible before controlled React inputs hydrate
 

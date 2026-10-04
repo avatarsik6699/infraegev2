@@ -4,6 +4,23 @@ import { courseLessonPublications } from "../../src/entities/course/content/cour
 import { lessonPublications } from "../../src/shared/config/lesson-publication.mjs";
 import { expectNoHorizontalOverflow } from "./layout.assertions";
 
+const firstTopicSubtopicByRouteSlug: Readonly<Record<string, string>> = {
+  "16-rekursiya": "osnovy",
+  "5-preobrazovanie-zapisey-chisel": "model-algoritma",
+  "17-chislovye-posledovatelnosti": "chisla-iz-fayla",
+  "24-obrabotka-simvolnyh-strok": "stroka-i-pozicii",
+  "25-obrabotka-celyh-chisel": "perebor-i-cifry",
+  "26-sortirovka-i-otbor": "dannye",
+  "27-analiz-dannyh-i-klasterizatsiya": "gruppy",
+};
+
+function topicSubtopicRoute(routeSlug: string): string {
+  const firstSlug = firstTopicSubtopicByRouteSlug[routeSlug];
+  if (!firstSlug)
+    throw new Error(`Published topic ${routeSlug} has no subtopic`);
+  return `/ege/${routeSlug}/${firstSlug}`;
+}
+
 const visibleTasks = bank.tasks
   .filter(({ task }) => task.catalog_visible && !task.archived)
   .sort((a, b) => a.task.id.localeCompare(b.task.id));
@@ -22,7 +39,10 @@ export class MinimalApplicationPage {
     const lessons = [
       ...lessonPublications
         .filter((lesson) => lesson.status === "published")
-        .map((lesson) => ({ ...lesson, route: `/ege/${lesson.routeSlug}` })),
+        .map((lesson) => ({
+          ...lesson,
+          route: topicSubtopicRoute(lesson.routeSlug),
+        })),
       ...courseLessonPublications
         .filter((lesson) => lesson.status === "published")
         .map((lesson) => ({
@@ -33,9 +53,60 @@ export class MinimalApplicationPage {
     const lesson = lessons[index];
     await this.page.setViewportSize({ width: 390, height: 844 });
     expect((await this.page.goto(lesson.route))?.status()).toBe(200);
-    await expect(this.page.getByRole("heading", { level: 1 })).toHaveText(
-      lesson.title,
-    );
+    if (!noJavaScript) {
+      // The root font override below must happen after client hydration so the
+      // test does not create an SSR/client attribute mismatch on <html>.
+      // Cold unbundled startup has a separate budget from interaction assertions.
+      await expect(
+        this.page.getByRole("link", { name: "Войти", exact: true }),
+      ).toBeVisible({ timeout: 15_000 });
+    }
+    if (lesson.route.startsWith("/ege/")) {
+      await expect(
+        this.page.locator("[data-subtopic-head] h1, [data-subtopic-head] h2"),
+      ).toBeVisible();
+      await expect(
+        this.page.locator("[data-subtopic-navigation]"),
+      ).toContainText(lesson.title);
+      await expect(
+        this.page.locator(
+          "[data-subtopic-navigation] ol a[aria-current='page']",
+        ),
+      ).toHaveAttribute("href", lesson.route);
+      await expect(this.page.locator("[data-subtopic-head]")).toContainText(
+        /Подтема 1 из/,
+      );
+    } else {
+      await expect(this.page.getByRole("heading", { level: 1 })).toHaveText(
+        lesson.title,
+      );
+      await expect(
+        this.page.getByRole("navigation", { name: "Уроки курса", exact: true }),
+      ).toBeVisible();
+      await expect(
+        this.page.locator("[data-course-lesson-pager]"),
+      ).toBeVisible();
+      await expect(
+        this.page.getByRole("navigation", {
+          name: "На этой странице",
+          exact: true,
+        }),
+      ).toBeHidden();
+      await this.page.setViewportSize({ width: 1440, height: 900 });
+      await expect(
+        this.page.getByRole("navigation", { name: "На этой странице" }),
+      ).toBeVisible();
+      await this.page.setViewportSize({ width: 390, height: 844 });
+      await expect(
+        this.page.locator("[data-course-lesson-head]"),
+      ).not.toContainText(/^§\s*\d+/u);
+      await expect(
+        this.page.getByRole("navigation", {
+          name: "В этом уроке",
+          exact: true,
+        }),
+      ).toHaveCount(0);
+    }
     await expect(this.page.locator("[data-learning-profile]")).toHaveCount(0);
     for (const heading of await this.page
       .locator("#theory section[id] > h3")
@@ -64,6 +135,43 @@ export class MinimalApplicationPage {
       await expectNoHorizontalOverflow(this.page);
     };
     await verifyType(1);
+    if (noJavaScript) {
+      await this.page.evaluate(() => {
+        document.documentElement.style.fontSize = "200%";
+      });
+      try {
+        await verifyType(2);
+      } finally {
+        await this.page.evaluate(() => {
+          document.documentElement.style.removeProperty("font-size");
+        });
+      }
+    } else {
+      const scaledRootFont = await this.page.addStyleTag({
+        content: "html { font-size: 200%; }",
+      });
+      try {
+        await verifyType(2);
+      } finally {
+        await scaledRootFont.evaluate((style) =>
+          style.parentNode?.removeChild(style),
+        );
+      }
+    }
+    if (lesson.route.startsWith("/ege/")) {
+      const [, , topicSlug] = lesson.route.split("/");
+      await this.page.goto(`/ege/${topicSlug}/praktika`);
+      if (!noJavaScript) {
+        await expect(
+          this.page.getByRole("link", { name: "Войти", exact: true }),
+        ).toBeVisible({ timeout: 15_000 });
+        await expect(
+          this.page
+            .locator('[data-practice-form][data-enhanced="true"]')
+            .first(),
+        ).toBeVisible();
+      }
+    }
     const checkpoint = this.page.getByRole("region", {
       name: "Проверьте себя",
     });
@@ -80,21 +188,12 @@ export class MinimalApplicationPage {
       await disclosure.press("Enter");
       await expect(disclosure).toHaveAttribute("aria-expanded", "true");
     }
-    await this.page.evaluate(() => {
-      document.documentElement.style.fontSize = "200%";
-    });
-    try {
-      await verifyType(2);
-    } finally {
-      await this.page.evaluate(() => {
-        document.documentElement.style.removeProperty("font-size");
-      });
-    }
   }
   async expectPublicPages() {
     for (const path of [
       "/",
       "/ege",
+      topicSubtopicRoute("16-rekursiya"),
       "/courses",
       "/courses/python",
       "/privacy",
@@ -110,11 +209,29 @@ export class MinimalApplicationPage {
         ),
       ).toHaveCount(0);
       await expectNoHorizontalOverflow(this.page);
+      if (path === "/courses/python") {
+        const summary = this.page.locator("[data-course-summary]");
+        await expect(
+          summary.getByText("уроков освоено", { exact: true }),
+        ).toBeVisible();
+        await expect(
+          summary.getByText("практика", { exact: true }),
+        ).toBeVisible();
+        await expect(this.page.locator("[data-course-module]")).toHaveCount(9);
+        await expect(
+          this.page.locator("[data-course-lesson-plan-item]"),
+        ).toHaveCount(28);
+        await expect(this.page.locator("[data-course-program]")).toBeVisible();
+      }
     }
     for (const path of ["/lab/design-system", "/lab/lesson"]) {
       expect((await this.page.goto(path))?.status()).toBe(404);
       await expect(
         this.page.getByRole("link", { name: "На главную", exact: true }),
+      ).toBeVisible();
+      await expect(this.page.locator("[data-status-scene]")).toBeVisible();
+      await expect(
+        this.page.locator("[data-illustration-placeholder]"),
       ).toBeVisible();
     }
   }
@@ -141,6 +258,54 @@ export class MinimalApplicationPage {
       this.page.getByRole("heading", { name: "Практика", exact: true }),
     ).toBeVisible();
     expect(await this.page.content()).not.toContain('"answer_variants"');
+    await expectNoHorizontalOverflow(this.page);
+  }
+
+  async expectPracticeTaskDetail(): Promise<void> {
+    const entry = visibleTasks.find(({ task }) =>
+      task.sources.some(
+        (source) => source.kind !== "unknown" && source.is_public,
+      ),
+    );
+    if (!entry)
+      throw new Error("The practice bank has no task with a public source");
+    const task = entry.task;
+    const response = await this.page.goto(`/practice/${task.id}`);
+    expect(response?.status()).toBe(200);
+    const heading = this.page.getByRole("heading", {
+      level: 1,
+      name: task.title,
+    });
+    await expect(heading).toBeVisible();
+    await expect(this.page.getByText(/^ЕГЭ \d+ · /u)).toBeVisible();
+    const taskCard = this.page.getByRole("region", { name: "Решение задачи" });
+    await expect(taskCard).toHaveAttribute("data-presentation", "detail");
+    await expect(
+      taskCard.getByRole("textbox", { name: "Ваш ответ" }),
+    ).toBeVisible();
+    await expect(
+      taskCard.getByRole("button", { name: "Проверить", exact: true }),
+    ).toBeVisible();
+    const hint = taskCard.getByRole("button", {
+      name: "Подсказка",
+      exact: true,
+    });
+    const solution = taskCard.getByRole("button", {
+      name: /^(?:Решение|Идея решения)$/u,
+    });
+    await expect(hint).toHaveAttribute("aria-expanded", "false");
+    await expect(solution).toHaveAttribute("aria-expanded", "false");
+    await hint.click();
+    await expect(
+      taskCard.getByRole("heading", { name: "Подсказка", exact: true }),
+    ).toBeVisible();
+    await solution.click();
+    await expect(
+      taskCard.getByRole("heading", { name: /^(?:Решение|Идея решения)$/u }),
+    ).toBeVisible();
+    await expect(
+      this.page.getByRole("region", { name: "Источник задачи" }),
+    ).toBeVisible();
     await expectNoHorizontalOverflow(this.page);
   }
   async expectCatalog() {
@@ -183,8 +348,12 @@ export class MinimalApplicationPage {
       await filters.getByRole("button", { name: "Применить" }).click();
     } else {
       await this.openTopicChooser();
-      await this.page.getByRole("option", { name: /^16 номер\./ }).click();
-      await this.page.getByRole("option", { name: /^5 номер\./ }).click();
+      await this.page
+        .getByRole("option", { name: /^ЕГЭ 16 · Рекурсия/u })
+        .click();
+      await this.page
+        .getByRole("option", { name: /^ЕГЭ 5 · Преобразование записей чисел/u })
+        .click();
       await expect(this.page).toHaveURL(/page=2/);
       await this.page
         .getByRole("button", { name: "Применить", exact: true })
@@ -196,7 +365,11 @@ export class MinimalApplicationPage {
         url.searchParams.getAll("topics").length === 2 &&
         !url.searchParams.has("page"),
     );
-    await this.page.getByRole("link", { name: /Убрать тему: 5 номер/ }).click();
+    await this.page
+      .getByRole("link", {
+        name: "Убрать тему: ЕГЭ 5 · Преобразование записей чисел",
+      })
+      .click();
     await expect(this.page).toHaveURL(
       (url) =>
         url.searchParams.getAll("topics").join() === "ege-16" &&
@@ -205,7 +378,7 @@ export class MinimalApplicationPage {
     if (!noJavaScript)
       await expect(
         filters.getByRole("combobox", { name: "Тема", exact: true }),
-      ).toContainText("16 номер");
+      ).toContainText("ЕГЭ 16 · Рекурсия");
     if (noJavaScript) {
       await this.page
         .getByRole("combobox", { name: "Сортировка:", exact: true })
@@ -309,6 +482,9 @@ export class MinimalApplicationPage {
     for (const width of [1440, 390]) {
       await this.page.setViewportSize({ width, height: 900 });
       await this.page.goto("/practice?limit=10&page=10");
+      await expect(
+        this.page.getByRole("link", { name: "Войти", exact: true }),
+      ).toBeVisible();
       const navigation = this.page.getByRole("navigation", {
         name: "Страницы задач",
       });
@@ -328,6 +504,9 @@ export class MinimalApplicationPage {
       await row.getByRole("button", { name: /Раскрыть задание:/ }).click();
       const input = row.getByRole("textbox", { name: "Ваш ответ" });
       await expect(input).toBeEnabled();
+      await expect(
+        row.locator('[data-standalone][data-enhanced="true"]'),
+      ).toBeVisible();
       const hint = row.getByRole("button", { name: "Подсказка", exact: true });
       const collapse = row.getByRole("button", { name: /Свернуть задание:/ });
       const before = await hint.evaluate(
@@ -418,7 +597,29 @@ export class MinimalApplicationPage {
         const buttonTopAfter = await checkButton.evaluate(
           (el) => el.getBoundingClientRect().top + scrollY,
         );
-        expect(Math.abs(buttonTopAfter - buttonTopBefore)).toBeLessThan(1);
+        if (width === 1440)
+          expect(Math.abs(buttonTopAfter - buttonTopBefore)).toBeLessThan(1);
+        else {
+          const controls = await row.evaluate((element) => {
+            const field = element.querySelector('input[name="answer"]')!;
+            const button = element.querySelector('button[type="submit"]')!;
+            const help = element.querySelector(
+              'button[aria-controls^="hint-"]',
+            )!;
+            return {
+              fieldBottom: field.getBoundingClientRect().bottom,
+              buttonTop: button.getBoundingClientRect().top,
+              buttonBottom: button.getBoundingClientRect().bottom,
+              helpTop: help.getBoundingClientRect().top,
+            };
+          });
+          expect(controls.buttonTop).toBeGreaterThanOrEqual(
+            controls.fieldBottom,
+          );
+          expect(controls.helpTop).toBeGreaterThanOrEqual(
+            controls.buttonBottom,
+          );
+        }
         const inputTop = await input.evaluate(
           (el) => el.getBoundingClientRect().top + scrollY,
         );
@@ -444,13 +645,17 @@ export class MinimalApplicationPage {
           );
           expect(Math.abs(errorBox.x - inputBox.x)).toBeLessThan(1);
           if (width === 390) {
+            const buttonBox = (await checkButton.boundingBox())!;
             const hintBox = (await hint.boundingBox())!;
-            expect(hintBox.y).toBeGreaterThanOrEqual(
+            expect(buttonBox.y).toBeGreaterThanOrEqual(
               errorBox.y + errorBox.height,
+            );
+            expect(hintBox.y).toBeGreaterThanOrEqual(
+              buttonBox.y + buttonBox.height,
             );
           }
         }
-        await this.page.unrouteAll({ behavior: "wait" });
+        await this.page.unroute("**/api/tasks/*/check");
       }
       const theory = row.getByRole("navigation", { name: "Теория к задаче" });
       if (width === 1440) {
@@ -746,7 +951,7 @@ export class MinimalApplicationPage {
         await expectNoHorizontalOverflow(this.page);
       } finally {
         release();
-        await this.page.unrouteAll({ behavior: "wait" });
+        await this.page.unroute("**/*.js");
       }
     }
   }
@@ -762,11 +967,13 @@ export class MinimalApplicationPage {
       await route.continue();
     });
     try {
-      await this.page.goto("/ege/16-rekursiya", { waitUntil: "commit" });
-      const outline = this.page.getByRole("navigation", {
-        name: "Содержание урока",
+      await this.page.goto(topicSubtopicRoute("16-rekursiya"), {
+        waitUntil: "commit",
       });
-      const trigger = outline.getByRole("button", { name: "Содержание урока" });
+      const outline = this.page.getByRole("navigation", {
+        name: "Подтемы урока",
+      });
+      const trigger = outline.getByRole("button", { name: "Подтемы · 1 из 6" });
       await expect(trigger).toBeVisible();
       await expect(trigger).toBeDisabled();
       const before = await outline.boundingBox();
@@ -777,7 +984,10 @@ export class MinimalApplicationPage {
       expect(Math.abs(after!.height - before!.height)).toBeLessThan(2);
       await trigger.click();
       await expect(
-        outline.getByRole("link", { name: "Теория", exact: true }),
+        outline.getByRole("link", {
+          name: "Как считается рекурсия",
+          exact: true,
+        }),
       ).toBeVisible();
     } finally {
       release();

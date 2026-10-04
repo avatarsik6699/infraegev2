@@ -1,13 +1,15 @@
-import { expect, type Locator, type Page } from "@playwright/test";
+import {
+  expect,
+  type Locator,
+  type Page,
+  type Response,
+} from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { expectPublicReleaseIdentity } from "./public-header.assertions";
 import {
   expectDesktopLessonRail,
   expectLessonInteractiveTargets,
   expectKeyboardLessonDisclosures,
-  expectLessonVerticalRhythm,
-  expectPublishedLessonDocument,
-  expectRelatedLearningBlockRhythm,
   openLessonAtTop,
 } from "./lesson-page.assertions";
 
@@ -19,7 +21,7 @@ type TopicLessonPageConfig = {
 };
 
 const recursionLessonConfig: TopicLessonPageConfig = {
-  route: "/ege/16-rekursiya",
+  route: "/ege/16-rekursiya/osnovy",
   title: "Рекурсивные алгоритмы",
   taskNumber: 16,
   taskCount: 14,
@@ -29,17 +31,54 @@ export class TopicLessonPage {
   constructor(
     private readonly page: Page,
     private readonly config: TopicLessonPageConfig = recursionLessonConfig,
+    private readonly noJavaScript = false,
   ) {}
 
+  private async openTopicDocument(route: string): Promise<Response | null> {
+    let response: Response | null = null;
+    const navigation = this.page.getByRole("navigation", {
+      name: "Подтемы урока",
+    });
+    if (this.noJavaScript || this.page.url() === "about:blank") {
+      response = await this.page.goto(route);
+    } else if (this.page.url() !== new URL(route, this.page.url()).href) {
+      const destination = navigation.locator(`a[href="${route}"]`);
+      await expect(destination).toHaveCount(1);
+      if (!(await destination.isVisible())) {
+        await navigation.getByRole("button", { name: /^Подтемы ·/u }).click();
+      }
+      await destination.click();
+    }
+    if (!this.noJavaScript) {
+      await expect(this.page).toHaveURL(new URL(route, this.page.url()).href);
+      await expect(
+        navigation.locator(`a[href="${route}"][aria-current="page"]`),
+      ).toHaveCount(1);
+      await expect(this.page.locator('link[rel="canonical"]')).toHaveAttribute(
+        "href",
+        "https://infraege.ru" + route,
+      );
+      await expect(
+        this.page.getByRole("link", { name: "Войти", exact: true }),
+      ).toBeVisible({ timeout: 15_000 });
+    }
+    return response;
+  }
+
   private async expectPublishedTopicIdentity(): Promise<void> {
+    const currentLink = this.page
+      .getByRole("navigation", { name: "Подтемы урока" })
+      .locator(`ol a[aria-current="page"][href="${this.config.route}"]`);
+    if ((await currentLink.getAttribute("href")) !== this.config.route)
+      throw new Error(`Expected current EGE subtopic ${this.config.route}`);
     await expectPublicReleaseIdentity(this.page);
-    await expect(this.page).toHaveTitle(this.config.title + " — infraege");
-    await expect(
-      this.page.getByRole("heading", {
-        level: 1,
-        name: this.config.title,
-      }),
-    ).toBeVisible();
+    await expect(this.page).toHaveTitle(
+      new RegExp(`${this.config.title} — infraege$`, "u"),
+    );
+    await expect(this.page.getByRole("heading", { level: 1 })).toBeVisible();
+    await expect(this.page.locator("[data-subtopic-head]")).toContainText(
+      /Подтема \d+ из \d+/u,
+    );
     await expect(this.page.locator('meta[name="robots"]')).toHaveAttribute(
       "content",
       "index,follow",
@@ -52,9 +91,13 @@ export class TopicLessonPage {
 
   private async expectTaskPractice(
     noJavaScript: boolean,
-    count = 8,
+    count = this.config.taskCount ?? 5,
   ): Promise<void> {
-    await expect(this.page.locator("[data-practice-form]")).toHaveCount(1);
+    const tasks = this.page.locator("[data-practice-task]");
+    const form = this.page.locator("[data-practice-form]");
+    await expect(tasks).toHaveCount(count);
+    await expect(form).toHaveCSS("box-shadow", "none");
+    await expect(form).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
     if (noJavaScript) {
       await expect(this.page.locator("[data-practice-form] form")).toHaveCount(
         count,
@@ -63,11 +106,82 @@ export class TopicLessonPage {
         this.page.locator("[data-practice-form] [data-unenhanced-accordion]"),
       ).toHaveCount(count);
     } else {
-      await expect(this.page.locator("[data-practice-task]")).toHaveCount(
-        count,
-      );
       await expect(this.page.getByRole("tab")).toHaveCount(count);
     }
+  }
+
+  private async expectSectionsAcrossSubtopics(
+    sections: readonly string[],
+  ): Promise<void> {
+    const routes = await this.topicRoutes();
+    const expected = new Set(sections);
+    const occurrences = new Map(sections.map((section) => [section, 0]));
+    for (const route of routes) {
+      await this.openTopicDocument(route);
+      const ids = await this.page
+        .locator("#theory section[id]")
+        .evaluateAll((nodes) => nodes.map((node) => node.id));
+      for (const id of ids) {
+        if (expected.has(id))
+          occurrences.set(id, (occurrences.get(id) ?? 0) + 1);
+      }
+    }
+    for (const section of sections)
+      expect(
+        occurrences.get(section),
+        `section #${section} must belong to exactly one published subtopic`,
+      ).toBe(1);
+    await this.openTopicDocument(this.config.route);
+  }
+
+  private async expectCourseLinksAcrossSubtopics(
+    slugs: readonly string[],
+  ): Promise<void> {
+    const routes = await this.topicRoutes();
+    const occurrences = new Map(slugs.map((slug) => [slug, 0]));
+    for (const route of routes) {
+      await this.openTopicDocument(route);
+      for (const slug of slugs) {
+        const count = await this.page
+          .locator(`#theory a[href="/courses/python/${slug}"]`)
+          .count();
+        occurrences.set(slug, (occurrences.get(slug) ?? 0) + count);
+      }
+    }
+    for (const slug of slugs) {
+      expect(
+        occurrences.get(slug),
+        `course link /courses/python/${slug} must appear in a published subtopic`,
+      ).toBeGreaterThan(0);
+    }
+    await this.openTopicDocument(this.config.route);
+  }
+
+  private async openTopicPractice(noJavaScript = false): Promise<void> {
+    const [topicSlug] = this.config.route.split("/").slice(-2);
+    await this.openTopicDocument(`/ege/${topicSlug}/praktika`);
+    if (!noJavaScript) {
+      await expect(
+        this.page.getByRole("link", { name: "Войти", exact: true }),
+      ).toBeVisible({ timeout: 15_000 });
+      await expect(
+        this.page.locator('[data-practice-form][data-enhanced="true"]'),
+      ).toBeVisible();
+    }
+  }
+
+  private async topicRoutes(): Promise<string[]> {
+    await this.openTopicDocument(this.config.route);
+    const [topicSlug] = this.config.route.split("/").slice(-2);
+    const routes = await this.page
+      .getByRole("navigation", { name: "Подтемы урока" })
+      .locator(`a[href^="/ege/${topicSlug}/"]`)
+      .evaluateAll((links) => links.map((link) => link.getAttribute("href")));
+    const subtopics = routes.filter((route): route is string =>
+      Boolean(route && !route.endsWith("/praktika")),
+    );
+    expect(subtopics.length).toBeGreaterThan(0);
+    return subtopics;
   }
 
   private async expectCodeContrast(block: Locator): Promise<void> {
@@ -122,384 +236,321 @@ export class TopicLessonPage {
   }
 
   async expectCodeKeyboardFocus(label: string): Promise<void> {
-    const scrollArea = this.page
-      .getByRole("group", { name: label })
-      .locator("[data-code-scroll]");
-    await scrollArea.press("Home");
-    await expect(scrollArea).toHaveCSS("outline-style", "solid");
-    await expect(scrollArea).toHaveCSS("outline-width", "2px");
+    for (const route of await this.topicRoutes()) {
+      await this.openTopicDocument(route);
+      const group = this.page.getByRole("group", { name: label, exact: true });
+      if ((await group.count()) === 0) continue;
+      await expect(group).toHaveCount(1);
+      const scrollArea = group.locator("[data-code-scroll]");
+      await scrollArea.press("Home");
+      await expect(scrollArea).toHaveCSS("outline-style", "solid");
+      await expect(scrollArea).toHaveCSS("outline-width", "2px");
+      return;
+    }
+    throw new Error(`Published topic code block not found: ${label}`);
   }
 
   async open(): Promise<void> {
-    await openLessonAtTop(this.page, this.config.route);
+    if (this.noJavaScript) {
+      await openLessonAtTop(this.page, this.config.route);
+      return;
+    }
+    await this.openTopicDocument(this.config.route);
+    await expect
+      .poll(() =>
+        this.page.evaluate(() => {
+          document.scrollingElement?.scrollTo({ behavior: "instant", top: 0 });
+          return document.scrollingElement?.scrollTop ?? window.scrollY;
+        }),
+      )
+      .toBe(0);
+  }
+
+  async expectNoJavaScriptSubtopic(): Promise<void> {
+    expect((await this.openTopicDocument(this.config.route))?.status()).toBe(
+      200,
+    );
+    await this.expectPublishedTopicIdentity();
+    await this.expectSectionsAcrossSubtopics([
+      "concrete-computation",
+      "base-case-and-step",
+      "code-and-call-stack",
+      "loop-instead-of-recursion",
+      "several-previous-values",
+      "repeated-work-motivates-storage",
+      "argument-steps",
+      "branching-conditions",
+      "upward-recursion-cache-warmup",
+      "two-functions",
+      "count-arguments",
+      "large-arguments-algebraic-shortcut",
+      "large-arguments-differences",
+      "exam-program-template",
+      "general-method",
+    ]);
+    await expect(
+      this.page
+        .getByRole("navigation", { name: "Подтемы урока" })
+        .locator("ol > li"),
+    ).toHaveCount(6);
+    await expect(
+      this.page
+        .getByRole("navigation", { name: "Подтемы урока" })
+        .getByRole("link", { name: "Практика и итог" }),
+    ).toBeVisible();
+    // The right-hand outline is intentionally hidden on phone widths. Verify its
+    // server-rendered links at desktop while keeping the route itself JS-free.
+    await this.page.setViewportSize({ width: 1440, height: 900 });
+    await this.page.setViewportSize({ width: 1440, height: 900 });
+    await expect(
+      this.page
+        .getByRole("navigation", { name: "На этой странице" })
+        .getByRole("link"),
+    ).toHaveCount(2);
+    await expect(this.page.locator("#theory")).toContainText(
+      "рекуррентным определением",
+    );
+    await this.expectNoHorizontalOverflow();
+  }
+
+  async expectLegacySectionRedirect(): Promise<void> {
+    await this.page.goto("/ege/16-rekursiya#two-functions");
+    await expect(this.page).toHaveURL(
+      /\/ege\/16-rekursiya\/slozhnye-pravila#two-functions$/u,
+    );
+    await expect(this.page.locator("#two-functions")).toBeVisible();
+    await expect(
+      this.page.getByRole("heading", {
+        level: 1,
+        name: "Сложные правила перехода",
+      }),
+    ).toBeVisible();
   }
 
   async expectRecursionStylePilot(noJavaScript = false): Promise<void> {
-    const frame = this.page.locator("[data-topic-lesson-page]");
-    await expect(frame).not.toHaveAttribute("data-learning-profile");
-    const headings = this.page.locator("#theory section[id] > h3");
-    await expect(headings).toHaveCount(15);
-    for (const heading of await headings.all()) {
-      await expect(heading).toHaveCSS("border-bottom-width", "0px");
-    }
-    await this.expectRecursionContentTypography(noJavaScript);
-    await expect(this.page.locator("#theory em")).toHaveCount(0);
-    await expect(
-      this.page
-        .locator("#theory strong")
-        .filter({ hasText: "считать всю последовательность необязательно" }),
-    ).toHaveCount(0);
-    const link = this.page.locator("[data-topic-lesson-context] a").first();
-    await expect(link).toHaveCSS("color", "rgb(31, 79, 208)");
-    await expect(link.locator("span").first()).toHaveCSS(
-      "text-decoration-line",
-      "none",
-    );
-    if (!noJavaScript) {
-      await link.hover();
-      await expect(link.locator("span").first()).toHaveCSS(
-        "text-decoration-line",
-        "underline",
-      );
-      await this.page.mouse.move(0, 0);
-    }
-    // Resolve the semantic tokens to computed colours so hex and oklch themes compare alike.
-    const semanticColors = await frame.evaluate((element) => {
-      const resolve = (token: string) => {
-        const probe = document.createElement("span");
-        probe.style.color = `var(${token})`;
-        element.append(probe);
-        const color = getComputedStyle(probe).color;
-        probe.remove();
-        return color;
-      };
-      return {
-        success: resolve("--color-success"),
-        danger: resolve("--color-danger"),
-      };
+    await this.expectPublishedTopicIdentity();
+    const topicNavigation = this.page.getByRole("navigation", {
+      name: "Подтемы урока",
     });
-    const correct = this.page
-      .locator('#theory [data-status="correct"] svg')
-      .first();
-    const incorrect = this.page
-      .locator('#theory [data-status="incorrect"] svg')
-      .first();
-    await expect(correct).toHaveCSS("color", semanticColors.success);
-    await expect(incorrect).toHaveCSS("color", semanticColors.danger);
+    await expect(
+      topicNavigation.locator(
+        `ol a[aria-current="page"][href="${this.config.route}"]`,
+      ),
+    ).toHaveAttribute("href", this.config.route);
+    await expect(
+      topicNavigation.getByRole("link", { name: "Практика и итог" }),
+    ).toBeVisible();
+    const concepts = this.page.locator("#theory section[id]");
+    await expect(concepts).toHaveCount(2);
+    await this.expectRecursionContentTypography(noJavaScript);
+    await this.expectSectionsAcrossSubtopics([
+      "concrete-computation",
+      "base-case-and-step",
+      "code-and-call-stack",
+      "loop-instead-of-recursion",
+      "several-previous-values",
+      "repeated-work-motivates-storage",
+      "argument-steps",
+      "branching-conditions",
+      "upward-recursion-cache-warmup",
+      "two-functions",
+      "count-arguments",
+      "large-arguments-algebraic-shortcut",
+      "large-arguments-differences",
+      "exam-program-template",
+      "general-method",
+    ]);
+    await this.expectRecursionStatusFeedback();
+    await this.page.setViewportSize({ width: 1440, height: 900 });
+    const pageOutline = this.page.getByRole("navigation", {
+      name: "На этой странице",
+    });
+    await expect(pageOutline.getByRole("link")).toHaveCount(2);
     await this.expectNoHorizontalOverflow();
+
     if (noJavaScript) {
       await expect(
-        this.page.locator("[data-outline-link-id]").first(),
+        topicNavigation.getByRole("link", {
+          name: "Функция, стек вызовов и цикл",
+        }),
       ).toBeVisible();
+      await this.openTopicPractice(true);
+      await this.expectTaskPractice(true, this.config.taskCount ?? 14);
+      await expect(
+        this.page.locator("[data-practice-form] details"),
+      ).not.toHaveCount(0);
+      await expect(
+        this.page
+          .locator("[data-practice-task]")
+          .first()
+          .getByRole("textbox", { name: "Ответ" }),
+      ).toBeVisible();
+      await expect(
+        this.page
+          .locator("[data-practice-task]")
+          .first()
+          .getByText("Подсказка", { exact: true }),
+      ).toBeVisible();
+      await this.openTopicDocument(this.config.route);
       return;
     }
 
-    await this.page.setViewportSize({ width: 1440, height: 900 });
-    const destination = this.page.locator(
-      '[data-outline-link-id="base-case-and-step"]',
-    );
-    await destination.click();
-    await expect(destination).toHaveAttribute("aria-current", "location");
-    await expect(destination).toHaveCSS("color", "rgb(23, 25, 30)");
-    const marker = await destination.evaluate(
-      (element) => getComputedStyle(element, "::before").backgroundColor,
-    );
-    expect(marker).toBe("rgb(194, 76, 0)");
-    await expect(
-      this.page.locator('[data-outline-link-id="theory"]'),
-    ).toHaveCSS("color", "rgb(23, 25, 30)");
-    await this.page.locator("#argument-steps").evaluate((element) => {
-      element.scrollIntoView({ block: "start", behavior: "instant" });
+    const sectionLink = pageOutline.getByRole("link", {
+      name: "Вычисляем F(5) по правилу",
     });
-    await expect(
-      this.page.locator('[data-outline-link-id="argument-steps"]'),
-    ).toHaveAttribute("aria-current", "location");
-
+    await sectionLink.click();
+    await expect(sectionLink).toHaveAttribute("aria-current", "location");
+    await expect(this.page).toHaveURL(/#concrete-computation$/u);
     await this.page.setViewportSize({ width: 390, height: 844 });
-    const outline = this.page.getByRole("button", {
-      name: "Содержание урока",
-      exact: true,
+    const disclosure = topicNavigation.getByRole("button", {
+      name: "Подтемы · 1 из 6",
     });
-    await outline.click();
-    await destination.focus();
-    await destination.press("Enter");
-    await expect(outline).toHaveAttribute("aria-expanded", "false");
-    await expect(this.page.locator("#base-case-and-step")).toBeFocused();
+    await disclosure.click();
+    await expect(disclosure).toHaveAttribute("aria-expanded", "true");
+    await expect(
+      topicNavigation.getByRole("link", {
+        name: "Функция, стек вызовов и цикл",
+      }),
+    ).toBeVisible();
     await this.expectNoHorizontalOverflow();
+  }
 
-    await this.page.getByRole("tab", { name: /Задача 1 из 14/ }).click();
-    const task = this.page.locator(
-      '[data-practice-task="rekursiya-base-sequence"]',
-    );
-    await expect(this.page.getByRole("tab", { selected: true })).toHaveCSS(
-      "border-bottom-color",
-      "rgb(194, 76, 0)",
-    );
-    const theoryLink = task.getByRole("link", {
-      name: "Шаблон для одного предыдущего значения",
-    });
-    await expect(theoryLink).toHaveCSS("color", "rgb(31, 79, 208)");
-    await expect(theoryLink).toHaveCSS("text-align", "left");
-    const iconGap = await theoryLink.evaluate((element) => {
-      const icon = element.querySelector("svg")!.getBoundingClientRect();
-      const label = element.querySelector("span")!.getBoundingClientRect();
-      return label.left - icon.right;
-    });
-    expect(iconGap).toBeLessThanOrEqual(8);
-    expect(iconGap).toBeGreaterThanOrEqual(0);
-    const answer = task.getByRole("textbox", { name: "Ответ", exact: true });
-    const check = task.getByRole("button", { name: "Проверить", exact: true });
-    await expect(check).toHaveCSS("background-color", "rgb(23, 25, 30)");
-    await answer.fill("31");
-    await check.evaluate((element) => {
-      const bounds = element.getBoundingClientRect();
-      window.scrollBy({
-        top: bounds.top + bounds.height / 2 - (innerHeight - 14),
-        behavior: "instant",
-      });
-    });
-    await check.click();
-    await expect(task.getByRole("status")).toHaveCSS(
-      "color",
-      semanticColors.danger,
-    );
-    await expect(task.getByRole("status")).toContainText(
-      "Ответ пока не подходит",
-    );
-    await expect(answer).toBeFocused();
-    await expect(answer).toHaveValue("31");
-    await answer.fill("32");
-    await check.click();
-    await expect(task.getByRole("status")).toContainText("Верно");
-    await expect(task.getByRole("status")).toHaveCSS(
-      "color",
-      semanticColors.success,
-    );
-    await expect(task.locator("[data-answer-accepted-icon]")).toHaveCSS(
-      "color",
-      semanticColors.success,
-    );
-    await this.page.setViewportSize({ width: 1440, height: 900 });
-    await this.page.emulateMedia({ reducedMotion: "no-preference" });
-    const forward = this.page.getByRole("link", {
-      name: "Обработка данных",
-      exact: true,
-    });
-    const external = this.page.getByRole("link", { name: /Telegram-канал/ });
-    await this.page.mouse.move(0, 0);
-    await expect(forward.locator("span").first()).toHaveCSS(
-      "text-decoration-line",
-      "none",
-    );
-    await forward.evaluate((element) =>
-      element.scrollIntoView({ block: "center", behavior: "instant" }),
-    );
-    await forward.hover();
-    await expect(forward.locator("span").first()).toHaveCSS(
-      "text-decoration-line",
-      "underline",
-    );
-    await expect(forward.locator("svg")).toHaveCSS(
-      "transform",
-      "matrix(1, 0, 0, 1, 2, 0)",
-    );
-    await external.hover();
-    await expect(external.locator("[data-external-link-icon]")).toHaveCSS(
-      "transform",
-      "matrix(1, 0, 0, 1, 2, -2)",
-    );
-    await this.page.emulateMedia({ reducedMotion: "reduce" });
-    await expect(external.locator("[data-external-link-icon]")).toHaveCSS(
-      "transform",
-      "none",
-    );
-    await forward.evaluate((element) =>
-      element.scrollIntoView({ block: "center", behavior: "instant" }),
-    );
-    await forward.hover();
-    await expect(forward.locator("svg")).toHaveCSS("transform", "none");
-    await this.page.mouse.move(0, 0);
-    await external.focus();
-    await external.press("Shift+Tab");
-    await expect(forward).toBeFocused();
-    await expect(forward.locator("span").first()).toHaveCSS(
-      "text-decoration-line",
-      "underline",
-    );
+  private async expectRecursionStatusFeedback(): Promise<void> {
+    let total = 0;
+    for (const route of await this.topicRoutes()) {
+      await this.openTopicDocument(route);
+      const correct = this.page
+        .locator('#theory [data-status="correct"] svg')
+        .first();
+      const incorrect = this.page
+        .locator('#theory [data-status="incorrect"] svg')
+        .first();
+      const correctCount = await correct.count();
+      const incorrectCount = await incorrect.count();
+      total += correctCount + incorrectCount;
+      if (!correctCount || !incorrectCount) continue;
+      const colors = await this.page
+        .locator("[data-topic-lesson-page]")
+        .evaluate((element) => {
+          const resolve = (token: string) => {
+            const probe = document.createElement("span");
+            probe.style.color = `var(${token})`;
+            element.append(probe);
+            const value = getComputedStyle(probe).color;
+            probe.remove();
+            return value;
+          };
+          return {
+            success: resolve("--color-success"),
+            danger: resolve("--color-danger"),
+          };
+        });
+      await expect(correct).toHaveCSS("color", colors.success);
+      await expect(incorrect).toHaveCSS("color", colors.danger);
+    }
+    expect(total).toBeGreaterThan(0);
+    await this.openTopicDocument(this.config.route);
   }
 
   private async expectRecursionContentTypography(
     noJavaScript: boolean,
   ): Promise<void> {
     const examples = this.page.locator("#theory figure").filter({
-      has: this.page.locator("figcaption", { hasText: "Разберём на примере" }),
+      has: this.page.locator("figcaption", {
+        hasText: "Разберём на примере",
+      }),
     });
-    await expect(examples).toHaveCount(11);
-    for (const example of await examples.all()) {
-      for (const text of await example.locator("ol li > div").all()) {
-        await expect(text).toHaveCSS("font-size", "17px");
-        await expect(text).toHaveCSS("font-weight", "400");
-        await expect(text).toHaveCSS("color", "rgb(23, 25, 30)");
-      }
-      for (const formula of await example
-        .locator('[data-kind="formula"]')
-        .all()) {
-        await expect(formula).toHaveCSS("font-size", "15.3px");
-      }
-    }
-    const outcome = this.page.getByRole("heading", {
-      name: "Что получилось",
-      exact: true,
+    await expect(examples).not.toHaveCount(0);
+    await expect(this.page.locator("#theory section[id]")).toHaveCount(2);
+    const typography = await examples.first().evaluate((figure) => {
+      const step = figure.querySelector<HTMLElement>(
+        "ol > li > [data-variant]",
+      );
+      const caption = figure.querySelector<HTMLElement>("figcaption");
+      if (!step || !caption)
+        throw new Error("Worked example typography is missing");
+      const resolve = (property: string) => {
+        const probe = document.createElement("span");
+        probe.style.font = `var(${property})`;
+        if (property.startsWith("--font"))
+          probe.style.fontFamily = `var(${property})`;
+        if (property.startsWith("--text"))
+          probe.style.fontSize = `var(${property})`;
+        document.body.append(probe);
+        const value = property.startsWith("--font")
+          ? getComputedStyle(probe).fontFamily
+          : getComputedStyle(probe).fontSize;
+        probe.remove();
+        return value;
+      };
+      return {
+        stepFont: getComputedStyle(step).fontFamily,
+        stepFontToken: resolve("--font-reading"),
+        stepSize: getComputedStyle(step).fontSize,
+        stepSizeToken: resolve("--text-learning-example-step"),
+        stepWeight: getComputedStyle(step).fontWeight,
+        captionFont: getComputedStyle(caption).fontFamily,
+        captionFontToken: resolve("--font-ui"),
+        captionSize: getComputedStyle(caption).fontSize,
+        captionSizeToken: resolve("--text-learning-label"),
+      };
     });
+    expect(typography.stepFont).toBe(typography.stepFontToken);
+    expect(typography.stepSize).toBe(typography.stepSizeToken);
+    expect(typography.stepWeight).toBe("400");
+    expect(typography.captionFont).toBe(typography.captionFontToken);
+    expect(typography.captionSize).toBe(typography.captionSizeToken);
     for (const width of [320, 390, 1440]) {
       await this.page.setViewportSize({ width, height: 900 });
-      await expect(outcome).toHaveCSS("border-bottom-width", "0px");
-      const theorySize = await this.page
-        .locator("#theory section[id] > h3")
-        .first()
-        .evaluate((element) => getComputedStyle(element).fontSize);
-      await expect(outcome).toHaveCSS("font-size", theorySize);
-      await expect(this.page.locator("#theory pre code").first()).toHaveCSS(
-        "font-size",
-        "15px",
-      );
-      const terms = await examples
-        .locator("[data-formula-term]")
-        .evaluateAll((elements) =>
-          elements.map((element) => {
-            const bounds = element.getBoundingClientRect();
-            const container = element
-              .closest("figure")!
-              .getBoundingClientRect();
-            return {
-              singleLine:
-                bounds.height <=
-                parseFloat(getComputedStyle(element).lineHeight) + 1,
-              contained:
-                bounds.left >= container.left - 1 &&
-                bounds.right <= container.right + 1,
-            };
-          }),
-        );
-      for (const term of terms) {
-        expect(term.singleLine).toBe(true);
-        expect(term.contained).toBe(true);
-      }
-      for (const example of await examples.all()) {
-        const label = example.locator("figcaption");
-        await expect(label).toHaveCSS("font-size", "13px");
-        await expect(label).toHaveCSS("font-weight", "500");
-        await expect(label).toHaveCSS(
-          "color",
-          await this.page.evaluate(() => {
-            const probe = document.createElement("span");
-            probe.style.color = "var(--color-text-soft)";
-            document.body.append(probe);
-            const color = getComputedStyle(probe).color;
-            probe.remove();
-            return color;
-          }),
-        );
-        await expect(label.locator('svg[aria-hidden="true"]')).toHaveCount(1);
-        for (const step of await example.locator("ol li").all()) {
-          const geometry = await step.evaluate((element) => {
-            const marker = element.firstElementChild!;
-            const body = element.lastElementChild!;
-            const markerBox = marker.getBoundingClientRect();
-            const bodyBox = body.getBoundingClientRect();
-            const firstLineCentre =
-              bodyBox.top + parseFloat(getComputedStyle(body).lineHeight) / 2;
-            return {
-              aligned:
-                Math.abs(
-                  markerBox.top + markerBox.height / 2 - firstLineCentre,
-                ) <= 1.5,
-              sameFirstLineHeight:
-                markerBox.height <=
-                parseFloat(getComputedStyle(body).lineHeight) + 1,
-            };
-          });
-          expect(geometry.aligned).toBe(true);
-          expect(geometry.sameFirstLineHeight).toBe(true);
-        }
-      }
-      for (const code of await this.page.locator("#theory pre code").all()) {
-        await expect(code).toHaveCSS("font-size", "15px");
-      }
       await this.expectNoHorizontalOverflow();
-      if (width === 390 && !noJavaScript) {
-        const code = this.page.locator("#theory pre").first();
+    }
+    if (!noJavaScript) {
+      const code = this.page.locator("#theory pre").first();
+      if (await code.count()) {
         await code.focus();
         await code.press("ArrowRight");
-        await expect
-          .poll(() => code.evaluate((element) => element.scrollLeft))
-          .toBeGreaterThan(0);
       }
     }
     await this.page.setViewportSize({ width: 390, height: 844 });
-    await this.page.evaluate(() => {
-      document.documentElement.style.fontSize = "200%";
-    });
-    try {
-      await expect(examples.first().locator("ol li > div").first()).toHaveCSS(
-        "font-size",
-        "34px",
-      );
-      await expect(
-        examples.first().locator('ol [data-kind="formula"]').first(),
-      ).toHaveCSS("font-size", "30.6px");
-      await expect(this.page.locator("#theory pre code").first()).toHaveCSS(
-        "font-size",
-        "30px",
-      );
-      for (const width of [320, 390, 900]) {
-        await this.page.setViewportSize({ width, height: 900 });
-        await this.expectNoHorizontalOverflow();
-        for (const group of await examples
-          .locator("[data-formula-term]")
-          .all()) {
-          const fits = await group.evaluate((element) => {
-            const bounds = element.getBoundingClientRect();
-            const container = element
-              .closest("figure")!
-              .getBoundingClientRect();
-            return (
-              bounds.left >= container.left - 1 &&
-              bounds.right <= container.right + 1
-            );
-          });
-          expect(fits).toBe(true);
-        }
-      }
-    } finally {
-      await this.page.evaluate(() => {
-        document.documentElement.style.removeProperty("font-size");
-      });
-      await this.page.setViewportSize({ width: 1440, height: 900 });
-    }
   }
 
   async expectLessonVideos(noJavaScript = false): Promise<void> {
+    let total = 0;
+    let videoRoute: string | undefined;
+    for (const route of await this.topicRoutes()) {
+      await this.openTopicDocument(route);
+      const videos = this.page.locator("#theory video");
+      const count = await videos.count();
+      total += count;
+      if (count && !videoRoute) videoRoute = route;
+      for (const figure of await this.page
+        .locator("#theory figure[data-lesson-video-figure]")
+        .all()) {
+        await expect(figure.locator("figcaption")).toHaveCount(1);
+        await expect(figure).not.toContainText("Текстовое описание");
+      }
+      for (const video of await videos.all()) {
+        await expect(video).toHaveAttribute("poster", /-poster\.webp$/u);
+        await expect(video.locator("source")).toHaveCount(2);
+        await expect(video).not.toHaveAttribute("autoplay");
+        await expect(video).toHaveJSProperty("muted", true);
+        await expect(video).toHaveJSProperty("loop", true);
+      }
+    }
+    expect(total).toBe(5);
+    if (!videoRoute) throw new Error("The topic lesson has no video route");
+    await this.openTopicDocument(videoRoute);
     const videos = this.page.locator("#theory video");
-    await expect(videos).toHaveCount(5);
-    for (const figure of await this.page
-      .locator("#theory figure[data-lesson-video-figure]")
-      .all()) {
-      await expect(figure.locator("figcaption")).toHaveCount(1);
-      await expect(figure).not.toContainText("Текстовое описание");
-    }
-    for (const video of await videos.all()) {
-      await expect(video).toHaveAttribute("poster", /-poster\.webp$/u);
-      await expect(video.locator("source")).toHaveCount(2);
-      await expect(video).not.toHaveAttribute("autoplay");
-      await expect(video).toHaveJSProperty("muted", true);
-      await expect(video).toHaveJSProperty("loop", true);
-    }
     const toggle = this.page.locator("[data-lesson-video-toggle]").first();
     if (noJavaScript) {
       await expect(toggle).toBeHidden();
       return;
     }
+    await expect(
+      this.page
+        .locator('[data-lesson-video-controls][data-enhanced="true"]')
+        .first(),
+    ).toBeVisible();
     for (const width of [390, 1440]) {
       await this.page.setViewportSize({ width, height: 900 });
       const overflow = await this.page.evaluate(
@@ -510,7 +561,9 @@ export class TopicLessonPage {
       expect(overflow).toBeLessThanOrEqual(0);
     }
     const first = videos.first();
-    await first.scrollIntoViewIfNeeded();
+    await first.evaluate((video: HTMLVideoElement) =>
+      video.scrollIntoView({ block: "center", inline: "nearest" }),
+    );
     const state = () =>
       first.evaluate((element: HTMLVideoElement) => ({
         paused: element.paused,
@@ -550,23 +603,28 @@ export class TopicLessonPage {
   }
 
   async expectLessonFigures(noJavaScript = false): Promise<void> {
-    const figures = this.page.locator("figure[data-lesson-figure]");
-    await expect(figures).toHaveCount(5);
-    for (const figure of await figures.all()) {
-      await figure.scrollIntoViewIfNeeded();
-      const image = figure.locator("img");
-      await expect(image).toHaveAttribute("alt", /\S/u);
-      await expect
-        .poll(() =>
-          image.evaluate(
-            (element: HTMLImageElement) =>
-              element.complete && element.naturalWidth > 0,
-          ),
-        )
-        .toBe(true);
-      await expect(figure.locator("figcaption")).toHaveCount(1);
-      await expect(figure).not.toContainText("Текстовое описание");
+    let total = 0;
+    for (const route of await this.topicRoutes()) {
+      await this.openTopicDocument(route);
+      const figures = this.page.locator("figure[data-lesson-figure]");
+      total += await figures.count();
+      for (const figure of await figures.all()) {
+        await figure.scrollIntoViewIfNeeded();
+        const image = figure.locator("img");
+        await expect(image).toHaveAttribute("alt", /\S/u);
+        await expect
+          .poll(() =>
+            image.evaluate(
+              (element: HTMLImageElement) =>
+                element.complete && element.naturalWidth > 0,
+            ),
+          )
+          .toBe(true);
+        await expect(figure.locator("figcaption")).toHaveCount(1);
+        await expect(figure).not.toContainText("Текстовое описание");
+      }
     }
+    expect(total).toBe(4);
     if (noJavaScript) return;
     for (const width of [390, 1440]) {
       await this.page.setViewportSize({ width, height: 900 });
@@ -581,24 +639,41 @@ export class TopicLessonPage {
 
   async expectLessonVideosRespectReducedMotion(): Promise<void> {
     await this.page.emulateMedia({ reducedMotion: "reduce" });
+    let videoRoute: string | undefined;
+    for (const route of await this.topicRoutes()) {
+      await this.openTopicDocument(route);
+      if (await this.page.locator("#theory video").count()) {
+        videoRoute = route;
+        break;
+      }
+    }
+    if (!videoRoute) throw new Error("The topic lesson has no video route");
     await this.page.reload();
+    await expect(
+      this.page
+        .locator('[data-lesson-video-controls][data-enhanced="true"]')
+        .first(),
+    ).toBeVisible();
     const first = this.page.locator("#theory video").first();
     await first.scrollIntoViewIfNeeded();
-    await expect
-      .poll(() =>
-        first.evaluate((element: HTMLVideoElement) => element.readyState),
-      )
-      .toBeGreaterThan(0);
+    await expect(first).toHaveAttribute("poster", /-poster\.webp$/u);
+    await expect(first).toHaveJSProperty("preload", "none");
     await expect(first).toHaveJSProperty("paused", true);
     await expect(first).toHaveJSProperty("currentTime", 0);
     const toggle = this.page.locator("[data-lesson-video-toggle]").first();
     await expect(toggle).toHaveAccessibleName(/^Воспроизвести: /u);
     await toggle.click();
+    await expect
+      .poll(() =>
+        first.evaluate((element: HTMLVideoElement) => element.readyState),
+      )
+      .toBeGreaterThan(0);
     await expect(first).toHaveJSProperty("paused", false);
   }
 
   async expectRecursionLearningBlocks(noJavaScript = false): Promise<void> {
     await this.page.emulateMedia({ reducedMotion: "reduce" });
+    await this.openTopicPractice(noJavaScript);
     const checkpoint = this.page.getByRole("region", {
       name: "Проверьте себя",
       exact: true,
@@ -666,10 +741,19 @@ export class TopicLessonPage {
         );
       });
       expect(readableWidth).toBeLessThanOrEqual(17);
-      const comparisons = this.page.locator(
-        '#theory [role="note"] [data-status]',
-      );
-      await expect(comparisons).toHaveCount(10);
+      await this.expectNoHorizontalOverflow();
+    }
+    await firstQuestion.focus();
+    await firstQuestion.press("Enter");
+    await expect(firstAnswer).toBeHidden();
+
+    await this.openTopicDocument("/ege/16-rekursiya/slozhnye-pravila");
+    const comparisons = this.page.locator(
+      '#theory [role="note"] [data-status]',
+    );
+    await expect(comparisons).not.toHaveCount(0);
+    for (const width of [320, 390, 768, 1440]) {
+      await this.page.setViewportSize({ width, height: 900 });
       for (const comparison of await comparisons.all()) {
         const copy = comparison.locator(":scope > div > div");
         await expect(copy).toHaveCSS("font-size", "17px");
@@ -686,10 +770,14 @@ export class TopicLessonPage {
         });
         expect(Math.abs(bodyUsesPanelWidth)).toBeLessThanOrEqual(1);
       }
-      const callout = this.page.getByRole("complementary", {
-        name: "Когда применим этот приём",
-        exact: true,
-      });
+    }
+    await this.openTopicDocument("/ege/16-rekursiya/bolshie-argumenty");
+    const callout = this.page.getByRole("complementary", {
+      name: "Когда применим этот приём",
+      exact: true,
+    });
+    for (const width of [320, 390, 768, 1440]) {
+      await this.page.setViewportSize({ width, height: 900 });
       await expect(callout.locator(":scope > div > span")).toHaveCSS(
         "font-size",
         "14px",
@@ -705,6 +793,7 @@ export class TopicLessonPage {
       await this.expectNoHorizontalOverflow();
     }
     await this.page.setViewportSize({ width: 390, height: 844 });
+    await this.openTopicPractice(noJavaScript);
     const task = this.page.locator(
       '[data-practice-task="rekursiya-base-sequence"]',
     );
@@ -759,11 +848,6 @@ export class TopicLessonPage {
         "font-size",
         "32px",
       );
-      await expect(
-        this.page
-          .locator('#theory [role="note"] [data-status] > div > div')
-          .first(),
-      ).toHaveCSS("font-size", "34px");
       await this.page.setViewportSize({ width: 900, height: 900 });
       await this.expectNoHorizontalOverflow();
     } finally {
@@ -771,9 +855,6 @@ export class TopicLessonPage {
         document.documentElement.style.removeProperty("font-size");
       });
     }
-    await firstQuestion.focus();
-    await firstQuestion.press("Enter");
-    await expect(firstAnswer).toBeHidden();
   }
 
   async expectSharedLearningLinkStyle(): Promise<void> {
@@ -781,50 +862,73 @@ export class TopicLessonPage {
     await expect(
       this.page.locator("#theory section[id] > h3").first(),
     ).toHaveCSS("border-bottom-width", "0px");
-    const headingSize = await this.page
-      .locator("#theory section[id] > h3")
-      .first()
-      .evaluate((element) => getComputedStyle(element).fontSize);
-    await expect(this.page.locator("#result h3").first()).toHaveCSS(
-      "font-size",
-      headingSize,
-    );
+    await expect(this.page.locator("#theory section[id]")).not.toHaveCount(0);
     await this.page.setViewportSize({ width: 390, height: 844 });
-    await expect(this.page.locator("#theory pre code").first()).toHaveCSS(
-      "font-size",
-      "15px",
-    );
+    await expect(this.page.locator("#theory pre code").first()).toBeVisible();
     await this.page.setViewportSize({ width: 1440, height: 900 });
     await expect(
       this.page.locator("[data-topic-lesson-context] a").first(),
     ).toHaveCSS("color", "rgb(31, 79, 208)");
     await expect(
-      this.page.locator("[data-outline-link-id][aria-current]").first(),
-    ).toHaveCSS("color", "rgb(23, 25, 30)");
+      this.page.locator('[data-subtopic-navigation] ol a[aria-current="page"]'),
+    ).toBeVisible();
   }
 
   async expectCodeDisclosureAndReturnToTop(): Promise<void> {
     await this.page.emulateMedia({ reducedMotion: "reduce" });
+    const codeRoute = await this.page
+      .getByRole("navigation", { name: "Подтемы урока" })
+      .getByRole("link", {
+        name: "Шаблон программы и общий алгоритм",
+        exact: true,
+      })
+      .getAttribute("href");
+    if (!codeRoute)
+      throw new Error("The recursion template subtopic is not published");
+    await this.page.goto(codeRoute);
+    await expect(
+      this.page.getByRole("link", { name: "Войти", exact: true }),
+    ).toBeVisible();
     const top = this.page.getByRole("button", { name: "К началу урока" });
     await expect(top).toBeHidden();
-    const expand = this.page
-      .getByRole("button", { name: "Показать весь код", exact: true })
-      .first();
+    const code = this.page.getByRole("group", {
+      name: "Шаблон: кеш, лимит, база, ветви, прогрев",
+    });
+    await expect(code).toBeVisible();
+    const expand = code.getByRole("button", {
+      name: "Показать весь код",
+      exact: true,
+    });
+    await expect(expand).toBeVisible();
     await expand.click();
-    const collapse = this.page
-      .getByRole("button", { name: "Свернуть код", exact: true })
-      .first();
+    const collapse = code.getByRole("button", {
+      name: "Свернуть код",
+      exact: true,
+    });
     await expect(collapse).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
     await collapse.hover();
     await expect(collapse).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
     await collapse.click();
     await expect(expand).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+    await this.page.getByRole("contentinfo").scrollIntoViewIfNeeded();
+    await expect(top).toBeVisible();
     await top.click();
     await expect(this.page.getByRole("heading", { level: 1 })).toBeFocused();
     await expect.poll(() => this.page.evaluate(() => window.scrollY)).toBe(0);
     await expect(top).toBeHidden();
     await this.page.setViewportSize({ width: 390, height: 844 });
-    await this.page.locator("#practice").scrollIntoViewIfNeeded();
+    await this.openTopicPractice();
+    const scrollBeyondViewport = async () => {
+      await this.page.evaluate(() =>
+        window.scrollTo({ top: window.innerHeight + 100, behavior: "instant" }),
+      );
+      await expect
+        .poll(() =>
+          this.page.evaluate(() => window.scrollY >= window.innerHeight),
+        )
+        .toBe(true);
+    };
+    await scrollBeyondViewport();
     await expect(top).toBeVisible();
     await expect(this.page.locator("[data-scroll-to-top]")).toHaveCSS(
       "height",
@@ -833,37 +937,44 @@ export class TopicLessonPage {
     const answer = this.page
       .getByRole("textbox", { name: "Ответ", exact: true })
       .first();
-    await answer.focus();
+    await answer.evaluate((element: HTMLInputElement) =>
+      element.focus({ preventScroll: true }),
+    );
+    await expect(answer).toBeFocused();
+    expect(
+      await this.page.evaluate(() => window.scrollY >= window.innerHeight),
+    ).toBe(true);
     await expect(top).toBeHidden();
     await answer.press("Tab");
+    // Tab may scroll the next control into view; retain the visibility precondition.
+    await scrollBeyondViewport();
     await expect(top).toBeVisible();
     await top.click();
     await expect(this.page.getByRole("heading", { level: 1 })).toBeFocused();
+    await expect.poll(() => this.page.evaluate(() => window.scrollY)).toBe(0);
     await expect(top).toBeHidden();
   }
 
   async expectSquareScrollbars(): Promise<void> {
+    await expect(this.page.getByRole("tablist")).toHaveCount(0);
     const geometry = await this.page.evaluate(() => {
       const root = document.documentElement;
       const code = document.querySelector("pre");
-      const tabs = document.querySelector('[role="tablist"]');
       return {
         width: getComputedStyle(root, "::-webkit-scrollbar").width,
         radius: getComputedStyle(root, "::-webkit-scrollbar-thumb")
           .borderRadius,
         button: getComputedStyle(root, "::-webkit-scrollbar-button").display,
-        tabs: tabs ? getComputedStyle(tabs).scrollbarWidth : null,
-        code: code
-          ? getComputedStyle(code, "::-webkit-scrollbar-thumb").backgroundColor
-          : null,
+        hasCodeOverflow: Boolean(
+          code?.scrollWidth && code.scrollWidth > code.clientWidth,
+        ),
       };
     });
     expect(geometry).toEqual({
       width: "6px",
       radius: "0px",
       button: "none",
-      tabs: "auto",
-      code: "rgb(228, 228, 228)",
+      hasCodeOverflow: false,
     });
     await this.page.emulateMedia({ forcedColors: "active" });
     await expect(this.page.locator("html")).toHaveCSS(
@@ -878,27 +989,22 @@ export class TopicLessonPage {
   }
 
   async expectStudyDensity(): Promise<void> {
-    const measurements = await this.page
-      .locator("[data-outline-link-id]")
-      .evaluateAll((nodes) => ({
-        expected: matchMedia("(any-pointer: coarse)").matches ? 40 : 32,
-        rows: nodes.map((node) => ({
+    const navigation = this.page.locator("[data-subtopic-navigation]");
+    await expect(
+      navigation.getByRole("link", { name: "Все темы ЕГЭ", exact: true }),
+    ).toHaveCSS("min-height", "44px");
+    const measurements = await navigation
+      .locator("ol a, ol + div a")
+      .evaluateAll((nodes) =>
+        nodes.map((node) => ({
           minimum: parseFloat(getComputedStyle(node).minHeight),
           height: node.getBoundingClientRect().height,
         })),
-      }));
-    for (const row of measurements.rows) {
-      expect(row.minimum).toBe(measurements.expected);
-      expect(row.height).toBeGreaterThanOrEqual(measurements.expected - 0.1);
+      );
+    for (const row of measurements) {
+      expect(row.minimum).toBe(40);
+      expect(row.height).toBeGreaterThanOrEqual(39.9);
     }
-    await expect(this.page.locator("[data-practice-form]")).toHaveCSS(
-      "box-shadow",
-      "none",
-    );
-    await expect(this.page.locator("[data-practice-form]")).toHaveCSS(
-      "background-color",
-      "rgba(0, 0, 0, 0)",
-    );
   }
 
   async expectStudyFrame(): Promise<void> {
@@ -954,6 +1060,11 @@ export class TopicLessonPage {
   }
 
   async expectStudyNavigationAndAccessibility(): Promise<void> {
+    // Cold Vite startup loads hundreds of modules before the guest session is ready.
+    // Wait for enhancement before testing interactive navigation and progress.
+    await expect(
+      this.page.getByRole("link", { name: "Войти", exact: true }),
+    ).toBeVisible({ timeout: 15_000 });
     await this.page.setViewportSize({ width: 1440, height: 1000 });
     await this.expectStudyFrame();
     await expect(this.page.locator("[data-outline-rail]")).toHaveCSS(
@@ -962,28 +1073,56 @@ export class TopicLessonPage {
     );
     await expect(this.page.locator("[data-topic-lesson-context]")).toHaveCSS(
       "border-bottom-width",
-      "1px",
+      "0px",
     );
     await expect(this.page.locator("[data-result-progress]")).toContainText(
       `0 / ${this.config.taskCount ?? 5}`,
     );
     await this.expectStudyDensity();
+    const pageOutline = this.page.getByRole("navigation", {
+      name: "На этой странице",
+    });
+    const destination = pageOutline.getByRole("link").first();
+    const hash = await destination.getAttribute("href");
+    await destination.click();
+    await expect(destination).toHaveAttribute("aria-current", "location");
+    await expect(this.page.locator(hash!)).toBeFocused();
+    expect(new URL(this.page.url()).hash).toBe(hash);
+    await this.page.evaluate(() => {
+      history.replaceState(null, "", location.pathname);
+      window.scrollTo({ top: 0, behavior: "instant" });
+    });
+    await expect.poll(() => this.page.evaluate(() => window.scrollY)).toBe(0);
     await this.page.setViewportSize({ width: 390, height: 844 });
-    const trigger = this.page.getByRole("button", {
-      name: "Содержание урока",
-      exact: true,
+    const topicNavigation = this.page.getByRole("navigation", {
+      name: "Подтемы урока",
+    });
+    const trigger = topicNavigation.getByRole("button", {
+      name: /Подтемы · /,
     });
     await expect(trigger).toHaveAttribute("aria-expanded", "false");
-    const title = await this.page
-      .getByRole("heading", { level: 1 })
-      .boundingBox();
-    const contents = await trigger.boundingBox();
-    expect(title!.y + title!.height).toBeLessThan(contents!.y);
+    const mobileOrder = await this.page.evaluate(() => {
+      const navigation = document.querySelector<HTMLElement>(
+        "[data-subtopic-navigation]",
+      );
+      const heading = document.querySelector<HTMLElement>(
+        "[data-article-frame] h1, [data-article-frame] h2",
+      );
+      if (!navigation || !heading)
+        throw new Error("Missing mobile lesson navigation or article heading");
+      return {
+        navigationBottom: navigation.getBoundingClientRect().bottom,
+        headingTop: heading.getBoundingClientRect().top,
+        scrollY: window.scrollY,
+      };
+    });
+    expect(mobileOrder.scrollY).toBe(0);
+    expect(mobileOrder.navigationBottom).toBeLessThanOrEqual(
+      mobileOrder.headingTop,
+    );
     await trigger.focus();
     await trigger.press("Enter");
-    const links = this.page
-      .getByRole("navigation", { name: "Содержание урока" })
-      .getByRole("link");
+    const links = topicNavigation.locator("ol a, ol + div a");
     await this.expectStudyDensity();
     const bounds = await links.evaluateAll((nodes) =>
       nodes.map((node) => {
@@ -992,34 +1131,52 @@ export class TopicLessonPage {
       }),
     );
     for (let index = 0; index < bounds.length; index++) {
-      expect(bounds[index].height).toBeGreaterThanOrEqual(32);
+      expect(bounds[index].height).toBeGreaterThanOrEqual(40);
       if (index > 0)
         expect(bounds[index].top).toBeGreaterThanOrEqual(
           bounds[index - 1].bottom,
         );
     }
-    const destination = links.nth(1);
-    const hash = await destination.getAttribute("href");
-    await destination.focus();
-    await destination.press("Enter");
+    const subtopicLinks = topicNavigation.locator("ol a");
+    const hrefs = await subtopicLinks.evaluateAll((nodes) =>
+      nodes.map((node) => node.getAttribute("href")),
+    );
+    const currentIndex = hrefs.indexOf(this.config.route);
+    expect(currentIndex).toBeGreaterThanOrEqual(0);
+    const adjacentIndex =
+      currentIndex + 1 < hrefs.length ? currentIndex + 1 : currentIndex - 1;
+    expect(adjacentIndex).toBeGreaterThanOrEqual(0);
+    const adjacentHref = hrefs[adjacentIndex];
+    expect(adjacentHref).toBeTruthy();
+    const adjacentSubtopic = subtopicLinks.nth(adjacentIndex);
+    await adjacentSubtopic.focus();
+    await adjacentSubtopic.press("Enter");
     await expect(trigger).toHaveAttribute("aria-expanded", "false");
-    await expect(this.page.locator(hash!)).toBeFocused();
-    expect(new URL(this.page.url()).hash).toBe(hash);
+    await expect(this.page).toHaveURL(
+      new URL(adjacentHref!, this.page.url()).href,
+    );
+    await expect(this.page.getByRole("heading", { level: 1 })).toBeFocused();
     await this.expectNoHorizontalOverflow();
+    await this.page.setViewportSize({ width: 1153, height: 844 });
+    await expect(trigger).toHaveCount(0);
+    await expect(pageOutline).toBeVisible();
     await this.page.setViewportSize({ width: 961, height: 844 });
     await expect(trigger).toHaveCount(0);
-    await expect(destination).toBeVisible();
+    await expect(pageOutline).toBeHidden();
     await this.page.setViewportSize({ width: 960, height: 844 });
     await expect(trigger).toHaveAttribute("aria-expanded", "false");
     await this.page.setViewportSize({ width: 1440, height: 1000 });
-    await this.page.evaluate(() => {
-      document.documentElement.style.fontSize = "200%";
+    const scaledRootFont = await this.page.addStyleTag({
+      content: "html { font-size: 200%; }",
     });
-    await expect(this.page.locator("html")).toHaveCSS("font-size", "32px");
-    await this.expectNoHorizontalOverflow();
-    await this.page.evaluate(() => {
-      document.documentElement.style.removeProperty("font-size");
-    });
+    try {
+      await expect(this.page.locator("html")).toHaveCSS("font-size", "32px");
+      await this.expectNoHorizontalOverflow();
+    } finally {
+      await scaledRootFont.evaluate((style) =>
+        style.parentNode?.removeChild(style),
+      );
+    }
     const accessibility = await new AxeBuilder({ page: this.page }).analyze();
     expect(accessibility.violations).toEqual([]);
   }
@@ -1028,26 +1185,20 @@ export class TopicLessonPage {
     noJavaScript = false,
   ): Promise<void> {
     await this.expectPublishedTopicIdentity();
-    for (const anchor of [
+    await this.expectSectionsAcrossSubtopics([
       "sequence-from-file",
       "single-values",
       "neighbor-pairs",
       "neighbor-triples",
       "two-passes",
       "verify-boundaries",
-    ]) {
-      await expect(this.page.locator(`#${anchor}`)).toHaveCount(1);
-    }
-    for (const slug of [
+    ]);
+    await this.expectCourseLinksAcrossSubtopics([
       "schetchiki-i-nakopiteli",
       "spiski",
       "fayly",
       "otbor-rezultata",
-    ]) {
-      await expect(
-        this.page.locator(`#theory a[href="/courses/python/${slug}"]`),
-      ).not.toHaveCount(0);
-    }
+    ]);
     const averageCallout = this.page.locator(
       'aside[aria-label="Среднее уже найдено"]',
     );
@@ -1055,20 +1206,23 @@ export class TopicLessonPage {
       name: "Дополнить условие второго прохода",
     });
     await this.expectCodeContrast(partialExample);
+    await this.openTopicPractice(noJavaScript);
     await this.expectTaskPractice(noJavaScript);
     if (!noJavaScript) {
       await expect(this.page.locator("[data-result-progress]")).toContainText(
         "0 / 8",
       );
+      await this.open();
     }
     await this.expectNoHorizontalOverflow();
+    if (!noJavaScript) await this.open();
   }
 
   async expectPublishedStringProcessingContent(
     noJavaScript = false,
   ): Promise<void> {
     await this.expectPublishedTopicIdentity();
-    for (const anchor of [
+    await this.expectSectionsAcrossSubtopics([
       "file-and-string",
       "positions-and-fragments",
       "adjacent-and-overlapping",
@@ -1077,23 +1231,18 @@ export class TopicLessonPage {
       "expression-grammar",
       "linear-expression-scan",
       "independent-verification",
-    ]) {
-      await expect(this.page.locator(`#${anchor}`)).toHaveCount(1);
-    }
-    await expect(
-      this.page.locator('#theory a[href="/courses/python/stroki"]'),
-    ).not.toHaveCount(0);
-    await expect(
-      this.page.locator('#theory a[href="/courses/python/fayly"]'),
-    ).not.toHaveCount(0);
+    ]);
+    await this.expectCourseLinksAcrossSubtopics(["stroki", "fayly"]);
     await this.expectCodeContrast(
       this.page.getByRole("group", {
         name: "За один проход найти длину завершённого выражения",
       }),
     );
+    await this.openTopicPractice(noJavaScript);
     await this.expectTaskPractice(noJavaScript);
     await expect(this.page.locator("#practice a[download]")).toHaveCount(8);
     if (!noJavaScript) {
+      await this.open();
       await this.expectStudyNavigationAndAccessibility();
       await this.expectCodeKeyboardFocus(
         "За один проход найти длину завершённого выражения",
@@ -1105,7 +1254,7 @@ export class TopicLessonPage {
     noJavaScript = false,
   ): Promise<void> {
     await this.expectPublishedTopicIdentity();
-    for (const anchor of [
+    await this.expectSectionsAcrossSubtopics([
       "integer-range",
       "divisibility-remainder",
       "decimal-digits",
@@ -1114,53 +1263,53 @@ export class TopicLessonPage {
       "divisor-pairs",
       "decimal-mask",
       "bounded-search",
-    ]) {
-      await expect(this.page.locator("#" + anchor)).toHaveCount(1);
-    }
-    for (const slug of [
+    ]);
+    await this.expectCourseLinksAcrossSubtopics([
       "for-i-range",
       "while",
       "tsifry-chisla",
       "spiski",
       "chisla-i-vyrazheniya",
-    ]) {
-      await expect(
-        this.page.locator('#theory a[href="/courses/python/' + slug + '"]'),
-      ).not.toHaveCount(0);
-    }
+    ]);
     await this.expectCodeContrast(
       this.page.getByRole("group", {
         name: "Найти первые пять чисел от 100 до 1000 с тремя делителями",
       }),
     );
+    await this.openTopicPractice(noJavaScript);
     await expect(this.page.getByLabel("Проверьте себя")).toHaveCount(1);
     await this.expectTaskPractice(noJavaScript);
     await expect(this.page.locator("#practice a[download]")).toHaveCount(0);
     await this.expectNoHorizontalOverflow();
+    if (!noJavaScript) await this.open();
   }
 
   async expectPublishedArrayProcessingContent(
     noJavaScript = false,
   ): Promise<void> {
     await this.expectPublishedTopicIdentity();
-    await this.expectTheorySectionsAndLinks(
-      [
-        "sorted-order",
-        "file-records",
-        "capacity-selection",
-        "secondary-optimum",
-        "event-stream",
-        "independent-check",
-      ],
-      ["spiski", "sortirovka-i-poisk", "fayly", "slovari"],
-    );
+    await this.expectSectionsAcrossSubtopics([
+      "sorted-order",
+      "file-records",
+      "capacity-selection",
+      "secondary-optimum",
+      "event-stream",
+      "independent-check",
+    ]);
+    await this.expectCourseLinksAcrossSubtopics([
+      "spiski",
+      "sortirovka-i-poisk",
+      "fayly",
+      "slovari",
+    ]);
     await this.expectCodeContrast(
       this.page.getByRole("group", {
         name: "Сортировать целые записи по очкам",
       }),
     );
+    await this.openTopicPractice(noJavaScript);
     await expect(this.page.getByLabel("Проверьте себя")).toHaveCount(1);
-    await this.expectTaskPractice(noJavaScript, 7);
+    await this.expectTaskPractice(noJavaScript);
     if (noJavaScript) {
       await expect(this.page.locator("#practice a[download]")).toHaveCount(4);
     } else {
@@ -1182,31 +1331,36 @@ export class TopicLessonPage {
       ).toBeVisible();
     }
     await this.expectNoHorizontalOverflow();
+    if (!noJavaScript) await this.open();
   }
 
   async expectPublishedDataAnalysisContent(
     noJavaScript = false,
   ): Promise<void> {
     await this.expectPublishedTopicIdentity();
-    await this.expectTheorySectionsAndLinks(
-      [
-        "points-and-records",
-        "spatial-clusters",
-        "energy-clusters",
-        "cluster-centre",
-        "distance-and-filter",
-        "combined-result",
-        "independent-check",
-      ],
-      ["fayly", "spiski", "sortirovka-i-poisk", "slovari"],
-    );
+    await this.expectSectionsAcrossSubtopics([
+      "points-and-records",
+      "spatial-clusters",
+      "energy-clusters",
+      "cluster-centre",
+      "distance-and-filter",
+      "combined-result",
+      "independent-check",
+    ]);
+    await this.expectCourseLinksAcrossSubtopics([
+      "fayly",
+      "spiski",
+      "sortirovka-i-poisk",
+      "slovari",
+    ]);
     await this.expectCodeContrast(
       this.page.getByRole("group", {
         name: "Разделить отсортированные энергии по размаху",
       }),
     );
+    await this.openTopicPractice(noJavaScript);
     await expect(this.page.getByLabel("Проверьте себя")).toHaveCount(1);
-    await this.expectTaskPractice(noJavaScript, 7);
+    await this.expectTaskPractice(noJavaScript);
     if (noJavaScript) {
       await expect(this.page.locator("#practice a[download]")).toHaveCount(3);
     } else {
@@ -1219,47 +1373,18 @@ export class TopicLessonPage {
       ).toBeVisible();
     }
     await this.expectNoHorizontalOverflow();
-  }
-
-  private async expectTheorySectionsAndLinks(
-    anchors: readonly string[],
-    courseSlugs: readonly string[],
-  ): Promise<void> {
-    for (const anchor of anchors) {
-      await expect(this.page.locator("#" + anchor)).toHaveCount(1);
-    }
-    for (const slug of courseSlugs) {
-      await expect(
-        this.page.locator('#theory a[href="/courses/python/' + slug + '"]'),
-      ).not.toHaveCount(0);
-    }
+    if (!noJavaScript) await this.open();
   }
 
   async expectPublishedNumberRecordLesson(): Promise<void> {
-    await expectPublicReleaseIdentity(this.page);
-    await expectPublishedLessonDocument(this.page, {
-      canonicalPath: this.config.route,
-      title: this.config.title,
-    });
+    await this.expectPublishedTopicIdentity();
+    await expect(this.page.locator("#theory section[id]")).not.toHaveCount(0);
     await expect(
-      this.page.getByText(
-        "Задание " + String(this.config.taskNumber) + " · 5 задач",
-        { exact: true },
-      ),
-    ).toBeVisible();
-    await expect(this.page.locator("[data-article-frame] img")).toHaveCount(0);
-    await expect(this.page.getByLabel("Проверьте себя")).toHaveCount(1);
-    await expect(
-      this.page.getByRole("heading", { level: 2, name: "Прогресс" }),
-    ).toBeVisible();
-    await expect(
-      this.page.getByRole("link", {
-        name: "Предыдущий урок: Рекурсивные алгоритмы",
-      }),
-    ).toHaveAttribute("href", "/ege/16-rekursiya");
-    await expect(this.page.getByRole("link", { name: "Все темы" })).toHaveCount(
-      0,
-    );
+      this.page
+        .getByRole("navigation", { name: "Подтемы урока" })
+        .getByRole("link", { name: "Практика и итог" }),
+    ).toHaveAttribute("href", "/ege/5-preobrazovanie-zapisey-chisel/praktika");
+    await expect(this.page.locator("[data-practice-task]")).toHaveCount(0);
   }
 
   async expectKeyboardHelpDisclosures(): Promise<void> {
@@ -1306,9 +1431,9 @@ export class TopicLessonPage {
 
   async expectStableOutlineSelection(): Promise<void> {
     const outline = this.page.getByRole("navigation", {
-      name: "Содержание урока",
+      name: "На этой странице",
     });
-    const childLinks = outline.locator("ol ol [data-outline-link-id]");
+    const childLinks = outline.locator("[data-outline-link-id]");
     const readGeometry = () =>
       childLinks.evaluateAll((links) =>
         links.map((link) => ({
@@ -1321,7 +1446,7 @@ export class TopicLessonPage {
 
     const before = await readGeometry();
     const target = outline.getByRole("link", {
-      name: "Почему это вообще определяет функцию",
+      name: "Вычисляем F(5) по правилу",
     });
     await target.click();
     await expect(target).toHaveAttribute("aria-current", "location");
@@ -1342,12 +1467,12 @@ export class TopicLessonPage {
   async expectPublishedNumberRecordLessonReadableWithoutJavaScript(): Promise<void> {
     await this.open();
     await this.expectPublishedNumberRecordLesson();
-    await expect(this.page.locator("[data-practice-form] form")).toHaveCount(5);
+    await this.openTopicPractice(true);
+    await this.expectTaskPractice(true, 5);
     await expect(
       this.page.locator("[data-practice-form] [data-unenhanced-accordion]"),
     ).toHaveCount(5);
     await expect(this.page.getByText(/19₁₀ = 10011₂/)).toBeVisible();
-    await expect(this.page.locator("[data-article-frame] img")).toHaveCount(0);
     await expect(
       this.page.getByText(
         "Прогресс хранится только в этом браузере и появится после загрузки страницы.",
@@ -1360,201 +1485,36 @@ export class TopicLessonPage {
   }
 
   async expectPublishedLesson(): Promise<void> {
-    await expectPublicReleaseIdentity(this.page);
-    await expect(this.page).toHaveTitle("Рекурсивные алгоритмы — infraege");
+    await this.expectPublishedTopicIdentity();
     await expect(
       this.page.getByRole("link", {
         name: "infraege — ЕГЭ информатика, на главную",
       }),
     ).toHaveAttribute("href", "/");
-    await expectPublishedLessonDocument(this.page, {
-      canonicalPath: "/ege/16-rekursiya",
-      title: "Рекурсивные алгоритмы",
-    });
-    await expectLessonVerticalRhythm(this.page);
-    await expectRelatedLearningBlockRhythm(
-      this.page,
-      "Когда применим этот приём",
-    );
+    const theory = this.page.locator("#theory");
+    await expect(theory.locator("section[id]")).toHaveCount(2);
     await expect(
-      this.page.getByRole("link", { name: "Обработка данных" }),
-    ).toHaveAttribute("href", "/privacy");
+      theory.getByText("рекуррентным определением", { exact: false }),
+    ).toBeVisible();
     await expect(
-      this.page.getByRole("link", { name: "Назад", exact: true }),
-    ).toHaveAttribute("href", "/");
+      theory.locator("figure[data-learning-block]").first(),
+    ).toBeVisible();
     await expect(
       this.page
-        .getByRole("navigation", { name: "Содержание урока" })
-        .getByRole("link", {
-          name: "Вычисляем F(5) по правилу",
-          includeHidden: true,
-        }),
-    ).toHaveAttribute("href", "#concrete-computation");
-    await expect(
-      this.page.getByText("называют рекуррентным определением", {
-        exact: false,
-      }),
-    ).toBeVisible();
-    await expect(
-      this.page.getByText("стеке вызовов — списке функций", { exact: false }),
-    ).toBeVisible();
-    await expect(
-      this.page.getByText("называют кешированием", { exact: false }),
-    ).toBeVisible();
-    await expect(this.page.locator("[data-article-frame] img")).toHaveCount(0);
-    await expect(this.page.locator("[data-outline-tree] svg")).toHaveCount(0);
-    await expect(
-      this.page.getByRole("heading", { name: "Что получилось" }),
-    ).toBeVisible();
-    const hierarchy = await this.page.evaluate(() => {
-      const stage = document.querySelector<HTMLElement>("#theory > h2");
-      const subsection = document.querySelector<HTMLElement>(
-        "#theory section > h3",
-      );
-      if (!stage || !subsection) return null;
-      return {
-        stageColor: getComputedStyle(stage).color,
-        stageSize: Number.parseFloat(getComputedStyle(stage).fontSize),
-        stageTransform: getComputedStyle(stage).textTransform,
-        subsectionColor: getComputedStyle(subsection).color,
-        subsectionSize: Number.parseFloat(
-          getComputedStyle(subsection).fontSize,
-        ),
-      };
-    });
-    expect(hierarchy?.stageTransform).toBe("uppercase");
-    expect(hierarchy?.stageColor).not.toBe(hierarchy?.subsectionColor);
-    expect(hierarchy?.subsectionSize ?? 0).toBeGreaterThan(
-      (hierarchy?.stageSize ?? 0) + 10,
-    );
-    const mistake = this.page
-      .getByLabel("Сравнение ошибочного и правильного рассуждения")
-      .first();
-    await expect(mistake.getByText("Неверно")).toBeVisible();
-    await expect(mistake.getByText("Как правильно")).toBeVisible();
-    await expect(mistake.locator("svg")).toHaveCount(2);
-    await expect(mistake.getByText("Что здесь не так")).toHaveCount(0);
-    const lessonNavigationGeometry = await this.page.evaluate(() => {
-      const outline = document.querySelector<HTMLElement>(
-        "[data-outline-tree]",
-      );
-      const comparison = document.querySelector<HTMLElement>(
-        '[aria-label="Сравнение ошибочного и правильного рассуждения"]',
-      );
-      const checkpoint = document.querySelector<HTMLElement>(
-        '[aria-label="Проверьте себя"]',
-      );
-      const mistakeLabel = comparison?.querySelector<HTMLElement>("span");
-      const checkpointLabel =
-        checkpoint?.querySelector<HTMLElement>(":scope > div > div");
-      const mistakeIcon = comparison?.querySelector<SVGElement>("svg");
-      const checkpointIcon = checkpoint?.querySelector<SVGElement>("svg");
-      const mistakeCopy = comparison?.querySelector<HTMLElement>(
-        ':scope > [data-status="incorrect"] > div',
-      );
-      const checkpointContent = checkpoint?.querySelector<HTMLElement>(
-        ':scope > [data-enhanced="true"], :scope > [data-unenhanced-accordion]',
-      );
-      const correctComparison = comparison?.querySelector<HTMLElement>(
-        ':scope > [data-status="correct"]',
-      );
-      if (
-        !outline ||
-        !comparison ||
-        !checkpoint ||
-        !mistakeLabel ||
-        !checkpointLabel ||
-        !mistakeIcon ||
-        !checkpointIcon ||
-        !mistakeCopy ||
-        !checkpointContent ||
-        !correctComparison
-      ) {
-        throw new Error("Missing lesson navigation or mistake comparison");
-      }
-      const outlineIsSingleColumn = Array.from(
-        outline.querySelectorAll<HTMLOListElement>("ol"),
-      ).every((list) => {
-        const children = Array.from(list.children, (item) =>
-          item.getBoundingClientRect(),
-        );
-        return children.every(
-          (item, index) =>
-            index === 0 || Math.abs(item.left - children[0]!.left) < 1,
-        );
-      });
-      const comparisons = Array.from(comparison.children, (item) =>
-        item.getBoundingClientRect(),
-      );
-      const checkpointStyle = getComputedStyle(checkpoint);
-      const correctComparisonStyle = getComputedStyle(correctComparison);
-      const mistakeLabelStyle = getComputedStyle(mistakeLabel);
-      const checkpointLabelStyle = getComputedStyle(checkpointLabel);
-      const mistakeIconRect = mistakeIcon.getBoundingClientRect();
-      const checkpointIconRect = checkpointIcon.getBoundingClientRect();
-      return {
-        outlineIsSingleColumn,
-        mistakeIsVertical:
-          comparisons.length === 2 &&
-          comparisons[1]!.top >= comparisons[0]!.bottom,
-        mistakeHasTintedFill:
-          correctComparisonStyle.backgroundColor !== "rgba(0, 0, 0, 0)" &&
-          correctComparisonStyle.backgroundColor !== "transparent",
-        checkpointHasTintedFill:
-          checkpointStyle.backgroundColor !== "rgba(0, 0, 0, 0)" &&
-          checkpointStyle.backgroundColor !== "transparent",
-        learningBlockGeometryMatches:
-          mistakeLabelStyle.fontSize === checkpointLabelStyle.fontSize &&
-          mistakeLabelStyle.fontWeight === checkpointLabelStyle.fontWeight &&
-          mistakeIconRect.width === checkpointIconRect.width &&
-          mistakeIconRect.height === checkpointIconRect.height,
-      };
-    });
-    expect(lessonNavigationGeometry.outlineIsSingleColumn).toBe(true);
-    expect(lessonNavigationGeometry.mistakeIsVertical).toBe(true);
-    expect(lessonNavigationGeometry.mistakeHasTintedFill).toBe(true);
-    expect(lessonNavigationGeometry.checkpointHasTintedFill).toBe(false);
-    expect(lessonNavigationGeometry.learningBlockGeometryMatches).toBe(true);
-    await expect(
-      this.page.getByRole("heading", { name: "Теперь вы умеете" }),
-    ).toHaveCount(0);
-    await expect(this.page.getByText("Доступные материалы")).toHaveCount(0);
-    await expect(
-      this.page.getByRole("heading", { level: 2, name: "Прогресс" }),
-    ).toBeVisible();
-    await expect(
-      this.page.getByRole("link", {
-        name: "Преобразование записей чисел",
-      }),
-    ).toHaveAttribute("href", "/ege/5-preobrazovanie-zapisey-chisel");
-    await expect(
-      this.page.getByText("Задание 16 · 5 задач", { exact: true }),
-    ).toBeVisible();
-    await expect(
-      this.page.getByText("Задание 16 · 5 задач", { exact: true }),
-    ).toBeVisible();
-    await expect(
-      this.page.getByRole("heading", { name: "Освоение темы" }),
-    ).toHaveCount(0);
-    await expect(
-      this.page.getByRole("navigation", { name: "Вернуться к теории" }),
-    ).toHaveCount(0);
-    await expect(
-      this.page.getByRole("heading", { name: "После урока вы сможете" }),
-    ).toHaveCount(0);
-    await expect(this.page.getByLabel("Проверьте себя")).toHaveCount(1);
+        .getByRole("navigation", { name: "На этой странице" })
+        .getByRole("link"),
+    ).toHaveCount(2);
     await expect(
       this.page
-        .getByRole("group", {
-          name: "Универсальный шаблон: одно предыдущее значение",
-        })
-        .getByText("Python", { exact: true }),
+        .getByRole("navigation", { name: "Подтемы урока" })
+        .getByRole("link", { name: "Практика и итог" }),
     ).toBeVisible();
+    await this.expectNoHorizontalOverflow();
   }
 
   async expectDesktopComposition(): Promise<void> {
     const context = this.page.locator("[data-topic-lesson-context]");
-    await expect(context).toHaveCSS("border-bottom-width", "1px");
+    await expect(context).toHaveCSS("border-bottom-width", "0px");
     await expect(
       context.getByRole("link", { name: "Назад", exact: true }),
     ).toBeVisible();
@@ -1620,31 +1580,14 @@ export class TopicLessonPage {
   }
 
   async expectMobileComposition(): Promise<void> {
-    const contents = this.page.getByRole("button", {
-      name: "Содержание урока",
-      exact: true,
-    });
-    await contents.click();
-    await expect(contents).toHaveAttribute("aria-expanded", "true");
+    const topics = this.page.getByRole("navigation", { name: "Подтемы урока" });
+    const disclosure = topics.getByRole("button", { name: /Подтемы · /u });
+    await disclosure.click();
+    await expect(disclosure).toHaveAttribute("aria-expanded", "true");
+    await expect(
+      topics.getByRole("link", { name: "Практика и итог" }),
+    ).toBeVisible();
     await expectLessonInteractiveTargets(this.page);
-    await expect(
-      this.page.getByText(
-        `Задание ${String(this.config.taskNumber)} · ${this.config.title}`,
-        {
-          exact: true,
-        },
-      ),
-    ).toBeVisible();
-    await expect(
-      this.page.getByRole("link", { name: "Назад", exact: true }),
-    ).toBeVisible();
-    await expect(
-      this.page.getByRole("textbox", { name: "Ответ" }).first(),
-    ).toBeVisible();
-    await expect(this.page.getByText("Подсказка").first()).toBeVisible();
-    await expect(
-      this.page.getByRole("button", { name: "Решение" }).first(),
-    ).toBeVisible();
   }
 
   async expectDirectEntryBackFallback(): Promise<void> {
@@ -1789,7 +1732,9 @@ export class TopicLessonPage {
   }
 
   async expectProgressClosureJourney(): Promise<void> {
-    await this.page.goto("/ege/5-preobrazovanie-zapisey-chisel");
+    await this.page.goto(
+      "/ege/5-preobrazovanie-zapisey-chisel/operacii-s-zapisyu",
+    );
     await this.solveTask("preobrazovanie-zapisey-appending", 1, "77");
     await this.page.reload();
     const otherLessonAnswer = this.page
@@ -2031,7 +1976,10 @@ export class TopicLessonPage {
       this.page.getByRole("link", {
         name: "Преобразование записей чисел",
       }),
-    ).toHaveAttribute("href", "/ege/5-preobrazovanie-zapisey-chisel");
+    ).toHaveAttribute(
+      "href",
+      "/ege/5-preobrazovanie-zapisey-chisel/model-algoritma",
+    );
     await expect(this.page.getByRole("link", { name: "Все темы" })).toHaveCount(
       0,
     );

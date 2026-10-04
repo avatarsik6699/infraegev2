@@ -129,6 +129,12 @@
   padding: var(--space-1-5) var(--space-3) var(--space-3);
 }
 
+.progressSlot {
+  display: grid;
+  min-height: 4.5rem;
+  align-content: center;
+}
+
 .personalProgress {
   display: grid;
   gap: var(--space-1);
@@ -196,6 +202,10 @@
 }
 
 @media (scripting: none) {
+  .progressSlot {
+    min-height: 0;
+  }
+
   .personalProgress,
   .summaryProgress {
     visibility: hidden;

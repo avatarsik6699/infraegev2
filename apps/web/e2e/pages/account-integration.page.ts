@@ -4,7 +4,7 @@ export class AccountIntegrationPage {
   constructor(private readonly page: Page) {}
 
   async expectGuestCheckStaysTransient(): Promise<void> {
-    await this.page.goto("/ege/16-rekursiya#practice");
+    await this.page.goto("/ege/16-rekursiya/praktika");
     const panel = this.page.locator(
       '[data-practice-task="rekursiya-base-sequence"]',
     );
@@ -52,7 +52,7 @@ export class AccountIntegrationPage {
   }
 
   async expectTopicProgressSavedAndCourseContextSeparate(): Promise<void> {
-    await this.page.goto("/ege/16-rekursiya#practice");
+    await this.page.goto("/ege/16-rekursiya/praktika");
     const panel = this.page.locator(
       '[data-practice-task="rekursiya-base-sequence"]',
     );
@@ -63,9 +63,19 @@ export class AccountIntegrationPage {
     await expect(answer).toHaveAttribute("data-solved", "true");
 
     await this.page.goto("/courses/python");
+    const progress = this.page.getByRole("region", { name: "Ваш прогресс" });
+    const practiceMetric = progress
+      .getByRole("term")
+      .filter({ hasText: /^практика$/u });
+    await expect(practiceMetric).toBeVisible();
     await expect(
-      this.page.getByRole("progressbar", { name: "Решённые задачи курса" }),
-    ).toHaveAttribute("aria-valuenow", "0");
+      progress
+        .locator("dl > div")
+        .filter({
+          has: this.page.getByRole("term").filter({ hasText: /^практика$/u }),
+        })
+        .getByRole("definition"),
+    ).toHaveText("0 из 140");
   }
 
   async logout(): Promise<void> {

@@ -678,6 +678,13 @@ progress without reducing guest functionality or importing old browser progress.
 decisions may add manual completion, richer statistics and premium entitlements; those are not
 implemented by Change 140. Payment processing and paywall enforcement require separate design.
 
+Client redesign programme (2026-10-03): Changes 164 (design system and restyle), 167 (EGE subtopic
+pages), 168 (profile dashboard) and 169 (every page to the approved v5 mockups) are merged into
+local `main` but not pushed or deployed. Release is blocked until Change 170 finishes: e2e
+migration to the new URLs and screens, dev practice bank restore, lesson LCP and Lighthouse,
+architect-supplied illustrations in the reserved placeholders, the §11 release prerequisites, and
+then one release of the whole programme. See `docs/changes/170-redesign-release-readiness.md`.
+
 ## 10. Out of Scope
 
 Production deployment/host mutations in local work; deleting old volumes; payments;

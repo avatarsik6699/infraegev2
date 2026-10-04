@@ -39,11 +39,16 @@ export const TopicCatalogPage: React.FC = () => {
                 Всего тем: {catalog.totalTopics} · Доступно:{" "}
                 {catalog.publishedTopics} ·
               </span>
-              <span className={styles.summaryText} role="status">
-                {topicCatalogModel.summaryText(
-                  catalog.totalSolved,
-                  catalog.unavailable,
-                )}
+              <span className={styles.summaryStatus}>
+                <span className={styles.summaryReserve} aria-hidden="true">
+                  {topicCatalogModel.summaryText(null, true)}
+                </span>
+                <span className={styles.summaryText} role="status">
+                  {topicCatalogModel.summaryText(
+                    catalog.totalSolved,
+                    catalog.unavailable,
+                  )}
+                </span>
               </span>
               <Button
                 className={styles.retry}

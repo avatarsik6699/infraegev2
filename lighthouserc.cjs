@@ -47,7 +47,8 @@ module.exports = {
         `${origin}/ege`,
         `${origin}/courses`,
         `${origin}/courses/python`,
-        `${origin}/ege/16-rekursiya`,
+        `${origin}/ege/16-rekursiya/osnovy`,
+        `${origin}/courses/python/pervaya-programma`,
       ],
       chromePath,
       settings: {

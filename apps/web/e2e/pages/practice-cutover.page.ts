@@ -4,7 +4,7 @@ export class PracticeCutoverPage {
   constructor(private readonly page: Page) {}
 
   async openTopic(): Promise<void> {
-    await this.page.goto("/ege/16-rekursiya#practice");
+    await this.page.goto("/ege/16-rekursiya/praktika");
     const dismiss = this.page.getByRole("button", {
       name: "Не сейчас",
       exact: true,
@@ -141,10 +141,15 @@ export class PracticeCutoverPage {
     ).toHaveAccessibleName(
       "Прогресс: 0 из 140. Войти, чтобы сохранять прогресс",
     );
-    await expect(this.page.locator('[role="progressbar"]')).toHaveAttribute(
-      "aria-valuenow",
-      "0",
+    const moduleProgress = this.page.locator(
+      '[data-course-overview-page] [role="progressbar"]',
     );
+    await expect(moduleProgress).toHaveCount(9);
+    expect(
+      await moduleProgress.evaluateAll((bars) =>
+        bars.every((bar) => bar.getAttribute("aria-valuenow") === "0"),
+      ),
+    ).toBe(true);
     await this.page.goto("/courses");
     await expect(
       this.page

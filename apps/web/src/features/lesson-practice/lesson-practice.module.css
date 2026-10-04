@@ -500,6 +500,15 @@
 .catalogHelpActions button {
   min-width: 10rem;
 }
+.catalogHelpLabel {
+  display: inline-grid;
+}
+.catalogHelpLabel > span {
+  grid-area: 1 / 1;
+}
+.catalogHelpLabelReserve {
+  visibility: hidden;
+}
 .practiceForm[data-layout="compact"] .answerRow {
   margin-top: 0;
   align-items: start;
