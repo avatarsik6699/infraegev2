@@ -3,6 +3,10 @@ import type { CourseCatalogTypes } from "~/entities/course";
 import { ActionLink } from "~/shared/components/action-link";
 import { Badge } from "~/shared/components/badge";
 import { IllustrationPlaceholder } from "~/shared/components/illustration-placeholder";
+import {
+  hasCourseIllustration,
+  ObjectIllustration,
+} from "~/shared/components/object-illustration";
 import { Typography } from "~/shared/components/typography";
 import type { CourseCatalogPageTypes } from "../course-catalog-page.types";
 import { courseCatalogModel } from "../model/course-catalog-model";
@@ -21,7 +25,16 @@ export const CourseCatalogCard: React.FC<Props> = (props) => (
     data-course-status={props.entry.status}
     aria-disabled={props.entry.status === "planned" || undefined}
   >
-    <IllustrationPlaceholder className={styles.illustration} />
+    {props.entry.status === "published" &&
+    hasCourseIllustration(props.entry.id) ? (
+      <ObjectIllustration
+        course={props.entry.id}
+        wide
+        className={styles.illustration}
+      />
+    ) : (
+      <IllustrationPlaceholder className={styles.illustration} />
+    )}
     <div className={styles.cardContent}>
       <Typography.Title order={2} className={styles.cardTitle}>
         {props.entry.title}

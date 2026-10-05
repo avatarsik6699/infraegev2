@@ -1,7 +1,7 @@
 import { ChevronRight } from "lucide-react";
 import { topicCatalog, type TopicCatalogTypes } from "~/entities/topic-catalog";
 import { ActionLink } from "~/shared/components/action-link";
-import { IllustrationPlaceholder } from "~/shared/components/illustration-placeholder";
+import { ObjectIllustration } from "~/shared/components/object-illustration";
 import { Typography } from "~/shared/components/typography";
 import type { TopicCatalogPageTypes } from "../topic-catalog-page.types";
 import { topicCatalogModel } from "../model/topic-catalog-model";
@@ -32,7 +32,10 @@ export const TopicCatalogCard: React.FC<Props> = (props) => (
         {topicCatalog.formatTaskNumbers(props.entry.taskNumbers)}
       </span>
     </span>
-    <IllustrationPlaceholder className={styles.illustration} />
+    <ObjectIllustration
+      topic={props.entry.taskNumbers[0]}
+      className={styles.illustration}
+    />
     <div className={styles.cardContent}>
       <Typography.Title order={2} className={styles.cardTitle}>
         {props.entry.status === "published" ? (

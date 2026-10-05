@@ -134,9 +134,14 @@ describe("mini-course catalog", () => {
       expect(screen.queryByRole("searchbox")).toBeNull();
       expect(
         view.container.querySelectorAll(
-          "[data-course-card] [data-illustration-placeholder]",
+          '[data-course-card="python"] [data-object-illustration="course-python-wide"]',
         ),
-      ).toHaveLength(4);
+      ).toHaveLength(1);
+      expect(
+        view.container.querySelectorAll(
+          '[data-course-status="planned"] [data-illustration-placeholder]',
+        ),
+      ).toHaveLength(3);
       expect(
         view.container.querySelector("[data-course-summary]")?.textContent,
       ).toContain("Всего направлений: 4 · Доступно: 1 · Уроков: 28");

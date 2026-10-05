@@ -9,7 +9,7 @@ export class CourseCatalogPage {
     await expect(this.page.locator("[data-course-card]")).toHaveCount(4);
     const published = this.page.locator('[data-course-card="python"]');
     await expect(
-      published.locator("[data-illustration-placeholder]"),
+      published.locator('[data-object-illustration="course-python-wide"]'),
     ).toHaveCount(1);
     await expect(published.locator("p").first()).toBeVisible();
     await expect(published).toContainText("28 уроков");
@@ -172,7 +172,7 @@ export class CourseCatalogPage {
     ).not.toBe(
       await card.evaluate((el) => getComputedStyle(el).backgroundColor),
     );
-    const illustration = card.locator("[data-illustration-placeholder]");
+    const illustration = card.locator("[data-object-illustration]");
     expect((await illustration.boundingBox())!.width).toBeGreaterThanOrEqual(
       208,
     );
@@ -202,10 +202,10 @@ export class CourseCatalogPage {
         cards.map((card) => {
           const box = card.getBoundingClientRect();
           const illustration = card.querySelector<HTMLElement>(
-            "[data-illustration-placeholder]",
+            "[data-object-illustration], [data-illustration-placeholder]",
           );
           if (!illustration)
-            throw new Error("Course card has no illustration placeholder");
+            throw new Error("Course card has no illustration slot");
           const illustrationBox = illustration.getBoundingClientRect();
           return {
             x: box.x,

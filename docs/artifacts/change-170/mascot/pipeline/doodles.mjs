@@ -14,15 +14,18 @@ import { optimize } from "svgo";
 import { dense, inkDot, inkStroke, INK, polygon, rng } from "./pen.mjs";
 const SOFT = "#f8f8f6";
 const require = createRequire(import.meta.url);
-const fontFile = readFileSync(
-  require.resolve("@fontsource/caveat/files/caveat-latin-600-normal.woff"),
-);
-const caveat = opentype.parse(
-  fontFile.buffer.slice(
-    fontFile.byteOffset,
-    fontFile.byteOffset + fontFile.byteLength,
-  ),
-);
+const font = (subset) => {
+  const file = readFileSync(
+    require.resolve(
+      `@fontsource/caveat/files/caveat-${subset}-600-normal.woff`,
+    ),
+  );
+  return opentype.parse(
+    file.buffer.slice(file.byteOffset, file.byteOffset + file.byteLength),
+  );
+};
+const caveat = font("latin");
+const caveatCyrillic = font("cyrillic");
 
 // ---------- minimal SVG tree ----------
 
@@ -107,12 +110,14 @@ const blob = (g, cx, cy, rx, ry, r) =>
   el("path", { d: inkDot(cx, cy, rx, ry, r), fill: INK }, g);
 
 // Handwritten label as outlines: the site does not load Caveat.
-function txt(g, x, y, s, size = 22) {
-  const width = caveat.getAdvanceWidth(s, size);
+// Cyrillic labels come from the Cyrillic subset of the same font.
+function txt(g, x, y, s, size = 22, fill = INK) {
+  const face = /[\u0400-\u04ff]/.test(s) ? caveatCyrillic : caveat;
+  const width = face.getAdvanceWidth(s, size);
   // Own serialisation: toPathData(2) drops the separator before a zero
   // ("-17.780"), and svgo cuts the path at that point.
   const n = (v) => v.toFixed(2);
-  const d = caveat
+  const d = face
     .getPath(s, x - width / 2, y, size)
     .commands.map((c) =>
       c.type === "Z"
@@ -124,7 +129,7 @@ function txt(g, x, y, s, size = 22) {
             : `${c.type}${n(c.x)} ${n(c.y)}`,
     )
     .join("");
-  return el("path", { d, fill: INK }, g);
+  return el("path", { d, fill }, g);
 }
 
 // ---------- objects (drawn around a local origin) ----------
@@ -424,7 +429,8 @@ const MOTION =
   "@keyframes twinkle{50%{opacity:.25}}</style>";
 // ---------- output ----------
 
-export function writeScene(out, name, root) {
+// A static picture (`motion: false`) carries no motion style.
+export function writeScene(out, name, root, { motion = true } = {}) {
   mkdirSync(out, { recursive: true });
   // Groups carry the motion classes and must not be collapsed into their
   // transformed children: a CSS transform would replace the placement.
@@ -443,9 +449,9 @@ export function writeScene(out, name, root) {
         },
       },
     ],
-  }).data.replace(/^(<svg[^>]*>)/, `$1${MOTION}`);
+  }).data.replace(/^(<svg[^>]*>)/, `$1${motion ? MOTION : ""}`);
   writeFileSync(join(out, `${name}.svg`), svg + "\n");
   console.log(`${name}.svg ${(svg.length / 1024).toFixed(1)} KB`);
 }
 
-export { at, el, P, rng };
+export { at, blob, el, fillShape, ink, line, oval, P, rectPts, rng, SOFT, txt };

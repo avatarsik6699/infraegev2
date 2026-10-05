@@ -1,0 +1,7 @@
+/* Object illustration: baked SVG. Zero specificity, so the slot class of the
+   page (size, fit) always wins, whatever order the stylesheets arrive in. */
+:where(.root) {
+  display: block;
+  min-width: 0;
+  height: auto;
+}

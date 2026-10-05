@@ -11,12 +11,10 @@
   align-items: center;
 }
 
-/* The one pastel plate on this page (DESIGN.md › The Cover Rule). */
+/* Supports the course summary, never outweighs it: about a third of the
+   head, no plate behind it. */
 .illustration {
-  width: min(32rem, 38vw);
-  aspect-ratio: 3 / 2;
-  border-radius: var(--radius-tile);
-  background: var(--color-plate-sky);
+  width: min(24rem, 30vw);
 }
 
 .courseSummary {

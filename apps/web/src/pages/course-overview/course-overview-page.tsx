@@ -1,4 +1,7 @@
-import { IllustrationPlaceholder } from "~/shared/components/illustration-placeholder";
+import {
+  hasCourseIllustration,
+  ObjectIllustration,
+} from "~/shared/components/object-illustration";
 import { PageContainer } from "~/shared/components/page-container";
 import { PageHead } from "~/shared/components/page-head";
 import { PublicFooter } from "~/widgets/public-footer";
@@ -24,7 +27,14 @@ export const CourseOverviewPage: React.FC<CourseOverviewPageTypes.Props> = (
       <main id="main-content" className={styles.main}>
         <PageHead
           className={styles.head}
-          aside={<IllustrationPlaceholder className={styles.illustration} />}
+          aside={
+            hasCourseIllustration(props.course.id) ? (
+              <ObjectIllustration
+                course={props.course.id}
+                className={styles.illustration}
+              />
+            ) : undefined
+          }
         >
           <div className={styles.courseSummary} data-course-summary>
             <CourseOverviewIntro course={props.course} overview={overview} />

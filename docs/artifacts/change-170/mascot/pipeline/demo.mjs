@@ -2,6 +2,7 @@
 // character sheet and the baked scenes exactly as the site embeds them.
 //
 // Usage: node demo.mjs <poses-dir> <scenes-dir> <out-file>
+// `{{scene:name}}` reads <scenes-dir>/name.svg; `../topics/topic-5` reaches the topic files.
 import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { basename, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -20,7 +21,7 @@ const page = read(here, "demo.template.html")
   .replace("{{poses}}", () => JSON.stringify(poses))
   // Scenes go in as <img> sources, exactly as the site loads them.
   .replace(
-    /\{\{scene:([\w-]+)\}\}/g,
+    /\{\{scene:([\w./-]+)\}\}/g,
     (_, name) =>
       "data:image/svg+xml;base64," +
       Buffer.from(read(scenesDir, `${name}.svg`)).toString("base64"),

@@ -137,7 +137,9 @@
 }
 
 .illustration {
+  width: 100%;
   height: 4.5rem;
+  object-fit: contain;
 }
 
 .cardContent {

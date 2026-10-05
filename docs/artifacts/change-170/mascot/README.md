@@ -13,8 +13,10 @@
   - `doodles.mjs` — общие рисованные предметы, анимация и запись сцены;
   - `scenes.mjs` — сцены, собранные кодом из поз (hero);
   - `trace_prep.py`, `trace.mjs` — сцены из PNG архитектора (вход, регистрация, 404, ошибка,
-    пустой поиск): трассировка, лицо пером, мелкие отдельные детали мерцают,
+    пустой поиск, курс Python): трассировка, лицо пером, мелкие отдельные детали мерцают,
     вокруг рассыпаны звёздочки и кружки;
+  - `topics.mjs` — предметные иллюстрации 25 тем ЕГЭ, нарисованные кодом общим пером
+    (`node topics.mjs ../../../../../apps/web/public/images/topics`);
   - `demo.mjs`, `demo.template.html` — демо-страница.
 
 ## Пересборка поз
@@ -44,6 +46,8 @@ python3 trace_prep.py $R/ill-register.png /tmp/mascot-scenes/register face=575,6
 python3 trace_prep.py $R/404-1200x375.png /tmp/mascot-scenes/not-found crop=0,0,1200,375 face=450,202,516,253 move=none
 python3 trace_prep.py $R/server-error-1200x375.png /tmp/mascot-scenes/error crop=0,0,1200,375 face=267,218,337,256 move=430,20,920,200
 python3 trace_prep.py $R/empty-search-1400x350.png /tmp/mascot-scenes/empty-search crop=80,20,1340,320 face=636,174,692,214 move=1040,250,1100,290
+python3 trace_prep.py $R/python_page_card.png /tmp/mascot-scenes/course-python crop=0,0,1536,1024 move=840,580,920,645
+python3 trace_prep.py $R/python_wide_card.png /tmp/mascot-scenes/course-python-wide move=1180,420,1300,500
 node trace.mjs /tmp/mascot-scenes ../../../../../apps/web/public/images/mascot [сцена...]
 ```
 
@@ -53,7 +57,8 @@ node trace.mjs /tmp/mascot-scenes ../../../../../apps/web/public/images/mascot [
 молнии над сервером) мерцают; деталь, внутри которой что-то есть (чекбокс с галочкой), остаётся
 частью рисунка. `move` ограничивает мерцание рамками (`x0,y0,x1,y1/…`) или выключает его
 (`none`): пунктир следов должен стоять. Сцены для шапок каталогов (`/ege`, `/courses`,
-`/practice`) пробовали и убрали: в шапке они спорили с заголовком. Вокруг рисунка пером дорисованы
+`/practice`) пробовали и убрали: в шапке они спорили с заголовком. Картинки курса Python — не маскот: лицо змеи не перерисовывается, файлы ложатся в
+`images/courses` (`folder` в `SCENES`). Вокруг рисунка пером дорисованы
 только мелкие абстрактные метки (`floaters` в `trace.mjs`): звёздочки и кружки, разнесённые по всей
 площади кадра, а не вокруг маскота. Предметы по смыслу (конверт, щит, значок) пробовали и
 отказались: рядом с основным рисунком они неуместны.

@@ -150,26 +150,12 @@
   background: var(--color-surface);
 }
 
+/* The topic illustration on the white card, no plate behind it. */
 .topic .topicPlate {
-  position: relative;
+  width: 100%;
   height: 8.5rem;
-  border-radius: 0;
-}
-
-.topic:nth-child(4n + 1) .topicPlate {
-  background: var(--color-plate-sky);
-}
-
-.topic:nth-child(4n + 2) .topicPlate {
-  background: var(--color-plate-sage);
-}
-
-.topic:nth-child(4n + 3) .topicPlate {
-  background: var(--color-plate-lilac);
-}
-
-.topic:nth-child(4n + 4) .topicPlate {
-  background: var(--color-plate-apricot);
+  padding: var(--space-1-5) var(--space-2) 0;
+  object-fit: contain;
 }
 
 .topicBody {
@@ -246,10 +232,7 @@
 }
 
 .coursePlate {
-  position: relative;
-  aspect-ratio: 3 / 2;
-  border-radius: var(--radius-surface);
-  background: var(--color-surface);
+  width: 100%;
 }
 
 @media (max-width: 60rem) {

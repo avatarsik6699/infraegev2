@@ -2,7 +2,10 @@ import { BookOpen, Code2, ListChecks } from "lucide-react";
 import { courseCatalog } from "~/entities/course";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { ActionLink } from "~/shared/components/action-link";
-import { IllustrationPlaceholder } from "~/shared/components/illustration-placeholder";
+import {
+  hasCourseIllustration,
+  ObjectIllustration,
+} from "~/shared/components/object-illustration";
 import { MascotScene } from "~/shared/components/mascot-scene";
 import { PageContainer } from "~/shared/components/page-container";
 import { PageHead } from "~/shared/components/page-head";
@@ -141,7 +144,10 @@ export const FoundationPage: React.FC<FoundationPageTypes.Props> = (props) => (
               .slice(0, foundation.featuredTopicCount)
               .map((topic) => (
                 <li key={topic.id} className={styles.topic}>
-                  <IllustrationPlaceholder className={styles.topicPlate} />
+                  <ObjectIllustration
+                    topic={topic.taskNumbers[0]}
+                    className={styles.topicPlate}
+                  />
                   <div className={styles.topicBody}>
                     <span className={styles.topicNumber}>
                       {topicCatalog.formatTaskNumbers(topic.taskNumbers)}
@@ -209,7 +215,12 @@ export const FoundationPage: React.FC<FoundationPageTypes.Props> = (props) => (
                 Открыть курс
               </ActionLink>
             </div>
-            <IllustrationPlaceholder className={styles.coursePlate} />
+            {hasCourseIllustration(foundation.course.id) ? (
+              <ObjectIllustration
+                course={foundation.course.id}
+                className={styles.coursePlate}
+              />
+            ) : null}
           </section>
         ) : null}
       </PageContainer>

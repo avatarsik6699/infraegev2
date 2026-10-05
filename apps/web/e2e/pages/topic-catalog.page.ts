@@ -319,12 +319,14 @@ export class TopicCatalogPage {
   }
 
   private async expectIllustrations() {
-    // Change 169: catalog drawings are retired; every row keeps a neutral placeholder.
+    // Change 170: every row, published or planned, has its topic illustration.
     const rows = this.page.locator("[data-topic-card]");
-    await expect(rows.locator("[data-illustration-placeholder]")).toHaveCount(
+    await expect(rows.locator("img[data-object-illustration]")).toHaveCount(
       await rows.count(),
     );
-    await expect(rows.locator("img")).toHaveCount(0);
+    await expect(rows.locator("[data-illustration-placeholder]")).toHaveCount(
+      0,
+    );
   }
 
   async expectTextZoom() {

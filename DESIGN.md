@@ -287,8 +287,11 @@ border or fill, not elevation.
 
 Small, calm corners: 6px on controls (buttons, inputs, segmented controls), 12px on cards and
 plates, 14px on home path tiles, full pills for chips and badges. Borders are 1px hairlines.
-Illustrations are hand-drawn monochrome lines with one orange accent, on pastel (home) or soft
-neutral (elsewhere) plates. Mascot scenes have no plate: they sit directly on the page head grid.
+Illustrations are hand-drawn monochrome lines with one orange accent and sit directly on the
+surface, no plate behind them: every EGE topic has its object illustration (home cards and `/ege`
+rows, dimmed for planned topics), the Python course its own picture (home block, `/courses`
+card, `/courses/python` head at about a third of the head width). They are shown by the shared
+`ObjectIllustration`, mascot scenes by `MascotScene`. Planned courses keep a neutral placeholder.
 
 ## Components
 
