@@ -281,7 +281,11 @@ lesson subtopic gets a 1px ring.
 
 ### Named Rules
 **The Flat Page Rule.** Cards, tiles and plates never cast shadows at rest; hover changes the
-border or fill, not elevation.
+border or fill, not elevation. One exception, set by the architect (2026-10-05): the home page is
+the cover, and its cards (paths, topics, the try card, the course card) are raised — a soft
+gradient of their own tone, `--shadow-cover`, a light top edge and a sheen from the top-left
+corner; hover lifts them by 2px (`--shadow-cover-raised`, no lift under reduced motion). No other
+page uses these tokens.
 
 ## Shapes
 

@@ -1,4 +1,4 @@
-/* Home is the cover: the only page with several pastel plates (DESIGN.md › The Cover Rule). */
+/* Home is the cover: the only page with several pastel plates and raised cards (DESIGN.md › The Cover Rule). */
 .page {
   composes: pageFrame from "../../shared/styles/patterns.module.css";
   min-width: 0;
@@ -16,12 +16,14 @@
   letter-spacing: -0.03em;
 }
 
+/* F9/F18: an ink brush stroke under the phrase — pressed start, torn edges,
+   a dry tail; repeated per line when the phrase wraps. The SVG carries the
+   brand orange (--theme-brand-orange): an image cannot read tokens. */
 .highlight {
-  background: linear-gradient(
-    transparent 88%,
-    var(--color-brand-orange) 88% 95%,
-    transparent 95%
-  );
+  padding-bottom: 0.1em;
+  background: url("./assets/ink-underline.svg") left bottom / 100% 0.5em
+    no-repeat;
+  box-decoration-break: clone;
 }
 
 .heroLead[data-variant] {
@@ -37,26 +39,21 @@
   margin-top: var(--space-2);
 }
 
+/* F10: plain secondary text, a quiet footnote to the hero. */
 .facts {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-1);
+  gap: 0 var(--space-1);
   margin: var(--space-1) 0 0;
   padding: 0;
+  color: var(--color-text-soft);
+  font-size: var(--text-sm);
   list-style: none;
 }
 
-.facts li {
-  padding: var(--space-0-5) var(--space-1-5);
-  border: 1px solid var(--color-rule);
-  border-radius: var(--radius-pill);
-  background: var(--color-surface);
-  color: var(--color-text-soft);
-  font-size: var(--text-sm);
-}
-
-.facts b {
-  color: var(--color-text);
+.facts li + li::before {
+  margin-right: var(--space-1);
+  content: "·";
 }
 
 .heroScene {
@@ -64,16 +61,77 @@
   aspect-ratio: 6 / 5;
 }
 
+/* F15: every home card is raised: a soft gradient of its tone, a lift and
+   a sheen from the top-left corner. Only the home page does this. */
+.path,
+.topic,
+.tryTask,
+.course {
+  --tone: var(--color-surface);
+  position: relative;
+  isolation: isolate;
+  border: 1px solid color-mix(in oklab, var(--tone), var(--color-text) 7%);
+  background: linear-gradient(
+    155deg,
+    color-mix(in oklab, var(--tone), var(--color-surface) 60%) 0%,
+    var(--tone) 55%,
+    color-mix(in oklab, var(--tone), var(--color-text) 3%) 100%
+  );
+  box-shadow: var(--shadow-cover);
+  transition:
+    box-shadow var(--motion-duration) var(--motion-easing),
+    transform var(--motion-duration) var(--motion-easing);
+}
+
+.path::before,
+.topic::before,
+.tryTask::before,
+.course::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    120% 70% at 0% 0%,
+    var(--cover-sheen),
+    transparent 60%
+  );
+  content: "";
+  pointer-events: none;
+}
+
+.path:is(:hover, :focus-within),
+.topic:is(:hover, :focus-within),
+.course:is(:hover, :focus-within) {
+  box-shadow: var(--shadow-cover-raised);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .path:is(:hover, :focus-within),
+  .topic:is(:hover, :focus-within),
+  .course:is(:hover, :focus-within) {
+    transform: translateY(-2px);
+  }
+}
+
 .content {
+  --section-gap: var(--space-6);
+
   display: grid;
-  gap: var(--space-6);
+  gap: var(--section-gap);
   padding-block: var(--space-5) var(--space-6);
 }
 
-.section {
+.section,
+.topicsSection {
   display: grid;
   gap: var(--space-1);
   min-width: 0;
+}
+
+/* F16: the course card follows the topic cards at the cards' own gap. */
+.topicsSection + .course {
+  margin-top: calc(var(--space-2) - var(--section-gap));
 }
 
 .sectionLead[data-variant] {
@@ -95,7 +153,6 @@
 }
 
 .path {
-  position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
@@ -105,21 +162,29 @@
 }
 
 .path[data-tone="sage"] {
-  background: var(--color-plate-sage);
+  --tone: var(--color-plate-sage);
 }
 
 .path[data-tone="sky"] {
-  background: var(--color-plate-sky);
+  --tone: var(--color-plate-sky);
 }
 
 .path[data-tone="lilac"] {
-  background: var(--color-plate-lilac);
+  --tone: var(--color-plate-lilac);
+}
+
+/* F11: the title leads, its icon sits at the right end of the same row. */
+.pathHead {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+  justify-content: space-between;
 }
 
 .pathIcon {
-  width: 2.25rem;
-  height: 2.25rem;
-  margin-bottom: var(--space-1);
+  flex: none;
+  width: 2rem;
+  height: 2rem;
   stroke-width: 1.6;
 }
 
@@ -137,17 +202,26 @@
   margin-top: auto;
 }
 
+/* F12: asymmetric grid — the first topic large across two rows, two compact
+   ones beside it, the fourth wide underneath with its picture on the left. */
 .topics {
-  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 1fr);
 }
 
 .topic {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border: 1px solid var(--color-rule);
   border-radius: var(--radius-surface);
-  background: var(--color-surface);
+}
+
+.topic[data-layout="feature"] {
+  grid-row: span 2;
+}
+
+.topic[data-layout="wide"] {
+  grid-column: span 2;
+  flex-direction: row;
 }
 
 /* The topic illustration on the white card, no plate behind it. */
@@ -156,6 +230,30 @@
   height: 8.5rem;
   padding: var(--space-1-5) var(--space-2) 0;
   object-fit: contain;
+}
+
+.topic[data-layout="feature"] .topicPlate {
+  height: 15rem;
+  padding: var(--space-3) var(--space-3) 0;
+}
+
+.topic[data-layout="wide"] .topicPlate {
+  flex: 0 0 38%;
+  height: auto;
+  min-height: 9rem;
+  padding: var(--space-2) 0 var(--space-2) var(--space-2);
+}
+
+.topic[data-layout="feature"] .topicBody {
+  padding: var(--space-3);
+}
+
+.topic[data-layout="feature"] .topicTitle[data-order] {
+  font-size: var(--text-2xl);
+}
+
+.topic[data-layout="feature"] .topicSummary[data-variant] {
+  font-size: var(--text-base);
 }
 
 .topicBody {
@@ -186,14 +284,12 @@
   margin-top: auto;
 }
 
+/* F13: no plate behind the block; the task itself is the card. */
 .try {
   display: grid;
   grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
   gap: var(--space-4);
-  align-items: start;
-  padding: var(--space-4);
-  border-radius: var(--radius-tile);
-  background: var(--color-surface-quiet);
+  align-items: center;
 }
 
 .tryCopy {
@@ -202,21 +298,22 @@
   justify-items: start;
 }
 
+/* F17: no clipping, the walkthrough's confetti flies past the card edges. */
 .tryTask {
   min-width: 0;
   padding: var(--space-3);
-  border-radius: var(--radius-surface);
-  background: var(--color-surface);
+  border-radius: var(--radius-tile);
 }
 
+/* F16: a compact neutral card, like the topics; the picture carries the
+   colour (an own apricot tone was tried and rejected, 2026-10-05). */
 .course {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: var(--space-4);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 20rem);
+  gap: var(--space-3);
   align-items: center;
-  padding: var(--space-4);
+  padding: var(--space-3) var(--space-4);
   border-radius: var(--radius-tile);
-  background: var(--color-plate-sky);
 }
 
 .courseCopy {
@@ -236,6 +333,19 @@
 }
 
 @media (max-width: 60rem) {
+  .topics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .topic[data-layout="feature"] {
+    grid-row: auto;
+    grid-column: span 2;
+  }
+
+  .topic[data-layout="feature"] .topicPlate {
+    height: 11rem;
+  }
+
   /* The scene would wrap under the copy at a reduced size; a lazy hidden image is never fetched. */
   .heroScene {
     display: none;
@@ -245,15 +355,35 @@
   .course {
     grid-template-columns: minmax(0, 1fr);
   }
+
+  .coursePlate {
+    justify-self: center;
+    max-width: 28rem;
+  }
 }
 
 @media (max-width: 44rem) {
   .content {
-    gap: var(--space-5);
+    --section-gap: var(--space-5);
+
     padding-block: var(--space-4) var(--space-5);
   }
 
-  .try,
+  .topics {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .topic[data-layout] {
+    grid-column: auto;
+    flex-direction: column;
+  }
+
+  .topic[data-layout] .topicPlate {
+    flex: none;
+    height: 8.5rem;
+    padding: var(--space-1-5) var(--space-2) 0;
+  }
+
   .course {
     padding: var(--space-3) var(--space-2);
   }

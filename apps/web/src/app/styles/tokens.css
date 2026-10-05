@@ -287,6 +287,16 @@
   --shadow-control: none;
   --shadow-overlay: 0 1.125rem 3.125rem var(--theme-overlay-shadow);
   --shadow-popover: 0 0.5rem 1.75rem var(--theme-popover-shadow);
+  /* Home cover cards (DESIGN.md › The Cover Rule): raised, with a sheen. */
+  --shadow-cover:
+    0 1px 2px var(--theme-cover-shadow-near),
+    0 1rem 2rem -1.25rem var(--theme-cover-shadow-far),
+    inset 0 1px 0 var(--theme-cover-highlight);
+  --shadow-cover-raised:
+    0 2px 4px var(--theme-cover-shadow-near),
+    0 1.5rem 2.75rem -1.25rem var(--theme-cover-shadow-far),
+    inset 0 1px 0 var(--theme-cover-highlight);
+  --cover-sheen: var(--theme-cover-highlight);
 
   --motion-duration: var(--theme-motion-duration);
   --motion-easing: var(--theme-motion-easing);

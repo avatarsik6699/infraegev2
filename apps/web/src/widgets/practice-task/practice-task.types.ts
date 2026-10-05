@@ -8,7 +8,6 @@ export namespace PracticeTaskWidgetTypes {
     onRefresh: () => Promise<unknown>;
     active?: boolean;
     topicHeading?: string;
-    /** `embed`: compact solving inside another page (home try block). */
-    presentation?: "catalog" | "detail" | "embed";
+    presentation?: "catalog" | "detail";
   };
 }

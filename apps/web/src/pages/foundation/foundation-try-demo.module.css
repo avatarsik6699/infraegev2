@@ -1,0 +1,169 @@
+/* F13: the walkthrough card on the home page (foundation-try-demo.tsx). */
+.root {
+  position: relative;
+}
+
+.task {
+  position: relative;
+  display: grid;
+  gap: var(--space-1-5);
+}
+
+.kicker[data-variant] {
+  color: var(--color-text-soft);
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+
+.statement[data-variant] {
+  margin: 0;
+  font-size: var(--text-lg);
+  line-height: 1.6;
+}
+
+.statement code {
+  font-family: var(--font-data);
+  font-size: var(--text-inline-code);
+}
+
+.row {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  align-items: center;
+}
+
+.field {
+  display: inline-flex;
+  flex: 1 1 12rem;
+  gap: var(--space-1);
+  align-items: center;
+  justify-content: space-between;
+  min-height: 2.75rem;
+  padding: 0 var(--space-1-5);
+  border: 1px solid var(--color-rule-strong);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  font-family: var(--font-data);
+  font-size: var(--text-lg);
+  transition:
+    border-color var(--motion-duration) var(--motion-easing),
+    background-color var(--motion-duration) var(--motion-easing),
+    box-shadow var(--motion-duration) var(--motion-easing);
+}
+
+.field[data-active] {
+  border-color: var(--color-text);
+}
+
+.field[data-correct] {
+  border-color: var(--color-success);
+  background: var(--color-success-soft);
+  box-shadow: 0 0 0 3px var(--color-success-soft);
+}
+
+.placeholder {
+  color: var(--color-muted);
+  font-family: var(--font-ui);
+  font-size: var(--text-base);
+}
+
+.check {
+  color: var(--color-success);
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-control);
+  background: var(--color-text);
+  color: var(--color-surface);
+  font-size: var(--text-control);
+  font-weight: 600;
+  transition: transform 120ms var(--motion-easing);
+}
+
+.button[data-pressed] {
+  transform: scale(0.95);
+}
+
+.cursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  fill: var(--color-text);
+  stroke: var(--color-surface);
+  stroke-width: 1.5;
+  pointer-events: none;
+  transition:
+    transform 650ms cubic-bezier(0.45, 0, 0.2, 1),
+    opacity var(--motion-duration) var(--motion-easing);
+}
+
+.cursor[data-hidden] {
+  opacity: 0;
+}
+
+/* Confetti bursts from the middle of the button. */
+.confetti {
+  position: absolute;
+  top: 50%;
+  right: 3.5rem;
+  pointer-events: none;
+}
+
+.confetti span {
+  position: absolute;
+  width: 7px;
+  height: 11px;
+  border-radius: 2px;
+  opacity: 0;
+}
+
+.confetti span[data-tone="orange"] {
+  background: var(--color-brand-orange);
+}
+
+.confetti span[data-tone="sky"] {
+  background: var(--color-info);
+}
+
+.confetti span[data-tone="sage"] {
+  background: var(--color-success);
+}
+
+.confetti span[data-tone="lilac"] {
+  background: var(--color-plate-lilac);
+  box-shadow: inset 0 0 0 1px var(--color-rule-strong);
+}
+
+.confetti span[data-tone="ink"] {
+  background: var(--color-text);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .confetti[data-burst] span {
+    animation: burst 1100ms var(--delay) cubic-bezier(0.2, 0.7, 0.3, 1) both;
+  }
+}
+
+@keyframes burst {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0deg) scale(0.6);
+  }
+
+  70% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(var(--x), calc(var(--y) + 40px)) rotate(var(--turn))
+      scale(1);
+  }
+}
