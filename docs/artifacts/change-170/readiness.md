@@ -136,3 +136,32 @@ LCP 706 ms (the scene is the LCP element), CLS 0.001. Real Chrome at 1440 px: sc
 animates; reduced motion stops all three layers; at 959 px and below the scene is hidden, from
 961 px it sits beside the copy; no horizontal overflow at 390–1440 px.
 
+
+## Pre-release verification (T4, 2026-10-07)
+
+Candidate `309020e` against the published `origin/main` `e0d433f` (28 commits, frontend, docs,
+nginx auxiliary pages and the dev Compose file; no API, migration or application dependency
+change). Production health reports `e0d433f`.
+
+- Static: format, web/tooling/shell lint with all verifiers, typecheck, 336 unit tests, content
+  asset tests and `validate:content`, nginx auxiliary-page, lesson-media, web-image, cleanup,
+  Lighthouse-script and dev-lifecycle contracts — all pass.
+- Production build and prerender crawl pass (one Vite PostCSS `from` warning; the build config
+  and dependencies are unchanged since the published release).
+- Full frontend E2E: 196/196. `test:layout` against the fresh build with a seeded local API
+  (`API_INTERNAL_URL`): 29/29 after F59 (a contract-obsolete solution-heading expectation).
+- Pre-push secrets scan of the 27-commit range: no leaks. Changed dependencies: none in release
+  manifests after F60 (the mascot pipeline manifest is outside the pnpm workspace).
+- Six-route Lighthouse medians (three runs each, unchanged budgets), all assertions pass:
+
+| Route | LCP, ms | CLS | TBT, ms | Accessibility | SEO |
+|---|---:|---:|---:|---:|---:|
+| `/` | 3632 | 0 | 0 | 1 | 1 |
+| `/ege` | 3476 | 0 | 0 | 1 | 1 |
+| `/courses` | 3548 | 0 | 0 | 1 | 1 |
+| `/courses/python` | 3463 | 0 | 0 | 1 | 1 |
+| `/ege/16-rekursiya/osnovy` | 3696 | 0 | 0 | 1 | 1 |
+| `/courses/python/pervaya-programma` | 3627 | 0 | 32 | 1 | 1 |
+
+Not run locally by design: published-image scan (after push), production Compose render and the
+first account-schema cutover rehearsal (no migration in this range). T1 stays open.
