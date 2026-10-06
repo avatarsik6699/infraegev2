@@ -50,6 +50,39 @@
   flex: 0 0 auto;
 }
 
+/* F24: the same title, lead and meta on /ege, /courses, /courses/python
+   and /practice. */
+.copy:has(> .heading) {
+  gap: var(--space-3);
+}
+
+.heading {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+}
+
+.heading .title[data-order] {
+  max-width: 22ch;
+  font-size: var(--text-3xl);
+}
+
+.heading .lead[data-variant] {
+  max-width: 40rem;
+}
+
+.meta {
+  display: grid;
+  gap: var(--space-0-5);
+  align-items: baseline;
+  margin-top: var(--space-0-5);
+  color: var(--color-muted);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+}
+
 @media (max-width: 44rem) {
   .inner {
     padding-block: var(--space-3);

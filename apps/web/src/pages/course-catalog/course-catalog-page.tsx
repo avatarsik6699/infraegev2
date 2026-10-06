@@ -2,7 +2,6 @@ import { courseCatalog } from "~/entities/course";
 import { useAccountSession } from "~/features/account";
 import { PageContainer } from "~/shared/components/page-container";
 import { PageHead } from "~/shared/components/page-head";
-import { Typography } from "~/shared/components/typography";
 import { PublicFooter } from "~/widgets/public-footer";
 import { PublicHeader } from "~/widgets/public-header";
 import { CourseCatalogCard } from "./components/course-catalog-card";
@@ -28,18 +27,11 @@ export const CourseCatalogPage: React.FC<CourseCatalogPageTypes.Props> = (
     <div className={styles.page} data-course-catalog-page>
       <PublicHeader activeSection="courses" />
       <main id="main-content" className={styles.root}>
-        <PageHead>
-          <header className={styles.catalogHeading}>
-            <Typography.Title
-              id="course-catalog-heading"
-              order={1}
-              className={styles.heading}
-            >
-              Мини-курсы
-            </Typography.Title>
-            <Typography.Text className={styles.catalogLead}>
-              Навыки, которые остаются после экзамена.
-            </Typography.Text>
+        <PageHead
+          title="Мини-курсы"
+          titleId="course-catalog-heading"
+          lead="Навыки, которые остаются после экзамена."
+          meta={
             <div className={styles.summary} data-course-summary>
               <span>
                 Всего направлений: {courseCatalog.entries.length} · Доступно:{" "}
@@ -49,8 +41,8 @@ export const CourseCatalogPage: React.FC<CourseCatalogPageTypes.Props> = (
                 {summaryProgress}
               </span>
             </div>
-          </header>
-        </PageHead>
+          }
+        />
         <PageContainer
           className={styles.catalogSection}
           component="section"

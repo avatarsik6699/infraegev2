@@ -10,23 +10,6 @@ type Props = {
   overview: CourseOverviewPageTypes.Model;
 };
 
-export const CourseOverviewIntro: React.FC<Props> = (props) => (
-  <header className={styles.intro}>
-    <Typography.Text variant="interface" className={styles.eyebrow}>
-      Мини-курс
-      {props.overview.level
-        ? ` · ${props.overview.level.toLocaleLowerCase("ru")} уровень`
-        : ""}
-    </Typography.Text>
-    <Typography.Title order={1} className={styles.title}>
-      {props.course.title}
-    </Typography.Title>
-    <Typography.Text variant="lead" className={styles.summary}>
-      {props.course.summary}
-    </Typography.Text>
-  </header>
-);
-
 export const CourseOverviewActions: React.FC<Props> = (props) => (
   <div className={styles.actions}>
     <CourseOverviewAction

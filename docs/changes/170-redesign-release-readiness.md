@@ -80,8 +80,8 @@ the architect's untracked work).
 - [x] `F21` Confirmation dialogs close on overlay click and Escape (Base UI `AlertDialog` forbids pointer dismissal) (§7) — _Depends on:_ —
 - [x] `F22` Filled danger button for the lesson progress reset dialog; account actions keep the outlined style (§7) — _Depends on:_ —
 - [x] `F23` Selected items never reflow: no weight change on current rail/outline items, reserved space for checks in «Тема» and selects (§3, §7) — _Depends on:_ —
-- [ ] `F24` One page head for `/ege`, `/courses`, `/courses/python`, `/practice`: same title, lead, meta sizes and gaps (§1) — _Depends on:_ —
-- [ ] `F25` `/ege`: no column headings; compact rows; «Все темы» in task order 1–27; the ФИПИ source note moves into the head meta (§2) — _Depends on:_ F19, F24
+- [x] `F24` One page head for `/ege`, `/courses`, `/courses/python`, `/practice`: same title, lead, meta sizes and gaps (§1) — _Depends on:_ —
+- [x] `F25` `/ege`: no column headings; compact rows; «Все темы» in task order 1–27; the ФИПИ source note moves into the head meta (§2) — _Depends on:_ F19, F24
 - [ ] `F26` `/practice` toolbar: «Сложность» left of «Сортировка», no overlap with «Тема» (§3) — _Depends on:_ —
 - [ ] `F27` «Тема» filter audit: whole search row focuses, focus does not stick, no shift on check, one font size (§3) — _Depends on:_ F23
 - [ ] `F28` Filter chips at the mockup size; «Сбросить всё» matches them (§3) — _Depends on:_ —

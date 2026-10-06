@@ -12,31 +12,15 @@
   padding-block: var(--space-3) var(--space-6);
 }
 
-.catalogHeading {
-  display: grid;
-  gap: var(--space-1);
-  margin: 0;
-}
-
-.heading[data-order] {
-  font-size: var(--text-3xl);
-}
-
-.catalogLead {
-  max-width: 65ch;
-  color: var(--color-text-soft);
-  font-size: var(--text-lg);
-}
-
 .summary {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  column-gap: var(--space-3);
-  color: var(--color-muted);
-  font-size: var(--text-sm);
-  line-height: 1.5;
-  font-variant-numeric: tabular-nums;
+  column-gap: 0.35em;
+}
+
+.summaryProgress::before {
+  content: "· ";
 }
 
 .summaryProgress {

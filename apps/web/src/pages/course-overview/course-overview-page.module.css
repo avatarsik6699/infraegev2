@@ -7,10 +7,6 @@
   min-width: 0;
 }
 
-.head > div {
-  align-items: center;
-}
-
 /* Supports the course summary, never outweighs it: about a third of the
    head, no plate behind it. */
 .illustration {
@@ -20,32 +16,7 @@
 .courseSummary {
   display: grid;
   gap: var(--space-3);
-  align-content: start;
   min-width: 0;
-  padding-block: var(--space-2);
-}
-
-.intro {
-  display: grid;
-  gap: var(--space-1-5);
-  min-width: 0;
-}
-
-.eyebrow {
-  color: var(--color-text);
-  font-size: var(--text-sm);
-  font-weight: 600;
-}
-
-.title[data-order] {
-  max-width: 22ch;
-  font-size: var(--text-3xl);
-}
-
-.summary {
-  max-width: 34rem;
-  color: var(--color-text-soft);
-  line-height: 1.6;
 }
 
 .progress {

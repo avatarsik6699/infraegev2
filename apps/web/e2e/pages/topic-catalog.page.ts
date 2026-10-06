@@ -83,15 +83,19 @@ export class TopicCatalogPage {
     await expect(this.page.getByText("Решено 1 из 2")).toBeVisible();
     await expect(this.page.getByText("Решено задач в темах: 1")).toBeVisible();
     await expect(this.page.locator("[data-topic-card]")).toHaveCount(25);
-    const statuses = await this.page
+    // Change 170 F25: «Все темы» lists topics in exam order 1–27.
+    const firstNumbers = await this.page
       .locator("[data-topic-card]")
       .evaluateAll((cards) =>
-        cards.map((card) => card.getAttribute("data-topic-status")),
+        cards.map((card) =>
+          Number.parseInt(
+            card.querySelector("[data-grouped] [aria-hidden]")?.textContent ??
+              "",
+            10,
+          ),
+        ),
       );
-    expect(statuses.slice(0, 7)).toEqual(Array(7).fill("published"));
-    expect(statuses.slice(7).every((status) => status === "planned")).toBe(
-      true,
-    );
+    expect(firstNumbers).toEqual([...firstNumbers].sort((a, b) => a - b));
     await expect(
       this.page.getByRole("link", {
         name: "Числовые последовательности",
