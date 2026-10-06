@@ -10,6 +10,10 @@ import { courseCatalogModel } from "./model/course-catalog-model";
 import { useCourseCatalog } from "./model/use-course-catalog";
 import styles from "./course-catalog-page.module.css";
 
+/** F49: the home topics grid — one large card over two rows, two compact,
+ * one wide underneath. */
+const courseLayouts = ["feature", "compact", "compact", "wide"] as const;
+
 export const CourseCatalogPage: React.FC<CourseCatalogPageTypes.Props> = (
   props,
 ) => {
@@ -53,10 +57,11 @@ export const CourseCatalogPage: React.FC<CourseCatalogPageTypes.Props> = (
             data-course-list
             aria-labelledby="course-catalog-heading"
           >
-            {courseCatalog.entries.map((entry) => (
+            {courseCatalog.entries.map((entry, index) => (
               <CourseCatalogCard
                 progress={catalog.byId[entry.id]}
                 entry={entry}
+                layout={courseLayouts[index] ?? "compact"}
                 key={entry.id}
               />
             ))}

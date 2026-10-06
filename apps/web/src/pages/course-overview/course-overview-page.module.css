@@ -125,6 +125,21 @@
   border-radius: var(--radius-tile);
 }
 
+/* F35/F50: the icon follows the title with a small gap. */
+.factHead {
+  display: flex;
+  gap: var(--space-1);
+  align-items: center;
+}
+
+.factIcon {
+  flex: none;
+  width: 1.375rem;
+  height: 1.375rem;
+  color: var(--color-text-soft);
+  stroke-width: 1.6;
+}
+
 .factTitle[data-order] {
   margin: 0;
   font-size: var(--text-lg);
@@ -146,14 +161,6 @@
 .programTitle[data-order] {
   margin: 0;
   font-size: var(--text-2xl);
-}
-
-.bulkAction {
-  flex: none;
-}
-
-.bulkAction:not([data-enhanced]) {
-  visibility: hidden;
 }
 
 .curriculum {

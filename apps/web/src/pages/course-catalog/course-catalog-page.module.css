@@ -28,9 +28,11 @@
   min-height: 1.5em;
 }
 
+/* F49: the home topics grid — a large card over two rows, two compact
+   cards beside it, a wide one underneath with its picture on the left. */
 .courseList {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 1fr);
   gap: var(--space-2);
   margin: 0;
   padding: 0;
@@ -47,8 +49,112 @@
   background: var(--color-surface);
 }
 
-.card[data-course-status="published"]:is(:hover, :focus-within) {
+.card[data-course-status="published"]:not([data-layout="feature"]):is(
+    :hover,
+    :focus-within
+  ) {
   border-color: var(--color-rule-strong);
+}
+
+.card[data-layout="feature"] {
+  grid-row: span 2;
+}
+
+.card[data-layout="wide"] {
+  display: grid;
+  grid-column: span 2;
+  grid-template-columns: minmax(0, 0.38fr) minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+}
+
+.card[data-layout="wide"] .illustration {
+  grid-row: 1 / span 2;
+  height: 100%;
+  border-right: 1px solid var(--color-rule);
+  border-bottom: 0;
+}
+
+.card[data-layout="compact"] .illustration {
+  height: 6.5rem;
+}
+
+/* The picture takes the height the two rows add. */
+.card[data-layout="feature"] .illustration {
+  flex: 1 1 13rem;
+  height: auto;
+  min-height: 13rem;
+}
+
+/* F49: a monochrome highlight travels slowly along the border; it stops
+   under reduced motion (DESIGN.md › Exceptions). */
+@property --course-border-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.card[data-layout="feature"] {
+  border: 2px solid transparent;
+  background:
+    linear-gradient(var(--color-surface), var(--color-surface)) padding-box,
+    conic-gradient(
+        from var(--course-border-angle),
+        var(--color-rule-strong) 0deg,
+        color-mix(in oklab, var(--color-text) 35%, var(--color-surface)) 50deg,
+        color-mix(in oklab, var(--color-text) 80%, var(--color-surface)) 95deg,
+        color-mix(in oklab, var(--color-text) 35%, var(--color-surface)) 140deg,
+        var(--color-rule-strong) 190deg,
+        var(--color-rule-strong) 360deg
+      )
+      border-box;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .card[data-layout="feature"] {
+    animation: course-border 9s linear infinite;
+  }
+}
+
+@keyframes course-border {
+  to {
+    --course-border-angle: 360deg;
+  }
+}
+
+/* Planned courses: compact copy, so they sit beside the large card. */
+.card[data-course-status="planned"] .cardContent {
+  padding: var(--space-2) var(--space-2) 0;
+}
+
+.card[data-course-status="planned"] .cardFooter {
+  padding: var(--space-1-5) var(--space-2) var(--space-2);
+}
+
+.card[data-course-status="planned"] .cardTitle[data-order] {
+  font-size: var(--text-lg);
+}
+
+.card[data-course-status="planned"] .cardDescription[data-variant],
+.card[data-course-status="planned"] .metadata {
+  font-size: var(--text-sm);
+}
+
+.cardContent {
+  padding: var(--space-2) var(--space-2) 0;
+}
+
+.card[data-course-status="planned"] .cardFooter {
+  padding: var(--space-1-5) var(--space-2) var(--space-2);
+}
+
+/* Compact copy, so the planned column does not stretch the featured card. */
+.card[data-course-status="planned"] .cardTitle[data-order] {
+  font-size: var(--text-lg);
+}
+
+.card[data-course-status="planned"] .cardDescription[data-variant],
+.card[data-course-status="planned"] .metadata {
+  font-size: var(--text-sm);
 }
 
 /* The same band for the course picture and the placeholders. */
@@ -69,24 +175,11 @@
   padding: var(--space-3) var(--space-3) 0;
 }
 
-.card[data-course-status="planned"] .cardContent {
-  padding-bottom: var(--space-3);
-}
-
 .cardTitle[data-order] {
   margin: 0;
   font-size: var(--text-xl);
   font-weight: 600;
   line-height: 1.3;
-}
-
-.card[data-course-status="planned"] .cardTitle {
-  color: var(--color-muted);
-}
-
-.plannedBadge {
-  align-self: flex-start;
-  margin-top: var(--space-1-5);
 }
 
 .cardDescription {
@@ -100,10 +193,6 @@
   gap: 0.3em;
   color: var(--color-text-soft);
   font-size: var(--text-base);
-}
-
-.cardOutcome {
-  color: var(--color-text);
 }
 
 .cardFooter {
@@ -142,6 +231,8 @@
 
 .progressPlaceholder {
   height: var(--progress-height);
+  border-radius: var(--radius-pill);
+  background: var(--progress-track-background);
 }
 
 .courseAction {
@@ -164,9 +255,34 @@
   transform: translateX(var(--space-0-5));
 }
 
-@container (max-width: 48rem) {
+@container (max-width: 60rem) {
+  .courseList {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .card[data-layout="feature"] {
+    grid-row: auto;
+    grid-column: span 2;
+  }
+}
+
+@container (max-width: 40rem) {
   .courseList {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .card[data-layout] {
+    grid-column: auto;
+  }
+
+  .card[data-layout="wide"] {
+    display: flex;
+  }
+
+  .card[data-layout="wide"] .illustration {
+    height: 6.5rem;
+    border-right: 0;
+    border-bottom: 1px solid var(--color-rule);
   }
 }
 

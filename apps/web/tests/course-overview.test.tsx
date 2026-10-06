@@ -359,6 +359,13 @@ describe("course overview model", () => {
   });
 });
 
+function expandAllModules() {
+  const program = screen.getByRole("region", { name: "Программа курса" });
+  for (const trigger of within(program).getAllByRole("button"))
+    if (trigger.getAttribute("aria-expanded") === "false")
+      fireEvent.click(trigger);
+}
+
 describe("course overview UI", () => {
   it.each(["loading", "error"] as const)(
     "keeps %s session rows neutral even though the guest registry starts empty",
@@ -401,7 +408,7 @@ describe("course overview UI", () => {
     expect(html).not.toContain("Прочитано");
     expect(html).not.toContain("0 из 15");
   });
-  it("supports independent disclosure and bulk expand/collapse", async () => {
+  it("supports independent disclosure of every module", async () => {
     render(overview());
     const start = screen.getByRole("button", { name: /Старт/ });
     const project = screen.getByRole("button", { name: /Финальный проект/ });
@@ -410,10 +417,11 @@ describe("course overview UI", () => {
     fireEvent.click(project);
     expect(start.getAttribute("aria-expanded")).toBe("true");
     expect(project.getAttribute("aria-expanded")).toBe("true");
-    fireEvent.click(screen.getByRole("button", { name: "Свернуть всё" }));
+    // Change 170 F35: no bulk toggle; each module opens on its own.
+    fireEvent.click(start);
     expect(start.getAttribute("aria-expanded")).toBe("false");
-    fireEvent.click(screen.getByRole("button", { name: "Развернуть всё" }));
     expect(project.getAttribute("aria-expanded")).toBe("true");
+    expandAllModules();
     expect(screen.getAllByRole("link", { name: /Практика:/ })).toHaveLength(3);
     await waitFor(() =>
       expect(screen.getByRole("link", { name: "Начать курс" })).not.toBeNull(),
@@ -464,7 +472,7 @@ describe("course overview UI", () => {
         .getByRole("link", { name: "Открыть первый урок" })
         .getAttribute("href"),
     ).toBe("/courses/python/first");
-    fireEvent.click(screen.getByRole("button", { name: "Развернуть всё" }));
+    expandAllModules();
     expect(
       within(
         screen.getByRole("region", { name: "Программа курса" }),

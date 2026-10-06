@@ -89,9 +89,9 @@ the architect's untracked work).
 - [x] `F30` One answer-controls layout (catalog style) in catalog, task page and lessons; success field instead of «Верно.»; confetti on a correct answer (§3, §4, §7) — _Depends on:_ F20
 - [x] `F31` «Как работает практика»: verify and shorten or remove on `/practice`; remove on the task page (§3, §4) — _Depends on:_ —
 - [x] `F32` Task page: minimal «К списку задач» left of the topic label; centred topic dot; tighter statement text (§4) — _Depends on:_ F30
-- [ ] `F33` `/courses`: asymmetric grid, Python card largest with an animated gradient border (off under reduced motion) (§5) — _Depends on:_ —
-- [ ] `F34` `/courses` planned cards: description, «— уроков · level», «Освоено 0 из — уроков», disabled «Скоро»; no outcome block anywhere (§5) — _Depends on:_ F19
-- [ ] `F35` `/courses/python`: blue «К программе курса ↓», icons on «Что понадобится»/«Как идёт курс», no «Развернуть всё», unified module progress (§6) — _Depends on:_ F19
+- [x] `F33` `/courses`: asymmetric grid, Python card largest with an animated gradient border (off under reduced motion) (§5) — _Depends on:_ —
+- [x] `F34` `/courses` planned cards: description, «— уроков · level», «Освоено 0 из — уроков», disabled «Скоро»; no outcome block anywhere (§5) — _Depends on:_ F19
+- [x] `F35` `/courses/python`: blue «К программе курса ↓», icons on «Что понадобится»/«Как идёт курс», no «Развернуть всё», unified module progress (§6) — _Depends on:_ F19
 - [ ] `F36` Breadcrumbs: Темы ЕГЭ › Задание N. Тема › current subtopic (and Мини-курсы › Курс › урок); last segment is not a link (§7) — _Depends on:_ —
 - [ ] `F37` Lesson rail as a minimal file tree (published topics by task number, course modules), no «Все темы ЕГЭ»/«К программе курса» link; «На этой странице» in the same style (§7) — _Depends on:_ F23
 - [ ] `F38` Lesson progress under «На этой странице» (in the mobile disclosure below 72rem); smaller reset button; one shared progress component (§7) — _Depends on:_ F21, F22, F37
@@ -105,6 +105,8 @@ the architect's untracked work).
 - [x] `F46` Accepted answer field (architect review 2026-10-06): the green fill is two-tone — the disabled input keeps its own background inside the green group — _Depends on:_ F30
 - [x] `F47` Task page: the source («Демоверсия 2023 · 2023») moves from the card under the task into the metadata line with difficulty and format — _Depends on:_ F32
 - [x] `F48` Tasks hidden from the catalog (lesson-only, e.g. `rekursiya-base-sequence`) fail the answer check on `/practice/{id}` with «Задача больше недоступна»; find the cause and fix or record it (architect delegated the decision, 2026-10-06) — _Depends on:_ —
+- [x] `F49` `/courses` (architect review 2026-10-06): the grid must read as asymmetric like the home topics grid (one large card over two rows, two compact, one wide); the Python border is a monochrome, smooth shimmering gradient, no colours — _Depends on:_ F33
+- [x] `F50` `/courses/python`: the icons in «Что понадобится» and «Как идёт курс» sit next to the heading with a gap, not at the far right — _Depends on:_ F35
 
 ### Data
 - [x] `D1` Restore the seeded dev practice bank with `make practice-bootstrap` (the local dev bank has 5 recursion tasks instead of 14, which fails four lesson/practice e2e tests and leaves some subtopics without practice); confirm the four data-bound e2e failures disappear — _Depends on:_ —

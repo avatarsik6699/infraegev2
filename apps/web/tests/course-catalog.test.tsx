@@ -123,11 +123,17 @@ describe("mini-course catalog", () => {
       expect(
         view.container.querySelectorAll("[data-course-card]"),
       ).toHaveLength(4);
+      // Change 170 F34: planned courses offer no link, only a disabled «Скоро».
       expect(
-        view.container.querySelectorAll(
-          '[data-course-status="planned"] a, [data-course-status="planned"] button',
-        ),
+        view.container.querySelectorAll('[data-course-status="planned"] a'),
       ).toHaveLength(0);
+      expect(
+        [
+          ...view.container.querySelectorAll<HTMLButtonElement>(
+            '[data-course-status="planned"] button',
+          ),
+        ].map((button) => [button.textContent, button.disabled]),
+      ).toEqual(Array(3).fill(["Скоро", true]));
       expect(
         screen.getByRole("link", { name: "Открыть курс" }).getAttribute("href"),
       ).toBe("/courses/python");
@@ -166,7 +172,7 @@ describe("mini-course catalog", () => {
   it("renders neutral personal state on SSR while retaining real navigation", () => {
     const html = renderToString(catalog());
     expect(html).toContain("Прогресс загружается");
-    expect(html).not.toContain("Освоено 0");
+    expect(html).not.toContain("Освоено 0 из 28");
     expect(html).toContain('href="/courses/python"');
     expect(html).toContain("Скоро");
     expect(html).not.toContain("В плане");

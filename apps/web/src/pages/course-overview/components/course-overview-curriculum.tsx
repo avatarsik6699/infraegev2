@@ -1,9 +1,6 @@
-import { useState } from "react";
 import { Flag } from "lucide-react";
 import { Accordion } from "~/shared/components/accordion";
-import { Button } from "~/shared/components/button";
 import { Typography } from "~/shared/components/typography";
-import { useIsEnhanced } from "~/shared/lib/use-is-enhanced";
 import { CourseOverviewModule } from "./course-overview-module";
 import { CourseOverviewLessons } from "./course-overview-lessons";
 import type { CourseOverviewPageTypes } from "../course-overview-page.types";
@@ -16,13 +13,6 @@ type Props = {
 };
 
 export const CourseOverviewCurriculum: React.FC<Props> = (props) => {
-  const [open, setOpen] = useState<string[]>(() =>
-    props.modules[0] ? [props.modules[0].id] : [],
-  );
-  const enhanced = useIsEnhanced();
-  const allOpen =
-    props.modules.length > 0 &&
-    props.modules.every((module) => open.includes(module.id));
   return (
     <section
       className={styles.courseContent}
@@ -37,25 +27,12 @@ export const CourseOverviewCurriculum: React.FC<Props> = (props) => {
         >
           Программа курса
         </Typography.Title>
-        <Button
-          hierarchy="secondary"
-          density="compact"
-          className={styles.bulkAction}
-          disabled={!enhanced}
-          data-enhanced={enhanced || undefined}
-          onClick={() =>
-            setOpen(allOpen ? [] : props.modules.map((module) => module.id))
-          }
-        >
-          {allOpen ? "Свернуть всё" : "Развернуть всё"}
-        </Button>
       </div>
       <Accordion
         className={styles.curriculum}
         nativeFallback
         multiple
-        value={open}
-        onValueChange={setOpen}
+        defaultOpen={props.modules[0] ? [props.modules[0].id] : []}
         items={props.modules.map((module) => ({
           id: module.id,
           icon: (
