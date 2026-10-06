@@ -1,11 +1,7 @@
-import { Link } from "@tanstack/react-router";
-import { Check, ChevronRight, PenLine } from "lucide-react";
-import { useState } from "react";
+import { Check, PenLine } from "lucide-react";
 import { useLessonProgress } from "~/features/lesson-progress";
-import { ResponsiveDisclosure } from "~/shared/components/responsive-disclosure";
-import { Typography } from "~/shared/components/typography";
+import { LessonTree } from "~/shared/components/lesson-tree";
 import type { SubtopicNavigationTypes } from "./subtopic-navigation.types";
-import styles from "./subtopic-navigation.module.css";
 
 const practiceCurrent = "practice";
 
@@ -16,7 +12,6 @@ const practiceCurrent = "practice";
 export const SubtopicNavigation: React.FC<SubtopicNavigationTypes.Props> = (
   props,
 ) => {
-  const [expanded, setExpanded] = useState(false);
   const progress = useLessonProgress(props.lessonId, props.tasks);
   const solved = new Set(progress.solvedTaskIds);
   const topic = props.topics.find((item) => item.id === props.lessonId);
@@ -28,113 +23,59 @@ export const SubtopicNavigation: React.FC<SubtopicNavigationTypes.Props> = (
     currentIndex >= 0
       ? `${String(currentIndex + 1)} из ${String(subtopics.length)}`
       : "практика и итог";
-  const close = () => setExpanded(false);
 
   return (
-    <nav
-      className={styles.root}
-      aria-label="Подтемы урока"
-      data-subtopic-navigation
-    >
-      <ResponsiveDisclosure
-        label={`Подтемы · ${position}`}
-        expanded={expanded}
-        onExpandedChange={setExpanded}
-      >
-        <Typography.Text className={styles.treeRoot}>Темы ЕГЭ</Typography.Text>
-        <ul className={styles.tree}>
-          {props.topics.map((item) => {
-            const isCurrent = item.id === props.lessonId;
-            return (
-              <li key={item.id}>
-                <details open={isCurrent} data-topic-folder={item.id}>
-                  <summary className={styles.folder}>
-                    <ChevronRight className={styles.chevron} aria-hidden />
-                    <span className={styles.marker} aria-hidden="true">
-                      {item.number}
-                    </span>
-                    <span className={styles.label}>{item.title}</span>
-                  </summary>
-                  <ol className={styles.branch}>
-                    {item.subtopics.map((subtopic, index) => {
-                      const done =
-                        isCurrent &&
-                        subtopic.taskIds.length > 0 &&
-                        subtopic.taskIds.every((id) => solved.has(id));
-                      return (
-                        <li key={subtopic.slug}>
-                          <Link
-                            className={styles.link}
-                            to="/ege/$slug/$subtopic"
-                            params={{
-                              slug: item.routeSlug,
-                              subtopic: subtopic.slug,
-                            }}
-                            aria-current={
-                              isCurrent && subtopic.slug === props.current
-                                ? "page"
-                                : undefined
-                            }
-                            data-done={done || undefined}
-                            onClick={close}
-                          >
-                            <span className={styles.marker} aria-hidden="true">
-                              {done ? (
-                                <Check size={14} strokeWidth={2.5} />
-                              ) : (
-                                index + 1
-                              )}
-                            </span>
-                            <span className={styles.label}>
-                              {subtopic.title}
-                              {done ? (
-                                <span className={styles.visuallyHidden}>
-                                  {" "}
-                                  (задачи решены)
-                                </span>
-                              ) : null}
-                            </span>
-                          </Link>
-                        </li>
-                      );
-                    })}
-                    <li>
-                      <Link
-                        className={styles.link}
-                        to="/ege/$slug/praktika"
-                        params={{ slug: item.routeSlug }}
-                        aria-current={
-                          isCurrent && props.current === practiceCurrent
-                            ? "page"
-                            : undefined
-                        }
-                        onClick={close}
-                      >
-                        <span className={styles.marker} aria-hidden="true">
-                          <PenLine size={13} strokeWidth={2} />
-                        </span>
-                        <span className={styles.label}>
-                          Практика и итог
-                          {isCurrent &&
-                          !props.practiceUnavailable &&
-                          props.tasks.length > 0 ? (
-                            <span className={styles.count}>
-                              {` · ${String(props.tasks.length)}`}
-                            </span>
-                          ) : null}
-                        </span>
-                      </Link>
-                    </li>
-                  </ol>
-                </details>
-              </li>
-            );
-          })}
-        </ul>
-        {props.progress ? (
-          <div className={styles.progress}>{props.progress}</div>
-        ) : null}
-      </ResponsiveDisclosure>
-    </nav>
+    <LessonTree
+      ariaLabel="Подтемы урока"
+      disclosureLabel={`Подтемы · ${position}`}
+      rootLabel="Темы ЕГЭ"
+      doneLabel="задачи решены"
+      navProps={{ "data-subtopic-navigation": true }}
+      progress={props.progress}
+      folders={props.topics.map((item) => {
+        const isCurrent = item.id === props.lessonId;
+        return {
+          id: item.id,
+          marker: item.number,
+          label: item.title,
+          open: isCurrent,
+          files: [
+            ...item.subtopics.map((subtopic, index) => {
+              const done =
+                isCurrent &&
+                subtopic.taskIds.length > 0 &&
+                subtopic.taskIds.every((id) => solved.has(id));
+              return {
+                id: subtopic.slug,
+                marker: done ? (
+                  <Check size={14} strokeWidth={2.5} />
+                ) : (
+                  index + 1
+                ),
+                label: subtopic.title,
+                to: "/ege/$slug/$subtopic",
+                params: { slug: item.routeSlug, subtopic: subtopic.slug },
+                current: isCurrent && subtopic.slug === props.current,
+                done,
+              };
+            }),
+            {
+              id: practiceCurrent,
+              marker: <PenLine size={13} strokeWidth={2} />,
+              label: "Практика и итог",
+              count:
+                isCurrent &&
+                !props.practiceUnavailable &&
+                props.tasks.length > 0
+                  ? ` · ${String(props.tasks.length)}`
+                  : undefined,
+              to: "/ege/$slug/praktika",
+              params: { slug: item.routeSlug },
+              current: isCurrent && props.current === practiceCurrent,
+            },
+          ],
+        };
+      })}
+    />
   );
 };

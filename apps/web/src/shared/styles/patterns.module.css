@@ -44,59 +44,6 @@
   background: transparent;
 }
 
-.studyLessonFrame {
-  composes: pageFrame lessonPage;
-  /* Two columns until subtopic pages bring a real "on this page" rail. */
-  --lesson-frame-columns: minmax(15rem, 16.25rem) minmax(0, 1fr);
-  grid-template-rows: auto auto 1fr auto;
-  min-width: 0;
-}
-
-.lessonFooter {
-  display: grid;
-  grid-template-columns: var(--lesson-frame-columns);
-}
-
-.lessonFooter::before {
-  content: "";
-  grid-column: 1;
-  grid-row: 1;
-  border-right: 1px solid var(--color-rule);
-}
-
-.lessonFooter > footer {
-  grid-column: 2 / -1;
-  grid-row: 1;
-  min-width: 0;
-}
-
-@media (max-width: 72rem) {
-  .studyLessonFrame {
-    --lesson-frame-columns: minmax(13rem, 15rem) minmax(0, 1fr);
-  }
-}
-
-@media (max-width: 60rem) {
-  .studyLessonFrame {
-    --lesson-frame-columns: minmax(0, 1fr);
-  }
-
-  .lessonFooter::before {
-    display: none;
-  }
-
-  .lessonFooter > footer {
-    grid-column: 1 / -1;
-  }
-}
-
-.controlsRow {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-1);
-  align-items: center;
-}
-
 .learningContentRoot {
   min-width: 0;
   max-width: var(--learning-block-measure, none);

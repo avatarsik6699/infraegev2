@@ -107,6 +107,14 @@ the architect's untracked work).
 - [x] `F48` Tasks hidden from the catalog (lesson-only, e.g. `rekursiya-base-sequence`) fail the answer check on `/practice/{id}` with «Задача больше недоступна»; find the cause and fix or record it (architect delegated the decision, 2026-10-06) — _Depends on:_ —
 - [x] `F49` `/courses` (architect review 2026-10-06): the grid must read as asymmetric like the home topics grid (one large card over two rows, two compact, one wide); the Python border is a monochrome, smooth shimmering gradient, no colours — _Depends on:_ F33
 - [x] `F50` `/courses/python`: the icons in «Что понадобится» and «Как идёт курс» sit next to the heading with a gap, not at the far right — _Depends on:_ F35
+- [x] `F51` `/courses` (architect review 2026-10-06, screenshot): the large Python card keeps its natural height with a fixed picture, the compact cards stretch to the row with the action at the bottom, the wide card's picture is narrower; the border shimmer is softer and slower — _Depends on:_ F49
+- [x] `F52` `/ege` rows: larger topic illustrations — _Depends on:_ F25
+- [x] `F53` `/ege` rows: the meta line («Теория · N задач · …») sits on the title line, the bar and «Решено X из Y» align with the bottom of the description — _Depends on:_ F25
+- [x] `F54` Task theory links are named after the theory heading they lead to (fallback «Теория»), not generic phrases like «Вернитесь к этому приёму»; several links stack tightly — _Depends on:_ F39
+- [x] `F55` Final audit (architect request 2026-10-07), dead code: unused `shared/components/back-link` and `tooltip`; unused `patterns.module.css` classes `studyLessonFrame`, `lessonFooter`, `controlsRow`; e2e helpers without callers (five `lesson-page.assertions.ts` functions, eleven `BrowserSession` viewport/capture methods); the orphaned robots/sitemap check goes back into the smoke spec — _Depends on:_ F45
+- [x] `F56` Final audit, duplication: the EGE and course lesson trees repeat the same markup — one shared `LessonTree`, the two widgets become adapters; the two confirmation dialogs repeat the dialog chrome CSS — one shared dialog stylesheet — _Depends on:_ F21, F37
+- [x] `F57` Final audit, docs drift: FRONTEND.md and SPEC §5 still describe pre-round-2 UI (help `details`, icon back link with tooltip and info popover on the task page, published-first `/ege`, task-page source card, overview expand-all, «no levels» on planned courses, left panel with one topic); broken archive link in `16-rekursiya.audit.md`; the change Files list — _Depends on:_ F44
+- [x] `F58` Final audit, hygiene: `make clean` misses Python caches under `docs/artifacts` (lesson-media, mascot pipeline) — _Depends on:_ —
 
 ### Data
 - [x] `D1` Restore the seeded dev practice bank with `make practice-bootstrap` (the local dev bank has 5 recursion tasks instead of 14, which fails four lesson/practice e2e tests and leaves some subtopics without practice); confirm the four data-bound e2e failures disappear — _Depends on:_ —
@@ -124,13 +132,14 @@ the architect's untracked work).
 ### Create / modify
 ~~~
 apps/web/e2e/** (specs and page objects)
-apps/web/src/** (only regressions found by F3/F4, and F6/F8 illustration slots)
+apps/web/src/** (regressions found by F3/F4, F6/F8 illustration slots, round-2 fixes F19–F54 and the final audit F55–F58)
 apps/web/public/images/** (F6/F8 assets)
 docs/artifacts/references/mascot/** (approved poses; rebuild only through the pipeline)
 docs/artifacts/change-170/mascot/** (pipeline and demo)
 lighthouserc.cjs
 Makefile / infra dev bootstrap (D2)
-docs/SPEC.md, docs/KNOWN_GOTCHAS.md (if findings require)
+docs/SPEC.md, docs/FRONTEND.md, DESIGN.md, docs/KNOWN_GOTCHAS.md (if findings require)
+scripts/clean-local-artifacts.sh and its test (F58)
 ~~~
 
 ### Do NOT touch

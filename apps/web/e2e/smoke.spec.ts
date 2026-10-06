@@ -8,6 +8,12 @@ test("minimal public routes retain identity and retire both labs @smoke", async 
   await minimalPage.expectPublicPages();
 });
 
+test("robots.txt and the static sitemap list the public pages @smoke", async ({
+  publicDiscoveryPage,
+}) => {
+  await publicDiscoveryPage.expectRobotsAndSitemap();
+});
+
 test("minimal public routes retain identity without JavaScript @no-js", async ({
   noJavaScriptMinimalPage,
 }) => {

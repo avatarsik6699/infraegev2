@@ -167,5 +167,5 @@
 
 ## Рекомендации
 
-Change с Backlog: [`157-recursion-content-depth.md`](../../changes/157-recursion-content-depth.md).
+Change с Backlog: [`157-recursion-content-depth.md`](../../changes/archive/157-recursion-content-depth.md).
 Корректирующие правки не входят в Change 156 («Do NOT touch: authored prose»).

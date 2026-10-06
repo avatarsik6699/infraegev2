@@ -234,8 +234,8 @@ export const test = base.extend<AppFixtures>({
   accessibilityPage: async ({ page }, use) => {
     await use(new AccessibilityPage(page));
   },
-  browserSession: async ({ page }, use, testInfo) => {
-    await use(new BrowserSession(page, testInfo));
+  browserSession: async ({ page }, use) => {
+    await use(new BrowserSession(page));
   },
   publicDiscoveryPage: async ({ page }, use) => {
     await use(new PublicDiscoveryPage(page));

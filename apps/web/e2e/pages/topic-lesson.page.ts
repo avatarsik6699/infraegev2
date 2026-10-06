@@ -288,7 +288,7 @@ export class TopicLessonPage {
     await expect(
       this.page
         .getByRole("navigation", { name: "Подтемы урока" })
-        .locator('[data-topic-folder="rekursiya"] ol > li'),
+        .locator('[data-tree-folder="rekursiya"] ol > li'),
     ).toHaveCount(7);
     await expect(
       this.page
