@@ -56,14 +56,16 @@
   border-color: var(--color-rule-strong);
 }
 
+/* F51: the large card keeps its natural height beside the two rows. */
 .card[data-layout="feature"] {
   grid-row: span 2;
+  align-self: start;
 }
 
 .card[data-layout="wide"] {
   display: grid;
   grid-column: span 2;
-  grid-template-columns: minmax(0, 0.38fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 0.3fr) minmax(0, 1fr);
   grid-template-rows: auto 1fr;
 }
 
@@ -78,14 +80,11 @@
   height: 6.5rem;
 }
 
-/* The picture takes the height the two rows add. */
 .card[data-layout="feature"] .illustration {
-  flex: 1 1 13rem;
-  height: auto;
-  min-height: 13rem;
+  height: 14.5rem;
 }
 
-/* F49: a monochrome highlight travels slowly along the border; it stops
+/* F49/F51: a soft monochrome highlight travels slowly along the border; it stops
    under reduced motion (DESIGN.md › Exceptions). */
 @property --course-border-angle {
   syntax: "<angle>";
@@ -100,10 +99,10 @@
     conic-gradient(
         from var(--course-border-angle),
         var(--color-rule-strong) 0deg,
-        color-mix(in oklab, var(--color-text) 35%, var(--color-surface)) 50deg,
-        color-mix(in oklab, var(--color-text) 80%, var(--color-surface)) 95deg,
-        color-mix(in oklab, var(--color-text) 35%, var(--color-surface)) 140deg,
-        var(--color-rule-strong) 190deg,
+        color-mix(in oklab, var(--color-text) 18%, var(--color-surface)) 60deg,
+        color-mix(in oklab, var(--color-text) 34%, var(--color-surface)) 110deg,
+        color-mix(in oklab, var(--color-text) 18%, var(--color-surface)) 160deg,
+        var(--color-rule-strong) 220deg,
         var(--color-rule-strong) 360deg
       )
       border-box;
@@ -111,7 +110,7 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .card[data-layout="feature"] {
-    animation: course-border 9s linear infinite;
+    animation: course-border 16s linear infinite;
   }
 }
 
@@ -130,24 +129,6 @@
   padding: var(--space-1-5) var(--space-2) var(--space-2);
 }
 
-.card[data-course-status="planned"] .cardTitle[data-order] {
-  font-size: var(--text-lg);
-}
-
-.card[data-course-status="planned"] .cardDescription[data-variant],
-.card[data-course-status="planned"] .metadata {
-  font-size: var(--text-sm);
-}
-
-.cardContent {
-  padding: var(--space-2) var(--space-2) 0;
-}
-
-.card[data-course-status="planned"] .cardFooter {
-  padding: var(--space-1-5) var(--space-2) var(--space-2);
-}
-
-/* Compact copy, so the planned column does not stretch the featured card. */
 .card[data-course-status="planned"] .cardTitle[data-order] {
   font-size: var(--text-lg);
 }
@@ -195,9 +176,11 @@
   font-size: var(--text-base);
 }
 
+/* The action sits at the bottom of a stretched card. */
 .cardFooter {
   display: grid;
   gap: var(--space-2);
+  margin-top: auto;
   padding: var(--space-1-5) var(--space-3) var(--space-3);
 }
 

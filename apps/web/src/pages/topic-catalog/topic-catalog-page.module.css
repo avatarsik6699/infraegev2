@@ -4,7 +4,7 @@
 }
 
 .catalogSection[data-measure] {
-  --topic-columns: 4rem 7rem minmax(0, 1fr) 17rem 1.875rem;
+  --topic-columns: 4rem 9.5rem minmax(0, 1fr) 17rem 1.875rem;
   padding-block: var(--space-3) var(--space-6);
   container-type: inline-size;
 }
@@ -84,10 +84,27 @@
   outline-offset: -2px;
 }
 
+/* F53: two rows shared by the copy and the progress — the meta line sits
+   on the title line, the bar and its count end with the description. */
 .card {
   display: grid;
   grid-template-columns: var(--topic-columns);
+  grid-template-rows: auto auto;
+  align-content: center;
   column-gap: var(--space-2);
+}
+
+.cardIndex,
+.illustration,
+.rowAction {
+  grid-row: 1 / span 2;
+  align-self: center;
+}
+
+.cardContent,
+.progressSlot {
+  grid-row: 1 / span 2;
+  grid-template-rows: subgrid;
 }
 
 .topicList {
@@ -116,9 +133,10 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* F52: the picture reads at row height. */
 .illustration {
   width: 100%;
-  height: 3.5rem;
+  height: 5.25rem;
   object-fit: contain;
 }
 
@@ -170,6 +188,15 @@
   line-height: 1.4;
 }
 
+.metadata {
+  align-self: center;
+}
+
+/* The bar and its count end with the description. */
+.personalProgressSlot {
+  align-self: end;
+}
+
 .metadata,
 .personalProgress > span {
   overflow: hidden;
@@ -198,7 +225,15 @@
   font-weight: 600;
 }
 
+/* A planned row has no description: its title and badge centre. */
+.card[data-topic-status="planned"] .cardContent {
+  align-self: center;
+  grid-template-rows: none;
+}
+
 .planned {
+  grid-row: 1 / span 2;
+  align-self: center;
   justify-self: start;
   padding: 0.125rem var(--space-1);
   border-radius: var(--radius-pill);
@@ -259,12 +294,25 @@
   }
 
   .cardIndex {
+    align-self: start;
     padding-top: 0.2em;
   }
 
   .illustration,
   .rowAction {
     display: none;
+  }
+
+  .catalogSection[data-measure] .card {
+    grid-template-rows: none;
+  }
+
+  .cardIndex,
+  .cardContent,
+  .progressSlot,
+  .planned {
+    grid-row: auto;
+    grid-template-rows: none;
   }
 
   .progressSlot,

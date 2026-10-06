@@ -1,5 +1,5 @@
 import { useRouter } from "@tanstack/react-router";
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 import { ScrollToTop } from "~/shared/components/scroll-to-top";
 import { getCourseLessons } from "~/entities/course";
 import { Breadcrumbs } from "~/shared/components/breadcrumbs";
@@ -7,6 +7,7 @@ import { LessonTheory } from "~/shared/components/learning-content";
 import { Typography } from "~/shared/components/typography";
 import { useMediaQuery } from "~/shared/lib/media-query";
 import { russianCount } from "~/shared/lib/russian-count";
+import { theoryLinkLabel } from "~/shared/lib/theory-link-label";
 import { useAccountSession } from "~/features/account";
 import {
   checkPracticeAnswer,
@@ -28,6 +29,17 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
   props,
 ) => {
   const router = useRouter();
+  const practiceTasks = useMemo(
+    () =>
+      props.tasks.map((task) => ({
+        ...task,
+        theoryLinks: task.theoryLinks.map((link) => ({
+          ...link,
+          label: theoryLinkLabel(props.lesson.theory, link.hash),
+        })),
+      })),
+    [props.tasks, props.lesson.theory],
+  );
   const session = useAccountSession();
   const articleRef = useRef<HTMLElement>(null);
   const lessons = getCourseLessons(props.course);
@@ -176,7 +188,7 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
             <LessonPracticeFlow
               unavailable={props.practiceUnavailable}
               onRefresh={() => router.invalidate()}
-              tasks={props.tasks}
+              tasks={practiceTasks}
               lessonId={props.lesson.id}
               contextKind="course_lesson"
               checkAnswer={

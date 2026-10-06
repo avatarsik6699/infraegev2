@@ -106,14 +106,20 @@
   max-width: 100%;
 }
 
-/* F39: one line with an ellipsis; the arrow stays right after the text. */
-.taskTheoryLinks a {
+/* F39: one line with an ellipsis; the arrow stays right after the text.
+   F54: several links stack tightly (28px rows); a single one keeps 40px.
+   [data-presentation] outranks the shared link height. */
+.taskTheoryLinks a[data-presentation] {
   display: inline-flex;
   max-width: 100%;
-  min-height: 2.5rem;
+  min-height: 1.75rem;
   align-items: center;
   justify-content: flex-start;
   text-align: left;
+}
+
+.taskTheoryLinks li:only-child a[data-presentation] {
+  min-height: 2.5rem;
 }
 
 .taskTheoryLinks a > span {

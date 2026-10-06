@@ -8,6 +8,7 @@ import {
   topicLessons,
   type LessonContent,
 } from "~/entities/lesson";
+import { theoryLinkLabel } from "~/shared/lib/theory-link-label";
 
 const lesson: LessonContent.Definition = {
   id: "sample-lesson",
@@ -113,5 +114,12 @@ describe("lesson subtopics", () => {
         .map((subtopic) => `${item.id}/${subtopic.slug}`),
     );
     expect(missing).toEqual([]);
+  });
+
+  it("names a theory link after the heading it leads to", () => {
+    const theory = [{ id: "single-values", navLabel: "Отдельные числа" }];
+    expect(theoryLinkLabel(theory, "single-values")).toBe("Отдельные числа");
+    expect(theoryLinkLabel(theory, "unknown")).toBe("Теория");
+    expect(theoryLinkLabel(theory, null)).toBe("Теория");
   });
 });
