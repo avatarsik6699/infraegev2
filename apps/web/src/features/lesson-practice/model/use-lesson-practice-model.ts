@@ -9,7 +9,6 @@ type FormSubmitHandler = NonNullable<ComponentProps<"form">["onSubmit"]>;
 export function useLessonPracticeModel(props: LessonPracticeTypes.Props) {
   const [practiceStates, setPracticeStates] =
     useState<LessonPracticeTypes.States>({});
-  const [feedback, setFeedback] = useState<LessonPracticeTypes.Feedback>({});
   const [draftAnswers, setDraftAnswers] = useState<Record<string, string>>({});
   const [selectedTaskId, setSelectedTaskId] = useState(
     props.tasks[0]?.id ?? "",
@@ -37,7 +36,6 @@ export function useLessonPracticeModel(props: LessonPracticeTypes.Props) {
         answer,
         task.solutionRevision,
       );
-      setFeedback((current) => ({ ...current, [task.id]: result.explanation }));
       setPracticeStates((current) => ({
         ...current,
         [task.id]: result.correct ? "correct" : "incorrect",
@@ -60,7 +58,6 @@ export function useLessonPracticeModel(props: LessonPracticeTypes.Props) {
       try {
         await props.onRefresh?.();
         setPracticeStates({});
-        setFeedback({});
       } catch {
         setPracticeStates((current) => ({
           ...current,
@@ -71,7 +68,6 @@ export function useLessonPracticeModel(props: LessonPracticeTypes.Props) {
     answerFor: (taskId: string) => draftAnswers[taskId] ?? "",
     checkAnswer,
     enhanced,
-    feedbackFor: (taskId: string) => feedback[taskId] ?? "",
     isSolved: (taskId: string) => props.solvedTaskIds.includes(taskId),
     selectTask: setSelectedTaskId,
     stateFor: (taskId: string) => practiceStates[taskId] ?? "idle",

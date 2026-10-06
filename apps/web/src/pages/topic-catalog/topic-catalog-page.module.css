@@ -21,7 +21,7 @@
 .summary .retry[data-hierarchy] {
   min-height: 0;
   padding-block: 0;
-  font-size: inherit;
+  font-size: var(--text-sm);
 }
 
 .summaryStatus {

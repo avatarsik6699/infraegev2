@@ -18,19 +18,26 @@
   overflow-wrap: anywhere;
 }
 
-.heading > :first-child {
-  margin-bottom: var(--space-2);
+/* F32: «← К списку задач», then the topic, on one line above the title. */
+.context {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-0-5) var(--space-3);
+  align-items: center;
 }
 
-/* Topic eyebrow with the «you are here» dot (DESIGN.md › orange role). */
-.topic {
+/* Topic eyebrow with the «you are here» dot (DESIGN.md › orange role);
+   line-height 1 centres the dot on the text. */
+.topic[data-variant] {
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
   margin: 0;
   color: var(--color-current-location);
+  font-family: var(--font-ui);
   font-size: var(--text-sm);
   font-weight: 600;
+  line-height: 1;
 }
 
 .topic::before {
@@ -67,32 +74,8 @@
   font-family: var(--font-data);
 }
 
-.sources {
-  display: grid;
-  gap: var(--space-1-5);
-}
-
-.source {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--space-2) var(--space-3);
-  border: 1px solid var(--color-rule);
-  border-radius: var(--radius-tile);
-}
-
-.sourceCopy {
-  display: grid;
-  gap: var(--space-0-5);
-  min-width: 0;
-  flex: 1 1 20rem;
-}
-
-.sourceTitle {
-  margin: 0;
-  font-weight: 600;
+.visuallyHidden {
+  composes: visuallyHidden from "../../shared/styles/patterns.module.css";
 }
 
 .state {
@@ -119,15 +102,12 @@
 .metaItem svg {
   flex: none;
 }
-.back {
-  border: 1px solid var(--color-rule-strong);
-  border-radius: 50%;
-  align-self: start;
-  justify-self: start;
-  justify-content: center;
-  width: var(--control-height);
-  min-height: var(--control-height);
+.back[data-presentation] {
+  gap: var(--space-0-5);
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+  font-weight: 500;
 }
-.back svg {
-  display: block;
+.back[data-presentation]:hover {
+  color: var(--color-text);
 }

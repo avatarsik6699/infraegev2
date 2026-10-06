@@ -1,31 +1,20 @@
-import { Typography } from "~/shared/components/typography";
 import type { LessonPracticeTypes } from "../lesson-practice.types";
 import styles from "../lesson-practice.module.css";
 
-type PracticeTaskFeedbackProps = {
+/**
+ * F30: a correct answer shows in the field itself (green with a check), so
+ * the result is spoken, not printed; the solution stays behind «Решение».
+ */
+export const PracticeTaskFeedback: React.FC<{
   state: LessonPracticeTypes.State;
-  feedback: string;
-};
+}> = (props) => (
+  <span className={styles.visuallyHidden} role="status" aria-live="polite">
+    {feedbackMessage(props.state)}
+  </span>
+);
 
-export const PracticeTaskFeedback: React.FC<PracticeTaskFeedbackProps> = (
-  props,
-) => {
-  const message = feedbackMessage(props);
-
-  return message ? (
-    <Typography.Text
-      className={styles.feedback}
-      data-state={props.state}
-      role="status"
-      aria-live="polite"
-    >
-      {message}
-    </Typography.Text>
-  ) : null;
-};
-
-function feedbackMessage(props: PracticeTaskFeedbackProps): string {
-  if (props.state === "checking") return "Проверяем ответ…";
-  if (props.state === "correct") return `Верно. ${props.feedback}`;
+function feedbackMessage(state: LessonPracticeTypes.State): string {
+  if (state === "checking") return "Проверяем ответ…";
+  if (state === "correct") return "Верно. Ответ принят.";
   return "";
 }

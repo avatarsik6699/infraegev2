@@ -3,16 +3,13 @@ import type { PracticeTaskTypes } from "~/entities/practice-task";
 import { TabsPanel } from "~/shared/components/tabs";
 import type { LessonPracticeTypes } from "../lesson-practice.types";
 import styles from "../lesson-practice.module.css";
-import { PracticeTaskAnswer } from "./practice-task-answer";
-import { PracticeTaskFeedback } from "./practice-task-feedback";
-import { PracticeTaskHelp } from "./practice-task-help";
 import { PracticeTaskHeading } from "./practice-task-heading";
+import { PracticeTaskSolver } from "./practice-task-solver";
 
 type PracticeTaskPanelProps = {
   task: PracticeTaskTypes.Task;
   index: number;
   state: LessonPracticeTypes.State;
-  feedback: string;
   alreadySolved: boolean;
   enhanced: boolean;
   answer: string;
@@ -22,7 +19,6 @@ type PracticeTaskPanelProps = {
 };
 
 export const PracticeTaskPanel: React.FC<PracticeTaskPanelProps> = (props) => {
-  const inputId = `answer-${props.task.id}`;
   const headingId = `practice-heading-${props.task.id}`;
 
   return (
@@ -36,20 +32,16 @@ export const PracticeTaskPanel: React.FC<PracticeTaskPanelProps> = (props) => {
       }}
     >
       <PracticeTaskHeading headingId={headingId} task={props.task} />
-      <PracticeTaskAnswer
+      <PracticeTaskSolver
+        task={props.task}
         alreadySolved={props.alreadySolved}
         answer={props.answer}
-        checking={props.state === "checking"}
         enhanced={props.enhanced}
-        inputId={inputId}
+        state={props.state}
         onAnswerChange={props.onAnswerChange}
         onRefresh={props.onRefresh}
         onSubmit={props.onSubmit}
-        state={props.state}
-        task={props.task}
       />
-      <PracticeTaskHelp task={props.task} />
-      <PracticeTaskFeedback feedback={props.feedback} state={props.state} />
     </TabsPanel>
   );
 };

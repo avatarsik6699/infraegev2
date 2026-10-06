@@ -1,18 +1,14 @@
-import { ArrowLeft } from "lucide-react";
 import { ActionLink } from "~/shared/components/action-link";
-import { Tooltip } from "~/shared/components/tooltip";
 import styles from "../practice-task-page.module.css";
 
+/** F32: a quiet text link that sits before the topic label. */
 export const PracticeBackLink: React.FC<{ href: string }> = (props) => (
-  <Tooltip label="К списку задач">
-    <ActionLink
-      to={props.href}
-      icon="none"
-      presentation="navigation"
-      className={styles.back}
-      ariaLabel="К списку задач"
-    >
-      <ArrowLeft size={18} aria-hidden="true" />
-    </ActionLink>
-  </Tooltip>
+  <ActionLink
+    to={props.href}
+    icon="back"
+    presentation="navigation"
+    className={styles.back}
+  >
+    К списку задач
+  </ActionLink>
 );

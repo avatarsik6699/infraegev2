@@ -20,5 +20,4 @@ export namespace LessonPracticeTypes {
     | "stale"
     | "unavailable";
   export type States = Partial<Record<string, State>>;
-  export type Feedback = Partial<Record<string, string>>;
 }

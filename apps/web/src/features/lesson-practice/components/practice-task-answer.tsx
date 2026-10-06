@@ -1,21 +1,16 @@
 import { useEffect, useRef, useState, type ComponentProps } from "react";
-import { CircleCheck } from "lucide-react";
-import type { PracticeTaskTypes } from "~/entities/practice-task";
 import { Button } from "~/shared/components/button";
+import { ConfettiBurst } from "~/shared/components/confetti-burst";
 import { Field } from "~/shared/components/field";
-import { Typography } from "~/shared/components/typography";
 import type { LessonPracticeTypes } from "../lesson-practice.types";
 import styles from "../lesson-practice.module.css";
-import { PracticeTaskContent } from "./practice-task-content";
 
 type PracticeTaskAnswerProps = {
-  /** `detail`: the standalone task page (Change 169): visible label, instruction under the input. */
-  layout?: "stacked" | "compact" | "detail";
   focusOnMount?: boolean;
   active?: boolean;
   onRepeat?: () => void;
-  answerInstruction?: string;
-  task: PracticeTaskTypes.Task;
+  /** Id of a visible instruction the field refers to. */
+  describedBy?: string;
   inputId: string;
   alreadySolved: boolean;
   checking: boolean;
@@ -56,24 +51,17 @@ export const PracticeTaskAnswer: React.FC<PracticeTaskAnswerProps> = (
     [props.state, props.active],
   );
 
-  const placeholder = props.answerInstruction
-    ? "Введите ответ"
-    : "Без единиц измерения";
   const error = emptyAttempt
     ? "Введите ответ, чтобы проверить."
     : answerError(props.state);
   const needsRefresh = props.state === "stale" || props.state === "unavailable";
   const accepted = props.alreadySolved || props.state === "correct";
-  const stacked = (props.layout ?? "stacked") === "stacked";
-  const detail = props.layout === "detail";
-  const customInstruction =
-    props.answerInstruction &&
-    props.answerInstruction.trim() !==
-      "Запишите целое число в десятичной системе счисления.";
+  const placeholder = props.describedBy
+    ? "Введите ответ"
+    : "Без единиц измерения";
   return (
     <form
       className={styles.practiceForm}
-      data-layout={props.layout ?? "stacked"}
       onSubmit={(event) => {
         // An empty answer is a local input problem, not a failed check.
         if (props.answer.trim() === "") {
@@ -86,67 +74,33 @@ export const PracticeTaskAnswer: React.FC<PracticeTaskAnswerProps> = (
         props.onSubmit(event);
       }}
     >
-      {props.layout !== "compact" && (
-        <PracticeTaskContent
-          blocks={props.task.statement}
-          context="statement"
-        />
-      )}
-      <div className={styles.answerPanel}>
-        {stacked && customInstruction ? (
-          <Typography.Text
-            id={`${props.inputId}-instruction`}
-            className={styles.catalogInstruction}
-          >
-            {props.answerInstruction}
-          </Typography.Text>
-        ) : null}
-        <div className={styles.answerRow}>
-          <div className={styles.answerField}>
-            <Field
-              className={accepted ? styles.solvedAnswer : undefined}
-              data-solved={props.alreadySolved || undefined}
-              ref={inputRef}
-              id={props.inputId}
-              name="answer"
-              label={stacked ? "Ответ" : "Ваш ответ"}
-              labelVisibility={detail ? "visible" : "sr-only"}
-              aria-describedby={
-                (stacked && customInstruction) ||
-                (detail && props.answerInstruction)
-                  ? `${props.inputId}-instruction`
-                  : undefined
-              }
-              maxLength={500}
-              placeholder={accepted ? "Этот ответ уже принят" : placeholder}
-              error={error}
-              endAdornment={
-                accepted ? (
-                  <CircleCheck
-                    className={styles.answerAcceptedIcon}
-                    data-answer-accepted-icon
-                    aria-hidden="true"
-                    size={20}
-                    strokeWidth={1.8}
-                  />
-                ) : undefined
-              }
-              invalid={Boolean(error)}
-              autoComplete="off"
-              disabled={!props.enhanced || accepted || props.checking}
-              value={props.answer}
-              onChange={(event) => {
-                setEmptyAttempt(false);
-                props.onAnswerChange(event.currentTarget.value);
-              }}
-            />
-            {!stacked && props.alreadySolved && (
-              <span className={styles.visuallyHidden} role="status">
-                Ответ принят
-              </span>
-            )}
-          </div>
-          {!stacked && props.alreadySolved && props.onRepeat ? (
+      <div className={styles.answerRow}>
+        <div className={styles.answerField}>
+          <Field
+            data-solved={props.alreadySolved || undefined}
+            ref={inputRef}
+            id={props.inputId}
+            name="answer"
+            label="Ваш ответ"
+            labelVisibility="sr-only"
+            aria-describedby={props.describedBy}
+            maxLength={500}
+            placeholder={accepted ? "Ответ принят" : placeholder}
+            error={error}
+            success={accepted}
+            invalid={Boolean(error)}
+            autoComplete="off"
+            disabled={!props.enhanced || accepted || props.checking}
+            value={props.answer}
+            onChange={(event) => {
+              setEmptyAttempt(false);
+              props.onAnswerChange(event.currentTarget.value);
+            }}
+          />
+        </div>
+        {/* F30: the burst comes from the button the student pressed. */}
+        <span className={styles.answerAction}>
+          {props.alreadySolved && props.onRepeat ? (
             <Button hierarchy="secondary" onClick={props.onRepeat}>
               Решить ещё раз
             </Button>
@@ -165,25 +119,18 @@ export const PracticeTaskAnswer: React.FC<PracticeTaskAnswerProps> = (
               Проверить
             </Button>
           )}
-        </div>
-        {detail && props.answerInstruction ? (
-          <Typography.Text
-            id={`${props.inputId}-instruction`}
-            className={styles.detailInstruction}
-          >
-            {props.answerInstruction}
-          </Typography.Text>
-        ) : null}
-        {needsRefresh ? (
-          <Button
-            className={styles.answerRefresh}
-            hierarchy="quiet"
-            onClick={props.onRefresh}
-          >
-            Обновить условие
-          </Button>
-        ) : null}
+          <ConfettiBurst active={props.state === "correct"} />
+        </span>
       </div>
+      {needsRefresh ? (
+        <Button
+          className={styles.answerRefresh}
+          hierarchy="quiet"
+          onClick={props.onRefresh}
+        >
+          Обновить условие
+        </Button>
+      ) : null}
     </form>
   );
 };

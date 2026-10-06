@@ -59,7 +59,21 @@ export const PracticeResults: React.FC<PracticeCatalogPageTypes.Props> = (
           search={props.search}
           facets={props.result.facets}
         />
+        {/* F26: both list settings sit together, «Сложность» first. */}
         <div className={styles.sort}>
+          <InlineSelect
+            label="Сложность"
+            form="practice-filters"
+            name="difficulty"
+            defaultValue={String(props.search.difficulty ?? "")}
+            options={[
+              { value: "", label: "Любая" },
+              ...[1, 2, 3].map((level) => ({
+                value: String(level),
+                label: practiceCatalog.difficultyLabel(level),
+              })),
+            ]}
+          />
           <InlineSelect
             label="Сортировка"
             name="sort"

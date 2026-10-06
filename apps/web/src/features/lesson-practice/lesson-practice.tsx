@@ -87,7 +87,6 @@ export const LessonPractice: React.FC<LessonPracticeTypes.Props> = (props) => {
             }}
             onAnswerChange={(value) => model.updateAnswer(task.id, value)}
             state={model.stateFor(task.id)}
-            feedback={model.feedbackFor(task.id)}
             task={task}
           />
         ))}

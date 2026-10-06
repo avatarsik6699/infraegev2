@@ -197,9 +197,9 @@ describe("inline solving", () => {
     expect((row(0).getByRole("textbox") as HTMLInputElement).value).toBe("42");
     mocks.check.mockResolvedValueOnce({ correct: true, explanation: "" });
     fireEvent.click(row(0).getByRole("button", { name: "Проверить" }));
-    await screen.findByText("Верно.");
+    await screen.findByText("Верно. Ответ принят.");
     expect(mocks.check).toHaveBeenLastCalledWith("first", "42", 2);
-    expect(row(0).getByRole("status").textContent).toBe("Верно. ");
+    expect(row(0).getByRole("status").textContent).toBe("Верно. Ответ принят.");
     expect(row(0).queryByText("Эта версия задачи решена.")).toBeNull();
     expect(row(0).getByRole("textbox").getAttribute("data-solved")).toBeNull();
     expect((row(0).getByRole("textbox") as HTMLInputElement).disabled).toBe(

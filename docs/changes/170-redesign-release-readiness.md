@@ -82,13 +82,13 @@ the architect's untracked work).
 - [x] `F23` Selected items never reflow: no weight change on current rail/outline items, reserved space for checks in «Тема» and selects (§3, §7) — _Depends on:_ —
 - [x] `F24` One page head for `/ege`, `/courses`, `/courses/python`, `/practice`: same title, lead, meta sizes and gaps (§1) — _Depends on:_ —
 - [x] `F25` `/ege`: no column headings; compact rows; «Все темы» in task order 1–27; the ФИПИ source note moves into the head meta (§2) — _Depends on:_ F19, F24
-- [ ] `F26` `/practice` toolbar: «Сложность» left of «Сортировка», no overlap with «Тема» (§3) — _Depends on:_ —
-- [ ] `F27` «Тема» filter audit: whole search row focuses, focus does not stick, no shift on check, one font size (§3) — _Depends on:_ F23
-- [ ] `F28` Filter chips at the mockup size; «Сбросить всё» matches them (§3) — _Depends on:_ —
-- [ ] `F29` Practice rows: more padding and column gap; green solved check (§3) — _Depends on:_ —
-- [ ] `F30` One answer-controls layout (catalog style) in catalog, task page and lessons; success field instead of «Верно.»; confetti on a correct answer (§3, §4, §7) — _Depends on:_ F20
-- [ ] `F31` «Как работает практика»: verify and shorten or remove on `/practice`; remove on the task page (§3, §4) — _Depends on:_ —
-- [ ] `F32` Task page: minimal «К списку задач» left of the topic label; centred topic dot; tighter statement text (§4) — _Depends on:_ F30
+- [x] `F26` `/practice` toolbar: «Сложность» left of «Сортировка», no overlap with «Тема» (§3) — _Depends on:_ —
+- [x] `F27` «Тема» filter audit: whole search row focuses, focus does not stick, no shift on check, one font size (§3) — _Depends on:_ F23
+- [x] `F28` Filter chips at the mockup size; «Сбросить всё» matches them (§3) — _Depends on:_ —
+- [x] `F29` Practice rows: more padding and column gap; green solved check (§3) — _Depends on:_ —
+- [x] `F30` One answer-controls layout (catalog style) in catalog, task page and lessons; success field instead of «Верно.»; confetti on a correct answer (§3, §4, §7) — _Depends on:_ F20
+- [x] `F31` «Как работает практика»: verify and shorten or remove on `/practice`; remove on the task page (§3, §4) — _Depends on:_ —
+- [x] `F32` Task page: minimal «К списку задач» left of the topic label; centred topic dot; tighter statement text (§4) — _Depends on:_ F30
 - [ ] `F33` `/courses`: asymmetric grid, Python card largest with an animated gradient border (off under reduced motion) (§5) — _Depends on:_ —
 - [ ] `F34` `/courses` planned cards: description, «— уроков · level», «Освоено 0 из — уроков», disabled «Скоро»; no outcome block anywhere (§5) — _Depends on:_ F19
 - [ ] `F35` `/courses/python`: blue «К программе курса ↓», icons on «Что понадобится»/«Как идёт курс», no «Развернуть всё», unified module progress (§6) — _Depends on:_ F19
@@ -102,6 +102,9 @@ the architect's untracked work).
 - [ ] `F43` `/ege/{topic}/praktika` order: summary text and figures, tasks, then «Проверьте себя»; update SPEC §1.4 (§7) — _Depends on:_ F40
 - [ ] `F44` DESIGN.md and SPEC record the round-2 exceptions and new patterns — _Depends on:_ F19–F43
 - [ ] `F45` Migrate unit and e2e expectations to the round-2 contract; delete dead page-object methods; run affected e2e once — _Depends on:_ F19–F44
+- [x] `F46` Accepted answer field (architect review 2026-10-06): the green fill is two-tone — the disabled input keeps its own background inside the green group — _Depends on:_ F30
+- [x] `F47` Task page: the source («Демоверсия 2023 · 2023») moves from the card under the task into the metadata line with difficulty and format — _Depends on:_ F32
+- [x] `F48` Tasks hidden from the catalog (lesson-only, e.g. `rekursiya-base-sequence`) fail the answer check on `/practice/{id}` with «Задача больше недоступна»; find the cause and fix or record it (architect delegated the decision, 2026-10-06) — _Depends on:_ —
 
 ### Data
 - [x] `D1` Restore the seeded dev practice bank with `make practice-bootstrap` (the local dev bank has 5 recursion tasks instead of 14, which fails four lesson/practice e2e tests and leaves some subtopics without practice); confirm the four data-bound e2e failures disappear — _Depends on:_ —

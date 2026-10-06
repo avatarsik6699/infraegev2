@@ -77,7 +77,7 @@ export const PracticeActiveFilters: React.FC<{
             ariaLabel={filter.action}
             to={practiceCatalog.href({ ...filter.search, page: undefined })}
           >
-            <X size={12} aria-hidden="true" />
+            <X size={14} aria-hidden="true" />
           </ActionLink>
         </span>
       ))}

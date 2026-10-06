@@ -114,7 +114,7 @@ beforeEach(() => {
 it("renders the detail layout and one context-preserving return link in SSR", () => {
   const html = renderToStaticMarkup(page());
   expect(html).toContain("ЕГЭ 16 · Рекурсия");
-  expect(html).toContain('data-layout="detail"');
+  expect(html).toContain('data-presentation="detail"');
   expect(html).toContain("Вычислите F(5).");
   expect(html).toContain("Начните с базы.");
   expect(html).toContain("Получится 42.");
@@ -142,7 +142,7 @@ it("keeps retry feedback locally but no guest progress after reload", async () =
   await waitFor(() => expect((input as HTMLInputElement).disabled).toBe(false));
   fireEvent.change(input, { target: { value: "42" } });
   fireEvent.click(screen.getByRole("button", { name: "Проверить" }));
-  await screen.findByText("Верно.");
+  await screen.findByText("Верно. Ответ принят.");
   expect(screen.queryByRole("button", { name: "Решить ещё раз" })).toBeNull();
   expect((input as HTMLInputElement).disabled).toBe(true);
   view.rerender(page(result, "after-navigation"));
@@ -153,7 +153,7 @@ it("keeps retry feedback locally but no guest progress after reload", async () =
   );
   expect((screen.getByRole("textbox") as HTMLInputElement).value).toBe("");
   fireEvent.click(screen.getByRole("button", { name: "Подсказка" }));
-  fireEvent.click(screen.getByRole("button", { name: "Разбор" }));
+  fireEvent.click(screen.getByRole("button", { name: "Решение" }));
   expect(screen.getByText("Начните с базы.")).not.toBeNull();
   expect(screen.getByText("Получится 42.")).not.toBeNull();
 });
@@ -195,6 +195,28 @@ it("saves a signed-in standalone result under the canonical context", async () =
     context_id: "standalone",
   });
 });
+it("checks a lesson-only task without saving it as catalog progress", async () => {
+  // Change 170 F48: standalone progress counts catalog tasks only.
+  mocks.session.account = { id: "account-1" };
+  mocks.session.csrfToken = "csrf";
+  mocks.check.mockResolvedValue({ correct: true, explanation: "" });
+  const fetchMock = vi.fn();
+  vi.stubGlobal("fetch", fetchMock);
+  render(
+    page({ ...result, detail: { ...result.detail!, catalogVisible: false } }),
+  );
+  const input = await screen.findByRole("textbox", { name: "Ваш ответ" });
+  await waitFor(() => expect((input as HTMLInputElement).disabled).toBe(false));
+  fireEvent.change(input, { target: { value: "42" } });
+  fireEvent.click(screen.getByRole("button", { name: "Проверить" }));
+  await screen.findByText("Верно. Ответ принят.");
+  expect(mocks.check).toHaveBeenCalledWith("detail-task", "42", 1);
+  expect(
+    fetchMock.mock.calls.some((call: readonly unknown[]) =>
+      String((call[0] as Request).url).includes("/check-and-save"),
+    ),
+  ).toBe(false);
+});
 it("retains the answer on checker failure and associates feedback with its field", async () => {
   mocks.check.mockRejectedValue(new Error("offline"));
   render(page());
@@ -224,12 +246,9 @@ it("asks for an answer instead of checking an empty field", async () => {
   fireEvent.change(input, { target: { value: "1" } });
   expect(screen.queryByText("Введите ответ, чтобы проверить.")).toBeNull();
 });
-it("shows an icon-only return link with a keyboard tooltip", async () => {
+it("shows a quiet text return link before the topic label", () => {
   render(page());
   const back = screen.getByRole("link", { name: "К списку задач" });
-  expect(back.textContent).toBe("");
-  fireEvent.focus(back);
-  expect((await screen.findByRole("tooltip")).textContent).toBe(
-    "К списку задач",
-  );
+  expect(back.textContent).toBe("К списку задач");
+  expect(back.nextElementSibling?.textContent).toBe("ЕГЭ 16 · Рекурсия");
 });

@@ -6,7 +6,6 @@ import {
   practiceCatalog,
   type PracticeCatalogTypes,
 } from "~/entities/practice-task";
-import { InlineSelect } from "~/shared/components/inline-select";
 import { MultiCombobox } from "~/shared/components/multi-combobox";
 import { SearchField } from "~/shared/components/search-field";
 import { Button } from "~/shared/components/button";
@@ -121,19 +120,6 @@ export const PracticeFilters: React.FC<{
           value={props.search.exam_number}
         />
       )}
-      <InlineSelect
-        label="Сложность"
-        form="practice-filters"
-        name="difficulty"
-        defaultValue={String(props.search.difficulty ?? "")}
-        options={[
-          { value: "", label: "Любая" },
-          ...[1, 2, 3].map((level) => ({
-            value: String(level),
-            label: practiceCatalog.difficultyLabel(level),
-          })),
-        ]}
-      />
       {props.search.limit && (
         <input type="hidden" name="limit" value={props.search.limit} />
       )}

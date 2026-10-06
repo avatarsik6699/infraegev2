@@ -69,10 +69,6 @@
   margin-inline: var(--space-1);
 }
 
-.controlGroup:has(input[data-solved])::after {
-  border-color: var(--color-success);
-}
-
 /* F20: an accepted answer, the same look as the home walkthrough. */
 .controlGroup[data-success] {
   background: var(--color-success-soft);
@@ -84,6 +80,20 @@
 
 .controlGroup > .successIcon {
   color: var(--color-success);
+}
+
+/* The accepted answer is locked, but stays readable ink, not disabled grey. */
+.controlGroup[data-success] input:disabled {
+  /* F46: one green fill — the locked input must not paint its own grey. */
+  background: transparent;
+  color: var(--color-text);
+  opacity: 1;
+  -webkit-text-fill-color: var(--color-text);
+}
+
+.controlGroup[data-success] input:disabled::placeholder {
+  color: var(--color-muted);
+  -webkit-text-fill-color: var(--color-muted);
 }
 
 .controlGroup::after {

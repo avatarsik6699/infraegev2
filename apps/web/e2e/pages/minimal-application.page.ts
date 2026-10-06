@@ -303,9 +303,8 @@ export class MinimalApplicationPage {
     await expect(
       taskCard.getByRole("heading", { name: /^(?:Решение|Идея решения)$/u }),
     ).toBeVisible();
-    await expect(
-      this.page.getByRole("region", { name: "Источник задачи" }),
-    ).toBeVisible();
+    // Change 170 F47: the source is an item of the metadata line.
+    await expect(this.page.locator("[data-practice-source]")).toBeVisible();
     await expectNoHorizontalOverflow(this.page);
   }
   async expectCatalog() {
