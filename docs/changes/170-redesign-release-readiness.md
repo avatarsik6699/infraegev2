@@ -115,6 +115,7 @@ the architect's untracked work).
 - [x] `F56` Final audit, duplication: the EGE and course lesson trees repeat the same markup — one shared `LessonTree`, the two widgets become adapters; the two confirmation dialogs repeat the dialog chrome CSS — one shared dialog stylesheet — _Depends on:_ F21, F37
 - [x] `F57` Final audit, docs drift: FRONTEND.md and SPEC §5 still describe pre-round-2 UI (help `details`, icon back link with tooltip and info popover on the task page, published-first `/ege`, task-page source card, overview expand-all, «no levels» on planned courses, left panel with one topic); broken archive link in `16-rekursiya.audit.md`; the change Files list — _Depends on:_ F44
 - [x] `F58` Final audit, hygiene: `make clean` misses Python caches under `docs/artifacts` (lesson-media, mascot pipeline) — _Depends on:_ —
+- [x] `F59` Pre-release (T4): `test:layout` «practice toolbar stays fixed through answer feedback» expects a heading «Решение», but the solution panel is titled by explanation kind («Идея решения», «Решение», «Разбор»); assert the opened solution panel instead — _Depends on:_ F30
 
 ### Data
 - [x] `D1` Restore the seeded dev practice bank with `make practice-bootstrap` (the local dev bank has 5 recursion tasks instead of 14, which fails four lesson/practice e2e tests and leaves some subtopics without practice); confirm the four data-bound e2e failures disappear — _Depends on:_ —
@@ -123,6 +124,7 @@ the architect's untracked work).
 ### Other
 - [ ] `T1` Release prerequisites from SPEC §11 checked with the architect: provider applications and callbacks (VK ID, Яндекс ID, Telegram), mail delivery, privacy policy review, account-data backup/restore — _Depends on:_ —
 - [ ] `T2` `/ship 170 --release`: affected coverage and Release Gate per STACK, push `main`, deploy the exact SHA, verify public readiness — only after F1–F8, D1–D2, T1 and explicit architect authorisation — _Depends on:_ F3, F5, F6, F8, D1, D2, T1
+- [ ] `T4` Pre-release verification (architect request 2026-10-07): run the affected release coverage on the candidate before `/ship --release` — format, lint, typecheck, unit, content validation, production build and prerender crawl, full e2e with `test:layout` and `@no-js` against the API, axe, Lighthouse, nginx/image contract tests and a pre-push secrets scan of `origin/main..HEAD`; every finding is added as its own Backlog item and fixed — _Depends on:_ F55–F58
 - [x] `T3` Architect clarification (2026-10-03): mail delivery is implemented; VK ID, Яндекс ID and Telegram remain deferred. Verify disabled-provider behaviour and examine repository privacy and account backup/restore evidence for T1; distinguish technical acceptance from external legal review and fresh production restore proof — _Depends on:_ —
 
 ---

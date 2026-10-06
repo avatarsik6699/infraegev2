@@ -678,8 +678,9 @@ export class MinimalApplicationPage {
         row.getByRole("heading", { name: "Подсказка", exact: true }),
       ).toBeVisible();
       await row.getByRole("button", { name: "Решение", exact: true }).click();
+      // The panel title follows the explanation kind («Идея решения», «Решение», «Разбор»).
       await expect(
-        row.getByRole("heading", { name: "Решение", exact: true }),
+        row.locator('[data-practice-help="solution"]'),
       ).toBeVisible();
       await expectNoHorizontalOverflow(this.page);
       await expect(
