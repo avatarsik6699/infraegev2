@@ -21,11 +21,16 @@ export class CourseCatalogPage {
     } else {
       await expect(published.locator("[data-course-progress]")).toBeVisible();
     }
+    // Change 170 F34: a planned course offers no link, only a disabled «Скоро».
     await expect(
-      this.page.locator(
-        '[data-course-status="planned"] a, [data-course-status="planned"] button',
-      ),
+      this.page.locator('[data-course-status="planned"] a'),
     ).toHaveCount(0);
+    const soon = this.page.locator('[data-course-status="planned"] button');
+    await expect(soon).toHaveCount(3);
+    for (const button of await soon.all()) {
+      await expect(button).toHaveText("Скоро");
+      await expect(button).toBeDisabled();
+    }
     await expect(this.page.locator("[data-course-summary]")).toContainText(
       "Всего направлений: 4 · Доступно: 1 · Уроков: 28",
     );
@@ -34,23 +39,14 @@ export class CourseCatalogPage {
     await expect(
       planned.locator("[data-illustration-placeholder]"),
     ).toHaveCount(3);
-    await expect(planned.locator("[data-badge]")).toHaveText([
-      "Скоро",
-      "Скоро",
-      "Скоро",
-    ]);
     for (const card of await planned.all()) {
       await expect(card).toHaveAttribute("aria-disabled", "true");
-      await expect(card.locator("[data-badge]")).toHaveCSS(
-        "background-color",
-        "rgb(248, 248, 246)",
-      );
       await expect(card).toHaveCSS("background-color", "rgb(255, 255, 255)");
     }
     if (!noScripts) {
       await this.expectGuestProgress();
     }
-    await this.expectUniformCards();
+    await this.expectCardGrid();
     await expectNoHorizontalOverflow(this.page);
     await this.page.getByRole("link", { name: "Открыть курс" }).click();
     await expect(this.page).toHaveURL(/\/courses\/python$/);
@@ -119,7 +115,7 @@ export class CourseCatalogPage {
           ),
       );
       expect(await this.geometry()).toEqual(before);
-      await this.expectUniformCards();
+      await this.expectCardGrid();
       await expectNoHorizontalOverflow(this.page);
       expect(errors).toEqual([]);
     } finally {
@@ -157,9 +153,10 @@ export class CourseCatalogPage {
       });
     };
     const before = await cardDocumentGeometry();
-    await expect(card).toHaveCSS("background-color", "rgb(255, 255, 255)");
+    // Change 170 F49: the published card has a monochrome gradient border.
+    await expect(card).toHaveCSS("background-image", /conic-gradient/);
     await link.hover();
-    await expect(card).toHaveCSS("background-color", "rgb(255, 255, 255)");
+    await expect(card).toHaveCSS("background-image", /conic-gradient/);
     await expect(link).toHaveCSS("background-color", "rgb(42, 45, 52)");
     await expect(link).toHaveCSS("color", "rgb(255, 255, 255)");
     await expect(link).toHaveCSS("transform", "none");
@@ -185,54 +182,51 @@ export class CourseCatalogPage {
     await expect(link).toHaveCSS("transform", "none");
     await this.page.setViewportSize({ width: 650, height: 900 });
     await this.page.addStyleTag({ content: "html { font-size: 200%; }" });
-    await this.expectUniformCards();
+    await this.expectCardGrid();
     await expectNoHorizontalOverflow(this.page);
     await this.page.setViewportSize({ width: 390, height: 900 });
-    await this.expectUniformCards();
+    await this.expectCardGrid();
     await expectNoHorizontalOverflow(this.page);
     await this.expectGuestProgress(card);
     await link.press("Enter");
     await expect(this.page).toHaveURL(/\/courses\/python$/);
   }
 
-  private async expectUniformCards() {
-    const sizes = await this.page
+  /** Change 170 F49: an asymmetric grid — cards never overlap, each keeps
+   * its picture slot, and cards sharing a row of the same layout match. */
+  private async expectCardGrid() {
+    const cards = await this.page
       .locator("[data-course-card]")
-      .evaluateAll((cards) =>
-        cards.map((card) => {
+      .evaluateAll((nodes) =>
+        nodes.map((card) => {
           const box = card.getBoundingClientRect();
           const illustration = card.querySelector<HTMLElement>(
             "[data-object-illustration], [data-illustration-placeholder]",
           );
           if (!illustration)
             throw new Error("Course card has no illustration slot");
-          const illustrationBox = illustration.getBoundingClientRect();
+          const slot = illustration.getBoundingClientRect();
           return {
+            layout: card.getAttribute("data-layout"),
             x: box.x,
             y: box.y,
-            width: box.width,
+            right: box.right,
+            bottom: box.bottom,
             height: box.height,
-            illustrationWidth: illustrationBox.width,
-            illustrationHeight: illustrationBox.height,
+            slot: slot.width * slot.height,
           };
         }),
       );
-    for (const size of sizes) {
-      expect(Math.abs(size.width - sizes[0]!.width)).toBeLessThan(1);
-      expect(
-        Math.abs(size.illustrationWidth - sizes[0]!.illustrationWidth),
-      ).toBeLessThan(1);
-      expect(
-        Math.abs(size.illustrationHeight - sizes[0]!.illustrationHeight),
-      ).toBeLessThan(1);
-    }
-    for (let left = 0; left < sizes.length; left++) {
-      for (let right = left + 1; right < sizes.length; right++) {
-        if (Math.abs(sizes[left]!.y - sizes[right]!.y) < 1) {
-          expect(
-            Math.abs(sizes[left]!.height - sizes[right]!.height),
-          ).toBeLessThan(1);
-        }
+    for (const card of cards) expect(card.slot).toBeGreaterThan(0);
+    for (let left = 0; left < cards.length; left++) {
+      for (let right = left + 1; right < cards.length; right++) {
+        const a = cards[left]!;
+        const b = cards[right]!;
+        const overlapX = Math.min(a.right, b.right) - Math.max(a.x, b.x);
+        const overlapY = Math.min(a.bottom, b.bottom) - Math.max(a.y, b.y);
+        expect(overlapX < 1 || overlapY < 1).toBe(true);
+        if (a.layout === b.layout && Math.abs(a.y - b.y) < 1)
+          expect(Math.abs(a.height - b.height)).toBeLessThan(1);
       }
     }
   }

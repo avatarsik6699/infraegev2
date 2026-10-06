@@ -31,6 +31,10 @@
   composes: breadcrumbs from "../../shared/styles/lesson-frame.module.css";
 }
 
+.pageProgress {
+  composes: pageProgress from "../../shared/styles/lesson-frame.module.css";
+}
+
 .subtopicHead {
   composes: pageHead from "../../shared/styles/lesson-frame.module.css";
 }
@@ -82,4 +86,15 @@
 
 .theory {
   min-width: 0;
+}
+
+/* F43: the summary sits right under «Практика и итог». */
+.summary {
+  max-width: var(--measure-reading);
+}
+
+/* F42: the subtopic lead between the title and the first section. */
+.subtopicLead[data-variant] {
+  max-width: var(--measure-reading);
+  margin: 0;
 }

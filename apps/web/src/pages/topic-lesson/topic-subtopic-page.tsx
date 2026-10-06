@@ -78,6 +78,15 @@ export const TopicSubtopicPage: React.FC<TopicLessonPageTypes.SubtopicProps> = (
         >
           {subtopic.title}
         </Typography.Title>
+        {subtopic.lead ? (
+          <Typography.Text
+            variant="lead"
+            className={styles.subtopicLead}
+            data-subtopic-lead
+          >
+            {subtopic.lead}
+          </Typography.Text>
+        ) : null}
       </header>
 
       <LessonTheory

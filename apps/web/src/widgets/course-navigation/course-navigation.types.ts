@@ -17,7 +17,7 @@ export namespace CourseNavigationTypes {
     courseTitle: string;
     modules: readonly Module[];
     currentLessonId: string;
-    /** Lesson progress block shown under the list. */
+    /** Lesson progress shown under the tree on narrow screens (F38). */
     progress?: React.ReactNode;
   };
 }

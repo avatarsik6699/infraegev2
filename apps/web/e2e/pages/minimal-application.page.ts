@@ -283,6 +283,10 @@ export class MinimalApplicationPage {
     await expect(
       taskCard.getByRole("textbox", { name: "Ваш ответ" }),
     ).toBeVisible();
+    // The hint and solution toggles work once the page is interactive.
+    await expect(
+      taskCard.getByRole("textbox", { name: "Ваш ответ" }),
+    ).toBeEnabled({ timeout: 15_000 });
     await expect(
       taskCard.getByRole("button", { name: "Проверить", exact: true }),
     ).toBeVisible();
@@ -447,14 +451,10 @@ export class MinimalApplicationPage {
     await expect(
       this.page.getByText("Найдено 0 заданий", { exact: true }),
     ).toBeVisible();
-    await this.page
-      .getByRole("button", { name: "Как работает практика", exact: true })
-      .click();
-    await expect(this.page.getByRole("dialog")).toContainText(
-      "Черновики сохраняются",
-    );
-    await this.page.keyboard.press("Escape");
-    await expect(this.page.getByRole("dialog")).toBeHidden();
+    // Change 170 F31: the «Как работает практика» popover is gone.
+    await expect(
+      this.page.getByRole("button", { name: "Как работает практика" }),
+    ).toHaveCount(0);
     await this.page.getByRole("link", { name: /Убрать тему: Python/ }).click();
     await expect(
       this.page

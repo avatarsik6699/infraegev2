@@ -13,12 +13,22 @@ import { useIsEnhanced } from "~/shared/lib/use-is-enhanced";
 import styles from "~/shared/styles/lesson-layout.module.css";
 
 type Props = {
+  /** The progress context the reset clears. */
+  kind: "topic_lesson" | "course_lesson";
   masteryThreshold: number;
   lessonId: string;
   tasks: readonly PracticeTaskTypes.Task[];
 };
 
-export const TopicLessonProgress: React.FC<Props> = (props) => {
+/**
+ * Lesson progress with its reset, shared by EGE subtopic pages and course
+ * lessons (F38): under «На этой странице», or in the menu on narrow screens.
+ */
+export const LessonProgressPanel: React.FC<Props> = (props) => {
+  const headingId =
+    props.kind === "topic_lesson"
+      ? "result-progress-title"
+      : "course-result-progress-title";
   const progress = useLessonProgress(props.lessonId, props.tasks);
   const enhanced = useIsEnhanced();
   const session = useAccountSession();
@@ -28,7 +38,7 @@ export const TopicLessonProgress: React.FC<Props> = (props) => {
   if (session.status === "ready" && !session.account)
     content = (
       <GuestLessonProgress
-        headingId="result-progress-title"
+        headingId={headingId}
         headingOrder={2}
         masteryThreshold={props.masteryThreshold}
         total={props.tasks.length}
@@ -39,7 +49,7 @@ export const TopicLessonProgress: React.FC<Props> = (props) => {
       <>
         <Typography.Title
           order={2}
-          id="result-progress-title"
+          id={headingId}
           className={styles.progressHeading}
         >
           Прогресс
@@ -56,7 +66,7 @@ export const TopicLessonProgress: React.FC<Props> = (props) => {
       <>
         <LessonProgress
           hideEmptyStatus
-          headingId="result-progress-title"
+          headingId={headingId}
           headingOrder={2}
           masteryThreshold={props.masteryThreshold}
           solved={progress.solvedTaskIds.length}
@@ -70,9 +80,10 @@ export const TopicLessonProgress: React.FC<Props> = (props) => {
           description="Будут удалены решённые задачи только этого урока."
           confirmLabel="Сбросить"
           actions="filled"
+          triggerClassName={styles.progressReset}
           onConfirm={() => {
             void accountApi
-              .resetLesson("topic_lesson", props.lessonId, session.csrfToken)
+              .resetLesson(props.kind, props.lessonId, session.csrfToken)
               .then(
                 () => {
                   progress.clear();
@@ -90,7 +101,11 @@ export const TopicLessonProgress: React.FC<Props> = (props) => {
       </>
     );
   return (
-    <div className={styles.resultProgress} data-result-progress>
+    <div
+      className={styles.resultProgress}
+      data-result-progress={props.kind === "topic_lesson" || undefined}
+      data-course-result-progress={props.kind === "course_lesson" || undefined}
+    >
       {content}
     </div>
   );

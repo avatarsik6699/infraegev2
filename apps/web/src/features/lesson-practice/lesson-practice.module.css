@@ -16,31 +16,27 @@
   display: none;
 }
 
+/* F39: «Задача N» is short and predictable — never truncated; the check
+   has its own reserved column to the right, so solving shifts nothing. */
 .practiceTab {
   position: relative;
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
+  flex: none;
+  grid-template-columns: auto auto 0.75rem;
   gap: var(--space-0-5);
   align-items: center;
-  min-width: 7.5rem;
   text-align: left;
 }
 
-.practiceTab[data-solved] {
-  padding-right: 1.75rem;
-}
-
 .tabLabel {
-  overflow: hidden;
   color: inherit;
   font-size: var(--text-xs);
   line-height: 1.25;
-  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .tabSolved {
-  position: static;
+  grid-column: 3;
   flex: none;
   fill: none;
   stroke: var(--learning-success, var(--color-success));
@@ -107,9 +103,10 @@
 
 .taskTheoryLinks li {
   min-width: 0;
-  overflow-wrap: anywhere;
+  max-width: 100%;
 }
 
+/* F39: one line with an ellipsis; the arrow stays right after the text. */
 .taskTheoryLinks a {
   display: inline-flex;
   max-width: 100%;
@@ -117,6 +114,13 @@
   align-items: center;
   justify-content: flex-start;
   text-align: left;
+}
+
+.taskTheoryLinks a > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* F32: tighter task text — closer sentences and paragraphs. */
@@ -420,10 +424,6 @@
 }
 
 @media (max-width: 34rem) {
-  .practiceTab {
-    min-width: 6.5rem;
-  }
-
   .diagramDescription dl > div {
     grid-template-columns: minmax(0, 1fr);
     gap: var(--space-0-5);
@@ -450,9 +450,9 @@
     width: 100%;
   }
 
+  /* Share the row, but wrap rather than squeeze (enlarged text). */
   .helpActions button {
-    min-width: 0;
-    flex: 1;
+    flex: 1 1 auto;
   }
 }
 

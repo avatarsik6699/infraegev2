@@ -7,11 +7,14 @@ import styles from "../lesson-practice.module.css";
  */
 export const PracticeTaskFeedback: React.FC<{
   state: LessonPracticeTypes.State;
-}> = (props) => (
-  <span className={styles.visuallyHidden} role="status" aria-live="polite">
-    {feedbackMessage(props.state)}
-  </span>
-);
+}> = (props) => {
+  const message = feedbackMessage(props.state);
+  return message ? (
+    <span className={styles.visuallyHidden} role="status" aria-live="polite">
+      {message}
+    </span>
+  ) : null;
+};
 
 function feedbackMessage(state: LessonPracticeTypes.State): string {
   if (state === "checking") return "Проверяем ответ…";

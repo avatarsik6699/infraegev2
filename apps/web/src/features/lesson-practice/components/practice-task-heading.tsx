@@ -29,6 +29,7 @@ export const PracticeTaskHeading: React.FC<PracticeTaskHeadingProps> = (
                   presentation="action"
                   hierarchy="text"
                   to={link.href}
+                  title={link.label}
                 >
                   {link.label}
                 </ActionLink>
@@ -37,6 +38,7 @@ export const PracticeTaskHeading: React.FC<PracticeTaskHeadingProps> = (
                   presentation="action"
                   hierarchy="text"
                   hash={link.hash}
+                  anchorProps={{ title: link.label }}
                 >
                   {link.label}
                 </FragmentLink>

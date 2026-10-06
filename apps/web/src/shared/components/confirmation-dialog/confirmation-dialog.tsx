@@ -2,6 +2,7 @@ import { Dialog } from "@base-ui/react/dialog";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "~/shared/components/button";
+import { cssUtils } from "~/shared/lib/css-utils";
 import { Typography } from "~/shared/components/typography";
 import type { ConfirmationDialogTypes } from "./confirmation-dialog.types";
 import styles from "./confirmation-dialog.module.css";
@@ -55,11 +56,12 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogTypes.Props> = (
                 <Trash2 size={16} strokeWidth={1.8} aria-hidden="true" />
               ) : undefined
             }
-            className={
+            className={cssUtils.cx(
               props.triggerAppearance === "subtle"
                 ? styles.subtleTrigger
-                : undefined
-            }
+                : undefined,
+              props.triggerClassName,
+            )}
           />
         }
         aria-label={props.triggerAriaLabel}

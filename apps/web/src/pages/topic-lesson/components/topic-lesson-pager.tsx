@@ -30,6 +30,7 @@ const PagerLink: React.FC<{
     <Link
       className={styles.pagerLink}
       data-direction={props.direction}
+      title={props.target.title}
       rel={props.direction === "previous" ? "prev" : "next"}
       to="/ege/$slug/$subtopic"
       params={{ slug: props.routeSlug, subtopic: props.target.subtopic }}
@@ -40,6 +41,7 @@ const PagerLink: React.FC<{
     <Link
       className={styles.pagerLink}
       data-direction={props.direction}
+      title={props.target.title}
       rel={props.direction === "previous" ? "prev" : "next"}
       to="/ege/$slug/praktika"
       params={{ slug: props.routeSlug }}

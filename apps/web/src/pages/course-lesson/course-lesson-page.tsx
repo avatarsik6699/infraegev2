@@ -1,9 +1,11 @@
-import { Link, useRouter } from "@tanstack/react-router";
+import { useRouter } from "@tanstack/react-router";
 import { useRef } from "react";
 import { ScrollToTop } from "~/shared/components/scroll-to-top";
 import { getCourseLessons } from "~/entities/course";
+import { Breadcrumbs } from "~/shared/components/breadcrumbs";
 import { LessonTheory } from "~/shared/components/learning-content";
 import { Typography } from "~/shared/components/typography";
+import { useMediaQuery } from "~/shared/lib/media-query";
 import { russianCount } from "~/shared/lib/russian-count";
 import { useAccountSession } from "~/features/account";
 import {
@@ -13,11 +15,11 @@ import {
 import { ReadingPositionIndicator } from "~/features/reading-position";
 import { CourseNavigation } from "~/widgets/course-navigation";
 import { PageOutline } from "~/widgets/lesson-outline";
+import { LessonProgressPanel } from "~/widgets/lesson-progress-panel";
 import { LessonPracticeFlow } from "~/widgets/lesson-practice-flow";
 import { PublicFooter } from "~/widgets/public-footer";
 import { PublicHeader } from "~/widgets/public-header";
 import { CourseLessonPager } from "./components/course-lesson-pager";
-import { CourseLessonProgress } from "./components/course-lesson-progress";
 import { CourseLessonResult } from "./components/course-lesson-result";
 import type { CourseLessonPageTypes } from "./course-lesson-page.types";
 import styles from "./course-lesson.module.css";
@@ -68,6 +70,17 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
           ) ?? 0) + 1,
         )}`
       : undefined;
+  // F38: progress sits under «На этой странице»; below 72rem it moves into
+  // the course menu. One instance either way.
+  const narrow = useMediaQuery("(max-width: 72rem)");
+  const progress = (
+    <LessonProgressPanel
+      kind="course_lesson"
+      masteryThreshold={props.lesson.masteryThreshold ?? 0.8}
+      lessonId={props.lesson.id}
+      tasks={props.tasks}
+    />
+  );
   const outline = [
     ...props.lesson.theory.map((concept) => ({
       id: concept.id,
@@ -95,37 +108,25 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
               courseTitle={props.course.title}
               modules={modules}
               currentLessonId={props.lesson.id}
-              progress={
-                <CourseLessonProgress
-                  masteryThreshold={props.lesson.masteryThreshold ?? 0.8}
-                  lessonId={props.lesson.id}
-                  tasks={props.tasks}
-                />
-              }
+              progress={narrow ? progress : null}
             />
           </div>
         </aside>
 
         <article className={styles.article} data-article-frame ref={articleRef}>
-          <nav
+          <Breadcrumbs
             className={styles.breadcrumbs}
-            aria-label="Путь к странице"
-            data-course-lesson-context
-          >
-            <ol>
-              <li>
-                <Link to="/courses">Мини-курсы</Link>
-              </li>
-              <li>
-                <Link
-                  to="/courses/$courseSlug"
-                  params={{ courseSlug: props.course.routeSlug }}
-                >
-                  {props.course.title}
-                </Link>
-              </li>
-            </ol>
-          </nav>
+            navProps={{ "data-course-lesson-context": true }}
+            items={[
+              { label: "Мини-курсы", to: "/courses" },
+              {
+                label: props.course.title,
+                to: "/courses/$courseSlug",
+                params: { courseSlug: props.course.routeSlug },
+              },
+              { label: props.lesson.title },
+            ]}
+          />
 
           <header className={styles.head} data-course-lesson-head>
             {lessonNumber ? (
@@ -219,6 +220,9 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
         >
           <div className={styles.pageRailContents}>
             <PageOutline items={outline} />
+            {narrow ? null : (
+              <div className={styles.pageProgress}>{progress}</div>
+            )}
           </div>
         </aside>
       </main>

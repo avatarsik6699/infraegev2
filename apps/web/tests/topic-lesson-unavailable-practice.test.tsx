@@ -12,6 +12,16 @@ import type { PracticeTaskTypes } from "~/entities/practice-task";
 vi.mock("@tanstack/react-router", async (importOriginal) => ({
   ...(await importOriginal<typeof import("@tanstack/react-router")>()),
   useRouter: () => ({ invalidate: () => undefined }),
+  // The practice page renders the lesson summary, which links to theory.
+  Link: (props: { children?: React.ReactNode; to?: string }) => (
+    <a href={props.to}>{props.children}</a>
+  ),
+}));
+
+vi.mock("~/shared/components/action-link", () => ({
+  ActionLink: (props: { children?: React.ReactNode; to: string }) => (
+    <a href={props.to}>{props.children}</a>
+  ),
 }));
 
 vi.mock("~/shared/components/scroll-to-top", () => ({
@@ -63,12 +73,17 @@ vi.mock("~/widgets/subtopic-navigation", () => ({
   ),
 }));
 
+// A wide screen: lesson progress renders under «На этой странице» (F38).
+vi.mock("~/shared/lib/media-query", () => ({
+  useMediaQuery: () => false,
+}));
+
 vi.mock("~/widgets/public-header", () => ({
   PublicHeader: () => null,
 }));
 
-vi.mock("~/pages/topic-lesson/components/topic-lesson-breadcrumbs", () => ({
-  TopicLessonBreadcrumbs: () => null,
+vi.mock("~/shared/components/breadcrumbs", () => ({
+  Breadcrumbs: () => null,
 }));
 
 vi.mock("~/pages/topic-lesson/components/topic-lesson-pager", () => ({
@@ -87,14 +102,10 @@ vi.mock("~/widgets/public-footer", () => ({
   PublicFooter: () => null,
 }));
 
-vi.mock("~/pages/topic-lesson/components/topic-lesson-progress", () => ({
-  TopicLessonProgress: () => (
+vi.mock("~/widgets/lesson-progress-panel", () => ({
+  LessonProgressPanel: () => (
     <div data-testid="topic-lesson-progress">Все задания решены (0 / 0)</div>
   ),
-}));
-
-vi.mock("~/pages/topic-lesson/components/topic-lesson-result", () => ({
-  TopicLessonResult: () => null,
 }));
 
 const createTasks = (count: number): PracticeTaskTypes.Task[] =>

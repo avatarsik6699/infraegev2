@@ -26,16 +26,19 @@ export const numberSequencesLesson = defineLesson({
     {
       slug: "chisla-iz-fayla",
       title: "Числа из файла",
+      lead: "Как прочитать числа из файла и проверять условие для каждого числа по отдельности.",
       conceptIds: ["sequence-from-file", "single-values"],
     },
     {
       slug: "sosednie-elementy",
       title: "Соседние пары и тройки",
+      lead: "Как перебирать соседние пары и тройки, чтобы не пропустить ни одну и не посчитать дважды.",
       conceptIds: ["neighbor-pairs", "neighbor-triples"],
     },
     {
       slug: "proverka",
       title: "Два прохода и проверка",
+      lead: "Когда условие нельзя проверить за один проход и как убедиться, что границы и ответ посчитаны верно.",
       conceptIds: ["two-passes", "verify-boundaries"],
     },
   ],

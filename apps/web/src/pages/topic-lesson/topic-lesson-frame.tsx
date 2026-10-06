@@ -1,15 +1,21 @@
 import { useEffect, useRef } from "react";
-import { groupTasksBySubtopic, lessonSubtopics } from "~/entities/lesson";
+import {
+  groupTasksBySubtopic,
+  lessonPublications,
+  lessonSubtopics,
+  topicLessons,
+} from "~/entities/lesson";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { ReadingPositionIndicator } from "~/features/reading-position";
+import { Breadcrumbs } from "~/shared/components/breadcrumbs";
 import { ScrollToTop } from "~/shared/components/scroll-to-top";
+import { useMediaQuery } from "~/shared/lib/media-query";
 import { scrollToTop } from "~/shared/lib/scroll-to-top";
 import { PageOutline } from "~/widgets/lesson-outline";
+import { LessonProgressPanel } from "~/widgets/lesson-progress-panel";
 import { PublicFooter } from "~/widgets/public-footer";
 import { PublicHeader } from "~/widgets/public-header";
 import { SubtopicNavigation } from "~/widgets/subtopic-navigation";
-import { TopicLessonBreadcrumbs } from "./components/topic-lesson-breadcrumbs";
-import { TopicLessonProgress } from "./components/topic-lesson-progress";
 import type { TopicLessonPageTypes } from "./topic-lesson-page.types";
 import styles from "./topic-lesson.module.css";
 
@@ -30,6 +36,25 @@ export const TopicLessonFrame: React.FC<TopicLessonPageTypes.FrameProps> = (
     title: subtopic.title,
     taskIds: (groups.get(subtopic.slug) ?? []).map((task) => task.id),
   }));
+  const topics = publishedTopics().map((lesson) =>
+    lesson.id === props.lesson.id
+      ? { ...topicFolder(lesson), subtopics }
+      : topicFolder(lesson),
+  );
+  const currentTitle =
+    subtopics.find((subtopic) => subtopic.slug === props.current)?.title ??
+    "Практика и итог";
+  // F38: progress sits under «На этой странице»; below 72rem that rail is
+  // hidden, so it moves into the subtopic menu. One instance either way.
+  const narrow = useMediaQuery("(max-width: 72rem)");
+  const progress = props.practiceUnavailable ? null : (
+    <LessonProgressPanel
+      kind="topic_lesson"
+      masteryThreshold={props.lesson.masteryThreshold ?? 0.8}
+      lessonId={props.lesson.id}
+      tasks={props.tasks}
+    />
+  );
 
   return (
     <div className={styles.page} data-topic-lesson-page>
@@ -41,34 +66,29 @@ export const TopicLessonFrame: React.FC<TopicLessonPageTypes.FrameProps> = (
         <aside className={styles.rail} aria-label="Подтемы" data-outline-rail>
           <div className={styles.railContents}>
             <SubtopicNavigation
+              topics={topics}
               lessonId={props.lesson.id}
-              routeSlug={props.lesson.routeSlug}
-              title={props.lesson.title}
-              taskLabel={topicCatalog.formatTaskNumbers(
-                props.lesson.taskNumbers,
-              )}
-              subtopics={subtopics}
               current={props.current}
               tasks={props.tasks}
               practiceUnavailable={props.practiceUnavailable}
-              progress={
-                props.practiceUnavailable ? null : (
-                  <TopicLessonProgress
-                    masteryThreshold={props.lesson.masteryThreshold ?? 0.8}
-                    lessonId={props.lesson.id}
-                    tasks={props.tasks}
-                  />
-                )
-              }
+              progress={narrow ? progress : null}
             />
           </div>
         </aside>
 
         <article className={styles.article} data-article-frame ref={articleRef}>
-          <TopicLessonBreadcrumbs
-            routeSlug={props.lesson.routeSlug}
-            taskNumbers={props.lesson.taskNumbers}
-            title={props.lesson.title}
+          <Breadcrumbs
+            className={styles.breadcrumbs}
+            navProps={{ "data-topic-lesson-context": true }}
+            items={[
+              { label: "Темы ЕГЭ", to: "/ege" },
+              {
+                label: `${topicCatalog.formatTaskNumbers(props.lesson.taskNumbers)}. ${props.lesson.title}`,
+                to: "/ege/$slug",
+                params: { slug: props.lesson.routeSlug },
+              },
+              { label: currentTitle },
+            ]}
           />
           {props.children}
         </article>
@@ -80,6 +100,9 @@ export const TopicLessonFrame: React.FC<TopicLessonPageTypes.FrameProps> = (
         >
           <div className={styles.pageRailContents}>
             <PageOutline items={props.outline} />
+            {!narrow && progress ? (
+              <div className={styles.pageProgress}>{progress}</div>
+            ) : null}
           </div>
         </aside>
       </main>
@@ -89,3 +112,35 @@ export const TopicLessonFrame: React.FC<TopicLessonPageTypes.FrameProps> = (
     </div>
   );
 };
+
+type TopicLesson = (typeof topicLessons)[number];
+
+/** Published topics in exam order (F37 tree). */
+function publishedTopics(): TopicLesson[] {
+  const published = new Set(
+    lessonPublications
+      .filter((publication) => publication.status === "published")
+      .map((publication) => publication.id),
+  );
+  return topicLessons
+    .filter((lesson) => published.has(lesson.id))
+    .sort((a, b) => a.taskNumbers[0] - b.taskNumbers[0]);
+}
+
+function topicFolder(lesson: TopicLesson) {
+  const numbers = lesson.taskNumbers;
+  return {
+    id: lesson.id,
+    routeSlug: lesson.routeSlug,
+    title: lesson.title,
+    number:
+      numbers.length === 1
+        ? String(numbers[0]).padStart(2, "0")
+        : `${String(numbers[0])}–${String(numbers.at(-1))}`,
+    subtopics: lessonSubtopics(lesson).map((subtopic) => ({
+      slug: subtopic.slug,
+      title: subtopic.title,
+      taskIds: [],
+    })),
+  };
+}

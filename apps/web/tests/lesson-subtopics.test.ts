@@ -104,4 +104,14 @@ describe("lesson subtopics", () => {
   it("keeps every authored topic split valid", () => {
     expect(topicLessons.flatMap(subtopicErrors)).toEqual([]);
   });
+
+  it("gives every authored subtopic a lead under its title", () => {
+    // Change 170 F42: a subtopic title is never followed straight by a heading.
+    const missing = topicLessons.flatMap((item) =>
+      (item.subtopics ?? [])
+        .filter((subtopic) => !subtopic.lead?.trim())
+        .map((subtopic) => `${item.id}/${subtopic.slug}`),
+    );
+    expect(missing).toEqual([]);
+  });
 });

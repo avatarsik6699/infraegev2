@@ -6,12 +6,7 @@ import {
 } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { expectPublicReleaseIdentity } from "./public-header.assertions";
-import {
-  expectDesktopLessonRail,
-  expectLessonInteractiveTargets,
-  expectKeyboardLessonDisclosures,
-  openLessonAtTop,
-} from "./lesson-page.assertions";
+import { openLessonAtTop } from "./lesson-page.assertions";
 
 type TopicLessonPageConfig = {
   route: string;
@@ -102,9 +97,10 @@ export class TopicLessonPage {
       await expect(this.page.locator("[data-practice-form] form")).toHaveCount(
         count,
       );
+      // Change 170 F30: without scripts the hint and solution panels show.
       await expect(
-        this.page.locator("[data-practice-form] [data-unenhanced-accordion]"),
-      ).toHaveCount(count);
+        this.page.locator("[data-practice-form] [data-practice-help]"),
+      ).toHaveCount(count * 2);
     } else {
       await expect(this.page.getByRole("tab")).toHaveCount(count);
     }
@@ -288,11 +284,12 @@ export class TopicLessonPage {
       "exam-program-template",
       "general-method",
     ]);
+    // Change 170 F37: the open topic folder lists 6 subtopics and «Практика и итог».
     await expect(
       this.page
         .getByRole("navigation", { name: "Подтемы урока" })
-        .locator("ol > li"),
-    ).toHaveCount(6);
+        .locator('[data-topic-folder="rekursiya"] ol > li'),
+    ).toHaveCount(7);
     await expect(
       this.page
         .getByRole("navigation", { name: "Подтемы урока" })
@@ -376,9 +373,10 @@ export class TopicLessonPage {
       ).toBeVisible();
       await this.openTopicPractice(true);
       await this.expectTaskPractice(true, this.config.taskCount ?? 14);
+      // F30: without scripts the help toggles hide and both panels show.
       await expect(
-        this.page.locator("[data-practice-form] details"),
-      ).not.toHaveCount(0);
+        this.page.locator("[data-practice-help]").first(),
+      ).toBeVisible();
       await expect(
         this.page
           .locator("[data-practice-task]")
@@ -389,7 +387,7 @@ export class TopicLessonPage {
         this.page
           .locator("[data-practice-task]")
           .first()
-          .getByText("Подсказка", { exact: true }),
+          .getByRole("heading", { name: "Подсказка", exact: true }),
       ).toBeVisible();
       await this.openTopicDocument(this.config.route);
       return;
@@ -797,14 +795,17 @@ export class TopicLessonPage {
     const task = this.page.locator(
       '[data-practice-task="rekursiya-base-sequence"]',
     );
-    const hintTrigger = noJavaScript
-      ? task.locator("summary").filter({ hasText: /^Подсказка$/ })
-      : task.getByRole("button", { name: "Подсказка", exact: true });
-    const solutionTrigger = noJavaScript
-      ? task.locator("summary").filter({ hasText: /^Решение$/ })
-      : task.getByRole("button", { name: "Решение", exact: true });
+    // F30: toggle labels change («Скрыть решение»), so find them by panel.
+    const hintTrigger = task.locator('button[aria-controls^="hint-"]');
+    const solutionTrigger = task.locator('button[aria-controls^="solution-"]');
     const hint = task.locator('[data-content-context="hint"]');
     const solution = task.locator('[data-content-context="solution"]');
+    if (noJavaScript) {
+      await expect(hintTrigger).toBeHidden();
+      await expect(hint).toBeVisible();
+      await expect(solution).toBeVisible();
+      return;
+    }
     await expect(hint).toBeHidden();
     await expect(solution).toBeHidden();
     await hintTrigger.focus();
@@ -825,10 +826,8 @@ export class TopicLessonPage {
       await expect(paragraph).toHaveCSS("color", "rgb(23, 25, 30)");
     }
     for (const trigger of [hintTrigger, solutionTrigger]) {
-      await expect(trigger.locator("span").first()).toHaveCSS(
-        "font-weight",
-        "500",
-      );
+      // F30: the toggles are ordinary soft buttons.
+      await expect(trigger).toHaveCSS("font-weight", "600");
     }
     for (const content of [hint, solution]) {
       await expect(content.locator("..")).toHaveCSS(
@@ -935,7 +934,7 @@ export class TopicLessonPage {
       "44px",
     );
     const answer = this.page
-      .getByRole("textbox", { name: "Ответ", exact: true })
+      .getByRole("textbox", { name: "Ваш ответ", exact: true })
       .first();
     await answer.evaluate((element: HTMLInputElement) =>
       element.focus({ preventScroll: true }),
@@ -989,12 +988,10 @@ export class TopicLessonPage {
   }
 
   async expectStudyDensity(): Promise<void> {
+    // Change 170 F37: the tree has no «Все темы ЕГЭ» link; files keep 40px targets.
     const navigation = this.page.locator("[data-subtopic-navigation]");
-    await expect(
-      navigation.getByRole("link", { name: "Все темы ЕГЭ", exact: true }),
-    ).toHaveCSS("min-height", "44px");
     const measurements = await navigation
-      .locator("ol a, ol + div a")
+      .locator("details[open] ol a")
       .evaluateAll((nodes) =>
         nodes.map((node) => ({
           minimum: parseFloat(getComputedStyle(node).minHeight),
@@ -1122,7 +1119,7 @@ export class TopicLessonPage {
     );
     await trigger.focus();
     await trigger.press("Enter");
-    const links = topicNavigation.locator("ol a, ol + div a");
+    const links = topicNavigation.locator("details[open] ol a");
     await this.expectStudyDensity();
     const bounds = await links.evaluateAll((nodes) =>
       nodes.map((node) => {
@@ -1137,7 +1134,7 @@ export class TopicLessonPage {
           bounds[index - 1].bottom,
         );
     }
-    const subtopicLinks = topicNavigation.locator("ol a");
+    const subtopicLinks = topicNavigation.locator("details[open] ol a");
     const hrefs = await subtopicLinks.evaluateAll((nodes) =>
       nodes.map((node) => node.getAttribute("href")),
     );
@@ -1376,74 +1373,21 @@ export class TopicLessonPage {
     if (!noJavaScript) await this.open();
   }
 
-  async expectPublishedNumberRecordLesson(): Promise<void> {
-    await this.expectPublishedTopicIdentity();
-    await expect(this.page.locator("#theory section[id]")).not.toHaveCount(0);
-    await expect(
-      this.page
-        .getByRole("navigation", { name: "Подтемы урока" })
-        .getByRole("link", { name: "Практика и итог" }),
-    ).toHaveAttribute("href", "/ege/5-preobrazovanie-zapisey-chisel/praktika");
-    await expect(this.page.locator("[data-practice-task]")).toHaveCount(0);
-  }
-
-  async expectKeyboardHelpDisclosures(): Promise<void> {
-    await expectKeyboardLessonDisclosures(this.page);
-    const firstTask = this.page.locator("[data-practice-task]").first();
-    const solution = firstTask.getByRole("button", { name: "Решение" });
-    await solution.focus();
-    await solution.press("Enter");
-    await expect(solution).toHaveAttribute("aria-expanded", "true");
-    await expect(firstTask.getByText(/19₁₀ = 10011₂/)).toBeVisible();
-  }
-
-  async expectRichPracticeStatement(): Promise<void> {
-    const taskTab = this.page.getByRole("tab", {
-      name: /Проследите рекурсивные вызовы/,
-    });
-    await taskTab.click();
-    const task = this.page.locator(
-      '[data-practice-task="rekursiya-call-stack-trace"]',
-    );
-    await expect(
-      task.getByRole("group", { name: "Рекурсивная функция" }),
-    ).toBeVisible();
-    await expect(task.getByRole("table")).toHaveCount(0);
-    await expect(
-      task.getByRole("group", { name: "Рекурсивная функция" }),
-    ).toContainText("F(3) = ?");
-    await expect(task.getByText("f(5)", { exact: true })).toBeVisible();
-    await this.expectNoHorizontalOverflow();
-  }
-
-  async expectRichPracticeStatementWithoutJavaScript(): Promise<void> {
-    const task = this.page.locator(
-      '[data-practice-task="rekursiya-call-stack-trace"]',
-    );
-    await expect(
-      task.getByRole("group", { name: "Рекурсивная функция" }),
-    ).toBeVisible();
-    await expect(task.getByRole("table")).toHaveCount(0);
-    await expect(
-      task.getByRole("group", { name: "Рекурсивная функция" }),
-    ).toContainText("F(5) = ?");
-  }
-
+  /** F23: selecting an outline item changes neither weight nor geometry. */
   async expectStableOutlineSelection(): Promise<void> {
-    const outline = this.page.getByRole("navigation", {
-      name: "На этой странице",
-    });
-    const childLinks = outline.locator("[data-outline-link-id]");
+    await this.page.setViewportSize({ width: 1440, height: 900 });
+    await this.openTopicDocument("/ege/16-rekursiya/osnovy");
+    const outline = this.page.locator("[data-page-outline]");
+    const links = outline.getByRole("link");
     const readGeometry = () =>
-      childLinks.evaluateAll((links) =>
-        links.map((link) => ({
-          fontWeight: getComputedStyle(link).fontWeight,
-          height: link.getBoundingClientRect().height,
-          whiteSpace: getComputedStyle(link).whiteSpace,
-          width: link.getBoundingClientRect().width,
+      links.evaluateAll((nodes) =>
+        nodes.map((node) => ({
+          fontWeight: getComputedStyle(node).fontWeight,
+          fontSize: getComputedStyle(node).fontSize,
+          height: node.getBoundingClientRect().height,
+          width: node.getBoundingClientRect().width,
         })),
       );
-
     const before = await readGeometry();
     const target = outline.getByRole("link", {
       name: "Вычисляем F(5) по правилу",
@@ -1451,37 +1395,6 @@ export class TopicLessonPage {
     await target.click();
     await expect(target).toHaveAttribute("aria-current", "location");
     expect(await readGeometry()).toEqual(before);
-    expect(new Set(before.map((item) => item.fontWeight))).toEqual(
-      new Set(["400"]),
-    );
-    expect(new Set(before.map((item) => item.whiteSpace))).toEqual(
-      new Set(["normal"]),
-    );
-    expect(Math.max(...before.map((item) => item.height))).toBeGreaterThan(32);
-    await this.page.evaluate(() => {
-      history.replaceState(null, "", location.pathname);
-      document.scrollingElement?.scrollTo({ top: 0 });
-    });
-  }
-
-  async expectPublishedNumberRecordLessonReadableWithoutJavaScript(): Promise<void> {
-    await this.open();
-    await this.expectPublishedNumberRecordLesson();
-    await this.openTopicPractice(true);
-    await this.expectTaskPractice(true, 5);
-    await expect(
-      this.page.locator("[data-practice-form] [data-unenhanced-accordion]"),
-    ).toHaveCount(5);
-    await expect(this.page.getByText(/19₁₀ = 10011₂/)).toBeVisible();
-    await expect(
-      this.page.getByText(
-        "Прогресс хранится только в этом браузере и появится после загрузки страницы.",
-      ),
-    ).toBeVisible();
-    await expect(this.page.getByRole("link", { name: "Все темы" })).toHaveCount(
-      0,
-    );
-    await this.expectNoHorizontalOverflow();
   }
 
   async expectPublishedLesson(): Promise<void> {
@@ -1510,413 +1423,6 @@ export class TopicLessonPage {
         .getByRole("link", { name: "Практика и итог" }),
     ).toBeVisible();
     await this.expectNoHorizontalOverflow();
-  }
-
-  async expectDesktopComposition(): Promise<void> {
-    const context = this.page.locator("[data-topic-lesson-context]");
-    await expect(context).toHaveCSS("border-bottom-width", "0px");
-    await expect(
-      context.getByRole("link", { name: "Назад", exact: true }),
-    ).toBeVisible();
-    await expect(
-      context.getByText("Задание 16 · Рекурсивные алгоритмы", {
-        exact: true,
-      }),
-    ).toBeVisible();
-    await expect(
-      this.page.getByRole("progressbar", { name: "Решённые задачи урока" }),
-    ).toBeVisible();
-
-    const layout = await this.page
-      .locator("[data-lesson-frame]")
-      .evaluate((lesson) => {
-        const rail = lesson.querySelector<HTMLElement>("[data-outline-rail]");
-        const railContents = rail?.firstElementChild;
-        const article = lesson.querySelector<HTMLElement>(
-          "[data-article-frame]",
-        );
-        const marginRail =
-          lesson.querySelector<HTMLElement>("[data-margin-rail]");
-        if (!rail || !railContents || !article || !marginRail) {
-          throw new Error("Missing lesson composition");
-        }
-        return {
-          columns: getComputedStyle(lesson).gridTemplateColumns,
-          railPosition: getComputedStyle(railContents).position,
-          articleDisplay: getComputedStyle(article).display,
-          railHasProgress: Boolean(rail.querySelector('[role="progressbar"]')),
-          articleHasProgress: Boolean(
-            article.querySelector('[role="progressbar"]'),
-          ),
-          progressLabelSize: rail.querySelector<HTMLElement>(
-            "[data-result-progress] h2",
-          )
-            ? getComputedStyle(
-                rail.querySelector<HTMLElement>(
-                  "[data-result-progress] h2",
-                ) as HTMLElement,
-              ).fontSize
-            : null,
-          marginRailChildren: marginRail.childElementCount,
-          mistakeLeft: article
-            .querySelector<HTMLElement>("[data-concept-mistake]")
-            ?.getBoundingClientRect().left,
-          explanationLeft: article
-            .querySelector<HTMLElement>("[data-concept-explanation]")
-            ?.getBoundingClientRect().left,
-        };
-      });
-    expect(layout.columns.split(" ")).toHaveLength(3);
-    expect(layout.railPosition).toBe("sticky");
-    expect(layout.articleDisplay).toBe("block");
-    expect(layout.railHasProgress).toBe(true);
-    expect(layout.articleHasProgress).toBe(false);
-    expect(layout.progressLabelSize).toBe("12px");
-    expect(layout.marginRailChildren).toBe(0);
-    expect(
-      Math.abs((layout.mistakeLeft ?? 0) - (layout.explanationLeft ?? 0)),
-    ).toBeLessThan(2);
-    await expectDesktopLessonRail(this.page);
-  }
-
-  async expectMobileComposition(): Promise<void> {
-    const topics = this.page.getByRole("navigation", { name: "Подтемы урока" });
-    const disclosure = topics.getByRole("button", { name: /Подтемы · /u });
-    await disclosure.click();
-    await expect(disclosure).toHaveAttribute("aria-expanded", "true");
-    await expect(
-      topics.getByRole("link", { name: "Практика и итог" }),
-    ).toBeVisible();
-    await expectLessonInteractiveTargets(this.page);
-  }
-
-  async expectDirectEntryBackFallback(): Promise<void> {
-    await this.page.goto("about:blank");
-    await this.open();
-    await this.page.getByRole("link", { name: "Назад", exact: true }).click();
-    await expect(this.page).toHaveURL(/\/$/);
-    await expect(
-      this.page.getByRole("heading", {
-        name: "Информатика - это система",
-      }),
-    ).toBeVisible();
-  }
-
-  async expectInternalBackNavigation(): Promise<void> {
-    await this.page.goto("/ege#exam-map-heading");
-    await expect(
-      this.page.getByRole("heading", { name: "Темы ЕГЭ по информатике" }),
-    ).toBeVisible();
-    await expect(this.page).toHaveURL(/\/ege\/?#exam-map-heading$/);
-    await expect(
-      this.page.locator("[data-topic-catalog-page] main"),
-    ).toHaveAttribute("data-motion-active", "true");
-    await this.page
-      .getByRole("article")
-      .filter({
-        has: this.page.getByRole("heading", { name: "Рекурсивные алгоритмы" }),
-      })
-      .getByRole("link", { name: "Открыть тему" })
-      .click();
-    await expect(this.page).toHaveURL(/\/ege\/16-rekursiya$/);
-    await expect(
-      this.page.locator("[data-practice-form][data-enhanced]"),
-    ).toBeVisible();
-    const backLink = this.page.getByRole("link", {
-      name: "Назад",
-      exact: true,
-    });
-    await backLink.click();
-    await expect(this.page).toHaveURL(/\/ege\/?#exam-map-heading$/);
-  }
-
-  async expectPracticeSolutions(): Promise<void> {
-    await this.page
-      .getByRole("tab", {
-        name: /Задача 1 из 14/,
-      })
-      .click();
-    const firstPanel = this.page.locator("[data-practice-task]").first();
-    await firstPanel.getByRole("button", { name: "Решение" }).click();
-    await expect(firstPanel.getByText(/F\(5\) = 32/)).toBeVisible();
-
-    await this.page
-      .getByRole("tab", {
-        name: /Задача 2 из 14: Проследите рекурсивные вызовы/,
-      })
-      .click();
-    const tracePanel = this.page.locator(
-      '[data-practice-task="rekursiya-call-stack-trace"]',
-    );
-    await tracePanel.getByRole("button", { name: "Решение" }).click();
-    await expect(
-      tracePanel.getByRole("group", {
-        name: "Та же рекуррентная формула в Python",
-      }),
-    ).toBeVisible();
-  }
-
-  async expectDistilledSolvedTask(): Promise<void> {
-    const firstTab = this.page.getByRole("tab", {
-      name: /Задача 1 из 14/,
-    });
-    await firstTab.click();
-    const firstPanel = this.page.locator(
-      '[data-practice-task="rekursiya-base-sequence"]',
-    );
-    const answer = firstPanel.getByRole("textbox", { name: "Ответ" });
-    await answer.fill("32");
-    await firstPanel.getByRole("button", { name: "Проверить" }).click();
-    await expect(firstPanel.getByRole("status")).toContainText("Верно");
-    await expect(answer).toBeDisabled();
-    await expect(answer).toHaveAttribute("data-solved", "true");
-    await expect(answer).toHaveValue("32");
-    await expect(
-      firstPanel.locator("[data-answer-accepted-icon]"),
-    ).toBeVisible();
-    await expect(
-      firstPanel.getByRole("button", { name: "Проверить" }),
-    ).toBeDisabled();
-    await expect(firstPanel.getByText("решено", { exact: true })).toHaveCount(
-      0,
-    );
-    await expect(
-      this.page.getByRole("button", { name: /Следующая задача:/ }),
-    ).toHaveCount(0);
-    await expect(
-      this.page.getByRole("link", { name: "Перейти к результату" }),
-    ).toHaveCount(0);
-
-    await expect(firstTab).toHaveAttribute(
-      "aria-label",
-      /Задача 1 из 14:.*решена/,
-    );
-    await expect(firstTab).toHaveAttribute("data-solved", "true");
-    const solvedColors = await answer.evaluate((element) => {
-      const style = getComputedStyle(element);
-      return {
-        background: style.backgroundColor,
-        border: style.borderColor,
-      };
-    });
-
-    const secondTab = this.page.getByRole("tab", { name: /Задача 2 из 14/ });
-    await secondTab.click();
-    await expect(secondTab).toHaveAttribute("aria-selected", "true");
-    const unsolvedColors = await this.page
-      .locator('[data-practice-task="rekursiya-call-stack-trace"]')
-      .getByRole("textbox", { name: "Ответ" })
-      .evaluate((element) => {
-        const style = getComputedStyle(element);
-        return {
-          background: style.backgroundColor,
-          border: style.borderColor,
-        };
-      });
-    expect(solvedColors.border).toBe(unsolvedColors.border);
-    expect(solvedColors.background).toBe(unsolvedColors.background);
-    await firstTab.click();
-    await expect(firstTab).toHaveAttribute("aria-selected", "true");
-
-    await this.page.reload();
-    const restoredAnswer = this.page
-      .locator('[data-practice-task="rekursiya-base-sequence"]')
-      .getByRole("textbox", { name: "Ответ" });
-    await expect(restoredAnswer).toHaveValue("32");
-    await expect(restoredAnswer).toBeDisabled();
-    await expect(
-      this.page
-        .locator('[data-practice-task="rekursiya-base-sequence"]')
-        .getByRole("button", { name: "Проверить" }),
-    ).toBeDisabled();
-  }
-
-  async expectProgressClosureJourney(): Promise<void> {
-    await this.page.goto(
-      "/ege/5-preobrazovanie-zapisey-chisel/operacii-s-zapisyu",
-    );
-    await this.solveTask("preobrazovanie-zapisey-appending", 1, "77");
-    await this.page.reload();
-    const otherLessonAnswer = this.page
-      .locator('[data-practice-task="preobrazovanie-zapisey-appending"]')
-      .getByRole("textbox", { name: "Ответ" });
-    await expect(otherLessonAnswer).toHaveValue("77");
-    await expect(otherLessonAnswer).toBeDisabled();
-
-    await this.open();
-    await expect(
-      this.page.locator("[data-practice-form][data-enhanced]"),
-    ).toBeVisible();
-    const firstPanel = this.page.locator(
-      '[data-practice-task="rekursiya-base-sequence"]',
-    );
-    const firstAnswer = firstPanel.getByRole("textbox", { name: "Ответ" });
-    const firstCheck = firstPanel.getByRole("button", { name: "Проверить" });
-
-    await firstAnswer.fill("31");
-    await firstCheck.click();
-    await expect(
-      firstPanel.getByText(
-        "Ответ пока не подходит. Попробуйте ещё раз или откройте подсказку.",
-      ),
-    ).toBeVisible();
-    await expect(firstAnswer).toBeEnabled();
-    await expect(firstAnswer).toHaveValue("31");
-
-    let failedChecks = 0;
-    await this.page.route(
-      "**/api/tasks/rekursiya-base-sequence/check",
-      async (route) => {
-        failedChecks += 1;
-        await route.fulfill({
-          status: 200,
-          contentType: "application/json",
-          body: "{}",
-        });
-      },
-      { times: 1 },
-    );
-    await firstAnswer.fill("32");
-    await firstCheck.click();
-    await expect(
-      firstPanel.getByText("Не удалось проверить ответ. Попробуйте ещё раз."),
-    ).toBeVisible();
-    expect(failedChecks).toBe(1);
-    await expect(firstAnswer).toBeEnabled();
-    await expect(firstAnswer).toHaveValue("32");
-
-    await firstCheck.click();
-    await expect(firstPanel.getByRole("status")).toContainText("Верно");
-    // Mastery is 80%: 12 of 14 lesson tasks are the first passing count.
-    const solvedAnswers = [
-      ["rekursiya-call-stack-trace", "16"],
-      ["rekursiya-two-values", "29"],
-      ["rekursiya-repeated-calls", "25"],
-      ["rekursiya-digit-steps", "76"],
-      ["rekursiya-true-division", "3.0"],
-      ["rekursiya-branch-doubling", "51"],
-      ["rekursiya-upward-chain", "2255"],
-      ["rekursiya-two-functions-table", "25"],
-      ["rekursiya-count-arguments", "8"],
-      ["rekursiya-large-ratio", "9900"],
-      ["rekursiya-difference-terms", "23978"],
-    ] as const;
-    for (const [index, [taskId, answer]] of solvedAnswers.entries()) {
-      await this.solveTask(taskId, index + 2, answer, 14);
-    }
-
-    const resultProgress = this.page.locator("[data-result-progress]");
-    await expect(
-      resultProgress.getByText("12 / 14", { exact: true }),
-    ).toBeVisible();
-    await expect(resultProgress.getByText("Урок пройден")).toBeVisible();
-
-    await this.page.reload();
-    await expect(
-      this.page
-        .locator('[data-practice-task="rekursiya-base-sequence"]')
-        .getByRole("textbox", { name: "Ответ" }),
-    ).toHaveValue("32");
-    await expect(resultProgress.getByText("Урок пройден")).toBeVisible();
-
-    const reset = resultProgress.getByRole("button", {
-      name: "Сбросить прогресс урока",
-    });
-    await reset.focus();
-    await reset.press("Enter");
-    const dialog = this.page.getByRole("alertdialog", {
-      name: "Сбросить прогресс?",
-    });
-    await expect(dialog).toBeVisible();
-    const cancel = dialog.getByRole("button", { name: "Отмена" });
-    await expect(cancel).toBeFocused();
-    await cancel.press("Enter");
-    await expect(reset).toBeFocused();
-    await expect(resultProgress.getByText("Урок пройден")).toBeVisible();
-
-    await reset.press("Enter");
-    const confirm = this.page.getByRole("alertdialog").getByRole("button", {
-      name: "Сбросить",
-      exact: true,
-    });
-    await confirm.focus();
-    await confirm.press("Enter");
-    await expect(reset).toBeFocused();
-    await expect(
-      resultProgress.getByText("0 / 14", { exact: true }),
-    ).toBeVisible();
-    await expect(
-      resultProgress.getByText("Вы ещё не решали задания"),
-    ).toHaveCount(0);
-    await expect(firstAnswer).toBeEnabled();
-    await expect(firstAnswer).toHaveValue("");
-
-    await this.dismissAnalyticsPrompt();
-    await this.page
-      .getByRole("link", {
-        name: "Преобразование записей чисел",
-      })
-      .click();
-    await expect(this.page).toHaveURL(
-      /\/ege\/5-preobrazovanie-zapisey-chisel$/,
-    );
-    const preservedOtherAnswer = this.page
-      .locator('[data-practice-task="preobrazovanie-zapisey-appending"]')
-      .getByRole("textbox", { name: "Ответ" });
-    await expect(preservedOtherAnswer).toHaveValue("77");
-    await expect(preservedOtherAnswer).toBeDisabled();
-
-    await this.page
-      .getByRole("link", {
-        name: "infraege — ЕГЭ информатика, на главную",
-      })
-      .click();
-    await expect(this.page).toHaveURL(/\/$/);
-    await expect(
-      this.page.getByRole("heading", {
-        name: "Информатика - это система",
-      }),
-    ).toBeVisible();
-    await this.open();
-  }
-
-  private async dismissAnalyticsPrompt(): Promise<void> {
-    const prompt = this.page.getByRole("complementary", {
-      name: "Настройки необязательной аналитики",
-    });
-    await expect(prompt).toBeVisible();
-    await prompt.getByRole("button", { name: "Не сейчас" }).click();
-    await expect(prompt).toBeHidden();
-  }
-
-  async expectReadingPosition(): Promise<void> {
-    const value = this.page.locator("[data-reading-position-value]");
-    await expect(this.page.locator("[data-reading-position]")).toBeVisible();
-    await expect(
-      this.page.locator("[data-practice-form][data-enhanced]"),
-    ).toBeVisible();
-    await this.page.evaluate(() => {
-      document.documentElement.style.scrollBehavior = "auto";
-      if (document.scrollingElement) document.scrollingElement.scrollTop = 0;
-    });
-    await expect(value).toHaveAttribute("style", /scaleX\(0\)/);
-    await this.page.evaluate(() => {
-      if (document.scrollingElement) {
-        document.scrollingElement.scrollTop =
-          document.scrollingElement.scrollHeight;
-      }
-    });
-    await expect
-      .poll(() =>
-        value.evaluate((element) => {
-          const match = element.getAttribute("style")?.match(/scaleX\((.+)\)/);
-          return Number(match?.[1] ?? 0);
-        }),
-      )
-      .toBeGreaterThan(0.99);
-    await this.page.evaluate(() => {
-      document.documentElement.style.removeProperty("scroll-behavior");
-    });
   }
 
   async expectNoHorizontalOverflow(): Promise<void> {
@@ -1948,71 +1454,5 @@ export class TopicLessonPage {
       overflow.documentWidth,
       JSON.stringify(overflow, null, 2),
     ).toBeLessThanOrEqual(overflow.viewportWidth);
-  }
-
-  async expectReadableWithoutJavaScript(): Promise<void> {
-    await this.open();
-    await this.expectPublishedLesson();
-    await expect(this.page.locator("[data-practice-form] form")).toHaveCount(
-      14,
-    );
-    await expect(
-      this.page.locator("[data-practice-form] [data-unenhanced-accordion]"),
-    ).toHaveCount(14);
-    await expect(
-      this.page.getByText(/Раскрываем вызовы снизу вверх/),
-    ).toBeVisible();
-    await expect(
-      this.page.getByRole("group", {
-        name: "Та же рекуррентная формула в Python",
-      }),
-    ).toBeVisible();
-    await expect(
-      this.page.getByText(
-        "Прогресс хранится только в этом браузере и появится после загрузки страницы.",
-      ),
-    ).toBeVisible();
-    await expect(
-      this.page.getByRole("link", {
-        name: "Преобразование записей чисел",
-      }),
-    ).toHaveAttribute(
-      "href",
-      "/ege/5-preobrazovanie-zapisey-chisel/model-algoritma",
-    );
-    await expect(this.page.getByRole("link", { name: "Все темы" })).toHaveCount(
-      0,
-    );
-    await this.expectNoHorizontalOverflow();
-  }
-
-  private async solveTask(
-    taskId: string,
-    index: number,
-    answer: string,
-    total = 5,
-  ): Promise<void> {
-    await expect(
-      this.page.locator("[data-practice-form][data-enhanced]"),
-    ).toBeVisible();
-    await this.page
-      .getByRole("tab", {
-        name: `Задача ${String(index)} из ${String(total)}`,
-      })
-      .click();
-    const panel = this.page.locator(`[data-practice-task="${taskId}"]`);
-    await panel.getByRole("textbox", { name: "Ответ" }).fill(answer);
-    await panel.getByRole("button", { name: "Проверить" }).click();
-    await expect(panel.getByRole("status")).toContainText("Верно");
-  }
-
-  async expectUnknownLessonNotFound(): Promise<void> {
-    const response = await this.page.goto("/ege/unknown-lesson");
-    expect(response?.status()).toBe(404);
-  }
-
-  async expectStableReload(): Promise<void> {
-    await this.page.reload();
-    await this.expectPublishedLesson();
   }
 }

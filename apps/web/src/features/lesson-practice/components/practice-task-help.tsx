@@ -2,6 +2,7 @@ import { useState, type ReactNode } from "react";
 import type { PracticeTaskTypes } from "~/entities/practice-task";
 import { Button } from "~/shared/components/button";
 import { Typography } from "~/shared/components/typography";
+import { useIsEnhanced } from "~/shared/lib/use-is-enhanced";
 import { PracticeTaskContent } from "./practice-task-content";
 import styles from "../lesson-practice.module.css";
 
@@ -23,6 +24,8 @@ export const PracticeTaskHelp: React.FC<{
 }> = (props) => {
   const [hint, setHint] = useState(false);
   const [solution, setSolution] = useState(false);
+  // A click before hydration would be lost; like «Проверить», wait for it.
+  const enhanced = useIsEnhanced();
   const solutionTitle =
     SOLUTION_TITLE[props.task.explanationKind ?? "unclassified"];
   return (
@@ -32,6 +35,7 @@ export const PracticeTaskHelp: React.FC<{
         <div className={styles.helpActions}>
           <Button
             hierarchy="soft"
+            disabled={!enhanced}
             aria-expanded={hint}
             aria-controls={`hint-${props.task.id}`}
             onClick={() => setHint(!hint)}
@@ -45,6 +49,7 @@ export const PracticeTaskHelp: React.FC<{
           </Button>
           <Button
             hierarchy="soft"
+            disabled={!enhanced}
             aria-expanded={solution}
             aria-controls={`solution-${props.task.id}`}
             onClick={() => setSolution(!solution)}
@@ -62,6 +67,7 @@ export const PracticeTaskHelp: React.FC<{
         className={styles.helpPanel}
         id={`hint-${props.task.id}`}
         hidden={!hint}
+        data-practice-help="hint"
       >
         <Typography.Title
           order={props.headingOrder ?? 4}
@@ -75,6 +81,7 @@ export const PracticeTaskHelp: React.FC<{
         className={styles.helpPanel}
         id={`solution-${props.task.id}`}
         hidden={!solution}
+        data-practice-help="solution"
       >
         <Typography.Title
           order={props.headingOrder ?? 4}

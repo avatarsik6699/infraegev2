@@ -29,16 +29,19 @@ export const integerProcessingLesson = defineLesson({
     {
       slug: "perebor-i-cifry",
       title: "Перебор, делимость и цифры",
+      lead: "Как задать границы перебора и проверять делимость и цифры числа — из этих приёмов собирается решение.",
       conceptIds: ["integer-range", "divisibility-remainder", "decimal-digits"],
     },
     {
       slug: "deliteli",
       title: "Делители и простые числа",
+      lead: "Как найти делители числа и проверить, простое ли оно, не перебирая всё подряд.",
       conceptIds: ["divisors", "primes", "divisor-pairs"],
     },
     {
       slug: "maska-i-poisk",
       title: "Маска числа и общий поиск",
+      lead: "Как читать запись числа со знаком «?» и собрать общий поиск, ответ которого можно проверить.",
       conceptIds: ["decimal-mask", "bounded-search"],
     },
   ],

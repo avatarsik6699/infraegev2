@@ -206,14 +206,16 @@ one orange for position.
 - **Soft Surface** (surface-soft): neutral plates (catalog illustration placeholders, the home
   "try a task" block), barely distinguishable from white on purpose.
 - **Side Surface** (surface-side): lesson left panel, expanded practice rows, callouts.
-- **Wash** (wash): soft buttons, badges, track of progress bars, hover fills.
+- **Wash** (wash): soft buttons, badges, hover fills.
+- **Progress track** (line): every progress bar is the same — a 6px hairline-grey track, ink
+  fill, text above and below; the track never matches a hover fill.
 - **Hairline** (line) and **Strong Hairline** (line-strong): separators, card and input borders.
 - **Secondary Ink** (ink-secondary) for leads and text on plates (≥8:1 on pastels);
   **Muted Ink** (ink-muted) for metadata on white only.
 
 ### Status and code
-- **Success / Error** (success, error with their -bg pairs): answer-check results and destructive
-  actions only, never decoration.
+- **Success / Error** (success, error with their -bg pairs): answer-check results (an accepted
+  field, the solved mark in practice rows) and destructive actions only, never decoration.
 - **Code** (code-keyword violet, code-string green, code-number teal, code-comment grey) inside code
   blocks only; every code colour keeps at least 4.5:1 on the code surface.
 
@@ -257,12 +259,15 @@ numbers in tables; Caveat only inside diagrams.
 
 Content sits in a 1160px container with 24px gutters (16px under 760px). Pages open with a
 **page head**: white, title and lead on the left, optional illustration plate on the right, a
-hairline below and the engineering grid behind. Sections are separated by whitespace (about 56px)
+hairline below and the engineering grid behind. Catalog heads share one structure (`PageHead`
+title, lead and meta): the same title, lead and meta sizes and gaps on every page. Sections are separated by whitespace (about 56px)
 rather than rules.
 
-Lessons use three zones: a 272px left panel with the topic and its subtopics, a reading column up
-to 690px, and a 224px "На этой странице" rail; on phones both side zones collapse into a
-"Подтемы · N из M" disclosure. Course overview, catalogs and profile have no left panel. The
+Lessons use three zones: a 272px left panel with a file tree (EGE: published topics in exam order,
+each a folder of its subtopics and «Практика и итог»; course: modules as folders of lessons), a
+reading column up to 690px opening with breadcrumbs (ancestors as links, the current page as
+text), and a 224px "На этой странице" rail with the lesson progress under it; on phones both side
+zones collapse into a "Подтемы · N из M" disclosure that also holds the progress. Course overview, catalogs and profile have no left panel. The
 practice catalog keeps inline solving in the list, task detail on its own page, and pagination
 joined with the per-page limit.
 
@@ -276,8 +281,7 @@ never appears in reading areas, cards or forms.
 ## Elevation & Depth
 
 Flat by default. Depth comes from hairline borders and tonal plates, not shadows. The only
-shadows are functional: dropdown and dialog surfaces get a soft ambient shadow, and the current
-lesson subtopic gets a 1px ring.
+shadows are functional: dropdown and dialog surfaces get a soft ambient shadow.
 
 ### Named Rules
 **The Flat Page Rule.** Cards, tiles and plates never cast shadows at rest; hover changes the
@@ -285,7 +289,8 @@ border or fill, not elevation. One exception, set by the architect (2026-10-05):
 the cover, and its cards (paths, topics, the try card, the course card) are raised — a soft
 gradient of their own tone, `--shadow-cover`, a light top edge and a sheen from the top-left
 corner; hover lifts them by 2px (`--shadow-cover-raised`, no lift under reduced motion). No other
-page uses these tokens.
+page uses these tokens. A second exception (2026-10-06): the published course card on `/courses`
+carries a slow monochrome highlight travelling along its border (off under reduced motion).
 
 ## Shapes
 
@@ -304,7 +309,9 @@ card, `/courses/python` head at about a third of the head width). They are shown
 - **Primary:** ink fill, white text. One primary per view.
 - **Secondary:** white with strong hairline border; **Soft:** wash fill for secondary actions
   in the practice row (Подсказка, Решение); **Quiet:** transparent.
-- **Danger:** white with error text and border, only for irreversible account actions.
+- **Danger:** white with error text and border, only for irreversible account actions. The lesson
+  progress reset dialog is the one exception (architect, 2026-10-06): a soft «Отмена» and a
+  filled danger «Сбросить» with white text.
 - **Hover / Focus:** hover darkens the fill or border; focus is a 2px ink outline with 2px offset.
 - **Never** an orange or pastel-filled button.
 
@@ -313,7 +320,8 @@ card, `/courses/python` head at about a third of the head width). They are shown
   semibold with an arrow, underline on hover. On pastel plates links stay blue.
 
 ### Chips and badges
-- **Filter chips:** white pill with strong hairline, dismiss icon on the right.
+- **Filter chips:** white pill with strong hairline, 14px text, 3px 6px 3px 12px, a 14px
+  dismiss icon on the right.
 - **Badges:** wash pill with muted ink; success badge uses success colours. No orange badges.
 
 ### Cards / Containers
@@ -326,8 +334,11 @@ card, `/courses/python` head at about a third of the head width). They are shown
 ### Inputs / Fields
 - **Style:** white, 1px border (#cfcfca), 6px corners, 46px tall; answers use the mono face.
 - **Focus:** 2px ink outline.
-- **Error / Success:** error border plus message in error colour; success border with a check
-  icon and a success message plate.
+- **Error / Success:** error border plus message in error colour; an accepted answer is the
+  field itself — success border and fill with a check (no circle) — and a short confetti burst
+  from «Проверить» (off under reduced motion); the result is announced, not printed.
+- **Practice task:** one layout everywhere (catalog, task page, lessons): field, «Проверить»,
+  «Подсказка» and «Решение» in one row, their panels below.
 
 ### Navigation
 - Header: logo with wordmark and descriptor (descriptor hidden on phones), three text items,
@@ -335,9 +346,10 @@ card, `/courses/python` head at about a third of the head width). They are shown
   "Меню" button.
 - Profile: minimal tabs (Обзор, Настройки) with the same orange underline.
 
-### Lesson subtopic panel (signature)
-- Topic title, "Задание N · M подтем", practice count, numbered subtopics; done items show a
-  success check, the current one a white fill, 1px ring and a 3px Here Orange bar.
+### Lesson file tree (signature)
+- A quiet tree: folders (topic or module) with a chevron, files hanging off a hairline; done
+  items show a success check, the current one ink text and a 3px Here Orange bar on the tree
+  line. A selected item never changes weight or size, so nothing reflows.
 
 ### Mascot
 - A living stack of the three logo stones: face on the big bottom stone, the top stone outlined in

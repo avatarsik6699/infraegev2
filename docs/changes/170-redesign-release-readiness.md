@@ -92,16 +92,16 @@ the architect's untracked work).
 - [x] `F33` `/courses`: asymmetric grid, Python card largest with an animated gradient border (off under reduced motion) (§5) — _Depends on:_ —
 - [x] `F34` `/courses` planned cards: description, «— уроков · level», «Освоено 0 из — уроков», disabled «Скоро»; no outcome block anywhere (§5) — _Depends on:_ F19
 - [x] `F35` `/courses/python`: blue «К программе курса ↓», icons on «Что понадобится»/«Как идёт курс», no «Развернуть всё», unified module progress (§6) — _Depends on:_ F19
-- [ ] `F36` Breadcrumbs: Темы ЕГЭ › Задание N. Тема › current subtopic (and Мини-курсы › Курс › урок); last segment is not a link (§7) — _Depends on:_ —
-- [ ] `F37` Lesson rail as a minimal file tree (published topics by task number, course modules), no «Все темы ЕГЭ»/«К программе курса» link; «На этой странице» in the same style (§7) — _Depends on:_ F23
-- [ ] `F38` Lesson progress under «На этой странице» (in the mobile disclosure below 72rem); smaller reset button; one shared progress component (§7) — _Depends on:_ F21, F22, F37
-- [ ] `F39` Lesson practice: «Задача N» tabs never truncate, check to the right; theory links one line with ellipsis (also catalog and practice page) (§7) — _Depends on:_ F30
-- [ ] `F40` Remove next/previous topic links from the practice and summary page (§7) — _Depends on:_ —
-- [ ] `F41` Neighbour page links: one line with ellipsis, hover and focus feedback (§7) — _Depends on:_ —
-- [ ] `F42` A short lead under every EGE subtopic title (25 subtopics), so a heading is never followed by a heading; architect reviews the text (§7) — _Depends on:_ —
-- [ ] `F43` `/ege/{topic}/praktika` order: summary text and figures, tasks, then «Проверьте себя»; update SPEC §1.4 (§7) — _Depends on:_ F40
-- [ ] `F44` DESIGN.md and SPEC record the round-2 exceptions and new patterns — _Depends on:_ F19–F43
-- [ ] `F45` Migrate unit and e2e expectations to the round-2 contract; delete dead page-object methods; run affected e2e once — _Depends on:_ F19–F44
+- [x] `F36` Breadcrumbs: Темы ЕГЭ › Задание N. Тема › current subtopic (and Мини-курсы › Курс › урок); last segment is not a link (§7) — _Depends on:_ —
+- [x] `F37` Lesson rail as a minimal file tree (published topics by task number, course modules), no «Все темы ЕГЭ»/«К программе курса» link; «На этой странице» in the same style (§7) — _Depends on:_ F23
+- [x] `F38` Lesson progress under «На этой странице» (in the mobile disclosure below 72rem); smaller reset button; one shared progress component (§7) — _Depends on:_ F21, F22, F37
+- [x] `F39` Lesson practice: «Задача N» tabs never truncate, check to the right; theory links one line with ellipsis (also catalog and practice page) (§7) — _Depends on:_ F30
+- [x] `F40` Remove next/previous topic links from the practice and summary page (§7) — _Depends on:_ —
+- [x] `F41` Neighbour page links: one line with ellipsis, hover and focus feedback (§7) — _Depends on:_ —
+- [x] `F42` A short lead under every EGE subtopic title (25 subtopics), so a heading is never followed by a heading; architect reviews the text (§7) — _Depends on:_ —
+- [x] `F43` `/ege/{topic}/praktika` order: summary text and figures, tasks, then «Проверьте себя»; update SPEC §1.4 (§7) — _Depends on:_ F40
+- [x] `F44` DESIGN.md and SPEC record the round-2 exceptions and new patterns — _Depends on:_ F19–F43
+- [x] `F45` Migrate unit and e2e expectations to the round-2 contract; delete dead page-object methods; run affected e2e once — _Depends on:_ F19–F44
 - [x] `F46` Accepted answer field (architect review 2026-10-06): the green fill is two-tone — the disabled input keeps its own background inside the green group — _Depends on:_ F30
 - [x] `F47` Task page: the source («Демоверсия 2023 · 2023») moves from the card under the task into the metadata line with difficulty and format — _Depends on:_ F32
 - [x] `F48` Tasks hidden from the catalog (lesson-only, e.g. `rekursiya-base-sequence`) fail the answer check on `/practice/{id}` with «Задача больше недоступна»; find the cause and fix or record it (architect delegated the decision, 2026-10-06) — _Depends on:_ —

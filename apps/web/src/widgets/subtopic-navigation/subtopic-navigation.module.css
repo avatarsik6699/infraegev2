@@ -1,4 +1,4 @@
-/* Uses the shared lesson-frame navigation (Change 169). */
+/* Uses the shared lesson-frame file tree (F37). */
 .root {
   min-width: 0;
 }
@@ -7,24 +7,24 @@
   composes: visuallyHidden from "../../shared/styles/patterns.module.css";
 }
 
-.head {
-  composes: navHead from "../../shared/styles/lesson-frame.module.css";
+.treeRoot {
+  composes: navRoot from "../../shared/styles/lesson-frame.module.css";
 }
 
-.back {
-  composes: navBack from "../../shared/styles/lesson-frame.module.css";
+.tree {
+  composes: navTree from "../../shared/styles/lesson-frame.module.css";
 }
 
-.title {
-  composes: navTitle from "../../shared/styles/lesson-frame.module.css";
+.folder {
+  composes: navFolderSummary from "../../shared/styles/lesson-frame.module.css";
 }
 
-.meta {
-  composes: navMeta from "../../shared/styles/lesson-frame.module.css";
+.chevron {
+  composes: navChevron from "../../shared/styles/lesson-frame.module.css";
 }
 
-.list {
-  composes: navList from "../../shared/styles/lesson-frame.module.css";
+.branch {
+  composes: navBranch from "../../shared/styles/lesson-frame.module.css";
 }
 
 .link {
@@ -39,17 +39,11 @@
   composes: navLabel from "../../shared/styles/lesson-frame.module.css";
 }
 
-.progress {
-  composes: navProgress from "../../shared/styles/lesson-frame.module.css";
-}
-
-.practice {
-  margin-top: var(--space-1);
-  padding-top: var(--space-1);
-  border-top: 1px solid var(--color-rule);
-}
-
 .count {
-  color: var(--color-muted);
-  font-weight: 400;
+  composes: navCount from "../../shared/styles/lesson-frame.module.css";
+}
+
+/* Below 72rem the right rail is hidden, so progress lives here (F38). */
+.progress {
+  margin-top: var(--space-3);
 }
