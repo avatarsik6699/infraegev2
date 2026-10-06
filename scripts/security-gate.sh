@@ -100,6 +100,16 @@ audit_changed_dependencies() {
     case "$path" in
       pnpm-lock.yaml|pnpm-workspace.yaml) pnpm_changed=true ;;
       */package.json|package.json)
+        if release_package_manifest "$path"; then
+          :
+        else
+          classification_status=$?
+          if [[ "$classification_status" -eq 1 ]]; then
+            printf 'Skipping %s: outside the pnpm workspace, not a release input.\n' "$path"
+            continue
+          fi
+          die "could not read the pnpm workspace to classify $path"
+        fi
         if manifest_dependencies_changed "$base" "$head" "$path" package; then
           :
         else
@@ -137,6 +147,38 @@ audit_changed_dependencies() {
     printf 'No dependency manifests or lockfiles changed in %s..%s; no ecosystem audit needed.\n' \
       "$base" "$head"
   fi
+}
+
+# Only the root manifest and pnpm-workspace packages ship; any other package.json (for example
+# a one-off tool under docs/artifacts) is not a release input. Exit 0 = release, 1 = not
+# release, other = the workspace could not be read (callers fail closed).
+release_package_manifest() {
+  local path=$1
+  [[ "$path" == package.json ]] && return 0
+  python3 - "$repo_dir/pnpm-workspace.yaml" "${path%/package.json}" <<'PY'
+import fnmatch
+import sys
+
+workspace, directory = sys.argv[1:]
+try:
+    lines = open(workspace, encoding="utf-8").read().splitlines()
+except OSError as exc:
+    print(f"security-gate: could not read {workspace}: {exc}", file=sys.stderr)
+    raise SystemExit(2)
+patterns, inside = [], False
+for line in lines:
+    if not line.strip() or line.lstrip().startswith("#"):
+        continue
+    if not line[0].isspace():
+        inside = line.startswith("packages:")
+        continue
+    if inside and line.strip().startswith("- "):
+        patterns.append(line.strip()[2:].strip().strip("'\""))
+if not patterns:
+    print(f"security-gate: no packages listed in {workspace}", file=sys.stderr)
+    raise SystemExit(2)
+raise SystemExit(0 if any(fnmatch.fnmatch(directory, p) for p in patterns) else 1)
+PY
 }
 
 manifest_dependencies_changed() (

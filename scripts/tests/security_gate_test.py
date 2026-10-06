@@ -257,6 +257,22 @@ if [[ "${SECURITY_UV_EXPORT_FAILURE:-}" == 1 ]]; then exit 17; fi
                 self.assertNotIn("\npnpm ", self.logged_calls())
                 self.assertNotIn("\nuv export ", self.logged_calls())
 
+    def test_manifest_outside_pnpm_workspace_is_not_a_release_input(self):
+        path = "docs/artifacts/tool/package.json"
+        result = self.run_gate(
+            "changed-dependencies",
+            BASE,
+            HEAD,
+            SECURITY_CHANGED_PATHS=path,
+            SECURITY_BASE_MANIFEST_CONTENT="not json",
+            SECURITY_HEAD_MANIFEST_CONTENT='{"dependencies": {"svgo": "4.1.0"}}',
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn(f"Skipping {path}: outside the pnpm workspace", result.stdout)
+        self.assertIn("no ecosystem audit needed", result.stdout)
+        self.assertNotIn("\npnpm ", self.logged_calls())
+
     def test_pnpm_lockfile_and_workspace_policy_always_run_audit(self):
         for changed_path in ("pnpm-lock.yaml", "pnpm-workspace.yaml"):
             with self.subTest(changed_path=changed_path):
