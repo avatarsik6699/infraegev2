@@ -73,6 +73,19 @@
   border-color: var(--color-success);
 }
 
+/* F20: an accepted answer, the same look as the home walkthrough. */
+.controlGroup[data-success] {
+  background: var(--color-success-soft);
+  box-shadow: 0 0 0 3px var(--color-success-soft);
+  transition:
+    background-color var(--motion-duration) var(--motion-easing),
+    box-shadow var(--motion-duration) var(--motion-easing);
+}
+
+.controlGroup > .successIcon {
+  color: var(--color-success);
+}
+
 .controlGroup::after {
   content: "";
   position: absolute;
@@ -83,6 +96,10 @@
 }
 .controlGroup:focus-within::after {
   border-color: var(--color-focus);
+}
+.controlGroup[data-success]::after,
+.controlGroup[data-success]:focus-within::after {
+  border-color: var(--color-success);
 }
 .controlGroup[data-invalid]::after {
   border-color: var(--color-danger);

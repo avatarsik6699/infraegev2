@@ -1,5 +1,6 @@
 import { Check } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { ConfettiBurst } from "~/shared/components/confetti-burst";
 import { Typography } from "~/shared/components/typography";
 import { useMediaQuery } from "~/shared/lib/media-query";
 import { useInViewport } from "~/shared/lib/use-in-viewport";
@@ -29,23 +30,6 @@ const TYPED: Record<Step, string> = {
   press: "32",
   done: "32",
 };
-
-const CONFETTI_COUNT = 28;
-const CONFETTI_TONES = ["orange", "sky", "sage", "lilac", "ink"] as const;
-
-/** Confetti pieces: flight (a fan upwards), turn, delay and tone. */
-const CONFETTI = Array.from({ length: CONFETTI_COUNT }, (_, i) => {
-  const spread = (i / (CONFETTI_COUNT - 1)) * 2 - 1;
-  const angle = -Math.PI / 2 + spread * 1.35;
-  const distance = 110 + ((i * 37) % 90);
-  return {
-    x: Math.round(Math.cos(angle) * distance),
-    y: Math.round(Math.sin(angle) * distance),
-    turn: ((i * 97) % 360) - 180,
-    delay: (i % 5) * 30,
-    tone: CONFETTI_TONES[i % CONFETTI_TONES.length],
-  };
-});
 
 /** Point inside `target`, relative to `root`, where the cursor aims. */
 function aim(root: HTMLElement, target: HTMLElement, dx: number) {
@@ -137,25 +121,10 @@ export const FoundationTryDemo: React.FC = () => {
           >
             Проверить
           </span>
-          <span
+          <ConfettiBurst
             className={styles.confetti}
-            data-burst={(done && !reduced) || undefined}
-          >
-            {CONFETTI.map((piece, i) => (
-              <span
-                key={i}
-                data-tone={piece.tone}
-                style={
-                  {
-                    "--x": `${String(piece.x)}px`,
-                    "--y": `${String(piece.y)}px`,
-                    "--turn": `${String(piece.turn)}deg`,
-                    "--delay": `${String(piece.delay)}ms`,
-                  } as React.CSSProperties
-                }
-              />
-            ))}
-          </span>
+            active={done && !reduced}
+          />
         </div>
         <svg
           className={styles.cursor}

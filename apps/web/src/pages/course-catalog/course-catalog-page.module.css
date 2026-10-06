@@ -156,12 +156,8 @@
   visibility: hidden;
 }
 
-.progress {
-  --progress-height: 6px;
-}
-
 .progressPlaceholder {
-  height: 6px;
+  height: var(--progress-height);
 }
 
 .courseAction {

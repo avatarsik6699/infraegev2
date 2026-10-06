@@ -74,6 +74,35 @@ the architect's untracked work).
 - [x] `F17` Home try card: the confetti must not be clipped by the card; it flies out past the card edges — _Depends on:_ F13
 - [x] `F18` Home hero underline (architect review 2026-10-05): the F9 stroke still reads as a clean vector line; it must look inked — ragged edges, dry-brush gaps, a pressed start and a thinning tail — _Depends on:_ F9
 
+#### Round 2 (architect review 2026-10-06, [fixes round 2](../artifacts/references/for_new_design/fixes_after_redisign.md); decisions: subtopic leads, progress under the right rail, catalog-style answer controls everywhere, tree of published topics only)
+- [x] `F19` One progress bar everywhere: mockup look (6px, visible track, ink fill, text above and below), track token distinct from hover fills; drop local overrides (§2, §6) — _Depends on:_ —
+- [x] `F20` Shared confetti burst and field success state (green border and fill, check without circle), extracted from the home demo (§3) — _Depends on:_ —
+- [x] `F21` Confirmation dialogs close on overlay click and Escape (Base UI `AlertDialog` forbids pointer dismissal) (§7) — _Depends on:_ —
+- [x] `F22` Filled danger button for the lesson progress reset dialog; account actions keep the outlined style (§7) — _Depends on:_ —
+- [x] `F23` Selected items never reflow: no weight change on current rail/outline items, reserved space for checks in «Тема» and selects (§3, §7) — _Depends on:_ —
+- [ ] `F24` One page head for `/ege`, `/courses`, `/courses/python`, `/practice`: same title, lead, meta sizes and gaps (§1) — _Depends on:_ —
+- [ ] `F25` `/ege`: no column headings; compact rows; «Все темы» in task order 1–27; the ФИПИ source note moves into the head meta (§2) — _Depends on:_ F19, F24
+- [ ] `F26` `/practice` toolbar: «Сложность» left of «Сортировка», no overlap with «Тема» (§3) — _Depends on:_ —
+- [ ] `F27` «Тема» filter audit: whole search row focuses, focus does not stick, no shift on check, one font size (§3) — _Depends on:_ F23
+- [ ] `F28` Filter chips at the mockup size; «Сбросить всё» matches them (§3) — _Depends on:_ —
+- [ ] `F29` Practice rows: more padding and column gap; green solved check (§3) — _Depends on:_ —
+- [ ] `F30` One answer-controls layout (catalog style) in catalog, task page and lessons; success field instead of «Верно.»; confetti on a correct answer (§3, §4, §7) — _Depends on:_ F20
+- [ ] `F31` «Как работает практика»: verify and shorten or remove on `/practice`; remove on the task page (§3, §4) — _Depends on:_ —
+- [ ] `F32` Task page: minimal «К списку задач» left of the topic label; centred topic dot; tighter statement text (§4) — _Depends on:_ F30
+- [ ] `F33` `/courses`: asymmetric grid, Python card largest with an animated gradient border (off under reduced motion) (§5) — _Depends on:_ —
+- [ ] `F34` `/courses` planned cards: description, «— уроков · level», «Освоено 0 из — уроков», disabled «Скоро»; no outcome block anywhere (§5) — _Depends on:_ F19
+- [ ] `F35` `/courses/python`: blue «К программе курса ↓», icons on «Что понадобится»/«Как идёт курс», no «Развернуть всё», unified module progress (§6) — _Depends on:_ F19
+- [ ] `F36` Breadcrumbs: Темы ЕГЭ › Задание N. Тема › current subtopic (and Мини-курсы › Курс › урок); last segment is not a link (§7) — _Depends on:_ —
+- [ ] `F37` Lesson rail as a minimal file tree (published topics by task number, course modules), no «Все темы ЕГЭ»/«К программе курса» link; «На этой странице» in the same style (§7) — _Depends on:_ F23
+- [ ] `F38` Lesson progress under «На этой странице» (in the mobile disclosure below 72rem); smaller reset button; one shared progress component (§7) — _Depends on:_ F21, F22, F37
+- [ ] `F39` Lesson practice: «Задача N» tabs never truncate, check to the right; theory links one line with ellipsis (also catalog and practice page) (§7) — _Depends on:_ F30
+- [ ] `F40` Remove next/previous topic links from the practice and summary page (§7) — _Depends on:_ —
+- [ ] `F41` Neighbour page links: one line with ellipsis, hover and focus feedback (§7) — _Depends on:_ —
+- [ ] `F42` A short lead under every EGE subtopic title (25 subtopics), so a heading is never followed by a heading; architect reviews the text (§7) — _Depends on:_ —
+- [ ] `F43` `/ege/{topic}/praktika` order: summary text and figures, tasks, then «Проверьте себя»; update SPEC §1.4 (§7) — _Depends on:_ F40
+- [ ] `F44` DESIGN.md and SPEC record the round-2 exceptions and new patterns — _Depends on:_ F19–F43
+- [ ] `F45` Migrate unit and e2e expectations to the round-2 contract; delete dead page-object methods; run affected e2e once — _Depends on:_ F19–F44
+
 ### Data
 - [x] `D1` Restore the seeded dev practice bank with `make practice-bootstrap` (the local dev bank has 5 recursion tasks instead of 14, which fails four lesson/practice e2e tests and leaves some subtopics without practice); confirm the four data-bound e2e failures disappear — _Depends on:_ —
 - [x] `D2` Find why `make dev` did not apply account migration `140_01` to the dev account database (columns `privacy_consent_version`, `privacy_consented_at` were missing and were added by hand on 2026-10-03); fix the dev bootstrap so a fresh `make dev` is consistent. **Closed 2026-10-04 by architect decision:** the schema safeguard is done and verified; the historical root cause is unprovable without the pre-repair state and is accepted as such — _Depends on:_ —
@@ -100,7 +129,7 @@ docs/SPEC.md, docs/KNOWN_GOTCHAS.md (if findings require)
 ~~~
 
 ### Do NOT touch
-- `apps/web/src/entities/*/content/*.lesson.tsx` wording and order
+- `apps/web/src/entities/*/content/*.lesson.tsx` wording and order (round 2 only adds subtopic leads, F42)
 - `apps/web/src/shared/api/schema.ts` by hand or by a broad Prettier run (regenerate with `pnpm api:generate`)
 - `.impeccable/` (architect's untracked `critique/` folder)
 - Production hosts outside `/ship 170 --release`

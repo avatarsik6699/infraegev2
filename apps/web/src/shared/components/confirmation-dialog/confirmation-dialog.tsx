@@ -1,4 +1,4 @@
-import { AlertDialog } from "@base-ui/react/alert-dialog";
+import { Dialog } from "@base-ui/react/dialog";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "~/shared/components/button";
@@ -12,6 +12,7 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogTypes.Props> = (
   const [open, setOpen] = useState(false);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const filled = props.actions === "filled";
   const confirm = async () => {
     if (pending) return;
     setPending(true);
@@ -30,7 +31,8 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogTypes.Props> = (
     }
   };
   return (
-    <AlertDialog.Root
+    <Dialog.Root
+      /* F21: Escape and a click outside close it, unlike AlertDialog. */
       open={open}
       onOpenChange={(nextOpen) => {
         if (pending && !nextOpen) return;
@@ -38,7 +40,7 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogTypes.Props> = (
         if (!nextOpen) setError(null);
       }}
     >
-      <AlertDialog.Trigger
+      <Dialog.Trigger
         render={
           <Button
             hierarchy={
@@ -63,34 +65,34 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogTypes.Props> = (
         aria-label={props.triggerAriaLabel}
       >
         {props.triggerLabel}
-      </AlertDialog.Trigger>
-      <AlertDialog.Portal>
-        <AlertDialog.Backdrop className={styles.backdrop} />
-        <AlertDialog.Viewport className={styles.viewport}>
-          <AlertDialog.Popup className={styles.popup}>
+      </Dialog.Trigger>
+      <Dialog.Portal>
+        <Dialog.Backdrop className={styles.backdrop} />
+        <Dialog.Viewport className={styles.viewport}>
+          <Dialog.Popup className={styles.popup} role="alertdialog">
             <div className={styles.copy}>
-              <AlertDialog.Title className={styles.title}>
+              <Dialog.Title className={styles.title}>
                 {props.title}
-              </AlertDialog.Title>
-              <AlertDialog.Description className={styles.description}>
+              </Dialog.Title>
+              <Dialog.Description className={styles.description}>
                 {props.description}
-              </AlertDialog.Description>
+              </Dialog.Description>
             </div>
             <div className={styles.actions}>
-              <AlertDialog.Close
+              <Dialog.Close
                 render={
                   <Button
-                    hierarchy="quiet"
-                    surface="bare"
+                    hierarchy={filled ? "soft" : "quiet"}
+                    surface={filled ? "default" : "bare"}
                     type="button"
                     disabled={pending}
                   />
                 }
               >
                 Отмена
-              </AlertDialog.Close>
+              </Dialog.Close>
               <Button
-                hierarchy="destructive"
+                hierarchy={filled ? "danger" : "destructive"}
                 type="button"
                 loading={pending}
                 onClick={() => {
@@ -105,9 +107,9 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogTypes.Props> = (
                 {error}
               </Typography.Text>
             ) : null}
-          </AlertDialog.Popup>
-        </AlertDialog.Viewport>
-      </AlertDialog.Portal>
-    </AlertDialog.Root>
+          </Dialog.Popup>
+        </Dialog.Viewport>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 };

@@ -245,7 +245,6 @@ a.navLink:hover {
 .navLink[aria-current="page"] {
   background: var(--color-surface);
   box-shadow: 0 0 0 1px var(--color-rule);
-  font-weight: 600;
 }
 
 .navLink[aria-current="page"]::before {

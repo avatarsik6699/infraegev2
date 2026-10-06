@@ -86,7 +86,10 @@ export const MultiCombobox: React.FC<MultiComboboxTypes.Props> = (props) => {
                             {item.description}
                           </span>
                         </span>
-                        <Combobox.ItemIndicator>
+                        <Combobox.ItemIndicator
+                          keepMounted
+                          className={styles.indicator}
+                        >
                           <Check size={16} aria-hidden="true" />
                         </Combobox.ItemIndicator>
                       </Combobox.Item>

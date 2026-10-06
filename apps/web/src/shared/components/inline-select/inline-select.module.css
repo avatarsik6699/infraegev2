@@ -54,6 +54,16 @@
   border-radius: var(--radius-control);
   cursor: pointer;
 }
+/* F23: the check always holds its column, so a selection never shifts text. */
+.indicator {
+  display: flex;
+  flex: none;
+  width: 1rem;
+  justify-content: center;
+}
+.item:not([data-selected]) .indicator {
+  visibility: hidden;
+}
 .item[data-highlighted] {
   background: var(--color-surface-quiet);
   outline: none;

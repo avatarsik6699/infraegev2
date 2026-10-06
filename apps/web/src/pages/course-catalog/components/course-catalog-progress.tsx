@@ -22,7 +22,6 @@ export const CourseCatalogProgress: React.FC<Props> = (props) => {
         <div className={styles.personalProgress} data-course-progress>
           {progress.status === "ready" && progress.total > 0 ? (
             <Progress
-              className={styles.progress}
               value={progress.mastered}
               max={progress.total}
               label={`Освоение курса: ${props.title}`}

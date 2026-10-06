@@ -1,4 +1,5 @@
 import { Field as BaseField } from "@base-ui/react/field";
+import { Check } from "lucide-react";
 import { InfoPopover } from "~/shared/components/info-popover";
 import { Input } from "~/shared/components/input";
 import type { FieldTypes } from "./field.types";
@@ -12,6 +13,7 @@ export const Field: React.FC<FieldTypes.Props> = ({
   help,
   error,
   invalid = Boolean(error),
+  success = false,
   disabled,
   className,
   ...inputProps
@@ -41,8 +43,11 @@ export const Field: React.FC<FieldTypes.Props> = ({
       </BaseField.Description>
     ) : null}
     <div
-      className={endAdornment ? styles.controlGroup : styles.controlSlot}
+      className={
+        endAdornment || success ? styles.controlGroup : styles.controlSlot
+      }
       data-invalid={invalid || undefined}
+      data-success={success || undefined}
     >
       <Input
         {...inputProps}
@@ -50,7 +55,16 @@ export const Field: React.FC<FieldTypes.Props> = ({
         disabled={disabled}
         invalid={invalid}
       />
-      {endAdornment}
+      {success ? (
+        <Check
+          className={styles.successIcon}
+          strokeWidth={2.5}
+          aria-hidden="true"
+          data-answer-accepted-icon
+        />
+      ) : (
+        endAdornment
+      )}
     </div>
     {error ? (
       <BaseField.Error

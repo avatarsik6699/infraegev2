@@ -69,6 +69,7 @@ export const CourseLessonProgress: React.FC<Props> = (props) => {
           title="Сбросить прогресс?"
           description="Будут удалены решённые задачи только этого урока."
           confirmLabel="Сбросить"
+          actions="filled"
           onConfirm={() => {
             void accountApi
               .resetLesson("course_lesson", props.lessonId, session.csrfToken)

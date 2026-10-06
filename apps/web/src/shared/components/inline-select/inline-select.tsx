@@ -60,7 +60,10 @@ export const InlineSelect: React.FC<InlineSelectTypes.Props> = (props) => {
                       className={styles.item}
                     >
                       <Select.ItemText>{option.label}</Select.ItemText>
-                      <Select.ItemIndicator>
+                      <Select.ItemIndicator
+                        keepMounted
+                        className={styles.indicator}
+                      >
                         <Check size={14} aria-hidden="true" />
                       </Select.ItemIndicator>
                     </Select.Item>

@@ -2,7 +2,7 @@ import type { ComponentPropsWithRef } from "react";
 
 export namespace ButtonTypes {
   export type Hierarchy =
-    "primary" | "secondary" | "soft" | "quiet" | "destructive";
+    "primary" | "secondary" | "soft" | "quiet" | "destructive" | "danger";
   export type Density = "compact" | "default";
 
   export type Props = Omit<ComponentPropsWithRef<"button">, "color"> & {
