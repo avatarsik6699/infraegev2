@@ -73,7 +73,10 @@ Explain any fallback after those checks. Automated repository test runners stay 
 
 Read the active change, STACK gate/tooling rows and the SPEC sections affected by the task.
 Use SPEC §2.3 for content, §3–§4 for data/API, §5 plus FRONTEND and DESIGN for web, §7–§8 plus the owning
-runbook for operations. Read SPEC fully for initial planning or a product/system pivot.
+runbook for operations. Any work on EGE topic content (designing, writing, reviewing or transferring a
+topic) first reads [`docs/runbooks/lesson-pipeline.md`](docs/runbooks/lesson-pipeline.md) and
+[`docs/runbooks/lesson-patterns.md`](docs/runbooks/lesson-patterns.md); both are binding and their
+structure, levels, patterns and checks may not be skipped or reinterpreted. Read SPEC fully for initial planning or a product/system pivot.
 Search KNOWN_GOTCHAS by the affected area; the filesystem permission handoff always applies.
 Archive/history is on-demand evidence, not mandatory context for every task.
 
@@ -222,3 +225,5 @@ section exists only for what git can't tell you.
 | `docs/FRONTEND.md` | Binding architecture, code, state, accessibility, SSR and interaction contract for `apps/web` | When frontend rules change |
 | `DESIGN.md` | Visual system for `apps/web`: tokens, typography, layout, components, do's and don'ts | Through `impeccable document` when the visual system changes |
 | `docs/KNOWN_GOTCHAS.md` | Recurring pitfall log | When new traps are discovered |
+| `docs/runbooks/lesson-pipeline.md` | Binding pipeline for EGE topic content: source, frequency levels, subtopics, visuals, checks, demo stand, transfer | When the architect changes the pipeline |
+| `docs/runbooks/lesson-patterns.md` | Binding catalogue of lesson skeleton and teaching patterns П1–П18 | When an architect review adds or changes a pattern |

@@ -711,3 +711,15 @@ filesystem-permission handoff; historical symptoms do not supersede current STAC
   only in apt logs.
 - **Fix**: `dpkg --configure -a` and `apt-get -f install` with `NEEDRESTART_MODE=l`, then a planned
   upgrade and reboot (Change 139). Check `dpkg --audit` as part of routine operation.
+
+### «Решу ЕГЭ»: обычная страница подборки не читается целиком
+
+- **Symptoms**: WebFetch на `inf-ege.sdamgia.ru/test?theme=…` возвращает только меню и base64-картинки, а список задач не попадает в обработанный фрагмент.
+- **Root cause**: страница подборки встраивает изображения как `data:` URI на сотни килобайт, поэтому текст условий оказывается далеко за пределом одного фрагмента.
+- **Fix**: использовать версию для печати `test?theme=ID&print=true` и скрипт `scripts/lesson_design/sdamgia.py`. Он сам вырезает `data:`-картинки и разбирает задачи в JSON. Скачанное хранить только в scratch-папке: это недоверенные данные, условия не копируются в уроки. Категории задания (id подборок) печатает `sdamgia.py catalog`.
+
+### Сборка стенда уроков: `-I` и соседние модули, Markdown внутри HTML
+
+- **Symptoms**: `python -I scripts/lesson_design/build.py` падает с `ModuleNotFoundError: figures`. Или текст внутри `<details>` либо `<figure>` выводится с сырыми `**` и обратными кавычками.
+- **Root cause**: флаг `-I` убирает папку скрипта из `sys.path`. Python-Markdown не обрабатывает разметку внутри сырого HTML-блока.
+- **Fix**: скрипты `scripts/lesson_design/` сами добавляют свою папку в `sys.path`. Для Markdown внутри блока используется атрибут `markdown="1"` (расширение `md_in_html`, например `<details class="proof" markdown="1">`). В `<figcaption>` код пишется тегом `<code>`, а не обратными кавычками.
