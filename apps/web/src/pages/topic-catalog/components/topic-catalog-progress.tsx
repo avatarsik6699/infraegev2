@@ -34,38 +34,40 @@ export const TopicCatalogProgress: React.FC<Props> = (props) => {
           </span>
         ) : null}
       </span>
-      <GuestProgressLoginLock
-        enabled={isGuest && progress !== undefined}
-        total={progress?.total ?? 0}
-      >
-        <div className={styles.personalProgress}>
-          {progress ? (
-            <>
-              <Progress
-                className={styles.progress}
-                value={progress.solved}
-                max={progress.total}
-                label={`Практика: ${props.title}`}
-                valueText={`Решено ${String(progress.solved)} из ${String(progress.total)} задач`}
-              />
-              <span>
-                Решено {progress.solved} из {progress.total}
-                {resume ? (
-                  <span className={styles.resume} aria-hidden="true">
-                    {" · Продолжить"}
-                  </span>
-                ) : null}
+      <div className={styles.personalProgressSlot}>
+        <GuestProgressLoginLock
+          enabled={isGuest && progress !== undefined}
+          total={progress?.total ?? 0}
+        >
+          <div className={styles.personalProgress}>
+            {progress ? (
+              <>
+                <Progress
+                  className={styles.progress}
+                  value={progress.solved}
+                  max={progress.total}
+                  label={`Практика: ${props.title}`}
+                  valueText={`Решено ${String(progress.solved)} из ${String(progress.total)} задач`}
+                />
+                <span>
+                  Решено {progress.solved} из {progress.total}
+                  {resume ? (
+                    <span className={styles.resume} aria-hidden="true">
+                      {" · Продолжить"}
+                    </span>
+                  ) : null}
+                </span>
+              </>
+            ) : (
+              <span className={styles.progressStatus}>
+                {props.loadState === "loading"
+                  ? "Прогресс загружается"
+                  : "Прогресс недоступен"}
               </span>
-            </>
-          ) : (
-            <span className={styles.progressStatus}>
-              {props.loadState === "loading"
-                ? "Прогресс загружается"
-                : "Прогресс недоступен"}
-            </span>
-          )}
-        </div>
-      </GuestProgressLoginLock>
+            )}
+          </div>
+        </GuestProgressLoginLock>
+      </div>
     </div>
   );
 };

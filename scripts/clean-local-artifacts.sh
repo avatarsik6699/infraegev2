@@ -72,7 +72,7 @@ done < <(
     -name 'C:\\Users\\user\\AppData\\Local\\lighthouse.*' -print
 )
 
-for search_root in "$repo_dir/apps/api" "$repo_dir/ops" "$repo_dir/scripts"; do
+for search_root in "$repo_dir/apps/api" "$repo_dir/ops" "$repo_dir/scripts" "$repo_dir/docs/artifacts"; do
   require_local_parent "$search_root/cache"
   [[ -d $search_root ]] || continue
   while IFS= read -r cache_dir; do

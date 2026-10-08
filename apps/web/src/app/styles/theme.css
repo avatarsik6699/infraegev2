@@ -53,6 +53,10 @@
   --theme-warning: #8a5a00;
   --theme-overlay-shadow: rgb(0 0 0 / 0.14);
   --theme-popover-shadow: rgb(0 0 0 / 0.08);
+  /* Home cover cards only: a soft lift and a light top edge (F15). */
+  --theme-cover-shadow-near: rgb(23 25 30 / 0.06);
+  --theme-cover-shadow-far: rgb(23 25 30 / 0.2);
+  --theme-cover-highlight: rgb(255 255 255 / 0.8);
 
   /* Code on a soft surface; every text colour is at least 4.5:1 on --theme-code. */
   --theme-code: #f8f8f6;

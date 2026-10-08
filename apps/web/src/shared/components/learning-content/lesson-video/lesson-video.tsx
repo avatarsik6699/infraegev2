@@ -102,7 +102,9 @@ export const LessonVideo: React.FC<LessonVideoTypes.Props> = (props) => {
         loop
         muted
         playsInline
-        preload="metadata"
+        // Native video lazy loading is newer than the installed React typings.
+        {...{ loading: "lazy" }}
+        preload="none"
         aria-hidden="true"
         onClick={enhanced ? togglePlayback : undefined}
         onPlay={() => setPlaying(true)}

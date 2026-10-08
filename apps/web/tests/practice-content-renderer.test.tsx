@@ -116,7 +116,7 @@ describe("rich practice content", () => {
       />,
     );
     const input = screen.getByRole("textbox", {
-      name: "Ответ",
+      name: "Ваш ответ",
     }) as HTMLInputElement;
     fireEvent.change(input, { target: { value: "2" } });
     fireEvent.click(screen.getByRole("button", { name: "Проверить" }));
@@ -143,11 +143,11 @@ describe("rich practice content", () => {
       />,
     );
 
-    const input = screen.getByRole("textbox", { name: "Ответ" });
+    const input = screen.getByRole("textbox", { name: "Ваш ответ" });
     fireEvent.change(input, { target: { value: "2" } });
     fireEvent.click(screen.getByRole("button", { name: "Проверить" }));
 
-    await screen.findByText("Верно. Верно.");
+    await screen.findByText("Верно. Ответ принят.");
     expect(onTaskSolved).not.toHaveBeenCalled();
     expect((input as HTMLInputElement).value).toBe("2");
     expect((input as HTMLInputElement).disabled).toBe(true);
@@ -168,7 +168,7 @@ describe("rich practice content", () => {
       />,
     );
 
-    fireEvent.change(screen.getByRole("textbox", { name: "Ответ" }), {
+    fireEvent.change(screen.getByRole("textbox", { name: "Ваш ответ" }), {
       target: { value: "2" },
     });
     fireEvent.click(screen.getByRole("button", { name: "Проверить" }));
@@ -189,7 +189,7 @@ describe("rich practice content", () => {
       onTaskSolved: () => 0,
     };
     const first = render(<StandalonePractice {...props} />);
-    fireEvent.change(screen.getByRole("textbox", { name: "Ответ" }), {
+    fireEvent.change(screen.getByRole("textbox", { name: "Ваш ответ" }), {
       target: { value: "123" },
     });
     first.unmount();
@@ -198,7 +198,7 @@ describe("rich practice content", () => {
       expect(
         (
           screen.getByRole("textbox", {
-            name: "Ответ",
+            name: "Ваш ответ",
           }) as HTMLInputElement
         ).value,
       ).toBe(""),
@@ -213,7 +213,7 @@ describe("rich practice content", () => {
     expect(
       (
         screen.getByRole("textbox", {
-          name: "Ответ",
+          name: "Ваш ответ",
         }) as HTMLInputElement
       ).value,
     ).toBe("");

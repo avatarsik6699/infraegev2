@@ -27,11 +27,13 @@ export const stringProcessingLesson = defineLesson({
     {
       slug: "stroka-i-pozicii",
       title: "Строка, позиции и фрагменты",
+      lead: "Как прочитать строку из файла и точно говорить о её позициях и непрерывных фрагментах.",
       conceptIds: ["file-and-string", "positions-and-fragments"],
     },
     {
       slug: "fragmenty",
       title: "Подходящие фрагменты",
+      lead: "Как найти самый длинный фрагмент, подходящий под условие на соседние символы или на число вхождений.",
       conceptIds: [
         "adjacent-and-overlapping",
         "longest-valid-run",
@@ -41,6 +43,7 @@ export const stringProcessingLesson = defineLesson({
     {
       slug: "vyrazheniya",
       title: "Выражения в строке",
+      lead: "Как устроена запись арифметического выражения, как найти самое длинное за один просмотр и проверить ответ.",
       conceptIds: [
         "expression-grammar",
         "linear-expression-scan",

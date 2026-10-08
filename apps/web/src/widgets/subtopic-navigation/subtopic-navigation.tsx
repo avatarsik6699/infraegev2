@@ -1,119 +1,81 @@
-import { Link } from "@tanstack/react-router";
-import { Check } from "lucide-react";
-import { useState } from "react";
+import { Check, PenLine } from "lucide-react";
 import { useLessonProgress } from "~/features/lesson-progress";
-import { ActionLink } from "~/shared/components/action-link";
-import { Typography } from "~/shared/components/typography";
-import { ResponsiveDisclosure } from "~/shared/components/responsive-disclosure";
-import { russianCount } from "~/shared/lib/russian-count";
+import { LessonTree } from "~/shared/components/lesson-tree";
 import type { SubtopicNavigationTypes } from "./subtopic-navigation.types";
-import styles from "./subtopic-navigation.module.css";
 
 const practiceCurrent = "practice";
 
+/**
+ * F37: the EGE topics as a file tree — each published topic is a folder of
+ * its subtopics and «Практика и итог»; the current topic is open.
+ */
 export const SubtopicNavigation: React.FC<SubtopicNavigationTypes.Props> = (
   props,
 ) => {
-  const [expanded, setExpanded] = useState(false);
   const progress = useLessonProgress(props.lessonId, props.tasks);
   const solved = new Set(progress.solvedTaskIds);
-  const currentIndex = props.subtopics.findIndex(
+  const topic = props.topics.find((item) => item.id === props.lessonId);
+  const subtopics = topic?.subtopics ?? [];
+  const currentIndex = subtopics.findIndex(
     (subtopic) => subtopic.slug === props.current,
   );
-  const total = props.subtopics.length;
   const position =
     currentIndex >= 0
-      ? `${String(currentIndex + 1)} из ${String(total)}`
+      ? `${String(currentIndex + 1)} из ${String(subtopics.length)}`
       : "практика и итог";
 
   return (
-    <nav
-      className={styles.root}
-      aria-label="Подтемы урока"
-      data-subtopic-navigation
-    >
-      <ResponsiveDisclosure
-        label={`Подтемы · ${position}`}
-        expanded={expanded}
-        onExpandedChange={setExpanded}
-      >
-        <div className={styles.head}>
-          <ActionLink
-            className={styles.back}
-            presentation="action"
-            hierarchy="text"
-            icon="back"
-            to="/ege/"
-          >
-            Все темы ЕГЭ
-          </ActionLink>
-          <Typography.Text className={styles.title}>
-            {props.title}
-          </Typography.Text>
-          <Typography.Text className={styles.meta}>
-            {`${props.taskLabel} · ${russianCount.subtopics(total)}`}
-          </Typography.Text>
-        </div>
-        <ol className={styles.list}>
-          {props.subtopics.map((subtopic, index) => {
-            const done =
-              subtopic.taskIds.length > 0 &&
-              subtopic.taskIds.every((id) => solved.has(id));
-            const current = subtopic.slug === props.current;
-            return (
-              <li key={subtopic.slug}>
-                <Link
-                  className={styles.link}
-                  to="/ege/$slug/$subtopic"
-                  params={{ slug: props.routeSlug, subtopic: subtopic.slug }}
-                  aria-current={current ? "page" : undefined}
-                  data-done={done || undefined}
-                  onClick={() => setExpanded(false)}
-                >
-                  <span className={styles.marker} aria-hidden="true">
-                    {done ? <Check size={14} strokeWidth={2.5} /> : index + 1}
-                  </span>
-                  <span className={styles.label}>
-                    {subtopic.title}
-                    {done ? (
-                      <span className={styles.visuallyHidden}>
-                        {" "}
-                        (задачи решены)
-                      </span>
-                    ) : null}
-                  </span>
-                </Link>
-              </li>
-            );
-          })}
-        </ol>
-        <div className={styles.practice}>
-          <Link
-            className={styles.link}
-            to="/ege/$slug/praktika"
-            params={{ slug: props.routeSlug }}
-            aria-current={
-              props.current === practiceCurrent ? "page" : undefined
-            }
-            onClick={() => setExpanded(false)}
-          >
-            <span className={styles.marker} aria-hidden="true">
-              ▸
-            </span>
-            <span className={styles.label}>
-              Практика и итог
-              {props.practiceUnavailable || props.tasks.length === 0 ? null : (
-                <span className={styles.count}>
-                  {` · ${String(props.tasks.length)}`}
-                </span>
-              )}
-            </span>
-          </Link>
-        </div>
-        {props.progress ? (
-          <div className={styles.progress}>{props.progress}</div>
-        ) : null}
-      </ResponsiveDisclosure>
-    </nav>
+    <LessonTree
+      ariaLabel="Подтемы урока"
+      disclosureLabel={`Подтемы · ${position}`}
+      rootLabel="Темы ЕГЭ"
+      doneLabel="задачи решены"
+      navProps={{ "data-subtopic-navigation": true }}
+      progress={props.progress}
+      folders={props.topics.map((item) => {
+        const isCurrent = item.id === props.lessonId;
+        return {
+          id: item.id,
+          marker: item.number,
+          label: item.title,
+          open: isCurrent,
+          files: [
+            ...item.subtopics.map((subtopic, index) => {
+              const done =
+                isCurrent &&
+                subtopic.taskIds.length > 0 &&
+                subtopic.taskIds.every((id) => solved.has(id));
+              return {
+                id: subtopic.slug,
+                marker: done ? (
+                  <Check size={14} strokeWidth={2.5} />
+                ) : (
+                  index + 1
+                ),
+                label: subtopic.title,
+                to: "/ege/$slug/$subtopic",
+                params: { slug: item.routeSlug, subtopic: subtopic.slug },
+                current: isCurrent && subtopic.slug === props.current,
+                done,
+              };
+            }),
+            {
+              id: practiceCurrent,
+              marker: <PenLine size={13} strokeWidth={2} />,
+              label: "Практика и итог",
+              count:
+                isCurrent &&
+                !props.practiceUnavailable &&
+                props.tasks.length > 0
+                  ? ` · ${String(props.tasks.length)}`
+                  : undefined,
+              to: "/ege/$slug/praktika",
+              params: { slug: item.routeSlug },
+              current: isCurrent && props.current === practiceCurrent,
+            },
+          ],
+        };
+      })}
+    />
   );
 };

@@ -7,35 +7,46 @@ export class CourseCatalogPage {
   async expectCatalog(noScripts = false) {
     await this.page.goto("/courses");
     await expect(this.page.locator("[data-course-card]")).toHaveCount(4);
+    const published = this.page.locator('[data-course-card="python"]');
     await expect(
-      this.page.locator(
-        '[data-course-status="planned"] a, [data-course-status="planned"] button',
-      ),
+      published.locator('[data-object-illustration="course-python-wide"]'),
+    ).toHaveCount(1);
+    await expect(published.locator("p").first()).toBeVisible();
+    await expect(published).toContainText("28 уроков");
+    await expect(
+      published.getByRole("link", { name: "Открыть курс" }),
+    ).toBeVisible();
+    if (noScripts) {
+      await expect(published.locator("[data-course-progress]")).toBeHidden();
+    } else {
+      await expect(published.locator("[data-course-progress]")).toBeVisible();
+    }
+    // Change 170 F34: a planned course offers no link, only a disabled «Скоро».
+    await expect(
+      this.page.locator('[data-course-status="planned"] a'),
     ).toHaveCount(0);
+    const soon = this.page.locator('[data-course-status="planned"] button');
+    await expect(soon).toHaveCount(3);
+    for (const button of await soon.all()) {
+      await expect(button).toHaveText("Скоро");
+      await expect(button).toBeDisabled();
+    }
     await expect(this.page.locator("[data-course-summary]")).toContainText(
       "Всего направлений: 4 · Доступно: 1 · Уроков: 28",
     );
     await expect(this.page.getByRole("searchbox")).toHaveCount(0);
     const planned = this.page.locator('[data-course-status="planned"]');
-    await expect(planned.locator("[data-badge]")).toHaveText([
-      "Скоро",
-      "Скоро",
-      "Скоро",
-    ]);
+    await expect(
+      planned.locator("[data-illustration-placeholder]"),
+    ).toHaveCount(3);
     for (const card of await planned.all()) {
       await expect(card).toHaveAttribute("aria-disabled", "true");
-      await expect(card.locator("[data-badge]")).toHaveCSS(
-        "background-color",
-        "rgb(248, 248, 246)",
-      );
       await expect(card).toHaveCSS("background-color", "rgb(255, 255, 255)");
     }
-    if (noScripts) {
-      await expect(this.page.locator("[data-course-progress]")).toBeHidden();
-    } else {
+    if (!noScripts) {
       await this.expectGuestProgress();
     }
-    await this.expectUniformCards();
+    await this.expectCardGrid();
     await expectNoHorizontalOverflow(this.page);
     await this.page.getByRole("link", { name: "Открыть курс" }).click();
     await expect(this.page).toHaveURL(/\/courses\/python$/);
@@ -63,7 +74,7 @@ export class CourseCatalogPage {
         await assets;
         if (failedAssets) return route.abort();
       }
-      return route.continue();
+      return route.fallback();
     });
     try {
       await this.page.goto("/courses", { waitUntil: "commit" });
@@ -104,7 +115,7 @@ export class CourseCatalogPage {
           ),
       );
       expect(await this.geometry()).toEqual(before);
-      await this.expectUniformCards();
+      await this.expectCardGrid();
       await expectNoHorizontalOverflow(this.page);
       expect(errors).toEqual([]);
     } finally {
@@ -115,6 +126,10 @@ export class CourseCatalogPage {
 
   async expectKeyboardAndMotion() {
     await this.page.goto("/courses");
+    await expect(
+      this.page.getByRole("link", { name: "Войти", exact: true }),
+    ).toBeVisible();
+    await this.page.evaluate(() => document.fonts.ready);
     await this.page.emulateMedia({ reducedMotion: "no-preference" });
     const link = this.page.getByRole("link", { name: "Открыть курс" });
     await link.focus();
@@ -126,10 +141,22 @@ export class CourseCatalogPage {
     await expect(link).toHaveCSS("color", "rgb(255, 255, 255)");
     await this.expectGuestProgress(card);
     // Measure after progress settles; hydration stability has its own delivery check.
-    const before = await card.boundingBox();
-    await expect(card).toHaveCSS("background-color", "rgb(255, 255, 255)");
+    const cardDocumentGeometry = async () => {
+      return card.evaluate((element) => {
+        const box = element.getBoundingClientRect();
+        return {
+          x: box.x + window.scrollX,
+          y: box.y + window.scrollY,
+          width: box.width,
+          height: box.height,
+        };
+      });
+    };
+    const before = await cardDocumentGeometry();
+    // Change 170 F49: the published card has a monochrome gradient border.
+    await expect(card).toHaveCSS("background-image", /conic-gradient/);
     await link.hover();
-    await expect(card).toHaveCSS("background-color", "rgb(255, 255, 255)");
+    await expect(card).toHaveCSS("background-image", /conic-gradient/);
     await expect(link).toHaveCSS("background-color", "rgb(42, 45, 52)");
     await expect(link).toHaveCSS("color", "rgb(255, 255, 255)");
     await expect(link).toHaveCSS("transform", "none");
@@ -142,39 +169,65 @@ export class CourseCatalogPage {
     ).not.toBe(
       await card.evaluate((el) => getComputedStyle(el).backgroundColor),
     );
-    const image = card.locator("img");
-    expect((await image.boundingBox())!.width).toBeGreaterThanOrEqual(208);
+    const illustration = card.locator("[data-object-illustration]");
+    expect((await illustration.boundingBox())!.width).toBeGreaterThanOrEqual(
+      208,
+    );
     const arrow = link.locator("svg");
     await expect(arrow).toHaveCSS("transform", "matrix(1, 0, 0, 1, 4, 0)");
-    expect(await card.boundingBox()).toEqual(before);
+    expect(await cardDocumentGeometry()).toEqual(before);
     await this.page.emulateMedia({ reducedMotion: "reduce" });
     await expect(arrow).toHaveCSS("transform", "none");
     await expect(card).toHaveCSS("transform", "none");
     await expect(link).toHaveCSS("transform", "none");
     await this.page.setViewportSize({ width: 650, height: 900 });
     await this.page.addStyleTag({ content: "html { font-size: 200%; }" });
-    await this.expectUniformCards();
+    await this.expectCardGrid();
     await expectNoHorizontalOverflow(this.page);
     await this.page.setViewportSize({ width: 390, height: 900 });
-    await this.expectUniformCards();
+    await this.expectCardGrid();
     await expectNoHorizontalOverflow(this.page);
     await this.expectGuestProgress(card);
     await link.press("Enter");
     await expect(this.page).toHaveURL(/\/courses\/python$/);
   }
 
-  private async expectUniformCards() {
-    const sizes = await this.page
+  /** Change 170 F49: an asymmetric grid — cards never overlap, each keeps
+   * its picture slot, and cards sharing a row of the same layout match. */
+  private async expectCardGrid() {
+    const cards = await this.page
       .locator("[data-course-card]")
-      .evaluateAll((cards) =>
-        cards.map((card) => {
+      .evaluateAll((nodes) =>
+        nodes.map((card) => {
           const box = card.getBoundingClientRect();
-          return { width: box.width, height: box.height };
+          const illustration = card.querySelector<HTMLElement>(
+            "[data-object-illustration], [data-illustration-placeholder]",
+          );
+          if (!illustration)
+            throw new Error("Course card has no illustration slot");
+          const slot = illustration.getBoundingClientRect();
+          return {
+            layout: card.getAttribute("data-layout"),
+            x: box.x,
+            y: box.y,
+            right: box.right,
+            bottom: box.bottom,
+            height: box.height,
+            slot: slot.width * slot.height,
+          };
         }),
       );
-    for (const size of sizes) {
-      expect(Math.abs(size.width - sizes[0]!.width)).toBeLessThan(1);
-      expect(Math.abs(size.height - sizes[0]!.height)).toBeLessThan(1);
+    for (const card of cards) expect(card.slot).toBeGreaterThan(0);
+    for (let left = 0; left < cards.length; left++) {
+      for (let right = left + 1; right < cards.length; right++) {
+        const a = cards[left]!;
+        const b = cards[right]!;
+        const overlapX = Math.min(a.right, b.right) - Math.max(a.x, b.x);
+        const overlapY = Math.min(a.bottom, b.bottom) - Math.max(a.y, b.y);
+        expect(overlapX < 1 || overlapY < 1).toBe(true);
+        if (a.layout === b.layout && Math.abs(a.y - b.y) < 1)
+          expect(Math.abs(a.height - b.height)).toBeLessThan(1);
+      }
     }
   }
 

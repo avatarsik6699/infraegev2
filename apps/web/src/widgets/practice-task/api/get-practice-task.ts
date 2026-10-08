@@ -13,7 +13,9 @@ import {
 import {
   courseLessonPublications,
   coursePublications,
+  findCourseLessonByRouteSlugs,
 } from "~/entities/course";
+import { theoryLinkLabel } from "~/shared/lib/theory-link-label";
 
 export const getPracticeTask = createServerFn({ method: "GET" })
   .validator((id: string) => {
@@ -48,7 +50,7 @@ export const getPracticeTask = createServerFn({ method: "GET" })
             href: subtopic
               ? `/ege/${topic.routeSlug}/${subtopic.slug}${hash}`
               : `/ege/${topic.routeSlug}${hash}`,
-            label: link.label,
+            label: theoryLinkLabel(lesson?.theory, link.section),
           },
         ];
       }
@@ -66,7 +68,11 @@ export const getPracticeTask = createServerFn({ method: "GET" })
         ? [
             {
               href: `/courses/${course.routeSlug}/${lesson.routeSlug}${hash}`,
-              label: link.label,
+              label: theoryLinkLabel(
+                findCourseLessonByRouteSlugs(course.routeSlug, lesson.routeSlug)
+                  ?.theory,
+                link.section,
+              ),
             },
           ]
         : [];

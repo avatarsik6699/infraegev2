@@ -1,5 +1,6 @@
 .field {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-0-5);
   font-size: var(--text-sm);
   min-width: 0;
@@ -12,6 +13,7 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-1);
+  min-width: 0;
   min-height: var(--control-height);
   padding: var(--space-1) var(--space-1-5);
   border: 1px solid var(--color-rule);
@@ -37,6 +39,8 @@
 }
 .popup {
   display: flex;
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
   flex-direction: column;
   max-height: min(24rem, var(--available-height));
   background: var(--color-surface);
@@ -51,8 +55,15 @@
   display: flex;
   align-items: center;
   gap: var(--space-1);
-  padding: var(--space-1);
+  padding: 0 var(--space-1-5);
   border-bottom: 1px solid var(--color-rule);
+  color: var(--color-muted);
+  cursor: text;
+  transition: border-color var(--motion-duration) var(--motion-easing);
+}
+/* Focus shows as the caret and an ink line under the row, not a stuck ring. */
+.search:focus-within {
+  border-bottom-color: var(--color-text);
 }
 .search input {
   min-width: 0;
@@ -60,12 +71,12 @@
   min-height: var(--control-height);
   border: 0;
   background: transparent;
-  color: inherit;
+  color: var(--color-text);
   font: inherit;
 }
+.search input:focus,
 .search input:focus-visible {
-  outline: 2px solid var(--color-focus);
-  outline-offset: -2px;
+  outline: none;
 }
 .list {
   min-height: 0;
@@ -89,6 +100,16 @@
   min-height: var(--control-height);
   border-radius: var(--radius-control);
   cursor: pointer;
+}
+/* F23: the check always holds its column, so a selection never shifts text. */
+.indicator {
+  display: flex;
+  flex: none;
+  width: 1rem;
+  justify-content: center;
+}
+.item:not([data-selected]) .indicator {
+  visibility: hidden;
 }
 .item[data-highlighted] {
   background: var(--color-surface-quiet);

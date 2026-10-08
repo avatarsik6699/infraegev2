@@ -1,0 +1,12 @@
+{
+  "name": "infraege-mascot-pipeline",
+  "private": true,
+  "type": "module",
+  "description": "One-off tooling that rebuilds the approved mascot poses from the generated character sheet. Not part of the app build.",
+  "dependencies": {
+    "@fontsource/caveat": "5.3.0",
+    "opentype.js": "2.0.0",
+    "potrace": "2.1.8",
+    "svgo": "4.1.0"
+  }
+}

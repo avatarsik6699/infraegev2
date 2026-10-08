@@ -17,26 +17,29 @@ export const CourseCatalogProgress: React.FC<Props> = (props) => {
   let progress = props.progress;
   if (isGuest) progress = { status: "ready", mastered: 0, total: props.total };
   return (
-    <GuestProgressLoginLock enabled={isGuest} total={props.total}>
-      <div className={styles.personalProgress} data-course-progress>
-        {progress.status === "ready" && progress.total > 0 ? (
-          <Progress
-            className={styles.progress}
-            value={progress.mastered}
-            max={progress.total}
-            label={`Освоение курса: ${props.title}`}
-            valueText={courseCatalogModel.progressText(progress)}
-          />
-        ) : (
-          <span className={styles.progressPlaceholder} aria-hidden="true" />
-        )}
-        <div className={styles.progressCopy}>
-          <span className={styles.progressReserve} aria-hidden="true">
-            {courseCatalogModel.progressText({ status: "unavailable" })}
-          </span>
-          <span role="status">{courseCatalogModel.progressText(progress)}</span>
+    <div className={styles.progressSlot}>
+      <GuestProgressLoginLock enabled={isGuest} total={props.total}>
+        <div className={styles.personalProgress} data-course-progress>
+          {progress.status === "ready" && progress.total > 0 ? (
+            <Progress
+              value={progress.mastered}
+              max={progress.total}
+              label={`Освоение курса: ${props.title}`}
+              valueText={courseCatalogModel.progressText(progress)}
+            />
+          ) : (
+            <span className={styles.progressPlaceholder} aria-hidden="true" />
+          )}
+          <div className={styles.progressCopy}>
+            <span className={styles.progressReserve} aria-hidden="true">
+              {courseCatalogModel.progressText({ status: "unavailable" })}
+            </span>
+            <span role="status">
+              {courseCatalogModel.progressText(progress)}
+            </span>
+          </div>
         </div>
-      </div>
-    </GuestProgressLoginLock>
+      </GuestProgressLoginLock>
+    </div>
   );
 };

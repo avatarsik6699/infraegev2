@@ -1,48 +1,35 @@
+/* Open page, no card: the scene leads, the message follows. */
 .root {
   display: grid;
   justify-items: center;
-  gap: var(--space-1-5);
-  width: min(100%, 30rem);
+  gap: var(--space-2);
+  width: min(100%, 52rem);
   margin: var(--space-5) auto;
-  padding: var(--space-3);
-  border: 1px solid var(--color-rule);
-  border-radius: var(--radius-tile);
-  background: var(--color-surface);
   text-align: center;
 }
 
+/* At most 50rem × 15.6rem: the scene keeps its 3.2:1 frame. */
 .illustration {
-  justify-self: stretch;
-  height: 7.5rem;
-  margin-bottom: var(--space-1);
-}
-
-.icon {
-  color: var(--color-danger);
-}
-
-.code {
-  margin: 0;
-  color: var(--color-text-soft);
-  font-family: var(--font-data);
-  font-size: var(--text-sm);
+  width: min(100%, 50rem);
+  margin-bottom: var(--space-2);
 }
 
 .title[data-order] {
   margin: 0;
-  font-size: var(--text-2xl);
+  font-size: var(--text-3xl);
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.15;
 }
 
 .description {
   margin: 0;
+  font-size: var(--text-lg);
 }
 
 .actions {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: var(--space-1);
+  gap: var(--space-1-5);
   margin-top: var(--space-1-5);
 }

@@ -8,5 +8,7 @@ export namespace FieldTypes {
     description?: string;
     help?: React.ReactNode;
     error?: string;
+    /** An accepted answer: green border and fill with a check (no circle). */
+    success?: boolean;
   };
 }

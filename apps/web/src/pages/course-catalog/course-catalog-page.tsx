@@ -1,9 +1,7 @@
 import { courseCatalog } from "~/entities/course";
 import { useAccountSession } from "~/features/account";
 import { PageContainer } from "~/shared/components/page-container";
-import { IllustrationPlaceholder } from "~/shared/components/illustration-placeholder";
 import { PageHead } from "~/shared/components/page-head";
-import { Typography } from "~/shared/components/typography";
 import { PublicFooter } from "~/widgets/public-footer";
 import { PublicHeader } from "~/widgets/public-header";
 import { CourseCatalogCard } from "./components/course-catalog-card";
@@ -11,6 +9,10 @@ import type { CourseCatalogPageTypes } from "./course-catalog-page.types";
 import { courseCatalogModel } from "./model/course-catalog-model";
 import { useCourseCatalog } from "./model/use-course-catalog";
 import styles from "./course-catalog-page.module.css";
+
+/** F49: the home topics grid — one large card over two rows, two compact,
+ * one wide underneath. */
+const courseLayouts = ["feature", "compact", "compact", "wide"] as const;
 
 export const CourseCatalogPage: React.FC<CourseCatalogPageTypes.Props> = (
   props,
@@ -30,24 +32,10 @@ export const CourseCatalogPage: React.FC<CourseCatalogPageTypes.Props> = (
       <PublicHeader activeSection="courses" />
       <main id="main-content" className={styles.root}>
         <PageHead
-          aside={
-            <IllustrationPlaceholder
-              tone="outline"
-              className={styles.headIllustration}
-            />
-          }
-        >
-          <header className={styles.catalogHeading}>
-            <Typography.Title
-              id="course-catalog-heading"
-              order={1}
-              className={styles.heading}
-            >
-              Мини-курсы
-            </Typography.Title>
-            <Typography.Text className={styles.catalogLead}>
-              Навыки, которые остаются после экзамена.
-            </Typography.Text>
+          title="Мини-курсы"
+          titleId="course-catalog-heading"
+          lead="Навыки, которые остаются после экзамена."
+          meta={
             <div className={styles.summary} data-course-summary>
               <span>
                 Всего направлений: {courseCatalog.entries.length} · Доступно:{" "}
@@ -57,8 +45,8 @@ export const CourseCatalogPage: React.FC<CourseCatalogPageTypes.Props> = (
                 {summaryProgress}
               </span>
             </div>
-          </header>
-        </PageHead>
+          }
+        />
         <PageContainer
           className={styles.catalogSection}
           component="section"
@@ -69,10 +57,11 @@ export const CourseCatalogPage: React.FC<CourseCatalogPageTypes.Props> = (
             data-course-list
             aria-labelledby="course-catalog-heading"
           >
-            {courseCatalog.entries.map((entry) => (
+            {courseCatalog.entries.map((entry, index) => (
               <CourseCatalogCard
                 progress={catalog.byId[entry.id]}
                 entry={entry}
+                layout={courseLayouts[index] ?? "compact"}
                 key={entry.id}
               />
             ))}

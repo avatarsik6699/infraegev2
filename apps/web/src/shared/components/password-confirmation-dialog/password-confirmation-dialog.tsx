@@ -1,4 +1,4 @@
-import { AlertDialog } from "@base-ui/react/alert-dialog";
+import { Dialog } from "@base-ui/react/dialog";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "~/shared/components/button";
@@ -41,7 +41,7 @@ export const PasswordConfirmationDialog: React.FC<Props> = (props) => {
   };
 
   return (
-    <AlertDialog.Root
+    <Dialog.Root
       open={open}
       onOpenChange={(nextOpen) => {
         if (pending && !nextOpen) return;
@@ -49,7 +49,7 @@ export const PasswordConfirmationDialog: React.FC<Props> = (props) => {
         if (!nextOpen) setError(null);
       }}
     >
-      <AlertDialog.Trigger
+      <Dialog.Trigger
         render={
           <Button
             hierarchy={
@@ -66,17 +66,15 @@ export const PasswordConfirmationDialog: React.FC<Props> = (props) => {
         aria-label={props.triggerAriaLabel}
       >
         {props.triggerLabel}
-      </AlertDialog.Trigger>
-      <AlertDialog.Portal>
-        <AlertDialog.Backdrop className={styles.backdrop} />
-        <AlertDialog.Viewport className={styles.viewport}>
-          <AlertDialog.Popup className={styles.popup}>
-            <AlertDialog.Title className={styles.title}>
-              {props.title}
-            </AlertDialog.Title>
-            <AlertDialog.Description className={styles.description}>
+      </Dialog.Trigger>
+      <Dialog.Portal>
+        <Dialog.Backdrop className={styles.backdrop} />
+        <Dialog.Viewport className={styles.viewport}>
+          <Dialog.Popup className={styles.popup} role="alertdialog">
+            <Dialog.Title className={styles.title}>{props.title}</Dialog.Title>
+            <Dialog.Description className={styles.description}>
               {props.description}
-            </AlertDialog.Description>
+            </Dialog.Description>
             <form
               className={styles.form}
               method="post"
@@ -108,7 +106,7 @@ export const PasswordConfirmationDialog: React.FC<Props> = (props) => {
                 </Typography.Text>
               ) : null}
               <div className={styles.actions}>
-                <AlertDialog.Close
+                <Dialog.Close
                   render={
                     <Button
                       hierarchy="quiet"
@@ -119,15 +117,15 @@ export const PasswordConfirmationDialog: React.FC<Props> = (props) => {
                   }
                 >
                   Отмена
-                </AlertDialog.Close>
+                </Dialog.Close>
                 <Button type="submit" hierarchy="destructive" loading={pending}>
                   {props.confirmLabel}
                 </Button>
               </div>
             </form>
-          </AlertDialog.Popup>
-        </AlertDialog.Viewport>
-      </AlertDialog.Portal>
-    </AlertDialog.Root>
+          </Dialog.Popup>
+        </Dialog.Viewport>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 };

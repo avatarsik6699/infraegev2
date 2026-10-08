@@ -4,21 +4,6 @@
   flex-direction: column;
 }
 
-/* Auth screens (v5 mockup `auth.html`): soft page, illustration band, white form card. */
-.page[data-auth-page] {
-  background: var(--color-surface-quiet);
-}
-
-.authBand {
-  border-bottom: 1px solid var(--color-rule);
-  background: var(--color-bg);
-}
-
-.authIllustration {
-  width: min(100% - 2 * var(--page-chrome-gutter), 62rem);
-  height: 6.25rem;
-  margin: var(--space-3) auto;
-}
 .main[data-measure] {
   flex: 1;
   width: 100%;
@@ -29,6 +14,35 @@
   max-width: 76rem;
   padding-block: var(--space-5);
 }
+
+/* Auth screens: white page, the form on the left, the illustration on the right. */
+.main[data-measure][data-auth] {
+  display: grid;
+  grid-template-columns: minmax(0, 27rem) minmax(0, 29rem);
+  gap: var(--space-5);
+  align-items: center;
+  justify-content: center;
+  max-width: var(--measure-wide);
+}
+
+/* Noticeably lower than the form beside it: the form leads. */
+.authIllustration {
+  justify-self: center;
+  width: 100%;
+  max-height: 25rem;
+  object-fit: contain;
+}
+
+@media (max-width: 60rem) {
+  .main[data-measure][data-auth] {
+    grid-template-columns: minmax(0, 27rem);
+  }
+
+  .authIllustration {
+    display: none;
+  }
+}
+
 .panel {
   display: grid;
   gap: var(--space-3);
@@ -88,11 +102,6 @@
 .panel[data-auth-surface] {
   gap: var(--space-3);
   max-width: 27rem;
-  margin-inline: auto;
-  padding: var(--space-3) var(--space-3) var(--space-4);
-  border: 1px solid var(--color-rule);
-  border-radius: var(--radius-tile);
-  background: var(--color-surface);
 }
 .intro {
   display: grid;
@@ -151,7 +160,7 @@
   width: 100%;
 }
 .panel[data-auth-surface] .form .actions > a {
-  justify-self: center;
+  justify-self: start;
 }
 .secondary {
   display: grid;

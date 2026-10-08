@@ -8,6 +8,7 @@ import {
   topicLessons,
   type LessonContent,
 } from "~/entities/lesson";
+import { theoryLinkLabel } from "~/shared/lib/theory-link-label";
 
 const lesson: LessonContent.Definition = {
   id: "sample-lesson",
@@ -103,5 +104,22 @@ describe("lesson subtopics", () => {
 
   it("keeps every authored topic split valid", () => {
     expect(topicLessons.flatMap(subtopicErrors)).toEqual([]);
+  });
+
+  it("gives every authored subtopic a lead under its title", () => {
+    // Change 170 F42: a subtopic title is never followed straight by a heading.
+    const missing = topicLessons.flatMap((item) =>
+      (item.subtopics ?? [])
+        .filter((subtopic) => !subtopic.lead?.trim())
+        .map((subtopic) => `${item.id}/${subtopic.slug}`),
+    );
+    expect(missing).toEqual([]);
+  });
+
+  it("names a theory link after the heading it leads to", () => {
+    const theory = [{ id: "single-values", navLabel: "Отдельные числа" }];
+    expect(theoryLinkLabel(theory, "single-values")).toBe("Отдельные числа");
+    expect(theoryLinkLabel(theory, "unknown")).toBe("Теория");
+    expect(theoryLinkLabel(theory, null)).toBe("Теория");
   });
 });

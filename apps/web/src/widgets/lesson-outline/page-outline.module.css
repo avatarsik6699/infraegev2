@@ -39,9 +39,9 @@
   outline-offset: 0;
 }
 
+/* F23: colour and the bar mark the current item; the weight never changes. */
 .link[aria-current="location"] {
   color: var(--color-text);
-  font-weight: 600;
 }
 
 .link[aria-current="location"]::before {

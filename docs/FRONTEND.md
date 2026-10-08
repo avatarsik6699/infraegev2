@@ -141,9 +141,16 @@ Lesson media:
 - `CodeBlock` shows line numbers by default (`showLineNumbers={false}` opts out) in a gutter that
   is not selected or copied; long blocks collapse behind a "show all code" button and expand
   again; copy and keyboard focus stay available. Syntax colours keep at least 4.5:1.
-- Self-check and practice help use the native `details` fallback so answers stay closed until
-  revealed, before enhancement and without JavaScript. General Accordion keeps its explicit
-  opt-in fallback contract.
+- Self-check uses the native `details` fallback so answers stay closed until revealed, before
+  enhancement and without JavaScript. General Accordion keeps its explicit opt-in fallback
+  contract.
+- Every practice task uses one layout (catalog, task page, lessons; Change 170 F30): the answer
+  field, «Проверить», «Подсказка» and «Решение» in one row, the help panels below it. Without
+  scripting the toggles are hidden and both panels are shown. An accepted answer is shown by the
+  field itself (success border and fill, a check without a circle) and a short confetti burst,
+  off under reduced motion; the result is announced to assistive technology, not printed.
+- A task theory link is named after the heading it leads to, or «Теория» when the task names no
+  section (F54).
 
 Practice state:
 
@@ -162,10 +169,11 @@ Practice state:
   "Запишите целое число в десятичной системе счисления." is suppressed in presentation only.
 - Task code-variant blocks show only the authored Python variant as an ordinary CodeBlock, without
   language tabs, including SSR.
-- Task detail uses the topic as its sole h1, an icon-only back link with an accessible tooltip, and
-  one wrapping metadata row (short ID, difficulty, answer format, known sources, duration,
-  theory). Unknown-source filler and duplicate progress/actions are omitted. One context-preserving
-  return link; no next-task navigation; progress explanations live in an info popover.
+- Task detail uses the task title as its sole h1, with a text link «← К списку задач» on one line
+  with the topic above it, and one wrapping metadata row (short ID, difficulty, answer format,
+  duration, known sources, theory). Unknown-source filler and duplicate progress/actions are
+  omitted. One context-preserving return link; no next-task navigation and no practice
+  explanation popover (F31, F32, F47).
 
 Progress and accounts:
 
@@ -243,19 +251,20 @@ Progress and accounts:
 ## 7. Catalog and overview behaviour
 
 - EGE catalog: total/published topic counts and lesson practice progress sit below the page title
-  and reflect the full catalog regardless of filtering. Topic status buttons use pressed
+  and reflect the full catalog regardless of filtering. «Все темы» lists topics by first task
+  number, published and planned mixed, planned rows muted (F25). Topic status buttons use pressed
   semantics. Published rows expose one navigable link; planned rows have no action. Illustrations
   never change publication status. Full SSR/no-JS catalog access.
 - Mini-course catalog: registry order, titles and descriptions are kept. Planned directions have
-  aria-disabled state and no links, invented counts, levels or dates; Python has one overview
-  link. Header totals and card progress share one revision-aware calculation; until hydration or
+  aria-disabled state, no links and no invented counts or dates: they show their registry level,
+  «— уроков» placeholders, an empty bar and a disabled «Скоро» action (F34); Python has one
+  overview link. Header totals and card progress share one revision-aware calculation; until hydration or
   on summary failure show a neutral/unavailable state, never a false zero or partial aggregate.
 - Python course overview: full authored titles, order and URLs for all 28 lessons, nine modules and
   the four-lesson project. Module descriptions, per-lesson outcomes and the long outcomes list are
-  hidden on the overview only. The first module starts open; disclosures and expand/collapse-all
-  are page-local, hydration never changes disclosure, and the Accordion's native `details`
-  fallback keeps the same first paint and usable links without JavaScript. Bulk controls are
-  hidden before enhancement.
+  hidden on the overview only. The first module starts open; disclosures are page-local (no
+  expand/collapse-all, F35), hydration never changes disclosure, and the Accordion's native
+  `details` fallback keeps the same first paint and usable links without JavaScript.
 - Course progress uses revision-aware lesson progress and each lesson's mastery threshold
   (default 80%); a zero-task lesson is not mastered; practice counts sum lesson task memberships.
   States are "Не начат", "В процессе", "Освоен" with exact task counts. Actions: no progress →

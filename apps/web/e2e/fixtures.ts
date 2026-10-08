@@ -49,41 +49,41 @@ type AppFixtures = {
 };
 
 const numberRecordLessonConfig = {
-  route: "/ege/5-preobrazovanie-zapisey-chisel",
+  route: "/ege/5-preobrazovanie-zapisey-chisel/model-algoritma",
   title: "Преобразование записей чисел",
   taskNumber: 5,
 };
 
 const numberSequencesLessonConfig = {
-  route: "/ege/17-chislovye-posledovatelnosti",
+  route: "/ege/17-chislovye-posledovatelnosti/proverka",
   title: "Числовые последовательности",
   taskNumber: 17,
   taskCount: 8,
 };
 
 const stringProcessingLessonConfig = {
-  route: "/ege/24-obrabotka-simvolnyh-strok",
+  route: "/ege/24-obrabotka-simvolnyh-strok/vyrazheniya",
   title: "Обработка символьных строк",
   taskNumber: 24,
   taskCount: 8,
 };
 
 const integerProcessingLessonConfig = {
-  route: "/ege/25-obrabotka-celyh-chisel",
+  route: "/ege/25-obrabotka-celyh-chisel/maska-i-poisk",
   title: "Обработка целых чисел",
   taskNumber: 25,
   taskCount: 8,
 };
 
 const arrayProcessingLessonConfig = {
-  route: "/ege/26-sortirovka-i-otbor",
+  route: "/ege/26-sortirovka-i-otbor/dannye",
   title: "Обработка данных: сортировка и отбор",
   taskNumber: 26,
   taskCount: 7,
 };
 
 const dataAnalysisLessonConfig = {
-  route: "/ege/27-analiz-dannyh-i-klasterizatsiya",
+  route: "/ege/27-analiz-dannyh-i-klasterizatsiya/gruppy",
   title: "Анализ данных: кластеризация",
   taskNumber: 27,
   taskCount: 7,
@@ -101,7 +101,7 @@ async function useNoJavaScriptTopicLesson(
     viewport: { width: 390, height: 844 },
   });
   try {
-    await use(new TopicLessonPage(await context.newPage(), config));
+    await use(new TopicLessonPage(await context.newPage(), config, true));
   } finally {
     await context.close();
   }
@@ -144,7 +144,14 @@ export const test = base.extend<AppFixtures>({
       await context.close();
     }
   },
-  courseCatalogPage: async ({ page }, use) => {
+  courseCatalogPage: async ({ page, baseURL }, use) => {
+    // The production layout server has no API reverse proxy. Keep its visual
+    // checks deterministic while normal dev E2E still exercises the backend.
+    if (baseURL && new URL(baseURL).port === "3200") {
+      await page.route("**/api/auth/session", (route) =>
+        route.fulfill({ json: { account: null, csrf_token: null } }),
+      );
+    }
     await use(new CourseCatalogPage(page));
   },
   noJavaScriptCourseCatalogPage: async ({ baseURL, browser }, use) => {
@@ -189,7 +196,12 @@ export const test = base.extend<AppFixtures>({
       await context.close();
     }
   },
-  minimalPage: async ({ page }, use) => {
+  minimalPage: async ({ page, baseURL }, use) => {
+    if (baseURL && new URL(baseURL).port === "3200") {
+      await page.route("**/api/auth/session", (route) =>
+        route.fulfill({ json: { account: null, csrf_token: null } }),
+      );
+    }
     await use(new MinimalApplicationPage(page));
   },
   noJavaScriptMinimalPage: async ({ baseURL, browser }, use) => {
@@ -222,8 +234,8 @@ export const test = base.extend<AppFixtures>({
   accessibilityPage: async ({ page }, use) => {
     await use(new AccessibilityPage(page));
   },
-  browserSession: async ({ page }, use, testInfo) => {
-    await use(new BrowserSession(page, testInfo));
+  browserSession: async ({ page }, use) => {
+    await use(new BrowserSession(page));
   },
   publicDiscoveryPage: async ({ page }, use) => {
     await use(new PublicDiscoveryPage(page));

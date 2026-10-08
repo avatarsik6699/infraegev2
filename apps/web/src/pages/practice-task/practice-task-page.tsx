@@ -19,7 +19,6 @@ import { PracticeBackLink } from "./components/practice-back-link";
 import { Button } from "~/shared/components/button";
 import { StatusScene } from "~/shared/components/status-scene";
 import { PracticeSources } from "./components/practice-sources";
-import { InfoPopover } from "~/shared/components/info-popover";
 import { practiceTopic } from "./practice-topic";
 import type { PracticeTaskPageTypes } from "./practice-task-page.types";
 import styles from "./practice-task-page.module.css";
@@ -46,12 +45,14 @@ export const PracticeTaskPage: React.FC<PracticeTaskPageTypes.Props> = (
         {detail ? (
           <>
             <header className={styles.heading}>
-              <PracticeBackLink
-                href={practiceCatalog.returnHref(props.search)}
-              />
-              <Typography.Text className={styles.topic}>
-                {practiceTopic.label(detail)}
-              </Typography.Text>
+              <div className={styles.context}>
+                <PracticeBackLink
+                  href={practiceCatalog.returnHref(props.search)}
+                />
+                <Typography.Text className={styles.topic}>
+                  {practiceTopic.label(detail)}
+                </Typography.Text>
+              </div>
               <Typography.Title
                 order={1}
                 variant="lesson"
@@ -81,19 +82,8 @@ export const PracticeTaskPage: React.FC<PracticeTaskPageTypes.Props> = (
                     Около {detail.estimatedMinutes} мин
                   </span>
                 ) : null}
+                <PracticeSources sources={detail.sources} />
                 <PracticeTheory links={result.links} />
-                <InfoPopover label="Как работает практика">
-                  <ul>
-                    <li>
-                      Отметки решения сохраняются в этом браузере отдельно от
-                      уроков.
-                    </li>
-                    <li>
-                      Введённый ответ сбросится при уходе со страницы или
-                      перезагрузке.
-                    </li>
-                  </ul>
-                </InfoPopover>
               </div>
             </header>
             <div className={styles.task}>
@@ -101,10 +91,10 @@ export const PracticeTaskPage: React.FC<PracticeTaskPageTypes.Props> = (
                 key={detail.task.id}
                 task={detail.task}
                 links={result.links}
+                saveProgress={detail.catalogVisible}
                 onRefresh={refresh}
               />
             </div>
-            <PracticeSources sources={detail.sources} />
           </>
         ) : (
           <section className={styles.state}>

@@ -26,16 +26,19 @@ export const dataAnalysisLesson = defineLesson({
     {
       slug: "gruppy",
       title: "Файл и группы точек",
+      lead: "Что хранится в файле и как разделить точки на группы — по положению на плоскости или по энергии.",
       conceptIds: ["points-and-records", "spatial-clusters", "energy-clusters"],
     },
     {
       slug: "raschety",
       title: "Выбор центра и второй расчёт",
+      lead: "Как выбрать центр каждой группы и посчитать по нему второе значение, которое требует задание.",
       conceptIds: ["cluster-centre", "distance-and-filter"],
     },
     {
       slug: "rezultat",
       title: "Результаты и проверка",
+      lead: "Как получить оба числа ответа и проверить их на границах, где легче всего ошибиться.",
       conceptIds: ["combined-result", "independent-check"],
     },
   ],

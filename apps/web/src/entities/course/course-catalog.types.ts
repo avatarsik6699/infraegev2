@@ -6,8 +6,8 @@ export namespace CourseCatalogTypes {
     id: Id;
     title: string;
     summary: string;
+    /** The planned level for courses that are not published yet. */
     level?: string;
-    outcome?: string;
   };
 
   export type PlannedEntry = Definition & {

@@ -37,9 +37,6 @@ export const PracticeTask: React.FC<PracticeTaskWidgetTypes.Props> = (
         </header>
       )}
       <StandalonePractice
-        layout={
-          (props.presentation ?? "detail") === "detail" ? "detail" : "compact"
-        }
         helpHeadingOrder={props.presentation === "catalog" ? 4 : 2}
         key={attempt}
         focusOnMount={repeating}
@@ -54,7 +51,7 @@ export const PracticeTask: React.FC<PracticeTaskWidgetTypes.Props> = (
         }
         tasks={[props.task]}
         checkAnswer={
-          session.account
+          session.account && props.saveProgress !== false
             ? createCheckAndSaveAnswer(
                 "standalone",
                 STANDALONE_CONTEXT_ID,

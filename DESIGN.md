@@ -192,12 +192,12 @@ one orange for position.
 - **Here Orange** (here-orange): the "you are here" mark only: the 2px line under the current
   nav item and selected tab, the 3px bar at the current lesson subtopic and page-rail item, and the
   small "Подтема N из M" label. 4.85:1 on white.
-- **Logo Orange** (logo-orange): the top stone of the logo and the single marker underline under
-  the key phrase of the home hero. Nowhere else.
+- **Logo Orange** (logo-orange): the top stone of the logo and of the mascot, and the single
+  marker underline under the key phrase of the home hero. Nowhere else.
 
 ### Tertiary
 - **Cover Pastels** (pastel-sky, pastel-sage, pastel-lilac, pastel-apricot): home-page path
-  tiles, topic illustration plates, the course band and the hero illustration plate. Outside home,
+  tiles, topic illustration plates and the course band. Outside home,
   one pastel plate per page for the main next step (course illustration, profile "Следующий шаг").
   Pastels rotate in a fixed order and carry no meaning; they are never assigned to a section.
 
@@ -206,14 +206,16 @@ one orange for position.
 - **Soft Surface** (surface-soft): neutral plates (catalog illustration placeholders, the home
   "try a task" block), barely distinguishable from white on purpose.
 - **Side Surface** (surface-side): lesson left panel, expanded practice rows, callouts.
-- **Wash** (wash): soft buttons, badges, track of progress bars, hover fills.
+- **Wash** (wash): soft buttons, badges, hover fills.
+- **Progress track** (line): every progress bar is the same — a 6px hairline-grey track, ink
+  fill, text above and below; the track never matches a hover fill.
 - **Hairline** (line) and **Strong Hairline** (line-strong): separators, card and input borders.
 - **Secondary Ink** (ink-secondary) for leads and text on plates (≥8:1 on pastels);
   **Muted Ink** (ink-muted) for metadata on white only.
 
 ### Status and code
-- **Success / Error** (success, error with their -bg pairs): answer-check results and destructive
-  actions only, never decoration.
+- **Success / Error** (success, error with their -bg pairs): answer-check results (an accepted
+  field, the solved mark in practice rows) and destructive actions only, never decoration.
 - **Code** (code-keyword violet, code-string green, code-number teal, code-comment grey) inside code
   blocks only; every code colour keeps at least 4.5:1 on the code surface.
 
@@ -257,12 +259,15 @@ numbers in tables; Caveat only inside diagrams.
 
 Content sits in a 1160px container with 24px gutters (16px under 760px). Pages open with a
 **page head**: white, title and lead on the left, optional illustration plate on the right, a
-hairline below and the engineering grid behind. Sections are separated by whitespace (about 56px)
+hairline below and the engineering grid behind. Catalog heads share one structure (`PageHead`
+title, lead and meta): the same title, lead and meta sizes and gaps on every page. Sections are separated by whitespace (about 56px)
 rather than rules.
 
-Lessons use three zones: a 272px left panel with the topic and its subtopics, a reading column up
-to 690px, and a 224px "На этой странице" rail; on phones both side zones collapse into a
-"Подтемы · N из M" disclosure. Course overview, catalogs and profile have no left panel. The
+Lessons use three zones: a 272px left panel with a file tree (EGE: published topics in exam order,
+each a folder of its subtopics and «Практика и итог»; course: modules as folders of lessons), a
+reading column up to 690px opening with breadcrumbs (ancestors as links, the current page as
+text), and a 224px "На этой странице" rail with the lesson progress under it; on phones both side
+zones collapse into a "Подтемы · N из M" disclosure that also holds the progress. Course overview, catalogs and profile have no left panel. The
 practice catalog keeps inline solving in the list, task detail on its own page, and pagination
 joined with the per-page limit.
 
@@ -276,19 +281,26 @@ never appears in reading areas, cards or forms.
 ## Elevation & Depth
 
 Flat by default. Depth comes from hairline borders and tonal plates, not shadows. The only
-shadows are functional: dropdown and dialog surfaces get a soft ambient shadow, and the current
-lesson subtopic gets a 1px ring.
+shadows are functional: dropdown and dialog surfaces get a soft ambient shadow.
 
 ### Named Rules
 **The Flat Page Rule.** Cards, tiles and plates never cast shadows at rest; hover changes the
-border or fill, not elevation.
+border or fill, not elevation. One exception, set by the architect (2026-10-05): the home page is
+the cover, and its cards (paths, topics, the try card, the course card) are raised — a soft
+gradient of their own tone, `--shadow-cover`, a light top edge and a sheen from the top-left
+corner; hover lifts them by 2px (`--shadow-cover-raised`, no lift under reduced motion). No other
+page uses these tokens. A second exception (2026-10-06): the published course card on `/courses`
+carries a slow monochrome highlight travelling along its border (off under reduced motion).
 
 ## Shapes
 
 Small, calm corners: 6px on controls (buttons, inputs, segmented controls), 12px on cards and
 plates, 14px on home path tiles, full pills for chips and badges. Borders are 1px hairlines.
-Illustrations are hand-drawn monochrome lines with one orange accent, on pastel (home) or soft
-neutral (elsewhere) plates.
+Illustrations are hand-drawn monochrome lines with one orange accent and sit directly on the
+surface, no plate behind them: every EGE topic has its object illustration (home cards and `/ege`
+rows, dimmed for planned topics), the Python course its own picture (home block, `/courses`
+card, `/courses/python` head at about a third of the head width). They are shown by the shared
+`ObjectIllustration`, mascot scenes by `MascotScene`. Planned courses keep a neutral placeholder.
 
 ## Components
 
@@ -297,7 +309,9 @@ neutral (elsewhere) plates.
 - **Primary:** ink fill, white text. One primary per view.
 - **Secondary:** white with strong hairline border; **Soft:** wash fill for secondary actions
   in the practice row (Подсказка, Решение); **Quiet:** transparent.
-- **Danger:** white with error text and border, only for irreversible account actions.
+- **Danger:** white with error text and border, only for irreversible account actions. The lesson
+  progress reset dialog is the one exception (architect, 2026-10-06): a soft «Отмена» and a
+  filled danger «Сбросить» with white text.
 - **Hover / Focus:** hover darkens the fill or border; focus is a 2px ink outline with 2px offset.
 - **Never** an orange or pastel-filled button.
 
@@ -306,7 +320,8 @@ neutral (elsewhere) plates.
   semibold with an arrow, underline on hover. On pastel plates links stay blue.
 
 ### Chips and badges
-- **Filter chips:** white pill with strong hairline, dismiss icon on the right.
+- **Filter chips:** white pill with strong hairline, 14px text, 3px 6px 3px 12px, a 14px
+  dismiss icon on the right.
 - **Badges:** wash pill with muted ink; success badge uses success colours. No orange badges.
 
 ### Cards / Containers
@@ -319,8 +334,11 @@ neutral (elsewhere) plates.
 ### Inputs / Fields
 - **Style:** white, 1px border (#cfcfca), 6px corners, 46px tall; answers use the mono face.
 - **Focus:** 2px ink outline.
-- **Error / Success:** error border plus message in error colour; success border with a check
-  icon and a success message plate.
+- **Error / Success:** error border plus message in error colour; an accepted answer is the
+  field itself — success border and fill with a check (no circle) — and a short confetti burst
+  from «Проверить» (off under reduced motion); the result is announced, not printed.
+- **Practice task:** one layout everywhere (catalog, task page, lessons): field, «Проверить»,
+  «Подсказка» and «Решение» in one row, their panels below.
 
 ### Navigation
 - Header: logo with wordmark and descriptor (descriptor hidden on phones), three text items,
@@ -328,9 +346,34 @@ neutral (elsewhere) plates.
   "Меню" button.
 - Profile: minimal tabs (Обзор, Настройки) with the same orange underline.
 
-### Lesson subtopic panel (signature)
-- Topic title, "Задание N · M подтем", practice count, numbered subtopics; done items show a
-  success check, the current one a white fill, 1px ring and a 3px Here Orange bar.
+### Lesson file tree (signature)
+- A quiet tree: folders (topic or module) with a chevron, files hanging off a hairline; done
+  items show a success check, the current one ink text and a 3px Here Orange bar on the tree
+  line. A selected item never changes weight or size, so nothing reflows.
+
+### Mascot
+- A living stack of the three logo stones: face on the big bottom stone, the top stone outlined in
+  Logo Orange, thin arms with round hands, short legs. Outline only, uneven hand-drawn line.
+- Approved poses and rules: `docs/artifacts/references/mascot`. Scenes are baked by its pipeline
+  into `apps/web/public/images/mascot` and shown by the shared `MascotScene` (a lazy decorative
+  image at the scene's own viewBox size).
+- Places: home hero (lotus with floating learning objects), sign-in (unlocking a door),
+  registration (filling in a clipboard form), 404 (an open door to nowhere), error (an unplugged
+  server), empty search (an empty box under a magnifier). Catalog heads (`/ege`, `/courses`,
+  `/practice`) have no illustration: a scene there competed with the title. Topics and courses
+  keep object illustrations without the mascot.
+- Scenes after the hero are drawn as PNG by the architect and traced by the pipeline; the face is
+  redrawn with the pen of the poses. Around a scene only small monochrome abstract marks
+  (sparkles, rings), spread out, never clustered at the mascot; no colour, confetti or large
+  floating objects.
+- Sign-in and registration: white page, the form on the left without a card, the scene on the
+  right, centred together with a `--space-5` gap; the scene stays lower than the form.
+- 404 and error are open pages, never a card: the scene (up to 50rem), then the title, text and
+  actions; no large code digits. Empty search is an open block under the filters: the scene up
+  to 34rem, the title and the reset.
+- Motion is CSS inside the scene file: a slow float, gentle sway, sparkles; off under
+  `prefers-reduced-motion`. Hero and auth scenes are hidden below 960px, where they would wrap under
+  the copy or the form.
 
 ## Do's and Don'ts
 

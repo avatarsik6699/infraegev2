@@ -148,6 +148,16 @@
   border-color: var(--color-danger);
   background: var(--color-danger-soft);
 }
+/* F22: a filled danger confirm, only inside a confirmation dialog. */
+.root[data-hierarchy="danger"] {
+  border-color: var(--color-danger);
+  background: var(--color-danger);
+  color: var(--color-surface);
+}
+.root[data-hierarchy="danger"]:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--color-danger) 85%, var(--color-text));
+  background: color-mix(in srgb, var(--color-danger) 85%, var(--color-text));
+}
 .root:focus-visible {
   outline: 2px solid var(--color-focus);
   outline-offset: 2px;

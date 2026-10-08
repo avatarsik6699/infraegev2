@@ -6,7 +6,7 @@ for (const path of [
   "/courses/python/pervaya-programma",
   "/practice",
   "/ege",
-  "/ege/16-rekursiya",
+  "/ege/16-rekursiya/osnovy",
   "/privacy",
   "/sign-in",
   "/register",

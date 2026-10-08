@@ -27,6 +27,9 @@ export namespace LessonContent {
     /** Public path segment: /ege/{routeSlug}/{slug}. */
     slug: string;
     title: string;
+    /** F42: one or two sentences under the subtopic title, so a heading is
+     * never followed straight by another heading. */
+    lead?: string;
     /** Adjacent `ConceptBlock` ids in authored order. */
     conceptIds: readonly [string, ...string[]];
   };

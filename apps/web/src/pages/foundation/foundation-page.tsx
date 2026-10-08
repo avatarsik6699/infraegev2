@@ -2,14 +2,17 @@ import { BookOpen, Code2, ListChecks } from "lucide-react";
 import { courseCatalog } from "~/entities/course";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { ActionLink } from "~/shared/components/action-link";
-import { IllustrationPlaceholder } from "~/shared/components/illustration-placeholder";
+import {
+  hasCourseIllustration,
+  ObjectIllustration,
+} from "~/shared/components/object-illustration";
+import { MascotScene } from "~/shared/components/mascot-scene";
 import { PageContainer } from "~/shared/components/page-container";
 import { PageHead } from "~/shared/components/page-head";
 import { Typography } from "~/shared/components/typography";
 import { PublicFooter } from "~/widgets/public-footer";
 import { PublicHeader } from "~/widgets/public-header";
-import { FoundationTryTask } from "./foundation-try-task";
-import type { FoundationPageTypes } from "./foundation-page.types";
+import { FoundationTryDemo } from "./foundation-try-demo";
 import styles from "./foundation-page.module.css";
 
 const foundation = {
@@ -18,25 +21,19 @@ const foundation = {
   ),
   plannedTopicCount: topicCatalog.entries.length,
   course: courseCatalog.entries.find((entry) => entry.status === "published"),
-  heroNotes: ["F(5) = 31", "for i in range", "n % 10", "✓ верно"],
   featuredTopicCount: 4,
 } as const;
 
-export const FoundationPage: React.FC<FoundationPageTypes.Props> = (props) => (
+/** F12: an asymmetric grid — a large first topic, two compact, one wide. */
+const topicLayouts = ["feature", "compact", "compact", "wide"] as const;
+
+export const FoundationPage: React.FC = () => (
   <div className={styles.page}>
     <PublicHeader home />
     <main id="main-content" className={styles.main} data-foundation-layout>
       <PageHead
         className={styles.hero}
-        aside={
-          <div className={styles.heroPlate} aria-hidden="true">
-            {foundation.heroNotes.map((note) => (
-              <span key={note} className={styles.heroNote}>
-                {note}
-              </span>
-            ))}
-          </div>
-        }
+        aside={<MascotScene scene="home-hero" className={styles.heroScene} />}
       >
         <Typography.Title order={1} className={styles.heroTitle}>
           Понять, <span className={styles.highlight}>почему это работает</span>,
@@ -55,13 +52,9 @@ export const FoundationPage: React.FC<FoundationPageTypes.Props> = (props) => (
           </ActionLink>
         </div>
         <ul className={styles.facts} aria-label="Что есть на сайте">
-          <li>
-            <b>{foundation.publishedTopics.length}</b> тем ЕГЭ
-          </li>
+          <li>{foundation.publishedTopics.length} тем ЕГЭ</li>
           {foundation.course?.status === "published" ? (
-            <li>
-              <b>{foundation.course.lessonCount}</b> уроков Python
-            </li>
+            <li>{foundation.course.lessonCount} уроков Python</li>
           ) : null}
         </ul>
       </PageHead>
@@ -76,10 +69,12 @@ export const FoundationPage: React.FC<FoundationPageTypes.Props> = (props) => (
           </Typography.Text>
           <ul className={styles.paths}>
             <li className={styles.path} data-tone="sage">
-              <BookOpen className={styles.pathIcon} aria-hidden="true" />
-              <Typography.Title order={3} className={styles.pathTitle}>
-                Темы ЕГЭ
-              </Typography.Title>
+              <div className={styles.pathHead}>
+                <Typography.Title order={3} className={styles.pathTitle}>
+                  Темы ЕГЭ
+                </Typography.Title>
+                <BookOpen className={styles.pathIcon} aria-hidden="true" />
+              </div>
               <Typography.Text className={styles.pathText}>
                 Теория, разобранные примеры и задачи с проверкой по каждому
                 заданию экзамена.
@@ -94,10 +89,12 @@ export const FoundationPage: React.FC<FoundationPageTypes.Props> = (props) => (
             </li>
             {foundation.course?.status === "published" ? (
               <li className={styles.path} data-tone="sky">
-                <Code2 className={styles.pathIcon} aria-hidden="true" />
-                <Typography.Title order={3} className={styles.pathTitle}>
-                  {foundation.course.title}
-                </Typography.Title>
+                <div className={styles.pathHead}>
+                  <Typography.Title order={3} className={styles.pathTitle}>
+                    {foundation.course.title}
+                  </Typography.Title>
+                  <Code2 className={styles.pathIcon} aria-hidden="true" />
+                </div>
                 <Typography.Text className={styles.pathText}>
                   Можно начинать без опыта: в каждом уроке объяснение,
                   разобранный пример и практика.
@@ -113,10 +110,12 @@ export const FoundationPage: React.FC<FoundationPageTypes.Props> = (props) => (
               </li>
             ) : null}
             <li className={styles.path} data-tone="lilac">
-              <ListChecks className={styles.pathIcon} aria-hidden="true" />
-              <Typography.Title order={3} className={styles.pathTitle}>
-                Банк задач
-              </Typography.Title>
+              <div className={styles.pathHead}>
+                <Typography.Title order={3} className={styles.pathTitle}>
+                  Банк задач
+                </Typography.Title>
+                <ListChecks className={styles.pathIcon} aria-hidden="true" />
+              </div>
               <Typography.Text className={styles.pathText}>
                 Фильтры по темам и сложности. Решайте прямо в списке и сразу
                 проверяйте ответ.
@@ -134,7 +133,7 @@ export const FoundationPage: React.FC<FoundationPageTypes.Props> = (props) => (
 
         <section
           id="topics"
-          className={styles.section}
+          className={styles.topicsSection}
           aria-labelledby="topics-title"
           data-topic-list
         >
@@ -147,9 +146,16 @@ export const FoundationPage: React.FC<FoundationPageTypes.Props> = (props) => (
           <ul className={styles.topics}>
             {foundation.publishedTopics
               .slice(0, foundation.featuredTopicCount)
-              .map((topic) => (
-                <li key={topic.id} className={styles.topic}>
-                  <IllustrationPlaceholder className={styles.topicPlate} />
+              .map((topic, index) => (
+                <li
+                  key={topic.id}
+                  className={styles.topic}
+                  data-layout={topicLayouts[index]}
+                >
+                  <ObjectIllustration
+                    topic={topic.taskNumbers[0]}
+                    className={styles.topicPlate}
+                  />
                   <div className={styles.topicBody}>
                     <span className={styles.topicNumber}>
                       {topicCatalog.formatTaskNumbers(topic.taskNumbers)}
@@ -173,27 +179,6 @@ export const FoundationPage: React.FC<FoundationPageTypes.Props> = (props) => (
                 </li>
               ))}
           </ul>
-          <ActionLink hierarchy="text" to="/ege/">
-            Все темы
-          </ActionLink>
-        </section>
-
-        <section className={styles.try} aria-labelledby="try-title">
-          <div className={styles.tryCopy}>
-            <Typography.Title order={2} id="try-title">
-              Попробуйте прямо сейчас
-            </Typography.Title>
-            <Typography.Text>
-              Одна задача без регистрации. Посчитайте значения по порядку и
-              проверьте ответ: так устроено каждое задание в банке.
-            </Typography.Text>
-            <ActionLink hierarchy="text" to="/practice">
-              Открыть банк задач
-            </ActionLink>
-          </div>
-          <div className={styles.tryTask} data-featured-task>
-            <FoundationTryTask featuredTask={props.featuredTask} />
-          </div>
         </section>
 
         {foundation.course?.status === "published" ? (
@@ -217,9 +202,32 @@ export const FoundationPage: React.FC<FoundationPageTypes.Props> = (props) => (
                 Открыть курс
               </ActionLink>
             </div>
-            <IllustrationPlaceholder className={styles.coursePlate} />
+            {hasCourseIllustration(foundation.course.id) ? (
+              <ObjectIllustration
+                course={foundation.course.id}
+                className={styles.coursePlate}
+              />
+            ) : null}
           </section>
         ) : null}
+
+        <section className={styles.try} aria-labelledby="try-title">
+          <div className={styles.tryCopy}>
+            <Typography.Title order={2} id="try-title">
+              Попробуйте прямо сейчас
+            </Typography.Title>
+            <Typography.Text>
+              Так решается каждое задание в банке: введите ответ, нажмите
+              «Проверить» и сразу узнайте результат. Без регистрации.
+            </Typography.Text>
+            <ActionLink hierarchy="text" to="/practice">
+              Решать задачи
+            </ActionLink>
+          </div>
+          <div className={styles.tryTask} data-try-demo>
+            <FoundationTryDemo />
+          </div>
+        </section>
       </PageContainer>
     </main>
     <PublicFooter />

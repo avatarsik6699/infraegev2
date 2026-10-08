@@ -1,0 +1,58 @@
+.root {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  pointer-events: none;
+}
+
+.root span {
+  position: absolute;
+  width: 7px;
+  height: 11px;
+  border-radius: 2px;
+  opacity: 0;
+}
+
+.root span[data-tone="orange"] {
+  background: var(--color-brand-orange);
+}
+
+.root span[data-tone="sky"] {
+  background: var(--color-info);
+}
+
+.root span[data-tone="sage"] {
+  background: var(--color-success);
+}
+
+.root span[data-tone="lilac"] {
+  background: var(--color-plate-lilac);
+  box-shadow: inset 0 0 0 1px var(--color-rule-strong);
+}
+
+.root span[data-tone="ink"] {
+  background: var(--color-text);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .root[data-burst] span {
+    animation: burst 1100ms var(--delay) cubic-bezier(0.2, 0.7, 0.3, 1) both;
+  }
+}
+
+@keyframes burst {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0deg) scale(0.6);
+  }
+
+  70% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(var(--x), calc(var(--y) + 40px)) rotate(var(--turn))
+      scale(1);
+  }
+}

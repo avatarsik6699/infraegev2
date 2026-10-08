@@ -52,6 +52,7 @@ export const PracticeCatalogRow: React.FC<{
           role="img"
           aria-label={hydrated ? status : "Статус решения загружается"}
           title={status}
+          data-solved={(solved && hydrated) || undefined}
         >
           {solved && hydrated ? (
             <CircleCheck size={19} aria-hidden="true" />

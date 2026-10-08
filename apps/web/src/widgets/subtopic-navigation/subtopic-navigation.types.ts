@@ -2,21 +2,28 @@ export namespace SubtopicNavigationTypes {
   export type Item = {
     slug: string;
     title: string;
+    /** Tasks of the subtopic; only the current topic marks solved ones. */
     taskIds: readonly string[];
   };
 
-  export type Props = {
-    lessonId: string;
+  export type Topic = {
+    id: string;
     routeSlug: string;
     title: string;
-    /** «Задание 16», already formatted. */
-    taskLabel: string;
+    /** «16» or «19–21», already formatted. */
+    number: string;
     subtopics: readonly Item[];
+  };
+
+  export type Props = {
+    /** Published topics in exam order; the current one opens. */
+    topics: readonly Topic[];
+    lessonId: string;
     /** Subtopic slug, or `practice` on the final page. */
     current: string;
     tasks: readonly { id: string; solutionRevision?: number }[];
     practiceUnavailable?: boolean;
-    /** Lesson progress block shown under the list. */
+    /** Lesson progress shown under the tree on narrow screens (F38). */
     progress?: React.ReactNode;
   };
 }

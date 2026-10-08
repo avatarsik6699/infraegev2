@@ -8,6 +8,7 @@ test("approved shared reading style keeps semantic feedback and responsive outli
   test.setTimeout(90_000);
   await topicLessonPage.open();
   await topicLessonPage.expectRecursionStylePilot();
+  await topicLessonPage.expectStableOutlineSelection();
   browserSession.expectCleanConsole();
 });
 

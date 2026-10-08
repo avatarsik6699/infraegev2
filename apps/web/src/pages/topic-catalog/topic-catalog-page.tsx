@@ -2,7 +2,7 @@ import { Button } from "~/shared/components/button";
 import { SearchField } from "~/shared/components/search-field";
 import { ExternalLink } from "~/shared/components/external-link";
 import { PageContainer } from "~/shared/components/page-container";
-import { IllustrationPlaceholder } from "~/shared/components/illustration-placeholder";
+import { MascotScene } from "~/shared/components/mascot-scene";
 import { PageHead } from "~/shared/components/page-head";
 import { Typography } from "~/shared/components/typography";
 import { PublicFooter } from "~/widgets/public-footer";
@@ -19,45 +19,51 @@ export const TopicCatalogPage: React.FC = () => {
       <PublicHeader activeSection="topics" />
       <main id="main-content">
         <PageHead
-          aside={
-            <IllustrationPlaceholder
-              tone="outline"
-              className={styles.headIllustration}
-            />
+          title="Темы ЕГЭ"
+          titleId="exam-map-heading"
+          lead="Теория, разобранные примеры и задачи с проверкой по каждому заданию экзамена."
+          meta={
+            <>
+              <div className={styles.summary} data-topic-summary>
+                <span>
+                  Всего тем: {catalog.totalTopics} · Доступно:{" "}
+                  {catalog.publishedTopics} ·
+                </span>
+                <span className={styles.summaryStatus}>
+                  <span className={styles.summaryReserve} aria-hidden="true">
+                    {topicCatalogModel.summaryText(null, true)}
+                  </span>
+                  <span className={styles.summaryText} role="status">
+                    {topicCatalogModel.summaryText(
+                      catalog.totalSolved,
+                      catalog.unavailable,
+                    )}
+                  </span>
+                </span>
+                <Button
+                  className={styles.retry}
+                  data-visible={catalog.unavailable}
+                  aria-hidden={!catalog.unavailable}
+                  tabIndex={catalog.unavailable ? 0 : -1}
+                  hierarchy="quiet"
+                  density="compact"
+                  onClick={catalog.retry}
+                >
+                  Повторить
+                </Button>
+              </div>
+              <span data-topic-source-note>
+                25 тем для всех 27 заданий: задания 19–21 собраны в одну тему ·{" "}
+                <ExternalLink
+                  href="https://fipi.ru/ege/demoversii-specifikacii-kodifikatory"
+                  newTab
+                >
+                  Структура экзамена — ФИПИ
+                </ExternalLink>
+              </span>
+            </>
           }
-        >
-          <header className={styles.catalogHeading}>
-            <Typography.Title
-              id="exam-map-heading"
-              className={styles.heading}
-              order={1}
-            >
-              Темы ЕГЭ
-            </Typography.Title>
-            <div className={styles.summary} data-topic-summary>
-              <span className={styles.catalogMetadata}>
-                Всего тем: {catalog.totalTopics} · Доступно:{" "}
-                {catalog.publishedTopics} ·
-              </span>
-              <span className={styles.summaryText} role="status">
-                {topicCatalogModel.summaryText(
-                  catalog.totalSolved,
-                  catalog.unavailable,
-                )}
-              </span>
-              <Button
-                className={styles.retry}
-                data-visible={catalog.unavailable}
-                aria-hidden={!catalog.unavailable}
-                tabIndex={catalog.unavailable ? 0 : -1}
-                hierarchy="quiet"
-                onClick={catalog.retry}
-              >
-                Повторить
-              </Button>
-            </div>
-          </header>
-        </PageHead>
+        />
         <PageContainer
           className={styles.catalogSection}
           component="section"
@@ -98,11 +104,6 @@ export const TopicCatalogPage: React.FC = () => {
               ))}
             </div>
           </form>
-          <div className={styles.columnHeadings} aria-hidden="true">
-            <span>Номер ЕГЭ</span>
-            <span>Тема</span>
-            <span>Теория и практика</span>
-          </div>
           <ol
             className={styles.topicList}
             data-topic-list
@@ -119,7 +120,10 @@ export const TopicCatalogPage: React.FC = () => {
           </ol>
           {catalog.entries.length === 0 && (
             <div className={styles.empty} role="status">
-              <IllustrationPlaceholder className={styles.emptyIllustration} />
+              <MascotScene
+                scene="empty-search"
+                className={styles.emptyIllustration}
+              />
               <Typography.Title order={2} className={styles.emptyTitle}>
                 Темы не найдены
               </Typography.Title>
@@ -131,21 +135,6 @@ export const TopicCatalogPage: React.FC = () => {
               </Button>
             </div>
           )}
-          <aside
-            className={styles.sourceNote}
-            aria-label="Примечание о структуре экзамена"
-          >
-            <Typography.Text tone="muted">
-              25 тем для всех 27 заданий. Задания 19–21 собраны в одну тему.
-            </Typography.Text>
-            <ExternalLink
-              href="https://fipi.ru/ege/demoversii-specifikacii-kodifikatory"
-              presentation="action"
-              newTab
-            >
-              Структура экзамена — ФИПИ
-            </ExternalLink>
-          </aside>
         </PageContainer>
       </main>
       <PublicFooter />

@@ -161,7 +161,13 @@ start_stack() {
   fi
 
   if compose "$@"; then
-    return 0
+    # A completed one-shot migration job may be reused by Compose. Always check
+    # the retained schema on resume, including when image inputs are unchanged.
+    if compose run --rm --no-deps db-migrate '.venv/bin/alembic check'; then
+      return 0
+    else
+      status=$?
+    fi
   else
     status=$?
   fi
@@ -170,8 +176,8 @@ start_stack() {
   echo "infraege failed to become healthy; current service status:" >&2
   compose ps --all >&2 || true
   echo >&2
-  echo "Recent nginx/web/api logs:" >&2
-  compose logs --tail=80 nginx web api >&2 || true
+  echo "Recent migration/nginx/web/api logs:" >&2
+  compose logs --tail=80 db-migrate nginx web api >&2 || true
   exit "$status"
 }
 

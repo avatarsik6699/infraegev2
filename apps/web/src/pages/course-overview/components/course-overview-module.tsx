@@ -16,7 +16,6 @@ export const CourseOverviewModule: React.FC<Props> = (props) => (
     </span>
     {props.module.progress ? (
       <Progress
-        className={styles.moduleBar}
         value={props.module.progress.mastered}
         max={props.module.progress.total}
         label={`Освоено уроков: ${props.module.title}`}

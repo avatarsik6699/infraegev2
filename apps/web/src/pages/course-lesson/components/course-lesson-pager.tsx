@@ -15,6 +15,7 @@ const PagerLink: React.FC<{
 }> = (props) => (
   <Link
     className={styles.pagerLink}
+    title={props.lesson.title}
     data-direction={props.direction}
     rel={props.direction === "previous" ? "prev" : "next"}
     to="/courses/$courseSlug/$lessonSlug"

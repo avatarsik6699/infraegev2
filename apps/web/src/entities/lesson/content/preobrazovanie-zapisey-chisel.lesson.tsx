@@ -25,6 +25,7 @@ export const preobrazovanieZapiseyChiselLesson = defineLesson({
     {
       slug: "model-algoritma",
       title: "Как устроен алгоритм",
+      lead: "Из каких стадий состоит алгоритм задания 5 и чем число отличается от своей записи.",
       conceptIds: [
         "four-stage-model",
         "number-and-representation",
@@ -34,6 +35,7 @@ export const preobrazovanieZapiseyChiselLesson = defineLesson({
     {
       slug: "operacii-s-zapisyu",
       title: "Операции с записью числа",
+      lead: "Как работать с записью числа как со строкой: приписывать разряды, менять цифры, считать чётность.",
       conceptIds: [
         "string-operations",
         "appending-and-place-value",
@@ -43,6 +45,7 @@ export const preobrazovanieZapiseyChiselLesson = defineLesson({
     {
       slug: "poisk-i-granicy",
       title: "Поиск ответа и границы перебора",
+      lead: "Как искать нужное число перебором и выбирать границы так, чтобы не пропустить ответ.",
       conceptIds: [
         "minimum-search",
         "branched-base-three",
@@ -52,6 +55,7 @@ export const preobrazovanieZapiseyChiselLesson = defineLesson({
     {
       slug: "shablon",
       title: "Замена и универсальный шаблон",
+      lead: "Как выполнить одновременную замену и собрать один шаблон программы для всех вариантов задания.",
       conceptIds: [
         "simultaneous-replacement",
         "digit-sum-and-general-template",

@@ -9,7 +9,7 @@ import {
 } from "~/features/account";
 import { ApiError } from "~/shared/api";
 import { ActionLink } from "~/shared/components/action-link";
-import { IllustrationPlaceholder } from "~/shared/components/illustration-placeholder";
+import { MascotScene } from "~/shared/components/mascot-scene";
 import { PageContainer } from "~/shared/components/page-container";
 import { Typography } from "~/shared/components/typography";
 import { PublicFooter } from "~/widgets/public-footer";
@@ -207,17 +207,10 @@ export const AccountPage: React.FC<AccountPageTypes.Props> = (props) => {
       data-auth-page={props.mode !== "profile" || undefined}
     >
       <PublicHeader />
-      {props.mode !== "profile" ? (
-        <div className={styles.authBand}>
-          <IllustrationPlaceholder
-            tone="outline"
-            className={styles.authIllustration}
-          />
-        </div>
-      ) : null}
       <PageContainer
         className={styles.main}
         data-profile={props.mode === "profile" || undefined}
+        data-auth={props.mode !== "profile" || undefined}
       >
         <section
           className={styles.panel}
@@ -336,6 +329,16 @@ export const AccountPage: React.FC<AccountPageTypes.Props> = (props) => {
             />
           ) : null}
         </section>
+        {props.mode !== "profile" ? (
+          <MascotScene
+            scene={
+              props.mode === "register" || props.mode === "verify"
+                ? "register"
+                : "sign-in"
+            }
+            className={styles.authIllustration}
+          />
+        ) : null}
       </PageContainer>
       <PublicFooter />
     </div>

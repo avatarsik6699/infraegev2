@@ -1,7 +1,6 @@
 /* Lesson result and progress blocks shared by topic and course lessons.
    The page frame itself lives in lesson-frame.module.css (Change 169). */
-.resultSummary,
-.resultNavigation {
+.resultSummary {
   max-width: var(--measure-reading);
 }
 
@@ -11,8 +10,7 @@
   min-width: 0;
 }
 
-.resultSummary h3,
-.resultNavigation {
+.resultSummary h3 {
   margin-block: 0;
 }
 
@@ -33,10 +31,6 @@
     var(--lesson-concept-rule, transparent);
 }
 
-.resultNavigation {
-  min-width: 0;
-}
-
 .resultProgress {
   display: grid;
   min-width: 0;
@@ -45,11 +39,11 @@
   border-top: 1px solid var(--color-rule);
 }
 
-.resultLinks {
-  font-family: var(--font-ui);
-  font-size: var(--text-sm);
-  line-height: 1.45;
-  composes: lessonNavigationLinks from "./patterns.module.css";
+/* F38: the reset reads as small as the progress text around it. */
+.progressReset[data-hierarchy] {
+  min-height: 0;
+  padding-block: var(--space-0-5);
+  font-size: var(--text-xs);
 }
 
 .progressHeading {

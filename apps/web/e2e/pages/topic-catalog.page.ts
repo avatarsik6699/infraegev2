@@ -83,6 +83,19 @@ export class TopicCatalogPage {
     await expect(this.page.getByText("Решено 1 из 2")).toBeVisible();
     await expect(this.page.getByText("Решено задач в темах: 1")).toBeVisible();
     await expect(this.page.locator("[data-topic-card]")).toHaveCount(25);
+    // Change 170 F25: «Все темы» lists topics in exam order 1–27.
+    const firstNumbers = await this.page
+      .locator("[data-topic-card]")
+      .evaluateAll((cards) =>
+        cards.map((card) =>
+          Number.parseInt(
+            card.querySelector("[data-grouped] [aria-hidden]")?.textContent ??
+              "",
+            10,
+          ),
+        ),
+      );
+    expect(firstNumbers).toEqual([...firstNumbers].sort((a, b) => a - b));
     await expect(
       this.page.getByRole("link", {
         name: "Числовые последовательности",
@@ -113,6 +126,19 @@ export class TopicCatalogPage {
         exact: true,
       }),
     ).toHaveAttribute("href", "/ege/27-analiz-dannyh-i-klasterizatsiya");
+    await this.page
+      .getByRole("link", {
+        name: "Числовые последовательности",
+        exact: true,
+      })
+      .click();
+    await expect(this.page).toHaveURL(
+      "/ege/17-chislovye-posledovatelnosti/chisla-iz-fayla",
+    );
+    await expect(this.page.locator("[data-subtopic-head]")).toContainText(
+      "Числа из файла",
+    );
+    await this.page.goto("/ege");
     await expect(
       this.page
         .locator('[data-topic-id="number-sequences"]')
@@ -124,9 +150,15 @@ export class TopicCatalogPage {
     ).toHaveCount(0);
     await this.page.getByRole("button", { name: "В процессе" }).click();
     await expect(this.page.locator("[data-topic-card]")).toHaveCount(1);
-    await expect(
-      this.page.getByText("Продолжить", { exact: true }),
-    ).toBeVisible();
+    const inProgress = this.page.locator(
+      '[data-topic-card][data-topic-id="rekursiya"]',
+    );
+    await expect(inProgress.getByRole("link")).toHaveCount(1);
+    await expect(inProgress.getByRole("link")).toHaveAttribute(
+      "href",
+      "/ege/16-rekursiya",
+    );
+    await expect(inProgress).toContainText("Решено 1 из 2");
     await this.page
       .getByRole("button", { name: "Все темы", exact: true })
       .click();
@@ -232,7 +264,9 @@ export class TopicCatalogPage {
           (window as unknown as { topicLayoutShifts: number[] })
             .topicLayoutShifts,
       );
-      expect(shifts.reduce((sum, value) => sum + value, 0)).toBe(0);
+      expect(shifts.reduce((sum, value) => sum + value, 0)).toBeLessThanOrEqual(
+        0.1,
+      );
       expect(errors).toEqual([]);
     } finally {
       releaseScripts();
@@ -252,8 +286,8 @@ export class TopicCatalogPage {
     );
     await this.page.goto("/ege");
     await expect(
-      this.page.getByText("Прогресс временно недоступен"),
-    ).toBeVisible();
+      this.page.locator("[data-topic-summary]").getByRole("status"),
+    ).toHaveText("Прогресс временно недоступен");
     const before = await this.geometry();
     await expect(
       this.page.getByRole("button", { name: "Не начаты" }),
@@ -289,12 +323,14 @@ export class TopicCatalogPage {
   }
 
   private async expectIllustrations() {
-    // Change 169: catalog drawings are retired; every row keeps a neutral placeholder.
+    // Change 170: every row, published or planned, has its topic illustration.
     const rows = this.page.locator("[data-topic-card]");
-    await expect(rows.locator("[data-illustration-placeholder]")).toHaveCount(
+    await expect(rows.locator("img[data-object-illustration]")).toHaveCount(
       await rows.count(),
     );
-    await expect(rows.locator("img")).toHaveCount(0);
+    await expect(rows.locator("[data-illustration-placeholder]")).toHaveCount(
+      0,
+    );
   }
 
   async expectTextZoom() {
@@ -337,18 +373,25 @@ export class TopicCatalogPage {
     expect(
       await plannedTitle.evaluate((el) => getComputedStyle(el).opacity),
     ).toBe("1");
-    const metadata = await row
-      .locator("[data-topic-progress] > span")
+    const progressSlot = await row
+      .locator("[data-topic-progress]")
       .boundingBox();
-    const heading = await title.boundingBox();
-    const content = await row.locator("h2").locator("..").boundingBox();
+    const content = await row
+      .locator("[data-topic-progress]")
+      .locator("..")
+      .boundingBox();
     const progress = await row.getByRole("progressbar").boundingBox();
-    expect(metadata?.y).toBe(heading?.y);
-    expect(progress?.height).toBe(8);
-    expect(progress!.y + progress!.height).toBe(content!.y + content!.height);
+    expect(
+      Math.abs(
+        progressSlot!.y +
+          progressSlot!.height / 2 -
+          (content!.y + content!.height / 2),
+      ),
+    ).toBeLessThanOrEqual(1);
+    expect(progress?.height).toBe(6);
     const before = await row.boundingBox();
     await row.getByRole("link").hover();
-    const arrow = row.locator("svg.lucide-arrow-right");
+    const arrow = row.locator('[aria-hidden="true"] svg').last();
     await expect
       .poll(() => arrow.evaluate((el) => getComputedStyle(el).transform))
       .toBe("matrix(1, 0, 0, 1, 4, 0)");

@@ -1,4 +1,5 @@
 import type { CourseTypes } from "~/entities/course";
+import { Laptop, Route } from "lucide-react";
 import { FragmentLink } from "~/shared/components/fragment-link";
 import { Typography } from "~/shared/components/typography";
 import { CourseOverviewAction } from "./course-overview-action";
@@ -9,23 +10,6 @@ type Props = {
   course: CourseTypes.Definition;
   overview: CourseOverviewPageTypes.Model;
 };
-
-export const CourseOverviewIntro: React.FC<Props> = (props) => (
-  <header className={styles.intro}>
-    <Typography.Text variant="interface" className={styles.eyebrow}>
-      Мини-курс
-      {props.overview.level
-        ? ` · ${props.overview.level.toLocaleLowerCase("ru")} уровень`
-        : ""}
-    </Typography.Text>
-    <Typography.Title order={1} className={styles.title}>
-      {props.course.title}
-    </Typography.Title>
-    <Typography.Text variant="lead" className={styles.summary}>
-      {props.course.summary}
-    </Typography.Text>
-  </header>
-);
 
 export const CourseOverviewActions: React.FC<Props> = (props) => (
   <div className={styles.actions}>
@@ -49,26 +33,32 @@ export const CourseOverviewActions: React.FC<Props> = (props) => (
 export const CourseOverviewFacts: React.FC = () => (
   <div className={styles.facts}>
     <section className={styles.fact} aria-labelledby="course-requirements">
-      <Typography.Title
-        order={2}
-        id="course-requirements"
-        className={styles.factTitle}
-      >
-        Что понадобится
-      </Typography.Title>
+      <div className={styles.factHead}>
+        <Typography.Title
+          order={2}
+          id="course-requirements"
+          className={styles.factTitle}
+        >
+          Что понадобится
+        </Typography.Title>
+        <Laptop className={styles.factIcon} aria-hidden="true" />
+      </div>
       <Typography.Text tone="muted">
         Компьютер с Python. Онлайн-среда — запасной вариант. Можно начать без
         опыта.
       </Typography.Text>
     </section>
     <section className={styles.fact} aria-labelledby="course-format">
-      <Typography.Title
-        order={2}
-        id="course-format"
-        className={styles.factTitle}
-      >
-        Как идёт курс
-      </Typography.Title>
+      <div className={styles.factHead}>
+        <Typography.Title
+          order={2}
+          id="course-format"
+          className={styles.factTitle}
+        >
+          Как идёт курс
+        </Typography.Title>
+        <Route className={styles.factIcon} aria-hidden="true" />
+      </div>
       <Typography.Text tone="muted">
         Каждый урок: объяснение, разобранный пример и практика. Прогресс
         сохраняется в аккаунте.

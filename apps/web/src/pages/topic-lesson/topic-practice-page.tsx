@@ -1,14 +1,14 @@
 import { useRouter } from "@tanstack/react-router";
-import { lessonPublications, lessonSubtopics } from "~/entities/lesson";
+import { lessonSubtopics } from "~/entities/lesson";
 import { useAccountSession } from "~/features/account";
 import {
   checkPracticeAnswer,
   createCheckAndSaveAnswer,
 } from "~/features/lesson-practice";
+import { Checkpoint } from "~/shared/components/learning-content";
 import { Typography } from "~/shared/components/typography";
 import { LessonPracticeFlow } from "~/widgets/lesson-practice-flow";
 import { TopicLessonPager } from "./components/topic-lesson-pager";
-import { TopicLessonResult } from "./components/topic-lesson-result";
 import { withSubtopicTheoryLinks } from "./lib/subtopic-task-links";
 import { TopicLessonFrame } from "./topic-lesson-frame";
 import type { TopicLessonPageTypes } from "./topic-lesson-page.types";
@@ -21,18 +21,16 @@ export const TopicPracticePage: React.FC<TopicLessonPageTypes.PracticeProps> = (
   const session = useAccountSession();
   const subtopics = lessonSubtopics(props.lesson);
   const last = subtopics.at(-1);
-  const publishedLessons = lessonPublications.filter(
-    (lesson) => lesson.status === "published",
-  );
-  const lessonIndex = publishedLessons.findIndex(
-    (lesson) => lesson.id === props.lesson.id,
-  );
+  // F43: the summary opens the page, then the tasks, then the self-check.
   const outline = [
+    { id: "result", label: "Итог" },
     ...(props.lesson.examFocus
       ? [{ id: "exam-focus", label: "На экзамене" }]
       : []),
     { id: "practice", label: "Практика" },
-    { id: "result", label: "Итог" },
+    ...(props.lesson.checkpoint
+      ? [{ id: "self-check", label: "Проверьте себя" }]
+      : []),
   ];
 
   return (
@@ -50,6 +48,10 @@ export const TopicPracticePage: React.FC<TopicLessonPageTypes.PracticeProps> = (
           Практика и итог
         </Typography.Title>
       </header>
+
+      <div id="result" className={styles.summary} data-topic-summary>
+        <Typography.Prose>{props.lesson.result}</Typography.Prose>
+      </div>
 
       {props.lesson.examFocus ? (
         <section
@@ -98,28 +100,12 @@ export const TopicPracticePage: React.FC<TopicLessonPageTypes.PracticeProps> = (
         />
       </section>
 
-      <section
-        id="result"
-        className={styles.section}
-        aria-labelledby="result-title"
-      >
-        <Typography.Title
-          order={2}
-          id="result-title"
-          className={styles.sectionTitle}
-        >
-          Итог
-        </Typography.Title>
-        <TopicLessonResult
-          lesson={props.lesson}
-          previousLesson={
-            lessonIndex > 0 ? publishedLessons[lessonIndex - 1] : undefined
-          }
-          nextLesson={
-            lessonIndex >= 0 ? publishedLessons[lessonIndex + 1] : undefined
-          }
-        />
-      </section>
+      {props.lesson.checkpoint ? (
+        // The Checkpoint is itself the «Проверьте себя» region.
+        <div id="self-check" className={styles.section}>
+          <Checkpoint items={props.lesson.checkpoint} />
+        </div>
+      ) : null}
 
       <TopicLessonPager
         routeSlug={props.lesson.routeSlug}

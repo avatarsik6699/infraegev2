@@ -16,31 +16,27 @@
   display: none;
 }
 
+/* F39: «Задача N» is short and predictable — never truncated; the check
+   has its own reserved column to the right, so solving shifts nothing. */
 .practiceTab {
   position: relative;
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
+  flex: none;
+  grid-template-columns: auto auto 0.75rem;
   gap: var(--space-0-5);
   align-items: center;
-  min-width: 7.5rem;
   text-align: left;
 }
 
-.practiceTab[data-solved] {
-  padding-right: 1.75rem;
-}
-
 .tabLabel {
-  overflow: hidden;
   color: inherit;
   font-size: var(--text-xs);
   line-height: 1.25;
-  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .tabSolved {
-  position: static;
+  grid-column: 3;
   flex: none;
   fill: none;
   stroke: var(--learning-success, var(--color-success));
@@ -107,21 +103,36 @@
 
 .taskTheoryLinks li {
   min-width: 0;
-  overflow-wrap: anywhere;
+  max-width: 100%;
 }
 
-.taskTheoryLinks a {
+/* F39: one line with an ellipsis; the arrow stays right after the text.
+   F54: several links stack tightly (28px rows); a single one keeps 40px.
+   [data-presentation] outranks the shared link height. */
+.taskTheoryLinks a[data-presentation] {
   display: inline-flex;
   max-width: 100%;
-  min-height: 2.5rem;
+  min-height: 1.75rem;
   align-items: center;
   justify-content: flex-start;
   text-align: left;
 }
 
+.taskTheoryLinks li:only-child a[data-presentation] {
+  min-height: 2.5rem;
+}
+
+.taskTheoryLinks a > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* F32: tighter task text — closer sentences and paragraphs. */
 .taskContent {
   display: grid;
-  gap: var(--space-2);
+  gap: var(--space-1);
   min-width: 0;
 }
 
@@ -139,7 +150,7 @@
   margin: 0;
   font-family: var(--font-reading);
   font-size: var(--text-base);
-  line-height: 1.68;
+  line-height: 1.55;
 }
 
 .taskContent[data-content-context="hint"] .contentText,
@@ -328,19 +339,27 @@
   padding-inline-start: var(--space-0-5);
 }
 
-.answerRow {
-  display: grid;
-  grid-template-columns: minmax(10rem, 16rem) auto;
+/* F30: one answer layout — field and «Проверить», then «Подсказка» and
+   «Решение»; the panels open below the row. */
+.taskToolbar {
+  display: flex;
+  flex-wrap: wrap;
   gap: var(--space-1);
-  align-items: start;
+  align-items: flex-start;
   margin-top: var(--space-2);
 }
 
-.answerRow button {
-  width: auto;
-  min-height: var(--control-height);
-  min-width: 8rem;
-  justify-self: start;
+/* Fits field, «Проверить» and both toggles on one row in a 48rem column. */
+.taskToolbar > form {
+  flex: 1 1 18rem;
+  max-width: 24rem;
+}
+
+.answerRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
+  gap: var(--space-1);
+  align-items: start;
 }
 
 .answerField {
@@ -348,53 +367,69 @@
   min-width: 0;
 }
 
-.answerAcceptedIcon {
-  color: var(--learning-success, var(--color-success));
-  pointer-events: none;
+/* The confetti origin; it must not clip, so no overflow here. */
+.answerAction {
+  position: relative;
+  display: inline-flex;
 }
 
-.answerRow .solvedAnswer:disabled {
-  border-color: var(--color-rule-strong);
-  background: var(--color-surface);
-  color: var(--color-text);
-  opacity: 1;
+.answerAction > button {
+  min-width: 8rem;
 }
 
-.feedback {
-  max-width: var(--measure-reading);
-  margin: var(--space-1) 0 0;
-  color: var(--color-muted);
-  font-family: var(--font-reading);
-  font-size: var(--text-sm);
-  line-height: 1.6;
-}
-
-.taskHelp {
-  max-width: var(--measure-reading);
+.answerRefresh {
   margin-top: var(--space-1);
 }
 
-.feedback:empty {
-  display: none;
+.helpActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  align-items: center;
 }
 
-.feedback[data-state="correct"] {
-  color: var(--learning-success, var(--color-success));
+.helpActions button {
+  padding-inline: var(--space-2);
 }
 
-.feedback[data-state="incorrect"] {
-  color: var(--learning-danger, var(--color-danger));
+.helpLabel {
+  display: inline-grid;
+}
+
+.helpLabel > span {
+  grid-area: 1 / 1;
+}
+
+.helpLabelReserve {
+  visibility: hidden;
+}
+
+.helpPanel {
+  max-width: var(--measure-reading);
+}
+
+.helpPanel:not([hidden]) {
+  padding-block: var(--space-1);
+}
+
+.helpTitle[data-order] {
+  margin: 0 0 var(--space-0-5);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+
+.instruction {
+  margin-top: var(--space-1);
+  color: var(--color-text-soft);
+  font-size: var(--text-sm);
+}
+
+.visuallyHidden {
+  composes: visuallyHidden from "../../shared/styles/patterns.module.css";
 }
 
 @media (max-width: 34rem) {
-  .practiceTab {
-    min-width: 6.5rem;
-  }
-
-  .answerRow {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
   .diagramDescription dl > div {
     grid-template-columns: minmax(0, 1fr);
     gap: var(--space-0-5);
@@ -408,160 +443,38 @@
   font-size: var(--text-sm);
 }
 
-[data-standalone] .answerRow {
-  grid-template-columns: minmax(10rem, 1fr) auto;
-  align-items: start;
-}
 @media (max-width: 40rem) {
-  [data-standalone] .answerRow {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-.answerPanel {
-  min-width: 0;
-}
-.practiceForm[data-layout="compact"] {
-  display: grid;
-  gap: var(--space-2);
-}
-.practiceForm[data-layout="compact"] > .taskContent {
-  max-width: 75ch;
-}
-.practiceForm[data-layout="compact"] .answerPanel {
-  min-width: 0;
-}
-.practiceForm[data-layout="compact"] .answerRow {
-  max-width: 34rem;
-  align-items: start;
-}
-.practiceForm[data-layout="compact"] .feedback {
-  margin-block-start: var(--space-1);
-}
-.answerRefresh {
-  margin-top: var(--space-1);
-}
-.practiceSet[data-layout="compact"] {
-  gap: var(--space-1-5);
-}
-.practiceSet[data-layout="compact"] .taskContent {
-  gap: var(--space-1-5);
-}
-
-.catalogHelpPanel:not([hidden]) {
-  padding-block: var(--space-1);
-}
-.practiceSet[data-layout="compact"] .taskContent {
-  gap: var(--space-1);
-  margin-top: 0;
-}
-.practiceSet[data-layout="compact"] .contentText,
-.practiceSet[data-layout="compact"] .contentSteps p,
-.practiceSet[data-layout="compact"] .contentList {
-  font-size: var(--text-base);
-  line-height: 1.68;
-}
-.catalogInstruction {
-  margin-top: var(--space-1);
-  font-size: var(--text-sm);
-}
-
-.practiceForm[data-layout="detail"] .answerRow {
-  grid-template-columns: minmax(10rem, 15rem) auto;
-}
-
-/* Align «Проверить» with the input under the visible «Ваш ответ» label. */
-.practiceForm[data-layout="detail"] .answerRow > button {
-  margin-top: calc(var(--text-sm) * 1.25 + var(--space-0-5));
-}
-
-.detailInstruction {
-  margin-top: var(--space-1);
-  color: var(--color-text-soft);
-  font-size: var(--text-sm);
-}
-.catalogToolbar {
-  display: flex;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  gap: var(--space-1);
-  margin-top: var(--space-2);
-}
-.catalogToolbar > form {
-  flex: 1 1 22rem;
-  max-width: 34rem;
-}
-.catalogHelpActions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-1);
-}
-.catalogHelpActions button {
-  min-width: 10rem;
-}
-.practiceForm[data-layout="compact"] .answerRow {
-  margin-top: 0;
-  align-items: start;
-}
-.practiceForm[data-layout="compact"] .solvedAnswer:disabled {
-  border-color: var(--color-success);
-}
-.visuallyHidden {
-  composes: visuallyHidden from "../../shared/styles/patterns.module.css";
-}
-.helpTitle[data-order] {
-  margin: 0 0 var(--space-0-5);
-  font-family: var(--font-ui);
-  font-size: var(--text-sm);
-  font-weight: 500;
-}
-@media (max-width: 40rem) {
-  .catalogToolbar > form {
+  .taskToolbar > form {
     flex-basis: 100%;
   }
-  .practiceForm[data-layout="compact"] .answerRow {
-    grid-template-columns: minmax(0, 1fr) auto;
-  }
-  .answerRow button {
+
+  .answerAction > button {
     min-width: 0;
   }
-  .catalogHelpActions {
+
+  .helpActions {
     width: 100%;
   }
-  .catalogHelpActions button {
-    min-width: 0;
-    flex: 1;
-  }
-}
 
-.practiceForm[data-layout="compact"] .answerRow {
-  grid-template-columns: minmax(0, 1fr) max-content;
-}
-.practiceForm[data-layout="compact"] .answerRow > button {
-  width: 100%;
-}
-@media (max-width: 40rem) {
-  .practiceForm[data-layout="compact"] .answerRow {
-    grid-template-columns: minmax(0, 1fr) max-content;
+  /* Share the row, but wrap rather than squeeze (enlarged text). */
+  .helpActions button {
+    flex: 1 1 auto;
   }
 }
 
 @media (max-width: 24rem) {
-  .practiceForm[data-layout="compact"] .answerRow {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .catalogHelpActions {
+  .helpActions {
     flex-direction: column;
     align-items: stretch;
   }
 }
 
 @media (scripting: none) {
-  .catalogHelpActions {
+  .helpActions {
     display: none;
   }
-  .catalogHelpPanel[hidden] {
+
+  .helpPanel[hidden] {
     display: block;
     padding-block: var(--space-1);
   }
@@ -583,7 +496,7 @@
 
 /* Very narrow screens: the answer field takes the full row so its hint is not clipped. */
 @media (max-width: 26.25rem) {
-  .practiceForm[data-layout="compact"] .answerRow {
+  .answerRow {
     grid-template-columns: minmax(0, 1fr);
   }
 }

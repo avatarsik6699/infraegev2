@@ -1,11 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { FoundationPage, foundationFeaturedTask } from "~/pages/foundation";
+import { FoundationPage } from "~/pages/foundation";
 import { siteConfig } from "~/shared/config/site";
 import { pageHead } from "~/shared/lib/seo";
 
 export const Route = createFileRoute("/")({
-  loader: () => foundationFeaturedTask.load(),
-  staleTime: 0,
   head: () => {
     const head = pageHead.create({
       title: "infraege — подготовка к ЕГЭ по информатике",
@@ -26,5 +24,5 @@ export const Route = createFileRoute("/")({
 });
 
 function FoundationRoute() {
-  return <FoundationPage featuredTask={Route.useLoaderData()} />;
+  return <FoundationPage />;
 }

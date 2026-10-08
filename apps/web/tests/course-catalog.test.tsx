@@ -123,20 +123,31 @@ describe("mini-course catalog", () => {
       expect(
         view.container.querySelectorAll("[data-course-card]"),
       ).toHaveLength(4);
+      // Change 170 F34: planned courses offer no link, only a disabled «Скоро».
       expect(
-        view.container.querySelectorAll(
-          '[data-course-status="planned"] a, [data-course-status="planned"] button',
-        ),
+        view.container.querySelectorAll('[data-course-status="planned"] a'),
       ).toHaveLength(0);
+      expect(
+        [
+          ...view.container.querySelectorAll<HTMLButtonElement>(
+            '[data-course-status="planned"] button',
+          ),
+        ].map((button) => [button.textContent, button.disabled]),
+      ).toEqual(Array(3).fill(["Скоро", true]));
       expect(
         screen.getByRole("link", { name: "Открыть курс" }).getAttribute("href"),
       ).toBe("/courses/python");
       expect(screen.queryByRole("searchbox")).toBeNull();
       expect(
         view.container.querySelectorAll(
-          "[data-course-card] [data-illustration-placeholder]",
+          '[data-course-card="python"] [data-object-illustration="course-python-wide"]',
         ),
-      ).toHaveLength(4);
+      ).toHaveLength(1);
+      expect(
+        view.container.querySelectorAll(
+          '[data-course-status="planned"] [data-illustration-placeholder]',
+        ),
+      ).toHaveLength(3);
       expect(
         view.container.querySelector("[data-course-summary]")?.textContent,
       ).toContain("Всего направлений: 4 · Доступно: 1 · Уроков: 28");
@@ -161,7 +172,7 @@ describe("mini-course catalog", () => {
   it("renders neutral personal state on SSR while retaining real navigation", () => {
     const html = renderToString(catalog());
     expect(html).toContain("Прогресс загружается");
-    expect(html).not.toContain("Освоено 0");
+    expect(html).not.toContain("Освоено 0 из 28");
     expect(html).toContain('href="/courses/python"');
     expect(html).toContain("Скоро");
     expect(html).not.toContain("В плане");

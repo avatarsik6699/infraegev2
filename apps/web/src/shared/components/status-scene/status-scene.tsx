@@ -1,26 +1,15 @@
-import { CircleAlert } from "lucide-react";
-import { IllustrationPlaceholder } from "~/shared/components/illustration-placeholder";
+import { MascotScene } from "~/shared/components/mascot-scene";
 import { Typography } from "~/shared/components/typography";
 import type { StatusSceneTypes } from "./status-scene.types";
 import styles from "./status-scene.module.css";
 
-/** Centred status card with a reserved illustration slot (v5 mockup `states.html`). */
+/** Open status page: a large mascot scene (404 for a missing page or task, the error scene otherwise), the message and actions. */
 export const StatusScene: React.FC<StatusSceneTypes.Props> = (props) => (
   <div className={styles.root} data-status-scene data-kind={props.kind}>
-    <IllustrationPlaceholder className={styles.illustration} />
-    {props.kind === "error" ? (
-      <CircleAlert
-        className={styles.icon}
-        aria-hidden="true"
-        size={20}
-        strokeWidth={1.75}
-      />
-    ) : null}
-    {props.kind === "code" ? (
-      <Typography.Text className={styles.code}>
-        Ошибка {props.code}
-      </Typography.Text>
-    ) : null}
+    <MascotScene
+      scene={props.code === "404" ? "not-found" : "error"}
+      className={styles.illustration}
+    />
     <Typography.Title order={props.headingOrder ?? 1} className={styles.title}>
       {props.title}
     </Typography.Title>

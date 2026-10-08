@@ -50,14 +50,15 @@ export const MultiCombobox: React.FC<MultiComboboxTypes.Props> = (props) => {
               interaction === "keyboard" ? input.current : false
             }
           >
-            <div className={styles.search}>
+            {/* F27: the whole row is the input's label, so any click focuses it. */}
+            <label className={styles.search}>
               <Search size={16} aria-hidden="true" />
               <Combobox.Input
                 ref={input}
                 aria-label={props.searchPlaceholder}
                 placeholder={props.searchPlaceholder}
               />
-            </div>
+            </label>
             <Combobox.Empty className={styles.empty}>
               {props.emptyLabel}
             </Combobox.Empty>
@@ -86,7 +87,10 @@ export const MultiCombobox: React.FC<MultiComboboxTypes.Props> = (props) => {
                             {item.description}
                           </span>
                         </span>
-                        <Combobox.ItemIndicator>
+                        <Combobox.ItemIndicator
+                          keepMounted
+                          className={styles.indicator}
+                        >
                           <Check size={16} aria-hidden="true" />
                         </Combobox.ItemIndicator>
                       </Combobox.Item>
@@ -95,10 +99,15 @@ export const MultiCombobox: React.FC<MultiComboboxTypes.Props> = (props) => {
               ))}
             </Combobox.List>
             <div className={styles.footer}>
-              <Button hierarchy="quiet" onClick={() => setDraft([])}>
+              <Button
+                hierarchy="quiet"
+                density="compact"
+                onClick={() => setDraft([])}
+              >
                 Сбросить
               </Button>
               <Button
+                density="compact"
                 onClick={() => {
                   props.onApply(draft);
                   setOpen(false);

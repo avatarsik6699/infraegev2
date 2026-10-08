@@ -18,6 +18,10 @@ printf 'first\n' >"$input_file"
 cat >"$fake_bin/docker" <<'EOF'
 #!/usr/bin/env bash
 printf '%s\n' "$*" >>"$DOCKER_CALLS"
+if [[ ${TEST_SCHEMA_DRIFT:-0} == 1 && $* == *'run --rm --no-deps db-migrate .venv/bin/alembic check'* ]]; then
+  echo 'FAILED: New upgrade operations detected: privacy_consent_version' >&2
+  exit 23
+fi
 if [[ ${SMTP_USERNAME:-} == fixture-user && ${SMTP_PASSWORD:-} == fixture-password &&
       ${SMTP_HOST:-} == postbox.cloud.yandex.net && ${SMTP_PORT:-} == 587 &&
       ${MAIL_FROM:-} == accounts@infraege.ru ]]; then
@@ -53,11 +57,24 @@ run_lifecycle() {
 
 run_lifecycle dev
 grep -Fq 'up --build --wait' "$calls"
+grep -Fq 'run --rm --no-deps db-migrate .venv/bin/alembic check' "$calls"
 test ! -e "$athanor_calls"
 
 : >"$calls"
 run_lifecycle dev
 grep -Fq 'up --wait' "$calls"
+! grep -Fq 'up --build' "$calls"
+grep -Fq 'run --rm --no-deps db-migrate .venv/bin/alembic check' "$calls"
+
+# Same fingerprint and a completed migration job do not hide schema drift.
+previous_fingerprint=$(cat "$state_file")
+: >"$calls"
+drift_status=0
+TEST_SCHEMA_DRIFT=1 run_lifecycle dev 2>"$test_root/drift.err" || drift_status=$?
+test "$drift_status" -eq 23
+grep -Fq 'privacy_consent_version' "$test_root/drift.err"
+grep -Fq 'logs --tail=80 db-migrate nginx web api' "$calls"
+test "$(cat "$state_file")" = "$previous_fingerprint"
 ! grep -Fq 'up --build' "$calls"
 
 printf 'changed\n' >"$input_file"
@@ -68,10 +85,12 @@ grep -Fq 'up --build --wait' "$calls"
 : >"$calls"
 run_lifecycle stop
 grep -Fq 'stop --timeout 10' "$calls"
+! grep -Fq 'alembic check' "$calls"
 
 : >"$calls"
 run_lifecycle down
 grep -Fq 'down --timeout 10 --remove-orphans' "$calls"
+! grep -Fq 'alembic check' "$calls"
 
 touch "$fixture_repo/athanor.yaml"
 : >"$calls"

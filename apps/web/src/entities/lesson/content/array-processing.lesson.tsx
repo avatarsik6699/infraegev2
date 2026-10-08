@@ -27,16 +27,19 @@ export const arrayProcessingLesson = defineLesson({
     {
       slug: "dannye",
       title: "Порядок и данные из файла",
+      lead: "Как прочитать данные из файла и почему решение начинается с сортировки: от порядка чисел зависит, что выбирать первым.",
       conceptIds: ["sorted-order", "file-records"],
     },
     {
       slug: "otbor",
       title: "Отбор при ограничении",
+      lead: "Как набрать как можно больше объектов, не выйдя за ограничение, и как учесть второе условие задачи.",
       conceptIds: ["capacity-selection", "secondary-optimum"],
     },
     {
       slug: "sobytiya",
       title: "Журнал событий и проверка",
+      lead: "Как разобрать журнал событий по времени и проверить ответ, прежде чем его записать.",
       conceptIds: ["event-stream", "independent-check"],
     },
   ],

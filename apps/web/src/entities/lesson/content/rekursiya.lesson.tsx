@@ -28,16 +28,19 @@ export const rekursiyaLesson = defineLesson({
     {
       slug: "osnovy",
       title: "Как считается рекурсия",
+      lead: "Что такое рекуррентное правило и как посчитать его значение вручную, шаг за шагом от базы.",
       conceptIds: ["concrete-computation", "base-case-and-step"],
     },
     {
       slug: "funkciya-i-cikl",
       title: "Функция, стек вызовов и цикл",
+      lead: "Как записать то же вычисление функцией на Python, что при этом происходит со стеком вызовов и когда хватит обычного цикла.",
       conceptIds: ["code-and-call-stack", "loop-instead-of-recursion"],
     },
     {
       slug: "predydushchie-znacheniya",
       title: "Несколько предыдущих значений и кеш",
+      lead: "Что меняется, когда шаг опирается на два предыдущих значения, и как кеш убирает повторные вычисления.",
       conceptIds: [
         "several-previous-values",
         "repeated-work-motivates-storage",
@@ -46,6 +49,7 @@ export const rekursiyaLesson = defineLesson({
     {
       slug: "slozhnye-pravila",
       title: "Сложные правила перехода",
+      lead: "Правила, в которых аргумент делится, ветвится по чётности, растёт «вверх» или переходит между двумя функциями.",
       conceptIds: [
         "argument-steps",
         "branching-conditions",
@@ -56,6 +60,7 @@ export const rekursiyaLesson = defineLesson({
     {
       slug: "bolshie-argumenty",
       title: "Подсчёт и большие аргументы",
+      lead: "Как посчитать, для скольких n выполняется условие, и найти значение при огромном n, не вычисляя его напрямую.",
       conceptIds: [
         "count-arguments",
         "large-arguments-algebraic-shortcut",
@@ -65,6 +70,7 @@ export const rekursiyaLesson = defineLesson({
     {
       slug: "shablon",
       title: "Шаблон программы и общий алгоритм",
+      lead: "Готовый шаблон программы для задания 16 и общий порядок действий для любого его варианта.",
       conceptIds: ["exam-program-template", "general-method"],
     },
   ],

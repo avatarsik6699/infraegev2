@@ -103,8 +103,12 @@ sdamgia.ru, kpolyakov.spb.ru), ни новыми AI-ботами (решают �
 
 Тема ЕГЭ (Change 167) делится на авторские подтемы — группы соседних `ConceptBlock` без изменения
 их текста и порядка. Каждая подтема — отдельная страница `/ege/{topic}/{subtopic}`; первая
-открывается по адресу темы (редирект) и начинается с введения. После подтем идёт страница «Практика и итог»
-с ролями 2–4. Страница подтемы дополнительно показывает те задачи урока, у которых есть
+открывается по адресу темы (редирект) и начинается с введения. Под заголовком каждой подтемы стоит
+короткий вводный абзац (`lead`, одно–два предложения): заголовок никогда не следует сразу за
+заголовком (Change 170 F42). После подтем идёт страница «Практика и итог» с ролями 2–4 в
+порядке страницы (Change 170 F43): сначала итоговый текст `result` с иллюстрациями сразу под
+заголовком, затем «Что важно для ЕГЭ», затем задачи и в конце самопроверка `checkpoint`;
+ссылок на соседние темы на ней нет — к другим темам ведут хлебные крошки и дерево тем. Страница подтемы дополнительно показывает те задачи урока, у которых есть
 theory link на её разделы: это представление той же практики урока, а не отдельный набор задач
 или прогресс. Отметка пройденной подтемы вычисляется из уже сохранённых решений этих задач;
 подтема без задач отметки не имеет. Мини-курсы Python остаются одностраничными уроками.
@@ -398,7 +402,10 @@ have a left panel with the topic and its subtopic pages (Change 167: `/ege/{topi
 «Подтема N из M», previous/next, a right “on this page” rail; `/ege/{topic}` redirects to the first
 subtopic and old `#section` links resolve to the owning subtopic); course lessons keep in-page
 anchors but use the same three-column lesson frame (Change 169: the course and its lessons on the
-left, the lesson in the centre, «На этой странице» on the right); course overview, catalogs and profile have
+left, the lesson in the centre, «На этой странице» on the right). Change 170: the left panel of
+both is a file tree (EGE: published topics in exam order, each a folder of its subtopics and
+«Практика и итог»; course: modules as folders of lessons), the reading column opens with
+breadcrumbs, and lesson progress sits under «На этой странице»; course overview, catalogs and profile have
 no left panel; the profile has an overview dashboard (Change 168: next step, course/topic/practice tiles, per-topic progress, continuations and a next bank task, all derived from existing summaries and saved progress) and a settings tab. Keep educational
 figures and attachments (lesson media stays); hand-drawn monochrome illustrations are supplied by
 the architect and use neutral reserved placeholders until then (Change 169: the earlier topic and
@@ -419,13 +426,18 @@ Details load only on first expansion and remain mounted while collapsed. Transie
 and help state survive collapse, but reset on selection/page changes, leaving or reloading.
 The detail route remains for direct links and no-JS reading; catalog IDs link there with the
 filter/page context. Real task IDs remain canonical; rows show eight-character UUID prefixes with accessible full IDs.
-The catalog heading says “Решай задачи и закрепляй теорию”; a question icon opens draft/progress
-information. Search applies explicitly. Topic selection uses a grouped searchable multiple combobox,
+The catalog head is «Практика» with the lead “Решай задачи и закрепляй теорию”, without a
+practice explanation popover (Change 170 F31). Search applies explicitly. Topic selection uses a grouped searchable multiple combobox,
 counts below labels, and Apply/cancel; selected topics appear as removable chips. Default sorting is
 stable UUID order; optional difficulty directions and compact numbered pagination retain URL context.
 No-JS retains GET controls, native multiple selection and detail reading. Empty topics show ordinary
 no-results feedback. Compact rows show difficulty, actual answer format, public sources and a disabled
-favorite affordance. Expanded statements precede answer/check/help actions; theory sits beside the topic heading above the statement. The catalog keeps compact solving controls; the detail page follows the v5 mockup (Change 169: topic eyebrow, task title as the heading, a visible «Ваш ответ» caption, the instruction under the input, hint/solution disclosures and a source card); lessons keep their presentation. Base UI owns controls,
+favorite affordance. Expanded statements precede answer/check/help actions; theory sits beside the topic heading above the statement. Every task — catalog, detail page and
+lessons — uses one answer layout (Change 170 F30): field, «Проверить», «Подсказка» and «Решение» in
+one row with the help panels below; an accepted answer is the green field with a check and a short
+confetti burst. The detail page has the task title as its heading, «← К списку задач» beside the
+topic, and the source in the metadata line. Theory links are named after the heading they lead to,
+or «Теория». Base UI owns controls,
 Lucide owns icons; no shadcn/HeroUI dependencies are added.
 Existing filters and numbered pagination remain. Detail pages have one context-preserving return
 link and no next-task navigation. Remove persisted answer drafts and special row/scroll restoration;
@@ -445,12 +457,12 @@ snapshot. Public lesson theory, navigation and practice remain SSR-readable with
 
 ### EGE catalog (Change 126, layout Change 169)
 
-`/ege` retains 25 topics with 19–21 grouped. Following the v5 mockup, published topics come first
-in exam-number order as compact rows (number, placeholder plate, title and one-line summary,
-«Теория · N задач · Практика …», thin progress bar with «Решено X из Y» and the continuation link);
-planned topics follow as compact muted «Скоро» rows with no links, summaries or invented counts.
-Search and the status filter share one row above the list. The page head carries a neutral
-illustration placeholder. Illustrations alone do not publish a planned topic.
+`/ege` retains 25 topics with 19–21 grouped. Topics are listed by first task number, published and
+planned mixed (Change 170 F25): published rows show number, illustration, title and one-line
+summary, «Теория · N задач · Практика …» on the title line, and a thin progress bar with «Решено X
+из Y» aligned with the bottom of the summary, plus the continuation link; planned topics are muted
+«Скоро» rows with no links, summaries or invented counts. Search and the status filter share one
+row above the list. The page head has no illustration; the source note sits in its meta line. Illustrations alone do not publish a planned topic.
 Search matches title, summary and numbers while typing, ignoring case and е/ё. Status filters
 are All, In progress (0 < solved < total), and Not started (solved = 0), with the latter two
 restricted to published topics with available practice. Completed topics remain in All.
@@ -703,6 +715,13 @@ immutable history remains in archives. Change 140 introduces optional accounts a
 progress without reducing guest functionality or importing old browser progress. Later product
 decisions may add manual completion, richer statistics and premium entitlements; those are not
 implemented by Change 140. Payment processing and paywall enforcement require separate design.
+
+Client redesign programme (2026-10-03): Changes 164 (design system and restyle), 167 (EGE subtopic
+pages), 168 (profile dashboard) and 169 (every page to the approved v5 mockups) are merged into
+local `main` but not pushed or deployed. Release is blocked until Change 170 finishes: e2e
+migration to the new URLs and screens, dev practice bank restore, lesson LCP and Lighthouse,
+architect-supplied illustrations in the reserved placeholders, the §11 release prerequisites, and
+then one release of the whole programme. See `docs/changes/170-redesign-release-readiness.md`.
 
 ## 10. Out of Scope
 

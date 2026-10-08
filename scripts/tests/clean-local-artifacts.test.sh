@@ -16,7 +16,9 @@ mkdir -p \
   "$test_root/apps/web/node_modules/keep" \
   "$test_root/apps/web/.fallow" \
   "$test_root/apps/web/src/entities/course/api" \
-  "$test_root/docs/artifacts" \
+  "$test_root/docs/artifacts/pipeline/__pycache__" \
+  "$test_root/docs/artifacts/pipeline/.ruff_cache" \
+  "$test_root/docs/artifacts/pipeline/node_modules/keep" \
   "$test_root/infra/practice-import-120.local" \
   "$test_root/infra/task-files.local" \
   "$test_root/data"
@@ -32,6 +34,9 @@ touch \
   "$test_root/apps/web/.fallow/cache.bin" \
   "$test_root/data/keep.db" \
   "$test_root/docs/artifacts/authored.md" \
+  "$test_root/docs/artifacts/pipeline/__pycache__/prepare.pyc" \
+  "$test_root/docs/artifacts/pipeline/.ruff_cache/cache" \
+  "$test_root/docs/artifacts/pipeline/node_modules/keep/package.json" \
   "$test_root/infra/practice-import-120.local/bank.json" \
   "$test_root/infra/task-files.local/attachment.bin" \
   "$test_root/secrets.enc.yaml" \
@@ -65,6 +70,9 @@ test -f "$test_root/apps/web/node_modules/keep/package.json"
 test -f "$test_root/data/keep.db"
 test -f "$test_root/.env"
 test -f "$test_root/docs/artifacts/authored.md"
+test ! -e "$test_root/docs/artifacts/pipeline/__pycache__"
+test ! -e "$test_root/docs/artifacts/pipeline/.ruff_cache"
+test -f "$test_root/docs/artifacts/pipeline/node_modules/keep/package.json"
 test -f "$test_root/infra/practice-import-120.local/bank.json"
 test -f "$test_root/infra/task-files.local/attachment.bin"
 test -f "$test_root/secrets.enc.yaml"

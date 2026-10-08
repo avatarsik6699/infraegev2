@@ -2,6 +2,12 @@
 # Dependencies are installed inside images; source bind mounts provide hot reload without
 # requiring Node, pnpm, Python, uv, PostgreSQL, or an .env file on the host.
 services:
+  db-migrate:
+    # A retained dev volume can have structural drift even at the recorded head.
+    # Fail before a new API starts instead of silently accepting that schema.
+    command:
+      - .venv/bin/alembic upgrade head && .venv/bin/alembic check
+
   nginx:
     ports:
       - "8080:80"

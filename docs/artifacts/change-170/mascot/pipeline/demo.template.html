@@ -1,0 +1,221 @@
+<title>Маскот infraege</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;600;700&family=JetBrains+Mono:wght@400&display=swap">
+<style>
+  /* Layout: working sheet — the generated character sheet as vector poses, then the hero scene with CSS motion. Light only, as on the site. */
+  :root {
+    --page: #ffffff;
+    --soft: #f8f8f6;
+    --ink: #17191e;
+    --muted: #4d535e;
+    --rule: #e6e4de;
+    --orange: #ff6a00;
+    --font-ui: "Onest", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --font-data: "JetBrains Mono", ui-monospace, monospace;
+    color-scheme: light;
+  }
+  body { background: var(--page); color: var(--ink); font-family: var(--font-ui); font-size: 15px; line-height: 1.5; }
+  .wrap { max-width: 72rem; margin: 0 auto; padding-inline: 16px; padding-block: 2.5rem 4rem; display: grid; gap: 3.5rem; }
+  h1, h2, h3 { margin: 0; text-wrap: balance; font-weight: 700; letter-spacing: -0.01em; }
+  h1 { font-size: 2rem; line-height: 1.15; }
+  h2 { font-size: 1.35rem; }
+  h3 { font-size: 1rem; font-weight: 600; }
+  p { margin: 0; max-width: 66ch; }
+  .muted { color: var(--muted); }
+  .intro, .section, .sub { display: grid; gap: 0.75rem; }
+  .section { gap: 1.25rem; }
+  .section-head { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; align-items: baseline; justify-content: space-between; }
+  .actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .row { display: grid; grid-template-columns: repeat(var(--cols, 5), minmax(0, 1fr)); gap: 0.75rem; }
+  .tile { display: grid; gap: 0.4rem; min-width: 0; margin: 0; align-content: start; }
+  .stage { border-radius: 12px; background: var(--soft); max-width: 100%; width: 100%; overflow: hidden; aspect-ratio: var(--ratio, 1); display: grid; place-items: center; }
+  .stage > svg, .stage > img { width: 84%; height: 84%; display: block; object-fit: contain; }
+  .label { font-family: var(--font-data); font-size: 12px; color: var(--muted); }
+  .compare { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem; max-width: 60rem; }
+  .hero { display: grid; grid-template-columns: minmax(0, 30rem) minmax(0, 1fr); gap: 1.5rem; align-items: start; }
+  .hero .stage { --ratio: 6 / 5; box-shadow: inset 0 0 0 1px var(--rule); }
+  .hero .stage > img { width: 100%; height: 100%; }
+  .auth { display: grid; grid-template-columns: minmax(0, 27rem) minmax(0, 29rem); gap: 3rem; justify-content: center; align-items: center; padding: 2rem 0; border-top: 1px solid var(--rule); }
+  .auth .form { display: grid; gap: 0.7rem; }
+  .auth .form b { font-size: 1.6rem; letter-spacing: -0.02em; }
+  .auth .field { height: 44px; border: 1px solid #cfcfca; border-radius: 6px; }
+  .auth .submit { height: 44px; border-radius: 6px; background: var(--ink); }
+  .auth img { display: block; justify-self: center; width: 100%; max-height: 25rem; object-fit: contain; }
+  @media (max-width: 56rem) { .auth { grid-template-columns: minmax(0, 1fr); } }
+  .status { display: grid; justify-items: center; gap: 0.8rem; padding: 2.5rem 0; border-top: 1px solid var(--rule); text-align: center; }
+  .status img { display: block; width: min(100%, 50rem); height: auto; }
+  .status.small img { width: min(100%, 34rem); }
+  .status b { font-size: clamp(1.875rem, 3.6vw, 2.625rem); line-height: 1.15; }
+  .status.small b { font-size: 1.5rem; }
+  .status .submit { width: 10rem; height: 44px; border-radius: 6px; background: var(--ink); }
+  .status .ghost { background: none; border: 1px solid #c9c6bd; }
+  .actions-row { display: flex; gap: 0.75rem; }
+  .hero .text { display: grid; gap: 0.75rem; min-width: 0; }
+  .btn { font: 600 14px var(--font-ui); color: var(--ink); background: var(--page); border: 1px solid #c9c6bd; border-radius: 6px; padding: 0.5rem 0.9rem; cursor: pointer; }
+  .btn:hover, .btn[aria-pressed="true"] { border-color: var(--ink); }
+  .btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  .topics img { display: block; width: 100%; height: auto; }
+  .plates { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: 0.75rem; }
+  .plate { display: grid; grid-template-rows: 8.5rem auto; border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; }
+  .plate img { width: 100%; height: 8.5rem; object-fit: contain; padding: 0.5rem; box-sizing: border-box; }
+  .plate span { padding: 0.6rem 0.8rem; font-weight: 600; }
+  .trows { display: grid; border-top: 1px solid var(--rule); }
+  .trow { display: grid; grid-template-columns: 4rem 7rem minmax(0, 1fr); gap: 1rem; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--rule); }
+  .trow .num { font-family: var(--font-data); color: var(--muted); }
+  .trow .slot { display: block; height: 4.5rem; }
+  .trow .slot img { width: 100%; height: 100%; object-fit: contain; }
+  .course-card { display: grid; width: min(100%, 30rem); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; }
+  .course-card img { display: block; width: 100%; height: 9.375rem; object-fit: contain; padding: 0.5rem 0.75rem; box-sizing: border-box; border-bottom: 1px solid var(--rule); }
+  .course-card > div, .course-home > div, .course-head > div { display: grid; gap: 0.35rem; padding: 0.9rem 1rem; }
+  .course-card b, .course-home b { font-size: 1.15rem; }
+  .course-home { display: grid; grid-template-columns: minmax(0, 24rem) minmax(0, 1fr); align-items: center; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--rule); }
+  .course-home img { display: block; width: 100%; height: auto; }
+  .course-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--rule); }
+  .course-head b { font-size: 2.4rem; letter-spacing: -0.02em; }
+  .course-head img { display: block; width: min(100%, 32rem); height: auto; }
+  .notes { display: grid; gap: 0.35rem; padding-left: 1.1rem; margin: 0; color: var(--muted); max-width: 64ch; }
+
+  /* Hero motion: the same CSS as apps/web/src/shared/components/mascot-scene. */
+  @media (prefers-reduced-motion: no-preference) {
+    .mascot-float { animation: float 5.2s ease-in-out infinite; }
+    .mascot-bob { transform-box: fill-box; transform-origin: center; animation: bob var(--d, 6s) ease-in-out var(--delay, 0s) infinite; }
+    .mascot-twinkle { animation: twinkle var(--d, 3s) ease-in-out var(--delay, 0s) infinite; }
+  }
+  @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+  @keyframes bob {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    33% { transform: translate(var(--x, 3px), -5px) rotate(var(--r, 4deg)); }
+    66% { transform: translate(calc(var(--x, 3px) * -0.6), 3px) rotate(calc(var(--r, 4deg) * -0.5)); }
+  }
+  @keyframes twinkle { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
+  .paused .mascot-float, .paused .mascot-bob, .paused .mascot-twinkle { animation-play-state: paused; }
+
+  @media (max-width: 56rem) {
+    .row { --cols: 3 !important; }
+    .hero { grid-template-columns: minmax(0, 1fr); }
+    h1 { font-size: 1.6rem; }
+  }
+  @media (max-width: 30rem) { .row { --cols: 2 !important; } }
+</style>
+
+<div class="wrap">
+  <header class="intro">
+    <h1>Маскот: лист персонажа и hero</h1>
+    <p class="muted">Утверждённый маскот: камни и конечности — трассировка сгенерированного листа, глаза, рот и брови прорисованы пером. Позы: docs/artifacts/references/mascot/poses. Сцены для сайта собирает pipeline/scenes.mjs, эта страница показывает те же файлы.</p>
+  </header>
+
+  <section class="section" aria-labelledby="sheet-title">
+    <h2 id="sheet-title">Лист персонажа</h2>
+    <div class="sub"><h3>Ракурсы</h3><div class="row" style="--cols: 5" id="views"></div></div>
+    <div class="sub"><h3>Позы</h3><div class="row" id="poses"></div></div>
+    <div class="sub"><h3>Эмоции</h3><div class="row" id="moods"></div></div>
+  </section>
+
+  <section class="section" aria-labelledby="hero-title">
+    <div class="section-head">
+      <h2 id="hero-title">Hero главной</h2>
+      <button class="btn" id="motion" type="button" aria-pressed="true">Остановить движение</button>
+    </div>
+    <div class="hero">
+      <figure class="tile">
+        <div class="stage" id="hero-stage"><img src="{{scene:home-hero}}" alt="" width="360" height="300"></div>
+        <figcaption class="label">слот 30rem, 6:5, без подложки · заменяет плашку с заметками</figcaption>
+      </figure>
+      <div class="text">
+        <p class="muted">Маскот в позе лотоса медленно парит. Вокруг покачиваются предметы из учёбы: змейка Python, пузырь с галочкой, клетки бланка ЕГЭ с ответом 27, таблица, 1 0 1, фигурные скобки, блок-схема и дерево. Звёздочки мерцают.</p>
+        <h3>Подложка</h3>
+        <div class="actions" id="bg"></div>
+        <ul class="notes">
+          <li>Анимация на чистом CSS, без JavaScript: парение 5 с, у каждого предмета свой период и сдвиг.</li>
+          <li>При системной настройке «уменьшить движение» всё стоит на месте.</li>
+          <li>Маскот и предметы — отдельные слои; на сайте это один лёгкий inline SVG.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  <section class="section" aria-labelledby="auth-title">
+    <h2 id="auth-title">Вход и регистрация</h2>
+    <p class="muted">Сцены из PNG архитектора, переведённые в вектор; мимика перерисована пером, как в листе персонажа. Справа от формы, колонка 29rem и не выше 25rem, вплотную к форме, чтобы форма оставалась главной; ниже 960 px сцена скрыта. Вокруг по всей площади рассыпаны только звёздочки и кружки: звёздочки мерцают, кружки покачиваются.</p>
+    <div class="auth">
+      <div class="form"><b>Войти</b><div class="field"></div><div class="field"></div><div class="submit"></div></div>
+      <img src="{{scene:sign-in}}" alt="" width="1074" height="910">
+    </div>
+    <div class="auth">
+      <div class="form"><b>Создать аккаунт</b><div class="field"></div><div class="field"></div><div class="submit"></div></div>
+      <img src="{{scene:register}}" alt="" width="906" height="894">
+    </div>
+  </section>
+  <section class="section" aria-labelledby="states-title">
+    <h2 id="states-title">404 и ошибка</h2>
+    <p class="muted">Открытая страница без карточки: крупная сцена (до 50rem), под ней заголовок, текст и кнопки, без крупных цифр кода. Двигаются молнии и искры у вилки и редкие звёздочки и кружки по краям; пунктир следов стоит.</p>
+    <div class="status"><img src="{{scene:not-found}}" alt="" width="1200" height="375"><b>Такой страницы нет</b><span class="muted">Проверьте адрес или вернитесь на главную.</span><div class="submit"></div></div>
+    <div class="status"><img src="{{scene:error}}" alt="" width="1200" height="375"><b>Не удалось загрузить страницу</b><span class="muted">Попробуйте ещё раз или вернитесь на главную.</span><div class="actions-row"><div class="submit"></div><div class="submit ghost"></div></div></div>
+  </section>
+  <section class="section" aria-labelledby="empty-title">
+    <h2 id="empty-title">Пустой поиск</h2>
+    <p class="muted">Темы и практика: открытый блок без карточки, сцена до 34rem, заголовок и действие под ней. Мерцает комок с чёрточками и метки по краям.</p>
+    <div class="status small"><img src="{{scene:empty-search}}" alt="" width="1260" height="300"><b>Темы не найдены</b><span class="muted">Попробуйте другой запрос или сбросьте фильтры.</span><div class="submit ghost"></div></div>
+  </section>
+  <section class="section" aria-labelledby="topics-title">
+    <h2 id="topics-title">Иллюстрации тем</h2>
+    <p class="muted">Все 25 тем: без маскота, одна идея на тему, тем же пером и с одним оранжевым акцентом, без движения. Подложек под иллюстрациями нет. Ниже — карточки главной (без цветных плашек) и строки <code>/ege</code> в размере слота 7rem × 4,5rem.</p>
+    <div class="row topics" style="--cols: 5"><figure class="tile"><img src="{{scene:../topics/topic-1}}" alt="" width="180" height="120"><figcaption class="label">01 · Анализ информационных моделей</figcaption></figure><figure class="tile"><img src="{{scene:../topics/topic-2}}" alt="" width="180" height="120"><figcaption class="label">02 · Таблицы истинности</figcaption></figure><figure class="tile"><img src="{{scene:../topics/topic-3}}" alt="" width="180" height="120"><figcaption class="label">03 · Реляционные базы данных</figcaption></figure><figure class="tile"><img src="{{scene:../topics/topic-4}}" alt="" width="180" height="120"><figcaption class="label">04 · Кодирование и условие Фано</figcaption></figure><figure class="tile"><img src="{{scene:../topics/topic-5}}" alt="" width="180" height="120"><figcaption class="label">05 · Преобразование записей чисел</figcaption></figure><figure class="tile"><img src="{{scene:../topics/topic-6}}" alt="" width="180" height="120"><figcaption class="label">06 · Анализ простейших алгоритмов</figcaption></figure><figure class="tile"><img src="{{scene:../topics/topic-7}}" alt="" width="180" height="120"><figcaption class="label">07 · Кодирование изображений и звука</figcaption></figure><figure class="tile"><img src="{{scene:../topics/topic-8}}" alt="" width="180" height="120"><figcaption class="label">08 · Перебор слов</figcaption></figure><figure class="tile"><img src="{{scene:../topics/topic-9}}" alt="" width="180" height="120"><figcaption class="label">09 · Электронные таблицы</figcaption></figure><figure class="tile"><img src="{{scene:../topics/topic-10}}" alt="" width="180" height="120"><figcaption class="label">10 · Компьютерные сети и адресация</figcaption></figure><figure class="tile"><img src="{{scene:../topics/topic-11}}" alt="" width="180" height="120"><figcaption class="label">11 · Количество информации</figcaption></figure><figure class="tile"><img src="{{scene:../topics/topic-12}}" alt="" width="180" height="120"><figcaption class="label">12 · Алгоритмы для исполнителей</figcaption></figure><figure class="tile"><img src="{{scene:../topics/topic-13}}" alt="" width="180" height="120"><figcaption class="label">13 · Ветвления и перебор вариантов</figcaption></figure><figure class="tile"><img src="{{scene:../topics/topic-14}}" alt="" width="180" height="120"><figcaption class="label">14 · Системы счисления</figcaption></figure><figure class="tile"><img src="{{scene:../topics/topic-15}}" alt="" width="180" height="120"><figcaption class="label">15 · Преобразование логических выражений</figcaption></figure><figure class="tile"><img src="{{scene:../topics/topic-16}}" alt="" width="180" height="120"><figcaption class="label">16 · Рекурсивные алгоритмы</figcaption></figure><figure class="tile"><img src="{{scene:../topics/topic-17}}" alt="" width="180" height="120"><figcaption class="label">17 · Числовые последовательности</figcaption></figure><figure class="tile"><img src="{{scene:../topics/topic-18}}" alt="" width="180" height="120"><figcaption class="label">18 · Оптимизация в электронных таблицах</figcaption></figure><figure class="tile"><img src="{{scene:../topics/topic-19}}" alt="" width="180" height="120"><figcaption class="label">19–21 · Выигрышная стратегия</figcaption></figure><figure class="tile"><img src="{{scene:../topics/topic-22}}" alt="" width="180" height="120"><figcaption class="label">22 · Параллельные вычисления</figcaption></figure><figure class="tile"><img src="{{scene:../topics/topic-23}}" alt="" width="180" height="120"><figcaption class="label">23 · Анализ графов</figcaption></figure><figure class="tile"><img src="{{scene:../topics/topic-24}}" alt="" width="180" height="120"><figcaption class="label">24 · Обработка символьных строк</figcaption></figure><figure class="tile"><img src="{{scene:../topics/topic-25}}" alt="" width="180" height="120"><figcaption class="label">25 · Обработка целых чисел</figcaption></figure><figure class="tile"><img src="{{scene:../topics/topic-26}}" alt="" width="180" height="120"><figcaption class="label">26 · Обработка данных: сортировка и отбор</figcaption></figure><figure class="tile"><img src="{{scene:../topics/topic-27}}" alt="" width="180" height="120"><figcaption class="label">27 · Анализ данных: кластеризация</figcaption></figure></div>
+    <div class="plates"><div class="plate"><img src="{{scene:../topics/topic-5}}" alt="" width="180" height="120"><span>Преобразование записей чисел</span></div><div class="plate"><img src="{{scene:../topics/topic-16}}" alt="" width="180" height="120"><span>Рекурсивные алгоритмы</span></div><div class="plate"><img src="{{scene:../topics/topic-17}}" alt="" width="180" height="120"><span>Числовые последовательности</span></div><div class="plate"><img src="{{scene:../topics/topic-24}}" alt="" width="180" height="120"><span>Обработка символьных строк</span></div></div>
+    <div class="trows"><div class="trow"><span class="num">01</span><span class="slot"><img src="{{scene:../topics/topic-1}}" alt="" width="180" height="120"></span><b>Анализ информационных моделей</b></div><div class="trow"><span class="num">02</span><span class="slot"><img src="{{scene:../topics/topic-2}}" alt="" width="180" height="120"></span><b>Таблицы истинности</b></div><div class="trow"><span class="num">03</span><span class="slot"><img src="{{scene:../topics/topic-3}}" alt="" width="180" height="120"></span><b>Реляционные базы данных</b></div><div class="trow"><span class="num">04</span><span class="slot"><img src="{{scene:../topics/topic-4}}" alt="" width="180" height="120"></span><b>Кодирование и условие Фано</b></div><div class="trow"><span class="num">05</span><span class="slot"><img src="{{scene:../topics/topic-5}}" alt="" width="180" height="120"></span><b>Преобразование записей чисел</b></div><div class="trow"><span class="num">06</span><span class="slot"><img src="{{scene:../topics/topic-6}}" alt="" width="180" height="120"></span><b>Анализ простейших алгоритмов</b></div><div class="trow"><span class="num">07</span><span class="slot"><img src="{{scene:../topics/topic-7}}" alt="" width="180" height="120"></span><b>Кодирование изображений и звука</b></div><div class="trow"><span class="num">08</span><span class="slot"><img src="{{scene:../topics/topic-8}}" alt="" width="180" height="120"></span><b>Перебор слов</b></div><div class="trow"><span class="num">09</span><span class="slot"><img src="{{scene:../topics/topic-9}}" alt="" width="180" height="120"></span><b>Электронные таблицы</b></div><div class="trow"><span class="num">10</span><span class="slot"><img src="{{scene:../topics/topic-10}}" alt="" width="180" height="120"></span><b>Компьютерные сети и адресация</b></div><div class="trow"><span class="num">11</span><span class="slot"><img src="{{scene:../topics/topic-11}}" alt="" width="180" height="120"></span><b>Количество информации</b></div><div class="trow"><span class="num">12</span><span class="slot"><img src="{{scene:../topics/topic-12}}" alt="" width="180" height="120"></span><b>Алгоритмы для исполнителей</b></div><div class="trow"><span class="num">13</span><span class="slot"><img src="{{scene:../topics/topic-13}}" alt="" width="180" height="120"></span><b>Ветвления и перебор вариантов</b></div><div class="trow"><span class="num">14</span><span class="slot"><img src="{{scene:../topics/topic-14}}" alt="" width="180" height="120"></span><b>Системы счисления</b></div><div class="trow"><span class="num">15</span><span class="slot"><img src="{{scene:../topics/topic-15}}" alt="" width="180" height="120"></span><b>Преобразование логических выражений</b></div><div class="trow"><span class="num">16</span><span class="slot"><img src="{{scene:../topics/topic-16}}" alt="" width="180" height="120"></span><b>Рекурсивные алгоритмы</b></div><div class="trow"><span class="num">17</span><span class="slot"><img src="{{scene:../topics/topic-17}}" alt="" width="180" height="120"></span><b>Числовые последовательности</b></div><div class="trow"><span class="num">18</span><span class="slot"><img src="{{scene:../topics/topic-18}}" alt="" width="180" height="120"></span><b>Оптимизация в электронных таблицах</b></div><div class="trow"><span class="num">19–21</span><span class="slot"><img src="{{scene:../topics/topic-19}}" alt="" width="180" height="120"></span><b>Выигрышная стратегия</b></div><div class="trow"><span class="num">22</span><span class="slot"><img src="{{scene:../topics/topic-22}}" alt="" width="180" height="120"></span><b>Параллельные вычисления</b></div><div class="trow"><span class="num">23</span><span class="slot"><img src="{{scene:../topics/topic-23}}" alt="" width="180" height="120"></span><b>Анализ графов</b></div><div class="trow"><span class="num">24</span><span class="slot"><img src="{{scene:../topics/topic-24}}" alt="" width="180" height="120"></span><b>Обработка символьных строк</b></div><div class="trow"><span class="num">25</span><span class="slot"><img src="{{scene:../topics/topic-25}}" alt="" width="180" height="120"></span><b>Обработка целых чисел</b></div><div class="trow"><span class="num">26</span><span class="slot"><img src="{{scene:../topics/topic-26}}" alt="" width="180" height="120"></span><b>Обработка данных: сортировка и отбор</b></div><div class="trow"><span class="num">27</span><span class="slot"><img src="{{scene:../topics/topic-27}}" alt="" width="180" height="120"></span><b>Анализ данных: кластеризация</b></div></div>
+  </section>
+  <section class="section" aria-labelledby="course-title">
+    <h2 id="course-title">Курс Python</h2>
+    <p class="muted">Рисунки архитектора, переведённые в вектор: змей в очках набирает <code>for i in range(3)</code>, чёрточки над оранжевой клавишей мерцают, по свободному месту разнесены мелкие звёздочки и кружки, как во входе и регистрации. Широкий кадр — для карточки <code>/courses</code> (иллюстрация 9,4rem в высоту), 3:2 — для блока курса на главной и шапки <code>/courses/python</code> (до 32rem); подложек нет.</p>
+    <div class="course-card"><img src="{{scene:../courses/course-python-wide}}" alt="" width="2138" height="634"><div><b>Python с нуля для ЕГЭ</b><span class="muted">От первой программы — к задачам и алгоритмам, которые пригодятся на ЕГЭ.</span></div></div>
+    <div class="course-home"><img src="{{scene:../courses/course-python}}" alt="" width="1536" height="1024"><div><b>Python с нуля для ЕГЭ</b><span class="muted">28 уроков · Начальный</span></div></div>
+    <div class="course-head"><div><b>Python с нуля для ЕГЭ</b><span class="muted">От первой программы — к задачам и алгоритмам.</span></div><img src="{{scene:../courses/course-python}}" alt="" width="1536" height="1024"></div>
+  </section>
+</div>
+
+<script>
+(() => {
+  // Generated by pipeline/demo.mjs: approved poses and baked scenes.
+  const POSES = {{poses}};
+
+  function pose(name) {
+    const svg = new DOMParser().parseFromString(POSES[name], "image/svg+xml").documentElement;
+    svg.setAttribute("role", "img");
+    return document.importNode(svg, true);
+  }
+  function tile(name, label, host) {
+    const t = document.createElement("figure"); t.className = "tile";
+    const stage = document.createElement("div"); stage.className = "stage";
+    const svg = pose(name); svg.setAttribute("aria-label", "Маскот: " + label);
+    stage.appendChild(svg);
+    const cap = document.createElement("figcaption"); cap.className = "label"; cap.textContent = label;
+    t.append(stage, cap); host.appendChild(t);
+  }
+  [["front", "анфас"], ["side", "профиль"], ["back", "со спины"]].forEach(([n, l]) => tile(n, l, document.getElementById("views")));
+  [["stand", "стоит"], ["wave", "машет"], ["point", "указывает"], ["jump", "прыгает"], ["lotus", "лотос"]].forEach(([n, l]) => tile(n, l, document.getElementById("poses")));
+  [["happy", "рад"], ["think", "думает"], ["sad", "грустит"], ["surprised", "удивлён"], ["calm", "спокоен"]].forEach(([n, l]) => tile(n, l, document.getElementById("moods")));
+
+  // Hero plate colours for comparison; the site shows the scene without a plate.
+  const BGS = [["#ffffff", "Без подложки"], ["#fffaf5", "Едва заметная"], ["#ffeadb", "Абрикосовая"]];
+  const stage = document.getElementById("hero-stage");
+  const bgHost = document.getElementById("bg");
+  const setBg = (color) => {
+    stage.style.background = color;
+    [...bgHost.children].forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.color === color)));
+  };
+  BGS.forEach(([color, label]) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "btn"; b.textContent = label; b.dataset.color = color;
+    b.addEventListener("click", () => setBg(color));
+    bgHost.appendChild(b);
+  });
+  setBg("#ffffff");
+
+  const motion = document.getElementById("motion");
+  motion.addEventListener("click", () => {
+    const paused = document.body.classList.toggle("paused");
+    motion.textContent = paused ? "Запустить движение" : "Остановить движение";
+    motion.setAttribute("aria-pressed", String(!paused));
+  });
+})();
+</script>
