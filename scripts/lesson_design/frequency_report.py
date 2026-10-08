@@ -1,0 +1,100 @@
+"""Write a topic's frequency.md from its tagged task table.
+
+Usage: python3 -I scripts/lesson_design/frequency_report.py docs/artifacts/lesson-design/topic-25
+
+The topic folder must contain ``tasks.py`` with: TOPIC_NUMBER, SOURCE (task
+URL template), FETCHED (date), COLLECTIONS, SHORT, TASKS, YEAR_BOUNDS, CORE,
+RECENT, NAMES, TREND, CORE_RULE, ADVANCED_RULE and the functions ``year`` and
+``level``. See docs/artifacts/lesson-design/topic-25/tasks.py for the format.
+Never edit frequency.md by hand: change tasks.py and run this script.
+"""
+
+import importlib.util
+import sys
+from collections import Counter
+from pathlib import Path
+
+
+def load(topic_dir: Path):
+    spec = importlib.util.spec_from_file_location("topic_tasks", topic_dir / "tasks.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def report(t) -> str:
+    tasks, total = t.TASKS, len(t.TASKS)
+    recent = [x for x in tasks if t.year(x[0]) >= t.RECENT]
+    dated = [x for x in tasks if x[2].startswith("ЕГЭ")]
+    uses = Counter(tech for x in tasks for tech in x[4].split())
+    uses_recent = Counter(tech for x in recent for tech in x[4].split())
+    levels = Counter(t.level(x[4]) for x in tasks)
+    core = levels["основной"]
+    collections = " и ".join(f"«{name}» (тема {theme})" for name, theme in t.COLLECTIONS.values())
+    counts = ", ".join(f"{t.SHORT[k]} — {sum(x[1] == k for x in tasks)}" for k in t.COLLECTIONS)
+    dated_all_core = all(t.level(x[4]) == "основной" for x in dated)
+    last_year = max(t.year(x[0]) for x in tasks)
+    lines = [
+        f"# Частота типов задания {t.TOPIC_NUMBER}",
+        "",
+        f"Источник: подборки «Решу ЕГЭ» по заданию {t.TOPIC_NUMBER} — {collections}. "
+        f"Подборки скачаны {t.FETCHED}. "
+        "Условия не копируются: ниже только номера, источники и наши описания.",
+        "",
+        "Файл сгенерирован скриптом `frequency_report.py` из размеченной таблицы "
+        "`tasks.py`. Год задач без пометки источника оценён по номеру задачи "
+        "между датированными задачами, поэтому это приблизительная оценка.",
+        "",
+        "## Итог",
+        "",
+        f"- Всего задач: **{total}**; {counts}.",
+        f"- Решаются приёмами основного уровня: **{core} из {total} ({core / total:.0%})**.",
+        f"- Задачи с реальных экзаменов (ЕГЭ {min((t.year(x[0]) for x in dated), default=0)}–"
+        f"{last_year}): {len(dated)}, все "
+        f"{'основного' if dated_all_core else 'НЕ ТОЛЬКО основного'} уровня.",
+        f"- Задачи {t.RECENT}–{last_year} годов (по оценке): {len(recent)}, из них "
+        f"{sum(t.level(x[4]) == 'основной' for x in recent)} основного уровня.",
+        "",
+        "## Какие приёмы нужны",
+        "",
+        "Одна задача обычно требует нескольких приёмов, поэтому сумма больше числа задач.",
+        "",
+        f"| Приём | Задач | Доля | Из них {t.RECENT}–{last_year} |",
+        "|---|---:|---:|---:|",
+    ]
+    for key, name in t.NAMES.items():
+        lines.append(
+            f"| {name} | {uses[key]} | {uses[key] / total:.0%} | "
+            f"{uses_recent[key]} из {len(recent)} |"
+        )
+    lines += [
+        "",
+        t.TREND,
+        "",
+        "## Правило уровней",
+        "",
+        t.CORE_RULE,
+        t.ADVANCED_RULE.format(advanced=levels["дополнительный"], total=total),
+        "",
+        "## Все задачи",
+        "",
+        "| № | Подборка | Источник | Год | Что требуется | Приёмы | Уровень |",
+        "|---|---|---|---:|---|---|---|",
+    ]
+    for tid, kind, src, desc, techs in sorted(tasks, key=lambda x: x[0]):
+        lines.append(
+            f"| [{tid}]({t.SOURCE.format(tid)}) | {t.SHORT[kind]} | {src or '—'} | "
+            f"{t.year(tid)}{'' if src else '*'} | {desc} | {techs.replace(' ', ', ')} | "
+            f"{t.level(techs)} |"
+        )
+    lines += ["", "\\* год оценён по номеру задачи.", ""]
+    return "\n".join(lines)
+
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        raise SystemExit(__doc__)
+    folder = Path(sys.argv[1])
+    data = load(folder)
+    (folder / "frequency.md").write_text(report(data), encoding="utf-8")
+    print(f"{folder / 'frequency.md'} written")
