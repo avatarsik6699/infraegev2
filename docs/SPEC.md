@@ -705,8 +705,8 @@ benchmark framework и без требования дождаться их дл�
 
 С 2026-10-08 содержание тем ЕГЭ готовится по [пайплайну подготовки темы](runbooks/lesson-pipeline.md)
 на демо-стенде `docs/artifacts/lesson-design/`. Эталон — тема 25 (делители и маски): исходник
-архитектора, частотный анализ, шесть подтем двух уровней, схемы для тяжёлых мест. Её перенос на
-сайт — отдельный change после выпуска Change 170. Этот change закрывает пробелы модели, перечисленные
+архитектора, частотный анализ, шесть подтем двух уровней, схемы для тяжёлых мест. Доработки
+платформы под пайплайн и перенос темы — следующие change, до выпуска редизайна. Они закрывают пробелы модели, перечисленные
 в пайплайне (этап 9): учебная таблица, свёрнутое доказательство, уровень подтемы, пошаговая схема
 и песочница, решение о точных SVG-диаграммах. Следующие темы проходят тот же пайплайн до переноса.
 
@@ -718,10 +718,11 @@ implemented by Change 140. Payment processing and paywall enforcement require se
 
 Client redesign programme (2026-10-03): Changes 164 (design system and restyle), 167 (EGE subtopic
 pages), 168 (profile dashboard) and 169 (every page to the approved v5 mockups) are merged into
-local `main` but not pushed or deployed. Release is blocked until Change 170 finishes: e2e
-migration to the new URLs and screens, dev practice bank restore, lesson LCP and Lighthouse,
-architect-supplied illustrations in the reserved placeholders, the §11 release prerequisites, and
-then one release of the whole programme. See `docs/changes/170-redesign-release-readiness.md`.
+local `main` but not pushed or deployed. Change 170 completed the e2e migration, dev bank
+restore, LCP/Lighthouse and pre-release verification and was closed without release on 2026-10-08
+(see `docs/changes/archive/170-redesign-release-readiness.md`): the release now waits for the lesson
+materials rebuilt by the lesson pipeline. The §11 release prerequisites and one release of the whole
+programme move to a future release change, which refreshes the pre-release evidence.
 
 ## 10. Out of Scope
 
