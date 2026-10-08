@@ -123,8 +123,8 @@ the architect's untracked work).
 - [x] `D2` Find why `make dev` did not apply account migration `140_01` to the dev account database (columns `privacy_consent_version`, `privacy_consented_at` were missing and were added by hand on 2026-10-03); fix the dev bootstrap so a fresh `make dev` is consistent. **Closed 2026-10-04 by architect decision:** the schema safeguard is done and verified; the historical root cause is unprovable without the pre-repair state and is accepted as such — _Depends on:_ —
 
 ### Other
-- [ ] `T1` Release prerequisites from SPEC §11 checked with the architect: provider applications and callbacks (VK ID, Яндекс ID, Telegram), mail delivery, privacy policy review, account-data backup/restore — _Depends on:_ —
-- [ ] `T2` `/ship 170 --release`: affected coverage and Release Gate per STACK, push `main`, deploy the exact SHA, verify public readiness — only after F1–F8, D1–D2, T1 and explicit architect authorisation — _Depends on:_ F3, F5, F6, F8, D1, D2, T1
+- [x] `T1` **Deferred (architect decision 2026-10-08), not done in this change:** moved to the future release change. Release prerequisites from SPEC §11 checked with the architect: provider applications and callbacks (VK ID, Яндекс ID, Telegram), mail delivery, privacy policy review, account-data backup/restore — _Depends on:_ —
+- [x] `T2` **Deferred (architect decision 2026-10-08), not done in this change:** no release from Change 170; the redesign is released together with the lessons refactored by the new lesson pipeline in a later change. Originally: `/ship 170 --release`: affected coverage and Release Gate per STACK, push `main`, deploy the exact SHA, verify public readiness — only after F1–F8, D1–D2, T1 and explicit architect authorisation — _Depends on:_ F3, F5, F6, F8, D1, D2, T1
 - [x] `T4` Pre-release verification (architect request 2026-10-07): run the affected release coverage on the candidate before `/ship --release` — format, lint, typecheck, unit, content validation, production build and prerender crawl, full e2e with `test:layout` and `@no-js` against the API, axe, Lighthouse, nginx/image contract tests and a pre-push secrets scan of `origin/main..HEAD`; every finding is added as its own Backlog item and fixed — _Depends on:_ F55–F58
 - [x] `T3` Architect clarification (2026-10-03): mail delivery is implemented; VK ID, Яндекс ID and Telegram remain deferred. Verify disabled-provider behaviour and examine repository privacy and account backup/restore evidence for T1; distinguish technical acceptance from external legal review and fresh production restore proof — _Depends on:_ —
 
@@ -174,6 +174,13 @@ the dev API besides `DATABASE_URL`.
 ---
 
 ## Implementation Notes
+
+- **Closed without release (architect decision 2026-10-08).** The lesson materials are not yet
+  rebuilt by the binding [lesson pipeline](../runbooks/lesson-pipeline.md), so the release is not
+  ready. Change 170 is closed with a local `/ship` (merge to local `main`, no push, no deploy).
+  T1 (SPEC §11 prerequisites: formal privacy acceptance and fresh production account restore
+  proof still unconfirmed) and T2 (`--release`) move to the future release change; the T4
+  pre-release evidence must be refreshed there because later changes will alter the candidate.
 
 - Technical account/privacy/recovery findings are recorded in [readiness evidence](../artifacts/change-170/readiness.md). Formal privacy acceptance and fresh production account restore proof remain unconfirmed; T1 stays open. The historical D2 pre-repair state is unavailable, so its cause remains unproven; the architect accepted the verified schema guard as closing D2 (2026-10-04).
 - Architect clarification (2026-10-03): aim for good overall performance rather than ideal numbers; a modest LCP deviation does not require further optimization. Keep the original CI reference budgets and report their assertion failures honestly. Rejected speculative chunking and route-loading experiments; retained native video lazy loading, verified in the browser and focused tests.
