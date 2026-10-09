@@ -9,7 +9,7 @@
 | Change | `173` |
 | Slug | `repository-audit-gates` |
 | Title | Repository audit, context compaction and gate efficiency |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/173-repository-audit-gates` |
 
 ---
