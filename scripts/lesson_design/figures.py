@@ -70,9 +70,7 @@ def rectangles_svg(n: int = 36, cell: int = 10) -> str:
         tx = left + 36 * cell + 28
         out.append(_text(tx, y + h / 2 + 5, label, 15, INK))
         if square:
-            out.append(
-                _text(tx + 104, y + h / 2 + 5, "квадрат", 15, ACCENT, weight=600)
-            )
+            out.append(_text(tx + 104, y + h / 2 + 5, "квадрат", 15, ACCENT, weight=600))
         y += h + gap
     return (
         f'<svg viewBox="0 0 660 {y - gap + top}" role="img" '
@@ -211,13 +209,9 @@ def cover_svg(side=6, rows=7, cols=8, cell=20) -> str:
         f'fill="none" stroke="{ACCENT}" stroke-width="2" stroke-dasharray="7 5"/>'
     )
     tx = left + cols * cell + 32
-    out.append(
-        _text(tx, top + 40, f"{side} · {side} = {side * side}", 16, INK, weight=600)
-    )
+    out.append(_text(tx, top + 40, f"{side} · {side} = {side * side}", 16, INK, weight=600))
     out.append(_text(tx, top + 64, "уже все клетки числа 36", 15, MUTED))
-    out.append(
-        _text(tx, top + 104, f"{rows} · {cols} = {rows * cols}", 16, ACCENT, weight=600)
-    )
+    out.append(_text(tx, top + 104, f"{rows} · {cols} = {rows * cols}", 16, ACCENT, weight=600))
     out.append(_text(tx, top + 128, "квадрат и ещё клетки вокруг", 15, MUTED))
     return (
         f'<svg viewBox="0 0 660 {top * 2 + rows * cell}" role="img" aria-label='
@@ -246,9 +240,7 @@ def remainder_svg(n: int = 17, d: int = 5, cell: int = 32) -> str:
                 f'stroke-width="{1.5 if k < q else 2}"/>'
             )
         w = size * cell
-        out.append(
-            _bracket(x + 2, x + w - 2, top + cell + 8, color if k == q else MUTED)
-        )
+        out.append(_bracket(x + 2, x + w - 2, top + cell + 8, color if k == q else MUTED))
         label = f"{d}" if k < q else f"{r}"
         out.append(_text(x + w / 2, top + cell + 34, label, 15, color, "middle"))
         x += w + gap
@@ -260,9 +252,7 @@ def remainder_svg(n: int = 17, d: int = 5, cell: int = 32) -> str:
     h = top + cell + 88
     return (
         f'<svg viewBox="0 0 660 {h}" role="img" aria-label="{ru_count(n, *CELLS)} '
-        f'порциями по {d}: {ru_count(q, *PORTIONS)} и {r} в остатке">'
-        + "".join(out)
-        + "</svg>"
+        f'порциями по {d}: {ru_count(q, *PORTIONS)} и {r} в остатке">' + "".join(out) + "</svg>"
     )
 
 
@@ -276,6 +266,7 @@ REMAINDER_CAPTION = (
 
 def remainder_widget(n: int = 17, d: int = 5) -> str:
     """remainder_svg with n and d controls and presets; static without JS."""
+
     def stepper_ctl(key, value, name):
         return (
             f'<span class="num-in"><span>{key}</span>'
@@ -351,7 +342,7 @@ REMAINDER_JS = r"""<script>
 </script>"""
 
 
-STAND = Path(__file__).resolve().parents[2] / "docs" / "artifacts" / "lesson-design"
+STAND = Path(__file__).resolve().parents[2] / "content" / "lesson-design"
 
 
 def _inline(text: str) -> str:
@@ -378,27 +369,33 @@ def cheatsheet(source: str) -> str:
 
     def rows(items, columns=False) -> str:
         cols = " data-columns" if columns else ""
-        return f"<ul{cols}>" + "".join(
-            f"<li><span class='cs-k'>{_inline(k)}</span>"
-            f"<span class='cs-v'>{_inline(v)}</span></li>"
-            for k, v in items
-        ) + "</ul>"
+        return (
+            f"<ul{cols}>"
+            + "".join(
+                f"<li><span class='cs-k'>{_inline(k)}</span>"
+                f"<span class='cs-v'>{_inline(v)}</span></li>"
+                for k, v in items
+            )
+            + "</ul>"
+        )
 
     groups = []
     for g in data["groups"]:
-        level = f'<small>{html.escape(g["level"])}</small>' if g.get("level") else ""
+        level = f"<small>{html.escape(g['level'])}</small>" if g.get("level") else ""
         groups.append(
             f'<section class="cs-group"><h3><a href="{prefix}-{g["page"]}.html">'
             f'<span class="cs-n">{g["page"]}</span>{html.escape(g["title"])}</a>{level}</h3>'
-            f'{rows(g["items"])}</section>'
+            f"{rows(g['items'])}</section>"
         )
     sections = []
     for sec in data.get("sections", []):
         body = rows(sec["rows"], sec.get("columns", False)) if "rows" in sec else ""
         if "steps" in sec:
-            body += '<ol class="cs-checks">' + "".join(
-                f"<li>{_inline(c)}</li>" for c in sec["steps"]
-            ) + "</ol>"
+            body += (
+                '<ol class="cs-checks">'
+                + "".join(f"<li>{_inline(c)}</li>" for c in sec["steps"])
+                + "</ol>"
+            )
         if sec.get("note"):
             body += f'<p class="cs-note">{_inline(sec["note"])}</p>'
         wide = " data-wide" if sec.get("columns") else ""
@@ -476,7 +473,7 @@ def arcs_svg(
         ds = sorted({v for p in pairs for v in p})
         step = (width - left - right) / (len(ds) - 1)
 
-        def x(v):
+        def x(v):  # pyright: ignore[reportRedeclaration]
             if v in ds:
                 return left + ds.index(v) * step
             lo = max(i for i, dv in enumerate(ds) if dv < v)
@@ -538,7 +535,9 @@ def two_arcs_figure(a: int, b: int) -> str:
     parts, height = [], 0
     for offset, n in ((0, a), (330, b)):
         svg = arcs_svg(n, width=330, ordinal=True)
-        h = int(float(re.match(r'<svg viewBox="0 0 [\d.]+ ([\d.]+)"', svg).group(1)))
+        size = re.match(r'<svg viewBox="0 0 [\d.]+ ([\d.]+)"', svg)
+        assert size
+        h = int(float(size.group(1)))
         height = max(height, h)
         parts.append(
             re.sub(
@@ -583,7 +582,7 @@ def ladder_svg(n: int = 360) -> str:
                 f'<text x="{xr + 12}" y="{y}" font-family="{SANS}" font-size="17" '
                 f'fill="{INK}">{p}</text>'
                 f'<text x="{xr + 60}" y="{y}" font-family="{SANS}" '
-            f'font-size="15" fill="{MUTED}">{val} : {p} = {val // p}</text>'
+                f'font-size="15" fill="{MUTED}">{val} : {p} = {val // p}</text>'
             )
     primes = [p for _, p in rows if p]
     out.append(
@@ -803,7 +802,7 @@ def mask_align_svg(mask: str, samples: list[str]) -> str:
                         f'<rect x="{x}" y="{y}" width="{cell}" height="{cell}" '
                         f'fill="{fills.get(p, "#ffffff")}" '
                         f'stroke="{ACCENT if p == "*" else INK}"'
-                        f'{' stroke-width="2"' if p == "*" else ""}/>'
+                        f"{' stroke-width="2"' if p == '*' else ''}/>"
                         f'<text x="{x + cell / 2}" y="{y + 18}" text-anchor="middle" '
                         f'font-family="{SANS}" font-size="15" fill="{INK}">{ch}</text>'
                     )
@@ -1050,8 +1049,12 @@ def graph_layout(edges, *, order=None, up: bool = False, width: int = 660) -> di
             # (crossings) and from labels placed before
             def clear(pt, i=i):
                 near_edge = min(
-                    (abs(pt[0] - x) + abs(pt[1] - y)
-                     for j, cv in enumerate(curves) if j != i for x, y in cv),
+                    (
+                        abs(pt[0] - x) + abs(pt[1] - y)
+                        for j, cv in enumerate(curves)
+                        if j != i
+                        for x, y in cv
+                    ),
                     default=99,
                 )
                 free = all(abs(pt[0] - x) > 26 or abs(pt[1] - y) > 20 for x, y in labels)
@@ -1062,17 +1065,30 @@ def graph_layout(edges, *, order=None, up: bool = False, width: int = 660) -> di
             labels.append((lx, ly))
             label = (lx, ly, 7.6 * len(_num(w)) + 8)
             ys += [ly - 12, ly + 12]
-        out_edges.append({
-            "u": u, "v": v, "w": w, "backward": backward,
-            "path": (f"M {a[0]:.1f} {a[1]:.1f} Q {c[0]:.1f} {c[1]:.1f} "
-                     f"{base[0]:.1f} {base[1]:.1f}"),
-            "arrow": (f"M {tip[0]:.1f} {tip[1]:.1f} "
-                      f"L {base[0] - e[1] * 4.5:.1f} {base[1] + e[0] * 4.5:.1f} "
-                      f"L {base[0] + e[1] * 4.5:.1f} {base[1] - e[0] * 4.5:.1f} Z"),
-            "label": label,
-        })
-    return {"width": width, "pos": pos, "edges": out_edges,
-            "top": min(ys) - 8, "bottom": max(ys) + 8}
+        out_edges.append(
+            {
+                "u": u,
+                "v": v,
+                "w": w,
+                "backward": backward,
+                "path": (
+                    f"M {a[0]:.1f} {a[1]:.1f} Q {c[0]:.1f} {c[1]:.1f} {base[0]:.1f} {base[1]:.1f}"
+                ),
+                "arrow": (
+                    f"M {tip[0]:.1f} {tip[1]:.1f} "
+                    f"L {base[0] - e[1] * 4.5:.1f} {base[1] + e[0] * 4.5:.1f} "
+                    f"L {base[0] + e[1] * 4.5:.1f} {base[1] - e[0] * 4.5:.1f} Z"
+                ),
+                "label": label,
+            }
+        )
+    return {
+        "width": width,
+        "pos": pos,
+        "edges": out_edges,
+        "top": min(ys) - 8,
+        "bottom": max(ys) + 8,
+    }
 
 
 def graph_geometry(edges) -> dict:
@@ -1096,15 +1112,26 @@ def graph_geometry(edges) -> dict:
     return {
         "width": g["width"],
         "height": round(g["bottom"] - top),
-        "nodes": [{"id": v, "x": round(x, 1), "y": round(y - top, 1)}
-                  for v, (x, y) in g["pos"].items()],
-        "edges": [{
-            "from": e["u"], "to": e["v"], "weight": _num(e["w"]),
-            "path": shift_path(e["path"]), "arrow": shift_path(e["arrow"]),
-            "label": None if e["label"] is None else {
-                "x": round(e["label"][0], 1), "y": round(e["label"][1] - top, 1),
-                "width": round(e["label"][2], 1)},
-        } for e in g["edges"]],
+        "nodes": [
+            {"id": v, "x": round(x, 1), "y": round(y - top, 1)} for v, (x, y) in g["pos"].items()
+        ],
+        "edges": [
+            {
+                "from": e["u"],
+                "to": e["v"],
+                "weight": _num(e["w"]),
+                "path": shift_path(e["path"]),
+                "arrow": shift_path(e["arrow"]),
+                "label": None
+                if e["label"] is None
+                else {
+                    "x": round(e["label"][0], 1),
+                    "y": round(e["label"][1] - top, 1),
+                    "width": round(e["label"][2], 1),
+                },
+            }
+            for e in g["edges"]
+        ],
     }
 
 
@@ -1135,8 +1162,7 @@ def graph_svg(
     graph; faded — vertices already removed (topological sort);
     interactive — vertices and edges carry data-v / data-e for a page script.
     """
-    g = graph_layout(edges, order=order, up=values is not None or footer is not None,
-                     width=width)
+    g = graph_layout(edges, order=order, up=values is not None or footer is not None, width=width)
     pos = g["pos"]
     on_path = set(zip(path, path[1:], strict=False)) if path else set()
     banned, faded = set(banned), set(faded)
@@ -1150,13 +1176,21 @@ def graph_svg(
         sw = 2.4 if hot else 1.4
         dash = ' stroke-dasharray="5 4"' if (off and u not in faded) or e["backward"] else ""
         tag = f' data-e="{u}-{v}"' if interactive else ""
-        parts.append(f'<path{tag} d="{e["path"]}" fill="none" stroke="{stroke}" '
-                     f'stroke-width="{sw}"{dash}/>')
+        parts.append(
+            f'<path{tag} d="{e["path"]}" fill="none" stroke="{stroke}" stroke-width="{sw}"{dash}/>'
+        )
         parts.append(f'<path{tag} d="{e["arrow"]}" fill="{stroke}"/>')
         if e["label"]:
             lx, ly, tw = e["label"]
-            text = _text(lx, ly + 5, _num(e["w"]), 13, ACCENT if hot else MUTED, "middle",
-                         600 if hot else 400)
+            text = _text(
+                lx,
+                ly + 5,
+                _num(e["w"]),
+                13,
+                ACCENT if hot else MUTED,
+                "middle",
+                600 if hot else 400,
+            )
             if interactive:
                 text = text.replace("<text ", f'<text data-el="{u}-{v}" ', 1)
             label_parts.append(
@@ -1177,20 +1211,23 @@ def graph_svg(
         else:
             fill, stroke, sw, color = "#ffffff", INK, 1.5, INK
         if interactive:
-            parts.append(f'<g data-v="{v}" tabindex="0" role="button" '
-                         f'aria-label="Вершина {v}" class="gv">')
-        parts.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{NODE_R}" fill="{fill}" '
-                     f'stroke="{stroke}" stroke-width="{sw}"{dash}/>')
-        parts.append(_text(x, y + 5, str(v), 14 if len(str(v)) < 4 else 12, color,
-                           "middle", 600))
+            parts.append(
+                f'<g data-v="{v}" tabindex="0" role="button" aria-label="Вершина {v}" class="gv">'
+            )
+        parts.append(
+            f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{NODE_R}" fill="{fill}" '
+            f'stroke="{stroke}" stroke-width="{sw}"{dash}/>'
+        )
+        parts.append(_text(x, y + 5, str(v), 14 if len(str(v)) < 4 else 12, color, "middle", 600))
         if interactive:
             parts.append("</g>")
         if values and v in values:
             hot = v == changed
             # above a vertex of the upper row, under the others
             vy = y - NODE_R - 9 if y < 0 else y + NODE_R + 19
-            parts.append(_text(x, vy, values[v], 14, ACCENT if hot else INK, "middle",
-                               600 if hot else 400))
+            parts.append(
+                _text(x, vy, values[v], 14, ACCENT if hot else INK, "middle", 600 if hot else 400)
+            )
             ys += [vy - 14, vy + 7]
 
     top = min(ys) - (0 if min(ys) == g["top"] else 8)
@@ -1204,7 +1241,8 @@ def graph_svg(
     return (
         f'<svg viewBox="0 0 {width} {bottom - top:.0f}" role="img" '
         f'aria-label="{html.escape(name)}"><g transform="translate(0 {-top:.1f})">'
-        + "".join(parts) + "</g></svg>"
+        + "".join(parts)
+        + "</g></svg>"
     )
 
 
@@ -1227,8 +1265,14 @@ def best_frames(edges, source=1, target=100) -> list[tuple[str, str]]:
         chain = " → ".join(f"best({v})" for v in stack) or "пуст"
         frames.append(
             (
-                graph_svg(edges, values=values, current=cur, edge=edge, changed=changed,
-                          footer=[f"Стек вызовов: {chain}"]),
+                graph_svg(
+                    edges,
+                    values=values,
+                    current=cur,
+                    edge=edge,
+                    changed=changed,
+                    footer=[f"Стек вызовов: {chain}"],
+                ),
                 caption,
             )
         )
@@ -1239,8 +1283,11 @@ def best_frames(edges, source=1, target=100) -> list[tuple[str, str]]:
         stack.append(v)
         if v == target:
             memo[v] = 0.0
-            snap(f"best({v}): это цель, идти больше не нужно — f({v}) = 0. Значение сохранено.",
-                 v, changed=v)
+            snap(
+                f"best({v}): это цель, идти больше не нужно — f({v}) = 0. Значение сохранено.",
+                v,
+                changed=v,
+            )
             stack.pop()
             return 0.0
         snap(f"Вызов best({v}): ответа для {v} ещё нет, перебираем рёбра из {v}.", v)
@@ -1249,8 +1296,11 @@ def best_frames(edges, source=1, target=100) -> list[tuple[str, str]]:
             known = nxt in memo
             rest = best(nxt)
             cand = w + rest
-            got = f"best({nxt}) уже сохранено — берём из памяти: {_f(rest)}." if known else (
-                f"best({nxt}) вернул {_f(rest)}.")
+            got = (
+                f"best({nxt}) уже сохранено — берём из памяти: {_f(rest)}."
+                if known
+                else (f"best({nxt}) вернул {_f(rest)}.")
+            )
             better = cand < answer
             answer = min(answer, cand)
             snap(
@@ -1260,8 +1310,11 @@ def best_frames(edges, source=1, target=100) -> list[tuple[str, str]]:
                 edge=(v, nxt),
             )
         memo[v] = answer
-        snap(f"Все рёбра из {v} просмотрены: f({v}) = {_f(answer)}. Значение сохранено.",
-             v, changed=v)
+        snap(
+            f"Все рёбра из {v} просмотрены: f({v}) = {_f(answer)}. Значение сохранено.",
+            v,
+            changed=v,
+        )
         stack.pop()
         return answer
 
@@ -1286,12 +1339,22 @@ def passes_frames(edges, source=1) -> list[tuple[str, str]]:
     def snap(caption, edge=None, changed=None, where=""):
         values = {v: f"d = {_f(x)}" for v, x in d.items()}
         frames.append(
-            (graph_svg(edges, values=values, edge=edge, changed=changed,
-                       footer=[where] if where else None), caption)
+            (
+                graph_svg(
+                    edges,
+                    values=values,
+                    edge=edge,
+                    changed=changed,
+                    footer=[where] if where else None,
+                ),
+                caption,
+            )
         )
 
-    snap(f"До проходов: d[{source}] = 0, до остальных вершин путь пока не найден — ∞.",
-         where="Рёбра в порядке файла: " + ", ".join(f"{u} → {v}" for u, v, _ in edges))
+    snap(
+        f"До проходов: d[{source}] = 0, до остальных вершин путь пока не найден — ∞.",
+        where="Рёбра в порядке файла: " + ", ".join(f"{u} → {v}" for u, v, _ in edges),
+    )
     passes = len(nodes) - 1
     for p in range(1, passes + 1):
         changed_any = False
@@ -1299,26 +1362,40 @@ def passes_frames(edges, source=1) -> list[tuple[str, str]]:
             w = float(w)
             where = f"Проход {p} из {passes} · ребро {i} из {len(edges)}"
             if d[u] == float("inf"):
-                snap(f"{u} → {v}: до {u} путь пока не найден — ребро ничего не даёт.",
-                     (u, v), where=where)
+                snap(
+                    f"{u} → {v}: до {u} путь пока не найден — ребро ничего не даёт.",
+                    (u, v),
+                    where=where,
+                )
                 continue
             cand = d[u] + w
             if cand < d[v]:
                 old = d[v]
                 d[v] = cand
                 changed_any = True
-                snap(f"{u} → {v}: {_f(d[u])} + {w:g} = {_f(cand)} < {_f(old)} — улучшаем d[{v}].",
-                     (u, v), changed=v, where=where)
+                snap(
+                    f"{u} → {v}: {_f(d[u])} + {w:g} = {_f(cand)} < {_f(old)} — улучшаем d[{v}].",
+                    (u, v),
+                    changed=v,
+                    where=where,
+                )
             else:
-                snap(f"{u} → {v}: {_f(d[u])} + {w:g} = {_f(cand)}, не лучше {_f(d[v])}.",
-                     (u, v), where=where)
+                snap(
+                    f"{u} → {v}: {_f(d[u])} + {w:g} = {_f(cand)}, не лучше {_f(d[v])}.",
+                    (u, v),
+                    where=where,
+                )
         if not changed_any:
-            snap(f"За проход {p} ничего не изменилось — дальше можно не проходить.",
-                 where=f"Проход {p} без изменений")
+            snap(
+                f"За проход {p} ничего не изменилось — дальше можно не проходить.",
+                where=f"Проход {p} без изменений",
+            )
             break
     else:
-        snap(f"Выполнено V − 1 = {ru_count(passes, 'проход', 'прохода', 'проходов')} — "
-             "значения окончательные.")
+        snap(
+            f"Выполнено V − 1 = {ru_count(passes, 'проход', 'прохода', 'проходов')} — "
+            "значения окончательные."
+        )
     return frames
 
 
@@ -1343,12 +1420,16 @@ def backward_frames(edges, source=1, target=100) -> list[tuple[str, str]]:
     def snap(caption, cur=None, edge=None, path=None, changed=None):
         values = {v: f"f = {_f(x)}" for v, x in f.items()}
         frames.append(
-            (graph_svg(edges, values=values, current=cur, edge=edge, path=path,
-                       changed=changed), caption)
+            (
+                graph_svg(edges, values=values, current=cur, edge=edge, path=path, changed=changed),
+                caption,
+            )
         )
 
-    snap("Значения f пока не известны. Начнём с вершин, после которых идти "
-         "некуда или почти некуда, — с цели.")
+    snap(
+        "Значения f пока не известны. Начнём с вершин, после которых идти "
+        "некуда или почти некуда, — с цели."
+    )
     for v in order:
         if v == target:
             f[v] = 0.0
@@ -1365,18 +1446,26 @@ def backward_frames(edges, source=1, target=100) -> list[tuple[str, str]]:
         win[v] = best_x
         terms = ", ".join(f"{_num(w)} + f({x})" for _, x, w in cands)
         nums = ", ".join(f"{_num(w)} + {_f(f[x])}" for _, x, w in cands)
-        formula = (f"f({v}) = {_num(cands[0][2])} + f({cands[0][1]}) = {nums} = {_f(best_c)}"
-                   if len(cands) == 1 else
-                   f"f({v}) = min({terms}) = min({nums}) = {_f(best_c)}")
-        snap(f"{formula}. Ответы для соседей уже известны — они ближе к цели.",
-             v, edge=(v, best_x), changed=v)
+        formula = (
+            f"f({v}) = {_num(cands[0][2])} + f({cands[0][1]}) = {nums} = {_f(best_c)}"
+            if len(cands) == 1
+            else f"f({v}) = min({terms}) = min({nums}) = {_f(best_c)}"
+        )
+        snap(
+            f"{formula}. Ответы для соседей уже известны — они ближе к цели.",
+            v,
+            edge=(v, best_x),
+            changed=v,
+        )
     path, v = [source], source
     while v != target and v in win:
         v = win[v]
         path.append(v)
-    snap(f"Готово: f({source}) = {_f(f[source])}. Если из каждой вершины идти по ребру, "
-         f"которое дало минимум, получится путь {' → '.join(map(str, path))}.",
-         path=path)
+    snap(
+        f"Готово: f({source}) = {_f(f[source])}. Если из каждой вершины идти по ребру, "
+        f"которое дало минимум, получится путь {' → '.join(map(str, path))}.",
+        path=path,
+    )
     return frames
 
 
@@ -1393,8 +1482,10 @@ def adjacency_svg(edges, focus=None, width: int = 660) -> str:
     row, top = 30, 44
     lx, rx = 24, 300
     h = top + row * max(len(edges), len(keys) + len(targets)) + 16
-    out = [f'<svg viewBox="0 0 {width} {h}" role="img" '
-           f'aria-label="Строки файла раскладываются в словарь graph по начальной вершине">']
+    out = [
+        f'<svg viewBox="0 0 {width} {h}" role="img" '
+        f'aria-label="Строки файла раскладываются в словарь graph по начальной вершине">'
+    ]
     out.append(_text(lx, 22, "строки файла", 13, MUTED))
     out.append(_text(rx, 22, "graph: вершина → её переходы", 13, MUTED))
     key_y = {k: top + row * i for i, k in enumerate(keys)}
@@ -1412,8 +1503,17 @@ def adjacency_svg(edges, focus=None, width: int = 660) -> str:
         y = key_y[k]
         hot = k == focus
         items = ", ".join(f"({v}, {_num(w)})" for u, v, w in edges if u == k)
-        out.append(_text(rx, y + 5, f"{k}: [{items}]", 15, ACCENT if hot else INK, "start",
-                         600 if hot else 400))
+        out.append(
+            _text(
+                rx,
+                y + 5,
+                f"{k}: [{items}]",
+                15,
+                ACCENT if hot else INK,
+                "start",
+                600 if hot else 400,
+            )
+        )
     for i, t in enumerate(targets):
         y = top + row * (len(keys) + i)
         out.append(_text(rx, y + 5, f"{t}: записи нет — graph.get({t}, []) даёт []", 15, MUTED))
@@ -1425,8 +1525,11 @@ def _call_tree(edges, v, target, memo, cache):
     """Nested calls of best(v): (vertex, from memory?, children)."""
     if cache and v in memo:
         return (v, True, [])
-    kids = [] if v == target else [_call_tree(edges, x, target, memo, cache)
-                                   for x, _ in _out_edges(edges, v)]
+    kids = (
+        []
+        if v == target
+        else [_call_tree(edges, x, target, memo, cache) for x, _ in _out_edges(edges, v)]
+    )
     memo.add(v)
     return (v, False, kids)
 
@@ -1475,31 +1578,40 @@ def call_tree_svg(edges, source=1, target=100, width: int = 660) -> str:
         note = ru_count(calls, "вызов", "вызова", "вызовов")
         if cache:
             note += f", вычислено {computed}"
-        out.append(_text(k * half + 20, 20, "с @cache" if cache else "без @cache", 15, INK,
-                         "start", 600))
+        out.append(
+            _text(k * half + 20, 20, "с @cache" if cache else "без @cache", 15, INK, "start", 600)
+        )
         out.append(_text(k * half + 20, 40, note, 13, MUTED))
         for x, d, _v, _mem, ids in pos.values():
             for i in ids:
                 cx, cd = pos[i][0], pos[i][1]
-                out.append(f'<line x1="{px(x):.1f}" y1="{py(d) + 12}" x2="{px(cx):.1f}" '
-                           f'y2="{py(cd) - 12}" stroke="{FAINT}" stroke-width="1.25"/>')
+                out.append(
+                    f'<line x1="{px(x):.1f}" y1="{py(d) + 12}" x2="{px(cx):.1f}" '
+                    f'y2="{py(cd) - 12}" stroke="{FAINT}" stroke-width="1.25"/>'
+                )
         for x, d, v, mem, _ids in pos.values():
             label = f"best({v})"
             tw = 6.9 * len(label) + 10
             dash = ' stroke-dasharray="4 3"' if mem else ""
-            out.append(f'<rect x="{px(x) - tw / 2:.1f}" y="{py(d) - 12}" width="{tw:.1f}" '
-                       f'height="24" rx="6" fill="{WASH if mem else "#ffffff"}" '
-                       f'stroke="{MUTED if mem else INK}" stroke-width="1.25"{dash}/>')
+            out.append(
+                f'<rect x="{px(x) - tw / 2:.1f}" y="{py(d) - 12}" width="{tw:.1f}" '
+                f'height="24" rx="6" fill="{WASH if mem else "#ffffff"}" '
+                f'stroke="{MUTED if mem else INK}" stroke-width="1.25"{dash}/>'
+            )
             out.append(_text(px(x), py(d) + 4, label, 12, MUTED if mem else INK, "middle"))
             height = max(height, py(d) + 20)
         if cache:
-            out.append(_text(k * half + 20, height + 18, "пунктир — ответ взят из памяти", 13,
-                             MUTED))
+            out.append(
+                _text(k * half + 20, height + 18, "пунктир — ответ взят из памяти", 13, MUTED)
+            )
     height += 30
     out.insert(0, f'<line x1="{half}" y1="8" x2="{half}" y2="{height - 8}" stroke="{FAINT}"/>')
-    return (f'<svg viewBox="0 0 {width} {height}" role="img" '
-            f'aria-label="Дерево вызовов best без запоминания и с запоминанием">'
-            + "".join(out) + "</svg>")
+    return (
+        f'<svg viewBox="0 0 {width} {height}" role="img" '
+        f'aria-label="Дерево вызовов best без запоминания и с запоминанием">'
+        + "".join(out)
+        + "</svg>"
+    )
 
 
 def topo_frames(edges) -> list[tuple[str, str]]:
@@ -1513,11 +1625,19 @@ def topo_frames(edges) -> list[tuple[str, str]]:
     def snap(caption, cur=None):
         values = {v: f"входит: {indeg[v]}" for v in nodes if v not in done}
         order = ", ".join(map(str, done)) or "пока пуст"
-        frames.append((graph_svg(edges, values=values, current=cur, faded=done,
-                                 footer=[f"Порядок: {order}"]), caption))
+        frames.append(
+            (
+                graph_svg(
+                    edges, values=values, current=cur, faded=done, footer=[f"Порядок: {order}"]
+                ),
+                caption,
+            )
+        )
 
-    snap("Под каждой вершиной — сколько рёбер в неё входит. Ищем вершину, в "
-         "которую не входит ни одно ребро.")
+    snap(
+        "Под каждой вершиной — сколько рёбер в неё входит. Ищем вершину, в "
+        "которую не входит ни одно ребро."
+    )
     while len(done) < len(nodes):
         v = next(x for x in nodes if x not in done and indeg[x] == 0)
         nxt = [x for u, x, _ in edges if u == v]
@@ -1525,14 +1645,19 @@ def topo_frames(edges) -> list[tuple[str, str]]:
             indeg[x] -= 1
         done.append(v)
         if nxt:
-            names = (", ".join(map(str, nxt[:-1])) + " и " + str(nxt[-1])
-                     if len(nxt) > 1 else str(nxt[0]))
+            names = (
+                ", ".join(map(str, nxt[:-1])) + " и " + str(nxt[-1])
+                if len(nxt) > 1
+                else str(nxt[0])
+            )
             tail = f" Убираем её рёбра: у {names} входящих рёбер становится меньше."
         else:
             tail = ""
         snap(f"В {v} ничего не входит — записываем её в порядок.{tail}", v)
-    snap(f"Все вершины записаны: {', '.join(map(str, done))}. Каждое ребро идёт от более "
-         "ранней вершины к более поздней.")
+    snap(
+        f"Все вершины записаны: {', '.join(map(str, done))}. Каждое ребро идёт от более "
+        "ранней вершины к более поздней."
+    )
     return frames
 
 
@@ -1555,8 +1680,13 @@ def path_builder_data(edges, source=1, target=100, caption="") -> dict:
             return Decimal(0)
         return min((w + f(x) for x, w in graph.get(v, [])), default=Decimal("Infinity"))
 
-    return {"kind": "graph", **graph_geometry(edges), "source": source,
-            "target": target, "shortest": str(f(source))}
+    return {
+        "kind": "graph",
+        **graph_geometry(edges),
+        "source": source,
+        "target": target,
+        "shortest": str(f(source)),
+    }
 
 
 def path_builder(edges, source=1, target=100, caption="") -> str:

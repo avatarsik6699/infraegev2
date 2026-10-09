@@ -88,7 +88,7 @@ const task = (
     solutionRevision: 1,
     theoryLinks: [{ hash, label: "Теория" }],
     countsTowardMastery,
-  }) as PracticeTaskTypes.Task;
+  }) as unknown as PracticeTaskTypes.Task;
 const tasks = [
   task("core-1", "delenie-s-ostatkom"),
   task("core-2", "otbor-delitelej"),

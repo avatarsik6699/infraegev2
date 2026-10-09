@@ -1,6 +1,6 @@
-# Compacted change history — 01–153
+# Compacted change history — 01–172
 
-Changes 01–110 and 111–153 have separate immutable source snapshots. Current contracts remain
+Changes 01–110, 111–153 and 154–172 have separate immutable source snapshots. Current contracts remain
 SPEC, FRONTEND, STACK and the owning runbooks; this checkpoint preserves historical decisions,
 approvals and unresolved risks. Local archive/publication status is not live release evidence.
 The metadata is verified by `python3 scripts/change_history.py inspect` before history-dependent work.
@@ -318,6 +318,185 @@ The metadata is verified by `python3 scripts/change_history.py inspect` before h
         "docs/changes/archive/153-data-clustering-lesson.md"
       ],
       "source_digest": "bbae14e4164ec88ad4ecbab48a6c8f02bca602c59d020d5ad6ebc361cdcb1376"
+    },
+    {
+      "covered_from": 154,
+      "covered_through": 172,
+      "source_commit": "a8aaf234206dd301b311700c1eb031e65489cfce",
+      "date": "2026-10-09",
+      "missing_numbers": [],
+      "source_paths": [
+        "docs/artifacts/154-repository-audit.md",
+        "docs/artifacts/change-156/balanced-scale/desktop.png",
+        "docs/artifacts/change-156/balanced-scale/mobile.png",
+        "docs/artifacts/change-156/balanced-scale/verification.md",
+        "docs/artifacts/change-156/content-audit/design-a.md",
+        "docs/artifacts/change-156/content-audit/desktop-example.png",
+        "docs/artifacts/change-156/content-audit/desktop-outcome.png",
+        "docs/artifacts/change-156/content-audit/evidence-b.md",
+        "docs/artifacts/change-156/content-audit/metrics.json",
+        "docs/artifacts/change-156/content-audit/mobile-code.png",
+        "docs/artifacts/change-156/content-audit/mobile-example.png",
+        "docs/artifacts/change-156/content-audit/mobile-outcome.png",
+        "docs/artifacts/change-156/content-audit/report.md",
+        "docs/artifacts/change-156/content-pilot/desktop-example.png",
+        "docs/artifacts/change-156/content-pilot/desktop-outcome.png",
+        "docs/artifacts/change-156/content-pilot/mobile-code.png",
+        "docs/artifacts/change-156/content-pilot/mobile-example.png",
+        "docs/artifacts/change-156/content-pilot/mobile-outcome.png",
+        "docs/artifacts/change-156/content-pilot/verification.md",
+        "docs/artifacts/change-156/final-audit/dense-desktop.png",
+        "docs/artifacts/change-156/final-audit/dense-mobile-enlarged.png",
+        "docs/artifacts/change-156/final-audit/dense-mobile.png",
+        "docs/artifacts/change-156/final-audit/dense-observations.json",
+        "docs/artifacts/change-156/final-audit/verification.md",
+        "docs/artifacts/change-156/final-polish/desktop-arrival.png",
+        "docs/artifacts/change-156/final-polish/desktop-checkpoint.png",
+        "docs/artifacts/change-156/final-polish/desktop-example.png",
+        "docs/artifacts/change-156/final-polish/desktop-help.png",
+        "docs/artifacts/change-156/final-polish/metrics.json",
+        "docs/artifacts/change-156/final-polish/mobile-arrival.png",
+        "docs/artifacts/change-156/final-polish/mobile-checkpoint.png",
+        "docs/artifacts/change-156/final-polish/mobile-code.png",
+        "docs/artifacts/change-156/final-polish/mobile-enlarged-context.png",
+        "docs/artifacts/change-156/final-polish/mobile-enlarged.png",
+        "docs/artifacts/change-156/final-polish/mobile-example.png",
+        "docs/artifacts/change-156/final-polish/mobile-help.png",
+        "docs/artifacts/change-156/final-polish/mobile-no-js-enlarged-context.png",
+        "docs/artifacts/change-156/final-polish/mobile-no-js-enlarged.png",
+        "docs/artifacts/change-156/final-polish/mobile-outline.png",
+        "docs/artifacts/change-156/final-polish/verification.md",
+        "docs/artifacts/change-156/learning-blocks/before-mobile-checkpoint.png",
+        "docs/artifacts/change-156/learning-blocks/desktop-callout.png",
+        "docs/artifacts/change-156/learning-blocks/desktop-checkpoint.png",
+        "docs/artifacts/change-156/learning-blocks/desktop-help.png",
+        "docs/artifacts/change-156/learning-blocks/desktop-mistake.png",
+        "docs/artifacts/change-156/learning-blocks/mobile-callout.png",
+        "docs/artifacts/change-156/learning-blocks/mobile-checkpoint.png",
+        "docs/artifacts/change-156/learning-blocks/mobile-help.png",
+        "docs/artifacts/change-156/learning-blocks/mobile-mistake.png",
+        "docs/artifacts/change-156/learning-blocks/verification.md",
+        "docs/artifacts/change-156/links-desktop.png",
+        "docs/artifacts/change-156/links-mobile.png",
+        "docs/artifacts/change-156/scale-followup/desktop-example.png",
+        "docs/artifacts/change-156/scale-followup/desktop-help.png",
+        "docs/artifacts/change-156/scale-followup/mobile-code.png",
+        "docs/artifacts/change-156/scale-followup/mobile-example.png",
+        "docs/artifacts/change-156/scale-followup/mobile-help.png",
+        "docs/artifacts/change-156/scale-followup/verification.md",
+        "docs/artifacts/change-156/site-rollout/account-desktop-200.png",
+        "docs/artifacts/change-156/site-rollout/account-desktop.png",
+        "docs/artifacts/change-156/site-rollout/account-mobile-200.png",
+        "docs/artifacts/change-156/site-rollout/account-mobile.png",
+        "docs/artifacts/change-156/site-rollout/browser-observations.json",
+        "docs/artifacts/change-156/site-rollout/consent-desktop.png",
+        "docs/artifacts/change-156/site-rollout/consent-mobile.png",
+        "docs/artifacts/change-156/site-rollout/courses-desktop-200.png",
+        "docs/artifacts/change-156/site-rollout/courses-desktop.png",
+        "docs/artifacts/change-156/site-rollout/courses-mobile-200.png",
+        "docs/artifacts/change-156/site-rollout/courses-mobile.png",
+        "docs/artifacts/change-156/site-rollout/courses-tablet.png",
+        "docs/artifacts/change-156/site-rollout/ege-desktop.png",
+        "docs/artifacts/change-156/site-rollout/ege-mobile.png",
+        "docs/artifacts/change-156/site-rollout/home-desktop.png",
+        "docs/artifacts/change-156/site-rollout/home-mobile.png",
+        "docs/artifacts/change-156/site-rollout/not-found-desktop.png",
+        "docs/artifacts/change-156/site-rollout/not-found-mobile.png",
+        "docs/artifacts/change-156/site-rollout/pagination-200-js.png",
+        "docs/artifacts/change-156/site-rollout/pagination-200-native.png",
+        "docs/artifacts/change-156/site-rollout/password-reset-desktop.png",
+        "docs/artifacts/change-156/site-rollout/password-reset-mobile.png",
+        "docs/artifacts/change-156/site-rollout/practice-200.png",
+        "docs/artifacts/change-156/site-rollout/practice-desktop-200.png",
+        "docs/artifacts/change-156/site-rollout/practice-desktop.png",
+        "docs/artifacts/change-156/site-rollout/practice-detail-desktop.png",
+        "docs/artifacts/change-156/site-rollout/practice-detail-mobile.png",
+        "docs/artifacts/change-156/site-rollout/practice-mobile-200.png",
+        "docs/artifacts/change-156/site-rollout/practice-mobile.png",
+        "docs/artifacts/change-156/site-rollout/practice-sort-200.png",
+        "docs/artifacts/change-156/site-rollout/privacy-desktop.png",
+        "docs/artifacts/change-156/site-rollout/privacy-mobile.png",
+        "docs/artifacts/change-156/site-rollout/python-lesson-desktop.png",
+        "docs/artifacts/change-156/site-rollout/python-lesson-mobile.png",
+        "docs/artifacts/change-156/site-rollout/python-overview-desktop.png",
+        "docs/artifacts/change-156/site-rollout/python-overview-mobile.png",
+        "docs/artifacts/change-156/site-rollout/recursion-desktop.png",
+        "docs/artifacts/change-156/site-rollout/recursion-mobile.png",
+        "docs/artifacts/change-156/site-rollout/register-desktop.png",
+        "docs/artifacts/change-156/site-rollout/register-mobile.png",
+        "docs/artifacts/change-156/site-rollout/sign-in-desktop.png",
+        "docs/artifacts/change-156/site-rollout/sign-in-mobile.png",
+        "docs/artifacts/change-156/site-rollout/verification-error-desktop.png",
+        "docs/artifacts/change-156/site-rollout/verification-error-mobile.png",
+        "docs/artifacts/change-156/site-rollout/verification-success-desktop.png",
+        "docs/artifacts/change-156/site-rollout/verification-success-mobile.png",
+        "docs/artifacts/change-156/site-rollout/verification.md",
+        "docs/artifacts/change-164/candidates/zh-docs-textbook/README.md",
+        "docs/artifacts/change-164/candidates/zh-docs-textbook/desktop.png",
+        "docs/artifacts/change-164/candidates/zh-docs-textbook/mobile.png",
+        "docs/artifacts/change-164/candidates/zh-docs-textbook/mockup.html",
+        "docs/artifacts/change-164/mockups/build6.py",
+        "docs/artifacts/change-170/mascot/demo.html",
+        "docs/artifacts/lessons/16-rekursiya.audit.md",
+        "docs/artifacts/lessons/16-rekursiya.bank-tags.json",
+        "docs/artifacts/lessons/16-rekursiya.checks/bank-check.json",
+        "docs/artifacts/lessons/16-rekursiya.checks/lesson_numbers.py",
+        "docs/artifacts/lessons/16-rekursiya.checks/tag_bank.py",
+        "docs/artifacts/lessons/16-rekursiya.checks/task_numbers.py",
+        "docs/artifacts/lessons/16-rekursiya.checks/verify_bank.py",
+        "docs/artifacts/lessons/16-rekursiya.quality.md",
+        "docs/artifacts/lessons/17-number-sequences.quality.md",
+        "docs/artifacts/lessons/24-string-processing.quality.md",
+        "docs/artifacts/lessons/26-array-processing.quality.md",
+        "docs/artifacts/lessons/27-data-analysis.quality.md",
+        "docs/artifacts/lessons_list.md",
+        "docs/artifacts/references/ege_themes_illustrations/generated/13_theme.png",
+        "docs/artifacts/references/ege_themes_illustrations/generated/16_theme.png",
+        "docs/artifacts/references/ege_themes_illustrations/generated/17_theme.png",
+        "docs/artifacts/references/ege_themes_illustrations/generated/19_21_theme.png",
+        "docs/artifacts/references/ege_themes_illustrations/generated/1_theme.png",
+        "docs/artifacts/references/ege_themes_illustrations/generated/22_theme.png",
+        "docs/artifacts/references/ege_themes_illustrations/generated/23_theme.png",
+        "docs/artifacts/references/ege_themes_illustrations/generated/24_theme.png",
+        "docs/artifacts/references/ege_themes_illustrations/generated/25_theme.png",
+        "docs/artifacts/references/ege_themes_illustrations/generated/26_theme.png",
+        "docs/artifacts/references/ege_themes_illustrations/generated/27_theme.png",
+        "docs/artifacts/references/ege_themes_illustrations/generated/5_theme.png",
+        "docs/artifacts/references/ege_themes_illustrations/generated/README.md",
+        "docs/artifacts/references/for_new_design/2026-10-06003239.png",
+        "docs/artifacts/references/for_new_design/colorized_page.webp",
+        "docs/artifacts/references/for_new_design/description_with_files.webp",
+        "docs/artifacts/references/for_new_design/documentation_content.webp",
+        "docs/artifacts/references/for_new_design/eduix.webp",
+        "docs/artifacts/references/for_new_design/fixes_after_redisign.md",
+        "docs/artifacts/references/for_new_design/ideavault_landing_main_page1.webp",
+        "docs/artifacts/references/for_new_design/ideavault_landing_main_page2.webp",
+        "docs/artifacts/references/for_new_design/mascot-lotus-reference.png",
+        "docs/artifacts/references/for_new_design/photo_2026-10-05_12-53-59.jpg",
+        "docs/artifacts/references/for_new_design/photo_2026-10-06_11-13-17.jpg",
+        "docs/artifacts/references/for_new_design/readme.md",
+        "docs/changes/archive/154-repository-audit-cleanup.md",
+        "docs/changes/archive/155-ege-reference-illustrations.md",
+        "docs/changes/archive/156-recursion-style-pilot.md",
+        "docs/changes/archive/157-recursion-content-depth.md",
+        "docs/changes/archive/158-lesson-video-illustrations.md",
+        "docs/changes/archive/159-recursion-illustrations.md",
+        "docs/changes/archive/160-theory-blocks-polish.md",
+        "docs/changes/archive/161-production-runtime-reliability.md",
+        "docs/changes/archive/162-release-quality-gate.md",
+        "docs/changes/archive/163-codex-sol-upgrade.md",
+        "docs/changes/archive/164-client-redesign.md",
+        "docs/changes/archive/165-monitoring-signal-corrections.md",
+        "docs/changes/archive/166-pcre2-security-patches.md",
+        "docs/changes/archive/167-subtopic-pages.md",
+        "docs/changes/archive/168-profile-progress-dashboard.md",
+        "docs/changes/archive/169-screens-to-mockups.md",
+        "docs/changes/archive/170-redesign-release-readiness.md",
+        "docs/changes/archive/171-lesson-pipeline-platform.md",
+        "docs/changes/archive/172-topic-23-graphs.md",
+        "docs/runbooks/practice-transition.md"
+      ],
+      "source_digest": "28fe3ab90c601c4fde6c835a9efdad5b8d7421736957643eb37f8f65e0bcf5ee"
     }
   ]
 }
@@ -527,3 +706,57 @@ bytes to stdout; redirect binary data only to a new temporary file. Missing sour
 corrupt metadata, incomplete ranges or mismatched hashes fail closed. Fetch full recorded history
 from a trusted copy; never replace the source with HEAD. Change 154 and later changes remain ordinary
 archives until another explicitly approved compaction. This saves checkout space, not `.git` space.
+
+## Snapshot 154–172: outcomes and decisions
+
+Compacted in Change 173 on 2026-10-09 from source `a8aaf234206dd301b311700c1eb031e65489cfce`.
+The exact manifest above replaces 19 completed changes, retired artifacts (Change 154 audit,
+Change 155/156 evidence, unused 164 design candidate, mascot demo page, mood board, one-off
+recursion bank checks) and the completed `practice-transition` runbook. Six lesson audit/quality
+records deleted in `10c759b` outside compaction were restored from the source commit for this
+manifest, then removed again. Live inputs stayed or moved (Change 173): lesson design stands →
+`content/lesson-design/`, lesson-media engine → `scripts/lesson_media/`, mascot pipeline →
+`scripts/mascot/`, v5 mockups → `docs/artifacts/mockups-v5/`, release readiness evidence →
+`docs/artifacts/release-readiness.md`.
+
+| Changes | Outcome and retained decision |
+|---|---|
+| 154 | Whole-repository audit, sequential history snapshots, compaction of 111–153; cleanup cannot follow symlink ancestors. |
+| 155 | Twelve topic illustrations on `/ege` (topic 13 kept its source-prefix mapping by user request). Retired in 169; masters are recoverable here. |
+| 156 | Recursion pilot style rolled out to all lessons/pages: blue links/outline approved, link underline on hover only, neutral tabs, no added strong/em. |
+| 157 | Recursion lesson to full task-16 coverage (15 sections, 14 tasks, mastery 12/14); `@lru_cache(None)` confirmed by the architect. Theory-link tags were derived by the retired one-off checks. |
+| 158 | Short silent looped lesson video (WebM+MP4, poster, play/pause and seek bar per 2026-09-29 decision) generated by a Pillow engine; Nginx serves `/lesson-media` because the Node server lacks Range. Architect accepted video weight above the 300 KB guideline. |
+| 159 | Static hand-drawn lesson figures from the same engine: few figures, at least two blocks from a video, faint brand mark; light code blocks. |
+| 160 | Calm theory blocks (Procedure/Callout/Checkpoint/Mistake); `mistake` only for real traps. D2 removal candidates (lessons 17, 24) were not accepted and remain queued. |
+| 161 | Account-artifact purge runs the app venv; API memory observation (slab-dominated, no growth) recorded without a code fix; AST interpreter replaced `eval` in the local task validator. |
+| 162–166 | Release unblockers: E501, PCRE2 exact patched packages, restore-drill false errors removed; Codex GPT-6.1 Sol roles. Codex history warning from 163 T9 is an accepted residual limit (support packet outside the repo). |
+| 164 | Client redesign: `DESIGN.md` via impeccable, candidate Ж (textbook) approved, Onest/JetBrains Mono, no callout side bar, pre-164 visual rules only in `git show 01252a9:docs/FRONTEND.md`. |
+| 167–169 | Subtopic pages `/ege/{topic}/{subtopic}` + `/praktika` (301 from `/ege/{topic}`), profile dashboard from existing endpoints, every page matched to v5 mockups; old catalog drawings replaced by placeholders. |
+| 170 | Redesign stabilisation: e2e migration, mascot scenes, LCP measurement (modest deviation accepted, CI budgets kept honest). **Closed without release on 2026-10-08**; release moves to a future change. |
+| 171 | Binding lesson pipeline platform: generated SVG figures inline (Onest labels), mastery counts core subtopics + final page, per-subtopic self-checks, topic 25 rebuilt and old `integer-processing` replaced without redirects. |
+| 172 | Topic 23 graphs from its stand: levels follow the 2027 demo task, recursion + `@cache` core, Bellman–Ford advanced, `PathBuilder` sandbox, original graph files; no «Решу ЕГЭ» mentions. |
+
+## Snapshot 154–172: unresolved risks and acceptance limits
+
+- Changes 164 and 167–172 are merged into local `main` only; nothing is pushed or deployed. The
+  future release change must close SPEC §11 prerequisites (formal privacy acceptance, fresh
+  production account restore proof) and refresh `docs/artifacts/release-readiness.md`.
+- Change 170 D2 (historical pre-repair dev schema state) has no proven cause; the architect accepted
+  the schema guard as closure on 2026-10-04.
+- Lighthouse LCP on long lessons (≈5 s locally) predates the redesign; the architect accepted good
+  overall performance over ideal numbers. Not a fresh production measurement.
+- Change 165: disk-wait episodes and historical HTTP 500 have no established root cause; VPS network
+  configuration and uptime targets are operational follow-ups.
+- Change 160 D2 mistake-section removals in lessons 17/24 remain undecided.
+- Dev-bank e2e failures from stale local data were an environment limitation; isolated seeded runs
+  (`scripts/run-isolated-browser-audit.sh`) are the reference.
+- Lesson media reference books stay outside the repository by decision (158).
+
+## Recovery after Change 173
+
+```bash
+python3 scripts/change_history.py read docs/changes/archive/170-redesign-release-readiness.md
+python3 scripts/change_history.py read docs/artifacts/change-156/final-audit/verification.md
+```
+
+Paths present in several snapshots require `--source <full SHA>`.

@@ -4,6 +4,7 @@ set -euo pipefail
 repo_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)
 mode=${1:---apply}
 artifacts_found=0
+removed_count=0
 
 if [[ $mode != --apply && $mode != --dry-run && $mode != --check ]]; then
   echo 'usage: scripts/clean-local-artifacts.sh [--dry-run|--check|--apply]' >&2
@@ -40,7 +41,7 @@ remove_path() {
       ;;
     --apply)
       rm -rf -- "$target"
-      printf 'removed %s\n' "${target#"$repo_dir"/}"
+      removed_count=$((removed_count + 1))
       ;;
   esac
 }
@@ -52,13 +53,11 @@ static_targets=(
   .tanstack
   .fallow
   .fallow-review
-  .ruff_cache
   apps/web/.output
   apps/web/.vinxi
   apps/web/.tanstack
   apps/web/.fallow
   apps/web/dist
-  apps/web/.eslintcache
 )
 
 for relative_path in "${static_targets[@]}"; do
@@ -72,7 +71,8 @@ done < <(
     -name 'C:\\Users\\user\\AppData\\Local\\lighthouse.*' -print
 )
 
-for search_root in "$repo_dir/apps/api" "$repo_dir/ops" "$repo_dir/scripts" "$repo_dir/docs/artifacts"; do
+# Lint and test caches (.eslintcache, .ruff_cache, .pytest_cache) stay: the next gate reuses them.
+for search_root in "$repo_dir/apps/api" "$repo_dir/ops" "$repo_dir/scripts" "$repo_dir/content" "$repo_dir/docs/artifacts"; do
   require_local_parent "$search_root/cache"
   [[ -d $search_root ]] || continue
   while IFS= read -r cache_dir; do
@@ -80,17 +80,13 @@ for search_root in "$repo_dir/apps/api" "$repo_dir/ops" "$repo_dir/scripts" "$re
   done < <(
     find "$search_root" \
       -type d \( -name .venv -o -name node_modules \) -prune -o \
-      -type d \( -name __pycache__ -o -name .pytest_cache -o -name .ruff_cache \) -print
+      -type d -name __pycache__ -print
   )
 done
 
 empty_candidates=(
   apps/web/.impeccable/live/annotations
   apps/web/.impeccable/live/sessions
-  apps/web/src/entities/course/api
-  apps/web/src/features/course-progress/model
-  apps/web/src/features/course-progress
-  apps/web/src/shared/components/popover
 )
 
 for relative_path in "${empty_candidates[@]}"; do
@@ -123,6 +119,8 @@ case $mode in
     echo 'Repository contains no allowlisted local artifacts.'
     ;;
   --apply)
-    echo 'Regenerable local reports, build outputs, and caches removed.'
+    # Applying re-scans with --check so one command both cleans and proves the result.
+    echo "Removed $removed_count regenerable local artifact path(s)."
+    exec bash "$0" --check
     ;;
 esac

@@ -26,7 +26,7 @@ const lesson = graphAnalysisLesson;
 const SOURCE = resolve(
   process.cwd(),
   "../..",
-  "docs/artifacts/lesson-design/topic-23",
+  "content/lesson-design/topic-23",
 );
 const authoredContent = [
   ...lesson.theory.map(({ explanation }) => explanation),

@@ -1,9 +1,8 @@
 # Rules of operation of the AI agent during infraege development
 
-This workflow is specialized for **web applications** (frontend + backend + database) — it is not
-a general-purpose SDD framework. These rules are the contract any AI agent (Claude Code, Codex,
-others) must follow when working on this project. Stack-specific commands, file layout, and
-tooling live in [`docs/STACK.md`](docs/STACK.md).
+This workflow is specialized for **web applications** (frontend + backend + database). These rules
+are the contract any AI agent (Claude Code, Codex, others) must follow in this project.
+Stack-specific commands, file layout and tooling live in [`docs/STACK.md`](docs/STACK.md).
 
 ## Core Rules
 
@@ -15,59 +14,49 @@ tooling live in [`docs/STACK.md`](docs/STACK.md).
 3. **No Guessing**: If a requirement is genuinely ambiguous and risky, ask a concise question
    instead of inventing behavior.
 4. **Proportional Gates**: `/work` runs one affected-area Critical Gate for its complete target
-   set; default `/ship` runs only checks invalidated since that result. Full Gate runs only on
-   explicit `/ship --full`. Release requires affected coverage, unpublished-commit secrets,
-   relevant dependency checks, exact-SHA image scan and Release Gate. Unchecked Backlog still
-   blocks shipping.
+   set (`python3 scripts/gate.py affected` suggests the groups); default `/ship` runs only checks
+   invalidated since that result. Full Gate runs only on explicit `/ship --full`. Release requires
+   affected coverage, unpublished-commit secrets, relevant dependency checks, exact-SHA image scan
+   and Release Gate. Broad security, browser and Lighthouse audits are weekly/manual; auth, schema,
+   dependency and release-image checks stay mandatory when their own boundary changes. Unchecked
+   Backlog blocks shipping. Policy: [verification runbook](docs/runbooks/verification.md).
 5. **Security**: No hardcoded secrets. Use `.env`, environment variables, and typed settings
-   appropriate to the stack. Broad scans are weekly/manual; `/ship --release` checks every
-   unpublished commit for secrets, audits changed dependencies and verifies applicable images.
+   appropriate to the stack.
 6. **Open Backlog**: When the architect reports a finding, bug, or follow-up in chat mid-session,
    append it to the active change's Backlog with a new ID before acting on it — never fix it
    off-list. See `docs/playbooks/work.md` § Backlog append.
 7. **Required Tooling**: Domain-mandated tools (Playwriter first for interactive frontend UI and
-   LSP for TypeScript/Python) are not optional judgment calls —
-   see `docs/STACK.md` § Required Tooling and use them before checking an item off.
+   LSP for TypeScript/Python) are not optional judgment calls — see `docs/STACK.md` § Required
+   Tooling and use them before checking an item off.
 8. **E2E Architecture**: Playwright specs import `test` only from `apps/web/e2e/fixtures.ts` and
-   consume domain fixtures only. Specs do not construct Page Objects or call low-level Playwright
-   APIs; Page Objects own actions/assertions, while fixtures own construction and cleanup. Extend
-   those abstractions instead of weakening the policy enforced by `pnpm --filter web lint`.
+   consume domain fixtures only; Page Objects own actions/assertions, fixtures own construction
+   and cleanup. Extend those abstractions instead of weakening the policy enforced by
+   `pnpm --filter web lint` (details: STACK § Testing).
 9. **Web Platform Boundaries**: Production `apps/web` code does not call `window`, `document`,
    storage, `navigator`, `fetch`, or `process` ad hoc. Put browser/platform access in the owning
    `shared/lib` adapter, network access in the owning slice's `api/`, and server environment access
-   in `*.server.ts`; consume semantic functions elsewhere. Extend the boundary and its lint
-   self-test instead of adding an inline bypass.
+   in `*.server.ts`. Extend the boundary and its lint self-test instead of adding an inline bypass.
 10. **Frontend Contract**: Before writing or reviewing any `apps/web/src` code, read
     [`docs/FRONTEND.md`](docs/FRONTEND.md) — the binding architecture, code-shape, state,
-    accessibility, SSR and interaction contract for that layer tree — and, for any visual work,
-    [`DESIGN.md`](DESIGN.md), the visual system maintained through the `impeccable` skill. Follow
-    them exactly; where they and this file overlap on a frontend specific, they govern.
+    accessibility, SSR and interaction contract — and, for any visual work,
+    [`DESIGN.md`](DESIGN.md), the visual system maintained through the `impeccable` skill. Where
+    they and this file overlap on a frontend specific, they govern.
 11. **Repository Hygiene**: Reports, build outputs and caches may remain only until their evidence
-    has been analyzed. Finish `/work`, `/ship` and ad-hoc test/lint/build sessions with
-    `make clean-dry-run`, review the allowlist, then run `make clean` and `make clean-check`.
-    Never substitute `git clean -fdX`: ignored dependencies, environments, secrets and data are
+    has been analyzed. Finish code/test/build sessions with `make clean` (removes the allowlist,
+    then fails if anything remains; lint/test caches are kept). Docs-only sessions skip it. Never
+    substitute `git clean -fdX`: ignored dependencies, environments, secrets and data are
     protected. Temporary tools such as Lighthouse must clean their own external workspaces on exit.
 
-## Verification cadence
-
-One affected-area Critical completes a coherent `/work` set. `/ship` runs only checks invalidated
-since that observation; it does not repeat unchanged evidence. Full is explicit (`/ship --full`),
-never an automatic response to a shared path or release. Broad security, browser and Lighthouse
-audits are weekly/manual. Auth, schema, dependency and release-image checks stay mandatory when
-their own boundary changes. Do not build local evidence caches, schedulers, snapshots or audit
-import services to implement this policy.
+Do not build local evidence caches, schedulers, snapshots or audit import services to implement
+these rules.
 
 ## Interactive browser connection
 
-Use Playwriter first for interactive browser work; read its skill before use.
-In this WSL environment it connects to ordinary Windows Chrome with the Playwriter
-extension in profile `Default`. Playwright/MCP Chrome instances with temporary
-profiles and `--disable-extensions` cannot provide that connection.
-Before treating `extension_not_connected` as tool unavailability, check the profile,
-start ordinary Chrome if absent, and retry. Follow
-[STACK's browser connection procedure](docs/STACK.md#interactive-browser-connection-wsl)
-and the [known gotcha](docs/KNOWN_GOTCHAS.md#playwriter-extension-not-connected-when-only-playwright-chrome-is-running).
-Explain any fallback after those checks. Automated repository test runners stay unchanged.
+Use Playwriter first for interactive browser work; read its skill before use. In this WSL
+environment it needs ordinary Windows Chrome with the extension in profile `Default`; check the
+profile, start Chrome if absent and retry before treating `extension_not_connected` as
+unavailability. Follow [STACK's procedure](docs/STACK.md#interactive-browser-connection-wsl) and
+explain any fallback. Automated repository test runners stay unchanged.
 
 ## Reading scope
 
@@ -83,49 +72,33 @@ Archive/history is on-demand evidence, not mandatory context for every task.
 ## Stack Conventions
 
 Before writing code, running commands, or reasoning about project layout, read
-[`docs/STACK.md`](docs/STACK.md). It is the source of truth for concrete technologies, setup
-commands, gate commands (Critical/Full/Release), required tooling, and per-module style guides.
-
-If a stack convention is missing from `STACK.md`, do not invent it. Ask the user, then update
-`STACK.md` so the answer is durable.
+[`docs/STACK.md`](docs/STACK.md). If a stack convention is missing from it, do not invent it: ask
+the user, then update `STACK.md` so the answer is durable.
 
 ## Library Documentation Lookup
 
-Before writing or reviewing code that uses any external library, framework, SDK, CLI tool, or cloud
-service, consult up-to-date documentation in this preference order:
-
-1. `Context7` via MCP, if the runtime exposes it
-2. For OpenAI products specifically, the official OpenAI developer docs MCP server
-3. `ctx7` CLI: `npx ctx7@latest library "<name>"` then
-   `npx ctx7@latest docs /org/project "<question>"`
-4. Official library docs / primary-source API references
-
-Rules:
-
-- Use the official library name with correct punctuation (`Next.js`, not `nextjs`).
-- Do not rely on training-data knowledge alone.
-- Skip only for pure refactoring, business-logic debugging, code review of existing code, or
-  general programming concepts not tied to a specific library.
-- Cap at 3 `ctx7` calls per question. If unclear, ask rather than guessing.
-- Never include secrets in documentation queries.
+Before writing or reviewing code that uses an external library, framework, SDK, CLI tool or cloud
+service, consult current documentation: Context7 MCP when exposed; the official OpenAI docs MCP for
+OpenAI products; otherwise `npx ctx7@latest library "<name>"` then
+`npx ctx7@latest docs /org/project "<question>"` (official name and punctuation, at most 3 calls
+per question); otherwise primary-source docs. Do not rely on training data alone. Skip only for
+pure refactoring, business-logic debugging, code review of existing code or general concepts.
+Never include secrets in queries; if unclear, ask rather than guess.
 
 ## Repo Memory Files
 
-Keep lightweight long-lived project memory in `docs/`:
-
-- `docs/SPEC.md`'s own git history — the record of spec-level decisions (there is no separate
-  decision log file; diff `docs/SPEC.md` to see what changed and when).
-- `docs/changes/archive/COMPACTED.md`, when present, summarizes a verified immutable source
-  snapshot; `python3 scripts/change_history.py inspect` validates coverage and current numbering.
-  Missing/corrupt metadata or unavailable source history must fail closed. Ordinary archives stay
-  immutable; only an explicitly approved compaction change may replace them with a verified
-  checkpoint, preserving unresolved items, accepted risks and human approvals.
-- Each `docs/changes/*.md` (and, once shipped, `docs/changes/archive/*.md`) § Implementation Notes
-  — non-obvious deviations for that unit of work.
+- `docs/SPEC.md`'s git history is the record of spec-level decisions (no separate decision log).
+- `docs/changes/*.md` (and `docs/changes/archive/*.md`) § Implementation Notes — non-obvious
+  deviations for that unit of work.
+- `docs/changes/archive/COMPACTED.md` summarizes verified immutable source snapshots;
+  `python3 scripts/change_history.py inspect` validates coverage and numbering, and missing/corrupt
+  metadata or unavailable source history fails closed. Ordinary archives stay immutable; only an
+  explicitly approved compaction change may replace them with a verified checkpoint that preserves
+  unresolved items, accepted risks and human approvals ([procedure](docs/runbooks/change-history.md)).
 - `docs/KNOWN_GOTCHAS.md` — recurring pitfalls, symptoms, and fixes.
 
-There is no separate contract-mirror file to keep in sync. The codebase is the source of truth for
-what currently exists; `docs/changes/archive/` is the source of truth for what's already shipped.
+The codebase is the source of truth for what currently exists; the archive is the source of truth
+for what has shipped.
 
 ## Filesystem Permission Failures
 
@@ -139,89 +112,66 @@ fix. If no gotcha entry exists, ask how to proceed and add the resolution to `KN
 ## Git Workflow
 
 1. `/plan` creates and switches to `feature/NN-slug` for the change it scaffolds. `/work` checks
-   the current branch first and switches (creating if needed) before doing anything else — the
-   architect should not need to say "switch to the feature branch" in chat.
+   the current branch first and switches (creating if needed) before doing anything else.
 2. Never use destructive git commands or force-push without explicit instruction.
 3. Use conventional commits: `feat|fix|chore|docs|test|refactor(scope): description`.
-4. `/ship` runs the Critical Gate by default; `/ship --full` runs the manually requested Full
-   Gate. On PASS either mode commits outstanding work, merges `feature/NN-slug` into local `main`,
-   and archives the change file. Do not merge or push outside of `/ship`.
-5. `/ship --release` runs affected coverage and fresh candidate security,
-   prepublication checks, then pushes `main`, verifies exact-SHA CI/published images, and verifies
-   the resulting deploy via `gh` and public health. Do not push to `origin/main` any other way without
+4. `/ship` (Critical) or `/ship --full` (manual Full Gate) on PASS commits outstanding work, merges
+   `feature/NN-slug` into local `main`, and archives the change file. Do not merge or push outside
+   of `/ship`.
+5. `/ship --release` additionally pushes `main`, verifies exact-SHA CI/published images and the
+   resulting deploy via `gh` and public health. Do not push to `origin/main` any other way without
    explicit instruction.
 
 ## Workflow Playbooks
 
-### Model routing and delegation
+The SDD workflows are defined in `docs/playbooks/`; runtime wrappers (`.claude/skills/`,
+`.agents/skills/`, `plugins/sdd-workflow/`) are thin stubs and all workflow logic lives in the
+playbooks:
 
-Use native Codex orchestration automatically for substantial parallelizable work.
-The project `.codex/config.toml` selects GPT-6.1 Sol (medium) for the primary agent;
-`.codex/agents/` defines Luna (high) `explorer`, `worker`, `tester`, GPT-6.1 Sol (high)
-`architect`, `reviewer`, and Astra (high) `escalation`. Custom roles load in new
-trusted-repository sessions. `bash scripts/codex-orchestrator.sh` launches from the
-repository and forwards normal CLI overrides; existing sessions keep their selection.
+- [`plan`](docs/playbooks/plan.md) — select the next scope from project docs or an explicit brief,
+  refresh `docs/SPEC.md` when needed, scaffold a change and its feature branch
+- [`work`](docs/playbooks/work.md) — implement Backlog tasks, absorb findings from local manual
+  review, run one affected-area Critical Gate
+- [`ship`](docs/playbooks/ship.md) — run missing/invalidated Critical checks (or Full with
+  `--full`), merge to `main`, archive, and with `--release` push and verify the deploy
 
-Do simple sequential tasks directly. For substantial work, decompose the authorized
-Backlog, delegate bounded independent tasks while doing useful work locally, integrate,
-obtain independent review, resolve findings and run one affected acceptance set.
-Skip roles with no concrete deliverable; this is not a mandatory six-agent ceremony.
-Use `architect` for unsettled design, `explorer` for a specific unknown, `worker` for
-settled implementation and `tester` for isolated reproduction/behavioral tests.
-Limit concurrent children to two; assign disjoint file ownership, acceptance criteria
-and concise context. Workers are not alone and must preserve others' edits. Children
-must not delegate. One parent owns Backlog updates, integration, shared gates, Docker
-lifecycle, cleanup, Git and release. Deterministic commands belong in existing runners.
-After two distinct failed focused attempts, or immediately for ambiguous high-risk
-work, consult `escalation`; the technical `architect` cannot grant human approval.
-See [agent workflow](docs/runbooks/agent-workflow.md) for the full handoff and measurement policy.
+### Model routing and delegation (Codex)
 
-The SDD workflows are defined in `docs/playbooks/`:
-
-- [`plan`](docs/playbooks/plan.md) — select the next scope from project docs or use an explicit
-  brief, refresh `docs/SPEC.md` when needed, and scaffold a new change with its feature branch
-- [`work`](docs/playbooks/work.md) — implement Backlog tasks through the agent execution loop,
-  absorbing findings from local manual review and running one affected-area Critical Gate
-- [`ship`](docs/playbooks/ship.md) — run missing/invalidated Critical checks by default or the
-  manual Full Gate with `--full`, merge to `main`, archive the change, and (with `--release`)
-  push and verify the deploy
-
-Runtime wrappers are thin stubs. Workflow logic belongs in the playbooks.
+The project `.codex/config.toml` selects GPT-6.1 Sol (medium); `.codex/agents/` defines Luna (high)
+`explorer`, `worker`, `tester`, GPT-6.1 Sol (high) `architect`, `reviewer` and Astra (high)
+`escalation`. Do simple sequential tasks directly; delegate substantial independent work with at
+most two concurrent children, disjoint file ownership and concise context. Children never delegate.
+One parent owns Backlog updates, integration, shared gates, Docker lifecycle, cleanup, Git and
+release. After two distinct failed focused attempts, or immediately for ambiguous high-risk work,
+consult `escalation`; the technical `architect` cannot grant human approval. Full policy:
+[agent workflow](docs/runbooks/agent-workflow.md).
 
 ## Change Lifecycle
 
 ```text
-1. Architect ships the current change; an optional brief may be provided in chat or a draft file
-2. /plan ["brief" | path/to/draft.md]  -> auto-select next scope when omitted, refresh SPEC if
-                                          needed, scaffold change, create feature/NN-slug
-3. Architect approves docs/SPEC.md (first time / on pivots only)
-4. /work NN                            -> agent implements Backlog items, absorbing any
-                                          findings the architect reports mid-session
-5. Architect manually verifies the production-equivalent local result
-6. Architect reports findings; agent appends new Backlog items in the same change
-7. /work NN                            -> agent fixes those items; repeat 5-7 until clean
-8. /ship NN                            -> missing/invalidated Critical checks; on PASS: merge to main, archive
-9. /ship NN --full                     -> manual Full Gate; on PASS: merge to main, archive
-10. /ship NN --release                 -> affected checks + Release Gate; push and verify deploy
+1. /plan ["brief" | path/to/draft.md]  -> auto-select scope when omitted, refresh SPEC if needed,
+                                          scaffold change, create feature/NN-slug
+2. Architect approves docs/SPEC.md (first time / on pivots only)
+3. /work NN                            -> implement Backlog, absorb mid-session findings
+4. Architect verifies the production-equivalent local result and reports findings;
+   agent appends them to the Backlog and /work NN fixes them; repeat until clean
+5. /ship NN | /ship NN --full          -> gate; on PASS merge to main and archive
+6. /ship NN --release                  -> affected checks + Release Gate; push and verify deploy
 ```
 
-## Implementation Notes
-
-`docs/changes/NN-slug.md` § Implementation Notes is a short, optional, agent-maintained bullet
-list — not a mandatory execution log. The agent adds an entry only when something isn't already
-visible from the code or commit history: an intentional deviation from the plan, a residual risk,
-a rejected alternative. Git history and the diff are the record of *how* work was done; this
-section exists only for what git can't tell you.
+`§ Implementation Notes` is a short, optional list — only what git and the diff cannot tell
+(intentional deviation, residual risk, rejected alternative); never an execution log.
 
 ## Document Roles
 
 | File | Role | Change cadence |
 |------|------|----------------|
 | `docs/SPEC.md` | Strategic product and system intent | Rarely; architect-approved |
-| `docs/changes/NN-slug.md` | Active unit of work: Backlog, files, gate overrides, implementation notes | Continuously while active |
+| `docs/changes/NN-slug.md` | Active unit of work: Backlog, files, gate evidence, implementation notes | Continuously while active |
 | `docs/changes/archive/NN-slug.md` | Completed unit of work, kept as history | Written once, by `/ship` |
 | `docs/changes/archive/COMPACTED.md` | Verified historical checkpoint and immutable source index | Only an approved compaction change |
-| `docs/STACK.md` | Stack-specific commands, Critical/Full/Release gate tables, required tooling | When tooling changes |
+| `docs/STACK.md` | Stack, commands, gate tables, required tooling | When tooling changes |
+| `docs/runbooks/verification.md` | Gate selection policy, Full environment, CI/audits, release evidence | When gate policy changes |
 | `docs/FRONTEND.md` | Binding architecture, code, state, accessibility, SSR and interaction contract for `apps/web` | When frontend rules change |
 | `DESIGN.md` | Visual system for `apps/web`: tokens, typography, layout, components, do's and don'ts | Through `impeccable document` when the visual system changes |
 | `docs/KNOWN_GOTCHAS.md` | Recurring pitfall log | When new traps are discovered |

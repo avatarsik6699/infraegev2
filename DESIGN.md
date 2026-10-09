@@ -70,10 +70,6 @@ typography:
     fontSize: "15px"
     fontWeight: 500
     lineHeight: 1.75
-  hand:
-    fontFamily: "Caveat, cursive"
-    fontSize: "22px"
-    fontWeight: 600
 rounded:
   control: "6px"
   card: "12px"
@@ -146,7 +142,7 @@ components:
 
 # Design System: infraege
 
-<!-- Source: approved mockups v5 of Change 164 (docs/artifacts/change-164/mockups/), 2026-10-03.
+<!-- Source: approved mockups v5 of Change 164 (docs/artifacts/mockups-v5/), 2026-10-03.
      The app still renders the previous system until F3–F9 land; re-run `$impeccable document`
      after F4 to capture the implemented components. -->
 
@@ -235,7 +231,6 @@ colour. Adding a section adds no colour.
 **Display Font:** Onest (with system-ui, sans-serif)
 **Body Font:** Onest (with system-ui, sans-serif)
 **Label/Mono Font:** JetBrains Mono (with ui-monospace, monospace)
-**Hand Font:** Caveat, for short handwritten labels inside lesson diagrams only
 
 **Character:** One friendly, clear Cyrillic grotesque carries everything from the hero to the
 smallest label; the mono face marks code, task IDs and counters. Hierarchy comes from size and
@@ -253,7 +248,8 @@ weight, not from mixing families.
 
 ### Named Rules
 **The One Family Rule.** Onest for all prose and UI; JetBrains Mono only for code, IDs and
-numbers in tables; Caveat only inside diagrams.
+numbers in tables. No handwritten face on the site (mascot artwork bakes its few labels into
+outlines offline).
 
 ## Layout
 

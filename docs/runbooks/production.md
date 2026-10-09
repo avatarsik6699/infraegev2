@@ -27,7 +27,7 @@ access during credential rotation. Store secrets outside Git, mode 600; never pu
    reason to disable origin, CSRF or callback validation.
 4. Obtain initial TLS with `ops/obtain-initial-certificate.sh` and the required `PUBLIC_IPV4` and
    `TLS_EMAIL` environment; configure renewal with `ops/configure-certificate-renewal.sh`.
-5. Prepare the application database/bank using [practice-transition](practice-transition.md),
+5. Prepare the application database and import the bank following [practice](practice.md),
    then perform the explicit release. Install application backup/restore timers only when
    `/opt/infraege/database-current` points to the matching reviewed release.
 
@@ -80,13 +80,10 @@ prints a warning and never fails the deploy. Set `KEEP_RELEASES` (at least 2) to
 A failure invokes one verified rollback and retains its original error status. The data volume
 `infraege_postgres122-data` is shared by every kept release, so rollback never switches volumes. Missing previous release or failed rollback
 requires manual recovery, not a destructive schema downgrade. Consult [backup](backup-restore.md).
-The `140_01` account migration is additive, so a retained `122_01` release remains rollback-safe
-against the same volume; no automatic downgrade runs. Before the first account release, run the
-two-stage candidate migration/restore rehearsal on isolated production-data copies described in
-[backup](backup-restore.md), then record the exact candidate as root-owned mode-600
-`/etc/infraege/accounts-schema-ready` containing `140_01 <full-candidate-sha>`. This must happen
-after exact-SHA image verification and before deploy dispatch; routine restore-check of an old
-`122_01` bundle alone cannot attest the new schema. Do not bypass the preflight or migrate the live
+Migrations must stay additive so a retained previous release remains rollback-safe against the
+same volume; no automatic downgrade runs. A candidate that changes the schema head needs the
+[schema transition attestation](backup-restore.md#schema-transition-attestation) after exact-SHA
+image verification and before deploy dispatch. Do not bypass the preflight or migrate the live
 database to break the ordering cycle.
 
 ## Routine operation
@@ -154,5 +151,11 @@ Nothing on the host depends on it. Change 138 removed the rest of it by architec
   bootstrap/cutover files in `/root`;
 - its restic snapshots (`restic forget --tag infraege-ops --prune`, followed by `restic check`).
 
-The application's `infraege-application` snapshots were not touched. Sibling repositories and remote management hosts are still not
-implicitly authorized by an application deploy.
+Change 139 (architect decision 2026-09-23) removed the old PostgreSQL 16 volume
+`infraege_postgres-data` (verified empty `infraege` database, test-only `umami` data) and 13
+untagged early Restic snapshots and recovered the interrupted
+2026-09-05 package upgrade (run `dpkg --audit` in routine operation). Only `infraege_postgres122-data`
+and `infraege-application` snapshots remain protected.
+
+The application's `infraege-application` snapshots were not touched by any retirement. Sibling
+repositories and remote management hosts are still not implicitly authorized by an application deploy.

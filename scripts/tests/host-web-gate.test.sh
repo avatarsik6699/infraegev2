@@ -24,9 +24,9 @@ grep -Fq 'stop web' "$temporary/docker.log"
 grep -Fq 'up -d --no-deps web' "$temporary/docker.log"
 [[ $(grep -Fc 'stop web' "$temporary/docker.log") == 1 ]]
 [[ $(grep -Fc 'up -d --no-deps web' "$temporary/docker.log") == 1 ]]
-! grep -Fq -- '--env-file /dev/null' "$temporary/docker.log"
+if grep -Fq -- '--env-file /dev/null' "$temporary/docker.log"; then exit 1; fi
 grep -Fq -- '--project-name infraege-full-gate' "$temporary/docker.log"
-! grep -Eq -- '--project-name infra([[:space:]]|$)' "$temporary/docker.log"
+if grep -Eq -- '--project-name infra([[:space:]]|$)' "$temporary/docker.log"; then exit 1; fi
 
 : >"$temporary/docker.log"
 PATH="$fake_bin:$PATH" bash "$repo_dir/scripts/run-host-web-gate.sh" true
@@ -40,8 +40,8 @@ printf '%s\n' "\$*" >>'$temporary/docker.log'
 EOF
 chmod +x "$fake_bin/docker"
 PATH="$fake_bin:$PATH" bash "$repo_dir/scripts/run-host-web-gate.sh" true
-! grep -Fq 'stop web' "$temporary/docker.log"
-! grep -Fq 'up -d --no-deps web' "$temporary/docker.log"
+if grep -Fq 'stop web' "$temporary/docker.log"; then exit 1; fi
+if grep -Fq 'up -d --no-deps web' "$temporary/docker.log"; then exit 1; fi
 
 rendered=$(POSTGRES_PASSWORD=contract-only \
   DB_RUNTIME_PASSWORD=contract-runtime DB_IMPORT_PASSWORD=contract-import \

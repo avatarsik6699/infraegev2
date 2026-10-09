@@ -65,8 +65,8 @@ parent directories must permit traversal for the operator, while containers moun
 
 `cd apps/api && uv run pytest tests/test_minimal_bank.py` runs host tests against disposable PG18.
 `pnpm api:generate` updates HTTP contracts; `pnpm api:check` detects drift. The catalog uses numbered
-pages of 30, stable ID order, existing filters and next-task navigation. Invalid input is 422,
+pages (10/30/50/100 per page), stable ID order and existing filters; there is no next-task
+navigation. Invalid input is 422,
 missing content 404 and unavailable storage/database 503.
 
-Backup/restore is documented in [backup-restore](backup-restore.md). Before the first production
-switch follow [practice-transition](practice-transition.md). Local import never deploys.
+Backup/restore is documented in [backup-restore](backup-restore.md). Local import never deploys.

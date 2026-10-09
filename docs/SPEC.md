@@ -9,8 +9,8 @@
 
 | Field | Value |
 |-------|-------|
-| Document Version | `v2.26` |
-| Date | `2026-10-08` |
+| Document Version | `v2.27` |
+| Date | `2026-10-09` |
 | Architect / Owner | `v.godlevskiy` |
 | Stack | See [docs/STACK.md](./STACK.md) |
 | Domain | Платформа подготовки к ЕГЭ по информатике — самостоятельные темы экзамена и мини-курсы с теорией, визуализацией и практикой |
@@ -66,14 +66,11 @@ sdamgia.ru, kpolyakov.spb.ru), ни новыми AI-ботами (решают �
 | Необязательный аккаунт и серверный прогресс после Change 140; все текущие учебные действия доступны гостю | i18n/локализация (аудитория исключительно русскоязычная) |
 | | Полноценный поиск по сайту (линейная карта из 25 тем остаётся обозримой без отдельного поиска) |
 
-Текущий source-tree baseline: семь опубликованных TopicLesson (№ 5, 16, 17, 24–27),
-независимый Python Course с 28
-последовательными CourseLesson и 140 server-owned задачами; финал — четыре стадии одного
-терминального менеджера задач. Все уроки прошли содержательную и визуальную оценку.
-Первоначальная 19-шаговая редакция не получила финального одобрения и не является baseline.
-Лаборатории удалены. Новые Topic-связи не следуют из публикации курса.
-Релизная история хранится в archive; текущий deployed SHA проверяется через `/health/ready`,
-а не выводится из local `main`, `origin/main` или старого успешного релиза.
+Текущий состав опубликованных материалов задают publication registries
+(`apps/web/src/entities/lesson/content/lesson-registry.ts` и Course registry): независимый Python
+Course из 28 последовательных CourseLesson и 140 server-owned задач и опубликованные TopicLesson.
+Новые Topic-связи не следуют из публикации курса. Текущий deployed SHA проверяется через
+`/health/ready`, а не выводится из local `main`, `origin/main` или старого релиза.
 
 ### 1.4 Durable Learning Flow
 
@@ -135,12 +132,6 @@ registry-derived список доступных опубликованных м
 assisted-solution scoring, оценки уверенности или персонализированного повторения нет. Их нельзя
 добавлять без нового решения архитектора. Глубина разделов зависит от сложности материала, но
 линейная модель предпочтительнее скрытого адаптивного ветвления.
-
-Reset удаляет конкретные публикации и UI-решения, но не этот контракт и не предметную область
-продукта. Сохраняются нейтральные сущности Topic/Course/CourseLesson/Task и mastery-семантика;
-CourseLesson принадлежит Course, но не связан с Topic без отдельного будущего решения. Slug,
-тексты, ассеты, маршруты и композиции удалённой публикации не являются основанием для нового
-дизайна.
 
 ---
 
@@ -328,36 +319,14 @@ checklist, не заменяя его. Схемы демо-стенда — то
 - [ ] Текст темы и формулировки задач не являются близким пересказом источника — переформулированы
   самостоятельно (§8, «Юридическое (оригинальность контента)»).
 
-Чек-лист хранится рядом с контентом (например, как шаблон PR при добавлении новой темы), а не
-только в этом документе.
-
-#### Источники педагогического checklist
-
-Перенесённая библиография исходного исследования; это provenance, не новые продуктовые обещания.
-
-Ниже — источники, на которые опирается документ (для дальнейшего самостоятельного погружения в тему):
-
-- Sweller, J. — работы по Cognitive Load Theory и worked-example effect (обзор: en.wikipedia.org/wiki/Worked-example_effect)
-- Cognitive Load Theory — обзор для практиков: education.nsw.gov.au (CESE, 2017), uky.edu (Cognitive Load & Instructional Design)
-- Mayer, R. E. — Cognitive Theory of Multimedia Learning, обзоры принципов: learning-theories.com, theelearningcoach.com, litfl.com, springer.com (The Past, Present, and Future of CTML)
-- Roediger, H. L. & Karpicke, J. D. — testing effect: psychnet.wustl.edu (The Power of Testing Memory)
-- Pan, S. C. & Rickard, T. C. (2018) — spaced retrieval practice meta-анализ
-- Rohrer, D. и коллеги — interleaving в математике: pubmed.ncbi.nlm.nih.gov/24578089, aft.org (Interleaving in Math)
-- Bjork, E. L. & Bjork, R. A. — Desirable Difficulties: structural-learning.com, unh.edu, researchschool.org.uk
-- Bloom, B. (1984) — 2 Sigma Problem: en.wikipedia.org/wiki/Bloom%27s_2_sigma_problem, nintil.com (系统ematический обзор эффективности mastery learning)
-- Kapur, M. — Productive Failure: boldscience.org, pubmed.ncbi.nlm.nih.gov/31089856
-- Kulik, J. A. & Kulik, C.-L. C. — мета-анализ по timing обратной связи; edsurge.com, learningscientists.org — практические разборы
-- Duolingo Research — research.duolingo.com, github.com/duolingo/halflife-regression, pnas.org (Enhancing human learning via spaced repetition optimization)
-
 
 ---
 
 ## 3. Data Model
 
-Change 122, approved 2026-09-17, supersedes the former practice transition and decorative
-roadmap. Theory remains authored content; PostgreSQL 18 owns the full existing task bank.
-Stable task IDs, exact checker answers, content blocks, private provenance, attachments and
-ordered lesson memberships survive the transition to a new isolated volume.
+Theory remains authored content; PostgreSQL 18 owns the task bank. Stable task IDs, exact checker
+answers, content blocks, private provenance, attachments and ordered lesson memberships are
+preserved across schema changes.
 
 The current-state model has task, private checker, lesson membership and file records. Small
 metadata collections (skills, exam numbers, sources, theory links) use JSONB. There is one
@@ -366,10 +335,10 @@ One trusted operator imports/exports JSON using host tooling. Import updates sel
 transactionally, never deletes omitted tasks, and does not duplicate replayed data. Basic
 structure, database integrity, bounded input and safe file paths remain mandatory. Concurrent
 editing, package ledgers, revision history, background jobs and garbage collection are deferred.
-Old database volumes and source snapshots are retained; no destructive in-place migration.
+Migrations are additive; no destructive in-place migration.
 
-Change 140 adds server-owned account, verified identity, revocable session and progress records
-through additive schema migrations. A result is keyed by user, task, solution revision and
+Server-owned account, verified identity, revocable session and progress records
+(schema `140_01`). A result is keyed by user, task, solution revision and
 learning context (topic lesson, course lesson or standalone practice); the same task in two
 lessons has two independent results. A later answer revision invalidates the previous result
 for current-progress projections without erasing its historical fact. No submitted answer text,
@@ -405,15 +374,15 @@ No public task-bank write/admin API.
 
 ## 5. Frontend / Client Contract
 
-All public learning routes remain: `/`, `/ege`, `/courses`, course overview, published topic and
-course lessons, `/practice`, task detail and `/privacy`. Planned entries remain non-links.
-Internal `/lab/design-system` and `/lab/lesson` and their demos are retired.
+Public learning routes: `/`, `/ege`, `/courses`, course overview, published topic and course
+lessons, `/practice`, task detail and `/privacy`. Planned entries remain non-links; there are no
+internal lab or specimen routes.
 
 Change 164 replaces the minimal Change 122/156 profile with the "Clean Textbook" visual system
 in [DESIGN](../DESIGN.md), approved by the architect from full-page mockups. Keep the infraege
 stone identity; the home page is the colourful entry point, every other page is a calm white
 reading surface where colour appears only where it carries meaning; light theme only. Fonts are
-self-hosted Onest, JetBrains Mono and Caveat (lesson diagram labels only). EGE topic lessons
+self-hosted Onest and JetBrains Mono. EGE topic lessons
 have a left panel with the topic and its subtopic pages (Change 167: `/ege/{topic}/{subtopic}`,
 «Подтема N из M», previous/next, a right “on this page” rail; `/ege/{topic}` redirects to the first
 subtopic and old `#section` links resolve to the owning subtopic); course lessons keep in-page
@@ -426,7 +395,7 @@ no left panel; the profile has an overview dashboard (Change 168: next step, cou
 figures and attachments (lesson media stays); hand-drawn monochrome illustrations are supplied by
 the architect and use neutral reserved placeholders until then (Change 169: the earlier topic and
 course catalog drawings are retired from home, catalogs and the course overview). Every page follows
-its approved v5 mockup (`docs/artifacts/change-164/mockups/`).
+its approved v5 mockup (`docs/artifacts/mockups-v5/`).
 Change 171 adds lesson blocks for the lesson pipeline: a learning table (semantic `table`,
 numeric columns aligned, horizontal scroll only inside it), a collapsible proof (native `details`,
 closed by default, readable without scripting), an exact SVG diagram (repository-generated file,
@@ -496,8 +465,7 @@ independently of filtering; standalone practice and course progress remain separ
 
 `GET /api/topics/practice-summary` returns `{topics: [{id, tasks: [{id, solution_revision}]}]}`
 for published topic memberships and nonarchived tasks, without statements or checker data.
-It uses the existing read-only session and no-store/error policy. Its original introduction
-required no data migration; Change 140 adds separate account/progress migrations (§3).
+It uses the existing read-only session and no-store/error policy.
 The authenticated progress projection compares the summary with revision-aware lesson results.
 Missing topic summaries are unavailable, never fabricated zero totals. Old browser progress keys
 are ignored, not imported.
@@ -578,30 +546,21 @@ cookie. Идентификатор сессии хранится на серве
 
 ### 7.2 Deploy / CI
 
-CI выполняет static/build/security checks; обычные pytest/Vitest/unit/DB suites остаются
-локальными. Решение архитектора 2026-09-26 (Change 146) разрешает узкое исключение:
-периодические browser/no-JS/accessibility/layout и Lighthouse-аудиты в GitHub Actions,
-на host runner с синтетическими данными, не внутри application image и не на каждом PR/push.
-Публичный production-аудит отделён от аудита main: только чтение, без входа и мутаций.
-После пересмотра Change 146 результаты аудитов остаются в GitHub Actions: статус, журнал и
-обычные artifacts. Собственный импорт/checkpoint периодических аудитов не нужен. Отсутствующий
-или неуспешный запуск не является PASS, но сам по себе не запускает Full и не блокирует
-несвязанное изменение. Известная критическая проблема аккаунтов, данных или выпускаемого
-артефакта требует устранения до затронутого релиза. Целевая периодичность — раз в неделю
-и по явному запросу; внедрение и отдельная удалённая активация описаны в Change 146.
-Production использует immutable SHA images. Deploy — явный workflow_dispatch, с health/smoke
-и rollback на предыдущий release. Исходный перенос банка на `122_01` описан в
-истории Change 122/123; это исторический cutover, а не действие каждого deploy. Обычный deploy
-не импортирует контент. Первый переход с `122_01` на `140_01` требует отдельной
-exact-SHA account-schema restore-приёмки по STACK и runbook backup/restore.
-Старый volume (`infraege_postgres-data`, PostgreSQL 16) хранился до 2026-09-23 и удалён по решению
-архитектора (Change 139): проверка показала пустую базу `infraege` и только тестовые данные
-выведенного Umami. Rollback на любой хранимый релиз использует тот же `infraege_postgres122-data`.
-Content validation и OpenAPI drift проверяются до merge. Подробности в STACK и runbooks.
-Change 140 requires an additive database-schema bump across migrations, runtime checks,
-deploy preflight and restore verifier; new write-role grants must be narrower than importer
-grants. Provider credentials, callback origins and mail delivery are environment-specific and
-must be validated before release. Rollback compatibility requires an isolated restore check.
+CI (`quality.yml`) выполняет static/build/security checks через группы `scripts/gate.py`; обычные
+pytest/Vitest/unit/DB suites остаются локальными. Узкое исключение (решение архитектора
+2026-09-26): еженедельные и ручные browser/no-JS/accessibility/layout и Lighthouse-аудиты в GitHub
+Actions на host runner с синтетическими данными, не внутри application image и не на каждом
+PR/push; публичный production-аудит только читает. Результаты остаются в GitHub Actions.
+Отсутствующий или неуспешный запуск не является PASS, но не запускает Full и не блокирует
+несвязанное изменение; известная критическая проблема аккаунтов, данных или выпускаемого
+артефакта устраняется до затронутого релиза.
+
+Production использует immutable SHA images. Deploy — явный workflow_dispatch с health/smoke и
+rollback на предыдущий release; rollback на любой хранимый релиз использует тот же
+`infraege_postgres122-data`. Обычный deploy не импортирует контент. Изменение schema head требует
+exact-SHA restore-приёмки (STACK Release Gate, runbook backup/restore); новые grants роли записи
+уже, чем у импортёра. Provider credentials, callback origins и доставка почты проверяются в
+окружении до релиза. Content validation и OpenAPI drift проверяются до merge.
 
 ### 7.3 Minimal operations
 
@@ -612,7 +571,7 @@ Umami, Beszel, sre-kit integration, publishers и monitoring tunnels остаю�
 
 Браузерная аналитика возвращена точечно, без нового сервиса (2026-09-22, архитектор пересмотрел
 прежний отказ, см. §1.2/§8.2): публичные страницы подключают cookieless tracking snippet
-`<script defer src="https://sre.infraege.ru/track.js" data-site="…">` self-hosted сервиса
+`<script async src="https://sre.infraege.ru/track.js" data-site="…">` self-hosted сервиса
 `smotryashchiy` — отдельный репозиторий, отдельный деплой на отдельном VPS, тот же оператор.
 Единственное изменение в этом репозитории — точечная правка Nginx CSP (`infra/nginx/conf.d/
 infraege.prod.conf`, §8.2): `script-src`/`connect-src` допускают `https://sre.infraege.ru` для
@@ -624,44 +583,21 @@ infraege.prod.conf`, §8.2): `script-src`/`connect-src` допускают `http
 остановка и отключение старых таймеров входят в отдельный явно разрешённый release по runbook;
 volumes автоматически не удаляются.
 
-Решение архитектора 2026-09-23 (Change 136): старый стек `infraege-ops` (Umami, Beszel и его
-агент, docker-socket-proxy, отдельный PostgreSQL, таймеры `infraege-ops-*`) удаляется с хоста
-полностью, включая его volumes и `/opt/infraege-ops`, — его заменил `smotryashchiy`, событий он
-не получал. Это разовое явно разрешённое исключение из правила «volumes не удаляются»; оно не
-распространяется на тома приложения (`infraege_postgres-data`, сохранённый `infraege_postgres122-data`).
-
-Решение архитектора 2026-09-23 (Change 138):
-- С хоста убираются остатки старой эксплуатации: туннель `wg0` с пакетами и `/etc/wireguard`,
-  journal gateway (`systemd-journal-remote`), env-файлы и backup-каталог старого стека, его
-  Docker-сеть и висящие анонимные volumes, снапшоты restic с тегом `infraege-ops`.
-- Снапшоты `infraege-application` и тома приложения не затрагиваются.
-- Журналирование пакетов UFW выключено.
-- На хосте хранятся три последних релиза: каталог, архив, deploy-скрипт и образы. Кроме них
-  хранится то, на что указывают `current` и `database-current`. Очистка выполняется после
-  успешного deploy и не может его сорвать.
-
-Решение архитектора 2026-09-23 (Change 139):
-- Старый том `infraege_postgres-data` удалён. Перед удалением проверено: база `infraege` пустая,
-  а база `umami` содержала только тестовые события выведенного Umami.
-- Удалены 13 снапшотов restic без тега (ранние бэкапы приложения 2026-08-10..20).
-- Под защитой остаются только `infraege_postgres122-data` и снапшоты `infraege-application`.
-- Прерванное 2026-09-05 обновление пакетов восстановлено. Хост обновлён и перезагружен на ядро
-  6.8.0-142.
+Старый стек `infraege-ops` и остатки прежней эксплуатации удалены с хоста по решениям архитектора
+2026-09-23 (Changes 136, 138, 139; [production runbook](runbooks/production.md#retired-operations-stack)).
+Под защитой остаются только `infraege_postgres122-data` и снапшоты `infraege-application`; на хосте
+хранятся три последних релиза плюс цели `current` и `database-current`.
 
 ## 8. Non-Functional Requirements
 
-### 8.1 Data transition and recovery
+### 8.1 Data changes and recovery
 
-Before changing persistence, preserve and restore-check the actual local bank/files. Build the
-simpler model on a new isolated volume; verify IDs, content, checker, memberships and file
-parity. Keep source database/files. Scheduled backup covers database and referenced files;
-restore runs into an empty isolated target. Production transfer and retirement of installed
-monitoring services require explicit release authorization, affected migration/restore checks
-and Release Gate; a blanket Full Gate is not an automatic prerequisite.
-Before releasing accounts, restore-check identities, session revocation and per-context progress
-on an isolated target. Existing guest browser progress is intentionally abandoned, not migrated.
-Release requires verified provider callbacks, password-mail delivery and updated privacy text;
-local acceptance alone is not production authorization.
+Before changing persistence, preserve and restore-check the actual bank/files; verify IDs, content,
+checker, memberships and file parity on an isolated target. Scheduled backup covers database and
+referenced files; restore runs into an empty isolated target. Production transfer and host service
+retirement require explicit release authorization and the affected migration/restore checks, not
+an automatic Full Gate. Account data changes restore-check identities, session revocation and
+per-context progress on an isolated target. Guest browser progress is never migrated.
 
 ### 8.2 Existing non-functional baseline
 
@@ -672,7 +608,7 @@ local acceptance alone is not production authorization.
 | Performance budget | Lighthouse-аудит раз в неделю или по запросу сохраняет median LCP ≤4.0s на мобильном 4G-профиле; продуктовая цель остаётся LCP ≤2.8s. CLS < 0.1, INP < 200ms. Измеряются `/`, `/ege`, `/courses`, `/courses/python` и `/ege/16-rekursiya`; cold-load font/layout shifts проверяются отдельно. Lighthouse не является обязательным шагом каждого релиза или изменения CSS; подозрение на регрессию требует целевого измерения, а не автоматического Full Gate. Порог не ослабляется ради ускорения |
 | Observability | Health, structured server logs and scheduled external availability/TLS probe, plus a cookieless browser-analytics beacon (`smotryashchiy`, self-hosted at `sre.infraege.ru`, separate repo/deploy, §7.3) allowlisted in CSP; no cookies, no persistent visitor id, no consent UI, no dashboards or monitoring stack hosted in this repo |
 | Backup / restore | Application DB, files, roles and protected environment in encrypted Restic; 7 daily + 4 weekly + 3 monthly, monthly isolated restore. Same-host backup loss remains accepted until off-site storage exists |
-| SEO | `/`, `/privacy`, published topics, courses и CourseLesson имеют canonical, уникальные metadata, SSR content, общий crawlable social preview и входят в sitemap/prerender; root document публикует browser-only manifest, SVG/PNG/ICO favicon и Apple touch icon из production-знака, а `/` — правдивый `WebSite` JSON-LD без выдуманной Organization; черновые маршруты остаются unlisted, `noindex,nofollow` и исключены из public discovery; Lighthouse SEO для публичных маршрутов проходит без ошибок |
+| SEO | `/`, `/privacy`, published topics, courses и CourseLesson имеют canonical, уникальные metadata, SSR content, общий crawlable social preview и входят в sitemap (prerender только `/` и `/ege`, остальное SSR); root document публикует browser-only manifest, SVG/PNG/ICO favicon и Apple touch icon из production-знака, а `/` — правдивый `WebSite` JSON-LD без выдуманной Organization; черновые маршруты остаются unlisted, `noindex,nofollow` и исключены из public discovery; Lighthouse SEO для публичных маршрутов проходит без ошибок |
 | Mobile / no-JS readability | TopicLesson, Course overview и CourseLesson сохраняют текст, программу, подписи, решения и section anchors в SSR HTML; интерактивная проверка и персональный progress остаются progressive enhancement |
 | Client resilience / API drift | Route failures восстанавливаемы без белого экрана; loading/empty/error/not-found состояния доступны с клавиатуры и скринридера; OpenAPI schema/types drift ломает gate до merge; runtime HTTP имеет timeout/abort и не делает скрытый retry мутаций |
 | Account security | Passwords use a current password-hashing scheme; verification/reset tokens expire and are single-use; sessions are server-revocable, HttpOnly/Secure/SameSite and protected from CSRF. Auth endpoints have targeted abuse limits, generic recovery responses and no sensitive URL/query/access-log leakage. Authentication does not grant editorial, operator or paid access. |
@@ -684,71 +620,33 @@ local acceptance alone is not production authorization.
 
 ---
 
-### 8.3 Proportional verification (Change 146)
+### 8.3 Proportional verification
 
-Пересмотр архитектора 2026-09-26: для простой учебной платформы приоритет — скорость разработки
-и доставки с достаточной защитой учебных сценариев, аккаунтов и данных. Собственная CI/CD-платформа,
-универсальный scheduler, snapshot runtime, artifact cache и ledger доказательств не входят в цель.
-Это целевой контракт; действующие команды и правила перехода обновляются в рамках Change 146,
-а не считаются уже внедрёнными вследствие изменения SPEC.
-
-Во время разработки выполняются только проверки, отвечающие на конкретный вопрос. Один
-affected-area Critical завершает связный набор работ. `/ship` проверяет полноту приёмки и изменения
-после последнего прохода, но не повторяет весь набор для неизменённых входов. Достаточно короткой
-записи команд, результата и проверенной ревизии/изменений в change; отдельное хранилище и механизм
-автоматического признания результатов не требуются. При неопределённости повторяется затронутая
-проверка, а не весь Full. Неизвестные пути требуют явного выбора покрытия.
-
-Full — только явный запрос полной функциональной регрессии; ни shared/config изменения, ни
-release автоматически его не включают. Глубокие security, browser, accessibility, no-JS,
-layout и Lighthouse-аудиты выполняются еженедельно или по запросу. Существующие pytest/Vitest/DB
-suites остаются локальными; узкое исключение для периодического host browser runner сохраняется.
-Точные команды и принадлежность проверок определяются STACK, а не дублируются в каждом playbook.
-
-Секреты новых публикуемых коммитов проверяются до push. Изменённые зависимости требуют dependency
-audit; изменения auth, прав доступа, сессий и прогресса — соответствующих функциональных и
-security-boundary проверок; schema/data изменения — миграционной и restore-приёмки. SAST/config
-в delivery path выбирается по конкретному риску, а не запускается всегда. Каждый новый release
-image сканируется по digest в существующем images workflow перед deploy; второй обязательный
-локальный build/scan не нужен. Production health проверяется заново. Периодический отчёт не
-подменяет эти проверки и не служит универсальным release gate.
-
-GitHub Actions отвечает за CI jobs, стандартные кэши зависимостей, artifacts и уведомления;
-локальные команды остаются простыми. Ни новый сервис, ни платформа монорепозитория, ни собственная
-подпись/attestation-цепочка не вводятся без отдельной доказанной потребности. Сохраняются точный
-release SHA, проверка опубликованных образов, явный deploy, health/smoke и rollback, особая
-приёмка первого account-schema cutover и запрет автоматического повторения мутаций.
-
-Разрешение локального ship не означает разрешение push/deploy. Нерелевантный или пропущенный
-еженедельный аудит не блокирует обычную разработку; подтверждённые критические находки для
-выпускаемой функции/артефакта блокируют затронутый релиз. Архитектор просматривает недельные
-результаты через стандартные уведомления GitHub, без обязательного remote fetch перед каждым
-plan/work/ship. Измеряется фактическое время нескольких следующих changes без дополнительного
-benchmark framework и без требования дождаться их для закрытия 146.
+Решение архитектора 2026-09-26: приоритет — скорость разработки и доставки при достаточной защите
+учебных сценариев, аккаунтов и данных. Собственная CI/CD-платформа, scheduler, snapshot runtime,
+artifact cache и ledger доказательств не вводятся. Один affected-area Critical завершает связный
+набор работ; `/ship` проверяет только изменившееся; Full — только явный запрос. Секреты публикуемых
+коммитов проверяются до push, изменённые зависимости — аудитом, auth/доступ/прогресс — своими
+функциональными и security-boundary проверками, schema/data — миграционной и restore-приёмкой;
+каждый release image сканируется по digest до deploy, production health проверяется заново.
+Разрешение локального ship не означает разрешение push/deploy. Команды — STACK, политика выбора —
+[verification runbook](runbooks/verification.md).
 
 ## 9. Roadmap
 
-С 2026-10-08 содержание тем ЕГЭ готовится по [пайплайну подготовки темы](runbooks/lesson-pipeline.md)
-на демо-стенде `docs/artifacts/lesson-design/`. Эталон — тема 25 (делители и маски): исходник
-архитектора, частотный анализ, шесть подтем двух уровней, схемы для тяжёлых мест. Доработки
-платформы под пайплайн и перенос темы — следующие change, до выпуска редизайна. Они закрывают пробелы модели, перечисленные
-в пайплайне (этап 9): учебная таблица, свёрнутое доказательство, точные SVG-диаграммы, уровень
-подтемы, самопроверка подтемы, пошаговая схема и песочница. Change 171 делает их вместе с переносом
-темы 25. Следующие темы проходят тот же пайплайн до переноса. Change 172 переносит тему 23 «Анализ графов»: уровни по демоверсии 2027 (задание новое), песочница пути по графу, задачи на своих файлах-графах.
+Ordered unfinished outcomes (each a separate change, smallest coherent slice first):
 
-Changes 122–139 established the simplified practice and local/production baseline; their
-immutable history remains in archives. Change 140 introduces optional accounts and server-owned
-progress without reducing guest functionality or importing old browser progress. Later product
-decisions may add manual completion, richer statistics and premium entitlements; those are not
-implemented by Change 140. Payment processing and paywall enforcement require separate design.
+1. **Перестройка опубликованных тем ЕГЭ по [пайплайну](runbooks/lesson-pipeline.md).** Каждая тема
+   проходит демо-стенд `content/lesson-design/` и одобрение архитектора, затем переносится на сайт
+   отдельным change (эталоны — темы 25 и 23, Changes 171–172). Исходники архитектора есть для тем
+   16, 17 и 27 (`docs/artifacts/lessons/`); для 5, 24 и 26 их нужно получить. Порядок задаёт
+   архитектор. [NEEDS_CLARIFICATION: какие темы обязательны до релиза]
+2. **Релиз программы редизайна и перестроенных уроков.** Локальный `main` с Changes 164–172 не
+   выпущен (Change 170 закрыт без релиза 2026-10-08). Отдельный release change закрывает
+   предпосылки §11 и обновляет `docs/artifacts/release-readiness.md`.
 
-Client redesign programme (2026-10-03): Changes 164 (design system and restyle), 167 (EGE subtopic
-pages), 168 (profile dashboard) and 169 (every page to the approved v5 mockups) are merged into
-local `main` but not pushed or deployed. Change 170 completed the e2e migration, dev bank
-restore, LCP/Lighthouse and pre-release verification and was closed without release on 2026-10-08
-(see `docs/changes/archive/170-redesign-release-readiness.md`): the release now waits for the lesson
-materials rebuilt by the lesson pipeline. The §11 release prerequisites and one release of the whole
-programme move to a future release change, which refreshes the pre-release evidence.
+Later product decisions may add manual completion, richer statistics and premium entitlements;
+payment processing and paywall enforcement require separate design.
 
 ## 10. Out of Scope
 
@@ -758,7 +656,7 @@ imports/file garbage collection; hosting analytics dashboards or a monitoring st
 (dashboards remain in the separate `smotryashchiy` deploy — this repo only allowlists its origin
 in CSP, §7.3); labs and internal design specimens. Automatic account merging, guest-progress import,
 saved answer text, standalone profile table, manual completion, advanced statistics and premium
-entitlements are out of Change 140. Single-operator sequential imports and ordinary pagination
+entitlements are out of scope. Single-operator sequential imports and ordinary pagination
 are intentional first-version limits. Formal legal review, off-site backup, key-only SSH and new
 content remain separate decisions.
 
@@ -766,4 +664,5 @@ content remain separate decisions.
 
 The architect confirmed account deletion and lesson-scoped reset on 2026-09-24. Before production release, register and
 verify provider applications/callbacks and mail delivery, review the updated privacy policy and
-confirm account-data backup/restore. These are release prerequisites, not claims of completion.
+confirm account-data backup/restore with a fresh production restore proof. These are release
+prerequisites, not claims of completion.

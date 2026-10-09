@@ -25,7 +25,7 @@ docker run --rm -d --name "$container_name" -p 127.0.0.1:18083:8080 \
   -v "$repo_dir/infra/nginx/snippets:/etc/nginx/snippets:ro" \
   -v "$repo_dir/apps/web/public/lesson-media:/usr/share/nginx/lesson-media:ro" \
   "$nginx_image" >/dev/null
-for attempt in {1..30}; do
+for _ in {1..30}; do
   if curl -s http://127.0.0.1:18083/lesson-media/missing >/dev/null; then break; fi
   sleep 0.2
 done

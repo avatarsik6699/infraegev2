@@ -1,15 +1,10 @@
 # Stack Guide
 
-> **Source of truth for this project's concrete technologies, tools, and conventions.**
->
-> The SDD pipeline (`plan` / `work` / `ship`) is specialized for web applications but stack-neutral
-> within that: this file is where it learns what to actually run. `docs/playbooks/work.md` reads
-> the [Critical Gate](#critical-gate) and [Required Tooling](#required-tooling) tables verbatim;
-> `docs/playbooks/ship.md` reads the Critical, [Full Gate](#full-gate), and
-> [Release Gate](#release-gate) tables verbatim.
-> Keep these tables accurate.
->
-> **Stack status:** CONFIGURED (change 01 — project-foundation)
+> **Source of truth for this project's concrete technologies, tools, commands and gate tables.**
+> `docs/playbooks/work.md` reads the [Critical Gate](#critical-gate) and
+> [Required Tooling](#required-tooling) tables; `docs/playbooks/ship.md` reads the Critical,
+> [Full Gate](#full-gate) and [Release Gate](#release-gate) tables. Gate policy (what to select and
+> when) lives in the [verification runbook](runbooks/verification.md). Keep these tables accurate.
 
 ---
 
@@ -20,45 +15,15 @@
 | Frontend | React + TanStack Start (SSR/SSG, file-based routing and automatic route splitting) on Vite **8.2.1 exact** (Rolldown/Oxc); Base UI **1.7.0 exact** with local CSS Modules; Zustand **5.0.12 exact** for the cross-route lesson-progress registry; synchronous Python tokenization through `@speed-highlight/core` **2.0.0 exact**; TanStack Query for future server state; generated `openapi-typescript` contracts with `openapi-fetch` transport |
 | Backend | Python/FastAPI (`apps/api`) |
 | Database | PostgreSQL 18.6, separate runtime/app/import/migration/backup roles; Alembic `140_01`, additive account/progress schema on the isolated bank volume |
-| Cache | — (not needed on M0) |
 | Observability | Health, structured server logs, fail2ban and scheduled external availability/TLS probe |
 | Infra | Application Docker Compose on Ubuntu 24.04: Nginx → web/API/PostgreSQL; systemd, journald, fail2ban, Restic |
 | Package managers | uv (`apps/api`), pnpm workspace (`apps/web`, root) |
 | Formatting | Prettier 3.9.6 exact for supported repository files; Ruff from the API lock for Python; EditorConfig for cross-editor whitespace defaults |
-| CI/CD | GitHub Actions on pinned Ubuntu 24.04 runners: ordinary static quality, weekly/manual security and browser audits, GHCR SHA images with SBOM/provenance, and serialized explicit-SHA deploy with rollback. The `production` GitHub Environment has no required reviewers (architect decision, 2026-09-04) — image publish and deploy run unattended once dispatched; `can_admins_bypass` stays the only remaining safety property |
+| CI/CD | GitHub Actions on pinned Ubuntu 24.04 runners: static quality through `scripts/gate.py` groups, weekly/manual security and browser audits, GHCR SHA images with SBOM/provenance, and serialized explicit-SHA deploy with rollback. The `production` GitHub Environment has no required reviewers (architect decision, 2026-09-04) — image publish and deploy run unattended once dispatched; `can_admins_bypass` stays the only remaining safety property |
 
 ---
 
 ## Prerequisites
-
-### Practice persistence
-
-PostgreSQL 18.6, SQLAlchemy 2.0.52, Alembic 1.20.0 and asyncpg 0.31.0 are locked.
-Schema `140_01` retains task JSON, private checker, lesson membership and file objects and adds
-accounts, identities, credentials, sessions, one-time tokens, provider challenges and per-context
-solved results. `infraege_runtime` is SELECT-only on the bank and has no account-table rights;
-`infraege_app` has narrow account/progress writes and checker reads. Import/migration/backup use
-separate roles. Every datetime is timezone-aware.
-No revision history, package engine, release import or automatic data migration remains.
-
-`make dev` owns the dedicated `infraege-dev_postgres122-data` volume; lifecycle commands preserve it.
-`make practice-bootstrap` explicitly imports `content/practice-bank` into local dev, including
-updates: export/backup operator edits before reimporting. `python3 scripts/practice-local.py export
-/path/to/new-directory` exports the actual local bank and referenced files. This helper refuses
-other container identities. Production import requires explicit protected credentials and the
-[practice runbook](runbooks/practice.md); production transfer is not part of local `/work`.
-
-Focused persistence acceptance: `cd apps/api && uv run pytest tests/test_minimal_bank.py`.
-It creates/disposes an isolated PG18 instance, runs migrations and validates nonempty parity,
-transaction rollback, HTTP privacy, checker, filters, paging, files and published lesson ordering.
-Tests run on the host; only weekly/manual browser audits run in CI. Disposable acceptance
-databases run in Docker, while test processes stay on the host. Backup verification additionally
-uses the shipped read-only `app.modules.practice.verify` and isolated restore machinery.
-`node scripts/practice-registry.mjs --check` checks authored publication metadata.
-Task files are persistent data (`infra/task-files.local` / `/var/lib/infraege/task-files`), outside cleanup.
-See [backup](runbooks/backup-restore.md) and [transition](runbooks/practice-transition.md).
-
-### Current prerequisites
 
 ```bash
 docker --version          # application: Docker + Compose v2
@@ -72,215 +37,184 @@ uv --version              # local tests only
 curl --version            # health and smoke checks
 jq --version              # JSON tests and operational status files
 sha256sum --version       # Docker development input fingerprinting
+shellcheck --version      # shell static checks: >=0.9
 ```
+
+### Practice persistence
+
+PostgreSQL 18.6, SQLAlchemy 2.0.52, Alembic 1.20.0 and asyncpg 0.31.0 are locked. Schema `140_01`
+retains task JSON, private checker, lesson membership and file objects and adds accounts,
+identities, credentials, sessions, one-time tokens, provider challenges and per-context solved
+results. `infraege_runtime` is SELECT-only on the bank and has no account-table rights;
+`infraege_app` has narrow account/progress writes and checker reads. Import/migration/backup use
+separate roles. Every datetime is timezone-aware. No revision history, package engine, release
+import or automatic data migration exists.
+
+`make dev` owns the dedicated `infraege-dev_postgres122-data` volume; lifecycle commands preserve
+it. `make practice-bootstrap` explicitly imports `content/practice-bank` into local dev, including
+updates: export operator edits first with `python3 scripts/practice-local.py export
+/path/to/new-directory` (it refuses other container identities). Production import requires
+protected credentials and the [practice runbook](runbooks/practice.md). Task files are persistent
+data (`infra/task-files.local` / `/var/lib/infraege/task-files`), outside cleanup.
+
+Focused persistence acceptance: `cd apps/api && uv run pytest tests/test_minimal_bank.py` creates
+and disposes an isolated PG18 instance, runs migrations and validates parity, rollback, HTTP
+privacy, checker, filters, paging, files and lesson ordering. Disposable databases run in Docker;
+test processes stay on the host. `node scripts/practice-registry.mjs --check` checks authored
+publication metadata. Backup: [backup and restore](runbooks/backup-restore.md).
 
 ---
 
 ## Initial setup
 
 ```bash
+pnpm install --frozen-lockfile
 make dev
 ```
 
-`make dev` supplies disposable process-scoped local values, starts or resumes the dedicated
-development overlay, waits for every healthcheck, and requires no `.env`. It fingerprints
-dependency manifests, lockfiles, Dockerfiles, Vite configuration and other image-owned inputs:
-when they change, `make dev` rebuilds before starting; otherwise it keeps the fast resumable path.
-`make rebuild` remains the explicit force-rebuild command. Web source/public assets and API source use
-development bind mounts; the API publication registry and migrations are image-owned. Use `make stop` for a fast resumable halt; use `make down` only when the
-owned containers and network must be recreated. Both paths preserve the named PostgreSQL volume.
+`make dev` supplies disposable process-scoped local values, starts or resumes the development
+overlay, waits for every healthcheck and requires no `.env`. It fingerprints dependency manifests,
+lockfiles, Dockerfiles, Vite configuration and other image-owned inputs and rebuilds only when they
+change; `make rebuild` forces a rebuild. Web source/public assets and API source use bind mounts;
+the API publication registry and migrations are image-owned. `make stop` halts resumably; `make
+down` removes the owned containers and network. Both preserve the PostgreSQL volume. Lifecycle
+commands for the `infraege-dev` project are serialized: a second concurrent command fails
+immediately. Direct `docker compose` commands may create a separate `infra` project; Make owns only
+`infraege-dev`. A failed start prints service status and recent nginx/web/api logs.
 
-When this checkout has `athanor.yaml`, `make dev`, `make rebuild` and `make restart` run through
-the Athanor CLI and require nonempty `SMTP_USERNAME` and `SMTP_PASSWORD` in its vault. The local
-Postbox defaults are `SMTP_HOST=postbox.cloud.yandex.net`, `SMTP_PORT=587` and
-`MAIL_FROM=accounts@infraege.ru`; process-scoped overrides remain possible. A missing CLI, locked
-vault or incomplete SMTP credentials fails before Docker changes anything. Without the manifest,
-the original no-mail, no-Athanor development path remains available. `make stop` and `make down`
-never need to unlock the vault. `athanor.yaml` and `secrets.enc.yaml` are ignored local files,
-not release inputs; neither belongs in a Change 140 commit. No plaintext SMTP secret is written
-to `.env` or a tracked file.
+With `athanor.yaml` in the checkout, `make dev`, `make rebuild` and `make restart` run through the
+Athanor CLI and require nonempty `SMTP_USERNAME` and `SMTP_PASSWORD` in its vault (Postbox defaults:
+`SMTP_HOST=postbox.cloud.yandex.net`, `SMTP_PORT=587`, `MAIL_FROM=accounts@infraege.ru`). A missing
+CLI, locked vault or incomplete credentials fails before Docker changes anything. Without the
+manifest the no-mail development path remains. `athanor.yaml` and `secrets.enc.yaml` are ignored
+local files, never release inputs; no plaintext SMTP secret is written to a tracked file.
 
-Lifecycle mutations are serialized for the `infraege-dev` Compose project: if a previous
-`make dev`, `make rebuild`, `make stop`, `make down` or `make restart` is still running, a second
-command fails immediately instead of racing the first one. Docker Desktop may also show a separate
-`infra` project created by direct `docker compose` commands; the Make targets intentionally own
-only `infraege-dev`. A failed start prints service status and recent nginx/web/api logs.
+Lesson practice and the checker read only PostgreSQL through the API; web SSR uses the owning typed
+adapter and `API_INTERNAL_URL` (`http://api:8000` in Compose). Topic and Course theory are
+content-as-code. Only `/` and `/ege` are prerendered; DB-dependent pages are SSR. Legacy
+`content/tasks` JSON is historical test fixtures only, never packaged or read at runtime.
+`/practice` and `/practice/$taskId` use request-time API reads; signed-in standalone progress is
+account-owned and context-separated from lesson progress; guests are checked without saved
+progress. `/sitemap.xml` indexes the release-owned `/sitemap-static.xml` and bounded
+`/sitemap-practice/$page` partitions. Practice API reads, SSR learning pages, dynamic sitemaps and
+`/_serverFn` share one Nginx per-IP limit (120/minute, burst 110, immediate 429); static assets,
+unrelated pages and health do not consume it; the checker keeps its own 20/minute, burst 5 limit.
+Public deployments must enter through Nginx. Run `make practice-bootstrap` after the first `make
+dev`. Dev PostgreSQL exposes an allocated loopback-only port for host CLI/test access.
 
-Lesson practice and the checker read only PostgreSQL through the API; web SSR uses the owning
-typed adapter and `API_INTERNAL_URL` (`http://api:8000` in Compose). Topic and Course theory remain
-content-as-code. Only `/` and `/ege` are prerendered; DB-dependent lesson/course pages are SSR.
-Legacy `content/tasks` JSON remains only as historical test fixtures; it is neither packaged
-into application images nor mounted/read at runtime.
-`/practice` and `/practice/$taskId` use request-time API reads; signed-in standalone task
-progress is account-owned and context-separated from lesson progress. Guest answers are checked
-without accumulating progress. `/sitemap.xml` is a runtime index with the
-release-owned `/sitemap-static.xml` and bounded `/sitemap-practice/$page` partitions. Neither page
-builds nor static publication metadata read the database. Practice API reads, SSR learning pages,
-dynamic sitemaps and `/_serverFn` requests share one Nginx per-IP limit: 120/minute, burst 110,
-immediate 429 on excess. The burst permits catalog navigation plus 100 inline task loads. Static
-assets, unrelated pages and health do not consume it; checker retains its separate 20/minute,
-burst 5 limit. Host-only servers bypass Nginx; public deployments must enter through Nginx.
-Use explicit `make practice-bootstrap` after `make dev` for first local import;
-[practice](runbooks/practice.md) documents backup setup. Dev PostgreSQL exposes an allocated
-loopback-only port for host CLI/test access. Bootstrap applies the supplied bank; export operator edits before reimporting.
-
-Production credentials and deployment: [production](runbooks/production.md).
-Recovery: [backup and restore](runbooks/backup-restore.md).
+Production: [production](runbooks/production.md). Recovery: [backup and restore](runbooks/backup-restore.md).
 
 ### pnpm workspace policy
 
-The root `packageManager` and workspace policy pin pnpm 10.33.0, model dependency compatibility
-against the Node 22.13 minimum while CI and production images use the current pinned Node 22
-maintenance patch, reject invalid peers and stale `node_modules` before
-scripts, and fail on unreviewed dependency build scripts. The only approved install script is the
-exact currently locked `esbuild@0.28.2`; an esbuild update must therefore be reviewed and approved
-explicitly instead of inheriting permission by package name. Supply-chain cooldown, provenance
-downgrade prevention, exotic transitive-source blocking, and frozen-lockfile installs remain in
-force. Run `pnpm install --frozen-lockfile` explicitly after checkout; pnpm will not repair stale
-dependencies as a side effect of `pnpm run`.
+The root `packageManager` and workspace policy pin pnpm 10.33.0, model compatibility against the
+Node 22.13 minimum while CI and images use the pinned Node 22 maintenance patch, reject invalid peers
+and stale `node_modules` before scripts, and fail on unreviewed dependency build scripts. The only
+approved install script is the exact locked `esbuild@0.28.2`; an update must be approved
+explicitly. Supply-chain cooldown, provenance downgrade prevention, exotic transitive-source
+blocking and frozen-lockfile installs remain in force; pnpm does not repair stale dependencies as a
+side effect of `pnpm run`.
 
-Production Dockerfiles and third-party Compose images use a readable release tag plus an immutable
-multi-platform digest. Dependabot monitors Dockerfiles, Compose, package locks, Python dependencies,
-and SHA-pinned GitHub Actions weekly; image updates still require the repository gates and review.
-The image gate uses `--pull` so a missing or revoked digest fails closed, while the digest keeps a
-successful rebuild reproducible. Do not replace these references with floating `latest` tags or run
-blanket package-manager upgrades. If the current upstream image still contains a fixed security
-finding, pin only the affected OS packages to exact patched versions in the Dockerfile, following
-the existing API/Nginx pattern, and rerun image scanning. Remove such patches once a scanned base
-image supplies the fix itself.
+Production Dockerfiles and third-party Compose images use a readable tag plus an immutable
+multi-platform digest. Dependabot monitors Dockerfiles, Compose, locks, Python dependencies and
+SHA-pinned Actions weekly; updates still require gates and review. The image gate uses `--pull`
+so a missing or revoked digest fails closed. Never use floating `latest` tags or blanket upgrades.
+If the current upstream image still contains a fixed security finding, pin only the affected OS
+packages to exact patched versions (existing API/Nginx pattern), rescan, and remove the pin once a
+scanned base image supplies the fix.
 
-### VS Code workspace
+### Editor
 
-Run `pnpm install --frozen-lockfile` before opening the repository when local editor/test tooling
-has not been installed yet. The tracked [`.vscode/settings.json`](../.vscode/settings.json) points
-the TypeScript language service at `apps/web/node_modules/typescript/lib`; the web workspace
-resolves that SDK from the frozen pnpm lockfile. Accept VS Code's workspace-TypeScript
-prompt (or run **TypeScript: Select TypeScript Version** and choose **Use Workspace Version**) so
-the status bar no longer reports VS Code's bundled TypeScript version.
+The tracked `.vscode/settings.json` points the TypeScript language service at
+`apps/web/node_modules/typescript/lib` (choose **Use Workspace Version**), selects
+`apps/api/.venv`, and formats with the repository Prettier/Ruff. The web ESLint config pins
+`parserOptions.tsconfigRootDir` to its own directory for every TypeScript file. Markdown stays
+outside Prettier and keeps trailing whitespace. `.editorconfig` covers other editors.
 
-The workspace also recommends the ESLint, Prettier, Python, Ruff, and Playwright extensions used by the
-repository. Its shared settings select `apps/api/.venv`, expose the API pytest suite in Test
-Explorer, give the web workspace the correct ESLint working directory, update imports on
-file moves, formats supported source/config files with the repository-local Prettier or Ruff on
-save, and applies repository-backed lint fixes on explicit save. The web flat ESLint config
-also pins `parserOptions.tsconfigRootDir` to its own directory for every TypeScript extension,
-including contracts, tests, and root-level configs; this is required because the long-lived
-extension process can otherwise infer a different config root. Markdown remains
-outside the Prettier boundary and is exempt from trailing-whitespace removal because authored
-wrapping and two spaces can be meaningful. Personal UI, theme, font, autosave, and experimental
-settings remain user-level choices.
+`pnpm format:check` / `pnpm format` run Prettier plus Ruff over the API and the host-Python list.
+`pnpm lint` runs root tooling (`pnpm lint:tooling`: `scripts/**/*.mjs`, `lighthouserc.cjs`) and the
+web workspace, whose lint also runs typed production rules and executable E2E/platform policy
+self-tests. `pnpm lint:fix` applies safe fixes to both.
 
-Repository-wide commands are `pnpm format:check` for the non-mutating gate and `pnpm format` to
-apply Prettier plus Ruff. ESLint stays a separate quality pass: `pnpm lint` checks root tooling
-(`pnpm lint:tooling`: `scripts/**/*.mjs` and `lighthouserc.cjs`) and the web workspace. Web lint uses
-a content-based cache; root tooling uses the locked web ESLint with a separate flat configuration
-from repository root. `pnpm lint:fix` applies safe fixes to both. CI invokes the same `pnpm lint`. Web lint also
-runs typed production-code rules plus executable positive/negative checks for the E2E and web
-platform architecture policies; these static checks run in CI without collecting or executing
-tests. `.editorconfig` provides UTF-8, LF, final-newline, indentation, and whitespace defaults to
-editors beyond VS Code.
+---
+
+## Gate command groups
+
+`scripts/gate.py` is the one command source for local gates and CI (`.github/workflows/quality.yml`):
+
+```bash
+python3 scripts/gate.py affected [--base main]   # suggest groups and reminders for changed paths
+python3 scripts/gate.py run --group web-lint --group web-typecheck [--keep-going]
+python3 scripts/gate.py checks                    # list every group and its command
+```
+
+`run` prints one `group PASS/FAIL seconds` line per group and, on failure, the last 40 log lines;
+the full output is in `.output/gate/<group>.log` (removed by `make clean`). `affected` is advisory:
+it maps changed, staged and untracked paths to groups and prints focused-test/browser reminders
+and paths that need an explicit coverage decision. It never caches a result.
+
+Host Python (outside `apps/api`) has one list: `scripts/pyrightconfig.json` `include` for Pyright,
+plus Ruff-only Pillow tooling (`scripts/lesson_media`, `scripts/mascot`) declared in
+`scripts/lib/gate/core.py`. `python3 scripts/gate.py host-python` prints it for Ruff.
 
 ---
 
 ## Critical Gate
 
 Run once after the complete target set of a `/work` invocation; local `/ship` reruns only rows whose
-inputs changed or whose evidence is missing. It proves changed code is internally consistent without replaying
-the full regression, browser, infrastructure, security, accessibility, or performance suites.
-Fill every applicable row and report the rest as `SKIPPED` with a reason.
-
-Use the supported gate command groups and [verification runbook](runbooks/verification.md).
-An uncertain path requires an explicit affected-check decision; it never launches Full implicitly.
-One parent owns the gate. Do not repeat it independently in every worker.
+inputs changed or whose evidence is missing. Start from `python3 scripts/gate.py affected`, run the
+suggested groups once, then the focused rows below. Report every inapplicable row as `SKIPPED` with a
+reason. An unknown path requires an explicit coverage decision; it never launches Full. One parent
+owns the gate.
 
 | Check | Command | Preconditions / notes |
 |-------|---------|-----------------------|
-| Format | `pnpm format:check` | run once when formatted files/config changed; Markdown-only changes are excluded |
-| Lint | `pnpm --filter web lint` · `pnpm lint:tooling` · `cd apps/api && uv run ruff check app tests migrations` · `pnpm lint:shell` · `bash -n <other-changed-shell-files>` | scope to touched workspace or scripts; `pnpm lint` combines root tooling and web |
-| Type-check (affected) | `pnpm --filter web typecheck` · `cd apps/api && pnpm exec pyright app tests migrations` | app pyright reads `[tool.pyright]` in `apps/api/pyproject.toml`; shell changes have no type-check row |
-| Focused tests | `pnpm --filter web exec vitest run <changed-test-files>` · `cd apps/api && uv run pytest <changed-test-files-or-nodeids>` · `bash scripts/tests/<changed-contract>.test.sh` · `pnpm test:content-assets` | run only tests directly covering changed behavior; `test:content-assets` owns the isolated task-asset validator contract while `validate:content` checks the real content tree; documentation-only changes are `SKIPPED`; never expand this row to the full suite |
+| Static groups | `python3 scripts/gate.py run --group …` from `affected` | `format`, `python-format`, `*-lint`, `*-typecheck`, `host-*`, `shell-lint`, `docs-links`, `content-static`, `lesson-media`, `infra-config`, `api-contract` as suggested; web typecheck covers `src`, `tests`, `e2e` and Playwright configs |
+| Focused tests | `pnpm --filter web exec vitest run <changed-test-files>` · `cd apps/api && uv run pytest <changed-test-files-or-nodeids>` · `bash scripts/tests/<changed-contract>.test.sh` · `python3 -m unittest scripts.tests.<module>` | only tests directly covering changed behavior; documentation-only changes are `SKIPPED`; never expand this row to the full suite |
 | LSP diagnostics | available: yes | `python-lsp` (Pyright) and `typescript-lsp` MCP servers are auxiliary changed-file diagnostics; repository compiler/type-check commands are binding |
-| API type regen (`openapi-typescript` or equivalent) | `pnpm api:check` | only when the public API surface or its generated consumer changed; fails on tracked drift |
-| Repository hygiene | analyze required reports, then `make clean-dry-run && make clean && make clean-check` | always run last; the allowlist preserves dependencies, environments, secrets, authored evidence and data; never use `git clean -fdX` as a replacement |
+| Repository hygiene | analyze required reports, then `make clean` | always last for code/test/build sessions; it removes allowlisted outputs and fails if any remain; lint/test caches stay. Docs-only sessions skip it. Never use `git clean -fdX` |
 
 ---
 
 ## Full Gate
 
-Run only when explicitly requested through `/ship --full`. It is intentionally expensive and is
-not part of routine task completion, default local shipping, or every release. Release selects
-the missing affected checks, fresh candidate security/image evidence and the Release Gate.
+Run only on explicit `/ship --full`. It is expensive and is not part of routine completion, default
+local shipping or every release. Environment setup: [verification runbook](runbooks/verification.md#full-gate-environment).
 
 | Check | Command | Preconditions / notes |
 |-------|---------|-----------------------|
-| Formatting | `pnpm format:check` | Prettier and Ruff; Markdown and generated/dependency-owned files are explicitly ignored |
-| Infrastructure / bootstrap | `docker compose --project-name infraege-full-gate -f infra/docker-compose.yml -f infra/docker-compose.override.yml up --build -d` | The explicit project name and overlay ports `18080/13000/18000/15432` isolate the gate from unrelated Compose directories and common development ports. Verified live in change 03 on Docker Desktop/BuildKit: all four services become healthy; frontend and `/health` return 200 through Nginx. Current practice/checker budgets and explicit `429` responses follow Initial setup and the owning Nginx contract tests |
-| Operations contracts | `bash scripts/tests/backup-restore.test.sh && bash scripts/tests/backup-retention.test.sh && bash scripts/tests/deploy-preflight.test.sh && bash scripts/tests/host-web-gate.test.sh && bash scripts/tests/host-access-policy.test.sh && bash scripts/tests/root-password-access.test.sh && bash scripts/tests/release-retention.test.sh && bash scripts/tests/web-image-build.test.sh && bash scripts/tests/clean-local-artifacts.test.sh` | local/fake transport only; `backup-restic-integration.test.sh` is an explicit isolated manual check, not a routine gate |
-| Host Python contracts | `python3 -m unittest scripts.tests.application_db_test scripts.tests.deploy_orchestration_test scripts.tests.gate_test scripts.tests.release_checkpoint_test scripts.tests.change_history_test` | includes restore/deploy boundaries and verification orchestration; local fake transports |
-| Migrations | `cd apps/api && uv run alembic upgrade head && uv run alembic current && uv run alembic check` | explicit isolated gate DB and migration-role URL; Compose runs its own separate migration job before API startup; never CI or production |
+| Static groups | `python3 scripts/gate.py run --keep-going --group format --group python-format --group shell-lint --group tooling-lint --group web-lint --group web-typecheck --group api-lint --group api-typecheck --group host-ruff --group host-python --group docs-links --group content-static --group lesson-media --group api-contract` | the same groups CI runs |
+| Infrastructure / bootstrap | `docker compose --project-name infraege-full-gate -f infra/docker-compose.yml -f infra/docker-compose.override.yml up --build -d` | overlay ports `18080/13000/18000/15432` isolate the gate; all four services must become healthy |
+| Operations contracts | `bash scripts/tests/backup-restore.test.sh && bash scripts/tests/backup-retention.test.sh && bash scripts/tests/deploy-preflight.test.sh && bash scripts/tests/host-web-gate.test.sh && bash scripts/tests/host-access-policy.test.sh && bash scripts/tests/root-password-access.test.sh && bash scripts/tests/release-retention.test.sh && bash scripts/tests/web-image-build.test.sh && bash scripts/tests/clean-local-artifacts.test.sh` | local/fake transport only; other contracts are affected-area checks listed in the verification runbook |
+| Host Python contracts | `python3 -m unittest scripts.tests.application_db_test scripts.tests.deploy_orchestration_test scripts.tests.gate_test scripts.tests.release_checkpoint_test scripts.tests.change_history_test` | local fake transports |
+| Migrations | `cd apps/api && uv run alembic upgrade head && uv run alembic current && uv run alembic check` | isolated gate DB and migration-role URL; never CI or production |
 | Backend test suite | `cd apps/api && uv run pytest` | local only |
-| API contract drift | `pnpm api:check` | requires the frozen API and pnpm environments; tracked schema and generated TypeScript must match |
-| Frontend build | `scripts/run-host-web-gate.sh pnpm --filter web build` | temporarily stops only the `infraege-full-gate` Compose web service (host port 13000), runs the host build/prerender, then restores that service on success/failure; fails if any crawled page 500s |
+| Frontend build | `scripts/run-host-web-gate.sh pnpm --filter web build` | temporarily stops only the gate web service, builds/prerenders on the host, restores it; fails if any crawled page 500s |
 | Frontend unit tests | `pnpm --filter web test` | local only |
-| E2E lint / determinism | `pnpm --filter web exec playwright test --list` | local delivery check; also collected by the weekly/manual browser audit; validates Playwright config/spec collection without running the journey |
-| E2E (Playwright) | `pnpm --filter web test:e2e` | local delivery check; also executed by the weekly/manual browser audit; starts local Vite + Uvicorn through Playwright `webServer` and verifies public routes, all published course lessons without JS, practice, degraded states, reading layout and accessibility in Chromium; requires the seeded isolated bank described below |
-| Smoke | `curl -f http://localhost:18000/health/ready` (backend) — frontend smoke is the build prerender crawl | Full Gate API port from `docker-compose.override.yml` |
-| Accessibility audit | covered by `pnpm --filter web test:e2e` above | complete E2E includes `e2e/accessibility.spec.ts`; do not run it twice. `pnpm audit:a11y` remains the focused command when E2E was not selected |
-| Content validation | `pnpm test:content-assets && pnpm validate:content` | the isolated validator tests reject unsafe paths and invalid asset metadata before the real-tree pass; `validate:content` checks Course/module/lesson membership and titles, generated publication registry, and the complete canonical bank through the API CLI (schema, lesson positions, theory material/section references and file bytes). Requires uv and the frozen API environment; no database or credentials. The legacy asset tests retain historical fixture coverage |
-| Repository hygiene | analyze all gate reports, then `make clean-dry-run && make clean && make clean-check` | always run last; Lighthouse removes its external Chrome profile on every exit, while this terminal step removes retained reports, builds and caches from the repository |
+| E2E (Playwright) | `pnpm --filter web exec playwright test --list && pnpm --filter web test:e2e` | seeded isolated bank; includes `e2e/accessibility.spec.ts` (do not run `audit:a11y` twice) |
+| Smoke | `curl -f http://localhost:18000/health/ready` | frontend smoke is the build prerender crawl |
+| Content validation | `pnpm validate:content` | Course/module/lesson membership, publication registry and the complete bank through the API CLI; no database or credentials |
+| Repository hygiene | analyze all reports, then `make clean` | always last |
 
-Tests remain local-only. Weekly/manual GitHub audits are the only browser exception and never add
-ordinary pytest, Vitest or database suites to push/PR quality jobs.
-Broad security (`pnpm audit:security`) and performance (`scripts/run-host-web-gate.sh pnpm audit:performance`)
-are separate weekly/manual or specifically requested checks, not implicit Full rows. Performance
-consumes an existing successful build only when inputs are unchanged; its current lab ceilings are
-LCP ≤4.0s, CLS ≤0.1 and TBT ≤200ms, while LCP ≤2.8s remains the product target.
-
-### Full Gate environment
-
-Run in one host shell with the frozen pnpm/API environments installed. Use a fresh isolated
-`infraege-full-gate` database; never supply production credentials or reuse development storage.
-Before bootstrap, export `POSTGRES_USER=infraege`, `POSTGRES_DB=infraege` and distinct random
-URL-safe values of at least 16 characters for `POSTGRES_PASSWORD`, `DB_RUNTIME_PASSWORD`,
-`DB_APP_PASSWORD`, `DB_IMPORT_PASSWORD`, `DB_MIGRATION_PASSWORD`, `DB_BACKUP_PASSWORD`, plus an
-independent `AUTH_CSRF_SECRET` of at least 32 characters. `openssl rand -hex 24`
-generates a suitable value. Keep these process-scoped or in a mode-600 file outside Git; do not
-print the environment or rendered Compose secrets. Set `TASK_FILES_DIR` to a dedicated absolute
-temporary directory, `APP_ENV=development` and `DEPLOY_SHA=development`.
-
-After bootstrap, wait for PostgreSQL/API/web/Nginx health and the successful migration job. From
-`apps/api`, supply `MIGRATION_DATABASE_URL` using `infraege_migration` and host port 15432 for
-the migration row. Import `../../content/practice-bank` through the host CLI with
-`IMPORT_DATABASE_URL` for `infraege_import` on that same isolated database. The URL shape is
-`postgresql://ROLE:PASSWORD@127.0.0.1:15432/infraege`; passwords come from the protected environment.
-The migration job alone creates an empty schema and is not a seeded-bank acceptance.
-
-For Playwright/axe, export the read-only `DATABASE_URL` for `infraege_runtime` and
-`ACCOUNT_DATABASE_URL` for `infraege_app` on port 15432, and retain `TASK_FILES_DIR`.
-For Lighthouse and host SSR, set
-`API_INTERNAL_URL=http://127.0.0.1:18000`. Run security scans after browser/build/performance jobs
-finish: generated trace/report files change during those jobs and can invalidate filesystem scans.
-Keep the same environment for `run-host-web-gate.sh` so Compose interpolation succeeds. Finish
-by stopping/removing only the owned gate containers/network, retaining data volumes, then perform
-repository hygiene after reports have been analyzed. No test runner executes inside a container.
+Broad security (`pnpm audit:security`) and performance (`scripts/run-host-web-gate.sh pnpm
+audit:performance`) are weekly/manual or specifically requested, not Full rows. Lab ceilings are
+LCP ≤4.0s, CLS ≤0.1 and TBT ≤200ms; LCP ≤2.8s remains the product target.
 
 ---
 
 ## Release Gate
 
 Run only by `/ship --release`, after the selected release coverage has passed and the change is
-merged locally. Prepublication checks run before push; published-image checks necessarily run
-after push and before deploy. A failed publication check blocks deploy, not a fictitious undo
-of an already completed push. See the [verification runbook](runbooks/verification.md).
+merged locally. Prepublication checks run before push; published-image checks after push and
+before deploy. A failed publication check blocks deploy, not a fictitious undo of a push.
 
 | Check | Command | Preconditions / notes |
 |-------|---------|-----------------------|
-| Unpublished commit secrets | `bash scripts/security-gate.sh pre-push FULL_BASE_SHA FULL_HEAD_SHA` | before push, scan every commit in the explicit base..head range; base is the verified remote publication tip, head is the candidate merge SHA. Missing/ambiguous ancestry blocks publication; do not treat a tree-only scan as equivalent |
-| Changed dependencies | `bash scripts/security-gate.sh changed-dependencies FULL_BASE_SHA FULL_HEAD_SHA` | before push, audit only changed pnpm/Python ecosystems; checked-out head must match and dependency manifests/locks must be clean. A `package.json` outside the root and pnpm-workspace packages (e.g. one-off docs tooling) is reported as not a release input and skipped; an unreadable workspace fails closed. Other changed trust boundaries require their owning targeted checks |
-| Published image build + scan | successful exact-SHA `images.yml` run, verified by release checkpoint tool | after push, before deploy: the workflow scans all three published digests for fixed HIGH/CRITICAL findings and emits SBOM/provenance. `pnpm audit:images` remains an optional local diagnostic, not a second mandatory build/scan |
-| First account-schema cutover | `bash scripts/rehearse-account-cutover.sh --validate FULL_RESTIC_SNAPSHOT_ID SHA API_DIGEST` then `--run` with the same inputs | after published-image verification and before deploy dispatch, only when moving from `122_01` to `140_01`; follow [backup and restore](runbooks/backup-restore.md). The command authenticates and restores the exact Restic snapshot, checks the published digest and writes root-owned `/etc/infraege/accounts-schema-ready` only after a passing second restore; missing evidence blocks deploy |
-| Production Compose render | `scripts/render-production-config.sh /etc/infraege/production.env >/dev/null` | run on the provisioned VPS or against a complete temporary env |
-| Health/deploy verification | `scripts/check-release-target.sh` | Before the first successful deploy, permits an unavailable site only when the deploy workflow has no successful run and both public A records match the VPS. Later releases fail closed unless current production health reports a 40-character SHA. After push, the deploy workflow checks the public page/readiness and rolls back on failure. |
+| Unpublished commit secrets | `bash scripts/security-gate.sh pre-push FULL_BASE_SHA FULL_HEAD_SHA` | scan every commit from the verified remote tip to the candidate merge SHA; missing/ambiguous ancestry blocks publication; a tree-only scan is not equivalent |
+| Changed dependencies | `bash scripts/security-gate.sh changed-dependencies FULL_BASE_SHA FULL_HEAD_SHA` | audits only changed pnpm/Python ecosystems; head must match and manifests/locks must be clean. A `package.json` outside the root and workspace packages is reported as not a release input; an unreadable workspace fails closed |
+| Published image build + scan | `python3 scripts/release_checkpoint.py predeploy --sha FULL_HEAD_SHA` | after push, before deploy: requires successful exact-SHA `quality.yml` and `images.yml`; images scans all three published digests and emits SBOM/provenance. `pnpm audit:images` is an optional local diagnostic |
+| Schema transition | owning procedure in [backup and restore](runbooks/backup-restore.md#schema-transition-attestation) | only when the candidate changes the production schema head: rehearse against restored production data and record the root-owned exact-SHA attestation before deploy; missing evidence blocks deploy |
+| Production Compose render | `scripts/render-production-config.sh /etc/infraege/production.env >/dev/null` | on the provisioned VPS or against a complete temporary env |
+| Health/deploy verification | `scripts/check-release-target.sh`, then after deploy `python3 scripts/release_checkpoint.py postdeploy --sha FULL_HEAD_SHA` | current production health must report a 40-character SHA; the deploy workflow checks public page/readiness and rolls back on failure |
 | `gh` repository/environment | `gh auth status && gh repo view avatarsik6699/infraegev2` | verify the documented no-reviewer production policy, `can_admins_bypass`, and required secrets/vars |
 
 ---
@@ -300,8 +234,7 @@ tool that isn't available must be reported as skipped with a reason, never silen
 | Backend architecture decision | `backend-architecture` skill | during planning and architecture review | yes — installed in the local Codex skill catalog |
 | Frontend UI/design change | `impeccable` skill (`critique` before; `polish` + `audit` and its detector before check-off; `document` when the visual system changes) against `DESIGN.md`; Playwriter stays the browser check and `dsh-ui-review` the visual/a11y review | during design, implementation and before check-off | yes — user-level skill; `frontend-design` plugin disabled in `.claude/settings.json` |
 
-Mark a row `no` (not available) rather than leaving it blank — an unmarked row is otherwise
-ambiguous between "not asked" and "not needed."
+Mark a row `no` (not available) rather than leaving it blank.
 
 ---
 
@@ -342,80 +275,53 @@ a listening port alone does not. Explain any remaining failure before falling ba
 The runtime guide is `~/.local/share/playwriter-runtime/README.md`.
 Repository-prescribed automated Playwright tests keep their existing runner.
 
-## Testing Policy
-
-Unit tests (Vitest and pytest), database acceptance, and ordinary Playwright E2E run **only
-locally**. They must never be containerized or added to push/PR quality jobs. The narrow exception
-is weekly/manual `audit-browser.yml`: a host runner may use disposable synthetic data for the
-browser portfolio and a separate unauthenticated read-only public Lighthouse observation. It has
-no production credentials or writes and does not make a broad browser suite routine CI.
-
-Docker may serve the application for unrelated infrastructure verification, but no test runner or
-browser is installed or executed inside an application image or Compose service. The Playwright
-gate uses its locally installed Chromium and locally starts Vite and Uvicorn.
-
 ## Testing
 
-### Layout stability (focused production browser suite)
-
-```bash
-scripts/run-host-web-gate.sh pnpm --filter web build
-pnpm --filter web test:layout
-```
-
-This local-only suite owns a production Node server at `127.0.0.2:3200` and checks desktop/mobile
-readability with pending and failed fonts, plus mobile lesson-outline geometry while scripts are
-held and then released. Supply `API_INTERNAL_URL` for the seeded local API. Normal E2E separately checks public routes and every
-published Python lesson without JavaScript. Use a fresh production build for delivery evidence.
-No decorative artwork or pixel-comparison infrastructure remains.
+Unit tests (Vitest and pytest), database acceptance and ordinary Playwright E2E run **only
+locally**; never containerized and never in push/PR quality jobs. The narrow exception is
+weekly/manual `audit-browser.yml`: a host runner with disposable synthetic data plus a separate
+read-only public Lighthouse observation, without production credentials or writes. No test runner
+or browser runs inside an application image or Compose service.
 
 ### Backend
 
 ```bash
-cd apps/api && uv run pytest
+cd apps/api && uv run pytest            # markers: -m pure (no Docker), -m db
 ```
 
-- Use FastAPI `TestClient`; do not call a live server or external network from unit tests.
-- Prefer function-style pytest tests and fixtures. Build content fixtures with small helpers such
-  as the existing `make_task()` pattern rather than shared mutable objects or class setup.
-- Keep each test focused on observable service or HTTP behavior.
-- Own `TestClient` through a pytest fixture/context manager and reset FastAPI dependency overrides
-  in fixture teardown so failures cannot leak global application state into later tests.
+- Use FastAPI `TestClient`; never call a live server or external network from unit tests.
+- Prefer function-style tests and fixtures; build content with helpers such as `make_task()`.
+- Own `TestClient` through a fixture/context manager and reset dependency overrides in teardown.
 
-### Frontend (if applicable)
+### Frontend
 
 ```bash
 pnpm --filter web test
 pnpm --filter web test:e2e:install  # installs Chromium only; first run / browser update
 pnpm --filter web test:e2e
+scripts/run-host-web-gate.sh pnpm --filter web build && pnpm --filter web test:layout
 ```
 
-- Vitest unit tests live in `apps/web/tests/`.
-- Playwright specs live in `apps/web/e2e/`; browser journeys use Page Object Model classes from
-  `e2e/pages/*.page.ts`, typed application fixtures from `e2e/fixtures.ts`, and user-visible
-  `getByRole`/`getByText` locators. Specs describe journeys; POMs own page actions/assertions, and
-  fixtures own object construction plus resource teardown. Specs import `test` only from
-  `./fixtures`, consume application fixtures only, and neither instantiate POMs nor use Playwright
-  locators, assertions, runner plumbing, or context/page APIs directly. `pnpm --filter web lint`
-  enforces this boundary and runs policy self-tests; extend the fixture or owning POM instead of
-  bypassing the rule.
-- Prefer locator actions and web-first assertions over `waitForTimeout`, selector polling, or
-  global `networkidle`. When streamed SSR markup precedes hydration, retry the user action against
-  an observable interactive state inside the owning POM.
-- Vitest owns mock cleanup through workspace config (`clearMocks`, `restoreMocks`, and
-  `unstubGlobals`); keep fake-timer and environment-variable cleanup beside the tests that own
-  those resources.
-- `playwright.config.ts` contains one project only: Chromium. It always starts fresh local frontend
-  and backend processes on dedicated `127.0.0.2:3100` / `127.0.0.2:8100` ports with strict port
-  binding; it never reuses an arbitrary process that may serve a stale checkout.
+- Vitest unit tests live in `apps/web/tests/`; workspace config owns mock cleanup
+  (`clearMocks`, `restoreMocks`, `unstubGlobals`); keep fake-timer/env cleanup beside its test.
+- Playwright specs live in `apps/web/e2e/`. Specs import `test` only from `./fixtures` and consume
+  domain fixtures; Page Objects (`e2e/pages/*.page.ts`) own actions, user-visible locators and
+  assertions; fixtures own construction and teardown. `pnpm --filter web lint` enforces this with
+  policy self-tests — extend the fixture or owning POM instead of bypassing it.
+- Prefer locator actions and web-first assertions over `waitForTimeout`, selector polling or
+  global `networkidle`. When streamed SSR precedes hydration, retry the user action against an
+  observable interactive state inside the owning POM.
+- `playwright.config.ts` has one Chromium project and always starts fresh frontend/backend
+  processes on strict `127.0.0.2:3100` / `127.0.0.2:8100` ports; it never reuses a server.
+- The layout suite owns a production server on `127.0.0.2:3200` and checks readability with
+  pending/failed fonts and mobile outline geometry; supply `API_INTERNAL_URL` for a seeded API.
+- Under `gate.py` (`GATE_SUMMARY=1`) Playwright uses the `dot` reporter.
 
-E2E requires a seeded bank. Use an isolated database for selected release verification; the
-weekly browser launcher owns its disposable synthetic database. For ordinary development run
-`make dev` and explicit `make practice-bootstrap` first,
-then provide the read-only runtime `DATABASE_URL` to the host runner, using the allocated
-loopback port from `docker port infraege-dev-postgres-1 5432`. Set `TASK_FILES_DIR` to the absolute
-local task-files directory for file delivery. Never point a test runner at production. No test
-imports a synthetic bank into the persistent development volume.
+E2E requires a seeded bank. Prefer `bash scripts/run-isolated-browser-audit.sh` (disposable bank;
+`E2E_ARGS="e2e/<spec>.ts"` limits it). For the dev stack run `make practice-bootstrap`, export the
+read-only `DATABASE_URL` on the port from `docker port infraege-dev-postgres-1 5432`, and set
+`TASK_FILES_DIR` to the local task-files directory. Never point a runner at production or import a
+synthetic bank into the development volume.
 
 ---
 
@@ -423,215 +329,72 @@ imports a synthetic bank into the persistent development volume.
 
 ```
 .
-├── docs/
-│   ├── SPEC.md              # vision/contract anchor
-│   ├── STACK.md              # this file
-│   ├── KNOWN_GOTCHAS.md      # recurring pitfalls
-│   ├── CHANGE_TEMPLATE.md    # template for new changes
-│   ├── changes/              # active units of work
-│   │   └── archive/          # completed units of work
-│   └── playbooks/            # plan.md / work.md / ship.md
-├── .claude/skills/            # Claude Code skill wrappers (plan, work, ship)
-├── .agents/skills/             # generic-agent skill wrappers (plan, work, ship)
-├── .vscode/                    # shared workspace editor settings (repository TypeScript SDK)
-├── .editorconfig               # editor-independent whitespace and indentation defaults
-├── prettier.config.mjs         # repository-local Prettier opt-in/config anchor
-├── plugins/sdd-workflow/       # Codex plugin (skills, commands, MCP, hooks)
-├── apps/web/, apps/api/, infra/, ops/, content/, scripts/
+├── docs/                       # SPEC, STACK, FRONTEND, KNOWN_GOTCHAS, CHANGE_TEMPLATE
+│   ├── changes/ (archive/)     # active and completed units of work
+│   ├── playbooks/              # plan.md / work.md / ship.md
+│   ├── runbooks/               # operations, verification, lesson pipeline/patterns
+│   └── artifacts/              # architect sources and references (lessons, mockups, references)
+├── content/                    # practice bank, legacy task fixtures, lesson-design stands
+├── scripts/                    # gate, history, release, ops tooling; lesson_design, lesson_media, mascot
+├── apps/web/, apps/api/, infra/, ops/
+├── .claude/skills/, .agents/skills/, plugins/sdd-workflow/   # thin workflow wrappers
 └── AGENTS.md / CLAUDE.md       # AI agent rules
 ```
 
-### Frontend layers (`apps/web/src/`) — pragmatic FSD-like, established in change 02
+### Frontend (`apps/web/src/`)
 
-Architecture, code-shape, interaction and visual-system rules for this tree live in
-[`docs/FRONTEND.md`](FRONTEND.md) — see `AGENTS.md` Core Rule 10.
+Layers, ownership, platform boundaries and state rules are binding in [FRONTEND](FRONTEND.md) §3.
+Tooling facts: `eslint.config.js` enforces the downward import zones and the platform allowlist
+(raw `window`, `document`, `navigator`, storage, `fetch`, `process` only in owning adapters,
+`shared/config/client-env.ts` and `*.server.ts`). TanStack route modules keep two narrow
+unsafe-value exemptions (generated augmentation resolved by `tsc` but not Project Service) plus
+the route-only `only-throw-error` exemption for `notFound()`. Server state uses a per-router
+TanStack Query client; regenerate `contracts/openapi.json` and `shared/api/schema.ts` with
+`pnpm api:generate` and prove no drift with `pnpm api:check`.
 
-```
-app/         application providers, project-wide configuration, route states and global styles.
-routes/      TanStack Start file-based routing (framework-fixed location). During the foundation
-             reset it owns only thin route definitions and the generated route tree.
-pages/       route-level composition and content that belongs to one page.
-widgets/     reusable composite page chrome, including lesson navigation.
-features/    reusable user-facing capabilities, including lesson practice and progress.
-entities/    reusable domain concepts, including lesson semantics and learning visuals.
-shared/      domain-agnostic config/lib plus local policy components owning semantic APIs and CSS;
-             Base UI behavior stays an internal detail of those components.
-```
-
-Import direction is enforced by `eslint.config.js`'s per-layer `no-restricted-imports` zones: each
-layer may import only itself and the lower layers listed below it in this table (e.g. `entities` must
-not import from `features`/`widgets`/`pages`/`routes`). `~/*` still maps to `src/*` (see
-`tsconfig.json`) — no separate per-layer alias set. Every slice exposes a strict `index.ts` public
-API; cross-slice deep imports are forbidden, while imports within a slice are relative. UI does
-not use an extra `ui/` segment: a root component is colocated with its `*.types.ts` and optional
-CSS Module, and recursively complex private components live under `components/`. Meaningful
-`api/`, `model/`, and `lib/` segments remain.
-
-Production modules use explicit execution and integration boundaries. Public Vite values live in
-`shared/config/client-env.ts`; server environment reads live in marker-protected `*.server.ts`
-modules and happen inside the request handler. Browser globals and storage are owned by focused
-`shared/lib` adapters, while HTTP calls are owned by the consuming slice's `api/`. Components,
-stores, pages, and routes call those semantic APIs rather than raw `window`, `document`,
-`navigator`, storage, `fetch`, or `process`. `pnpm --filter web lint` enforces this allowlist,
-type-checks production lint rules through typescript-eslint Project Service, and runs executable
-policy cases. TanStack route modules retain two narrow unsafe-value lint exemptions because its
-generated augmentation is resolved by the project `tsc` gate but not fully by Project Service;
-the documented `notFound()` sentinel also requires the route-only `only-throw-error` exemption.
-
-Server state belongs to a per-router TanStack Query client, which is integrated with SSR and is
-never reused between requests. No product query currently consumes it. Future domain operations
-use the single generated `shared/api` transport. Regenerate `contracts/openapi.json` and
-`shared/api/schema.ts` with `pnpm api:generate`; prove no drift with `pnpm api:check`.
-
-The account feature owns session and server progress reads. Lesson and standalone practice keep
-only transient answer/input feedback in memory; old browser progress is ignored without migration.
-Course progress remains a derived selector over current revision-aware server results. No account,
-answer or progress data is persisted in browser storage.
-
-Route error/not-found UI and delayed navigation progress are application-level defaults.
-Client transitions keep the current page until the next route is ready; the progress bar appears
-after 150 ms, without a global pending screen, skeleton or minimum display delay. Expected product errors remain local to their owner. Additional Base UI primitives or
-component libraries are adopted only with a real consumer and a local semantic boundary.
-
-### Backend modules (`apps/api/app/`) — DDD-like, established in change 02
+### Backend modules (`apps/api/app/`)
 
 ```
 main.py      create_app() factory.
-api/         router.py — aggregates every module's router under one prefix (`/api`, not `/api/v1`
-             — see SPEC §4 for the current API contract).
-core/        cross-cutting infra with no HTTP surface of its own: config (Settings), exceptions
-             (AppException base), logging (structlog), middleware (request IDs and request logging). Modules may import from core/; core/ must not import modules/.
-modules/     health/, tasks/, practice/ and account/ (authentication, identities and progress).
-             content/ owns shared content-block DTOs; it does not expose an HTTP router. Each holds only the
-             files it needs: api.py (routes), service.py (logic), schemas.py (Pydantic DTOs),
-             exceptions.py (module-specific AppException subclasses).
-shared/      cross-module code used by >= 2 modules — stays an empty placeholder until that's
-             actually true; do not pre-populate it.
+api/         router.py — aggregates every module's router under `/api` (not `/api/v1`; SPEC §4).
+core/        config (Settings), exceptions, logging (structlog), middleware, database engine and
+             metadata. Modules may import core/; core/ never imports modules/.
+modules/     health/, tasks/, practice/, account/ (authentication, identities, progress) and
+             content/ (shared content-block DTOs, no router). Each holds only api.py, service.py,
+             schemas.py, exceptions.py as needed.
+shared/      cross-module code used by >= 2 modules; empty until that is true.
 ```
 
-`core/database.py` owns engine construction and shared metadata. `modules/practice/` owns typed
-models, content validation, immutable files, one transactional import/export and a host CLI.
-Migrations live in `apps/api/migrations/`. Public projections exclude checker/private provenance.
-The checker requires the displayed solution revision; the counter advances on solution-affecting
-edits. There is no audit history or concurrent editorial workflow.
+`modules/practice/` owns typed models, content validation, immutable files, one transactional
+import/export and a host CLI. Migrations live in `apps/api/migrations/`. Public projections exclude
+checker/private provenance; the checker requires the displayed solution revision.
 
-### Application maintenance code
+### Host maintenance code
 
-Keep Bash as explicit command/lifecycle adapters. Structured backup metadata, checksums,
-references, exported-snapshot consistency and restore invariants belong to the stdlib-only
-`scripts/lib/application_db/` package, invoked by `scripts/application_db.py`. Keep the existing
-Make interface and bundle compatibility; do not introduce an SDK/service/framework for host tools.
-Production hosts require Python 3.12+ (Ubuntu 24.04 supplies it). Shell static checks require
-ShellCheck >=0.9; `pnpm lint:shell` checks the declared maintenance allowlist and runs in static CI.
-A shell syntax check is not evidence that rollback runs: test the installed failure boundary.
-`EXIT` recovery preserves the original failure and invokes/health-checks rollback once.
-
-Maintenance checks (host-only, from repository root):
+Bash stays an explicit command/lifecycle adapter. Structured backup metadata, checksums and restore
+invariants belong to the stdlib-only `scripts/lib/application_db/` package (`scripts/application_db.py`);
+gate, history and release-checkpoint tooling follow the same stdlib-only boundary and are tested
+with fake commands/transports. Production hosts require Python 3.12+. A shell syntax check is not
+evidence that rollback runs: test the installed failure boundary; `EXIT` recovery preserves the
+original failure and invokes/health-checks rollback once. Lesson tooling: `scripts/lesson_design`
+(binding [pipeline](runbooks/lesson-pipeline.md)), `scripts/lesson_media` (Pillow engine,
+[lesson authoring](runbooks/lesson-authoring.md)) and `scripts/mascot` (illustration pipeline).
 
 ```bash
-pnpm lint:shell
-pnpm exec pyright --project scripts/pyrightconfig.json
-python3 -m unittest discover -s scripts/tests -p application_db_test.py
-python3 -m unittest discover -s scripts/tests -p deploy_orchestration_test.py
-python3 -m unittest discover -s scripts/tests -p gate_test.py
-python3 -m unittest discover -s scripts/tests -p release_checkpoint_test.py
+python3 -m unittest discover -s scripts/tests -p '<module>_test.py'
 uv run --no-project --with pillow python -m unittest discover -s scripts/tests -p lesson_media_engine_test.py
 bash scripts/tests/lesson-media-nginx.test.sh
 ```
 
-The optional snapshot integration test requires an explicitly selected `PRACTICE_BACKUP_CONTAINER`; never run it in CI. `pnpm format:check` includes maintenance Python. Lint from `apps/api` with
-`uv run ruff check ../../scripts/application_db.py ../../scripts/lib/application_db
-../../scripts/tests/application_db_test.py ../../scripts/tests/deploy_orchestration_test.py`.
-
-Gate/checkpoint tooling follows the same stdlib-only boundary. Its focused lint command is
-`cd apps/api && uv run ruff check ../../scripts/gate.py ../../scripts/lib/gate
-../../scripts/tests/gate_test.py ../../scripts/release-checkpoint.py ../../scripts/release_checkpoint.py
-../../scripts/tests/release_checkpoint_test.py`. These checks exercise fake commands/transports;
-testing orchestration does not require running application Full Gate or contacting production.
-See [verification](runbooks/verification.md) and [agent workflow](runbooks/agent-workflow.md).
-
-Native Codex setup: `.codex/config.toml` selects GPT-6.1 Sol and caps children at two;
-`.codex/agents/*.toml` defines bounded Luna roles, GPT-6.1 Sol design/review and Astra escalation.
-`bash scripts/codex-orchestrator.sh` launches from this repository with normal CLI arguments.
-New trusted-repository sessions load the roles; existing sessions keep their runtime settings.
-Agent-config acceptance uses TOML parsing, Codex strict config loading and a read-only delegation
-smoke; launcher changes use `pnpm lint:shell`. No application build/DB/browser suite is needed.
-
+The optional snapshot integration test requires an explicitly selected `PRACTICE_BACKUP_CONTAINER`;
+never run it in CI. Agent configuration: [agent workflow](runbooks/agent-workflow.md). Change
+history and compaction: [change history](runbooks/change-history.md).
 
 ## Common operations
 
 ```bash
-# Start the stack
-make dev
-
-# Rebuild after changing image-owned configuration or dependencies
-make rebuild
-
-# Gracefully stop everything, preserving containers and PostgreSQL data for fast resume
-make stop
-
-# Explicitly remove the development containers and network; PostgreSQL data remains
-make down
-
-# Follow service logs
-make logs
-
-# Show health/status
-make ps
-
-# Remove regenerable local reports, build outputs, and caches
-# Preserves node_modules, apps/api/.venv, env files, and PostgreSQL/Docker data
-make clean-dry-run
-make clean
-make clean-check
-
-# Add a new migration / schema change
-# Use explicit MIGRATION_DATABASE_URL with the migration role; see runbooks/practice.md
-
-# Format / lint
-cd apps/web && pnpm lint
-cd apps/api && uv run ruff check app tests
+make dev | make rebuild | make stop | make down | make logs | make ps
+make clean          # remove regenerable outputs, then verify none remain (keeps deps, envs, data)
+make clean-dry-run  # optional preview
+# New migration: explicit MIGRATION_DATABASE_URL with the migration role (runbooks/practice.md)
 ```
-
-## Change history
-
-`python3 scripts/change_history.py inspect` validates ordinary/compacted history and reports the
-active file, covered range and next number. `python3 scripts/change_history.py next` refuses
-planning until the active change is shipped. COMPACTED.md is not an active change. Numbering uses
-`max(covered_through, active numbers, remaining archived numbers) + 1` (at least two digits).
-
-For approved compaction, list exact repository-relative files in a temporary sorted path
-file, then run `python3 scripts/change_history.py snapshot <full-source-sha> <covered-through>
-<paths-file>`. The source must contain every represented original; output is JSON metadata for one
-`<!-- compacted-metadata -->` fenced `json` block in `docs/changes/archive/COMPACTED.md`. The command
-compares every local file byte-for-byte with its Git blob, rejects symlinks/unsafe paths and checks
-complete archive coverage, including explicitly missing numbers. It does not remove any file.
-The digest binds ordered paths and their SHA-256 blob hashes. Version 2 metadata contains ordered
-`snapshots`, each with `covered_from`, `covered_through`, a full `source_commit`, `source_paths`,
-`source_digest`, date and missing numbers. Ranges must be contiguous from 1. Legacy flat metadata
-is still accepted and normalized; appending a snapshot retains every previous SHA/hash/path value.
-Only `docs/` sources and completed `.impeccable/critique/` artifacts are allowed; active changes
-and COMPACTED.md cannot be snapshot inputs. Add compact human-readable decisions, risks and
-approvals beside the metadata before deleting only verified originals. The snapshot command
-appends the next verified range in its output; it never edits metadata or deletes files itself.
-
-Read original content without overwriting the checkout:
-
-```bash
-python3 scripts/change_history.py read docs/changes/archive/01-project-foundation.md
-# Or inspect another exact source_paths entry from COMPACTED.md.
-# A path present in multiple snapshots requires the original full source SHA:
-python3 scripts/change_history.py read docs/artifacts/repository-hygiene-audit.md --source a443c286f6928c9501c5fee4365cf93aba00184b
-```
-
-Binary reads write exact bytes to stdout; redirect to a new temporary path when needed. The recorded
-full source SHA is immutable, independent of branch/tag movement. This is local Git preservation,
-not an off-site backup. Missing source objects (including shallow clones) stop the tool: fetch the
-recorded commit/full history from a trusted copy and rerun; never substitute HEAD or reset numbering.
-After normal ship, rerun `inspect` to verify ordinary archive + compacted coverage still agree.
-
-Tooling gate: `python3 -m unittest discover -s scripts/tests -p change_history_test.py`;
-`cd apps/api && uv run ruff check ../../scripts/change_history.py ../../scripts/tests/change_history_test.py`;
-`cd apps/api && uv run ruff format --check ../../scripts/change_history.py ../../scripts/tests/change_history_test.py`;
-`pnpm exec pyright scripts/change_history.py scripts/tests/change_history_test.py`; Python LSP.
-These are stdlib-only tooling checks; no app runtime, browser, API or deployment is involved.

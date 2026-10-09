@@ -15,9 +15,11 @@ mkdir -p \
   "$test_root/apps/api/app/__pycache__" \
   "$test_root/apps/web/node_modules/keep" \
   "$test_root/apps/web/.fallow" \
-  "$test_root/apps/web/src/entities/course/api" \
+  "$test_root/apps/web/.impeccable/live/sessions" \
   "$test_root/docs/artifacts/pipeline/__pycache__" \
   "$test_root/docs/artifacts/pipeline/.ruff_cache" \
+  "$test_root/content/lesson-design/__pycache__" \
+  "$test_root/apps/api/.pytest_cache" \
   "$test_root/docs/artifacts/pipeline/node_modules/keep" \
   "$test_root/infra/practice-import-120.local" \
   "$test_root/infra/task-files.local" \
@@ -36,6 +38,9 @@ touch \
   "$test_root/docs/artifacts/authored.md" \
   "$test_root/docs/artifacts/pipeline/__pycache__/prepare.pyc" \
   "$test_root/docs/artifacts/pipeline/.ruff_cache/cache" \
+  "$test_root/content/lesson-design/__pycache__/bank.pyc" \
+  "$test_root/apps/api/.pytest_cache/lastfailed" \
+  "$test_root/apps/web/.eslintcache" \
   "$test_root/docs/artifacts/pipeline/node_modules/keep/package.json" \
   "$test_root/infra/practice-import-120.local/bank.json" \
   "$test_root/infra/task-files.local/attachment.bin" \
@@ -57,13 +62,22 @@ if bash "$test_root/scripts/clean-local-artifacts.sh" --check >/dev/null 2>&1; t
   exit 1
 fi
 
-bash "$test_root/scripts/clean-local-artifacts.sh" --apply >/dev/null
+apply_output=$(bash "$test_root/scripts/clean-local-artifacts.sh" --apply)
+grep -Eq '^Removed [0-9]+ regenerable local artifact path' <<<"$apply_output"
+grep -Fq 'Repository contains no allowlisted local artifacts.' <<<"$apply_output"
+if grep -Fq 'removed ' <<<"$apply_output"; then
+  echo 'cleanup apply unexpectedly listed every removed path' >&2
+  exit 1
+fi
 test ! -e "$test_root/.lighthouseci"
 test ! -e "$test_root/.fallow"
 test ! -e "$test_root/C:\Users\user\AppData\Local\lighthouse.1234"
 test -f "$test_root/apps/ops/source/main.py"
 test ! -e "$test_root/apps/api/app/__pycache__"
-test ! -e "$test_root/apps/web/src/entities/course/api"
+test ! -e "$test_root/apps/web/.impeccable/live/sessions"
+test ! -e "$test_root/content/lesson-design/__pycache__"
+test -f "$test_root/apps/api/.pytest_cache/lastfailed"
+test -f "$test_root/apps/web/.eslintcache"
 test ! -e "$test_root/apps/web/.fallow"
 test -f "$test_root/apps/api/.venv/keep/python"
 test -f "$test_root/apps/web/node_modules/keep/package.json"
@@ -71,7 +85,7 @@ test -f "$test_root/data/keep.db"
 test -f "$test_root/.env"
 test -f "$test_root/docs/artifacts/authored.md"
 test ! -e "$test_root/docs/artifacts/pipeline/__pycache__"
-test ! -e "$test_root/docs/artifacts/pipeline/.ruff_cache"
+test -f "$test_root/docs/artifacts/pipeline/.ruff_cache/cache"
 test -f "$test_root/docs/artifacts/pipeline/node_modules/keep/package.json"
 test -f "$test_root/infra/practice-import-120.local/bank.json"
 test -f "$test_root/infra/task-files.local/attachment.bin"

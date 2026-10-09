@@ -6,11 +6,8 @@ verify with the domain's mandated tooling and one compact Critical Gate, and upd
 the code satisfies the Backlog item's contract. Findings from the architect's local manual
 review are appended to the same Backlog, implemented and checked before `/ship`.
 
-This document is the single source of truth for the `work` workflow.
-
-In an integrated project, runtime wrappers under `.claude/skills/work/SKILL.md` (Claude Code),
-`.agents/skills/work/SKILL.md` (generic agent), and `plugins/sdd-workflow/{commands,skills}/work/...`
-(Codex) point here. The wrappers are thin stubs — every workflow detail lives in this file.
+This document is the single source of truth for the `work` workflow; runtime wrappers are thin
+stubs (AGENTS § Workflow Playbooks).
 
 ## Input
 
@@ -33,7 +30,7 @@ In an integrated project, runtime wrappers under `.claude/skills/work/SKILL.md` 
   Gate Checks override, existing Implementation Notes
 - `docs/SPEC.md` §3–§4 (and others as relevant) — the actual contract; the change file only
   points here, it doesn't duplicate it
-- `docs/STACK.md` — Critical Gate table, Required Tooling table, stack conventions
+- `docs/STACK.md` — Gate command groups, Critical Gate and Required Tooling tables
 - `docs/KNOWN_GOTCHAS.md` — search affected-area pitfalls; permission handoff always applies
 - Relevant source files and git history — verify current implementation before editing; recent
   commits and diffs are the record of *how* prior work was done, so read them instead of expecting
@@ -47,10 +44,9 @@ In an integrated project, runtime wrappers under `.claude/skills/work/SKILL.md` 
   from `main` first if it doesn't exist yet. Do this before any other step — don't wait to be told.
 - If switching would discard uncommitted work on the current branch, stop and ask.
 
-Run `python3 scripts/change_history.py inspect` before resolving the target. COMPACTED.md is
-archive metadata, never an active unit. Read original compacted files only when the current task
-needs their evidence, using STACK’s history commands. Invalid metadata or missing source blocks
-history-dependent work; fetch the recorded source instead of guessing.
+Run `python3 scripts/change_history.py inspect` before resolving the target; COMPACTED.md is never
+an active unit, and history-dependent work follows the [change history](../runbooks/change-history.md)
+runbook.
 
 ### 2. Validate input and resolve the target Backlog
 
@@ -127,8 +123,7 @@ only for an unresolved technical choice; do not prepare a separate ceremony for 
 
 For frontend work, read `docs/FRONTEND.md` and `DESIGN.md` and use the existing public pages and
 shared semantic controls. Keep composition with the page; introduce a reusable mechanism only for a
-real consumer. Compare desktop/mobile and degraded states in the required browser pass. Labs
-and decorative specimens are not part of the current product.
+real consumer. Compare desktop/mobile and degraded states in the required browser pass.
 
 The plan must stay inside the active change's Backlog contract.
 
@@ -147,22 +142,10 @@ For each planned item:
 
 ### 9. Required-tooling enforcement
 
-Before verifying and checking off an item, consult `docs/STACK.md`'s Required Tooling table for
-the item's domain and confirm the mandated tool/skill was actually used:
-
-- Frontend UI change → use Playwriter first for a screenshot and browser-console check; follow
-  STACK's documented connection/fallback procedure when unavailable.
-- TypeScript/Python change → run an LSP diagnostics pass on the changed files.
-- New/changed API surface → regenerate types (`openapi-typescript` or the project's declared
-  equivalent) and re-typecheck the frontend consumer.
-- Frontend architecture decision → the `frontend-architecture` skill must have been consulted
-  during planning or architecture review.
-- Backend architecture/API design decision → the `backend-architecture` skill must have been
-  consulted during planning or architecture review.
-- Frontend UI/design change → `impeccable` is the single design authority: run `critique` on the
-  target before changing it, implement against `DESIGN.md`, and run `polish` and `audit` (plus
-  the detector it requests) before the item is checked off. A visual-system change also updates
-  `DESIGN.md` through `impeccable document`. Other frontend design plugins or skills stay disabled.
+Before verifying and checking off an item, confirm that every tool in `docs/STACK.md`'s Required
+Tooling table for the item's domain was actually used (Playwriter, LSP, API regeneration,
+architecture skills, `impeccable` critique → polish/audit/detector; `impeccable document` when the
+visual system changes). Other frontend design plugins or skills stay disabled.
 
 This is not optional or "if convenient." If a mandated tool genuinely isn't available in this
 environment, report it explicitly as skipped with the reason — do not check off the item silently
@@ -175,18 +158,16 @@ After implementing the complete target set:
 1. Re-read the changed files and confirm every targeted Backlog contract is satisfied. During
    implementation, run a focused test immediately only when it provides useful feedback; do not
    replay the gate after every individual checkbox.
-2. Run the `docs/STACK.md` **Critical Gate** once, selecting only rows relevant to the touched
-   area: formatting, affected-workspace lint/type-check, tests directly covering changed behavior,
-   LSP diagnostics, and API type regeneration when applicable. Documentation-only work normally
-   needs formatting/link integrity only. Do not run full unit suites, E2E, infrastructure,
-   security, accessibility, performance, or the Full Gate unless explicitly requested.
-   Analyze any reports and metrics before the final Repository hygiene row removes them. The row is
-   mandatory even when earlier checks produced only caches; never replace its allowlisted commands
-   with broad ignored-file cleanup.
-   Follow the supported command groups in [verification](../runbooks/verification.md); record the
-   affected-check rationale. An unknown path requires a coverage decision,
-   not an automatic expensive Full run. Only the parent runs shared gates; delegated workers
-   return focused evidence according to [agent workflow](../runbooks/agent-workflow.md).
+2. Run the `docs/STACK.md` **Critical Gate** once: `python3 scripts/gate.py affected`, then
+   `python3 scripts/gate.py run` for the suggested groups, the focused tests that directly cover
+   changed behavior, LSP diagnostics and required browser checks. Read the summary lines and, on
+   failure, the printed tail — not whole logs. Do not run full unit suites, E2E, infrastructure,
+   security, accessibility, performance or the Full Gate unless explicitly requested or required
+   by the [verification](../runbooks/verification.md) scope reminders. An unmatched path requires a
+   coverage decision, not an automatic Full run. Analyze reports, then finish code/test/build work
+   with `make clean` (docs-only work skips it; never replace it with broad ignored-file cleanup).
+   Only the parent runs shared gates; delegated workers return focused evidence according to
+   [agent workflow](../runbooks/agent-workflow.md). Fill the change's **Gate evidence** block.
 3. Report the commands run and their results; if a check was not run, state the reason.
 4. Check off each verified item in `docs/changes/NN-slug.md` § Backlog.
 

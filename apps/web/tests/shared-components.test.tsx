@@ -1,7 +1,6 @@
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { renderToString } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
-import { Badge } from "~/shared/components/badge";
 import { Accordion } from "~/shared/components/accordion";
 import { Button } from "~/shared/components/button";
 import { CodeBlock } from "~/shared/components/code-block";
@@ -558,26 +557,6 @@ describe("Tabs", () => {
     expect(markup).toContain("Второе содержимое");
     expect(markup).not.toContain('role="tabpanel"');
     expect(markup).not.toContain('inert=""');
-  });
-});
-
-describe("Badge", () => {
-  it("carries its tone as a data attribute for CSS to key off", () => {
-    const result = render(<Badge tone="success">решено</Badge>);
-    const badge = result.container.querySelector("[data-tone]");
-    expect(badge?.getAttribute("data-tone")).toBe("success");
-  });
-
-  it("defaults to a neutral semantic tone", () => {
-    const result = render(<Badge>разбор</Badge>);
-    expect(
-      result.container.querySelector("[data-tone]")?.getAttribute("data-tone"),
-    ).toBe("neutral");
-  });
-
-  it("maps icon to a leading section", () => {
-    render(<Badge icon={<span data-testid="icon" />}>решено</Badge>);
-    expect(screen.getByTestId("icon")).toBeTruthy();
   });
 });
 

@@ -4,8 +4,8 @@ Close a change locally after checking what changed since its affected-area Criti
 The expensive Full Gate is manual through `--full`. Production publication through `--release`
 adds missing affected coverage, candidate security and the release checks.
 
-This document is the single source of truth for the `ship` workflow. Runtime wrappers under
-`.claude/skills/`, `.agents/skills/`, and `plugins/sdd-workflow/` stay thin and point here.
+This document is the single source of truth for the `ship` workflow; runtime wrappers are thin
+stubs (AGENTS § Workflow Playbooks).
 
 ## Input
 
@@ -42,11 +42,11 @@ This document is the single source of truth for the `ship` workflow. Runtime wra
 #### Default local ship
 
 1. Read `docs/STACK.md`'s **Critical Gate** table.
-2. Determine touched areas from the feature-branch diff against local `main`.
-3. Compare the candidate with the recorded `/work` acceptance. Run only missing or invalidated
-   affected Critical rows. If no relevant inputs changed and the evidence is clear, record the
-   unchanged checks as accepted without re-executing them. Use focused behavior tests when needed;
-   documentation changes normally need link/structure checks only. Analyze reports before hygiene.
+2. Read the change's **Gate evidence** (recorded HEAD and groups). Run
+   `python3 scripts/gate.py affected --base <recorded HEAD>` for paths changed since then.
+3. Run only those missing or invalidated groups and focused rows. If no relevant inputs changed and
+   the evidence is clear, record the unchanged checks as accepted without re-executing them.
+   Documentation changes normally need `docs-links` only. Analyze reports before hygiene.
 4. Report each applicable row and every intentional skip with its reason.
 
 #### `--full` or `--release`
@@ -93,19 +93,17 @@ Run only after the selected local release coverage and local merge succeed.
    changed dependencies. Run prepublication STACK rows: production Compose render, release target
    health and GitHub access/environment/secrets policy. Never persist secrets.
 2. On PASS, push local `main` to `origin/main` under the user's release authorization.
-3. Use the release checkpoint utility to fetch fresh successful CI and images evidence for that
-   exact SHA. The images workflow scans the actual published digests; no second local image build
-   is required. Pending/missing/failed runs block deploy.
-4. For a first account-schema cutover, pause before dispatch. The operator must rehearse this
-   exact candidate against isolated copies of production data, verify the second-stage restore,
-   and record the root-owned SHA attestation described in the production and backup runbooks.
-   Missing or failed rehearsal blocks deploy; a pre-migration production backup or a local drill
-   alone is not sufficient. Use the dedicated candidate rehearsal command, not the routine
-   restore-check command, for this proof.
+3. Run `python3 scripts/release_checkpoint.py predeploy --sha <FULL_SHA>`: it requires fresh
+   successful exact-SHA `quality.yml` and `images.yml` runs (images scans the published digests; no
+   second local image build). Pending/missing/failed runs block deploy.
+4. If the candidate changes the production schema head, pause before dispatch for the
+   [schema transition attestation](../runbooks/backup-restore.md#schema-transition-attestation);
+   missing or failed rehearsal blocks deploy. A pre-migration backup or local drill alone is not
+   sufficient.
 5. Dispatch the existing deploy workflow once for that SHA. On interruption, inspect existing
    runs before deciding whether any dispatch is needed; a checkpoint never repeats a mutation.
-6. Verify the exact deploy target and independent public readiness SHA/homepage using the
-   checkpoint utility. Saved statuses are history, never current production truth.
+6. Run `python3 scripts/release_checkpoint.py postdeploy --sha <FULL_SHA>` to verify the deploy run
+   and independent public readiness SHA/homepage. Saved statuses are never current production truth.
 7. Failure before push blocks push; failure after push blocks deploy or completion. Report the
    actual reached phase. Do not undo a completed merge/push or repeat bank imports automatically.
 

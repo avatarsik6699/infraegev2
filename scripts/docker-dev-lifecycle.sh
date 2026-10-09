@@ -6,6 +6,7 @@ STOP_TIMEOUT=${STOP_TIMEOUT:-10}
 WAIT_TIMEOUT=${WAIT_TIMEOUT:-180}
 LOCK_FILE=${INFRAEGE_DOCKER_LOCK_FILE:-/tmp/infraege-dev-docker-lifecycle.lock}
 STATE_FILE=${INFRAEGE_DOCKER_STATE_FILE:-.output/docker-dev-inputs.sha256}
+# shellcheck disable=SC3060 # a quoted multi-line default, not a string replacement
 DEV_INPUTS=${INFRAEGE_DOCKER_INPUTS:-"
 package.json
 pnpm-workspace.yaml
@@ -50,6 +51,7 @@ if ! command -v flock >/dev/null 2>&1; then
   exit 1
 fi
 
+# shellcheck disable=SC1007 # CDPATH= clears the variable for this cd only
 REPO_ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 cd "$REPO_ROOT"
 

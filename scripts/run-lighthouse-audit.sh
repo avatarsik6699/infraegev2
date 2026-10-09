@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-repo_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 lhci_bin=${INFRAEGE_LHCI_BIN:-${1:-lhci}}
 if [[ -z ${INFRAEGE_LHCI_BIN:-} && $# -gt 0 ]]; then
   shift

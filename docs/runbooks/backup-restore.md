@@ -79,19 +79,22 @@ recovery plan. Do not silently return its accounts to service. An automatic proo
 reappearance requires a separately designed deletion ledger; it is a known follow-up, not something
 this procedure pretends to provide.
 
-First conversion to 122_01 is documented in [practice-transition](practice-transition.md).
-For the first `140_01` production release, the deploy preflight requires an exact-candidate-SHA
-restore attestation **before** it will migrate production. After that SHA's images are published and
-verified, take a fresh pre-migration production backup. Restore it into a disposable, isolated
-database and task-files copy; never migrate the live database as part of the rehearsal. Apply the
-candidate migration to that copy, create a candidate-schema backup from it, and restore that
-backup into a _second_ fresh isolated target. Verify data/roles/fingerprints, account identities,
-session revocation, per-context progress and `infraege_app` grants there. Only after all checks pass
-may the operator record `140_01 <full-candidate-sha>` in
-`/etc/infraege/accounts-schema-ready` (root-owned, mode 600), then permit deployment. A failed or
-partial drill must not create the attestation. Current routine `db-restore-check` verifies the
-latest bundle; it does not by itself perform this two-stage candidate rehearsal or justify the
-attestation.
+## Schema transition attestation
+
+Deploy preflight (`scripts/lib/application-db-release.sh`) compares `infra/database-schema` of the
+candidate with the running release. When the schema head changes, it refuses to migrate production
+unless root-owned, mode-600 `/etc/infraege/accounts-schema-ready` contains
+`<schema> <full-candidate-sha>`. That proof may be written only by a passing isolated two-stage
+rehearsal of the exact candidate, after its images are published and verified: take a fresh
+pre-migration production backup, restore it into a disposable isolated database and task-files
+copy (never migrate the live database), apply the candidate migration there, back that copy up,
+restore it into a _second_ fresh isolated target and verify data/roles/fingerprints, identities,
+session revocation, per-context progress and application grants. A failed or partial drill must not
+create the attestation; routine `db-restore-check` does not justify it.
+
+The completed 2026-09-26 `122_01` → `140_01` account cutover used the procedure below;
+`scripts/rehearse-account-cutover.sh` implements exactly that transition. A future schema head
+needs its own reviewed rehearsal following the same rules.
 
 Use the reviewed `scripts/rehearse-account-cutover.sh` from the exact candidate source on the
 production host, before deploy dispatch. Take a fresh production backup through the existing
@@ -162,7 +165,7 @@ is not production evidence. After preserving the encrypted Restic snapshot and r
 result, remove only the exact temporary extraction directory selected for this rehearsal; the
 command removes its own disposable Docker resources and internal working directory.
 
-After a healthy first deploy, create a fresh _live_ `140_01` backup and run the routine isolated
+After a healthy transition deploy, create a fresh _live_ backup of the new schema and run the routine isolated
 restore check again; this confirms the actual post-cutover data. Preserve the pre-migration backup
 for recovery. Do not claim this post-deploy check as the proof that authorized the preceding
 migration. After that fresh backup has run its retention, re-authenticate the previously recorded
@@ -196,10 +199,8 @@ record the new full ID and authenticate it. The next routine retention may prune
 procedure. The retained pre-migration point can contain later-deleted accounts; the deletion
 reconciliation rule above applies before any restoration to production.
 
-The exact 2026-09-26 pre-migration `122_01` snapshot from the first account cutover was pruned by
-same-day post-release retention before this protection existed. It cannot be recovered from the
-remaining repository. The older retained `122_01` point is a different, earlier backup and is
-not interchangeable with that exact cutover point; verify its ID, schema and account-deletion
-window before relying on it. Protecting an older point now does not recreate the lost one.
+The exact pre-migration snapshot of the 2026-09-26 cutover was pruned before recovery holds
+existed; an older retained `122_01` point is a different backup — verify its ID, schema and
+account-deletion window before relying on it.
 Retired operations snapshots/services are not altered by local code removal. Their eventual
 retirement must be explicit; preserve any shared Restic data and application timers.

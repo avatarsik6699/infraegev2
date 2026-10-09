@@ -26,7 +26,7 @@ const lesson = divisorsAndMasksLesson;
 const SOURCE = resolve(
   process.cwd(),
   "../..",
-  "docs/artifacts/lesson-design/topic-25",
+  "content/lesson-design/topic-25",
 );
 const authoredContent = [
   ...lesson.theory.map(({ explanation }) => explanation),

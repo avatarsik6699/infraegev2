@@ -50,7 +50,7 @@ docker run --rm -d --name "$container_name" -p 127.0.0.1:18082:8080 \
   -v "$repo_dir/apps/web/public/brand/infraege-mark.svg:/usr/share/nginx/auxiliary/assets/infraege-mark.svg:ro" \
   -v "$repo_dir/apps/web/public/fonts:/usr/share/nginx/auxiliary/assets/fonts:ro" \
   "$nginx_image" >/dev/null
-for attempt in {1..30}; do
+for _ in {1..30}; do
   if curl -s http://127.0.0.1:18082/missing >/dev/null; then break; fi
   sleep 0.2
 done
@@ -58,9 +58,9 @@ docker exec "$container_name" nginx -t
 for code in 502 503 504; do
   status=$(curl -sS -H 'Accept: text/html' -D "$test_dir/headers" -o "$test_dir/body" -w '%{http_code}' "http://127.0.0.1:18082/$code")
   test "$status" = "$code"
-  ! grep -q "scenes/.*webp" "$test_dir/body"
-  ! grep -q 'class="card"' "$test_dir/body"
-  ! grep -q 'class="patternField"' "$test_dir/body"
+  if grep -q "scenes/.*webp" "$test_dir/body"; then exit 1; fi
+  if grep -q 'class="card"' "$test_dir/body"; then exit 1; fi
+  if grep -q 'class="patternField"' "$test_dir/body"; then exit 1; fi
   grep -q 'class="refresh"' "$test_dir/body"
   grep -q "data-server-state=\"$code\"" "$test_dir/body"
   grep -qi 'Cache-Control: no-store' "$test_dir/headers"
@@ -72,16 +72,16 @@ done
 curl -sS -H 'Accept: text/html' http://127.0.0.1:18082/down | grep -q 'data-server-state="502"'
 for target in /api/503 /health /_serverFn/example /images/missing.webp /503.js /503; do
   curl -sS -H 'Accept: application/json' "http://127.0.0.1:18082$target" > "$test_dir/body"
-  ! grep -q 'data-server-state' "$test_dir/body"
+  if grep -q 'data-server-state' "$test_dir/body"; then exit 1; fi
 done
 for target in /_serverFn/example /images/missing.webp /503.js; do
   curl -sS -H 'Accept: text/html' "http://127.0.0.1:18082$target" > "$test_dir/body"
-  ! grep -q 'data-server-state' "$test_dir/body"
+  if grep -q 'data-server-state' "$test_dir/body"; then exit 1; fi
 done
 curl -sS -X POST -H 'Accept: text/html' http://127.0.0.1:18082/503 > "$test_dir/body"
-! grep -q 'data-server-state' "$test_dir/body"
+if grep -q 'data-server-state' "$test_dir/body"; then exit 1; fi
 curl -sS -H 'Accept: text/html' -H 'Sec-Fetch-Dest: script' http://127.0.0.1:18082/503 > "$test_dir/body"
-! grep -q 'data-server-state' "$test_dir/body"
+if grep -q 'data-server-state' "$test_dir/body"; then exit 1; fi
 curl -sS -H 'Accept: text/html' http://127.0.0.1:18082/_serverFn/example | grep -q 'server function'
 curl -sS -H 'Accept: application/json' http://127.0.0.1:18082/asset.js | grep -q 'upstream unavailable'
 for target in missing broken; do

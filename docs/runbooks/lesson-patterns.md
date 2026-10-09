@@ -2,7 +2,7 @@
 
 > **Статус: обязательный.** Каталог — часть [пайплайна подготовки темы](lesson-pipeline.md). Каждая новая тема и подтема строится по скелету и паттернам П1–П18. Отклонение допускается только по прямому решению архитектора, которое записывается в этот файл.
 
-Каталог выведен из трёх уроков, которые архитектор подготовил в нужной ему манере (2026-10-07), и дополнен по итогам ревью темы 25 (П18, 2026-10-08). Эталонная реализация по этим паттернам — тема 25 в `docs/artifacts/lesson-design/topic-25/`.
+Каталог выведен из трёх уроков, которые архитектор подготовил в нужной ему манере (2026-10-07), и дополнен по итогам ревью темы 25 (П18, 2026-10-08). Эталонная реализация по этим паттернам — тема 25 в `content/lesson-design/topic-25/`.
 
 Уроки, из которых выведен каталог, прочитаны полностью:
 
@@ -220,3 +220,19 @@
 | Песочница и пошаговые схемы (П18) | Нет | Компоненты по правилам FRONTEND и DESIGN |
 
 Пробелы закрывает Change 171 (решения архитектора 2026-10-08: точные SVG-диаграммы, уровень подтемы и mastery только по основным, самопроверка в каждой подтеме). Порядок переноса — в [пайплайне](lesson-pipeline.md#этап-9-перенос-на-сайт).
+
+## Источники педагогического checklist
+
+Перенесено из SPEC §2.3 (Change 173): provenance чек-листа, не новые продуктовые обещания.
+
+- Sweller, J. — работы по Cognitive Load Theory и worked-example effect (обзор: en.wikipedia.org/wiki/Worked-example_effect)
+- Cognitive Load Theory — обзор для практиков: education.nsw.gov.au (CESE, 2017), uky.edu (Cognitive Load & Instructional Design)
+- Mayer, R. E. — Cognitive Theory of Multimedia Learning, обзоры принципов: learning-theories.com, theelearningcoach.com, litfl.com, springer.com (The Past, Present, and Future of CTML)
+- Roediger, H. L. & Karpicke, J. D. — testing effect: psychnet.wustl.edu (The Power of Testing Memory)
+- Pan, S. C. & Rickard, T. C. (2018) — spaced retrieval practice meta-анализ
+- Rohrer, D. и коллеги — interleaving в математике: pubmed.ncbi.nlm.nih.gov/24578089, aft.org (Interleaving in Math)
+- Bjork, E. L. & Bjork, R. A. — Desirable Difficulties: structural-learning.com, unh.edu, researchschool.org.uk
+- Bloom, B. (1984) — 2 Sigma Problem: en.wikipedia.org/wiki/Bloom%27s_2_sigma_problem, nintil.com (系统ematический обзор эффективности mastery learning)
+- Kapur, M. — Productive Failure: boldscience.org, pubmed.ncbi.nlm.nih.gov/31089856
+- Kulik, J. A. & Kulik, C.-L. C. — мета-анализ по timing обратной связи; edsurge.com, learningscientists.org — практические разборы
+- Duolingo Research — research.duolingo.com, github.com/duolingo/halflife-regression, pnas.org (Enhancing human learning via spaced repetition optimization)

@@ -1,5 +1,5 @@
 export namespace MascotSceneTypes {
-  /** Baked scene in `public/images/mascot` (built by docs/artifacts/change-170/mascot/pipeline). */
+  /** Baked scene in `public/images/mascot` (built by scripts/mascot). */
   export type Scene =
     | "home-hero"
     | "sign-in"

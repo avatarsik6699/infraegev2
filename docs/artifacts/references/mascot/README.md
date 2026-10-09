@@ -44,4 +44,4 @@
 - Сцены для сайта собираются конвейером в `apps/web/public/images/mascot` и показываются общим
   компонентом `MascotScene` (ленивая декоративная картинка 6:5, без подложки).
 - Позы не перерисовываются вручную: изменения вносятся через конвейер
-  [`change-170/mascot/pipeline`](../../change-170/mascot/README.md).
+  [`scripts/mascot`](../../../../scripts/mascot/README.md).

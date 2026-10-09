@@ -23,12 +23,14 @@ for expected in \
 done
 
 grep -Fq 'PROD_ROOT_PASSWORD' "$workflow"
-! grep -Eq 'PROD_SSH_KEY|PROD_USER' "$workflow"
+if grep -Eq 'PROD_SSH_KEY|PROD_USER' "$workflow"; then exit 1; fi
+# shellcheck disable=SC2016 # literal workflow and script text, not expansions
 grep -Fq 'root@$PROD_HOST:/root/' "$workflow"
+# shellcheck disable=SC2016 # literal script text
 grep -Fq 'archive="/root/infraege-$DEPLOY_SHA.tar.gz"' "$repo_dir/scripts/deploy-remote.sh"
 grep -Fq 'StrictHostKeyChecking=yes' "$repo_dir/scripts/lib/production-ssh.sh"
 grep -Fq 'SSH_ASKPASS_REQUIRE=force' "$repo_dir/scripts/lib/production-ssh.sh"
-! grep -Eq 'ADMIN_SSH_PUBLIC_KEY|DEPLOY_USER' "$repo_dir/ops/bootstrap-vps.sh"
+if grep -Eq 'ADMIN_SSH_PUBLIC_KEY|DEPLOY_USER' "$repo_dir/ops/bootstrap-vps.sh"; then exit 1; fi
 for service in \
   infraege-backup.service \
   infraege-restore-check.service; do

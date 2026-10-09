@@ -17,9 +17,9 @@ Skill wrappers live in `.claude/skills/` and are intentionally thin.
 
 ## MCP
 
-`Context7` is wired in `.mcp.json` at the project root and in
-`plugins/sdd-workflow/.mcp.json` for Codex. Per `AGENTS.md § Library Documentation Lookup`, prefer
-MCP documentation lookup when available.
+`.mcp.json` declares Context7 as the `context7-mcp` command; it connects only when that binary is
+on `PATH` (Codex reads `.codex/config.toml`). When the MCP server is unavailable, use the `ctx7` CLI
+per `AGENTS.md § Library Documentation Lookup`.
 
 For interactive browser checks, follow the Playwriter/profile rule in `AGENTS.md`
 and [STACK's WSL connection procedure](docs/STACK.md#interactive-browser-connection-wsl)

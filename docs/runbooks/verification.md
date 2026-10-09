@@ -1,118 +1,113 @@
 # Verification and release evidence
 
-This project favors a short development loop over a custom verification platform. Use existing
-package commands, GitHub Actions and release workflows; do not add a result cache, snapshot runner,
-audit importer, evidence TTL ledger or command DSL.
+This project favors a short development loop over a custom verification platform. Use the
+`scripts/gate.py` command groups, existing package commands, GitHub Actions and release workflows;
+do not add a result cache, snapshot runner, audit importer, evidence TTL ledger or scheduler.
+Commands live in [STACK](../STACK.md#gate-command-groups); this runbook owns selection policy.
 
 ## Local work
 
-For one coherent `/work` set, choose the affected rows from STACK's Critical Gate and run them once:
+For one coherent `/work` set:
 
-- format where applicable;
-- lint/type checks for modified workspace or maintenance script;
-- focused test(s) that directly exercise changed behavior;
-- browser observation for changed UI behavior;
-- API generation only when the public API changed.
+1. `python3 scripts/gate.py affected` maps changed paths to groups (docs-only → `docs-links`;
+   web → format, web lint/typecheck; API → API lint/typecheck, `api-contract` for app code; content
+   → `content-static`; lesson stands/tooling → `lesson-media` + host Python; shell → `shell-lint`;
+   infra → `infra-config` plus nginx contracts). It prints reminders and unmatched paths.
+2. Run the suggested groups once with `python3 scripts/gate.py run --group …`; read only the
+   summary and, on failure, the printed tail or `.output/gate/<group>.log`.
+3. Run focused tests that directly exercise changed behavior and the required browser/LSP checks.
+4. Fill the active change's **Gate evidence** block (HEAD, groups, result, seconds).
 
-Record the reviewed revision/diff, command and outcome in the active change. At local `/ship`,
-compare relevant source, tests, configuration and locks with that record. Do not repeat an unchanged
-check. Re-run only the check whose inputs changed, evidence is missing, or environment is uncertain.
-Runtime/browser/database checks are fresh when selected. A command result is not production proof.
-
-Unknown impact requires a written coverage decision or a focused architect question. It does not
-automatically invoke Full. Full is only `/ship --full`.
-
-The thin selector is optional: `python3 scripts/gate.py checks` lists commands, and
-`python3 scripts/gate.py run --group web-lint --group web-typecheck` runs only those groups. It
-does not infer scope or cache a PASS. Use the owning package/test command directly when clearer.
+At local `/ship`, compare the diff since that recorded HEAD. Do not repeat an unchanged check;
+re-run only checks whose inputs changed, whose evidence is missing or whose environment is
+uncertain. Runtime/browser/database checks are fresh when selected. A command result is not
+production proof. An unmatched path requires a written coverage decision or a focused architect
+question; it never invokes Full. Full is only `/ship --full`.
 
 ## Scope reminders
 
-- Docs: links/structure and relevant formatter only.
-- Content: content validation and affected SSR/rendering.
-- UI: web lint/types plus owning behavior; use focused no-JS/a11y/layout only when relevant.
-  Lighthouse is weekly/manual or a specific performance investigation, not every CSS change.
-- API: API lint/types and owning tests; OpenAPI only for public contract changes.
+- UI: Playwriter desktop/mobile; focused no-JS/a11y/layout specs only when relevant. Lighthouse is
+  weekly/manual or a specific performance investigation, not every CSS change.
 - Auth/progress: negative/owner-isolation coverage and real account integration before release.
 - Schema/data: owning isolated migration/restore and permission checks.
-- Dependencies: changed ecosystem audit; candidate images are scanned once by `images.yml`.
+- Dependencies: changed-ecosystem audit; candidate images are scanned once by `images.yml`.
 - Host scripts: owning fake contracts and relevant real boundary checks, not web performance.
+- Run browser specs once before ship and only the affected ones; the full portfolio only on request.
 
-Full's STACK rows enumerate their contract set; they do not mean every test in `scripts/tests`
-runs in Full or ordinary CI. Select these additional local contracts when their owner changes:
+Full's STACK rows enumerate their contract set. Select these additional local contracts when their
+owner changes:
 
 | Owner | Specialized contract |
 |---|---|
-| Account cutover | `bash scripts/tests/account-cutover.test.sh` (also wrapped by `python3 -m unittest scripts.tests.account_cutover_drill_test`) |
+| Account cutover | `bash scripts/tests/account-cutover.test.sh` (also `python3 -m unittest scripts.tests.account_cutover_drill_test`) |
 | Account artifact retention | `bash scripts/tests/account-retention.test.sh` |
 | Nginx auth/progress edge | `bash scripts/tests/auth-edge.test.sh` |
+| Nginx auxiliary error pages | `bash scripts/tests/auxiliary-pages.test.sh` (Docker nginx) |
+| Nginx lesson media | `bash scripts/tests/lesson-media-nginx.test.sh` (Docker nginx) |
 | Practice read throttling | `bash scripts/tests/practice-read-limit.test.sh` |
 | Local Docker lifecycle | `bash scripts/tests/docker-dev-lifecycle.test.sh` |
 | Production environment rendering | `bash scripts/tests/production-env.test.sh` |
+| Restore readiness | `bash scripts/tests/restore-readiness.test.sh` |
+| Lighthouse wrapper | `bash scripts/tests/run-lighthouse-audit.test.sh` |
 | Security selection/orchestration | `python3 -m unittest scripts.tests.security_gate_test` |
 | Synthetic account server | `python3 -m unittest scripts.tests.test_account_server` |
+| Lesson media engine | `uv run --no-project --with pillow python -m unittest discover -s scripts/tests -p lesson_media_engine_test.py` |
 
-These suites remain affected-area checks, alongside the isolated manual Restic integration.
-Their absence from an unrelated check's command is not evidence that their behavior passed.
+These remain affected-area checks, alongside the isolated manual Restic integration. Their absence
+from an unrelated check's command is not evidence that their behavior passed.
+
+## Full Gate environment
+
+Run in one host shell with the frozen pnpm/API environments installed and a fresh isolated
+`infraege-full-gate` database; never supply production credentials or reuse development storage.
+Before bootstrap, export `POSTGRES_USER=infraege`, `POSTGRES_DB=infraege` and distinct random
+URL-safe values of at least 16 characters for `POSTGRES_PASSWORD`, `DB_RUNTIME_PASSWORD`,
+`DB_APP_PASSWORD`, `DB_IMPORT_PASSWORD`, `DB_MIGRATION_PASSWORD`, `DB_BACKUP_PASSWORD`, plus an
+independent `AUTH_CSRF_SECRET` of at least 32 characters (`openssl rand -hex 24`). Keep them
+process-scoped or in a mode-600 file outside Git; never print them or rendered Compose secrets.
+Set `TASK_FILES_DIR` to a dedicated absolute temporary directory, `APP_ENV=development` and
+`DEPLOY_SHA=development`.
+
+After bootstrap, wait for PostgreSQL/API/web/Nginx health and the migration job. From `apps/api`,
+use `MIGRATION_DATABASE_URL` (`infraege_migration`, port 15432) for the migration row and import
+`../../content/practice-bank` with `IMPORT_DATABASE_URL` (`infraege_import`). URL shape:
+`postgresql://ROLE:PASSWORD@127.0.0.1:15432/infraege`. The migration job alone creates an empty
+schema and is not a seeded-bank acceptance. For Playwright/axe export the read-only `DATABASE_URL`
+(`infraege_runtime`) and `ACCOUNT_DATABASE_URL` (`infraege_app`) on port 15432 and keep
+`TASK_FILES_DIR`; for Lighthouse and host SSR set `API_INTERNAL_URL=http://127.0.0.1:18000`. Run
+security scans after browser/build/performance jobs (their reports change the tree). Keep the same
+environment for `run-host-web-gate.sh`. Finish by removing only the owned gate containers/network,
+retaining volumes, then `make clean` after reports are analyzed.
 
 ## CI and periodic audits
 
-Ordinary quality CI remains static and must not run normal pytest, Vitest, DB or browser suites.
-Use native dependency caching and workflow concurrency; do not cache test validity. Avoid required
-workflow path filters that can leave a check Pending.
+`quality.yml` runs the static `gate.py` groups listed in STACK Full (no pytest, Vitest, DB or
+browser suites). A main-branch run is never cancelled, so each pushed SHA keeps its evidence. Use
+native dependency caching; do not cache test validity or add required path filters that can leave
+a check Pending.
 
-`audit-security.yml` and `audit-browser.yml` run weekly and manually. They report directly through
-GitHub Actions logs/artifacts and standard notifications. Security covers main repository/locks;
-browser uses a disposable synthetic environment, while public Lighthouse is separately read-only.
-A missed periodic run is noticed and rerun manually. It is not green and does not trigger Full for
-unrelated work. A confirmed critical account/data finding or applicable candidate-image vulnerability
-blocks the affected release; noncritical findings become ordinary Backlog work.
-
-The first manual activation on 2026-09-26 used the published account-release SHA
-`bb0c0aea936b2949faee415510a17c8930f676fd`: the browser audit passed, including isolated
-synthetic journeys and public Lighthouse; the security audit failed at Git-history Gitleaks with
-four findings, before SAST, config and dependency steps ran. This is not a security PASS.
-A subsequent local triage confirmed
-each was the exact SHA-256 of its public source task file in the historical migration snapshot;
-the architect approved four value-and-path-specific Gitleaks exceptions. The local full-history
-scan then passed, but that is not a retroactive PASS for the earlier remote run or for the steps
-it never reached. Both workflows report through standard
-GitHub Actions status/notifications; the repository can verify the run status and actor, not
-whether an individual email was delivered. Future schedules remain Tuesday 03:23 UTC (browser)
-and 04:23 UTC (security); inspect missed runs rather than assuming a PASS.
-The local equivalents are `bash scripts/security-gate.sh weekly` and
-`bash scripts/run-isolated-browser-audit.sh` (plus `INFRAEGE_LIGHTHOUSE_TARGET=production pnpm
-audit:performance` for the separate public observation). These broad commands are not the routine
-work/ship handoff. `E2E_ARGS="e2e/topic-reading.spec.ts"` limits the `full` portfolio of the isolated audit to selected specs.
+`audit-security.yml` and `audit-browser.yml` run weekly (Tuesday 03:23 UTC browser, 04:23 UTC security) and manually and
+report through GitHub Actions status/notifications. A missed run is noticed and rerun manually; it is
+not green and does not trigger Full for unrelated work. A confirmed critical account/data finding or
+applicable candidate-image vulnerability blocks the affected release; noncritical findings become
+ordinary Backlog work. Local equivalents: `bash scripts/security-gate.sh weekly`,
+`bash scripts/run-isolated-browser-audit.sh` and `INFRAEGE_LIGHTHOUSE_TARGET=production pnpm
+audit:performance`; these are not the routine work/ship handoff. History of the first 2026-09-26
+audit run (four approved Gitleaks exceptions) is in [COMPACTED](../changes/archive/COMPACTED.md).
 
 ## Release
 
 `/ship --release` keeps the existing separation:
 
 1. Run missing affected local checks and merge locally after the change is accepted.
-2. Before pushing the final merged SHA, check its complete unpublished commit range for secrets
-   and audit changed dependencies: `bash scripts/security-gate.sh pre-push FULL_BASE_SHA
-   FULL_HEAD_SHA` and `bash scripts/security-gate.sh changed-dependencies FULL_BASE_SHA
-   FULL_HEAD_SHA`. Resolve the actual full SHAs from the verified remote tip and checked-out
-   candidate; missing or ambiguous range blocks publication. Push only under release authority
-   after these checks pass.
-3. Verify exact-SHA quality/images workflow results. Images owns digest scan, SBOM and provenance;
-   do not duplicate it with a mandatory local image scan.
-4. Dispatch deploy once for that exact SHA and verify fresh public health/readiness plus homepage.
-   Never use saved local evidence as current production health or repeat a mutation automatically.
-5. The first account-schema cutover retains its separate candidate restore/rehearsal, provider/mail
-   and environment acceptance. It is exceptional, not a template for ordinary releases.
+2. Before pushing the final merged SHA, scan its complete unpublished commit range for secrets and
+   audit changed dependencies (STACK Release Gate). Missing or ambiguous range blocks publication.
+3. After push, `python3 scripts/release_checkpoint.py predeploy --sha <SHA>` requires successful
+   exact-SHA `quality.yml` and `images.yml` runs; images owns digest scan, SBOM and provenance.
+4. A candidate that changes the production schema head needs the schema transition attestation
+   (STACK Release Gate) before dispatch.
+5. Dispatch deploy once for that SHA; `release_checkpoint.py postdeploy --sha <SHA>` verifies the
+   deploy run plus fresh public readiness and homepage. Saved evidence is never current production
+   health, and a mutation is never repeated automatically.
 
-Finish after analysis with `make clean-dry-run`, inspect its allowlist, then `make clean` and
-`make clean-check`. Do not use `git clean -fdX`.
-
-## Lightweight timing check
-
-The historical 2026-09-25 sample contained nine Full attempts and 3690.864 seconds of summed
-command time; one successful attempt spent 482.768 seconds, including 187.300 on Lighthouse and
-110.165 on E2E. These are neither delivery wall time nor a comparable post-change benchmark.
-For up to five subsequent real changes, note the affected area, local work/ship wall time,
-environment setup, browser runs, builds, repeats and any escaped defect in the change's ordinary
-handoff. Record actual observations only; no new reports, timers, result cache, fixed benchmark
-ceremony or wait for all five changes is required. Investigate a dominant repeated step before
-adding orchestration.
+Finish with `make clean`. Do not use `git clean -fdX`.

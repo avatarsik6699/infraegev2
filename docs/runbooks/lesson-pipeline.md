@@ -15,8 +15,8 @@
 | [lesson-patterns.md](lesson-patterns.md) | Обязательный каталог: скелет урока и паттерны П1–П18 |
 | [SPEC §1.4, §2.3](../SPEC.md#23-content-quality-gate-definition-of-done) | Продуктовый контракт урока и Content Quality Gate сайта |
 | [lesson-authoring.md](lesson-authoring.md) | Практические правила при переносе урока на сайт (этап 9) |
-| `docs/artifacts/lesson-design/topic-25/` | Эталонная реализация пайплайна: тема 25 целиком |
-| `docs/artifacts/lesson-design/topic-23/` | Тема по новому заданию без статистики: уровни по демоверсии, свои файлы данных |
+| `content/lesson-design/topic-25/` | Эталонная реализация пайплайна: тема 25 целиком |
+| `content/lesson-design/topic-23/` | Тема по новому заданию без статистики: уровни по демоверсии, свои файлы данных |
 | `scripts/lesson_design/` | Инструменты пайплайна |
 
 ## Этапы коротко
@@ -33,13 +33,13 @@
 | 8 | Стенд и ревью архитектора | страницы стенда, ссылка на артефакт | Архитектор одобрил; замечания исправлены и записаны |
 | 9 | Перенос на сайт | Change через `/plan` | По правилам SPEC §2.3 и `lesson-authoring.md` |
 
-Этапы 1–8 идут на **демо-стенде** (`docs/artifacts/lesson-design/`) и не меняют код сайта. Этап 9 — отдельный Change.
+Этапы 1–8 идут на **демо-стенде** (`content/lesson-design/`) и не меняют код сайта. Этап 9 — отдельный Change.
 
 ## Структура файлов
 
 ```text
 docs/artifacts/lessons/NN_slug.md            исходник темы (этап 1), пишет архитектор
-docs/artifacts/lesson-design/
+content/lesson-design/
   index.html                                 обзор стенда (правится вручную)
   textbook.css                               стили стенда в системе DESIGN.md
   NN-1.html … NN-7.html, NN-map.html …        собранные страницы: генерируются build.py,
@@ -136,7 +136,7 @@ python3 -I scripts/lesson_design/sdamgia.py fetch <scratch-dir> 414 246
 **2.5. Сгенерировать отчёт.**
 
 ```bash
-python3 -I scripts/lesson_design/frequency_report.py docs/artifacts/lesson-design/topic-NN
+python3 -I scripts/lesson_design/frequency_report.py content/lesson-design/topic-NN
 ```
 
 `frequency.md` руками не правится: меняется `tasks.py`, отчёт пересобирается.
@@ -339,10 +339,10 @@ python3 -I scripts/lesson_design/split_source.py docs/artifacts/lessons/NN_slug.
 Все команды — из корня репозитория:
 
 ```bash
-python3 -I scripts/lesson_design/verify_code.py docs/artifacts/lesson-design/topic-NN
-python3 -I docs/artifacts/lesson-design/topic-NN/checks.py
-python3 -I scripts/lesson_design/frequency_report.py docs/artifacts/lesson-design/topic-NN
-uv run --no-project --with markdown python -I scripts/lesson_design/build.py docs/artifacts/lesson-design/topic-NN
+python3 -I scripts/lesson_design/verify_code.py content/lesson-design/topic-NN
+python3 -I content/lesson-design/topic-NN/checks.py
+python3 -I scripts/lesson_design/frequency_report.py content/lesson-design/topic-NN
+uv run --no-project --with markdown python -I scripts/lesson_design/build.py content/lesson-design/topic-NN
 ```
 
 - `verify_code.py` запускает каждую программу с показанным выводом и сравнивает вывод. Он же проверяет длину строк кода. Программы запускаются в папке `topic-NN/files`, если она есть: там лежат файлы данных темы (тема 23: `23.txt`). Фрагмент, который продолжает программу выше и сам по себе не запускается, проверяется после предыдущих программ той же подтемы.
@@ -351,7 +351,7 @@ uv run --no-project --with markdown python -I scripts/lesson_design/build.py doc
 
 Проверка в браузере — Playwriter (Chrome, профиль Default; порядок подключения — в AGENTS.md):
 
-- стенд раздаётся локально: `python3 -m http.server` из `docs/artifacts/lesson-design`;
+- стенд раздаётся локально: `python3 -m http.server` из `content/lesson-design`;
 - каждая страница на ширине 1280 и 375 px: нет горизонтальной прокрутки и ошибок консоли;
 - каждая анимация проходит все шаги; песочница отвечает на верный, неверный и некорректный ввод; доказательства раскрываются;
 - скриншоты всех новых схем просмотрены глазами: подписи не слипаются, текст не обрезан.
@@ -402,14 +402,14 @@ uv run --no-project --with markdown python -I scripts/lesson_design/build.py doc
 2. Схемы:
 
    ```bash
-   python3 -I scripts/lesson_design/export_media.py docs/artifacts/lesson-design/topic-25
+   python3 -I scripts/lesson_design/export_media.py content/lesson-design/topic-25
    ```
 
    Пишет разметку SVG схем и кадров в манифест `apps/web/src/entities/lesson/content/<id>.media.ts`; сайт встраивает её в страницу, поэтому подписи наследуют шрифт страницы (внутри `<img>` веб-шрифты не грузятся). После любой правки построителя или вызова — повторить; `--check` падает на устаревшем манифесте.
 3. Черновик урока:
 
    ```bash
-   python3 -I scripts/lesson_design/export_lesson.py docs/artifacts/lesson-design/topic-25 \
+   python3 -I scripts/lesson_design/export_lesson.py content/lesson-design/topic-25 \
        --out apps/web/src/entities/lesson/content/divisors-and-masks.lesson.tsx --tasks <scratch>/tasks.json
    ```
 

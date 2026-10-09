@@ -1,11 +1,11 @@
 """Write a topic's frequency.md from its tagged task table.
 
-Usage: python3 -I scripts/lesson_design/frequency_report.py docs/artifacts/lesson-design/topic-25
+Usage: python3 -I scripts/lesson_design/frequency_report.py content/lesson-design/topic-25
 
 The topic folder must contain ``tasks.py`` with: TOPIC_NUMBER, SOURCE (task
 URL template), FETCHED (date), COLLECTIONS, SHORT, TASKS, YEAR_BOUNDS, CORE,
 RECENT, NAMES, TREND, CORE_RULE, ADVANCED_RULE, optional NOTES and the
-functions ``year`` and ``level``. See docs/artifacts/lesson-design/topic-25/tasks.py for the format.
+functions ``year`` and ``level``. See content/lesson-design/topic-25/tasks.py for the format.
 Never edit frequency.md by hand: change tasks.py and run this script.
 """
 
@@ -17,6 +17,7 @@ from pathlib import Path
 
 def load(topic_dir: Path):
     spec = importlib.util.spec_from_file_location("topic_tasks", topic_dir / "tasks.py")
+    assert spec and spec.loader
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module

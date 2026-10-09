@@ -52,6 +52,7 @@ describe("guest progress session boundary", () => {
     sessionFixture.status = "ready";
     const courseOverview = render(
       <CourseOverviewProgress
+        lessonCount={28}
         guestTotal={5}
         progress={{ status: "ready", solved: 3, total: 5, mastered: false }}
       />,
@@ -98,6 +99,7 @@ describe("guest progress session boundary", () => {
       sessionFixture.status = status;
       const courseOverview = render(
         <CourseOverviewProgress
+          lessonCount={28}
           guestTotal={5}
           progress={{ status: "ready", solved: 3, total: 5, mastered: false }}
         />,

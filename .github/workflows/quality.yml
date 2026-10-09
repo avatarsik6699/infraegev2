@@ -9,7 +9,8 @@ on:
 
 concurrency:
   group: quality-${{ github.ref }}
-  cancel-in-progress: true
+  # A cancelled main run would leave its SHA without the evidence the release checkpoint needs.
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 permissions:
   contents: read
@@ -33,26 +34,18 @@ jobs:
           enable-cache: true
           prune-cache: true
       - name: Current-tree secrets defense in depth
-        run: bash scripts/security-gate.sh secrets
+        run: python3 scripts/gate.py run --group security-secrets
       - run: pnpm install --frozen-lockfile
-      - name: Shell maintenance static checks
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y shellcheck
-          pnpm lint:shell
-      - name: Frontend static checks
-        run: |
-          pnpm lint
-          pnpm --filter web typecheck
-          node scripts/validate-content-links.mjs
-          node scripts/practice-registry.mjs --check
-      - name: Backend static checks
+      - name: Install ShellCheck when the runner lacks it
+        run: command -v shellcheck || { sudo apt-get update && sudo apt-get install -y shellcheck; }
+      - name: Python environment
         working-directory: apps/api
-        run: |
-          uv sync --frozen --dev
-          uv run ruff check app tests migrations
-          pnpm exec pyright app tests migrations
-          uv run ruff check ../../scripts/practice-local.py ../../scripts/application_db.py ../../scripts/lib/application_db ../../scripts/gate.py ../../scripts/lib/gate ../../scripts/change_history.py ../../scripts/release_checkpoint.py ../../scripts/test-account-server.py ../../scripts/tests
-          pnpm exec pyright --project ../../scripts/pyrightconfig.json
-      - name: Generated API contract drift
-        run: pnpm api:check
+        run: uv sync --frozen --dev
+      # One command source for CI and local gates: scripts/lib/gate/core.py.
+      - name: Static quality groups
+        run: >-
+          python3 scripts/gate.py run --keep-going
+          --group format --group shell-lint --group tooling-lint --group web-lint
+          --group web-typecheck --group content-static --group lesson-media
+          --group api-lint --group api-typecheck --group host-ruff --group host-python
+          --group docs-links --group api-contract

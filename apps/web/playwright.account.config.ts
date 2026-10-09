@@ -10,7 +10,7 @@ export default defineConfig({
   testDir: "./e2e",
   testMatch: "account-integration.spec.ts",
   outputDir: "../../.output/playwright-account-integration",
-  reporter: "list",
+  reporter: process.env.GATE_SUMMARY ? "dot" : "list",
   fullyParallel: false,
   timeout: 45_000,
   retries: process.env.CI ? 1 : 0,

@@ -77,17 +77,19 @@ of truth; this file only tracks what to build and what's left.
 
 ## Gate Checks
 
-> Critical Gate runs once per `/work` target set and by default in `/ship`; Full Gate runs only
-> with explicit `--full`; release selects affected checks and Release Gate. All gates are defined in [docs/STACK.md](./STACK.md) — this section only records
-> change-specific overrides.
+> Critical Gate runs once per `/work` target set; default `/ship` reruns only invalidated checks;
+> Full Gate only with explicit `--full`. Commands: [docs/STACK.md](./STACK.md); selection:
+> `python3 scripts/gate.py affected`. Record change-specific overrides here, or `None`.
 
-If this change needs a custom smoke target or other change-specific note, record it here:
+None
 
-```bash
-# Optional change-specific smoke override
-# curl -s http://localhost:8000/api/v1/[your-endpoint]
-# expected: [describe expected response]
-```
+### Gate evidence
+
+<!-- Filled by /work from the gate.py summary; /ship compares the diff since this HEAD. -->
+
+| HEAD | Groups / focused checks | Result | Seconds |
+|------|-------------------------|--------|---------|
+| — | — | — | — |
 
 ---
 

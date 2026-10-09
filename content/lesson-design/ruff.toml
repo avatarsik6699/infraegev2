@@ -1,0 +1,7 @@
+# Authored lesson text, SVG and HTML templates keep their natural line length;
+# Markdown (including its Python examples) is authored content, not formatter input.
+extend = "../../apps/api/pyproject.toml"
+extend-exclude = ["*.md"]
+
+[lint]
+ignore = ["E501"]

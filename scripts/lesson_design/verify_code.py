@@ -1,6 +1,6 @@
 """Run every Python example of a topic and compare it with the printed output.
 
-Usage: python3 -I scripts/lesson_design/verify_code.py docs/artifacts/lesson-design/topic-25
+Usage: python3 -I scripts/lesson_design/verify_code.py content/lesson-design/topic-25
 
 A block is checked when it contains ``print`` and is followed directly by an
 ```output block (shown under the code, lines joined in one row), or by a marker
@@ -50,6 +50,7 @@ def main(topic_dir: Path) -> int:
             expected = outputs.get(block.start())
             if expected is not None and "print" in code:
                 ran += 1
+
                 def run(source):
                     return subprocess.run(
                         [sys.executable, "-I", "-c", source],

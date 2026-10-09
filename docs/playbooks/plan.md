@@ -6,16 +6,14 @@ Select the next scope from project documentation or use an explicit brief, creat
 
 This document is the single source of truth for the `plan` workflow.
 
-In an integrated project, runtime wrappers under `.claude/skills/plan/SKILL.md` (Claude Code),
-`.agents/skills/plan/SKILL.md` (generic agent), and `plugins/sdd-workflow/{commands,skills}/plan/...`
-(Codex) point here. The wrappers are thin stubs — every workflow detail lives in this file.
+Runtime wrappers are thin stubs (AGENTS § Workflow Playbooks).
 
 ## Input
 
 - Optional free-form product brief (one paragraph to several pages).
 - Optional file path (e.g. `/plan docs/DRAFT_SPEC.md`) — read the file as the primary source brief
   instead of asking for one in chat.
-- With no brief or file, `$plan` derives the next smallest coherent change from `docs/SPEC.md`'s
+- With no brief or file, `/plan` derives the next smallest coherent change from `docs/SPEC.md`'s
   first unfinished roadmap outcome and the evidence in active/archived change history. It asks for
   direction only when that evidence does not identify one unique safe scope.
 - Optional mode flag: `--new` (rewrite `docs/SPEC.md` end-to-end) or `--continue` (extend/refine
@@ -27,9 +25,9 @@ In an integrated project, runtime wrappers under `.claude/skills/plan/SKILL.md` 
 - `docs/SPEC.md` roadmap and affected contracts; full SPEC for initial planning or a product/system pivot
 - `docs/STACK.md`
 - `docs/KNOWN_GOTCHAS.md` (if present)
-- `docs/changes/` and `docs/changes/archive/` (existing change files, to pick the next `NN` and
-  confirm nothing with the same slug already exists); when present, read archive/COMPACTED.md
-  for compacted outcomes and use its verified source only for details needed by the new scope
+- `python3 scripts/change_history.py inspect` (active change, next `NN`), the list of archive file
+  names (slug uniqueness) and the prose of `docs/changes/archive/COMPACTED.md`; open an individual
+  archive or compacted source only for details the new scope needs
 - The file at the given path, if one was passed as input
 
 ## Procedure
@@ -67,7 +65,7 @@ In an integrated project, runtime wrappers under `.claude/skills/plan/SKILL.md` 
 
 Only run this step if `docs/SPEC.md` doesn't exist yet, or the brief signals a spec-level change
 (new domain area, changed contract, changed NFRs). A brief that only describes the next unit of
-work against an already-adequate spec skips straight to step 4.
+work against an already-adequate spec skips straight to step 5.
 
 - In `new` mode: rewrite the full document end-to-end.
 - In `continue` mode: keep unaffected sections stable; modify only sections touched by the brief.
@@ -116,10 +114,7 @@ flow.
 
 ### 3.1 Existing visual language for frontend changes
 
-For frontend work, read `docs/FRONTEND.md` and `DESIGN.md` and use the existing public pages and
-shared semantic controls. Keep composition with the page; introduce a reusable mechanism only for a
-real consumer. Compare desktop/mobile and degraded states in the required browser pass. Labs
-and decorative specimens are not part of the current product.
+Follow `work.md` § 7 (FRONTEND, DESIGN, existing pages and shared controls).
 
 ### 4. Run critical validation checks (spec-level, when step 2 ran)
 

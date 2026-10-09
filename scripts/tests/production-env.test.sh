@@ -9,6 +9,7 @@ test_root=$(mktemp -d)
 trap 'rm -rf -- "$test_root"' EXIT
 env_file="$test_root/production.env"
 compose_file="$test_root/compose.yml"
+# shellcheck disable=SC2016 # the literal must keep $HOME and backticks unexpanded
 synthetic_value='ssh-ed25519 AAAA+test/value= operator $HOME `noop` \ "quoted"'
 
 quoted=$(production_env_quote "$synthetic_value")
@@ -18,6 +19,7 @@ production_env_validate "$env_file"
 unset SYNTHETIC_VALUE
 # shellcheck disable=SC1090
 source "$env_file"
+# shellcheck disable=SC2153 # assigned by the sourced env file
 [[ $SYNTHETIC_VALUE == "$synthetic_value" ]]
 
 cat >"$compose_file" <<'EOF'

@@ -138,7 +138,7 @@ TERMS: dict[str, tuple[str, str, str, str]] = {
     "split": (
         "Разбить строку: split",
         "<code>s.split()</code> делит строку на части по пробелам, табуляциям и переводам "
-        "строки и возвращает список строк: <code>\"40  7 1.3\".split()</code> даёт "
+        'строки и возвращает список строк: <code>"40  7 1.3".split()</code> даёт '
         "<code>['40', '7', '1.3']</code>.",
         "stroki",
         "Строки: символы, индексы и срезы",
@@ -146,7 +146,7 @@ TERMS: dict[str, tuple[str, str, str, str]] = {
     "num": (
         "Целые и дробные числа: int и float",
         "<code>int</code> — целые числа, <code>float</code> — дробные: <code>2.5</code>. "
-        "<code>int(\"40\")</code> превращает строку из цифр в число, а "
+        '<code>int("40")</code> превращает строку из цифр в число, а '
         "<code>int(7.9)</code> отбрасывает дробную часть и даёт 7.",
         "chisla-i-vyrazheniya",
         "Числа, типы и арифметические выражения",
@@ -161,7 +161,7 @@ TERMS: dict[str, tuple[str, str, str, str]] = {
     ),
     "file": (
         "Чтение файла: with open",
-        "<code>with open(\"23.txt\") as f:</code> открывает файл, а <code>for line in f:</code> "
+        '<code>with open("23.txt") as f:</code> открывает файл, а <code>for line in f:</code> '
         "по очереди даёт его строки. После блока файл закрывается сам.",
         "fayly",
         "Читаем данные из файла",

@@ -14,12 +14,10 @@ All workflow logic lives in `docs/playbooks/`; plugin files are thin wrappers.
 
 ## Hooks
 
-The plugin-local [`hooks.json`](./hooks.json) is a reference policy for the workflow bundle. Current
-Codex plugin manifests do not load hooks directly; if your workspace uses project-scoped Codex hook
-config, point it at this file.
-
-The active hook covers `PreToolUse` for `Bash` and blocks dangerous commands via
-[`scripts/block-dangerous-bash.sh`](./scripts/block-dangerous-bash.sh).
+The plugin-local [`hooks.json`](./hooks.json) is a reference policy and is **not active**: Codex
+plugin manifests do not load hooks, and neither `plugin.json` nor `.codex/config.toml` references it.
+To enable it, point project-scoped Codex hook config at this file; it would block dangerous `Bash`
+commands on `PreToolUse` via [`scripts/block-dangerous-bash.sh`](./scripts/block-dangerous-bash.sh).
 
 ## Docs MCPs
 

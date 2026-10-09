@@ -15,7 +15,7 @@
     "test:browser:accessibility": "playwright test e2e/accessibility.spec.ts",
     "test:browser:layout": "playwright test --config playwright.layout.config.ts --grep-invert @no-js",
     "test:browser:production:once": "playwright test --config playwright.production.config.ts",
-    "test:browser:production": "bash ../../scripts/run-browser-portfolio.sh production",
+    "test:browser:production": "pnpm build && pnpm test:browser:production:once",
     "test:e2e:install": "playwright install chromium",
     "typecheck": "tsc --noEmit",
     "lint": "eslint . --cache --cache-strategy content --max-warnings 0 && node scripts/verify-test-architecture.mjs && node scripts/verify-app-architecture.mjs && node scripts/verify-layer-boundaries.mjs",

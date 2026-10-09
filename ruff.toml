@@ -1,0 +1,4 @@
+# Python outside apps/api (scripts, content/lesson-design) uses the API Ruff settings, whichever
+# directory Ruff is started from. Markdown, including its Python examples, is authored content.
+extend = "apps/api/pyproject.toml"
+extend-exclude = ["*.md"]

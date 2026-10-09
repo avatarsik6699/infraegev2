@@ -13,7 +13,7 @@ export default defineConfig({
   // Keep traces outside Vite's app root; writing them under apps/web makes the dev watcher reload
   // the page mid-test and clears controlled input state.
   outputDir: "../../.output/playwright",
-  reporter: "list",
+  reporter: process.env.GATE_SUMMARY ? "dot" : "list",
   fullyParallel: false,
   timeout: 45_000,
   retries: 0,

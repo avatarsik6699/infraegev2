@@ -1,6 +1,6 @@
 export namespace LessonFigureTypes {
   export type Props = {
-    /** Путь к рисунку (WebP из `docs/artifacts/lesson-media`). */
+    /** Путь к рисунку (WebP из `scripts/lesson_media`). */
     src: string;
     width: number;
     height: number;

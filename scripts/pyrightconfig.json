@@ -14,9 +14,10 @@
     "lib/gate",
     "tests/gate_test.py",
     "tests/security_gate_test.py",
-    "release-checkpoint.py",
     "release_checkpoint.py",
-    "tests/release_checkpoint_test.py"
+    "tests/release_checkpoint_test.py",
+    "lesson_design",
+    "../content/lesson-design"
   ],
   "extraPaths": ["..", "../apps/api"],
   "venvPath": "../apps/api",

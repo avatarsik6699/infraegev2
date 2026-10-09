@@ -4,43 +4,10 @@ import {
   markTaskSolved,
 } from "~/features/lesson-progress/model/lesson-progress-state";
 import { createLessonProgressRegistry } from "~/features/lesson-progress/model/lesson-progress-registry";
-import { lessonProgressStorage } from "./fixtures/legacy-progress/lesson-progress-storage";
 import { courseProgress } from "~/entities/course";
 
 describe("revision-aware lesson progress", () => {
   beforeEach(() => localStorage.clear());
-
-  it("migrates the old registry and isolates new revisions from old-tab writes", async () => {
-    const task = "python-first-program-output-order";
-    localStorage.setItem(
-      "infraege:lesson-progress",
-      JSON.stringify({
-        version: 1,
-        data: {
-          lessons: {
-            "python-first-program": {
-              solvedTaskIds: [task],
-              acceptedAnswers: { [task]: "42" },
-            },
-          },
-        },
-      }),
-    );
-    const loaded = await lessonProgressStorage.persistStorage.getItem("unused");
-    expect(JSON.stringify(loaded)).not.toContain("42");
-    expect(
-      loaded?.state.lessons["python-first-program"]?.solvedRevisions?.[task],
-    ).toEqual({ "1": true });
-    if (!loaded) throw new Error("missing migrated state");
-    await lessonProgressStorage.persistStorage.setItem("unused", loaded);
-    localStorage.setItem(
-      "infraege:lesson-progress",
-      JSON.stringify({ version: 1, data: { lessons: {} } }),
-    );
-    expect(
-      await lessonProgressStorage.persistStorage.getItem("unused"),
-    ).toEqual(loaded);
-  });
 
   it("retains historical revision facts while only the displayed revision counts", () => {
     const taskId = "python-first-program-output-order";
@@ -103,23 +70,5 @@ describe("revision-aware lesson progress", () => {
         solvedRevisions: { task: { "1": true } },
       },
     });
-  });
-
-  it("migrates only verified first-import task membership from legacy lesson storage", () => {
-    localStorage.setItem(
-      "infraege:lesson:python-first-program:progress",
-      JSON.stringify({
-        version: 1,
-        data: {
-          solvedTaskIds: ["python-first-program-output-order", "unrelated"],
-          acceptedAnswers: { "python-first-program-output-order": "42" },
-        },
-      }),
-    );
-    const progress = lessonProgressStorage.readLegacy("python-first-program");
-    expect(progress?.solvedRevisions).toEqual({
-      "python-first-program-output-order": { "1": true },
-    });
-    expect(progress?.solvedTaskIds).toContain("unrelated");
   });
 });

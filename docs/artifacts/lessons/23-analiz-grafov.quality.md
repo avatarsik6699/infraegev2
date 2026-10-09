@@ -1,6 +1,6 @@
 # ЕГЭ № 23 «Анализ графов» — проверка качества урока и практики
 
-Урок перенесён на сайт в Change 172 с одобренного демо-стенда `docs/artifacts/lesson-design/topic-23/` (версия 18) по [пайплайну](../../runbooks/lesson-pipeline.md). Это первый урок темы каталога «Анализ графов» (`graph-analysis`, `/ege/23-analiz-grafov`).
+Урок перенесён на сайт в Change 172 с одобренного демо-стенда `content/lesson-design/topic-23/` (версия 18) по [пайплайну](../../runbooks/lesson-pipeline.md). Это первый урок темы каталога «Анализ графов» (`graph-analysis`, `/ege/23-analiz-grafov`).
 
 ## Замысел
 

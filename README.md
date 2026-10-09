@@ -1,275 +1,56 @@
 # infraege
 
-Веб-приложение для подготовки к ЕГЭ по информатике с семью опубликованными в source tree темами,
-завершённым самостоятельным мини-курсом Python из 28 уроков, server-owned практикой и необязательным
-аккаунтом для сохранения прогресса на сервере. Гости читают и проверяют ответы без сохранения
-результатов. Темы ЕГЭ и CourseLesson остаются независимыми учебными траекториями.
+Веб-приложение для подготовки к ЕГЭ по информатике: темы ЕГЭ, опубликованные в source tree
+(список — `apps/web/src/entities/lesson/content/lesson-registry.ts`), самостоятельный мини-курс
+Python из 28 уроков, server-owned практика и необязательный аккаунт для сохранения прогресса на
+сервере. Гости читают и проверяют ответы без сохранения результатов. Темы ЕГЭ и CourseLesson
+остаются независимыми учебными траекториями.
 
-Технический контракт проекта находится в [`docs/SPEC.md`](docs/SPEC.md), команды и версии стека —
-в [`docs/STACK.md`](docs/STACK.md). Production-контур для `infraege.ru` описан в
-[`docs/runbooks/production.md`](docs/runbooks/production.md). Production работает на
-`infraege.ru`; application использует один Compose project. Внешняя cookieless-аналитика
-остаётся отдельным сервисом; её стек не входит в application Compose.
+Технический контракт проекта — [`docs/SPEC.md`](docs/SPEC.md), версии, команды и gate —
+[`docs/STACK.md`](docs/STACK.md), правила работы агентов — [`AGENTS.md`](AGENTS.md).
+Production работает на `infraege.ru` в одном application Compose project
+([`docs/runbooks/production.md`](docs/runbooks/production.md)); внешняя cookieless-аналитика —
+отдельный сервис.
 
-Статус `complete`/`archived` в change-файлах описывает код в локальной истории репозитория, а не
-факт публикации. GitHub может отставать от локального `main`, а production — от GitHub; фактически
-развёрнутый SHA всегда проверяется через `/health/ready` и release evidence, а не выводится из
-документационного статуса. Описание возможностей в этом README относится к текущему source tree;
-до `/ship --release` одобренные изменения могут ещё отсутствовать в production.
-
-## Быстрый старт
-
-Для `make dev` нужны Docker с Compose v2 и GNU Make. Для первого импорта банка
-`make practice-bootstrap` также нужны Python 3.12+ и uv на host. Из корня репозитория выполните:
-
-```bash
-make dev
-make practice-bootstrap  # первый явный импорт учебного банка
-```
-
-Если в checkout есть локальный `athanor.yaml`, запуск требует Athanor CLI и разблокированного
-SMTP vault; без manifest действует no-mail режим. См. [STACK](docs/STACK.md#initial-setup).
-
-При первом запуске команда сама:
-
-- подставляет одноразовые локальные значения без создания `.env`;
-- собирает отсутствующие frontend/backend-образы со всеми зависимостями внутри Docker;
-- запускает PostgreSQL, API, Vite dev server и Nginx;
-- ждёт, пока healthchecks всех сервисов станут зелёными;
-- печатает готовые URL.
-
-После запуска откройте <http://localhost:8080/>. Изменения в `apps/web/src`, `apps/api/app` и
-`apps/web/public` подхватываются контейнерами без ручной переустановки зависимостей.
-Задачи в PostgreSQL обновляются явным импортом, а publication registry входит в образ API.
-
-Основные команды:
-
-```bash
-make dev      # запустить/возобновить и дождаться готовности
-make rebuild  # явно пересобрать образы и запустить стек
-make ps       # показать состояние и health сервисов
-make logs     # смотреть общие логи, выход — Ctrl+C
-make restart  # перезапустить весь dev-стек
-make stop     # остановить стек, сохранив контейнеры для быстрого запуска
-make down     # удалить контейнеры и dev-network, сохранив PostgreSQL
-make clean-dry-run  # показать точный allowlist удаляемых локальных артефактов
-make clean          # удалить отчёты, build outputs и кэши; зависимости и данные сохраняются
-make clean-check    # завершиться с ошибкой, если allowlisted-артефакты ещё остались
-make help     # показать доступные команды
-```
-
-После тестов, линтинга, сборки или аудита сначала проанализируйте нужные отчёты, затем завершите
-сессию последовательностью `make clean-dry-run`, `make clean`, `make clean-check`. Не используйте
-вместо неё `git clean -fdX`: среди ignored-путей находятся зависимости, окружения, секреты и данные.
+После тестов, линтинга, сборки или аудита проанализируйте отчёты и выполните `make clean` (удаляет
+allowlisted артефакты и проверяет, что их не осталось). Не используйте вместо него
+`git clean -fdX`: среди ignored-путей находятся зависимости, окружения, секреты и данные.
 
 ## Требования
 
-- Docker с Compose v2 и GNU Make — для `make dev`;
-- Node.js 22.13+, pnpm 10.33.0 (закреплён в `packageManager`), Python 3.12+ и
-  [uv](https://docs.astral.sh/uv/) — для host-проверок; Python и uv нужны также для импорта банка;
-- Chromium — только для локального Playwright E2E.
+Docker с Compose v2 и GNU Make — для `make dev`; для host-проверок — Node.js 22.13+, pnpm 10.33.0,
+Python 3.12+, uv и ShellCheck; Chromium — только для локального Playwright. Полный список с
+проверочными командами — [STACK § Prerequisites](docs/STACK.md#prerequisites). Все команды
+выполняются из корня репозитория.
 
-Проверить установленные версии:
-
-```bash
-node --version
-pnpm --version
-python3 --version
-uv --version
-docker --version
-docker compose version
-make --version
-```
-
-Все команды ниже выполняются из корня репозитория, если не указано иное.
-
-## Установка зависимостей на host — только для тестов
-
-Для обычного запуска через `make dev` этот раздел не нужен. Если требуется запускать lint,
-typecheck или тесты непосредственно в WSL/на host:
+## Запуск
 
 ```bash
-pnpm install --frozen-lockfile
-cd apps/api
-uv sync --frozen
-cd ../..
+pnpm install --frozen-lockfile   # host-зависимости: нужны только для проверок и тестов
+make dev                         # dev-стек: UI http://localhost:8080/, health /health
+make practice-bootstrap          # импорт банка задач в локальную базу (после первого make dev)
+make stop                        # быстрая остановка; make down удаляет контейнеры, данные остаются
 ```
 
-Для первого запуска Playwright отдельно установите Chromium:
+`make dev` сам пересобирает образы при изменении lock-файлов, Dockerfile и других входов;
+`make rebuild` — принудительно. Код `apps/web/src`, `apps/web/public` и `apps/api/app` подключён
+bind-mount. Перед повторным импортом банка экспортируйте свои правки. Детали lifecycle, Athanor/SMTP
+и запуск отдельных процессов без Docker — [STACK § Initial setup](docs/STACK.md#initial-setup) и
+[accounts](docs/runbooks/accounts.md).
+
+## Проверки
 
 ```bash
-pnpm --filter web test:e2e:install
+python3 scripts/gate.py affected          # какие группы проверок нужны для текущих изменений
+python3 scripts/gate.py run --group …     # запустить их; краткая сводка, полный лог в .output/gate/
+pnpm format | pnpm lint:fix               # применить Prettier/Ruff и безопасные ESLint fixes
+pnpm --filter web test                    # Vitest
+cd apps/api && uv run pytest              # backend
+pnpm --filter web test:e2e                # Playwright; нужен засеянный банк (STACK § Testing)
 ```
 
-## Альтернативный запуск без Docker
-
-Этот вариант предназначен для отладки отдельных процессов. Полный учебный flow требует
-PostgreSQL с текущим migration head `140_01` и импортированным банком. Подготовьте локальную базу через
-`make dev` и `make practice-bootstrap`, передайте backend read-only `DATABASE_URL` с loopback-портом
-из `docker port infraege-dev-postgres-1 5432` и абсолютный `TASK_FILES_DIR`. Без базы доступны
-статические страницы и liveness; практика и readiness будут недоступны.
-Для аккаунтов и сохранения прогресса также требуются отдельный `ACCOUNT_DATABASE_URL` роли
-`infraege_app`, `AUTH_CSRF_SECRET` и согласованный `PUBLIC_ORIGIN`; почта и провайдеры включаются
-только после настройки. См. [accounts](docs/runbooks/accounts.md).
-
-Откройте два терминала.
-
-Терминал 1 — backend:
-
-```bash
-cd apps/api
-uv run uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
-```
-
-Проверка backend:
-
-```bash
-curl -f http://127.0.0.1:8000/health
-```
-
-Ожидаемый ответ:
-
-```json
-{"status":"ok","version":"development"}
-```
-
-Терминал 2 — frontend:
-
-```bash
-pnpm dev
-```
-
-Откройте приложение: <http://127.0.0.1:3000/>.
-
-Остановить каждый локальный процесс можно сочетанием `Ctrl+C` в его терминале.
-
-## Запуск через Docker Compose
-
-Рекомендуемый интерфейс — Makefile:
-
-```bash
-make dev
-```
-
-Он использует отдельный `infra/docker-compose.dev.yml`. В режиме без локального Athanor manifest
-`.env` и почтовые секреты не требуются; при наличии manifest действуют SMTP-предусловия выше.
-Встроенные значения существуют только в процессе команды и предназначены исключительно для
-локального disposable PostgreSQL. Импорт банка требует Python и uv на host.
-
-Проверить состояние:
-
-```bash
-make ps
-```
-
-В контейнерном режиме открывайте приложение через Nginx:
-
-- UI: <http://localhost:8080/>;
-- health check: <http://localhost:8080/health>.
-
-Остановить стек для последующего быстрого запуска:
-
-```bash
-make stop
-```
-
-Команда посылает сервисам их штатные stop-сигналы и ждёт до 10 секунд на сервис. Контейнеры,
-dev-network, собранные образы, build cache и named volume PostgreSQL сохраняются. Следующий
-`make dev` запустит существующие контейнеры и дождётся их готовности; если отслеживаемые входные
-файлы образов изменились, он автоматически выполнит сборку. Изменения
-в `apps/web/src`, `apps/web/public` и `apps/api/app` подключены bind-mount и доступны без пересборки.
-Изменения задач применяются отдельным импортом; registry и миграции требуют пересборки API.
-
-Изменения lock-файлов, package manifests, Dockerfile, Vite config и других отслеживаемых
-входных файлов автоматически учитываются при `make dev`. Для принудительной пересборки:
-
-```bash
-make rebuild
-```
-
-Docker использует build cache, поэтому неизменившиеся слои `pnpm install` и `uv sync` при этом не
-выполняются заново.
-
-Для явного удаления контейнеров и dev-network используйте:
-
-```bash
-make down
-```
-
-`make down` также сохраняет named volume PostgreSQL; удаление данных не входит в обычный локальный
-lifecycle. Timeout при необходимости можно увеличить для обеих команд, например:
-`make stop STOP_TIMEOUT=60`.
-
-Не запускайте unit- или E2E-тесты внутри контейнеров: по правилам проекта они выполняются только
-локально в окружении разработчика.
-
-## Автоматические проверки
-
-Все JavaScript-workspace:
-
-```bash
-pnpm lint
-pnpm typecheck
-pnpm test
-```
-
-Форматирование всего поддерживаемого репозитория проверяется отдельно от линтеров:
-
-```bash
-pnpm format:check
-pnpm format        # применить Prettier и Ruff
-pnpm lint:fix      # применить безопасные ESLint fixes
-```
-
-```bash
-pnpm build
-```
-
-Backend:
-
-```bash
-cd apps/api
-uv run ruff check app tests
-pnpm exec pyright app tests
-uv run pytest
-cd ../..
-```
-
-Связи content-as-code:
-
-```bash
-pnpm validate:content
-```
-
-Проверить, что Playwright видит E2E-сценарии:
-
-```bash
-pnpm --filter web exec playwright test --list
-```
-
-Полный локальный E2E запускается командой:
-
-```bash
-pnpm --filter web test:e2e
-```
-
-Playwright сам поднимает свежие frontend/backend на изолированных адресах
-`127.0.0.2:3100` и `127.0.0.2:8100`; заранее запускать серверы для него не нужно. Сценарии
-проверяют публичный вход, опубликованные уроки, no-JS чтение, desktop/mobile viewport, общий 404
-и восстановление после ошибок. Перед запуском передайте `DATABASE_URL` read-only роли
-локальной базы с импортированным банком и абсолютный `TASK_FILES_DIR`; подробности в
-[STACK](docs/STACK.md#testing). Публичный cookieless tracker сохраняется; account/answer data
-не передаются в аналитику.
-
-Периодические/ручные аудиты и отдельная локальная диагностика образов
-(предусловия и границы — в [STACK](docs/STACK.md#full-gate)):
-
-```bash
-pnpm audit:a11y       # focused Playwright + axe; также входит в weekly browser audit
-pnpm audit:performance
-pnpm audit:security
-pnpm audit:images
-```
+Тесты запускаются только на host, не в контейнерах. Gate-таблицы и периодические аудиты —
+[STACK](docs/STACK.md) и [verification](docs/runbooks/verification.md).
 
 ## Production и эксплуатация
 
@@ -279,8 +60,7 @@ fail2ban, application backup/restore и явный SHA deploy. Аналитич�
 не изменяет сервисы VPS.
 
 Практика хранится в PostgreSQL (migration head `140_01`, исходная схема банка `122_01`), импорт/экспорт описан в
-[practice](docs/runbooks/practice.md), перенос на новую схему — в
-[transition](docs/runbooks/practice-transition.md). `make practice-bootstrap` импортирует
+[practice](docs/runbooks/practice.md). `make practice-bootstrap` импортирует
 полный проверенный банк в локальную базу. Перед повторным импортом экспортируйте свои правки.
 [Production](docs/runbooks/production.md) и [backup/restore](docs/runbooks/backup-restore.md)
 описывают действующие команды. Push и deploy не входят в локальный `/work`.

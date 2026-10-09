@@ -2,7 +2,7 @@
 
 Usage (from the repository root):
 
-    python3 -I scripts/lesson_design/export_lesson.py docs/artifacts/lesson-design/topic-25 \\
+    python3 -I scripts/lesson_design/export_lesson.py content/lesson-design/topic-25 \\
         --out /tmp/draft.lesson.tsx --tasks /tmp/tasks.json
 
 The draft is a starting point, never a publication: read it in full, then move
@@ -76,9 +76,7 @@ def inline(text: str) -> str:
             key = m.group("term_key")
             if key not in TERMS:
                 raise SystemExit(f"Unknown term {key!r}; add it to terms.TERMS")
-            out.append(
-                f"<PythonTerm term={js(key)}>{inline(m.group('term_label'))}</PythonTerm>"
-            )
+            out.append(f"<PythonTerm term={js(key)}>{inline(m.group('term_label'))}</PythonTerm>")
         elif m.group("sup") is not None:
             out.append(f"<sup>{jsx_text(m.group('sup'))}</sup>")
         elif m.group("bold") is not None:
@@ -135,9 +133,13 @@ class Converter:
         self.local.add("SubtopicLink")
 
         def rows(items) -> str:
-            return "[" + ", ".join(
-                f"{{ key: <>{inline(k)}</>, note: <>{inline(v)}</> }}" for k, v in items
-            ) + "]"
+            return (
+                "["
+                + ", ".join(
+                    f"{{ key: <>{inline(k)}</>, note: <>{inline(v)}</> }}" for k, v in items
+                )
+                + "]"
+            )
 
         groups = []
         for g in data["groups"]:
@@ -196,13 +198,11 @@ class Converter:
             f"variants={{[{', '.join(variants)}]}} />"
         )
 
-    def figure_call(
-        self, name: str, args_src: str, caption: str | None, context: str
-    ) -> str:
+    def figure_call(self, name: str, args_src: str, caption: str | None, context: str) -> str:
         args, kwargs = parse_call(name, args_src)
         if name == "mask_try":
             self.imports.add("MaskSandbox")
-            mask, number = (*args, *mask_try.__defaults__[len(args) :])
+            mask, number = (*args, *(mask_try.__defaults__ or ())[len(args) :])
             return f"<MaskSandbox defaultMask={js(mask)} defaultNumber={js(number)} />"
         if name == "remainder_widget":
             self.imports.add("RemainderExplorer")
@@ -225,9 +225,7 @@ class Converter:
             raise SystemExit(f"widget {name!r} has no site mapping")
         key = media_key(name, args, kwargs)
         if key not in self.media_known:
-            raise SystemExit(
-                f"{key}: not in the media manifest; run export_media.py first"
-            )
+            raise SystemExit(f"{key}: not in the media manifest; run export_media.py first")
         if name in STEPPERS:
             self.imports.add("LessonStepper")
             labels = self.site.get("stepperLabels", {})
@@ -235,7 +233,9 @@ class Converter:
             label = labels.get(key) or labels.get(name) or plain(context) or "Пошаговая схема"
             return f"<LessonStepper {{...lessonMedia.{key}}} label={{{js(label)}}} />"
         self.imports.add("LessonDiagram")
-        return f"<LessonDiagram {{...lessonMedia.{key}}} caption={{<>{inline(caption or '')}</>}} />"
+        return (
+            f"<LessonDiagram {{...lessonMedia.{key}}} caption={{<>{inline(caption or '')}</>}} />"
+        )
 
     def blocks(self, md: str) -> list[str]:
         """Convert Markdown body text into JSX block elements."""
@@ -273,7 +273,9 @@ class Converter:
                 label = (
                     short_label(last_para, f"Код на Python: {first[:60]}")
                     if language == "python"
-                    else f"Строки файла {file_name}" if file_name else "Результат"
+                    else f"Строки файла {file_name}"
+                    if file_name
+                    else "Результат"
                 )
                 extra = f" output={{{js(output)}}}" if output is not None else ""
                 if file_name:
@@ -320,35 +322,26 @@ class Converter:
                 self.imports.add("ProofDisclosure")
                 inner = "\n".join(self.blocks(body))
                 title = plain(summary.group(1)) if summary else "Доказательство"
-                out.append(
-                    f"<ProofDisclosure summary={js(title)}>\n{inner}\n</ProofDisclosure>"
-                )
+                out.append(f"<ProofDisclosure summary={js(title)}>\n{inner}\n</ProofDisclosure>")
                 i = j + 1
                 continue
             call = FIGURE_CALL.match(stripped)
             if call:
-                out.append(
-                    self.figure_call(call.group(1), call.group(2), None, last_para)
-                )
+                out.append(self.figure_call(call.group(1), call.group(2), None, last_para))
                 i += 1
                 continue
             if stripped.startswith("|"):
                 j = i
                 rows = []
                 while j < len(lines) and lines[j].strip().startswith("|"):
-                    rows.append(
-                        [c.strip() for c in lines[j].strip().strip("|").split("|")]
-                    )
+                    rows.append([c.strip() for c in lines[j].strip().strip("|").split("|")])
                     j += 1
                 header, align, body = rows[0], rows[1], rows[2:]
                 columns = ", ".join(
                     f"{{ label: {node(h)}{', numeric: true' if a.endswith(':') else ''} }}"
                     for h, a in zip(header, align, strict=True)
                 )
-                cells = ",\n".join(
-                    "[" + ", ".join(node(c) for c in row) + "]"
-                    for row in body
-                )
+                cells = ",\n".join("[" + ", ".join(node(c) for c in row) + "]" for row in body)
                 label = short_label(last_para, ", ".join(plain(h) for h in header))
                 self.imports.add("LessonTable")
                 out.append(
@@ -387,9 +380,7 @@ class Converter:
             while (
                 j < len(lines)
                 and lines[j].strip()
-                and not re.match(
-                    r"^(```|<figure|<details|%%|:::|\||>|- |\d+\. )", lines[j].strip()
-                )
+                and not re.match(r"^(```|<figure|<details|%%|:::|\||>|- |\d+\. )", lines[j].strip())
             ):
                 para.append(lines[j].strip())
                 j += 1
@@ -414,9 +405,7 @@ def task_inventory(block: str) -> list[dict]:
 
     def numbered(text: str) -> dict[int, str]:
         found = re.split(r"(?m)^(\d+)\. ", text)
-        return {
-            int(found[k]): found[k + 1].strip() for k in range(1, len(found) - 1, 2)
-        }
+        return {int(found[k]): found[k + 1].strip() for k in range(1, len(found) - 1, 2)}
 
     q, a = numbered(questions), numbered(answers)
     return [{"number": n, "question": q[n], "answer": a.get(n, "")} for n in sorted(q)]
@@ -430,17 +419,19 @@ def write_terms(path: Path) -> None:
             f"  {key}: {{\n    title: {js(title)},\n    body: <>{inline(body)}</>,\n"
             f"    lessonSlug: {js(slug)},\n    lessonTitle: {js(lesson)},\n  }},"
         )
-    path.write_text(prettier(
-        "// Generated by scripts/lesson_design/export_lesson.py from terms.py.\n"
-        'import { Notation } from "~/shared/components/notation";\n\n'
-        "type PythonTermEntry = {\n  title: string;\n  body: React.ReactNode;\n"
-        "  lessonSlug: string;\n  lessonTitle: string;\n};\n\n"
-        "export const pythonTerms = {\n"
-        + "\n".join(entries)
-        + "\n} as const satisfies Record<string, PythonTermEntry>;\n\n"
-        "export type PythonTermKey = keyof typeof pythonTerms;\n",
-        path,
-    ))
+    path.write_text(
+        prettier(
+            "// Generated by scripts/lesson_design/export_lesson.py from terms.py.\n"
+            'import { Notation } from "~/shared/components/notation";\n\n'
+            "type PythonTermEntry = {\n  title: string;\n  body: React.ReactNode;\n"
+            "  lessonSlug: string;\n  lessonTitle: string;\n};\n\n"
+            "export const pythonTerms = {\n"
+            + "\n".join(entries)
+            + "\n} as const satisfies Record<string, PythonTermEntry>;\n\n"
+            "export type PythonTermKey = keyof typeof pythonTerms;\n",
+            path,
+        )
+    )
 
 
 def checkpoint_block(checks: list[dict], indent: str) -> str:
@@ -456,7 +447,7 @@ def checkpoint_block(checks: list[dict], indent: str) -> str:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    parser = argparse.ArgumentParser(description=(__doc__ or "").split("\n")[0])
     parser.add_argument("topic", type=Path)
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--tasks", type=Path, required=True)
@@ -465,14 +456,10 @@ def main() -> int:
     meta = json.loads((topic / "topic.json").read_text())
     site = meta["site"]
     manifest = (
-        HERE.parents[1]
-        / "apps/web/src/entities/lesson/content"
-        / f"{site['id']}.media.ts"
+        HERE.parents[1] / "apps/web/src/entities/lesson/content" / f"{site['id']}.media.ts"
     ).read_text()
     slugs = [re.sub(r"^\d+-", "", Path(sub["source"]).stem) for sub in meta["subtopics"]]
-    converter = Converter(
-        set(re.findall(r"^  (\w+): \{", manifest, re.M)), site, slugs
-    )
+    converter = Converter(set(re.findall(r"^  (\w+): \{", manifest, re.M)), site, slugs)
     theory, subtopics, inventory = [], [], {}
     for sub in meta["subtopics"]:
         name = sub["source"]
@@ -485,9 +472,7 @@ def main() -> int:
             if step.startswith(TASK_BLOCK):
                 inventory[slug] = task_inventory(step)
                 continue
-            anchor, label = (
-                anchors[k] if k < len(anchors) else (f"{slug}-{k + 1}", f"Шаг {k + 1}")
-            )
+            anchor, label = anchors[k] if k < len(anchors) else (f"{slug}-{k + 1}", f"Шаг {k + 1}")
             k += 1
             ids.append(anchor)
             theory.append(
@@ -532,7 +517,10 @@ def main() -> int:
         'import { defineLesson } from "../lib/define-lesson";',
         f'import {{ lessonMedia }} from "./{site["id"]}.media";',
         'import { PythonTerm } from "./python-term";',
-        *[f'import {{ {name} }} from "./{re.sub(r"(?<!^)(?=[A-Z])", "-", name).lower()}";' for name in local],
+        *[
+            f'import {{ {name} }} from "./{re.sub(r"(?<!^)(?=[A-Z])", "-", name).lower()}";'
+            for name in local
+        ],
         "",
         f"export const {publication}Lesson = defineLesson({{",
         f"  ...{publication}LessonPublication,",

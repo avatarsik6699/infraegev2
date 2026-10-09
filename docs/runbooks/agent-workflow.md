@@ -9,7 +9,7 @@ not a deterministic scheduler or a promise of reduced token cost.
 Start a new Codex session in this trusted repository, or from any directory run:
 
 ```bash
-bash /home/niquetamerewsl/projects/infraegev2/scripts/codex-orchestrator.sh
+bash <repository>/scripts/codex-orchestrator.sh
 ```
 
 Then invoke the existing work skill with the active change number and optional Backlog ID. The launcher changes to the
@@ -33,11 +33,10 @@ no duplicate `[agents.<role>]` registry is needed. `explorer` and `worker` inten
 the built-in roles. Unclassified subagents default to GPT-6.1 Sol; only explicitly bounded roles use Luna.
 The concurrency cap is **two children**, excluding the primary.
 
-Use the project `reviewer` for independent change acceptance. A global `code-reviewer` is
-for repositories without that role or an explicitly different review scope. Use `tester`
-for reproduction and tests; assign `test-debugger` only a concrete failing Backlog task
-with production-file ownership when an implementation fix is required. Do not duplicate
-review or test passes merely because both role names are available.
+Use the project `reviewer` for independent change acceptance and `tester` for reproduction and
+tests; a production fix found by a tester goes to a `worker` with file ownership. Global roles
+(for example `code-reviewer`) are for repositories without these roles. Do not duplicate review or
+test passes merely because several role names are available.
 
 Custom role model/effort settings take precedence over the initial resolution from explicit
 spawn settings, `[agents]` defaults and parent settings. Use a fresh or short context when
@@ -93,16 +92,15 @@ roles/model settings in a fresh session, and run a small read-only delegation sm
 entry proves advertised availability; a successful child turn proves that model route responded.
 Inspect runtime metadata when asserting the selected model; a model's self-report is not proof.
 Do not read secrets or run app gates for agent configuration. For the shell launcher use the
-repository `pnpm lint:shell` command and verify argument forwarding. Finish with reviewed
-`make clean-dry-run`, `make clean`, `make clean-check`.
+repository `pnpm lint:shell` command and verify argument forwarding. Configuration-only sessions
+produce no build outputs and skip `make clean`.
 
 Resume the active change and its assigned Backlog in a new session; preserve existing edits.
 
-When a real change feels slow, report the dominant step. Compare subsequent changes opportunistically;
-do not create a benchmark platform, force all roles to run, or claim cost savings without usage data.
+When a real change feels slow, report the dominant step (the gate summary prints seconds per
+group). Do not create a benchmark platform, force all roles to run, or claim cost savings without
+usage data.
 
 Configuration reference checked 2026-09-26 with Codex CLI 0.157.1:
 [OpenAI subagents](https://learn.chatgpt.com/docs/agent-configuration/subagents) and
 [configuration precedence](https://learn.chatgpt.com/docs/config-file/config-basic#configuration-precedence).
-The user-supplied `docs/artifacts/multiagents.md` is historical source research, recoverable through
-[COMPACTED](../changes/archive/COMPACTED.md), not the binding runtime contract.

@@ -43,7 +43,7 @@ help:
 	@echo "  make logs     Follow logs from all services"
 	@echo "  make ps       Show service and health status"
 	@echo "  make config   Validate the fully rendered Compose configuration"
-	@echo "  make clean    Remove regenerable local reports, build outputs, and caches"
+	@echo "  make clean    Remove regenerable local reports and build outputs, then verify none remain"
 	@echo "  make clean-check    Fail if allowlisted local artifacts remain"
 	@echo "  make clean-dry-run  Preview the exact local artifacts make clean removes"
 	@echo "  make db-inventory DB_ENV=dev DB_PROJECT=infraege-dev  Read application DB metadata"

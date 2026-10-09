@@ -63,7 +63,7 @@ test ! -e "$athanor_calls"
 : >"$calls"
 run_lifecycle dev
 grep -Fq 'up --wait' "$calls"
-! grep -Fq 'up --build' "$calls"
+if grep -Fq 'up --build' "$calls"; then exit 1; fi
 grep -Fq 'run --rm --no-deps db-migrate .venv/bin/alembic check' "$calls"
 
 # Same fingerprint and a completed migration job do not hide schema drift.
@@ -75,7 +75,7 @@ test "$drift_status" -eq 23
 grep -Fq 'privacy_consent_version' "$test_root/drift.err"
 grep -Fq 'logs --tail=80 db-migrate nginx web api' "$calls"
 test "$(cat "$state_file")" = "$previous_fingerprint"
-! grep -Fq 'up --build' "$calls"
+if grep -Fq 'up --build' "$calls"; then exit 1; fi
 
 printf 'changed\n' >"$input_file"
 : >"$calls"
@@ -85,12 +85,12 @@ grep -Fq 'up --build --wait' "$calls"
 : >"$calls"
 run_lifecycle stop
 grep -Fq 'stop --timeout 10' "$calls"
-! grep -Fq 'alembic check' "$calls"
+if grep -Fq 'alembic check' "$calls"; then exit 1; fi
 
 : >"$calls"
 run_lifecycle down
 grep -Fq 'down --timeout 10 --remove-orphans' "$calls"
-! grep -Fq 'alembic check' "$calls"
+if grep -Fq 'alembic check' "$calls"; then exit 1; fi
 
 touch "$fixture_repo/athanor.yaml"
 : >"$calls"

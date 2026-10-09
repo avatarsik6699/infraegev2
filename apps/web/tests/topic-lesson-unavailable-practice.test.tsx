@@ -112,7 +112,7 @@ const createTasks = (count: number): PracticeTaskTypes.Task[] =>
   Array.from({ length: count }, (_, index) => ({
     id: "task-" + String(index + 1),
     theoryLinks: [],
-  })) as PracticeTaskTypes.Task[];
+  })) as unknown as PracticeTaskTypes.Task[];
 
 const firstSubtopic = (lesson: LessonContent.Definition) =>
   lessonSubtopics(lesson)[0];

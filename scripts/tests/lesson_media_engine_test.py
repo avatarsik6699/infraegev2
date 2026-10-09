@@ -1,4 +1,4 @@
-"""Контракт движка рисования иллюстраций для уроков (docs/artifacts/lesson-media).
+"""Контракт движка рисования иллюстраций для уроков (scripts/lesson_media).
 
 Запуск (нужен Pillow, ffmpeg не нужен):
 
@@ -13,7 +13,7 @@ import sys
 import unittest
 
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-ENGINE = os.path.join(REPO, "docs", "artifacts", "lesson-media")
+ENGINE = os.path.join(REPO, "scripts", "lesson_media")
 PUBLIC = os.path.join(REPO, "apps", "web", "public", "lesson-media")
 sys.path.insert(0, ENGINE)
 

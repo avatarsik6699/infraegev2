@@ -3,7 +3,7 @@
 Usage (from the repository root):
 
     uv run --no-project --with markdown python -I scripts/lesson_design/build.py \
-        docs/artifacts/lesson-design/topic-25
+        content/lesson-design/topic-25
 
 The topic folder holds ``topic.json`` (see docs/runbooks/lesson-pipeline.md),
 the subtopic Markdown files and the extra pages. Pages are written next to the
@@ -100,9 +100,11 @@ def pick_block(m: re.Match) -> str:
         name = name.lstrip("*").strip()
         if kind == "pick-tokens":
             on = {v.strip() for v in value.split(",")}
-            shown = '<span class="toks">' + "".join(
-                f'<span class="tok{" on" if v in on else ""}">{v}</span>' for v in values
-            ) + "</span>"
+            shown = (
+                '<span class="toks">'
+                + "".join(f'<span class="tok{" on" if v in on else ""}">{v}</span>' for v in values)
+                + "</span>"
+            )
         else:
             shown = inline_md(value)
         if note:
@@ -194,8 +196,9 @@ def call_figure(m: re.Match) -> str:
     if name not in FIGURES:
         raise SystemExit(f"Unknown figure {name!r}; add it to figures.FIGURES")
     call = ast.parse(f"f({m.group(2)})", mode="eval").body
+    assert isinstance(call, ast.Call)
     args = [ast.literal_eval(a) for a in call.args]
-    kwargs = {k.arg: ast.literal_eval(k.value) for k in call.keywords}
+    kwargs = {str(k.arg): ast.literal_eval(k.value) for k in call.keywords}
     return FIGURES[name](*args, **kwargs)
 
 

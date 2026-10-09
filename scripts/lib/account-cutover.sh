@@ -5,7 +5,7 @@
 cutover_wait_postgres() {
   local container=$1
   for _attempt in $(seq 1 60); do
-    if docker exec "$container" pg_isready -h 127.0.0.1 -U restore_admin >/dev/null 2>&1; then
+    if docker exec "$container" pg_isready -h 127.0.0.1 -U restore_admin -d postgres >/dev/null 2>&1; then
       return 0
     fi
     sleep 1
