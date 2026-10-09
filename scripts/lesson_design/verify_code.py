@@ -2,8 +2,9 @@
 
 Usage: python3 -I scripts/lesson_design/verify_code.py docs/artifacts/lesson-design/topic-25
 
-A block is checked when it contains ``print`` and is followed by a marker line
-("Программа выведет:", "Результат:", "Получим:", "Выведет:") and a ```text block.
+A block is checked when it contains ``print`` and is followed directly by an
+```output block (shown under the code, lines joined in one row), or by a marker
+line ("Программа выведет:", "Результат:", …) and a ```text block.
 Complete function definitions from earlier blocks of the topic (in file order)
 are prepended, so later examples may call ``get_divisors`` and similar helpers.
 Every code line must fit in 64 characters (the site's code column).
@@ -18,9 +19,9 @@ from pathlib import Path
 MAX_LINE = 64
 BLOCK = re.compile(r"```python\n((?:(?!```).)*?)```", re.S)
 WITH_OUTPUT = re.compile(
-    r"```python\n((?:(?!```).)*?)```\n\n"
-    r"(?:Программа выведет|Результат|Получим|Выведет|получаем|даёт|даст):?\n\n"
-    r"```text\n(.*?)```",
+    r"```python\n((?:(?!```).)*?)```\n\n?"
+    r"(?:(?:Программа выведет|Результат|Получим|Выведет|получаем|даёт|даст):?\n\n"
+    r"```text\n|```output\n)(.*?)```",
     re.S,
 )
 PRELUDE = "from math import isqrt\nfrom fnmatch import fnmatch\n"

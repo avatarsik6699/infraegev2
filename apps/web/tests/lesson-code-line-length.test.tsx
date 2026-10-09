@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import {
   arrayProcessingLesson,
   dataAnalysisLesson,
-  integerProcessingLesson,
+  divisorsAndMasksLesson,
   numberSequencesLesson,
   preobrazovanieZapiseyChiselLesson,
   rekursiyaLesson,
@@ -22,7 +22,7 @@ const MAX_CODE_LINE = 64;
 const lessons = [
   arrayProcessingLesson,
   dataAnalysisLesson,
-  integerProcessingLesson,
+  divisorsAndMasksLesson,
   numberSequencesLesson,
   preobrazovanieZapiseyChiselLesson,
   rekursiyaLesson,

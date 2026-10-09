@@ -58,6 +58,11 @@ export const LessonTree: React.FC<LessonTreeTypes.Props> = (props) => {
                           {file.count ? (
                             <span className={styles.count}>{file.count}</span>
                           ) : null}
+                          {file.note ? (
+                            <span className={styles.visuallyHidden}>
+                              {`, ${file.note}`}
+                            </span>
+                          ) : null}
                           {file.done && props.doneLabel ? (
                             <span className={styles.visuallyHidden}>
                               {` (${props.doneLabel})`}
@@ -68,6 +73,11 @@ export const LessonTree: React.FC<LessonTreeTypes.Props> = (props) => {
                     );
                     return (
                       <li key={file.id}>
+                        {file.groupLabel ? (
+                          <span className={styles.group} aria-hidden="true">
+                            {file.groupLabel}
+                          </span>
+                        ) : null}
                         {file.to ? (
                           <FileLink
                             className={styles.file}

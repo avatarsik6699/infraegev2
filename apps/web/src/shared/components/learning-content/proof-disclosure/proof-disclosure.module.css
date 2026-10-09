@@ -1,0 +1,50 @@
+/* A quiet fold: hairline frame, the summary reads as a label, the proof as
+   ordinary prose once opened. */
+.root {
+  max-width: var(--measure-reading);
+  margin-block: 0 var(--space-2);
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-surface);
+  background: var(--color-surface);
+}
+
+.summary {
+  display: flex;
+  gap: var(--space-1);
+  align-items: center;
+  min-height: 2.75rem;
+  padding: var(--space-1) var(--space-1-5);
+  color: var(--color-text);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  list-style: none;
+  cursor: pointer;
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+.summary:hover {
+  background: var(--color-wash);
+}
+
+.summary:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.chevron {
+  flex: none;
+  color: var(--color-muted);
+  transition: transform var(--motion-duration) var(--motion-easing);
+}
+
+.root[open] > .summary .chevron {
+  transform: rotate(90deg);
+}
+
+.body {
+  padding: var(--space-0-5) var(--space-2) var(--space-0-5) var(--space-4);
+}

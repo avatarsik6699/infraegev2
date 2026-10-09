@@ -58,6 +58,14 @@ export const CodeBlock: React.FC<CodeBlockTypes.Props> = (props) => {
           onToggle={() => setExpanded((current) => !current)}
         />
       ) : null}
+      {props.output === undefined ? null : (
+        <div className={styles.output} data-code-output>
+          <span className={styles.outputLabel}>Вывод</span>
+          <samp className={styles.outputValue}>
+            {props.output.replace(/\n+$/u, "").split("\n").join(", ")}
+          </samp>
+        </div>
+      )}
     </div>
   );
 };

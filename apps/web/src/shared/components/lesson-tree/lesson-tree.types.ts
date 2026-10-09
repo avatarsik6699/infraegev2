@@ -10,6 +10,10 @@ export namespace LessonTreeTypes {
     params?: Record<string, string>;
     current?: boolean;
     done?: boolean;
+    /** Quiet caption above this file that opens a group, e.g. «Дополнительный уровень». */
+    groupLabel?: string;
+    /** Read after the label, e.g. «дополнительный уровень»; the caption already shows it. */
+    note?: string;
   };
 
   export type Folder = {

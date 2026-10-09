@@ -1161,6 +1161,11 @@
       "Membership": {
         "additionalProperties": false,
         "properties": {
+          "counts_toward_mastery": {
+            "default": true,
+            "title": "Counts Toward Mastery",
+            "type": "boolean"
+          },
           "material_id": {
             "pattern": "^[a-z0-9][a-z0-9_-]{0,119}$",
             "title": "Material Id",
@@ -2027,6 +2032,10 @@
       "TaskVersion": {
         "additionalProperties": false,
         "properties": {
+          "counts_toward_mastery": {
+            "title": "Counts Toward Mastery",
+            "type": "boolean"
+          },
           "id": {
             "title": "Id",
             "type": "string"
@@ -2038,7 +2047,8 @@
         },
         "required": [
           "id",
-          "solution_revision"
+          "solution_revision",
+          "counts_toward_mastery"
         ],
         "title": "TaskVersion",
         "type": "object"

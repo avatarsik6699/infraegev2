@@ -9,7 +9,7 @@
 
 | Field | Value |
 |-------|-------|
-| Document Version | `v2.25` |
+| Document Version | `v2.26` |
 | Date | `2026-10-08` |
 | Architect / Owner | `v.godlevskiy` |
 | Stack | See [docs/STACK.md](./STACK.md) |
@@ -96,8 +96,10 @@ sdamgia.ru, kpolyakov.spb.ru), ни новыми AI-ботами (решают �
 4. **Результат** (`result`, обязательна) завершает материал итогами, освоенными умениями,
    результатом практики, текущим mastery-состоянием и registry-derived списком доступных
    опубликованных материалов. Формативная самопроверка (`checkpoint`, опциональна) — единственная
-   на весь урок, собирает вопросы по всем теоретическим идеям и рендерится внутри этой секции,
-   после итогового текста; не учитывается как выполненная практика.
+   на уровне урока, собирает вопросы по всем теоретическим идеям и рендерится внутри этой секции,
+   после итогового текста; не учитывается как выполненная практика. В теме ЕГЭ каждая подтема
+   дополнительно может завершаться своей самопроверкой того же вида (Change 171): вопросы «объясни,
+   почему» к идеям этой подтемы, после её задач; она тоже не учитывается как практика.
 
 Роли идут только в этом порядке; опциональные роли можно пропускать, но нельзя переставлять.
 
@@ -117,6 +119,9 @@ theory link на её разделы: это представление той �
 уровней. **Основные** вместе решают не меньше ~80 % задач открытых подборок и все типы задач реальных
 экзаменов последних двух лет. **Дополнительного уровня** — редкие случаи; они идут после основных,
 перед «Практикой и итогом», явно помечены и проходятся тем же линейным порядком, без ветвления.
+«Освоено» (`masteryThreshold`) в теме ЕГЭ считается по задачам основных подтем и страницы «Практика
+и итог»: задачи подтем дополнительного уровня решаются и сохраняются, но не входят ни в число решённых,
+ни в общее число задач для mastery (решение архитектора 2026-10-08, Change 171).
 Формальное доказательство, идея которого уже показана в тексте примером и схемой, может быть свёрнуто
 в раскрывающийся блок. Это не переключатель «кратко/подробно»: объяснение «почему работает» всегда
 остаётся в основном тексте.
@@ -159,7 +164,8 @@ PostgreSQL (§3). Задача самостоятельна и может име
 `TopicCatalogEntry` (учебная тема) `→` непустой упорядоченный `taskNumbers[]` (один или несколько
 номеров ЕГЭ) `→` опциональный опубликованный `TopicLesson`
 `TopicLesson` `→` `ConceptBlock[]` (смысловые разделы типизированной TSX-теории)
-`TopicLesson` `→` `Subtopic[]` (авторская группировка соседних `ConceptBlock` со своим slug, Change 167)
+`TopicLesson` `→` `Subtopic[]` (авторская группировка соседних `ConceptBlock` со своим slug, Change 167;
+уровень `core | advanced` и необязательная самопроверка подтемы, Change 171)
 `Course` `→` `CourseModule[]` `→` `CourseLesson[]` (упорядоченная самостоятельная траектория)
 `TopicLesson` / `CourseLesson` `→` `Task[]` через `lessons[{material_id, position}]`
 
@@ -218,9 +224,8 @@ Python подставляет title, summary, route и состав уроков
 и [каталогу паттернов](runbooks/lesson-patterns.md); одобренная на демо-стенде тема переносится на
 сайт отдельным change. Практический порядок переноса и подготовки уроков Python — в
 [руководстве по подготовке урока](runbooks/lesson-authoring.md); оба документа поясняют этот
-checklist, не заменяя его. Схемы демо-стенда — SVG, построенные кодом; при переносе они
-становятся иллюстрациями или роликами по правилам ниже, если архитектор отдельно не разрешит точные
-SVG-диаграммы.
+checklist, не заменяя его. Схемы демо-стенда — точные SVG-диаграммы, построенные кодом; при переносе
+они остаются SVG-диаграммами по правилу ниже.
 
 **Педагогика:**
 - [ ] Новое понятие сначала вводится через понятную ситуацию и объяснение своими словами;
@@ -272,6 +277,14 @@ SVG-диаграммы.
   одна подпись с сутью и числами рисунка, без служебных заголовков; числа на рисунке считает код;
   надписи читаются на телефоне. Баланс: рисунков в уроке немного (порядка одного на три раздела),
   а между рисунком и роликом не меньше двух блоков: они не идут друг за другом.
+- [ ] Точная учебная SVG-диаграмма (решение архитектора 2026-10-08) выбирается, когда схема
+  показывает точные числа, структуру или шаги алгоритма (пары делителей, разложение, разбор числа
+  по маске, сетка делителей). Она строится кодом из репозитория (`scripts/lesson_design/figures.py`):
+  каждое число и подпись считает тот же код, что и рисунок, вручную SVG не рисуется. Правила
+  размещения и подписи те же, что у рисунка: после абзаца, одна подпись с сутью и числами, alt,
+  читаемость на телефоне, цвета только из DESIGN. Процесс показывается пошаговой схемой с ручным
+  переключением и без автозапуска; без JavaScript виден итоговый кадр и текст всех шагов. Рисованный
+  растр остаётся для образных иллюстраций, ролик — для движения, которое не сводится к шагам.
 - [ ] Задачи используют `interaction_type: production`, кроме случаев, где сам формат ЕГЭ требует
   выбора варианта.
 - [ ] `mastery_threshold` осознанно выставлен, не оставлен дефолтом бездумно.
@@ -361,7 +374,10 @@ learning context (topic lesson, course lesson or standalone practice); the same 
 lessons has two independent results. A later answer revision invalidates the previous result
 for current-progress projections without erasing its historical fact. No submitted answer text,
 draft, incorrect attempt or guest result is stored. Lesson/course totals are derived from
-published memberships and current revisions, not separately synchronized counters.
+published memberships and current revisions, not separately synchronized counters. For a topic
+lesson the mastery total excludes tasks whose lesson membership is marked as outside mastery — the
+tasks of advanced-level subtopics (Change 171); those tasks keep ordinary results, and the API and
+the frontend apply the same membership flag.
 
 ## 4. API / Backend Contract
 
@@ -411,6 +427,15 @@ figures and attachments (lesson media stays); hand-drawn monochrome illustration
 the architect and use neutral reserved placeholders until then (Change 169: the earlier topic and
 course catalog drawings are retired from home, catalogs and the course overview). Every page follows
 its approved v5 mockup (`docs/artifacts/change-164/mockups/`).
+Change 171 adds lesson blocks for the lesson pipeline: a learning table (semantic `table`,
+numeric columns aligned, horizontal scroll only inside it), a collapsible proof (native `details`,
+closed by default, readable without scripting), an exact SVG diagram (repository-generated file,
+alt and one caption), a step-through diagram (manual previous/next and play, no autoplay; without
+scripting the final frame and all step captions) and the mask sandbox (enhancement only; without
+scripting a static worked alignment). Subtopics carry a level: advanced ones follow the core ones,
+are marked «дополнительный уровень» in the tree, the subtopic head and the pager, and may end with
+their own self-check. Topic 25 is rebuilt by the lesson pipeline with a new id and route; the old
+`integer-processing` lesson, its route and its eight tasks are retired without redirects.
 The `/courses` catalog keeps all four directions in registry order, published-only lesson
 counts, an overview CTA and a header summary of catalog totals and revision-aware mastered
 lessons. No filters or planned links.
@@ -707,8 +732,9 @@ benchmark framework и без требования дождаться их дл�
 на демо-стенде `docs/artifacts/lesson-design/`. Эталон — тема 25 (делители и маски): исходник
 архитектора, частотный анализ, шесть подтем двух уровней, схемы для тяжёлых мест. Доработки
 платформы под пайплайн и перенос темы — следующие change, до выпуска редизайна. Они закрывают пробелы модели, перечисленные
-в пайплайне (этап 9): учебная таблица, свёрнутое доказательство, уровень подтемы, пошаговая схема
-и песочница, решение о точных SVG-диаграммах. Следующие темы проходят тот же пайплайн до переноса.
+в пайплайне (этап 9): учебная таблица, свёрнутое доказательство, точные SVG-диаграммы, уровень
+подтемы, самопроверка подтемы, пошаговая схема и песочница. Change 171 делает их вместе с переносом
+темы 25. Следующие темы проходят тот же пайплайн до переноса.
 
 Changes 122–139 established the simplified practice and local/production baseline; their
 immutable history remains in archives. Change 140 introduces optional accounts and server-owned

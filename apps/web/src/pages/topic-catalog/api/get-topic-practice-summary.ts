@@ -14,10 +14,16 @@ export const getTopicPracticeSummary = async (
   return result.data.topics.map(
     (topic: components["schemas"]["LessonSummary"]) => ({
       id: topic.id,
-      tasks: topic.tasks.map((task: components["schemas"]["TaskVersion"]) => ({
-        id: task.id,
-        solutionRevision: task.solution_revision,
-      })),
+      // Mastery counts only tasks inside it (advanced subtopics stay out, B1).
+      tasks: topic.tasks
+        .filter(
+          (task: components["schemas"]["TaskVersion"]) =>
+            task.counts_toward_mastery !== false,
+        )
+        .map((task: components["schemas"]["TaskVersion"]) => ({
+          id: task.id,
+          solutionRevision: task.solution_revision,
+        })),
     }),
   );
 };

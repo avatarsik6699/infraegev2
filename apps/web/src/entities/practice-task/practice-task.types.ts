@@ -84,6 +84,9 @@ export namespace PracticeTaskTypes {
     hint: readonly ContentBlock[];
     theoryLinks: readonly TheoryLink[];
     solution: readonly ContentBlock[];
+    /** `false` for advanced-subtopic tasks: solved and saved as usual, but
+     *  outside the lesson's mastery total (SPEC §1.4). Missing means counted. */
+    countsTowardMastery?: boolean;
   };
 
   export type LocalTask = Task & {

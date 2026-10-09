@@ -109,7 +109,15 @@ export const TopicPracticePage: React.FC<TopicLessonPageTypes.PracticeProps> = (
 
       <TopicLessonPager
         routeSlug={props.lesson.routeSlug}
-        previous={last ? { title: last.title, subtopic: last.slug } : undefined}
+        previous={
+          last
+            ? {
+                title: last.title,
+                subtopic: last.slug,
+                advanced: last.level === "advanced",
+              }
+            : undefined
+        }
       />
     </TopicLessonFrame>
   );

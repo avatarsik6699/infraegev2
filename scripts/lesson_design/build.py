@@ -25,6 +25,7 @@ HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[1]
 sys.path.insert(0, str(HERE))
 from figures import FIGURES, PAGE_SCRIPTS  # noqa: E402
+from terms import TERMS  # noqa: E402
 
 PATTERNS = REPO / "docs" / "runbooks" / "lesson-patterns.md"
 
@@ -33,7 +34,7 @@ FONTS = (
     '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
     '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?'
     "family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600"
-    '&family=Caveat:wght@600&display=swap">'
+    '&display=swap">'
 )
 
 KEYWORDS = set(
@@ -47,6 +48,9 @@ TOKEN = re.compile(
     re.M,
 )
 FIGURE_CALL = re.compile(r"%%(\w+)\((.*?)\)%%")
+PICK_BLOCK = re.compile(r"^:::(pick|pick-tokens) ([^\n]+)\n(.*?)^:::$", re.M | re.S)
+TERM = re.compile(r"\{\{(\w+)\|(.+?)\}\}")
+COURSE = "http://localhost:8080/courses/python/"
 
 
 def highlight_python(src: str) -> str:
@@ -72,6 +76,118 @@ def highlight_python(src: str) -> str:
     return "".join(out)
 
 
+def inline_md(text: str) -> str:
+    """`code` and **bold** inside hand-written widget rows."""
+    text = re.sub(r"`([^`]+)`", lambda m: f"<code>{html.escape(m.group(1))}</code>", text)
+    return re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", text)
+
+
+def pick_block(m: re.Match) -> str:
+    """:::pick label / - variant | value | note / ::: — one variant at a time.
+
+    In ``pick-tokens`` the label is followed by ``| 1, 2, 3`` — the full set —
+    and each value lists the chosen members. A variant starting with ``*`` is
+    selected first. Without JS every variant stays listed.
+    """
+    kind, head, body = m.group(1), m.group(2), m.group(3)
+    label, _, universe = head.partition("|")
+    values = [v.strip() for v in universe.split(",") if v.strip()]
+    rows = []
+    for line in body.strip().splitlines():
+        cells = [c.strip() for c in line.lstrip("- ").split("|")]
+        name, value, note = (cells + ["", ""])[:3]
+        selected = name.startswith("*")
+        name = name.lstrip("*").strip()
+        if kind == "pick-tokens":
+            on = {v.strip() for v in value.split(",")}
+            shown = '<span class="toks">' + "".join(
+                f'<span class="tok{" on" if v in on else ""}">{v}</span>' for v in values
+            ) + "</span>"
+        else:
+            shown = inline_md(value)
+        if note:
+            shown += f'<span class="pick-n">{inline_md(note)}</span>'
+        rows.append(
+            f'<div class="pick-item" data-label="{html.escape(name)}"'
+            f'{" data-selected" if selected else ""}><span class="pick-l">{html.escape(name)}</span>'
+            f'<div class="pick-v">{shown}</div></div>'
+        )
+    if not any("data-selected" in r for r in rows):
+        rows[0] = rows[0].replace('class="pick-item"', 'class="pick-item" data-selected', 1)
+    return (
+        f'\n<div class="pick" data-pick role="group" aria-label="{html.escape(label.strip())}">'
+        '<div class="pick-chips" hidden></div>' + "".join(rows) + "</div>\n"
+    )
+
+
+_term_count: dict[str, int] = {}
+
+
+def term(m: re.Match) -> str:
+    key, label = m.group(1), m.group(2)
+    if key not in TERMS:
+        raise SystemExit(f"Unknown term {key!r}; add it to terms.TERMS")
+    title, body, slug, lesson = TERMS[key]
+    _term_count[key] = _term_count.get(key, 0) + 1
+    pid = f"term-{key}-{_term_count[key]}"
+    return (
+        f'<button type="button" class="term" data-term popovertarget="{pid}" '
+        f'aria-expanded="false">{label}</button>'
+        f'<span id="{pid}" popover class="pop" role="dialog" aria-label="{html.escape(title)}">'
+        f'<b class="pop-t">{html.escape(title)}</b><span class="pop-b">{body}</span>'
+        f'<span class="pop-c">Курс Python: {html.escape(lesson)}</span>'
+        f'<span class="pop-a"><a href="{COURSE}{slug}">Читать урок →</a>'
+        f'<button type="button" class="pop-x" popovertarget="{pid}" '
+        'popovertargetaction="hide">Закрыть</button></span></span>'
+    )
+
+
+PICK_JS = r"""<script>
+document.querySelectorAll("[data-pick]").forEach(function (box) {
+  var items = [].slice.call(box.querySelectorAll(".pick-item")), chips = box.querySelector(".pick-chips");
+  items.forEach(function (item) {
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "chip"; b.textContent = item.dataset.label;
+    b.setAttribute("aria-pressed", item.hasAttribute("data-selected"));
+    b.onclick = function () {
+      items.forEach(function (x) { x.toggleAttribute("data-selected", x === item); });
+      chips.querySelectorAll(".chip").forEach(function (c) { c.setAttribute("aria-pressed", c === b); });
+    };
+    chips.appendChild(b);
+    item.setAttribute("aria-live", "polite");
+  });
+  chips.hidden = false; box.setAttribute("data-ready", "");
+});
+</script>"""
+
+TERM_JS = r"""<script>
+document.querySelectorAll("[data-term]").forEach(function (btn) {
+  var pop = document.getElementById(btn.getAttribute("popovertarget"));
+  var hideT = null, showT = null, pinned = false;
+  function place() {
+    var r = btn.getBoundingClientRect(), w = pop.offsetWidth, h = pop.offsetHeight;
+    var left = Math.max(16, Math.min(innerWidth - w - 16, r.left + r.width / 2 - w / 2));
+    var top = r.bottom + 8;
+    if (top + h > innerHeight - 8) top = r.top - h - 8;
+    pop.style.left = left + "px"; pop.style.top = top + "px";
+  }
+  pop.addEventListener("toggle", function (e) {
+    var open = e.newState === "open";
+    btn.setAttribute("aria-expanded", open);
+    if (open) place(); else pinned = false;
+  });
+  btn.addEventListener("click", function () { pinned = true; });
+  function enter() { clearTimeout(hideT); if (!pop.matches(":popover-open")) showT = setTimeout(function () { pop.showPopover(); }, 150); }
+  function leave() { clearTimeout(showT); if (!pinned) hideT = setTimeout(function () { if (pop.matches(":popover-open")) pop.hidePopover(); }, 250); }
+  if (matchMedia("(hover: hover)").matches) {
+    btn.addEventListener("mouseenter", enter); btn.addEventListener("mouseleave", leave);
+    pop.addEventListener("mouseenter", enter); pop.addEventListener("mouseleave", leave);
+  }
+  addEventListener("scroll", function () { if (pop.matches(":popover-open")) place(); }, { passive: true });
+});
+</script>"""
+
+
 def call_figure(m: re.Match) -> str:
     """Expand %%name(literal args)%% with a builder from figures.FIGURES."""
     name = m.group(1)
@@ -85,22 +201,37 @@ def call_figure(m: re.Match) -> str:
 
 def render(md_text: str) -> tuple[str, list[tuple[str, str]]]:
     md_text = FIGURE_CALL.sub(call_figure, md_text)
+    md_text = PICK_BLOCK.sub(pick_block, md_text)
     leftover = re.findall(r"%%[^%\n]+%%", md_text)
     if leftover:
         raise SystemExit(f"Unexpanded placeholders: {leftover}")
     body = markdown.markdown(md_text, extensions=["tables", "fenced_code", "md_in_html"])
-    for marker, script in PAGE_SCRIPTS.items():
+    body = TERM.sub(term, body)
+    for marker, script in {**PAGE_SCRIPTS, "data-pick": PICK_JS, "data-term": TERM_JS}.items():
         if marker in body:
             body += script
 
     def code_block(m: re.Match) -> str:
         lang, code = m.group(1), html.unescape(m.group(2))
+        if lang == "output":
+            # Output lines joined in one row, under the code they come from.
+            shown = ", ".join(code.rstrip("\n").split("\n"))
+            return (
+                '<div class="out"><span class="out-l">Вывод</span>'
+                f'<span class="out-v">{html.escape(shown)}</span></div>'
+            )
         inner = highlight_python(code) if lang == "python" else html.escape(code)
         return f'<pre class="code {lang}"><code>{inner}</code></pre>'
 
     body = re.sub(
         r'<pre><code class="language-(\w+)">(.*?)</code></pre>',
         code_block,
+        body,
+        flags=re.S,
+    )
+    body = re.sub(
+        r'(<pre class="code python">(?:(?!</pre>).)*</pre>)\s*(<div class="out">.*?</div>)',
+        r'<div class="code-box">\1\2</div>',
         body,
         flags=re.S,
     )

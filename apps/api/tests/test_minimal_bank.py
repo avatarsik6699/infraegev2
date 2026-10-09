@@ -176,6 +176,10 @@ def test_http_catalog_privacy_checker_and_files(database, monkeypatch, tmp_path)
         assert client.get("/health/ready").status_code == 200
         for entry in source.tasks:
             response = client.get(f"/api/tasks/{entry.task.id}")
+            if entry.task.archived:
+                # Retired tasks (topic 25, Change 171) stay in the bank but are not public.
+                assert response.status_code == 404
+                continue
             assert response.status_code == 200
             public = response.json()
             assert "checker" not in public["content"]
@@ -242,7 +246,7 @@ def test_pagination_next_and_lesson_membership(database):
                     if material.status == "published" and expected:
                         result = await readers.lesson(session, material.kind, material.id)
                         assert [t.id for t in result.tasks] == [i for _, i in expected]
-                assert len(list(await session.scalars(select(TaskRecord.id)))) == 744
+                assert len(list(await session.scalars(select(TaskRecord.id)))) == 783
         finally:
             await engine.dispose()
 
@@ -344,7 +348,7 @@ def test_validate_cli_checks_canonical_bank_without_database_or_legacy_json(tmp_
 
     result = validate()
     assert result.returncode == 0, result.stderr
-    assert json.loads(result.stdout)["tasks"] == 744
+    assert json.loads(result.stdout)["tasks"] == 783
     task["task"]["theory_links"][0]["section"] = "missing-section"
     result = validate()
     assert result.returncode != 0 and "unknown theory section" in result.stderr
@@ -551,7 +555,7 @@ def test_topic_summary_matches_published_lessons_and_excludes_hidden_tasks(datab
             "preobrazovanie-zapisey-chisel",
             "number-sequences",
             "string-processing",
-            "integer-processing",
+            "divisors-and-masks",
             "array-processing",
             "data-analysis",
         }
@@ -559,11 +563,32 @@ def test_topic_summary_matches_published_lessons_and_excludes_hidden_tasks(datab
             assert set(topic) == {"id", "tasks"}
             lesson = client.get(f"/api/learning-materials/topic/{topic['id']}/practice").json()
             assert topic["tasks"] == [
-                {"id": task["id"], "solution_revision": task["solution_revision"]}
+                {
+                    "id": task["id"],
+                    "solution_revision": task["solution_revision"],
+                    "counts_toward_mastery": all(
+                        link.get("counts_toward_mastery", True)
+                        for link in task["content"]["lessons"]
+                        if link["material_id"] == topic["id"]
+                    ),
+                }
                 for task in lesson["tasks"]
             ]
             assert topic["tasks"]
-            assert all(set(task) == {"id", "solution_revision"} for task in topic["tasks"])
+        source = Bank.model_validate_json((BANK / "bank.json").read_bytes())
+        flagged = {
+            (link.material_id, entry.task.id)
+            for entry in source.tasks
+            for link in entry.task.lessons
+            if not link.counts_toward_mastery
+        }
+        assert flagged, "advanced-subtopic tasks must stay outside mastery"
+        assert flagged == {
+            (topic["id"], task["id"])
+            for topic in topics
+            for task in topic["tasks"]
+            if not task["counts_toward_mastery"]
+        }
 
     async def scenario():
         engine = database_engine(database("import"))
@@ -594,7 +619,7 @@ def test_topic_summary_matches_published_lessons_and_excludes_hidden_tasks(datab
                         "preobrazovanie-zapisey-chisel",
                         "number-sequences",
                         "string-processing",
-                        "integer-processing",
+                        "divisors-and-masks",
                         "array-processing",
                         "data-analysis",
                     }

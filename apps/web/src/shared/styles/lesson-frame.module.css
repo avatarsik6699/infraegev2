@@ -3,7 +3,7 @@
 .page {
   composes: pageFrame lessonPage from "./patterns.module.css";
   --lesson-frame-columns: minmax(15rem, 16.25rem) minmax(0, 1fr)
-    minmax(12rem, 14rem);
+    minmax(16rem, 17rem);
   grid-template-rows: auto 1fr auto;
   min-width: 0;
 }

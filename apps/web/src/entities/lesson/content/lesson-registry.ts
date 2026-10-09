@@ -3,7 +3,7 @@ import { numberSequencesLesson } from "./number-sequences.lesson";
 import { stringProcessingLesson } from "./string-processing.lesson";
 import { preobrazovanieZapiseyChiselLesson } from "./preobrazovanie-zapisey-chisel.lesson";
 import { rekursiyaLesson } from "./rekursiya.lesson";
-import { integerProcessingLesson } from "./integer-processing.lesson";
+import { divisorsAndMasksLesson } from "./divisors-and-masks.lesson";
 import { arrayProcessingLesson } from "./array-processing.lesson";
 import { dataAnalysisLesson } from "./data-analysis.lesson";
 
@@ -12,7 +12,7 @@ export const topicLessons: readonly LessonContent.Definition[] = [
   preobrazovanieZapiseyChiselLesson,
   numberSequencesLesson,
   stringProcessingLesson,
-  integerProcessingLesson,
+  divisorsAndMasksLesson,
   arrayProcessingLesson,
   dataAnalysisLesson,
 ];

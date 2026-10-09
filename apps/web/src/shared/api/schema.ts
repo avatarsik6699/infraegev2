@@ -938,6 +938,11 @@ export interface components {
         };
         /** Membership */
         Membership: {
+            /**
+             * Counts Toward Mastery
+             * @default true
+             */
+            counts_toward_mastery: boolean;
             /** Material Id */
             material_id: string;
             /** Position */
@@ -1174,6 +1179,8 @@ export interface components {
         };
         /** TaskVersion */
         TaskVersion: {
+            /** Counts Toward Mastery */
+            counts_toward_mastery: boolean;
             /** Id */
             id: string;
             /** Solution Revision */

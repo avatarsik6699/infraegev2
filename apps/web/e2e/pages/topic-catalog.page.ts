@@ -28,10 +28,11 @@ const summary = {
       ],
     },
     {
-      id: "integer-processing",
+      id: "divisors-and-masks",
       tasks: Array.from({ length: 8 }, (_, index) => ({
-        id: "task-25-" + String(index + 1).padStart(2, "0"),
+        id: "task-25-1-" + String(index + 1).padStart(2, "0"),
         solution_revision: 1,
+        counts_toward_mastery: true,
       })),
     },
     {
@@ -110,10 +111,10 @@ export class TopicCatalogPage {
     ).toHaveAttribute("href", "/ege/24-obrabotka-simvolnyh-strok");
     await expect(
       this.page.getByRole("link", {
-        name: "Обработка целых чисел",
+        name: "Делители и маски",
         exact: true,
       }),
-    ).toHaveAttribute("href", "/ege/25-obrabotka-celyh-chisel");
+    ).toHaveAttribute("href", "/ege/25-deliteli-i-maski");
     await expect(
       this.page.getByRole("link", {
         name: "Обработка данных: сортировка и отбор",

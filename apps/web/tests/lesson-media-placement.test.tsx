@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import {
   arrayProcessingLesson,
   dataAnalysisLesson,
-  integerProcessingLesson,
+  divisorsAndMasksLesson,
   numberSequencesLesson,
   preobrazovanieZapiseyChiselLesson,
   rekursiyaLesson,
@@ -21,13 +21,15 @@ const lessons = [
   preobrazovanieZapiseyChiselLesson,
   numberSequencesLesson,
   stringProcessingLesson,
-  integerProcessingLesson,
+  divisorsAndMasksLesson,
   arrayProcessingLesson,
   dataAnalysisLesson,
 ];
 
 const VIDEO = "figure[data-lesson-video-figure]";
-const FIGURE = "figure[data-lesson-figure]";
+// Code-built SVG diagrams and step-through figures follow the figure rules (Change 171).
+const FIGURE =
+  "figure[data-lesson-figure], figure[data-lesson-diagram], figure[data-lesson-stepper]";
 const MIN_BLOCKS_BETWEEN = 2;
 
 /** Блоки урока в порядке страницы: объяснение, пример, ошибка каждого понятия, затем итог. */
@@ -79,7 +81,13 @@ describe("lesson media placement", () => {
   it("gives every figure a description of the picture and one caption", () => {
     for (const lesson of lessons) {
       for (const figure of blocksOf(lesson).filter((b) => b.matches(FIGURE))) {
-        expect(figure.querySelector("img")?.getAttribute("alt")).toBeTruthy();
+        const picture =
+          figure.querySelector("img")?.getAttribute("alt") ??
+          figure.querySelector('[role="img"]')?.getAttribute("aria-label");
+        expect(
+          picture,
+          `${lesson.id}: a figure without a description`,
+        ).toBeTruthy();
         expect(figure.querySelectorAll("figcaption")).toHaveLength(1);
         expect(figure.textContent).not.toContain("Текстовое описание");
       }

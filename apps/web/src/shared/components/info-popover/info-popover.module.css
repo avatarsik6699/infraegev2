@@ -54,3 +54,66 @@
   position: absolute;
   inset: calc((1.25rem - var(--control-height)) / 2);
 }
+
+/* A term in running text: it stays text, a dotted underline marks the hint. */
+.textTrigger {
+  display: inline;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+  text-decoration: underline dotted var(--color-muted);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  cursor: help;
+}
+
+.textTrigger:hover,
+.textTrigger[data-popup-open] {
+  text-decoration-color: var(--color-text);
+  text-decoration-style: solid;
+}
+
+.textTrigger:focus-visible {
+  border-radius: 2px;
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.close {
+  min-height: 2rem;
+  margin-top: var(--space-1);
+  padding: 0 0.625rem;
+  border: 1px solid var(--color-rule-strong);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: 500 var(--text-sm) / 1 var(--font-ui);
+  cursor: pointer;
+}
+
+.close:hover {
+  background: var(--color-wash);
+}
+
+.close:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* Native popover without scripting: the browser centres it in the top layer. */
+.native {
+  margin: auto;
+  inset: 0;
+  height: fit-content;
+}
+
+.native:not(:popover-open) {
+  display: none;
+}
+
+.native .close {
+  display: block;
+}

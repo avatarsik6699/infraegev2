@@ -32,7 +32,15 @@ export namespace LessonContent {
     lead?: string;
     /** Adjacent `ConceptBlock` ids in authored order. */
     conceptIds: readonly [string, ...string[]];
+    /** Advanced subtopics cover rare exam cases: they follow all core ones and
+     *  stay outside mastery (SPEC §1.4, Change 171). Defaults to `core`. */
+    level?: SubtopicLevel;
+    /** «Объясни, почему» self-check at the end of the subtopic page, after its
+     *  tasks; not counted as practice. */
+    checkpoint?: readonly CheckpointItem[];
   };
+
+  export type SubtopicLevel = "core" | "advanced";
 
   export type Definition = {
     id: string;

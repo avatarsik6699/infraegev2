@@ -20,7 +20,20 @@ export function observeActiveSection(
     const passedTargets = targets.filter(
       ({ element }) => element.getBoundingClientRect().top <= readingLine,
     );
-    const nextId = (passedTargets.at(-1) ?? targets[0])?.id;
+    // A section the learner navigated to stays current while it starts at
+    // the top, even when it is shorter than the reading line (Change 171).
+    const hash = window.location.hash.slice(1);
+    const navigated = targets.find(
+      ({ id }) => id === hash || encodeURIComponent(id) === hash,
+    );
+    const navigatedTop = navigated?.element.getBoundingClientRect().top;
+    const nextId =
+      navigated &&
+      navigatedTop !== undefined &&
+      navigatedTop >= -1 &&
+      navigatedTop <= readingLine
+        ? navigated.id
+        : (passedTargets.at(-1) ?? targets[0])?.id;
 
     if (nextId && nextId !== activeId) {
       activeId = nextId;
@@ -36,10 +49,12 @@ export function observeActiveSection(
   update();
   window.addEventListener("scroll", scheduleUpdate, { passive: true });
   window.addEventListener("resize", scheduleUpdate);
+  window.addEventListener("hashchange", scheduleUpdate);
 
   return () => {
     window.removeEventListener("scroll", scheduleUpdate);
     window.removeEventListener("resize", scheduleUpdate);
+    window.removeEventListener("hashchange", scheduleUpdate);
     if (frameId !== undefined) window.cancelAnimationFrame(frameId);
   };
 }

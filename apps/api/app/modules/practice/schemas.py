@@ -144,6 +144,9 @@ class OperatorSource(Source):
 class Membership(StrictModel):
     material_id: Identifier
     position: int = Field(ge=0)
+    # False keeps the task out of the lesson's mastery total (advanced subtopics, Change 171).
+    # Stored only when false, so existing task content keeps its exact shape.
+    counts_toward_mastery: bool = Field(default=True, exclude_if=lambda value: value is True)
 
 
 class TheoryLink(StrictModel):

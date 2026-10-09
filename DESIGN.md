@@ -351,6 +351,38 @@ card, `/courses/python` head at about a third of the head width). They are shown
   items show a success check, the current one ink text and a 3px Here Orange bar on the tree
   line. A selected item never changes weight or size, so nothing reflows.
 
+### Lesson pipeline blocks (Change 171)
+- **Level mark:** an advanced subtopic is marked in text only: a quiet «Дополнительный уровень»
+  caption above its group in the tree (the root caption's label face), « · дополнительный уровень»
+  in muted ink after the orange «Подтема N из M» and in the pager label. Never a badge or a colour.
+- **Learning table:** hairline rows, label-face head, numeric columns right-aligned in the mono face
+  with tabular figures; sized by its content, scrolling only inside itself.
+- **Rule or task plate:** a stated rule or condition in prose sits on side surface with a hairline
+  border and 12px corners, no coloured bar.
+- **Proof disclosure:** a closed native fold with a hairline frame and a chevron; wash on hover.
+- **Exact diagram and step-through:** code-built SVG drawn inline on a hairline plate (card
+  radius) with one muted caption; labels in the page font (Onest), ink lines, hairline greys and
+  the wash, plus one Logo Orange accent as stroke or text on the figure's main thought — never a
+  fill, never a hand or monospace face. The stepper's controls copy `LessonVideo`: quiet icon
+  buttons, a thin ink timeline and a «2 / 7» count. On phones both keep a readable scale and
+  scroll inside their focusable plate.
+- **Mask sandbox:** a hairline-framed block with two fields and digit cells: white for required
+  digits, the wash for `?`, an orange outline for `*` — the same meaning as the mask diagram.
+- **Compact lesson flow:** one reading flow without Callout or Mistake boxes. Program output sits
+  under its code inside the code block, label-face «Вывод» and the lines joined with «, ».
+- **Python term hint:** the term itself is the InfoPopover trigger: running text with a muted
+  dotted underline that turns solid ink on hover or while open, no icon; the popover has a bold title, a short explanation, the course lesson name, «Читать урок →» and a
+  bordered «Закрыть». Without scripting a native popover keeps the paragraph whole.
+- **Variant picker:** rounded hairline chips (the shared `ChoiceChips`, also used for the remainder
+  explorer presets); the chosen chip gets an ink outline and medium
+  weight; the value appears below in reading size. Token rows emphasise chosen members with an
+  ink border and semibold digits.
+- **Topic cheat sheet:** one hairline sheet: a three-step solving order joined by small orange
+  arrows (its only accent), a three-column grid of subtopic blocks (link title, code key, muted
+  note), then optional topic-wide sections side by side (a two-column rows section is twice as
+  wide; topic 25: candidate sources and the final checks); two columns under 47.5rem, one under
+  35rem.
+
 ### Mascot
 - A living stack of the three logo stones: face on the big bottom stone, the top stone outlined in
   Logo Orange, thin arms with round hands, short legs. Outline only, uneven hand-drawn line.

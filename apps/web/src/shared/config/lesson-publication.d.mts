@@ -43,12 +43,12 @@ export const stringProcessingLessonPublication: Readonly<{
   status: "published";
 }>;
 
-export const integerProcessingLessonPublication: Readonly<{
-  id: "integer-processing";
-  routeSlug: "25-obrabotka-celyh-chisel";
+export const divisorsAndMasksLessonPublication: Readonly<{
+  id: "divisors-and-masks";
+  routeSlug: "25-deliteli-i-maski";
   taskNumbers: readonly [25];
-  title: "Обработка целых чисел";
-  summary: "Как проверять цифры и делители числа, перебирать пары и находить подходящие значения в заданном диапазоне.";
+  title: "Делители и маски";
+  summary: "Делители парами до корня, простые числа и разложение, маски числа и поиск подходящих чисел в диапазоне.";
   status: "published";
 }>;
 

@@ -54,10 +54,10 @@ describe("public release metadata", () => {
         status: "published",
       }),
       expect.objectContaining({
-        id: "integer-processing",
-        routeSlug: "25-obrabotka-celyh-chisel",
+        id: "divisors-and-masks",
+        routeSlug: "25-deliteli-i-maski",
         taskNumbers: [25],
-        title: "Обработка целых чисел",
+        title: "Делители и маски",
         status: "published",
       }),
       expect.objectContaining({
@@ -84,7 +84,7 @@ describe("public release metadata", () => {
       "5-preobrazovanie-zapisey-chisel",
       "17-chislovye-posledovatelnosti",
       "24-obrabotka-simvolnyh-strok",
-      "25-obrabotka-celyh-chisel",
+      "25-deliteli-i-maski",
       "26-sortirovka-i-otbor",
       "27-analiz-dannyh-i-klasterizatsiya",
     ]);
@@ -123,7 +123,7 @@ describe("public release metadata", () => {
       ["rekursiya", "16-rekursiya"],
       ["number-sequences", "17-chislovye-posledovatelnosti"],
       ["string-processing", "24-obrabotka-simvolnyh-strok"],
-      ["integer-processing", "25-obrabotka-celyh-chisel"],
+      ["divisors-and-masks", "25-deliteli-i-maski"],
       ["array-processing", "26-sortirovka-i-otbor"],
       ["data-analysis", "27-analiz-dannyh-i-klasterizatsiya"],
     ]);

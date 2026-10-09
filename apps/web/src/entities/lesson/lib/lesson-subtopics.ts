@@ -5,8 +5,12 @@ export const lessonPracticeSlug = "praktika";
 
 export type ResolvedSubtopic = LessonContent.Subtopic & {
   index: number;
+  level: LessonContent.SubtopicLevel;
   concepts: readonly LessonContent.ConceptBlock[];
 };
+
+/** Text mark of an advanced subtopic in the tree, the subtopic head and the pager. */
+export const advancedLevelLabel = "дополнительный уровень";
 
 export function lessonSubtopics(
   lesson: LessonContent.Definition,
@@ -17,6 +21,7 @@ export function lessonSubtopics(
   return (lesson.subtopics ?? []).map((subtopic, index) => ({
     ...subtopic,
     index,
+    level: subtopic.level ?? "core",
     concepts: subtopic.conceptIds.flatMap((id) => {
       const concept = concepts.get(id);
       return concept ? [concept] : [];
@@ -81,6 +86,16 @@ export function subtopicErrors(lesson: LessonContent.Definition): string[] {
       errors.push(`${lesson.id}: duplicate subtopic slug "${subtopic.slug}"`);
     }
     slugs.add(subtopic.slug);
+  }
+  const levels = subtopics.map((subtopic) => subtopic.level ?? "core");
+  if (!levels.includes("core")) {
+    errors.push(`${lesson.id}: a topic needs at least one core subtopic`);
+  }
+  if (
+    levels.indexOf("advanced") >= 0 &&
+    levels.lastIndexOf("core") > levels.indexOf("advanced")
+  ) {
+    errors.push(`${lesson.id}: advanced subtopics must follow all core ones`);
   }
   const split = subtopics.flatMap((subtopic) => subtopic.conceptIds);
   const theory = lesson.theory.map((concept) => concept.id);

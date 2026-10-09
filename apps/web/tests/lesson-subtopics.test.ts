@@ -95,6 +95,37 @@ describe("lesson subtopics", () => {
     expect(subtopicErrors({ ...lesson, subtopics })).not.toEqual([]);
   });
 
+  it("resolves the level and keeps advanced subtopics after core ones", () => {
+    const leveled = {
+      ...lesson,
+      subtopics: [
+        { slug: "first", title: "Первая", conceptIds: ["a", "b"] },
+        {
+          slug: "second",
+          title: "Вторая",
+          conceptIds: ["c"],
+          level: "advanced",
+        },
+      ],
+    } satisfies LessonContent.Definition;
+    expect(lessonSubtopics(leveled).map(({ level }) => level)).toEqual([
+      "core",
+      "advanced",
+    ]);
+    expect(subtopicErrors(leveled)).toEqual([]);
+  });
+
+  it.each([
+    ["has no core subtopic", ["advanced", "advanced"]],
+    ["puts an advanced subtopic before a core one", ["advanced", "core"]],
+  ] as const)("rejects a topic that %s", (_, levels) => {
+    const subtopics = (lesson.subtopics ?? []).map((subtopic, index) => ({
+      ...subtopic,
+      level: levels[index],
+    }));
+    expect(subtopicErrors({ ...lesson, subtopics })).toHaveLength(1);
+  });
+
   it("requires subtopics on a published topic", () => {
     expect(subtopicErrors({ ...lesson, subtopics: undefined })).toHaveLength(1);
     expect(

@@ -2,6 +2,7 @@ export namespace SubtopicNavigationTypes {
   export type Item = {
     slug: string;
     title: string;
+    level: "core" | "advanced";
     /** Tasks of the subtopic; only the current topic marks solved ones. */
     taskIds: readonly string[];
   };

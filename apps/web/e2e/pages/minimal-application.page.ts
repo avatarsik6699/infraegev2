@@ -9,7 +9,7 @@ const firstTopicSubtopicByRouteSlug: Readonly<Record<string, string>> = {
   "5-preobrazovanie-zapisey-chisel": "model-algoritma",
   "17-chislovye-posledovatelnosti": "chisla-iz-fayla",
   "24-obrabotka-simvolnyh-strok": "stroka-i-pozicii",
-  "25-obrabotka-celyh-chisel": "perebor-i-cifry",
+  "25-deliteli-i-maski": "perebor-i-proverki",
   "26-sortirovka-i-otbor": "dannye",
   "27-analiz-dannyh-i-klasterizatsiya": "gruppy",
 };
@@ -224,7 +224,12 @@ export class MinimalApplicationPage {
         await expect(this.page.locator("[data-course-program]")).toBeVisible();
       }
     }
-    for (const path of ["/lab/design-system", "/lab/lesson"]) {
+    // The retired topic 25 route has no redirect (Change 171).
+    for (const path of [
+      "/lab/design-system",
+      "/lab/lesson",
+      "/ege/25-obrabotka-celyh-chisel",
+    ]) {
       expect((await this.page.goto(path))?.status()).toBe(404);
       await expect(
         this.page.getByRole("link", { name: "На главную", exact: true }),

@@ -34,6 +34,7 @@ export const TopicLessonFrame: React.FC<TopicLessonPageTypes.FrameProps> = (
   const subtopics = lessonSubtopics(props.lesson).map((subtopic) => ({
     slug: subtopic.slug,
     title: subtopic.title,
+    level: subtopic.level,
     taskIds: (groups.get(subtopic.slug) ?? []).map((task) => task.id),
   }));
   const topics = publishedTopics().map((lesson) =>
@@ -140,6 +141,7 @@ function topicFolder(lesson: TopicLesson) {
     subtopics: lessonSubtopics(lesson).map((subtopic) => ({
       slug: subtopic.slug,
       title: subtopic.title,
+      level: subtopic.level,
       taskIds: [],
     })),
   };

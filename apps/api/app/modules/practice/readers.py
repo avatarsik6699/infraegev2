@@ -1,5 +1,8 @@
 """Public current-state projections; checker is read only for answer submission."""
 
+from collections.abc import Iterable, Sequence
+from typing import Any
+
 from sqlalchemy import exists, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -22,6 +25,7 @@ class Unavailable(ValueError):
 class TaskVersion(StrictModel):
     id: str
     solution_revision: int
+    counts_toward_mastery: bool
 
 
 class LessonSummary(StrictModel):
@@ -138,9 +142,40 @@ async def lesson(session: AsyncSession, kind: str, material_id: str) -> LessonPr
     return LessonPractice(id=material_id, kind=kind, tasks=await project(session, rows))
 
 
+def counts_toward_mastery(memberships: list[dict[str, object]], material_id: str) -> bool:
+    """The membership flag lives in task content; a missing key means the task is counted."""
+    return next(
+        (
+            item.get("counts_toward_mastery", True) is not False
+            for item in memberships
+            if item.get("material_id") == material_id
+        ),
+        True,
+    )
+
+
+def group_versions(rows: Iterable[Sequence[Any]]) -> dict[str, list[TaskVersion]]:
+    """Group (material, task id, revision, memberships) rows by material."""
+    grouped: dict[str, list[TaskVersion]] = {}
+    for material, task_id, revision, memberships in rows:
+        grouped.setdefault(material, []).append(
+            TaskVersion(
+                id=task_id,
+                solution_revision=revision,
+                counts_toward_mastery=counts_toward_mastery(memberships or [], material),
+            )
+        )
+    return grouped
+
+
 async def course(session: AsyncSession, course_id: str) -> CourseSummary:
     rows = await session.execute(
-        select(LessonTask.material_id, TaskRecord.id, TaskRecord.solution_revision)
+        select(
+            LessonTask.material_id,
+            TaskRecord.id,
+            TaskRecord.solution_revision,
+            TaskRecord.content["lessons"],
+        )
         .join(TaskRecord)
         .where(
             LessonTask.course_id == course_id,
@@ -149,9 +184,7 @@ async def course(session: AsyncSession, course_id: str) -> CourseSummary:
         )
         .order_by(LessonTask.material_id, LessonTask.position)
     )
-    grouped: dict[str, list[TaskVersion]] = {}
-    for material, task_id, revision in rows:
-        grouped.setdefault(material, []).append(TaskVersion(id=task_id, solution_revision=revision))
+    grouped = group_versions(rows)
     if not grouped:
         raise Unavailable("course unavailable")
     return CourseSummary(
@@ -161,7 +194,12 @@ async def course(session: AsyncSession, course_id: str) -> CourseSummary:
 
 async def topics(session: AsyncSession) -> TopicSummary:
     rows = await session.execute(
-        select(LessonTask.material_id, TaskRecord.id, TaskRecord.solution_revision)
+        select(
+            LessonTask.material_id,
+            TaskRecord.id,
+            TaskRecord.solution_revision,
+            TaskRecord.content["lessons"],
+        )
         .join(TaskRecord)
         .where(
             LessonTask.kind == "topic",
@@ -170,9 +208,7 @@ async def topics(session: AsyncSession) -> TopicSummary:
         )
         .order_by(LessonTask.material_id, LessonTask.position)
     )
-    grouped: dict[str, list[TaskVersion]] = {}
-    for material, task_id, revision in rows:
-        grouped.setdefault(material, []).append(TaskVersion(id=task_id, solution_revision=revision))
+    grouped = group_versions(rows)
     return TopicSummary(topics=[LessonSummary(id=k, tasks=v) for k, v in grouped.items()])
 
 

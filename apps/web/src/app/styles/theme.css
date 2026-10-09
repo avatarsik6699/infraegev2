@@ -58,7 +58,9 @@
   --theme-cover-shadow-far: rgb(23 25 30 / 0.2);
   --theme-cover-highlight: rgb(255 255 255 / 0.8);
 
-  /* Code on a soft surface; every text colour is at least 4.5:1 on --theme-code. */
+  /* Code on a soft surface; every code text colour is at least 4.5:1 on
+     --theme-code. Line numbers are decorative (aria-hidden, not copied) and
+     barely visible by the architect's decision (Change 171). */
   --theme-code: #f8f8f6;
   --theme-code-ink: #17191e;
   --theme-code-keyword: #5b3b9a;
@@ -67,7 +69,7 @@
   --theme-code-number: #0b6e75;
   --theme-code-function: #17191e;
   --theme-code-operator: #474747;
-  --theme-code-line-number: #686e79;
+  --theme-code-line-number: #c2c4c9;
 
   --theme-font-sans:
     "Infraege Onest", "Onest Fallback", -apple-system, BlinkMacSystemFont,

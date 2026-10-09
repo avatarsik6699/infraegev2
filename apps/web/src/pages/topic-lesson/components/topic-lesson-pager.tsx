@@ -1,10 +1,13 @@
 import { Link } from "@tanstack/react-router";
+import { advancedLevelLabel } from "~/entities/lesson";
 import styles from "../topic-lesson.module.css";
 
 type Target = {
   title: string;
   /** Subtopic slug; omitted for the final practice page. */
   subtopic?: string;
+  /** An advanced subtopic is named as such next to the direction. */
+  advanced?: boolean;
 };
 
 type Props = {
@@ -22,6 +25,7 @@ const PagerLink: React.FC<{
     <>
       <span className={styles.pagerLabel}>
         {props.direction === "previous" ? "← Назад" : "Дальше →"}
+        {props.target.advanced ? ` · ${advancedLevelLabel}` : null}
       </span>
       <span className={styles.pagerTitle}>{props.target.title}</span>
     </>

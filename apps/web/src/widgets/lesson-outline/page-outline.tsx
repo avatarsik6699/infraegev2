@@ -1,3 +1,4 @@
+import { TextAlignStart } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Typography } from "~/shared/components/typography";
 import { FragmentLink } from "~/shared/components/fragment-link";
@@ -33,6 +34,7 @@ export const PageOutline: React.FC<LessonOutlineTypes.PageProps> = (props) => {
       data-page-outline
     >
       <Typography.Text id="page-outline-title" className={styles.heading}>
+        <TextAlignStart size={16} aria-hidden="true" className={styles.icon} />
         На этой странице
       </Typography.Text>
       <ul className={styles.list}>

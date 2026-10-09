@@ -115,8 +115,16 @@ const summary = {
       })),
     },
     {
-      id: "integer-processing",
-      tasks: [{ id: "task-25-01", solution_revision: 1 }],
+      id: "divisors-and-masks",
+      tasks: [
+        { id: "task-25-1-01", solution_revision: 1 },
+        // An advanced-subtopic task: solved and saved, outside mastery (B1).
+        {
+          id: "task-25-6-01",
+          solution_revision: 1,
+          counts_toward_mastery: false,
+        },
+      ],
     },
     {
       id: "array-processing",
@@ -200,9 +208,9 @@ describe("TopicCatalogPage", () => {
     expect(screen.getByText("Задания 19–21")).not.toBeNull();
     expect(
       screen
-        .getByRole("link", { name: "Обработка целых чисел" })
+        .getByRole("link", { name: "Делители и маски" })
         .getAttribute("href"),
-    ).toBe("/ege/25-obrabotka-celyh-chisel");
+    ).toBe("/ege/25-deliteli-i-maski");
     expect(
       screen
         .getByRole("link", { name: "Обработка данных: сортировка и отбор" })
@@ -296,6 +304,26 @@ it("counts only current topic answers, keeps completed in All and excludes stale
   expect(
     screen.getByRole("link", { name: "Обработка символьных строк" }),
   ).not.toBeNull();
+});
+
+it("leaves advanced-subtopic tasks out of a topic's mastery total", async () => {
+  progressFixture.results = [
+    {
+      context_kind: "topic_lesson",
+      context_id: "divisors-and-masks",
+      task_id: "task-25-1-01",
+      solution_revision: 1,
+    },
+    {
+      context_kind: "topic_lesson",
+      context_id: "divisors-and-masks",
+      task_id: "task-25-6-01",
+      solution_revision: 1,
+    },
+  ];
+  renderCatalog();
+  await screen.findByText("Решено задач в темах: 1");
+  expect(screen.getByText(/Практика завершена/)).not.toBeNull();
 });
 
 it("keeps navigation/search usable on API error and retries without inventing zero totals", async () => {

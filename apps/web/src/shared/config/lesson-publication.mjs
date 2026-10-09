@@ -38,13 +38,13 @@ export const stringProcessingLessonPublication = Object.freeze({
   status: "published",
 });
 
-export const integerProcessingLessonPublication = Object.freeze({
-  id: "integer-processing",
-  routeSlug: "25-obrabotka-celyh-chisel",
+export const divisorsAndMasksLessonPublication = Object.freeze({
+  id: "divisors-and-masks",
+  routeSlug: "25-deliteli-i-maski",
   taskNumbers: Object.freeze([25]),
-  title: "Обработка целых чисел",
+  title: "Делители и маски",
   summary:
-    "Как проверять цифры и делители числа, перебирать пары и находить подходящие значения в заданном диапазоне.",
+    "Делители парами до корня, простые числа и разложение, маски числа и поиск подходящих чисел в диапазоне.",
   status: "published",
 });
 
@@ -73,7 +73,7 @@ export const lessonPublications = Object.freeze([
   preobrazovanieZapiseyChiselLessonPublication,
   numberSequencesLessonPublication,
   stringProcessingLessonPublication,
-  integerProcessingLessonPublication,
+  divisorsAndMasksLessonPublication,
   arrayProcessingLessonPublication,
   dataAnalysisLessonPublication,
 ]);

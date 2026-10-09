@@ -173,3 +173,31 @@
     transition: none;
   }
 }
+
+/* Output of the program under its code, in one row (Change 171). */
+.output {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-1-5);
+  align-items: baseline;
+  padding: var(--space-1) var(--space-2);
+  border-top: 1px solid var(--color-rule);
+  background: var(--color-surface);
+}
+
+.outputLabel {
+  color: var(--color-muted);
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  font-weight: 500;
+}
+
+.outputValue {
+  min-width: 0;
+  color: var(--color-text-soft);
+  font-family: var(--font-data);
+  font-size: var(--text-learning-code);
+  font-variant-ligatures: none;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}

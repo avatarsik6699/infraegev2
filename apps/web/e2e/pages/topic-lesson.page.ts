@@ -13,6 +13,8 @@ type TopicLessonPageConfig = {
   title: string;
   taskNumber: number;
   taskCount?: number;
+  /** Tasks counted by mastery when advanced subtopics add more (Change 171). */
+  masteryTaskCount?: number;
 };
 
 const recursionLessonConfig: TopicLessonPageConfig = {
@@ -1018,7 +1020,7 @@ export class TopicLessonPage {
       .boundingBox();
     const blocks = await this.page
       .locator(
-        "figure[data-learning-block], [data-concept-mistake] > *, [data-concept-checkpoint] > *",
+        "figure[data-learning-block], figure[data-lesson-diagram], figure[data-lesson-stepper], [data-concept-mistake] > *, [data-concept-checkpoint] > *",
       )
       .evaluateAll((nodes) =>
         nodes.map((node) => ({
@@ -1073,7 +1075,7 @@ export class TopicLessonPage {
       "0px",
     );
     await expect(this.page.locator("[data-result-progress]")).toContainText(
-      `0 / ${this.config.taskCount ?? 5}`,
+      `0 / ${this.config.masteryTaskCount ?? this.config.taskCount ?? 5}`,
     );
     await this.expectStudyDensity();
     const pageOutline = this.page.getByRole("navigation", {
@@ -1247,38 +1249,140 @@ export class TopicLessonPage {
     }
   }
 
-  async expectPublishedIntegerProcessingContent(
+  async expectPublishedDivisorsAndMasksContent(
     noJavaScript = false,
   ): Promise<void> {
+    const topic = "/ege/25-deliteli-i-maski";
     await this.expectPublishedTopicIdentity();
     await this.expectSectionsAcrossSubtopics([
-      "integer-range",
-      "divisibility-remainder",
-      "decimal-digits",
-      "divisors",
-      "primes",
-      "divisor-pairs",
-      "decimal-mask",
-      "bounded-search",
+      "delenie-s-ostatkom",
+      "pary-delitelej",
+      "poisk-po-shagam",
+      "rovno-k-delitelej",
+      "razlozhenie",
+      "znaki-maski",
+      "generaciya-po-maske",
+      "forma-chisla",
     ]);
-    await this.expectCourseLinksAcrossSubtopics([
-      "for-i-range",
-      "while",
-      "tsifry-chisla",
-      "spiski",
-      "chisla-i-vyrazheniya",
-    ]);
-    await this.expectCodeContrast(
-      this.page.getByRole("group", {
-        name: "Найти первые пять чисел от 100 до 1000 с тремя делителями",
+    // Compact form (Change 171): live remainder figure, variant pickers and
+    // Python terms with a course link; without scripting all stays readable.
+    await this.openTopicDocument(`${topic}/perebor-i-proverki`);
+    const remainder = this.page.locator("[data-remainder-explorer]");
+    const picker = this.page.locator("[data-variant-picker]").first();
+    const term = this.page.locator('[data-python-term="andor"]');
+    if (noJavaScript) {
+      await expect(remainder.getByRole("button")).toHaveCount(0);
+      await expect(picker.locator("dt")).toHaveCount(9);
+      await expect(term.locator("details")).toHaveCount(0);
+      await term.getByRole("button").click();
+      await expect(
+        this.page.getByRole("dialog", {
+          name: "Что это: Составные условия and и or",
+        }),
+      ).toBeVisible();
+    } else {
+      await remainder.getByRole("button", { name: "20 и 5" }).click();
+      await expect(remainder.getByRole("img")).toHaveAttribute(
+        "aria-label",
+        "20 клеток порциями по 5: 4 полные порции и 0 в остатке",
+      );
+      await picker.getByRole("button", { name: "не меньше 100" }).click();
+      await expect(picker.locator("[data-variant-result]")).toContainText(
+        "n >= 100",
+      );
+      await term.getByRole("button").click();
+      const popup = this.page.getByRole("dialog", {
+        name: "Что это: Составные условия and и or",
+      });
+      await expect(
+        popup.getByRole("link", { name: "Читать урок →" }),
+      ).toHaveAttribute("href", "/courses/python/sostavnye-usloviya");
+      await popup.getByRole("button", { name: "Закрыть" }).click();
+      await expect(popup).toHaveCount(0);
+    }
+    await this.openTopicDocument(this.config.route);
+
+    // The advanced subtopic follows the core ones and is named as such.
+    const navigation = this.page.getByRole("navigation", {
+      name: "Подтемы урока",
+    });
+    await expect(
+      navigation.getByRole("link", {
+        name: /Вид числа по количеству делителей\s*, дополнительный уровень/u,
       }),
+    ).toHaveCount(1);
+
+    // Subtopic 2: the closed proof, the step-through figure, the self-check.
+    const proof = this.page.locator("details[data-proof-disclosure]").first();
+    await expect(proof).not.toHaveAttribute("open");
+    await expect(proof).toContainText("противоречие");
+    await proof.locator("summary").click();
+    await expect(proof).toHaveAttribute("open");
+    const stepper = this.page.getByRole("figure", {
+      name: "Поиск делителей 36 до корня по шагам",
+    });
+    if (noJavaScript) {
+      await expect(stepper.locator("[data-stepper-steps] li")).toHaveCount(7);
+      await expect(stepper.getByRole("button")).toHaveCount(0);
+    } else {
+      const caption = stepper.locator("[data-stepper-caption]");
+      await expect(caption).toHaveText(/^d = 1:/u);
+      await stepper.getByRole("button", { name: "Следующий шаг" }).click();
+      await expect(caption).toHaveText(/^d = 2:/u);
+      await expect(stepper.locator("[data-stepper-count]")).toHaveText("2 / 7");
+    }
+    await expect(
+      this.page.getByRole("region", { name: "Проверьте себя" }),
+    ).toHaveCount(1);
+
+    // Subtopic 5: the mask sandbox is an enhancement only.
+    await this.openTopicDocument(`${topic}/maski`);
+    const sandbox = this.page.locator("[data-mask-sandbox]");
+    if (noJavaScript) {
+      await expect(sandbox.locator("input")).toHaveCount(0);
+      await expect(sandbox).toContainText("Звёздочка заменяет «00».");
+    } else {
+      await sandbox.getByLabel("Число").fill("12304");
+      await expect(sandbox).toContainText("Не подходит");
+    }
+
+    // Subtopic 6 is the advanced level.
+    await this.openTopicDocument(`${topic}/vid-chisla`);
+    await expect(this.page.locator("[data-subtopic-head]")).toContainText(
+      "Подтема 6 из 6 · дополнительный уровень",
     );
+    await expect(this.page.locator("figure[data-lesson-diagram]")).toHaveCount(
+      2,
+    );
+    await this.expectNoHorizontalOverflow();
+
     await this.openTopicPractice(noJavaScript);
-    await expect(this.page.getByLabel("Проверьте себя")).toHaveCount(1);
+    const sheet = this.page.locator("[data-topic-cheat-sheet]");
+    await expect(sheet.locator("section")).toHaveCount(8);
+    await expect(
+      sheet.getByRole("link", { name: "Делители парами" }),
+    ).toHaveAttribute("href", `${topic}/deliteli-parami`);
     await this.expectTaskPractice(noJavaScript);
-    await expect(this.page.locator("#practice a[download]")).toHaveCount(0);
+    if (!noJavaScript)
+      await expect(this.page.locator("[data-result-progress]")).toContainText(
+        `0 / ${String(this.config.masteryTaskCount)}`,
+      );
     await this.expectNoHorizontalOverflow();
     if (!noJavaScript) await this.open();
+  }
+
+  async expectStepperRespectsReducedMotion(): Promise<void> {
+    await this.page.emulateMedia({ reducedMotion: "reduce" });
+    await this.open();
+    const stepper = this.page.getByRole("figure", {
+      name: "Поиск делителей 36 до корня по шагам",
+    });
+    await expect(
+      stepper.getByRole("button", { name: "Следующий шаг" }),
+    ).toBeVisible();
+    await expect(
+      stepper.getByRole("button", { name: "Воспроизвести" }),
+    ).toHaveCount(0);
   }
 
   async expectPublishedArrayProcessingContent(

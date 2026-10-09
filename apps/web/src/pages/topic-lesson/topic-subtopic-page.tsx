@@ -1,5 +1,9 @@
 import { useRouter } from "@tanstack/react-router";
-import { groupTasksBySubtopic, lessonSubtopics } from "~/entities/lesson";
+import {
+  advancedLevelLabel,
+  groupTasksBySubtopic,
+  lessonSubtopics,
+} from "~/entities/lesson";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { useAccountSession } from "~/features/account";
 import {
@@ -7,6 +11,7 @@ import {
   createCheckAndSaveAnswer,
 } from "~/features/lesson-practice";
 import {
+  Checkpoint,
   LessonIntro,
   LessonTheory,
 } from "~/shared/components/learning-content";
@@ -43,7 +48,11 @@ export const TopicSubtopicPage: React.FC<TopicLessonPageTypes.SubtopicProps> = (
       label: concept.navLabel,
     })),
     ...(tasks.length ? [{ id: "practice", label: "Практика" }] : []),
+    ...(subtopic.checkpoint
+      ? [{ id: "self-check", label: "Проверьте себя" }]
+      : []),
   ];
+  const advanced = subtopic.level === "advanced";
   const position = `Подтема ${String(subtopic.index + 1)} из ${String(subtopics.length)}`;
 
   return (
@@ -69,6 +78,11 @@ export const TopicSubtopicPage: React.FC<TopicLessonPageTypes.SubtopicProps> = (
       >
         <Typography.Text className={styles.position}>
           {position}
+          {advanced ? (
+            <span className={styles.level} data-subtopic-level>
+              {` · ${advancedLevelLabel}`}
+            </span>
+          ) : null}
         </Typography.Text>
         <Typography.Title
           order={first ? 2 : 1}
@@ -127,16 +141,31 @@ export const TopicSubtopicPage: React.FC<TopicLessonPageTypes.SubtopicProps> = (
         </section>
       ) : null}
 
+      {subtopic.checkpoint ? (
+        // F4: the subtopic's own «объясни, почему» self-check, after its tasks.
+        <div id="self-check" className={styles.section}>
+          <Checkpoint items={subtopic.checkpoint} />
+        </div>
+      ) : null}
+
       <TopicLessonPager
         routeSlug={props.lesson.routeSlug}
         previous={
           previous
-            ? { title: previous.title, subtopic: previous.slug }
+            ? {
+                title: previous.title,
+                subtopic: previous.slug,
+                advanced: previous.level === "advanced",
+              }
             : undefined
         }
         next={
           next
-            ? { title: next.title, subtopic: next.slug }
+            ? {
+                title: next.title,
+                subtopic: next.slug,
+                advanced: next.level === "advanced",
+              }
             : { title: "Практика и итог" }
         }
       />

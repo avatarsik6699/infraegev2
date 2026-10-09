@@ -1,5 +1,6 @@
 import { Check, PenLine } from "lucide-react";
 import { useLessonProgress } from "~/features/lesson-progress";
+import { advancedLevelLabel } from "~/entities/lesson";
 import { LessonTree } from "~/shared/components/lesson-tree";
 import type { SubtopicNavigationTypes } from "./subtopic-navigation.types";
 
@@ -45,8 +46,13 @@ export const SubtopicNavigation: React.FC<SubtopicNavigationTypes.Props> = (
                 isCurrent &&
                 subtopic.taskIds.length > 0 &&
                 subtopic.taskIds.every((id) => solved.has(id));
+              const advanced = subtopic.level === "advanced";
+              const opensGroup =
+                advanced && item.subtopics[index - 1]?.level !== "advanced";
               return {
                 id: subtopic.slug,
+                groupLabel: opensGroup ? "Дополнительный уровень" : undefined,
+                note: advanced ? advancedLevelLabel : undefined,
                 marker: done ? (
                   <Check size={14} strokeWidth={2.5} />
                 ) : (

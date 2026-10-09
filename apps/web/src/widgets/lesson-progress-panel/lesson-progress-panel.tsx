@@ -1,4 +1,4 @@
-import type { PracticeTaskTypes } from "~/entities/practice-task";
+import { masteryTasks, type PracticeTaskTypes } from "~/entities/practice-task";
 import { useState } from "react";
 import { accountApi, useAccountSession } from "~/features/account";
 import {
@@ -29,7 +29,9 @@ export const LessonProgressPanel: React.FC<Props> = (props) => {
     props.kind === "topic_lesson"
       ? "result-progress-title"
       : "course-result-progress-title";
-  const progress = useLessonProgress(props.lessonId, props.tasks);
+  // Advanced-subtopic tasks keep their solved state but stay outside mastery.
+  const tasks = masteryTasks(props.tasks);
+  const progress = useLessonProgress(props.lessonId, tasks);
   const enhanced = useIsEnhanced();
   const session = useAccountSession();
   const progressStatus = useLessonProgressStatus();
@@ -41,7 +43,7 @@ export const LessonProgressPanel: React.FC<Props> = (props) => {
         headingId={headingId}
         headingOrder={2}
         masteryThreshold={props.masteryThreshold}
-        total={props.tasks.length}
+        total={tasks.length}
       />
     );
   else if (!enhanced || progressStatus !== "ready")
@@ -70,7 +72,7 @@ export const LessonProgressPanel: React.FC<Props> = (props) => {
           headingOrder={2}
           masteryThreshold={props.masteryThreshold}
           solved={progress.solvedTaskIds.length}
-          total={props.tasks.length}
+          total={tasks.length}
         />
         <ConfirmationDialog
           triggerLabel="Сбросить прогресс"

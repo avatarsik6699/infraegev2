@@ -40,8 +40,8 @@ type AppFixtures = {
   noJavaScriptNumberSequencesLessonPage: TopicLessonPage;
   stringProcessingLessonPage: TopicLessonPage;
   noJavaScriptStringProcessingLessonPage: TopicLessonPage;
-  integerProcessingLessonPage: TopicLessonPage;
-  noJavaScriptIntegerProcessingLessonPage: TopicLessonPage;
+  divisorsAndMasksLessonPage: TopicLessonPage;
+  noJavaScriptDivisorsAndMasksLessonPage: TopicLessonPage;
   arrayProcessingLessonPage: TopicLessonPage;
   noJavaScriptArrayProcessingLessonPage: TopicLessonPage;
   dataAnalysisLessonPage: TopicLessonPage;
@@ -68,11 +68,12 @@ const stringProcessingLessonConfig = {
   taskCount: 8,
 };
 
-const integerProcessingLessonConfig = {
-  route: "/ege/25-obrabotka-celyh-chisel/maska-i-poisk",
-  title: "Обработка целых чисел",
+const divisorsAndMasksLessonConfig = {
+  route: "/ege/25-deliteli-i-maski/deliteli-parami",
+  title: "Делители и маски",
   taskNumber: 25,
-  taskCount: 8,
+  taskCount: 39,
+  masteryTaskCount: 33,
 };
 
 const arrayProcessingLessonConfig = {
@@ -252,8 +253,8 @@ export const test = base.extend<AppFixtures>({
   stringProcessingLessonPage: async ({ page }, use) => {
     await use(new TopicLessonPage(page, stringProcessingLessonConfig));
   },
-  integerProcessingLessonPage: async ({ page }, use) => {
-    await use(new TopicLessonPage(page, integerProcessingLessonConfig));
+  divisorsAndMasksLessonPage: async ({ page }, use) => {
+    await use(new TopicLessonPage(page, divisorsAndMasksLessonConfig));
   },
   arrayProcessingLessonPage: async ({ page }, use) => {
     await use(new TopicLessonPage(page, arrayProcessingLessonConfig));
@@ -288,15 +289,12 @@ export const test = base.extend<AppFixtures>({
       stringProcessingLessonConfig,
     );
   },
-  noJavaScriptIntegerProcessingLessonPage: async (
-    { baseURL, browser },
-    use,
-  ) => {
+  noJavaScriptDivisorsAndMasksLessonPage: async ({ baseURL, browser }, use) => {
     await useNoJavaScriptTopicLesson(
       browser,
       baseURL,
       use,
-      integerProcessingLessonConfig,
+      divisorsAndMasksLessonConfig,
     );
   },
   noJavaScriptArrayProcessingLessonPage: async ({ baseURL, browser }, use) => {

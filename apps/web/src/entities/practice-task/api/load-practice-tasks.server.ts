@@ -392,6 +392,11 @@ export function projectPracticeTask(
         ? [{ hash: link.section, label: link.label }]
         : [],
     ),
+    // The API omits the flag while it is true (B1), so only `false` excludes.
+    countsTowardMastery: !(source.content.lessons ?? []).some(
+      (link) =>
+        link.material_id === materialId && link.counts_toward_mastery === false,
+    ),
   };
 }
 
@@ -436,12 +441,15 @@ export async function loadCoursePracticeSummary(courseId: string) {
       ? result.data.lessons.map(
           (lesson: components["schemas"]["LessonSummary"]) => ({
             id: lesson.id,
-            tasks: lesson.tasks.map(
-              (task: components["schemas"]["TaskVersion"]) => ({
+            tasks: lesson.tasks
+              .filter(
+                (task: components["schemas"]["TaskVersion"]) =>
+                  task.counts_toward_mastery !== false,
+              )
+              .map((task: components["schemas"]["TaskVersion"]) => ({
                 id: task.id,
                 solutionRevision: task.solution_revision,
-              }),
-            ),
+              })),
           }),
         )
       : null;
@@ -460,12 +468,15 @@ export async function loadTopicPracticeSummary() {
       ? result.data.topics.map(
           (topic: components["schemas"]["LessonSummary"]) => ({
             id: topic.id,
-            tasks: topic.tasks.map(
-              (task: components["schemas"]["TaskVersion"]) => ({
+            tasks: topic.tasks
+              .filter(
+                (task: components["schemas"]["TaskVersion"]) =>
+                  task.counts_toward_mastery !== false,
+              )
+              .map((task: components["schemas"]["TaskVersion"]) => ({
                 id: task.id,
                 solutionRevision: task.solution_revision,
-              }),
-            ),
+              })),
           }),
         )
       : null;

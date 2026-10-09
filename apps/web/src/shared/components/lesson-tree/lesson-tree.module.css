@@ -18,6 +18,18 @@
   font-weight: 500;
 }
 
+/* A group caption inside a branch (advanced subtopics): the root caption's
+   quiet label face, no colour of its own. */
+.group {
+  display: block;
+  margin: var(--space-1) 0 0;
+  padding: var(--space-0-5) var(--space-1);
+  color: var(--color-muted);
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  font-weight: 500;
+}
+
 .tree,
 .branch {
   display: grid;
