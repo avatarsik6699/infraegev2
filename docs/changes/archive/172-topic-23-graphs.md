@@ -9,7 +9,7 @@
 | Change | `172` |
 | Slug | `topic-23-graphs` |
 | Title | Topic 23 «Анализ графов» on the site |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/172-topic-23-graphs` |
 
 ---
@@ -17,7 +17,7 @@
 ## Goal
 
 Transfer EGE topic 23 from the approved demo stand (`docs/artifacts/lesson-design/topic-23/`) to the
-site: stage 9 of the binding [lesson pipeline](../runbooks/lesson-pipeline.md), the second topic
+site: stage 9 of the binding [lesson pipeline](../../runbooks/lesson-pipeline.md), the second topic
 after Change 171. The catalog topic «Анализ графов» gets its lesson for the first time. It has:
 - seven subtopics, five core and two advanced, plus «Практика и итог»;
 - original bank tasks on our own graph files.
@@ -32,7 +32,7 @@ The Change 171 platform blocks are reused unchanged where possible. New platform
 - the `PathBuilder` sandbox;
 - the lesson's program checks against a data file.
 
-Contract: [SPEC](../SPEC.md) §1.4, §2.2–§2.3, §3, §5; [FRONTEND](../FRONTEND.md); [DESIGN](../../DESIGN.md); [lesson-authoring](../runbooks/lesson-authoring.md).
+Contract: [SPEC](../../SPEC.md) §1.4, §2.2–§2.3, §3, §5; [FRONTEND](../../FRONTEND.md); [DESIGN](../../../DESIGN.md); [lesson-authoring](../../runbooks/lesson-authoring.md).
 
 ---
 
@@ -162,7 +162,7 @@ See `docs/SPEC.md` §1.4, §2.2–§2.3, §3–§5 and the Files list above.
 ## Gate Checks
 
 > Critical Gate runs once per `/work` target set and by default in `/ship`; Full Gate runs only
-> with explicit `--full`; release selects affected checks and Release Gate. All gates are defined in [docs/STACK.md](../STACK.md) — this section only records
+> with explicit `--full`; release selects affected checks and Release Gate. All gates are defined in [docs/STACK.md](../../STACK.md) — this section only records
 > change-specific overrides.
 
 Change-specific additions:
