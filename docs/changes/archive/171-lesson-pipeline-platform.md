@@ -9,14 +9,14 @@
 | Change | `171` |
 | Slug | `lesson-pipeline-platform` |
 | Title | Lesson pipeline platform and topic 25 |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/171-lesson-pipeline-platform` |
 
 ---
 
 ## Goal
 
-Give the site the lesson blocks that the binding [lesson pipeline](../runbooks/lesson-pipeline.md)
+Give the site the lesson blocks that the binding [lesson pipeline](../../runbooks/lesson-pipeline.md)
 (stage 9) relies on, and rebuild EGE topic 25 on them from the approved demo stand
 (`docs/artifacts/lesson-design/topic-25/`). After this change every later topic is transferred
 without platform work.
@@ -28,8 +28,8 @@ Architect decisions 2026-10-08:
 4. The old `integer-processing` lesson, its route and its eight tasks are replaced completely, with no redirects.
 5. Every subtopic may end with its own self-check (SPEC §1.4).
 
-Contract: [SPEC](../SPEC.md) §1.4, §2.2, §2.3, §3, §5 (v2.26), [FRONTEND](../FRONTEND.md),
-[DESIGN](../../DESIGN.md), [lesson-patterns](../runbooks/lesson-patterns.md).
+Contract: [SPEC](../../SPEC.md) §1.4, §2.2, §2.3, §3, §5 (v2.26), [FRONTEND](../../FRONTEND.md),
+[DESIGN](../../../DESIGN.md), [lesson-patterns](../../runbooks/lesson-patterns.md).
 
 ---
 
@@ -255,7 +255,7 @@ See `docs/SPEC.md` §1.4, §2.2–§2.3, §3–§5 (v2.26) and the Files list ab
 ## Gate Checks
 
 > Critical Gate runs once per `/work` target set and by default in `/ship`; Full Gate runs only
-> with explicit `--full`; release selects affected checks and Release Gate. All gates are defined in [docs/STACK.md](../STACK.md) — this section only records
+> with explicit `--full`; release selects affected checks and Release Gate. All gates are defined in [docs/STACK.md](../../STACK.md) — this section only records
 > change-specific overrides.
 
 Change-specific additions:
