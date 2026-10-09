@@ -92,6 +92,10 @@
   user-select: none;
 }
 
+.lineNumber::before {
+  content: attr(data-line);
+}
+
 .lineContent [data-token="kwd"] {
   color: var(--color-code-keyword);
 }

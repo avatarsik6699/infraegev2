@@ -1,0 +1,55 @@
+/* Graph sandbox (Change 172): the graph keeps a readable scale and scrolls
+   inside its plate on a phone, like the generated diagrams. */
+.svg {
+  display: block;
+  width: 100%;
+  min-width: min(30rem, 100%);
+  height: auto;
+  font-family: var(--font-ui);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 47.5rem) {
+  .svg {
+    min-width: 30rem;
+  }
+}
+
+.vertex {
+  cursor: pointer;
+  outline: none;
+}
+
+.vertex:hover .node {
+  fill: var(--color-surface-side);
+}
+
+.vertex:focus-visible .node {
+  stroke: var(--color-focus);
+  stroke-width: 3;
+}
+
+.controls {
+  display: grid;
+  gap: var(--space-1);
+  padding-top: var(--space-1);
+}
+
+.status {
+  margin: 0;
+  color: var(--color-text);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+/* Invisible enlarged target of a vertex (about 44px on a desktop plate). */
+.hit {
+  stroke: none;
+}

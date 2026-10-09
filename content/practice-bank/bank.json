@@ -118352,6 +118352,2326 @@
         }
       },
       "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-23-1-02",
+        "title": "Посчитайте вершины графа",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 2,
+        "answer_instruction": "Введите количество вершин.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сколько вершин в графе с рёбрами 1 → 40, 40 → 7, 7 → 100 и 1 → 100?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Выпишите все разные номера, которые встречаются в рёбрах. Номер 100 — имя вершины, а не их количество."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "4: в рёбрах встречаются номера 1, 40, 7 и 100. Номер 100 — имя одной вершины, а не количество вершин."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "edges = [(1, 40), (40, 7), (7, 100), (1, 100)]\nvertices = set()\nfor u, v in edges:\n    vertices.add(u)\n    vertices.add(v)\nprint(len(vertices))",
+              "caption": "Решение программой"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [23],
+        "files": [],
+        "lessons": [
+          {
+            "position": 0,
+            "material_id": "graph-analysis"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "vershiny-i-rebra",
+            "material_id": "graph-analysis"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["4"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-23-1-05",
+        "title": "Найдите кратчайший путь перебором",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 5,
+        "answer_instruction": "Введите целую часть найденной длины.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Дан файл:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "text",
+              "code": "1 20 2.4\n1 7 6.0\n20 7 1.3\n7 100 3.2\n20 100 8.0\n1 100 15.0",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Найди все пути из `1` в `100`, их стоимости, кратчайший путь и целую часть его стоимости."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Путей из 1 в 100 всего четыре. Выпишите каждый и сложите веса его рёбер."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Четыре пути: 15.0, 9.2, 10.4 и 6.9. Кратчайший — 1 → 20 → 7 → 100 длиной 2.4 + 1.3 + 3.2 = 6.9, целая часть — 6."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "EDGES = [\n    \"1 20 2.4\",\n    \"1 7 6.0\",\n    \"20 7 1.3\",\n    \"7 100 3.2\",\n    \"20 100 8.0\",\n    \"1 100 15.0\",\n]\nfrom decimal import Decimal\nfrom functools import cache\n\nINF = Decimal(\"Infinity\")\ngraph = {}\n\nfor line in EDGES:\n    parts = line.split()\n    u = int(parts[0])\n    v = int(parts[1])\n    w = Decimal(parts[2])\n    if u not in graph:\n        graph[u] = []\n    graph[u].append((v, w))\n\n\n@cache\ndef best(v, target):\n    if v == target:\n        return Decimal(0)\n    answer = INF\n    for next_vertex, weight in graph.get(v, []):\n        candidate = weight + best(next_vertex, target)\n        if candidate < answer:\n            answer = candidate\n    return answer\n\n\nprint(int(best(1, 100)))",
+              "caption": "Решение программой"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [23],
+        "files": [],
+        "lessons": [
+          {
+            "position": 1,
+            "material_id": "graph-analysis"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "kratchajshij",
+            "material_id": "graph-analysis"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["6"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-23-1-07",
+        "title": "Найдите кратчайший путь в небольшом графе",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 6,
+        "answer_instruction": "Введите целую часть найденной длины.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Граф задан рёбрами:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "text",
+              "code": "1 12 3.4\n1 5 6.1\n12 5 1.9\n12 30 7.2\n5 30 2.6\n5 100 9.8\n30 100 4.7\n1 100 16.5",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Найди длину кратчайшего пути из вершины 1 в вершину 100. В ответ запиши её целую часть."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Путь с меньшим числом рёбер не обязательно короче: сравнивайте полные суммы весов."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "12: кратчайший путь 1 → 12 → 5 → 30 → 100 длиной 3.4 + 1.9 + 2.6 + 4.7 = 12.6. Пути с меньшим числом рёбер дороже: 1 → 100 — 16.5, 1 → 5 → 100 — 15.9."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "EDGES = [\n    \"1 12 3.4\",\n    \"1 5 6.1\",\n    \"12 5 1.9\",\n    \"12 30 7.2\",\n    \"5 30 2.6\",\n    \"5 100 9.8\",\n    \"30 100 4.7\",\n    \"1 100 16.5\",\n]\nfrom decimal import Decimal\nfrom functools import cache\n\nINF = Decimal(\"Infinity\")\ngraph = {}\n\nfor line in EDGES:\n    parts = line.split()\n    u = int(parts[0])\n    v = int(parts[1])\n    w = Decimal(parts[2])\n    if u not in graph:\n        graph[u] = []\n    graph[u].append((v, w))\n\n\n@cache\ndef best(v, target):\n    if v == target:\n        return Decimal(0)\n    answer = INF\n    for next_vertex, weight in graph.get(v, []):\n        candidate = weight + best(next_vertex, target)\n        if candidate < answer:\n            answer = candidate\n    return answer\n\n\nprint(int(best(1, 100)))",
+              "caption": "Решение программой"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [23],
+        "files": [],
+        "lessons": [
+          {
+            "position": 2,
+            "material_id": "graph-analysis"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "kratchajshij",
+            "material_id": "graph-analysis"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["12"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-23-2-06",
+        "title": "Посчитайте f от цели назад",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 6,
+        "answer_instruction": "Введите целую часть найденной длины.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Граф задан рёбрами:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "text",
+              "code": "1 4 2.5\n1 6 4.1\n4 6 1.2\n4 15 0.6\n6 15 2.9\n6 100 7.4\n15 100 5.8\n15 22 0.3",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Из вершины 22 рёбер нет. Найди f для каждой вершины и длину кратчайшего пути из 1 в 100. В ответ запиши её целую часть."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Начните с f(100) = 0 и f(22) = ∞: из 22 до цели не дойти. Затем f(15), f(6), f(4) и f(1)."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "8: f(15) = 5.8, f(6) = min(2.9 + 5.8, 7.4) = 7.4, f(4) = min(1.2 + 7.4, 0.6 + 5.8) = 6.4, f(1) = min(2.5 + 6.4, 4.1 + 7.4) = 8.9. Если ошибочно считать тупик 22 нулём, получится 3.4."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "EDGES = [\n    \"1 4 2.5\",\n    \"1 6 4.1\",\n    \"4 6 1.2\",\n    \"4 15 0.6\",\n    \"6 15 2.9\",\n    \"6 100 7.4\",\n    \"15 100 5.8\",\n    \"15 22 0.3\",\n]\nfrom decimal import Decimal\nfrom functools import cache\n\nINF = Decimal(\"Infinity\")\ngraph = {}\n\nfor line in EDGES:\n    parts = line.split()\n    u = int(parts[0])\n    v = int(parts[1])\n    w = Decimal(parts[2])\n    if u not in graph:\n        graph[u] = []\n    graph[u].append((v, w))\n\n\n@cache\ndef best(v, target):\n    if v == target:\n        return Decimal(0)\n    answer = INF\n    for next_vertex, weight in graph.get(v, []):\n        candidate = weight + best(next_vertex, target)\n        if candidate < answer:\n            answer = candidate\n    return answer\n\n\nprint(int(best(1, 100)))",
+              "caption": "Решение программой"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [23],
+        "files": [],
+        "lessons": [
+          {
+            "position": 3,
+            "material_id": "graph-analysis"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "tupik",
+            "material_id": "graph-analysis"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["8"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-23-3-01",
+        "title": "Строки и числа",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 1,
+        "answer_instruction": "Введите оба значения через пробел.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Что выведет `print(\"12\" + \"5\", 12 + 5)`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Строки при сложении склеиваются, числа складываются."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "125 17: «12» + «5» — склейка строк, 12 + 5 — сумма чисел."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "print(\"12\" + \"5\", 12 + 5)",
+              "caption": "Решение программой"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [23],
+        "files": [],
+        "lessons": [
+          {
+            "position": 4,
+            "material_id": "graph-analysis"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "split-i-int",
+            "material_id": "graph-analysis"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["125 17"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-23-3-06",
+        "title": "float против Decimal",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 2,
+        "answer_instruction": "Введите оба значения через пробел, как их выведет Python.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Что выведет программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "text",
+              "code": "from decimal import Decimal\n\na = 0.1 + 0.2\nb = Decimal(\"0.1\") + Decimal(\"0.2\")\nprint(a == 0.3, b == Decimal(\"0.3\"))",
+              "caption": null
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "0.1 и 0.2 не имеют конечной двоичной записи, а Decimal из строки хранит десятичные дроби точно."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "False True: сумма float хранится приближённо (0.30000000000000004), а Decimal складывает десятичные дроби точно."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from decimal import Decimal\n\na = 0.1 + 0.2\nb = Decimal(\"0.1\") + Decimal(\"0.2\")\nprint(a == 0.3, b == Decimal(\"0.3\"))",
+              "caption": "Решение программой"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [23],
+        "files": [],
+        "lessons": [
+          {
+            "position": 5,
+            "material_id": "graph-analysis"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "decimal",
+            "material_id": "graph-analysis"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["False True"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-23-3-07",
+        "title": "Прочитайте граф из файла",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 5,
+        "answer_instruction": "Введите количество вершин.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В файле 23-1.txt записан граф в формате задания. Прочитай его и определи, сколько в графе различных вершин. Различные вершины удобно собрать в множество: `vertices.add(u)` добавляет номер, только если его там ещё нет. Заодно проверь: есть ли исходящие рёбра у вершины 100?"
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Соберите оба конца каждого ребра в множество: повторы в нём не сохраняются."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "60 различных вершин при 200 рёбрах. Из вершины 100 выходят два ребра, хотя она цель: файл описывает весь граф, а не только путь."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "vertices = set()\n\nwith open(\"23-1.txt\") as f:\n    for line in f:\n        if not line.strip():\n            continue\n        parts = line.split()\n        vertices.add(int(parts[0]))\n        vertices.add(int(parts[1]))\n\nprint(len(vertices))",
+              "caption": "Решение программой"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [23],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "b26b725dfc2be5504617e76f9097f274e70261f4802a0b2959b2a7d11876eb8d",
+            "filename": "23-1.txt",
+            "attribution": null,
+            "description": "Ациклический ориентированный граф: в строке — начало ребра, конец и вес"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 6,
+            "material_id": "graph-analysis"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "spisok-reber",
+            "material_id": "graph-analysis"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["60"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-23-4-06",
+        "title": "Кратчайший путь из 1 в 100",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 10,
+        "answer_instruction": "Введите целую часть найденной длины.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В файле 23-1.txt записан ациклический ориентированный граф: в каждой строке — номер начальной вершины ребра, номер конечной вершины и вес ребра. Найдите длину кратчайшего пути из вершины 1 в вершину 100. В ответ запишите целую часть найденной длины."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Прочитайте файл в список смежности и вызовите рекурсию с @cache. Целую часть берите только у итоговой суммы."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "11387: рекурсия с запоминанием находит длину 11387.63, целая часть — 11387."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from decimal import Decimal\nfrom functools import cache\n\nINF = Decimal(\"Infinity\")\ngraph = {}\n\nwith open(\"23-1.txt\") as f:\n    for line in f:\n        if not line.strip():\n            continue\n        parts = line.split()\n        u = int(parts[0])\n        v = int(parts[1])\n        w = Decimal(parts[2])\n        if u not in graph:\n            graph[u] = []\n        graph[u].append((v, w))\n\n\n@cache\ndef best(v, target):\n    if v == target:\n        return Decimal(0)\n    answer = INF\n    for next_vertex, weight in graph.get(v, []):\n        candidate = weight + best(next_vertex, target)\n        if candidate < answer:\n            answer = candidate\n    return answer\n\n\nprint(int(best(1, 100)))",
+              "caption": "Решение программой"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [23],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "b26b725dfc2be5504617e76f9097f274e70261f4802a0b2959b2a7d11876eb8d",
+            "filename": "23-1.txt",
+            "attribution": null,
+            "description": "Ациклический ориентированный граф: в строке — начало ребра, конец и вес"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 7,
+            "material_id": "graph-analysis"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "programma",
+            "material_id": "graph-analysis"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["11387"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-23-4-07",
+        "title": "Кратчайший путь до другой вершины",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 6,
+        "answer_instruction": "Введите целую часть найденной длины.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Для того же файла найдите длину кратчайшего пути из вершины 1 в вершину 255. В ответ запишите её целую часть."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Меняется только цель: вершина 255 — тупик, но для этого вопроса она конец пути."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "11009: та же программа с целью 255 даёт 11009.49."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from decimal import Decimal\nfrom functools import cache\n\nINF = Decimal(\"Infinity\")\ngraph = {}\n\nwith open(\"23-1.txt\") as f:\n    for line in f:\n        if not line.strip():\n            continue\n        parts = line.split()\n        u = int(parts[0])\n        v = int(parts[1])\n        w = Decimal(parts[2])\n        if u not in graph:\n            graph[u] = []\n        graph[u].append((v, w))\n\n\n@cache\ndef best(v, target):\n    if v == target:\n        return Decimal(0)\n    answer = INF\n    for next_vertex, weight in graph.get(v, []):\n        candidate = weight + best(next_vertex, target)\n        if candidate < answer:\n            answer = candidate\n    return answer\n\n\nprint(int(best(1, 255)))",
+              "caption": "Решение программой"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [23],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "b26b725dfc2be5504617e76f9097f274e70261f4802a0b2959b2a7d11876eb8d",
+            "filename": "23-1.txt",
+            "attribution": null,
+            "description": "Ациклический ориентированный граф: в строке — начало ребра, конец и вес"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 8,
+            "material_id": "graph-analysis"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "programma",
+            "material_id": "graph-analysis"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["11009"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-23-5-05",
+        "title": "Обязательная и запрещённая вершина",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 6,
+        "answer_instruction": "Введите длину пути — десятичную дробь через точку.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Для графа подтемы найди длину кратчайшего пути из 1 в 100 через вершину 15 при запрете вершины 4."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Без вершины 4 до 15 можно дойти только через 6."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "12.8: участок 1 → 6 → 15 стоит 4.1 + 2.9 = 7.0, участок 15 → 100 — 5.8."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "EDGES = [\n    \"1 4 2.5\",\n    \"1 6 4.1\",\n    \"4 6 1.2\",\n    \"4 15 0.6\",\n    \"6 15 2.9\",\n    \"6 100 7.4\",\n    \"15 100 5.8\",\n    \"15 22 0.3\",\n]\nfrom decimal import Decimal\nfrom functools import cache\n\nINF = Decimal(\"Infinity\")\ngraph = {}\n\nfor line in EDGES:\n    parts = line.split()\n    u = int(parts[0])\n    v = int(parts[1])\n    w = Decimal(parts[2])\n    if u not in graph:\n        graph[u] = []\n    graph[u].append((v, w))\nBANNED = {4}\n\n\n@cache\ndef best_without(v, target):\n    if v in BANNED:\n        return INF\n    if v == target:\n        return Decimal(0)\n    answer = INF\n    for next_vertex, weight in graph.get(v, []):\n        candidate = weight + best_without(next_vertex, target)\n        if candidate < answer:\n            answer = candidate\n    return answer\n\n\npart1 = best_without(1, 15)\npart2 = best_without(15, 100)\nprint(part1 + part2)",
+              "caption": "Решение программой"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [23],
+        "files": [],
+        "lessons": [
+          {
+            "position": 9,
+            "material_id": "graph-analysis"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "zapret",
+            "material_id": "graph-analysis"
+          },
+          {
+            "label": "Теория",
+            "section": "obyazatelnaya",
+            "material_id": "graph-analysis"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["12.8", "12,8"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-23-5-06",
+        "title": "Путь через обязательную вершину",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 10,
+        "answer_instruction": "Введите целую часть найденной длины.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В файле 23-2.txt записан ациклический ориентированный граф: в каждой строке — номер начальной вершины ребра, номер конечной вершины и вес ребра. Найдите длину кратчайшего пути из вершины 1 в вершину 100, проходящего через вершину 264. В ответ запишите целую часть найденной длины."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Путь делится на два участка: до вершины 264 и от неё. Сложите их минимумы, целую часть берите в конце."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "10742: best(1, 264) + best(264, 100) = 10742.14. Кратчайший путь без условия через 264 не проходит и стоит 10715.49."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from decimal import Decimal\nfrom functools import cache\n\nINF = Decimal(\"Infinity\")\ngraph = {}\n\nwith open(\"23-2.txt\") as f:\n    for line in f:\n        if not line.strip():\n            continue\n        parts = line.split()\n        u = int(parts[0])\n        v = int(parts[1])\n        w = Decimal(parts[2])\n        if u not in graph:\n            graph[u] = []\n        graph[u].append((v, w))\n\n\n@cache\ndef best(v, target):\n    if v == target:\n        return Decimal(0)\n    answer = INF\n    for next_vertex, weight in graph.get(v, []):\n        candidate = weight + best(next_vertex, target)\n        if candidate < answer:\n            answer = candidate\n    return answer\n\n\nprint(int(best(1, 264) + best(264, 100)))",
+              "caption": "Решение программой"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [23],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "8ee1f7931d1518b9c8a21e78f10522b86e98735385ddedc77cb70937808cc6e2",
+            "filename": "23-2.txt",
+            "attribution": null,
+            "description": "Ациклический ориентированный граф: в строке — начало ребра, конец и вес"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 10,
+            "material_id": "graph-analysis"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "obyazatelnaya",
+            "material_id": "graph-analysis"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["10742"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-23-5-07",
+        "title": "Путь в обход запрещённой вершины",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 10,
+        "answer_instruction": "Введите целую часть найденной длины.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Для того же файла найдите длину кратчайшего пути из вершины 1 в вершину 100, не проходящего через вершину 975. В ответ запишите целую часть найденной длины."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Запрещённая вершина — тупик: её значение — бесконечность."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "10981: кратчайший путь проходит через 975 и стоит 10715.49; в обход получается 10981.54."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from decimal import Decimal\nfrom functools import cache\n\nINF = Decimal(\"Infinity\")\ngraph = {}\n\nwith open(\"23-2.txt\") as f:\n    for line in f:\n        if not line.strip():\n            continue\n        parts = line.split()\n        u = int(parts[0])\n        v = int(parts[1])\n        w = Decimal(parts[2])\n        if u not in graph:\n            graph[u] = []\n        graph[u].append((v, w))\nBANNED = {975}\n\n\n@cache\ndef best_without(v, target):\n    if v in BANNED:\n        return INF\n    if v == target:\n        return Decimal(0)\n    answer = INF\n    for next_vertex, weight in graph.get(v, []):\n        candidate = weight + best_without(next_vertex, target)\n        if candidate < answer:\n            answer = candidate\n    return answer\n\n\nprint(int(best_without(1, 100)))",
+              "caption": "Решение программой"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [23],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "8ee1f7931d1518b9c8a21e78f10522b86e98735385ddedc77cb70937808cc6e2",
+            "filename": "23-2.txt",
+            "attribution": null,
+            "description": "Ациклический ориентированный граф: в строке — начало ребра, конец и вес"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 11,
+            "material_id": "graph-analysis"
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "zapret",
+            "material_id": "graph-analysis"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["10981"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-23-6-02",
+        "title": "Сколько проходов при удобном порядке",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 3,
+        "answer_instruction": "Введите количество проходов.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сколько проходов сделает программа с ранней остановкой, если те же три ребра записаны в порядке `1 40`, `40 7`, `7 100`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "При порядке по ходу движения все стоимости находятся за один проход. Что нужно, чтобы программа это заметила?"
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "2: за первый проход стоимости находятся сразу по цепочке 2, 3, 6, второй проход изменений не даёт, и программа останавливается."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from decimal import Decimal\n\nINF = Decimal(\"Infinity\")\nedges = [(1, 40, 2), (40, 7, 1), (7, 100, 3)]\ndistance = {1: Decimal(0), 40: INF, 7: INF, 100: INF}\npasses = 0\nfor step in range(len(distance) - 1):\n    passes += 1\n    changed = False\n    for u, v, w in edges:\n        if distance[u] + w < distance[v]:\n            distance[v] = distance[u] + w\n            changed = True\n    if not changed:\n        break\nprint(passes)",
+              "caption": "Решение программой"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [23],
+        "files": [],
+        "lessons": [
+          {
+            "position": 12,
+            "material_id": "graph-analysis",
+            "counts_toward_mastery": false
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "rannyaya-ostanovka",
+            "material_id": "graph-analysis"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["2"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-23-6-06",
+        "title": "Кратчайший путь повторными проходами",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 12,
+        "answer_instruction": "Введите целую часть найденной длины.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В файле 23-3.txt записан ациклический ориентированный граф. Найдите длину кратчайшего пути из вершины 1 в вершину 100. В ответ запишите целую часть найденной длины."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Стоимость от начала: 0 для вершины 1, бесконечность для остальных. Просматривайте рёбра, пока они дают улучшения."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "7393: повторные проходы дают 7393.88 — столько же, сколько рекурсия."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from decimal import Decimal\n\nINF = Decimal(\"Infinity\")\nedges = []\nvertices = {1, 100}\n\nwith open(\"23-3.txt\") as f:\n    for line in f:\n        if not line.strip():\n            continue\n        parts = line.split()\n        u = int(parts[0])\n        v = int(parts[1])\n        edges.append((u, v, Decimal(parts[2])))\n        vertices.add(u)\n        vertices.add(v)\n\ndistance = {v: INF for v in vertices}\ndistance[1] = Decimal(0)\n\nfor step in range(len(vertices) - 1):\n    changed = False\n    for u, v, w in edges:\n        if distance[u] == INF:\n            continue\n        if distance[u] + w < distance[v]:\n            distance[v] = distance[u] + w\n            changed = True\n    if not changed:\n        break\n\nprint(int(distance[100]))",
+              "caption": "Решение программой"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [23],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "05843a4b31ddb950ba697985780f01a4dad60780d72c18afacbabfacc6dc4cb7",
+            "filename": "23-3.txt",
+            "attribution": null,
+            "description": "Ациклический ориентированный граф: в строке — начало ребра, конец и вес"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 13,
+            "material_id": "graph-analysis",
+            "counts_toward_mastery": false
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "programma-prohodov",
+            "material_id": "graph-analysis"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["7393"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-23-6-07",
+        "title": "Восстановите кратчайший путь",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 3,
+        "estimated_minutes": 12,
+        "answer_instruction": "Введите номера вершин пути по порядку через пробел, начиная с 1.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Для того же файла восстановите кратчайший путь из 1 в 100: запишите номера его вершин по порядку."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "При каждом улучшении запоминайте предшественника: previous[v] = u. Потом идите от 100 назад и разверните список."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Путь 1 → 899 → 650 → 372 → 820 → 598 → 450 → 246 → 170 → 701 → 632 → 454 → 100: словарь предшественников, пройденный от цели к началу."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from decimal import Decimal\n\nINF = Decimal(\"Infinity\")\nedges = []\nvertices = {1, 100}\n\nwith open(\"23-3.txt\") as f:\n    for line in f:\n        if not line.strip():\n            continue\n        parts = line.split()\n        u = int(parts[0])\n        v = int(parts[1])\n        edges.append((u, v, Decimal(parts[2])))\n        vertices.add(u)\n        vertices.add(v)\n\ndistance = {v: INF for v in vertices}\ndistance[1] = Decimal(0)\nprevious = {}\n\nfor step in range(len(vertices) - 1):\n    changed = False\n    for u, v, w in edges:\n        if distance[u] == INF:\n            continue\n        if distance[u] + w < distance[v]:\n            distance[v] = distance[u] + w\n            previous[v] = u\n            changed = True\n    if not changed:\n        break\n\npath = []\nv = 100\nwhile v != 1:\n    path.append(v)\n    v = previous[v]\npath.append(1)\npath.reverse()\nprint(*path)",
+              "caption": "Решение программой"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [23],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "05843a4b31ddb950ba697985780f01a4dad60780d72c18afacbabfacc6dc4cb7",
+            "filename": "23-3.txt",
+            "attribution": null,
+            "description": "Ациклический ориентированный граф: в строке — начало ребра, конец и вес"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 14,
+            "material_id": "graph-analysis",
+            "counts_toward_mastery": false
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "vosstanovlenie",
+            "material_id": "graph-analysis"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": [
+            "1 899 650 372 820 598 450 246 170 701 632 454 100"
+          ],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-23-7-01",
+        "title": "Запишите топологический порядок",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 1,
+        "estimated_minutes": 4,
+        "answer_instruction": "Введите номера вершин в порядке через пробел.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Граф задан рёбрами 5 → 3, 5 → 8, 3 → 8, 8 → 2, 3 → 2. Запиши его топологический порядок."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Найдите вершину, в которую ничего не входит, запишите её и уберите её рёбра. Повторяйте."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "5 3 8 2: в 5 ничего не входит, после её удаления ничего не входит в 3, затем в 8, последней остаётся 2."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "edges = [(5, 3), (5, 8), (3, 8), (8, 2), (3, 2)]\nvertices = [5, 3, 8, 2]\norder = []\nwhile len(order) < len(vertices):\n    for v in vertices:\n        if v in order:\n            continue\n        incoming = [u for u, x in edges\n                    if x == v and u not in order]\n        if not incoming:\n            order.append(v)\n            break\nprint(*order)",
+              "caption": "Решение программой"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [23],
+        "files": [],
+        "lessons": [
+          {
+            "position": 15,
+            "material_id": "graph-analysis",
+            "counts_toward_mastery": false
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "topologicheskij",
+            "material_id": "graph-analysis"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["5 3 8 2"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-23-7-02",
+        "title": "Порядок обработки в алгоритме Дейкстры",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 6,
+        "answer_instruction": "Введите номера вершин в порядке обработки через пробел.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В каком порядке алгоритм Дейкстры обработает вершины графа из задачи 5 подтемы 1 (рёбра 1 —2.4→ 20, 1 —6.0→ 7, 20 —1.3→ 7, 7 —3.2→ 100, 20 —8.0→ 100, 1 —15.0→ 100)?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Каждый раз берите ещё не обработанную вершину с наименьшей найденной стоимостью от начала."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "1 20 7 100: стоимости 0, 2.4, 3.7 (через 20) и 6.9 (через 7)."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "EDGES = [\n    \"1 20 2.4\",\n    \"1 7 6.0\",\n    \"20 7 1.3\",\n    \"7 100 3.2\",\n    \"20 100 8.0\",\n    \"1 100 15.0\",\n]\nfrom decimal import Decimal\nfrom functools import cache\n\nINF = Decimal(\"Infinity\")\ngraph = {}\n\nfor line in EDGES:\n    parts = line.split()\n    u = int(parts[0])\n    v = int(parts[1])\n    w = Decimal(parts[2])\n    if u not in graph:\n        graph[u] = []\n    graph[u].append((v, w))\n\ndist = {1: Decimal(0)}\ndone = []\nwhile len(done) < 4:\n    v = min((d, x) for x, d in dist.items()\n            if x not in done)[1]\n    done.append(v)\n    for x, w in graph.get(v, []):\n        if dist[v] + w < dist.get(x, INF):\n            dist[x] = dist[v] + w\nprint(*done)",
+              "caption": "Решение программой"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [23],
+        "files": [],
+        "lessons": [
+          {
+            "position": 16,
+            "material_id": "graph-analysis",
+            "counts_toward_mastery": false
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "dejkstra",
+            "material_id": "graph-analysis"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["1 20 7 100"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-23-7-04",
+        "title": "Путь ровно из двух рёбер",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 5,
+        "answer_instruction": "Введите стоимость — десятичную дробь через точку.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Для того же графа найди минимальную стоимость пути ровно из двух рёбер."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Нужна стоимость попадания в 100 ровно за два перехода: D[2][100]."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "9.2: ровно двумя рёбрами лучше путь 1 → 7 → 100 (6.0 + 3.2); 1 → 20 → 100 стоит 10.4."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from decimal import Decimal\n\nINF = Decimal(\"Infinity\")\nedges = [(1, 20, \"2.4\"), (1, 7, \"6.0\"), (20, 7, \"1.3\"),\n         (7, 100, \"3.2\"), (20, 100, \"8.0\"), (1, 100, \"15.0\")]\nvertices = {1, 20, 7, 100}\nD = [{v: INF for v in vertices} for k in range(3)]\nD[0][1] = Decimal(0)\nfor k in range(2):\n    for u, v, w in edges:\n        if D[k][u] + Decimal(w) < D[k + 1][v]:\n            D[k + 1][v] = D[k][u] + Decimal(w)\nprint(D[2][100])",
+              "caption": "Решение программой"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [23],
+        "files": [],
+        "lessons": [
+          {
+            "position": 17,
+            "material_id": "graph-analysis",
+            "counts_toward_mastery": false
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "rovno-k",
+            "material_id": "graph-analysis"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["9.2", "9,2"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-23-7-06",
+        "title": "Количество путей",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 10,
+        "answer_instruction": "Введите количество путей.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В файле 23-4.txt записан ациклический ориентированный граф. Определите количество различных путей из вершины 1 в вершину 100."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "c(цель) = 1, тупик — 0, для остальных — сумма c по соседям. Запоминайте ответы."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "227: рекурсия с запоминанием складывает количества путей соседей."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from decimal import Decimal\nfrom functools import cache\n\nINF = Decimal(\"Infinity\")\ngraph = {}\n\nwith open(\"23-4.txt\") as f:\n    for line in f:\n        if not line.strip():\n            continue\n        parts = line.split()\n        u = int(parts[0])\n        v = int(parts[1])\n        w = Decimal(parts[2])\n        if u not in graph:\n            graph[u] = []\n        graph[u].append((v, w))\n\n\n@cache\ndef count(v):\n    if v == 100:\n        return 1\n    total = 0\n    for next_vertex, weight in graph.get(v, []):\n        total += count(next_vertex)\n    return total\n\n\nprint(count(1))",
+              "caption": "Решение программой"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [23],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "df41bfd2a2075e0a8f57f48568fcb845e07b23392dbe3b503ba988cdb3b19021",
+            "filename": "23-4.txt",
+            "attribution": null,
+            "description": "Ациклический ориентированный граф: в строке — начало ребра, конец и вес"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 18,
+            "material_id": "graph-analysis",
+            "counts_toward_mastery": false
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "kolichestvo-putej",
+            "material_id": "graph-analysis"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["227"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-23-7-07",
+        "title": "Самый длинный путь",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 10,
+        "answer_instruction": "Введите целую часть найденной длины.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Для того же файла найдите длину самого длинного пути из вершины 1 в вершину 100. В ответ запишите целую часть найденной длины."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Вместо минимума — максимум, а тупик обозначается минус бесконечностью."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "7362: самый длинный путь стоит 7362.44."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from decimal import Decimal\nfrom functools import cache\n\nINF = Decimal(\"Infinity\")\ngraph = {}\n\nwith open(\"23-4.txt\") as f:\n    for line in f:\n        if not line.strip():\n            continue\n        parts = line.split()\n        u = int(parts[0])\n        v = int(parts[1])\n        w = Decimal(parts[2])\n        if u not in graph:\n            graph[u] = []\n        graph[u].append((v, w))\n\nNEG = Decimal(\"-Infinity\")\n\n\n@cache\ndef longest(v):\n    if v == 100:\n        return Decimal(0)\n    answer = NEG\n    for next_vertex, weight in graph.get(v, []):\n        candidate = weight + longest(next_vertex)\n        if candidate > answer:\n            answer = candidate\n    return answer\n\n\nprint(int(longest(1)))",
+              "caption": "Решение программой"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [23],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "df41bfd2a2075e0a8f57f48568fcb845e07b23392dbe3b503ba988cdb3b19021",
+            "filename": "23-4.txt",
+            "attribution": null,
+            "description": "Ациклический ориентированный граф: в строке — начало ребра, конец и вес"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 19,
+            "material_id": "graph-analysis",
+            "counts_toward_mastery": false
+          }
+        ],
+        "theory_links": [
+          {
+            "label": "Теория",
+            "section": "dlinnejshij",
+            "material_id": "graph-analysis"
+          }
+        ],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["7362"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-23-8-01",
+        "title": "Кратчайший путь в графе из файла",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 10,
+        "answer_instruction": "Введите целую часть найденной длины.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Файл 23-5.txt. Найдите длину кратчайшего пути из вершины 1 в вершину 100. В ответ запишите целую часть найденной длины. (Подтема 4.)"
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Подтема 4: рекурсия с @cache, целая часть только в конце."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "10211: длина кратчайшего пути 10211.63. Подтема 4: рекурсия с запоминанием."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from decimal import Decimal\nfrom functools import cache\n\nINF = Decimal(\"Infinity\")\ngraph = {}\n\nwith open(\"23-5.txt\") as f:\n    for line in f:\n        if not line.strip():\n            continue\n        parts = line.split()\n        u = int(parts[0])\n        v = int(parts[1])\n        w = Decimal(parts[2])\n        if u not in graph:\n            graph[u] = []\n        graph[u].append((v, w))\n\n\n@cache\ndef best(v, target):\n    if v == target:\n        return Decimal(0)\n    answer = INF\n    for next_vertex, weight in graph.get(v, []):\n        candidate = weight + best(next_vertex, target)\n        if candidate < answer:\n            answer = candidate\n    return answer\n\n\nprint(int(best(1, 100)))",
+              "caption": "Решение программой"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [23],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "5c4dbdfa4537c58eb49a5d1d022b8a2c02d3f54d71e27c72f54193acb411eba7",
+            "filename": "23-5.txt",
+            "attribution": null,
+            "description": "Ациклический ориентированный граф: в строке — начало ребра, конец и вес"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 20,
+            "material_id": "graph-analysis"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["10211"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-23-8-02",
+        "title": "Путь через две обязательные вершины",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 3,
+        "estimated_minutes": 12,
+        "answer_instruction": "Введите целую часть найденной длины.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Для файла 23-5.txt найдите длину кратчайшего пути из вершины 1 в вершину 100, проходящего через вершины 342 и 423. В ответ запишите целую часть найденной длины. (Подтема 5: порядок обязательных вершин нужно определить.)"
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Подтема 5: посчитайте оба порядка обязательных вершин — недостижимый даст бесконечность."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "10327: из 342 можно дойти до 423, а обратно нельзя, поэтому путь идёт 1 → … → 342 → … → 423 → … → 100. Подтема 5: путь по участкам."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from decimal import Decimal\nfrom functools import cache\n\nINF = Decimal(\"Infinity\")\ngraph = {}\n\nwith open(\"23-5.txt\") as f:\n    for line in f:\n        if not line.strip():\n            continue\n        parts = line.split()\n        u = int(parts[0])\n        v = int(parts[1])\n        w = Decimal(parts[2])\n        if u not in graph:\n            graph[u] = []\n        graph[u].append((v, w))\n\n\n@cache\ndef best(v, target):\n    if v == target:\n        return Decimal(0)\n    answer = INF\n    for next_vertex, weight in graph.get(v, []):\n        candidate = weight + best(next_vertex, target)\n        if candidate < answer:\n            answer = candidate\n    return answer\n\n\na, b = 342, 423\none = best(1, a) + best(a, b) + best(b, 100)\ntwo = best(1, b) + best(b, a) + best(a, 100)\nprint(int(min(one, two)))",
+              "caption": "Решение программой"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [23],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "5c4dbdfa4537c58eb49a5d1d022b8a2c02d3f54d71e27c72f54193acb411eba7",
+            "filename": "23-5.txt",
+            "attribution": null,
+            "description": "Ациклический ориентированный граф: в строке — начало ребра, конец и вес"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 21,
+            "material_id": "graph-analysis"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["10327"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-23-8-03",
+        "title": "Путь без запрещённой вершины",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 10,
+        "answer_instruction": "Введите целую часть найденной длины.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Для файла 23-5.txt найдите длину кратчайшего пути из вершины 1 в вершину 100, не проходящего через вершину 722. В ответ запишите целую часть найденной длины. (Подтема 5.)"
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Подтема 5: запрещённая вершина возвращает бесконечность."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "10228: кратчайший путь проходит через 722, в обход получается 10228.86. Подтема 5: запрещённая вершина."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from decimal import Decimal\nfrom functools import cache\n\nINF = Decimal(\"Infinity\")\ngraph = {}\n\nwith open(\"23-5.txt\") as f:\n    for line in f:\n        if not line.strip():\n            continue\n        parts = line.split()\n        u = int(parts[0])\n        v = int(parts[1])\n        w = Decimal(parts[2])\n        if u not in graph:\n            graph[u] = []\n        graph[u].append((v, w))\nBANNED = {722}\n\n\n@cache\ndef best_without(v, target):\n    if v in BANNED:\n        return INF\n    if v == target:\n        return Decimal(0)\n    answer = INF\n    for next_vertex, weight in graph.get(v, []):\n        candidate = weight + best_without(next_vertex, target)\n        if candidate < answer:\n            answer = candidate\n    return answer\n\n\nprint(int(best_without(1, 100)))",
+              "caption": "Решение программой"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [23],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "5c4dbdfa4537c58eb49a5d1d022b8a2c02d3f54d71e27c72f54193acb411eba7",
+            "filename": "23-5.txt",
+            "attribution": null,
+            "description": "Ациклический ориентированный граф: в строке — начало ребра, конец и вес"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 22,
+            "material_id": "graph-analysis"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["10228"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-23-8-04",
+        "title": "Граф с тупиками",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 10,
+        "answer_instruction": "Введите целую часть найденной длины.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Файл 23-6.txt. Найдите длину кратчайшего пути из вершины 1 в вершину 100. В ответ запишите целую часть найденной длины. (Подтемы 2 и 4: проверьте, как программа обрабатывает тупики.)"
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Подтемы 2 и 4: тупик, из которого не дойти до цели, — бесконечность, а не ноль."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "9257: длина кратчайшего пути 9257.03. Если тупику вернуть 0, получится 316 — «путь» в тупик. Подтемы 2 и 4."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from decimal import Decimal\nfrom functools import cache\n\nINF = Decimal(\"Infinity\")\ngraph = {}\n\nwith open(\"23-6.txt\") as f:\n    for line in f:\n        if not line.strip():\n            continue\n        parts = line.split()\n        u = int(parts[0])\n        v = int(parts[1])\n        w = Decimal(parts[2])\n        if u not in graph:\n            graph[u] = []\n        graph[u].append((v, w))\n\n\n@cache\ndef best(v, target):\n    if v == target:\n        return Decimal(0)\n    answer = INF\n    for next_vertex, weight in graph.get(v, []):\n        candidate = weight + best(next_vertex, target)\n        if candidate < answer:\n            answer = candidate\n    return answer\n\n\nprint(int(best(1, 100)))",
+              "caption": "Решение программой"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [23],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "9cb55653e16f89efe05e05367440008e3af7dd1dd239a3009022a019c8081116",
+            "filename": "23-6.txt",
+            "attribution": null,
+            "description": "Ациклический ориентированный граф: в строке — начало ребра, конец и вес"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 23,
+            "material_id": "graph-analysis"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["9257"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "task-23-8-05",
+        "title": "Путь через обязательную вершину",
+        "short_description": null,
+        "explanation_kind": "worked_solution",
+        "difficulty": 2,
+        "estimated_minutes": 10,
+        "answer_instruction": "Введите целую часть найденной длины.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Для файла 23-6.txt найдите длину кратчайшего пути из вершины 1 в вершину 100, проходящего через вершину 429. В ответ запишите целую часть найденной длины. (Подтема 5.)"
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Подтема 5: сумма минимумов двух участков."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "9659: best(1, 429) + best(429, 100) = 9659.94. Подтема 5."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "from decimal import Decimal\nfrom functools import cache\n\nINF = Decimal(\"Infinity\")\ngraph = {}\n\nwith open(\"23-6.txt\") as f:\n    for line in f:\n        if not line.strip():\n            continue\n        parts = line.split()\n        u = int(parts[0])\n        v = int(parts[1])\n        w = Decimal(parts[2])\n        if u not in graph:\n            graph[u] = []\n        graph[u].append((v, w))\n\n\n@cache\ndef best(v, target):\n    if v == target:\n        return Decimal(0)\n    answer = INF\n    for next_vertex, weight in graph.get(v, []):\n        candidate = weight + best(next_vertex, target)\n        if candidate < answer:\n            answer = candidate\n    return answer\n\n\nprint(int(best(1, 429) + best(429, 100)))",
+              "caption": "Решение программой"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [23],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "9cb55653e16f89efe05e05367440008e3af7dd1dd239a3009022a019c8081116",
+            "filename": "23-6.txt",
+            "attribution": null,
+            "description": "Ациклический ориентированный граф: в строке — начало ребра, конец и вес"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 24,
+            "material_id": "graph-analysis"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["9659"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
     }
   ],
   "files": [
@@ -118515,6 +120835,48 @@
       "mime_type": "text/plain",
       "size_bytes": 171,
       "storage_key": "acb425622e23b446b2f0089845f9c6f5baa83170648f2e3d5974adad8bd8edaa"
+    },
+    {
+      "format": "txt",
+      "checksum": "b26b725dfc2be5504617e76f9097f274e70261f4802a0b2959b2a7d11876eb8d",
+      "mime_type": "text/plain",
+      "size_bytes": 3011,
+      "storage_key": "b26b725dfc2be5504617e76f9097f274e70261f4802a0b2959b2a7d11876eb8d"
+    },
+    {
+      "format": "txt",
+      "checksum": "8ee1f7931d1518b9c8a21e78f10522b86e98735385ddedc77cb70937808cc6e2",
+      "mime_type": "text/plain",
+      "size_bytes": 3021,
+      "storage_key": "8ee1f7931d1518b9c8a21e78f10522b86e98735385ddedc77cb70937808cc6e2"
+    },
+    {
+      "format": "txt",
+      "checksum": "05843a4b31ddb950ba697985780f01a4dad60780d72c18afacbabfacc6dc4cb7",
+      "mime_type": "text/plain",
+      "size_bytes": 2261,
+      "storage_key": "05843a4b31ddb950ba697985780f01a4dad60780d72c18afacbabfacc6dc4cb7"
+    },
+    {
+      "format": "txt",
+      "checksum": "df41bfd2a2075e0a8f57f48568fcb845e07b23392dbe3b503ba988cdb3b19021",
+      "mime_type": "text/plain",
+      "size_bytes": 1047,
+      "storage_key": "df41bfd2a2075e0a8f57f48568fcb845e07b23392dbe3b503ba988cdb3b19021"
+    },
+    {
+      "format": "txt",
+      "checksum": "5c4dbdfa4537c58eb49a5d1d022b8a2c02d3f54d71e27c72f54193acb411eba7",
+      "mime_type": "text/plain",
+      "size_bytes": 2989,
+      "storage_key": "5c4dbdfa4537c58eb49a5d1d022b8a2c02d3f54d71e27c72f54193acb411eba7"
+    },
+    {
+      "format": "txt",
+      "checksum": "9cb55653e16f89efe05e05367440008e3af7dd1dd239a3009022a019c8081116",
+      "mime_type": "text/plain",
+      "size_bytes": 2836,
+      "storage_key": "9cb55653e16f89efe05e05367440008e3af7dd1dd239a3009022a019c8081116"
     }
   ],
   "materials": [
@@ -118611,6 +120973,70 @@
         "vid-vmesto-perebora",
         "vid-i-maska",
         "vid-korotko"
+      ],
+      "kind": "topic",
+      "status": "published",
+      "course_id": null
+    },
+    {
+      "id": "graph-analysis",
+      "sections": [
+        "graf-ideya",
+        "vershiny-i-rebra",
+        "napravlenie",
+        "ves",
+        "put",
+        "cikly",
+        "kratchajshij",
+        "graf-itogo",
+        "ostatok-ideya",
+        "zhadnyj-vybor",
+        "perebor-putej",
+        "odno-chislo",
+        "funkciya-f",
+        "tupik",
+        "ostatok-itogo",
+        "fajl-ideya",
+        "stroka-fajla",
+        "split-i-int",
+        "drobnaya-chast",
+        "float",
+        "decimal",
+        "spisok-reber",
+        "spisok-smezhnosti",
+        "fajl-itogo",
+        "rekursiya-ideya",
+        "funkciya-best",
+        "cache",
+        "rekursiya-po-shagam",
+        "programma",
+        "zavershenie",
+        "dinamika",
+        "rekursiya-itogo",
+        "usloviya-ideya",
+        "cel-parametr",
+        "obyazatelnaya",
+        "zapret",
+        "puti-net",
+        "usloviya-itogo",
+        "prohody-zachem",
+        "ot-nachala",
+        "nachalnye",
+        "relaksaciya",
+        "poryadok-strok",
+        "v-1-prohodov",
+        "rannyaya-ostanovka",
+        "programma-prohodov",
+        "skorost-prohodov",
+        "vosstanovlenie",
+        "prohody-itogo",
+        "drugie-zachem",
+        "topologicheskij",
+        "dejkstra",
+        "kolichestvo-putej",
+        "dlinnejshij",
+        "rovno-k",
+        "drugie-itogo"
       ],
       "kind": "topic",
       "status": "published",

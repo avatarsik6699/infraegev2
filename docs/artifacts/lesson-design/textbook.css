@@ -226,6 +226,14 @@ pre.code code {
 pre.code.text {
   background: var(--paper);
 }
+/* lines of a data file: its name in the head of the block, like «Python» on the site */
+pre.code[data-file]::before {
+  content: attr(data-file);
+  display: block;
+  margin-bottom: 4px;
+  font: 500 12.5px/1.4 var(--mono);
+  color: var(--muted);
+}
 .tok-kw {
   color: var(--kw);
 }
@@ -1087,4 +1095,33 @@ figure.cheatsheet {
   .cs-foot ul {
     grid-template-columns: 1fr;
   }
+}
+
+/* path builder sandbox (topic 23): click vertices to build a path */
+.pathb[data-ready] .gv {
+  cursor: pointer;
+}
+.pathb[data-ready] .gv:hover circle {
+  fill: var(--wash);
+}
+.pathb .gv:focus {
+  outline: none;
+}
+.pathb .gv:focus-visible circle {
+  stroke-width: 3;
+  stroke: var(--ink);
+}
+.pb-ctl {
+  margin-top: 8px;
+}
+.pb-status {
+  margin: 0 0 8px;
+  font-size: 15.5px;
+  color: var(--ink);
+  min-height: 1.5em;
+}
+.pb-btns {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }

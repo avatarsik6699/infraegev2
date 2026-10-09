@@ -58,8 +58,12 @@ export const LessonStepper: React.FC<Props> = (props) => {
         </div>
         <figcaption className={mediaStyles.caption}>
           <ol className={styles.steps} data-stepper-steps>
-            {props.frames.map((frame) => (
-              <li key={frame.caption}>{frame.caption}</li>
+            {/* Frames are a fixed sequence; two frames may share a caption
+                (topic 23 passes: the same edge on two passes). */}
+            {props.frames.map((frame, frameIndex) => (
+              <li key={`${String(frameIndex)}:${frame.caption}`}>
+                {frame.caption}
+              </li>
             ))}
           </ol>
         </figcaption>
@@ -84,7 +88,7 @@ export const LessonStepper: React.FC<Props> = (props) => {
       <div className={mediaStyles.plate} tabIndex={0}>
         {props.frames.map((frame, frameIndex) => (
           <InlineSvg
-            key={frame.caption}
+            key={`${String(frameIndex)}:${frame.caption}`}
             svg={frame.svg}
             width={props.width}
             height={props.height}

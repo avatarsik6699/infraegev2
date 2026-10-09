@@ -3,6 +3,7 @@ export { rekursiyaLesson } from "./content/rekursiya.lesson";
 export { lessonPublications } from "~/shared/config/lesson-publication.mjs";
 export { findLessonByRouteSlug, topicLessons } from "./content/lesson-registry";
 export { numberSequencesLesson } from "./content/number-sequences.lesson";
+export { graphAnalysisLesson } from "./content/graph-analysis.lesson";
 export { stringProcessingLesson } from "./content/string-processing.lesson";
 export { divisorsAndMasksLesson } from "./content/divisors-and-masks.lesson";
 export { arrayProcessingLesson } from "./content/array-processing.lesson";

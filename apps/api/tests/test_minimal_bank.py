@@ -246,7 +246,7 @@ def test_pagination_next_and_lesson_membership(database):
                     if material.status == "published" and expected:
                         result = await readers.lesson(session, material.kind, material.id)
                         assert [t.id for t in result.tasks] == [i for _, i in expected]
-                assert len(list(await session.scalars(select(TaskRecord.id)))) == 783
+                assert len(list(await session.scalars(select(TaskRecord.id)))) == 808
         finally:
             await engine.dispose()
 
@@ -348,7 +348,7 @@ def test_validate_cli_checks_canonical_bank_without_database_or_legacy_json(tmp_
 
     result = validate()
     assert result.returncode == 0, result.stderr
-    assert json.loads(result.stdout)["tasks"] == 783
+    assert json.loads(result.stdout)["tasks"] == 808
     task["task"]["theory_links"][0]["section"] = "missing-section"
     result = validate()
     assert result.returncode != 0 and "unknown theory section" in result.stderr
@@ -554,6 +554,7 @@ def test_topic_summary_matches_published_lessons_and_excludes_hidden_tasks(datab
             "rekursiya",
             "preobrazovanie-zapisey-chisel",
             "number-sequences",
+            "graph-analysis",
             "string-processing",
             "divisors-and-masks",
             "array-processing",
@@ -618,6 +619,7 @@ def test_topic_summary_matches_published_lessons_and_excludes_hidden_tasks(datab
                         "rekursiya",
                         "preobrazovanie-zapisey-chisel",
                         "number-sequences",
+                        "graph-analysis",
                         "string-processing",
                         "divisors-and-masks",
                         "array-processing",

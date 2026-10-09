@@ -105,7 +105,7 @@ describe("subtopic levels and self-checks (Change 171)", () => {
       />,
     );
     expect(screen.getByText(/Подтема 6 из 6/u).textContent).toBe(
-      "Подтема 6 из 6 · дополнительный уровень",
+      "Подтема 6 из 6 · дополнительный урок",
     );
     const pager = screen.getByRole("navigation", {
       name: "Соседние страницы темы",
@@ -127,7 +127,7 @@ describe("subtopic levels and self-checks (Change 171)", () => {
     expect(
       within(
         screen.getByRole("navigation", { name: "Соседние страницы темы" }),
-      ).getByText("Дальше → · дополнительный уровень"),
+      ).getByText("Дальше → · дополнительный урок"),
     ).toBeTruthy();
   });
 
@@ -181,7 +181,7 @@ describe("subtopic levels and self-checks (Change 171)", () => {
 
   it("keeps the practice page's pager pointing back to the advanced subtopic", () => {
     render(<TopicPracticePage lesson={lesson} tasks={tasks} />);
-    expect(screen.getByText("← Назад · дополнительный уровень")).toBeTruthy();
+    expect(screen.getByText("← Назад · дополнительный урок")).toBeTruthy();
   });
 });
 
@@ -211,13 +211,14 @@ describe("lesson tree levels", () => {
     const captions = container.querySelectorAll('[aria-hidden="true"]');
     expect(
       [...captions].filter(
-        (node) => node.textContent === "Дополнительный уровень",
+        (node) =>
+          node.textContent === "Дополнительные уроки · для\u00a0продвинутых",
       ),
     ).toHaveLength(1);
     const advanced = screen.getByRole("link", {
       name: /Вид числа по количеству делителей/u,
     });
-    expect(advanced.textContent).toContain(", дополнительный уровень");
+    expect(advanced.textContent).toContain(", дополнительный урок");
     expect(
       screen.getByRole("link", { name: /Маски чисел/u }).textContent,
     ).not.toContain("дополнительный");

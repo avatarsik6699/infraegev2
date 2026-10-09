@@ -51,7 +51,9 @@ export const SubtopicNavigation: React.FC<SubtopicNavigationTypes.Props> = (
                 advanced && item.subtopics[index - 1]?.level !== "advanced";
               return {
                 id: subtopic.slug,
-                groupLabel: opensGroup ? "Дополнительный уровень" : undefined,
+                groupLabel: opensGroup
+                  ? "Дополнительные уроки · для\u00a0продвинутых"
+                  : undefined,
                 note: advanced ? advancedLevelLabel : undefined,
                 marker: done ? (
                   <Check size={14} strokeWidth={2.5} />

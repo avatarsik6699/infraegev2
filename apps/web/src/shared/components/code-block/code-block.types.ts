@@ -3,6 +3,11 @@ export namespace CodeBlockTypes {
     code: string;
     language: "python" | "text";
     label: string;
+    /**
+     * Имя файла, чьи строки показаны (`23.txt`): стоит в шапке вместо
+     * «Python», чтобы данные не читались как код (Change 172).
+     */
+    fileName?: string;
     /** Нумерация строк, как в редакторе; по умолчанию включена. */
     showLineNumbers?: boolean;
     className?: string;

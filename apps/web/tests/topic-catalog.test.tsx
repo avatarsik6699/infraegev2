@@ -108,6 +108,10 @@ const summary = {
       ],
     },
     {
+      id: "graph-analysis",
+      tasks: [{ id: "task-23-1-02", solution_revision: 1 }],
+    },
+    {
       id: "string-processing",
       tasks: Array.from({ length: 8 }, (_, index) => ({
         id: `task-24-${String(index + 1).padStart(2, "0")}`,
@@ -175,13 +179,13 @@ describe("TopicCatalogPage", () => {
     expect(cards).toHaveLength(25);
     expect(
       container.querySelectorAll('[data-topic-status="published"]'),
-    ).toHaveLength(7);
+    ).toHaveLength(8);
     expect(
       container.querySelectorAll('[data-topic-status="planned"]'),
-    ).toHaveLength(18);
+    ).toHaveLength(17);
     expect(
       container.querySelectorAll('[data-topic-status="published"] a'),
-    ).toHaveLength(7);
+    ).toHaveLength(8);
     expect(
       container.querySelectorAll('[data-topic-status="planned"] a'),
     ).toHaveLength(0);
@@ -221,7 +225,7 @@ describe("TopicCatalogPage", () => {
         .getByRole("link", { name: "Анализ данных: кластеризация" })
         .getAttribute("href"),
     ).toBe("/ege/27-analiz-dannyh-i-klasterizatsiya");
-    expect(screen.getAllByText("Скоро")).toHaveLength(18);
+    expect(screen.getAllByText("Скоро")).toHaveLength(17);
     await screen.findByText("Решено 0 из 2");
   });
 });
@@ -230,14 +234,14 @@ it("combines live search and status filters, clears input and resets empty resul
   const view = renderCatalog();
   await screen.findByText("Решено 0 из 2");
   fireEvent.click(screen.getByRole("button", { name: "Не начаты" }));
-  expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(7);
+  expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(8);
   fireEvent.change(screen.getByRole("searchbox"), {
-    target: { value: "РЕКУРС" },
+    target: { value: "РЕКУРСИВ" },
   });
   expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(1);
   fireEvent.click(screen.getByRole("button", { name: "Очистить поиск" }));
   expect((screen.getByRole("searchbox") as HTMLInputElement).value).toBe("");
-  expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(7);
+  expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(8);
   fireEvent.change(screen.getByRole("searchbox"), {
     target: { value: "unknown" },
   });
@@ -297,7 +301,7 @@ it("counts only current topic answers, keeps completed in All and excludes stale
   ).not.toBeNull();
   expect(screen.getByText("Решено задач в темах: 2")).not.toBeNull();
   fireEvent.click(screen.getByRole("button", { name: "Не начаты" }));
-  expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(5);
+  expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(6);
   expect(
     screen.getByRole("link", { name: "Числовые последовательности" }),
   ).not.toBeNull();
@@ -374,7 +378,7 @@ it("treats missing summaries as unavailable and recovers corrupt storage", async
   renderCatalog();
   await screen.findByText("Прогресс временно недоступен");
   expect(screen.getByText("Решено 0 из 2")).not.toBeNull();
-  expect(screen.getAllByText("Прогресс недоступен")).toHaveLength(6);
+  expect(screen.getAllByText("Прогресс недоступен")).toHaveLength(7);
 });
 
 it("does not flash zero progress while summary is pending", async () => {
@@ -391,7 +395,7 @@ it("does not flash zero progress while summary is pending", async () => {
     }),
   );
   renderCatalog();
-  expect(screen.getAllByText("Прогресс загружается")).toHaveLength(7);
+  expect(screen.getAllByText("Прогресс загружается")).toHaveLength(8);
   expect(screen.queryByRole("progressbar")).toBeNull();
   await waitFor(() => expect(resolve).toBeTypeOf("function"));
   resolve(Response.json(summary));

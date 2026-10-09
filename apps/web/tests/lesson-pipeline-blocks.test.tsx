@@ -368,7 +368,7 @@ describe("TopicCheatSheet", () => {
           {
             number: 6,
             title: "Вид числа",
-            level: "дополнительный уровень",
+            level: "дополнительный урок",
             rows: [],
           },
         ]}
@@ -386,7 +386,7 @@ describe("TopicCheatSheet", () => {
     );
     expect(container.querySelectorAll("ol li")).toHaveLength(5);
     expect(screen.getByRole("link", { name: "Перебор" })).toBeTruthy();
-    expect(container.textContent).toContain("дополнительный уровень");
+    expect(container.textContent).toContain("дополнительный урок");
     expect(container.querySelectorAll("figcaption")).toHaveLength(1);
   });
 });

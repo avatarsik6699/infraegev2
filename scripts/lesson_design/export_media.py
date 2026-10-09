@@ -11,7 +11,8 @@ rebuilt with ``figures.py``:
 - a diagram becomes one SVG string;
 - a step-through figure (``figures.STEPPERS``) becomes one SVG string per frame;
 - an interactive widget (``figures.WIDGETS``) is rendered by its own site
-  component and exports nothing.
+  component; one that draws from generated data (``figures.WIDGET_DATA``,
+  topic 23 ``path_builder``) exports that data as its own manifest entry.
 
 The strings go into a typed manifest with sizes, alt text and frame captions,
 ``apps/web/src/entities/lesson/content/<id>.media.ts``; the site renders them
@@ -23,6 +24,7 @@ when the manifest is stale.
 
 import argparse
 import ast
+import hashlib
 import json
 import re
 import subprocess
@@ -32,7 +34,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[1]
 sys.path.insert(0, str(HERE))
-from figures import FIGURES, STEPPERS, WIDGETS  # noqa: E402
+from figures import FIGURES, STEPPERS, WIDGET_DATA, WIDGETS  # noqa: E402
 
 FIGURE_CALL = re.compile(r"%%(\w+)\((.*?)\)%%")
 SVG_NS = 'xmlns="http://www.w3.org/2000/svg"'
@@ -68,14 +70,22 @@ def prop(indent: int, key: str, value: str) -> str:
     return line if len(line) <= 80 else f"{pad}{key}:\n{pad}  {value},"
 
 
-def media_key(name: str, args: list) -> str:
-    """Stable TS identifier: camelCase builder name plus its positional args."""
+def media_key(name: str, args: list, kwargs: dict | None = None) -> str:
+    """Stable TS identifier: camelCase builder name plus its positional args.
+    A call whose arguments are only lists (a graph: its edge list) gets a short
+    hash of them and of the keyword arguments instead, so that two pictures of
+    one graph (a path, values under the vertices) never share a key."""
     head, *rest = name.split("_")
     camel = head + "".join(part.title() for part in rest)
     parts = [
         re.sub(r"[^0-9A-Za-z]", "", str(a)) for a in args if not isinstance(a, list)
     ]
-    return camel + "_".join(p for p in parts if p)
+    key = camel + "_".join(p for p in parts if p)
+    if key == camel and args:
+        data = json.dumps([args, kwargs or {}], ensure_ascii=False, sort_keys=True)
+        digest = hashlib.sha1(data.encode()).hexdigest()
+        key += "_" + digest[:6]
+    return key
 
 
 def ts_string(text: str) -> str:
@@ -113,17 +123,22 @@ def build(topic: Path) -> tuple[str, Path]:
     for source in sources:
         for match in FIGURE_CALL.finditer(source.read_text()):
             name, args_src = match.group(1), match.group(2)
-            if name in WIDGETS:
+            if name in WIDGETS and name not in WIDGET_DATA:
                 continue
             if name not in FIGURES:
                 raise SystemExit(f"Unknown figure {name!r}; add it to figures.FIGURES")
             args, kwargs = parse_call(name, args_src)
-            key = media_key(name, args)
+            key = media_key(name, args, kwargs)
             if key in seen:
                 raise SystemExit(
                     f"Two figures share the key {key!r}; vary their arguments"
                 )
             seen.add(key)
+            if name in WIDGET_DATA:
+                # a sandbox drawn by its site component from generated data
+                data = WIDGET_DATA[name](*args, **kwargs)
+                entries.append(f"  {key}: " + json.dumps(data, ensure_ascii=False) + ",")
+                continue
             if name in STEPPERS:
                 frames = []
                 for svg, caption in STEPPERS[name](*args, **kwargs):

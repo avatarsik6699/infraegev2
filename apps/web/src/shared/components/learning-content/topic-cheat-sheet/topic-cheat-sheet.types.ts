@@ -6,7 +6,7 @@ export namespace TopicCheatSheetTypes {
     number: number;
     /** Title, usually a link to the subtopic page. */
     title: React.ReactNode;
-    /** Text mark for an advanced subtopic, e.g. «дополнительный уровень». */
+    /** Text mark for an advanced subtopic, e.g. «дополнительный урок». */
     level?: string;
     rows: readonly Row[];
   };

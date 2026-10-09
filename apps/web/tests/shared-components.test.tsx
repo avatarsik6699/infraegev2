@@ -317,8 +317,17 @@ describe("CodeBlock", () => {
     expect(
       result.container.querySelectorAll('[data-token="func"]').length,
     ).toBeGreaterThan(0);
+    // Numbers are drawn by CSS from data-line: not page text, not copied (F6).
+    expect(
+      [...result.container.querySelectorAll("[data-line]")].map((node) =>
+        node.getAttribute("data-line"),
+      ),
+    ).toEqual(["1", "2"]);
     expect(result.container.querySelector("code")?.textContent).toContain(
-      "2    return",
+      "    return",
+    );
+    expect(result.container.querySelector("code")?.textContent).not.toMatch(
+      /\d\s+return/u,
     );
   });
 
@@ -328,6 +337,20 @@ describe("CodeBlock", () => {
     );
 
     expect(result.container.querySelector("[data-token]")).toBeNull();
+  });
+
+  it("names the data file in the header instead of the language", () => {
+    const result = render(
+      <CodeBlock
+        code="40 7 1.3"
+        label="Строки файла file.txt"
+        language="text"
+        fileName="file.txt"
+      />,
+    );
+
+    expect(result.container.textContent).toContain("file.txt");
+    expect(result.container.textContent).not.toContain("Python");
   });
 
   it("collapses nine or more lines after hydration and exposes an accessible toggle", () => {

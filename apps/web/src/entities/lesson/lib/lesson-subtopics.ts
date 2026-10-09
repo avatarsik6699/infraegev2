@@ -10,7 +10,7 @@ export type ResolvedSubtopic = LessonContent.Subtopic & {
 };
 
 /** Text mark of an advanced subtopic in the tree, the subtopic head and the pager. */
-export const advancedLevelLabel = "дополнительный уровень";
+export const advancedLevelLabel = "дополнительный урок";
 
 export function lessonSubtopics(
   lesson: LessonContent.Definition,

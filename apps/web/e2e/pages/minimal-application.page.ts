@@ -8,6 +8,7 @@ const firstTopicSubtopicByRouteSlug: Readonly<Record<string, string>> = {
   "16-rekursiya": "osnovy",
   "5-preobrazovanie-zapisey-chisel": "model-algoritma",
   "17-chislovye-posledovatelnosti": "chisla-iz-fayla",
+  "23-analiz-grafov": "graf-i-put",
   "24-obrabotka-simvolnyh-strok": "stroka-i-pozicii",
   "25-deliteli-i-maski": "perebor-i-proverki",
   "26-sortirovka-i-otbor": "dannye",

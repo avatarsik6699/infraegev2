@@ -24,9 +24,13 @@ export const CodeBlockContent: React.FC<CodeBlockContentProps> = (props) => {
         {lines.map((line, lineIndex) => (
           <span className={styles.line} key={lineIndex}>
             {props.showLineNumbers ? (
-              <span className={styles.lineNumber} aria-hidden="true">
-                {lineIndex + 1}
-              </span>
+              // Decorative and barely visible (Change 171): the number is drawn
+              // by CSS from data-line, so it is neither page text nor copied.
+              <span
+                className={styles.lineNumber}
+                aria-hidden="true"
+                data-line={lineIndex + 1}
+              />
             ) : null}
             <span className={styles.lineContent}>
               {line.length === 0

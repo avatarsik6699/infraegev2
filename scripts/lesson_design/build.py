@@ -220,11 +220,17 @@ def render(md_text: str) -> tuple[str, list[tuple[str, str]]]:
                 '<div class="out"><span class="out-l">Вывод</span>'
                 f'<span class="out-v">{html.escape(shown)}</span></div>'
             )
+        if "." in lang:
+            # lines of a data file: the fence names the file (```23.txt)
+            return (
+                f'<pre class="code text" data-file="{html.escape(lang)}">'
+                f"<code>{html.escape(code)}</code></pre>"
+            )
         inner = highlight_python(code) if lang == "python" else html.escape(code)
         return f'<pre class="code {lang}"><code>{inner}</code></pre>'
 
     body = re.sub(
-        r'<pre><code class="language-(\w+)">(.*?)</code></pre>',
+        r'<pre><code class="language-([\w.+-]+)">(.*?)</code></pre>',
         code_block,
         body,
         flags=re.S,
@@ -288,9 +294,19 @@ def page(title, kicker, lead, nav, body, outline, before="", after="") -> str:
 """
 
 
-def nav_html(topic: dict, current: str) -> str:
+def stand_topics(stand: Path) -> list[int]:
+    """Numbers of all topics of the stand, from their topic.json files."""
+    return sorted(
+        json.loads(p.read_text(encoding="utf-8"))["number"]
+        for p in stand.glob("topic-*/topic.json")
+    )
+
+
+def nav_html(topic: dict, current: str, numbers: list[int]) -> str:
+    """Stand bar: overview, every topic, extra pages of this topic, patterns."""
     n = topic["number"]
-    items = [("index.html", "Обзор"), (f"{n}-1.html", f"Тема {n}")]
+    items = [("index.html", "Обзор")]
+    items += [(f"{k}-1.html", f"Тема {k}") for k in numbers]
     items += [(f"{n}-{p['name']}.html", p["nav"]) for p in topic.get("pages", [])]
     items.append(("patterns.html", "Паттерны"))
     out = []
@@ -307,6 +323,7 @@ def build_topic(topic_dir: Path) -> None:
     topic = json.loads((topic_dir / "topic.json").read_text(encoding="utf-8"))
     n = topic["number"]
     stand = topic_dir.parent
+    numbers = stand_topics(stand)
     lessons = topic["subtopics"] + [dict(topic["final"], level="")]
     outs = [f"{n}-{i}.html" for i in range(1, len(lessons) + 1)]
     core_count = len(topic["subtopics"])
@@ -349,7 +366,7 @@ def build_topic(topic_dir: Path) -> None:
             lesson["title"],
             kicker,
             lesson["lead"],
-            nav_html(topic, out),
+            nav_html(topic, out, numbers),
             body,
             outline,
             subnav(out),
@@ -365,7 +382,7 @@ def build_topic(topic_dir: Path) -> None:
             extra["title"],
             extra["kicker"],
             extra["lead"],
-            nav_html(topic, out),
+            nav_html(topic, out, numbers),
             body,
             [],
         )
@@ -377,7 +394,7 @@ def build_topic(topic_dir: Path) -> None:
         "Учебные паттерны",
         "Обязательный каталог приёмов подачи",
         "Скелет урока и приёмы, по которым строится каждая тема.",
-        nav_html(topic, "patterns.html"),
+        nav_html(topic, "patterns.html", numbers),
         body,
         [],
     )

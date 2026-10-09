@@ -50,6 +50,10 @@ const summary = {
       })),
     },
     {
+      id: "graph-analysis",
+      tasks: [{ id: "task-23-1-02", solution_revision: 1 }],
+    },
+    {
       id: "string-processing",
       tasks: Array.from({ length: 8 }, (_, index) => ({
         id: `task-24-${String(index + 1).padStart(2, "0")}`,
@@ -175,7 +179,7 @@ export class TopicCatalogPage {
     await expect(this.page.getByRole("searchbox")).toHaveValue("");
     await expect(this.page.locator("[data-topic-card]")).toHaveCount(25);
     await this.page.getByRole("button", { name: "Не начаты" }).click();
-    await expect(this.page.locator("[data-topic-card]")).toHaveCount(6);
+    await expect(this.page.locator("[data-topic-card]")).toHaveCount(7);
     await expect(
       this.page.getByRole("link", {
         name: "Преобразование записей чисел",
@@ -312,7 +316,7 @@ export class TopicCatalogPage {
     await this.expectIllustrations();
     await expect(
       this.page.locator('[data-topic-status="published"] h2 a'),
-    ).toHaveCount(7);
+    ).toHaveCount(8);
     await expect(
       this.page.locator('[data-topic-status="planned"] a'),
     ).toHaveCount(0);

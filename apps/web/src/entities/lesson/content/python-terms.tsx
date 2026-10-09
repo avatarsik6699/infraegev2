@@ -223,6 +223,69 @@ export const pythonTerms = {
     lessonSlug: "chasti-programmy",
     lessonTitle: "Разбиваем программу на понятные части",
   },
+  split: {
+    title: "Разбить строку: split",
+    body: (
+      <>
+        <Notation>{"s.split()"}</Notation> делит строку на части по пробелам,
+        табуляциям и переводам строки и возвращает список строк:{" "}
+        <Notation>{'"40  7 1.3".split()'}</Notation> даёт{" "}
+        <Notation>{"['40', '7', '1.3']"}</Notation>.
+      </>
+    ),
+    lessonSlug: "stroki",
+    lessonTitle: "Строки: символы, индексы и срезы",
+  },
+  num: {
+    title: "Целые и дробные числа: int и float",
+    body: (
+      <>
+        <Notation>{"int"}</Notation> — целые числа,{" "}
+        <Notation>{"float"}</Notation> — дробные: <Notation>{"2.5"}</Notation>.{" "}
+        <Notation>{'int("40")'}</Notation> превращает строку из цифр в число, а{" "}
+        <Notation>{"int(7.9)"}</Notation> отбрасывает дробную часть и даёт 7.
+      </>
+    ),
+    lessonSlug: "chisla-i-vyrazheniya",
+    lessonTitle: "Числа, типы и арифметические выражения",
+  },
+  dict: {
+    title: "Словарь",
+    body: (
+      <>
+        Словарь хранит пары «ключ — значение»: <Notation>{"{}"}</Notation> —
+        пустой словарь, <Notation>{"d[40] = 2"}</Notation> записывает значение
+        для ключа 40, <Notation>{"d[40]"}</Notation> читает его,{" "}
+        <Notation>{"40 in d"}</Notation> проверяет, есть ли такой ключ.
+      </>
+    ),
+    lessonSlug: "slovari",
+    lessonTitle: "Словари: связываем ключи и значения",
+  },
+  file: {
+    title: "Чтение файла: with open",
+    body: (
+      <>
+        <Notation>{'with open("23.txt") as f:'}</Notation> открывает файл, а{" "}
+        <Notation>{"for line in f:"}</Notation> по очереди даёт его строки.
+        После блока файл закрывается сам.
+      </>
+    ),
+    lessonSlug: "fayly",
+    lessonTitle: "Читаем данные из файла",
+  },
+  rec: {
+    title: "Рекурсия",
+    body: (
+      <>
+        Рекурсивная функция вызывает саму себя для более простого случая. Ей
+        нужен базовый случай, где ответ известен сразу, иначе вызовы не
+        закончатся.
+      </>
+    ),
+    lessonSlug: "rekursiya",
+    lessonTitle: "Рекурсия: базовый случай, шаг и трассировка",
+  },
 } as const satisfies Record<string, PythonTermEntry>;
 
 export type PythonTermKey = keyof typeof pythonTerms;

@@ -42,6 +42,7 @@ export const CodeBlock: React.FC<CodeBlockTypes.Props> = (props) => {
         copyStatus={copyStatus}
         enhanced={enhanced}
         isPython={isPython}
+        fileName={props.fileName}
         onCopy={handleCopy}
       />
       <CodeBlockContent
@@ -76,15 +77,16 @@ type CodeBlockHeaderProps = {
   copyStatus: string;
   enhanced: boolean;
   isPython: boolean;
+  fileName?: string;
   onCopy: () => Promise<void>;
 };
 
 const CodeBlockHeader: React.FC<CodeBlockHeaderProps> = (props) => (
   <div className={styles.header}>
     <div className={styles.meta} aria-hidden="true">
-      {props.isPython ? (
+      {props.isPython || props.fileName ? (
         <Typography.Text component="span" className={styles.language}>
-          Python
+          {props.fileName ?? "Python"}
         </Typography.Text>
       ) : null}
     </div>

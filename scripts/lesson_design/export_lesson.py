@@ -22,11 +22,13 @@ Markdown table → ``LessonTable`` (``---:`` columns are numeric); code fences �
 ``%%builder()%%`` call → ``LessonDiagram``; a bare stepper call →
 ``LessonStepper``; ``%%mask_try(mask, number)%%`` → ``MaskSandbox``;
 ``%%remainder_widget(n, d)%%`` → ``RemainderExplorer``; ``%%cheatsheet(file)%%`` →
-``TopicCheatSheet``. A python fence followed by an ``output`` fence becomes one
+``TopicCheatSheet``; ``%%path_builder(edges, …)%%`` → ``PathBuilder`` with the
+graph data of the manifest. A link to a topic data file (``topic-NN/files/…``)
+becomes the file name: on the site the file is attached to the bank task. A python fence followed by an ``output`` fence becomes one
 ``CodeBlock`` with ``output``; ``{{key|label}}`` → ``PythonTerm`` (registry
 ``python-terms.tsx`` is regenerated from ``terms.py``); ``:::pick`` /
 ``:::pick-tokens`` → ``VariantPicker`` (with ``TokenSet`` values). The task block of each
-subtopic («Чтобы проверить понимание…», «Задачи основного уровня…») is not
+subtopic («Чтобы проверить понимание…», «Задачи основных подтем…») is not
 theory: it is written to ``--tasks`` with its answers, to become bank tasks
 (checkable) or the subtopic self-check (``объясни, почему``).
 """
@@ -43,7 +45,7 @@ from export_media import media_key, parse_call, prettier  # noqa: E402
 from figures import REMAINDER_CAPTION, STAND, STEPPERS, WIDGETS, mask_try  # noqa: E402
 from terms import TERMS  # noqa: E402
 
-TASK_BLOCK = ("**Чтобы проверить понимание", "**Задачи основного уровня")
+TASK_BLOCK = ("**Чтобы проверить понимание", "**Задачи основных подтем")
 FIGURE_CALL = re.compile(r"^%%(\w+)\((.*?)\)%%$")
 INLINE = re.compile(
     r"\{\{(?P<term_key>\w+)\|(?P<term_label>.+?)\}\}"
@@ -52,6 +54,7 @@ INLINE = re.compile(
     r"|`(?P<code>[^`]+)`"
     r"|<code>(?P<html_code>.+?)</code>"
     r"|\[(?P<link_text>[^\]]+)\]\((?P<link_url>https?://[^)\s]+)\)"
+    r"|\[(?P<file_text>[^\]]+)\]\((?P<file_url>topic-\d+/files/[^)\s]+)\)"
 )
 LEVELS = {"основной": "core", "дополнительный": "advanced"}
 
@@ -80,6 +83,10 @@ def inline(text: str) -> str:
             out.append(f"<sup>{jsx_text(m.group('sup'))}</sup>")
         elif m.group("bold") is not None:
             out.append(f"<strong>{inline(m.group('bold'))}</strong>")
+        elif m.group("file_text") is not None:
+            # a data file of the topic: on the site it is attached to the bank
+            # task, so the lesson names it without a stand link
+            out.append(f"<Notation>{{{js(m.group('file_text'))}}}</Notation>")
         elif m.group("code") is not None or m.group("html_code") is not None:
             code = m.group("code") or m.group("html_code")
             out.append(f"<Notation>{{{js(code)}}}</Notation>")
@@ -192,7 +199,7 @@ class Converter:
     def figure_call(
         self, name: str, args_src: str, caption: str | None, context: str
     ) -> str:
-        args, _ = parse_call(name, args_src)
+        args, kwargs = parse_call(name, args_src)
         if name == "mask_try":
             self.imports.add("MaskSandbox")
             mask, number = (*args, *mask_try.__defaults__[len(args) :])
@@ -205,16 +212,27 @@ class Converter:
             )
         if name == "cheatsheet":
             return self.cheatsheet(args[0])
+        if name == "path_builder":
+            self.imports.add("PathBuilder")
+            key = media_key(name, args, kwargs)
+            if key not in self.media_known:
+                raise SystemExit(f"{key}: not in the media manifest; run export_media.py first")
+            return (
+                f"<PathBuilder {{...lessonMedia.{key}}} "
+                f"caption={{<>{inline(kwargs.get('caption', ''))}</>}} />"
+            )
         if name in WIDGETS:
             raise SystemExit(f"widget {name!r} has no site mapping")
-        key = media_key(name, args)
+        key = media_key(name, args, kwargs)
         if key not in self.media_known:
             raise SystemExit(
                 f"{key}: not in the media manifest; run export_media.py first"
             )
         if name in STEPPERS:
             self.imports.add("LessonStepper")
-            label = self.site.get("stepperLabels", {}).get(key) or plain(context) or "Пошаговая схема"
+            labels = self.site.get("stepperLabels", {})
+            # by media key, or by builder name when the key carries a hash
+            label = labels.get(key) or labels.get(name) or plain(context) or "Пошаговая схема"
             return f"<LessonStepper {{...lessonMedia.{key}}} label={{{js(label)}}} />"
         self.imports.add("LessonDiagram")
         return f"<LessonDiagram {{...lessonMedia.{key}}} caption={{<>{inline(caption or '')}</>}} />"
@@ -249,13 +267,17 @@ class Converter:
                     j = m
                 self.imports.add("CodeBlock")
                 language = "python" if lang == "python" else "text"
+                # lines of a data file: the fence names the file (```23.txt)
+                file_name = lang if "." in lang else None
                 first = next((ln.strip() for ln in code.splitlines() if ln.strip()), "")
                 label = (
                     short_label(last_para, f"Код на Python: {first[:60]}")
                     if language == "python"
-                    else "Результат"
+                    else f"Строки файла {file_name}" if file_name else "Результат"
                 )
                 extra = f" output={{{js(output)}}}" if output is not None else ""
+                if file_name:
+                    extra += f" fileName={js(file_name)}"
                 out.append(
                     f"<CodeBlock code={{{js(code)}}} label={{{js(label)}}} language={js(language)}{extra} />"
                 )
@@ -531,7 +553,12 @@ def main() -> int:
         "});",
         "",
     ]
-    options.out.write_text(prettier("\n".join(header), options.out))
+    text = "\n".join(header)
+    if "<ExternalLink" not in text:  # topic 23 has no outside links
+        text = text.replace(
+            'import { ExternalLink } from "~/shared/components/external-link";\n', ""
+        )
+    options.out.write_text(prettier(text, options.out))
     write_terms(options.out.parent / "python-terms.tsx")
     options.tasks.write_text(json.dumps(inventory, ensure_ascii=False, indent=2) + "\n")
     print(f"draft: {options.out}; tasks: {options.tasks}")

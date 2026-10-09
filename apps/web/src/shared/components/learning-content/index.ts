@@ -22,3 +22,10 @@ export {
   TopicCheatSheet,
   type TopicCheatSheetTypes,
 } from "./topic-cheat-sheet";
+export {
+  PathBuilder,
+  decimalSum,
+  startState,
+  statusText,
+  step,
+} from "./path-builder";

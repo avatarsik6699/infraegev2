@@ -84,7 +84,7 @@ function sourcePythonBlocks(): string[] {
     return steps
       .filter(
         (step) =>
-          !/^\s*\*\*(Чтобы проверить понимание|Задачи основного уровня)/u.test(
+          !/^\s*\*\*(Чтобы проверить понимание|Задачи основных подтем)/u.test(
             step,
           ),
       )

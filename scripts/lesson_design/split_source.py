@@ -22,6 +22,11 @@ SUB = str.maketrans("0123456789ik", "₀₁₂₃₄₅₆₇₈₉ᵢₖ")
 
 def conv(m):
     t = m
+    # weighted arrow u —w→ v (topic 23) and plain arrows,
+    # before the table below strips \right
+    t = re.sub(r"\s*\\xrightarrow\{([^{}]*)\}\s*", r" —\1→ ", t)
+    t = re.sub(r"\s*\\(?:long)?rightarrow\s*", " → ", t)
+    t = re.sub(r"\\operatorname\{([^{}]*)\}", r"\1", t)
     for a, b in [
         (r"\qquad", " "),
         (r"\quad", " "),

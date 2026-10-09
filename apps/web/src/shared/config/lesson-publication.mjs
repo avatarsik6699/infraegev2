@@ -28,6 +28,16 @@ export const numberSequencesLessonPublication = Object.freeze({
   status: "published",
 });
 
+export const graphAnalysisLessonPublication = Object.freeze({
+  id: "graph-analysis",
+  routeSlug: "23-analiz-grafov",
+  taskNumbers: Object.freeze([23]),
+  title: "Анализ графов",
+  summary:
+    "Граф из файла, кратчайший путь в ациклическом графе рекурсией с запоминанием, обязательные и запрещённые вершины.",
+  status: "published",
+});
+
 export const stringProcessingLessonPublication = Object.freeze({
   id: "string-processing",
   routeSlug: "24-obrabotka-simvolnyh-strok",
@@ -72,6 +82,7 @@ export const lessonPublications = Object.freeze([
   rekursiyaLessonPublication,
   preobrazovanieZapiseyChiselLessonPublication,
   numberSequencesLessonPublication,
+  graphAnalysisLessonPublication,
   stringProcessingLessonPublication,
   divisorsAndMasksLessonPublication,
   arrayProcessingLessonPublication,

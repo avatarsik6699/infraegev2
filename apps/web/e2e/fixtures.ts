@@ -40,6 +40,8 @@ type AppFixtures = {
   noJavaScriptNumberSequencesLessonPage: TopicLessonPage;
   stringProcessingLessonPage: TopicLessonPage;
   noJavaScriptStringProcessingLessonPage: TopicLessonPage;
+  graphAnalysisLessonPage: TopicLessonPage;
+  noJavaScriptGraphAnalysisLessonPage: TopicLessonPage;
   divisorsAndMasksLessonPage: TopicLessonPage;
   noJavaScriptDivisorsAndMasksLessonPage: TopicLessonPage;
   arrayProcessingLessonPage: TopicLessonPage;
@@ -66,6 +68,14 @@ const stringProcessingLessonConfig = {
   title: "Обработка символьных строк",
   taskNumber: 24,
   taskCount: 8,
+};
+
+const graphAnalysisLessonConfig = {
+  route: "/ege/23-analiz-grafov/luchshij-ostatok",
+  title: "Анализ графов",
+  taskNumber: 23,
+  taskCount: 25,
+  masteryTaskCount: 17,
 };
 
 const divisorsAndMasksLessonConfig = {
@@ -253,6 +263,9 @@ export const test = base.extend<AppFixtures>({
   stringProcessingLessonPage: async ({ page }, use) => {
     await use(new TopicLessonPage(page, stringProcessingLessonConfig));
   },
+  graphAnalysisLessonPage: async ({ page }, use) => {
+    await use(new TopicLessonPage(page, graphAnalysisLessonConfig));
+  },
   divisorsAndMasksLessonPage: async ({ page }, use) => {
     await use(new TopicLessonPage(page, divisorsAndMasksLessonConfig));
   },
@@ -287,6 +300,14 @@ export const test = base.extend<AppFixtures>({
       baseURL,
       use,
       stringProcessingLessonConfig,
+    );
+  },
+  noJavaScriptGraphAnalysisLessonPage: async ({ baseURL, browser }, use) => {
+    await useNoJavaScriptTopicLesson(
+      browser,
+      baseURL,
+      use,
+      graphAnalysisLessonConfig,
     );
   },
   noJavaScriptDivisorsAndMasksLessonPage: async ({ baseURL, browser }, use) => {

@@ -145,7 +145,7 @@ const definitions: readonly TopicCatalogTypes.Definition[] = [
     taskNumbers: [23],
     title: "Анализ графов",
     summary:
-      "Количество путей, ориентированные графы и поиск оптимального маршрута.",
+      "Граф из файла, кратчайший путь в ациклическом графе, обязательные и запрещённые вершины.",
   },
   {
     id: "string-processing",

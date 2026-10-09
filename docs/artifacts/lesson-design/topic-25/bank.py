@@ -32,7 +32,7 @@ REGISTRY = REPO / "apps/api/practice-registry.json"
 MATERIAL = "divisors-and-masks"
 RETIRED_MATERIAL = "integer-processing"
 RETIRED = [f"task-25-{n:02d}" for n in range(1, 9)]
-TASK_BLOCK = ("**Чтобы проверить понимание", "**Задачи основного уровня")
+TASK_BLOCK = ("**Чтобы проверить понимание", "**Задачи основных подтем")
 FILES = {
     1: "01-perebor-i-proverki.md",
     2: "02-deliteli-parami.md",

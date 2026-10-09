@@ -34,6 +34,15 @@ export const numberSequencesLessonPublication: Readonly<{
   status: "published";
 }>;
 
+export const graphAnalysisLessonPublication: Readonly<{
+  id: "graph-analysis";
+  routeSlug: "23-analiz-grafov";
+  taskNumbers: readonly [23];
+  title: "Анализ графов";
+  summary: "Граф из файла, кратчайший путь в ациклическом графе рекурсией с запоминанием, обязательные и запрещённые вершины.";
+  status: "published";
+}>;
+
 export const stringProcessingLessonPublication: Readonly<{
   id: "string-processing";
   routeSlug: "24-obrabotka-simvolnyh-strok";

@@ -4,8 +4,8 @@ Usage: python3 -I scripts/lesson_design/frequency_report.py docs/artifacts/lesso
 
 The topic folder must contain ``tasks.py`` with: TOPIC_NUMBER, SOURCE (task
 URL template), FETCHED (date), COLLECTIONS, SHORT, TASKS, YEAR_BOUNDS, CORE,
-RECENT, NAMES, TREND, CORE_RULE, ADVANCED_RULE and the functions ``year`` and
-``level``. See docs/artifacts/lesson-design/topic-25/tasks.py for the format.
+RECENT, NAMES, TREND, CORE_RULE, ADVANCED_RULE, optional NOTES and the
+functions ``year`` and ``level``. See docs/artifacts/lesson-design/topic-25/tasks.py for the format.
 Never edit frequency.md by hand: change tasks.py and run this script.
 """
 
@@ -34,6 +34,7 @@ def report(t) -> str:
     counts = ", ".join(f"{t.SHORT[k]} — {sum(x[1] == k for x in tasks)}" for k in t.COLLECTIONS)
     dated_all_core = all(t.level(x[4]) == "основной" for x in dated)
     last_year = max(t.year(x[0]) for x in tasks)
+    period = str(last_year) if t.RECENT == last_year else f"{t.RECENT}–{last_year}"
     lines = [
         f"# Частота типов задания {t.TOPIC_NUMBER}",
         "",
@@ -49,17 +50,22 @@ def report(t) -> str:
         "",
         f"- Всего задач: **{total}**; {counts}.",
         f"- Решаются приёмами основного уровня: **{core} из {total} ({core / total:.0%})**.",
-        f"- Задачи с реальных экзаменов (ЕГЭ {min((t.year(x[0]) for x in dated), default=0)}–"
-        f"{last_year}): {len(dated)}, все "
-        f"{'основного' if dated_all_core else 'НЕ ТОЛЬКО основного'} уровня.",
-        f"- Задачи {t.RECENT}–{last_year} годов (по оценке): {len(recent)}, из них "
+        (
+            f"- Задачи с реальных экзаменов (ЕГЭ {min(t.year(x[0]) for x in dated)}–"
+            f"{last_year}): {len(dated)}, все "
+            f"{'основного' if dated_all_core else 'НЕ ТОЛЬКО основного'} уровня."
+            if dated
+            else "- Задач с реальных экзаменов в подборке пока нет."
+        ),
+        f"- Задачи {period} {'года' if t.RECENT == last_year else 'годов'} (по оценке): "
+        f"{len(recent)}, из них "
         f"{sum(t.level(x[4]) == 'основной' for x in recent)} основного уровня.",
         "",
         "## Какие приёмы нужны",
         "",
         "Одна задача обычно требует нескольких приёмов, поэтому сумма больше числа задач.",
         "",
-        f"| Приём | Задач | Доля | Из них {t.RECENT}–{last_year} |",
+        f"| Приём | Задач | Доля | Из них {period} |",
         "|---|---:|---:|---:|",
     ]
     for key, name in t.NAMES.items():
@@ -76,6 +82,12 @@ def report(t) -> str:
         t.CORE_RULE,
         t.ADVANCED_RULE.format(advanced=levels["дополнительный"], total=total),
         "",
+    ]
+    # Optional free text of the topic: how levels were chosen when the
+    # collection alone is not enough (topic 23: a single task).
+    if getattr(t, "NOTES", ""):
+        lines += [t.NOTES, ""]
+    lines += [
         "## Все задачи",
         "",
         "| № | Подборка | Источник | Год | Что требуется | Приёмы | Уровень |",
