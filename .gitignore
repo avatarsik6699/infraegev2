@@ -36,10 +36,9 @@ content/lesson-design/[0-9]*-*.html
 content/lesson-design/patterns.html
 content/lesson-design/py-*.html
 content/lesson-design/xl-*.html
-# Excel course: the practice workbook and the evaluator conformance cases are
-# generated (workbook.py, verify_sheets.py --cases)
+# Excel course: the practice workbook is generated (workbook.py); the bank keeps
+# its copy by sha256
 content/lesson-design/course-excel/files/*.xlsx
-content/lesson-design/course-excel/sheet_cases.json
 
 # Machine-local agent state.
 .claude/settings.local.json

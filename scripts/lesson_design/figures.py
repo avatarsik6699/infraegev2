@@ -3632,8 +3632,9 @@ PAGE_SCRIPTS = {
 }
 
 # The Excel course (Change 176): its figures and sandboxes live in excel_figures.py.
-from excel_figures import EXCEL_FIGURES, EXCEL_SCRIPTS, EXCEL_WIDGETS  # noqa: E402
+from excel_figures import EXCEL_FIGURES, EXCEL_SCRIPTS, EXCEL_STEPPERS, EXCEL_WIDGETS  # noqa: E402
 
 FIGURES.update(EXCEL_FIGURES)
 WIDGETS.update(EXCEL_WIDGETS)
+STEPPERS.update(EXCEL_STEPPERS)
 PAGE_SCRIPTS.update(EXCEL_SCRIPTS)

@@ -11,7 +11,7 @@ export const Route = createFileRoute("/courses/")({
     pageHead.create({
       title: "Мини-курсы — infraege",
       description:
-        "Самостоятельные мини-курсы по информатике: полный курс Python и будущие программы по Excel, алгоритмам и задачам повышенной сложности.",
+        "Самостоятельные мини-курсы по информатике: курсы Python и Excel и будущие программы по алгоритмам и задачам повышенной сложности.",
       path: "/courses",
     }),
   component: CourseCatalogRoute,

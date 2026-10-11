@@ -30,7 +30,9 @@ export const CourseOverviewActions: React.FC<Props> = (props) => (
   </div>
 );
 
-export const CourseOverviewFacts: React.FC = () => (
+export const CourseOverviewFacts: React.FC<{ requirements: string }> = (
+  props,
+) => (
   <div className={styles.facts}>
     <section className={styles.fact} aria-labelledby="course-requirements">
       <div className={styles.factHead}>
@@ -43,10 +45,7 @@ export const CourseOverviewFacts: React.FC = () => (
         </Typography.Title>
         <Laptop className={styles.factIcon} aria-hidden="true" />
       </div>
-      <Typography.Text tone="muted">
-        Компьютер с Python. Онлайн-среда — запасной вариант. Можно начать без
-        опыта.
-      </Typography.Text>
+      <Typography.Text tone="muted">{props.requirements}</Typography.Text>
     </section>
     <section className={styles.fact} aria-labelledby="course-format">
       <div className={styles.factHead}>

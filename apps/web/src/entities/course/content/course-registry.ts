@@ -1,10 +1,14 @@
 import type { CourseTypes } from "../course.types";
+import { excelCourse } from "./excel-course";
+import { excelCourseLessons } from "./excel-course-lessons";
 import { pythonCourse } from "./python-course";
 import { pythonCourseLessons } from "./python-course-lessons";
 
-const courses: readonly CourseTypes.Definition[] = [pythonCourse];
-const courseLessons: readonly CourseTypes.LessonDefinition[] =
-  pythonCourseLessons;
+const courses: readonly CourseTypes.Definition[] = [pythonCourse, excelCourse];
+const courseLessons: readonly CourseTypes.LessonDefinition[] = [
+  ...pythonCourseLessons,
+  ...excelCourseLessons,
+];
 
 export function findCourseByRouteSlug(
   routeSlug: string,

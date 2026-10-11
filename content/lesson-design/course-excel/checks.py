@@ -12,6 +12,7 @@ no check at all.
 
 import datetime
 import math
+import re
 import sys
 from decimal import ROUND_HALF_UP, Decimal
 from fractions import Fraction
@@ -24,13 +25,15 @@ checked: set[str] = set()
 
 def text(prefix: str) -> str:
     (path,) = D.glob(f"{prefix}-*.md")
-    return path.read_text(encoding="utf-8")
+    # inline code and keys are markup, not text: `=B2*C2`, [[Ctrl+C]]
+    return re.sub(r"`|\[\[|\]\]", "", path.read_text(encoding="utf-8"))
 
 
 def has(prefix: str, *fragments: str) -> None:
     checked.add(prefix)
     body = text(prefix)
     for fragment in fragments:
+        fragment = re.sub(r"`|\[\[|\]\]", "", fragment)
         if fragment not in body:
             failures.append(f"{prefix}: {fragment!r} not in the lesson")
 

@@ -1,16 +1,17 @@
-"""Export the approved Python course stand to the site (Change 175, stage 9).
+"""Export an approved course stand to the site (Changes 175, 177; stage 9).
 
 Usage (from the repository root):
 
     python3 -I scripts/lesson_design/export_course.py content/lesson-design/course-python
-    python3 -I scripts/lesson_design/export_course.py content/lesson-design/course-python --check
+    python3 -I scripts/lesson_design/export_course.py content/lesson-design/course-excel --check
 
 Writes into ``apps/web/src/entities/course/content/``:
 
-- ``course-publication.mjs`` and ``.d.mts`` — the course, its modules and
-  lessons from ``course.json`` (``site``: summary, audience, outcomes; per
-  module ``summary``; per lesson ``site.id``, ``routeSlug``, ``outcome``);
-- ``python-course-lessons.ts`` — the ordered lesson definitions;
+- ``course-publication.mjs`` and ``.d.mts`` — every course of the stand
+  (``content/lesson-design/course-*/course.json``, Python first), its modules
+  and lessons (``site``: summary, audience, outcomes; per module ``summary``;
+  per lesson ``site.id``, ``routeSlug``, ``outcome``), whichever course is exported;
+- ``<course>-course-lessons.ts`` — the ordered lesson definitions of the course;
 - ``<id>.lesson.tsx`` per lesson and ``<id>.media.ts`` when the lesson has
   diagrams, step-through figures or runnable code blocks.
 
@@ -24,8 +25,11 @@ other tasks → the lesson's ``checkpoint``. Code: ```` ```python [run] [name.py
 ``CodeBlock`` (output lines as in a terminal; line numbers, as on the stand,
 only in a runnable block, whose notes name the lines) or ``CodeRunner`` with the steps
 recorded by ``tracer.py``; a data fence (```` ```numbers.txt ````) → a
-``CodeBlock`` named by the file; ``range_try`` → ``RangeSandbox``. Everything
-else as in ``export_lesson.py``. Generated files are never edited by hand:
+``CodeBlock`` named by the file; ``range_try`` → ``RangeSandbox``. The Excel
+course: a ```` ```sheet ```` block → ``SheetBlock`` with its data in the media
+manifest (``sheetblock.site_data``; the site recomputes the values), ```` ```excel
+[шаблон] ```` → ``FormulaBlock`` (``B2: =…`` names the cell), ``fill_try`` →
+``FillSandbox``. Everything else as in ``export_lesson.py``. Generated files are never edited by hand:
 change the stand and re-export. ``--check`` fails on stale output.
 """
 
@@ -39,9 +43,13 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[1]
 sys.path.insert(0, str(HERE))
+from excel_figures import fill_try  # noqa: E402
 from export_lesson import Converter, js, plain, split_steps, task_inventory  # noqa: E402
 from export_media import figure_entries, manifest_text, parse_call, prettier  # noqa: E402
 from runblock import IO, file_name, record  # noqa: E402
+from sheetblock import BLOCK as SHEET_BLOCK  # noqa: E402
+from sheetblock import parse_block, site_data  # noqa: E402
+from terms import EXCEL_TERMS  # noqa: E402
 
 OUT = REPO / "apps/web/src/entities/course/content"
 TASK_BLOCK = "**Чтобы проверить понимание"
@@ -55,6 +63,7 @@ CODE_GROUP = re.compile(
 IO_BLOCK = re.compile(r"```(output|console|error|input)\n(.*?)```", re.S)
 LEVELS = {"основной": "core", "дополнительный": "advanced"}
 HEAD = {"shell": "команда", "text": "текст"}
+STAND = REPO / "content/lesson-design"
 
 
 def camel(text: str) -> str:
@@ -68,11 +77,25 @@ class CourseConverter(Converter):
     def __init__(self, media_known: set[str]):
         super().__init__(media_known, {}, [])
         self.codes: list[str] = []
-        self.runs: list[str] = []  # media entries of runnable blocks
+        self.runs: list[str] = []  # media entries of runnable blocks and sheets
+        self.sheet_labels: dict[str, str] = {}
 
     def figure_call(self, name: str, args_src: str, caption, context: str) -> str:
         if name == "code":
             return self.codes[int(args_src)].replace("__LABEL__", js(code_label(context)))
+        if name == "sheet":
+            key = f"sheet{args_src}"
+            self.imports.add("SheetBlock")
+            return f"<SheetBlock {{...lessonMedia.{key}}} label={{{js(self.sheet_labels[key])}}} />"
+        if name == "fill_try":
+            args, _ = parse_call(name, args_src)
+            defaults = fill_try.__defaults__ or ()
+            formula, origin, target = (*args, *defaults[len(args) :])[:3]
+            self.imports.add("FillSandbox")
+            return (
+                f"<FillSandbox defaultFormula={{{js(formula)}}} origin={js(origin)} "
+                f"defaultTarget={js(target)} />"
+            )
         if name == "range_try":
             args, kwargs = parse_call(name, args_src)
             mode, start, stop, step, text = (*args, None, None, None, None, None)[:5]
@@ -129,6 +152,19 @@ class CourseConverter(Converter):
                     f'<CodeBlock code={{{js(code)}}} label={{__LABEL__}} language="python" '
                     f"fileName={js(shown)} showLineNumbers={{false}}{extra} />"
                 )
+        elif lang.startswith("excel"):
+            # a formula of the Excel course: the sheet's formula bar (F9), not code
+            lines = []
+            for raw in code.split("\n"):
+                at = re.match(r"^([A-Z]{1,3}\d+):\s*(?==)", raw)
+                cell = {"cell": at.group(1)} if at else {}
+                lines.append({**cell, "formula": raw[at.end() :] if at else raw})
+            self.imports.add("FormulaBlock")
+            label = "Шаблон формулы" if lang == "excel-template" else "Формула"
+            jsx = (
+                f"<FormulaBlock lines={{{json.dumps(lines, ensure_ascii=False)}}} "
+                f"label={js(label)} />"
+            )
         else:
             self.imports.add("CodeBlock")
             head = lang if "." in lang else HEAD.get(lang, str(lang))
@@ -141,7 +177,18 @@ class CourseConverter(Converter):
         return f"%%code({len(self.codes) - 1})%%\n"
 
     def prepare(self, md: str) -> str:
+        md = md.replace("```excel шаблон\n", "```excel-template\n")
+        md = SHEET_BLOCK.sub(self.sheet, md)
         return CODE_GROUP.sub(self.code_group, md)
+
+    def sheet(self, m: re.Match) -> str:
+        """A live sheet → its data in the media manifest and a placeholder line."""
+        block = parse_block(m.group(1), m.group(2))
+        key = f"sheet{len(self.sheet_labels) + 1}"
+        self.sheet_labels[key] = f"Лист «{block.name}»"
+        self.runs.append(f"  {key}: " + json.dumps(site_data(block), ensure_ascii=False) + ",")
+        self.media_known.add(key)
+        return f"%%sheet({key[5:]})%%\n"
 
 
 def code_label(context: str) -> str:
@@ -218,6 +265,7 @@ def lesson_source(course_dir: Path, lesson: dict, bank: dict[str, str]) -> tuple
         "// Change the stand or course.json and re-export, not this file.",
         'import { CodeBlock } from "~/shared/components/code-block";',
         'import { ExternalLink } from "~/shared/components/external-link";',
+        'import { KeyCombo } from "~/shared/components/key-combo";',
         'import { Notation } from "~/shared/components/notation";',
         'import { Typography } from "~/shared/components/typography";',
     ]
@@ -254,6 +302,7 @@ def lesson_source(course_dir: Path, lesson: dict, bank: dict[str, str]) -> tuple
     for name, module in (
         ("CodeBlock", "code-block"),
         ("ExternalLink", "external-link"),
+        ("KeyCombo", "key-combo"),
         ("Notation", "notation"),
         ("Typography", "typography"),
     ):
@@ -265,15 +314,57 @@ def lesson_source(course_dir: Path, lesson: dict, bank: dict[str, str]) -> tuple
     return text, manifest
 
 
-def publication_source(course: dict) -> tuple[str, str]:
-    site = course["site"]
-    lessons = [(m, lesson) for m in course["modules"] for lesson in m["lessons"]]
+def stand_courses() -> list[dict]:
+    """Every course of the stand, Python first (the order of the publication)."""
+    courses = [
+        json.loads(p.read_text(encoding="utf-8")) for p in STAND.glob("course-*/course.json")
+    ]
+    return sorted(courses, key=lambda c: (c["id"] != "python", c["id"]))
+
+
+def publication_source(courses: list[dict]) -> tuple[str, str]:
     out = [
         "// Generated by scripts/lesson_design/export_course.py from",
-        "// content/lesson-design/course-python/course.json: change it there and re-export.",
+        "// content/lesson-design/course-*/course.json: change it there and re-export.",
         "",
     ]
-    names = []
+    names: list[str] = []
+    course_names: list[str] = []
+    for course in courses:
+        course_names.append(course_publication(course, out, names))
+    out.append(f"export const coursePublications = Object.freeze([{', '.join(course_names)}]);")
+    out.append(
+        "export const courseLessonPublications = Object.freeze([\n"
+        + "".join(f"  {n},\n" for n in names)
+        + "]);\n"
+    )
+    out.append(FINDERS)
+    declarations = (
+        "// Generated by scripts/lesson_design/export_course.py.\n"
+        'import type { LessonContent } from "~/entities/lesson";\n'
+        'import type { CourseTypes } from "../course.types";\n\n'
+        'export type CoursePublication = Omit<CourseTypes.Definition, "modules"> & {\n'
+        "  modules: readonly CourseTypes.Module[];\n};\n\n"
+        "export type CourseLessonPublication = {\n  id: string;\n  routeSlug: string;\n"
+        "  title: string;\n  summary: string;\n  status: LessonContent.Status;\n"
+        '  masteryThreshold?: number;\n  level?: "core" | "advanced";\n};\n\n'
+        + "".join(f"export const {n}: Readonly<CourseLessonPublication>;\n" for n in names)
+        + "".join(f"export const {n}: Readonly<CoursePublication>;\n" for n in course_names)
+        + "export const coursePublications: readonly CoursePublication[];\n"
+        "export const courseLessonPublications: readonly CourseLessonPublication[];\n"
+        "export function findCoursePublicationByRouteSlug(\n  routeSlug: string,\n"
+        "): CoursePublication | undefined;\n"
+        "export function findCourseLessonPublicationByRouteSlugs(\n"
+        "  courseRouteSlug: string,\n  lessonRouteSlug: string,\n"
+        "): CourseLessonPublication | undefined;\n"
+    )
+    return "\n".join(out), declarations
+
+
+def course_publication(course: dict, out: list[str], names: list[str]) -> str:
+    """Append the lessons and the course of one ``course.json``; return its name."""
+    site = course["site"]
+    lessons = [(m, lesson) for m in course["modules"] for lesson in m["lessons"]]
     for _, lesson in lessons:
         s = lesson["site"]
         name = f"{camel(s['id'])}LessonPublication"
@@ -304,23 +395,23 @@ def publication_source(course: dict) -> tuple[str, str]:
             f"      lessonPlan: Object.freeze([\n{plan},\n      ]),\n    }})"
         )
     outcomes = ",\n".join(f"    {js(o)}" for o in site["learningOutcomes"])
+    name = f"{camel(course['id'])}CoursePublication"
     out.append(
-        "export const pythonCoursePublication = Object.freeze({\n"
-        f'  id: "python",\n  routeSlug: "python",\n  title: {js(course["title"])},\n'
+        f"export const {name} = Object.freeze({{\n"
+        f"  id: {js(course['id'])},\n  routeSlug: {js(course['id'])},\n"
+        f"  title: {js(course['title'])},\n"
+        f"  shortTitle: {js(site['shortTitle'])},\n"
         f"  summary: {js(site['summary'])},\n  audience: {js(site['audience'])},\n"
+        f"  requirements: {js(site['requirements'])},\n"
         f"  learningOutcomes: Object.freeze([\n{outcomes},\n  ]),\n"
         '  status: "published",\n  stage: "complete",\n'
         f"  modules: Object.freeze([\n{','.join(chr(10) + mod for mod in modules).lstrip(chr(10))},\n  ]),\n"
         "});\n"
     )
-    out.append("export const coursePublications = Object.freeze([pythonCoursePublication]);")
-    out.append(
-        "export const courseLessonPublications = Object.freeze([\n"
-        + "".join(f"  {n},\n" for n in names)
-        + "]);\n"
-    )
-    out.append(
-        """export const findCoursePublicationByRouteSlug = (routeSlug) =>
+    return name
+
+
+FINDERS = """export const findCoursePublicationByRouteSlug = (routeSlug) =>
   coursePublications.find((course) => course.routeSlug === routeSlug);
 
 export const findCourseLessonPublicationByRouteSlugs = (
@@ -340,27 +431,6 @@ export const findCourseLessonPublicationByRouteSlugs = (
   );
 };
 """
-    )
-    declarations = (
-        "// Generated by scripts/lesson_design/export_course.py.\n"
-        'import type { LessonContent } from "~/entities/lesson";\n'
-        'import type { CourseTypes } from "../course.types";\n\n'
-        'export type CoursePublication = Omit<CourseTypes.Definition, "modules"> & {\n'
-        "  modules: readonly CourseTypes.Module[];\n};\n\n"
-        "export type CourseLessonPublication = {\n  id: string;\n  routeSlug: string;\n"
-        "  title: string;\n  summary: string;\n  status: LessonContent.Status;\n"
-        '  masteryThreshold?: number;\n  level?: "core" | "advanced";\n};\n\n'
-        + "".join(f"export const {n}: Readonly<CourseLessonPublication>;\n" for n in names)
-        + "export const pythonCoursePublication: Readonly<CoursePublication>;\n"
-        "export const coursePublications: readonly CoursePublication[];\n"
-        "export const courseLessonPublications: readonly CourseLessonPublication[];\n"
-        "export function findCoursePublicationByRouteSlug(\n  routeSlug: string,\n"
-        "): CoursePublication | undefined;\n"
-        "export function findCourseLessonPublicationByRouteSlugs(\n"
-        "  courseRouteSlug: string,\n  lessonRouteSlug: string,\n"
-        "): CourseLessonPublication | undefined;\n"
-    )
-    return "\n".join(out), declarations
 
 
 def lessons_index(course: dict) -> str:
@@ -370,7 +440,7 @@ def lessons_index(course: dict) -> str:
         "// Generated by scripts/lesson_design/export_course.py: the course lessons in order.\n"
         'import type { CourseTypes } from "../course.types";\n'
         + imports
-        + "\nexport const pythonCourseLessons: readonly CourseTypes.LessonDefinition[] = [\n"
+        + f"\nexport const {camel(course['id'])}CourseLessons: readonly CourseTypes.LessonDefinition[] = [\n"
         + "".join(f"  {camel(i)}Lesson,\n" for i in ids)
         + "];\n"
     )
@@ -383,12 +453,17 @@ def main() -> int:
     options = parser.parse_args()
     course_dir = options.course
     course = json.loads((course_dir / "course.json").read_text(encoding="utf-8"))
+    if course["id"] == "excel":
+        slugs = {lesson["site"]["routeSlug"] for m in course["modules"] for lesson in m["lessons"]}
+        unknown = {k: slug for k, (_, slug) in EXCEL_TERMS.items() if slug not in slugs}
+        if unknown:
+            raise SystemExit(f"terms.EXCEL_TERMS name lessons the course lacks: {unknown}")
     tasks = json.loads((course_dir / "tasks.json").read_text(encoding="utf-8"))
     files: dict[Path, str] = {}
-    publication, declarations = publication_source(course)
+    publication, declarations = publication_source(stand_courses())
     files[OUT / "course-publication.mjs"] = publication
     files[OUT / "course-publication.d.mts"] = declarations
-    files[OUT / "python-course-lessons.ts"] = lessons_index(course)
+    files[OUT / f"{course['id']}-course-lessons.ts"] = lessons_index(course)
     for m in course["modules"]:
         for lesson in m["lessons"]:
             lesson_id = lesson["site"]["id"]

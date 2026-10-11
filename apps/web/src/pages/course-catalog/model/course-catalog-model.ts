@@ -66,10 +66,19 @@ const lessonCount = (count: number): string => {
   return `${String(count)} ${noun}`;
 };
 
+/** «из 27 уроков», «из 41 урока»: the genitive after «из». */
+const ofLessons = (count: number): string =>
+  `из ${String(count)} ${count % 10 === 1 && count % 100 !== 11 ? "урока" : "уроков"}`;
+
 const progressText = (progress: CourseCatalogPageTypes.Progress): string => {
   if (progress.status === "unavailable") return "Прогресс временно недоступен";
   if (progress.status === "loading") return "Прогресс загружается";
-  return `Освоено ${String(progress.mastered)} из ${lessonCount(progress.total)}`;
+  return `Освоено ${String(progress.mastered)} ${ofLessons(progress.total)}`;
 };
 
-export const courseCatalogModel = { calculate, lessonCount, progressText };
+export const courseCatalogModel = {
+  calculate,
+  lessonCount,
+  ofLessons,
+  progressText,
+};

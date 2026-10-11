@@ -3,6 +3,7 @@
 Usage:
     python3 -I scripts/lesson_design/verify_sheets.py content/lesson-design/course-excel
     python3 -I scripts/lesson_design/verify_sheets.py content/lesson-design/course-excel --cases
+    python3 -I scripts/lesson_design/verify_sheets.py content/lesson-design/course-excel --cases --check
 
 Checks every lesson page of the course (``course.json``) and its extra pages:
 
@@ -21,9 +22,11 @@ Checks every lesson page of the course (``course.json``) and its extra pages:
 - every step of a worked formula (``%%formula_steps(cells, steps, notes)%%``)
   shows the same value as the formula itself (excel_figures.check_steps).
 
-``--cases`` also writes ``sheet_cases.json`` next to ``course.json``: every block
-of the course as it stands and with a few cells retyped, with the display of
-every cell. ``sheet_conformance.mjs`` runs the browser evaluator on it.
+``--cases`` also writes the conformance cases ``apps/web/tests/fixtures/sheet-cases.json``
+(one case per line, committed): every block of the course as it stands and with a
+few cells retyped, with the display of every cell. ``sheet_conformance.mjs`` runs
+the stand's browser evaluator on it, Vitest runs the site's evaluator on the same
+file. ``--cases --check`` fails when the file is stale.
 Exit code 1 on any problem.
 """
 
@@ -42,6 +45,7 @@ from sheet_eval import FUNCTIONS, FormulaError, function_names, parse  # noqa: E
 from sheetblock import BLOCK, SheetBlockError, blocks_in, cases_for, check_block  # noqa: E402
 
 MAX_LINE = 64
+CASES = HERE.parents[1] / "apps/web/tests/fixtures/sheet-cases.json"
 EXCEL = re.compile(r"^```excel( шаблон)?\n(.*?)^```", re.M | re.S)
 INLINE = re.compile(r"(?<!`)`(=[^`\n]+)`(?!`)")
 STEPS = re.compile(r"%%formula_steps\((.*?)\)%%")
@@ -134,6 +138,8 @@ def check_page(path: Path) -> tuple[list[str], int, int]:
     for m in INLINE.finditer(text):
         if not re.search(r"[\wА-Яа-яЁё]", m.group(1)[1:]):
             continue  # operators named in the text (`= <> <`), not a formula
+        if is_template(m.group(1)) or "…" in m.group(1):
+            continue  # words or «…» in place of arguments: a template
         formulas += 1
         err = check_formula(m.group(1))
         if err:
@@ -189,9 +195,19 @@ def main() -> None:
     print(f"{total_sheets} sheets, {total_formulas} formulas; {len(problems)} problems")
     if "--cases" in sys.argv and not problems:
         cases = cases_for([*texts, stress_page()])
-        out = course_dir / "sheet_cases.json"
-        out.write_text(json.dumps(cases, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
-        print(f"{out}: {len(cases)} cases")
+        lines = ",\n".join(json.dumps(c, ensure_ascii=False, sort_keys=True) for c in cases)
+        text = f"[\n{lines}\n]\n"
+        name = CASES.relative_to(HERE.parents[1])
+        if "--check" in sys.argv:
+            if not CASES.exists() or CASES.read_text(encoding="utf-8") != text:
+                problems.append(f"{name} is stale: run with --cases")
+                print(problems[-1])
+            else:
+                print(f"{name}: {len(cases)} cases, up to date")
+        else:
+            CASES.parent.mkdir(parents=True, exist_ok=True)
+            CASES.write_text(text, encoding="utf-8")
+            print(f"{name}: {len(cases)} cases")
     sys.exit(1 if problems else 0)
 
 

@@ -1,7 +1,7 @@
 // The browser evaluator of the live sheet against the reference (sheet_eval.py).
 //
 //   python3 -I scripts/lesson_design/verify_sheets.py content/lesson-design/course-excel --cases
-//   node scripts/lesson_design/sheet_conformance.mjs content/lesson-design/course-excel/sheet_cases.json
+//   node scripts/lesson_design/sheet_conformance.mjs apps/web/tests/fixtures/sheet-cases.json
 //
 // Every case is a sheet block with some cells retyped; every cell must show
 // exactly what sheet_eval.py + sheetblock.formatted show. Exit code 1 on a mismatch.
@@ -10,7 +10,9 @@ import { Book, formatted } from "./sheet_eval.js";
 
 const path = process.argv[2];
 if (!path) {
-  console.error("usage: node sheet_conformance.mjs sheet_cases.json");
+  console.error(
+    "usage: node sheet_conformance.mjs apps/web/tests/fixtures/sheet-cases.json",
+  );
   process.exit(2);
 }
 const cases = JSON.parse(readFileSync(path, "utf-8"));

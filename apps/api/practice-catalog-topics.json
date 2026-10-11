@@ -139,5 +139,60 @@
       "python-advanced-features",
       "python-testing"
     ]
+  },
+  {
+    "id": "excel-sheet",
+    "label": "Excel · Лист и данные",
+    "group": "Мини-курсы",
+    "exam_number": null,
+    "material_ids": ["excel-sheet", "excel-input-files", "excel-cell-values"]
+  },
+  {
+    "id": "excel-formulas",
+    "label": "Excel · Формулы",
+    "group": "Мини-курсы",
+    "exam_number": null,
+    "material_ids": [
+      "excel-first-formulas",
+      "excel-references",
+      "excel-range-functions"
+    ]
+  },
+  {
+    "id": "excel-conditions",
+    "label": "Excel · Условия",
+    "group": "Мини-курсы",
+    "exam_number": null,
+    "material_ids": [
+      "excel-conditions",
+      "excel-numbers",
+      "excel-conditional-count",
+      "excel-text-dates"
+    ]
+  },
+  {
+    "id": "excel-tables",
+    "label": "Excel · Таблицы и связи",
+    "group": "Мини-курсы",
+    "exam_number": null,
+    "material_ids": [
+      "excel-sort-filter",
+      "excel-lookup",
+      "excel-neighbour-cells"
+    ]
+  },
+  {
+    "id": "excel-final",
+    "label": "Excel · Итог",
+    "group": "Мини-курсы",
+    "exam_number": null,
+    "material_ids": ["excel-from-task-to-table"]
+  },
+  {
+    "id": "excel-advanced",
+    "label": "Excel · Дополнительно",
+    "group": "Мини-курсы",
+    "exam_number": null,
+    "material_ids": ["excel-tables-pivots"]
   }
 ]

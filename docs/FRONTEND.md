@@ -161,6 +161,27 @@ Lesson media:
   Without scripting and on SSR it is the ordinary code block with output.
 - `RangeSandbox` redraws `range(start, stop, step)` or `s[start:stop:step]` as the learner types,
   with Python's rules (`range-values.ts`); without scripting it draws the default example.
+- `SheetBlock` (Change 177) is the Excel course's live sheet, the stand's mini-sheet: column
+  letters and row numbers, a formula bar with references coloured as their frames, frames of the
+  cells the selected formula reads drawn on the grid lines (a 2px band over the line plus 1px
+  right/below, so neighbouring frames share one band; the selection sits on the same lines; the
+  tint is the cell's own background), sheet tabs that mark a sheet the formula reads, editable
+  source cells (Enter/Tab/F2/Esc, typing replaces the value, «Вернуть исходные»), `aria-live`
+  for the shown value and the number of recalculated formulas. The data comes from the media
+  manifest (kind `sheet`); values are computed by `shared/lib/sheet-eval`, a port of the stand's
+  evaluator that must match `tests/fixtures/sheet-cases.json` cell by cell. Frame colours are the
+  `--color-sheet-ref-1…5` tokens. SSR and no-JS show the values, every sheet with its name and
+  the formula list; the grid scrolls inside the block on a narrow screen.
+- `FillSandbox` copies a formula from its cell to the one the learner names with the shift rule of
+  `sheet-eval` (`shiftFormula`), marks the moved parts of every address and says when an address
+  leaves the sheet (`#ССЫЛКА!`); without scripting it shows the lesson's worked example.
+- `KeyCombo` (shared) draws a keyboard shortcut in lesson text as keycaps joined by «+» that never
+  break across lines; lessons mark it `[[Ctrl+C]]` (export → `<KeyCombo keys={…} />`).
+- `FormulaBlock` is a formula of the Excel course (F9), drawn as the live sheet's formula bar and
+  not as a code block: an optional cell address (lesson `B2: =…`), a muted italic «fx», the
+  formula in the data face with function names in medium weight and template slots (lower-case
+  words, «…») in italics; hairline frame on white, one quiet copy button that copies the formulas
+  without addresses. Without scripting the copy button is absent.
 - Self-check uses the native `details` fallback so answers stay closed until revealed, before
   enhancement and without JavaScript. General Accordion keeps its explicit opt-in fallback
   contract.

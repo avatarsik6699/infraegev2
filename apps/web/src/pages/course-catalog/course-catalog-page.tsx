@@ -23,7 +23,7 @@ export const CourseCatalogPage: React.FC<CourseCatalogPageTypes.Props> = (
   let summaryProgress = courseCatalogModel.progressText(catalog.summary);
   if (!session.account) {
     if (isGuest)
-      summaryProgress = `Освоено 0 из ${String(catalog.total)} уроков`;
+      summaryProgress = `Освоено 0 ${courseCatalogModel.ofLessons(catalog.total)}`;
     else if (session.status === "loading") summaryProgress = "Проверяем вход";
     else summaryProgress = "Не удалось проверить вход";
   }

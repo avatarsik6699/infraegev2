@@ -1,4 +1,7 @@
-import { courseLessonPublications } from "~/entities/course";
+import {
+  courseLessonPublications,
+  coursePublications,
+} from "~/entities/course";
 import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import { renderToString } from "react-dom/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -77,12 +80,22 @@ vi.mock(
   },
 );
 
-// The real lesson ids: the last three are additional and stay out of mastery.
-const lessons = courseLessonPublications.map((lesson, index) => ({
-  id: lesson.id,
-  tasks: [{ id: `task-${String(index)}`, solutionRevision: 2 }],
-}));
-const catalog = (summaries = { python: lessons }) => (
+// The real lesson ids of each published course: the additional lessons (the
+// last three of Python, the last one of Excel) stay out of mastery.
+const summaryOf = (courseId: string) =>
+  courseLessonPublications
+    .filter((lesson) =>
+      coursePublications
+        .find((course) => course.id === courseId)
+        ?.modules.some((m) => m.lessonPlan.some((p) => p.id === lesson.id)),
+    )
+    .map((lesson, index) => ({
+      id: lesson.id,
+      tasks: [{ id: `${courseId}-task-${String(index)}`, solutionRevision: 2 }],
+    }));
+const lessons = summaryOf("python");
+const excelLessons = summaryOf("excel");
+const catalog = (summaries = { python: lessons, excel: excelLessons }) => (
   <LessonProgressProvider accountId="member">
     <CourseCatalogPage summaries={summaries} />
   </LessonProgressProvider>
@@ -114,14 +127,16 @@ describe("mini-course catalog", () => {
         solution_revision: 2,
       }));
       const view = render(catalog());
+      // the header totals both published courses: 27 + 14 core lessons
       await waitFor(() =>
         expect(
           screen.getAllByText(`Освоено ${String(count)} из 27 уроков`),
-        ).toHaveLength(2),
+        ).toHaveLength(1),
       );
       expect(
-        screen.getByRole("progressbar").getAttribute("aria-valuenow"),
-      ).toBe(String(count));
+        screen.getAllByText(`Освоено ${String(count)} из 41 урока`),
+      ).toHaveLength(1);
+      expect(screen.getAllByText("Освоено 0 из 14 уроков")).toHaveLength(1);
       expect(
         view.container.querySelectorAll("[data-course-card]"),
       ).toHaveLength(4);
@@ -135,10 +150,12 @@ describe("mini-course catalog", () => {
             '[data-course-status="planned"] button',
           ),
         ].map((button) => [button.textContent, button.disabled]),
-      ).toEqual(Array(3).fill(["Скоро", true]));
+      ).toEqual(Array(2).fill(["Скоро", true]));
       expect(
-        screen.getByRole("link", { name: "Открыть курс" }).getAttribute("href"),
-      ).toBe("/courses/python");
+        screen
+          .getAllByRole("link", { name: "Открыть курс" })
+          .map((link) => link.getAttribute("href")),
+      ).toEqual(["/courses/python", "/courses/excel"]);
       expect(screen.queryByRole("searchbox")).toBeNull();
       expect(
         view.container.querySelectorAll(
@@ -149,10 +166,10 @@ describe("mini-course catalog", () => {
         view.container.querySelectorAll(
           '[data-course-status="planned"] [data-illustration-placeholder]',
         ),
-      ).toHaveLength(3);
+      ).toHaveLength(2);
       expect(
         view.container.querySelector("[data-course-summary]")?.textContent,
-      ).toContain("Всего направлений: 4 · Доступно: 1 · Уроков: 27");
+      ).toContain("Всего направлений: 4 · Доступно: 2 · Уроков: 41");
     },
   );
 
@@ -160,14 +177,14 @@ describe("mini-course catalog", () => {
     progressFixture.results = [
       {
         context_kind: "course_lesson",
-        context_id: "lesson-0",
-        task_id: "task-0",
+        context_id: lessons[0]!.id,
+        task_id: lessons[0]!.tasks[0]!.id,
         solution_revision: 1,
       },
     ];
     render(catalog());
     await waitFor(() =>
-      expect(screen.getAllByText("Освоено 0 из 27 уроков")).toHaveLength(2),
+      expect(screen.getAllByText("Освоено 0 из 27 уроков")).toHaveLength(1),
     );
   });
 
@@ -183,7 +200,7 @@ describe("mini-course catalog", () => {
   it("preserves navigation and totals on missing summaries without a false zero", async () => {
     render(
       <LessonProgressProvider accountId="member">
-        <CourseCatalogPage summaries={{ python: null }} />
+        <CourseCatalogPage summaries={{ python: null, excel: null }} />
       </LessonProgressProvider>,
     );
     await waitFor(() =>
@@ -193,11 +210,13 @@ describe("mini-course catalog", () => {
           .filter(
             (status) => status.textContent === "Прогресс временно недоступен",
           ),
-      ).toHaveLength(2),
+      ).toHaveLength(3),
     );
     expect(screen.queryByRole("progressbar")).toBeNull();
     expect(screen.queryByText("Освоено 0 из 27 уроков")).toBeNull();
-    expect(screen.getByRole("link", { name: "Открыть курс" })).not.toBeNull();
+    expect(screen.getAllByRole("link", { name: "Открыть курс" })).toHaveLength(
+      2,
+    );
   });
 });
 
@@ -225,7 +244,7 @@ it("never reports partial totals as complete when another published summary is m
   const result = courseCatalogModel.calculate(
     entries,
     { python: [lessons[0]!] },
-    { [lessons[0]!.id]: { solvedTaskIds: ["task-0"] } },
+    { [lessons[0]!.id]: { solvedTaskIds: [lessons[0]!.tasks[0]!.id] } },
     true,
   );
   expect(result.total).toBe(2);

@@ -100,6 +100,111 @@
       "course_id": null
     },
     {
+      "id": "excel-cell-values",
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
+      "kind": "course",
+      "status": "published",
+      "course_id": "excel"
+    },
+    {
+      "id": "excel-conditional-count",
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6", "s7", "s8"],
+      "kind": "course",
+      "status": "published",
+      "course_id": "excel"
+    },
+    {
+      "id": "excel-conditions",
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
+      "kind": "course",
+      "status": "published",
+      "course_id": "excel"
+    },
+    {
+      "id": "excel-first-formulas",
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
+      "kind": "course",
+      "status": "published",
+      "course_id": "excel"
+    },
+    {
+      "id": "excel-from-task-to-table",
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6", "s7"],
+      "kind": "course",
+      "status": "published",
+      "course_id": "excel"
+    },
+    {
+      "id": "excel-input-files",
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
+      "kind": "course",
+      "status": "published",
+      "course_id": "excel"
+    },
+    {
+      "id": "excel-lookup",
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
+      "kind": "course",
+      "status": "published",
+      "course_id": "excel"
+    },
+    {
+      "id": "excel-neighbour-cells",
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6"],
+      "kind": "course",
+      "status": "published",
+      "course_id": "excel"
+    },
+    {
+      "id": "excel-numbers",
+      "sections": ["intro", "s1", "s2", "s3", "s4"],
+      "kind": "course",
+      "status": "published",
+      "course_id": "excel"
+    },
+    {
+      "id": "excel-range-functions",
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6"],
+      "kind": "course",
+      "status": "published",
+      "course_id": "excel"
+    },
+    {
+      "id": "excel-references",
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6"],
+      "kind": "course",
+      "status": "published",
+      "course_id": "excel"
+    },
+    {
+      "id": "excel-sheet",
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
+      "kind": "course",
+      "status": "published",
+      "course_id": "excel"
+    },
+    {
+      "id": "excel-sort-filter",
+      "sections": ["intro", "s1", "s2", "s3", "s4"],
+      "kind": "course",
+      "status": "published",
+      "course_id": "excel"
+    },
+    {
+      "id": "excel-tables-pivots",
+      "sections": ["intro", "s1", "s2", "s3", "s4"],
+      "kind": "course",
+      "status": "published",
+      "course_id": "excel"
+    },
+    {
+      "id": "excel-text-dates",
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
+      "kind": "course",
+      "status": "published",
+      "course_id": "excel"
+    },
+    {
       "id": "graph-analysis",
       "sections": [
         "graf-ideya",
@@ -482,6 +587,27 @@
         "python-classes",
         "python-advanced-features",
         "python-testing"
+      ]
+    },
+    {
+      "id": "excel",
+      "status": "published",
+      "lesson_ids": [
+        "excel-sheet",
+        "excel-input-files",
+        "excel-cell-values",
+        "excel-first-formulas",
+        "excel-references",
+        "excel-range-functions",
+        "excel-conditions",
+        "excel-numbers",
+        "excel-conditional-count",
+        "excel-text-dates",
+        "excel-sort-filter",
+        "excel-lookup",
+        "excel-neighbour-cells",
+        "excel-from-task-to-table",
+        "excel-tables-pivots"
       ]
     }
   ]

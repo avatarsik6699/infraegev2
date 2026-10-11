@@ -452,13 +452,11 @@ def _mono_marked(x, y, text, span, size, color, mark) -> str:
     )
 
 
-def formula_steps(cells: str, steps: list[str], notes: list[str]) -> str:
+def formula_frames(cells: str, steps: list[str], notes: list[str]) -> list[tuple[str, str]]:
     """How Excel computes a formula, one substitution per frame (like «Вычислить
     формулу» in Excel): references become values, then the innermost operation
     becomes its result. Each step is checked by ``sheet_eval``: it shows the same
     value as the formula itself."""
-    from figures import _stepper
-
     if len(steps) != len(notes):
         raise SystemExit("formula_steps: one note per step")
     problems = check_steps(cells, steps)
@@ -483,13 +481,17 @@ def formula_steps(cells: str, steps: list[str], notes: list[str]) -> str:
             out.append(_mono_marked(30, y + 22, step, span, 17, color, ACCENT if j == k else color))
         out.append("</svg>")
         frames.append(("".join(out), notes[k]))
-    return _stepper(frames)
+    return frames
 
 
-def ctrl_jump() -> str:
-    """Ctrl+↓ in a column with a gap: it stops at the edge of every block of data."""
+def formula_steps(cells: str, steps: list[str], notes: list[str]) -> str:
     from figures import _stepper
 
+    return _stepper(formula_frames(cells, steps, notes))
+
+
+def ctrl_jump_frames() -> list[tuple[str, str]]:
+    """Ctrl+↓ in a column with a gap: it stops at the edge of every block of data."""
     values = {
         1: "Сумма",
         2: "120",
@@ -592,7 +594,13 @@ def ctrl_jump() -> str:
         out.append("</svg>")
         frames.append(("".join(out), note))
         prev = at
-    return _stepper(frames)
+    return frames
+
+
+def ctrl_jump() -> str:
+    from figures import _stepper
+
+    return _stepper(ctrl_jump_frames())
 
 
 def csv_split(line: str = "Тетрадь;40;12,5") -> str:
@@ -813,18 +821,16 @@ def text_slots(text: str = "ABCDE") -> str:
     return "".join(out)
 
 
-def sumif_steps(
+def sumif_frames(
     check: list[str] | tuple = ("Книги", "Книги", "Еда", "Книги", "Игрушки"),
     add: list[float] | tuple = (100, 200, 50, 100, 300),
     crit: str = "Книги",
     check_col: str = "A",
     add_col: str = "D",
     first: int = 2,
-) -> str:
+) -> list[tuple[str, str]]:
     """СУММЕСЛИ row by row: test the cell of the check range, and when it passes
     add the number of the same row from the sum range."""
-    from figures import _stepper
-
     test = criterion(crit)
     last = first + len(check) - 1
     formula = (
@@ -927,7 +933,20 @@ def sumif_steps(
         None,
         f"Итог {display(total)}. Диапазоны {check_col}{first}:{check_col}{last} и {add_col}{first}:{add_col}{last} одной высоты: k-я ячейка проверки и k-я ячейка суммы — из одной строки.",
     )
-    return _stepper(frames)
+    return frames
+
+
+def sumif_steps(
+    check: list[str] | tuple = ("Книги", "Книги", "Еда", "Книги", "Игрушки"),
+    add: list[float] | tuple = (100, 200, 50, 100, 300),
+    crit: str = "Книги",
+    check_col: str = "A",
+    add_col: str = "D",
+    first: int = 2,
+) -> str:
+    from figures import _stepper
+
+    return _stepper(sumif_frames(check, add, crit, check_col, add_col, first))
 
 
 GOODS = [
@@ -938,11 +957,9 @@ GOODS = [
 ]
 
 
-def vlookup_steps(key: str = "103", col: int = 3) -> str:
+def vlookup_frames(key: str = "103", col: int = 3) -> list[tuple[str, str]]:
     """ВПР(key; Товары!$A$2:$D$5; col; 0): down the first column of the range to
     the key, then across the found row to the column with number ``col``."""
-    from figures import _stepper
-
     formula = f"=ВПР({key};Товары!$A$2:$D$5;{col};0)"
     cw, rh, L, T = 96, 30, 64, 92
     h = T + len(GOODS) * rh + 20
@@ -1049,7 +1066,13 @@ def vlookup_steps(key: str = "103", col: int = 3) -> str:
             f"В найденной строке ВПР берёт {col}-й столбец диапазона — {col_letters(col)}{found + 2}: {GOODS[found][col - 1]}. Четвёртый аргумент 0 требует точного совпадения ключа.",
         )
     )
-    return _stepper(frames)
+    return frames
+
+
+def vlookup_steps(key: str = "103", col: int = 3) -> str:
+    from figures import _stepper
+
+    return _stepper(vlookup_frames(key, col))
 
 
 EXCEL_FIGURES = {
@@ -1067,4 +1090,11 @@ EXCEL_FIGURES = {
     "vlookup_steps": vlookup_steps,
 }
 EXCEL_WIDGETS = {"fill_try": "FillSandbox"}
+# step-through figures: the site shows their frames (export_media → figures.STEPPERS)
+EXCEL_STEPPERS = {
+    "formula_steps": formula_frames,
+    "ctrl_jump": ctrl_jump_frames,
+    "sumif_steps": sumif_frames,
+    "vlookup_steps": vlookup_frames,
+}
 EXCEL_SCRIPTS = {"data-fill-try": FILL_TRY_JS}

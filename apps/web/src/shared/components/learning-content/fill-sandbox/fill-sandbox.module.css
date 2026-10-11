@@ -1,0 +1,65 @@
+/* Copy sandbox of the Excel course (Change 177): the stand's fill_try — the
+   copied formula in the code font, the moved parts of addresses marked in
+   link blue, as the stand marks them. */
+.root {
+  display: grid;
+  gap: var(--space-1);
+  max-width: var(--measure-reading);
+  margin-block: 0 var(--space-2);
+  padding: var(--space-2);
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-surface);
+}
+
+.inputs {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 7rem;
+  gap: var(--space-1-5);
+}
+
+@media (max-width: 30rem) {
+  .inputs {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.formulaField,
+.targetField {
+  font-family: var(--font-data);
+}
+
+.given,
+.result,
+.message,
+.note {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.55;
+}
+
+.result {
+  overflow-wrap: anywhere;
+}
+
+.resultLabel {
+  margin-right: var(--space-0-5);
+  color: var(--color-muted);
+}
+
+.code {
+  font-family: var(--font-data);
+  font-size: var(--text-base);
+  font-weight: 600;
+  font-variant-ligatures: none;
+}
+
+.moved {
+  padding: 0 1px;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--color-link) 14%, var(--color-surface));
+  color: var(--color-link);
+}
+
+.note {
+  color: var(--color-muted);
+}

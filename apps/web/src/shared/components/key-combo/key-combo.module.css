@@ -1,0 +1,27 @@
+/* Keycaps of a shortcut in lesson text: a hairline cap with a thicker bottom
+   edge on the quiet surface, the data face — the stand's [[Ctrl+C]]. */
+.root {
+  white-space: nowrap;
+}
+
+.key {
+  display: inline-block;
+  min-width: 1.6em;
+  padding: 0.1em 0.5em;
+  border: 1px solid var(--color-rule-strong);
+  border-bottom-width: 2px;
+  border-radius: var(--radius-control);
+  background: var(--color-surface-quiet);
+  font-family: var(--font-data);
+  font-size: var(--text-inline-code);
+  font-weight: 700;
+  line-height: 1.45;
+  color: var(--color-text);
+  text-align: center;
+  vertical-align: 0.05em;
+}
+
+.plus {
+  margin-inline: 0.3em;
+  color: var(--color-muted);
+}

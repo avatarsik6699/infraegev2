@@ -330,27 +330,47 @@ def grid_html(block: SheetBlock, part: SheetPart, active: bool, uid: str, index:
     )
 
 
+def formula_items(part: SheetPart) -> list[tuple[str, str, str | None]]:
+    """The formulas typed into a sheet: (address, formula, last cell of its copies)."""
+    copies: dict[tuple[int, int], list[tuple[int, int]]] = {}
+    for cell, origin in part.filled.items():
+        copies.setdefault(origin, []).append(cell)
+    items = []
+    for (r, c), text in sorted(part.inputs.items(), key=lambda kv: (kv[0][1], kv[0][0])):
+        if not text.startswith("=") or (r, c) in part.filled:
+            continue
+        until = None
+        if (r, c) in copies:
+            cells = copies[(r, c)]
+            until = address(max(r2 for r2, _ in cells), max(c2 for _, c2 in cells))
+        items.append((address(r, c), text, until))
+    return items
+
+
 def formulas_note(block: SheetBlock) -> str:
     """The formulas of the block in one line: originals and where they were copied."""
     items = []
     for part in block.sheets:
-        copies: dict[tuple[int, int], list[tuple[int, int]]] = {}
-        for cell, origin in part.filled.items():
-            copies.setdefault(origin, []).append(cell)
         prefix = f"{part.name}!" if len(block.sheets) > 1 else ""
-        for (r, c), text in sorted(part.inputs.items(), key=lambda kv: (kv[0][1], kv[0][0])):
-            if not text.startswith("=") or (r, c) in part.filled:
-                continue
-            item = f"<code>{prefix}{address(r, c)}: {html.escape(text)}</code>"
-            if (r, c) in copies:
-                cells = copies[(r, c)]
-                last_row = max(r2 for r2, _ in cells)
-                last_col = max(c2 for _, c2 in cells)
-                item += f", скопирована до {address(last_row, last_col)}"
+        for addr, text, until in formula_items(part):
+            item = f"<code>{prefix}{addr}: {html.escape(text)}</code>"
+            if until:
+                item += f", скопирована до {until}"
             items.append(item)
     if not items:
         return ""
     return f'<p class="sheet-note">Формулы: {"; ".join(items)}</p>'
+
+
+def site_data(block: SheetBlock) -> dict:
+    """The site's SheetBlock (Change 177): the stand data plus the formula list."""
+    data = block_data(block)
+    for part, sheet in zip(block.sheets, data["sheets"], strict=True):
+        sheet["formulas"] = [
+            {"cell": a, "formula": f, **({"until": u} if u else {})}
+            for a, f, u in formula_items(part)
+        ]
+    return {"kind": "sheet", **data}
 
 
 def block_html(block: SheetBlock, uid: str) -> str:

@@ -36,3 +36,6 @@ export {
   rangeValues,
   sliceIndexes,
 } from "./range-sandbox";
+export { SheetBlock, type SheetBlockProps } from "./sheet-block";
+export { FillSandbox, type FillSandboxProps } from "./fill-sandbox";
+export { FormulaBlock, type FormulaBlockProps } from "./formula-block";

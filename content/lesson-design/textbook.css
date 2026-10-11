@@ -1442,6 +1442,28 @@ pre.out-v {
   color: var(--muted);
 }
 
+/* keyboard keys of a shortcut: [[Ctrl+C]] (Excel course) */
+.keys {
+  white-space: nowrap;
+}
+kbd.key {
+  display: inline-block;
+  min-width: 1.6em;
+  padding: 0.1em 0.5em;
+  border: 1px solid var(--line-strong);
+  border-bottom-width: 2px;
+  border-radius: 6px;
+  background: var(--soft);
+  font: 700 0.84em/1.45 var(--mono);
+  color: var(--ink);
+  text-align: center;
+  vertical-align: 0.05em;
+}
+.key-plus {
+  margin: 0 0.3em;
+  color: var(--muted);
+}
+
 /* one «Вывод» field: typed input as a key-like chip, an error in red */
 kbd.typed {
   display: inline-block;
@@ -1798,8 +1820,61 @@ figure.sheet[data-ready] .sheet-grid td {
   font-size: 14.5px;
   color: var(--ink-2);
 }
-.tok-ref {
-  color: var(--num);
+/* Excel course: a formula block — the sheet's formula bar, not a code block
+   (Change 177 F9): optional cell address, «fx», the formula; functions in
+   medium weight, the slots of a template in italics, one quiet copy button. */
+figure.formula {
+  position: relative;
+  margin: 8px 0 22px;
+  padding: 4px 44px 4px 0;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--paper);
+}
+.f-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  min-height: 36px;
+  padding: 6px 0 6px 14px;
+}
+.f-row + .f-row {
+  border-top: 1px solid var(--line);
+}
+.f-cell {
+  flex: none;
+  min-width: 2.6em;
+  font: 600 13px/1 var(--mono);
+  color: var(--ink-2);
+}
+.f-cell:empty {
+  display: none;
+}
+.f-fx {
+  flex: none;
+  font: italic 500 13px/1 var(--sans);
+  color: var(--muted);
+}
+.f-text {
+  min-width: 0;
+  padding: 0;
+  background: none;
+  font: 400 16px/1.5 var(--mono);
+  font-variant-ligatures: none;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+.f-fn {
+  font-weight: 700;
+}
+.f-slot {
+  font-style: italic;
+  color: var(--ink-2);
+}
+.f-copy {
+  position: absolute;
+  top: 4px;
+  right: 4px;
 }
 /* Excel course: copy sandbox (fill_try) */
 .fill-try .ft-row {

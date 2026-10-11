@@ -129980,6 +129980,3946 @@
         }
       },
       "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-sheet-t01",
+        "title": "Сколько ячеек в B3:E7?",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сколько ячеек в `B3:E7`? Какая ячейка находится в нижнем правом углу этого диапазона?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Книга, лист, ячейка, диапазон»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "20 ячеек: строк 7 − 3 + 1 = 5, столбцов от B до E — 4. Нижняя правая — `E7`."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 0,
+            "material_id": "excel-sheet"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["20 E7"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-sheet-t02",
+        "title": "Сколько ячеек в диапазонах C2:C11 и B5:F5?",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сколько ячеек в диапазонах `C2:C11` и `B5:F5`? Какой из них — часть столбца, а какой — часть строки?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Книга, лист, ячейка, диапазон»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "10 и 5: `C2:C11` — часть столбца C, строк 11 − 2 + 1 = 10; `B5:F5` — часть строки 5, столбцы B, C, D, E, F."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 1,
+            "material_id": "excel-sheet"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["10 5"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-sheet-t03",
+        "title": "Какой столбец идёт сразу после Z?",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Какой столбец идёт сразу после Z? А после AZ?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Книга, лист, ячейка, диапазон»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "AA, затем после AZ идёт BA."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 2,
+            "material_id": "excel-sheet"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["AA BA"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-sheet-t04",
+        "title": "Углы прямоугольника — ячейки B2, D2, B4 и D4",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Углы прямоугольника — ячейки `B2`, `D2`, `B4` и `D4`. Запиши его диапазоном и посчитай ячейки."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Книга, лист, ячейка, диапазон»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "`B2:D4`, 3 × 3 = 9 ячеек."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 3,
+            "material_id": "excel-sheet"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["B2:D4 9"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-sheet-t05",
+        "title": "В диапазоне A1:C10 записаны 20 чисел и 3 названия, остальные ячейки пусты",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В диапазоне `A1:C10` записаны 20 чисел и 3 названия, остальные ячейки пусты. Сколько ячеек в диапазоне и сколько из них пустых?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Книга, лист, ячейка, диапазон»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "30 ячеек, из них 7 пустых: 10 строк × 3 столбца = 30, заполнено 23."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 4,
+            "material_id": "excel-sheet"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["30 7"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-sheet-t06",
+        "title": "В таблице покупок выше назови адрес цены карандаша и адрес количества тетрадей",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В таблице покупок выше назови адрес цены карандаша и адрес количества тетрадей."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Книга, лист, ячейка, диапазон»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Цена карандаша — `B5`, количество тетрадей — `C2`."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 5,
+            "material_id": "excel-sheet"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["B5 C2"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-sheet-t08",
+        "title": "Создай пустую книгу",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Создай пустую книгу. В `A1` введи «Товар», в `B1` — «Цена», в `C1` — «Количество». В строки 2–4 перенеси первые три товара из таблицы выше. Выдели `B2:C4`: сколько ячеек выделено? Где хранится количество папок?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Книга, лист, ячейка, диапазон»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Шесть ячеек: 3 строки × 2 столбца. Количество папок — в `C4`."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 6,
+            "material_id": "excel-sheet"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["6 C4"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-input-files-t03",
+        "title": "В файле CSV строка Тетрадь;40;12,5",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В файле CSV строка `Тетрадь;40;12,5`. Сколько полей получится при разделителе «точка с запятой» и сколько — при разделителе «запятая»?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Ввод данных и файлы»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Три поля при «;»: `Тетрадь`, `40`, `12,5`. Два при «,»: `Тетрадь;40;12` и `5`."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 0,
+            "material_id": "excel-input-files"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["3 2"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-input-files-t04",
+        "title": "В файле есть код 00127",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В файле есть код `00127`. Каким он станет, если при импорте выбрать числовой тип? Что нужно выбрать, чтобы нули сохранились?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Ввод данных и файлы»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Число 127: ведущие нули числа не хранит. Нужно выбрать текстовый тип столбца."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 1,
+            "material_id": "excel-input-files"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["127"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-input-files-t08",
+        "title": "На листе выше выбери C3 и набери 7, не нажимая F2, затем Enter",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "На листе выше выбери `C3` и набери 7, не нажимая F2, затем Enter. Чему теперь равно количество ручек? Что изменится, если вместо Enter нажать Esc?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Ввод данных и файлы»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "7 — набор заменяет прежнее значение 3. После Esc набранное отменяется, остаётся 3."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 2,
+            "material_id": "excel-input-files"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["7 3"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-cell-values-t02",
+        "title": "Что покажет процентный формат для чисел 0,075 и 2?",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Что покажет процентный формат для чисел 0,075 и 2? А формат «0,0%» для 0,075?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Что хранится в ячейке»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "8% и 200%; в формате «0,0%» — 7,5%."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 0,
+            "material_id": "excel-cell-values"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["8% 200% 7,5%"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-cell-values-t04",
+        "title": "Найди среднее чисел 6, 9 и 0 и среднее чисел 6 и 9, если третья ячейка пуста",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Найди среднее чисел 6, 9 и 0 и среднее чисел 6 и 9, если третья ячейка пуста."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Что хранится в ячейке»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "5 и 7,5: ноль — число и входит в среднее, пустая ячейка — нет."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 1,
+            "material_id": "excel-cell-values"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["5 7,5"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-cell-values-t05",
+        "title": "Дата 01.10.2026 хранится как 46296",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Дата 01.10.2026 хранится как 46296. Какое число хранится для 03.10.2026? Сколько дней от 01.10.2026 до 15.10.2026?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Что хранится в ячейке»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "46298; от 01.10 до 15.10 — 14 дней: 46310 − 46296."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 2,
+            "material_id": "excel-cell-values"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["46298 14"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-first-formulas-t01",
+        "title": "В A2 записано 12, в B2 — 5",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В `A2` записано 12, в `B2` — 5. Найди результаты `=A2+B2*2` и `=(A2+B2)*2`. Объясни различие."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Первые формулы»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "22 и 34. В первой формуле сначала 5×2, во второй сначала 12+5."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 0,
+            "material_id": "excel-first-formulas"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["22 34"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-first-formulas-t02",
+        "title": "Вычисли =2*3^2, =(2*3)^2 и =10%*50",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Вычисли `=2*3^2`, `=(2*3)^2` и `=10%*50`."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Первые формулы»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "18, 36 и 5: степень раньше умножения, 10% — это 0,1."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 1,
+            "material_id": "excel-first-formulas"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["18 36 5"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-first-formulas-t03",
+        "title": "В A2 — 15, в B2 — 8",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В `A2` — 15, в `B2` — 8. Чему равны `=(A2+B2)/2` и `=A2+B2/2`? Какая из формул — среднее?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Первые формулы»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "11,5 и 19. Среднее — первая: во второй делится только `B2`."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 2,
+            "material_id": "excel-first-formulas"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["11,5 19"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-first-formulas-t04",
+        "title": "В D2 набрано число 200, в E2 — формула =B2*C2 (цена 40, количество 5)",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В `D2` набрано число 200, в `E2` — формула `=B2*C2` (цена 40, количество 5). Цену изменили на 50. Что теперь показывают `D2` и `E2`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Первые формулы»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "`D2` — 200, `E2` — 250: набранное число не связано с ценой."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 3,
+            "material_id": "excel-first-formulas"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["200 250"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-first-formulas-t05",
+        "title": "По операции продано 8 упаковок массой 250 г по цене 120 рублей за упаковку",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "По операции продано 8 упаковок массой 250 г по цене 120 рублей за упаковку. Найди массу в килограммах и выручку. Почему нельзя перемножить все три числа для ответа в рублях?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Первые формулы»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Масса 8×250/1000 = 2 кг. Выручка 8×120 = 960 рублей. Цена уже задана за упаковку, поэтому дополнительное умножение на её массу меняет смысл и единицы результата."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 4,
+            "material_id": "excel-first-formulas"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["2 960"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-first-formulas-t07",
+        "title": "В B2 — 0, в A2 — 300",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите ответ одним значением — так, как его покажет Excel.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В `B2` — 0, в `A2` — 300. Что покажет `=A2/B2` и что нужно выяснить, прежде чем исправлять формулу?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Первые формулы»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "`#ДЕЛ/0!`. Нужно выяснить, почему знаменатель ноль: неверные данные, пропуск или особый случай условия."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 5,
+            "material_id": "excel-first-formulas"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["#ДЕЛ/0!"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-first-formulas-t08",
+        "title": "Составь таблицу трёх покупок: блокнот — 60 рублей, 3 штуки; линейка — 25…",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 2,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Составь таблицу трёх покупок: блокнот — 60 рублей, 3 штуки; линейка — 25 рублей, 4 штуки; ластик — 10 рублей, 6 штук. Найди стоимость каждой покупки и итог формулами."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Первые формулы»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "180, 100 и 60, итог 340: `=B2*C2` в каждой строке и `=D2+D3+D4`."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "18272be3baae940a812063ff3240a27b2a20486339aca23ad8744c5b56044875",
+            "filename": "excel-zadachnik.xlsx",
+            "attribution": null,
+            "description": "Задачник курса: лист «Задачи» — данные задачи и жёлтые ячейки для формул, лист «Ответы» — решения формулами"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 6,
+            "material_id": "excel-first-formulas"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["180 100 60 340"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-references-t04",
+        "title": "Ссылку A$2 копируют на два столбца вправо и на три строки вниз",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ссылку `A$2` копируют на два столбца вправо и на три строки вниз. Во что она превратится? А ссылка `$A2`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Копирование формул и знак $»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "`C$2` и `$A5`."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 0,
+            "material_id": "excel-references"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["C$2 $A5"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-references-t05",
+        "title": "Скидка в H2 равна 15%, стоимости в D2:D5 — 200, 60, 240 и 60",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Скидка в `H2` равна 15%, стоимости в `D2:D5` — 200, 60, 240 и 60. В `E2` записано `=D2*(1-$H$2)` и скопировано до `E5`. Найди значения `E2:E5` и их сумму."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Копирование формул и знак $»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "170, 51, 204 и 51; сумма 476."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 1,
+            "material_id": "excel-references"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["170 51 204 51 476"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-range-functions-t01",
+        "title": "В A1 число 7, в A2 число 0, A3 пуста, A4 содержит текст «нет»",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В `A1` число 7, в `A2` число 0, `A3` пуста, `A4` содержит текст «нет». Чему равны СУММ(`A1:A4`), СЧЁТ(`A1:A4`), СЧЁТЗ(`A1:A4`), СРЗНАЧ(`A1:A4`)?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Функции по диапазону»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сумма 7, количество чисел 2, непустых значений 3, среднее 3,5. Ноль участвует в среднем, текст и пустота не участвуют."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 0,
+            "material_id": "excel-range-functions"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["7 2 3 3,5"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-range-functions-t02",
+        "title": "В A1:A3 — 5, 5 и 11",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В `A1:A3` — 5, 5 и 11. Найди НАИБОЛЬШИЙ(`A1:A3`;1), НАИБОЛЬШИЙ(`A1:A3`;2) и НАИМЕНЬШИЙ(`A1:A3`;2)."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Функции по диапазону»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "11, 5 и 5: второе место с учётом повторений."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 1,
+            "material_id": "excel-range-functions"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["11 5 5"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-range-functions-t03",
+        "title": "В группе из 3 человек средний балл 90, в группе из 7 — 70",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В группе из 3 человек средний балл 90, в группе из 7 — 70. Найди общее среднее и среднее двух средних."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Функции по диапазону»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Общее среднее 76: (90·3 + 70·7)/10; среднее двух средних — 80."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 2,
+            "material_id": "excel-range-functions"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["76 80"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-range-functions-t04",
+        "title": "Что вернёт =СРЗНАЧ(A1:A3), если в диапазоне только текст?",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите ответ одним значением — так, как его покажет Excel.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Что вернёт `=СРЗНАЧ(A1:A3)`, если в диапазоне только текст?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Функции по диапазону»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "`#ДЕЛ/0!`: чисел нет, среднее не определено."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 3,
+            "material_id": "excel-range-functions"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["#ДЕЛ/0!"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-range-functions-t07",
+        "title": "Найди =СУММКВ(A1:B1) для чисел 5 и 12",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Найди `=СУММКВ(A1:B1)` для чисел 5 и 12."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Функции по диапазону»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "169: 25 + 144."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 4,
+            "material_id": "excel-range-functions"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["169"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-conditions-t03",
+        "title": "Что вернут =A2>10 и =A2>=10 при A2 = 10?",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Что вернут `=A2>10` и `=A2>=10` при `A2` = 10?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Проверки и ЕСЛИ»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "`ЛОЖЬ` и `ИСТИНА`."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 0,
+            "material_id": "excel-conditions"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["ЛОЖЬ ИСТИНА"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-conditions-t06",
+        "title": "Баллы пяти учеников: 35, 40, 55, 70, 71",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Баллы пяти учеников: 35, 40, 55, 70, 71. Сколько из них дадут признак 1 в задаче 1?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Проверки и ЕСЛИ»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Три: 40, 55 и 70."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 1,
+            "material_id": "excel-conditions"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["3"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-conditions-t08",
+        "title": "Составь лист: в A2:A6 — числа 12, 7, 20, 3, 15; в B — признак «число от 5 до…",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 2,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Составь лист: в `A2:A6` — числа 12, 7, 20, 3, 15; в B — признак «число от 5 до 15 включительно», в `B8` — количество подходящих чисел. Какие признаки и какой итог получатся?"
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Проверки и ЕСЛИ»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Признаки 1, 1, 0, 0, 1; итог 3."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "18272be3baae940a812063ff3240a27b2a20486339aca23ad8744c5b56044875",
+            "filename": "excel-zadachnik.xlsx",
+            "attribution": null,
+            "description": "Задачник курса: лист «Задачи» — данные задачи и жёлтые ячейки для формул, лист «Ответы» — решения формулами"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 2,
+            "material_id": "excel-conditions"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["1 1 0 0 1 3"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-numbers-t01",
+        "title": "Цена 800 рублей увеличилась на 15%, затем уменьшилась на 15%",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Цена 800 рублей увеличилась на 15%, затем уменьшилась на 15%. Найди итоговую цену. Почему она не равна исходной?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Проценты, округление, остаток»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "800×1,15×0,85=782. Уменьшение применяется уже к 920, поэтому размер второго изменения в рублях больше первого. Два одинаковых процента с разными основаниями не взаимоуничтожаются."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 0,
+            "material_id": "excel-numbers"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["782"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-numbers-t02",
+        "title": "Для 37 предметов используются коробки вместимостью 8",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Для 37 предметов используются коробки вместимостью 8. Сколько коробок нужно? Запиши формулу."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Проценты, округление, остаток»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Пять коробок. `=ОКРУГЛВВЕРХ(37/8;0)`. Четыре коробки вмещают только 32 предмета."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 1,
+            "material_id": "excel-numbers"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["5"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-numbers-t04",
+        "title": "Найди =ОКРУГЛ(3456;-2), =ОКРУГЛВНИЗ(7,99;0) и =ОКРУГЛВВЕРХ(-0,1;0)",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Найди `=ОКРУГЛ(3456;-2)`, `=ОКРУГЛВНИЗ(7,99;0)` и `=ОКРУГЛВВЕРХ(-0,1;0)`."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Проценты, округление, остаток»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "3500, 7 и −1."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 2,
+            "material_id": "excel-numbers"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["3500 7 -1", "3500 7 −1"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-numbers-t05",
+        "title": "Чему равны ЦЕЛОЕ(-4,5) и ОТБР(-4,5)?",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Чему равны `ЦЕЛОЕ(-4,5)` и `ОТБР(-4,5)`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Проценты, округление, остаток»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "−5 и −4."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 3,
+            "material_id": "excel-numbers"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["-5 -4", "−5 −4"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-numbers-t09",
+        "title": "Три цены 1,4, 1,4 и 1,4 нужно сложить и округлить до целого",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Три цены 1,4, 1,4 и 1,4 нужно сложить и округлить до целого. Сравни два порядка: сначала округлить каждую, потом сложить, и наоборот."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Проценты, округление, остаток»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Округлить каждую и сложить — 3, сложить и округлить — 4: 4,2 округляется до 4."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 4,
+            "material_id": "excel-numbers"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["3 4"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-conditional-count-t04",
+        "title": "В строке 2, 3, 6, 7 нужно посчитать элементы, кратные 2 или 3",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В строке 2, 3, 6, 7 нужно посчитать элементы, кратные 2 или 3. Почему сложение двух отдельных количеств без поправки даёт ошибку?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Подсчёт и сумма по условию»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Подходят 2, 3 и 6: ответ 3. Кратных 2 два, кратных 3 два, но 6 попало в обе группы. Нужно 2+2−1=3 или один признак через `ИЛИ`."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 0,
+            "material_id": "excel-conditional-count"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["3"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-conditional-count-t05",
+        "title": "Запиши частоты для строки 7, 7, 2, 2, 5, 9",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Запиши частоты для строки 7, 7, 2, 2, 5, 9. Сколько разных значений повторяется? Сколько позиций занято повторяющимися элементами?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Подсчёт и сумма по условию»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Частоты 2, 2, 2, 2, 1, 1. Повторяются два разных значения — 7 и 2. Они занимают четыре позиции."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 1,
+            "material_id": "excel-conditional-count"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["2 2 2 2 1 1 2 4"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-conditional-count-t06",
+        "title": "Для строки 6, 6, 1, 2, 3, 9 найди сумму одиночных и сумму повторяющихся…",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 2,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Для строки 6, 6, 1, 2, 3, 9 найди сумму одиночных и сумму повторяющихся элементов."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Подсчёт и сумма по условию»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Одиночные 15 (1 + 2 + 3 + 9), повторяющиеся 12 (6 + 6)."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "18272be3baae940a812063ff3240a27b2a20486339aca23ad8744c5b56044875",
+            "filename": "excel-zadachnik.xlsx",
+            "attribution": null,
+            "description": "Задачник курса: лист «Задачи» — данные задачи и жёлтые ячейки для формул, лист «Ответы» — решения формулами"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 2,
+            "material_id": "excel-conditional-count"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["15 12"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-conditional-count-t07",
+        "title": "Промежутки [1; 5), [2; 3) и [5; 8)",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Промежутки [1; 5), [2; 3) и [5; 8). Сколько из них содержат момент 2? момент 5?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Подсчёт и сумма по условию»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Момент 2 содержат два промежутка: [1; 5) и [2; 3). Момент 5 — один: [5; 8), а [1; 5) уже закончился."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 3,
+            "material_id": "excel-conditional-count"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["2 1"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-conditional-count-t08",
+        "title": "Что посчитает =СЧЁТЕСЛИ(A2:A10;\"?а*\") для значений «Казань», «Курск»,…",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Что посчитает `=СЧЁТЕСЛИ(A2:A10;\"?а*\")` для значений «Казань», «Курск», «Самара», «Омск»?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Подсчёт и сумма по условию»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "2: «Казань» и «Самара» — вторая буква «а»."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 4,
+            "material_id": "excel-conditional-count"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["2"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-conditional-count-t09",
+        "title": "В A2:A5 — 10, 15, 20, 25",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В `A2:A5` — 10, 15, 20, 25. Что вернут `=СУММЕСЛИ(A2:A5;\">=15\")` и `=СРЗНАЧЕСЛИ(A2:A5;\">30\")`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Подсчёт и сумма по условию»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "60 и `#ДЕЛ/0!`: подходящих чисел нет."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 5,
+            "material_id": "excel-conditional-count"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["60 #ДЕЛ/0!"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-text-dates-t01",
+        "title": "Что вернут =ЛЕВСИМВ(\"Москва\";3), =ПРАВСИМВ(\"Москва\";2) и =ПСТР(\"Москва\";2;4)?",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Что вернут `=ЛЕВСИМВ(\"Москва\";3)`, `=ПРАВСИМВ(\"Москва\";2)` и `=ПСТР(\"Москва\";2;4)`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Текст и даты»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Мос, ва и оскв."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 0,
+            "material_id": "excel-text-dates"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["Мос ва оскв"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-text-dates-t02",
+        "title": "Чему равна =ДЛСТР(\" да \")?",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Чему равна `=ДЛСТР(\" да \")`? А `=ДЛСТР(СЖПРОБЕЛЫ(\" да \"))`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Текст и даты»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "4 и 2."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 1,
+            "material_id": "excel-text-dates"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["4 2"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-sort-filter-t02",
+        "title": "В таблице 6 строк с суммами 10, 20, 30, 40, 50, 60",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В таблице 6 строк с суммами 10, 20, 30, 40, 50, 60. Фильтр скрыл строки с суммами 20 и 50, вручную скрыта строка с 60. Что вернут `СУММ`, `ПРОМЕЖУТОЧНЫЕ.ИТОГИ` с кодом 9 и с кодом 109?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Сортировка, фильтр, видимые строки»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "210, 140 и 80."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 0,
+            "material_id": "excel-sort-filter"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["210 140 80"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-lookup-t02",
+        "title": "Справочник лежит в Товары!C10:F40, ключ — в столбце C, категория — в столбце E",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Справочник лежит в `Товары!C10:F40`, ключ — в столбце C, категория — в столбце E. Какой номер столбца передать `ВПР`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Поиск по ключу»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "3: внутри диапазона `C:F` столбец E — третий."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 0,
+            "material_id": "excel-lookup"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["3"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-lookup-t03",
+        "title": "Что вернёт =ПОИСКПОЗ(104;Товары!$A$2:$A$5;0)?",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Что вернёт `=ПОИСКПОЗ(104;Товары!$A$2:$A$5;0)`? А `=ИНДЕКС(Товары!$B$2:$B$5;2)`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Поиск по ключу»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "4 и «Кофе»."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 1,
+            "material_id": "excel-lookup"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["4 Кофе"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-lookup-t06",
+        "title": "По операциям с кодами 101, 101, 104 и 103 и количествами 2, 3, 4 и 5 найди,…",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "По операциям с кодами 101, 101, 104 и 103 и количествами 2, 3, 4 и 5 найди, сколько упаковок напитков продано и сколько было операций с напитками."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Поиск по ключу»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "9 упаковок и 3 операции: напитки — 101, 101, 104 (2 + 3 + 4)."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 2,
+            "material_id": "excel-lookup"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["9 3"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-neighbour-cells-t01",
+        "title": "В A2:A101 записано 100 чисел",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В `A2:A101` записано 100 чисел. Сколько соседних пар? До какой строки нужно заполнить формулу, сравнивающую `A2` и `A3`, если первая формула находится в `B2`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Расчёт по соседним ячейкам»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Пар 99. Первая использует `A2` и `A3`, последняя — `A100` и `A101`. Формулу в `B2` нужно заполнить до `B100`."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 0,
+            "material_id": "excel-neighbour-cells"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["99 B100"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-neighbour-cells-t02",
+        "title": "Расходы по дням: 50, 30, 20, 100",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 2,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Расходы по дням: 50, 30, 20, 100. Каким будет накопленный итог в каждой строке?"
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Расчёт по соседним ячейкам»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "50, 80, 100 и 200."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "18272be3baae940a812063ff3240a27b2a20486339aca23ad8744c5b56044875",
+            "filename": "excel-zadachnik.xlsx",
+            "attribution": null,
+            "description": "Задачник курса: лист «Задачи» — данные задачи и жёлтые ячейки для формул, лист «Ответы» — решения формулами"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 1,
+            "material_id": "excel-neighbour-cells"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["50 80 100 200"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-neighbour-cells-t04",
+        "title": "Для последовательности 4, 8, 6, 5, 7 посчитай пары соседей, в которых хотя…",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Для последовательности 4, 8, 6, 5, 7 посчитай пары соседей, в которых хотя бы одно число кратно 3."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Расчёт по соседним ячейкам»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Две: (8, 6) и (6, 5) — в обеих есть 6; в парах (4, 8) и (5, 7) кратных 3 нет."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 2,
+            "material_id": "excel-neighbour-cells"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["2"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-neighbour-cells-t05",
+        "title": "В столбце D для подходящих строк стоит =СТРОКА(), для остальных \"\"",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В столбце D для подходящих строк стоит `=СТРОКА()`, для остальных `\"\"`. Подходят строки 4, 9 и 15. Что вернут `=МИН(D2:D20)` и `=МАКС(D2:D20)`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Расчёт по соседним ячейкам»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "4 и 15."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 3,
+            "material_id": "excel-neighbour-cells"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["4 15"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-neighbour-cells-t06",
+        "title": "Сколько путей «только вправо и вниз» ведёт из A1 в C2?",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сколько путей «только вправо и вниз» ведёт из `A1` в `C2`? А в `D3`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Расчёт по соседним ячейкам»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "3 и 10."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 4,
+            "material_id": "excel-neighbour-cells"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["3 10"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-neighbour-cells-t07",
+        "title": "Сколько строк понадобится, чтобы перебрать все наборы трёх логических…",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сколько строк понадобится, чтобы перебрать все наборы трёх логических переменных?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Расчёт по соседним ячейкам»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "8 = 2³."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 5,
+            "material_id": "excel-neighbour-cells"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["8"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-from-task-to-table-t07",
+        "title": "В таблице покупок урока поставь скидку 50%",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В таблице покупок урока поставь скидку 50%. Сколько покупок дороже 100 рублей и на какую сумму?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «От условия к таблице вычислений»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Одна покупка — папки — на 120 рублей: тетради стоят ровно 100, а условие строгое."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 0,
+            "material_id": "excel-from-task-to-table"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["1 120"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-from-task-to-table-t08",
+        "title": "Составь лист: в A2:A7 — баллы 45, 80, 62, 80, 30, 95",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 2,
+        "estimated_minutes": null,
+        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Составь лист: в `A2:A7` — баллы 45, 80, 62, 80, 30, 95. Посчитай двумя способами (признаками и `СЧЁТЕСЛИ`), сколько баллов не меньше 60, и найди их среднее."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «От условия к таблице вычислений»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "4 балла не меньше 60 — 80, 62, 80, 95; среднее 79,25."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "18272be3baae940a812063ff3240a27b2a20486339aca23ad8744c5b56044875",
+            "filename": "excel-zadachnik.xlsx",
+            "attribution": null,
+            "description": "Задачник курса: лист «Задачи» — данные задачи и жёлтые ячейки для формул, лист «Ответы» — решения формулами"
+          }
+        ],
+        "lessons": [
+          {
+            "position": 1,
+            "material_id": "excel-from-task-to-table"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["4 79,25"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-tables-pivots-t04",
+        "title": "По данным листа «Сводка» найди выручку Москвы без Какао",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "По данным листа «Сводка» найди выручку Москвы без Какао."
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Опора — урок «Таблица, оформление и сводные»: рассуди по шагам, а затем проверь в Excel."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "550: `=СУММЕСЛИМН(C2:C7;A2:A7;\"Москва\";B2:B7;\"<>Какао\")`."
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 0,
+            "material_id": "excel-tables-pivots",
+            "counts_toward_mastery": false
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["550"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
     }
   ],
   "files": [
@@ -130185,6 +134125,13 @@
       "mime_type": "text/plain",
       "size_bytes": 2836,
       "storage_key": "9cb55653e16f89efe05e05367440008e3af7dd1dd239a3009022a019c8081116"
+    },
+    {
+      "format": "xlsx",
+      "checksum": "18272be3baae940a812063ff3240a27b2a20486339aca23ad8744c5b56044875",
+      "mime_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "size_bytes": 61399,
+      "storage_key": "18272be3baae940a812063ff3240a27b2a20486339aca23ad8744c5b56044875"
     }
   ],
   "materials": [
@@ -130285,6 +134232,111 @@
       "kind": "topic",
       "status": "published",
       "course_id": null
+    },
+    {
+      "id": "excel-cell-values",
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
+      "kind": "course",
+      "status": "published",
+      "course_id": "excel"
+    },
+    {
+      "id": "excel-conditional-count",
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6", "s7", "s8"],
+      "kind": "course",
+      "status": "published",
+      "course_id": "excel"
+    },
+    {
+      "id": "excel-conditions",
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
+      "kind": "course",
+      "status": "published",
+      "course_id": "excel"
+    },
+    {
+      "id": "excel-first-formulas",
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
+      "kind": "course",
+      "status": "published",
+      "course_id": "excel"
+    },
+    {
+      "id": "excel-from-task-to-table",
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6", "s7"],
+      "kind": "course",
+      "status": "published",
+      "course_id": "excel"
+    },
+    {
+      "id": "excel-input-files",
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
+      "kind": "course",
+      "status": "published",
+      "course_id": "excel"
+    },
+    {
+      "id": "excel-lookup",
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
+      "kind": "course",
+      "status": "published",
+      "course_id": "excel"
+    },
+    {
+      "id": "excel-neighbour-cells",
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6"],
+      "kind": "course",
+      "status": "published",
+      "course_id": "excel"
+    },
+    {
+      "id": "excel-numbers",
+      "sections": ["intro", "s1", "s2", "s3", "s4"],
+      "kind": "course",
+      "status": "published",
+      "course_id": "excel"
+    },
+    {
+      "id": "excel-range-functions",
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6"],
+      "kind": "course",
+      "status": "published",
+      "course_id": "excel"
+    },
+    {
+      "id": "excel-references",
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6"],
+      "kind": "course",
+      "status": "published",
+      "course_id": "excel"
+    },
+    {
+      "id": "excel-sheet",
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
+      "kind": "course",
+      "status": "published",
+      "course_id": "excel"
+    },
+    {
+      "id": "excel-sort-filter",
+      "sections": ["intro", "s1", "s2", "s3", "s4"],
+      "kind": "course",
+      "status": "published",
+      "course_id": "excel"
+    },
+    {
+      "id": "excel-tables-pivots",
+      "sections": ["intro", "s1", "s2", "s3", "s4"],
+      "kind": "course",
+      "status": "published",
+      "course_id": "excel"
+    },
+    {
+      "id": "excel-text-dates",
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
+      "kind": "course",
+      "status": "published",
+      "course_id": "excel"
     },
     {
       "id": "graph-analysis",
@@ -130669,6 +134721,27 @@
         "python-classes",
         "python-advanced-features",
         "python-testing"
+      ]
+    },
+    {
+      "id": "excel",
+      "status": "published",
+      "lesson_ids": [
+        "excel-sheet",
+        "excel-input-files",
+        "excel-cell-values",
+        "excel-first-formulas",
+        "excel-references",
+        "excel-range-functions",
+        "excel-conditions",
+        "excel-numbers",
+        "excel-conditional-count",
+        "excel-text-dates",
+        "excel-sort-filter",
+        "excel-lookup",
+        "excel-neighbour-cells",
+        "excel-from-task-to-table",
+        "excel-tables-pivots"
       ]
     }
   ]

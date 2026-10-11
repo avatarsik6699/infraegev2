@@ -45,6 +45,11 @@ fallback.
   lesson-design stand; runnable examples replay steps recorded at export, never code executed in
   the browser. Progress is derived from the published lessons and current answer revisions and
   is saved only for signed-in learners.
+- The Excel course has 15 lessons in six modules (Change 177): 14 core lessons on the spreadsheet
+  mechanisms of tasks 3, 9, 18 and 22, then one additional lesson (tables, conditional formatting,
+  pivots, charts) outside course mastery. Its live sheets recalculate edited source cells in the
+  browser with an evaluator limited to the course's functions; tasks on the practice workbook
+  carry it as an `.xlsx` attachment.
 - Optional accounts and synchronized progress are implemented. Hard lesson locks, payments and
   in-product AI remain out of scope; enabled sign-in methods depend on deployment configuration.
 

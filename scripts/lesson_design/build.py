@@ -29,7 +29,6 @@ REPO = HERE.parents[1]
 sys.path.insert(0, str(HERE))
 from figures import FIGURES, PAGE_SCRIPTS  # noqa: E402
 from runblock import RUN_JS, code_html, file_name, prepare  # noqa: E402
-from sheet_eval import FormulaError, tokenize  # noqa: E402
 from sheetblock import prepare as prepare_sheets  # noqa: E402
 from sheetblock import scripts as sheet_scripts  # noqa: E402
 from terms import TERMS  # noqa: E402
@@ -58,6 +57,18 @@ PICK_BLOCK = re.compile(r"^:::(pick|pick-tokens) ([^\n]+)\n(.*?)^:::$", re.M | r
 TERM = re.compile(r"\{\{(\w+)\|(.+?)\}\}")
 IO_ROWS = {"input": "Ввод", "output": "Вывод", "error": "Ошибка"}
 TYPED = re.compile(r"⟪(.*?)⟫")
+# [[Ctrl+C]] in a lesson: keys of a keyboard shortcut (the Excel course, Change 177)
+KEYS = re.compile(r"\[\[([^\]\n\"]+)\]\]")
+
+
+def keys_html(m: re.Match) -> str:
+    keys = [html.escape(k.strip()) for k in m.group(1).split("+")]
+    plus = '<span class="key-plus">+</span>'
+    return (
+        '<span class="keys">' + plus.join(f'<kbd class="key">{k}</kbd>' for k in keys) + "</span>"
+    )
+
+
 # the Python course: terms of the topics open its lessons
 PY_COURSE_DIR = "course-python"
 # ```python name.py / ```python run name.py: a name for the head of the block
@@ -65,8 +76,6 @@ NAMED_FENCE = re.compile(r"^```python( run)? ([\w-]+\.\w+)\n", re.M)
 HEAD_LABEL = {
     "shell": "команда",
     "text": "текст",
-    "excel": "формула",
-    "excel-template": "шаблон формулы",
 }
 COPY_ICON = (
     '<svg class="ic" width="17" height="17" viewBox="0 0 24 24" aria-hidden="true">'
@@ -77,8 +86,8 @@ COPY_JS = r"""<script>
 document.querySelectorAll(".code-copy").forEach(function (b) {
   b.hidden = !navigator.clipboard;
   b.onclick = function () {
-    var pre = b.closest(".code-box").querySelector("pre.code");
-    navigator.clipboard.writeText(pre.innerText.replace(/\n$/, "")).then(function () {
+    var text = b.dataset.copy || b.closest(".code-box").querySelector("pre.code").innerText.replace(/\n$/, "");
+    navigator.clipboard.writeText(text).then(function () {
       b.classList.add("done"); b.setAttribute("aria-label", "Код скопирован");
       setTimeout(function () { b.classList.remove("done"); b.setAttribute("aria-label", "Скопировать код"); }, 1600);
     });
@@ -166,34 +175,47 @@ def highlight_python(src: str) -> str:
     return "".join(out)
 
 
-EXCEL_CLASS = {"func": "fn", "str": "str", "num": "num", "bool": "kw", "ref": "ref"}
+# A formula of the Excel course in pieces: function names, quoted text, and the
+# lower-case words of a template that stand for arguments («условие»).
+FORMULA_PART = re.compile(
+    r'(?P<str>"[^"]*")|(?P<func>[A-ZА-ЯЁ][A-ZА-ЯЁ0-9.]*(?=\())|(?P<slot>[a-zа-яё][\wа-яё]*|…)'
+)
+FORMULA_LABEL = re.compile(r"^([A-Z]{1,3}\d+):\s*(?==)")
 
 
-def highlight_excel(src: str) -> str:
-    """Formulas of the Excel course: functions, references, text and numbers."""
-    out = []
-    for line in src.split("\n"):
-        start = line.find("=")
-        if start < 0:
-            out.append(html.escape(line, quote=False))
-            continue
-        try:
-            toks = tokenize(line[start:])
-        except FormulaError:
-            out.append(html.escape(line, quote=False))
-            continue
-        parts, pos = [html.escape(line[:start], quote=False)], start
-        for t in toks:
-            cls = EXCEL_CLASS.get(t.kind)
-            if not cls:
-                continue
-            begin = start + t.start
-            parts.append(html.escape(line[pos:begin], quote=False))
-            parts.append(f'<span class="tok-{cls}">{html.escape(t.text, quote=False)}</span>')
-            pos = begin + len(t.text)
-        parts.append(html.escape(line[pos:], quote=False))
-        out.append("".join(parts))
-    return "\n".join(out)
+def formula_html(src: str, template: bool) -> str:
+    """A formula block (Change 177 F9): the sheet's formula bar, not a code block —
+    an optional cell address, «fx» and the formula; functions in medium weight,
+    the slots of a template in italics; one quiet copy button."""
+    rows, plain = [], []
+    for line in src.strip("\n").split("\n"):
+        m = FORMULA_LABEL.match(line)
+        cell, formula = (m.group(1), line[m.end() :]) if m else ("", line)
+        plain.append(formula)
+        parts, pos = [], 0
+        for t in FORMULA_PART.finditer(formula):
+            parts.append(html.escape(formula[pos : t.start()]))
+            text = html.escape(t.group(0))
+            if t.lastgroup == "func":
+                parts.append(f'<span class="f-fn">{text}</span>')
+            elif t.lastgroup == "slot":
+                parts.append(f'<span class="f-slot">{text}</span>')
+            else:
+                parts.append(text)
+            pos = t.end()
+        parts.append(html.escape(formula[pos:]))
+        rows.append(
+            f'<div class="f-row"><span class="f-cell">{cell}</span>'
+            f'<span class="f-fx" aria-hidden="true">fx</span>'
+            f'<code class="f-text">{"".join(parts)}</code></div>'
+        )
+    label = "Шаблон формулы" if template else "Формула"
+    copy = html.escape("\n".join(plain), quote=True)
+    return (
+        f'<figure class="formula" role="group" aria-label="{label}">{"".join(rows)}'
+        f'<button type="button" class="ib code-copy f-copy" aria-label="Скопировать формулу" '
+        f'data-copy="{copy}" hidden>{COPY_ICON}</button></figure>'
+    )
 
 
 def inline_md(text: str) -> str:
@@ -349,6 +371,7 @@ def render(md_text: str, lines: bool = False) -> tuple[str, list[tuple[str, str]
     md_text = md_text.replace("```excel шаблон\n", "```excel-template\n")
     md_text, sheets = prepare_sheets(md_text)
     md_text = FIGURE_CALL.sub(call_figure, md_text)
+    md_text = KEYS.sub(keys_html, md_text)
     md_text = PICK_BLOCK.sub(pick_block, md_text)
     leftover = re.findall(r"%%[^%\n]+%%", md_text)
     if leftover:
@@ -374,13 +397,14 @@ def render(md_text: str, lines: bool = False) -> tuple[str, list[tuple[str, str]
                 f'<div class="out out-{lang}"><span class="out-l">{IO_ROWS[lang]}</span>'
                 f'<span class="out-v">{html.escape(shown)}</span></div>'
             )
+        if lang.startswith("excel"):
+            return formula_html(code, lang == "excel-template")
         if lines and lang != "python":
             label = lang if "." in lang else HEAD_LABEL.get(lang, str(lang))
-            inner = highlight_excel(code) if lang.startswith("excel") else html.escape(code)
             return (
                 f'<div class="code-box">{code_head(label)}'
                 f'<pre class="code {"text" if "." in lang else lang}">'
-                f"<code>{inner}</code></pre></div>"
+                f"<code>{html.escape(code)}</code></pre></div>"
             )
         if "." in lang:
             # lines of a data file: the fence names the file (```23.txt)

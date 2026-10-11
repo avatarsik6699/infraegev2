@@ -49,7 +49,8 @@ from terms import TERMS  # noqa: E402
 TASK_BLOCK = ("**Чтобы проверить понимание", "**Задачи основных подтем")
 FIGURE_CALL = re.compile(r"^%%(\w+)\((.*?)\)%%$")
 INLINE = re.compile(
-    r"\{\{(?P<term_key>\w+)\|(?P<term_label>.+?)\}\}"
+    r"\[\[(?P<keys>[^\]\n\"]+)\]\]"
+    r"|\{\{(?P<term_key>\w+)\|(?P<term_label>.+?)\}\}"
     r"|<sup>(?P<sup>.+?)</sup>"
     r"|\*\*(?P<bold>.+?)\*\*"
     r"|`(?P<code>[^`]+)`"
@@ -75,7 +76,10 @@ def inline(text: str) -> str:
     out, last = [], 0
     for m in INLINE.finditer(text):
         out.append(jsx_text(text[last : m.start()]))
-        if m.group("term_key") is not None:
+        if m.group("keys") is not None:
+            keys = ", ".join(js(k.strip()) for k in m.group("keys").split("+"))
+            out.append(f"<KeyCombo keys={{[{keys}]}} />")
+        elif m.group("term_key") is not None:
             key = m.group("term_key")
             if key not in TERMS:
                 raise SystemExit(f"Unknown term {key!r}; add it to terms.TERMS")

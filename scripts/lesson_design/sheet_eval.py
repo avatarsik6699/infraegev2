@@ -3,9 +3,9 @@
 The course shows formulas as a Russian-locale Excel shows them: Russian function
 names, ``;`` between arguments, a decimal comma (``=ОКРУГЛ(A2*0,1;2)``). Every
 sheet of the stand is computed here; the browser evaluator of the live sheet
-(``sheetblock.js``) and later the site's one must agree with it on
-``sheet_cases.json``, and the generated workbook is recomputed by an independent
-library (``workbook.py --check``).
+(``sheetblock.js``) and the site's one (``apps/web/src/shared/lib/sheet-eval``)
+must agree with it on ``apps/web/tests/fixtures/sheet-cases.json``, and the
+generated workbook is recomputed by an independent library (``workbook.py --check``).
 
 Only the functions the course teaches are supported (chapter 24 of the source);
 an unknown name is ``#ИМЯ?``, as in Excel. Semantics follow Microsoft's

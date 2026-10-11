@@ -174,3 +174,27 @@ TERMS: dict[str, tuple[str, str, str, str]] = {
         "Рекурсия и запоминание",
     ),
 }
+
+# The Excel course (Change 177): the lesson that explains each spreadsheet term the
+# EGE topics 3, 9, 18 and 22 rely on (map.md, «Термины тем ЕГЭ → уроки курса").
+# key: (term, Excel course lesson route slug). No topic links them yet — those topics
+# are legacy; a rebuilt topic adds the popover text here as TERMS has it.
+# export_course.py checks that every slug is a published lesson of the course.
+EXCEL_TERMS: dict[str, tuple[str, str]] = {
+    "xl-address": ("Адрес ячейки и диапазон", "list-i-yacheyka"),
+    "xl-csv": ("CSV, разделитель и импорт", "vvod-i-fayly"),
+    "xl-format": ("Значение и формат ячейки", "chto-v-yacheyke"),
+    "xl-formula": ("Формула и порядок действий", "pervye-formuly"),
+    "xl-ref": ("Относительная, абсолютная и смешанная ссылка", "kopirovanie-i-dollar"),
+    "xl-fill": ("Заполнение формулой", "kopirovanie-i-dollar"),
+    "xl-range-functions": ("СУММ, СЧЁТ, СРЗНАЧ, МАКС, МИН, НАИБОЛЬШИЙ", "funktsii"),
+    "xl-if": ("Признак ЕСЛИ(…;1;0), И, ИЛИ, НЕ", "usloviya"),
+    "xl-mod": ("ОСТАТ, ЦЕЛОЕ, ОКРУГЛ, ABS", "chisla"),
+    "xl-countif": ("СЧЁТЕСЛИ, СЧЁТЕСЛИМН, СУММЕСЛИ и критерий с &", "podschet-po-usloviyu"),
+    "xl-frequency": ("Частоты значений в строке", "podschet-po-usloviyu"),
+    "xl-dates": ("ДАТА, период и текстовые функции", "tekst-i-daty"),
+    "xl-filter": ("Сортировка, фильтр и ПРОМЕЖУТОЧНЫЕ.ИТОГИ", "sortirovka-i-filtr"),
+    "xl-lookup": ("Ключ, ВПР, ИНДЕКС и ПОИСКПОЗ", "poisk-po-klyuchu"),
+    "xl-neighbours": ("Накопление, соседние пары и таблица из таблицы", "raschet-po-sosedyam"),
+    "xl-check": ("Ошибки Excel и проверка ответа", "ot-usloviya-k-tablitse"),
+}

@@ -23,10 +23,7 @@ export const practiceTopic = {
           .filter((section) =>
             section.lessonPlan.some((lesson) => materialIds.has(lesson.id)),
           )
-          .map(
-            (section) =>
-              `${course.id === "python" ? "Python" : course.title} · ${section.title}`,
-          ),
+          .map((section) => `${course.shortTitle} · ${section.title}`),
       );
     return modules.join(" · ") || "Задание";
   },

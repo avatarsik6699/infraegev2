@@ -58,7 +58,7 @@ export const CourseOverviewPage: React.FC<CourseOverviewPageTypes.Props> = (
           </div>
         </PageHead>
         <PageContainer component="div" measure="wide" className={styles.root}>
-          <CourseOverviewFacts />
+          <CourseOverviewFacts requirements={props.course.requirements} />
           <CourseOverviewCurriculum
             courseRouteSlug={props.course.routeSlug}
             modules={overview.modules}

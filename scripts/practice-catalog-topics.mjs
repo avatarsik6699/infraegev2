@@ -23,7 +23,7 @@ for (const course of coursePublications.filter(
   for (const section of course.modules) {
     topics.push({
       id: `${course.id}-${section.id}`,
-      label: `${course.id === "python" ? "Python" : course.title} · ${section.title}`,
+      label: `${course.shortTitle} · ${section.title}`,
       group: "Мини-курсы",
       exam_number: null,
       material_ids: section.lessonPlan

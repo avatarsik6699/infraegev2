@@ -44,8 +44,12 @@ export namespace CourseTypes {
     id: string;
     routeSlug: string;
     title: string;
+    /** «Python», «Excel»: the course in a label beside a module (practice topics). */
+    shortTitle: string;
     summary: string;
     audience: string;
+    /** «Что понадобится» on the course overview: the program and the files. */
+    requirements: string;
     learningOutcomes: readonly string[];
     status: Status;
     stage: Stage;

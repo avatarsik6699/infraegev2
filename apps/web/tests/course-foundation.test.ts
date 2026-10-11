@@ -11,6 +11,7 @@ import {
   type CourseProgressTypes,
 } from "~/entities/course";
 import course from "../../../content/lesson-design/course-python/course.json";
+import excel from "../../../content/lesson-design/course-excel/course.json";
 import {
   loadMigrationPractice as loadPracticeTasks,
   migrationTaskIds,
@@ -33,10 +34,18 @@ describe("Python course foundation", () => {
         stage: "complete",
         status: "published",
       }),
+      expect.objectContaining({
+        id: "excel",
+        routeSlug: "excel",
+        stage: "complete",
+        status: "published",
+      }),
     ]);
-    expect(courseLessonPublications.map((lesson) => lesson.id)).toEqual(
-      planned.map((lesson) => lesson.id),
-    );
+    // the Python lessons first, then the Excel course of Change 177
+    expect(courseLessonPublications.map((lesson) => lesson.id)).toEqual([
+      ...planned.map((lesson) => lesson.id),
+      ...excel.modules.flatMap((m) => m.lessons.map((l) => l.site.id)),
+    ]);
     expect(
       courseLessonPublications.every((lesson) => lesson.status === "published"),
     ).toBe(true);

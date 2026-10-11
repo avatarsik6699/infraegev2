@@ -246,7 +246,7 @@ def test_pagination_next_and_lesson_membership(database):
                     if material.status == "published" and expected:
                         result = await readers.lesson(session, material.kind, material.id)
                         assert [t.id for t in result.tasks] == [i for _, i in expected]
-                assert len(list(await session.scalars(select(TaskRecord.id)))) == 965
+                assert len(list(await session.scalars(select(TaskRecord.id)))) == 1021
         finally:
             await engine.dispose()
 
@@ -348,7 +348,7 @@ def test_validate_cli_checks_canonical_bank_without_database_or_legacy_json(tmp_
 
     result = validate()
     assert result.returncode == 0, result.stderr
-    assert json.loads(result.stdout)["tasks"] == 965
+    assert json.loads(result.stdout)["tasks"] == 1021
     task["task"]["theory_links"] = [
         {"label": "Теория", "section": "missing-section", "material_id": "python-first-program"}
     ]

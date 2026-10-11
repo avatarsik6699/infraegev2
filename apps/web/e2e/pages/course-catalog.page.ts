@@ -13,6 +13,13 @@ export class CourseCatalogPage {
     ).toHaveCount(1);
     await expect(published.locator("p").first()).toBeVisible();
     await expect(published).toContainText("30 уроков");
+    // Change 177: the Excel course is the second published card
+    const excel = this.page.locator('[data-course-card="excel"]');
+    await expect(excel).toHaveAttribute("data-course-status", "published");
+    await expect(excel).toContainText("15 уроков");
+    await expect(
+      excel.getByRole("link", { name: "Открыть курс" }),
+    ).toHaveAttribute("href", "/courses/excel");
     await expect(
       published.getByRole("link", { name: "Открыть курс" }),
     ).toBeVisible();
@@ -26,29 +33,29 @@ export class CourseCatalogPage {
       this.page.locator('[data-course-status="planned"] a'),
     ).toHaveCount(0);
     const soon = this.page.locator('[data-course-status="planned"] button');
-    await expect(soon).toHaveCount(3);
+    await expect(soon).toHaveCount(2);
     for (const button of await soon.all()) {
       await expect(button).toHaveText("Скоро");
       await expect(button).toBeDisabled();
     }
     await expect(this.page.locator("[data-course-summary]")).toContainText(
-      "Всего направлений: 4 · Доступно: 1 · Уроков: 27",
+      "Всего направлений: 4 · Доступно: 2 · Уроков: 41",
     );
     await expect(this.page.getByRole("searchbox")).toHaveCount(0);
     const planned = this.page.locator('[data-course-status="planned"]');
     await expect(
       planned.locator("[data-illustration-placeholder]"),
-    ).toHaveCount(3);
+    ).toHaveCount(2);
     for (const card of await planned.all()) {
       await expect(card).toHaveAttribute("aria-disabled", "true");
       await expect(card).toHaveCSS("background-color", "rgb(255, 255, 255)");
     }
     if (!noScripts) {
-      await this.expectGuestProgress();
+      await this.expectGuestProgress(published);
     }
     await this.expectCardGrid();
     await expectNoHorizontalOverflow(this.page);
-    await this.page.getByRole("link", { name: "Открыть курс" }).click();
+    await published.getByRole("link", { name: "Открыть курс" }).click();
     await expect(this.page).toHaveURL(/\/courses\/python$/);
   }
 
@@ -102,9 +109,11 @@ export class CourseCatalogPage {
       ).toHaveText("Проверяем вход");
       await expect(
         this.page.locator("[data-course-progress]").getByRole("status"),
-      ).toHaveText("Прогресс загружается");
+      ).toHaveText(["Прогресс загружается", "Прогресс загружается"]);
       releaseScripts();
-      await this.expectGuestProgress();
+      await this.expectGuestProgress(
+        this.page.locator('[data-course-card="python"]'),
+      );
       expect(await this.geometry()).toEqual(before);
       releaseAssets();
       await this.page.waitForLoadState("load");
@@ -131,10 +140,10 @@ export class CourseCatalogPage {
     ).toBeVisible();
     await this.page.evaluate(() => document.fonts.ready);
     await this.page.emulateMedia({ reducedMotion: "no-preference" });
-    const link = this.page.getByRole("link", { name: "Открыть курс" });
+    const card = this.page.locator('[data-course-card="python"]');
+    const link = card.getByRole("link", { name: "Открыть курс" });
     await link.focus();
     await expect(link).toBeFocused();
-    const card = this.page.locator('[data-course-card="python"]');
     await expect(card).toHaveCSS("transform", "none");
     await expect(link).toHaveAttribute("data-hierarchy", "primary");
     await expect(link).toHaveCSS("background-color", "rgb(23, 25, 30)");

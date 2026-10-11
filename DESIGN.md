@@ -26,6 +26,11 @@ colors:
   code-string: "#2a6a3a"
   code-comment: "#636a75"
   code-number: "#0b6e75"
+  sheet-ref-1: "#1f4fd0"
+  sheet-ref-2: "#7a3fb8"
+  sheet-ref-3: "#0b6e75"
+  sheet-ref-4: "#2a6a3a"
+  sheet-ref-5: "#9a5b00"
 typography:
   display:
     fontFamily: "Onest, system-ui, sans-serif"
@@ -215,6 +220,11 @@ one orange for position.
 - **Code** (code-keyword violet, code-string green, code-number teal, code-comment grey) inside code
   blocks only; every code colour keeps at least 4.5:1 on the code surface.
 
+- **Sheet references** (sheet-ref-1…5) inside the Excel course's live sheet only: the frame of the
+  cells a formula reads and that reference in the formula bar share one colour, in the order the
+  references appear, as Excel colours them; the tint inside a frame is 7% of its colour. This is
+  the sheet's own legend, not a link or a status.
+
 ### Named Rules
 **The Cover Rule.** Pastel colour belongs to the home page. Any other page gets at most one pastel
 plate, and only for its main next step.
@@ -362,6 +372,20 @@ card, `/courses/python` head at about a third of the head width). They are shown
   fill, never a hand or monospace face. The stepper's controls copy `LessonVideo`: quiet icon
   buttons, a thin ink timeline and a «2 / 7» count. On phones both keep a readable scale and
   scroll inside their focusable plate.
+- **Live sheet (Excel course):** one hairline-framed block: a formula bar (the address in the code
+  face, a muted italic «fx», the formula with its references in their frame colours), the grid
+  with wash headers for column letters and row numbers, formula cells with a faint link tint, and
+  sheet tabs under the grid. The selected cell has a 2px ink frame; the cells its formula reads get
+  2px frames in the sheet-reference colours, drawn on the grid lines so neighbours share one band.
+  «Вернуть исходные» is a compact secondary button that appears only after an edit. A wide grid
+  scrolls inside the block; the formulas are listed under it in muted text.
+- **Formula block (Excel course):** a formula is never a code block: it repeats the live sheet's
+  formula bar — hairline frame on white, an optional cell address in the code face, a muted italic
+  «fx», the formula with function names in medium weight and template slots in italics; rows of
+  several formulas are split by hairlines; one quiet copy icon in the corner.
+- **Copy sandbox:** the mask sandbox's frame with two fields (formula, target cell) and the copied
+  formula in the code face; the moved column letters and row numbers are marked with a light link
+  tint, the only accent.
 - **Mask sandbox:** a hairline-framed block with two fields and digit cells: white for required
   digits, the wash for `?`, an orange outline for `*` — the same meaning as the mask diagram.
 - **Compact lesson flow:** one reading flow without Callout or Mistake boxes. Program output sits

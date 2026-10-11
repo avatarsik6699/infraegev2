@@ -37,6 +37,9 @@ sys.path.insert(0, str(HERE))
 from figures import FIGURES, STEPPERS, WIDGET_DATA, WIDGETS  # noqa: E402
 
 FIGURE_CALL = re.compile(r"%%(\w+)\((.*?)\)%%")
+# builders whose content is in their list arguments: two calls with the same
+# scalar arguments still draw different figures (formula_steps of one cell)
+HASHED = {"formula_steps"}
 SVG_NS = 'xmlns="http://www.w3.org/2000/svg"'
 STAND_FONT = 'font-family="Onest, system-ui, sans-serif"'
 HEADER = (
@@ -77,7 +80,7 @@ def media_key(name: str, args: list, kwargs: dict | None = None) -> str:
     camel = head + "".join(part.title() for part in rest)
     parts = [re.sub(r"[^0-9A-Za-z]", "", str(a)) for a in args if not isinstance(a, list)]
     key = camel + "_".join(p for p in parts if p)
-    if key == camel and args:
+    if (key == camel and args) or name in HASHED:
         data = json.dumps([args, kwargs or {}], ensure_ascii=False, sort_keys=True)
         digest = hashlib.sha1(data.encode()).hexdigest()
         key += "_" + digest[:6]

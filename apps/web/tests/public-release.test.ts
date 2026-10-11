@@ -140,15 +140,20 @@ describe("public release metadata", () => {
     expect(topicCatalog.formatTaskNumbers([19, 20, 21])).toBe("Задания 19–21");
   });
 
-  it("publishes the Python course and lesson discovery metadata together", () => {
+  it("publishes the courses and lesson discovery metadata together", () => {
     expect(coursePublications).toEqual([
       expect.objectContaining({
         id: "python",
         routeSlug: "python",
         status: "published",
       }),
+      expect.objectContaining({
+        id: "excel",
+        routeSlug: "excel",
+        status: "published",
+      }),
     ]);
-    expect(courseLessonPublications).toHaveLength(30);
+    expect(courseLessonPublications).toHaveLength(45);
     expect(
       courseLessonPublications.every((lesson) =>
         ["draft", "published"].includes(lesson.status),
@@ -158,7 +163,7 @@ describe("public release metadata", () => {
       courseLessonPublications
         .filter((lesson) => lesson.status === "published")
         .map((lesson) => lesson.routeSlug),
-    ).toHaveLength(30);
+    ).toHaveLength(45);
   });
 
   it("projects truthful course availability into the catalog", () => {
@@ -171,8 +176,8 @@ describe("public release metadata", () => {
       ].sort(),
     );
     expect(courseCatalog).toMatchObject({
-      availableCount: 1,
-      plannedCount: 3,
+      availableCount: 2,
+      plannedCount: 2,
     });
     expect(courseCatalog.entries[0]).toMatchObject({
       id: "python",
@@ -185,10 +190,15 @@ describe("public release metadata", () => {
         "python-testing",
       ],
     });
+    expect(courseCatalog.entries.find((e) => e.id === "excel")).toMatchObject({
+      status: "published",
+      routeSlug: "excel",
+      lessonCount: 15,
+      advancedLessonIds: ["excel-tables-pivots"],
+    });
     expect(
       courseCatalog.entries.filter((entry) => entry.status === "planned"),
     ).toEqual([
-      expect.not.objectContaining({ routeSlug: expect.anything() }),
       expect.not.objectContaining({ routeSlug: expect.anything() }),
       expect.not.objectContaining({ routeSlug: expect.anything() }),
     ]);

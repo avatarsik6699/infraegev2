@@ -44,6 +44,14 @@
     transparent 82%
   );
 
+  /* Excel course sheet (Change 177): frames of the cells a formula reads, one
+     colour per reference, as Excel colours them. */
+  --theme-sheet-ref-1: #1f4fd0;
+  --theme-sheet-ref-2: #7a3fb8;
+  --theme-sheet-ref-3: #0b6e75;
+  --theme-sheet-ref-4: #2a6a3a;
+  --theme-sheet-ref-5: #9a5b00;
+
   /* Answer results and destructive actions only. */
   --theme-success: #1d7a46;
   --theme-success-soft: #eef7f1;

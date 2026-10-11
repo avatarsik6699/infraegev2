@@ -1,11 +1,11 @@
-"""Build the Excel course's practice workbook from the stand's own sheets.
+"""Build the Excel course's problem book (Задачник) from the stand's own sheets.
 
 Usage:
     uv run --no-project --with openpyxl python -I content/lesson-design/course-excel/workbook.py
     uv run --no-project --with openpyxl --with formulas python -I \
         content/lesson-design/course-excel/workbook.py --check
 
-Writes ``files/excel-praktika.xlsx`` (decision of 2026-10-11: the workbook comes
+Writes ``files/excel-zadachnik.xlsx`` (decision of 2026-10-11: the workbook comes
 from the same data as the lessons, so the numbers in the text and in the file
 always agree):
 
@@ -13,8 +13,11 @@ always agree):
 - one sheet per sheet block of the lessons, named «NN Name» (lesson number and
   the block's sheet name); a block's other sheets («Товары», «Магазины») are
   shared by name, so formulas such as ``Товары!$A$2:$D$5`` work as in the lesson;
-- «Практика» — data of lesson tasks with yellow cells for the reader's formulas,
+- «Задачи» — data of lesson tasks with yellow cells for the reader's formulas,
   «Ответы» — the same tasks solved by formulas.
+
+The build is reproducible: the save time is replaced by a fixed date, so the
+same data always give the same bytes (the bank keeps the file by sha256).
 
 Formulas are stored as an .xlsx stores them: English names, ``,``, ``.``
 (``sheet_eval.to_english``); Excel shows them in its own language.
@@ -53,7 +56,7 @@ from sheet_eval import (  # noqa: E402
 )
 from sheetblock import blocks_in  # noqa: E402
 
-OUT = D / "files" / "excel-praktika.xlsx"
+OUT = D / "files" / "excel-zadachnik.xlsx"
 YELLOW = "FFF2CC"
 HEAD = "F3F3F1"
 FORMATS = {"%": "0%", "0,0%": "0.0%", "0,00": "0.00", "дата": "dd.mm.yyyy"}
@@ -220,7 +223,7 @@ def build(path: Path):
     start = wb.active
     assert start is not None
     start.title = "Начало"
-    used = {"Начало", "Практика", "Ответы"}
+    used = {"Начало", "Задачи", "Ответы"}
     shared: dict[str, dict] = {}
     reference = Book()  # every sheet of the file, for --check
     index = []
@@ -266,7 +269,7 @@ def build(path: Path):
             ws.cell(1, c).fill = head_fill
             ws.column_dimensions[ws.cell(1, c).column_letter].width = 14
 
-    practice = wb.create_sheet("Практика", 1)
+    practice = wb.create_sheet("Задачи", 1)
     answers = wb.create_sheet("Ответы", 2)
     ref_answers = reference.sheet("Ответы")
     row = 1
@@ -298,12 +301,12 @@ def build(path: Path):
     for ws in (practice, answers):
         ws.column_dimensions["A"].width = 16
 
-    start["A1"] = "Практика к курсу «Excel с нуля для ЕГЭ»"
+    start["A1"] = "Задачник к курсу «Excel с нуля для ЕГЭ»"
     start["A1"].font = Font(bold=True, size=14)
-    start["A3"] = "Книга собрана из листов уроков стенда: числа в уроках и в книге совпадают."
+    start["A3"] = "Задачник собран из листов уроков: числа в уроках и в задачнике совпадают."
     start["A4"] = "Листы «NN …» — примеры урока NN: меняй исходные числа и предсказывай результат."
     start["A5"] = (
-        "«Практика» — данные задач уроков, жёлтые ячейки — место для твоих формул; «Ответы» — решения формулами."
+        "«Задачи» — данные задач уроков, жёлтые ячейки — место для твоих формул; «Ответы» — решения формулами."
     )
     start["A6"] = "Формулы записаны в файле по-английски, Excel покажет их на своём языке."
     start["A8"] = "Урок"
@@ -314,7 +317,33 @@ def build(path: Path):
     start.column_dimensions["B"].width = 28
     path.parent.mkdir(parents=True, exist_ok=True)
     wb.save(path)
+    reproducible(path)
     return reference, placed
+
+
+STAMP = "2026-10-11T00:00:00Z"  # the book's fixed date: same data → same bytes
+
+
+def reproducible(path: Path) -> None:
+    """Drop the save time from the file: openpyxl stamps docProps/core.xml and
+    every zip entry with «now». The bank stores the book by its sha256, so a
+    rebuild of unchanged data must give the same bytes."""
+    import zipfile
+
+    with zipfile.ZipFile(path) as src:
+        entries = [(info, src.read(info)) for info in src.infolist()]
+    with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as out:
+        for info, data in entries:
+            if info.filename == "docProps/core.xml":
+                data = re.sub(
+                    rb"(<dcterms:(?:created|modified)[^>]*>)[^<]*",
+                    lambda m: m.group(1) + STAMP.encode(),
+                    data,
+                )
+            fixed = zipfile.ZipInfo(info.filename, date_time=(1980, 1, 1, 0, 0, 0))
+            fixed.compress_type = zipfile.ZIP_DEFLATED
+            fixed.external_attr = info.external_attr
+            out.writestr(fixed, data)
 
 
 def relocate(formula: str, drow: int) -> str:

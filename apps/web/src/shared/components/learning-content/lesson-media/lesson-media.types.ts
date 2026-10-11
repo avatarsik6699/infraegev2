@@ -86,5 +86,36 @@ export namespace LessonMediaTypes {
     steps: readonly [RunStep, ...RunStep[]];
   };
 
-  export type Generated = Diagram | Stepper | Graph | Run;
+  /** A formula typed into a sheet and the last cell it was copied to. */
+  export type SheetFormula = { cell: string; formula: string; until?: string };
+
+  export type SheetPart = {
+    name: string;
+    /** First and last column and row shown, from 1. */
+    cols: readonly [number, number];
+    rows: readonly [number, number];
+    /** What the author typed, by address: values and formulas («=B2*C2»). */
+    inputs: Readonly<Record<string, string>>;
+    /** Number formats: «%», «0,00», «0,0%», «дата». */
+    formats: Readonly<Record<string, string>>;
+    /** Rows hidden by a filter and by hand. */
+    filtered: readonly number[];
+    hidden: readonly number[];
+    /** Source cells the learner may retype. */
+    edit: readonly string[];
+    formulas: readonly SheetFormula[];
+  };
+
+  /**
+   * A live sheet of the Excel course (Change 177), exported from the stand's
+   * ```sheet block (`sheetblock.site_data`); the site computes the values.
+   */
+  export type Sheet = {
+    kind: "sheet";
+    sheets: readonly [SheetPart, ...SheetPart[]];
+    /** The cell selected at first: [sheet, address]. */
+    select: readonly [string, string] | null;
+  };
+
+  export type Generated = Diagram | Stepper | Graph | Run | Sheet;
 }
