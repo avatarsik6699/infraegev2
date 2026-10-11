@@ -9,7 +9,7 @@
 | Change | `174` |
 | Slug | `python-course-stand` |
 | Title | Мини-курс Python по пайплайну: стенд всего курса |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/174-python-course-stand` |
 
 ---
@@ -17,7 +17,7 @@
 ## Goal
 
 Привести мини-курс Python к обязательному пайплайну и паттернам
-([lesson-pipeline.md](../runbooks/lesson-pipeline.md), [lesson-patterns.md](../runbooks/lesson-patterns.md))
+([lesson-pipeline.md](../../runbooks/lesson-pipeline.md), [lesson-patterns.md](../../runbooks/lesson-patterns.md))
 на демо-стенде (этапы 1–8), чтобы следующие темы ЕГЭ ссылались на корректные уроки курса
 (SPEC §1.4, §2.2, §2.3). Исходник архитектора — `docs/artifacts/lessons/Python_podrobny_uchebnik.html`.
 Код сайта не меняется: перенос на сайт — отдельный Change 175.
@@ -129,7 +129,7 @@ See `docs/SPEC.md` §1.4, §2.2–§2.3, `docs/runbooks/lesson-pipeline.md` and 
 ## Gate Checks
 
 > Critical Gate runs once per `/work` target set; default `/ship` reruns only invalidated checks;
-> Full Gate only with explicit `--full`. Commands: [docs/STACK.md](../STACK.md); selection:
+> Full Gate only with explicit `--full`. Commands: [docs/STACK.md](../../STACK.md); selection:
 > `python3 scripts/gate.py affected`. Record change-specific overrides here, or `None`.
 
 Проверки этапа 7 пайплайна по `content/lesson-design/course-python` и регрессия тем 23/25
