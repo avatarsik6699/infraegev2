@@ -11,6 +11,8 @@ and ```error (the last line of the traceback it must stop with), or by
 marked lines become stdin and are echoed, as a terminal shows them.
 Complete function definitions from earlier blocks of the topic (in file order)
 are prepended, so later examples may call ``get_divisors`` and similar helpers.
+Functions of a runnable example (```python run, which defines and calls them in
+one block) are prepended the same way.
 Every code line must fit in 64 characters (the site's code column).
 A program that continues an earlier one of the same file (uses its names
 and fails when run alone) is rerun after the earlier programs of that
@@ -135,6 +137,13 @@ def main(topic_dir: Path) -> int:
                 # something (unittest.main()) must not leak into later programs
                 if all(isinstance(node, DEFINITIONS) for node in tree.body):
                     prelude += code + "\n"
+            elif block.group(0).startswith("```python run") and error is None:
+                # a runnable example defines its function and calls it at once
+                # (П20); later programs of the topic may call that function
+                tree = ast.parse(code)
+                for node in tree.body:
+                    if isinstance(node, ast.FunctionDef):
+                        prelude += (ast.get_source_segment(code, node) or "") + "\n"
     print(f"checked {ran} programs, problems: {bad}")
     return 1 if bad else 0
 

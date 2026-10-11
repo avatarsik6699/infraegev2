@@ -3638,3 +3638,9 @@ FIGURES.update(EXCEL_FIGURES)
 WIDGETS.update(EXCEL_WIDGETS)
 STEPPERS.update(EXCEL_STEPPERS)
 PAGE_SCRIPTS.update(EXCEL_SCRIPTS)
+
+# Topic 5 (Change 178): figures of number records live in record_figures.py.
+from record_figures import RECORD_FIGURES, RECORD_STEPPERS  # noqa: E402
+
+FIGURES.update(RECORD_FIGURES)
+STEPPERS.update(RECORD_STEPPERS)

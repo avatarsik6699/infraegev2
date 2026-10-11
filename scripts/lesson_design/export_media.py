@@ -19,7 +19,8 @@ The strings go into a typed manifest with sizes, alt text and frame captions,
 inline, so their labels use the page font (Onest) — an SVG inside ``<img>``
 cannot load webfonts. ``topic.json`` names the site identity:
 ``"site": {"id": ..., "route": ...}``. ``--check`` rebuilds in memory and fails
-when the manifest is stale.
+when the manifest is stale; a topic without ``site`` is still on the demo stand
+(stages 1–8) and has no manifest yet, so ``--check`` skips it.
 """
 
 import argparse
@@ -200,6 +201,9 @@ def main() -> int:
     parser.add_argument("topic", type=Path)
     parser.add_argument("--check", action="store_true", help="fail on stale output")
     options = parser.parse_args()
+    if options.check and "site" not in json.loads((options.topic / "topic.json").read_text()):
+        print(f"{options.topic}: stand only, not exported yet")
+        return 0
     manifest, manifest_path = build(options.topic)
     manifest = prettier(manifest, manifest_path)
     rel = manifest_path.relative_to(REPO)

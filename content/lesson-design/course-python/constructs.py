@@ -11,7 +11,7 @@ the course lesson fills (listed in map.md).
 # topic source -> EGE task number shown in the report
 SOURCES = {
     "docs/artifacts/lessons/4.md": "4",
-    "docs/artifacts/lessons/5.md": "5",
+    "docs/artifacts/lessons/5_number_records.md": "5",
     "docs/artifacts/lessons/7.md": "7",
     "docs/artifacts/lessons/8.md": "8",
     "docs/artifacts/lessons/9.md": "9",

@@ -419,7 +419,7 @@ def render(md_text: str, lines: bool = False) -> tuple[str, list[tuple[str, str]
         run = code_html(code, runs, highlight_python) if lang == "python" else None
         inner = highlight_python(code) if lang == "python" else html.escape(code)
         pre = run or f'<pre class="code {lang}"><code>{inner}</code></pre>'
-        if not lines:
+        if not lines and not run:
             return pre
         visible = code.split("\n", 1)[1] if code.startswith("#RUN:") else code
         return (
@@ -445,8 +445,19 @@ def render(md_text: str, lines: bool = False) -> tuple[str, list[tuple[str, str]
             flags=re.S,
         )
     else:
+        # a topic's runnable block has its own box with a head («Запуск»
+        # goes there, П20); its output moves into that box, as in the course
         body = re.sub(
-            r'(<pre class="code python"[^>]*>(?:(?!</pre>).)*</pre>)' + outs,
+            r'(<div class="code-box">[^<]*<div class="code-head">(?:(?!<div class="code-box">).)*?</pre>)</div>'
+            + outs,
+            lambda m: (
+                f"{m.group(1)}{re.sub(r'</div>\s+<div', '</div><div', m.group(2).strip())}</div>"
+            ),
+            body,
+            flags=re.S,
+        )
+        body = re.sub(
+            r'(<pre class="code python"(?![^>]*data-run)[^>]*>(?:(?!</pre>).)*</pre>)' + outs,
             lambda m: (
                 f'<div class="code-box">{m.group(1)}'
                 f"{re.sub(r'</div>\s+<div', '</div><div', m.group(2).strip())}</div>"
