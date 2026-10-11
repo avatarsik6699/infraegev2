@@ -9,7 +9,7 @@
 | Change | `177` |
 | Slug | `excel-course-site` |
 | Title | Мини-курс Excel на сайте: перенос со стенда |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/177-excel-course-site` |
 
 ---
@@ -124,7 +124,7 @@ this file only tracks what to build and what's left.
 ## Gate Checks
 
 > Critical Gate runs once per `/work` target set; default `/ship` reruns only invalidated checks;
-> Full Gate only with explicit `--full`. Commands: [docs/STACK.md](../STACK.md); selection:
+> Full Gate only with explicit `--full`. Commands: [docs/STACK.md](../../STACK.md); selection:
 > `python3 scripts/gate.py affected`. Record change-specific overrides here, or `None`.
 
 - Этап 7 пайплайна для курса Excel: `verify_sheets.py --cases`, `checks.py`, `excel_needs.py`, `workbook.py --check`, `sheet_conformance.mjs`, `bank.py` (без `--write`), `export_course.py --check` (оба курса), `export_media.py --check`.
