@@ -19,7 +19,7 @@
     "lesson_design",
     "../content/lesson-design"
   ],
-  "extraPaths": ["..", "../apps/api"],
+  "extraPaths": ["..", "../apps/api", "lesson_design"],
   "venvPath": "../apps/api",
   "venv": ".venv",
   "pythonVersion": "3.12"

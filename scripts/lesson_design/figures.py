@@ -3630,3 +3630,10 @@ PAGE_SCRIPTS = {
     "data-pathb": PATH_BUILDER_JS,
     "data-range-try": RANGE_TRY_JS,
 }
+
+# The Excel course (Change 176): its figures and sandboxes live in excel_figures.py.
+from excel_figures import EXCEL_FIGURES, EXCEL_SCRIPTS, EXCEL_WIDGETS  # noqa: E402
+
+FIGURES.update(EXCEL_FIGURES)
+WIDGETS.update(EXCEL_WIDGETS)
+PAGE_SCRIPTS.update(EXCEL_SCRIPTS)

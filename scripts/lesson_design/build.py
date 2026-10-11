@@ -29,6 +29,9 @@ REPO = HERE.parents[1]
 sys.path.insert(0, str(HERE))
 from figures import FIGURES, PAGE_SCRIPTS  # noqa: E402
 from runblock import RUN_JS, code_html, file_name, prepare  # noqa: E402
+from sheet_eval import FormulaError, tokenize  # noqa: E402
+from sheetblock import prepare as prepare_sheets  # noqa: E402
+from sheetblock import scripts as sheet_scripts  # noqa: E402
 from terms import TERMS  # noqa: E402
 
 PATTERNS = REPO / "docs" / "runbooks" / "lesson-patterns.md"
@@ -55,10 +58,16 @@ PICK_BLOCK = re.compile(r"^:::(pick|pick-tokens) ([^\n]+)\n(.*?)^:::$", re.M | r
 TERM = re.compile(r"\{\{(\w+)\|(.+?)\}\}")
 IO_ROWS = {"input": "Ввод", "output": "Вывод", "error": "Ошибка"}
 TYPED = re.compile(r"⟪(.*?)⟫")
-COURSE_DIR = "course-python"
+# the Python course: terms of the topics open its lessons
+PY_COURSE_DIR = "course-python"
 # ```python name.py / ```python run name.py: a name for the head of the block
 NAMED_FENCE = re.compile(r"^```python( run)? ([\w-]+\.\w+)\n", re.M)
-HEAD_LABEL = {"shell": "команда", "text": "текст"}
+HEAD_LABEL = {
+    "shell": "команда",
+    "text": "текст",
+    "excel": "формула",
+    "excel-template": "шаблон формулы",
+}
 COPY_ICON = (
     '<svg class="ic" width="17" height="17" viewBox="0 0 24 24" aria-hidden="true">'
     '<rect x="8.5" y="8.5" width="11" height="11" rx="2"/>'
@@ -157,6 +166,36 @@ def highlight_python(src: str) -> str:
     return "".join(out)
 
 
+EXCEL_CLASS = {"func": "fn", "str": "str", "num": "num", "bool": "kw", "ref": "ref"}
+
+
+def highlight_excel(src: str) -> str:
+    """Formulas of the Excel course: functions, references, text and numbers."""
+    out = []
+    for line in src.split("\n"):
+        start = line.find("=")
+        if start < 0:
+            out.append(html.escape(line, quote=False))
+            continue
+        try:
+            toks = tokenize(line[start:])
+        except FormulaError:
+            out.append(html.escape(line, quote=False))
+            continue
+        parts, pos = [html.escape(line[:start], quote=False)], start
+        for t in toks:
+            cls = EXCEL_CLASS.get(t.kind)
+            if not cls:
+                continue
+            begin = start + t.start
+            parts.append(html.escape(line[pos:begin], quote=False))
+            parts.append(f'<span class="tok-{cls}">{html.escape(t.text, quote=False)}</span>')
+            pos = begin + len(t.text)
+        parts.append(html.escape(line[pos:], quote=False))
+        out.append("".join(parts))
+    return "\n".join(out)
+
+
 def inline_md(text: str) -> str:
     """`code` and **bold** inside hand-written widget rows."""
     text = re.sub(r"`([^`]+)`", lambda m: f"<code>{html.escape(m.group(1))}</code>", text)
@@ -209,7 +248,7 @@ _term_count: dict[str, int] = {}
 def course_slugs() -> list[str]:
     """Site route slugs of the stand's Python course lessons, in course order."""
     course = json.loads(
-        (REPO / "content" / "lesson-design" / COURSE_DIR / "course.json").read_text(
+        (REPO / "content" / "lesson-design" / PY_COURSE_DIR / "course.json").read_text(
             encoding="utf-8"
         )
     )
@@ -307,6 +346,8 @@ def render(md_text: str, lines: bool = False) -> tuple[str, list[tuple[str, str]
         lambda m: f"```python{m.group(1) or ''}\n#FILE:{m.group(2)}\n", md_text
     )
     md_text = prepare(md_text, runs)
+    md_text = md_text.replace("```excel шаблон\n", "```excel-template\n")
+    md_text, sheets = prepare_sheets(md_text)
     md_text = FIGURE_CALL.sub(call_figure, md_text)
     md_text = PICK_BLOCK.sub(pick_block, md_text)
     leftover = re.findall(r"%%[^%\n]+%%", md_text)
@@ -335,10 +376,11 @@ def render(md_text: str, lines: bool = False) -> tuple[str, list[tuple[str, str]
             )
         if lines and lang != "python":
             label = lang if "." in lang else HEAD_LABEL.get(lang, str(lang))
+            inner = highlight_excel(code) if lang.startswith("excel") else html.escape(code)
             return (
                 f'<div class="code-box">{code_head(label)}'
                 f'<pre class="code {"text" if "." in lang else lang}">'
-                f"<code>{html.escape(code)}</code></pre></div>"
+                f"<code>{inner}</code></pre></div>"
             )
         if "." in lang:
             # lines of a data file: the fence names the file (```23.txt)
@@ -401,6 +443,8 @@ def render(md_text: str, lines: bool = False) -> tuple[str, list[tuple[str, str]
         body += COLLAPSE_JS
     if runs:
         body += RUN_JS
+    if sheets:
+        body += sheet_scripts()
     # A step opens with a bold claim right after a horizontal rule; it becomes
     # an anchor for the step outline.
     outline: list[tuple[str, str]] = []
@@ -462,19 +506,28 @@ def stand_topics(stand: Path) -> list[int]:
     )
 
 
+def stand_courses(stand: Path) -> list[dict]:
+    """Mini-courses of the stand (``course-*/course.json``), the Python course first."""
+    courses = [
+        json.loads(p.read_text(encoding="utf-8")) for p in stand.glob("course-*/course.json")
+    ]
+    return sorted(courses, key=lambda c: (c["id"] != "python", c["id"]))
+
+
 def nav_html(extra: list[tuple[str, str]], current: str, numbers: list[int], stand: Path) -> str:
     """Stand bar: overview, every topic, the course, extra pages of this page group, patterns."""
     items = [("index.html", "Обзор")]
     items += [(f"{k}-1.html", f"Тема {k}") for k in numbers]
-    if (stand / COURSE_DIR / "course.json").exists():
-        items.append(("py-01.html", "Курс Python"))
+    courses = stand_courses(stand)
+    items += [(f"{c['prefix']}-01.html", c.get("nav", "Курс Python")) for c in courses]
     items += extra
     items.append(("patterns.html", "Паттерны"))
     group = current.split("-")[0]
+    prefixes = {c["prefix"] for c in courses}
     out = []
     for href, label in items:
         here = href == current or (
-            href.endswith("-01.html" if group == "py" else "-1.html")
+            href.endswith("-01.html" if group in prefixes else "-1.html")
             and href.split("-")[0] == group
             and re.fullmatch(rf"{group}-\d+\.html", current)
         )
