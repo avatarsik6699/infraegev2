@@ -9,7 +9,7 @@
 | Change | `175`                                               |
 | Slug   | `python-course-site`                                |
 | Title  | Мини-курс Python на сайте: перенос со стенда        |
-| Status | `active`                                            |
+| Status | `archived`                                          |
 | Branch | `feature/175-python-course-site`                    |
 
 ---
@@ -127,7 +127,7 @@ of truth; this file only tracks what to build and what's left.
 ## Gate Checks
 
 > Critical Gate runs once per `/work` target set; default `/ship` reruns only invalidated checks;
-> Full Gate only with explicit `--full`. Commands: [docs/STACK.md](../STACK.md); selection:
+> Full Gate only with explicit `--full`. Commands: [docs/STACK.md](../../STACK.md); selection:
 > `python3 scripts/gate.py affected`. Record change-specific overrides here, or `None`.
 
 - Этап 7 пайплайна для курса: `verify_code.py`, `checks.py`, `bank.py` (без `--write`), `export_media.py --check`, экспорт уроков `--check`.
