@@ -1,0 +1,427 @@
+{
+  "id": "python",
+  "title": "Python с нуля для ЕГЭ",
+  "prefix": "py",
+  "source": "docs/artifacts/lessons/python_course.md",
+  "modules": [
+    {
+      "id": "start",
+      "title": "Старт",
+      "lessons": [
+        {
+          "source": "01-programma.md",
+          "title": "Программа и её выполнение",
+          "level": "основной",
+          "lead": "Что такое программа, как запустить первый файл, чем выражение отличается от инструкции и как читать сообщение об ошибке.",
+          "sections": ["0", "1.1", "1.2", "1.3", "1.4", "18.1"],
+          "site": {
+            "id": "python-first-program",
+            "routeSlug": "pervaya-programma"
+          }
+        },
+        {
+          "source": "02-znacheniya.md",
+          "title": "Значения, типы и переменные",
+          "level": "основной",
+          "lead": "Почему число и текст — разные данные, как работает присваивание и что на самом деле хранит имя.",
+          "sections": ["2.1", "2.2", "2.3", "2.4", "2.5"],
+          "site": {
+            "id": "python-values",
+            "routeSlug": "znacheniya-i-peremennye"
+          }
+        },
+        {
+          "source": "03-chisla.md",
+          "title": "Числа и арифметические операции",
+          "level": "основной",
+          "lead": "Целое деление и остаток, отрицательные числа, приоритет операций, точные целые и приближённые дробные.",
+          "sections": ["3.1", "3.2", "3.3", "3.4", "3.5", "3.6"],
+          "site": {
+            "id": "python-numbers",
+            "routeSlug": "chisla-i-vyrazheniya"
+          }
+        },
+        {
+          "source": "04-vvod-i-vyvod.md",
+          "title": "Ввод, преобразование и вывод",
+          "level": "основной",
+          "lead": "Что возвращает input, когда текст можно превратить в число и как вывести несколько значений в нужном виде.",
+          "sections": ["4.1", "4.2", "4.3", "4.4"],
+          "site": {
+            "id": "python-input-output",
+            "routeSlug": "vvod-i-vyvod"
+          }
+        }
+      ]
+    },
+    {
+      "id": "conditions",
+      "title": "Условия",
+      "lessons": [
+        {
+          "source": "05-logika.md",
+          "title": "Логические выражения",
+          "level": "основной",
+          "lead": "Сравнения дают True или False; and, or и not собирают из них условия, а короткое вычисление защищает от ошибок.",
+          "sections": ["5.1", "5.2", "5.3", "5.4", "5.5"],
+          "site": {
+            "id": "python-logic",
+            "routeSlug": "logicheskie-vyrazheniya"
+          }
+        },
+        {
+          "source": "06-vetvlenie.md",
+          "title": "Ветвление: if, elif и else",
+          "level": "основной",
+          "lead": "Как программа выбирает действие по условию, когда нужны elif, а когда отдельные if.",
+          "sections": ["6.1", "6.2", "6.3", "6.4"],
+          "site": {
+            "id": "python-conditions",
+            "routeSlug": "usloviya"
+          }
+        }
+      ]
+    },
+    {
+      "id": "loops",
+      "title": "Циклы",
+      "lessons": [
+        {
+          "source": "07-while.md",
+          "title": "Цикл while и состояние программы",
+          "level": "основной",
+          "lead": "Повторение по условию, счётчик и накопитель, почему цикл даёт верный ответ, цифры числа, break и continue.",
+          "sections": ["7.1", "7.2", "7.3", "7.4", "7.5"],
+          "site": {
+            "id": "python-while",
+            "routeSlug": "while"
+          }
+        },
+        {
+          "source": "08-for.md",
+          "title": "Цикл for и диапазоны",
+          "level": "основной",
+          "lead": "for перебирает готовый набор значений; range задаёт числа с исключённой правой границей.",
+          "sections": ["8.1", "8.2", "8.3", "8.4", "8.5"],
+          "site": {
+            "id": "python-for-range",
+            "routeSlug": "for-i-range"
+          }
+        }
+      ]
+    },
+    {
+      "id": "data",
+      "title": "Строки и коллекции",
+      "lessons": [
+        {
+          "source": "09-stroki.md",
+          "title": "Строки",
+          "level": "основной",
+          "lead": "Индексы и срезы, неизменяемость, методы строк и подсчёт фрагментов с перекрытием.",
+          "sections": ["9.1", "9.2", "9.3", "9.4", "9.5", "9.6"],
+          "site": {
+            "id": "python-strings",
+            "routeSlug": "stroki"
+          }
+        },
+        {
+          "source": "10-spiski.md",
+          "title": "Списки",
+          "level": "основной",
+          "lead": "Изменяемая последовательность: методы списка, проход по значениям и индексам, ссылки и копии, split и join.",
+          "sections": ["10.1", "10.2", "10.3", "10.4", "10.5"],
+          "site": {
+            "id": "python-lists",
+            "routeSlug": "spiski"
+          }
+        },
+        {
+          "source": "11-kortezhi.md",
+          "title": "Кортежи, распаковка, enumerate и zip",
+          "level": "основной",
+          "lead": "Небольшие неизменяемые записи, раздача элементов по именам и совместный перебор.",
+          "sections": ["11.1", "11.2", "11.3"],
+          "site": {
+            "id": "python-tuples",
+            "routeSlug": "kortezhi-i-raspakovka"
+          }
+        },
+        {
+          "source": "12-slovari.md",
+          "title": "Словари и подсчёт частот",
+          "level": "основной",
+          "lead": "Доступ по смысловому ключу, обход пар и частотная таблица.",
+          "sections": ["12.1", "12.2", "12.3", "12.4"],
+          "site": {
+            "id": "python-dictionaries",
+            "routeSlug": "slovari"
+          }
+        },
+        {
+          "source": "13-mnozhestva.md",
+          "title": "Множества и выбор структуры данных",
+          "level": "основной",
+          "lead": "Только различные значения, быстрые проверки принадлежности и операции над множествами.",
+          "sections": ["13.1", "13.2", "13.3"],
+          "site": {
+            "id": "python-sets",
+            "routeSlug": "mnozhestva"
+          }
+        },
+        {
+          "source": "14-vklyucheniya.md",
+          "title": "Включения и функции для коллекций",
+          "level": "основной",
+          "lead": "Списковое включение как запись знакомого цикла, фильтр, sum, min, max, all и any.",
+          "sections": ["14.1", "14.2", "14.3", "14.4"],
+          "site": {
+            "id": "python-comprehensions",
+            "routeSlug": "vklyucheniya"
+          }
+        }
+      ]
+    },
+    {
+      "id": "functions",
+      "title": "Функции",
+      "lessons": [
+        {
+          "source": "15-funktsii.md",
+          "title": "Функции: def, return и область видимости",
+          "level": "основной",
+          "lead": "Своё действие с именем: параметры и аргументы, return против print, локальные имена и изменение переданных объектов.",
+          "sections": ["15.1", "15.2", "15.3", "15.4"],
+          "site": {
+            "id": "python-functions",
+            "routeSlug": "funktsii"
+          }
+        },
+        {
+          "source": "16-argumenty.md",
+          "title": "Аргументы, несколько результатов и lambda",
+          "level": "основной",
+          "lead": "Значения по умолчанию, именованные аргументы, кортеж результатов, функция как значение и договорённость функции.",
+          "sections": ["15.5", "15.6", "15.7", "15.8"],
+          "site": {
+            "id": "python-arguments",
+            "routeSlug": "argumenty-i-lambda"
+          }
+        },
+        {
+          "source": "17-moduli.md",
+          "title": "Модули и части программы",
+          "level": "основной",
+          "lead": "import и from, собственный модуль и основной запуск, сторонние пакеты и разделение программы на части.",
+          "sections": ["19.1", "19.2", "19.3", "19.4"],
+          "site": {
+            "id": "python-program-parts",
+            "routeSlug": "chasti-programmy"
+          }
+        },
+        {
+          "source": "18-sortirovka.md",
+          "title": "Сортировка и выбор лучших элементов",
+          "level": "основной",
+          "lead": "sorted и sort, ключ сортировки, несколько критериев, max с ключом и почему сортировка не доказывает жадный выбор.",
+          "sections": ["16.1", "16.2", "16.3", "16.4", "16.5"],
+          "site": {
+            "id": "python-sorting-search",
+            "routeSlug": "sortirovka-i-poisk"
+          }
+        },
+        {
+          "source": "19-rekursiya.md",
+          "title": "Рекурсия и запоминание",
+          "level": "основной",
+          "lead": "Функция, которая вызывает себя: базовый случай, стек незавершённых вызовов и @cache против повторных вычислений.",
+          "sections": ["25.1", "25.2", "25.3"],
+          "site": {
+            "id": "python-recursion",
+            "routeSlug": "rekursiya"
+          }
+        }
+      ]
+    },
+    {
+      "id": "tools",
+      "title": "Файлы и инструменты",
+      "lessons": [
+        {
+          "source": "20-fayly.md",
+          "title": "Файлы и внешние данные",
+          "level": "основной",
+          "lead": "Чтение файла целиком и по строкам, заголовок как часть формата, запись, пути, CSV и JSON.",
+          "sections": ["17.1", "17.2", "17.3", "17.4", "17.5", "17.6"],
+          "site": {
+            "id": "python-files",
+            "routeSlug": "fayly"
+          }
+        },
+        {
+          "source": "21-isklyucheniya.md",
+          "title": "Исключения и отладка",
+          "level": "основной",
+          "lead": "Перехват ожидаемой ошибки, raise, поиск причины по состоянию, assert и выбор проверочных примеров.",
+          "sections": ["18.2", "18.3", "18.4", "18.5", "18.6"],
+          "site": {
+            "id": "python-exceptions",
+            "routeSlug": "obrabotka-isklyucheniy"
+          }
+        },
+        {
+          "source": "22-iteratory.md",
+          "title": "Итераторы и генераторы",
+          "level": "основной",
+          "lead": "Как for получает элементы, map и filter, генераторные выражения и собственный генератор с yield.",
+          "sections": ["20.1", "20.2", "20.3", "20.4"],
+          "site": {
+            "id": "python-iterators-generators",
+            "routeSlug": "iteratory-i-generatory"
+          }
+        },
+        {
+          "source": "23-biblioteka.md",
+          "title": "Стандартная библиотека и перебор комбинаций",
+          "level": "основной",
+          "lead": "Counter, defaultdict, deque, точные Fraction и Decimal, math и itertools: product, permutations, combinations.",
+          "sections": ["20.5", "23.1", "23.2"],
+          "site": {
+            "id": "python-standard-library",
+            "routeSlug": "standartnaya-biblioteka"
+          }
+        },
+        {
+          "source": "24-zapisi-i-shablony.md",
+          "title": "Записи чисел, биты и текстовые шаблоны",
+          "level": "основной",
+          "lead": "int с основанием, bin, oct, hex и format, битовые операции, маски fnmatch и регулярные выражения re.",
+          "sections": ["22.4", "22.5", "23.4", "23.5"],
+          "site": {
+            "id": "python-notation-patterns",
+            "routeSlug": "zapisi-chisel-i-shablony"
+          }
+        },
+        {
+          "source": "25-skorost.md",
+          "title": "Скорость и память программы",
+          "level": "основной",
+          "lead": "Как растёт работа с размером данных, какие операции дорогие, сколько памяти нужно и как измерить время.",
+          "sections": ["21.1", "21.2", "21.3", "21.4", "21.5"],
+          "site": {
+            "id": "python-cost",
+            "routeSlug": "skorost-i-pamyat"
+          }
+        }
+      ]
+    },
+    {
+      "id": "final",
+      "title": "Итог",
+      "lessons": [
+        {
+          "source": "26-analiz-fayla.md",
+          "title": "Законченная программа: анализ файла",
+          "level": "основной",
+          "lead": "Договорённость, полный код, разбор новых деталей и проверка программы на разных файлах.",
+          "sections": ["30.1", "30.2", "30.3", "30.4", "30.5"],
+          "site": {
+            "id": "python-independent-program",
+            "routeSlug": "gotovaya-programma"
+          }
+        },
+        {
+          "source": "27-praktika.md",
+          "title": "Практика и итог курса",
+          "level": "основной",
+          "lead": "Порядок работы над новой задачей, ошибки, которые полезно узнавать сразу, и задачи на перенос знаний.",
+          "sections": [
+            "31.1",
+            "31.2",
+            "31.3",
+            "31.4",
+            "31.5",
+            "31.6",
+            "31.7",
+            "31.8",
+            "31.10",
+            "32",
+            "32.1",
+            "32.2",
+            "33",
+            "34.3"
+          ],
+          "site": {
+            "id": "python-practice",
+            "routeSlug": "praktika-i-itog"
+          }
+        }
+      ]
+    },
+    {
+      "id": "advanced",
+      "title": "Дополнительно",
+      "lessons": [
+        {
+          "source": "28-klassy.md",
+          "title": "Классы",
+          "level": "дополнительный",
+          "lead": "Свой тип данных: экземпляры и self, атрибуты, свойства, наследование, композиция и dataclass.",
+          "sections": ["27.1", "27.2", "27.3", "27.4", "27.5", "27.6"],
+          "site": {
+            "id": "python-classes",
+            "routeSlug": "klassy"
+          }
+        },
+        {
+          "source": "29-mekhanizmy.md",
+          "title": "Дополнительные механизмы языка",
+          "level": "дополнительный",
+          "lead": "Замыкания, собственные декораторы, контекстные менеджеры, match, байты и асинхронность.",
+          "sections": ["28.1", "28.2", "28.3", "28.4", "28.5", "28.6"],
+          "site": {
+            "id": "python-advanced-features",
+            "routeSlug": "dopolnitelnye-mekhanizmy"
+          }
+        },
+        {
+          "source": "30-testy.md",
+          "title": "Читаемость, аннотации и тесты",
+          "level": "дополнительный",
+          "lead": "Понятный код, аннотации типов, модульные тесты, медленный эталон и проверка свойств.",
+          "sections": ["29.1", "29.2", "29.3", "29.4", "29.5"],
+          "site": {
+            "id": "python-testing",
+            "routeSlug": "chitaemost-i-testy"
+          }
+        }
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "map",
+      "nav": "Карта курса",
+      "source": "map.md",
+      "title": "Карта курса Python",
+      "kicker": "Мини-курс Python · карта",
+      "lead": "Модули и уроки курса, откуда взят текст, что передано темам ЕГЭ и почему границы проведены так."
+    },
+    {
+      "name": "needs",
+      "nav": "Потребности тем",
+      "source": "needs.md",
+      "title": "Что нужно темам ЕГЭ",
+      "kicker": "Мини-курс Python · анализ",
+      "lead": "Какие конструкции Python используют исходники тем ЕГЭ и в каком уроке курса каждая объяснена."
+    },
+    {
+      "name": "review",
+      "nav": "Ревью схем",
+      "source": "review.md",
+      "title": "Ревью схем курса",
+      "kicker": "Мини-курс Python · П18",
+      "lead": "Тяжёлые места курса, что для них добавлено и где схему сознательно не ставили."
+    }
+  ]
+}

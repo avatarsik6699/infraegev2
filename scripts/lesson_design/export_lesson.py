@@ -176,7 +176,7 @@ class Converter:
         values = [v.strip() for v in universe.split(",") if v.strip()]
         variants, default = [], 0
         for index, line in enumerate(body.strip().splitlines()):
-            cells = [c.strip() for c in line.strip().lstrip("- ").split("|")]
+            cells = [c.strip() for c in re.split(r" \| ", line.strip().lstrip("- "))]
             name, value, note = (cells + ["", ""])[:3]
             if name.startswith("*"):
                 default, name = index, name.lstrip("*").strip()

@@ -11,6 +11,8 @@ pnpm-lock.yaml
 
 # Documentation and authored learning content retain intentional wrapping.
 **/*.md
+# An author's source textbook is kept verbatim (lesson pipeline, stage 1).
+docs/artifacts/lessons/*.html
 
 # Machine-local editor state is not repository formatting scope.
 .claude/settings.local.json

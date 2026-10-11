@@ -4,7 +4,11 @@ Usage: python3 -I scripts/lesson_design/verify_code.py content/lesson-design/top
 
 A block is checked when it contains ``print`` and is followed directly by an
 ```output block (shown under the code, lines joined in one row), or by a marker
-line ("Программа выведет:", "Результат:", …) and a ```text block.
+line ("Программа выведет:", "Результат:", …) and a ```text block. A course
+program may also be followed by ```input (typed lines fed to ``input()``)
+and ```error (the last line of the traceback it must stop with), or by
+```console — a terminal session where the typed text is marked ⟪…⟫: the
+marked lines become stdin and are echoed, as a terminal shows them.
 Complete function definitions from earlier blocks of the topic (in file order)
 are prepended, so later examples may call ``get_divisors`` and similar helpers.
 Every code line must fit in 64 characters (the site's code column).
@@ -16,24 +20,61 @@ may open a data file of the topic (topic 23: ``open("23.txt")``).
 Exit code 1 on any mismatch or long line.
 """
 
+import ast
 import re
 import subprocess
 import sys
 from pathlib import Path
 
 MAX_LINE = 64
-BLOCK = re.compile(r"```python\n((?:(?!```).)*?)```", re.S)
+BLOCK = re.compile(r"```python(?: run)?(?: [\w-]+\.\w+)?\n((?:(?!```).)*?)```", re.S)
 WITH_OUTPUT = re.compile(
-    r"```python\n((?:(?!```).)*?)```\n\n?"
+    r"```python(?: run)?(?: [\w-]+\.\w+)?\n((?:(?!```).)*?)```\n\n?"
     r"(?:(?:Программа выведет|Результат|Получим|Выведет|получаем|даёт|даст):?\n\n"
     r"```text\n|```output\n)(.*?)```",
     re.S,
 )
+DEFINITIONS = (ast.FunctionDef, ast.ClassDef, ast.Import, ast.ImportFrom)
+IO_AFTER = re.compile(r"\n*```(input|output|error|console)\n(.*?)```", re.S)
+TYPED = re.compile(r"⟪(.*?)⟫")
+ECHO = (
+    "import builtins as _b\n"
+    "_read = _b.input\n"
+    "def _echo(prompt=''):\n"
+    "    text = _read(prompt)\n"
+    "    print(text)\n"
+    "    return text\n"
+    "_b.input = _echo\n"
+)
+# topics only: their sources call isqrt and fnmatch without importing them;
+# a course program must import everything it uses, as a student would
 PRELUDE = "from math import isqrt\nfrom fnmatch import fnmatch\n"
 
 
+def run(source: str, stdin: str, cwd: Path | None) -> subprocess.CompletedProcess:
+    """Run one program as a student would: isolated, with typed input."""
+    return subprocess.run(
+        [sys.executable, "-I", "-c", source],
+        capture_output=True,
+        text=True,
+        timeout=300,
+        cwd=cwd,
+        input=stdin,
+    )
+
+
+def io_blocks(text: str, end: int) -> dict[str, str]:
+    """```input / ```output / ```error blocks right after a program."""
+    found = {}
+    while m := IO_AFTER.match(text, end):
+        found[m.group(1)] = m.group(2)
+        end = m.end()
+    return found
+
+
 def main(topic_dir: Path) -> int:
-    prelude, ran, bad = PRELUDE, 0, 0
+    course = (topic_dir / "course.json").exists()
+    prelude, ran, bad = ("" if course else PRELUDE), 0, 0
     files = topic_dir / "files"
     cwd = files if files.is_dir() else None
     for path in sorted(topic_dir.glob("[0-9][0-9]-*.md")):
@@ -47,41 +88,53 @@ def main(topic_dir: Path) -> int:
                 if len(line) > MAX_LINE:
                     bad += 1
                     print(f"LONG {path.name}:{line_no} ({len(line)}): {line}")
-            expected = outputs.get(block.start())
-            if expected is not None and "print" in code:
+            io = io_blocks(text, block.end())
+            expected = outputs.get(block.start(), io.get("output"))
+            error = io.get("error")
+            stdin = io.get("input", "")
+            echo = ""
+            if "console" in io:
+                expected = TYPED.sub(r"\1", io["console"])
+                stdin = "".join(t + "\n" for t in TYPED.findall(io["console"]))
+                echo = ECHO
+            if (expected is not None and "print" in code) or error is not None:
                 ran += 1
 
-                def run(source):
-                    return subprocess.run(
-                        [sys.executable, "-I", "-c", source],
-                        capture_output=True,
-                        text=True,
-                        timeout=300,
-                        cwd=cwd,
-                    )
-
-                result = run(prelude + code)
-                if result.returncode and earlier:
+                result = run(prelude + echo + code, stdin, cwd)
+                if result.returncode and earlier and error is None:
                     result = run(
                         prelude
                         + "import contextlib, io\n"
                         + "with contextlib.redirect_stdout(io.StringIO()):\n"
-                        + f"    exec(compile({earlier!r}, 'earlier', 'exec'))\n"
-                        + code
+                        + "    try:\n"
+                        + f"        exec(compile({earlier!r}, 'earlier', 'exec'))\n"
+                        + "    except SystemExit:\n"
+                        + "        pass\n"
+                        + echo
+                        + code,
+                        stdin,
+                        cwd,
                     )
-                earlier += code + "\n"
-                if result.stdout.strip() != expected.strip():
+                if error is None:
+                    earlier += code + "\n"
+                got_error = (result.stderr.strip().splitlines() or [""])[-1]
+                if result.stdout.strip() != (expected or "").strip() or (
+                    error is not None and got_error != error.strip().splitlines()[-1]
+                ):
                     bad += 1
                     print(
-                        f"MISMATCH {path.name}:{line_no}\n--- expected\n{expected}"
+                        f"MISMATCH {path.name}:{line_no}\n--- expected\n{expected}{error or ''}"
                         f"--- got\n{result.stdout}{result.stderr[-500:]}"
                     )
-            if re.search(r"^def ", code, re.M) and "print" not in code:
+            if re.search(r"^def ", code, re.M) and "print" not in code and error is None:
                 try:
-                    compile(code, "block", "exec")
-                    prelude += code + "\n"
+                    tree = ast.parse(code)
                 except SyntaxError:
-                    pass  # a one-line fragment shown for explanation
+                    continue  # a one-line fragment shown for explanation
+                # only definitions and imports; a block that also runs
+                # something (unittest.main()) must not leak into later programs
+                if all(isinstance(node, DEFINITIONS) for node in tree.body):
+                    prelude += code + "\n"
     print(f"checked {ran} programs, problems: {bad}")
     return 1 if bad else 0
 

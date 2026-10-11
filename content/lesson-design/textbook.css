@@ -14,6 +14,7 @@
   --kw: #5b3b9a;
   --str: #2a6a3a;
   --com: #636a75;
+  --err: #b3261e;
   --num: #0b6e75;
   --sans: "Onest", system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
@@ -631,6 +632,20 @@ figure.stepper {
   color: var(--muted);
   margin: 8px 0 0;
 }
+.range-try .plate svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.range-try .rt-ctl {
+  margin-top: 10px;
+}
+.range-try .rt-num {
+  width: 84px;
+}
+.range-try .rt-text {
+  width: 150px;
+}
 
 /* code and its output in one block: output in one row under the code */
 .code-box {
@@ -1124,4 +1139,443 @@ figure.cheatsheet {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+}
+
+/* course: lessons of the current module, other modules folded */
+.subnav .mod-t {
+  margin: 10px 18px 0;
+  font: 600 12.5px/1.4 var(--sans);
+  color: var(--muted);
+}
+.subnav details.mods {
+  border-top: 1px solid var(--line);
+  padding: 4px 8px 8px;
+}
+.subnav details.mods summary {
+  cursor: pointer;
+  padding: 6px 10px;
+  font-size: 14px;
+  color: var(--ink-2);
+}
+.subnav details.mods .num {
+  min-width: 0;
+  margin-left: auto;
+}
+.out-error .out-v {
+  color: var(--ink);
+}
+/* course: output keeps its lines, as in a terminal */
+.out-lines {
+  align-items: start;
+}
+pre.out-v {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* course code blocks: a head with a file-like name of the example */
+.code-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 6px 0 16px;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+}
+.code-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font: 500 13px/1 var(--mono);
+  color: var(--muted);
+}
+.code-box > pre.code {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+}
+/* output under the code: the label sits on the first line of the value */
+.out-lines {
+  align-items: start;
+}
+.out-lines .out-l,
+.out-lines .out-v {
+  line-height: 24px;
+}
+
+/* runnable code block (```python run): steps of a recorded run */
+.out[hidden],
+.run-vars[hidden],
+.run-note[hidden],
+.run-ctl[hidden],
+.run-go[hidden] {
+  display: none;
+}
+.run-box {
+  outline: none;
+}
+.run-go {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 30px;
+  padding: 0 12px 0 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--paper);
+  font: 500 14px var(--sans);
+  color: var(--ink);
+  cursor: pointer;
+}
+.run-go:hover {
+  border-color: var(--ink);
+}
+.run-go .ic {
+  width: 16px;
+  height: 16px;
+}
+.run-ctl {
+  display: flex;
+  align-items: center;
+}
+.run-ctl .ib {
+  width: 32px;
+  height: 32px;
+}
+.run-count {
+  min-width: 4.5em;
+  text-align: center;
+  font: 500 13.5px var(--sans);
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.run-close {
+  margin-left: 4px;
+}
+.run-box pre.code .ln {
+  display: block;
+  margin: 0 -16px;
+  padding: 0 16px;
+}
+.run-box pre.code .ln.on {
+  background: var(--wash);
+  box-shadow: inset 3px 0 var(--here);
+}
+.run-box pre.code .ln.bad {
+  box-shadow: inset 3px 0 var(--ink);
+}
+.run-box.running.side .run-main {
+  display: grid;
+  grid-template-columns: var(--code-w) minmax(0, 1fr);
+}
+.run-vars {
+  padding: 10px 16px 14px;
+  border-top: 1px solid var(--line);
+  background: var(--paper);
+}
+.run-box.side .run-vars {
+  border-top: 0;
+  border-left: 1px solid var(--line);
+}
+.run-h {
+  margin: 0 0 8px;
+  font: 600 13px/1.4 var(--sans);
+  color: var(--ink-2);
+}
+.vars {
+  position: relative;
+}
+.vars.with-objs {
+  display: grid;
+  grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
+  column-gap: 44px;
+  align-items: start;
+}
+.vars .links {
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+.links .link {
+  fill: none;
+  stroke: var(--ink-2);
+  stroke-width: 1.4;
+}
+.links .head {
+  fill: var(--ink-2);
+}
+.links .hot {
+  stroke: var(--here);
+}
+.links .head.hot {
+  fill: var(--here);
+  stroke: none;
+}
+.fr {
+  display: grid;
+  gap: 4px;
+}
+.fr-t {
+  font: 500 12px/1.4 var(--sans);
+  color: var(--muted);
+}
+.fr.call {
+  margin-top: 6px;
+  padding: 6px 8px 8px 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+}
+.fr.call.active {
+  border-color: var(--here);
+}
+.var {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 28px;
+  font: 500 14.5px/1 var(--mono);
+  font-variant-ligatures: none;
+}
+.vn {
+  min-width: var(--vn, 3ch);
+  font-weight: 600;
+  color: var(--ink);
+}
+.vv {
+  padding: 4px 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  background: var(--paper);
+  color: var(--ink-2);
+  white-space: pre;
+}
+.var.ch .vv {
+  border-color: var(--here);
+  color: var(--ink);
+}
+.var.fn .vv {
+  border-style: dashed;
+  color: var(--muted);
+  font: 400 13px/1 var(--sans);
+}
+.vref {
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  background: var(--paper);
+  position: relative;
+}
+.vref::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  margin: -3.5px 0 0 -3.5px;
+  border-radius: 50%;
+  background: var(--ink-2);
+}
+.objs {
+  position: relative;
+}
+.objs .obj {
+  position: absolute;
+  left: 0;
+  max-width: 100%;
+}
+.obj {
+  display: grid;
+  gap: 2px;
+  justify-self: start;
+  padding: 5px 9px 7px;
+  border: 1px solid var(--ink-2);
+  border-radius: 8px;
+  background: var(--paper);
+}
+.obj.ch {
+  border-color: var(--here);
+}
+.obj-t {
+  font: 500 11.5px/1.3 var(--sans);
+  color: var(--muted);
+}
+.obj code {
+  padding: 0;
+  background: none;
+  font: 500 14.5px/1.4 var(--mono);
+  color: var(--ink);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.run-note {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  margin: 0;
+  padding: 12px 16px;
+  border-top: 1px solid var(--line);
+  background: var(--paper);
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: var(--ink);
+}
+.run-l {
+  flex: none;
+  font: 500 12.5px/1.55 var(--sans);
+  color: var(--muted);
+  min-width: 4.8em;
+}
+.run-t code {
+  font-size: 0.88em;
+}
+.run-empty {
+  margin: 0;
+  font: 400 14px/24px var(--sans);
+  color: var(--muted);
+}
+
+/* one «Вывод» field: typed input as a key-like chip, an error in red */
+kbd.typed {
+  display: inline-block;
+  padding: 0 6px 0 7px;
+  margin: 1px 0;
+  border: 1px solid var(--line-strong);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  background: var(--wash);
+  font: inherit;
+  line-height: 20px;
+  color: var(--ink);
+}
+kbd.typed::after {
+  content: " ↵";
+  color: var(--muted);
+  font-size: 0.85em;
+}
+.out-err {
+  display: inline-block;
+  padding-left: 9px;
+  border-left: 3px solid var(--err);
+  color: var(--err);
+  white-space: pre-wrap;
+}
+/* copy button in the head of a code block */
+.code-copy {
+  width: 32px;
+  height: 32px;
+  color: var(--muted);
+}
+.code-copy:hover {
+  color: var(--ink);
+}
+.code-copy.done {
+  color: var(--str);
+}
+.code-copy[hidden] {
+  display: none;
+}
+/* line numbers in a runnable block: the explanation names the line */
+.run-box pre.code code {
+  counter-reset: ln;
+}
+.run-box pre.code .ln::before {
+  counter-increment: ln;
+  content: counter(ln);
+  display: inline-block;
+  width: 2ch;
+  margin-right: 14px;
+  text-align: right;
+  color: #a3a8b0;
+  font-weight: 400;
+}
+
+/* long code or output folded to about 7.5 lines, as the site's CodeBlock */
+.fold {
+  position: relative;
+  min-width: 0;
+}
+.fold[data-folded] > pre.code {
+  max-height: calc(7.5 * 1.7em + 12px);
+  overflow-y: hidden;
+}
+.fold[data-folded] > .out-v {
+  max-height: calc(7.5 * 24px);
+  overflow-y: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent);
+  mask-image: linear-gradient(to bottom, #000 55%, transparent);
+}
+/* the output keeps its button under the text, not over it */
+.out .fold[data-folded] > .fold-bar {
+  position: static;
+  padding: 4px 0 0;
+  background: none;
+  justify-content: flex-start;
+}
+.out .fold > .fold-bar {
+  justify-content: flex-start;
+  padding: 4px 0 0;
+}
+.fold-bar {
+  display: flex;
+  justify-content: center;
+  padding: 2px 8px 8px;
+}
+.code-box > .fold > pre.code + .fold-bar {
+  background: var(--soft);
+}
+.fold[data-folded] > .fold-bar {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding-top: 40px;
+  background: linear-gradient(to bottom, transparent, var(--paper) 52%);
+}
+.code-box > .fold[data-folded] > pre.code + .fold-bar {
+  background: linear-gradient(to bottom, transparent, var(--soft) 52%);
+}
+.fold-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 12px 0 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--paper);
+  font: 500 13.5px var(--sans);
+  color: var(--ink-2);
+  cursor: pointer;
+}
+.fold-btn:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+.fold-btn .ic {
+  transition: transform 0.2s ease;
+}
+.fold-btn[aria-expanded="true"] .ic {
+  transform: rotate(180deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .fold-btn .ic {
+    transition: none;
+  }
+}
+/* step-by-step run: nothing is folded, the controls are hidden */
+.running .fold > pre.code,
+.running .fold > .out-v {
+  max-height: none;
+}
+.running .fold-bar {
+  display: none;
 }

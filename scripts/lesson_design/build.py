@@ -1,4 +1,4 @@
-"""Build the lesson-design stand: one topic folder -> static HTML pages.
+"""Build the lesson-design stand: one topic or course folder -> static HTML pages.
 
 Usage (from the repository root):
 
@@ -6,15 +6,18 @@ Usage (from the repository root):
         content/lesson-design/topic-25
 
 The topic folder holds ``topic.json`` (see docs/runbooks/lesson-pipeline.md),
-the subtopic Markdown files and the extra pages. Pages are written next to the
+the subtopic Markdown files and the extra pages; a mini-course folder holds
+``course.json`` (modules of one-page lessons) instead. Pages are written next to the
 topic folder, into the stand root that also holds ``index.html`` and
 ``textbook.css``. The pattern catalogue is rendered from
 ``docs/runbooks/lesson-patterns.md`` into ``patterns.html``.
 """
 
 import ast
+import builtins
 import html
 import json
+import keyword
 import re
 import sys
 from pathlib import Path
@@ -25,6 +28,7 @@ HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[1]
 sys.path.insert(0, str(HERE))
 from figures import FIGURES, PAGE_SCRIPTS  # noqa: E402
+from runblock import RUN_JS, code_html, prepare  # noqa: E402
 from terms import TERMS  # noqa: E402
 
 PATTERNS = REPO / "docs" / "runbooks" / "lesson-patterns.md"
@@ -37,20 +41,125 @@ FONTS = (
     '&display=swap">'
 )
 
-KEYWORDS = set(
-    "and as break continue def elif else for if in is not or return "
-    "while True False None import from".split()
-)
-BUILTINS = {"print", "range", "len", "sum", "abs", "int", "sorted", "min", "max"}
+KEYWORDS = set(keyword.kwlist)
+BUILTINS = {n for n in dir(builtins) if n[0].islower() and not n.startswith("_")}
 TOKEN = re.compile(
-    r"(#.*$)|(\"(?:[^\"\\]|\\.)*\"|'(?:[^'\\]|\\.)*')|(\b\d[\d_]*\b)"
-    r"|(\b[A-Za-z_]\w*\b)",
+    r"(#.*$)"
+    r'|("""[\s\S]*?"""|\'\'\'[\s\S]*?\'\'\''
+    r"|\"(?:[^\"\\\n]|\\.)*\"|'(?:[^'\\\n]|\\.)*')"
+    r"|(\b\d[\d_]*\b)|(\b[A-Za-z_]\w*\b)",
     re.M,
 )
 FIGURE_CALL = re.compile(r"%%(\w+)\((.*?)\)%%")
 PICK_BLOCK = re.compile(r"^:::(pick|pick-tokens) ([^\n]+)\n(.*?)^:::$", re.M | re.S)
 TERM = re.compile(r"\{\{(\w+)\|(.+?)\}\}")
-COURSE = "http://localhost:8080/courses/python/"
+# Stand: a term opens the course lesson that explains it now (map.md, «Термины
+# тем ЕГЭ → уроки курса»); terms.py keeps the site slugs until Change 175.
+TERM_LESSON = {
+    "num": 3, "str": 4, "eq": 5, "andor": 5, "if": 6, "while": 7, "break": 7,
+    "for": 8, "len": 9, "in": 9, "slice": 9, "list": 10, "split": 10,
+    "dict": 12, "set": 13, "comp": 14, "agg": 14, "def": 15, "import": 17,
+    "sorted": 18, "rec": 19, "file": 20,
+}  # fmt: skip
+IO_ROWS = {"input": "Ввод", "output": "Вывод", "error": "Ошибка"}
+TYPED = re.compile(r"⟪(.*?)⟫")
+COURSE_DIR = "course-python"
+# ```python name.py / ```python run name.py: a name for the head of the block
+NAMED_FENCE = re.compile(r"^```python( run)? ([\w-]+\.\w+)\n", re.M)
+HEAD_LABEL = {"shell": "команда", "text": "текст"}
+COPY_ICON = (
+    '<svg class="ic" width="17" height="17" viewBox="0 0 24 24" aria-hidden="true">'
+    '<rect x="8.5" y="8.5" width="11" height="11" rx="2"/>'
+    '<path d="M15.5 8.5V6a1.5 1.5 0 0 0-1.5-1.5H6A1.5 1.5 0 0 0 4.5 6v8A1.5 1.5 0 0 0 6 15.5h2.5"/></svg>'
+)
+COPY_JS = r"""<script>
+document.querySelectorAll(".code-copy").forEach(function (b) {
+  b.hidden = !navigator.clipboard;
+  b.onclick = function () {
+    var pre = b.closest(".code-box").querySelector("pre.code");
+    navigator.clipboard.writeText(pre.innerText.replace(/\n$/, "")).then(function () {
+      b.classList.add("done"); b.setAttribute("aria-label", "Код скопирован");
+      setTimeout(function () { b.classList.remove("done"); b.setAttribute("aria-label", "Скопировать код"); }, 1600);
+    });
+  };
+});
+</script>"""
+
+
+def file_name(code: str) -> str:
+    """A file-like name for a course code block: the first function, class or
+    meaningful variable of the example; ``main.py`` otherwise."""
+    try:
+        tree = ast.parse(code)
+    except SyntaxError:
+        return "main.py"
+    for node in tree.body:
+        if isinstance(node, ast.FunctionDef):
+            return f"{node.name}.py"
+        if isinstance(node, ast.ClassDef):
+            return re.sub(r"(?<!^)(?=[A-Z])", "_", node.name).lower() + ".py"
+    for node in tree.body:
+        if isinstance(node, ast.Assign) and isinstance(node.targets[0], ast.Name):
+            name = node.targets[0].id
+            if len(name) > 2:
+                return f"{name}.py"
+    return "main.py"
+
+
+# Course: a code block or an output longer than 8 lines is folded to about 7.5
+# lines with a fade and «Показать весь код / вывод» — as the site's CodeBlock.
+# While a block runs step by step everything stays open (CSS .running).
+COLLAPSE_JS = r"""<script>
+(function () {
+  var CHEVRON = '<svg class="ic" width="15" height="15" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+  var n = 0;
+  function fold(target, what) {
+    var lines = target.textContent.replace(/\n$/, "").split("\n").length;
+    if (lines <= 8) return;
+    var wrap = document.createElement("div");
+    wrap.className = "fold";
+    target.before(wrap); wrap.append(target);
+    target.id = target.id || "fold-" + (++n);
+    var bar = document.createElement("div");
+    bar.className = "fold-bar";
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "fold-btn"; b.setAttribute("aria-controls", target.id);
+    wrap.append(bar); bar.append(b);
+    function set(open) {
+      wrap.toggleAttribute("data-folded", !open);
+      b.setAttribute("aria-expanded", open);
+      b.innerHTML = CHEVRON + "<span>" + (open ? "Свернуть " + what : "Показать весь " + what) + "</span>";
+    }
+    b.onclick = function () { set(wrap.hasAttribute("data-folded")); };
+    set(false);
+  }
+  document.querySelectorAll(".code-box > pre.code:not([data-run])").forEach(function (pre) { fold(pre, "код"); });
+  document.querySelectorAll(".code-box .out-lines > .out-v").forEach(function (v) { fold(v, "вывод"); });
+})();
+</script>"""
+
+
+def code_head(label: str, copy: bool = False) -> str:
+    button = (
+        f'<button type="button" class="ib code-copy" aria-label="Скопировать код" hidden>'
+        f"{COPY_ICON}</button>"
+        if copy
+        else ""
+    )
+    return (
+        f'<div class="code-head"><span class="code-name">{html.escape(label)}</span>{button}</div>'
+    )
+
+
+def out_lines(lang: str, code: str) -> str:
+    """Course: output, typed input and an error in one «Вывод» field. Typed
+    text becomes a key-like chip, an error is set apart by colour."""
+    text = html.escape(code.rstrip("\n"))
+    if lang == "error":
+        return f'<span class="out-err">{text}</span>'
+    if lang == "input":
+        return "\n".join(f'<kbd class="typed">{t}</kbd>' for t in text.split("\n"))
+    return TYPED.sub(lambda t: f'<kbd class="typed">{t.group(1)}</kbd>', text)
 
 
 def highlight_python(src: str) -> str:
@@ -94,7 +203,7 @@ def pick_block(m: re.Match) -> str:
     values = [v.strip() for v in universe.split(",") if v.strip()]
     rows = []
     for line in body.strip().splitlines():
-        cells = [c.strip() for c in line.lstrip("- ").split("|")]
+        cells = [c.strip() for c in re.split(r" \| ", line.lstrip("- "))]
         name, value, note = (cells + ["", ""])[:3]
         selected = name.startswith("*")
         name = name.lstrip("*").strip()
@@ -125,11 +234,23 @@ def pick_block(m: re.Match) -> str:
 _term_count: dict[str, int] = {}
 
 
+def course_titles() -> list[str]:
+    """Lesson titles of the stand's Python course, in course order."""
+    course = json.loads(
+        (REPO / "content" / "lesson-design" / COURSE_DIR / "course.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    return [lesson["title"] for m in course["modules"] for lesson in m["lessons"]]
+
+
 def term(m: re.Match) -> str:
     key, label = m.group(1), m.group(2)
     if key not in TERMS:
         raise SystemExit(f"Unknown term {key!r}; add it to terms.TERMS")
-    title, body, slug, lesson = TERMS[key]
+    title, body, _, _ = TERMS[key]
+    number = TERM_LESSON[key]
+    lesson = course_titles()[number - 1]
     _term_count[key] = _term_count.get(key, 0) + 1
     pid = f"term-{key}-{_term_count[key]}"
     return (
@@ -137,8 +258,8 @@ def term(m: re.Match) -> str:
         f'aria-expanded="false">{label}</button>'
         f'<span id="{pid}" popover class="pop" role="dialog" aria-label="{html.escape(title)}">'
         f'<b class="pop-t">{html.escape(title)}</b><span class="pop-b">{body}</span>'
-        f'<span class="pop-c">Курс Python: {html.escape(lesson)}</span>'
-        f'<span class="pop-a"><a href="{COURSE}{slug}">Читать урок →</a>'
+        f'<span class="pop-c">Курс Python, урок {number}: {html.escape(lesson)}</span>'
+        f'<span class="pop-a"><a href="py-{number:02d}.html">Читать урок →</a>'
         f'<button type="button" class="pop-x" popovertarget="{pid}" '
         'popovertargetaction="hide">Закрыть</button></span></span>'
     )
@@ -202,7 +323,18 @@ def call_figure(m: re.Match) -> str:
     return FIGURES[name](*args, **kwargs)
 
 
-def render(md_text: str) -> tuple[str, list[tuple[str, str]]]:
+def render(md_text: str, lines: bool = False) -> tuple[str, list[tuple[str, str]]]:
+    """Markdown page -> HTML body and step outline.
+
+    ``lines``: output keeps its lines as in a terminal (the course); topics
+    show it in one compact row. A ```console block is a terminal session
+    where the typed text is marked ⟪…⟫.
+    """
+    runs: dict[str, list] = {}
+    md_text = NAMED_FENCE.sub(
+        lambda m: f"```python{m.group(1) or ''}\n#FILE:{m.group(2)}\n", md_text
+    )
+    md_text = prepare(md_text, runs)
     md_text = FIGURE_CALL.sub(call_figure, md_text)
     md_text = PICK_BLOCK.sub(pick_block, md_text)
     leftover = re.findall(r"%%[^%\n]+%%", md_text)
@@ -216,12 +348,25 @@ def render(md_text: str) -> tuple[str, list[tuple[str, str]]]:
 
     def code_block(m: re.Match) -> str:
         lang, code = m.group(1), html.unescape(m.group(2))
-        if lang == "output":
-            # Output lines joined in one row, under the code they come from.
+        if lang == "console" or (lines and lang in IO_ROWS):  # console: always lines
+            return (
+                '<div class="out out-lines"><span class="out-l">Вывод</span>'
+                f'<pre class="out-v">{out_lines(lang, code)}</pre></div>'
+            )
+        if lang in IO_ROWS:
+            # Output lines joined in one row, under the code they come from;
+            # typed input and the last line of an expected error likewise.
             shown = ", ".join(code.rstrip("\n").split("\n"))
             return (
-                '<div class="out"><span class="out-l">Вывод</span>'
+                f'<div class="out out-{lang}"><span class="out-l">{IO_ROWS[lang]}</span>'
                 f'<span class="out-v">{html.escape(shown)}</span></div>'
+            )
+        if lines and lang != "python":
+            label = lang if "." in lang else HEAD_LABEL.get(lang, str(lang))
+            return (
+                f'<div class="code-box">{code_head(label)}'
+                f'<pre class="code {"text" if "." in lang else lang}">'
+                f"<code>{html.escape(code)}</code></pre></div>"
             )
         if "." in lang:
             # lines of a data file: the fence names the file (```23.txt)
@@ -229,8 +374,19 @@ def render(md_text: str) -> tuple[str, list[tuple[str, str]]]:
                 f'<pre class="code text" data-file="{html.escape(lang)}">'
                 f"<code>{html.escape(code)}</code></pre>"
             )
+        name = None
+        if lang == "python" and code.startswith("#FILE:"):
+            first, _, code = code.partition("\n")
+            name = first[len("#FILE:") :]
+        run = code_html(code, runs, highlight_python) if lang == "python" else None
         inner = highlight_python(code) if lang == "python" else html.escape(code)
-        return f'<pre class="code {lang}"><code>{inner}</code></pre>'
+        pre = run or f'<pre class="code {lang}"><code>{inner}</code></pre>'
+        if not lines:
+            return pre
+        visible = code.split("\n", 1)[1] if code.startswith("#RUN:") else code
+        return (
+            f'<div class="code-box">{code_head(name or file_name(visible), copy=True)}{pre}</div>'
+        )
 
     body = re.sub(
         r'<pre><code class="language-([\w.+-]+)">(.*?)</code></pre>',
@@ -238,12 +394,41 @@ def render(md_text: str) -> tuple[str, list[tuple[str, str]]]:
         body,
         flags=re.S,
     )
-    body = re.sub(
-        r'(<pre class="code python">(?:(?!</pre>).)*</pre>)\s*(<div class="out">.*?</div>)',
-        r'<div class="code-box">\1\2</div>',
-        body,
-        flags=re.S,
-    )
+    outs = r'((?:\s*<div class="out out-[^"]+">.*?</div>)+)'
+    if lines:
+        # course: every code block already has its box with a head; the
+        # output, typed input or error under the code moves into that box
+        body = re.sub(
+            r'(<div class="code-box">(?:(?!<div class="code-box">).)*?</pre>)</div>' + outs,
+            lambda m: (
+                f"{m.group(1)}{re.sub(r'</div>\s+<div', '</div><div', m.group(2).strip())}</div>"
+            ),
+            body,
+            flags=re.S,
+        )
+    else:
+        body = re.sub(
+            r'(<pre class="code python"[^>]*>(?:(?!</pre>).)*</pre>)' + outs,
+            lambda m: (
+                f'<div class="code-box">{m.group(1)}'
+                f"{re.sub(r'</div>\s+<div', '</div><div', m.group(2).strip())}</div>"
+            ),
+            body,
+            flags=re.S,
+        )
+    if lines:
+        # one «Вывод» field per program: output, typed input and error together
+        body = re.sub(
+            r'</pre></div><div class="out out-lines"><span class="out-l">Вывод</span><pre class="out-v">',
+            "\n",
+            body,
+        )
+    if "code-copy" in body:
+        body += COPY_JS
+    if lines:
+        body += COLLAPSE_JS
+    if runs:
+        body += RUN_JS
     # A step opens with a bold claim right after a horizontal rule; it becomes
     # an anchor for the step outline.
     outline: list[tuple[str, str]] = []
@@ -305,17 +490,21 @@ def stand_topics(stand: Path) -> list[int]:
     )
 
 
-def nav_html(topic: dict, current: str, numbers: list[int]) -> str:
-    """Stand bar: overview, every topic, extra pages of this topic, patterns."""
-    n = topic["number"]
+def nav_html(extra: list[tuple[str, str]], current: str, numbers: list[int], stand: Path) -> str:
+    """Stand bar: overview, every topic, the course, extra pages of this page group, patterns."""
     items = [("index.html", "Обзор")]
     items += [(f"{k}-1.html", f"Тема {k}") for k in numbers]
-    items += [(f"{n}-{p['name']}.html", p["nav"]) for p in topic.get("pages", [])]
+    if (stand / COURSE_DIR / "course.json").exists():
+        items.append(("py-01.html", "Курс Python"))
+    items += extra
     items.append(("patterns.html", "Паттерны"))
+    group = current.split("-")[0]
     out = []
     for href, label in items:
         here = href == current or (
-            href == f"{n}-1.html" and re.fullmatch(rf"{n}-\d+\.html", current)
+            href.endswith("-01.html" if group == "py" else "-1.html")
+            and href.split("-")[0] == group
+            and re.fullmatch(rf"{group}-\d+\.html", current)
         )
         attr = ' aria-current="page"' if here else ""
         out.append(f'<a href="{href}"{attr}>{html.escape(label)}</a>')
@@ -327,6 +516,7 @@ def build_topic(topic_dir: Path) -> None:
     n = topic["number"]
     stand = topic_dir.parent
     numbers = stand_topics(stand)
+    nav_extra = [(f"{n}-{p['name']}.html", p["nav"]) for p in topic.get("pages", [])]
     lessons = topic["subtopics"] + [dict(topic["final"], level="")]
     outs = [f"{n}-{i}.html" for i in range(1, len(lessons) + 1)]
     core_count = len(topic["subtopics"])
@@ -369,7 +559,7 @@ def build_topic(topic_dir: Path) -> None:
             lesson["title"],
             kicker,
             lesson["lead"],
-            nav_html(topic, out, numbers),
+            nav_html(nav_extra, out, numbers, stand),
             body,
             outline,
             subnav(out),
@@ -385,7 +575,7 @@ def build_topic(topic_dir: Path) -> None:
             extra["title"],
             extra["kicker"],
             extra["lead"],
-            nav_html(topic, out, numbers),
+            nav_html(nav_extra, out, numbers, stand),
             body,
             [],
         )
@@ -397,7 +587,7 @@ def build_topic(topic_dir: Path) -> None:
         "Учебные паттерны",
         "Обязательный каталог приёмов подачи",
         "Скелет урока и приёмы, по которым строится каждая тема.",
-        nav_html(topic, "patterns.html", numbers),
+        nav_html(nav_extra, "patterns.html", numbers, stand),
         body,
         [],
     )
@@ -405,7 +595,96 @@ def build_topic(topic_dir: Path) -> None:
     print("patterns.html")
 
 
+def build_course(course_dir: Path) -> None:
+    """A mini-course: modules of one-page lessons ``py-01.html`` …, plus extra pages."""
+    course = json.loads((course_dir / "course.json").read_text(encoding="utf-8"))
+    stand = course_dir.parent
+    numbers = stand_topics(stand)
+    prefix = course["prefix"]
+    nav_extra = [(f"{prefix}-{p['name']}.html", p["nav"]) for p in course.get("pages", [])]
+    lessons = [(m, lesson) for m in course["modules"] for lesson in m["lessons"]]
+    outs = [f"{prefix}-{i:02d}.html" for i in range(1, len(lessons) + 1)]
+
+    def subnav(current: str) -> str:
+        """Lessons of the current module, other modules folded under one summary."""
+        here = outs.index(current)
+        first, rows, items, title = 0, [], [], ""
+        for module in course["modules"]:
+            last = first + len(module["lessons"])
+            span = f"уроки {first + 1}–{last}"
+            if first <= here < last:
+                title = f"{module['title']} · {span} из {len(lessons)}"
+                for i in range(first, last):
+                    lesson = lessons[i][1]
+                    note = " · доп." if lesson["level"] == "дополнительный" else ""
+                    attr = ' aria-current="page"' if i == here else ""
+                    items.append(
+                        f'<li><a href="{outs[i]}"{attr}><span class="num">{i + 1}</span>'
+                        f"{html.escape(lesson['title'])}{note}</a></li>"
+                    )
+            rows.append(
+                f'<li><a href="{outs[first]}">{html.escape(module["title"])}'
+                f' <span class="num">{span}</span></a></li>'
+            )
+            first = last
+        return (
+            '<nav class="subnav course" aria-label="Уроки курса">'
+            f'<p class="mod-t">{html.escape(title)}</p><ol>{"".join(items)}</ol>'
+            f'<details class="mods"><summary>Все модули курса</summary><ol>{"".join(rows)}</ol>'
+            "</details></nav>"
+        )
+
+    def pager(i: int) -> str:
+        links = []
+        if i > 0:
+            title = html.escape(lessons[i - 1][1]["title"])
+            links.append(f'<a class="prev" href="{outs[i - 1]}">← {title}</a>')
+        if i < len(lessons) - 1:
+            title = html.escape(lessons[i + 1][1]["title"])
+            links.append(f'<a class="next" href="{outs[i + 1]}">{title} →</a>')
+        return '<nav class="pager" aria-label="Соседние уроки">' + "".join(links) + "</nav>"
+
+    for i, ((module, lesson), out) in enumerate(zip(lessons, outs, strict=True)):
+        kicker = (
+            f"{course['title']} · {module['title']} · Урок {i + 1} из {len(lessons)}"
+            f" · {lesson['level']} уровень"
+        )
+        body, outline = render(
+            (course_dir / lesson["source"]).read_text(encoding="utf-8"), lines=True
+        )
+        text = page(
+            lesson["title"],
+            kicker,
+            lesson["lead"],
+            nav_html(nav_extra, out, numbers, stand),
+            body,
+            outline,
+            subnav(out),
+            pager(i),
+        )
+        (stand / out).write_text(text, encoding="utf-8")
+        print(f"{out}: {len(outline)} steps")
+
+    for page_def in course.get("pages", []):
+        out = f"{prefix}-{page_def['name']}.html"
+        body, _ = render((course_dir / page_def["source"]).read_text(encoding="utf-8"), lines=True)
+        text = page(
+            page_def["title"],
+            page_def["kicker"],
+            page_def["lead"],
+            nav_html(nav_extra, out, numbers, stand),
+            body,
+            [],
+        )
+        (stand / out).write_text(text, encoding="utf-8")
+        print(out)
+
+
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         raise SystemExit(__doc__)
-    build_topic(Path(sys.argv[1]).resolve())
+    folder = Path(sys.argv[1]).resolve()
+    if (folder / "course.json").exists():
+        build_course(folder)
+    else:
+        build_topic(folder)
