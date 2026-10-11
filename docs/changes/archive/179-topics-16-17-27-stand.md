@@ -9,7 +9,7 @@
 | Change | `179` |
 | Slug | `topics-16-17-27-stand` |
 | Title | Волна 1: темы 16, 17, 27 по пайплайну на демо-стенде |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/179-topics-16-17-27-stand` |
 
 ---
@@ -17,7 +17,7 @@
 ## Goal
 
 Перестроить на демо-стенде три темы ЕГЭ по обязательному пайплайну
-([lesson-pipeline.md](../runbooks/lesson-pipeline.md), [lesson-patterns.md](../runbooks/lesson-patterns.md)),
+([lesson-pipeline.md](../../runbooks/lesson-pipeline.md), [lesson-patterns.md](../../runbooks/lesson-patterns.md)),
 этапы 1–8 (SPEC §9, пункт 1): № 16 «Рекурсия» (`docs/artifacts/lessons/16.md`), № 17 «Числовые
 последовательности» (`17.md`), № 27 «Кластеризация» (`27.md`). Перенос темы 5 на сайт отложен
 архитектором (2026-10-11): сначала стенд пополняется волнами тем.
@@ -110,7 +110,7 @@ See `docs/SPEC.md` §1.4, §2.3, `docs/runbooks/lesson-pipeline.md` and the File
 ## Gate Checks
 
 > Critical Gate runs once per `/work` target set; default `/ship` reruns only invalidated checks;
-> Full Gate only with explicit `--full`. Commands: [docs/STACK.md](../STACK.md); selection:
+> Full Gate only with explicit `--full`. Commands: [docs/STACK.md](../../STACK.md); selection:
 > `python3 scripts/gate.py affected`. Record change-specific overrides here, or `None`.
 
 Проверки этапа 7 пайплайна по `topic-16`, `topic-17`, `topic-27` (агенты — своей темы, оркестратор —
