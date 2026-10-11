@@ -3644,3 +3644,33 @@ from record_figures import RECORD_FIGURES, RECORD_STEPPERS  # noqa: E402
 
 FIGURES.update(RECORD_FIGURES)
 STEPPERS.update(RECORD_STEPPERS)
+
+# Wave 1 of the topics (Change 179): each topic keeps its figures in its own module.
+from cluster_figures import (  # noqa: E402
+    CLUSTER_FIGURES,
+    CLUSTER_SCRIPTS,
+    CLUSTER_STEPPERS,
+    CLUSTER_WIDGETS,
+)
+from recursion_figures import (  # noqa: E402
+    RECURSION_FIGURES,
+    RECURSION_SCRIPTS,
+    RECURSION_STEPPERS,
+    RECURSION_WIDGETS,
+)
+from sequence_figures import (  # noqa: E402
+    SEQUENCE_FIGURES,
+    SEQUENCE_SCRIPTS,
+    SEQUENCE_STEPPERS,
+    SEQUENCE_WIDGETS,
+)
+
+for _figures, _steppers, _widgets, _scripts in (
+    (RECURSION_FIGURES, RECURSION_STEPPERS, RECURSION_WIDGETS, RECURSION_SCRIPTS),
+    (SEQUENCE_FIGURES, SEQUENCE_STEPPERS, SEQUENCE_WIDGETS, SEQUENCE_SCRIPTS),
+    (CLUSTER_FIGURES, CLUSTER_STEPPERS, CLUSTER_WIDGETS, CLUSTER_SCRIPTS),
+):
+    FIGURES.update(_figures)
+    STEPPERS.update(_steppers)
+    WIDGETS.update(_widgets)
+    PAGE_SCRIPTS.update(_scripts)

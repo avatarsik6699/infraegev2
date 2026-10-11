@@ -8,9 +8,9 @@
 
 | Файл | Тема | Строк |
 | --- | --- | ---: |
-| `docs/artifacts/lessons/16_rekursion.md` | № 16 — рекурсия | 3282 |
-| `docs/artifacts/lessons/17_num_sec.md` | № 17 — числовые последовательности | 2893 |
-| `docs/artifacts/lessons/27_clusters.md` | № 27 — кластеризация | 2710 |
+| `docs/artifacts/lessons/16.md` | № 16 — рекурсия | 3282 |
+| `docs/artifacts/lessons/17.md` | № 17 — числовые последовательности | 2893 |
+| `docs/artifacts/lessons/27.md` | № 27 — кластеризация | 2710 |
 
 Ниже ссылки вида `16:113` означают «файл 16, строка 113». Частоты посчитаны скриптом по всем трём файлам.
 

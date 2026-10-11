@@ -18,14 +18,14 @@ SOURCES = {
     "docs/artifacts/lessons/11.md": "11",
     "docs/artifacts/lessons/10.md": "13",
     "docs/artifacts/lessons/14.md": "14",
-    "docs/artifacts/lessons/16_rekursion.md": "16",
-    "docs/artifacts/lessons/17_num_sec.md": "17",
-    "docs/artifacts/lessons/19_21_theory_of_game.md": "19–21",
+    "docs/artifacts/lessons/16.md": "16",
+    "docs/artifacts/lessons/17.md": "17",
+    "docs/artifacts/lessons/19_21.md": "19–21",
     "docs/artifacts/lessons/23_graphs.md": "23",
     "docs/artifacts/lessons/24.md": "24",
     "docs/artifacts/lessons/25_dividers_and_mask.md": "25",
-    "docs/artifacts/lessons/26_data_processing.md": "26",
-    "docs/artifacts/lessons/27_clusters.md": "27",
+    "docs/artifacts/lessons/26.md": "26",
+    "docs/artifacts/lessons/27.md": "27",
 }
 
 CONSTRUCTS = {
