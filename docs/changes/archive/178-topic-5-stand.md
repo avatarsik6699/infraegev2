@@ -9,15 +9,15 @@
 | Change | `178` |
 | Slug | `topic-5-stand` |
 | Title | Тема 5 «Преобразование записи числа» по пайплайну: демо-стенд |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/178-topic-5-stand` |
 
 ---
 
 ## Goal
 
-Перестроить тему 5 ЕГЭ по обязательному пайплайну ([lesson-pipeline.md](../runbooks/lesson-pipeline.md),
-[lesson-patterns.md](../runbooks/lesson-patterns.md)) на демо-стенде — этапы 1–8 (SPEC §9, пункт 1).
+Перестроить тему 5 ЕГЭ по обязательному пайплайну ([lesson-pipeline.md](../../runbooks/lesson-pipeline.md),
+[lesson-patterns.md](../../runbooks/lesson-patterns.md)) на демо-стенде — этапы 1–8 (SPEC §9, пункт 1).
 Исходник архитектора — `docs/artifacts/lessons/5.md` (≈2780 строк: число и запись, позиционные
 системы, дописывание и замена цифр, чётность и сумма цифр, повторные шаги, инверсия, Python-средства,
 поиск входа и границы перебора, обратный ход). Подборки «Решу ЕГЭ»: theme 362 «Посимвольное
@@ -101,7 +101,7 @@ See `docs/SPEC.md` §1.4, §2.3, `docs/runbooks/lesson-pipeline.md` and the File
 ## Gate Checks
 
 > Critical Gate runs once per `/work` target set; default `/ship` reruns only invalidated checks;
-> Full Gate only with explicit `--full`. Commands: [docs/STACK.md](../STACK.md); selection:
+> Full Gate only with explicit `--full`. Commands: [docs/STACK.md](../../STACK.md); selection:
 > `python3 scripts/gate.py affected`. Record change-specific overrides here, or `None`.
 
 Проверки этапа 7 пайплайна по `content/lesson-design/topic-5` и регрессионная сборка тем 23/25 и
