@@ -112,7 +112,7 @@ export class PracticeCutoverPage {
   async expectLegacyBrowserProgressIsIgnored(): Promise<void> {
     await this.page.goto("/courses/python/pervaya-programma");
     await expect(
-      this.page.locator("#answer-python-first-program-output-order"),
+      this.page.locator("#answer-python-first-program-t02"),
     ).toBeEnabled();
     await this.page.evaluate(() => {
       localStorage.setItem(
@@ -121,10 +121,9 @@ export class PracticeCutoverPage {
           version: 1,
           data: {
             solvedTaskIds: [
-              "python-first-program-output-order",
-              "python-first-program-variable-trace",
-              "python-first-program-input-conversion",
-              "python-first-program-expression",
+              "python-first-program-t02",
+              "python-first-program-t03",
+              "python-first-program-t08",
             ],
             acceptedAnswers: {},
           },
@@ -133,18 +132,18 @@ export class PracticeCutoverPage {
     });
     await this.page.reload();
     await expect(
-      this.page.locator("#answer-python-first-program-output-order"),
+      this.page.locator("#answer-python-first-program-t02"),
     ).toBeEnabled();
     await this.page.goto("/courses/python");
     await expect(
       this.page.locator("[data-guest-progress-lock]").getByRole("link"),
     ).toHaveAccessibleName(
-      "Прогресс: 0 из 140. Войти, чтобы сохранять прогресс",
+      "Прогресс: 0 из 146. Войти, чтобы сохранять прогресс",
     );
     const moduleProgress = this.page.locator(
       '[data-course-overview-page] [role="progressbar"]',
     );
-    await expect(moduleProgress).toHaveCount(9);
+    await expect(moduleProgress).toHaveCount(8);
     expect(
       await moduleProgress.evaluateAll((bars) =>
         bars.every((bar) => bar.getAttribute("aria-valuenow") === "0"),
@@ -154,7 +153,7 @@ export class PracticeCutoverPage {
     await expect(
       this.page
         .locator("[data-course-progress]")
-        .getByText("Освоено 0 из 28 уроков", { exact: true }),
+        .getByText("Освоено 0 из 27 уроков", { exact: true }),
     ).toBeVisible();
   }
 

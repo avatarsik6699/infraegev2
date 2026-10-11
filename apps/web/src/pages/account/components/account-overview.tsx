@@ -150,6 +150,7 @@ export const AccountOverview: React.FC<AccountOverviewTypes.Props> = (
       title: lesson.title,
       routeSlug: lesson.routeSlug,
       masteryThreshold: lesson.masteryThreshold,
+      level: lesson.level,
       tasks: courseById.get(lesson.id)?.tasks ?? [],
     })),
     topics: publishedTopics.map((topic) => ({

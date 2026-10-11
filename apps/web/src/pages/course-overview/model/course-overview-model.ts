@@ -43,7 +43,9 @@ const calculate = (
     id: lesson.id,
     tasks: summaries.get(lesson.id)?.tasks ?? [],
     masteryThreshold: lesson.masteryThreshold,
+    level: lesson.level,
   }));
+  const core = courseProgress.coreLessons(progressLessons);
   const practice = courseProgress.calculatePractice(
     progressLessons,
     guest ? {} : saved,
@@ -53,10 +55,11 @@ const calculate = (
   };
   const ready = complete && (hydrated || guest);
   const allMastered =
-    published.length > 0 &&
-    published.every((lesson) => practice.byLessonId[lesson.id]?.mastered);
+    core.length > 0 &&
+    core.every((lesson) => practice.byLessonId[lesson.id]?.mastered);
   const next = published.find(
-    (lesson) => !practice.byLessonId[lesson.id]?.mastered,
+    (lesson) =>
+      lesson.level !== "advanced" && !practice.byLessonId[lesson.id]?.mastered,
   );
   const first = published[0];
   const target = ready ? (next ?? first) : first;
@@ -67,11 +70,11 @@ const calculate = (
     if (allMastered) actionLabel = "Повторить курс";
     else if (continuing && target) actionLabel = `Продолжить: ${target.title}`;
   }
-  const masteredLessons = published.filter(
+  const masteredLessons = core.filter(
     (lesson) => practice.byLessonId[lesson.id]?.mastered,
   ).length;
   return {
-    lessonCount: published.length,
+    lessonCount: core.length,
     masteredLessons: ready ? masteredLessons : undefined,
     level: courseCatalog.entries.find((entry) => entry.id === props.course.id)
       ?.level,
@@ -99,6 +102,7 @@ const calculate = (
             id: item.id,
             title: item.title,
             number: `${String(moduleIndex + 1)}.${String(lessonIndex + 1)}`,
+            advanced: item.level === "advanced" || undefined,
             routeSlug:
               lesson?.status === "published" ? lesson.routeSlug : undefined,
             progress:

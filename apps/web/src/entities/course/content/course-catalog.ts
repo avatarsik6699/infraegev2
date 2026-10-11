@@ -60,6 +60,7 @@ const entries: readonly CourseCatalogTypes.Entry[] = definitions.map(
           {
             id: lesson.id,
             masteryThreshold: lesson.masteryThreshold ?? 0.8,
+            level: lesson.level ?? "core",
           },
         ];
       }),
@@ -72,6 +73,9 @@ const entries: readonly CourseCatalogTypes.Entry[] = definitions.map(
       status: "published",
       routeSlug: publication.routeSlug,
       lessonCount: progressLessons.length,
+      advancedLessonIds: progressLessons
+        .filter((lesson) => lesson.level === "advanced")
+        .map((lesson) => lesson.id),
     };
   },
 );

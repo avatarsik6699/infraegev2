@@ -109,15 +109,12 @@ def inline_svg(svg: str) -> tuple[str, int, int, str]:
     return svg, width, height, label.group(1) if label else ""
 
 
-def build(topic: Path) -> tuple[str, Path]:
-    """Return the manifest text and its target path."""
-    meta, sources = topic_sources(topic)
-    site = meta["site"]
-    manifest_path = REPO / "apps/web/src/entities/lesson/content" / f"{site['id']}.media.ts"
+def figure_entries(texts: list[str], seen: set[str] | None = None) -> list[str]:
+    """Manifest entries for every ``%%builder(args)%%`` call of the texts."""
+    seen = set() if seen is None else seen
     entries: list[str] = []
-    seen: set[str] = set()
-    for source in sources:
-        for match in FIGURE_CALL.finditer(source.read_text()):
+    for text in texts:
+        for match in FIGURE_CALL.finditer(text):
             name, args_src = match.group(1), match.group(2)
             if name in WIDGETS and name not in WIDGET_DATA:
                 continue
@@ -137,10 +134,10 @@ def build(topic: Path) -> tuple[str, Path]:
                 frames = []
                 width = height = 0
                 for svg, caption in STEPPERS[name](*args, **kwargs):
-                    text, width, height, _ = inline_svg(svg)
+                    text_svg, width, height, _ = inline_svg(svg)
                     frames.append(
                         "      {\n"
-                        + prop(8, "svg", ts_string(text))
+                        + prop(8, "svg", ts_string(text_svg))
                         + "\n"
                         + prop(8, "caption", ts_string(caption))
                         + "\n      },"
@@ -150,25 +147,37 @@ def build(topic: Path) -> tuple[str, Path]:
                     f"    height: {height},\n    frames: [\n" + "\n".join(frames) + "\n    ],\n  },"
                 )
             else:
-                text, width, height, alt = inline_svg(FIGURES[name](*args, **kwargs))
+                text_svg, width, height, alt = inline_svg(FIGURES[name](*args, **kwargs))
                 if not alt:
                     raise SystemExit(f"{key}: a diagram needs aria-label for its alt text")
                 entries.append(
                     f'  {key}: {{\n    kind: "diagram",\n'
-                    + prop(4, "svg", ts_string(text))
+                    + prop(4, "svg", ts_string(text_svg))
                     + f"\n    width: {width},\n    height: {height},\n"
                     + prop(4, "alt", ts_string(alt))
                     + "\n  },"
                 )
-    rel = topic.resolve().relative_to(REPO)
-    manifest = (
+    return entries
+
+
+def manifest_text(source: Path, entries: list[str]) -> str:
+    rel = source.resolve().relative_to(REPO)
+    return (
         HEADER.format(source=rel)
         + 'import type { LessonMediaTypes } from "~/shared/components/learning-content";\n\n'
         + "export const lessonMedia = {\n"
         + "\n".join(entries)
         + "\n} as const satisfies Record<string, LessonMediaTypes.Generated>;\n"
     )
-    return manifest, manifest_path
+
+
+def build(topic: Path) -> tuple[str, Path]:
+    """Return the manifest text and its target path."""
+    meta, sources = topic_sources(topic)
+    site = meta["site"]
+    manifest_path = REPO / "apps/web/src/entities/lesson/content" / f"{site['id']}.media.ts"
+    entries = figure_entries([source.read_text() for source in sources])
+    return manifest_text(topic, entries), manifest_path
 
 
 def prettier(text: str, path: Path) -> str:

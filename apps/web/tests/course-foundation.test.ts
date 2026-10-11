@@ -10,13 +10,22 @@ import {
   getCourseLessons,
   type CourseProgressTypes,
 } from "~/entities/course";
+import course from "../../../content/lesson-design/course-python/course.json";
 import {
   loadMigrationPractice as loadPracticeTasks,
   migrationTaskIds,
 } from "./practice-migration-fixture";
 
 describe("Python course foundation", () => {
-  it("publishes the complete expanded curriculum for final evaluation", () => {
+  const planned = course.modules.flatMap((courseModule) =>
+    courseModule.lessons.map((lesson) => ({
+      ...lesson.site,
+      title: lesson.title,
+      level: lesson.level === "дополнительный" ? "advanced" : "core",
+    })),
+  );
+
+  it("publishes the rebuilt course of the stand (Change 175)", () => {
     expect(coursePublications).toEqual([
       expect.objectContaining({
         id: "python",
@@ -25,665 +34,120 @@ describe("Python course foundation", () => {
         status: "published",
       }),
     ]);
-    expect(courseLessonPublications).toHaveLength(28);
+    expect(courseLessonPublications.map((lesson) => lesson.id)).toEqual(
+      planned.map((lesson) => lesson.id),
+    );
     expect(
-      courseLessonPublications.filter(
-        (lesson) => lesson.status === "published",
-      ),
-    ).toHaveLength(28);
-    expect(
-      courseLessonPublications.every((lesson) =>
-        ["draft", "published"].includes(lesson.status),
-      ),
+      courseLessonPublications.every((lesson) => lesson.status === "published"),
     ).toBe(true);
-    expect(
-      courseLessonPublications.find(
-        (lesson) => lesson.id === "python-todo-start",
-      ),
-    ).toMatchObject({
-      routeSlug: "spisok-del",
-      title: "Добавляем дела и выводим список",
-    });
-    expect(
-      courseLessonPublications.find(
-        (lesson) => lesson.id === "python-todo-actions",
-      ),
-    ).toMatchObject({ routeSlug: "deystviya-so-spiskom" });
-    expect(
-      courseLessonPublications.find(
-        (lesson) => lesson.id === "python-todo-storage",
-      ),
-    ).toMatchObject({ routeSlug: "sohranenie-spiska-del" });
+    const pythonCourse = findCourseByRouteSlug("python");
+    if (!pythonCourse) throw new Error("Published Python course is missing");
+    expect(pythonCourse.modules.map((courseModule) => courseModule.id)).toEqual(
+      course.modules.map((courseModule) => courseModule.id),
+    );
+    expect(getCourseLessons(pythonCourse).map((lesson) => lesson.id)).toEqual(
+      planned.map((lesson) => lesson.id),
+    );
   });
 
-  it("resolves only lessons owned by the requested course", () => {
-    const pythonCourse = findCourseByRouteSlug("python");
-    const pythonFirstProgramLesson = findCourseLessonByRouteSlugs(
-      "python",
-      "pervaya-programma",
-    );
-    const pythonConditionsLesson = findCourseLessonByRouteSlugs(
-      "python",
-      "usloviya",
-    );
-    const pythonErrorsLesson = findCourseLessonByRouteSlugs(
-      "python",
-      "oshibki",
-    );
-
-    expect(findCoursePublicationByRouteSlug("python")).toMatchObject({
-      id: "python",
-      status: "published",
-    });
+  it("resolves lessons by route slug and drops the retired ones", () => {
     expect(
       findCourseLessonPublicationByRouteSlugs("python", "pervaya-programma"),
     ).toMatchObject({ id: "python-first-program", status: "published" });
     expect(
+      findCourseLessonByRouteSlugs("python", "logicheskie-vyrazheniya"),
+    ).toMatchObject({ id: "python-logic" });
+    expect(findCoursePublicationByRouteSlug("python")).toBeDefined();
+    expect(
       findCourseLessonPublicationByRouteSlugs("missing", "pervaya-programma"),
     ).toBeUndefined();
-    expect(
-      findCourseLessonPublicationByRouteSlugs("python", "oshibki"),
-    ).toMatchObject({ id: "python-errors", status: "published" });
-    expect(
-      findCourseLessonPublicationByRouteSlugs("python", "usloviya"),
-    ).toMatchObject({ id: "python-conditions", status: "published" });
-    expect(pythonCourse).toBeDefined();
-    expect(pythonFirstProgramLesson).toBeDefined();
-    expect(pythonErrorsLesson).toBeDefined();
-    expect(pythonConditionsLesson).toBeDefined();
-    expect(findCourseLessonByRouteSlugs("missing", "pervaya-programma")).toBe(
-      undefined,
-    );
-    if (
-      !pythonCourse ||
-      !pythonFirstProgramLesson ||
-      !pythonErrorsLesson ||
-      !pythonConditionsLesson
-    ) {
-      throw new Error("Published Python course fixture is missing");
+    for (const retired of ["oshibki", "spisok-del", "otbor-rezultata"]) {
+      expect(findCourseLessonByRouteSlugs("python", retired)).toBeUndefined();
     }
-    const courseLessons = getCourseLessons(pythonCourse);
-    expect(courseLessons).toHaveLength(28);
-    expect(courseLessons.slice(0, 5)).toEqual([
-      pythonFirstProgramLesson,
-      expect.objectContaining({ id: "python-numbers" }),
-      pythonErrorsLesson,
-      pythonConditionsLesson,
-      expect.objectContaining({ id: "python-compound-conditions" }),
+  });
+
+  it("marks the additional lessons in the plan and the definitions", () => {
+    const pythonCourse = findCourseByRouteSlug("python");
+    if (!pythonCourse) throw new Error("Published Python course is missing");
+    const advanced = planned
+      .filter((lesson) => lesson.level === "advanced")
+      .map((lesson) => lesson.id);
+    expect(advanced).toEqual([
+      "python-classes",
+      "python-advanced-features",
+      "python-testing",
     ]);
-    expect(pythonCourse.modules).toHaveLength(9);
+    const planItems = pythonCourse.modules.flatMap(
+      (courseModule) => courseModule.lessonPlan,
+    );
     expect(
-      pythonCourse.modules.flatMap((courseModule) => courseModule.lessonPlan),
-    ).toHaveLength(28);
-    expect(pythonCourse).toMatchObject({
-      summary:
-        "От первой программы — к задачам и алгоритмам, которые пригодятся на ЕГЭ.",
-      audience:
-        "Подойдёт, если вы раньше не программировали: начнём с самого начала и будем двигаться небольшими шагами.",
-      learningOutcomes: [
-        "Понимать, что делает небольшая программа и как меняются значения",
-        "Писать и проверять простые программы на Python",
-        "Разбираться в сообщениях об ошибках и находить причину",
-        "Собирать знакомые команды и конструкции в терминальное приложение с сохранением данных",
-      ],
-    });
-  });
-
-  it("loads five authored practice tasks in order without checker secrets", async () => {
-    const pythonFirstProgramLesson = findCourseLessonByRouteSlugs(
-      "python",
-      "pervaya-programma",
-    );
-    if (!pythonFirstProgramLesson) {
-      throw new Error("Published Python course lesson fixture is missing");
-    }
-    const tasks = await loadPracticeTasks(
-      migrationTaskIds(pythonFirstProgramLesson.id),
-    );
-
-    expect(tasks.map((task) => task.id)).toEqual(
-      migrationTaskIds(pythonFirstProgramLesson.id),
-    );
-    expect(tasks).toHaveLength(5);
-    for (const task of tasks) {
-      expect(task.title).not.toBe("");
-      expect(task.statement).not.toBe("");
-      expect(task.theoryLinks.length).toBeGreaterThan(0);
-      expect(task.solution.length).toBeGreaterThan(0);
-      expect(task).not.toHaveProperty("answer_variants");
-      expect(task).not.toHaveProperty("numeric_tolerance");
-      expect(task).not.toHaveProperty("explanation");
+      planItems.filter((item) => item.level === "advanced").map((i) => i.id),
+    ).toEqual(advanced);
+    for (const lesson of getCourseLessons(pythonCourse)) {
+      expect(lesson.level ?? "core").toBe(
+        advanced.includes(lesson.id) ? "advanced" : "core",
+      );
     }
   });
 
-  it("preserves the first-program editorial pilot structure and tasks", () => {
-    const lesson = findCourseLessonByRouteSlugs("python", "pervaya-programma");
-
-    expect(lesson).toBeDefined();
-    expect(lesson?.theory.map((concept) => concept.id)).toEqual([
-      "program-order",
-      "values-and-variables",
-      "input-and-conversion",
-      "calculation-and-output",
-      "run-and-check",
-    ]);
-    expect(migrationTaskIds(lesson?.id)).toEqual([
-      "python-first-program-output-order",
-      "python-first-program-variable-trace",
-      "python-first-program-input-conversion",
-      "python-first-program-expression",
-      "python-first-program-local-run",
-    ]);
-    expect(lesson).toMatchObject({
-      accessTier: "free",
-      masteryThreshold: 0.8,
-      status: "published",
-    });
-  });
-
-  it("preserves the foundation editorial batch structure and tasks", () => {
-    const cases = [
-      {
-        routeSlug: "chisla-i-vyrazheniya",
-        sectionIds: ["types", "operations", "precedence", "workflow"],
-        practiceTaskIds: [
-          "python-numbers-precedence",
-          "python-numbers-division",
-          "python-numbers-remainder",
-          "python-numbers-conversion",
-          "python-numbers-local-run",
-        ],
-      },
-      {
-        routeSlug: "oshibki",
-        sectionIds: [
-          "error-as-clue",
-          "read-bottom-up",
-          "syntax-error",
-          "name-error",
-          "type-or-value",
-          "fix-and-rerun",
-        ],
-        practiceTaskIds: [
-          "python-errors-final-line",
-          "python-errors-source-line",
-          "python-errors-syntax-fix",
-          "python-errors-value-error",
-          "python-errors-local-fix",
-        ],
-      },
-      {
-        routeSlug: "usloviya",
-        sectionIds: [
-          "comparison-result",
-          "if-branch",
-          "if-else",
-          "comparison-boundaries",
-          "test-both-branches",
-        ],
-        practiceTaskIds: [
-          "python-conditions-comparison-result",
-          "python-conditions-branch-trace",
-          "python-conditions-boundary",
-          "python-conditions-operator",
-          "python-conditions-local-run",
-        ],
-      },
-      {
-        routeSlug: "sostavnye-usloviya",
-        sectionIds: ["model", "trace", "pitfall", "workflow"],
-        practiceTaskIds: [
-          "python-compound-conditions-branch-order",
-          "python-compound-conditions-logic-trace",
-          "python-compound-conditions-boundary",
-          "python-compound-conditions-fix",
-          "python-compound-conditions-local-run",
-        ],
-      },
-    ] as const;
-
-    for (const lessonCase of cases) {
-      const lesson = findCourseLessonByRouteSlugs(
-        "python",
-        lessonCase.routeSlug,
+  it("opens every lesson with an untitled lead and ends it with a result", () => {
+    const pythonCourse = findCourseByRouteSlug("python");
+    if (!pythonCourse) throw new Error("Published Python course is missing");
+    for (const lesson of getCourseLessons(pythonCourse)) {
+      expect(lesson.theory[0]).toMatchObject({ id: "intro", lead: true });
+      expect(lesson.theory.slice(1).some((concept) => concept.lead)).toBe(
+        false,
       );
-
-      expect(lesson).toBeDefined();
-      expect(lesson?.theory.map((concept) => concept.id)).toEqual(
-        lessonCase.sectionIds,
-      );
-      expect(migrationTaskIds(lesson?.id)).toEqual(lessonCase.practiceTaskIds);
-      expect(lesson).toMatchObject({
-        accessTier: "free",
-        masteryThreshold: 0.8,
-        status: "published",
-      });
+      const ids = lesson.theory.map((concept) => concept.id);
+      expect(new Set(ids).size).toBe(ids.length);
+      expect(
+        lesson.theory.every((concept) => concept.navLabel.length > 0),
+      ).toBe(true);
+      expect(lesson.result).toBeTruthy();
     }
   });
 
-  it("preserves the loops editorial batch structure and tasks", () => {
-    const cases = [
-      {
-        routeSlug: "for-i-range",
-        sectionIds: ["model", "trace", "pitfall", "workflow"],
-        practiceTaskIds: [
-          "python-for-range-range-values",
-          "python-for-range-sum-trace",
-          "python-for-range-boundary",
-          "python-for-range-fix",
-          "python-for-range-local-run",
-        ],
-      },
-      {
-        routeSlug: "while",
-        sectionIds: ["model", "trace", "pitfall", "workflow"],
-        practiceTaskIds: [
-          "python-while-trace",
-          "python-while-stop-value",
-          "python-while-condition",
-          "python-while-fix",
-          "python-while-local-run",
-        ],
-      },
-      {
-        routeSlug: "schetchiki-i-nakopiteli",
-        sectionIds: ["model", "trace", "other-state", "pitfall", "workflow"],
-        practiceTaskIds: [
-          "python-loop-state-counter",
-          "python-loop-state-accumulator",
-          "python-loop-state-boundary",
-          "python-loop-state-fix",
-          "python-loop-state-local-run",
-        ],
-      },
-      {
-        routeSlug: "tsifry-chisla",
-        sectionIds: ["one-step", "loop", "zero", "procedure"],
-        practiceTaskIds: [
-          "python-number-digits-last",
-          "python-number-digits-shorten",
-          "python-number-digits-trace",
-          "python-number-digits-sum",
-          "python-number-digits-local-run",
-        ],
-      },
-    ] as const;
-
-    for (const lessonCase of cases) {
-      const lesson = findCourseLessonByRouteSlugs(
-        "python",
-        lessonCase.routeSlug,
-      );
-
-      expect(lesson).toBeDefined();
-      expect(lesson?.theory.map((concept) => concept.id)).toEqual(
-        lessonCase.sectionIds,
-      );
-      expect(migrationTaskIds(lesson?.id)).toEqual(lessonCase.practiceTaskIds);
-      expect(lesson).toMatchObject({
-        accessTier: "free",
-        masteryThreshold: 0.8,
-        status: "published",
-      });
-    }
-  });
-
-  it("preserves the collections editorial batch structure and tasks", () => {
-    const cases = [
-      {
-        routeSlug: "stroki",
-        sectionIds: ["model", "trace", "split-join", "pitfall", "workflow"],
-        practiceTaskIds: [
-          "python-strings-index",
-          "python-strings-negative-index",
-          "python-strings-slice",
-          "python-strings-fix",
-          "python-strings-local-run",
-        ],
-      },
-      {
-        routeSlug: "spiski",
-        sectionIds: ["model", "trace", "remove", "pitfall", "workflow"],
-        practiceTaskIds: [
-          "python-lists-index",
-          "python-lists-mutation",
-          "python-lists-append",
-          "python-lists-trace",
-          "python-lists-local-run",
-        ],
-      },
-      {
-        routeSlug: "mnozhestva",
-        sectionIds: ["model", "trace", "pitfall", "workflow"],
-        practiceTaskIds: [
-          "python-sets-unique-count",
-          "python-sets-membership",
-          "python-sets-add",
-          "python-sets-order",
-          "python-sets-local-run",
-        ],
-      },
-      {
-        routeSlug: "slovari",
-        sectionIds: ["model", "trace", "records", "pitfall", "workflow"],
-        practiceTaskIds: [
-          "python-dictionaries-lookup",
-          "python-dictionaries-update",
-          "python-dictionaries-membership",
-          "python-dictionaries-get",
-          "python-dictionaries-local-run",
-        ],
-      },
-      {
-        routeSlug: "sortirovka-i-poisk",
-        sectionIds: ["search", "sorted", "key", "choice"],
-        practiceTaskIds: [
-          "python-sorting-search-linear",
-          "python-sorting-search-sorted",
-          "python-sorting-search-in-place",
-          "python-sorting-search-key",
-          "python-sorting-search-local-run",
-        ],
-      },
-      {
-        routeSlug: "vklyucheniya",
-        sectionIds: ["from-loop", "filter", "kinds", "decision"],
-        practiceTaskIds: [
-          "python-comprehensions-list",
-          "python-comprehensions-filter",
-          "python-comprehensions-set",
-          "python-comprehensions-dict",
-          "python-comprehensions-local-run",
-        ],
-      },
-    ] as const;
-
-    for (const lessonCase of cases) {
-      const lesson = findCourseLessonByRouteSlugs(
-        "python",
-        lessonCase.routeSlug,
-      );
-
-      expect(lesson).toBeDefined();
-      expect(lesson?.theory.map((concept) => concept.id)).toEqual(
-        lessonCase.sectionIds,
-      );
-      expect(migrationTaskIds(lesson?.id)).toEqual(lessonCase.practiceTaskIds);
-      expect(lesson).toMatchObject({
-        accessTier: "free",
-        masteryThreshold: 0.8,
-        status: "published",
-      });
-    }
-  });
-
-  it("preserves the functions and files editorial batch structure and tasks", () => {
-    const cases = [
-      {
-        routeSlug: "funktsii",
-        sectionIds: ["model", "trace", "pitfall", "workflow"],
-        practiceTaskIds: [
-          "python-functions-call",
-          "python-functions-parameters",
-          "python-functions-return",
-          "python-functions-fix",
-          "python-functions-local-run",
-        ],
-      },
-      {
-        routeSlug: "chasti-programmy",
-        sectionIds: ["model", "trace", "pitfall", "workflow"],
-        practiceTaskIds: [
-          "python-program-parts-responsibility",
-          "python-program-parts-data-flow",
-          "python-program-parts-composition",
-          "python-program-parts-fix",
-          "python-program-parts-local-run",
-        ],
-      },
-      {
-        routeSlug: "iteratory-i-generatory",
-        sectionIds: ["inside-for", "exhaustion", "generator", "choice"],
-        practiceTaskIds: [
-          "python-iterators-generators-iterable",
-          "python-iterators-generators-next",
-          "python-iterators-generators-exhausted",
-          "python-iterators-generators-yield",
-          "python-iterators-generators-local-run",
-        ],
-      },
-      {
-        routeSlug: "obrabotka-isklyucheniy",
-        sectionIds: ["expected", "specific", "retry", "decision"],
-        practiceTaskIds: [
-          "python-exceptions-value-error",
-          "python-exceptions-specific",
-          "python-exceptions-else",
-          "python-exceptions-loop",
-          "python-exceptions-local-run",
-        ],
-      },
-      {
-        routeSlug: "fayly",
-        sectionIds: ["model", "write", "trace", "pitfall", "workflow"],
-        practiceTaskIds: [
-          "python-files-read-line",
-          "python-files-strip",
-          "python-files-parse",
-          "python-files-aggregate",
-          "python-files-local-run",
-        ],
-      },
-      {
-        routeSlug: "tablitsy",
-        sectionIds: ["model", "trace", "records", "pitfall", "workflow"],
-        practiceTaskIds: [
-          "python-tables-split",
-          "python-tables-columns",
-          "python-tables-filter",
-          "python-tables-aggregate",
-          "python-tables-local-run",
-        ],
-      },
-    ] as const;
-
-    for (const lessonCase of cases) {
-      const lesson = findCourseLessonByRouteSlugs(
-        "python",
-        lessonCase.routeSlug,
-      );
-
-      expect(lesson).toBeDefined();
-      expect(lesson?.theory.map((concept) => concept.id)).toEqual(
-        lessonCase.sectionIds,
-      );
-      expect(migrationTaskIds(lesson?.id)).toEqual(lessonCase.practiceTaskIds);
-      expect(lesson).toMatchObject({
-        accessTier: "free",
-        masteryThreshold: 0.8,
-        status: "published",
-      });
-    }
-  });
-
-  it("preserves the algorithms and final project editorial batch structure and tasks", () => {
-    const cases = [
-      {
-        routeSlug: "polnyy-perebor",
-        sectionIds: ["model", "trace", "pitfall", "workflow"],
-        practiceTaskIds: [
-          "python-bruteforce-range",
-          "python-bruteforce-condition",
-          "python-bruteforce-count",
-          "python-bruteforce-nested",
-          "python-bruteforce-local-run",
-        ],
-      },
-      {
-        routeSlug: "otbor-rezultata",
-        sectionIds: ["model", "trace", "pitfall", "workflow"],
-        practiceTaskIds: [
-          "python-select-result-filter",
-          "python-select-result-minimum",
-          "python-select-result-maximum",
-          "python-select-result-initial-value",
-          "python-select-result-local-run",
-        ],
-      },
-      {
-        routeSlug: "spisok-del",
-        sectionIds: ["first-run", "command-loop", "empty", "snapshot"],
-        practiceTaskIds: [
-          "python-todo-start-storage",
-          "python-todo-start-command",
-          "python-todo-start-add",
-          "python-todo-start-show",
-          "python-todo-start-local-run",
-        ],
-      },
-      {
-        routeSlug: "deystviya-so-spiskom",
-        sectionIds: ["continue", "change", "delete", "snapshot"],
-        practiceTaskIds: [
-          "python-todo-actions-find",
-          "python-todo-actions-complete",
-          "python-todo-actions-edit",
-          "python-todo-actions-delete",
-          "python-todo-actions-local-run",
-        ],
-      },
-      {
-        routeSlug: "sohranenie-spiska-del",
-        sectionIds: ["why-file", "load", "identity", "snapshot"],
-        practiceTaskIds: [
-          "python-todo-storage-import",
-          "python-todo-storage-write",
-          "python-todo-storage-read",
-          "python-todo-storage-missing",
-          "python-todo-storage-local-run",
-        ],
-      },
-      {
-        routeSlug: "gotovaya-programma",
-        sectionIds: [
-          "grown-program",
-          "bad-input",
-          "file-recovery",
-          "whole-test",
-          "refactor",
-        ],
-        practiceTaskIds: [
-          "python-independent-program-contract",
-          "python-independent-program-decomposition",
-          "python-independent-program-test-cases",
-          "python-independent-program-fix",
-          "python-independent-program-local-run",
-        ],
-      },
-    ] as const;
-
-    for (const lessonCase of cases) {
-      const lesson = findCourseLessonByRouteSlugs(
-        "python",
-        lessonCase.routeSlug,
-      );
-
-      expect(lesson).toBeDefined();
-      expect(lesson?.theory.map((concept) => concept.id)).toEqual(
-        lessonCase.sectionIds,
-      );
-      expect(migrationTaskIds(lesson?.id)).toEqual(lessonCase.practiceTaskIds);
-      expect(lesson).toMatchObject({
-        accessTier: "free",
-        masteryThreshold: 0.8,
-        status: "published",
-      });
-    }
-  });
-
-  it("loads the published conditions tasks without checker secrets", async () => {
-    const pythonConditionsLesson = findCourseLessonByRouteSlugs(
-      "python",
-      "usloviya",
-    );
-    if (!pythonConditionsLesson) {
-      throw new Error("Published Python conditions lesson fixture is missing");
-    }
-    const tasks = await loadPracticeTasks(
-      migrationTaskIds(pythonConditionsLesson.id),
-    );
-
-    expect(tasks.map((task) => task.id)).toEqual(
-      migrationTaskIds(pythonConditionsLesson.id),
-    );
-    expect(tasks).toHaveLength(5);
-    for (const task of tasks) {
-      expect(task.title).not.toBe("");
-      expect(task.statement).not.toBe("");
-      expect(task.theoryLinks.length).toBeGreaterThan(0);
-      expect(task.solution.length).toBeGreaterThan(0);
-      expect(task).not.toHaveProperty("answer_variants");
-      expect(task).not.toHaveProperty("numeric_tolerance");
-      expect(task).not.toHaveProperty("explanation");
-    }
-  });
-
-  it("loads the published errors tasks without checker secrets", async () => {
-    const pythonErrorsLesson = findCourseLessonByRouteSlugs(
-      "python",
-      "oshibki",
-    );
-    if (!pythonErrorsLesson) {
-      throw new Error("Published Python errors lesson fixture is missing");
-    }
-    const tasks = await loadPracticeTasks(
-      migrationTaskIds(pythonErrorsLesson.id),
-    );
-
-    expect(tasks.map((task) => task.id)).toEqual(
-      migrationTaskIds(pythonErrorsLesson.id),
-    );
-    expect(tasks).toHaveLength(5);
-    for (const task of tasks) {
-      expect(task.title).not.toBe("");
-      expect(task.statement).not.toBe("");
-      expect(task.theoryLinks.length).toBeGreaterThan(0);
-      expect(task.solution.length).toBeGreaterThan(0);
-      expect(task).not.toHaveProperty("answer_variants");
-      expect(task).not.toHaveProperty("numeric_tolerance");
-      expect(task).not.toHaveProperty("explanation");
-    }
-  });
-
-  it("loads every authored lesson task family without checker secrets", async () => {
-    for (const publication of courseLessonPublications) {
-      const lesson = findCourseLessonByRouteSlugs(
-        "python",
-        publication.routeSlug,
-      );
-      expect(lesson).toMatchObject({
-        id: publication.id,
-        status: publication.status,
-      });
-      if (!lesson) throw new Error(`Missing lesson ${publication.id}`);
-
-      const tasks = await loadPracticeTasks(migrationTaskIds(lesson.id));
-      expect(tasks.map((task) => task.id)).toEqual(migrationTaskIds(lesson.id));
-      expect(tasks).toHaveLength(5);
+  it("loads every lesson's tasks in order without checker secrets", async () => {
+    for (const lesson of planned) {
+      const ids = migrationTaskIds(lesson.id);
+      expect(ids.length, lesson.id).toBeGreaterThan(0);
+      expect(ids.every((id) => id.startsWith(`${lesson.id}-t`))).toBe(true);
+      const tasks = await loadPracticeTasks(ids);
+      expect(tasks.map((task) => task.id)).toEqual(ids);
       for (const task of tasks) {
-        expect(task.title).not.toBe("");
-        expect(task.statement).not.toBe("");
-        expect(task.theoryLinks.length).toBeGreaterThan(0);
-        expect(task.solution.length).toBeGreaterThan(0);
-        expect(task).not.toHaveProperty("answer_variants");
-        expect(task).not.toHaveProperty("numeric_tolerance");
-        expect(task).not.toHaveProperty("explanation");
+        expect(JSON.stringify(task)).not.toContain("answer_variants");
       }
     }
   });
 });
 
 describe("course progress", () => {
+  it("keeps additional lessons out of course mastery (Change 175)", () => {
+    const lessons: CourseProgressTypes.Lesson[] = [
+      { id: "core", tasks: [{ id: "a", solutionRevision: 1 }] },
+      {
+        id: "extra",
+        level: "advanced",
+        tasks: [{ id: "b", solutionRevision: 1 }],
+      },
+    ];
+    const progress = courseProgress.calculate(lessons, {
+      core: { solvedTaskIds: ["a"] },
+      extra: { solvedTaskIds: ["b"] },
+    });
+    expect(progress).toEqual({
+      masteredLessonIds: ["core"],
+      availableCount: 1,
+      allAvailableMastered: true,
+    });
+    const practice = courseProgress.calculatePractice(lessons, {
+      extra: { solvedTaskIds: ["b"] },
+    });
+    expect(practice.solved).toBe(0);
+    expect(practice.total).toBe(1);
+    expect(practice.byLessonId.extra?.mastered).toBe(true);
+  });
+
   it("counts mastery only across the available lesson set", () => {
     const lessons = [
       {

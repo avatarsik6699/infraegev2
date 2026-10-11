@@ -12,7 +12,7 @@ export class CourseCatalogPage {
       published.locator('[data-object-illustration="course-python-wide"]'),
     ).toHaveCount(1);
     await expect(published.locator("p").first()).toBeVisible();
-    await expect(published).toContainText("28 уроков");
+    await expect(published).toContainText("30 уроков");
     await expect(
       published.getByRole("link", { name: "Открыть курс" }),
     ).toBeVisible();
@@ -32,7 +32,7 @@ export class CourseCatalogPage {
       await expect(button).toBeDisabled();
     }
     await expect(this.page.locator("[data-course-summary]")).toContainText(
-      "Всего направлений: 4 · Доступно: 1 · Уроков: 28",
+      "Всего направлений: 4 · Доступно: 1 · Уроков: 27",
     );
     await expect(this.page.getByRole("searchbox")).toHaveCount(0);
     const planned = this.page.locator('[data-course-status="planned"]');
@@ -234,7 +234,7 @@ export class CourseCatalogPage {
   private async expectGuestProgress(scope = this.page.locator("body")) {
     const progress = scope.locator("[data-course-progress]");
     await expect(progress.locator('[role="status"]')).toHaveText(
-      "Освоено 0 из 28 уроков",
+      "Освоено 0 из 27 уроков",
     );
     await expect(progress.locator('[role="progressbar"]')).toHaveAttribute(
       "aria-valuenow",
@@ -243,7 +243,7 @@ export class CourseCatalogPage {
     await expect(
       scope.locator("[data-guest-progress-lock]").getByRole("link"),
     ).toHaveAccessibleName(
-      "Прогресс: 0 из 28. Войти, чтобы сохранять прогресс",
+      "Прогресс: 0 из 27. Войти, чтобы сохранять прогресс",
     );
   }
 

@@ -1,3 +1,4 @@
+import { advancedLevelLabel } from "~/entities/lesson";
 import { LessonTree } from "~/shared/components/lesson-tree";
 import type { CourseNavigationTypes } from "./course-navigation.types";
 
@@ -46,6 +47,7 @@ export const CourseNavigation: React.FC<CourseNavigationTypes.Props> = (
               }
             : {}),
           current: lesson.id === props.currentLessonId,
+          note: lesson.level === "advanced" ? advancedLevelLabel : undefined,
         })),
       }))}
     />

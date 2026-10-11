@@ -6,6 +6,7 @@ import { copyText } from "~/shared/lib/clipboard";
 import { cssUtils } from "~/shared/lib/css-utils";
 import { useIsEnhanced } from "~/shared/lib/use-is-enhanced";
 import { CodeBlockContent } from "./code-block-content";
+import { CodeBlockOutput } from "./code-block-output";
 import type { CodeBlockTypes } from "./code-block.types";
 import styles from "./code-block.module.css";
 
@@ -20,8 +21,9 @@ export const CodeBlock: React.FC<CodeBlockTypes.Props> = (props) => {
   const isPython = props.language === "python";
   const copyLabel = getCopyLabel(copyState);
   const copyStatus = getCopyStatus(copyState);
+  const collapsible = props.collapsible ?? true;
   const isLong = props.code.split("\n").length > 8;
-  const collapsed = enhanced && isLong && !expanded;
+  const collapsed = enhanced && collapsible && isLong && !expanded;
 
   const handleCopy = async () => {
     const copied = await copyText(props.code);
@@ -35,6 +37,7 @@ export const CodeBlock: React.FC<CodeBlockTypes.Props> = (props) => {
       aria-label={props.label}
       data-code-block-long={isLong || undefined}
       data-learning-block
+      data-code-aside={props.codeAside ? true : undefined}
     >
       <CodeBlockHeader
         copyLabel={copyLabel}
@@ -43,30 +46,39 @@ export const CodeBlock: React.FC<CodeBlockTypes.Props> = (props) => {
         enhanced={enhanced}
         isPython={isPython}
         fileName={props.fileName}
+        actions={props.headerActions}
         onCopy={handleCopy}
       />
-      <CodeBlockContent
-        code={props.code}
-        language={props.language}
-        showLineNumbers={props.showLineNumbers ?? true}
-        id={contentId}
-        collapsed={collapsed}
-      />
-      {enhanced && isLong ? (
-        <CodeBlockDisclosure
+      <div className={styles.body} data-code-body>
+        <CodeBlockContent
+          code={props.code}
+          language={props.language}
+          showLineNumbers={props.showLineNumbers ?? true}
+          id={contentId}
           collapsed={collapsed}
-          contentId={contentId}
-          onToggle={() => setExpanded((current) => !current)}
+          activeLine={props.activeLine}
+          activeLineTone={props.activeLineTone}
         />
-      ) : null}
-      {props.output === undefined ? null : (
-        <div className={styles.output} data-code-output>
-          <span className={styles.outputLabel}>Вывод</span>
-          <samp className={styles.outputValue}>
-            {props.output.replace(/\n+$/u, "").split("\n").join(", ")}
-          </samp>
-        </div>
-      )}
+        {enhanced && collapsible && isLong ? (
+          // inside the code area: the fade and the button sit at the bottom
+          // of the code, never over the output under it
+          <CodeBlockDisclosure
+            collapsed={collapsed}
+            contentId={contentId}
+            onToggle={() => setExpanded((current) => !current)}
+          />
+        ) : null}
+        {props.codeAside}
+      </div>
+      {props.footer ??
+        (props.output === undefined && props.error === undefined ? null : (
+          <CodeBlockOutput
+            text={props.output ?? ""}
+            error={props.error}
+            layout={props.outputLayout ?? "row"}
+            collapsible={collapsible}
+          />
+        ))}
     </div>
   );
 };
@@ -78,6 +90,7 @@ type CodeBlockHeaderProps = {
   enhanced: boolean;
   isPython: boolean;
   fileName?: string;
+  actions?: React.ReactNode;
   onCopy: () => Promise<void>;
 };
 
@@ -110,6 +123,9 @@ const CodeBlockHeader: React.FC<CodeBlockHeaderProps> = (props) => (
       >
         {props.copyLabel}
       </Button>
+    ) : null}
+    {props.actions ? (
+      <div className={styles.actions}>{props.actions}</div>
     ) : null}
     {!props.enhanced || !props.copyStatus ? null : (
       <span className={styles.copyStatus} role="status" aria-live="polite">

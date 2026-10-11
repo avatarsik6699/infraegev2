@@ -141,6 +141,26 @@ Lesson media:
 - `CodeBlock` shows line numbers by default (`showLineNumbers={false}` opts out) in a gutter that
   is not selected or copied; long blocks collapse behind a "show all code" button and expand
   again; copy and keyboard focus stay available. Syntax colours keep at least 4.5:1.
+- Course code blocks (Change 175) follow the stand: a file-like name in the head (`fileName`), no
+  line numbers outside a runnable block, and one output field in lines (`outputLayout="lines"`):
+  «Вывод:» on its own row, the printed lines under it (labels under the code — «Вывод:»,
+  «Строка N:», «Переменные:» — are `CodeBlockLabel`: one quiet caption with its own small mark); typed input is a key-like `kbd` with ↵
+  (`⟪…⟫` in the data), the stopping error is the last line in `--color-learning-danger`; output
+  longer than eight lines folds like long code. Topics keep the one-row output.
+- A course lesson opens with a lead (`ConceptBlock.lead`): no heading of its own and no entry in
+  «На этой странице». «Тонкости: …» of a step is `ProofDisclosure kind="nuance"` (a small mark, the
+  label and its topic, the arrow on the right); a proof keeps the plain fold.
+- Generated figures name the stand's fonts; `lesson-media.module.css` maps them to the site faces,
+  and monospace labels keep the 0.6 em pitch (`textLength`) the builders place boxes by.
+- `CodeRunner` is a runnable code block: steps recorded at export by `tracer.py` (media kind
+  `run`), never code executed in the browser. «Запуск» (a quiet pill) after the copy button; back / count / forward / close
+  and ←/→/Esc while running; the executed line is highlighted; variables sit beside the code when
+  the widest line leaves room, under it otherwise (values in small boxes; call frames nested, the
+  active one and a changed value outlined in `--color-current-location`; lists/dicts/sets as
+  objects with arrows); every step is laid out in one grid cell so the block keeps its tallest step's height.
+  Without scripting and on SSR it is the ordinary code block with output.
+- `RangeSandbox` redraws `range(start, stop, step)` or `s[start:stop:step]` as the learner types,
+  with Python's rules (`range-values.ts`); without scripting it draws the default example.
 - Self-check uses the native `details` fallback so answers stay closed until revealed, before
   enhancement and without JavaScript. General Accordion keeps its explicit opt-in fallback
   contract.

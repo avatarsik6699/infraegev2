@@ -28,7 +28,7 @@ HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[1]
 sys.path.insert(0, str(HERE))
 from figures import FIGURES, PAGE_SCRIPTS  # noqa: E402
-from runblock import RUN_JS, code_html, prepare  # noqa: E402
+from runblock import RUN_JS, code_html, file_name, prepare  # noqa: E402
 from terms import TERMS  # noqa: E402
 
 PATTERNS = REPO / "docs" / "runbooks" / "lesson-patterns.md"
@@ -53,14 +53,6 @@ TOKEN = re.compile(
 FIGURE_CALL = re.compile(r"%%(\w+)\((.*?)\)%%")
 PICK_BLOCK = re.compile(r"^:::(pick|pick-tokens) ([^\n]+)\n(.*?)^:::$", re.M | re.S)
 TERM = re.compile(r"\{\{(\w+)\|(.+?)\}\}")
-# Stand: a term opens the course lesson that explains it now (map.md, «Термины
-# тем ЕГЭ → уроки курса»); terms.py keeps the site slugs until Change 175.
-TERM_LESSON = {
-    "num": 3, "str": 4, "eq": 5, "andor": 5, "if": 6, "while": 7, "break": 7,
-    "for": 8, "len": 9, "in": 9, "slice": 9, "list": 10, "split": 10,
-    "dict": 12, "set": 13, "comp": 14, "agg": 14, "def": 15, "import": 17,
-    "sorted": 18, "rec": 19, "file": 20,
-}  # fmt: skip
 IO_ROWS = {"input": "Ввод", "output": "Вывод", "error": "Ошибка"}
 TYPED = re.compile(r"⟪(.*?)⟫")
 COURSE_DIR = "course-python"
@@ -84,26 +76,6 @@ document.querySelectorAll(".code-copy").forEach(function (b) {
   };
 });
 </script>"""
-
-
-def file_name(code: str) -> str:
-    """A file-like name for a course code block: the first function, class or
-    meaningful variable of the example; ``main.py`` otherwise."""
-    try:
-        tree = ast.parse(code)
-    except SyntaxError:
-        return "main.py"
-    for node in tree.body:
-        if isinstance(node, ast.FunctionDef):
-            return f"{node.name}.py"
-        if isinstance(node, ast.ClassDef):
-            return re.sub(r"(?<!^)(?=[A-Z])", "_", node.name).lower() + ".py"
-    for node in tree.body:
-        if isinstance(node, ast.Assign) and isinstance(node.targets[0], ast.Name):
-            name = node.targets[0].id
-            if len(name) > 2:
-                return f"{name}.py"
-    return "main.py"
 
 
 # Course: a code block or an output longer than 8 lines is folded to about 7.5
@@ -234,23 +206,23 @@ def pick_block(m: re.Match) -> str:
 _term_count: dict[str, int] = {}
 
 
-def course_titles() -> list[str]:
-    """Lesson titles of the stand's Python course, in course order."""
+def course_slugs() -> list[str]:
+    """Site route slugs of the stand's Python course lessons, in course order."""
     course = json.loads(
         (REPO / "content" / "lesson-design" / COURSE_DIR / "course.json").read_text(
             encoding="utf-8"
         )
     )
-    return [lesson["title"] for m in course["modules"] for lesson in m["lessons"]]
+    return [lesson["site"]["routeSlug"] for m in course["modules"] for lesson in m["lessons"]]
 
 
 def term(m: re.Match) -> str:
     key, label = m.group(1), m.group(2)
     if key not in TERMS:
         raise SystemExit(f"Unknown term {key!r}; add it to terms.TERMS")
-    title, body, _, _ = TERMS[key]
-    number = TERM_LESSON[key]
-    lesson = course_titles()[number - 1]
+    # on the stand a term opens the course lesson page with its route slug
+    title, body, slug, lesson = TERMS[key]
+    number = course_slugs().index(slug) + 1
     _term_count[key] = _term_count.get(key, 0) + 1
     pid = f"term-{key}-{_term_count[key]}"
     return (
@@ -350,7 +322,7 @@ def render(md_text: str, lines: bool = False) -> tuple[str, list[tuple[str, str]
         lang, code = m.group(1), html.unescape(m.group(2))
         if lang == "console" or (lines and lang in IO_ROWS):  # console: always lines
             return (
-                '<div class="out out-lines"><span class="out-l">Вывод</span>'
+                '<div class="out out-lines"><span class="out-l">Вывод:</span>'
                 f'<pre class="out-v">{out_lines(lang, code)}</pre></div>'
             )
         if lang in IO_ROWS:
@@ -419,7 +391,7 @@ def render(md_text: str, lines: bool = False) -> tuple[str, list[tuple[str, str]
     if lines:
         # one «Вывод» field per program: output, typed input and error together
         body = re.sub(
-            r'</pre></div><div class="out out-lines"><span class="out-l">Вывод</span><pre class="out-v">',
+            r'</pre></div><div class="out out-lines"><span class="out-l">Вывод:</span><pre class="out-v">',
             "\n",
             body,
         )

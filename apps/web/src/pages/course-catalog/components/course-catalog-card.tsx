@@ -63,7 +63,10 @@ export const CourseCatalogCard: React.FC<Props> = (props) => {
         {props.entry.status === "published" ? (
           <CourseCatalogProgress
             progress={props.progress ?? { status: "loading" }}
-            total={props.entry.lessonCount}
+            // additional lessons stay outside mastery, as in the model
+            total={
+              props.entry.lessonCount - props.entry.advancedLessonIds.length
+            }
             title={props.entry.title}
           />
         ) : (

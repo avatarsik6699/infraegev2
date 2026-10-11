@@ -198,222 +198,211 @@
       "course_id": null
     },
     {
-      "id": "python-bruteforce",
-      "sections": ["model", "trace", "pitfall", "workflow"],
+      "id": "python-advanced-features",
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6"],
       "kind": "course",
       "status": "published",
       "course_id": "python"
     },
     {
-      "id": "python-compound-conditions",
-      "sections": ["model", "trace", "pitfall", "workflow"],
+      "id": "python-arguments",
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
+      "kind": "course",
+      "status": "published",
+      "course_id": "python"
+    },
+    {
+      "id": "python-classes",
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6"],
       "kind": "course",
       "status": "published",
       "course_id": "python"
     },
     {
       "id": "python-comprehensions",
-      "sections": ["from-loop", "filter", "kinds", "decision"],
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6"],
       "kind": "course",
       "status": "published",
       "course_id": "python"
     },
     {
       "id": "python-conditions",
-      "sections": [
-        "comparison-result",
-        "if-branch",
-        "if-else",
-        "comparison-boundaries",
-        "test-both-branches"
-      ],
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6"],
+      "kind": "course",
+      "status": "published",
+      "course_id": "python"
+    },
+    {
+      "id": "python-cost",
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
       "kind": "course",
       "status": "published",
       "course_id": "python"
     },
     {
       "id": "python-dictionaries",
-      "sections": ["model", "trace", "records", "pitfall", "workflow"],
-      "kind": "course",
-      "status": "published",
-      "course_id": "python"
-    },
-    {
-      "id": "python-errors",
-      "sections": [
-        "error-as-clue",
-        "read-bottom-up",
-        "syntax-error",
-        "name-error",
-        "type-or-value",
-        "fix-and-rerun"
-      ],
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
       "kind": "course",
       "status": "published",
       "course_id": "python"
     },
     {
       "id": "python-exceptions",
-      "sections": ["expected", "specific", "retry", "decision"],
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
       "kind": "course",
       "status": "published",
       "course_id": "python"
     },
     {
       "id": "python-files",
-      "sections": ["model", "write", "trace", "pitfall", "workflow"],
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6", "s7"],
       "kind": "course",
       "status": "published",
       "course_id": "python"
     },
     {
       "id": "python-first-program",
-      "sections": [
-        "program-order",
-        "values-and-variables",
-        "input-and-conversion",
-        "calculation-and-output",
-        "run-and-check"
-      ],
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6"],
       "kind": "course",
       "status": "published",
       "course_id": "python"
     },
     {
       "id": "python-for-range",
-      "sections": ["model", "trace", "pitfall", "workflow"],
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6", "s7"],
       "kind": "course",
       "status": "published",
       "course_id": "python"
     },
     {
       "id": "python-functions",
-      "sections": ["model", "trace", "pitfall", "workflow"],
+      "sections": ["intro", "s1", "s2", "s3", "s4"],
       "kind": "course",
       "status": "published",
       "course_id": "python"
     },
     {
       "id": "python-independent-program",
-      "sections": [
-        "grown-program",
-        "bad-input",
-        "file-recovery",
-        "whole-test",
-        "refactor"
-      ],
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
+      "kind": "course",
+      "status": "published",
+      "course_id": "python"
+    },
+    {
+      "id": "python-input-output",
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
       "kind": "course",
       "status": "published",
       "course_id": "python"
     },
     {
       "id": "python-iterators-generators",
-      "sections": ["inside-for", "exhaustion", "generator", "choice"],
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
       "kind": "course",
       "status": "published",
       "course_id": "python"
     },
     {
       "id": "python-lists",
-      "sections": ["model", "trace", "remove", "pitfall", "workflow"],
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6", "s7"],
       "kind": "course",
       "status": "published",
       "course_id": "python"
     },
     {
-      "id": "python-loop-state",
-      "sections": ["model", "trace", "other-state", "pitfall", "workflow"],
+      "id": "python-logic",
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
       "kind": "course",
       "status": "published",
       "course_id": "python"
     },
     {
-      "id": "python-number-digits",
-      "sections": ["one-step", "loop", "zero", "procedure"],
+      "id": "python-notation-patterns",
+      "sections": ["intro", "s1", "s2", "s3", "s4"],
       "kind": "course",
       "status": "published",
       "course_id": "python"
     },
     {
       "id": "python-numbers",
-      "sections": ["types", "operations", "precedence", "workflow"],
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6"],
+      "kind": "course",
+      "status": "published",
+      "course_id": "python"
+    },
+    {
+      "id": "python-practice",
+      "sections": ["intro", "s1", "s2", "s3"],
       "kind": "course",
       "status": "published",
       "course_id": "python"
     },
     {
       "id": "python-program-parts",
-      "sections": ["model", "trace", "pitfall", "workflow"],
+      "sections": ["intro", "s1", "s2", "s3", "s4"],
       "kind": "course",
       "status": "published",
       "course_id": "python"
     },
     {
       "id": "python-recursion",
-      "sections": ["model", "trace", "ege-connection", "pitfall", "workflow"],
-      "kind": "course",
-      "status": "published",
-      "course_id": "python"
-    },
-    {
-      "id": "python-select-result",
-      "sections": ["model", "trace", "pitfall", "workflow"],
+      "sections": ["intro", "s1", "s2", "s3", "s4"],
       "kind": "course",
       "status": "published",
       "course_id": "python"
     },
     {
       "id": "python-sets",
-      "sections": ["model", "trace", "pitfall", "workflow"],
+      "sections": ["intro", "s1", "s2", "s3", "s4"],
       "kind": "course",
       "status": "published",
       "course_id": "python"
     },
     {
       "id": "python-sorting-search",
-      "sections": ["search", "sorted", "key", "choice"],
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
+      "kind": "course",
+      "status": "published",
+      "course_id": "python"
+    },
+    {
+      "id": "python-standard-library",
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6"],
       "kind": "course",
       "status": "published",
       "course_id": "python"
     },
     {
       "id": "python-strings",
-      "sections": ["model", "trace", "split-join", "pitfall", "workflow"],
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6"],
       "kind": "course",
       "status": "published",
       "course_id": "python"
     },
     {
-      "id": "python-tables",
-      "sections": ["model", "trace", "records", "pitfall", "workflow"],
+      "id": "python-testing",
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
       "kind": "course",
       "status": "published",
       "course_id": "python"
     },
     {
-      "id": "python-todo-actions",
-      "sections": ["continue", "change", "delete", "snapshot"],
+      "id": "python-tuples",
+      "sections": ["intro", "s1", "s2", "s3", "s4"],
       "kind": "course",
       "status": "published",
       "course_id": "python"
     },
     {
-      "id": "python-todo-start",
-      "sections": ["first-run", "command-loop", "empty", "snapshot"],
-      "kind": "course",
-      "status": "published",
-      "course_id": "python"
-    },
-    {
-      "id": "python-todo-storage",
-      "sections": ["why-file", "load", "identity", "snapshot"],
+      "id": "python-values",
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
       "kind": "course",
       "status": "published",
       "course_id": "python"
     },
     {
       "id": "python-while",
-      "sections": ["model", "trace", "pitfall", "workflow"],
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6", "s7"],
       "kind": "course",
       "status": "published",
       "course_id": "python"
@@ -464,33 +453,35 @@
       "status": "published",
       "lesson_ids": [
         "python-first-program",
+        "python-values",
         "python-numbers",
-        "python-errors",
+        "python-input-output",
+        "python-logic",
         "python-conditions",
-        "python-compound-conditions",
-        "python-for-range",
         "python-while",
-        "python-loop-state",
-        "python-number-digits",
+        "python-for-range",
         "python-strings",
         "python-lists",
-        "python-sets",
+        "python-tuples",
         "python-dictionaries",
-        "python-sorting-search",
+        "python-sets",
         "python-comprehensions",
         "python-functions",
+        "python-arguments",
         "python-program-parts",
-        "python-iterators-generators",
+        "python-sorting-search",
         "python-recursion",
-        "python-exceptions",
         "python-files",
-        "python-tables",
-        "python-bruteforce",
-        "python-select-result",
-        "python-todo-start",
-        "python-todo-actions",
-        "python-todo-storage",
-        "python-independent-program"
+        "python-exceptions",
+        "python-iterators-generators",
+        "python-standard-library",
+        "python-notation-patterns",
+        "python-cost",
+        "python-independent-program",
+        "python-practice",
+        "python-classes",
+        "python-advanced-features",
+        "python-testing"
       ]
     }
   ]

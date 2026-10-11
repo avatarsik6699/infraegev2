@@ -11,6 +11,8 @@ export namespace CourseOverviewPageTypes {
     title: string;
     number: string;
     routeSlug?: string;
+    /** Additional lesson: marked, outside course mastery (Change 175). */
+    advanced?: boolean;
     progress: Progress;
   };
 

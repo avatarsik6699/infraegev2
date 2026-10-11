@@ -22,8 +22,8 @@ export const pythonTerms = {
         <Notation>{"n"}</Notation>.
       </>
     ),
-    lessonSlug: "usloviya",
-    lessonTitle: "Условия: сравнения и выбор из двух вариантов",
+    lessonSlug: "logicheskie-vyrazheniya",
+    lessonTitle: "Логические выражения",
   },
   andor: {
     title: "Составные условия and и or",
@@ -34,8 +34,8 @@ export const pythonTerms = {
         оба сразу.
       </>
     ),
-    lessonSlug: "sostavnye-usloviya",
-    lessonTitle: "Несколько ветвей и составные условия",
+    lessonSlug: "logicheskie-vyrazheniya",
+    lessonTitle: "Логические выражения",
   },
   for: {
     title: "Цикл for и range",
@@ -48,7 +48,7 @@ export const pythonTerms = {
       </>
     ),
     lessonSlug: "for-i-range",
-    lessonTitle: "for и range: повторяем известное число раз",
+    lessonTitle: "Цикл for и диапазоны",
   },
   if: {
     title: "Условие if",
@@ -60,7 +60,7 @@ export const pythonTerms = {
       </>
     ),
     lessonSlug: "usloviya",
-    lessonTitle: "Условия: сравнения и выбор из двух вариантов",
+    lessonTitle: "Ветвление: if, elif и else",
   },
   while: {
     title: "Цикл while",
@@ -72,7 +72,7 @@ export const pythonTerms = {
       </>
     ),
     lessonSlug: "while",
-    lessonTitle: "while: повторяем, пока условие верно",
+    lessonTitle: "Цикл while и состояние программы",
   },
   break: {
     title: "Досрочный выход: break",
@@ -82,8 +82,8 @@ export const pythonTerms = {
         после цикла продолжают выполняться.
       </>
     ),
-    lessonSlug: "schetchiki-i-nakopiteli",
-    lessonTitle: "Счётчики, накопители и границы цикла",
+    lessonSlug: "while",
+    lessonTitle: "Цикл while и состояние программы",
   },
   str: {
     title: "Строка, str и int",
@@ -96,8 +96,8 @@ export const pythonTerms = {
         <Notation>{'"1234"'}</Notation>.
       </>
     ),
-    lessonSlug: "stroki",
-    lessonTitle: "Строки: символы, индексы и срезы",
+    lessonSlug: "vvod-i-vyvod",
+    lessonTitle: "Ввод, преобразование и вывод",
   },
   len: {
     title: "Длина: len",
@@ -109,7 +109,7 @@ export const pythonTerms = {
       </>
     ),
     lessonSlug: "stroki",
-    lessonTitle: "Строки: символы, индексы и срезы",
+    lessonTitle: "Строки",
   },
   in: {
     title: "Проверка вхождения: in",
@@ -122,7 +122,7 @@ export const pythonTerms = {
       </>
     ),
     lessonSlug: "stroki",
-    lessonTitle: "Строки: символы, индексы и срезы",
+    lessonTitle: "Строки",
   },
   slice: {
     title: "Индексы и срезы строки",
@@ -135,7 +135,7 @@ export const pythonTerms = {
       </>
     ),
     lessonSlug: "stroki",
-    lessonTitle: "Строки: символы, индексы и срезы",
+    lessonTitle: "Строки",
   },
   list: {
     title: "Список и append",
@@ -148,7 +148,7 @@ export const pythonTerms = {
       </>
     ),
     lessonSlug: "spiski",
-    lessonTitle: "Списки: храним и изменяем последовательность",
+    lessonTitle: "Списки",
   },
   agg: {
     title: "sum, min, max",
@@ -159,8 +159,8 @@ export const pythonTerms = {
         наименьший и наибольший из них.
       </>
     ),
-    lessonSlug: "sortirovka-i-poisk",
-    lessonTitle: "Сортировка и поиск в коллекции",
+    lessonSlug: "vklyucheniya",
+    lessonTitle: "Включения и функции для коллекций",
   },
   sorted: {
     title: "Сортировка: sorted",
@@ -172,7 +172,7 @@ export const pythonTerms = {
       </>
     ),
     lessonSlug: "sortirovka-i-poisk",
-    lessonTitle: "Сортировка и поиск в коллекции",
+    lessonTitle: "Сортировка и выбор лучших элементов",
   },
   set: {
     title: "Множество",
@@ -184,7 +184,7 @@ export const pythonTerms = {
       </>
     ),
     lessonSlug: "mnozhestva",
-    lessonTitle: "Множества: оставляем уникальные значения",
+    lessonTitle: "Множества и выбор структуры данных",
   },
   comp: {
     title: "Списковое включение",
@@ -196,7 +196,7 @@ export const pythonTerms = {
       </>
     ),
     lessonSlug: "vklyucheniya",
-    lessonTitle: "Включения: собираем коллекции коротко",
+    lessonTitle: "Включения и функции для коллекций",
   },
   def: {
     title: "Функция: def и return",
@@ -209,7 +209,7 @@ export const pythonTerms = {
       </>
     ),
     lessonSlug: "funktsii",
-    lessonTitle: "Функции: параметры и возвращаемый результат",
+    lessonTitle: "Функции: def, return и область видимости",
   },
   import: {
     title: "Подключение модуля: import",
@@ -221,7 +221,7 @@ export const pythonTerms = {
       </>
     ),
     lessonSlug: "chasti-programmy",
-    lessonTitle: "Разбиваем программу на понятные части",
+    lessonTitle: "Модули и части программы",
   },
   split: {
     title: "Разбить строку: split",
@@ -233,8 +233,8 @@ export const pythonTerms = {
         <Notation>{"['40', '7', '1.3']"}</Notation>.
       </>
     ),
-    lessonSlug: "stroki",
-    lessonTitle: "Строки: символы, индексы и срезы",
+    lessonSlug: "spiski",
+    lessonTitle: "Списки",
   },
   num: {
     title: "Целые и дробные числа: int и float",
@@ -247,7 +247,7 @@ export const pythonTerms = {
       </>
     ),
     lessonSlug: "chisla-i-vyrazheniya",
-    lessonTitle: "Числа, типы и арифметические выражения",
+    lessonTitle: "Числа и арифметические операции",
   },
   dict: {
     title: "Словарь",
@@ -260,7 +260,7 @@ export const pythonTerms = {
       </>
     ),
     lessonSlug: "slovari",
-    lessonTitle: "Словари: связываем ключи и значения",
+    lessonTitle: "Словари и подсчёт частот",
   },
   file: {
     title: "Чтение файла: with open",
@@ -272,7 +272,7 @@ export const pythonTerms = {
       </>
     ),
     lessonSlug: "fayly",
-    lessonTitle: "Читаем данные из файла",
+    lessonTitle: "Файлы и внешние данные",
   },
   rec: {
     title: "Рекурсия",
@@ -284,7 +284,7 @@ export const pythonTerms = {
       </>
     ),
     lessonSlug: "rekursiya",
-    lessonTitle: "Рекурсия: базовый случай, шаг и трассировка",
+    lessonTitle: "Рекурсия и запоминание",
   },
 } as const satisfies Record<string, PythonTermEntry>;
 

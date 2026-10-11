@@ -39,12 +39,12 @@ fallback.
 
 - Public learning content is SSR/no-JavaScript readable and Russian-only.
 - Checker answers stay on the server; the browser never executes untrusted Python code.
-- The Python course has a complete 28-step path from the first program to one terminal task
-  manager. All lessons have passed publication approval; current deployment is verified separately. Progress is derived from the
-  published lessons and current answer revisions and is saved only for signed-in learners.
-- The compact course overview retains full lesson titles and links to published lessons; authored
-  learning outcomes remain in course content, while overview rows show practice counts.
-  Future curriculum expansion must not appear as available before its own approval.
+- The Python course has 30 lessons in eight modules (Change 175): 27 core lessons from the first
+  program to a finished file-analysis program, then three additional lessons (classes, language
+  mechanisms, tests) that stay outside course mastery. Lessons are exported from the approved
+  lesson-design stand; runnable examples replay steps recorded at export, never code executed in
+  the browser. Progress is derived from the published lessons and current answer revisions and
+  is saved only for signed-in learners.
 - Optional accounts and synchronized progress are implemented. Hard lesson locks, payments and
   in-product AI remain out of scope; enabled sign-in methods depend on deployment configuration.
 

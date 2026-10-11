@@ -11,6 +11,7 @@ Author notes go into an optional ```steps block after the output:
 of its second run.
 """
 
+import ast
 import html
 import json
 import re
@@ -29,6 +30,47 @@ TYPED = re.compile(r"⟪(.*?)⟫")
 MARK = "#RUN:"
 
 
+def file_name(code: str) -> str:
+    """A file-like name for a course code block: the first function, class or
+    meaningful variable of the example; ``main.py`` otherwise."""
+    try:
+        tree = ast.parse(code)
+    except SyntaxError:
+        return "main.py"
+    for node in tree.body:
+        if isinstance(node, ast.FunctionDef):
+            return f"{node.name}.py"
+        if isinstance(node, ast.ClassDef):
+            return re.sub(r"(?<!^)(?=[A-Z])", "_", node.name).lower() + ".py"
+    for node in tree.body:
+        if isinstance(node, ast.Assign) and isinstance(node.targets[0], ast.Name):
+            name = node.targets[0].id
+            if len(name) > 2:
+                return f"{name}.py"
+    return "main.py"
+
+
+def record(code: str, io: dict[str, str], notes: str = "") -> list[dict]:
+    """Steps of one runnable program, checked against the lesson: the recorded
+    output must equal the ```output / ```console block, a run that stops must
+    stop with the last line of the ```error block. The full error text of the
+    lesson goes into the last step."""
+    console = io.get("console", "")
+    stdin = "".join(t + "\n" for t in TYPED.findall(console))
+    steps = trace_steps(code, notes, stdin)
+    got = steps[-1]["out"]
+    expected = console or io.get("output")
+    if expected is not None and got.strip() != expected.strip():
+        raise SystemExit(f"run block output differs:\n{code}\n--- got\n{got}")
+    if "error" in io:
+        last = steps[-1]
+        shown = io["error"].strip()
+        if not last.get("stop") or last["error"] != shown.splitlines()[-1]:
+            raise SystemExit(f"run block must stop with {shown}:\n{code}")
+        last["error"] = shown  # the full message as in the lesson
+    return steps
+
+
 def prepare(md_text: str, store: dict[str, list]) -> str:
     """Record the run of every ```python run block; leave an ordinary fence
     with a marker line that ``code_html`` turns into the runnable block."""
@@ -38,21 +80,7 @@ def prepare(md_text: str, store: dict[str, list]) -> str:
         if code.startswith("#FILE:"):
             first, _, code = code.partition("\n")
             head = first + "\n"
-        io = dict(IO.findall(m.group("io")))
-        console = io.get("console", "")
-        stdin = "".join(t + "\n" for t in TYPED.findall(console))
-        steps = trace_steps(code, m.group("notes") or "", stdin)
-        got = steps[-1]["out"]
-        expected = console or io.get("output")
-        if expected is not None and got.strip() != expected.strip():
-            raise SystemExit(f"run block output differs:\n{code}\n--- got\n{got}")
-        if "error" in io:
-            last = steps[-1]
-            shown = io["error"].strip()
-            if not last.get("stop") or last["error"] != shown.splitlines()[-1]:
-                raise SystemExit(f"run block must stop with {io['error'].strip()}:\n{code}")
-        if "error" in io:
-            steps[-1]["error"] = io["error"].strip()  # the full message as in the lesson
+        steps = record(code, dict(IO.findall(m.group("io"))), m.group("notes") or "")
         key = str(len(store))
         store[key] = steps
         return f"```python\n{head}{MARK}{key}\n{code}```{m.group('io')}"

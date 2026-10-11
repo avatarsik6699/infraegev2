@@ -75,7 +75,7 @@ export class AccountIntegrationPage {
           has: this.page.getByRole("term").filter({ hasText: /^практика$/u }),
         })
         .getByRole("definition"),
-    ).toHaveText("0 из 140");
+    ).toHaveText("0 из 146");
   }
 
   async logout(): Promise<void> {

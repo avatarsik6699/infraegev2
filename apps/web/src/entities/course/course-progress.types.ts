@@ -3,6 +3,8 @@ export namespace CourseProgressTypes {
     id: string;
     tasks: readonly { id: string; solutionRevision: number }[];
     masteryThreshold?: number;
+    /** Additional lessons are practised but stay out of course mastery (Change 175). */
+    level?: "core" | "advanced";
   };
 
   export type LessonProgress = {

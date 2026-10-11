@@ -1,5 +1,10 @@
 import type { CourseProgressTypes } from "./course-progress.types";
 
+/** Lessons that count toward course mastery: additional ones do not (SPEC §1.4). */
+const coreLessons = <Lesson extends { level?: "core" | "advanced" }>(
+  lessons: readonly Lesson[],
+): Lesson[] => lessons.filter((lesson) => lesson.level !== "advanced");
+
 const calculatePractice = (
   lessons: readonly CourseProgressTypes.Lesson[],
   progressByLessonId: Readonly<
@@ -24,6 +29,8 @@ const calculatePractice = (
         solvedCount / lesson.tasks.length >= masteryThreshold,
     };
   });
+  const core = new Set(coreLessons(lessons).map((lesson) => lesson.id));
+  const counted = states.filter((state) => core.has(state.id));
   return {
     byLessonId: Object.fromEntries(
       states.map((state) => [
@@ -35,8 +42,8 @@ const calculatePractice = (
         },
       ]),
     ),
-    solved: states.reduce((sum, state) => sum + state.solved, 0),
-    total: states.reduce((sum, state) => sum + state.total, 0),
+    solved: counted.reduce((sum, state) => sum + state.solved, 0),
+    total: counted.reduce((sum, state) => sum + state.total, 0),
   };
 };
 
@@ -47,15 +54,16 @@ const calculate = (
   >,
 ): CourseProgressTypes.Snapshot => {
   const practice = calculatePractice(lessons, progressByLessonId);
-  const masteredLessonIds = lessons
+  const core = coreLessons(lessons);
+  const masteredLessonIds = core
     .filter((lesson) => practice.byLessonId[lesson.id]?.mastered)
     .map((lesson) => lesson.id);
 
   return {
     masteredLessonIds,
-    availableCount: lessons.length,
+    availableCount: core.length,
     allAvailableMastered:
-      lessons.length > 0 && masteredLessonIds.length === lessons.length,
+      core.length > 0 && masteredLessonIds.length === core.length,
   };
 };
 
@@ -72,6 +80,7 @@ const formatCatalogCopy = (progress: CourseProgressTypes.Snapshot): string =>
 
 export const courseProgress = {
   calculate,
+  coreLessons,
   calculatePractice,
   formatCatalogCopy,
   formatOverviewCopy,

@@ -69,6 +69,7 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
       id: item.id,
       title: item.title,
       routeSlug: routeSlugs.get(item.id),
+      level: item.level,
     })),
   }));
   const moduleIndex = modules.findIndex((module) =>
@@ -94,10 +95,9 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
     />
   );
   const outline = [
-    ...props.lesson.theory.map((concept) => ({
-      id: concept.id,
-      label: concept.navLabel,
-    })),
+    ...props.lesson.theory
+      .filter((concept) => !concept.lead)
+      .map((concept) => ({ id: concept.id, label: concept.navLabel })),
     { id: "practice", label: "Практика" },
     { id: "result", label: "Итог" },
   ];

@@ -16,7 +16,16 @@
           "sections": ["0", "1.1", "1.2", "1.3", "1.4", "18.1"],
           "site": {
             "id": "python-first-program",
-            "routeSlug": "pervaya-programma"
+            "routeSlug": "pervaya-programma",
+            "outcome": "Запустить файл, отличить выражение от инструкции, прочитать сообщение об ошибке",
+            "navLabels": {
+              "s1": "Программа и алгоритм",
+              "s2": "Первая программа",
+              "s3": "Как работать с примером",
+              "s4": "Выражение и инструкция",
+              "s5": "Три вида ошибок",
+              "s6": "Как читать traceback"
+            }
           }
         },
         {
@@ -27,7 +36,15 @@
           "sections": ["2.1", "2.2", "2.3", "2.4", "2.5"],
           "site": {
             "id": "python-values",
-            "routeSlug": "znacheniya-i-peremennye"
+            "routeSlug": "znacheniya-i-peremennye",
+            "outcome": "Различать типы, трассировать присваивания",
+            "navLabels": {
+              "s1": "Число и текст",
+              "s2": "Присваивание",
+              "s3": "x = x + 1",
+              "s4": "Имя и объект",
+              "s5": "Хорошие имена"
+            }
           }
         },
         {
@@ -38,7 +55,16 @@
           "sections": ["3.1", "3.2", "3.3", "3.4", "3.5", "3.6"],
           "site": {
             "id": "python-numbers",
-            "routeSlug": "chisla-i-vyrazheniya"
+            "routeSlug": "chisla-i-vyrazheniya",
+            "outcome": "Пользоваться //, %, **, брать цифры числа",
+            "navLabels": {
+              "s1": "Семь операций",
+              "s2": "Округление вниз",
+              "s3": "Порядок операций",
+              "s4": "Точность чисел",
+              "s5": "Готовые функции",
+              "s6": "Делимость и цифры"
+            }
           }
         },
         {
@@ -49,10 +75,19 @@
           "sections": ["4.1", "4.2", "4.3", "4.4"],
           "site": {
             "id": "python-input-output",
-            "routeSlug": "vvod-i-vyvod"
+            "routeSlug": "vvod-i-vyvod",
+            "outcome": "Читать и преобразовывать ввод, форматировать вывод",
+            "navLabels": {
+              "s1": "input возвращает строку",
+              "s2": "Преобразование текста",
+              "s3": "sep и end",
+              "s4": "f-строки",
+              "s5": "Площадь и периметр"
+            }
           }
         }
-      ]
+      ],
+      "summary": "Программа, значения и типы, числа, ввод и вывод."
     },
     {
       "id": "conditions",
@@ -66,7 +101,15 @@
           "sections": ["5.1", "5.2", "5.3", "5.4", "5.5"],
           "site": {
             "id": "python-logic",
-            "routeSlug": "logicheskie-vyrazheniya"
+            "routeSlug": "logicheskie-vyrazheniya",
+            "outcome": "Переводить «и», «или», «не» в условия",
+            "navLabels": {
+              "s1": "Сравнения",
+              "s2": "and, or, not",
+              "s3": "Короткое вычисление",
+              "s4": "Истинность значений",
+              "s5": "Отрицание и импликация"
+            }
           }
         },
         {
@@ -77,10 +120,20 @@
           "sections": ["6.1", "6.2", "6.3", "6.4"],
           "site": {
             "id": "python-conditions",
-            "routeSlug": "usloviya"
+            "routeSlug": "usloviya",
+            "outcome": "Выбирать порядок проверок, искать максимум",
+            "navLabels": {
+              "s1": "if и else",
+              "s2": "Цепочка elif",
+              "s3": "Отдельные if",
+              "s4": "Значение на каждом пути",
+              "s5": "Наибольшее из чисел",
+              "s6": "Сквозная задача"
+            }
           }
         }
-      ]
+      ],
+      "summary": "Логические выражения и выбор ветви программы."
     },
     {
       "id": "loops",
@@ -94,7 +147,17 @@
           "sections": ["7.1", "7.2", "7.3", "7.4", "7.5"],
           "site": {
             "id": "python-while",
-            "routeSlug": "while"
+            "routeSlug": "while",
+            "outcome": "Писать цикл по условию и объяснять его инвариантом",
+            "navLabels": {
+              "s1": "Цикл while",
+              "s2": "Счётчик и накопитель",
+              "s3": "Инвариант и завершение",
+              "s4": "Цифры числа",
+              "s5": "break и continue",
+              "s6": "Первая степень",
+              "s7": "Сквозная задача"
+            }
           }
         },
         {
@@ -105,10 +168,21 @@
           "sections": ["8.1", "8.2", "8.3", "8.4", "8.5"],
           "site": {
             "id": "python-for-range",
-            "routeSlug": "for-i-range"
+            "routeSlug": "for-i-range",
+            "outcome": "Перебирать с range, находить первое подходящее",
+            "navLabels": {
+              "s1": "Цикл for",
+              "s2": "range",
+              "s3": "Переменная цикла",
+              "s4": "Вложенные циклы",
+              "s5": "Первое подходящее",
+              "s6": "Шаг range",
+              "s7": "Три способа порядка строк"
+            }
           }
         }
-      ]
+      ],
+      "summary": "while и for: повторение, накопители, перебор с range."
     },
     {
       "id": "data",
@@ -122,7 +196,16 @@
           "sections": ["9.1", "9.2", "9.3", "9.4", "9.5", "9.6"],
           "site": {
             "id": "python-strings",
-            "routeSlug": "stroki"
+            "routeSlug": "stroki",
+            "outcome": "Индексы, срезы, методы, подсчёт с перекрытием",
+            "navLabels": {
+              "s1": "Длина и индексы",
+              "s2": "Срезы",
+              "s3": "Неизменяемость",
+              "s4": "Методы строк",
+              "s5": "count без перекрытий",
+              "s6": "Спецсимволы и Unicode"
+            }
           }
         },
         {
@@ -133,7 +216,17 @@
           "sections": ["10.1", "10.2", "10.3", "10.4", "10.5"],
           "site": {
             "id": "python-lists",
-            "routeSlug": "spiski"
+            "routeSlug": "spiski",
+            "outcome": "Менять список, копировать, split и join",
+            "navLabels": {
+              "s1": "Список",
+              "s2": "Обход списка",
+              "s3": "Два имени — один список",
+              "s4": "Копия и вложенные списки",
+              "s5": "split и join",
+              "s6": "Новый список",
+              "s7": "Сквозная задача"
+            }
           }
         },
         {
@@ -144,7 +237,14 @@
           "sections": ["11.1", "11.2", "11.3"],
           "site": {
             "id": "python-tuples",
-            "routeSlug": "kortezhi-i-raspakovka"
+            "routeSlug": "kortezhi-i-raspakovka",
+            "outcome": "Распаковывать, обменивать, перебирать совместно",
+            "navLabels": {
+              "s1": "Кортеж",
+              "s2": "Распаковка",
+              "s3": "Пары в for",
+              "s4": "enumerate и zip"
+            }
           }
         },
         {
@@ -155,7 +255,15 @@
           "sections": ["12.1", "12.2", "12.3", "12.4"],
           "site": {
             "id": "python-dictionaries",
-            "routeSlug": "slovari"
+            "routeSlug": "slovari",
+            "outcome": "Доступ по ключу, частотная таблица",
+            "navLabels": {
+              "s1": "Словарь",
+              "s2": "Хешируемые ключи",
+              "s3": "Обход словаря",
+              "s4": "Частотная таблица",
+              "s5": "Самое частое значение"
+            }
           }
         },
         {
@@ -166,7 +274,14 @@
           "sections": ["13.1", "13.2", "13.3"],
           "site": {
             "id": "python-sets",
-            "routeSlug": "mnozhestva"
+            "routeSlug": "mnozhestva",
+            "outcome": "Различные значения, операции над множествами",
+            "navLabels": {
+              "s1": "Множество",
+              "s2": "Операции над множествами",
+              "s3": "Выбор структуры",
+              "s4": "Общие элементы"
+            }
           }
         },
         {
@@ -177,10 +292,20 @@
           "sections": ["14.1", "14.2", "14.3", "14.4"],
           "site": {
             "id": "python-comprehensions",
-            "routeSlug": "vklyucheniya"
+            "routeSlug": "vklyucheniya",
+            "outcome": "Включения, sum/min/max/all/any",
+            "navLabels": {
+              "s1": "Включение",
+              "s2": "Фильтр и условное выражение",
+              "s3": "Несколько for",
+              "s4": "sum, min, max, all, any",
+              "s5": "Числа из строки",
+              "s6": "Модуль целиком"
+            }
           }
         }
-      ]
+      ],
+      "summary": "Строки, списки, кортежи, словари, множества и включения."
     },
     {
       "id": "functions",
@@ -194,7 +319,14 @@
           "sections": ["15.1", "15.2", "15.3", "15.4"],
           "site": {
             "id": "python-functions",
-            "routeSlug": "funktsii"
+            "routeSlug": "funktsii",
+            "outcome": "Писать функции, различать return и print",
+            "navLabels": {
+              "s1": "Функция",
+              "s2": "return и print",
+              "s3": "Локальные имена",
+              "s4": "Параметр и объект"
+            }
           }
         },
         {
@@ -205,7 +337,15 @@
           "sections": ["15.5", "15.6", "15.7", "15.8"],
           "site": {
             "id": "python-arguments",
-            "routeSlug": "argumenty-i-lambda"
+            "routeSlug": "argumenty-i-lambda",
+            "outcome": "Значения по умолчанию, кортеж результатов, lambda",
+            "navLabels": {
+              "s1": "Значения по умолчанию",
+              "s2": "Несколько результатов",
+              "s3": "Функция как значение",
+              "s4": "Договорённость функции",
+              "s5": "return после цикла"
+            }
           }
         },
         {
@@ -216,7 +356,14 @@
           "sections": ["19.1", "19.2", "19.3", "19.4"],
           "site": {
             "id": "python-program-parts",
-            "routeSlug": "chasti-programmy"
+            "routeSlug": "chasti-programmy",
+            "outcome": "import, свой модуль, разделение программы",
+            "navLabels": {
+              "s1": "Модули и import",
+              "s2": "Свой модуль",
+              "s3": "Сторонние пакеты",
+              "s4": "Деление программы"
+            }
           }
         },
         {
@@ -227,7 +374,15 @@
           "sections": ["16.1", "16.2", "16.3", "16.4", "16.5"],
           "site": {
             "id": "python-sorting-search",
-            "routeSlug": "sortirovka-i-poisk"
+            "routeSlug": "sortirovka-i-poisk",
+            "outcome": "Ключ сортировки, несколько критериев, max с ключом",
+            "navLabels": {
+              "s1": "sorted и sort",
+              "s2": "Ключ сортировки",
+              "s3": "Несколько критериев",
+              "s4": "Устойчивость и max",
+              "s5": "Жадный выбор"
+            }
           }
         },
         {
@@ -238,10 +393,18 @@
           "sections": ["25.1", "25.2", "25.3"],
           "site": {
             "id": "python-recursion",
-            "routeSlug": "rekursiya"
+            "routeSlug": "rekursiya",
+            "outcome": "Базовый случай, стек вызовов, @cache",
+            "navLabels": {
+              "s1": "Рекурсия",
+              "s2": "Стек вызовов",
+              "s3": "Мемоизация",
+              "s4": "Модель вызова"
+            }
           }
         }
-      ]
+      ],
+      "summary": "Функции и их договорённость, модули, сортировка, рекурсия."
     },
     {
       "id": "tools",
@@ -255,7 +418,17 @@
           "sections": ["17.1", "17.2", "17.3", "17.4", "17.5", "17.6"],
           "site": {
             "id": "python-files",
-            "routeSlug": "fayly"
+            "routeSlug": "fayly",
+            "outcome": "Читать файл целиком, по строкам, с заголовком; CSV, JSON",
+            "navLabels": {
+              "s1": "Открыть файл",
+              "s2": "Целиком или построчно",
+              "s3": "Заголовок файла",
+              "s4": "Режимы открытия",
+              "s5": "pathlib",
+              "s6": "CSV и JSON",
+              "s7": "Нет подходящего элемента"
+            }
           }
         },
         {
@@ -266,7 +439,15 @@
           "sections": ["18.2", "18.3", "18.4", "18.5", "18.6"],
           "site": {
             "id": "python-exceptions",
-            "routeSlug": "obrabotka-isklyucheniy"
+            "routeSlug": "obrabotka-isklyucheniy",
+            "outcome": "try/except, raise, подбор проверочных примеров",
+            "navLabels": {
+              "s1": "try и except",
+              "s2": "raise",
+              "s3": "Отладка",
+              "s4": "assert",
+              "s5": "Проверочные примеры"
+            }
           }
         },
         {
@@ -277,7 +458,15 @@
           "sections": ["20.1", "20.2", "20.3", "20.4"],
           "site": {
             "id": "python-iterators-generators",
-            "routeSlug": "iteratory-i-generatory"
+            "routeSlug": "iteratory-i-generatory",
+            "outcome": "map, генераторные выражения, yield",
+            "navLabels": {
+              "s1": "Что выдаёт for",
+              "s2": "Итератор",
+              "s3": "map и filter",
+              "s4": "Генераторное выражение",
+              "s5": "yield"
+            }
           }
         },
         {
@@ -288,7 +477,16 @@
           "sections": ["20.5", "23.1", "23.2"],
           "site": {
             "id": "python-standard-library",
-            "routeSlug": "standartnaya-biblioteka"
+            "routeSlug": "standartnaya-biblioteka",
+            "outcome": "Counter, deque, точные числа, itertools",
+            "navLabels": {
+              "s1": "Обзор библиотеки",
+              "s2": "Counter и defaultdict",
+              "s3": "deque",
+              "s4": "Fraction и Decimal",
+              "s5": "product и перебор",
+              "s6": "Перестановки и сочетания"
+            }
           }
         },
         {
@@ -299,7 +497,14 @@
           "sections": ["22.4", "22.5", "23.4", "23.5"],
           "site": {
             "id": "python-notation-patterns",
-            "routeSlug": "zapisi-chisel-i-shablony"
+            "routeSlug": "zapisi-chisel-i-shablony",
+            "outcome": "int(…, base), bin, биты, fnmatch, re",
+            "navLabels": {
+              "s1": "Системы счисления",
+              "s2": "Битовые операции",
+              "s3": "Маски fnmatch",
+              "s4": "Регулярные выражения"
+            }
           }
         },
         {
@@ -310,10 +515,19 @@
           "sections": ["21.1", "21.2", "21.3", "21.4", "21.5"],
           "site": {
             "id": "python-cost",
-            "routeSlug": "skorost-i-pamyat"
+            "routeSlug": "skorost-i-pamyat",
+            "outcome": "Оценивать рост работы и выбирать структуру",
+            "navLabels": {
+              "s1": "Временная сложность",
+              "s2": "Подсчёт шагов",
+              "s3": "Стоимость операций",
+              "s4": "Память",
+              "s5": "Измерение времени"
+            }
           }
         }
-      ]
+      ],
+      "summary": "Файлы, исключения, итераторы, стандартная библиотека, биты и шаблоны, скорость."
     },
     {
       "id": "final",
@@ -327,7 +541,15 @@
           "sections": ["30.1", "30.2", "30.3", "30.4", "30.5"],
           "site": {
             "id": "python-independent-program",
-            "routeSlug": "gotovaya-programma"
+            "routeSlug": "gotovaya-programma",
+            "outcome": "Собрать программу по договорённости и проверить её",
+            "navLabels": {
+              "s1": "Договорённость",
+              "s2": "Полный код",
+              "s3": "Новые детали",
+              "s4": "Проверка программы",
+              "s5": "Развитие программы"
+            }
           }
         },
         {
@@ -353,10 +575,17 @@
           ],
           "site": {
             "id": "python-practice",
-            "routeSlug": "praktika-i-itog"
+            "routeSlug": "praktika-i-itog",
+            "outcome": "Порядок работы над задачей, типичные ошибки, перенос знаний",
+            "navLabels": {
+              "s1": "Порядок работы",
+              "s2": "Типичные ошибки",
+              "s3": "Карта применения"
+            }
           }
         }
-      ]
+      ],
+      "summary": "Законченная программа и практика по всему курсу."
     },
     {
       "id": "advanced",
@@ -370,7 +599,16 @@
           "sections": ["27.1", "27.2", "27.3", "27.4", "27.5", "27.6"],
           "site": {
             "id": "python-classes",
-            "routeSlug": "klassy"
+            "routeSlug": "klassy",
+            "outcome": "Свои типы, self, свойства, dataclass",
+            "navLabels": {
+              "s1": "Класс и экземпляр",
+              "s2": "self и атрибуты",
+              "s3": "Атрибут класса",
+              "s4": "Инкапсуляция и property",
+              "s5": "Наследование и композиция",
+              "s6": "Специальные методы и dataclass"
+            }
           }
         },
         {
@@ -381,7 +619,16 @@
           "sections": ["28.1", "28.2", "28.3", "28.4", "28.5", "28.6"],
           "site": {
             "id": "python-advanced-features",
-            "routeSlug": "dopolnitelnye-mekhanizmy"
+            "routeSlug": "dopolnitelnye-mekhanizmy",
+            "outcome": "Замыкания, декораторы, with, match, байты, async",
+            "navLabels": {
+              "s1": "Замыкания",
+              "s2": "Декораторы",
+              "s3": "Контекстные менеджеры",
+              "s4": "match",
+              "s5": "Текст и байты",
+              "s6": "Асинхронность"
+            }
           }
         },
         {
@@ -392,10 +639,19 @@
           "sections": ["29.1", "29.2", "29.3", "29.4", "29.5"],
           "site": {
             "id": "python-testing",
-            "routeSlug": "chitaemost-i-testy"
+            "routeSlug": "chitaemost-i-testy",
+            "outcome": "Аннотации, unittest, эталон, свойства",
+            "navLabels": {
+              "s1": "Читаемость",
+              "s2": "Аннотации типов",
+              "s3": "Модульные тесты",
+              "s4": "Медленный эталон",
+              "s5": "Проверка свойств"
+            }
           }
         }
-      ]
+      ],
+      "summary": "Классы, механизмы языка и тесты — для тех, кто идёт дальше экзамена."
     }
   ],
   "pages": [
@@ -423,5 +679,15 @@
       "kicker": "Мини-курс Python · П18",
       "lead": "Тяжёлые места курса, что для них добавлено и где схему сознательно не ставили."
     }
-  ]
+  ],
+  "site": {
+    "summary": "От первой программы до законченной программы анализа файла: язык, на котором решаются задачи ЕГЭ.",
+    "audience": "Подойдёт, если вы раньше не программировали: начнём с самого начала и будем двигаться небольшими шагами.",
+    "learningOutcomes": [
+      "Понимать, что делает небольшая программа и как меняются значения",
+      "Писать и проверять программы с условиями, циклами, коллекциями и функциями",
+      "Читать сообщения об ошибках и находить причину",
+      "Собирать законченную программу, которая читает файл и проверяет данные"
+    ]
+  }
 }

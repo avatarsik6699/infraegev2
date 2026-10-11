@@ -57,29 +57,29 @@
   },
   {
     "id": "python-start",
-    "label": "Python · Старт и отладка",
+    "label": "Python · Старт",
     "group": "Мини-курсы",
     "exam_number": null,
-    "material_ids": ["python-first-program", "python-numbers", "python-errors"]
+    "material_ids": [
+      "python-first-program",
+      "python-values",
+      "python-numbers",
+      "python-input-output"
+    ]
   },
   {
     "id": "python-conditions",
     "label": "Python · Условия",
     "group": "Мини-курсы",
     "exam_number": null,
-    "material_ids": ["python-conditions", "python-compound-conditions"]
+    "material_ids": ["python-logic", "python-conditions"]
   },
   {
     "id": "python-loops",
     "label": "Python · Циклы",
     "group": "Мини-курсы",
     "exam_number": null,
-    "material_ids": [
-      "python-for-range",
-      "python-while",
-      "python-loop-state",
-      "python-number-digits"
-    ]
+    "material_ids": ["python-while", "python-for-range"]
   },
   {
     "id": "python-data",
@@ -89,9 +89,9 @@
     "material_ids": [
       "python-strings",
       "python-lists",
-      "python-sets",
+      "python-tuples",
       "python-dictionaries",
-      "python-sorting-search",
+      "python-sets",
       "python-comprehensions"
     ]
   },
@@ -102,41 +102,42 @@
     "exam_number": null,
     "material_ids": [
       "python-functions",
+      "python-arguments",
       "python-program-parts",
-      "python-iterators-generators"
+      "python-sorting-search",
+      "python-recursion"
     ]
   },
   {
-    "id": "python-recursion",
-    "label": "Python · Рекурсия",
-    "group": "Мини-курсы",
-    "exam_number": null,
-    "material_ids": ["python-recursion", "python-exceptions"]
-  },
-  {
-    "id": "python-files",
-    "label": "Python · Файлы и таблицы",
-    "group": "Мини-курсы",
-    "exam_number": null,
-    "material_ids": ["python-files", "python-tables"]
-  },
-  {
-    "id": "python-algorithms",
-    "label": "Python · Перебор и алгоритмические приёмы",
-    "group": "Мини-курсы",
-    "exam_number": null,
-    "material_ids": ["python-bruteforce", "python-select-result"]
-  },
-  {
-    "id": "python-final-program",
-    "label": "Python · Финальный проект: список дел",
+    "id": "python-tools",
+    "label": "Python · Файлы и инструменты",
     "group": "Мини-курсы",
     "exam_number": null,
     "material_ids": [
-      "python-todo-start",
-      "python-todo-actions",
-      "python-todo-storage",
-      "python-independent-program"
+      "python-files",
+      "python-exceptions",
+      "python-iterators-generators",
+      "python-standard-library",
+      "python-notation-patterns",
+      "python-cost"
+    ]
+  },
+  {
+    "id": "python-final",
+    "label": "Python · Итог",
+    "group": "Мини-курсы",
+    "exam_number": null,
+    "material_ids": ["python-independent-program", "python-practice"]
+  },
+  {
+    "id": "python-advanced",
+    "label": "Python · Дополнительно",
+    "group": "Мини-курсы",
+    "exam_number": null,
+    "material_ids": [
+      "python-classes",
+      "python-advanced-features",
+      "python-testing"
     ]
   }
 ]

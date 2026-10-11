@@ -28,19 +28,18 @@ function courseStep(
     courseLessons,
     input.progress,
   );
-  const mastered = courseLessons.filter(
+  const core = courseProgress.coreLessons(courseLessons);
+  const mastered = core.filter(
     (lesson) => practice.byLessonId[lesson.id]?.mastered,
   ).length;
-  const next = courseLessons.find(
-    (lesson) => !practice.byLessonId[lesson.id]?.mastered,
-  );
+  const next = core.find((lesson) => !practice.byLessonId[lesson.id]?.mastered);
   const target = next ?? courseLessons[0];
   if (!target) return undefined;
   return {
     kind: "course",
     title: target.title,
     description: next
-      ? `${courseTitle} · освоено ${String(mastered)} из ${String(courseLessons.length)} уроков`
+      ? `${courseTitle} · освоено ${String(mastered)} из ${String(core.length)} уроков`
       : `${courseTitle} · все уроки освоены`,
     courseRouteSlug,
     lessonRouteSlug: target.routeSlug,

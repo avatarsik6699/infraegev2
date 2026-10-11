@@ -1802,7 +1802,7 @@ def refs_svg(names, objects, cells=None, old=None, accent=()) -> str:
     ``objects`` — labels; ``cells`` — {object index: [element indexes]};
     ``old`` — earlier bindings drawn dashed; ``accent`` — names in accent.
     An element shared by several cells sits right under them, so the arrows
-    visibly meet; separate elements go to the right column."""
+    visibly land on one box; separate elements go to the right column."""
     cells = {int(k): v for k, v in (cells or {}).items()}
     old = old or []
     row_h, top, cell = 58, 18, 34
@@ -1841,9 +1841,13 @@ def refs_svg(names, objects, cells=None, old=None, accent=()) -> str:
     out = [f'<svg viewBox="0 0 660 {h:.0f}" role="img" aria-label="Имена и объекты">']
 
     def anchor(t, fx, fy):
-        """Arrow end on the target box: its top for a box below, else its left."""
+        """Arrow end on the target box: its top for a box below, else its left.
+        A box shared by several cells takes each arrow under its own cell, so
+        the arrowheads stay apart instead of meeting in one point."""
         x, y = pos[t]
         if y > fy + 30:
+            if len(owners.get(t, ())) > 1:
+                return min(max(fx, x + 12), x + width[t] - 12), y
             return x + width[t] / 2, y
         return x, y + 20
 
@@ -2092,9 +2096,13 @@ GREEN = "#2a6a3a"
 
 
 def _mono(x, y, s, size: float = 15, color=INK, anchor="start", weight=500) -> str:
+    # The figures place boxes by the 0.6 em advance of JetBrains Mono; the
+    # fixed text length keeps that pitch when another monospace font renders
+    # the text (a fallback before the web font loads), so boxes stay on it.
+    fit = f' textLength="{len(s) * size * CH:.1f}" lengthAdjust="spacing"' if len(s) > 1 else ""
     return (
         f'<text x="{x:.1f}" y="{y:.1f}" font-family="{MONO_FONT}" font-size="{size}" '
-        f'font-weight="{weight}" fill="{color}" text-anchor="{anchor}" '
+        f'font-weight="{weight}" fill="{color}" text-anchor="{anchor}"{fit} '
         f'style="white-space:pre;font-variant-ligatures:none">{html.escape(s)}</text>'
     )
 
@@ -2610,10 +2618,11 @@ def error_stages_svg() -> str:
             ["Python молчит:", "логическая ошибка"],
         ),
     ]
-    w, gap = 196, 36
+    w, gap = 192, 30  # three columns and two gaps inside the 660 width
+    x0 = (660 - 3 * w - 2 * gap) / 2
     out = [_svg(250, "Где обнаруживаются три вида ошибок")]
     for k, (title, when, code, (res, color), note) in enumerate(cols):
-        x = 8 + k * (w + gap)
+        x = x0 + k * (w + gap)
         out.append(_text(x, 20, title, 15, INK, weight=600))
         out.append(_text(x, 40, when, 13, MUTED))
         out.append(_box(x, 54, w, 40, INK))
@@ -2682,10 +2691,11 @@ TYPES = [
 
 def type_cards_svg() -> str:
     """The five first types: examples of values and what each is for."""
-    w, gap = 120, 15
+    w, gap = 118, 13  # five cards and four gaps inside the 660 width
+    x0 = (660 - 5 * w - 4 * gap) / 2
     out = [_svg(232, "Пять первых типов значений")]
     for k, (name, ru, examples, use) in enumerate(TYPES):
-        x = 7.5 + k * (w + gap)
+        x = x0 + k * (w + gap)
         out.append(_mono(x + w / 2, 22, name, 16, INK, "middle", 600))
         out.append(_text(x + w / 2, 42, ru, 13, MUTED, "middle"))
         out.append(_box(x, 54, w, 128, FAINT, WASH, rx=10))
@@ -3202,23 +3212,15 @@ def truth_grids_svg(exprs=("a and b", "a or b", "a != b"), names=("a", "b")) -> 
                     "middle",
                 )
             )
+        marked = []  # outlines of the True cells, drawn over every cell
         for i, av in enumerate((False, True)):
             out.append(_mono(gx - 8, gy + i * cell_h + 24, f"{p} {av}", 11, MUTED, "end"))
             for j, bv in enumerate((False, True)):
                 v = eval(e, {}, {p: av, q: bv})  # noqa: S307 — literal expressions of the figure
                 x, y = gx + j * cell_w, gy + i * cell_h
-                out.append(
-                    _box(
-                        x,
-                        y,
-                        cell_w,
-                        cell_h,
-                        ACCENT if v else FAINT,
-                        WASH if v else "#fff",
-                        rx=0,
-                        sw=2 if v else 1,
-                    )
-                )
+                out.append(_box(x, y, cell_w, cell_h, FAINT, WASH if v else "#fff", rx=0, sw=1))
+                if v:
+                    marked.append(_box(x + 1, y + 1, cell_w - 2, cell_h - 2, ACCENT, "none", 0, 2))
                 out.append(
                     _mono(
                         x + cell_w / 2,
@@ -3230,6 +3232,7 @@ def truth_grids_svg(exprs=("a and b", "a or b", "a != b"), names=("a", "b")) -> 
                         600 if v else 500,
                     )
                 )
+        out.extend(marked)
         if k:
             out.append(f'<path d="M {k * slot:.1f} 8 V 164" stroke="{FAINT}"/>')
     out.append(

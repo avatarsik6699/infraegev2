@@ -148,7 +148,7 @@ describe("public release metadata", () => {
         status: "published",
       }),
     ]);
-    expect(courseLessonPublications).toHaveLength(28);
+    expect(courseLessonPublications).toHaveLength(30);
     expect(
       courseLessonPublications.every((lesson) =>
         ["draft", "published"].includes(lesson.status),
@@ -158,7 +158,7 @@ describe("public release metadata", () => {
       courseLessonPublications
         .filter((lesson) => lesson.status === "published")
         .map((lesson) => lesson.routeSlug),
-    ).toHaveLength(28);
+    ).toHaveLength(30);
   });
 
   it("projects truthful course availability into the catalog", () => {
@@ -178,7 +178,12 @@ describe("public release metadata", () => {
       id: "python",
       status: "published",
       routeSlug: "python",
-      lessonCount: 28,
+      lessonCount: 30,
+      advancedLessonIds: [
+        "python-classes",
+        "python-advanced-features",
+        "python-testing",
+      ],
     });
     expect(
       courseCatalog.entries.filter((entry) => entry.status === "planned"),

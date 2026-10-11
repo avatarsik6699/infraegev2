@@ -22,8 +22,14 @@ const calculate = (
   let unavailable = false;
   for (const entry of entries) {
     if (entry.status !== "published") continue;
-    total += entry.lessonCount;
-    const lessons = summaries[entry.id];
+    const advanced = new Set(entry.advancedLessonIds);
+    total += entry.lessonCount - advanced.size;
+    const lessons = summaries[entry.id]?.map((lesson) => ({
+      ...lesson,
+      level: advanced.has(lesson.id)
+        ? ("advanced" as const)
+        : ("core" as const),
+    }));
     if (!lessons || lessons.length !== entry.lessonCount) {
       byId[entry.id] = { status: "unavailable" };
       unavailable = true;
@@ -38,7 +44,7 @@ const calculate = (
       byId[entry.id] = {
         status: "ready",
         mastered: count,
-        total: entry.lessonCount,
+        total: progress.availableCount,
       };
       mastered += count;
     }

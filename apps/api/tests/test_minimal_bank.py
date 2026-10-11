@@ -205,7 +205,7 @@ def test_http_catalog_privacy_checker_and_files(database, monkeypatch, tmp_path)
             ).status_code
             == 409
         )
-        attached = next(e for e in source.tasks if e.task.files)
+        attached = next(e for e in source.tasks if e.task.files and not e.task.archived)
         file = attached.task.files[0]
         response = client.get(f"/api/tasks/{attached.task.id}/files/{file.id}")
         assert response.status_code == 200 and response.headers["x-accel-redirect"].endswith(
@@ -246,7 +246,7 @@ def test_pagination_next_and_lesson_membership(database):
                     if material.status == "published" and expected:
                         result = await readers.lesson(session, material.kind, material.id)
                         assert [t.id for t in result.tasks] == [i for _, i in expected]
-                assert len(list(await session.scalars(select(TaskRecord.id)))) == 808
+                assert len(list(await session.scalars(select(TaskRecord.id)))) == 965
         finally:
             await engine.dispose()
 
@@ -348,8 +348,10 @@ def test_validate_cli_checks_canonical_bank_without_database_or_legacy_json(tmp_
 
     result = validate()
     assert result.returncode == 0, result.stderr
-    assert json.loads(result.stdout)["tasks"] == 808
-    task["task"]["theory_links"][0]["section"] = "missing-section"
+    assert json.loads(result.stdout)["tasks"] == 965
+    task["task"]["theory_links"] = [
+        {"label": "Теория", "section": "missing-section", "material_id": "python-first-program"}
+    ]
     result = validate()
     assert result.returncode != 0 and "unknown theory section" in result.stderr
     task["task"]["theory_links"][0]["section"] = None
@@ -581,7 +583,7 @@ def test_topic_summary_matches_published_lessons_and_excludes_hidden_tasks(datab
             (link.material_id, entry.task.id)
             for entry in source.tasks
             for link in entry.task.lessons
-            if not link.counts_toward_mastery
+            if not link.counts_toward_mastery and link.material_id in {t["id"] for t in topics}
         }
         assert flagged, "advanced-subtopic tasks must stay outside mastery"
         assert flagged == {

@@ -14,11 +14,13 @@ import {
   renderAuthoredLessonContent,
 } from "./lesson-content-test-utils";
 
+// The lesson still names retired course lessons (it is not rebuilt yet,
+// Change 175): PythonCourseLessonLink opens the lessons that replace them.
 const courseLessonPaths = [
-  "/courses/python/schetchiki-i-nakopiteli",
+  "/courses/python/while",
   "/courses/python/spiski",
   "/courses/python/fayly",
-  "/courses/python/otbor-rezultata",
+  "/courses/python/sortirovka-i-poisk",
 ];
 
 const authoredContent = [

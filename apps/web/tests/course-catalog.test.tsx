@@ -1,3 +1,4 @@
+import { courseLessonPublications } from "~/entities/course";
 import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import { renderToString } from "react-dom/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -76,8 +77,9 @@ vi.mock(
   },
 );
 
-const lessons = Array.from({ length: 28 }, (_, index) => ({
-  id: `lesson-${String(index)}`,
+// The real lesson ids: the last three are additional and stay out of mastery.
+const lessons = courseLessonPublications.map((lesson, index) => ({
+  id: lesson.id,
   tasks: [{ id: `task-${String(index)}`, solutionRevision: 2 }],
 }));
 const catalog = (summaries = { python: lessons }) => (
@@ -102,7 +104,7 @@ afterEach(() => {
 });
 
 describe("mini-course catalog", () => {
-  it.each([0, 1, 28])(
+  it.each([0, 1, 27])(
     "shares %i mastered lessons across header and card",
     async (count: number) => {
       progressFixture.results = lessons.slice(0, count).map((lesson) => ({
@@ -114,7 +116,7 @@ describe("mini-course catalog", () => {
       const view = render(catalog());
       await waitFor(() =>
         expect(
-          screen.getAllByText(`Освоено ${String(count)} из 28 уроков`),
+          screen.getAllByText(`Освоено ${String(count)} из 27 уроков`),
         ).toHaveLength(2),
       );
       expect(
@@ -150,7 +152,7 @@ describe("mini-course catalog", () => {
       ).toHaveLength(3);
       expect(
         view.container.querySelector("[data-course-summary]")?.textContent,
-      ).toContain("Всего направлений: 4 · Доступно: 1 · Уроков: 28");
+      ).toContain("Всего направлений: 4 · Доступно: 1 · Уроков: 27");
     },
   );
 
@@ -165,14 +167,14 @@ describe("mini-course catalog", () => {
     ];
     render(catalog());
     await waitFor(() =>
-      expect(screen.getAllByText("Освоено 0 из 28 уроков")).toHaveLength(2),
+      expect(screen.getAllByText("Освоено 0 из 27 уроков")).toHaveLength(2),
     );
   });
 
   it("renders neutral personal state on SSR while retaining real navigation", () => {
     const html = renderToString(catalog());
     expect(html).toContain("Прогресс загружается");
-    expect(html).not.toContain("Освоено 0 из 28");
+    expect(html).not.toContain("Освоено 0 из 27");
     expect(html).toContain('href="/courses/python"');
     expect(html).toContain("Скоро");
     expect(html).not.toContain("В плане");
@@ -194,7 +196,7 @@ describe("mini-course catalog", () => {
       ).toHaveLength(2),
     );
     expect(screen.queryByRole("progressbar")).toBeNull();
-    expect(screen.queryByText("Освоено 0 из 28 уроков")).toBeNull();
+    expect(screen.queryByText("Освоено 0 из 27 уроков")).toBeNull();
     expect(screen.getByRole("link", { name: "Открыть курс" })).not.toBeNull();
   });
 });
@@ -208,6 +210,7 @@ it("never reports partial totals as complete when another published summary is m
       summary: "",
       routeSlug: "python",
       lessonCount: 1,
+      advancedLessonIds: [],
     },
     {
       id: "excel",
@@ -216,12 +219,13 @@ it("never reports partial totals as complete when another published summary is m
       summary: "",
       routeSlug: "excel",
       lessonCount: 1,
+      advancedLessonIds: [],
     },
   ];
   const result = courseCatalogModel.calculate(
     entries,
     { python: [lessons[0]!] },
-    { "lesson-0": { solvedTaskIds: ["task-0"] } },
+    { [lessons[0]!.id]: { solvedTaskIds: ["task-0"] } },
     true,
   );
   expect(result.total).toBe(2);

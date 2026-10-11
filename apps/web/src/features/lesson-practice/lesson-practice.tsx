@@ -49,17 +49,6 @@ export const LessonPractice: React.FC<LessonPracticeTypes.Props> = (props) => {
           новой версии решите их ещё раз.
         </Typography.Text>
       ) : null}
-      {model.enhanced && props.tasks.length > 0 ? (
-        <Typography.Text
-          className={styles.taskPosition}
-          aria-live="polite"
-          data-task-position
-        >
-          Задание{" "}
-          {props.tasks.findIndex((task) => task.id === model.activeTaskId) + 1}{" "}
-          из {props.tasks.length}
-        </Typography.Text>
-      ) : null}
       {!model.enhanced ? (
         <Typography.Text variant="caption" tone="muted">
           Для проверки ответов нужен JavaScript. Условия, подсказки и решения

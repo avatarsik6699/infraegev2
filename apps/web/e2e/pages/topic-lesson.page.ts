@@ -1296,7 +1296,7 @@ export class TopicLessonPage {
       });
       await expect(
         popup.getByRole("link", { name: "Читать урок →" }),
-      ).toHaveAttribute("href", "/courses/python/sostavnye-usloviya");
+      ).toHaveAttribute("href", "/courses/python/logicheskie-vyrazheniya");
       await popup.getByRole("button", { name: "Закрыть" }).click();
       await expect(popup).toHaveCount(0);
     }

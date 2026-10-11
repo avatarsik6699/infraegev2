@@ -29,3 +29,10 @@ export {
   statusText,
   step,
 } from "./path-builder";
+export { CodeRunner, type CodeRunnerProps } from "./code-runner";
+export {
+  RangeSandbox,
+  parseWhole,
+  rangeValues,
+  sliceIndexes,
+} from "./range-sandbox";

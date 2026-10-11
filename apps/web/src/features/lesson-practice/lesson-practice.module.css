@@ -17,21 +17,22 @@
 }
 
 /* F39: «Задача N» is short and predictable — never truncated; the check
-   has its own reserved column to the right, so solving shifts nothing. */
+   has its own reserved column to the right, so solving shifts nothing.
+   The level glyph stands on the label's baseline, not centred on it. */
 .practiceTab {
   position: relative;
   display: grid;
   flex: none;
   grid-template-columns: auto auto 0.75rem;
   gap: var(--space-0-5);
-  align-items: center;
+  align-items: end;
   text-align: left;
 }
 
 .tabLabel {
   color: inherit;
   font-size: var(--text-xs);
-  line-height: 1.25;
+  line-height: 1;
   white-space: nowrap;
 }
 
@@ -434,13 +435,6 @@
     grid-template-columns: minmax(0, 1fr);
     gap: var(--space-0-5);
   }
-}
-
-.taskPosition {
-  margin: 0 0 var(--space-1);
-  color: var(--color-text-soft);
-  font-family: var(--font-ui);
-  font-size: var(--text-sm);
 }
 
 @media (max-width: 40rem) {

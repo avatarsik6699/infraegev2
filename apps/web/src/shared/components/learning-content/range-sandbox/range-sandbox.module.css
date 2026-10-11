@@ -1,0 +1,118 @@
+/* Range and slice sandbox (Change 175): drawn like the lesson's range and
+   slice diagrams — ink, the one orange accent as a stroke, page font. */
+.root {
+  display: grid;
+  gap: var(--space-1-5);
+  max-width: var(--measure-reading);
+  margin-block: 0 var(--space-2);
+  padding: var(--space-2);
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-surface);
+}
+
+.plate {
+  overflow-x: auto;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  min-width: 32rem;
+  height: auto;
+  font-family: inherit;
+}
+
+.inputs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(6rem, 1fr));
+  gap: var(--space-1-5);
+}
+
+.field {
+  font-family: var(--font-data);
+}
+
+.message,
+.note {
+  margin: 0;
+  font-family: var(--font-reading);
+  font-size: var(--text-sm);
+  line-height: 1.55;
+}
+
+.message {
+  font-family: var(--font-data);
+  overflow-wrap: anywhere;
+}
+
+.note {
+  color: var(--color-muted);
+}
+
+.axis,
+.bound {
+  stroke: var(--color-text);
+  stroke-width: 1.5;
+}
+
+.bound {
+  stroke-width: 2.5;
+}
+
+.tick {
+  stroke: var(--color-muted);
+}
+
+.stop {
+  stroke: var(--color-text);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 3;
+}
+
+.arc {
+  fill: none;
+  stroke: var(--color-muted);
+  stroke-width: 1.25;
+}
+
+.dot {
+  fill: var(--color-wash);
+  stroke: var(--color-brand-orange);
+  stroke-width: 2;
+}
+
+.cell {
+  fill: var(--color-bg);
+  stroke: var(--color-text);
+  stroke-width: 1.25;
+}
+
+.cellOn {
+  fill: var(--color-wash);
+  stroke: var(--color-brand-orange);
+  stroke-width: 2;
+}
+
+.label,
+.labelOn,
+.char,
+.order {
+  font-variant-numeric: tabular-nums;
+}
+
+.label {
+  fill: var(--color-muted);
+}
+
+.labelOn {
+  fill: var(--color-text);
+}
+
+.char {
+  fill: var(--color-text);
+  font-weight: 600;
+}
+
+.order {
+  fill: var(--color-brand-orange);
+}

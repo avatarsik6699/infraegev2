@@ -4,6 +4,8 @@ export namespace CourseNavigationTypes {
     title: string;
     /** Absent for a lesson that is not published yet. */
     routeSlug?: string;
+    /** Additional lessons are marked and stay out of course mastery (Change 175). */
+    level?: "core" | "advanced";
   };
 
   export type Module = {

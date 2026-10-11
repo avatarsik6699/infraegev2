@@ -100,7 +100,7 @@
     vars.className = "run-vars";
     vars.hidden = true;
     vars.innerHTML =
-      '<p class="run-h">Переменные</p><div class="vars' +
+      '<p class="run-h">Переменные:</p><div class="vars' +
       (hasObjs ? " with-objs" : "") +
       '"><div class="frames"></div><div class="objs"></div></div>';
     var svg = document.createElementNS(NS, "svg");
@@ -115,7 +115,8 @@
     var out = document.createElement("div");
     out.className = "out out-output out-lines run-out";
     out.hidden = true;
-    out.innerHTML = '<span class="out-l">Вывод</span><pre class="out-v"></pre>';
+    out.innerHTML =
+      '<span class="out-l">Вывод:</span><pre class="out-v"></pre>';
     main.after(note);
     note.after(out);
 
@@ -229,7 +230,7 @@
       });
       note.innerHTML =
         '<span class="run-l">' +
-        (s.line ? "строка " + s.line : "начало") +
+        (s.line ? "Строка " + s.line + ":" : "Начало:") +
         "</span>" +
         '<span class="run-t">' +
         rich(s.text) +

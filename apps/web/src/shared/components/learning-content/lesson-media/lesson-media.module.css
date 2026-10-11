@@ -53,3 +53,13 @@
     min-width: 30rem;
   }
 }
+
+/* The generated figures name the stand's fonts; on the site the same faces
+   are registered under the site's names (Change 175). */
+.svg text[font-family^="JetBrains"] {
+  font-family: var(--font-data);
+}
+
+.svg text[font-family^="Onest"] {
+  font-family: var(--font-ui);
+}

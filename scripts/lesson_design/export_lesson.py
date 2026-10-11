@@ -34,6 +34,7 @@ theory: it is written to ``--tasks`` with its answers, to become bank tasks
 """
 
 import argparse
+import html
 import json
 import re
 import sys
@@ -69,6 +70,8 @@ def jsx_text(text: str) -> str:
 
 
 def inline(text: str) -> str:
+    # figure captions are HTML on the stand: <strong> reads as **…**
+    text = re.sub(r"<strong>(.*?)</strong>", r"**\1**", text, flags=re.S)
     out, last = [], 0
     for m in INLINE.finditer(text):
         out.append(jsx_text(text[last : m.start()]))
@@ -86,7 +89,9 @@ def inline(text: str) -> str:
             # task, so the lesson names it without a stand link
             out.append(f"<Notation>{{{js(m.group('file_text'))}}}</Notation>")
         elif m.group("code") is not None or m.group("html_code") is not None:
-            code = m.group("code") or m.group("html_code")
+            code = m.group("code")
+            if code is None:  # <code> of an HTML caption: entities decoded
+                code = html.unescape(m.group("html_code"))
             out.append(f"<Notation>{{{js(code)}}}</Notation>")
         else:
             out.append(
@@ -322,7 +327,11 @@ class Converter:
                 self.imports.add("ProofDisclosure")
                 inner = "\n".join(self.blocks(body))
                 title = plain(summary.group(1)) if summary else "Доказательство"
-                out.append(f"<ProofDisclosure summary={js(title)}>\n{inner}\n</ProofDisclosure>")
+                # «Тонкости: …» — fine points of a step, not a proof: own look
+                kind = ' kind="nuance"' if title.startswith("Тонкости") else ""
+                out.append(
+                    f"<ProofDisclosure summary={js(title)}{kind}>\n{inner}\n</ProofDisclosure>"
+                )
                 i = j + 1
                 continue
             call = FIGURE_CALL.match(stripped)

@@ -11,10 +11,16 @@ export const LessonTheoryConcept: React.FC<LessonTheoryConceptProps> = ({
   concept,
   headingOrder = 3,
 }) => (
-  <section className={styles.concept} id={concept.id}>
-    <Typography.Title order={headingOrder} className={styles.conceptTitle}>
-      {concept.navLabel}
-    </Typography.Title>
+  <section
+    className={styles.concept}
+    id={concept.id}
+    data-concept-lead={concept.lead || undefined}
+  >
+    {concept.lead ? null : (
+      <Typography.Title order={headingOrder} className={styles.conceptTitle}>
+        {concept.navLabel}
+      </Typography.Title>
+    )}
     <Typography.Prose
       className={styles.conceptExplanation}
       data-concept-explanation

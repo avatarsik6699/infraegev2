@@ -57,9 +57,10 @@
   letter-spacing: -0.02em;
 }
 
+/* One text baseline for the row: the level glyph stands on it (Change 175). */
 .metadata {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   flex-wrap: wrap;
   gap: var(--space-1) var(--space-2);
   margin-top: var(--space-0-5);
@@ -96,11 +97,12 @@
 }
 .metaItem {
   display: inline-flex;
-  align-items: center;
+  align-items: baseline;
   gap: var(--space-1);
 }
 .metaItem svg {
   flex: none;
+  align-self: center;
 }
 .back[data-presentation] {
   gap: var(--space-0-5);

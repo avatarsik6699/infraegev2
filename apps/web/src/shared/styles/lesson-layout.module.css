@@ -1,11 +1,13 @@
 /* Lesson result and progress blocks shared by topic and course lessons.
    The page frame itself lives in lesson-frame.module.css (Change 169). */
 .resultSummary {
+  min-width: 0;
   max-width: var(--measure-reading);
 }
 
 .resultGrid {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-3);
   min-width: 0;
 }

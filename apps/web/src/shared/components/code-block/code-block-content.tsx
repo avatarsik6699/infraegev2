@@ -7,6 +7,9 @@ export type CodeBlockContentProps = {
   showLineNumbers?: boolean;
   id?: string;
   collapsed?: boolean;
+  /** 1-based line shown as just executed (step-by-step run). */
+  activeLine?: number;
+  activeLineTone?: "current" | "error";
 };
 
 export const CodeBlockContent: React.FC<CodeBlockContentProps> = (props) => {
@@ -22,7 +25,15 @@ export const CodeBlockContent: React.FC<CodeBlockContentProps> = (props) => {
     >
       <code className={styles.code} data-language={props.language}>
         {lines.map((line, lineIndex) => (
-          <span className={styles.line} key={lineIndex}>
+          <span
+            className={styles.line}
+            key={lineIndex}
+            data-active={
+              props.activeLine === lineIndex + 1
+                ? (props.activeLineTone ?? "current")
+                : undefined
+            }
+          >
             {props.showLineNumbers ? (
               // Decorative and barely visible (Change 171): the number is drawn
               // by CSS from data-line, so it is neither page text nor copied.

@@ -48,5 +48,43 @@ export namespace LessonMediaTypes {
     shortest: string;
   };
 
-  export type Generated = Diagram | Stepper | Graph;
+  /** A name of one frame in a recorded step: `ref` points to an object. */
+  export type RunName = {
+    n: string;
+    v: string;
+    ref: number | null;
+    /** Changed by this step. */
+    ch: boolean;
+  };
+
+  export type RunFrame = { title: string; names: readonly RunName[] };
+
+  /**
+   * One step of a runnable code block (Change 175): the state right after a
+   * line ran, recorded by `scripts/lesson_design/tracer.py` from a real run.
+   */
+  export type RunStep = {
+    line: number | null;
+    /** Plain-language explanation; `code` in backticks. */
+    text: string;
+    kind: "start" | "line" | "call" | "return" | "error";
+    frames: readonly RunFrame[];
+    objs: Readonly<Record<string, { v: string; ch: boolean }>>;
+    /** Output so far; typed input marked `⟪…⟫`. */
+    out: string;
+    error?: string;
+    stop?: boolean;
+  };
+
+  export type Run = {
+    kind: "run";
+    code: string;
+    fileName: string;
+    /** Static output and the final error, shown without JavaScript. */
+    output: string;
+    error?: string;
+    steps: readonly [RunStep, ...RunStep[]];
+  };
+
+  export type Generated = Diagram | Stepper | Graph | Run;
 }
