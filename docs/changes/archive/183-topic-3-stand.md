@@ -9,7 +9,7 @@
 | Change | `183` |
 | Slug | `topic-3-stand` |
 | Title | Тема 3 «Связанные таблицы» по пайплайну на демо-стенде |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/183-topic-3-stand` |
 
 ---
@@ -17,10 +17,10 @@
 ## Goal
 
 Перестроить на демо-стенде тему № 3 ЕГЭ «Связанные таблицы: отбор и расчёт» по
-[пайплайну](../runbooks/lesson-pipeline.md) и [порядку волны](../runbooks/lesson-wave.md), этапы 1–8
-(SPEC §9, пункт 1). Исходник архитектора — [`3.md`](../artifacts/lessons/3.md) и тренировочная книга
-[`3_training.xlsx`](../artifacts/lessons/3_training.xlsx) (выгрузка листов —
-[`3_training.md`](../artifacts/lessons/3_training.md), `docx_to_md.py`).
+[пайплайну](../../runbooks/lesson-pipeline.md) и [порядку волны](../../runbooks/lesson-wave.md), этапы 1–8
+(SPEC §9, пункт 1). Исходник архитектора — [`3.md`](../../artifacts/lessons/3.md) и тренировочная книга
+[`3_training.xlsx`](../../artifacts/lessons/3_training.xlsx) (выгрузка листов —
+[`3_training.md`](../../artifacts/lessons/3_training.md), `docx_to_md.py`).
 
 Решение архитектора (2026-10-12): **тема 3 решается только в Excel, Python в уроках нет** — как
 тема 18. Мини-лист и строка формул курса Excel, термины `{{xl-…}}` на уроки курса (поиск по ключу
@@ -97,7 +97,7 @@ and the Files list above.
 ## Gate Checks
 
 > Critical Gate runs once per `/work` target set; default `/ship` reruns only invalidated checks;
-> Full Gate only with explicit `--full`. Commands: [docs/STACK.md](../STACK.md); selection:
+> Full Gate only with explicit `--full`. Commands: [docs/STACK.md](../../STACK.md); selection:
 > `python3 scripts/gate.py affected`. Record change-specific overrides here, or `None`.
 
 Проверки этапа 7 по `topic-3` (`verify_sheets.py topic-3`, `checks.py`, `datasets.py --check`, если
