@@ -1674,6 +1674,16 @@ figure.sheet {
 .sheet-scroll {
   overflow-x: auto;
 }
+/* the book of a task under its statement: long sheets scroll inside the block */
+details.book .sheet-scroll {
+  max-height: 26rem;
+  overflow-y: auto;
+}
+details.book .sheet-grid thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
 table.sheet-grid {
   min-width: 0;
   border-collapse: separate;

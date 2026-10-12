@@ -6,13 +6,15 @@ looks each construct up in CONSTRUCTS: (source section of the course, what it
 is). The section owner and its level come from course.json. "+" after a
 section marks a gap of the source that the course lesson fills (map.md).
 
-Topics 3, 18 and 22 have no source of their own yet: until they do, chapters
-14–17 of the course source — the worked tasks passed to those topics — stand
-for what the topics need (decision of 2026-10-11, Change 176).
+Topics 18 and 22 have no source of their own in SOURCES yet: chapters 14–17 of
+the course source — the worked tasks passed to those topics — stand for what
+the topics need (decision of 2026-10-11, Change 176). Topic 3 has its own
+source since Change 183.
 """
 
 # source -> (EGE task shown in the report, line range or None for the whole file)
 SOURCES = {
+    "docs/artifacts/lessons/3.md": ("3", None),
     "docs/artifacts/lessons/9.md": ("9", None),
     "docs/artifacts/lessons/excel_course.md#14": ("9", (595, 696)),
     "docs/artifacts/lessons/excel_course.md#15": ("3", (697, 787)),
@@ -75,6 +77,7 @@ CONSTRUCTS = {
     "fn СТРОКА": ("18.2+", "`СТРОКА()` — номер строки ячейки"),
     # actions
     "fill": ("5.2", "заполнение формулы вниз и вправо"),
+    "fn ПРОМЕЖУТОЧНЫЕ.ИТОГИ": ("11.2", "`ПРОМЕЖУТОЧНЫЕ.ИТОГИ` — итог видимых строк"),
     "filter": ("11.2", "фильтр"),
     "sort": ("11.1", "сортировка"),
 }

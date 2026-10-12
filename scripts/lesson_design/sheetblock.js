@@ -360,4 +360,12 @@ document.querySelectorAll("[data-sheetblock]").forEach(function (fig) {
     };
   }
   select(current.sheet, current.addr, false);
+  // a wide sheet hides the chosen cell to the right: scroll the sheet, not the page
+  var start = td(current.sheet, current.addr);
+  var pane = start && start.closest(".sheet-scroll");
+  if (pane) {
+    var over =
+      start.getBoundingClientRect().right - pane.getBoundingClientRect().right;
+    if (over > 0) pane.scrollLeft += over + 8;
+  }
 });

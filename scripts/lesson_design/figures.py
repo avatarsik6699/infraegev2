@@ -3670,6 +3670,12 @@ from combo_figures import (  # noqa: E402
     COMBO_STEPPERS,
     COMBO_WIDGETS,
 )
+from db_figures import (  # noqa: E402
+    DB_FIGURES,
+    DB_SCRIPTS,
+    DB_STEPPERS,
+    DB_WIDGETS,
+)
 from game_figures import (  # noqa: E402
     GAME_FIGURES,
     GAME_SCRIPTS,
@@ -3746,6 +3752,7 @@ for _figures, _steppers, _widgets, _scripts in (
     (GAME_FIGURES, GAME_STEPPERS, GAME_WIDGETS, GAME_SCRIPTS),
     (STRING_FIGURES, STRING_STEPPERS, STRING_WIDGETS, STRING_SCRIPTS),
     (GREEDY_FIGURES, GREEDY_STEPPERS, GREEDY_WIDGETS, GREEDY_SCRIPTS),
+    (DB_FIGURES, DB_STEPPERS, DB_WIDGETS, DB_SCRIPTS),
 ):
     FIGURES.update(_figures)
     STEPPERS.update(_steppers)
