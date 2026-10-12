@@ -45,3 +45,6 @@ content/lesson-design/topic-*/files/*.xlsx
 # Machine-local agent state.
 .claude/settings.local.json
 .claude/scheduled_tasks.lock
+
+reports
+research_notes
