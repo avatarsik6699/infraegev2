@@ -9,15 +9,15 @@
 | Change | `180` |
 | Slug | `topics-4-7-8-9-stand` |
 | Title | Волна 2: темы 4, 7, 8, 9 по пайплайну на демо-стенде |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/180-topics-4-7-8-9-stand` |
 
 ---
 
 ## Goal
 
-Перестроить на демо-стенде четыре темы ЕГЭ по [пайплайну](../runbooks/lesson-pipeline.md) и
-[порядку волны](../runbooks/lesson-wave.md), этапы 1–8 (SPEC §9, пункт 1): № 4 «Кодирование и
+Перестроить на демо-стенде четыре темы ЕГЭ по [пайплайну](../../runbooks/lesson-pipeline.md) и
+[порядку волны](../../runbooks/lesson-wave.md), этапы 1–8 (SPEC §9, пункт 1): № 4 «Кодирование и
 условие Фано» (`docs/artifacts/lessons/4.md`), № 7 «Объём информации: изображения, звук, текст»
 (`7.md`), № 8 «Комбинаторика: слова и последовательности» (`8.md`), № 9 «Обработка таблицы»
 (`9.md`). Исходники подтверждены архитектором (2026-10-11). Агент на тему (Opus 5.5, effort high):
@@ -110,7 +110,7 @@ and the Files list above.
 ## Gate Checks
 
 > Critical Gate runs once per `/work` target set; default `/ship` reruns only invalidated checks;
-> Full Gate only with explicit `--full`. Commands: [docs/STACK.md](../STACK.md); selection:
+> Full Gate only with explicit `--full`. Commands: [docs/STACK.md](../../STACK.md); selection:
 > `python3 scripts/gate.py affected`. Record change-specific overrides here, or `None`.
 
 Проверки этапа 7 по `topic-4`, `topic-7`, `topic-8`, `topic-9`; для T2 — `export_course.py --check`
