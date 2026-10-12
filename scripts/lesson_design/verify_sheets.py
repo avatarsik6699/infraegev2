@@ -2,10 +2,12 @@
 
 Usage:
     python3 -I scripts/lesson_design/verify_sheets.py content/lesson-design/course-excel
+    python3 -I scripts/lesson_design/verify_sheets.py content/lesson-design/topic-9
     python3 -I scripts/lesson_design/verify_sheets.py content/lesson-design/course-excel --cases
     python3 -I scripts/lesson_design/verify_sheets.py content/lesson-design/course-excel --cases --check
 
-Checks every lesson page of the course (``course.json``) and its extra pages:
+Checks every lesson page of the course (``course.json``) and its extra pages, or every
+subtopic and the final page of an EGE topic (``topic.json``, Change 180; no ``--cases``):
 
 - each ```sheet block is computed by ``sheet_eval`` (Russian locale); a value the
   text states with ``⇒`` must be what the sheet shows, and a formula must not
@@ -104,6 +106,12 @@ def check_formula(text: str) -> str | None:
 
 
 def pages(course_dir: Path) -> list[Path]:
+    if not (course_dir / "course.json").exists():
+        # an EGE topic (topic.json, Change 180): its subtopics and the final page
+        topic = json.loads((course_dir / "topic.json").read_text(encoding="utf-8"))
+        files = [course_dir / s["source"] for s in topic["subtopics"]]
+        files.append(course_dir / topic["final"]["source"])
+        return [f for f in files if f.exists()]
     course = json.loads((course_dir / "course.json").read_text(encoding="utf-8"))
     files = [course_dir / ls["source"] for m in course["modules"] for ls in m["lessons"]]
     files += [course_dir / p["source"] for p in course.get("pages", [])]
@@ -193,6 +201,8 @@ def main() -> None:
     for p in problems:
         print(p)
     print(f"{total_sheets} sheets, {total_formulas} formulas; {len(problems)} problems")
+    if "--cases" in sys.argv and not (course_dir / "course.json").exists():
+        raise SystemExit("--cases is for the Excel course: the site evaluator fixture")
     if "--cases" in sys.argv and not problems:
         cases = cases_for([*texts, stress_page()])
         lines = ",\n".join(json.dumps(c, ensure_ascii=False, sort_keys=True) for c in cases)

@@ -455,7 +455,7 @@ def main() -> int:
     course = json.loads((course_dir / "course.json").read_text(encoding="utf-8"))
     if course["id"] == "excel":
         slugs = {lesson["site"]["routeSlug"] for m in course["modules"] for lesson in m["lessons"]}
-        unknown = {k: slug for k, (_, slug) in EXCEL_TERMS.items() if slug not in slugs}
+        unknown = {k: v[2] for k, v in EXCEL_TERMS.items() if v[2] not in slugs}
         if unknown:
             raise SystemExit(f"terms.EXCEL_TERMS name lessons the course lacks: {unknown}")
     tasks = json.loads((course_dir / "tasks.json").read_text(encoding="utf-8"))

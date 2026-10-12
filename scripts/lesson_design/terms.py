@@ -215,6 +215,23 @@ TERMS: dict[str, tuple[str, str, str, str]] = {
         "znacheniya-i-peremennye",
         "Значения, типы и переменные",
     ),
+    "product": (
+        "Перебор наборов: itertools.product",
+        "<code>product('ab', repeat=3)</code> по очереди даёт все наборы из трёх символов "
+        "<code>a</code> и <code>b</code>: <code>('a', 'a', 'a')</code>, <code>('a', 'a', 'b')</code>, … "
+        "— всего 2³ = 8; <code>''.join(w)</code> склеивает набор в слово. Подключается "
+        "<code>from itertools import product</code>.",
+        "standartnaya-biblioteka",
+        "Стандартная библиотека и перебор комбинаций",
+    ),
+    "enumerate": (
+        "Номер и значение: enumerate",
+        "<code>for i, x in enumerate(items):</code> даёт на каждом шаге пару: номер "
+        "<code>i</code> и сам элемент <code>x</code>. Нумерация с нуля; "
+        "<code>enumerate(items, 1)</code> начинает с единицы.",
+        "kortezhi-i-raspakovka",
+        "Кортежи, распаковка, enumerate и zip",
+    ),
     # Each topic agent adds its new terms only under its own line.
     # --- topic 16 ---
     "cache": (
@@ -340,28 +357,197 @@ TERMS: dict[str, tuple[str, str, str, str]] = {
         "skorost-i-pamyat",
         "Скорость и память программы",
     ),
+    # Wave 2 (Change 180): each topic agent adds its new terms only under its own line.
+    # --- topic 4 ---
+    "startswith": (
+        "Начало строки: startswith",
+        "<code>s.startswith(t)</code> даёт <code>True</code>, если строка <code>s</code> "
+        "начинается со строки <code>t</code>: <code>'0110'.startswith('01')</code> — "
+        "<code>True</code>, <code>'0010'.startswith('010')</code> — <code>False</code>. "
+        "Строка начинается и сама с себя.",
+        "stroki",
+        "Строки",
+    ),
+    "zfill": (
+        "Нули слева: zfill",
+        "<code>s.zfill(n)</code> дописывает слева нули до длины n: "
+        "<code>'1'.zfill(3)</code> — <code>'001'</code>. Так двоичную запись "
+        "<code>bin(x)[2:]</code> выравнивают до нужной длины кода.",
+        "stroki",
+        "Строки",
+    ),
+    # --- topic 7 ---
+    "ceil": (
+        "Округление вверх: ceil",
+        "<code>from math import ceil</code>; <code>ceil(5312.5)</code> — наименьшее целое, "
+        "не меньшее числа, 5313; <code>ceil(10)</code> — 10. Целочисленный вариант без "
+        "дробей: <code>-(-a // b)</code> делит a на b с округлением вверх.",
+        "chasti-programmy",
+        "Модули и части программы",
+    ),
+    "floaterr": (
+        "Дробные числа приближённые",
+        "<code>float</code> хранит дробь приближённо: <code>0.1 + 0.2</code> даёт "
+        "<code>0.30000000000000004</code>, а <code>1 - 0.84</code> — "
+        "<code>0.16000000000000003</code>. Целые числа <code>int</code> точные, поэтому "
+        "проценты удобно считать целыми: 16 из 100.",
+        "chisla-i-vyrazheniya",
+        "Числа и арифметические операции",
+    ),
+    "round": (
+        "Округление к ближайшему: round",
+        "<code>round(12.8)</code> — ближайшее целое, 13; <code>int(12.8)</code> отбрасывает "
+        "дробную часть, 12. Ровно половину <code>round</code> округляет к чётному: "
+        "<code>round(12.5)</code> даёт 12, <code>round(13.5)</code> — 14.",
+        "chisla-i-vyrazheniya",
+        "Числа и арифметические операции",
+    ),
+    # --- topic 8 ---
+    "permutations": (
+        "Перестановки и наборы: permutations, combinations",
+        "<code>permutations('abc', 2)</code> даёт расстановки без повторов: "
+        "<code>('a', 'b')</code>, <code>('a', 'c')</code>, <code>('b', 'a')</code>, … — "
+        "всего 3 · 2 = 6. <code>combinations('abc', 2)</code> даёт наборы без учёта "
+        "порядка: <code>('a', 'b')</code>, <code>('a', 'c')</code>, <code>('b', 'c')</code>. "
+        "Подключаются из модуля <code>itertools</code>.",
+        "standartnaya-biblioteka",
+        "Стандартная библиотека и перебор комбинаций",
+    ),
+    # --- topic 9 ---
+    "counter": (
+        "Подсчёт частот: Counter",
+        "<code>Counter(a)</code> из модуля <code>collections</code> — словарь «значение → "
+        "сколько раз оно встречается в <code>a</code>»: <code>Counter([4, 4, 7])[4]</code> "
+        "равно 2. Частота значения, которого нет, равна 0.",
+        "standartnaya-biblioteka",
+        "Стандартная библиотека и перебор комбинаций",
+    ),
+    "listcount": (
+        "Сколько раз в списке: count",
+        "<code>a.count(x)</code> возвращает, сколько элементов списка <code>a</code> равны "
+        "<code>x</code>: для <code>[2, 2, 5]</code> вызов <code>a.count(2)</code> даёт 2, "
+        "а <code>a.count(7)</code> — 0.",
+        "spiski",
+        "Списки",
+    ),
+    "mapint": (
+        "Преобразовать все части: map",
+        "<code>list(map(int, line.split()))</code> применяет <code>int</code> к каждой части "
+        "строки и собирает результаты в список — то же, что "
+        "<code>[int(part) for part in line.split()]</code>.",
+        "iteratory-i-generatory",
+        "Итераторы и генераторы",
+    ),
 }
 
 # The Excel course (Change 177): the lesson that explains each spreadsheet term the
 # EGE topics 3, 9, 18 and 22 rely on (map.md, «Термины тем ЕГЭ → уроки курса").
-# key: (term, Excel course lesson route slug). No topic links them yet — those topics
-# are legacy; a rebuilt topic adds the popover text here as TERMS has it.
+# A topic marks one as {{xl-key|label}} (Change 180): the popover links the Excel course lesson.
+# key: (title, explanation HTML, Excel course lesson route slug, course lesson title).
 # export_course.py checks that every slug is a published lesson of the course.
-EXCEL_TERMS: dict[str, tuple[str, str]] = {
-    "xl-address": ("Адрес ячейки и диапазон", "list-i-yacheyka"),
-    "xl-csv": ("CSV, разделитель и импорт", "vvod-i-fayly"),
-    "xl-format": ("Значение и формат ячейки", "chto-v-yacheyke"),
-    "xl-formula": ("Формула и порядок действий", "pervye-formuly"),
-    "xl-ref": ("Относительная, абсолютная и смешанная ссылка", "kopirovanie-i-dollar"),
-    "xl-fill": ("Заполнение формулой", "kopirovanie-i-dollar"),
-    "xl-range-functions": ("СУММ, СЧЁТ, СРЗНАЧ, МАКС, МИН, НАИБОЛЬШИЙ", "funktsii"),
-    "xl-if": ("Признак ЕСЛИ(…;1;0), И, ИЛИ, НЕ", "usloviya"),
-    "xl-mod": ("ОСТАТ, ЦЕЛОЕ, ОКРУГЛ, ABS", "chisla"),
-    "xl-countif": ("СЧЁТЕСЛИ, СЧЁТЕСЛИМН, СУММЕСЛИ и критерий с &", "podschet-po-usloviyu"),
-    "xl-frequency": ("Частоты значений в строке", "podschet-po-usloviyu"),
-    "xl-dates": ("ДАТА, период и текстовые функции", "tekst-i-daty"),
-    "xl-filter": ("Сортировка, фильтр и ПРОМЕЖУТОЧНЫЕ.ИТОГИ", "sortirovka-i-filtr"),
-    "xl-lookup": ("Ключ, ВПР, ИНДЕКС и ПОИСКПОЗ", "poisk-po-klyuchu"),
-    "xl-neighbours": ("Накопление, соседние пары и таблица из таблицы", "raschet-po-sosedyam"),
-    "xl-check": ("Ошибки Excel и проверка ответа", "ot-usloviya-k-tablitse"),
+EXCEL_TERMS: dict[str, tuple[str, str, str, str]] = {
+    "xl-address": (
+        "Адрес ячейки и диапазон",
+        "<code>B3</code> — ячейка в столбце B и строке 3. <code>A1:D1</code> — прямоугольный диапазон от A1 до D1: здесь четыре ячейки одной строки.",
+        "list-i-yacheyka",
+        "Книга, лист, ячейка, диапазон",
+    ),
+    "xl-csv": (
+        "CSV, разделитель и импорт",
+        "В файле CSV значения строки разделены знаком, обычно «;» или «,». При открытии Excel делит строку по разделителю на столбцы; неверный разделитель склеивает всё в одну ячейку.",
+        "vvod-i-fayly",
+        "Ввод данных и файлы",
+    ),
+    "xl-format": (
+        "Значение и формат ячейки",
+        "В ячейке хранится значение — число, текст или дата, а формат лишь показывает его: <code>0,5</code> и <code>50%</code> — одно и то же число. Считают формулы по значению, а не по виду.",
+        "chto-v-yacheyke",
+        "Что хранится в ячейке",
+    ),
+    "xl-formula": (
+        "Формула и порядок действий",
+        "Формула начинается со знака <code>=</code> и пересчитывается при изменении ячеек, на которые ссылается. Порядок действий обычный: <code>=A1+B1*2</code> сначала умножает.",
+        "pervye-formuly",
+        "Первые формулы",
+    ),
+    "xl-ref": (
+        "Относительная, абсолютная и смешанная ссылка",
+        "При копировании формулы ссылка <code>A1</code> сдвигается вместе с ней, <code>$A$1</code> остаётся на месте, а <code>$A1</code> и <code>A$1</code> закрепляют только столбец или только строку.",
+        "kopirovanie-i-dollar",
+        "Копирование формул и знак $",
+    ),
+    "xl-fill": (
+        "Заполнение формулой",
+        "Формулу пишут один раз в первой строке и протягивают вниз за маркер заполнения: в каждой строке получаются те же действия над своими ячейками.",
+        "kopirovanie-i-dollar",
+        "Копирование формул и знак $",
+    ),
+    "xl-range-functions": (
+        "СУММ, СЧЁТ, СРЗНАЧ, МАКС, МИН, НАИБОЛЬШИЙ",
+        "Функции по диапазону: <code>=СУММ(A1:D1)</code> — сумма, <code>=МАКС(A1:D1)</code> — наибольшее, <code>=НАИБОЛЬШИЙ(A1:D1;2)</code> — второе по величине, считая повторы.",
+        "funktsii",
+        "Функции по диапазону",
+    ),
+    "xl-if": (
+        "Признак ЕСЛИ(…;1;0), И, ИЛИ, НЕ",
+        "<code>=ЕСЛИ(условие;1;0)</code> ставит 1, когда строка подходит, и 0 иначе; сумма таких признаков — количество подходящих строк. <code>И</code>, <code>ИЛИ</code>, <code>НЕ</code> соединяют проверки.",
+        "usloviya",
+        "Проверки и ЕСЛИ",
+    ),
+    "xl-mod": (
+        "ОСТАТ, ЦЕЛОЕ, ОКРУГЛ, ABS",
+        "<code>=ОСТАТ(A1;2)</code> — остаток от деления на 2, <code>=ЦЕЛОЕ(A1)</code> — округление вниз до целого, <code>=ОКРУГЛ(A1;0)</code> — до ближайшего целого, <code>=ABS(A1)</code> — модуль.",
+        "chisla",
+        "Проценты, округление, остаток",
+    ),
+    "xl-countif": (
+        "СЧЁТЕСЛИ, СЧЁТЕСЛИМН, СУММЕСЛИ и критерий с &",
+        '<code>=СЧЁТЕСЛИ(A1:D1;A1)</code> — сколько ячеек диапазона равны A1; <code>=СЧЁТЕСЛИ(A1:D1;"&gt;"&amp;E1)</code> — сколько больше E1: критерий склеивают знаком <code>&amp;</code>.',
+        "podschet-po-usloviyu",
+        "Подсчёт и сумма по условию",
+    ),
+    "xl-frequency": (
+        "Частоты значений в строке",
+        "Для каждой ячейки строки <code>СЧЁТЕСЛИ</code> по всей строке даёт, сколько раз встречается её значение: так находят повторы и числа, встречающиеся ровно один раз.",
+        "podschet-po-usloviyu",
+        "Подсчёт и сумма по условию",
+    ),
+    "xl-dates": (
+        "ДАТА, период и текстовые функции",
+        "Дата в Excel — число дней, поэтому даты сравнивают и вычитают как числа; <code>ЛЕВСИМВ</code>, <code>ПСТР</code>, <code>ПРАВСИМВ</code> берут части текста.",
+        "tekst-i-daty",
+        "Текст и даты",
+    ),
+    "xl-filter": (
+        "Сортировка, фильтр и ПРОМЕЖУТОЧНЫЕ.ИТОГИ",
+        "Фильтр прячет неподходящие строки, а не удаляет их; <code>ПРОМЕЖУТОЧНЫЕ.ИТОГИ</code> считает только видимые строки, <code>СУММ</code> — все.",
+        "sortirovka-i-filtr",
+        "Сортировка, фильтр, видимые строки",
+    ),
+    "xl-lookup": (
+        "Ключ, ВПР, ИНДЕКС и ПОИСКПОЗ",
+        "<code>=ВПР(ключ;диапазон;номер;0)</code> ищет ключ в первом столбце диапазона и берёт значение из столбца с заданным номером той же строки.",
+        "poisk-po-klyuchu",
+        "Поиск по ключу",
+    ),
+    "xl-neighbours": (
+        "Накопление, соседние пары и таблица из таблицы",
+        "Формула строки 2 может ссылаться на строку 1: так копят сумму и сравнивают соседние строки. Новая таблица признаков рядом с исходной не меняет данные.",
+        "raschet-po-sosedyam",
+        "Расчёт по соседним ячейкам",
+    ),
+    "xl-row": (
+        "Номер строки: СТРОКА()",
+        '<code>=СТРОКА()</code> даёт номер строки, где стоит формула. <code>=ЕСЛИ(признак=1;СТРОКА();"")</code> '
+        "в каждой строке и <code>МИН</code> или <code>МАКС</code> по столбцу дают первую или последнюю "
+        "подходящую строку.",
+        "raschet-po-sosedyam",
+        "Расчёт по соседним ячейкам",
+    ),
+    "xl-check": (
+        "Ошибки Excel и проверка ответа",
+        "<code>#ЗНАЧ!</code>, <code>#ДЕЛ/0!</code> и <code>#Н/Д</code> показывают, что формула получила не то; ответ проверяют на нескольких строках вручную, прежде чем протянуть формулу.",
+        "ot-usloviya-k-tablitse",
+        "От условия к таблице вычислений",
+    ),
 }

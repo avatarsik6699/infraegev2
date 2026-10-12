@@ -24,8 +24,10 @@ GENERATOR = 0x20
 
 
 def _value(v) -> str:
-    # an imported built-in (from math import dist) is a function to the student too
-    if isinstance(v, (types.FunctionType, types.BuiltinFunctionType)):
+    # an imported built-in (from math import dist) or an imported class used as a
+    # function (from itertools import product) is a function to the student too
+    imported = isinstance(v, type) and v.__module__ != "__main__"
+    if imported or isinstance(v, (types.FunctionType, types.BuiltinFunctionType)):
         return "функция"
     if isinstance(v, types.GeneratorType):
         return "генератор"

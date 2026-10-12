@@ -3645,12 +3645,24 @@ from record_figures import RECORD_FIGURES, RECORD_STEPPERS  # noqa: E402
 FIGURES.update(RECORD_FIGURES)
 STEPPERS.update(RECORD_STEPPERS)
 
-# Wave 1 of the topics (Change 179): each topic keeps its figures in its own module.
+# Topic waves (Changes 179, 180): each topic keeps its figures in its own module.
 from cluster_figures import (  # noqa: E402
     CLUSTER_FIGURES,
     CLUSTER_SCRIPTS,
     CLUSTER_STEPPERS,
     CLUSTER_WIDGETS,
+)
+from code_figures import (  # noqa: E402
+    CODE_FIGURES,
+    CODE_SCRIPTS,
+    CODE_STEPPERS,
+    CODE_WIDGETS,
+)
+from combo_figures import (  # noqa: E402
+    COMBO_FIGURES,
+    COMBO_SCRIPTS,
+    COMBO_STEPPERS,
+    COMBO_WIDGETS,
 )
 from recursion_figures import (  # noqa: E402
     RECURSION_FIGURES,
@@ -3664,11 +3676,27 @@ from sequence_figures import (  # noqa: E402
     SEQUENCE_STEPPERS,
     SEQUENCE_WIDGETS,
 )
+from table_figures import (  # noqa: E402
+    TABLE_FIGURES,
+    TABLE_SCRIPTS,
+    TABLE_STEPPERS,
+    TABLE_WIDGETS,
+)
+from volume_figures import (  # noqa: E402
+    VOLUME_FIGURES,
+    VOLUME_SCRIPTS,
+    VOLUME_STEPPERS,
+    VOLUME_WIDGETS,
+)
 
 for _figures, _steppers, _widgets, _scripts in (
     (RECURSION_FIGURES, RECURSION_STEPPERS, RECURSION_WIDGETS, RECURSION_SCRIPTS),
     (SEQUENCE_FIGURES, SEQUENCE_STEPPERS, SEQUENCE_WIDGETS, SEQUENCE_SCRIPTS),
     (CLUSTER_FIGURES, CLUSTER_STEPPERS, CLUSTER_WIDGETS, CLUSTER_SCRIPTS),
+    (CODE_FIGURES, CODE_STEPPERS, CODE_WIDGETS, CODE_SCRIPTS),
+    (VOLUME_FIGURES, VOLUME_STEPPERS, VOLUME_WIDGETS, VOLUME_SCRIPTS),
+    (COMBO_FIGURES, COMBO_STEPPERS, COMBO_WIDGETS, COMBO_SCRIPTS),
+    (TABLE_FIGURES, TABLE_STEPPERS, TABLE_WIDGETS, TABLE_SCRIPTS),
 ):
     FIGURES.update(_figures)
     STEPPERS.update(_steppers)

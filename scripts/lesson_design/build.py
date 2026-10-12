@@ -31,7 +31,7 @@ from figures import FIGURES, PAGE_SCRIPTS  # noqa: E402
 from runblock import RUN_JS, code_html, file_name, prepare  # noqa: E402
 from sheetblock import prepare as prepare_sheets  # noqa: E402
 from sheetblock import scripts as sheet_scripts  # noqa: E402
-from terms import TERMS  # noqa: E402
+from terms import EXCEL_TERMS, TERMS  # noqa: E402
 
 PATTERNS = REPO / "docs" / "runbooks" / "lesson-patterns.md"
 
@@ -54,7 +54,7 @@ TOKEN = re.compile(
 )
 FIGURE_CALL = re.compile(r"%%(\w+)\((.*?)\)%%")
 PICK_BLOCK = re.compile(r"^:::(pick|pick-tokens) ([^\n]+)\n(.*?)^:::$", re.M | re.S)
-TERM = re.compile(r"\{\{(\w+)\|(.+?)\}\}")
+TERM = re.compile(r"\{\{([\w-]+)\|(.+?)\}\}")
 IO_ROWS = {"input": "Ввод", "output": "Вывод", "error": "Ошибка"}
 TYPED = re.compile(r"⟪(.*?)⟫")
 # [[Ctrl+C]] in a lesson: keys of a keyboard shortcut (the Excel course, Change 177)
@@ -267,10 +267,10 @@ def pick_block(m: re.Match) -> str:
 _term_count: dict[str, int] = {}
 
 
-def course_slugs() -> list[str]:
-    """Site route slugs of the stand's Python course lessons, in course order."""
+def course_slugs(course_dir: str = PY_COURSE_DIR) -> list[str]:
+    """Site route slugs of a stand course's lessons, in course order."""
     course = json.loads(
-        (REPO / "content" / "lesson-design" / PY_COURSE_DIR / "course.json").read_text(
+        (REPO / "content" / "lesson-design" / course_dir / "course.json").read_text(
             encoding="utf-8"
         )
     )
@@ -279,11 +279,16 @@ def course_slugs() -> list[str]:
 
 def term(m: re.Match) -> str:
     key, label = m.group(1), m.group(2)
-    if key not in TERMS:
-        raise SystemExit(f"Unknown term {key!r}; add it to terms.TERMS")
+    # {{xl-…|…}} — a spreadsheet term of the Excel course (Change 180)
+    if key in EXCEL_TERMS:
+        title, body, slug, lesson = EXCEL_TERMS[key]
+        course, prefix, number = "Курс Excel", "xl", course_slugs("course-excel").index(slug) + 1
+    elif key in TERMS:
+        title, body, slug, lesson = TERMS[key]
+        course, prefix, number = "Курс Python", "py", course_slugs().index(slug) + 1
+    else:
+        raise SystemExit(f"Unknown term {key!r}; add it to terms.TERMS or terms.EXCEL_TERMS")
     # on the stand a term opens the course lesson page with its route slug
-    title, body, slug, lesson = TERMS[key]
-    number = course_slugs().index(slug) + 1
     _term_count[key] = _term_count.get(key, 0) + 1
     pid = f"term-{key}-{_term_count[key]}"
     return (
@@ -291,8 +296,8 @@ def term(m: re.Match) -> str:
         f'aria-expanded="false">{label}</button>'
         f'<span id="{pid}" popover class="pop" role="dialog" aria-label="{html.escape(title)}">'
         f'<b class="pop-t">{html.escape(title)}</b><span class="pop-b">{body}</span>'
-        f'<span class="pop-c">Курс Python, урок {number}: {html.escape(lesson)}</span>'
-        f'<span class="pop-a"><a href="py-{number:02d}.html">Читать урок →</a>'
+        f'<span class="pop-c">{course}, урок {number}: {html.escape(lesson)}</span>'
+        f'<span class="pop-a"><a href="{prefix}-{number:02d}.html">Читать урок →</a>'
         f'<button type="button" class="pop-x" popovertarget="{pid}" '
         'popovertargetaction="hide">Закрыть</button></span></span>'
     )
