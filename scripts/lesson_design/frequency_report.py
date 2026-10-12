@@ -36,10 +36,12 @@ def report(t) -> str:
     dated_all_core = all(t.level(x[4]) == "основной" for x in dated)
     last_year = max(t.year(x[0]) for x in tasks)
     period = str(last_year) if t.RECENT == last_year else f"{t.RECENT}–{last_year}"
+    several = "–" in str(t.TOPIC_NUMBER)  # tasks 19–21 share one topic (Change 182)
+    of_task, by_task = ("заданий", "заданиям") if several else ("задания", "заданию")
     lines = [
-        f"# Частота типов задания {t.TOPIC_NUMBER}",
+        f"# Частота типов {of_task} {t.TOPIC_NUMBER}",
         "",
-        f"Источник: подборки «Решу ЕГЭ» по заданию {t.TOPIC_NUMBER} — {collections}. "
+        f"Источник: подборки «Решу ЕГЭ» по {by_task} {t.TOPIC_NUMBER} — {collections}. "
         f"Подборки скачаны {t.FETCHED}. "
         "Условия не копируются: ниже только номера, источники и наши описания.",
         "",

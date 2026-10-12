@@ -3645,7 +3645,7 @@ from record_figures import RECORD_FIGURES, RECORD_STEPPERS  # noqa: E402
 FIGURES.update(RECORD_FIGURES)
 STEPPERS.update(RECORD_STEPPERS)
 
-# Topic waves (Changes 179–181): each topic keeps its figures in its own module.
+# Topic waves (Changes 179–182): each topic keeps its figures in its own module.
 from base_figures import (  # noqa: E402
     BASE_FIGURES,
     BASE_SCRIPTS,
@@ -3669,6 +3669,18 @@ from combo_figures import (  # noqa: E402
     COMBO_SCRIPTS,
     COMBO_STEPPERS,
     COMBO_WIDGETS,
+)
+from game_figures import (  # noqa: E402
+    GAME_FIGURES,
+    GAME_SCRIPTS,
+    GAME_STEPPERS,
+    GAME_WIDGETS,
+)
+from greedy_figures import (  # noqa: E402
+    GREEDY_FIGURES,
+    GREEDY_SCRIPTS,
+    GREEDY_STEPPERS,
+    GREEDY_WIDGETS,
 )
 from grid_figures import (  # noqa: E402
     GRID_FIGURES,
@@ -3700,6 +3712,12 @@ from sequence_figures import (  # noqa: E402
     SEQUENCE_STEPPERS,
     SEQUENCE_WIDGETS,
 )
+from string_figures import (  # noqa: E402
+    STRING_FIGURES,
+    STRING_SCRIPTS,
+    STRING_STEPPERS,
+    STRING_WIDGETS,
+)
 from table_figures import (  # noqa: E402
     TABLE_FIGURES,
     TABLE_SCRIPTS,
@@ -3725,6 +3743,9 @@ for _figures, _steppers, _widgets, _scripts in (
     (PASSWORD_FIGURES, PASSWORD_STEPPERS, PASSWORD_WIDGETS, PASSWORD_SCRIPTS),
     (BASE_FIGURES, BASE_STEPPERS, BASE_WIDGETS, BASE_SCRIPTS),
     (GRID_FIGURES, GRID_STEPPERS, GRID_WIDGETS, GRID_SCRIPTS),
+    (GAME_FIGURES, GAME_STEPPERS, GAME_WIDGETS, GAME_SCRIPTS),
+    (STRING_FIGURES, STRING_STEPPERS, STRING_WIDGETS, STRING_SCRIPTS),
+    (GREEDY_FIGURES, GREEDY_STEPPERS, GREEDY_WIDGETS, GREEDY_SCRIPTS),
 ):
     FIGURES.update(_figures)
     STEPPERS.update(_steppers)

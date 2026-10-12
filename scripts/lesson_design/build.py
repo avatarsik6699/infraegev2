@@ -546,6 +546,19 @@ def stand_topics(stand: Path) -> list[int]:
     )
 
 
+def topic_label(topic: dict) -> str:
+    """How a topic is named on the stand: its number, or ``label`` for a topic that
+    covers several exam tasks (Change 182: tasks 19–21 share one game, ``"19–21"``)."""
+    return topic.get("label", str(topic["number"]))
+
+
+def stand_labels(stand: Path) -> dict[int, str]:
+    return {
+        (t := json.loads(p.read_text(encoding="utf-8")))["number"]: topic_label(t)
+        for p in stand.glob("topic-*/topic.json")
+    }
+
+
 def stand_courses(stand: Path) -> list[dict]:
     """Mini-courses of the stand (``course-*/course.json``), the Python course first."""
     courses = [
@@ -557,7 +570,8 @@ def stand_courses(stand: Path) -> list[dict]:
 def nav_html(extra: list[tuple[str, str]], current: str, numbers: list[int], stand: Path) -> str:
     """Stand bar: overview, every topic, the course, extra pages of this page group, patterns."""
     items = [("index.html", "Обзор")]
-    items += [(f"{k}-1.html", f"Тема {k}") for k in numbers]
+    labels = stand_labels(stand)
+    items += [(f"{k}-1.html", f"Тема {labels[k]}") for k in numbers]
     courses = stand_courses(stand)
     items += [(f"{c['prefix']}-01.html", c.get("nav", "Курс Python")) for c in courses]
     items += extra
@@ -579,6 +593,9 @@ def nav_html(extra: list[tuple[str, str]], current: str, numbers: list[int], sta
 def build_topic(topic_dir: Path) -> None:
     topic = json.loads((topic_dir / "topic.json").read_text(encoding="utf-8"))
     n = topic["number"]
+    label = topic_label(topic)
+    several = "–" in label  # «Задания 19–21», «подтемы заданий 19–21»
+    task, of_task = ("Задания", "заданий") if several else ("Задание", "задания")
     stand = topic_dir.parent
     numbers = stand_topics(stand)
     nav_extra = [(f"{n}-{p['name']}.html", p["nav"]) for p in topic.get("pages", [])]
@@ -597,7 +614,7 @@ def build_topic(topic_dir: Path) -> None:
                 f"{html.escape(lesson['title'])}{note}</a></li>"
             )
         return (
-            f'<nav class="subnav" aria-label="Подтемы задания {n}"><ol>'
+            f'<nav class="subnav" aria-label="Подтемы {of_task} {label}"><ol>'
             + "".join(items)
             + "</ol></nav>"
         )
@@ -616,9 +633,9 @@ def build_topic(topic_dir: Path) -> None:
 
     for i, (lesson, out) in enumerate(zip(lessons, outs, strict=True)):
         if i < core_count:
-            kicker = f"Задание {n} · Подтема {i + 1} из {core_count} · {lesson['level']} уровень"
+            kicker = f"{task} {label} · Подтема {i + 1} из {core_count} · {lesson['level']} уровень"
         else:
-            kicker = f"Задание {n} · итоговая страница"
+            kicker = f"{task} {label} · итоговая страница"
         body, outline = render((topic_dir / lesson["source"]).read_text(encoding="utf-8"))
         text = page(
             lesson["title"],
