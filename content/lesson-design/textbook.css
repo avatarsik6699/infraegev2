@@ -168,6 +168,9 @@ li {
 li > p {
   margin: 0 0 6px;
 }
+li > p:empty {
+  display: none;
+}
 hr {
   border: 0;
   border-top: 1px solid var(--line);
@@ -1725,6 +1728,27 @@ table.sheet-grid {
 }
 .sheet-grid tr[data-hidden] {
   display: none;
+}
+/* Walls of a field (topic 18): thick borders drawn as inset shadows, so a wall
+   never shifts the grid; data-w lists the walled sides t, r, b, l. */
+.sheet-grid td[data-w] {
+  box-shadow:
+    inset 0 calc(var(--wt, 0) * 3px) 0 0 var(--ink),
+    inset calc(var(--wr, 0) * -3px) 0 0 0 var(--ink),
+    inset 0 calc(var(--wb, 0) * -3px) 0 0 var(--ink),
+    inset calc(var(--wl, 0) * 3px) 0 0 0 var(--ink);
+}
+.sheet-grid td[data-w*="t"] {
+  --wt: 1;
+}
+.sheet-grid td[data-w*="r"] {
+  --wr: 1;
+}
+.sheet-grid td[data-w*="b"] {
+  --wb: 1;
+}
+.sheet-grid td[data-w*="l"] {
+  --wl: 1;
 }
 figure.sheet[data-ready] .sheet-grid td {
   cursor: cell;

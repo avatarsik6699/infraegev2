@@ -22,6 +22,11 @@ A block is a small workbook written as a grid::
   are what Excel makes, never typed by hand; ``fmt RANGE KIND`` with KIND
   ``%``, ``0,0%``, ``0,00`` (decimals) or ``дата``; ``filter 3 5`` / ``hide 4`` —
   rows hidden by a filter / by hand (``ПРОМЕЖУТОЧНЫЕ.ИТОГИ``).
+- Walls (topic 18, Change 181) are thick cell borders, drawn and never
+  computed: ``wall right B1,A2:B2`` (also ``down``, ``left``, ``up``) puts a
+  wall on that side of every cell; ``frame A1:C3`` walls the outline of a range;
+  ``walls F1:H3 from A1:C3`` repeats the walls of one range on another of the
+  same size (the field and its calculation block).
 - ``[Товары]`` starts another sheet of the same book (its grid follows);
   the first sheet takes the block's name.
 - Options on the fence line: ``select=D2`` (the cell shown first in the formula
@@ -91,6 +96,7 @@ class SheetPart:
     filled: dict[tuple[int, int], tuple[int, int]] = field(default_factory=dict)  # copy → origin
     filtered: set[int] = field(default_factory=set)
     hidden: set[int] = field(default_factory=set)
+    walls: dict[tuple[int, int], set[str]] = field(default_factory=dict)  # cell → sides
 
 
 @dataclass
@@ -142,6 +148,38 @@ def apply_fill(part: SheetPart, rng: str) -> None:
             part.filled[(r, c)] = part.filled.get((orow, ocol), (orow, ocol))
 
 
+SIDES = {"right": "r", "down": "b", "left": "l", "up": "t"}
+
+
+def apply_walls(part: SheetPart, word: str, rest: str) -> None:
+    """``wall SIDE RANGES``, ``frame RANGE`` or ``walls DEST from SRC``."""
+    if word == "wall":
+        side, _, rng = rest.strip().partition(" ")
+        if side not in SIDES:
+            raise SheetBlockError(f"wall side {side!r}: use one of {', '.join(SIDES)}")
+        for cell in cells_of(rng):
+            part.walls.setdefault(cell, set()).add(SIDES[side])
+    elif word == "frame":
+        cells = cells_of(rest.strip())
+        top, left = cells[0]
+        bottom, right = cells[-1]
+        for r, c in cells:
+            sides = part.walls.setdefault((r, c), set())
+            sides |= {s for s, edge in (("t", top), ("b", bottom)) if r == edge}
+            sides |= {s for s, edge in (("l", left), ("r", right)) if c == edge}
+            if not sides:
+                del part.walls[(r, c)]
+    else:
+        dest, _, src = rest.strip().partition(" from ")
+        to, frm = cells_of(dest), cells_of(src)
+        if not src or len(to) != len(frm) or to[-1][0] - to[0][0] != frm[-1][0] - frm[0][0]:
+            raise SheetBlockError(f"walls {rest.strip()!r}: ranges of different shape")
+        dr, dc = to[0][0] - frm[0][0], to[0][1] - frm[0][1]
+        for r, c in frm:
+            if (r, c) in part.walls:
+                part.walls.setdefault((r + dr, c + dc), set()).update(part.walls[(r, c)])
+
+
 def parse_block(head: str, body: str) -> SheetBlock:
     name, *opts = head.split()
     options = dict(o.split("=", 1) for o in opts)
@@ -158,6 +196,9 @@ def parse_block(head: str, body: str) -> SheetBlock:
         if line.startswith("|"):
             cells = split_row(line)
             if not part.cols:
+                bad = [c for c in cells[1:] if not re.fullmatch(r"[A-Z]{1,3}", c)]
+                if bad or not cells[1:]:
+                    raise SheetBlockError(f"sheet {part.name}: column letters {cells[1:]}")
                 part.cols = [col_number(c) for c in cells[1:]]
                 continue
             row = int(cells[0])
@@ -180,12 +221,22 @@ def parse_block(head: str, body: str) -> SheetBlock:
         elif word in ("filter", "hide"):
             rows = {int(x) for x in rest.split()}
             (part.filtered if word == "filter" else part.hidden).update(rows)
+        elif word in ("wall", "frame", "walls"):
+            apply_walls(part, word, rest)
         else:
             raise SheetBlockError(f"unknown line in sheet {name}: {line!r}")
     book = Book()
     for p in parts:
         if not p.cols:
             raise SheetBlockError(f"sheet {p.name} has no grid")
+        outside = [
+            address(r, c)
+            for r, c in p.walls
+            if not (min(p.rows, default=1) <= r <= max(p.rows, default=1))
+            or not (min(p.cols) <= c <= max(p.cols))
+        ]
+        if outside:
+            raise SheetBlockError(f"sheet {p.name}: walls outside the grid at {', '.join(outside)}")
         sheet = book.sheet(p.name)
         sheet.inputs.update(p.inputs)
         sheet.filtered, sheet.hidden = set(p.filtered), set(p.hidden)
@@ -274,6 +325,14 @@ def blocks_in(md_text: str) -> list[tuple[int, SheetBlock]]:
 # html ---------------------------------------------------------------------------
 
 
+def walls_of(part: SheetPart) -> dict[str, str]:
+    """``{"B1": "rb"}`` — the walled sides of every cell, in the order t, r, b, l."""
+    return {
+        address(r, c): "".join(s for s in "trbl" if s in sides)
+        for (r, c), sides in sorted(part.walls.items())
+    }
+
+
 def block_data(block: SheetBlock) -> dict:
     """What sheetblock.js needs: inputs, formats, hidden rows, editable cells."""
     return {
@@ -287,6 +346,7 @@ def block_data(block: SheetBlock) -> dict:
                 "filtered": sorted(p.filtered),
                 "hidden": sorted(p.hidden),
                 "edit": sorted(address(r, c) for s, r, c in block.editable if s == p.name),
+                **({"walls": walls_of(p)} if p.walls else {}),
             }
             for p in block.sheets
         ],
@@ -302,6 +362,7 @@ def grid_html(block: SheetBlock, part: SheetPart, active: bool, uid: str, index:
     head = "".join(f'<th scope="col">{col_letters(c)}</th>' for c in range(c1, c2 + 1))
     rows = []
     sel = block.select
+    walls = walls_of(part)
     for r in range(r1, r2 + 1):
         tds = []
         for c in range(c1, c2 + 1):
@@ -314,8 +375,9 @@ def grid_html(block: SheetBlock, part: SheetPart, active: bool, uid: str, index:
                 cls.append("in")
             if sel and sel == (part.name, r, c):
                 cls.append("sel")
+            wall = f' data-w="{walls[address(r, c)]}"' if address(r, c) in walls else ""
             tds.append(
-                f'<td class="{" ".join(cls)}" data-a="{address(r, c)}">'
+                f'<td class="{" ".join(cls)}" data-a="{address(r, c)}"{wall}>'
                 f"{html.escape(formatted(value, part.formats.get((r, c))))}</td>"
             )
         hidden = r in part.filtered or r in part.hidden

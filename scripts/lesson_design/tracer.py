@@ -18,6 +18,23 @@ import types
 
 FILE = "<lesson>"
 PURE = {"len", "abs", "min", "max", "sum", "int", "str", "bool", "all", "any"}
+# methods that only read their object (strings, lists, numbers): `s.count('1')`
+PURE_METHODS = {
+    "count",
+    "index",
+    "find",
+    "startswith",
+    "endswith",
+    "isdigit",
+    "isalpha",
+    "upper",
+    "lower",
+    "strip",
+    "split",
+    "replace",
+    "join",
+    "bit_length",
+}
 MUTABLE = (list, dict, set)
 MAX_STEPS = 30
 GENERATOR = 0x20
@@ -31,6 +48,10 @@ def _value(v) -> str:
         return "функция"
     if isinstance(v, types.GeneratorType):
         return "генератор"
+    if type(v).__module__ == "ipaddress":  # topic 10: IPv4Network('…') is noise
+        name = type(v).__name__
+        kind = "сеть" if "Network" in name else "адрес" if "Address" in name else "интерфейс"
+        return f"{kind} {v}"
     text = repr(v)
     return text if len(text) <= 40 else text[:39] + "…"
 
@@ -43,7 +64,8 @@ def _pure(node: ast.AST) -> bool:
     """An expression that can be evaluated again without side effects."""
     for sub in ast.walk(node):
         if isinstance(sub, ast.Call) and not (
-            isinstance(sub.func, ast.Name) and sub.func.id in PURE
+            (isinstance(sub.func, ast.Name) and sub.func.id in PURE)
+            or (isinstance(sub.func, ast.Attribute) and sub.func.attr in PURE_METHODS)
         ):
             return False
         if isinstance(sub, (ast.NamedExpr, ast.Await, ast.Yield, ast.YieldFrom)):
@@ -180,12 +202,21 @@ class _Recorder:
         except Exception:  # noqa: BLE001
             return None
 
+    def branch(self, node: ast.If | ast.While, frame, nxt):
+        """The value of the test; when it cannot be computed again (a call with side
+        effects), whether the body runs is read from the next line executed."""
+        ok = self.evaluate(node.test, frame)
+        if ok is None and nxt is not None:
+            first, last = node.body[0].lineno, node.body[-1].end_lineno or node.lineno
+            ok = first <= nxt <= last
+        return ok
+
     def explain(self, frame, line, nxt, printed) -> str:
         node = self.stmts.get(line)
         changed = self.changes(frame)
         said = ""
         if isinstance(node, ast.If):
-            ok = self.evaluate(node.test, frame)
+            ok = self.branch(node, frame, nxt)
             test = f"Проверка `{_src(node.test)}` даёт `{ok}`"
             if ok:
                 said = f"{test} — выполняется блок под этим условием."
@@ -194,7 +225,7 @@ class _Recorder:
             else:
                 said = f"{test} — блок пропускается."
         elif isinstance(node, ast.While):
-            ok = self.evaluate(node.test, frame)
+            ok = self.branch(node, frame, nxt)
             test = f"Проверка `{_src(node.test)}` даёт `{ok}`"
             said = test + (
                 " — тело цикла выполняется." if ok else " — цикл закончен, программа идёт дальше."
