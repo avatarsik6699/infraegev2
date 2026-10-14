@@ -104,6 +104,8 @@ export namespace LessonMediaTypes {
     /** Source cells the learner may retype. */
     edit: readonly string[];
     formulas: readonly SheetFormula[];
+    /** Walls of a field (topic 18): walled sides of a cell, of «trbl». */
+    walls?: Readonly<Record<string, string>>;
   };
 
   /**

@@ -1,6 +1,21 @@
-import bank from "../../../content/practice-bank/bank.json";
+import bankJson from "../../../content/practice-bank/bank.json";
 import { projectPracticeTask } from "~/entities/practice-task/api/load-practice-tasks.server";
 import type { components } from "~/shared/api/schema";
+
+type BankTask = {
+  id: string;
+  lessons: { material_id: string; position: number }[];
+  sources: ({ is_public: boolean } & Record<string, unknown>)[];
+  files: { id: string; checksum: string }[];
+  checker: unknown;
+} & Record<string, unknown>;
+
+/** The fields of the practice bank this fixture reads. The file has grown past the size
+ * up to which TypeScript infers a JSON module's type, so the import is typed here. */
+const bank = bankJson as unknown as {
+  tasks: { solution_revision: number; task: BankTask }[];
+  files: { checksum: string; mime_type: string; size_bytes: number }[];
+};
 
 export function migrationTaskIds(lessonId: string | undefined): string[] {
   return bank.tasks

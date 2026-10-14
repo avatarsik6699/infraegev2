@@ -43,7 +43,6 @@ owner changes:
 | Account artifact retention | `bash scripts/tests/account-retention.test.sh` |
 | Nginx auth/progress edge | `bash scripts/tests/auth-edge.test.sh` |
 | Nginx auxiliary error pages | `bash scripts/tests/auxiliary-pages.test.sh` (Docker nginx) |
-| Nginx lesson media | `bash scripts/tests/lesson-media-nginx.test.sh` (Docker nginx) |
 | Practice read throttling | `bash scripts/tests/practice-read-limit.test.sh` |
 | Local Docker lifecycle | `bash scripts/tests/docker-dev-lifecycle.test.sh` |
 | Production environment rendering | `bash scripts/tests/production-env.test.sh` |
@@ -51,7 +50,6 @@ owner changes:
 | Lighthouse wrapper | `bash scripts/tests/run-lighthouse-audit.test.sh` |
 | Security selection/orchestration | `python3 -m unittest scripts.tests.security_gate_test` |
 | Synthetic account server | `python3 -m unittest scripts.tests.test_account_server` |
-| Lesson media engine | `uv run --no-project --with pillow python -m unittest discover -s scripts/tests -p lesson_media_engine_test.py` |
 
 These remain affected-area checks, alongside the isolated manual Restic integration. Their absence
 from an unrelated check's command is not evidence that their behavior passed.

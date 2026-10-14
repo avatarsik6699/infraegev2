@@ -6,6 +6,7 @@ import { Typography } from "~/shared/components/typography";
 import {
   CodeRunner,
   LessonStepper,
+  LessonSummary,
 } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { pythonWhileLessonPublication } from "./course-publication.mjs";
@@ -371,28 +372,46 @@ export const pythonWhileLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          <Notation>{"while"}</Notation> проверяет условие перед каждой
-          итерацией; ложное сразу условие — ноль итераций.
-        </li>
-        <li>Счётчик и сумма начинаются с 0, произведение — с 1.</li>
-        <li>
-          Правильность цикла объясняет инвариант, а завершение — изменение
-          переменной к границе.
-        </li>
-        <li>
-          Цифры: <Notation>{"n % 10"}</Notation> и{" "}
-          <Notation>{"n //= 10"}</Notation>; ноль и отрицательные числа
-          обрабатывают отдельно.
-        </li>
-        <li>
-          <Notation>{"break"}</Notation> выходит из цикла,{" "}
-          <Notation>{"continue"}</Notation> пропускает остаток итерации;
-          изменение управляющей переменной не должно оказаться за{" "}
-          <Notation>{"continue"}</Notation>.
-        </li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                <Notation>{"while"}</Notation> проверяет условие перед каждой
+                итерацией; ложное сразу условие — ноль итераций.
+              </>
+            ),
+          },
+          { note: <>Счётчик и сумма начинаются с 0, произведение — с 1.</> },
+          {
+            note: (
+              <>
+                Правильность цикла объясняет инвариант, а завершение — изменение
+                переменной к границе.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Цифры: <Notation>{"n % 10"}</Notation> и{" "}
+                <Notation>{"n //= 10"}</Notation>; ноль и отрицательные числа
+                обрабатывают отдельно.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"break"}</Notation> выходит из цикла,{" "}
+                <Notation>{"continue"}</Notation> пропускает остаток итерации;
+                изменение управляющей переменной не должно оказаться за{" "}
+                <Notation>{"continue"}</Notation>.
+              </>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

@@ -5,6 +5,7 @@ import { Typography } from "~/shared/components/typography";
 import {
   LessonDiagram,
   LessonStepper,
+  LessonSummary,
   SheetBlock,
 } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
@@ -334,30 +335,55 @@ export const excelRangeFunctionsLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          Функция: имя, скобки, аргументы через «;»; диапазон пишется через «:».
-        </li>
-        <li>
-          <Notation>{"СУММ"}</Notation> и <Notation>{"СРЗНАЧ"}</Notation>{" "}
-          работают с числами диапазона; текст и пустота в них не участвуют, ноль
-          участвует.
-        </li>
-        <li>
-          <Notation>{"СЧЁТ"}</Notation> — числа, <Notation>{"СЧЁТЗ"}</Notation>{" "}
-          — непустые, <Notation>{"СЧИТАТЬПУСТОТЫ"}</Notation> — пустые и{" "}
-          <Notation>{'""'}</Notation>.
-        </li>
-        <li>
-          <Notation>{"МАКС"}</Notation>, <Notation>{"МИН"}</Notation> — крайние
-          значения; <Notation>{"НАИБОЛЬШИЙ(диапазон;k)"}</Notation> — k-е по
-          убыванию с повторами.
-        </li>
-        <li>
-          Диапазон определяет вопрос: строка — одна запись, столбец — все
-          записи.
-        </li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                Функция: имя, скобки, аргументы через «;»; диапазон пишется
+                через «:».
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"СУММ"}</Notation> и <Notation>{"СРЗНАЧ"}</Notation>{" "}
+                работают с числами диапазона; текст и пустота в них не
+                участвуют, ноль участвует.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"СЧЁТ"}</Notation> — числа,{" "}
+                <Notation>{"СЧЁТЗ"}</Notation> — непустые,{" "}
+                <Notation>{"СЧИТАТЬПУСТОТЫ"}</Notation> — пустые и{" "}
+                <Notation>{'""'}</Notation>.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"МАКС"}</Notation>, <Notation>{"МИН"}</Notation> —
+                крайние значения;{" "}
+                <Notation>{"НАИБОЛЬШИЙ(диапазон;k)"}</Notation> — k-е по
+                убыванию с повторами.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Диапазон определяет вопрос: строка — одна запись, столбец — все
+                записи.
+              </>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

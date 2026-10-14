@@ -18,7 +18,6 @@ COPY infra/nginx/snippets /etc/nginx/snippets
 COPY infra/nginx/auxiliary /usr/share/nginx/auxiliary
 COPY apps/web/public/brand/infraege-mark.svg /usr/share/nginx/auxiliary/assets/infraege-mark.svg
 COPY apps/web/public/fonts/onest/ /usr/share/nginx/auxiliary/assets/fonts/onest/
-COPY apps/web/public/lesson-media/ /usr/share/nginx/lesson-media/
 
 EXPOSE 80 443
 HEALTHCHECK --interval=30s --timeout=5s --retries=3 CMD nginx -t

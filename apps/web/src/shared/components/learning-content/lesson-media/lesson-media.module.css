@@ -34,6 +34,7 @@
    shrinking and its plate scrolls instead. */
 .svg {
   min-width: min(30rem, 100%);
+  margin-inline: auto;
   color: var(--color-text);
   font-family: var(--font-ui);
 }

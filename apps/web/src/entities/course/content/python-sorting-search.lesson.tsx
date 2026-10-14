@@ -3,6 +3,7 @@
 import { CodeBlock } from "~/shared/components/code-block";
 import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
+import { LessonSummary } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { pythonSortingSearchLessonPublication } from "./course-publication.mjs";
 
@@ -359,28 +360,51 @@ export const pythonSortingSearchLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          <Notation>{"sorted(x)"}</Notation> создаёт новый список,{" "}
-          <Notation>{"x.sort()"}</Notation> меняет <Notation>{"x"}</Notation> и
-          возвращает <Notation>{"None"}</Notation>;{" "}
-          <Notation>{"reverse=True"}</Notation> — по убыванию.
-        </li>
-        <li>
-          <Notation>{"key=функция"}</Notation> сортирует по значению функции;
-          передаётся функция без скобок.
-        </li>
-        <li>
-          Несколько критериев — кортеж ключей; минус перед числом даёт убывание
-          только этого критерия.
-        </li>
-        <li>
-          Сортировка устойчива; один лучший элемент —{" "}
-          <Notation>{"max(x, key=…)"}</Notation>, пустой источник —{" "}
-          <Notation>{"default="}</Notation>.
-        </li>
-        <li>Жадный выбор после сортировки верен только с доказательством.</li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                <Notation>{"sorted(x)"}</Notation> создаёт новый список,{" "}
+                <Notation>{"x.sort()"}</Notation> меняет{" "}
+                <Notation>{"x"}</Notation> и возвращает{" "}
+                <Notation>{"None"}</Notation>;{" "}
+                <Notation>{"reverse=True"}</Notation> — по убыванию.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"key=функция"}</Notation> сортирует по значению
+                функции; передаётся функция без скобок.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Несколько критериев — кортеж ключей; минус перед числом даёт
+                убывание только этого критерия.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Сортировка устойчива; один лучший элемент —{" "}
+                <Notation>{"max(x, key=…)"}</Notation>, пустой источник —{" "}
+                <Notation>{"default="}</Notation>.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>Жадный выбор после сортировки верен только с доказательством.</>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

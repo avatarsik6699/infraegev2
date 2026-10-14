@@ -2,7 +2,10 @@
 // Change the stand or course.json and re-export, not this file.
 import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
-import { SheetBlock } from "~/shared/components/learning-content";
+import {
+  LessonSummary,
+  SheetBlock,
+} from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { excelCellValuesLessonPublication } from "./course-publication.mjs";
 import { lessonMedia } from "./excel-cell-values.media";
@@ -304,24 +307,43 @@ export const excelCellValuesLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          Число и текст — разные значения: «120 руб.» и '00127 — текст, 00127
-          без апострофа становится числом 127.
-        </li>
-        <li>
-          Формат меняет вид, а не значение: 1,23456 в формате «два знака» видно
-          как 1,23, но хранится целиком.
-        </li>
-        <li>
-          15% — это 0,15; число 15 в процентном формате выглядит как 1500%.
-        </li>
-        <li>
-          Пустая ячейка не равна нулю: среднее 10, 20 и 0 — 10, а 10, 20 и
-          пустой ячейки — 15.
-        </li>
-        <li>Дата — число дней, поэтому даты можно вычитать.</li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                Число и текст — разные значения: «120 руб.» и '00127 — текст,
+                00127 без апострофа становится числом 127.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Формат меняет вид, а не значение: 1,23456 в формате «два знака»
+                видно как 1,23, но хранится целиком.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                15% — это 0,15; число 15 в процентном формате выглядит как
+                1500%.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Пустая ячейка не равна нулю: среднее 10, 20 и 0 — 10, а 10, 20 и
+                пустой ячейки — 15.
+              </>
+            ),
+          },
+          { note: <>Дата — число дней, поэтому даты можно вычитать.</> },
+        ]}
+      />
     </>
   ),
   status: "published",

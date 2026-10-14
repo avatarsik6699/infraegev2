@@ -71,6 +71,8 @@ print(clusters[1])
 [(10.0, 0.0), (12.0, 0.0), (11.0, 1.0)]
 ```
 
+На диаграмме рассеяния граница видна сразу:
+
 <figure class="plate-figure">
 %%cl_scatter("example27.txt", "x5", lines=True)%%
 <figcaption>Граница x = 5 проходит по пустой полосе: пять точек слева (кружки) — первый кластер, три справа (квадраты) — второй.</figcaption>
@@ -246,6 +248,8 @@ relative_angle = (angle - start) % 360
 if relative_angle <= width:
     ...
 ```
+
+Так выглядит сектор, который переходит через направление 0°:
 
 <figure class="plate-figure">
 %%cl_sector()%%

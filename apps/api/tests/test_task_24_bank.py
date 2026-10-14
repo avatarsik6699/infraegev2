@@ -1,294 +1,518 @@
-"""Focused content, checker, attachment and public-projection checks for EGE task 24."""
+"""Independent answer and content checks for the EGE topic 24 lesson «Обработка символьных строк».
 
-import contextlib
-import hashlib
-import io
-import itertools
-import json
+The lesson makes one pass with the current length, the sliding window, positions and
+``re.finditer``. Here every answer is recomputed another way: the short strings of the
+tasks by the search of all substrings; the files by windows between consecutive bad
+positions, positions instead of the window, queues of the last occurrences, ``split``,
+``groupby`` and ``Counter``, dynamic programming over digit runs and a hand-written scan of
+sums instead of regular expressions. The bank's own solution programs, run next to their
+attachments, must print the same answers.
+"""
+
+import math
 import re
+import shutil
 import subprocess
 import sys
+import tempfile
+from collections import Counter, deque
+from itertools import groupby
 from pathlib import Path
-from unittest.mock import mock_open, patch
 
 import pytest
 
-from app.modules.practice.models import FileObject, TaskRecord
-from app.modules.practice.readers import public_task
-from app.modules.practice.schemas import Bank, Block, TaskData
+from app.modules.practice.schemas import Bank, TaskData
 from app.shared.checker import is_correct
 
 pytestmark = pytest.mark.pure
 
 ROOT = Path(__file__).resolve().parents[3]
 BANK_DIR = ROOT / "content/practice-bank"
-TASK_IDS = [f"task-24-{number:02d}" for number in range(1, 9)]
-EXPECTED = [4, 5, 7, 9, 4, 6, 8, 81]
-WRONG = [3, 4, 6, 8, 3, 5, 7, 80]
-SECTIONS = [
-    "adjacent-and-overlapping",
-    "longest-valid-run",
-    "longest-valid-run",
-    "occurrence-limit",
-    "expression-grammar",
-    "expression-grammar",
-    "expression-grammar",
-    "linear-expression-scan",
-]
+FILES = ROOT / "content/lesson-design/topic-24/files"
+MATERIAL = "string-processing"
+RETIRED = [f"task-24-{number:02d}" for number in range(1, 9)]
+VOWELS = "AEIOUY"
+LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+NUMBER = "(?:0|[1-9][0-9]*)"
 
 
 def _bank() -> Bank:
     return Bank.model_validate_json((BANK_DIR / "bank.json").read_bytes())
 
 
-def _markdown(block: Block) -> str:
-    if block.type != "text":
-        raise AssertionError("expected a text block")
-    return block.data.markdown
+def _entries() -> dict[str, TaskData]:
+    return {
+        entry.task.id: entry.task
+        for entry in _bank().tasks
+        if any(link.material_id == MATERIAL for link in entry.task.lessons)
+    }
 
 
-def _code(task: TaskData) -> str:
-    for block in task.explanation:
-        if block.type == "code_example":
-            return block.data.code
-    raise AssertionError(f"{task.id} has no Python solution example")
+def _read(name: str) -> str:
+    return (FILES / name).read_text(encoding="ascii").split("\n")[0]
 
 
-def _is_expression(value: str, *, allow_zero: bool = True) -> bool:
-    """Independent small-input parser for the task's complete expression grammar."""
-    if not value:
-        return False
-    position = 0
-
-    def read_number(start: int) -> int | None:
-        if start >= len(value):
-            return None
-        if allow_zero and value[start] == "0":
-            return start + 1
-        if value[start] not in "6789":
-            return None
-        end = start + 1
-        following_digits = "06789" if allow_zero else "6789"
-        while end < len(value) and value[end] in following_digits:
-            end += 1
-        return end
-
-    end = read_number(position)
-    if end is None:
-        return False
-    position = end
-    while position < len(value):
-        if value[position] not in "-*":
-            return False
-        end = read_number(position + 1)
-        if end is None:
-            return False
-        position = end
-    return True
+def _lines(name: str) -> list[str]:
+    return (FILES / name).read_text(encoding="ascii").splitlines()
 
 
-def _brute_longest_expression(value: str) -> int:
-    return max(
-        (
-            end - start
-            for start in range(len(value))
-            for end in range(start + 1, len(value) + 1)
-            if _is_expression(value[start:end])
-        ),
-        default=0,
-    )
+# --- the search of all substrings (short strings only) -------------------------------
 
 
-def _run_code_with_text(code: str, text: str) -> str:
-    output = io.StringIO()
-    with patch("builtins.open", mock_open(read_data=text)), contextlib.redirect_stdout(output):
-        exec(compile(code, "task-24-solution.py", "exec"), {})
-    return output.getvalue().strip()
+def _substrings(s: str):
+    for i in range(len(s)):
+        for j in range(i + 1, len(s) + 1):
+            yield i, s[i:j]
 
 
-def test_task_24_content_answers_files_and_ordered_lesson_progression(tmp_path: Path) -> None:
-    bank = _bank()
-    bank.validate_references()
-    entries = [
-        next(entry for entry in bank.tasks if entry.task.id == task_id) for task_id in TASK_IDS
-    ]
-    material = next(item for item in bank.materials if item.id == "string-processing")
-    expected_sections = [
-        "file-and-string",
-        "positions-and-fragments",
-        "adjacent-and-overlapping",
-        "longest-valid-run",
-        "occurrence-limit",
-        "expression-grammar",
-        "linear-expression-scan",
-        "independent-verification",
-    ]
-    assert material.status == "published"
-    assert material.sections == expected_sections
-    assert [entry.task.checker.answer_variants[0] for entry in entries] == [
-        str(number) for number in EXPECTED
-    ]
-    assert [entry.task.difficulty for entry in entries] == [1, 1, 2, 2, 2, 3, 3, 3]
-    assert [entry.task.lessons[0].position for entry in entries] == list(range(8))
-    assert "если они используют общие символы" in _markdown(entries[0].task.statement[0])
+def _max(s: str, ok) -> int:
+    return max((len(t) for _, t in _substrings(s) if ok(t)), default=0)
 
-    file_map = {item.checksum: item for item in bank.files}
-    for index, entry in enumerate(entries):
-        task = entry.task
-        assert task.exam_numbers == []
-        assert task.catalog_visible is False
-        assert task.archived is False
-        assert len(task.lessons) == 1 and task.lessons[0].material_id == "string-processing"
-        assert len(task.files) == 1 and task.files[0].purpose == "attachment"
-        assert len(task.theory_links) == 1
-        assert task.theory_links[0].material_id == "string-processing"
-        assert task.theory_links[0].section == SECTIONS[index]
 
-        usage = task.files[0]
-        metadata = file_map[usage.checksum]
-        data = (BANK_DIR / "files" / usage.checksum).read_bytes()
-        assert hashlib.sha256(data).hexdigest() == usage.checksum == metadata.storage_key
-        assert len(data) == metadata.size_bytes
-        assert data.endswith(b"\n") and b"\r" not in data
-        text = data.decode("utf-8").strip()
+def _min(s: str, ok) -> int:
+    return min(len(t) for _, t in _substrings(s) if ok(t))
 
-        if index == 0:
-            independent = sum(text.startswith("ABA", start) for start in range(len(text) - 2))
-        elif index == 1:
-            runs = re.findall(r"[ABC]+", text)
-            independent = max(map(len, runs), default=0)
-        elif index == 2:
-            independent = max(
-                (
-                    end - start
-                    for start in range(len(text))
-                    for end in range(start + 1, len(text) + 1)
-                    if "XY" not in text[start:end]
-                ),
-                default=0,
-            )
-        elif index == 3:
-            independent = max(
-                (
-                    end - start
-                    for start in range(len(text))
-                    for end in range(start + 1, len(text) + 1)
-                    if sum(text.startswith("ABA", position) for position in range(start, end - 2))
-                    <= 2
-                ),
-                default=0,
-            )
-        elif index == 4:
-            lines = text.splitlines()
-            independent = sum(_is_expression(line, allow_zero=False) for line in lines)
-        elif index == 5:
-            independent = sum(_is_expression(line) for line in text.splitlines())
-        elif index == 6:
-            segments = text.split("|")
-            independent = max(
-                (_brute_longest_expression(segment) for segment in segments),
-                default=0,
-            )
-            assert len(data) >= 8_000
-            assert len(segments) == len(set(segments)) == 1_025
-            length_eight = [
-                segment[start : start + 8]
-                for segment in segments
-                for start in range(len(segment) - 7)
-                if _is_expression(segment[start : start + 8])
-            ]
-            assert length_eight == ["9-68-7*0"]
+
+def _occurrences(t: str, word: str) -> int:
+    return sum(t.startswith(word, i) for i in range(len(t)))
+
+
+def _neighbours(t: str, good) -> bool:
+    return all(good(a, b) for a, b in zip(t, t[1:], strict=False))
+
+
+def _expression(t: str, number: str, signs: str) -> bool:
+    return re.fullmatch(number + f"(?:[{re.escape(signs)}]{number})*", t) is not None
+
+
+def _first_alphabet(counter: Counter, pick_max: bool = True) -> str:
+    best = max(counter.values()) if pick_max else min(counter.values())
+    return min(c for c, v in counter.items() if v == best)
+
+
+# --- second methods for the files ---------------------------------------------------------
+
+
+def _avoiding(n: int, bad_starts: list[int], m: int) -> int:
+    """Longest fragment holding no bad window of length m entirely: between consecutive
+    bad starts b1 < b2 it runs from b1 + 1 to b2 + m − 2."""
+    marks = [-1, *bad_starts, n - m + 1]
+    return max(b2 - b1 + m - 2 for b1, b2 in zip(marks, marks[1:], strict=False))
+
+
+def _at_most(s: str, letter: str, k: int) -> int:
+    """At most k letters: from one after the occurrence j to one before j + k + 1."""
+    p = [-1, *(i for i, c in enumerate(s) if c == letter), len(s)]
+    return max(p[j + k + 1] - p[j] - 1 for j in range(len(p) - k - 1))
+
+
+def _each_queue(s: str, letters: str, k: int) -> int:
+    """Every letter at most k times: the left end is one after the (k + 1)-th last
+    occurrence of some letter."""
+    last = {c: deque(maxlen=k + 1) for c in letters}
+    left = best = 0
+    for r, c in enumerate(s):
+        if c in last:
+            last[c].append(r)
+            if len(last[c]) == k + 1:
+                left = max(left, last[c][0] + 1)
+        best = max(best, r - left + 1)
+    return best
+
+
+def _exact_words(s: str, word: str, k: int) -> int:
+    """Exactly k whole occurrences of word (they may overlap), by their starts."""
+    m = len(word)
+    p = [-1, *(i for i in range(len(s) - m + 1) if s.startswith(word, i)), len(s) - m + 1]
+    return max(p[j + k] - p[j - 1] + m - 2 for j in range(1, len(p) - k))
+
+
+def _shortest(s: str, letter: str, k: int) -> int:
+    """At least k letters, the shortest: the window that shrinks while good."""
+    left = count = 0
+    best = len(s) + 1
+    for right, c in enumerate(s):
+        count += c == letter
+        while count >= k:
+            best = min(best, right - left + 1)
+            count -= s[left] == letter
+            left += 1
+    return best
+
+
+def _runs(s: str, alphabet: str):
+    """(start, text) of the maximal runs of characters of alphabet."""
+    pos = 0
+    for inside, group in groupby(s, key=lambda c: c in alphabet):
+        text = "".join(group)
+        if inside:
+            yield pos, text
+        pos += len(text)
+
+
+def _longest_expression(s: str, signs: str, zero_alone: bool) -> int:
+    """Dynamic programming over digit runs: the longest correct expression ending at the
+    digit i; every number but the first is a whole run preceded by a sign."""
+    digits = "0123456789"
+    run_start = [0] * len(s)
+    best_end = [0] * len(s)
+    best = 0
+    for i, c in enumerate(s):
+        if c not in digits:
+            continue
+        a = run_start[i] = run_start[i - 1] if i > 0 and s[i - 1] in digits else i
+        k = a
+        while k <= i and s[k] == "0":
+            k += 1
+        single = i - k + 1 if k <= i else (1 if zero_alone else 0)
+        whole = s[a] != "0" or (zero_alone and a == i)
+        longer = 0
+        if whole and a >= 2 and s[a - 1] in signs and best_end[a - 2] > 0:
+            longer = best_end[a - 2] + 1 + (i - a + 1)
+        best_end[i] = max(single, longer)
+        best = max(best, best_end[i])
+    return best
+
+
+def _tokens(text: str) -> list[str]:
+    out: list[str] = []
+    for c in text:
+        if c.isdigit() and out and out[-1].isdigit():
+            out[-1] += c
         else:
-            independent = max(
-                (_brute_longest_expression(part) for part in text.split("|")),
-                default=0,
+            out.append(c)
+    return out
+
+
+def _numbers_window(s: str, k: int) -> int:
+    """At most k numbers: maximal expressions cut where two signs meet, then the
+    numbers j − k + 1 … j of each."""
+    best = 0
+    for _, text in _runs(s, "123456789+-*"):
+        for chunk in re.split("[-+*]{2,}", text):
+            spans, pos = [], 0
+            for token in _tokens(chunk.strip("+-*")):
+                pos += len(token)
+                if token[0].isdigit():
+                    spans.append((pos - len(token), pos))
+            for j in range(len(spans)):
+                best = max(best, spans[j][1] - spans[max(0, j - k + 1)][0])
+    return best
+
+
+def _no_mult_after_minus(t: str) -> bool:
+    return "-" not in t or "*" not in t[t.index("-") :]
+
+
+def _order_brute(s: str) -> int:
+    """Base 8, − and *: every fragment of a maximal run of allowed characters."""
+    number = "(?:0|[1-7][0-7]*)"
+    best = 0
+    for _, text in _runs(s, "01234567-*"):
+        for i in range(len(text)):
+            for j in range(len(text), i + best, -1):
+                t = text[i:j]
+                if _expression(t, number, "-*") and _no_mult_after_minus(t):
+                    best = j - i
+                    break
+    return best
+
+
+def _sums_after(s: str, letter: str, signs: str):
+    """(text, values of the initial parts) of every sum right after letter, by hand."""
+    for i, c in enumerate(s):
+        if c != letter:
+            continue
+        j, values, total, sign, number, text = i + 1, [], 0, 1, "", ""
+        while j < len(s):
+            ch = s[j]
+            if ch in "123456789":
+                number += ch
+            elif ch in signs and number:
+                total += sign * int(number)
+                values.append(total)
+                text += number + ch
+                sign, number = (-1 if ch == "-" else 1), ""
+            else:
+                break
+            j += 1
+        if number:
+            total += sign * int(number)
+            values.append(total)
+            text += number
+        elif text:
+            text = text[:-1]
+        if values:
+            yield text, values
+
+
+def _combo(s: str, letter: str, k: int, word: str, t: int) -> int:
+    """Exactly k letters and at least t words: the widest windows by two pointers, the
+    words counted incrementally."""
+    m, n = len(word), len(s)
+    starts = {i for i in range(n - m + 1) if s.startswith(word, i)}
+    pos = [i for i, c in enumerate(s) if c == letter]
+    best, left, words, right = 0, 0, 0, -1
+    for j in range(len(pos) - k + 1):
+        lo = pos[j - 1] + 1 if j > 0 else 0
+        hi = pos[j + k] - 1 if j + k < len(pos) else n - 1
+        while right < hi:
+            right += 1
+            if right - m + 1 >= left and right - m + 1 in starts:
+                words += 1
+        while left < lo:
+            if left in starts and left + m - 1 <= right:
+                words -= 1
+            left += 1
+        if words >= t:
+            best = max(best, hi - lo + 1)
+    return best
+
+
+def _objects(s: str, k: int) -> int:
+    """Letter runs with a digit on both sides, by groupby; k consecutive ones."""
+    found = []
+    for start, text in _runs(s, LETTERS):
+        end = start + len(text)
+        if start > 0 and end < len(s) and s[start - 1].isdigit() and s[end].isdigit():
+            found.append((start - 1, end))
+    return min(found[j + k - 1][1] - found[j][0] + 1 for j in range(len(found) - k + 1))
+
+
+@pytest.fixture(scope="module")
+def answers() -> dict[str, str]:
+    a: dict[str, str] = {}
+    f1, f2, f4, f5 = _read("24-1.txt"), _read("24-2.txt"), _read("24-4.txt"), _read("24-5.txt")
+    f6, f7, f8, f9 = _read("24-6.txt"), _read("24-7.txt"), _read("24-8.txt"), _read("24-9.txt")
+    # subtopic 1
+    a["task-24-1-02"] = f"{len(range(4, 10))} {len(range(5, 9))} {9 - 4}"
+    pairs = sum(1 for _ in _substrings("A" * 8))
+    a["task-24-1-05"] = f"{pairs} {math.comb(300_001, 2)}"
+    a["task-24-1-08"] = str(
+        sum(Counter(line)["K"] > Counter(line)["L"] for line in _lines("24-3.txt"))
+    )
+    # subtopic 2
+    a["task-24-2-01"] = str(_max("AXXXBXXXXXAX", lambda t: set(t) == {"X"}))
+    a["task-24-2-02"] = str(_max("CAABCBCC", lambda t: _neighbours(t, str.__ne__)))
+    a["task-24-2-03"] = str(_max("ZZYYYZYYYYZ", lambda t: len(set(t)) == 1))
+
+    def triples_ok(t: str) -> bool:
+        d = [int(c) for c in t]
+        return all(x + y > z for x, y, z in zip(d, d[1:], d[2:], strict=False))
+
+    a["task-24-2-04"] = str(_max("12456", triples_ok))
+    a["task-24-2-05"] = str(_max("KLAKKLB", lambda t: "KL" not in t and "LK" not in t))
+    a["task-24-2-07"] = str(max(len(part) for part in f1.split("Y")))
+    bad = [i for i in range(len(f1) - 1) if f1[i] in "XZ" and f1[i + 1] in "XZ"]
+    a["task-24-2-08"] = str(_avoiding(len(f1), bad, 2))
+    d = [int(c) for c in f2]
+    bad = [i for i in range(len(d) - 2) if d[i] + d[i + 2] <= d[i + 1]]
+    a["task-24-2-09"] = str(_avoiding(len(d), bad, 3))
+    # subtopic 3
+    a["task-24-3-01"] = str(_occurrences("ABABABA", "ABA"))
+    s = "ABABBAB"
+    a["task-24-3-02"] = str(sum(x == z for x, z in zip(s, s[2:], strict=False)))
+    a["task-24-3-03"] = str(_max("ABABCABCA", lambda t: t == ("ABC" * len(t))[: len(t)]))
+    chains = [
+        len(t) // 2
+        for _, t in _substrings("BABEDACA")
+        if len(t) % 2 == 0 and all(t[i] in "BCDF" and t[i + 1] in "AE" for i in range(0, len(t), 2))
+    ]
+    a["task-24-3-04"] = f"{max(chains)} {2 * max(chains)}"
+    s = "CADACABAA"
+    a["task-24-3-05"] = _first_alphabet(
+        Counter(y for x, y in zip(s, s[1:], strict=False) if x == "A")
+    )
+    runs = [(len(t), i) for i, t in _substrings("YXXYXXYXX") if set(t) == {"X"}]
+    start = max(runs)[1]
+    a["task-24-3-06"] = f"{start} {start + 1}"
+    a["task-24-3-07"] = str(max(len(m.group()) for m in re.finditer(r"X(?:YZX)*(?:YZ|Y)?", f1)))
+    vowel_pairs = re.finditer(r"(?=((?:[AEIOUY][B-DF-HJ-NP-TV-XZ])+))", f4)
+    a["task-24-3-08"] = str(max(len(m.group(1)) // 2 for m in vowel_pairs))
+    a["task-24-3-09"] = _first_alphabet(
+        Counter(x for x, y in zip(f4, f4[1:], strict=False) if y == "R")
+    )
+    lines = _lines("24-3.txt")
+    line = max(enumerate(lines), key=lambda p: (p[1].count("Q"), p[0]))[1]
+    a["task-24-3-10"] = _first_alphabet(Counter(line), pick_max=False)
+    # subtopic 4
+    s = "ABCABBACB"
+    a["task-24-4-01"] = str(_max(s, lambda t: t.count("A") <= 2))
+    a["task-24-4-02"] = str(_max(s, lambda t: t.count("A") == 2))
+    a["task-24-4-03"] = str(_min(s, lambda t: t.count("A") >= 2))
+    a["task-24-4-04"] = str(_max("ABCXABYABCZ", lambda t: "ABC" not in t))
+    a["task-24-4-05"] = str(_max("ABCBADAB", lambda t: t.count("A") <= 1 and t.count("B") <= 1))
+    a["task-24-4-06"] = str(_max("AAABAAB", lambda t: _occurrences(t, "AA") <= 1))
+    a["task-24-4-08"] = str(_at_most(f4, "Q", 12))
+    a["task-24-4-09"] = str(_each_queue(f4, "JKXZ", 6))
+    a["task-24-4-10"] = str(_exact_words(f4, "TT", 25))
+    # subtopic 5
+    s = "CAABACAB"
+    a["task-24-5-01"] = str(_min(s, lambda t: t.count("A") >= 3))
+    a["task-24-5-02"] = str(_max(s, lambda t: t.count("A") == 2))
+    a["task-24-5-03"] = str(_min("ABACABAABA", lambda t: _occurrences(t, "ABA") >= 2))
+    a["task-24-5-04"] = str(_max("ABYCDXEFGHYXI", lambda t: not set(t) & {"X", "Y"}))
+
+    def f_chain(t: str) -> bool:
+        inner = t.split("F")[1:-1]
+        return len(t) > 1 and t[0] == t[-1] == "F" and all(p.count("A") <= 1 for p in inner)
+
+    a["task-24-5-05"] = str(_max("AFBAFCFAAFDF", f_chain))
+    s = "KLMNBCABXYZACBQ"
+    marked = {
+        i + k
+        for i in range(len(s) - 2)
+        if Counter(s[i : i + 3]) == Counter("ABC")
+        for k in range(3)
+    }
+    a["task-24-5-06"] = str(
+        max(
+            j - i
+            for i in range(len(s))
+            for j in range(i, len(s) + 1)
+            if not marked & set(range(i, j))
+        )
+    )
+    a["task-24-5-07"] = str(_shortest(f4, "Q", 50))
+    best = len(f5) + 1
+    for part in f5.split("0")[:-1]:  # every part but the last is followed by a 0
+        ks = [i for i, c in enumerate(part) if c == "K"]
+        if len(ks) >= 6:
+            best = min(best, len(part) - ks[-6] + 1)
+    a["task-24-5-08"] = str(best)
+    found = [
+        (len(m.group(2)) + 2, m.start())
+        for m in re.finditer(r"(?=([0369])([A-Z]+)\1)", f5)
+        if 2 * sum(c in VOWELS for c in m.group(2)) == len(m.group(2))
+    ]
+    a["task-24-5-09"] = str(max(found)[1])
+    a["task-24-5-10"] = str(max(len(t) for _, t in _runs(f5, LETTERS) if set(VOWELS) <= set(t)))
+    # subtopic 6
+    a["task-24-6-03"] = str(_max("5+*12+0*07+3", lambda t: _expression(t, NUMBER, "+*")))
+    a["task-24-6-06"] = str(
+        _max("0A9BC00B1A20X", lambda t: re.fullmatch(r"[1-9AB][0-9AB]*", t) is not None)
+    )
+    a["task-24-6-07"] = str(_longest_expression(f6, "+*", zero_alone=True))
+    a["task-24-6-08"] = str(_longest_expression(f7, "-*", zero_alone=False))
+    a["task-24-6-09"] = str(max(len(t.lstrip("0")) for _, t in _runs(f5, "0123456789ABCDEFGHIJ")))
+    largest = -1
+    for _, t in _runs(f5, "0123456789ABCDEF"):
+        for end in range(len(t)):
+            if int(t[end], 16) % 2 == 0:
+                largest = max(largest, int(t[: end + 1], 16))
+    a["task-24-6-10"] = str(len(format(largest, "X")))
+
+    # subtopic 7
+    def numbers(t: str) -> int:
+        return sum(token[0].isdigit() for token in _tokens(t))
+
+    a["task-24-7-01"] = str(
+        _max("9*8+76+5+4321", lambda t: _expression(t, NUMBER, "+*") and numbers(t) <= 2)
+    )
+    a["task-24-7-02"] = str(
+        _max("1+22*333+4444", lambda t: _expression(t, NUMBER, "+*") and numbers(t) <= 3)
+    )
+    a["task-24-7-04"] = str(
+        _max("4-3*2*5-1", lambda t: _expression(t, NUMBER, "-*") and _no_mult_after_minus(t))
+    )
+    a["task-24-7-05"] = str(
+        max(v for _, values in _sums_after("A12-25+3", "A", "+-") for v in values)
+    )
+    a["task-24-7-06"] = str(
+        max((len(t), v[-1]) for t, v in _sums_after("B12-3CB21+5", "B", "+-"))[1]
+    )
+    a["task-24-7-07"] = str(_numbers_window(f8, 20))
+    a["task-24-7-08"] = str(_order_brute(f7))
+    a["task-24-7-09"] = str(max(v[-1] for _, v in _sums_after(f8, "C", "+")))
+    a["task-24-7-10"] = str(max((len(t), v[-1]) for t, v in _sums_after(f8, "B", "+-"))[1])
+    # subtopic 8
+    a["task-24-8-02"] = str(_max("ABBBAAB", lambda t: t.count("A") == t.count("B")))
+    a["task-24-8-03"] = str(_max("ABCADEB", lambda t: len(set(t)) == len(t)))
+
+    def objects(t: str) -> int:
+        return len(re.findall(r"(?=[A-Z][0-9]+[A-Z])", t))
+
+    a["task-24-8-05"] = str(_min("X12Y3Z45W", lambda t: objects(t) >= 2))
+    a["task-24-8-06"] = str(
+        _max("ABAYABABAYXYABA", lambda t: t.count("Y") == 1 and _occurrences(t, "ABA") >= 2)
+    )
+    a["task-24-8-07"] = str(_combo(f5, "Y", 30, "2025", 4))
+    a["task-24-8-08"] = str(_objects(f5, 500))
+    # Практика и итог
+    bad = [i for i in range(len(f9) - 1) if f9[i] in VOWELS and f9[i + 1] in VOWELS]
+    a["task-24-9-01"] = str(_avoiding(len(f9), bad, 2))
+    a["task-24-9-02"] = _first_alphabet(
+        Counter(y for x, y, z in zip(f9, f9[1:], f9[2:], strict=False) if x == z)
+    )
+    a["task-24-9-03"] = str(_each_queue(f9, "QXZ", 40))
+    a["task-24-9-04"] = str(max(len(p) + 2 for c in "ABCDEF" for p in f9.split(c)[1:-1]))
+    a["task-24-9-05"] = str(_longest_expression(f6, "+", zero_alone=True))
+    return a
+
+
+def _solution(task: TaskData) -> str:
+    (code,) = [
+        block.data.code
+        for block in task.explanation
+        if block.type == "code_example" and block.data.language == "python"
+    ]
+    return code
+
+
+def _neighbour(token: str) -> str:
+    """A wrong answer next to the right one: the next number or the next letter."""
+    if token.isalpha():
+        return chr(ord(token) + 1)
+    return str(int(token) + 1)
+
+
+def test_every_answer_matches_independent_recomputation(answers: dict[str, str]) -> None:
+    tasks = _entries()
+    assert sorted(tasks) == sorted(answers)
+    assert sorted(t.lessons[0].position for t in tasks.values()) == list(range(66))
+    for task_id, task in tasks.items():
+        assert task.checker.answer_variants[0] == answers[task_id], task_id
+        assert task.exam_numbers == [24] and not task.catalog_visible and not task.archived
+        on_final_page = task_id.startswith("task-24-9-")
+        assert bool(task.theory_links) != on_final_page, task_id
+        advanced = task_id.startswith(("task-24-7-", "task-24-8-"))
+        assert task.lessons[0].counts_toward_mastery == (not advanced), task_id
+        assert task.files or not re.search(r"24-\d\.txt", str(task.statement)), task_id
+
+
+def test_tasks_of_the_retired_lesson_are_archived() -> None:
+    tasks = {entry.task.id: entry.task for entry in _bank().tasks}
+    for task_id in RETIRED:
+        task = tasks[task_id]
+        assert task.archived and not task.catalog_visible, task_id
+        assert not task.lessons and not task.theory_links, task_id
+
+
+def test_checker_accepts_the_answer_and_rejects_a_neighbour(
+    answers: dict[str, str],
+) -> None:
+    for task_id, task in _entries().items():
+        expected = answers[task_id]
+        assert is_correct(task.checker, expected), task_id
+        assert is_correct(task.checker, expected.lower()), task_id
+        tokens = expected.split()
+        tokens[-1] = _neighbour(tokens[-1])
+        assert not is_correct(task.checker, " ".join(tokens)), task_id
+
+
+def test_solution_programs_print_the_answer(answers: dict[str, str]) -> None:
+    for task_id, task in _entries().items():
+        code = _solution(task)
+        with tempfile.TemporaryDirectory() as tmp:
+            for usage in task.files:
+                shutil.copy(BANK_DIR / "files" / usage.checksum, Path(tmp) / usage.filename)
+            result = subprocess.run(
+                [sys.executable, "-I", "-c", code],
+                capture_output=True,
+                text=True,
+                check=True,
+                timeout=300,
+                cwd=tmp,
             )
-            assert len(data) >= 100_000
-            assert text.count("9" + "*8" * 40) == 1
-
-        expected = EXPECTED[index]
-        assert independent == expected
-        assert is_correct(task.checker, str(expected))
-        assert not is_correct(task.checker, str(WRONG[index]))
-
-        code = _code(task)
-        filename = usage.filename
-        (tmp_path / filename).write_bytes(data)
-        result = subprocess.run(
-            [sys.executable, "-c", code],
-            cwd=tmp_path,
-            capture_output=True,
-            text=True,
-            check=True,
-        )
-        assert result.stdout.strip() == str(expected)
-
-
-def test_task_24_expression_examples_match_independent_short_string_oracle() -> None:
-    assert not _is_expression("60", allow_zero=False)
-    assert _is_expression("60")
-    bank = _bank()
-    task = next(entry.task for entry in bank.tasks if entry.task.id == "task-24-08")
-    code = _code(task)
-    alphabet = "06789-*X"
-    for length in range(5):
-        for symbols in itertools.product(alphabet, repeat=length):
-            text = "".join(symbols)
-            assert _run_code_with_text(code, text) == str(_brute_longest_expression(text)), text
-
-    for edge_case, expected in {
-        "7-0": 3,
-        "-0*7": 3,
-        "07": 1,
-        "68-0*7": 6,
-        "6--7": 1,
-        "7*": 1,
-        "00": 1,
-        "": 0,
-    }.items():
-        assert _run_code_with_text(code, edge_case) == str(expected), edge_case
-
-
-def test_task_24_public_projection_hides_checker_answers_and_private_source() -> None:
-    bank = _bank()
-    for task_id in TASK_IDS:
-        entry = next(item for item in bank.tasks if item.task.id == task_id)
-        private_content = entry.task.model_dump(exclude={"checker"})
-        private_content["sources"].append(
-            {
-                "url": "https://example.invalid/internal-source",
-                "kind": "bank",
-                "role": "copy",
-                "year": None,
-                "title": "Private editorial reference",
-                "author": None,
-                "primary": False,
-                "is_public": False,
-                "adaptation": None,
-                "original_id": "private-24-reference",
-            }
-        )
-        usage = entry.task.files[0]
-        metadata = next(item for item in bank.files if item.checksum == usage.checksum)
-        row = TaskRecord(
-            id=entry.task.id,
-            content=private_content,
-            solution_revision=entry.solution_revision,
-            catalog_visible=False,
-            archived=False,
-        )
-        file_object = FileObject(
-            checksum=metadata.checksum,
-            storage_key=metadata.storage_key,
-            format=metadata.format,
-            mime_type=metadata.mime_type,
-            size_bytes=metadata.size_bytes,
-        )
-        projected = public_task(row, {metadata.checksum: file_object})
-        public_json = json.dumps(projected.model_dump(), ensure_ascii=False)
-        assert "checker" not in public_json and "answer_variants" not in public_json
-        assert "Private editorial reference" not in public_json
-        assert "private-24-reference" not in public_json
-        assert not hasattr(projected.content, "checker")
-        assert len(projected.content.files) == 1
-        assert projected.deliveries[0].size_bytes == metadata.size_bytes
+        assert " ".join(result.stdout.split()) == answers[task_id], task_id
+        assert all(len(line) <= 64 for line in code.splitlines()), task_id

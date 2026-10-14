@@ -7,7 +7,9 @@ import styles from "./variant-picker.module.css";
 /**
  * One of several parallel variants at a time instead of a long enumeration
  * (Change 171): chips choose the variant, its value is announced politely.
- * Without scripting every variant is listed, so nothing is hidden.
+ * Without scripting every variant is listed, so nothing is hidden. Change 184:
+ * the value sits in a hairline panel under the chips, captioned with the
+ * chosen chip, so the change is seen where the eye already is.
  */
 export const VariantPicker: React.FC<VariantPickerTypes.Props> = (props) => {
   const enhanced = useIsEnhanced();
@@ -37,8 +39,11 @@ export const VariantPicker: React.FC<VariantPickerTypes.Props> = (props) => {
         selected={index}
         onSelect={setIndex}
       />
-      <div className={styles.result} aria-live="polite" data-variant-result>
-        <VariantValue variant={current} />
+      <div className={styles.panel} aria-live="polite" data-variant-result>
+        <span className={styles.caption}>{current.label}</span>
+        <div className={styles.result}>
+          <VariantValue variant={current} />
+        </div>
       </div>
     </div>
   );

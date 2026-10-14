@@ -3,7 +3,10 @@
 import { CodeBlock } from "~/shared/components/code-block";
 import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
-import { LessonStepper } from "~/shared/components/learning-content";
+import {
+  LessonStepper,
+  LessonSummary,
+} from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { pythonRecursionLessonPublication } from "./course-publication.mjs";
 import { lessonMedia } from "./python-recursion.media";
@@ -345,27 +348,52 @@ export const pythonRecursionLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          Рекурсивная функция: базовый случай без вызова и переход к меньшему
-          случаю, который обязательно доходит до базы.
-        </li>
-        <li>
-          Незавершённые вызовы ждут в стеке; первым завершается самый глубокий.
-        </li>
-        <li>
-          Недостижимая база — <Notation>{"RecursionError"}</Notation>; предел —{" "}
-          <Notation>{"sys.getrecursionlimit()"}</Notation>, поднимать его — не
-          исправление алгоритма.
-        </li>
-        <li>
-          Повторные вычисления делают прямую рекурсию медленной;{" "}
-          <Notation>{"@cache"}</Notation> вычисляет каждое значение один раз.
-        </li>
-        <li>
-          Кэш требует хешируемых аргументов и не убирает ограничение глубины.
-        </li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                Рекурсивная функция: базовый случай без вызова и переход к
+                меньшему случаю, который обязательно доходит до базы.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Незавершённые вызовы ждут в стеке; первым завершается самый
+                глубокий.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Недостижимая база — <Notation>{"RecursionError"}</Notation>;
+                предел — <Notation>{"sys.getrecursionlimit()"}</Notation>,
+                поднимать его — не исправление алгоритма.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Повторные вычисления делают прямую рекурсию медленной;{" "}
+                <Notation>{"@cache"}</Notation> вычисляет каждое значение один
+                раз.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Кэш требует хешируемых аргументов и не убирает ограничение
+                глубины.
+              </>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

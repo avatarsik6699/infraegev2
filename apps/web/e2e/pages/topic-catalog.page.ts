@@ -1,4 +1,5 @@
 import { expect, type Page } from "@playwright/test";
+import { lessonPublications } from "../../src/shared/config/lesson-publication.mjs";
 import { expectNoHorizontalOverflow } from "./layout.assertions";
 
 const summary = {
@@ -62,6 +63,15 @@ const summary = {
     },
   ],
 };
+// Every other published topic: one unsolved task, so its card shows progress.
+for (const { id } of lessonPublications) {
+  if (!summary.topics.some((topic) => topic.id === id))
+    summary.topics.push({
+      id,
+      tasks: [{ id: `${id}-1`, solution_revision: 1 }],
+    });
+}
+const published = lessonPublications.length;
 
 export class TopicCatalogPage {
   constructor(private readonly page: Page) {}
@@ -138,10 +148,10 @@ export class TopicCatalogPage {
       })
       .click();
     await expect(this.page).toHaveURL(
-      "/ege/17-chislovye-posledovatelnosti/chisla-iz-fayla",
+      "/ege/17-chislovye-posledovatelnosti/chisla-i-proverki",
     );
     await expect(this.page.locator("[data-subtopic-head]")).toContainText(
-      "Числа из файла",
+      "Числа файла и проверки условия",
     );
     await this.page.goto("/ege");
     await expect(
@@ -179,7 +189,10 @@ export class TopicCatalogPage {
     await expect(this.page.getByRole("searchbox")).toHaveValue("");
     await expect(this.page.locator("[data-topic-card]")).toHaveCount(25);
     await this.page.getByRole("button", { name: "Не начаты" }).click();
-    await expect(this.page.locator("[data-topic-card]")).toHaveCount(7);
+    // every published topic but the one in progress
+    await expect(this.page.locator("[data-topic-card]")).toHaveCount(
+      published - 1,
+    );
     await expect(
       this.page.getByRole("link", {
         name: "Преобразование записей чисел",
@@ -316,7 +329,7 @@ export class TopicCatalogPage {
     await this.expectIllustrations();
     await expect(
       this.page.locator('[data-topic-status="published"] h2 a'),
-    ).toHaveCount(8);
+    ).toHaveCount(published);
     await expect(
       this.page.locator('[data-topic-status="planned"] a'),
     ).toHaveCount(0);

@@ -3,6 +3,7 @@
 import { CodeBlock } from "~/shared/components/code-block";
 import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
+import { LessonSummary } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { pythonAdvancedFeaturesLessonPublication } from "./course-publication.mjs";
 
@@ -403,30 +404,52 @@ export const pythonAdvancedFeaturesLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          Замыкание — внутренняя функция с доступом к именам внешней; оно видит
-          переменную, а не снимок.
-        </li>
-        <li>
-          Декоратор — функция, которая получает функцию и возвращает обёртку;
-          обёртка должна вернуть результат.
-        </li>
-        <li>
-          Контекстный менеджер описывает вход и выход блока{" "}
-          <Notation>{"with"}</Notation>; <Notation>{"finally"}</Notation>{" "}
-          выполняется и при ошибке.
-        </li>
-        <li>
-          <Notation>{"match"}</Notation> проверяет форму значения;{" "}
-          <Notation>{"str.encode"}</Notation> и{" "}
-          <Notation>{"bytes.decode"}</Notation> переводят текст и байты.
-        </li>
-        <li>
-          <Notation>{"async"}</Notation>/<Notation>{"await"}</Notation> помогают
-          ждать внешние операции, но не ускоряют вычисления.
-        </li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                Замыкание — внутренняя функция с доступом к именам внешней; оно
+                видит переменную, а не снимок.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Декоратор — функция, которая получает функцию и возвращает
+                обёртку; обёртка должна вернуть результат.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Контекстный менеджер описывает вход и выход блока{" "}
+                <Notation>{"with"}</Notation>; <Notation>{"finally"}</Notation>{" "}
+                выполняется и при ошибке.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"match"}</Notation> проверяет форму значения;{" "}
+                <Notation>{"str.encode"}</Notation> и{" "}
+                <Notation>{"bytes.decode"}</Notation> переводят текст и байты.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"async"}</Notation>/<Notation>{"await"}</Notation>{" "}
+                помогают ждать внешние операции, но не ускоряют вычисления.
+              </>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

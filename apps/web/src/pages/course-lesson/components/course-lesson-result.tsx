@@ -12,7 +12,7 @@ export const CourseLessonResult: React.FC<Props> = (props) => (
     <div className={styles.resultSummary}>
       <Typography.Prose>{props.lesson.result}</Typography.Prose>
       {props.lesson.checkpoint ? (
-        <Checkpoint items={props.lesson.checkpoint} />
+        <Checkpoint items={props.lesson.checkpoint} headingOrder={3} />
       ) : null}
     </div>
   </div>

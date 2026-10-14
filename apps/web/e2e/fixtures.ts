@@ -51,23 +51,32 @@ type AppFixtures = {
 };
 
 const numberRecordLessonConfig = {
-  route: "/ege/5-preobrazovanie-zapisey-chisel/model-algoritma",
+  route: "/ege/5-preobrazovanie-zapisey-chisel/chislo-i-zapis",
   title: "Преобразование записей чисел",
   taskNumber: 5,
+  taskCount: 40,
+  masteryTaskCount: 37,
+  diagramCount: 12,
 };
 
 const numberSequencesLessonConfig = {
-  route: "/ege/17-chislovye-posledovatelnosti/proverka",
+  route: "/ege/17-chislovye-posledovatelnosti/chisla-i-proverki",
   title: "Числовые последовательности",
   taskNumber: 17,
-  taskCount: 8,
+  taskCount: 49,
+  masteryTaskCount: 38,
+  diagramCount: 10,
+  downloadCount: 23,
 };
 
 const stringProcessingLessonConfig = {
-  route: "/ege/24-obrabotka-simvolnyh-strok/vyrazheniya",
+  route: "/ege/24-obrabotka-simvolnyh-strok/stroka-i-fragment",
   title: "Обработка символьных строк",
   taskNumber: 24,
-  taskCount: 8,
+  taskCount: 66,
+  masteryTaskCount: 51,
+  diagramCount: 8,
+  downloadCount: 30,
 };
 
 const graphAnalysisLessonConfig = {
@@ -87,17 +96,23 @@ const divisorsAndMasksLessonConfig = {
 };
 
 const arrayProcessingLessonConfig = {
-  route: "/ege/26-sortirovka-i-otbor/dannye",
+  route: "/ege/26-sortirovka-i-otbor/zapisi-i-rejting",
   title: "Обработка данных: сортировка и отбор",
   taskNumber: 26,
-  taskCount: 7,
+  taskCount: 67,
+  masteryTaskCount: 53,
+  diagramCount: 13,
+  downloadCount: 26,
 };
 
 const dataAnalysisLessonConfig = {
-  route: "/ege/27-analiz-dannyh-i-klasterizatsiya/gruppy",
+  route: "/ege/27-analiz-dannyh-i-klasterizatsiya/tochki-i-rasstoyaniya",
   title: "Анализ данных: кластеризация",
   taskNumber: 27,
-  taskCount: 7,
+  taskCount: 34,
+  masteryTaskCount: 29,
+  diagramCount: 19,
+  downloadCount: 21,
 };
 
 async function useNoJavaScriptTopicLesson(

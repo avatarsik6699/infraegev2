@@ -6,6 +6,7 @@ import { Typography } from "~/shared/components/typography";
 import {
   CodeRunner,
   LessonDiagram,
+  LessonSummary,
   RangeSandbox,
 } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
@@ -396,29 +397,52 @@ export const pythonForRangeLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          <Notation>{"for x in источник"}</Notation> берёт значения по одному;
-          источник сам кончается.
-        </li>
-        <li>
-          <Notation>{"range(a, b)"}</Notation> — числа от{" "}
-          <Notation>{"a"}</Notation> до <Notation>{"b − 1"}</Notation>; чтобы
-          включить <Notation>{"b"}</Notation>, пишут{" "}
-          <Notation>{"range(a, b + 1)"}</Notation>.
-        </li>
-        <li>
-          Отрицательный шаг идёт вниз, пока значение больше{" "}
-          <Notation>{"stop"}</Notation>.
-        </li>
-        <li>
-          Вложенный цикл выполняется целиком для каждого значения внешнего.
-        </li>
-        <li>
-          Первый найденный при переборе по возрастанию — наименьший; отсутствие
-          ответа — <Notation>{"None"}</Notation>.
-        </li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                <Notation>{"for x in источник"}</Notation> берёт значения по
+                одному; источник сам кончается.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"range(a, b)"}</Notation> — числа от{" "}
+                <Notation>{"a"}</Notation> до <Notation>{"b − 1"}</Notation>;
+                чтобы включить <Notation>{"b"}</Notation>, пишут{" "}
+                <Notation>{"range(a, b + 1)"}</Notation>.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Отрицательный шаг идёт вниз, пока значение больше{" "}
+                <Notation>{"stop"}</Notation>.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Вложенный цикл выполняется целиком для каждого значения
+                внешнего.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Первый найденный при переборе по возрастанию — наименьший;
+                отсутствие ответа — <Notation>{"None"}</Notation>.
+              </>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

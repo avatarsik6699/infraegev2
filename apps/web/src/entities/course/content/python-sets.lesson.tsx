@@ -3,7 +3,10 @@
 import { CodeBlock } from "~/shared/components/code-block";
 import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
-import { LessonDiagram } from "~/shared/components/learning-content";
+import {
+  LessonDiagram,
+  LessonSummary,
+} from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { pythonSetsLessonPublication } from "./course-publication.mjs";
 import { lessonMedia } from "./python-sets.media";
@@ -294,28 +297,50 @@ export const pythonSetsLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          <Notation>{"set(items)"}</Notation> оставляет различные значения;
-          порядка и индексов нет.
-        </li>
-        <li>
-          <Notation>{"{}"}</Notation> — пустой словарь, пустое множество —{" "}
-          <Notation>{"set()"}</Notation>.
-        </li>
-        <li>
-          <Notation>{"|"}</Notation>, <Notation>{"&"}</Notation>,{" "}
-          <Notation>{"-"}</Notation>, <Notation>{"^"}</Notation> — объединение,
-          пересечение, разность, «ровно в одном».
-        </li>
-        <li>
-          <Notation>{"add"}</Notation>, <Notation>{"update"}</Notation>,{" "}
-          <Notation>{"discard"}</Notation> меняют множество;{" "}
-          <Notation>{"remove"}</Notation> отсутствующего даёт{" "}
-          <Notation>{"KeyError"}</Notation>.
-        </li>
-        <li>Количество разных — множество, частота каждого — словарь.</li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                <Notation>{"set(items)"}</Notation> оставляет различные
+                значения; порядка и индексов нет.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"{}"}</Notation> — пустой словарь, пустое множество —{" "}
+                <Notation>{"set()"}</Notation>.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"|"}</Notation>, <Notation>{"&"}</Notation>,{" "}
+                <Notation>{"-"}</Notation>, <Notation>{"^"}</Notation> —
+                объединение, пересечение, разность, «ровно в одном».
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"add"}</Notation>, <Notation>{"update"}</Notation>,{" "}
+                <Notation>{"discard"}</Notation> меняют множество;{" "}
+                <Notation>{"remove"}</Notation> отсутствующего даёт{" "}
+                <Notation>{"KeyError"}</Notation>.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>Количество разных — множество, частота каждого — словарь.</>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

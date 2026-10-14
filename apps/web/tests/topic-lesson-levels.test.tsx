@@ -131,7 +131,7 @@ describe("subtopic levels and self-checks (Change 171)", () => {
     ).toBeTruthy();
   });
 
-  it("ends a subtopic with its own self-check after the practice", () => {
+  it("puts the subtopic's own self-check before its practice", () => {
     const { container } = render(
       <TopicSubtopicPage
         lesson={lesson}
@@ -142,7 +142,7 @@ describe("subtopic levels and self-checks (Change 171)", () => {
     const practice = container.querySelector("#practice")!;
     const selfCheck = container.querySelector("#self-check")!;
     expect(
-      practice.compareDocumentPosition(selfCheck) &
+      selfCheck.compareDocumentPosition(practice) &
         Node.DOCUMENT_POSITION_FOLLOWING,
     ).toBeTruthy();
     expect(
@@ -153,7 +153,7 @@ describe("subtopic levels and self-checks (Change 171)", () => {
     expect(selfCheck.textContent).toContain("числа 49 должна включать 7");
     expect(
       screen.getByRole("navigation", { name: "На этой странице" }).textContent,
-    ).toContain("Практика | Проверьте себя");
+    ).toContain("Проверьте себя | Практика");
   });
 
   it("has no subtopic self-check where none is authored", () => {

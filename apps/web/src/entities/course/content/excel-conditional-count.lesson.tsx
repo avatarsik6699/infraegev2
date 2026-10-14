@@ -5,6 +5,7 @@ import { Typography } from "~/shared/components/typography";
 import {
   FormulaBlock,
   LessonStepper,
+  LessonSummary,
   SheetBlock,
 } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
@@ -452,31 +453,54 @@ export const excelConditionalCountLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          <Notation>{"СЧЁТЕСЛИ(диапазон;критерий)"}</Notation>: число, текст,
-          сравнение в кавычках <Notation>{'">5"'}</Notation>, шаблон{" "}
-          <Notation>{'"К*"'}</Notation>.
-        </li>
-        <li>
-          Критерий с порогом из ячейки собирают знаком &:{" "}
-          <Notation>{'">"&D2'}</Notation>.
-        </li>
-        <li>
-          <Notation>{"СЧЁТЕСЛИМН"}</Notation> и{" "}
-          <Notation>{"СУММЕСЛИМН"}</Notation> — <Notation>{"И"}</Notation> между
-          условиями одной строки; у <Notation>{"СУММЕСЛИМН"}</Notation> диапазон
-          суммы первый.
-        </li>
-        <li>
-          Частоты в строке — <Notation>{"=СЧЁТЕСЛИ($A2:$F2;A2)"}</Notation>,
-          скопированная вправо и вниз.
-        </li>
-        <li>
-          По полосе частот <Notation>{"СУММЕСЛИ"}</Notation> отделяет
-          повторяющиеся элементы от одиночных.
-        </li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                <Notation>{"СЧЁТЕСЛИ(диапазон;критерий)"}</Notation>: число,
+                текст, сравнение в кавычках <Notation>{'">5"'}</Notation>,
+                шаблон <Notation>{'"К*"'}</Notation>.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Критерий с порогом из ячейки собирают знаком &:{" "}
+                <Notation>{'">"&D2'}</Notation>.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"СЧЁТЕСЛИМН"}</Notation> и{" "}
+                <Notation>{"СУММЕСЛИМН"}</Notation> — <Notation>{"И"}</Notation>{" "}
+                между условиями одной строки; у{" "}
+                <Notation>{"СУММЕСЛИМН"}</Notation> диапазон суммы первый.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Частоты в строке —{" "}
+                <Notation>{"=СЧЁТЕСЛИ($A2:$F2;A2)"}</Notation>, скопированная
+                вправо и вниз.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                По полосе частот <Notation>{"СУММЕСЛИ"}</Notation> отделяет
+                повторяющиеся элементы от одиночных.
+              </>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

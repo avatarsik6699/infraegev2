@@ -26,7 +26,7 @@ FAILURE_TAIL_LINES = 40
 
 # Python outside apps/api: Pyright covers scripts/pyrightconfig.json "include"; Ruff covers
 # that list plus code that needs Pillow at run time (outside the API environment).
-RUFF_ONLY_PYTHON = ("scripts/tests", "scripts/lesson_media", "scripts/mascot")
+RUFF_ONLY_PYTHON = ("scripts/tests", "scripts/mascot")
 
 
 class GateError(RuntimeError):
@@ -247,14 +247,6 @@ RULES: tuple[Rule, ...] = (
         ("scripts/*.py", "scripts/pyrightconfig.json", "scripts/ruff.toml"),
         ("host-ruff", "host-python"),
         ("matching scripts/tests/*_test.py: python3 -m unittest scripts.tests.<module>",),
-    ),
-    Rule(
-        ("scripts/lesson_media/*",),
-        reminders=(
-            "engine: uv run --no-project --with pillow python -m unittest discover "
-            "-s scripts/tests -p lesson_media_engine_test.py",
-        ),
-        exclude=MARKDOWN,
     ),
     Rule(("*.sh",), ("shell-lint",), ("matching scripts/tests/*.test.sh contract",)),
     Rule(

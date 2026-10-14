@@ -3,7 +3,10 @@
 import { CodeBlock } from "~/shared/components/code-block";
 import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
-import { CodeRunner } from "~/shared/components/learning-content";
+import {
+  CodeRunner,
+  LessonSummary,
+} from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { pythonFunctionsLessonPublication } from "./course-publication.mjs";
 import { lessonMedia } from "./python-functions.media";
@@ -290,29 +293,52 @@ export const pythonFunctionsLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          <Notation>{"def имя(параметры):"}</Notation> создаёт функцию; тело
-          выполняется только при вызове.
-        </li>
-        <li>
-          <Notation>{"return"}</Notation> отдаёт значение и завершает вызов; без
-          него функция возвращает <Notation>{"None"}</Notation>.
-        </li>
-        <li>
-          Присваивание внутри функции создаёт локальное имя; внешнее не
-          меняется.
-        </li>
-        <li>
-          Чтение имени до его присваивания в той же функции —{" "}
-          <Notation>{"UnboundLocalError"}</Notation>.
-        </li>
-        <li>
-          Параметр — ещё одно имя переданного объекта:{" "}
-          <Notation>{"append"}</Notation> меняет внешний список, присваивание
-          параметру — нет.
-        </li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                <Notation>{"def имя(параметры):"}</Notation> создаёт функцию;
+                тело выполняется только при вызове.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"return"}</Notation> отдаёт значение и завершает
+                вызов; без него функция возвращает <Notation>{"None"}</Notation>
+                .
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Присваивание внутри функции создаёт локальное имя; внешнее не
+                меняется.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Чтение имени до его присваивания в той же функции —{" "}
+                <Notation>{"UnboundLocalError"}</Notation>.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Параметр — ещё одно имя переданного объекта:{" "}
+                <Notation>{"append"}</Notation> меняет внешний список,
+                присваивание параметру — нет.
+              </>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

@@ -1,24 +1,57 @@
+/* The topic head (Change 184 F6): a page head inside the reading column — the
+   engineering grid fading out behind it and a hairline under it — so it reads
+   as the head of the whole topic, apart from the subtopic below. */
 .root {
+  position: relative;
+  isolation: isolate;
   display: grid;
-  gap: var(--space-1-5);
+  gap: var(--space-1);
+  padding-block: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--color-rule);
+}
+
+.root::before {
+  position: absolute;
+  z-index: -1;
+  inset: calc(-1 * var(--space-2)) calc(-1 * var(--space-2)) 0;
+  background-image:
+    linear-gradient(90deg, var(--grid-line-major) 1px, transparent 1px),
+    linear-gradient(var(--grid-line-major) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line-minor) 1px, transparent 1px),
+    linear-gradient(var(--grid-line-minor) 1px, transparent 1px);
+  background-position: -1px -1px;
+  background-size:
+    80px 48px,
+    80px 48px,
+    16px 12px,
+    16px 12px;
+  content: "";
+  mask-image: var(--grid-fade);
+  pointer-events: none;
+}
+
+.kicker {
+  margin: 0;
+  color: var(--color-muted);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 600;
 }
 
 .title {
-  max-width: 28ch;
+  max-width: 22ch;
   margin: 0;
 }
 
 .lead {
   max-width: var(--measure-reading);
   margin: 0;
-  color: var(--color-text-soft);
-  font-size: var(--text-base);
-  line-height: 1.6;
 }
 
 .studyMeta {
-  margin: 0;
-  color: var(--color-text-soft);
+  margin: var(--space-0-5) 0 0;
+  color: var(--color-muted);
   font-family: var(--font-ui);
   font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
 }

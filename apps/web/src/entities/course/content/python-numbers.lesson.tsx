@@ -5,6 +5,7 @@ import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
 import {
   LessonDiagram,
+  LessonSummary,
   ProofDisclosure,
   RemainderExplorer,
 } from "~/shared/components/learning-content";
@@ -401,33 +402,55 @@ export const pythonNumbersLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          <Notation>{"//"}</Notation> — частное с округлением вниз,{" "}
-          <Notation>{"%"}</Notation> — остаток; вместе{" "}
-          <Notation>{"a = (a // b) * b + a % b"}</Notation>.
-        </li>
-        <li>
-          <Notation>{"//"}</Notation> округляет вниз,{" "}
-          <Notation>{"int(a / b)"}</Notation> — к нулю: при отрицательном
-          частном не нацело ответы расходятся; остаток при положительном
-          делителе неотрицателен.
-        </li>
-        <li>
-          Степень <Notation>{"**"}</Notation> группируется справа, а{" "}
-          <Notation>{"-3 ** 2"}</Notation> равно −9.
-        </li>
-        <li>
-          Целые точные, <Notation>{"float"}</Notation> приближённые:{" "}
-          <Notation>{"0.1 + 0.2"}</Notation> не равно{" "}
-          <Notation>{"0.3"}</Notation>.
-        </li>
-        <li>
-          <Notation>{"n % 10"}</Notation> — последняя цифра,{" "}
-          <Notation>{"n // 10"}</Notation> — число без неё; делимость — нулевой
-          остаток.
-        </li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                <Notation>{"//"}</Notation> — частное с округлением вниз,{" "}
+                <Notation>{"%"}</Notation> — остаток; вместе{" "}
+                <Notation>{"a = (a // b) * b + a % b"}</Notation>.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"//"}</Notation> округляет вниз,{" "}
+                <Notation>{"int(a / b)"}</Notation> — к нулю: при отрицательном
+                частном не нацело ответы расходятся; остаток при положительном
+                делителе неотрицателен.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Степень <Notation>{"**"}</Notation> группируется справа, а{" "}
+                <Notation>{"-3 ** 2"}</Notation> равно −9.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Целые точные, <Notation>{"float"}</Notation> приближённые:{" "}
+                <Notation>{"0.1 + 0.2"}</Notation> не равно{" "}
+                <Notation>{"0.3"}</Notation>.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"n % 10"}</Notation> — последняя цифра,{" "}
+                <Notation>{"n // 10"}</Notation> — число без неё; делимость —
+                нулевой остаток.
+              </>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

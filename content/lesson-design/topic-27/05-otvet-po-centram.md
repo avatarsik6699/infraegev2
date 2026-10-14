@@ -178,6 +178,8 @@ print(int(-2.9), floor(-2.9))
 -2 -3
 ```
 
+На числовой оси разница видна наглядно:
+
 <figure class="plate-figure">
 %%cl_trunc_line()%%
 <figcaption>Для 2,9 int и floor совпадают — обе дают 2, round даёт 3. Для −2,9 int идёт к нулю (−2), а floor и round — к −3.</figcaption>

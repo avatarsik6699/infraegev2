@@ -5,6 +5,7 @@ import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
 import {
   CodeRunner,
+  LessonSummary,
   ProofDisclosure,
 } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
@@ -386,30 +387,53 @@ export const pythonDictionariesLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          <Notation>{"d[key]"}</Notation> читает значение, отсутствующий ключ
-          даёт <Notation>{"KeyError"}</Notation>;{" "}
-          <Notation>{"d.get(key, default)"}</Notation> безопасен.
-        </li>
-        <li>
-          Присваивание по существующему ключу заменяет значение; ключи
-          уникальны.
-        </li>
-        <li>
-          Ключи хешируемые: строки, числа, кортежи из них; список ключом быть не
-          может.
-        </li>
-        <li>
-          <Notation>{"in"}</Notation> проверяет ключи;{" "}
-          <Notation>{".items()"}</Notation> даёт пары,{" "}
-          <Notation>{".values()"}</Notation> — значения; порядок — порядок
-          добавления.
-        </li>
-        <li>
-          Частоты: <Notation>{"counts[x] = counts.get(x, 0) + 1"}</Notation>.
-        </li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                <Notation>{"d[key]"}</Notation> читает значение, отсутствующий
+                ключ даёт <Notation>{"KeyError"}</Notation>;{" "}
+                <Notation>{"d.get(key, default)"}</Notation> безопасен.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Присваивание по существующему ключу заменяет значение; ключи
+                уникальны.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Ключи хешируемые: строки, числа, кортежи из них; список ключом
+                быть не может.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"in"}</Notation> проверяет ключи;{" "}
+                <Notation>{".items()"}</Notation> даёт пары,{" "}
+                <Notation>{".values()"}</Notation> — значения; порядок — порядок
+                добавления.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Частоты:{" "}
+                <Notation>{"counts[x] = counts.get(x, 0) + 1"}</Notation>.
+              </>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

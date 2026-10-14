@@ -15,64 +15,40 @@ describe("lesson route data", () => {
     expect(tasks.map((task) => task.id)).toEqual(
       migrationTaskIds(rekursiyaLesson.id),
     );
-    expect(tasks.map((task) => task.difficultyLabel)).toEqual([
+    // Change 184: the lesson rebuilt from the stand; its final page tasks
+    // (task-16-8-…) have no theory link, as on every pipeline lesson.
+    expect(tasks).toHaveLength(57);
+    expect(tasks.slice(0, 4).map((task) => task.difficultyLabel)).toEqual([
       "Базовая",
-      "Средняя",
-      "Средняя",
-      "Высокая",
-      "Средняя",
       "Базовая",
-      "Средняя",
-      "Высокая",
-      "Средняя",
-      "Высокая",
-      "Высокая",
-      "Высокая",
-      "Высокая",
-      "Высокая",
+      "Базовая",
+      "Базовая",
     ]);
     for (const task of tasks) {
       expect(task.title).not.toBe("");
       expect(task.statement).not.toBe("");
-      expect(task.theoryLinks.length).toBeGreaterThan(0);
-      expect(task.solution.length).toBeGreaterThan(0);
+      expect(task.theoryLinks.length > 0).toBe(
+        !task.id.startsWith("task-16-8-"),
+      );
+      expect(task.solution.some((block) => block.type === "code")).toBe(true);
       expect(task).not.toHaveProperty("answer_variants");
       expect(task).not.toHaveProperty("explanation");
     }
-    expect(tasks[1]?.solution.some((block) => block.type === "code")).toBe(
-      true,
-    );
-    expect(tasks[3]?.solution.some((block) => block.type === "code")).toBe(
-      true,
-    );
   });
 
-  it("loads five task-5 projections in order without checker secrets", async () => {
-    const tasks = await loadPracticeTasks(
-      migrationTaskIds(preobrazovanieZapiseyChiselLesson.id),
-    );
+  it("loads the task-5 lesson's 40 tasks in order (Change 184)", async () => {
+    const ids = migrationTaskIds(preobrazovanieZapiseyChiselLesson.id);
+    const tasks = await loadPracticeTasks(ids);
 
-    expect(tasks.map((task) => task.id)).toEqual(
-      migrationTaskIds(preobrazovanieZapiseyChiselLesson.id),
-    );
-    expect(tasks.map((task) => task.difficultyLabel)).toEqual([
-      "Базовая",
-      "Средняя",
-      "Средняя",
-      "Высокая",
-      "Высокая",
-    ]);
+    expect(tasks.map((task) => task.id)).toEqual(ids);
+    expect(tasks).toHaveLength(40);
     for (const task of tasks) {
-      expect(task.title).not.toBe("");
-      expect(task.statement).not.toBe("");
-      expect(task.theoryLinks.length).toBeGreaterThan(0);
-      expect(task.solution.length).toBeGreaterThan(0);
+      expect(task.theoryLinks.length > 0).toBe(
+        !task.id.startsWith("task-5-7-"),
+      );
+      expect(task.solution.some((block) => block.type === "code")).toBe(true);
       expect(task).not.toHaveProperty("answer_variants");
       expect(task).not.toHaveProperty("numeric_tolerance");
-      expect(task).not.toHaveProperty("explanation");
     }
-    expect(tasks[4]?.solution.some((block) => block.type === "code")).toBe(
-      true,
-    );
   });
 });

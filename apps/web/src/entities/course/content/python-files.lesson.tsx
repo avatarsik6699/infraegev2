@@ -5,6 +5,7 @@ import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
 import {
   LessonStepper,
+  LessonSummary,
   ProofDisclosure,
 } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
@@ -558,27 +559,47 @@ export const pythonFilesLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          <Notation>{'with open(путь, encoding="utf-8") as file:'}</Notation>{" "}
-          открывает файл и закрывает его после блока.
-        </li>
-        <li>
-          <Notation>{"read()"}</Notation> — весь текст сразу,{" "}
-          <Notation>{"for line in file"}</Notation> — по строке,{" "}
-          <Notation>{"readline()"}</Notation> — одна строка.
-        </li>
-        <li>Заголовок читают отдельно; остальные строки — данные.</li>
-        <li>
-          <Notation>{"w"}</Notation> очищает файл, <Notation>{"a"}</Notation>{" "}
-          дописывает; <Notation>{"write"}</Notation> не добавляет перевод
-          строки.
-        </li>
-        <li>
-          CSV читают модулем <Notation>{"csv"}</Notation>, вложенные записи
-          сохраняют в JSON.
-        </li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                <Notation>
+                  {'with open(путь, encoding="utf-8") as file:'}
+                </Notation>{" "}
+                открывает файл и закрывает его после блока.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"read()"}</Notation> — весь текст сразу,{" "}
+                <Notation>{"for line in file"}</Notation> — по строке,{" "}
+                <Notation>{"readline()"}</Notation> — одна строка.
+              </>
+            ),
+          },
+          { note: <>Заголовок читают отдельно; остальные строки — данные.</> },
+          {
+            note: (
+              <>
+                <Notation>{"w"}</Notation> очищает файл,{" "}
+                <Notation>{"a"}</Notation> дописывает;{" "}
+                <Notation>{"write"}</Notation> не добавляет перевод строки.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                CSV читают модулем <Notation>{"csv"}</Notation>, вложенные
+                записи сохраняют в JSON.
+              </>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

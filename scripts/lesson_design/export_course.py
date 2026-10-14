@@ -43,161 +43,29 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[1]
 sys.path.insert(0, str(HERE))
-from excel_figures import fill_try  # noqa: E402
-from export_lesson import Converter, js, plain, split_steps, task_inventory  # noqa: E402
-from export_media import figure_entries, manifest_text, parse_call, prettier  # noqa: E402
-from runblock import IO, file_name, record  # noqa: E402
-from sheetblock import BLOCK as SHEET_BLOCK  # noqa: E402
-from sheetblock import parse_block, site_data  # noqa: E402
+from export_lesson import (  # noqa: E402
+    LEVELS,
+    Converter,
+    camel,
+    js,
+    split_steps,
+    task_inventory,
+)
+from export_media import figure_entries, manifest_text, prettier  # noqa: E402
 from terms import EXCEL_TERMS  # noqa: E402
 
 OUT = REPO / "apps/web/src/entities/course/content"
 TASK_BLOCK = "**Чтобы проверить понимание"
 SUMMARY = "**Итого.**"
-CODE_GROUP = re.compile(
-    r"^```(?P<lang>[\w.-]+)(?P<run> run)?(?: (?P<name>[\w-]+\.\w+))?\n(?P<code>.*?)^```\n"
-    r"(?P<io>(?:\n*^```(?:output|console|error|input)\n.*?^```\n)*)"
-    r"(?:\n*^```steps\n(?P<notes>.*?)^```\n)?",
-    re.M | re.S,
-)
-IO_BLOCK = re.compile(r"```(output|console|error|input)\n(.*?)```", re.S)
-LEVELS = {"основной": "core", "дополнительный": "advanced"}
-HEAD = {"shell": "команда", "text": "текст"}
 STAND = REPO / "content/lesson-design"
 
 
-def camel(text: str) -> str:
-    head, *rest = re.split(r"[-_]", text)
-    return head + "".join(part[:1].upper() + part[1:] for part in rest)
-
-
 class CourseConverter(Converter):
-    """Converter with the course's code groups and sandboxes."""
+    """Converter with the course's code groups: other Python fences as in a terminal."""
 
     def __init__(self, media_known: set[str]):
         super().__init__(media_known, {}, [])
-        self.codes: list[str] = []
-        self.runs: list[str] = []  # media entries of runnable blocks and sheets
-        self.sheet_labels: dict[str, str] = {}
-
-    def figure_call(self, name: str, args_src: str, caption, context: str) -> str:
-        if name == "code":
-            return self.codes[int(args_src)].replace("__LABEL__", js(code_label(context)))
-        if name == "sheet":
-            key = f"sheet{args_src}"
-            self.imports.add("SheetBlock")
-            return f"<SheetBlock {{...lessonMedia.{key}}} label={{{js(self.sheet_labels[key])}}} />"
-        if name == "fill_try":
-            args, _ = parse_call(name, args_src)
-            defaults = fill_try.__defaults__ or ()
-            formula, origin, target = (*args, *defaults[len(args) :])[:3]
-            self.imports.add("FillSandbox")
-            return (
-                f"<FillSandbox defaultFormula={{{js(formula)}}} origin={js(origin)} "
-                f"defaultTarget={js(target)} />"
-            )
-        if name == "range_try":
-            args, kwargs = parse_call(name, args_src)
-            mode, start, stop, step, text = (*args, None, None, None, None, None)[:5]
-            mode = kwargs.get("mode", mode or "range")
-            start = kwargs.get("start", 2 if start is None else start)
-            stop = kwargs.get("stop", 9 if stop is None else stop)
-            step = kwargs.get("step", 3 if step is None else step)
-            text = kwargs.get("text", text or "ABCDEFG")
-            self.imports.add("RangeSandbox")
-            extra = f" text={js(text)}" if mode == "slice" else ""
-            return (
-                f"<RangeSandbox mode={js(mode)} start={{{json.dumps(start)}}} "
-                f"stop={{{json.dumps(stop)}}} step={{{step}}}{extra} />"
-            )
-        return super().figure_call(name, args_src, caption, context)
-
-    def code_group(self, m: re.Match) -> str:
-        """One code fence with its output blocks → a placeholder line."""
-        lang, code, name = m.group("lang"), m.group("code").rstrip("\n"), m.group("name")
-        io_text = m.group("io") or ""
-        if lang == "python":
-            parts, error = [], None
-            for kind, body in IO_BLOCK.findall(io_text):
-                body = body.rstrip("\n")
-                if kind == "error":
-                    error = body
-                elif kind == "input":
-                    parts.append("\n".join(f"⟪{line}⟫" for line in body.split("\n")))
-                else:
-                    parts.append(body)
-            output = "\n".join(parts)
-            shown = name or file_name(code)
-            if m.group("run"):
-                key = "run" + camel(Path(shown).stem)[:1].upper() + camel(Path(shown).stem)[1:]
-                steps = record(code + "\n", dict(IO.findall(io_text)), m.group("notes") or "")
-                entry = {"kind": "run", "code": code, "fileName": shown, "output": output}
-                if error is not None:
-                    entry["error"] = error
-                entry["steps"] = steps
-                self.runs.append(f"  {key}: " + json.dumps(entry, ensure_ascii=False) + ",")
-                self.media_known.add(key)
-                self.imports.add("CodeRunner")
-                jsx = f"<CodeRunner {{...lessonMedia.{key}}} label={{__LABEL__}} />"
-            else:
-                extra = ""
-                if output or error is not None:
-                    extra += ' outputLayout="lines"'
-                if output:
-                    extra += f" output={{{js(output)}}}"
-                if error is not None:
-                    extra += f" error={{{js(error)}}}"
-                self.imports.add("CodeBlock")
-                jsx = (
-                    f'<CodeBlock code={{{js(code)}}} label={{__LABEL__}} language="python" '
-                    f"fileName={js(shown)} showLineNumbers={{false}}{extra} />"
-                )
-        elif lang.startswith("excel"):
-            # a formula of the Excel course: the sheet's formula bar (F9), not code
-            lines = []
-            for raw in code.split("\n"):
-                at = re.match(r"^([A-Z]{1,3}\d+):\s*(?==)", raw)
-                cell = {"cell": at.group(1)} if at else {}
-                lines.append({**cell, "formula": raw[at.end() :] if at else raw})
-            self.imports.add("FormulaBlock")
-            label = "Шаблон формулы" if lang == "excel-template" else "Формула"
-            jsx = (
-                f"<FormulaBlock lines={{{json.dumps(lines, ensure_ascii=False)}}} "
-                f"label={js(label)} />"
-            )
-        else:
-            self.imports.add("CodeBlock")
-            head = lang if "." in lang else HEAD.get(lang, str(lang))
-            label = f"Строки файла {lang}" if "." in lang else f"Пример: {head}"
-            jsx = (
-                f'<CodeBlock code={{{js(code)}}} label={{{js(label)}}} language="text" '
-                f"fileName={js(head)} showLineNumbers={{false}} />"
-            )
-        self.codes.append(jsx)
-        return f"%%code({len(self.codes) - 1})%%\n"
-
-    def prepare(self, md: str) -> str:
-        md = md.replace("```excel шаблон\n", "```excel-template\n")
-        md = SHEET_BLOCK.sub(self.sheet, md)
-        return CODE_GROUP.sub(self.code_group, md)
-
-    def sheet(self, m: re.Match) -> str:
-        """A live sheet → its data in the media manifest and a placeholder line."""
-        block = parse_block(m.group(1), m.group(2))
-        key = f"sheet{len(self.sheet_labels) + 1}"
-        self.sheet_labels[key] = f"Лист «{block.name}»"
-        self.runs.append(f"  {key}: " + json.dumps(site_data(block), ensure_ascii=False) + ",")
-        self.media_known.add(key)
-        return f"%%sheet({key[5:]})%%\n"
-
-
-def code_label(context: str) -> str:
-    """The accessible name of a code block: the paragraph that introduces it."""
-    text = plain(context).rstrip(":.").strip()
-    if 4 <= len(text) <= 90:
-        return text
-    last = re.split(r"(?<=[.!?])\s+", text)[-1].rstrip(":.").strip()
-    return last if 4 <= len(last) <= 90 else "Программа на Python"
+        self.course = True
 
 
 def task_text(text: str) -> str:
@@ -216,6 +84,7 @@ def lesson_source(course_dir: Path, lesson: dict, bank: dict[str, str]) -> tuple
     steps = split_steps(converter.prepare(md))
     labels = site.get("navLabels", {})
     theory, result_parts, checkpoint = [], [], []
+    summary = ""
     after_tasks = False
     for index, step in enumerate(steps):
         if index == 0:
@@ -233,7 +102,7 @@ def lesson_source(course_dir: Path, lesson: dict, bank: dict[str, str]) -> tuple
             after_tasks = True
             continue
         if step.startswith(SUMMARY):
-            result_parts.insert(0, step[len(SUMMARY) :].strip())
+            summary = step[len(SUMMARY) :].strip()
             continue
         if after_tasks:
             result_parts.append(step)
@@ -250,7 +119,13 @@ def lesson_source(course_dir: Path, lesson: dict, bank: dict[str, str]) -> tuple
         + f"      explanation: (\n{converter.fragment(body)}\n      ),\n    }},"
         for a, label, body in theory
     ]
-    result = converter.fragment("\n\n".join(result_parts))
+    # «Итого» first, its list as LessonSummary (Change 184), then the rest
+    converter.summary = True
+    summary_blocks = converter.blocks(summary) if summary else []
+    converter.summary = False
+    result = (
+        "<>\n" + "\n".join(summary_blocks + converter.blocks("\n\n".join(result_parts))) + "\n</>"
+    )
     check = "".join(
         f"    {{ id: {js(i)}, prompt: {converter.fragment(q)}, reveal: {converter.fragment(a)} }},\n"
         for i, q, a in checkpoint

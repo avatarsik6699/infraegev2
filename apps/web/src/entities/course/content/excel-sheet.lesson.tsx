@@ -4,6 +4,7 @@ import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
 import {
   LessonDiagram,
+  LessonSummary,
   SheetBlock,
 } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
@@ -215,24 +216,42 @@ export const excelSheetLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          Книга состоит из листов, лист — из ячеек на пересечении строк и
-          столбцов.
-        </li>
-        <li>
-          Адрес — буква столбца и номер строки: <Notation>{"B3"}</Notation>;
-          буквы латинские.
-        </li>
-        <li>
-          Диапазон <Notation>{"A2:D6"}</Notation> включает обе границы: строк 6
-          − 2 + 1 = 5, ячеек 5 × 4 = 20.
-        </li>
-        <li>
-          В списке строка — запись, столбец — поле; в таблице-поле положение
-          ячейки само несёт смысл.
-        </li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                Книга состоит из листов, лист — из ячеек на пересечении строк и
+                столбцов.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Адрес — буква столбца и номер строки:{" "}
+                <Notation>{"B3"}</Notation>; буквы латинские.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Диапазон <Notation>{"A2:D6"}</Notation> включает обе границы:
+                строк 6 − 2 + 1 = 5, ячеек 5 × 4 = 20.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                В списке строка — запись, столбец — поле; в таблице-поле
+                положение ячейки само несёт смысл.
+              </>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

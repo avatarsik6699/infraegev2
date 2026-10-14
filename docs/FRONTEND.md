@@ -127,16 +127,10 @@ reader of existing Python basics at their point of use and link to the full cour
 
 Lesson media:
 
-- `LessonVideo` (SPEC §2.3) has WebM and MP4, a poster, reserved dimensions and one caption. It
-  follows the paragraph it illustrates, never a code block or another block. No `autoplay`
-  attribute: without scripting only the poster shows. With scripting it starts from the beginning
-  when at least half visible (`useInViewport`) and pauses off-screen; a learner's pause is kept.
-  Controls are one play/pause button and a native range timeline; clicking the picture toggles,
-  scrubbing does not pause, controls are hidden without scripting, and reduced motion shows the
-  poster until the button starts it. Video files are served by Nginx (Range/206), never by Node.
-- `LessonFigure` is a WebP with reserved size, lazy loading, `alt` and one caption, placed after the
-  paragraph it illustrates. About one figure per three sections and at least two blocks between a
-  figure and a video; the contract test `lesson-media-placement` enforces order and distance.
+- Lesson figures are code-built SVG from the lesson manifest (`LessonDiagram`, `LessonStepper`),
+  placed after the paragraph or list they illustrate (contract test `lesson-media-placement`). The
+  raster `LessonVideo`/`LessonFigure`, their Pillow engine and the Nginx `/lesson-media` route were
+  removed with the old recursion lesson (Change 184).
   `LearningVisualFrame` remains only for practice task content.
 - `CodeBlock` shows line numbers by default (`showLineNumbers={false}` opts out) in a gutter that
   is not selected or copied; long blocks collapse behind a "show all code" button and expand
@@ -171,7 +165,12 @@ Lesson media:
   manifest (kind `sheet`); values are computed by `shared/lib/sheet-eval`, a port of the stand's
   evaluator that must match `tests/fixtures/sheet-cases.json` cell by cell. Frame colours are the
   `--color-sheet-ref-1…5` tokens. SSR and no-JS show the values, every sheet with its name and
-  the formula list; the grid scrolls inside the block on a narrow screen.
+  the formula list; the grid scrolls inside the block on a narrow screen. Walls of a field
+  (topic 18, Change 184; `walls` of a sheet part, sides `trbl` per cell) are inset shadows in
+  `--color-text`, so they never shift the grid or meet the frames.
+- `PythonTerm` in topic lessons explains a Python or an Excel basic (`course` of the generated
+  `python-terms.tsx` entry, Change 184): «Курс Python: …» / «Курс Excel: …» and a link to that
+  course's lesson.
 - `FillSandbox` copies a formula from its cell to the one the learner names with the shift rule of
   `sheet-eval` (`shiftFormula`), marks the moved parts of every address and says when an address
   leaves the sheet (`#ССЫЛКА!`); without scripting it shows the lesson's worked example.

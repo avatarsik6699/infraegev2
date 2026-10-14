@@ -21,7 +21,16 @@ export const preobrazovanieZapiseyChiselLessonPublication: Readonly<{
   routeSlug: "5-preobrazovanie-zapisey-chisel";
   taskNumbers: readonly [5];
   title: "Преобразование записей чисел";
-  summary: "Как перевести число в заданную систему, изменить запись по алгоритму и безопасно найти исходное число или результат.";
+  summary: "Число и его запись: перевод делением, дописывание и замена цифр, сумма цифр, поиск входа или результата с обоснованными границами перебора.";
+  status: "published";
+}>;
+
+export const spreadsheetsLessonPublication: Readonly<{
+  id: "spreadsheets";
+  routeSlug: "9-obrabotka-tablicy-chisel";
+  taskNumbers: readonly [9];
+  title: "Обработка таблицы чисел";
+  summary: string;
   status: "published";
 }>;
 
@@ -30,7 +39,7 @@ export const numberSequencesLessonPublication: Readonly<{
   routeSlug: "17-chislovye-posledovatelnosti";
   taskNumbers: readonly [17];
   title: "Числовые последовательности";
-  summary: "Как читать числовые данные и находить отдельные элементы, соседние пары и тройки по условиям задания 17.";
+  summary: "Файл как список чисел и условие как проверки: цифры и знак, соседние пары и тройки, порог по всей последовательности, величина проверки и величина ответа.";
   status: "published";
 }>;
 
@@ -48,7 +57,7 @@ export const stringProcessingLessonPublication: Readonly<{
   routeSlug: "24-obrabotka-simvolnyh-strok";
   taskNumbers: readonly [24];
   title: "Обработка символьных строк";
-  summary: "Как находить подходящие непрерывные фрагменты строки и проверять, что запись арифметического выражения устроена правильно.";
+  summary: "Фрагменты строки: текущая длина цепочки, образцы и частоты, скользящее окно, позиции и границы, корректные выражения по шаблону.";
   status: "published";
 }>;
 
@@ -75,6 +84,87 @@ export const dataAnalysisLessonPublication: Readonly<{
   routeSlug: "27-analiz-dannyh-i-klasterizatsiya";
   taskNumbers: readonly [27];
   title: "Анализ данных: кластеризация";
+  summary: string;
+  status: "published";
+}>;
+
+export const spreadsheetOptimizationLessonPublication: Readonly<{
+  id: "spreadsheet-optimization";
+  routeSlug: "18-robot-sborshchik-monet";
+  taskNumbers: readonly [18];
+  title: "Робот-сборщик монет";
+  summary: string;
+  status: "published";
+}>;
+
+export const winningStrategyLessonPublication: Readonly<{
+  id: "winning-strategy";
+  routeSlug: "19-21-vyigryshnaya-strategiya";
+  taskNumbers: readonly [19, 20, 21];
+  title: "Выигрышная стратегия";
+  summary: string;
+  status: "published";
+}>;
+
+export const relationalDatabasesLessonPublication: Readonly<{
+  id: "relational-databases";
+  routeSlug: "3-svyazannye-tablicy";
+  taskNumbers: readonly [3];
+  title: "Связанные таблицы";
+  summary: string;
+  status: "published";
+}>;
+
+export const codingAndFanoLessonPublication: Readonly<{
+  id: "coding-and-fano";
+  routeSlug: "4-kodirovanie-i-uslovie-fano";
+  taskNumbers: readonly [4];
+  title: "Кодирование и условие Фано";
+  summary: string;
+  status: "published";
+}>;
+
+export const mediaCodingLessonPublication: Readonly<{
+  id: "media-coding";
+  routeSlug: "7-izobrazheniya-zvuk-tekst";
+  taskNumbers: readonly [7];
+  title: "Объём информации: изображения, звук, текст";
+  summary: string;
+  status: "published";
+}>;
+
+export const wordEnumerationLessonPublication: Readonly<{
+  id: "word-enumeration";
+  routeSlug: "8-perebor-slov";
+  taskNumbers: readonly [8];
+  title: "Перебор слов и системы счисления";
+  summary: string;
+  status: "published";
+}>;
+
+export const networksLessonPublication: Readonly<{
+  id: "networks";
+  routeSlug: "10-ip-adresa-i-maski";
+  taskNumbers: readonly [10];
+  title: "IP-адреса и маски";
+  summary: string;
+  status: "published";
+}>;
+
+export const informationAmountLessonPublication: Readonly<{
+  id: "information-amount";
+  routeSlug: "11-paroli-i-zapisi";
+  taskNumbers: readonly [11];
+  title: "Объём информации: пароли и записи";
+  summary: string;
+  status: "published";
+}>;
+
+export const numeralSystemsLessonPublication: Readonly<{
+  id: "numeral-systems";
+  routeSlug: "14-sistemy-schisleniya";
+  taskNumbers: readonly [14];
+  title: "Системы счисления: операции и неизвестные цифры";
   summary: string;
   status: "published";
 }>;

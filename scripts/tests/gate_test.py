@@ -124,7 +124,7 @@ class GateGroupsTest(unittest.TestCase):
         for path in paths:
             self.assertTrue((REPO / path).exists(), path)
         host_ruff = " ".join(core.GROUPS["host-ruff"].argv)
-        self.assertIn("../../scripts/lesson_media", host_ruff)
+        self.assertIn("../../scripts/mascot", host_ruff)
 
     def test_unsupported_resume_interface_is_rejected(self) -> None:
         completed = subprocess.run(

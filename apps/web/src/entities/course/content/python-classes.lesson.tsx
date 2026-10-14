@@ -3,6 +3,7 @@
 import { CodeBlock } from "~/shared/components/code-block";
 import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
+import { LessonSummary } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { pythonClassesLessonPublication } from "./course-publication.mjs";
 
@@ -420,29 +421,54 @@ export const pythonClassesLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          <Notation>{"class"}</Notation> описывает тип; вызов класса создаёт
-          экземпляр, <Notation>{"__init__"}</Notation> его настраивает.
-        </li>
-        <li>
-          <Notation>{"self"}</Notation> — экземпляр, для которого вызван метод;{" "}
-          <Notation>{"self.x"}</Notation> — атрибут экземпляра.
-        </li>
-        <li>
-          Изменяемый атрибут класса общий для всех экземпляров; свои данные
-          создают в <Notation>{"__init__"}</Notation>.
-        </li>
-        <li>
-          <Notation>{"@property"}</Notation> — вычисляемое свойство без скобок;
-          наследование уточняет поведение, композиция — «содержит».
-        </li>
-        <li>
-          <Notation>{"@dataclass"}</Notation> создаёт{" "}
-          <Notation>{"__init__"}</Notation>, <Notation>{"__repr__"}</Notation> и{" "}
-          <Notation>{"__eq__"}</Notation> по полям.
-        </li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                <Notation>{"class"}</Notation> описывает тип; вызов класса
+                создаёт экземпляр, <Notation>{"__init__"}</Notation> его
+                настраивает.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"self"}</Notation> — экземпляр, для которого вызван
+                метод; <Notation>{"self.x"}</Notation> — атрибут экземпляра.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Изменяемый атрибут класса общий для всех экземпляров; свои
+                данные создают в <Notation>{"__init__"}</Notation>.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"@property"}</Notation> — вычисляемое свойство без
+                скобок; наследование уточняет поведение, композиция —
+                «содержит».
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"@dataclass"}</Notation> создаёт{" "}
+                <Notation>{"__init__"}</Notation>,{" "}
+                <Notation>{"__repr__"}</Notation> и{" "}
+                <Notation>{"__eq__"}</Notation> по полям.
+              </>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

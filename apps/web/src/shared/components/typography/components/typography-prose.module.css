@@ -34,14 +34,18 @@
   letter-spacing: -0.01em;
 }
 
-/* A stated rule or task condition (lesson pipeline, Change 171): a quiet
-   side-surface plate, never a coloured bar. */
+/* A quoted formulation — a task condition, a question, a rule — read word for
+   word (Change 184 F7, replacing the Change 171 plate a learner took for an
+   unexplained box): set in from the text behind an ink rule, in medium weight,
+   as a textbook quotes; no fill and no colour. */
 .root blockquote {
   margin-inline: 0;
-  padding: var(--space-1-5) var(--space-2);
-  border: 1px solid var(--color-rule);
-  border-radius: var(--radius-surface);
-  background: var(--color-surface-side);
+  padding: 0.125rem 0 0.125rem var(--space-2);
+  border-inline-start: 3px solid var(--color-text);
+}
+
+.root blockquote > p {
+  font-weight: 500;
 }
 
 .root blockquote > :last-child {

@@ -47,10 +47,11 @@ export const TopicSubtopicPage: React.FC<TopicLessonPageTypes.SubtopicProps> = (
       id: concept.id,
       label: concept.navLabel,
     })),
-    ...(tasks.length ? [{ id: "practice", label: "Практика" }] : []),
+    // Change 184: reasoning first, then the tasks with a file
     ...(subtopic.checkpoint
       ? [{ id: "self-check", label: "Проверьте себя" }]
       : []),
+    ...(tasks.length ? [{ id: "practice", label: "Практика" }] : []),
   ];
   const advanced = subtopic.level === "advanced";
   const position = `Подтема ${String(subtopic.index + 1)} из ${String(subtopics.length)}`;
@@ -66,6 +67,7 @@ export const TopicSubtopicPage: React.FC<TopicLessonPageTypes.SubtopicProps> = (
           className={styles.intro}
           accessTier={props.lesson.accessTier}
           eyebrow={topicCatalog.formatTaskNumbers(props.lesson.taskNumbers)}
+          subtopicCount={subtopics.length}
           summary={props.lesson.summary}
           taskCount={props.practiceUnavailable ? undefined : props.tasks.length}
           title={props.lesson.title}
@@ -110,6 +112,18 @@ export const TopicSubtopicPage: React.FC<TopicLessonPageTypes.SubtopicProps> = (
         className={styles.theory}
       />
 
+      {subtopic.checkpoint ? (
+        // The subtopic's «объясни, почему» self-check, before its tasks:
+        // reasoning first, then Excel or code (Change 184).
+        <div id="self-check" className={styles.section}>
+          <Checkpoint
+            items={subtopic.checkpoint}
+            headingOrder={first ? 3 : 2}
+            headingClassName={styles.sectionTitle}
+          />
+        </div>
+      ) : null}
+
       {tasks.length ? (
         <section
           id="practice"
@@ -139,13 +153,6 @@ export const TopicSubtopicPage: React.FC<TopicLessonPageTypes.SubtopicProps> = (
             }
           />
         </section>
-      ) : null}
-
-      {subtopic.checkpoint ? (
-        // F4: the subtopic's own «объясни, почему» self-check, after its tasks.
-        <div id="self-check" className={styles.section}>
-          <Checkpoint items={subtopic.checkpoint} />
-        </div>
       ) : null}
 
       <TopicLessonPager

@@ -1,6 +1,14 @@
 /* Keycaps of a shortcut in lesson text: a hairline cap with a thicker bottom
    edge on the quiet surface, the data face — the stand's [[Ctrl+C]]. */
+/* The combination moves to the next line whole; it wraps between keys only
+   when it is wider than the column (enlarged text on a phone, Change 184). */
 .root {
+  display: inline-block;
+  max-width: 100%;
+}
+
+/* A key with its leading «+» never breaks. */
+.part {
   white-space: nowrap;
 }
 

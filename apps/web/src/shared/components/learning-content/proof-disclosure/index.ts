@@ -1,1 +1,5 @@
-export { ProofDisclosure } from "./proof-disclosure";
+export {
+  disclosureLabel,
+  disclosurePurpose,
+  ProofDisclosure,
+} from "./proof-disclosure";

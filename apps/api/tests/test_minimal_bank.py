@@ -27,6 +27,8 @@ pytestmark = pytest.mark.db
 
 ROOT = Path(__file__).resolve().parents[3]
 BANK = ROOT / "content/practice-bank"
+# Every task of the canonical bank; it grows as topic lessons move from the stand.
+BANK_TASKS = len(json.loads((BANK / "bank.json").read_bytes())["tasks"])
 IMAGE = (
     "postgres:18.6-alpine3.24@sha256:"
     "d3e1620b530c944afa6e887d22eb899824da68e19c52024bf98f5220c88a65b2"
@@ -246,7 +248,7 @@ def test_pagination_next_and_lesson_membership(database):
                     if material.status == "published" and expected:
                         result = await readers.lesson(session, material.kind, material.id)
                         assert [t.id for t in result.tasks] == [i for _, i in expected]
-                assert len(list(await session.scalars(select(TaskRecord.id)))) == 1021
+                assert len(list(await session.scalars(select(TaskRecord.id)))) == BANK_TASKS
         finally:
             await engine.dispose()
 
@@ -348,7 +350,7 @@ def test_validate_cli_checks_canonical_bank_without_database_or_legacy_json(tmp_
 
     result = validate()
     assert result.returncode == 0, result.stderr
-    assert json.loads(result.stdout)["tasks"] == 1021
+    assert json.loads(result.stdout)["tasks"] == BANK_TASKS
     task["task"]["theory_links"] = [
         {"label": "Теория", "section": "missing-section", "material_id": "python-first-program"}
     ]
@@ -555,7 +557,17 @@ def test_topic_summary_matches_published_lessons_and_excludes_hidden_tasks(datab
         assert {topic["id"] for topic in topics} == {
             "rekursiya",
             "preobrazovanie-zapisey-chisel",
+            "spreadsheets",
             "number-sequences",
+            "spreadsheet-optimization",
+            "winning-strategy",
+            "relational-databases",
+            "coding-and-fano",
+            "media-coding",
+            "word-enumeration",
+            "networks",
+            "information-amount",
+            "numeral-systems",
             "graph-analysis",
             "string-processing",
             "divisors-and-masks",
@@ -620,7 +632,17 @@ def test_topic_summary_matches_published_lessons_and_excludes_hidden_tasks(datab
                     in {
                         "rekursiya",
                         "preobrazovanie-zapisey-chisel",
+                        "spreadsheets",
                         "number-sequences",
+                        "spreadsheet-optimization",
+                        "winning-strategy",
+                        "relational-databases",
+                        "coding-and-fano",
+                        "media-coding",
+                        "word-enumeration",
+                        "networks",
+                        "information-amount",
+                        "numeral-systems",
                         "graph-analysis",
                         "string-processing",
                         "divisors-and-masks",
@@ -1726,7 +1748,7 @@ def test_recursion_lesson_tasks_check_answers_and_link_to_real_sections():
         for link in entry.task.lessons
         if link.material_id == "rekursiya"
     )
-    assert [position for position, _ in lesson_tasks] == list(range(14))
+    assert [position for position, _ in lesson_tasks] == list(range(57))
     for _, task in lesson_tasks:
         answer = task.checker.answer_variants[0]
         assert is_correct(task.checker, answer), task.id

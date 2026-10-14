@@ -5,6 +5,7 @@ import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
 import {
   LessonDiagram,
+  LessonSummary,
   MaskSandbox,
   VariantPicker,
 } from "~/shared/components/learning-content";
@@ -484,36 +485,59 @@ export const pythonNotationPatternsLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          <Notation>{"int(text, base)"}</Notation> — запись в число;{" "}
-          <Notation>{"bin"}</Notation>, <Notation>{"oct"}</Notation>,{" "}
-          <Notation>{"hex"}</Notation> — число в запись с префиксом,{" "}
-          <Notation>{'format(n, "08b")'}</Notation> — без префикса и с нулями.
-        </li>
-        <li>
-          <Notation>{"&"}</Notation>, <Notation>{"|"}</Notation>,{" "}
-          <Notation>{"^"}</Notation>, <Notation>{"<<"}</Notation>,{" "}
-          <Notation>{">>"}</Notation> работают с разрядами;{" "}
-          <Notation>{"bit_count"}</Notation> и{" "}
-          <Notation>{"bit_length"}</Notation> — единицы и длина записи.
-        </li>
-        <li>
-          <Notation>{"fnmatchcase(text, mask)"}</Notation>:{" "}
-          <Notation>{"?"}</Notation> — ровно один символ,{" "}
-          <Notation>{"*"}</Notation> — любая последовательность, в том числе
-          пустая.
-        </li>
-        <li>
-          В regex <Notation>{"*"}</Notation> — повторение предыдущего;{" "}
-          <Notation>{"fullmatch"}</Notation> проверяет всю строку.
-        </li>
-        <li>
-          <Notation>{"finditer"}</Notation> даёт совпадения с{" "}
-          <Notation>{"group"}</Notation>, <Notation>{"start"}</Notation> и{" "}
-          <Notation>{"end"}</Notation>.
-        </li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                <Notation>{"int(text, base)"}</Notation> — запись в число;{" "}
+                <Notation>{"bin"}</Notation>, <Notation>{"oct"}</Notation>,{" "}
+                <Notation>{"hex"}</Notation> — число в запись с префиксом,{" "}
+                <Notation>{'format(n, "08b")'}</Notation> — без префикса и с
+                нулями.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"&"}</Notation>, <Notation>{"|"}</Notation>,{" "}
+                <Notation>{"^"}</Notation>, <Notation>{"<<"}</Notation>,{" "}
+                <Notation>{">>"}</Notation> работают с разрядами;{" "}
+                <Notation>{"bit_count"}</Notation> и{" "}
+                <Notation>{"bit_length"}</Notation> — единицы и длина записи.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"fnmatchcase(text, mask)"}</Notation>:{" "}
+                <Notation>{"?"}</Notation> — ровно один символ,{" "}
+                <Notation>{"*"}</Notation> — любая последовательность, в том
+                числе пустая.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                В regex <Notation>{"*"}</Notation> — повторение предыдущего;{" "}
+                <Notation>{"fullmatch"}</Notation> проверяет всю строку.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"finditer"}</Notation> даёт совпадения с{" "}
+                <Notation>{"group"}</Notation>, <Notation>{"start"}</Notation> и{" "}
+                <Notation>{"end"}</Notation>.
+              </>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

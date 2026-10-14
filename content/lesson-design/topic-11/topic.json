@@ -70,5 +70,97 @@
       "kicker": "Задание 11 · где схема помогает понять материал",
       "lead": "Какие схемы, анимации и запускаемые блоки добавлены в подтемы и где их сознательно нет."
     }
-  ]
+  ],
+  "site": {
+    "id": "information-amount",
+    "route": "11-paroli-i-zapisi",
+    "steps": {
+      "01-parol-v-bajtah.md": [
+        ["kak-ustroena-tema-11", "Как устроена тема"],
+        ["chto-hranim", "Что хранится"],
+        ["kod-simvola", "Код символа"],
+        ["minimalno-vozmozhnoe", "Минимально возможное число битов"],
+        ["alfavit", "Алфавит"],
+        ["obyom-parolya", "Объём пароля"],
+        ["kolichestvo-i-pamyat", "Количество и память"],
+        ["celye-bajty", "Целые байты"],
+        ["chto-okruglyat", "Что округлять"],
+        ["elementy-i-sostoyaniya", "Элементы и состояния"],
+        ["raschyot-python", "Расчёт на Python"],
+        ["parol-itogo", "Итого"]
+      ],
+      "02-zapisi.md": [
+        ["zapis-polzovatelya", "Запись пользователя"],
+        ["dopolnitelnye-svedeniya", "Дополнительные сведения"],
+        ["obratnyj-hod", "Обратный ход"],
+        ["obshchij-zagolovok", "Общий заголовок"],
+        ["svedeniya-v-bitah", "Сведения в битах"],
+        ["zapisi-itogo", "Итого"]
+      ],
+      "03-ne-bolee.md": [
+        ["diapazon", "Диапазон длины кода"],
+        ["okruglenie-skryvaet", "Округление скрывает длину"],
+        ["dlina-parolya", "Длина пароля"],
+        ["moshchnost-alfavita", "Мощность алфавита"],
+        ["granicy", "Границы «не более» и «не менее»"],
+        ["naibolshaya-dlina", "Наибольшая длина"],
+        ["naibolshaya-moshchnost", "Наибольшая мощность"],
+        ["specialnye-simvoly", "Специальные символы"],
+        ["naibolshee-chislo-zapisej", "Наибольшее число записей"],
+        ["krupnye-chisla", "Крупные числа"],
+        ["ne-bolee-itogo", "Итого"]
+      ],
+      "04-bolee-i-ne-menee.md": [
+        ["nizhnyaya-granica", "Нижняя граница"],
+        ["naimenshee-chislo-bajtov", "Наименьшее число байтов"],
+        ["ne-pomeshchaetsya", "Код не помещается"],
+        ["minimalnaya-moshchnost", "Минимальная мощность"],
+        ["minimalnyj-nabor", "Минимальный набор"],
+        ["perebor-bitov", "Перебор числа битов"],
+        ["celaya-chast-zapisi", "Целая часть записи"],
+        ["krupnye-chisla-granica", "Крупные числа"],
+        ["bolee-itogo", "Итого"]
+      ],
+      "05-sostavnye-kody.md": [
+        ["po-chastyam", "По частям"],
+        ["razbor-koda", "Разбор кода"],
+        ["gde-bajty", "Где выделяются байты"],
+        ["nomer-kak-chislo", "Номер как число"],
+        ["bit-length", "Метод bit_length"],
+        ["nomer-i-kod", "Номер и код"],
+        ["urovni", "Несколько уровней"],
+        ["sostavnye-itogo", "Итого"]
+      ],
+      "06-sluzhebnye-dannye.md": [
+        ["dopolnitelnyy-urok-sluzhebnye", "Дополнительный урок"],
+        ["chislo-zagolovkov", "Число заголовков"],
+        ["naibolshee-soobshchenie", "Наибольшее сообщение"],
+        ["razmer-zavisit", "Размер зависит от количества"],
+        ["perebor-kolichestva", "Перебор количества"],
+        ["sluzhebnye-itogo", "Итого"]
+      ]
+    },
+    "final": {
+      "result": [0, 1],
+      "examFocus": [2, 3]
+    },
+    "learningOutcomes": [
+      "Находить минимальное число битов на символ и объём пароля в целых байтах",
+      "Складывать запись пользователя из пароля и дополнительных сведений",
+      "Решать обратные задачи с ограничением «не более»: длина, мощность алфавита, число записей",
+      "Находить нижнюю границу при «более» и «не менее»",
+      "Считать составные коды, номера и описания объектов по частям",
+      "Для редких задач — служебные данные, зависящие от размера (дополнительный урок)"
+    ],
+    "stepperLabels": {},
+    "checkpoints": {
+      "ne-bolee": [
+        {
+          "id": "zadacha-3",
+          "prompt": "Пароль из 4 символов занимает минимально возможные 3 байта. Каким может быть число битов на символ? Какой может быть мощность алфавита?",
+          "reveal": "5 или 6 битов, мощность от 17 до 64: 16 < 4i ≤ 24, i = 5 даёт 17–32 символа, i = 6 — 33–64."
+        }
+      ]
+    }
+  }
 }

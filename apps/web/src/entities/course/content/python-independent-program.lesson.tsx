@@ -3,6 +3,7 @@
 import { CodeBlock } from "~/shared/components/code-block";
 import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
+import { LessonSummary } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { pythonIndependentProgramLessonPublication } from "./course-publication.mjs";
 
@@ -327,29 +328,51 @@ export const pythonIndependentProgramLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          Программа начинается с договорённости: формат входа, выход, спорные
-          случаи.
-        </li>
-        <li>
-          Чтение, вычисление и вывод разделены по функциям; вычисление
-          проверяется на списках.
-        </li>
-        <li>
-          <Notation>{"sys.argv"}</Notation> — аргументы запуска,{" "}
-          <Notation>{"sys.stderr"}</Notation> — сообщения об ошибках,{" "}
-          <Notation>{"SystemExit"}</Notation> — код завершения.
-        </li>
-        <li>
-          <Notation>{"raise … from error"}</Notation> добавляет контекст (номер
-          строки), не теряя причину.
-        </li>
-        <li>
-          Проверочные случаи: обычный, пустой, одна строка, отсутствующий файл,
-          испорченная строка.
-        </li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                Программа начинается с договорённости: формат входа, выход,
+                спорные случаи.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Чтение, вычисление и вывод разделены по функциям; вычисление
+                проверяется на списках.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"sys.argv"}</Notation> — аргументы запуска,{" "}
+                <Notation>{"sys.stderr"}</Notation> — сообщения об ошибках,{" "}
+                <Notation>{"SystemExit"}</Notation> — код завершения.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"raise … from error"}</Notation> добавляет контекст
+                (номер строки), не теряя причину.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Проверочные случаи: обычный, пустой, одна строка, отсутствующий
+                файл, испорченная строка.
+              </>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

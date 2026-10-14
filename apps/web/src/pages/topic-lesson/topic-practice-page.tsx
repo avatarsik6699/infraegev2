@@ -21,16 +21,16 @@ export const TopicPracticePage: React.FC<TopicLessonPageTypes.PracticeProps> = (
   const session = useAccountSession();
   const subtopics = lessonSubtopics(props.lesson);
   const last = subtopics.at(-1);
-  // F43: the summary opens the page, then the tasks, then the self-check.
+  // F43: the summary opens the page; Change 184: the self-check, then the tasks.
   const outline = [
     { id: "result", label: "Итог" },
     ...(props.lesson.examFocus
-      ? [{ id: "exam-focus", label: "На экзамене" }]
+      ? [{ id: "exam-focus", label: "Проверка решения" }]
       : []),
-    { id: "practice", label: "Практика" },
     ...(props.lesson.checkpoint
       ? [{ id: "self-check", label: "Проверьте себя" }]
       : []),
+    { id: "practice", label: "Практика" },
   ];
 
   return (
@@ -64,10 +64,19 @@ export const TopicPracticePage: React.FC<TopicLessonPageTypes.PracticeProps> = (
             id="exam-focus-title"
             className={styles.sectionTitle}
           >
-            На экзамене
+            Проверка решения
           </Typography.Title>
           <Typography.Prose>{props.lesson.examFocus}</Typography.Prose>
         </section>
+      ) : null}
+
+      {props.lesson.checkpoint ? (
+        <div id="self-check" className={styles.section}>
+          <Checkpoint
+            items={props.lesson.checkpoint}
+            headingClassName={styles.sectionTitle}
+          />
+        </div>
       ) : null}
 
       <section
@@ -99,13 +108,6 @@ export const TopicPracticePage: React.FC<TopicLessonPageTypes.PracticeProps> = (
           }
         />
       </section>
-
-      {props.lesson.checkpoint ? (
-        // The Checkpoint is itself the «Проверьте себя» region.
-        <div id="self-check" className={styles.section}>
-          <Checkpoint items={props.lesson.checkpoint} />
-        </div>
-      ) : null}
 
       <TopicLessonPager
         routeSlug={props.lesson.routeSlug}

@@ -102,8 +102,10 @@ describe("SheetBlock (Change 177)", () => {
     );
     expect(html).toContain(">200<");
     expect(html).toContain(">60<");
-    expect(html).toContain("Формулы: ");
-    expect(html).toContain("<code>D2: =B2*C2</code>, скопирована до D3");
+    expect(html).toContain(">Формулы в ячейках<");
+    expect(html).toContain("<code>D2</code>");
+    expect(html).toContain("скопирована до D3");
+    expect(html).toContain("=B2*C2");
     expect(html).not.toContain('role="grid"');
     expect(html).not.toContain("Вернуть исходные");
   });
@@ -177,6 +179,22 @@ describe("SheetBlock (Change 177)", () => {
     expect(goods?.querySelectorAll("td[data-ref]")).toHaveLength(4);
   });
 
+  it("draws the walls of a field without scripting (Change 184)", () => {
+    flags.enhanced = false;
+    const [part] = base.sheets;
+    const html = renderToStaticMarkup(
+      <SheetBlock
+        {...base}
+        sheets={[{ ...part, walls: { B2: "rb", C3: "t" } }]}
+        label="Лист «База»"
+      />,
+    );
+    expect(html.match(/data-wall="[trbl]+"/gu)).toEqual([
+      'data-wall="rb"',
+      'data-wall="t"',
+    ]);
+  });
+
   it("switches sheets with the arrows and keeps a tab stop in the shown grid", () => {
     const view = render(<SheetBlock {...books} label="Лист «Операции»" />);
     const tabs = within(screen.getByRole("tablist")).getAllByRole("tab");
@@ -185,6 +203,71 @@ describe("SheetBlock (Change 177)", () => {
     expect(document.activeElement).toBe(tabs[1]);
     const goods = view.container.querySelector('[data-sheet-name="Товары"]');
     expect(goods?.querySelectorAll('td[tabindex="0"]')).toHaveLength(1);
+  });
+});
+
+describe("SheetBlock (Change 184)", () => {
+  it("selects the cell of a formula listed under the grid", () => {
+    render(<SheetBlock {...books} label="Лист «Операции»" />);
+    const row = screen.getByRole("button", { name: /B2.*ВПР/u });
+    fireEvent.click(row);
+    expect(row.getAttribute("aria-current")).toBe("true");
+    expect(screen.getByLabelText("Строка формул").textContent).toBe(
+      "=ВПР(A2;Товары!$A$2:$B$3;2;0)",
+    );
+  });
+
+  it("names the sheet of the formulas and the sheets with data only (F12)", () => {
+    render(<SheetBlock {...books} label="Лист «Операции»" />);
+    expect(screen.getByText("Формулы в ячейках листа «Операции»")).toBeTruthy();
+    expect(
+      screen.getByText(
+        "Нажми на формулу — её ячейка выделится в таблице. На листе «Товары» формул нет — только данные.",
+      ),
+    ).toBeTruthy();
+  });
+
+  it("unfolds a long formula by its arguments on request (F13)", () => {
+    const formula =
+      '=СУММЕСЛИМН(D2:D3;A2:A3;">=100";B2:B3;"Выпечка";A2:A3;"<=200")';
+    const [part] = base.sheets;
+    render(
+      <SheetBlock
+        {...base}
+        sheets={[
+          {
+            ...part,
+            inputs: { ...part.inputs, D4: formula },
+            formulas: [{ cell: "D4", formula }],
+          },
+        ]}
+        select={["База", "D4"]}
+        label="Лист «База»"
+      />,
+    );
+    const bar = screen.getByLabelText("Строка формул");
+    expect(bar.textContent).toBe(formula);
+    expect(bar.hasAttribute("data-unfolded")).toBe(false);
+    const unfold = screen.getByRole("button", {
+      name: "Формула по аргументам",
+    });
+    fireEvent.click(unfold);
+    expect(unfold.getAttribute("aria-expanded")).toBe("true");
+    expect(bar.hasAttribute("data-unfolded")).toBe(true);
+    expect(bar.textContent).toBe(formula);
+  });
+
+  it("covers the screen and returns to the page with Esc", () => {
+    const view = render(<SheetBlock {...base} label="Лист «База»" />);
+    const root = view.container.querySelector("[data-sheet-block]");
+    fireEvent.click(
+      screen.getByRole("button", { name: "Таблица на весь экран" }),
+    );
+    expect(root?.hasAttribute("data-expanded")).toBe(true);
+    expect(document.documentElement.style.overflow).toBe("hidden");
+    fireEvent.keyDown(document, { key: "Escape" });
+    expect(root?.hasAttribute("data-expanded")).toBe(false);
+    expect(document.documentElement.style.overflow).toBe("");
   });
 });
 
@@ -233,8 +316,8 @@ describe("FillSandbox (Change 177)", () => {
   });
 });
 
-describe("FormulaBlock (Change 177 F9)", () => {
-  it("shows the cell, fx and the formula with function names and template slots", () => {
+describe("FormulaBlock (Change 184, display line)", () => {
+  it("shows the cell and the formula with function names and template slots", () => {
     const html = renderToStaticMarkup(
       <FormulaBlock
         label="Шаблон формулы"
@@ -246,12 +329,28 @@ describe("FormulaBlock (Change 177 F9)", () => {
     );
     expect(html).toContain('aria-label="Шаблон формулы"');
     expect(html).toContain(">B2</span>");
-    expect(html.match(/>fx</g)).toHaveLength(2);
+    expect(html).not.toContain(">fx<");
     expect(html).toMatch(/<span class="[^"]*function[^"]*">ЕСЛИ<\/span>/);
     expect(html).toMatch(/<span class="[^"]*slot[^"]*">условие<\/span>/);
     // quoted text is not a slot
     expect(html).toContain("&quot;да&quot;");
     expect(html).not.toMatch(/slot[^"]*">да</);
+  });
+
+  it("shows the value of a cell after its formula", () => {
+    const html = renderToStaticMarkup(
+      <FormulaBlock
+        label="Формула"
+        lines={[
+          {
+            cell: "H2",
+            formula: "=ВПР(C2;'Магазин'!$A$2:$C$4;2;0)",
+            result: "Северный",
+          },
+        ]}
+      />,
+    );
+    expect(html).toMatch(/data-formula-result[^>]*>.*результат: .*Северный/);
   });
 
   it("copies the formulas without the cell addresses", () => {

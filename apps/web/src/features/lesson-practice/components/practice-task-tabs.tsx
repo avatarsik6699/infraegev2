@@ -9,11 +9,12 @@ type PracticeTaskTabsProps = {
   isSolved: (taskId: string) => boolean;
 };
 
+// Change 184: one task needs no tab strip; its own heading names it.
 export const PracticeTaskTabs: React.FC<PracticeTaskTabsProps> = (props) => (
   <TabsList
     className={styles.practiceTabs}
     label="Задачи урока"
-    hidden={!props.enhanced}
+    hidden={!props.enhanced || props.tasks.length < 2}
   >
     {props.tasks.map((task, index) => (
       <PracticeTaskTab

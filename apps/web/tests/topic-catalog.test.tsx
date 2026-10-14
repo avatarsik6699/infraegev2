@@ -10,6 +10,7 @@ import { LessonProgressProvider } from "~/features/lesson-progress";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { topicCatalogModel } from "~/pages/topic-catalog/model/topic-catalog-model";
 import { TopicCatalogPage } from "~/pages/topic-catalog";
+import { lessonPublications } from "~/shared/config/lesson-publication.mjs";
 
 const progressFixture = vi.hoisted(() => ({
   results: [] as {
@@ -95,6 +96,10 @@ const summary = {
       tasks: [{ id: "n1", solution_revision: 1 }],
     },
     {
+      id: "spreadsheets",
+      tasks: [{ id: "task-9-1-07", solution_revision: 1 }],
+    },
+    {
       id: "number-sequences",
       tasks: [
         { id: "task-17-01", solution_revision: 1 },
@@ -140,6 +145,16 @@ const summary = {
     },
   ],
 };
+// Every other published topic: one unsolved task, so its card shows progress.
+for (const { id } of lessonPublications) {
+  if (!summary.topics.some((topic) => topic.id === id))
+    summary.topics.push({
+      id,
+      tasks: [{ id: `${id}-1`, solution_revision: 1 }],
+    });
+}
+const PUBLISHED = lessonPublications.length;
+const PLANNED = 25 - PUBLISHED;
 const renderCatalog = () =>
   render(
     <LessonProgressProvider accountId="member">
@@ -179,13 +194,13 @@ describe("TopicCatalogPage", () => {
     expect(cards).toHaveLength(25);
     expect(
       container.querySelectorAll('[data-topic-status="published"]'),
-    ).toHaveLength(8);
+    ).toHaveLength(PUBLISHED);
     expect(
       container.querySelectorAll('[data-topic-status="planned"]'),
-    ).toHaveLength(17);
+    ).toHaveLength(PLANNED);
     expect(
       container.querySelectorAll('[data-topic-status="published"] a'),
-    ).toHaveLength(8);
+    ).toHaveLength(PUBLISHED);
     expect(
       container.querySelectorAll('[data-topic-status="planned"] a'),
     ).toHaveLength(0);
@@ -194,6 +209,11 @@ describe("TopicCatalogPage", () => {
         .getByRole("link", { name: "Преобразование записей чисел" })
         .getAttribute("href"),
     ).toBe("/ege/5-preobrazovanie-zapisey-chisel");
+    expect(
+      screen
+        .getByRole("link", { name: "Обработка таблицы чисел" })
+        .getAttribute("href"),
+    ).toBe("/ege/9-obrabotka-tablicy-chisel");
     expect(
       screen
         .getByRole("link", { name: "Рекурсивные алгоритмы" })
@@ -225,7 +245,7 @@ describe("TopicCatalogPage", () => {
         .getByRole("link", { name: "Анализ данных: кластеризация" })
         .getAttribute("href"),
     ).toBe("/ege/27-analiz-dannyh-i-klasterizatsiya");
-    expect(screen.getAllByText("Скоро")).toHaveLength(17);
+    expect(screen.getAllByText("Скоро")).toHaveLength(PLANNED);
     await screen.findByText("Решено 0 из 2");
   });
 });
@@ -234,14 +254,18 @@ it("combines live search and status filters, clears input and resets empty resul
   const view = renderCatalog();
   await screen.findByText("Решено 0 из 2");
   fireEvent.click(screen.getByRole("button", { name: "Не начаты" }));
-  expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(8);
+  expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(
+    PUBLISHED,
+  );
   fireEvent.change(screen.getByRole("searchbox"), {
     target: { value: "РЕКУРСИВ" },
   });
   expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(1);
   fireEvent.click(screen.getByRole("button", { name: "Очистить поиск" }));
   expect((screen.getByRole("searchbox") as HTMLInputElement).value).toBe("");
-  expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(8);
+  expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(
+    PUBLISHED,
+  );
   fireEvent.change(screen.getByRole("searchbox"), {
     target: { value: "unknown" },
   });
@@ -301,7 +325,9 @@ it("counts only current topic answers, keeps completed in All and excludes stale
   ).not.toBeNull();
   expect(screen.getByText("Решено задач в темах: 2")).not.toBeNull();
   fireEvent.click(screen.getByRole("button", { name: "Не начаты" }));
-  expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(6);
+  expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(
+    PUBLISHED - 2,
+  );
   expect(
     screen.getByRole("link", { name: "Числовые последовательности" }),
   ).not.toBeNull();
@@ -378,7 +404,9 @@ it("treats missing summaries as unavailable and recovers corrupt storage", async
   renderCatalog();
   await screen.findByText("Прогресс временно недоступен");
   expect(screen.getByText("Решено 0 из 2")).not.toBeNull();
-  expect(screen.getAllByText("Прогресс недоступен")).toHaveLength(7);
+  expect(screen.getAllByText("Прогресс недоступен")).toHaveLength(
+    PUBLISHED - 1,
+  );
 });
 
 it("does not flash zero progress while summary is pending", async () => {
@@ -395,7 +423,7 @@ it("does not flash zero progress while summary is pending", async () => {
     }),
   );
   renderCatalog();
-  expect(screen.getAllByText("Прогресс загружается")).toHaveLength(8);
+  expect(screen.getAllByText("Прогресс загружается")).toHaveLength(PUBLISHED);
   expect(screen.queryByRole("progressbar")).toBeNull();
   await waitFor(() => expect(resolve).toBeTypeOf("function"));
   resolve(Response.json(summary));

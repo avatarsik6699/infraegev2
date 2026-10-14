@@ -4,6 +4,7 @@ import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
 import {
   LessonDiagram,
+  LessonSummary,
   SheetBlock,
 } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
@@ -271,32 +272,54 @@ export const excelNumbersLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          Скидка d — множитель 1 − d, наценка — 1 + d; процент в ячейке уже
-          доля.
-        </li>
-        <li>
-          Процент изменения — (новое − старое)/старое: от 80 к 100 — 25%,
-          обратно — −20%.
-        </li>
-        <li>
-          <Notation>{"ОКРУГЛ"}</Notation> — по правилу,{" "}
-          <Notation>{"ОКРУГЛВВЕРХ"}</Notation> — от нуля,{" "}
-          <Notation>{"ОКРУГЛВНИЗ"}</Notation> — к нулю;{" "}
-          <Notation>{"ЦЕЛОЕ"}</Notation> — вниз по прямой,{" "}
-          <Notation>{"ОТБР"}</Notation> — отбросить дробь.
-        </li>
-        <li>
-          Коробок для n предметов по k —{" "}
-          <Notation>{"ОКРУГЛВВЕРХ(n/k;0)"}</Notation>.
-        </li>
-        <li>
-          <Notation>{"ОСТАТ(n;k)=0"}</Notation> — делимость;{" "}
-          <Notation>{"ОСТАТ(n;10)"}</Notation> — последняя цифра; для
-          отрицательных — <Notation>{"ОСТАТ(ABS(n);10)"}</Notation>.
-        </li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                Скидка d — множитель 1 − d, наценка — 1 + d; процент в ячейке
+                уже доля.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Процент изменения — (новое − старое)/старое: от 80 к 100 — 25%,
+                обратно — −20%.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"ОКРУГЛ"}</Notation> — по правилу,{" "}
+                <Notation>{"ОКРУГЛВВЕРХ"}</Notation> — от нуля,{" "}
+                <Notation>{"ОКРУГЛВНИЗ"}</Notation> — к нулю;{" "}
+                <Notation>{"ЦЕЛОЕ"}</Notation> — вниз по прямой,{" "}
+                <Notation>{"ОТБР"}</Notation> — отбросить дробь.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Коробок для n предметов по k —{" "}
+                <Notation>{"ОКРУГЛВВЕРХ(n/k;0)"}</Notation>.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"ОСТАТ(n;k)=0"}</Notation> — делимость;{" "}
+                <Notation>{"ОСТАТ(n;10)"}</Notation> — последняя цифра; для
+                отрицательных — <Notation>{"ОСТАТ(ABS(n);10)"}</Notation>.
+              </>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

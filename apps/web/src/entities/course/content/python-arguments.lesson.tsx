@@ -3,7 +3,10 @@
 import { CodeBlock } from "~/shared/components/code-block";
 import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
-import { CodeRunner } from "~/shared/components/learning-content";
+import {
+  CodeRunner,
+  LessonSummary,
+} from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { pythonArgumentsLessonPublication } from "./course-publication.mjs";
 import { lessonMedia } from "./python-arguments.media";
@@ -345,30 +348,52 @@ export const pythonArgumentsLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          <Notation>{"def f(a, b=0)"}</Notation> — <Notation>{"b"}</Notation>{" "}
-          можно не передавать; <Notation>{"f(b=1, a=2)"}</Notation> — аргументы
-          по имени.
-        </li>
-        <li>
-          Изменяемое значение по умолчанию общее для всех вызовов: используй{" "}
-          <Notation>{"None"}</Notation> и новый объект внутри.
-        </li>
-        <li>
-          <Notation>{"return a, b"}</Notation> возвращает кортеж, его
-          распаковывают: <Notation>{"q, r = f(...)"}</Notation>.
-        </li>
-        <li>
-          <Notation>{"*values"}</Notation> собирает лишние позиционные аргументы
-          в кортеж.
-        </li>
-        <li>
-          Функцию передают без скобок;{" "}
-          <Notation>{"lambda x: выражение"}</Notation> — короткая функция;
-          docstring описывает договорённость.
-        </li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                <Notation>{"def f(a, b=0)"}</Notation> —{" "}
+                <Notation>{"b"}</Notation> можно не передавать;{" "}
+                <Notation>{"f(b=1, a=2)"}</Notation> — аргументы по имени.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Изменяемое значение по умолчанию общее для всех вызовов:
+                используй <Notation>{"None"}</Notation> и новый объект внутри.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"return a, b"}</Notation> возвращает кортеж, его
+                распаковывают: <Notation>{"q, r = f(...)"}</Notation>.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"*values"}</Notation> собирает лишние позиционные
+                аргументы в кортеж.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Функцию передают без скобок;{" "}
+                <Notation>{"lambda x: выражение"}</Notation> — короткая функция;
+                docstring описывает договорённость.
+              </>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

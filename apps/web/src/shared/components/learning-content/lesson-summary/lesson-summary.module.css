@@ -1,0 +1,56 @@
+/* «Итого» (Change 184): the cheat sheet's key-and-note blocks on the page
+   itself, no frame — two columns in the reading column, one on a phone.
+   Doubled class: the prose list rules (`.root ul`) must not indent it. */
+.root.root {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: var(--space-2) var(--space-3);
+  margin-block: 0 var(--space-2);
+  padding: 0;
+  list-style: none;
+}
+
+/* sentences without keys read in order, one under another */
+.root.root[data-plain] {
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-1-5);
+}
+
+.item {
+  display: grid;
+  align-content: start;
+  gap: var(--space-0-5);
+  min-width: 0;
+  margin: 0;
+}
+
+.key {
+  font-family: var(--font-ui);
+  font-size: var(--text-base);
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--color-text);
+}
+
+/* the key is already bold; its source keeps «**…**» for the stand */
+.key strong {
+  font-weight: 600;
+}
+
+.key code {
+  font-weight: 500;
+}
+
+.note,
+.plain {
+  font-size: var(--text-base);
+  line-height: 1.5;
+}
+
+.note {
+  color: var(--color-text-soft);
+}
+
+.plain {
+  color: var(--color-text);
+}

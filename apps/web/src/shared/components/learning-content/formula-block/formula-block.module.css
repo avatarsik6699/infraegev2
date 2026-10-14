@@ -1,22 +1,23 @@
-/* A formula of the Excel course (Change 177 F9): the live sheet's formula bar
-   — address, a muted italic «fx», the formula in the data face — on a
-   hairline-framed white surface, not the code block's tinted panel. */
+/* A formula of the Excel course (Change 184, variant C): a display line, not a
+   box — the formula in the data face between two hairlines (the learning
+   table's rows), the cell address in the label face, the value after «⇒». */
 .root {
   position: relative;
   margin: 0 0 var(--space-2);
-  padding-block: var(--space-0-5);
-  padding-inline-end: 2.75rem;
-  border: 1px solid var(--color-rule);
-  border-radius: var(--radius-surface);
-  background: var(--color-surface);
+  border-block: 1px solid var(--color-rule-strong);
 }
 
 .row {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: var(--space-1-5);
   align-items: baseline;
-  gap: var(--space-1);
-  min-height: 2.25rem;
-  padding: 0.375rem 0 0.375rem var(--space-1-5);
+  padding-block: 0.625rem;
+  padding-inline-end: 2.5rem;
+}
+
+.root[data-cells] .row {
+  grid-template-columns: 3.2em minmax(0, 1fr) auto;
 }
 
 .row + .row {
@@ -24,31 +25,26 @@
 }
 
 .cell {
-  flex: none;
-  min-width: 2.6em;
-  font-family: var(--font-data);
-  font-size: var(--text-sm);
-  font-weight: 600;
-  color: var(--color-text-soft);
-}
-
-.fx {
-  flex: none;
+  grid-column: 1;
   font-family: var(--font-ui);
   font-size: var(--text-sm);
-  font-style: italic;
   font-weight: 500;
   color: var(--color-muted);
 }
 
 .formula {
+  grid-column: 1;
   min-width: 0;
   font-family: var(--font-data);
-  font-size: var(--text-base);
+  font-size: var(--text-learning-code);
   font-variant-ligatures: none;
   line-height: 1.5;
   color: var(--color-text);
   overflow-wrap: anywhere;
+}
+
+.root[data-cells] .formula {
+  grid-column: 2;
 }
 
 .function {
@@ -60,8 +56,59 @@
   color: var(--color-text-soft);
 }
 
+.result {
+  font-family: var(--font-reading);
+  font-size: var(--text-base);
+  color: var(--color-text-soft);
+  white-space: nowrap;
+}
+
+.result::before {
+  content: "⇒\00a0";
+  color: var(--color-muted);
+}
+
+.visuallyHidden {
+  composes: visuallyHidden from "../../../styles/patterns.module.css";
+}
+
+/* quiet until the block is pointed at or focused; a phone always shows it */
 .copy {
   position: absolute;
-  inset-block-start: var(--space-0-5);
-  inset-inline-end: var(--space-0-5);
+  inset-block-start: 50%;
+  inset-inline-end: 0;
+  transform: translateY(-50%);
+  opacity: 0.55;
+}
+
+.root:hover .copy,
+.copy:focus-visible {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .copy {
+    opacity: 1;
+  }
+}
+
+/* a phone: the value goes under its formula */
+@media (max-width: 34rem) {
+  .row,
+  .root[data-cells] .row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .root[data-cells] .row {
+    grid-template-columns: 3.2em minmax(0, 1fr);
+  }
+
+  .result {
+    grid-column: 1;
+    white-space: normal;
+  }
+
+  .root[data-cells] .result {
+    grid-column: 2;
+  }
 }

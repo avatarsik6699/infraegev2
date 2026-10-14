@@ -1,23 +1,17 @@
 import { test } from "./fixtures";
 
-test("published data analysis lesson explains clustering and shows file practice", async ({
+test("published data analysis lesson is readable with its bank tasks", async ({
   dataAnalysisLessonPage,
   browserSession,
 }) => {
   await dataAnalysisLessonPage.open();
-  await dataAnalysisLessonPage.expectPublishedDataAnalysisContent();
-  await dataAnalysisLessonPage.expectStudyNavigationAndAccessibility();
-  await dataAnalysisLessonPage.expectCodeKeyboardFocus(
-    "Разделить отсортированные энергии по размаху",
-  );
+  await dataAnalysisLessonPage.expectPipelineLessonContent();
   browserSession.expectCleanConsole();
 });
 
-test("data analysis lesson retains theory and files without JavaScript", async ({
+test("published data analysis lesson remains readable without JavaScript", async ({
   noJavaScriptDataAnalysisLessonPage,
 }) => {
   await noJavaScriptDataAnalysisLessonPage.open();
-  await noJavaScriptDataAnalysisLessonPage.expectPublishedDataAnalysisContent(
-    true,
-  );
+  await noJavaScriptDataAnalysisLessonPage.expectPipelineLessonContent(true);
 });

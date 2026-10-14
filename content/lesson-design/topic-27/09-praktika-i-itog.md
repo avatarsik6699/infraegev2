@@ -80,6 +80,8 @@ plt.grid()
 plt.show()
 ```
 
+Такой рисунок должна построить программа:
+
 <figure class="plate-figure">
 %%cl_scatter("example27.txt", "x5", lines=True, centers=True)%%
 <figcaption>Проверочный рисунок файла example27.txt: кластеры разными маркерами, граница x = 5, центры (1; 1) и (11; 1) обведены.</figcaption>

@@ -446,7 +446,7 @@ def block_html(block: SheetBlock, uid: str) -> str:
     tabs = ""
     if len(block.sheets) > 1:
         tabs = (
-            '<div class="sheet-tabs" role="tablist" aria-label="Листы книги">'
+            '<div class="sheet-tabs" role="tablist" aria-label="Листы файла">'
             + "".join(
                 f'<button type="button" role="tab" aria-controls="{uid}-p{i}" '
                 f'aria-selected="{"true" if i == 0 else "false"}">{html.escape(p.name)}</button>'

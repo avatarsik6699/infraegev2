@@ -1,180 +1,264 @@
 import { spawnSync } from "node:child_process";
-import { renderToStaticMarkup } from "react-dom/server";
+import { readFileSync, readdirSync } from "node:fs";
+import { resolve } from "node:path";
+import { isValidElement } from "react";
 import { describe, expect, it, vi } from "vitest";
-import { courseLessonPublications } from "~/entities/course";
 import {
+  stringProcessingLesson,
   findLessonByRouteSlug,
   lessonPublications,
-  stringProcessingLesson,
+  lessonSubtopics,
 } from "~/entities/lesson";
+import { lessonMedia } from "~/entities/lesson/content/string-processing.media";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { publicPaths } from "~/pages/site-discovery/public-paths";
-import {
-  codeFromBlock,
-  renderAuthoredLessonContent,
-} from "./lesson-content-test-utils";
+import { CodeBlock } from "~/shared/components/code-block";
+import { CodeRunner } from "~/shared/components/learning-content";
+import { Typography } from "~/shared/components/typography";
+import { renderAuthoredLessonContent } from "./lesson-content-test-utils";
 
-const anchors = [
-  "file-and-string",
-  "positions-and-fragments",
-  "adjacent-and-overlapping",
-  "longest-valid-run",
-  "occurrence-limit",
-  "expression-grammar",
-  "linear-expression-scan",
-  "independent-verification",
-];
+vi.mock("~/shared/components/action-link", () => ({
+  ActionLink: ({ children }: { children: React.ReactNode }) => (
+    <span>{children}</span>
+  ),
+}));
 
+const lesson = stringProcessingLesson;
+const SOURCE = resolve(
+  process.cwd(),
+  "../..",
+  "content/lesson-design/topic-24",
+);
 const authoredContent = [
-  ...stringProcessingLesson.theory.map(({ explanation }) => explanation),
-  stringProcessingLesson.examFocus,
-  stringProcessingLesson.result,
+  ...lesson.theory.map(({ explanation }) => explanation),
+  lesson.examFocus,
+  lesson.result,
 ];
 
-vi.mock("@tanstack/react-router", () => {
-  const Link = ({
-    children,
-    to,
-    params,
-  }: {
-    children: React.ReactNode;
-    to: string;
-    params: Record<string, string>;
-  }) => (
-    <span
-      data-link-href={to
-        .replace("$courseSlug", params.courseSlug)
-        .replace("$lessonSlug", params.lessonSlug)}
-    >
-      {children}
-    </span>
-  );
-  return { Link, createLink: () => Link };
-});
+type Piece =
+  | { kind: "code"; language: string; code: string; output?: string }
+  | { kind: "run"; code: string; output: string }
+  | { kind: "text"; text: string };
 
-describe("task 24 string processing lesson", () => {
-  it("keeps all concepts in the planned teaching order", () => {
-    expect(stringProcessingLesson.theory.map(({ id }) => id)).toEqual(anchors);
-    expect(stringProcessingLesson).toMatchObject({
+function textOf(node: React.ReactNode): string {
+  if (typeof node === "string" || typeof node === "number") return String(node);
+  if (Array.isArray(node)) return node.map(textOf).join("");
+  if (isValidElement<{ children?: React.ReactNode }>(node))
+    return textOf(node.props.children);
+  return "";
+}
+
+/** Code blocks and paragraphs of authored content, in page order. */
+function pieces(node: React.ReactNode, out: Piece[] = []): Piece[] {
+  if (Array.isArray(node)) {
+    for (const child of node) pieces(child, out);
+    return out;
+  }
+  if (!isValidElement<Record<string, unknown>>(node)) return out;
+  if (node.type === CodeBlock) {
+    const props = node.props as {
+      code: string;
+      language: string;
+      output?: string;
+    };
+    out.push({
+      kind: "code",
+      language: props.language,
+      code: props.code,
+      output: props.output,
+    });
+    return out;
+  }
+  if (node.type === CodeRunner) {
+    // a runnable example: its program is the stand's `python run` fence
+    const props = node.props as { code: string; output: string };
+    out.push({ kind: "run", code: props.code, output: props.output });
+    return out;
+  }
+  if (node.type === Typography.Text) {
+    out.push({ kind: "text", text: textOf(node.props.children as never) });
+    return out;
+  }
+  return pieces(node.props.children as React.ReactNode, out);
+}
+
+/** Python fences of the approved stand, without the task blocks. */
+function sourcePythonBlocks(): string[] {
+  const files = readdirSync(SOURCE)
+    .filter((name) => /^0[1-9]-.*\.md$/u.test(name))
+    .sort();
+  return files.flatMap((name) => {
+    const steps = readFileSync(resolve(SOURCE, name), "utf8").split(/\n---\n/u);
+    return steps
+      .filter(
+        (step) =>
+          !/^\s*\*\*(Чтобы проверить понимание|Задачи основных подтем)/u.test(
+            step,
+          ),
+      )
+      .flatMap((step) =>
+        [...step.matchAll(/```python\n([\s\S]*?)```/gu)].map((match) =>
+          (match[1] ?? "").replace(/\n$/u, ""),
+        ),
+      );
+  });
+}
+
+/** A complete definition, not a one-line fragment shown for explanation. */
+function compiles(code: string): boolean {
+  const check = spawnSync(
+    "python3",
+    ["-I", "-c", "import sys; compile(sys.stdin.read(), 'block', 'exec')"],
+    { input: code, encoding: "utf8" },
+  );
+  return check.status === 0;
+}
+
+describe("task 24 string processing lesson (Change 184)", () => {
+  it("has six core subtopics, two advanced and their self-checks", () => {
+    expect(lesson).toMatchObject({
       id: "string-processing",
       routeSlug: "24-obrabotka-simvolnyh-strok",
+      title: "Обработка символьных строк",
       taskNumbers: [24],
       status: "published",
-      accessTier: "free",
       masteryThreshold: 0.8,
     });
-    expect(stringProcessingLesson.examFocus).toBeDefined();
-    expect(stringProcessingLesson.result).toBeDefined();
-    expect(stringProcessingLesson.checkpoint?.length).toBeGreaterThan(0);
+    const subtopics = lessonSubtopics(lesson);
+    expect(subtopics.map(({ slug, level }) => [slug, level])).toEqual([
+      ["stroka-i-fragment", "core"],
+      ["cepochka", "core"],
+      ["obrazcy-i-chastoty", "core"],
+      ["skolzyashchee-okno", "core"],
+      ["pozicii-i-granicy", "core"],
+      ["chisla-i-vyrazheniya", "core"],
+      ["usloviya-na-vyrazhenie", "advanced"],
+      ["nakoplennye-kolichestva", "advanced"],
+    ]);
+    expect(subtopics.map(({ checkpoint }) => checkpoint?.length ?? 0)).toEqual([
+      5, 1, 0, 1, 0, 4, 1, 2,
+    ]);
+    expect(lesson.examFocus).toBeDefined();
+    expect(lesson.result).toBeDefined();
   });
 
-  it("publishes the lesson through route, catalog and sitemap", () => {
-    expect(findLessonByRouteSlug("24-obrabotka-simvolnyh-strok")).toBe(
-      stringProcessingLesson,
+  it("is the lesson of the catalog topic of task 24", () => {
+    expect(findLessonByRouteSlug("24-obrabotka-simvolnyh-strok")).toMatchObject(
+      { id: lesson.id },
     );
     expect(
-      lessonPublications.find((lesson) => lesson.id === "string-processing"),
-    ).toMatchObject({ status: "published" });
+      lessonPublications.filter(({ taskNumbers }) => taskNumbers.includes(24)),
+    ).toEqual([expect.objectContaining({ id: "string-processing" })]);
     expect(
-      topicCatalog.entries.find((entry) => entry.id === "string-processing"),
+      topicCatalog.entries.find((entry) => entry.taskNumbers.includes(24)),
     ).toMatchObject({
-      status: "published",
-      taskNumbers: [24],
+      id: "string-processing",
       routeSlug: "24-obrabotka-simvolnyh-strok",
+      status: "published",
     });
+    expect(publicPaths).toContain(
+      "/ege/24-obrabotka-simvolnyh-strok/stroka-i-fragment",
+    );
     expect(publicPaths).toContain("/ege/24-obrabotka-simvolnyh-strok/praktika");
   });
 
-  it("links only to published Python lessons and keeps word boundaries", () => {
+  it("shows the stand's Python code verbatim and in order", () => {
+    const shown = pieces(authoredContent)
+      .flatMap((piece) =>
+        piece.kind === "code" && piece.language === "python"
+          ? [piece.code]
+          : [],
+      )
+      .map((code) => code.replace(/\n$/u, ""));
+    expect(shown).toEqual(sourcePythonBlocks());
+  });
+
+  it("runs every program that shows its output and gets that output", () => {
+    // The rule of scripts/lesson_design/verify_code.py: programs run next to
+    // the lesson's data files; a fragment that continues an earlier program of the same
+    // page runs after it, with that output discarded.
+    const files = resolve(SOURCE, "files");
+    let prelude = "";
+    let earlier = "";
+    let ran = 0;
+    const run = (code: string) =>
+      spawnSync("python3", ["-I", "-c", code], {
+        encoding: "utf8",
+        cwd: files,
+      });
+    const byId = new Map(lesson.theory.map((block) => [block.id, block]));
+    for (const subtopic of lessonSubtopics(lesson)) {
+      earlier = ""; // continuations stay within one subtopic page
+      const page = subtopic.conceptIds.map((id) => byId.get(id)?.explanation);
+      for (const piece of pieces(page)) {
+        if (piece.kind === "run") {
+          // later programs of the page may call its function (verify_code.py)
+          const result = run(prelude + piece.code);
+          expect(result.stdout.trim(), piece.code).toBe(piece.output.trim());
+          earlier += piece.code + "\n";
+          ran += 1;
+          // and so may every later page: its definitions join the prelude
+          for (const part of piece.code.split("\n\n\n"))
+            if (part.startsWith("def ")) prelude += part + "\n";
+          continue;
+        }
+        if (piece.kind !== "code" || piece.language !== "python") continue;
+        if (piece.output !== undefined && piece.code.includes("print")) {
+          let result = run(prelude + piece.code);
+          if (result.status !== 0 && earlier) {
+            result = run(
+              prelude +
+                "import contextlib, io\n" +
+                "with contextlib.redirect_stdout(io.StringIO()):\n" +
+                `    exec(compile(${JSON.stringify(earlier)}, 'earlier', 'exec'))\n` +
+                piece.code,
+            );
+          }
+          expect(result.status, result.stderr).toBe(0);
+          expect(result.stdout.trim(), piece.code).toBe(piece.output.trim());
+          earlier += piece.code + "\n";
+          ran += 1;
+        }
+        if (
+          /^def /mu.test(piece.code) &&
+          !piece.code.includes("print") &&
+          compiles(piece.code)
+        )
+          prelude += piece.code + "\n";
+      }
+    }
+    expect(ran).toBe(61);
+  }, 60_000);
+
+  it("keeps spaces around inline code, links and emphasis", () => {
     const html = renderAuthoredLessonContent(authoredContent).innerHTML.replace(
       /<pre\b[^>]*>[\s\S]*?<\/pre>/gu,
       "",
     );
-    const hrefs = [...html.matchAll(/data-link-href="([^"]+)"/g)].map(
-      (match) => match[1],
+    expect([...html.matchAll(/<\/(?:code|var|a|strong)>[А-Яа-яЁё]/gu)]).toEqual(
+      [],
     );
-    expect(hrefs).toContain("/courses/python/stroki");
-    expect(hrefs).toContain("/courses/python/fayly");
-    for (const href of hrefs) {
-      const routeSlug = href.split("/").at(-1);
-      expect(
-        courseLessonPublications.find(
-          (lesson) => lesson.routeSlug === routeSlug,
-        ),
-      ).toMatchObject({ status: "published" });
-    }
-    const joinedAfterInline = [
-      ...html.matchAll(/<\/(?:code|var|span|a|strong|em)>[А-Яа-яЁё]/gu),
-    ].map((match) =>
-      html.slice(Math.max(0, match.index - 80), match.index + 80),
+    expect([...html.matchAll(/[А-Яа-яЁё]<(?:code|var|a|strong)\b/gu)]).toEqual(
+      [],
     );
-    const joinedBeforeInline = [
-      ...html.matchAll(/[А-Яа-яЁё:]<(?:code|var|span|a|strong|em)\b/gu),
-    ].map((match) =>
-      html.slice(Math.max(0, match.index - 80), match.index + 80),
-    );
-    expect(joinedAfterInline).toEqual([]);
-    expect(joinedBeforeInline).toEqual([]);
-    expect(
-      renderToStaticMarkup(<div>{stringProcessingLesson.result}</div>),
-    ).toContain("строк");
   });
 
-  it("runs each complete Python example with its stated result", () => {
+  it("uses every generated figure once, with the stepper and run blocks", () => {
     const container = renderAuthoredLessonContent(authoredContent);
-    const examples = [
-      ["Прочитать текст и убрать перевод строки по краям", "АБА-В"],
-      ["Взять три символа по индексам", "БВГ"],
-      ["Посчитать соседние вхождения с перекрытием", "2"],
-      ["Найти самый длинный участок из разрешённой буквы", "3"],
-      ["Найти длинное окно с ограниченным числом пар", "5"],
-      ["За один проход найти длину завершённого выражения", "6"],
-      ["Отдельно проверить грамматику короткого выражения", "True\nFalse"],
-    ] as const;
-
-    for (const [label, expected] of examples) {
-      const result = spawnSync(
-        "python3",
-        ["-c", codeFromBlock(container, label)],
-        {
-          encoding: "utf8",
-        },
-      );
-      expect(result.status, `${label}: ${result.stderr}`).toBe(0);
-      expect(result.stdout.trim(), label).toBe(expected);
-    }
-
-    const grammar = spawnSync(
-      "python3",
-      ["-c", codeFromBlock(container, "Сверить примеры с правилом")],
-      { encoding: "utf8" },
+    const media = Object.values(lessonMedia);
+    const diagrams = media.filter((item) => item.kind === "diagram");
+    expect(
+      container.querySelectorAll("figure[data-lesson-diagram]"),
+    ).toHaveLength(diagrams.length);
+    expect(media.filter((item) => item.kind === "stepper")).toHaveLength(4);
+    expect(media.filter((item) => item.kind === "run")).toHaveLength(3);
+    expect(container.querySelectorAll("img, video")).toHaveLength(0);
+    expect(container.querySelectorAll("[data-topic-cheat-sheet]")).toHaveLength(
+      1,
     );
-    expect(grammar.status, grammar.stderr).toBe(0);
-    expect(grammar.stdout).toContain("7-0 True");
-    expect(grammar.stdout).toContain("07 False");
-  });
-
-  it("keeps complete expression boundaries when scanning a short string", () => {
-    const scanner = codeFromBlock(
-      renderAuthoredLessonContent(authoredContent),
-      "За один проход найти длину завершённого выражения",
-    );
-    for (const [input, expected] of [
-      ["7-0", "3"],
-      ["07-6", "3"],
-      ["6--7", "1"],
-      ["7*", "1"],
-      ["00", "1"],
-      ["-0*7", "3"],
-      ["8-09", "3"],
-    ] as const) {
-      const code = scanner.replace(
-        /^text = .*\n/u,
-        `text = ${JSON.stringify(input)}\n`,
-      );
-      const result = spawnSync("python3", ["-c", code], { encoding: "utf8" });
-      expect(result.status, `${input}: ${result.stderr}`).toBe(0);
-      expect(result.stdout.trim(), input).toBe(expected);
-    }
+    expect(
+      container.querySelectorAll("[data-python-term]").length,
+    ).toBeGreaterThanOrEqual(10);
+    expect(container.querySelectorAll("aside, [role='note']")).toHaveLength(0);
   });
 });

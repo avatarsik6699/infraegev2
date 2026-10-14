@@ -362,14 +362,28 @@ card, `/courses/python` head at about a third of the head width). They are shown
   caption above its group in the tree (the root caption's label face), « · дополнительный уровень»
   in muted ink after the orange «Подтема N из M» and in the pager label. Never a badge or a colour.
 - **Learning table:** hairline rows, label-face head, numeric columns right-aligned in the mono face
-  with tabular figures; sized by its content, scrolling only inside itself.
-- **Rule or task plate:** a stated rule or condition in prose sits on side surface with a hairline
-  border and 12px corners, no coloured bar.
+  with tabular figures; sized by its content, scrolling only inside itself. Cells wrap between
+  words only, never inside a word, date or formula (Change 184).
+- **Quoted formulation (Change 184):** a task condition, question or rule quoted word for word in
+  prose is set in from the text behind a 3px ink rule, in medium weight; no fill, no frame, no
+  colour (the Change 171 side-surface plate read as an unexplained box).
+- **Topic head (Change 184):** the first page of an EGE topic opens with the topic's own head — the
+  exam task as a muted kicker, the title, the lead and «N подтем · M задач» over the page head's
+  fading engineering grid, closed by a hairline; the subtopic under it keeps the same position
+  line, title and lead as every other subtopic page.
 - **Proof disclosure:** a closed native fold with a hairline frame and a chevron; wash on hover.
+  Over its title a muted label names why it stands apart from the step — «Обоснование · необязательно»,
+  «Другой способ · …», «Формула · …», «Подробный разбор · …» — or only «Необязательно» when the
+  title already says it (Change 184).
+- **Centring:** a learning table or a figure narrower than the reading column stands in its middle;
+  a wider one starts at the left edge and scrolls (Change 184).
+- **No code for prose:** a code block holds code, program output, an error, a console or file
+  lines only; reasoning, plans, conditions and logical structure are prose, a list, a quotation or
+  a figure (Change 184).
 - **Exact diagram and step-through:** code-built SVG drawn inline on a hairline plate (card
   radius) with one muted caption; labels in the page font (Onest), ink lines, hairline greys and
   the wash, plus one Logo Orange accent as stroke or text on the figure's main thought — never a
-  fill, never a hand or monospace face. The stepper's controls copy `LessonVideo`: quiet icon
+  fill, never a hand or monospace face. The stepper's controls are quiet icon
   buttons, a thin ink timeline and a «2 / 7» count. On phones both keep a readable scale and
   scroll inside their focusable plate.
 - **Live sheet (Excel course):** one hairline-framed block: a formula bar (the address in the code
@@ -378,11 +392,23 @@ card, `/courses/python` head at about a third of the head width). They are shown
   sheet tabs under the grid. The selected cell has a 2px ink frame; the cells its formula reads get
   2px frames in the sheet-reference colours, drawn on the grid lines so neighbours share one band.
   «Вернуть исходные» is a compact secondary button that appears only after an edit. A wide grid
-  scrolls inside the block; the formulas are listed under it in muted text.
-- **Formula block (Excel course):** a formula is never a code block: it repeats the live sheet's
-  formula bar — hairline frame on white, an optional cell address in the code face, a muted italic
-  «fx», the formula with function names in medium weight and template slots in italics; rows of
-  several formulas are split by hairlines; one quiet copy icon in the corner.
+  scrolls inside the block. Change 184: the sheets of a block share the height of the tallest one
+  up to min(34rem, 75vh) and scroll inside under sticky column letters and row numbers. A formula is
+  one flowing line that breaks only after «;»; the bar keeps up to three lines for the block's
+  longest formula, and a quiet chevron, as in Excel's formula bar, unfolds a long one by its
+  arguments (the «ЕСЛИМН» functions keep a range and its criterion on one line). Under the grid
+  «Формулы в ячейках листа «…»» lists them one per row — the cell and «скопирована до …», then
+  the formula — with a muted line saying that a row selects its cell and which sheets hold data
+  only. A quiet icon button at the end of the bar opens the block on the whole screen (the
+  Fullscreen API, or covering the window); Esc returns it.
+- **Formula block (Excel course):** a formula is never a code block and, since Change 184 (variant
+  C of the architect's review), not a framed box either: a display line between two strong
+  hairlines, like a learning table's rows — the cell address in the label face (medium, muted), the
+  formula in the data face with function names in medium weight and template slots in italics, and,
+  when the text knows it, «⇒ value» of that cell at the end of the line in secondary ink (under the
+  formula on a phone); rows of several formulas are split by hairlines; one quiet copy icon that
+  comes up on hover or focus (always shown on touch). No «fx»: the framed bar with a muted «fx»
+  read as an input field.
 - **Copy sandbox:** the mask sandbox's frame with two fields (formula, target cell) and the copied
   formula in the code face; the moved column letters and row numbers are marked with a light link
   tint, the only accent.
@@ -394,9 +420,22 @@ card, `/courses/python` head at about a third of the head width). They are shown
   dotted underline that turns solid ink on hover or while open, no icon; the popover has a bold title, a short explanation, the course lesson name, «Читать урок →» and a
   bordered «Закрыть». Without scripting a native popover keeps the paragraph whole.
 - **Variant picker:** rounded hairline chips (the shared `ChoiceChips`, also used for the remainder
-  explorer presets); the chosen chip gets an ink outline and medium
-  weight; the value appears below in reading size. Token rows emphasise chosen members with an
-  ink border and semibold digits.
+  explorer presets); the chosen chip gets an ink outline and medium weight; its value sits right
+  under the chips in a hairline panel (control radius), captioned in the label face with the
+  chosen chip, the value one step larger than reading size (Change 184). Token rows emphasise
+  chosen members with an ink border and semibold digits.
+- **Lesson summary «Итого» (Change 184, variant C):** the cheat sheet's key-and-note blocks on the
+  page itself, without a frame: a grid of two columns (one on a phone), each item a semibold key —
+  a term, a formula in the code face, an error — over its note in secondary ink. A list without keys
+  (sentences) reads in one column. No bullets.
+- **Self-check «Проверьте себя» (Change 184, variant A):** a section with its own heading at the
+  level of «Практика», a muted line «Ответь сначала сам, потом открой ответ.», then numbered
+  questions on hairlines (mono muted numbers). Each has the practice task's soft button «Ответ» /
+  «Скрыть ответ» (a native `details`, with or without scripting) and, under it, the answer captioned
+  «Ответ» in the label face, in secondary ink — the same pattern as «Решение» in a task. On a
+  subtopic page it comes before «Практика»: reasoning first, then the file.
+- **Topic final page:** the section of checks is titled «Проверка решения» (it was «На экзамене»,
+  which named none of its content); a practice list of one task shows no tab strip.
 - **Topic cheat sheet:** one hairline sheet: a three-step solving order joined by small orange
   arrows (its only accent), a three-column grid of subtopic blocks (link title, code key, muted
   note), then optional topic-wide sections side by side (a two-column rows section is twice as

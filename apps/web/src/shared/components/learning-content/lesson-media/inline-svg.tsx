@@ -17,7 +17,11 @@ type Props = {
 export const InlineSvg: React.FC<Props> = (props) => (
   <div
     className={styles.svg}
-    style={{ aspectRatio: `${String(props.width)} / ${String(props.height)}` }}
+    style={{
+      aspectRatio: `${String(props.width)} / ${String(props.height)}`,
+      // never wider than drawn: a narrow figure stays centred (F11)
+      maxWidth: `${String(props.width)}px`,
+    }}
     role={props.label ? "img" : undefined}
     aria-label={props.label}
     hidden={props.hidden}

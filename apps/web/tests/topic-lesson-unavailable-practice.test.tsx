@@ -4,8 +4,9 @@ import {
   numberSequencesLesson,
   rekursiyaLesson,
   stringProcessingLesson,
+  lessonSubtopics,
+  type LessonContent,
 } from "~/entities/lesson";
-import { lessonSubtopics, type LessonContent } from "~/entities/lesson";
 import { TopicPracticePage, TopicSubtopicPage } from "~/pages/topic-lesson";
 import type { PracticeTaskTypes } from "~/entities/practice-task";
 
@@ -161,7 +162,9 @@ describe("topic lesson with unavailable practice", () => {
       />,
     );
 
-    expect(screen.getByText("Задание 17 · 8 задач")).toBeTruthy();
+    // the topic head (F6): the task as a kicker, then «N подтем · M задач»
+    expect(screen.getByText("Задание 17")).toBeTruthy();
+    expect(screen.getByText(/^\d+ подтем\S* · 8 задач$/u)).toBeTruthy();
     expect(screen.getByTestId("topic-lesson-progress")).toBeTruthy();
   });
 
@@ -175,7 +178,9 @@ describe("topic lesson with unavailable practice", () => {
       />,
     );
 
-    expect(screen.getByText("Задание 16 · 5 задач")).toBeTruthy();
+    // the topic head (F6): the task as a kicker, then «N подтем · M задач»
+    expect(screen.getByText("Задание 16")).toBeTruthy();
+    expect(screen.getByText(/^\d+ подтем\S* · 5 задач$/u)).toBeTruthy();
     expect(screen.getByTestId("topic-lesson-progress")).toBeTruthy();
   });
 });

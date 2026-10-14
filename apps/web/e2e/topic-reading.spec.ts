@@ -4,10 +4,9 @@ test("approved shared reading style keeps semantic feedback and responsive outli
   topicLessonPage,
   browserSession,
 }) => {
-  // Страница урока с рисунками и роликами длиннее, а проверка типографики гоняет её по размерам шрифта.
   test.setTimeout(90_000);
   await topicLessonPage.open();
-  await topicLessonPage.expectRecursionStylePilot();
+  await topicLessonPage.expectReadingStyle();
   await topicLessonPage.expectStableOutlineSelection();
   browserSession.expectCleanConsole();
 });
@@ -16,7 +15,7 @@ test("approved shared reading style is readable without scripts @no-js", async (
   noJavaScriptTopicLessonPage,
 }) => {
   await noJavaScriptTopicLessonPage.open();
-  await noJavaScriptTopicLessonPage.expectRecursionStylePilot(true);
+  await noJavaScriptTopicLessonPage.expectReadingStyle(true);
 });
 
 test("shared blue links and outline apply the approved number-record reading style", async ({
@@ -28,7 +27,7 @@ test("shared blue links and outline apply the approved number-record reading sty
   browserSession.expectCleanConsole();
 });
 
-test("recursion study layout supports mobile anchors, breakpoints and enlarged text", async ({
+test("topic study layout supports mobile anchors, breakpoints and enlarged text", async ({
   topicLessonPage,
   browserSession,
 }) => {
@@ -77,57 +76,18 @@ test("lesson code disclosure stays transparent and return to top preserves focus
   browserSession.expectCleanConsole();
 });
 
-test("recursion learning blocks keep answers hidden until keyboard disclosure", async ({
+test("lesson learning blocks keep answers hidden until keyboard disclosure", async ({
   topicLessonPage,
   browserSession,
 }) => {
   await topicLessonPage.open();
-  await topicLessonPage.expectRecursionLearningBlocks();
+  await topicLessonPage.expectLearningBlocks();
   browserSession.expectCleanConsole();
 });
 
-test("recursion learning blocks disclose hints and answers without scripts @no-js", async ({
+test("lesson learning blocks disclose hints and answers without scripts @no-js", async ({
   noJavaScriptTopicLessonPage,
 }) => {
   await noJavaScriptTopicLessonPage.open();
-  await noJavaScriptTopicLessonPage.expectRecursionLearningBlocks(true);
-});
-
-test("lesson videos autoplay silently, toggle on click and keep the reading column intact", async ({
-  topicLessonPage,
-  browserSession,
-}) => {
-  await topicLessonPage.open();
-  await topicLessonPage.expectLessonVideos();
-  browserSession.expectCleanConsole();
-});
-
-test("lesson videos show the poster without autoplay for reduced motion", async ({
-  topicLessonPage,
-}) => {
-  await topicLessonPage.open();
-  await topicLessonPage.expectLessonVideosRespectReducedMotion();
-});
-
-test("lesson videos keep poster, sources and an inert control without scripts @no-js", async ({
-  noJavaScriptTopicLessonPage,
-}) => {
-  await noJavaScriptTopicLessonPage.open();
-  await noJavaScriptTopicLessonPage.expectLessonVideos(true);
-});
-
-test("lesson figures load, carry one caption and keep the reading column intact", async ({
-  topicLessonPage,
-  browserSession,
-}) => {
-  await topicLessonPage.open();
-  await topicLessonPage.expectLessonFigures();
-  browserSession.expectCleanConsole();
-});
-
-test("lesson figures are readable without scripts @no-js", async ({
-  noJavaScriptTopicLessonPage,
-}) => {
-  await noJavaScriptTopicLessonPage.open();
-  await noJavaScriptTopicLessonPage.expectLessonFigures(true);
+  await noJavaScriptTopicLessonPage.expectLearningBlocks(true);
 });

@@ -2,6 +2,8 @@ import { ActionLink } from "~/shared/components/action-link";
 
 type PythonCourseLessonLinkProps = {
   children: React.ReactNode;
+  /** The course of the lesson; the Python course when omitted. */
+  courseSlug?: "python" | "excel";
   lessonSlug: string;
 };
 
@@ -26,8 +28,11 @@ export const PythonCourseLessonLink: React.FC<PythonCourseLessonLinkProps> = (
     icon="none"
     to="/courses/$courseSlug/$lessonSlug"
     params={{
-      courseSlug: "python",
-      lessonSlug: courseLessonSlug(props.lessonSlug),
+      courseSlug: props.courseSlug ?? "python",
+      lessonSlug:
+        props.courseSlug === "excel"
+          ? props.lessonSlug
+          : courseLessonSlug(props.lessonSlug),
     }}
   >
     {props.children}

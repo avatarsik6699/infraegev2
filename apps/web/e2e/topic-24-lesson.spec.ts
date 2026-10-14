@@ -1,11 +1,11 @@
 import { test } from "./fixtures";
 
-test("published string processing lesson is readable with eight tasks", async ({
+test("published string processing lesson is readable with its bank tasks", async ({
   stringProcessingLessonPage,
   browserSession,
 }) => {
   await stringProcessingLessonPage.open();
-  await stringProcessingLessonPage.expectPublishedStringProcessingContent();
+  await stringProcessingLessonPage.expectPipelineLessonContent();
   browserSession.expectCleanConsole();
 });
 
@@ -13,7 +13,7 @@ test("published string processing lesson remains readable without JavaScript", a
   noJavaScriptStringProcessingLessonPage,
 }) => {
   await noJavaScriptStringProcessingLessonPage.open();
-  await noJavaScriptStringProcessingLessonPage.expectPublishedStringProcessingContent(
+  await noJavaScriptStringProcessingLessonPage.expectPipelineLessonContent(
     true,
   );
 });

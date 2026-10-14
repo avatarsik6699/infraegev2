@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Button } from "~/shared/components/button";
 import { copyText } from "~/shared/lib/clipboard";
 import { useIsEnhanced } from "~/shared/lib/use-is-enhanced";
+import { breakable } from "./formula-text";
 import { formulaParts } from "./formula-parts";
 import styles from "./formula-block.module.css";
 
@@ -10,6 +11,8 @@ export type FormulaLine = {
   /** The cell the formula is written in («B2»), when the text names one. */
   cell?: string;
   formula: string;
+  /** What the formula shows in that cell («Северный»), when the text gives it. */
+  result?: string;
 };
 
 export type FormulaBlockProps = {
@@ -19,9 +22,11 @@ export type FormulaBlockProps = {
 };
 
 /**
- * A formula of the Excel course (Change 177 F9): drawn as the sheet's formula
- * bar, not as a code block — an optional cell address, «fx», the formula with
- * function names in medium weight and the slots of a template in italics, and
+ * A formula of the Excel course, set as a display line (Change 184, variant C
+ * of the architect's review): no frame and no «fx», the formula in the data
+ * face between two hairlines like the rows of a learning table, the cell
+ * address in the label face before it and, when the text gives it, the value
+ * the cell shows after «⇒». Function names are medium, template slots italic;
  * one quiet copy button. Readable without scripting.
  */
 export const FormulaBlock: React.FC<FormulaBlockProps> = (props) => {
@@ -39,13 +44,11 @@ export const FormulaBlock: React.FC<FormulaBlockProps> = (props) => {
       aria-label={props.label}
       data-formula-block
       data-learning-block
+      data-cells={props.lines.some((line) => line.cell) || undefined}
     >
       {props.lines.map((line, index) => (
         <div key={`${String(index)}-${line.formula}`} className={styles.row}>
           {line.cell ? <span className={styles.cell}>{line.cell}</span> : null}
-          <span className={styles.fx} aria-hidden="true">
-            fx
-          </span>
           <code className={styles.formula}>
             {formulaParts(line.formula).map((part, k) =>
               part.kind ? (
@@ -58,10 +61,16 @@ export const FormulaBlock: React.FC<FormulaBlockProps> = (props) => {
                   {part.text}
                 </span>
               ) : (
-                part.text
+                <span key={k}>{breakable(part.text, k)}</span>
               ),
             )}
           </code>
+          {line.result ? (
+            <span className={styles.result} data-formula-result>
+              <span className={styles.visuallyHidden}>результат: </span>
+              {line.result}
+            </span>
+          ) : null}
         </div>
       ))}
       {enhanced ? (

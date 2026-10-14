@@ -7,6 +7,7 @@ import { Typography } from "~/shared/components/typography";
 import {
   CodeRunner,
   LessonDiagram,
+  LessonSummary,
   ProofDisclosure,
 } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
@@ -563,28 +564,51 @@ export const pythonFirstProgramLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          Программа — точная запись алгоритма; интерпретатор выполняет её строки
-          сверху вниз.
-        </li>
-        <li>
-          <Notation>{"print(...)"}</Notation> показывает значение; выражение без{" "}
-          <Notation>{"print"}</Notation> в файле ничего не выводит.
-        </li>
-        <li>
-          Кавычки делают запись текстом: <Notation>{'"3 * 40"'}</Notation> не
-          вычисляется.
-        </li>
-        <li>
-          Синтаксическая ошибка, исключение и логическая ошибка — разные
-          проблемы; о логической Python не сообщает.
-        </li>
-        <li>
-          Сообщение об ошибке читают с последней строки, затем ищут номер строки
-          своего файла.
-        </li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                Программа — точная запись алгоритма; интерпретатор выполняет её
+                строки сверху вниз.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"print(...)"}</Notation> показывает значение;
+                выражение без <Notation>{"print"}</Notation> в файле ничего не
+                выводит.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Кавычки делают запись текстом: <Notation>{'"3 * 40"'}</Notation>{" "}
+                не вычисляется.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Синтаксическая ошибка, исключение и логическая ошибка — разные
+                проблемы; о логической Python не сообщает.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Сообщение об ошибке читают с последней строки, затем ищут номер
+                строки своего файла.
+              </>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

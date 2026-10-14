@@ -7,6 +7,7 @@ import { Typography } from "~/shared/components/typography";
 import {
   LessonDiagram,
   LessonStepper,
+  LessonSummary,
   SheetBlock,
 } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
@@ -327,28 +328,46 @@ export const excelInputFilesLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          <KeyCombo keys={["Enter"]} /> и <KeyCombo keys={["Tab"]} />{" "}
-          подтверждают ввод, <KeyCombo keys={["Esc"]} /> отменяет,{" "}
-          <KeyCombo keys={["F2"]} /> открывает ячейку для исправления; набор
-          поверх ячейки заменяет её значение.
-        </li>
-        <li>
-          <KeyCombo keys={["Delete"]} /> очищает содержимое, удаление строки
-          сдвигает остальные строки.
-        </li>
-        <li>
-          Большой диапазон выделяют адресом в поле имени или{" "}
-          <KeyCombo keys={["Ctrl", "Shift", "стрелка"]} />; последнюю запись
-          проверяют глазами.
-        </li>
-        <li>
-          CSV — текст: при импорте указывают настоящий разделитель полей и не
-          путают его с десятичной запятой.
-        </li>
-        <li>Работают в копии файла, исходные данные не трогают.</li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                <KeyCombo keys={["Enter"]} /> и <KeyCombo keys={["Tab"]} />{" "}
+                подтверждают ввод, <KeyCombo keys={["Esc"]} /> отменяет,{" "}
+                <KeyCombo keys={["F2"]} /> открывает ячейку для исправления;
+                набор поверх ячейки заменяет её значение.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <KeyCombo keys={["Delete"]} /> очищает содержимое, удаление
+                строки сдвигает остальные строки.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Большой диапазон выделяют адресом в поле имени или{" "}
+                <KeyCombo keys={["Ctrl", "Shift", "стрелка"]} />; последнюю
+                запись проверяют глазами.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                CSV — текст: при импорте указывают настоящий разделитель полей и
+                не путают его с десятичной запятой.
+              </>
+            ),
+          },
+          { note: <>Работают в копии файла, исходные данные не трогают.</> },
+        ]}
+      />
     </>
   ),
   status: "published",

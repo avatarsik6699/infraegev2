@@ -1,19 +1,43 @@
 import { expect, type Page } from "@playwright/test";
-import bank from "../../../../content/practice-bank/bank.json" with { type: "json" };
-import { courseLessonPublications } from "../../src/entities/course/content/course-publication.mjs";
+import bankJson from "../../../../content/practice-bank/bank.json" with { type: "json" };
+import {
+  courseLessonPublications,
+  coursePublications,
+} from "../../src/entities/course/content/course-publication.mjs";
 import { lessonPublications } from "../../src/shared/config/lesson-publication.mjs";
 import { expectNoHorizontalOverflow } from "./layout.assertions";
 
 const firstTopicSubtopicByRouteSlug: Readonly<Record<string, string>> = {
-  "16-rekursiya": "osnovy",
-  "5-preobrazovanie-zapisey-chisel": "model-algoritma",
-  "17-chislovye-posledovatelnosti": "chisla-iz-fayla",
+  "3-svyazannye-tablicy": "tablicy-i-klyuchi",
+  "4-kodirovanie-i-uslovie-fano": "kod-i-uslovie-fano",
+  "5-preobrazovanie-zapisey-chisel": "chislo-i-zapis",
+  "7-izobrazheniya-zvuk-tekst": "bity-i-kody",
+  "8-perebor-slov": "slova-i-umnozhenie",
+  "9-obrabotka-tablicy-chisel": "stroka-i-uslovie",
+  "10-ip-adresa-i-maski": "adres-i-maska",
+  "11-paroli-i-zapisi": "parol-v-bajtah",
+  "14-sistemy-schisleniya": "zapis-i-znachenie",
+  "16-rekursiya": "funktsiya-cherez-sebya",
+  "17-chislovye-posledovatelnosti": "chisla-i-proverki",
+  "18-robot-sborshchik-monet": "luchshaya-summa-do-kletki",
+  "19-21-vyigryshnaya-strategiya": "igra-i-strategiya",
   "23-analiz-grafov": "graf-i-put",
-  "24-obrabotka-simvolnyh-strok": "stroka-i-pozicii",
+  "24-obrabotka-simvolnyh-strok": "stroka-i-fragment",
   "25-deliteli-i-maski": "perebor-i-proverki",
-  "26-sortirovka-i-otbor": "dannye",
-  "27-analiz-dannyh-i-klasterizatsiya": "gruppy",
+  "26-sortirovka-i-otbor": "zapisi-i-rejting",
+  "27-analiz-dannyh-i-klasterizatsiya": "tochki-i-rasstoyaniya",
 };
+
+/** A course lesson lives under the course whose module plan lists it. */
+function courseLessonRoute(lesson: { id: string; routeSlug: string }): string {
+  const course = coursePublications.find(({ modules }) =>
+    modules.some(({ lessonPlan }) =>
+      lessonPlan.some((item) => item.id === lesson.id),
+    ),
+  );
+  if (!course) throw new Error(`Course lesson ${lesson.id} has no course`);
+  return `/courses/${course.routeSlug}/${lesson.routeSlug}`;
+}
 
 function topicSubtopicRoute(routeSlug: string): string {
   const firstSlug = firstTopicSubtopicByRouteSlug[routeSlug];
@@ -21,6 +45,21 @@ function topicSubtopicRoute(routeSlug: string): string {
     throw new Error(`Published topic ${routeSlug} has no subtopic`);
   return `/ege/${routeSlug}/${firstSlug}`;
 }
+
+/** The fields of the practice bank these checks read. The file has grown past the size
+ * up to which TypeScript infers a JSON module's type, so the import is typed here. */
+const bank = bankJson as unknown as {
+  tasks: {
+    task: {
+      id: string;
+      title: string;
+      catalog_visible: boolean;
+      archived: boolean;
+      sources: { kind: string; is_public: boolean }[];
+      checker: { answer_variants: string[] };
+    };
+  }[];
+};
 
 const visibleTasks = bank.tasks
   .filter(({ task }) => task.catalog_visible && !task.archived)
@@ -48,7 +87,7 @@ export class MinimalApplicationPage {
         .filter((lesson) => lesson.status === "published")
         .map((lesson) => ({
           ...lesson,
-          route: `/courses/python/${lesson.routeSlug}`,
+          route: courseLessonRoute(lesson),
         })),
     ];
     const lesson = lessons[index];
@@ -116,7 +155,7 @@ export class MinimalApplicationPage {
     }
     const verifyType = async (scale: number) => {
       const sizes = await this.page
-        .locator("#theory pre code, #theory [data-kind]")
+        .locator("#theory pre code, #theory :is(code, var)[data-kind]")
         .evaluateAll((elements) =>
           elements.map((element) => ({
             actual: parseFloat(getComputedStyle(element).fontSize),
@@ -128,7 +167,9 @@ export class MinimalApplicationPage {
                 0.9,
           })),
         );
-      expect(sizes.length).toBeGreaterThan(0);
+      // A topic subtopic exported from its stand may open without code (Change 184).
+      if (!lesson.route.startsWith("/ege/"))
+        expect(sizes.length).toBeGreaterThan(0);
       for (const size of sizes)
         expect(Math.abs(size.actual - size.expected)).toBeLessThan(0.05);
       for (const block of await this.page.locator("#theory pre code").all())
@@ -176,6 +217,9 @@ export class MinimalApplicationPage {
     const checkpoint = this.page.getByRole("region", {
       name: "Проверьте себя",
     });
+    // A lesson exported from its stand has self-checks only where the stand has
+    // them (Change 184): a topic's «Практика и итог» or a course lesson may have none.
+    if (!(await checkpoint.count())) return;
     const disclosure = noJavaScript
       ? checkpoint.locator("summary").first()
       : checkpoint.getByRole("button").first();
@@ -218,10 +262,10 @@ export class MinimalApplicationPage {
         await expect(
           summary.getByText("практика", { exact: true }),
         ).toBeVisible();
-        await expect(this.page.locator("[data-course-module]")).toHaveCount(9);
+        await expect(this.page.locator("[data-course-module]")).toHaveCount(8);
         await expect(
           this.page.locator("[data-course-lesson-plan-item]"),
-        ).toHaveCount(28);
+        ).toHaveCount(30);
         await expect(this.page.locator("[data-course-program]")).toBeVisible();
       }
     }
@@ -253,9 +297,7 @@ export class MinimalApplicationPage {
   }
   async expectPublishedLesson(index: number) {
     const lesson = courseLessonPublications[index];
-    const response = await this.page.goto(
-      `/courses/python/${lesson.routeSlug}`,
-    );
+    const response = await this.page.goto(courseLessonRoute(lesson));
     expect(response?.status()).toBe(200);
     await expect(this.page.getByRole("heading", { level: 1 })).toHaveText(
       lesson.title,
@@ -979,7 +1021,7 @@ export class MinimalApplicationPage {
       const outline = this.page.getByRole("navigation", {
         name: "Подтемы урока",
       });
-      const trigger = outline.getByRole("button", { name: "Подтемы · 1 из 6" });
+      const trigger = outline.getByRole("button", { name: "Подтемы · 1 из 7" });
       await expect(trigger).toBeVisible();
       await expect(trigger).toBeDisabled();
       const before = await outline.boundingBox();

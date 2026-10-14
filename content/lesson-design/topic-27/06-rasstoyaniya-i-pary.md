@@ -188,6 +188,8 @@ print(sum(1 for p in big if dist(center, p) <= 10))
 5
 ```
 
+Те же точки и окружность на рисунке:
+
 <figure class="plate-figure">
 %%cl_scatter("example27.txt", circle=(1, 1, 10))%%
 <figcaption>Окружность радиуса 10 вокруг (1; 1): точка (11; 1) лежит ровно на ней, (10; 0) — внутри на расстоянии √82 ≈ 9,06, (12; 0) — снаружи.</figcaption>

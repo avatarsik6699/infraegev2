@@ -2,7 +2,10 @@
 // Change the stand or course.json and re-export, not this file.
 import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
-import { SheetBlock } from "~/shared/components/learning-content";
+import {
+  LessonSummary,
+  SheetBlock,
+} from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { excelNeighbourCellsLessonPublication } from "./course-publication.mjs";
 import { lessonMedia } from "./excel-neighbour-cells.media";
@@ -273,29 +276,51 @@ export const excelNeighbourCellsLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          Накопление: <Notation>{"=B2+A3"}</Notation> вниз, или{" "}
-          <Notation>{"=СУММ($A$2:A2)"}</Notation> с закреплённым началом.
-        </li>
-        <li>
-          Формула пары соседей использует свою и следующую строку и заполняется
-          на одну строку меньше.
-        </li>
-        <li>
-          <Notation>{"СТРОКА()"}</Notation> даёт номер строки формулы; с{" "}
-          <Notation>{"МИН"}</Notation> и <Notation>{"МАКС"}</Notation> — первая
-          и последняя подходящие строки.
-        </li>
-        <li>
-          Таблица из таблицы: внутренняя формула из вычисленных соседей, крайние
-          строки — своими формулами.
-        </li>
-        <li>
-          Excel считает ячейки в порядке зависимостей, а круговая ссылка —
-          ошибка.
-        </li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                Накопление: <Notation>{"=B2+A3"}</Notation> вниз, или{" "}
+                <Notation>{"=СУММ($A$2:A2)"}</Notation> с закреплённым началом.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Формула пары соседей использует свою и следующую строку и
+                заполняется на одну строку меньше.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"СТРОКА()"}</Notation> даёт номер строки формулы; с{" "}
+                <Notation>{"МИН"}</Notation> и <Notation>{"МАКС"}</Notation> —
+                первая и последняя подходящие строки.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Таблица из таблицы: внутренняя формула из вычисленных соседей,
+                крайние строки — своими формулами.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Excel считает ячейки в порядке зависимостей, а круговая ссылка —
+                ошибка.
+              </>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

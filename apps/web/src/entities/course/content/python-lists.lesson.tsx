@@ -6,6 +6,7 @@ import { Typography } from "~/shared/components/typography";
 import {
   CodeRunner,
   LessonDiagram,
+  LessonSummary,
   VariantPicker,
 } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
@@ -599,32 +600,55 @@ export const pythonListsLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          Список изменяем: <Notation>{"a[i] = x"}</Notation>,{" "}
-          <Notation>{"append"}</Notation>, <Notation>{"insert"}</Notation>,{" "}
-          <Notation>{"pop"}</Notation>, <Notation>{"remove"}</Notation>,{" "}
-          <Notation>{"reverse"}</Notation>.
-        </li>
-        <li>
-          Методы, меняющие список, возвращают <Notation>{"None"}</Notation>: не
-          пиши <Notation>{"a = a.append(x)"}</Notation>.
-        </li>
-        <li>
-          <Notation>{"b = a"}</Notation> — второе имя того же списка; копия —{" "}
-          <Notation>{"a.copy()"}</Notation>, <Notation>{"a[:]"}</Notation>,{" "}
-          <Notation>{"list(a)"}</Notation>.
-        </li>
-        <li>
-          Копия поверхностная: вложенные списки остаются общими;{" "}
-          <Notation>{"[[0] * 3] * 2"}</Notation> повторяет одну строку.
-        </li>
-        <li>
-          <Notation>{"split()"}</Notation> режет по пробелам,{" "}
-          <Notation>{'split(",")'}</Notation> — по запятой с пустыми частями;{" "}
-          <Notation>{"join"}</Notation> склеивает строки.
-        </li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                Список изменяем: <Notation>{"a[i] = x"}</Notation>,{" "}
+                <Notation>{"append"}</Notation>, <Notation>{"insert"}</Notation>
+                , <Notation>{"pop"}</Notation>, <Notation>{"remove"}</Notation>,{" "}
+                <Notation>{"reverse"}</Notation>.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Методы, меняющие список, возвращают{" "}
+                <Notation>{"None"}</Notation>: не пиши{" "}
+                <Notation>{"a = a.append(x)"}</Notation>.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"b = a"}</Notation> — второе имя того же списка;
+                копия — <Notation>{"a.copy()"}</Notation>,{" "}
+                <Notation>{"a[:]"}</Notation>, <Notation>{"list(a)"}</Notation>.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Копия поверхностная: вложенные списки остаются общими;{" "}
+                <Notation>{"[[0] * 3] * 2"}</Notation> повторяет одну строку.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"split()"}</Notation> режет по пробелам,{" "}
+                <Notation>{'split(",")'}</Notation> — по запятой с пустыми
+                частями; <Notation>{"join"}</Notation> склеивает строки.
+              </>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

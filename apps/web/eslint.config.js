@@ -242,6 +242,12 @@ export default tseslint.config(
     },
   },
   {
+    files: ["src/shared/lib/fullscreen/browser-adapter.ts"],
+    rules: {
+      "no-restricted-globals": restrictedPlatformGlobals("document"),
+    },
+  },
+  {
     files: ["src/shared/lib/clipboard/browser-adapter.ts"],
     rules: {
       "no-restricted-globals": restrictedPlatformGlobals("navigator"),

@@ -18,7 +18,7 @@ const STEP_MS = 1600;
 /**
  * Step-through diagram over generated frames (SPEC §2.3): the learner moves
  * by hand; play only advances on request, never by itself, and is absent
- * under reduced motion. Controls match `LessonVideo`: quiet icon buttons and
+ * under reduced motion. Controls are quiet icon buttons and
  * a thin timeline. Without scripting the final frame and every step caption
  * stay readable.
  */

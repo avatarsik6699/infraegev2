@@ -6,6 +6,7 @@ import { Typography } from "~/shared/components/typography";
 import {
   CodeRunner,
   LessonStepper,
+  LessonSummary,
   LessonTable,
 } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
@@ -326,30 +327,53 @@ export const pythonIteratorsGeneratorsLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          <Notation>{"for"}</Notation> берёт элементы у итератора;{" "}
-          <Notation>{"iter"}</Notation> и <Notation>{"next"}</Notation> делают
-          это вручную.
-        </li>
-        <li>
-          Итератор одноразовый: после исчерпания он пуст;{" "}
-          <Notation>{"range"}</Notation> и список можно обходить снова.
-        </li>
-        <li>
-          <Notation>{"map"}</Notation> и <Notation>{"filter"}</Notation>{" "}
-          работают постепенно; <Notation>{"list(...)"}</Notation> собирает их
-          результаты.
-        </li>
-        <li>
-          Генераторное выражение в <Notation>{"sum(...)"}</Notation>,{" "}
-          <Notation>{"any(...)"}</Notation> не создаёт промежуточный список.
-        </li>
-        <li>
-          <Notation>{"yield"}</Notation> выдаёт значение и приостанавливает
-          функцию до следующего запроса.
-        </li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                <Notation>{"for"}</Notation> берёт элементы у итератора;{" "}
+                <Notation>{"iter"}</Notation> и <Notation>{"next"}</Notation>{" "}
+                делают это вручную.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Итератор одноразовый: после исчерпания он пуст;{" "}
+                <Notation>{"range"}</Notation> и список можно обходить снова.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"map"}</Notation> и <Notation>{"filter"}</Notation>{" "}
+                работают постепенно; <Notation>{"list(...)"}</Notation> собирает
+                их результаты.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Генераторное выражение в <Notation>{"sum(...)"}</Notation>,{" "}
+                <Notation>{"any(...)"}</Notation> не создаёт промежуточный
+                список.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"yield"}</Notation> выдаёт значение и
+                приостанавливает функцию до следующего запроса.
+              </>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

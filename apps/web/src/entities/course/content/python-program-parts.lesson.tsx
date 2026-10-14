@@ -3,7 +3,10 @@
 import { CodeBlock } from "~/shared/components/code-block";
 import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
-import { ProofDisclosure } from "~/shared/components/learning-content";
+import {
+  LessonSummary,
+  ProofDisclosure,
+} from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { pythonProgramPartsLessonPublication } from "./course-publication.mjs";
 
@@ -363,27 +366,46 @@ export const pythonProgramPartsLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          <Notation>{"import math"}</Notation> — доступ через{" "}
-          <Notation>{"math.имя"}</Notation>;{" "}
-          <Notation>{"from math import isqrt"}</Notation> — имя напрямую.
-        </li>
-        <li>
-          <Notation>{"math.isqrt"}</Notation>, <Notation>{"gcd"}</Notation>,{" "}
-          <Notation>{"floor"}</Notation>, <Notation>{"ceil"}</Notation>,{" "}
-          <Notation>{"fsum"}</Notation> — точные готовые действия с числами.
-        </li>
-        <li>Свой файл не называют как стандартный модуль.</li>
-        <li>
-          <Notation>{'if __name__ == "__main__":'}</Notation> выполняет запуск
-          только при прямом запуске файла.
-        </li>
-        <li>
-          Программу делят на чтение, вычисление и вывод; вычисление проверяют
-          отдельно.
-        </li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                <Notation>{"import math"}</Notation> — доступ через{" "}
+                <Notation>{"math.имя"}</Notation>;{" "}
+                <Notation>{"from math import isqrt"}</Notation> — имя напрямую.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"math.isqrt"}</Notation>,{" "}
+                <Notation>{"gcd"}</Notation>, <Notation>{"floor"}</Notation>,{" "}
+                <Notation>{"ceil"}</Notation>, <Notation>{"fsum"}</Notation> —
+                точные готовые действия с числами.
+              </>
+            ),
+          },
+          { note: <>Свой файл не называют как стандартный модуль.</> },
+          {
+            note: (
+              <>
+                <Notation>{'if __name__ == "__main__":'}</Notation> выполняет
+                запуск только при прямом запуске файла.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Программу делят на чтение, вычисление и вывод; вычисление
+                проверяют отдельно.
+              </>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

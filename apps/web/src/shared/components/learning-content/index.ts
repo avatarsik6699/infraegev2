@@ -1,15 +1,17 @@
 export { Checkpoint } from "./checkpoint";
 export { LessonSectionHeading } from "./lesson-section-heading";
 export { LessonIntro } from "./lesson-intro";
-export { LessonFigure } from "./lesson-figure";
-export { LessonVideo } from "./lesson-video";
 export { LessonTheory, type LessonTheoryTypes } from "./lesson-theory";
 export { Mistake } from "./mistake";
 export { Procedure } from "./procedure";
 export { WorkedExample } from "./worked-example";
 export { LearningVisualFrame } from "./learning-visual-frame";
 export { LessonTable, type LessonTableTypes } from "./lesson-table";
-export { ProofDisclosure } from "./proof-disclosure";
+export {
+  disclosureLabel,
+  disclosurePurpose,
+  ProofDisclosure,
+} from "./proof-disclosure";
 export { LessonDiagram } from "./lesson-diagram";
 export { LessonStepper } from "./lesson-stepper";
 export { MaskSandbox, checkMask, segmentByMask } from "./mask-sandbox";
@@ -39,3 +41,4 @@ export {
 export { SheetBlock, type SheetBlockProps } from "./sheet-block";
 export { FillSandbox, type FillSandboxProps } from "./fill-sandbox";
 export { FormulaBlock, type FormulaBlockProps } from "./formula-block";
+export { LessonSummary, type LessonSummaryItem } from "./lesson-summary";

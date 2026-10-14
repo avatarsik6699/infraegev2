@@ -2,7 +2,11 @@
 // Change the stand or course.json and re-export, not this file.
 import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
-import { FormulaBlock, SheetBlock } from "~/shared/components/learning-content";
+import {
+  FormulaBlock,
+  LessonSummary,
+  SheetBlock,
+} from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { excelSortFilterLessonPublication } from "./course-publication.mjs";
 import { lessonMedia } from "./excel-sort-filter.media";
@@ -318,27 +322,52 @@ export const excelSortFilterLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          Сортируют всю таблицу с заголовками: поля записи переезжают вместе.
-        </li>
-        <li>
-          Порядок уровней сортировки важен: сначала группа, внутри неё —
-          порядок.
-        </li>
-        <li>
-          Фильтр прячет строки; условия разных столбцов — И, значения одного
-          столбца — <Notation>{"ИЛИ"}</Notation>.
-        </li>
-        <li>
-          <Notation>{"СУММ"}</Notation> и <Notation>{"СУММЕСЛИ"}</Notation> не
-          видят фильтра; <Notation>{"ПРОМЕЖУТОЧНЫЕ.ИТОГИ(109;…)"}</Notation>{" "}
-          считает только видимое, 9 — учитывает скрытое вручную.
-        </li>
-        <li>
-          Ответ записывают формулой, строка состояния — только для проверки.
-        </li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                Сортируют всю таблицу с заголовками: поля записи переезжают
+                вместе.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Порядок уровней сортировки важен: сначала группа, внутри неё —
+                порядок.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Фильтр прячет строки; условия разных столбцов — И, значения
+                одного столбца — <Notation>{"ИЛИ"}</Notation>.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"СУММ"}</Notation> и{" "}
+                <Notation>{"СУММЕСЛИ"}</Notation> не видят фильтра;{" "}
+                <Notation>{"ПРОМЕЖУТОЧНЫЕ.ИТОГИ(109;…)"}</Notation> считает
+                только видимое, 9 — учитывает скрытое вручную.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Ответ записывают формулой, строка состояния — только для
+                проверки.
+              </>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

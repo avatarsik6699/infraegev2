@@ -42,15 +42,21 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
+from excel_figures import fill_try  # noqa: E402
 from export_media import media_key, parse_call, prettier  # noqa: E402
 from figures import REMAINDER_CAPTION, STAND, STEPPERS, WIDGETS, mask_try  # noqa: E402
-from terms import TERMS  # noqa: E402
+from runblock import IO, file_name, record  # noqa: E402
+from sheetblock import BLOCK as SHEET_BLOCK  # noqa: E402
+from sheetblock import parse_block, site_data  # noqa: E402
+from terms import EXCEL_TERMS, TERMS  # noqa: E402
 
+CONTENT = HERE.parents[1] / "apps/web/src/entities/lesson/content"
+BANK = HERE.parents[1] / "content/practice-bank/bank.json"
 TASK_BLOCK = ("**Чтобы проверить понимание", "**Задачи основных подтем")
 FIGURE_CALL = re.compile(r"^%%(\w+)\((.*?)\)%%$")
 INLINE = re.compile(
     r"\[\[(?P<keys>[^\]\n\"]+)\]\]"
-    r"|\{\{(?P<term_key>\w+)\|(?P<term_label>.+?)\}\}"
+    r"|\{\{(?P<term_key>[\w-]+)\|(?P<term_label>.+?)\}\}"
     r"|<sup>(?P<sup>.+?)</sup>"
     r"|\*\*(?P<bold>.+?)\*\*"
     r"|`(?P<code>[^`]+)`"
@@ -59,6 +65,18 @@ INLINE = re.compile(
     r"|\[(?P<file_text>[^\]]+)\]\((?P<file_url>topic-\d+/files/[^)\s]+)\)"
 )
 LEVELS = {"основной": "core", "дополнительный": "advanced"}
+CODE_GROUP = re.compile(
+    r"^```(?P<lang>[\w.-]+)(?P<run> run)?(?: (?P<name>[\w-]+\.\w+))?\n(?P<code>.*?)^```\n"
+    r"(?P<io>(?:\n*^```(?:output|console|error|input)\n.*?^```\n)*)"
+    r"(?:\n*^```steps\n(?P<notes>.*?)^```\n)?",
+    re.M | re.S,
+)
+IO_BLOCK = re.compile(r"```(output|console|error|input)\n(.*?)```", re.S)
+HEAD = {"shell": "команда", "text": "текст"}
+
+
+# fences a code block may have besides a file name (``23.txt``)
+CODE_FENCES = {"python", "output", "error", "console", "input", "bash", "shell"}
 
 
 def js(text: str) -> str:
@@ -70,7 +88,7 @@ def jsx_text(text: str) -> str:
     return re.sub(r"[{}<>]+", lambda m: "{" + js(m.group(0)) + "}", text)
 
 
-def inline(text: str) -> str:
+def inline(text: str, files: dict[str, str] | None = None) -> str:
     # figure captions are HTML on the stand: <strong> reads as **…**
     text = re.sub(r"<strong>(.*?)</strong>", r"**\1**", text, flags=re.S)
     out, last = [], 0
@@ -81,13 +99,23 @@ def inline(text: str) -> str:
             out.append(f"<KeyCombo keys={{[{keys}]}} />")
         elif m.group("term_key") is not None:
             key = m.group("term_key")
-            if key not in TERMS:
-                raise SystemExit(f"Unknown term {key!r}; add it to terms.TERMS")
-            out.append(f"<PythonTerm term={js(key)}>{inline(m.group('term_label'))}</PythonTerm>")
+            if key not in TERMS and key not in EXCEL_TERMS:
+                raise SystemExit(f"Unknown term {key!r}; add it to terms.TERMS or EXCEL_TERMS")
+            label = inline(m.group("term_label"), files)
+            out.append(f"<PythonTerm term={js(key)}>{label}</PythonTerm>")
         elif m.group("sup") is not None:
             out.append(f"<sup>{jsx_text(m.group('sup'))}</sup>")
         elif m.group("bold") is not None:
-            out.append(f"<strong>{inline(m.group('bold'))}</strong>")
+            out.append(f"<strong>{inline(m.group('bold'), files)}</strong>")
+        elif m.group("file_text") is not None and files is not None:
+            # a self-check question links the file of the bank task it shares
+            name = m.group("file_url").rsplit("/", 1)[-1]
+            if name not in files:
+                raise SystemExit(f"{name}: no bank task carries this file")
+            out.append(
+                f'<DownloadLink presentation="inline" href={js(files[name])}>'
+                f"{jsx_text(m.group('file_text'))}</DownloadLink>"
+            )
         elif m.group("file_text") is not None:
             # a data file of the topic: on the site it is attached to the bank
             # task, so the lesson names it without a stand link
@@ -128,6 +156,20 @@ def plain(text: str) -> str:
     return re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", text).strip()
 
 
+def camel(text: str) -> str:
+    head, *rest = re.split(r"[-_]", text)
+    return head + "".join(part[:1].upper() + part[1:] for part in rest)
+
+
+def code_label(context: str) -> str:
+    """The accessible name of a code block: the paragraph that introduces it."""
+    text = plain(context).rstrip(":.").strip()
+    if 4 <= len(text) <= 90:
+        return text
+    last = re.split(r"(?<=[.!?])\s+", text)[-1].rstrip(":.").strip()
+    return last if 4 <= len(last) <= 90 else "Программа на Python"
+
+
 class Converter:
     def __init__(self, media_known: set[str], site: dict, subtopic_slugs: list[str]):
         self.media_known = media_known
@@ -135,6 +177,14 @@ class Converter:
         self.subtopic_slugs = subtopic_slugs
         self.imports: set[str] = set()
         self.local: set[str] = set()
+        # a course shows every Python fence as in a terminal; a topic keeps its
+        # code-and-output blocks and takes only runs, sheets and formulas from here
+        self.course = False
+        self.summary = False  # converting the list of «Итого»
+        self.codes: list[str] = []
+        self.runs: list[str] = []  # media entries of runnable blocks and sheets
+        self.sheet_labels: dict[str, str] = {}
+        self.run_keys: set[str] = set()
 
     def cheatsheet(self, source: str) -> str:
         data = json.loads((STAND / source).read_text(encoding="utf-8"))
@@ -207,7 +257,39 @@ class Converter:
             f"variants={{[{', '.join(variants)}]}} />"
         )
 
-    def figure_call(self, name: str, args_src: str, caption: str | None, context: str) -> str:
+    def figure_call(self, name: str, args_src: str, caption, context: str) -> str:
+        if name == "code":
+            return self.codes[int(args_src)].replace("__LABEL__", js(code_label(context)))
+        if name == "sheet":
+            key = f"sheet{args_src}"
+            self.imports.add("SheetBlock")
+            return f"<SheetBlock {{...lessonMedia.{key}}} label={{{js(self.sheet_labels[key])}}} />"
+        if name == "fill_try":
+            args, _ = parse_call(name, args_src)
+            defaults = fill_try.__defaults__ or ()
+            formula, origin, target = (*args, *defaults[len(args) :])[:3]
+            self.imports.add("FillSandbox")
+            return (
+                f"<FillSandbox defaultFormula={{{js(formula)}}} origin={js(origin)} "
+                f"defaultTarget={js(target)} />"
+            )
+        if name == "range_try":
+            args, kwargs = parse_call(name, args_src)
+            mode, start, stop, step, text = (*args, None, None, None, None, None)[:5]
+            mode = kwargs.get("mode", mode or "range")
+            start = kwargs.get("start", 2 if start is None else start)
+            stop = kwargs.get("stop", 9 if stop is None else stop)
+            step = kwargs.get("step", 3 if step is None else step)
+            text = kwargs.get("text", text or "ABCDEFG")
+            self.imports.add("RangeSandbox")
+            extra = f" text={js(text)}" if mode == "slice" else ""
+            return (
+                f"<RangeSandbox mode={js(mode)} start={{{json.dumps(start)}}} "
+                f"stop={{{json.dumps(stop)}}} step={{{step}}}{extra} />"
+            )
+        return self.topic_figure(name, args_src, caption, context)
+
+    def topic_figure(self, name: str, args_src: str, caption: str | None, context: str) -> str:
         args, kwargs = parse_call(name, args_src)
         if name == "mask_try":
             self.imports.add("MaskSandbox")
@@ -246,6 +328,94 @@ class Converter:
             f"<LessonDiagram {{...lessonMedia.{key}}} caption={{<>{inline(caption or '')}</>}} />"
         )
 
+    def code_group(self, m: re.Match) -> str:
+        """One code fence with its output blocks → a placeholder line."""
+        lang, code, name = m.group("lang"), m.group("code").rstrip("\n"), m.group("name")
+        io_text = m.group("io") or ""
+        if not self.course and not (m.group("run") or lang.startswith("excel")):
+            return m.group(0)  # a topic's code and output: blocks() keeps its look
+        if lang == "python":
+            parts, error = [], None
+            for kind, body in IO_BLOCK.findall(io_text):
+                body = body.rstrip("\n")
+                if kind == "error":
+                    error = body
+                elif kind == "input":
+                    parts.append("\n".join(f"⟪{line}⟫" for line in body.split("\n")))
+                else:
+                    parts.append(body)
+            output = "\n".join(parts)
+            shown = name or file_name(code)
+            if m.group("run"):
+                key = "run" + camel(Path(shown).stem)[:1].upper() + camel(Path(shown).stem)[1:]
+                base, n = key, 1
+                while key in self.run_keys:  # a topic reuses a file name on another page
+                    n += 1
+                    key = f"{base}{n}"
+                steps = record(code + "\n", dict(IO.findall(io_text)), m.group("notes") or "")
+                entry = {"kind": "run", "code": code, "fileName": shown, "output": output}
+                if error is not None:
+                    entry["error"] = error
+                entry["steps"] = steps
+                self.runs.append(f"  {key}: " + json.dumps(entry, ensure_ascii=False) + ",")
+                self.run_keys.add(key)
+                self.media_known.add(key)
+                self.imports.add("CodeRunner")
+                jsx = f"<CodeRunner {{...lessonMedia.{key}}} label={{__LABEL__}} />"
+            else:
+                extra = ""
+                if output or error is not None:
+                    extra += ' outputLayout="lines"'
+                if output:
+                    extra += f" output={{{js(output)}}}"
+                if error is not None:
+                    extra += f" error={{{js(error)}}}"
+                self.imports.add("CodeBlock")
+                jsx = (
+                    f'<CodeBlock code={{{js(code)}}} label={{__LABEL__}} language="python" '
+                    f"fileName={js(shown)} showLineNumbers={{false}}{extra} />"
+                )
+        elif lang.startswith("excel"):
+            # a formula of the Excel course: the sheet's formula bar (F9), not code
+            lines = []
+            for raw in code.split("\n"):
+                at = re.match(r"^([A-Z]{1,3}\d+):\s*(?==)", raw)
+                cell = {"cell": at.group(1)} if at else {}
+                # «⇒ value» after the formula: what the cell shows, as on a sheet
+                formula, _, shown = (raw[at.end() :] if at else raw).partition(" ⇒ ")
+                result = {"result": shown.strip()} if shown.strip() else {}
+                lines.append({**cell, "formula": formula.rstrip(), **result})
+            self.imports.add("FormulaBlock")
+            label = "Шаблон формулы" if lang == "excel-template" else "Формула"
+            jsx = (
+                f"<FormulaBlock lines={{{json.dumps(lines, ensure_ascii=False)}}} "
+                f"label={js(label)} />"
+            )
+        else:
+            self.imports.add("CodeBlock")
+            head = lang if "." in lang else HEAD.get(lang, str(lang))
+            label = f"Строки файла {lang}" if "." in lang else f"Пример: {head}"
+            jsx = (
+                f'<CodeBlock code={{{js(code)}}} label={{{js(label)}}} language="text" '
+                f"fileName={js(head)} showLineNumbers={{false}} />"
+            )
+        self.codes.append(jsx)
+        return f"%%code({len(self.codes) - 1})%%\n"
+
+    def prepare(self, md: str) -> str:
+        md = md.replace("```excel шаблон\n", "```excel-template\n")
+        md = SHEET_BLOCK.sub(self.sheet, md)
+        return CODE_GROUP.sub(self.code_group, md)
+
+    def sheet(self, m: re.Match) -> str:
+        """A live sheet → its data in the media manifest and a placeholder line."""
+        block = parse_block(m.group(1), m.group(2))
+        key = f"sheet{len(self.sheet_labels) + 1}"
+        self.sheet_labels[key] = f"Лист «{block.name}»"
+        self.runs.append(f"  {key}: " + json.dumps(site_data(block), ensure_ascii=False) + ",")
+        self.media_known.add(key)
+        return f"%%sheet({key[5:]})%%\n"
+
     def blocks(self, md: str) -> list[str]:
         """Convert Markdown body text into JSX block elements."""
         lines = md.strip("\n").split("\n")
@@ -260,6 +430,10 @@ class Converter:
                 continue
             if stripped.startswith("```"):
                 lang = stripped[3:].strip() or "text"
+                # a code block holds code, its output or the lines of a file
+                # (Change 184 T24): reasoning, plans and conditions are prose
+                if lang.split()[0] not in CODE_FENCES and "." not in lang:
+                    raise SystemExit(f"```{lang}: not code — write it as prose, a list or a figure")
                 j = i + 1
                 while not lines[j].strip().startswith("```"):
                     j += 1
@@ -383,6 +557,11 @@ class Converter:
                 while j < len(lines) and re.match(r"^(- |\d+\. )", lines[j].strip()):
                     items.append(re.sub(r"^(- |\d+\. )", "", lines[j].strip()))
                     j += 1
+                if self.summary and not ordered:
+                    out.append(summary_block(items))
+                    self.imports.add("LessonSummary")
+                    i = j
+                    continue
                 tag = "ol" if ordered else "ul"
                 lis = "\n".join(f"<li>{inline(item)}</li>" for item in items)
                 out.append(f"<{tag}>\n{lis}\n</{tag}>")
@@ -403,12 +582,44 @@ class Converter:
             i = j
         return out
 
-    def fragment(self, md: str) -> str:
-        return "<>\n" + "\n".join(self.blocks(md)) + "\n</>"
+    def fragment(self, md: str, summary: bool = False) -> str:
+        """JSX of a step; in «Итого» (`summary`) a bullet list is LessonSummary."""
+        self.summary = summary
+        try:
+            return "<>\n" + "\n".join(self.blocks(md)) + "\n</>"
+        finally:
+            self.summary = False
+
+
+# «Итого» item: a key — bold or code, maybe with a few words — then « — » or «: »
+SUMMARY_KEY = re.compile(r"^((?:\*\*[^*]+\*\*|`[^`]+`)[^—:`*]*?)(?: — |: )(.+)$", re.S)
+
+
+def summary_block(items: list[str]) -> str:
+    """The list of «Итого» as LessonSummary (Change 184): `**ключ** — пояснение`
+    gives a key and its note. Keys only when every item has one, so a list never
+    mixes the two forms; otherwise each item is one plain block."""
+    found = [SUMMARY_KEY.match(item) for item in items]
+    rows = []
+    for item, m in zip(items, found, strict=True):
+        if all(found) and m:
+            key, note = inline(m.group(1).strip()), inline(m.group(2))
+            rows.append(f"{{ key: <>{key}</>, note: <>{note}</> }}")
+        else:
+            rows.append(f"{{ note: <>{inline(item)}</> }}")
+    return "<LessonSummary\nitems={[\n" + ",\n".join(rows) + ",\n]}\n/>"
 
 
 def split_steps(md: str) -> list[str]:
     return [b.strip() for b in re.split(r"\n---\n", md) if b.strip()]
+
+
+def without_label(step: str, label: str) -> str:
+    """The step without a bold opening that repeats its heading («**Итого.**»)."""
+    m = re.match(r"\*\*(.+?)\.?\*\*[ \t]*", step)
+    if m and m.group(1).casefold() == label.casefold():
+        return step[m.end() :].lstrip()
+    return step
 
 
 def task_inventory(block: str) -> list[dict]:
@@ -424,36 +635,63 @@ def task_inventory(block: str) -> list[dict]:
     return [{"number": n, "question": q[n], "answer": a.get(n, "")} for n in sorted(q)]
 
 
-def write_terms(path: Path) -> None:
-    """The PythonTerm registry, generated from terms.TERMS."""
+def write_terms(path: Path) -> str:
+    """The term registry of topic lessons, generated from terms.TERMS (Python
+    course) and terms.EXCEL_TERMS (Excel course, Change 184)."""
     entries = []
-    for key, (title, body, slug, lesson) in TERMS.items():
-        entries.append(
-            f"  {key}: {{\n    title: {js(title)},\n    body: <>{inline(body)}</>,\n"
-            f"    lessonSlug: {js(slug)},\n    lessonTitle: {js(lesson)},\n  }},"
-        )
-    path.write_text(
-        prettier(
-            "// Generated by scripts/lesson_design/export_lesson.py from terms.py.\n"
-            'import { Notation } from "~/shared/components/notation";\n\n'
-            "type PythonTermEntry = {\n  title: string;\n  body: React.ReactNode;\n"
-            "  lessonSlug: string;\n  lessonTitle: string;\n};\n\n"
-            "export const pythonTerms = {\n"
-            + "\n".join(entries)
-            + "\n} as const satisfies Record<string, PythonTermEntry>;\n\n"
-            "export type PythonTermKey = keyof typeof pythonTerms;\n",
-            path,
-        )
+    for course, registry in (("python", TERMS), ("excel", EXCEL_TERMS)):
+        meta = json.loads((STAND / f"course-{course}/course.json").read_text(encoding="utf-8"))
+        slugs = {ls["site"]["routeSlug"] for m in meta["modules"] for ls in m["lessons"]}
+        for key, (title, body, slug, lesson) in registry.items():
+            if slug not in slugs:
+                raise SystemExit(f"term {key!r}: the {course} course has no lesson {slug!r}")
+            entries.append(
+                f"  {js(key) if '-' in key else key}: {{\n    title: {js(title)},\n"
+                f"    body: <>{inline(body)}</>,\n    course: {js(course)},\n"
+                f"    lessonSlug: {js(slug)},\n    lessonTitle: {js(lesson)},\n  }},"
+            )
+    return prettier(
+        "// Generated by scripts/lesson_design/export_lesson.py from terms.py.\n"
+        'import { Notation } from "~/shared/components/notation";\n\n'
+        "type PythonTermEntry = {\n  title: string;\n  body: React.ReactNode;\n"
+        '  course: "python" | "excel";\n  lessonSlug: string;\n  lessonTitle: string;\n};\n\n'
+        "export const pythonTerms = {\n"
+        + "\n".join(entries)
+        + "\n} as const satisfies Record<string, PythonTermEntry>;\n\n"
+        "export type PythonTermKey = keyof typeof pythonTerms;\n",
+        path,
     )
 
 
+def bank_files() -> dict[str, str]:
+    """File name → its download address on the site: the file of the first bank
+    task (by id) that carries it, as the practice shows it."""
+    bank = json.loads(BANK.read_text(encoding="utf-8"))
+    found: dict[str, str] = {}
+    for entry in sorted(bank["tasks"], key=lambda e: e["task"]["id"]):
+        for usage in entry["task"]["files"]:
+            found.setdefault(
+                usage["filename"], f"/api/tasks/{entry['task']['id']}/files/{usage['id']}"
+            )
+    return found
+
+
 def checkpoint_block(checks: list[dict], indent: str) -> str:
-    """«Проверьте себя» items from topic.json → a `checkpoint` property."""
+    """«Проверьте себя» items from topic.json → a `checkpoint` property. The
+    question is text, not a button (Change 184): its terms open their hints and
+    a task file is a download link."""
     if not checks:
         return ""
+    for c in checks:
+        if "%%" in c["prompt"] + c["reveal"]:
+            # a stand figure (the workbook view of a task) has no place in the
+            # self-check: the file is attached to the bank task (Change 184)
+            raise SystemExit(f"checkpoint {c['id']!r}: a %%figure%% call in the self-check")
+    files = bank_files() if any("/files/" in c["prompt"] + c["reveal"] for c in checks) else {}
     items = ",\n".join(
-        f"{indent}  {{ id: {js(c['id'])}, prompt: <>{inline(c['prompt'])}</>, "
-        f"reveal: <>{inline(c['reveal'])}</> }}"
+        f"{indent}  {{ id: {js(c['id'])}, "
+        f"prompt: <>{inline(c['prompt'], files)}</>, "
+        f"reveal: <>{inline(c['reveal'], files)}</> }}"
         for c in checks
     )
     return f"{indent}checkpoint: [\n{items}\n{indent}],\n"
@@ -462,22 +700,21 @@ def checkpoint_block(checks: list[dict], indent: str) -> str:
 def main() -> int:
     parser = argparse.ArgumentParser(description=(__doc__ or "").split("\n")[0])
     parser.add_argument("topic", type=Path)
-    parser.add_argument("--out", type=Path, required=True)
-    parser.add_argument("--tasks", type=Path, required=True)
+    parser.add_argument("--out", type=Path, help="default: the site lesson of topic.json site.id")
+    parser.add_argument("--tasks", type=Path, help="where to write the task inventory")
+    parser.add_argument("--check", action="store_true", help="fail on a stale lesson or terms")
     options = parser.parse_args()
     topic = options.topic
     meta = json.loads((topic / "topic.json").read_text())
     site = meta["site"]
-    manifest = (
-        HERE.parents[1] / "apps/web/src/entities/lesson/content" / f"{site['id']}.media.ts"
-    ).read_text()
+    manifest = (CONTENT / f"{site['id']}.media.ts").read_text()
     slugs = [re.sub(r"^\d+-", "", Path(sub["source"]).stem) for sub in meta["subtopics"]]
     converter = Converter(set(re.findall(r"^  (\w+): \{", manifest, re.M)), site, slugs)
     theory, subtopics, inventory = [], [], {}
     for sub in meta["subtopics"]:
         name = sub["source"]
         slug = re.sub(r"^\d+-", "", Path(name).stem)
-        steps = split_steps((topic / name).read_text())
+        steps = split_steps(converter.prepare((topic / name).read_text()))
         anchors = site.get("steps", {}).get(name, [])
         ids = []
         k = 0
@@ -490,7 +727,7 @@ def main() -> int:
             ids.append(anchor)
             theory.append(
                 f"    {{\n      id: {js(anchor)},\n      navLabel: {js(label)},\n"
-                f"      explanation: (\n{converter.fragment(step)}\n      ),\n    }},"
+                f"      explanation: (\n{converter.fragment(without_label(step, label), label == 'Итого')}\n      ),\n    }},"
             )
         level = LEVELS[sub["level"]]
         checkpoint = checkpoint_block(site.get("checkpoints", {}).get(slug, []), "      ")
@@ -504,7 +741,7 @@ def main() -> int:
             + checkpoint
             + "    },"
         )
-    final_steps = split_steps((topic / meta["final"]["source"]).read_text())
+    final_steps = split_steps(converter.prepare((topic / meta["final"]["source"]).read_text()))
     for step in final_steps:
         if step.startswith(TASK_BLOCK):
             inventory["praktika"] = task_inventory(step)
@@ -559,10 +796,34 @@ def main() -> int:
         text = text.replace(
             'import { ExternalLink } from "~/shared/components/external-link";\n', ""
         )
-    options.out.write_text(prettier(text, options.out))
-    write_terms(options.out.parent / "python-terms.tsx")
-    options.tasks.write_text(json.dumps(inventory, ensure_ascii=False, indent=2) + "\n")
-    print(f"draft: {options.out}; tasks: {options.tasks}")
+    if "<DownloadLink" in text:  # a self-check question with a task file
+        text = text.replace(
+            'import { Notation } from "~/shared/components/notation";\n',
+            'import { DownloadLink } from "~/shared/components/download-link";\n'
+            'import { Notation } from "~/shared/components/notation";\n',
+        )
+    if "<CodeBlock" not in text:  # a spreadsheet topic (18) has no code
+        text = text.replace('import { CodeBlock } from "~/shared/components/code-block";\n', "")
+    if "<KeyCombo" in text:  # a key combination is written inline, outside the imports
+        text = text.replace(
+            'import { Notation } from "~/shared/components/notation";\n',
+            'import { KeyCombo } from "~/shared/components/key-combo";\n'
+            'import { Notation } from "~/shared/components/notation";\n',
+        )
+    out = options.out or CONTENT / f"{site['id']}.lesson.tsx"
+    outputs = {out: prettier(text, out)}
+    terms_path = out.parent / "python-terms.tsx"
+    outputs[terms_path] = write_terms(terms_path)
+    if options.check:
+        stale = [p for p, body in outputs.items() if not p.exists() or p.read_text() != body]
+        for p in outputs:
+            print(f"{p.name}: {'stale' if p in stale else 'up to date'}")
+        return 1 if stale else 0
+    for p, body in outputs.items():
+        p.write_text(body)
+    if options.tasks:
+        options.tasks.write_text(json.dumps(inventory, ensure_ascii=False, indent=2) + "\n")
+    print(f"wrote {out.name}" + (f"; tasks: {options.tasks}" if options.tasks else ""))
     return 0
 
 

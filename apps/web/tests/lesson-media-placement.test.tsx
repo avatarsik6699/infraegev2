@@ -6,6 +6,7 @@ import {
   numberSequencesLesson,
   preobrazovanieZapiseyChiselLesson,
   rekursiyaLesson,
+  spreadsheetsLesson,
   stringProcessingLesson,
 } from "~/entities/lesson";
 import { renderAuthoredLessonContent } from "./lesson-content-test-utils";
@@ -18,6 +19,7 @@ vi.mock("~/shared/components/action-link", () => ({
 
 const lessons = [
   rekursiyaLesson,
+  spreadsheetsLesson,
   preobrazovanieZapiseyChiselLesson,
   numberSequencesLesson,
   stringProcessingLesson,
@@ -26,11 +28,8 @@ const lessons = [
   dataAnalysisLesson,
 ];
 
-const VIDEO = "figure[data-lesson-video-figure]";
 // Code-built SVG diagrams and step-through figures follow the figure rules (Change 171).
-const FIGURE =
-  "figure[data-lesson-figure], figure[data-lesson-diagram], figure[data-lesson-stepper]";
-const MIN_BLOCKS_BETWEEN = 2;
+const FIGURE = "figure[data-lesson-diagram], figure[data-lesson-stepper]";
 
 /** Блоки урока в порядке страницы: объяснение, пример, ошибка каждого понятия, затем итог. */
 function blocksOf(lesson: (typeof lessons)[number]): Element[] {
@@ -49,31 +48,15 @@ function blocksOf(lesson: (typeof lessons)[number]): Element[] {
 }
 
 describe("lesson media placement", () => {
-  it("puts every video and figure right after the paragraph it illustrates", () => {
+  it("puts every figure right after the text it illustrates (a paragraph or a list)", () => {
     for (const lesson of lessons) {
-      for (const media of blocksOf(lesson).filter(
-        (block) => block.matches(VIDEO) || block.matches(FIGURE),
+      for (const media of blocksOf(lesson).filter((block) =>
+        block.matches(FIGURE),
       )) {
         expect(
           media.previousElementSibling?.tagName,
-          `${lesson.id}: media must follow a paragraph, not a code block or another block`,
-        ).toBe("P");
-      }
-    }
-  });
-
-  it("keeps a figure at least two blocks away from any video", () => {
-    for (const lesson of lessons) {
-      const blocks = blocksOf(lesson);
-      const videos = blocks.flatMap((b, i) => (b.matches(VIDEO) ? [i] : []));
-      const figures = blocks.flatMap((b, i) => (b.matches(FIGURE) ? [i] : []));
-      for (const figure of figures) {
-        for (const video of videos) {
-          expect(
-            Math.abs(figure - video) - 1,
-            `${lesson.id}: figure at block ${figure} is too close to the video at block ${video}`,
-          ).toBeGreaterThanOrEqual(MIN_BLOCKS_BETWEEN);
-        }
+          `${lesson.id}: media must follow a paragraph or a list, not a code block or another block`,
+        ).toMatch(/^(P|UL|OL)$/u);
       }
     }
   });
@@ -92,25 +75,5 @@ describe("lesson media placement", () => {
         expect(figure.textContent).not.toContain("Текстовое описание");
       }
     }
-  });
-
-  it("keeps recursion code and its output or call tree in one block", () => {
-    const codeBlock = '[role="group"][data-learning-block]';
-    for (const block of blocksOf(rekursiyaLesson).filter((b) =>
-      b.matches(codeBlock),
-    )) {
-      expect(
-        block.nextElementSibling?.matches(codeBlock),
-        "two code blocks must not follow each other",
-      ).toBeFalsy();
-    }
-  });
-
-  it("uses the recursion pilot figures and videos in a balanced way", () => {
-    const blocks = blocksOf(rekursiyaLesson);
-    const figures = blocks.filter((b) => b.matches(FIGURE)).length;
-    const videos = blocks.filter((b) => b.matches(VIDEO)).length;
-    expect(videos).toBe(5);
-    expect(figures).toBe(5);
   });
 });

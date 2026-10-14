@@ -3,7 +3,10 @@
 import { CodeBlock } from "~/shared/components/code-block";
 import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
-import { CodeRunner } from "~/shared/components/learning-content";
+import {
+  CodeRunner,
+  LessonSummary,
+} from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { pythonExceptionsLessonPublication } from "./course-publication.mjs";
 import { lessonMedia } from "./python-exceptions.media";
@@ -359,29 +362,52 @@ export const pythonExceptionsLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          <Notation>{"try"}</Notation>/<Notation>{"except Тип"}</Notation>{" "}
-          перехватывает только ожидаемую ошибку; <Notation>{"else"}</Notation> —
-          при успехе, <Notation>{"finally"}</Notation> — всегда.
-        </li>
-        <li>
-          <Notation>{"except: pass"}</Notation> прячет ошибки автора; так не
-          делают.
-        </li>
-        <li>
-          <Notation>{'raise ValueError("…")'}</Notation> сообщает о нарушенной
-          договорённости функции.
-        </li>
-        <li>
-          Отладка — печать состояния по шагам или отладчик; отладочный вывод
-          удаляют.
-        </li>
-        <li>
-          <Notation>{"assert"}</Notation> — проверка разработчика; примеры
-          подбирают на границы, пустой вход и отрицательные числа.
-        </li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                <Notation>{"try"}</Notation>/<Notation>{"except Тип"}</Notation>{" "}
+                перехватывает только ожидаемую ошибку;{" "}
+                <Notation>{"else"}</Notation> — при успехе,{" "}
+                <Notation>{"finally"}</Notation> — всегда.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"except: pass"}</Notation> прячет ошибки автора; так
+                не делают.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{'raise ValueError("…")'}</Notation> сообщает о
+                нарушенной договорённости функции.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Отладка — печать состояния по шагам или отладчик; отладочный
+                вывод удаляют.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"assert"}</Notation> — проверка разработчика; примеры
+                подбирают на границы, пустой вход и отрицательные числа.
+              </>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

@@ -5,6 +5,7 @@ import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
 import {
   LessonDiagram,
+  LessonSummary,
   LessonTable,
 } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
@@ -514,30 +515,54 @@ export const pythonComprehensionsLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          <Notation>{"[выражение for x in источник]"}</Notation> — тот же цикл с{" "}
-          <Notation>{"append"}</Notation>, записанный правилом.
-        </li>
-        <li>
-          <Notation>{"if"}</Notation> в конце отбирает элементы;{" "}
-          <Notation>{"a if c else b"}</Notation> в начале выбирает значение.
-        </li>
-        <li>
-          Несколько <Notation>{"for"}</Notation> — вложенные циклы в том же
-          порядке.
-        </li>
-        <li>
-          <Notation>{"{x for …}"}</Notation> — множество,{" "}
-          <Notation>{"{k: v for …}"}</Notation> — словарь.
-        </li>
-        <li>
-          <Notation>{"sum"}</Notation> пустого — 0, <Notation>{"min"}</Notation>
-          /<Notation>{"max"}</Notation> пустого — ошибка;{" "}
-          <Notation>{"all"}</Notation> пустого — <Notation>{"True"}</Notation>,{" "}
-          <Notation>{"any"}</Notation> пустого — <Notation>{"False"}</Notation>.
-        </li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                <Notation>{"[выражение for x in источник]"}</Notation> — тот же
+                цикл с <Notation>{"append"}</Notation>, записанный правилом.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"if"}</Notation> в конце отбирает элементы;{" "}
+                <Notation>{"a if c else b"}</Notation> в начале выбирает
+                значение.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Несколько <Notation>{"for"}</Notation> — вложенные циклы в том
+                же порядке.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"{x for …}"}</Notation> — множество,{" "}
+                <Notation>{"{k: v for …}"}</Notation> — словарь.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"sum"}</Notation> пустого — 0,{" "}
+                <Notation>{"min"}</Notation>/<Notation>{"max"}</Notation>{" "}
+                пустого — ошибка; <Notation>{"all"}</Notation> пустого —{" "}
+                <Notation>{"True"}</Notation>, <Notation>{"any"}</Notation>{" "}
+                пустого — <Notation>{"False"}</Notation>.
+              </>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

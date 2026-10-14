@@ -3,7 +3,10 @@
 import { KeyCombo } from "~/shared/components/key-combo";
 import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
-import { SheetBlock } from "~/shared/components/learning-content";
+import {
+  LessonSummary,
+  SheetBlock,
+} from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { excelTablesPivotsLessonPublication } from "./course-publication.mjs";
 import { lessonMedia } from "./excel-tables-pivots.media";
@@ -300,24 +303,43 @@ export const excelTablesPivotsLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          «Таблица» Excel — диапазон с фильтрами и ссылками по именам столбцов
-          [@Цена]; объединённые ячейки внутри списка мешают.
-        </li>
-        <li>
-          Условное форматирование — правило-формула для верхней левой ячейки со
-          смешанными ссылками; цвет не заменяет признак.
-        </li>
-        <li>
-          Сводная таблица — итоги по группам, то же, что{" "}
-          <Notation>{"СУММЕСЛИ"}</Notation> по каждому значению; её обновляют
-          после изменения данных.
-        </li>
-        <li>
-          Тип диаграммы — по вопросу; ответ берут из вычислений, не с графика.
-        </li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                «Таблица» Excel — диапазон с фильтрами и ссылками по именам
+                столбцов [@Цена]; объединённые ячейки внутри списка мешают.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Условное форматирование — правило-формула для верхней левой
+                ячейки со смешанными ссылками; цвет не заменяет признак.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Сводная таблица — итоги по группам, то же, что{" "}
+                <Notation>{"СУММЕСЛИ"}</Notation> по каждому значению; её
+                обновляют после изменения данных.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Тип диаграммы — по вопросу; ответ берут из вычислений, не с
+                графика.
+              </>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

@@ -26,6 +26,7 @@ when the manifest is stale; a topic without ``site`` is still on the demo stand
 import argparse
 import ast
 import hashlib
+import html
 import json
 import re
 import subprocess
@@ -38,9 +39,12 @@ sys.path.insert(0, str(HERE))
 from figures import FIGURES, STEPPERS, WIDGET_DATA, WIDGETS  # noqa: E402
 
 FIGURE_CALL = re.compile(r"%%(\w+)\((.*?)\)%%")
+FIGURE_BLOCK = re.compile(r"<figure\b.*?</figure>", re.S)
 # builders whose content is in their list arguments: two calls with the same
-# scalar arguments still draw different figures (formula_steps of one cell)
-HASHED = {"formula_steps"}
+# scalar arguments still draw different figures (formula_steps of one cell,
+# base_blocks of one base)
+HASHED = {"formula_steps", "base_blocks"}
+TASK_BLOCK = ("**Чтобы проверить понимание", "**Задачи основных подтем")
 SVG_NS = 'xmlns="http://www.w3.org/2000/svg"'
 STAND_FONT = 'font-family="Onest, system-ui, sans-serif"'
 HEADER = (
@@ -76,12 +80,14 @@ def media_key(name: str, args: list, kwargs: dict | None = None) -> str:
     """Stable TS identifier: camelCase builder name plus its positional args.
     A call whose arguments are only lists (a graph: its edge list) gets a short
     hash of them and of the keyword arguments instead, so that two pictures of
-    one graph (a path, values under the vertices) never share a key."""
+    one graph (a path, values under the vertices) never share a key; a call with
+    keyword arguments gets the hash too, so that two views of one data file
+    (points, then their clusters) never share a key either."""
     head, *rest = name.split("_")
     camel = head + "".join(part.title() for part in rest)
     parts = [re.sub(r"[^0-9A-Za-z]", "", str(a)) for a in args if not isinstance(a, list)]
     key = camel + "_".join(p for p in parts if p)
-    if (key == camel and args) or name in HASHED:
+    if (key == camel and args) or kwargs or name in HASHED:
         data = json.dumps([args, kwargs or {}], ensure_ascii=False, sort_keys=True)
         digest = hashlib.sha1(data.encode()).hexdigest()
         key += "_" + digest[:6]
@@ -113,11 +119,25 @@ def inline_svg(svg: str) -> tuple[str, int, int, str]:
     return svg, width, height, label.group(1) if label else ""
 
 
+def captions(text: str) -> dict[str, str]:
+    """Plain figure captions by the builder call they sign: the alt text of a
+    diagram whose builder draws no ``aria-label`` (topics 16, 18)."""
+    found = {}
+    for figure in FIGURE_BLOCK.finditer(text):
+        call = FIGURE_CALL.search(figure.group(0))
+        caption = re.search(r"<figcaption>(.*?)</figcaption>", figure.group(0), re.S)
+        if call and caption:
+            plain = re.sub(r"<[^>]+>", "", caption.group(1))
+            found[call.group(0)] = html.unescape(" ".join(plain.split()))
+    return found
+
+
 def figure_entries(texts: list[str], seen: set[str] | None = None) -> list[str]:
     """Manifest entries for every ``%%builder(args)%%`` call of the texts."""
     seen = set() if seen is None else seen
     entries: list[str] = []
     for text in texts:
+        signed = captions(text)
         for match in FIGURE_CALL.finditer(text):
             name, args_src = match.group(1), match.group(2)
             if name in WIDGETS and name not in WIDGET_DATA:
@@ -152,8 +172,11 @@ def figure_entries(texts: list[str], seen: set[str] | None = None) -> list[str]:
                 )
             else:
                 text_svg, width, height, alt = inline_svg(FIGURES[name](*args, **kwargs))
+                alt = alt or signed.get(match.group(0), "")
                 if not alt:
-                    raise SystemExit(f"{key}: a diagram needs aria-label for its alt text")
+                    raise SystemExit(
+                        f"{key}: a diagram needs aria-label or a figcaption for its alt text"
+                    )
                 entries.append(
                     f'  {key}: {{\n    kind: "diagram",\n'
                     + prop(4, "svg", ts_string(text_svg))
@@ -180,8 +203,27 @@ def build(topic: Path) -> tuple[str, Path]:
     meta, sources = topic_sources(topic)
     site = meta["site"]
     manifest_path = REPO / "apps/web/src/entities/lesson/content" / f"{site['id']}.media.ts"
-    entries = figure_entries([source.read_text() for source in sources])
-    return manifest_text(topic, entries), manifest_path
+    texts = [lesson_text(source.read_text()) for source in sources]
+    return manifest_text(topic, figure_entries(texts) + code_entries(texts)), manifest_path
+
+
+def lesson_text(text: str) -> str:
+    """The steps the site shows: the task block of a page («Чтобы проверить
+    понимание…», «Задачи основных подтем…») stays on the stand, and so do the
+    book previews (``grid_book``) its tasks open."""
+    steps = re.split(r"\n---\n", text)
+    return "\n---\n".join(s for s in steps if not s.strip().startswith(TASK_BLOCK))
+
+
+def code_entries(texts: list[str]) -> list[str]:
+    """Runnable code blocks and live sheets of a topic, in the order the lesson
+    export meets them, so both name them alike (``runCount``, ``sheet1``)."""
+    from export_lesson import Converter  # the lesson export imports this module
+
+    converter = Converter(set(), {}, [])
+    for text in texts:
+        converter.prepare(text)
+    return converter.runs
 
 
 def prettier(text: str, path: Path) -> str:

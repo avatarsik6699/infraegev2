@@ -5,12 +5,10 @@ export class AccountIntegrationPage {
 
   async expectGuestCheckStaysTransient(): Promise<void> {
     await this.page.goto("/ege/16-rekursiya/praktika");
-    const panel = this.page.locator(
-      '[data-practice-task="rekursiya-base-sequence"]',
-    );
+    const panel = this.page.locator('[data-practice-task="task-16-1-01"]');
     const answer = panel.getByRole("textbox", { name: "Ответ" });
     await expect(answer).toBeEnabled();
-    await answer.fill("32");
+    await answer.fill("31");
     await panel.getByRole("button", { name: "Проверить", exact: true }).click();
     await expect(panel.getByRole("status")).toContainText("Верно");
     await expect(answer).not.toHaveAttribute("data-solved", "true");
@@ -53,12 +51,10 @@ export class AccountIntegrationPage {
 
   async expectTopicProgressSavedAndCourseContextSeparate(): Promise<void> {
     await this.page.goto("/ege/16-rekursiya/praktika");
-    const panel = this.page.locator(
-      '[data-practice-task="rekursiya-base-sequence"]',
-    );
+    const panel = this.page.locator('[data-practice-task="task-16-1-01"]');
     const answer = panel.getByRole("textbox", { name: "Ответ" });
     await expect(answer).toBeEnabled();
-    await answer.fill("32");
+    await answer.fill("31");
     await panel.getByRole("button", { name: "Проверить", exact: true }).click();
     await expect(answer).toHaveAttribute("data-solved", "true");
 

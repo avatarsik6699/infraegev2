@@ -3,7 +3,10 @@
 import { CodeBlock } from "~/shared/components/code-block";
 import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
-import { LessonDiagram } from "~/shared/components/learning-content";
+import {
+  LessonDiagram,
+  LessonSummary,
+} from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { pythonLogicLessonPublication } from "./course-publication.mjs";
 import { lessonMedia } from "./python-logic.media";
@@ -375,28 +378,50 @@ export const pythonLogicLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          Сравнения дают <Notation>{"True"}</Notation> или{" "}
-          <Notation>{"False"}</Notation>; <Notation>{"="}</Notation>{" "}
-          присваивает, <Notation>{"=="}</Notation> сравнивает.
-        </li>
-        <li>
-          <Notation>{"and"}</Notation> — оба условия,{" "}
-          <Notation>{"or"}</Notation> — хотя бы одно, в том числе оба;{" "}
-          <Notation>{"a != b"}</Notation> для логических — «ровно одно».
-        </li>
-        <li>
-          Сравнение повторяют для каждой части:{" "}
-          <Notation>{"x == 2 or x == 3"}</Notation>.
-        </li>
-        <li>Короткое вычисление: безопасная проверка ставится первой.</li>
-        <li>
-          <Notation>{"not (a and b)"}</Notation> ={" "}
-          <Notation>{"not a or not b"}</Notation>; импликация A → B —{" "}
-          <Notation>{"(not A) or B"}</Notation>.
-        </li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                Сравнения дают <Notation>{"True"}</Notation> или{" "}
+                <Notation>{"False"}</Notation>; <Notation>{"="}</Notation>{" "}
+                присваивает, <Notation>{"=="}</Notation> сравнивает.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"and"}</Notation> — оба условия,{" "}
+                <Notation>{"or"}</Notation> — хотя бы одно, в том числе оба;{" "}
+                <Notation>{"a != b"}</Notation> для логических — «ровно одно».
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Сравнение повторяют для каждой части:{" "}
+                <Notation>{"x == 2 or x == 3"}</Notation>.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>Короткое вычисление: безопасная проверка ставится первой.</>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"not (a and b)"}</Notation> ={" "}
+                <Notation>{"not a or not b"}</Notation>; импликация A → B —{" "}
+                <Notation>{"(not A) or B"}</Notation>.
+              </>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

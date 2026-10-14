@@ -5,6 +5,7 @@ import { Typography } from "~/shared/components/typography";
 import {
   FormulaBlock,
   LessonStepper,
+  LessonSummary,
   SheetBlock,
 } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
@@ -351,30 +352,52 @@ export const excelConditionsLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          Сравнение даёт <Notation>{"ИСТИНА"}</Notation> или{" "}
-          <Notation>{"ЛОЖЬ"}</Notation>; «больше» и «не меньше» различаются на
-          границе.
-        </li>
-        <li>
-          Двойную границу проверяют через <Notation>{"И"}</Notation>:{" "}
-          <Notation>{"=И(A2>=10;A2<=20)"}</Notation>; цепочка{" "}
-          <Notation>{"10<=A2<=20"}</Notation> работает неверно.
-        </li>
-        <li>
-          <Notation>{"ИЛИ"}</Notation> допускает обе истинные проверки; «ровно
-          одна» — <Notation>{"=G2<>H2"}</Notation>.
-        </li>
-        <li>
-          <Notation>{"ЕСЛИ(условие;1;0)"}</Notation> — признак строки; сумма
-          признаков — число подходящих строк.
-        </li>
-        <li>
-          Сложные условия раскладывают по столбцам; деление защищают ветвью{" "}
-          <Notation>{"ЕСЛИ"}</Notation>.
-        </li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                Сравнение даёт <Notation>{"ИСТИНА"}</Notation> или{" "}
+                <Notation>{"ЛОЖЬ"}</Notation>; «больше» и «не меньше»
+                различаются на границе.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Двойную границу проверяют через <Notation>{"И"}</Notation>:{" "}
+                <Notation>{"=И(A2>=10;A2<=20)"}</Notation>; цепочка{" "}
+                <Notation>{"10<=A2<=20"}</Notation> работает неверно.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"ИЛИ"}</Notation> допускает обе истинные проверки;
+                «ровно одна» — <Notation>{"=G2<>H2"}</Notation>.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"ЕСЛИ(условие;1;0)"}</Notation> — признак строки;
+                сумма признаков — число подходящих строк.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Сложные условия раскладывают по столбцам; деление защищают
+                ветвью <Notation>{"ЕСЛИ"}</Notation>.
+              </>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

@@ -5,6 +5,7 @@ import { Typography } from "~/shared/components/typography";
 import {
   FormulaBlock,
   LessonStepper,
+  LessonSummary,
   SheetBlock,
 } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
@@ -355,31 +356,56 @@ export const excelLookupLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          Ключ однозначно указывает запись справочника; номер строки ключом не
-          является.
-        </li>
-        <li>
-          <Notation>{"=ВПР(ключ;Лист!$A$2:$D$5;номер_столбца;0)"}</Notation>:
-          ключ — в первом столбце, номер столбца — внутри диапазона, 0 — точное
-          совпадение.
-        </li>
-        <li>
-          <Notation>
-            {"ИНДЕКС(столбец;ПОИСКПОЗ(ключ;столбец_ключей;0))"}
-          </Notation>{" "}
-          ищет и влево.
-        </li>
-        <li>
-          <Notation>{"#Н/Д"}</Notation> — ключа нет или он другого типа; ошибку
-          не прячут нулём.
-        </li>
-        <li>
-          <Notation>{"ВПР"}</Notation> приносит свойство одной записи,{" "}
-          <Notation>{"СУММЕСЛИ"}</Notation> по нему объединяет многие записи.
-        </li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                Ключ однозначно указывает запись справочника; номер строки
+                ключом не является.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>
+                  {"=ВПР(ключ;Лист!$A$2:$D$5;номер_столбца;0)"}
+                </Notation>
+                : ключ — в первом столбце, номер столбца — внутри диапазона, 0 —
+                точное совпадение.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>
+                  {"ИНДЕКС(столбец;ПОИСКПОЗ(ключ;столбец_ключей;0))"}
+                </Notation>{" "}
+                ищет и влево.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"#Н/Д"}</Notation> — ключа нет или он другого типа;
+                ошибку не прячут нулём.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"ВПР"}</Notation> приносит свойство одной записи,{" "}
+                <Notation>{"СУММЕСЛИ"}</Notation> по нему объединяет многие
+                записи.
+              </>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

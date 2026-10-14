@@ -172,7 +172,8 @@ function renderContentBlock(
             <strong>{block.label}</strong>
             <span>{block.description}</span>
             <span className={styles.attachmentMeta}>
-              {block.mimeType} · {formatFileSize(block.sizeBytes)}
+              {fileKind(block.mimeType, block.label)} ·{" "}
+              {formatFileSize(block.sizeBytes)}
             </span>
           </span>
           <Download aria-hidden="true" strokeWidth={1.8} />
@@ -210,6 +211,30 @@ function renderContentBlock(
 function formatFileSize(sizeBytes: number): string {
   if (sizeBytes < 1024) return `${sizeBytes} Б`;
   const sizeKilobytes = sizeBytes / 1024;
-  if (sizeKilobytes < 1024) return `${sizeKilobytes.toFixed(1)} КБ`;
-  return `${(sizeKilobytes / 1024).toFixed(1)} МБ`;
+  if (sizeKilobytes < 1024) return `${decimal(sizeKilobytes)} КБ`;
+  return `${decimal(sizeKilobytes / 1024)} МБ`;
+}
+
+const decimal = (value: number) => value.toFixed(1).replace(".", ",");
+
+// The kind of a task file in words (Change 184): a learner knows «Excel»,
+// not «application/vnd.openxmlformats-officedocument.spreadsheetml.sheet».
+const FILE_KINDS: Record<string, string> = {
+  xlsx: "Excel",
+  xls: "Excel",
+  ods: "Таблица",
+  csv: "Таблица CSV",
+  txt: "Текстовый файл",
+  docx: "Word",
+  odt: "Текстовый документ",
+  pdf: "PDF",
+  zip: "Архив",
+};
+
+function fileKind(mimeType: string, name: string): string {
+  const extension = name.split(".").at(-1)?.toLowerCase() ?? "";
+  if (extension in FILE_KINDS) return FILE_KINDS[extension];
+  if (mimeType.startsWith("text/")) return "Текстовый файл";
+  if (mimeType.startsWith("image/")) return "Изображение";
+  return "Файл";
 }

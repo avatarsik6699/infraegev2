@@ -3,7 +3,10 @@
 import { CodeBlock } from "~/shared/components/code-block";
 import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
-import { LessonDiagram } from "~/shared/components/learning-content";
+import {
+  LessonDiagram,
+  LessonSummary,
+} from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { pythonInputOutputLessonPublication } from "./course-publication.mjs";
 import { lessonMedia } from "./python-input-output.media";
@@ -289,31 +292,54 @@ export const pythonInputOutputLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          <Notation>{"input()"}</Notation> возвращает строку без перевода
-          строки; число получают через <Notation>{"int"}</Notation> или{" "}
-          <Notation>{"float"}</Notation>.
-        </li>
-        <li>
-          Неверный формат даёт <Notation>{"ValueError"}</Notation>:{" "}
-          <Notation>{'int("2.75")'}</Notation>,{" "}
-          <Notation>{'float("2,75")'}</Notation>.
-        </li>
-        <li>
-          <Notation>{"print"}</Notation> разделяет значения{" "}
-          <Notation>{"sep"}</Notation> и заканчивает{" "}
-          <Notation>{"end"}</Notation>; по умолчанию пробел и перевод строки.
-        </li>
-        <li>
-          f-строка подставляет выражения в <Notation>{"{}"}</Notation>;{" "}
-          <Notation>{":.2f"}</Notation> — две цифры после точки.
-        </li>
-        <li>
-          Для автоматической проверки выводят только требуемые значения, без
-          подсказок.
-        </li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                <Notation>{"input()"}</Notation> возвращает строку без перевода
+                строки; число получают через <Notation>{"int"}</Notation> или{" "}
+                <Notation>{"float"}</Notation>.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Неверный формат даёт <Notation>{"ValueError"}</Notation>:{" "}
+                <Notation>{'int("2.75")'}</Notation>,{" "}
+                <Notation>{'float("2,75")'}</Notation>.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"print"}</Notation> разделяет значения{" "}
+                <Notation>{"sep"}</Notation> и заканчивает{" "}
+                <Notation>{"end"}</Notation>; по умолчанию пробел и перевод
+                строки.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                f-строка подставляет выражения в <Notation>{"{}"}</Notation>;{" "}
+                <Notation>{":.2f"}</Notation> — две цифры после точки.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Для автоматической проверки выводят только требуемые значения,
+                без подсказок.
+              </>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

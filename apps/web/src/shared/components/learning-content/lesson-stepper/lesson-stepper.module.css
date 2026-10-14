@@ -1,6 +1,8 @@
-/* Controls match LessonVideo: quiet icon buttons and a thin timeline. */
+/* Controls: quiet icon buttons and a thin timeline. With enlarged text the
+   timeline and the count wrap under the buttons instead of widening the page. */
 .controls {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.25rem;
   min-height: 2.5rem;
@@ -9,7 +11,7 @@
 
 .timeline {
   --progress: 0%;
-  flex: 1;
+  flex: 1 1 4rem;
   min-width: 0;
   height: 2.5rem;
   margin: 0 var(--space-1);

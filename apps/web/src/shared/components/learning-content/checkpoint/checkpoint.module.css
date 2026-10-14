@@ -1,51 +1,144 @@
+/* «Проверьте себя» (Change 184, variant A): numbered questions on hairlines,
+   each with the practice task's soft button and the answer below it. */
 .root {
   min-width: 0;
   max-width: var(--learning-block-measure, none);
-  --notation-bg: var(
-    --learning-callout-notation-bg,
-    var(--color-surface-quiet)
-  );
-  display: grid;
-  gap: var(--learning-checkpoint-gap, var(--space-0-5));
   margin: 0;
-  padding: var(
-    --learning-checkpoint-padding,
-    var(--learning-alert-padding, var(--space-1-5) var(--space-2))
-  );
-  border: var(--learning-alert-border, 0 solid transparent);
-  border-radius: var(--learning-alert-radius, var(--radius-surface));
-  background: var(
-    --learning-checkpoint-background,
-    var(
-      --learning-alert-background,
-      var(--learning-info-background, var(--color-info-soft))
-    )
-  );
 }
 
-.heading {
-  composes: learningContentHeading from "../../../styles/patterns.module.css";
+.lead {
+  margin: var(--space-0-5) 0 var(--space-1-5);
+  color: var(--color-text-soft);
 }
 
-.icon {
-  display: block;
-  flex: 0 0 auto;
-  width: 1rem;
-  height: 1rem;
-  color: var(
-    --learning-checkpoint-icon-color,
-    var(--learning-info, var(--color-info))
-  );
+.list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: question;
 }
 
-.label {
-  color: var(--learning-checkpoint-color, var(--color-text-soft));
-  font-family: var(--font-reading);
-  font-size: var(--text-learning-label);
-  font-weight: 400;
-  line-height: 1.4;
+.item {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  column-gap: var(--space-1);
+  padding-block: var(--space-2);
+  border-top: 1px solid var(--color-rule);
+  counter-increment: question;
 }
 
-.content {
-  margin-left: var(--learning-checkpoint-indent, calc(1rem + var(--space-1)));
+.item:last-child {
+  border-bottom: 1px solid var(--color-rule);
+}
+
+.item::before {
+  content: counter(question);
+  grid-row: 1;
+  padding-top: 0.2em;
+  color: var(--color-muted);
+  font-family: var(--font-data);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.prompt,
+.answer {
+  grid-column: 2;
+  min-width: 0;
+}
+
+.prompt {
+  font-size: var(--text-reading);
+  line-height: 1.6;
+}
+
+.answer {
+  margin-top: var(--space-1-5);
+}
+
+/* the practice task's soft button (Button hierarchy «soft», compact) */
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.5rem;
+  padding-inline: var(--space-2);
+  border-radius: var(--radius-control);
+  background: var(--control-soft-bg);
+  color: var(--color-text);
+  font-family: var(--font-ui);
+  font-size: var(--text-control);
+  font-weight: 600;
+  line-height: 1;
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color var(--motion-duration) var(--motion-easing);
+}
+
+.toggle::-webkit-details-marker {
+  display: none;
+}
+
+.toggle:hover,
+.answer[open] > .toggle {
+  background: color-mix(in srgb, var(--color-text) 10%, var(--color-surface));
+}
+
+.toggle:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* the label keeps the width of the longer one, so the button never jumps */
+.toggleLabel {
+  display: inline-grid;
+  justify-items: center;
+}
+
+.toggleLabel > span {
+  grid-area: 1 / 1;
+}
+
+.reserve {
+  visibility: hidden;
+}
+
+.open,
+.answer[open] .closed {
+  visibility: hidden;
+}
+
+.answer[open] .open {
+  visibility: visible;
+}
+
+.panel {
+  padding-top: var(--space-1-5);
+}
+
+.caption {
+  margin: 0 0 var(--space-0-5);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+
+.reveal {
+  color: var(--color-text-soft);
+  font-size: var(--text-practice-help);
+  line-height: 1.58;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .answer[open] .panel {
+    animation: reveal 160ms ease-out;
+  }
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
 }

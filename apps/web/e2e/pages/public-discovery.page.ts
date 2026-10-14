@@ -20,10 +20,12 @@ export class PublicDiscoveryPage {
     const sitemap = await this.page.locator("body").textContent();
     expect(sitemap).toContain("https://infraege.ru/");
     expect(sitemap).toContain("https://infraege.ru/privacy");
-    expect(sitemap).toContain("https://infraege.ru/ege/16-rekursiya/osnovy");
+    expect(sitemap).toContain(
+      "https://infraege.ru/ege/16-rekursiya/funktsiya-cherez-sebya",
+    );
     expect(sitemap).toContain("https://infraege.ru/ege</loc>");
     expect(sitemap).toContain(
-      "https://infraege.ru/ege/5-preobrazovanie-zapisey-chisel/model-algoritma",
+      "https://infraege.ru/ege/5-preobrazovanie-zapisey-chisel/chislo-i-zapis",
     );
     expect(sitemap).not.toContain("https://infraege.ru/ege/16-rekursiya</loc>");
     expect(sitemap).not.toContain(

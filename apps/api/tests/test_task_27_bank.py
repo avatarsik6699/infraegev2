@@ -1,12 +1,25 @@
-"""Independent content, file, ordering and checker checks for EGE task 27."""
+"""Independent answer and content checks for the EGE topic 27 lesson «Кластеризация».
 
-import hashlib
-import itertools
+The lesson splits points by bounds read from the scatter diagram, finds a center by a
+double loop over candidates and scales the answer with ``int``. Here every answer is
+recomputed another way: clusters are the connected groups of close points (union-find)
+or the parts between the largest gaps, energies are cut at their three largest gaps, a
+center comes from paired sums (each distance once, added to both ends) or as the median
+of energies, distances use ``hypot`` and short answers use exact fractions and integer
+square roots. The bank's own solution programs, run next to their attachments, must
+print the same answers.
+"""
+
+import cmath
 import math
+import re
+import shutil
 import subprocess
 import sys
+import tempfile
+from collections import Counter
 from fractions import Fraction
-from math import isqrt
+from math import fsum, hypot, isqrt
 from pathlib import Path
 
 import pytest
@@ -18,278 +31,283 @@ pytestmark = pytest.mark.pure
 
 ROOT = Path(__file__).resolve().parents[3]
 BANK_DIR = ROOT / "content/practice-bank"
-TASK_IDS = [f"task-27-{number:02d}" for number in range(1, 8)]
-EXPECTED = ["3", "1 1", "3", "10", "10", "4 4", "36055 135000"]
-WRONG = ["2", "0 0", "6", "12", "5", "3 4", "36056 135000"]
-SECTIONS = [
-    {"spatial-clusters"},
-    {"spatial-clusters"},
-    {"energy-clusters"},
-    {"cluster-centre"},
-    {"distance-and-filter"},
-    {"combined-result"},
-    {"independent-check", "combined-result"},
-]
-EXPECTED_SKILLS = [
-    [],
-    [],
-    ["sorting"],
-    ["sorting"],
-    ["file-processing"],
-    ["sorting", "file-processing"],
-    ["sorting", "file-processing"],
-]
+FILES = ROOT / "content/lesson-design/topic-27/files"
+MATERIAL = "data-analysis"
+RETIRED = [f"task-27-{number:02d}" for number in range(1, 8)]
 
 
 def _bank() -> Bank:
     return Bank.model_validate_json((BANK_DIR / "bank.json").read_bytes())
 
 
-def _attached_path(bank: Bank, task: TaskData) -> Path:
-    assert len(task.files) == 1, task.id
-    return BANK_DIR / "files" / task.files[0].checksum
-
-
-def _code(task: TaskData) -> str:
-    examples = [block.data.code for block in task.explanation if block.type == "code_example"]
-    assert len(examples) == 1, task.id
-    return examples[0]
-
-
-def _task_text(task: TaskData) -> str:
-    return "\n".join(block.data.markdown for block in task.statement if block.type == "text")
-
-
-def _independent_answers(bank: Bank) -> list[str]:
-    by_id = {entry.task.id: entry.task for entry in bank.tasks}
-
-    # Apply the stated coordinate bounds directly to every point.
-    points = [(0, 0), (1, 0), (1, 1), (2, 2), (5, 5), (5, 6), (7, 1), (9, 0)]
-    answer_01 = str(sum(2 <= x < 7 for x, _y in points))
-
-    # Compare complete sums of distances for every candidate, independently of the worked code.
-    spatial_points = [(0, 0), (2, 0), (0, 2), (1, 1)]
-    totals = {
-        point: sum(math.hypot(point[0] - other[0], point[1] - other[1]) for other in spatial_points)
-        for point in spatial_points
+def _entries() -> dict[str, TaskData]:
+    return {
+        entry.task.id: entry.task
+        for entry in _bank().tasks
+        if any(link.material_id == MATERIAL for link in entry.task.lessons)
     }
-    assert math.isclose(totals[(0, 0)], 4 + math.sqrt(2))
-    assert math.isclose(totals[(2, 0)], 2 + math.sqrt(8) + math.sqrt(2))
-    assert math.isclose(totals[(0, 2)], 2 + math.sqrt(8) + math.sqrt(2))
-    assert math.isclose(totals[(1, 1)], 3 * math.sqrt(2))
-    ranked_centres = sorted(totals.items(), key=lambda item: item[1])
-    assert ranked_centres[0][1] < ranked_centres[1][1]
-    answer_02 = f"{ranked_centres[0][0][0]} {ranked_centres[0][0][1]}"
 
-    # Fix the small groups explicitly, then check both their widths and the next boundary.
-    energy_groups = [[1, 3, 5], [8, 12], [14]]
-    assert all(group[-1] - group[0] <= 4 for group in energy_groups)
-    assert all(
-        next_group[0] - group[0] > 4 for group, next_group in itertools.pairwise(energy_groups)
+
+def _rows(name: str) -> list[list[str]]:
+    return [line.replace(",", ".").split() for line in (FILES / name).read_text().splitlines()]
+
+
+def _points(name: str) -> list[tuple[float, float]]:
+    return [(float(r[0]), float(r[1])) for r in _rows(name)]
+
+
+def _d(a, b) -> float:
+    return hypot(a[0] - b[0], a[1] - b[1])
+
+
+def _i4(v: float) -> str:
+    return str(math.trunc(v * 10000))
+
+
+def _num(v) -> str:
+    """An exact number the way the lesson prints it: 5, 2.5."""
+    v = Fraction(v)
+    return str(v.numerator) if v.denominator == 1 else str(float(v))
+
+
+def _chains(items, eps, key=lambda p: p):
+    """Connected groups of points closer than eps (union-find), largest first."""
+    parent = list(range(len(items)))
+
+    def find(i):
+        while parent[i] != i:
+            parent[i] = parent[parent[i]]
+            i = parent[i]
+        return i
+
+    for i in range(len(items)):
+        for j in range(i + 1, len(items)):
+            if _d(key(items[i]), key(items[j])) <= eps:
+                parent[find(i)] = find(j)
+    groups: dict[int, list] = {}
+    for i, item in enumerate(items):
+        groups.setdefault(find(i), []).append(item)
+    return sorted(groups.values(), key=len, reverse=True)
+
+
+def _center(cluster, dd=_d, key=lambda p: p):
+    """Paired sums: every distance once, added to both ends."""
+    n = len(cluster)
+    totals: list[list[float]] = [[] for _ in range(n)]
+    for i in range(n):
+        for j in range(i + 1, n):
+            v = dd(key(cluster[i]), key(cluster[j]))
+            totals[i].append(v)
+            totals[j].append(v)
+    sums = [fsum(t) for t in totals]
+    return cluster[sums.index(min(sums))]
+
+
+def _energy(r) -> float:
+    return float(r[4]) * (float(r[2]) ** 2 + float(r[3]) ** 2) / 2
+
+
+def _energy_groups(parts):
+    """Sort by energy and cut at the three largest gaps."""
+    srt = sorted(parts, key=_energy)
+    gaps = sorted(range(len(srt) - 1), key=lambda i: _energy(srt[i + 1]) - _energy(srt[i]))[-3:]
+    groups, start = [], 0
+    for i in sorted(gaps):
+        groups.append(srt[start : i + 1])
+        start = i + 1
+    groups.append(srt[start:])
+    return groups
+
+
+def _median_center(group, order):
+    """The smallest sum of |ΔE| is at a median energy; of two equal medians the lesson
+    keeps the one that comes first in the file."""
+    srt = sorted(group, key=_energy)
+    n = len(srt)
+    middles = [srt[(n - 1) // 2], srt[n // 2]]
+    return min(middles, key=lambda r: order[id(r)])
+
+
+def _kind(code: str, cls: str, lum: str) -> bool:
+    return re.fullmatch(f"{cls}\\d{lum}", code) is not None
+
+
+@pytest.fixture(scope="module")
+def answers() -> dict[str, str]:
+    a: dict[str, str] = {}
+    # subtopic 1: exact arithmetic
+    a["task-27-1-01"] = str(isqrt(3**2 + 4**2))
+    a["task-27-1-03"] = str(isqrt(6**2 + 8**2))
+    clusters = [[(0, 0), (1, 1)], [(5, 5), (6, 5), (7, 6)], [(10, 0)]]
+    a["task-27-1-04"] = f"{len(clusters)} {len(clusters[1])} {clusters[1][-1][0]}"
+    # distance in hundredths: floor(d · 10⁴) = isqrt(d² · 10⁸) exactly
+    a["task-27-1-08"] = str(isqrt((460**2 + 265**2) * 10**4))
+    # subtopic 2
+    stars = _rows("27-3.txt")
+    codes = Counter(r[2] for r in stars)
+    a["task-27-2-05"] = f"{len(stars)} {codes['VII']}"
+    a["task-27-2-06"] = str(sum(n for c, n in codes.items() if _kind(c, "M", "III")))
+    a["task-27-2-07"] = _num(Fraction(2) * ((-1) ** 2 + 3**2) / 2)
+    parts = _rows("27-4.txt")
+    best = max(Fraction(r[4]) * (Fraction(r[2]) ** 2 + Fraction(r[3]) ** 2) / 2 for r in parts)
+    a["task-27-2-08"] = str(math.floor(best * 10000))
+    # subtopic 3: groups of neighbours instead of bounds
+    a["task-27-3-05"] = _num(round(math.degrees(cmath.phase(complex(-3, 3)))))
+    g1 = sorted(_chains(_points("27-1.txt"), 1.0), key=lambda g: min(p[0] for p in g))
+    assert len(g1) == 2
+    a["task-27-3-07"] = f"{len(g1[0])} {len(g1[1])}"
+    g3 = _chains([(float(r[0]), float(r[1]), r[2]) for r in stars], 0.8)
+    assert len(g3) == 3
+    a["task-27-3-08"] = " ".join(str(len(g)) for g in sorted(g3, key=len))
+    # subtopic 4
+    c = _center(g1[0])
+    a["task-27-4-08"] = f"{_i4(c[0])} {_i4(c[1])}"
+    order = {id(r): i for i, r in enumerate(parts)}
+    eg = _energy_groups(parts)
+    assert all(_energy(g[-1]) - _energy(g[0]) <= 2 for g in eg)
+    a["task-27-4-09"] = _i4(_energy(_median_center(eg[0], order)))
+    # subtopic 5
+    a["task-27-5-01"] = f"{_num(Fraction(-2 + 6, 2))} {_num(Fraction(4 + 10, 2))}"
+    a["task-27-5-02"] = f"{abs(min(-5, 2, 4))} {abs(min(3, -7, 1))}"
+    a["task-27-5-03"] = f"3 {_num(Fraction(2 + 3 + 7, 3))}"
+    a["task-27-5-05"] = f"{_num(abs(Fraction(-6 + 2 + 1, 3)))} {_num(Fraction(6 + 2 + 1, 3))}"
+    c1s = [_center(g) for g in g1]
+    a["task-27-5-07"] = f"{_i4(fsum(c[0] for c in c1s) / 2)} {_i4(fsum(c[1] for c in c1s) / 2)}"
+    g2 = _chains(_points("27-2.txt"), 1.0)
+    big3 = sorted((g for g in g2 if len(g) > 10), key=len)
+    assert len(big3) == 3 and sum(len(g) for g in g2 if len(g) <= 10) == 3
+    c2s = [_center(g) for g in big3]
+    rest = c2s[1:]
+    a["task-27-5-08"] = " ".join(
+        [
+            _i4(abs(min(c[0] for c in c2s))),
+            _i4(abs(min(c[1] for c in c2s))),
+            _i4(fsum(c[0] for c in rest) / 2),
+            _i4(fsum(c[1] for c in rest) / 2),
+        ]
     )
-    answer_03 = str(max(len(group) for group in energy_groups))
+    # subtopic 6
+    ds = [_d(p, q) for p in [(0, 0), (1, 0)] for q in [(4, 0), (6, 0)]]
+    a["task-27-6-01"] = f"{_num(round(min(ds)))} {_num(round(max(ds)))}"
+    xs = [0, 1, 3, 4, 10]  # all on the axis: the distance is |x − 1|
+    a["task-27-6-04"] = (
+        f"{sum(abs(x - 1) <= 3 for x in xs)} {sum(abs(x - 1) < 3 for x in xs)} "
+        f"{sum(abs(x - 1) <= 3 for x in xs if x != 1)}"
+    )
+    centers3 = {id(g): _center(g, key=lambda s: s[:2]) for g in g3}
+    small3 = min(g3, key=len)
+    near = min(
+        (s for s in small3 if _kind(s[2], "M", "III")),
+        key=lambda s: _d(s, centers3[id(small3)]),
+    )
+    a["task-27-6-07"] = f"{_i4(near[0])} {_i4(near[1])}"
 
-    # Brute force each possible one-dimensional centre rather than selecting an index.
-    coordinates = [2, 7, 10, 12, 20]
-    deviations = {point: sum(abs(point - other) for other in coordinates) for point in coordinates}
-    minimum = min(deviations.values())
-    centres = [point for point, total in deviations.items() if total == minimum]
-    assert len(centres) == 1
-    answer_04 = str(centres[0])
+    def giants(g):
+        return sum(_kind(s[2], "M", "III") for s in g)
 
-    records_path = _attached_path(bank, by_id["task-27-05"])
-    records = [line.split() for line in records_path.read_text().splitlines()]
-    same_group_distances = []
-    for first, second in itertools.combinations(records, 2):
-        if first[0] == second[0] and first[1] == second[1] == "II":
-            same_group_distances.append(
-                math.hypot(int(first[2]) - int(second[2]), int(first[3]) - int(second[3]))
+    lo, hi = min(g3, key=giants), max(g3, key=giants)
+    b1 = _d(centers3[id(lo)], centers3[id(hi)])
+    b2 = max(
+        _d(p, q)
+        for g in g3
+        for p in g
+        for q in g
+        if p is not q and _kind(p[2], "G", "V") and _kind(q[2], "G", "V")
+    )
+    a["task-27-6-08"] = f"{_i4(b1)} {_i4(b2)}"
+    q1 = _d(c2s[0], c2s[-1])
+    q2 = max(_d(c, p) for c, g in zip(c2s, big3, strict=True) for p in g)
+    a["task-27-6-09"] = f"{_i4(q1)} {_i4(q2)}"
+    # subtopic 7
+    p5 = _points("27-5.txt")
+    ok = [e for e in range(1, 8) if sorted(len(g) for g in _chains(p5, e)) == [69, 76, 83]]
+    a["task-27-7-07"] = str(max(ok))
+    c6 = [_center(g) for g in _chains(_points("27-6.txt"), 0.5)]
+    a["task-27-7-08"] = f"{_i4(fsum(c[0] for c in c6) / 2)} {_i4(fsum(c[1] for c in c6) / 2)}"
+    # subtopic 8
+    a["task-27-8-06"] = f"{isqrt(6**2 + 8**2)} {_num(Fraction(isqrt(6**2 + 8**2), 2))}"
+
+    def minimax_radius(g):
+        return min(max(_d(c, p) for p in g) for c in g)
+
+    a["task-27-8-07"] = _i4(fsum(minimax_radius(g) for g in g1) / 2)
+    sm = big3[0]
+    anti = max(sm, key=lambda c: fsum(_d(c, p) for p in sm))
+    a["task-27-8-08"] = _i4(abs(anti[0] + anti[1]))
+    # Практика и итог
+    a["task-27-9-01"] = _i4(_d(c1s[0], c1s[1]))
+    a["task-27-9-02"] = _i4(max(_d(c2s[0], p) for p in big3[-1]))
+    a["task-27-9-03"] = str(sum(s[2] == "VII" for s in max(g3, key=len)))
+    q1 = max(
+        hypot(float(r[0]) - float(s[0]), float(r[1]) - float(s[1]))
+        for g in eg
+        for r in g
+        for s in g
+        if r is not s and r[5] == "II" and s[5] == "II"
+    )
+    q2 = max(_energy(_median_center(g, order)) for g in eg)
+    a["task-27-9-04"] = f"{_i4(q1)} {_i4(q2)}"
+    c5 = [_center(g) for g in _chains(p5, 3)]
+    a["task-27-9-05"] = (
+        f"{_i4(abs(fsum(c[0] for c in c5) / 3))} {_i4(abs(fsum(c[1] for c in c5) / 3))}"
+    )
+    return a
+
+
+def _solution(task: TaskData) -> str:
+    (code,) = [
+        block.data.code
+        for block in task.explanation
+        if block.type == "code_example" and block.data.language == "python"
+    ]
+    return code
+
+
+def test_every_answer_matches_independent_recomputation(answers: dict[str, str]) -> None:
+    tasks = _entries()
+    assert sorted(tasks) == sorted(answers)
+    assert sorted(t.lessons[0].position for t in tasks.values()) == list(range(34))
+    for task_id, task in tasks.items():
+        assert task.checker.answer_variants[0] == answers[task_id], task_id
+        assert task.exam_numbers == [27] and not task.catalog_visible and not task.archived
+        on_final_page = task_id.startswith("task-27-9-")
+        assert bool(task.theory_links) != on_final_page, task_id
+        advanced = task_id.startswith(("task-27-7-", "task-27-8-"))
+        assert task.lessons[0].counts_toward_mastery == (not advanced), task_id
+
+
+def test_tasks_of_the_retired_lesson_are_archived() -> None:
+    tasks = {entry.task.id: entry.task for entry in _bank().tasks}
+    for task_id in RETIRED:
+        task = tasks[task_id]
+        assert task.archived and not task.catalog_visible, task_id
+        assert not task.lessons and not task.theory_links, task_id
+
+
+def test_checker_accepts_the_answer_and_rejects_an_off_by_one(
+    answers: dict[str, str],
+) -> None:
+    for task_id, task in _entries().items():
+        expected = answers[task_id]
+        assert is_correct(task.checker, expected), task_id
+        tokens = expected.split()
+        tokens[-1] = str(int(tokens[-1]) + 1)
+        assert not is_correct(task.checker, " ".join(tokens)), task_id
+
+
+def test_solution_programs_print_the_answer(answers: dict[str, str]) -> None:
+    for task_id, task in _entries().items():
+        code = _solution(task)
+        with tempfile.TemporaryDirectory() as tmp:
+            for usage in task.files:
+                shutil.copy(BANK_DIR / "files" / usage.checksum, Path(tmp) / usage.filename)
+            result = subprocess.run(
+                [sys.executable, "-I", "-c", code],
+                capture_output=True,
+                text=True,
+                check=True,
+                timeout=300,
+                cwd=tmp,
             )
-    answer_05 = str(int(max(same_group_distances)))
-
-    decimal_path = _attached_path(bank, by_id["task-27-06"])
-    decimal_records = []
-    for line in decimal_path.read_text().splitlines():
-        particle_id, raw_x, raw_energy = line.split()
-        decimal_records.append(
-            (float(raw_energy.replace(",", ".")), float(raw_x.replace(",", ".")), particle_id)
-        )
-    decimal_energy_groups = [[1.0, 1.5, 2.0, 2.3, 2.4], [5.0, 6.5], [10.0], [12.0]]
-    assert sorted(record[0] for record in decimal_records) == list(
-        itertools.chain.from_iterable(decimal_energy_groups)
-    )
-    assert all(group[-1] - group[0] <= 1.5 for group in decimal_energy_groups)
-    assert all(
-        next_group[0] - group[0] > 1.5
-        for group, next_group in itertools.pairwise(decimal_energy_groups)
-    )
-    largest_decimal_group = [
-        record for record in decimal_records if record[0] in decimal_energy_groups[0]
-    ]
-    decimal_deviations = {
-        record[2]: sum(abs(record[0] - other[0]) for other in largest_decimal_group)
-        for record in largest_decimal_group
-    }
-    assert decimal_deviations["C"] == min(decimal_deviations.values())
-    assert list(decimal_deviations.values()).count(decimal_deviations["C"]) == 1
-    decimal_center = next(record for record in largest_decimal_group if record[2] == "C")
-    answer_06 = f"{len(decimal_energy_groups)} {int(decimal_center[1])}"
-
-    # Exact rational energies and integer square roots form an independent scaled-answer oracle.
-    particle_path = _attached_path(bank, by_id["task-27-07"])
-    particles = []
-    for line in particle_path.read_text().splitlines():
-        raw_x, raw_y, raw_vx, raw_vy, raw_mass, particle_type = line.split()
-        x, y, vx, vy, mass = map(int, (raw_x, raw_y, raw_vx, raw_vy, raw_mass))
-        energy = Fraction(mass * (vx * vx + vy * vy), 2)
-        particles.append((energy, x, y, particle_type))
-    expected_energies = [
-        [Fraction(1), Fraction(3, 2), Fraction(2)],
-        [Fraction(5), Fraction(11, 2), Fraction(6)],
-        [Fraction(9), Fraction(19, 2), Fraction(10)],
-        [Fraction(13), Fraction(27, 2), Fraction(14)],
-    ]
-    assert sorted(particle[0] for particle in particles) == list(
-        itertools.chain.from_iterable(expected_energies)
-    )
-    assert all(group[-1] - group[0] <= 2 for group in expected_energies)
-    assert all(
-        next_group[0] - group[0] > 2 for group, next_group in itertools.pairwise(expected_energies)
-    )
-    particle_groups = [
-        [particle for particle in particles if particle[0] in energy_group]
-        for energy_group in expected_energies
-    ]
-    centers = []
-    for group in particle_groups:
-        deviations = {
-            particle[0]: sum(abs(particle[0] - other[0]) for other in group) for particle in group
-        }
-        minimum = min(deviations.values())
-        assert list(deviations.values()).count(minimum) == 1
-        centers.append(next(energy for energy, total in deviations.items() if total == minimum))
-    maximum_squared = 0
-    within_cluster_squared = []
-    for group in particle_groups:
-        type_two = [particle for particle in group if particle[3] == "2"]
-        local_squared = 0
-        for first, second in itertools.combinations(type_two, 2):
-            local_squared = max(
-                local_squared, (first[1] - second[1]) ** 2 + (first[2] - second[2]) ** 2
-            )
-        within_cluster_squared.append(local_squared)
-        maximum_squared = max(maximum_squared, local_squared)
-    assert within_cluster_squared == [1, 1, 9, 13]
-    scaled_distance = isqrt(maximum_squared * 100_000_000)
-    scaled_energy = int(max(centers) * 10_000)
-    answer_07 = f"{scaled_distance} {scaled_energy}"
-
-    return [answer_01, answer_02, answer_03, answer_04, answer_05, answer_06, answer_07]
-
-
-def test_task_27_answers_files_and_ordered_lesson_progression(tmp_path: Path) -> None:
-    bank = _bank()
-    bank.validate_references()
-    material = next(item for item in bank.materials if item.id == "data-analysis")
-    assert material.kind == "topic" and material.status == "published"
-    assert material.sections == [
-        "points-and-records",
-        "spatial-clusters",
-        "energy-clusters",
-        "cluster-centre",
-        "distance-and-filter",
-        "combined-result",
-        "independent-check",
-    ]
-
-    entries = [
-        next(entry for entry in bank.tasks if entry.task.id == task_id) for task_id in TASK_IDS
-    ]
-    assert _independent_answers(bank) == EXPECTED
-    assert [entry.task.lessons[0].position for entry in entries] == list(range(7))
-    assert [entry.task.difficulty for entry in entries] == [1, 2, 2, 2, 3, 3, 3]
-
-    file_map = {item.checksum: item for item in bank.files}
-    for index, entry in enumerate(entries):
-        task = entry.task
-        assert task.exam_numbers == []
-        assert task.catalog_visible is False and task.archived is False
-        assert task.interaction_type == "production"
-        assert task.lessons[0].material_id == "data-analysis"
-        assert {link.material_id for link in task.theory_links} == {"data-analysis"}
-        assert {link.section for link in task.theory_links} == SECTIONS[index]
-        assert len(task.sources) == 1
-        assert task.sources[0].kind == "original" and task.sources[0].is_public
-        assert task.checker.answer_variants == [EXPECTED[index]]
-        assert is_correct(task.checker, EXPECTED[index])
-        assert not is_correct(task.checker, WRONG[index])
-        assert task.hint and task.explanation
-        assert task.skills == EXPECTED_SKILLS[index]
-
-        if index < 4:
-            assert task.files == []
-        else:
-            assert len(task.files) == 1 and task.files[0].purpose == "attachment"
-            usage = task.files[0]
-            metadata = file_map[usage.checksum]
-            data = (BANK_DIR / "files" / usage.checksum).read_bytes()
-            assert hashlib.sha256(data).hexdigest() == usage.checksum == metadata.storage_key
-            assert len(data) == metadata.size_bytes
-            assert data.endswith(b"\n") and b"\r" not in data
-            (tmp_path / usage.filename).write_bytes(data)
-
-        result = subprocess.run(
-            [sys.executable, "-c", _code(task)],
-            cwd=tmp_path,
-            capture_output=True,
-            text=True,
-            check=True,
-        )
-        assert result.stdout.strip() == EXPECTED[index], task.id
-
-
-def test_task_27_boundaries_and_counterexamples_are_explicit() -> None:
-    bank = _bank()
-    tasks = {entry.task.id: entry.task for entry in bank.tasks if entry.task.id in TASK_IDS}
-
-    assert "2 <= x < 7" in _task_text(tasks["task-27-01"])
-    assert "наименьшей ещё не распределённой энергии" in _task_text(tasks["task-27-03"])
-    assert "медианной энергией" in _task_text(tasks["task-27-06"])
-    assert "размах max(E)−min(E)" in _task_text(tasks["task-27-07"])
-    assert "отбрасывает дробную часть" in _task_text(tasks["task-27-07"])
-    assert 2 <= 2 < 7  # the lower coordinate boundary is included
-    assert not 2 <= 7 < 7  # the upper coordinate boundary is excluded
-
-    # Adjacent gaps of 4 do not make [1, 3, 5, 8] a valid width-4 cluster.
-    assert 8 - 1 > 4 and 3 - 1 <= 4 and 5 - 3 <= 4 and 8 - 5 <= 4
-
-    decimal_task = tasks["task-27-06"]
-    decimal_records = [
-        line.split() for line in _attached_path(bank, decimal_task).read_text().splitlines()
-    ]
-    energies = sorted(float(record[2].replace(",", ".")) for record in decimal_records)
-    assert energies[:5] == [1.0, 1.5, 2.0, 2.3, 2.4]
-    assert energies[5:7] == [5.0, 6.5]  # inclusive width boundary
-    assert 6.5 - 5.0 == 1.5
-
-    integrated = [
-        line.split() for line in _attached_path(bank, tasks["task-27-07"]).read_text().splitlines()
-    ]
-    exact_energies = [
-        Fraction(int(row[4]) * (int(row[2]) ** 2 + int(row[3]) ** 2), 2) for row in integrated
-    ]
-    assert sorted(exact_energies) == [
-        Fraction(1),
-        Fraction(3, 2),
-        Fraction(2),
-        Fraction(5),
-        Fraction(11, 2),
-        Fraction(6),
-        Fraction(9),
-        Fraction(19, 2),
-        Fraction(10),
-        Fraction(13),
-        Fraction(27, 2),
-        Fraction(14),
-    ]
-    assert isqrt(13 * 100_000_000) == 36055  # int(sqrt(13) * 10000), truncating the fraction
+        assert " ".join(result.stdout.split()) == answers[task_id], task_id
+        assert all(len(line) <= 64 for line in code.splitlines()), task_id

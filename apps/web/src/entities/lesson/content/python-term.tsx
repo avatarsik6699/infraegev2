@@ -8,10 +8,12 @@ type Props = {
   children: React.ReactNode;
 };
 
+const courseTitles = { python: "Python", excel: "Excel" } as const;
+
 /**
- * A Python basic that topic lessons do not re-explain (Change 171): the term
- * itself, underlined with dots, opens a short explanation with a link to the
- * Python course lesson.
+ * A basic that topic lessons do not re-explain: a Python term (Change 171) or a
+ * spreadsheet term (Change 184). The term itself, underlined with dots, opens a
+ * short explanation with a link to the lesson of the Python or Excel course.
  */
 export const PythonTerm: React.FC<Props> = (props) => {
   const entry = pythonTerms[props.term];
@@ -25,9 +27,14 @@ export const PythonTerm: React.FC<Props> = (props) => {
       >
         <span className={styles.title}>{entry.title}</span>
         <span className={styles.body}>{entry.body}</span>
-        <span className={styles.course}>Курс Python: {entry.lessonTitle}</span>
+        <span className={styles.course}>
+          Курс {courseTitles[entry.course]}: {entry.lessonTitle}
+        </span>
         <span className={styles.link}>
-          <PythonCourseLessonLink lessonSlug={entry.lessonSlug}>
+          <PythonCourseLessonLink
+            courseSlug={entry.course}
+            lessonSlug={entry.lessonSlug}
+          >
             Читать урок →
           </PythonCourseLessonLink>
         </span>

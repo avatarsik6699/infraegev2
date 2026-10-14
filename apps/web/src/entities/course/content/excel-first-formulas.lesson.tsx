@@ -4,6 +4,7 @@ import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
 import {
   LessonStepper,
+  LessonSummary,
   ProofDisclosure,
   SheetBlock,
 } from "~/shared/components/learning-content";
@@ -244,29 +245,52 @@ export const excelFirstFormulasLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          Формула начинается с =, ячейка показывает результат, строка формул —
-          саму формулу.
-        </li>
-        <li>
-          Формула со ссылками пересчитывается при изменении данных; набранное
-          число — нет.
-        </li>
-        <li>
-          <Notation>{"*"}</Notation> — умножение, / — деление,{" "}
-          <Notation>{"^"}</Notation> — степень; <Notation>{"2*A2"}</Notation>, а
-          не 2A2; <Notation>{"=10%"}</Notation> — это 0,1.
-        </li>
-        <li>
-          Порядок действий обычный, скобки его меняют: среднее двух —{" "}
-          <Notation>{"=(A2+B2)/2"}</Notation>.
-        </li>
-        <li>
-          Деление на ноль даёт <Notation>{"#ДЕЛ/0!"}</Notation>; единицы
-          результата следуют из единиц данных.
-        </li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                Формула начинается с =, ячейка показывает результат, строка
+                формул — саму формулу.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Формула со ссылками пересчитывается при изменении данных;
+                набранное число — нет.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"*"}</Notation> — умножение, / — деление,{" "}
+                <Notation>{"^"}</Notation> — степень;{" "}
+                <Notation>{"2*A2"}</Notation>, а не 2A2;{" "}
+                <Notation>{"=10%"}</Notation> — это 0,1.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Порядок действий обычный, скобки его меняют: среднее двух —{" "}
+                <Notation>{"=(A2+B2)/2"}</Notation>.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Деление на ноль даёт <Notation>{"#ДЕЛ/0!"}</Notation>; единицы
+                результата следуют из единиц данных.
+              </>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

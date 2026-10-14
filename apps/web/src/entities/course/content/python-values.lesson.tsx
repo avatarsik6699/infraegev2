@@ -6,6 +6,7 @@ import { Typography } from "~/shared/components/typography";
 import {
   CodeRunner,
   LessonDiagram,
+  LessonSummary,
 } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { pythonValuesLessonPublication } from "./course-publication.mjs";
@@ -371,29 +372,53 @@ export const pythonValuesLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          Тип определяет, какие операции имеют смысл:{" "}
-          <Notation>{"27 + 3"}</Notation> — 30,{" "}
-          <Notation>{'"27" + "3"'}</Notation> — <Notation>{'"273"'}</Notation>.
-        </li>
-        <li>
-          Присваивание вычисляет правую часть и связывает имя с результатом;
-          формула не запоминается.
-        </li>
-        <li>
-          <Notation>{"x = x + 1"}</Notation> и <Notation>{"x += 1"}</Notation>{" "}
-          берут прежнее значение и заменяют его новым.
-        </li>
-        <li>
-          Имя ссылается на объект, тип принадлежит объекту; Python не угадывает
-          смысл: <Notation>{'10 + "5"'}</Notation> —{" "}
-          <Notation>{"TypeError"}</Notation>.
-        </li>
-        <li>
-          Имена выбирают по смыслу и не занимают имена встроенных средств.
-        </li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                Тип определяет, какие операции имеют смысл:{" "}
+                <Notation>{"27 + 3"}</Notation> — 30,{" "}
+                <Notation>{'"27" + "3"'}</Notation> —{" "}
+                <Notation>{'"273"'}</Notation>.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Присваивание вычисляет правую часть и связывает имя с
+                результатом; формула не запоминается.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"x = x + 1"}</Notation> и{" "}
+                <Notation>{"x += 1"}</Notation> берут прежнее значение и
+                заменяют его новым.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Имя ссылается на объект, тип принадлежит объекту; Python не
+                угадывает смысл: <Notation>{'10 + "5"'}</Notation> —{" "}
+                <Notation>{"TypeError"}</Notation>.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Имена выбирают по смыслу и не занимают имена встроенных средств.
+              </>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

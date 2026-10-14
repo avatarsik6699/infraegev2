@@ -3,6 +3,7 @@
 import { CodeBlock } from "~/shared/components/code-block";
 import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
+import { LessonSummary } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { pythonTestingLessonPublication } from "./course-publication.mjs";
 
@@ -342,30 +343,53 @@ export const pythonTestingLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          Имена, константы и комментарии объясняют смысл и причины, а не
-          пересказывают код.
-        </li>
-        <li>
-          Аннотации <Notation>{"list[int]"}</Notation>,{" "}
-          <Notation>{"int | None"}</Notation> описывают договорённость; Python
-          их не проверяет.
-        </li>
-        <li>
-          <Notation>{"unittest"}</Notation>: методы{" "}
-          <Notation>{"test_…"}</Notation> с <Notation>{"assertEqual"}</Notation>
-          , <Notation>{"assertIsNone"}</Notation> и другими.
-        </li>
-        <li>
-          Быстрое решение сравнивают с медленным эталоном на случайных данных с
-          фиксированным генератором.
-        </li>
-        <li>
-          Свойства результата проверяют вместе с полнотой: одно свойство может
-          пропустить ошибку.
-        </li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                Имена, константы и комментарии объясняют смысл и причины, а не
+                пересказывают код.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Аннотации <Notation>{"list[int]"}</Notation>,{" "}
+                <Notation>{"int | None"}</Notation> описывают договорённость;
+                Python их не проверяет.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"unittest"}</Notation>: методы{" "}
+                <Notation>{"test_…"}</Notation> с{" "}
+                <Notation>{"assertEqual"}</Notation>,{" "}
+                <Notation>{"assertIsNone"}</Notation> и другими.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Быстрое решение сравнивают с медленным эталоном на случайных
+                данных с фиксированным генератором.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Свойства результата проверяют вместе с полнотой: одно свойство
+                может пропустить ошибку.
+              </>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

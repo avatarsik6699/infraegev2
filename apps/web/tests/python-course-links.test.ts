@@ -6,19 +6,26 @@ import {
   courseLessonSlug,
   retiredCourseLessonSlugs,
 } from "~/entities/lesson/content/python-course-lesson-link";
+import { pythonTerms } from "~/entities/lesson/content/python-terms";
 
 const CONTENT = join(__dirname, "../src/entities/lesson/content");
 
-/** Every course lesson slug named by topic lessons and the term registry. */
+/** Every Python course lesson slug named by topic lessons and the term
+ * registry; Excel terms (Change 184) are checked against the Excel course. */
 const namedSlugs = () =>
   readdirSync(CONTENT)
-    .filter((name) => name.endsWith(".tsx"))
+    .filter((name) => name.endsWith(".tsx") && name !== "python-terms.tsx")
     .flatMap((name) =>
       [
         ...readFileSync(join(CONTENT, name), "utf8").matchAll(
           /lessonSlug(?:=|: )"([^"]+)"/gu,
         ),
       ].map((match) => ({ file: name, slug: match[1] ?? "" })),
+    )
+    .concat(
+      Object.values(pythonTerms)
+        .filter((entry) => entry.course === "python")
+        .map((entry) => ({ file: "python-terms.tsx", slug: entry.lessonSlug })),
     );
 
 describe("links to the Python course (Change 175)", () => {
@@ -32,6 +39,19 @@ describe("links to the Python course (Change 175)", () => {
           courseLessonSlug(slug),
         ),
         `${file}: ${slug}`,
+      ).toMatchObject({ status: "published" });
+    }
+  });
+
+  it("names published Excel course lessons in spreadsheet terms", () => {
+    const excel = Object.values(pythonTerms).filter(
+      (entry) => entry.course === "excel",
+    );
+    expect(excel.length).toBeGreaterThan(0);
+    for (const entry of excel) {
+      expect(
+        findCourseLessonPublicationByRouteSlugs("excel", entry.lessonSlug),
+        entry.lessonSlug,
       ).toMatchObject({ status: "published" });
     }
   });

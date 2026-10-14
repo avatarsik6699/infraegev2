@@ -280,12 +280,6 @@ dropped capabilities, no-new-privileges and SELECT-only credentials; never chmod
 sqlalchemy`). Invoke `/app/.venv/bin/python -m app.modules.account.purge`; confirm two scheduled
 successful runs via aggregate counts and the service journal.
 
-### Lesson videos need Nginx Range support
-
-Safari does not play media without `206` responses and the Node server ignores `Range`. Lesson media
-is baked into the Nginx image (`infra/nginx/snippets/lesson-media.conf`); guard:
-`scripts/tests/lesson-media-nginx.test.sh`.
-
 ### Restic retention, grouping and recovery holds
 
 - Each backup's unique `work.XXXXXX` path forms its own group: retention must use
@@ -345,13 +339,6 @@ timers/services, volumes and install directory, disable, bring down, remove what
 covers, then check `docker ps -a`, `systemctl list-timers`, `docker volume ls`.
 
 ## Lesson pipeline
-
-### Hand-drawn engine: missing glyphs, clipped captions, file size
-
-Neucha has no `−` (use `-`); Pillow silently clips glyphs outside the canvas; frequent keyframes
-bloat WebM. `Text` raises on a missing glyph, `Scene.warnings()` reports clipped/too-small captions,
-and `scripts/lesson_media/build.py` uses a keyframe every 5 s, width ≤1200 px, CRF 40/30. WebM bytes
-are not reproducible (libvpx threads); MP4 and posters are — do not diff WebM.
 
 ### «Решу ЕГЭ»: обычная страница подборки не читается целиком
 

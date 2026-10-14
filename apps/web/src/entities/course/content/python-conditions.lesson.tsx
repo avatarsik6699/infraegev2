@@ -6,6 +6,7 @@ import { Typography } from "~/shared/components/typography";
 import {
   CodeRunner,
   LessonDiagram,
+  LessonSummary,
 } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { pythonConditionsLessonPublication } from "./course-publication.mjs";
@@ -398,26 +399,49 @@ export const pythonConditionsLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          <Notation>{"if"}</Notation> выполняет блок с отступом, только если
-          условие истинно; <Notation>{"else"}</Notation> — иначе.
-        </li>
-        <li>
-          Цепочка <Notation>{"if"}</Notation>–<Notation>{"elif"}</Notation>–
-          <Notation>{"else"}</Notation> выбирает ровно одну ветку; порядок
-          проверок выводится из условий.
-        </li>
-        <li>
-          Несколько независимых признаков проверяют отдельными{" "}
-          <Notation>{"if"}</Notation>.
-        </li>
-        <li>
-          Имя должно получить значение на каждом пути; иначе{" "}
-          <Notation>{"NameError"}</Notation>.
-        </li>
-        <li>Максимум начинают с первого значения из данных, а не с нуля.</li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                <Notation>{"if"}</Notation> выполняет блок с отступом, только
+                если условие истинно; <Notation>{"else"}</Notation> — иначе.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Цепочка <Notation>{"if"}</Notation>–
+                <Notation>{"elif"}</Notation>–<Notation>{"else"}</Notation>{" "}
+                выбирает ровно одну ветку; порядок проверок выводится из
+                условий.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Несколько независимых признаков проверяют отдельными{" "}
+                <Notation>{"if"}</Notation>.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Имя должно получить значение на каждом пути; иначе{" "}
+                <Notation>{"NameError"}</Notation>.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>Максимум начинают с первого значения из данных, а не с нуля.</>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

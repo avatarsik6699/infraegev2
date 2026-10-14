@@ -153,7 +153,7 @@ it maps changed, staged and untracked paths to groups and prints focused-test/br
 and paths that need an explicit coverage decision. It never caches a result.
 
 Host Python (outside `apps/api`) has one list: `scripts/pyrightconfig.json` `include` for Pyright,
-plus Ruff-only Pillow tooling (`scripts/lesson_media`, `scripts/mascot`) declared in
+plus Ruff-only Pillow tooling (`scripts/mascot`) declared in
 `scripts/lib/gate/core.py`. `python3 scripts/gate.py host-python` prints it for Ruff.
 
 ---
@@ -335,7 +335,7 @@ synthetic bank into the development volume.
 │   ├── runbooks/               # operations, verification, lesson pipeline/patterns
 │   └── artifacts/              # architect sources and references (lessons, mockups, references)
 ├── content/                    # practice bank, legacy task fixtures, lesson-design stands
-├── scripts/                    # gate, history, release, ops tooling; lesson_design, lesson_media, mascot
+├── scripts/                    # gate, history, release, ops tooling; lesson_design, mascot
 ├── apps/web/, apps/api/, infra/, ops/
 ├── .claude/skills/, .agents/skills/, plugins/sdd-workflow/   # thin workflow wrappers
 └── AGENTS.md / CLAUDE.md       # AI agent rules
@@ -377,13 +377,10 @@ gate, history and release-checkpoint tooling follow the same stdlib-only boundar
 with fake commands/transports. Production hosts require Python 3.12+. A shell syntax check is not
 evidence that rollback runs: test the installed failure boundary; `EXIT` recovery preserves the
 original failure and invokes/health-checks rollback once. Lesson tooling: `scripts/lesson_design`
-(binding [pipeline](runbooks/lesson-pipeline.md)), `scripts/lesson_media` (Pillow engine,
-[lesson authoring](runbooks/lesson-authoring.md)) and `scripts/mascot` (illustration pipeline).
+(binding [pipeline](runbooks/lesson-pipeline.md)) and `scripts/mascot` (illustration pipeline).
 
 ```bash
 python3 -m unittest discover -s scripts/tests -p '<module>_test.py'
-uv run --no-project --with pillow python -m unittest discover -s scripts/tests -p lesson_media_engine_test.py
-bash scripts/tests/lesson-media-nginx.test.sh
 ```
 
 The optional snapshot integration test requires an explicitly selected `PRACTICE_BACKUP_CONTAINER`;

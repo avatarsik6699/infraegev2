@@ -4,6 +4,7 @@ import { Notation } from "~/shared/components/notation";
 type PythonTermEntry = {
   title: string;
   body: React.ReactNode;
+  course: "python" | "excel";
   lessonSlug: string;
   lessonTitle: string;
 };
@@ -22,6 +23,7 @@ export const pythonTerms = {
         <Notation>{"n"}</Notation>.
       </>
     ),
+    course: "python",
     lessonSlug: "logicheskie-vyrazheniya",
     lessonTitle: "Логические выражения",
   },
@@ -34,6 +36,7 @@ export const pythonTerms = {
         оба сразу.
       </>
     ),
+    course: "python",
     lessonSlug: "logicheskie-vyrazheniya",
     lessonTitle: "Логические выражения",
   },
@@ -47,6 +50,7 @@ export const pythonTerms = {
         входит, а <Notation>{"range(a, b, k)"}</Notation> идёт с шагом k.
       </>
     ),
+    course: "python",
     lessonSlug: "for-i-range",
     lessonTitle: "Цикл for и диапазоны",
   },
@@ -59,6 +63,7 @@ export const pythonTerms = {
         относятся к <Notation>{"if"}</Notation> или циклу.
       </>
     ),
+    course: "python",
     lessonSlug: "usloviya",
     lessonTitle: "Ветвление: if, elif и else",
   },
@@ -71,6 +76,7 @@ export const pythonTerms = {
         повторений.
       </>
     ),
+    course: "python",
     lessonSlug: "while",
     lessonTitle: "Цикл while и состояние программы",
   },
@@ -82,6 +88,7 @@ export const pythonTerms = {
         после цикла продолжают выполняться.
       </>
     ),
+    course: "python",
     lessonSlug: "while",
     lessonTitle: "Цикл while и состояние программы",
   },
@@ -96,6 +103,7 @@ export const pythonTerms = {
         <Notation>{'"1234"'}</Notation>.
       </>
     ),
+    course: "python",
     lessonSlug: "vvod-i-vyvod",
     lessonTitle: "Ввод, преобразование и вывод",
   },
@@ -108,6 +116,7 @@ export const pythonTerms = {
         <Notation>{"len(str(n))"}</Notation> — число его цифр.
       </>
     ),
+    course: "python",
     lessonSlug: "stroki",
     lessonTitle: "Строки",
   },
@@ -121,6 +130,7 @@ export const pythonTerms = {
         элемент в списке.
       </>
     ),
+    course: "python",
     lessonSlug: "stroki",
     lessonTitle: "Строки",
   },
@@ -134,6 +144,7 @@ export const pythonTerms = {
         <Notation>{"s[::-1]"}</Notation> — строка задом наперёд.
       </>
     ),
+    course: "python",
     lessonSlug: "stroki",
     lessonTitle: "Строки",
   },
@@ -147,6 +158,7 @@ export const pythonTerms = {
         элементов.
       </>
     ),
+    course: "python",
     lessonSlug: "spiski",
     lessonTitle: "Списки",
   },
@@ -159,6 +171,7 @@ export const pythonTerms = {
         наименьший и наибольший из них.
       </>
     ),
+    course: "python",
     lessonSlug: "vklyucheniya",
     lessonTitle: "Включения и функции для коллекций",
   },
@@ -171,6 +184,7 @@ export const pythonTerms = {
         <Notation>{"sorted(a, reverse=True)"}</Notation> — по убыванию.
       </>
     ),
+    course: "python",
     lessonSlug: "sortirovka-i-poisk",
     lessonTitle: "Сортировка и выбор лучших элементов",
   },
@@ -183,6 +197,7 @@ export const pythonTerms = {
         элемент, если его ещё нет.
       </>
     ),
+    course: "python",
     lessonSlug: "mnozhestva",
     lessonTitle: "Множества и выбор структуры данных",
   },
@@ -195,6 +210,7 @@ export const pythonTerms = {
         истинно, — короткая запись цикла с <Notation>{"append"}</Notation>.
       </>
     ),
+    course: "python",
     lessonSlug: "vklyucheniya",
     lessonTitle: "Включения и функции для коллекций",
   },
@@ -208,6 +224,7 @@ export const pythonTerms = {
         только выводит его на экран.
       </>
     ),
+    course: "python",
     lessonSlug: "funktsii",
     lessonTitle: "Функции: def, return и область видимости",
   },
@@ -220,6 +237,7 @@ export const pythonTerms = {
         по имени.
       </>
     ),
+    course: "python",
     lessonSlug: "chasti-programmy",
     lessonTitle: "Модули и части программы",
   },
@@ -233,6 +251,7 @@ export const pythonTerms = {
         <Notation>{"['40', '7', '1.3']"}</Notation>.
       </>
     ),
+    course: "python",
     lessonSlug: "spiski",
     lessonTitle: "Списки",
   },
@@ -246,6 +265,7 @@ export const pythonTerms = {
         <Notation>{"int(7.9)"}</Notation> отбрасывает дробную часть и даёт 7.
       </>
     ),
+    course: "python",
     lessonSlug: "chisla-i-vyrazheniya",
     lessonTitle: "Числа и арифметические операции",
   },
@@ -259,6 +279,7 @@ export const pythonTerms = {
         <Notation>{"40 in d"}</Notation> проверяет, есть ли такой ключ.
       </>
     ),
+    course: "python",
     lessonSlug: "slovari",
     lessonTitle: "Словари и подсчёт частот",
   },
@@ -271,8 +292,57 @@ export const pythonTerms = {
         После блока файл закрывается сам.
       </>
     ),
+    course: "python",
     lessonSlug: "fayly",
     lessonTitle: "Файлы и внешние данные",
+  },
+  intdiv: {
+    title: "Целая часть и остаток: // и %",
+    body: (
+      <>
+        <Notation>{"17 // 5"}</Notation> — целая часть частного, 3;{" "}
+        <Notation>{"17 % 5"}</Notation> — остаток, 2: 17 = 5 · 3 + 2. Обычное{" "}
+        <Notation>{"17 / 5"}</Notation> даёт дробное{" "}
+        <Notation>{"3.4"}</Notation>. <Notation>{"2 ** 5"}</Notation> — степень,
+        32.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "chisla-i-vyrazheniya",
+    lessonTitle: "Числа и арифметические операции",
+  },
+  base: {
+    title: "Запись в другой системе: bin, oct, int(s, q)",
+    body: (
+      <>
+        <Notation>{"bin(13)"}</Notation> даёт строку{" "}
+        <Notation>{"'0b1101'"}</Notation>, <Notation>{"bin(13)[2:]"}</Notation>{" "}
+        — цифры <Notation>{"'1101'"}</Notation> без префикса;{" "}
+        <Notation>{"oct"}</Notation> — восьмеричная запись.{" "}
+        <Notation>{"int('1101', 2)"}</Notation> читает запись с основанием 2 и
+        даёт 13; без второго аргумента <Notation>{"int"}</Notation> читает
+        десятичную запись.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "zapisi-chisel-i-shablony",
+    lessonTitle: "Записи чисел, биты и текстовые шаблоны",
+  },
+  strmeth: {
+    title: "Методы строки: count и replace",
+    body: (
+      <>
+        <Notation>{"s.count('1')"}</Notation> — сколько раз символ{" "}
+        <Notation>{"'1'"}</Notation> встречается в строке.{" "}
+        <Notation>{"s.replace('0', '2')"}</Notation> возвращает новую строку,
+        где каждый <Notation>{"'0'"}</Notation> заменён на{" "}
+        <Notation>{"'2'"}</Notation>; сама <Notation>{"s"}</Notation> не
+        меняется.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "stroki",
+    lessonTitle: "Строки",
   },
   rec: {
     title: "Рекурсия",
@@ -283,8 +353,990 @@ export const pythonTerms = {
         закончатся.
       </>
     ),
+    course: "python",
     lessonSlug: "rekursiya",
     lessonTitle: "Рекурсия и запоминание",
+  },
+  none: {
+    title: "None: значения пока нет",
+    body: (
+      <>
+        <Notation>{"best = None"}</Notation> отмечает, что ответа ещё нет: ни
+        одно значение не подошло. Проверяют это как{" "}
+        <Notation>{"best is None"}</Notation>: <Notation>{"is"}</Notation>{" "}
+        сравнивает сам объект, а <Notation>{"None"}</Notation> в программе один.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "for-i-range",
+    lessonTitle: "Цикл for и диапазоны",
+  },
+  augassign: {
+    title: "Сокращённое присваивание: += и другие",
+    body: (
+      <>
+        <Notation>{"count += 1"}</Notation> — то же, что{" "}
+        <Notation>{"count = count + 1"}</Notation>: взять старое значение,
+        прибавить и записать обратно. Так же работают{" "}
+        <Notation>{"-="}</Notation>, <Notation>{"*="}</Notation>,{" "}
+        <Notation>{"//="}</Notation> и <Notation>{"%="}</Notation>.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "znacheniya-i-peremennye",
+    lessonTitle: "Значения, типы и переменные",
+  },
+  product: {
+    title: "Перебор наборов: itertools.product",
+    body: (
+      <>
+        <Notation>{"product('ab', repeat=3)"}</Notation> по очереди даёт все
+        наборы из трёх символов <Notation>{"a"}</Notation> и{" "}
+        <Notation>{"b"}</Notation>: <Notation>{"('a', 'a', 'a')"}</Notation>,{" "}
+        <Notation>{"('a', 'a', 'b')"}</Notation>, … — всего 2³ = 8;{" "}
+        <Notation>{"''.join(w)"}</Notation> склеивает набор в слово.
+        Подключается <Notation>{"from itertools import product"}</Notation>.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "standartnaya-biblioteka",
+    lessonTitle: "Стандартная библиотека и перебор комбинаций",
+  },
+  enumerate: {
+    title: "Номер и значение: enumerate",
+    body: (
+      <>
+        <Notation>{"for i, x in enumerate(items):"}</Notation> даёт на каждом
+        шаге пару: номер <Notation>{"i"}</Notation> и сам элемент{" "}
+        <Notation>{"x"}</Notation>. Нумерация с нуля;{" "}
+        <Notation>{"enumerate(items, 1)"}</Notation> начинает с единицы.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "kortezhi-i-raspakovka",
+    lessonTitle: "Кортежи, распаковка, enumerate и zip",
+  },
+  readline: {
+    title: "Строка файла целиком: read и readline",
+    body: (
+      <>
+        <Notation>{'open("24.txt").readline()'}</Notation> читает одну строку
+        файла вместе со знаком переноса в конце,{" "}
+        <Notation>{".read()"}</Notation> — весь файл одной строкой;{" "}
+        <Notation>{".strip()"}</Notation> убирает перенос. Так читают файл из
+        одной длинной строки.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "fayly",
+    lessonTitle: "Файлы и внешние данные",
+  },
+  dictget: {
+    title: "Значение по умолчанию: dict.get",
+    body: (
+      <>
+        <Notation>{"d.get(k, 0)"}</Notation> возвращает значение по ключу{" "}
+        <Notation>{"k"}</Notation>, а если такого ключа нет — 0, без ошибки.
+        Поэтому счётчик пишут <Notation>{"d[k] = d.get(k, 0) + 1"}</Notation>.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "slovari",
+    lessonTitle: "Словари и подсчёт частот",
+  },
+  cache: {
+    title: "Запоминание: @cache",
+    body: (
+      <>
+        Строка <Notation>{"@cache"}</Notation> над <Notation>{"def"}</Notation>{" "}
+        (из <Notation>{"from functools import cache"}</Notation>) запоминает
+        результат функции для каждого аргумента: повторный вызов с тем же
+        аргументом сразу берёт сохранённый ответ. Это декоратор — он меняет
+        поведение функции, не трогая её формулу.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "rekursiya",
+    lessonTitle: "Рекурсия и запоминание",
+  },
+  reclimit: {
+    title: "Предел глубины рекурсии",
+    body: (
+      <>
+        Python держит не больше примерно 1000 незавершённых вызовов, дальше —
+        ошибка <Notation>{"RecursionError"}</Notation>.{" "}
+        <Notation>{"import sys"}</Notation> и{" "}
+        <Notation>{"sys.setrecursionlimit(5000)"}</Notation> поднимают предел;
+        алгоритм от этого быстрее не становится.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "rekursiya",
+    lessonTitle: "Рекурсия и запоминание",
+  },
+  defarg: {
+    title: "Значение параметра по умолчанию",
+    body: (
+      <>
+        <Notation>{"def count_sum(bound, target, base=10):"}</Notation> — если
+        при вызове третий аргумент не передан, <Notation>{"base"}</Notation>{" "}
+        равно 10; <Notation>{"count_sum(500, 6, 15)"}</Notation> передаёт 15.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "argumenty-i-lambda",
+    lessonTitle: "Аргументы, несколько результатов и lambda",
+  },
+  fraction: {
+    title: "Точные дроби: Fraction",
+    body: (
+      <>
+        <Notation>{"from fractions import Fraction"}</Notation>;{" "}
+        <Notation>{"Fraction(11, 2)"}</Notation> хранит дробь 11/2 точно —
+        целыми числителем и знаменателем, и арифметика с ней точная. Обычное{" "}
+        <Notation>{"11 / 2"}</Notation> даёт приближённое{" "}
+        <Notation>{"float"}</Notation>.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "standartnaya-biblioteka",
+    lessonTitle: "Стандартная библиотека и перебор комбинаций",
+  },
+  listindex: {
+    title: "Индекс элемента списка",
+    body: (
+      <>
+        <Notation>{"a[0]"}</Notation> — первый элемент списка,{" "}
+        <Notation>{"a[i]"}</Notation> — элемент с индексом{" "}
+        <Notation>{"i"}</Notation>; индексы начинаются с нуля, поэтому у списка
+        из <Notation>{"n"}</Notation> элементов последний —{" "}
+        <Notation>{"a[n - 1]"}</Notation>, а <Notation>{"a[n]"}</Notation> даёт
+        ошибку.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "spiski",
+    lessonTitle: "Списки",
+  },
+  absval: {
+    title: "Модуль числа: abs",
+    body: (
+      <>
+        <Notation>{"abs(x)"}</Notation> — абсолютная величина числа:{" "}
+        <Notation>{"abs(-12)"}</Notation> и <Notation>{"abs(12)"}</Notation>{" "}
+        равны 12, <Notation>{"abs(0)"}</Notation> — 0. Знак отбрасывается, само
+        число <Notation>{"x"}</Notation> не меняется.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "chisla-i-vyrazheniya",
+    lessonTitle: "Числа и арифметические операции",
+  },
+  nested: {
+    title: "Вложенные циклы",
+    body: (
+      <>
+        Цикл внутри цикла: для каждого значения внешней переменной внутренний
+        цикл проходит целиком. <Notation>{"range(i + 1, n)"}</Notation> даёт
+        числа от <Notation>{"i + 1"}</Notation> до{" "}
+        <Notation>{"n - 1"}</Notation>.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "for-i-range",
+    lessonTitle: "Цикл for и диапазоны",
+  },
+  tuple: {
+    title: "Кортеж и распаковка",
+    body: (
+      <>
+        <Notation>{"point = (2.0, 5.0)"}</Notation> — кортеж: несколько значений
+        по порядку, изменить его нельзя. <Notation>{"point[0]"}</Notation> —
+        первый элемент, а <Notation>{"x, y = point"}</Notation> раздаёт элементы
+        двум именам сразу; так же <Notation>{"for x, y in points:"}</Notation>.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "kortezhi-i-raspakovka",
+    lessonTitle: "Кортежи, распаковка, enumerate и zip",
+  },
+  listops: {
+    title: "Методы списка: copy, pop, index",
+    body: (
+      <>
+        <Notation>{"a.copy()"}</Notation> — новый отдельный список с теми же
+        элементами. <Notation>{"a.pop()"}</Notation> удаляет последний элемент и
+        возвращает его. <Notation>{"a.index(v)"}</Notation> — номер первого
+        элемента, равного <Notation>{"v"}</Notation>.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "spiski",
+    lessonTitle: "Списки",
+  },
+  sortkey: {
+    title: "Ключ сортировки: key",
+    body: (
+      <>
+        <Notation>{"sorted(clusters, key=len)"}</Notation> сравнивает элементы
+        не сами по себе, а по значению <Notation>{"len(элемент)"}</Notation>.
+        Ключом может быть любая функция от элемента; передают саму функцию, без
+        скобок. Так же работают <Notation>{"min"}</Notation> и{" "}
+        <Notation>{"max"}</Notation> с <Notation>{"key="}</Notation>.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "sortirovka-i-poisk",
+    lessonTitle: "Сортировка и выбор лучших элементов",
+  },
+  genexp: {
+    title: "Генераторное выражение",
+    body: (
+      <>
+        <Notation>{"sum(p[0] for p in points)"}</Notation> — выражение в скобках
+        выдаёт значения по одному прямо в <Notation>{"sum"}</Notation>,{" "}
+        <Notation>{"min"}</Notation> или <Notation>{"max"}</Notation>, без
+        промежуточного списка. Запись та же, что у спискового включения, но без
+        квадратных скобок.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "iteratory-i-generatory",
+    lessonTitle: "Итераторы и генераторы",
+  },
+  multiret: {
+    title: "Несколько результатов функции",
+    body: (
+      <>
+        <Notation>{"return best, radius"}</Notation> возвращает один кортеж из
+        двух значений; при вызове его раскладывают по именам:{" "}
+        <Notation>{"center, radius = f(cluster)"}</Notation>.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "argumenty-i-lambda",
+    lessonTitle: "Аргументы, несколько результатов и lambda",
+  },
+  continue: {
+    title: "Пропуск шага: continue",
+    body: (
+      <>
+        <Notation>{"continue"}</Notation> сразу переходит к следующему проходу
+        цикла: оставшиеся строки тела для текущего элемента не выполняются, а
+        цикл продолжается.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "while",
+    lessonTitle: "Цикл while и состояние программы",
+  },
+  strip: {
+    title: "Края строки: strip",
+    body: (
+      <>
+        <Notation>{"line.strip()"}</Notation> возвращает строку без пробелов,
+        табуляций и перевода строки по краям. Для пустой строки файла результат
+        — пустая строка <Notation>{'""'}</Notation>, а она в условии считается
+        ложью.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "stroki",
+    lessonTitle: "Строки",
+  },
+  bigo: {
+    title: "Сложность: запись O(n²)",
+    body: (
+      <>
+        <Notation>{"O(n²)"}</Notation> говорит, как растёт работа с ростом
+        данных: при вдвое большем n — примерно вчетверо больше действий. Это
+        порядок роста, а не число секунд.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "skorost-i-pamyat",
+    lessonTitle: "Скорость и память программы",
+  },
+  startswith: {
+    title: "Начало строки: startswith",
+    body: (
+      <>
+        <Notation>{"s.startswith(t)"}</Notation> даёт{" "}
+        <Notation>{"True"}</Notation>, если строка <Notation>{"s"}</Notation>{" "}
+        начинается со строки <Notation>{"t"}</Notation>:{" "}
+        <Notation>{"'0110'.startswith('01')"}</Notation> —{" "}
+        <Notation>{"True"}</Notation>,{" "}
+        <Notation>{"'0010'.startswith('010')"}</Notation> —{" "}
+        <Notation>{"False"}</Notation>. Строка начинается и сама с себя.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "stroki",
+    lessonTitle: "Строки",
+  },
+  zfill: {
+    title: "Нули слева: zfill",
+    body: (
+      <>
+        <Notation>{"s.zfill(n)"}</Notation> дописывает слева нули до длины n:{" "}
+        <Notation>{"'1'.zfill(3)"}</Notation> — <Notation>{"'001'"}</Notation>.
+        Так двоичную запись <Notation>{"bin(x)[2:]"}</Notation> выравнивают до
+        нужной длины кода.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "stroki",
+    lessonTitle: "Строки",
+  },
+  ceil: {
+    title: "Округление вверх: ceil",
+    body: (
+      <>
+        <Notation>{"from math import ceil"}</Notation>;{" "}
+        <Notation>{"ceil(5312.5)"}</Notation> — наименьшее целое, не меньшее
+        числа, 5313; <Notation>{"ceil(10)"}</Notation> — 10. Целочисленный
+        вариант без дробей: <Notation>{"-(-a // b)"}</Notation> делит a на b с
+        округлением вверх.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "chasti-programmy",
+    lessonTitle: "Модули и части программы",
+  },
+  floaterr: {
+    title: "Дробные числа приближённые",
+    body: (
+      <>
+        <Notation>{"float"}</Notation> хранит дробь приближённо:{" "}
+        <Notation>{"0.1 + 0.2"}</Notation> даёт{" "}
+        <Notation>{"0.30000000000000004"}</Notation>, а{" "}
+        <Notation>{"1 - 0.84"}</Notation> —{" "}
+        <Notation>{"0.16000000000000003"}</Notation>. Целые числа{" "}
+        <Notation>{"int"}</Notation> точные, поэтому проценты удобно считать
+        целыми: 16 из 100.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "chisla-i-vyrazheniya",
+    lessonTitle: "Числа и арифметические операции",
+  },
+  round: {
+    title: "Округление к ближайшему: round",
+    body: (
+      <>
+        <Notation>{"round(12.8)"}</Notation> — ближайшее целое, 13;{" "}
+        <Notation>{"int(12.8)"}</Notation> отбрасывает дробную часть, 12. Ровно
+        половину <Notation>{"round"}</Notation> округляет к чётному:{" "}
+        <Notation>{"round(12.5)"}</Notation> даёт 12,{" "}
+        <Notation>{"round(13.5)"}</Notation> — 14.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "chisla-i-vyrazheniya",
+    lessonTitle: "Числа и арифметические операции",
+  },
+  permutations: {
+    title: "Перестановки и наборы: permutations, combinations",
+    body: (
+      <>
+        <Notation>{"permutations('abc', 2)"}</Notation> даёт расстановки без
+        повторов: <Notation>{"('a', 'b')"}</Notation>,{" "}
+        <Notation>{"('a', 'c')"}</Notation>, <Notation>{"('b', 'a')"}</Notation>
+        , … — всего 3 · 2 = 6. <Notation>{"combinations('abc', 2)"}</Notation>{" "}
+        даёт наборы без учёта порядка: <Notation>{"('a', 'b')"}</Notation>,{" "}
+        <Notation>{"('a', 'c')"}</Notation>, <Notation>{"('b', 'c')"}</Notation>
+        . Подключаются из модуля <Notation>{"itertools"}</Notation>.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "standartnaya-biblioteka",
+    lessonTitle: "Стандартная библиотека и перебор комбинаций",
+  },
+  counter: {
+    title: "Подсчёт частот: Counter",
+    body: (
+      <>
+        <Notation>{"Counter(a)"}</Notation> из модуля{" "}
+        <Notation>{"collections"}</Notation> — словарь «значение → сколько раз
+        оно встречается в <Notation>{"a"}</Notation>»:{" "}
+        <Notation>{"Counter([4, 4, 7])[4]"}</Notation> равно 2. Частота
+        значения, которого нет, равна 0.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "standartnaya-biblioteka",
+    lessonTitle: "Стандартная библиотека и перебор комбинаций",
+  },
+  listcount: {
+    title: "Сколько раз в списке: count",
+    body: (
+      <>
+        <Notation>{"a.count(x)"}</Notation> возвращает, сколько элементов списка{" "}
+        <Notation>{"a"}</Notation> равны <Notation>{"x"}</Notation>: для{" "}
+        <Notation>{"[2, 2, 5]"}</Notation> вызов{" "}
+        <Notation>{"a.count(2)"}</Notation> даёт 2, а{" "}
+        <Notation>{"a.count(7)"}</Notation> — 0.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "spiski",
+    lessonTitle: "Списки",
+  },
+  mapint: {
+    title: "Преобразовать все части: map",
+    body: (
+      <>
+        <Notation>{"list(map(int, line.split()))"}</Notation> применяет{" "}
+        <Notation>{"int"}</Notation> к каждой части строки и собирает результаты
+        в список — то же, что{" "}
+        <Notation>{"[int(part) for part in line.split()]"}</Notation>.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "iteratory-i-generatory",
+    lessonTitle: "Итераторы и генераторы",
+  },
+  format: {
+    title: "Запись по шаблону: format",
+    body: (
+      <>
+        <Notation>{"format(10, '08b')"}</Notation> даёт{" "}
+        <Notation>{"'00001010'"}</Notation>: <Notation>{"b"}</Notation> —
+        двоичная запись, <Notation>{"8"}</Notation> — ширина,{" "}
+        <Notation>{"0"}</Notation> — дополнить нулями слева.{" "}
+        <Notation>{"format(n, '032b')"}</Notation> — ровно 32 знака. В отличие
+        от <Notation>{"bin(10)"}</Notation> нет префикса{" "}
+        <Notation>{"0b"}</Notation>.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "zapisi-chisel-i-shablony",
+    lessonTitle: "Записи чисел, биты и текстовые шаблоны",
+  },
+  fstring: {
+    title: "Подстановка в строку: f-строка",
+    body: (
+      <>
+        Буква <Notation>{"f"}</Notation> перед кавычкой разрешает вставлять
+        значения в фигурных скобках: при <Notation>{"p = 19"}</Notation> строка{" "}
+        <Notation>{"f'10.0.0.1/{p}'"}</Notation> равна{" "}
+        <Notation>{"'10.0.0.1/19'"}</Notation>.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "vvod-i-vyvod",
+    lessonTitle: "Ввод, преобразование и вывод",
+  },
+  bitand: {
+    title: "Побитовое «И»: &",
+    body: (
+      <>
+        <Notation>{"173 & 192"}</Notation> сравнивает двоичные записи по
+        позициям и оставляет 1 только там, где 1 в обоих числах:{" "}
+        <Notation>{"10101101 & 11000000 = 10000000"}</Notation>, то есть 128.
+        Слово <Notation>{"and"}</Notation> соединяет условия и{" "}
+        <Notation>{"&"}</Notation> не заменяет.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "zapisi-chisel-i-shablony",
+    lessonTitle: "Записи чисел, биты и текстовые шаблоны",
+  },
+  comb: {
+    title: "Число сочетаний: comb",
+    body: (
+      <>
+        <Notation>{"from math import comb"}</Notation>;{" "}
+        <Notation>{"comb(4, 2)"}</Notation> — сколькими способами можно выбрать
+        2 предмета из 4 без учёта порядка: 6.{" "}
+        <Notation>{"comb(n, k)"}</Notation> при k &gt; n равно 0, отрицательное
+        k даёт ошибку.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "standartnaya-biblioteka",
+    lessonTitle: "Стандартная библиотека и перебор комбинаций",
+  },
+  bitlength: {
+    title: "Длина двоичной записи: bit_length",
+    body: (
+      <>
+        <Notation>{"n.bit_length()"}</Notation> — сколько разрядов в двоичной
+        записи числа без начальных нулей:{" "}
+        <Notation>{"(128).bit_length()"}</Notation> даёт 8, потому что 128 ={" "}
+        <Notation>{"10000000"}</Notation>;{" "}
+        <Notation>{"(127).bit_length()"}</Notation> — 7. Метод пишут через точку
+        после числа или имени.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "zapisi-chisel-i-shablony",
+    lessonTitle: "Записи чисел, биты и текстовые шаблоны",
+  },
+  anyall: {
+    title: "any и all",
+    body: (
+      <>
+        <Notation>{"any(checks)"}</Notation> — истинен ли хотя бы один элемент,{" "}
+        <Notation>{"all(checks)"}</Notation> — истинны ли все. Внутрь часто
+        пишут генераторное выражение:{" "}
+        <Notation>{"any(q > 20 for q in nxt)"}</Notation>. Для пустого набора{" "}
+        <Notation>{"any"}</Notation> даёт <Notation>{"False"}</Notation>, а{" "}
+        <Notation>{"all"}</Notation> — <Notation>{"True"}</Notation>: нет ни
+        одного подтверждения и ни одного нарушения.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "vklyucheniya",
+    lessonTitle: "Включения и функции для коллекций",
+  },
+  regex: {
+    title: "Регулярное выражение: модуль re",
+    body: (
+      <>
+        Шаблон описывает подходящий текст: <Notation>{"[0-9]"}</Notation> — одна
+        цифра, <Notation>{"[ABC]"}</Notation> — один символ набора,{" "}
+        <Notation>{"+"}</Notation> — одно или несколько повторений,{" "}
+        <Notation>{"*"}</Notation> — ноль или больше,{" "}
+        <Notation>{"A|B"}</Notation> — один из вариантов.{" "}
+        <Notation>{"re.finditer(r'[0-9]+', s)"}</Notation> по очереди выдаёт
+        совпадения без перекрытий: <Notation>{"m.group()"}</Notation> —
+        найденный текст, <Notation>{"m.start()"}</Notation> и{" "}
+        <Notation>{"m.end()"}</Notation> — его границы, как у среза.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "zapisi-chisel-i-shablony",
+    lessonTitle: "Записи чисел, биты и текстовые шаблоны",
+  },
+  listrepeat: {
+    title: "Список из одинаковых значений: [0] * n",
+    body: (
+      <>
+        <Notation>{"[0] * 5"}</Notation> — список{" "}
+        <Notation>{"[0, 0, 0, 0, 0]"}</Notation>;{" "}
+        <Notation>{"[False] * len(s)"}</Notation> — по одному{" "}
+        <Notation>{"False"}</Notation> на каждый символ строки. Элементы потом
+        заменяют присваиванием: <Notation>{"a[2] = 7"}</Notation>.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "spiski",
+    lessonTitle: "Списки",
+  },
+  elif: {
+    title: "Цепочка if — elif — else",
+    body: (
+      <>
+        <Notation>{"elif условие:"}</Notation> — «иначе, если»: проверяется,
+        только когда все условия выше не выполнились. Из цепочки{" "}
+        <Notation>{"if"}</Notation>, <Notation>{"elif"}</Notation>,{" "}
+        <Notation>{"else"}</Notation> выполняется ровно одна ветка.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "usloviya",
+    lessonTitle: "Ветвление: if, elif и else",
+  },
+  splitsep: {
+    title: "Разбить по символу: split('X')",
+    body: (
+      <>
+        <Notation>{"s.split('X')"}</Notation> режет строку в каждом месте, где
+        стоит <Notation>{"'X'"}</Notation>, и возвращает список частей без самих
+        разделителей: <Notation>{"'ABXXC'.split('X')"}</Notation> даёт{" "}
+        <Notation>{"['AB', '', 'C']"}</Notation> — между соседними разделителями
+        остаётся пустая часть.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "spiski",
+    lessonTitle: "Списки",
+  },
+  lambda: {
+    title: "Короткая функция: lambda",
+    body: (
+      <>
+        <Notation>{"lambda r: r[1]"}</Notation> — функция без имени: слева от
+        двоеточия параметр, справа возвращаемое выражение. Её передают туда, где
+        нужна функция, например{" "}
+        <Notation>{"sorted(records, key=lambda r: r[1])"}</Notation>.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "argumenty-i-lambda",
+    lessonTitle: "Аргументы, несколько результатов и lambda",
+  },
+  listsort: {
+    title: "Сортировка на месте: sort",
+    body: (
+      <>
+        <Notation>{"a.sort()"}</Notation> упорядочивает сам список{" "}
+        <Notation>{"a"}</Notation> и возвращает <Notation>{"None"}</Notation>,
+        поэтому <Notation>{"a = a.sort()"}</Notation> теряет список.{" "}
+        <Notation>{"sorted(a)"}</Notation> оставляет <Notation>{"a"}</Notation>{" "}
+        как был и возвращает новый. Сортировка устойчива: элементы с равными
+        ключами сохраняют исходный порядок.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "sortirovka-i-poisk",
+    lessonTitle: "Сортировка и выбор лучших элементов",
+  },
+  multikey: {
+    title: "Несколько критериев: кортеж ключей",
+    body: (
+      <>
+        Кортежи сравниваются по очереди: сначала первые элементы, при равенстве
+        — вторые. Поэтому <Notation>{"key=lambda s: (-s[1], s[0])"}</Notation>{" "}
+        ставит больший балл выше, а при равных баллах — меньший номер; минус
+        разворачивает только своё число.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "sortirovka-i-poisk",
+    lessonTitle: "Сортировка и выбор лучших элементов",
+  },
+  listmul: {
+    title: "Список из одинаковых значений: [0] * k",
+    body: (
+      <>
+        <Notation>{"[0] * 3"}</Notation> — список{" "}
+        <Notation>{"[0, 0, 0]"}</Notation>: умножение списка на число повторяет
+        его элементы. Так создают по одному счётчику или времени на каждый из k
+        объектов.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "spiski",
+    lessonTitle: "Списки",
+  },
+  truthy: {
+    title: "Значение в условии: пустое — ложь",
+    body: (
+      <>
+        В условии пустой список, пустая строка, 0 и{" "}
+        <Notation>{"None"}</Notation> считаются ложью, непустые и ненулевые —
+        истиной. <Notation>{"if not a:"}</Notation> читается «если список
+        пустой».
+      </>
+    ),
+    course: "python",
+    lessonSlug: "logicheskie-vyrazheniya",
+    lessonTitle: "Логические выражения",
+  },
+  deque: {
+    title: "Очередь: deque",
+    body: (
+      <>
+        <Notation>{"from collections import deque"}</Notation>;{" "}
+        <Notation>{"q = deque()"}</Notation> — очередь:{" "}
+        <Notation>{"q.append(x)"}</Notation> ставит в конец,{" "}
+        <Notation>{"q.popleft()"}</Notation> забирает первый элемент сразу,{" "}
+        <Notation>{"q[0]"}</Notation> и <Notation>{"q[-1]"}</Notation> — первый
+        и последний, <Notation>{"len(q)"}</Notation> — сколько в очереди.
+      </>
+    ),
+    course: "python",
+    lessonSlug: "standartnaya-biblioteka",
+    lessonTitle: "Стандартная библиотека и перебор комбинаций",
+  },
+  "xl-address": {
+    title: "Адрес ячейки и диапазон",
+    body: (
+      <>
+        <Notation>{"B3"}</Notation> — ячейка в столбце B и строке 3.{" "}
+        <Notation>{"A1:D1"}</Notation> — прямоугольный диапазон от A1 до D1:
+        здесь четыре ячейки одной строки.
+      </>
+    ),
+    course: "excel",
+    lessonSlug: "list-i-yacheyka",
+    lessonTitle: "Книга, лист, ячейка, диапазон",
+  },
+  "xl-csv": {
+    title: "CSV, разделитель и импорт",
+    body: (
+      <>
+        В файле CSV значения строки разделены знаком, обычно «;» или «,». При
+        открытии Excel делит строку по разделителю на столбцы; неверный
+        разделитель склеивает всё в одну ячейку.
+      </>
+    ),
+    course: "excel",
+    lessonSlug: "vvod-i-fayly",
+    lessonTitle: "Ввод данных и файлы",
+  },
+  "xl-format": {
+    title: "Значение и формат ячейки",
+    body: (
+      <>
+        В ячейке хранится значение — число, текст или дата, а формат лишь
+        показывает его: <Notation>{"0,5"}</Notation> и{" "}
+        <Notation>{"50%"}</Notation> — одно и то же число. Считают формулы по
+        значению, а не по виду.
+      </>
+    ),
+    course: "excel",
+    lessonSlug: "chto-v-yacheyke",
+    lessonTitle: "Что хранится в ячейке",
+  },
+  "xl-formula": {
+    title: "Формула и порядок действий",
+    body: (
+      <>
+        Формула начинается со знака <Notation>{"="}</Notation> и пересчитывается
+        при изменении ячеек, на которые ссылается. Порядок действий обычный:{" "}
+        <Notation>{"=A1+B1*2"}</Notation> сначала умножает.
+      </>
+    ),
+    course: "excel",
+    lessonSlug: "pervye-formuly",
+    lessonTitle: "Первые формулы",
+  },
+  "xl-ref": {
+    title: "Относительная, абсолютная и смешанная ссылка",
+    body: (
+      <>
+        При копировании формулы ссылка <Notation>{"A1"}</Notation> сдвигается
+        вместе с ней, <Notation>{"$A$1"}</Notation> остаётся на месте, а{" "}
+        <Notation>{"$A1"}</Notation> и <Notation>{"A$1"}</Notation> закрепляют
+        только столбец или только строку.
+      </>
+    ),
+    course: "excel",
+    lessonSlug: "kopirovanie-i-dollar",
+    lessonTitle: "Копирование формул и знак $",
+  },
+  "xl-fill": {
+    title: "Заполнение формулой",
+    body: (
+      <>
+        Формулу пишут один раз в первой строке и протягивают вниз за маркер
+        заполнения: в каждой строке получаются те же действия над своими
+        ячейками.
+      </>
+    ),
+    course: "excel",
+    lessonSlug: "kopirovanie-i-dollar",
+    lessonTitle: "Копирование формул и знак $",
+  },
+  "xl-range-functions": {
+    title: "СУММ, СЧЁТ, СРЗНАЧ, МАКС, МИН, НАИБОЛЬШИЙ",
+    body: (
+      <>
+        Функции по диапазону: <Notation>{"=СУММ(A1:D1)"}</Notation> — сумма,{" "}
+        <Notation>{"=МАКС(A1:D1)"}</Notation> — наибольшее,{" "}
+        <Notation>{"=НАИБОЛЬШИЙ(A1:D1;2)"}</Notation> — второе по величине,
+        считая повторы.
+      </>
+    ),
+    course: "excel",
+    lessonSlug: "funktsii",
+    lessonTitle: "Функции по диапазону",
+  },
+  "xl-if": {
+    title: "Признак ЕСЛИ(…;1;0), И, ИЛИ, НЕ",
+    body: (
+      <>
+        <Notation>{"=ЕСЛИ(условие;1;0)"}</Notation> ставит 1, когда строка
+        подходит, и 0 иначе; сумма таких признаков — количество подходящих
+        строк. <Notation>{"И"}</Notation>, <Notation>{"ИЛИ"}</Notation>,{" "}
+        <Notation>{"НЕ"}</Notation> соединяют проверки.
+      </>
+    ),
+    course: "excel",
+    lessonSlug: "usloviya",
+    lessonTitle: "Проверки и ЕСЛИ",
+  },
+  "xl-mod": {
+    title: "ОСТАТ, ЦЕЛОЕ, ОКРУГЛ, ABS",
+    body: (
+      <>
+        <Notation>{"=ОСТАТ(A1;2)"}</Notation> — остаток от деления на 2,{" "}
+        <Notation>{"=ЦЕЛОЕ(A1)"}</Notation> — округление вниз до целого,{" "}
+        <Notation>{"=ОКРУГЛ(A1;0)"}</Notation> — до ближайшего целого,{" "}
+        <Notation>{"=ABS(A1)"}</Notation> — модуль.
+      </>
+    ),
+    course: "excel",
+    lessonSlug: "chisla",
+    lessonTitle: "Проценты, округление, остаток",
+  },
+  "xl-countif": {
+    title: "СЧЁТЕСЛИ, СЧЁТЕСЛИМН, СУММЕСЛИ и критерий с &",
+    body: (
+      <>
+        <Notation>{"=СЧЁТЕСЛИ(A1:D1;A1)"}</Notation> — сколько ячеек диапазона
+        равны A1; <Notation>{'=СЧЁТЕСЛИ(A1:D1;">"&E1)'}</Notation> — сколько
+        больше E1: критерий склеивают знаком <Notation>{"&"}</Notation>.
+      </>
+    ),
+    course: "excel",
+    lessonSlug: "podschet-po-usloviyu",
+    lessonTitle: "Подсчёт и сумма по условию",
+  },
+  "xl-frequency": {
+    title: "Частоты значений в строке",
+    body: (
+      <>
+        Для каждой ячейки строки <Notation>{"СЧЁТЕСЛИ"}</Notation> по всей
+        строке даёт, сколько раз встречается её значение: так находят повторы и
+        числа, встречающиеся ровно один раз.
+      </>
+    ),
+    course: "excel",
+    lessonSlug: "podschet-po-usloviyu",
+    lessonTitle: "Подсчёт и сумма по условию",
+  },
+  "xl-dates": {
+    title: "ДАТА, период и текстовые функции",
+    body: (
+      <>
+        Дата в Excel — число дней, поэтому даты сравнивают и вычитают как числа;{" "}
+        <Notation>{"ЛЕВСИМВ"}</Notation>, <Notation>{"ПСТР"}</Notation>,{" "}
+        <Notation>{"ПРАВСИМВ"}</Notation> берут части текста.
+      </>
+    ),
+    course: "excel",
+    lessonSlug: "tekst-i-daty",
+    lessonTitle: "Текст и даты",
+  },
+  "xl-filter": {
+    title: "Сортировка, фильтр и ПРОМЕЖУТОЧНЫЕ.ИТОГИ",
+    body: (
+      <>
+        Фильтр прячет неподходящие строки, а не удаляет их;{" "}
+        <Notation>{"ПРОМЕЖУТОЧНЫЕ.ИТОГИ"}</Notation> считает только видимые
+        строки, <Notation>{"СУММ"}</Notation> — все.
+      </>
+    ),
+    course: "excel",
+    lessonSlug: "sortirovka-i-filtr",
+    lessonTitle: "Сортировка, фильтр, видимые строки",
+  },
+  "xl-lookup": {
+    title: "Ключ, ВПР, ИНДЕКС и ПОИСКПОЗ",
+    body: (
+      <>
+        <Notation>{"=ВПР(ключ;диапазон;номер;0)"}</Notation> ищет ключ в первом
+        столбце диапазона и берёт значение из столбца с заданным номером той же
+        строки.
+      </>
+    ),
+    course: "excel",
+    lessonSlug: "poisk-po-klyuchu",
+    lessonTitle: "Поиск по ключу",
+  },
+  "xl-neighbours": {
+    title: "Накопление, соседние пары и таблица из таблицы",
+    body: (
+      <>
+        Формула строки 2 может ссылаться на строку 1: так копят сумму и
+        сравнивают соседние строки. Новая таблица признаков рядом с исходной не
+        меняет данные.
+      </>
+    ),
+    course: "excel",
+    lessonSlug: "raschet-po-sosedyam",
+    lessonTitle: "Расчёт по соседним ячейкам",
+  },
+  "xl-row": {
+    title: "Номер строки: СТРОКА()",
+    body: (
+      <>
+        <Notation>{"=СТРОКА()"}</Notation> даёт номер строки, где стоит формула.{" "}
+        <Notation>{'=ЕСЛИ(признак=1;СТРОКА();"")'}</Notation> в каждой строке и{" "}
+        <Notation>{"МИН"}</Notation> или <Notation>{"МАКС"}</Notation> по
+        столбцу дают первую или последнюю подходящую строку.
+      </>
+    ),
+    course: "excel",
+    lessonSlug: "raschet-po-sosedyam",
+    lessonTitle: "Расчёт по соседним ячейкам",
+  },
+  "xl-isnumber": {
+    title: "Проверка типа: ЕЧИСЛО",
+    body: (
+      <>
+        <Notation>{"=ЕЧИСЛО(A2)"}</Notation> даёт ИСТИНА, если в{" "}
+        <Notation>{"A2"}</Notation> число, и ЛОЖЬ, если текст или пусто. Так
+        формула отличает числа от текстовых отметок вроде «X».
+      </>
+    ),
+    course: "excel",
+    lessonSlug: "tekst-i-daty",
+    lessonTitle: "Текст и даты",
+  },
+  "xl-recalc": {
+    title: "Порядок пересчёта и циклическая ссылка",
+    body: (
+      <>
+        Excel сам пересчитывает формулы в нужном порядке: сначала ячейки, на
+        которые ссылаются, потом зависящие от них. Если формулы ссылаются друг
+        на друга по кругу, Excel сообщает о циклической ссылке — у такого
+        расчёта нет начала.
+      </>
+    ),
+    course: "excel",
+    lessonSlug: "raschet-po-sosedyam",
+    lessonTitle: "Расчёт по соседним ячейкам",
+  },
+  "xl-check": {
+    title: "Ошибки Excel и проверка ответа",
+    body: (
+      <>
+        <Notation>{"#ЗНАЧ!"}</Notation>, <Notation>{"#ДЕЛ/0!"}</Notation> и{" "}
+        <Notation>{"#Н/Д"}</Notation> показывают, что формула получила не то;
+        ответ проверяют на нескольких строках вручную, прежде чем протянуть
+        формулу.
+      </>
+    ),
+    course: "excel",
+    lessonSlug: "ot-usloviya-k-tablitse",
+    lessonTitle: "От условия к таблице вычислений",
+  },
+  "xl-wildcard": {
+    title: "Шаблон в критерии: * и ?",
+    body: (
+      <>
+        В критерии <Notation>{"СЧЁТЕСЛИ"}</Notation>,{" "}
+        <Notation>{"СУММЕСЛИ"}</Notation> и <Notation>{"СУММЕСЛИМН"}</Notation>{" "}
+        знак * заменяет любые символы, ? — ровно один:{" "}
+        <Notation>{'"*зефир*"'}</Notation> подходит к «Зефир ванильный» и «Торт
+        зефирный». Регистр букв не важен.
+      </>
+    ),
+    course: "excel",
+    lessonSlug: "podschet-po-usloviyu",
+    lessonTitle: "Подсчёт и сумма по условию",
+  },
+  "xl-sheetref": {
+    title: "Ссылка на другой лист",
+    body: (
+      <>
+        <Notation>{"Товар!A2"}</Notation> — ячейка A2 на листе «Товар»: знак !
+        отделяет имя листа от адреса. Имя с пробелом берут в одинарные кавычки:{" "}
+        <Notation>{"'Движение товаров'!$A$2:$G$300"}</Notation>.
+      </>
+    ),
+    course: "excel",
+    lessonSlug: "poisk-po-klyuchu",
+    lessonTitle: "Поиск по ключу",
+  },
+  "xl-pivot": {
+    title: "Сводная таблица",
+    body: (
+      <>
+        Сводная таблица раскладывает записи по значениям поля (магазины, районы)
+        и считает итог каждой группы — то же, что{" "}
+        <Notation>{"СУММЕСЛИ"}</Notation> по списку значений. Отбор задают в её
+        собственном фильтре.
+      </>
+    ),
+    course: "excel",
+    lessonSlug: "oformlenie-i-svodnye",
+    lessonTitle: "Таблица, оформление и сводные",
   },
 } as const satisfies Record<string, PythonTermEntry>;
 

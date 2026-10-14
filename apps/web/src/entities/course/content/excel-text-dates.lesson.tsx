@@ -4,6 +4,7 @@ import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
 import {
   LessonDiagram,
+  LessonSummary,
   SheetBlock,
 } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
@@ -330,30 +331,55 @@ export const excelTextDatesLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          <Notation>{"ЕЧИСЛО"}</Notation> и <Notation>{"ЕТЕКСТ"}</Notation>{" "}
-          проверяют тип, <Notation>{"ЗНАЧЕН"}</Notation> переводит числовой
-          текст в число.
-        </li>
-        <li>
-          <Notation>{"ДЛСТР"}</Notation>, <Notation>{"ЛЕВСИМВ"}</Notation>,{" "}
-          <Notation>{"ПРАВСИМВ"}</Notation>, <Notation>{"ПСТР"}</Notation>{" "}
-          считают позиции с 1; у <Notation>{"ПСТР"}</Notation> третий аргумент —
-          количество.
-        </li>
-        <li>
-          <Notation>{"СЖПРОБЕЛЫ"}</Notation> убирает лишние обычные пробелы,{" "}
-          <Notation>{"ПОДСТАВИТЬ"}</Notation> заменяет кусок текста, &
-          склеивает.
-        </li>
-        <li>
-          <Notation>{"ДАТА"}</Notation> строит дату из чисел,{" "}
-          <Notation>{"ДЕНЬ"}</Notation>, <Notation>{"МЕСЯЦ"}</Notation> и{" "}
-          <Notation>{"ГОД"}</Notation> разбирают её.
-        </li>
-        <li>Период — «не раньше начала и строго раньше следующей границы».</li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                <Notation>{"ЕЧИСЛО"}</Notation> и{" "}
+                <Notation>{"ЕТЕКСТ"}</Notation> проверяют тип,{" "}
+                <Notation>{"ЗНАЧЕН"}</Notation> переводит числовой текст в
+                число.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"ДЛСТР"}</Notation>, <Notation>{"ЛЕВСИМВ"}</Notation>
+                , <Notation>{"ПРАВСИМВ"}</Notation>,{" "}
+                <Notation>{"ПСТР"}</Notation> считают позиции с 1; у{" "}
+                <Notation>{"ПСТР"}</Notation> третий аргумент — количество.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"СЖПРОБЕЛЫ"}</Notation> убирает лишние обычные
+                пробелы, <Notation>{"ПОДСТАВИТЬ"}</Notation> заменяет кусок
+                текста, & склеивает.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"ДАТА"}</Notation> строит дату из чисел,{" "}
+                <Notation>{"ДЕНЬ"}</Notation>, <Notation>{"МЕСЯЦ"}</Notation> и{" "}
+                <Notation>{"ГОД"}</Notation> разбирают её.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Период — «не раньше начала и строго раньше следующей границы».
+              </>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

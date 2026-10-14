@@ -5,6 +5,7 @@ import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
 import {
   LessonDiagram,
+  LessonSummary,
   ProofDisclosure,
   RangeSandbox,
   VariantPicker,
@@ -532,30 +533,53 @@ export const pythonStringsLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          Индексы с 0 до <Notation>{"len(s) - 1"}</Notation>, отрицательные — с
-          конца; неверный индекс даёт <Notation>{"IndexError"}</Notation>.
-        </li>
-        <li>
-          Срез <Notation>{"s[start:stop:step]"}</Notation> не включает{" "}
-          <Notation>{"stop"}</Notation>; <Notation>{"s[::-1]"}</Notation>{" "}
-          разворачивает строку.
-        </li>
-        <li>
-          Строка неизменяема: методы и <Notation>{"+"}</Notation> создают новые
-          строки.
-        </li>
-        <li>
-          <Notation>{"count"}</Notation> считает без перекрытий; с перекрытием —
-          проверка каждой позиции срезом.
-        </li>
-        <li>
-          <Notation>{"in"}</Notation> проверяет вхождение;{" "}
-          <Notation>{"find"}</Notation> возвращает −1 при отсутствии, а 0 — это
-          найденное начало.
-        </li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                Индексы с 0 до <Notation>{"len(s) - 1"}</Notation>,
+                отрицательные — с конца; неверный индекс даёт{" "}
+                <Notation>{"IndexError"}</Notation>.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Срез <Notation>{"s[start:stop:step]"}</Notation> не включает{" "}
+                <Notation>{"stop"}</Notation>; <Notation>{"s[::-1]"}</Notation>{" "}
+                разворачивает строку.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Строка неизменяема: методы и <Notation>{"+"}</Notation> создают
+                новые строки.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"count"}</Notation> считает без перекрытий; с
+                перекрытием — проверка каждой позиции срезом.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"in"}</Notation> проверяет вхождение;{" "}
+                <Notation>{"find"}</Notation> возвращает −1 при отсутствии, а 0
+                — это найденное начало.
+              </>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

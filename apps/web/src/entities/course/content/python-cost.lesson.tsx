@@ -5,6 +5,7 @@ import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
 import {
   LessonDiagram,
+  LessonSummary,
   LessonTable,
 } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
@@ -430,26 +431,51 @@ export const pythonCostLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>Сложность — рост числа действий с размером входа, а не секунды.</li>
-        <li>
-          Один проход — <Notation>{"O(n)"}</Notation>, все пары —{" "}
-          <Notation>{"O(n²)"}</Notation>, деление пополам —{" "}
-          <Notation>{"O(log n)"}</Notation>.
-        </li>
-        <li>
-          Шаги считают по реальным границам циклов: пары i {"<"} j — n(n − 1)/2.
-        </li>
-        <li>
-          <Notation>{"x in list"}</Notation> — до n сравнений,{" "}
-          <Notation>{"x in set"}</Notation> — обычно один шаг;{" "}
-          <Notation>{"pop(0)"}</Notation> у списка — сдвиг всех элементов.
-        </li>
-        <li>
-          Сохранённые данные, рекурсия и кэш занимают память; время измеряют{" "}
-          <Notation>{"perf_counter"}</Notation>.
-        </li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                Сложность — рост числа действий с размером входа, а не секунды.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Один проход — <Notation>{"O(n)"}</Notation>, все пары —{" "}
+                <Notation>{"O(n²)"}</Notation>, деление пополам —{" "}
+                <Notation>{"O(log n)"}</Notation>.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Шаги считают по реальным границам циклов: пары i {"<"} j — n(n −
+                1)/2.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"x in list"}</Notation> — до n сравнений,{" "}
+                <Notation>{"x in set"}</Notation> — обычно один шаг;{" "}
+                <Notation>{"pop(0)"}</Notation> у списка — сдвиг всех элементов.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Сохранённые данные, рекурсия и кэш занимают память; время
+                измеряют <Notation>{"perf_counter"}</Notation>.
+              </>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

@@ -3,7 +3,10 @@
 import { CodeBlock } from "~/shared/components/code-block";
 import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
-import { LessonDiagram } from "~/shared/components/learning-content";
+import {
+  LessonDiagram,
+  LessonSummary,
+} from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { pythonStandardLibraryLessonPublication } from "./course-publication.mjs";
 import { lessonMedia } from "./python-standard-library.media";
@@ -350,31 +353,54 @@ export const pythonStandardLibraryLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          <Notation>{"Counter"}</Notation> считает частоты,{" "}
-          <Notation>{"most_common"}</Notation> даёт самые частые;{" "}
-          <Notation>{"defaultdict"}</Notation> создаёт значение для нового
-          ключа.
-        </li>
-        <li>
-          <Notation>{"deque"}</Notation>: <Notation>{"append"}</Notation> в
-          конец, <Notation>{"popleft"}</Notation> из начала — очередь.
-        </li>
-        <li>
-          <Notation>{"Fraction"}</Notation> точна для дробей,{" "}
-          <Notation>{"Decimal"}</Notation> создают из строк,{" "}
-          <Notation>{"isclose"}</Notation> сравнивает приближённые числа.
-        </li>
-        <li>
-          <Notation>{"product"}</Notation> — слова с повторами,{" "}
-          <Notation>{"permutations"}</Notation> — порядок без повторов,{" "}
-          <Notation>{"combinations"}</Notation> — группы.
-        </li>
-        <li>
-          Перед перебором считают число вариантов и проверяют полноту набора.
-        </li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                <Notation>{"Counter"}</Notation> считает частоты,{" "}
+                <Notation>{"most_common"}</Notation> даёт самые частые;{" "}
+                <Notation>{"defaultdict"}</Notation> создаёт значение для нового
+                ключа.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"deque"}</Notation>: <Notation>{"append"}</Notation>{" "}
+                в конец, <Notation>{"popleft"}</Notation> из начала — очередь.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"Fraction"}</Notation> точна для дробей,{" "}
+                <Notation>{"Decimal"}</Notation> создают из строк,{" "}
+                <Notation>{"isclose"}</Notation> сравнивает приближённые числа.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"product"}</Notation> — слова с повторами,{" "}
+                <Notation>{"permutations"}</Notation> — порядок без повторов,{" "}
+                <Notation>{"combinations"}</Notation> — группы.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                Перед перебором считают число вариантов и проверяют полноту
+                набора.
+              </>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",

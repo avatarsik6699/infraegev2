@@ -3,8 +3,10 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { CodeBlock } from "~/shared/components/code-block";
 import {
+  Checkpoint,
   checkMask,
   LessonDiagram,
+  LessonSummary,
   RemainderExplorer,
   remainderLayout,
   TokenSet,
@@ -15,6 +17,8 @@ import {
   MaskSandbox,
   ProofDisclosure,
   segmentByMask,
+  disclosureLabel,
+  disclosurePurpose,
 } from "~/shared/components/learning-content";
 
 const flags = vi.hoisted(() => ({ enhanced: true, reducedMotion: false }));
@@ -281,12 +285,13 @@ describe("VariantPicker", () => {
     );
     const result = container.querySelector("[data-variant-result]")!;
     expect(result.getAttribute("aria-live")).toBe("polite");
-    expect(result.textContent).toBe("n % 7 != 0остаток не ноль");
+    // Change 184: the chosen chip captions its value
+    expect(result.textContent).toBe("не кратно 7n % 7 != 0остаток не ноль");
     const first = screen.getByRole("button", { name: "кратно 7" });
     expect(first.getAttribute("aria-pressed")).toBe("false");
     fireEvent.click(first);
     expect(first.getAttribute("aria-pressed")).toBe("true");
-    expect(result.textContent).toBe("n % 7 == 0");
+    expect(result.textContent).toBe("кратно 7n % 7 == 0");
   });
 });
 
@@ -388,5 +393,84 @@ describe("TopicCheatSheet", () => {
     expect(screen.getByRole("link", { name: "Перебор" })).toBeTruthy();
     expect(container.textContent).toContain("дополнительный урок");
     expect(container.querySelectorAll("figcaption")).toHaveLength(1);
+  });
+});
+
+describe("ProofDisclosure purpose (Change 184 F14)", () => {
+  it("names why a closed block stands apart from the step", () => {
+    expect(disclosurePurpose("Почему сумма цифр даёт тот же остаток")).toBe(
+      "Обоснование",
+    );
+    expect(
+      disclosurePurpose(
+        "Другой способ отбора: список подходящих ID и СЧЁТЕСЛИ",
+      ),
+    ).toBe("Другой способ");
+    expect(disclosurePurpose("Тот же ответ без программы")).toBe(
+      "Другой способ",
+    );
+    expect(disclosurePurpose("То же правило для любых частот и длин")).toBe(
+      "Общий случай",
+    );
+    expect(disclosurePurpose("Формула числа сочетаний через факториал")).toBe(
+      "Формула",
+    );
+    expect(disclosurePurpose("Разбор второй половины программы")).toBe(
+      "Подробный разбор",
+    );
+    expect(disclosureLabel("Почему так для любого составного n")).toBe(
+      "Обоснование · необязательно",
+    );
+    expect(
+      disclosureLabel("Другой способ отбора: список подходящих ID и СЧЁТЕСЛИ"),
+    ).toBe("Необязательно");
+  });
+});
+
+describe("Checkpoint (Change 184, variant A)", () => {
+  const items = [
+    { id: "a", prompt: <>Что означает строка?</>, reveal: <>Одну выдачу.</> },
+    { id: "b", prompt: <>Где ключ?</>, reveal: <>В первом столбце.</> },
+  ];
+
+  it("is a titled region of numbered questions with closed answers", () => {
+    const { container } = render(<Checkpoint items={items} headingOrder={3} />);
+    const region = screen.getByRole("region", { name: "Проверьте себя" });
+    expect(region.querySelector("h3")?.textContent).toBe("Проверьте себя");
+    expect(container.querySelectorAll("ol > li")).toHaveLength(2);
+    const details = container.querySelectorAll("details");
+    expect(details).toHaveLength(2);
+    expect([...details].some((d) => d.open)).toBe(false);
+    // the question is text, not the toggle: links and terms work inside it
+    expect(details[0].querySelector("summary")?.textContent).not.toContain(
+      "Что означает",
+    );
+  });
+
+  it("opens one answer, captioned «Ответ», from its toggle", () => {
+    const { container } = render(<Checkpoint items={items} />);
+    const first = container.querySelector("details")!;
+    fireEvent.click(first.querySelector("summary")!);
+    first.open = true;
+    expect(first.textContent).toContain("ОтветОдну выдачу.");
+    expect(container.querySelectorAll("details[open]")).toHaveLength(1);
+  });
+});
+
+describe("LessonSummary (Change 184, variant C)", () => {
+  it("shows keys over notes, and a keyless item as one line", () => {
+    const { container } = render(
+      <LessonSummary
+        items={[
+          { key: <>Первичный ключ</>, note: <>различает записи</> },
+          { note: <>Строка — запись.</> },
+        ]}
+      />,
+    );
+    const items = container.querySelectorAll("[data-lesson-summary] > li");
+    expect(items).toHaveLength(2);
+    expect(items[0].children).toHaveLength(2);
+    expect(items[0].textContent).toBe("Первичный ключразличает записи");
+    expect(items[1].children).toHaveLength(1);
   });
 });

@@ -3,7 +3,10 @@
 import { CodeBlock } from "~/shared/components/code-block";
 import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
-import { LessonDiagram } from "~/shared/components/learning-content";
+import {
+  LessonDiagram,
+  LessonSummary,
+} from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { pythonTuplesLessonPublication } from "./course-publication.mjs";
 import { lessonMedia } from "./python-tuples.media";
@@ -311,29 +314,51 @@ export const pythonTuplesLesson = defineCourseLesson({
   ],
   result: (
     <>
-      <ul>
-        <li>
-          Кортеж создаёт запятая: <Notation>{"(8,)"}</Notation> — кортеж,{" "}
-          <Notation>{"(8)"}</Notation> — число; элементы менять нельзя.
-        </li>
-        <li>
-          <Notation>{"x, y = point"}</Notation> раздаёт элементы по именам;
-          число имён должно совпадать.
-        </li>
-        <li>
-          <Notation>{"a, b = b, a"}</Notation> меняет значения местами: правая
-          часть вычисляется целиком до присваивания.
-        </li>
-        <li>
-          <Notation>{"for name, score in pairs"}</Notation> распаковывает каждую
-          пару; <Notation>{"enumerate"}</Notation> даёт номер,{" "}
-          <Notation>{"zip"}</Notation> — элементы по позициям.
-        </li>
-        <li>
-          <Notation>{"print(*items)"}</Notation> передаёт элементы отдельными
-          аргументами.
-        </li>
-      </ul>
+      <LessonSummary
+        items={[
+          {
+            note: (
+              <>
+                Кортеж создаёт запятая: <Notation>{"(8,)"}</Notation> — кортеж,{" "}
+                <Notation>{"(8)"}</Notation> — число; элементы менять нельзя.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"x, y = point"}</Notation> раздаёт элементы по
+                именам; число имён должно совпадать.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"a, b = b, a"}</Notation> меняет значения местами:
+                правая часть вычисляется целиком до присваивания.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"for name, score in pairs"}</Notation> распаковывает
+                каждую пару; <Notation>{"enumerate"}</Notation> даёт номер,{" "}
+                <Notation>{"zip"}</Notation> — элементы по позициям.
+              </>
+            ),
+          },
+          {
+            note: (
+              <>
+                <Notation>{"print(*items)"}</Notation> передаёт элементы
+                отдельными аргументами.
+              </>
+            ),
+          },
+        ]}
+      />
     </>
   ),
   status: "published",
