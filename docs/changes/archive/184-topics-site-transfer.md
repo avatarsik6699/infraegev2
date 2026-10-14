@@ -9,7 +9,7 @@
 | Change | `184` |
 | Slug | `topics-site-transfer` |
 | Title | Перенос тем ЕГЭ со стенда на сайт |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/184-topics-site-transfer` |
 
 ---
@@ -17,7 +17,7 @@
 ## Goal
 
 Все темы ЕГЭ, одобренные на демо-стенде в Changes 178–183, переносятся на сайт по этапу 9
-[пайплайна](../runbooks/lesson-pipeline.md#этап-9-перенос-на-сайт). Это 16 уроков: темы 3, 4, 5,
+[пайплайна](../../runbooks/lesson-pipeline.md#этап-9-перенос-на-сайт). Это 16 уроков: темы 3, 4, 5,
 7, 8, 9, 10, 11, 14, 16, 17, 18, 19–21 (один урок), 24, 26 и 27.
 
 - Уроки тем 5, 16, 17, 24, 26 и 27 заменяют устаревшие уроки сайта. Замена идёт без редиректов, как тема 25 в Change 171.
@@ -186,7 +186,7 @@ this file only tracks what to build and what's left.
 ## Gate Checks
 
 > Critical Gate runs once per `/work` target set; default `/ship` reruns only invalidated checks;
-> Full Gate only with explicit `--full`. Commands: [docs/STACK.md](../STACK.md); selection:
+> Full Gate only with explicit `--full`. Commands: [docs/STACK.md](../../STACK.md); selection:
 > `python3 scripts/gate.py affected`. Record change-specific overrides here, or `None`.
 
 None
