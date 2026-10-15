@@ -9,7 +9,7 @@
 | Change | `185` |
 | Slug | `home-cards-ui-audit` |
 | Title | Home cards after the references + UI/UX audit |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/185-home-cards-ui-audit` |
 
 ---
@@ -157,7 +157,7 @@ of truth; this file only tracks what to build and what's left.
 ## Gate Checks
 
 > Critical Gate runs once per `/work` target set; default `/ship` reruns only invalidated checks;
-> Full Gate only with explicit `--full`. Commands: [docs/STACK.md](../STACK.md); selection:
+> Full Gate only with explicit `--full`. Commands: [docs/STACK.md](../../STACK.md); selection:
 > `python3 scripts/gate.py affected`. Record change-specific overrides here, or `None`.
 
 None
