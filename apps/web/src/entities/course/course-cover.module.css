@@ -1,0 +1,172 @@
+/* Change 185 (F26, F27): the course cover shared by the home course card and
+   the `/courses` cards (DESIGN.md › Components › Course cards). */
+
+/* The card's course tone: neutral by default, a published course's own
+   pastel by its id. */
+.tone {
+  --course-tone: var(--color-surface-quiet);
+  --course-strong: var(--color-muted);
+  --course-ink: var(--color-muted);
+}
+
+.tone[data-course-tone="python"] {
+  --course-tone: var(--color-plate-sky);
+  --course-strong: var(--color-plate-sky-strong);
+  --course-ink: var(--color-plate-sky-ink);
+}
+
+.tone[data-course-tone="excel"] {
+  --course-tone: var(--color-plate-sage);
+  --course-strong: var(--color-plate-sage-strong);
+  --course-ink: var(--color-plate-sage-ink);
+}
+
+/* F27: the hairline border takes a barely visible wash of the tone from the
+   top-left corner. The ring replaces the border colour, one pixel inside. */
+.tone[data-course-tone] {
+  border-color: transparent;
+}
+
+.tone[data-course-tone]::after {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--course-strong) 34%, var(--color-surface)) 0%,
+    color-mix(in oklab, var(--color-surface), var(--color-text) 7%) 55%
+  );
+  content: "";
+  mask:
+    linear-gradient(currentColor 0 0) content-box exclude,
+    linear-gradient(currentColor 0 0);
+  pointer-events: none;
+}
+
+/* The picture whole on a near-white plate of the course's tone; its white
+   ground multiplies into the plate, the pattern shows around it and fades
+   from the top-left corner. */
+.plate {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--course-tone), var(--color-surface) 80%),
+    color-mix(in oklab, var(--course-tone), var(--color-surface) 92%) 70%
+  );
+}
+
+.plate::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  content: "";
+  opacity: 0.5;
+  mask:
+    linear-gradient(
+      125deg,
+      currentColor,
+      color-mix(in oklab, currentColor 30%, transparent)
+    ),
+    var(--grid-fade);
+  mask-composite: intersect;
+  pointer-events: none;
+}
+
+.plate[data-pattern="code"]::before {
+  background: color-mix(in oklab, var(--course-strong) 26%, transparent);
+  mask:
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22132%22%20height%3D%2284%22%3E%3Crect%20x%3D%228%22%20y%3D%229%22%20width%3D%2244%22%20height%3D%223%22%20rx%3D%221.5%22/%3E%3Crect%20x%3D%2258%22%20y%3D%229%22%20width%3D%2222%22%20height%3D%223%22%20rx%3D%221.5%22/%3E%3Crect%20x%3D%2222%22%20y%3D%2230%22%20width%3D%2236%22%20height%3D%223%22%20rx%3D%221.5%22/%3E%3Crect%20x%3D%2264%22%20y%3D%2230%22%20width%3D%2240%22%20height%3D%223%22%20rx%3D%221.5%22/%3E%3Crect%20x%3D%2222%22%20y%3D%2251%22%20width%3D%2258%22%20height%3D%223%22%20rx%3D%221.5%22/%3E%3Crect%20x%3D%228%22%20y%3D%2272%22%20width%3D%2230%22%20height%3D%223%22%20rx%3D%221.5%22/%3E%3Crect%20x%3D%2244%22%20y%3D%2272%22%20width%3D%2216%22%20height%3D%223%22%20rx%3D%221.5%22/%3E%3C/svg%3E")
+      0 0 / 132px 84px repeat,
+    linear-gradient(
+      125deg,
+      currentColor,
+      color-mix(in oklab, currentColor 30%, transparent)
+    ),
+    var(--grid-fade);
+  mask-composite: intersect;
+}
+
+.plate[data-pattern="cells"]::before {
+  background:
+    linear-gradient(
+        90deg,
+        color-mix(in oklab, var(--course-strong) 22%, transparent) 1px,
+        transparent 1px
+      )
+      0 0 / 56px 22px,
+    linear-gradient(
+        color-mix(in oklab, var(--course-strong) 22%, transparent) 1px,
+        transparent 1px
+      )
+      0 0 / 56px 22px;
+}
+
+.plate[data-pattern="graph"]::before {
+  background: radial-gradient(
+      color-mix(in oklab, var(--course-strong) 35%, transparent) 2px,
+      transparent 2.6px
+    )
+    0 0 / 48px 40px;
+}
+
+.plate[data-pattern="hatch"]::before {
+  background: repeating-linear-gradient(
+    -45deg,
+    color-mix(in oklab, var(--course-strong) 14%, transparent) 0 1px,
+    transparent 1px 11px
+  );
+}
+
+.plate .picture {
+  position: absolute;
+  inset: var(--space-1) var(--space-1-5);
+  width: calc(100% - 2 * var(--space-1-5));
+  height: calc(100% - 2 * var(--space-1));
+  border-radius: 0;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+}
+
+.sparks {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: var(--color-text);
+  stroke-linecap: round;
+  stroke-width: 1.8;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .sparks g {
+    animation: blink 3.4s ease-in-out infinite;
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.2;
+  }
+}
+
+.chip {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 0.625rem;
+  background: var(--course-strong);
+  color: var(--color-surface);
+}
+
+.chip svg {
+  width: 1.375rem;
+  height: 1.375rem;
+}

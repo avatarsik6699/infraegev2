@@ -4,21 +4,22 @@ import styles from "./object-illustration.module.css";
 
 type Size = { width: number; height: number };
 
-/** viewBox of each course picture; every topic shares 180×120. */
-const courseSizes: Record<
-  ObjectIllustrationTypes.Course,
-  { square: Size; wide: Size }
-> = {
-  python: {
-    square: { width: 1536, height: 1024 },
-    wide: { width: 2138, height: 634 },
-  },
+/**
+ * Size of each course scene at its larger width (Change 185): the
+ * architect's coloured pictures, made by scripts/mascot/course_scenes.py.
+ */
+const courseScenes: Record<ObjectIllustrationTypes.Course, Size> = {
+  python: { width: 1600, height: 636 },
+  excel: { width: 1600, height: 793 },
+  "algorithms-data-structures": { width: 1600, height: 664 },
+  "advanced-problems": { width: 1600, height: 615 },
 };
+const sceneWidths = [960, 1600] as const;
 
-/** Whether the course has a picture; others keep the placeholder. */
+/** Whether the course has a scene; others keep the placeholder. */
 export const hasCourseIllustration = (
   id: string,
-): id is ObjectIllustrationTypes.Course => Object.hasOwn(courseSizes, id);
+): id is ObjectIllustrationTypes.Course => Object.hasOwn(courseScenes, id);
 
 function source(props: ObjectIllustrationTypes.Props) {
   if (props.course === undefined)
@@ -28,30 +29,36 @@ function source(props: ObjectIllustrationTypes.Props) {
       width: 180,
       height: 120,
     };
-  const name = `course-${props.course}${props.wide ? "-wide" : ""}`;
+  const base = `/images/courses/course-${props.course}`;
   return {
-    name,
-    src: `/images/courses/${name}.svg`,
-    ...courseSizes[props.course][props.wide ? "wide" : "square"],
+    name: `course-${props.course}-scene`,
+    src: `${base}-${String(sceneWidths[0])}.webp`,
+    srcSet: sceneWidths
+      .map((width) => `${base}-${String(width)}.webp ${String(width)}w`)
+      .join(", "),
+    sizes: props.sizes,
+    ...courseScenes[props.course],
   };
 }
 
 /**
- * Decorative object illustration (DESIGN.md › Shapes): a separate SVG file,
- * lazy, with any motion inside the file.
+ * Decorative object illustration (DESIGN.md › Shapes): a separate file, lazy,
+ * with any motion inside an SVG file.
  */
 export const ObjectIllustration: React.FC<ObjectIllustrationTypes.Props> = (
   props,
 ) => {
-  const { name, src, width, height } = source(props);
+  const picture = source(props);
   return (
     <img
       className={cssUtils.cx(styles.root, props.className)}
-      data-object-illustration={name}
-      src={src}
+      data-object-illustration={picture.name}
+      src={picture.src}
+      srcSet={"srcSet" in picture ? picture.srcSet : undefined}
+      sizes={"sizes" in picture ? picture.sizes : undefined}
       alt=""
-      width={width}
-      height={height}
+      width={picture.width}
+      height={picture.height}
       loading="lazy"
       decoding="async"
     />

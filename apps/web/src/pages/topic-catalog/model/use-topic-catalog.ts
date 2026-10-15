@@ -14,7 +14,6 @@ const publishedIds = topicCatalog.entries
   .map((entry) => entry.id);
 
 export const useTopicCatalog = () => {
-  const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<TopicCatalogPageTypes.Filter>("all");
   const [summary, setSummary] = useState<TopicCatalogPageTypes.Summary>([]);
   const [loadState, setLoadState] =
@@ -61,8 +60,6 @@ export const useTopicCatalog = () => {
   return {
     totalTopics: topicCatalog.entries.length,
     publishedTopics: publishedIds.length,
-    query,
-    setQuery,
     filter,
     setFilter,
     byId: aggregate.byId,
@@ -75,20 +72,12 @@ export const useTopicCatalog = () => {
     entries: topicCatalogModel
       .order(topicCatalog.entries)
       .filter((entry) =>
-        topicCatalogModel.matches(
-          entry,
-          query,
-          filter,
-          aggregate.byId[entry.id],
-        ),
+        topicCatalogModel.matches(entry, filter, aggregate.byId[entry.id]),
       ),
     retry: () => {
       setLoadState("loading");
       setAttempt((value) => value + 1);
     },
-    reset: () => {
-      setQuery("");
-      setFilter("all");
-    },
+    reset: () => setFilter("all"),
   };
 };

@@ -10,12 +10,15 @@ export const InlineSelect: React.FC<InlineSelectTypes.Props> = (props) => {
   const enhanced = useIsEnhanced();
   const labelId = useId();
   const input = useRef<HTMLInputElement>(null);
-  const [value, setValue] = useState(props.defaultValue);
+  const [formValue, setFormValue] = useState(props.defaultValue ?? "");
+  const controlled = props.onValueChange !== undefined;
+  const value = controlled ? props.value : formValue;
   useEffect(
     function submitSelectionFx() {
-      if (value !== props.defaultValue) input.current?.form?.requestSubmit();
+      if (!controlled && formValue !== props.defaultValue)
+        input.current?.form?.requestSubmit();
     },
-    [value, props.defaultValue],
+    [controlled, formValue, props.defaultValue],
   );
   return (
     <div className={styles.root}>
@@ -23,19 +26,23 @@ export const InlineSelect: React.FC<InlineSelectTypes.Props> = (props) => {
         {props.label}:
       </span>
       <div className={patterns.scriptedOnly}>
-        <input
-          disabled={!enhanced}
-          ref={input}
-          type="hidden"
-          form={props.form}
-          name={props.name}
-          value={value}
-        />
+        {controlled ? null : (
+          <input
+            disabled={!enhanced}
+            ref={input}
+            type="hidden"
+            form={props.form}
+            name={props.name}
+            value={value}
+          />
+        )}
         <Select.Root
           items={props.options}
           value={value}
           onValueChange={(next) => {
-            if (next !== null) setValue(next);
+            if (next === null) return;
+            if (props.onValueChange) props.onValueChange(next);
+            else setFormValue(next);
           }}
         >
           <Select.Trigger aria-labelledby={labelId} className={styles.trigger}>
@@ -57,6 +64,7 @@ export const InlineSelect: React.FC<InlineSelectTypes.Props> = (props) => {
                     <Select.Item
                       key={option.value}
                       value={option.value}
+                      disabled={option.disabled}
                       className={styles.item}
                     >
                       <Select.ItemText>{option.label}</Select.ItemText>
@@ -74,21 +82,23 @@ export const InlineSelect: React.FC<InlineSelectTypes.Props> = (props) => {
           </Select.Portal>
         </Select.Root>
       </div>
-      <noscript>
-        <select
-          aria-labelledby={labelId}
-          name={props.name}
-          form={props.form}
-          defaultValue={props.defaultValue}
-          className={styles.trigger}
-        >
-          {props.options.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      </noscript>
+      {controlled ? null : (
+        <noscript>
+          <select
+            aria-labelledby={labelId}
+            name={props.name}
+            form={props.form}
+            defaultValue={props.defaultValue}
+            className={styles.trigger}
+          >
+            {props.options.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </noscript>
+      )}
     </div>
   );
 };

@@ -39,6 +39,7 @@ export const CourseOverviewPage: React.FC<CourseOverviewPageTypes.Props> = (
             hasCourseIllustration(props.course.id) ? (
               <ObjectIllustration
                 course={props.course.id}
+                sizes="(max-width: 75rem) 48vw, 36rem"
                 className={styles.illustration}
               />
             ) : undefined

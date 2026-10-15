@@ -1,17 +1,12 @@
-import {
-  ChevronDown,
-  Circle,
-  CircleCheck,
-  CircleAlert,
-  Bookmark,
-  FileText,
-} from "lucide-react";
+import { ChevronDown, Circle, CircleCheck, CircleAlert } from "lucide-react";
 import {
   practiceCatalog,
-  practiceAnswerFormat,
+  practiceTaskNotation,
   PracticeDifficulty,
   type PracticeCatalogTypes,
 } from "~/entities/practice-task";
+import { topicCatalog } from "~/entities/topic-catalog";
+import { useAccountSession } from "~/features/account";
 import { usePracticeProgress } from "~/features/practice-progress";
 import { PracticeTask } from "~/widgets/practice-task";
 import { ActionLink } from "~/shared/components/action-link";
@@ -28,9 +23,16 @@ export const PracticeCatalogRow: React.FC<{
   search: PracticeCatalogTypes.Search;
   skills: PracticeCatalogTypes.Facets["skills"];
   topics?: PracticeCatalogTypes.Topic[];
+  /** F47: 3 under a topic row, 2 in an ungrouped list. */
+  headingOrder?: 2 | 3;
+  /** F47: the topic row that opens this number's tasks, if this is the first. */
+  group?: React.ReactNode;
 }> = (props) => {
   const history = usePracticeProgress((state) => state.history[props.task.id]);
   const hydrated = usePracticeProgress((state) => state.hydrated);
+  const session = useAccountSession();
+  // F46 (П14): a guest's status is unknown, not «не решено» — no icon.
+  const guest = session.status === "ready" && !session.account;
   const enhanced = useIsEnhanced();
   const model = useInlineTask(props.task.id, props.open);
   const detail = model.result?.detail;
@@ -42,40 +44,44 @@ export const PracticeCatalogRow: React.FC<{
   if (solved) status = "Решено";
   const source =
     props.task.sources?.find((item) => item.primary) ?? props.task.sources?.[0];
+  const topic = rowModel.topic(
+    props.task,
+    props.topics,
+    props.skills,
+    props.headingOrder === 3,
+  );
   const panelId = `task-panel-${props.task.id}`;
   const headingId = `task-heading-${props.task.id}`;
   return (
     <li className={styles.row} id={`task-${props.task.id}`}>
+      {props.group}
       <div className={styles.rowHeader}>
-        <span
-          className={styles.progress}
-          role="img"
-          aria-label={hydrated ? status : "Статус решения загружается"}
-          title={status}
-          data-solved={(solved && hydrated) || undefined}
-        >
-          {solved && hydrated ? (
-            <CircleCheck size={19} aria-hidden="true" />
-          ) : null}
-          {!solved && hydrated && history ? (
-            <CircleAlert size={19} aria-hidden="true" />
-          ) : null}
-          {(!hydrated || (!solved && !history)) && (
-            <Circle size={19} aria-hidden="true" />
-          )}
-        </span>
-        <ActionLink
-          presentation="navigation"
-          to={practiceCatalog.taskHref(props.task.id, props.search)}
-          hierarchy="text"
-          className={styles.taskId}
-          ariaLabel={`ID: ${props.task.id}`}
-          title={props.task.id}
-        >
-          #{props.task.id.slice(0, 8)}
-        </ActionLink>
+        {guest ? (
+          <span className={styles.progress} aria-hidden="true" />
+        ) : (
+          <span
+            className={styles.progress}
+            role="img"
+            aria-label={hydrated ? status : "Статус решения загружается"}
+            title={status}
+            data-solved={(solved && hydrated) || undefined}
+          >
+            {solved && hydrated ? (
+              <CircleCheck size={19} aria-hidden="true" />
+            ) : null}
+            {!solved && hydrated && history ? (
+              <CircleAlert size={19} aria-hidden="true" />
+            ) : null}
+            {(!hydrated || (!solved && !history)) && (
+              <Circle size={19} aria-hidden="true" />
+            )}
+          </span>
+        )}
         <div className={styles.rowContent}>
-          <Typography.Title order={2} className={styles.rowHeading}>
+          <Typography.Title
+            order={props.headingOrder ?? 2}
+            className={styles.rowHeading}
+          >
             {enhanced ? (
               <button
                 type="button"
@@ -100,65 +106,33 @@ export const PracticeCatalogRow: React.FC<{
           </Typography.Title>
           {props.task.short_description && (
             <Typography.Text className={styles.preview}>
-              {props.task.short_description.replace(/[.…\s]+$/, "")}…
+              {rowModel.preview(props.task.short_description)}
             </Typography.Text>
           )}
         </div>
-        <span className={styles.topicCell}>
-          {props.task.exam_numbers
-            .map((number) => {
-              const facet = props.topics?.find(
-                (topic) => topic.id === `ege-${String(number)}`,
-              );
-              return facet
-                ? practiceCatalog.topicLabel(facet.label)
-                : `ЕГЭ ${String(number)}`;
-            })
-            .join(", ") ||
-            props.task.topics
-              ?.map(
-                (id) => props.topics?.find((topic) => topic.id === id)?.label,
-              )
-              .filter(Boolean)
-              .join(", ") ||
-            props.task.skills
-              .map(
-                (skill) =>
-                  props.skills.find((item) => item.value === skill)?.label ??
-                  skill,
-              )
-              .join(", ")}
-        </span>
-        <span className={styles.difficulty}>
-          <PracticeDifficulty level={props.task.difficulty} />
-        </span>
-        <span className={styles.format} title={props.task.answer_instruction}>
-          <FileText size={17} aria-hidden="true" />
-          <span>
-            {practiceAnswerFormat.label(props.task.answer_instruction)}
+        <div className={styles.rowMeta}>
+          <span className={styles.topicCell}>
+            <span className={styles.topicNumber}>{topic.number}</span>
+            <span className={styles.topicName} title={topic.name}>
+              {topic.name}
+            </span>
           </span>
-        </span>
-        <span className={styles.source}>
-          <span
-            className={styles.sourceName}
-            title={source?.title ?? undefined}
-          >
-            {source?.title ??
-              (source?.kind === "original" ? "Авторское" : "Не указан")}
+          <span className={styles.difficulty}>
+            <PracticeDifficulty level={props.task.difficulty} />
           </span>
-          {source?.year && !source.title?.includes(String(source.year)) && (
-            <small>{source.year}</small>
-          )}
-        </span>
-        <button
-          className={styles.bookmark}
-          type="button"
-          disabled
-          aria-label="Избранное пока недоступно"
-          title="Избранное пока недоступно"
-        >
-          <Bookmark size={18} aria-hidden="true" />
-        </button>
+          <span className={styles.source}>
+            <span
+              className={styles.sourceName}
+              title={source?.title ?? undefined}
+            >
+              {source?.title ??
+                (source?.kind === "original" ? "Авторское" : "—")}
+            </span>
+            {source?.year && !source.title?.includes(String(source.year)) && (
+              <small>{source.year}</small>
+            )}
+          </span>
+        </div>
         <span className={styles.scriptedOnly}>
           <button
             type="button"
@@ -188,22 +162,7 @@ export const PracticeCatalogRow: React.FC<{
         )}
         {detail && model.result && (
           <PracticeTask
-            topicHeading={
-              props.topics
-                ?.filter(
-                  (topic) =>
-                    props.task.topics?.includes(topic.id) ||
-                    props.task.exam_numbers.some(
-                      (number) => topic.id === `ege-${number}`,
-                    ),
-                )
-                .map((topic) => practiceCatalog.topicLabel(topic.label))
-                .join(" · ") ||
-              props.task.exam_numbers
-                .map((number) => `ЕГЭ ${String(number)}`)
-                .join(" · ") ||
-              props.task.title
-            }
+            taskHref={practiceCatalog.taskHref(props.task.id, props.search)}
             task={detail.task}
             links={model.result.links}
             onRefresh={model.refresh}
@@ -234,4 +193,58 @@ export const PracticeCatalogRow: React.FC<{
       </div>
     </li>
   );
+};
+
+/**
+ * Change 185 (F46): «Тема» in two even lines — «№ 16» and the topic as /ege
+ * names it (the skill under a topic row, F47); a course task splits its facet
+ * label («Python · Старт»).
+ */
+const rowModel = {
+  /** The condition's question; a snippet cut mid-sentence ends with «…». */
+  preview: (text: string) => {
+    const plain = practiceTaskNotation.plain(text).trim();
+    return /[.?!)»:]$/u.test(plain)
+      ? plain
+      : `${plain.replace(/[,;\s]+$/u, "")}…`;
+  },
+  topic: (
+    task: PracticeCatalogTypes.Entry,
+    topics: PracticeCatalogTypes.Topic[] | undefined,
+    skills: PracticeCatalogTypes.Facets["skills"],
+    grouped: boolean,
+  ) => {
+    const numbers = task.exam_numbers;
+    const skill = skills.find((item) => task.skills.includes(item.value));
+    if (numbers.length) {
+      const entry = topicCatalog.entries.find((item) =>
+        item.taskNumbers.includes(numbers[0]),
+      );
+      const facet = topics?.find(
+        (item) => item.id === `ege-${String(numbers[0])}`,
+      );
+      // F47: under a topic row the topic is said once; the skill tells the
+      // tasks of one number apart.
+      return {
+        number: `№ ${numbers.length > 1 ? `${String(numbers[0])}–${String(numbers.at(-1))}` : String(numbers[0])}`,
+        name:
+          (grouped ? skill?.label : undefined) ??
+          entry?.title ??
+          practiceCatalog
+            .topicLabel(facet?.label ?? "")
+            .replace(/^ЕГЭ \S+ · /u, ""),
+      };
+    }
+    const label =
+      task.topics
+        ?.map((id) => topics?.find((item) => item.id === id)?.label)
+        .find(Boolean) ??
+      skill?.label ??
+      "";
+    const [group, ...rest] = label.split(" · ");
+    return {
+      number: rest.length ? group : "",
+      name: rest.join(" · ") || group,
+    };
+  },
 };

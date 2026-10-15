@@ -16,12 +16,54 @@
 .main > * {
   min-width: 0;
 }
-.filters {
+/* F48 (К3): one frame — the filter panel on a soft tint on top, the table
+   under it; the pager stays outside. */
+.catalog {
   display: grid;
-  grid-template-columns: minmax(0, 27.5rem) minmax(12rem, 16rem);
-  justify-content: start;
-  gap: var(--space-2);
-  align-items: end;
+  min-width: 0;
+}
+/* F58: one line on wide screens — the search takes the rest, the selects
+   never wrap (a long topic is cut by its own ellipsis); under 75rem the
+   panel is always two lines, search over selects. No layout depends on how
+   long the chosen values are. */
+.panel {
+  display: grid;
+  grid-template-columns: minmax(12rem, 1fr) auto;
+  gap: var(--space-1-5) var(--space-3);
+  align-items: center;
+  padding: var(--space-1-5);
+  border: 1px solid var(--color-rule);
+  border-bottom: 0;
+  border-radius: var(--radius-surface) var(--radius-surface) 0 0;
+  background: var(--color-surface-quiet);
+}
+.panelSelects {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: end;
+  align-items: center;
+  gap: 0 var(--space-3);
+  min-width: 0;
+}
+.panelSelects > * {
+  flex: none;
+}
+.panel > .activeFilters {
+  grid-column: 1 / -1;
+}
+.table {
+  display: grid;
+  min-width: 0;
+  padding: 0 var(--space-1) var(--space-0-5);
+  border: 1px solid var(--color-rule);
+  border-top: 0;
+  border-radius: 0 0 var(--radius-surface) var(--radius-surface);
+}
+.table .row:last-child {
+  border-bottom: 0;
+}
+.catalog > .paginationBar {
+  margin-top: var(--space-3);
 }
 .nativeTopics {
   composes: label from "../../shared/components/field/field.module.css";
@@ -33,7 +75,9 @@
   align-items: center;
   gap: var(--space-2);
   flex-wrap: wrap;
-  min-height: var(--control-height);
+  /* F58: air between the panel and the count, and between the count and the
+     column names — the three do not run together. */
+  padding: var(--space-2) var(--space-1) var(--space-1-5);
 }
 .activeFilters {
   display: flex;
@@ -89,14 +133,6 @@
   background: var(--color-surface-quiet);
 }
 
-.sort {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 var(--space-3);
-  align-items: center;
-  max-width: 100%;
-  margin-inline-start: auto;
-}
 .bulkToggle[data-hierarchy] {
   justify-self: center;
 }
@@ -105,30 +141,117 @@
   padding: 0;
   margin: 0;
 }
+/* F46: one grid for the heading and the rows — status, task, «Тема» (number
+   and topic), difficulty, source, disclosure. */
+.listHeading,
+.rowHeader,
+.group {
+  grid-template-columns: 1.5rem minmax(0, 1fr) 12rem 8rem 9rem 2.5rem;
+}
 .listHeading {
   align-items: center;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 7rem 7rem 7rem 8rem 2.5rem 2.5rem;
   gap: var(--space-1) var(--space-2);
   padding: 0 var(--space-1);
   border-bottom: 1px solid var(--color-rule);
   font-size: var(--text-xs);
   color: var(--color-muted);
 }
+/* F47: the root row of an exam number — the number in the status column, the
+   topic in the task column, the number's progress on the right. */
+.group {
+  display: grid;
+  gap: var(--space-0-5) var(--space-2);
+  align-items: center;
+  padding: var(--space-3) var(--space-1) var(--space-1-5);
+  border-bottom: 1px solid var(--color-rule-strong);
+}
+/* F59: the number stands on the title's baseline, not in the row's middle. */
+.groupNumber {
+  align-self: first baseline;
+  justify-self: center;
+  font-family: var(--font-data);
+  font-size: var(--text-xl);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.groupTopic {
+  align-self: first baseline;
+  display: grid;
+  gap: var(--space-0-5);
+  min-width: 0;
+}
+.groupTitle[data-order] {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  line-height: 1.3;
+}
+.groupMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 var(--space-2);
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+}
+.groupMeta a[data-hierarchy] {
+  min-height: 0;
+}
+.groupLevel {
+  display: inline-block;
+  width: 0.375rem;
+  height: 0.375rem;
+  margin-inline-end: var(--space-0-5);
+  border-radius: 50%;
+  vertical-align: 0.1em;
+  background: var(--color-level-basic);
+}
+.groupLevel[data-level="advanced"] {
+  background: var(--color-level-advanced);
+}
+.groupLevel[data-level="high"] {
+  background: var(--color-level-high);
+}
+/* F50, F51: the number's progress ends with «Источник»; the bar is as long as
+   the /ege progress column, the count right-aligned over it. */
+.groupProgress {
+  /* F59: through the chevron column to the row's right edge. */
+  grid-column: 3 / -1;
+  justify-self: end;
+  display: grid;
+  justify-items: end;
+  width: min(100%, 15rem);
+  gap: var(--space-0-5);
+  /* The bar's line is reserved: a guest's count (no bar) and the row before
+     the session answers keep one height, no shift on hydration. */
+  min-height: calc(1lh + var(--space-0-5) + var(--progress-height));
+  align-content: center;
+  color: var(--color-text-soft);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+}
+.groupBar {
+  width: 100%;
+}
 .row {
   border-bottom: 1px solid var(--color-rule);
   scroll-margin-block: var(--space-2);
 }
 .rowHeader {
+  position: relative;
   display: grid;
-  grid-template-columns:
-    1.5rem 5.5rem minmax(0, 1fr)
-    7rem 7rem 7rem 8rem 2.5rem 2.5rem;
   /* F29: air between rows and between columns with long content. */
   gap: var(--space-1) var(--space-2);
-  align-items: center;
+  align-items: start;
   min-height: 3.5rem;
   padding: var(--space-1-5) var(--space-1);
+  transition: background-color var(--motion-duration) var(--motion-easing);
+}
+/* F46: the whole row opens the task; it answers the pointer and the focus. */
+.rowHeader:hover,
+.rowHeader:has(.trigger:focus-visible) {
+  background: var(--color-surface-side);
 }
 .rowContent {
   align-self: start;
@@ -152,59 +275,68 @@
   text-align: left;
   cursor: pointer;
   min-height: 0;
-  position: relative;
   overflow-wrap: anywhere;
 }
+/* The title's target stretches over the whole row (as the /ege rows). */
 .trigger::before {
   content: "";
   position: absolute;
-  inset: -0.5rem 0;
-  min-height: var(--control-height);
+  inset: 0;
 }
-.trigger:focus-visible,
+.trigger:focus-visible {
+  outline: none;
+}
+.rowHeader:has(.trigger:focus-visible) {
+  outline: 2px solid var(--color-focus);
+  outline-offset: -2px;
+}
 .disclosure:focus-visible {
   outline: 2px solid var(--color-focus);
   outline-offset: 2px;
-}
-.trigger:hover {
-  color: var(--color-text-soft);
-  text-underline-offset: 3px;
-}
-.taskId[data-hierarchy] {
-  align-self: center;
-  font-size: var(--text-xs);
-  color: var(--color-muted);
-  white-space: nowrap;
 }
 .preview {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: var(--color-muted);
-  font-size: var(--text-xs);
+  color: var(--color-text-soft);
+  font-size: var(--text-sm);
   margin-top: 0;
+}
+.rowMeta {
+  display: contents;
 }
 .topicCell,
 .difficulty,
-.format,
 .source {
+  padding-block-start: var(--space-0-5);
   font-size: var(--text-sm);
   color: var(--color-text);
 }
-.difficulty,
-.format {
+/* F46: two even lines — «№ 16» and the topic, cut to one line. */
+.topicCell {
+  display: grid;
+  min-width: 0;
+}
+.topicNumber {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.topicName {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-text-soft);
+}
+.difficulty {
   display: flex;
   align-items: center;
   gap: var(--space-0-5);
 }
-.difficulty svg,
-.format svg {
+.difficulty svg {
   flex-shrink: 0;
   color: var(--color-text);
-}
-.format {
-  min-width: 0;
-  overflow-wrap: anywhere;
 }
 .source small {
   display: block;
@@ -213,27 +345,24 @@
 .progress {
   display: flex;
   align-items: center;
+  padding-block-start: var(--space-0-5);
 }
 /* F29: a solved task's check is green, as in the mockups. */
 .progress[data-solved] {
   color: var(--color-success);
 }
-.bookmark,
 .disclosure {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: var(--control-height);
   width: 100%;
+  margin-block: calc(var(--space-1) * -1);
   padding: 0;
   border: 0;
   background: transparent;
   color: var(--color-muted);
-}
-.bookmark {
-  opacity: 0.45;
-}
-.disclosure {
   cursor: pointer;
 }
 .chevron {
@@ -245,7 +374,9 @@
 .expanded:not([hidden]) {
   display: grid;
   gap: var(--space-1-5);
-  padding: var(--space-2) var(--space-3) var(--space-3) 7.75rem;
+  /* F46: the task lines up with the «Задание» column. */
+  padding: var(--space-2) var(--space-3) var(--space-3)
+    calc(1.5rem + var(--space-2) + var(--space-1));
   margin: 0;
   border-top: 1px solid var(--color-rule);
   background: var(--color-surface-side);
@@ -259,19 +390,20 @@
   gap: var(--space-2);
   justify-items: start;
 }
-/* Open block, no card: the scene leads, the message and the way back follow. */
+/* F46 (П13): as the /ege empty result (F45) — the scene leads at up to 52rem,
+   the shared EmptyState follows centred. */
 .state {
   justify-items: center;
-  align-content: center;
-  width: min(100%, 40rem);
-  margin: var(--space-5) auto;
+  gap: var(--space-3);
+  padding-block: var(--space-5) var(--space-6);
   text-align: center;
 }
-
-/* At most 34rem wide; the scene keeps its 4.2:1 frame. */
 .stateIllustration {
-  width: min(100%, 34rem);
-  margin-bottom: var(--space-1);
+  width: min(100%, 52rem);
+}
+.state > section {
+  justify-items: center;
+  max-width: 34rem;
 }
 
 /* Practice/filter errors (mockup `states.html`): a soft danger block. */
@@ -335,86 +467,107 @@
   gap: var(--space-1);
 }
 @media (max-width: 75rem) {
-  .listHeading {
-    grid-template-columns: minmax(0, 1fr) 5rem 6rem 4rem 5rem 2.5rem 2.5rem;
-  }
-  .rowHeader {
-    grid-template-columns:
-      1.5rem 5rem minmax(0, 1fr)
-      5rem 6rem 4rem 5rem 2.5rem 2.5rem;
+  .listHeading,
+  .rowHeader,
+  .group {
+    grid-template-columns: 1.5rem minmax(0, 1fr) 10rem 7.5rem 7rem 2.5rem;
   }
 }
+@media (max-width: 75rem) {
+  .panel {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .panelSelects {
+    flex-wrap: wrap;
+    justify-content: start;
+    gap: 0 var(--space-2);
+  }
+}
+/* Under 64rem the row stacks: status, title and disclosure on top, the
+   condition under the title, then one wrapping line of number, topic,
+   difficulty and source. */
 @media (max-width: 64rem) {
   .listHeading {
     grid-template-columns: minmax(0, 1fr) 2.5rem;
   }
-  .listHeading > span:not(:first-child) {
+  .listHeading > span {
     display: none;
   }
+  /* F52: the column names are gone, so the «Раскрыть все» toggle joins the
+     count's line on the right; the rule under that line moves to the list. */
+  .table {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .table > * {
+    grid-column: 1 / -1;
+  }
+  .table > .resultBar {
+    grid-column: 1;
+    grid-row: 1;
+    padding-block: var(--space-1-5);
+  }
+  .table > .listHeading {
+    grid-column: 2;
+    grid-row: 1;
+    grid-template-columns: 2.5rem;
+    justify-self: end;
+    border-bottom: 0;
+  }
+  .table > .list {
+    border-top: 1px solid var(--color-rule);
+  }
   .rowHeader {
-    grid-template-columns: 1.5rem 5.5rem minmax(0, 1fr) 2.5rem 2.5rem;
+    grid-template-columns: 1.5rem minmax(0, 1fr) 2.5rem;
     row-gap: var(--space-0-5);
     padding-block: var(--space-1);
   }
   .rowContent {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .rowHeader > .scriptedOnly {
     grid-column: 3;
-  }
-  .bookmark {
-    grid-column: 4;
     grid-row: 1;
   }
-  .disclosure {
-    grid-column: 5;
-    grid-row: 1;
+  .group {
+    grid-template-columns: 1.5rem minmax(0, 1fr);
+  }
+  .groupProgress {
+    grid-column: 2;
+    justify-self: stretch;
+    justify-items: start;
+    width: auto;
+  }
+  .rowMeta {
+    grid-column: 2;
+    grid-row: 2;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-0-5) var(--space-2);
+  }
+  .rowMeta > * {
+    padding-block-start: 0;
   }
   .topicCell {
-    grid-column: 2;
-  }
-  .difficulty {
-    grid-column: 3;
-  }
-  .format {
-    grid-column: 2;
+    display: flex;
+    gap: var(--space-1);
   }
   .source {
-    grid-column: 3;
+    color: var(--color-text-soft);
   }
 }
 @media (max-width: 40rem) {
-  .filters {
-    grid-template-columns: 1fr;
+  .panel {
+    padding: var(--space-1);
   }
-  .rowHeader {
-    grid-template-columns: 1.5rem minmax(0, 1fr) 2.5rem 2.5rem;
+  .table {
+    padding-inline: var(--space-0-5);
   }
-  .taskId {
-    grid-column: 2;
-  }
-  .rowContent {
-    grid-column: 1 / -1;
-    grid-row: 2;
-  }
-  .bookmark {
-    grid-column: 3;
-  }
-  .disclosure {
-    grid-column: 4;
-  }
-  .topicCell,
-  .format {
-    grid-column: 1 / 3;
-  }
-  .difficulty,
-  .source {
-    grid-column: 3 / -1;
-  }
+
   .expanded:not([hidden]) {
     margin-inline: 0;
     padding: var(--space-2) var(--space-1);
-  }
-  .sort {
-    max-width: 100%;
-    margin-inline-start: 0;
   }
   .pagination {
     gap: 0;

@@ -34,7 +34,14 @@ export const PageHead: React.FC<PageHeadTypes.Props> = (props) => (
           </>
         )}
       </div>
-      {props.aside ? <div className={styles.aside}>{props.aside}</div> : null}
+      {props.aside ? (
+        <div
+          className={styles.aside}
+          data-on-narrow={props.asideOnNarrow || undefined}
+        >
+          {props.aside}
+        </div>
+      ) : null}
     </div>
   </div>
 );

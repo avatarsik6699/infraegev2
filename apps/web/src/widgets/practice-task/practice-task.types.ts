@@ -7,7 +7,8 @@ export namespace PracticeTaskWidgetTypes {
     links: Result["links"];
     onRefresh: () => Promise<unknown>;
     active?: boolean;
-    topicHeading?: string;
+    /** F49: the catalog header links the task's own page by its id. */
+    taskHref?: string;
     presentation?: "catalog" | "detail";
     /**
      * F48: false for a lesson-only task opened on its own page — the answer is

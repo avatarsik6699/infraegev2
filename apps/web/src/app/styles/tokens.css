@@ -122,6 +122,9 @@
   --text-2xl: 1.5rem;
   --text-3xl: clamp(1.875rem, 3.6vw, 2.625rem);
   --text-display: clamp(2.25rem, 4.8vw, 3.625rem);
+  /* Home topic cards (Change 185): the faint task number behind the picture. */
+  --text-cover-numeral: 6.5rem;
+  --text-cover-numeral-lg: 9rem;
   --text-topic-index: clamp(2.75rem, 4vw, 3.25rem);
   --text-topic-title: 1.5rem;
   --text-topic-heading: clamp(2.5rem, 4vw, 3.5rem);
@@ -160,6 +163,15 @@
   --color-plate-sage: var(--theme-pastel-sage);
   --color-plate-lilac: var(--theme-pastel-lilac);
   --color-plate-apricot: var(--theme-pastel-apricot);
+  --color-plate-sky-strong: var(--theme-pastel-sky-strong);
+  --color-plate-sky-ink: var(--theme-pastel-sky-ink);
+  --color-plate-sage-strong: var(--theme-pastel-sage-strong);
+  --color-plate-sage-ink: var(--theme-pastel-sage-ink);
+  --color-plate-lilac-strong: var(--theme-pastel-lilac-strong);
+  --color-plate-lilac-ink: var(--theme-pastel-lilac-ink);
+  --color-level-basic: var(--theme-pastel-sage-strong);
+  --color-level-advanced: var(--theme-pastel-sky-strong);
+  --color-level-high: var(--theme-level-high);
   --grid-line-major: var(--theme-grid-major);
   --grid-line-minor: var(--theme-grid-minor);
   --grid-fade: var(--theme-grid-fade);
@@ -293,14 +305,15 @@
   --shadow-control: none;
   --shadow-overlay: 0 1.125rem 3.125rem var(--theme-overlay-shadow);
   --shadow-popover: 0 0.5rem 1.75rem var(--theme-popover-shadow);
-  /* Home cover cards (DESIGN.md › The Cover Rule): raised, with a sheen. */
+  /* Home cover cards (DESIGN.md › The Cover Rule): raised, with a sheen.
+     F25: a short, dense shadow close under the card, not a wide halo. */
   --shadow-cover:
     0 1px 2px var(--theme-cover-shadow-near),
-    0 1rem 2rem -1.25rem var(--theme-cover-shadow-far),
+    0 0.375rem 0.75rem -0.375rem var(--theme-cover-shadow-far),
     inset 0 1px 0 var(--theme-cover-highlight);
   --shadow-cover-raised:
-    0 2px 4px var(--theme-cover-shadow-near),
-    0 1.5rem 2.75rem -1.25rem var(--theme-cover-shadow-far),
+    0 2px 3px var(--theme-cover-shadow-near),
+    0 0.75rem 1.25rem -0.625rem var(--theme-cover-shadow-far),
     inset 0 1px 0 var(--theme-cover-highlight);
   --cover-sheen: var(--theme-cover-highlight);
 

@@ -1,13 +1,14 @@
-import { ArrowRight } from "lucide-react";
-import type { CourseCatalogTypes } from "~/entities/course";
-import { ActionLink } from "~/shared/components/action-link";
-import { Button } from "~/shared/components/button";
-import { IllustrationPlaceholder } from "~/shared/components/illustration-placeholder";
 import {
-  hasCourseIllustration,
-  ObjectIllustration,
-} from "~/shared/components/object-illustration";
+  courseCatalog,
+  CourseChip,
+  CourseCover,
+  courseCover,
+  type CourseCatalogTypes,
+} from "~/entities/course";
+import { ActionLink } from "~/shared/components/action-link";
 import { Typography } from "~/shared/components/typography";
+import { cssUtils } from "~/shared/lib/css-utils";
+import { russianCount } from "~/shared/lib/russian-count";
 import type { CourseCatalogPageTypes } from "../course-catalog-page.types";
 import { courseCatalogModel } from "../model/course-catalog-model";
 import { CourseCatalogProgress } from "./course-catalog-progress";
@@ -16,57 +17,57 @@ import styles from "../course-catalog-page.module.css";
 type Props = {
   entry: CourseCatalogTypes.Entry;
   progress?: CourseCatalogPageTypes.Progress;
-  layout: "feature" | "compact" | "wide";
 };
 
 /**
- * F33/F34: every card has the same parts — description, lessons and
- * level, progress and an action. A planned course shows placeholders
- * («— уроков», «Освоено 0 из — уроков») and a disabled «Скоро».
+ * Change 185 (after the home's colour cards): the course cover (F26), the
+ * icon square, title, level and lessons, the description, then progress and
+ * the action. A published card is a link
+ * as a whole and has its own tone; a planned one is neutral, shows «— уроков»
+ * and «Освоено 0 из — уроков» and a quiet «Скоро», never a link.
  */
 export const CourseCatalogCard: React.FC<Props> = (props) => {
   const published = props.entry.status === "published";
+  const lessons =
+    props.entry.status === "published"
+      ? `${courseCatalogModel.lessonCount(courseCatalog.coreLessonCount(props.entry))}${russianCount.additional(props.entry.advancedLessonIds.length, "lessons")}`
+      : "— уроков";
   return (
     <li
-      className={styles.card}
+      className={cssUtils.cx(styles.card, courseCover.tone)}
       data-course-card={props.entry.id}
       data-course-status={props.entry.status}
-      data-layout={props.layout}
+      data-course-tone={published ? props.entry.id : undefined}
       aria-disabled={!published || undefined}
     >
-      {published && hasCourseIllustration(props.entry.id) ? (
-        <ObjectIllustration
-          course={props.entry.id}
-          wide
-          className={styles.illustration}
-        />
-      ) : (
-        <IllustrationPlaceholder className={styles.illustration} />
-      )}
+      <CourseCover
+        entry={props.entry}
+        sizes="(max-width: 40rem) 92vw, 34rem"
+        className={styles.plate}
+      />
       <div className={styles.cardContent}>
+        <CourseChip entry={props.entry} className={styles.chip} />
         <Typography.Title order={2} className={styles.cardTitle}>
           {props.entry.title}
         </Typography.Title>
-        <Typography.Text tone="muted" className={styles.cardDescription}>
+        <Typography.Text className={styles.metadata}>
+          {[
+            props.entry.level ? `${props.entry.level} уровень` : undefined,
+            lessons,
+          ]
+            .filter(Boolean)
+            .join(" · ")}
+        </Typography.Text>
+        <Typography.Text className={styles.cardDescription}>
           {props.entry.summary}
         </Typography.Text>
-        <div className={styles.metadata}>
-          <span>
-            {props.entry.status === "published"
-              ? courseCatalogModel.lessonCount(props.entry.lessonCount)
-              : "— уроков"}
-          </span>
-          {props.entry.level && <span>· {props.entry.level}</span>}
-        </div>
       </div>
       <div className={styles.cardFooter}>
         {props.entry.status === "published" ? (
           <CourseCatalogProgress
             progress={props.progress ?? { status: "loading" }}
             // additional lessons stay outside mastery, as in the model
-            total={
-              props.entry.lessonCount - props.entry.advancedLessonIds.length
-            }
+            total={courseCatalog.coreLessonCount(props.entry)}
             title={props.entry.title}
           />
         ) : (
@@ -77,25 +78,15 @@ export const CourseCatalogCard: React.FC<Props> = (props) => {
         )}
         {props.entry.status === "published" ? (
           <ActionLink
-            presentation="button"
-            hierarchy="primary"
+            hierarchy="text"
             to="/courses/$courseSlug"
             params={{ courseSlug: props.entry.routeSlug }}
             className={styles.courseAction}
           >
-            <span className={styles.actionContent}>
-              Открыть курс
-              <ArrowRight
-                className={styles.arrow}
-                size={16}
-                aria-hidden="true"
-              />
-            </span>
+            Открыть курс
           </ActionLink>
         ) : (
-          <Button disabled fullWidth className={styles.courseAction}>
-            Скоро
-          </Button>
+          <span className={styles.soon}>Скоро</span>
         )}
       </div>
     </li>

@@ -19,10 +19,10 @@ describe("lesson route data", () => {
     // (task-16-8-…) have no theory link, as on every pipeline lesson.
     expect(tasks).toHaveLength(57);
     expect(tasks.slice(0, 4).map((task) => task.difficultyLabel)).toEqual([
-      "Базовая",
-      "Базовая",
-      "Базовая",
-      "Базовая",
+      "Лёгкая",
+      "Лёгкая",
+      "Лёгкая",
+      "Лёгкая",
     ]);
     for (const task of tasks) {
       expect(task.title).not.toBe("");

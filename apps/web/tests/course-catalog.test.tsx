@@ -140,33 +140,36 @@ describe("mini-course catalog", () => {
       expect(
         view.container.querySelectorAll("[data-course-card]"),
       ).toHaveLength(4);
-      // Change 170 F34: planned courses offer no link, only a disabled «Скоро».
+      // Change 185: a planned course offers no link or button, only a quiet «Скоро».
       expect(
-        view.container.querySelectorAll('[data-course-status="planned"] a'),
+        view.container.querySelectorAll(
+          '[data-course-status="planned"] :is(a, button)',
+        ),
       ).toHaveLength(0);
       expect(
         [
-          ...view.container.querySelectorAll<HTMLButtonElement>(
-            '[data-course-status="planned"] button',
-          ),
-        ].map((button) => [button.textContent, button.disabled]),
-      ).toEqual(Array(2).fill(["Скоро", true]));
+          ...view.container.querySelectorAll('[data-course-status="planned"]'),
+        ].map((card) => card.textContent?.includes("Скоро")),
+      ).toEqual([true, true]);
       expect(
         screen
           .getAllByRole("link", { name: "Открыть курс" })
           .map((link) => link.getAttribute("href")),
       ).toEqual(["/courses/python", "/courses/excel"]);
       expect(screen.queryByRole("searchbox")).toBeNull();
+      // Change 185: every course has its own scene, planned ones too.
       expect(
-        view.container.querySelectorAll(
-          '[data-course-card="python"] [data-object-illustration="course-python-wide"]',
-        ),
-      ).toHaveLength(1);
-      expect(
-        view.container.querySelectorAll(
-          '[data-course-status="planned"] [data-illustration-placeholder]',
-        ),
-      ).toHaveLength(2);
+        [
+          ...view.container.querySelectorAll<HTMLImageElement>(
+            "[data-course-card] [data-object-illustration]",
+          ),
+        ].map((image) => image.dataset.objectIllustration),
+      ).toEqual([
+        "course-python-scene",
+        "course-advanced-problems-scene",
+        "course-algorithms-data-structures-scene",
+        "course-excel-scene",
+      ]);
       expect(
         view.container.querySelector("[data-course-summary]")?.textContent,
       ).toContain("Всего направлений: 4 · Доступно: 2 · Уроков: 41");
@@ -229,6 +232,7 @@ it("never reports partial totals as complete when another published summary is m
       summary: "",
       routeSlug: "python",
       lessonCount: 1,
+      moduleCount: 1,
       advancedLessonIds: [],
     },
     {
@@ -238,6 +242,7 @@ it("never reports partial totals as complete when another published summary is m
       summary: "",
       routeSlug: "excel",
       lessonCount: 1,
+      moduleCount: 1,
       advancedLessonIds: [],
     },
   ];

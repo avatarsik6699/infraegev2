@@ -13,6 +13,7 @@ export const MultiCombobox: React.FC<MultiComboboxTypes.Props> = (props) => {
   const items = props.options.filter((item) =>
     item.label.toLocaleLowerCase("ru").includes(query.toLocaleLowerCase("ru")),
   );
+  const inline = props.presentation === "inline";
   const label =
     props.value.length === 1
       ? props.options.find((item) => item.value === props.value[0])?.label
@@ -33,13 +34,19 @@ export const MultiCombobox: React.FC<MultiComboboxTypes.Props> = (props) => {
       onInputValueChange={setQuery}
       filter={null}
     >
-      <div className={styles.field}>
-        <Combobox.Label className={styles.fieldLabel}>
+      <div className={inline ? styles.inline : styles.field}>
+        <Combobox.Label
+          className={inline ? styles.inlineLabel : styles.fieldLabel}
+        >
           {props.label}
+          {inline ? <span aria-hidden="true">:</span> : null}
         </Combobox.Label>
-        <Combobox.Trigger className={styles.trigger} aria-label={props.label}>
+        <Combobox.Trigger
+          className={inline ? styles.inlineTrigger : styles.trigger}
+          aria-label={props.label}
+        >
           <span>{props.value.length ? label : props.emptySelectionLabel}</span>
-          <ChevronDown size={16} aria-hidden="true" />
+          <ChevronDown size={inline ? 14 : 16} aria-hidden="true" />
         </Combobox.Trigger>
       </div>
       <Combobox.Portal>
@@ -98,6 +105,9 @@ export const MultiCombobox: React.FC<MultiComboboxTypes.Props> = (props) => {
                 </Combobox.Group>
               ))}
             </Combobox.List>
+            {props.note ? (
+              <span className={styles.note}>{props.note}</span>
+            ) : null}
             <div className={styles.footer}>
               <Button
                 hierarchy="quiet"

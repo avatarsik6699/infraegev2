@@ -18,6 +18,12 @@ colors:
   pastel-sage: "#e6f0e4"
   pastel-lilac: "#ece8f6"
   pastel-apricot: "#ffeadb"
+  pastel-sky-strong: "#4a76b4"
+  pastel-sky-ink: "#2b4c78"
+  pastel-sage-strong: "#3c8571"
+  pastel-sage-ink: "#2b5c4f"
+  pastel-lilac-strong: "#7a5fbd"
+  pastel-lilac-ink: "#4f3d8a"
   success: "#1d7a46"
   success-bg: "#eef7f1"
   error: "#b3261e"
@@ -201,6 +207,9 @@ one orange for position.
   tiles, topic illustration plates and the course band. Outside home,
   one pastel plate per page for the main next step (course illustration, profile "Следующий шаг").
   Pastels rotate in a fixed order and carry no meaning; they are never assigned to a section.
+- **Path-tile shades** (pastel-*-strong, pastel-*-ink; Change 185): on the home path tiles only,
+  the icon square takes the strong shade of its tile's pastel (white glyph ≥4.3:1) and the
+  subtitle the ink shade (≥6.5:1). Apricot has no strong shade: it would turn orange.
 
 ### Neutral
 - **Paper** (paper): page background, cards, reading areas, forms.
@@ -227,7 +236,15 @@ one orange for position.
 
 ### Named Rules
 **The Cover Rule.** Pastel colour belongs to the home page. Any other page gets at most one pastel
-plate, and only for its main next step.
+plate, and only for its main next step. One exception (Change 185): a published course's card on
+`/courses` and on the home page carries its tone (Python sky, Excel sage) in the icon square, the
+level line and the faint pattern around its picture, plus a barely visible wash of it on the border
+from the top-left corner, on the plate and on the plate's hairline (F27); card backgrounds stay
+neutral (F22: tinted cards clashed with the progress bar), planned courses stay grey.
+A second exception (F36): on `/ege` colour means the exam level and nothing else — базовый in
+the sage strong shade, повышенный in the sky strong shade, высокий in a muted brick
+(`--color-level-*`, kept apart from the danger red). It appears only as small dots (under a task
+on the exam map, before the level in a row) and on the goal scale.
 
 **The One Meaning Rule.** Each accent has exactly one job: blue is a link, orange is "you are
 here", green/red are answer results. A colour never borrows another's job, so unrelated elements
@@ -275,7 +292,19 @@ reading column up to 690px opening with breadcrumbs (ancestors as links, the cur
 text), and a 224px "На этой странице" rail with the lesson progress under it; on phones both side
 zones collapse into a "Подтемы · N из M" disclosure that also holds the progress. Course overview, catalogs and profile have no left panel. The
 practice catalog keeps inline solving in the list, task detail on its own page, and pagination
-joined with the per-page limit.
+joined with the per-page limit. A practice row (Change 185, F46): status (none for guests), the title
+over its condition on one line, «Тема» as two even lines — «№ 16» and the topic as `/ege` names it
+— difficulty «Лёгкая / Средняя / Трудная», source («—» when unknown), disclosure; the whole row
+opens the task and takes the side surface on hover and focus. The list runs by exam number, then
+from easy to hard. In that order each number opens with a topic row (F47): the number in the
+status column, the topic as an h2 with its level dot, «Базовый уровень» and «Теория →», and on the
+right «Решено N из M» right-aligned over a 15rem bar (as on `/ege`) (guests see «M заданий»); under it the rows' «Тема» shows
+the skill instead of repeating the topic. Search and filters sit in one panel over the table (F48, variant К3): the
+panel on the quiet tint with the table's frame under it — the search field on the left, the text
+selects «Тема» (the multi-select topic list, inline presentation, topics with tasks only and a
+muted «Ещё N тем — задачи скоро» line), «Сложность» and «Сортировка» on the right, the chosen
+values as chips across the panel's foot with «Сбросить всё»; «Найдено N заданий» opens the
+table, the pager stays outside the frame.
 
 Under 760px every two-column hero stacks, table-like rows reflow into title, metadata and status
 lines, and form boards collapse to one column. Touch targets stay at least 40px.
@@ -294,9 +323,13 @@ shadows are functional: dropdown and dialog surfaces get a soft ambient shadow.
 border or fill, not elevation. One exception, set by the architect (2026-10-05): the home page is
 the cover, and its cards (paths, topics, the try card, the course card) are raised — a soft
 gradient of their own tone, `--shadow-cover`, a light top edge and a sheen from the top-left
-corner; hover lifts them by 2px (`--shadow-cover-raised`, no lift under reduced motion). No other
-page uses these tokens. A second exception (2026-10-06): the published course card on `/courses`
-carries a slow monochrome highlight travelling along its border (off under reduced motion).
+corner; hover lifts them by 2px (`--shadow-cover-raised`, no lift under reduced motion). The
+shadow is short and dense, close under the card, never a wide halo (F25). In step
+with the lift, a path tile's faint icon rises a little further and turns 7°; the hover never
+changes a card's colour (Change 185: a white wash and ring were tried and rejected as too loud).
+The `/courses` cards of published courses use the same raised look and lift (Change 185; it
+replaces the 2026-10-06 travelling border highlight). Nothing moves inside a picture area: no
+zoom, sway or drift; only a few pen marks may blink in place (off under reduced motion).
 
 ## Shapes
 
@@ -304,9 +337,12 @@ Small, calm corners: 6px on controls (buttons, inputs, segmented controls), 12px
 plates, 14px on home path tiles, full pills for chips and badges. Borders are 1px hairlines.
 Illustrations are hand-drawn monochrome lines with one orange accent and sit directly on the
 surface, no plate behind them: every EGE topic has its object illustration (home cards and `/ege`
-rows, dimmed for planned topics), the Python course its own picture (home block, `/courses`
-card, `/courses/python` head at about a third of the head width). They are shown by the shared
-`ObjectIllustration`, mascot scenes by `MascotScene`. Planned courses keep a neutral placeholder.
+rows, dimmed for planned topics). Course scenes are the one exception to monochrome (Change 185):
+the architect's generated scenes with characters and the little mascot, in colour and with
+shading, served as WebP (`scripts/mascot/course_scenes.py`). Every course has one, planned courses too, in colour; it is
+shown whole, never cropped, on the home course card, in the `/courses` card and in the course head
+at about half the head width, its white ground multiplied into the plate or the head's grid. They
+are shown by the shared `ObjectIllustration` (`course`), mascot scenes by `MascotScene`.
 
 ## Components
 
@@ -324,6 +360,10 @@ card, `/courses/python` head at about a third of the head width). They are shown
 ### Links
 - Always Hyperlink Blue. Inline links underlined; standalone action links ("Открыть тему →")
   semibold with an arrow, underline on hover. On pastel plates links stay blue.
+- One exception, the **reference link** (`ActionLink presentation="reference"`, Change 185 F49):
+  an id that opens its own page («Задача 02347089 ↗» in an expanded practice row). It reads as
+  data — mono 13px in soft ink, a dotted muted underline, a ↗ — and darkens to ink with a solid
+  line on hover and focus, so it does not take the eye from the task the way blue would.
 
 ### Chips and badges
 - **Filter chips:** white pill with strong hairline, 14px text, 3px 6px 3px 12px, a 14px
@@ -333,8 +373,63 @@ card, `/courses/python` head at about a third of the head width). They are shown
 ### Cards / Containers
 - **Corner Style:** 12px. **Background:** paper. **Border:** 1px hairline, strong hairline on
   hover. **Internal Padding:** 22px 24px.
-- **Path tiles (home):** pastel fill, no border, 14px corners, big number, title, description,
-  blue action link.
+- **Path tiles (home, Change 185):** a 44px square in the strong shade of the tile's pastel with a
+  white Lucide icon beside the title (ink, 20px) and a one-line subtitle in the ink shade, then a
+  short description and a footer under a tinted hairline: muted facts on the left, the blue action
+  on the right. Every part starts at the top, so neighbouring titles share one line. The same icon,
+  large and faint, sits in the top right corner, cropped by the edge. The whole tile is the link;
+  its focus ring is drawn on the tile.
+- **Cover cards (home topics, Change 185):** variant E — white, raised; structure gives
+  them weight: the picture fills its own soft-surface plate closed by a hairline, with a barely
+  visible pattern behind it (the task number large in the data face and a few pen marks), then the
+  copy, then a footer under a hairline with muted facts («7 подтем») on the left and the blue
+  action on the right. The whole card is the link. The plate is 11rem high and the picture a
+  little enlarged: the topic drawings are small line art (F57). Colour stays off these cards.
+- **Home course card (Change 185, F26, F57):** the `/courses` card in the topics grid: the same
+  course cover across the top, then the icon square, title, «Мини-курс · уровень» in the ink shade,
+  the description, a footer with «8 модулей · 27 уроков + 3 дополнительных» and «Открыть курс →».
+  The whole card is the link.
+- **Home «Темы ЕГЭ» grid (Change 185, F57, variant Д2):** the published courses lead and the topics
+  stay small. Seven narrow columns, rows of different step: a course on three, two topics on two
+  each; the second row mirrored, so the courses stand on a diagonal (Python top-left, Excel
+  bottom-right). Under 60rem two columns (a course across both, topics in pairs), under 44rem one.
+- **Topic rows (`/ege`, Change 185, variant C):** one anatomy for published and planned topics —
+  the picture (7rem high) on the left; «Задание N · ● Базовый · ≈ 3 мин» (a planned topic adds a
+  quiet «Скоро»), the title and the description; then «Теория · N задач», the bar and «Решено x из
+  N» (planned: «— задач», an empty bar, «Решено — из —»). The row is styled as a whole: the large
+  task numeral in the data face sits on the right under the progress, cropped by the row's bottom;
+  a few pen marks sit in the row's margins and the picture column; a light wash rises toward the
+  numeral. Rows stay flat, separated by hairlines; hover fills the row with the side surface and
+  nudges the arrow. Under 52rem the picture moves to the right of the title and the marks go.
+  Rows outside the chosen goal stay in the list, quiet: the picture, numeral and marks fade, the
+  title turns to the muted ink.
+- **Exam map (`/ege` head):** the 27 tasks as cells in nine columns, 19–21 as one cell; a dot per
+  task in its level's tone, planned topics dashed; a cell leads to its row and names its topic in a
+  tooltip. Outside the goal a cell loses its border. One Tab stop: arrows, Home and End move inside.
+  It keeps a 3rem gap from the head's copy.
+- **Control line (`/ege`, F38–F44):** one quiet line over the list, no search. On the left the
+  goal scale: three cumulative steps — База 40+, Стандарт 60+, Хард 80+ — with no thumb and no
+  label; steps up to the goal fill lightly, the chosen one is thicker in its level's tone with its
+  name in ink. Each step explains itself in a tooltip on hover or focus (the same text is the
+  radio's description); there is no «?» and no running summary — the dimmed rows show the choice.
+  On the right the progress filter as a minimal dropdown, «Прогресс: Все темы ▾» (the shared inline
+  select), so it never competes with the goal. An empty filter result (F45) is open, no card,
+  centred: the scene at full size (up to 52rem — it is wide and low), then the shared empty state
+  (24px/600 title, the line under it) with a message for that filter, and one solid ink «Показать
+  все темы».
+- **Tooltip (shared):** a short hint on hover and keyboard focus — surface, hairline, popover
+  shadow, 13px soft ink, at most 20rem. The control keeps its own accessible description.
+- **Course cards (`/courses`, Change 185):** four equal cards in two columns, registry order. The
+  course cover (`CourseCover` in `entities/course`, shared with the home course card): the course
+  scene whole on a near-white plate of the card's tone (9:4) with the course's faint pattern around
+  it, fading from the top-left corner — code lines, cells, graph nodes, hatching; under it the icon
+  square, title, «уровень · уроки» in the ink shade, the description, then progress and «Открыть
+  курс →». The card itself is neutral (white fading to the soft surface); a published one is raised
+  and a link as a whole, its tone only in the icon square, level line, pattern and the barely
+  visible border wash; a planned one has no shadow, with «— уроков», an empty bar and a quiet
+  «Скоро» pill, never a link or a button.
+- **Try card (home):** a head strip on the soft surface names the task like a practice row
+  (task number, topic, difficulty) above the walkthrough.
 - **Next step plate:** one pastel plate with the next lesson and an ink "Продолжить" button.
 
 ### Inputs / Fields

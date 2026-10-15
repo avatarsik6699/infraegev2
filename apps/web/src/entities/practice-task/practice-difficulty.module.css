@@ -1,7 +1,10 @@
+/* Change 185 (F59): the word sits on the glyph's foot — its letters end
+   where the bars end, not on the shared baseline below them. */
 .root {
   display: inline-flex;
-  align-items: baseline;
+  align-items: flex-end;
   gap: var(--space-1);
+  line-height: 1;
 }
 .scale {
   position: relative;

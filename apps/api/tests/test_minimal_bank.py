@@ -452,11 +452,12 @@ def test_catalog_search_topics_sort_and_limits(database, monkeypatch):
             items = first + second
 
             def key(t, direction=direction):
-                return ((-1 if direction == "difficulty_desc" else 1) * t["difficulty"], t["id"])
+                rank = (-1 if direction == "difficulty_desc" else 1) * t["difficulty"]
+                if direction == "default":
+                    return ((t["exam_numbers"] or [1000])[0], rank, t["id"])
+                return (rank, t["id"])
 
-            assert items == sorted(
-                items, key=(lambda t: t["id"]) if direction == "default" else key
-            )
+            assert items == sorted(items, key=key)
             following = client.get(
                 f"/api/tasks/{first[0]['id']}/next?topics=ege-16&q=рекурс&sort={direction}"
             ).json()
@@ -775,6 +776,7 @@ def test_account_auth_guest_and_context_progress(database, monkeypatch):
         assert client.post(check_url, json=body, headers=authorized).status_code == 200
         results = client.get("/api/progress").json()["results"]
         assert len(results) == 1 and results[0]["context_id"] == link.material_id
+        assert results[0]["exam_numbers"] == entry.task.exam_numbers
         assert (
             client.post(
                 check_url,

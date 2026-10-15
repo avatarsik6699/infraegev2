@@ -22,7 +22,11 @@ export namespace SubtopicNavigationTypes {
     lessonId: string;
     /** Subtopic slug, or `practice` on the final page. */
     current: string;
-    tasks: readonly { id: string; solutionRevision?: number }[];
+    tasks: readonly {
+      id: string;
+      solutionRevision?: number;
+      countsTowardMastery?: boolean;
+    }[];
     practiceUnavailable?: boolean;
     /** Lesson progress shown under the tree on narrow screens (F38). */
     progress?: React.ReactNode;

@@ -18,6 +18,8 @@ export namespace CourseCatalogTypes {
     status: "published";
     routeSlug: string;
     lessonCount: number;
+    /** Modules of the published course (home course card, Change 185). */
+    moduleCount: number;
     /** Additional lessons: listed, but outside course mastery (Change 175). */
     advancedLessonIds: readonly string[];
   };

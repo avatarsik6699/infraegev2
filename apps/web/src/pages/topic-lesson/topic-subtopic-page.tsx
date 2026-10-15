@@ -4,6 +4,7 @@ import {
   groupTasksBySubtopic,
   lessonSubtopics,
 } from "~/entities/lesson";
+import { masteryTasks } from "~/entities/practice-task";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { useAccountSession } from "~/features/account";
 import {
@@ -69,7 +70,16 @@ export const TopicSubtopicPage: React.FC<TopicLessonPageTypes.SubtopicProps> = (
           eyebrow={topicCatalog.formatTaskNumbers(props.lesson.taskNumbers)}
           subtopicCount={subtopics.length}
           summary={props.lesson.summary}
-          taskCount={props.practiceUnavailable ? undefined : props.tasks.length}
+          taskCount={
+            props.practiceUnavailable
+              ? undefined
+              : masteryTasks(props.tasks).length
+          }
+          additionalTaskCount={
+            props.practiceUnavailable
+              ? undefined
+              : props.tasks.length - masteryTasks(props.tasks).length
+          }
           title={props.lesson.title}
         />
       ) : null}

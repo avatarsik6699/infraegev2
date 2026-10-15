@@ -36,7 +36,7 @@ function detail(id: string, revision = 1): PracticeTaskWidgetTypes.Result {
         title: id,
         solutionRevision: revision,
         difficulty: 1,
-        difficultyLabel: "Базовая",
+        difficultyLabel: "Лёгкая",
         answerInstruction:
           "Запишите целое число в десятичной системе счисления.",
         statement: [{ type: "text", text: `Условие ${id}` }],
@@ -99,7 +99,9 @@ describe("inline solving", () => {
   });
   it("loads on demand, keeps independent drafts/help on collapse, resets on selection change", async () => {
     const view = render(rows());
-    expect(screen.getAllByText("Целое число")).toHaveLength(2);
+    // F46: «Тема» is the number and the /ege topic; the format column left.
+    expect(screen.getAllByText("№ 16")).toHaveLength(2);
+    expect(screen.queryByText("Целое число")).toBeNull();
     expect(mocks.load).not.toHaveBeenCalled();
     await open();
     await open("second");
@@ -245,13 +247,25 @@ describe("inline solving", () => {
     expect(
       row(0).queryByText(/Прогресс сохраняется в этом браузере/),
     ).toBeNull();
-    expect(row(0).getByRole("link", { name: /^Теория$/ })).toBeTruthy();
+    // F47: the topic row in the first item has its own «Теория»; the task's
+    // link is inside the solving region.
+    expect(
+      within(row(0).getByRole("region", { name: "Решение задачи" })).getByRole(
+        "link",
+        { name: /^Теория$/ },
+      ),
+    ).toBeTruthy();
     expect(
       row(0).queryByText(
         "Запишите целое число в десятичной системе счисления.",
       ),
     ).toBeNull();
-    expect(row(0).getByRole("heading", { name: "ЕГЭ 16" })).toBeTruthy();
+    // F49: the expanded task names itself by id, a quiet link to its page
+    // (the mocked ActionLink keeps only the text); no topic repeated inside.
+    expect(
+      row(0).getByRole("link", { name: "Задача first" }).getAttribute("href"),
+    ).toMatch(/^\/practice\/first/);
+    expect(row(0).queryByRole("heading", { name: "ЕГЭ 16" })).toBeNull();
   });
   it("deduplicates loading, retries locally and isolates missing tasks", async () => {
     let resolve!: (value: PracticeTaskWidgetTypes.Result) => void;

@@ -36,7 +36,7 @@ export const LessonIntro: React.FC<LessonIntroTypes.Props> = (props) => (
           ? russianCount.subtopics(props.subtopicCount)
           : null,
         props.taskCount !== undefined
-          ? russianCount.tasks(props.taskCount)
+          ? `${russianCount.tasks(props.taskCount)}${russianCount.additional(props.additionalTaskCount ?? 0, "tasks")}`
           : null,
         props.accessTier === "paid" ? "По подписке" : null,
       ]

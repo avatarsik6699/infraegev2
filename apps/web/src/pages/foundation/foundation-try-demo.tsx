@@ -93,9 +93,6 @@ export const FoundationTryDemo: React.FC = () => {
         засчитан.
       </Typography.Text>
       <div className={styles.task} aria-hidden="true">
-        <Typography.Text component="span" className={styles.kicker}>
-          Задание 16 · рекурсия
-        </Typography.Text>
         <Typography.Text className={styles.statement}>
           <code>F(1) = 4</code>, <code>F(n) = F(n − 1) + 2n</code> при{" "}
           <code>n &gt; 1</code>. Найдите <code>F(5)</code>.

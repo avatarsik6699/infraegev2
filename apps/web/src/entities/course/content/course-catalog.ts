@@ -73,6 +73,7 @@ const entries: readonly CourseCatalogTypes.Entry[] = definitions.map(
       status: "published",
       routeSlug: publication.routeSlug,
       lessonCount: progressLessons.length,
+      moduleCount: publication.modules.length,
       advancedLessonIds: progressLessons
         .filter((lesson) => lesson.level === "advanced")
         .map((lesson) => lesson.id),
@@ -82,6 +83,9 @@ const entries: readonly CourseCatalogTypes.Entry[] = definitions.map(
 
 export const courseCatalog = {
   entries,
+  /** Lessons that count toward mastery; additional ones stay apart (F8). */
+  coreLessonCount: (entry: CourseCatalogTypes.PublishedEntry): number =>
+    entry.lessonCount - entry.advancedLessonIds.length,
   availableCount: entries.filter((entry) => entry.status === "published")
     .length,
   plannedCount: entries.filter((entry) => entry.status === "planned").length,

@@ -27,7 +27,11 @@ export const AccountTryTask: React.FC<{ savedTaskIds: readonly string[] }> = (
     ? `, ЕГЭ ${task.examNumbers.join(", ")}`
     : "";
   return (
-    <section className={styles.card} aria-labelledby="try-task-title">
+    <section
+      className={styles.card}
+      data-whole-link
+      aria-labelledby="try-task-title"
+    >
       <Typography.Title order={3} id="try-task-title">
         Попробуйте задачу
       </Typography.Title>

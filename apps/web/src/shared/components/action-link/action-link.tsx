@@ -39,7 +39,7 @@ const ActionLinkRoot = forwardRef<HTMLAnchorElement, ActionLinkTypes.RootProps>(
           <ArrowLeft className={styles.icon} aria-hidden="true" />
         ) : null}
         <span>{children}</span>
-        {linkProps.target === "_blank" && (
+        {(linkProps.target === "_blank" || presentation === "reference") && (
           <ArrowUpRight className={styles.icon} aria-hidden="true" />
         )}
         {linkProps.target !== "_blank" &&

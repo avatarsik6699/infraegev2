@@ -110,24 +110,35 @@ const blob = (g, cx, cy, rx, ry, r) =>
   el("path", { d: inkDot(cx, cy, rx, ry, r), fill: INK }, g);
 
 // Handwritten label as outlines: the site does not load Caveat.
-// Cyrillic labels come from the Cyrillic subset of the same font.
+// Cyrillic runs come from the Cyrillic subset of the same font, the rest from
+// the Latin one, so a mixed label («=СУММ(B1:B3)») keeps every glyph.
 function txt(g, x, y, s, size = 22, fill = INK) {
-  const face = /[\u0400-\u04ff]/.test(s) ? caveatCyrillic : caveat;
-  const width = face.getAdvanceWidth(s, size);
+  const runs = (s.match(/[\u0400-\u04ff]+|[^\u0400-\u04ff]+/g) ?? []).map(
+    (run) => {
+      const face = /[\u0400-\u04ff]/.test(run) ? caveatCyrillic : caveat;
+      return { run, face, width: face.getAdvanceWidth(run, size) };
+    },
+  );
+  let left = x - runs.reduce((sum, { width }) => sum + width, 0) / 2;
   // Own serialisation: toPathData(2) drops the separator before a zero
   // ("-17.780"), and svgo cuts the path at that point.
   const n = (v) => v.toFixed(2);
-  const d = face
-    .getPath(s, x - width / 2, y, size)
-    .commands.map((c) =>
-      c.type === "Z"
-        ? "Z"
-        : c.type === "Q"
-          ? `Q${n(c.x1)} ${n(c.y1)} ${n(c.x)} ${n(c.y)}`
-          : c.type === "C"
-            ? `C${n(c.x1)} ${n(c.y1)} ${n(c.x2)} ${n(c.y2)} ${n(c.x)} ${n(c.y)}`
-            : `${c.type}${n(c.x)} ${n(c.y)}`,
-    )
+  const d = runs
+    .map(({ run, face, width }) => {
+      const path = face.getPath(run, left, y, size);
+      left += width;
+      return path.commands
+        .map((c) =>
+          c.type === "Z"
+            ? "Z"
+            : c.type === "Q"
+              ? `Q${n(c.x1)} ${n(c.y1)} ${n(c.x)} ${n(c.y)}`
+              : c.type === "C"
+                ? `C${n(c.x1)} ${n(c.y1)} ${n(c.x2)} ${n(c.y2)} ${n(c.x)} ${n(c.y)}`
+                : `${c.type}${n(c.x)} ${n(c.y)}`,
+        )
+        .join("");
+    })
     .join("");
   return el("path", { d, fill }, g);
 }

@@ -4,6 +4,7 @@ import type { PracticeCatalogTypes } from "~/entities/practice-task";
 import { Button } from "~/shared/components/button";
 import { useIsEnhanced } from "~/shared/lib/use-is-enhanced";
 import { PracticeCatalogRow } from "./practice-catalog-row";
+import { PracticeTopicGroup } from "./practice-topic-group";
 import styles from "../practice-catalog-page.module.css";
 
 export const PracticeTaskList: React.FC<{
@@ -16,16 +17,33 @@ export const PracticeTaskList: React.FC<{
   const enhanced = useIsEnhanced();
   if (!props.tasks.length) return null;
   const allOpen = props.tasks.every((task) => expanded.has(task.id));
+  // F47: ordered by number, each number opens with its topic row.
+  const grouped = (props.search.sort ?? "default") === "default";
+  const numberOf = (task?: PracticeCatalogTypes.Entry) => task?.exam_numbers[0];
+  const groupAt = (index: number) => {
+    const number = numberOf(props.tasks[index]);
+    if (!grouped || number === undefined) return null;
+    if (index > 0 && numberOf(props.tasks[index - 1]) === number) return null;
+    return (
+      <PracticeTopicGroup
+        number={number}
+        total={
+          props.topics?.find((topic) => topic.id === `ege-${String(number)}`)
+            ?.count ?? 0
+        }
+        pageTasks={props.tasks.filter((item) => numberOf(item) === number)}
+      />
+    );
+  };
 
   return (
     <>
       <div className={styles.listHeading}>
+        <span aria-hidden="true" />
         <span aria-hidden="true">Задание</span>
         <span aria-hidden="true">Тема</span>
         <span aria-hidden="true">Сложность</span>
-        <span aria-hidden="true">Формат</span>
         <span aria-hidden="true">Источник</span>
-        <span aria-hidden="true" />
         <div className={styles.scriptedOnly}>
           <Button
             className={styles.bulkToggle}
@@ -55,9 +73,11 @@ export const PracticeTaskList: React.FC<{
         </div>
       </div>
       <ul className={styles.list} aria-label="Задачи">
-        {props.tasks.map((task) => (
+        {props.tasks.map((task, index) => (
           <PracticeCatalogRow
             key={task.id}
+            group={groupAt(index)}
+            headingOrder={grouped && numberOf(task) !== undefined ? 3 : 2}
             task={task}
             search={props.search}
             skills={props.skills}

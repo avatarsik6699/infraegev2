@@ -1,7 +1,10 @@
 import { LearningVisualFrame } from "~/shared/components/learning-content";
 import { Download, FileText } from "lucide-react";
 import type { ReactNode } from "react";
-import type { PracticeTaskTypes } from "~/entities/practice-task";
+import {
+  practiceTaskNotation,
+  type PracticeTaskTypes,
+} from "~/entities/practice-task";
 import { Callout } from "~/shared/components/callout";
 import { CodeBlock } from "~/shared/components/code-block";
 import { DownloadLink } from "~/shared/components/download-link";
@@ -9,6 +12,7 @@ import { Image } from "~/shared/components/image";
 import { Typography } from "~/shared/components/typography";
 import styles from "../lesson-practice.module.css";
 import { PracticeInlineText } from "./practice-inline-text";
+import { PracticeNotationText } from "./practice-notation-text";
 import { Notation } from "~/shared/components/notation";
 import { PracticeCodeVariants } from "./practice-code-variants";
 
@@ -27,6 +31,26 @@ export const PracticeTaskContent: React.FC<PracticeTaskContentProps> = (
   </div>
 );
 
+function renderInlineSpan(
+  span: PracticeTaskTypes.InlineSpan,
+  index: number,
+): ReactNode {
+  if (span.kind === "text")
+    return <PracticeNotationText key={index} text={span.text} />;
+  // A formula may carry the bank's TeX scripts (F7); code stays literal.
+  if (span.kind === "formula" && practiceTaskNotation.has(span.text))
+    return (
+      <Notation key={index} kind="formula">
+        <PracticeNotationText text={span.text} />
+      </Notation>
+    );
+  return (
+    <Notation key={index} kind={span.kind}>
+      {span.text}
+    </Notation>
+  );
+}
+
 function renderContentBlock(
   block: PracticeTaskTypes.ContentBlock,
   key: string,
@@ -35,15 +59,7 @@ function renderContentBlock(
     case "rich-text":
       return (
         <Typography.Text key={key} className={styles.contentText}>
-          {block.spans.map((span, index) =>
-            span.kind === "text" ? (
-              span.text
-            ) : (
-              <Notation key={index} kind={span.kind}>
-                {span.text}
-              </Notation>
-            ),
-          )}
+          {block.spans.map(renderInlineSpan)}
         </Typography.Text>
       );
     case "code-variants":

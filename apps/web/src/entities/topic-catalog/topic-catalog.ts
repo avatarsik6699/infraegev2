@@ -177,6 +177,32 @@ const definitions: readonly TopicCatalogTypes.Definition[] = [
   },
 ];
 
+/**
+ * Subtopics per published lesson, kept here so the prerendered home does not
+ * load lesson content; `tests/topic-catalog.test.tsx` checks them against
+ * the lesson definitions.
+ */
+const subtopicCounts: Readonly<Record<string, number>> = {
+  rekursiya: 7,
+  "relational-databases": 7,
+  "coding-and-fano": 7,
+  "preobrazovanie-zapisey-chisel": 6,
+  "media-coding": 7,
+  "word-enumeration": 7,
+  networks: 7,
+  "information-amount": 6,
+  "numeral-systems": 7,
+  spreadsheets: 8,
+  "number-sequences": 8,
+  "spreadsheet-optimization": 8,
+  "winning-strategy": 7,
+  "graph-analysis": 7,
+  "string-processing": 8,
+  "divisors-and-masks": 6,
+  "array-processing": 8,
+  "data-analysis": 8,
+};
+
 const publicationById = new Map(
   lessonPublications.map(
     (publication) => [publication.id, publication] as const,
@@ -197,6 +223,7 @@ const entries: readonly TopicCatalogTypes.Entry[] = definitions.map(
       summary: publication.summary,
       status: "published",
       routeSlug: publication.routeSlug,
+      subtopicCount: subtopicCounts[definition.id] ?? 0,
     };
   },
 );

@@ -327,9 +327,9 @@ function requireOnlyKeys(
 }
 
 function difficultyLabel(difficulty: number): string {
-  if (difficulty <= 1) return "Базовая";
+  if (difficulty <= 1) return "Лёгкая";
   if (difficulty === 2) return "Средняя";
-  return "Высокая";
+  return "Трудная";
 }
 
 type PublicTask = components["schemas"]["PublicTask"];

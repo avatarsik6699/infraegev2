@@ -37,4 +37,13 @@ export const russianCount = {
   subtopics(count: number): string {
     return `${String(count)} ${subtopicForms[taskPluralRules.select(count)]}`;
   },
+  /**
+   * « + 3 дополнительных» after a main count (Change 185, F8): the main number
+   * is what progress counts, the additional lessons or tasks follow apart.
+   * Empty when there are none.
+   */
+  additional(count: number, of: "lessons" | "tasks"): string {
+    if (count === 0) return "";
+    return ` + ${russianCount.of(count, of === "lessons" ? ["дополнительный", "дополнительных", "дополнительных"] : ["дополнительная", "дополнительные", "дополнительных"])}`;
+  },
 };

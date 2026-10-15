@@ -38,6 +38,8 @@ class ResultView(StrictModel):
     context_id: str
     task_id: str
     solution_revision: int
+    # Change 185 (F47): the practice catalog counts solved tasks per exam number.
+    exam_numbers: list[int] = Field(default_factory=list)
 
 
 class ProgressView(StrictModel):
@@ -118,6 +120,7 @@ async def read_progress(db: AsyncSession, session: AccountSession) -> ProgressVi
             ProgressResult.context_id,
             ProgressResult.task_id,
             ProgressResult.solution_revision,
+            TaskRecord.content["exam_numbers"],
         )
         .join(TaskRecord, TaskRecord.id == ProgressResult.task_id)
         .where(
@@ -141,8 +144,9 @@ async def read_progress(db: AsyncSession, session: AccountSession) -> ProgressVi
                 context_id=context_id,
                 task_id=task_id,
                 solution_revision=revision,
+                exam_numbers=[int(number) for number in numbers or []],
             )
-            for kind, context_id, task_id, revision in rows
+            for kind, context_id, task_id, revision, numbers in rows
         ]
     )
 

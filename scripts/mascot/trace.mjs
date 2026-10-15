@@ -1,7 +1,6 @@
-// Builds the scenes drawn as PNG by the architect (mascot scenes and the
-// Python course pictures): traces the masks from trace_prep.py, redraws the
-// mascot face with the pen, lets the small free pieces twinkle and adds small
-// abstract marks around the drawing.
+// Builds the mascot scenes drawn as PNG by the architect: traces the masks
+// from trace_prep.py, redraws the mascot face with the pen, lets the small
+// free pieces twinkle and adds small abstract marks around the drawing.
 //
 // Usage: node trace.mjs <work-dir> <out-dir>
 //   <work-dir>/<scene>/ is the output of trace_prep.py for each scene below.
@@ -131,8 +130,7 @@ function floaters(svg, defs, name, seed, items) {
   }
 }
 
-// Each scene: the seed of its marks and the marks themselves; `folder`
-// places a picture that is not a mascot scene next to the mascot scenes.
+// Each scene: the seed of its marks and the marks themselves.
 const SCENES = {
   // Sign-in: the mascot unlocks the door, light rays shimmer through the gap.
   "sign-in": {
@@ -197,42 +195,13 @@ const SCENES = {
       ["ring", 40, 260, 3],
     ],
   },
-  // Python course page and home block (3:2): the snake in glasses types on
-  // a keyboard, the press marks over the orange key flicker.
-  "course-python": {
-    seed: 173,
-    folder: "../courses",
-    marks: [
-      ["sparkle", 210, 160, 5],
-      ["ring", 560, 110, 4.5],
-      ["sparkle", 820, 250, 4.5],
-      ["ring", 1180, 120, 4.5],
-      ["sparkle", 1460, 190, 5],
-      ["ring", 120, 880, 4.5],
-      ["sparkle", 640, 920, 4.5],
-      ["ring", 1080, 900, 4.5],
-      ["sparkle", 1450, 860, 5],
-    ],
-  },
-  // The wide Python card on /courses: the same scene, stretched out.
-  "course-python-wide": {
-    seed: 179,
-    folder: "../courses",
-    marks: [
-      ["sparkle", 200, 80, 6],
-      ["ring", 990, 90, 5.5],
-      ["sparkle", 1180, 210, 6],
-      ["ring", 1330, 70, 5.5],
-      ["ring", 2100, 590, 5.5],
-    ],
-  },
 };
 
 // `node trace.mjs <work> <out> [scene...]` rebuilds only the named scenes.
 const only = process.argv.slice(4);
-for (const [name, { seed, marks, folder = "." }] of Object.entries(SCENES)) {
+for (const [name, { seed, marks }] of Object.entries(SCENES)) {
   if (only.length && !only.includes(name)) continue;
   const { svg, defs } = await traced(name);
   floaters(svg, defs, name, seed, marks);
-  writeScene(join(out, folder), name, svg);
+  writeScene(out, name, svg);
 }

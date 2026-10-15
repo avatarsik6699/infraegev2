@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import { Notation } from "~/shared/components/notation";
+import { PracticeNotationText } from "./practice-notation-text";
 
 type PracticeInlineTextProps = {
   text: string;
@@ -13,7 +14,11 @@ export const PracticeInlineText: React.FC<PracticeInlineTextProps> = (
       const isCode = fragment.startsWith("`") && fragment.endsWith("`");
       return (
         <Fragment key={`${index}-${fragment}`}>
-          {isCode ? <Notation>{fragment.slice(1, -1)}</Notation> : fragment}
+          {isCode ? (
+            <Notation>{fragment.slice(1, -1)}</Notation>
+          ) : (
+            <PracticeNotationText text={fragment} />
+          )}
         </Fragment>
       );
     })}

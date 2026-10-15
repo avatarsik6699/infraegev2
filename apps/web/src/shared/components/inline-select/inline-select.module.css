@@ -68,3 +68,9 @@
   background: var(--color-surface-quiet);
   outline: none;
 }
+
+.item[data-disabled] {
+  color: var(--color-muted);
+  cursor: default;
+  opacity: 0.6;
+}

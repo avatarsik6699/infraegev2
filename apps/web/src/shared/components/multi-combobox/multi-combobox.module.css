@@ -144,3 +144,50 @@
 .item + .item {
   border-top: 1px solid var(--color-surface-quiet);
 }
+
+/* Change 185 (F48): the inline trigger reads as the InlineSelect beside it —
+   a muted label, then the value as quiet text with a small chevron. */
+.inline {
+  display: flex;
+  flex-wrap: wrap;
+  min-width: 0;
+  align-items: center;
+  gap: var(--space-0-5);
+  font-size: var(--text-xs);
+}
+.inlineLabel {
+  color: var(--color-muted);
+}
+.inlineTrigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-width: 0;
+  max-width: 16rem;
+  min-height: var(--control-height);
+  padding: 0 var(--space-1);
+  border: 0;
+  border-radius: var(--radius-control);
+  background: transparent;
+  color: var(--color-text);
+  font: inherit;
+  cursor: pointer;
+}
+.inlineTrigger span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.inlineTrigger:hover {
+  background: var(--color-surface-quiet);
+}
+.inlineTrigger:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+.note {
+  flex-shrink: 0;
+  padding: var(--space-1) var(--space-1-5);
+  color: var(--color-muted);
+  font-size: var(--text-2xs);
+}

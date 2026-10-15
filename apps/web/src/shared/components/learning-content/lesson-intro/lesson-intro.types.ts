@@ -8,6 +8,8 @@ export namespace LessonIntroTypes {
     subtopicCount?: number;
     summary: string;
     taskCount?: number;
+    /** Tasks outside mastery, named after the main count (F8). */
+    additionalTaskCount?: number;
     title: string;
   };
 }

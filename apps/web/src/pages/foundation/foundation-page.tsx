@@ -1,17 +1,17 @@
 import { BookOpen, Code2, ListChecks } from "lucide-react";
-import { courseCatalog } from "~/entities/course";
+import { courseCatalog, type CourseCatalogTypes } from "~/entities/course";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { ActionLink } from "~/shared/components/action-link";
-import {
-  hasCourseIllustration,
-  ObjectIllustration,
-} from "~/shared/components/object-illustration";
+import { ObjectIllustration } from "~/shared/components/object-illustration";
 import { MascotScene } from "~/shared/components/mascot-scene";
 import { PageContainer } from "~/shared/components/page-container";
 import { PageHead } from "~/shared/components/page-head";
 import { Typography } from "~/shared/components/typography";
+import { russianCount } from "~/shared/lib/russian-count";
 import { PublicFooter } from "~/widgets/public-footer";
 import { PublicHeader } from "~/widgets/public-header";
+import { FoundationCourseCard } from "./foundation-course-card";
+import { FoundationPlateMarks } from "./foundation-plate-marks";
 import { FoundationTryDemo } from "./foundation-try-demo";
 import styles from "./foundation-page.module.css";
 
@@ -21,11 +21,14 @@ const foundation = {
   ),
   plannedTopicCount: topicCatalog.entries.length,
   course: courseCatalog.entries.find((entry) => entry.status === "published"),
+  courses: courseCatalog.entries.filter(
+    (entry): entry is CourseCatalogTypes.PublishedEntry =>
+      entry.status === "published",
+  ),
   featuredTopicCount: 4,
+  moduleForms: ["модуль", "модуля", "модулей"],
+  lessonForms: ["урок", "урока", "уроков"],
 } as const;
-
-/** F12: an asymmetric grid — a large first topic, two compact, one wide. */
-const topicLayouts = ["feature", "compact", "compact", "wide"] as const;
 
 export const FoundationPage: React.FC = () => (
   <div className={styles.page}>
@@ -54,7 +57,7 @@ export const FoundationPage: React.FC = () => (
         <ul className={styles.facts} aria-label="Что есть на сайте">
           <li>{foundation.publishedTopics.length} тем ЕГЭ</li>
           {foundation.course?.status === "published" ? (
-            <li>{foundation.course.lessonCount} уроков Python</li>
+            <li>{`${russianCount.of(courseCatalog.coreLessonCount(foundation.course), foundation.lessonForms)} Python`}</li>
           ) : null}
         </ul>
       </PageHead>
@@ -69,64 +72,88 @@ export const FoundationPage: React.FC = () => (
           </Typography.Text>
           <ul className={styles.paths}>
             <li className={styles.path} data-tone="sage">
-              <div className={styles.pathHead}>
-                <Typography.Title order={3} className={styles.pathTitle}>
-                  Темы ЕГЭ
-                </Typography.Title>
-                <BookOpen className={styles.pathIcon} aria-hidden="true" />
-              </div>
+              <span className={styles.pathChip}>
+                <BookOpen aria-hidden="true" />
+              </span>
+              <Typography.Title order={3} className={styles.pathTitle}>
+                Темы ЕГЭ
+              </Typography.Title>
               <Typography.Text className={styles.pathText}>
+                Теория и практика по заданиям
+              </Typography.Text>
+              <Typography.Text className={styles.pathDescription}>
                 Теория, разобранные примеры и задачи с проверкой по каждому
                 заданию экзамена.
               </Typography.Text>
-              <ActionLink
-                className={styles.pathLink}
-                hierarchy="text"
-                to="/ege/"
-              >
-                Выбрать тему
-              </ActionLink>
+              <div className={styles.pathFoot}>
+                <span className={styles.cardFacts}>
+                  {`${String(foundation.publishedTopics.length)} тем из ${String(foundation.plannedTopicCount)}`}
+                </span>
+                <ActionLink
+                  className={styles.stretchedLink}
+                  hierarchy="text"
+                  to="/ege/"
+                >
+                  Выбрать тему
+                </ActionLink>
+              </div>
+              <BookOpen className={styles.pathMark} aria-hidden="true" />
             </li>
             {foundation.course?.status === "published" ? (
               <li className={styles.path} data-tone="sky">
-                <div className={styles.pathHead}>
-                  <Typography.Title order={3} className={styles.pathTitle}>
-                    {foundation.course.title}
-                  </Typography.Title>
-                  <Code2 className={styles.pathIcon} aria-hidden="true" />
-                </div>
+                <span className={styles.pathChip}>
+                  <Code2 aria-hidden="true" />
+                </span>
+                <Typography.Title order={3} className={styles.pathTitle}>
+                  {foundation.course.title}
+                </Typography.Title>
                 <Typography.Text className={styles.pathText}>
-                  Можно начинать без опыта: в каждом уроке объяснение,
-                  разобранный пример и практика.
+                  Курс с нуля, опыт не нужен
                 </Typography.Text>
-                <ActionLink
-                  className={styles.pathLink}
-                  hierarchy="text"
-                  to="/courses/$courseSlug"
-                  params={{ courseSlug: foundation.course.routeSlug }}
-                >
-                  Начать курс
-                </ActionLink>
+                <Typography.Text className={styles.pathDescription}>
+                  В каждом уроке объяснение, разобранный пример и практика.
+                </Typography.Text>
+                <div className={styles.pathFoot}>
+                  <span className={styles.cardFacts}>
+                    {`${russianCount.of(foundation.course.moduleCount, foundation.moduleForms)} · ${russianCount.of(courseCatalog.coreLessonCount(foundation.course), foundation.lessonForms)}`}
+                  </span>
+                  <ActionLink
+                    className={styles.stretchedLink}
+                    hierarchy="text"
+                    to="/courses/$courseSlug"
+                    params={{ courseSlug: foundation.course.routeSlug }}
+                  >
+                    Начать курс
+                  </ActionLink>
+                </div>
+                <Code2 className={styles.pathMark} aria-hidden="true" />
               </li>
             ) : null}
             <li className={styles.path} data-tone="lilac">
-              <div className={styles.pathHead}>
-                <Typography.Title order={3} className={styles.pathTitle}>
-                  Банк задач
-                </Typography.Title>
-                <ListChecks className={styles.pathIcon} aria-hidden="true" />
-              </div>
+              <span className={styles.pathChip}>
+                <ListChecks aria-hidden="true" />
+              </span>
+              <Typography.Title order={3} className={styles.pathTitle}>
+                Банк задач
+              </Typography.Title>
               <Typography.Text className={styles.pathText}>
+                Задачи с проверкой ответа
+              </Typography.Text>
+              <Typography.Text className={styles.pathDescription}>
                 Фильтры по темам и сложности. Решайте прямо в списке и сразу
                 проверяйте ответ.
               </Typography.Text>
-              <ActionLink
-                className={styles.pathLink}
-                hierarchy="text"
-                to="/practice"
-              >
-                Решать задачи
-              </ActionLink>
+              <div className={styles.pathFoot}>
+                <span className={styles.cardFacts}>3 уровня сложности</span>
+                <ActionLink
+                  className={styles.stretchedLink}
+                  hierarchy="text"
+                  to="/practice"
+                >
+                  Решать задачи
+                </ActionLink>
+              </div>
+              <ListChecks className={styles.pathMark} aria-hidden="true" />
             </li>
           </ul>
         </section>
@@ -141,75 +168,62 @@ export const FoundationPage: React.FC = () => (
             Темы ЕГЭ
           </Typography.Title>
           <Typography.Text className={styles.sectionLead}>
-            {`Опубликовано ${String(foundation.publishedTopics.length)} из ${String(foundation.plannedTopicCount)} тем. Остальные появятся позже.`}
+            {`Опубликовано ${String(foundation.publishedTopics.length)} из ${String(foundation.plannedTopicCount)} тем и ${russianCount.of(foundation.courses.length, ["мини-курс", "мини-курса", "мини-курсов"])}. Остальные темы появятся позже.`}
           </Typography.Text>
+          {/* F57 (Д2): seven narrow columns, rows of different step — a course
+              on three, two topics on two each; the second row mirrored. */}
           <ul className={styles.topics}>
+            {foundation.courses[0] ? (
+              <FoundationCourseCard course={foundation.courses[0]} />
+            ) : null}
             {foundation.publishedTopics
               .slice(0, foundation.featuredTopicCount)
-              .map((topic, index) => (
-                <li
-                  key={topic.id}
-                  className={styles.topic}
-                  data-layout={topicLayouts[index]}
-                >
-                  <ObjectIllustration
-                    topic={topic.taskNumbers[0]}
-                    className={styles.topicPlate}
-                  />
-                  <div className={styles.topicBody}>
-                    <span className={styles.topicNumber}>
-                      {topicCatalog.formatTaskNumbers(topic.taskNumbers)}
+              .map((topic) => (
+                <li key={topic.id} className={styles.topic}>
+                  <div className={styles.plate} data-pattern="number">
+                    <FoundationPlateMarks className={styles.plateMarks} />
+                    <span className={styles.plateNumber} aria-hidden="true">
+                      {String(topic.taskNumbers[0]).padStart(2, "0")}
                     </span>
-                    <Typography.Title order={3} className={styles.topicTitle}>
-                      {topic.title}
-                    </Typography.Title>
-                    <Typography.Text className={styles.topicSummary}>
-                      {topic.summary}
-                    </Typography.Text>
-                    <ActionLink
-                      className={styles.topicLink}
-                      ariaLabel={`Открыть тему: ${topic.title}`}
-                      hierarchy="text"
-                      to="/ege/$slug"
-                      params={{ slug: topic.routeSlug }}
-                    >
-                      Открыть тему
-                    </ActionLink>
+                    <ObjectIllustration
+                      topic={topic.taskNumbers[0]}
+                      className={styles.platePicture}
+                    />
+                  </div>
+                  <div className={styles.cardMain}>
+                    <div className={styles.topicBody}>
+                      <span className={styles.topicNumber}>
+                        {topicCatalog.formatTaskNumbers(topic.taskNumbers)}
+                      </span>
+                      <Typography.Title order={3} className={styles.topicTitle}>
+                        {topic.title}
+                      </Typography.Title>
+                      <Typography.Text className={styles.topicSummary}>
+                        {topic.summary}
+                      </Typography.Text>
+                    </div>
+                    <div className={styles.cardFoot}>
+                      <span className={styles.cardFacts}>
+                        {russianCount.subtopics(topic.subtopicCount)}
+                      </span>
+                      <ActionLink
+                        className={styles.stretchedLink}
+                        ariaLabel={`Открыть тему: ${topic.title}`}
+                        hierarchy="text"
+                        to="/ege/$slug"
+                        params={{ slug: topic.routeSlug }}
+                      >
+                        Открыть тему
+                      </ActionLink>
+                    </div>
                   </div>
                 </li>
               ))}
+            {foundation.courses.slice(1, 2).map((course) => (
+              <FoundationCourseCard key={course.id} course={course} />
+            ))}
           </ul>
         </section>
-
-        {foundation.course?.status === "published" ? (
-          <section
-            id="courses"
-            className={styles.course}
-            aria-labelledby="course-title"
-            data-course-list
-          >
-            <div className={styles.courseCopy}>
-              <span className={styles.courseKind}>Мини-курс</span>
-              <Typography.Title order={2} id="course-title">
-                {foundation.course.title}
-              </Typography.Title>
-              <Typography.Text>{foundation.course.summary}</Typography.Text>
-              <ActionLink
-                hierarchy="text"
-                to="/courses/$courseSlug"
-                params={{ courseSlug: foundation.course.routeSlug }}
-              >
-                Открыть курс
-              </ActionLink>
-            </div>
-            {hasCourseIllustration(foundation.course.id) ? (
-              <ObjectIllustration
-                course={foundation.course.id}
-                className={styles.coursePlate}
-              />
-            ) : null}
-          </section>
-        ) : null}
 
         <section className={styles.try} aria-labelledby="try-title">
           <div className={styles.tryCopy}>
@@ -225,7 +239,16 @@ export const FoundationPage: React.FC = () => (
             </ActionLink>
           </div>
           <div className={styles.tryTask} data-try-demo>
-            <FoundationTryDemo />
+            <div className={styles.tryStrip}>
+              <span>
+                <span className={styles.tryStripTopic}>Задание 16</span> ·
+                Рекурсивные алгоритмы
+              </span>
+              <span>Лёгкая</span>
+            </div>
+            <div className={styles.tryBody}>
+              <FoundationTryDemo />
+            </div>
           </div>
         </section>
       </PageContainer>

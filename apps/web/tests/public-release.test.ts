@@ -274,6 +274,7 @@ describe("public release metadata", () => {
       status: "published",
       routeSlug: "python",
       lessonCount: 30,
+      moduleCount: 8,
       advancedLessonIds: [
         "python-classes",
         "python-advanced-features",

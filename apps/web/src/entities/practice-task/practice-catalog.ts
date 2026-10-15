@@ -99,7 +99,7 @@ function returnHref(value: PracticeCatalogTypes.TaskSearch) {
 }
 
 function difficultyLabel(value: number) {
-  return ["Базовая", "Средняя", "Высокая"][value - 1] ?? "Сложность не указана";
+  return ["Лёгкая", "Средняя", "Трудная"][value - 1] ?? "Сложность не указана";
 }
 
 function countLabel(count: number) {

@@ -1695,6 +1695,13 @@
             "title": "Context Kind",
             "type": "string"
           },
+          "exam_numbers": {
+            "items": {
+              "type": "integer"
+            },
+            "title": "Exam Numbers",
+            "type": "array"
+          },
           "solution_revision": {
             "title": "Solution Revision",
             "type": "integer"

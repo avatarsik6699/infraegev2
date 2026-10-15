@@ -24,15 +24,11 @@ export const TopicCatalogProgress: React.FC<Props> = (props) => {
   );
   return (
     <div className={styles.progressSlot} data-topic-progress>
+      {/* F30 (E4): the count once; «Решено x из N» and the bar say the rest. */}
       <span className={styles.metadata}>
         {props.progress
           ? `Теория · ${topicCatalogModel.taskCount(props.progress.total)}`
           : "Теория"}
-        {progress ? (
-          <span className={styles.progressStatus}>
-            {` · ${topicCatalogModel.progressStatus(progress)}`}
-          </span>
-        ) : null}
       </span>
       <div className={styles.personalProgressSlot}>
         <GuestProgressLoginLock
@@ -59,7 +55,7 @@ export const TopicCatalogProgress: React.FC<Props> = (props) => {
                 </span>
               </>
             ) : (
-              <span className={styles.progressStatus}>
+              <span>
                 {props.loadState === "loading"
                   ? "Прогресс загружается"
                   : "Прогресс недоступен"}

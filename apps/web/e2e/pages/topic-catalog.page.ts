@@ -104,8 +104,7 @@ export class TopicCatalogPage {
       .evaluateAll((cards) =>
         cards.map((card) =>
           Number.parseInt(
-            card.querySelector("[data-grouped] [aria-hidden]")?.textContent ??
-              "",
+            card.querySelector("[data-topic-numeral]")?.textContent ?? "",
             10,
           ),
         ),
@@ -163,7 +162,7 @@ export class TopicCatalogPage {
     await expect(
       this.page.locator('[data-topic-status="planned"] a'),
     ).toHaveCount(0);
-    await this.page.getByRole("button", { name: "В процессе" }).click();
+    await this.chooseProgress("В процессе");
     await expect(this.page.locator("[data-topic-card]")).toHaveCount(1);
     const inProgress = this.page.locator(
       '[data-topic-card][data-topic-id="rekursiya"]',
@@ -174,21 +173,11 @@ export class TopicCatalogPage {
       "/ege/16-rekursiya",
     );
     await expect(inProgress).toContainText("Решено 1 из 2");
-    await this.page
-      .getByRole("button", { name: "Все темы", exact: true })
-      .click();
-    await this.page.getByRole("searchbox").fill("20");
-    await expect(
-      this.page.getByRole("heading", { name: "Выигрышная стратегия" }),
-    ).toBeVisible();
-    await this.page.getByRole("button", { name: "Очистить поиск" }).click();
-    await expect(this.page.getByRole("searchbox")).toBeFocused();
-    await this.page.getByRole("searchbox").fill("неизвестная тема");
-    await expect(this.page.getByText("Темы не найдены")).toBeVisible();
-    await this.page.getByRole("button", { name: "Сбросить фильтры" }).click();
-    await expect(this.page.getByRole("searchbox")).toHaveValue("");
+    // F40: the topic search is gone; the progress dropdown is the filter.
+    await expect(this.page.getByRole("searchbox")).toHaveCount(0);
+    await this.chooseProgress("Все темы");
     await expect(this.page.locator("[data-topic-card]")).toHaveCount(25);
-    await this.page.getByRole("button", { name: "Не начаты" }).click();
+    await this.chooseProgress("Не начаты");
     // every published topic but the one in progress
     await expect(this.page.locator("[data-topic-card]")).toHaveCount(
       published - 1,
@@ -307,14 +296,15 @@ export class TopicCatalogPage {
       this.page.locator("[data-topic-summary]").getByRole("status"),
     ).toHaveText("Прогресс временно недоступен");
     const before = await this.geometry();
+    await this.page.getByRole("combobox", { name: /Прогресс/ }).click();
     await expect(
-      this.page.getByRole("button", { name: "Не начаты" }),
-    ).toBeDisabled();
+      this.page.getByRole("option", { name: "Не начаты" }),
+    ).toHaveAttribute("aria-disabled", "true");
+    await this.page.keyboard.press("Escape");
     failed = false;
     await this.page.getByRole("button", { name: "Повторить" }).click();
     await expect(this.page.getByText("Решено 0 из 2")).toBeVisible();
     expect(await this.geometry()).toEqual(before);
-    await this.page.getByRole("searchbox").fill("16");
     await expect(
       this.page.getByRole("link", {
         name: "Рекурсивные алгоритмы",
@@ -333,10 +323,7 @@ export class TopicCatalogPage {
     await expect(
       this.page.locator('[data-topic-status="planned"] a'),
     ).toHaveCount(0);
-    await expect(this.page.getByRole("searchbox")).toBeHidden();
-    await expect(
-      this.page.getByRole("button", { name: "В процессе" }),
-    ).toBeHidden();
+    await expect(this.page.locator("[data-catalog-toolbar]")).toBeHidden();
     await expectNoHorizontalOverflow(this.page);
   }
 
@@ -360,7 +347,7 @@ export class TopicCatalogPage {
     await this.page.addStyleTag({ content: "html { font-size: 200%; }" });
     await expect(this.page.getByText("Решено 0 из 2")).toBeVisible();
     await expectNoHorizontalOverflow(this.page);
-    await this.page.getByRole("searchbox").fill("16");
+    await this.chooseProgress("Не начаты");
     await expect(
       this.page.getByRole("link", {
         name: "Рекурсивные алгоритмы",
@@ -430,6 +417,49 @@ export class TopicCatalogPage {
     await row.getByRole("link").focus();
     await expect(row.getByRole("link")).toBeFocused();
     expect(await row.boundingBox()).toEqual(before);
+    await this.expectGoalAndMap();
+  }
+
+  /** F40: «Прогресс: Все темы ▾» — a Base UI select. */
+  private async chooseProgress(label: string) {
+    await this.page.getByRole("combobox", { name: /Прогресс/ }).click();
+    await this.page.getByRole("option", { name: label, exact: true }).click();
+    await expect(
+      this.page.getByRole("combobox", { name: /Прогресс/ }),
+    ).toContainText(label);
+  }
+
+  /** Change 185 (F33–F37): the goal dims rows and map cells, never hides them;
+   * a map cell leads to its row. */
+  private async expectGoalAndMap() {
+    const rows = this.page.locator("[data-topic-card]");
+    const strings = this.page.locator('[data-topic-id="string-processing"]');
+    await expect(strings).toHaveAttribute("data-in-goal", "true");
+    await this.page.getByRole("radio", { name: /База/ }).check();
+    await expect(rows).toHaveCount(25);
+    await expect(strings).toHaveAttribute("data-in-goal", "false");
+    await expect(this.page.getByRole("radio", { name: /База/ })).toBeChecked();
+    // F44: the step's own tooltip on hover
+    await this.page.locator("[data-topic-goal] label").first().hover();
+    // the popup renders in a portal after the hidden description
+    await expect(
+      this.page.getByText(/^Без программирования/).last(),
+    ).toBeVisible();
+    await this.page.mouse.move(0, 0);
+    await expect(
+      this.page.locator('[data-exam-map] a[data-in-goal="false"]'),
+    ).toHaveCount(14);
+    await this.page.reload();
+    await expect(this.page.getByRole("radio", { name: /База/ })).toBeChecked();
+    await this.page.getByRole("radio", { name: /Хард/ }).check();
+    await this.page
+      .locator("[data-exam-map]")
+      .getByRole("link", { name: /^Задание 23\./ })
+      .click();
+    await expect(this.page).toHaveURL(/\/ege#topic-graph-analysis$/);
+    await expect(
+      this.page.locator('[data-topic-id="graph-analysis"]'),
+    ).toBeInViewport();
   }
 
   private async geometry() {

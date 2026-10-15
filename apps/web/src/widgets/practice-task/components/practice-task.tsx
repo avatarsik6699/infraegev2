@@ -7,7 +7,7 @@ import {
 } from "~/features/lesson-practice";
 import { useAccountSession } from "~/features/account";
 import { usePracticeProgress } from "~/features/practice-progress";
-import { Typography } from "~/shared/components/typography";
+import { ActionLink } from "~/shared/components/action-link";
 import { PracticeTheory } from "./practice-theory";
 import type { PracticeTaskWidgetTypes } from "../practice-task.types";
 import styles from "../practice-task.module.css";
@@ -30,9 +30,17 @@ export const PracticeTask: React.FC<PracticeTaskWidgetTypes.Props> = (
     >
       {props.presentation === "catalog" && (
         <header className={styles.catalogHeader}>
-          <Typography.Title order={3} className={styles.catalogTitle}>
-            {props.topicHeading ?? props.task.title}
-          </Typography.Title>
+          {props.taskHref ? (
+            <ActionLink
+              presentation="reference"
+              to={props.taskHref}
+              ariaLabel={`Открыть задачу ${props.task.id.slice(0, 8)} на отдельной странице`}
+            >
+              {`Задача ${props.task.id.slice(0, 8)}`}
+            </ActionLink>
+          ) : (
+            <span />
+          )}
           <PracticeTheory links={props.links} />
         </header>
       )}

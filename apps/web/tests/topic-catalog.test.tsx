@@ -7,7 +7,8 @@ import {
 } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { LessonProgressProvider } from "~/features/lesson-progress";
-import { topicCatalog } from "~/entities/topic-catalog";
+import { lessonSubtopics, topicLessons } from "~/entities/lesson";
+import { examPlan, topicCatalog } from "~/entities/topic-catalog";
 import { topicCatalogModel } from "~/pages/topic-catalog/model/topic-catalog-model";
 import { TopicCatalogPage } from "~/pages/topic-catalog";
 import { lessonPublications } from "~/shared/config/lesson-publication.mjs";
@@ -229,7 +230,10 @@ describe("TopicCatalogPage", () => {
         .getByRole("link", { name: "Обработка символьных строк" })
         .getAttribute("href"),
     ).toBe("/ege/24-obrabotka-simvolnyh-strok");
-    expect(screen.getByText("Задания 19–21")).not.toBeNull();
+    expect(
+      container.querySelector('[data-topic-id="winning-strategy"]')
+        ?.textContent,
+    ).toContain("Задания 19–21 · базовый, повышенный, высокий");
     expect(
       screen
         .getByRole("link", { name: "Делители и маски" })
@@ -250,29 +254,35 @@ describe("TopicCatalogPage", () => {
   });
 });
 
-it("combines live search and status filters, clears input and resets empty results", async () => {
+/** F40: the progress filter is a dropdown («Прогресс: Все темы»). */
+const chooseProgress = async (label: string) => {
+  fireEvent.click(screen.getByRole("combobox", { name: /Прогресс/ }));
+  const option = await screen.findByRole("option", { name: label });
+  // Base UI picks an item on pointer up after the pointer went down on it
+  fireEvent.pointerDown(option, { pointerType: "mouse" });
+  fireEvent.mouseDown(option);
+  fireEvent.pointerUp(option, { pointerType: "mouse" });
+  fireEvent.mouseUp(option);
+  fireEvent.click(option);
+  await waitFor(() =>
+    expect(
+      screen.getByRole("combobox", { name: /Прогресс/ }).textContent,
+    ).toContain(label),
+  );
+};
+
+it("filters by progress and resets an empty result to all topics", async () => {
   const view = renderCatalog();
   await screen.findByText("Решено 0 из 2");
-  fireEvent.click(screen.getByRole("button", { name: "Не начаты" }));
+  expect(screen.queryByRole("searchbox")).toBeNull();
+  await chooseProgress("Не начаты");
   expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(
     PUBLISHED,
   );
-  fireEvent.change(screen.getByRole("searchbox"), {
-    target: { value: "РЕКУРСИВ" },
-  });
-  expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(1);
-  fireEvent.click(screen.getByRole("button", { name: "Очистить поиск" }));
-  expect((screen.getByRole("searchbox") as HTMLInputElement).value).toBe("");
-  expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(
-    PUBLISHED,
-  );
-  fireEvent.change(screen.getByRole("searchbox"), {
-    target: { value: "unknown" },
-  });
-  expect(screen.getByText("Темы не найдены")).not.toBeNull();
-  fireEvent.click(screen.getByRole("button", { name: "Сбросить фильтры" }));
+  await chooseProgress("В процессе");
+  expect(screen.getByText("Пока нет начатых тем")).not.toBeNull();
+  fireEvent.click(screen.getByRole("button", { name: "Показать все темы" }));
   expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(25);
-  expect((screen.getByRole("searchbox") as HTMLInputElement).value).toBe("");
 });
 
 it("counts only current topic answers, keeps completed in All and excludes stale/removed/course tasks", async () => {
@@ -317,14 +327,15 @@ it("counts only current topic answers, keeps completed in All and excludes stale
   const view = renderCatalog();
   await screen.findByText("Решено задач в темах: 2");
   expect(screen.getByText("Решено 1 из 2")).not.toBeNull();
-  expect(screen.getByText(/Практика завершена/)).not.toBeNull();
-  fireEvent.click(screen.getByRole("button", { name: "В процессе" }));
+  // F30 (E4): completion reads from the count and the full bar
+  expect(screen.getByText("Решено 1 из 1")).not.toBeNull();
+  await chooseProgress("В процессе");
   expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(1);
   expect(
     screen.getByRole("link", { name: "Рекурсивные алгоритмы" }),
   ).not.toBeNull();
   expect(screen.getByText("Решено задач в темах: 2")).not.toBeNull();
-  fireEvent.click(screen.getByRole("button", { name: "Не начаты" }));
+  await chooseProgress("Не начаты");
   expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(
     PUBLISHED - 2,
   );
@@ -353,7 +364,8 @@ it("leaves advanced-subtopic tasks out of a topic's mastery total", async () => 
   ];
   renderCatalog();
   await screen.findByText("Решено задач в темах: 1");
-  expect(screen.getByText(/Практика завершена/)).not.toBeNull();
+  // F30 (E4): completion reads from the count and the full bar
+  expect(screen.getByText("Решено 1 из 1")).not.toBeNull();
 });
 
 it("keeps navigation/search usable on API error and retries without inventing zero totals", async () => {
@@ -374,17 +386,20 @@ it("keeps navigation/search usable on API error and retries without inventing ze
   renderCatalog();
   await screen.findByText("Прогресс временно недоступен");
   expect(screen.queryByText("Решено 0 из 2")).toBeNull();
+  fireEvent.click(screen.getByRole("combobox", { name: /Прогресс/ }));
   expect(
-    (screen.getByRole("button", { name: "Не начаты" }) as HTMLButtonElement)
-      .disabled,
-  ).toBe(true);
-  fireEvent.change(screen.getByRole("searchbox"), { target: { value: "16" } });
+    (await screen.findByRole("option", { name: "Не начаты" })).getAttribute(
+      "aria-disabled",
+    ),
+  ).toBe("true");
+  fireEvent.keyDown(document.activeElement ?? document.body, {
+    key: "Escape",
+  });
   expect(
     screen.getByRole("link", { name: "Рекурсивные алгоритмы" }),
   ).not.toBeNull();
   fireEvent.click(screen.getByRole("button", { name: "Повторить" }));
   await screen.findByText("Решено 0 из 2");
-  expect((screen.getByRole("searchbox") as HTMLInputElement).value).toBe("16");
 });
 
 it("treats missing summaries as unavailable and recovers corrupt storage", async () => {
@@ -430,15 +445,94 @@ it("does not flash zero progress while summary is pending", async () => {
   await screen.findByText("Решено 0 из 2");
 });
 
-it("matches grouped numbers and normalizes Cyrillic search without changing ordering", () => {
-  const matches = (q: string) =>
-    topicCatalog.entries.filter((entry) =>
-      topicCatalogModel.matches(entry, q, "all", undefined),
+it("matches topics by practice progress only", () => {
+  const entry = topicCatalog.entries.find((item) => item.id === "rekursiya")!;
+  const started = { solved: 1, total: 2 };
+  expect(topicCatalogModel.matches(entry, "all", undefined)).toBe(true);
+  expect(topicCatalogModel.matches(entry, "started", started)).toBe(true);
+  expect(topicCatalogModel.matches(entry, "not-started", started)).toBe(false);
+  expect(
+    topicCatalogModel.matches(entry, "not-started", { solved: 0, total: 2 }),
+  ).toBe(true);
+});
+
+describe("topic catalog subtopic counts", () => {
+  it("match the published lesson definitions", () => {
+    for (const lesson of topicLessons) {
+      const entry = topicCatalog.entries.find((item) => item.id === lesson.id);
+      expect(entry?.status, lesson.id).toBe("published");
+      if (entry?.status !== "published") continue;
+      expect(entry.subtopicCount, lesson.id).toBe(
+        lessonSubtopics(lesson).length,
+      );
+    }
+  });
+});
+
+describe("exam plan (Change 185, F34–F35)", () => {
+  it("follows the FIPI 2027 plan: 11 basic, 11 advanced, 5 high, 235 minutes", () => {
+    const tasks = Array.from({ length: 27 }, (_, index) => index + 1);
+    const count = (level: string) =>
+      tasks.filter((task) => examPlan.level(task) === level).length;
+    expect([count("basic"), count("advanced"), count("high")]).toEqual([
+      11, 11, 5,
+    ]);
+    expect(tasks.reduce((sum, task) => sum + examPlan.minutes(task), 0)).toBe(
+      235,
     );
-  expect(matches("20").map((entry) => entry.id)).toEqual(["winning-strategy"]);
-  expect(matches("05").map((entry) => entry.id)).toEqual([
-    "preobrazovanie-zapisey-chisel",
-  ]);
-  expect(matches(" подсчет ").length).toBeGreaterThan(0);
-  expect(matches("подсчет")).toEqual(matches("ПОДСЧЁТ"));
+    expect(tasks.reduce((sum, task) => sum + examPlan.points(task), 0)).toBe(
+      29,
+    );
+  });
+
+  it("builds cumulative goals with their scope", () => {
+    expect(examPlan.goalScope("base")).toMatchObject({
+      tasks: 11,
+      primary: 11,
+    });
+    expect(examPlan.goalScope("standard")).toMatchObject({
+      tasks: 22,
+      primary: 22,
+    });
+    expect(examPlan.goalScope("hard")).toMatchObject({
+      tasks: 27,
+      primary: 29,
+      score: 100,
+    });
+    expect(examPlan.inGoal([19, 20, 21], "base")).toBe(true);
+    expect(examPlan.inGoal([24], "standard")).toBe(false);
+  });
+
+  it("labels a row's level, time and points", () => {
+    expect(topicCatalogModel.levelLabel([4])).toBe("Базовый · ≈ 2 мин");
+    expect(topicCatalogModel.levelLabel([26])).toBe(
+      "Высокий · ≈ 35 мин · 2 балла",
+    );
+    expect(topicCatalogModel.levelLabel([19, 20, 21])).toBe(
+      "базовый, повышенный, высокий",
+    );
+  });
+});
+
+it("dims topics outside the chosen goal and keeps the goal on this device", async () => {
+  window.localStorage.removeItem("infraege:ege-goal");
+  const { container } = renderCatalog();
+  const row = (id: string) =>
+    container.querySelector(`[data-topic-id="${id}"]`);
+  expect(row("string-processing")?.getAttribute("data-in-goal")).toBe("true");
+  fireEvent.click(screen.getByRole("radio", { name: /База/ }));
+  expect(container.querySelectorAll("[data-topic-card]")).toHaveLength(25);
+  expect(row("string-processing")?.getAttribute("data-in-goal")).toBe("false");
+  expect(row("networks")?.getAttribute("data-in-goal")).toBe("true");
+  expect(
+    (screen.getByRole("radio", { name: /База/ }) as HTMLInputElement).checked,
+  ).toBe(true);
+  // F44: each step describes itself (tooltip on hover, description for AT)
+  const base = screen.getByRole("radio", { name: /База/ });
+  expect(
+    document.getElementById(base.getAttribute("aria-describedby") ?? "")
+      ?.textContent,
+  ).toContain("11 из 27 заданий, до 11 первичных ≈ 54 балла");
+  expect(window.localStorage.getItem("infraege:ege-goal")).toContain("base");
+  window.localStorage.removeItem("infraege:ege-goal");
 });

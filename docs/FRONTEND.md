@@ -217,6 +217,9 @@ Practice state:
 
 Progress and accounts:
 
+- One counting rule (Change 185): the main number of lessons or tasks is the one mastery counts
+  (core lessons, tasks outside advanced subtopics), on every page and in the profile; where there
+  is room the rest follow as «+ N дополнительных». Progress denominators use the same main number.
 - Personal progress is account-scoped server data, cleared from memory on logout/account switch;
   never store session tokens, answers or progress in browser storage.
 - Guest progress shows a `0 из N` starting state derived only from public totals with an
@@ -297,8 +300,8 @@ Progress and accounts:
   never change publication status. Full SSR/no-JS catalog access.
 - Mini-course catalog: registry order, titles and descriptions are kept. Planned directions have
   aria-disabled state, no links and no invented counts or dates: they show their registry level,
-  «— уроков» placeholders, an empty bar and a disabled «Скоро» action (F34); Python has one
-  overview link. Header totals and card progress share one revision-aware calculation; until hydration or
+  «— уроков» placeholders, an empty bar and a quiet «Скоро» label, no link or button (F34, Change
+  185); a published card is one overview link as a whole. Header totals and card progress share one revision-aware calculation; until hydration or
   on summary failure show a neutral/unavailable state, never a false zero or partial aggregate.
 - Python course overview: full authored titles, order and URLs for all 28 lessons, nine modules and
   the four-lesson project. Module descriptions, per-lesson outcomes and the long outcomes list are

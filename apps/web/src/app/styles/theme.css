@@ -33,6 +33,14 @@
   --theme-pastel-sage: #e6f0e4;
   --theme-pastel-lilac: #ece8f6;
   --theme-pastel-apricot: #ffeadb;
+  /* Home path tiles only (Change 185): the icon square in a strong shade of
+     its pastel (white glyph ≥4.3:1) and the subtitle in a dark one (≥6.5:1). */
+  --theme-pastel-sky-strong: #4a76b4;
+  --theme-pastel-sky-ink: #2b4c78;
+  --theme-pastel-sage-strong: #3c8571;
+  --theme-pastel-sage-ink: #2b5c4f;
+  --theme-pastel-lilac-strong: #7a5fbd;
+  --theme-pastel-lilac-ink: #4f3d8a;
 
   /* Engineering grid in page heads. */
   --theme-grid-major: rgb(48 78 128 / 0.085);
@@ -65,6 +73,9 @@
   --theme-cover-shadow-near: rgb(23 25 30 / 0.06);
   --theme-cover-shadow-far: rgb(23 25 30 / 0.2);
   --theme-cover-highlight: rgb(255 255 255 / 0.8);
+  /* Exam levels on /ege (Change 185, F36): one meaning per tone, dots and the
+     goal scale only. Высокий is a muted brick, kept apart from danger. */
+  --theme-level-high: #b65a52;
 
   /* Code on a soft surface; every code text colour is at least 4.5:1 on
      --theme-code. Line numbers are decorative (aria-hidden, not copied) and

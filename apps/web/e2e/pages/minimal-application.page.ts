@@ -55,15 +55,28 @@ const bank = bankJson as unknown as {
       title: string;
       catalog_visible: boolean;
       archived: boolean;
+      exam_numbers: number[];
+      difficulty: number;
       sources: { kind: string; is_public: boolean }[];
       checker: { answer_variants: string[] };
     };
   }[];
 };
 
+// F46: the catalog's default order — exam number (none last), difficulty, id.
+const catalogRank = ({ task }: (typeof bank.tasks)[number]) =>
+  [task.exam_numbers[0] ?? 1000, task.difficulty] as const;
 const visibleTasks = bank.tasks
   .filter(({ task }) => task.catalog_visible && !task.archived)
-  .sort((a, b) => a.task.id.localeCompare(b.task.id));
+  .sort((a, b) => {
+    const [examA, difficultyA] = catalogRank(a);
+    const [examB, difficultyB] = catalogRank(b);
+    return (
+      examA - examB ||
+      difficultyA - difficultyB ||
+      a.task.id.localeCompare(b.task.id)
+    );
+  });
 
 export class MinimalApplicationPage {
   constructor(private readonly page: Page) {}
@@ -363,20 +376,21 @@ export class MinimalApplicationPage {
     await this.page.goto("/practice");
     const list = this.page.getByRole("list", { name: "Задачи", exact: true });
     await expect(list.getByRole("listitem")).toHaveCount(30);
-    const first = await list.getByRole("link").first().getAttribute("href");
+    // F46: rows carry no id link any more; the row's own id tells pages apart.
+    const first = await list.getByRole("listitem").first().getAttribute("id");
     await this.page
       .getByRole("link", { name: "Следующая страница" })
       .press("Enter");
     await expect(this.page).toHaveURL(/page=2/);
-    await expect(list.getByRole("link").first()).not.toHaveAttribute(
-      "href",
+    await expect(list.getByRole("listitem").first()).not.toHaveAttribute(
+      "id",
       first!,
     );
     await this.page.goto("/practice?exam_number=16&difficulty=1");
-    await expect(list.getByRole("listitem").first()).toContainText("ЕГЭ 16");
+    await expect(list.getByRole("listitem").first()).toContainText("№ 16");
     await this.page.goto("/practice?skill=nonexistent");
     await expect(
-      this.page.getByRole("heading", { name: "Пока ничего не нашлось" }),
+      this.page.getByRole("heading", { name: "Ничего не нашлось" }),
     ).toBeVisible();
     await this.page.goto("/practice?difficulty=9");
     await expect(
@@ -464,7 +478,7 @@ export class MinimalApplicationPage {
     await expect(
       this.page
         .getByRole("list", { name: "Задачи", exact: true })
-        .locator(":scope > li"),
+        .getByRole("listitem"),
     ).toHaveCount(10);
     await this.page.getByRole("link", { name: "Следующая страница" }).click();
     await expect(this.page).toHaveURL(/page=2/);
@@ -480,21 +494,26 @@ export class MinimalApplicationPage {
     await this.page
       .getByRole("combobox", { name: "Найти тему", exact: true })
       .fill("Циклы");
-    const option = this.page.getByRole("option", { name: /Python · Циклы/ });
-    await expect(option).toContainText("0 заданий");
+    // F48 (П8): topics without tasks stay out of the list; one muted line
+    // says how many are coming.
+    await expect(
+      this.page.getByRole("option", { name: /Python · Циклы/ }),
+    ).toHaveCount(0);
+    await expect(
+      this.page.getByText(/^Ещё \d+ тем.* — задачи скоро$/u),
+    ).toBeVisible();
+    const searchBox = this.page.getByRole("combobox", {
+      name: "Найти тему",
+      exact: true,
+    });
+    await searchBox.fill("Рекурс");
+    const option = this.page.getByRole("option", { name: /^ЕГЭ 16 · / });
     await option.click();
     await this.page.keyboard.press("Escape");
     await expect(trigger).toContainText("Все темы");
-    await this.openTopicChooser();
-    await this.page
-      .getByRole("combobox", { name: "Найти тему", exact: true })
-      .fill("Циклы");
-    await option.click();
-    await this.page
-      .getByRole("button", { name: "Применить", exact: true })
-      .click();
+    await this.page.goto("/practice?topics=python-loops");
     await expect(
-      this.page.getByRole("heading", { name: "Пока ничего не нашлось" }),
+      this.page.getByRole("heading", { name: "Ничего не нашлось" }),
     ).toBeVisible();
     await expect(
       this.page.getByText("Найдено 0 заданий", { exact: true }),
@@ -507,7 +526,7 @@ export class MinimalApplicationPage {
     await expect(
       this.page
         .getByRole("list", { name: "Задачи", exact: true })
-        .locator(":scope > li"),
+        .getByRole("listitem"),
     ).toHaveCount(30);
   }
 
@@ -758,12 +777,16 @@ export class MinimalApplicationPage {
     const inputBox = (await input.boundingBox())!;
     expect(inputBox.y).toBeGreaterThan(contentBox.y + contentBox.height);
     const check = first.getByRole("button", { name: "Проверить", exact: true });
-    const before = (await check.boundingBox())!;
+    // F47: the topic row puts the task lower, so feedback may scroll the
+    // page; the check must not move within the document.
+    const documentTop = () =>
+      check.evaluate((node) => node.getBoundingClientRect().top + scrollY);
+    const before = await documentTop();
     await input.fill("wrong-answer");
     await check.click();
     await expect(first.getByText(/Ответ пока не подходит/)).toBeVisible();
-    const after = (await check.boundingBox())!;
-    expect(Math.abs(after.y - before.y)).toBeLessThan(1);
+    const after = await documentTop();
+    expect(Math.abs(after - before)).toBeLessThan(1);
     await expect(input).toHaveAttribute("aria-invalid", "true");
     for (const width of [1024, 768, 390]) {
       await this.page.setViewportSize({ width, height: 1000 });
@@ -838,7 +861,7 @@ export class MinimalApplicationPage {
       .getByRole("list", { name: "Задачи", exact: true })
       .getByRole("listitem")
       .first();
-    await first.getByRole("link", { name: /^ID:/ }).click();
+    await first.getByRole("heading").getByRole("link").click();
     await expect(
       this.page.getByRole("region", { name: "Решение задачи" }),
     ).toBeVisible();
@@ -1033,7 +1056,7 @@ export class MinimalApplicationPage {
       await trigger.click();
       await expect(
         outline.getByRole("link", {
-          name: "Как считается рекурсия",
+          name: "Функция, заданная через себя",
           exact: true,
         }),
       ).toBeVisible();

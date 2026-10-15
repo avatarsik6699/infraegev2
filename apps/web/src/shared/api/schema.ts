@@ -1080,6 +1080,8 @@ export interface components {
              * @enum {string}
              */
             context_kind: "topic_lesson" | "course_lesson" | "standalone";
+            /** Exam Numbers */
+            exam_numbers?: number[];
             /** Solution Revision */
             solution_revision: number;
             /** Task Id */

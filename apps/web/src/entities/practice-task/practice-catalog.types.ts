@@ -40,6 +40,7 @@ export namespace PracticeCatalogTypes {
     label: string;
     group: string;
     count: number;
+    exam_number?: number | null;
   };
   export type Facets = {
     topics?: Topic[];

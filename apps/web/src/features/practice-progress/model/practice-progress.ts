@@ -5,6 +5,8 @@ type PracticeHistory = Record<string, Record<string, true>>;
 type PracticeProgressStatus = "guest" | "loading" | "ready" | "error";
 type State = {
   history: PracticeHistory;
+  /** F47: exam numbers of the solved catalog tasks, from the server. */
+  examNumbers: Record<string, readonly number[]>;
   hydrated: boolean;
   status: PracticeProgressStatus;
   setHydrated: () => void;
@@ -16,6 +18,7 @@ type State = {
       context_kind: string;
       task_id: string;
       solution_revision: number;
+      exam_numbers?: readonly number[];
     }[],
   ) => void;
 };
@@ -30,11 +33,12 @@ function record(
 function create(accountId?: string) {
   return createStore<State>()((set) => ({
     history: {},
+    examNumbers: {},
     hydrated: false,
     status: accountId ? "loading" : "guest",
     setHydrated: () => set({ hydrated: true, status: "ready" }),
     setUnavailable: () => set({ hydrated: false, status: "error" }),
-    clear: () => set({ history: {} }),
+    clear: () => set({ history: {}, examNumbers: {} }),
     markSolved: (id, revision) => {
       if (!accountId) return;
       set((state) => ({
@@ -43,11 +47,13 @@ function create(accountId?: string) {
     },
     replaceFromServer: (results) => {
       let history: PracticeHistory = {};
+      const examNumbers: Record<string, readonly number[]> = {};
       for (const result of results) {
-        if (result.context_kind === "standalone")
-          history = record(history, result.task_id, result.solution_revision);
+        if (result.context_kind !== "standalone") continue;
+        history = record(history, result.task_id, result.solution_revision);
+        examNumbers[result.task_id] = result.exam_numbers ?? [];
       }
-      set({ history, hydrated: true, status: "ready" });
+      set({ history, examNumbers, hydrated: true, status: "ready" });
     },
   }));
 }

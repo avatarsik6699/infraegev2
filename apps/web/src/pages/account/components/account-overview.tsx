@@ -218,7 +218,18 @@ export const AccountOverview: React.FC<AccountOverviewTypes.Props> = (
             <li className={styles.tile}>
               <Code2 className={styles.tileIcon} aria-hidden="true" />
               <Typography.Text className={styles.kind}>
-                {course?.title ?? "Мини-курс"}
+                {course ? (
+                  <ActionLink
+                    className={styles.tileLink}
+                    presentation="navigation"
+                    to="/courses/$courseSlug"
+                    params={{ courseSlug: course.routeSlug }}
+                  >
+                    {course.title}
+                  </ActionLink>
+                ) : (
+                  "Мини-курс"
+                )}
               </Typography.Text>
               <Typography.Text className={styles.tileValue}>
                 {`${String(dashboard.course.mastered)} из ${String(dashboard.course.total)}`}
@@ -237,7 +248,13 @@ export const AccountOverview: React.FC<AccountOverviewTypes.Props> = (
             <li className={styles.tile}>
               <BookOpen className={styles.tileIcon} aria-hidden="true" />
               <Typography.Text className={styles.kind}>
-                Темы ЕГЭ
+                <ActionLink
+                  className={styles.tileLink}
+                  presentation="navigation"
+                  to="/ege/"
+                >
+                  Темы ЕГЭ
+                </ActionLink>
               </Typography.Text>
               <Typography.Text className={styles.tileValue}>
                 {russianCount.tasks(dashboard.topics.solved)}
@@ -258,7 +275,13 @@ export const AccountOverview: React.FC<AccountOverviewTypes.Props> = (
             <li className={styles.tile}>
               <ListChecks className={styles.tileIcon} aria-hidden="true" />
               <Typography.Text className={styles.kind}>
-                Практика
+                <ActionLink
+                  className={styles.tileLink}
+                  presentation="navigation"
+                  to="/practice"
+                >
+                  Практика
+                </ActionLink>
               </Typography.Text>
               <Typography.Text className={styles.tileValue}>
                 {String(dashboard.practice.saved)}

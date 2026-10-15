@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Literal
 
 from pydantic import Field, TypeAdapter, field_validator, model_validator
-from sqlalchemy import ColumnElement, and_, cast, exists, func, or_, select
+from sqlalchemy import ColumnElement, and_, cast, exists, func, or_, select, tuple_
 from sqlalchemy.dialects.postgresql import JSONPATH
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -113,13 +113,19 @@ def topic_predicate(topic: TopicDefinition):
     )
 
 
+def exam_order():
+    """The first exam number; tasks without one go after every exam task."""
+    return func.coalesce(TaskRecord.content[("exam_numbers", 0)].as_integer(), 1000)
+
+
 def ordering(query: CatalogFilters):
     difficulty = TaskRecord.content["difficulty"].as_integer()
     if query.sort == "difficulty_asc":
         return (difficulty.asc(), TaskRecord.id.asc())
     if query.sort == "difficulty_desc":
         return (difficulty.desc(), TaskRecord.id.asc())
-    return (TaskRecord.id.asc(),)
+    # Change 185 (F46): by exam number, then from easy to hard.
+    return (exam_order().asc(), difficulty.asc(), TaskRecord.id.asc())
 
 
 def filters(query: CatalogFilters):
@@ -334,11 +340,20 @@ async def next_task(session: AsyncSession, task_id: str, query: CatalogFilters) 
         is None
     ):
         raise Unavailable("current task is not in this selection")
-    current_difficulty = await session.scalar(
-        select(TaskRecord.content["difficulty"].as_integer()).where(TaskRecord.id == task_id)
-    )
+    current = (
+        await session.execute(
+            select(exam_order(), TaskRecord.content["difficulty"].as_integer()).where(
+                TaskRecord.id == task_id
+            )
+        )
+    ).one()
+    current_exam, current_difficulty = current
     difficulty = TaskRecord.content["difficulty"].as_integer()
-    after = TaskRecord.id > task_id
+    after = tuple_(exam_order(), difficulty, TaskRecord.id) > (
+        current_exam,
+        current_difficulty,
+        task_id,
+    )
     if query.sort != "default":
         comparison = (
             difficulty > current_difficulty

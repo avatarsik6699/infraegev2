@@ -9,8 +9,12 @@
 
 /* Supports the course summary, never outweighs it: about a third of the
    head, no plate behind it. */
+/* Change 185: the course's scene about half the head wide, whole, its white
+   ground multiplied into the head's grid. */
 .illustration {
-  width: min(24rem, 30vw);
+  width: min(36rem, 48vw);
+  height: auto;
+  mix-blend-mode: multiply;
 }
 
 .courseSummary {

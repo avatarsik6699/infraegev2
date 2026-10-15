@@ -1,6 +1,7 @@
 import { Check, PenLine } from "lucide-react";
 import { useLessonProgress } from "~/features/lesson-progress";
 import { advancedLevelLabel } from "~/entities/lesson";
+import { masteryTasks } from "~/entities/practice-task";
 import { LessonTree } from "~/shared/components/lesson-tree";
 import type { SubtopicNavigationTypes } from "./subtopic-navigation.types";
 
@@ -74,8 +75,8 @@ export const SubtopicNavigation: React.FC<SubtopicNavigationTypes.Props> = (
               count:
                 isCurrent &&
                 !props.practiceUnavailable &&
-                props.tasks.length > 0
-                  ? ` · ${String(props.tasks.length)}`
+                masteryTasks(props.tasks).length > 0
+                  ? ` · ${String(masteryTasks(props.tasks).length)}`
                   : undefined,
               to: "/ege/$slug/praktika",
               params: { slug: item.routeSlug },

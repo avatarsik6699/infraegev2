@@ -15,17 +15,22 @@ export const PracticeCatalogPage: React.FC<PracticeCatalogPageTypes.Props> = (
     <div className={styles.page}>
       <PublicHeader activeSection="practice" />
       <main id="main-content" className={styles.mainFrame}>
-        <PageHead title="Практика" lead="Решай задачи и закрепляй теорию" />
+        <PageHead
+          title="Практика"
+          lead="Задачи ЕГЭ с проверкой ответа и разбором"
+        />
         <PageContainer component="div" className={styles.main}>
-          <PracticeFilters
-            key={practiceCatalog.href(props.search)}
-            search={props.search}
-            facets={props.result.facets}
-          />
-          <PracticeResults
-            key={`results:${practiceCatalog.href(props.search)}`}
-            {...props}
-          />
+          <div className={styles.catalog}>
+            <PracticeFilters
+              key={practiceCatalog.href(props.search)}
+              search={props.search}
+              facets={props.result.facets}
+            />
+            <PracticeResults
+              key={`results:${practiceCatalog.href(props.search)}`}
+              {...props}
+            />
+          </div>
         </PageContainer>
       </main>
       <PublicFooter />

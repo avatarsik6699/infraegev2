@@ -9,12 +9,6 @@
   gap: var(--space-1-5);
 }
 
-.kicker[data-variant] {
-  color: var(--color-text-soft);
-  font-size: var(--text-sm);
-  font-weight: 500;
-}
-
 .statement[data-variant] {
   margin: 0;
   font-size: var(--text-lg);
@@ -112,4 +106,13 @@
 .row .confetti {
   right: 3.5rem;
   left: auto;
+}
+
+/* Change 185: the JS already shows the solved state at once; nothing eases either. */
+@media (prefers-reduced-motion: reduce) {
+  .field,
+  .button,
+  .cursor {
+    transition: none;
+  }
 }

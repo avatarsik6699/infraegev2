@@ -148,10 +148,22 @@ describe("account-scoped practice history", () => {
   it("hydrates only standalone results from the server projection", () => {
     const store = practiceProgress.create();
     store.getState().replaceFromServer([
-      { context_kind: "standalone", task_id: "task", solution_revision: 2 },
-      { context_kind: "topic_lesson", task_id: "other", solution_revision: 2 },
+      {
+        context_kind: "standalone",
+        task_id: "task",
+        solution_revision: 2,
+        exam_numbers: [16],
+      },
+      {
+        context_kind: "topic_lesson",
+        task_id: "other",
+        solution_revision: 2,
+        exam_numbers: [5],
+      },
     ]);
     expect(store.getState().history).toEqual({ task: { "2": true } });
+    // F47: the topic rows count solved tasks per exam number.
+    expect(store.getState().examNumbers).toEqual({ task: [16] });
     expect(store.getState().hydrated).toBe(true);
   });
 });

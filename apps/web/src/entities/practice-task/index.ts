@@ -14,3 +14,5 @@ export { practiceAnswerFormat } from "./practice-answer-format";
 export type { PracticeCatalogTypes } from "./practice-catalog.types";
 export { PracticeDifficulty } from "./practice-difficulty";
 export { PracticeDifficultyGlyph } from "./practice-difficulty-glyph";
+export { practiceTaskNotation } from "./practice-task-notation";
+export type { PracticeTaskNotationSegment } from "./practice-task-notation";

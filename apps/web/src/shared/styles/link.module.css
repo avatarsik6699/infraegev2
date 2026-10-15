@@ -26,17 +26,19 @@
   outline: 2px solid var(--color-focus);
   outline-offset: 2px;
 }
-.root:not([data-presentation="button"]):not([data-presentation="navigation"]) {
+.root:not([data-presentation="button"]):not(
+    [data-presentation="navigation"]
+  ):not([data-presentation="reference"]) {
   color: var(--color-link);
 }
 .root:not([data-presentation="button"]):not(
     [data-presentation="navigation"]
-  ):hover {
+  ):not([data-presentation="reference"]):hover {
   color: var(--color-link-hover);
 }
 .root:not([data-presentation="button"]):not(
     [data-presentation="navigation"]
-  ):active {
+  ):not([data-presentation="reference"]):active {
   color: var(--color-link-active);
 }
 .root[data-presentation="action"],
@@ -65,6 +67,33 @@
 }
 .root[data-presentation="action"] > .icon,
 .root[data-presentation="navigation"] > .icon {
+  margin-inline: 0;
+}
+/* Change 185 (F49): a quiet reference — an id that opens its own page. It
+   reads as data (small, soft, dotted underline) so it does not pull the eye
+   like a blue link; it darkens to ink with a solid line on hover and focus. */
+.root[data-presentation="reference"] {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25em;
+  min-height: var(--control-height);
+  color: var(--color-text-soft);
+  font-family: var(--font-data);
+  font-size: var(--text-xs);
+}
+.root[data-presentation="reference"] > span:first-of-type {
+  text-decoration-style: dotted;
+  text-decoration-color: var(--color-muted);
+}
+.root[data-presentation="reference"]:is(:hover, :focus-visible) {
+  color: var(--color-text);
+}
+.root[data-presentation="reference"]:is(:hover, :focus-visible)
+  > span:first-of-type {
+  text-decoration-style: solid;
+  text-decoration-color: currentColor;
+}
+.root[data-presentation="reference"] > .icon {
   margin-inline: 0;
 }
 .icon {

@@ -118,10 +118,11 @@ export function accountDashboard(
 
   return {
     course: course && {
-      mastered: input.courseLessons.filter(
-        (lesson) => course.byLessonId[lesson.id]?.mastered,
-      ).length,
-      total: input.courseLessons.length,
+      // F8: the additional lessons stay outside, as on the course page.
+      mastered: courseProgress
+        .coreLessons(input.courseLessons)
+        .filter((lesson) => course.byLessonId[lesson.id]?.mastered).length,
+      total: courseProgress.coreLessons(input.courseLessons).length,
     },
     topics: input.topicsSource.ready
       ? {

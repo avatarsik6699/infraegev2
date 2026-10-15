@@ -88,7 +88,11 @@
     padding-block: var(--space-3);
   }
 
-  .aside {
+  .aside:not([data-on-narrow]) {
     display: none;
+  }
+
+  .aside[data-on-narrow] {
+    flex: 1 1 100%;
   }
 }

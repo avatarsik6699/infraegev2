@@ -107,3 +107,22 @@ describe("account dashboard", () => {
     ]);
   });
 });
+
+describe("account dashboard course count (Change 185, F8)", () => {
+  it("counts only core lessons, like the course page", () => {
+    const dashboard = accountDashboard({
+      ...base,
+      courseLessons: [
+        ...base.courseLessons,
+        {
+          id: "l3",
+          title: "Дополнительная",
+          routeSlug: "extra",
+          level: "advanced" as const,
+          tasks: tasks("l3", 2),
+        },
+      ],
+    });
+    expect(dashboard.course).toMatchObject({ mastered: 0, total: 2 });
+  });
+});

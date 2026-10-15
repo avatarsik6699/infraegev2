@@ -195,3 +195,59 @@
     grid-row: 2;
   }
 }
+
+/* F9 (Change 185): a tile, a continuation and the «Попробуйте задачу» card
+   lead to one place, so the whole card is the link. Hover darkens the frame
+   (DESIGN.md › Cards); the focus ring is drawn on the card. «Следующий шаг»
+   keeps its own primary button. */
+.tileLink {
+  color: inherit;
+  text-decoration: none;
+}
+
+.tileLink::after,
+.continuation .stepAction::after,
+.card[data-whole-link] a::after {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  content: "";
+}
+
+.tileLink:focus-visible,
+.continuation .stepAction:focus-visible,
+.card[data-whole-link] a:focus-visible {
+  outline: 0;
+}
+
+.continuation,
+.card[data-whole-link] {
+  position: relative;
+}
+
+.tile,
+.continuation,
+.card[data-whole-link] {
+  transition: border-color var(--motion-duration) var(--motion-easing);
+}
+
+.tile:has(.tileLink):hover,
+.continuation:hover,
+.card[data-whole-link]:hover {
+  border-color: var(--color-rule-strong);
+}
+
+.tile:has(.tileLink:focus-visible),
+.continuation:has(.stepAction:focus-visible),
+.card[data-whole-link]:has(a:focus-visible) {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile,
+  .continuation,
+  .card[data-whole-link] {
+    transition: none;
+  }
+}
