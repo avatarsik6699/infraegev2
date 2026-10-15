@@ -9,7 +9,7 @@
 | Change | `186` |
 | Slug | `course-pages-tone` |
 | Title | Course pages: audit and course tone |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/186-course-pages-tone` |
 
 ---
@@ -156,7 +156,7 @@ of truth; this file only tracks what to build and what's left.
 ## Gate Checks
 
 > Critical Gate runs once per `/work` target set; default `/ship` reruns only invalidated checks;
-> Full Gate only with explicit `--full`. Commands: [docs/STACK.md](../STACK.md); selection:
+> Full Gate only with explicit `--full`. Commands: [docs/STACK.md](../../STACK.md); selection:
 > `python3 scripts/gate.py affected`. Record change-specific overrides here, or `None`.
 
 Affected e2e before `/ship`: `course-catalog.spec.ts`, `accessibility.spec.ts` (plus the production
