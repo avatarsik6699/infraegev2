@@ -1,6 +1,21 @@
 /* Course lesson (Change 169) on the shared lesson frame. */
 .page {
   composes: page from "../../shared/styles/lesson-frame.module.css";
+
+  /* Change 186 (F4): the rail's module and lesson numbers in the course
+     colour; Python's branches are blue indent guides. */
+  --lesson-tree-marker: var(--course-action);
+  /* F28: «Проверить» and the other primaries in the course colour. */
+  --primary-fill: var(--course-action);
+  --primary-fill-hover: var(--course-ink);
+}
+
+.page[data-course-tone="python"] {
+  --lesson-tree-guide: color-mix(
+    in oklab,
+    var(--course-strong) 45%,
+    transparent
+  );
 }
 
 .lesson {

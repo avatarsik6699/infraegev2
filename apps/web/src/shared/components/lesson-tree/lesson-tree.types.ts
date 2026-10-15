@@ -29,8 +29,8 @@ export namespace LessonTreeTypes {
     ariaLabel: string;
     /** The phone disclosure label, e.g. «Подтемы · 2 из 5». */
     disclosureLabel: string;
-    /** The quiet caption above the tree. */
-    rootLabel: string;
+    /** The quiet caption above the tree; a course passes its chip and link. */
+    rootLabel: React.ReactNode;
     folders: readonly Folder[];
     /** Read after the label of a done file, e.g. «задачи решены». */
     doneLabel?: string;

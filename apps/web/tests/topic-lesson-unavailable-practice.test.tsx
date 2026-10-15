@@ -164,7 +164,9 @@ describe("topic lesson with unavailable practice", () => {
 
     // the topic head (F6): the task as a kicker, then «N подтем · M задач»
     expect(screen.getByText("Задание 17")).toBeTruthy();
-    expect(screen.getByText(/^\d+ подтем\S* · 8 задач$/u)).toBeTruthy();
+    expect(
+      screen.getByText(/^\d+ подтем\S* · 8 задач · повышенный · ≈ \d+ мин$/u),
+    ).toBeTruthy();
     expect(screen.getByTestId("topic-lesson-progress")).toBeTruthy();
   });
 
@@ -180,7 +182,9 @@ describe("topic lesson with unavailable practice", () => {
 
     // the topic head (F6): the task as a kicker, then «N подтем · M задач»
     expect(screen.getByText("Задание 16")).toBeTruthy();
-    expect(screen.getByText(/^\d+ подтем\S* · 5 задач$/u)).toBeTruthy();
+    expect(
+      screen.getByText(/^\d+ подтем\S* · 5 задач · повышенный · ≈ \d+ мин$/u),
+    ).toBeTruthy();
     expect(screen.getByTestId("topic-lesson-progress")).toBeTruthy();
   });
 });

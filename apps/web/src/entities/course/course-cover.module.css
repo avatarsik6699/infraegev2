@@ -2,23 +2,9 @@
    the `/courses` cards (DESIGN.md › Components › Course cards). */
 
 /* The card's course tone: neutral by default, a published course's own
-   pastel by its id. */
+   pastel by its id (Change 186: the palette is shared with the course pages). */
 .tone {
-  --course-tone: var(--color-surface-quiet);
-  --course-strong: var(--color-muted);
-  --course-ink: var(--color-muted);
-}
-
-.tone[data-course-tone="python"] {
-  --course-tone: var(--color-plate-sky);
-  --course-strong: var(--color-plate-sky-strong);
-  --course-ink: var(--color-plate-sky-ink);
-}
-
-.tone[data-course-tone="excel"] {
-  --course-tone: var(--color-plate-sage);
-  --course-strong: var(--color-plate-sage-strong);
-  --course-ink: var(--color-plate-sage-ink);
+  composes: palette from "./course-identity.module.css";
 }
 
 /* F27: the hairline border takes a barely visible wash of the tone from the

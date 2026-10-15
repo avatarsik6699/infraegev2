@@ -1,0 +1,30 @@
+/* Change 186 (F14): the rail opens with the course's chip and a link back to
+   its overview, in the course's ink. */
+.chip {
+  width: 1.625rem;
+  height: 1.625rem;
+  border-radius: var(--radius-control);
+}
+
+.chip svg {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.course {
+  color: var(--course-ink);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.course:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.course:focus-visible {
+  border-radius: var(--radius-control);
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}

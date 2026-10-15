@@ -50,6 +50,8 @@ vi.mock(
 describe("guest progress session boundary", () => {
   it("uses one locked zero-progress invitation for every catalog consumer", () => {
     sessionFixture.status = "ready";
+    // Change 186 F7: the course overview shows a guest the course size and a
+    // plain sign-in link instead of the locked zeros.
     const courseOverview = render(
       <CourseOverviewProgress
         lessonCount={28}
@@ -57,12 +59,12 @@ describe("guest progress session boundary", () => {
         progress={{ status: "ready", solved: 3, total: 5, mastered: false }}
       />,
     );
-    expect(screen.getByText("0 из 5")).not.toBeNull();
+    const size = screen.getByRole("region", { name: "Объём курса" });
+    expect(size.textContent).toContain("уроков в курсе28");
+    expect(size.textContent).toContain("задач с проверкой5");
     expect(
       screen
-        .getByRole("link", {
-          name: "Прогресс: 0 из 5. Войти, чтобы сохранять прогресс",
-        })
+        .getByRole("link", { name: "Войдите, чтобы сохранять прогресс" })
         .getAttribute("href"),
     ).toBe("/sign-in?returnTo=/courses/python");
     courseOverview.unmount();

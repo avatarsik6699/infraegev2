@@ -131,11 +131,11 @@ export class PracticeCutoverPage {
       this.page.locator("#answer-python-first-program-t02"),
     ).toBeEnabled({ timeout: 15000 });
     await this.page.goto("/courses/python");
+    const size = this.page.getByRole("region", { name: "Объём курса" });
+    await expect(size).toContainText("146");
     await expect(
-      this.page.locator("[data-guest-progress-lock]").getByRole("link"),
-    ).toHaveAccessibleName(
-      "Прогресс: 0 из 146. Войти, чтобы сохранять прогресс",
-    );
+      size.getByRole("link", { name: "Войдите, чтобы сохранять прогресс" }),
+    ).toBeVisible();
     const moduleProgress = this.page.locator(
       '[data-course-overview-page] [role="progressbar"]',
     );

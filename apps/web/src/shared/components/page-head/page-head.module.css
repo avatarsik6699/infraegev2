@@ -26,6 +26,19 @@
   pointer-events: none;
 }
 
+/* Change 186: a page's own backdrop replaces the grid and the bottom rule. */
+.root[data-backdrop] {
+  border-bottom: 0;
+}
+
+.root[data-backdrop]::before {
+  content: none;
+}
+
+.root[data-backdrop] > :first-child {
+  z-index: -1;
+}
+
 .inner {
   display: flex;
   flex-wrap: wrap;
@@ -43,7 +56,8 @@
   display: grid;
   gap: var(--space-1);
   min-width: 0;
-  flex: 1 1 28rem;
+  /* A page with a large picture narrows the copy (course heads, Change 186). */
+  flex: 1 1 var(--page-head-copy-basis, 28rem);
 }
 
 .aside {
@@ -60,6 +74,16 @@
   display: grid;
   gap: var(--space-1);
   margin: 0;
+}
+
+.eyebrow {
+  display: flex;
+  gap: var(--space-1);
+  align-items: center;
+  margin-bottom: var(--space-1);
+  color: var(--color-text-soft);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
 }
 
 .heading .title[data-order] {
@@ -94,5 +118,22 @@
 
   .aside[data-on-narrow] {
     flex: 1 1 100%;
+  }
+
+  /* The picture right under the title and lead, before the page's blocks. */
+  .root[data-aside-after-heading] .inner {
+    display: grid;
+  }
+
+  .root[data-aside-after-heading] .copy {
+    display: contents;
+  }
+
+  .root[data-aside-after-heading] .copy > :not(.heading) {
+    order: 2;
+  }
+
+  .root[data-aside-after-heading] .aside {
+    order: 1;
   }
 }

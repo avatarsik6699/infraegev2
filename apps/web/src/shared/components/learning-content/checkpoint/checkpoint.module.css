@@ -1,5 +1,6 @@
-/* «Проверьте себя» (Change 184, variant A): numbered questions on hairlines,
-   each with the practice task's soft button and the answer below it. */
+/* «Проверьте себя» (Change 184; Change 186 F54): the questions as tabs like
+   the practice tasks; each panel holds one question with the practice task's
+   soft «Ответ» button and the answer below it. */
 .root {
   min-width: 0;
   max-width: var(--learning-block-measure, none);
@@ -11,50 +12,59 @@
   color: var(--color-text-soft);
 }
 
-.list {
-  display: grid;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  counter-reset: question;
+.tabs[hidden] {
+  display: none;
 }
 
-.item {
-  display: grid;
-  grid-template-columns: 2rem minmax(0, 1fr);
-  column-gap: var(--space-1);
-  padding-block: var(--space-2);
-  border-top: 1px solid var(--color-rule);
-  counter-increment: question;
-}
-
-.item:last-child {
-  border-bottom: 1px solid var(--color-rule);
-}
-
-.item::before {
-  content: counter(question);
-  grid-row: 1;
-  padding-top: 0.2em;
-  color: var(--color-muted);
-  font-family: var(--font-data);
+.tab {
   font-size: var(--text-sm);
-  font-variant-numeric: tabular-nums;
+}
+
+.tabPanel,
+.single {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-1-5);
+  padding-block: var(--space-2);
+}
+
+.tabPanel[hidden] {
+  display: none;
+}
+
+/* Without scripts every panel shows, one under another, on hairlines. */
+.tabPanel[data-unenhanced-tab-panel] {
+  border-top: 1px solid var(--color-rule);
+}
+
+.question {
+  display: grid;
+  gap: var(--space-1-5);
+  width: 100%;
+  min-width: 0;
+}
+
+/* The tab names the question; only the script-less list needs the number. */
+.number {
+  display: none;
+  color: var(--color-muted);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+
+.tabPanel[data-unenhanced-tab-panel] .number {
+  display: block;
 }
 
 .prompt,
 .answer {
-  grid-column: 2;
   min-width: 0;
 }
 
 .prompt {
   font-size: var(--text-reading);
   line-height: 1.6;
-}
-
-.answer {
-  margin-top: var(--space-1-5);
 }
 
 /* the practice task's soft button (Button hierarchy «soft», compact) */

@@ -48,6 +48,12 @@
 .panelSelects > * {
   flex: none;
 }
+/* Without scripts the native topic list takes its own line and the panel's
+   width, never the width of its longest option (Change 186 F30). */
+.panelSelects > noscript {
+  flex: 1 1 100%;
+  min-width: 0;
+}
 .panel > .activeFilters {
   grid-column: 1 / -1;
 }
@@ -69,6 +75,13 @@
   composes: label from "../../shared/components/field/field.module.css";
   display: grid;
   gap: var(--space-1);
+  min-width: 0;
+  max-width: 100%;
+}
+
+.nativeTopics select {
+  min-width: 0;
+  max-width: 100%;
 }
 .resultBar {
   display: flex;

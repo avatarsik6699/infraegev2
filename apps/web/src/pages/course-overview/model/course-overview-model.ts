@@ -103,6 +103,7 @@ const calculate = (
             title: item.title,
             number: `${String(moduleIndex + 1)}.${String(lessonIndex + 1)}`,
             advanced: item.level === "advanced" || undefined,
+            hasPractice: summaries.get(item.id)?.tasks.length !== 0,
             routeSlug:
               lesson?.status === "published" ? lesson.routeSlug : undefined,
             progress:
@@ -139,6 +140,8 @@ const calculate = (
         finalProject:
           props.course.id === "python" && module.id === "final-program",
         lessons,
+        advanced:
+          lessons.length > 0 && lessons.every((lesson) => lesson.advanced),
         status,
         progress:
           ready && available.length > 0

@@ -102,7 +102,7 @@ export const CourseCover: React.FC<CoverProps> = (props) => {
 
 /** The course's icon in a square of its strong tone. */
 export const CourseChip: React.FC<{
-  entry: CourseCatalogTypes.Entry;
+  entry: { id: string };
   className?: string;
 }> = (props) => {
   const Icon = (courseLook[props.entry.id] ?? defaultLook).icon;

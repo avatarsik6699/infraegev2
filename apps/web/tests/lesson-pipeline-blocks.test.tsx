@@ -433,11 +433,25 @@ describe("Checkpoint (Change 184, variant A)", () => {
     { id: "b", prompt: <>Где ключ?</>, reveal: <>В первом столбце.</> },
   ];
 
-  it("is a titled region of numbered questions with closed answers", () => {
+  it("is a titled region of question tabs with closed answers (Change 186 F54)", () => {
     const { container } = render(<Checkpoint items={items} headingOrder={3} />);
     const region = screen.getByRole("region", { name: "Проверьте себя" });
     expect(region.querySelector("h3")?.textContent).toBe("Проверьте себя");
-    expect(container.querySelectorAll("ol > li")).toHaveLength(2);
+    const tabs = screen.getAllByRole("tab");
+    expect(tabs.map((tab) => tab.textContent)).toEqual([
+      "Вопрос 1",
+      "Вопрос 2",
+    ]);
+    const shown = (text: string) =>
+      !screen
+        .getByText(text)
+        .closest('[role="tabpanel"]')
+        ?.hasAttribute("hidden");
+    expect(shown("Что означает строка?")).toBe(true);
+    expect(shown("Где ключ?")).toBe(false);
+    fireEvent.click(screen.getByRole("tab", { name: "Вопрос 2" }));
+    expect(shown("Где ключ?")).toBe(true);
+    expect(shown("Что означает строка?")).toBe(false);
     const details = container.querySelectorAll("details");
     expect(details).toHaveLength(2);
     expect([...details].some((d) => d.open)).toBe(false);

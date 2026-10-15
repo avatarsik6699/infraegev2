@@ -1,0 +1,163 @@
+/* Change 186: a published course's own colour and motif on its pages
+   (DESIGN.md › The Course Tone Rule). Neutral by default; a course's id in
+   `data-course-tone` picks its tone. */
+.palette {
+  --course-tone: var(--color-surface-quiet);
+  --course-strong: var(--color-muted);
+  --course-ink: var(--color-muted);
+  --course-action: var(--color-accent);
+}
+
+.palette[data-course-tone="python"] {
+  --course-tone: var(--color-plate-sky);
+  --course-strong: var(--color-plate-sky-strong);
+  --course-ink: var(--color-plate-sky-ink);
+  --course-action: var(--color-plate-sky-action);
+}
+
+.palette[data-course-tone="excel"] {
+  --course-tone: var(--color-plate-sage);
+  --course-strong: var(--color-plate-sage-strong);
+  --course-ink: var(--color-plate-sage-ink);
+  --course-action: var(--color-plate-sage-action);
+}
+
+/* F22, F23: the head's backdrop — barely visible, it fades out downwards and
+   to the right, so the head runs into the page without an edge. */
+.motif {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  mask-image:
+    linear-gradient(180deg, currentColor 35%, transparent 100%),
+    linear-gradient(90deg, currentColor 30%, transparent 78%);
+  mask-composite: intersect;
+  pointer-events: none;
+}
+
+.ruler,
+.columns,
+.rows {
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-data);
+  font-size: var(--text-2xs);
+  font-variant-numeric: tabular-nums;
+  list-style: none;
+}
+
+/* Python: an editor — faint ruled lines and a line-number gutter. */
+.motif[data-motif="python"] {
+  background: repeating-linear-gradient(
+      transparent 0 calc(var(--motif-line) - 1px),
+      color-mix(in oklab, var(--course-strong) 7%, transparent)
+        calc(var(--motif-line) - 1px) var(--motif-line)
+    )
+    0 var(--space-1) / 100% var(--motif-line);
+  --motif-line: 1.75rem;
+}
+
+.ruler {
+  inset: 0 auto 0 0;
+  width: 2.5rem;
+  padding-top: var(--space-1);
+  padding-inline-end: var(--space-1);
+  border-inline-end: 1px solid
+    color-mix(in oklab, var(--course-strong) 12%, transparent);
+  color: color-mix(in oklab, var(--course-strong) 42%, var(--color-surface));
+  line-height: var(--motif-line);
+  text-align: end;
+}
+
+/* Excel: a sheet — column letters, row numbers and very faint cells. */
+.motif[data-motif="excel"] {
+  --motif-col: 6.5rem;
+  --motif-row: 1.75rem;
+  --motif-head: 1.5rem;
+  --motif-gutter: 2.5rem;
+
+  background:
+    linear-gradient(
+        90deg,
+        color-mix(in oklab, var(--course-strong) 6%, transparent) 1px,
+        transparent 1px
+      )
+      var(--motif-gutter) var(--motif-head) / var(--motif-col) var(--motif-row),
+    linear-gradient(
+        color-mix(in oklab, var(--course-strong) 6%, transparent) 1px,
+        transparent 1px
+      )
+      var(--motif-gutter) var(--motif-head) / var(--motif-col) var(--motif-row);
+}
+
+.columns,
+.rows {
+  display: flex;
+  color: color-mix(in oklab, var(--course-ink) 70%, var(--color-surface));
+  font-weight: 500;
+}
+
+.columns {
+  inset: 0 0 auto var(--motif-gutter);
+  height: var(--motif-head);
+  border-bottom: 1px solid
+    color-mix(in oklab, var(--course-strong) 16%, transparent);
+  line-height: var(--motif-head);
+}
+
+.columns li {
+  flex: none;
+  width: var(--motif-col);
+  border-inline-end: 1px solid
+    color-mix(in oklab, var(--course-strong) 10%, transparent);
+  text-align: center;
+}
+
+.rows {
+  inset: var(--motif-head) auto 0 0;
+  flex-direction: column;
+  width: var(--motif-gutter);
+  border-inline-end: 1px solid
+    color-mix(in oklab, var(--course-strong) 16%, transparent);
+  line-height: var(--motif-row);
+  text-align: center;
+}
+
+.rows li {
+  flex: none;
+  height: var(--motif-row);
+  border-bottom: 1px solid
+    color-mix(in oklab, var(--course-strong) 10%, transparent);
+}
+
+/* On a phone only the edge stays — the gutter line or the column letters —
+   so nothing runs behind the text. */
+@media (max-width: 44rem) {
+  .motif[data-motif] {
+    background: none;
+  }
+
+  .ruler {
+    width: var(--space-1);
+    padding: 0;
+    border-inline-end-color: color-mix(
+      in oklab,
+      var(--course-strong) 22%,
+      transparent
+    );
+  }
+
+  .ruler li {
+    visibility: hidden;
+  }
+
+  .motif[data-motif="excel"] {
+    --motif-gutter: 0px;
+    --motif-head: 1.25rem;
+  }
+
+  .rows {
+    display: none;
+  }
+}

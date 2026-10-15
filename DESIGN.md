@@ -22,6 +22,11 @@ colors:
   pastel-sky-ink: "#2b4c78"
   pastel-sage-strong: "#3c8571"
   pastel-sage-ink: "#2b5c4f"
+  pastel-sky-action: "#3f6aa6"
+  pastel-sage-action: "#347a66"
+  exam-ink: "#b54700"
+  exam-mark: "#e9a576"
+  exam-badge: "#d0651a"
   pastel-lilac-strong: "#7a5fbd"
   pastel-lilac-ink: "#4f3d8a"
   success: "#1d7a46"
@@ -210,6 +215,9 @@ one orange for position.
 - **Path-tile shades** (pastel-*-strong, pastel-*-ink; Change 185): on the home path tiles only,
   the icon square takes the strong shade of its tile's pastel (white glyph ≥4.3:1) and the
   subtitle the ink shade (≥6.5:1). Apricot has no strong shade: it would turn orange.
+- **Course action shades** (pastel-sky-action, pastel-sage-action; Change 186): a course page's
+  primary button in its course colour, white text 5.5:1 (Python) and 5.1:1 (Excel); hover goes
+  to the course ink shade. The sage strong shade also draws the spreadsheet's selected cell.
 
 ### Neutral
 - **Paper** (paper): page background, cards, reading areas, forms.
@@ -252,6 +260,33 @@ are never visually linked.
 
 **The No Section Colour Rule.** Sections are told apart by headings and illustrations, never by a
 colour. Adding a section adds no colour.
+
+**The Course Tone Rule (Change 186).** A published course is an object with its own identity, not a
+section: its overview and lessons carry its tone (Python sky, Excel sage) and a quiet motif of its
+tool. The motif is a backdrop of the page head in place of the engineering grid — Python an
+editor (faint ruled lines, a line-number gutter, `>>>` before lesson numbers, blue indent guides
+in the lesson rail), Excel a sheet (column letters, row numbers, faint cells, module numbers as row
+headers, the lesson to continue framed as the selected cell with its fill handle). It is barely
+visible, fades out downwards and to the right so the head runs into the page without a rule, and
+on a phone keeps only its edge (the gutter line or the column letters), never running behind
+text. The tone colours the icon square, the level, module and lesson numbers, progress bars, the
+outcome rules, the primary buttons (overview and lesson «Проверить») and the head's own jump link
+«К программе курса ↓» (architect, 2026-10-15); text in the tone uses the action shade (≥5:1).
+It never takes another colour's job: every other link stays blue, the current place stays orange, a mastered lesson is a plain green check before its title (no mark
+otherwise). No plate goes under a course scene; `/ege` and `/practice` stay neutral.
+
+**The Exam Paper Rule (Change 186).** The EGE topic pages (`/ege`, subtopics, «Практика и итог»)
+share one identity in the site's own grey and orange, no new hue. The `/ege` head and the topic head
+in a lesson sit on squared paper (`ExamPaper`): grey cells, barely visible, fading out downwards and
+to the right, on a phone kept out from behind text, with no rule under the head. Orange takes a
+second, quiet job here, always as line or text, never as a plate: rail numbers, filled progress and
+the practice eyebrow in exam ink (#b54700, 5.4:1), outcome rules in exam mark, the rail's «ЕГЭ»
+mark as white letters on an exam badge square (#d0651a, like a course chip). Buttons stay ink
+(#17191e, a near-black, never pure black); an orange button edge was tried and dropped (F53). The vivid «you are here» orange
+keeps its own job (subtopic position, current file bar). Catalog rows keep their own look; the exam
+level dots stay the only other colour. No illustration and no repeated number box in the lesson's
+topic head: «Задание N», the title and lead, and one meta line with subtopics, tasks, level and
+minutes.
 
 ## Typography
 
@@ -341,14 +376,17 @@ rows, dimmed for planned topics). Course scenes are the one exception to monochr
 the architect's generated scenes with characters and the little mascot, in colour and with
 shading, served as WebP (`scripts/mascot/course_scenes.py`). Every course has one, planned courses too, in colour; it is
 shown whole, never cropped, on the home course card, in the `/courses` card and in the course head
-at about half the head width, its white ground multiplied into the plate or the head's grid. They
+at a bit over half the head width (Change 186: no plate, on a phone right under the title), its
+white ground multiplied into the card plate or the page. They
 are shown by the shared `ObjectIllustration` (`course`), mascot scenes by `MascotScene`.
 
 ## Components
 
 ### Buttons
 - **Shape:** gently rounded (6px), 44px tall (36px small), semibold 15px.
-- **Primary:** ink fill, white text. One primary per view.
+- **Primary:** ink fill, white text. One primary per view. On a course's pages the primary takes
+  the course action shade (The Course Tone Rule); black buttons elsewhere are to be replaced
+  gradually (architect, 2026-10-15).
 - **Secondary:** white with strong hairline border; **Soft:** wash fill for secondary actions
   in the practice row (Подсказка, Решение); **Quiet:** transparent.
 - **Danger:** white with error text and border, only for irreversible account actions. The lesson
@@ -484,7 +522,8 @@ are shown by the shared `ObjectIllustration` (`course`), mascot scenes by `Masco
 - **Live sheet (Excel course):** one hairline-framed block: a formula bar (the address in the code
   face, a muted italic «fx», the formula with its references in their frame colours), the grid
   with wash headers for column letters and row numbers, formula cells with a faint link tint, and
-  sheet tabs under the grid. The selected cell has a 2px ink frame; the cells its formula reads get
+  sheet tabs under the grid. The selected cell has a 2px frame in the sheet green with Excel's fill
+  handle in its corner (Change 186); the cells its formula reads get
   2px frames in the sheet-reference colours, drawn on the grid lines so neighbours share one band.
   «Вернуть исходные» is a compact secondary button that appears only after an edit. A wide grid
   scrolls inside the block. Change 184: the sheets of a block share the height of the tallest one
@@ -524,8 +563,9 @@ are shown by the shared `ObjectIllustration` (`course`), mascot scenes by `Masco
   a term, a formula in the code face, an error — over its note in secondary ink. A list without keys
   (sentences) reads in one column. No bullets.
 - **Self-check «Проверьте себя» (Change 184, variant A):** a section with its own heading at the
-  level of «Практика», a muted line «Ответь сначала сам, потом открой ответ.», then numbered
-  questions on hairlines (mono muted numbers). Each has the practice task's soft button «Ответ» /
+  level of «Практика», a muted line «Ответь сначала сам, потом открой ответ.», then the questions
+  as tabs «Вопрос N» like the practice tasks (Change 186), one at a time; without scripts they stand one under another on hairlines, each named «Вопрос N», and a
+  single question has no tab strip. Each has the practice task's soft button «Ответ» /
   «Скрыть ответ» (a native `details`, with or without scripting) and, under it, the answer captioned
   «Ответ» in the label face, in secondary ink — the same pattern as «Решение» in a task. On a
   subtopic page it comes before «Практика»: reasoning first, then the file.
@@ -569,11 +609,14 @@ are shown by the shared `ObjectIllustration` (`course`), mascot scenes by `Masco
 - **Do** use at most one pastel plate on any page other than home.
 - **Do** keep text on plates in Textbook Ink or Secondary Ink.
 - **Do** show each piece of progress once per page.
-- **Do** use the engineering grid only in page heads, faded to the edges.
+- **Do** use the engineering grid only in page heads, faded to the edges; a course head uses its
+  motif instead.
 
 ### Don't:
 - **Don't** assign colours to site sections.
-- **Don't** fill buttons with orange or pastel; primary buttons are ink.
+- **Don't** fill buttons with orange or pastel; primary buttons are ink, or a course's action
+  shade on its own pages.
+- **Don't** put a plate under a course scene or let a course motif compete with text.
 - **Don't** use orange for links, code, warnings, focus rings, badges or diagram emphasis.
 - **Don't** use yellow or blush plates, or red outside errors and destructive actions.
 - **Don't** add AI-template badges, cairn progress indicators or handwritten signatures.

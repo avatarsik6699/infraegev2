@@ -1,9 +1,12 @@
-import { Check, PenLine } from "lucide-react";
+import { PenLine } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { useLessonProgress } from "~/features/lesson-progress";
+import { ExamMark } from "~/entities/topic-catalog";
 import { advancedLevelLabel } from "~/entities/lesson";
 import { masteryTasks } from "~/entities/practice-task";
 import { LessonTree } from "~/shared/components/lesson-tree";
 import type { SubtopicNavigationTypes } from "./subtopic-navigation.types";
+import styles from "./subtopic-navigation.module.css";
 
 const practiceCurrent = "practice";
 
@@ -25,12 +28,25 @@ export const SubtopicNavigation: React.FC<SubtopicNavigationTypes.Props> = (
     currentIndex >= 0
       ? `${String(currentIndex + 1)} из ${String(subtopics.length)}`
       : "практика и итог";
+  // F42: the phone label names the task, as the course rail names the course.
+  const task = topic ? `Задание ${topic.number.replace(/^0/u, "")}` : "Подтемы";
 
   return (
     <LessonTree
       ariaLabel="Подтемы урока"
-      disclosureLabel={`Подтемы · ${position}`}
-      rootLabel="Темы ЕГЭ"
+      disclosureLabel={`${task} · ${position}`}
+      rootLabel={
+        <>
+          <ExamMark />
+          <Link
+            className={styles.root}
+            to="/ege"
+            activeOptions={{ exact: true }}
+          >
+            Темы ЕГЭ
+          </Link>
+        </>
+      }
       doneLabel="задачи решены"
       navProps={{ "data-subtopic-navigation": true }}
       progress={props.progress}
@@ -56,11 +72,7 @@ export const SubtopicNavigation: React.FC<SubtopicNavigationTypes.Props> = (
                   ? "Дополнительные уроки · для\u00a0продвинутых"
                   : undefined,
                 note: advanced ? advancedLevelLabel : undefined,
-                marker: done ? (
-                  <Check size={14} strokeWidth={2.5} />
-                ) : (
-                  index + 1
-                ),
+                marker: index + 1,
                 label: subtopic.title,
                 to: "/ege/$slug/$subtopic",
                 params: { slug: item.routeSlug, subtopic: subtopic.slug },

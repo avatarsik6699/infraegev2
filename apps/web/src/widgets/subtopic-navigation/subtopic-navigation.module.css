@@ -1,0 +1,19 @@
+/* Change 186 (F41, F49): «Темы ЕГЭ» over the rail is a link back to the
+   catalog, beside the EGE mark. */
+.root {
+  color: var(--color-text);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.root:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.root:focus-visible {
+  border-radius: var(--radius-control);
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}

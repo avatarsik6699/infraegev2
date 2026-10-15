@@ -265,9 +265,16 @@
   border-right-width: 2px;
 }
 
+/* Change 186 (F18): the selected cell as Excel draws it — a green frame with
+   the fill handle in its bottom-right corner. */
 .cell[data-selected]::before {
   z-index: 2;
-  border: 2px solid var(--color-text);
+  border: 2px solid var(--color-sheet-selected);
+  background:
+    linear-gradient(var(--color-sheet-selected), var(--color-sheet-selected))
+      100% 100% / 7px 7px no-repeat border-box,
+    linear-gradient(var(--color-surface), var(--color-surface)) 100% 100% / 9px
+      9px no-repeat border-box;
 }
 
 .cell:focus-visible {
@@ -296,7 +303,7 @@
   z-index: 3;
   width: 100%;
   padding: 0.25rem 0.5625rem;
-  border: 2px solid var(--color-text);
+  border: 2px solid var(--color-sheet-selected);
   border-radius: 0;
   background: var(--color-surface);
   font: inherit;

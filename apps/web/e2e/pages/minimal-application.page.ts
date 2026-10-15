@@ -269,11 +269,13 @@ export class MinimalApplicationPage {
       await expectNoHorizontalOverflow(this.page);
       if (path === "/courses/python") {
         const summary = this.page.locator("[data-course-summary]");
+        // Without scripts the session is unknown, so the member labels stay
+        // (Change 186 F7 shows a known guest the course size instead).
         await expect(
           summary.getByText("уроков освоено", { exact: true }),
         ).toBeVisible();
         await expect(
-          summary.getByText("практика", { exact: true }),
+          summary.getByText("задач решено", { exact: true }),
         ).toBeVisible();
         await expect(this.page.locator("[data-course-module]")).toHaveCount(8);
         await expect(
@@ -1044,7 +1046,9 @@ export class MinimalApplicationPage {
       const outline = this.page.getByRole("navigation", {
         name: "Подтемы урока",
       });
-      const trigger = outline.getByRole("button", { name: "Подтемы · 1 из 7" });
+      const trigger = outline.getByRole("button", {
+        name: "Задание 16 · 1 из 7",
+      });
       await expect(trigger).toBeVisible();
       await expect(trigger).toBeDisabled();
       const before = await outline.boundingBox();

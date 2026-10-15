@@ -1,5 +1,8 @@
 import type { ComponentProps } from "react";
-import type { PracticeTaskTypes } from "~/entities/practice-task";
+import {
+  practiceTaskStatement,
+  type PracticeTaskTypes,
+} from "~/entities/practice-task";
 import { Typography } from "~/shared/components/typography";
 import type { LessonPracticeTypes } from "../lesson-practice.types";
 import styles from "../lesson-practice.module.css";
@@ -37,7 +40,13 @@ export const PracticeTaskSolver: React.FC<Props> = (props) => {
   const custom = instruction && instruction !== DEFAULT_INSTRUCTION;
   return (
     <>
-      <PracticeTaskContent blocks={props.task.statement} context="statement" />
+      <PracticeTaskContent
+        blocks={practiceTaskStatement.withoutTitle(
+          props.task.statement,
+          props.task.title,
+        )}
+        context="statement"
+      />
       {custom ? (
         <Typography.Text
           id={`${inputId}-instruction`}

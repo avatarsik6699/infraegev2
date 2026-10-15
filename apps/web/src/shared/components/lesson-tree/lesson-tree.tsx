@@ -1,8 +1,7 @@
 import { Link } from "@tanstack/react-router";
-import { ChevronRight } from "lucide-react";
-import { useState } from "react";
+import { Check, ChevronRight } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { ResponsiveDisclosure } from "~/shared/components/responsive-disclosure";
-import { Typography } from "~/shared/components/typography";
 import type { LessonTreeTypes } from "./lesson-tree.types";
 import styles from "./lesson-tree.module.css";
 
@@ -20,9 +19,14 @@ const FileLink = Link as unknown as React.FC<FileLinkProps>;
  */
 export const LessonTree: React.FC<LessonTreeTypes.Props> = (props) => {
   const [expanded, setExpanded] = useState(false);
+  const navRef = useRef<HTMLElement>(null);
+  useEffect(function revealCurrentFileFx() {
+    if (navRef.current) revealCurrent(navRef.current);
+  }, []);
 
   return (
     <nav
+      ref={navRef}
       {...props.navProps}
       className={styles.root}
       aria-label={props.ariaLabel}
@@ -32,9 +36,7 @@ export const LessonTree: React.FC<LessonTreeTypes.Props> = (props) => {
         expanded={expanded}
         onExpandedChange={setExpanded}
       >
-        <Typography.Text className={styles.caption}>
-          {props.rootLabel}
-        </Typography.Text>
+        <div className={styles.caption}>{props.rootLabel}</div>
         <ul className={styles.tree}>
           {props.folders.map((folder) => (
             <li key={folder.id}>
@@ -52,6 +54,11 @@ export const LessonTree: React.FC<LessonTreeTypes.Props> = (props) => {
                       <>
                         <span className={styles.marker} aria-hidden="true">
                           {file.marker}
+                        </span>
+                        {/* Change 186 (F25, F26): a done file gets a green
+                            check before its label, kept in its own slot. */}
+                        <span className={styles.check} aria-hidden="true">
+                          {file.done ? <Check strokeWidth={2.5} /> : null}
                         </span>
                         <span className={styles.label}>
                           {file.label}
@@ -109,3 +116,25 @@ export const LessonTree: React.FC<LessonTreeTypes.Props> = (props) => {
     </nav>
   );
 };
+
+/**
+ * Change 186 (F41): a late topic's open folder can sit below the rail's first
+ * screen; scroll the rail itself (never the page) so the current file shows.
+ */
+function revealCurrent(nav: HTMLElement): void {
+  const current = nav.querySelector<HTMLElement>(
+    `.${styles.branch} [aria-current="page"]`,
+  );
+  if (!current) return;
+  let scroller = nav.parentElement;
+  while (
+    scroller &&
+    !/(auto|scroll)/u.test(getComputedStyle(scroller).overflowY)
+  )
+    scroller = scroller.parentElement;
+  if (!scroller || scroller.scrollHeight <= scroller.clientHeight) return;
+  const box = scroller.getBoundingClientRect();
+  const item = current.getBoundingClientRect();
+  if (item.top >= box.top && item.bottom <= box.bottom) return;
+  scroller.scrollTop += item.top - box.top - box.height / 3;
+}

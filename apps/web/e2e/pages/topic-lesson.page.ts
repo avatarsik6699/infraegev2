@@ -48,7 +48,9 @@ export class TopicLessonPage {
       const destination = navigation.locator(`a[href="${route}"]`);
       await expect(destination).toHaveCount(1);
       if (!(await destination.isVisible())) {
-        await navigation.getByRole("button", { name: /^Подтемы ·/u }).click();
+        await navigation
+          .getByRole("button", { name: /^Задание [\d–]+ ·/u })
+          .click();
       }
       await destination.click();
     }
@@ -359,7 +361,7 @@ export class TopicLessonPage {
     expect(new URL(this.page.url()).hash).toBe(hash);
     await this.page.setViewportSize({ width: 390, height: 844 });
     const disclosure = topicNavigation.getByRole("button", {
-      name: `Подтемы · 1 из ${String(subtopics)}`,
+      name: new RegExp(`^Задание [\\d–]+ · 1 из ${String(subtopics)}$`, "u"),
     });
     await disclosure.click();
     await expect(disclosure).toHaveAttribute("aria-expanded", "true");
@@ -466,10 +468,15 @@ export class TopicLessonPage {
     await expect(firstQuestion).toBeFocused();
     await expect(firstQuestion).toHaveAccessibleName("Скрыть ответ");
     if ((await questions.count()) > 1) {
+      // Change 186 F54: with scripts the questions are tabs, one at a time.
+      if (!noJavaScript)
+        await checkpoint.getByRole("tab", { name: "Вопрос 2" }).click();
       await questions.nth(1).focus();
       await questions.nth(1).press("Enter");
-      await expect(firstAnswer).toBeVisible();
       await expect(checkpoint.locator("details[open]")).toHaveCount(2);
+      if (!noJavaScript)
+        await checkpoint.getByRole("tab", { name: "Вопрос 1" }).click();
+      await expect(firstAnswer).toBeVisible();
     }
     for (const width of [320, 390, 768, 1440]) {
       await this.page.setViewportSize({ width, height: 900 });
@@ -782,7 +789,7 @@ export class TopicLessonPage {
       name: "Подтемы урока",
     });
     const trigger = topicNavigation.getByRole("button", {
-      name: /Подтемы · /,
+      name: /^Задание [\d–]+ · /u,
     });
     await expect(trigger).toHaveAttribute("aria-expanded", "false");
     const mobileOrder = await this.page.evaluate(() => {

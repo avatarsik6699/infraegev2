@@ -1,4 +1,7 @@
+import { CourseChip } from "~/entities/course";
 import { advancedLevelLabel } from "~/entities/lesson";
+import { Link } from "@tanstack/react-router";
+import styles from "./course-navigation.module.css";
 import { LessonTree } from "~/shared/components/lesson-tree";
 import type { CourseNavigationTypes } from "./course-navigation.types";
 
@@ -24,8 +27,21 @@ export const CourseNavigation: React.FC<CourseNavigationTypes.Props> = (
   return (
     <LessonTree
       ariaLabel="Уроки курса"
-      disclosureLabel={`Курс · ${position}`}
-      rootLabel={props.courseTitle}
+      disclosureLabel={`${props.courseShortTitle} · ${position}`}
+      rootLabel={
+        <>
+          <CourseChip entry={{ id: props.courseId }} className={styles.chip} />
+          <Link
+            className={styles.course}
+            to="/courses/$courseSlug"
+            params={{ courseSlug: props.courseRouteSlug }}
+            activeOptions={{ exact: true }}
+          >
+            {props.courseTitle}
+          </Link>
+        </>
+      }
+      doneLabel="урок освоен"
       navProps={{ "data-course-navigation": true }}
       progress={props.progress}
       folders={props.modules.map((module, index) => ({
@@ -47,6 +63,7 @@ export const CourseNavigation: React.FC<CourseNavigationTypes.Props> = (
               }
             : {}),
           current: lesson.id === props.currentLessonId,
+          done: props.masteredLessonIds?.has(lesson.id),
           note: lesson.level === "advanced" ? advancedLevelLabel : undefined,
         })),
       }))}

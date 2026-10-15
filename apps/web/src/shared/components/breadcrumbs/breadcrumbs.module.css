@@ -42,3 +42,22 @@
 .current {
   color: var(--color-text-soft);
 }
+
+/* Change 186 F16: on a phone the path is one step back — the parent page —
+   because a wrapped path started its second line with a bare «›». The page
+   title stands right below, so the current item is not repeated. */
+@media (max-width: 40rem) {
+  .item:not(:only-child) {
+    display: none;
+  }
+
+  .list .item[data-back] {
+    display: inline-flex;
+  }
+
+  .list .item[data-back]::before {
+    margin-inline-end: var(--space-0-5);
+    color: var(--color-link);
+    content: "←";
+  }
+}

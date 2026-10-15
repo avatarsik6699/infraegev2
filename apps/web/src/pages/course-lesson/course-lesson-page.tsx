@@ -1,7 +1,8 @@
 import { useRouter } from "@tanstack/react-router";
 import { useMemo, useRef } from "react";
 import { ScrollToTop } from "~/shared/components/scroll-to-top";
-import { getCourseLessons } from "~/entities/course";
+import { courseIdentity, getCourseLessons } from "~/entities/course";
+import { cssUtils } from "~/shared/lib/css-utils";
 import { Breadcrumbs } from "~/shared/components/breadcrumbs";
 import { LessonTheory } from "~/shared/components/learning-content";
 import { Typography } from "~/shared/components/typography";
@@ -22,6 +23,7 @@ import { PublicFooter } from "~/widgets/public-footer";
 import { PublicHeader } from "~/widgets/public-header";
 import { CourseLessonPager } from "./components/course-lesson-pager";
 import { CourseLessonResult } from "./components/course-lesson-result";
+import { useMasteredLessons } from "./model/use-mastered-lessons";
 import type { CourseLessonPageTypes } from "./course-lesson-page.types";
 import styles from "./course-lesson.module.css";
 
@@ -43,6 +45,7 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
   const session = useAccountSession();
   const articleRef = useRef<HTMLElement>(null);
   const lessons = getCourseLessons(props.course);
+  const masteredLessonIds = useMasteredLessons(lessons, props.practiceSummary);
   const routeSlugs = new Map(
     lessons
       .filter((lesson) => lesson.status === "published")
@@ -103,7 +106,11 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
   ];
 
   return (
-    <div className={styles.page} data-course-lesson-page>
+    <div
+      className={cssUtils.cx(styles.page, courseIdentity.palette)}
+      data-course-tone={props.course.id}
+      data-course-lesson-page
+    >
       <ScrollToTop key={props.lesson.id} headingId="lesson-title" />
       <ReadingPositionIndicator targetRef={articleRef} />
       <PublicHeader activeSection="courses" />
@@ -116,10 +123,13 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
         >
           <div className={styles.railContents}>
             <CourseNavigation
+              courseId={props.course.id}
               courseRouteSlug={props.course.routeSlug}
               courseTitle={props.course.title}
+              courseShortTitle={props.course.shortTitle}
               modules={modules}
               currentLessonId={props.lesson.id}
+              masteredLessonIds={masteredLessonIds}
               progress={narrow ? progress : null}
             />
           </div>

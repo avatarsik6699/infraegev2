@@ -6,6 +6,8 @@ type Props = {
   courseRouteSlug: string;
   lessons: readonly CourseOverviewPageTypes.Lesson[];
   continuingLessonId?: string;
+  /** F11: off inside the «Дополнительно» module, whose title already says it. */
+  markAdvanced: boolean;
 };
 
 export const CourseOverviewLessons: React.FC<Props> = (props) => (
@@ -16,6 +18,7 @@ export const CourseOverviewLessons: React.FC<Props> = (props) => (
         lesson={lesson}
         courseRouteSlug={props.courseRouteSlug}
         continuing={lesson.id === props.continuingLessonId}
+        markAdvanced={props.markAdvanced}
       />
     ))}
   </ol>

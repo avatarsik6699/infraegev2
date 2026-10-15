@@ -1,7 +1,8 @@
 export namespace BreadcrumbsTypes {
   export type Item = {
     label: string;
-    /** A link to an ancestor; the last item (current page) has none. */
+    /** A link to an ancestor; the last item (current page) has none, and an
+     *  ancestor that is this very page (a topic on its first subtopic) neither. */
     to?: string;
     params?: Record<string, string>;
   };

@@ -1,5 +1,6 @@
 import { useRouter } from "@tanstack/react-router";
 import { lessonSubtopics } from "~/entities/lesson";
+import { topicCatalog } from "~/entities/topic-catalog";
 import { useAccountSession } from "~/features/account";
 import {
   checkPracticeAnswer,
@@ -36,8 +37,9 @@ export const TopicPracticePage: React.FC<TopicLessonPageTypes.PracticeProps> = (
   return (
     <TopicLessonFrame {...props} current="practice" outline={outline}>
       <header className={styles.subtopicHead} data-subtopic-head>
-        <Typography.Text className={styles.position}>
-          {props.lesson.title}
+        {/* F43: the topic in the EGE ink, not the orange of «you are here». */}
+        <Typography.Text className={styles.examEyebrow}>
+          {`${topicCatalog.formatTaskNumbers(props.lesson.taskNumbers)} · ${props.lesson.title}`}
         </Typography.Text>
         <Typography.Title
           order={1}
@@ -48,6 +50,18 @@ export const TopicPracticePage: React.FC<TopicLessonPageTypes.PracticeProps> = (
           Практика и итог
         </Typography.Title>
       </header>
+
+      {/* F35: what the topic teaches, in a row under rules of the EGE ink. */}
+      <ol className={styles.outcomes} aria-label="Чему научились в теме">
+        {props.lesson.learningOutcomes.map((outcome, index) => (
+          <li key={outcome} className={styles.outcome}>
+            <span className={styles.outcomeMark} aria-hidden="true">
+              {`${String(props.lesson.taskNumbers[0])}.${String(index + 1)}`}
+            </span>
+            {outcome}
+          </li>
+        ))}
+      </ol>
 
       <div id="result" className={styles.summary} data-topic-summary>
         <Typography.Prose>{props.lesson.result}</Typography.Prose>

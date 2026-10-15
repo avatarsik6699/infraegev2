@@ -7,6 +7,7 @@ type Props = {
   courseRouteSlug: string;
   lesson: CourseOverviewPageTypes.Lesson;
   continuing: boolean;
+  markAdvanced: boolean;
 };
 
 export const CourseOverviewLesson: React.FC<Props> = (props) => (
@@ -29,11 +30,17 @@ export const CourseOverviewLesson: React.FC<Props> = (props) => (
           lessonSlug: props.lesson.routeSlug,
         }}
       >
-        <CourseOverviewLessonContent lesson={props.lesson} />
+        <CourseOverviewLessonContent
+          lesson={props.lesson}
+          markAdvanced={props.markAdvanced}
+        />
       </ActionLink>
     ) : (
       <div className={styles.plannedLesson}>
-        <CourseOverviewLessonContent lesson={props.lesson} />
+        <CourseOverviewLessonContent
+          lesson={props.lesson}
+          markAdvanced={props.markAdvanced}
+        />
       </div>
     )}
   </li>

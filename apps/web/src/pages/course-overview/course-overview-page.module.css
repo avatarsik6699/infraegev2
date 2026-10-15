@@ -1,18 +1,43 @@
 /* Python course overview — v5 mockup `course-python.html` (Change 169). */
 .page {
   composes: pageFrame from "../../shared/styles/patterns.module.css";
+
+  /* Change 186 (F27, F9): the course's colour on its primary button and
+     progress bars; an empty bar is a pale track of the tone. */
+  --primary-fill: var(--course-action);
+  --primary-fill-hover: var(--course-ink);
+  --progress-indicator-background: var(--course-strong);
+  --progress-track-background: color-mix(
+    in oklab,
+    var(--course-tone),
+    var(--course-strong) 10%
+  );
+}
+
+/* F21: a larger scene beside narrower copy. */
+.head {
+  --page-head-copy-basis: 24rem;
+}
+
+.chip {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius-control);
+}
+
+.level {
+  color: var(--course-ink);
+  font-weight: 500;
 }
 
 .main {
   min-width: 0;
 }
 
-/* Supports the course summary, never outweighs it: about a third of the
-   head, no plate behind it. */
-/* Change 185: the course's scene about half the head wide, whole, its white
-   ground multiplied into the head's grid. */
+/* Change 186 (F20, F21): the scene whole and large, straight on the page —
+   no plate; the backdrop has faded out by the time it reaches the picture. */
 .illustration {
-  width: min(36rem, 48vw);
+  width: min(43rem, 54vw);
   height: auto;
   mix-blend-mode: multiply;
 }
@@ -105,6 +130,9 @@
 }
 
 .programLink {
+  --link-fill: var(--course-action);
+  --link-fill-hover: var(--course-ink);
+
   font-weight: 600;
 }
 
@@ -114,39 +142,63 @@
   padding-block: var(--space-3) var(--space-6);
 }
 
-.facts {
+/* F24: four outcomes in a row, each under a rule of the course colour;
+   what the course needs is one line under them. */
+.about {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-2);
 }
 
-.fact {
+.aboutTitle[data-order] {
+  margin: 0;
+  font-size: var(--text-xl);
+}
+
+.outcomes {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-2) var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.outcome {
   display: grid;
   gap: var(--space-1);
   align-content: start;
-  padding: var(--space-3);
-  border: 1px solid var(--color-rule);
-  border-radius: var(--radius-tile);
+  padding-top: var(--space-1-5);
+  border-top: 2px solid
+    color-mix(in oklab, var(--course-strong) 55%, var(--color-surface));
+  color: var(--color-text-soft);
+  font-size: var(--text-sm);
+  line-height: 1.5;
 }
 
-/* F35/F50: the icon follows the title with a small gap. */
-.factHead {
+.outcomeMark {
+  color: var(--course-action);
+  font-family: var(--font-data);
+  font-size: var(--text-2xs);
+  font-weight: 500;
+}
+
+.needs {
   display: flex;
   gap: var(--space-1);
   align-items: center;
+  padding-top: var(--space-1-5);
+  border-top: 1px solid var(--color-rule);
 }
 
-.factIcon {
+.needsIcon {
   flex: none;
-  width: 1.375rem;
-  height: 1.375rem;
-  color: var(--color-text-soft);
-  stroke-width: 1.6;
+  width: 1.125rem;
+  height: 1.125rem;
+  color: var(--color-muted);
 }
 
-.factTitle[data-order] {
-  margin: 0;
-  font-size: var(--text-lg);
+.needsText strong {
+  color: var(--color-text);
   font-weight: 600;
 }
 
@@ -198,10 +250,20 @@
   width: 2.75rem;
   height: 2.75rem;
   border-radius: var(--radius-control);
-  background: var(--color-surface-quiet);
-  color: var(--color-text);
+  background: var(--course-strong);
+  color: var(--color-surface);
   font-size: var(--text-lg);
   font-weight: 600;
+}
+
+/* Excel: module numbers are the sheet's row headers. */
+.page[data-course-tone="excel"] .moduleNumber {
+  border: 1px solid color-mix(in oklab, var(--course-strong) 28%, transparent);
+  border-radius: 3px;
+  background: color-mix(in oklab, var(--course-tone), var(--color-surface) 15%);
+  color: var(--course-ink);
+  font-family: var(--font-data);
+  font-weight: 500;
 }
 
 .moduleHeader {
@@ -266,18 +328,61 @@
   background: var(--color-surface-side);
 }
 
+/* The lesson to continue on a pale wash of the course tone; in Excel it is
+   the selected cell — a green frame with the fill handle (F22). */
+.lessonLink[data-continuing] {
+  position: relative;
+  background: color-mix(in oklab, var(--course-tone), var(--color-surface) 40%);
+}
+
+.page[data-course-tone="excel"] .lessonLink[data-continuing] {
+  background: color-mix(in oklab, var(--course-tone), var(--color-surface) 60%);
+  box-shadow: inset 0 0 0 2px var(--color-sheet-selected);
+}
+
+.page[data-course-tone="excel"] .lessonLink[data-continuing]::after {
+  position: absolute;
+  right: -3px;
+  bottom: -3px;
+  width: 7px;
+  height: 7px;
+  border: 1.5px solid var(--color-surface);
+  background: var(--color-sheet-selected);
+  content: "";
+}
+
 .lessonRow {
   display: grid;
-  grid-template-columns: 3.5rem minmax(0, 1fr) auto 1.25rem;
+  grid-template-columns: 2.75rem 1rem minmax(0, 1fr) auto 1.25rem;
   align-items: center;
   gap: var(--space-1-5);
 }
 
+/* Text in the course colour takes the action shade (≥5:1 on white and the
+   side surface); the strong shade is for fills and rules. */
 .lessonNumber {
-  color: var(--color-text-soft);
+  color: var(--course-action);
   font-family: var(--font-data);
   font-size: var(--text-sm);
+  font-weight: 500;
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* F22: Python numbers its lessons like the interactive prompt. */
+.page[data-course-tone="python"] .lessonRow {
+  grid-template-columns: 5rem 1rem minmax(0, 1fr) auto 1.25rem;
+}
+
+.page[data-course-tone="python"] .lessonNumber::before {
+  color: color-mix(in oklab, var(--course-strong) 50%, var(--color-surface));
+  font-weight: 400;
+  content: ">>> ";
+}
+
+.lessonCheck {
+  display: flex;
+  color: var(--color-success);
 }
 
 .lessonTitle {
@@ -303,10 +408,6 @@
   font-variant-numeric: tabular-nums;
 }
 
-.lessonPractice svg {
-  flex: none;
-}
-
 .lessonArrow {
   color: var(--color-text);
 }
@@ -315,9 +416,25 @@
   composes: visuallyHidden from "../../shared/styles/patterns.module.css";
 }
 
+@media (max-width: 64rem) {
+  .outcomes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 44rem) {
+  .illustration {
+    width: 100%;
+  }
+}
+
 @media (max-width: 48rem) {
-  .facts {
+  .outcomes {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .needs {
+    align-items: start;
   }
 
   .moduleHeader {
@@ -325,9 +442,19 @@
     gap: var(--space-1);
   }
 
-  .lessonRow {
-    grid-template-columns: 2.75rem minmax(0, 1fr) 1.25rem;
+  .lessonRow,
+  .page[data-course-tone="python"] .lessonRow {
+    grid-template-columns: 2.75rem 1rem minmax(0, 1fr) 1.25rem;
     row-gap: var(--space-0-5);
+  }
+
+  .page[data-course-tone="python"] .lessonNumber::before {
+    content: none;
+  }
+
+  .lessonCheck {
+    align-self: start;
+    padding-top: 0.2em;
   }
 
   .lessonNumber {
@@ -336,12 +463,17 @@
   }
 
   .lessonPractice {
-    grid-column: 2;
+    grid-column: 3;
     min-width: 0;
   }
 
+  /* F10: a lesson without tasks keeps no empty practice line. */
+  .lessonPractice:empty {
+    display: none;
+  }
+
   .lessonArrow {
-    grid-column: 3;
+    grid-column: 4;
     grid-row: 1 / 3;
   }
 }

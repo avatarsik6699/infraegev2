@@ -4,7 +4,15 @@ import type { PageHeadTypes } from "./page-head.types";
 import styles from "./page-head.module.css";
 
 export const PageHead: React.FC<PageHeadTypes.Props> = (props) => (
-  <div className={cssUtils.cx(styles.root, props.className)} data-page-head>
+  <div
+    className={cssUtils.cx(styles.root, props.className)}
+    data-page-head
+    data-backdrop={props.backdrop ? true : undefined}
+    data-aside-after-heading={
+      props.asideOnNarrow === "after-heading" || undefined
+    }
+  >
+    {props.backdrop}
     <div className={styles.inner}>
       <div className={styles.copy}>
         {props.title === undefined ? (
@@ -12,6 +20,9 @@ export const PageHead: React.FC<PageHeadTypes.Props> = (props) => (
         ) : (
           <>
             <header className={styles.heading}>
+              {props.eyebrow ? (
+                <div className={styles.eyebrow}>{props.eyebrow}</div>
+              ) : null}
               <Typography.Title
                 order={1}
                 id={props.titleId}

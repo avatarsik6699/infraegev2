@@ -7,12 +7,25 @@ import styles from "./scroll-to-top.module.css";
 
 export const ScrollToTop: React.FC<ScrollToTopTypes.Props> = (props) => {
   const [visible, setVisible] = useState(false);
+  const [lift, setLift] = useState(0);
   useEffect(function observeScrollFx() {
-    return scrollToTop.observe(setVisible);
+    return scrollToTop.observe((nextVisible, nextLift) => {
+      setVisible(nextVisible);
+      setLift(nextLift);
+    });
   }, []);
+  // Change 186 F13: rises above the footer instead of covering its links.
+  const style = {
+    "--scroll-to-top-lift": `${String(lift)}px`,
+  } as React.CSSProperties;
 
   return (
-    <div className={styles.root} hidden={!visible} data-scroll-to-top>
+    <div
+      className={styles.root}
+      hidden={!visible}
+      style={style}
+      data-scroll-to-top
+    >
       <Button
         hierarchy="quiet"
         surface="bare"

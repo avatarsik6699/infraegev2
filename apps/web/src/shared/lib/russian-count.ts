@@ -24,12 +24,15 @@ export type RussianForms = readonly [one: string, few: string, many: string];
 export const russianCount = {
   /** «3 полные порции», «5 полных порций», «21 клетка». */
   of(count: number, forms: RussianForms): string {
+    return `${String(count)} ${russianCount.noun(count, forms)}`;
+  },
+  /** The word alone, for a number set apart: «27» over «уроков в курсе». */
+  noun(count: number, forms: RussianForms): string {
     const index: Partial<Record<Intl.LDMLPluralRule, number>> = {
       one: 0,
       few: 1,
     };
-    const word = forms[index[taskPluralRules.select(count)] ?? 2];
-    return `${String(count)} ${word}`;
+    return forms[index[taskPluralRules.select(count)] ?? 2];
   },
   tasks(count: number): string {
     return `${String(count)} ${taskForms[taskPluralRules.select(count)]}`;

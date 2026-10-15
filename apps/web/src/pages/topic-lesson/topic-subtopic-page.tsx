@@ -5,7 +5,12 @@ import {
   lessonSubtopics,
 } from "~/entities/lesson";
 import { masteryTasks } from "~/entities/practice-task";
-import { topicCatalog } from "~/entities/topic-catalog";
+import {
+  ExamPaper,
+  examPlan,
+  topicCatalog,
+  type TopicCatalogTypes,
+} from "~/entities/topic-catalog";
 import { useAccountSession } from "~/features/account";
 import {
   checkPracticeAnswer,
@@ -81,6 +86,8 @@ export const TopicSubtopicPage: React.FC<TopicLessonPageTypes.SubtopicProps> = (
               : props.tasks.length - masteryTasks(props.tasks).length
           }
           title={props.lesson.title}
+          examMeta={topicExamMeta(props.lesson.taskNumbers)}
+          backdrop={<ExamPaper />}
         />
       ) : null}
       <header
@@ -189,3 +196,15 @@ export const TopicSubtopicPage: React.FC<TopicLessonPageTypes.SubtopicProps> = (
     </TopicLessonFrame>
   );
 };
+
+/** F48: the topic's exam level and minutes, as the catalog row names them. */
+function topicExamMeta(numbers: TopicCatalogTypes.TaskNumbers): string[] {
+  const levels = [...new Set(examPlan.levels(numbers))].map((level) =>
+    examPlan.levelTitles[level].toLocaleLowerCase("ru"),
+  );
+  const minutes = numbers.reduce(
+    (sum, task) => sum + examPlan.minutes(task),
+    0,
+  );
+  return [levels.join(" / "), `≈ ${String(minutes)} мин`];
+}

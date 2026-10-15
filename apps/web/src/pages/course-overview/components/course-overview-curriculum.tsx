@@ -49,6 +49,7 @@ export const CourseOverviewCurriculum: React.FC<Props> = (props) => {
             <CourseOverviewLessons
               courseRouteSlug={props.courseRouteSlug}
               lessons={module.lessons}
+              markAdvanced={!module.advanced}
               continuingLessonId={
                 props.action?.continuing ? props.action.lesson.id : undefined
               }

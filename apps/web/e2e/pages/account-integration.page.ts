@@ -62,13 +62,15 @@ export class AccountIntegrationPage {
     const progress = this.page.getByRole("region", { name: "Ваш прогресс" });
     const practiceMetric = progress
       .getByRole("term")
-      .filter({ hasText: /^практика$/u });
+      .filter({ hasText: /^задач решено$/u });
     await expect(practiceMetric).toBeVisible();
     await expect(
       progress
         .locator("dl > div")
         .filter({
-          has: this.page.getByRole("term").filter({ hasText: /^практика$/u }),
+          has: this.page
+            .getByRole("term")
+            .filter({ hasText: /^задач решено$/u }),
         })
         .getByRole("definition"),
     ).toHaveText("0 из 146");

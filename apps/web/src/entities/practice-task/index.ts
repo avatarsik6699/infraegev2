@@ -15,4 +15,5 @@ export type { PracticeCatalogTypes } from "./practice-catalog.types";
 export { PracticeDifficulty } from "./practice-difficulty";
 export { PracticeDifficultyGlyph } from "./practice-difficulty-glyph";
 export { practiceTaskNotation } from "./practice-task-notation";
+export { practiceTaskStatement } from "./practice-task-statement";
 export type { PracticeTaskNotationSegment } from "./practice-task-notation";

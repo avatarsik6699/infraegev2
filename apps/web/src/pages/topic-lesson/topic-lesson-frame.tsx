@@ -85,8 +85,14 @@ export const TopicLessonFrame: React.FC<TopicLessonPageTypes.FrameProps> = (
               { label: "Темы ЕГЭ", to: "/ege" },
               {
                 label: `${topicCatalog.formatTaskNumbers(props.lesson.taskNumbers)}. ${props.lesson.title}`,
-                to: "/ege/$slug",
-                params: { slug: props.lesson.routeSlug },
+                // F40: the topic address opens its first subtopic, so there
+                // the topic is this page, not a way back.
+                ...(props.current === subtopics[0]?.slug
+                  ? {}
+                  : {
+                      to: "/ege/$slug",
+                      params: { slug: props.lesson.routeSlug },
+                    }),
               },
               { label: currentTitle },
             ]}

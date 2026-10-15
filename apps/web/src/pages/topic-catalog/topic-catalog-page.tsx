@@ -7,7 +7,7 @@ import { MascotScene } from "~/shared/components/mascot-scene";
 import { PageHead } from "~/shared/components/page-head";
 import { PublicFooter } from "~/widgets/public-footer";
 import { PublicHeader } from "~/widgets/public-header";
-import { topicCatalog } from "~/entities/topic-catalog";
+import { ExamPaper, topicCatalog } from "~/entities/topic-catalog";
 import { TopicCatalogCard } from "./components/topic-catalog-card";
 import { TopicCatalogGoal } from "./components/topic-catalog-goal";
 import { TopicCatalogMap } from "./components/topic-catalog-map";
@@ -32,9 +32,12 @@ export const TopicCatalogPage: React.FC = () => {
           meta={
             <>
               <div className={styles.summary} data-topic-summary>
-                <span>
-                  Всего тем: {catalog.totalTopics} · Доступно:{" "}
-                  {catalog.publishedTopics} ·
+                {/* F45: the line breaks only between its pairs. */}
+                <span className={styles.summaryPair}>
+                  Всего тем: {catalog.totalTopics} ·
+                </span>
+                <span className={styles.summaryPair}>
+                  Доступно: {catalog.publishedTopics} ·
                 </span>
                 <span className={styles.summaryStatus}>
                   <span className={styles.summaryReserve} aria-hidden="true">
@@ -70,6 +73,7 @@ export const TopicCatalogPage: React.FC = () => {
               </span>
             </>
           }
+          backdrop={<ExamPaper />}
           aside={<TopicCatalogMap entries={examOrder} goal={goal} />}
           asideOnNarrow
         />

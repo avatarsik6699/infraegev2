@@ -15,7 +15,11 @@ export const LessonIntro: React.FC<LessonIntroTypes.Props> = (props) => (
     className={cssUtils.cx(styles.root, props.className)}
     data-presentation="study"
     data-topic-head
+    data-backdrop={props.backdrop ? true : undefined}
   >
+    {props.backdrop ? (
+      <div className={styles.backdrop}>{props.backdrop}</div>
+    ) : null}
     <Typography.Text className={styles.kicker}>{props.eyebrow}</Typography.Text>
     <Typography.Title
       order={1}
@@ -38,6 +42,7 @@ export const LessonIntro: React.FC<LessonIntroTypes.Props> = (props) => (
         props.taskCount !== undefined
           ? `${russianCount.tasks(props.taskCount)}${russianCount.additional(props.additionalTaskCount ?? 0, "tasks")}`
           : null,
+        ...(props.examMeta ?? []),
         props.accessTier === "paid" ? "По подписке" : null,
       ]
         .filter(Boolean)

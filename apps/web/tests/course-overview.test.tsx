@@ -441,7 +441,7 @@ describe("course overview UI", () => {
     );
     expect(
       screen.getByRole("region", { name: "Ваш прогресс" }).textContent,
-    ).toMatch(/практика4 из \d+/);
+    ).toMatch(/задач решено4 из \d+/);
     expect(
       screen.getByRole("link", { name: /Урок first Урок освоен/ }),
     ).not.toBeNull();
@@ -459,7 +459,7 @@ describe("course overview UI", () => {
     );
     expect(
       screen.getByRole("region", { name: "Ваш прогресс" }).textContent,
-    ).toMatch(/практика0 из \d+/);
+    ).toMatch(/задач решено0 из \d+/);
   });
   it("retains lesson navigation when progress is unavailable", async () => {
     render(overview({ ...props, practiceSummary: null }));

@@ -16,25 +16,25 @@ describe("return to page start", () => {
     const listener = vi.fn();
     const stop = scrollToTop.observe(listener);
     vi.advanceTimersToNextFrame();
-    expect(listener).toHaveBeenLastCalledWith(false);
+    expect(listener).toHaveBeenLastCalledWith(false, 0);
     vi.stubGlobal("scrollY", 900);
     window.dispatchEvent(new Event("scroll"));
     window.dispatchEvent(new Event("scroll"));
     vi.advanceTimersToNextFrame();
-    expect(listener).toHaveBeenLastCalledWith(true);
+    expect(listener).toHaveBeenLastCalledWith(true, 0);
     expect(listener).toHaveBeenCalledTimes(2);
     vi.stubGlobal("innerHeight", 1000);
     window.dispatchEvent(new Event("resize"));
     vi.advanceTimersToNextFrame();
-    expect(listener).toHaveBeenLastCalledWith(false);
+    expect(listener).toHaveBeenLastCalledWith(false, 0);
     vi.stubGlobal("scrollY", 1500);
     window.dispatchEvent(new Event("scroll"));
     vi.advanceTimersToNextFrame();
-    expect(listener).toHaveBeenLastCalledWith(true);
+    expect(listener).toHaveBeenLastCalledWith(true, 0);
     vi.stubGlobal("scrollY", 50);
     window.dispatchEvent(new Event("scroll"));
     vi.advanceTimersToNextFrame();
-    expect(listener).toHaveBeenLastCalledWith(false);
+    expect(listener).toHaveBeenLastCalledWith(false, 0);
     window.dispatchEvent(new Event("scroll"));
     stop();
     listener.mockClear();
@@ -42,6 +42,26 @@ describe("return to page start", () => {
     window.dispatchEvent(new Event("scroll"));
     vi.advanceTimersToNextFrame();
     expect(listener).not.toHaveBeenCalled();
+  });
+
+  it("reports how far the footer reaches into the viewport", () => {
+    vi.useFakeTimers({
+      toFake: ["requestAnimationFrame", "cancelAnimationFrame"],
+    });
+    vi.stubGlobal("innerHeight", 800);
+    vi.stubGlobal("scrollY", 2000);
+    const footer = document.createElement("footer");
+    footer.getBoundingClientRect = () => ({ top: 700 }) as DOMRect;
+    document.body.append(footer);
+    const listener = vi.fn();
+    const stop = scrollToTop.observe(listener);
+    vi.advanceTimersToNextFrame();
+    expect(listener).toHaveBeenLastCalledWith(true, 100);
+    footer.getBoundingClientRect = () => ({ top: 900 }) as DOMRect;
+    window.dispatchEvent(new Event("scroll"));
+    vi.advanceTimersToNextFrame();
+    expect(listener).toHaveBeenLastCalledWith(true, 0);
+    stop();
   });
 
   it.each([false, true])(

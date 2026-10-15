@@ -1,0 +1,43 @@
+/* Change 186 (F46): the EGE pages' backdrop — squared paper, barely visible,
+   fading out downwards and to the right so the head runs into the page. */
+.paper {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, var(--color-exam-paper) 1px, transparent 1px) 0 0 /
+      1.25rem 1.25rem,
+    linear-gradient(var(--color-exam-paper) 1px, transparent 1px) 0 0 / 1.25rem
+      1.25rem;
+  mask-image:
+    linear-gradient(180deg, currentColor 30%, transparent 100%),
+    linear-gradient(90deg, currentColor 25%, transparent 75%);
+  mask-composite: intersect;
+  pointer-events: none;
+}
+
+/* On a phone the paper stays out from behind the text. */
+@media (max-width: 44rem) {
+  .paper {
+    mask-image: linear-gradient(180deg, currentColor, transparent 45%);
+    opacity: 0.6;
+  }
+}
+
+/* The «ЕГЭ» mark: an orange square with white letters, like a course chip. */
+.mark {
+  display: block;
+  flex: none;
+  width: 1.625rem;
+  height: 1.625rem;
+}
+
+.mark rect {
+  fill: var(--color-exam-badge);
+}
+
+.mark text {
+  fill: var(--color-surface);
+  font-family: var(--font-ui);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}

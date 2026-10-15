@@ -26,15 +26,17 @@
   outline: 2px solid var(--color-focus);
   outline-offset: 2px;
 }
+/* Change 186 (F29): a page may tint one link through `--link-fill` and
+   `--link-fill-hover` (a course's own jump link in its colour). */
 .root:not([data-presentation="button"]):not(
     [data-presentation="navigation"]
   ):not([data-presentation="reference"]) {
-  color: var(--color-link);
+  color: var(--link-fill, var(--color-link));
 }
 .root:not([data-presentation="button"]):not(
     [data-presentation="navigation"]
   ):not([data-presentation="reference"]):hover {
-  color: var(--color-link-hover);
+  color: var(--link-fill-hover, var(--color-link-hover));
 }
 .root:not([data-presentation="button"]):not(
     [data-presentation="navigation"]

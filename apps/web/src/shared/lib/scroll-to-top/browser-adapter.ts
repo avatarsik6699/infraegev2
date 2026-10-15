@@ -1,8 +1,20 @@
-const observe = (listener: (visible: boolean) => void): (() => void) => {
+/** How far the page footer reaches into the viewport, so the button can sit above it. */
+const footerOverlap = (): number => {
+  const footer = document.querySelector("footer");
+  if (!footer) return 0;
+  return Math.max(
+    0,
+    Math.round(window.innerHeight - footer.getBoundingClientRect().top),
+  );
+};
+
+const observe = (
+  listener: (visible: boolean, lift: number) => void,
+): (() => void) => {
   let frame: number | undefined;
   const update = () => {
     frame = undefined;
-    listener(window.scrollY >= window.innerHeight);
+    listener(window.scrollY >= window.innerHeight, footerOverlap());
   };
   const schedule = () => {
     frame ??= window.requestAnimationFrame(update);

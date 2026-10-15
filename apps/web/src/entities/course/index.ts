@@ -4,6 +4,7 @@ export type { CourseProgressTypes } from "./course-progress.types";
 export { courseProgress } from "./course-progress";
 export { courseCatalog } from "./content/course-catalog";
 export { CourseChip, CourseCover, courseCover } from "./course-cover";
+export { CourseMotif, courseIdentity } from "./course-identity";
 export {
   courseLessonPublications,
   coursePublications,

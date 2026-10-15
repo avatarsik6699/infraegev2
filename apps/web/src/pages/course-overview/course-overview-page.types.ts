@@ -13,6 +13,8 @@ export namespace CourseOverviewPageTypes {
     routeSlug?: string;
     /** Additional lesson: marked, outside course mastery (Change 175). */
     advanced?: boolean;
+    /** F10: false only when the lesson is known to have no practice tasks. */
+    hasPractice: boolean;
     progress: Progress;
   };
 
@@ -21,6 +23,8 @@ export namespace CourseOverviewPageTypes {
     title: string;
     number: string;
     finalProject: boolean;
+    /** F11: the «Дополнительно» module — its rows need no advanced mark. */
+    advanced: boolean;
     status: string;
     lessons: readonly Lesson[];
     /** Mastered of published lessons; absent until progress is ready. */

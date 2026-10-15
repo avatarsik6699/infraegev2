@@ -2,7 +2,7 @@
   position: fixed;
   z-index: var(--layer-reading);
   right: var(--space-2);
-  bottom: var(--space-2);
+  bottom: calc(var(--space-2) + var(--scroll-to-top-lift, 0px));
 }
 
 .root[hidden],
@@ -20,7 +20,7 @@
   }
 
   .root {
-    inset: auto 0 0;
+    inset: auto 0 var(--scroll-to-top-lift, 0px);
     display: flex;
     justify-content: flex-end;
     align-items: center;

@@ -1,6 +1,9 @@
 /* EGE topic catalog — v5 mockup `ege.html` (Change 169). */
 .page {
   composes: pageFrame from "../../shared/styles/patterns.module.css";
+
+  /* Change 186 (F47): the EGE paper — filled progress in the ink orange. */
+  --progress-indicator-background: var(--color-exam-ink);
 }
 
 .catalogSection[data-measure] {
@@ -17,6 +20,10 @@
   align-items: center;
 }
 
+.summaryPair {
+  white-space: nowrap;
+}
+
 /* The retry action sits on the meta line without adding a control's height. */
 .summary .retry[data-hierarchy] {
   min-height: 0;
@@ -26,6 +33,7 @@
 
 .summaryStatus {
   display: grid;
+  white-space: nowrap;
 }
 
 .summaryStatus > span {

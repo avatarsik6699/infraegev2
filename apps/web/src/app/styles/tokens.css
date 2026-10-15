@@ -167,6 +167,12 @@
   --color-plate-sky-ink: var(--theme-pastel-sky-ink);
   --color-plate-sage-strong: var(--theme-pastel-sage-strong);
   --color-plate-sage-ink: var(--theme-pastel-sage-ink);
+  --color-exam-ink: var(--theme-exam-ink);
+  --color-exam-mark: var(--theme-exam-mark);
+  --color-exam-badge: var(--theme-exam-badge);
+  --color-exam-paper: var(--theme-exam-paper);
+  --color-plate-sky-action: var(--theme-pastel-sky-action);
+  --color-plate-sage-action: var(--theme-pastel-sage-action);
   --color-plate-lilac-strong: var(--theme-pastel-lilac-strong);
   --color-plate-lilac-ink: var(--theme-pastel-lilac-ink);
   --color-level-basic: var(--theme-pastel-sage-strong);
@@ -191,6 +197,8 @@
   --color-sheet-ref-3: var(--theme-sheet-ref-3);
   --color-sheet-ref-4: var(--theme-sheet-ref-4);
   --color-sheet-ref-5: var(--theme-sheet-ref-5);
+  /* Change 186 (F18): the selected cell and its fill handle, as Excel draws them. */
+  --color-sheet-selected: var(--theme-pastel-sage-strong);
   --color-code: var(--theme-code);
   --color-code-top: var(--theme-code);
   --color-code-text: var(--theme-code-ink);

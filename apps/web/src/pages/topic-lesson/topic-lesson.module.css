@@ -1,6 +1,11 @@
 /* EGE topic pages (Change 167) on the shared lesson frame (Change 169). */
 .page {
   composes: page from "../../shared/styles/lesson-frame.module.css";
+
+  /* Change 186 (F34): the EGE paper — rail numbers and filled progress in
+     the ink orange; buttons stay ink (F53). */
+  --lesson-tree-marker: var(--color-exam-ink);
+  --progress-indicator-background: var(--color-exam-ink);
 }
 
 .lesson {
@@ -53,6 +58,12 @@
   composes: pageTitle from "../../shared/styles/lesson-frame.module.css";
 }
 
+/* F37: under the topic head the first subtopic's title is a step smaller,
+   so the page opens with one big heading, not two. */
+.subtopicHead[data-first] .subtopicTitle[data-order] {
+  font-size: var(--text-2xl);
+}
+
 .section {
   composes: section from "../../shared/styles/lesson-frame.module.css";
 }
@@ -98,4 +109,42 @@
 .subtopicLead[data-variant] {
   max-width: var(--measure-reading);
   margin: 0;
+}
+
+/* Change 186 (F43): the practice page's eyebrow names the topic in the EGE
+   ink; orange stays «you are here» on the subtopic pages. */
+.examEyebrow {
+  margin: 0;
+  color: var(--color-exam-ink);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+/* F35: the topic's outcomes in a row, each under a light orange rule. */
+.outcomes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+  gap: var(--space-2) var(--space-3);
+  margin: 0 0 var(--space-4);
+  padding: 0;
+  list-style: none;
+}
+
+.outcome {
+  display: grid;
+  gap: var(--space-1);
+  align-content: start;
+  padding-top: var(--space-1-5);
+  border-top: 2px solid var(--color-exam-mark);
+  color: var(--color-text-soft);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+}
+
+.outcomeMark {
+  color: var(--color-exam-ink);
+  font-family: var(--font-data);
+  font-size: var(--text-2xs);
+  font-weight: 500;
 }

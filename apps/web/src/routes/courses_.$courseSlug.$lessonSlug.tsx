@@ -8,6 +8,7 @@ import {
 import {
   CourseLessonPage,
   getCourseLessonRouteData,
+  getCourseLessonSummary,
 } from "~/pages/course-lesson";
 import { pageHead } from "~/shared/lib/seo";
 
@@ -41,6 +42,10 @@ function courseLessonHead(
   });
 }
 
+/** The rail's mastered checks are optional: a failed summary marks nothing. */
+const getCourseLessonRouteSummary = (courseId: string) =>
+  getCourseLessonSummary({ data: courseId }).catch(() => null);
+
 export const Route = createFileRoute("/courses_/$courseSlug/$lessonSlug")({
   loader: async ({ params }) => {
     const course = findCoursePublicationByRouteSlug(params.courseSlug);
@@ -49,18 +54,22 @@ export const Route = createFileRoute("/courses_/$courseSlug/$lessonSlug")({
       params.lessonSlug,
     );
     if (!course || !lesson) throw notFound();
-    const routeData = await getCourseLessonRouteData({
-      data: {
-        courseRouteSlug: params.courseSlug,
-        lessonRouteSlug: params.lessonSlug,
-      },
-    });
+    const [routeData, practiceSummary] = await Promise.all([
+      getCourseLessonRouteData({
+        data: {
+          courseRouteSlug: params.courseSlug,
+          lessonRouteSlug: params.lessonSlug,
+        },
+      }),
+      getCourseLessonRouteSummary(course.id),
+    ]);
     if (!routeData) throw notFound();
     return {
       course,
       lesson,
       tasks: routeData.tasks,
       practiceUnavailable: routeData.practiceUnavailable,
+      practiceSummary,
     };
   },
   head: ({ loaderData }) => courseLessonHead(loaderData),
@@ -82,6 +91,7 @@ function CourseLessonRoute() {
       lesson={lesson}
       tasks={data.tasks}
       practiceUnavailable={data.practiceUnavailable}
+      practiceSummary={data.practiceSummary}
     />
   );
 }

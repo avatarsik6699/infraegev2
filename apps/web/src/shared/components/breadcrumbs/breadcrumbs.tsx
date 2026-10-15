@@ -17,7 +17,11 @@ export const Breadcrumbs: React.FC<BreadcrumbsTypes.Props> = (props) => (
       {props.items.map((item, index) => {
         const last = index === props.items.length - 1;
         return (
-          <li key={`${item.label}-${String(index)}`} className={styles.item}>
+          <li
+            key={`${item.label}-${String(index)}`}
+            className={styles.item}
+            data-back={index === backIndex(props.items) || undefined}
+          >
             {item.to && !last ? (
               <ActionLink
                 to={item.to}
@@ -29,7 +33,10 @@ export const Breadcrumbs: React.FC<BreadcrumbsTypes.Props> = (props) => (
                 {item.label}
               </ActionLink>
             ) : (
-              <span className={styles.current} aria-current="page">
+              <span
+                className={styles.current}
+                aria-current={last ? "page" : undefined}
+              >
                 {item.label}
               </span>
             )}
@@ -39,3 +46,10 @@ export const Breadcrumbs: React.FC<BreadcrumbsTypes.Props> = (props) => (
     </ol>
   </nav>
 );
+
+/** The phone's one step back: the nearest ancestor that is a link (F16, F40). */
+function backIndex(items: readonly BreadcrumbsTypes.Item[]): number {
+  for (let index = items.length - 2; index >= 0; index -= 1)
+    if (items[index]?.to) return index;
+  return -1;
+}

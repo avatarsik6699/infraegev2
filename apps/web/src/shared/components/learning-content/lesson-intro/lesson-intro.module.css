@@ -30,6 +30,17 @@
   pointer-events: none;
 }
 
+.root[data-backdrop]::before {
+  content: none;
+}
+
+.backdrop {
+  position: absolute;
+  z-index: -1;
+  inset: calc(-1 * var(--space-2)) calc(-1 * var(--space-2)) 0;
+  pointer-events: none;
+}
+
 .kicker {
   margin: 0;
   color: var(--color-muted);

@@ -27,13 +27,15 @@
     color var(--motion-duration) var(--motion-easing);
 }
 
+/* Change 186: a page may tint its primary through `--primary-fill` and
+   `--primary-fill-hover` (a course's pages use the course action shade). */
 .root[data-hierarchy="primary"] {
-  background: var(--control-primary-bg);
+  background: var(--primary-fill, var(--control-primary-bg));
   color: var(--control-primary-text);
 }
 
 .root[data-hierarchy="primary"]:hover:not(:disabled) {
-  background: var(--control-primary-bg-hover);
+  background: var(--primary-fill-hover, var(--control-primary-bg-hover));
   color: var(--control-primary-text);
 }
 

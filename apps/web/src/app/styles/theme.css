@@ -39,6 +39,18 @@
   --theme-pastel-sky-ink: #2b4c78;
   --theme-pastel-sage-strong: #3c8571;
   --theme-pastel-sage-ink: #2b5c4f;
+  /* Change 186: a course's primary button in its own colour (white text
+     ≥5:1) and the Excel selected cell in the sheet green. */
+  /* Change 186: the EGE topic pages' paper in grey and orange — numbers and
+     filled progress in the ink orange (5.4:1), outcome rules in the light
+     one, squared paper. */
+  --theme-exam-ink: #b54700;
+  --theme-exam-mark: #e9a576;
+  /* F51: the «ЕГЭ» mark's fill, darker for its white letters (3.8:1). */
+  --theme-exam-badge: #d0651a;
+  --theme-exam-paper: rgb(23 25 30 / 0.05);
+  --theme-pastel-sky-action: #3f6aa6;
+  --theme-pastel-sage-action: #347a66;
   --theme-pastel-lilac-strong: #7a5fbd;
   --theme-pastel-lilac-ink: #4f3d8a;
 

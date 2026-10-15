@@ -15,10 +15,15 @@ export namespace CourseNavigationTypes {
   };
 
   export type Props = {
+    courseId: string;
     courseRouteSlug: string;
     courseTitle: string;
+    /** «Python», «Excel»: names the course in the phone disclosure (F15). */
+    courseShortTitle: string;
     modules: readonly Module[];
     currentLessonId: string;
+    /** Lessons shown with the green mastered check (F26). */
+    masteredLessonIds?: ReadonlySet<string>;
     /** Lesson progress shown under the tree on narrow screens (F38). */
     progress?: React.ReactNode;
   };

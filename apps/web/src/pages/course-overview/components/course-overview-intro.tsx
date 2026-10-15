@@ -1,5 +1,5 @@
 import type { CourseTypes } from "~/entities/course";
-import { Laptop, Route } from "lucide-react";
+import { Laptop } from "lucide-react";
 import { FragmentLink } from "~/shared/components/fragment-link";
 import { Typography } from "~/shared/components/typography";
 import { CourseOverviewAction } from "./course-overview-action";
@@ -30,38 +30,44 @@ export const CourseOverviewActions: React.FC<Props> = (props) => (
   </div>
 );
 
-export const CourseOverviewFacts: React.FC<{ requirements: string }> = (
-  props,
-) => (
-  <div className={styles.facts}>
-    <section className={styles.fact} aria-labelledby="course-requirements">
-      <div className={styles.factHead}>
-        <Typography.Title
-          order={2}
-          id="course-requirements"
-          className={styles.factTitle}
-        >
-          Что понадобится
-        </Typography.Title>
-        <Laptop className={styles.factIcon} aria-hidden="true" />
-      </div>
-      <Typography.Text tone="muted">{props.requirements}</Typography.Text>
-    </section>
-    <section className={styles.fact} aria-labelledby="course-format">
-      <div className={styles.factHead}>
-        <Typography.Title
-          order={2}
-          id="course-format"
-          className={styles.factTitle}
-        >
-          Как идёт курс
-        </Typography.Title>
-        <Route className={styles.factIcon} aria-hidden="true" />
-      </div>
-      <Typography.Text tone="muted">
-        Каждый урок: объяснение, разобранный пример и практика. Прогресс
-        сохраняется в аккаунте.
+type FactsProps = {
+  courseId: string;
+  requirements: string;
+  outcomes: readonly string[];
+};
+
+/** F24: each outcome's mark in the course's own notation — a Python comment, an Excel cell. */
+const outcomeMark = (courseId: string, index: number): string =>
+  courseId === "excel" ? `A${String(index + 1)}` : `# ${String(index + 1)}`;
+
+/**
+ * Change 186 (F17, F24): what the course teaches, four outcomes in a row
+ * under a rule of the course's colour, then what it needs in one line.
+ */
+export const CourseOverviewFacts: React.FC<FactsProps> = (props) => (
+  <section className={styles.about} aria-labelledby="course-outcomes">
+    <Typography.Title
+      order={2}
+      id="course-outcomes"
+      className={styles.aboutTitle}
+    >
+      Чему научитесь
+    </Typography.Title>
+    <ol className={styles.outcomes}>
+      {props.outcomes.map((outcome, index) => (
+        <li key={outcome} className={styles.outcome}>
+          <span className={styles.outcomeMark} aria-hidden="true">
+            {outcomeMark(props.courseId, index)}
+          </span>
+          {outcome}
+        </li>
+      ))}
+    </ol>
+    <div className={styles.needs}>
+      <Laptop className={styles.needsIcon} aria-hidden="true" />
+      <Typography.Text tone="muted" className={styles.needsText}>
+        <strong>Что понадобится.</strong> {props.requirements}
       </Typography.Text>
-    </section>
-  </div>
+    </div>
+  </section>
 );
