@@ -119,7 +119,7 @@ describe("task 24 string processing lesson (Change 184)", () => {
     expect(lesson).toMatchObject({
       id: "string-processing",
       routeSlug: "24-obrabotka-simvolnyh-strok",
-      title: "Обработка символьных строк",
+      title: "Обработка символьной информации",
       taskNumbers: [24],
       status: "published",
       masteryThreshold: 0.8,

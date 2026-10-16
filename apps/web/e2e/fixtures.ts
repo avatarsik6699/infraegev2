@@ -52,7 +52,7 @@ type AppFixtures = {
 
 const numberRecordLessonConfig = {
   route: "/ege/5-preobrazovanie-zapisey-chisel/chislo-i-zapis",
-  title: "Преобразование записей чисел",
+  title: "Формальное исполнение алгоритма",
   taskNumber: 5,
   taskCount: 40,
   masteryTaskCount: 37,
@@ -61,7 +61,7 @@ const numberRecordLessonConfig = {
 
 const numberSequencesLessonConfig = {
   route: "/ege/17-chislovye-posledovatelnosti/chisla-i-proverki",
-  title: "Числовые последовательности",
+  title: "Обработка числовой последовательности",
   taskNumber: 17,
   taskCount: 49,
   masteryTaskCount: 38,
@@ -71,7 +71,7 @@ const numberSequencesLessonConfig = {
 
 const stringProcessingLessonConfig = {
   route: "/ege/24-obrabotka-simvolnyh-strok/stroka-i-fragment",
-  title: "Обработка символьных строк",
+  title: "Обработка символьной информации",
   taskNumber: 24,
   taskCount: 66,
   masteryTaskCount: 51,
@@ -89,7 +89,7 @@ const graphAnalysisLessonConfig = {
 
 const divisorsAndMasksLessonConfig = {
   route: "/ege/25-deliteli-i-maski/deliteli-parami",
-  title: "Делители и маски",
+  title: "Обработка целочисленной информации",
   taskNumber: 25,
   taskCount: 39,
   masteryTaskCount: 33,
@@ -97,7 +97,7 @@ const divisorsAndMasksLessonConfig = {
 
 const arrayProcessingLessonConfig = {
   route: "/ege/26-sortirovka-i-otbor/zapisi-i-rejting",
-  title: "Обработка данных: сортировка и отбор",
+  title: "Обработка данных с сортировкой",
   taskNumber: 26,
   taskCount: 67,
   masteryTaskCount: 53,
@@ -107,7 +107,7 @@ const arrayProcessingLessonConfig = {
 
 const dataAnalysisLessonConfig = {
   route: "/ege/27-analiz-dannyh-i-klasterizatsiya/tochki-i-rasstoyaniya",
-  title: "Анализ данных: кластеризация",
+  title: "Анализ данных",
   taskNumber: 27,
   taskCount: 34,
   masteryTaskCount: 29,

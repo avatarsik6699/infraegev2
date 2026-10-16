@@ -50,10 +50,11 @@ fallback.
   pivots, charts) outside course mastery. Its live sheets recalculate edited source cells in the
   browser with an evaluator limited to the course's functions; tasks on the practice workbook
   carry it as an `.xlsx` attachment.
-- EGE topic lessons cover tasks 3–5, 7–11, 14, 16–21 and 23–27 (Change 184; 19–21 are one
-  lesson). Each is exported whole from its approved lesson-design stand: core subtopics, then
-  advanced ones outside mastery where the stand has them, then «Практика и итог» with the topic's
-  bank tasks and their data files. Topics 1, 2, 6, 12, 13, 15 and 22 are not published yet.
+- EGE topic lessons cover every task 1–27 (Changes 184 and 190; 19–21 are one lesson), under the
+  short names of the FIPI 2027 variant plan. Each is exported whole from its approved
+  lesson-design stand: core subtopics, then advanced ones outside mastery where the stand has
+  them, then «Практика и итог» with the topic's bank tasks, their data files and the schemes of
+  their statements.
 - Optional accounts and synchronized progress are implemented. Hard lesson locks, payments and
   in-product AI remain out of scope; enabled sign-in methods depend on deployment configuration.
 

@@ -242,7 +242,7 @@ export const FoundationPage: React.FC = () => (
             <div className={styles.tryStrip}>
               <span>
                 <span className={styles.tryStripTopic}>Задание 16</span> ·
-                Рекурсивные алгоритмы
+                Рекуррентные выражения
               </span>
               <span>Лёгкая</span>
             </div>

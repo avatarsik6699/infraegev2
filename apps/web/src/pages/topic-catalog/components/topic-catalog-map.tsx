@@ -80,10 +80,13 @@ export const TopicCatalogMap: React.FC<Props> = (props) => {
             {examPlan.levelTitles[level].toLocaleLowerCase("ru")}
           </span>
         ))}
-        <span>
-          <i className={styles.legendSoon} />
-          скоро
-        </span>
+        {/* Change 190: every topic is published — «скоро» only while one is planned */}
+        {props.entries.some((entry) => entry.status === "planned") && (
+          <span>
+            <i className={styles.legendSoon} />
+            скоро
+          </span>
+        )}
       </span>
     </nav>
   );

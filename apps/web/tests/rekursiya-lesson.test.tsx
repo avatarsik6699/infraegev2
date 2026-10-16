@@ -111,7 +111,7 @@ describe("task 16 recursion lesson (Change 184)", () => {
     expect(lesson).toMatchObject({
       id: "rekursiya",
       routeSlug: "16-rekursiya",
-      title: "Рекурсивные алгоритмы",
+      title: "Рекуррентные выражения",
       taskNumbers: [16],
       status: "published",
       masteryThreshold: 0.8,

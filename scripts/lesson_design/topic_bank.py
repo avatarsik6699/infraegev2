@@ -50,6 +50,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import textwrap
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
@@ -59,7 +60,11 @@ REGISTRY = REPO / "apps/api/practice-registry.json"
 TASK_BLOCK = ("**Чтобы проверить понимание", "**Задачи основных подтем")
 MAX_CODE_LINE = 64
 XLSX_MIME = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-MIME = {".xlsx": ("xlsx", XLSX_MIME), ".txt": ("txt", "text/plain")}
+MIME = {
+    ".xlsx": ("xlsx", XLSX_MIME),
+    ".txt": ("txt", "text/plain"),
+    ".png": ("png", "image/png"),
+}
 NUMBER = "Введите число."
 TWO = "Введите два числа через пробел в том порядке, в каком их спрашивают."
 THREE = "Введите три числа через пробел в том порядке, в каком их спрашивают."
@@ -84,6 +89,8 @@ def pages(topic: Path) -> tuple[dict, list[str]]:
 
 def task_inventory(block: str) -> dict[int, tuple[str, str]]:
     questions, _, answers = block.partition("\n**Ответы для проверки:**\n")
+    # the closing words of a final page («**Что дальше.**») may hold a list of their own
+    answers = answers.split("\n\n**", 1)[0]
 
     def numbered(text: str) -> dict[int, str]:
         found = re.split(r"(?m)^(\d+)\. ", text)
@@ -103,17 +110,113 @@ def inventory(topic: Path) -> dict[int, dict[int, tuple[str, str]]]:
     return result
 
 
-def site_text(text: str) -> str:
+def plain(text: str) -> str:
     """Stand markup → bank Markdown: a data file link becomes its name, a
-    course term keeps only its label; the final page's closing words after the
-    last answer are not part of it."""
-    text = text.split("\n\n", 1)[0]
+    course term keeps only its label."""
     text = re.sub(r"\[([^\]]+)\]\(topic-\d+/files/[^)]+\)", r"\1", text)
     return re.sub(r"\{\{[\w-]+\|(.+?)\}\}", r"\1", text)
 
 
-def statement(question: str) -> list[dict]:
-    return [{"type": "text", "data": {"markdown": " ".join(site_text(question).split())}}]
+def site_text(text: str) -> str:
+    """The written answer: its first paragraph (the final page's closing words
+    after the last answer are not part of it)."""
+    return plain(text.split("\n\n", 1)[0])
+
+
+def figure_png(topic: Path, svg: str) -> Path:
+    """Where the PNG of a statement figure lives: named by its SVG."""
+    digest = hashlib.sha256(svg.encode()).hexdigest()[:16]
+    return topic / "files" / f"fig-{digest}.png"
+
+
+def render_png(jobs: list[tuple[str, Path]]) -> None:
+    """Draw the missing PNGs with ``svg_png.mjs`` (headless Chromium)."""
+    if not jobs:
+        return
+    payload = json.dumps([{"svg": svg, "out": str(out)} for svg, out in jobs])
+    done = subprocess.run(
+        ["node", str(REPO / "scripts/lesson_design/svg_png.mjs")],
+        input=payload,
+        capture_output=True,
+        text=True,
+        timeout=300,
+    )
+    if done.returncode:
+        raise SystemExit(done.stderr)
+
+
+def table_block(lines: list[str]) -> dict:
+    def cells(line: str) -> list[str]:
+        cells = line.strip().strip("|").split("|")
+        return [plain(c.strip().replace("**", "").replace("\\*", "*")) for c in cells]
+
+    return {
+        "type": "table",
+        "data": {
+            "headers": cells(lines[0]),
+            "rows": [cells(x) for x in lines[2:]],
+            "caption": None,
+        },
+    }
+
+
+def statement(question: str, topic: Path | None = None) -> tuple[list[dict], list[tuple]]:
+    """The whole question as bank blocks: paragraphs are text, a Markdown table
+    a ``table``, a code fence a ``code_example``, a stand figure an ``image``
+    (PNG of the same builder, returned as ``(svg, png, alt, width, height)``);
+    a workbook view (``%%…_book(…)%%``) is left out — the book is attached."""
+    blocks: list[dict] = []
+    images: list[tuple] = []
+    parts = re.split(r"(<figure\b.*?</figure>|```[^\n]*\n.*?```)", question.strip(), flags=re.S)
+    for k, part in enumerate(parts):
+        if k % 2:
+            body = textwrap.dedent(part)
+            if body.startswith("```"):
+                head, _, code = body.partition("\n")
+                code = textwrap.dedent(code.rsplit("```", 1)[0]).rstrip()
+                language = "python" if head.strip("`").startswith("python") else "text"
+                blocks.append(
+                    {
+                        "type": "code_example",
+                        "data": {"language": language, "code": code, "caption": None},
+                    }
+                )
+                continue
+            call = re.search(r"%%(\w+)\((.*?)\)%%", body)
+            if not call or topic is None:
+                raise SystemExit(f"a figure without a builder call: {body[:80]!r}")
+            from export_media import inline_svg, parse_call  # noqa: PLC0415
+            from figures import FIGURES  # noqa: PLC0415
+
+            args, kwargs = parse_call(call.group(1), call.group(2))
+            svg = FIGURES[call.group(1)](*args, **kwargs)
+            _, width, height, alt = inline_svg(svg)
+            caption = re.search(r"<figcaption>(.*?)</figcaption>", body, re.S)
+            alt = alt or (
+                " ".join(re.sub(r"<[^>]+>", "", caption.group(1)).split()) if caption else ""
+            )
+            if not alt:
+                raise SystemExit(f"figure {call.group(1)}: needs aria-label or a figcaption")
+            images.append((svg, figure_png(topic, svg), alt, width, height))
+            data: dict[str, object] = {"usage_id": f"figure-{len(images)}", "alt": alt}
+            data.update(width=width, height=height, caption=None)
+            blocks.append({"type": "image", "data": data})
+            continue
+        for chunk in re.split(r"\n\s*\n", part):
+            lines = [x.strip() for x in chunk.strip().split("\n") if x.strip()]
+            if not lines:
+                continue
+            if re.fullmatch(r"%%\w+_book\(.*\)%%", " ".join(lines)):
+                continue
+            if "%%" in chunk:
+                raise SystemExit(f"a stand figure outside <figure>: {chunk.strip()[:80]!r}")
+            if lines[0].startswith("|") and len(lines) > 2 and set(lines[1]) <= set("|-: "):
+                blocks.append(table_block(lines))
+            else:
+                blocks.append(
+                    {"type": "text", "data": {"markdown": " ".join(plain(chunk).split())}}
+                )
+    return blocks, images
 
 
 def run(code: str, files: list[Path]) -> str:
@@ -162,9 +265,17 @@ def build(topic: Path, exam: int, tasks: list[dict]) -> tuple[list[dict], dict[s
         "sections"
     ]
     built, files = [], {}
+    missing = {
+        png: svg
+        for spec in tasks
+        for svg, png, *_ in statement(texts[spec["at"][0]][spec["at"][1]][0], topic)[1]
+        if not png.exists()
+    }
+    render_png([(svg, png) for png, svg in missing.items()])
     for position, spec in enumerate(tasks):
         page, number = spec["at"]
         question, written = texts[page][number]
+        blocks, images = statement(question, topic)
         written = site_text(written)
         code = spec.get("code")
         attached = [(topic / "files" / name, note) for name, note in spec.get("files", [])]
@@ -200,6 +311,19 @@ def build(topic: Path, exam: int, tasks: list[dict]) -> tuple[list[dict], dict[s
                     "description": note,
                 }
             )
+        for k, (_, png, alt, _, _) in enumerate(images, start=1):
+            checksum = sha256(png)
+            files[checksum] = png
+            attachments.append(
+                {
+                    "id": f"figure-{k}",
+                    "purpose": "image",
+                    "checksum": checksum,
+                    "filename": png.name,
+                    "attribution": None,
+                    "description": alt,
+                }
+            )
         membership = {"position": position, "material_id": material}
         if page in advanced:
             membership["counts_toward_mastery"] = False
@@ -215,8 +339,12 @@ def build(topic: Path, exam: int, tasks: list[dict]) -> tuple[list[dict], dict[s
                     "answer_instruction": spec["instruction"],
                     "interaction_type": "production",
                     "content_schema_version": 1,
-                    "statement": statement(question)
-                    + [{"type": "attachment", "data": {"usage_id": a["id"]}} for a in attachments],
+                    "statement": blocks
+                    + [
+                        {"type": "attachment", "data": {"usage_id": a["id"]}}
+                        for a in attachments
+                        if a["purpose"] == "attachment"
+                    ],
                     "hint": [{"type": "text", "data": {"markdown": spec["hint"]}}],
                     "explanation": [{"type": "text", "data": {"markdown": written}}]
                     + solution(code, spec.get("excel")),
@@ -261,8 +389,10 @@ def checkpoints(topic: Path, tasks: list[dict]) -> dict[str, list[dict]]:
         slug = "praktika" if page == len(names) else re.sub(r"^\d+-", "", names[page - 1][:-3])
         for number, (question, answer) in items.items():
             if (page, number) not in used:
+                # the workbook view of a task stays on the stand (the bank task attaches the book)
+                prompt = re.sub(r"\n\s*%%\w+_book\(.*?\)%%", "", question)
                 result.setdefault(slug, []).append(
-                    {"id": f"zadacha-{number}", "prompt": question, "reveal": answer}
+                    {"id": f"zadacha-{number}", "prompt": prompt, "reveal": answer}
                 )
     return result
 
@@ -299,12 +429,16 @@ def main(
             # kept for the saved progress, hidden and out of every lesson; the
             # import then drops their lesson positions
             entry["task"].update(archived=True, catalog_visible=False, lessons=[], theory_links=[])
-    # a retired task may share the prefix (task-17-01 of the earlier lesson)
-    bank["tasks"] = [
-        e
-        for e in bank["tasks"]
-        if not e["task"]["id"].startswith(prefix) or e["task"]["id"] in remove
-    ] + built
+
+    # a retired task may share the prefix (task-17-01 of the earlier lesson);
+    # the topic's tasks keep their place in the bank (a new topic goes last)
+    def ours(e: dict) -> bool:
+        return e["task"]["id"].startswith(prefix) and e["task"]["id"] not in remove
+
+    place = next((k for k, e in enumerate(bank["tasks"]) if ours(e)), len(bank["tasks"]))
+    kept = [e for e in bank["tasks"] if not ours(e)]
+    at = sum(1 for e in bank["tasks"][:place] if not ours(e))
+    bank["tasks"] = kept[:at] + built + kept[at:]
     material = json.loads((topic / "topic.json").read_text())["site"]["id"]
     for entry in bank["tasks"]:
         for link in entry["task"]["theory_links"]:

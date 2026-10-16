@@ -26,6 +26,13 @@ const subtopicCounts: Readonly<Record<string, number>> = {
   "divisors-and-masks": 6,
   "array-processing": 8,
   "data-analysis": 8,
+  "information-models": 6,
+  "truth-tables": 6,
+  "simple-algorithms": 7,
+  executors: 7,
+  "branching-and-enumeration": 8,
+  "logic-transformations": 7,
+  "parallel-computing": 8,
 };
 
 const publicationById = new Map(

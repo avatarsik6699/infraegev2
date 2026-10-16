@@ -514,13 +514,16 @@ export const dataAnalysisLesson = defineLesson({
           id: "zadacha-2",
           prompt: (
             <>
-              Почему следующий код может быть очень медленным? ``
-              <Notation>
-                {
-                  "python\n    for point in cluster:\n        d = dist(center_sum(cluster), point)\n    "
+              <Typography.Text>
+                Почему следующий код может быть очень медленным?
+              </Typography.Text>
+              <CodeBlock
+                code={
+                  "for point in cluster:\n    d = dist(center_sum(cluster), point)"
                 }
-              </Notation>
-              ``
+                label={"Почему следующий код может быть очень медленным?"}
+                language="python"
+              />
             </>
           ),
           reveal: (

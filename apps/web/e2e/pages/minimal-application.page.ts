@@ -53,6 +53,7 @@ const bank = bankJson as unknown as {
     task: {
       id: string;
       title: string;
+      hint: unknown[];
       catalog_visible: boolean;
       archived: boolean;
       exam_numbers: number[];
@@ -77,6 +78,25 @@ const visibleTasks = bank.tasks
       a.task.id.localeCompare(b.task.id)
     );
   });
+
+/** The first topic whose two leading catalog tasks both have a hint (inline solving). */
+const hintedTopic = (() => {
+  const exams = [
+    ...new Set(visibleTasks.map(({ task }) => task.exam_numbers[0])),
+  ];
+  for (const exam of exams) {
+    const tasks = visibleTasks.filter(
+      ({ task }) => task.exam_numbers[0] === exam,
+    );
+    if (
+      tasks.length >= 2 &&
+      tasks[0]!.task.hint.length &&
+      tasks[1]!.task.hint.length
+    )
+      return { exam: exam!, tasks };
+  }
+  throw new Error("No topic with two hinted catalog tasks");
+})();
 
 export class MinimalApplicationPage {
   constructor(private readonly page: Page) {}
@@ -416,10 +436,12 @@ export class MinimalApplicationPage {
     } else {
       await this.openTopicChooser();
       await this.page
-        .getByRole("option", { name: /^ЕГЭ 16 · Рекурсия/u })
+        .getByRole("option", { name: /^ЕГЭ 16 · Рекуррентные выражения/u })
         .click();
       await this.page
-        .getByRole("option", { name: /^ЕГЭ 5 · Преобразование записей чисел/u })
+        .getByRole("option", {
+          name: /^ЕГЭ 5 · Формальное исполнение алгоритма/u,
+        })
         .click();
       await expect(this.page).toHaveURL(/page=2/);
       await this.page
@@ -434,7 +456,7 @@ export class MinimalApplicationPage {
     );
     await this.page
       .getByRole("link", {
-        name: "Убрать тему: ЕГЭ 5 · Преобразование записей чисел",
+        name: "Убрать тему: ЕГЭ 5 · Формальное исполнение алгоритма",
       })
       .click();
     await expect(this.page).toHaveURL(
@@ -445,7 +467,7 @@ export class MinimalApplicationPage {
     if (!noJavaScript)
       await expect(
         filters.getByRole("combobox", { name: "Тема", exact: true }),
-      ).toContainText("ЕГЭ 16 · Рекурсия");
+      ).toContainText("ЕГЭ 16 · Рекуррентные выражения");
     if (noJavaScript) {
       await this.page
         .getByRole("combobox", { name: "Сортировка:", exact: true })
@@ -508,7 +530,7 @@ export class MinimalApplicationPage {
       name: "Найти тему",
       exact: true,
     });
-    await searchBox.fill("Рекурс");
+    await searchBox.fill("Рекуррент");
     const option = this.page.getByRole("option", { name: /^ЕГЭ 16 · / });
     await option.click();
     await this.page.keyboard.press("Escape");
@@ -803,32 +825,35 @@ export class MinimalApplicationPage {
   }
 
   async expectInlineSolving() {
-    await this.page.goto("/practice");
+    // Change 190: the first catalog tasks are KEGE imports without hints (Change 188);
+    // the check opens the first topic whose two leading tasks have one.
+    const { exam, tasks } = hintedTopic;
+    await this.page.goto(`/practice?topics=ege-${String(exam)}`);
     const list = this.page.getByRole("list", { name: "Задачи", exact: true });
     const first = list.getByRole("listitem").nth(0);
     const second = list.getByRole("listitem").nth(1);
     await expect(first.getByRole("textbox")).toHaveCount(0);
     await first
-      .getByRole("button", { name: visibleTasks[0].task.title, exact: true })
+      .getByRole("button", { name: tasks[0].task.title, exact: true })
       .click();
     await second
-      .getByRole("button", { name: visibleTasks[1].task.title, exact: true })
+      .getByRole("button", { name: tasks[1].task.title, exact: true })
       .click();
     await first.getByRole("textbox").fill("draft-one");
     await second.getByRole("textbox").fill("draft-two");
     await first.getByRole("button", { name: "Подсказка", exact: true }).click();
     await first
-      .getByRole("button", { name: visibleTasks[0].task.title, exact: true })
+      .getByRole("button", { name: tasks[0].task.title, exact: true })
       .click();
     await expect(first.getByRole("textbox")).toBeHidden();
     await expect(
       first.getByRole("button", {
-        name: visibleTasks[0].task.title,
+        name: tasks[0].task.title,
         exact: true,
       }),
     ).toBeFocused();
     await first
-      .getByRole("button", { name: visibleTasks[0].task.title, exact: true })
+      .getByRole("button", { name: tasks[0].task.title, exact: true })
       .press("Enter");
     await expect(first.getByRole("textbox")).toHaveValue("draft-one");
     await expect(second.getByRole("textbox")).toHaveValue("draft-two");
@@ -837,21 +862,23 @@ export class MinimalApplicationPage {
     ).toHaveAttribute("aria-expanded", "true");
     await first
       .getByRole("textbox")
-      .fill(visibleTasks[0].task.checker.answer_variants[0]);
+      .fill(tasks[0].task.checker.answer_variants[0]);
     await first.getByRole("button", { name: "Проверить", exact: true }).click();
     await expect(first.getByRole("status")).toContainText("Верно.");
     await expect(first).not.toHaveAttribute("data-solved");
-    await expect(this.page).toHaveURL(/\/practice$/);
+    await expect(this.page).toHaveURL(
+      new RegExp(`/practice\\?topics=ege-${String(exam)}$`),
+    );
     await expect(second.getByRole("textbox")).toHaveValue("draft-two");
     await expectNoHorizontalOverflow(this.page);
     await this.page.reload();
     await first
-      .getByRole("button", { name: visibleTasks[0].task.title, exact: true })
+      .getByRole("button", { name: tasks[0].task.title, exact: true })
       .click();
     await expect(first.getByRole("textbox")).toBeEnabled();
     await expect(first.getByRole("textbox")).toHaveValue("");
     await second
-      .getByRole("button", { name: visibleTasks[1].task.title, exact: true })
+      .getByRole("button", { name: tasks[1].task.title, exact: true })
       .click();
     await expect(second.getByRole("textbox")).toHaveValue("");
     await this.page.setViewportSize({ width: 390, height: 844 });

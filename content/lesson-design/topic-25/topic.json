@@ -1,6 +1,6 @@
 {
   "number": 25,
-  "title": "Делители и маски",
+  "title": "Обработка целочисленной информации",
   "source": "docs/artifacts/lessons/25_dividers_and_mask.md",
   "site": {
     "id": "divisors-and-masks",

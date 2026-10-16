@@ -51,7 +51,7 @@ describe("task 3 linked tables lesson (Change 184)", () => {
     expect(lesson).toMatchObject({
       id: "relational-databases",
       routeSlug: "3-svyazannye-tablicy",
-      title: "Связанные таблицы",
+      title: "Реляционные базы данных",
       taskNumbers: [3],
       status: "published",
       masteryThreshold: 0.8,

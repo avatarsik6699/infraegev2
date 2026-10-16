@@ -207,27 +207,27 @@ describe("TopicCatalogPage", () => {
     ).toHaveLength(0);
     expect(
       screen
-        .getByRole("link", { name: "Преобразование записей чисел" })
+        .getByRole("link", { name: "Формальное исполнение алгоритма" })
         .getAttribute("href"),
     ).toBe("/ege/5-preobrazovanie-zapisey-chisel");
     expect(
       screen
-        .getByRole("link", { name: "Обработка таблицы чисел" })
+        .getByRole("link", { name: "Электронные таблицы" })
         .getAttribute("href"),
     ).toBe("/ege/9-obrabotka-tablicy-chisel");
     expect(
       screen
-        .getByRole("link", { name: "Рекурсивные алгоритмы" })
+        .getByRole("link", { name: "Рекуррентные выражения" })
         .getAttribute("href"),
     ).toBe("/ege/16-rekursiya");
     expect(
       screen
-        .getByRole("link", { name: "Числовые последовательности" })
+        .getByRole("link", { name: "Обработка числовой последовательности" })
         .getAttribute("href"),
     ).toBe("/ege/17-chislovye-posledovatelnosti");
     expect(
       screen
-        .getByRole("link", { name: "Обработка символьных строк" })
+        .getByRole("link", { name: "Обработка символьной информации" })
         .getAttribute("href"),
     ).toBe("/ege/24-obrabotka-simvolnyh-strok");
     expect(
@@ -236,20 +236,24 @@ describe("TopicCatalogPage", () => {
     ).toContain("Задания 19–21 · базовый, повышенный, высокий");
     expect(
       screen
-        .getByRole("link", { name: "Делители и маски" })
+        .getByRole("link", { name: "Обработка целочисленной информации" })
         .getAttribute("href"),
     ).toBe("/ege/25-deliteli-i-maski");
     expect(
       screen
-        .getByRole("link", { name: "Обработка данных: сортировка и отбор" })
+        .getByRole("link", { name: "Обработка данных с сортировкой" })
         .getAttribute("href"),
     ).toBe("/ege/26-sortirovka-i-otbor");
     expect(
-      screen
-        .getByRole("link", { name: "Анализ данных: кластеризация" })
-        .getAttribute("href"),
+      screen.getByRole("link", { name: "Анализ данных" }).getAttribute("href"),
     ).toBe("/ege/27-analiz-dannyh-i-klasterizatsiya");
-    expect(screen.getAllByText("Скоро")).toHaveLength(PLANNED);
+    expect(screen.queryAllByText("Скоро")).toHaveLength(PLANNED);
+    // Change 190: the map legend names «скоро» only while a topic is planned
+    expect(
+      container
+        .querySelector("[data-exam-map]")
+        ?.textContent?.includes("скоро"),
+    ).toBe(PLANNED > 0);
     await screen.findByText("Решено 0 из 2");
   });
 });
@@ -332,7 +336,7 @@ it("counts only current topic answers, keeps completed in All and excludes stale
   await chooseProgress("В процессе");
   expect(view.container.querySelectorAll("[data-topic-card]")).toHaveLength(1);
   expect(
-    screen.getByRole("link", { name: "Рекурсивные алгоритмы" }),
+    screen.getByRole("link", { name: "Рекуррентные выражения" }),
   ).not.toBeNull();
   expect(screen.getByText("Решено задач в темах: 2")).not.toBeNull();
   await chooseProgress("Не начаты");
@@ -340,10 +344,10 @@ it("counts only current topic answers, keeps completed in All and excludes stale
     PUBLISHED - 2,
   );
   expect(
-    screen.getByRole("link", { name: "Числовые последовательности" }),
+    screen.getByRole("link", { name: "Обработка числовой последовательности" }),
   ).not.toBeNull();
   expect(
-    screen.getByRole("link", { name: "Обработка символьных строк" }),
+    screen.getByRole("link", { name: "Обработка символьной информации" }),
   ).not.toBeNull();
 });
 
@@ -396,7 +400,7 @@ it("keeps navigation/search usable on API error and retries without inventing ze
     key: "Escape",
   });
   expect(
-    screen.getByRole("link", { name: "Рекурсивные алгоритмы" }),
+    screen.getByRole("link", { name: "Рекуррентные выражения" }),
   ).not.toBeNull();
   fireEvent.click(screen.getByRole("button", { name: "Повторить" }));
   await screen.findByText("Решено 0 из 2");

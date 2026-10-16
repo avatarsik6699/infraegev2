@@ -112,37 +112,37 @@ export class TopicCatalogPage {
     expect(firstNumbers).toEqual([...firstNumbers].sort((a, b) => a - b));
     await expect(
       this.page.getByRole("link", {
-        name: "Числовые последовательности",
+        name: "Обработка числовой последовательности",
         exact: true,
       }),
     ).toHaveAttribute("href", "/ege/17-chislovye-posledovatelnosti");
     await expect(
       this.page.getByRole("link", {
-        name: "Обработка символьных строк",
+        name: "Обработка символьной информации",
         exact: true,
       }),
     ).toHaveAttribute("href", "/ege/24-obrabotka-simvolnyh-strok");
     await expect(
       this.page.getByRole("link", {
-        name: "Делители и маски",
+        name: "Обработка целочисленной информации",
         exact: true,
       }),
     ).toHaveAttribute("href", "/ege/25-deliteli-i-maski");
     await expect(
       this.page.getByRole("link", {
-        name: "Обработка данных: сортировка и отбор",
+        name: "Обработка данных с сортировкой",
         exact: true,
       }),
     ).toHaveAttribute("href", "/ege/26-sortirovka-i-otbor");
     await expect(
       this.page.getByRole("link", {
-        name: "Анализ данных: кластеризация",
+        name: "Анализ данных",
         exact: true,
       }),
     ).toHaveAttribute("href", "/ege/27-analiz-dannyh-i-klasterizatsiya");
     await this.page
       .getByRole("link", {
-        name: "Числовые последовательности",
+        name: "Обработка числовой последовательности",
         exact: true,
       })
       .click();
@@ -184,7 +184,7 @@ export class TopicCatalogPage {
     );
     await expect(
       this.page.getByRole("link", {
-        name: "Преобразование записей чисел",
+        name: "Формальное исполнение алгоритма",
         exact: true,
       }),
     ).toBeVisible();
@@ -307,7 +307,7 @@ export class TopicCatalogPage {
     expect(await this.geometry()).toEqual(before);
     await expect(
       this.page.getByRole("link", {
-        name: "Рекурсивные алгоритмы",
+        name: "Рекуррентные выражения",
         exact: true,
       }),
     ).toBeVisible();
@@ -350,7 +350,7 @@ export class TopicCatalogPage {
     await this.chooseProgress("Не начаты");
     await expect(
       this.page.getByRole("link", {
-        name: "Рекурсивные алгоритмы",
+        name: "Рекуррентные выражения",
         exact: true,
       }),
     ).toBeVisible();
@@ -368,16 +368,10 @@ export class TopicCatalogPage {
     );
     await expect(row.getByRole("progressbar")).toBeVisible();
     await row.scrollIntoViewIfNeeded();
-    const plannedTitle = this.page
-      .locator('[data-topic-status="planned"] h2')
-      .first();
-    const title = row.locator("h2");
-    expect(
-      await plannedTitle.evaluate((el) => getComputedStyle(el).color),
-    ).not.toBe(await title.evaluate((el) => getComputedStyle(el).color));
-    expect(
-      await plannedTitle.evaluate((el) => getComputedStyle(el).opacity),
-    ).toBe("1");
+    // Change 190: every topic 1–27 is published, no planned row is left
+    await expect(
+      this.page.locator('[data-topic-status="planned"]'),
+    ).toHaveCount(0);
     const progressSlot = await row
       .locator("[data-topic-progress]")
       .boundingBox();

@@ -111,7 +111,7 @@ describe("task 25 divisors and masks lesson", () => {
     expect(lesson).toMatchObject({
       id: "divisors-and-masks",
       routeSlug: "25-deliteli-i-maski",
-      title: "Делители и маски",
+      title: "Обработка целочисленной информации",
       taskNumbers: [25],
       status: "published",
       masteryThreshold: 0.8,

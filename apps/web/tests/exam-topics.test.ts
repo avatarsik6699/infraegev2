@@ -28,7 +28,7 @@ describe("canonical EGE 2027 taxonomy", () => {
           examTopics.find((option) => option.exam_number === number),
         ).toEqual({
           id: `ege-${number}`,
-          label: `${number} номер. ${number === 16 ? "Рекурсия" : topic.title}`,
+          label: `${number} номер. ${topic.title}`,
           group: "ЕГЭ",
           exam_number: number,
           material_ids: [],
@@ -38,9 +38,9 @@ describe("canonical EGE 2027 taxonomy", () => {
   });
 
   it.each([
-    [10, "Компьютерные сети и адресация", "networks"],
-    [12, "Машина Тьюринга", "executors"],
-    [13, "Подсчёт программ исполнителя", "branching-and-enumeration"],
+    [10, "Маска подсети", "networks"],
+    [12, "Исполнение алгоритма для исполнителя", "executors"],
+    [13, "Анализ хода исполнения алгоритма", "branching-and-enumeration"],
     [23, "Анализ графов", "graph-analysis"],
   ] as const)(
     "uses the 2027 meaning for number %s without changing its stable topic ID",
@@ -70,7 +70,7 @@ describe("canonical EGE 2027 taxonomy", () => {
       topicCatalog.entries
         .filter((topic) => topic.status === "planned")
         .flatMap((topic) => topic.taskNumbers),
-    ).toEqual([1, 2, 6, 12, 13, 15, 22]);
+    ).toEqual([]);
   });
 
   it("preserves mini-course options and their published lesson membership", () => {

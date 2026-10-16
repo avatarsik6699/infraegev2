@@ -9,7 +9,7 @@ const topics = examTopicDefinitions
   .flatMap((x) =>
     x.taskNumbers.map((number) => ({
       id: `ege-${number}`,
-      label: `${number} номер. ${number === 16 ? "Рекурсия" : x.title}`,
+      label: `${number} номер. ${x.title}`,
       group: "ЕГЭ",
       exam_number: number,
       material_ids: [],

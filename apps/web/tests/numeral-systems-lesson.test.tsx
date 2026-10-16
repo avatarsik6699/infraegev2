@@ -119,7 +119,7 @@ describe("task 14 numeral systems lesson (Change 184)", () => {
     expect(lesson).toMatchObject({
       id: "numeral-systems",
       routeSlug: "14-sistemy-schisleniya",
-      title: "Системы счисления: операции и неизвестные цифры",
+      title: "Позиционные системы счисления",
       taskNumbers: [14],
       status: "published",
       masteryThreshold: 0.8,

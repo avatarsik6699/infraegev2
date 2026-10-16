@@ -274,7 +274,7 @@ def test_cli_writes_private_delta_and_error_report(tmp_path):
     assert output.stat().st_mode & 0o777 == 0o700
     assert (output / "bank.json").stat().st_mode & 0o777 == 0o600
     assert json.loads((output / "report.json").read_text())["counts"] == {"included": 1, "error": 1}
-    assert TITLES[16] == "Рекурсия"
+    assert TITLES[16] == "Рекуррентные выражения"
 
 
 def test_source_comment_year_and_no_invented_author():

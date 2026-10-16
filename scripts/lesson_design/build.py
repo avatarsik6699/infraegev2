@@ -423,7 +423,9 @@ def render(md_text: str, lines: bool = False) -> tuple[str, list[tuple[str, str]
             name = first[len("#FILE:") :]
         run = code_html(code, runs, highlight_python) if lang == "python" else None
         inner = highlight_python(code) if lang == "python" else html.escape(code)
-        pre = run or f'<pre class="code {lang}"><code>{inner}</code></pre>'
+        # an executor's program (```algo) looks like the other plain-text blocks
+        shown = "text" if lang == "algo" else lang
+        pre = run or f'<pre class="code {shown}"><code>{inner}</code></pre>'
         if not lines and not run:
             return pre
         visible = code.split("\n", 1)[1] if code.startswith("#RUN:") else code

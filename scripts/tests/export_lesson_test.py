@@ -109,6 +109,11 @@ class FenceTest(unittest.TestCase):
         (block,) = converter.blocks("```27.txt\n1.5 3.2\n```\n")
         self.assertIn('fileName="27.txt"', block)
 
+    def test_an_executor_program_is_a_plain_code_block(self) -> None:
+        converter = Converter(set(), {}, [])
+        (block,) = converter.blocks("```algo\nПовтори 4 [Вперёд 3 Направо 90]\n```\n")
+        self.assertIn('label={"Алгоритм для исполнителя"} language="text"', block)
+
 
 class SummaryTest(unittest.TestCase):
     """«Итого» is LessonSummary: keys and notes, never a mix of the two forms."""
@@ -130,7 +135,8 @@ class SummaryTest(unittest.TestCase):
 
 
 class CheckpointTest(unittest.TestCase):
-    """A self-check question has no stand figure: its file is in the bank task."""
+    """A self-check question has no workbook view: its file is in the bank task; a table,
+    a scheme or code of the question is converted like a step (Change 190)."""
 
     def test_a_figure_call_is_refused(self) -> None:
         check = {
@@ -144,6 +150,13 @@ class CheckpointTest(unittest.TestCase):
     def test_a_plain_question_is_exported(self) -> None:
         check = {"id": "z", "prompt": "Что означает строка?", "reveal": "Одну выдачу."}
         self.assertIn("Одну выдачу.", checkpoint_block([check], ""))
+
+    def test_a_question_with_a_table_is_converted_like_a_step(self) -> None:
+        prompt = "Таблица дорог:\n\n   | Пункт | 1 | 2 |\n   |---|---:|---:|\n   | **1** | — | * |"
+        check = {"id": "z", "prompt": prompt, "reveal": "Одна дорога."}
+        jsx = checkpoint_block([check], "", Converter(set(), {}, []))
+        self.assertIn("<LessonTable", jsx)
+        self.assertIn("Одна дорога.", jsx)
 
 
 if __name__ == "__main__":

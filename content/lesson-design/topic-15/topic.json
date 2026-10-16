@@ -76,5 +76,182 @@
       "kicker": "Задание 15 · где схема помогает понять материал",
       "lead": "Какие схемы формул, отрезков, битов и решётки добавлены в подтемы и где их сознательно нет."
     }
-  ]
+  ],
+  "site": {
+    "id": "logic-transformations",
+    "route": "15-zakony-matematicheskoj-logiki",
+    "steps": {
+      "01-parametr-i-lozhnyj-sluchaj.md": [
+        ["kak-ustroena-tema-15", "Как устроена тема"],
+        ["parametr-vybirayut-odin-raz", "Параметр выбирают один раз"],
+        ["kontrprimer-i-dokazatelstvo", "Контрпример и доказательство"],
+        ["oblast-znachenij", "Область значений"],
+        ["logicheskie-bukvy", "Логические буквы"],
+        ["implikaciya", "Импликация"],
+        ["skobki", "Скобки"],
+        ["otricanie", "Отрицание"],
+        ["lozhnyj-sluchaj", "Ложный случай"],
+        ["minimum-i-maksimum", "Минимум и максимум"],
+        ["formula-lozhna-vsegda", "Формула ложна всегда"],
+        ["parametr-itogo", "Итого"]
+      ],
+      "02-prinadlezhnost-i-oblast.md": [
+        ["sudba-kazhdoj-tochki", "Судьба каждой точки"],
+        ["prinadlezhnost", "Принадлежность"],
+        ["podstanovki-0-i-1", "Подстановки 0 и 1"],
+        ["kolichestvo-i-summa", "Количество и сумма"],
+        ["dlina-otrezka", "Длина отрезка"],
+        ["peresechenie-p-i-q", "Пересечение P и Q"],
+        ["vnutri-p-q", "Внутри P ∪ Q"],
+        ["promezhutok-mezhdu-chastyami", "Промежуток между частями"],
+        ["slozhnaya-formula", "Сложная формула"],
+        ["koncy-otrezkov", "Концы отрезков"],
+        ["ekvivalentnost", "Эквивалентность"],
+        ["poryadok-resheniya", "Порядок решения"],
+        ["oblast-itogo", "Итого"]
+      ],
+      "03-bity-i-maski.md": [
+        ["bity-parametra", "Биты параметра"],
+        ["razryady-i-vesa", "Разряды и веса"],
+        ["porazryadnoe-i", "Поразрядное И"],
+        ["naimenshee-a", "Наименьшее A"],
+        ["naibolshee-a", "Наибольшее A"],
+        ["dostatochnost", "Достаточность"],
+        ["konechnaya-proverka", "Конечная проверка"],
+        ["bity-poryadok", "Порядок решения"],
+        ["bity-itogo", "Итого"]
+      ],
+      "04-opasnaya-oblast.md": [
+        ["opasnaya-oblast", "Опасная область"],
+        ["tochki-reshetki", "Точки решётки"],
+        ["odna-chast-s-a", "Одна часть с A"],
+        ["vse-lozhnye-chasti", "Все ложные части"],
+        ["naibolshee-znachenie", "Наибольшее значение"],
+        ["dve-chasti-i", "Две части И"],
+        ["strogij-znak", "Строгий знак"],
+        ["napravlenie-vliyaniya", "Направление влияния"],
+        ["oblast-poryadok", "Порядок решения"],
+        ["parametr-mnozhitelem", "Параметр множителем"],
+        ["opasnaya-itogo", "Итого"]
+      ],
+      "05-delimost-i-smeshannye-usloviya.md": [
+        ["opasnyj-nabor", "Опасный набор"],
+        ["del", "ДЕЛ"],
+        ["nod-i-nok", "НОД и НОК"],
+        ["delimost-v-strelke", "Делимость в стрелке"],
+        ["naibolshee-a-2", "Наибольшее A"],
+        ["dopolnitelnoe-ogranichenie", "Дополнительное ограничение"],
+        ["obshchie-deliteli", "Общие делители"],
+        ["napravlenie-delimosti", "Направление делимости"],
+        ["period", "Период"],
+        ["delimost-poryadok", "Порядок решения"],
+        ["konechnyj-opasnyj-nabor", "Конечный опасный набор"],
+        ["nekratnye-chisla", "Некратные числа"],
+        ["kratno-no-ne-drugomu", "Кратно, но не другому"],
+        ["konechnoe-mnozhestvo-a", "Конечное множество A"],
+        ["delimost-itogo", "Итого"]
+      ],
+      "06-konechnaya-proverka.md": [
+        ["programma-proveryaet-model", "Программа проверяет модель"],
+        ["poisk-kontrprimera", "Поиск контрпримера"],
+        ["formula-na-python", "Формула на Python"],
+        ["kazhdoe-znachenie-x", "Каждое значение x"],
+        ["snachala-kontrprimer", "Сначала контрпример"],
+        ["proverka-otrezkov", "Проверка отрезков"],
+        ["proverka-na-ploskosti", "Проверка на плоскости"],
+        ["period-delimosti", "Период делимости"],
+        ["proverka-itogo", "Итого"]
+      ],
+      "07-novye-predikaty.md": [
+        ["novoe-uslovie", "Новое условие"],
+        ["predikat-po-opredeleniyu", "Предикат по определению"],
+        ["obychnaya-chast-formuly", "Обычная часть формулы"],
+        ["max", "MAX"],
+        ["nabor-zavisit-ot-a", "Набор зависит от A"],
+        ["svyazannye-delimosti", "Связанные делимости"],
+        ["predikaty-itogo", "Итого"]
+      ]
+    },
+    "final": {
+      "result": [0, 1],
+      "examFocus": [2, 3]
+    },
+    "learningOutcomes": [
+      "Искать ложный случай формулы и выбирать параметр, который устраняет каждый контрпример",
+      "Решать задачи на отрезки: обязательные и запрещённые точки, длина и количество",
+      "Собирать параметр-маску по битам: обязательные и разрешённые разряды",
+      "Находить опасную область формулы с двумя переменными и её экстремум",
+      "Решать задачи с ДЕЛ через НОД и НОК и проверять модель конечным перебором",
+      "Для редких задач — новые предикаты: треугольник, MAX, набор, зависящий от A (дополнительный урок)"
+    ],
+    "checkpoints": {
+      "parametr-i-lozhnyj-sluchaj": [
+        {
+          "id": "zadacha-2",
+          "prompt": "Запиши отрицание (x ≤ 4) ∨ (y>9) без отрицания перед скобкой.",
+          "reveal": "(x > 4) ∧ (y ≤ 9)."
+        },
+        {
+          "id": "zadacha-3",
+          "prompt": "Подбери значения p,q,r, показывающие, что p → (q → r) и (p → q) → r различаются.",
+          "reveal": "Например, p = q = r = 0."
+        }
+      ],
+      "prinadlezhnost-i-oblast": [
+        {
+          "id": "zadacha-5",
+          "prompt": "Может ли один отрезок содержать [1;2] ∪ [4;5] и одновременно полностью лежать в [1;3] ∪ [4;5]?",
+          "reveal": "Нет: отрезок через 2 и 4 содержит 3,5."
+        }
+      ],
+      "bity-i-maski": [
+        {
+          "id": "zadacha-4",
+          "prompt": "Может ли формула ¬((x&1 ≠ 0) ∧ (x&2 ≠ 0)) быть истинной для всех неотрицательных x? Найди самое маленькое нарушение.",
+          "reveal": "Нет; контрпример x = 3."
+        }
+      ],
+      "opasnaya-oblast": [
+        {
+          "id": "zadacha-5",
+          "prompt": "Измени первую часть предыдущей формулы на (x<5) → (x²<A). Как изменятся допустимые целые A и их количество?",
+          "reveal": "A = 17, 18, …, 35; количество 19."
+        }
+      ],
+      "konechnaya-proverka": [
+        {
+          "id": "zadacha-1",
+          "prompt": "Формула при фиксированном A = 9 использует только условия делимости x на 6, 10, 9. Какой один период достаточно проверить для натурального x и почему?",
+          "reveal": "x = 1, 2, …, 90: НОК(6, 10, 9) = 90, значение 90 представляет нулевой остаток."
+        },
+        {
+          "id": "zadacha-2",
+          "prompt": "Что вернёт `all(formula(x, 5) for x in range(0))` и почему это не проверка?",
+          "reveal": "`True`: пустой набор не содержит нарушений, но и ничего не проверяет."
+        },
+        {
+          "id": "zadacha-4",
+          "prompt": "Маски 50 и 22, кандидат A = 32. Какой диапазон x достаточно проверить?",
+          "reveal": "0 … 63: все маски и кандидат помещаются в шесть битов."
+        },
+        {
+          "id": "zadacha-5",
+          "prompt": "Для формулы (3x + y ≥ 33) ∨ (x + y < A) на натуральных x, y укажи прямоугольник пар, которого хватает для проверки.",
+          "reveal": "x = 1 … 10, y = 1 … 29: при x ≥ 11 или y ≥ 30 первая часть истинна."
+        },
+        {
+          "id": "zadacha-6",
+          "prompt": "В программе для отрезков проверили только целые x от −5 до 5. Почему для P = [0; 1,01], Q = [1,02; 2] это не доказательство?",
+          "reveal": "Нарушение — при нецелом x = 1,015 между концами 1,01 и 1,02."
+        }
+      ],
+      "novye-predikaty": [
+        {
+          "id": "zadacha-1",
+          "prompt": "При каких натуральных x существует треугольник со сторонами x, 5 и 9? Найди наименьшее натуральное A, при котором T(x, 5, 9) → (x < A) истинно для всех натуральных x.",
+          "reveal": "x = 5 … 13; A = 14."
+        }
+      ]
+    }
+  }
 }

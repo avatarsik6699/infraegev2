@@ -119,7 +119,7 @@ describe("task 10 IP addresses lesson (Change 184)", () => {
     expect(lesson).toMatchObject({
       id: "networks",
       routeSlug: "10-ip-adresa-i-maski",
-      title: "IP-адреса и маски",
+      title: "Маска подсети",
       taskNumbers: [10],
       status: "published",
       masteryThreshold: 0.8,

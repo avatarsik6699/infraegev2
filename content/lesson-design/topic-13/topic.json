@@ -82,5 +82,159 @@
       "kicker": "Задание 13 · где схема помогает понять материал",
       "lead": "Какие схемы программ и таблиц добавлены в подтемы и где их сознательно нет."
     }
-  ]
+  ],
+  "site": {
+    "id": "branching-and-enumeration",
+    "route": "13-analiz-hoda-ispolneniya-algoritma",
+    "steps": {
+      "01-komandy-i-derevo.md": [
+        ["kak-ustroena-tema-13", "Как устроена тема"],
+        ["ispolnitel-i-komanda", "Исполнитель и команда"],
+        ["razlichnye-programmy", "Различные программы"],
+        ["traektoriya", "Траектория"],
+        ["programmy-vseh-dlin", "Программы всех длин"],
+        ["rost-chisla", "Рост числа"],
+        ["napravlenie-komandy", "Направление команды"],
+        ["pryzhok-cherez-chislo", "Прыжок через число"],
+        ["derevo-variantov", "Дерево вариантов"],
+        ["odinakovye-chisla-v-dereve", "Одинаковые числа в дереве"],
+        ["derevo-itogo", "Итого"]
+      ],
+      "02-tablica-kolichestv.md": [
+        ["summa-po-predshestvennikam", "Сумма по предшественникам"],
+        ["poslednyaya-komanda", "Последняя команда"],
+        ["edinica-v-starte", "Единица в старте"],
+        ["kazhdaya-programma-odin-raz", "Каждая программа один раз"],
+        ["ot-starta-k-celi", "От старта к цели"],
+        ["razreshennye-predshestvenniki", "Разрешённые предшественники"],
+        ["tablica-vpered", "Таблица вперёд"],
+        ["tri-komandy", "Три команды"],
+        ["nedostizhimye-chisla", "Недостижимые числа"],
+        ["tablica-itogo", "Итого"]
+      ],
+      "03-etapy-i-zaprety.md": [
+        ["uchastki-programmy", "Участки программы"],
+        ["razrez-po-obyazatelnomu", "Разрез по обязательному"],
+        ["novaya-edinica", "Новая единица"],
+        ["zapreshchennoe-chislo", "Запрещённое число"],
+        ["proverka-vychitaniem", "Проверка вычитанием"],
+        ["obyazatelnoe-i-zapreshchennoe", "Обязательное и запрещённое"],
+        ["neskolko-obyazatelnyh", "Несколько обязательных"],
+        ["zapret-po-svojstvu", "Запрет по свойству"],
+        ["etapy-itogo", "Итого"]
+      ],
+      "04-smysl-novoj-komandy.md": [
+        ["novaya-komanda", "Новая команда"],
+        ["predshestvennik-iz-ravenstva", "Предшественник из равенства"],
+        ["sostavnaya-komanda", "Составная команда"],
+        ["dopisat-cifru", "Дописать цифру"],
+        ["delenie-tochnoe-i-nacelo", "Деление точное и нацело"],
+        ["kvadrat", "Квадрат"],
+        ["vypolnenie-vpered", "Выполнение вперёд"],
+        ["uslovnaya-komanda", "Условная команда"],
+        ["komanda-itogo", "Итого"]
+      ],
+      "05-ubyvanie-i-delenie.md": [
+        ["ubyvayushchie-komandy", "Убывающие команды"],
+        ["tablica-vniz", "Таблица вниз"],
+        ["predshestvenniki-bolshe-n", "Предшественники больше n"],
+        ["okruglenie-vniz", "Округление вниз"],
+        ["okruglenie-vverh", "Округление вверх"],
+        ["vetvlenie-v-komande", "Ветвление в команде"],
+        ["zaprety-pri-ubyvanii", "Запреты при убывании"],
+        ["ubyvanie-itogo", "Итого"]
+      ],
+      "06-vychislenie-i-proverka.md": [
+        ["podschet-programmoj", "Подсчёт программой"],
+        ["dva-raznyh-chisla", "Два разных числа"],
+        ["rekursiya-f-x-y", "Рекурсия f(x, y)"],
+        ["svoi-x-i-y-u-vyzova", "Свои x и y у вызова"],
+        [
+          "obyazatelnye-i-zapreshchennye-v-kode",
+          "Обязательные и запрещённые в коде"
+        ],
+        ["zapominanie-rezultatov", "Запоминание результатов"],
+        ["ubyvanie-v-kode", "Убывание в коде"],
+        ["tablichnyj-cikl", "Табличный цикл"],
+        ["vhodyashchie-perehody", "Входящие переходы"],
+        ["uslovnaya-komanda-v-cikle", "Условная команда в цикле"],
+        ["w-n-i-f-x-y", "W(n) и f(x, y)"],
+        ["vychislenie-itogo", "Итого"]
+      ],
+      "07-gruppy-programm.md": [
+        ["neskolko-chisel-srazu", "Несколько чисел сразу"],
+        ["i-ili-rovno-odno", "И, или, ровно одно"],
+        ["tolko-pribavleniya", "Только прибавления"],
+        ["obratnyj-vopros", "Обратный вопрос"],
+        ["ne-oba", "Не оба"],
+        ["gruppy-itogo", "Итого"]
+      ],
+      "08-dlina-i-pamyat.md": [
+        ["ogranichenie-na-programmu", "Ограничение на программу"],
+        ["zadannaya-dlina", "Заданная длина"],
+        ["dlina-po-uchastkam", "Длина по участкам"],
+        ["sostoyanie", "Состояние"],
+        ["vozvraty", "Возвраты"],
+        ["zapret-povtora-podryad", "Запрет повтора подряд"],
+        ["skolko-chisel", "Сколько чисел"],
+        ["dvizhenie-v-obe-storony", "Движение в обе стороны"],
+        ["pamyat-itogo", "Итого"]
+      ]
+    },
+    "final": {
+      "result": [0, 1],
+      "examFocus": [2, 3, 4]
+    },
+    "learningOutcomes": [
+      "Различать программы по последовательности команд и строить дерево вариантов",
+      "Заполнять таблицу количеств: единица в старте, сумма вкладов по последней команде",
+      "Разрезать программу по обязательным числам и обнулять запрещённые",
+      "Находить предшественников новых команд: 2x + 1, дописывание цифры, квадрат, условная перестановка",
+      "Считать при убывании и делении нацело и проверять подсчёт программой на Python",
+      "Для редких задач — группы программ, заданная длина и память о прошлом (дополнительные уроки)"
+    ],
+    "stepperLabels": {
+      "ex_fill": "Заполнение таблицы количеств программ: шаг за шагом"
+    },
+    "checkpoints": {
+      "komandy-i-derevo": [
+        {
+          "id": "zadacha-4",
+          "prompt": "Команды «+1» и «+2». Выпиши все программы, которые переводят 2 в 6.",
+          "reveal": "5 программ: 1111, 112, 121, 211, 22."
+        },
+        {
+          "id": "zadacha-5",
+          "prompt": "Команды «+1» и «возвести в квадрат», старт 1. Почему здесь нельзя без проверки считать, что каждая команда увеличивает число?",
+          "reveal": "Квадрат 1 равен 1: число не меняется, и эту команду можно повторять сколько угодно раз — программ бесконечно много. Строгий рост квадрата есть только при x ≥ 2."
+        },
+        {
+          "id": "zadacha-6",
+          "prompt": "Траектория из 2 в 12 командами «+1» и «×2» должна содержать 6. Подходит ли переход 4 → 8? А если 6, наоборот, запрещено?",
+          "reveal": "При обязательном 6 — нет: после 8 число 6 уже не появится. При запрещённом 6 — да: результат команды 8, а не 6."
+        }
+      ],
+      "vychislenie-i-proverka": [
+        {
+          "id": "zadacha-1",
+          "prompt": "Что вернёт `f(4, 4)` и почему это не ноль?",
+          "reveal": "1: x == y — одна пустая программа-продолжение."
+        }
+      ],
+      "gruppy-programm": [
+        {
+          "id": "zadacha-3",
+          "prompt": "Команды «+1» и «×2», старт 2. Найди все цели от 2 до 21, для которых существует ровно 18 программ. Какой ответ получится, если нужно указать только наименьшую цель?",
+          "reveal": "Все цели: 16 и 17. Наименьшая цель: 16."
+        }
+      ],
+      "dlina-i-pamyat": [
+        {
+          "id": "zadacha-2",
+          "prompt": "Команды «+1» и «×2», старт 0, цель 1, длина не ограничена. Объясни, почему обычная рекурсивная функция для возрастающего исполнителя здесь не работает и почему нельзя дать конечный ответ.",
+          "reveal": "Умножение 0 на 2 оставляет 0, поэтому программ бесконечно много: 1, 21, 221, …"
+        }
+      ]
+    }
+  }
 }

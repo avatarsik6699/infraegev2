@@ -115,7 +115,7 @@ describe("task 7 information volume lesson (Change 184)", () => {
     expect(lesson).toMatchObject({
       id: "media-coding",
       routeSlug: "7-izobrazheniya-zvuk-tekst",
-      title: "Объём информации: изображения, звук, текст",
+      title: "Объём графической и звуковой информации",
       taskNumbers: [7],
       status: "published",
       masteryThreshold: 0.8,

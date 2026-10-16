@@ -1,4 +1,11 @@
 import type { LessonContent } from "../lib/define-lesson.types";
+import { parallelComputingLesson } from "./parallel-computing.lesson";
+import { logicTransformationsLesson } from "./logic-transformations.lesson";
+import { branchingAndEnumerationLesson } from "./branching-and-enumeration.lesson";
+import { executorsLesson } from "./executors.lesson";
+import { simpleAlgorithmsLesson } from "./simple-algorithms.lesson";
+import { truthTablesLesson } from "./truth-tables.lesson";
+import { informationModelsLesson } from "./information-models.lesson";
 import { winningStrategyLesson } from "./winning-strategy.lesson";
 import { spreadsheetOptimizationLesson } from "./spreadsheet-optimization.lesson";
 import { numberSequencesLesson } from "./number-sequences.lesson";
@@ -37,6 +44,13 @@ export const topicLessons: readonly LessonContent.Definition[] = [
   divisorsAndMasksLesson,
   arrayProcessingLesson,
   dataAnalysisLesson,
+  informationModelsLesson,
+  truthTablesLesson,
+  simpleAlgorithmsLesson,
+  executorsLesson,
+  branchingAndEnumerationLesson,
+  logicTransformationsLesson,
+  parallelComputingLesson,
 ];
 
 export function findLessonByRouteSlug(

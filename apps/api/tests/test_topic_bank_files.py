@@ -1,4 +1,4 @@
-"""The files of the topic lessons' bank tasks are the stand's own files (Change 184).
+"""The files of the topic lessons' bank tasks are the stand's own files (Change 184, 190).
 
 Every topic moved to the site from ``content/lesson-design/topic-NN/`` attaches the data
 files of its stand. Each attachment must be stored under its checksum, have the MIME type
@@ -51,6 +51,7 @@ def test_topic_task_files_are_the_stand_files_with_their_mime_type() -> None:
             assert record.mime_type == MIME[suffix], task.id
             assert (stands[0] / "files" / file.filename).read_bytes() == data, task.id
             checked.add(task.id)
-    # topics 3, 9, 17, 18, 23, 24, 26 and 27 work with files
+    # topics 3, 9, 17, 18, 22, 23, 24, 26 and 27 work with files; topic 1 shows its
+    # schemes as PNG images of the stand's builder (Change 190)
     prefixes = {task_id.split("-")[1] for task_id in checked}
-    assert prefixes == {"3", "9", "17", "18", "23", "24", "26", "27"}
+    assert prefixes == {"1", "3", "9", "17", "18", "22", "23", "24", "26", "27"}

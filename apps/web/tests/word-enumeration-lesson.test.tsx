@@ -115,7 +115,7 @@ describe("task 8 word enumeration lesson (Change 184)", () => {
     expect(lesson).toMatchObject({
       id: "word-enumeration",
       routeSlug: "8-perebor-slov",
-      title: "Перебор слов и системы счисления",
+      title: "Измерение количества информации",
       taskNumbers: [8],
       status: "published",
       masteryThreshold: 0.8,

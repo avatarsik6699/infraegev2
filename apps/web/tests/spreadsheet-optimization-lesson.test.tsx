@@ -55,7 +55,7 @@ describe("task 18 robot lesson (Change 184)", () => {
     expect(lesson).toMatchObject({
       id: "spreadsheet-optimization",
       routeSlug: "18-robot-sborshchik-monet",
-      title: "Робот-сборщик монет",
+      title: "Электронные таблицы: целочисленные данные",
       taskNumbers: [18],
       status: "published",
       masteryThreshold: 0.8,

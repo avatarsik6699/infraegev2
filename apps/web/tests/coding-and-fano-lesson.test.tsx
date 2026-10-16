@@ -115,7 +115,7 @@ describe("task 4 Fano condition lesson (Change 184)", () => {
     expect(lesson).toMatchObject({
       id: "coding-and-fano",
       routeSlug: "4-kodirovanie-i-uslovie-fano",
-      title: "Кодирование и условие Фано",
+      title: "Кодирование и декодирование информации",
       taskNumbers: [4],
       status: "published",
       masteryThreshold: 0.8,

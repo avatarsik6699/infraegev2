@@ -115,7 +115,7 @@ describe("task 5 number records lesson (Change 184)", () => {
     expect(lesson).toMatchObject({
       id: "preobrazovanie-zapisey-chisel",
       routeSlug: "5-preobrazovanie-zapisey-chisel",
-      title: "Преобразование записей чисел",
+      title: "Формальное исполнение алгоритма",
       taskNumbers: [5],
       status: "published",
       masteryThreshold: 0.8,

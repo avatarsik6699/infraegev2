@@ -119,7 +119,7 @@ describe("task 26 data processing lesson (Change 184)", () => {
     expect(lesson).toMatchObject({
       id: "array-processing",
       routeSlug: "26-sortirovka-i-otbor",
-      title: "Обработка данных: сортировка и отбор",
+      title: "Обработка данных с сортировкой",
       taskNumbers: [26],
       status: "published",
       masteryThreshold: 0.8,

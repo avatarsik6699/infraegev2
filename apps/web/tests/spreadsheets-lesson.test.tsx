@@ -107,7 +107,7 @@ describe("task 9 spreadsheets lesson (Change 184)", () => {
     expect(lesson).toMatchObject({
       id: "spreadsheets",
       routeSlug: "9-obrabotka-tablicy-chisel",
-      title: "Обработка таблицы чисел",
+      title: "Электронные таблицы",
       taskNumbers: [9],
       status: "published",
       masteryThreshold: 0.8,

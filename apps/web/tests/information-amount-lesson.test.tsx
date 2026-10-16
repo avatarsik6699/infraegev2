@@ -119,7 +119,7 @@ describe("task 11 passwords lesson (Change 184)", () => {
     expect(lesson).toMatchObject({
       id: "information-amount",
       routeSlug: "11-paroli-i-zapisi",
-      title: "Объём информации: пароли и записи",
+      title: "Информационный объём сообщения",
       taskNumbers: [11],
       status: "published",
       masteryThreshold: 0.8,

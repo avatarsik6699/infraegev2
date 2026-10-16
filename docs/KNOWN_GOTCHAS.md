@@ -216,6 +216,13 @@ parent command lines, start ordinary Chrome with `--profile-directory=Default`, 
 [STACK's procedure](STACK.md#interactive-browser-connection-wsl). Playwriter `-f` scripts start
 without a page: `state.page = state.page ?? await context.newPage()` before `bringToFront()`.
 
+### Headless Chromium dies under `ulimit -v`
+
+`scripts/lesson_design/svg_png.mjs` (PNG figures of bank statements, Change 190) launches the
+Playwright Chromium. Under the `ulimit -v 3000000` used for brute-force checks it exits with
+`SIGTRAP` («Target page, context or browser has been closed»): Chromium reserves far more virtual
+memory than it uses. Run `topic-NN/bank.py` without the limit; its searches are small.
+
 ### Cleanup or compaction refuses a symlinked parent directory
 
 A repository-looking path can traverse a symlink into another checkout or external data. Inspect

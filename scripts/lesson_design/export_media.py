@@ -42,8 +42,8 @@ FIGURE_CALL = re.compile(r"%%(\w+)\((.*?)\)%%")
 FIGURE_BLOCK = re.compile(r"<figure\b.*?</figure>", re.S)
 # builders whose content is in their list arguments: two calls with the same
 # scalar arguments still draw different figures (formula_steps of one cell,
-# base_blocks of one base)
-HASHED = {"formula_steps", "base_blocks"}
+# base_blocks of one base, ex_line of one path with other marks)
+HASHED = {"formula_steps", "base_blocks", "ex_line"}
 TASK_BLOCK = ("**Чтобы проверить понимание", "**Задачи основных подтем")
 SVG_NS = 'xmlns="http://www.w3.org/2000/svg"'
 STAND_FONT = 'font-family="Onest, system-ui, sans-serif"'
@@ -132,8 +132,11 @@ def captions(text: str) -> dict[str, str]:
     return found
 
 
-def figure_entries(texts: list[str], seen: set[str] | None = None) -> list[str]:
-    """Manifest entries for every ``%%builder(args)%%`` call of the texts."""
+def figure_entries(
+    texts: list[str], seen: set[str] | None = None, shared: bool = False
+) -> list[str]:
+    """Manifest entries for every ``%%builder(args)%%`` call of the texts;
+    ``shared``: a figure already listed is reused, not an error."""
     seen = set() if seen is None else seen
     entries: list[str] = []
     for text in texts:
@@ -146,6 +149,8 @@ def figure_entries(texts: list[str], seen: set[str] | None = None) -> list[str]:
                 raise SystemExit(f"Unknown figure {name!r}; add it to figures.FIGURES")
             args, kwargs = parse_call(name, args_src)
             key = media_key(name, args, kwargs)
+            if key in seen and shared:
+                continue
             if key in seen:
                 raise SystemExit(f"Two figures share the key {key!r}; vary their arguments")
             seen.add(key)
@@ -204,7 +209,13 @@ def build(topic: Path) -> tuple[str, Path]:
     site = meta["site"]
     manifest_path = REPO / "apps/web/src/entities/lesson/content" / f"{site['id']}.media.ts"
     texts = [lesson_text(source.read_text()) for source in sources]
-    return manifest_text(topic, figure_entries(texts) + code_entries(texts)), manifest_path
+    seen: set[str] = set()
+    entries = figure_entries(texts, seen)
+    # a self-check question shows its figure too (topic 1, Change 190); one
+    # drawn in the lesson already is shared
+    prompts = [c["prompt"] for checks in site.get("checkpoints", {}).values() for c in checks]
+    entries += figure_entries([p for p in prompts if "<figure" in p], seen, shared=True)
+    return manifest_text(topic, entries + code_entries(texts)), manifest_path
 
 
 def lesson_text(text: str) -> str:

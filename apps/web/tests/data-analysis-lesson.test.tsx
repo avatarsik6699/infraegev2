@@ -119,7 +119,7 @@ describe("task 27 clustering lesson (Change 184)", () => {
     expect(lesson).toMatchObject({
       id: "data-analysis",
       routeSlug: "27-analiz-dannyh-i-klasterizatsiya",
-      title: "Анализ данных: кластеризация",
+      title: "Анализ данных",
       taskNumbers: [27],
       status: "published",
       masteryThreshold: 0.8,

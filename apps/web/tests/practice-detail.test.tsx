@@ -113,7 +113,7 @@ beforeEach(() => {
 });
 it("renders the detail layout and one context-preserving return link in SSR", () => {
   const html = renderToStaticMarkup(page());
-  expect(html).toContain("ЕГЭ 16 · Рекурсия");
+  expect(html).toContain("ЕГЭ 16 · Рекуррентные выражения");
   expect(html).toContain('data-presentation="detail"');
   expect(html).toContain("Вычислите F(5).");
   expect(html).toContain("Начните с базы.");
@@ -124,7 +124,7 @@ it("renders the detail layout and one context-preserving return link in SSR", ()
   expect(screen.getByRole("heading", { level: 1 }).textContent).toBe(
     "Вычисление функции",
   );
-  expect(screen.getByText("ЕГЭ 16 · Рекурсия").tagName).toBe("P");
+  expect(screen.getByText("ЕГЭ 16 · Рекуррентные выражения").tagName).toBe("P");
   expect(screen.getByText("Средняя")).not.toBeNull();
   expect(screen.getByText("Целое число", { exact: true })).not.toBeNull();
   const back = screen.getByRole("link", { name: "К списку задач" });
@@ -250,5 +250,7 @@ it("shows a quiet text return link before the topic label", () => {
   render(page());
   const back = screen.getByRole("link", { name: "К списку задач" });
   expect(back.textContent).toBe("К списку задач");
-  expect(back.nextElementSibling?.textContent).toBe("ЕГЭ 16 · Рекурсия");
+  expect(back.nextElementSibling?.textContent).toBe(
+    "ЕГЭ 16 · Рекуррентные выражения",
+  );
 });

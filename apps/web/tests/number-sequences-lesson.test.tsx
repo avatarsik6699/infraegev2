@@ -111,7 +111,7 @@ describe("task 17 number sequences lesson (Change 184)", () => {
     expect(lesson).toMatchObject({
       id: "number-sequences",
       routeSlug: "17-chislovye-posledovatelnosti",
-      title: "Числовые последовательности",
+      title: "Обработка числовой последовательности",
       taskNumbers: [17],
       status: "published",
       masteryThreshold: 0.8,

@@ -90,12 +90,15 @@ export const stringProcessingLesson = defineLesson({
           id: "zadacha-4",
           prompt: (
             <>
-              Что напечатает программа для <Notation>{"s = 'KLMN'"}</Notation>?
-              ``
-              <Notation>
-                {"python\n   for i in range(3):\n       print(s[i - 1])\n   "}
-              </Notation>
-              ``
+              <Typography.Text>
+                Что напечатает программа для <Notation>{"s = 'KLMN'"}</Notation>
+                ?
+              </Typography.Text>
+              <CodeBlock
+                code={"for i in range(3):\n    print(s[i - 1])"}
+                label={"Что напечатает программа для s = 'KLMN'?"}
+                language="python"
+              />
             </>
           ),
           reveal: (
