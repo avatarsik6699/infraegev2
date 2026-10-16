@@ -9,7 +9,7 @@
 | Change | `191` |
 | Slug | `practice-speed-bank-cleanup` |
 | Title | Fast practice, search suggestions and KEGE bank cleanup |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/191-practice-speed-bank-cleanup` |
 
 ---
@@ -95,7 +95,7 @@ of truth; this file only tracks what to build and what's left.
 ## Gate Checks
 
 > Critical Gate runs once per `/work` target set; default `/ship` reruns only invalidated checks;
-Full Gate only with explicit `--full`. Commands: [docs/STACK.md](../STACK.md); selection:
+Full Gate only with explicit `--full`. Commands: [docs/STACK.md](../../STACK.md); selection:
 `python3 scripts/gate.py affected`. Record change-specific overrides here, or `None`.
 
 None
