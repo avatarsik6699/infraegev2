@@ -7,7 +7,7 @@
 | Change | `188` |
 | Slug | `kompege-bank-import` |
 | Title | New KЕГЭ tasks in standalone practice |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/188-kompege-bank-import` |
 
 ## Goal
@@ -72,7 +72,7 @@ See `docs/SPEC.md` §2.2–§4, `docs/FRONTEND.md`, `docs/runbooks/practice.md` 
 
 ## Gate Checks
 
-Commands: [STACK](../STACK.md); select with `python3 scripts/gate.py affected`.
+Commands: [STACK](../../STACK.md); select with `python3 scripts/gate.py affected`.
 The Dockerfile follow-up is covered explicitly by the web image contract and successful real rebuild/startup; no schema or dependency versions changed.
 Auxiliary TS LSP reported isolated Vitest callback inference warnings; the binding project compiler passes for both source and tests.
 Use disposable databases for acceptance. Local target import is single-operator and additive.
