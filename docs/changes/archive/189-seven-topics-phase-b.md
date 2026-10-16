@@ -7,7 +7,7 @@
 | Change | `189` |
 | Slug | `seven-topics-phase-b` |
 | Title | Фаза Б семи тем: тексты, схемы и задачи на стенде |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/189-seven-topics-phase-b` |
 
 ---
@@ -76,7 +76,7 @@ docs/changes/189-seven-topics-phase-b.md
 ## Gate Checks
 
 > Critical Gate runs once per `/work` target set; default `/ship` reruns only invalidated checks;
-> Full Gate only with explicit `--full`. Commands: [docs/STACK.md](../STACK.md); selection:
+> Full Gate only with explicit `--full`. Commands: [docs/STACK.md](../../STACK.md); selection:
 > `python3 scripts/gate.py affected`. Record change-specific overrides here, or `None`.
 
 На каждую тему — команды этапа 7 (`verify_code.py`, `checks.py`, `frequency_report.py`, `build.py`; для 22 ещё `verify_sheets.py` и `datasets.py --check`), Ruff/Pyright/Prettier по своим файлам, Playwriter на 1280 и 375 px по страницам темы. Переборы — генераторами, запуск под `ulimit -v 3000000; timeout 600` (память WSL общая).
