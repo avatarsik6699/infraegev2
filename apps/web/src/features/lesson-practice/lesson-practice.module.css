@@ -154,6 +154,10 @@
   line-height: 1.55;
 }
 
+.richContentText {
+  white-space: pre-line;
+}
+
 .taskContent[data-content-context="hint"] .contentText,
 .taskContent[data-content-context="solution"] .contentText,
 .taskContent[data-content-context="hint"] .contentSteps p,

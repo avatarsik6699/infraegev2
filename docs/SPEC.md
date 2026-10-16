@@ -9,8 +9,8 @@
 
 | Field | Value |
 |-------|-------|
-| Document Version | `v2.27` |
-| Date | `2026-10-09` |
+| Document Version | `v2.28` |
+| Date | `2026-10-16` |
 | Architect / Owner | `v.godlevskiy` |
 | Stack | See [docs/STACK.md](./STACK.md) |
 | Domain | Платформа подготовки к ЕГЭ по информатике — самостоятельные темы экзамена и мини-курсы с теорией, визуализацией и практикой |
@@ -381,7 +381,9 @@ match exam numbers), grouped multi-topic OR selection, default stable ID order o
 ascending/descending with ID tie-break, and numbered pages of 10/30/50/100 (default 30).
 Topic counts include only catalog-visible nonarchived tasks, independent of search; zero topics
 remain selectable. Course sections derive from publication metadata without publishing lesson-only
-tasks. Legacy exam/skill/difficulty links remain supported. Next task uses the same selection/order.
+tasks. EGE practice filters cover every number 1–27 independently of lesson publication; their
+canonical exam titles come from the shared dated 2027 exam-topic metadata. Lesson titles and
+publication remain separate. Legacy exam/skill/difficulty links remain supported. Next task uses the same selection/order.
 Public projections exclude
 checker answers and private sources. Wrong answers, missing tasks, stale solution counters and
 unavailable services remain distinct. Regenerate OpenAPI/client types with implementation.
@@ -396,6 +398,13 @@ they return no-store data only to the owning account. The checker response disti
 from saved; a write failure never claims that progress was saved. Public catalog/lesson reads and
 checker answers remain available without registration. Regenerate OpenAPI clients with the API.
 No public task-bank write/admin API.
+
+An imported standalone task may have no authored hint or explanation; those lists are empty and
+their help actions/panels are absent. Checker answers remain private and are not substituted for
+an explanation. Attachments are bounded at 64 MiB. Original `.xls` attachments and GIF task images use the same content-addressed,
+validated file delivery as the other bank formats. A one-time KEGE import (Change 188) adds only
+new tasks compatible with the FIPI 2027 project; archived sections, 110/112, hidden records and
+outdated formats are excluded. Existing task content, checkers and revisions are preserved.
 
 ## 5. Frontend / Client Contract
 

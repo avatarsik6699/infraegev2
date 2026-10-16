@@ -185,8 +185,9 @@ Lesson media:
   enhancement and without JavaScript. General Accordion keeps its explicit opt-in fallback
   contract.
 - Every practice task uses one layout (catalog, task page, lessons; Change 170 F30): the answer
-  field, «Проверить», «Подсказка» and «Решение» in one row, the help panels below it. Without
-  scripting the toggles are hidden and both panels are shown. An accepted answer is shown by the
+  field, «Проверить» and available «Подсказка» / «Решение» actions in one row, the help panels below
+  it. Each help action and panel exists only when its authored blocks are nonempty. Without
+  scripting the toggles are hidden and available panels are shown. An accepted answer is shown by the
   field itself (success border and fill, a check without a circle) and a short confetti burst,
   off under reduced motion; the result is announced to assistive technology, not printed.
 - A task theory link is named after the heading it leads to, or «Теория» when the task names no

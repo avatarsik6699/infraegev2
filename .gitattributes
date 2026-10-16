@@ -1,0 +1,2 @@
+# Content-addressed attachments must retain their exact original bytes.
+content/practice-bank/files/** binary

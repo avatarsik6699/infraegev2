@@ -6,6 +6,7 @@ from pathlib import Path
 
 MIME = {
     "png": "image/png",
+    "gif": "image/gif",
     "jpg": "image/jpeg",
     "jpeg": "image/jpeg",
     "webp": "image/webp",
@@ -16,6 +17,7 @@ MIME = {
     "py": "text/x-python",
     "zip": "application/zip",
     "pdf": "application/pdf",
+    "xls": "application/vnd.ms-excel",
     "xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     "docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     "ods": "application/vnd.oasis.opendocument.spreadsheet",

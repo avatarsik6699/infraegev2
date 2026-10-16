@@ -225,8 +225,9 @@ inputs cannot contain symlink components.
 ### Cached pnpm install layer plus fresh web sources fails `verifyDepsBeforeRun`
 
 A fresh `COPY apps/web` makes `package.json` newer than the cached install and pnpm reports the
-workspace overrides as outdated. The builder re-runs `pnpm install --frozen-lockfile --offline`
-after copying sources (guard: `scripts/tests/web-image-build.test.sh`). Keep
+workspace overrides as outdated. Both development and builder stages re-run
+`pnpm install --frozen-lockfile --offline` after copying sources
+(guard: `scripts/tests/web-image-build.test.sh`). Keep
 `verifyDepsBeforeRun: error`; do not regenerate a current lockfile or bump cache scopes.
 
 ### GitHub names an unnamed matrix job with every matrix value
@@ -357,3 +358,13 @@ covers, then check `docker ps -a`, `systemctl list-timers`, `docker volume ls`.
 - **Symptoms**: подписи схемы на сайте другого начертания, чем на стенде, или съезжают. На телефоне страница с пошаговой схемой получает горизонтальную прокрутку до загрузки скриптов или без них.
 - **Root cause**: SVG, подключённый через `<img>`, изолирован от CSS страницы и её `@font-face`: имена JetBrains Mono и Caveat из построителей стенда не находятся. Кадр схемы держит минимальную ширину 30rem ради читаемых подписей и без прокручиваемой рамки выходит за колонку.
 - **Fix**: схемы сайта не подключаются через `<img>`: `scripts/lesson_design/export_media.py` пишет разметку SVG в манифест урока, `InlineSvg` встраивает её в страницу, а `font-family="inherit"` берёт шрифт страницы (Change 171, компактная подача). Любая схема, в том числе итоговый кадр в разметке без JavaScript, стоит внутри своей плашки с `overflow-x: auto` и `tabIndex=0`, как блок кода.
+
+### Content-addressed bank files must bypass Git EOL conversion
+
+With `core.autocrlf=input`, extensionless textual attachments may be normalized from CRLF to LF
+when staged, even though the working file still passes its SHA-256 check. Their filename, bank
+metadata and stored bytes then disagree after checkout. `.gitattributes` marks
+`content/practice-bank/files/**` as `binary` to preserve exact bytes, without changing global Git
+settings. After correcting attributes, restage the original files with scoped `git add --renormalize`
+and compare indexed blob size/SHA-256 against `bank.json`; verify the destination checkout before
+removing the source worktree. Do not regenerate checksums around corrupted normalized bytes.

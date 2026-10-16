@@ -10,6 +10,8 @@ COPY --chown=node:node apps/web/package.json apps/web/package.json
 USER node
 RUN pnpm install --frozen-lockfile
 COPY --chown=node:node apps/web apps/web
+# A cached install precedes the fresh manifests copied above; refresh frozen metadata offline.
+RUN pnpm install --frozen-lockfile --offline
 # `pnpm exec` (not `pnpm --filter web dev`) so vite runs as a direct child of pnpm instead of
 # behind an `sh -c` layer — the shell doesn't forward SIGTERM, so `docker compose stop` had to
 # wait out the full per-service timeout before force-killing the orphaned vite process.

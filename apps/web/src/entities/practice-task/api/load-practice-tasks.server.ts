@@ -40,7 +40,7 @@ const contentBlockParsers: Record<
   attachment: parseAttachmentBlock,
 };
 
-const ATTACHMENT_MAX_BYTES = 20 * 1024 * 1024;
+const ATTACHMENT_MAX_BYTES = 64 * 1024 * 1024;
 
 const attachmentMimeTypes = new Set<PracticeTaskTypes.AttachmentMimeType>([
   "text/plain",
@@ -49,6 +49,7 @@ const attachmentMimeTypes = new Set<PracticeTaskTypes.AttachmentMimeType>([
   "text/x-python",
   "application/zip",
   "application/pdf",
+  "application/vnd.ms-excel",
   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   "application/vnd.oasis.opendocument.spreadsheet",

@@ -176,7 +176,7 @@ class TaskContent(StrictModel):
     content_schema_version: Literal[1, 2] = 1
     statement: list[Block] = Field(min_length=1, max_length=1000)
     hint: list[Block] = Field(max_length=1000)
-    explanation: list[Block] = Field(min_length=1, max_length=1000)
+    explanation: list[Block] = Field(max_length=1000)
     skills: list[Identifier] = Field(default_factory=list, max_length=100)
     exam_numbers: list[Annotated[int, Field(ge=1, le=27)]] = Field(default_factory=list)
     files: list[FileUsage] = Field(default_factory=list, max_length=100)

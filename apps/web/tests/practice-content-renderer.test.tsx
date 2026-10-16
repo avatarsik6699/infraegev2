@@ -87,6 +87,43 @@ const task: PracticeTaskTypes.LocalTask = {
 };
 
 describe("rich practice content", () => {
+  it("downloads an original XLS attachment with the same filename and URL", () => {
+    const xlsTask = {
+      ...task,
+      statement: [
+        {
+          type: "attachment" as const,
+          src: "/api/tasks/xls/files/data",
+          label: "data.xls",
+          description: "Исходная таблица",
+          mimeType: "application/vnd.ms-excel" as const,
+          sizeBytes: 4096,
+        },
+      ],
+    };
+    render(
+      <LessonPractice
+        tasks={[xlsTask]}
+        solvedTaskIds={[]}
+        checkAnswer={vi.fn()}
+        onTaskSolved={() => 0}
+      />,
+    );
+    const download = screen.getByRole("link", { name: /data\.xls/ });
+    expect(download.getAttribute("href")).toBe("/api/tasks/xls/files/data");
+    expect(download.getAttribute("download")).not.toBeNull();
+    const html = renderToStaticMarkup(
+      <LessonPractice
+        tasks={[xlsTask]}
+        solvedTaskIds={[]}
+        checkAnswer={vi.fn()}
+        onTaskSolved={() => 0}
+      />,
+    );
+    expect(html).toContain('href="/api/tasks/xls/files/data"');
+    expect(html).toContain("data.xls");
+    expect(html).not.toContain("data.xlsx");
+  });
   it("explains an empty practice without constructing empty tabs", () => {
     render(
       <LessonPractice

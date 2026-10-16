@@ -1372,7 +1372,6 @@
               ]
             },
             "maxItems": 1000,
-            "minItems": 1,
             "title": "Explanation",
             "type": "array"
           },

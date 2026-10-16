@@ -28,7 +28,13 @@ pytestmark = pytest.mark.db
 ROOT = Path(__file__).resolve().parents[3]
 BANK = ROOT / "content/practice-bank"
 # Every task of the canonical bank; it grows as topic lessons move from the stand.
-BANK_TASKS = len(json.loads((BANK / "bank.json").read_bytes())["tasks"])
+BANK_ENTRIES = json.loads((BANK / "bank.json").read_bytes())["tasks"]
+BANK_TASKS = len(BANK_ENTRIES)
+VISIBLE_ENTRIES = [
+    entry
+    for entry in BANK_ENTRIES
+    if entry["task"]["catalog_visible"] and not entry["task"]["archived"]
+]
 IMAGE = (
     "postgres:18.6-alpine3.24@sha256:"
     "d3e1620b530c944afa6e887d22eb899824da68e19c52024bf98f5220c88a65b2"
@@ -145,7 +151,9 @@ def test_roundtrip_replay_and_atomic_failure(database):
                 assert before.tasks == after.tasks
             broken = source.model_copy(deep=True)
             broken.tasks[0].task.title = "Should roll back"
-            broken.tasks[-1].task.lessons[0].material_id = "missing-material"
+            next(entry for entry in reversed(broken.tasks) if entry.task.lessons).task.lessons[
+                0
+            ].material_id = "missing-material"
             with pytest.raises(ValueError, match="unknown lesson"):
                 async with AsyncSession(engine) as session, session.begin():
                     changed = source.model_copy(deep=True)
@@ -169,11 +177,13 @@ def test_http_catalog_privacy_checker_and_files(database, monkeypatch, tmp_path)
     with TestClient(create_app()) as client:
         first = client.get("/api/tasks").json()
         second = client.get("/api/tasks?page=2").json()
-        assert first["total"] == 547 and len(first["tasks"]) == 30
+        assert first["total"] == len(VISIBLE_ENTRIES) and len(first["tasks"]) == 30
         assert first["next_page"] == 2
         assert not ({x["id"] for x in first["tasks"]} & {x["id"] for x in second["tasks"]})
         assert client.get("/api/tasks?page=0").status_code == 422
-        assert client.get("/api/tasks?exam_number=27").json()["tasks"] == []
+        assert client.get("/api/tasks?exam_number=27").json()["total"] == sum(
+            27 in entry["task"]["exam_numbers"] for entry in VISIBLE_ENTRIES
+        )
         assert client.get("/api/tasks/missing").status_code == 404
         assert client.get("/health/ready").status_code == 200
         for entry in source.tasks:
@@ -418,6 +428,7 @@ def test_catalog_search_topics_sort_and_limits(database, monkeypatch):
     with TestClient(create_app()) as client:
         facets = client.get("/api/tasks/facets").json()
         counts = {t["id"]: t["count"] for t in facets["topics"]}
+        assert {f"ege-{number}" for number in range(1, 28)} <= counts.keys()
         assert counts["ege-16"] == 255 and counts["ege-5"] == 292
         assert counts["python-loops"] == 0
         assert client.get("/api/tasks?topics=python-loops").json()["total"] == 0
@@ -426,9 +437,9 @@ def test_catalog_search_topics_sort_and_limits(database, monkeypatch):
         first_id = combined["tasks"][0]["id"]
         instruction = client.get(f"/api/tasks/{first_id}").json()["content"]["answer_instruction"]
         assert combined["tasks"][0]["answer_instruction"] == instruction
-        # These words exist only in the retained Pascal/C++ variants, not rendered Python.
-        assert client.get("/api/tasks?q=writeln").json()["total"] == 0
-        assert client.get("/api/tasks?q=cout").json()["total"] == 0
+        # In these retained tasks the other-language variants are not rendered or searchable.
+        assert client.get("/api/tasks?q=writeln&topics=ege-5&topics=ege-16").json()["total"] == 0
+        assert client.get("/api/tasks?q=cout&topics=ege-5&topics=ege-16").json()["total"] == 0
         assert client.get("/api/tasks?q=print").json()["total"] > 0
         assert client.get(f"/api/tasks?q={first_id[:8]}").json()["tasks"][0]["id"] == first_id
         assert client.get("/api/tasks?q=16").json()["total"] >= 255
@@ -1766,3 +1777,54 @@ def test_recursion_lesson_tasks_check_answers_and_link_to_real_sections():
         for link in task.theory_links:
             if link.material_id == "rekursiya":
                 assert link.section in sections, (task.id, link.section)
+
+
+def test_imported_tasks_without_help_and_original_file_formats(database, monkeypatch):
+    """A native imported task remains solvable without exposing a fabricated explanation."""
+    monkeypatch.setattr(settings, "database_url", database("runtime"))
+    monkeypatch.setenv("TASK_FILES_DIR", str(BANK / "files"))
+    bank = Bank.model_validate_json((BANK / "bank.json").read_bytes())
+    task = next(
+        entry
+        for entry in bank.tasks
+        if entry.task.catalog_visible
+        and not entry.task.archived
+        and not entry.task.explanation
+        and not entry.task.hint
+    )
+    with TestClient(create_app()) as client:
+        response = client.get(f"/api/tasks/{task.task.id}")
+        assert response.status_code == 200
+        assert response.json()["content"]["explanation"] == []
+        assert response.json()["content"]["hint"] == []
+        assert "checker" not in response.json()["content"]
+        check = client.post(
+            f"/api/tasks/{task.task.id}/check",
+            json={
+                "answer": task.task.checker.answer_variants[0],
+                "solution_revision": task.solution_revision,
+            },
+        )
+        assert check.status_code == 200
+        assert check.json() == {
+            "correct": True,
+            "explanation": [],
+            "solution_revision": task.solution_revision,
+        }
+        for extension, mime, disposition in (
+            (".xls", "application/vnd.ms-excel", "attachment"),
+            (".gif", "image/gif", "inline"),
+        ):
+            entry, usage = next(
+                (entry, usage)
+                for entry in bank.tasks
+                if entry.task.catalog_visible and not entry.task.archived
+                for usage in entry.task.files
+                if usage.filename.lower().endswith(extension)
+            )
+            file = client.get(f"/api/tasks/{entry.task.id}/files/{usage.id}")
+            assert file.status_code == 200
+            assert file.headers["content-type"] == mime
+            assert file.headers["content-disposition"].startswith(disposition + ";")
+            assert file.headers["x-content-type-options"] == "nosniff"
+            assert file.headers["x-accel-redirect"].endswith(usage.checksum)

@@ -2,15 +2,111 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   parseContentBlock,
   loadLessonPractice,
+  projectPracticeTask,
 } from "~/entities/practice-task/api/load-practice-tasks.server";
 
 const text = { type: "text", data: { markdown: "Условие" } };
 
 describe("public practice projection", () => {
+  it("projects tasks without help and keeps original XLS deliveries", () => {
+    const result = projectPracticeTask(
+      {
+        id: "imported-task",
+        revision: 1,
+        solution_revision: 1,
+        content: {
+          id: "imported-task",
+          title: "Таблица",
+          answer_instruction: "Запишите целое число.",
+          archived: false,
+          catalog_visible: true,
+          content_schema_version: 2,
+          explanation_kind: "unclassified",
+          interaction_type: "production",
+          sources: [],
+          difficulty: 1,
+          statement: [{ type: "attachment", data: { usage_id: "data" } }],
+          hint: [],
+          explanation: [],
+          files: [
+            {
+              id: "data",
+              filename: "source.xls",
+              description: "Исходная таблица",
+              purpose: "attachment",
+              checksum: "a".repeat(64),
+            },
+          ],
+        },
+        deliveries: [
+          {
+            usage_id: "data",
+            url: "/api/tasks/imported-task/files/data",
+            mime_type: "application/vnd.ms-excel",
+            size_bytes: 4096,
+          },
+        ],
+      },
+      "",
+    );
+    expect(result.hint).toEqual([]);
+    expect(result.solution).toEqual([]);
+    expect(result.statement).toEqual([
+      {
+        type: "attachment",
+        src: "/api/tasks/imported-task/files/data",
+        label: "source.xls",
+        description: "Исходная таблица",
+        mimeType: "application/vnd.ms-excel",
+        sizeBytes: 4096,
+      },
+    ]);
+  });
   afterEach(() => vi.unstubAllGlobals());
+
+  it("accepts the large source datasets within the 64 MiB attachment limit", () => {
+    const block = (size: number) => ({
+      type: "attachment",
+      data: {
+        src: "/api/tasks/task/files/data",
+        label: "data.txt",
+        description: "Исходные данные",
+        mime_type: "text/plain",
+        size_bytes: size,
+      },
+    });
+    expect(parseContentBlock(block(31_944_094))).toMatchObject({
+      sizeBytes: 31_944_094,
+    });
+    expect(parseContentBlock(block(50_084_031))).toMatchObject({
+      sizeBytes: 50_084_031,
+    });
+    expect(parseContentBlock(block(64 * 1024 * 1024))).toBeTruthy();
+    expect(() => parseContentBlock(block(64 * 1024 * 1024 + 1))).toThrow();
+  });
 
   it.each([
     [text, { type: "text", text: "Условие" }],
+    [
+      {
+        type: "attachment",
+        data: {
+          src: "/api/tasks/task/files/data",
+          label: "data.xls",
+          description: "Исходная таблица",
+          mime_type: "application/vnd.ms-excel",
+          size_bytes: 4096,
+        },
+      },
+      {
+        type: "attachment",
+        src: "/api/tasks/task/files/data",
+        label: "data.xls",
+        description: "Исходная таблица",
+        mimeType: "application/vnd.ms-excel",
+        sizeBytes: 4096,
+      },
+    ],
     [
       { type: "callout", data: { tone: "info", markdown: "Идея" } },
       { type: "callout", tone: "idea", text: "Идея" },

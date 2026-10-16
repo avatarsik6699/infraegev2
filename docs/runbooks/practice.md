@@ -61,6 +61,37 @@ attachment directory to 0755 and validated attachment bytes to 0644 for the sepa
 Keep this directory free of exports/secrets. Private exports remain 0700 with 0600 files; host
 parent directories must permit traversal for the operator, while containers mount only storage.
 
+## One-time KEGE import (Change 188)
+
+The source is `https://kompege.ru/task`; the page reads public
+`/api/v1/task/number/{number}` collections. Collect only the explicitly mapped current sections,
+never the archive sections or 110/112. The dated FIPI 2027 project is authoritative; Sdamgia is a
+cross-check. In particular 10 is networks, 12 Turing machines, 13 program counting and 23 graphs;
+27 must have the current two-number, one-row answer format. A task's year alone is not a filter.
+
+Prepare with `uv run python -m app.modules.practice.kompege --help` from `apps/api` after exporting
+the selected local target. Raw downloads and exports stay in a private scratch directory outside
+Git and public assets. The converter reconciles source identities against both the canonical bank
+and the DB export, skips every existing task, and emits only new tasks plus a per-record report.
+Do not use a whole-bank bootstrap for this transfer: operator edits in retained rows must survive.
+Analyze all exclusions/corrections and resolve preparation errors before validating the delta.
+Games 19/20/21 become individually solvable tasks with their common game setup and own question.
+Statements become native blocks; assets are stored by SHA-256, including original `.xls` and GIF. Source assets and projected attachments are bounded at 64 MiB;
+the large #17 source datasets are approximately 30.5 MiB each, and #24 source 587 is approximately 47.8 MiB.
+Do not fabricate explanations from checker answers. Missing authored help is represented by an
+empty list. No lesson memberships or theory links are inferred from the exam number.
+
+Run ordinary `validate`, rehearse the delta and replay in disposable PostgreSQL, then import the
+delta into the exported local target with one operator. Compare retained tasks/checkers/revisions,
+memberships and account/progress state before and after. Add only the prepared new entries/files
+to the canonical bank. Keep the pre-import private export until the local result is accepted;
+remove raw scratch downloads after analyzing their evidence. This is not a synchronization service
+and never authorizes production import.
+
+Practice exam labels are owned by `apps/web/src/shared/config/exam-topics.mjs` rather than lesson
+publication. `node scripts/practice-catalog-topics.mjs` regenerates the API taxonomy; `--check`
+verifies it. All numbers 1–27 stay selectable even when their theory lesson is not published.
+
 ## Checks and recovery
 
 `cd apps/api && uv run pytest tests/test_minimal_bank.py` runs host tests against disposable PG18.

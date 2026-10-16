@@ -1,12 +1,11 @@
-// Publication-owned catalog taxonomy; independent of operator bank metadata.
+// Canonical exam taxonomy; publication controls course membership only.
 import { readFileSync, writeFileSync } from "node:fs";
-import { lessonPublications } from "../apps/web/src/shared/config/lesson-publication.mjs";
+import { examTopicDefinitions } from "../apps/web/src/shared/config/exam-topics.mjs";
 import {
   coursePublications,
   courseLessonPublications,
 } from "../apps/web/src/entities/course/content/course-publication.mjs";
-const topics = lessonPublications
-  .filter((x) => x.status === "published")
+const topics = examTopicDefinitions
   .flatMap((x) =>
     x.taskNumbers.map((number) => ({
       id: `ege-${number}`,

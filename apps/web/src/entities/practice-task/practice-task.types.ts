@@ -9,6 +9,7 @@ export namespace PracticeTaskTypes {
     | "text/x-python"
     | "application/zip"
     | "application/pdf"
+    | "application/vnd.ms-excel"
     | "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     | "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     | "application/vnd.oasis.opendocument.spreadsheet"

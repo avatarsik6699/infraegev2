@@ -58,7 +58,10 @@ function renderContentBlock(
   switch (block.type) {
     case "rich-text":
       return (
-        <Typography.Text key={key} className={styles.contentText}>
+        <Typography.Text
+          key={key}
+          className={`${styles.contentText} ${styles.richContentText}`}
+        >
           {block.spans.map(renderInlineSpan)}
         </Typography.Text>
       );
