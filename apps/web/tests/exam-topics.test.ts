@@ -18,23 +18,27 @@ describe("canonical EGE 2027 taxonomy", () => {
       examTopicDefinitions.map((topic) => topic.id),
     );
     const examTopics = practiceTopics.filter((topic) => topic.group === "ЕГЭ");
-    expect(examTopics.map((topic) => topic.exam_number)).toEqual(numbers);
-    expect(examTopics.map((topic) => topic.id)).toEqual(
-      numbers.map((number) => `ege-${number}`),
-    );
-    for (const topic of examTopicDefinitions) {
-      for (const number of topic.taskNumbers) {
-        expect(
-          examTopics.find((option) => option.exam_number === number),
-        ).toEqual({
-          id: `ege-${number}`,
-          label: `${number} номер. ${topic.title}`,
+    // Change 191 (F6): one catalog option per topic; 19–21 is a single option.
+    expect(examTopics.flatMap((topic) => topic.exam_numbers)).toEqual(numbers);
+    expect(examTopics).toEqual(
+      examTopicDefinitions.map((topic) => {
+        const first = topic.taskNumbers[0];
+        const last = topic.taskNumbers[topic.taskNumbers.length - 1];
+        const range = first === last ? `${first}` : `${first}–${last}`;
+        return {
+          id: first === last ? `ege-${first}` : `ege-${first}-${last}`,
+          label: `${range} номер. ${topic.title}`,
           group: "ЕГЭ",
-          exam_number: number,
+          exam_number: first,
+          exam_numbers: [...topic.taskNumbers],
           material_ids: [],
-        });
-      }
-    }
+        };
+      }),
+    );
+    expect(
+      examTopics.find((topic) => (topic.exam_numbers as number[]).includes(20))
+        ?.id,
+    ).toBe("ege-19-21");
   });
 
   it.each([
@@ -82,6 +86,7 @@ describe("canonical EGE 2027 taxonomy", () => {
           label: `${course.shortTitle} · ${section.title}`,
           group: "Мини-курсы",
           exam_number: null,
+          exam_numbers: [],
           material_ids: section.lessonPlan
             .filter((lesson) =>
               courseLessonPublications.some(

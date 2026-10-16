@@ -254,6 +254,10 @@ the sage strong shade, повышенный in the sky strong shade, высок�
 (`--color-level-*`, kept apart from the danger red). It appears only as small dots (under a task
 on the exam map, before the level in a row) and on the goal scale.
 
+A third exception (Change 191, F4): task difficulty bars — easy green, medium orange, hard
+near-red (`--color-difficulty-*`, apart from the accent orange and the answer-result colours). Only
+the filled bars of the difficulty glyph carry it; the word beside them stays text colour.
+
 **The One Meaning Rule.** Each accent has exactly one job: blue is a link, orange is "you are
 here", green/red are answer results. A colour never borrows another's job, so unrelated elements
 are never visually linked.

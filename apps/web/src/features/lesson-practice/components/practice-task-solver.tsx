@@ -10,6 +10,7 @@ import { PracticeTaskAnswer } from "./practice-task-answer";
 import { PracticeTaskContent } from "./practice-task-content";
 import { PracticeTaskFeedback } from "./practice-task-feedback";
 import { PracticeTaskHelp } from "./practice-task-help";
+import { PracticeTaskPartsAnswer } from "./practice-task-parts-answer";
 
 const DEFAULT_INSTRUCTION =
   "Запишите целое число в десятичной системе счисления.";
@@ -25,6 +26,10 @@ type Props = {
   active?: boolean;
   onRepeat?: () => void;
   onAnswerChange: (value: string) => void;
+  /** Change 191: drafts and results of a multi-part (19–21) task. */
+  partAnswers?: Readonly<Record<string, string>>;
+  partResults?: Readonly<Record<string, boolean>>;
+  onPartAnswerChange?: (key: string, value: string) => void;
   onRefresh: () => void;
   onSubmit: NonNullable<ComponentProps<"form">["onSubmit"]>;
 };
@@ -37,7 +42,9 @@ type Props = {
 export const PracticeTaskSolver: React.FC<Props> = (props) => {
   const inputId = `answer-${props.task.id}`;
   const instruction = props.task.answerInstruction?.trim();
-  const custom = instruction && instruction !== DEFAULT_INSTRUCTION;
+  const parts = props.task.answerParts;
+  const custom =
+    !parts?.length && instruction && instruction !== DEFAULT_INSTRUCTION;
   return (
     <>
       <PracticeTaskContent
@@ -56,21 +63,39 @@ export const PracticeTaskSolver: React.FC<Props> = (props) => {
         </Typography.Text>
       ) : null}
       <PracticeTaskHelp task={props.task} headingOrder={props.headingOrder}>
-        <PracticeTaskAnswer
-          inputId={inputId}
-          describedBy={custom ? `${inputId}-instruction` : undefined}
-          focusOnMount={props.focusOnMount}
-          active={props.active}
-          onRepeat={props.onRepeat}
-          alreadySolved={props.alreadySolved}
-          checking={props.state === "checking"}
-          enhanced={props.enhanced}
-          answer={props.answer}
-          state={props.state}
-          onAnswerChange={props.onAnswerChange}
-          onRefresh={props.onRefresh}
-          onSubmit={props.onSubmit}
-        />
+        {parts?.length ? (
+          <PracticeTaskPartsAnswer
+            inputId={inputId}
+            parts={parts}
+            alreadySolved={props.alreadySolved}
+            checking={props.state === "checking"}
+            enhanced={props.enhanced}
+            answers={props.partAnswers ?? {}}
+            results={props.partResults}
+            state={props.state}
+            onAnswerChange={(key, value) =>
+              props.onPartAnswerChange?.(key, value)
+            }
+            onRefresh={props.onRefresh}
+            onSubmit={props.onSubmit}
+          />
+        ) : (
+          <PracticeTaskAnswer
+            inputId={inputId}
+            describedBy={custom ? `${inputId}-instruction` : undefined}
+            focusOnMount={props.focusOnMount}
+            active={props.active}
+            onRepeat={props.onRepeat}
+            alreadySolved={props.alreadySolved}
+            checking={props.state === "checking"}
+            enhanced={props.enhanced}
+            answer={props.answer}
+            state={props.state}
+            onAnswerChange={props.onAnswerChange}
+            onRefresh={props.onRefresh}
+            onSubmit={props.onSubmit}
+          />
+        )}
       </PracticeTaskHelp>
       <PracticeTaskFeedback state={props.state} />
     </>

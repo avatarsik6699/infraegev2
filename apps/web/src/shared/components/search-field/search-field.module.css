@@ -23,3 +23,108 @@
 .action[data-empty="true"] {
   visibility: hidden;
 }
+
+/* Change 191 (F2): suggestions under the field, the same surface as the
+   topic picker. Matches are marked in ink, not in a fill colour. */
+.positioner {
+  z-index: 50;
+  width: max(var(--anchor-width), 20rem);
+  max-width: calc(100vw - 2rem);
+}
+.popup {
+  display: flex;
+  flex-direction: column;
+  max-height: min(28rem, var(--available-height));
+  overflow: hidden;
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-popover);
+  color: var(--color-text);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+}
+.list {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--space-0-5);
+}
+.list:empty {
+  display: none;
+}
+.list[data-stale] {
+  opacity: 0.6;
+}
+.item {
+  display: grid;
+  gap: var(--space-0-5);
+  padding: var(--space-1);
+  border-radius: var(--radius-control);
+  cursor: pointer;
+}
+.item + .item {
+  border-top: 1px solid var(--color-surface-quiet);
+}
+.item[data-highlighted] {
+  background: var(--color-surface-quiet);
+}
+.itemTitle {
+  display: flex;
+  gap: var(--space-1);
+  min-width: 0;
+  font-weight: 600;
+}
+.itemMeta {
+  flex: none;
+  color: var(--color-muted);
+  font-family: var(--font-data);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.itemSnippet {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  color: var(--color-text-soft);
+  font-size: var(--text-xs);
+}
+.item mark {
+  background: transparent;
+  color: var(--color-text);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+.status {
+  padding: var(--space-1-5);
+  color: var(--color-muted);
+}
+.status:empty {
+  display: none;
+}
+.showAll {
+  display: flex;
+  flex-shrink: 0;
+  justify-content: space-between;
+  align-items: center;
+  min-height: var(--control-height);
+  padding: var(--space-1) var(--space-1-5);
+  border: 0;
+  border-top: 1px solid var(--color-rule);
+  background: var(--color-surface);
+  color: var(--color-link, var(--color-text));
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.showAll:hover,
+.showAll:focus-visible {
+  background: var(--color-surface-quiet);
+}
+.showAll:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: -2px;
+}

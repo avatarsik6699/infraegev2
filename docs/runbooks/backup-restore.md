@@ -93,8 +93,10 @@ session revocation, per-context progress and application grants. A failed or par
 create the attestation; routine `db-restore-check` does not justify it.
 
 The completed 2026-09-26 `122_01` → `140_01` account cutover used the procedure below;
-`scripts/rehearse-account-cutover.sh` implements exactly that transition. A future schema head
-needs its own reviewed rehearsal following the same rules.
+`scripts/rehearse-account-cutover.sh` implements that transition and, since Change 191, the
+`140_01` → `191_01` one: the target is the candidate's `infra/database-schema` and the source its
+predecessor in `APPLICATION_SCHEMAS` (`scripts/lib/application-db-release.sh`); the attestation
+holds `<target> <sha>`. A further schema head extends that list and its own checks.
 
 Use the reviewed `scripts/rehearse-account-cutover.sh` from the exact candidate source on the
 production host, before deploy dispatch. Take a fresh production backup through the existing
@@ -105,7 +107,7 @@ The rehearsal authenticates the snapshot and obtains its restore size through Re
 also works with Restic 0.16 snapshots that do not include an embedded `summary`. Do not extract a
 bundle manually: the rehearsal authenticates and restores that exact snapshot itself into its
 private root-owned workspace, rejecting `latest`, prefixes, untagged snapshots and any snapshot
-that does not yield exactly one valid production `122_01` bundle. Pull the candidate API image
+that does not yield exactly one valid production bundle of the source schema. Pull the candidate API image
 and obtain its `sha256:` digest from the successful exact-SHA `images.yml` publication evidence.
 Run from a clean Git checkout whose `HEAD` is precisely the same full candidate SHA; this binds
 the migration scripts to the SHA-tagged image rather than trusting nearby modified source. Then
@@ -151,7 +153,7 @@ extracted bundle.
 `--validate` makes Restic authenticate and inspect the exact snapshot, verifies its application
 tag/freshness, checks the clean candidate source SHA and confirms the local SHA tag has the exact
 published API digest; it never restores data or starts a database. `--run` repeats those checks,
-locks both deploy and Restic activity, and requires a fresh production `122_01` bundle from that
+locks both deploy and Restic activity, and requires a fresh production source-schema bundle from that
 snapshot, the still-current source release, sufficient free space in both backup and Docker
 storage, root-only production settings and the already-pulled matching API image. It creates
 networkless disposable PostgreSQL

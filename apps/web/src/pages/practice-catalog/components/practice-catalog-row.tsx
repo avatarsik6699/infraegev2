@@ -1,6 +1,7 @@
-import { ChevronDown, Circle, CircleCheck, CircleAlert } from "lucide-react";
+import { Check, ChevronDown, CircleAlert } from "lucide-react";
 import {
   practiceCatalog,
+  practiceSource,
   practiceTaskNotation,
   PracticeDifficulty,
   type PracticeCatalogTypes,
@@ -10,6 +11,7 @@ import { useAccountSession } from "~/features/account";
 import { usePracticeProgress } from "~/features/practice-progress";
 import { PracticeTask } from "~/widgets/practice-task";
 import { ActionLink } from "~/shared/components/action-link";
+import { ExternalLink } from "~/shared/components/external-link";
 import { Button } from "~/shared/components/button";
 import { Typography } from "~/shared/components/typography";
 import { useIsEnhanced } from "~/shared/lib/use-is-enhanced";
@@ -40,8 +42,9 @@ export const PracticeCatalogRow: React.FC<{
     detail?.task.solutionRevision ?? props.task.solution_revision;
   const solved = history?.[revision] !== undefined;
   let status = "Не решено";
-  if (history) status = "Задача изменилась";
-  if (solved) status = "Решено";
+  let state = "open";
+  if (history) [status, state] = ["Задача изменилась", "changed"];
+  if (solved) [status, state] = ["Решено", "solved"];
   const source =
     props.task.sources?.find((item) => item.primary) ?? props.task.sources?.[0];
   const topic = rowModel.topic(
@@ -56,54 +59,55 @@ export const PracticeCatalogRow: React.FC<{
     <li className={styles.row} id={`task-${props.task.id}`}>
       {props.group}
       <div className={styles.rowHeader}>
-        {guest ? (
-          <span className={styles.progress} aria-hidden="true" />
-        ) : (
-          <span
-            className={styles.progress}
-            role="img"
-            aria-label={hydrated ? status : "Статус решения загружается"}
-            title={status}
-            data-solved={(solved && hydrated) || undefined}
-          >
-            {solved && hydrated ? (
-              <CircleCheck size={19} aria-hidden="true" />
-            ) : null}
-            {!solved && hydrated && history ? (
-              <CircleAlert size={19} aria-hidden="true" />
-            ) : null}
-            {(!hydrated || (!solved && !history)) && (
-              <Circle size={19} aria-hidden="true" />
-            )}
-          </span>
-        )}
         <div className={styles.rowContent}>
-          <Typography.Title
-            order={props.headingOrder ?? 2}
-            className={styles.rowHeading}
-          >
-            {enhanced ? (
-              <button
-                type="button"
-                id={headingId}
-                className={styles.trigger}
-                aria-expanded={props.open}
-                aria-controls={panelId}
-                onClick={props.onToggle}
-              >
-                {props.task.title}
-              </button>
+          {/* Change 191 (F8): the solved check follows the title in a slot that
+              is always reserved, so the title never moves when it appears. */}
+          <div className={styles.titleLine}>
+            <Typography.Title
+              order={props.headingOrder ?? 2}
+              className={styles.rowHeading}
+            >
+              {enhanced ? (
+                <button
+                  type="button"
+                  id={headingId}
+                  className={styles.trigger}
+                  aria-expanded={props.open}
+                  aria-controls={panelId}
+                  onClick={props.onToggle}
+                >
+                  {props.task.title}
+                </button>
+              ) : (
+                <ActionLink
+                  presentation="navigation"
+                  to={practiceCatalog.taskHref(props.task.id, props.search)}
+                  hierarchy="text"
+                  className={styles.trigger}
+                >
+                  {props.task.title}
+                </ActionLink>
+              )}
+            </Typography.Title>
+            {guest ? (
+              <span className={styles.solvedMark} aria-hidden="true" />
             ) : (
-              <ActionLink
-                presentation="navigation"
-                to={practiceCatalog.taskHref(props.task.id, props.search)}
-                hierarchy="text"
-                className={styles.trigger}
+              <span
+                className={styles.solvedMark}
+                role="img"
+                aria-label={hydrated ? status : "Статус решения загружается"}
+                title={hydrated ? status : undefined}
+                data-state={hydrated ? state : undefined}
               >
-                {props.task.title}
-              </ActionLink>
+                {solved && hydrated ? (
+                  <Check size={18} strokeWidth={2.5} aria-hidden="true" />
+                ) : null}
+                {!solved && hydrated && history ? (
+                  <CircleAlert size={16} aria-hidden="true" />
+                ) : null}
+              </span>
             )}
-          </Typography.Title>
+          </div>
           {props.task.short_description && (
             <Typography.Text className={styles.preview}>
               {rowModel.preview(props.task.short_description)}
@@ -125,8 +129,15 @@ export const PracticeCatalogRow: React.FC<{
               className={styles.sourceName}
               title={source?.title ?? undefined}
             >
-              {source?.title ??
-                (source?.kind === "original" ? "Авторское" : "—")}
+              {/* Change 191 (F3): the original task stays one click away. */}
+              {source?.url ? (
+                <ExternalLink href={source.url} newTab>
+                  {source.title ?? practiceSource.label(source)}
+                </ExternalLink>
+              ) : (
+                (source?.title ??
+                (source?.kind === "original" ? "Авторское" : "—"))
+              )}
             </span>
             {source?.year && !source.title?.includes(String(source.year)) && (
               <small>{source.year}</small>
@@ -220,8 +231,8 @@ const rowModel = {
       const entry = topicCatalog.entries.find((item) =>
         item.taskNumbers.includes(numbers[0]),
       );
-      const facet = topics?.find(
-        (item) => item.id === `ege-${String(numbers[0])}`,
+      const facet = topics?.find((item) =>
+        item.exam_numbers?.includes(numbers[0]),
       );
       // F47: under a topic row the topic is said once; the skill tells the
       // tasks of one number apart.

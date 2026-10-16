@@ -33,6 +33,8 @@ async def session(response: Response) -> AsyncIterator[AsyncSession]:
                 yield connection
     except readers.Unavailable as exc:
         raise HTTPException(404, "task or material unavailable") from exc
+    except readers.InvalidAnswer as exc:
+        raise HTTPException(422, "answer shape does not match the task") from exc
     except Conflict as exc:
         raise HTTPException(409, "refresh the task") from exc
     except (OSError, TimeoutError, SQLAlchemyError, PostgresError, ValueError) as exc:
@@ -62,6 +64,13 @@ async def get_sitemap(
     connection: Session, page: Annotated[int, Query(ge=1, le=49999)] = 1
 ) -> catalog.SitemapPage:
     return await catalog.sitemap_page(connection, page)
+
+
+@router.get("/tasks/suggest", response_model=catalog.SuggestPage)
+async def get_suggestions(
+    query: Annotated[catalog.SuggestQuery, Query()], connection: Session
+) -> catalog.SuggestPage:
+    return await catalog.suggest(connection, query)
 
 
 @router.get("/tasks/facets", response_model=catalog.CatalogFacets)

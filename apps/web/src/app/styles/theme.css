@@ -88,6 +88,12 @@
   /* Exam levels on /ege (Change 185, F36): one meaning per tone, dots and the
      goal scale only. Высокий is a muted brick, kept apart from danger. */
   --theme-level-high: #b65a52;
+  /* Task difficulty bars only (Change 191, F4): green / orange / near-red, each
+     at least 3:1 on the surface (WCAG non-text contrast),
+     kept apart from the accent orange and from answer-result colours. */
+  --theme-difficulty-easy: #3f9a5c;
+  --theme-difficulty-medium: #cf7a1b;
+  --theme-difficulty-hard: #c8483c;
 
   /* Code on a soft surface; every code text colour is at least 4.5:1 on
      --theme-code. Line numbers are decorative (aria-hidden, not copied) and

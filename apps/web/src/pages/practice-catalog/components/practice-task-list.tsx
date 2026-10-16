@@ -28,7 +28,7 @@ export const PracticeTaskList: React.FC<{
       <PracticeTopicGroup
         number={number}
         total={
-          props.topics?.find((topic) => topic.id === `ege-${String(number)}`)
+          props.topics?.find((topic) => topic.exam_numbers?.includes(number))
             ?.count ?? 0
         }
         pageTasks={props.tasks.filter((item) => numberOf(item) === number)}
@@ -39,7 +39,6 @@ export const PracticeTaskList: React.FC<{
   return (
     <>
       <div className={styles.listHeading}>
-        <span aria-hidden="true" />
         <span aria-hidden="true">Задание</span>
         <span aria-hidden="true">Тема</span>
         <span aria-hidden="true">Сложность</span>

@@ -10,6 +10,9 @@ export function useLessonPracticeModel(props: LessonPracticeTypes.Props) {
   const [practiceStates, setPracticeStates] =
     useState<LessonPracticeTypes.States>({});
   const [draftAnswers, setDraftAnswers] = useState<Record<string, string>>({});
+  const [partResults, setPartResults] = useState<
+    Record<string, Readonly<Record<string, boolean>>>
+  >({});
   const [selectedTaskId, setSelectedTaskId] = useState(
     props.tasks[0]?.id ?? "",
   );
@@ -27,8 +30,20 @@ export function useLessonPracticeModel(props: LessonPracticeTypes.Props) {
     if (pending.current.has(task.id) || props.solvedTaskIds.includes(task.id))
       return;
     pending.current.add(task.id);
-    const value = new FormData(event.currentTarget).get("answer");
-    const answer = typeof value === "string" ? value : "";
+    const form = new FormData(event.currentTarget);
+    const read = (name: string) => {
+      const value = form.get(name);
+      return typeof value === "string" ? value : "";
+    };
+    // Change 191: a 19–21 task submits every part field at once.
+    const answer: PracticeTaskTypes.Answer = task.answerParts
+      ? Object.fromEntries(
+          task.answerParts.map((part) => [
+            part.key,
+            read(`answer-${part.key}`),
+          ]),
+        )
+      : read("answer");
     setPracticeStates((current) => ({ ...current, [task.id]: "checking" }));
     try {
       const result = await props.checkAnswer(
@@ -40,6 +55,8 @@ export function useLessonPracticeModel(props: LessonPracticeTypes.Props) {
         ...current,
         [task.id]: result.correct ? "correct" : "incorrect",
       }));
+      if (result.parts)
+        setPartResults((current) => ({ ...current, [task.id]: result.parts! }));
       if (result.correct && result.saved === true) props.onTaskSolved(task.id);
     } catch (error) {
       let state: LessonPracticeTypes.State = "error";
@@ -66,6 +83,15 @@ export function useLessonPracticeModel(props: LessonPracticeTypes.Props) {
       }
     },
     answerFor: (taskId: string) => draftAnswers[taskId] ?? "",
+    /** Drafts of a multi-part task live under `taskId:partKey`. */
+    partAnswersFor: (task: PracticeTaskTypes.Task) =>
+      Object.fromEntries(
+        (task.answerParts ?? []).map((part) => [
+          part.key,
+          draftAnswers[`${task.id}:${part.key}`] ?? "",
+        ]),
+      ),
+    partResultsFor: (taskId: string) => partResults[taskId],
     checkAnswer,
     enhanced,
     isSolved: (taskId: string) => props.solvedTaskIds.includes(taskId),

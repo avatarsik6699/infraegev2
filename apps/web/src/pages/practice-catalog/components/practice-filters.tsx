@@ -15,6 +15,7 @@ import { Button } from "~/shared/components/button";
 import { russianCount } from "~/shared/lib/russian-count";
 import { useIsEnhanced } from "~/shared/lib/use-is-enhanced";
 import { PracticeActiveFilters } from "./practice-active-filters";
+import { useSearchSuggestions } from "../model/use-search-suggestions";
 import styles from "../practice-catalog-page.module.css";
 
 export const PracticeFilters: React.FC<{
@@ -25,6 +26,8 @@ export const PracticeFilters: React.FC<{
   const enhanced = useIsEnhanced();
   const form = useRef<HTMLFormElement>(null);
   const [topics, setTopics] = useState(props.search.topics ?? []);
+  const [text, setText] = useState(props.search.q ?? "");
+  const suggestions = useSearchSuggestions(props.search, text);
   const [applyVersion, setApplyVersion] = useState(0);
   useEffect(
     function applyTopicsFx() {
@@ -46,8 +49,9 @@ export const PracticeFilters: React.FC<{
     Object.keys(examNumbers).filter(
       (id) =>
         history[id] &&
-        topic.exam_number != null &&
-        examNumbers[id].includes(topic.exam_number),
+        (topic.exam_numbers ?? []).some((number) =>
+          examNumbers[id].includes(number),
+        ),
     ).length;
   return (
     <form
@@ -72,9 +76,42 @@ export const PracticeFilters: React.FC<{
         name="q"
         placeholder="Название, условие или номер"
         maxLength={200}
-        defaultValue={props.search.q ?? ""}
+        value={text}
+        onValueChange={setText}
         submitLabel="Найти задачи"
         clearLabel="Очистить поиск"
+        suggestions={
+          enhanced
+            ? {
+                active: suggestions.active,
+                loading: suggestions.loading,
+                items: (suggestions.value?.tasks ?? []).map((task) => ({
+                  id: task.id,
+                  title: task.title,
+                  titleHighlights: task.title_highlights,
+                  meta: practiceCatalog.numberLabel(task.exam_numbers),
+                  snippet: task.snippet,
+                  snippetHighlights: task.snippet_highlights,
+                })),
+                total: suggestions.value?.total ?? null,
+                listLabel: "Подходящие задачи",
+                emptyLabel:
+                  suggestions.value?.status === "unavailable"
+                    ? "Подсказки сейчас недоступны — нажмите Enter для поиска"
+                    : "Ничего не нашлось",
+                loadingLabel: "Ищем…",
+                showAllLabel: (total) =>
+                  `Показать все: ${practiceCatalog.countLabel(total)}`,
+                onSelect: (id) => {
+                  void router.navigate({
+                    to: "/practice/$taskId",
+                    params: { taskId: id },
+                    search: { ...props.search, q: text.trim() || undefined },
+                  });
+                },
+              }
+            : undefined
+        }
       />
       <div className={styles.panelSelects}>
         <div className={patterns.scriptedOnly}>
@@ -95,7 +132,7 @@ export const PracticeFilters: React.FC<{
               label: practiceCatalog.topicLabel(topic.label),
               group: topic.group,
               description:
-                member && hydrated && topic.exam_number != null
+                member && hydrated && (topic.exam_numbers ?? []).length > 0
                   ? `${practiceCatalog.countLabel(topic.count)} · решено ${String(solvedIn(topic))}`
                   : practiceCatalog.countLabel(topic.count),
             }))}

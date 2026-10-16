@@ -78,10 +78,12 @@ cutover_disposable_phase() {
   # Read by the sourcing production wrapper for its post-drill release re-attestation.
   # shellcheck disable=SC2034
   CUTOVER_SOURCE_METADATA=$metadata
-  jq -e --arg schema 122_01 '
+  jq -e --arg schema "${CUTOVER_SOURCE_SCHEMA:?}" '
     .environment == "prod" and .project == "infraege" and .schemaVersion == $schema and
     (.release | test("^[a-f0-9]{40}$"))
-  ' "$metadata" >/dev/null || { db_fail 'authenticated snapshot is not a production 122_01 bundle'; return 1; }
+  ' "$metadata" >/dev/null || {
+    db_fail "authenticated snapshot is not a production $CUTOVER_SOURCE_SCHEMA bundle"; return 1;
+  }
   [[ $(<"$CUTOVER_CURRENT_RELEASE") == "$(jq -r '.release' "$metadata")" ]] || {
     db_fail 'production release changed since source snapshot'; return 1;
   }
@@ -123,8 +125,9 @@ cutover_disposable_phase() {
     <"$CUTOVER_REPO_DIR/scripts/sql/account-cutover-fixture.sql"
   PRACTICE_TEST_IMAGE="$CUTOVER_IMAGE" python3 "$CUTOVER_REPO_DIR/scripts/application_db.py" bundle \
     "$CUTOVER_FIRST" "$CUTOVER_WORK_DIR/candidate-bundle" "$CUTOVER_ENV_FILE" test "$CUTOVER_PROJECT"
-  [[ $(jq -r '.schemaVersion' "$CUTOVER_WORK_DIR/candidate-bundle/metadata.json") == 140_01 ]] || {
-    db_fail 'candidate backup does not contain 140_01'; return 1;
+  [[ $(jq -r '.schemaVersion' "$CUTOVER_WORK_DIR/candidate-bundle/metadata.json") == \
+    "${CUTOVER_TARGET_SCHEMA:?}" ]] || {
+    db_fail "candidate backup does not contain $CUTOVER_TARGET_SCHEMA"; return 1;
   }
   docker rm --force "$CUTOVER_FIRST" >/dev/null
   CUTOVER_CREATED_FIRST=false

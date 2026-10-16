@@ -339,8 +339,13 @@ export function projectPracticeTask(
   source: PublicTask,
   materialId: string,
 ): PracticeTaskTypes.Task {
+  const partLabels = new Set(
+    (source.content.answer_parts ?? []).map((part) => part.label),
+  );
   const blocks = (values: PublicTask["content"]["statement"]) =>
-    values.map((block) => {
+    values.map((block): PracticeTaskTypes.ContentBlock => {
+      if (block.type === "text" && partLabels.has(block.data.markdown))
+        return { type: "part-heading", text: block.data.markdown };
       if (
         block.type !== "attachment" &&
         block.type !== "image" &&
@@ -393,6 +398,11 @@ export function projectPracticeTask(
         ? [{ hash: link.section, label: link.label }]
         : [],
     ),
+    answerParts: source.content.answer_parts?.map((part) => ({
+      key: part.key,
+      label: part.label,
+      answerInstruction: part.answer_instruction,
+    })),
     // The API omits the flag while it is true (B1), so only `false` excludes.
     countsTowardMastery: !(source.content.lessons ?? []).some(
       (link) =>

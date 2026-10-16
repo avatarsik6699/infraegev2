@@ -112,6 +112,11 @@ class Checker(StrictModel):
     checker_type: Literal["exact_match", "numeric_tolerance"]
     answer_variants: list[Nonempty] = Field(min_length=1, max_length=100)
     numeric_tolerance: float | None = Field(default=None, ge=0)
+    # Change 191: multi-part tasks check every part separately; the fields above then mirror the
+    # first part, because stored checkers always keep them.
+    parts: list["CheckerPart"] | None = Field(
+        default=None, min_length=2, max_length=5, exclude_if=lambda value: value is None
+    )
 
     @model_validator(mode="after")
     def valid_numbers(self) -> Self:
@@ -122,6 +127,38 @@ class Checker(StrictModel):
                 raise ValueError("numeric answers must be finite")
         elif self.numeric_tolerance is not None:
             raise ValueError("exact checker has no tolerance")
+        return self
+
+
+PartKey = Annotated[str, Field(pattern=r"^[0-9]{1,2}$")]
+
+
+class CheckerPart(Checker):
+    """One independently checked question of a multi-part task (EGE 19–21, Change 191)."""
+
+    key: PartKey
+
+
+class AnswerPart(StrictModel):
+    key: PartKey
+    label: Annotated[str, Field(min_length=1, max_length=80)]
+    answer_instruction: Nonempty
+
+
+class AnswerInput(BaseModel):
+    """Exactly one of a single `answer` or per-part `answers` (Change 191)."""
+
+    answer: str | None = Field(default=None, min_length=1, max_length=500)
+    answers: dict[PartKey, Annotated[str, Field(max_length=500)]] | None = Field(
+        default=None, min_length=1, max_length=5
+    )
+
+    @model_validator(mode="after")
+    def one_shape(self) -> Self:
+        if (self.answer is None) == (self.answers is None):
+            raise ValueError("provide either answer or answers")
+        if self.answers is not None and not any(v.strip() for v in self.answers.values()):
+            raise ValueError("at least one part answer is required")
         return self
 
 
@@ -182,6 +219,9 @@ class TaskContent(StrictModel):
     files: list[FileUsage] = Field(default_factory=list, max_length=100)
     lessons: list[Membership] = Field(default_factory=list, max_length=100)
     theory_links: list[TheoryLink] = Field(default_factory=list, max_length=100)
+    answer_parts: list[AnswerPart] | None = Field(
+        default=None, min_length=2, max_length=5, exclude_if=lambda value: value is None
+    )
     catalog_visible: bool = True
     archived: bool = False
 
@@ -228,6 +268,10 @@ class TaskData(TaskContent):
     def primary_source(self) -> Self:
         if sum(source.primary for source in self.sources) != 1:
             raise ValueError("exactly one primary source required")
+        public = [part.key for part in self.answer_parts or []]
+        private = [part.key for part in self.checker.parts or []]
+        if public != private or len(set(public)) != len(public):
+            raise ValueError("answer parts must match checker parts")
         return self
 
 

@@ -154,12 +154,18 @@
   padding: 0;
   margin: 0;
 }
-/* F46: one grid for the heading and the rows — status, task, «Тема» (number
-   and topic), difficulty, source, disclosure. */
+/* F46: one grid for the heading and the rows — task, «Тема» (number and
+   topic), difficulty, source, disclosure. Change 191 (F8): no status column;
+   a solved check follows the title. */
 .listHeading,
-.rowHeader,
+.rowHeader {
+  grid-template-columns: minmax(0, 1fr) 12rem 8rem 9rem 2.5rem;
+}
 .group {
-  grid-template-columns: 1.5rem minmax(0, 1fr) 12rem 8rem 9rem 2.5rem;
+  grid-template-columns: minmax(2rem, max-content) minmax(0, 1fr) minmax(
+      0,
+      15rem
+    );
 }
 .listHeading {
   align-items: center;
@@ -181,12 +187,17 @@
 }
 /* F59: the number stands on the title's baseline, not in the row's middle. */
 .groupNumber {
+  white-space: nowrap;
   align-self: first baseline;
-  justify-self: center;
+  justify-self: start;
   font-family: var(--font-data);
   font-size: var(--text-xl);
   font-weight: 600;
   font-variant-numeric: tabular-nums;
+}
+/* Change 191 (F6): «19–21» keeps the number's line in a smaller size. */
+.groupNumber[data-range] {
+  font-size: var(--text-lg);
 }
 .groupTopic {
   align-self: first baseline;
@@ -230,7 +241,7 @@
    the /ege progress column, the count right-aligned over it. */
 .groupProgress {
   /* F59: through the chevron column to the row's right edge. */
-  grid-column: 3 / -1;
+  grid-column: 3;
   justify-self: end;
   display: grid;
   justify-items: end;
@@ -252,6 +263,9 @@
   scroll-margin-block: var(--space-2);
 }
 .rowHeader {
+  /* Change 191 (F9): one line height for every cell, so first and second
+     lines of the title, topic, difficulty and source share two rows. */
+  --row-line: 1.375rem;
   position: relative;
   display: grid;
   /* F29: air between rows and between columns with long content. */
@@ -271,11 +285,27 @@
   padding-block-start: var(--space-0-5);
   min-width: 0;
 }
+.titleLine {
+  display: grid;
+  grid-template-columns: minmax(0, max-content) 1.25rem;
+  gap: var(--space-1);
+  align-items: start;
+}
 .rowHeading[data-order] {
   font-family: var(--font-display);
   font-size: var(--text-reading);
   font-weight: 600;
-  line-height: 1.3;
+  line-height: var(--row-line);
+}
+.solvedMark {
+  display: flex;
+  align-items: center;
+  height: var(--row-line);
+  color: var(--color-muted);
+}
+/* F29: a solved task's check is green (the solved mark in practice rows). */
+.solvedMark[data-state="solved"] {
+  color: var(--color-success);
 }
 .trigger {
   display: inline-flex;
@@ -313,6 +343,7 @@
   white-space: nowrap;
   color: var(--color-text-soft);
   font-size: var(--text-sm);
+  line-height: var(--row-line);
   margin-top: 0;
 }
 .rowMeta {
@@ -323,7 +354,13 @@
 .source {
   padding-block-start: var(--space-0-5);
   font-size: var(--text-sm);
+  line-height: var(--row-line);
   color: var(--color-text);
+}
+/* Change 191 (F7): the source link sits above the title's row-wide target. */
+.source a {
+  position: relative;
+  z-index: 1;
 }
 /* F46: two even lines — «№ 16» and the topic, cut to one line. */
 .topicCell {
@@ -345,6 +382,8 @@
 .difficulty {
   display: flex;
   align-items: center;
+  align-self: start;
+  height: calc(var(--row-line) + var(--space-0-5));
   gap: var(--space-0-5);
 }
 .difficulty svg {
@@ -354,15 +393,7 @@
 .source small {
   display: block;
   font-size: var(--text-xs);
-}
-.progress {
-  display: flex;
-  align-items: center;
-  padding-block-start: var(--space-0-5);
-}
-/* F29: a solved task's check is green, as in the mockups. */
-.progress[data-solved] {
-  color: var(--color-success);
+  line-height: var(--row-line);
 }
 .disclosure {
   position: relative;
@@ -481,9 +512,8 @@
 }
 @media (max-width: 75rem) {
   .listHeading,
-  .rowHeader,
-  .group {
-    grid-template-columns: 1.5rem minmax(0, 1fr) 10rem 7.5rem 7rem 2.5rem;
+  .rowHeader {
+    grid-template-columns: minmax(0, 1fr) 10rem 7.5rem 7rem 2.5rem;
   }
 }
 @media (max-width: 75rem) {
@@ -530,20 +560,20 @@
     border-top: 1px solid var(--color-rule);
   }
   .rowHeader {
-    grid-template-columns: 1.5rem minmax(0, 1fr) 2.5rem;
+    grid-template-columns: minmax(0, 1fr) 2.5rem;
     row-gap: var(--space-0-5);
     padding-block: var(--space-1);
   }
   .rowContent {
-    grid-column: 2;
+    grid-column: 1;
     grid-row: 1;
   }
   .rowHeader > .scriptedOnly {
-    grid-column: 3;
+    grid-column: 2;
     grid-row: 1;
   }
   .group {
-    grid-template-columns: 1.5rem minmax(0, 1fr);
+    grid-template-columns: minmax(2rem, max-content) minmax(0, 1fr);
   }
   .groupProgress {
     grid-column: 2;
@@ -552,7 +582,7 @@
     width: auto;
   }
   .rowMeta {
-    grid-column: 2;
+    grid-column: 1;
     grid-row: 2;
     display: flex;
     flex-wrap: wrap;

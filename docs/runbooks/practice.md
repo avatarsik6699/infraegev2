@@ -1,8 +1,9 @@
 # Practice operator workflow
 
-Migration head `140_01` retains the bank introduced by `122_01`: current task JSON, a separate
+Migration head `191_01` retains the bank introduced by `122_01`: current task JSON, a separate
 private checker, ordered lesson memberships and content-addressed files; it adds accounts and
-server progress. PostgreSQL is the only runtime bank. Theory/publication definitions
+server progress, and `191_01` adds stored generated catalog columns (exam numbers, order,
+difficulty, skills, normalized search text) maintained by PostgreSQL from task JSON. PostgreSQL is the only runtime bank. Theory/publication definitions
 remain authored in the web tree and `apps/api/practice-registry.json` (generated/checkable with
 `node scripts/practice-registry.mjs --check`). There is no history/package/release-import engine.
 
@@ -91,6 +92,16 @@ and never authorizes production import.
 Practice exam labels are owned by `apps/web/src/shared/config/exam-topics.mjs` rather than lesson
 publication. `node scripts/practice-catalog-topics.mjs` regenerates the API taxonomy; `--check`
 verifies it. All numbers 1–27 stay selectable even when their theory lesson is not published.
+
+## Bank repair (Change 191)
+
+`uv run python -m app.modules.practice.bank_repair content/practice-bank EXAM_TOPICS_JSON` (from
+`apps/api`; the JSON is `examTopicDefinitions` exported by node from `exam-topics.mjs`) rewrites
+the canonical bank once: Change 188 titles become the FIPI topic name, imported and empty
+summaries come from the statement question, catalog tasks without theory get a topic-level
+«Теория» link, and every kompege 19/20/21 game becomes one multi-part task while its split parts
+stay archived. It is idempotent; format with prettier, then `make practice-bootstrap` and
+`pnpm validate:content`. Editorial fields keep `solution_revision`.
 
 ## Checks and recovery
 

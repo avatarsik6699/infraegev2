@@ -17,7 +17,10 @@ export const checkPracticeAnswer: PracticeTaskTypes.Checker = async (
       "/api/tasks/{task_id}/check",
       {
         params: { path: { task_id: taskId } },
-        body: { answer, solution_revision: solutionRevision },
+        body: {
+          ...answerBody(answer),
+          solution_revision: solutionRevision,
+        },
         signal: AbortSignal.timeout(10_000),
       },
     );
@@ -33,6 +36,7 @@ export const checkPracticeAnswer: PracticeTaskTypes.Checker = async (
       throw new ApiError("protocol", "Checker revision mismatch");
     return {
       correct: data.correct,
+      parts: data.parts ?? undefined,
       explanation: data.explanation
         .map(explanationText)
         .filter(Boolean)
@@ -42,6 +46,11 @@ export const checkPracticeAnswer: PracticeTaskTypes.Checker = async (
     throw normalizeApiFailure(error);
   }
 };
+
+/** Change 191: a multi-part task sends its answers by part key. */
+function answerBody(answer: PracticeTaskTypes.Answer) {
+  return typeof answer === "string" ? { answer } : { answers: { ...answer } };
+}
 
 export function createCheckAndSaveAnswer(
   contextKind: "topic_lesson" | "course_lesson" | "standalone",
@@ -55,7 +64,7 @@ export function createCheckAndSaveAnswer(
         {
           params: { path: { task_id: taskId } },
           body: {
-            answer,
+            ...answerBody(answer),
             solution_revision: solutionRevision,
             context_kind: contextKind,
             context_id: contextId,
@@ -73,6 +82,7 @@ export function createCheckAndSaveAnswer(
       return {
         correct: data.correct,
         saved: data.saved,
+        parts: data.parts ?? undefined,
         explanation: data.explanation
           .map(explanationText)
           .filter(Boolean)

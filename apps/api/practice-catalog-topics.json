@@ -4,6 +4,7 @@
     "label": "1 номер. Анализ информационных моделей",
     "group": "ЕГЭ",
     "exam_number": 1,
+    "exam_numbers": [1],
     "material_ids": []
   },
   {
@@ -11,6 +12,7 @@
     "label": "2 номер. Таблицы истинности",
     "group": "ЕГЭ",
     "exam_number": 2,
+    "exam_numbers": [2],
     "material_ids": []
   },
   {
@@ -18,6 +20,7 @@
     "label": "3 номер. Реляционные базы данных",
     "group": "ЕГЭ",
     "exam_number": 3,
+    "exam_numbers": [3],
     "material_ids": []
   },
   {
@@ -25,6 +28,7 @@
     "label": "4 номер. Кодирование и декодирование информации",
     "group": "ЕГЭ",
     "exam_number": 4,
+    "exam_numbers": [4],
     "material_ids": []
   },
   {
@@ -32,6 +36,7 @@
     "label": "5 номер. Формальное исполнение алгоритма",
     "group": "ЕГЭ",
     "exam_number": 5,
+    "exam_numbers": [5],
     "material_ids": []
   },
   {
@@ -39,6 +44,7 @@
     "label": "6 номер. Простейшие алгоритмы для исполнителей",
     "group": "ЕГЭ",
     "exam_number": 6,
+    "exam_numbers": [6],
     "material_ids": []
   },
   {
@@ -46,6 +52,7 @@
     "label": "7 номер. Объём графической и звуковой информации",
     "group": "ЕГЭ",
     "exam_number": 7,
+    "exam_numbers": [7],
     "material_ids": []
   },
   {
@@ -53,6 +60,7 @@
     "label": "8 номер. Измерение количества информации",
     "group": "ЕГЭ",
     "exam_number": 8,
+    "exam_numbers": [8],
     "material_ids": []
   },
   {
@@ -60,6 +68,7 @@
     "label": "9 номер. Электронные таблицы",
     "group": "ЕГЭ",
     "exam_number": 9,
+    "exam_numbers": [9],
     "material_ids": []
   },
   {
@@ -67,6 +76,7 @@
     "label": "10 номер. Маска подсети",
     "group": "ЕГЭ",
     "exam_number": 10,
+    "exam_numbers": [10],
     "material_ids": []
   },
   {
@@ -74,6 +84,7 @@
     "label": "11 номер. Информационный объём сообщения",
     "group": "ЕГЭ",
     "exam_number": 11,
+    "exam_numbers": [11],
     "material_ids": []
   },
   {
@@ -81,6 +92,7 @@
     "label": "12 номер. Исполнение алгоритма для исполнителя",
     "group": "ЕГЭ",
     "exam_number": 12,
+    "exam_numbers": [12],
     "material_ids": []
   },
   {
@@ -88,6 +100,7 @@
     "label": "13 номер. Анализ хода исполнения алгоритма",
     "group": "ЕГЭ",
     "exam_number": 13,
+    "exam_numbers": [13],
     "material_ids": []
   },
   {
@@ -95,6 +108,7 @@
     "label": "14 номер. Позиционные системы счисления",
     "group": "ЕГЭ",
     "exam_number": 14,
+    "exam_numbers": [14],
     "material_ids": []
   },
   {
@@ -102,6 +116,7 @@
     "label": "15 номер. Законы математической логики",
     "group": "ЕГЭ",
     "exam_number": 15,
+    "exam_numbers": [15],
     "material_ids": []
   },
   {
@@ -109,6 +124,7 @@
     "label": "16 номер. Рекуррентные выражения",
     "group": "ЕГЭ",
     "exam_number": 16,
+    "exam_numbers": [16],
     "material_ids": []
   },
   {
@@ -116,6 +132,7 @@
     "label": "17 номер. Обработка числовой последовательности",
     "group": "ЕГЭ",
     "exam_number": 17,
+    "exam_numbers": [17],
     "material_ids": []
   },
   {
@@ -123,27 +140,15 @@
     "label": "18 номер. Электронные таблицы: целочисленные данные",
     "group": "ЕГЭ",
     "exam_number": 18,
+    "exam_numbers": [18],
     "material_ids": []
   },
   {
-    "id": "ege-19",
-    "label": "19 номер. Выигрышная стратегия",
+    "id": "ege-19-21",
+    "label": "19–21 номер. Выигрышная стратегия",
     "group": "ЕГЭ",
     "exam_number": 19,
-    "material_ids": []
-  },
-  {
-    "id": "ege-20",
-    "label": "20 номер. Выигрышная стратегия",
-    "group": "ЕГЭ",
-    "exam_number": 20,
-    "material_ids": []
-  },
-  {
-    "id": "ege-21",
-    "label": "21 номер. Выигрышная стратегия",
-    "group": "ЕГЭ",
-    "exam_number": 21,
+    "exam_numbers": [19, 20, 21],
     "material_ids": []
   },
   {
@@ -151,6 +156,7 @@
     "label": "22 номер. Многопроцессорные системы",
     "group": "ЕГЭ",
     "exam_number": 22,
+    "exam_numbers": [22],
     "material_ids": []
   },
   {
@@ -158,6 +164,7 @@
     "label": "23 номер. Анализ графов",
     "group": "ЕГЭ",
     "exam_number": 23,
+    "exam_numbers": [23],
     "material_ids": []
   },
   {
@@ -165,6 +172,7 @@
     "label": "24 номер. Обработка символьной информации",
     "group": "ЕГЭ",
     "exam_number": 24,
+    "exam_numbers": [24],
     "material_ids": []
   },
   {
@@ -172,6 +180,7 @@
     "label": "25 номер. Обработка целочисленной информации",
     "group": "ЕГЭ",
     "exam_number": 25,
+    "exam_numbers": [25],
     "material_ids": []
   },
   {
@@ -179,6 +188,7 @@
     "label": "26 номер. Обработка данных с сортировкой",
     "group": "ЕГЭ",
     "exam_number": 26,
+    "exam_numbers": [26],
     "material_ids": []
   },
   {
@@ -186,6 +196,7 @@
     "label": "27 номер. Анализ данных",
     "group": "ЕГЭ",
     "exam_number": 27,
+    "exam_numbers": [27],
     "material_ids": []
   },
   {
@@ -193,6 +204,7 @@
     "label": "Python · Старт",
     "group": "Мини-курсы",
     "exam_number": null,
+    "exam_numbers": [],
     "material_ids": [
       "python-first-program",
       "python-values",
@@ -205,6 +217,7 @@
     "label": "Python · Условия",
     "group": "Мини-курсы",
     "exam_number": null,
+    "exam_numbers": [],
     "material_ids": ["python-logic", "python-conditions"]
   },
   {
@@ -212,6 +225,7 @@
     "label": "Python · Циклы",
     "group": "Мини-курсы",
     "exam_number": null,
+    "exam_numbers": [],
     "material_ids": ["python-while", "python-for-range"]
   },
   {
@@ -219,6 +233,7 @@
     "label": "Python · Строки и коллекции",
     "group": "Мини-курсы",
     "exam_number": null,
+    "exam_numbers": [],
     "material_ids": [
       "python-strings",
       "python-lists",
@@ -233,6 +248,7 @@
     "label": "Python · Функции",
     "group": "Мини-курсы",
     "exam_number": null,
+    "exam_numbers": [],
     "material_ids": [
       "python-functions",
       "python-arguments",
@@ -246,6 +262,7 @@
     "label": "Python · Файлы и инструменты",
     "group": "Мини-курсы",
     "exam_number": null,
+    "exam_numbers": [],
     "material_ids": [
       "python-files",
       "python-exceptions",
@@ -260,6 +277,7 @@
     "label": "Python · Итог",
     "group": "Мини-курсы",
     "exam_number": null,
+    "exam_numbers": [],
     "material_ids": ["python-independent-program", "python-practice"]
   },
   {
@@ -267,6 +285,7 @@
     "label": "Python · Дополнительно",
     "group": "Мини-курсы",
     "exam_number": null,
+    "exam_numbers": [],
     "material_ids": [
       "python-classes",
       "python-advanced-features",
@@ -278,6 +297,7 @@
     "label": "Excel · Лист и данные",
     "group": "Мини-курсы",
     "exam_number": null,
+    "exam_numbers": [],
     "material_ids": ["excel-sheet", "excel-input-files", "excel-cell-values"]
   },
   {
@@ -285,6 +305,7 @@
     "label": "Excel · Формулы",
     "group": "Мини-курсы",
     "exam_number": null,
+    "exam_numbers": [],
     "material_ids": [
       "excel-first-formulas",
       "excel-references",
@@ -296,6 +317,7 @@
     "label": "Excel · Условия",
     "group": "Мини-курсы",
     "exam_number": null,
+    "exam_numbers": [],
     "material_ids": [
       "excel-conditions",
       "excel-numbers",
@@ -308,6 +330,7 @@
     "label": "Excel · Таблицы и связи",
     "group": "Мини-курсы",
     "exam_number": null,
+    "exam_numbers": [],
     "material_ids": [
       "excel-sort-filter",
       "excel-lookup",
@@ -319,6 +342,7 @@
     "label": "Excel · Итог",
     "group": "Мини-курсы",
     "exam_number": null,
+    "exam_numbers": [],
     "material_ids": ["excel-from-task-to-table"]
   },
   {
@@ -326,6 +350,7 @@
     "label": "Excel · Дополнительно",
     "group": "Мини-курсы",
     "exam_number": null,
+    "exam_numbers": [],
     "material_ids": ["excel-tables-pivots"]
   }
 ]

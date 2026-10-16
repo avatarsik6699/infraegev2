@@ -3,6 +3,7 @@ export {
   loadCoursePracticeSummary,
   loadTopicPracticeSummary,
   loadPracticeCatalog,
+  loadPracticeSuggestions,
   loadStandaloneTask,
   loadTaskSitemapIndex,
   loadTaskSitemapPage,
@@ -11,6 +12,8 @@ export type { PracticeTaskTypes } from "./practice-task.types";
 export { masteryTasks } from "./mastery-tasks";
 export { practiceCatalog } from "./practice-catalog";
 export { practiceAnswerFormat } from "./practice-answer-format";
+export { practiceSource } from "./practice-source";
+export type { PracticeSourceValue } from "./practice-source";
 export type { PracticeCatalogTypes } from "./practice-catalog.types";
 export { PracticeDifficulty } from "./practice-difficulty";
 export { PracticeDifficultyGlyph } from "./practice-difficulty-glyph";

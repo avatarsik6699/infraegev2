@@ -382,6 +382,33 @@
   min-width: 8rem;
 }
 
+/* Change 191 (F5): one labelled field per question of a 19–21 task. */
+.partHeading {
+  margin-top: var(--space-2);
+  font-weight: 600;
+}
+
+.answerParts {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.answerPart {
+  min-width: 0;
+}
+
+.answerPartsActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.answerPartsActions .instruction {
+  margin-top: 0;
+}
+
 .answerRefresh {
   margin-top: var(--space-1);
 }

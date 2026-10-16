@@ -38,7 +38,10 @@ Practice catalog controls:
   after hydration. Native fallbacks live in `noscript`; CSS `scripting: none` hides their scripted
   counterparts. Hidden submission values never duplicate native values.
 - Search is one shared Field with inline clear/submit actions; clear appears whenever text is
-  entered after enhancement. Field and MultiCombobox share the label component.
+  entered after enhancement. Field and MultiCombobox share the label component. With
+  `suggestions` (enhanced only) the Field becomes a Base UI Autocomplete combobox: the list never
+  changes the typed text, Enter without a highlighted item submits the form, an item navigates,
+  and a late response never replaces a newer query.
 - An active filter is removable from its own badge; reset-all is a separate action.
 - Pagination keeps neighbouring pages and explicit destinations for skipped ranges, and the
   per-page limit belongs to the same control group.

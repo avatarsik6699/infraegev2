@@ -34,10 +34,15 @@ export const PracticeTopicGroup: React.FC<Props> = (props) => {
   const entry = topicCatalog.entries.find((item) =>
     item.taskNumbers.includes(props.number),
   );
-  const level = examPlan.level(props.number);
+  const numbers = entry?.taskNumbers ?? [props.number];
+  // Change 191 (F6): 19–21 is one topic; its parts have different FIPI levels.
+  const level = numbers.length === 1 ? examPlan.level(props.number) : null;
+  const label = topicCatalog.formatTaskNumbers(numbers).replace(/^\S+ /u, "");
   const solved = new Set([
     ...Object.keys(examNumbers).filter(
-      (id) => history[id] && examNumbers[id].includes(props.number),
+      (id) =>
+        history[id] &&
+        numbers.some((number) => examNumbers[id].includes(number)),
     ),
     ...props.pageTasks
       .filter((task) => history[task.id]?.[task.solution_revision])
@@ -45,21 +50,27 @@ export const PracticeTopicGroup: React.FC<Props> = (props) => {
   ]).size;
   return (
     <div className={styles.group} data-practice-group={props.number}>
-      <span className={styles.groupNumber} aria-hidden="true">
-        {props.number}
+      <span
+        className={styles.groupNumber}
+        aria-hidden="true"
+        data-range={numbers.length > 1 || undefined}
+      >
+        {label}
       </span>
       <div className={styles.groupTopic}>
         <Typography.Title order={2} className={styles.groupTitle}>
           <span className={patterns.visuallyHidden}>
-            {`Задание ${String(props.number)}. `}
+            {`Задание ${label}. `}
           </span>
-          {entry?.title ?? `Задание ${String(props.number)}`}
+          {entry?.title ?? `Задание ${label}`}
         </Typography.Title>
         <span className={styles.groupMeta}>
-          <span>
-            <i className={styles.groupLevel} data-level={level} />
-            {`${examPlan.levelTitles[level]} уровень`}
-          </span>
+          {level ? (
+            <span>
+              <i className={styles.groupLevel} data-level={level} />
+              {`${examPlan.levelTitles[level]} уровень`}
+            </span>
+          ) : null}
           {entry?.status === "published" ? (
             <ActionLink to="/ege/$slug" params={{ slug: entry.routeSlug }}>
               Теория
@@ -81,7 +92,7 @@ export const PracticeTopicGroup: React.FC<Props> = (props) => {
               className={styles.groupBar}
               value={hydrated ? solved : null}
               max={Math.max(1, props.total)}
-              label={`Решено в задании ${String(props.number)}`}
+              label={`Решено в задании ${label}`}
               valueText={
                 hydrated
                   ? `${String(solved)} из ${String(props.total)}`

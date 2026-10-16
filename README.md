@@ -59,7 +59,7 @@ fail2ban, application backup/restore и явный SHA deploy. Аналитич�
 в application; публичный tracker обращается к отдельному cookieless-сервису. Локальная работа
 не изменяет сервисы VPS.
 
-Практика хранится в PostgreSQL (migration head `140_01`, исходная схема банка `122_01`), импорт/экспорт описан в
+Практика хранится в PostgreSQL (migration head `191_01`, исходная схема банка `122_01`), импорт/экспорт описан в
 [practice](docs/runbooks/practice.md). `make practice-bootstrap` импортирует
 полный проверенный банк в локальную базу. Перед повторным импортом экспортируйте свои правки.
 [Production](docs/runbooks/production.md) и [backup/restore](docs/runbooks/backup-restore.md)

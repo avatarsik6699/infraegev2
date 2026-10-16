@@ -428,7 +428,8 @@ def test_catalog_search_topics_sort_and_limits(database, monkeypatch):
     with TestClient(create_app()) as client:
         facets = client.get("/api/tasks/facets").json()
         counts = {t["id"]: t["count"] for t in facets["topics"]}
-        assert {f"ege-{number}" for number in range(1, 28)} <= counts.keys()
+        singles = {f"ege-{number}" for number in range(1, 28) if number not in (19, 20, 21)}
+        assert singles | {"ege-19-21"} <= counts.keys()
         assert counts["ege-16"] == 255 and counts["ege-5"] == 292
         assert counts["python-loops"] == 0
         assert client.get("/api/tasks?topics=python-loops").json()["total"] == 0
@@ -477,6 +478,54 @@ def test_catalog_search_topics_sort_and_limits(database, monkeypatch):
         assert "checker" not in serialized and "answer_variants" not in serialized
         assert "kompege.ru" not in serialized  # private copy provenance in this bank
         assert client.get("/api/tasks?q=kompege.ru").json()["total"] == 0
+
+
+def test_suggestions_merged_game_topic_and_multi_part_check(database, monkeypatch):
+    """Change 191: suggestions, the merged 19–21 topic and per-part answers."""
+    monkeypatch.setattr(settings, "database_url", database("runtime"))
+    games = [e["task"] for e in BANK_ENTRIES if e["task"].get("answer_parts")]
+    game = next(t for t in games if t["sources"][0]["original_id"] == "31516")
+    parts = {p["key"]: p["answer_variants"][0] for p in game["checker"]["parts"]}
+    with TestClient(create_app()) as client:
+        counts = {t["id"]: t["count"] for t in client.get("/api/tasks/facets").json()["topics"]}
+        assert counts["ege-19-21"] == len(games)
+        legacy = client.get("/api/tasks?topics=ege-20&limit=10").json()
+        merged = client.get("/api/tasks?topics=ege-19-21&limit=10").json()
+        assert legacy == merged and merged["tasks"][0]["topics"] == ["ege-19-21"]
+        with_20 = sum(20 in t["exam_numbers"] for t in games)
+        assert client.get("/api/tasks?exam_number=20").json()["total"] == with_20
+
+        suggest = client.get("/api/tasks/suggest?q=31516").json()
+        assert suggest["total"] == 1 and suggest["tasks"][0]["id"] == game["id"]
+        found = client.get("/api/tasks/suggest?q=Сумма Цифр").json()
+        assert 0 < len(found["tasks"]) <= 6 and found["total"] >= len(found["tasks"])
+        for item in found["tasks"]:
+            text = item["snippet"] or ""
+            for start, end in item["snippet_highlights"]:
+                assert text[start:end].lower() == "сумма цифр"
+        assert client.get("/api/tasks/suggest?q=a").status_code == 422
+
+        detail = client.get(f"/api/tasks/{game['id']}").json()
+        assert [p["key"] for p in detail["content"]["answer_parts"]] == ["19", "20", "21"]
+        assert "answer_variants" not in json.dumps(detail)
+        url = f"/api/tasks/{game['id']}/check"
+        revision = detail["solution_revision"]
+        partial = client.post(
+            url, json={"answers": {"19": parts["19"], "21": "0"}, "solution_revision": revision}
+        ).json()
+        assert partial["correct"] is False and partial["parts"] == {"19": True, "21": False}
+        full = client.post(url, json={"answers": parts, "solution_revision": revision}).json()
+        assert full["correct"] is True and set(full["parts"].values()) == {True}
+        single = {"answer": parts["19"], "solution_revision": revision}
+        assert client.post(url, json=single).status_code == 422
+        both = {"answer": "1", "answers": parts, "solution_revision": revision}
+        assert client.post(url, json=both).status_code == 422
+        unknown = {"answers": {"22": "1"}, "solution_revision": revision}
+        assert client.post(url, json=unknown).status_code == 422
+        plain = next(e["task"] for e in BANK_ENTRIES if e["task"]["exam_numbers"] == [16])
+        plain_detail = client.get(f"/api/tasks/{plain['id']}").json()
+        multi = {"answers": {"19": "1"}, "solution_revision": plain_detail["solution_revision"]}
+        assert client.post(f"/api/tasks/{plain['id']}/check", json=multi).status_code == 422
 
 
 def test_catalog_searches_visible_structured_fields(database):
@@ -560,32 +609,28 @@ def test_catalog_searches_visible_structured_fields(database):
 def test_topic_summary_matches_published_lessons_and_excludes_hidden_tasks(database, monkeypatch):
     from app.modules.practice.models import LessonTask
 
+    # Change 191 (T3): every published topic lesson with bank tasks, from the bank itself.
+    registry = json.loads((ROOT / "apps/api/practice-registry.json").read_bytes())
+    published = {
+        m["id"]
+        for m in registry["materials"]
+        if m.get("kind", "topic") == "topic" and m.get("status") == "published"
+    }
+    expected_topics = {
+        link["material_id"]
+        for entry in BANK_ENTRIES
+        if not entry["task"].get("archived")
+        for link in entry["task"].get("lessons", [])
+        if link["material_id"] in published
+    }
+
     monkeypatch.setattr(settings, "database_url", database("runtime"))
     with TestClient(create_app()) as client:
         response = client.get("/api/topics/practice-summary")
         assert response.status_code == 200
         assert response.headers["cache-control"] == "no-store"
         topics = response.json()["topics"]
-        assert {topic["id"] for topic in topics} == {
-            "rekursiya",
-            "preobrazovanie-zapisey-chisel",
-            "spreadsheets",
-            "number-sequences",
-            "spreadsheet-optimization",
-            "winning-strategy",
-            "relational-databases",
-            "coding-and-fano",
-            "media-coding",
-            "word-enumeration",
-            "networks",
-            "information-amount",
-            "numeral-systems",
-            "graph-analysis",
-            "string-processing",
-            "divisors-and-masks",
-            "array-processing",
-            "data-analysis",
-        }
+        assert {topic["id"] for topic in topics} == expected_topics
         for topic in topics:
             assert set(topic) == {"id", "tasks"}
             lesson = client.get(f"/api/learning-materials/topic/{topic['id']}/practice").json()
@@ -639,30 +684,7 @@ def test_topic_summary_matches_published_lessons_and_excludes_hidden_tasks(datab
                 ids = {task.id for topic in summary.topics for task in topic.tasks}
                 assert hidden_id not in ids
                 assert archived_id not in ids
-                assert all(
-                    topic.id
-                    in {
-                        "rekursiya",
-                        "preobrazovanie-zapisey-chisel",
-                        "spreadsheets",
-                        "number-sequences",
-                        "spreadsheet-optimization",
-                        "winning-strategy",
-                        "relational-databases",
-                        "coding-and-fano",
-                        "media-coding",
-                        "word-enumeration",
-                        "networks",
-                        "information-amount",
-                        "numeral-systems",
-                        "graph-analysis",
-                        "string-processing",
-                        "divisors-and-masks",
-                        "array-processing",
-                        "data-analysis",
-                    }
-                    for topic in summary.topics
-                )
+                assert all(topic.id in expected_topics for topic in summary.topics)
                 await session.rollback()
         finally:
             await engine.dispose()

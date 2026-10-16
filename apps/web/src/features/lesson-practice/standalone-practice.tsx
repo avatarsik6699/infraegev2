@@ -40,6 +40,11 @@ export const StandalonePractice: React.FC<
         answer={model.answerFor(task.id)}
         state={model.stateFor(task.id)}
         onAnswerChange={(value) => model.updateAnswer(task.id, value)}
+        partAnswers={model.partAnswersFor(task)}
+        partResults={model.partResultsFor(task.id)}
+        onPartAnswerChange={(key, value) =>
+          model.updateAnswer(`${task.id}:${key}`, value)
+        }
         onRefresh={() => {
           void model.refresh();
         }}

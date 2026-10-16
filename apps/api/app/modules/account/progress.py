@@ -13,14 +13,13 @@ from app.modules.account.models import AccountSession, ProgressResult
 from app.modules.account.schemas import StrictModel
 from app.modules.practice import readers
 from app.modules.practice.models import LessonTask, TaskRecord
-from app.modules.practice.schemas import Block
+from app.modules.practice.schemas import AnswerInput, Block
 
 ContextKind = Literal["topic_lesson", "course_lesson", "standalone"]
 STANDALONE_CONTEXT = "standalone"
 
 
-class CheckAndSaveRequest(StrictModel):
-    answer: str = Field(min_length=1, max_length=500)
+class CheckAndSaveRequest(StrictModel, AnswerInput):
     solution_revision: int = Field(ge=1)
     context_kind: ContextKind
     context_id: str = Field(min_length=1, max_length=160)
@@ -31,6 +30,7 @@ class CheckAndSaveResponse(StrictModel):
     saved: bool
     explanation: list[Block]
     solution_revision: int
+    parts: dict[str, bool] | None = None
 
 
 class ResultView(StrictModel):
@@ -80,7 +80,7 @@ async def check_and_save(
 ) -> CheckAndSaveResponse:
     if not await valid_context(db, task_id, body.context_kind, body.context_id):
         raise readers.Unavailable("task is not in this published context")
-    checked = await readers.check(db, task_id, body.solution_revision, body.answer)
+    checked = await readers.check(db, task_id, body.solution_revision, body.answer, body.answers)
     if checked.correct:
         statement = (
             insert(ProgressResult)
@@ -99,6 +99,7 @@ async def check_and_save(
         saved=checked.correct,
         explanation=checked.explanation,
         solution_revision=checked.solution_revision,
+        parts=checked.parts,
     )
 
 

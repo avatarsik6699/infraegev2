@@ -178,6 +178,9 @@
   --color-level-basic: var(--theme-pastel-sage-strong);
   --color-level-advanced: var(--theme-pastel-sky-strong);
   --color-level-high: var(--theme-level-high);
+  --color-difficulty-easy: var(--theme-difficulty-easy);
+  --color-difficulty-medium: var(--theme-difficulty-medium);
+  --color-difficulty-hard: var(--theme-difficulty-hard);
   --grid-line-major: var(--theme-grid-major);
   --grid-line-minor: var(--theme-grid-minor);
   --grid-fade: var(--theme-grid-fade);

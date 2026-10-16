@@ -1,4 +1,15 @@
+import { examTopicDefinitions } from "~/shared/config/exam-topics.mjs";
 import type { PracticeCatalogTypes } from "./practice-catalog.types";
+
+/** Change 191 (F6): old single-number links of a merged topic (ege-20 → ege-19-21). */
+const topicAliases = new Map(
+  examTopicDefinitions
+    .filter((topic) => topic.taskNumbers.length > 1)
+    .flatMap((topic) => {
+      const id = `ege-${String(topic.taskNumbers[0])}-${String(topic.taskNumbers.at(-1))}`;
+      return topic.taskNumbers.map((number) => [`ege-${String(number)}`, id]);
+    }),
+);
 
 function search(value: Record<string, unknown>): PracticeCatalogTypes.Search {
   const result: PracticeCatalogTypes.Search =
@@ -20,7 +31,11 @@ function search(value: Record<string, unknown>): PracticeCatalogTypes.Search {
     )
       result.invalid = true;
     else if (topics.length)
-      result.topics = [...new Set(topics as string[])].sort();
+      result.topics = [
+        ...new Set(
+          (topics as string[]).map((topic) => topicAliases.get(topic) ?? topic),
+        ),
+      ].sort();
   }
   if (
     value.sort !== undefined &&
@@ -115,8 +130,18 @@ function countLabel(count: number) {
 const topicLabel = (label: string): string =>
   label.replace(/^(\d+(?:–\d+)?) номер\.\s*/u, "ЕГЭ $1 · ");
 
+/** «№ 8», «№ 19–21» for a 19–21 task, nothing for a course task. */
+function numberLabel(numbers: readonly number[]) {
+  if (!numbers.length) return undefined;
+  const last = numbers[numbers.length - 1];
+  return numbers.length > 1
+    ? `№ ${String(numbers[0])}–${String(last)}`
+    : `№ ${String(numbers[0])}`;
+}
+
 export const practiceCatalog = {
   countLabel,
+  numberLabel,
   topicLabel,
   search,
   href,

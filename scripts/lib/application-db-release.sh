@@ -1,10 +1,30 @@
 #!/usr/bin/env bash
 
+# Ordered schema heads; a transition is allowed only from the immediately previous head.
+APPLICATION_SCHEMAS=(122_01 140_01 191_01)
+
+application_known_schema() {
+  local schema
+  for schema in "${APPLICATION_SCHEMAS[@]}"; do [[ $1 == "$schema" ]] && return 0; done
+  return 1
+}
+
+application_previous_schema() {
+  local index
+  for index in "${!APPLICATION_SCHEMAS[@]}"; do
+    if [[ ${APPLICATION_SCHEMAS[$index]} == "$1" ]] && (( index > 0 )); then
+      printf '%s\n' "${APPLICATION_SCHEMAS[$((index - 1))]}"
+      return 0
+    fi
+  done
+  return 1
+}
+
 application_backup_mode() {
   local candidate=$1 previous=$2 candidate_schema previous_schema
   candidate_schema=$(cat "$candidate/infra/database-schema") || return 1
   previous_schema=$(cat "$previous/infra/database-schema" 2>/dev/null || true)
-  [[ $candidate_schema == 122_01 || $candidate_schema == 140_01 ]] || return 1
+  application_known_schema "$candidate_schema" || return 1
   if [[ $candidate_schema == "$previous_schema" ]]; then
     printf 'ordinary\n'
   else
@@ -17,12 +37,13 @@ application_schema_preflight() {
   local candidate_schema previous_schema
   candidate_schema=$(cat "$candidate/infra/database-schema")
   previous_schema=$(cat "$previous/infra/database-schema" 2>/dev/null || true)
-  [[ $candidate_schema == 122_01 || $candidate_schema == 140_01 ]] || return 1
-  # 140_01 is additive: a retained 122_01 application release can read its own task schema
-  # after a failed activation. A first account-schema deployment still needs a fresh isolated
-  # restore acceptance for this exact image before migration is allowed.
-  if [[ $candidate_schema == 140_01 && $previous_schema == 140_01 ]]; then return 0; fi
-  if [[ $candidate_schema == 122_01 && $previous_schema == 122_01 ]]; then return 0; fi
+  application_known_schema "$candidate_schema" || return 1
+  # Each head is additive over its predecessor (140_01 accounts, 191_01 generated catalog
+  # columns): a retained previous release reads its own schema after a failed activation. A
+  # first deployment of a new head still needs a fresh isolated restore acceptance for this
+  # exact image before migration is allowed.
+  if [[ $candidate_schema == "$previous_schema" ]]; then return 0; fi
+  [[ $(application_previous_schema "$candidate_schema") == "$previous_schema" ]] || return 1
   [[ -f $proof && $(stat -c '%u:%a' "$proof") == 0:600 &&
      $(cat "$proof") == "$candidate_schema $DEPLOY_SHA" ]] || {
     echo "Schema $candidate_schema requires explicit isolated restore acceptance for this exact SHA before deployment" >&2

@@ -67,6 +67,12 @@ function renderContentBlock(
       );
     case "code-variants":
       return <PracticeCodeVariants key={key} variants={block.variants} />;
+    case "part-heading":
+      return (
+        <Typography.Text key={key} className={styles.partHeading}>
+          {block.text}
+        </Typography.Text>
+      );
     case "text":
       return (
         <Typography.Text key={key} className={styles.contentText}>

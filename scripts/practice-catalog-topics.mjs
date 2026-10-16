@@ -5,16 +5,21 @@ import {
   coursePublications,
   courseLessonPublications,
 } from "../apps/web/src/entities/course/content/course-publication.mjs";
+// Change 191 (F6): a topic covering several numbers (19–21) is one catalog option.
 const topics = examTopicDefinitions
-  .flatMap((x) =>
-    x.taskNumbers.map((number) => ({
-      id: `ege-${number}`,
-      label: `${number} номер. ${x.title}`,
+  .map((x) => {
+    const first = x.taskNumbers[0];
+    const last = x.taskNumbers[x.taskNumbers.length - 1];
+    const range = first === last ? String(first) : `${first}–${last}`;
+    return {
+      id: first === last ? `ege-${first}` : `ege-${first}-${last}`,
+      label: `${range} номер. ${x.title}`,
       group: "ЕГЭ",
-      exam_number: number,
+      exam_number: first,
+      exam_numbers: [...x.taskNumbers],
       material_ids: [],
-    })),
-  )
+    };
+  })
   .sort((a, b) => a.exam_number - b.exam_number);
 for (const course of coursePublications.filter(
   (x) => x.status === "published",
@@ -25,6 +30,7 @@ for (const course of coursePublications.filter(
       label: `${course.shortTitle} · ${section.title}`,
       group: "Мини-курсы",
       exam_number: null,
+      exam_numbers: [],
       material_ids: section.lessonPlan
         .filter((x) =>
           courseLessonPublications.some(

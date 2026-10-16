@@ -28,3 +28,15 @@
 .scale .track {
   color: var(--color-rule);
 }
+
+/* Change 191 (F4): the filled bars carry the level's colour; the track stays
+   neutral. The word beside the glyph keeps the text colour. */
+.scale[data-difficulty="1"] svg:not(.track) {
+  color: var(--color-difficulty-easy);
+}
+.scale[data-difficulty="2"] svg:not(.track) {
+  color: var(--color-difficulty-medium);
+}
+.scale[data-difficulty="3"] svg:not(.track) {
+  color: var(--color-difficulty-hard);
+}

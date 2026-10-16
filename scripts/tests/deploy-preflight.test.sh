@@ -31,4 +31,18 @@ printf '140_01\n' > "$test_root/candidate/infra/database-schema"
 printf '122_01\n' > "$test_root/previous/infra/database-schema"
 printf '140_01 wrong-sha\n' > "$test_root/proof"
 if application_schema_preflight "$test_root/candidate" "$test_root/previous" "$test_root/proof"; then exit 1; fi
+# Change 191: 191_01 follows 140_01 only, with its own exact-SHA acceptance.
+printf '191_01\n' > "$test_root/candidate/infra/database-schema"
+printf '140_01\n' > "$test_root/previous/infra/database-schema"
+if application_schema_preflight "$test_root/candidate" "$test_root/previous" "$test_root/missing"; then exit 1; fi
+[[ $(application_backup_mode "$test_root/candidate" "$test_root/previous") == recovery-hold ]]
+printf '140_01 %s\n' "$DEPLOY_SHA" > "$test_root/proof"
+if application_schema_preflight "$test_root/candidate" "$test_root/previous" "$test_root/proof"; then exit 1; fi
+printf '191_01 %s\n' "$DEPLOY_SHA" > "$test_root/proof"
+application_schema_preflight "$test_root/candidate" "$test_root/previous" "$test_root/proof"
+printf '122_01\n' > "$test_root/previous/infra/database-schema"
+if application_schema_preflight "$test_root/candidate" "$test_root/previous" "$test_root/proof"; then exit 1; fi
+printf '191_01\n' > "$test_root/previous/infra/database-schema"
+application_schema_preflight "$test_root/candidate" "$test_root/previous" "$test_root/missing"
+[[ $(application_backup_mode "$test_root/candidate" "$test_root/previous") == ordinary ]]
 echo 'Deploy preflight: PASS (sourceable env, compatible schema, exact candidate acceptance)'

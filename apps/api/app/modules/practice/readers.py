@@ -9,6 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.modules.practice.models import FileObject, LessonTask, TaskChecker, TaskRecord
 from app.modules.practice.schemas import (
     Block,
+    CheckerPart,
     FileDelivery,
     PublicTask,
     PublicTaskContent,
@@ -52,6 +53,11 @@ class CheckedAnswer(StrictModel):
     correct: bool
     explanation: list[Block]
     solution_revision: int
+    parts: dict[str, bool] | None = None
+
+
+class InvalidAnswer(ValueError):
+    """The submitted answer shape does not match the task (single vs multi-part)."""
 
 
 def availability():
@@ -212,7 +218,13 @@ async def topics(session: AsyncSession) -> TopicSummary:
     return TopicSummary(topics=[LessonSummary(id=k, tasks=v) for k, v in grouped.items()])
 
 
-async def check(session: AsyncSession, task_id: str, revision: int, answer: str) -> CheckedAnswer:
+async def check(
+    session: AsyncSession,
+    task_id: str,
+    revision: int,
+    answer: str | None,
+    answers: dict[str, str] | None = None,
+) -> CheckedAnswer:
     row = (
         await session.execute(
             select(TaskRecord, TaskChecker)
@@ -224,8 +236,24 @@ async def check(session: AsyncSession, task_id: str, revision: int, answer: str)
         raise Unavailable("task unavailable")
     if row[0].solution_revision != revision:
         raise Conflict("solution revision changed; refresh the task")
+    checker = row[1]
+    parts = None
+    if checker.parts:
+        known = {part["key"]: CheckerPart.model_validate(part) for part in checker.parts}
+        if answers is None or answer is not None or not set(answers) <= set(known):
+            raise InvalidAnswer("multi-part task requires part answers")
+        # Change 191: empty parts stay unchecked; success needs every part correct.
+        parts = {
+            key: is_correct(known[key], value) for key, value in answers.items() if value.strip()
+        }
+        correct = len(parts) == len(known) and all(parts.values())
+    else:
+        if answer is None or answers is not None:
+            raise InvalidAnswer("single-answer task requires one answer")
+        correct = is_correct(checker, answer)
     return CheckedAnswer(
-        correct=is_correct(row[1], answer),
+        correct=correct,
         explanation=row[0].content["explanation"],
         solution_revision=revision,
+        parts=parts,
     )

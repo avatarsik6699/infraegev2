@@ -43,3 +43,47 @@ it("reports controlled edits and clearing and accepts parent resets", () => {
   expect((screen.getByRole("searchbox") as HTMLInputElement).value).toBe("");
   expect(screen.queryByRole("button", { name: "Очистить" })).toBeNull();
 });
+
+it("Change 191: lists suggestions with marked matches and opens the chosen one", async () => {
+  const select = vi.fn();
+  const submit = vi.fn((event: { preventDefault: () => void }) =>
+    event.preventDefault(),
+  );
+  render(
+    <form onSubmit={submit}>
+      <SearchField
+        {...props}
+        value="цифр"
+        suggestions={{
+          active: true,
+          loading: false,
+          items: [
+            {
+              id: "task-1",
+              title: "Сумма цифр",
+              titleHighlights: [[6, 10]],
+              meta: "№ 5",
+              snippet: "Найдите сумму цифр числа.",
+              snippetHighlights: [[14, 18]],
+            },
+          ],
+          total: 12,
+          listLabel: "Подходящие задачи",
+          emptyLabel: "Ничего не нашлось",
+          loadingLabel: "Ищем…",
+          showAllLabel: (total) => `Показать все: ${String(total)}`,
+          onSelect: select,
+        }}
+      />
+    </form>,
+  );
+  const input = screen.getByRole("combobox", { name: "Поиск" });
+  fireEvent.click(input);
+  fireEvent.keyDown(input, { key: "ArrowDown" });
+  const option = await screen.findByRole("option");
+  expect(option.querySelectorAll("mark")).toHaveLength(2);
+  expect(screen.getByText("Показать все: 12")).toBeTruthy();
+  fireEvent.click(option);
+  expect(select).toHaveBeenCalledWith("task-1");
+  expect(submit).not.toHaveBeenCalled();
+});

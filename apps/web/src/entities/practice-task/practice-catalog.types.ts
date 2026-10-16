@@ -25,6 +25,8 @@ export namespace PracticeCatalogTypes {
       year: number | null;
       primary: boolean;
       kind: string;
+      url?: string | null;
+      original_id?: string | null;
     }[];
     topics?: string[];
   };
@@ -41,6 +43,8 @@ export namespace PracticeCatalogTypes {
     group: string;
     count: number;
     exam_number?: number | null;
+    /** Change 191: every number of the topic (19–21 is one topic). */
+    exam_numbers?: number[];
   };
   export type Facets = {
     topics?: Topic[];

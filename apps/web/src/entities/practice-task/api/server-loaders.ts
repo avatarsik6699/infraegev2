@@ -17,6 +17,10 @@ export const loadTopicPracticeSummary = createServerOnlyFn(() =>
 export const loadPracticeCatalog = createServerOnlyFn(
   (search: PracticeCatalogTypes.Search) => catalog.loadPracticeCatalog(search),
 );
+export const loadPracticeSuggestions = createServerOnlyFn(
+  (search: PracticeCatalogTypes.Search) =>
+    catalog.loadPracticeSuggestions(search),
+);
 export const loadStandaloneTask = createServerOnlyFn((id: string) =>
   catalog.loadStandaloneTask(id),
 );

@@ -19,8 +19,8 @@ elif [[ $1 == stats && $2 == --mode && $3 == restore-size && $4 == --json &&
 elif [[ $1 == restore && $2 == "$CUTOVER_TEST_SNAPSHOT" && $3 == --target ]]; then
   bundle="$4/fixture-bundle"
   mkdir -p "$bundle/task-files"
-  printf '{"environment":"prod","project":"infraege","schemaVersion":"122_01","release":"%s"}\n' \
-    "$CUTOVER_TEST_SHA" >"$bundle/metadata.json"
+  printf '{"environment":"prod","project":"infraege","schemaVersion":"%s","release":"%s"}\n' \
+    "${CUTOVER_TEST_SOURCE_SCHEMA:-140_01}" "$CUTOVER_TEST_SHA" >"$bundle/metadata.json"
 else
   exit 97
 fi
@@ -61,7 +61,7 @@ cat >"$test_root/bin/python3" <<'FAKE'
 printf '%s\n' "python3 $*" >>"$CUTOVER_TEST_LOG"
 [[ $2 == bundle ]] || exit 94
 mkdir -p "$4"
-printf '{"schemaVersion":"140_01"}\n' >"$4/metadata.json"
+printf '{"schemaVersion":"191_01"}\n' >"$4/metadata.json"
 FAKE
 chmod +x "$test_root/bin/restic" "$test_root/bin/git" "$test_root/bin/docker" "$test_root/bin/python3"
 export PATH="$test_root/bin:$PATH" CUTOVER_TEST_LOG="$test_root/calls.log"
@@ -166,6 +166,7 @@ export CUTOVER_FIRST_VOLUME=fixture-first-data CUTOVER_SECOND_VOLUME=fixture-sec
 export CUTOVER_CANDIDATE_SHA=$sha CUTOVER_IMAGE="ghcr.io/avatarsik6699/infraegev2-api:$sha"
 export CUTOVER_IMAGE_ID=sha256:fixture-image CUTOVER_ENV_FILE="$test_root/production.env"
 export CUTOVER_CURRENT_RELEASE=$fixture_release CUTOVER_ADMIN_PASSWORD=fixture-admin
+export CUTOVER_SOURCE_SCHEMA=140_01 CUTOVER_TARGET_SCHEMA=191_01
 export POSTGRES_PASSWORD=fixture DB_RUNTIME_PASSWORD=fixture DB_IMPORT_PASSWORD=fixture
 export DB_MIGRATION_PASSWORD=fixture DB_BACKUP_PASSWORD=fixture DB_APP_PASSWORD=fixture
 CUTOVER_CREATED_FIRST=false CUTOVER_CREATED_SECOND=false

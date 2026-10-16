@@ -103,7 +103,8 @@ async def export_bank(session: AsyncSession) -> Bank:
             task.content,
             checker={
                 key: getattr(checker, key)
-                for key in ("checker_type", "answer_variants", "numeric_tolerance")
+                for key in ("checker_type", "answer_variants", "numeric_tolerance", "parts")
+                if key != "parts" or checker.parts is not None
             },
         )
         tasks.append(

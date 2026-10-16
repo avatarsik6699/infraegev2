@@ -15,13 +15,17 @@ from app.modules.account.progress import (
     read_progress,
     reset_lesson,
 )
-from app.modules.practice.readers import Unavailable
+from app.modules.practice.readers import InvalidAnswer, Unavailable
 from app.modules.practice.service import Conflict
 
 router = APIRouter(tags=["progress"])
 
 
-@router.post("/tasks/{task_id}/check-and-save", response_model=CheckAndSaveResponse)
+@router.post(
+    "/tasks/{task_id}/check-and-save",
+    response_model=CheckAndSaveResponse,
+    response_model_exclude_none=True,
+)
 async def submit_answer(
     task_id: str,
     request: Request,
@@ -38,6 +42,8 @@ async def submit_answer(
         return result
     except Unavailable as exc:
         raise HTTPException(404, "task or context unavailable") from exc
+    except InvalidAnswer as exc:
+        raise HTTPException(422, "answer shape does not match the task") from exc
     except Conflict as exc:
         raise HTTPException(409, "refresh the task") from exc
 

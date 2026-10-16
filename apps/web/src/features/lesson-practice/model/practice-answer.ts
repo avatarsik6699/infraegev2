@@ -16,6 +16,8 @@ export function createLocalPracticeChecker(
   return (taskId, answer) => {
     const task = tasks.find((candidate) => candidate.id === taskId);
     if (!task) throw new Error(`Unknown local practice task: ${taskId}`);
+    if (typeof answer !== "string")
+      throw new Error("Local practice tasks have one answer");
     return Promise.resolve({
       correct: isPracticeAnswerCorrect(task, answer),
       explanation: task.explanation,

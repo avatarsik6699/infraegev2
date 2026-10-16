@@ -2,13 +2,12 @@ from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from app.modules.practice.schemas import Block
+from app.modules.practice.schemas import AnswerInput, Block
 
 
-class CheckRequest(BaseModel):
+class CheckRequest(AnswerInput):
     model_config = ConfigDict(extra="forbid")
 
-    answer: str = Field(min_length=1, max_length=500)
     solution_revision: int = Field(ge=1)
 
 
@@ -16,3 +15,4 @@ class CheckResponse(BaseModel):
     correct: bool
     explanation: list[Block]
     solution_revision: int
+    parts: dict[str, bool] | None = None

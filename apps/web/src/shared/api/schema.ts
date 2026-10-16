@@ -416,6 +416,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/tasks/suggest": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Suggestions */
+        get: operations["get_suggestions_api_tasks_suggest_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/tasks/{task_id}": {
         parameters: {
             query?: never;
@@ -592,6 +609,15 @@ export interface components {
             /** Password */
             password: string;
         };
+        /** AnswerPart */
+        AnswerPart: {
+            /** Answer Instruction */
+            answer_instruction: string;
+            /** Key */
+            key: string;
+            /** Label */
+            label: string;
+        };
         /** AttachmentBlock */
         AttachmentBlock: {
             data: components["schemas"]["AttachmentData"];
@@ -684,7 +710,11 @@ export interface components {
         /** CheckAndSaveRequest */
         CheckAndSaveRequest: {
             /** Answer */
-            answer: string;
+            answer?: string | null;
+            /** Answers */
+            answers?: {
+                [key: string]: string;
+            } | null;
             /** Context Id */
             context_id: string;
             /**
@@ -701,6 +731,10 @@ export interface components {
             correct: boolean;
             /** Explanation */
             explanation: (components["schemas"]["TextBlock"] | components["schemas"]["ListBlock"] | components["schemas"]["CodeExampleBlock"] | components["schemas"]["TableBlock"] | components["schemas"]["WorkedExampleBlock"] | components["schemas"]["CalloutBlock"] | components["schemas"]["ImageBlock"] | components["schemas"]["DiagramBlock"] | components["schemas"]["AttachmentBlock"] | components["schemas"]["RichTextBlock"] | components["schemas"]["CodeVariantsBlock"])[];
+            /** Parts */
+            parts?: {
+                [key: string]: boolean;
+            } | null;
             /** Saved */
             saved: boolean;
             /** Solution Revision */
@@ -709,7 +743,11 @@ export interface components {
         /** CheckRequest */
         CheckRequest: {
             /** Answer */
-            answer: string;
+            answer?: string | null;
+            /** Answers */
+            answers?: {
+                [key: string]: string;
+            } | null;
             /** Solution Revision */
             solution_revision: number;
         };
@@ -719,6 +757,10 @@ export interface components {
             correct: boolean;
             /** Explanation */
             explanation: (components["schemas"]["TextBlock"] | components["schemas"]["ListBlock"] | components["schemas"]["CodeExampleBlock"] | components["schemas"]["TableBlock"] | components["schemas"]["WorkedExampleBlock"] | components["schemas"]["CalloutBlock"] | components["schemas"]["ImageBlock"] | components["schemas"]["DiagramBlock"] | components["schemas"]["AttachmentBlock"] | components["schemas"]["RichTextBlock"] | components["schemas"]["CodeVariantsBlock"])[];
+            /** Parts */
+            parts?: {
+                [key: string]: boolean;
+            } | null;
             /** Solution Revision */
             solution_revision: number;
         };
@@ -974,6 +1016,8 @@ export interface components {
         PublicTaskContent: {
             /** Answer Instruction */
             answer_instruction: string;
+            /** Answer Parts */
+            answer_parts?: components["schemas"]["AnswerPart"][] | null;
             /**
              * Archived
              * @default false
@@ -1161,6 +1205,36 @@ export interface components {
             /** Year */
             year: number | null;
         };
+        /** SuggestPage */
+        SuggestPage: {
+            /** Tasks */
+            tasks: components["schemas"]["Suggestion"][];
+            /** Total */
+            total: number;
+        };
+        /** Suggestion */
+        Suggestion: {
+            /** Difficulty */
+            difficulty: number;
+            /** Exam Numbers */
+            exam_numbers: number[];
+            /** Id */
+            id: string;
+            /** Snippet */
+            snippet: string | null;
+            /** Snippet Highlights */
+            snippet_highlights: [
+                number,
+                number
+            ][];
+            /** Title */
+            title: string;
+            /** Title Highlights */
+            title_highlights: [
+                number,
+                number
+            ][];
+        };
         /** TableBlock */
         TableBlock: {
             data: components["schemas"]["TableBlockData"];
@@ -1222,6 +1296,8 @@ export interface components {
             count: number;
             /** Exam Number */
             exam_number: number | null;
+            /** Exam Numbers */
+            exam_numbers?: number[];
             /** Group */
             group: string;
             /** Id */
@@ -2024,6 +2100,42 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CatalogFacets"];
+                };
+            };
+        };
+    };
+    get_suggestions_api_tasks_suggest_get: {
+        parameters: {
+            query?: {
+                q?: string | null;
+                topics?: string[];
+                sort?: "default" | "difficulty_asc" | "difficulty_desc";
+                skill?: string | null;
+                exam_number?: number | null;
+                difficulty?: number | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuggestPage"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };

@@ -26,6 +26,8 @@ export namespace PracticeTaskTypes {
     | { type: "rich-text"; spans: readonly InlineSpan[] }
     | { type: "code-variants"; variants: readonly CodeVariant[] }
     | { type: "text"; text: string }
+    /** Change 191: the start of one question of a multi-part (19–21) task. */
+    | { type: "part-heading"; text: string }
     | {
         type: "list";
         style: "ordered" | "unordered";
@@ -73,6 +75,13 @@ export namespace PracticeTaskTypes {
     | { type: "callout"; tone: "idea" | "warning"; text: string }
     | { type: "steps"; prompt: string; steps: readonly string[] };
 
+  /** Change 191: one independently checked question of a 19–21 task. */
+  export type AnswerPart = {
+    key: string;
+    label: string;
+    answerInstruction: string;
+  };
+
   export type Task = {
     id: string;
     solutionRevision: number;
@@ -88,6 +97,7 @@ export namespace PracticeTaskTypes {
     /** `false` for advanced-subtopic tasks: solved and saved as usual, but
      *  outside the lesson's mastery total (SPEC §1.4). Missing means counted. */
     countsTowardMastery?: boolean;
+    answerParts?: readonly AnswerPart[];
   };
 
   export type LocalTask = Task & {
@@ -99,10 +109,14 @@ export namespace PracticeTaskTypes {
     correct: boolean;
     explanation: string;
     saved?: boolean;
+    /** Per-part results of a multi-part task; unanswered parts are absent. */
+    parts?: Readonly<Record<string, boolean>>;
   };
+  /** One answer, or the answers of a multi-part task by part key. */
+  export type Answer = string | Readonly<Record<string, string>>;
   export type Checker = (
     taskId: string,
-    answer: string,
+    answer: Answer,
     solutionRevision: number,
   ) => Promise<CheckResult>;
 }

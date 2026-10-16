@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
-# First 122_01 -> 140_01 cutover: two disposable restores, never the live DB.
+# Schema head cutover (122_01 -> 140_01, 140_01 -> 191_01): two disposable restores, never the
+# live DB. The target is the candidate's declared head; the source is its predecessor.
 set -euo pipefail
 umask 077
 
 repo_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 source "$repo_dir/scripts/lib/application-db.sh"
 source "$repo_dir/scripts/lib/account-cutover.sh"
+source "$repo_dir/scripts/lib/application-db-release.sh"
 
 usage() {
   echo "usage: $0 --validate|--run FULL_RESTIC_SNAPSHOT_ID FULL_CANDIDATE_SHA API_IMAGE_DIGEST" >&2
@@ -22,8 +24,9 @@ candidate_digest=$4
 [[ $candidate_digest =~ ^sha256:[a-f0-9]{64}$ ]] || {
   db_fail 'published API image digest required'; exit 64;
 }
-[[ $(<"$repo_dir/infra/database-schema") == 140_01 ]] || {
-  db_fail 'candidate source must declare 140_01'; exit 1;
+target_schema=$(<"$repo_dir/infra/database-schema")
+source_schema=$(application_previous_schema "$target_schema") || {
+  db_fail 'candidate source must declare a schema head with a predecessor'; exit 1;
 }
 backup_root=/var/backups/infraege
 env_file=/etc/infraege/production.env
@@ -147,6 +150,7 @@ CUTOVER_FIRST_VOLUME=$first_volume CUTOVER_SECOND_VOLUME=$second_volume
 CUTOVER_CANDIDATE_SHA=$candidate_sha CUTOVER_IMAGE=$image CUTOVER_IMAGE_ID=$image_id
 CUTOVER_ENV_FILE=$env_file CUTOVER_CURRENT_RELEASE=$current_release
 CUTOVER_ADMIN_PASSWORD=$admin_password CUTOVER_CREATED_FIRST=$created_first
+CUTOVER_SOURCE_SCHEMA=$source_schema CUTOVER_TARGET_SCHEMA=$target_schema
 CUTOVER_CREATED_SECOND=$created_second CUTOVER_CREATED_FIRST_VOLUME=$created_first_volume
 CUTOVER_CREATED_SECOND_VOLUME=$created_second_volume
 cutover_disposable_phase
@@ -165,10 +169,10 @@ trap - EXIT
 
 proof_tmp=$(mktemp /etc/infraege/accounts-schema-ready.XXXXXXXX)
 trap 'rm -f -- "$proof_tmp"' EXIT
-printf '140_01 %s\n' "$candidate_sha" >"$proof_tmp"
+printf '%s %s\n' "$target_schema" "$candidate_sha" >"$proof_tmp"
 chmod 600 "$proof_tmp"
 chown root:root "$proof_tmp"
 ln "$proof_tmp" "$proof" || { db_fail 'attestation already exists'; exit 1; }
 rm -- "$proof_tmp"
 trap - EXIT
-echo "Isolated 140_01 migration, second restore and SHA attestation passed: $candidate_sha"
+echo "Isolated $source_schema -> $target_schema migration, second restore and SHA attestation passed: $candidate_sha"

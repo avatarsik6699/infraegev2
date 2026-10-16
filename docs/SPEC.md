@@ -376,14 +376,21 @@ the frontend apply the same membership flag.
 ## 4. API / Backend Contract
 
 Existing `/api/tasks` detail/check/file and lesson-practice/course-summary capabilities remain.
-Catalog supports server search in title, summary, visible statement and ID (numeric queries also
-match exam numbers), grouped multi-topic OR selection, default stable ID order or difficulty
+Catalog supports server search in title, summary, visible statement, ID and public source number
+(case-insensitive, е/ё folded; numeric queries also match exam numbers), grouped multi-topic OR selection, default stable ID order or difficulty
 ascending/descending with ID tie-break, and numbered pages of 10/30/50/100 (default 30).
 Topic counts include only catalog-visible nonarchived tasks, independent of search; zero topics
 remain selectable. Course sections derive from publication metadata without publishing lesson-only
 tasks. EGE practice filters cover every number 1–27 independently of lesson publication; their
 canonical exam titles come from the shared dated 2027 exam-topic metadata. Lesson titles and
 publication remain separate. Legacy exam/skill/difficulty links remain supported. Next task uses the same selection/order.
+Change 191: catalog sorting, filters, facets and search read stored generated columns of the task
+(`191_01`), never the compressed task JSON per row. `GET /api/tasks/suggest` returns at most six
+matches of the current filters with title/snippet match ranges and the total. EGE 19–21 is one
+catalog topic (`ege-19-21`; legacy `ege-19|20|21` links resolve to it) and one multi-part task per
+game: public `answer_parts` (key, label, instruction) and a private per-part checker; check and
+check-and-save accept either one `answer` or per-part `answers`, report per-part results, and
+record success only when every part is correct.
 Public projections exclude
 checker answers and private sources. Wrong answers, missing tasks, stale solution counters and
 unavailable services remain distinct. Regenerate OpenAPI/client types with implementation.
@@ -460,7 +467,9 @@ and help state survive collapse, but reset on selection/page changes, leaving or
 The detail route remains for direct links and no-JS reading; catalog IDs link there with the
 filter/page context. Real task IDs remain canonical; rows show eight-character UUID prefixes with accessible full IDs.
 The catalog head is «Практика» with the lead “Решай задачи и закрепляй теорию”, without a
-practice explanation popover (Change 170 F31). Search applies explicitly. Topic selection uses a grouped searchable multiple combobox,
+practice explanation popover (Change 170 F31). Search suggests up to six matching tasks with their number, title and marked snippet after
+two characters and a short pause; Enter or «Показать все» applies the search to the list and a
+suggestion opens its task. Difficulty bars are green, orange and near-red by level. Topic selection uses a grouped searchable multiple combobox,
 counts below labels, and Apply/cancel; selected topics appear as removable chips. Default sorting is
 stable UUID order; optional difficulty directions and compact numbered pagination retain URL context.
 No-JS retains GET controls, native multiple selection and detail reading. Empty topics show ordinary
@@ -644,7 +653,7 @@ per-context progress on an isolated target. Guest browser progress is never migr
 |---------|-------------|
 | Security headers / CORS | Rate limiting чекер-эндпоинта на Nginx: `limit_req_zone` 20 req/min/IP, burst 5, `nodelay` (см. §4) — против автоматизированного перебора банка ответов; конкретную цифру пересмотреть по факту логов после запуска. Основной public root/password SSH использует принятый архитектором минимум 12 символов, pinned host key, UFW и fail2ban; production Environment не имеет required reviewers по решению архитектора от 2026-09-04, `can_admins_bypass` остаётся единственным environment safety property. Повышенный риск перебора и полного захвата VPS при компрометации более короткого пароля осознанно принят, key-only migration не запланирована. |
 | Accessibility target | Public pages не имеют serious/critical axe violations; lesson outline сохраняет вложенный semantic list, anchors, keyboard focus, различимый текущий пункт и корректный source order, а сложный визуал имеет видимую полную текстовую альтернативу |
-| Performance budget | Lighthouse-аудит раз в неделю или по запросу сохраняет median LCP ≤4.0s на мобильном 4G-профиле; продуктовая цель остаётся LCP ≤2.8s. CLS < 0.1, INP < 200ms. Измеряются `/`, `/ege`, `/courses`, `/courses/python` и `/ege/16-rekursiya`; cold-load font/layout shifts проверяются отдельно. Lighthouse не является обязательным шагом каждого релиза или изменения CSS; подозрение на регрессию требует целевого измерения, а не автоматического Full Gate. Порог не ослабляется ради ускорения |
+| Performance budget | Lighthouse-аудит раз в неделю или по запросу сохраняет median LCP ≤4.0s на мобильном 4G-профиле; продуктовая цель остаётся LCP ≤2.8s. CLS < 0.1, INP < 200ms. Server response (Change 191): on the full local bank `/practice` TTFB ≤300 ms, catalog/facet API ≤100 ms, search and suggestions ≤150 ms. Измеряются `/`, `/ege`, `/courses`, `/courses/python` и `/ege/16-rekursiya`; cold-load font/layout shifts проверяются отдельно. Lighthouse не является обязательным шагом каждого релиза или изменения CSS; подозрение на регрессию требует целевого измерения, а не автоматического Full Gate. Порог не ослабляется ради ускорения |
 | Observability | Health, structured server logs and scheduled external availability/TLS probe, plus a cookieless browser-analytics beacon (`smotryashchiy`, self-hosted at `sre.infraege.ru`, separate repo/deploy, §7.3) allowlisted in CSP; no cookies, no persistent visitor id, no consent UI, no dashboards or monitoring stack hosted in this repo |
 | Backup / restore | Application DB, files, roles and protected environment in encrypted Restic; 7 daily + 4 weekly + 3 monthly, monthly isolated restore. Same-host backup loss remains accepted until off-site storage exists |
 | SEO | `/`, `/privacy`, published topics, courses и CourseLesson имеют canonical, уникальные metadata, SSR content, общий crawlable social preview и входят в sitemap (prerender только `/` и `/ege`, остальное SSR); root document публикует browser-only manifest, SVG/PNG/ICO favicon и Apple touch icon из production-знака, а `/` — правдивый `WebSite` JSON-LD без выдуманной Organization; черновые маршруты остаются unlisted, `noindex,nofollow` и исключены из public discovery; Lighthouse SEO для публичных маршрутов проходит без ошибок |

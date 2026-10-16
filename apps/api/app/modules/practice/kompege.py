@@ -29,9 +29,9 @@ def canonical_titles() -> dict[int, str]:
         (Path(__file__).resolve().parents[3] / "practice-catalog-topics.json").read_text()
     )
     titles = {
-        topic["exam_number"]: re.sub(r"^\d+ номер\.\s*", "", topic["label"])
+        number: re.sub(r"^[\d–]+ номер\.\s*", "", topic["label"])
         for topic in topics
-        if topic.get("exam_number") is not None
+        for number in topic.get("exam_numbers") or []
     }
     if set(titles) != set(range(1, 28)):
         raise ValueError("canonical practice catalog must define all 27 exam titles")
