@@ -7,7 +7,7 @@
 | Change | `187` |
 | Slug | `lessons-comparative-audit` |
 | Title | Аудит и редактура исходников тем ЕГЭ |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/187-lessons-comparative-audit` |
 
 ## Goal
@@ -97,7 +97,7 @@ research_notes/Аудит материалов шести тем/ — локал
 
 ## Gate Checks
 
-Команды: [STACK](../STACK.md). Выбор: `python3 scripts/gate.py affected`.
+Команды: [STACK](../../STACK.md). Выбор: `python3 scripts/gate.py affected`.
 Документационный аудит: применимые проверки ссылок и формата, целевые содержательные пересчёты, структура DOCX/PDF/XLSX, браузер HTML-отчёта. Приложение не меняется; Full Gate, Docker и релиз не нужны. Отдельная синхронизация PDF должна сохранять формулы, рисунки и таблицы.
 
 ### Gate evidence
