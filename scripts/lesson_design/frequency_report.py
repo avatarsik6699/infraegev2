@@ -6,6 +6,8 @@ The topic folder must contain ``tasks.py`` with: TOPIC_NUMBER, SOURCE (task
 URL template), FETCHED (date), COLLECTIONS, SHORT, TASKS, YEAR_BOUNDS, CORE,
 RECENT, NAMES, TREND, CORE_RULE, ADVANCED_RULE, optional NOTES and the
 functions ``year`` and ``level``. See content/lesson-design/topic-25/tasks.py for the format.
+Optional ANALYSIS_TASKS selects a nonempty subset for statistics when a collection
+mixes current and historical formats. The complete TASKS table remains visible.
 Never edit frequency.md by hand: change tasks.py and run this script.
 """
 
@@ -24,7 +26,13 @@ def load(topic_dir: Path):
 
 
 def report(t) -> str:
-    tasks, total = t.TASKS, len(t.TASKS)
+    all_tasks = t.TASKS
+    tasks = getattr(t, "ANALYSIS_TASKS", all_tasks)
+    if not tasks or len({x[0] for x in tasks}) != len(tasks):
+        raise ValueError("Analysis corpus must be nonempty with unique task ids")
+    if any(task not in all_tasks for task in tasks):
+        raise ValueError("Analysis corpus must be a subset of TASKS")
+    total = len(tasks)
     recent = [x for x in tasks if t.year(x[0]) >= t.RECENT]
     dated = [x for x in tasks if x[2].startswith("ЕГЭ")]
     uses = Counter(tech for x in tasks for tech in x[4].split())
@@ -51,6 +59,18 @@ def report(t) -> str:
         "",
         "## Итог",
         "",
+        *(
+            [
+                f"Размечено условий: **{len(all_tasks)}**. "
+                f"Статистика ниже относится к основному корпусу: **{total}**; "
+                f"вне его — **{len(all_tasks) - total}**. "
+                "Причины разделения описаны в правиле уровней. "
+                "Полная таблица сохраняет оба корпуса.",
+                "",
+            ]
+            if tasks != all_tasks
+            else []
+        ),
         f"- Всего задач: **{total}**; {counts}.",
         f"- Решаются приёмами основного уровня: **{core} из {total} ({core / total:.0%})**.",
         (
@@ -96,7 +116,7 @@ def report(t) -> str:
         "| № | Подборка | Источник | Год | Что требуется | Приёмы | Уровень |",
         "|---|---|---|---:|---|---|---|",
     ]
-    for tid, kind, src, desc, techs in sorted(tasks, key=lambda x: x[0]):
+    for tid, kind, src, desc, techs in sorted(all_tasks, key=lambda x: x[0]):
         lines.append(
             f"| [{tid}]({t.SOURCE.format(tid)}) | {t.SHORT[kind]} | {src or '—'} | "
             f"{t.year(tid)}{'' if src else '*'} | {desc} | {techs.replace(' ', ', ')} | "

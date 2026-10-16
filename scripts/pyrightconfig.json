@@ -13,6 +13,7 @@
     "tests/change_history_test.py",
     "lib/gate",
     "tests/gate_test.py",
+    "tests/frequency_report_test.py",
     "tests/security_gate_test.py",
     "release_checkpoint.py",
     "tests/release_checkpoint_test.py",

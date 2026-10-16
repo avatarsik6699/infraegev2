@@ -599,6 +599,13 @@ TERMS: dict[str, tuple[str, str, str, str]] = {
         "standartnaya-biblioteka",
         "Стандартная библиотека и перебор комбинаций",
     ),
+    # --- topic 1 ---
+    # --- topic 2 ---
+    # --- topic 6 ---
+    # --- topic 12 ---
+    # --- topic 13 ---
+    # --- topic 15 ---
+    # --- topic 22 ---
 }
 
 # The Excel course (Change 177): the lesson that explains each spreadsheet term the

@@ -3676,11 +3676,23 @@ from db_figures import (  # noqa: E402
     DB_STEPPERS,
     DB_WIDGETS,
 )
+from executor_figures import (  # noqa: E402
+    EXECUTOR_FIGURES,
+    EXECUTOR_SCRIPTS,
+    EXECUTOR_STEPPERS,
+    EXECUTOR_WIDGETS,
+)
 from game_figures import (  # noqa: E402
     GAME_FIGURES,
     GAME_SCRIPTS,
     GAME_STEPPERS,
     GAME_WIDGETS,
+)
+from graph_match_figures import (  # noqa: E402
+    GRAPH_MATCH_FIGURES,
+    GRAPH_MATCH_SCRIPTS,
+    GRAPH_MATCH_STEPPERS,
+    GRAPH_MATCH_WIDGETS,
 )
 from greedy_figures import (  # noqa: E402
     GREEDY_FIGURES,
@@ -3700,11 +3712,29 @@ from ip_figures import (  # noqa: E402
     IP_STEPPERS,
     IP_WIDGETS,
 )
+from logic_table_figures import (  # noqa: E402
+    LOGIC_TABLE_FIGURES,
+    LOGIC_TABLE_SCRIPTS,
+    LOGIC_TABLE_STEPPERS,
+    LOGIC_TABLE_WIDGETS,
+)
+from parameter_figures import (  # noqa: E402
+    PARAMETER_FIGURES,
+    PARAMETER_SCRIPTS,
+    PARAMETER_STEPPERS,
+    PARAMETER_WIDGETS,
+)
 from password_figures import (  # noqa: E402
     PASSWORD_FIGURES,
     PASSWORD_SCRIPTS,
     PASSWORD_STEPPERS,
     PASSWORD_WIDGETS,
+)
+from process_figures import (  # noqa: E402
+    PROCESS_FIGURES,
+    PROCESS_SCRIPTS,
+    PROCESS_STEPPERS,
+    PROCESS_WIDGETS,
 )
 from recursion_figures import (  # noqa: E402
     RECURSION_FIGURES,
@@ -3730,6 +3760,18 @@ from table_figures import (  # noqa: E402
     TABLE_STEPPERS,
     TABLE_WIDGETS,
 )
+from turing_figures import (  # noqa: E402
+    TURING_FIGURES,
+    TURING_SCRIPTS,
+    TURING_STEPPERS,
+    TURING_WIDGETS,
+)
+from turtle_figures import (  # noqa: E402
+    TURTLE_FIGURES,
+    TURTLE_SCRIPTS,
+    TURTLE_STEPPERS,
+    TURTLE_WIDGETS,
+)
 from volume_figures import (  # noqa: E402
     VOLUME_FIGURES,
     VOLUME_SCRIPTS,
@@ -3753,6 +3795,13 @@ for _figures, _steppers, _widgets, _scripts in (
     (STRING_FIGURES, STRING_STEPPERS, STRING_WIDGETS, STRING_SCRIPTS),
     (GREEDY_FIGURES, GREEDY_STEPPERS, GREEDY_WIDGETS, GREEDY_SCRIPTS),
     (DB_FIGURES, DB_STEPPERS, DB_WIDGETS, DB_SCRIPTS),
+    (GRAPH_MATCH_FIGURES, GRAPH_MATCH_STEPPERS, GRAPH_MATCH_WIDGETS, GRAPH_MATCH_SCRIPTS),
+    (LOGIC_TABLE_FIGURES, LOGIC_TABLE_STEPPERS, LOGIC_TABLE_WIDGETS, LOGIC_TABLE_SCRIPTS),
+    (TURTLE_FIGURES, TURTLE_STEPPERS, TURTLE_WIDGETS, TURTLE_SCRIPTS),
+    (TURING_FIGURES, TURING_STEPPERS, TURING_WIDGETS, TURING_SCRIPTS),
+    (EXECUTOR_FIGURES, EXECUTOR_STEPPERS, EXECUTOR_WIDGETS, EXECUTOR_SCRIPTS),
+    (PARAMETER_FIGURES, PARAMETER_STEPPERS, PARAMETER_WIDGETS, PARAMETER_SCRIPTS),
+    (PROCESS_FIGURES, PROCESS_STEPPERS, PROCESS_WIDGETS, PROCESS_SCRIPTS),
 ):
     FIGURES.update(_figures)
     STEPPERS.update(_steppers)
