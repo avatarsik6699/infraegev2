@@ -9,7 +9,7 @@
 | Change | `190` |
 | Slug | `seven-topics-site-transfer` |
 | Title | Перенос семи тем на сайт |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/190-seven-topics-site-transfer` |
 
 ---
@@ -17,7 +17,7 @@
 ## Goal
 
 Темы 1, 2, 6, 12, 13, 15 и 22, одобренные на стенде в Change 189, переносятся на сайт по этапу 9
-[пайплайна](../runbooks/lesson-pipeline.md#этап-9-перенос-на-сайт), по образцу Change 184. Все семь —
+[пайплайна](../../runbooks/lesson-pipeline.md#этап-9-перенос-на-сайт), по образцу Change 184. Все семь —
 в каталоге «в планах», старых уроков у них нет, поэтому задачи снимать не нужно. После переноса
 все темы 1–27 опубликованы уроками пайплайна. Названия тем в каталоге, публикации и на стенде
 приводятся к коротким названиям по плану варианта ФИПИ 2027. Уроки собираются экспортом со стенда
@@ -139,15 +139,15 @@ docs/artifacts/lessons/*.quality.md, docs/runbooks/lesson-pipeline.md, PRODUCT.m
 
 ## Contracts
 
-См. `docs/SPEC.md` §1.4, §2.3, §5, [lesson-pipeline.md](../runbooks/lesson-pipeline.md) этап 9,
-[lesson-authoring.md](../runbooks/lesson-authoring.md) и Files выше.
+См. `docs/SPEC.md` §1.4, §2.3, §5, [lesson-pipeline.md](../../runbooks/lesson-pipeline.md) этап 9,
+[lesson-authoring.md](../../runbooks/lesson-authoring.md) и Files выше.
 
 ---
 
 ## Gate Checks
 
 > Critical Gate runs once per `/work` target set; default `/ship` reruns only invalidated checks;
-> Full Gate only with explicit `--full`. Commands: [docs/STACK.md](../STACK.md); selection:
+> Full Gate only with explicit `--full`. Commands: [docs/STACK.md](../../STACK.md); selection:
 > `python3 scripts/gate.py affected`. Record change-specific overrides here, or `None`.
 
 На каждую тему — этап 7 и `--check` экспорта (`export_media.py`, `export_lesson.py`), тест банка
