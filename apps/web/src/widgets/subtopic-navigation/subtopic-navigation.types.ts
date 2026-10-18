@@ -5,6 +5,8 @@ export namespace SubtopicNavigationTypes {
     level: "core" | "advanced";
     /** Tasks of the subtopic; only the current topic marks solved ones. */
     taskIds: readonly string[];
+    /** Change 192: the subtopic is paid. */
+    paid?: boolean;
   };
 
   export type Topic = {
@@ -14,6 +16,8 @@ export namespace SubtopicNavigationTypes {
     /** «16» or «19–21», already formatted. */
     number: string;
     subtopics: readonly Item[];
+    /** Change 192: «Практика и итог» is paid. */
+    paidPractice?: boolean;
   };
 
   export type Props = {
@@ -30,5 +34,7 @@ export namespace SubtopicNavigationTypes {
     practiceUnavailable?: boolean;
     /** Lesson progress shown under the tree on narrow screens (F38). */
     progress?: React.ReactNode;
+    /** Change 192: lock the paid files (the paywall is on, access is not granted). */
+    locks?: boolean;
   };
 }

@@ -4,6 +4,9 @@ import {
   getTopicLessonRouteData,
   TopicPracticePage,
 } from "~/pages/topic-lesson";
+import { accessState, getAccessState } from "~/entities/access";
+import { getOffer } from "~/entities/billing";
+import { paidContent } from "~/shared/lib/paid-content";
 import { pageHead } from "~/shared/lib/seo";
 
 export const Route = createFileRoute("/ege_/$slug/praktika")({
@@ -11,24 +14,47 @@ export const Route = createFileRoute("/ege_/$slug/praktika")({
     const publication = lessonPublications.find(
       (item) => item.routeSlug === params.slug,
     );
-    if (!publication || !findLessonByRouteSlug(params.slug)) throw notFound();
-    const routeData = await getTopicLessonRouteData({ data: params.slug });
+    const lesson = findLessonByRouteSlug(params.slug);
+    if (!publication || !lesson) throw notFound();
+    const [routeData, access] = await Promise.all([
+      getTopicLessonRouteData({ data: params.slug }),
+      getAccessState(),
+    ]);
+    if (accessState.opens(access))
+      await paidContent.preload(lesson.paidPractice?.load);
     if (!routeData) throw notFound();
-    return routeData;
+    const offer =
+      lesson.paidPractice && accessState.locks(access)
+        ? await getOffer()
+        : undefined;
+    return { ...routeData, access, offer };
   },
-  head: ({ params }: { params: { slug: string } }) => {
+  head: ({
+    params,
+    loaderData,
+  }: {
+    params: { slug: string };
+    loaderData?: { access?: { status: string; paywall?: boolean } };
+  }) => {
     const publication = lessonPublications.find(
       (item) => item.routeSlug === params.slug,
     );
-    return publication
-      ? pageHead.create({
-          title: `Практика и итог — ${publication.title} — infraege`,
-          description: publication.summary,
-          path: `/ege/${publication.routeSlug}/praktika`,
-          type: "article",
-          noIndex: publication.status !== "published",
-        })
-      : {};
+    if (!publication) return {};
+    const meta = {
+      title: `Практика и итог — ${publication.title} — infraege`,
+      description: publication.summary,
+      path: `/ege/${publication.routeSlug}/praktika`,
+    };
+    const head = pageHead.create({
+      ...meta,
+      type: "article",
+      noIndex: publication.status !== "published",
+    });
+    // Change 192: a paid final page says so while the paywall is on
+    return findLessonByRouteSlug(params.slug)?.paidPractice &&
+      loaderData?.access?.paywall
+      ? pageHead.withPaidArticle(head, meta)
+      : head;
   },
   component: TopicPracticeRoute,
 });
@@ -43,6 +69,9 @@ function TopicPracticeRoute() {
       lesson={lesson}
       tasks={data.tasks}
       practiceUnavailable={data.practiceUnavailable}
+      lockedTasks={data.lockedTasks}
+      access={data.access}
+      offer={data.offer}
     />
   );
 }

@@ -13,6 +13,10 @@ const sceneSizes: Record<
   "not-found": { width: 1200, height: 375 },
   error: { width: 1200, height: 375 },
   "empty-search": { width: 1260, height: 300 },
+  paywall: { width: 1242, height: 1050 },
+  "paywall-guest": { width: 1064, height: 656 },
+  pricing: { width: 1320, height: 718 },
+  "access-open": { width: 300, height: 254 },
 };
 
 /**

@@ -6,7 +6,11 @@ export const lessonPracticeSlug = "praktika";
 export type ResolvedSubtopic = LessonContent.Subtopic & {
   index: number;
   level: LessonContent.SubtopicLevel;
+  access: LessonContent.AccessTier;
+  /** The free subtopic's blocks; empty for a paid one (see `paid.load`). */
   concepts: readonly LessonContent.ConceptBlock[];
+  /** Anchors and headings of every section, free or paid. */
+  outline: readonly LessonContent.ConceptOutline[];
 };
 
 /** Text mark of an advanced subtopic in the tree, the subtopic head and the pager. */
@@ -18,15 +22,32 @@ export function lessonSubtopics(
   const concepts = new Map(
     lesson.theory.map((concept) => [concept.id, concept]),
   );
-  return (lesson.subtopics ?? []).map((subtopic, index) => ({
-    ...subtopic,
-    index,
-    level: subtopic.level ?? "core",
-    concepts: subtopic.conceptIds.flatMap((id) => {
+  return (lesson.subtopics ?? []).map((subtopic, index) => {
+    const own = subtopic.conceptIds.flatMap((id) => {
       const concept = concepts.get(id);
       return concept ? [concept] : [];
-    }),
-  }));
+    });
+    return {
+      ...subtopic,
+      index,
+      level: subtopic.level ?? "core",
+      access: subtopic.access ?? "free",
+      concepts: own,
+      outline: subtopic.paid
+        ? subtopic.paid.outline
+        : own.map((concept) => ({
+            id: concept.id,
+            navLabel: concept.navLabel,
+          })),
+    };
+  });
+}
+
+/** Every theory section of the topic, free or paid, in authored order. */
+export function lessonSections(
+  lesson: LessonContent.Definition,
+): LessonContent.ConceptOutline[] {
+  return lessonSubtopics(lesson).flatMap((subtopic) => subtopic.outline);
 }
 
 export function findSubtopic(
@@ -97,11 +118,35 @@ export function subtopicErrors(lesson: LessonContent.Definition): string[] {
   ) {
     errors.push(`${lesson.id}: advanced subtopics must follow all core ones`);
   }
-  const split = subtopics.flatMap((subtopic) => subtopic.conceptIds);
+  const split = subtopics
+    .filter((subtopic) => !subtopic.paid)
+    .flatMap((subtopic) => subtopic.conceptIds);
   const theory = lesson.theory.map((concept) => concept.id);
   if (split.join("\n") !== theory.join("\n")) {
     errors.push(
       `${lesson.id}: subtopics must list every theory block once, in authored order`,
+    );
+  }
+  for (const subtopic of subtopics) {
+    const paid = (subtopic.access ?? "free") === "paid";
+    if (paid !== Boolean(subtopic.paid)) {
+      errors.push(
+        `${lesson.id}: subtopic "${subtopic.slug}" must carry its paid module exactly when paid`,
+      );
+    }
+    if (
+      subtopic.paid &&
+      subtopic.paid.outline.map((item) => item.id).join("\n") !==
+        subtopic.conceptIds.join("\n")
+    ) {
+      errors.push(
+        `${lesson.id}: the outline of "${subtopic.slug}" must follow its conceptIds`,
+      );
+    }
+  }
+  if (Boolean(lesson.paidPractice) === (lesson.result !== undefined)) {
+    errors.push(
+      `${lesson.id}: «Практика и итог» needs either its result or its paid module`,
     );
   }
   return errors;

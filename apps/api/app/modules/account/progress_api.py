@@ -15,6 +15,7 @@ from app.modules.account.progress import (
     read_progress,
     reset_lesson,
 )
+from app.modules.entitlement.service import SUBSCRIPTION_REQUIRED, access_until, task_is_paid
 from app.modules.practice.readers import InvalidAnswer, Unavailable
 from app.modules.practice.service import Conflict
 
@@ -36,6 +37,9 @@ async def submit_answer(
     require_origin(request)
     require_csrf(request, x_csrf_token)
     current = await active_session(request, db)
+    # Change 192: a paid task needs an active grant of this very account.
+    if await task_is_paid(db, task_id) and await access_until(db, current.user_id) is None:
+        raise HTTPException(403, SUBSCRIPTION_REQUIRED)
     try:
         result = await check_and_save(db, current, task_id, body)
         await db.commit()

@@ -22,6 +22,48 @@ export namespace LessonContent {
     mistake?: React.ReactNode;
   };
 
+  /** A theory section's anchor and heading: public even when its text is paid. */
+  export type ConceptOutline = { id: string; navLabel: string };
+
+  /**
+   * Change 192: paid text lives in its own `*.paid.*` module, imported on demand
+   * so its chunk can be served only after an access check (SPEC §6.1).
+   */
+  export type PaidLoader<Content> = () => Promise<{ default: Content }>;
+
+  /** The default export of `<lesson>.paid.<subtopic>.tsx`. */
+  export type PaidSubtopicContent = {
+    theory: readonly ConceptBlock[];
+    checkpoint?: readonly CheckpointItem[];
+  };
+
+  /** The default export of `<lesson>.paid.praktika.tsx`. */
+  export type PaidPracticeContent = {
+    examFocus?: React.ReactNode;
+    checkpoint?: readonly CheckpointItem[];
+    result: React.ReactNode;
+  };
+
+  /** «Практика и итог» of a topic whose final page is paid. */
+  export type PaidPractice = {
+    /** Which optional sections the paid module has, for the page outline. */
+    examFocus: boolean;
+    /** Self-check questions of the paid module; 0 when it has none. */
+    checkpoint: number;
+    load: PaidLoader<PaidPracticeContent>;
+  };
+
+  /** The paid part of a subtopic: its outline and opening stay public. */
+  export type PaidSubtopic = {
+    /** Concept anchors and headings in authored order (`conceptIds` order). */
+    outline: readonly [ConceptOutline, ...ConceptOutline[]];
+    /** The opening paragraph of the first section, shown above the paywall. */
+    preview: React.ReactNode;
+    /** Self-check questions in the paid module; 0 when it has none. */
+    selfCheck: number;
+    load: PaidLoader<PaidSubtopicContent>;
+  };
+
   /** Authored page of an EGE topic: adjacent theory blocks under one URL (Change 167). */
   export type Subtopic = {
     /** Public path segment: /ege/{routeSlug}/{slug}. */
@@ -38,6 +80,10 @@ export namespace LessonContent {
     /** «Объясни, почему» self-check at the end of the subtopic page, after its
      *  tasks; not counted as practice. */
     checkpoint?: readonly CheckpointItem[];
+    /** Change 192: a paid subtopic keeps its text in a separate module; its
+     *  concepts are absent from `theory`. Defaults to free. */
+    access?: AccessTier;
+    paid?: PaidSubtopic;
   };
 
   export type SubtopicLevel = "core" | "advanced";
@@ -53,17 +99,20 @@ export namespace LessonContent {
     /** Share of correct Task answers counted as "mastered". Defaults to 0.8. */
     masteryThreshold?: number;
     learningOutcomes: readonly string[];
-    /** Authored theory blocks; task membership belongs to the canonical practice bank. */
+    /** Authored theory blocks of the free subtopics; task membership belongs to the
+     *  canonical practice bank. Paid subtopics carry their own (`Subtopic.paid`). */
     theory: readonly ConceptBlock[];
-    /** Splits `theory` into subtopic pages without changing its order; required once published. */
+    /** Splits the theory into subtopic pages without changing its order; required once published. */
     subtopics?: readonly Subtopic[];
     examFocus?: React.ReactNode;
     /** The lesson's single formative, think-then-reveal self-check, rendered inside `result`
      *  («Итоги»), after the result copy — not counted toward masteryThreshold. */
     checkpoint?: readonly CheckpointItem[];
-    result: React.ReactNode;
+    /** Present when «Практика и итог» is free; a paid final page has `paidPractice`. */
+    result?: React.ReactNode;
+    paidPractice?: PaidPractice;
     status: Status;
-    /** Monetization groundwork — not enforced on the MVP. */
+    /** Change 192: `paid` when any part of the topic is paid (SPEC §2.2). */
     accessTier: AccessTier;
   };
 }

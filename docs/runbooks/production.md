@@ -92,6 +92,9 @@ Use `docker compose` with the explicit production environment/project and instal
 `systemctl` and `journalctl` for application/TLS/backup/security status. Confirm the daily backup,
 monthly isolated restore and hourly `infraege-account-purge.timer` are enabled after deployment;
 the purge timer reports only aggregate cleanup counts and must not be replaced by host SQL access.
+Paid access (Change 192) adds `infraege-billing-hourly.timer` and `infraege-billing-daily.timer`
+(installed by `ops/install-backup-timers.sh`, no-ops while `BILLING_ENABLED` is off); flags,
+refunds and incidents are in the [billing runbook](billing.md).
 After a release that changes account purge, the release operator must keep the incident open until
 `systemctl list-timers infraege-account-purge.timer` and
 `journalctl -u infraege-account-purge.service --since <release-time> --no-pager` show the first

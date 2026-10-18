@@ -1,6 +1,43 @@
 {
   "components": {
     "schemas": {
+      "AccessView": {
+        "additionalProperties": false,
+        "properties": {
+          "granted": {
+            "title": "Granted",
+            "type": "boolean"
+          },
+          "paywall": {
+            "title": "Paywall",
+            "type": "boolean"
+          },
+          "signed_in": {
+            "title": "Signed In",
+            "type": "boolean"
+          },
+          "until": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Until"
+          }
+        },
+        "required": [
+          "paywall",
+          "signed_in",
+          "granted",
+          "until"
+        ],
+        "title": "AccessView",
+        "type": "object"
+      },
       "AccountView": {
         "additionalProperties": false,
         "properties": {
@@ -648,6 +685,71 @@
         "title": "CheckResponse",
         "type": "object"
       },
+      "CheckoutRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "idempotency_key": {
+            "maxLength": 80,
+            "minLength": 16,
+            "pattern": "^[A-Za-z0-9_-]+$",
+            "title": "Idempotency Key",
+            "type": "string"
+          },
+          "offer_version": {
+            "maxLength": 20,
+            "minLength": 10,
+            "title": "Offer Version",
+            "type": "string"
+          },
+          "plan": {
+            "enum": [
+              "month",
+              "year"
+            ],
+            "title": "Plan",
+            "type": "string"
+          },
+          "return_path": {
+            "anyOf": [
+              {
+                "maxLength": 300,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Return Path"
+          }
+        },
+        "required": [
+          "plan",
+          "offer_version",
+          "idempotency_key"
+        ],
+        "title": "CheckoutRequest",
+        "type": "object"
+      },
+      "CheckoutView": {
+        "additionalProperties": false,
+        "properties": {
+          "payment_id": {
+            "format": "uuid",
+            "title": "Payment Id",
+            "type": "string"
+          },
+          "redirect_url": {
+            "title": "Redirect Url",
+            "type": "string"
+          }
+        },
+        "required": [
+          "payment_id",
+          "redirect_url"
+        ],
+        "title": "CheckoutView",
+        "type": "object"
+      },
       "CodeExampleBlock": {
         "additionalProperties": false,
         "properties": {
@@ -1087,6 +1189,13 @@
             "title": "Kind",
             "type": "string"
           },
+          "locked": {
+            "items": {
+              "$ref": "#/components/schemas/LockedTask"
+            },
+            "title": "Locked",
+            "type": "array"
+          },
           "tasks": {
             "items": {
               "$ref": "#/components/schemas/PublicTask"
@@ -1169,6 +1278,65 @@
           "items"
         ],
         "title": "ListBlockData",
+        "type": "object"
+      },
+      "LockedTask": {
+        "additionalProperties": false,
+        "description": "A paid task shown to a reader without access (Change 192): what it is about and\nwhere it belongs, never its statement, help, files or answers.",
+        "properties": {
+          "counts_toward_mastery": {
+            "title": "Counts Toward Mastery",
+            "type": "boolean"
+          },
+          "difficulty": {
+            "title": "Difficulty",
+            "type": "integer"
+          },
+          "exam_numbers": {
+            "items": {
+              "type": "integer"
+            },
+            "title": "Exam Numbers",
+            "type": "array"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "skills": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Skills",
+            "type": "array"
+          },
+          "solution_revision": {
+            "title": "Solution Revision",
+            "type": "integer"
+          },
+          "theory_links": {
+            "items": {
+              "$ref": "#/components/schemas/TheoryLink"
+            },
+            "title": "Theory Links",
+            "type": "array"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "solution_revision",
+          "title",
+          "difficulty",
+          "skills",
+          "exam_numbers",
+          "theory_links",
+          "counts_toward_mastery"
+        ],
+        "title": "LockedTask",
         "type": "object"
       },
       "LoginMethod": {
@@ -1310,6 +1478,208 @@
           "task_id"
         ],
         "title": "NextTask",
+        "type": "object"
+      },
+      "OfferView": {
+        "additionalProperties": false,
+        "properties": {
+          "billing": {
+            "title": "Billing",
+            "type": "boolean"
+          },
+          "offer_version": {
+            "title": "Offer Version",
+            "type": "string"
+          },
+          "paywall": {
+            "title": "Paywall",
+            "type": "boolean"
+          },
+          "plans": {
+            "items": {
+              "$ref": "#/components/schemas/PlanView"
+            },
+            "title": "Plans",
+            "type": "array"
+          }
+        },
+        "required": [
+          "billing",
+          "paywall",
+          "offer_version",
+          "plans"
+        ],
+        "title": "OfferView",
+        "type": "object"
+      },
+      "PaymentHistory": {
+        "additionalProperties": false,
+        "properties": {
+          "payments": {
+            "items": {
+              "$ref": "#/components/schemas/PaymentView"
+            },
+            "title": "Payments",
+            "type": "array"
+          }
+        },
+        "required": [
+          "payments"
+        ],
+        "title": "PaymentHistory",
+        "type": "object"
+      },
+      "PaymentView": {
+        "additionalProperties": false,
+        "properties": {
+          "access_from": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Access From"
+          },
+          "access_until": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Access Until"
+          },
+          "amount_kopecks": {
+            "title": "Amount Kopecks",
+            "type": "integer"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "paid_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Paid At"
+          },
+          "plan": {
+            "enum": [
+              "month",
+              "year"
+            ],
+            "title": "Plan",
+            "type": "string"
+          },
+          "receipt_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Receipt Url"
+          },
+          "return_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Return Path"
+          },
+          "status": {
+            "enum": [
+              "created",
+              "pending",
+              "succeeded",
+              "failed",
+              "refunded"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "plan",
+          "amount_kopecks",
+          "status",
+          "created_at",
+          "paid_at",
+          "access_from",
+          "access_until",
+          "receipt_url",
+          "return_path"
+        ],
+        "title": "PaymentView",
+        "type": "object"
+      },
+      "PlanView": {
+        "additionalProperties": false,
+        "properties": {
+          "days": {
+            "title": "Days",
+            "type": "integer"
+          },
+          "id": {
+            "enum": [
+              "month",
+              "year"
+            ],
+            "title": "Id",
+            "type": "string"
+          },
+          "monthly_equivalent_kopecks": {
+            "title": "Monthly Equivalent Kopecks",
+            "type": "integer"
+          },
+          "months_price_kopecks": {
+            "title": "Months Price Kopecks",
+            "type": "integer"
+          },
+          "price_kopecks": {
+            "title": "Price Kopecks",
+            "type": "integer"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "price_kopecks",
+          "days",
+          "monthly_equivalent_kopecks",
+          "months_price_kopecks"
+        ],
+        "title": "PlanView",
         "type": "object"
       },
       "ProgressView": {
@@ -2536,6 +2906,27 @@
   },
   "openapi": "3.1.0",
   "paths": {
+    "/api/access": {
+      "get": {
+        "operationId": "get_access_api_access_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Get Access",
+        "tags": [
+          "access"
+        ]
+      }
+    },
     "/api/auth/account": {
       "delete": {
         "operationId": "delete_account_api_auth_account_delete",
@@ -3307,6 +3698,151 @@
         "summary": "Verify Email",
         "tags": [
           "account"
+        ]
+      }
+    },
+    "/api/billing/checkout": {
+      "post": {
+        "operationId": "post_checkout_api_billing_checkout_post",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-csrf-token",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Csrf-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckoutRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckoutView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Post Checkout",
+        "tags": [
+          "billing"
+        ]
+      }
+    },
+    "/api/billing/offer": {
+      "get": {
+        "operationId": "get_offer_api_billing_offer_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OfferView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Get Offer",
+        "tags": [
+          "billing"
+        ]
+      }
+    },
+    "/api/billing/payments": {
+      "get": {
+        "operationId": "get_payments_api_billing_payments_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentHistory"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Get Payments",
+        "tags": [
+          "billing"
+        ]
+      }
+    },
+    "/api/billing/payments/{payment_id}": {
+      "get": {
+        "description": "The return page polls this; a pending payment is asked of the provider again.",
+        "operationId": "get_payment_api_billing_payments__payment_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "payment_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Payment Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Payment",
+        "tags": [
+          "billing"
         ]
       }
     },

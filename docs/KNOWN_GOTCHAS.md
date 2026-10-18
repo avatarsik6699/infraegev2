@@ -375,3 +375,30 @@ metadata and stored bytes then disagree after checkout. `.gitattributes` marks
 settings. After correcting attributes, restage the original files with scoped `git add --renormalize`
 and compare indexed blob size/SHA-256 against `bank.json`; verify the destination checkout before
 removing the source worktree. Do not regenerate checksums around corrupted normalized bytes.
+
+## Paid access (Change 192)
+
+### `MissingGreenlet` after a billing transaction
+
+- **Symptom:** an endpoint or job answers 503 with `account.database_unavailable`
+  (`MissingGreenlet`) right after `async with db.begin():`.
+- **Cause:** the account sessions keep `expire_on_commit`; reading an ORM row's attribute after the
+  block commits triggers a lazy reload outside the async context.
+- **Fix:** take the values you need (`payment.id`, the status) inside the block, as
+  `service.apply_status` and `execute_refund` return plain dataclasses; end a read transaction with
+  `await db.commit()` before opening `db.begin()` on the same session.
+
+### Paid text in a public chunk
+
+- Never import a `*.paid.*` content module statically, from a test helper or a registry: only the
+  generated `load: () => import(…)` may reach it, or Rolldown folds its text into a public chunk.
+  `pnpm --filter web build && node scripts/check-paid-leak.mjs` (`paid-leak` gate group) proves it.
+- Client chunks are served from `/assets/…` (not `/_build/`); the Nginx gate is `/assets/paid/`.
+
+### Practice registry and the bank must change together
+
+`apps/api/practice-registry.json` (format 2, with subtopic access) is copied verbatim into the
+`materials`/`courses` of `content/practice-bank/bank.json`, and the operator import refuses a
+difference. After a change of `access` in a stand: re-export, `node scripts/practice-registry.mjs`,
+then copy the registry's `materials` and `courses` into `bank.json` and format it from the
+repository root (`npx prettier --write content/practice-bank/bank.json`).

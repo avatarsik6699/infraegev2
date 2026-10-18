@@ -5,7 +5,7 @@ import subprocess
 from pathlib import Path
 
 from . import sql
-from .bundle import TASK_SCHEMAS, schema_version, validate
+from .bundle import ACCOUNT_SCHEMAS, BILLING_SCHEMAS, TASK_SCHEMAS, schema_version, validate
 from .postgres import TIMEOUT, Database, docker
 
 
@@ -58,8 +58,10 @@ def restore(bundle: Path, container: str) -> None:
     db = Database(container)
     if schema_version(db) != metadata.schemaVersion:
         raise ValueError("restored schema differs from metadata")
-    if metadata.schemaVersion == "140_01" and db.query(sql.ACCOUNT_RESTORE).strip() != "t":
+    if metadata.schemaVersion in ACCOUNT_SCHEMAS and db.query(sql.ACCOUNT_RESTORE).strip() != "t":
         raise ValueError("restored account schema or application grants mismatch")
+    if metadata.schemaVersion in BILLING_SCHEMAS and db.query(sql.BILLING_RESTORE).strip() != "t":
+        raise ValueError("restored billing schema or application grants mismatch")
     checks = [("data-checks.txt", sql.FINGERPRINT), ("schema.txt", sql.SCHEMAS)]
     if metadata.schemaVersion in TASK_SCHEMAS:
         checks.append(("file-references.txt", sql.REFERENCES))

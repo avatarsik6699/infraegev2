@@ -43,7 +43,6 @@ export const LessonIntro: React.FC<LessonIntroTypes.Props> = (props) => (
           ? `${russianCount.tasks(props.taskCount)}${russianCount.additional(props.additionalTaskCount ?? 0, "tasks")}`
           : null,
         ...(props.examMeta ?? []),
-        props.accessTier === "paid" ? "По подписке" : null,
       ]
         .filter(Boolean)
         .join(" · ")}

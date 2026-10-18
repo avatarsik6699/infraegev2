@@ -95,7 +95,7 @@ def client(content_task: Task, monkeypatch: pytest.MonkeyPatch) -> Iterator[Test
     async def connection():
         yield None
 
-    async def check(_session, task_id, revision, answer):
+    async def check(_session, task_id, revision, answer, answers=None):
         if task_id != content_task.id:
             raise HTTPException(404, "task unavailable")
         if revision != 1:

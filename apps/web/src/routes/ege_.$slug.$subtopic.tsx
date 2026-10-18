@@ -8,6 +8,9 @@ import {
   getTopicLessonRouteData,
   TopicSubtopicPage,
 } from "~/pages/topic-lesson";
+import { accessState, getAccessState } from "~/entities/access";
+import { getOffer } from "~/entities/billing";
+import { paidContent } from "~/shared/lib/paid-content";
 import { pageHead } from "~/shared/lib/seo";
 
 export const Route = createFileRoute("/ege_/$slug/$subtopic")({
@@ -20,29 +23,53 @@ export const Route = createFileRoute("/ege_/$slug/$subtopic")({
       (item) => item.routeSlug === params.slug,
     );
     const lesson = findLessonByRouteSlug(params.slug);
-    if (!publication || !lesson || !findSubtopic(lesson, params.subtopic))
-      throw notFound();
-    const routeData = await getTopicLessonRouteData({ data: params.slug });
+    const subtopic = lesson ? findSubtopic(lesson, params.subtopic) : undefined;
+    if (!publication || !subtopic) throw notFound();
+    // Change 192: every topic page knows the visitor's access, so the tree locks
+    // paid subtopics of every topic alike; paid text renders from a loaded module,
+    // never a suspended boundary, so SSR HTML stays complete without JavaScript.
+    const [routeData, access] = await Promise.all([
+      getTopicLessonRouteData({ data: params.slug }),
+      getAccessState(),
+    ]);
     if (!routeData) throw notFound();
-    return routeData;
+    if (accessState.opens(access))
+      await paidContent.preload(subtopic.paid?.load);
+    // prices only for a visitor who meets the paywall here
+    const offer =
+      subtopic.paid && accessState.locks(access) ? await getOffer() : undefined;
+    return { ...routeData, access, offer };
   },
-  head: ({ params }: { params: { slug: string; subtopic: string } }) => {
+  head: ({
+    params,
+    loaderData,
+  }: {
+    params: { slug: string; subtopic: string };
+    loaderData?: { access?: { status: string; paywall?: boolean } };
+  }) => {
     const publication = lessonPublications.find(
       (item) => item.routeSlug === params.slug,
     );
     const lesson = findLessonByRouteSlug(params.slug);
     const subtopic = lesson ? findSubtopic(lesson, params.subtopic) : undefined;
     if (!publication || !subtopic) return {};
-    return pageHead.create({
+    const meta = {
       title:
         subtopic.index === 0
           ? `${publication.title} — infraege`
           : `${subtopic.title} — ${publication.title} — infraege`,
       description: publication.summary,
       path: `/ege/${publication.routeSlug}/${subtopic.slug}`,
+    };
+    const head = pageHead.create({
+      ...meta,
       type: "article",
       noIndex: publication.status !== "published",
     });
+    // Change 192: a paid subtopic says so while the paywall is on
+    return subtopic.paid && loaderData?.access?.paywall
+      ? pageHead.withPaidArticle(head, meta)
+      : head;
   },
   component: TopicSubtopicRoute,
 });
@@ -60,6 +87,9 @@ function TopicSubtopicRoute() {
       subtopic={subtopic}
       tasks={data.tasks}
       practiceUnavailable={data.practiceUnavailable}
+      lockedTasks={data.lockedTasks}
+      access={data.access}
+      offer={data.offer}
     />
   );
 }

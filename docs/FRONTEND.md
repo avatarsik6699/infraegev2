@@ -295,6 +295,26 @@ Progress and accounts:
   repository typecheck. Validate real pages, not lab specimens. Use repository format/lint
   commands and finish with allowlisted cleanup. Gate scope comes from STACK.
 
+### Paid access (Change 192)
+
+- **Access:** `entities/access` asks `GET /api/access` on the server with only the session
+  cookie (`getAccessState`). Every topic and course lesson route loads it, so the trees lock paid
+  files alike. `accessState.opens` decides whether paid modules load; `accessState.locks` decides
+  locks and the paywall; an unknown state shows neither and never paid text. A page rendered for
+  a session is `private, no-store`.
+- **Prices:** `entities/billing` (`getOffer`, cached a minute per process) is loaded only where the
+  visitor sees prices: the paywall, `/pricing`, `/subscribe`. The root loader reads only
+  `billing` for the footer through `shared/lib/site-flags`. Browser calls (`billingApi`) carry the
+  CSRF token; leaving for the provider goes through `shared/lib/payment-navigation`.
+- **Paywall:** `features/paywall` takes the page's own path (`from`) as a prop, never from router
+  state, so pages render it in isolation. Counts come from the content: subtopics with `paid`,
+  their `selfCheck` numbers and the API's `locked` task list. The JSON-LD of a paid page points
+  `cssSelector` at the global `.paywall` class. The checkout return trusts only
+  `GET /api/billing/payments/{id}`, never its query string.
+- **Legal texts:** `/oferta` and `/vozvrat` render `content/legal` through `import.meta.glob`;
+  the web image copies that directory and dev mounts it, because the API hashes the same files
+  for the acceptance journal.
+
 ## 7. Catalog and overview behaviour
 
 - EGE catalog: total/published topic counts and lesson practice progress sit below the page title

@@ -18,6 +18,7 @@ import { Typography } from "~/shared/components/typography";
 import { PracticeBackLink } from "./components/practice-back-link";
 import { Button } from "~/shared/components/button";
 import { StatusScene } from "~/shared/components/status-scene";
+import { LockedTaskState } from "./components/locked-task-state";
 import { PracticeSources } from "./components/practice-sources";
 import { practiceTopic } from "./practice-topic";
 import type { PracticeTaskPageTypes } from "./practice-task-page.types";
@@ -100,20 +101,24 @@ export const PracticeTaskPage: React.FC<PracticeTaskPageTypes.Props> = (
           <section className={styles.state}>
             <PracticeBackLink href={practiceCatalog.returnHref(props.search)} />
 
-            <StatusScene
-              kind="code"
-              code={result.status === "missing" ? "404" : "503"}
-              title={
-                result.status === "missing"
-                  ? "Задача недоступна"
-                  : "Не удалось загрузить задачу"
-              }
-              description={
-                result.status === "missing"
-                  ? "Вернитесь в каталог и выберите другую задачу."
-                  : "Попробуйте ещё раз немного позже."
-              }
-            />
+            {result.status === "locked" ? (
+              <LockedTaskState />
+            ) : (
+              <StatusScene
+                kind="code"
+                code={result.status === "missing" ? "404" : "503"}
+                title={
+                  result.status === "missing"
+                    ? "Задача недоступна"
+                    : "Не удалось загрузить задачу"
+                }
+                description={
+                  result.status === "missing"
+                    ? "Вернитесь в каталог и выберите другую задачу."
+                    : "Попробуйте ещё раз немного позже."
+                }
+              />
+            )}
             {result.status === "unavailable" && (
               <Button
                 onClick={() => {

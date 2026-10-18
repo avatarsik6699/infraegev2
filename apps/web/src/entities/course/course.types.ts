@@ -56,6 +56,26 @@ export namespace CourseTypes {
     modules: readonly Module[];
   };
 
+  /** A theory section's anchor and heading: public even when its text is paid. */
+  export type ConceptOutline = { id: string; navLabel: string; lead?: boolean };
+
+  /** The default export of `<lesson>.paid.lesson.tsx` (Change 192, SPEC §6.1). */
+  export type PaidLessonContent = {
+    theory: readonly ConceptBlock[];
+    checkpoint?: readonly CheckpointItem[];
+    result: React.ReactNode;
+  };
+
+  /** A paid lesson keeps its outline and opening public; its text loads on demand. */
+  export type PaidLesson = {
+    outline: readonly [ConceptOutline, ...ConceptOutline[]];
+    /** The first paragraph of the lesson's opening, shown above the paywall. */
+    preview: React.ReactNode;
+    /** Self-check questions in the paid module; 0 when it has none. */
+    selfCheck: number;
+    load: () => Promise<{ default: PaidLessonContent }>;
+  };
+
   export type LessonDefinition = {
     id: string;
     routeSlug: string;
@@ -64,11 +84,13 @@ export namespace CourseTypes {
     masteryThreshold?: number;
     level?: Level;
     learningOutcomes: readonly string[];
-    theory: readonly ConceptBlock[];
+    /** Free lessons only; a paid lesson's theory, checkpoint and result are in `paid`. */
+    theory?: readonly ConceptBlock[];
     /** The lesson's single formative, think-then-reveal self-check, rendered inside `result`
      *  («Итоги»), after the result copy — not counted toward masteryThreshold. */
     checkpoint?: readonly CheckpointItem[];
-    result: React.ReactNode;
+    result?: React.ReactNode;
+    paid?: PaidLesson;
     status: Status;
     accessTier: AccessTier;
   };

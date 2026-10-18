@@ -1,14 +1,22 @@
 import { useRouter } from "@tanstack/react-router";
+import { accessState } from "~/entities/access";
+import { Suspense } from "react";
 import { lessonSubtopics } from "~/entities/lesson";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { useAccountSession } from "~/features/account";
 import {
+  LockedTasks,
+  PaywallGate,
+  paywallCopy,
+  paywallUnlocks,
+} from "~/features/paywall";
+import {
   checkPracticeAnswer,
   createCheckAndSaveAnswer,
 } from "~/features/lesson-practice";
-import { Checkpoint } from "~/shared/components/learning-content";
 import { Typography } from "~/shared/components/typography";
 import { LessonPracticeFlow } from "~/widgets/lesson-practice-flow";
+import { PracticeBody } from "./components/practice-body";
 import { TopicLessonPager } from "./components/topic-lesson-pager";
 import { withSubtopicTheoryLinks } from "./lib/subtopic-task-links";
 import { TopicLessonFrame } from "./topic-lesson-frame";
@@ -23,13 +31,18 @@ export const TopicPracticePage: React.FC<TopicLessonPageTypes.PracticeProps> = (
   const subtopics = lessonSubtopics(props.lesson);
   const last = subtopics.at(-1);
   // F43: the summary opens the page; Change 184: the self-check, then the tasks.
+  // Change 192: a paid final page the visitor cannot open — outcomes, the paywall,
+  // then the open tasks and the locked ones.
+  const locked =
+    Boolean(props.lesson.paidPractice) && !accessState.opens(props.access);
+  const lockedTasks = props.lockedTasks ?? [];
   const outline = [
-    { id: "result", label: "Итог" },
-    ...(props.lesson.examFocus
-      ? [{ id: "exam-focus", label: "Проверка решения" }]
+    { id: "result", label: "Итог", locked },
+    ...(props.lesson.examFocus || props.lesson.paidPractice?.examFocus
+      ? [{ id: "exam-focus", label: "Проверка решения", locked }]
       : []),
-    ...(props.lesson.checkpoint
-      ? [{ id: "self-check", label: "Проверьте себя" }]
+    ...(props.lesson.checkpoint || props.lesson.paidPractice?.checkpoint
+      ? [{ id: "self-check", label: "Проверьте себя", locked }]
       : []),
     { id: "practice", label: "Практика" },
   ];
@@ -63,34 +76,18 @@ export const TopicPracticePage: React.FC<TopicLessonPageTypes.PracticeProps> = (
         ))}
       </ol>
 
-      <div id="result" className={styles.summary} data-topic-summary>
-        <Typography.Prose>{props.lesson.result}</Typography.Prose>
-      </div>
-
-      {props.lesson.examFocus ? (
-        <section
-          id="exam-focus"
-          className={styles.section}
-          aria-labelledby="exam-focus-title"
-        >
-          <Typography.Title
-            order={2}
-            id="exam-focus-title"
-            className={styles.sectionTitle}
-          >
-            Проверка решения
-          </Typography.Title>
-          <Typography.Prose>{props.lesson.examFocus}</Typography.Prose>
-        </section>
-      ) : null}
-
-      {props.lesson.checkpoint ? (
-        <div id="self-check" className={styles.section}>
-          <Checkpoint
-            items={props.lesson.checkpoint}
-            headingClassName={styles.sectionTitle}
-          />
-        </div>
+      <Suspense fallback={null}>
+        <PracticeBody lesson={props.lesson} locked={locked} />
+      </Suspense>
+      {locked ? (
+        <PaywallGate
+          access={props.access}
+          offer={props.offer}
+          unlocks={paywallUnlocks.topic(props.lesson, lockedTasks.length)}
+          {...paywallCopy.topic(props.lesson.taskNumbers)}
+          headingOrder={2}
+          from={`/ege/${props.lesson.routeSlug}/praktika`}
+        />
       ) : null}
 
       <section
@@ -121,6 +118,13 @@ export const TopicPracticePage: React.FC<TopicLessonPageTypes.PracticeProps> = (
               : checkPracticeAnswer
           }
         />
+        {accessState.locks(props.access) ? (
+          <LockedTasks
+            tasks={lockedTasks}
+            start={props.tasks.length + 1}
+            from={`/ege/${props.lesson.routeSlug}/praktika`}
+          />
+        ) : null}
       </section>
 
       <TopicLessonPager

@@ -1,4 +1,5 @@
 import type { components } from "~/shared/api/schema";
+import { sessionCookie } from "~/shared/api/session-cookie.server";
 import { practiceServerClient } from "./practice-server-client.server";
 import type { PracticeTaskTypes } from "../practice-task.types";
 
@@ -411,15 +412,39 @@ export function projectPracticeTask(
   };
 }
 
+/** Change 192: a paid task the visitor cannot open, without its statement. */
+export function projectLockedTask(
+  source: components["schemas"]["LockedTask"],
+  materialId: string,
+): PracticeTaskTypes.LockedTask {
+  return {
+    id: source.id,
+    title: source.title,
+    difficulty: source.difficulty,
+    difficultyLabel: difficultyLabel(source.difficulty),
+    skills: source.skills,
+    examNumbers: source.exam_numbers,
+    theoryLinks: source.theory_links.flatMap((link) =>
+      link.material_id === materialId && link.section
+        ? [{ hash: link.section, label: link.label }]
+        : [],
+    ),
+    countsTowardMastery: source.counts_toward_mastery,
+  };
+}
+
 export async function loadLessonPractice(
   kind: "topic" | "course",
   materialId: string,
 ) {
+  // Change 192: with the paywall on, the API unlocks paid tasks for the session.
+  const cookie = sessionCookie.header();
   try {
     const result = await practiceServerClient.GET(
       "/api/learning-materials/{kind}/{material_id}/practice",
       {
         params: { path: { kind, material_id: materialId } },
+        headers: cookie ? { cookie } : undefined,
         cache: "no-store",
         signal: AbortSignal.timeout(6000),
       },
@@ -431,10 +456,18 @@ export async function loadLessonPractice(
         (task: components["schemas"]["PublicTask"]) =>
           projectPracticeTask(task, materialId),
       ),
+      lockedTasks: (result.data.locked ?? []).map(
+        (task): PracticeTaskTypes.LockedTask =>
+          projectLockedTask(task, materialId),
+      ),
       practiceUnavailable: false,
     };
   } catch {
-    return { tasks: [], practiceUnavailable: true };
+    return {
+      tasks: [],
+      lockedTasks: [] as PracticeTaskTypes.LockedTask[],
+      practiceUnavailable: true,
+    };
   }
 }
 

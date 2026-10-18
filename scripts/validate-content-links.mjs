@@ -99,6 +99,69 @@ for (const path of sourceFiles(WEB_SOURCE_DIR)) {
   }
 }
 
+// Change 192: the approved free/paid matrix (SPEC §2.2). Free topics: tasks 1–11, 14
+// and 16; elsewhere a prefix of about a third of the subtopics is free, advanced
+// subtopics and «Практика и итог» are paid. Python is free; Excel lessons 1–6 are free.
+const registry = JSON.parse(
+  readFileSync(join(REPO_ROOT, "apps/api/practice-registry.json"), "utf8"),
+);
+const FREE_TASKS = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 14, 16]);
+const FREE_COURSE_LESSONS = { python: Infinity, excel: 6 };
+const standLevels = new Map(
+  readdirSync(join(REPO_ROOT, "content/lesson-design"))
+    .filter((name) => /^topic-\d+$/u.test(name))
+    .map((name) =>
+      JSON.parse(
+        readFileSync(
+          join(REPO_ROOT, "content/lesson-design", name, "topic.json"),
+          "utf8",
+        ),
+      ),
+    )
+    .filter((topic) => topic.site)
+    .map((topic) => [
+      topic.site.id,
+      topic.subtopics.map((subtopic) => subtopic.level),
+    ]),
+);
+for (const material of registry.materials) {
+  if (material.kind === "topic") {
+    const publication = lessonPublications.find(
+      (item) => item.id === material.id,
+    );
+    const free = publication?.taskNumbers.every((n) => FREE_TASKS.has(n));
+    const access = material.subtopics.map((subtopic) => subtopic.access);
+    const freeCount = free ? access.length : Math.round(access.length / 3);
+    const expected = access.map((_, index) =>
+      index < freeCount ? "free" : "paid",
+    );
+    if (access.join() !== expected.join()) {
+      errors.push(
+        `topic "${material.id}": subtopic access ${access.join(",")} must be ${expected.join(",")}`,
+      );
+    }
+    if (material.final_access !== (free ? "free" : "paid")) {
+      errors.push(`topic "${material.id}": «Практика и итог» access`);
+    }
+    const levels = standLevels.get(material.id) ?? [];
+    levels.forEach((level, index) => {
+      if (level === "дополнительный" && access[index] === "free" && !free) {
+        errors.push(`topic "${material.id}": an advanced subtopic is free`);
+      }
+    });
+  } else if (material.course_id) {
+    const course = registry.courses.find(
+      (item) => item.id === material.course_id,
+    );
+    const index = course?.lesson_ids.indexOf(material.id) ?? -1;
+    const limit = FREE_COURSE_LESSONS[material.course_id] ?? 0;
+    const expected = index >= 0 && index < limit ? "free" : "paid";
+    if (material.access !== expected) {
+      errors.push(`course lesson "${material.id}": access must be ${expected}`);
+    }
+  }
+}
+
 if (errors.length > 0) {
   console.error(
     "Content link validation failed:\n" +

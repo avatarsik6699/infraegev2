@@ -8,6 +8,7 @@ import {
   findLessonByRouteSlug,
   findSubtopicBySection,
   lessonPublications,
+  lessonSections,
   lessonSubtopics,
 } from "~/entities/lesson";
 import {
@@ -50,7 +51,10 @@ export const getPracticeTask = createServerFn({ method: "GET" })
             href: subtopic
               ? `/ege/${topic.routeSlug}/${subtopic.slug}${hash}`
               : `/ege/${topic.routeSlug}${hash}`,
-            label: theoryLinkLabel(lesson?.theory, link.section),
+            label: theoryLinkLabel(
+              lesson ? lessonSections(lesson) : undefined,
+              link.section,
+            ),
           },
         ];
       }
@@ -64,13 +68,16 @@ export const getPracticeTask = createServerFn({ method: "GET" })
             module.lessonPlan.some((entry) => entry.id === link.material_id),
           ),
       );
+      const definition =
+        lesson && course
+          ? findCourseLessonByRouteSlugs(course.routeSlug, lesson.routeSlug)
+          : undefined;
       return lesson && course
         ? [
             {
               href: `/courses/${course.routeSlug}/${lesson.routeSlug}${hash}`,
               label: theoryLinkLabel(
-                findCourseLessonByRouteSlugs(course.routeSlug, lesson.routeSlug)
-                  ?.theory,
+                definition?.paid?.outline ?? definition?.theory,
                 link.section,
               ),
             },

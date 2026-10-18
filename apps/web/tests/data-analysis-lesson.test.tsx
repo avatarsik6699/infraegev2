@@ -9,13 +9,16 @@ import {
   lessonPublications,
   lessonSubtopics,
 } from "~/entities/lesson";
-import { lessonMedia } from "~/entities/lesson/content/data-analysis.media";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { publicPaths } from "~/pages/site-discovery/public-paths";
 import { CodeBlock } from "~/shared/components/code-block";
 import { CodeRunner } from "~/shared/components/learning-content";
 import { Typography } from "~/shared/components/typography";
-import { renderAuthoredLessonContent } from "./lesson-content-test-utils";
+import {
+  renderAuthoredLessonContent,
+  topicMedia,
+  wholeLesson,
+} from "./lesson-content-test-utils";
 
 vi.mock("~/shared/components/action-link", () => ({
   ActionLink: ({ children }: { children: React.ReactNode }) => (
@@ -23,7 +26,9 @@ vi.mock("~/shared/components/action-link", () => ({
   ),
 }));
 
-const lesson = dataAnalysisLesson;
+// Change 192: the paid subtopics live in their own modules.
+const lesson = await wholeLesson(dataAnalysisLesson);
+const lessonMedia = topicMedia("data-analysis");
 const SOURCE = resolve(
   process.cwd(),
   "../..",
@@ -144,7 +149,7 @@ describe("task 27 clustering lesson (Change 184)", () => {
 
   it("is the lesson of the catalog topic of task 27", () => {
     expect(findLessonByRouteSlug("27-analiz-dannyh-i-klasterizatsiya")).toBe(
-      lesson,
+      dataAnalysisLesson,
     );
     expect(
       lessonPublications.filter(({ taskNumbers }) => taskNumbers.includes(27)),

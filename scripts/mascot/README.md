@@ -49,8 +49,18 @@ python3 trace_prep.py $R/ill-register.png /tmp/mascot-scenes/register face=575,6
 python3 trace_prep.py $R/404-1200x375.png /tmp/mascot-scenes/not-found crop=0,0,1200,375 face=450,202,516,253 move=none
 python3 trace_prep.py $R/server-error-1200x375.png /tmp/mascot-scenes/error crop=0,0,1200,375 face=267,218,337,256 move=430,20,920,200
 python3 trace_prep.py $R/empty-search-1400x350.png /tmp/mascot-scenes/empty-search crop=80,20,1340,320 face=636,174,692,214 move=1040,250,1100,290
+R=../../docs/artifacts/references/billing_refs   # Change 192, цветные рисунки
+python3 trace_prep.py $R/paywall.png /tmp/mascot-scenes/paywall move=none
+python3 trace_prep.py $R/paywall-guest.png /tmp/mascot-scenes/paywall-guest move=120,450,200,560/960,800,1040,870
+python3 trace_prep.py $R/pricing.png /tmp/mascot-scenes/pricing move=95,755,160,845
 node trace.mjs /tmp/mascot-scenes ../../apps/web/public/images/mascot [сцена...]
 ```
+
+Цветные линии кроме оранжевого (жёлтые, зелёные, синие, серые; Change 192) уходят в свои
+маски `tint-*.png` и трассируются в среднем цвете с долей туши; серая линия отделяется от мягкого
+края чёрной по отсутствию чёрной сердцевины рядом. В сценах оплаты лица не перерисовываются
+(`face` не задан), а `rough` и `calm` в `trace.mjs` дают неровный край туши и только мерцание меток.
+Сцена «доступ открыт» (`access-open`) собирается кодом: `node scenes.mjs <позы> <выход> access-open`.
 
 `face` — рамка лица в пикселях PNG: глаза и рот перерисовываются пером, как в утверждённых
 позах. `crop` — кадр в пикселях PNG (без него — рисунок плюс поля); для баннеров кадр задан, чтобы

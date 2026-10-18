@@ -275,12 +275,39 @@ class TaskData(TaskContent):
         return self
 
 
+Access = Literal["free", "paid"]
+
+
+class SubtopicDefinition(StrictModel):
+    """A topic page and its theory sections, with its access level (Change 192)."""
+
+    slug: Identifier
+    access: Access = "free"
+    sections: list[Identifier]
+
+
 class MaterialDefinition(StrictModel):
     id: Identifier
     sections: list[Identifier]
     kind: Literal["topic", "course"] = "topic"
     status: Literal["draft", "published"] = "draft"
     course_id: Identifier | None = None
+    # Change 192: a topic splits its sections into subtopics, each free or paid,
+    # and its final page «Практика и итог» has its own level; a course lesson is
+    # free or paid as a whole.
+    subtopics: list[SubtopicDefinition] = Field(default_factory=list)
+    final_access: Access = "free"
+    access: Access = "free"
+
+    @model_validator(mode="after")
+    def subtopic_sections(self) -> Self:
+        if (
+            self.subtopics
+            and [section for subtopic in self.subtopics for section in subtopic.sections]
+            != self.sections
+        ):
+            raise ValueError("subtopics must split the material sections in order")
+        return self
 
 
 class CourseDefinition(StrictModel):
@@ -290,7 +317,7 @@ class CourseDefinition(StrictModel):
 
 
 class Registry(StrictModel):
-    format: Literal[1]
+    format: Literal[2]
     materials: list[MaterialDefinition]
     courses: list[CourseDefinition] = Field(default_factory=list)
 

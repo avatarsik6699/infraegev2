@@ -9,13 +9,16 @@ import {
   lessonPublications,
   lessonSubtopics,
 } from "~/entities/lesson";
-import { lessonMedia } from "~/entities/lesson/content/winning-strategy.media";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { publicPaths } from "~/pages/site-discovery/public-paths";
 import { CodeBlock } from "~/shared/components/code-block";
 import { CodeRunner } from "~/shared/components/learning-content";
 import { Typography } from "~/shared/components/typography";
-import { renderAuthoredLessonContent } from "./lesson-content-test-utils";
+import {
+  renderAuthoredLessonContent,
+  topicMedia,
+  wholeLesson,
+} from "./lesson-content-test-utils";
 
 vi.mock("~/shared/components/action-link", () => ({
   ActionLink: ({ children }: { children: React.ReactNode }) => (
@@ -23,7 +26,9 @@ vi.mock("~/shared/components/action-link", () => ({
   ),
 }));
 
-const lesson = winningStrategyLesson;
+// Change 192: the paid subtopics live in their own modules.
+const lesson = await wholeLesson(winningStrategyLesson);
+const lessonMedia = topicMedia("winning-strategy");
 const SOURCE = resolve(
   process.cwd(),
   "../..",
@@ -142,7 +147,9 @@ describe("tasks 19–21 winning strategy lesson (Change 184)", () => {
   });
 
   it("is the lesson of the catalog topic of tasks 19–21", () => {
-    expect(findLessonByRouteSlug("19-21-vyigryshnaya-strategiya")).toBe(lesson);
+    expect(findLessonByRouteSlug("19-21-vyigryshnaya-strategiya")).toBe(
+      winningStrategyLesson,
+    );
     expect(
       lessonPublications.filter(({ taskNumbers }) => taskNumbers.includes(20)),
     ).toEqual([expect.objectContaining({ id: "winning-strategy" })]);

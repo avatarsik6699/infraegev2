@@ -9,12 +9,15 @@ import {
   lessonPublications,
   lessonSubtopics,
 } from "~/entities/lesson";
-import { lessonMedia } from "~/entities/lesson/content/divisors-and-masks.media";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { publicPaths } from "~/pages/site-discovery/public-paths";
 import { CodeBlock } from "~/shared/components/code-block";
 import { Typography } from "~/shared/components/typography";
-import { renderAuthoredLessonContent } from "./lesson-content-test-utils";
+import {
+  renderAuthoredLessonContent,
+  topicMedia,
+  wholeLesson,
+} from "./lesson-content-test-utils";
 
 vi.mock("~/shared/components/action-link", () => ({
   ActionLink: ({ children }: { children: React.ReactNode }) => (
@@ -22,7 +25,9 @@ vi.mock("~/shared/components/action-link", () => ({
   ),
 }));
 
-const lesson = divisorsAndMasksLesson;
+// Change 192: the paid subtopics live in their own modules.
+const lesson = await wholeLesson(divisorsAndMasksLesson);
+const lessonMedia = topicMedia("divisors-and-masks");
 const SOURCE = resolve(
   process.cwd(),
   "../..",
@@ -133,7 +138,9 @@ describe("task 25 divisors and masks lesson", () => {
   });
 
   it("replaces the retired topic 25 lesson without a redirect", () => {
-    expect(findLessonByRouteSlug("25-deliteli-i-maski")).toBe(lesson);
+    expect(findLessonByRouteSlug("25-deliteli-i-maski")).toBe(
+      divisorsAndMasksLesson,
+    );
     expect(findLessonByRouteSlug("25-obrabotka-celyh-chisel")).toBeUndefined();
     expect(
       lessonPublications.filter(({ taskNumbers }) => taskNumbers.includes(25)),

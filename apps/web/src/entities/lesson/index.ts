@@ -34,6 +34,7 @@ export {
   findSubtopicBySection,
   groupTasksBySubtopic,
   lessonPracticeSlug,
+  lessonSections,
   lessonSubtopics,
   subtopicErrors,
   type ResolvedSubtopic,

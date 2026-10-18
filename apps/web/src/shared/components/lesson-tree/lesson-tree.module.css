@@ -175,6 +175,17 @@ a.file:hover {
   color: var(--color-muted);
 }
 
+/* Change 192: a paid file the visitor cannot open — the logo orange as a
+   line icon, never as text (DESIGN.md › Logo Orange). */
+.lock {
+  flex: none;
+  width: 0.8125rem;
+  height: 0.8125rem;
+  margin: 0.2rem 0 0 auto;
+  color: var(--color-brand-orange);
+  stroke-width: 2.25;
+}
+
 /* Below 72rem the right rail is hidden, so progress lives here (F38). */
 .progress {
   margin-top: var(--space-3);

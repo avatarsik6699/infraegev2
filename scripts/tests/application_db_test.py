@@ -131,17 +131,35 @@ class BundleTests(unittest.TestCase):
 
     def test_account_restore_rejects_missing_grants_or_progress_contract(self):
         restored = Mock()
-        restored.query.side_effect = ["140_01", "f"]
+        restored.query.side_effect = ["f"]
         with (
             patch.object(recovery, "require_disposable"),
             patch.object(recovery, "docker", return_value="0"),
             patch.object(recovery, "Database", return_value=restored),
             patch.object(recovery.subprocess, "run"),
-            patch.object(recovery, "schema_version", return_value="140_01"),
+            patch.object(recovery, "schema_version", return_value=bundle.SCHEMA),
         ):
             with self.assertRaisesRegex(ValueError, "account schema or application grants"):
                 recovery.restore(self.root, "isolated-restore")
         restored.query.assert_called_once_with(sql.ACCOUNT_RESTORE)
+
+    def test_billing_restore_rejects_deletable_evidence_or_missing_tables(self):
+        # Change 192: the accounts contract holds, the billing contract does not.
+        restored = Mock()
+        restored.query.side_effect = ["t", "f"]
+        with (
+            patch.object(recovery, "require_disposable"),
+            patch.object(recovery, "docker", return_value="0"),
+            patch.object(recovery, "Database", return_value=restored),
+            patch.object(recovery.subprocess, "run"),
+            patch.object(recovery, "schema_version", return_value=bundle.SCHEMA),
+        ):
+            with self.assertRaisesRegex(ValueError, "billing schema or application grants"):
+                recovery.restore(self.root, "isolated-restore")
+        self.assertEqual(
+            [call.args[0] for call in restored.query.call_args_list],
+            [sql.ACCOUNT_RESTORE, sql.BILLING_RESTORE],
+        )
 
 
 @unittest.skipUnless(

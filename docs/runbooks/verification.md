@@ -11,7 +11,8 @@ For one coherent `/work` set:
 
 1. `python3 scripts/gate.py affected` maps changed paths to groups (docs-only → `docs-links`;
    web → format, web lint/typecheck; API → API lint/typecheck, `api-contract` for app code; content
-   → `content-static`; lesson stands/tooling → `lesson-media` + host Python; shell → `shell-lint`;
+   → `content-static`; lesson stands/tooling → `lesson-media` + host Python; generated lesson/course
+   content and the Vite config → `paid-leak`; shell → `shell-lint`;
    infra → `infra-config` plus nginx contracts). It prints reminders and unmatched paths.
 2. Run the suggested groups once with `python3 scripts/gate.py run --group …`; read only the
    summary and, on failure, the printed tail or `.output/gate/<group>.log`.
@@ -42,6 +43,7 @@ owner changes:
 | Account cutover | `bash scripts/tests/account-cutover.test.sh` (also `python3 -m unittest scripts.tests.account_cutover_drill_test`) |
 | Account artifact retention | `bash scripts/tests/account-retention.test.sh` |
 | Nginx auth/progress edge | `bash scripts/tests/auth-edge.test.sh` |
+| Nginx paid-chunk gate and payment notifications (Change 192) | `bash scripts/tests/paid-gate.test.sh` |
 | Nginx auxiliary error pages | `bash scripts/tests/auxiliary-pages.test.sh` (Docker nginx) |
 | Practice read throttling | `bash scripts/tests/practice-read-limit.test.sh` |
 | Local Docker lifecycle | `bash scripts/tests/docker-dev-lifecycle.test.sh` |

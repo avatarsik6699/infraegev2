@@ -23,9 +23,23 @@ const trace = (file) =>
   );
 const pathData = (svg) => svg.match(/ d="([^"]+)"/)?.[1] ?? "";
 
+// Extra colour layers (Change 192) take a little ink, like a coloured ink
+// line rather than a marker.
+const inked = (hex, k = 0.14) =>
+  "#" +
+  [1, 3, 5]
+    .map((i) => {
+      const c = parseInt(hex.slice(i, i + 2), 16);
+      const ink = parseInt(INK.slice(i, i + 2), 16);
+      return Math.round(c * (1 - k) + ink * k)
+        .toString(16)
+        .padStart(2, "0");
+    })
+    .join("");
+
 // Traced drawing: static ink and colour layers, then each free piece in its
 // own twinkling group, then the face.
-async function traced(name) {
+async function traced(name, { rough = false } = {}) {
   const dir = join(work, name);
   const scene = JSON.parse(readFileSync(join(dir, "scene.json"), "utf8"));
   const s = scene.scale;
@@ -34,14 +48,32 @@ async function traced(name) {
     viewBox: `0 0 ${scene.w} ${scene.h}`,
   });
   const defs = el("defs", {}, svg);
+  // `rough`: an uneven ink edge over the traced curves, as in the poses.
+  if (rough) {
+    defs.children.push(
+      `<filter id="mascot-${name}-rough" x="-2%" y="-2%" width="104%" height="104%">` +
+        `<feTurbulence type="fractalNoise" baseFrequency="0.09" numOctaves="2" seed="5" result="n"/>` +
+        `<feDisplacementMap in="SourceGraphic" in2="n" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>` +
+        `</filter>`,
+    );
+  }
   const drawing = el(
     "g",
-    { transform: `scale(${1 / s})`, "fill-rule": "evenodd" },
+    {
+      transform: `scale(${1 / s})`,
+      "fill-rule": "evenodd",
+      ...(rough && { filter: `url(#mascot-${name}-rough)` }),
+    },
     svg,
   );
   const layers = [
     ["ink.png", INK, "mascot-ink"],
     ["accent.png", ORANGE, "mascot-accent"],
+    ...(scene.tints ?? []).map((tint) => [
+      tint.file,
+      inked(tint.fill),
+      "mascot-tint",
+    ]),
   ];
   for (const [file, fill, cls] of layers) {
     el(
@@ -118,14 +150,19 @@ const bob = (i) => ({
 });
 
 // Small abstract marks spread around the drawing: [kind, x, y, scale].
-// Sparkles twinkle, rings sway.
-function floaters(svg, defs, name, seed, items) {
+// Sparkles twinkle, rings sway; in a `calm` scene (Change 192) rings only
+// pulse too, nothing moves.
+function floaters(svg, defs, name, seed, items, calm = false) {
   const id = `mascot-${name}-ink`;
   inkFilter(defs, id);
   const layer = el("g", { filter: `url(#${id})` }, svg);
   const r = rng(seed);
   for (const [i, [kind, x, y, scale]] of items.entries()) {
-    const group = el("g", kind === "sparkle" ? twinkle(i) : bob(i), layer);
+    const group = el(
+      "g",
+      kind === "sparkle" || calm ? twinkle(i) : bob(i),
+      layer,
+    );
     P[kind](at(group, x, y, scale), r);
   }
 }
@@ -195,13 +232,56 @@ const SCENES = {
       ["ring", 40, 260, 3],
     ],
   },
+  // Change 192, paywall: the mascot with a key and a sword before a locked
+  // gate, the task monsters on top of it.
+  paywall: {
+    seed: 157,
+    rough: true,
+    calm: true,
+    marks: [
+      ["sparkle", 70, 90, 3.4],
+      ["ring", 330, 120, 3],
+      ["sparkle", 560, 60, 3],
+      ["ring", 1180, 120, 3],
+      ["sparkle", 1150, 1000, 3],
+      ["ring", 620, 1000, 2.8],
+    ],
+  },
+  // Guest paywall: the mascot brings a ready account card.
+  "paywall-guest": {
+    seed: 163,
+    rough: true,
+    calm: true,
+    marks: [
+      ["sparkle", 60, 60, 3.4],
+      ["ring", 600, 60, 3],
+      ["sparkle", 1000, 120, 3],
+      ["ring", 1020, 420, 2.8],
+      ["sparkle", 480, 610, 2.6],
+    ],
+  },
+  // /pricing: the mascot carries a bag of lessons and pays by card.
+  pricing: {
+    seed: 167,
+    rough: true,
+    calm: true,
+    marks: [
+      ["sparkle", 50, 60, 3.4],
+      ["ring", 760, 70, 3],
+      ["sparkle", 860, 150, 3],
+      ["ring", 1270, 130, 3],
+      ["sparkle", 1280, 640, 3],
+      ["ring", 30, 420, 2.8],
+      ["sparkle", 720, 690, 2.6],
+    ],
+  },
 };
 
 // `node trace.mjs <work> <out> [scene...]` rebuilds only the named scenes.
 const only = process.argv.slice(4);
-for (const [name, { seed, marks }] of Object.entries(SCENES)) {
+for (const [name, { seed, marks, rough, calm }] of Object.entries(SCENES)) {
   if (only.length && !only.includes(name)) continue;
-  const { svg, defs } = await traced(name);
-  floaters(svg, defs, name, seed, marks);
+  const { svg, defs } = await traced(name, { rough });
+  floaters(svg, defs, name, seed, marks, calm);
   writeScene(out, name, svg);
 }

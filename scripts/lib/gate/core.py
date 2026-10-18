@@ -85,6 +85,15 @@ def _groups() -> tuple[Group, ...]:
         Group("infra-config", ("make", "config")),
         Group("api-contract", ("pnpm", "api:check")),
         Group("web-build", ("pnpm", "--filter", "web", "build")),
+        # Change 192: paid lesson text only in the gated assets/paid/ chunks
+        Group(
+            "paid-leak",
+            (
+                "bash",
+                "-c",
+                "pnpm --filter web build && node scripts/check-paid-leak.mjs",
+            ),
+        ),
         Group("api-tests", _api_shell("uv run pytest")),
         Group("web-unit", ("pnpm", "--filter", "web", "test")),
         Group("e2e", ("pnpm", "--filter", "web", "test:e2e")),
@@ -237,6 +246,15 @@ RULES: tuple[Rule, ...] = (
         ("content/*",),
         ("content-static",),
         exclude=(*MARKDOWN, "content/lesson-design/*"),
+    ),
+    Rule(
+        (
+            "apps/web/src/entities/lesson/content/*",
+            "apps/web/src/entities/course/content/*",
+            "apps/web/vite.config.ts",
+            "scripts/check-paid-leak.mjs",
+        ),
+        ("paid-leak",),
     ),
     Rule(
         ("content/lesson-design/*", "scripts/lesson_design/*"),

@@ -94,9 +94,19 @@ create the attestation; routine `db-restore-check` does not justify it.
 
 The completed 2026-09-26 `122_01` → `140_01` account cutover used the procedure below;
 `scripts/rehearse-account-cutover.sh` implements that transition and, since Change 191, the
-`140_01` → `191_01` one: the target is the candidate's `infra/database-schema` and the source its
-predecessor in `APPLICATION_SCHEMAS` (`scripts/lib/application-db-release.sh`); the attestation
-holds `<target> <sha>`. A further schema head extends that list and its own checks.
+`140_01` → `191_01` one: the target is the candidate's `infra/database-schema` and the source the
+schema of the release production runs now (`/opt/infraege/database-current/infra/database-schema`,
+falling back to the predecessor in `APPLICATION_SCHEMAS`); the transition must be the immediate
+predecessor or a reviewed entry of `APPLICATION_SKIPS` in `scripts/lib/application-db-release.sh`.
+The attestation holds `<target> <sha>`. A further schema head extends that list and its own checks.
+
+Change 192: production runs `140_01` (191_01 was never released), so the paid-access release
+rehearses `140_01` → `192_01` in one step (the reviewed skip; both heads are additive). The
+restore check of a `192_01` bundle also proves the billing tables and grants
+(`sql.BILLING_RESTORE`): the application may add and update payments, grants, refunds and
+provider events but never delete them, offer acceptances are append-only, and the runtime and
+import roles see none of them. Billing rows are 5-year evidence: paid access needs this proof and
+off-site backups before `BILLING_ENABLED` (docs/runbooks/billing.md).
 
 Use the reviewed `scripts/rehearse-account-cutover.sh` from the exact candidate source on the
 production host, before deploy dispatch. Take a fresh production backup through the existing

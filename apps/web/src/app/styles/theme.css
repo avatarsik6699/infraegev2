@@ -22,6 +22,10 @@
   --theme-link-hover: #1a42ad;
   --theme-here: #c24c00;
   --theme-brand-orange: #ff6a00;
+  /* Change 192: the paid-access action (paywall, /pricing, checkout) — the
+     logo orange deepened until white 17px text keeps 4.5:1 (4.53:1). */
+  --theme-cta: #c95000;
+  --theme-cta-hover: #b84900;
   --theme-primary: #17191e;
   --theme-primary-hover: #2a2d34;
   --theme-on-primary: #ffffff;

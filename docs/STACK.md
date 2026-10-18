@@ -168,7 +168,7 @@ owns the gate.
 
 | Check | Command | Preconditions / notes |
 |-------|---------|-----------------------|
-| Static groups | `python3 scripts/gate.py run --group …` from `affected` | `format`, `python-format`, `*-lint`, `*-typecheck`, `host-*`, `shell-lint`, `docs-links`, `content-static`, `lesson-media`, `infra-config`, `api-contract` as suggested; web typecheck covers `src`, `tests`, `e2e` and Playwright configs |
+| Static groups | `python3 scripts/gate.py run --group …` from `affected` | `format`, `python-format`, `*-lint`, `*-typecheck`, `host-*`, `shell-lint`, `docs-links`, `content-static`, `lesson-media`, `paid-leak`, `infra-config`, `api-contract` as suggested; web typecheck covers `src`, `tests`, `e2e` and Playwright configs; `paid-leak` builds the web and fails when paid lesson text appears outside the gated `assets/paid/` chunks (Change 192) |
 | Focused tests | `pnpm --filter web exec vitest run <changed-test-files>` · `cd apps/api && uv run pytest <changed-test-files-or-nodeids>` · `bash scripts/tests/<changed-contract>.test.sh` · `python3 -m unittest scripts.tests.<module>` | only tests directly covering changed behavior; documentation-only changes are `SKIPPED`; never expand this row to the full suite |
 | LSP diagnostics | available: yes | `python-lsp` (Pyright) and `typescript-lsp` MCP servers are auxiliary changed-file diagnostics; repository compiler/type-check commands are binding |
 | Repository hygiene | analyze required reports, then `make clean` | always last for code/test/build sessions; it removes allowlisted outputs and fails if any remain; lint/test caches stay. Docs-only sessions skip it. Never use `git clean -fdX` |
@@ -188,7 +188,7 @@ local shipping or every release. Environment setup: [verification runbook](runbo
 | Host Python contracts | `python3 -m unittest scripts.tests.application_db_test scripts.tests.deploy_orchestration_test scripts.tests.gate_test scripts.tests.release_checkpoint_test scripts.tests.change_history_test` | local fake transports |
 | Migrations | `cd apps/api && uv run alembic upgrade head && uv run alembic current && uv run alembic check` | isolated gate DB and migration-role URL; never CI or production |
 | Backend test suite | `cd apps/api && uv run pytest` | local only |
-| Frontend build | `scripts/run-host-web-gate.sh pnpm --filter web build` | temporarily stops only the gate web service, builds/prerenders on the host, restores it; fails if any crawled page 500s |
+| Frontend build | `scripts/run-host-web-gate.sh pnpm --filter web build && node scripts/check-paid-leak.mjs` | temporarily stops only the gate web service, builds/prerenders on the host, restores it; fails if any crawled page 500s or paid lesson text leaves `assets/paid/` |
 | Frontend unit tests | `pnpm --filter web test` | local only |
 | E2E (Playwright) | `pnpm --filter web exec playwright test --list && pnpm --filter web test:e2e` | seeded isolated bank; includes `e2e/accessibility.spec.ts` (do not run `audit:a11y` twice) |
 | Smoke | `curl -f http://localhost:18000/health/ready` | frontend smoke is the build prerender crawl |

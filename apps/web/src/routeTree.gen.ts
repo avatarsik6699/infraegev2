@@ -12,21 +12,27 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as ConsentRouteImport } from './routes/consent'
+import { Route as OfertaRouteImport } from './routes/oferta'
 import { Route as PasswordResetRouteImport } from './routes/password-reset'
+import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as SignInRouteImport } from './routes/sign-in'
 import { Route as SitemapStaticDotxmlRouteImport } from './routes/sitemap-static[.]xml'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SubscribeRouteImport } from './routes/subscribe'
 import { Route as VerifyEmailRouteImport } from './routes/verify-email'
+import { Route as VozvratRouteImport } from './routes/vozvrat'
 import { Route as CoursesIndexRouteImport } from './routes/courses.index'
 import { Route as CoursesCourseSlugRouteImport } from './routes/courses.$courseSlug'
 import { Route as EgeIndexRouteImport } from './routes/ege.index'
 import { Route as EgeSlugRouteImport } from './routes/ege.$slug'
+import { Route as OfertaVersionRouteImport } from './routes/oferta_.$version'
 import { Route as PracticeIndexRouteImport } from './routes/practice.index'
 import { Route as PracticeTaskIdRouteImport } from './routes/practice.$taskId'
 import { Route as SitemapPracticePageRouteImport } from './routes/sitemap-practice.$page'
+import { Route as SubscribeReturnRouteImport } from './routes/subscribe_.return'
 import { Route as CoursesCourseSlugLessonSlugRouteImport } from './routes/courses_.$courseSlug.$lessonSlug'
 import { Route as EgeSlugSubtopicRouteImport } from './routes/ege_.$slug.$subtopic'
 import { Route as EgeSlugPraktikaRouteImport } from './routes/ege_.$slug.praktika'
@@ -46,9 +52,19 @@ const ConsentRoute = ConsentRouteImport.update({
   path: '/consent',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OfertaRoute = OfertaRouteImport.update({
+  id: '/oferta',
+  path: '/oferta',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PasswordResetRoute = PasswordResetRouteImport.update({
   id: '/password-reset',
   path: '/password-reset',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyRoute = PrivacyRouteImport.update({
@@ -81,9 +97,19 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SubscribeRoute = SubscribeRouteImport.update({
+  id: '/subscribe',
+  path: '/subscribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const VerifyEmailRoute = VerifyEmailRouteImport.update({
   id: '/verify-email',
   path: '/verify-email',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VozvratRoute = VozvratRouteImport.update({
+  id: '/vozvrat',
+  path: '/vozvrat',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CoursesIndexRoute = CoursesIndexRouteImport.update({
@@ -106,6 +132,11 @@ const EgeSlugRoute = EgeSlugRouteImport.update({
   path: '/ege/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OfertaVersionRoute = OfertaVersionRouteImport.update({
+  id: '/oferta_/$version',
+  path: '/oferta/$version',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PracticeIndexRoute = PracticeIndexRouteImport.update({
   id: '/practice/',
   path: '/practice/',
@@ -119,6 +150,11 @@ const PracticeTaskIdRoute = PracticeTaskIdRouteImport.update({
 const SitemapPracticePageRoute = SitemapPracticePageRouteImport.update({
   id: '/sitemap-practice/$page',
   path: '/sitemap-practice/$page',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SubscribeReturnRoute = SubscribeReturnRouteImport.update({
+  id: '/subscribe_/return',
+  path: '/subscribe/return',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CoursesCourseSlugLessonSlugRoute =
@@ -142,18 +178,24 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
   '/consent': typeof ConsentRoute
+  '/oferta': typeof OfertaRoute
   '/password-reset': typeof PasswordResetRoute
+  '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sign-in': typeof SignInRoute
   '/sitemap-static.xml': typeof SitemapStaticDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/subscribe': typeof SubscribeRoute
   '/verify-email': typeof VerifyEmailRoute
+  '/vozvrat': typeof VozvratRoute
   '/courses/$courseSlug': typeof CoursesCourseSlugRoute
   '/ege/$slug': typeof EgeSlugRoute
+  '/oferta/$version': typeof OfertaVersionRoute
   '/practice/$taskId': typeof PracticeTaskIdRoute
   '/sitemap-practice/$page': typeof SitemapPracticePageRoute
+  '/subscribe/return': typeof SubscribeReturnRoute
   '/courses/': typeof CoursesIndexRoute
   '/ege/': typeof EgeIndexRoute
   '/practice/': typeof PracticeIndexRoute
@@ -165,18 +207,24 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
   '/consent': typeof ConsentRoute
+  '/oferta': typeof OfertaRoute
   '/password-reset': typeof PasswordResetRoute
+  '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sign-in': typeof SignInRoute
   '/sitemap-static.xml': typeof SitemapStaticDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/subscribe': typeof SubscribeRoute
   '/verify-email': typeof VerifyEmailRoute
+  '/vozvrat': typeof VozvratRoute
   '/courses/$courseSlug': typeof CoursesCourseSlugRoute
   '/ege/$slug': typeof EgeSlugRoute
+  '/oferta/$version': typeof OfertaVersionRoute
   '/practice/$taskId': typeof PracticeTaskIdRoute
   '/sitemap-practice/$page': typeof SitemapPracticePageRoute
+  '/subscribe/return': typeof SubscribeReturnRoute
   '/courses': typeof CoursesIndexRoute
   '/ege': typeof EgeIndexRoute
   '/practice': typeof PracticeIndexRoute
@@ -189,18 +237,24 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
   '/consent': typeof ConsentRoute
+  '/oferta': typeof OfertaRoute
   '/password-reset': typeof PasswordResetRoute
+  '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sign-in': typeof SignInRoute
   '/sitemap-static.xml': typeof SitemapStaticDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/subscribe': typeof SubscribeRoute
   '/verify-email': typeof VerifyEmailRoute
+  '/vozvrat': typeof VozvratRoute
   '/courses/$courseSlug': typeof CoursesCourseSlugRoute
   '/ege/$slug': typeof EgeSlugRoute
+  '/oferta_/$version': typeof OfertaVersionRoute
   '/practice/$taskId': typeof PracticeTaskIdRoute
   '/sitemap-practice/$page': typeof SitemapPracticePageRoute
+  '/subscribe_/return': typeof SubscribeReturnRoute
   '/courses/': typeof CoursesIndexRoute
   '/ege/': typeof EgeIndexRoute
   '/practice/': typeof PracticeIndexRoute
@@ -214,18 +268,24 @@ export interface FileRouteTypes {
     | '/'
     | '/account'
     | '/consent'
+    | '/oferta'
     | '/password-reset'
+    | '/pricing'
     | '/privacy'
     | '/register'
     | '/robots.txt'
     | '/sign-in'
     | '/sitemap-static.xml'
     | '/sitemap.xml'
+    | '/subscribe'
     | '/verify-email'
+    | '/vozvrat'
     | '/courses/$courseSlug'
     | '/ege/$slug'
+    | '/oferta/$version'
     | '/practice/$taskId'
     | '/sitemap-practice/$page'
+    | '/subscribe/return'
     | '/courses/'
     | '/ege/'
     | '/practice/'
@@ -237,18 +297,24 @@ export interface FileRouteTypes {
     | '/'
     | '/account'
     | '/consent'
+    | '/oferta'
     | '/password-reset'
+    | '/pricing'
     | '/privacy'
     | '/register'
     | '/robots.txt'
     | '/sign-in'
     | '/sitemap-static.xml'
     | '/sitemap.xml'
+    | '/subscribe'
     | '/verify-email'
+    | '/vozvrat'
     | '/courses/$courseSlug'
     | '/ege/$slug'
+    | '/oferta/$version'
     | '/practice/$taskId'
     | '/sitemap-practice/$page'
+    | '/subscribe/return'
     | '/courses'
     | '/ege'
     | '/practice'
@@ -260,18 +326,24 @@ export interface FileRouteTypes {
     | '/'
     | '/account'
     | '/consent'
+    | '/oferta'
     | '/password-reset'
+    | '/pricing'
     | '/privacy'
     | '/register'
     | '/robots.txt'
     | '/sign-in'
     | '/sitemap-static.xml'
     | '/sitemap.xml'
+    | '/subscribe'
     | '/verify-email'
+    | '/vozvrat'
     | '/courses/$courseSlug'
     | '/ege/$slug'
+    | '/oferta_/$version'
     | '/practice/$taskId'
     | '/sitemap-practice/$page'
+    | '/subscribe_/return'
     | '/courses/'
     | '/ege/'
     | '/practice/'
@@ -284,18 +356,24 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AccountRoute: typeof AccountRoute
   ConsentRoute: typeof ConsentRoute
+  OfertaRoute: typeof OfertaRoute
   PasswordResetRoute: typeof PasswordResetRoute
+  PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
   RegisterRoute: typeof RegisterRoute
   RobotsDottxtRoute: typeof RobotsDottxtRoute
   SignInRoute: typeof SignInRoute
   SitemapStaticDotxmlRoute: typeof SitemapStaticDotxmlRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  SubscribeRoute: typeof SubscribeRoute
   VerifyEmailRoute: typeof VerifyEmailRoute
+  VozvratRoute: typeof VozvratRoute
   CoursesCourseSlugRoute: typeof CoursesCourseSlugRoute
   EgeSlugRoute: typeof EgeSlugRoute
+  OfertaVersionRoute: typeof OfertaVersionRoute
   PracticeTaskIdRoute: typeof PracticeTaskIdRoute
   SitemapPracticePageRoute: typeof SitemapPracticePageRoute
+  SubscribeReturnRoute: typeof SubscribeReturnRoute
   CoursesIndexRoute: typeof CoursesIndexRoute
   EgeIndexRoute: typeof EgeIndexRoute
   PracticeIndexRoute: typeof PracticeIndexRoute
@@ -327,11 +405,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConsentRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/oferta': {
+      id: '/oferta'
+      path: '/oferta'
+      fullPath: '/oferta'
+      preLoaderRoute: typeof OfertaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/password-reset': {
       id: '/password-reset'
       path: '/password-reset'
       fullPath: '/password-reset'
       preLoaderRoute: typeof PasswordResetRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy': {
@@ -376,11 +468,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/subscribe': {
+      id: '/subscribe'
+      path: '/subscribe'
+      fullPath: '/subscribe'
+      preLoaderRoute: typeof SubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/verify-email': {
       id: '/verify-email'
       path: '/verify-email'
       fullPath: '/verify-email'
       preLoaderRoute: typeof VerifyEmailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/vozvrat': {
+      id: '/vozvrat'
+      path: '/vozvrat'
+      fullPath: '/vozvrat'
+      preLoaderRoute: typeof VozvratRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/courses/': {
@@ -411,6 +517,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EgeSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/oferta_/$version': {
+      id: '/oferta_/$version'
+      path: '/oferta/$version'
+      fullPath: '/oferta/$version'
+      preLoaderRoute: typeof OfertaVersionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/practice/': {
       id: '/practice/'
       path: '/practice'
@@ -430,6 +543,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap-practice/$page'
       fullPath: '/sitemap-practice/$page'
       preLoaderRoute: typeof SitemapPracticePageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/subscribe_/return': {
+      id: '/subscribe_/return'
+      path: '/subscribe/return'
+      fullPath: '/subscribe/return'
+      preLoaderRoute: typeof SubscribeReturnRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/courses_/$courseSlug/$lessonSlug': {
@@ -460,18 +580,24 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccountRoute: AccountRoute,
   ConsentRoute: ConsentRoute,
+  OfertaRoute: OfertaRoute,
   PasswordResetRoute: PasswordResetRoute,
+  PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
   RegisterRoute: RegisterRoute,
   RobotsDottxtRoute: RobotsDottxtRoute,
   SignInRoute: SignInRoute,
   SitemapStaticDotxmlRoute: SitemapStaticDotxmlRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  SubscribeRoute: SubscribeRoute,
   VerifyEmailRoute: VerifyEmailRoute,
+  VozvratRoute: VozvratRoute,
   CoursesCourseSlugRoute: CoursesCourseSlugRoute,
   EgeSlugRoute: EgeSlugRoute,
+  OfertaVersionRoute: OfertaVersionRoute,
   PracticeTaskIdRoute: PracticeTaskIdRoute,
   SitemapPracticePageRoute: SitemapPracticePageRoute,
+  SubscribeReturnRoute: SubscribeReturnRoute,
   CoursesIndexRoute: CoursesIndexRoute,
   EgeIndexRoute: EgeIndexRoute,
   PracticeIndexRoute: PracticeIndexRoute,

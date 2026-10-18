@@ -9,6 +9,11 @@ export namespace ActionLinkTypes {
   export type Props = RootProps & {
     to: string;
     params?: Record<string, string>;
-    search?: { returnTo: string; token?: string };
+    search?:
+      | { returnTo: string; token?: string }
+      /** Change 192: /pricing and /subscribe return to the page they came from. */
+      | { from?: string; plan?: "month" | "year" }
+      /** Change 192: the profile opens on a tab. */
+      | { tab: "access" };
   };
 }

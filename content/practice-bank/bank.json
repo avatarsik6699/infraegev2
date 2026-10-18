@@ -816528,7 +816528,125 @@
       ],
       "kind": "topic",
       "status": "published",
-      "course_id": null
+      "course_id": null,
+      "subtopics": [
+        {
+          "slug": "zapisi-i-rejting",
+          "access": "free",
+          "sections": [
+            "kak-ustroena-tema-26",
+            "obekt",
+            "ogranicheniya-i-cel",
+            "chtenie-fayla",
+            "sortirovka",
+            "klyuch-reytinga",
+            "vychislyaemye-pokazateli",
+            "granica-prohoda",
+            "ocenka-raboty",
+            "zapisi-itogo"
+          ]
+        },
+        {
+          "slug": "zhadnyj-vybor",
+          "access": "free",
+          "sections": [
+            "samye-malenkie",
+            "zhadnyy-algoritm",
+            "bolshe-vsego-faylov",
+            "samyy-bolshoy-fayl",
+            "pokupka-partiyami",
+            "dva-tipa",
+            "skidki",
+            "zhadnyy-itogo"
+          ]
+        },
+        {
+          "slug": "cepochki-i-pary",
+          "access": "free",
+          "sections": [
+            "vozmozhnosti-dlya-prodolzheniya",
+            "cepochka-snaruzhi",
+            "pochemu-cepochka-dlinnee",
+            "napravlenie-postroeniya",
+            "dva-ukazatelya",
+            "gruzy-i-konteynery",
+            "detali-dvuh-vidov",
+            "cepochki-itogo"
+          ]
+        },
+        {
+          "slug": "ryady-i-serii",
+          "access": "paid",
+          "sections": [
+            "pozicii-v-ryadah",
+            "mnozhestva-i-slovari",
+            "svobodnye-mesta",
+            "stolbcy",
+            "serii",
+            "liniya-s-promezhutkom",
+            "izolirovannaya-tochka",
+            "nakoplenie-po-klyuchu",
+            "ryady-itogo"
+          ]
+        },
+        {
+          "slug": "intervaly",
+          "access": "paid",
+          "sections": [
+            "tri-zadachi-intervalov",
+            "rannee-okonchanie",
+            "kontrprimery",
+            "vtoroy-kriteriy",
+            "obedinenie-intervalov",
+            "sobytiya",
+            "okno-nablyudeniya",
+            "intervaly-itogo"
+          ]
+        },
+        {
+          "slug": "modelirovanie",
+          "access": "paid",
+          "sections": [
+            "ispolnit-pravila",
+            "vybrat-ili-ispolnit",
+            "kamera-hraneniya",
+            "cena-i-nomer",
+            "dva-vida-mest",
+            "ochered",
+            "upakovka-gruzov",
+            "zadannaya-procedura",
+            "zhurnaly-i-kopii",
+            "modelirovanie-itogo"
+          ]
+        },
+        {
+          "slug": "pary-okno-kucha",
+          "access": "paid",
+          "sections": [
+            "dopolnitelnyy-urok-pary",
+            "podschyot-i-razbienie",
+            "perebor-par",
+            "skolzyashchee-okno",
+            "osobye-perehody",
+            "kucha",
+            "pary-itogo"
+          ]
+        },
+        {
+          "slug": "slozhnye-cepochki",
+          "access": "paid",
+          "sections": [
+            "dopolnitelnyy-urok-cepochki",
+            "chereduyushchiesya-cveta",
+            "rastushchiy-zazor",
+            "naimenshee-chislo-blokov",
+            "bloki-s-cherodovaniem",
+            "luchshiy-nabor",
+            "slozhnye-itogo"
+          ]
+        }
+      ],
+      "final_access": "paid"
     },
     {
       "id": "branching-and-enumeration",
@@ -816610,7 +816728,132 @@
       ],
       "kind": "topic",
       "status": "published",
-      "course_id": null
+      "course_id": null,
+      "subtopics": [
+        {
+          "slug": "komandy-i-derevo",
+          "access": "free",
+          "sections": [
+            "kak-ustroena-tema-13",
+            "ispolnitel-i-komanda",
+            "razlichnye-programmy",
+            "traektoriya",
+            "programmy-vseh-dlin",
+            "rost-chisla",
+            "napravlenie-komandy",
+            "pryzhok-cherez-chislo",
+            "derevo-variantov",
+            "odinakovye-chisla-v-dereve",
+            "derevo-itogo"
+          ]
+        },
+        {
+          "slug": "tablica-kolichestv",
+          "access": "free",
+          "sections": [
+            "summa-po-predshestvennikam",
+            "poslednyaya-komanda",
+            "edinica-v-starte",
+            "kazhdaya-programma-odin-raz",
+            "ot-starta-k-celi",
+            "razreshennye-predshestvenniki",
+            "tablica-vpered",
+            "tri-komandy",
+            "nedostizhimye-chisla",
+            "tablica-itogo"
+          ]
+        },
+        {
+          "slug": "etapy-i-zaprety",
+          "access": "free",
+          "sections": [
+            "uchastki-programmy",
+            "razrez-po-obyazatelnomu",
+            "novaya-edinica",
+            "zapreshchennoe-chislo",
+            "proverka-vychitaniem",
+            "obyazatelnoe-i-zapreshchennoe",
+            "neskolko-obyazatelnyh",
+            "zapret-po-svojstvu",
+            "etapy-itogo"
+          ]
+        },
+        {
+          "slug": "smysl-novoj-komandy",
+          "access": "paid",
+          "sections": [
+            "novaya-komanda",
+            "predshestvennik-iz-ravenstva",
+            "sostavnaya-komanda",
+            "dopisat-cifru",
+            "delenie-tochnoe-i-nacelo",
+            "kvadrat",
+            "vypolnenie-vpered",
+            "uslovnaya-komanda",
+            "komanda-itogo"
+          ]
+        },
+        {
+          "slug": "ubyvanie-i-delenie",
+          "access": "paid",
+          "sections": [
+            "ubyvayushchie-komandy",
+            "tablica-vniz",
+            "predshestvenniki-bolshe-n",
+            "okruglenie-vniz",
+            "okruglenie-vverh",
+            "vetvlenie-v-komande",
+            "zaprety-pri-ubyvanii",
+            "ubyvanie-itogo"
+          ]
+        },
+        {
+          "slug": "vychislenie-i-proverka",
+          "access": "paid",
+          "sections": [
+            "podschet-programmoj",
+            "dva-raznyh-chisla",
+            "rekursiya-f-x-y",
+            "svoi-x-i-y-u-vyzova",
+            "obyazatelnye-i-zapreshchennye-v-kode",
+            "zapominanie-rezultatov",
+            "ubyvanie-v-kode",
+            "tablichnyj-cikl",
+            "vhodyashchie-perehody",
+            "uslovnaya-komanda-v-cikle",
+            "w-n-i-f-x-y",
+            "vychislenie-itogo"
+          ]
+        },
+        {
+          "slug": "gruppy-programm",
+          "access": "paid",
+          "sections": [
+            "neskolko-chisel-srazu",
+            "i-ili-rovno-odno",
+            "tolko-pribavleniya",
+            "obratnyj-vopros",
+            "ne-oba",
+            "gruppy-itogo"
+          ]
+        },
+        {
+          "slug": "dlina-i-pamyat",
+          "access": "paid",
+          "sections": [
+            "ogranichenie-na-programmu",
+            "zadannaya-dlina",
+            "dlina-po-uchastkam",
+            "sostoyanie",
+            "vozvraty",
+            "zapret-povtora-podryad",
+            "skolko-chisel",
+            "dvizhenie-v-obe-storony",
+            "pamyat-itogo"
+          ]
+        }
+      ],
+      "final_access": "paid"
     },
     {
       "id": "coding-and-fano",
@@ -816672,7 +816915,106 @@
       ],
       "kind": "topic",
       "status": "published",
-      "course_id": null
+      "course_id": null,
+      "subtopics": [
+        {
+          "slug": "kod-i-uslovie-fano",
+          "access": "free",
+          "sections": [
+            "kak-ustroena-tema-4",
+            "kod-bukvy",
+            "dlina-kodovogo-slova",
+            "ravnomernyj-kod",
+            "chislo-posledovatelnostej",
+            "neodnoznachnost",
+            "uslovie-fano",
+            "chtenie-sleva",
+            "proverka-v-obe-storony",
+            "fano-itogo"
+          ]
+        },
+        {
+          "slug": "kodovoe-derevo",
+          "access": "free",
+          "sections": [
+            "kody-kak-puti",
+            "put-ot-kornya",
+            "fano-na-dereve",
+            "chtenie-po-derevu",
+            "svobodnaya-vetv",
+            "kratchajshij-kod",
+            "derevo-itogo"
+          ]
+        },
+        {
+          "slug": "mesto-dlya-vseh-bukv",
+          "access": "free",
+          "sections": [
+            "kod-kazhdoj-bukve",
+            "mesta-ne-hvatit",
+            "odnoj-vetvi-hvataet",
+            "naimenshaya-summa",
+            "neskolko-vetvej",
+            "mesto-itogo"
+          ]
+        },
+        {
+          "slug": "dlina-slova",
+          "access": "free",
+          "sections": [
+            "dlina-zakodirovannogo",
+            "chto-umenshat",
+            "chastoty-i-dliny",
+            "bukva-ne-v-slove",
+            "rezervnaya-vetv",
+            "chastym-korotkie",
+            "dlina-itogo"
+          ]
+        },
+        {
+          "slug": "forma-dereva",
+          "access": "free",
+          "sections": [
+            "korotkij-ne-vsegda",
+            "lovushka-chastoj",
+            "dokazatelstvo-minimuma",
+            "lovushka-vtoroj",
+            "perebor-form",
+            "programma-perebora",
+            "forma-itogo"
+          ]
+        },
+        {
+          "slug": "podschet-i-velichiny",
+          "access": "free",
+          "sections": [
+            "dopolnitelnyy-urok-podschet",
+            "podschet-kodov",
+            "maksimalnaya-dlina",
+            "proizvedenie-dlin",
+            "dva-trebovaniya",
+            "zapis-slova",
+            "chislo-edinic",
+            "narushenie-fano",
+            "podschet-itogo"
+          ]
+        },
+        {
+          "slug": "kod-po-zapisi",
+          "access": "free",
+          "sections": [
+            "dopolnitelnyy-urok-zapis",
+            "kody-po-povtoram",
+            "uravnenie-na-dliny",
+            "dva-slova",
+            "ne-tolko-fano",
+            "neravenstvo-krafta",
+            "metod-haffmana",
+            "zapis-itogo"
+          ]
+        }
+      ],
+      "final_access": "free"
     },
     {
       "id": "data-analysis",
@@ -816753,7 +817095,131 @@
       ],
       "kind": "topic",
       "status": "published",
-      "course_id": null
+      "course_id": null,
+      "subtopics": [
+        {
+          "slug": "tochki-i-rasstoyaniya",
+          "access": "free",
+          "sections": [
+            "kak-ustroena-tema-27",
+            "chto-v-fayle",
+            "tochka-kortezh",
+            "klaster-spisok",
+            "teorema-pifagora",
+            "math-dist",
+            "kvadrat-rasstoyaniya",
+            "celaya-chast-otveta",
+            "tochki-itogo"
+          ]
+        },
+        {
+          "slug": "fajl-s-tochkami",
+          "access": "free",
+          "sections": [
+            "chtenie-bez-poter",
+            "pervye-stroki",
+            "razbor-stroki",
+            "funkciya-chteniya",
+            "zagolovok",
+            "dopolnitelnye-stolbcy",
+            "kod-zvezdy",
+            "stroka-chasticy",
+            "fayl-itogo"
+          ]
+        },
+        {
+          "slug": "razdelenie-na-klastery",
+          "access": "free",
+          "sections": [
+            "pravilo-razdeleniya",
+            "diagramma-rasseyaniya",
+            "koordinatnye-granicy",
+            "tri-gruppy",
+            "anomalii",
+            "naklonnaya-granica",
+            "razdelyayushchiy-priznak",
+            "vychislyaemyy-priznak",
+            "razdelenie-itogo"
+          ]
+        },
+        {
+          "slug": "centr-klastera",
+          "access": "paid",
+          "sections": [
+            "centr-tochka-klastera",
+            "summa-rasstoyaniy",
+            "perebor-kandidatov",
+            "programma-centra",
+            "rasstoyanie-do-sebya",
+            "srednee-ne-centr",
+            "tri-vyrazheniya",
+            "srednee-rasstoyanie",
+            "formula-rasstoyaniya",
+            "vremya-poiska",
+            "centr-itogo"
+          ]
+        },
+        {
+          "slug": "otvet-po-centram",
+          "access": "paid",
+          "sections": [
+            "vychislenie-otveta",
+            "korotkaya-zapis",
+            "srednee-centrov",
+            "minimalnye-koordinaty",
+            "malenkiy-i-bolshoy",
+            "obekty-nuzhnogo-vida",
+            "isklyuchenie-klasterov",
+            "masshtabirovanie",
+            "float",
+            "polnyy-primer",
+            "otvet-itogo"
+          ]
+        },
+        {
+          "slug": "rasstoyaniya-i-pary",
+          "access": "paid",
+          "sections": [
+            "iz-rasstoyaniy",
+            "svoy-i-chuzhoy",
+            "diametr",
+            "mezhklasternyy-diametr",
+            "tochki-okolo-centra",
+            "blizhayshiy-obekt",
+            "rasstoyaniya-itogo"
+          ]
+        },
+        {
+          "slug": "cepochki-sosedej",
+          "access": "paid",
+          "sections": [
+            "dopolnitelnyy-urok-sosedi",
+            "porog-sosedstva",
+            "postroenie-gruppy",
+            "pochemu-vsya-gruppa",
+            "porog-v-primere",
+            "obosnovanie-poroga",
+            "malenkie-gruppy",
+            "dve-operacii",
+            "sosedi-itogo"
+          ]
+        },
+        {
+          "slug": "drugie-centry-i-uskoreniya",
+          "access": "paid",
+          "sections": [
+            "dopolnitelnyy-urok-centry",
+            "samaya-dalyokaya-tochka",
+            "antipod",
+            "summa-kvadratov",
+            "simmetriya",
+            "dosrochnaya-ostanovka",
+            "bez-garantii",
+            "centry-itogo"
+          ]
+        }
+      ],
+      "final_access": "paid"
     },
     {
       "id": "divisors-and-masks",
@@ -816822,112 +817288,227 @@
       ],
       "kind": "topic",
       "status": "published",
-      "course_id": null
+      "course_id": null,
+      "subtopics": [
+        {
+          "slug": "perebor-i-proverki",
+          "access": "free",
+          "sections": [
+            "kak-ustroena-tema",
+            "chetyre-dejstviya",
+            "delenie-s-ostatkom",
+            "uslovie-v-kod",
+            "perebor-diapazona",
+            "chislo-i-stroka",
+            "operacii-s-ciframi",
+            "proverka-in",
+            "perebor-po-ubyvaniyu",
+            "perebor-korotko"
+          ]
+        },
+        {
+          "slug": "deliteli-parami",
+          "access": "free",
+          "sections": [
+            "pary-ideya",
+            "delitel",
+            "perebor-do-n",
+            "pary-delitelej",
+            "kvadrat-granica",
+            "pochemu-do-kornya",
+            "poisk-po-shagam",
+            "celaya-chast-kornya",
+            "koren-odin-raz",
+            "funkciya-delitelej",
+            "otbor-delitelej",
+            "harakteristiki-spiska",
+            "chetnye-deliteli",
+            "schetchik-delitelej",
+            "pary-korotko"
+          ]
+        },
+        {
+          "slug": "chisla-po-delitelyam",
+          "access": "paid",
+          "sections": [
+            "chisla-ideya",
+            "rovno-k-delitelej",
+            "maksimum-delitelej",
+            "velichina-m",
+            "naimenshij-i-naibolshij",
+            "pervye-posle-granicy",
+            "chisla-korotko"
+          ]
+        },
+        {
+          "slug": "prostye-i-razlozhenie",
+          "access": "paid",
+          "sections": [
+            "prostye-ideya",
+            "prostye-chisla",
+            "razlozhenie",
+            "prostye-deliteli",
+            "mnozhiteli-i-deliteli",
+            "cifry-mnozhitelej",
+            "skorost-razlozheniya",
+            "prostye-korotko"
+          ]
+        },
+        {
+          "slug": "maski",
+          "access": "paid",
+          "sections": [
+            "maski-ideya",
+            "znaki-maski",
+            "dlina-zvezdochki",
+            "fnmatch",
+            "perebor-kratnyh",
+            "pervoe-kratnoe",
+            "generaciya-po-maske",
+            "ocenka-kandidatov",
+            "nuli-v-zvezdochke",
+            "neskolko-zvezdochek",
+            "maska-i-deliteli",
+            "opredelenie-znakov",
+            "maski-korotko"
+          ]
+        },
+        {
+          "slug": "vid-chisla",
+          "access": "paid",
+          "sections": [
+            "vid-zachem",
+            "formula-kolichestva",
+            "forma-chisla",
+            "nechetnoe-kolichestvo",
+            "summa-delitelej",
+            "vid-vmesto-perebora",
+            "vid-i-maska",
+            "vid-korotko"
+          ]
+        }
+      ],
+      "final_access": "paid"
     },
     {
       "id": "excel-cell-values",
       "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
       "kind": "course",
       "status": "published",
-      "course_id": "excel"
+      "course_id": "excel",
+      "access": "free"
     },
     {
       "id": "excel-conditional-count",
       "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6", "s7", "s8"],
       "kind": "course",
       "status": "published",
-      "course_id": "excel"
+      "course_id": "excel",
+      "access": "paid"
     },
     {
       "id": "excel-conditions",
       "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
       "kind": "course",
       "status": "published",
-      "course_id": "excel"
+      "course_id": "excel",
+      "access": "paid"
     },
     {
       "id": "excel-first-formulas",
       "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
       "kind": "course",
       "status": "published",
-      "course_id": "excel"
+      "course_id": "excel",
+      "access": "free"
     },
     {
       "id": "excel-from-task-to-table",
       "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6", "s7"],
       "kind": "course",
       "status": "published",
-      "course_id": "excel"
+      "course_id": "excel",
+      "access": "paid"
     },
     {
       "id": "excel-input-files",
       "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
       "kind": "course",
       "status": "published",
-      "course_id": "excel"
+      "course_id": "excel",
+      "access": "free"
     },
     {
       "id": "excel-lookup",
       "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
       "kind": "course",
       "status": "published",
-      "course_id": "excel"
+      "course_id": "excel",
+      "access": "paid"
     },
     {
       "id": "excel-neighbour-cells",
       "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6"],
       "kind": "course",
       "status": "published",
-      "course_id": "excel"
+      "course_id": "excel",
+      "access": "paid"
     },
     {
       "id": "excel-numbers",
       "sections": ["intro", "s1", "s2", "s3", "s4"],
       "kind": "course",
       "status": "published",
-      "course_id": "excel"
+      "course_id": "excel",
+      "access": "paid"
     },
     {
       "id": "excel-range-functions",
       "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6"],
       "kind": "course",
       "status": "published",
-      "course_id": "excel"
+      "course_id": "excel",
+      "access": "free"
     },
     {
       "id": "excel-references",
       "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6"],
       "kind": "course",
       "status": "published",
-      "course_id": "excel"
+      "course_id": "excel",
+      "access": "free"
     },
     {
       "id": "excel-sheet",
       "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
       "kind": "course",
       "status": "published",
-      "course_id": "excel"
+      "course_id": "excel",
+      "access": "free"
     },
     {
       "id": "excel-sort-filter",
       "sections": ["intro", "s1", "s2", "s3", "s4"],
       "kind": "course",
       "status": "published",
-      "course_id": "excel"
+      "course_id": "excel",
+      "access": "paid"
     },
     {
       "id": "excel-tables-pivots",
       "sections": ["intro", "s1", "s2", "s3", "s4"],
       "kind": "course",
       "status": "published",
-      "course_id": "excel"
+      "course_id": "excel",
+      "access": "paid"
     },
     {
       "id": "excel-text-dates",
       "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
       "kind": "course",
       "status": "published",
-      "course_id": "excel"
+      "course_id": "excel",
+      "access": "paid"
     },
     {
       "id": "executors",
@@ -816989,7 +817570,106 @@
       ],
       "kind": "topic",
       "status": "published",
-      "course_id": null
+      "course_id": null,
+      "subtopics": [
+        {
+          "slug": "lenta-i-komanda",
+          "access": "free",
+          "sections": [
+            "takt-mashiny",
+            "kak-ustroena-tema-12",
+            "lenta-i-pustoj-simvol",
+            "sostoyanie",
+            "komanda-v-kletke",
+            "odin-takt",
+            "tablica-na-slove-10100",
+            "nachalnoe-polozhenie",
+            "lenta-itogo"
+          ]
+        },
+        {
+          "slug": "prohod-i-kolichestva",
+          "access": "free",
+          "sections": [
+            "odnokratnyj-prohod",
+            "nezavisimaya-zamena",
+            "kolichestva-simvolov",
+            "uslovie-na-rezultat",
+            "uslovie-na-vhod",
+            "summa-rezultata",
+            "prohod-itogo"
+          ]
+        },
+        {
+          "slug": "slovo-i-chislo",
+          "access": "paid",
+          "sections": [
+            "chislo-na-lente",
+            "slovo-i-chislo",
+            "pripisyvanie-sprava",
+            "edinica-sleva",
+            "zamena-starshego-razryada",
+            "inversiya",
+            "pribavlenie-edinicy",
+            "slovo-itogo"
+          ]
+        },
+        {
+          "slug": "hvost-i-obratnaya-zadacha",
+          "access": "paid",
+          "sections": [
+            "hvost-i-odna-cifra",
+            "vychitanie-edinicy",
+            "otkuda-nuli",
+            "granica-i-primer",
+            "osobye-sluchai",
+            "zerkalnaya-tablica",
+            "hvost-itogo"
+          ]
+        },
+        {
+          "slug": "sostoyaniya-i-fazy",
+          "access": "paid",
+          "sections": [
+            "fazy-raboty",
+            "perehody-mezhdu-sostoyaniyami",
+            "fazy-po-dejstviyam",
+            "rezultat-dlya-lyuboj-dliny",
+            "razryady-na-krayah",
+            "sostoyanie-kak-pamyat",
+            "fazy-itogo"
+          ]
+        },
+        {
+          "slug": "proverka-resheniya",
+          "access": "paid",
+          "sections": [
+            "proverka-programmoj",
+            "takt-v-programme",
+            "lenta-slovar",
+            "universalnaya-funkciya",
+            "izmenennyj-fragment",
+            "kraevye-slova",
+            "proverka-formuly",
+            "zaciklivanie",
+            "proverka-itogo"
+          ]
+        },
+        {
+          "slug": "ogranicheniya-na-summu",
+          "access": "paid",
+          "sections": [
+            "summa-pri-ogranicheniyah",
+            "tri-kolichestva",
+            "naimenshaya-summa",
+            "naibolshaya-summa",
+            "prostoe-chislo",
+            "prostaya-summa",
+            "summa-itogo"
+          ]
+        }
+      ],
+      "final_access": "paid"
     },
     {
       "id": "graph-analysis",
@@ -817053,7 +817733,108 @@
       ],
       "kind": "topic",
       "status": "published",
-      "course_id": null
+      "course_id": null,
+      "subtopics": [
+        {
+          "slug": "graf-i-put",
+          "access": "free",
+          "sections": [
+            "graf-ideya",
+            "vershiny-i-rebra",
+            "napravlenie",
+            "ves",
+            "put",
+            "cikly",
+            "kratchajshij",
+            "graf-itogo"
+          ]
+        },
+        {
+          "slug": "luchshij-ostatok",
+          "access": "free",
+          "sections": [
+            "ostatok-ideya",
+            "zhadnyj-vybor",
+            "perebor-putej",
+            "odno-chislo",
+            "funkciya-f",
+            "tupik",
+            "ostatok-itogo"
+          ]
+        },
+        {
+          "slug": "graf-iz-fajla",
+          "access": "paid",
+          "sections": [
+            "fajl-ideya",
+            "stroka-fajla",
+            "split-i-int",
+            "drobnaya-chast",
+            "float",
+            "decimal",
+            "spisok-reber",
+            "spisok-smezhnosti",
+            "fajl-itogo"
+          ]
+        },
+        {
+          "slug": "rekursiya-s-zapominaniem",
+          "access": "paid",
+          "sections": [
+            "rekursiya-ideya",
+            "funkciya-best",
+            "cache",
+            "rekursiya-po-shagam",
+            "programma",
+            "zavershenie",
+            "dinamika",
+            "rekursiya-itogo"
+          ]
+        },
+        {
+          "slug": "usloviya-na-put",
+          "access": "paid",
+          "sections": [
+            "usloviya-ideya",
+            "cel-parametr",
+            "obyazatelnaya",
+            "zapret",
+            "puti-net",
+            "usloviya-itogo"
+          ]
+        },
+        {
+          "slug": "povtornye-prohody",
+          "access": "paid",
+          "sections": [
+            "prohody-zachem",
+            "ot-nachala",
+            "nachalnye",
+            "relaksaciya",
+            "poryadok-strok",
+            "v-1-prohodov",
+            "rannyaya-ostanovka",
+            "programma-prohodov",
+            "skorost-prohodov",
+            "vosstanovlenie",
+            "prohody-itogo"
+          ]
+        },
+        {
+          "slug": "drugie-sposoby",
+          "access": "paid",
+          "sections": [
+            "drugie-zachem",
+            "topologicheskij",
+            "dejkstra",
+            "kolichestvo-putej",
+            "dlinnejshij",
+            "rovno-k",
+            "drugie-itogo"
+          ]
+        }
+      ],
+      "final_access": "paid"
     },
     {
       "id": "information-amount",
@@ -817113,7 +817894,98 @@
       ],
       "kind": "topic",
       "status": "published",
-      "course_id": null
+      "course_id": null,
+      "subtopics": [
+        {
+          "slug": "parol-v-bajtah",
+          "access": "free",
+          "sections": [
+            "kak-ustroena-tema-11",
+            "chto-hranim",
+            "kod-simvola",
+            "minimalno-vozmozhnoe",
+            "alfavit",
+            "obyom-parolya",
+            "kolichestvo-i-pamyat",
+            "celye-bajty",
+            "chto-okruglyat",
+            "elementy-i-sostoyaniya",
+            "raschyot-python",
+            "parol-itogo"
+          ]
+        },
+        {
+          "slug": "zapisi",
+          "access": "free",
+          "sections": [
+            "zapis-polzovatelya",
+            "dopolnitelnye-svedeniya",
+            "obratnyj-hod",
+            "obshchij-zagolovok",
+            "svedeniya-v-bitah",
+            "zapisi-itogo"
+          ]
+        },
+        {
+          "slug": "ne-bolee",
+          "access": "free",
+          "sections": [
+            "diapazon",
+            "okruglenie-skryvaet",
+            "dlina-parolya",
+            "moshchnost-alfavita",
+            "granicy",
+            "naibolshaya-dlina",
+            "naibolshaya-moshchnost",
+            "specialnye-simvoly",
+            "naibolshee-chislo-zapisej",
+            "krupnye-chisla",
+            "ne-bolee-itogo"
+          ]
+        },
+        {
+          "slug": "bolee-i-ne-menee",
+          "access": "free",
+          "sections": [
+            "nizhnyaya-granica",
+            "naimenshee-chislo-bajtov",
+            "ne-pomeshchaetsya",
+            "minimalnaya-moshchnost",
+            "minimalnyj-nabor",
+            "perebor-bitov",
+            "celaya-chast-zapisi",
+            "krupnye-chisla-granica",
+            "bolee-itogo"
+          ]
+        },
+        {
+          "slug": "sostavnye-kody",
+          "access": "free",
+          "sections": [
+            "po-chastyam",
+            "razbor-koda",
+            "gde-bajty",
+            "nomer-kak-chislo",
+            "bit-length",
+            "nomer-i-kod",
+            "urovni",
+            "sostavnye-itogo"
+          ]
+        },
+        {
+          "slug": "sluzhebnye-dannye",
+          "access": "free",
+          "sections": [
+            "dopolnitelnyy-urok-sluzhebnye",
+            "chislo-zagolovkov",
+            "naibolshee-soobshchenie",
+            "razmer-zavisit",
+            "perebor-kolichestva",
+            "sluzhebnye-itogo"
+          ]
+        }
+      ],
+      "final_access": "free"
     },
     {
       "id": "information-models",
@@ -817157,7 +818029,82 @@
       ],
       "kind": "topic",
       "status": "published",
-      "course_id": null
+      "course_id": null,
+      "subtopics": [
+        {
+          "slug": "model-i-stepeni",
+          "access": "free",
+          "sections": [
+            "kak-ustroena-tema-1",
+            "informacionnaya-model",
+            "graf-dorog",
+            "doroga-i-marshrut",
+            "tablica-dorog",
+            "stepen-punkta",
+            "proverka-chisla-dorog",
+            "model-itogo"
+          ]
+        },
+        {
+          "slug": "sosedi-i-opory",
+          "access": "free",
+          "sections": [
+            "okruzhenie-punkta",
+            "profil-sosedej",
+            "opornyj-punkt",
+            "polnyj-primer",
+            "sosedi-itogo"
+          ]
+        },
+        {
+          "slug": "kandidaty-i-proverka",
+          "access": "free",
+          "sections": [
+            "pohozhie-punkty",
+            "sovpadenie-ne-dokazatelstvo",
+            "treugolnik-i-svyazi",
+            "obshchie-sosedi",
+            "predel-priznakov",
+            "proverka-predpolozheniya",
+            "kandidaty-itogo"
+          ]
+        },
+        {
+          "slug": "simmetriya-i-otvet",
+          "access": "free",
+          "sections": [
+            "neskolko-sootvetstvij",
+            "simmetriya",
+            "tri-situacii",
+            "odnoznachnyj-otvet",
+            "simmetriya-itogo"
+          ]
+        },
+        {
+          "slug": "dliny-i-format",
+          "access": "free",
+          "sections": [
+            "dejstvie-po-voprosu",
+            "bukvy-v-nomera",
+            "dliny-kak-priznak",
+            "format-otveta",
+            "dliny-itogo"
+          ]
+        },
+        {
+          "slug": "dopolnitelnye-usloviya-i-marshruty",
+          "access": "free",
+          "sections": [
+            "redkie-usloviya",
+            "sravnenie-dlin",
+            "propushchennaya-doroga",
+            "kratchajshij-marshrut",
+            "dalnee-okruzhenie-i-mosty",
+            "dopolnitelnye-itogo"
+          ]
+        }
+      ],
+      "final_access": "free"
     },
     {
       "id": "logic-transformations",
@@ -817241,7 +818188,128 @@
       ],
       "kind": "topic",
       "status": "published",
-      "course_id": null
+      "course_id": null,
+      "subtopics": [
+        {
+          "slug": "parametr-i-lozhnyj-sluchaj",
+          "access": "free",
+          "sections": [
+            "kak-ustroena-tema-15",
+            "parametr-vybirayut-odin-raz",
+            "kontrprimer-i-dokazatelstvo",
+            "oblast-znachenij",
+            "logicheskie-bukvy",
+            "implikaciya",
+            "skobki",
+            "otricanie",
+            "lozhnyj-sluchaj",
+            "minimum-i-maksimum",
+            "formula-lozhna-vsegda",
+            "parametr-itogo"
+          ]
+        },
+        {
+          "slug": "prinadlezhnost-i-oblast",
+          "access": "free",
+          "sections": [
+            "sudba-kazhdoj-tochki",
+            "prinadlezhnost",
+            "podstanovki-0-i-1",
+            "kolichestvo-i-summa",
+            "dlina-otrezka",
+            "peresechenie-p-i-q",
+            "vnutri-p-q",
+            "promezhutok-mezhdu-chastyami",
+            "slozhnaya-formula",
+            "koncy-otrezkov",
+            "ekvivalentnost",
+            "poryadok-resheniya",
+            "oblast-itogo"
+          ]
+        },
+        {
+          "slug": "bity-i-maski",
+          "access": "paid",
+          "sections": [
+            "bity-parametra",
+            "razryady-i-vesa",
+            "porazryadnoe-i",
+            "naimenshee-a",
+            "naibolshee-a",
+            "dostatochnost",
+            "konechnaya-proverka",
+            "bity-poryadok",
+            "bity-itogo"
+          ]
+        },
+        {
+          "slug": "opasnaya-oblast",
+          "access": "paid",
+          "sections": [
+            "opasnaya-oblast",
+            "tochki-reshetki",
+            "odna-chast-s-a",
+            "vse-lozhnye-chasti",
+            "naibolshee-znachenie",
+            "dve-chasti-i",
+            "strogij-znak",
+            "napravlenie-vliyaniya",
+            "oblast-poryadok",
+            "parametr-mnozhitelem",
+            "opasnaya-itogo"
+          ]
+        },
+        {
+          "slug": "delimost-i-smeshannye-usloviya",
+          "access": "paid",
+          "sections": [
+            "opasnyj-nabor",
+            "del",
+            "nod-i-nok",
+            "delimost-v-strelke",
+            "naibolshee-a-2",
+            "dopolnitelnoe-ogranichenie",
+            "obshchie-deliteli",
+            "napravlenie-delimosti",
+            "period",
+            "delimost-poryadok",
+            "konechnyj-opasnyj-nabor",
+            "nekratnye-chisla",
+            "kratno-no-ne-drugomu",
+            "konechnoe-mnozhestvo-a",
+            "delimost-itogo"
+          ]
+        },
+        {
+          "slug": "konechnaya-proverka",
+          "access": "paid",
+          "sections": [
+            "programma-proveryaet-model",
+            "poisk-kontrprimera",
+            "formula-na-python",
+            "kazhdoe-znachenie-x",
+            "snachala-kontrprimer",
+            "proverka-otrezkov",
+            "proverka-na-ploskosti",
+            "period-delimosti",
+            "proverka-itogo"
+          ]
+        },
+        {
+          "slug": "novye-predikaty",
+          "access": "paid",
+          "sections": [
+            "novoe-uslovie",
+            "predikat-po-opredeleniyu",
+            "obychnaya-chast-formuly",
+            "max",
+            "nabor-zavisit-ot-a",
+            "svyazannye-delimosti",
+            "predikaty-itogo"
+          ]
+        }
+      ],
+      "final_access": "paid"
     },
     {
       "id": "media-coding",
@@ -817326,7 +818394,129 @@
       ],
       "kind": "topic",
       "status": "published",
-      "course_id": null
+      "course_id": null,
+      "subtopics": [
+        {
+          "slug": "bity-i-kody",
+          "access": "free",
+          "sections": [
+            "kak-ustroena-tema-7",
+            "bit",
+            "bajt",
+            "stepeni-dvojki",
+            "kilogercy",
+            "chislo-kodov",
+            "dlina-koda",
+            "nuzhnaya-i-vydelennaya",
+            "obyom-dannyh",
+            "obyom-teksta",
+            "bity-itogo"
+          ]
+        },
+        {
+          "slug": "izobrazhenie",
+          "access": "free",
+          "sections": [
+            "setka-kodov",
+            "rastr",
+            "kod-cveta",
+            "obyom-izobrazheniya",
+            "po-poryadku",
+            "glubina-cveta",
+            "tri-bajta",
+            "obratnaya-zadacha",
+            "cveta-i-obyom",
+            "razreshenie",
+            "mnozhiteli",
+            "izobrazhenie-itogo"
+          ]
+        },
+        {
+          "slug": "szhatie-i-zagolovki",
+          "access": "free",
+          "sections": [
+            "szhatie-i-sluzhebnye",
+            "szhatie",
+            "na-do-v",
+            "procent-umensheniya",
+            "ishodnyj-obyom",
+            "posledovatelnye-izmeneniya",
+            "procenty-v-programme",
+            "zagolovok",
+            "neskolko-fajlov",
+            "obratnyj-poryadok",
+            "drobnaya-glubina",
+            "szhatie-itogo"
+          ]
+        },
+        {
+          "slug": "zvuk",
+          "access": "free",
+          "sections": [
+            "izmereniya",
+            "otschyoty",
+            "chastota-diskretizacii",
+            "glubina-kodirovaniya",
+            "kanaly",
+            "obyom-zapisi",
+            "dlitelnost",
+            "vremya-v-sekundah",
+            "okruglenie-vverh",
+            "dve-zapisi",
+            "raznoe-szhatie",
+            "v-1-5-raza",
+            "zvuk-itogo"
+          ]
+        },
+        {
+          "slug": "peredacha",
+          "access": "free",
+          "sections": [
+            "vremya-peredachi",
+            "skorost",
+            "edinicy",
+            "dlitelnost-i-peredacha",
+            "otnosheniya",
+            "bez-otstavaniya",
+            "snimki",
+            "nabor-snimkov",
+            "naibolshee-chislo",
+            "podbor-szhatiya",
+            "ekonomiya",
+            "albom",
+            "peredacha-itogo"
+          ]
+        },
+        {
+          "slug": "okruglenie",
+          "access": "free",
+          "sections": [
+            "napravlenie-okrugleniya",
+            "chto-sprashivayut",
+            "promezhutochnye",
+            "operacii-python",
+            "strogie-neravenstva",
+            "sosednee-znachenie",
+            "uroven-pamyati",
+            "fajly-i-nositeli",
+            "zapolnennye-nositeli",
+            "okruglenie-itogo"
+          ]
+        },
+        {
+          "slug": "sostavnye-zapisi",
+          "access": "free",
+          "sections": [
+            "dopolnitelnyy-urok-zapisi",
+            "odinakovyj-zagolovok",
+            "tekst-i-skan",
+            "zamena-skana",
+            "audiokniga",
+            "sostavnye-itogo"
+          ]
+        }
+      ],
+      "final_access": "free"
     },
     {
       "id": "networks",
@@ -817399,7 +818589,117 @@
       ],
       "kind": "topic",
       "status": "published",
-      "course_id": null
+      "course_id": null,
+      "subtopics": [
+        {
+          "slug": "adres-i-maska",
+          "access": "free",
+          "sections": [
+            "kak-ustroena-tema-10",
+            "zachem-ip",
+            "32-bita",
+            "obratnoe-preobrazovanie",
+            "oktet",
+            "vosem-bitov",
+            "modul-ipaddress",
+            "set-i-uzel",
+            "maska",
+            "edinica-v-maske",
+            "oktety-maski",
+            "maska-po-prefiksu",
+            "adres-itogo"
+          ]
+        },
+        {
+          "slug": "adres-seti",
+          "access": "free",
+          "sections": [
+            "granicy-seti",
+            "adres-seti",
+            "primer-192",
+            "shirokoveshchatelnyj",
+            "ip-network",
+            "tretij-oktet",
+            "razmer-bloka",
+            "forma-otveta",
+            "set-itogo"
+          ]
+        },
+        {
+          "slug": "kolichestvo-i-nomer-uzla",
+          "access": "free",
+          "sections": [
+            "kolichestvo-i-nomer",
+            "svobodnye-bity",
+            "maska-pod-kolichestvo",
+            "podseti",
+            "nomer-uzla",
+            "neskolko-oktetov",
+            "adres-kak-chislo",
+            "adres-po-nomeru",
+            "uzel-itogo"
+          ]
+        },
+        {
+          "slug": "maska-po-adresu-seti",
+          "access": "free",
+          "sections": [
+            "maska-po-bitam",
+            "sravnenie-bitov",
+            "odna-poziciya",
+            "neodnoznachnost",
+            "neravenstvo",
+            "perebor-dlin",
+            "polnaya-programma",
+            "maska-itogo"
+          ]
+        },
+        {
+          "slug": "dva-uzla",
+          "access": "free",
+          "sections": [
+            "odna-set",
+            "setevye-chasti",
+            "pervoe-razlichie",
+            "programma-dvuh-setej",
+            "samaya-dlinnaya",
+            "dva-itogo"
+          ]
+        },
+        {
+          "slug": "dvoichnaya-zapis-adresov",
+          "access": "free",
+          "sections": [
+            "fiksirovannye-bity",
+            "svobodnye-i-fiksirovannye",
+            "chislo-edinic",
+            "chetnost-edinic",
+            "specialnye-adresa",
+            "chast-adresa",
+            "dlya-vseh",
+            "naimenshij-adres",
+            "razmer-perebora",
+            "krajnyaya-maska",
+            "naibolshee-znachenie",
+            "dvoichnaya-itogo"
+          ]
+        },
+        {
+          "slug": "maska-po-usloviyu",
+          "access": "free",
+          "sections": [
+            "dopolnitelnyy-urok-maska",
+            "vybor-pozicij",
+            "formula",
+            "maska-po-usloviyu",
+            "nomer-uzla-uslovie",
+            "rovno-stolko",
+            "vtoroj-uzel",
+            "usloviya-itogo"
+          ]
+        }
+      ],
+      "final_access": "free"
     },
     {
       "id": "number-sequences",
@@ -817466,7 +818766,117 @@
       ],
       "kind": "topic",
       "status": "published",
-      "course_id": null
+      "course_id": null,
+      "subtopics": [
+        {
+          "slug": "chisla-i-proverki",
+          "access": "free",
+          "sections": [
+            "kak-ustroena-tema",
+            "posledovatelnost",
+            "kolichestvo-i-velichina",
+            "spisok",
+            "fajl-v-spisok",
+            "pervaya-stroka",
+            "proverki-usloviya",
+            "ostatok",
+            "summa-i-proizvedenie",
+            "chisla-itogo"
+          ]
+        },
+        {
+          "slug": "skolko-podhodit",
+          "access": "free",
+          "sections": [
+            "skolko-elementov",
+            "i-ili-ne",
+            "rovno-odno",
+            "raznye-svojstva",
+            "skobki",
+            "odno-a-drugoe",
+            "skolko-itogo"
+          ]
+        },
+        {
+          "slug": "cifry-i-znak",
+          "access": "free",
+          "sections": [
+            "cifry-i-znak",
+            "poslednie-cifry",
+            "gde-nuzhen-modul",
+            "kolichestvo-cifr",
+            "cifra-v-razryade",
+            "znak-chisla",
+            "cifry-itogo"
+          ]
+        },
+        {
+          "slug": "sosednie-gruppy",
+          "access": "paid",
+          "sections": [
+            "granica-perebora",
+            "sosednie-pary",
+            "sosednie-trojki",
+            "pervaya-zadacha",
+            "bez-spiska-summ",
+            "pochemu-verno",
+            "gruppy-itogo"
+          ]
+        },
+        {
+          "slug": "vsya-posledovatelnost",
+          "access": "paid",
+          "sections": [
+            "porog-po-vsem",
+            "predvaritelnaya-harakteristika",
+            "vidy-harakteristik",
+            "ishodnye-chisla",
+            "polnaya-zadacha",
+            "trojki-s-porogom",
+            "srednee",
+            "srednee-bez-drobej",
+            "ne-povtoryat",
+            "lomayushchie-preobrazovaniya",
+            "posledovatelnost-itogo"
+          ]
+        },
+        {
+          "slug": "chto-proveryat-i-vyvodit",
+          "access": "paid",
+          "sections": [
+            "poryadok-dejstvij",
+            "dlinnye-formulirovki",
+            "proverka-i-otvet",
+            "ostatok-minimalnogo",
+            "malenkij-spisok",
+            "dva-naibolshih",
+            "vyvod-itogo"
+          ]
+        },
+        {
+          "slug": "treugolniki",
+          "access": "paid",
+          "sections": [
+            "treugolniki",
+            "sushchestvovanie",
+            "vid-treugolnika",
+            "pryamougolnyj",
+            "treugolniki-itogo"
+          ]
+        },
+        {
+          "slug": "lyubye-pary",
+          "access": "paid",
+          "sections": [
+            "lyubye-pary",
+            "ne-sosedi",
+            "chislo-proverok",
+            "po-ostatkam",
+            "pary-itogo"
+          ]
+        }
+      ],
+      "final_access": "paid"
     },
     {
       "id": "numeral-systems",
@@ -817538,7 +818948,116 @@
       ],
       "kind": "topic",
       "status": "published",
-      "course_id": null
+      "course_id": null,
+      "subtopics": [
+        {
+          "slug": "zapis-i-znachenie",
+          "access": "free",
+          "sections": [
+            "kak-ustroena-tema-14",
+            "chislo-i-zapis-14",
+            "osnovanie",
+            "znachenie-zapisi",
+            "cifry-bukvy",
+            "naimenshee-osnovanie",
+            "dlina-zapisi-14",
+            "ostatok-i-chastnoe",
+            "posledovatelnoe-delenie",
+            "sdvigi",
+            "zapis-itogo-14"
+          ]
+        },
+        {
+          "slug": "stepeni-blokami",
+          "access": "free",
+          "sections": [
+            "bloki-cifr",
+            "slozhenie",
+            "koefficient",
+            "minus-edinica",
+            "raznost-stepenej",
+            "sborka-iz-blokov",
+            "perevod-gruppami",
+            "odno-osnovanie",
+            "neudobnoe-vychitaemoe",
+            "stepeni-itogo"
+          ]
+        },
+        {
+          "slug": "cifry-programmoj",
+          "access": "free",
+          "sections": [
+            "odin-sposob",
+            "bolshie-stepeni",
+            "podschyot-cifry",
+            "spisok-cifr",
+            "voprosy-o-zapisi",
+            "cifry-so-svojstvom",
+            "bin-oct-hex",
+            "programma-itogo"
+          ]
+        },
+        {
+          "slug": "parametr-x",
+          "access": "free",
+          "sections": [
+            "perebor-x",
+            "x-chislo",
+            "bez-zaimstvovanij",
+            "maksimalnoe-x",
+            "ne-plavno",
+            "naibolshee-kolichestvo",
+            "while",
+            "parametr-itogo"
+          ]
+        },
+        {
+          "slug": "neizvestnaya-cifra",
+          "access": "free",
+          "sections": [
+            "perebor-cifry",
+            "chto-oboznachaet",
+            "dopustimye-znacheniya",
+            "razlozhenie",
+            "naimenshaya-cifra",
+            "funkciya-znacheniya",
+            "strokovyj-perebor",
+            "v-otvet",
+            "ves-razryada",
+            "do-programmy",
+            "cifra-itogo"
+          ]
+        },
+        {
+          "slug": "dve-cifry",
+          "access": "free",
+          "sections": [
+            "dve-cifry",
+            "diapazony",
+            "vyrazhenie-ot-dvuh",
+            "ne-pervaya-para",
+            "naimenshee-znachenie",
+            "sama-para",
+            "dve-itogo"
+          ]
+        },
+        {
+          "slug": "neizvestnoe-osnovanie",
+          "access": "free",
+          "sections": [
+            "dopolnitelnyy-urok-osnovanie",
+            "osnovanie-po-formule",
+            "osnovanie-i-cifra",
+            "ravenstvo-s-bukvami",
+            "delenie-na-q-1",
+            "delenie-na-q-plus-1",
+            "dobavka",
+            "nachalo-perebora",
+            "osnovanie-itogo"
+          ]
+        }
+      ],
+      "final_access": "free"
     },
     {
       "id": "parallel-computing",
@@ -817603,7 +819122,115 @@
       ],
       "kind": "topic",
       "status": "published",
-      "course_id": null
+      "course_id": null,
+      "subtopics": [
+        {
+          "slug": "process-i-zavisimost",
+          "access": "free",
+          "sections": [
+            "kak-ustroena-tema-22",
+            "process",
+            "tablica-processov",
+            "dlitelnost-nachalo-okonchanie",
+            "process-itogo"
+          ]
+        },
+        {
+          "slug": "rannee-raspisanie",
+          "access": "free",
+          "sections": [
+            "nachalo-i-okonchanie",
+            "poslednij-postavshchik",
+            "graf-zavisimostej",
+            "raschet-tablicy",
+            "minimalnoe-obshchee-vremya",
+            "raschet-v-excel",
+            "pereputannye-stroki",
+            "poryadok-rascheta",
+            "kriticheskij-put",
+            "raspisanie-itogo"
+          ]
+        },
+        {
+          "slug": "excel-po-id",
+          "access": "free",
+          "sections": [
+            "poisk-postavshchika-po-id",
+            "funkciya-vpr",
+            "postavshchiki-po-yachejkam",
+            "sluzhebnyj-process-0",
+            "tolko-predydushchie-stroki",
+            "znak",
+            "poryadok-strok",
+            "vpr-itogo"
+          ]
+        },
+        {
+          "slug": "kogo-schitat",
+          "access": "paid",
+          "sections": [
+            "vopros-v-neravenstva",
+            "process-rabotaet",
+            "moment-i-millisekunda",
+            "scheteslimn",
+            "zavershivshiesya-i-nachavshiesya",
+            "vnutri-okna",
+            "k-e-okonchanie",
+            "schitat-itogo"
+          ]
+        },
+        {
+          "slug": "parallelnost",
+          "access": "paid",
+          "sections": [
+            "vremennaya-setka",
+            "setka-v-excel",
+            "pik-parallelnosti",
+            "samyj-dlinnyj-otrezok",
+            "sostav-processov",
+            "isklyuchennyj-id",
+            "proverka-po-strokam",
+            "vmeste-s-processom",
+            "parallelnost-itogo"
+          ]
+        },
+        {
+          "slug": "sdvigi-i-zapas",
+          "access": "paid",
+          "sections": [
+            "okno-zapuska",
+            "mozhno-li-sdvigat",
+            "proverka-sdviga",
+            "pozdnie-nachala",
+            "ne-ranshe-poroga",
+            "sdvigi-itogo"
+          ]
+        },
+        {
+          "slug": "zaderzhki-i-obratnye-voprosy",
+          "access": "paid",
+          "sections": [
+            "tri-rasshireniya",
+            "zaderzhka-peredachi",
+            "neizvestnaya-dlitelnost",
+            "sobytiya-vmesto-setki",
+            "zaderzhki-itogo"
+          ]
+        },
+        {
+          "slug": "ogranichennye-resursy",
+          "access": "paid",
+          "sections": [
+            "ogranichennye-resursy",
+            "gotov-i-zapushchen",
+            "neskolko-mest",
+            "pravilo-vybora",
+            "vzaimnoe-isklyuchenie",
+            "resursy-itogo"
+          ]
+        }
+      ],
+      "final_access": "paid"
     },
     {
       "id": "preobrazovanie-zapisey-chisel",
@@ -817662,217 +819289,337 @@
       ],
       "kind": "topic",
       "status": "published",
-      "course_id": null
+      "course_id": null,
+      "subtopics": [
+        {
+          "slug": "chislo-i-zapis",
+          "access": "free",
+          "sections": [
+            "kak-ustroena-tema",
+            "chislo-i-zapis",
+            "mesto-cifry",
+            "perevod-deleniem",
+            "dlina-zapisi",
+            "chislo-i-stroka",
+            "operacii",
+            "gotovye-funkcii",
+            "svoya-funkciya",
+            "zapis-itogo"
+          ]
+        },
+        {
+          "slug": "dopisyvanie",
+          "access": "free",
+          "sections": [
+            "dopisyvanie-sprava",
+            "sdvig-razryadov",
+            "neskolko-cifr",
+            "dopisyvanie-sleva",
+            "poslednie-cifry",
+            "soedinenie-strok",
+            "blok-po-usloviyu",
+            "rezultat-vychisleniya",
+            "dopisyvanie-itogo"
+          ]
+        },
+        {
+          "slug": "chasti-zapisi",
+          "access": "free",
+          "sections": [
+            "zamena-cifr",
+            "udalit-i-vstavit",
+            "indeksy-i-srezy",
+            "sborka-iz-srezov",
+            "perevernut-i-invertirovat",
+            "odni-edinicy",
+            "odnovremennaya-zamena",
+            "vedushchie-nuli",
+            "chasti-itogo"
+          ]
+        },
+        {
+          "slug": "summa-cifr",
+          "access": "free",
+          "sections": [
+            "chetnost",
+            "poslednyaya-cifra",
+            "drugie-sistemy",
+            "kakaya-zapis",
+            "povtornyj-shag",
+            "desyatichnaya-zapis",
+            "summa-itogo"
+          ]
+        },
+        {
+          "slug": "poisk-otveta",
+          "access": "free",
+          "sections": [
+            "chto-minimizirovat",
+            "vopros-poiska",
+            "ostanovka-perebora",
+            "granicy-perebora",
+            "dve-proverki",
+            "po-vetvyam",
+            "ot-rezultata",
+            "zadan-rezultat",
+            "troichnyj-algoritm",
+            "oba-chisla",
+            "poisk-itogo"
+          ]
+        },
+        {
+          "slug": "rassuzhdenie-vmesto-perebora",
+          "access": "free",
+          "sections": [
+            "rassuzhdenie",
+            "zamena-bez-perebora",
+            "monotonnost-vetvi",
+            "kolichestvo-rezultatov",
+            "rassuzhdenie-itogo"
+          ]
+        }
+      ],
+      "final_access": "free"
     },
     {
       "id": "python-advanced-features",
       "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6"],
       "kind": "course",
       "status": "published",
-      "course_id": "python"
+      "course_id": "python",
+      "access": "free"
     },
     {
       "id": "python-arguments",
       "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
       "kind": "course",
       "status": "published",
-      "course_id": "python"
+      "course_id": "python",
+      "access": "free"
     },
     {
       "id": "python-classes",
       "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6"],
       "kind": "course",
       "status": "published",
-      "course_id": "python"
+      "course_id": "python",
+      "access": "free"
     },
     {
       "id": "python-comprehensions",
       "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6"],
       "kind": "course",
       "status": "published",
-      "course_id": "python"
+      "course_id": "python",
+      "access": "free"
     },
     {
       "id": "python-conditions",
       "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6"],
       "kind": "course",
       "status": "published",
-      "course_id": "python"
+      "course_id": "python",
+      "access": "free"
     },
     {
       "id": "python-cost",
       "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
       "kind": "course",
       "status": "published",
-      "course_id": "python"
+      "course_id": "python",
+      "access": "free"
     },
     {
       "id": "python-dictionaries",
       "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
       "kind": "course",
       "status": "published",
-      "course_id": "python"
+      "course_id": "python",
+      "access": "free"
     },
     {
       "id": "python-exceptions",
       "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
       "kind": "course",
       "status": "published",
-      "course_id": "python"
+      "course_id": "python",
+      "access": "free"
     },
     {
       "id": "python-files",
       "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6", "s7"],
       "kind": "course",
       "status": "published",
-      "course_id": "python"
+      "course_id": "python",
+      "access": "free"
     },
     {
       "id": "python-first-program",
       "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6"],
       "kind": "course",
       "status": "published",
-      "course_id": "python"
+      "course_id": "python",
+      "access": "free"
     },
     {
       "id": "python-for-range",
       "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6", "s7"],
       "kind": "course",
       "status": "published",
-      "course_id": "python"
+      "course_id": "python",
+      "access": "free"
     },
     {
       "id": "python-functions",
       "sections": ["intro", "s1", "s2", "s3", "s4"],
       "kind": "course",
       "status": "published",
-      "course_id": "python"
+      "course_id": "python",
+      "access": "free"
     },
     {
       "id": "python-independent-program",
       "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
       "kind": "course",
       "status": "published",
-      "course_id": "python"
+      "course_id": "python",
+      "access": "free"
     },
     {
       "id": "python-input-output",
       "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
       "kind": "course",
       "status": "published",
-      "course_id": "python"
+      "course_id": "python",
+      "access": "free"
     },
     {
       "id": "python-iterators-generators",
       "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
       "kind": "course",
       "status": "published",
-      "course_id": "python"
+      "course_id": "python",
+      "access": "free"
     },
     {
       "id": "python-lists",
       "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6", "s7"],
       "kind": "course",
       "status": "published",
-      "course_id": "python"
+      "course_id": "python",
+      "access": "free"
     },
     {
       "id": "python-logic",
       "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
       "kind": "course",
       "status": "published",
-      "course_id": "python"
+      "course_id": "python",
+      "access": "free"
     },
     {
       "id": "python-notation-patterns",
       "sections": ["intro", "s1", "s2", "s3", "s4"],
       "kind": "course",
       "status": "published",
-      "course_id": "python"
+      "course_id": "python",
+      "access": "free"
     },
     {
       "id": "python-numbers",
       "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6"],
       "kind": "course",
       "status": "published",
-      "course_id": "python"
+      "course_id": "python",
+      "access": "free"
     },
     {
       "id": "python-practice",
       "sections": ["intro", "s1", "s2", "s3"],
       "kind": "course",
       "status": "published",
-      "course_id": "python"
+      "course_id": "python",
+      "access": "free"
     },
     {
       "id": "python-program-parts",
       "sections": ["intro", "s1", "s2", "s3", "s4"],
       "kind": "course",
       "status": "published",
-      "course_id": "python"
+      "course_id": "python",
+      "access": "free"
     },
     {
       "id": "python-recursion",
       "sections": ["intro", "s1", "s2", "s3", "s4"],
       "kind": "course",
       "status": "published",
-      "course_id": "python"
+      "course_id": "python",
+      "access": "free"
     },
     {
       "id": "python-sets",
       "sections": ["intro", "s1", "s2", "s3", "s4"],
       "kind": "course",
       "status": "published",
-      "course_id": "python"
+      "course_id": "python",
+      "access": "free"
     },
     {
       "id": "python-sorting-search",
       "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
       "kind": "course",
       "status": "published",
-      "course_id": "python"
+      "course_id": "python",
+      "access": "free"
     },
     {
       "id": "python-standard-library",
       "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6"],
       "kind": "course",
       "status": "published",
-      "course_id": "python"
+      "course_id": "python",
+      "access": "free"
     },
     {
       "id": "python-strings",
       "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6"],
       "kind": "course",
       "status": "published",
-      "course_id": "python"
+      "course_id": "python",
+      "access": "free"
     },
     {
       "id": "python-testing",
       "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
       "kind": "course",
       "status": "published",
-      "course_id": "python"
+      "course_id": "python",
+      "access": "free"
     },
     {
       "id": "python-tuples",
       "sections": ["intro", "s1", "s2", "s3", "s4"],
       "kind": "course",
       "status": "published",
-      "course_id": "python"
+      "course_id": "python",
+      "access": "free"
     },
     {
       "id": "python-values",
       "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
       "kind": "course",
       "status": "published",
-      "course_id": "python"
+      "course_id": "python",
+      "access": "free"
     },
     {
       "id": "python-while",
       "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6", "s7"],
       "kind": "course",
       "status": "published",
-      "course_id": "python"
+      "course_id": "python",
+      "access": "free"
     },
     {
       "id": "rekursiya",
@@ -817934,7 +819681,106 @@
       ],
       "kind": "topic",
       "status": "published",
-      "course_id": null
+      "course_id": null,
+      "subtopics": [
+        {
+          "slug": "funktsiya-cherez-sebya",
+          "access": "free",
+          "sections": [
+            "kak-ustroena-tema",
+            "zapis-f-n",
+            "rekursivnoe-opredelenie",
+            "podstanovka",
+            "do-bazy-i-obratno",
+            "tablica-predydushchih",
+            "opredelenie-itogo"
+          ]
+        },
+        {
+          "slug": "rekursivnaya-funktsiya",
+          "access": "free",
+          "sections": [
+            "po-opredeleniyu",
+            "baza-i-sootnoshenie",
+            "dohodyat-do-bazy",
+            "usloviya-v-opredelenii",
+            "funkciya-itogo"
+          ]
+        },
+        {
+          "slug": "tablitsa-znacheniy",
+          "access": "free",
+          "sections": [
+            "tablica-ciklom",
+            "odno-predydushchee",
+            "spisok-znachenij",
+            "dva-poslednih",
+            "po-ubyvaniyu",
+            "svyazannye-funkcii",
+            "summa-predydushchih",
+            "tablica-itogo"
+          ]
+        },
+        {
+          "slug": "povtornye-vyzovy",
+          "access": "free",
+          "sections": [
+            "zapominanie",
+            "povtornye-vychisleniya",
+            "slovar-znachenij",
+            "cache",
+            "dve-problemy",
+            "razmer-argumenta",
+            "skolko-argumentov",
+            "poisk-argumenta",
+            "chislo-vyzovov",
+            "vyzovy-itogo"
+          ]
+        },
+        {
+          "slug": "bolshie-argumenty",
+          "access": "free",
+          "sections": [
+            "smotret-na-vyrazhenie",
+            "raznost",
+            "proizvedenie",
+            "obshchee-neizvestnoe",
+            "cepochki",
+            "chetnost-i-sokrashchenie",
+            "perehody-do-bazy",
+            "napravleniya",
+            "arifmetika",
+            "bolshie-itogo"
+          ]
+        },
+        {
+          "slug": "chto-schitaet-funktsiya",
+          "access": "free",
+          "sections": [
+            "dopolnitelnyj-uroven",
+            "cifry-chisla",
+            "dvoichnye-cifry",
+            "vklad-cifry",
+            "perenos",
+            "tablica-vkladov",
+            "prostye-mnozhiteli",
+            "dokazat-zakonomernost",
+            "schitaet-itogo"
+          ]
+        },
+        {
+          "slug": "podschet-po-tsifram",
+          "access": "free",
+          "sections": [
+            "chisla-do-granicy",
+            "sleva-napravo",
+            "cifry-sleva",
+            "vedushchie-nuli",
+            "podschet-itogo"
+          ]
+        }
+      ],
+      "final_access": "free"
     },
     {
       "id": "relational-databases",
@@ -818002,7 +819848,112 @@
       ],
       "kind": "topic",
       "status": "published",
-      "course_id": null
+      "course_id": null,
+      "subtopics": [
+        {
+          "slug": "tablicy-i-klyuchi",
+          "access": "free",
+          "sections": [
+            "kak-ustroena-tema-3",
+            "odna-bolshaya-tablica",
+            "stroka-obekt",
+            "klyuch",
+            "kody-v-operacii",
+            "svyaz-po-klyuchu",
+            "mnogo-operacij",
+            "kniga-i-listy",
+            "tablicy-itogo"
+          ]
+        },
+        {
+          "slug": "svyaz-listov-vpr",
+          "access": "free",
+          "sections": [
+            "harakteristiki-operacii",
+            "poisk-rukami",
+            "formula-vpr",
+            "zakreplenie",
+            "drugie-stolbcy",
+            "oshibka-nd",
+            "poisk-i-itog",
+            "vpr-itogo"
+          ]
+        },
+        {
+          "slug": "otbor-zapisey",
+          "access": "free",
+          "sections": [
+            "otbor",
+            "pole-i-tablica",
+            "i-ili",
+            "proverka-strok",
+            "vklyuchitelno",
+            "priznak-1-0",
+            "filtr",
+            "vse-vidy",
+            "otbor-itogo"
+          ]
+        },
+        {
+          "slug": "vklad-zapisi",
+          "access": "free",
+          "sections": [
+            "otbor-i-vychislenie",
+            "massa",
+            "edinicy",
+            "stoimost",
+            "postupleniya-i-prodazhi",
+            "raznye-voprosy",
+            "stolbec-vklada",
+            "summeslimn",
+            "forma-otveta",
+            "vklad-itogo"
+          ]
+        },
+        {
+          "slug": "izmenenie-zapasa",
+          "access": "free",
+          "sections": [
+            "izmenenie-zapasa",
+            "konechnyj-zapas",
+            "bolshe-ili-menshe",
+            "summa-so-znakami",
+            "stolbec-znaka",
+            "pribyl",
+            "zapas-itogo"
+          ]
+        },
+        {
+          "slug": "itogi-po-obektam",
+          "access": "free",
+          "sections": [
+            "itog-obekta",
+            "porog-itoga",
+            "gruppirovka",
+            "maksimum-chego",
+            "chto-v-otvete",
+            "rajon-ili-den",
+            "svodnaya-tablica",
+            "itogi-itogo"
+          ]
+        },
+        {
+          "slug": "drugie-bazy",
+          "access": "free",
+          "sections": [
+            "dopolnitelnyy-urok-bazy",
+            "shema-bazy",
+            "cena-po-tarifu",
+            "ili-v-pole",
+            "cepochka-klyuchej",
+            "tablica-svyazej",
+            "odna-zapis",
+            "nalichie-na-datu",
+            "bazy-itogo"
+          ]
+        }
+      ],
+      "final_access": "free"
     },
     {
       "id": "simple-algorithms",
@@ -818091,7 +820042,133 @@
       ],
       "kind": "topic",
       "status": "published",
-      "course_id": null
+      "course_id": null,
+      "subtopics": [
+        {
+          "slug": "sostoyanie-i-komandy",
+          "access": "free",
+          "sections": [
+            "kak-ustroena-tema-6",
+            "sostoyanie-cherepahi",
+            "koordinaty",
+            "celochislennye-tochki",
+            "dvizhenie-i-povorot",
+            "napravlenie-kak-ugol",
+            "ugol-povorota-i-ugol-figury",
+            "modul-turtle",
+            "nachalnoe-napravlenie",
+            "povtori-i-cikl",
+            "otstupy",
+            "neskolko-storon-za-povtorenie",
+            "povtornyj-prohod",
+            "konechnoe-sostoyanie",
+            "chertezhnik",
+            "sostoyanie-itogo"
+          ]
+        },
+        {
+          "slug": "postroenie-i-reshetka",
+          "access": "free",
+          "sections": [
+            "risunok-kak-proverka",
+            "masshtab",
+            "masshtab-i-koordinaty",
+            "pervaya-programma",
+            "sluzhebnye-komandy",
+            "setka-tochek",
+            "peremennye-cikla",
+            "hvost-pered-setkoj",
+            "odin-masshtab",
+            "diapazony-setki",
+            "setka-ne-schitaet",
+            "risunok-ne-pomeshchaetsya",
+            "gde-zapuskat",
+            "gotovyj-shablon",
+            "postroenie-itogo"
+          ]
+        },
+        {
+          "slug": "granica-i-velichiny",
+          "access": "free",
+          "sections": [
+            "chto-sprashivaet-vopros",
+            "vnutri-na-granice-snaruzhi",
+            "podschet-po-ryadam",
+            "tochki-i-promezhutki",
+            "pryamougolnik-po-osyam",
+            "tochki-ploshchad-perimetr",
+            "nezamknutaya-liniya",
+            "rasstoyanie-i-dlina-puti",
+            "ploshchad-treugolnika",
+            "granica-itogo"
+          ]
+        },
+        {
+          "slug": "neskolko-figur",
+          "access": "free",
+          "sections": [
+            "dve-figury",
+            "perehod-mezhdu-figurami",
+            "peresechenie",
+            "granicy-peresecheniya",
+            "obedinenie",
+            "tolko-v-odnoj-figure",
+            "tri-figury",
+            "peresechenie-po-granice",
+            "granica-obedineniya",
+            "figury-itogo"
+          ]
+        },
+        {
+          "slug": "naklonnaya-geometriya",
+          "access": "free",
+          "sections": [
+            "naklonnye-storony",
+            "naklon-na-setke",
+            "polozhenie-treugolnika",
+            "tochki-mezhdu-naklonnymi",
+            "granica-treugolnika",
+            "sedmoe-povtorenie",
+            "naklonnyj-chetyrehugolnik",
+            "spornaya-tochka",
+            "pogreshnost-koordinat",
+            "proverka-konechnogo-polozheniya",
+            "nevypuklaya-figura",
+            "naklon-itogo"
+          ]
+        },
+        {
+          "slug": "obratnyj-vopros-i-poseshcheniya",
+          "access": "free",
+          "sections": [
+            "obratnyj-vopros",
+            "chislo-tochek-ot-parametra",
+            "strogij-i-nestrogij-porog",
+            "naibolshee-peresechenie",
+            "figura-ne-pomeshchaetsya",
+            "poseshcheniya",
+            "schetchik-poseshchenij",
+            "obratnyj-itogo"
+          ]
+        },
+        {
+          "slug": "tochnyj-podschet-i-dugi",
+          "access": "free",
+          "sections": [
+            "podschet-programmoj",
+            "uslovie-prinadlezhnosti",
+            "koordinaty-bez-masshtaba",
+            "dva-pryamougolnika",
+            "treugolnik-programmoj",
+            "necelye-granicy",
+            "proizvolnyj-povorot",
+            "komanda-dugi",
+            "krivolinejnaya-granica",
+            "dugi-itogo"
+          ]
+        }
+      ],
+      "final_access": "free"
     },
     {
       "id": "spreadsheet-optimization",
@@ -818155,7 +820232,114 @@
       ],
       "kind": "topic",
       "status": "published",
-      "course_id": null
+      "course_id": null,
+      "subtopics": [
+        {
+          "slug": "luchshaya-summa-do-kletki",
+          "access": "free",
+          "sections": [
+            "kak-ustroena-tema-18",
+            "pole-i-marshruty",
+            "dlina-marshruta",
+            "ochevidnye-sposoby",
+            "poslednij-shag",
+            "luchshaya-summa",
+            "pravilo-kletki",
+            "pole-4x4",
+            "vosstanovlenie-marshruta",
+            "summa-itogo"
+          ]
+        },
+        {
+          "slug": "tablica-v-excel",
+          "access": "free",
+          "sections": [
+            "dva-bloka",
+            "forma-bloka",
+            "chetyre-formuly",
+            "kopirovanie",
+            "blok-minimuma",
+            "pole-ekzamena",
+            "excel-itogo"
+          ]
+        },
+        {
+          "slug": "steny",
+          "access": "free",
+          "sections": [
+            "stena-na-vhode",
+            "stena-mezhdu-kletkami",
+            "steny-na-vhode",
+            "stena-v-formule",
+            "otrezok-steny",
+            "steny-itogo"
+          ]
+        },
+        {
+          "slug": "nedostizhimye-i-finishi",
+          "access": "paid",
+          "sections": [
+            "nedostizhimye-kletki",
+            "dostizhimost",
+            "vymyshlennyj-marshrut",
+            "metka-x",
+            "uglovye-finishi",
+            "start-vnutri",
+            "finishi-itogo"
+          ]
+        },
+        {
+          "slug": "napravleniya-i-zapuski",
+          "access": "paid",
+          "sections": [
+            "drugie-napravleniya",
+            "predshestvenniki",
+            "adresa-predshestvennikov",
+            "obratnyj-raschyot",
+            "neskolko-zapuskov",
+            "zapuski-itogo"
+          ]
+        },
+        {
+          "slug": "diagonali-i-cena-shaga",
+          "access": "paid",
+          "sections": [
+            "sostav-kandidatov",
+            "diagonal-vpravo-vniz",
+            "diagonal-vlevo-vniz",
+            "vklad-ot-prihoda",
+            "zapas-energii",
+            "diagonali-itogo"
+          ]
+        },
+        {
+          "slug": "usloviya-perehoda",
+          "access": "paid",
+          "sections": [
+            "dopolnitelnyy-urok-perehody",
+            "proverka-prihoda",
+            "vspomogatelnye-bloki",
+            "nachislenie-i-perehod",
+            "ostatok-energii",
+            "harakteristika-marshruta",
+            "cherez-kletku",
+            "perehody-itogo"
+          ]
+        },
+        {
+          "slug": "ladya-i-chislo-marshrutov",
+          "access": "paid",
+          "sections": [
+            "dopolnitelnyy-urok-ladya",
+            "ladya",
+            "rasshiryayushchijsya-diapazon",
+            "chislo-marshrutov",
+            "sostoyanie",
+            "ladya-itogo"
+          ]
+        }
+      ],
+      "final_access": "paid"
     },
     {
       "id": "spreadsheets",
@@ -818235,7 +820419,130 @@
       ],
       "kind": "topic",
       "status": "published",
-      "course_id": null
+      "course_id": null,
+      "subtopics": [
+        {
+          "slug": "stroka-i-uslovie",
+          "access": "free",
+          "sections": [
+            "kak-ustroena-tema",
+            "chto-schitaem",
+            "bukvalnyj-perevod",
+            "neskolko-uslovij",
+            "odno-ili-raznye-chisla",
+            "priznak-1-0",
+            "schetchik-strok",
+            "fajl-xlsx-i-txt",
+            "stroka-itogo"
+          ]
+        },
+        {
+          "slug": "summa-krajnie-srednie",
+          "access": "free",
+          "sections": [
+            "velichiny-stroki",
+            "n-s-m-m",
+            "summa-ostalnyh",
+            "povtory-krajnih",
+            "vtoroe-po-velichine",
+            "kvadrat-summy",
+            "srednie-bez-deleniya",
+            "summa-itogo"
+          ]
+        },
+        {
+          "slug": "povtory-v-stroke",
+          "access": "free",
+          "sections": [
+            "znachenie-i-poyavlenie",
+            "chastota",
+            "struktura-povtorov",
+            "struktura-ne-po-chislu",
+            "polosa-chastot",
+            "schetesli-polosa",
+            "count",
+            "counter",
+            "mnozhestvo",
+            "povtory-itogo"
+          ]
+        },
+        {
+          "slug": "povtoryayushchiesya-i-odinochnye",
+          "access": "free",
+          "sections": [
+            "dve-gruppy",
+            "summesli",
+            "srednie-grupp",
+            "celoe-reshenie",
+            "vspomogatelnye-stolbcy",
+            "dva-spiska",
+            "polnaya-programma",
+            "razlichnye-povtory",
+            "snachala-struktura",
+            "gruppy-itogo"
+          ]
+        },
+        {
+          "slug": "chetnost-i-osobye-chisla",
+          "access": "free",
+          "sections": [
+            "proverka-chisla",
+            "ostatok",
+            "chetnye-i-nechetnye",
+            "vyshe-srednego",
+            "celaya-chast-srednego",
+            "kvadraty",
+            "kuby",
+            "chetnost-itogo"
+          ]
+        },
+        {
+          "slug": "poryadok-i-nomer-stroki",
+          "access": "free",
+          "sections": [
+            "poryadok-i-nomer",
+            "vozrastanie",
+            "chasti-stroki",
+            "sortirovannaya-kopiya",
+            "dve-pary",
+            "sposob-otveta",
+            "stroka-funkciya",
+            "summa-i-nomer",
+            "modul",
+            "poryadok-itogo"
+          ]
+        },
+        {
+          "slug": "treugolniki",
+          "access": "free",
+          "sections": [
+            "dopolnitelnyj-uroven",
+            "sushchestvovanie",
+            "bez-sortirovki",
+            "vid-po-uglam",
+            "tupougolnyj",
+            "tri-iz-chetyreh",
+            "parallelepiped",
+            "treugolniki-itogo"
+          ]
+        },
+        {
+          "slug": "yachejka-stolbec-sosedi",
+          "access": "free",
+          "sections": [
+            "oblast-poiska",
+            "oblast-podscheta",
+            "yachejka-v-diapazone",
+            "poyavleniya-i-stroki",
+            "urovni-proverki",
+            "vse-dannye",
+            "sosedi",
+            "perebor-sosedej",
+            "sosedi-itogo"
+          ]
+        }
+      ],
+      "final_access": "free"
     },
     {
       "id": "string-processing",
@@ -818321,7 +820628,136 @@
       ],
       "kind": "topic",
       "status": "published",
-      "course_id": null
+      "course_id": null,
+      "subtopics": [
+        {
+          "slug": "stroka-i-fragment",
+          "access": "free",
+          "sections": [
+            "kak-ustroena-tema-24",
+            "stroka",
+            "podstroka",
+            "indeksy",
+            "srezy",
+            "chtenie-fayla",
+            "chto-udalyaet-strip",
+            "stroki-fayla",
+            "tri-voprosa",
+            "polnyy-perebor",
+            "stroka-itogo"
+          ]
+        },
+        {
+          "slug": "cepochka",
+          "access": "free",
+          "sections": [
+            "tekushchaya-dlina",
+            "dve-peremennye",
+            "obnovlenie-maksimuma",
+            "uslovie-na-simvol",
+            "sosednie-simvoly",
+            "sosedi-razlichny",
+            "drugie-usloviya-sosedey",
+            "zapreshchyonnye-pary",
+            "usloviya-po-troykam",
+            "sbros-0-1-2",
+            "cepochka-itogo"
+          ]
+        },
+        {
+          "slug": "obrazcy-i-chastoty",
+          "access": "free",
+          "sections": [
+            "obrazcy-za-odin-prohod",
+            "poisk-obrazca",
+            "korotkie-fragmenty",
+            "povtoryayushchiysya-obrazec",
+            "cepochki-par",
+            "chastoty",
+            "ravnye-chastoty",
+            "dopolnitelnyy-kriteriy",
+            "mnogo-strok",
+            "rasstoyanie-mezhdu-bukvami",
+            "obrazcy-itogo"
+          ]
+        },
+        {
+          "slug": "skolzyashchee-okno",
+          "access": "paid",
+          "sections": [
+            "dve-granicy",
+            "okno",
+            "sdvig-levoy-granicy",
+            "pochemu-okno-rabotaet",
+            "rovno-k",
+            "minimalnaya-dlina",
+            "neskolko-ogranicheniy",
+            "slovar-schyotchikov",
+            "pary-v-okne",
+            "zapreshchyonnoe-slovo",
+            "okno-itogo"
+          ]
+        },
+        {
+          "slug": "pozicii-i-granicy",
+          "access": "paid",
+          "sections": [
+            "pozicii-simvolov",
+            "spisok-poziciy",
+            "maksimum-s-rovno-k",
+            "vhozhdeniya-slova",
+            "zameny-i-razbienie",
+            "chasti-mezhdu-razdelitelyami",
+            "peresekayushchiesya-razdeliteli",
+            "nachalo-i-konec",
+            "odinakovye-koncy",
+            "vse-simvoly-nabora",
+            "pozicii-itogo"
+          ]
+        },
+        {
+          "slug": "chisla-i-vyrazheniya",
+          "access": "paid",
+          "sections": [
+            "struktura-vyrazheniya",
+            "regulyarnye-vyrazheniya",
+            "dopustimoe-chislo",
+            "shablon-vyrazheniya",
+            "shablon-po-usloviyu",
+            "zapis-v-sisteme",
+            "vedushchie-nuli",
+            "vyrazheniya-itogo"
+          ]
+        },
+        {
+          "slug": "usloviya-na-vyrazhenie",
+          "access": "paid",
+          "sections": [
+            "dopolnitelnyy-urok-vyrazheniya",
+            "ne-bolee-k-chisel",
+            "dopolnitelnye-trebovaniya",
+            "naibolshee-znachenie",
+            "summa-posle-bukvy",
+            "usloviya-itogo"
+          ]
+        },
+        {
+          "slug": "nakoplennye-kolichestva",
+          "access": "paid",
+          "sections": [
+            "dopolnitelnyy-urok-kolichestva",
+            "prefiksnye-summy",
+            "sovmeshchyonnye-usloviya",
+            "nachalo-so-slova",
+            "kogda-okno-ne-szhimaetsya",
+            "vse-simvoly-razlichny",
+            "obshchie-granicy",
+            "chislo-mezhdu-bukvami",
+            "kolichestva-itogo"
+          ]
+        }
+      ],
+      "final_access": "paid"
     },
     {
       "id": "truth-tables",
@@ -818367,7 +820803,84 @@
       ],
       "kind": "topic",
       "status": "published",
-      "course_id": null
+      "course_id": null,
+      "subtopics": [
+        {
+          "slug": "logicheskie-operacii",
+          "access": "free",
+          "sections": [
+            "operacii-i-ih-znacheniya",
+            "kak-ustroena-tema-2",
+            "dva-znacheniya",
+            "otricanie",
+            "konyunkciya",
+            "dizyunkciya",
+            "implikaciya",
+            "ravnoznachnost",
+            "operacii-itogo"
+          ]
+        },
+        {
+          "slug": "formula-i-nabory",
+          "access": "free",
+          "sections": [
+            "formula-po-chastyam",
+            "ot-skobok-k-vneshnej-operacii",
+            "polnaya-tablica",
+            "ot-f-k-vhodam",
+            "dopustimye-preobrazovaniya",
+            "formula-itogo"
+          ]
+        },
+        {
+          "slug": "fragment-i-stolbcy",
+          "access": "free",
+          "sections": [
+            "fragment-i-podpisi",
+            "fragment-tablicy",
+            "poryadok-ruchnogo-resheniya",
+            "obshchaya-shapka",
+            "nabory-i-poryadki",
+            "fragment-itogo"
+          ]
+        },
+        {
+          "slug": "chetyre-peremennye",
+          "access": "free",
+          "sections": [
+            "chetyre-peremennye",
+            "cepochka-implikacij",
+            "raznye-znacheniya-f",
+            "pyat-peremennyh",
+            "chetyre-itogo"
+          ]
+        },
+        {
+          "slug": "proverka-python",
+          "access": "free",
+          "sections": [
+            "proverka-programmoj",
+            "formula-na-python",
+            "vlozhennye-cikly",
+            "perebor-cherez-product",
+            "python-itogo"
+          ]
+        },
+        {
+          "slug": "polnyj-poisk",
+          "access": "free",
+          "sections": [
+            "redkie-usloviya",
+            "neznakomyj-znak",
+            "dva-urovnya-perebora",
+            "polnyj-poisk",
+            "drugaya-zadacha",
+            "dve-funkcii",
+            "poisk-itogo"
+          ]
+        }
+      ],
+      "final_access": "free"
     },
     {
       "id": "winning-strategy",
@@ -818444,7 +820957,121 @@
       ],
       "kind": "topic",
       "status": "published",
-      "course_id": null
+      "course_id": null,
+      "subtopics": [
+        {
+          "slug": "igra-i-strategiya",
+          "access": "free",
+          "sections": [
+            "kak-ustroena-tema-19",
+            "pravila-igry",
+            "konec-igry",
+            "vtoroj-hod-peti",
+            "udachnaya-partiya",
+            "strategiya",
+            "sushchestvuet-i-vse",
+            "neudachnyj-hod",
+            "igra-itogo"
+          ]
+        },
+        {
+          "slug": "pozicii-ot-konca",
+          "access": "free",
+          "sections": [
+            "ot-blizhajshej-pobedy",
+            "otnositelno-igroka",
+            "poziciya-w1",
+            "poziciya-l1",
+            "poziciya-w2",
+            "poziciya-l2",
+            "analiz-ot-konca",
+            "strategiya-vani",
+            "zadanie-19",
+            "zadaniya-20-21",
+            "otricanie",
+            "silnyj-hod",
+            "pozicii-itogo"
+          ]
+        },
+        {
+          "slug": "chetyre-proverki",
+          "access": "paid",
+          "sections": [
+            "rassuzhdeniya-v-kod",
+            "moves-i-finished",
+            "any",
+            "chetyre-proverki",
+            "not-finished",
+            "poisk-znachenij",
+            "forma-otveta",
+            "granica-perebora",
+            "proverki-itogo"
+          ]
+        },
+        {
+          "slug": "dve-kuchi",
+          "access": "paid",
+          "sections": [
+            "dve-kuchi",
+            "para-chisel",
+            "kortezh",
+            "proverka-pozicii",
+            "poziciya-3-3",
+            "neudachnyj-hod-kuchi",
+            "perebor-3-s",
+            "summa-kuch",
+            "drugie-pravila",
+            "kuchi-itogo"
+          ]
+        },
+        {
+          "slug": "umenshenie-i-usloviya",
+          "access": "paid",
+          "sections": [
+            "te-zhe-proverki",
+            "umenshenie-kuchi",
+            "blizhajshie-gruppy",
+            "okruglenie",
+            "granica-deleniya",
+            "naimenshee-i-naibolshee",
+            "hody-s-usloviem",
+            "zapreshchyonnyj-rezultat",
+            "bez-hodov",
+            "umenshenie-itogo"
+          ]
+        },
+        {
+          "slug": "rekursiya-f",
+          "access": "paid",
+          "sections": [
+            "odna-funkciya",
+            "tot-zhe-vopros",
+            "can-win",
+            "voprosy-zadanij",
+            "shablon-f",
+            "nechyotnoe-m",
+            "f-5-3",
+            "vyzovy-f",
+            "f-dve-kuchi",
+            "ne-pozdnee-i-rovno",
+            "tretij-hod",
+            "glubina",
+            "rekursiya-itogo"
+          ]
+        },
+        {
+          "slug": "pozitsiya-shire",
+          "access": "paid",
+          "sections": [
+            "dopolnitelnyy-urok-poziciya",
+            "sostoyanie-shire",
+            "do-konca",
+            "vse-pozicii",
+            "shire-itogo"
+          ]
+        }
+      ],
+      "final_access": "paid"
     },
     {
       "id": "word-enumeration",
@@ -818527,7 +821154,127 @@
       ],
       "kind": "topic",
       "status": "published",
-      "course_id": null
+      "course_id": null,
+      "subtopics": [
+        {
+          "slug": "slova-i-umnozhenie",
+          "access": "free",
+          "sections": [
+            "kak-ustroena-tema-8",
+            "slovo",
+            "alfavit-i-zapas",
+            "umnozhenie",
+            "ogranicheniya-mest",
+            "raznye-nabory",
+            "slozhenie",
+            "bez-povtorenij",
+            "perebor-product",
+            "schyotchik",
+            "permutations",
+            "ocenka-perebora",
+            "slova-itogo"
+          ]
+        },
+        {
+          "slug": "skolko-raz-bukva",
+          "access": "free",
+          "sections": [
+            "vybor-mest",
+            "mesta-bez-poryadka",
+            "ostalnye-pozicii",
+            "neskolko-glasnyh",
+            "hotya-by-ne-bolee",
+            "dopolnenie",
+            "peresecheniya",
+            "razbor-sluchaev",
+            "programma-frazy",
+            "glasnye-ciklom",
+            "odinakovye-bukvy",
+            "bukva-itogo"
+          ]
+        },
+        {
+          "slug": "sosednie-bukvy",
+          "access": "free",
+          "sections": [
+            "sosedi-i-umnozhenie",
+            "sosednie-pozicii",
+            "proverka-sosedej",
+            "odinakovye-sosedi",
+            "promezhutki",
+            "podstroka",
+            "glasnye-ne-ryadom",
+            "blok",
+            "chereduyutsya",
+            "nalozheniya",
+            "sosedi-itogo"
+          ]
+        },
+        {
+          "slug": "zapis-chisla",
+          "access": "free",
+          "sections": [
+            "chislo-kak-slovo",
+            "nachalnyj-nol",
+            "cifry-chislami",
+            "bez-povtora-cifr",
+            "vozrastanie",
+            "chetnost",
+            "ryadom-s-5",
+            "chetnost-chereduetsya",
+            "dlina-ne-zadana",
+            "chisla-itogo"
+          ]
+        },
+        {
+          "slug": "nomer-slova",
+          "access": "free",
+          "sections": [
+            "spisok-kak-schyotchik",
+            "sravnenie-slov",
+            "schyotchik-sistemy",
+            "plyus-odin",
+            "nomer-slova",
+            "nomer-programmoj",
+            "slovo-po-nomeru",
+            "nachalnye-nuli",
+            "obshchee-nachalo",
+            "mezhdu-nomerami",
+            "poryadok-alfavita",
+            "raznaya-dlina",
+            "nomer-itogo"
+          ]
+        },
+        {
+          "slug": "poisk-v-spiske",
+          "access": "free",
+          "sections": [
+            "nomer-i-kolichestvo",
+            "pervoe-i-poslednee",
+            "razdelnye-schyotchiki",
+            "ostanovka",
+            "polnyj-spisok",
+            "chetnost-nomera",
+            "odin-cikl",
+            "ne-sokrashchat",
+            "poisk-itogo"
+          ]
+        },
+        {
+          "slug": "kogda-perebor-ne-uspevaet",
+          "access": "free",
+          "sections": [
+            "dopolnitelnyy-urok-perebor",
+            "dlina-20",
+            "sostoyaniya",
+            "shemy-tipov",
+            "strogij-poryadok",
+            "do-granicy",
+            "perebor-itogo"
+          ]
+        }
+      ],
+      "final_access": "free"
     }
   ],
   "courses": [

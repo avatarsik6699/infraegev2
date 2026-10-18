@@ -9,13 +9,16 @@ import {
   lessonPublications,
   lessonSubtopics,
 } from "~/entities/lesson";
-import { lessonMedia } from "~/entities/lesson/content/string-processing.media";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { publicPaths } from "~/pages/site-discovery/public-paths";
 import { CodeBlock } from "~/shared/components/code-block";
 import { CodeRunner } from "~/shared/components/learning-content";
 import { Typography } from "~/shared/components/typography";
-import { renderAuthoredLessonContent } from "./lesson-content-test-utils";
+import {
+  renderAuthoredLessonContent,
+  topicMedia,
+  wholeLesson,
+} from "./lesson-content-test-utils";
 
 vi.mock("~/shared/components/action-link", () => ({
   ActionLink: ({ children }: { children: React.ReactNode }) => (
@@ -23,7 +26,9 @@ vi.mock("~/shared/components/action-link", () => ({
   ),
 }));
 
-const lesson = stringProcessingLesson;
+// Change 192: the paid subtopics live in their own modules.
+const lesson = await wholeLesson(stringProcessingLesson);
+const lessonMedia = topicMedia("string-processing");
 const SOURCE = resolve(
   process.cwd(),
   "../..",

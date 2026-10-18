@@ -64,6 +64,7 @@ export const CourseNavigation: React.FC<CourseNavigationTypes.Props> = (
             : {}),
           current: lesson.id === props.currentLessonId,
           done: props.masteredLessonIds?.has(lesson.id),
+          locked: props.locks && lesson.paid,
           note: lesson.level === "advanced" ? advancedLevelLabel : undefined,
         })),
       }))}

@@ -1,0 +1,35 @@
+/* Change 192: an open page, no card; the orange lock is the one accent. */
+.root {
+  --primary-fill: var(--color-cta);
+  --primary-fill-hover: var(--color-cta-hover);
+
+  display: grid;
+  gap: var(--space-1-5);
+  justify-items: start;
+  max-width: 36rem;
+  padding-block: var(--space-4);
+}
+
+.lock {
+  width: 1.75rem;
+  height: 1.75rem;
+  color: var(--color-brand-orange);
+}
+
+.title[data-order] {
+  margin: 0;
+  font-size: var(--text-2xl);
+}
+
+.text[data-variant] {
+  margin: 0;
+  color: var(--color-text-soft);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1-5) var(--space-2);
+  align-items: center;
+  margin-top: var(--space-1);
+}

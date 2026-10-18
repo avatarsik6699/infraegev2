@@ -78,6 +78,7 @@ export const SubtopicNavigation: React.FC<SubtopicNavigationTypes.Props> = (
                 params: { slug: item.routeSlug, subtopic: subtopic.slug },
                 current: isCurrent && subtopic.slug === props.current,
                 done,
+                locked: props.locks && subtopic.paid,
               };
             }),
             {
@@ -93,6 +94,7 @@ export const SubtopicNavigation: React.FC<SubtopicNavigationTypes.Props> = (
               to: "/ege/$slug/praktika",
               params: { slug: item.routeSlug },
               current: isCurrent && props.current === practiceCurrent,
+              locked: props.locks && item.paidPractice,
             },
           ],
         };

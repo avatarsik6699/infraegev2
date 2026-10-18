@@ -9,12 +9,15 @@ import {
   lessonPublications,
   lessonSubtopics,
 } from "~/entities/lesson";
-import { lessonMedia } from "~/entities/lesson/content/graph-analysis.media";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { publicPaths } from "~/pages/site-discovery/public-paths";
 import { CodeBlock } from "~/shared/components/code-block";
 import { Typography } from "~/shared/components/typography";
-import { renderAuthoredLessonContent } from "./lesson-content-test-utils";
+import {
+  renderAuthoredLessonContent,
+  topicMedia,
+  wholeLesson,
+} from "./lesson-content-test-utils";
 
 vi.mock("~/shared/components/action-link", () => ({
   ActionLink: ({ children }: { children: React.ReactNode }) => (
@@ -22,7 +25,9 @@ vi.mock("~/shared/components/action-link", () => ({
   ),
 }));
 
-const lesson = graphAnalysisLesson;
+// Change 192: the paid subtopics live in their own modules.
+const lesson = await wholeLesson(graphAnalysisLesson);
+const lessonMedia = topicMedia("graph-analysis");
 const SOURCE = resolve(
   process.cwd(),
   "../..",
@@ -135,7 +140,7 @@ describe("task 23 graph analysis lesson", () => {
   });
 
   it("is the lesson of the catalog topic «Анализ графов»", () => {
-    expect(findLessonByRouteSlug("23-analiz-grafov")).toBe(lesson);
+    expect(findLessonByRouteSlug("23-analiz-grafov")).toBe(graphAnalysisLesson);
     expect(
       lessonPublications.filter(({ taskNumbers }) => taskNumbers.includes(23)),
     ).toEqual([expect.objectContaining({ id: "graph-analysis" })]);

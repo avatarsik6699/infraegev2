@@ -92,3 +92,33 @@ SELECT (SELECT count(*) FROM expected) =
   AND has_table_privilege('infraege_app', 'practice.task_checker', 'SELECT')
   AND has_table_privilege('infraege_app', 'practice.lesson_task', 'SELECT');
 """
+
+# Change 192: payments, grants, refunds and provider events are evidence kept for 5 years. The
+# application may add and update them but never delete; offer acceptances are append-only; the
+# runtime and import roles see none of them.
+BILLING_RESTORE = r"""
+WITH expected(tablename) AS (
+  VALUES ('billing_offer_acceptance'), ('billing_payment'), ('access_grant'),
+         ('billing_refund'), ('billing_provider_event')
+), actual AS (
+  SELECT tablename FROM pg_tables WHERE schemaname = 'practice'
+), evidence(name) AS (
+  SELECT 'practice.' || tablename FROM expected
+)
+SELECT (SELECT count(*) FROM expected) =
+  (SELECT count(*) FROM expected JOIN actual USING (tablename))
+  AND has_table_privilege('infraege_app', 'practice.billing_offer_acceptance', 'SELECT, INSERT')
+  AND NOT has_table_privilege('infraege_app', 'practice.billing_offer_acceptance', 'UPDATE')
+  AND has_table_privilege('infraege_app', 'practice.billing_payment', 'SELECT, INSERT, UPDATE')
+  AND has_table_privilege('infraege_app', 'practice.access_grant', 'SELECT, INSERT, UPDATE')
+  AND has_table_privilege('infraege_app', 'practice.billing_refund', 'SELECT, INSERT, UPDATE')
+  AND has_table_privilege(
+    'infraege_app', 'practice.billing_provider_event', 'SELECT, INSERT, UPDATE')
+  AND NOT EXISTS (
+    SELECT 1 FROM evidence
+    WHERE has_table_privilege('infraege_app', name, 'DELETE')
+       OR has_table_privilege('infraege_app', name, 'TRUNCATE')
+       OR has_table_privilege('infraege_runtime', name, 'SELECT')
+       OR has_table_privilege('infraege_import', name, 'SELECT')
+  );
+"""

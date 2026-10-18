@@ -1,0 +1,20 @@
+/* Change 192: the public opening of a paid text dissolves into the page; the
+   paywall follows directly under it, with no card around it. */
+.root {
+  position: relative;
+  max-height: 13.5em;
+  overflow: hidden;
+}
+
+.root::after {
+  position: absolute;
+  inset: auto 0 0;
+  height: 9em;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in oklab, var(--color-bg) 0%, transparent),
+    var(--color-bg) 88%
+  );
+  content: "";
+  pointer-events: none;
+}

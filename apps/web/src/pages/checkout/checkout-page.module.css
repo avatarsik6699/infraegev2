@@ -1,0 +1,151 @@
+/* /subscribe (Change 192, F1): one narrow column — the plan, the date access
+   runs to, the sum and one orange «Оплатить»; the offer line in small print. */
+.page {
+  composes: pageFrame from "../../shared/styles/patterns.module.css";
+  min-width: 0;
+
+  --primary-fill: var(--color-cta);
+  --primary-fill-hover: var(--color-cta-hover);
+}
+
+.content {
+  display: grid;
+  gap: var(--space-3);
+  max-width: 34rem;
+  padding-block: var(--space-5) var(--space-6);
+}
+
+.title[data-order] {
+  margin: 0;
+  font-size: var(--text-2xl);
+}
+
+.visuallyHidden {
+  composes: visuallyHidden from "../../shared/styles/patterns.module.css";
+}
+
+.guest,
+.actions {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.account {
+  display: flex;
+  gap: var(--space-1-5);
+  align-items: center;
+}
+
+.accountText[data-variant] {
+  margin: 0;
+  color: var(--color-text-soft);
+  font-size: var(--text-sm);
+}
+
+.plans {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-1-5);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.option {
+  position: relative;
+  display: grid;
+  gap: 2px;
+  padding: var(--space-2) var(--space-2) var(--space-2);
+  border: 1px solid var(--color-rule-strong);
+  border-radius: var(--radius-surface);
+  cursor: pointer;
+}
+
+.option[data-checked] {
+  border-color: var(--color-brand-orange);
+  box-shadow: inset 0 0 0 1px var(--color-brand-orange);
+}
+
+.option:has(:focus-visible) {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* The native radio stays: an orange ring at the card's corner. */
+.radio {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  width: 1.125rem;
+  height: 1.125rem;
+  margin: 0;
+  accent-color: var(--color-cta);
+}
+
+.optionName {
+  font-weight: 600;
+}
+
+.optionPrice {
+  font-size: var(--text-xl);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.optionNote {
+  color: var(--color-muted);
+  font-size: var(--text-xs);
+}
+
+.summary {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  padding: var(--space-2) 0;
+  border-block: 1px solid var(--color-rule);
+}
+
+.summary div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.summary dt,
+.summary dd {
+  margin: 0;
+}
+
+.total {
+  font-weight: 600;
+}
+
+.error[data-variant] {
+  margin: 0;
+  color: var(--color-danger);
+  font-size: var(--text-sm);
+}
+
+.content .pay {
+  min-height: 3.25rem;
+  font-size: var(--text-cta);
+}
+
+.smallPrint[data-variant] {
+  margin: calc(-1 * var(--space-1)) 0 0;
+  color: var(--color-muted);
+  font-size: var(--text-xs);
+  text-align: center;
+}
+
+@media (max-width: 30rem) {
+  .plans {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Check, ChevronRight } from "lucide-react";
+import { Check, ChevronRight, Lock } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { ResponsiveDisclosure } from "~/shared/components/responsive-disclosure";
 import type { LessonTreeTypes } from "./lesson-tree.types";
@@ -75,7 +75,15 @@ export const LessonTree: React.FC<LessonTreeTypes.Props> = (props) => {
                               {` (${props.doneLabel})`}
                             </span>
                           ) : null}
+                          {file.locked ? (
+                            <span className={styles.visuallyHidden}>
+                              {" (с полным доступом)"}
+                            </span>
+                          ) : null}
                         </span>
+                        {file.locked ? (
+                          <Lock className={styles.lock} aria-hidden="true" />
+                        ) : null}
                       </>
                     );
                     return (

@@ -260,7 +260,10 @@ export default tseslint.config(
     },
   },
   {
-    files: ["src/shared/lib/auth-provider-navigation/browser-adapter.ts"],
+    files: [
+      "src/shared/lib/auth-provider-navigation/browser-adapter.ts",
+      "src/shared/lib/payment-navigation/browser-adapter.ts",
+    ],
     rules: {
       "no-restricted-globals": restrictedPlatformGlobals("window"),
     },

@@ -11,7 +11,7 @@ if (( ${#portfolios[@]} == 0 )); then
 fi
 for portfolio in "${portfolios[@]}"; do
   case "$portfolio" in
-    account|full|production|no-js|accessibility) ;;
+    account|billing|full|production|no-js|accessibility) ;;
     *) printf 'Unknown browser portfolio: %s\n' "$portfolio" >&2; exit 2 ;;
   esac
 done
@@ -99,6 +99,7 @@ for portfolio in "${portfolios[@]}"; do
   fi
   case "$portfolio" in
     account) pnpm --filter web exec playwright test --config playwright.account.config.ts ;;
+    billing) pnpm --filter web exec playwright test --config playwright.billing.config.ts ;;
     full) pnpm --filter web test:e2e "${e2e_args[@]}" ;;
     production) pnpm --filter web test:browser:production:once ;;
     no-js) pnpm --filter web test:browser:no-js ;;

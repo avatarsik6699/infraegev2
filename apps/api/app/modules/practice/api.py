@@ -9,12 +9,14 @@ from typing import Annotated
 from urllib.parse import quote
 
 from asyncpg import PostgresError
-from fastapi import APIRouter, Depends, HTTPException, Query, Response
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
 from app.core.database import database_engine
+from app.modules.entitlement.registry import task_access
+from app.modules.entitlement.service import SUBSCRIPTION_REQUIRED, Viewer, task_is_paid
 from app.modules.practice import catalog, readers
 from app.modules.practice.files import MIME, safe_path
 from app.modules.practice.schemas import PublicTask
@@ -45,6 +47,12 @@ async def session(response: Response) -> AsyncIterator[AsyncSession]:
 
 
 Session = Annotated[AsyncSession, Depends(session)]
+
+
+async def require_readable(connection: AsyncSession, request: Request, task_id: str) -> None:
+    """Change 192: a paid task needs access; 403 tells the site to show its paywall."""
+    if await task_is_paid(connection, task_id) and not await Viewer(request).may_read_paid():
+        raise HTTPException(403, SUBSCRIPTION_REQUIRED)
 
 
 @router.get("/tasks", response_model=catalog.CatalogPage)
@@ -86,14 +94,21 @@ async def get_next_task(
 
 
 @router.get("/tasks/{task_id}", response_model=PublicTask)
-async def get_task(task_id: str, connection: Session) -> PublicTask:
+async def get_task(task_id: str, request: Request, connection: Session) -> PublicTask:
+    await require_readable(connection, request, task_id)
     return await readers.task(connection, task_id)
 
 
 @router.get(
     "/learning-materials/{kind}/{material_id}/practice", response_model=readers.LessonPractice
 )
-async def get_lesson(kind: str, material_id: str, connection: Session) -> readers.LessonPractice:
+async def get_lesson(
+    kind: str, material_id: str, request: Request, connection: Session
+) -> readers.LessonPractice:
+    if settings.paywall_enabled and not await Viewer(request).may_read_paid():
+        return await readers.lesson(
+            connection, kind, material_id, lambda content: task_access(content) == "paid"
+        )
     return await readers.lesson(connection, kind, material_id)
 
 
@@ -108,7 +123,8 @@ async def get_course(course_id: str, connection: Session) -> readers.CourseSumma
 
 
 @router.get("/tasks/{task_id}/files/{usage_id}", response_class=Response)
-async def get_file(task_id: str, usage_id: str, connection: Session) -> Response:
+async def get_file(task_id: str, usage_id: str, request: Request, connection: Session) -> Response:
+    await require_readable(connection, request, task_id)
     usage, object_file = await readers.file(connection, task_id, usage_id)
     if (
         not re.fullmatch(r"[a-f0-9]{64}", object_file.storage_key)

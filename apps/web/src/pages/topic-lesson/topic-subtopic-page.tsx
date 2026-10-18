@@ -1,4 +1,6 @@
 import { useRouter } from "@tanstack/react-router";
+import { accessState } from "~/entities/access";
+import { Suspense } from "react";
 import {
   advancedLevelLabel,
   groupTasksBySubtopic,
@@ -12,18 +14,16 @@ import {
   type TopicCatalogTypes,
 } from "~/entities/topic-catalog";
 import { useAccountSession } from "~/features/account";
+import { PaywallGate, paywallCopy, paywallUnlocks } from "~/features/paywall";
 import {
   checkPracticeAnswer,
   createCheckAndSaveAnswer,
 } from "~/features/lesson-practice";
-import {
-  Checkpoint,
-  LessonIntro,
-  LessonTheory,
-} from "~/shared/components/learning-content";
+import { LessonIntro } from "~/shared/components/learning-content";
 import { Typography } from "~/shared/components/typography";
 import { LessonPracticeFlow } from "~/widgets/lesson-practice-flow";
 import { LegacySectionRedirect } from "./components/legacy-section-redirect";
+import { SubtopicBody } from "./components/subtopic-body";
 import { TopicLessonPager } from "./components/topic-lesson-pager";
 import { withSubtopicTheoryLinks } from "./lib/subtopic-task-links";
 import { TopicLessonFrame } from "./topic-lesson-frame";
@@ -48,14 +48,17 @@ export const TopicSubtopicPage: React.FC<TopicLessonPageTypes.SubtopicProps> = (
           [],
         subtopic.slug,
       );
+  // Change 192: a paid subtopic the visitor cannot open shows its opening and the paywall.
+  const locked = Boolean(subtopic.paid) && !accessState.opens(props.access);
   const outline = [
-    ...subtopic.concepts.map((concept) => ({
+    ...subtopic.outline.map((concept) => ({
       id: concept.id,
       label: concept.navLabel,
+      locked,
     })),
     // Change 184: reasoning first, then the tasks with a file
-    ...(subtopic.checkpoint
-      ? [{ id: "self-check", label: "Проверьте себя" }]
+    ...(subtopic.checkpoint || subtopic.paid?.selfCheck
+      ? [{ id: "self-check", label: "Проверьте себя", locked }]
       : []),
     ...(tasks.length ? [{ id: "practice", label: "Практика" }] : []),
   ];
@@ -71,7 +74,6 @@ export const TopicSubtopicPage: React.FC<TopicLessonPageTypes.SubtopicProps> = (
       {first ? (
         <LessonIntro
           className={styles.intro}
-          accessTier={props.lesson.accessTier}
           eyebrow={topicCatalog.formatTaskNumbers(props.lesson.taskNumbers)}
           subtopicCount={subtopics.length}
           summary={props.lesson.summary}
@@ -122,23 +124,28 @@ export const TopicSubtopicPage: React.FC<TopicLessonPageTypes.SubtopicProps> = (
         ) : null}
       </header>
 
-      <LessonTheory
-        variant="page"
-        concepts={subtopic.concepts}
-        conceptHeadingOrder={first ? 3 : 2}
-        className={styles.theory}
-      />
-
-      {subtopic.checkpoint ? (
-        // The subtopic's «объясни, почему» self-check, before its tasks:
-        // reasoning first, then Excel or code (Change 184).
-        <div id="self-check" className={styles.section}>
-          <Checkpoint
-            items={subtopic.checkpoint}
-            headingOrder={first ? 3 : 2}
-            headingClassName={styles.sectionTitle}
-          />
-        </div>
+      <Suspense fallback={null}>
+        <SubtopicBody
+          subtopic={subtopic}
+          locked={locked}
+          headingOrder={first ? 3 : 2}
+          theoryClassName={styles.theory}
+          sectionClassName={styles.section}
+          sectionTitleClassName={styles.sectionTitle}
+        />
+      </Suspense>
+      {locked ? (
+        <PaywallGate
+          access={props.access}
+          offer={props.offer}
+          unlocks={paywallUnlocks.topic(
+            props.lesson,
+            props.lockedTasks?.length ?? 0,
+          )}
+          {...paywallCopy.topic(props.lesson.taskNumbers)}
+          headingOrder={first ? 3 : 2}
+          from={`/ege/${props.lesson.routeSlug}/${subtopic.slug}`}
+        />
       ) : null}
 
       {tasks.length ? (

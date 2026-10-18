@@ -1,0 +1,67 @@
+/* /subscribe/return (Change 192): an open page, no card; on success the
+   mascot jumps beside the copy (DESIGN.md › Mascot, like 404 and sign-in). */
+.page {
+  composes: pageFrame from "../../shared/styles/patterns.module.css";
+  min-width: 0;
+
+  --primary-fill: var(--color-cta);
+  --primary-fill-hover: var(--color-cta-hover);
+}
+
+.content {
+  padding-block: var(--space-6);
+}
+
+.done {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 18.75rem;
+  gap: var(--space-3) var(--space-5);
+  align-items: center;
+  max-width: 52rem;
+}
+
+.copy {
+  display: grid;
+  gap: var(--space-1);
+  max-width: 36rem;
+}
+
+.title[data-order] {
+  margin: 0 0 var(--space-1);
+  font-size: var(--text-3xl);
+  letter-spacing: -0.025em;
+}
+
+.text[data-variant] {
+  margin: 0;
+  color: var(--color-text-soft);
+  font-size: var(--text-lg);
+}
+
+.note[data-variant] {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1-5) var(--space-2);
+  align-items: center;
+  margin-top: var(--space-2);
+}
+
+.scene {
+  width: 100%;
+}
+
+@media (max-width: 60rem) {
+  .done {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .scene {
+    display: none;
+  }
+}

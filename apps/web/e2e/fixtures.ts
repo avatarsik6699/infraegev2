@@ -1,6 +1,7 @@
 import { CourseCatalogPage } from "./pages/course-catalog.page";
 import { AccountPage } from "./pages/account.page";
 import { AccountIntegrationPage } from "./pages/account-integration.page";
+import { BillingIntegrationPage } from "./pages/billing-integration.page";
 import { MinimalApplicationPage } from "./pages/minimal-application.page";
 import { PracticeCutoverPage } from "./pages/practice-cutover.page";
 import { test as base, type Browser } from "@playwright/test";
@@ -19,6 +20,7 @@ type AppFixtures = {
   accountPage: AccountPage;
   accountIdentity: { email: string; password: string };
   accountIntegrationPage: AccountIntegrationPage;
+  billingIntegrationPage: BillingIntegrationPage;
   accountMailbox: { readVerificationLink(): string };
   noJavaScriptAccountPage: AccountPage;
   courseCatalogPage: CourseCatalogPage;
@@ -139,6 +141,9 @@ export const test = base.extend<AppFixtures>({
   },
   accountIntegrationPage: async ({ page }, use) => {
     await use(new AccountIntegrationPage(page));
+  },
+  billingIntegrationPage: async ({ page }, use) => {
+    await use(new BillingIntegrationPage(page));
   },
   accountIdentity: async ({ browser }, use, testInfo) => {
     void browser;

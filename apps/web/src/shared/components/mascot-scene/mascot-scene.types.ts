@@ -6,7 +6,12 @@ export namespace MascotSceneTypes {
     | "register"
     | "not-found"
     | "error"
-    | "empty-search";
+    | "empty-search"
+    // Change 192: paid access
+    | "paywall"
+    | "paywall-guest"
+    | "pricing"
+    | "access-open";
 
   export type Props = {
     scene: Scene;

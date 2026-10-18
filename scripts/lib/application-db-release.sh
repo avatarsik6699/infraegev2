@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 
-# Ordered schema heads; a transition is allowed only from the immediately previous head.
-APPLICATION_SCHEMAS=(122_01 140_01 191_01)
+# Ordered schema heads; a transition is allowed only from the immediately previous head, or
+# along a reviewed skip below.
+APPLICATION_SCHEMAS=(122_01 140_01 191_01 192_01)
+# Change 192: production runs 140_01 (191_01 was never released). Both later heads are
+# additive, so one isolated rehearsal of 140_01 -> 192_01 proves the whole step.
+APPLICATION_SKIPS=("140_01 192_01")
 
 application_known_schema() {
   local schema
@@ -17,6 +21,14 @@ application_previous_schema() {
       return 0
     fi
   done
+  return 1
+}
+
+# Whether a deployment may migrate from schema $1 to schema $2.
+application_allowed_transition() {
+  local skip
+  [[ $(application_previous_schema "$2") == "$1" ]] && return 0
+  for skip in "${APPLICATION_SKIPS[@]}"; do [[ $skip == "$1 $2" ]] && return 0; done
   return 1
 }
 
@@ -39,11 +51,11 @@ application_schema_preflight() {
   previous_schema=$(cat "$previous/infra/database-schema" 2>/dev/null || true)
   application_known_schema "$candidate_schema" || return 1
   # Each head is additive over its predecessor (140_01 accounts, 191_01 generated catalog
-  # columns): a retained previous release reads its own schema after a failed activation. A
-  # first deployment of a new head still needs a fresh isolated restore acceptance for this
-  # exact image before migration is allowed.
+  # columns, 192_01 billing tables): a retained previous release reads its own schema after a
+  # failed activation. A first deployment of a new head still needs a fresh isolated restore
+  # acceptance for this exact image before migration is allowed.
   if [[ $candidate_schema == "$previous_schema" ]]; then return 0; fi
-  [[ $(application_previous_schema "$candidate_schema") == "$previous_schema" ]] || return 1
+  application_allowed_transition "$previous_schema" "$candidate_schema" || return 1
   [[ -f $proof && $(stat -c '%u:%a' "$proof") == 0:600 &&
      $(cat "$proof") == "$candidate_schema $DEPLOY_SHA" ]] || {
     echo "Schema $candidate_schema requires explicit isolated restore acceptance for this exact SHA before deployment" >&2

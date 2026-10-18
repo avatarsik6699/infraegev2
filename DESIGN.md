@@ -205,7 +205,13 @@ one orange for position.
   nav item and selected tab, the 3px bar at the current lesson subtopic and page-rail item, and the
   small "Подтема N из M" label. 4.85:1 on white.
 - **Logo Orange** (logo-orange): the top stone of the logo and of the mascot, and the single
-  marker underline under the key phrase of the home hero. Nowhere else.
+  marker underline under the key phrase of the home hero (and of /pricing). Change 192 adds one
+  job: paid access — the lock of a paid file, section or task (a line icon, never text), the
+  month plan's chip, ticks and animated frame on /pricing, the selected plan at checkout.
+- **CTA Orange** (cta, cta-hover; Change 192): the fill of the paid-access action only —
+  «Получить полный доступ», «Выбрать месяц», «Оплатить», «Создать аккаунт» on the paywall. The
+  logo orange deepened to `#c95000` so white 17px semibold text keeps 4.53:1; the architect chose
+  it over ink (2026-10-18). Everywhere else primaries keep their rule.
 
 ### Tertiary
 - **Cover Pastels** (pastel-sky, pastel-sage, pastel-lilac, pastel-apricot): home-page path
@@ -397,7 +403,7 @@ are shown by the shared `ObjectIllustration` (`course`), mascot scenes by `Masco
   progress reset dialog is the one exception (architect, 2026-10-06): a soft «Отмена» and a
   filled danger «Сбросить» with white text.
 - **Hover / Focus:** hover darkens the fill or border; focus is a 2px ink outline with 2px offset.
-- **Never** an orange or pastel-filled button.
+- **Never** an orange or pastel-filled button, except the CTA Orange of paid access (Change 192).
 
 ### Links
 - Always Hyperlink Blue. Inline links underlined; standalone action links ("Открыть тему →")
@@ -581,6 +587,23 @@ are shown by the shared `ObjectIllustration` (`course`), mascot scenes by `Masco
   wide; topic 25: candidate sources and the final checks); two columns under 47.5rem, one under
   35rem.
 
+### Soft paywall and plans (Change 192)
+- **Paywall** (`features/paywall`): part of the page, never a card. The paid opening fades into
+  the page; under it the heading and one line of why with the `paywall` scene beside them (as on
+  sign-in, hidden below 960px), the question «Что откроется с полным доступом?» and a list with the
+  path-tile icons in their strong shades, no plates (lessons nested under «N уроков с разбором»,
+  questions, tasks); then the CTA, «от 249 ₽ в месяц / при оплате за год» and the quiet «Разовый
+  платёж, без автопродления…». A guest gets «Создайте аккаунт, чтобы продолжить» and no prices.
+  «урок», not «подтема», in these texts only.
+- **Locks:** an orange line lock after a paid file in the lesson trees, named-but-unlinked
+  sections in «На этой странице», locked task cards (title, difficulty, skills; no statement).
+  All follow the paywall flag; the /ege catalog never marks paid topics.
+- **/pricing:** three plan cards in the path-tile layout, monochrome, each with its own gradient
+  direction and faint pattern (dots, squared paper, hatching), sharing rows via subgrid. The month
+  plan sits in the centre as the one to try first (orange chip and ticks, «Для начала», the CTA,
+  an animated conic frame); the year is right, with twelve real month prices struck through.
+  One column on phones: month, year, Free.
+
 ### Mascot
 - A living stack of the three logo stones: face on the big bottom stone, the top stone outlined in
   Logo Orange, thin arms with round hands, short legs. Outline only, uneven hand-drawn line.
@@ -604,6 +627,12 @@ are shown by the shared `ObjectIllustration` (`course`), mascot scenes by `Masco
 - Motion is CSS inside the scene file: a slow float, gentle sway, sparkles; off under
   `prefers-reduced-motion`. Hero and auth scenes are hidden below 960px, where they would wrap under
   the copy or the form.
+- Paid access (Change 192): the paywall (`paywall`), the guest paywall (`paywall-guest`) and
+  /pricing (`pricing`) are the architect's colour drawings, traced like the auth scenes with their
+  extra colour layers (yellow, green, blue, grey) kept — the one exception to «one colour»; the
+  paywall face stays as drawn. After payment (`access-open`) the jump pose is drawn in code. In
+  these scenes the mascot does not move; only the marks twinkle and pulse (architect,
+  2026-10-17).
 
 ## Do's and Don'ts
 

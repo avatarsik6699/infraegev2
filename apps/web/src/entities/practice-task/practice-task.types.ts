@@ -100,6 +100,19 @@ export namespace PracticeTaskTypes {
     answerParts?: readonly AnswerPart[];
   };
 
+  /** Change 192: a paid task the visitor cannot open — its title and skills
+   *  only; the API never sends the statement (SPEC §6.1). */
+  export type LockedTask = {
+    id: string;
+    title: string;
+    difficulty: number;
+    difficultyLabel: string;
+    skills: readonly string[];
+    examNumbers: readonly number[];
+    theoryLinks: readonly TheoryLink[];
+    countsTowardMastery: boolean;
+  };
+
   export type LocalTask = Task & {
     answers: readonly string[];
     explanation: string;

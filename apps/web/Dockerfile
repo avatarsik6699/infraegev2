@@ -10,6 +10,8 @@ COPY --chown=node:node apps/web/package.json apps/web/package.json
 USER node
 RUN pnpm install --frozen-lockfile
 COPY --chown=node:node apps/web apps/web
+# Change 192: the offer and refund pages render the same files the API hashes.
+COPY --chown=node:node content/legal content/legal
 # A cached install precedes the fresh manifests copied above; refresh frozen metadata offline.
 RUN pnpm install --frozen-lockfile --offline
 # `pnpm exec` (not `pnpm --filter web dev`) so vite runs as a direct child of pnpm instead of
@@ -24,6 +26,7 @@ COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
 COPY apps/web/package.json apps/web/package.json
 RUN pnpm install --frozen-lockfile
 COPY apps/web apps/web
+COPY content/legal content/legal
 # When the install layer comes from the build cache, the fresh copy makes the manifests newer than
 # the install and pnpm's deep check rejects the tree. Re-running the frozen install from the store
 # already in this layer takes about a second and needs no network (Change 137).

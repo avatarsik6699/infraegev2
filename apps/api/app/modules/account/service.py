@@ -336,5 +336,9 @@ async def delete_account(db: AsyncSession, session: AccountSession, password: st
             raise InvalidCredentials("invalid password")
     elif session.authenticated_at < now() - RECENT_AUTH:
         raise InvalidCredentials("recent authentication required")
+    # Change 192: billing rows stay as evidence; access ends and unused days are refunded.
+    from app.modules.billing.service import on_account_deletion
+
+    await on_account_deletion(db, user.id)
     await db.delete(user)
     await db.flush()

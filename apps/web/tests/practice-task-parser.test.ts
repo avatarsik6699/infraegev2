@@ -5,6 +5,10 @@ import {
   projectPracticeTask,
 } from "~/entities/practice-task/api/load-practice-tasks.server";
 
+vi.mock("~/shared/api/session-cookie.server", () => ({
+  sessionCookie: { header: () => undefined },
+}));
+
 const text = { type: "text", data: { markdown: "Условие" } };
 
 describe("public practice projection", () => {
@@ -221,6 +225,7 @@ describe("public practice projection", () => {
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new TypeError("offline")));
     expect(await loadLessonPractice("topic", "rekursiya")).toEqual({
       tasks: [],
+      lockedTasks: [],
       practiceUnavailable: true,
     });
   });

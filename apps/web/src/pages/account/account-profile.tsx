@@ -17,6 +17,7 @@ import {
 } from "~/shared/components/tabs";
 import { Typography } from "~/shared/components/typography";
 import { authProviderNavigation } from "~/shared/lib/auth-provider-navigation";
+import { AccountAccess } from "./components/account-access";
 import { AccountOverview } from "./components/account-overview";
 import { EmailMethodForm } from "./components/email-method-form";
 import { LoginMethodIcon } from "./components/login-method-icon";
@@ -30,7 +31,11 @@ export const AccountProfile: React.FC<AccountProfileTypes.Props> = (props) => {
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [needsReauthentication, setNeedsReauthentication] = useState(false);
-  const [tab, setTab] = useState("overview");
+  const [tab, setTab] = useState<string>(
+    props.tab === "access" && !props.billing
+      ? "overview"
+      : (props.tab ?? "overview"),
+  );
   if (session.status === "loading")
     return (
       <Typography.Text className={styles.notice} role="status">
@@ -121,8 +126,14 @@ export const AccountProfile: React.FC<AccountProfileTypes.Props> = (props) => {
       <TabsRoot value={tab} onValueChange={setTab} className={styles.tabs}>
         <TabsList label="Разделы профиля" className={styles.tabList}>
           <TabsTab value="overview">Обзор</TabsTab>
+          {props.billing ? <TabsTab value="access">Доступ</TabsTab> : null}
           <TabsTab value="settings">Настройки</TabsTab>
         </TabsList>
+        {props.billing ? (
+          <TabsPanel value="access" className={styles.tabPanel}>
+            <AccountAccess access={props.billing.access} />
+          </TabsPanel>
+        ) : null}
         <TabsPanel value="overview" className={styles.tabPanel}>
           <AccountOverview
             practiceSummary={props.practiceSummary}

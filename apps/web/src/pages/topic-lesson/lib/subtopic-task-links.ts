@@ -1,4 +1,8 @@
-import { findSubtopicBySection, type LessonContent } from "~/entities/lesson";
+import {
+  findSubtopicBySection,
+  lessonSections,
+  type LessonContent,
+} from "~/entities/lesson";
 import type { PracticeTaskTypes } from "~/entities/practice-task";
 import { theoryLinkLabel } from "~/shared/lib/theory-link-label";
 
@@ -13,7 +17,7 @@ export function withSubtopicTheoryLinks(
     ...task,
     theoryLinks: task.theoryLinks.map((link) => {
       const owner = findSubtopicBySection(lesson, link.hash);
-      const label = theoryLinkLabel(lesson.theory, link.hash);
+      const label = theoryLinkLabel(lessonSections(lesson), link.hash);
       return owner && owner.slug !== currentSubtopic
         ? {
             ...link,

@@ -1,0 +1,195 @@
+"""Robokassa for a самозанятый seller (Change 192, SPEC §7.3).
+
+Payments: the Merchant/Index.aspx page, signed with Password #1; the ResultURL
+notification is signed with Password #2 and answered `OK{InvId}`; OpStateExt (Password #2)
+is the status of record; refunds go through the Refund API, a JWT signed with Password #3.
+Receipts are registered in «Мой налог» by Робочеки СМЗ on the shop side.
+
+Verify against the shop in test mode before launch (runbook billing-provider-selection):
+the OpStateExt signature and state codes, and whether Робочеки need a `Receipt` field.
+"""
+
+import hashlib
+import hmac
+from decimal import Decimal, InvalidOperation
+from urllib.parse import urlencode
+from xml.etree import ElementTree
+
+import httpx
+import jwt
+
+from app.core.config import settings
+from app.modules.billing.plans import rubles
+from app.modules.billing.provider.port import (
+    InvalidNotification,
+    Notification,
+    PaymentRequest,
+    ProviderError,
+    RefundResult,
+    State,
+    Status,
+)
+
+PAY_URL = "https://auth.robokassa.ru/Merchant/Index.aspx"
+STATE_URL = "https://auth.robokassa.ru/Merchant/WebService/Service.asmx/OpStateExt"
+REFUND_URL = "https://services.robokassa.ru/RefundService/Refund/Create"
+REFUND_STATE_URL = "https://services.robokassa.ru/RefundService/Refund/GetState"
+TIMEOUT = httpx.Timeout(10)
+# OpStateExt State/Code: 5 created, 10 cancelled, 20 on hold, 50 received and being
+# credited, 60 returned to the buyer, 80 suspended, 100 completed.
+STATES: dict[int, State] = {
+    5: "pending",
+    10: "failed",
+    20: "pending",
+    50: "pending",
+    60: "refunded",
+    80: "pending",
+    100: "succeeded",
+}
+
+
+def kopecks(value: str) -> int:
+    try:
+        amount = Decimal(value) * 100
+    except InvalidOperation as exc:
+        raise InvalidNotification("malformed amount") from exc
+    if amount != amount.to_integral_value() or amount <= 0:
+        raise InvalidNotification("malformed amount")
+    return int(amount)
+
+
+def digest(text: str) -> str:
+    return hashlib.new(settings.robokassa_hash, text.encode()).hexdigest()
+
+
+def local(tag: str) -> str:
+    return tag.rsplit("}", 1)[-1]
+
+
+def find(root: ElementTree.Element, *path: str) -> str | None:
+    node: ElementTree.Element | None = root
+    for name in path:
+        node = next((child for child in node if local(child.tag) == name), None) if node else None
+    return node.text if node is not None else None
+
+
+class Robokassa:
+    name = "robokassa"
+
+    @property
+    def login(self) -> str:
+        return settings.robokassa_merchant_login
+
+    def secret(self, number: int) -> str:
+        value = {
+            1: settings.robokassa_password1,
+            2: settings.robokassa_password2,
+            3: settings.robokassa_password3,
+        }[number].get_secret_value()
+        if not value:
+            raise ProviderError(f"Robokassa password #{number} is not configured")
+        return value
+
+    def payment_url(self, request: PaymentRequest) -> str:
+        out_sum = rubles(request.amount_kopecks)
+        params = {
+            "MerchantLogin": self.login,
+            "OutSum": out_sum,
+            "InvId": str(request.invoice_no),
+            "Description": request.description[:100],
+            "SignatureValue": digest(
+                f"{self.login}:{out_sum}:{request.invoice_no}:{self.secret(1)}"
+            ),
+            "Culture": "ru",
+            **({"Email": request.email} if request.email else {}),
+            **({"IsTest": "1"} if settings.robokassa_test else {}),
+        }
+        return f"{PAY_URL}?{urlencode(params)}"
+
+    def parse_notification(self, fields: dict[str, str]) -> Notification:
+        out_sum, invoice, signature = (
+            fields.get("OutSum", ""),
+            fields.get("InvId", ""),
+            fields.get("SignatureValue", ""),
+        )
+        if not out_sum or not invoice.isdigit() or not signature:
+            raise InvalidNotification("malformed notification")
+        expected = digest(f"{out_sum}:{invoice}:{self.secret(2)}")
+        if not hmac.compare_digest(expected.lower(), signature.lower()):
+            raise InvalidNotification("bad signature")
+        return Notification(
+            event_key=f"result:{invoice}",
+            invoice_no=int(invoice),
+            amount_kopecks=kopecks(out_sum),
+            state="succeeded",
+            payload={
+                "OutSum": out_sum,
+                "InvId": invoice,
+                "PaymentMethod": fields.get("PaymentMethod"),
+                "IncCurrLabel": fields.get("IncCurrLabel"),
+            },
+        )
+
+    def acknowledge(self, notification: Notification) -> str:
+        return f"OK{notification.invoice_no}"
+
+    async def fetch_status(self, invoice_no: int) -> Status:
+        params = {
+            "MerchantLogin": self.login,
+            "InvoiceID": str(invoice_no),
+            "Signature": digest(f"{self.login}:{invoice_no}:{self.secret(2)}"),
+        }
+        try:
+            async with httpx.AsyncClient(timeout=TIMEOUT, follow_redirects=False) as client:
+                response = await client.get(STATE_URL, params=params)
+                response.raise_for_status()
+            root = ElementTree.fromstring(response.content[:65536])
+        except (httpx.HTTPError, ElementTree.ParseError) as exc:
+            raise ProviderError("Robokassa status unavailable") from exc
+        result = find(root, "Result", "Code")
+        if result == "3":  # the invoice is unknown: the buyer never reached the pay page
+            return Status("pending")
+        if result != "0":
+            raise ProviderError(f"Robokassa status error {result}")
+        code = find(root, "State", "Code")
+        amount = find(root, "Info", "OutSum")
+        return Status(
+            state=STATES.get(int(code or 0), "pending"),
+            amount_kopecks=kopecks(amount) if amount else None,
+            provider_ref=find(root, "Info", "OpKey"),
+        )
+
+    async def refund(
+        self, invoice_no: int, amount_kopecks: int, full: bool, description: str
+    ) -> RefundResult:
+        status = await self.fetch_status(invoice_no)
+        if status.state != "succeeded" or not status.provider_ref:
+            return RefundResult("failed", message="payment is not completed")
+        payload: dict[str, object] = {"OpKey": status.provider_ref}
+        if not full:
+            payload["RefundSum"] = float(Decimal(amount_kopecks) / 100)
+        token = jwt.encode(payload, self.secret(3), algorithm="HS256")
+        try:
+            async with httpx.AsyncClient(timeout=TIMEOUT, follow_redirects=False) as client:
+                response = await client.post(
+                    REFUND_URL, content=token, headers={"Content-Type": "application/json"}
+                )
+                response.raise_for_status()
+                body = response.json()
+        except (httpx.HTTPError, ValueError) as exc:
+            raise ProviderError("Robokassa refund unavailable") from exc
+        if not body.get("success"):
+            return RefundResult("failed", message=str(body.get("message"))[:200])
+        return RefundResult("pending", provider_ref=body.get("requestId"))
+
+    async def refund_state(self, provider_ref: str) -> RefundResult:
+        try:
+            async with httpx.AsyncClient(timeout=TIMEOUT, follow_redirects=False) as client:
+                response = await client.get(REFUND_STATE_URL, params={"id": provider_ref})
+                response.raise_for_status()
+                body = response.json()
+        except (httpx.HTTPError, ValueError) as exc:
+            raise ProviderError("Robokassa refund state unavailable") from exc
+        label = body.get("label")
+        state = {"finished": "succeeded", "canceled": "failed"}.get(label, "pending")
+        return RefundResult(state, provider_ref=provider_ref, message=label)  # type: ignore[arg-type]

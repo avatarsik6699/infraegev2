@@ -6,10 +6,18 @@ import {
 } from "@tanstack/react-router";
 import type { AppRouterContext } from "~/router";
 import { AppDocumentHead, AppProviders, RouteError } from "~/app";
+import { getOffer } from "~/entities/billing";
 import { siteConfig } from "~/shared/config/site";
+import { SiteFlagsProvider } from "~/shared/lib/site-flags";
 import "~/app/styles.css";
 
 export const Route = createRootRouteWithContext<AppRouterContext>()({
+  // Change 192: the footer links plans, the offer and refunds only while selling
+  // is on (BILLING_ENABLED); the server keeps the answer for a minute.
+  loader: async () => ({
+    billing: Boolean((await getOffer().catch(() => undefined))?.billing),
+  }),
+  staleTime: Infinity,
   head: () => ({
     meta: [
       { charSet: "utf-8" },
@@ -61,10 +69,11 @@ export const Route = createRootRouteWithContext<AppRouterContext>()({
 });
 
 function RootComponent() {
+  const flags = Route.useLoaderData();
   return (
-    <>
+    <SiteFlagsProvider value={flags}>
       <Outlet />
-    </>
+    </SiteFlagsProvider>
   );
 }
 

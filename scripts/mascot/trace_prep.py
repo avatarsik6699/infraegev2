@@ -9,16 +9,19 @@ ink pieces (sparkles, light rays, pencil marks) into their own masks so the scen
 can animate them. Pieces enclosed by a larger outline (eyes, keyhole) stay put;
 `move` limits the moving pieces to the given boxes (source pixels) or turns
 them off, so trail dashes stay still.
+Coloured lines other than the orange accent (yellow, green, blue, light grey;
+Change 192) go to their own masks, traced in their mean colour.
 Face lines inside the `face` box (source pixels) leave the trace and are kept
 as centrelines, so trace.mjs redraws them with the pen like the approved poses.
 Writes <work-dir>/scene.json and the masks next to it.
 """
 
+import colorsys
 import json
 import sys
 from pathlib import Path
 
-from PIL import Image
+from PIL import Image, ImageFilter
 from prepare import (
     centrelines,
     components,
@@ -32,6 +35,30 @@ from prepare import (
 TRACE_SCALE = 2
 MARGIN = 24
 SMALL = 120  # px in the source: larger pieces are part of the drawing
+TINT_MIN = 40  # px in the trace: smaller colour specks are anti-aliasing
+# Hue bands (degrees) of the extra colour layers; orange stays the accent.
+HUES = {"yellow": (38, 70), "green": (75, 170), "blue": (185, 260)}
+
+
+def is_yellow(r, g, b):
+    """A dark yellow edge passes the accent test; its hue tells it apart."""
+    return colorsys.rgb_to_hsv(r / 255, g / 255, b / 255)[0] * 360 > 34
+
+
+def is_neutral(r, g, b):
+    """A mid-grey pixel: a grey line, or the soft edge of a black one."""
+    _, s, v = colorsys.rgb_to_hsv(r / 255, g / 255, b / 255)
+    return s < 0.12 and 0.3 < v < 0.8
+
+
+def tint_of(r, g, b):
+    """Colour layer of a pixel that is neither ink nor accent; grey is found by region."""
+    h, s, v = colorsys.rgb_to_hsv(r / 255, g / 255, b / 255)
+    if s > 0.35 and v > 0.3:
+        for name, (lo, hi) in HUES.items():
+            if lo <= h * 360 <= hi:
+                return name
+    return None
 
 
 def move_zones(option, box):
@@ -72,14 +99,36 @@ def main():
     crop = image.crop(box)
     big = crop.resize((crop.width * TRACE_SCALE, crop.height * TRACE_SCALE), Image.LANCZOS)
     px = big.load()
-    ink, accent = set(), set()
+    ink, accent, core, neutral = set(), set(), set(), set()
+    tints = {name: set() for name in (*HUES, "grey")}
     for y in range(big.height):
         for x in range(big.width):
             colour = px[x, y]
-            if is_accent(*colour):
+            if max(colour) < 80:
+                core.add((x, y))
+            elif is_neutral(*colour):
+                neutral.add((x, y))
+            if is_accent(*colour) and not is_yellow(*colour):
                 accent.add((x, y))
-            elif is_ink(*colour):
+            elif is_ink(*colour) and tint_of(*colour) is None:
                 ink.add((x, y))
+            elif (name := tint_of(*colour)) is not None:
+                tints[name].add((x, y))
+    # The soft edge of every black line is grey too, and the darker middle of
+    # a grey line passes the ink test: a grey line is grey away from any black
+    # core, whatever its shade, and leaves the ink.
+    if neutral:
+        core_mask = Image.new("L", big.size, 0)
+        cm = core_mask.load()
+        for x, y in core:
+            cm[x, y] = 255
+        near = core_mask.filter(ImageFilter.MaxFilter(11)).load()
+        tints["grey"] = {(x, y) for x, y in neutral if not near[x, y]}
+        ink -= tints["grey"]
+    for pixels in tints.values():
+        for comp in components(set(pixels)):
+            if len(comp) < TINT_MIN:
+                pixels.difference_update(comp)
 
     enclosed_comps = face_components(big.size, ink)
     enclosed = {p for comp in enclosed_comps for p in comp}
@@ -127,6 +176,15 @@ def main():
     work.mkdir(parents=True, exist_ok=True)
     save_mask(big.size, still, work / "ink.png")
     save_mask(big.size, accent, work / "accent.png")
+    tint_layers = []
+    for name, pixels in tints.items():
+        if not pixels:
+            continue
+        mean = [round(sum(px[x, y][c] for x, y in pixels) / len(pixels)) for c in range(3)]
+        save_mask(big.size, pixels, work / f"tint-{name}.png")
+        tint_layers.append(
+            {"file": f"tint-{name}.png", "fill": "#" + "".join(f"{c:02x}" for c in mean)}
+        )
     meta = []
     for i, (x0, y0, x1, y1, comp) in enumerate(sorted(items)):
         pad = 6
@@ -154,10 +212,14 @@ def main():
         "scale": TRACE_SCALE,
         "face": face,
         "items": meta,
+        "tints": tint_layers,
     }
     (work / "scene.json").write_text(json.dumps(scene, indent=1))
     features = f", face {len(face['strokes'])} strokes {len(face['dots'])} dots" if face else ""
-    print(f"{source.name}: {crop.width}×{crop.height}, {len(meta)} moving pieces{features}")
+    colours = f", colours {' '.join(t['fill'] for t in tint_layers)}" if tint_layers else ""
+    print(
+        f"{source.name}: {crop.width}×{crop.height}, {len(meta)} moving pieces{features}{colours}"
+    )
 
 
 if __name__ == "__main__":

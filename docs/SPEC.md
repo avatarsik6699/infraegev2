@@ -9,8 +9,8 @@
 
 | Field | Value |
 |-------|-------|
-| Document Version | `v2.28` |
-| Date | `2026-10-16` |
+| Document Version | `v2.29` |
+| Date | `2026-10-17` |
 | Architect / Owner | `v.godlevskiy` |
 | Stack | See [docs/STACK.md](./STACK.md) |
 | Domain | Платформа подготовки к ЕГЭ по информатике — самостоятельные темы экзамена и мини-курсы с теорией, визуализацией и практикой |
@@ -60,7 +60,8 @@ sdamgia.ru, kpolyakov.spb.ru), ни новыми AI-ботами (решают �
 |-----------------|------------------------------------------|
 | Полная публичная карта заданий ЕГЭ и 2 проверенные TopicLesson как содержательный MVP baseline | Полноценный тренажёр-пробник ЕГЭ с таймером на весь вариант |
 | 1 мини-курс — Python (закрывает больше всего номеров: 6, 8, 11, 14, 15, 16, 17, 18, 20–27) | Автоматическая персональная рекомендация следующей темы |
-| Завершённый самостоятельный мини-курс Python с отдельным Course/CourseLesson flow | Платные функции любого вида |
+| Завершённый самостоятельный мини-курс Python с отдельным Course/CourseLesson flow | Автопродление и сохранённые карты, живые форматы (группы, занятия), кабинет учителя, реклама |
+| Платный доступ (Change 192, §6.1): два разовых тарифа, soft paywall, оплата через провайдера с чеками самозанятого; включается флагами вместе с релизом | |
 | Публичные, индексируемые страницы тем и уроков (SSR/SSG) | AI внутри продукта (только как инструмент автора при подготовке контента) |
 | Практика по каждой опубликованной TopicLesson: 5–10 заданий с проверкой ответа, без адаптивного подбора сложности | Полные TopicLesson для остальных заданий ЕГЭ — вторая волна, по той же структуре |
 | Мини-курс Excel (задания 3, 9, 18, 22): стенд по пайплайну — Change 176, перенос на сайт — Change 177 | |
@@ -149,8 +150,10 @@ assisted-solution scoring, оценки уверенности или персо
 
 | Role | Capabilities | Restrictions |
 |------|-------------|--------------|
-| `Anonymous learner` | Читает теорию, решает практику, получает обратную связь по ответу | Прогресс не сохраняется и не засчитывается после ухода или перезагрузки страницы |
-| `Signed-in learner` | Всё доступное гостю; хранит прогресс уроков и самостоятельной практики в аккаунте и управляет способами входа | Факт входа не даёт прав автора, оператора или платного доступа |
+| `Anonymous learner` | Читает бесплатную теорию, решает её практику, получает обратную связь по ответу; у платных частей видит превью и блок оплаты (§6.1) | Прогресс не сохраняется и не засчитывается после ухода или перезагрузки страницы; купить доступ без входа нельзя |
+| `Signed-in learner` | Всё доступное гостю; хранит прогресс уроков и самостоятельной практики в аккаунте и управляет способами входа; покупает доступ для своего аккаунта | Факт входа не даёт прав автора, оператора или платного доступа |
+| `Subscriber` | Signed-in learner с действующим доступом (`access_grant`, §3): читает и решает платные подтемы, уроки и их задачи | Доступ принадлежит одному аккаунту и не передаётся; права не меняют учебный прогресс |
+| `Billing operator` (архитектор) | Через операторскую CLI на хосте оформляет возвраты, смотрит платежи пользователя и годовую выручку | Публичного admin API нет; действия идемпотентны и журналируются |
 | `Content author` (архитектор + AI как инструмент) | Пишет типизированную теорию в `apps/web/src/entities/lesson/content/*.lesson.tsx` и практику в `content/practice-bank/bank.json`; в feature-ветке помечает готовый к локальной проверке урок `published` и импортирует задачи обычным операторским путём | Content Quality Gate (§2.3) применяется до `/ship`; импорт задач — по §3 и runbook practice; локальный статус не выпускает материал в production |
 | `Architect` | Владеет `docs/SPEC.md`, принимает архитектурные решения, вручную проверяет готовый локальный урок и сообщает замечания в активный Backlog до `/ship` | — |
 | `AI_Agent` | Реализует изменения через `/work`, готовит и исправляет контент по [Content Quality Gate](#23-content-quality-gate-definition-of-done) (§2.3), запускает предусмотренные проверки | Не делает `/ship` или push в `main` без соответствующей команды; локальный `published` не означает production-выпуск |
@@ -190,7 +193,23 @@ ID задачи, `solution_revision` на момент проверки и вр�
 Текст ответа, ошибочные попытки, черновики и готовые mastery-счётчики не сохраняются. Прогресс
 курса вычисляется из результатов опубликованных уроков; будущая статистика уникальных задач
 считает distinct task ID независимо от числа контекстов. Ручная отметка «пройдено» и права
-подписки, если будут введены, не подменяют факт верного ответа и имеют отдельное владение.
+доступа не подменяют факт верного ответа и имеют отдельное владение.
+
+Платный доступ (Change 192). Каждая подтема темы ЕГЭ, страница «Практика и итог» и урок курса
+имеют уровень доступа `access: free | paid`, заданный в исходнике стенда (`topic.json`,
+`course.json`) и экспортируемый в publication metadata и practice registry. Матрица деления
+(решение архитектора 2026-10-16): курс Python бесплатен целиком; в курсе Excel бесплатны уроки 1–6
+(модули «Лист» и «Формулы»); темы заданий 1–11, 14 и 16 бесплатны целиком; в остальных темах
+бесплатна первая треть подтем (2–3), остальные подтемы и «Практика и итог» — платные. Внутри
+бесплатной подтемы ничего не закрыто. Задача платная, если все её опубликованные членства в уроках
+ведут в платные подтемы, платную «Практику и итог» или платные уроки; задача самостоятельного банка
+(`catalog_visible`) остаётся бесплатной. `AccessPlan` — тариф из настроек (`month`: 490 ₽ на 30 дней,
+`year`: 2 990 ₽ на 365 дней; цены и сроки задаются конфигурацией). `Payment` — разовая оплата
+тарифа владельцем аккаунта; `AccessGrant` — период доступа, созданный успешной оплатой: начало —
+позднейшее из «сейчас» и конца предыдущего гранта, возврат укорачивает или отзывает грант. Доступ
+вычисляется из грантов, а не хранится флагом. `OfferAcceptance` — неизменяемая запись принятия
+версии оферты при оплате; `Refund` — возврат по платежу; `ProviderEvent` — входящее уведомление
+провайдера с дедупликацией. Автопродления, сохранённых карт и подписочной машины состояний нет.
 Аккаунт и видимый «Профиль» — разные понятия; отдельная таблица профиля не нужна до появления
 собственных редактируемых полей. Старые localStorage-записи не импортируются.
 
@@ -373,6 +392,17 @@ lesson the mastery total excludes tasks whose lesson membership is marked as out
 tasks of advanced-level subtopics (Change 171); those tasks keep ordinary results, and the API and
 the frontend apply the same membership flag.
 
+Billing records (Change 192, schema `192_01`, schema `practice`): offer acceptance (append-only:
+offer version, text hash, time), payment (provider invoice number, plan, amount in integer kopecks,
+status `created | pending | succeeded | failed | refunded`, unique idempotency key, provider
+reference, receipt status/link, paid time), access grant (payment, user, start, end), refund
+(payment, amount, reason, status, idempotency key) and provider event inbox (unique per provider
+event). The account write role gets narrow grants: no DELETE on billing tables, INSERT/SELECT only on
+append-only ones. Account deletion ends access, files a refund request for the unused part and
+pseudonymizes billing rows (user link and contact removed); billing rows are retained 5 years for tax
+and consumer disputes. The free/paid level of materials is content metadata (§2.2), carried to the
+API by the generated practice registry, not a database column.
+
 ## 4. API / Backend Contract
 
 Existing `/api/tasks` detail/check/file and lesson-practice/course-summary capabilities remain.
@@ -406,6 +436,20 @@ from saved; a write failure never claims that progress was saved. Public catalog
 checker answers remain available without registration. Regenerate OpenAPI clients with the API.
 No public task-bank write/admin API.
 
+Paid access (Change 192). Practice reads apply the access level (§2.2): for a viewer without access
+lesson practice returns paid tasks as locked stubs (ID, position, revision, title, skills; no
+statement, hints or files) and task detail, check, check-and-save and files of a paid task answer
+403 `subscription_required`. `GET /api/access` returns the viewer's access state (until, plan) and
+`GET /api/access/asset` is the internal yes/no check behind the paid-chunk gate (§7). Billing:
+`GET /api/billing/offer` (flags, plans with prices and the reference monthly sum, current offer
+version); `POST /api/billing/checkout` (session, CSRF, origin, verified email, plan, offer version,
+client idempotency key; returns the provider redirect URL); `POST /api/billing/webhooks/{provider}`
+(no session/CSRF; provider signature, event dedup, status re-fetched from the provider, idempotent
+transition under a row lock, provider acknowledgement); `GET /api/billing/payments/{id}` (owner-only,
+no-store; bounded status re-fetch while pending); `GET /api/billing/payments` (owner history with
+receipt links). Refunds, payment lookup and yearly revenue are an operator CLI, not an API. While
+`PAYWALL_ENABLED` is off every read is free; while `BILLING_ENABLED` is off checkout is unavailable.
+
 An imported standalone task may have no authored hint or explanation; those lists are empty and
 their help actions/panels are absent. Checker answers remain private and are not substituted for
 an explanation. Attachments are bounded at 64 MiB. Original `.xls` attachments and GIF task images use the same content-addressed,
@@ -417,7 +461,31 @@ outdated formats are excluded. Existing task content, checkers and revisions are
 
 Public learning routes: `/`, `/ege`, `/courses`, course overview, published topic and course
 lessons, `/practice`, task detail and `/privacy`. Planned entries remain non-links; there are no
-internal lab or specimen routes.
+internal lab or specimen routes. Change 192 adds `/pricing`, `/subscribe` (checkout), the payment
+return page, `/oferta` (current offer with dated archive) and `/vozvrat`, plus an «Доступ» section
+in the account.
+
+### Paid access UI (Change 192)
+
+Soft paywall, one visual pattern everywhere paid content appears, shown only while
+`PAYWALL_ENABLED` is on and only to viewers without access: a lock icon after paid subtopics, «Практика
+и итог» and paid course lessons in the left tree; a paid page keeps its breadcrumbs, title, `lead` and
+the opening of its first section, which fades into the page background, followed by a paywall card
+(why the rest is closed, what is inside — remaining subtopics and task counts from metadata, the
+lowest monthly-equivalent price, «Открыть доступ»; for guests also «Войти»). Locked practice tasks
+show title and skills with the same card pattern, never a statement. Topic and course cards may carry
+a quiet free-part note («3 из 8 подтем бесплатно»). After payment the learner returns to the page
+they came from. The light «Clean Textbook» system of DESIGN applies (no dark paywall, no loud badges);
+the pattern is approved from a mockup before code.
+
+`/pricing` shows Free («Ваш план» by default), Месяц and Год. The year plan shows the honest
+comparison with paying monthly: the struck-through 12 × monthly sum, the percentage saved and the
+per-month and per-day equivalents; the year column is emphasized quietly. No fictitious base prices,
+fake countdowns or scarcity claims (§8.2). Checkout shows the chosen plan, «Оплатить» and one small
+line «Нажимая «Оплатить», вы принимаете условия оферты» with a link; no checkboxes. The return page
+polls the payment status and never trusts query parameters. The account «Доступ» section shows access
+end date, payment history with receipt links and «Продлить». Footer links: «Тарифы», «Оферта»,
+«Возврат» — no seller name.
 
 Change 164 replaces the minimal Change 122/156 profile with the "Clean Textbook" visual system
 in [DESIGN](../DESIGN.md), approved by the architect from full-page mockups. Keep the infraege
@@ -573,9 +641,26 @@ cookie. Идентификатор сессии хранится на серве
 отзывает сеансы и удаляет его учебные результаты. Сброс прогресса урока затрагивает только этот
 контекст и требует подтверждения.
 
-`access_tier: free | paid` в Topic/CourseLesson пока лишь metadata: все опубликованные материалы
-остаются бесплатными. Будущие entitlement и оплата отделены от идентичности; скрытие ссылки в UI
-не может служить защитой платного контента, особенно для TSX-уроков в web bundle.
+### 6.1 Платный доступ (Change 192)
+
+Право доступа отделено от идентичности: вход его не даёт, доступ даёт только действующий
+`AccessGrant` (§2.2). Скрытие ссылки или текста в интерфейсе защитой не считается. Платная теория
+не попадает в публичные файлы: экспорт стенда выносит каждую платную подтему и платный урок курса
+в отдельный TSX-модуль `*.paid.*`, который загружается через `React.lazy`; сборка складывает их
+чанки в `/assets/paid/`, и Nginx отдаёт этот путь только после внутренней проверки
+`GET /api/access/asset` с cookie сессии (`auth_request`). Основной модуль урока содержит
+бесплатные блоки, метаданные и превью всех подтем. SSR узнаёт доступ серверной функцией, которая
+передаёт в API только cookie сессии: зрителю с доступом рендерит полный текст (`private, no-store`),
+остальным — превью и блок оплаты; публичный HTML гостя не меняется от наличия чужих сессий.
+Проверка сборки падает, если контрольная фраза платного модуля найдена в публичных файлах вне
+`assets/paid/` или в предрендеренном HTML. Задачи платных подтем закрывает API (§4).
+
+Оплатить доступ может только вошедший владелец аккаунта с подтверждённым email. Оплата —
+принятие оферты (ГК ст. 438); сервер записывает показанную версию оферты. Тарифы разовые, без
+автопродления и сохранения карт; повторная покупка продлевает доступ от даты окончания.
+Флаги `PAYWALL_ENABLED` и `BILLING_ENABLED` выключены по умолчанию: пока они выключены, все
+материалы бесплатны, а оплата недоступна; включение — правка окружения и перезапуск, без нового
+кода.
 
 ---
 
@@ -627,6 +712,18 @@ infraege.prod.conf`, §8.2): `script-src`/`connect-src` допускают `http
 под первым лицом (first-party proxy) не заводится — расширять эту границу без нового явного
 решения архитектора нельзя.
 
+Платный доступ (Change 192) не добавляет сервисов в Compose. Платёжный провайдер — Robokassa
+(самозанятый: каждый чек регистрируется в «Мой налог» сервисом «Робочеки СМЗ», при возврате
+аннулируется); код работает через порт провайдера с фейковым адаптером для тестов и dev, отключённым
+в production. Nginx получает внутренний `auth_request` для `/assets/paid/` и отдельный
+`location` уведомлений провайдера со своей зоной лимита и малым размером тела. Браузер уходит на
+страницу оплаты обычной навигацией (CSP не расширяется). Хостовый systemd-таймер биллинга (образец —
+`infraege-account-purge`) раз в час досверяет зависшие платежи, закрывает неоплаченные заказы,
+раз в сутки сверяет платежи и чеки с провайдером, считает выручку календарного года против лимита
+НПД (70 % — предупреждение в журнале, 85 % — письмо оператору, 95 % — пауза новых оплат) и
+отправляет нейтральное письмо «доступ заканчивается через 3 дня». Секреты провайдера и флаги — в
+`/etc/infraege/production.env`.
+
 Установленные сервисы VPS этим локальным change не изменяются, кроме упомянутой правки CSP. Их
 остановка и отключение старых таймеров входят в отдельный явно разрешённый release по runbook;
 volumes автоматически не удаляются.
@@ -655,15 +752,17 @@ per-context progress on an isolated target. Guest browser progress is never migr
 | Accessibility target | Public pages не имеют serious/critical axe violations; lesson outline сохраняет вложенный semantic list, anchors, keyboard focus, различимый текущий пункт и корректный source order, а сложный визуал имеет видимую полную текстовую альтернативу |
 | Performance budget | Lighthouse-аудит раз в неделю или по запросу сохраняет median LCP ≤4.0s на мобильном 4G-профиле; продуктовая цель остаётся LCP ≤2.8s. CLS < 0.1, INP < 200ms. Server response (Change 191): on the full local bank `/practice` TTFB ≤300 ms, catalog/facet API ≤100 ms, search and suggestions ≤150 ms. Измеряются `/`, `/ege`, `/courses`, `/courses/python` и `/ege/16-rekursiya`; cold-load font/layout shifts проверяются отдельно. Lighthouse не является обязательным шагом каждого релиза или изменения CSS; подозрение на регрессию требует целевого измерения, а не автоматического Full Gate. Порог не ослабляется ради ускорения |
 | Observability | Health, structured server logs and scheduled external availability/TLS probe, plus a cookieless browser-analytics beacon (`smotryashchiy`, self-hosted at `sre.infraege.ru`, separate repo/deploy, §7.3) allowlisted in CSP; no cookies, no persistent visitor id, no consent UI, no dashboards or monitoring stack hosted in this repo |
-| Backup / restore | Application DB, files, roles and protected environment in encrypted Restic; 7 daily + 4 weekly + 3 monthly, monthly isolated restore. Same-host backup loss remains accepted until off-site storage exists |
-| SEO | `/`, `/privacy`, published topics, courses и CourseLesson имеют canonical, уникальные metadata, SSR content, общий crawlable social preview и входят в sitemap (prerender только `/` и `/ege`, остальное SSR); root document публикует browser-only manifest, SVG/PNG/ICO favicon и Apple touch icon из production-знака, а `/` — правдивый `WebSite` JSON-LD без выдуманной Organization; черновые маршруты остаются unlisted, `noindex,nofollow` и исключены из public discovery; Lighthouse SEO для публичных маршрутов проходит без ошибок |
-| Mobile / no-JS readability | TopicLesson, Course overview и CourseLesson сохраняют текст, программу, подписи, решения и section anchors в SSR HTML; интерактивная проверка и персональный progress остаются progressive enhancement |
+| Backup / restore | Application DB, files, roles and protected environment in encrypted Restic; 7 daily + 4 weekly + 3 monthly, monthly isolated restore; restore checks cover billing tables and grants (Change 192). Same-host backup loss remains accepted until off-site storage exists; off-site storage is a prerequisite for enabling paid access, since offer acceptances and payments are evidence |
+| SEO | `/`, `/privacy`, published topics, courses и CourseLesson имеют canonical, уникальные metadata, SSR content, общий crawlable social preview и входят в sitemap (prerender только `/` и `/ege`, остальное SSR); root document публикует browser-only manifest, SVG/PNG/ICO favicon и Apple touch icon из production-знака, а `/` — правдивый `WebSite` JSON-LD без выдуманной Organization; черновые маршруты остаются unlisted, `noindex,nofollow` и исключены из public discovery; платные страницы (Change 192) остаются в sitemap, робот получает ровно то, что гость (превью и блок оплаты, без клоакинга), с JSON-LD `isAccessibleForFree: false` и `hasPart` на закрытую часть; `/subscribe` и страница возврата с оплаты — `noindex`; Lighthouse SEO для публичных маршрутов проходит без ошибок |
+| Mobile / no-JS readability | TopicLesson, Course overview и CourseLesson сохраняют текст, программу, подписи, решения и section anchors в SSR HTML (платные части — для зрителя с доступом; остальным SSR отдаёт превью и блок оплаты, Change 192); интерактивная проверка и персональный progress остаются progressive enhancement |
 | Client resilience / API drift | Route failures восстанавливаемы без белого экрана; loading/empty/error/not-found состояния доступны с клавиатуры и скринридера; OpenAPI schema/types drift ломает gate до merge; runtime HTTP имеет timeout/abort и не делает скрытый retry мутаций |
 | Account security | Passwords use a current password-hashing scheme; verification/reset tokens expire and are single-use; sessions are server-revocable, HttpOnly/Secure/SameSite and protected from CSRF. Auth endpoints have targeted abuse limits, generic recovery responses and no sensitive URL/query/access-log leakage. Authentication does not grant editorial, operator or paid access. |
 | Personal-data isolation | Progress and account reads/writes are owner-scoped and no-store; logout and account switching clear in-memory personalized state. Guest checking remains anonymous and read-only. Account/identity/progress data and new role grants are covered by isolated backup/restore checks. |
-| Юридическое (152-ФЗ) | `/privacy` публикует фактические цели, состав, сроки и получателей обработки; регистрация по email требует отдельной неотмеченной по умолчанию галочки со ссылкой на версионированное согласие, а API фиксирует версию и время. Контакт — `avatarsik6699@gmail.com`. По явному решению архитектора ФИО и адрес оператора не публикуются, возраст и полномочия представителя при регистрации не проверяются, уведомление РКН переносится на отдельный пункт после релиза. Эти решения оставляют существенный юридический риск и не являются заявлением о соответствии закону; надпись «18+» для фактически школьной аудитории не используется как фиктивное освобождение от обязанностей. Гости любого возраста могут читать уроки и проверять ответы без регистрации. Браузерная аналитика возвращена (2026-09-22, архитектор пересмотрел прежний отказ, §1.2/§7.3): self-hosted `smotryashchiy`, без cookie и постоянного идентификатора — visitor-хэш `sha256(daily_salt+site+IP+UA)` с посуточной ротацией соли, сырой IP не сохраняется, referrer усекается до hostname. Отсутствие отдельного consent UI для этой аналитики — интерпретация архитектора, не юридическое заключение. Формальная проверка уведомления РКН, локализации, текста политики, детей и этой трактовки юристом остаётся внешним follow-up. |
+| Юридическое (152-ФЗ) | `/privacy` публикует фактические цели, состав, сроки и получателей обработки; регистрация по email требует отдельной неотмеченной по умолчанию галочки со ссылкой на версионированное согласие, а API фиксирует версию и время. Контакт — `avatarsik6699@gmail.com`. По явному решению архитектора ФИО и адрес оператора не публикуются (с Change 192 ФИО и ИНН продавца есть только в реквизитах оферты, строка «Юридическое (оплата)»), возраст и полномочия представителя при регистрации не проверяются, уведомление РКН переносится на отдельный пункт после релиза. Эти решения оставляют существенный юридический риск и не являются заявлением о соответствии закону; надпись «18+» для фактически школьной аудитории не используется как фиктивное освобождение от обязанностей. Гости любого возраста могут читать уроки и проверять ответы без регистрации. Браузерная аналитика возвращена (2026-09-22, архитектор пересмотрел прежний отказ, §1.2/§7.3): self-hosted `smotryashchiy`, без cookie и постоянного идентификатора — visitor-хэш `sha256(daily_salt+site+IP+UA)` с посуточной ротацией соли, сырой IP не сохраняется, referrer усекается до hostname. Отсутствие отдельного consent UI для этой аналитики — интерпретация архитектора, не юридическое заключение. Формальная проверка уведомления РКН, локализации, текста политики, детей и этой трактовки юристом остаётся внешним follow-up. |
 | Юридическое (436-ФЗ) | Возрастная маркировка для обычного сайта не вводится: существующая `12+` удаляется без замены на `18+` |
 | Происхождение контента | Существующие уроки сохраняют Content Quality Gate (§2.3). Для нового банка принято импортируемое содержимое с явным provenance (§3); происхождение, атрибуция и допустимость использования проверяются при подготовке импорта, не выводятся автоматически из URL и не заменяются технической валидацией |
+| Платежи (Change 192) | Номер карты и платёжные данные не проходят через сайт; уведомления провайдера принимаются только с верной подписью, статус перезапрашивается у провайдера, обработка идемпотентна; двойное нажатие оплаты не создаёт двух платежей; суммы — целые копейки; логи биллинга без email, токенов и сырых уведомлений; возвраты — только операторская CLI. Пока флаги выключены, production бесплатен |
+| Юридическое (оплата) | Продавец — самозанятый (НПД, лимит 2,4 млн ₽ в год, чек на каждую оплату и аннулирование при возврате через провайдера). Принцип архитектора (2026-10-17): юридические требования выполняются в наименее заметной законной форме, но не ниже законного минимума. Оферта и правила возврата — версионированные страницы; ФИО и ИНН продавца — только в блоке «Реквизиты исполнителя» в конце оферты (паспорт и адрес не публикуются), в подвале — ссылки без имени. Галочек нет: строка под «Оплатить» о принятии оферты; пункт о покупке несовершеннолетним (ГК ст. 26) и полном возврате по обращению родителя — в оферте. Возврат — пропорционально неиспользованным дням (ЗоЗПП ст. 32). Цены и скидки правдивы (38-ФЗ ст. 5): зачёркнутая сумма — только реальное сравнение (12 × месячный тариф), без фиктивных базовых цен, ложных таймеров и дефицита. Формальная проверка оферты юристом — предпосылка запуска (§11) |
 | Other (юридический ориентир, не консультация) | Открытые источники используются как инженерный ориентир; формальная юридическая проверка, данные оператора, оформление доступа детей и уведомление РКН не закрыты. Архитектор принял риск выпуска без них и планирует РКН отдельным пунктом после релиза; это не меняет установленного законом срока подачи уведомления до обработки, если исключение неприменимо. |
 
 ---
@@ -697,24 +796,29 @@ Ordered unfinished outcomes (each a separate change, smallest coherent slice fir
    27 заменяются) — Change 184: платформа и пилот (тема 9), затем темы по одной, без параллельных агентов.
    Последние семь тем (1, 2, 6, 12, 13, 15, 22): карты — Change 187, стенд — Change 189, перенос на
    сайт — Change 190; после него все темы 1–27 опубликованы уроками пайплайна, названия тем — короткие,
-   по плану варианта ФИПИ 2027.
-   [NEEDS_CLARIFICATION: какие темы обязательны до релиза]
+   по плану варианта ФИПИ 2027. Выполнено: в релиз идут все 25 тем каталога (решение архитектора
+   2026-10-17).
 2. **Релиз программы редизайна и перестроенных уроков.** Локальный `main` с Changes 164–172 не
    выпущен (Change 170 закрыт без релиза 2026-10-08). Отдельный release change закрывает
    предпосылки §11 и обновляет `docs/artifacts/release-readiness.md`.
 
-Later product decisions may add manual completion, richer statistics and premium entitlements;
-payment processing and paywall enforcement require separate design.
+3. **Платный доступ — Change 192.** Тарифы, soft paywall, закрытые чанки, оплата и операторские
+   возвраты реализуются одним change и попадают в `main` с выключенными флагами; включение — вместе
+   с релизом после предпосылок §11 (цель — конец августа 2027, начало сезона 2027/28).
+
+Later product decisions may add manual completion, richer statistics, auto-renewal, live formats
+and parent reports; each needs its own decision.
 
 ## 10. Out of Scope
 
-Production deployment/host mutations in local work; deleting old volumes; payments;
+Production deployment/host mutations in local work; deleting old volumes; auto-renewal, saved cards
+and price changes for existing buyers; public billing/admin API;
 collaborative editing; editorial audit history; automatic import conflict resolution; background
 imports/file garbage collection; hosting analytics dashboards or a monitoring stack in this repo
 (dashboards remain in the separate `smotryashchiy` deploy — this repo only allowlists its origin
 in CSP, §7.3); labs and internal design specimens. Automatic account merging, guest-progress import,
-saved answer text, standalone profile table, manual completion, advanced statistics and premium
-entitlements are out of scope. Single-operator sequential imports and ordinary pagination
+saved answer text, standalone profile table, manual completion and advanced statistics are out of
+scope. Single-operator sequential imports and ordinary pagination
 are intentional first-version limits. Formal legal review, off-site backup, key-only SSH and new
 content remain separate decisions.
 
@@ -724,3 +828,10 @@ The architect confirmed account deletion and lesson-scoped reset on 2026-09-24. 
 verify provider applications/callbacks and mail delivery, review the updated privacy policy and
 confirm account-data backup/restore with a fresh production restore proof. These are release
 prerequisites, not claims of completion.
+
+Before enabling paid access (Change 192 flags): seller registered as НПД; Robokassa shop connected
+with Робочеки СМЗ, verified by a real 1 ₽ payment and refund with receipt and annulment in «Мой
+налог»; offer, refund rules and updated privacy policy reviewed by a lawyer; RKN notification filed
+(payments add processing purposes); off-site backup in place and a restore proof including billing
+tables; provenance of tasks in paid subtopics confirmed; date and text of the announcement for topics
+that are free on production today chosen by the architect.

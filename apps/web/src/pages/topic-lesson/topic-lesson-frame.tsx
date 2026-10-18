@@ -5,6 +5,7 @@ import {
   lessonSubtopics,
   topicLessons,
 } from "~/entities/lesson";
+import { accessState } from "~/entities/access";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { ReadingPositionIndicator } from "~/features/reading-position";
 import { Breadcrumbs } from "~/shared/components/breadcrumbs";
@@ -36,6 +37,7 @@ export const TopicLessonFrame: React.FC<TopicLessonPageTypes.FrameProps> = (
     title: subtopic.title,
     level: subtopic.level,
     taskIds: (groups.get(subtopic.slug) ?? []).map((task) => task.id),
+    paid: Boolean(subtopic.paid),
   }));
   const topics = publishedTopics().map((lesson) =>
     lesson.id === props.lesson.id
@@ -73,6 +75,7 @@ export const TopicLessonFrame: React.FC<TopicLessonPageTypes.FrameProps> = (
               tasks={props.tasks}
               practiceUnavailable={props.practiceUnavailable}
               progress={narrow ? progress : null}
+              locks={accessState.locks(props.access)}
             />
           </div>
         </aside>
@@ -149,6 +152,8 @@ function topicFolder(lesson: TopicLesson) {
       title: subtopic.title,
       level: subtopic.level,
       taskIds: [],
+      paid: Boolean(subtopic.paid),
     })),
+    paidPractice: Boolean(lesson.paidPractice),
   };
 }

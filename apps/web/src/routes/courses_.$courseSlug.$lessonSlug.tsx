@@ -10,6 +10,13 @@ import {
   getCourseLessonRouteData,
   getCourseLessonSummary,
 } from "~/pages/course-lesson";
+import {
+  accessState,
+  getAccessState,
+  type AccessTypes,
+} from "~/entities/access";
+import { getOffer } from "~/entities/billing";
+import { paidContent } from "~/shared/lib/paid-content";
 import { pageHead } from "~/shared/lib/seo";
 
 type CourseLessonLoaderData =
@@ -26,20 +33,33 @@ function courseLessonHead(
         lesson: NonNullable<
           ReturnType<typeof findCourseLessonPublicationByRouteSlugs>
         >;
-      } & NonNullable<CourseLessonLoaderData>)
+      } & NonNullable<CourseLessonLoaderData> & {
+          access?: AccessTypes.State;
+        })
     | undefined,
 ) {
   if (!loaderData) return {};
   const { course, lesson } = loaderData;
-  return pageHead.create({
+  const meta = {
     title: `${lesson.title} — ${course.title}`,
     description: lesson.summary,
     path: `/courses/${course.routeSlug}/${lesson.routeSlug}`,
+  };
+  const head = pageHead.create({
+    ...meta,
     type: "article",
     noIndex: [course.status, lesson.status].some(
       (status) => status !== "published",
     ),
   });
+  // Change 192: a paid lesson says so while the paywall is on
+  const access = loaderData.access;
+  return findCourseLessonByRouteSlugs(course.routeSlug, lesson.routeSlug)
+    ?.paid &&
+    access?.status === "ready" &&
+    access.paywall
+    ? pageHead.withPaidArticle(head, meta)
+    : head;
 }
 
 /** The rail's mastered checks are optional: a failed summary marks nothing. */
@@ -54,7 +74,11 @@ export const Route = createFileRoute("/courses_/$courseSlug/$lessonSlug")({
       params.lessonSlug,
     );
     if (!course || !lesson) throw notFound();
-    const [routeData, practiceSummary] = await Promise.all([
+    const definition = findCourseLessonByRouteSlugs(
+      params.courseSlug,
+      params.lessonSlug,
+    );
+    const [routeData, practiceSummary, access] = await Promise.all([
       getCourseLessonRouteData({
         data: {
           courseRouteSlug: params.courseSlug,
@@ -62,14 +86,26 @@ export const Route = createFileRoute("/courses_/$courseSlug/$lessonSlug")({
         },
       }),
       getCourseLessonRouteSummary(course.id),
+      // Change 192: every lesson knows the visitor's access, so the rail locks
+      // paid lessons alike.
+      getAccessState(),
     ]);
     if (!routeData) throw notFound();
+    if (accessState.opens(access))
+      await paidContent.preload(definition?.paid?.load);
+    const offer =
+      definition?.paid && accessState.locks(access)
+        ? await getOffer()
+        : undefined;
     return {
       course,
       lesson,
       tasks: routeData.tasks,
+      lockedTasks: routeData.lockedTasks,
       practiceUnavailable: routeData.practiceUnavailable,
       practiceSummary,
+      access,
+      offer,
     };
   },
   head: ({ loaderData }) => courseLessonHead(loaderData),
@@ -92,6 +128,9 @@ function CourseLessonRoute() {
       tasks={data.tasks}
       practiceUnavailable={data.practiceUnavailable}
       practiceSummary={data.practiceSummary}
+      lockedTasks={data.lockedTasks}
+      access={data.access}
+      offer={data.offer}
     />
   );
 }

@@ -9,13 +9,16 @@ import {
   lessonPublications,
   lessonSubtopics,
 } from "~/entities/lesson";
-import { lessonMedia } from "~/entities/lesson/content/array-processing.media";
 import { topicCatalog } from "~/entities/topic-catalog";
 import { publicPaths } from "~/pages/site-discovery/public-paths";
 import { CodeBlock } from "~/shared/components/code-block";
 import { CodeRunner } from "~/shared/components/learning-content";
 import { Typography } from "~/shared/components/typography";
-import { renderAuthoredLessonContent } from "./lesson-content-test-utils";
+import {
+  renderAuthoredLessonContent,
+  topicMedia,
+  wholeLesson,
+} from "./lesson-content-test-utils";
 
 vi.mock("~/shared/components/action-link", () => ({
   ActionLink: ({ children }: { children: React.ReactNode }) => (
@@ -23,7 +26,9 @@ vi.mock("~/shared/components/action-link", () => ({
   ),
 }));
 
-const lesson = arrayProcessingLesson;
+// Change 192: the paid subtopics live in their own modules.
+const lesson = await wholeLesson(arrayProcessingLesson);
+const lessonMedia = topicMedia("array-processing");
 const SOURCE = resolve(
   process.cwd(),
   "../..",
@@ -143,7 +148,9 @@ describe("task 26 data processing lesson (Change 184)", () => {
   });
 
   it("is the lesson of the catalog topic of task 26", () => {
-    expect(findLessonByRouteSlug("26-sortirovka-i-otbor")).toBe(lesson);
+    expect(findLessonByRouteSlug("26-sortirovka-i-otbor")).toBe(
+      arrayProcessingLesson,
+    );
     expect(
       lessonPublications.filter(({ taskNumbers }) => taskNumbers.includes(26)),
     ).toEqual([expect.objectContaining({ id: "array-processing" })]);

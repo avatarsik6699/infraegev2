@@ -1,8 +1,9 @@
 """Public current-state projections; checker is read only for answer submission."""
 
-from collections.abc import Iterable, Sequence
+from collections.abc import Callable, Iterable, Sequence
 from typing import Any
 
+from pydantic import Field
 from sqlalchemy import exists, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -14,6 +15,7 @@ from app.modules.practice.schemas import (
     PublicTask,
     PublicTaskContent,
     StrictModel,
+    TheoryLink,
 )
 from app.modules.practice.service import Conflict
 from app.shared.checker import is_correct
@@ -43,10 +45,25 @@ class CourseSummary(StrictModel):
     lessons: list[LessonSummary]
 
 
+class LockedTask(StrictModel):
+    """A paid task shown to a reader without access (Change 192): what it is about and
+    where it belongs, never its statement, help, files or answers."""
+
+    id: str
+    solution_revision: int
+    title: str
+    difficulty: int
+    skills: list[str]
+    exam_numbers: list[int]
+    theory_links: list[TheoryLink]
+    counts_toward_mastery: bool
+
+
 class LessonPractice(StrictModel):
     id: str
     kind: str
     tasks: list[PublicTask]
+    locked: list[LockedTask] = Field(default_factory=list)
 
 
 class CheckedAnswer(StrictModel):
@@ -129,7 +146,13 @@ async def file(session: AsyncSession, task_id: str, usage_id: str):
     return usage, obj
 
 
-async def lesson(session: AsyncSession, kind: str, material_id: str) -> LessonPractice:
+async def lesson(
+    session: AsyncSession,
+    kind: str,
+    material_id: str,
+    closed: Callable[[dict[str, Any]], bool] | None = None,
+) -> LessonPractice:
+    """The lesson's tasks in order; `closed` picks the ones shown locked."""
     rows = list(
         await session.scalars(
             select(TaskRecord)
@@ -145,7 +168,32 @@ async def lesson(session: AsyncSession, kind: str, material_id: str) -> LessonPr
     )
     if not rows:
         raise Unavailable("material unavailable")
-    return LessonPractice(id=material_id, kind=kind, tasks=await project(session, rows))
+    shut = [row for row in rows if closed is not None and closed(row.content)]
+    open_rows = [row for row in rows if row not in shut]
+    return LessonPractice(
+        id=material_id,
+        kind=kind,
+        tasks=await project(session, open_rows),
+        locked=[
+            LockedTask(
+                id=row.id,
+                solution_revision=row.solution_revision,
+                title=row.content["title"],
+                difficulty=row.content["difficulty"],
+                skills=row.content.get("skills", []),
+                exam_numbers=row.content.get("exam_numbers", []),
+                theory_links=[
+                    TheoryLink.model_validate(link)
+                    for link in row.content.get("theory_links", [])
+                    if link.get("material_id") == material_id
+                ],
+                counts_toward_mastery=counts_toward_mastery(
+                    row.content.get("lessons", []), material_id
+                ),
+            )
+            for row in shut
+        ],
+    )
 
 
 def counts_toward_mastery(memberships: list[dict[str, object]], material_id: str) -> bool:

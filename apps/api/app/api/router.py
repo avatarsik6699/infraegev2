@@ -11,6 +11,8 @@ from fastapi import APIRouter
 
 from app.modules.account.api import router as account_router
 from app.modules.account.progress_api import router as progress_router
+from app.modules.billing.api import router as billing_router
+from app.modules.entitlement.api import router as access_router
 from app.modules.practice.api import router as practice_router
 from app.modules.tasks.api import router as tasks_router
 
@@ -19,3 +21,5 @@ api_router.include_router(tasks_router)
 api_router.include_router(practice_router)
 api_router.include_router(account_router)
 api_router.include_router(progress_router)
+api_router.include_router(access_router)
+api_router.include_router(billing_router)

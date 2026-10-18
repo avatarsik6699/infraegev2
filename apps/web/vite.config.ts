@@ -1,7 +1,42 @@
-import { defineConfig } from "vite";
+import { defineConfig, type Plugin } from "vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import { nitro } from "nitro/vite";
 import viteReact from "@vitejs/plugin-react";
+// Change 192 (SPEC §6.1): a `*.paid.*` content module and its media manifest are
+// only reached through dynamic imports, so each becomes a chunk of its own. The
+// client build names those chunks under assets/paid/, the path Nginx serves after
+// an access check, and fails if a paid module shares a chunk with public code.
+const PAID_MODULE = /\.paid\.[^/]*\.tsx?$/u;
+const isPaidChunk = (moduleIds: readonly string[]) =>
+  moduleIds.length > 0 && moduleIds.every((id) => PAID_MODULE.test(id));
+
+function paidChunks(): Plugin {
+  return {
+    name: "infraege:paid-chunks",
+    applyToEnvironment: (environment) => environment.name === "client",
+    outputOptions(output) {
+      return {
+        ...output,
+        chunkFileNames: (chunk) =>
+          isPaidChunk(chunk.moduleIds)
+            ? "assets/paid/[name]-[hash].js"
+            : "assets/[name]-[hash].js",
+      };
+    },
+    generateBundle(_, bundle) {
+      for (const chunk of Object.values(bundle)) {
+        if (chunk.type !== "chunk") continue;
+        const paid = chunk.moduleIds.filter((id) => PAID_MODULE.test(id));
+        if (paid.length && !isPaidChunk(chunk.moduleIds)) {
+          this.error(
+            `${chunk.fileName} mixes paid modules (${paid.join(", ")}) with public code`,
+          );
+        }
+      }
+    },
+  };
+}
+
 export default defineConfig((configEnv) => {
   const apiProxyTarget =
     process.env.VITE_PROXY_TARGET ?? "http://localhost:8000";
@@ -63,13 +98,22 @@ export default defineConfig((configEnv) => {
           configEnv.command === "serve"
             ? {
                 "/api/**": {
-                  proxy: `${apiProxyTarget}/api/**`,
+                  // Change 192: pass the API's redirects to the browser, as Nginx does;
+                  // a followed 303 (fake payment → /subscribe/return) left the browser on
+                  // the /api URL with another page's HTML.
+                  proxy: {
+                    to: `${apiProxyTarget}/api/**`,
+                    fetchOptions: { redirect: "manual" },
+                  },
                 },
               }
             : {},
       }),
       // react's vite plugin must come after start's vite plugin.
       viteReact(),
+      // Change 192: paid lesson text ships only in chunks under assets/paid/,
+      // which Nginx serves after an access check (SPEC §6.1).
+      paidChunks(),
     ],
   };
 });

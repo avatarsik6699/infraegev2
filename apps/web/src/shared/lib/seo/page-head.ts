@@ -54,4 +54,51 @@ function createWebsiteStructuredData() {
   } as const;
 }
 
-export const pageHead = { create, createWebsiteStructuredData } as const;
+/**
+ * Change 192 (SPEC §6.1, no cloaking): a page whose text is partly paid says so;
+ * the paywall section carries the global class `paywall` for `cssSelector`.
+ * Robots get exactly what a guest gets.
+ */
+function createPaidArticleStructuredData(options: {
+  title: string;
+  description: string;
+  path: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: options.title,
+    description: options.description,
+    url: new URL(options.path, siteConfig.origin).toString(),
+    inLanguage: "ru",
+    isAccessibleForFree: false,
+    hasPart: {
+      "@type": "WebPageElement",
+      isAccessibleForFree: false,
+      cssSelector: ".paywall",
+    },
+  } as const;
+}
+
+/** The head of a page with a paid part: the usual tags plus the paid-article data. */
+function withPaidArticle(
+  head: ReturnType<typeof create>,
+  options: { title: string; description: string; path: string },
+) {
+  return {
+    ...head,
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(createPaidArticleStructuredData(options)),
+      },
+    ],
+  };
+}
+
+export const pageHead = {
+  create,
+  createWebsiteStructuredData,
+  createPaidArticleStructuredData,
+  withPaidArticle,
+} as const;

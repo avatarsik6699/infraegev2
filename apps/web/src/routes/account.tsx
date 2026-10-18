@@ -1,4 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { getAccessState } from "~/entities/access";
+import { getOffer } from "~/entities/billing";
 import {
   getAccountCourseSummary,
   getAccountTopicSummary,
@@ -7,21 +9,43 @@ import {
 import { AccountPage } from "~/pages/account";
 
 export const Route = createFileRoute("/account")({
-  loader: async () => ({
-    practiceSummary: await getAccountCourseSummary().catch(() => null),
-    topicSummary: await getAccountTopicSummary().catch(() => null),
-    enabledProviders: await getProviderAvailability().catch(() => []),
-  }),
+  // Change 192: «Раздел «Доступ»» links open the profile on that tab.
+  validateSearch: (
+    search: Record<string, unknown>,
+  ): { tab?: "access" | "settings" } =>
+    search.tab === "access" || search.tab === "settings"
+      ? { tab: search.tab }
+      : {},
+  loader: async () => {
+    const [practiceSummary, topicSummary, enabledProviders, offer, access] =
+      await Promise.all([
+        getAccountCourseSummary().catch(() => null),
+        getAccountTopicSummary().catch(() => null),
+        getProviderAvailability().catch(() => []),
+        // Change 192: the «Доступ» tab exists while selling is on
+        getOffer().catch(() => undefined),
+        getAccessState().catch(() => undefined),
+      ]);
+    return {
+      practiceSummary,
+      topicSummary,
+      enabledProviders,
+      billing: offer?.billing ? { access } : undefined,
+    };
+  },
   component: AccountRoute,
 });
 
 function AccountRoute() {
+  const data = Route.useLoaderData();
   return (
     <AccountPage
       mode="profile"
-      practiceSummary={Route.useLoaderData().practiceSummary}
-      topicSummary={Route.useLoaderData().topicSummary}
-      enabledProviders={Route.useLoaderData().enabledProviders}
+      practiceSummary={data.practiceSummary}
+      topicSummary={data.topicSummary}
+      enabledProviders={data.enabledProviders}
+      billing={data.billing}
+      tab={Route.useSearch().tab}
     />
   );
 }

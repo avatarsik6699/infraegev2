@@ -260,6 +260,8 @@ export const AccountPage: React.FC<AccountPageTypes.Props> = (props) => {
               practiceSummary={props.practiceSummary ?? null}
               topicSummary={props.topicSummary ?? null}
               enabledProviders={props.enabledProviders ?? []}
+              billing={props.billing}
+              tab={props.tab}
             />
           ) : null}
           {props.mode === "verify" && props.token ? (

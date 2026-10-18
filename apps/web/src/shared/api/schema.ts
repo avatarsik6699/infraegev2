@@ -4,6 +4,23 @@
  */
 
 export interface paths {
+    "/api/access": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Access */
+        get: operations["get_access_api_access_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/auth/account": {
         parameters: {
             query?: never;
@@ -274,6 +291,77 @@ export interface paths {
         put?: never;
         /** Verify Email */
         post: operations["verify_email_api_auth_verify_email_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/billing/checkout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Post Checkout */
+        post: operations["post_checkout_api_billing_checkout_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/billing/offer": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Offer */
+        get: operations["get_offer_api_billing_offer_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/billing/payments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Payments */
+        get: operations["get_payments_api_billing_payments_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/billing/payments/{payment_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Payment
+         * @description The return page polls this; a pending payment is asked of the provider again.
+         */
+        get: operations["get_payment_api_billing_payments__payment_id__get"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -590,6 +678,17 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** AccessView */
+        AccessView: {
+            /** Granted */
+            granted: boolean;
+            /** Paywall */
+            paywall: boolean;
+            /** Signed In */
+            signed_in: boolean;
+            /** Until */
+            until: string | null;
+        };
         /** AccountView */
         AccountView: {
             /** Email */
@@ -764,6 +863,30 @@ export interface components {
             /** Solution Revision */
             solution_revision: number;
         };
+        /** CheckoutRequest */
+        CheckoutRequest: {
+            /** Idempotency Key */
+            idempotency_key: string;
+            /** Offer Version */
+            offer_version: string;
+            /**
+             * Plan
+             * @enum {string}
+             */
+            plan: "month" | "year";
+            /** Return Path */
+            return_path?: string | null;
+        };
+        /** CheckoutView */
+        CheckoutView: {
+            /**
+             * Payment Id
+             * Format: uuid
+             */
+            payment_id: string;
+            /** Redirect Url */
+            redirect_url: string;
+        };
         /** CodeExampleBlock */
         CodeExampleBlock: {
             data: components["schemas"]["CodeExampleBlockData"];
@@ -919,6 +1042,8 @@ export interface components {
             id: string;
             /** Kind */
             kind: string;
+            /** Locked */
+            locked?: components["schemas"]["LockedTask"][];
             /** Tasks */
             tasks: components["schemas"]["PublicTask"][];
         };
@@ -947,6 +1072,29 @@ export interface components {
              * @enum {string}
              */
             style: "ordered" | "unordered";
+        };
+        /**
+         * LockedTask
+         * @description A paid task shown to a reader without access (Change 192): what it is about and
+         *     where it belongs, never its statement, help, files or answers.
+         */
+        LockedTask: {
+            /** Counts Toward Mastery */
+            counts_toward_mastery: boolean;
+            /** Difficulty */
+            difficulty: number;
+            /** Exam Numbers */
+            exam_numbers: number[];
+            /** Id */
+            id: string;
+            /** Skills */
+            skills: string[];
+            /** Solution Revision */
+            solution_revision: number;
+            /** Theory Links */
+            theory_links: components["schemas"]["TheoryLink"][];
+            /** Title */
+            title: string;
         };
         /** LoginMethod */
         LoginMethod: {
@@ -994,6 +1142,75 @@ export interface components {
         NextTask: {
             /** Task Id */
             task_id: string | null;
+        };
+        /** OfferView */
+        OfferView: {
+            /** Billing */
+            billing: boolean;
+            /** Offer Version */
+            offer_version: string;
+            /** Paywall */
+            paywall: boolean;
+            /** Plans */
+            plans: components["schemas"]["PlanView"][];
+        };
+        /** PaymentHistory */
+        PaymentHistory: {
+            /** Payments */
+            payments: components["schemas"]["PaymentView"][];
+        };
+        /** PaymentView */
+        PaymentView: {
+            /** Access From */
+            access_from: string | null;
+            /** Access Until */
+            access_until: string | null;
+            /** Amount Kopecks */
+            amount_kopecks: number;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Paid At */
+            paid_at: string | null;
+            /**
+             * Plan
+             * @enum {string}
+             */
+            plan: "month" | "year";
+            /** Receipt Url */
+            receipt_url: string | null;
+            /** Return Path */
+            return_path: string | null;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "created" | "pending" | "succeeded" | "failed" | "refunded";
+        };
+        /** PlanView */
+        PlanView: {
+            /** Days */
+            days: number;
+            /**
+             * Id
+             * @enum {string}
+             */
+            id: "month" | "year";
+            /** Monthly Equivalent Kopecks */
+            monthly_equivalent_kopecks: number;
+            /** Months Price Kopecks */
+            months_price_kopecks: number;
+            /** Price Kopecks */
+            price_kopecks: number;
+            /** Title */
+            title: string;
         };
         /** ProgressView */
         ProgressView: {
@@ -1350,6 +1567,26 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    get_access_api_access_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AccessView"];
+                };
+            };
+        };
+    };
     get_account_api_auth_account_get: {
         parameters: {
             query?: never;
@@ -1868,6 +2105,112 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    post_checkout_api_billing_checkout_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-csrf-token"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CheckoutRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CheckoutView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_offer_api_billing_offer_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OfferView"];
+                };
+            };
+        };
+    };
+    get_payments_api_billing_payments_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaymentHistory"];
+                };
+            };
+        };
+    };
+    get_payment_api_billing_payments__payment_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                payment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaymentView"];
+                };
             };
             /** @description Validation Error */
             422: {

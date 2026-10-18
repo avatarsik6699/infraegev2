@@ -1,11 +1,12 @@
 import { render as baseRender, screen, within } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { beforeAll, describe, expect, it, vi } from "vitest";
 import { divisorsAndMasksLesson, lessonSubtopics } from "~/entities/lesson";
 import type { PracticeTaskTypes } from "~/entities/practice-task";
 import { LessonProgressProvider } from "~/features/lesson-progress";
 import { TopicPracticePage, TopicSubtopicPage } from "~/pages/topic-lesson";
 import { LessonProgressPanel } from "~/widgets/lesson-progress-panel";
 import { SubtopicNavigation } from "~/widgets/subtopic-navigation";
+import { paidContent } from "~/shared/lib/paid-content";
 
 vi.mock("@tanstack/react-router", async (importOriginal) => ({
   ...(await importOriginal<typeof import("@tanstack/react-router")>()),
@@ -96,6 +97,14 @@ const tasks = [
 ];
 
 describe("subtopic levels and self-checks (Change 171)", () => {
+  // Change 192: the route loader loads paid subtopics before the page renders.
+  beforeAll(() =>
+    Promise.all([
+      ...subtopics.map((subtopic) => paidContent.preload(subtopic.paid?.load)),
+      paidContent.preload(lesson.paidPractice?.load),
+    ]),
+  );
+
   it("names the advanced level in the head and the pager, never a core one", () => {
     const { unmount } = render(
       <TopicSubtopicPage

@@ -203,19 +203,68 @@ def manifest_text(source: Path, entries: list[str]) -> str:
     )
 
 
-def build(topic: Path) -> tuple[str, Path]:
-    """Return the manifest text and its target path."""
-    meta, sources = topic_sources(topic)
+CONTENT = REPO / "apps/web/src/entities/lesson/content"
+
+
+def page_slug(source: str) -> str:
+    """The site slug of a subtopic file (``03-chisla-po-delitelyam.md``)."""
+    return re.sub(r"^\d+-", "", Path(source).stem)
+
+
+def topic_pages(topic: Path, meta: dict) -> list[tuple[str | None, Path, str]]:
+    """Every page of the topic in order: (paid page slug or None, file, slug).
+    A paid page's figures go into its own manifest, which only its paid module
+    imports (Change 192): they never reach a public chunk."""
+    pages = []
+    for sub in meta["subtopics"]:
+        slug = page_slug(sub["source"])
+        paid = slug if sub.get("access", "free") == "paid" else None
+        pages.append((paid, topic / sub["source"], slug))
+    final = meta["final"]
+    paid = "praktika" if final.get("access", "free") == "paid" else None
+    pages.append((paid, topic / final["source"], "praktika"))
+    return pages
+
+
+def manifest_path(site_id: str, paid: str | None) -> Path:
+    name = f"{site_id}.media.ts" if paid is None else f"{site_id}.paid.{paid}.media.ts"
+    return CONTENT / name
+
+
+def build(topic: Path) -> dict[Path, str]:
+    """Return the manifests of the topic by target path: the public one, always,
+    and one per paid page that draws a figure or runs code."""
+    meta, _ = topic_sources(topic)
     site = meta["site"]
-    manifest_path = REPO / "apps/web/src/entities/lesson/content" / f"{site['id']}.media.ts"
-    texts = [lesson_text(source.read_text()) for source in sources]
+    pages = topic_pages(topic, meta)
+    figures: dict[str | None, list[str]] = {None: []}
+    codes: dict[str | None, list[str]] = {None: []}
     seen: set[str] = set()
-    entries = figure_entries(texts, seen)
+    for paid, source, _ in pages:
+        figures.setdefault(paid, []).extend(figure_entries([lesson_text(source.read_text())], seen))
     # a self-check question shows its figure too (topic 1, Change 190); one
     # drawn in the lesson already is shared
-    prompts = [c["prompt"] for checks in site.get("checkpoints", {}).values() for c in checks]
-    entries += figure_entries([p for p in prompts if "<figure" in p], seen, shared=True)
-    return manifest_text(topic, entries + code_entries(texts)), manifest_path
+    owner = {slug: paid for paid, _, slug in pages}
+    for slug, checks in site.get("checkpoints", {}).items():
+        prompts = [c["prompt"] for c in checks if "<figure" in c["prompt"]]
+        if prompts:
+            group = owner.get(slug)
+            figures.setdefault(group, []).extend(figure_entries(prompts, seen, shared=True))
+    # runnable code and live sheets, in the order the lesson export meets them,
+    # so both name them alike (``runCount``, ``sheet1``)
+    from export_lesson import Converter  # the lesson export imports this module
+
+    converter = Converter(set(), {}, [])
+    for paid, source, _ in pages:
+        before = len(converter.runs)
+        converter.prepare(lesson_text(source.read_text()))
+        codes.setdefault(paid, []).extend(converter.runs[before:])
+    out = {}
+    for paid in figures.keys() | codes.keys():
+        entries = figures.get(paid, []) + codes.get(paid, [])
+        if paid is None or entries:
+            out[manifest_path(site["id"], paid)] = manifest_text(topic, entries)
+    return out
 
 
 def lesson_text(text: str) -> str:
@@ -224,17 +273,6 @@ def lesson_text(text: str) -> str:
     book previews (``grid_book``) its tasks open."""
     steps = re.split(r"\n---\n", text)
     return "\n---\n".join(s for s in steps if not s.strip().startswith(TASK_BLOCK))
-
-
-def code_entries(texts: list[str]) -> list[str]:
-    """Runnable code blocks and live sheets of a topic, in the order the lesson
-    export meets them, so both name them alike (``runCount``, ``sheet1``)."""
-    from export_lesson import Converter  # the lesson export imports this module
-
-    converter = Converter(set(), {}, [])
-    for text in texts:
-        converter.prepare(text)
-    return converter.runs
 
 
 def prettier(text: str, path: Path) -> str:
@@ -257,15 +295,29 @@ def main() -> int:
     if options.check and "site" not in json.loads((options.topic / "topic.json").read_text()):
         print(f"{options.topic}: stand only, not exported yet")
         return 0
-    manifest, manifest_path = build(options.topic)
-    manifest = prettier(manifest, manifest_path)
-    rel = manifest_path.relative_to(REPO)
+    manifests = build(options.topic)
+    site_id = json.loads((options.topic / "topic.json").read_text())["site"]["id"]
+    # a page that turned free leaves its old paid manifest behind
+    extra = set(CONTENT.glob(f"{site_id}.paid.*.media.ts")) - manifests.keys()
+    stale = sorted(extra)
+    for path, text in sorted(manifests.items()):
+        text = prettier(text, path)
+        rel = path.relative_to(REPO)
+        if options.check:
+            fresh = path.exists() and path.read_text() == text
+            if not fresh:
+                stale.append(path)
+            print(f"{rel}: {'up to date' if fresh else 'stale'}")
+        else:
+            path.write_text(text)
+            print(f"wrote {rel}")
     if options.check:
-        stale = not manifest_path.exists() or manifest_path.read_text() != manifest
-        print(f"{rel}: {'stale' if stale else 'up to date'}")
+        for path in sorted(extra):
+            print(f"{path.relative_to(REPO)}: no longer generated")
         return 1 if stale else 0
-    manifest_path.write_text(manifest)
-    print(f"wrote {rel}")
+    for path in extra:
+        path.unlink()
+        print(f"removed {path.relative_to(REPO)}")
     return 0
 
 

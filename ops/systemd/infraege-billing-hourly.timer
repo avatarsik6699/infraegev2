@@ -1,0 +1,10 @@
+[Unit]
+Description=Hourly infraege billing upkeep: open payments, refunds, access notices
+
+[Timer]
+OnCalendar=hourly
+RandomizedDelaySec=5m
+Persistent=true
+
+[Install]
+WantedBy=timers.target

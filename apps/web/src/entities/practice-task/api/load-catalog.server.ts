@@ -1,3 +1,5 @@
+import { setResponseHeader } from "@tanstack/react-start/server";
+import { sessionCookie } from "~/shared/api/session-cookie.server";
 import type { components } from "~/shared/api/schema";
 import type { PracticeCatalogTypes } from "../practice-catalog.types";
 import { projectPracticeTask } from "./load-practice-tasks.server";
@@ -72,14 +74,21 @@ export async function loadPracticeSuggestions(
 }
 
 export async function loadStandaloneTask(id: string) {
+  // Change 192: a paid task opens for a session with access, so the cookie goes too.
+  const cookie = sessionCookie.header();
+  // a page rendered for a session may carry a paid statement: never cache it shared
+  if (cookie) setResponseHeader("Cache-Control", "private, no-store");
   try {
     const result = await practiceServerClient.GET("/api/tasks/{task_id}", {
       params: { path: { task_id: id } },
+      headers: cookie ? { cookie } : undefined,
       cache: "no-store",
       signal: AbortSignal.timeout(6000),
     });
     if (result.response.status === 404)
       return { status: "missing" as const, detail: null };
+    if (result.response.status === 403)
+      return { status: "locked" as const, detail: null };
     if (!result.response.ok || !result.data)
       throw new Error("Practice unavailable");
     const raw: components["schemas"]["PublicTask"] = result.data;

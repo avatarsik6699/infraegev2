@@ -1,5 +1,7 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { expect } from "vitest";
+import type { LessonContent } from "~/entities/lesson";
+import type { LessonMediaTypes } from "~/shared/components/learning-content";
 
 export function renderAuthoredLessonContent(
   content: readonly React.ReactNode[],
@@ -28,4 +30,64 @@ export function codeFromBlock(container: HTMLElement, label: string) {
         line.lastElementChild?.textContent?.replace(/\u00a0/gu, "") ?? "",
     )
     .join("\n");
+}
+
+type Manifest = { lessonMedia: Record<string, LessonMediaTypes.Generated> };
+
+const manifests = import.meta.glob<Manifest>(
+  "../src/entities/lesson/content/*.media.ts",
+  { eager: true },
+);
+
+/** The whole topic as a reader with access sees it (Change 192): the paid
+ * subtopics and the paid final page merged back into one definition. */
+export async function wholeLesson(
+  lesson: LessonContent.Definition,
+): Promise<LessonContent.Definition> {
+  const free = new Map(lesson.theory.map((concept) => [concept.id, concept]));
+  const subtopics = await Promise.all(
+    (lesson.subtopics ?? []).map(async (subtopic) => {
+      const { paid, ...rest } = subtopic;
+      if (!paid) {
+        return {
+          subtopic: rest,
+          theory: subtopic.conceptIds.flatMap((id) => free.get(id) ?? []),
+        };
+      }
+      const content = (await paid.load()).default;
+      return {
+        subtopic: {
+          ...rest,
+          access: "free" as const,
+          checkpoint: content.checkpoint,
+        },
+        theory: content.theory,
+      };
+    }),
+  );
+  const practice = lesson.paidPractice
+    ? (await lesson.paidPractice.load()).default
+    : undefined;
+  return {
+    ...lesson,
+    theory: subtopics.flatMap((item) => item.theory),
+    subtopics: subtopics.map((item) => item.subtopic),
+    ...(practice ?? {}),
+    paidPractice: undefined,
+  };
+}
+
+/** Every figure of the topic, its public and its paid manifests together. */
+export function topicMedia(
+  id: string,
+): Record<string, LessonMediaTypes.Generated> {
+  return Object.assign(
+    {},
+    ...Object.entries(manifests)
+      .filter(
+        ([path]) =>
+          path.endsWith(`/${id}.media.ts`) || path.includes(`/${id}.paid.`),
+      )
+      .map(([, manifest]) => manifest.lessonMedia),
+  ) as Record<string, LessonMediaTypes.Generated>;
 }

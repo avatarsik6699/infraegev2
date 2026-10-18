@@ -1,10 +1,10 @@
 import { useRouter } from "@tanstack/react-router";
-import { useMemo, useRef } from "react";
+import { accessState } from "~/entities/access";
+import { Suspense, useMemo, useRef } from "react";
 import { ScrollToTop } from "~/shared/components/scroll-to-top";
 import { courseIdentity, getCourseLessons } from "~/entities/course";
 import { cssUtils } from "~/shared/lib/css-utils";
 import { Breadcrumbs } from "~/shared/components/breadcrumbs";
-import { LessonTheory } from "~/shared/components/learning-content";
 import { Typography } from "~/shared/components/typography";
 import { useMediaQuery } from "~/shared/lib/media-query";
 import { russianCount } from "~/shared/lib/russian-count";
@@ -14,6 +14,12 @@ import {
   checkPracticeAnswer,
   createCheckAndSaveAnswer,
 } from "~/features/lesson-practice";
+import {
+  LockedTasks,
+  PaywallGate,
+  paywallCopy,
+  paywallUnlocks,
+} from "~/features/paywall";
 import { ReadingPositionIndicator } from "~/features/reading-position";
 import { CourseNavigation } from "~/widgets/course-navigation";
 import { PageOutline } from "~/widgets/lesson-outline";
@@ -23,6 +29,7 @@ import { PublicFooter } from "~/widgets/public-footer";
 import { PublicHeader } from "~/widgets/public-header";
 import { CourseLessonPager } from "./components/course-lesson-pager";
 import { CourseLessonResult } from "./components/course-lesson-result";
+import { CourseLessonTheory } from "./components/course-lesson-theory";
 import { useMasteredLessons } from "./model/use-mastered-lessons";
 import type { CourseLessonPageTypes } from "./course-lesson-page.types";
 import styles from "./course-lesson.module.css";
@@ -31,18 +38,24 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
   props,
 ) => {
   const router = useRouter();
+  // Change 192: a paid lesson keeps its section outline public.
+  const sections = useMemo(
+    () => props.lesson.paid?.outline ?? props.lesson.theory ?? [],
+    [props.lesson],
+  );
   const practiceTasks = useMemo(
     () =>
       props.tasks.map((task) => ({
         ...task,
         theoryLinks: task.theoryLinks.map((link) => ({
           ...link,
-          label: theoryLinkLabel(props.lesson.theory, link.hash),
+          label: theoryLinkLabel(sections, link.hash),
         })),
       })),
-    [props.tasks, props.lesson.theory],
+    [props.tasks, sections],
   );
   const session = useAccountSession();
+  const locked = Boolean(props.lesson.paid) && !accessState.opens(props.access);
   const articleRef = useRef<HTMLElement>(null);
   const lessons = getCourseLessons(props.course);
   const masteredLessonIds = useMasteredLessons(lessons, props.practiceSummary);
@@ -51,6 +64,11 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
       .filter((lesson) => lesson.status === "published")
       .map((lesson) => [lesson.id, lesson.routeSlug]),
   );
+  const paidLessonIds = new Set(
+    lessons.filter((lesson) => lesson.paid).map((lesson) => lesson.id),
+  );
+  const lockedTasks = props.lockedTasks ?? [];
+  const lessonPath = `/courses/${props.course.routeSlug}/${props.lesson.routeSlug}`;
   const publishedLessons = lessons.filter(
     (lesson) => lesson.status === "published",
   );
@@ -73,6 +91,7 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
       title: item.title,
       routeSlug: routeSlugs.get(item.id),
       level: item.level,
+      paid: paidLessonIds.has(item.id),
     })),
   }));
   const moduleIndex = modules.findIndex((module) =>
@@ -98,11 +117,12 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
     />
   );
   const outline = [
-    ...props.lesson.theory
+    ...sections
       .filter((concept) => !concept.lead)
-      .map((concept) => ({ id: concept.id, label: concept.navLabel })),
+      .map((concept) => ({ id: concept.id, label: concept.navLabel, locked })),
     { id: "practice", label: "Практика" },
-    { id: "result", label: "Итог" },
+    // Change 192: a locked lesson has no «Итог» on the page
+    ...(locked ? [] : [{ id: "result", label: "Итог" }]),
   ];
 
   return (
@@ -131,6 +151,7 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
               currentLessonId={props.lesson.id}
               masteredLessonIds={masteredLessonIds}
               progress={narrow ? progress : null}
+              locks={accessState.locks(props.access)}
             />
           </div>
         </aside>
@@ -172,16 +193,31 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
               {props.lesson.summary}
             </Typography.Text>
             <Typography.Text className={styles.meta}>
-              {russianCount.tasks(props.tasks.length)}
-              {props.lesson.accessTier === "paid" ? " · По подписке" : null}
+              {russianCount.tasks(props.tasks.length + lockedTasks.length)}
             </Typography.Text>
           </header>
 
-          <LessonTheory
-            variant="page"
-            concepts={props.lesson.theory}
-            conceptHeadingOrder={2}
-          />
+          <Suspense fallback={null}>
+            <CourseLessonTheory lesson={props.lesson} locked={locked} />
+          </Suspense>
+          {locked ? (
+            <PaywallGate
+              access={props.access}
+              offer={props.offer}
+              unlocks={{
+                ...paywallUnlocks.course(lessons),
+                // every paid lesson's tasks, from the course summary when it came
+                tasks: props.practiceSummary
+                  ? props.practiceSummary
+                      .filter((lesson) => paidLessonIds.has(lesson.id))
+                      .reduce((sum, lesson) => sum + lesson.tasks.length, 0)
+                  : lockedTasks.length,
+              }}
+              {...paywallCopy.course(props.course.shortTitle)}
+              headingOrder={2}
+              from={lessonPath}
+            />
+          ) : null}
 
           <section
             id="practice"
@@ -211,10 +247,18 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
                   : checkPracticeAnswer
               }
             />
+            {accessState.locks(props.access) ? (
+              <LockedTasks
+                tasks={lockedTasks}
+                start={props.tasks.length + 1}
+                from={lessonPath}
+              />
+            ) : null}
           </section>
 
           <section
             id="result"
+            hidden={locked}
             className={styles.section}
             aria-labelledby="result-title"
           >
@@ -225,7 +269,9 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
             >
               Итог
             </Typography.Title>
-            <CourseLessonResult lesson={props.lesson} />
+            <Suspense fallback={null}>
+              <CourseLessonResult lesson={props.lesson} locked={locked} />
+            </Suspense>
           </section>
 
           <CourseLessonPager

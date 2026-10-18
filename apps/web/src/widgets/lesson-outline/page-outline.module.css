@@ -38,6 +38,17 @@
   overflow-wrap: anywhere;
 }
 
+/* Change 192: a section behind the paywall is named but not a link. */
+.locked {
+  display: block;
+  padding: 0.1875rem var(--space-1-5);
+  color: color-mix(in oklab, var(--color-muted) 55%, var(--color-bg));
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
 /* Mouse: compact rows so long outlines stay short; the shared navigation
    link keeps its 44px height only for touch. */
 @media not (any-pointer: coarse) {

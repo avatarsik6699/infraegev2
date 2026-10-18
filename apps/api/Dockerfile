@@ -32,6 +32,8 @@ COPY apps/api/app ./app
 COPY apps/api/migrations ./migrations
 COPY apps/api/alembic.ini apps/api/practice-registry.json apps/api/practice-catalog-topics.json ./
 COPY apps/api/entrypoint.sh ./entrypoint.sh
+# Change 192: the public offer whose version and hash a payment records
+COPY content/legal ./legal
 
 RUN chmod +x ./entrypoint.sh \
     && useradd --no-create-home --uid 1000 appuser \

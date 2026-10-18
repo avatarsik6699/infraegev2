@@ -1,0 +1,44 @@
+/* Change 192: the offer and the refund rules, in the privacy page's layout. */
+.page {
+  composes: pageFrame from "../../shared/styles/patterns.module.css";
+}
+
+.root {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  padding-block: clamp(var(--space-4), 6vw, var(--space-6));
+}
+
+.root > h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+.editions[data-variant] {
+  margin: var(--space-1) 0 0;
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+}
+
+.content {
+  margin-top: var(--space-4);
+}
+
+.content h2 {
+  margin: var(--space-4) 0 var(--space-1);
+  padding-bottom: var(--space-1);
+  border-bottom: 1px solid var(--lesson-concept-rule);
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+
+.content p {
+  margin-block: 0 var(--space-2);
+}

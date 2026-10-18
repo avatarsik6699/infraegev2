@@ -6,6 +6,8 @@ export namespace CourseNavigationTypes {
     routeSlug?: string;
     /** Additional lessons are marked and stay out of course mastery (Change 175). */
     level?: "core" | "advanced";
+    /** Change 192: the lesson is paid. */
+    paid?: boolean;
   };
 
   export type Module = {
@@ -26,5 +28,7 @@ export namespace CourseNavigationTypes {
     masteredLessonIds?: ReadonlySet<string>;
     /** Lesson progress shown under the tree on narrow screens (F38). */
     progress?: React.ReactNode;
+    /** Change 192: lock the paid lessons (the paywall is on, access is not granted). */
+    locks?: boolean;
   };
 }

@@ -103,15 +103,14 @@ describe("Python course foundation", () => {
     const pythonCourse = findCourseByRouteSlug("python");
     if (!pythonCourse) throw new Error("Published Python course is missing");
     for (const lesson of getCourseLessons(pythonCourse)) {
-      expect(lesson.theory[0]).toMatchObject({ id: "intro", lead: true });
-      expect(lesson.theory.slice(1).some((concept) => concept.lead)).toBe(
-        false,
-      );
-      const ids = lesson.theory.map((concept) => concept.id);
+      // The Python course is free (Change 192): its theory stays in the lesson.
+      const theory = lesson.theory ?? [];
+      expect(lesson.paid).toBeUndefined();
+      expect(theory[0]).toMatchObject({ id: "intro", lead: true });
+      expect(theory.slice(1).some((concept) => concept.lead)).toBe(false);
+      const ids = theory.map((concept) => concept.id);
       expect(new Set(ids).size).toBe(ids.length);
-      expect(
-        lesson.theory.every((concept) => concept.navLabel.length > 0),
-      ).toBe(true);
+      expect(theory.every((concept) => concept.navLabel.length > 0)).toBe(true);
       expect(lesson.result).toBeTruthy();
     }
   });

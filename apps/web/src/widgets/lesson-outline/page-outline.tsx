@@ -14,7 +14,7 @@ export const PageOutline: React.FC<LessonOutlineTypes.PageProps> = (props) => {
   useEffect(
     function observeActiveSectionFx() {
       return observeActiveSection(
-        props.items.map((item) => item.id),
+        props.items.filter((item) => !item.locked).map((item) => item.id),
         setActiveId,
       );
     },
@@ -40,27 +40,33 @@ export const PageOutline: React.FC<LessonOutlineTypes.PageProps> = (props) => {
       <ul className={styles.list}>
         {props.items.map((item) => (
           <li key={item.id}>
-            <FragmentLink
-              className={styles.link}
-              hash={item.id}
-              icon={false}
-              anchorProps={{
-                "aria-current": item.id === activeId ? "location" : undefined,
-                onClick: (event) => {
-                  if (
-                    event.button !== 0 ||
-                    event.metaKey ||
-                    event.ctrlKey ||
-                    event.altKey ||
-                    event.shiftKey
-                  )
-                    return;
-                  setNavigation({ id: item.id });
-                },
-              }}
-            >
-              {item.label}
-            </FragmentLink>
+            {item.locked ? (
+              <span className={styles.locked} data-outline-locked>
+                {item.label}
+              </span>
+            ) : (
+              <FragmentLink
+                className={styles.link}
+                hash={item.id}
+                icon={false}
+                anchorProps={{
+                  "aria-current": item.id === activeId ? "location" : undefined,
+                  onClick: (event) => {
+                    if (
+                      event.button !== 0 ||
+                      event.metaKey ||
+                      event.ctrlKey ||
+                      event.altKey ||
+                      event.shiftKey
+                    )
+                      return;
+                    setNavigation({ id: item.id });
+                  },
+                }}
+              >
+                {item.label}
+              </FragmentLink>
+            )}
           </li>
         ))}
       </ul>

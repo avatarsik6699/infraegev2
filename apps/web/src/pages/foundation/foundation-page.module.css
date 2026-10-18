@@ -18,11 +18,12 @@
 
 /* F9/F18: an ink brush stroke under the phrase — pressed start, torn edges,
    a dry tail; repeated per line when the phrase wraps. The SVG carries the
-   brand orange (--theme-brand-orange): an image cannot read tokens. */
+   brand orange (--theme-brand-orange): an image cannot read tokens. The same
+   stroke marks the key phrase of /pricing (Change 192). */
 .highlight {
   padding-bottom: 0.1em;
-  background: url("./assets/ink-underline.svg") left bottom / 100% 0.5em
-    no-repeat;
+  background: url("../../shared/styles/assets/ink-underline.svg") left bottom /
+    100% 0.5em no-repeat;
   box-decoration-break: clone;
 }
 

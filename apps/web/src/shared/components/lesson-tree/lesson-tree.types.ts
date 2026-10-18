@@ -14,6 +14,8 @@ export namespace LessonTreeTypes {
     groupLabel?: string;
     /** Read after the label, e.g. «дополнительный урок»; the caption already shows it. */
     note?: string;
+    /** Change 192: a paid file the visitor cannot open yet; an orange lock after the label. */
+    locked?: boolean;
   };
 
   export type Folder = {
