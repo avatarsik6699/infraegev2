@@ -9,7 +9,7 @@
 | Change | `192` |
 | Slug | `paid-access` |
 | Title | Paid access: plans, soft paywall, gated content and payments |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/192-paid-access` |
 
 ---
@@ -121,7 +121,7 @@ of truth; this file only tracks what to build and what's left.
 ## Gate Checks
 
 > Critical Gate runs once per `/work` target set; default `/ship` reruns only invalidated checks;
-> Full Gate only with explicit `--full`. Commands: [docs/STACK.md](../STACK.md); selection:
+> Full Gate only with explicit `--full`. Commands: [docs/STACK.md](../../STACK.md); selection:
 > `python3 scripts/gate.py affected`. Record change-specific overrides here, or `None`.
 
 - Schema head changes (`192_01`): migration + isolated restore-check covering billing tables and grants.
