@@ -9,7 +9,7 @@
 | Change | `193` |
 | Slug | `kodumka-domain` |
 | Title | Кодумка: new public domain and brand |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/193-kodumka-domain` |
 
 ---
