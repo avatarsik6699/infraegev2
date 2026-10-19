@@ -6,6 +6,7 @@
     python -m app.modules.billing.admin show --email ADDRESS
     python -m app.modules.billing.admin revenue [--year YEAR]
     python -m app.modules.billing.admin funnel [--days N]       # orders → payments by day
+    python -m app.modules.billing.admin export                  # the monitoring summary (JSON)
 
 Output names payments, amounts and states only; addresses never reach the journal.
 """
@@ -19,12 +20,12 @@ from collections import defaultdict
 from datetime import datetime, timedelta
 from uuid import UUID
 
-from sqlalchemy import func, select
+from sqlalchemy import distinct, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
 from app.core.database import database_engine
-from app.modules.account.models import AccountPassword
+from app.modules.account.models import AccountIdentity, AccountPassword, AccountUser
 from app.modules.billing import provider, service
 from app.modules.billing.models import AccessGrant, Payment, Refund
 
@@ -127,6 +128,91 @@ async def funnel(db: AsyncSession, days: int) -> list[dict]:
     return [{"day": day, "plan": plan, **line} for (day, plan), line in sorted(report.items())]
 
 
+EXPORT_DAYS = 90
+STUCK_ORDER = timedelta(hours=2)
+
+
+async def export(db: AsyncSession) -> dict:
+    """Change 195: the summary the monitoring «Продажи» view shows, refreshed hourly by the
+    host job. Counts and sums only: no addresses, ids or names leave the database."""
+    moment = service.now()
+    today = moment.astimezone(service.MOSCOW).date()
+    start = today - timedelta(days=EXPORT_DAYS - 1)
+    since = datetime(start.year, start.month, start.day, tzinfo=service.MOSCOW)
+    confirmed = or_(
+        select(AccountPassword.user_id)
+        .where(
+            AccountPassword.user_id == AccountUser.id,
+            AccountPassword.email_verified_at.is_not(None),
+        )
+        .exists(),
+        select(AccountIdentity.id).where(AccountIdentity.user_id == AccountUser.id).exists(),
+    )
+    registrations: dict[str, dict[str, int]] = defaultdict(lambda: {"accounts": 0, "confirmed": 0})
+    for created_at, is_confirmed in (
+        await db.execute(
+            select(AccountUser.created_at, confirmed).where(AccountUser.created_at >= since)
+        )
+    ).all():
+        line = registrations[created_at.astimezone(service.MOSCOW).date().isoformat()]
+        line["accounts"] += 1
+        line["confirmed"] += int(bool(is_confirmed))
+    paid = Payment.status.in_(("succeeded", "refunded"))
+    live = (
+        AccessGrant.starts_at <= moment,
+        AccessGrant.ends_at > moment,
+        AccessGrant.revoked_at.is_(None),
+    )
+    year = today.year
+    refunds: dict[str, int] = {
+        status: count
+        for status, count in (
+            await db.execute(
+                select(Refund.status, func.count())
+                .where(Refund.status.in_(("requested", "pending", "failed")))
+                .group_by(Refund.status)
+            )
+        ).tuples()
+    }
+    return {
+        "schema": "kodumka.business/1",
+        "generated_at": moment.isoformat(),
+        "days": EXPORT_DAYS,
+        "billing_enabled": settings.billing_enabled,
+        "paywall_enabled": settings.paywall_enabled,
+        "funnel": await funnel(db, EXPORT_DAYS),
+        "registrations": [{"day": day, **line} for day, line in sorted(registrations.items())],
+        "accounts_total": await db.scalar(select(func.count()).select_from(AccountUser)),
+        "paying_accounts_total": await db.scalar(
+            select(func.count(distinct(Payment.user_id))).where(paid, Payment.user_id.is_not(None))
+        ),
+        "access": {
+            "active": await db.scalar(
+                select(func.count(distinct(AccessGrant.user_id))).where(*live)
+            ),
+            "ending_7d": await db.scalar(
+                select(func.count()).where(*live, AccessGrant.ends_at <= moment + timedelta(days=7))
+            ),
+        },
+        "npd": {
+            "year": year,
+            "income_kopecks": await service.revenue_kopecks(db, year),
+            "limit_kopecks": settings.billing_npd_limit_kopecks,
+        },
+        "problems": {
+            "stuck_orders": await db.scalar(
+                select(func.count()).where(
+                    Payment.status.in_(("created", "pending")),
+                    Payment.created_at < moment - STUCK_ORDER,
+                )
+            ),
+            "refunds_requested": refunds.get("requested", 0),
+            "refunds_pending": refunds.get("pending", 0),
+            "refunds_failed": refunds.get("failed", 0),
+        },
+    }
+
+
 async def main_async(args: argparse.Namespace) -> object:
     engine = database_engine(settings.account_database_url, role="infraege_app")
     try:
@@ -154,6 +240,8 @@ async def main_async(args: argparse.Namespace) -> object:
                 return await show(db, args.email)
             if args.command == "funnel":
                 return await funnel(db, args.days)
+            if args.command == "export":
+                return await export(db)
             year = args.year or service.now().astimezone(service.MOSCOW).year
             income = await service.revenue_kopecks(db, year)
             return {
@@ -177,6 +265,7 @@ def main() -> None:
     commands.add_parser("show").add_argument("--email", required=True)
     commands.add_parser("revenue").add_argument("--year", type=int)
     commands.add_parser("funnel").add_argument("--days", type=int, default=30)
+    commands.add_parser("export")
     print(json.dumps(asyncio.run(main_async(parser.parse_args())), ensure_ascii=False, indent=2))
 
 

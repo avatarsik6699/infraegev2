@@ -167,6 +167,8 @@ async def reconcile(db: AsyncSession, gateway: PaymentProvider) -> None:
                 payment = await db.scalar(select(Payment).where(Payment.invoice_no == invoice_no))
                 if payment is not None and not payment.provider_ref:
                     payment.provider_ref = reported.provider_ref
+    # Change 195: the host job keeps this line for the monitoring «Продажи» view.
+    logger.info("billing.reconcile_done", checked=len(rows), mismatches=len(mismatches))
     if mismatches:
         logger.error("billing.reconcile_mismatch", count=len(mismatches))
         await alert_operator("сверка с провайдером", "\n".join(mismatches) + "\n")

@@ -180,6 +180,11 @@ separate product with its own releases, so an application deploy never updates i
 `systemctl restart smotryashchiy-agent`; confirm the host is fresh on the dashboard, then delete the
 backup binary. Roll back by restoring that binary and restarting.
 
+The agent also ships the hourly business summary (Change 195, [billing](billing.md#business-summary-change-195))
+to the «Продажи» view: its unit runs `agent run` with `--business-file
+/var/lib/infraege/business/summary.json` (smotryashchiy v0.4.0 or later). Without the flag, or
+before the first hourly run writes the file, the view says that no summary has arrived.
+
 ## Retired operations stack
 
 The pre-Change-122 operations stack `infraege-ops` (Umami, Beszel and its agent, docker-socket-proxy,

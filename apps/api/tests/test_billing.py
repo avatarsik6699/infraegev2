@@ -1,6 +1,7 @@
 """Change 192: paid access and one-time payments against real PostgreSQL roles."""
 
 import asyncio
+import json
 import re
 from datetime import UTC, datetime, timedelta
 from uuid import uuid4
@@ -411,6 +412,25 @@ def test_jobs_settle_missed_notifications_expire_orders_and_notify(
 
                 lines = [line for line in await admin.funnel(db, 2) if line["plan"] == "month"]
                 assert sum(line["orders"] for line in lines) >= 2
+                # Change 195: the monitoring summary carries counts and sums, never people
+                summary = await admin.export(db)
+                assert summary["schema"] == "kodumka.business/1"
+                assert {
+                    "funnel",
+                    "registrations",
+                    "accounts_total",
+                    "paying_accounts_total",
+                    "access",
+                    "npd",
+                    "problems",
+                } <= set(summary)
+                assert summary["paying_accounts_total"] >= 1
+                assert summary["access"]["active"] >= 1
+                assert summary["access"]["ending_7d"] >= 1
+                assert sum(day["accounts"] for day in summary["registrations"]) >= 1
+                dumped = json.dumps(summary, default=str)
+                assert "@" not in dumped
+                assert not re.search(r"[0-9a-f]{8}-[0-9a-f]{4}-", dumped)
                 assert sum(line["paid"] for line in lines) >= 1
                 assert sum(line["failed"] for line in lines) >= 1
                 assert all(

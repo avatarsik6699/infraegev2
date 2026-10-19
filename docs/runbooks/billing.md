@@ -55,6 +55,18 @@ the address, authenticates them.
 - Both are no-ops while `BILLING_ENABLED` is off. Logs: `journalctl -u infraege-billing-hourly`
   (events `billing.*`, ids and amounts only, no emails).
 
+## Business summary (Change 195)
+
+The hourly timer, also while billing is off, writes `/var/lib/infraege/business/summary.json`
+(root, mode 640) from `admin export`: orders → payments → refunds by day and plan for 90 days,
+registrations by day with paying accounts, active access and access ending within 7 days, the НПД
+year income and limit, stuck orders (created or pending over 2 hours) and requested/pending/failed
+refunds. The daily timer keeps its last provider reconciliation in `reconcile.json` beside it, and
+the hourly summary carries it as `reconcile`. The file holds counts and sums only. The
+`smotryashchiy` agent on this host reads it and ships it to the monitoring «Продажи» view
+([production](production.md#host-monitoring-agent-smotryashchiy)). A failed export fails the
+hourly unit (`journalctl -u infraege-billing-hourly`).
+
 ## Routine checks
 
 - After enabling: `journalctl -u infraege-billing-daily --since today` shows `billing.jobs_done`.
