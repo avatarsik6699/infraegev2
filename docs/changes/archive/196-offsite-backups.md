@@ -9,7 +9,7 @@
 | Change | `196` |
 | Slug | `offsite-backups` |
 | Title | Off-site backups in Yandex Object Storage |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/196-offsite-backups` |
 
 ---
@@ -184,7 +184,7 @@ Files list above.
 ## Gate Checks
 
 > Critical Gate runs once per `/work` target set; default `/ship` reruns only invalidated checks;
-> Full Gate only with explicit `--full`. Commands: [docs/STACK.md](../STACK.md); selection:
+> Full Gate only with explicit `--full`. Commands: [docs/STACK.md](../../STACK.md); selection:
 > `python3 scripts/gate.py affected`. Record change-specific overrides here, or `None`.
 
 None
