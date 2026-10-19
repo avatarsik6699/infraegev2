@@ -11,8 +11,10 @@ access during credential rotation. Store secrets outside Git, mode 600; never pu
 2. Create `/etc/infraege/production.env` from `infra/.env.example`, mode 600, with distinct
    independent bootstrap/runtime/import/migration/backup/application-write passwords. Set a random
    `AUTH_CSRF_SECRET` (at least 32 characters), `PUBLIC_ORIGIN=https://kodumka.ru` and keep
-   `TASK_FILES_DIR=/var/lib/infraege/task-files`. Create `/etc/infraege/restic-password` separately.
-   Production must never reuse dev credentials.
+   `TASK_FILES_DIR=/var/lib/infraege/task-files`. Create `/etc/infraege/restic-password` separately
+   and keep a copy off the host (athanor `RESTIC_PASSWORD`). Write the root-only off-site
+   credentials file `/etc/infraege/offsite-backup.env` as in [backup-restore](backup-restore.md)
+   § Off-site copy (Change 196). Production must never reuse dev credentials.
 3. Before enabling accounts, configure SMTP delivery (`SMTP_*`, `MAIL_FROM`) and create provider
    applications with the exact HTTPS callback origins
    `https://kodumka.ru/api/auth/providers/vk/callback`,

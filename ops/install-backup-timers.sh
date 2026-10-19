@@ -19,6 +19,12 @@ install -m 644 "$repo_dir/ops/systemd/infraege-restore-check.service" /etc/syste
 install -m 644 "$repo_dir/ops/systemd/infraege-restore-check.timer" /etc/systemd/system/
 install -m 644 "$repo_dir/ops/systemd/infraege-account-purge.service" /etc/systemd/system/
 install -m 644 "$repo_dir/ops/systemd/infraege-account-purge.timer" /etc/systemd/system/
+# Change 196: off-site repository check (a no-op until /etc/infraege/offsite-backup.env exists)
+# and the hourly backup summary for the monitoring view.
+for unit in infraege-offsite-check infraege-backup-summary; do
+  install -m 644 "$repo_dir/ops/systemd/$unit.service" /etc/systemd/system/
+  install -m 644 "$repo_dir/ops/systemd/$unit.timer" /etc/systemd/system/
+done
 # Change 192: billing upkeep; a no-op until BILLING_ENABLED is on
 for unit in infraege-billing-hourly infraege-billing-daily; do
   install -m 644 "$repo_dir/ops/systemd/$unit.service" /etc/systemd/system/
@@ -26,4 +32,5 @@ for unit in infraege-billing-hourly infraege-billing-daily; do
 done
 systemctl daemon-reload
 systemctl enable --now infraege-backup.timer infraege-restore-check.timer infraege-account-purge.timer \
-  infraege-billing-hourly.timer infraege-billing-daily.timer
+  infraege-billing-hourly.timer infraege-billing-daily.timer \
+  infraege-offsite-check.timer infraege-backup-summary.timer

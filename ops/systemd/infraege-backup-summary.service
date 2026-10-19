@@ -1,0 +1,9 @@
+[Unit]
+Description=infraege backup summary for the monitoring view
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+WorkingDirectory=/opt/infraege/database-current
+ExecStart=/opt/infraege/database-current/scripts/backup-summary.sh

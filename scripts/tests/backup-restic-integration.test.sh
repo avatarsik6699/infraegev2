@@ -30,4 +30,35 @@ restic_test forget --tag infraege-application --group-by host,tags \
 restic_test cat snapshot "$held_id" |
   jq -e '.tags | index("infraege-recovery-hold") != null' >/dev/null
 restic_test cat snapshot "$ordinary_id" >/dev/null
-echo 'Restic 0.16.4 isolated retention: PASS (both same-day full IDs survived)'
+
+# Change 196: the off-site copy through the real library, with a second local repository standing in
+# for the remote backend (the repository URL is the only difference).
+repo_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)
+printf 'synthetic-test-only\n' > "$test_root/password"
+restic() {
+  docker run --rm --user "$(id -u):$(id -g)" --volume "$test_root:/test" \
+    --env RESTIC_REPOSITORY --env RESTIC_PASSWORD_FILE=/test/password \
+    --env RESTIC_CACHE_DIR=/test/cache restic/restic:0.16.4 "$@"
+}
+export RESTIC_PASSWORD_FILE=/test/password
+# shellcheck source=scripts/lib/offsite-backup.sh
+source "$repo_dir/scripts/lib/offsite-backup.sh"
+export OFFSITE_RESTIC_REPOSITORY=/test/offsite
+offsite_test() { RESTIC_REPOSITORY=/test/offsite restic "$@"; }
+
+copied=$(offsite_copy /test/repo "$ordinary_id")
+[[ $(offsite_test cat snapshot "$copied" | jq -r .original) == "$ordinary_id" ]]
+[[ $(offsite_test cat config | jq -r .chunker_polynomial) == $(restic_test cat config | jq -r .chunker_polynomial) ]]
+# The pre-migration hold survives the off-site retention as well.
+[[ $(offsite_test snapshots --json --tag infraege-recovery-hold | jq length) == 1 ]]
+
+# A missed day catches up: two local backups, one copy run, both arrive.
+printf 'day two\n' > "$test_root/data/input"
+missed=$(restic_test backup --json --tag infraege-application /test/data | jq -sr '.[] | select(.message_type == "summary") | .snapshot_id')
+printf 'day three\n' > "$test_root/data/input"
+latest=$(restic_test backup --json --tag infraege-application /test/data | jq -sr '.[] | select(.message_type == "summary") | .snapshot_id')
+offsite_copy /test/repo "$latest" >/dev/null
+offsite_test snapshots --json --tag infraege-application |
+  jq -e --arg a "$missed" --arg b "$latest" '[.[].original] | index($a) != null and index($b) != null' >/dev/null
+[[ $(offsite_repository_facts | jq -r '.snapshots > 0 and .sizeBytes > 0') == true ]]
+echo 'Restic 0.16.4 isolated retention: PASS (both same-day full IDs survived; off-site copy, original ID, chunker, hold, catch-up)'

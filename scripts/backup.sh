@@ -3,6 +3,7 @@ set -euo pipefail
 
 repo_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 source "$repo_dir/scripts/lib/application-db.sh"
+source "$repo_dir/scripts/lib/offsite-backup.sh"
 [[ $# -le 2 && ( $# -lt 2 || $2 == --recovery-hold ) ]] || {
   echo "usage: $0 [ENV_FILE] [--recovery-hold]" >&2
   exit 64
@@ -28,7 +29,8 @@ exec 9>"$restic_lock_file"
 flock -n 9 || { echo 'another infraege Restic job is running' >&2; exit 1; }
 work_dir=$(mktemp -d "$backup_root/work.XXXXXX")
 backup_output=$(mktemp "$backup_root/backup-output.XXXXXX")
-trap 'rm -rf -- "$work_dir"; rm -f -- "$backup_output"' EXIT
+# Whatever happens, the dashboard's backup summary (Change 196) is rewritten from the status files.
+trap 'rm -rf -- "$work_dir"; rm -f -- "$backup_output"; bash "$repo_dir/scripts/backup-summary.sh" >/dev/null 2>&1 || true' EXIT
 
 db_bundle "$work_dir/bundle" "$env_file"
 
@@ -56,11 +58,34 @@ restic forget --tag "$snapshot_tag" --group-by host,tags \
 
 # A successful forget/prune is not proof that this exact pre-migration point survived.
 restic cat snapshot "$snapshot_id" >/dev/null
+snapshot_count=$(restic snapshots --json --tag "$snapshot_tag" | jq 'length')
+repository_bytes=$(restic stats --json --mode raw-data | jq '.total_size')
+holds=$(restic snapshots --json --tag "$recovery_hold_tag" | jq -c '[.[] | {name:.short_id, createdAt:.time}]')
 jq -n \
   --arg status success \
   --arg completedAt "$(date --utc +%FT%TZ)" \
   --arg snapshotId "$snapshot_id" \
   --argjson recoveryHold "$recovery_hold" \
-  '{status:$status,completedAt:$completedAt,snapshotId:$snapshotId,recoveryHold:$recoveryHold,maxAgeHours:36}' \
+  --argjson snapshots "$snapshot_count" \
+  --argjson sizeBytes "$repository_bytes" \
+  --argjson holds "$holds" \
+  '{status:$status,completedAt:$completedAt,snapshotId:$snapshotId,recoveryHold:$recoveryHold,maxAgeHours:36,
+    snapshots:$snapshots,sizeBytes:$sizeBytes,holds:$holds}' \
   > "$backup_status_file"
 chmod 644 "$backup_status_file"
+
+# Off-site copy (Change 196). The local backup above stays valid whatever happens here; a failed
+# copy records its failure and fails this run (and the systemd unit, or the deploy before migrating).
+if ! offsite_configured; then
+  offsite_write "$offsite_status_file" not-configured 36
+  exit 0
+fi
+if ! offsite_load || ! offsite_snapshot=$(offsite_copy "$restic_repo" "$snapshot_id") ||
+  ! offsite_facts=$(offsite_repository_facts); then
+  offsite_write "$offsite_status_file" failed 36 "$(jq -cn --arg id "$snapshot_id" '{snapshotId:$id}')"
+  echo 'off-site copy failed; the local backup succeeded' >&2
+  exit 1
+fi
+offsite_write "$offsite_status_file" success 36 \
+  "$(jq -cn --arg id "$snapshot_id" --arg offsite "$offsite_snapshot" --argjson facts "$offsite_facts" \
+    '{snapshotId:$id, offsiteSnapshotId:$offsite} + $facts')"

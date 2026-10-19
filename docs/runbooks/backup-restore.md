@@ -10,8 +10,8 @@ plus timer/retention timing). A schema-transition deploy additionally creates on
 removes the hold. Review and manually release it after 30 days, after confirming recovery is no
 longer needed. This is a bounded operational review, not an automatic deletion timer. Individual
 records are never edited out of Restic snapshots. Jobs serialize with
-`/run/lock/infraege-restic.lock`. Local same-host backups do not survive loss of the VPS; off-site
-storage remains an accepted unresolved risk.
+`/run/lock/infraege-restic.lock`. Every successful backup is also copied off the host (§ Off-site
+copy), so loss of the VPS no longer takes the backups with it.
 
 ## Operator commands
 
@@ -19,7 +19,8 @@ storage remains an accepted unresolved risk.
 make db-inventory DB_ENV=dev DB_PROJECT=infraege-dev
 make db-inventory DB_ENV=prod DB_PROJECT=infraege
 make db-backup DB_ENV=prod DB_PROJECT=infraege ENV_FILE=/etc/infraege/production.env
-make db-restore-check DB_ENV=restore DB_PROJECT=infraege-restore
+make db-restore-check DB_ENV=restore DB_PROJECT=infraege-restore            # off-site copy when configured
+make db-restore-check DB_ENV=restore DB_PROJECT=infraege-restore RESTORE_SOURCE=local
 make db-export DB_ENV=prod DB_PROJECT=infraege DESTINATION=/absolute/new/export
 ```
 
@@ -214,5 +215,65 @@ reconciliation rule above applies before any restoration to production.
 The exact pre-migration snapshot of the 2026-09-26 cutover was pruned before recovery holds
 existed; an older retained `122_01` point is a different backup — verify its ID, schema and
 account-deletion window before relying on it.
+Since Change 196 the off-site repository holds a copy of the held snapshot under a **different ID**
+whose `original` field is the local full ID. After releasing the hold locally, release it off-site
+too: with the off-site environment loaded (see § Off-site copy), find the copy with `restic
+snapshots --json --tag infraege-recovery-hold | jq '.[] | select(.original == "FULL_LOCAL_ID") |
+.id'`, authenticate it with `restic cat snapshot` and remove only its `infraege-recovery-hold` tag.
+The off-site key cannot delete object versions; pruned data stays in the bucket for 30 more days.
+
+## Off-site copy (Change 196)
+
+Restic copies every application snapshot to a second, encrypted repository in Yandex Object
+Storage (Russia): `s3:https://storage.yandexcloud.net/kodumka-backup-app`.
+- **Bucket:** private, versioned, 50 GB cap. Lifecycle `keep-deleted-30d` keeps replaced or deleted
+  object versions for 30 days.
+- **Key:** the bucket key (service account `kodumka-backup-app`) can write, read and delete objects.
+  It cannot delete versions, list versions, or change versioning, lifecycle or the bucket policy, so
+  a compromised host cannot destroy the history.
+- **Password:** both repositories use the one Restic password in `/etc/infraege/restic-password`.
+  The architect keeps it off-host in athanor (`RESTIC_PASSWORD`, infraegev2 vault); the monitoring
+  host uses the same one. Without it the off-site copy is unreadable.
+
+**Setup** (once, from the operator machine, without echoing values): write the root-only
+credentials file from athanor over SSH. The file holds only these keys, never `production.env`,
+which is rendered into Compose:
+
+```bash
+athanor run -- bash -c 'printf "OFFSITE_RESTIC_REPOSITORY=s3:https://storage.yandexcloud.net/kodumka-backup-app\nAWS_ACCESS_KEY_ID=%s\nAWS_SECRET_ACCESS_KEY=%s\nAWS_DEFAULT_REGION=ru-central1\n" \
+  "$BACKUP_S3_ACCESS_KEY_ID" "$BACKUP_S3_SECRET_ACCESS_KEY" |
+  ssh root@<host> "install -m 600 -o root -g root /dev/stdin /etc/infraege/offsite-backup.env"'
+```
+
+`scripts/lib/offsite-backup.sh` refuses the file unless it is a root-owned regular file with mode
+600. It reads only those four keys and never executes the file. Without the file, every job records
+`not-configured`.
+
+**What runs:**
+- After each local backup (timer or deploy), `backup.sh`, under the same lock:
+  - runs `restic copy` (the first run creates the repository with the local chunker parameters);
+  - finds the new snapshot off-site by its `original` ID;
+  - applies the same retention, holds included;
+  - writes `offsite-backup-status.json`.
+- A failed copy records `failed` and exits non-zero after the local backup succeeded. The timer
+  unit fails; a deploy stops before migrating, because the pre-migration copy must leave the host
+  first. To deploy during a storage outage, fix the storage, or move the credentials file away
+  deliberately and record why.
+- Weekly, `infraege-offsite-check.timer` runs `restic check --read-data-subset=10%` and writes
+  `offsite-check-status.json`.
+- Monthly, the restore drill reads the off-site repository (`RESTORE_SOURCE=auto`), and
+  `restore-status.json` records `source`.
+- `scripts/backup-summary.sh` (hourly and after every job) writes
+  `/var/lib/infraege/ops/backups.json` in the `smotryashchiy.backup/1` schema, mode 640. It holds
+  only states, times, snapshot counts, sizes, holds, backup-disk space and failed backup units.
+  The monitoring agent reports it with `--document backup=/var/lib/infraege/ops/backups.json`; the
+  dashboard's BACKUPS ledger assesses it. There are no notifications.
+
+**Disaster recovery on a fresh host:**
+1. Bootstrap the host as in production.md.
+2. Restore `/etc/infraege/restic-password` from athanor and write the credentials file as above.
+3. Run `RESTORE_SOURCE=offsite make db-restore-check …` to prove the copy.
+4. Restore the chosen bundle to a new volume with the matching maintenance release (§ Recovery).
+
 Retired operations snapshots/services are not altered by local code removal. Their eventual
 retirement must be explicit; preserve any shared Restic data and application timers.

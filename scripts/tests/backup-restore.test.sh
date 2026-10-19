@@ -22,6 +22,14 @@ reject env DB_ENV=dev DB_PROJECT=infraege bash "$repo_dir/scripts/backup.sh" /no
 reject env DB_ENV=prod DB_PROJECT=infraege-ops bash "$repo_dir/scripts/backup.sh" /not/read
 reject env DB_ENV=prod DB_PROJECT=infraege bash "$repo_dir/scripts/restore-check.sh"
 reject env DB_ENV=restore DB_PROJECT=infraege bash "$repo_dir/scripts/restore-check.sh"
+# Change 196: the restore source is explicit or auto; off-site credentials must be private.
+reject env DB_ENV=restore DB_PROJECT=infraege-restore RESTORE_SOURCE=cloud bash "$repo_dir/scripts/restore-check.sh"
+printf 'OFFSITE_RESTIC_REPOSITORY=s3:https://storage.example/b\n' >"$test_root/offsite.env"
+chmod 644 "$test_root/offsite.env"
+reject env DB_ENV=restore DB_PROJECT=infraege-restore RESTORE_SOURCE=offsite OFFSITE_ENV_FILE="$test_root/offsite.env" \
+  OFFSITE_ENV_OWNER="$(id -u)" bash "$repo_dir/scripts/restore-check.sh"
+reject env DB_ENV=restore DB_PROJECT=infraege-restore OFFSITE_ENV_FILE="$test_root/offsite.env" \
+  OFFSITE_ENV_OWNER="$(id -u)" bash "$repo_dir/scripts/restore-check.sh"
 reject env DB_ENV=dev DB_PROJECT=infraege-dev bash "$repo_dir/scripts/db-export.sh" "$test_root/export"
 reject env DB_ENV=prod DB_PROJECT=infraege bash "$repo_dir/scripts/db-export.sh" "$test_root"
 source "$repo_dir/scripts/lib/application-db.sh"

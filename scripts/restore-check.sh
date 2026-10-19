@@ -3,15 +3,27 @@ set -euo pipefail
 umask 077
 repo_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 source "$repo_dir/scripts/lib/application-db.sh"
+source "$repo_dir/scripts/lib/offsite-backup.sh"
 : "${DB_ENV:?explicit DB_ENV required (restore)}"
 : "${DB_PROJECT:?explicit DB_PROJECT required (infraege-restore)}"
 [[ $DB_ENV == restore && $DB_PROJECT == infraege-restore ]] || {
   db_fail 'only disposable restore/infraege-restore destination accepted'; exit 64;
 }
-echo 'destination=restore project=infraege-restore source-tag=infraege-application'
 backup_root=${BACKUP_ROOT:-/var/backups/infraege}
 export RESTIC_REPOSITORY=${RESTIC_REPOSITORY:-$backup_root/restic}
 export RESTIC_PASSWORD_FILE=${RESTIC_PASSWORD_FILE:-/etc/infraege/restic-password}
+# Change 196: the monthly drill reads the off-site copy once it exists, which proves that copy restores.
+restore_source=${RESTORE_SOURCE:-auto}
+case $restore_source in
+  auto) if offsite_configured; then restore_source=offsite; else restore_source=local; fi ;;
+  local | offsite) ;;
+  *) db_fail 'RESTORE_SOURCE must be local, offsite or auto'; exit 64 ;;
+esac
+if [[ $restore_source == offsite ]]; then
+  offsite_load || exit 1
+  export RESTIC_REPOSITORY=$OFFSITE_RESTIC_REPOSITORY
+fi
+echo "destination=restore project=infraege-restore source-tag=infraege-application source=$restore_source"
 exec 9>"${RESTIC_LOCK_FILE:-/run/lock/infraege-restic.lock}"
 flock -n 9 || { db_fail 'another Restic job is running'; exit 1; }
 work_dir=$(mktemp -d "$backup_root/restore.XXXXXX")
@@ -55,6 +67,8 @@ cleanup
 trap - EXIT
 elapsed=$((SECONDS-started))
 status_file=${RESTORE_STATUS_FILE:-/var/lib/infraege/restore-status.json}
-jq -n --arg completedAt "$(date -u +%FT%TZ)" --argjson seconds "$elapsed"   '{status:"success",completedAt:$completedAt,durationSeconds:$seconds,maxAgeHours:840,format:1}' >"$status_file"
+jq -n --arg completedAt "$(date -u +%FT%TZ)" --argjson seconds "$elapsed" --arg source "$restore_source" \
+  '{status:"success",completedAt:$completedAt,durationSeconds:$seconds,maxAgeHours:840,format:1,source:$source}' >"$status_file"
 chmod 644 "$status_file"
+bash "$repo_dir/scripts/backup-summary.sh" >/dev/null 2>&1 || true
 echo "Application restore SQL verification passed in ${elapsed}s."

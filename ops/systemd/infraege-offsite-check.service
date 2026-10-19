@@ -1,0 +1,11 @@
+[Unit]
+Description=infraege off-site backup repository check
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+WorkingDirectory=/opt/infraege/database-current
+ExecStart=/opt/infraege/database-current/scripts/offsite-check.sh

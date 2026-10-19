@@ -48,7 +48,7 @@ help:
 	@echo "  make clean-dry-run  Preview the exact local artifacts make clean removes"
 	@echo "  make db-inventory DB_ENV=dev DB_PROJECT=infraege-dev  Read application DB metadata"
 	@echo "  make db-backup DB_ENV=... DB_PROJECT=... ENV_FILE=...  Back up an explicit application DB"
-	@echo "  make db-restore-check DB_ENV=restore DB_PROJECT=infraege-restore  Verify a disposable restore"
+	@echo "  make db-restore-check DB_ENV=restore DB_PROJECT=infraege-restore [RESTORE_SOURCE=local|offsite]  Verify a disposable restore"
 	@echo "  make db-export DB_ENV=prod DB_PROJECT=infraege DESTINATION=...  Export encrypted PC copy"
 
 dev:
@@ -98,7 +98,7 @@ db-backup:
 	@DB_ENV="$(DB_ENV)" DB_PROJECT="$(DB_PROJECT)" bash scripts/backup.sh "$(ENV_FILE)"
 
 db-restore-check:
-	@DB_ENV="$(DB_ENV)" DB_PROJECT="$(DB_PROJECT)" bash scripts/restore-check.sh
+	@DB_ENV="$(DB_ENV)" DB_PROJECT="$(DB_PROJECT)" RESTORE_SOURCE="$(RESTORE_SOURCE)" bash scripts/restore-check.sh
 
 db-export:
 	@DB_ENV="$(DB_ENV)" DB_PROJECT="$(DB_PROJECT)" bash scripts/db-export.sh "$(DESTINATION)"

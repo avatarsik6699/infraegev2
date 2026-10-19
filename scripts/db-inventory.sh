@@ -39,11 +39,14 @@ SQL
 docker exec "$container" df -Pk /var/lib/postgresql
 if [[ $environment == prod ]]; then
   df -Pk /var/backups/infraege
-  systemctl show infraege-backup.timer infraege-restore-check.timer \
+  systemctl show infraege-backup.timer infraege-restore-check.timer infraege-offsite-check.timer \
     -p Id -p ActiveState -p LastTriggerUSec
-  systemctl show infraege-backup.service infraege-restore-check.service \
+  systemctl show infraege-backup.service infraege-restore-check.service infraege-offsite-check.service \
     -p Id -p Result -p ExecMainStatus
-  if [[ -r /var/lib/infraege/backup-status.json ]]; then
-    jq '{status,completedAt,maxAgeHours}' /var/lib/infraege/backup-status.json
-  fi
+  # Local backup, off-site copy and off-site check (Change 196): state and age only.
+  for status_file in backup-status offsite-backup-status offsite-check-status; do
+    if [[ -r /var/lib/infraege/$status_file.json ]]; then
+      jq --arg job "$status_file" '{job:$job,status,completedAt,maxAgeHours}' "/var/lib/infraege/$status_file.json"
+    fi
+  done
 fi

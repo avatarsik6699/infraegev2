@@ -34,8 +34,9 @@ the address, authenticates them.
 1. Release the paid-access code with both flags off; production stays free. Before that deploy,
    rehearse the `140_01` → `192_01` migration on the production host and keep its attestation
    ([backup-restore](backup-restore.md), «Change 192»).
-2. Off-site backups are running and a restore check of a `192_01` bundle has passed (billing rows
-   are evidence, see «Backups»).
+2. Off-site backups are running (`offsite-backup-status.json` success, BACKUPS ledger OK; setup in
+   [backup-restore](backup-restore.md) § Off-site copy) and a restore check of a `192_01` bundle
+   from the off-site copy has passed (billing rows are evidence, see «Backups»).
 3. Register as самозанятый, connect the Robokassa shop and Робочеки СМЗ, put the credentials into
    `/etc/infraege/production.env` ([billing-provider-selection](billing-provider-selection.md)).
 4. `BILLING_ENABLED=true`, `ROBOKASSA_TEST=true`: run the test-mode checks; then the live 1 ₽
