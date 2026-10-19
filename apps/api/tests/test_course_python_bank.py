@@ -1,7 +1,6 @@
 """Independent checks of the Python course bank tasks (Change 175).
 
-The bank answers come from ``content/lesson-design/course-python/tasks.json`` and agree
-with the lesson texts (``bank.py``); here a sample of them from every lesson is recomputed
+The bank answers agree with the lesson texts; here a sample of them from every lesson is recomputed
 by other means, and the shape of the course bank is checked: membership, mastery of
 additional lessons, archived tasks of the earlier course and server-side checking.
 """
@@ -22,7 +21,7 @@ pytestmark = pytest.mark.pure
 
 ROOT = Path(__file__).resolve().parents[3]
 BANK_PATH = ROOT / "content/practice-bank/bank.json"
-COURSE = ROOT / "content/lesson-design/course-python/course.json"
+REGISTRY = ROOT / "apps/api/practice-registry.json"
 ADVANCED = {"python-classes", "python-advanced-features", "python-testing"}
 
 
@@ -31,8 +30,9 @@ def _bank() -> Bank:
 
 
 def _course_lessons() -> list[str]:
-    course = json.loads(COURSE.read_text(encoding="utf-8"))
-    return [lesson["site"]["id"] for m in course["modules"] for lesson in m["lessons"]]
+    """The course lessons in order, as the release registry lists them."""
+    registry = json.loads(REGISTRY.read_text(encoding="utf-8"))
+    return next(c["lesson_ids"] for c in registry["courses"] if c["id"] == "python")
 
 
 def _digit_sum(n: int) -> int:

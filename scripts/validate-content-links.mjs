@@ -10,6 +10,7 @@ import {
   courseLessonPublications,
   coursePublications,
 } from "../apps/web/src/entities/course/content/course-publication.mjs";
+import { topicStructure } from "./lib/lesson-sources.mjs";
 
 const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 execFileSync(
@@ -107,23 +108,6 @@ const registry = JSON.parse(
 );
 const FREE_TASKS = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 14, 16]);
 const FREE_COURSE_LESSONS = { python: Infinity, excel: 6 };
-const standLevels = new Map(
-  readdirSync(join(REPO_ROOT, "content/lesson-design"))
-    .filter((name) => /^topic-\d+$/u.test(name))
-    .map((name) =>
-      JSON.parse(
-        readFileSync(
-          join(REPO_ROOT, "content/lesson-design", name, "topic.json"),
-          "utf8",
-        ),
-      ),
-    )
-    .filter((topic) => topic.site)
-    .map((topic) => [
-      topic.site.id,
-      topic.subtopics.map((subtopic) => subtopic.level),
-    ]),
-);
 for (const material of registry.materials) {
   if (material.kind === "topic") {
     const publication = lessonPublications.find(
@@ -143,9 +127,11 @@ for (const material of registry.materials) {
     if (material.final_access !== (free ? "free" : "paid")) {
       errors.push(`topic "${material.id}": «Практика и итог» access`);
     }
-    const levels = standLevels.get(material.id) ?? [];
+    const levels = topicStructure(material.id).subtopics.map(
+      (subtopic) => subtopic.level,
+    );
     levels.forEach((level, index) => {
-      if (level === "дополнительный" && access[index] === "free" && !free) {
+      if (level === "advanced" && access[index] === "free" && !free) {
         errors.push(`topic "${material.id}": an advanced subtopic is free`);
       }
     });

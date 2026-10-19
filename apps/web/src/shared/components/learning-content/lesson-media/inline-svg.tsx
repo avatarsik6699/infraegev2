@@ -1,7 +1,7 @@
 import styles from "./lesson-media.module.css";
 
 type Props = {
-  /** Trusted markup from `export_media.py`, never user input. */
+  /** Trusted markup from `site_media.py`, never user input. */
   svg: string;
   width: number;
   height: number;
@@ -25,7 +25,7 @@ export const InlineSvg: React.FC<Props> = (props) => (
     role={props.label ? "img" : undefined}
     aria-label={props.label}
     hidden={props.hidden}
-    // Repository-generated markup (export_media.py), never user input.
+    // Repository-generated markup (site_media.py), never user input.
     dangerouslySetInnerHTML={{ __html: props.svg }}
   />
 );

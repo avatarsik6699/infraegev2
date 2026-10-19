@@ -1,5 +1,3 @@
-import { readFileSync, readdirSync } from "node:fs";
-import { resolve } from "node:path";
 import { describe, expect, it, vi } from "vitest";
 import {
   spreadsheetOptimizationLesson,
@@ -24,36 +22,11 @@ vi.mock("~/shared/components/action-link", () => ({
 // Change 192: the paid subtopics live in their own modules.
 const lesson = await wholeLesson(spreadsheetOptimizationLesson);
 const lessonMedia = topicMedia("spreadsheet-optimization");
-const SOURCE = resolve(
-  process.cwd(),
-  "../..",
-  "content/lesson-design/topic-18",
-);
 const authoredContent = [
   ...lesson.theory.map(({ explanation }) => explanation),
   lesson.examFocus,
   lesson.result,
 ];
-
-/** Fences of one kind on the approved stand, without the task blocks. */
-function sourceFences(kind: "excel" | "sheet" | "python"): number {
-  return readdirSync(SOURCE)
-    .filter((name) => /^0[1-9]-.*\.md$/u.test(name))
-    .flatMap((name) =>
-      readFileSync(resolve(SOURCE, name), "utf8").split(/\n---\n/u),
-    )
-    .filter(
-      (step) =>
-        !/^\s*\*\*(Чтобы проверить понимание|Задачи основных подтем)/u.test(
-          step,
-        ),
-    )
-    .reduce(
-      (total, step) =>
-        total + [...step.matchAll(new RegExp(`^\`\`\`${kind}`, "gmu"))].length,
-      0,
-    );
-}
 
 describe("task 18 robot lesson (Change 184)", () => {
   it("has six core subtopics, two advanced and their self-checks", () => {
@@ -103,18 +76,20 @@ describe("task 18 robot lesson (Change 184)", () => {
     expect(publicPaths).toContain("/ege/18-robot-sborshchik-monet/praktika");
   });
 
-  it("shows every sheet and formula of the stand, and no Python", () => {
+  it("shows every sheet of its media, the formulas and no Python", () => {
     const container = renderAuthoredLessonContent(authoredContent);
-    const media = Object.values(lessonMedia);
-    expect(sourceFences("python")).toBe(0);
-    expect(media.filter((item) => item.kind === "sheet")).toHaveLength(
-      sourceFences("sheet"),
+    const sheets = Object.values(lessonMedia).filter(
+      (item) => item.kind === "sheet",
     );
+    expect(sheets.length).toBeGreaterThan(0);
     expect(container.querySelectorAll("[data-sheet-block]")).toHaveLength(
-      sourceFences("sheet"),
+      sheets.length,
     );
-    expect(container.querySelectorAll("[data-formula-block]")).toHaveLength(
-      sourceFences("excel"),
+    expect(
+      container.querySelectorAll("[data-formula-block]").length,
+    ).toBeGreaterThan(0);
+    expect(container.querySelectorAll("[data-language='python']")).toHaveLength(
+      0,
     );
   });
 

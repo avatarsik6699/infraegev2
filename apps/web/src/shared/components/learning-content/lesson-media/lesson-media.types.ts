@@ -1,4 +1,4 @@
-/** Media written by `scripts/lesson_design/export_media.py` (Change 171). */
+/** Media of the site lessons, rebuilt by `scripts/lesson_design/site_media.py` (Change 197). */
 export namespace LessonMediaTypes {
   export type Diagram = {
     kind: "diagram";

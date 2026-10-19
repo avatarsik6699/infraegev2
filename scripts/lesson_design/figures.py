@@ -256,7 +256,7 @@ def remainder_svg(n: int = 17, d: int = 5, cell: int = 32) -> str:
     )
 
 
-# One caption for the stand widget and the site RemainderExplorer (export_lesson).
+# One caption for the stand widget and the site RemainderExplorer.
 REMAINDER_CAPTION = (
     "Клетки числа n разложены порциями по d: полные порции — частное `n // d`, "
     "клетки, которым не хватило на порцию, — остаток `n % d`. Меняйте числа или "
@@ -967,7 +967,7 @@ def _unit(a, b):
 
 def graph_layout(edges, *, order=None, up: bool = False, width: int = 660) -> dict:
     """Geometry of a weighted directed graph, the single source for the stand
-    picture (graph_svg) and the site sandbox (PathBuilder, via export_media).
+    picture (graph_svg) and the site sandbox (PathBuilder, via site_media).
 
     Vertices go by layers from left to right; an edge is a quadratic curve,
     bent when a vertex lies on its straight line. order — every vertex in one
@@ -1093,7 +1093,7 @@ def graph_layout(edges, *, order=None, up: bool = False, width: int = 660) -> di
 
 def graph_geometry(edges) -> dict:
     """graph_layout moved so that the picture starts at y = 0: the data the
-    site sandbox draws from (export_media → manifest kind «graph»)."""
+    site sandbox draws from (site_media → manifest kind «graph»)."""
     g = graph_layout(edges)
     top = g["top"]
 
@@ -3593,8 +3593,8 @@ FIGURES = {
     "growth": growth_svg,
 }
 
-# Step-through figures as (svg, caption) frames, for the site export
-# (scripts/lesson_design/export_media.py). Keys match FIGURES.
+# Step-through figures as (svg, caption) frames, for the site media
+# (scripts/lesson_design/site_media.py). Keys match FIGURES.
 STEPPERS = {
     "search_stepper": search_frames,
     "factor_stepper": factor_frames,
@@ -3616,7 +3616,7 @@ WIDGETS = {
     "range_try": "RangeSandbox",
 }
 
-# Widgets whose site component draws from generated data: export_media writes
+# Widgets whose site component draws from generated data: site_media writes
 # the data into the lesson's media manifest.
 WIDGET_DATA = {
     "path_builder": path_builder_data,

@@ -612,7 +612,8 @@ TERMS: dict[str, tuple[str, str, str, str]] = {
 # EGE topics 3, 9, 18 and 22 rely on (map.md, «Термины тем ЕГЭ → уроки курса").
 # A topic marks one as {{xl-key|label}} (Change 180): the popover links the Excel course lesson.
 # key: (title, explanation HTML, Excel course lesson route slug, course lesson title).
-# export_course.py checks that every slug is a published lesson of the course.
+# Archived with the stand (Change 197): the site popovers are edited in
+# apps/web/src/entities/lesson/content/python-terms.tsx.
 EXCEL_TERMS: dict[str, tuple[str, str, str, str]] = {
     "xl-address": (
         "Адрес ячейки и диапазон",

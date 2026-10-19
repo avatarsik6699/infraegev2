@@ -1,6 +1,6 @@
 /**
  * Evaluator of the Excel course's live sheet (Change 177): a port of the
- * stand's `scripts/lesson_design/sheet_eval.js`, whose reference is
+ * archived stand's `scripts/lesson_design/sheet_eval.js`, whose reference is
  * `sheet_eval.py`. Every cell of `tests/fixtures/sheet-cases.json` must show
  * exactly what the reference shows. Russian locale: Russian function names,
  * «;» between arguments, a decimal comma. Only the functions of the course.

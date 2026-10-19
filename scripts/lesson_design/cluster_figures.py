@@ -2,7 +2,7 @@
 
 Every number on a figure is computed here from the same data as the picture:
 coordinates, distances, sums, sizes of groups. Scatter plots read the data
-files of the topic (content/lesson-design/topic-27/files) and split them by
+files of the topic (content/lesson-files/topic-27) and split them by
 the same bounds as the lessons.
 
 ``cl_plane(points, segment)`` — points on the coordinate plane; with a segment,
@@ -31,7 +31,7 @@ from pathlib import Path
 
 from figures import ACCENT, FAINT, INK, MUTED, WASH, _stepper, _text
 
-FILES = Path(__file__).resolve().parents[2] / "content" / "lesson-design" / "topic-27" / "files"
+FILES = Path(__file__).resolve().parents[2] / "content" / "lesson-files" / "topic-27"
 W = 660
 
 

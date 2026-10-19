@@ -28,7 +28,7 @@ pytestmark = pytest.mark.pure
 
 ROOT = Path(__file__).resolve().parents[3]
 BANK_DIR = ROOT / "content/practice-bank"
-FILES = ROOT / "content/lesson-design/topic-24/files"
+FILES = ROOT / "content/lesson-files/topic-24"
 MATERIAL = "string-processing"
 RETIRED = [f"task-24-{number:02d}" for number in range(1, 9)]
 VOWELS = "AEIOUY"

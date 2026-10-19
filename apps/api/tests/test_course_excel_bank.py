@@ -1,7 +1,6 @@
 """Independent checks of the Excel course bank tasks (Change 177).
 
-The bank answers come from ``content/lesson-design/course-excel/tasks.json`` and agree
-with the lesson texts (``bank.py``); here every one of them is recomputed in plain
+The bank answers agree with the lesson texts; here every one of them is recomputed in plain
 Python, the way Excel would compute it, without the course's own evaluator. The shape
 of the course bank is checked too: membership, mastery of the additional lesson and the
 problem book (Задачник) attached by its checksum.
@@ -28,7 +27,7 @@ pytestmark = pytest.mark.pure
 ROOT = Path(__file__).resolve().parents[3]
 BANK_PATH = ROOT / "content/practice-bank/bank.json"
 BANK_FILES = ROOT / "content/practice-bank/files"
-COURSE = ROOT / "content/lesson-design/course-excel/course.json"
+REGISTRY = ROOT / "apps/api/practice-registry.json"
 ADVANCED = {"excel-tables-pivots"}
 WORKBOOK_TASKS = {
     "excel-first-formulas-t08",
@@ -44,8 +43,9 @@ def _bank() -> Bank:
 
 
 def _course_lessons() -> list[str]:
-    course = json.loads(COURSE.read_text(encoding="utf-8"))
-    return [lesson["site"]["id"] for m in course["modules"] for lesson in m["lessons"]]
+    """The course lessons in order, as the release registry lists them."""
+    registry = json.loads(REGISTRY.read_text(encoding="utf-8"))
+    return next(c["lesson_ids"] for c in registry["courses"] if c["id"] == "excel")
 
 
 def _cells(ref: str) -> int:

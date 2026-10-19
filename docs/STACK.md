@@ -334,7 +334,7 @@ synthetic bank into the development volume.
 │   ├── playbooks/              # plan.md / work.md / ship.md
 │   ├── runbooks/               # operations, verification, lesson pipeline/patterns
 │   └── artifacts/              # architect sources and references (lessons, mockups, references)
-├── content/                    # practice bank, legacy task fixtures, lesson-design stands
+├── content/                    # practice bank, lesson data files, legacy fixtures, stand archive
 ├── scripts/                    # gate, history, release, ops tooling; lesson_design, mascot
 ├── apps/web/, apps/api/, infra/, ops/
 ├── .claude/skills/, .agents/skills/, plugins/sdd-workflow/   # thin workflow wrappers
@@ -377,7 +377,9 @@ gate, history and release-checkpoint tooling follow the same stdlib-only boundar
 with fake commands/transports. Production hosts require Python 3.12+. A shell syntax check is not
 evidence that rollback runs: test the installed failure boundary; `EXIT` recovery preserves the
 original failure and invokes/health-checks rollback once. Lesson tooling: `scripts/lesson_design`
-(binding [pipeline](runbooks/lesson-pipeline.md)) and `scripts/mascot` (illustration pipeline).
+(binding [pipeline](runbooks/lesson-pipeline.md); since Change 197 the site lesson modules are the
+source and `site_media.py` rebuilds their figures and recorded runs) and `scripts/mascot`
+(illustration pipeline).
 
 ```bash
 python3 -m unittest discover -s scripts/tests -p '<module>_test.py'

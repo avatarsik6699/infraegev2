@@ -185,10 +185,10 @@ def statement(question: str, topic: Path | None = None) -> tuple[list[dict], lis
             call = re.search(r"%%(\w+)\((.*?)\)%%", body)
             if not call or topic is None:
                 raise SystemExit(f"a figure without a builder call: {body[:80]!r}")
-            from export_media import inline_svg, parse_call  # noqa: PLC0415
             from figures import FIGURES  # noqa: PLC0415
+            from site_media import inline_svg, parse_call  # noqa: PLC0415
 
-            args, kwargs = parse_call(call.group(1), call.group(2))
+            args, kwargs = parse_call(call.group(2))
             svg = FIGURES[call.group(1)](*args, **kwargs)
             _, width, height, alt = inline_svg(svg)
             caption = re.search(r"<figcaption>(.*?)</figcaption>", body, re.S)

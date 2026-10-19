@@ -1090,7 +1090,7 @@ EXCEL_FIGURES = {
     "vlookup_steps": vlookup_steps,
 }
 EXCEL_WIDGETS = {"fill_try": "FillSandbox"}
-# step-through figures: the site shows their frames (export_media → figures.STEPPERS)
+# step-through figures: the site shows their frames (site_media → figures.STEPPERS)
 EXCEL_STEPPERS = {
     "formula_steps": formula_frames,
     "ctrl_jump": ctrl_jump_frames,

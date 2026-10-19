@@ -11,8 +11,9 @@ For one coherent `/work` set:
 
 1. `python3 scripts/gate.py affected` maps changed paths to groups (docs-only → `docs-links`;
    web → format, web lint/typecheck; API → API lint/typecheck, `api-contract` for app code; content
-   → `content-static`; lesson stands/tooling → `lesson-media` + host Python; generated lesson/course
-   content and the Vite config → `paid-leak`; shell → `shell-lint`;
+   → `content-static`; lesson media manifests and `scripts/lesson_design` → `lesson-media` (+ host
+   Python for the tooling); lesson/course content and the Vite config → `paid-leak`; the archived
+   stand → a read-only reminder; shell → `shell-lint`;
    infra → `infra-config` plus nginx contracts). It prints reminders and unmatched paths.
 2. Run the suggested groups once with `python3 scripts/gate.py run --group …`; read only the
    summary and, on failure, the printed tail or `.output/gate/<group>.log`.

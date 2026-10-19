@@ -152,11 +152,18 @@ class AffectedTest(unittest.TestCase):
         self.assertTrue(any("Playwriter" in item for item in suggestion.reminders))
         self.assertTrue(any("Vitest" in item for item in suggestion.reminders))
 
-    def test_lesson_stand_text_checks_generated_media(self) -> None:
-        suggestion = core.suggest(("content/lesson-design/topic-25/05-maski.md",))
+    def test_lesson_media_change_checks_the_media(self) -> None:
+        suggestion = core.suggest(("apps/web/src/entities/lesson/content/rekursiya.media.ts",))
 
         self.assertIn("lesson-media", suggestion.groups)
+        self.assertIn("paid-leak", suggestion.groups)
+
+    def test_archived_stand_is_read_only(self) -> None:
+        suggestion = core.suggest(("content/lesson-design/topic-25/05-maski.md",))
+
+        self.assertNotIn("lesson-media", suggestion.groups)
         self.assertNotIn("content-static", suggestion.groups)
+        self.assertTrue(any("read-only" in item for item in suggestion.reminders))
 
     def test_paths_map_to_owning_groups(self) -> None:
         cases = {

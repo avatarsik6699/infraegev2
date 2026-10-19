@@ -29,7 +29,7 @@ pytestmark = pytest.mark.pure
 
 ROOT = Path(__file__).resolve().parents[3]
 BANK_DIR = ROOT / "content/practice-bank"
-FILES = ROOT / "content/lesson-design/topic-26/files"
+FILES = ROOT / "content/lesson-files/topic-26"
 MATERIAL = "array-processing"
 RETIRED = [f"task-26-{number:02d}" for number in range(1, 8)]
 

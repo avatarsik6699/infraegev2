@@ -10,23 +10,28 @@ import {
   getCourseLessons,
   type CourseProgressTypes,
 } from "~/entities/course";
-import course from "../../../content/lesson-design/course-python/course.json";
-import excel from "../../../content/lesson-design/course-excel/course.json";
 import {
   loadMigrationPractice as loadPracticeTasks,
   migrationTaskIds,
 } from "./practice-migration-fixture";
 
+// The course publications are the site's own plan of each course (Change 197).
+function plan(id: string) {
+  const publication = coursePublications.find((item) => item.id === id);
+  if (!publication) throw new Error(`Course publication ${id} is missing`);
+  return publication;
+}
+
 describe("Python course foundation", () => {
+  const course = plan("python");
   const planned = course.modules.flatMap((courseModule) =>
-    courseModule.lessons.map((lesson) => ({
-      ...lesson.site,
-      title: lesson.title,
-      level: lesson.level === "дополнительный" ? "advanced" : "core",
+    courseModule.lessonPlan.map((lesson) => ({
+      id: lesson.id,
+      level: lesson.level ?? "core",
     })),
   );
 
-  it("publishes the rebuilt course of the stand (Change 175)", () => {
+  it("publishes the Python course, then the Excel course (Change 175, 177)", () => {
     expect(coursePublications).toEqual([
       expect.objectContaining({
         id: "python",
@@ -44,7 +49,7 @@ describe("Python course foundation", () => {
     // the Python lessons first, then the Excel course of Change 177
     expect(courseLessonPublications.map((lesson) => lesson.id)).toEqual([
       ...planned.map((lesson) => lesson.id),
-      ...excel.modules.flatMap((m) => m.lessons.map((l) => l.site.id)),
+      ...plan("excel").modules.flatMap((m) => m.lessonPlan.map((l) => l.id)),
     ]);
     expect(
       courseLessonPublications.every((lesson) => lesson.status === "published"),

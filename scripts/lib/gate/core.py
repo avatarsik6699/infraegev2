@@ -58,10 +58,6 @@ def _api_shell(command: str, paths: Iterable[str] = ()) -> tuple[str, ...]:
 
 def _groups() -> tuple[Group, ...]:
     host = host_python_paths()
-    lesson_media = (
-        "for topic in content/lesson-design/topic-*; do "
-        'python3 -I scripts/lesson_design/export_media.py "$topic" --check || exit 1; done'
-    )
     return (
         Group("format", ("pnpm", "format:check")),
         Group(
@@ -81,7 +77,7 @@ def _groups() -> tuple[Group, ...]:
         ),
         Group("docs-links", ("python3", "scripts/check-doc-links.py")),
         Group("content-static", ("node", "scripts/validate-content-links.mjs")),
-        Group("lesson-media", ("bash", "-c", lesson_media)),
+        Group("lesson-media", ("python3", "-I", "scripts/lesson_design/site_media.py", "--check")),
         Group("infra-config", ("make", "config")),
         Group("api-contract", ("pnpm", "api:check")),
         Group("web-build", ("pnpm", "--filter", "web", "build")),
@@ -257,9 +253,24 @@ RULES: tuple[Rule, ...] = (
         ("paid-leak",),
     ),
     Rule(
-        ("content/lesson-design/*", "scripts/lesson_design/*"),
+        (
+            "apps/web/src/entities/lesson/content/*.media.ts",
+            "apps/web/src/entities/course/content/*.media.ts",
+        ),
+        ("lesson-media",),
+    ),
+    Rule(
+        ("scripts/lesson_design/*",),
         ("lesson-media", "host-ruff", "host-python"),
-        ("topic checks: python3 -I content/lesson-design/topic-NN/{checks,bank}.py",),
+        ("site media tool: python3 -m unittest scripts.tests.site_media_test",),
+    ),
+    Rule(
+        ("content/lesson-files/*",),
+        reminders=("the topic's lesson test and apps/api/tests/test_task_NN_bank.py",),
+    ),
+    Rule(
+        ("content/lesson-design/*",),
+        reminders=("archived stand (Change 197): read-only, edit the site lesson instead",),
     ),
     Rule(
         ("scripts/*.py", "scripts/pyrightconfig.json", "scripts/ruff.toml"),

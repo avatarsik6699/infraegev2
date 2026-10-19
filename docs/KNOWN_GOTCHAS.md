@@ -364,7 +364,7 @@ covers, then check `docker ps -a`, `systemctl list-timers`, `docker volume ls`.
 
 - **Symptoms**: подписи схемы на сайте другого начертания, чем на стенде, или съезжают. На телефоне страница с пошаговой схемой получает горизонтальную прокрутку до загрузки скриптов или без них.
 - **Root cause**: SVG, подключённый через `<img>`, изолирован от CSS страницы и её `@font-face`: имена JetBrains Mono и Caveat из построителей стенда не находятся. Кадр схемы держит минимальную ширину 30rem ради читаемых подписей и без прокручиваемой рамки выходит за колонку.
-- **Fix**: схемы сайта не подключаются через `<img>`: `scripts/lesson_design/export_media.py` пишет разметку SVG в манифест урока, `InlineSvg` встраивает её в страницу, а `font-family="inherit"` берёт шрифт страницы (Change 171, компактная подача). Любая схема, в том числе итоговый кадр в разметке без JavaScript, стоит внутри своей плашки с `overflow-x: auto` и `tabIndex=0`, как блок кода.
+- **Fix**: схемы сайта не подключаются через `<img>`: `scripts/lesson_design/site_media.py` пишет разметку SVG в манифест урока, `InlineSvg` встраивает её в страницу, а `font-family="inherit"` берёт шрифт страницы (Change 171, компактная подача). Любая схема, в том числе итоговый кадр в разметке без JavaScript, стоит внутри своей плашки с `overflow-x: auto` и `tabIndex=0`, как блок кода.
 
 ### Content-addressed bank files must bypass Git EOL conversion
 

@@ -25,7 +25,7 @@ pytestmark = pytest.mark.pure
 
 ROOT = Path(__file__).resolve().parents[3]
 BANK_DIR = ROOT / "content/practice-bank"
-FILES = ROOT / "content/lesson-design/topic-17/files"
+FILES = ROOT / "content/lesson-files/topic-17"
 MATERIAL = "number-sequences"
 RETIRED = [f"task-17-{number:02d}" for number in range(1, 9)]
 

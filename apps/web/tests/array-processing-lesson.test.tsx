@@ -1,5 +1,4 @@
 import { spawnSync } from "node:child_process";
-import { readFileSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
 import { isValidElement } from "react";
 import { describe, expect, it, vi } from "vitest";
@@ -29,11 +28,7 @@ vi.mock("~/shared/components/action-link", () => ({
 // Change 192: the paid subtopics live in their own modules.
 const lesson = await wholeLesson(arrayProcessingLesson);
 const lessonMedia = topicMedia("array-processing");
-const SOURCE = resolve(
-  process.cwd(),
-  "../..",
-  "content/lesson-design/topic-26",
-);
+const FILES = resolve(process.cwd(), "../..", "content/lesson-files/topic-26");
 const authoredContent = [
   ...lesson.theory.map(({ explanation }) => explanation),
   lesson.examFocus,
@@ -85,28 +80,6 @@ function pieces(node: React.ReactNode, out: Piece[] = []): Piece[] {
     return out;
   }
   return pieces(node.props.children as React.ReactNode, out);
-}
-
-/** Python fences of the approved stand, without the task blocks. */
-function sourcePythonBlocks(): string[] {
-  const files = readdirSync(SOURCE)
-    .filter((name) => /^0[1-9]-.*\.md$/u.test(name))
-    .sort();
-  return files.flatMap((name) => {
-    const steps = readFileSync(resolve(SOURCE, name), "utf8").split(/\n---\n/u);
-    return steps
-      .filter(
-        (step) =>
-          !/^\s*\*\*(Чтобы проверить понимание|Задачи основных подтем)/u.test(
-            step,
-          ),
-      )
-      .flatMap((step) =>
-        [...step.matchAll(/```python\n([\s\S]*?)```/gu)].map((match) =>
-          (match[1] ?? "").replace(/\n$/u, ""),
-        ),
-      );
-  });
 }
 
 /** A complete definition, not a one-line fragment shown for explanation. */
@@ -167,22 +140,11 @@ describe("task 26 data processing lesson (Change 184)", () => {
     expect(publicPaths).toContain("/ege/26-sortirovka-i-otbor/praktika");
   });
 
-  it("shows the stand's Python code verbatim and in order", () => {
-    const shown = pieces(authoredContent)
-      .flatMap((piece) =>
-        piece.kind === "code" && piece.language === "python"
-          ? [piece.code]
-          : [],
-      )
-      .map((code) => code.replace(/\n$/u, ""));
-    expect(shown).toEqual(sourcePythonBlocks());
-  });
-
   it("runs every program that shows its output and gets that output", () => {
     // The rule of scripts/lesson_design/verify_code.py: programs run next to
     // the lesson's data files; a fragment that continues an earlier program of the same
     // page runs after it, with that output discarded.
-    const files = resolve(SOURCE, "files");
+    const files = FILES;
     let prelude = "";
     let earlier = "";
     let ran = 0;

@@ -1,8 +1,9 @@
-"""The files of the topic lessons' bank tasks are the stand's own files (Change 184, 190).
+"""The files of the topic lessons' bank tasks (Change 184, 190, 197).
 
-Every topic moved to the site from ``content/lesson-design/topic-NN/`` attaches the data
-files of its stand. Each attachment must be stored under its checksum, have the MIME type
-the API serves for its format and be byte for byte the stand file of the same name.
+Each attachment must be stored under its checksum and have the MIME type the API serves
+for its format. A data file the lessons also read lives in ``content/lesson-files/topic-NN/``
+and must be byte for byte the attached one; a generated book (``.xlsx``) exists only in
+the bank.
 """
 
 import hashlib
@@ -18,28 +19,24 @@ pytestmark = pytest.mark.pure
 
 ROOT = Path(__file__).resolve().parents[3]
 BANK = ROOT / "content/practice-bank"
-STAND = ROOT / "content/lesson-design"
+LESSON_FILES = ROOT / "content/lesson-files"
+REGISTRY = ROOT / "apps/api/practice-registry.json"
 
 
-def _topics() -> dict[str, Path]:
-    """Material id of each topic lesson on the site → its stand folder."""
-    topics = {}
-    for path in sorted(STAND.glob("topic-*/topic.json")):
-        site = json.loads(path.read_text()).get("site")
-        if site:
-            topics[site["id"]] = path.parent
-    return topics
+def _topics() -> set[str]:
+    """Material ids of the topic lessons on the site."""
+    registry = json.loads(REGISTRY.read_text())
+    return {m["id"] for m in registry["materials"] if m["kind"] == "topic"}
 
 
-def test_topic_task_files_are_the_stand_files_with_their_mime_type() -> None:
+def test_topic_task_files_are_stored_and_match_the_lesson_files() -> None:
     bank = Bank.model_validate_json((BANK / "bank.json").read_bytes())
     records = {record.checksum: record for record in bank.files}
     topics = _topics()
     checked = set()
     for entry in bank.tasks:
         task = entry.task
-        stands = [topics[link.material_id] for link in task.lessons if link.material_id in topics]
-        if task.archived or not stands:
+        if task.archived or not any(link.material_id in topics for link in task.lessons):
             continue
         for file in task.files:
             record = records[file.checksum]
@@ -49,9 +46,14 @@ def test_topic_task_files_are_the_stand_files_with_their_mime_type() -> None:
             suffix = Path(file.filename).suffix.lstrip(".")
             assert record.format == suffix, task.id
             assert record.mime_type == MIME[suffix], task.id
-            assert (stands[0] / "files" / file.filename).read_bytes() == data, task.id
+            # a topic task's id carries its exam number: task-26-…
+            lesson_file = LESSON_FILES / f"topic-{task.id.split('-')[1]}" / file.filename
+            if suffix == "xlsx":
+                assert not lesson_file.exists(), f"{task.id}: a generated book lives in the bank"
+            else:
+                assert lesson_file.read_bytes() == data, task.id
             checked.add(task.id)
     # topics 3, 9, 17, 18, 22, 23, 24, 26 and 27 work with files; topic 1 shows its
-    # schemes as PNG images of the stand's builder (Change 190)
+    # schemes as PNG images of the figure builder (Change 190)
     prefixes = {task_id.split("-")[1] for task_id in checked}
     assert prefixes == {"1", "3", "9", "17", "18", "22", "23", "24", "26", "27"}
