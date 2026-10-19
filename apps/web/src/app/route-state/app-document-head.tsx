@@ -18,8 +18,8 @@ export const AppDocumentHead: React.FC = () => {
     (match: AnyRouteMatch) => match.status === "error",
   );
   let title: string | undefined;
-  if (missing) title = "Страница не найдена — infraege";
-  else if (failed) title = "Не удалось загрузить страницу — infraege";
+  if (missing) title = "Страница не найдена — Кодумка";
+  else if (failed) title = "Не удалось загрузить страницу — Кодумка";
   const visibleTags = title
     ? tags.filter((tag) => {
         if (tag.tag === "title") return false;

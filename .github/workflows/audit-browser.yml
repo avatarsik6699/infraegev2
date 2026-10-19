@@ -69,7 +69,7 @@ jobs:
         env:
           INFRAEGE_LIGHTHOUSE_TARGET: production
         run: |
-          printf 'target=https://infraege.ru observed_at=%s workflow_sha=%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$GITHUB_SHA"
+          printf 'target=https://kodumka.ru observed_at=%s workflow_sha=%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$GITHUB_SHA"
           pnpm audit:performance
       - name: Upload public Lighthouse reports
         if: ${{ always() }}

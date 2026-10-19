@@ -1,6 +1,6 @@
 # Production bootstrap and deployment
 
-Application: Ubuntu VPS, `infraege.ru`, Nginx → web/API/PostgreSQL. The accepted access contract
+Application: Ubuntu VPS, `kodumka.ru` (former `infraege.ru` redirects), Nginx → web/API/PostgreSQL. The accepted access contract
 remains public root/password SSH with pinned host key, UFW and fail2ban. Keep provider console
 access during credential rotation. Store secrets outside Git, mode 600; never put them in logs.
 
@@ -10,14 +10,14 @@ access during credential rotation. Store secrets outside Git, mode 600; never pu
    the reviewed release. Verify a second SSH session before closing the recovery console.
 2. Create `/etc/infraege/production.env` from `infra/.env.example`, mode 600, with distinct
    independent bootstrap/runtime/import/migration/backup/application-write passwords. Set a random
-   `AUTH_CSRF_SECRET` (at least 32 characters), `PUBLIC_ORIGIN=https://infraege.ru` and keep
+   `AUTH_CSRF_SECRET` (at least 32 characters), `PUBLIC_ORIGIN=https://kodumka.ru` and keep
    `TASK_FILES_DIR=/var/lib/infraege/task-files`. Create `/etc/infraege/restic-password` separately.
    Production must never reuse dev credentials.
 3. Before enabling accounts, configure SMTP delivery (`SMTP_*`, `MAIL_FROM`) and create provider
    applications with the exact HTTPS callback origins
-   `https://infraege.ru/api/auth/providers/vk/callback`,
-   `https://infraege.ru/api/auth/providers/yandex/callback` and
-   `https://infraege.ru/api/auth/providers/telegram/callback`. Store client IDs/secrets only in the
+   `https://kodumka.ru/api/auth/providers/vk/callback`,
+   `https://kodumka.ru/api/auth/providers/yandex/callback` and
+   `https://kodumka.ru/api/auth/providers/telegram/callback`. Store client IDs/secrets only in the
    protected environment; do not paste callback `code`, `state`, mail links or tokens into tickets,
    shell history or journals. Provider methods also require the explicit per-provider
    `VK_ENABLED`, `YANDEX_ENABLED`, or `TELEGRAM_ENABLED` release flag (default `false`), only
@@ -85,6 +85,38 @@ same volume; no automatic downgrade runs. A candidate that changes the schema he
 [schema transition attestation](backup-restore.md#schema-transition-attestation) after exact-SHA
 image verification and before deploy dispatch. Do not bypass the preflight or migrate the live
 database to break the ordering cycle.
+
+## Domain move to kodumka.ru (Change 193)
+
+The public origin is `https://kodumka.ru`; `www.kodumka.ru`, `infraege.ru` and `www.infraege.ru`
+answer 301 with path and query kept (SPEC §7.1). DNS (reg.ru), the Postbox address `kodumka.ru`
+with its DKIM CNAMEs, SPF and DMARC, and the Yandex Webmaster / Google Search Console properties
+were set up on 2026-10-18. The first release that carries Change 193 needs, on the host, before
+the deploy is dispatched:
+
+1. `PUBLIC_IPV4=2.26.8.245 TLS_EMAIL=… bash ops/obtain-initial-certificate.sh` from the candidate
+   source. With the old Nginx running it obtains `kodumka.ru` through the ACME webroot (every host
+   on port 80 serves it) and leaves the existing `infraege.ru` certificate alone.
+2. In `/etc/infraege/production.env`: `PUBLIC_ORIGIN=https://kodumka.ru`,
+   `MAIL_FROM=accounts@kodumka.ru`. Do not print the file.
+3. Deploy as usual. `scripts/check-release-target.sh` accepts a healthy target on either domain;
+   the deploy preflight requires both certificates; post-deploy checks use `kodumka.ru`.
+4. After the release is healthy: `bash ops/configure-certificate-renewal.sh` (both certificates
+   renew by webroot); check `curl -sI https://infraege.ru/ege?x=1` answers 301 to
+   `https://kodumka.ru/ege?x=1`; send a test letter from the Postbox `kodumka.ru` address.
+   In `smotryashchiy` (sre.infraege.ru) add uptime targets `https://kodumka.ru/`,
+   `https://kodumka.ru/health/ready` (http) and `kodumka.ru:443` (tls): the infraege.ru target
+   stays green through the 301. The analytics site `kodumka.ru` (`data-site` in `__root.tsx`)
+   exists since 2026-10-19; keep the old `infraege.ru` site — deleting it deletes its history.
+5. Search engines: Yandex Webmaster «Переезд сайта» from `infraege.ru` (add and verify the old
+   site first) and Google Search Console «Изменение адреса»; submit
+   `https://kodumka.ru/sitemap.xml` in both.
+6. Robokassa: shop URL `https://kodumka.ru` and the Result/Success/Fail URLs in
+   [billing](billing.md). OAuth providers are not enabled; when one is, register only the
+   `kodumka.ru` callbacks above (Telegram `/setdomain kodumka.ru`).
+
+Keep `infraege.ru` registered while the redirect matters. A rollback to a release before Change
+193 serves `infraege.ru` again with its own certificate; restore the two environment values with it.
 
 ## Routine operation
 

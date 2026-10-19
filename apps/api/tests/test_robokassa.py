@@ -66,8 +66,8 @@ def test_payment_link_is_signed_with_password_one():
             amount_kopecks=49_000,
             description="Доступ на месяц — infraege",
             email="buyer@example.com",
-            success_url="https://infraege.ru/subscribe/return",
-            fail_url="https://infraege.ru/subscribe/return",
+            success_url="https://kodumka.ru/subscribe/return",
+            fail_url="https://kodumka.ru/subscribe/return",
         )
     )
     parts = urlsplit(url)

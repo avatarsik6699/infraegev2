@@ -11,7 +11,7 @@ cleanup() {
 trap cleanup EXIT
 
 mkdir "$test_dir/conf.d" "$test_dir/cert"
-openssl req -x509 -newkey rsa:2048 -nodes -days 1 -subj /CN=infraege.ru \
+openssl req -x509 -newkey rsa:2048 -nodes -days 1 -subj /CN=kodumka.ru \
   -keyout "$test_dir/cert/privkey.pem" -out "$test_dir/cert/fullchain.pem" >/dev/null 2>&1
 cp "$repo_dir/infra/nginx/conf.d/infraege.prod.conf" "$test_dir/conf.d/app.conf"
 # The access check answers 204 only for a session cookie the fake API accepts.
@@ -42,16 +42,17 @@ docker run -d --name "$container_name" -p 127.0.0.1::443 \
   -v "$test_dir/conf.d:/etc/nginx/conf.d:ro" \
   -v "$repo_dir/infra/nginx/snippets:/etc/nginx/snippets:ro" \
   -v "$test_dir/cert:/etc/letsencrypt/live/infraege.ru:ro" \
+  -v "$test_dir/cert:/etc/letsencrypt/live/kodumka.ru:ro" \
   "$nginx_image" >/dev/null
 port=$(docker port "$container_name" 443 | cut -d: -f2)
 for _ in {1..30}; do
-  if curl -ks --max-time 1 -H 'Host: infraege.ru' "https://127.0.0.1:$port/health" >/dev/null; then break; fi
+  if curl -ks --max-time 1 -H 'Host: kodumka.ru' "https://127.0.0.1:$port/health" >/dev/null; then break; fi
   sleep 0.2
 done
 docker exec "$container_name" nginx -t
 
 base="https://127.0.0.1:$port"
-request() { curl -ks -o /dev/null -w '%{http_code}' -H 'Host: infraege.ru' "$@"; }
+request() { curl -ks -o /dev/null -w '%{http_code}' -H 'Host: kodumka.ru' "$@"; }
 expect() {
   local want=$1 got=$2 what=$3
   [[ $got == "$want" ]] || { echo "$what: expected $want, got $got" >&2; exit 1; }
@@ -62,7 +63,7 @@ expect 403 "$(request -H 'Cookie: __Host-infraege_session=other' "$base/assets/p
   'paid chunk for an account without access'
 expect 200 "$(request -H 'Cookie: __Host-infraege_session=granted' "$base/assets/paid/x.js")" \
   'paid chunk with access'
-cache=$(curl -ks -D - -o /dev/null -H 'Host: infraege.ru' -H 'Cookie: __Host-infraege_session=granted' \
+cache=$(curl -ks -D - -o /dev/null -H 'Host: kodumka.ru' -H 'Cookie: __Host-infraege_session=granted' \
   "$base/assets/paid/x.js" | tr -d '\r' | grep -i '^cache-control:')
 [[ $cache == *private* && $cache == *no-store* && $cache != *immutable* ]] || {
   echo "gated chunk cache policy: $cache" >&2

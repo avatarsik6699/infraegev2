@@ -12,7 +12,7 @@ export const PublicFooter: React.FC = () => {
       <div className={styles.inner}>
         <span className={styles.signature} data-footer-signature>
           <span className={styles.mark} aria-hidden="true" />
-          infraege
+          Кодумка
         </span>
         <nav className={styles.links} aria-label="Ссылки в подвале">
           <ActionLink hierarchy="text" to="/privacy">

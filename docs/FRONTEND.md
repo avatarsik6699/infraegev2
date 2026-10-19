@@ -342,5 +342,5 @@ Progress and accounts:
 
 ## 8. Brand assets
 
-Use the infraege stone logo, the generated favicon/manifest/social assets and consistent titles.
+Use the stone logo with the «Кодумка» wordmark (Cyrillic, Change 193), the generated favicon/manifest/social assets and consistent titles.
 ALCHIMIA may remain only in immutable historical evidence. Brand generation stays deterministic.

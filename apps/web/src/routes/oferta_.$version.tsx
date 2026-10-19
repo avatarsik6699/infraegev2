@@ -10,8 +10,8 @@ export const Route = createFileRoute("/oferta_/$version")({
   },
   head: ({ params }) =>
     pageHead.create({
-      title: `Оферта, редакция ${params.version} — infraege`,
-      description: "Прежняя редакция публичной оферты infraege.",
+      title: `Оферта, редакция ${params.version} — Кодумка`,
+      description: "Прежняя редакция публичной оферты Кодумки.",
       path: `/oferta/${params.version}`,
       noIndex: true,
     }),

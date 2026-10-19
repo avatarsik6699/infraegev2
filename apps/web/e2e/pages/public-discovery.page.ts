@@ -8,7 +8,7 @@ export class PublicDiscoveryPage {
     expect(robotsResponse?.status()).toBe(200);
     expect(robotsResponse?.headers()["content-type"]).toContain("text/plain");
     await expect(this.page.locator("body")).toContainText(
-      "Sitemap: https://infraege.ru/sitemap.xml",
+      "Sitemap: https://kodumka.ru/sitemap.xml",
     );
     await expect(this.page.locator("body")).toContainText("Disallow: /lab/");
 
@@ -18,24 +18,24 @@ export class PublicDiscoveryPage {
       "application/xml",
     );
     const sitemap = await this.page.locator("body").textContent();
-    expect(sitemap).toContain("https://infraege.ru/");
-    expect(sitemap).toContain("https://infraege.ru/privacy");
+    expect(sitemap).toContain("https://kodumka.ru/");
+    expect(sitemap).toContain("https://kodumka.ru/privacy");
     expect(sitemap).toContain(
-      "https://infraege.ru/ege/16-rekursiya/funktsiya-cherez-sebya",
+      "https://kodumka.ru/ege/16-rekursiya/funktsiya-cherez-sebya",
     );
-    expect(sitemap).toContain("https://infraege.ru/ege</loc>");
+    expect(sitemap).toContain("https://kodumka.ru/ege</loc>");
     expect(sitemap).toContain(
-      "https://infraege.ru/ege/5-preobrazovanie-zapisey-chisel/chislo-i-zapis",
+      "https://kodumka.ru/ege/5-preobrazovanie-zapisey-chisel/chislo-i-zapis",
     );
-    expect(sitemap).not.toContain("https://infraege.ru/ege/16-rekursiya</loc>");
+    expect(sitemap).not.toContain("https://kodumka.ru/ege/16-rekursiya</loc>");
     expect(sitemap).not.toContain(
-      "https://infraege.ru/ege/5-preobrazovanie-zapisey-chisel</loc>",
+      "https://kodumka.ru/ege/5-preobrazovanie-zapisey-chisel</loc>",
     );
     expect(sitemap).not.toContain("/lab/");
-    expect(sitemap).toContain("https://infraege.ru/courses</loc>");
-    expect(sitemap).toContain("https://infraege.ru/courses/python");
+    expect(sitemap).toContain("https://kodumka.ru/courses</loc>");
+    expect(sitemap).toContain("https://kodumka.ru/courses/python");
     expect(sitemap).toContain(
-      "https://infraege.ru/courses/python/pervaya-programma",
+      "https://kodumka.ru/courses/python/pervaya-programma",
     );
   }
 }

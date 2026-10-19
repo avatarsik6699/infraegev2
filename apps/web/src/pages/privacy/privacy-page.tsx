@@ -15,7 +15,7 @@ export const PrivacyPage: React.FC = () => (
       </Typography.Title>
       <Typography.Prose className={styles.content}>
         <Typography.Text>
-          Актуально на 25 сентября 2026 года. На infraege.ru нет рекламных
+          Актуально на 25 сентября 2026 года. На kodumka.ru нет рекламных
           трекеров. Аналитика посещений собирается собственным сервисом того же
           оператора, без рекламы и без продажи данных — подробнее ниже.
         </Typography.Text>

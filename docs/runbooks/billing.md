@@ -24,8 +24,8 @@ Turn on in this order: `BILLING_ENABLED=true` with `ROBOKASSA_TEST=true` → tes
 1 ₽ check → `ROBOKASSA_TEST=false` → announcement period → `PAYWALL_ENABLED=true`. Turning the
 paywall off again makes everything free at once; grants are kept.
 
-Robokassa shop settings: ResultURL `https://infraege.ru/api/billing/webhooks/robokassa` (POST),
-SuccessURL and FailURL `https://infraege.ru/subscribe/return` (GET), hash algorithm equal to
+Robokassa shop settings: ResultURL `https://kodumka.ru/api/billing/webhooks/robokassa` (POST),
+SuccessURL and FailURL `https://kodumka.ru/subscribe/return` (GET), hash algorithm equal to
 `ROBOKASSA_HASH`. Notifications come from `185.59.216.65` and `185.59.217.65`; the signature, not
 the address, authenticates them.
 

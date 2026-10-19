@@ -10,7 +10,7 @@ cleanup() {
 }
 trap cleanup EXIT
 mkdir "$test_dir/conf.d" "$test_dir/cert"
-openssl req -x509 -newkey rsa:2048 -nodes -days 1 -subj /CN=infraege.ru \
+openssl req -x509 -newkey rsa:2048 -nodes -days 1 -subj /CN=kodumka.ru \
   -keyout "$test_dir/cert/privkey.pem" -out "$test_dir/cert/fullchain.pem" >/dev/null 2>&1
 cat > "$test_dir/conf.d/upstream.conf" <<'NGINX'
 server {
@@ -31,10 +31,11 @@ for profile in infraege.conf infraege.prod.conf; do
     -v "$test_dir/conf.d:/etc/nginx/conf.d:ro" \
     -v "$repo_dir/infra/nginx/snippets:/etc/nginx/snippets:ro" \
     -v "$test_dir/cert:/etc/letsencrypt/live/infraege.ru:ro" \
+    -v "$test_dir/cert:/etc/letsencrypt/live/kodumka.ru:ro" \
     "$nginx_image" >/dev/null
   port=$(docker port "$container_name" "$container_port" | cut -d: -f2)
   for _attempt in {1..30}; do
-    if curl -ks --max-time 1 -H 'Host: infraege.ru' "$scheme://127.0.0.1:$port/health" >/dev/null; then break; fi
+    if curl -ks --max-time 1 -H 'Host: kodumka.ru' "$scheme://127.0.0.1:$port/health" >/dev/null; then break; fi
     sleep 0.2
   done
   docker exec "$container_name" nginx -t
@@ -51,7 +52,7 @@ context = ssl._create_unverified_context()
 opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), urllib.request.HTTPSHandler(context=context))
 
 def status(path):
-    request = urllib.request.Request(base + path, headers={"Host": "infraege.ru"})
+    request = urllib.request.Request(base + path, headers={"Host": "kodumka.ru"})
     try:
         with opener.open(request, timeout=5) as response:
             return response.status

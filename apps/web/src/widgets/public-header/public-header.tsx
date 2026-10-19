@@ -69,15 +69,12 @@ export const PublicHeader: React.FC<PublicHeaderProps> = ({
       </FragmentLink>
       <div className={styles.inner}>
         {home ? (
-          <span
-            className={styles.brand}
-            aria-label="infraege — ЕГЭ информатика"
-          >
+          <span className={styles.brand} aria-label="Кодумка — ЕГЭ информатика">
             <PublicHeaderIdentity />
           </span>
         ) : (
           <Link
-            aria-label="infraege — ЕГЭ информатика, на главную"
+            aria-label="Кодумка — ЕГЭ информатика, на главную"
             className={styles.brand}
             to="/"
           >

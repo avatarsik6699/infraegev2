@@ -100,7 +100,7 @@ function RootDocument(props: { children: React.ReactNode }) {
           <script
             async
             src="https://sre.infraege.ru/track.js"
-            data-site="a98eb46cb1aa5116e1b5cefd"
+            data-site="65a299a0318aa70e52b7d463"
           />
         ) : null}
       </head>

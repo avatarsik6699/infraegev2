@@ -13,10 +13,10 @@ describe("public release metadata", () => {
   it("exposes one release identity for public headers", () => {
     expect(siteConfig).toEqual(
       expect.objectContaining({
-        name: "infraege",
+        name: "Кодумка",
         themeColor: "#ffffff",
         socialImagePath: "/brand/infraege-social.png",
-        socialImageAlt: "Три камня и название infraege",
+        socialImageAlt: "Три камня и название Кодумка",
       }),
     );
     expect(siteConfig).not.toHaveProperty("releaseLabel");
@@ -360,7 +360,7 @@ describe("public release metadata", () => {
 
   it("creates absolute canonical and social metadata", () => {
     const head = pageHead.create({
-      title: "Проверочная страница — infraege",
+      title: "Проверочная страница — Кодумка",
       description: "Описание проверочной страницы.",
       path: "/check",
     });
@@ -391,9 +391,9 @@ describe("public release metadata", () => {
     expect(pageHead.createWebsiteStructuredData()).toEqual({
       "@context": "https://schema.org",
       "@type": "WebSite",
-      name: "infraege",
-      alternateName: "infraege.ru",
-      url: "https://infraege.ru/",
+      name: "Кодумка",
+      alternateName: "kodumka.ru",
+      url: "https://kodumka.ru/",
       description: siteConfig.description,
       inLanguage: "ru",
     });

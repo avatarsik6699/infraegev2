@@ -9,7 +9,7 @@ export const Route = createFileRoute("/courses/")({
   loader: () => getCatalogPracticeSummaries(),
   head: () =>
     pageHead.create({
-      title: "Мини-курсы — infraege",
+      title: "Мини-курсы — Кодумка",
       description:
         "Самостоятельные мини-курсы по информатике: курсы Python и Excel и будущие программы по алгоритмам и задачам повышенной сложности.",
       path: "/courses",

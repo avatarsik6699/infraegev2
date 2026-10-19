@@ -21,8 +21,8 @@ export const Route = createFileRoute("/subscribe")({
   },
   head: () => ({
     ...pageHead.create({
-      title: "Оформление доступа — infraege",
-      description: "Оплата доступа к урокам infraege.",
+      title: "Оформление доступа — Кодумка",
+      description: "Оплата доступа к урокам Кодумки.",
       path: "/subscribe",
       noIndex: true,
     }),

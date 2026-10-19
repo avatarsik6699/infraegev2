@@ -72,8 +72,9 @@ run_compose "$release_dir" "$DEPLOY_SHA" config --quiet
 install -d -m 755 -o 1000 -g 1000 /var/lib/infraege/task-files
 run_compose "$release_dir" "$DEPLOY_SHA" pull
 if ! run_compose "$release_dir" "$DEPLOY_SHA" run --rm --no-deps --interactive=false --entrypoint /bin/sh nginx \
-  -ec 'test -r /etc/letsencrypt/live/infraege.ru/fullchain.pem && test -r /etc/letsencrypt/live/infraege.ru/privkey.pem'; then
-  echo "TLS certificate is missing or unreadable inside the Nginx container; run obtain-initial-certificate.sh first" >&2
+  -ec 'test -r /etc/letsencrypt/live/kodumka.ru/fullchain.pem && test -r /etc/letsencrypt/live/kodumka.ru/privkey.pem &&
+    test -r /etc/letsencrypt/live/infraege.ru/fullchain.pem && test -r /etc/letsencrypt/live/infraege.ru/privkey.pem'; then
+  echo "A TLS certificate (kodumka.ru or infraege.ru) is missing or unreadable inside the Nginx container; run obtain-initial-certificate.sh first" >&2
   exit 1
 fi
 # Prepared DB must already contain the reviewed bank; deploy never reimports content.
@@ -90,9 +91,9 @@ run_compose "$release_dir" "$DEPLOY_SHA" up --detach --remove-orphans --wait --w
 ln -sfn "$release_dir" "$root/database-current"
 bash "$release_dir/ops/install-backup-timers.sh" application
 
-curl --fail --silent --show-error --max-time 15 https://infraege.ru/health/ready |
+curl --fail --silent --show-error --max-time 15 https://kodumka.ru/health/ready |
   jq -e --arg sha "$DEPLOY_SHA" '.status == "ok" and .version == $sha' >/dev/null
-curl --fail --silent --show-error --max-time 15 https://infraege.ru/ >/dev/null
+curl --fail --silent --show-error --max-time 15 https://kodumka.ru/ >/dev/null
 
 run_compose "$release_dir" "$DEPLOY_SHA" run --rm --no-deps --interactive=false \
   --volume "$root:$root" --entrypoint /bin/ln nginx -sfn "$release_dir" "$root/current"

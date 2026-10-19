@@ -5,7 +5,7 @@ export const PublicHeaderIdentity: React.FC = () => (
     <span className={styles.mark} data-infraege-mark aria-hidden="true" />
     <span className={styles.name} data-infraege-name>
       <span className={styles.wordmark} data-infraege-wordmark>
-        infraege
+        Кодумка
       </span>
       <span className={styles.subtitle} data-infraege-subtitle>
         подготовка к ЕГЭ по информатике

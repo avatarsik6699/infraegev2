@@ -114,14 +114,10 @@ const onestCyrillicPath = resolve(
   publicDir,
   "fonts/onest/onest-cyrillic-wght-normal.woff2",
 );
-const onestLatinPath = resolve(
-  publicDir,
-  "fonts/onest/onest-latin-wght-normal.woff2",
-);
 const socialFilter = [
   "[1:v]scale=190:-1:flags=lanczos[mark]",
   "[0:v][mark]overlay=250:(H-h)/2:format=auto[lockup]",
-  `[lockup]drawtext=fontfile='${onestLatinPath}':text='infraege':fontcolor=0x17191E:fontsize=112:x=465:y=188`,
+  `[lockup]drawtext=fontfile='${onestCyrillicPath}':text='Кодумка':fontcolor=0x17191E:fontsize=112:x=465:y=188`,
   `drawtext=fontfile='${onestCyrillicPath}':text='подготовка к ЕГЭ по информатике':fontcolor=0x4D535E:fontsize=31:x=470:y=326`,
   "format=rgb24[out]",
 ].join(",");

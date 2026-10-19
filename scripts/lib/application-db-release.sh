@@ -70,9 +70,9 @@ application_db_rollback() {
     previous_sha=$(<"$previous_release/.deploy-sha")
     echo "Deploy failed; rolling back application to $previous_sha" >&2
     run_compose "$previous_release" "$previous_sha" up --detach --remove-orphans --wait --wait-timeout 180 || return $?
-    curl --fail --silent --show-error --max-time 15 https://infraege.ru/health |
+    curl --fail --silent --show-error --max-time 15 https://kodumka.ru/health |
       jq -e --arg sha "$previous_sha" '.status == "ok" and .version == $sha' >/dev/null || return $?
-    curl --fail --silent --show-error --max-time 15 https://infraege.ru/ >/dev/null || return $?
+    curl --fail --silent --show-error --max-time 15 https://kodumka.ru/ >/dev/null || return $?
     # Maintenance must follow the restored database schema, including a first-cutover failure.
     ln -sfn "$previous_release" "${root:?}/current" || return $?
     ln -sfn "$previous_release" "$root/database-current" || return $?

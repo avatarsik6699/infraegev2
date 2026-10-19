@@ -61,7 +61,7 @@ export class TopicLessonPage {
       ).toHaveCount(1);
       await expect(this.page.locator('link[rel="canonical"]')).toHaveAttribute(
         "href",
-        "https://infraege.ru" + route,
+        "https://kodumka.ru" + route,
       );
       await expect(
         this.page.getByRole("link", { name: "Войти", exact: true }),
@@ -78,7 +78,7 @@ export class TopicLessonPage {
       throw new Error(`Expected current EGE subtopic ${this.config.route}`);
     await expectPublicReleaseIdentity(this.page);
     await expect(this.page).toHaveTitle(
-      new RegExp(`${this.config.title} — infraege$`, "u"),
+      new RegExp(`${this.config.title} — Кодумка$`, "u"),
     );
     await expect(this.page.getByRole("heading", { level: 1 })).toBeVisible();
     await expect(this.page.locator("[data-subtopic-head]")).toContainText(
@@ -90,7 +90,7 @@ export class TopicLessonPage {
     );
     await expect(this.page.locator('link[rel="canonical"]')).toHaveAttribute(
       "href",
-      "https://infraege.ru" + this.config.route,
+      "https://kodumka.ru" + this.config.route,
     );
   }
 

@@ -19,7 +19,7 @@ export const Route = createFileRoute("/pricing")({
   },
   head: () =>
     pageHead.create({
-      title: "Доступ к урокам — infraege",
+      title: "Доступ к урокам — Кодумка",
       description,
       path: "/pricing",
     }),

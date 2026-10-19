@@ -71,6 +71,6 @@ jobs:
         env:
           DEPLOY_SHA: ${{ inputs.sha }}
         run: |
-          curl --fail --silent --show-error --max-time 15 https://infraege.ru/health/ready |
+          curl --fail --silent --show-error --max-time 15 https://kodumka.ru/health/ready |
             jq -e --arg sha "$DEPLOY_SHA" '.status == "ok" and .version == $sha' >/dev/null
-          curl --fail --silent --show-error --max-time 15 https://infraege.ru/ >/dev/null
+          curl --fail --silent --show-error --max-time 15 https://kodumka.ru/ >/dev/null

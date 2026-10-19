@@ -67,7 +67,7 @@ if [ -f athanor.yaml ] && [ "$ACTION" != stop ] && [ "$ACTION" != down ]; then
     fi
     SMTP_HOST=${SMTP_HOST:-postbox.cloud.yandex.net}
     SMTP_PORT=${SMTP_PORT:-587}
-    MAIL_FROM=${MAIL_FROM:-accounts@infraege.ru}
+    MAIL_FROM=${MAIL_FROM:-accounts@kodumka.ru}
     export SMTP_HOST SMTP_PORT MAIL_FROM
     exec athanor run -- env INFRAEGE_ATHANOR_ACTIVE=1 "$0" "$ACTION"
   fi

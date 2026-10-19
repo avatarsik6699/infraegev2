@@ -26,8 +26,8 @@ REPOSITORY_RE = re.compile(r"^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$")
 MAX_RUN_PAGES = 10
 IMAGE_NAMES = frozenset(("api", "nginx", "web"))
 DEFAULT_REPOSITORY = "avatarsik6699/infraegev2"
-DEFAULT_HEALTH_URL = "https://infraege.ru/health/ready"
-DEFAULT_HOMEPAGE_URL = "https://infraege.ru/"
+DEFAULT_HEALTH_URL = "https://kodumka.ru/health/ready"
+DEFAULT_HOMEPAGE_URL = "https://kodumka.ru/"
 
 
 class CheckpointError(RuntimeError):

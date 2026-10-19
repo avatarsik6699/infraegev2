@@ -5,9 +5,9 @@ import { pageHead } from "~/shared/lib/seo";
 export const Route = createFileRoute("/vozvrat")({
   head: () =>
     pageHead.create({
-      title: "Возврат оплаты — infraege",
+      title: "Возврат оплаты — Кодумка",
       description:
-        "Как вернуть деньги за неиспользованные дни доступа к infraege.",
+        "Как вернуть деньги за неиспользованные дни доступа к Кодумке.",
       path: "/vozvrat",
     }),
   component: RefundPage,

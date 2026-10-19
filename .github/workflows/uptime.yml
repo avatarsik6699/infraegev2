@@ -15,11 +15,18 @@ jobs:
     steps:
       - name: HTTP and readiness
         run: |
-          curl --fail --silent --show-error --max-time 15 https://infraege.ru/ >/dev/null
-          curl --fail --silent --show-error --max-time 15 https://infraege.ru/health/ready |
+          curl --fail --silent --show-error --max-time 15 https://kodumka.ru/ >/dev/null
+          curl --fail --silent --show-error --max-time 15 https://kodumka.ru/health/ready |
             jq -e '.status == "ok" and (.version | length == 40)' >/dev/null
+      - name: Former domain redirects with path and query
+        run: |
+          location=$(curl --silent --show-error --max-time 15 --output /dev/null \
+            --write-out '%{http_code} %{redirect_url}' 'https://infraege.ru/ege?from=uptime')
+          test "$location" = '301 https://kodumka.ru/ege?from=uptime'
       - name: TLS expires in more than 14 days
         run: |
-          expires=$(echo | openssl s_client -servername infraege.ru -connect infraege.ru:443 2>/dev/null |
-            openssl x509 -noout -enddate | cut -d= -f2)
-          test $(( $(date --date "$expires" +%s) - $(date +%s) )) -gt $((14 * 86400))
+          for domain in kodumka.ru infraege.ru; do
+            expires=$(echo | openssl s_client -servername "$domain" -connect "$domain:443" 2>/dev/null |
+              openssl x509 -noout -enddate | cut -d= -f2)
+            test $(( $(date --date "$expires" +%s) - $(date +%s) )) -gt $((14 * 86400))
+          done

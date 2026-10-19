@@ -56,8 +56,8 @@ export const Route = createFileRoute("/ege_/$slug/$subtopic")({
     const meta = {
       title:
         subtopic.index === 0
-          ? `${publication.title} — infraege`
-          : `${subtopic.title} — ${publication.title} — infraege`,
+          ? `${publication.title} — Кодумка`
+          : `${subtopic.title} — ${publication.title} — Кодумка`,
       description: publication.summary,
       path: `/ege/${publication.routeSlug}/${subtopic.slug}`,
     };

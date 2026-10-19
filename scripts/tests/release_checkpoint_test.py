@@ -258,17 +258,17 @@ class ReleaseCheckpointTests(unittest.TestCase):
         with patch.object(checkpoint, "urlopen") as request:
             with self.assertRaisesRegex(checkpoint.CheckpointError, "same configured"):
                 checkpoint.verify_public_release(
-                    "https://infraege.ru/health/ready", "https://other.example/", SHA
+                    "https://kodumka.ru/health/ready", "https://other.example/", SHA
                 )
             request.assert_not_called()
 
     def test_public_probe_rejects_non_https_urls_before_network(self):
         rejected = (
             "file:///etc/passwd",
-            "http://infraege.ru/health/ready",
-            "https://user:secret@infraege.ru/health/ready",
-            "https://infraege.ru/health/ready?x=1",
-            "https://infraege.ru/health/ready#frag",
+            "http://kodumka.ru/health/ready",
+            "https://user:secret@kodumka.ru/health/ready",
+            "https://kodumka.ru/health/ready?x=1",
+            "https://kodumka.ru/health/ready#frag",
         )
         with patch.object(checkpoint, "urlopen") as request:
             for url in rejected:

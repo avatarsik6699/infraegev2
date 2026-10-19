@@ -106,8 +106,8 @@ describe("production brand assets", () => {
 
     expect(manifest).toEqual(
       expect.objectContaining({
-        name: "infraege — подготовка к ЕГЭ по информатике",
-        short_name: "infraege",
+        name: "Кодумка — подготовка к ЕГЭ по информатике",
+        short_name: "Кодумка",
         display: "browser",
         background_color: "#f5f3ef",
         theme_color: "#f5f3ef",
@@ -127,9 +127,9 @@ describe("production brand assets", () => {
     );
   });
 
-  it("renders the infraege social lockup from local mark and fonts", () => {
+  it("renders the Кодумка social lockup from local mark and fonts", () => {
     expect(generatorSource).toContain("color=c=0xF5F3EF:s=1200x630");
-    expect(generatorSource).toContain("text='infraege'");
+    expect(generatorSource).toContain("text='Кодумка'");
     expect(generatorSource).toContain("text='подготовка к ЕГЭ по информатике'");
     expect(generatorSource).not.toContain("drawbox");
   });

@@ -47,7 +47,7 @@ function createWebsiteStructuredData() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: siteConfig.name,
-    alternateName: "infraege.ru",
+    alternateName: "kodumka.ru",
     url: `${siteConfig.origin}/`,
     description: siteConfig.description,
     inLanguage: "ru",

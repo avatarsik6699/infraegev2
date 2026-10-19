@@ -8,8 +8,8 @@ export const Route = createFileRoute("/subscribe_/return")({
     typeof search.payment === "string" ? { payment: search.payment } : {},
   head: () =>
     pageHead.create({
-      title: "Оплата — infraege",
-      description: "Состояние оплаты доступа к урокам infraege.",
+      title: "Оплата — Кодумка",
+      description: "Состояние оплаты доступа к урокам Кодумки.",
       path: "/subscribe/return",
       noIndex: true,
     }),

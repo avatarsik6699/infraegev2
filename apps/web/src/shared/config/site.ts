@@ -1,10 +1,10 @@
 export const siteConfig = Object.freeze({
-  name: "infraege",
-  origin: "https://infraege.ru",
+  name: "Кодумка",
+  origin: "https://kodumka.ru",
   themeColor: "#ffffff",
   socialImagePath: "/brand/infraege-social.png",
-  socialImageAlt: "Три камня и название infraege",
-  privacyContactEmail: "avatarsik6699@gmail.com",
+  socialImageAlt: "Три камня и название Кодумка",
+  privacyContactEmail: "kodumka@mail.ru",
   telegramInviteUrl: "https://t.me/+dElnKYPKGd81OGYy",
   description:
     "Понятные материалы для подготовки к ЕГЭ по информатике: теория, разборы и практика с объяснениями.",

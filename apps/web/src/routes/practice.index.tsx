@@ -12,7 +12,7 @@ export const Route = createFileRoute("/practice/")({
   staleTime: 0,
   head: ({ loaderData, match }) =>
     pageHead.create({
-      title: "Практика — infraege",
+      title: "Практика — Кодумка",
       description:
         "Самостоятельные задачи по информатике: выбирайте навык, номер ЕГЭ и сложность, решайте с подсказками и разбором.",
       path: "/practice",

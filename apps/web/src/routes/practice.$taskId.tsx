@@ -8,7 +8,7 @@ export const Route = createFileRoute("/practice/$taskId")({
   staleTime: 0,
   head: ({ loaderData, params }) =>
     pageHead.create({
-      title: `${loaderData?.detail?.task.title ?? "Задача недоступна"} — infraege`,
+      title: `${loaderData?.detail?.task.title ?? "Задача недоступна"} — Кодумка`,
       description:
         loaderData?.detail?.answerInstruction ??
         "Самостоятельная практика по информатике.",

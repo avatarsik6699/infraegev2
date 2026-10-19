@@ -5,7 +5,7 @@ import { pageHead } from "~/shared/lib/seo";
 export const Route = createFileRoute("/consent")({
   head: () =>
     pageHead.create({
-      title: "Согласие на обработку данных — infraege",
+      title: "Согласие на обработку данных — Кодумка",
       description: "Согласие на обработку данных при создании аккаунта.",
       path: "/consent",
       noIndex: true,

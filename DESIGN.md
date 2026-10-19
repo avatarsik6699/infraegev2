@@ -1,5 +1,5 @@
 ---
-name: infraege
+name: Кодумка
 description: Понятная теория, разобранные примеры и задачи с проверкой для ЕГЭ по информатике.
 colors:
   ink: "#17191e"
@@ -156,7 +156,7 @@ components:
     padding: "22px 26px"
 ---
 
-# Design System: infraege
+# Design System: Кодумка
 
 <!-- Source: approved mockups v5 of Change 164 (docs/artifacts/mockups-v5/), 2026-10-03.
      The app still renders the previous system until F3–F9 land; re-run `$impeccable document`
@@ -166,7 +166,7 @@ components:
 
 **Creative North Star: "The Clean Textbook"**
 
-infraege looks like a well-made textbook: a white page, calm sans-serif type, generous line height
+Кодумка (code name infraege) looks like a well-made textbook: a white page, calm sans-serif type, generous line height
 and colour used like bookmarks, not decoration. The home page is the cover: it is the one
 genuinely colourful screen, with soft pastel plates that invite a learner in. Every other page is
 an inside page: white, quiet, built for reading and solving, with at most one colour plate that

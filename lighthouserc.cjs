@@ -7,7 +7,7 @@ if (!["local", "production"].includes(target)) {
   throw new Error("Lighthouse target must be local or production");
 }
 const production = target === "production";
-const origin = production ? "https://infraege.ru" : "http://127.0.0.2:3200";
+const origin = production ? "https://kodumka.ru" : "http://127.0.0.2:3200";
 
 if (!lighthouseProfileDir || !isAbsolute(lighthouseProfileDir)) {
   throw new Error(

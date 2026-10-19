@@ -17,8 +17,8 @@ code reaches any provider through `app/modules/billing/provider/port.py`.
 
 ## Shop settings
 
-- ResultURL `https://infraege.ru/api/billing/webhooks/robokassa`, method POST.
-- SuccessURL and FailURL `https://infraege.ru/subscribe/return`, method GET.
+- ResultURL `https://kodumka.ru/api/billing/webhooks/robokassa`, method POST.
+- SuccessURL and FailURL `https://kodumka.ru/subscribe/return`, method GET.
 - Hash algorithm SHA-256 (`ROBOKASSA_HASH=sha256`).
 - Passwords #1, #2 and #3 (test and live pairs differ) only in `/etc/infraege/production.env`.
 

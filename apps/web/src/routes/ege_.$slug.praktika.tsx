@@ -41,7 +41,7 @@ export const Route = createFileRoute("/ege_/$slug/praktika")({
     );
     if (!publication) return {};
     const meta = {
-      title: `Практика и итог — ${publication.title} — infraege`,
+      title: `Практика и итог — ${publication.title} — Кодумка`,
       description: publication.summary,
       path: `/ege/${publication.routeSlug}/praktika`,
     };

@@ -11,7 +11,7 @@ cleanup() {
 trap cleanup EXIT
 
 mkdir "$test_dir/conf.d" "$test_dir/cert"
-openssl req -x509 -newkey rsa:2048 -nodes -days 1 -subj /CN=infraege.ru \
+openssl req -x509 -newkey rsa:2048 -nodes -days 1 -subj /CN=kodumka.ru \
   -keyout "$test_dir/cert/privkey.pem" -out "$test_dir/cert/fullchain.pem" >/dev/null 2>&1
 cp "$repo_dir/infra/nginx/conf.d/infraege.prod.conf" "$test_dir/conf.d/app.conf"
 cat >"$test_dir/conf.d/upstream.conf" <<'NGINX'
@@ -29,18 +29,27 @@ docker run -d --name "$container_name" -p 127.0.0.1::443 \
   -v "$test_dir/conf.d:/etc/nginx/conf.d:ro" \
   -v "$repo_dir/infra/nginx/snippets:/etc/nginx/snippets:ro" \
   -v "$test_dir/cert:/etc/letsencrypt/live/infraege.ru:ro" \
+  -v "$test_dir/cert:/etc/letsencrypt/live/kodumka.ru:ro" \
   "$nginx_image" >/dev/null
 port=$(docker port "$container_name" 443 | cut -d: -f2)
 for _ in {1..30}; do
-  if curl -ks --max-time 1 -H 'Host: infraege.ru' "https://127.0.0.1:$port/health" >/dev/null; then break; fi
+  if curl -ks --max-time 1 -H 'Host: kodumka.ru' "https://127.0.0.1:$port/health" >/dev/null; then break; fi
   sleep 0.2
 done
 docker exec "$container_name" nginx -t
 
+# Change 193: the former domain answers a permanent redirect with path and query kept.
+redirect=$(curl -ks -o /dev/null -w '%{http_code} %{redirect_url}' -H 'Host: infraege.ru' \
+  "https://127.0.0.1:$port/ege?from=edge")
+[[ $redirect == '301 https://kodumka.ru/ege?from=edge' ]] || {
+  echo "former domain redirect: $redirect" >&2
+  exit 1
+}
+
 sentinel='oauth-secret-must-not-be-logged'
-curl -ksS -o /dev/null -H 'Host: infraege.ru' -H "Referer: https://infraege.ru/account/verify?token=$sentinel" \
+curl -ksS -o /dev/null -H 'Host: kodumka.ru' -H "Referer: https://kodumka.ru/account/verify?token=$sentinel" \
   "https://127.0.0.1:$port/api/auth/login?token=$sentinel"
-curl -ksS -o /dev/null -H 'Host: infraege.ru' \
+curl -ksS -o /dev/null -H 'Host: kodumka.ru' \
   "https://127.0.0.1:$port/api/auth/providers/vk/callback?code=$sentinel&state=$sentinel"
 if docker logs "$container_name" 2>&1 | grep -Fq "$sentinel"; then
   echo 'auth query credential appeared in edge logs' >&2
@@ -62,7 +71,7 @@ opener = urllib.request.build_opener(
 )
 
 def status(_: int) -> int:
-    request = urllib.request.Request(base + "/api/auth/password-reset/request", headers={"Host": "infraege.ru"})
+    request = urllib.request.Request(base + "/api/auth/password-reset/request", headers={"Host": "kodumka.ru"})
     try:
         with opener.open(request, timeout=5) as response:
             return response.status

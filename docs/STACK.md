@@ -84,7 +84,7 @@ immediately. Direct `docker compose` commands may create a separate `infra` proj
 
 With `athanor.yaml` in the checkout, `make dev`, `make rebuild` and `make restart` run through the
 Athanor CLI and require nonempty `SMTP_USERNAME` and `SMTP_PASSWORD` in its vault (Postbox defaults:
-`SMTP_HOST=postbox.cloud.yandex.net`, `SMTP_PORT=587`, `MAIL_FROM=accounts@infraege.ru`). A missing
+`SMTP_HOST=postbox.cloud.yandex.net`, `SMTP_PORT=587`, `MAIL_FROM=accounts@kodumka.ru`). A missing
 CLI, locked vault or incomplete credentials fails before Docker changes anything. Without the
 manifest the no-mail development path remains. `athanor.yaml` and `secrets.enc.yaml` are ignored
 local files, never release inputs; no plaintext SMTP secret is written to a tracked file.

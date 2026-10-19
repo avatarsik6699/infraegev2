@@ -8,7 +8,7 @@ Python из 28 уроков, server-owned практика и необязате
 
 Технический контракт проекта — [`docs/SPEC.md`](docs/SPEC.md), версии, команды и gate —
 [`docs/STACK.md`](docs/STACK.md), правила работы агентов — [`AGENTS.md`](AGENTS.md).
-Production работает на `infraege.ru` в одном application Compose project
+Production работает на `kodumka.ru` (бренд «Кодумка», `infraege.ru` переадресует) в одном application Compose project
 ([`docs/runbooks/production.md`](docs/runbooks/production.md)); внешняя cookieless-аналитика —
 отдельный сервис.
 

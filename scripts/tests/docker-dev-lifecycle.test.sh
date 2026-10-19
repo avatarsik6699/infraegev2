@@ -24,7 +24,7 @@ if [[ ${TEST_SCHEMA_DRIFT:-0} == 1 && $* == *'run --rm --no-deps db-migrate .ven
 fi
 if [[ ${SMTP_USERNAME:-} == fixture-user && ${SMTP_PASSWORD:-} == fixture-password &&
       ${SMTP_HOST:-} == postbox.cloud.yandex.net && ${SMTP_PORT:-} == 587 &&
-      ${MAIL_FROM:-} == accounts@infraege.ru ]]; then
+      ${MAIL_FROM:-} == accounts@kodumka.ru ]]; then
   printf 'smtp-configured\n' >>"$DOCKER_CALLS"
 fi
 exit 0

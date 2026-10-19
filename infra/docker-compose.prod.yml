@@ -1,4 +1,4 @@
-# Production overlay for infraege.ru. Render with scripts/render-production-config.sh.
+# Production overlay for kodumka.ru. Render with scripts/render-production-config.sh.
 x-journald: &journald
   driver: journald
   options:

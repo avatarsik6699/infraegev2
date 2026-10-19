@@ -41,7 +41,7 @@ function courseLessonHead(
   if (!loaderData) return {};
   const { course, lesson } = loaderData;
   const meta = {
-    title: `${lesson.title} — ${course.title}`,
+    title: `${lesson.title} — ${course.title} — Кодумка`,
     description: lesson.summary,
     path: `/courses/${course.routeSlug}/${lesson.routeSlug}`,
   };

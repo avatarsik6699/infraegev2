@@ -115,21 +115,21 @@ describe("PublicHeader", () => {
     ).toBe("П");
   });
 
-  it("renders the infraege identity and honest home navigation", () => {
+  it("renders the Кодумка identity and honest home navigation", () => {
     accountSession.status = "ready";
     accountSession.account = null;
     const { container } = render(<PublicHeader home />);
 
     expect(container.querySelector("[data-public-header]")).not.toBeNull();
     expect(container.querySelector("[data-infraege-mark]")).not.toBeNull();
-    expect(screen.getByText("infraege", { exact: true })).not.toBeNull();
+    expect(screen.getByText("Кодумка", { exact: true })).not.toBeNull();
     expect(
       screen.getByText("подготовка к ЕГЭ по информатике", { exact: true }),
     ).not.toBeNull();
     expect(container.querySelector("[data-infraege-benefits]")).toBeNull();
     expect(screen.queryByText("beta", { exact: true })).toBeNull();
     expect(screen.queryByText("v1.0.0", { exact: true })).toBeNull();
-    expect(screen.getByLabelText("infraege — ЕГЭ информатика")).not.toBeNull();
+    expect(screen.getByLabelText("Кодумка — ЕГЭ информатика")).not.toBeNull();
     expect(
       screen.getAllByRole("link", { name: "Темы" })[0].getAttribute("href"),
     ).toBe("/ege/");
@@ -171,7 +171,7 @@ describe("PublicHeader", () => {
 
     expect(footer).not.toBeNull();
     expect(footer?.querySelector("[data-footer-signature]")?.textContent).toBe(
-      "infraege",
+      "Кодумка",
     );
     expect(
       screen
@@ -197,7 +197,7 @@ describe("PublicHeader", () => {
     expect(
       screen
         .getByRole("link", {
-          name: "infraege — ЕГЭ информатика, на главную",
+          name: "Кодумка — ЕГЭ информатика, на главную",
         })
         .getAttribute("href"),
     ).toBe("/");
@@ -213,7 +213,7 @@ describe("PublicHeader", () => {
     expect(
       screen
         .getByRole("link", {
-          name: "infraege — ЕГЭ информатика, на главную",
+          name: "Кодумка — ЕГЭ информатика, на главную",
         })
         .getAttribute("href"),
     ).toBe("/");
