@@ -112,10 +112,13 @@ export class TopicLessonPage {
         this.page.locator("[data-practice-form] [data-practice-help]"),
       ).toHaveCount(count * 2);
     } else {
-      // Change 184: one task has no tab strip
-      await expect(this.page.getByRole("tab")).toHaveCount(
-        count > 1 ? count : 0,
-      );
+      // Change 184: one task has no tab strip. Self-check questions have
+      // their own tab list, so count only the task strip.
+      await expect(
+        this.page
+          .getByRole("tablist", { name: "Задачи урока" })
+          .getByRole("tab"),
+      ).toHaveCount(count > 1 ? count : 0);
     }
   }
 

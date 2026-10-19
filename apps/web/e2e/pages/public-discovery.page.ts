@@ -10,7 +10,11 @@ export class PublicDiscoveryPage {
     await expect(this.page.locator("body")).toContainText(
       "Sitemap: https://kodumka.ru/sitemap.xml",
     );
-    await expect(this.page.locator("body")).toContainText("Disallow: /lab/");
+    await expect(this.page.locator("body")).toContainText("Disallow: /api/");
+    await expect(this.page.locator("body")).toContainText(
+      "Clean-param: returnTo&from&plan",
+    );
+    await expect(this.page.locator("body")).not.toContainText("/lab/");
 
     const sitemapResponse = await this.page.goto("/sitemap-static.xml");
     expect(sitemapResponse?.status()).toBe(200);

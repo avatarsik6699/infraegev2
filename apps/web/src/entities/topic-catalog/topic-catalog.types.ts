@@ -17,6 +17,8 @@ export namespace TopicCatalogTypes {
     routeSlug: string;
     /** Subtopics of the published lesson (home topic cards, Change 185). */
     subtopicCount: number;
+    /** Slug of the first subtopic: the page a topic link opens (Change 194). */
+    firstSubtopic: string;
   };
 
   export type Entry = PlannedEntry | PublishedEntry;

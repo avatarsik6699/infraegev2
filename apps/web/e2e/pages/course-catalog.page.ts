@@ -106,8 +106,11 @@ export class CourseCatalogPage {
         this.page.locator("[data-course-progress]").getByRole("status"),
       ).toHaveText(["Прогресс загружается", "Прогресс загружается"]);
       releaseScripts();
+      // The dev server sends every held module at once on release: hydration may
+      // take longer than the default assertion window on a loaded runner.
       await this.expectGuestProgress(
         this.page.locator('[data-course-card="python"]'),
+        15_000,
       );
       expect(await this.geometry()).toEqual(before);
       releaseAssets();
@@ -202,10 +205,14 @@ export class CourseCatalogPage {
     }
   }
 
-  private async expectGuestProgress(scope = this.page.locator("body")) {
+  private async expectGuestProgress(
+    scope = this.page.locator("body"),
+    timeout?: number,
+  ) {
     const progress = scope.locator("[data-course-progress]");
     await expect(progress.locator('[role="status"]')).toHaveText(
       "Освоено 0 из 27 уроков",
+      { timeout },
     );
     await expect(progress.locator('[role="progressbar"]')).toHaveAttribute(
       "aria-valuenow",

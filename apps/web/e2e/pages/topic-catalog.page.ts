@@ -115,31 +115,40 @@ export class TopicCatalogPage {
         name: "Обработка числовой последовательности",
         exact: true,
       }),
-    ).toHaveAttribute("href", "/ege/17-chislovye-posledovatelnosti");
+    ).toHaveAttribute(
+      "href",
+      "/ege/17-chislovye-posledovatelnosti/chisla-i-proverki",
+    );
     await expect(
       this.page.getByRole("link", {
         name: "Обработка символьной информации",
         exact: true,
       }),
-    ).toHaveAttribute("href", "/ege/24-obrabotka-simvolnyh-strok");
+    ).toHaveAttribute(
+      "href",
+      "/ege/24-obrabotka-simvolnyh-strok/stroka-i-fragment",
+    );
     await expect(
       this.page.getByRole("link", {
         name: "Обработка целочисленной информации",
         exact: true,
       }),
-    ).toHaveAttribute("href", "/ege/25-deliteli-i-maski");
+    ).toHaveAttribute("href", "/ege/25-deliteli-i-maski/perebor-i-proverki");
     await expect(
       this.page.getByRole("link", {
         name: "Обработка данных с сортировкой",
         exact: true,
       }),
-    ).toHaveAttribute("href", "/ege/26-sortirovka-i-otbor");
+    ).toHaveAttribute("href", "/ege/26-sortirovka-i-otbor/zapisi-i-rejting");
     await expect(
       this.page.getByRole("link", {
         name: "Анализ данных",
         exact: true,
       }),
-    ).toHaveAttribute("href", "/ege/27-analiz-dannyh-i-klasterizatsiya");
+    ).toHaveAttribute(
+      "href",
+      "/ege/27-analiz-dannyh-i-klasterizatsiya/tochki-i-rasstoyaniya",
+    );
     await this.page
       .getByRole("link", {
         name: "Обработка числовой последовательности",
@@ -170,7 +179,7 @@ export class TopicCatalogPage {
     await expect(inProgress.getByRole("link")).toHaveCount(1);
     await expect(inProgress.getByRole("link")).toHaveAttribute(
       "href",
-      "/ege/16-rekursiya",
+      "/ege/16-rekursiya/funktsiya-cherez-sebya",
     );
     await expect(inProgress).toContainText("Решено 1 из 2");
     // F40: the topic search is gone; the progress dropdown is the filter.

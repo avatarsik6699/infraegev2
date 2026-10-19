@@ -93,8 +93,11 @@ export const TopicLessonFrame: React.FC<TopicLessonPageTypes.FrameProps> = (
                 ...(props.current === subtopics[0]?.slug
                   ? {}
                   : {
-                      to: "/ege/$slug",
-                      params: { slug: props.lesson.routeSlug },
+                      to: "/ege/$slug/$subtopic",
+                      params: {
+                        slug: props.lesson.routeSlug,
+                        subtopic: subtopics[0]?.slug ?? "",
+                      },
                     }),
               },
               { label: currentTitle },

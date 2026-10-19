@@ -45,4 +45,31 @@ const withoutTitle = (
   return lead ? [lead, ...rest] : rest;
 };
 
-export const practiceTaskStatement = { withoutTitle };
+const blockText = (block: Block): string => {
+  if (block.type === "text" || block.type === "part-heading") return block.text;
+  if (block.type === "rich-text")
+    return block.spans.map((span) => span.text).join("");
+  if (block.type === "list") return block.items.join("; ");
+  return "";
+};
+
+/**
+ * Change 194: plain words of the statement for search snippets — code and
+ * tables left out, formula escapes such as `\%` undone, a leading source
+ * credit such as «(PRO100 ЕГЭ)» dropped, cut at a word boundary with an ellipsis.
+ */
+const excerpt = (statement: readonly Block[], limit: number): string => {
+  const text = statement
+    .map(blockText)
+    .join(" ")
+    .replace(/\\([%_&$#])/gu, "$1")
+    .replace(/\s+/gu, " ")
+    .trim()
+    .replace(/^\([^)]{1,40}\)\s*/u, "");
+  if (text.length <= limit) return text;
+  const cut = text.slice(0, limit - 1);
+  const space = cut.lastIndexOf(" ");
+  return `${(space > limit / 2 ? cut.slice(0, space) : cut).replace(/[\s,;:–—-]+$/u, "")}…`;
+};
+
+export const practiceTaskStatement = { withoutTitle, excerpt };

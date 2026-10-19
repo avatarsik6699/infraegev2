@@ -180,7 +180,7 @@ describe("AccountOverview", () => {
 
     expect(
       screen.getByRole("link", { name: "Открыть тему" }).getAttribute("href"),
-    ).toBe(`/ege/${topic.routeSlug}`);
+    ).toBe(`/ege/${topic.routeSlug}/${topic.firstSubtopic}`);
     expect(
       screen
         .getByRole("link", { name: "Открыть практику" })

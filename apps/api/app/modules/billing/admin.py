@@ -5,6 +5,7 @@
     python -m app.modules.billing.admin refunds                  # requested and pending
     python -m app.modules.billing.admin show --email ADDRESS
     python -m app.modules.billing.admin revenue [--year YEAR]
+    python -m app.modules.billing.admin funnel [--days N]       # orders → payments by day
 
 Output names payments, amounts and states only; addresses never reach the journal.
 """
@@ -14,9 +15,11 @@ from __future__ import annotations
 import argparse
 import asyncio
 import json
+from collections import defaultdict
+from datetime import datetime, timedelta
 from uuid import UUID
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
@@ -79,6 +82,51 @@ async def show(db: AsyncSession, email: str) -> list[dict]:
     ]
 
 
+async def funnel(db: AsyncSession, days: int) -> list[dict]:
+    """Change 194: orders of the last `days` Moscow days by day and plan — how many were
+    paid, failed or are still open, how many were refunded, and the money that stayed.
+    Counts and sums only; the tracker never sees payments."""
+    today = service.now().astimezone(service.MOSCOW).date()
+    start = today - timedelta(days=days - 1)
+    returned = (
+        select(Refund.payment_id, func.sum(Refund.amount_kopecks).label("kopecks"))
+        .where(Refund.status == "succeeded")
+        .group_by(Refund.payment_id)
+        .subquery()
+    )
+    rows = await db.execute(
+        select(
+            Payment.created_at,
+            Payment.plan,
+            Payment.status,
+            Payment.amount_kopecks,
+            returned.c.kopecks,
+        )
+        .outerjoin(returned, returned.c.payment_id == Payment.id)
+        .where(
+            Payment.created_at
+            >= datetime(start.year, start.month, start.day, tzinfo=service.MOSCOW)
+        )
+    )
+    report: dict[tuple[str, str], dict] = defaultdict(
+        lambda: {"orders": 0, "paid": 0, "failed": 0, "open": 0, "refunded": 0, "kopecks": 0}
+    )
+    for created_at, plan, status, amount, refunded in rows.all():
+        day = created_at.astimezone(service.MOSCOW).date().isoformat()
+        line = report[(day, plan)]
+        line["orders"] += 1
+        if status in ("succeeded", "refunded"):
+            line["paid"] += 1
+            line["kopecks"] += amount - (refunded or 0)
+        elif status == "failed":
+            line["failed"] += 1
+        else:
+            line["open"] += 1
+        if refunded:
+            line["refunded"] += 1
+    return [{"day": day, "plan": plan, **line} for (day, plan), line in sorted(report.items())]
+
+
 async def main_async(args: argparse.Namespace) -> object:
     engine = database_engine(settings.account_database_url, role="infraege_app")
     try:
@@ -104,6 +152,8 @@ async def main_async(args: argparse.Namespace) -> object:
                 ]
             if args.command == "show":
                 return await show(db, args.email)
+            if args.command == "funnel":
+                return await funnel(db, args.days)
             year = args.year or service.now().astimezone(service.MOSCOW).year
             income = await service.revenue_kopecks(db, year)
             return {
@@ -126,6 +176,7 @@ def main() -> None:
     commands.add_parser("refunds")
     commands.add_parser("show").add_argument("--email", required=True)
     commands.add_parser("revenue").add_argument("--year", type=int)
+    commands.add_parser("funnel").add_argument("--days", type=int, default=30)
     print(json.dumps(asyncio.run(main_async(parser.parse_args())), ensure_ascii=False, indent=2))
 
 

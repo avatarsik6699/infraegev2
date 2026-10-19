@@ -3,36 +3,39 @@ import { lessonPublications } from "~/shared/config/lesson-publication.mjs";
 import type { TopicCatalogTypes } from "./topic-catalog.types";
 
 /**
- * Subtopics per published lesson, kept here so the prerendered home does not
- * load lesson content; `tests/topic-catalog.test.tsx` checks them against
- * the lesson definitions.
+ * Subtopics per published lesson and the first one's slug, kept here so the
+ * prerendered home does not load lesson content; `tests/topic-catalog.test.tsx`
+ * checks them against the lesson definitions. Links open the first subtopic
+ * directly instead of the topic address that redirects to it (Change 194).
  */
-const subtopicCounts: Readonly<Record<string, number>> = {
-  rekursiya: 7,
-  "relational-databases": 7,
-  "coding-and-fano": 7,
-  "preobrazovanie-zapisey-chisel": 6,
-  "media-coding": 7,
-  "word-enumeration": 7,
-  networks: 7,
-  "information-amount": 6,
-  "numeral-systems": 7,
-  spreadsheets: 8,
-  "number-sequences": 8,
-  "spreadsheet-optimization": 8,
-  "winning-strategy": 7,
-  "graph-analysis": 7,
-  "string-processing": 8,
-  "divisors-and-masks": 6,
-  "array-processing": 8,
-  "data-analysis": 8,
-  "information-models": 6,
-  "truth-tables": 6,
-  "simple-algorithms": 7,
-  executors: 7,
-  "branching-and-enumeration": 8,
-  "logic-transformations": 7,
-  "parallel-computing": 8,
+const subtopicFacts: Readonly<
+  Record<string, { count: number; first: string }>
+> = {
+  rekursiya: { count: 7, first: "funktsiya-cherez-sebya" },
+  "relational-databases": { count: 7, first: "tablicy-i-klyuchi" },
+  "coding-and-fano": { count: 7, first: "kod-i-uslovie-fano" },
+  "preobrazovanie-zapisey-chisel": { count: 6, first: "chislo-i-zapis" },
+  "media-coding": { count: 7, first: "bity-i-kody" },
+  "word-enumeration": { count: 7, first: "slova-i-umnozhenie" },
+  networks: { count: 7, first: "adres-i-maska" },
+  "information-amount": { count: 6, first: "parol-v-bajtah" },
+  "numeral-systems": { count: 7, first: "zapis-i-znachenie" },
+  spreadsheets: { count: 8, first: "stroka-i-uslovie" },
+  "number-sequences": { count: 8, first: "chisla-i-proverki" },
+  "spreadsheet-optimization": { count: 8, first: "luchshaya-summa-do-kletki" },
+  "winning-strategy": { count: 7, first: "igra-i-strategiya" },
+  "graph-analysis": { count: 7, first: "graf-i-put" },
+  "string-processing": { count: 8, first: "stroka-i-fragment" },
+  "divisors-and-masks": { count: 6, first: "perebor-i-proverki" },
+  "array-processing": { count: 8, first: "zapisi-i-rejting" },
+  "data-analysis": { count: 8, first: "tochki-i-rasstoyaniya" },
+  "information-models": { count: 6, first: "model-i-stepeni" },
+  "truth-tables": { count: 6, first: "logicheskie-operacii" },
+  "simple-algorithms": { count: 7, first: "sostoyanie-i-komandy" },
+  executors: { count: 7, first: "lenta-i-komanda" },
+  "branching-and-enumeration": { count: 8, first: "komandy-i-derevo" },
+  "logic-transformations": { count: 7, first: "parametr-i-lozhnyj-sluchaj" },
+  "parallel-computing": { count: 8, first: "process-i-zavisimost" },
 };
 
 const publicationById = new Map(
@@ -55,7 +58,8 @@ const entries: readonly TopicCatalogTypes.Entry[] = examTopicDefinitions.map(
       summary: publication.summary,
       status: "published",
       routeSlug: publication.routeSlug,
-      subtopicCount: subtopicCounts[definition.id] ?? 0,
+      subtopicCount: subtopicFacts[definition.id]?.count ?? 0,
+      firstSubtopic: subtopicFacts[definition.id]?.first ?? "",
     };
   },
 );
@@ -75,7 +79,16 @@ function formatTaskNumbers(taskNumbers: TopicCatalogTypes.TaskNumbers): string {
     : `Задания ${taskNumbers.join(", ")}`;
 }
 
+/** The first subtopic of a published topic, by its route slug. */
+function firstSubtopic(routeSlug: string): string | undefined {
+  const entry = entries.find(
+    (item) => item.status === "published" && item.routeSlug === routeSlug,
+  );
+  return entry?.status === "published" ? entry.firstSubtopic : undefined;
+}
+
 export const topicCatalog = {
   entries,
   formatTaskNumbers,
+  firstSubtopic,
 } as const;

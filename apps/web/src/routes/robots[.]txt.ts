@@ -6,10 +6,15 @@ export const Route = createFileRoute("/robots.txt")({
     handlers: {
       GET: () =>
         new Response(
+          // Change 194: account and sign-in pages carry `noindex`, so robots must still
+          // reach them; only machine endpoints are closed. Yandex drops the service
+          // parameters that make one page look like many.
           [
             "User-agent: *",
             "Allow: /",
-            "Disallow: /lab/",
+            "Disallow: /api/",
+            "Disallow: /_serverFn/",
+            "Clean-param: returnTo&from&plan",
             "",
             `Sitemap: ${siteConfig.origin}/sitemap.xml`,
             "",

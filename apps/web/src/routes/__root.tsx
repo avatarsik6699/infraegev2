@@ -77,19 +77,26 @@ function RootComponent() {
   );
 }
 
+/**
+ * Pages the tracker never sees. A page load skips the script; after an in-app
+ * navigation from a public page the tracker drops these paths itself
+ * (`data-exclude`, smotryashchiy tracker, Change 194).
+ */
+const privatePaths = [
+  "/account",
+  "/sign-in",
+  "/register",
+  "/verify-email",
+  "/password-reset",
+] as const;
+
 function RootDocument(props: { children: React.ReactNode }) {
   const pathname = useRouterState({
     select: (state) => state.location.pathname,
   });
-  const allowAnalytics =
-    !pathname.startsWith("/account/") &&
-    ![
-      "/account",
-      "/sign-in",
-      "/register",
-      "/verify-email",
-      "/password-reset",
-    ].includes(pathname);
+  const allowAnalytics = !privatePaths.some(
+    (path) => pathname === path || pathname.startsWith(`${path}/`),
+  );
   return (
     <html lang="ru">
       <head>
@@ -101,6 +108,7 @@ function RootDocument(props: { children: React.ReactNode }) {
             async
             src="https://sre.infraege.ru/track.js"
             data-site="65a299a0318aa70e52b7d463"
+            data-exclude={privatePaths.join(",")}
           />
         ) : null}
       </head>

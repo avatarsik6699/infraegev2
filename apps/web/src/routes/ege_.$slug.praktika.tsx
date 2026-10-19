@@ -42,7 +42,7 @@ export const Route = createFileRoute("/ege_/$slug/praktika")({
     if (!publication) return {};
     const meta = {
       title: `Практика и итог — ${publication.title} — Кодумка`,
-      description: publication.summary,
+      description: `Задачи в формате ЕГЭ и итог темы «${publication.title}». ${publication.summary}`,
       path: `/ege/${publication.routeSlug}/praktika`,
     };
     const head = pageHead.create({

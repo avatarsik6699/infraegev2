@@ -72,7 +72,10 @@ export const PracticeTopicGroup: React.FC<Props> = (props) => {
             </span>
           ) : null}
           {entry?.status === "published" ? (
-            <ActionLink to="/ege/$slug" params={{ slug: entry.routeSlug }}>
+            <ActionLink
+              to="/ege/$slug/$subtopic"
+              params={{ slug: entry.routeSlug, subtopic: entry.firstSubtopic }}
+            >
               Теория
             </ActionLink>
           ) : null}

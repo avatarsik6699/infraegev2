@@ -78,8 +78,11 @@ export const TopicCatalogCard: React.FC<Props> = (props) => {
             <ActionLink
               className={styles.topicLink}
               presentation="navigation"
-              to="/ege/$slug"
-              params={{ slug: props.entry.routeSlug }}
+              to="/ege/$slug/$subtopic"
+              params={{
+                slug: props.entry.routeSlug,
+                subtopic: props.entry.firstSubtopic,
+              }}
             >
               {props.entry.title}
             </ActionLink>

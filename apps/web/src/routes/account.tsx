@@ -7,6 +7,7 @@ import {
   getProviderAvailability,
 } from "~/features/account";
 import { AccountPage } from "~/pages/account";
+import { pageHead } from "~/shared/lib/seo";
 
 export const Route = createFileRoute("/account")({
   // Change 192: «Раздел «Доступ»» links open the profile on that tab.
@@ -33,6 +34,14 @@ export const Route = createFileRoute("/account")({
       billing: offer?.billing ? { access } : undefined,
     };
   },
+  // Change 194: account and sign-in pages stay out of search, `returnTo` variants included.
+  head: () =>
+    pageHead.create({
+      title: "Аккаунт — Кодумка",
+      description: "Профиль, прогресс и доступ к урокам Кодумки.",
+      path: "/account",
+      noIndex: true,
+    }),
   component: AccountRoute,
 });
 

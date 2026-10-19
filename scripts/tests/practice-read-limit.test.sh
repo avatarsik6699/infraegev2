@@ -64,19 +64,24 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=20) as pool:
     assert set(pool.map(status, [f"/_serverFn/task?id={i}" for i in range(100)])) == {204}
 # The same budget is consumed regardless of the page/function/API path or query string.
 paths = ["/practice?q=x", "/_serverFn/task?id=x", "/api/tasks", "/api/tasks/facets",
-         "/api/topics/practice-summary", "/api/learning-materials/topic/x/practice", "/ege/topic", "/courses/python",
-         "/sitemap.xml", "/sitemap-practice/1"]
+         "/api/topics/practice-summary", "/api/learning-materials/topic/x/practice"]
 for path in paths:
     with concurrent.futures.ThreadPoolExecutor(max_workers=20) as pool:
         codes = list(pool.map(status, [path] * 20))
     assert 429 in codes, (path, codes)
+# Change 194: crawl paths keep their own wider budget, untouched by an exhausted read budget.
+crawl = ["/ege/topic", "/courses/python", "/sitemap.xml", "/sitemap-static.xml", "/sitemap-practice/1"]
+with concurrent.futures.ThreadPoolExecutor(max_workers=20) as pool:
+    assert set(pool.map(status, [crawl[i % len(crawl)] for i in range(150)])) == {204}
+with concurrent.futures.ThreadPoolExecutor(max_workers=20) as pool:
+    assert 429 in list(pool.map(status, ["/ege/topic"] * 120))
 for path in ["/", "/privacy", "/_build/app.js", "/fonts/test.woff2", "/health"]:
     assert status(path) == 204, path
 # Read exhaustion does not exhaust the independently protected checker.
 assert status("/api/tasks/test/check") == 204
 with concurrent.futures.ThreadPoolExecutor(max_workers=10) as pool:
     assert 503 in list(pool.map(status, ["/api/tasks/test/check"] * 20))
-print("100-task burst, shared read limit, unaffected assets/health and independent checker: PASS")
+print("100-task burst, shared read limit, crawl budget, unaffected assets/health and independent checker: PASS")
 PY
   docker rm -f "$container_name" >/dev/null
 done

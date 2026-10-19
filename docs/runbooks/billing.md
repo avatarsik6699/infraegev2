@@ -77,6 +77,7 @@ docker compose --env-file /etc/infraege/production.env --project-name infraege \
 | `refund --payment ID --amount full --reason guardian` | a parent's request for a minor's purchase: the full price |
 | `refund --payment ID --amount KOPECKS --reason operator` | any other agreed sum |
 | `refunds` | requested, pending and failed refunds (account deletions create requested ones) |
+| `funnel [--days N]` | orders of the last N Moscow days (default 30) by day and plan: paid, failed, open, refunded and the money kept — the payment conversion (Change 194) |
 | `execute --refund ID` | send a requested or failed refund to the provider |
 | `revenue [--year YEAR]` | НПД income of a Moscow calendar year and its share of the limit |
 

@@ -118,6 +118,15 @@ the deploy is dispatched:
 Keep `infraege.ru` registered while the redirect matters. A rollback to a release before Change
 193 serves `infraege.ru` again with its own certificate; restore the two environment values with it.
 
+## Alerts (Change 194)
+
+`.github/workflows/uptime.yml` probes kodumka.ru, the infraege.ru redirect, both certificates and
+`sre.infraege.ru` every 15 minutes. On failure it posts to Telegram when the repository secrets
+`TELEGRAM_BOT_TOKEN` (a bot from BotFather) and `TELEGRAM_CHAT_ID` (the operator's chat with that
+bot) are set; without them the run only fails in GitHub with a warning. After setting or rotating
+them, check delivery once: dispatch the workflow with a deliberately failing step on a branch, or
+send a test message with the same `curl` from a trusted shell. Never print the token.
+
 ## Routine operation
 
 Use `docker compose` with the explicit production environment/project and installed release files,

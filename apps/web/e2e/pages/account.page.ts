@@ -1,4 +1,9 @@
 import { expect, type Page } from "@playwright/test";
+import { lessonPublications } from "../../src/shared/config/lesson-publication.mjs";
+
+const publishedTopicCount = lessonPublications.filter(
+  (lesson) => lesson.status === "published",
+).length;
 
 const member = {
   id: "test-account-one",
@@ -209,8 +214,10 @@ export class AccountPage {
       route.fulfill({ status: 400, json: { detail: "invalid" } }),
     );
     await this.page.goto("/verify-email?token=invalid-token");
+    // The token is checked only after hydration (see expectEnhancedForm).
     await expect(this.page.getByRole("alert")).toContainText(
       "Ссылка недействительна или устарела",
+      { timeout: 15_000 },
     );
     await expect(
       this.page.getByRole("link", { name: "Начать регистрацию заново" }),
@@ -381,7 +388,10 @@ export class AccountPage {
   }
 
   private async expectEnhancedForm(): Promise<void> {
-    await expect(this.page.locator("form[data-enhanced='true']")).toBeVisible();
+    // Hydration of an auth page on the dev server can outlast the default window.
+    await expect(this.page.locator("form[data-enhanced='true']")).toBeVisible({
+      timeout: 15_000,
+    });
     await expect(
       this.page.getByText("Для отправки формы нужен JavaScript.", {
         exact: false,
@@ -434,7 +444,7 @@ export class AccountPage {
     ).toBeVisible();
     await expect(
       dashboard.locator('[aria-labelledby="topics-title"] li'),
-    ).toHaveCount(7);
+    ).toHaveCount(publishedTopicCount);
     await expect(
       dashboard.getByRole("heading", { name: "Попробуйте задачу" }),
     ).toBeVisible();

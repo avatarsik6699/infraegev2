@@ -58,7 +58,8 @@ export const Route = createFileRoute("/ege_/$slug/$subtopic")({
         subtopic.index === 0
           ? `${publication.title} — Кодумка`
           : `${subtopic.title} — ${publication.title} — Кодумка`,
-      description: publication.summary,
+      // Change 194: each subtopic page is described by its own lead.
+      description: subtopic.lead ?? publication.summary,
       path: `/ege/${publication.routeSlug}/${subtopic.slug}`,
     };
     const head = pageHead.create({

@@ -7,20 +7,28 @@ import {
 import { lessonPublications } from "../../src/shared/config/lesson-publication.mjs";
 import { expectNoHorizontalOverflow } from "./layout.assertions";
 
+/** First subtopic per published topic; mirrors `subtopicFacts` in `topic-catalog.ts`. */
 const firstTopicSubtopicByRouteSlug: Readonly<Record<string, string>> = {
+  "1-analiz-informacionnyh-modelej": "model-i-stepeni",
+  "2-tablicy-istinnosti": "logicheskie-operacii",
   "3-svyazannye-tablicy": "tablicy-i-klyuchi",
   "4-kodirovanie-i-uslovie-fano": "kod-i-uslovie-fano",
   "5-preobrazovanie-zapisey-chisel": "chislo-i-zapis",
+  "6-prostejshie-algoritmy-dlya-ispolnitelej": "sostoyanie-i-komandy",
   "7-izobrazheniya-zvuk-tekst": "bity-i-kody",
   "8-perebor-slov": "slova-i-umnozhenie",
   "9-obrabotka-tablicy-chisel": "stroka-i-uslovie",
   "10-ip-adresa-i-maski": "adres-i-maska",
   "11-paroli-i-zapisi": "parol-v-bajtah",
+  "12-ispolnenie-algoritma-dlya-ispolnitelya": "lenta-i-komanda",
+  "13-analiz-hoda-ispolneniya-algoritma": "komandy-i-derevo",
   "14-sistemy-schisleniya": "zapis-i-znachenie",
+  "15-zakony-matematicheskoj-logiki": "parametr-i-lozhnyj-sluchaj",
   "16-rekursiya": "funktsiya-cherez-sebya",
   "17-chislovye-posledovatelnosti": "chisla-i-proverki",
   "18-robot-sborshchik-monet": "luchshaya-summa-do-kletki",
   "19-21-vyigryshnaya-strategiya": "igra-i-strategiya",
+  "22-mnogoprocessornye-sistemy": "process-i-zavisimost",
   "23-analiz-grafov": "graf-i-put",
   "24-obrabotka-simvolnyh-strok": "stroka-i-fragment",
   "25-deliteli-i-maski": "perebor-i-proverki",
@@ -54,6 +62,7 @@ const bank = bankJson as unknown as {
       id: string;
       title: string;
       hint: unknown[];
+      explanation: unknown[];
       catalog_visible: boolean;
       archived: boolean;
       exam_numbers: number[];
@@ -253,19 +262,17 @@ export class MinimalApplicationPage {
     // A lesson exported from its stand has self-checks only where the stand has
     // them (Change 184): a topic's «Практика и итог» or a course lesson may have none.
     if (!(await checkpoint.count())) return;
-    const disclosure = noJavaScript
-      ? checkpoint.locator("summary").first()
-      : checkpoint.getByRole("button").first();
+    // Every answer is a native disclosure (Change 186 F54): it opens from the
+    // keyboard with or without scripts; several questions add a tab strip.
+    const disclosure = checkpoint
+      .locator("summary")
+      .filter({ visible: true })
+      .first();
     await expect(disclosure).toBeVisible();
-    if (noJavaScript) {
-      await expect(checkpoint.locator("details[open]")).toHaveCount(0);
-      await disclosure.click();
-      await expect(checkpoint.locator("details[open]")).toHaveCount(1);
-    } else {
-      await disclosure.focus();
-      await disclosure.press("Enter");
-      await expect(disclosure).toHaveAttribute("aria-expanded", "true");
-    }
+    await expect(checkpoint.locator("details[open]")).toHaveCount(0);
+    await disclosure.focus();
+    await disclosure.press("Enter");
+    await expect(checkpoint.locator("details[open]")).toHaveCount(1);
   }
   async expectPublicPages() {
     for (const path of [
@@ -345,10 +352,14 @@ export class MinimalApplicationPage {
   }
 
   async expectPracticeTaskDetail(): Promise<void> {
-    const entry = visibleTasks.find(({ task }) =>
-      task.sources.some(
-        (source) => source.kind !== "unknown" && source.is_public,
-      ),
+    // The bank repair (Change 191) left imported tasks without help: pick one with both.
+    const entry = visibleTasks.find(
+      ({ task }) =>
+        task.hint.length > 0 &&
+        task.explanation.length > 0 &&
+        task.sources.some(
+          (source) => source.kind !== "unknown" && source.is_public,
+        ),
     );
     if (!entry)
       throw new Error("The practice bank has no task with a public source");
@@ -434,6 +445,8 @@ export class MinimalApplicationPage {
         .selectOption(["ege-16", "ege-5"]);
       await filters.getByRole("button", { name: "Применить" }).click();
     } else {
+      // Change 191: typing opens search suggestions over the toolbar; close them first.
+      await this.page.keyboard.press("Escape");
       await this.openTopicChooser();
       await this.page
         .getByRole("option", { name: /^ЕГЭ 16 · Рекуррентные выражения/u })

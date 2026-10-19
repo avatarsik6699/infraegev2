@@ -31,12 +31,23 @@ const publicPaths = [
     }),
   ...coursePublications
     .filter((course) => course.status === "published")
-    .flatMap((course) => [
-      `/courses/${course.routeSlug}`,
-      ...courseLessonPublications
-        .filter((lesson) => lesson.status === "published")
-        .map((lesson) => `/courses/${course.routeSlug}/${lesson.routeSlug}`),
-    ]),
+    .flatMap((course) => {
+      // Change 194: a course lists only its own lessons; another course's lesson is a 404.
+      const memberIds = new Set(
+        course.modules.flatMap((courseModule) =>
+          courseModule.lessonPlan.map((lesson) => lesson.id),
+        ),
+      );
+      return [
+        `/courses/${course.routeSlug}`,
+        ...courseLessonPublications
+          .filter(
+            (lesson) =>
+              lesson.status === "published" && memberIds.has(lesson.id),
+          )
+          .map((lesson) => `/courses/${course.routeSlug}/${lesson.routeSlug}`),
+      ];
+    }),
 ];
 
 export { publicPaths };

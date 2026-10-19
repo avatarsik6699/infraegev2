@@ -406,6 +406,18 @@ def test_jobs_settle_missed_notifications_expire_orders_and_notify(
                 await jobs.ending_notices(db)
                 assert len(paid_site) == before + 1
                 assert "Доступ к платным материалам действует до" in paid_site[-1][1]
+                # Change 194: the operator funnel counts both orders by their own outcome
+                from app.modules.billing import admin
+
+                lines = [line for line in await admin.funnel(db, 2) if line["plan"] == "month"]
+                assert sum(line["orders"] for line in lines) >= 2
+                assert sum(line["paid"] for line in lines) >= 1
+                assert sum(line["failed"] for line in lines) >= 1
+                assert all(
+                    set(line)
+                    == {"day", "plan", "orders", "paid", "failed", "open", "refunded", "kopecks"}
+                    for line in lines
+                )
         finally:
             await engine.dispose()
 

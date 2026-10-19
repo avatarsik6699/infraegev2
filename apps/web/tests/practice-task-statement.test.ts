@@ -48,3 +48,55 @@ describe("statement without the repeated title (Change 186 F12)", () => {
     );
   });
 });
+
+describe("statement excerpt for search snippets (Change 194)", () => {
+  const statement = [
+    {
+      type: "rich-text",
+      spans: [
+        {
+          kind: "text",
+          text: "(PRO100 ЕГЭ) Алгоритм вычисления значения функции ",
+        },
+        { kind: "formula", text: "F(n)" },
+        { kind: "text", text: " задан соотношениями:" },
+      ],
+    },
+    code,
+    {
+      type: "list",
+      style: "unordered",
+      items: ["F(n) = n при n < 10", "иначе F(n // 10)"],
+    },
+  ] as const;
+
+  it("joins words, skips code and drops a leading source credit", () => {
+    expect(practiceTaskStatement.excerpt(statement, 500)).toBe(
+      "Алгоритм вычисления значения функции F(n) задан соотношениями: F(n) = n при n < 10; иначе F(n // 10)",
+    );
+  });
+
+  it("cuts long text at a word boundary with an ellipsis", () => {
+    const short = practiceTaskStatement.excerpt(statement, 30);
+    expect(short).toBe("Алгоритм вычисления значения…");
+    expect(short.length).toBeLessThanOrEqual(30);
+  });
+
+  it("undoes formula escapes", () => {
+    expect(
+      practiceTaskStatement.excerpt(
+        [
+          {
+            type: "rich-text",
+            spans: [{ kind: "formula", text: "F(n) = n\\%10" }],
+          },
+        ],
+        60,
+      ),
+    ).toBe("F(n) = n%10");
+  });
+
+  it("gives an empty excerpt for a code-only statement", () => {
+    expect(practiceTaskStatement.excerpt([code], 60)).toBe("");
+  });
+});

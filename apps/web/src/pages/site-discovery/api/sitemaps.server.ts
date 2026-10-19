@@ -1,3 +1,4 @@
+import { getOffer } from "~/entities/billing";
 import {
   loadTaskSitemapIndex,
   loadTaskSitemapPage,
@@ -77,5 +78,12 @@ async function tasks(page: string) {
 export const sitemaps = {
   index,
   tasks,
-  static: () => urlset(publicPaths.map((path) => ({ path }))),
+  // Change 194: plans and their terms are public pages only while selling is on.
+  static: async () => {
+    const billing = Boolean((await getOffer().catch(() => undefined))?.billing);
+    const paths = billing
+      ? [...publicPaths, "/pricing", "/oferta", "/vozvrat"]
+      : publicPaths;
+    return urlset(paths.map((path) => ({ path })));
+  },
 };

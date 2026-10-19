@@ -30,3 +30,22 @@ jobs:
               openssl x509 -noout -enddate | cut -d= -f2)
             test $(( $(date --date "$expires" +%s) - $(date +%s) )) -gt $((14 * 86400))
           done
+      - name: Monitoring is reachable
+        run: curl --fail --silent --show-error --max-time 15 https://sre.infraege.ru/health/ready >/dev/null
+      # Change 194: a failed probe reaches the operator. Without the secrets the run still
+      # fails visibly in GitHub and only warns that Telegram is not configured.
+      - name: Notify Telegram
+        if: failure()
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          if [[ -z $TELEGRAM_BOT_TOKEN || -z $TELEGRAM_CHAT_ID ]]; then
+            echo "::warning::Telegram secrets are not set; no alert was sent."
+            exit 0
+          fi
+          curl --fail --silent --show-error --max-time 15 \
+            "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+            --data-urlencode "chat_id=${TELEGRAM_CHAT_ID}" \
+            --data-urlencode "text=Кодумка: внешняя проверка не прошла. ${RUN_URL}" >/dev/null

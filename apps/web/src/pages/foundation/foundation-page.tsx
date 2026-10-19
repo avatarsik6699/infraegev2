@@ -210,8 +210,11 @@ export const FoundationPage: React.FC = () => (
                         className={styles.stretchedLink}
                         ariaLabel={`Открыть тему: ${topic.title}`}
                         hierarchy="text"
-                        to="/ege/$slug"
-                        params={{ slug: topic.routeSlug }}
+                        to="/ege/$slug/$subtopic"
+                        params={{
+                          slug: topic.routeSlug,
+                          subtopic: topic.firstSubtopic,
+                        }}
                       >
                         Открыть тему
                       </ActionLink>

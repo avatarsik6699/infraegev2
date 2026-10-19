@@ -209,27 +209,27 @@ describe("TopicCatalogPage", () => {
       screen
         .getByRole("link", { name: "Формальное исполнение алгоритма" })
         .getAttribute("href"),
-    ).toBe("/ege/5-preobrazovanie-zapisey-chisel");
+    ).toBe("/ege/5-preobrazovanie-zapisey-chisel/chislo-i-zapis");
     expect(
       screen
         .getByRole("link", { name: "Электронные таблицы" })
         .getAttribute("href"),
-    ).toBe("/ege/9-obrabotka-tablicy-chisel");
+    ).toBe("/ege/9-obrabotka-tablicy-chisel/stroka-i-uslovie");
     expect(
       screen
         .getByRole("link", { name: "Рекуррентные выражения" })
         .getAttribute("href"),
-    ).toBe("/ege/16-rekursiya");
+    ).toBe("/ege/16-rekursiya/funktsiya-cherez-sebya");
     expect(
       screen
         .getByRole("link", { name: "Обработка числовой последовательности" })
         .getAttribute("href"),
-    ).toBe("/ege/17-chislovye-posledovatelnosti");
+    ).toBe("/ege/17-chislovye-posledovatelnosti/chisla-i-proverki");
     expect(
       screen
         .getByRole("link", { name: "Обработка символьной информации" })
         .getAttribute("href"),
-    ).toBe("/ege/24-obrabotka-simvolnyh-strok");
+    ).toBe("/ege/24-obrabotka-simvolnyh-strok/stroka-i-fragment");
     expect(
       container.querySelector('[data-topic-id="winning-strategy"]')
         ?.textContent,
@@ -238,15 +238,15 @@ describe("TopicCatalogPage", () => {
       screen
         .getByRole("link", { name: "Обработка целочисленной информации" })
         .getAttribute("href"),
-    ).toBe("/ege/25-deliteli-i-maski");
+    ).toBe("/ege/25-deliteli-i-maski/perebor-i-proverki");
     expect(
       screen
         .getByRole("link", { name: "Обработка данных с сортировкой" })
         .getAttribute("href"),
-    ).toBe("/ege/26-sortirovka-i-otbor");
+    ).toBe("/ege/26-sortirovka-i-otbor/zapisi-i-rejting");
     expect(
       screen.getByRole("link", { name: "Анализ данных" }).getAttribute("href"),
-    ).toBe("/ege/27-analiz-dannyh-i-klasterizatsiya");
+    ).toBe("/ege/27-analiz-dannyh-i-klasterizatsiya/tochki-i-rasstoyaniya");
     expect(screen.queryAllByText("Скоро")).toHaveLength(PLANNED);
     // Change 190: the map legend names «скоро» only while a topic is planned
     expect(
@@ -468,6 +468,9 @@ describe("topic catalog subtopic counts", () => {
       if (entry?.status !== "published") continue;
       expect(entry.subtopicCount, lesson.id).toBe(
         lessonSubtopics(lesson).length,
+      );
+      expect(entry.firstSubtopic, lesson.id).toBe(
+        lessonSubtopics(lesson)[0]?.slug,
       );
     }
   });

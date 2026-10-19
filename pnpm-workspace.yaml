@@ -20,3 +20,19 @@ overrides:
   "tmp@<0.2.7": "0.2.7"
   "js-yaml@>=4.0.0 <4.3.2": "4.3.2"
   "@lhci/utils>js-yaml": "3.15.2"
+  "source-map-js@<1.2.2": "1.2.2"
+  # Change 194: advisories in dev tooling (Lighthouse CI, build); none ships in an image.
+  "brace-expansion@<1.1.20": "1.1.20"
+  "brace-expansion@>=2.0.0 <2.1.6": "2.1.6"
+  "brace-expansion@>=4.0.0 <5.0.11": "5.0.11"
+  "basic-ftp@<6.2.1": "6.2.1"
+  "proxy-addr@<2.0.8": "2.0.8"
+  "compression@<1.8.2": "1.8.2"
+
+# Change 194: extract-zip has no fixed release. It is reached only through Lighthouse CI's
+# browser download (@lhci/cli → lighthouse → puppeteer), never with untrusted archives and
+# never in an image. Revisit when a fix exists.
+auditConfig:
+  ignoreGhsas:
+    - GHSA-jmr9-qjv8-65gv
+    - GHSA-7pqw-9j4j-h8q3

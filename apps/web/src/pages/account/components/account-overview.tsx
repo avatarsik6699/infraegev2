@@ -64,8 +64,11 @@ const StepLink: React.FC<{
       <ActionLink
         {...look}
         className={styles.stepAction}
-        to="/ege/$slug"
-        params={{ slug: step.routeSlug }}
+        to="/ege/$slug/$subtopic"
+        params={{
+          slug: step.routeSlug,
+          subtopic: topicCatalog.firstSubtopic(step.routeSlug) ?? "",
+        }}
       >
         {step.action}
       </ActionLink>
@@ -310,8 +313,12 @@ export const AccountOverview: React.FC<AccountOverviewTypes.Props> = (
                       presentation="inline"
                       hierarchy="text"
                       icon="none"
-                      to="/ege/$slug"
-                      params={{ slug: row.routeSlug }}
+                      to="/ege/$slug/$subtopic"
+                      params={{
+                        slug: row.routeSlug,
+                        subtopic:
+                          topicCatalog.firstSubtopic(row.routeSlug) ?? "",
+                      }}
                     >
                       {row.title}
                     </ActionLink>
