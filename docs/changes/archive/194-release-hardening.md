@@ -9,7 +9,7 @@
 | Change | `194` |
 | Slug | `release-hardening` |
 | Title | Release hardening before the kodumka.ru launch |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/194-release-hardening` |
 
 ---
