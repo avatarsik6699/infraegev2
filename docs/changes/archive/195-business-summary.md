@@ -9,7 +9,7 @@
 | Change | `195` |
 | Slug | `business-summary` |
 | Title | Business summary for the monitoring «Продажи» view |
-| Status | `active` |
+| Status | `archived` |
 | Branch | `feature/195-business-summary` |
 
 ---
