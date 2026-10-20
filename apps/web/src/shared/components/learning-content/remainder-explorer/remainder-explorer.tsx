@@ -105,7 +105,9 @@ export const RemainderExplorer: React.FC<Props> = (props) => {
 
 const INK = "var(--color-text)";
 const MUTED = "var(--color-muted)";
-const ACCENT = "var(--color-brand-orange)";
+// A course lesson gives its figures the course colour (Change 197);
+// a topic keeps the orange.
+const ACCENT = "var(--lesson-figure-accent, var(--color-brand-orange))";
 
 const RemainderSvg: React.FC<{
   n: number;

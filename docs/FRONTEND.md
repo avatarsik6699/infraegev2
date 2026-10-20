@@ -149,6 +149,9 @@ Lesson media:
   label and its topic, the arrow on the right); a proof keeps the plain fold.
 - Generated figures name the stand's fonts; `lesson-media.module.css` maps them to the site faces,
   and monospace labels keep the 0.6 em pitch (`textLength`) the builders place boxes by.
+- Interactive figures (`RemainderExplorer`) take their accent from `--lesson-figure-accent`: a Python
+  course lesson sets it to the course action shade, as the builders' `tone="python"` does for the
+  code-built figures; topics keep the orange (Change 197).
 - `CodeRunner` is a runnable code block: steps recorded by `site_media.py` with `tracer.py` (media kind
   `run`), never code executed in the browser. «Запуск» (a quiet pill) after the copy button; back / count / forward / close
   and ←/→/Esc while running; the executed line is highlighted; variables sit beside the code when

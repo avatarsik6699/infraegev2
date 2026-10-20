@@ -196,6 +196,11 @@ PRINTED_LINES = {
     ),
     "python-values-t05": 'print("12" + "8")\nprint(12 + 8)',
     "python-values-t08": "print(3 * 40 + 2 * 15)",
+    "python-numbers-t03": "print(2 + 3 * 4 ** 2)\nprint(-2 ** 4)\nprint((-2) ** 4)",
+    "python-numbers-t04": "n = 9051\nprint(n % 10)\nprint(n // 10)\nprint(n // 10 % 10)",
+    "python-numbers-t05": "print(round(4.5))\nprint(round(5.5))\nprint(round(-2.5))",
+    "python-numbers-t06": "print(1001 % 7)",
+    "python-numbers-t07": "print(100 // 7, 100 % 7)",
 }
 
 

@@ -118342,19 +118342,27 @@
     {
       "task": {
         "id": "python-numbers-t01",
-        "title": "Вычисли 200 // 7 и 200 % 7 и запиши равенство вида a = b·q + r",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите напечатанные числа через пробел в порядке вывода.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Вычисли `200 // 7` и `200 % 7` и запиши равенство вида a = b·q + r."
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "print(200 // 7)\nprint(200 % 7)",
+              "caption": null
             }
           }
         ],
@@ -118362,7 +118370,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Числа и арифметические операции»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "`//` — сколько полных семёрок помещается в 200, `%` — сколько осталось сверх них."
             }
           }
         ],
@@ -118370,7 +118378,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "28 и 4: 200 = 7·28 + 4."
+              "markdown": "В 200 помещается 28 полных семёрок: 28 · 7 = 196. Остаток 200 − 196 = 4. Проверка: 200 = 28 · 7 + 4."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `28 4`"
             }
           }
         ],
@@ -118411,19 +118425,27 @@
     {
       "task": {
         "id": "python-numbers-t02",
-        "title": "Чему равны -17 // 5, -17 % 5 и int(-17 / 5)?",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите напечатанные числа через пробел в порядке вывода.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Чему равны `-17 // 5`, `-17 % 5` и `int(-17 / 5)`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "print(-17 // 5)\nprint(-17 % 5)\nprint(int(-17 / 5))",
+              "caption": null
             }
           }
         ],
@@ -118431,7 +118453,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Числа и арифметические операции»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "−17 / 5 = −3.4. `//` округляет вниз, к меньшему целому; `int` отбрасывает дробную часть, к нулю. Остаток собирает число обратно: −17 = 5 · частное + остаток."
             }
           }
         ],
@@ -118439,7 +118461,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "−4, 3 и −3: −17 = 5·(−4) + 3, а `int` отбрасывает дробную часть −3.4 к нулю."
+              "markdown": "`-17 // 5` округляет −3.4 вниз: −4. Остаток: −17 − 5 · (−4) = 3. `int(-17 / 5)` отбрасывает дробную часть: −3."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `-4 3 -3`"
             }
           }
         ],
@@ -118480,19 +118508,27 @@
     {
       "task": {
         "id": "python-numbers-t03",
-        "title": "Вычисли 2 + 3 * 4  2, -2  4 и (-2)  4",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите напечатанные числа через пробел в порядке вывода.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Вычисли `2 + 3 * 4 ** 2`, `-2 ** 4` и `(-2) ** 4`."
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "print(2 + 3 * 4 ** 2)\nprint(-2 ** 4)\nprint((-2) ** 4)",
+              "caption": null
             }
           }
         ],
@@ -118500,7 +118536,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Числа и арифметические операции»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Степень выполняется раньше умножения и раньше минуса перед числом."
             }
           }
         ],
@@ -118508,7 +118544,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "50, −16 и 16."
+              "markdown": "`4 ** 2` = 16, `3 * 16` = 48, `2 + 48` = 50. `-2 ** 4` — это `-(2 ** 4)` = −16. В скобках минус относится к числу: `(-2) ** 4` = 16."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `50 -16 16`"
             }
           }
         ],
@@ -118549,19 +118591,27 @@
     {
       "task": {
         "id": "python-numbers-t04",
-        "title": "Для числа 9051 найди последнюю цифру, число без неё и вторую цифру справа",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите напечатанные числа через пробел в порядке вывода.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Для числа 9051 найди последнюю цифру, число без неё и вторую цифру справа."
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "n = 9051\nprint(n % 10)\nprint(n // 10)\nprint(n // 10 % 10)",
+              "caption": null
             }
           }
         ],
@@ -118569,7 +118619,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Числа и арифметические операции»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "`% 10` — последняя цифра, `// 10` — число без неё. Третья строка читается слева направо."
             }
           }
         ],
@@ -118577,7 +118627,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1, 905 и 5."
+              "markdown": "Последняя цифра 9051 — 1, без неё остаётся 905. Третья строка берёт последнюю цифру 905 — это 5, вторая цифра справа."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1 905 5`"
             }
           }
         ],
@@ -118618,19 +118674,27 @@
     {
       "task": {
         "id": "python-numbers-t05",
-        "title": "Что выведут round(4.5), round(5.5) и round(-2.5)?",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите напечатанные числа через пробел в порядке вывода.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Что выведут `round(4.5)`, `round(5.5)` и `round(-2.5)`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "print(round(4.5))\nprint(round(5.5))\nprint(round(-2.5))",
+              "caption": null
             }
           }
         ],
@@ -118638,7 +118702,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Числа и арифметические операции»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "При ровной половине `round` выбирает ближайшее чётное целое."
             }
           }
         ],
@@ -118646,7 +118710,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "4, 6 и −2: при равном расстоянии выбирается чётное."
+              "markdown": "4.5 — между 4 и 5, чётное 4. 5.5 — между 5 и 6, чётное 6. −2.5 — между −3 и −2, чётное −2."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4 6 -2`"
             }
           }
         ],
@@ -118692,14 +118762,22 @@
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Введите ответ одним значением, как его покажет Python.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Делится ли 1001 на 7? Ответь одним вычислением остатка."
+              "markdown": "Чтобы узнать, делится ли 1001 на 7, программа печатает остаток. Что она напечатает?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "print(1001 % 7)",
+              "caption": null
             }
           }
         ],
@@ -118707,7 +118785,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Числа и арифметические операции»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Число делится на 7, если остаток от деления на 7 равен нулю. Проверь: 7 · 143."
             }
           }
         ],
@@ -118715,7 +118793,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Да: `1001 % 7` равно 0, 1001 = 7·143."
+              "markdown": "7 · 143 = 1001, поэтому остаток 0 — 1001 делится на 7."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `0`"
             }
           }
         ],
@@ -118747,7 +118831,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["да"],
+          "answer_variants": ["0"],
           "numeric_tolerance": null
         }
       },
@@ -118761,7 +118845,7 @@
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите два числа через пробел: сначала полные недели, затем оставшиеся дни.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
@@ -118776,7 +118860,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Числа и арифметические операции»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "В неделе 7 дней: полные недели — целое деление на 7, оставшиеся дни — остаток."
             }
           }
         ],
@@ -118784,7 +118868,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "14 недель и 2 дня: `100 // 7` и `100 % 7`."
+              "markdown": "`100 // 7` = 14 полных недель (98 дней), `100 % 7` = 2 дня."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `14 2`"
             }
           }
         ],
@@ -118825,19 +118915,19 @@
     {
       "task": {
         "id": "python-numbers-t08",
-        "title": "Напиши программу, которая раскладывает 100000 секунд на сутки, часы, минуты…",
+        "title": "Напиши программу: 100000 секунд — это сколько суток, часов, минут и секунд?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 2,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите напечатанную строку: четыре числа через пробел.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Напиши программу, которая раскладывает 100000 секунд на сутки, часы, минуты и секунды и выводит четыре числа через пробел."
+              "markdown": "Напиши программу, которая раскладывает 100000 секунд на полные сутки, часы, минуты и секунды и печатает четыре числа одним `print` через запятую. В сутках 86400 секунд. Запусти программу и запиши, что она напечатала."
             }
           }
         ],
@@ -118845,7 +118935,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Числа и арифметические операции»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Как в разложении 3671 секунды из урока: сутки — `// 86400`, часы — `% 86400 // 3600`, минуты — `% 3600 // 60`, секунды — `% 60`."
             }
           }
         ],
@@ -118853,7 +118943,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`1 3 46 40`: 100000 = 86400 + 3·3600 + 46·60 + 40."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "seconds = 100000\ndays = seconds // 86400\nhours = seconds % 86400 // 3600\nminutes = seconds % 3600 // 60\nremaining_seconds = seconds % 60\nprint(days, hours, minutes, remaining_seconds)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "100000 = 86400 + 3 · 3600 + 46 · 60 + 40."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1 3 46 40`"
             }
           }
         ],
@@ -120136,7 +120246,7 @@
     {
       "task": {
         "id": "python-while-t01",
-        "title": "Найди наименьшее k, для которого 2  k >= n, при n = 1 и n = 64",
+        "title": "Найди наименьшее k, для которого 2 ** k >= n, при n = 1 и n = 64",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,

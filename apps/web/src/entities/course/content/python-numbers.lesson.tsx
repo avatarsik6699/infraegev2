@@ -24,19 +24,21 @@ export const pythonNumbersLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
+            В прошлом уроке у чисел появились имена, теперь займёмся самими
+            вычислениями. Сложение, вычитание и умножение в Python такие же, как
+            на уроке математики, а с делением интереснее.{" "}
             <strong>
-              Целое деление <Notation>{"//"}</Notation> и остаток{" "}
-              <Notation>{"%"}</Notation> вместе описывают одно равенство{" "}
-              <Notation>{"a = (a // b) * b + a % b"}</Notation>
+              Сколько полных пятёрок помещается в 23 и сколько остаётся? Для
+              таких вопросов в Python есть две отдельные операции — целое
+              деление <Notation>{"//"}</Notation> и остаток{" "}
+              <Notation>{"%"}</Notation>
             </strong>
-            . Из него следуют проверка делимости, последняя цифра числа и
-            разложение секунд на часы и минуты. Опора — урок о значениях: здесь
-            те же <Notation>{"int"}</Notation> и <Notation>{"float"}</Notation>,
-            но с операциями над ними.
+            . На них держатся проверка делимости, цифры числа и перевод секунд в
+            часы и минуты.
           </Typography.Text>
           <Typography.Text>
-            Все примеры урока держатся на числе 23 и делителе 5: в 23 содержатся
-            четыре полные пятёрки и ещё 3.
+            Ещё в уроке — порядок операций, точность дробных чисел и готовые
+            действия: модуль, минимум, максимум и округление.
           </Typography.Text>
         </>
       ),
@@ -47,45 +49,38 @@ export const pythonNumbersLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
-            <strong>В Python семь основных арифметических операций.</strong> Три
-            из них работают как в математике: сложение{" "}
-            <Notation>{"+"}</Notation>, вычитание <Notation>{"-"}</Notation> и
-            умножение <Notation>{"*"}</Notation>. Новое — три вида деления и
-            степень <Notation>{"**"}</Notation>: <Notation>{"2 ** 5"}</Notation>{" "}
-            — это 2⁵ = 32.
-          </Typography.Text>
-          <Typography.Text>
-            Обычное деление <Notation>{"/"}</Notation> всегда даёт дробное
-            число, даже если делится нацело: <Notation>{"8 / 2"}</Notation> —
-            это <Notation>{"4.0"}</Notation>, а не <Notation>{"4"}</Notation>.
-          </Typography.Text>
-          <Typography.Text>
-            Для целых <Notation>{"a"}</Notation> и <Notation>{"b"}</Notation> с
-            ненулевым <Notation>{"b"}</Notation> выполняется:
-          </Typography.Text>
-          <Typography.Text>
-            <Notation>{"a = (a // b) * b + a % b"}</Notation>.
-          </Typography.Text>
-          <Typography.Text>
-            Это объясняет одновременно частное и остаток. Разделим 23 на 5 тремя
-            способами:
+            <strong>В Python семь основных арифметических операций.</strong> Вот
+            они все на числах 23 и 5, у каждой строки — комментарий с названием:
           </Typography.Text>
           <CodeBlock
             code={
-              "print(23 / 5)\nprint(23 // 5)\nprint(23 % 5)\nprint(23 // 5 * 5 + 23 % 5)"
+              "print(23 + 5)   # сложение\nprint(23 - 5)   # вычитание\nprint(23 * 5)   # умножение\nprint(23 / 5)   # деление\nprint(23 // 5)  # целое деление\nprint(23 % 5)   # остаток\nprint(23 ** 5)  # степень"
             }
-            label={
-              "Это объясняет одновременно частное и остаток. Разделим 23 на 5 тремя способами"
-            }
+            label={"Все семь операций на числах 23 и 5"}
             language="python"
             fileName="main.py"
-            output={"4.6\n4\n3\n23"}
+            output={"28\n18\n115\n4.6\n4\n3\n6436343"}
           />
           <Typography.Text>
-            <Notation>{"/"}</Notation> даёт точное частное 4.6,{" "}
-            <Notation>{"//"}</Notation> — сколько в 23 полных пятёрок, то есть
-            4, а <Notation>{"%"}</Notation> — сколько осталось сверх них, то
-            есть 3. Последняя строка собирает 23 обратно из частного и остатка.
+            Первые три работают как в математике. <Notation>{"**"}</Notation> —
+            степень: <Notation>{"23 ** 5"}</Notation> — это 23⁵, а{" "}
+            <Notation>{"2 ** 5"}</Notation> — 2⁵ = 32. Обычное деление{" "}
+            <Notation>{"/"}</Notation> всегда даёт дробное число{" "}
+            <Notation>{"float"}</Notation>, даже если делится нацело:{" "}
+            <Notation>{"8 / 2"}</Notation> — это <Notation>{"4.0"}</Notation>, а
+            не <Notation>{"4"}</Notation>.
+          </Typography.Text>
+          <Typography.Text>
+            Умножение пишут явно: <Notation>{"2 * x"}</Notation>, а не{" "}
+            <Notation>{"2x"}</Notation>. Степень — <Notation>{"**"}</Notation>,
+            а не <Notation>{"^"}</Notation>: знак <Notation>{"^"}</Notation> в
+            Python означает другую операцию.
+          </Typography.Text>
+          <Typography.Text>
+            <strong>Целое деление и остаток.</strong>{" "}
+            <Notation>{"23 // 5"}</Notation> — сколько полных пятёрок помещается
+            в 23: четыре. <Notation>{"23 % 5"}</Notation> — сколько осталось
+            сверх них: 3. Разложи клетки на порции сам:
           </Typography.Text>
           <RemainderExplorer
             n={23}
@@ -94,22 +89,31 @@ export const pythonNumbersLesson = defineCourseLesson({
               <>
                 Клетки числа n разложены порциями по d: полные порции — частное{" "}
                 <Notation>{"n // d"}</Notation>, клетки, которым не хватило на
-                порцию, — остаток <Notation>{"n % d"}</Notation>. Меняйте числа
-                или выберите пример.
+                порцию, — остаток <Notation>{"n % d"}</Notation>. Меняй числа
+                или выбери пример: при 20 и 5 остатка нет — 20 делится на 5, а
+                при 3 и 7 нет ни одной полной порции.
               </>
             }
           />
           <Typography.Text>
-            Проверь равенство на своих числах: при 30 и 6 остатка нет — 30
-            делится на 6, а при 7 и 9 нет ни одной полной порции: 7 // 9 = 0, 7
-            % 9 = 7.
+            Частное и остаток всегда собираются обратно в исходное число: полные
+            порции, умноженные на размер порции, плюс остаток. Для целых{" "}
+            <Notation>{"a"}</Notation> и <Notation>{"b"}</Notation>, где{" "}
+            <Notation>{"b"}</Notation> — не ноль, это равенство{" "}
+            <Notation>{"a = (a // b) * b + a % b"}</Notation>:
           </Typography.Text>
+          <CodeBlock
+            code={"print(23 // 5 * 5 + 23 % 5)"}
+            label={"Частное и остаток собираются обратно в исходное число"}
+            language="python"
+            fileName="main.py"
+            output={"23"}
+          />
           <Typography.Text>
-            Умножение записывается явно: <Notation>{"2 * x"}</Notation>, а не{" "}
-            <Notation>{"2x"}</Notation>. Степень обозначается{" "}
-            <Notation>{"**"}</Notation>, а не <Notation>{"^"}</Notation>. Знак{" "}
-            <Notation>{"^"}</Notation> имеет другое назначение, которое будет
-            объяснено в уроке о битах.
+            Делить на ноль нельзя и здесь: <Notation>{"23 // 0"}</Notation> и{" "}
+            <Notation>{"23 % 0"}</Notation> остановят программу с{" "}
+            <Notation>{"ZeroDivisionError"}</Notation>, как деление на ноль в
+            первом уроке.
           </Typography.Text>
         </>
       ),
@@ -121,28 +125,27 @@ export const pythonNumbersLesson = defineCourseLesson({
         <>
           <Typography.Text>
             <strong>
-              «Отбросить дробную часть» и «округлить вниз» — разные действия.
+              <Notation>{"//"}</Notation> округляет частное вниз — к меньшему
+              целому.
             </strong>{" "}
-            Для положительных чисел они совпадают, поэтому разницу видно только
-            на отрицательных:
+            Для положительных чисел это то же, что отбросить дробную часть:{" "}
+            <Notation>{"23 / 5"}</Notation> — 4.6, а{" "}
+            <Notation>{"23 // 5"}</Notation> — 4. У отрицательных чисел разница
+            видна:
           </Typography.Text>
           <CodeBlock
-            code={
-              "print(-7 / 3)\nprint(-7 // 3)\nprint(-7 % 3)\nprint(int(-7 / 3))"
-            }
-            label={
-              "Для положительных чисел они совпадают, поэтому разницу видно только на отрицательных"
-            }
+            code={"print(-7 / 3)\nprint(-7 // 3)\nprint(int(-7 / 3))"}
+            label={"У отрицательных чисел разница видна"}
             language="python"
             fileName="main.py"
-            output={"-2.3333333333333335\n-3\n2\n-2"}
+            output={"-2.3333333333333335\n-3\n-2"}
           />
           <Typography.Text>
-            Вниз означает к меньшему числу: среди целых, не превышающих −2.333…,
-            наибольшее — −3. Остаток согласован с частным:{" "}
-            <Notation>{"-7 = (-3) * 3 + 2"}</Notation>. При положительном
-            делителе остаток неотрицателен и меньше делителя. В общем случае
-            ненулевой остаток имеет знак делителя.
+            <Notation>{"int(x)"}</Notation> превращает дробное число в целое,
+            отбрасывая дробную часть; подробнее о нём — в уроке «Ввод,
+            преобразование и вывод». Отбросить дробную часть у −2.33… — значит
+            получить −2, то есть сдвинуться к нулю. А округлить вниз — значит
+            взять меньшее целое: −3.
           </Typography.Text>
           <LessonDiagram
             {...lessonMedia.floorLine}
@@ -156,12 +159,25 @@ export const pythonNumbersLesson = defineCourseLesson({
             }
           />
           <Typography.Text>
-            <Notation>{"int"}</Notation> для конечного дробного числа
-            отбрасывает дробную часть по направлению к нулю. Поэтому заменять{" "}
-            <Notation>{"//"}</Notation> на <Notation>{"int(a / b)"}</Notation>{" "}
-            нельзя: мешают и отрицательные значения, и потеря точности при
-            переходе больших целых во <Notation>{"float"}</Notation>.
+            Поэтому заменять <Notation>{"a // b"}</Notation> на{" "}
+            <Notation>{"int(a / b)"}</Notation> нельзя: для отрицательных чисел
+            ответы разойдутся.
           </Typography.Text>
+          <ProofDisclosure
+            summary="Тонкости: остаток отрицательного числа"
+            kind="nuance"
+          >
+            <Typography.Text>
+              Остаток согласован с частным: <Notation>{"-7 % 3"}</Notation>{" "}
+              равно 2, потому что −7 = (−3) · 3 + 2. При положительном делителе
+              остаток всегда от 0 до делителя без единицы. Если отрицателен
+              делитель, ненулевой остаток тоже отрицателен:{" "}
+              <Notation>{"7 % -3"}</Notation> равно −2. А{" "}
+              <Notation>{"int(a / b)"}</Notation> подводит ещё и на очень
+              больших числах: дробное <Notation>{"a / b"}</Notation> хранится
+              приближённо (раздел «Точность чисел»).
+            </Typography.Text>
+          </ProofDisclosure>
         </>
       ),
     },
@@ -171,33 +187,41 @@ export const pythonNumbersLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
-            <strong>
-              Порядок операций такой же, как в математике, но степень
-              группируется справа.
-            </strong>{" "}
-            Сначала выполняются выражения в скобках, затем степени, умножение и
-            деления, затем сложение и вычитание. Операции одной обычной
-            арифметической ступени выполняются слева направо. Для степеней есть
-            особенность: цепочка группируется справа.
+            <strong>Порядок операций такой же, как в математике.</strong>{" "}
+            Сначала скобки, затем степень <Notation>{"**"}</Notation>, затем{" "}
+            <Notation>{"*"}</Notation>, <Notation>{"/"}</Notation>,{" "}
+            <Notation>{"//"}</Notation>, <Notation>{"%"}</Notation>, затем{" "}
+            <Notation>{"+"}</Notation> и <Notation>{"-"}</Notation>. Операции
+            одного уровня выполняются слева направо — это касается и{" "}
+            <Notation>{"//"}</Notation> с <Notation>{"%"}</Notation>: они стоят
+            на одном уровне с умножением.
           </Typography.Text>
           <CodeBlock
             code={
-              "print(2 + 3 * 4)\nprint((2 + 3) * 4)\nprint(2 ** 3 ** 2)\nprint(-3 ** 2)\nprint((-3) ** 2)"
+              "print(2 + 3 * 4)\nprint((2 + 3) * 4)\nprint(472 // 10 % 10)\nprint(2 ** 3 ** 2)\nprint(-3 ** 2)\nprint((-3) ** 2)"
             }
-            label={"Для степеней есть особенность: цепочка группируется справа"}
+            label={"Операции одного уровня выполняются слева направо"}
             language="python"
             fileName="main.py"
-            output={"14\n20\n512\n-9\n9"}
+            output={"14\n20\n7\n512\n-9\n9"}
           />
           <Typography.Text>
-            <Notation>{"2 ** 3 ** 2"}</Notation> — это{" "}
-            <Notation>{"2 ** (3 ** 2)"}</Notation>, то есть 2⁹ = 512.{" "}
-            <Notation>{"-3 ** 2"}</Notation> — это{" "}
-            <Notation>{"-(3 ** 2)"}</Notation>: минус применяется после степени.
+            <Notation>{"472 // 10 % 10"}</Notation> читается слева направо:
+            сначала <Notation>{"472 // 10"}</Notation> = 47, затем{" "}
+            <Notation>{"47 % 10"}</Notation> = 7. Этот приём понадобится в
+            разделе о цифрах числа.
           </Typography.Text>
           <Typography.Text>
-            Порядок удобно видеть деревом: каждая операция ждёт значения своих
-            веток, поэтому нижние операции выполняются первыми.
+            Степень — исключение: цепочку <Notation>{"**"}</Notation> Python
+            считает справа налево. <Notation>{"2 ** 3 ** 2"}</Notation> — это{" "}
+            <Notation>{"2 ** (3 ** 2)"}</Notation>, то есть 2⁹ = 512. И степень
+            выполняется раньше минуса перед числом:{" "}
+            <Notation>{"-3 ** 2"}</Notation> — это{" "}
+            <Notation>{"-(3 ** 2)"}</Notation>, то есть −9.
+          </Typography.Text>
+          <Typography.Text>
+            Порядок удобно видеть деревом: операция выполняется, когда готовы
+            значения под ней, поэтому нижние операции выполняются первыми.
           </Typography.Text>
           <LessonDiagram
             {...lessonMedia.exprTrees}
@@ -212,8 +236,10 @@ export const pythonNumbersLesson = defineCourseLesson({
             }
           />
           <Typography.Text>
-            Не превращай знание приоритетов в соревнование. Скобки полезны, если
-            по ним сразу понятен математический смысл.
+            Если сомневаешься в порядке, ставь скобки:{" "}
+            <Notation>{"(-3) ** 2"}</Notation> или{" "}
+            <Notation>{"2 + (3 * 4)"}</Notation> читаются сразу, без знания
+            правил.
           </Typography.Text>
         </>
       ),
@@ -224,41 +250,49 @@ export const pythonNumbersLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
-            <strong>Целые числа точные, а дробные — приближённые.</strong>{" "}
-            Python умеет работать с целыми намного больше привычных 32- или
-            64-битных диапазонов: например, <Notation>{"2 ** 200"}</Notation>{" "}
-            остаётся точным целым. Ограничения задаются ресурсами компьютера, а
-            операции с огромными числами занимают больше времени. «Целое
-            произвольной точности» не означает «вычисления любой величины
-            бесплатны».
-          </Typography.Text>
-          <Typography.Text>
-            <Notation>{"float"}</Notation> хранит приближение числа в двоичной
-            форме. Так же как десятичная запись 1/3 бесконечна, некоторые
-            короткие десятичные дроби не имеют конечной двоичной записи.
+            <strong>
+              Целые числа Python считает точно, а дробные — приближённо.
+            </strong>{" "}
+            Целое может быть сколь угодно длинным, пока хватает памяти
+            компьютера:
           </Typography.Text>
           <CodeBlock
-            code={"print(0.1 + 0.2 == 0.3)\nprint(0.1 + 0.2)"}
-            label={"Программа на Python"}
+            code={"print(2 ** 100)"}
+            label={"Целое может быть сколь угодно длинным"}
             language="python"
             fileName="main.py"
-            output={"False\n0.30000000000000004"}
+            output={"1267650600228229401496703205376"}
           />
           <Typography.Text>
-            <Notation>{"=="}</Notation> здесь проверяет равенство и отвечает{" "}
-            <Notation>{"True"}</Notation> или <Notation>{"False"}</Notation>;
-            подробно сравнения разберём в уроке о логических выражениях. Это
-            свойство выбранного представления, а не случайная поломка Python.
-            Для проверки целочисленной делимости используй{" "}
-            <Notation>{"%"}</Notation>, не дробное деление. Если задача по
-            смыслу целочисленная, сохраняй целые как можно дольше.
+            С дробными иначе. <Notation>{"float"}</Notation> хранит число с
+            ограниченным количеством знаков, поэтому некоторые простые дроби
+            записываются чуть неточно — так же, как 1/3 не записать конечной
+            десятичной дробью 0.333…:
           </Typography.Text>
+          <CodeBlock
+            code={"print(0.1 + 0.2)"}
+            label={"Некоторые простые дроби записываются чуть неточно"}
+            language="python"
+            fileName="main.py"
+            output={"0.30000000000000004"}
+          />
           <Typography.Text>
-            Для сравнения результатов приближённых вычислений подходит{" "}
-            <Notation>{"math.isclose"}</Notation> — он появится в уроке о
-            стандартной библиотеке. Допуск зависит от масштаба и смысла задачи,
-            его нельзя выбирать механически.
+            Это не ошибка Python, а свойство дробных чисел в компьютере. Отсюда
+            правило: если задача о целых — количестве, цифрах, делимости, —
+            считай в целых: <Notation>{"//"}</Notation> и{" "}
+            <Notation>{"%"}</Notation> вместо <Notation>{"/"}</Notation>.
           </Typography.Text>
+          <ProofDisclosure summary="Тонкости: сравнение дробных" kind="nuance">
+            <Typography.Text>
+              Внутри компьютера <Notation>{"float"}</Notation> хранится в
+              двоичной записи, а 0.1 в ней — бесконечная дробь, как 1/3 в
+              десятичной. Поэтому проверка{" "}
+              <Notation>{"0.1 + 0.2 == 0.3"}</Notation> даёт{" "}
+              <Notation>{"False"}</Notation>. Дробные результаты сравнивают с
+              допуском — функцией <Notation>{"math.isclose"}</Notation> из урока
+              о стандартной библиотеке; допуск выбирают по смыслу задачи.
+            </Typography.Text>
+          </ProofDisclosure>
         </>
       ),
     },
@@ -269,14 +303,17 @@ export const pythonNumbersLesson = defineCourseLesson({
         <>
           <Typography.Text>
             <strong>
-              Модуль, минимум, максимум и округление — готовые действия.
-            </strong>
+              Модуль, минимум, максимум и округление в Python уже готовы.
+            </strong>{" "}
+            Это <strong>функции</strong>: записываются они как{" "}
+            <Notation>{"print"}</Notation> — имя, а в скобках значения через
+            запятую.
           </Typography.Text>
           <CodeBlock
             code={
               "print(abs(-12))\nprint(min(5, 2, 9))\nprint(max(5, 2, 9))\nprint(round(2.5))\nprint(round(3.5))"
             }
-            label={"Модуль, минимум, максимум и округление — готовые действия"}
+            label={"Модуль, минимум, максимум и округление в Python уже готовы"}
             language="python"
             fileName="main.py"
             output={"12\n2\n9\n2\n4"}
@@ -284,19 +321,24 @@ export const pythonNumbersLesson = defineCourseLesson({
           <Typography.Text>
             <Notation>{"abs"}</Notation> даёт модуль числа,{" "}
             <Notation>{"min"}</Notation> и <Notation>{"max"}</Notation> —
-            наименьшее и наибольшее из переданных значений.{" "}
-            <Notation>{"round"}</Notation> округляет до ближайшего; при точном
-            равенстве расстояний используется ближайшее чётное. Поэтому 2.5
-            превратилось в 2, а 3.5 — в 4.
+            наименьшее и наибольшее из значений в скобках.{" "}
+            <Notation>{"round"}</Notation> округляет до ближайшего целого. Но
+            при ровной половине — 2.5 или 3.5 — Python выбирает ближайшее
+            чётное: 2.5 превратилось в 2, а 3.5 — в 4. Это правило Python, а не
+            ошибка.
           </Typography.Text>
-          <ProofDisclosure summary="Тонкости: округление дробных" kind="nuance">
+          <ProofDisclosure
+            summary="Тонкости: округление до знаков после точки"
+            kind="nuance"
+          >
             <Typography.Text>
-              Из-за представления <Notation>{"float"}</Notation> некоторые
-              десятичные «половинки» внутри компьютера не точные половинки:
-              поэтому <Notation>{"round(2.675, 2)"}</Notation> даёт{" "}
-              <Notation>{"2.67"}</Notation>. Для денежных сумм часто подходят
-              целые копейки или <Notation>{"Decimal"}</Notation> из стандартной
-              библиотеки.
+              Вторым значением в скобках <Notation>{"round"}</Notation>{" "}
+              принимает число знаков после точки:{" "}
+              <Notation>{"round(3.14159, 2)"}</Notation> даёт 3.14. Из-за
+              неточности <Notation>{"float"}</Notation> некоторые «половинки» на
+              деле чуть меньше половины, поэтому{" "}
+              <Notation>{"round(2.675, 2)"}</Notation> даёт 2.67. Поэтому деньги
+              часто считают в целых копейках.
             </Typography.Text>
           </ProofDisclosure>
         </>
@@ -308,20 +350,28 @@ export const pythonNumbersLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
-            <strong>Делимость и цифры числа — это остатки.</strong> Условие «
+            <strong>Делимость и цифры числа — это остатки.</strong> «
             <Notation>{"n"}</Notation> делится на <Notation>{"d"}</Notation>»
-            означает нулевой остаток: <Notation>{"n % d"}</Notation> равно 0.
-            Нельзя делить на ноль. Чётность проверяется остатком от деления на
-            2, в том числе для отрицательных целых.
+            значит, что остаток <Notation>{"n % d"}</Notation> равен нулю.
+            Чётность — остаток от деления на 2: у чётного числа он 0, у
+            нечётного 1.
           </Typography.Text>
+          <CodeBlock
+            code={"print(91 % 7)\nprint(18 % 2)\nprint(17 % 2)"}
+            label={"Чётность — остаток от деления на 2"}
+            language="python"
+            fileName="main.py"
+            output={"0\n0\n1"}
+          />
           <Typography.Text>
-            Если <Notation>{"n"}</Notation> — неотрицательное целое, то{" "}
-            <Notation>{"n % 10"}</Notation> — последняя десятичная цифра, а{" "}
+            91 делится на 7, 18 — чётное, 17 — нечётное. Последняя цифра — тоже
+            остаток. Если <Notation>{"n"}</Notation> — неотрицательное целое, то{" "}
+            <Notation>{"n % 10"}</Notation> — его последняя цифра, а{" "}
             <Notation>{"n // 10"}</Notation> — число без неё. Почему? Любое
-            такое число представимо как <Notation>{"10 * q + r"}</Notation>, где{" "}
-            <Notation>{"r"}</Notation> — от 0 до 9. Эти{" "}
-            <Notation>{"q"}</Notation> и <Notation>{"r"}</Notation> и вычисляют
-            две операции. Например, 472 = 10 · 47 + 2.
+            такое число записывается как <Notation>{"10 * q + r"}</Notation>,
+            где <Notation>{"r"}</Notation> — от 0 до 9, и эти{" "}
+            <Notation>{"q"}</Notation> и <Notation>{"r"}</Notation> как раз
+            вычисляют две операции. Например, 472 = 10 · 47 + 2:
           </Typography.Text>
           <CodeBlock
             code={"n = 472\nprint(n % 10)\nprint(n // 10)\nprint(n // 10 % 10)"}
@@ -333,8 +383,8 @@ export const pythonNumbersLesson = defineCourseLesson({
           <Typography.Text>
             Третья строка сначала отбрасывает последнюю цифру, а затем берёт
             последнюю цифру того, что осталось, — получается вторая цифра
-            справа. Для цифр отрицательного числа обычно сначала берут{" "}
-            <Notation>{"abs(n)"}</Notation>: знак не является цифрой.
+            справа. Для цифр отрицательного числа сначала берут{" "}
+            <Notation>{"abs(n)"}</Notation>: знак — не цифра.
           </Typography.Text>
           <LessonDiagram
             {...lessonMedia.placeValue472}
@@ -348,17 +398,19 @@ export const pythonNumbersLesson = defineCourseLesson({
             }
           />
           <Typography.Text>
-            Те же две операции раскладывают время. В 3671 секунде содержится 1
-            полный час (3600 секунд), в остатке 71 секунда, из них 1 полная
-            минута и 11 секунд:
+            Те же две операции раскладывают время. В 3671 секунде 1 полный час
+            (3600 секунд), в остатке 71 секунда: из них 1 полная минута и 11
+            секунд. <Notation>{"print"}</Notation> с несколькими значениями
+            через запятую печатает их в одну строку через пробел; подробнее — в
+            следующем уроке:
           </Typography.Text>
           <CodeBlock
             code={
               "seconds = 3671\nhours = seconds // 3600\nminutes = seconds % 3600 // 60\nremaining_seconds = seconds % 60\nprint(hours, minutes, remaining_seconds)"
             }
-            label={"Программа на Python"}
+            label={"Те же две операции раскладывают время"}
             language="python"
-            fileName="seconds.py"
+            fileName="main.py"
             output={"1 1 11"}
           />
           <LessonDiagram
@@ -373,12 +425,105 @@ export const pythonNumbersLesson = defineCourseLesson({
               </>
             }
           />
+        </>
+      ),
+    },
+  ],
+  checkpoint: [
+    {
+      id: "t1",
+      prompt: (
+        <>
           <Typography.Text>
-            <Notation>{"print"}</Notation> с несколькими значениями через
-            запятую печатает их через пробел; подробнее — в следующем уроке.
-            Остаток от деления на 3600 удаляет полные часы. Деление оставшегося
-            количества на 60 выделяет полные минуты. Для неотрицательной
-            длительности это именно требуемое разложение.
+            Что напечатают <Notation>{"print(17 // 5)"}</Notation> и{" "}
+            <Notation>{"print(17 % 5)"}</Notation>?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            3 и 2: в 17 помещаются три полные пятёрки, и 2 остаётся. Проверка:
+            17 = 3 · 5 + 2.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t2",
+      prompt: (
+        <>
+          <Typography.Text>
+            Почему <Notation>{"print(10 / 2)"}</Notation> печатает{" "}
+            <Notation>{"5.0"}</Notation>, а не <Notation>{"5"}</Notation>? Как
+            получить целое 5?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            Обычное деление <Notation>{"/"}</Notation> всегда даёт дробное{" "}
+            <Notation>{"float"}</Notation>, даже нацело. Целое 5 даёт{" "}
+            <Notation>{"10 // 2"}</Notation>.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t3",
+      prompt: (
+        <>
+          <Typography.Text>
+            Чему равно <Notation>{"-9 // 2"}</Notation>? А{" "}
+            <Notation>{"int(-9 / 2)"}</Notation>?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            −5 и −4: <Notation>{"-9 / 2"}</Notation> — это −4.5;{" "}
+            <Notation>{"//"}</Notation> округляет вниз, к меньшему целому, а{" "}
+            <Notation>{"int"}</Notation> отбрасывает дробную часть, к нулю.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t4",
+      prompt: (
+        <>
+          <Typography.Text>
+            Что напечатает <Notation>{"print(2 + 10 // 4 * 3)"}</Notation>?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            8: <Notation>{"//"}</Notation> и <Notation>{"*"}</Notation> — на
+            одном уровне, слева направо: 10 // 4 = 2, 2 * 3 = 6, и только потом
+            2 + 6.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t5",
+      prompt: (
+        <>
+          <Typography.Text>
+            Какими выражениями узнать последнюю цифру числа 2026 и проверить,
+            чётное ли оно? Что они дадут?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            <Notation>{"2026 % 10"}</Notation> — последняя цифра 6;{" "}
+            <Notation>{"2026 % 2"}</Notation> — 0, значит, число чётное.
           </Typography.Text>
         </>
       ),
@@ -386,50 +531,96 @@ export const pythonNumbersLesson = defineCourseLesson({
   ],
   result: (
     <>
+      <Typography.Text>
+        За урок ты прошёл все арифметические операции Python, а целое деление и
+        остаток научился применять к цифрам числа и ко времени. Вот что из этого
+        понадобится дальше.
+      </Typography.Text>
       <LessonSummary
         items={[
           {
+            key: "Семь операций",
             note: (
               <>
-                <Notation>{"//"}</Notation> — частное с округлением вниз,{" "}
-                <Notation>{"%"}</Notation> — остаток; вместе{" "}
-                <Notation>{"a = (a // b) * b + a % b"}</Notation>.
+                <Notation>{"+"}</Notation>, <Notation>{"-"}</Notation>,{" "}
+                <Notation>{"*"}</Notation> — как в математике;{" "}
+                <Notation>{"**"}</Notation> — степень;{" "}
+                <Notation>{"/"}</Notation> — деление с дробным ответом;{" "}
+                <Notation>{"//"}</Notation> — целое деление;{" "}
+                <Notation>{"%"}</Notation> — остаток.
               </>
             ),
           },
           {
+            key: <Notation>{"23 // 5, 23 % 5"}</Notation>,
             note: (
               <>
-                <Notation>{"//"}</Notation> округляет вниз,{" "}
-                <Notation>{"int(a / b)"}</Notation> — к нулю: при отрицательном
-                частном не нацело ответы расходятся; остаток при положительном
-                делителе неотрицателен.
+                4 полные пятёрки и 3 в остатке: 23 = 4 · 5 + 3. На ноль делить
+                нельзя — <Notation>{"ZeroDivisionError"}</Notation>.
               </>
             ),
           },
           {
+            key: "Округление вниз",
             note: (
               <>
-                Степень <Notation>{"**"}</Notation> группируется справа, а{" "}
-                <Notation>{"-3 ** 2"}</Notation> равно −9.
+                <Notation>{"//"}</Notation> округляет к меньшему:{" "}
+                <Notation>{"-7 // 3"}</Notation> — −3.{" "}
+                <Notation>{"int()"}</Notation> отбрасывает дробную часть к нулю:
+                −2.
               </>
             ),
           },
           {
+            key: "Порядок",
+            note: (
+              <>
+                Скобки, <Notation>{"**"}</Notation>, затем{" "}
+                <Notation>{"* / // %"}</Notation>, затем{" "}
+                <Notation>{"+ -"}</Notation>. Один уровень — слева направо,
+                цепочка <Notation>{"**"}</Notation> — справа налево;{" "}
+                <Notation>{"-3 ** 2"}</Notation> — −9.
+              </>
+            ),
+          },
+          {
+            key: "Точность",
             note: (
               <>
                 Целые точные, <Notation>{"float"}</Notation> приближённые:{" "}
-                <Notation>{"0.1 + 0.2"}</Notation> не равно{" "}
-                <Notation>{"0.3"}</Notation>.
+                <Notation>{"0.1 + 0.2"}</Notation> — 0.30000000000000004. Задачи
+                о целых считают в целых.
               </>
             ),
           },
           {
+            key: "Функции",
             note: (
               <>
+                <Notation>{"abs"}</Notation>, <Notation>{"min"}</Notation>,{" "}
+                <Notation>{"max"}</Notation>, <Notation>{"round"}</Notation>;{" "}
+                <Notation>{"round"}</Notation> при ровной половине выбирает
+                чётное.
+              </>
+            ),
+          },
+          {
+            key: "Делимость и цифры",
+            note: (
+              <>
+                Делится — значит <Notation>{"n % d"}</Notation> равно 0.{" "}
                 <Notation>{"n % 10"}</Notation> — последняя цифра,{" "}
-                <Notation>{"n // 10"}</Notation> — число без неё; делимость —
-                нулевой остаток.
+                <Notation>{"n // 10"}</Notation> — число без неё.
+              </>
+            ),
+          },
+          {
+            key: "Время",
+            note: (
+              <>
+                <Notation>{"// 3600"}</Notation> — часы,{" "}
+                <Notation>{"% 3600 // 60"}</Notation> — минуты,{" "}
+                <Notation>{"% 60"}</Notation> — секунды.
               </>
             ),
           },

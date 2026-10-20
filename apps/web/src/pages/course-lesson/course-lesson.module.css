@@ -33,6 +33,9 @@
    The site header keeps its orange; code blocks keep their own look. */
 .page[data-course-tone="python"] .lesson {
   --color-current-location: var(--course-action);
+  /* the interactive figures (RemainderExplorer) take the tone the
+     code-built figures get from `tone="python"` */
+  --lesson-figure-accent: var(--course-action);
 }
 
 .lesson {

@@ -2116,8 +2116,9 @@ def _mono(x, y, s, size: float = 15, color=INK, anchor="start", weight=500) -> s
     )
 
 
-def place_value_svg(digits: str = "472", base: int = 10) -> str:
+def place_value_svg(digits: str = "472", base: int = 10, tone: str | None = None) -> str:
     """Digits of a record with their weights: 472 = 4·100 + 7·10 + 2·1."""
+    accent = accent_of(tone)
     n = len(digits)
     box, gap = 64, 14
     total_w = n * box + (n - 1) * gap
@@ -2132,7 +2133,7 @@ def place_value_svg(digits: str = "472", base: int = 10) -> str:
         last = k == n - 1
         out.append(
             f'<rect x="{x:.1f}" y="16" width="{box}" height="56" rx="10" fill="#fff" '
-            f'stroke="{ACCENT if last else INK}" stroke-width="{2 if last else 1.5}"/>'
+            f'stroke="{accent if last else INK}" stroke-width="{2 if last else 1.5}"/>'
         )
         out.append(_text(x + box / 2, 54, d, 28, INK, "middle", 600))
         out.append(_text(x + box / 2, 98, f"× {weight}", 15, MUTED, "middle"))
@@ -2920,8 +2921,9 @@ def bind_strip_svg(
     return "".join(out)
 
 
-def floor_line_svg() -> str:
+def floor_line_svg(tone: str | None = None) -> str:
     """// rounds down, int() cuts towards zero: equal for 23 / 5, apart for −7 / 3."""
+    accent = accent_of(tone)
     out = [_svg(232, "Округление вниз и отбрасывание дробной части")]
     rows = [(23, 5, 2, 7), (-7, 3, -5, 1)]
     for k, (a, b, lo, hi) in enumerate(rows):
@@ -2948,10 +2950,10 @@ def floor_line_svg() -> str:
             out.append(_text(x(v), base + 24, label, 14, INK if v == 0 else MUTED, "middle"))
         floor, trunc = a // b, int(a / b)
         out.append(f'<circle cx="{x(exact):.1f}" cy="{base}" r="6" fill="{INK}"/>')
-        out.append(_arrow(x(exact) - 8, base - 14, x(floor) + 2, base - 14, ACCENT, width=2))
+        out.append(_arrow(x(exact) - 8, base - 14, x(floor) + 2, base - 14, accent, width=2))
         both = " и int()" if trunc == floor else ""
         label = f"//{both} → {floor}".replace("-", "−")
-        out.append(_text(x(floor), base - 24, label, 14, ACCENT, "middle", 600))
+        out.append(_text(x(floor), base - 24, label, 14, accent, "middle", 600))
         if trunc != floor:
             out.append(_arrow(x(exact) + 8, base - 14, x(trunc) - 2, base - 14, INK, width=2))
             label = f"int() → {trunc}, к нулю".replace("-", "−")
@@ -3009,7 +3011,7 @@ def _place(t, depth, leaves):
     return (sum(p[0] for p in placed) / len(placed), depth, t, placed)
 
 
-def _draw_tree(p, cx0, gapx, out, top=True) -> None:
+def _draw_tree(p, cx0, gapx, out, top=True, accent=ACCENT) -> None:
     pos, depth, (label, value, kids), placed = p
     x, y = cx0 + pos * gapx, 62 + depth * 58
     for c in placed:
@@ -3017,24 +3019,28 @@ def _draw_tree(p, cx0, gapx, out, top=True) -> None:
             f'<line x1="{x:.1f}" y1="{y + 14}" x2="{cx0 + c[0] * gapx:.1f}" '
             f'y2="{62 + c[1] * 58 - 16}" stroke="{MUTED}"/>'
         )
-        _draw_tree(c, cx0, gapx, out, top=False)
+        _draw_tree(c, cx0, gapx, out, top=False, accent=accent)
     if kids:
         out.append(
             f'<circle cx="{x:.1f}" cy="{y}" r="16" fill="#fff" '
-            f'stroke="{ACCENT if top else INK}" stroke-width="{2 if top else 1.5}"/>'
+            f'stroke="{accent if top else INK}" stroke-width="{2 if top else 1.5}"/>'
         )
         out.append(_mono(x, y + 5, label, 14, INK, "middle", 600))
         shown = f"= {value}".replace("-", "−")
-        out.append(_text(x + 22, y + 5, shown, 13, ACCENT if top else MUTED))
+        out.append(_text(x + 22, y + 5, shown, 13, accent if top else MUTED))
     else:
         out.append(_box(x - 17, y - 15, 34, 30, INK, WASH))
         out.append(_mono(x, y + 5, label, 14, INK, "middle", 600))
 
 
-def expr_trees_svg(sources=("2 + 3 * 4", "2 ** 3 ** 2", "-3 ** 2")) -> str:
+def expr_trees_svg(
+    sources=("2 + 3 * 4", "2 ** 3 ** 2", "-3 ** 2"), tone: str | None = None
+) -> str:
     """Expression trees: an operation is applied to the values of its branches,
     lower branches first; each node shows the value it produces."""
     import ast
+
+    accent = accent_of(tone)
 
     slot = 660 / len(sources)
     out = [_svg(262, "Деревья выражений")]
@@ -3048,15 +3054,16 @@ def expr_trees_svg(sources=("2 + 3 * 4", "2 ** 3 ** 2", "-3 ** 2")) -> str:
         gapx = min(62, (slot - 40) / (n - 1)) if n > 1 else 0
         cx0 = s * slot + slot / 2 - gapx * (n - 1) / 2
         out.append(_mono(s * slot + slot / 2, 22, src, 15, INK, "middle", 600))
-        _draw_tree(root, cx0, gapx, out)
+        _draw_tree(root, cx0, gapx, out, accent=accent)
         if s:
             out.append(f'<path d="M {s * slot:.1f} 8 V 250" stroke="{FAINT}"/>')
     out.append("</svg>")
     return "".join(out)
 
 
-def time_split_svg(seconds: int = 3671) -> str:
+def time_split_svg(seconds: int = 3671, tone: str | None = None) -> str:
     """Seconds split into hours, minutes and seconds by // and %."""
+    accent = accent_of(tone)
     h, m, s = seconds // 3600, seconds % 3600 // 60, seconds % 60
     parts = [
         (f"{h} ч", f"{h * 3600} с", f"{seconds} // 3600"),
@@ -3075,7 +3082,7 @@ def time_split_svg(seconds: int = 3671) -> str:
                 36,
                 w,
                 54,
-                ACCENT if k == 2 else INK,
+                accent if k == 2 else INK,
                 WASH,
                 rx=6,
                 sw=2 if k == 2 else 1.5,
@@ -3084,7 +3091,7 @@ def time_split_svg(seconds: int = 3671) -> str:
         out.append(_text(x + w / 2, 60, big, 17, INK, "middle", 600))
         out.append(_text(x + w / 2, 80, sec, 13, MUTED, "middle"))
         out.append(_mono(x + w / 2, 118, code, 13, INK, "middle"))
-        out.append(_mono(x + w / 2, 140, f"→ {[h, m, s][k]}", 13, ACCENT, "middle", 600))
+        out.append(_mono(x + w / 2, 140, f"→ {[h, m, s][k]}", 13, accent, "middle", 600))
         x += w + 10
     out.append("</svg>")
     return "".join(out)
