@@ -1,0 +1,48 @@
+idle-run-module.webp
+Use case: precise-object-edit, software tutorial screenshot correction. Image 1 is the edit target. Preserve Windows 11 light theme, 16:10 framing, existing geometry, readable native UI fonts, file main.py, exact code print("Привет!") and print(3 * 40), and output Привет! then 120. Make only the changes listed below.
+Replace the content in the right IDLE Shell with this exact sequence, each on its own line:
+Python 3.15.0
+= RESTART: C:\PycharmProjects\kurs\main.py =
+Привет!
+120
+>>>
+CRITICAL: No >>> or any other prompt before Привет! or before 120. There is exactly ONE >>> prompt, on its own line AFTER 120. RESTART is the module execution separator and appears BEFORE output. Output Привет! and 120 in blue, no prefixes. RESTART dark gray. Fit full RESTART path without clipping by using a slightly smaller monospace font for that separator if needed. Preserve left editor and open Run > Run Module menu unchanged.
+
+vscode-run.webp
+Use case: precise-object-edit, software tutorial screenshot correction. Image 1 is the edit target. Preserve Windows 11 light theme, 16:10 framing, existing geometry, readable native UI fonts, file main.py, exact code print("Привет!") and print(3 * 40), and output Привет! then 120. Make only the changes listed below.
+In the bottom-right status bar change the Python interpreter label from "3.12.0 64-bit" to exactly "3.15.0 64-bit". Do not change any other pixel, command, path, tooltip, code or output.
+
+pycharm-new-project.webp
+Use case: precise-object-edit, software tutorial screenshot correction. Image 1 is the edit target. Preserve Windows 11 light theme, 16:10 framing, existing geometry, readable native UI fonts, file main.py, exact code print("Привет!") and print(3 * 40), and output Привет! then 120. Make only the changes listed below.
+Replace Location field value with exactly "C:\PycharmProjects\kurs". Replace Environment location value with exactly "C:\PycharmProjects\kurs\.venv". No ellipsis. Preserve all English labels, Python 3.15 interpreter C:\Python315\python.exe, Create and Cancel buttons, layout and all other details unchanged.
+
+pycharm-run.webp
+Use case: precise-object-edit, software tutorial screenshot correction. Image 1 is the edit target. Preserve Windows 11 light theme, 16:10 framing, existing geometry, readable native UI fonts, file main.py, exact code print("Привет!") and print(3 * 40), and output Привет! then 120. Make only the changes listed below.
+1. Translate all application UI labels from Russian to English. Menu bar exactly: "File Edit View Navigate Code Refactor Run Tools VCS Window Help". Project pane heading "Project", tree labels "External Libraries" and "Scratches and Consoles". Bottom Run panel keeps label "Run". Completion message becomes "Process finished with exit code 0".
+2. Replace every project path with "C:\PycharmProjects\kurs". In project tree show that exact folder path. The command line in Run panel is exactly "C:\Python315\python.exe C:\PycharmProjects\kurs\main.py".
+3. Preserve Russian string in Python code print("Привет!") and program output Привет!; these are NOT UI labels and must remain Russian. Preserve 120. No residual Russian UI labels or C:\Projects paths. Keep composition unchanged.
+
+pycharm-terminal.webp
+Use case: precise-object-edit, software tutorial screenshot correction. Image 1 is the edit target. Preserve Windows 11 light theme, 16:10 framing, existing geometry, readable native UI fonts, file main.py, exact code print("Привет!") and print(3 * 40), and output Привет! then 120. Make only the changes listed below.
+Translate all application UI labels from Russian to English. Menu bar exactly: "File Edit View Navigate Code Refactor Run Tools VCS Window Help". Top toolbar "Version Control". Left pane "Project", "External Libraries", "Scratches and Consoles". Bottom tabs "Problems", "Python Packages", "Python Console", "Terminal", "Services". PowerShell boilerplate may be shortened to just "Windows PowerShell".
+Use exact project path C:\PycharmProjects\kurs wherever a project path is visible. The terminal transcript must remain exactly:
+PS C:\PycharmProjects\kurs> python main.py
+Привет!
+120
+PS C:\PycharmProjects\kurs>
+Preserve the Russian Привет! string in code and output. Keep same layout and light theme. No remaining Russian UI labels. 
+
+pycharm-new-python-file.webp
+Use case: ui-mockup. Generate ONE realistic software screenshot for a Russian Python tutorial. Windows 11, light theme, landscape EXACT 1280×800 pixels, 16:10 aspect ratio. Crisp native UI typography, all text sharp and legible. Straight-on digital screenshot, no perspective, no monitor frame, no watermark, no personal data, no unrelated windows. Application window fills canvas. Plausible clean PyCharm interface with ample readable text size.
+
+PyCharm light theme, project "kurs" at C:\PycharmProjects\kurs.
+Main menu bar in Russian exactly: Файл, Правка, Вид, Навигация, Код, Рефакторинг, Запуск, Инструменты, VCS, Окно, Справка.
+Left Project tool window occupies about 30% width; its heading may be "Проект". Tree has expanded project folder kurs, with the path C:\PycharmProjects\kurs beside it. Inside kurs is ONLY one collapsed subfolder .venv. NO main.py, NO other files. Editor area to right is empty, light gray empty state, no open file tabs, no code. Bottom Run and Terminal panels are closed.
+
+The kurs folder was right-clicked. A context menu sits beside the folder in left-middle area of window, and its submenu opens to the right into the empty editor. Top menu item "New" is highlighted in blue and has a right-facing submenu arrow. Below it are ordinary menu entries "Cut", "Copy", "Paste" in black on white. The open submenu lists EXACTLY four entries in this exact top-to-bottom order:
+File
+Directory
+Python File
+Python Package
+The THIRD entry, "Python File", is highlighted with a blue selection rectangle and white text. A standard Windows mouse arrow cursor rests on that highlighted Python File row without obscuring the label. The other three submenu rows have dark text on white. All context menu and submenu labels are ENGLISH exactly as written, sufficiently large and readable. Main menu remains RUSSIAN.
+No dialogs, no notifications, no other windows. Do not show a filename entry popup. Do not create the Python file yet. Priority: correct project path, empty kurs with .venv only, accurate four-entry submenu, Python File highlighted.

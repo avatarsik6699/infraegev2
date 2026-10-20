@@ -169,7 +169,21 @@ export const pythonFirstProgramLesson = defineCourseLesson({
               от его разработчиков; его же можно взять в Microsoft Store под
               названием «Python install manager».
             </li>
-            <li>Запусти скачанный файл и нажми «Install».</li>
+            <li>
+              Запусти скачанный файл и нажми «Install».
+              <LessonImage
+                src="/images/lessons/python-first-program/python-install-manager.webp"
+                width={1280}
+                height={800}
+                alt="Окно установки Python install manager с кнопкой Install"
+                caption={
+                  <>
+                    Окно установки: нажми «Install» — остальное установщик
+                    сделает сам.
+                  </>
+                }
+              />
+            </li>
             <li>
               Открой терминал: в меню «Пуск» набери «Терминал» (или «Командная
               строка») и запусти найденную программу.
@@ -192,6 +206,20 @@ export const pythonFirstProgramLesson = defineCourseLesson({
             него, в первом окне отметь «Add python.exe to PATH», иначе команда{" "}
             <Notation>{"python"}</Notation> в терминале не найдётся.
           </Typography.Text>
+          <LessonImage
+            src="/images/lessons/python-first-program/windows-terminal-python.webp"
+            width={1280}
+            height={800}
+            alt="Терминал Windows: python --version, затем интерактивный режим с 3 * 40 и exit()"
+            caption={
+              <>
+                Терминал после установки: версия Python, затем интерактивный
+                режим — после <Notation>{">>>"}</Notation> набрано{" "}
+                <Notation>{"3 * 40"}</Notation>, ниже ответ,{" "}
+                <Notation>{"exit()"}</Notation> возвращает в терминал.
+              </>
+            }
+          />
           <Typography.Text>
             <strong>Шаг 2. Выбери, где писать код.</strong> Мы советуем PyCharm:
             в нём удобно работать весь курс. Остальные варианты тоже подходят —
@@ -217,32 +245,57 @@ export const pythonFirstProgramLesson = defineCourseLesson({
                         Открой PyCharm и выбери «New Project». В поле «Location»
                         укажи папку для программ курса. Установленный Python
                         PyCharm найдёт сам — оставь его и нажми «Create».
+                        <LessonImage
+                          src="/images/lessons/python-first-program/pycharm-new-project.webp"
+                          width={1280}
+                          height={800}
+                          alt="Окно New Project в PyCharm: папка проекта, интерпретатор Python и кнопка Create"
+                          caption={
+                            <>
+                              Окно «New Project»: папка проекта в поле
+                              «Location», найденный Python в поле
+                              интерпретатора, кнопка «Create».
+                            </>
+                          }
+                        />
                       </li>
                       <li>
                         В панели «Project» слева щёлкни правой кнопкой по папке
                         проекта и выбери «New → Python File». Имя —{" "}
                         <Notation>{"main"}</Notation>, расширение{" "}
                         <Notation>{".py"}</Notation> PyCharm добавит сам.
+                        <LessonImage
+                          src="/images/lessons/python-first-program/pycharm-new-python-file.webp"
+                          width={1280}
+                          height={800}
+                          alt="PyCharm: контекстное меню папки kurs, пункт New, подпункт Python File"
+                          caption={
+                            <>
+                              Новый файл: правая кнопка по папке проекта → «New»
+                              → «Python File».
+                            </>
+                          }
+                        />
                       </li>
                       <li>
                         Набери код в открывшемся файле и запусти его:{" "}
                         <KeyCombo keys={["Ctrl", "Shift", "F10"]} /> или правой
                         кнопкой по тексту → «Run 'main'». Вывод появится внизу,
                         в панели «Run».
+                        <LessonImage
+                          src="/images/lessons/python-first-program/pycharm-run.webp"
+                          width={1280}
+                          height={800}
+                          alt="PyCharm: файл main.py с двумя строками и вывод Привет! и 120 в панели Run"
+                          caption={
+                            <>
+                              Файл <Notation>{"main.py"}</Notation> в редакторе,
+                              внизу в панели «Run» — вывод программы.
+                            </>
+                          }
+                        />
                       </li>
                     </ol>
-                    <LessonImage
-                      src="/images/lessons/python-first-program/pycharm-new-python-file.webp"
-                      width={1000}
-                      height={681}
-                      alt="Контекстное меню PyCharm: New, Python File"
-                      caption={
-                        <>
-                          Новый файл в PyCharm: правая кнопка по папке проекта →
-                          «New» → «Python File».
-                        </>
-                      }
-                    />
                   </>
                 ),
               },
@@ -268,6 +321,18 @@ export const pythonFirstProgramLesson = defineCourseLesson({
                       Выбери «Run → Run Module» или нажми{" "}
                       <KeyCombo keys={["F5"]} />. Вывод появится в окне «IDLE
                       Shell».
+                      <LessonImage
+                        src="/images/lessons/python-first-program/idle-run-module.webp"
+                        width={1280}
+                        height={800}
+                        alt="IDLE: редактор main.py с меню Run Module и окно IDLE Shell с выводом"
+                        caption={
+                          <>
+                            Слева редактор с файлом и меню «Run → Run Module»,
+                            справа «IDLE Shell» с выводом программы.
+                          </>
+                        }
+                      />
                     </li>
                   </ol>
                 ),
@@ -295,6 +360,18 @@ export const pythonFirstProgramLesson = defineCourseLesson({
                     <li>
                       Набери код и нажми треугольник «Run Python File» в правом
                       верхнем углу. Вывод появится внизу, в панели «Terminal».
+                      <LessonImage
+                        src="/images/lessons/python-first-program/vscode-run.webp"
+                        width={1280}
+                        height={800}
+                        alt="VS Code: main.py, кнопка Run Python File и вывод в панели Terminal"
+                        caption={
+                          <>
+                            Кнопка «Run Python File» справа вверху запускает
+                            файл, вывод — в панели «Terminal».
+                          </>
+                        }
+                      />
                     </li>
                   </ol>
                 ),
@@ -359,6 +436,18 @@ export const pythonFirstProgramLesson = defineCourseLesson({
             Затем выполни:
           </Typography.Text>
           <TerminalCommand command={"python main.py"} />
+          <LessonImage
+            src="/images/lessons/python-first-program/pycharm-terminal.webp"
+            width={1280}
+            height={800}
+            alt="Вкладка Terminal в PyCharm: команда python main.py и вывод программы"
+            caption={
+              <>
+                Вкладка «Terminal» в PyCharm уже открыта в папке проекта:
+                достаточно набрать <Notation>{"python main.py"}</Notation>.
+              </>
+            }
+          />
           <Typography.Text>
             Если набрать в терминале просто <Notation>{"python"}</Notation>,
             откроется <strong>интерактивный режим</strong> с приглашением{" "}

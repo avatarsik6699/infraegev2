@@ -8,23 +8,26 @@
 | Файл | Урок | Что на кадре | Источник |
 |---|---|---|---|
 | `python-first-program/python-org-download.webp` | 1.1 «Программа и её выполнение» | python.org/downloads на Windows: кнопка «Download Python install manager», 2026-10-20 | Собственный снимок страницы https://www.python.org/downloads/ (Playwriter, 1280 px) |
-| `python-first-program/pycharm-new-python-file.webp` | 1.1 | PyCharm: правая кнопка по папке проекта → New → Python File | Яндекс Практикум, та же статья — кадр «Алгоритм создания файла Python в PyCharm» (снят в Linux, интерфейс PyCharm тот же) |
 
 Убраны 2026-10-20 (вводили в заблуждение): запуск в PyCharm из статьи Практикума (Linux, файлы
 Jupyter, Python 3.8) и интерактивный режим оттуда же (Python 3.10, `print ("hello")`).
 
-## Кадры для съёмки (Windows 11, светлая тема, окно 1280×800, без личных данных)
+## Макеты окон, сгенерированные архитектором (2026-10-20)
 
-| № | Файл | Что на кадре |
-|---|---|---|
-| 1 | `python-install-manager.webp` | Окно установщика Python install manager с кнопкой «Install» |
-| 2 | `windows-terminal-python.webp` | Терминал: `python --version` → `Python 3.15.0`, затем `python`, `>>> 3 * 40` → `120`, `>>> exit()` |
-| 3 | `pycharm-new-project.webp` | PyCharm, окно «New Project»: Location `…\PycharmProjects\kurs`, выбранный установленный Python, кнопка «Create» |
-| 4 | `pycharm-run.webp` | PyCharm: проект `kurs`, файл `main.py` с `print("Привет!")` и `print(3 * 40)`, внизу панель «Run» с выводом `Привет!` и `120` |
-| 5 | `pycharm-terminal.webp` | PyCharm: вкладка «Terminal» внизу, в ней `python main.py` и вывод |
-| 6 | `idle-run-module.webp` | IDLE: окно редактора `main.py` с тем же кодом и меню «Run → Run Module»; рядом «IDLE Shell» с выводом |
-| 7 | `vscode-run.webp` | VS Code: `main.py`, кнопка «Run Python File» справа вверху, вывод в панели «Terminal» |
+Не снимки экрана: изображения созданы архитектором по промптам (вторая редакция —
+[lesson-images/revision-prompts.txt](lesson-images/revision-prompts.txt)) и приняты как
+финальные 2026-10-20. В репозитории только сжатые копии (WebP, 80) в
+`apps/web/public/images/lessons/python-first-program/`; полноразмерные оригиналы не хранятся —
+при правке кадр перегенерируется по промпту. Вторая редакция исправила IDLE (строка
+`= RESTART`), версию в VS Code и пути PyCharm; меню «New → Python File» заменило кадр из статьи.
 
-Кадры, которых нет в источниках (Windows): окно установки Python install manager, PyCharm на
-Windows (установщик, «New Project»), IDLE (оболочка и редактор, Run Module), VS Code (расширение
-Python, Run Python File). Пока их заменяют текстовые шаги.
+| Файл | Где в уроке 1.1 | Что на кадре | Известные неточности |
+|---|---|---|---|
+| `python-install-manager.webp` | «Установка Python», шаг 1.2 | Окно App Installer «Install Python install manager?» | — |
+| `windows-terminal-python.webp` | после проверки версии | PowerShell: `python --version`, `python`, `>>> 3 * 40`, `exit()` | Заставка интерактивного режима сокращена до версии |
+| `pycharm-new-project.webp` | вкладка PyCharm, шаг 2 | Окно «New Project», `C:\PycharmProjects\kurs` | Путь интерпретатора `C:\Python315` |
+| `pycharm-new-python-file.webp` | вкладка PyCharm, шаг 3 | Меню папки `kurs`: «New → Python File» | Главное меню русское, остальные кадры PyCharm — английские |
+| `pycharm-run.webp` | вкладка PyCharm, шаг 4 | `main.py` и вывод в панели «Run» | Нет папки `.venv`, запуск системным Python |
+| `pycharm-terminal.webp` | «Первая программа», запуск из терминала | Вкладка «Terminal» PyCharm с `python main.py` | — |
+| `idle-run-module.webp` | вкладка IDLE, шаг 4 | Редактор с меню «Run → Run Module» и IDLE Shell с `= RESTART` | — |
+| `vscode-run.webp` | вкладка VS Code, шаг 4 | «Run Python File» и вывод в «Terminal» | Путь `C:\kurs` вместо папки PyCharm |
