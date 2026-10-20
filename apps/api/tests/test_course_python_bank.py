@@ -201,6 +201,12 @@ PRINTED_LINES = {
     "python-numbers-t05": "print(round(4.5))\nprint(round(5.5))\nprint(round(-2.5))",
     "python-numbers-t06": "print(1001 % 7)",
     "python-numbers-t07": "print(100 // 7, 100 % 7)",
+    "python-input-output-t03": 'print(int("007"))\nprint(int(-3.9))',
+    "python-input-output-t04": 'print(1, 2, 3, sep="-")\nprint("a", end="")\nprint("b")',
+    "python-input-output-t05": 'print(f"{7 / 3:.2f}")',
+    "python-input-output-t07": (
+        'seconds = 7322\nprint(f"{seconds // 3600} ч {seconds % 3600 // 60} мин {seconds % 60} с")'
+    ),
 }
 
 

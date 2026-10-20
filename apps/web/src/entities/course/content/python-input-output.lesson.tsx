@@ -4,6 +4,7 @@ import { Typography } from "~/shared/components/typography";
 import {
   LessonDiagram,
   LessonSummary,
+  ProofDisclosure,
 } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { pythonInputOutputLessonPublication } from "./course-publication.mjs";
@@ -22,72 +23,73 @@ export const pythonInputOutputLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
+            В прошлых уроках цену и количество тетрадей мы записывали прямо в
+            код: <Notation>{"price = 40"}</Notation>. Чтобы посчитать другую
+            покупку, пришлось бы править программу.{" "}
             <strong>
-              <Notation>{"input"}</Notation> всегда возвращает текст, а
-              превратить его в число — решение автора программы
+              В этом уроке программа сама спросит цену и количество, а ты
+              превратишь введённый текст в числа
             </strong>
-            . Отсюда и правило вывода: печатать только то, что требуется, в
-            нужном виде. Опора — уроки о типах и числах:{" "}
-            <Notation>{"int(...)"}</Notation> и{" "}
-            <Notation>{"float(...)"}</Notation> превращают введённый текст в
-            значения, с которыми работает арифметика.
-          </Typography.Text>
-          <Typography.Text>
-            Работать будем с прямоугольником, длина и ширина которого вводятся с
-            клавиатуры: найдём его площадь и периметр.
+            . В конце научимся печатать результат в нужном виде: со своим
+            текстом и двумя цифрами после точки.
           </Typography.Text>
         </>
       ),
     },
     {
       id: "s1",
-      navLabel: "input возвращает строку",
+      navLabel: "Ввод с клавиатуры",
       explanation: (
         <>
           <Typography.Text>
             <strong>
-              <Notation>{"input()"}</Notation> ждёт строку от пользователя и
-              возвращает её как <Notation>{"str"}</Notation>.
+              <Notation>{"input()"}</Notation> останавливает программу и ждёт,
+              пока ты наберёшь текст и нажмёшь Enter.
             </strong>{" "}
-            Нажатие Enter завершает ввод, а завершающий перевод строки не входит
-            в результат.
+            Текст в скобках <Notation>{"input"}</Notation> программа печатает
+            как подсказку перед вводом:
           </Typography.Text>
           <CodeBlock
             code={'name = input("Как тебя зовут? ")\nprint("Привет,", name)'}
-            label={
-              "Нажатие Enter завершает ввод, а завершающий перевод строки не входит в результат"
-            }
+            label={"Текст в скобках input программа печатает как подсказку"}
             language="python"
-            fileName="name.py"
+            fileName="main.py"
             output={"Как тебя зовут? ⟪Анна⟫\nПривет, Анна"}
           />
           <Typography.Text>
-            Так это выглядит на экране: «Анна» в рамке набрал пользователь,
-            остальное напечатала программа. Подсказка{" "}
-            <Notation>{"input"}</Notation> стоит на той же строке, что и
-            набранный текст, а Enter (↵) переводит строку.
+            Когда программа дойдёт до <Notation>{"input"}</Notation>, она
+            остановится. В PyCharm щёлкни в панели «Run» внизу, набери ответ и
+            нажми Enter; при запуске из терминала набирай прямо в нём. В
+            примерах урока набранное показано в рамке, а знак ↵ — это Enter. Сам
+            Enter в строку не попадает: в <Notation>{"name"}</Notation> лежит
+            только «Анна».
           </Typography.Text>
           <Typography.Text>
-            Введённое <Notation>{"25"}</Notation> будет строкой{" "}
-            <Notation>{'"25"'}</Notation>. Python не может знать, является это
-            возрастом, кодом товара или частью телефонного номера. Поэтому
-            решение о преобразовании принимает автор программы.
+            <strong>
+              <Notation>{"input"}</Notation> всегда возвращает строку
+            </strong>{" "}
+            — даже если набраны одни цифры. Введённое 25 будет строкой{" "}
+            <Notation>{'"25"'}</Notation>: Python не знает, возраст это, код
+            товара или часть номера телефона. Поэтому превратить строку в число
+            должен ты:
           </Typography.Text>
           <CodeBlock
             code={"age_text = input()\nage = int(age_text)\nprint(age + 1)"}
-            label={"Поэтому решение о преобразовании принимает автор программы"}
+            label={"Превратить строку в число должен ты"}
             language="python"
-            fileName="age_text.py"
+            fileName="main.py"
             output={"⟪25⟫\n26"}
           />
           <Typography.Text>
-            Сокращённая запись <Notation>{"age = int(input())"}</Notation>{" "}
-            означает те же этапы: сначала внутренний вызов{" "}
-            <Notation>{"input"}</Notation>, затем преобразование его результата
-            с помощью <Notation>{"int"}</Notation>. Без{" "}
-            <Notation>{"int"}</Notation> выражение{" "}
-            <Notation>{"age_text + 1"}</Notation> остановилось бы с{" "}
-            <Notation>{"TypeError"}</Notation>: строку нельзя сложить с числом.
+            <Notation>{"int(...)"}</Notation> превращает строку{" "}
+            <Notation>{'"25"'}</Notation> в целое число 25 — подробно о нём в
+            следующем разделе. Запись{" "}
+            <Notation>{"age = int(input())"}</Notation> делает то же в одну
+            строку: Python сначала выполняет внутренние скобки — ввод, а потом
+            превращает результат в число. Без <Notation>{"int"}</Notation>{" "}
+            выражение <Notation>{"age_text + 1"}</Notation> остановилось бы с{" "}
+            <Notation>{"TypeError"}</Notation>: строку нельзя сложить с числом,
+            как <Notation>{'10 + "5"'}</Notation> в уроке о типах.
           </Typography.Text>
           <LessonDiagram
             {...lessonMedia.inputFlow}
@@ -106,82 +108,109 @@ export const pythonInputOutputLesson = defineCourseLesson({
     },
     {
       id: "s2",
-      navLabel: "Преобразование текста",
+      navLabel: "Преобразование",
       explanation: (
         <>
           <Typography.Text>
             <strong>
-              Преобразование возможно, только если текст записывает число в
-              ожидаемом формате.
-            </strong>
+              Строку в число превращают <Notation>{"int"}</Notation> и{" "}
+              <Notation>{"float"}</Notation>, число в строку —{" "}
+              <Notation>{"str"}</Notation>.
+            </strong>{" "}
+            Это те же имена, что у типов из урока «Значения, типы и переменные»:{" "}
+            <Notation>{"int(...)"}</Notation> даёт целое,{" "}
+            <Notation>{"float(...)"}</Notation> — дробное,{" "}
+            <Notation>{"str(...)"}</Notation> — строку:
           </Typography.Text>
           <CodeBlock
-            code={'print(int("-12"))\nprint(float("2.75"))\nprint(str(123))'}
+            code={
+              'print(int("-12"))\nprint(float("2.75"))\nprint("Итого: " + str(120))'
+            }
             label={
-              "Преобразование возможно, только если текст записывает число в ожидаемом формате"
+              "int и float превращают строку в число, str — число в строку"
             }
             language="python"
             fileName="main.py"
-            output={"-12\n2.75\n123"}
+            output={"-12\n2.75\nИтого: 120"}
           />
           <Typography.Text>
-            Последнее 123 — уже текст: <Notation>{"str"}</Notation> превращает
-            число в строку. А вот целое число из записи с точкой не получится:
+            <Notation>{"str"}</Notation> нужен, когда число надо склеить с
+            текстом: <Notation>{'"Итого: " + 120'}</Notation> остановится с{" "}
+            <Notation>{"TypeError"}</Notation>, а{" "}
+            <Notation>{"str(120)"}</Notation> превращает число в строку «120», и
+            строки склеиваются.
+          </Typography.Text>
+          <Typography.Text>
+            Превратить получится только подходящую запись:{" "}
+            <Notation>{"int"}</Notation> принимает запись целого числа,{" "}
+            <Notation>{"float"}</Notation> — числа с точкой. Из записи с точкой
+            целое не получится:
           </Typography.Text>
           <CodeBlock
             code={'print(int("2.75"))'}
-            label={"А вот целое число из записи с точкой не получится"}
+            label={"Из записи с точкой целое не получится"}
             language="python"
             fileName="main.py"
             error={"ValueError: invalid literal for int() with base 10: '2.75'"}
           />
           <Typography.Text>
-            <Notation>{"ValueError"}</Notation> означает, что тип подходит, а
-            конкретное значение — нет: строка не записывает целое число в
-            ожидаемом формате. <Notation>{"int(2.75)"}</Notation> допустимо и
-            даёт 2 — здесь исходное значение уже является числом.{" "}
-            <Notation>{'float("2,75")'}</Notation> тоже не подходит: десятичный
-            разделитель Python — точка. Если формат входа специально использует
-            запятую, её заменяют осознанно после знакомства со строковыми
-            методами.
+            <Notation>{"ValueError"}</Notation> — ошибка значения: в скобках
+            строка, но записано в ней не целое число. Так же не сработает{" "}
+            <Notation>{'float("2,75")'}</Notation>: дробную часть в Python
+            отделяют точкой. А вот <Notation>{"int(2.75)"}</Notation> работает и
+            даёт 2: в скобках уже число, и <Notation>{"int"}</Notation>{" "}
+            отбрасывает дробную часть, как в уроке о числах.
           </Typography.Text>
+          <ProofDisclosure
+            summary="Тонкости: запятая и пробелы во вводе"
+            kind="nuance"
+          >
+            <Typography.Text>
+              <Notation>{"int"}</Notation> и <Notation>{"float"}</Notation>{" "}
+              пропускают пробелы по краям: <Notation>{'int(" 25 ")'}</Notation>{" "}
+              даёт 25. Если же данные приходят с запятой, например «2,75», её
+              сначала заменяют точкой — это делают строковыми методами из урока
+              о строках.
+            </Typography.Text>
+          </ProofDisclosure>
           <Typography.Text>
-            Преобразование не исправляет смысл само. Например, индекс предмета{" "}
+            Преобразование не исправляет смысл само. Код товара{" "}
             <Notation>{'"007"'}</Notation> после <Notation>{"int"}</Notation>{" "}
-            превратится в 7. Если ведущие нули значимы, оставь текст.
+            превратится в 7: если ведущие нули важны, оставь текст.
           </Typography.Text>
         </>
       ),
     },
     {
       id: "s3",
-      navLabel: "sep и end",
+      navLabel: "Разделитель и конец вывода",
       explanation: (
         <>
           <Typography.Text>
             <strong>
-              <Notation>{"print"}</Notation> выводит несколько значений через
-              разделитель и заканчивает переводом строки.
-            </strong>
+              <Notation>{"print"}</Notation> ставит между значениями пробел, а в
+              конце — перевод строки.
+            </strong>{" "}
+            <strong>Перевод строки</strong> — невидимый символ, после которого
+            вывод продолжается с начала следующей строки; на схемах его рисуют
+            знаком ↵. Обе настройки можно поменять: после значений в скобках{" "}
+            <Notation>{"print"}</Notation> пишут <Notation>{"sep="}</Notation> —
+            чем разделять значения — и <Notation>{"end="}</Notation> — чем
+            закончить вывод:
           </Typography.Text>
           <CodeBlock
             code={
-              'print(10, 20, 30)\nprint(10, 20, 30, sep="; ")\nprint("Начало", end=" ")\nprint("продолжение")'
+              'print(10, 20, 30)\nprint(10, 20, 30, sep="; ")\nprint(10, 20, 30, sep="")\nprint("Начало", end=" ")\nprint("продолжение")'
             }
-            label={
-              "print выводит несколько значений через разделитель и заканчивает переводом строки"
-            }
+            label={"Обе настройки можно поменять"}
             language="python"
             fileName="main.py"
-            output={"10 20 30\n10; 20; 30\nНачало продолжение"}
+            output={"10 20 30\n10; 20; 30\n102030\nНачало продолжение"}
           />
           <Typography.Text>
-            Обычные аргументы — значения для вывода.{" "}
-            <Notation>{"sep="}</Notation> задаёт разделитель между ними,{" "}
-            <Notation>{"end="}</Notation> — окончание вывода. Такая запись
-            передаёт аргумент по имени. По умолчанию разделитель — пробел,
-            окончание — перевод строки. Поэтому третий и четвёртый вызовы дали
-            одну строку.
+            <Notation>{'sep=""'}</Notation> склеивает значения без пробела.
+            Четвёртая строка программы закончила вывод пробелом вместо перевода
+            строки, поэтому пятая продолжила ту же строку экрана.
           </Typography.Text>
           <LessonDiagram
             {...lessonMedia.printMarks}
@@ -190,8 +219,8 @@ export const pythonInputOutputLesson = defineCourseLesson({
                 Невидимые символы вывода показаны рамками:{" "}
                 <Notation>{"sep"}</Notation> ставится между значениями,{" "}
                 <Notation>{"end"}</Notation> — после последнего; ↵ — перевод
-                строки. Третий вызов закончил вывод пробелом вместо ↵, поэтому
-                «продолжение» напечаталось на той же строке.
+                строки. В третьем примере вывод закончен пробелом вместо ↵,
+                поэтому «продолжение» напечаталось на той же строке.
               </>
             }
           />
@@ -205,25 +234,27 @@ export const pythonInputOutputLesson = defineCourseLesson({
         <>
           <Typography.Text>
             <strong>
-              f-строка подставляет вычисленные значения прямо в текст.
-            </strong>
+              f-строка собирает текст из готовых кусков и вычисленных значений.
+            </strong>{" "}
+            Через запятую <Notation>{"print"}</Notation> сам ставит пробелы и
+            печатает число целиком. Когда нужен точный вид — свой текст между
+            значениями, две цифры после точки, — удобнее f-строка:
           </Typography.Text>
           <CodeBlock
             code={
-              'count = 7\nprice = 12.5\nprint(f"Количество: {count}; стоимость: {count * price:.2f}")'
+              'quantity = 3\nprice = 42.5\nprint(f"Тетрадей: {quantity}, стоимость: {quantity * price:.2f}")'
             }
-            label={"f-строка подставляет вычисленные значения прямо в текст"}
+            label={"Когда нужен точный вид, удобнее f-строка"}
             language="python"
-            fileName="count.py"
-            output={"Количество: 7; стоимость: 87.50"}
+            fileName="main.py"
+            output={"Тетрадей: 3, стоимость: 127.50"}
           />
           <Typography.Text>
             Буква <Notation>{"f"}</Notation> перед кавычками включает
-            подстановку выражений из фигурных скобок.{" "}
-            <Notation>{"count * price"}</Notation> вычисляется обычным образом.
-            Часть <Notation>{":.2f"}</Notation> задаёт формат вывода: две цифры
-            после десятичной точки. Она меняет представление при выводе, а не
-            превращает исходное число в точное десятичное.
+            подстановку: выражение в фигурных скобках вычисляется, и его
+            значение встаёт в текст. Часть <Notation>{":.2f"}</Notation> после
+            выражения — формат: две цифры после точки. Округляется только
+            напечатанное, само число не меняется.
           </Typography.Text>
           <LessonDiagram
             {...lessonMedia.fstring}
@@ -235,40 +266,148 @@ export const pythonInputOutputLesson = defineCourseLesson({
               </>
             }
           />
-          <Typography.Text>
-            При автоматической проверке задач обычно выводят только требуемые
-            значения. Подсказки внутри{" "}
-            <Notation>{'input("Введите...")'}</Notation> удобны человеку, но
-            становятся лишним текстом для проверяющей системы.
-          </Typography.Text>
         </>
       ),
     },
     {
       id: "s5",
-      navLabel: "Площадь и периметр",
+      navLabel: "Стоимость покупки",
       explanation: (
         <>
           <Typography.Text>
-            <strong>Площадь и периметр прямоугольника по вводу.</strong> Длина и
-            ширина вводятся на двух отдельных строках, поэтому нужны два вызова{" "}
-            <Notation>{"input"}</Notation>. Сначала решим для дробных значений:
+            <strong>
+              Соберём всё вместе: программа спрашивает цену тетради и количество
+              и печатает стоимость.
+            </strong>{" "}
+            Цена и количество вводятся на двух отдельных строках, поэтому нужны
+            два вызова <Notation>{"input"}</Notation>. Количество всегда целое,
+            а цена может быть дробной, например 42.5:
           </Typography.Text>
           <CodeBlock
             code={
-              "length = float(input())\nwidth = float(input())\narea = length * width\nperimeter = 2 * (length + width)\nprint(area, perimeter)"
+              'price = float(input())\nquantity = int(input())\ncost = price * quantity\nprint(f"Стоимость: {cost:.2f}")'
             }
-            label={"Сначала решим для дробных значений"}
+            label={"Программа спрашивает цену тетради и количество"}
             language="python"
-            fileName="length.py"
-            output={"⟪5⟫\n⟪3⟫\n15.0 16.0"}
+            fileName="main.py"
+            output={"⟪42.5⟫\n⟪3⟫\nСтоимость: 127.50"}
           />
           <Typography.Text>
-            Даже целые 5 и 3 после <Notation>{"float"}</Notation> стали
-            дробными, поэтому ответ напечатан как 15.0 и 16.0. Если по условию
-            данные целые и нужен точный целочисленный результат, замени{" "}
-            <Notation>{"float"}</Notation> на <Notation>{"int"}</Notation>:
-            тогда вывод будет 15 16.
+            Цену читаем через <Notation>{"float"}</Notation>:{" "}
+            <Notation>{'int("42.5")'}</Notation> остановился бы с{" "}
+            <Notation>{"ValueError"}</Notation>. Количество — через{" "}
+            <Notation>{"int"}</Notation>: дробных тетрадей не бывает. Если
+            ввести цену 40, <Notation>{"float"}</Notation> сделает из неё 40.0,
+            а f-строка напечатает «Стоимость: 120.00».
+          </Typography.Text>
+          <Typography.Text>
+            В задачах курса ты записываешь в поле ответа то, что напечатала
+            программа. Подсказки вроде{" "}
+            <Notation>{'input("Введите цену: ")'}</Notation> удобны, но их текст
+            тоже попадёт на экран, и его придётся отбрасывать. Поэтому в
+            решениях задач подсказки в <Notation>{"input"}</Notation> обычно не
+            пишут.
+          </Typography.Text>
+        </>
+      ),
+    },
+  ],
+  checkpoint: [
+    {
+      id: "t1",
+      prompt: (
+        <>
+          <Typography.Text>
+            Программа из двух строк <Notation>{"x = input()"}</Notation> и{" "}
+            <Notation>{"print(x + x)"}</Notation>. Что она напечатает, если
+            ввести 5? Как получить 10?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            55: <Notation>{"input"}</Notation> вернул строку{" "}
+            <Notation>{'"5"'}</Notation>, и <Notation>{"+"}</Notation> склеил
+            две строки. Чтобы получить 10, нужно{" "}
+            <Notation>{"x = int(input())"}</Notation>.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t2",
+      prompt: (
+        <>
+          <Typography.Text>
+            Что получится при <Notation>{'int("3.5")'}</Notation>? А при{" "}
+            <Notation>{"int(3.5)"}</Notation>?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            <Notation>{"ValueError"}</Notation>: строка с точкой — не запись
+            целого числа. <Notation>{"int(3.5)"}</Notation> даёт 3: в скобках
+            уже число, и дробная часть отбрасывается.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t3",
+      prompt: (
+        <>
+          <Typography.Text>
+            Что напечатают <Notation>{'print(1, 2, 3, sep="")'}</Notation> и{" "}
+            <Notation>{'print(1, 2, 3, sep=", ")'}</Notation>?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            123 и «1, 2, 3»: <Notation>{"sep"}</Notation> ставится только между
+            значениями.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t4",
+      prompt: (
+        <>
+          <Typography.Text>
+            Что напечатает программа из двух строк{" "}
+            <Notation>{'print("Итого:", end=" ")'}</Notation> и{" "}
+            <Notation>{"print(120)"}</Notation>?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            Одну строку «Итого: 120»: первый <Notation>{"print"}</Notation>{" "}
+            закончил вывод пробелом, а не переводом строки.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t5",
+      prompt: (
+        <>
+          <Typography.Text>
+            Что напечатает <Notation>{'print(f"{10 / 4:.2f}")'}</Notation>?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            2.50: <Notation>{"10 / 4"}</Notation> — это 2.5, а{" "}
+            <Notation>{":.2f"}</Notation> печатает две цифры после точки.
           </Typography.Text>
         </>
       ),
@@ -276,49 +415,61 @@ export const pythonInputOutputLesson = defineCourseLesson({
   ],
   result: (
     <>
+      <Typography.Text>
+        Теперь программа о тетрадях не зависит от чисел в коде: она спрашивает
+        цену и количество и печатает стоимость в нужном виде. Вот что из этого
+        понадобится дальше.
+      </Typography.Text>
       <LessonSummary
         items={[
           {
+            key: <Notation>{"input()"}</Notation>,
             note: (
               <>
-                <Notation>{"input()"}</Notation> возвращает строку без перевода
-                строки; число получают через <Notation>{"int"}</Notation> или{" "}
-                <Notation>{"float"}</Notation>.
+                Останавливает программу и ждёт ввода; возвращает строку без
+                Enter. Текст в скобках — подсказка перед вводом.
               </>
             ),
           },
           {
+            key: <Notation>{"int(), float(), str()"}</Notation>,
             note: (
               <>
-                Неверный формат даёт <Notation>{"ValueError"}</Notation>:{" "}
-                <Notation>{'int("2.75")'}</Notation>,{" "}
-                <Notation>{'float("2,75")'}</Notation>.
+                Строка → целое, строка → дробное, число → строка. Неподходящая
+                запись — <Notation>{"ValueError"}</Notation>.
               </>
             ),
           },
           {
+            key: <Notation>{"int(input())"}</Notation>,
+            note: (
+              <>Сначала ввод, затем преобразование — так читают целое число.</>
+            ),
+          },
+          {
+            key: <Notation>{"sep, end"}</Notation>,
             note: (
               <>
-                <Notation>{"print"}</Notation> разделяет значения{" "}
-                <Notation>{"sep"}</Notation> и заканчивает{" "}
-                <Notation>{"end"}</Notation>; по умолчанию пробел и перевод
-                строки.
+                Разделитель между значениями (обычно пробел) и конец вывода
+                (обычно перевод строки).
               </>
             ),
           },
           {
+            key: "f-строка",
             note: (
               <>
-                f-строка подставляет выражения в <Notation>{"{}"}</Notation>;{" "}
-                <Notation>{":.2f"}</Notation> — две цифры после точки.
+                <Notation>{"{…}"}</Notation> подставляет значение,{" "}
+                <Notation>{":.2f"}</Notation> печатает две цифры после точки.
               </>
             ),
           },
           {
+            key: "Ответ задачи",
             note: (
               <>
-                Для автоматической проверки выводят только требуемые значения,
-                без подсказок.
+                В поле записывают то, что напечатала программа; подсказки в{" "}
+                <Notation>{"input"}</Notation> в решениях не пишут.
               </>
             ),
           },

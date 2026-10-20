@@ -119004,19 +119004,19 @@
     {
       "task": {
         "id": "python-input-output-t01",
-        "title": "Введи длину и ширину прямоугольника на двух отдельных строках",
+        "title": "Напиши программу: площадь и периметр прямоугольника по вводу",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите напечатанную строку: два числа через пробел — площадь, затем периметр.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Введи длину и ширину прямоугольника на двух отдельных строках. Выведи площадь и периметр. Реши для целых значений; какой будет вывод при вводе 7 и 2?"
+              "markdown": "Напиши программу: длина и ширина прямоугольника вводятся на двух отдельных строках, целыми числами. Программа печатает площадь и периметр одним `print` через запятую. Запусти её, введи 7 и 2 и запиши, что она напечатала."
             }
           }
         ],
@@ -119024,7 +119024,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Ввод, преобразование и вывод»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Читай числа через `int(input())`. Площадь — длина на ширину, периметр — удвоенная сумма длины и ширины."
             }
           }
         ],
@@ -119032,7 +119032,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "С `int`: вывод 14 18 (площадь 7·2, периметр 2·(7 + 2))."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "length = int(input())\nwidth = int(input())\nprint(length * width, 2 * (length + width))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "При вводе 7 и 2: площадь 7 · 2 = 14, периметр 2 · (7 + 2) = 18."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `14 18`"
             }
           }
         ],
@@ -119073,19 +119093,27 @@
     {
       "task": {
         "id": "python-input-output-t02",
-        "title": "Что выведет print(\"1\" + input()), если пользователь ввёл 2?",
+        "title": "Что напечатает программа, если оба раза ввести 2?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите напечатанные строки через пробел в порядке вывода.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Что выведет `print(\"1\" + input())`, если пользователь ввёл 2? А `print(1 + int(input()))`?"
+              "markdown": "Что напечатает программа, если оба раза ввести 2?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "print(\"1\" + input())\nprint(1 + int(input()))",
+              "caption": null
             }
           }
         ],
@@ -119093,7 +119121,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Ввод, преобразование и вывод»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Первый `input` даёт строку, и `+` её склеивает со строкой `\"1\"`. Во второй строке `int` превращает ввод в число."
             }
           }
         ],
@@ -119101,7 +119129,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "12 — строки склеились; во втором случае 3."
+              "markdown": "В первой строке склеиваются строки `\"1\"` и `\"2\"` — печатается 12. Во второй `int(\"2\")` — число 2, и 1 + 2 = 3."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `12 3`"
             }
           }
         ],
@@ -119142,19 +119176,27 @@
     {
       "task": {
         "id": "python-input-output-t03",
-        "title": "Что дадут int(\"007\"), int(-3.9) и float(\"2,75\")?",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите напечатанные строки через пробел в порядке вывода.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Что дадут `int(\"007\")`, `int(-3.9)` и `float(\"2,75\")`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "print(int(\"007\"))\nprint(int(-3.9))",
+              "caption": null
             }
           }
         ],
@@ -119162,7 +119204,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Ввод, преобразование и вывод»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Из строки с ведущими нулями `int` получает число без них. У дробного числа `int` отбрасывает дробную часть — к нулю."
             }
           }
         ],
@@ -119170,7 +119212,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "7 (ведущие нули теряются), −3 (дробная часть отбрасывается к нулю), `ValueError`."
+              "markdown": "`int(\"007\")` — число 7: ведущие нули у числа не хранятся. `int(-3.9)` отбрасывает дробную часть: −3."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `7 -3`"
             }
           }
         ],
@@ -119202,7 +119250,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["7 -3 ValueError", "7 −3 ValueError"],
+          "answer_variants": ["7 -3", "7 −3"],
           "numeric_tolerance": null
         }
       },
@@ -119211,19 +119259,27 @@
     {
       "task": {
         "id": "python-input-output-t04",
-        "title": "Что выведут print(1, 2, 3, sep=\"-\") и пара вызовов print(\"a\", end=\"\"),…",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите напечатанные строки через пробел в порядке вывода.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Что выведут `print(1, 2, 3, sep=\"-\")` и пара вызовов `print(\"a\", end=\"\")`, `print(\"b\")`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "print(1, 2, 3, sep=\"-\")\nprint(\"a\", end=\"\")\nprint(\"b\")",
+              "caption": null
             }
           }
         ],
@@ -119231,7 +119287,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Ввод, преобразование и вывод»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "`sep` ставится между значениями. `end=\"\"` убирает перевод строки, и следующий `print` продолжает ту же строку."
             }
           }
         ],
@@ -119239,7 +119295,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1-2-3 и ab на одной строке."
+              "markdown": "Первая строка программы печатает `1-2-3`. Вторая печатает `a` без перевода строки, поэтому `b` встаёт рядом: `ab`."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1-2-3 ab`"
             }
           }
         ],
@@ -119280,19 +119342,27 @@
     {
       "task": {
         "id": "python-input-output-t05",
-        "title": "Что напечатает print(f\"{7 / 3:.2f}\")?",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Введите число.",
+        "answer_instruction": "Введите напечатанное число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Что напечатает `print(f\"{7 / 3:.2f}\")`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "print(f\"{7 / 3:.2f}\")",
+              "caption": null
             }
           }
         ],
@@ -119300,7 +119370,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Ввод, преобразование и вывод»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "7 / 3 = 2.333…; `:.2f` оставляет при печати две цифры после точки."
             }
           }
         ],
@@ -119308,7 +119378,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "2.33."
+              "markdown": "`7 / 3` — 2.3333…, а формат `:.2f` печатает две цифры после точки."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2.33`"
             }
           }
         ],
@@ -119349,7 +119425,7 @@
     {
       "task": {
         "id": "python-input-output-t06",
-        "title": "Напиши программу: на первой строке вводится цена тетради, на второй — количество",
+        "title": "Напиши программу: стоимость тетрадей по вводу",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 2,
@@ -119361,7 +119437,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Напиши программу: на первой строке вводится цена тетради, на второй — количество. Выведи стоимость. Какой вывод при вводе 40 и 3?"
+              "markdown": "Напиши программу: на первой строке вводится цена тетради, на второй — количество, оба целые. Программа печатает стоимость. Запусти её, введи 40 и 3 и запиши, что она напечатала."
             }
           }
         ],
@@ -119369,7 +119445,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Ввод, преобразование и вывод»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Два `int(input())` — цена и количество; стоимость — их произведение."
             }
           }
         ],
@@ -119377,7 +119453,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`int(input())` дважды и `print(price * count)`; вывод 120."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "price = int(input())\nquantity = int(input())\nprint(price * quantity)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "При вводе 40 и 3 программа печатает 120."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `120`"
             }
           }
         ],
@@ -119418,19 +119514,19 @@
     {
       "task": {
         "id": "python-input-output-t07",
-        "title": "Напиши программу: вводится число секунд, вывести строку вида 1 ч 1 мин 11 с",
+        "title": "Напиши программу: секунды в часы, минуты и секунды",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 2,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите напечатанную строку целиком, как на экране.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Напиши программу: вводится число секунд, вывести строку вида `1 ч 1 мин 11 с`. Проверь на вводе 3671 и 7322."
+              "markdown": "Напиши программу: вводится число секунд, программа печатает строку вида `1 ч 1 мин 11 с` (так выглядит вывод для 3671 секунды). Запусти её, введи 7322 и запиши, что она напечатала."
             }
           }
         ],
@@ -119438,7 +119534,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Ввод, преобразование и вывод»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Часы, минуты и секунды — как в уроке о числах: `// 3600`, `% 3600 // 60`, `% 60`. Строку собери f-строкой, между числом и буквами — пробел."
             }
           }
         ],
@@ -119446,7 +119542,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "f-строка `f\"{h} ч {m} мин {s} с\"` с `h = t // 3600`, `m = t % 3600 // 60`, `s = t % 60`; вывод 1 ч 1 мин 11 с и 2 ч 2 мин 2 с."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "seconds = int(input())\nhours = seconds // 3600\nminutes = seconds % 3600 // 60\nrest = seconds % 60\nprint(f\"{hours} ч {minutes} мин {rest} с\")",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "7322 = 2 · 3600 + 2 · 60 + 2."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2 ч 2 мин 2 с`"
             }
           }
         ],
@@ -119478,7 +119594,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["1 ч 1 мин 11 с 2 ч 2 мин 2 с"],
+          "answer_variants": ["2 ч 2 мин 2 с"],
           "numeric_tolerance": null
         }
       },

@@ -3097,8 +3097,9 @@ def time_split_svg(seconds: int = 3671, tone: str | None = None) -> str:
     return "".join(out)
 
 
-def input_flow_svg() -> str:
+def input_flow_svg(tone: str | None = None) -> str:
     """Keyboard → input() → str → int() → int → + 1; without int — TypeError."""
+    accent = accent_of(tone)
     nodes = [
         ("набрано", "2 5 ↵", None),
         ("str", '"25"', None),
@@ -3141,7 +3142,7 @@ def input_flow_svg() -> str:
                     y + 23,
                     x - 4,
                     y + 23,
-                    ACCENT if k == 2 else MUTED,
+                    accent if k == 2 else MUTED,
                     width=2 if k == 2 else 1.5,
                 )
             )
@@ -3151,7 +3152,7 @@ def input_flow_svg() -> str:
                     y + 44,
                     arrows[k - 1],
                     13,
-                    ACCENT if k == 2 else INK,
+                    accent if k == 2 else INK,
                     "middle",
                 )
             )
@@ -3165,8 +3166,9 @@ def input_flow_svg() -> str:
     return "".join(out)
 
 
-def print_marks_svg() -> str:
+def print_marks_svg(tone: str | None = None) -> str:
     """What print adds: sep between the values, end after them."""
+    accent = accent_of(tone)
     rows = [
         (
             ["print(10, 20, 30)"],
@@ -3201,7 +3203,7 @@ def print_marks_svg() -> str:
         for s, kind in segs:
             w = max(len(s), 1) * cw + (8 if kind else 0)
             if kind:
-                color = ACCENT if kind == "sep" else INK
+                color = accent if kind == "sep" else INK
                 out.append(
                     _box(
                         x,
@@ -3234,18 +3236,19 @@ def print_marks_svg() -> str:
     return "".join(out)
 
 
-def fstring_svg() -> str:
+def fstring_svg(tone: str | None = None) -> str:
     """An f-string is a template: each {…} is computed and put in its place."""
+    accent = accent_of(tone)
     size = 13.5
     cw = size * CH
-    tpl = 'f"Количество: {count}; стоимость: {count * price:.2f}"'
-    res = '"Количество: 7; стоимость: 87.50"'
+    tpl = 'f"Тетрадей: {quantity}, стоимость: {quantity * price:.2f}"'
+    res = '"Тетрадей: 3, стоимость: 127.50"'
     x0 = 16
     out = [_svg(200, "Подстановка значений в f-строку")]
     out.append(_mono(x0, 40, tpl, size, INK, weight=600))
     holes = [
-        ("{count}", "7", "count → 7"),
-        ("{count * price:.2f}", "87.50", "87.5 → две цифры после точки"),
+        ("{quantity}", "3", "quantity → 3"),
+        ("{quantity * price:.2f}", "127.50", "127.5 → две цифры после точки"),
     ]
     out.append(_mono(x0, 160, res, size, INK, weight=600))
     for hole, filled, note in holes:
@@ -3253,8 +3256,8 @@ def fstring_svg() -> str:
         b = res.index(filled)
         hx, hw = x0 + a * cw - 2, len(hole) * cw + 4
         rx, rw = x0 + b * cw - 2, len(filled) * cw + 4
-        out.append(_box(hx, 22, hw, 26, ACCENT, "none", rx=4, sw=1.5))
-        out.append(_box(rx, 142, rw, 26, ACCENT, "none", rx=4, sw=1.5))
+        out.append(_box(hx, 22, hw, 26, accent, "none", rx=4, sw=1.5))
+        out.append(_box(rx, 142, rw, 26, accent, "none", rx=4, sw=1.5))
         out.append(_arrow(hx + hw / 2, 52, rx + rw / 2, 138, MUTED))
         mx = (hx + hw / 2 + rx + rw / 2) / 2
         out.append(_text(mx + 8, 100, note, 13, MUTED))
