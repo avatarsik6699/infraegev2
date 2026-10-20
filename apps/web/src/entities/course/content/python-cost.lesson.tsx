@@ -115,8 +115,6 @@ export const pythonCostLesson = defineCourseLesson({
             label={"Программа на Python"}
             language="python"
             fileName="steps.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"499500 499500"}
           />
           <Typography.Text>
@@ -134,8 +132,6 @@ export const pythonCostLesson = defineCourseLesson({
             label={"Программа на Python"}
             language="python"
             fileName="steps.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"19"}
           />
           <Typography.Text>
@@ -290,7 +286,6 @@ export const pythonCostLesson = defineCourseLesson({
             }
             language="python"
             fileName="start.py"
-            showLineNumbers={false}
           />
           <Typography.Text>
             <Notation>{"perf_counter"}</Notation> даёт показания часов для

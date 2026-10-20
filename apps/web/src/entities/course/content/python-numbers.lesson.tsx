@@ -79,8 +79,6 @@ export const pythonNumbersLesson = defineCourseLesson({
             }
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"4.6\n4\n3\n23"}
           />
           <Typography.Text>
@@ -137,8 +135,6 @@ export const pythonNumbersLesson = defineCourseLesson({
             }
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"-2.3333333333333335\n-3\n2\n-2"}
           />
           <Typography.Text>
@@ -191,8 +187,6 @@ export const pythonNumbersLesson = defineCourseLesson({
             label={"Для степеней есть особенность: цепочка группируется справа"}
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"14\n20\n512\n-9\n9"}
           />
           <Typography.Text>
@@ -248,8 +242,6 @@ export const pythonNumbersLesson = defineCourseLesson({
             label={"Программа на Python"}
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"False\n0.30000000000000004"}
           />
           <Typography.Text>
@@ -287,8 +279,6 @@ export const pythonNumbersLesson = defineCourseLesson({
             label={"Модуль, минимум, максимум и округление — готовые действия"}
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"12\n2\n9\n2\n4"}
           />
           <Typography.Text>
@@ -338,8 +328,6 @@ export const pythonNumbersLesson = defineCourseLesson({
             label={"Например, 472 = 10 · 47 + 2"}
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"2\n47\n7"}
           />
           <Typography.Text>
@@ -371,8 +359,6 @@ export const pythonNumbersLesson = defineCourseLesson({
             label={"Программа на Python"}
             language="python"
             fileName="seconds.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"1 1 11"}
           />
           <LessonDiagram

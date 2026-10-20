@@ -16,6 +16,23 @@
     var(--course-strong) 45%,
     transparent
   );
+  /* Change 197: Python lessons fill their progress in the course blue, as
+     the course page does; an empty bar is a pale track of the tone. */
+  --progress-indicator-background: var(--course-strong);
+  --progress-track-background: color-mix(
+    in oklab,
+    var(--course-tone),
+    var(--course-strong) 10%
+  );
+  --reading-position-fill: var(--course-strong);
+}
+
+/* Change 197 (DESIGN.md › The Course Tone Rule): inside a Python lesson the
+   current place — the page-rail and lesson-tree bars, the position label,
+   the current code line, tabs and the CodeRunner frame — is the course blue.
+   The site header keeps its orange; code blocks keep their own look. */
+.page[data-course-tone="python"] .lesson {
+  --color-current-location: var(--course-action);
 }
 
 .lesson {

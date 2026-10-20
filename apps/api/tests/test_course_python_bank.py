@@ -5,6 +5,8 @@ by other means, and the shape of the course bank is checked: membership, mastery
 additional lessons, archived tasks of the earlier course and server-side checking.
 """
 
+import contextlib
+import io
 import itertools
 import json
 import math
@@ -181,3 +183,20 @@ def test_server_accepts_every_variant_and_the_minus_sign() -> None:
         if re.search(r"-\d", first):
             assert is_correct(checker, re.sub(r"-(?=\d)", "−", first))
         assert not is_correct(checker, "not-an-answer")
+
+
+# Change 197: an answer of several printed lines is one field, the lines separated by spaces.
+PRINTED_LINES = {
+    "python-first-program-t02": '7 * 6\nprint(7 * 6)\nprint("7*6")',
+    "python-first-program-t08": "print(3 * 40)\nprint(2 * 15)\nprint(3 * 40 + 2 * 15)",
+}
+
+
+@pytest.mark.parametrize("task_id", sorted(PRINTED_LINES))
+def test_the_answer_is_the_lines_python_prints(task_id: str) -> None:
+    entry = next(e for e in _course_tasks() if e.task.id == task_id)
+    printed = io.StringIO()
+    with contextlib.redirect_stdout(printed):
+        exec(PRINTED_LINES[task_id], {})  # noqa: S102 - the lesson's own fixed program
+    lines = printed.getvalue().splitlines()
+    assert is_correct(entry.task.checker, " ".join(lines)), task_id

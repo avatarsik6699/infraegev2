@@ -62,8 +62,6 @@ export const pythonDictionariesLesson = defineCourseLesson({
             }
             language="python"
             fileName="scores.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"91\n{'Анна': 95, 'Илья': 84, 'Марк': 88}"}
           />
           <Typography.Text>
@@ -78,8 +76,6 @@ export const pythonDictionariesLesson = defineCourseLesson({
             }
             language="python"
             fileName="scores.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             error={"KeyError: 'Ольга'"}
           />
           <Typography.Text>Безопасное чтение и проверка ключа:</Typography.Text>
@@ -90,8 +86,6 @@ export const pythonDictionariesLesson = defineCourseLesson({
             label={"Безопасное чтение и проверка ключа"}
             language="python"
             fileName="scores.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"0\nTrue\nFalse"}
           />
           <Typography.Text>
@@ -130,8 +124,6 @@ export const pythonDictionariesLesson = defineCourseLesson({
             }
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             error={
               "TypeError: cannot use 'list' as a dict key (unhashable type: 'list')"
             }
@@ -167,8 +159,6 @@ export const pythonDictionariesLesson = defineCourseLesson({
             }
             language="python"
             fileName="scores.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"Анна\nИлья\nАнна 91\nИлья 84\n175"}
           />
           <Typography.Text>
@@ -243,8 +233,6 @@ export const pythonDictionariesLesson = defineCourseLesson({
             label={"Программа на Python"}
             language="python"
             fileName="items.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"a 3"}
           />
           <Typography.Text>

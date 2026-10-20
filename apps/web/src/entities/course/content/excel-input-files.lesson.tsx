@@ -155,7 +155,6 @@ export const excelInputFilesLesson = defineCourseLesson({
             label={"Строки файла pokupki.csv"}
             language="text"
             fileName="pokupki.csv"
-            showLineNumbers={false}
           />
           <Typography.Text>
             Если при открытии CSV вся строка попала в один столбец, это ещё не

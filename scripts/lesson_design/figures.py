@@ -10,6 +10,15 @@ MUTED = "#4d535e"
 FAINT = "#d9d9d4"
 WASH = "#f3f3f1"  # neutral wash: the site has no blue fills in figures
 ACCENT = "#ff6a00"  # one accent per figure, strokes and text only
+# A course lesson's figures take its course accent (Change 197): the action shade of the
+# course tone, readable as text (≥5:1). `tone=None` keeps the orange of the topics.
+TONES = {"python": "#3f6aa6"}
+
+
+def accent_of(tone: str | None) -> str:
+    return TONES[tone] if tone else ACCENT
+
+
 SANS = "Onest, system-ui, sans-serif"
 
 
@@ -2476,8 +2485,9 @@ def _svg(h, label) -> str:
     return f'<svg viewBox="0 0 660 {h}" role="img" aria-label="{html.escape(label)}">'
 
 
-def program_path_svg() -> str:
+def program_path_svg(tone: str | None = None) -> str:
     """Task → algorithm → source code → interpreter → output for 3 × 40."""
+    accent = accent_of(tone)
     cards = [
         ("Задача", ["Сколько стоят", "3 тетради", "по 40 ₽?"], False),
         ("Алгоритм", ["взять 3 и 40,", "перемножить,", "показать ответ"], False),
@@ -2489,7 +2499,7 @@ def program_path_svg() -> str:
     out = [_svg(212, "Путь от задачи до вывода")]
     for k, (title, lines, code) in enumerate(cards):
         x = x0 + k * (w + gap)
-        out.append(_box(x, y, w, 118, ACCENT if k == 2 else INK, sw=2 if k == 2 else 1.5))
+        out.append(_box(x, y, w, 118, accent if k == 2 else INK, sw=2 if k == 2 else 1.5))
         out.append(_text(x + w / 2, y + 24, title, 14, INK, "middle", 600))
         if code:
             out.append(_text(x + w / 2, y + 56, lines[0], 12, MUTED, "middle"))
@@ -2514,21 +2524,22 @@ def program_path_svg() -> str:
     return "".join(out)
 
 
-def _window(x, y, w, h, title, lines) -> str:
+def _window(x, y, w, h, title, lines, title_size: float = 13) -> str:
     """A program window: title bar and monospace lines (text, colour)."""
     out = [_box(x, y, w, h, INK, rx=10)]
     out.append(f'<path d="M {x} {y + 30} H {x + w}" stroke="{FAINT}"/>')
     for i in range(3):
         out.append(f'<circle cx="{x + 16 + i * 13}" cy="{y + 15}" r="4" fill="{FAINT}"/>')
-    out.append(_text(x + 58, y + 20, title, 13, MUTED))
+    out.append(_text(x + 54, y + 20, title, title_size, MUTED))
     for i, (s, color) in enumerate(lines):
         out.append(_mono(x + 14, y + 56 + i * 22, s, 13, color))
     return "".join(out)
 
 
-def tools_svg() -> str:
+def tools_svg(tone: str | None = None) -> str:
     """Editor, terminal and the Python shell: where code is written and run."""
-    out = [_svg(232, "Редактор, терминал и оболочка Python")]
+    accent = accent_of(tone)
+    out = [_svg(232, "Редактор, терминал и интерактивный режим Python")]
     out.append(
         _window(
             8,
@@ -2546,10 +2557,12 @@ def tools_svg() -> str:
             204,
             150,
             "Терминал",
-            [("> python main.py", ACCENT), ("Привет!", INK), ("120", INK)],
+            [("> python main.py", accent), ("Привет!", INK), ("120", INK)],
         )
     )
-    out.append(_window(448, 8, 204, 150, "Оболочка Python", [(">>> 3 * 40", ACCENT), ("120", INK)]))
+    out.append(
+        _window(448, 8, 204, 150, "Интерактивный режим", [(">>> 3 * 40", accent), ("120", INK)], 12)
+    )
     notes = [
         ("пишем и сохраняем", "текст программы"),
         ("команда запускает", "файл целиком"),
@@ -2563,8 +2576,9 @@ def tools_svg() -> str:
     return "".join(out)
 
 
-def expr_fate_svg() -> str:
+def expr_fate_svg(tone: str | None = None) -> str:
     """A value computed in a file: lost without print, shown with print."""
+    accent = accent_of(tone)
     out = [_svg(150, "Куда попадает значение выражения")]
     rows = [("3 * 40", False), ("print(3 * 40)", True)]
     for k, (code, shown) in enumerate(rows):
@@ -2579,8 +2593,8 @@ def expr_fate_svg() -> str:
         out.append(_mono(vx + 32, y + 28, "120", 16, INK, "middle", 600))
         tx = vx + 64
         if shown:
-            out.append(_arrow(tx + 6, y + 22, tx + 70, y + 22, ACCENT))
-            out.append(_box(tx + 76, y, 150, 44, ACCENT, sw=2))
+            out.append(_arrow(tx + 6, y + 22, tx + 70, y + 22, accent))
+            out.append(_box(tx + 76, y, 150, 44, accent, sw=2))
             out.append(_text(tx + 90, y + 18, "экран", 12, MUTED))
             out.append(_mono(tx + 90, y + 36, "120", 14))
         else:
@@ -2649,8 +2663,9 @@ def error_stages_svg() -> str:
     return "".join(out)
 
 
-def traceback_svg() -> str:
+def traceback_svg(tone: str | None = None) -> str:
     """The parts of a traceback and the order to read them."""
+    accent = accent_of(tone)
     lines = [
         ("Traceback (most recent call last):", None, "дальше — путь к ошибке"),
         ('  File "main.py", line 2, in <module>', 2, "файл и номер строки"),
@@ -2672,10 +2687,93 @@ def traceback_svg() -> str:
         if order:
             out.append(
                 f'<circle cx="408" cy="{y - 4}" r="11" fill="#fff" '
-                f'stroke="{ACCENT if order == 1 else INK}" stroke-width="1.5"/>'
+                f'stroke="{accent if order == 1 else INK}" stroke-width="1.5"/>'
             )
             out.append(_text(408, y + 1, str(order), 13, INK, "middle", 600))
         out.append(_text(428, y, note, 14, INK if order else MUTED))
+    out.append("</svg>")
+    return "".join(out)
+
+
+def code_loop_svg(tone: str | None = None) -> str:
+    """How to work with code: write, run, compare with the expected output, explain."""
+    accent = accent_of(tone)
+    steps = [
+        ("Написать", ["или изменить", "одну деталь"]),
+        ("Запустить", ["файл целиком", "или фрагмент"]),
+        ("Сравнить", ["вывод с тем,", "что ожидал"]),
+        ("Объяснить", ["почему вышло", "именно так"]),
+    ]
+    w, gap, x0, y, h = 138, 26, 15, 16, 92
+    out = [_svg(186, "Цикл работы с кодом: написать, запустить, сравнить, объяснить")]
+    for k, (title, lines) in enumerate(steps):
+        x = x0 + k * (w + gap)
+        key = k == 2
+        out.append(_box(x, y, w, h, accent if key else INK, sw=2 if key else 1.5))
+        out.append(_text(x + w / 2, y + 30, title, 15, accent if key else INK, "middle", 600))
+        for i, line in enumerate(lines):
+            out.append(_text(x + w / 2, y + 56 + i * 19, line, 13, MUTED, "middle"))
+        if k:
+            out.append(_arrow(x - gap + 2, y + h / 2, x - 2, y + h / 2, MUTED))
+    # back from «Объяснить» to «Написать»: the loop repeats
+    right = x0 + 3 * (w + gap) + w / 2
+    left = x0 + w / 2
+    bottom = y + h + 34
+    out.append(
+        f'<path d="M {right:.1f} {y + h + 2:.1f} V {bottom} H {left:.1f} V {y + h + 14:.1f}" '
+        f'fill="none" stroke="{MUTED}" stroke-width="1.5"/>'
+    )
+    out.append(_arrow(left, y + h + 16, left, y + h + 2, MUTED))
+    out.append(
+        _text(
+            330,
+            bottom + 24,
+            "повторяй, пока вывод не совпадёт и причина не станет ясна",
+            13,
+            MUTED,
+            "middle",
+        )
+    )
+    out.append("</svg>")
+    return "".join(out)
+
+
+def code_block_anatomy_svg(tone: str | None = None) -> str:
+    """What the parts of a code block on the page mean."""
+    accent = accent_of(tone)
+    out = [_svg(220, "Из чего состоит блок кода на странице")]
+    x, y, w = 8, 8, 352
+    out.append(_box(x, y, w, 196, FAINT, "#fff", rx=10))
+    out.append(f'<path d="M {x} {y + 34} H {x + w}" stroke="{FAINT}"/>')
+    out.append(_mono(x + 16, y + 23, "main.py", 13, MUTED))
+    code = [
+        ("# три тетради по 40 рублей", MUTED),
+        ("print(3 * 40)", INK),
+        ("print(120 / 0)", INK),
+    ]
+    for i, (line, color) in enumerate(code):
+        out.append(_mono(x + 16, y + 62 + i * 24, line, 13, color))
+    out.append(f'<path d="M {x} {y + 126} H {x + w}" stroke="{FAINT}"/>')
+    out.append(_text(x + 16, y + 150, "Вывод", 12, MUTED))
+    out.append(_mono(x + 72, y + 150, "120", 13, INK))
+    out.append(_mono(x + 72, y + 176, "ZeroDivisionError: division by zero", 11, ERR, weight=600))
+    marks = [
+        (y + 19, "имя файла"),
+        (y + 58, "пояснение после #"),
+        (y + 94, "код программы"),
+        (y + 146, "«Вывод» программы"),
+        (y + 172, "ошибка — красным"),
+    ]
+    for k, (my, note) in enumerate(marks, 1):
+        out.append(
+            f'<line x1="{x + w + 6}" y1="{my}" x2="{392}" y2="{my}" stroke="{FAINT}" '
+            'stroke-dasharray="2 3"/>'
+        )
+        out.append(
+            f'<circle cx="408" cy="{my}" r="11" fill="#fff" stroke="{accent}" stroke-width="1.5"/>'
+        )
+        out.append(_text(408, my + 5, str(k), 13, INK, "middle", 600))
+        out.append(_text(428, my + 5, note, 13.5, INK))
     out.append("</svg>")
     return "".join(out)
 
@@ -3573,6 +3671,8 @@ FIGURES = {
     "expr_fate": expr_fate_svg,
     "error_stages": error_stages_svg,
     "traceback": traceback_svg,
+    "code_loop": code_loop_svg,
+    "code_block_anatomy": code_block_anatomy_svg,
     "type_cards": type_cards_svg,
     "plus_types": plus_types_svg,
     "assign": assign_svg,

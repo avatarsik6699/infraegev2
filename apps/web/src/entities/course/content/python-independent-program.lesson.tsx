@@ -1,7 +1,10 @@
 import { CodeBlock } from "~/shared/components/code-block";
 import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
-import { LessonSummary } from "~/shared/components/learning-content";
+import {
+  LessonSummary,
+  TerminalCommand,
+} from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { pythonIndependentProgramLessonPublication } from "./course-publication.mjs";
 
@@ -36,7 +39,6 @@ export const pythonIndependentProgramLesson = defineCourseLesson({
             label={"Строки файла numbers.txt"}
             language="text"
             fileName="numbers.txt"
-            showLineNumbers={false}
           />
           <Typography.Text>
             Программа выведет его количество, сумму, минимум, максимум и
@@ -93,8 +95,6 @@ export const pythonIndependentProgramLesson = defineCourseLesson({
             label={"Программа на Python"}
             language="python"
             fileName="read_numbers.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={
               "Количество: 4\nСумма: 20\nМинимум: -2\nМаксимум: 10\nСреднее: 5.000"
             }
@@ -165,13 +165,7 @@ export const pythonIndependentProgramLesson = defineCourseLesson({
             </strong>{" "}
             Запуск из терминала:
           </Typography.Text>
-          <CodeBlock
-            code={"python analyze_numbers.py numbers.txt"}
-            label={"Пример: команда"}
-            language="text"
-            fileName="команда"
-            showLineNumbers={false}
-          />
+          <TerminalCommand command={"python analyze_numbers.py numbers.txt"} />
           <Typography.Text>
             Проверь также пустой файл, одну строку <Notation>{"-5"}</Notation>,
             отсутствующий файл и строку <Notation>{"abc"}</Notation>. Для
@@ -188,8 +182,6 @@ export const pythonIndependentProgramLesson = defineCourseLesson({
             label={"Пусть файл bad.txt содержит строки 5, abc, 7"}
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={
               "ValueError Строка 2: ожидалось целое число\nFileNotFoundError [Errno 2] No such file or directory: 'missing.txt'\n{'count': 0, 'total': 0, 'minimum': None, 'maximum': None, 'average': None}\n-5.0"
             }

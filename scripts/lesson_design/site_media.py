@@ -13,7 +13,8 @@ The site is the only source of the lessons: every ``*.media.ts`` manifest under
   strings, size, alt text, stepper frames, sandbox data) is rebuilt from that call
   with ``figures.py``. A builder without ``aria-label`` keeps the entry's alt text.
   To add a figure, write the call line where it belongs and run this script: the
-  entry appears under it with its key (``media_key``) printed.
+  entry appears under it with its key (``media_key``) printed. Changing the call of
+  an existing figure keeps its key.
 - A runnable program (``kind: "run"``) is recorded again from its ``code`` by
   ``tracer.py``; the recorded output must equal the entry's ``output`` and a run that
   stops must stop with ``error``. Author notes for the steps (``3: текст``, ``3.2:
@@ -123,8 +124,10 @@ def inline_svg(svg: str) -> tuple[str, int, int, str]:
     return svg, width, height, label.group(1) if label else ""
 
 
-def figure_entry(call: str, current: dict | None) -> tuple[str, str]:
-    """The key and manifest entry of one ``%%builder(args)%%`` call."""
+def figure_entry(call: str, current: dict | None, key: str | None = None) -> tuple[str, str]:
+    """The key and manifest entry of one ``%%builder(args)%%`` call. An existing entry
+    keeps its key when its call changes, so the lesson's references stay; a new one is
+    named by ``media_key``."""
     match = FIGURE_CALL.fullmatch(call)
     if not match:
         raise SystemExit(f"not a figure call: {call!r}")
@@ -132,7 +135,7 @@ def figure_entry(call: str, current: dict | None) -> tuple[str, str]:
     if name not in FIGURES:
         raise SystemExit(f"Unknown figure {name!r}; add it to figures.FIGURES")
     args, kwargs = parse_call(match.group(2))
-    key = media_key(name, args, kwargs)
+    key = key or media_key(name, args, kwargs)
     if name in WIDGET_DATA:
         # a sandbox drawn by its site component from generated data
         return key, f"  {key}: " + json.dumps(
@@ -245,9 +248,7 @@ def rebuild(path: Path, media: dict) -> str:
             comments.append(last)
             calls = [last]
         if calls:
-            built_key, text = figure_entry(calls[0], entry)
-            if built_key != key:
-                raise SystemExit(f"{shown(path)}: {calls[0]} builds {built_key}, not {key}")
+            _, text = figure_entry(calls[0], entry, key)
             add(key, [f"  // {calls[0]}", text])
         elif entry.get("kind") == "run":
             note = notes[0] if notes else ""

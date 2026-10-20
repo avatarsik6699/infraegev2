@@ -76,8 +76,6 @@ export const pythonNotationPatternsLesson = defineCourseLesson({
             }
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"11\n47\n255\n0b101111 0o57 0xff\n101111"}
           />
           <Typography.Text>
@@ -109,8 +107,6 @@ export const pythonNotationPatternsLesson = defineCourseLesson({
             label={"Программа на Python"}
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"101111\n00000101\nff"}
           />
         </>
@@ -149,8 +145,6 @@ export const pythonNotationPatternsLesson = defineCourseLesson({
             label={"Возьмём a = 6, то есть двоичное 110, и b = 3, то есть 011"}
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"2 7 5 12 3\n5 6"}
           />
           <Typography.Text>
@@ -196,8 +190,6 @@ export const pythonNotationPatternsLesson = defineCourseLesson({
             label={"Программа на Python"}
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"True\nTrue\nFalse"}
           />
           <Typography.Text>
@@ -225,8 +217,6 @@ export const pythonNotationPatternsLesson = defineCourseLesson({
             label={"и *, а если запись не подходит — говорит об этом"}
             language="python"
             fileName="answers.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={
               "[(112, 16), (182, 26), (1022, 146), (1029, 147), (1120, 160)]"
             }
@@ -377,8 +367,6 @@ export const pythonNotationPatternsLesson = defineCourseLesson({
             }
             language="python"
             fileName="pattern.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"True\nFalse"}
           />
           <Typography.Text>
@@ -402,8 +390,6 @@ export const pythonNotationPatternsLesson = defineCourseLesson({
             label={"re.finditer перебирает все совпадения по очереди"}
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"12 1 3\n345 4 7\n6 8 9"}
           />
           <Typography.Text>

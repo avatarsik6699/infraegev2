@@ -451,8 +451,6 @@ export const pythonPracticeLesson = defineCourseLesson({
           label={"1. Для последней цифры достаточно остатка по модулю 10"}
           language="python"
           fileName="last_digit_of_power.py"
-          showLineNumbers={false}
-          outputLayout="lines"
           output={"1 6"}
         />
         <Typography.Text>
@@ -475,8 +473,6 @@ export const pythonPracticeLesson = defineCourseLesson({
           label={"2. Множество убирает повторы, сортировка задаёт порядок"}
           language="python"
           fileName="second_distinct_maximum.py"
-          showLineNumbers={false}
-          outputLayout="lines"
           output={"7\nNone"}
         />
         <Typography.Text>
@@ -498,8 +494,6 @@ export const pythonPracticeLesson = defineCourseLesson({
           }
           language="python"
           fileName="unique_in_order.py"
-          showLineNumbers={false}
-          outputLayout="lines"
           output={"[3, 1, 2]\n['a', 'b', 'r', 'c', 'd']"}
         />
         <Typography.Text>
@@ -517,8 +511,6 @@ export const pythonPracticeLesson = defineCourseLesson({
           label={"4. Сначала приводим регистр, затем отбираем буквы"}
           language="python"
           fileName="letter_counts.py"
-          showLineNumbers={false}
-          outputLayout="lines"
           output={"{'а': 2, 'б': 1}"}
         />
         <Typography.Text>
@@ -539,8 +531,6 @@ export const pythonPracticeLesson = defineCourseLesson({
           label={"5. max с одинаковым ключом оставляет первый элемент"}
           language="python"
           fileName="first_longest_word.py"
-          showLineNumbers={false}
-          outputLayout="lines"
           output={"окно\nкот\nNone"}
         />
         <Typography.Text>
@@ -559,8 +549,6 @@ export const pythonPracticeLesson = defineCourseLesson({
           label={"6. balance — число ещё не закрытых открывающих скобок"}
           language="python"
           fileName="valid_parentheses.py"
-          showLineNumbers={false}
-          outputLayout="lines"
           output={"True\nFalse\nFalse"}
         />
         <Typography.Text>
@@ -579,8 +567,6 @@ export const pythonPracticeLesson = defineCourseLesson({
           label={"7. В словаре находятся только прежние позиции"}
           language="python"
           fileName="find_pair_with_sum.py"
-          showLineNumbers={false}
-          outputLayout="lines"
           output={"(0, 1)\n(0, 1)"}
         />
         <Typography.Text>
@@ -603,8 +589,6 @@ export const pythonPracticeLesson = defineCourseLesson({
           }
           language="python"
           fileName="choose_meetings.py"
-          showLineNumbers={false}
-          outputLayout="lines"
           output={"[(1, 2), (2, 4)]"}
         />
         <Typography.Text>

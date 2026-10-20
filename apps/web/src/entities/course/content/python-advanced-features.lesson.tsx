@@ -71,8 +71,6 @@ export const pythonAdvancedFeaturesLesson = defineCourseLesson({
             label={"Программа на Python"}
             language="python"
             fileName="make_multiplier.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"21 14"}
           />
           <Typography.Text>
@@ -95,8 +93,6 @@ export const pythonAdvancedFeaturesLesson = defineCourseLesson({
             label={"Программа на Python"}
             language="python"
             fileName="late.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"[2, 2, 2] [0, 1, 2]"}
           />
           <Typography.Text>
@@ -127,8 +123,6 @@ export const pythonAdvancedFeaturesLesson = defineCourseLesson({
             label={"В простом варианте возвращается функция-обёртка"}
             language="python"
             fileName="announce.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"Вызов add\n7"}
           />
           <Typography.Text>
@@ -175,7 +169,6 @@ export const pythonAdvancedFeaturesLesson = defineCourseLesson({
             label={"Удобно также создавать их через contextlib.contextmanager"}
             language="python"
             fileName="measured.py"
-            showLineNumbers={false}
           />
           <Typography.Text>
             Код до <Notation>{"yield"}</Notation> выполняется при входе, блок
@@ -213,8 +206,6 @@ export const pythonAdvancedFeaturesLesson = defineCourseLesson({
             }
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"3 5\nЗавершение\nНеизвестная команда"}
           />
           <Typography.Text>
@@ -250,8 +241,6 @@ export const pythonAdvancedFeaturesLesson = defineCourseLesson({
             label={"Для перевода между ними нужна кодировка"}
             language="python"
             fileName="text.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"True\n6 12"}
           />
           <Typography.Text>
@@ -289,8 +278,6 @@ export const pythonAdvancedFeaturesLesson = defineCourseLesson({
             }
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"['A', 'B']"}
           />
           <Typography.Text>

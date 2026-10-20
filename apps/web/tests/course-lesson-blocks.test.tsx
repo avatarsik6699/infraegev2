@@ -22,7 +22,7 @@ afterEach(() => {
   flags.enhanced = true;
 });
 
-describe("CodeBlock course output (Change 175)", () => {
+describe("CodeBlock output (Change 175, 197)", () => {
   it("keeps the lines, shows typed input as a key and the error in red", () => {
     const html = renderToStaticMarkup(
       <CodeBlock
@@ -30,13 +30,11 @@ describe("CodeBlock course output (Change 175)", () => {
         label="Пример"
         language="python"
         fileName="greet.py"
-        outputLayout="lines"
         output={"Имя? ⟪Анна⟫\n10"}
         error={"ZeroDivisionError: division by zero"}
       />,
     );
     expect(html).toContain("greet.py");
-    expect(html).toContain('data-output-layout="lines"');
     expect(html).toMatch(
       /<svg[^>]*lucide-square-terminal[^>]*>.*?<\/svg>Вывод:/su,
     );
@@ -51,7 +49,6 @@ describe("CodeBlock course output (Change 175)", () => {
         code="for i in range(12):\n    print(i)"
         label="Длинный вывод"
         language="python"
-        outputLayout="lines"
         output={Array.from({ length: 12 }, (_, i) => String(i)).join("\n")}
       />,
     );
@@ -65,7 +62,7 @@ describe("CodeBlock course output (Change 175)", () => {
     ).toBe("true");
   });
 
-  it("keeps the topics' one-row output unchanged", () => {
+  it("shows every output line by line, in the topics too (Change 197)", () => {
     const html = renderToStaticMarkup(
       <CodeBlock
         code="print(1)\nprint(2)"
@@ -74,8 +71,8 @@ describe("CodeBlock course output (Change 175)", () => {
         output={"1\n2"}
       />,
     );
-    expect(html).toContain("1, 2");
-    expect(html).not.toContain('data-output-layout="lines"');
+    expect(html).toContain("1\n2");
+    expect(html).not.toContain("1, 2");
   });
 });
 

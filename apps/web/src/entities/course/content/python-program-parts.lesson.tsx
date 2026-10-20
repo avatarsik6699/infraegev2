@@ -4,6 +4,7 @@ import { Typography } from "~/shared/components/typography";
 import {
   LessonSummary,
   ProofDisclosure,
+  TerminalCommand,
 } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { pythonProgramPartsLessonPublication } from "./course-publication.mjs";
@@ -63,8 +64,6 @@ export const pythonProgramPartsLesson = defineCourseLesson({
             label={"Программа на Python"}
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"7\n6"}
           />
           <Typography.Text>
@@ -80,8 +79,6 @@ export const pythonProgramPartsLesson = defineCourseLesson({
             label={"Другая форма импорта"}
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"7"}
           />
           <Typography.Text>
@@ -105,8 +102,6 @@ export const pythonProgramPartsLesson = defineCourseLesson({
             label={"Программа на Python"}
             language="python"
             fileName="total.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"-3 -2\n0.9999999999999999 1.0"}
           />
           <Typography.Text>
@@ -142,7 +137,6 @@ export const pythonProgramPartsLesson = defineCourseLesson({
             label={"Файл calculations.py может содержать"}
             language="python"
             fileName="square.py"
-            showLineNumbers={false}
           />
           <Typography.Text>
             В соседнем <Notation>{"main.py"}</Notation>:
@@ -154,7 +148,6 @@ export const pythonProgramPartsLesson = defineCourseLesson({
             label={"В соседнем main.py"}
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
           />
           <Typography.Text>
             При обычном прямом запуске файла его специальное имя{" "}
@@ -199,26 +192,19 @@ export const pythonProgramPartsLesson = defineCourseLesson({
             kind="nuance"
           >
             <Typography.Text>Команды терминала:</Typography.Text>
-            <CodeBlock
-              code={"python -m venv .venv"}
-              label={"Пример: команда"}
-              language="text"
-              fileName="команда"
-              showLineNumbers={false}
-            />
+            <TerminalCommand command={"python -m venv .venv"} />
             <Typography.Text>
               <Notation>{"-m"}</Notation> запускает модуль как программу. Здесь
               стандартный <Notation>{"venv"}</Notation> создаёт папку окружения.
               Можно использовать интерпретатор из неё напрямую, без активации:
             </Typography.Text>
-            <CodeBlock
-              code={
-                "# Windows\n.venv\\Scripts\\python -m pip --version\n\n# Linux и macOS\n.venv/bin/python -m pip --version"
-              }
-              label={"Пример: команда"}
-              language="text"
-              fileName="команда"
-              showLineNumbers={false}
+            <TerminalCommand
+              system={"Windows"}
+              command={".venv\\Scripts\\python -m pip --version"}
+            />
+            <TerminalCommand
+              system={"Linux и macOS"}
+              command={".venv/bin/python -m pip --version"}
             />
             <Typography.Text>
               <Notation>{"pip"}</Notation> управляет установкой пакетов. Общая
@@ -262,8 +248,6 @@ export const pythonProgramPartsLesson = defineCourseLesson({
             label={"Программа на Python"}
             language="python"
             fileName="count_multiples.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"14"}
           />
           <Typography.Text>

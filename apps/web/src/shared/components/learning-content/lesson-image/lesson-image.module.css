@@ -1,0 +1,14 @@
+/* A screenshot sits on the diagram plate; it scales down with the column. */
+.plate {
+  max-width: min(100%, 46rem);
+  overflow: hidden;
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-surface);
+  background: var(--color-surface);
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: auto;
+}

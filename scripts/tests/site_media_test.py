@@ -54,6 +54,13 @@ class SiteMediaTest(unittest.TestCase):
         self.assertIn(call + "  refs_", out)
         self.assertEqual(out.count('kind: "diagram"'), 2)
 
+    def test_a_changed_call_keeps_the_key_the_lesson_uses(self) -> None:
+        text = FIGURE.read_text().replace('["10", "20"], old=', '["10", "30"], old=')
+        self.assertNotEqual(text, FIGURE.read_text())
+        out = self.rebuilt(self.copy(FIGURE, text))
+        self.assertIn("  refs_a6ff88: {", out)
+        self.assertIn(">30<", out)
+
     def test_a_diagram_without_its_call_is_refused(self) -> None:
         text = FIGURE.read_text().replace("  // %%refs(", "  // was %%refs(")
         with self.assertRaisesRegex(SystemExit, "has no // %%builder"):

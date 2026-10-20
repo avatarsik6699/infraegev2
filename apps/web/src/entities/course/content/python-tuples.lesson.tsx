@@ -57,8 +57,6 @@ export const pythonTuplesLesson = defineCourseLesson({
             label={"Программа на Python"}
             language="python"
             fileName="point.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"3\n<class 'int'> <class 'tuple'> 0"}
           />
           <Typography.Text>
@@ -72,8 +70,6 @@ export const pythonTuplesLesson = defineCourseLesson({
             label={"Попытка заменить элемент остановит программу"}
             language="python"
             fileName="point.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             error={"TypeError: 'tuple' object does not support item assignment"}
           />
           <Typography.Text>
@@ -103,8 +99,6 @@ export const pythonTuplesLesson = defineCourseLesson({
             }
             language="python"
             fileName="point.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"3 5\n20 10"}
           />
           <Typography.Text>
@@ -134,8 +128,6 @@ export const pythonTuplesLesson = defineCourseLesson({
             label={"Количество значений должно совпадать с количеством имён"}
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             error={"ValueError: too many values to unpack (expected 2, got 3)"}
           />
           <Typography.Text>
@@ -148,8 +140,6 @@ export const pythonTuplesLesson = defineCourseLesson({
             label={"Можно обозначить имя для остальных элементов звёздочкой"}
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"10 [20, 30] 40"}
           />
           <Typography.Text>
@@ -179,8 +169,6 @@ export const pythonTuplesLesson = defineCourseLesson({
             label={"Выведем имена тех, у кого результат не меньше 90"}
             language="python"
             fileName="students.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"Анна\nМарк"}
           />
           <Typography.Text>
@@ -213,8 +201,6 @@ export const pythonTuplesLesson = defineCourseLesson({
             label={"enumerate выдаёт пары «номер и элемент»"}
             language="python"
             fileName="names.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"1 Анна\n2 Илья\n3 Марк"}
           />
           <Typography.Text>
@@ -233,8 +219,6 @@ export const pythonTuplesLesson = defineCourseLesson({
             label={"zip соединяет несколько источников по позициям"}
             language="python"
             fileName="names.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"Анна 91\nИлья 84"}
           />
           <Typography.Text>
@@ -256,8 +240,6 @@ export const pythonTuplesLesson = defineCourseLesson({
             }
             language="python"
             fileName="numbers.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"10 20 30\n10, 20, 30"}
           />
           <Typography.Text>

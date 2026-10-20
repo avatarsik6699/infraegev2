@@ -93,8 +93,6 @@ export const pythonStandardLibraryLesson = defineCourseLesson({
             }
             language="python"
             fileName="counts.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"3\n0\n[('A', 3), ('N', 2)]\n['Анна']"}
           />
           <Typography.Text>
@@ -133,8 +131,6 @@ export const pythonStandardLibraryLesson = defineCourseLesson({
             }
             language="python"
             fileName="queue.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"1 [2, 3, 4]"}
           />
           <Typography.Text>
@@ -165,8 +161,6 @@ export const pythonStandardLibraryLesson = defineCourseLesson({
             label={"Fraction и Decimal считают точно там, где float ошибается"}
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"1/2\n0.3\nTrue"}
           />
           <Typography.Text>
@@ -217,8 +211,6 @@ export const pythonStandardLibraryLesson = defineCourseLesson({
             }
             language="python"
             fileName="count.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"12"}
           />
           <Typography.Text>
@@ -268,8 +260,6 @@ export const pythonStandardLibraryLesson = defineCourseLesson({
             label={"Разницу видно на парах из букв A, B, C"}
             language="python"
             fileName="items.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"9\n6\n3\n['AB', 'AC', 'BC']"}
           />
           <Typography.Text>

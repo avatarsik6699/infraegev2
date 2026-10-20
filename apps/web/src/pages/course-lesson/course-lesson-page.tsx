@@ -120,9 +120,17 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
     ...sections
       .filter((concept) => !concept.lead)
       .map((concept) => ({ id: concept.id, label: concept.navLabel, locked })),
+    // Change 192: a locked lesson has no «Итог» and self-check on the page;
+    // Change 197: they come before «Практика»
+    ...(locked
+      ? []
+      : [
+          { id: "result", label: "Итог" },
+          ...(props.lesson.checkpoint || props.lesson.paid?.selfCheck
+            ? [{ id: "self-check", label: "Проверьте себя" }]
+            : []),
+        ]),
     { id: "practice", label: "Практика" },
-    // Change 192: a locked lesson has no «Итог» on the page
-    ...(locked ? [] : [{ id: "result", label: "Итог" }]),
   ];
 
   return (
@@ -219,6 +227,15 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
             />
           ) : null}
 
+          <Suspense fallback={null}>
+            <CourseLessonResult
+              lesson={props.lesson}
+              locked={locked}
+              sectionClassName={styles.section}
+              titleClassName={styles.sectionTitle}
+            />
+          </Suspense>
+
           <section
             id="practice"
             className={styles.section}
@@ -254,24 +271,6 @@ export const CourseLessonPage: React.FC<CourseLessonPageTypes.Props> = (
                 from={lessonPath}
               />
             ) : null}
-          </section>
-
-          <section
-            id="result"
-            hidden={locked}
-            className={styles.section}
-            aria-labelledby="result-title"
-          >
-            <Typography.Title
-              order={2}
-              id="result-title"
-              className={styles.sectionTitle}
-            >
-              Итог
-            </Typography.Title>
-            <Suspense fallback={null}>
-              <CourseLessonResult lesson={props.lesson} locked={locked} />
-            </Suspense>
           </section>
 
           <CourseLessonPager

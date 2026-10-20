@@ -62,8 +62,6 @@ export const pythonWhileLesson = defineCourseLesson({
             }
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"1\n2\n3\n4"}
           />
           <Typography.Text>
@@ -180,8 +178,6 @@ export const pythonWhileLesson = defineCourseLesson({
             }
             language="python"
             fileName="number.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"14"}
           />
           <Typography.Text>
@@ -237,8 +233,6 @@ export const pythonWhileLesson = defineCourseLesson({
             }
             language="python"
             fileName="total.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"⟪5⟫\n⟪7⟫\n⟪0⟫\n12"}
           />
           <Typography.Text>
@@ -263,8 +257,6 @@ export const pythonWhileLesson = defineCourseLesson({
             }
             language="python"
             fileName="total.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"25"}
           />
           <Typography.Text>
@@ -296,8 +288,6 @@ export const pythonWhileLesson = defineCourseLesson({
             label={"Программа на Python"}
             language="python"
             fileName="power.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"5"}
           />
           <Typography.Text>
@@ -332,8 +322,6 @@ export const pythonWhileLesson = defineCourseLesson({
             label={"Программа на Python"}
             language="python"
             fileName="total.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"⟪5⟫\n⟪-2⟫\n⟪10⟫\n⟪7⟫\n⟪0⟫\n20 10"}
           />
           <Typography.Text>

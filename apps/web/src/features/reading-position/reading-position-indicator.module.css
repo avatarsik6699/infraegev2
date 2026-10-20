@@ -13,7 +13,7 @@
   display: block;
   width: 100%;
   height: 100%;
-  background: var(--color-text);
+  background: var(--reading-position-fill, var(--color-text));
   transform-origin: left center;
   transition: transform 90ms linear;
 }

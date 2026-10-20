@@ -1,4 +1,4 @@
-import { ChevronDown, ChevronRight, Microscope } from "lucide-react";
+import { ChevronDown, ChevronRight, Search } from "lucide-react";
 import styles from "./proof-disclosure.module.css";
 
 type Props = {
@@ -58,13 +58,13 @@ export const ProofDisclosure: React.FC<Props> = (props) => {
       >
         <summary className={styles.summary}>
           <span className={styles.mark} aria-hidden="true">
-            <Microscope size={16} strokeWidth={1.75} />
+            <Search size={14} strokeWidth={1.75} />
           </span>
           <span className={styles.title}>
-            <span className={styles.label}>{label}</span>
+            <span className={styles.label}>{topic ? `${label}:` : label}</span>
             {topic ? <span className={styles.topic}>{topic}</span> : null}
           </span>
-          <ChevronDown className={styles.toggle} aria-hidden size={16} />
+          <ChevronDown className={styles.toggle} aria-hidden size={14} />
         </summary>
         <div className={styles.body}>{props.children}</div>
       </details>

@@ -57,8 +57,6 @@ export const pythonLogicLesson = defineCourseLesson({
             label={"Сравнение отвечает на вопрос и даёт логическое значение"}
             language="python"
             fileName="temperature.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"True"}
           />
           <Typography.Text>
@@ -131,8 +129,6 @@ export const pythonLogicLesson = defineCourseLesson({
             label={"Интервал удобно записывать цепочкой"}
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"True\nTrue\nFalse"}
           />
           <Typography.Text>
@@ -164,8 +160,6 @@ export const pythonLogicLesson = defineCourseLesson({
             label={"Посмотрим, что получится"}
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"3\nFalse"}
           />
           <Typography.Text>
@@ -197,8 +191,6 @@ export const pythonLogicLesson = defineCourseLesson({
             label={"Это называют коротким вычислением"}
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"False"}
           />
           <LessonDiagram
@@ -264,8 +256,6 @@ export const pythonLogicLesson = defineCourseLesson({
             }
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"Без названия\n8"}
           />
           <Typography.Text>
@@ -304,8 +294,6 @@ export const pythonLogicLesson = defineCourseLesson({
             label={"Программа на Python"}
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"True\nTrue"}
           />
           <Typography.Text>

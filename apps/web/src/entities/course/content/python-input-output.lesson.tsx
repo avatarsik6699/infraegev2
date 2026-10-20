@@ -59,8 +59,6 @@ export const pythonInputOutputLesson = defineCourseLesson({
             }
             language="python"
             fileName="name.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"Как тебя зовут? ⟪Анна⟫\nПривет, Анна"}
           />
           <Typography.Text>
@@ -80,8 +78,6 @@ export const pythonInputOutputLesson = defineCourseLesson({
             label={"Поэтому решение о преобразовании принимает автор программы"}
             language="python"
             fileName="age_text.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"⟪25⟫\n26"}
           />
           <Typography.Text>
@@ -126,8 +122,6 @@ export const pythonInputOutputLesson = defineCourseLesson({
             }
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"-12\n2.75\n123"}
           />
           <Typography.Text>
@@ -139,8 +133,6 @@ export const pythonInputOutputLesson = defineCourseLesson({
             label={"А вот целое число из записи с точкой не получится"}
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             error={"ValueError: invalid literal for int() with base 10: '2.75'"}
           />
           <Typography.Text>
@@ -181,8 +173,6 @@ export const pythonInputOutputLesson = defineCourseLesson({
             }
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"10 20 30\n10; 20; 30\nНачало продолжение"}
           />
           <Typography.Text>
@@ -225,8 +215,6 @@ export const pythonInputOutputLesson = defineCourseLesson({
             label={"f-строка подставляет вычисленные значения прямо в текст"}
             language="python"
             fileName="count.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"Количество: 7; стоимость: 87.50"}
           />
           <Typography.Text>
@@ -273,8 +261,6 @@ export const pythonInputOutputLesson = defineCourseLesson({
             label={"Сначала решим для дробных значений"}
             language="python"
             fileName="length.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"⟪5⟫\n⟪3⟫\n15.0 16.0"}
           />
           <Typography.Text>

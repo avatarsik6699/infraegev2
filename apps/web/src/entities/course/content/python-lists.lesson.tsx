@@ -63,8 +63,6 @@ export const pythonListsLesson = defineCourseLesson({
             }
             language="python"
             fileName="temperatures.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"21\n4"}
           />
           <Typography.Text>
@@ -79,8 +77,6 @@ export const pythonListsLesson = defineCourseLesson({
             label={"Программа на Python"}
             language="python"
             fileName="numbers.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"[4, 10, 2, 8]"}
           />
           <Typography.Text>
@@ -222,8 +218,6 @@ export const pythonListsLesson = defineCourseLesson({
             }
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"None"}
           />
         </>
@@ -249,8 +243,6 @@ export const pythonListsLesson = defineCourseLesson({
             }
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"4\n7\n2\n[8, 14, 4]"}
           />
           <Typography.Text>
@@ -314,8 +306,6 @@ export const pythonListsLesson = defineCourseLesson({
             }
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"[1, 2]\n[1, 2, 3]\nFalse\nFalse"}
           />
           <LessonDiagram
@@ -359,8 +349,6 @@ export const pythonListsLesson = defineCourseLesson({
             }
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"[[99, 2], [3, 4]]"}
           />
           <Typography.Text>
@@ -377,8 +365,6 @@ export const pythonListsLesson = defineCourseLesson({
             label={"Особенно опасна запись"}
             language="python"
             fileName="table.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"[[9, 0, 0], [9, 0, 0]]"}
           />
           <LessonDiagram
@@ -404,8 +390,6 @@ export const pythonListsLesson = defineCourseLesson({
             }
             language="python"
             fileName="table.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"[[9, 0, 0], [0, 0, 0]]"}
           />
           <LessonDiagram
@@ -445,8 +429,6 @@ export const pythonListsLesson = defineCourseLesson({
             }
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"['10', '20', '30']\n['a', '', 'b']"}
           />
           <Typography.Text>
@@ -465,8 +447,6 @@ export const pythonListsLesson = defineCourseLesson({
             label={"Разберём несколько чисел из одной строки без сокращений"}
             language="python"
             fileName="line.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"[10, 20, 30]"}
           />
           <Typography.Text>
@@ -479,8 +459,6 @@ export const pythonListsLesson = defineCourseLesson({
             label={"Обратное соединение строк выполняет join"}
             language="python"
             fileName="words.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"Учимся писать программы"}
           />
           <Typography.Text>
@@ -512,8 +490,6 @@ export const pythonListsLesson = defineCourseLesson({
             }
             language="python"
             fileName="source.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"[5, 0, 8]\n[5, -2, 0, 8, -1]"}
           />
           <Typography.Text>
@@ -544,8 +520,6 @@ export const pythonListsLesson = defineCourseLesson({
             }
             language="python"
             fileName="numbers.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"20 10"}
           />
           <Typography.Text>

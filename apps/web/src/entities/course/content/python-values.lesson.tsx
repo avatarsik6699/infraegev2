@@ -62,8 +62,6 @@ export const pythonValuesLesson = defineCourseLesson({
             }
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"30\n273"}
           />
           <Typography.Text>
@@ -127,8 +125,6 @@ export const pythonValuesLesson = defineCourseLesson({
             }
             language="python"
             fileName="price.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"120"}
           />
           <Typography.Text>
@@ -204,8 +200,6 @@ export const pythonValuesLesson = defineCourseLesson({
             label={"Запись x = x + 1 не противоречие, а шаг вычисления"}
             language="python"
             fileName="count.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"5"}
           />
           <Typography.Text>
@@ -276,8 +270,6 @@ export const pythonValuesLesson = defineCourseLesson({
             }
             language="python"
             fileName="value.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"<class 'int'>\n<class 'str'>"}
           />
           <Typography.Text>
@@ -292,8 +284,6 @@ export const pythonValuesLesson = defineCourseLesson({
             }
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             error={
               "TypeError: unsupported operand type(s) for +: 'int' and 'str'"
             }
@@ -341,7 +331,6 @@ export const pythonValuesLesson = defineCourseLesson({
             }
             language="python"
             fileName="discount.py"
-            showLineNumbers={false}
           />
         </>
       ),

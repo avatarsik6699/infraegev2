@@ -57,8 +57,6 @@ export const pythonSortingSearchLesson = defineCourseLesson({
             }
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"[8, 2, 5]\n[2, 5, 8]\n[8, 5, 2]"}
           />
           <Typography.Text>
@@ -83,8 +81,6 @@ export const pythonSortingSearchLesson = defineCourseLesson({
             }
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"['100', '20', '3']\n['3', '20', '100']"}
           />
         </>
@@ -110,8 +106,6 @@ export const pythonSortingSearchLesson = defineCourseLesson({
             }
             language="python"
             fileName="words.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"['кот', 'дом', 'окно', 'арбуз']"}
           />
           <Typography.Text>
@@ -148,8 +142,6 @@ export const pythonSortingSearchLesson = defineCourseLesson({
             }
             language="python"
             fileName="students.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"[('Анна', 91), ('Марк', 91), ('Илья', 84)]"}
           />
           <Typography.Text>
@@ -188,8 +180,6 @@ export const pythonSortingSearchLesson = defineCourseLesson({
             }
             language="python"
             fileName="words.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"арбуз\nNone"}
           />
           <Typography.Text>
@@ -233,8 +223,6 @@ export const pythonSortingSearchLesson = defineCourseLesson({
             label={"Программа на Python"}
             language="python"
             fileName="prices.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"3 70"}
           />
           <Typography.Text>

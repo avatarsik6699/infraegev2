@@ -6,10 +6,9 @@ import { CodeBlockLabel } from "./code-block-label";
 import styles from "./code-block.module.css";
 
 export type CodeBlockOutputProps = {
-  /** Printed text; in the lines layout typed input is marked `⟪…⟫`. */
+  /** Printed text, line by line; typed input is marked `⟪…⟫`. */
   text: string;
   error?: string;
-  layout: "row" | "lines";
   collapsible?: boolean;
   /** Shown instead of an empty output (step-by-step run before any print). */
   emptyText?: string;
@@ -46,19 +45,6 @@ export const CodeBlockOutput: React.FC<CodeBlockOutputProps> = (props) => {
   const contentId = useId();
   const text = props.text.replace(/\n+$/u, "");
 
-  if (props.layout === "row") {
-    return (
-      <div className={styles.output} data-code-output>
-        <span className={styles.outputLabel}>Вывод</span>
-        <samp className={styles.outputValue}>
-          {[text.split("\n").join(", "), props.error]
-            .filter(Boolean)
-            .join(", ")}
-        </samp>
-      </div>
-    );
-  }
-
   const lines = text ? text.split("\n") : [];
   const errorLines = props.error ? props.error.split("\n") : [];
   const isLong =
@@ -67,7 +53,7 @@ export const CodeBlockOutput: React.FC<CodeBlockOutputProps> = (props) => {
   const collapsed = enhanced && isLong && !expanded;
 
   return (
-    <div className={styles.output} data-code-output data-output-layout="lines">
+    <div className={styles.output} data-code-output>
       <CodeBlockLabel icon={SquareTerminal}>Вывод:</CodeBlockLabel>
       <div className={styles.outputBody}>
         <samp

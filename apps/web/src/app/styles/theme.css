@@ -100,8 +100,10 @@
   --theme-difficulty-hard: #c8483c;
 
   /* Code on a soft surface; every code text colour is at least 4.5:1 on
-     --theme-code. Line numbers are decorative (aria-hidden, not copied) and
-     barely visible by the architect's decision (Change 171). */
+     --theme-code. A restrained scheme (architect, 2026-10-20): code blocks
+     teach, so only keywords, strings, numbers and comments take a colour.
+     Line numbers are decorative (aria-hidden, not copied) and barely visible
+     by the architect's decision (Change 171). */
   --theme-code: #f8f8f6;
   --theme-code-ink: #17191e;
   --theme-code-keyword: #5b3b9a;

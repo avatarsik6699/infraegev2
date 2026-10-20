@@ -125,8 +125,6 @@ export const pythonIteratorsGeneratorsLesson = defineCourseLesson({
             }
             language="python"
             fileName="numbers.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"10\n20\n[30]\n[]"}
           />
           <Typography.Text>
@@ -183,8 +181,6 @@ export const pythonIteratorsGeneratorsLesson = defineCourseLesson({
             label={"Программа на Python"}
             language="python"
             fileName="parts.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"[10, -2, 7]\n[]\n[10, 7]"}
           />
           <Typography.Text>
@@ -201,8 +197,6 @@ export const pythonIteratorsGeneratorsLesson = defineCourseLesson({
             label={"Если частей не две, распаковка завершится ошибкой"}
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"⟪3 4⟫\n7"}
           />
           <Typography.Text>
@@ -233,8 +227,6 @@ export const pythonIteratorsGeneratorsLesson = defineCourseLesson({
             }
             language="python"
             fileName="numbers.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"56\n14"}
           />
           <Typography.Text>

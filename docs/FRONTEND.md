@@ -149,11 +149,12 @@ Lesson media:
   label and its topic, the arrow on the right); a proof keeps the plain fold.
 - Generated figures name the stand's fonts; `lesson-media.module.css` maps them to the site faces,
   and monospace labels keep the 0.6 em pitch (`textLength`) the builders place boxes by.
-- `CodeRunner` is a runnable code block: steps recorded at export by `tracer.py` (media kind
+- `CodeRunner` is a runnable code block: steps recorded by `site_media.py` with `tracer.py` (media kind
   `run`), never code executed in the browser. «Запуск» (a quiet pill) after the copy button; back / count / forward / close
   and ←/→/Esc while running; the executed line is highlighted; variables sit beside the code when
   the widest line leaves room, under it otherwise (values in small boxes; call frames nested, the
-  active one and a changed value outlined in `--color-current-location`; lists/dicts/sets as
+  active one and a changed value outlined in `--color-current-location`, the course blue in a
+  Python lesson; lists/dicts/sets as
   objects with arrows); every step is laid out in one grid cell so the block keeps its tallest step's height.
   Without scripting and on SSR it is the ordinary code block with output.
 - `RangeSandbox` redraws `range(start, stop, step)` or `s[start:stop:step]` as the learner types,

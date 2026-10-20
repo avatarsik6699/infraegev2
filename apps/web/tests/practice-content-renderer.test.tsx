@@ -190,6 +190,34 @@ describe("rich practice content", () => {
     expect((input as HTMLInputElement).disabled).toBe(true);
   });
 
+  it("plays the confetti once after «Проверить», not again when its tab is shown (Change 197)", async () => {
+    const { container } = render(
+      <LessonPractice
+        tasks={[task, { ...task, id: "second-task" }]}
+        solvedTaskIds={[]}
+        checkAnswer={vi.fn().mockResolvedValue({
+          correct: true,
+          explanation: "Верно.",
+        })}
+        onTaskSolved={() => 1}
+      />,
+    );
+    const burst = () => container.querySelector("[data-burst]");
+    const [first, second] = screen.getAllByRole("tab");
+    fireEvent.change(
+      screen.getAllByRole("textbox", { name: "Ваш ответ" })[0]!,
+      {
+        target: { value: "2" },
+      },
+    );
+    fireEvent.click(screen.getAllByRole("button", { name: "Проверить" })[0]!);
+    await waitFor(() => expect(burst()).not.toBeNull());
+    await waitFor(() => expect(burst()).toBeNull(), { timeout: 3000 });
+    fireEvent.click(second!);
+    fireEvent.click(first!);
+    expect(burst()).toBeNull();
+  });
+
   it("stores a saved member result as a fact without its submitted answer", async () => {
     const onTaskSolved = vi.fn();
     render(

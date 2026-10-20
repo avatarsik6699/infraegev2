@@ -1,4 +1,4 @@
-import { Check, ChevronDown, Copy } from "lucide-react";
+import { Check, ChevronDown, Copy, FileCode2, FileText } from "lucide-react";
 import { useId, useState } from "react";
 import { Button } from "~/shared/components/button";
 import { Typography } from "~/shared/components/typography";
@@ -53,7 +53,7 @@ export const CodeBlock: React.FC<CodeBlockTypes.Props> = (props) => {
         <CodeBlockContent
           code={props.code}
           language={props.language}
-          showLineNumbers={props.showLineNumbers ?? true}
+          showLineNumbers={isPython}
           id={contentId}
           collapsed={collapsed}
           activeLine={props.activeLine}
@@ -75,7 +75,6 @@ export const CodeBlock: React.FC<CodeBlockTypes.Props> = (props) => {
           <CodeBlockOutput
             text={props.output ?? ""}
             error={props.error}
-            layout={props.outputLayout ?? "row"}
             collapsible={collapsible}
           />
         ))}
@@ -99,7 +98,10 @@ const CodeBlockHeader: React.FC<CodeBlockHeaderProps> = (props) => (
     <div className={styles.meta} aria-hidden="true">
       {props.isPython || props.fileName ? (
         <Typography.Text component="span" className={styles.language}>
-          {props.fileName ?? "Python"}
+          <FileIcon isPython={props.isPython} fileName={props.fileName} />
+          <span className={styles.languageName}>
+            {props.fileName ?? "Python"}
+          </span>
         </Typography.Text>
       ) : null}
     </div>
@@ -134,6 +136,21 @@ const CodeBlockHeader: React.FC<CodeBlockHeaderProps> = (props) => (
     )}
   </div>
 );
+
+/** The name's mark: a Python program or a data file. */
+const FileIcon: React.FC<{ isPython: boolean; fileName?: string }> = (
+  props,
+) => {
+  const Icon = props.isPython ? FileCode2 : FileText;
+  return (
+    <Icon
+      className={styles.languageIcon}
+      aria-hidden="true"
+      size={14}
+      strokeWidth={1.75}
+    />
+  );
+};
 
 type CodeBlockDisclosureProps = {
   collapsed: boolean;

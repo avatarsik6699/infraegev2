@@ -71,51 +71,54 @@
   padding: var(--space-0-5) var(--space-2) var(--space-0-5) var(--space-4);
 }
 
-/* «Тонкости» (Change 175): the frame of a code block, a small mark on the
-   left, the label and its topic, the fold arrow on the right. */
+/* «Тонкости» (Change 175, reworked in Change 197): a footnote of the
+   paragraph above, the same in every course and topic. Closed, one quiet line
+   under that paragraph: a small magnifier, «Тонкости:» and the topic in the
+   label size, the fold arrow. Opened, the text runs on indented under a
+   hairline, a size smaller than the step. */
 .root[data-kind="nuance"] {
-  border-radius: 0.75rem;
+  max-width: var(--measure-reading);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
 }
 
 .root[data-kind="nuance"] > .summary {
-  gap: var(--space-1-5);
-  min-height: 3rem;
-  padding: var(--space-1) var(--space-1-5) var(--space-1) var(--space-1);
-  border-radius: 0.75rem;
+  display: inline-flex;
+  gap: 0.4375rem;
+  min-height: 2.25rem;
+  margin-left: -0.5rem;
+  padding: 0.25rem 0.625rem 0.25rem 0.5rem;
+  border-radius: var(--radius-control);
+  color: var(--color-text-soft);
+  font-size: var(--text-sm);
 }
 
-.root[data-kind="nuance"][open] > .summary {
-  border-bottom: 1px solid var(--color-rule);
-  border-radius: 0.75rem 0.75rem 0 0;
+.root[data-kind="nuance"] > .summary:hover {
+  background: var(--color-wash);
+  color: var(--color-text);
 }
 
 .mark {
   display: inline-grid;
   flex: none;
-  width: 2rem;
-  height: 2rem;
   place-items: center;
-  border-radius: var(--radius-control);
-  background: var(--color-wash);
-  color: var(--color-text-soft);
+  color: var(--color-muted);
 }
 
 .title {
   display: flex;
-  flex: 1;
   flex-wrap: wrap;
-  gap: 0 var(--space-1);
+  gap: 0 0.3125rem;
   align-items: baseline;
   min-width: 0;
 }
 
 .label {
-  color: var(--color-text);
   font-weight: 600;
 }
 
 .topic {
-  color: var(--color-text-soft);
   font-weight: 400;
 }
 
@@ -130,7 +133,11 @@
 }
 
 .root[data-kind="nuance"] > .body {
-  padding: var(--space-1-5) var(--space-2) var(--space-1);
+  --text-reading: 0.96875rem;
+  margin: 0.25rem 0 0 0.4375rem;
+  padding: 0 0 0 1.125rem;
+  border-left: 1px solid var(--color-rule-strong);
+  color: var(--color-text-soft);
 }
 
 @media (prefers-reduced-motion: reduce) {

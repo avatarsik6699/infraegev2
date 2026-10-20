@@ -108,7 +108,7 @@ export class PracticeCutoverPage {
   async expectLegacyBrowserProgressIsIgnored(): Promise<void> {
     await this.page.goto("/courses/python/pervaya-programma");
     await expect(
-      this.page.locator("#answer-python-first-program-t02"),
+      this.page.locator("#answer-python-first-program-t03"),
     ).toBeEnabled({ timeout: 15000 });
     await this.page.evaluate(() => {
       localStorage.setItem(
@@ -128,7 +128,7 @@ export class PracticeCutoverPage {
     });
     await this.page.reload();
     await expect(
-      this.page.locator("#answer-python-first-program-t02"),
+      this.page.locator("#answer-python-first-program-t03"),
     ).toBeEnabled({ timeout: 15000 });
     await this.page.goto("/courses/python");
     const size = this.page.getByRole("region", { name: "Объём курса" });

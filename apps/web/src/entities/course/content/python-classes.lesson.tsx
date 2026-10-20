@@ -69,8 +69,6 @@ export const pythonClassesLesson = defineCourseLesson({
             label={"Для суммы чисел отдельный класс обычно не нужен"}
             language="python"
             fileName="reading_progress.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"Python 30\n0.15"}
           />
           <Typography.Text>
@@ -121,8 +119,6 @@ export const pythonClassesLesson = defineCourseLesson({
             }
             language="python"
             fileName="another_book.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"0 30"}
           />
         </>
@@ -151,8 +147,6 @@ export const pythonClassesLesson = defineCourseLesson({
             label={"Программа на Python"}
             language="python"
             fileName="notebook.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"[]"}
           />
           <Typography.Text>
@@ -198,8 +192,6 @@ export const pythonClassesLesson = defineCourseLesson({
             }
             language="python"
             fileName="rectangle.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"15"}
           />
           <Typography.Text>
@@ -234,8 +226,6 @@ export const pythonClassesLesson = defineCourseLesson({
             label={"Программа на Python"}
             language="python"
             fileName="named_item.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"Книга\n✓ Прочитать"}
           />
           <Typography.Text>
@@ -293,8 +283,6 @@ export const pythonClassesLesson = defineCourseLesson({
             }
             language="python"
             fileName="point.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"Point(x=1.0, y=2.0)\nTrue"}
           />
           <Typography.Text>
@@ -314,7 +302,6 @@ export const pythonClassesLesson = defineCourseLesson({
             label={"Для независимого изменяемого поля применяют фабрику"}
             language="python"
             fileName="course.py"
-            showLineNumbers={false}
           />
           <Typography.Text>
             <Notation>{"default_factory=list"}</Notation> создаёт новый список

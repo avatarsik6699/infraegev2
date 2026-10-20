@@ -46,7 +46,6 @@ export const pythonFilesLesson = defineCourseLesson({
             label={"Строки файла numbers.txt"}
             language="text"
             fileName="numbers.txt"
-            showLineNumbers={false}
           />
           <Typography.Text>
             Найдём сумму, количество, отрицательный максимум и разберём, что
@@ -85,8 +84,6 @@ export const pythonFilesLesson = defineCourseLesson({
             }
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"'5\\n-2\\n10\\n7\\n'"}
           />
           <Typography.Text>
@@ -110,8 +107,6 @@ export const pythonFilesLesson = defineCourseLesson({
             label={"Если файла нет по указанному пути, программа остановится"}
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             error={
               "FileNotFoundError: [Errno 2] No such file or directory: 'missing.txt'"
             }
@@ -145,8 +140,6 @@ export const pythonFilesLesson = defineCourseLesson({
             }
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"20"}
           />
           <Typography.Text>
@@ -163,8 +156,6 @@ export const pythonFilesLesson = defineCourseLesson({
             }
             language="python"
             fileName="total.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"4 20"}
           />
           <Typography.Text>
@@ -210,7 +201,6 @@ export const pythonFilesLesson = defineCourseLesson({
             label={"Строки файла header.txt"}
             language="text"
             fileName="header.txt"
-            showLineNumbers={false}
           />
           <CodeBlock
             code={
@@ -219,8 +209,6 @@ export const pythonFilesLesson = defineCourseLesson({
             label={"Пусть в файле header.txt первая строка — количество чисел"}
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"9"}
           />
           <Typography.Text>
@@ -245,8 +233,6 @@ export const pythonFilesLesson = defineCourseLesson({
             label={"Программа на Python"}
             language="python"
             fileName="header.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"100 2500"}
           />
           <Typography.Text>
@@ -284,7 +270,6 @@ export const pythonFilesLesson = defineCourseLesson({
             }
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
           />
           <Typography.Text>
             <Notation>{"write"}</Notation> принимает строку и сам не добавляет
@@ -317,7 +302,6 @@ export const pythonFilesLesson = defineCourseLesson({
             label={"Программа на Python"}
             language="python"
             fileName="path.py"
-            showLineNumbers={false}
           />
           <Typography.Text>
             Знак <Notation>{"/"}</Notation> между объектом{" "}
@@ -364,7 +348,6 @@ export const pythonFilesLesson = defineCourseLesson({
             label={"Строки файла students.csv"}
             language="text"
             fileName="students.csv"
-            showLineNumbers={false}
           />
           <CodeBlock
             code={
@@ -373,8 +356,6 @@ export const pythonFilesLesson = defineCourseLesson({
             label={"В стандартной библиотеке есть модуль csv"}
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"Анна 91\nИлья 84\nМарк 88"}
           />
           <Typography.Text>
@@ -399,8 +380,6 @@ export const pythonFilesLesson = defineCourseLesson({
             }
             language="python"
             fileName="data.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"True"}
           />
           <Typography.Text>
@@ -438,8 +417,6 @@ export const pythonFilesLesson = defineCourseLesson({
             }
             language="python"
             fileName="best.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"-2"}
           />
           <Typography.Text>

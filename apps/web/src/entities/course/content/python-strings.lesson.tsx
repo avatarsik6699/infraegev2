@@ -62,8 +62,6 @@ export const pythonStringsLesson = defineCourseLesson({
             label={"Программа на Python"}
             language="python"
             fileName="word.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"6\nP\nT\nN"}
           />
           <Typography.Text>
@@ -92,8 +90,6 @@ export const pythonStringsLesson = defineCourseLesson({
             label={"Обращение к word[6] вызывает ошибку: такой позиции нет"}
             language="python"
             fileName="word.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             error={"IndexError: string index out of range"}
           />
           <Typography.Text>
@@ -125,8 +121,6 @@ export const pythonStringsLesson = defineCourseLesson({
             label={"Остановка не включается, как в range"}
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"BCD\nABC\nEFG\nACEG\nGFEDCBA\nFEDC"}
           />
           <LessonDiagram
@@ -203,8 +197,6 @@ export const pythonStringsLesson = defineCourseLesson({
             }
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             error={"TypeError: 'str' object does not support item assignment"}
           />
           <Typography.Text>
@@ -215,8 +207,6 @@ export const pythonStringsLesson = defineCourseLesson({
             label={"Можно построить новую строку и связать с ней имя"}
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"рот"}
           />
           <Typography.Text>
@@ -363,8 +353,6 @@ export const pythonStringsLesson = defineCourseLesson({
             label={"Программа на Python"}
             language="python"
             fileName="clean.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"python\nTrue 2\n00000101"}
           />
           <Typography.Text>
@@ -429,8 +417,6 @@ export const pythonStringsLesson = defineCourseLesson({
             label={"Для подсчёта всех начал можно проверить каждую позицию"}
             language="python"
             fileName="part.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"3 2"}
           />
           <Typography.Text>
@@ -471,8 +457,6 @@ export const pythonStringsLesson = defineCourseLesson({
             }
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"3\n'A\\nB'\n65 B"}
           />
           <Typography.Text>

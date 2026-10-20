@@ -60,8 +60,6 @@ export const pythonComprehensionsLesson = defineCourseLesson({
             label={"Построим квадраты чисел"}
             language="python"
             fileName="squares.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"[1, 4, 9, 16, 25]"}
           />
           <Typography.Text>
@@ -75,8 +73,6 @@ export const pythonComprehensionsLesson = defineCourseLesson({
             }
             language="python"
             fileName="squares.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"[1, 4, 9, 16, 25]"}
           />
           <Typography.Text>
@@ -119,8 +115,6 @@ export const pythonComprehensionsLesson = defineCourseLesson({
             }
             language="python"
             fileName="even_squares.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"[4, 16, 36]"}
           />
           <Typography.Text>
@@ -135,8 +129,6 @@ export const pythonComprehensionsLesson = defineCourseLesson({
             label={"Условное выражение перед for решает другую задачу"}
             language="python"
             fileName="labels.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"['other', 'other', 'plus']"}
           />
           <Typography.Text>
@@ -166,8 +158,6 @@ export const pythonComprehensionsLesson = defineCourseLesson({
             }
             language="python"
             fileName="pairs.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"[(0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2)]"}
           />
           <Typography.Text>
@@ -198,8 +188,6 @@ export const pythonComprehensionsLesson = defineCourseLesson({
             label={"Независимые строки таблицы теперь можно создавать так"}
             language="python"
             fileName="table.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"[[9, 0, 0], [0, 0, 0]]"}
           />
           <Typography.Text>
@@ -232,8 +220,6 @@ export const pythonComprehensionsLesson = defineCourseLesson({
             }
             language="python"
             fileName="unique_lengths.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"{3, 4}\n{0: 0, 1: 1, 2: 4, 3: 9}"}
           />
           <Typography.Text>
@@ -253,8 +239,6 @@ export const pythonComprehensionsLesson = defineCourseLesson({
             label={"Программа на Python"}
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"0"}
             error={"ValueError: min() iterable argument is empty"}
           />
@@ -274,8 +258,6 @@ export const pythonComprehensionsLesson = defineCourseLesson({
             label={"Программа на Python"}
             language="python"
             fileName="numbers.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"True\nFalse"}
           />
           <Typography.Text>
@@ -307,8 +289,6 @@ export const pythonComprehensionsLesson = defineCourseLesson({
             }
             language="python"
             fileName="line.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"[10, -2, 7]\n15 -2 10"}
           />
           <Typography.Text>

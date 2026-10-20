@@ -66,8 +66,6 @@ export const pythonRecursionLesson = defineCourseLesson({
             label={"при n > 0"}
             language="python"
             fileName="factorial.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"24"}
           />
           <Typography.Text>
@@ -126,8 +124,6 @@ export const pythonRecursionLesson = defineCourseLesson({
             label={"Если базовый случай недостижим, стек переполняется"}
             language="python"
             fileName="down.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             error={"RecursionError: maximum recursion depth exceeded"}
           />
           <Typography.Text>
@@ -142,8 +138,6 @@ export const pythonRecursionLesson = defineCourseLesson({
             label={"Он подключается так же, как math в уроке о модулях"}
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"1000"}
           />
           <Typography.Text>
@@ -179,8 +173,6 @@ export const pythonRecursionLesson = defineCourseLesson({
             label={"Посчитаем вызовы"}
             language="python"
             fileName="fibonacci_slow.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"6765 21891"}
           />
           <Typography.Text>
@@ -205,8 +197,6 @@ export const pythonRecursionLesson = defineCourseLesson({
             label={"Программа на Python"}
             language="python"
             fileName="fibonacci.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"55 2880067194370816120"}
           />
           <Typography.Text>

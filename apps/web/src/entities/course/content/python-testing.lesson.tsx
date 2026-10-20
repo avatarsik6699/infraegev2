@@ -98,8 +98,6 @@ export const pythonTestingLesson = defineCourseLesson({
             }
             language="python"
             fileName="count_positive.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"2"}
           />
           <Typography.Text>
@@ -122,8 +120,6 @@ export const pythonTestingLesson = defineCourseLesson({
             label={"Программа на Python"}
             language="python"
             fileName="maximum_negative.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"-2 None"}
           />
           <Typography.Text>
@@ -166,7 +162,6 @@ export const pythonTestingLesson = defineCourseLesson({
             }
             language="python"
             fileName="maximum_negative.py"
-            showLineNumbers={false}
           />
           <Typography.Text>
             <Notation>{"unittest.TestCase"}</Notation> предоставляет методы
@@ -209,8 +204,6 @@ export const pythonTestingLesson = defineCourseLesson({
             }
             language="python"
             fileName="digit_sum.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"совпадает на 1000 случайных числах"}
           />
           <Typography.Text>
@@ -247,8 +240,6 @@ export const pythonTestingLesson = defineCourseLesson({
             label={"Программа на Python"}
             language="python"
             fileName="data.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"True True"}
           />
           <Typography.Text>

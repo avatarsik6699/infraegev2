@@ -12,33 +12,50 @@
   color: var(--color-code-text);
 }
 
+/* Change 197: the file name sits on the code sheet itself, with a small mark
+   of what it is; the output below is a white panel under a rule, so head,
+   code and output read as different parts. */
 .header {
   display: flex;
   gap: var(--space-1);
   align-items: center;
   min-height: 2.5rem;
-  padding: 0 0.375rem 0 var(--space-2);
-  border-bottom: 1px solid var(--color-rule);
-  background: var(--color-surface);
+  padding: 0.25rem 0.375rem 0 var(--space-2);
+}
+
+/* the name belongs to the code under it: no extra gap before the first line */
+.header + .body .code {
+  padding-top: var(--space-0-5);
 }
 
 .meta {
   display: flex;
   flex: 1;
   min-width: 0;
-  gap: 0.65rem;
   align-items: center;
 }
 
 .language {
-  overflow: hidden;
-  color: var(--color-muted);
+  display: inline-flex;
+  gap: 0.4375rem;
+  align-items: center;
+  min-width: 0;
+  color: var(--color-text-soft);
   font-family: var(--font-data);
   font-size: var(--text-xs);
   font-weight: 500;
   line-height: 1.2;
-  text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.languageName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.languageIcon {
+  flex: none;
+  color: var(--color-muted);
 }
 
 .copyStatus {
@@ -52,7 +69,7 @@
   font-family: var(--font-data);
   font-size: var(--text-learning-code);
   font-variant-ligatures: none;
-  line-height: 1.75;
+  line-height: 1.7;
 }
 
 .scrollArea:focus-visible {
@@ -72,7 +89,7 @@
   color: var(--color-code-text);
   font-family: inherit;
   font-size: var(--text-learning-code);
-  font-weight: 500;
+  font-weight: 400;
   line-height: inherit;
   tab-size: 4;
 }
@@ -184,32 +201,16 @@
   }
 }
 
-/* Output of the program under its code, in one row (Change 171). */
+/* Output of the program under its code, its lines as in a terminal
+   (Change 175, everywhere since Change 197): «Вывод:» on its own row. */
 .output {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: var(--space-1-5);
-  align-items: baseline;
-  padding: var(--space-1) var(--space-2);
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.125rem;
+  align-items: start;
+  padding: var(--space-1) var(--space-2) var(--space-1-5);
   border-top: 1px solid var(--color-rule);
   background: var(--color-surface);
-}
-
-.outputLabel {
-  color: var(--color-muted);
-  font-family: var(--font-ui);
-  font-size: var(--text-xs);
-  font-weight: 500;
-}
-
-.outputValue {
-  min-width: 0;
-  color: var(--color-text-soft);
-  font-family: var(--font-data);
-  font-size: var(--text-learning-code);
-  font-variant-ligatures: none;
-  line-height: 1.6;
-  overflow-wrap: anywhere;
 }
 
 /* Header actions sit after the copy button, on the right (Change 175). */
@@ -242,15 +243,6 @@
   box-shadow: inset 3px 0 0 var(--color-text);
 }
 
-/* Course output keeps its lines, as in a terminal (Change 175): «Вывод:»
-   on its own row, the printed lines under it. */
-.output[data-output-layout="lines"] {
-  grid-template-columns: minmax(0, 1fr);
-  gap: 0.125rem;
-  align-items: start;
-  padding-block: var(--space-1) var(--space-1-5);
-}
-
 .outputBody {
   display: grid;
   gap: var(--space-0-5);
@@ -262,11 +254,11 @@
   display: block;
   width: 100%;
   min-width: 0;
-  color: var(--color-text-soft);
+  color: var(--color-code-text);
   font-family: var(--font-data);
   font-size: var(--text-learning-code);
   font-variant-ligatures: none;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1.6;
   white-space: pre-wrap;
   overflow-wrap: anywhere;

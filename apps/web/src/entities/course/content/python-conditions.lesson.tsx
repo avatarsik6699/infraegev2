@@ -59,8 +59,6 @@ export const pythonConditionsLesson = defineCourseLesson({
             label={"Ветвление — выбор действий на основании условия"}
             language="python"
             fileName="order_total.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"0"}
           />
           <Typography.Text>
@@ -156,8 +154,6 @@ export const pythonConditionsLesson = defineCourseLesson({
             }
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"чётное\nделится на 3"}
           />
           <Typography.Text>
@@ -192,8 +188,6 @@ export const pythonConditionsLesson = defineCourseLesson({
             }
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"неположительное"}
           />
           <Typography.Text>
@@ -210,8 +204,6 @@ export const pythonConditionsLesson = defineCourseLesson({
             }
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             error={"NameError: name 'result' is not defined"}
           />
           <Typography.Text>
@@ -227,8 +219,6 @@ export const pythonConditionsLesson = defineCourseLesson({
             label={"Для простого выбора значения есть условное выражение"}
             language="python"
             fileName="absolute.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"2"}
           />
           <Typography.Text>
@@ -260,8 +250,6 @@ export const pythonConditionsLesson = defineCourseLesson({
             }
             language="python"
             fileName="best.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"-2"}
           />
           <Typography.Text>
@@ -298,8 +286,6 @@ export const pythonConditionsLesson = defineCourseLesson({
             }
             language="python"
             fileName="total.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"20 10"}
           />
           <Typography.Text>

@@ -61,8 +61,6 @@ export const pythonExceptionsLesson = defineCourseLesson({
             label={"Теперь научимся их обрабатывать"}
             language="python"
             fileName="text.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"Нужно ввести целое число"}
           />
           <Typography.Text>
@@ -127,8 +125,6 @@ export const pythonExceptionsLesson = defineCourseLesson({
             }
             language="python"
             fileName="average.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"5.0"}
             error={"ValueError: Нельзя вычислить среднее пустого набора"}
           />
@@ -164,8 +160,6 @@ export const pythonExceptionsLesson = defineCourseLesson({
             label={"Один способ — временно печатать промежуточные значения"}
             language="python"
             fileName="numbers.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={
               "шаг 0 элемент 3 сумма 3\nшаг 1 элемент -1 сумма 2\nшаг 2 элемент 4 сумма 6"
             }
@@ -208,8 +202,6 @@ export const pythonExceptionsLesson = defineCourseLesson({
             label={"assert проверяет предположение разработчика"}
             language="python"
             fileName="double.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             error={"AssertionError"}
           />
           <Typography.Text>

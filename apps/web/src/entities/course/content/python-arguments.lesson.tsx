@@ -58,8 +58,6 @@ export const pythonArgumentsLesson = defineCourseLesson({
             }
             language="python"
             fileName="final_price.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"200.0\n180.0\n180.0"}
           />
           <Typography.Text>
@@ -76,8 +74,6 @@ export const pythonArgumentsLesson = defineCourseLesson({
             label={"Одному параметру нельзя передать значение дважды"}
             language="python"
             fileName="final_price.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             error={
               "TypeError: final_price() got multiple values for argument 'price'"
             }
@@ -111,8 +107,6 @@ export const pythonArgumentsLesson = defineCourseLesson({
             label={"Правильный приём — None по умолчанию и новый список внутри"}
             language="python"
             fileName="add_item.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"[1]\n[2]"}
           />
           <Typography.Text>
@@ -144,8 +138,6 @@ export const pythonArgumentsLesson = defineCourseLesson({
             }
             language="python"
             fileName="quotient_and_remainder.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"4 3"}
           />
           <Typography.Text>
@@ -170,8 +162,6 @@ export const pythonArgumentsLesson = defineCourseLesson({
             }
             language="python"
             fileName="total_of.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"10\n0"}
           />
           <Typography.Text>
@@ -209,8 +199,6 @@ export const pythonArgumentsLesson = defineCourseLesson({
             }
             language="python"
             fileName="last_digit.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"7\n3"}
           />
           <Typography.Text>
@@ -250,8 +238,6 @@ export const pythonArgumentsLesson = defineCourseLesson({
             }
             language="python"
             fileName="digit_sum.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"14 0"}
           />
           <Typography.Text>
@@ -285,8 +271,6 @@ export const pythonArgumentsLesson = defineCourseLesson({
             }
             language="python"
             fileName="count_even.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"2\n0"}
           />
           <Typography.Text>

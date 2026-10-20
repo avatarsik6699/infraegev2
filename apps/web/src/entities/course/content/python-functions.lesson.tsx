@@ -61,8 +61,6 @@ export const pythonFunctionsLesson = defineCourseLesson({
             label={"Программа на Python"}
             language="python"
             fileName="rectangle_area.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"15\n20"}
           />
           <Typography.Text>
@@ -124,8 +122,6 @@ export const pythonFunctionsLesson = defineCourseLesson({
             label={"Программа на Python"}
             language="python"
             fileName="square.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"16\nNone"}
           />
           <Typography.Text>
@@ -144,8 +140,6 @@ export const pythonFunctionsLesson = defineCourseLesson({
             }
             language="python"
             fileName="describe_sign.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"отрицательное ноль"}
           />
           <Typography.Text>
@@ -198,8 +192,6 @@ export const pythonFunctionsLesson = defineCourseLesson({
             }
             language="python"
             fileName="show.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             error={
               "UnboundLocalError: cannot access local variable 'x' where it is not associated with a value"
             }

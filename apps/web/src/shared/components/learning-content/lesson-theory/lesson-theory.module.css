@@ -45,6 +45,12 @@
   margin-top: var(--rhythm-related-block);
 }
 
+/* «Тонкости» belong to the paragraph above (Change 197): pulled up under it. */
+.conceptExplanation[data-learning-flow]
+  > [data-kind="nuance"]:not(:first-child) {
+  margin-top: var(--space-0-5);
+}
+
 .conceptVisual,
 .conceptExample,
 .conceptMistake {

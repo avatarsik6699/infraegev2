@@ -240,8 +240,21 @@ one orange for position.
 ### Status and code
 - **Success / Error** (success, error with their -bg pairs): answer-check results (an accepted
   field, the solved mark in practice rows) and destructive actions only, never decoration.
-- **Code** (code-keyword violet, code-string green, code-number teal, code-comment grey) inside code
-  blocks only; every code colour keeps at least 4.5:1 on the code surface.
+- **Code** (code-keyword violet, code-string green, code-number teal, code-comment grey italic)
+  inside code blocks only, in regular weight; every code colour keeps at least 4.5:1 on the code
+  surface. The scheme stays restrained (architect, 2026-10-20): code blocks teach, they do not
+  imitate an editor, so names, calls and operators stay ink. A block is one soft code sheet with
+  the file name and a small mark of its kind at the top (no tab bar), the output in a white panel
+  under a rule.
+- **Terminal command** (`TerminalCommand`, Change 197): not a code block — one neutral wash strip
+  with a tag carrying the terminal mark (or «Windows», «Linux и macOS»), the prompt `>` (not
+  copied), the command and a copy button. The same in every course and topic: no course colour,
+  light, never a dark terminal.
+- **«Тонкости»** (nuance fold, Change 197): a footnote of the paragraph above, not a card, the
+  same everywhere. Closed: one quiet line right under that paragraph — a small magnifier,
+  «Тонкости:» (semibold) and the topic in the label size, the fold arrow; no colour, no
+  underline. Opened: the text runs on indented under a neutral hairline, a size smaller. Place
+  it right after the sentence it refines, never after an unrelated figure.
 
 - **Sheet references** (sheet-ref-1…5) inside the Excel course's live sheet only: the frame of the
   cells a formula reads and that reference in the formula bar share one colour, in the order the
@@ -284,6 +297,15 @@ outcome rules, the primary buttons (overview and lesson «Проверить») 
 «К программе курса ↓» (architect, 2026-10-15); text in the tone uses the action shade (≥5:1).
 It never takes another colour's job: every other link stays blue, the current place stays orange, a mastered lesson is a plain green check before its title (no mark
 otherwise). No plate goes under a course scene; `/ege` and `/practice` stay neutral.
+
+**Python lessons in the course blue (architect, 2026-10-20, Change 197).** Inside a Python course
+lesson the tone goes further: the current place (page-rail and lesson-tree bars, the position
+label «Модуль · Урок», the current code line, tabs, the CodeRunner frame) uses the action shade
+instead of Here Orange; the lesson progress and the reading bar fill with the strong shade. Code
+blocks keep their neutral surface and head (architect, 2026-10-20): only their accents — the
+current line, underlines, the running frame — turn blue. The site header keeps its orange, the
+paid-lesson lock stays brand orange, the Excel course is unchanged. Lesson figures switch to the course
+accent lesson by lesson, never all at once.
 
 **The Exam Paper Rule (Change 186).** The EGE topic pages (`/ege`, subtopics, «Практика и итог»)
 share one identity in the site's own grey and orange, no new hue. The `/ege` head and the topic head

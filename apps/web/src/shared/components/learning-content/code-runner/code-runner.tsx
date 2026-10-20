@@ -196,7 +196,6 @@ export const CodeRunner: React.FC<CodeRunnerProps> = (props) => {
         language="python"
         label={props.label}
         fileName={props.fileName}
-        outputLayout="lines"
         output={props.output}
         error={props.error}
         headerActions={actions}
@@ -255,7 +254,6 @@ export const CodeRunner: React.FC<CodeRunnerProps> = (props) => {
                     <CodeBlockOutput
                       text={each.out}
                       error={each.stop ? each.error : undefined}
-                      layout="lines"
                       collapsible={false}
                       emptyText="пока пусто"
                     />

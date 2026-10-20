@@ -24,6 +24,9 @@
 | Файл данных урока и задачи | `content/lesson-files/topic-NN/` и вложение задачи банка — те же байты; книга `.xlsx` — только в банке | `apps/api/tests/test_topic_bank_files.py` |
 | Подсказки терминов | `apps/web/src/entities/lesson/content/python-terms.tsx` | тест урока |
 
+Как вести ревизию урока и какие правила применять — [lesson-review.md](lesson-review.md)
+(выработано на уроке 1.1 курса Python).
+
 После правки единицы: её тест урока и тест банка, `site_media.py --check`, затем Critical Gate
 (`python3 scripts/gate.py affected`) и Playwriter на 1280 и 375 px.
 

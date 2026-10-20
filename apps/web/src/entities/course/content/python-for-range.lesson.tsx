@@ -59,8 +59,6 @@ export const pythonForRangeLesson = defineCourseLesson({
             label={"Примерами будут строка, диапазон и список"}
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"C\nO\nD\nE"}
           />
           <Typography.Text>
@@ -144,8 +142,6 @@ export const pythonForRangeLesson = defineCourseLesson({
             }
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"0\n1\n2"}
           />
           <Typography.Text>
@@ -217,8 +213,6 @@ export const pythonForRangeLesson = defineCourseLesson({
             }
             language="python"
             fileName="answer.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"102"}
           />
           <Typography.Text>
@@ -248,8 +242,6 @@ export const pythonForRangeLesson = defineCourseLesson({
             label={"Вот как выглядит поиск кратного 17 там, где его нет"}
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"нет"}
           />
           <Typography.Text>
@@ -281,8 +273,6 @@ export const pythonForRangeLesson = defineCourseLesson({
             }
             language="python"
             fileName="count.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"14 735"}
           />
           <Typography.Text>

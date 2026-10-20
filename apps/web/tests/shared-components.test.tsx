@@ -300,13 +300,12 @@ describe("CodeBlock", () => {
     (_, index) => `print(${String(index + 1)})`,
   ).join("\n");
 
-  it("renders synchronous Python tokens and optional line numbers as React nodes", () => {
+  it("renders synchronous Python tokens and its line numbers as React nodes", () => {
     const result = render(
       <CodeBlock
         code={"def factorial(n):\n    return n * factorial(n - 1)"}
         label="Рекурсивная функция"
         language="python"
-        showLineNumbers
       />,
     );
 
@@ -336,6 +335,8 @@ describe("CodeBlock", () => {
     );
 
     expect(result.container.querySelector("[data-token]")).toBeNull();
+    // file lines and executor algorithms are not numbered, Python code is (Change 197)
+    expect(result.container.querySelector("[data-line]")).toBeNull();
   });
 
   it("names the data file in the header instead of the language", () => {

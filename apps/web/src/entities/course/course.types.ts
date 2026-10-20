@@ -86,8 +86,8 @@ export namespace CourseTypes {
     learningOutcomes: readonly string[];
     /** Free lessons only; a paid lesson's theory, checkpoint and result are in `paid`. */
     theory?: readonly ConceptBlock[];
-    /** The lesson's single formative, think-then-reveal self-check, rendered inside `result`
-     *  («Итоги»), after the result copy — not counted toward masteryThreshold. */
+    /** The lesson's single formative, think-then-reveal self-check: its own section after
+     *  «Итог» and before «Практика» (Change 197) — not counted toward masteryThreshold. */
     checkpoint?: readonly CheckpointItem[];
     result?: React.ReactNode;
     paid?: PaidLesson;

@@ -55,8 +55,6 @@ export const pythonSetsLesson = defineCourseLesson({
             }
             language="python"
             fileName="values.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"3\nTrue"}
           />
           <Typography.Text>
@@ -76,8 +74,6 @@ export const pythonSetsLesson = defineCourseLesson({
             label={"Непустое множество можно записать {1, 2, 3}"}
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"<class 'dict'> <class 'set'> <class 'set'>"}
           />
         </>
@@ -98,8 +94,6 @@ export const pythonSetsLesson = defineCourseLesson({
             label={"Множества объединяют, пересекают и вычитают"}
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"{1, 2, 3, 4}\n{3}\n{1, 2}\n{1, 2, 4}\nTrue"}
           />
           <Typography.Text>
@@ -134,8 +128,6 @@ export const pythonSetsLesson = defineCourseLesson({
             label={"remove(x) тоже удаляет, но отсутствие вызывает ошибку"}
             language="python"
             fileName="main.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"{1, 2, 3, 4}"}
             error={"KeyError: 9"}
           />
@@ -196,8 +188,6 @@ export const pythonSetsLesson = defineCourseLesson({
             label={"Пока порядок результата не важен"}
             language="python"
             fileName="first.py"
-            showLineNumbers={false}
-            outputLayout="lines"
             output={"{'Илья'}"}
           />
           <Typography.Text>

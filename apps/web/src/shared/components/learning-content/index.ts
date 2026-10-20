@@ -13,6 +13,9 @@ export {
   ProofDisclosure,
 } from "./proof-disclosure";
 export { LessonDiagram } from "./lesson-diagram";
+export { LessonImage } from "./lesson-image";
+export { LessonTabs, type LessonTab } from "./lesson-tabs";
+export { TerminalCommand } from "./terminal-command";
 export { LessonStepper } from "./lesson-stepper";
 export { MaskSandbox, checkMask, segmentByMask } from "./mask-sandbox";
 export type { LessonMediaTypes } from "./lesson-media/lesson-media.types";
