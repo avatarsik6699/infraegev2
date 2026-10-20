@@ -28,6 +28,7 @@ SVG inside ``<img>`` cannot load webfonts.
 import argparse
 import ast
 import hashlib
+import html
 import json
 import re
 import subprocess
@@ -121,7 +122,8 @@ def inline_svg(svg: str) -> tuple[str, int, int, str]:
     clean = clean.replace("<svg ", f'<svg {SVG_NS} aria-hidden="true" focusable="false" ', 1)
     svg = clean + svg[len(head) :]
     svg = svg.replace(STAND_FONT.strip(), 'font-family="inherit"')
-    return svg, width, height, label.group(1) if label else ""
+    # the label is an SVG attribute value; the alt text is plain text
+    return svg, width, height, html.unescape(label.group(1)) if label else ""
 
 
 def figure_entry(call: str, current: dict | None, key: str | None = None) -> tuple[str, str]:

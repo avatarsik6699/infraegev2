@@ -5,6 +5,7 @@ import {
   CodeRunner,
   LessonDiagram,
   LessonSummary,
+  LessonTable,
 } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { pythonConditionsLessonPublication } from "./course-publication.mjs";
@@ -23,20 +24,15 @@ export const pythonConditionsLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
+            В прошлом уроке условия давали ответ <Notation>{"True"}</Notation>{" "}
+            или <Notation>{"False"}</Notation>.{" "}
             <strong>
-              <Notation>{"if"}</Notation> выбирает, какие строки выполнять, по
-              значению условия; порядок проверок в цепочке{" "}
-              <Notation>{"elif"}</Notation> выводится из условий, а не
-              выбирается наугад
+              Теперь программа будет по этому ответу выбирать, какие строки
+              выполнять: это делает инструкция <Notation>{"if"}</Notation>
             </strong>
-            . Опора — логические выражения прошлого урока:{" "}
-            <Notation>{"if"}</Notation> получает именно их значение{" "}
-            <Notation>{"True"}</Notation> или <Notation>{"False"}</Notation>.
-          </Typography.Text>
-          <Typography.Text>
-            Разберём это на уровне ученика по баллу: от 85 — высокий, от 60 —
-            средний, ниже — начальный. На нём видно и выбор одной ветки, и цену
-            неверного порядка проверок.
+            . Начнём с одной проверки, соберём цепочку из нескольких, а в конце
+            начнём новую сквозную задачу курса — сумму и наибольшее из
+            нескольких чисел.
           </Typography.Text>
         </>
       ),
@@ -47,36 +43,77 @@ export const pythonConditionsLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
-            <strong>Ветвление выбирает действия на основании условия.</strong>{" "}
-            Программа расчёта доставки может действовать по-разному: при большой
-            сумме заказа доставка бесплатна, иначе стоит 300 рублей.{" "}
-            <strong>Ветвление</strong> — выбор действий на основании условия.
+            <strong>
+              <Notation>{"if"}</Notation> выполняет блок строк, только если
+              условие истинно.
+            </strong>{" "}
+            Пусть доставка стоит 300 рублей, но при заказе от 2000 рублей она
+            бесплатна:
           </Typography.Text>
           <CodeBlock
             code={
-              "order_total = 2400\nif order_total >= 2000:\n    delivery = 0\nelse:\n    delivery = 300\nprint(delivery)"
+              "order_total = 2400\ndelivery = 300\nif order_total >= 2000:\n    delivery = 0\nprint(delivery)"
             }
-            label={"Ветвление — выбор действий на основании условия"}
+            label={"if выполняет блок строк, только если условие истинно"}
             language="python"
-            fileName="order_total.py"
+            fileName="main.py"
             output={"0"}
           />
           <Typography.Text>
-            <Notation>{"if"}</Notation> проверяет условие. Двоеточие открывает
-            блок связанных инструкций. Строки с одинаковым увеличенным отступом
-            принадлежат блоку. Обычно используют четыре пробела.{" "}
-            <Notation>{"else"}</Notation> означает альтернативу, когда условие{" "}
-            <Notation>{"if"}</Notation> ложно. После возврата к прежнему отступу
-            выполнение продолжается вне ветвления:{" "}
-            <Notation>{"print(delivery)"}</Notation> выполняется в любом случае.
+            Строка с <Notation>{"if"}</Notation> заканчивается двоеточием.
+            Строки под ней с отступом в четыре пробела — это{" "}
+            <strong>блок</strong>: они выполняются, только если условие истинно.
+            Строка без отступа после блока — уже не часть{" "}
+            <Notation>{"if"}</Notation>:{" "}
+            <Notation>{"print(delivery)"}</Notation> выполняется всегда. При
+            сумме 1500 блок пропускается, и программа напечатает 300.
           </Typography.Text>
           <Typography.Text>
-            <strong>Отступ — часть смысла программы.</strong> Это не украшение,
-            как выравнивание текста в тетради. Не смешивай табуляции и пробелы.
-            Если отступ у строки внутри блока пропущен, Python сообщит{" "}
-            <Notation>{"IndentationError"}</Notation>; если лишний отступ стоит
-            у строки вне блока — тоже.
+            Когда нужно выбрать одно из двух действий, добавляют{" "}
+            <Notation>{"else"}</Notation> — «иначе»:
           </Typography.Text>
+          <CodeBlock
+            code={
+              "order_total = 1500\nif order_total >= 2000:\n    delivery = 0\nelse:\n    delivery = 300\nprint(delivery)"
+            }
+            label={"Когда нужно выбрать одно из двух действий, добавляют else"}
+            language="python"
+            fileName="main.py"
+            output={"300"}
+          />
+          <Typography.Text>
+            Блок <Notation>{"else"}</Notation> выполняется, когда условие{" "}
+            <Notation>{"if"}</Notation> ложно. Из двух блоков выполняется ровно
+            один:
+          </Typography.Text>
+          <LessonDiagram
+            {...lessonMedia.codePathsElse}
+            caption={
+              <>
+                Точкой отмечены выполненные строки. При сумме 2400 условие
+                истинно: выполнен блок <Notation>{"if"}</Notation>, блок{" "}
+                <Notation>{"else"}</Notation> пропущен. При 1500 — наоборот.
+                Строка <Notation>{"print"}</Notation> без отступа выполняется в
+                обоих случаях.
+              </>
+            }
+          />
+          <Typography.Text>
+            <strong>Отступ — часть смысла программы.</strong> По нему Python
+            понимает, где кончается блок. В PyCharm после двоеточия нажми Enter
+            — отступ появится сам; клавиша Tab вставляет те же четыре пробела.
+            Если отступ пропустить, Python остановится ещё до запуска — это
+            синтаксическая ошибка из первого урока:
+          </Typography.Text>
+          <CodeBlock
+            code={'if 5 > 3:\nprint("да")'}
+            label={"Если отступ пропустить, Python остановится ещё до запуска"}
+            language="python"
+            fileName="main.py"
+            error={
+              "IndentationError: expected an indented block after 'if' statement on line 1"
+            }
+          />
         </>
       ),
     },
@@ -89,7 +126,10 @@ export const pythonConditionsLesson = defineCourseLesson({
             <strong>
               <Notation>{"elif"}</Notation> проверяет следующий случай, только
               если предыдущие не подошли.
-            </strong>
+            </strong>{" "}
+            Уровень ученика по баллу: от 85 — высокий, от 60 — средний, ниже —
+            начальный. Нажми «Запуск» в шапке примера и пройди программу по
+            шагам:
           </Typography.Text>
           <CodeRunner
             {...lessonMedia.runLevel}
@@ -98,20 +138,41 @@ export const pythonConditionsLesson = defineCourseLesson({
             }
           />
           <Typography.Text>
-            <Notation>{"elif"}</Notation> — следующая проверка, если предыдущие
-            не подошли. Здесь выбирается ровно одна ветка. Во вторую ветку
-            попадают значения от 60 до 84: верхняя граница уже следует из
-            неуспеха первой проверки. Проверим границы. 85 ещё «высокий»:{" "}
-            <Notation>{">="}</Notation> включает саму границу. 84 уже «средний»,
-            60 — тоже «средний», 59 — «начальный». Для 90 и 85 вторая проверка
-            не выполняется вовсе: ответ найден на первой.
+            <Notation>{"elif"}</Notation> — «иначе если»: следующая проверка,
+            если предыдущие не подошли. Проверка{" "}
+            <Notation>{"score >= 85"}</Notation> дала{" "}
+            <Notation>{"False"}</Notation>, <Notation>{"score >= 60"}</Notation>{" "}
+            — <Notation>{"True"}</Notation>, и до <Notation>{"else"}</Notation>{" "}
+            дело уже не дошло. Цепочка выбирает ровно одну ветку. Во вторую
+            ветку попадают баллы от 60 до 84: верхняя граница следует из того,
+            что первая проверка не прошла. Проверим границы:
           </Typography.Text>
+          <LessonTable
+            label="Уровень на границах"
+            columns={[
+              { label: "Балл", numeric: true },
+              { label: "Уровень" },
+              { label: "Почему" },
+            ]}
+            rows={[
+              [
+                "85",
+                "высокий",
+                <>
+                  <Notation>{">="}</Notation> включает саму границу
+                </>,
+              ],
+              ["84", "средний", "первая проверка не прошла, вторая прошла"],
+              ["60", "средний", "граница второй проверки"],
+              ["59", "начальный", "не прошла ни одна проверка"],
+            ]}
+          />
           <Typography.Text>
             Если сначала проверить <Notation>{"score >= 60"}</Notation>, а потом{" "}
-            <Notation>{"score >= 85"}</Notation>, высокий результат захватит
-            первая ветка: для 90 получится «средний», а ветка «высокий» не
-            выполнится никогда. Поэтому порядок проверок нужно выводить из
-            условий, а не выбирать наугад.
+            <Notation>{"score >= 85"}</Notation>, высокий балл захватит первая
+            ветка: для 90 получится «средний», а ветка «высокий» не выполнится
+            никогда. Поэтому порядок проверок выводят из условий: от самой
+            строгой к самой мягкой.
           </Typography.Text>
           <LessonDiagram
             {...lessonMedia.branch73_90}
@@ -124,13 +185,6 @@ export const pythonConditionsLesson = defineCourseLesson({
               </>
             }
           />
-          <Typography.Text>
-            Запусти программу с баллом 73 по шагам: проверка{" "}
-            <Notation>{"score >= 85"}</Notation> даёт{" "}
-            <Notation>{"False"}</Notation>, <Notation>{"score >= 60"}</Notation>{" "}
-            — <Notation>{"True"}</Notation>, и строки ветки{" "}
-            <Notation>{"else"}</Notation> уже не рассматриваются.
-          </Typography.Text>
         </>
       ),
     },
@@ -157,12 +211,23 @@ export const pythonConditionsLesson = defineCourseLesson({
             output={"чётное\nделится на 3"}
           />
           <Typography.Text>
-            Будут напечатаны обе строки. Замена второго{" "}
-            <Notation>{"if"}</Notation> на <Notation>{"elif"}</Notation>{" "}
-            запретила бы второй вывод после успешного первого: цепочка{" "}
-            <Notation>{"if"}</Notation>–<Notation>{"elif"}</Notation> выбирает
-            не больше одной ветки.
+            Будут напечатаны обе строки: каждая проверка независима. Если
+            заменить второй <Notation>{"if"}</Notation> на{" "}
+            <Notation>{"elif"}</Notation>, после успешной первой проверки вторая
+            даже не выполнится: цепочка <Notation>{"if"}</Notation>–
+            <Notation>{"elif"}</Notation> выбирает не больше одной ветки.
           </Typography.Text>
+          <LessonDiagram
+            {...lessonMedia.codePathsElif}
+            caption={
+              <>
+                Одна и та же проверка для <Notation>{"n = 12"}</Notation>. Слева
+                два отдельных <Notation>{"if"}</Notation>: выполнены обе ветки.
+                Справа <Notation>{"elif"}</Notation>: первая ветка сработала, и
+                вторая проверка пропущена.
+              </>
+            }
+          />
         </>
       ),
     },
@@ -192,106 +257,100 @@ export const pythonConditionsLesson = defineCourseLesson({
           />
           <Typography.Text>
             Если убрать <Notation>{"else"}</Notation>, при{" "}
-            <Notation>{"x = -2"}</Notation> имя <Notation>{"result"}</Notation>{" "}
-            в свежем запуске не появится:
+            <Notation>{"x = -2"}</Notation> присваивание не выполнится, и имени{" "}
+            <Notation>{"result"}</Notation> не будет:
           </Typography.Text>
           <CodeBlock
             code={
               'x = -2\nif x > 0:\n    result = "положительное"\nprint(result)'
             }
-            label={
-              "Если убрать else, при x = -2 имя result в свежем запуске не появится"
-            }
+            label={"Если убрать else, имени result не будет"}
             language="python"
             fileName="main.py"
             error={"NameError: name 'result' is not defined"}
           />
           <Typography.Text>
-            Интерактивная среда может скрыть ошибку, если от прошлого запуска
-            осталось старое значение; поэтому регулярно запускай весь файл
-            заново.
-          </Typography.Text>
-          <Typography.Text>
-            Для простого выбора значения есть условное выражение:
+            Для простого выбора одного из двух значений есть{" "}
+            <strong>условное выражение</strong>{" "}
+            <Notation>{"значение if условие else другое"}</Notation>:
           </Typography.Text>
           <CodeBlock
             code={"x = -2\nabsolute = x if x >= 0 else -x\nprint(absolute)"}
             label={"Для простого выбора значения есть условное выражение"}
             language="python"
-            fileName="absolute.py"
+            fileName="main.py"
             output={"2"}
           />
           <Typography.Text>
             Сначала проверяется условие, затем вычисляется только выбранная
-            часть. Для сложных действий обычный <Notation>{"if"}</Notation>{" "}
-            читается лучше.
+            часть. Для действий из нескольких строк обычный{" "}
+            <Notation>{"if"}</Notation> читается лучше.
           </Typography.Text>
         </>
       ),
     },
     {
       id: "s5",
-      navLabel: "Наибольшее из чисел",
+      navLabel: "Сквозная задача",
       explanation: (
         <>
           <Typography.Text>
             <strong>
-              Наибольшее из нескольких чисел ищут, сравнивая с лучшим найденным.
+              Новая сквозная задача курса: сумма и наибольшее из нескольких
+              чисел.
             </strong>{" "}
-            Найдём наибольшее из трёх целых без <Notation>{"max"}</Notation>,
-            разрешая равные и отрицательные значения:
+            Модуль 1 шёл на тетрадях. С этого урока через весь курс пройдёт
+            другая задача: найти сумму и наибольшее из чисел 5, −2, 10, 7. С
+            каждым модулем решение будет короче, а данных — больше. Сейчас у нас
+            есть только переменные и <Notation>{"if"}</Notation>, поэтому каждое
+            число получает своё имя.
           </Typography.Text>
-          <CodeBlock
-            code={
-              "a = -5\nb = -2\nc = -9\nbest = a\nif b > best:\n    best = b\nif c > best:\n    best = c\nprint(best)"
-            }
-            label={
-              "Найдём наибольшее из трёх целых без max, разрешая равные и отрицательные значения"
-            }
-            language="python"
-            fileName="best.py"
-            output={"-2"}
+          <Typography.Text>
+            Сумма — просто выражение. Наибольшее ищут так: первое число
+            запоминают как лучшее, а каждое следующее сравнивают с лучшим и,
+            если оно больше, делают лучшим его. Пройди программу по шагам и
+            следи за <Notation>{"best"}</Notation>:
+          </Typography.Text>
+          <CodeRunner
+            {...lessonMedia.runTotal}
+            label={"Сумма и наибольшее из чисел 5, −2, 10, 7"}
           />
           <Typography.Text>
-            Начальное значение взято из данных. Если начать с нуля, все
-            отрицательные значения ошибочно проиграют числу, которого среди
-            данных нет: программа напечатала бы 0. Здесь нужны именно отдельные{" "}
-            <Notation>{"if"}</Notation>, а не <Notation>{"elif"}</Notation>:
-            каждое следующее число сравнивается с лучшим на данный момент.
+            Здесь нужны отдельные <Notation>{"if"}</Notation>, а не{" "}
+            <Notation>{"elif"}</Notation>: каждое число сравнивается с лучшим на
+            данный момент, и проверить нужно все. Для тысячи чисел так писать
+            нельзя: понадобилась бы тысяча имён и тысяча{" "}
+            <Notation>{"if"}</Notation>. Это решат циклы следующего модуля.
           </Typography.Text>
         </>
       ),
     },
     {
       id: "s6",
-      navLabel: "Сквозная задача",
+      navLabel: "Начало — из данных",
       explanation: (
         <>
           <Typography.Text>
             <strong>
-              Сквозная задача курса: сумма и наибольшее — пока для отдельных
-              чисел.
+              Лучшее начинают с первого числа данных, а не с нуля.
             </strong>{" "}
-            Через весь курс пройдёт одна задача: найти сумму и наибольшее из
-            чисел 5, −2, 10, 7. С каждым модулем её решение будет становиться
-            короче, а данные — больше. Сейчас у нас есть только переменные и{" "}
-            <Notation>{"if"}</Notation>, поэтому каждое число получает своё имя:
+            Проверим на отрицательных числах:
           </Typography.Text>
           <CodeBlock
             code={
-              "a = 5\nb = -2\nc = 10\nd = 7\ntotal = a + b + c + d\nbest = a\nif b > best:\n    best = b\nif c > best:\n    best = c\nif d > best:\n    best = d\nprint(total, best)"
+              "a = -5\nb = -2\nc = -9\nbest = a\nif b > best:\n    best = b\nif c > best:\n    best = c\nprint(best)"
             }
-            label={
-              "Сейчас у нас есть только переменные и if, поэтому каждое число получает своё имя"
-            }
+            label={"Лучшее начинают с первого числа данных, а не с нуля"}
             language="python"
-            fileName="total.py"
-            output={"20 10"}
+            fileName="main.py"
+            output={"-2"}
           />
           <Typography.Text>
-            Для тысячи чисел так писать нельзя: понадобилась бы тысяча имён и
-            тысяча <Notation>{"if"}</Notation>. Это решат циклы следующего
-            модуля.
+            Если начать с <Notation>{"best = 0"}</Notation>, все отрицательные
+            числа проиграют нулю, которого среди данных нет: программа
+            напечатала бы 0. Равные числа тоже не мешают: при равенстве{" "}
+            <Notation>{">"}</Notation> не срабатывает, и лучшим остаётся
+            прежнее.
           </Typography.Text>
         </>
       ),
@@ -300,6 +359,29 @@ export const pythonConditionsLesson = defineCourseLesson({
   checkpoint: [
     {
       id: "t1",
+      prompt: (
+        <>
+          <Typography.Text>Что напечатает программа?</Typography.Text>
+          <CodeBlock
+            code={'x = 5\nif x > 10:\n    print("много")\nprint("готово")'}
+            label={"Программа с одним if"}
+            language="python"
+            fileName="main.py"
+          />
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            Только «готово»: условие ложно, блок пропущен, а{" "}
+            <Notation>{'print("готово")'}</Notation> без отступа выполняется
+            всегда.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t2",
       prompt: (
         <>
           <Typography.Text>
@@ -312,13 +394,13 @@ export const pythonConditionsLesson = defineCourseLesson({
       reveal: (
         <>
           <Typography.Text>
-            4; с нулевым началом для −5, −2, −9 получится 0 вместо −2.
+            4. С нулевым началом для −5, −2, −9 получится 0 вместо −2.
           </Typography.Text>
         </>
       ),
     },
     {
-      id: "t4",
+      id: "t3",
       prompt: (
         <>
           <Typography.Text>
@@ -332,14 +414,14 @@ export const pythonConditionsLesson = defineCourseLesson({
       reveal: (
         <>
           <Typography.Text>
-            Обе строки: чётное и делится на 3; с <Notation>{"elif"}</Notation> —
-            только чётное.
+            Обе строки: «чётное» и «делится на 3». С{" "}
+            <Notation>{"elif"}</Notation> — только «чётное».
           </Typography.Text>
         </>
       ),
     },
     {
-      id: "t5",
+      id: "t4",
       prompt: (
         <>
           <Typography.Text>
@@ -353,7 +435,7 @@ export const pythonConditionsLesson = defineCourseLesson({
       reveal: (
         <>
           <Typography.Text>
-            начальный и средний; «высокий» не получится ни при каком балле: до
+            Начальный и средний. «Высокий» не получится ни при каком балле: до
             проверки <Notation>{"score >= 85"}</Notation> доходят только баллы
             меньше 60.
           </Typography.Text>
@@ -361,7 +443,7 @@ export const pythonConditionsLesson = defineCourseLesson({
       ),
     },
     {
-      id: "t7",
+      id: "t5",
       prompt: (
         <>
           <Typography.Text>
@@ -375,7 +457,7 @@ export const pythonConditionsLesson = defineCourseLesson({
         <>
           <Typography.Text>
             <Notation>{'"чётное" if n % 2 == 0 else "нечётное"'}</Notation>; для
-            15 — нечётное.
+            15 — «нечётное».
           </Typography.Text>
         </>
       ),
@@ -383,45 +465,72 @@ export const pythonConditionsLesson = defineCourseLesson({
   ],
   result: (
     <>
+      <Typography.Text>
+        Теперь программа умеет выбирать, какие строки выполнять. Вот что из
+        этого понадобится в каждом следующем уроке.
+      </Typography.Text>
       <LessonSummary
         items={[
           {
+            key: <Notation>{"if"}</Notation>,
             note: (
               <>
-                <Notation>{"if"}</Notation> выполняет блок с отступом, только
-                если условие истинно; <Notation>{"else"}</Notation> — иначе.
+                Выполняет блок с отступом, только если условие истинно; строка
+                без отступа — уже после ветвления.
               </>
             ),
           },
           {
+            key: <Notation>{"else"}</Notation>,
+            note: <>Блок «иначе»: из двух блоков выполняется ровно один.</>,
+          },
+          {
+            key: <Notation>{"elif"}</Notation>,
             note: (
               <>
-                Цепочка <Notation>{"if"}</Notation>–
-                <Notation>{"elif"}</Notation>–<Notation>{"else"}</Notation>{" "}
-                выбирает ровно одну ветку; порядок проверок выводится из
-                условий.
+                Следующая проверка, если предыдущие не подошли. Цепочка выбирает
+                ровно одну ветку; проверки — от самой строгой.
               </>
             ),
           },
           {
+            key: "Отдельные if",
             note: (
               <>
-                Несколько независимых признаков проверяют отдельными{" "}
-                <Notation>{"if"}</Notation>.
+                Независимые признаки проверяют отдельными if: могут сработать
+                оба.
               </>
             ),
           },
           {
+            key: "Отступ",
             note: (
               <>
-                Имя должно получить значение на каждом пути; иначе{" "}
+                Четыре пробела после двоеточия; пропуск —{" "}
+                <Notation>{"IndentationError"}</Notation>.
+              </>
+            ),
+          },
+          {
+            key: "Каждый путь",
+            note: (
+              <>
+                Имя должно получить значение на каждом пути, иначе{" "}
                 <Notation>{"NameError"}</Notation>.
               </>
             ),
           },
           {
+            key: <Notation>{"a if c else b"}</Notation>,
+            note: <>Условное выражение: выбор одного из двух значений.</>,
+          },
+          {
+            key: "Наибольшее",
             note: (
-              <>Максимум начинают с первого значения из данных, а не с нуля.</>
+              <>
+                Лучшее — первое число данных; каждое следующее сравнивают с
+                лучшим отдельным <Notation>{"if"}</Notation>.
+              </>
             ),
           },
         ]}

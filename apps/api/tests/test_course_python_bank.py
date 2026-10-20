@@ -207,6 +207,9 @@ PRINTED_LINES = {
     "python-input-output-t07": (
         'seconds = 7322\nprint(f"{seconds // 3600} ч {seconds % 3600 // 60} мин {seconds % 60} с")'
     ),
+    "python-logic-t02": "print(7 > 3 and 2 > 5)\nprint(7 > 3 or 2 > 5)\nprint(not 7 > 3)",
+    "python-logic-t05": "print(0 and 10 / 0)",
+    "python-logic-t06": 'print(bool(""))\nprint(bool("0"))\nprint(bool(0))\nprint(bool(" "))',
 }
 
 

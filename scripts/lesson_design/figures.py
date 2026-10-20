@@ -2146,7 +2146,7 @@ def place_value_svg(digits: str = "472", base: int = 10, tone: str | None = None
     return "".join(out)
 
 
-def _branch_panel(x, title, var, value, checks, other) -> str:
+def _branch_panel(x, title, var, value, checks, other, accent=ACCENT) -> str:
     out = [_text(x + 8, 20, title, 14, INK, weight=600)]
     taken = None
     for i, (cond, _) in enumerate(checks):
@@ -2161,19 +2161,19 @@ def _branch_panel(x, title, var, value, checks, other) -> str:
         color = INK if visited else FAINT
         out.append(
             f'<rect x="{x + 8}" y="{y}" width="168" height="38" rx="19" fill="#fff" '
-            f'stroke="{ACCENT if visited else FAINT}" stroke-width="{2 if visited else 1.25}"/>'
+            f'stroke="{accent if visited else FAINT}" stroke-width="{2 if visited else 1.25}"/>'
         )
         out.append(_mono(x + 92, y + 25, f"{var} {cond}", 14, color, "middle"))
-        out.append(_arrow(x + 176, y + 19, x + 214, y + 19, ACCENT if hit else FAINT))
-        out.append(_text(x + 195, y + 12, "да", 12, ACCENT if hit else MUTED, "middle"))
+        out.append(_arrow(x + 176, y + 19, x + 214, y + 19, accent if hit else FAINT))
+        out.append(_text(x + 195, y + 12, "да", 12, accent if hit else MUTED, "middle"))
         out.append(
             f'<rect x="{x + 216}" y="{y}" width="100" height="38" rx="8" '
             f'fill="{WASH if hit else "#fff"}" stroke="{INK if hit else FAINT}" stroke-width="1.5"/>'
         )
         out.append(_text(x + 266, y + 25, label, 14, INK if hit else MUTED, "middle"))
         down = visited and not hit
-        out.append(_arrow(x + 92, y + 38, x + 92, y + 66, ACCENT if down else FAINT))
-        out.append(_text(x + 100, y + 56, "нет", 12, ACCENT if down else MUTED))
+        out.append(_arrow(x + 92, y + 38, x + 92, y + 66, accent if down else FAINT))
+        out.append(_text(x + 100, y + 56, "нет", 12, accent if down else MUTED))
         y += 66
     hit = taken is None
     out.append(
@@ -2184,18 +2184,32 @@ def _branch_panel(x, title, var, value, checks, other) -> str:
     return "".join(out)
 
 
-def branch_svg(value: int = 73, wrong: int = 90) -> str:
+def branch_svg(value: int = 73, wrong: int = 90, tone: str | None = None) -> str:
     """if/elif/else for score levels: the path of a value through the checks,
     and the same checks in the wrong order where «высокий» is unreachable."""
     good = [(">= 85", "высокий"), (">= 60", "средний")]
     bad = [(">= 60", "средний"), (">= 85", "высокий")]
     out = ['<svg viewBox="0 0 660 230" role="img" aria-label="Порядок проверок elif">']
     out.append(
-        _branch_panel(0, f"score = {value}: верный порядок", "score", value, good, "начальный")
+        _branch_panel(
+            0,
+            f"score = {value}: верный порядок",
+            "score",
+            value,
+            good,
+            "начальный",
+            accent_of(tone),
+        )
     )
     out.append(
         _branch_panel(
-            336, f"score = {wrong}: проверки переставлены", "score", wrong, bad, "начальный"
+            336,
+            f"score = {wrong}: проверки переставлены",
+            "score",
+            wrong,
+            bad,
+            "начальный",
+            accent_of(tone),
         )
     )
     out.append("</svg>")
@@ -3061,6 +3075,165 @@ def expr_trees_svg(
     return "".join(out)
 
 
+def _bool_node(node, env):
+    """(label, value, children) of a condition: comparisons and arithmetic are
+    leaves with their source, ``not`` / ``and`` / ``or`` are operations."""
+    import ast
+
+    value = eval(ast.unparse(node), {}, dict(env))  # noqa: S307 — literal conditions
+    if isinstance(node, ast.BoolOp):
+        op = "and" if isinstance(node.op, ast.And) else "or"
+        return (op, value, [_bool_node(v, env) for v in node.values])
+    if isinstance(node, ast.UnaryOp) and isinstance(node.op, ast.Not):
+        return ("not", value, [_bool_node(node.operand, env)])
+    return (ast.unparse(node), value, [])
+
+
+def bool_tree_svg(sources, env, tone: str | None = None) -> str:
+    """Trees of logical expressions with the values of every part: comparisons
+    are the leaves, ``not`` / ``and`` / ``or`` are applied to the values under
+    them, so the order of the operations is the shape of the tree."""
+    import ast
+
+    accent = accent_of(tone)
+    size, gap, step, top = 13, 16, 74, 64
+    trees = [_bool_node(ast.parse(src, mode="eval").body, env) for src in sources]
+
+    def leaf_w(label):
+        return len(label) * size * CH + 20
+
+    def layout(t, depth, x, out):
+        """Leaves left to right from x; a node over the middle of its children.
+        Returns (centre, right edge)."""
+        label, value, kids = t
+        if not kids:
+            w = leaf_w(label)
+            out.append((x + w / 2, depth, t, w, []))
+            return x + w / 2, x + w
+        centres, right = [], x
+        placed = []
+        for k in kids:
+            c, right = layout(k, depth + 1, right, placed)
+            centres.append(c)
+            right += gap
+        out.extend(placed)
+        centre = sum(centres) / len(centres)
+        out.append((centre, depth, t, 0, centres))
+        return centre, right - gap
+
+    plans, widths = [], []
+    for t in trees:
+        nodes: list = []
+        _, right = layout(t, 0, 0, nodes)
+        plans.append(nodes)
+        # an operation writes «= value» to its right: the tree is as wide as that
+        labels = [n[0] + 30 + len(f"= {n[2][1]}") * 13 * CH for n in nodes if n[2][2]]
+        widths.append(max([right, *labels]))
+    depth = max(n[1] for nodes in plans for n in nodes)
+    height = top + depth * step + 58
+    spare = (660 - sum(widths)) / (len(trees) + 1)
+    out = [_svg(height, "Порядок not, and, or в условии")]
+    x0 = spare
+    for k, (src, nodes, w) in enumerate(zip(sources, plans, widths, strict=True)):
+        out.append(_mono(x0 + w / 2, 20, src, 13, INK, "middle", 600))
+        names = ", ".join(f"{n} = {v}" for n, v in env.items() if n in src)
+        out.append(_text(x0 + w / 2, 40, names, 13, MUTED, "middle"))
+        root = max(nodes, key=lambda n: -n[1])
+        for cx, d, (label, value, kids), lw, centres in nodes:
+            x, y = x0 + cx, top + d * step
+            if kids:
+                for c in centres:
+                    child = next(n for n in nodes if n[0] == c and n[1] == d + 1)
+                    cy = top + child[1] * step - (16 if child[2][2] else 15)
+                    out.append(
+                        f'<line x1="{x:.1f}" y1="{y + 15}" x2="{x0 + c:.1f}" y2="{cy}" '
+                        f'stroke="{MUTED}"/>'
+                    )
+                is_root = d == root[1]
+                out.append(
+                    _box(x - 24, y - 15, 48, 30, accent if is_root else INK, "#fff", rx=15,
+                         sw=2 if is_root else 1.5)
+                )
+                out.append(_mono(x, y + 5, label, 13, INK, "middle", 600))
+                out.append(
+                    _mono(x + 30, y + 5, f"= {value}", 13, accent if is_root else MUTED,
+                          "start", 600 if is_root else 500)
+                )
+            else:
+                out.append(_box(x - lw / 2, y - 15, lw, 30, INK, WASH))
+                out.append(_mono(x, y + 5, label, size, INK, "middle"))
+                out.append(_mono(x, y + 34, str(value), 12, MUTED, "middle"))
+        if k:
+            sep = x0 - spare / 2
+            out.append(f'<path d="M {sep:.1f} 8 V {height - 8}" stroke="{FAINT}"/>')
+        x0 += w + spare
+    out.append("</svg>")
+    return "".join(out)
+
+
+def code_paths_svg(panels, tone: str | None = None) -> str:
+    """Which lines of a short program run: each panel is a program run once;
+    executed lines are marked, skipped ones faded, blocks shown by their
+    indent guide, and the output written under the code."""
+    import contextlib
+    import io
+    import sys
+
+    accent = accent_of(tone)
+    size, line_h, top = 13, 24, 58
+    n = len(panels)
+    slot = 660 / n
+    longest = max(len(p[1].splitlines()) for p in panels)
+    outs = []
+    for _, code in panels:
+        ran: set[int] = set()
+
+        def tracer(frame, event, arg, ran=ran):
+            if frame.f_code.co_filename == "<figure>" and event == "line":
+                ran.add(frame.f_lineno)
+            return tracer
+
+        printed = io.StringIO()
+        sys.settrace(tracer)
+        try:
+            with contextlib.redirect_stdout(printed):
+                exec(compile(code, "<figure>", "exec"), {})  # noqa: S102 — the figure's program
+        finally:
+            sys.settrace(None)
+        lines = code.splitlines()
+        # «else:» has no line event of its own: it ran if its block did
+        for i, line in enumerate(lines, 1):
+            if line.strip() == "else:" and i + 1 in ran:
+                ran.add(i)
+        outs.append((lines, ran, printed.getvalue().splitlines()))
+    height = top + longest * line_h + 30 + max(len(o[2]) for o in outs) * 20 + 10
+    out = [_svg(height, "Какие строки программы выполняются")]
+    for k, ((title, _), (lines, ran, printed)) in enumerate(zip(panels, outs, strict=True)):
+        x0 = k * slot + 16
+        out.append(_text(x0, 22, title, 14, INK, weight=600))
+        y = top
+        for i, line in enumerate(lines, 1):
+            done = i in ran
+            if line.startswith("    "):
+                out.append(
+                    f'<path d="M {x0 + 20:.1f} {y - 17} V {y + 7}" stroke="{FAINT}" '
+                    f'stroke-width="2"/>'
+                )
+            if done:
+                out.append(f'<circle cx="{x0 + 4}" cy="{y - 5}" r="3.5" fill="{accent}"/>')
+            out.append(_mono(x0 + 16, y, line, size, INK if done else FAINT))
+            y += line_h
+        y += 8
+        out.append(_text(x0 + 16, y + 6, "вывод:", 12, MUTED))
+        for s in printed:
+            y += 20
+            out.append(_mono(x0 + 16, y + 6, s, size, INK, weight=600))
+        if k:
+            out.append(f'<path d="M {k * slot:.1f} 8 V {height - 8}" stroke="{FAINT}"/>')
+    out.append("</svg>")
+    return "".join(out)
+
+
 def time_split_svg(seconds: int = 3671, tone: str | None = None) -> str:
     """Seconds split into hours, minutes and seconds by // and %."""
     accent = accent_of(tone)
@@ -3274,8 +3447,9 @@ def fstring_svg(tone: str | None = None) -> str:
     return "".join(out)
 
 
-def interval_svg(lo: int = 5, hi: int = 20, x: int = 12) -> str:
+def interval_svg(lo: int = 5, hi: int = 20, x: int = 12, tone: str | None = None) -> str:
     """lo <= x < hi on a number line: the closed and the open end."""
+    accent = accent_of(tone)
     L, R, a, b = 40, 620, lo - 3, hi + 3
     base = 74
 
@@ -3294,11 +3468,11 @@ def interval_svg(lo: int = 5, hi: int = 20, x: int = 12) -> str:
         if tall or v % 5 == 0:
             out.append(_text(px(v), base + 26, str(v), 14, INK if tall else MUTED, "middle"))
     out.append(
-        f'<line x1="{px(lo):.1f}" y1="{base}" x2="{px(hi):.1f}" y2="{base}" stroke="{ACCENT}" stroke-width="5"/>'
+        f'<line x1="{px(lo):.1f}" y1="{base}" x2="{px(hi):.1f}" y2="{base}" stroke="{accent}" stroke-width="5"/>'
     )
-    out.append(f'<circle cx="{px(lo):.1f}" cy="{base}" r="7" fill="{ACCENT}"/>')
+    out.append(f'<circle cx="{px(lo):.1f}" cy="{base}" r="7" fill="{accent}"/>')
     out.append(
-        f'<circle cx="{px(hi):.1f}" cy="{base}" r="7" fill="#fff" stroke="{ACCENT}" stroke-width="2.5"/>'
+        f'<circle cx="{px(hi):.1f}" cy="{base}" r="7" fill="#fff" stroke="{accent}" stroke-width="2.5"/>'
     )
     out.append(_mono(px(lo), base - 22, f"{lo} <= x", 14, INK, "middle"))
     out.append(_mono(px(hi), base - 22, f"x < {hi}", 14, INK, "middle"))
@@ -3310,9 +3484,17 @@ def interval_svg(lo: int = 5, hi: int = 20, x: int = 12) -> str:
     return "".join(out)
 
 
-def truth_grids_svg(exprs=("a and b", "a or b", "a != b"), names=("a", "b")) -> str:
+def truth_grids_svg(
+    exprs=("a and b", "a or b", "a != b"),
+    names=("a", "b"),
+    legend=None,
+    case=None,
+    tone: str | None = None,
+) -> str:
     """Each expression as a 2 × 2 grid over the values of two conditions:
-    the cells where it is True are marked."""
+    the cells where it is True are marked. ``legend`` names the conditions;
+    ``case`` — [a, b] of the lesson's example, a dot in its cell."""
+    accent = accent_of(tone)
     p, q = names
     slot = 660 / len(exprs)
     cell_w, cell_h = 66, 38
@@ -3340,7 +3522,9 @@ def truth_grids_svg(exprs=("a and b", "a or b", "a != b"), names=("a", "b")) -> 
                 x, y = gx + j * cell_w, gy + i * cell_h
                 out.append(_box(x, y, cell_w, cell_h, FAINT, WASH if v else "#fff", rx=0, sw=1))
                 if v:
-                    marked.append(_box(x + 1, y + 1, cell_w - 2, cell_h - 2, ACCENT, "none", 0, 2))
+                    marked.append(_box(x + 1, y + 1, cell_w - 2, cell_h - 2, accent, "none", 0, 2))
+                if case is not None and [av, bv] == list(case):
+                    marked.append(f'<circle cx="{x + 9}" cy="{y + 9}" r="4" fill="{INK}"/>')
                 out.append(
                     _mono(
                         x + cell_w / 2,
@@ -3359,7 +3543,7 @@ def truth_grids_svg(exprs=("a and b", "a or b", "a != b"), names=("a", "b")) -> 
         _text(
             330,
             186,
-            "строки — значение первого условия, столбцы — второго",
+            legend or "строки — значение первого условия, столбцы — второго",
             13,
             MUTED,
             "middle",
@@ -3369,8 +3553,9 @@ def truth_grids_svg(exprs=("a and b", "a or b", "a != b"), names=("a", "b")) -> 
     return "".join(out)
 
 
-def short_circuit_svg() -> str:
+def short_circuit_svg(tone: str | None = None) -> str:
     """and / or stop as soon as the answer is known: the right part is skipped."""
+    accent = accent_of(tone)
     rows = [
         ("x != 0", " and ", "10 / x > 2", "False", "False: and уже ложно"),
         ("x == 0", " or ", "10 / x > 2", "True", "True: or уже истинно"),
@@ -3385,7 +3570,7 @@ def short_circuit_svg() -> str:
         lw = len(left) * cw + 16
         out.append(_box(x, y - 22, lw, 32, INK))
         out.append(_mono(x + 8, y, left, size, INK, weight=600))
-        out.append(_mono(x + lw / 2, y + 30, f"→ {lv}", 13, ACCENT, "middle", 600))
+        out.append(_mono(x + lw / 2, y + 30, f"→ {lv}", 13, accent, "middle", 600))
         x += lw
         out.append(_mono(x, y, op, size, INK, weight=600))
         x += len(op) * cw
@@ -3399,8 +3584,9 @@ def short_circuit_svg() -> str:
     return "".join(out)
 
 
-def truthy_svg() -> str:
+def truthy_svg(tone: str | None = None) -> str:
     """Values that count as false in a condition, and everything else."""
+    accent = accent_of(tone)
     false = ["0", "0.0", '""', "None", "False"]
     true = ["5", "-1", "0.5", '"0"', '"False"', '" "', "True"]
     out = [_svg(196, "Истинные и ложные значения в условии")]
@@ -3417,7 +3603,7 @@ def truthy_svg() -> str:
                 30,
                 w,
                 118,
-                ACCENT if hot else INK,
+                accent if hot else INK,
                 WASH if hot else "#fff",
                 rx=12,
                 sw=2 if hot else 1.5,
@@ -3683,6 +3869,8 @@ FIGURES = {
     "stack_stepper": stack_stepper,
     "place_value": place_value_svg,
     "branch": branch_svg,
+    "bool_tree": bool_tree_svg,
+    "code_paths": code_paths_svg,
     "loop_grid": loop_grid_svg,
     "venn": venn_svg,
     "loop_to_comp": loop_to_comp_svg,

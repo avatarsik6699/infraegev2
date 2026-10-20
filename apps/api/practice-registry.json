@@ -3057,7 +3057,7 @@
     },
     {
       "id": "python-logic",
-      "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
+      "sections": ["intro", "s1", "s2", "s2-poryadok", "s3", "s4", "s5"],
       "kind": "course",
       "status": "published",
       "course_id": "python",

@@ -119603,19 +119603,19 @@
     {
       "task": {
         "id": "python-logic-t01",
-        "title": "Запиши условие «число делится на 3 или на 5, но не на оба сразу»",
+        "title": "Условие «делится на 3 или на 5, но не на оба сразу»",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите четыре значения через пробел в порядке чисел: 9, 10, 7, 15.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Запиши условие «число делится на 3 или на 5, но не на оба сразу». Проверь его на числах 9, 10, 7 и 15."
+              "markdown": "Запиши условие «n делится на 3 или на 5, но не на оба сразу». Проверь его, подставляя по очереди n = 9, 10, 7 и 15: для каждого числа программа печатает `True` или `False`."
             }
           }
         ],
@@ -119623,7 +119623,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Логические выражения»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "«Ровно одно из двух условий» записывают через `!=` между ними. Каждое условие — проверка остатка от деления."
             }
           }
         ],
@@ -119631,7 +119631,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`(n % 3 == 0) != (n % 5 == 0)`: для 9 и 10 — True, для 7 и 15 — False."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "n = 9\nprint((n % 3 == 0) != (n % 5 == 0))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "9 делится только на 3, 10 — только на 5: оба раза True. 7 не делится ни на одно, 15 — на оба: оба раза False."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `True True False False`"
             }
           }
         ],
@@ -119672,19 +119692,27 @@
     {
       "task": {
         "id": "python-logic-t02",
-        "title": "Чему равны 7 > 3 and 2 > 5, 7 > 3 or 2 > 5 и not 7 > 3?",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите напечатанные строки через пробел в порядке вывода.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Чему равны `7 > 3 and 2 > 5`, `7 > 3 or 2 > 5` и `not 7 > 3`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "print(7 > 3 and 2 > 5)\nprint(7 > 3 or 2 > 5)\nprint(not 7 > 3)",
+              "caption": null
             }
           }
         ],
@@ -119692,7 +119720,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Логические выражения»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Сначала вычисли каждое сравнение: `7 > 3` — True, `2 > 5` — False."
             }
           }
         ],
@@ -119700,7 +119728,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "False, True и False."
+              "markdown": "`and` требует обоих — False; `or` хватает одного — True; `not` переворачивает True в False."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `False True False`"
             }
           }
         ],
@@ -119741,19 +119775,27 @@
     {
       "task": {
         "id": "python-logic-t05",
-        "title": "Что выведет print(0 and 10 / 0)?",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите напечатанное значение.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Что выведет `print(0 and 10 / 0)`? А `print(10 / 0 and 0)`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "print(0 and 10 / 0)",
+              "caption": null
             }
           }
         ],
@@ -119761,7 +119803,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Логические выражения»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Левая часть `and` ложна, поэтому правая не вычисляется, а `and` отдаёт саму левую часть."
             }
           }
         ],
@@ -119769,7 +119811,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "0 — правая часть не вычислялась; во втором случае `ZeroDivisionError`."
+              "markdown": "0 в условии ложно. `and` с ложной левой частью не вычисляет правую — деления на ноль нет — и отдаёт левую часть: 0."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `0`"
             }
           }
         ],
@@ -119810,19 +119858,27 @@
     {
       "task": {
         "id": "python-logic-t06",
-        "title": "Чему равны bool(\"\"), bool(\"0\"), bool(0) и bool(\" \")?",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите напечатанные строки через пробел в порядке вывода.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Чему равны `bool(\"\")`, `bool(\"0\")`, `bool(0)` и `bool(\" \")`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "print(bool(\"\"))\nprint(bool(\"0\"))\nprint(bool(0))\nprint(bool(\" \"))",
+              "caption": null
             }
           }
         ],
@@ -119830,7 +119886,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Логические выражения»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Ложны ноль и пустая строка. `\"0\"` и `\" \"` — непустые строки."
             }
           }
         ],
@@ -119838,7 +119894,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "False, True, False и True: только пустая строка ложна, а `\"0\"` и `\" \"` — непустые."
+              "markdown": "Пустая строка ложна, `\"0\"` — непустая строка, истинна. Число 0 ложно, строка из пробела непустая — истинна."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `False True False True`"
             }
           }
         ],
@@ -119879,19 +119941,19 @@
     {
       "task": {
         "id": "python-logic-t07",
-        "title": "Пусть A — «n больше 10», B — «n чётное»",
+        "title": "Импликация A → B для трёх чисел",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите три значения через пробел в порядке n: 7, 12, 15.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Пусть A — «n больше 10», B — «n чётное». Вычисли импликацию A → B для n = 7, 12 и 15."
+              "markdown": "Пусть A — «n больше 10», B — «n чётное». Чему равна импликация A → B, то есть `(not A) or B`, при n = 7, 12 и 15?"
             }
           }
         ],
@@ -119899,7 +119961,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Логические выражения»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Импликация ложна только при истинном A и ложном B."
             }
           }
         ],
@@ -119907,7 +119969,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "True, True и False: ложно только при n = 15 — оно больше 10, но нечётное."
+              "markdown": "n = 7: A ложно — импликация истинна. n = 12: A и B истинны — истинна. n = 15: A истинно, B ложно — ложна."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `True True False`"
             }
           }
         ],
@@ -119948,19 +120016,19 @@
     {
       "task": {
         "id": "python-logic-t08",
-        "title": "Год високосный, если делится на 4 и не делится на 100 или если делится на 400",
+        "title": "Условие високосного года",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите четыре значения через пробел в порядке лет: 1900, 2000, 2024, 2023.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Год високосный, если делится на 4 и не делится на 100 или если делится на 400. Запиши условие и проверь его на 1900, 2000, 2024 и 2023."
+              "markdown": "Год високосный, если делится на 4 и не делится на 100 или если делится на 400. Запиши условие для `y` и проверь его, подставляя по очереди 1900, 2000, 2024 и 2023."
             }
           }
         ],
@@ -119968,7 +120036,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Логические выражения»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "`and` выполняется раньше `or`: «делится на 4 и не делится на 100» — одна пара, «делится на 400» — вторая."
             }
           }
         ],
@@ -119976,7 +120044,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`y % 4 == 0 and y % 100 != 0 or y % 400 == 0`: 1900 — False, 2000 — True, 2024 — True, 2023 — False."
+              "markdown": "Условие: `y % 4 == 0 and y % 100 != 0 or y % 400 == 0`. 1900 делится на 100, но не на 400 — False. 2000 делится на 400 — True. 2024 делится на 4 и не на 100 — True. 2023 не делится на 4 — False."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `False True True False`"
             }
           }
         ],
@@ -120017,19 +120091,27 @@
     {
       "task": {
         "id": "python-conditions-t02",
-        "title": "Какой будет доставка при сумме заказа 1999 и 2000 рублей?",
+        "title": "Доставка при сумме 1999 и 2000",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите два числа через пробел: для 1999, затем для 2000.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Какой будет доставка при сумме заказа 1999 и 2000 рублей?"
+              "markdown": "Запусти программу дважды: сначала введи 1999, затем 2000. Запиши оба результата."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "order_total = int(input())\nif order_total >= 2000:\n    delivery = 0\nelse:\n    delivery = 300\nprint(delivery)",
+              "caption": null
             }
           }
         ],
@@ -120037,7 +120119,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Ветвление: if, elif и else»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "`>=` включает саму границу: 2000 уже даёт бесплатную доставку."
             }
           }
         ],
@@ -120045,7 +120127,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "300 и 0: граница 2000 входит в бесплатную доставку."
+              "markdown": "1999 меньше 2000 — выполняется `else`, доставка 300. При 2000 условие `>=` истинно — доставка 0."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `300 0`"
             }
           }
         ],
@@ -120086,19 +120174,27 @@
     {
       "task": {
         "id": "python-conditions-t03",
-        "title": "Границы уровней поменяли: от 90 — высокий, от 70 — средний, ниже — начальный",
+        "title": "Уровни с новыми границами",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите четыре уровня через пробел в порядке баллов: 90, 89, 70, 69.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Границы уровней поменяли: от 90 — высокий, от 70 — средний, ниже — начальный. Какой уровень получат баллы 90, 89, 70 и 69?"
+              "markdown": "Границы уровней поменяли: от 90 — высокий, от 70 — средний, ниже — начальный. Запусти программу четыре раза и введи 90, 89, 70 и 69."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "score = int(input())\nif score >= 90:\n    print(\"высокий\")\nelif score >= 70:\n    print(\"средний\")\nelse:\n    print(\"начальный\")",
+              "caption": null
             }
           }
         ],
@@ -120106,7 +120202,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Ветвление: if, elif и else»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Проверки идут сверху вниз, `>=` включает границу."
             }
           }
         ],
@@ -120114,7 +120210,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "высокий, средний, средний и начальный."
+              "markdown": "90 проходит первую проверку — высокий. 89 и 70 не проходят первую, но проходят вторую — средний. 69 не проходит ни одну — начальный."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `высокий средний средний начальный`"
             }
           }
         ],
@@ -120155,19 +120257,27 @@
     {
       "task": {
         "id": "python-conditions-t06",
-        "title": "Что произойдёт, если выполнить x = 5, затем if x < 0: result = \"минус\" и…",
+        "title": "Какая ошибка остановила программу?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Введите ответ одним значением, как его покажет Python.",
+        "answer_instruction": "Запишите тип ошибки — слово перед двоеточием в последней строке сообщения.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Что произойдёт, если выполнить `x = 5`, затем `if x < 0: result = \"минус\"` и `print(result)`?"
+              "markdown": "Программа остановилась с ошибкой. Какой тип ошибки стоит в последней строке сообщения?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "x = 5\nif x < 0:\n    result = \"минус\"\nprint(result)",
+              "caption": null
             }
           }
         ],
@@ -120175,7 +120285,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Ветвление: if, elif и else»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "При x = 5 условие ложно: блок с присваиванием не выполнился."
             }
           }
         ],
@@ -120183,7 +120293,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`NameError`: присваивание не выполнилось, имени `result` нет."
+              "markdown": "Присваивание внутри `if` не выполнилось, и имени `result` нет. Последняя строка: `NameError: name 'result' is not defined`."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `NameError`"
             }
           }
         ],
@@ -120224,19 +120340,19 @@
     {
       "task": {
         "id": "python-conditions-t08",
-        "title": "Напиши программу: вводится год, вывести високосный или обычный",
+        "title": "Напиши программу: високосный или обычный год",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 2,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите два слова через пробел: для 1900, затем для 2024.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Напиши программу: вводится год, вывести `високосный` или `обычный`. Проверь на 1900 и 2024."
+              "markdown": "Напиши программу: вводится год, программа печатает `високосный` или `обычный`. Запусти её дважды — для 1900 и для 2024 — и запиши оба ответа."
             }
           }
         ],
@@ -120244,7 +120360,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Ветвление: if, elif и else»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Условие високосного года — из урока «Логические выражения»; `if` с `else` выбирает одно из двух слов."
             }
           }
         ],
@@ -120252,7 +120368,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1900 — обычный, 2024 — високосный."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "y = int(input())\nif y % 4 == 0 and y % 100 != 0 or y % 400 == 0:\n    print(\"високосный\")\nelse:\n    print(\"обычный\")",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "1900 делится на 100, но не на 400 — обычный. 2024 делится на 4 и не на 100 — високосный."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `обычный високосный`"
             }
           }
         ],
@@ -120293,19 +120429,19 @@
     {
       "task": {
         "id": "python-conditions-t09",
-        "title": "Напиши программу: вводятся три длины отрезков на отдельных строках",
+        "title": "Напиши программу: можно ли сложить треугольник",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 2,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите два слова через пробел: для 3, 4, 5, затем для 1, 2, 3.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Напиши программу: вводятся три длины отрезков на отдельных строках. Вывести `да`, если из них можно сложить треугольник (каждая сторона меньше суммы двух других), иначе `нет`. Проверь на 3, 4, 5 и на 1, 2, 3."
+              "markdown": "Напиши программу: вводятся три длины отрезков на отдельных строках. Программа печатает `да`, если из них можно сложить треугольник (каждая сторона меньше суммы двух других), иначе `нет`. Запусти её дважды: введи 3, 4, 5, затем 1, 2, 3."
             }
           }
         ],
@@ -120313,7 +120449,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Ветвление: if, elif и else»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Проверь три неравенства сразу, соединив их через `and`: каждая сторона меньше суммы двух других."
             }
           }
         ],
@@ -120321,7 +120457,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "3, 4, 5 — да; 1, 2, 3 — нет: 3 не меньше 1 + 2."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "a = int(input())\nb = int(input())\nc = int(input())\nif a < b + c and b < a + c and c < a + b:\n    print(\"да\")\nelse:\n    print(\"нет\")",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "3, 4, 5 — все три неравенства верны: да. 1, 2, 3 — 3 не меньше 1 + 2: нет."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `да нет`"
             }
           }
         ],
@@ -819835,7 +819991,7 @@
     },
     {
       "id": "python-logic",
-      "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
+      "sections": ["intro", "s1", "s2", "s2-poryadok", "s3", "s4", "s5"],
       "kind": "course",
       "status": "published",
       "course_id": "python",
