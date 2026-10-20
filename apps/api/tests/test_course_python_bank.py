@@ -189,6 +189,13 @@ def test_server_accepts_every_variant_and_the_minus_sign() -> None:
 PRINTED_LINES = {
     "python-first-program-t02": '7 * 6\nprint(7 * 6)\nprint("7*6")',
     "python-first-program-t08": "print(3 * 40)\nprint(2 * 15)\nprint(3 * 40 + 2 * 15)",
+    "python-values-t01": "a = 3\nb = a\na += 4\nprint(a, b)",
+    "python-values-t02": 'for v in (18, "18", 2.5):\n    print(type(v).__name__)',
+    "python-values-t04": (
+        "price = 40\nquantity = 3\ncost = price * quantity\nprice = 50\nprint(cost)"
+    ),
+    "python-values-t05": 'print("12" + "8")\nprint(12 + 8)',
+    "python-values-t08": "print(3 * 40 + 2 * 15)",
 }
 
 

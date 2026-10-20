@@ -2481,8 +2481,8 @@ def _box(x, y, w, h, stroke=INK, fill="#fff", rx=8, sw=1.5, dashed=False) -> str
     )
 
 
-def _svg(h, label) -> str:
-    return f'<svg viewBox="0 0 660 {h}" role="img" aria-label="{html.escape(label)}">'
+def _svg(h, label, w=660) -> str:
+    return f'<svg viewBox="0 0 {w} {h}" role="img" aria-label="{html.escape(label)}">'
 
 
 def program_path_svg(tone: str | None = None) -> str:
@@ -2779,20 +2779,24 @@ def code_block_anatomy_svg(tone: str | None = None) -> str:
 
 
 TYPES = [
-    ("int", "целое число", ["0", "18", "-7"], "количество, счёт"),
-    ("float", "дробное число", ["2.5", "-0.125"], "измерения, доли"),
+    ("int", "целое число", ["0", "18", "-7"], "количество"),
+    ("float", "дробное число", ["2.5", "-0.125"], "измерения"),
     ("str", "строка", ['"Python"', '"27"', '""'], "любой текст"),
     ("bool", "логическое", ["True", "False"], "ответ «да / нет»"),
     ("NoneType", "нет значения", ["None"], "результата нет"),
 ]
 
 
-def type_cards_svg() -> str:
-    """The five first types: examples of values and what each is for."""
-    w, gap = 118, 13  # five cards and four gaps inside the 660 width
-    x0 = (660 - 5 * w - 4 * gap) / 2
-    out = [_svg(232, "Пять первых типов значений")]
-    for k, (name, ru, examples, use) in enumerate(TYPES):
+def type_cards_svg(names=None) -> str:
+    """The first types: examples of values and what each is for. ``names`` picks
+    the cards; the figure is as wide as its cards, so three fit a phone."""
+    types = [t for t in TYPES if names is None or t[0] in names]
+    # five cards and four gaps fill the 660 width; three narrower ones fit a phone
+    w, gap = (118, 13) if len(types) > 3 else (100, 10)
+    width = round(len(types) * (w + gap) - gap + 18)
+    x0 = (width - len(types) * w - (len(types) - 1) * gap) / 2
+    out = [_svg(232, "Первые типы значений", width)]
+    for k, (name, ru, examples, use) in enumerate(types):
         x = x0 + k * (w + gap)
         out.append(_mono(x + w / 2, 22, name, 16, INK, "middle", 600))
         out.append(_text(x + w / 2, 42, ru, 13, MUTED, "middle"))
@@ -2814,8 +2818,9 @@ def _cells(x, y, chars, cell=34, stroke=INK) -> str:
     return "".join(out)
 
 
-def plus_types_svg() -> str:
+def plus_types_svg(tone: str | None = None) -> str:
     """One sign, two actions: numbers add up, strings are glued."""
+    accent = accent_of(tone)
     out = [_svg(150, "Плюс для чисел и для строк")]
     out.append(_text(16, 22, "Числа: 27 + 3", 14, INK, weight=600))
     out.append(_box(16, 44, 64, 40, INK))
@@ -2824,7 +2829,7 @@ def plus_types_svg() -> str:
     out.append(_box(116, 44, 48, 40, INK))
     out.append(_mono(140, 70, "3", 17, INK, "middle", 600))
     out.append(_arrow(172, 64, 212, 64, MUTED))
-    out.append(_box(220, 44, 64, 40, ACCENT, WASH, sw=2))
+    out.append(_box(220, 44, 64, 40, accent, WASH, sw=2))
     out.append(_mono(252, 70, "30", 17, INK, "middle", 600))
     out.append(_text(16, 118, "складываются: получается новое число", 13, MUTED))
     x = 350
@@ -2833,25 +2838,26 @@ def plus_types_svg() -> str:
     out.append(_text(x + 84, 70, "+", 18, MUTED, "middle"))
     out.append(_cells(x + 102, 47, "3"))
     out.append(_arrow(x + 144, 64, x + 180, 64, MUTED))
-    out.append(_cells(x + 188, 47, "273", stroke=ACCENT))
+    out.append(_cells(x + 188, 47, "273", stroke=accent))
     out.append(_text(x, 118, "склеиваются: символы встают подряд", 13, MUTED))
     out.append("</svg>")
     return "".join(out)
 
 
-def assign_svg() -> str:
+def assign_svg(tone: str | None = None) -> str:
     """cost = price * quantity: the right side first, then the name."""
+    accent = accent_of(tone)
     out = [_svg(196, "Порядок выполнения присваивания")]
     code = "cost = price * quantity"
     cw = 18 * CH
     x0 = 330 - len(code) * cw / 2
     out.append(_mono(x0, 30, code, 18, INK, weight=600))
     out.append(_bracket(x0 + 7 * cw, x0 + len(code) * cw, 40, MUTED))
-    out.append(_bracket(x0, x0 + 4 * cw, 40, ACCENT))
+    out.append(_bracket(x0, x0 + 4 * cw, 40, accent))
     # step 1: the right side is computed from the current values
     y = 70
     out.append(_text(16, y + 16, "1. Правая часть", 14, INK, weight=600))
-    out.append(_text(16, y + 34, "читает значения", 13, MUTED))
+    out.append(_text(16, y + 34, "вычисляется первой", 13, MUTED))
     x = 160
     for name, value in [("price", "40"), ("quantity", "3")]:
         out.append(_box(x, y, 84, 34, INK))
@@ -2863,19 +2869,23 @@ def assign_svg() -> str:
     out.append(_mono(x + 4, y + 22, "40 * 3 → 120", 14, INK, weight=600))
     # step 2: the name is bound to the finished value
     y = 136
-    out.append(_text(16, y + 16, "2. Имя", 14, ACCENT, weight=600))
-    out.append(_text(16, y + 34, "связывается с ним", 13, MUTED))
-    out.append(_box(160, y, 84, 38, ACCENT, sw=2))
-    out.append(_text(202, y + 24, "cost", 15, ACCENT, "middle", 600))
-    out.append(_arrow(244, y + 19, 290, y + 19, ACCENT))
+    out.append(_text(16, y + 16, "2. Имя слева", 14, accent, weight=600))
+    out.append(_text(16, y + 34, "связывается с итогом", 13, MUTED))
+    out.append(_box(160, y, 84, 38, accent, sw=2))
+    out.append(_text(202, y + 24, "cost", 15, accent, "middle", 600))
+    out.append(_arrow(244, y + 19, 290, y + 19, accent))
     out.append(_box(294, y, 60, 38, INK, WASH))
     out.append(_mono(324, y + 24, "120", 15, INK, "middle", 600))
     out.append("</svg>")
     return "".join(out)
 
 
-def bind_strip_svg(code=("x = 5", "y = x + 2", "x = 100"), names=("x", "y")) -> str:
-    """Names after each line of a short program: values change, formulas are not kept."""
+def bind_strip_svg(
+    code=("x = 5", "y = x + 2", "x = 100"), names=("x", "y"), tone: str | None = None
+) -> str:
+    """Names after each line of a short program: values change, formulas are not kept.
+    The name the line binds is accented; the figure is as wide as its panels."""
+    accent = accent_of(tone)
     env: dict = {}
     states = []
     for line in code:
@@ -2883,7 +2893,9 @@ def bind_strip_svg(code=("x = 5", "y = x + 2", "x = 100"), names=("x", "y")) -> 
         exec(line, {}, env)  # noqa: S102 — literal lines of the figure
         states.append((line, dict(env), {n for n in env if env.get(n) != before.get(n)}))
     w, gap = 200, 30
-    out = [_svg(186, "Значения имён после каждой строки")]
+    height = 78 + len(names) * 54
+    width = 8 + (len(states) - 1) * (w + gap) + 192
+    out = [_svg(height, "Значения имён после каждой строки", width)]
     for k, (line, env_k, changed) in enumerate(states):
         x = 8 + k * (w + gap)
         out.append(_text(x, 18, f"после строки {k + 1}", 13, MUTED))
@@ -2896,14 +2908,14 @@ def bind_strip_svg(code=("x = 5", "y = x + 2", "x = 100"), names=("x", "y")) -> 
                 out.append(_text(x + 76, y + 25, "ещё нет", 13, MUTED))
                 continue
             hot = n in changed
-            color = ACCENT if hot else INK
+            color = accent if hot else INK
             out.append(_box(x, y, 64, 38, color, sw=2 if hot else 1.5))
             out.append(_text(x + 32, y + 25, n, 15, color, "middle", 600))
             out.append(_arrow(x + 64, y + 19, x + 104, y + 19, color))
             out.append(_box(x + 108, y, 64, 38, INK, WASH if hot else "#fff"))
             out.append(_mono(x + 140, y + 25, str(env_k[n]), 15, INK, "middle", 600))
         if k:
-            out.append(f'<path d="M {x - gap / 2} 8 V 172" stroke="{FAINT}"/>')
+            out.append(f'<path d="M {x - gap / 2} 8 V {height - 14}" stroke="{FAINT}"/>')
     out.append("</svg>")
     return "".join(out)
 

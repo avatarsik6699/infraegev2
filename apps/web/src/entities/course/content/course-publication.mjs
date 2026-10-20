@@ -13,7 +13,7 @@ export const pythonValuesLessonPublication = Object.freeze({
   routeSlug: "znacheniya-i-peremennye",
   title: "Значения, типы и переменные",
   summary:
-    "Почему число и текст — разные данные, как работает присваивание и что на самом деле хранит имя.",
+    "Чем число отличается от текста, как дать значению имя и что происходит при присваивании.",
   status: "published",
 });
 

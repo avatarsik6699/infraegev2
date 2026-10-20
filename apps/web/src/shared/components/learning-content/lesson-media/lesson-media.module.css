@@ -31,9 +31,9 @@
 }
 
 /* Labels drawn at 13–17px stay legible: below about 30rem the figure stops
-   shrinking and its plate scrolls instead. */
+   shrinking and its plate scrolls instead. The minimum is set inline as
+   min(30rem, drawn width), so a narrow figure is never blown up. */
 .svg {
-  min-width: min(30rem, 100%);
   margin-inline: auto;
   color: var(--color-text);
   font-family: var(--font-ui);
@@ -47,12 +47,6 @@
   display: block;
   width: 100%;
   height: 100%;
-}
-
-@media (max-width: 47.5rem) {
-  .svg {
-    min-width: 30rem;
-  }
 }
 
 /* The generated figures name the stand's fonts; on the site the same faces

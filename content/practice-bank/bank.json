@@ -117771,19 +117771,27 @@
     {
       "task": {
         "id": "python-values-t01",
-        "title": "Что выведет print(a, b) после строк a = 3, b = a, a += 4?",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите напечатанную строку: два числа через пробел, сначала a, затем b.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Что выведет `print(a, b)` после строк `a = 3`, `b = a`, `a += 4`? Подсказка: `print` с двумя значениями через запятую печатает их через пробел."
+              "markdown": "Что напечатает программа? `print` с двумя значениями через запятую печатает их в одну строку через пробел."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "a = 3\nb = a\na += 4\nprint(a, b)",
+              "caption": null
             }
           }
         ],
@@ -117791,7 +117799,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Значения, типы и переменные»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "`b = a` связывает `b` с тем же числом, что и `a`. Следующая строка связывает с новым числом только `a`."
             }
           }
         ],
@@ -117799,7 +117807,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`7 3`: `a` связали с новым числом 7, а `b` по-прежнему ссылается на 3."
+              "markdown": "`b = a` связывает `b` с числом 3. `a += 4` вычисляет 3 + 4 и связывает с 7 только `a`; `b` по-прежнему связано с 3."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `7 3`"
             }
           }
         ],
@@ -117840,19 +117854,19 @@
     {
       "task": {
         "id": "python-values-t02",
-        "title": "Какой тип у значений 18, \"18\", 2.5, True, None?",
+        "title": "Какой тип у значений 18, \"18\" и 2.5?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите короткие имена типов через пробел в порядке значений, без <class …>.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Какой тип у значений `18`, `\"18\"`, `2.5`, `True`, `None`?"
+              "markdown": "Какой тип у значений `18`, `\"18\"` и `2.5`?"
             }
           }
         ],
@@ -117860,7 +117874,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Значения, типы и переменные»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Кавычки делают значение строкой, даже если внутри одни цифры. Точка в записи числа — признак дробного числа."
             }
           }
         ],
@@ -117868,7 +117882,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`int`, `str`, `float`, `bool`, `NoneType`."
+              "markdown": "`18` — целое число (`int`), `\"18\"` — строка (`str`): в кавычках, хоть и из цифр. `2.5` — дробное число (`float`)."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `int str float`"
             }
           }
         ],
@@ -117900,7 +117920,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["int str float bool NoneType"],
+          "answer_variants": ["int str float"],
           "numeric_tolerance": null
         }
       },
@@ -117909,7 +117929,7 @@
     {
       "task": {
         "id": "python-values-t03",
-        "title": "Что выведет программа?",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
@@ -117921,7 +117941,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Что выведет программа?"
+              "markdown": "Что напечатает программа?"
             }
           },
           {
@@ -117937,7 +117957,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Значения, типы и переменные»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Каждая строка берёт текущее значение `x`, вычисляет правую часть и связывает `x` с результатом."
             }
           }
         ],
@@ -117945,7 +117965,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "11: сначала 5 · 2 = 10, затем 10 + 1."
+              "markdown": "После первой строки `x` связано с 5, после второй — с 5 * 2 = 10, после третьей — с 10 + 1 = 11."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `11`"
             }
           }
         ],
@@ -117986,7 +118012,7 @@
     {
       "task": {
         "id": "python-values-t04",
-        "title": "После price = 40, quantity = 3, cost = price * quantity выполнили price = 50",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
@@ -117998,7 +118024,15 @@
           {
             "type": "text",
             "data": {
-              "markdown": "После `price = 40`, `quantity = 3`, `cost = price * quantity` выполнили `price = 50`. Чему равно `cost` и почему?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "price = 40\nquantity = 3\ncost = price * quantity\nprice = 50\nprint(cost)",
+              "caption": null
             }
           }
         ],
@@ -118006,7 +118040,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Значения, типы и переменные»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Присваивание запоминает результат, а не формулу: `cost` вычислено, когда цена была 40."
             }
           }
         ],
@@ -118014,7 +118048,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`cost` остаётся 120: стоимость вычислена до изменения цены."
+              "markdown": "`cost` связано с 120 — результатом `40 * 3`. Строка `price = 50` связывает с новым числом только `price`; `cost` не пересчитывается."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `120`"
             }
           }
         ],
@@ -118055,19 +118095,27 @@
     {
       "task": {
         "id": "python-values-t05",
-        "title": "Что выведут print(\"12\" + \"8\") и print(12 + 8)?",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите напечатанные строки через пробел в порядке вывода.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Что выведут `print(\"12\" + \"8\")` и `print(12 + 8)`?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "print(\"12\" + \"8\")\nprint(12 + 8)",
+              "caption": null
             }
           }
         ],
@@ -118075,7 +118123,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Значения, типы и переменные»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "В кавычках — строки: `+` ставит их символы подряд. Без кавычек — числа: `+` их складывает."
             }
           }
         ],
@@ -118083,7 +118131,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "128 и 20: строки склеиваются, числа складываются."
+              "markdown": "Первая строка склеивает строки `\"12\"` и `\"8\"` и печатает 128. Вторая складывает числа и печатает 20."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `128 20`"
             }
           }
         ],
@@ -118124,19 +118178,19 @@
     {
       "task": {
         "id": "python-values-t06",
-        "title": "Какие из имён допустимы: 2nd_place, max_value, my name, for, total?",
+        "title": "Какие из имён допустимы: 2nd_place, max_value, my name, None, total?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите допустимые имена через пробел в том порядке, в каком они даны в условии.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Какие из имён допустимы: `2nd_place`, `max_value`, `my name`, `for`, `total`?"
+              "markdown": "Какие из имён допустимы для переменной: `2nd_place`, `max_value`, `my name`, `None`, `total`?"
             }
           }
         ],
@@ -118144,7 +118198,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Значения, типы и переменные»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Имя состоит из букв, цифр и `_`, не начинается с цифры, не содержит пробелов и не совпадает со служебным словом."
             }
           }
         ],
@@ -118152,7 +118206,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Допустимы `max_value` и `total`."
+              "markdown": "`2nd_place` начинается с цифры, в `my name` пробел, `None` — служебное слово. Допустимы `max_value` и `total`."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `max_value total`"
             }
           }
         ],
@@ -118193,7 +118253,7 @@
     {
       "task": {
         "id": "python-values-t08",
-        "title": "Напиши программу: тетрадь стоит 40 рублей, ручка — 15",
+        "title": "Напиши программу: общая стоимость тетрадей и ручек в переменной total",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 2,
@@ -118205,7 +118265,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Напиши программу: тетрадь стоит 40 рублей, ручка — 15. Куплено 3 тетради и 2 ручки. Заведи переменные для цен и количеств, вычисли общую стоимость в переменной `total` и выведи её."
+              "markdown": "Тетрадь стоит 40 рублей, ручка — 15. Куплено 3 тетради и 2 ручки. Напиши программу: заведи переменные для цен и количеств, вычисли общую стоимость в переменной `total` и выведи её. Запусти программу и запиши, что она напечатала."
             }
           }
         ],
@@ -118213,7 +118273,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Значения, типы и переменные»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "`total` — сумма двух произведений: цена тетради на число тетрадей плюс цена ручки на число ручек."
             }
           }
         ],
@@ -118221,7 +118281,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`total = 3 * 40 + 2 * 15` через переменные; вывод 150."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "notebook_price = 40\npen_price = 15\nnotebooks = 3\npens = 2\ntotal = notebook_price * notebooks + pen_price * pens\nprint(total)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "3 · 40 + 2 · 15 = 120 + 30 = 150."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `150`"
             }
           }
         ],
