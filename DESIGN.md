@@ -304,8 +304,13 @@ label «Модуль · Урок», the current code line, tabs, the CodeRunner 
 instead of Here Orange; the lesson progress and the reading bar fill with the strong shade. Code
 blocks keep their neutral surface and head (architect, 2026-10-20): only their accents — the
 current line, underlines, the running frame — turn blue. The site header keeps its orange, the
-paid-lesson lock stays brand orange, the Excel course is unchanged. Lesson figures switch to the course
-accent lesson by lesson, never all at once.
+paid-lesson lock stays brand orange. Lesson figures switch to the course accent lesson by lesson,
+never all at once.
+
+**Excel lessons in the course sage (architect, 2026-10-21, Change 197).** The same rule holds for
+the Excel course in its own tone: the current place, the position label, the progress and the
+interactive figures (`FillSandbox` and the rest) take the sage action and strong shades; its
+code-built figures take `tone="excel"` module by module, together with the content review.
 
 **The Exam Paper Rule (Change 186).** The EGE topic pages (`/ege`, subtopics, «Практика и итог»)
 share one identity in the site's own grey and orange, no new hue. The `/ege` head and the topic head

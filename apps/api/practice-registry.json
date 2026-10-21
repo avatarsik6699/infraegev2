@@ -1026,7 +1026,7 @@
     },
     {
       "id": "excel-sheet",
-      "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
+      "sections": ["intro", "s0-okno", "s1", "s2", "s3", "s4", "s5"],
       "kind": "course",
       "status": "published",
       "course_id": "excel",

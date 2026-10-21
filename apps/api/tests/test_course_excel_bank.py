@@ -116,25 +116,32 @@ def _count_and_mean(scores: list[int]) -> str:
 
 # Answers recomputed by a method other than the lesson's.
 RECOMPUTED = {
-    "excel-sheet-t01": lambda: f"{_cells('B3:E7')} E7",
-    "excel-sheet-t02": lambda: f"{_cells('C2:C11')} {_cells('B5:F5')}",
-    "excel-sheet-t03": lambda: f"{_column_after('Z')} {_column_after('AZ')}",
-    "excel-sheet-t04": lambda: f"B2:D4 {_cells('B2:D4')}",
-    "excel-sheet-t05": lambda: f"{_cells('A1:C10')} {_cells('A1:C10') - 20 - 3}",
-    "excel-sheet-t06": lambda: "B5 C2",
-    "excel-sheet-t08": lambda: f"{_cells('B2:C4')} C4",
-    "excel-input-files-t03": lambda: (
-        f"{len('Тетрадь;40;12,5'.split(';'))} {len('Тетрадь;40;12,5'.split(','))}"
-    ),
+    "excel-sheet-t01": lambda: str(_cells("B3:E7")),
+    "excel-sheet-t09": lambda: "E7",
+    "excel-sheet-t02": lambda: str(_cells("C2:C11")),
+    "excel-sheet-t10": lambda: str(_cells("B5:F5")),
+    "excel-sheet-t03": lambda: _column_after("Z"),
+    "excel-sheet-t11": lambda: _column_after("AZ"),
+    "excel-sheet-t04": lambda: "B2:D4",
+    "excel-sheet-t12": lambda: str(_cells("B2:D4")),
+    "excel-sheet-t05": lambda: str(_cells("A1:C10") - 20 - 3),
+    "excel-sheet-t06": lambda: "B5",
+    "excel-sheet-t13": lambda: "C2",
+    "excel-sheet-t08": lambda: str(_cells("B2:C4")),
+    "excel-sheet-t14": lambda: "C4",
+    "excel-input-files-t03": lambda: str(len("Тетрадь;40;12,5".split(";"))),
+    "excel-input-files-t09": lambda: str(len("Тетрадь;40;12,5".split(","))),
     "excel-input-files-t04": lambda: str(int("00127")),
-    "excel-input-files-t08": lambda: "7 3",
-    "excel-cell-values-t02": lambda: (
-        f"{0.075 * 100:.0f}% {2 * 100:.0f}% {_num(0.075 * 1000 / 10)}%"
-    ),
-    "excel-cell-values-t04": lambda: f"{_num((6 + 9 + 0) / 3)} {_num((6 + 9) / 2)}",
-    "excel-cell-values-t05": lambda: (
-        f"{_serial(datetime.date(2026, 10, 3))} "
-        f"{(datetime.date(2026, 10, 15) - datetime.date(2026, 10, 1)).days}"
+    "excel-input-files-t08": lambda: "7",
+    "excel-input-files-t10": lambda: "3",
+    "excel-cell-values-t02": lambda: f"{_num(_round(0.075 * 100, 0))}%",
+    "excel-cell-values-t11": lambda: f"{_num(2 * 100)}%",
+    "excel-cell-values-t12": lambda: f"{_num(_round(0.075 * 100, 1))}%",
+    "excel-cell-values-t04": lambda: _num((6 + 9 + 0) / 3),
+    "excel-cell-values-t13": lambda: _num((6 + 9) / 2),
+    "excel-cell-values-t05": lambda: str(_serial(datetime.date(2026, 10, 3))),
+    "excel-cell-values-t14": lambda: str(
+        (datetime.date(2026, 10, 15) - datetime.date(2026, 10, 1)).days
     ),
     "excel-first-formulas-t01": lambda: f"{12 + 5 * 2} {(12 + 5) * 2}",
     "excel-first-formulas-t02": lambda: f"{2 * 3**2} {(2 * 3) ** 2} {_num(0.10 * 50)}",

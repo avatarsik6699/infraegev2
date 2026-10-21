@@ -12,7 +12,7 @@ WASH = "#f3f3f1"  # neutral wash: the site has no blue fills in figures
 ACCENT = "#ff6a00"  # one accent per figure, strokes and text only
 # A course lesson's figures take its course accent (Change 197): the action shade of the
 # course tone, readable as text (≥5:1). `tone=None` keeps the orange of the topics.
-TONES = {"python": "#3f6aa6"}
+TONES = {"python": "#3f6aa6", "excel": "#347a66"}
 
 
 def accent_of(tone: str | None) -> str:

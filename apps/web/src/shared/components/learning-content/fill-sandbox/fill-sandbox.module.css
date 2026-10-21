@@ -56,8 +56,12 @@
 .moved {
   padding: 0 1px;
   border-radius: 3px;
-  background: color-mix(in srgb, var(--color-link) 14%, var(--color-surface));
-  color: var(--color-link);
+  background: color-mix(
+    in srgb,
+    var(--lesson-figure-accent, var(--color-link)) 14%,
+    var(--color-surface)
+  );
+  color: var(--lesson-figure-accent, var(--color-link));
 }
 
 .note {

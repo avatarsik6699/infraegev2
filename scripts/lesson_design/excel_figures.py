@@ -10,6 +10,7 @@ Without JavaScript the initial example stays computed.
 from __future__ import annotations
 
 import datetime
+import functools
 import html
 
 from sheet_eval import (
@@ -1075,26 +1076,50 @@ def vlookup_steps(key: str = "103", col: int = 3) -> str:
     return _stepper(vlookup_frames(key, col))
 
 
+def _toned(builder):
+    """A course lesson passes ``tone="excel"`` (Change 197): the builder then draws
+    its one accent in the course colour instead of the orange of the topics."""
+
+    @functools.wraps(builder)
+    def call(*args, tone: str | None = None, **kwargs):
+        global ACCENT
+        from figures import accent_of  # noqa: PLC0415 — figures imports this module
+
+        saved, ACCENT = ACCENT, accent_of(tone)
+        try:
+            return builder(*args, **kwargs)
+        finally:
+            ACCENT = saved
+
+    return call
+
+
 EXCEL_FIGURES = {
-    "fill_try": fill_try,
-    "range_grid": range_grid,
-    "ref_moves": ref_moves,
-    "period_line": period_line,
-    "formula_steps": formula_steps,
-    "ctrl_jump": ctrl_jump,
-    "csv_split": csv_split,
-    "rank_line": rank_line,
-    "round_line": round_line,
-    "text_slots": text_slots,
-    "sumif_steps": sumif_steps,
-    "vlookup_steps": vlookup_steps,
+    name: _toned(builder)
+    for name, builder in {
+        "fill_try": fill_try,
+        "range_grid": range_grid,
+        "ref_moves": ref_moves,
+        "period_line": period_line,
+        "formula_steps": formula_steps,
+        "ctrl_jump": ctrl_jump,
+        "csv_split": csv_split,
+        "rank_line": rank_line,
+        "round_line": round_line,
+        "text_slots": text_slots,
+        "sumif_steps": sumif_steps,
+        "vlookup_steps": vlookup_steps,
+    }.items()
 }
 EXCEL_WIDGETS = {"fill_try": "FillSandbox"}
 # step-through figures: the site shows their frames (site_media → figures.STEPPERS)
 EXCEL_STEPPERS = {
-    "formula_steps": formula_frames,
-    "ctrl_jump": ctrl_jump_frames,
-    "sumif_steps": sumif_frames,
-    "vlookup_steps": vlookup_frames,
+    name: _toned(builder)
+    for name, builder in {
+        "formula_steps": formula_frames,
+        "ctrl_jump": ctrl_jump_frames,
+        "sumif_steps": sumif_frames,
+        "vlookup_steps": vlookup_frames,
+    }.items()
 }
 EXCEL_SCRIPTS = {"data-fill-try": FILL_TRY_JS}

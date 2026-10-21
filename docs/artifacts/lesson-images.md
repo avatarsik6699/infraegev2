@@ -8,6 +8,7 @@
 | Файл | Урок | Что на кадре | Источник |
 |---|---|---|---|
 | `python-first-program/python-org-download.webp` | 1.1 «Программа и её выполнение» | python.org/downloads на Windows: кнопка «Download Python install manager», 2026-10-20 | Собственный снимок страницы https://www.python.org/downloads/ (Playwriter, 1280 px) |
+| `excel-sheet/libreoffice-download.webp` | Excel 1.1 «Книга, лист, ячейка, диапазон» | libreoffice.org/download: LibreOffice 26.8.1, кнопки «WINDOWS (X86-64)» и «WINDOWS (ARM64)», 2026-10-21 | Собственный снимок страницы https://www.libreoffice.org/download/download-libreoffice/ (Playwriter, 1280 px) |
 
 Убраны 2026-10-20 (вводили в заблуждение): запуск в PyCharm из статьи Практикума (Linux, файлы
 Jupyter, Python 3.8) и интерактивный режим оттуда же (Python 3.10, `print ("hello")`).
@@ -31,3 +32,16 @@ Jupyter, Python 3.8) и интерактивный режим оттуда же 
 | `pycharm-terminal.webp` | «Первая программа», запуск из терминала | Вкладка «Terminal» PyCharm с `python main.py` | — |
 | `idle-run-module.webp` | вкладка IDLE, шаг 4 | Редактор с меню «Run → Run Module» и IDLE Shell с `= RESTART` | — |
 | `vscode-run.webp` | вкладка VS Code, шаг 4 | «Run Python File» и вывод в «Terminal» | Путь `C:\kurs` вместо папки PyCharm |
+
+## Кадры курса Excel, сгенерированные архитектором (2026-10-21)
+
+Не снимки экрана: созданы архитектором по промптам
+[lesson-images/excel-prompts.txt](lesson-images/excel-prompts.txt) и приняты как финальные
+2026-10-21. Лежат в `apps/web/public/images/lessons/excel-sheet/` (WebP, 1280×800); при правке кадр
+перегенерируется по промпту.
+
+| Файл | Где в уроке | Что на кадре | Известные неточности |
+|---|---|---|---|
+| `excel-window.webp` | Excel 1.1, «Программа и окно», вкладка Excel | Окно Excel: лента, поле имени `C4`, строка формул `2`, таблица покупок, ярлычки «База» и «Итоги»; метки 1–5 | — |
+| `calc-window.webp` | Excel 1.1, «Программа и окно», вкладка LibreOffice Calc | То же в LibreOffice Calc: меню и панели, поле имени, строка формул; метки 1–5 | — |
+| `excel-csv-import.webp` | Excel 1.2, «XLSX и CSV» | Окно «Данные → Из текста/CSV»: `pokupki.csv`, разделитель «Точка с запятой», предпросмотр; метка 1 | Книга за окном не затемнена |

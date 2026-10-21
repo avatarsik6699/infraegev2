@@ -130904,19 +130904,19 @@
     {
       "task": {
         "id": "excel-sheet-t01",
-        "title": "Сколько ячеек в B3:E7?",
+        "title": "Ячейки диапазона B3:E7",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько ячеек в `B3:E7`? Какая ячейка находится в нижнем правом углу этого диапазона?"
+              "markdown": "Сколько ячеек в диапазоне `B3:E7`?"
             }
           }
         ],
@@ -130924,7 +130924,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Книга, лист, ячейка, диапазон»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "Строк: 7 − 3 + 1; столбцов — сколько букв от B до E включительно."
             }
           }
         ],
@@ -130932,7 +130932,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "20 ячеек: строк 7 − 3 + 1 = 5, столбцов от B до E — 4. Нижняя правая — `E7`."
+              "markdown": "Строк 7 − 3 + 1 = 5, столбцов B, C, D, E — 4; 5 × 4 = 20."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `20`"
             }
           }
         ],
@@ -130964,7 +130970,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["20 E7"],
+          "answer_variants": ["20"],
           "numeric_tolerance": null
         }
       },
@@ -130973,19 +130979,19 @@
     {
       "task": {
         "id": "excel-sheet-t02",
-        "title": "Сколько ячеек в диапазонах C2:C11 и B5:F5?",
+        "title": "Ячейки части столбца",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько ячеек в диапазонах `C2:C11` и `B5:F5`? Какой из них — часть столбца, а какой — часть строки?"
+              "markdown": "Сколько ячеек в диапазоне `C2:C11`?"
             }
           }
         ],
@@ -130993,7 +130999,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Книга, лист, ячейка, диапазон»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "Столбец один — считай строки, обе границы включены."
             }
           }
         ],
@@ -131001,76 +131007,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "10 и 5: `C2:C11` — часть столбца C, строк 11 − 2 + 1 = 10; `B5:F5` — часть строки 5, столбцы B, C, D, E, F."
+              "markdown": "Строк 11 − 2 + 1 = 10, столбец один."
             }
-          }
-        ],
-        "skills": [],
-        "exam_numbers": [],
-        "files": [],
-        "lessons": [
-          {
-            "position": 1,
-            "material_id": "excel-sheet"
-          }
-        ],
-        "theory_links": [],
-        "catalog_visible": false,
-        "archived": false,
-        "sources": [
-          {
-            "url": null,
-            "kind": "original",
-            "role": "original",
-            "year": null,
-            "title": null,
-            "author": null,
-            "primary": true,
-            "is_public": true,
-            "adaptation": null,
-            "original_id": null
-          }
-        ],
-        "checker": {
-          "checker_type": "exact_match",
-          "answer_variants": ["10 5"],
-          "numeric_tolerance": null
-        }
-      },
-      "solution_revision": 1
-    },
-    {
-      "task": {
-        "id": "excel-sheet-t03",
-        "title": "Какой столбец идёт сразу после Z?",
-        "short_description": null,
-        "explanation_kind": "unclassified",
-        "difficulty": 1,
-        "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
-        "interaction_type": "production",
-        "content_schema_version": 1,
-        "statement": [
+          },
           {
             "type": "text",
             "data": {
-              "markdown": "Какой столбец идёт сразу после Z? А после AZ?"
-            }
-          }
-        ],
-        "hint": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Опора — урок «Книга, лист, ячейка, диапазон»: рассуди по шагам, а затем проверь в Excel."
-            }
-          }
-        ],
-        "explanation": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "AA, затем после AZ идёт BA."
+              "markdown": "Ответ: `10`"
             }
           }
         ],
@@ -131102,7 +131045,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["AA BA"],
+          "answer_variants": ["10"],
           "numeric_tolerance": null
         }
       },
@@ -131110,20 +131053,20 @@
     },
     {
       "task": {
-        "id": "excel-sheet-t04",
-        "title": "Углы прямоугольника — ячейки B2, D2, B4 и D4",
+        "id": "excel-sheet-t03",
+        "title": "Столбец после Z",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "answer_instruction": "Введите имя столбца латинскими буквами.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Углы прямоугольника — ячейки `B2`, `D2`, `B4` и `D4`. Запиши его диапазоном и посчитай ячейки."
+              "markdown": "Какой столбец идёт сразу после Z?"
             }
           }
         ],
@@ -131131,7 +131074,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Книга, лист, ячейка, диапазон»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "Однобуквенные имена кончились — начинаются двухбуквенные."
             }
           }
         ],
@@ -131139,76 +131082,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`B2:D4`, 3 × 3 = 9 ячеек."
+              "markdown": "После Z идут двухбуквенные имена, первое — AA."
             }
-          }
-        ],
-        "skills": [],
-        "exam_numbers": [],
-        "files": [],
-        "lessons": [
-          {
-            "position": 3,
-            "material_id": "excel-sheet"
-          }
-        ],
-        "theory_links": [],
-        "catalog_visible": false,
-        "archived": false,
-        "sources": [
-          {
-            "url": null,
-            "kind": "original",
-            "role": "original",
-            "year": null,
-            "title": null,
-            "author": null,
-            "primary": true,
-            "is_public": true,
-            "adaptation": null,
-            "original_id": null
-          }
-        ],
-        "checker": {
-          "checker_type": "exact_match",
-          "answer_variants": ["B2:D4 9"],
-          "numeric_tolerance": null
-        }
-      },
-      "solution_revision": 1
-    },
-    {
-      "task": {
-        "id": "excel-sheet-t05",
-        "title": "В диапазоне A1:C10 записаны 20 чисел и 3 названия, остальные ячейки пусты",
-        "short_description": null,
-        "explanation_kind": "unclassified",
-        "difficulty": 1,
-        "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
-        "interaction_type": "production",
-        "content_schema_version": 1,
-        "statement": [
+          },
           {
             "type": "text",
             "data": {
-              "markdown": "В диапазоне `A1:C10` записаны 20 чисел и 3 названия, остальные ячейки пусты. Сколько ячеек в диапазоне и сколько из них пустых?"
-            }
-          }
-        ],
-        "hint": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Опора — урок «Книга, лист, ячейка, диапазон»: рассуди по шагам, а затем проверь в Excel."
-            }
-          }
-        ],
-        "explanation": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "30 ячеек, из них 7 пустых: 10 строк × 3 столбца = 30, заполнено 23."
+              "markdown": "Ответ: `AA`"
             }
           }
         ],
@@ -131240,7 +131120,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["30 7"],
+          "answer_variants": ["AA", "aa"],
           "numeric_tolerance": null
         }
       },
@@ -131248,20 +131128,20 @@
     },
     {
       "task": {
-        "id": "excel-sheet-t06",
-        "title": "В таблице покупок выше назови адрес цены карандаша и адрес количества тетрадей",
+        "id": "excel-sheet-t04",
+        "title": "Прямоугольник диапазоном",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "answer_instruction": "Введите диапазон через двоеточие, например A1:B2.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "В таблице покупок выше назови адрес цены карандаша и адрес количества тетрадей."
+              "markdown": "Углы прямоугольника — ячейки `B2`, `D2`, `B4` и `D4`. Запиши его диапазоном."
             }
           }
         ],
@@ -131269,7 +131149,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Книга, лист, ячейка, диапазон»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "Диапазон — от верхнего левого угла до нижнего правого через двоеточие."
             }
           }
         ],
@@ -131277,76 +131157,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Цена карандаша — `B5`, количество тетрадей — `C2`."
+              "markdown": "Верхний левый угол — `B2`, нижний правый — `D4`: `B2:D4`."
             }
-          }
-        ],
-        "skills": [],
-        "exam_numbers": [],
-        "files": [],
-        "lessons": [
-          {
-            "position": 5,
-            "material_id": "excel-sheet"
-          }
-        ],
-        "theory_links": [],
-        "catalog_visible": false,
-        "archived": false,
-        "sources": [
-          {
-            "url": null,
-            "kind": "original",
-            "role": "original",
-            "year": null,
-            "title": null,
-            "author": null,
-            "primary": true,
-            "is_public": true,
-            "adaptation": null,
-            "original_id": null
-          }
-        ],
-        "checker": {
-          "checker_type": "exact_match",
-          "answer_variants": ["B5 C2"],
-          "numeric_tolerance": null
-        }
-      },
-      "solution_revision": 1
-    },
-    {
-      "task": {
-        "id": "excel-sheet-t08",
-        "title": "Создай пустую книгу",
-        "short_description": null,
-        "explanation_kind": "unclassified",
-        "difficulty": 1,
-        "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
-        "interaction_type": "production",
-        "content_schema_version": 1,
-        "statement": [
+          },
           {
             "type": "text",
             "data": {
-              "markdown": "Создай пустую книгу. В `A1` введи «Товар», в `B1` — «Цена», в `C1` — «Количество». В строки 2–4 перенеси первые три товара из таблицы выше. Выдели `B2:C4`: сколько ячеек выделено? Где хранится количество папок?"
-            }
-          }
-        ],
-        "hint": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Опора — урок «Книга, лист, ячейка, диапазон»: рассуди по шагам, а затем проверь в Excel."
-            }
-          }
-        ],
-        "explanation": [
-          {
-            "type": "text",
-            "data": {
-              "markdown": "Шесть ячеек: 3 строки × 2 столбца. Количество папок — в `C4`."
+              "markdown": "Ответ: `B2:D4`"
             }
           }
         ],
@@ -131378,7 +131195,232 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["6 C4"],
+          "answer_variants": ["B2:D4", "b2:d4"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-sheet-t05",
+        "title": "Пустые ячейки диапазона",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В диапазоне `A1:C10` записаны 20 чисел и 3 названия, остальные ячейки пусты. Сколько пустых ячеек?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сначала посчитай все ячейки диапазона, потом вычти заполненные."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ячеек 10 × 3 = 30, заполнено 20 + 3 = 23, пустых 30 − 23 = 7."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `7`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 8,
+            "material_id": "excel-sheet"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["7"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-sheet-t06",
+        "title": "Адрес цены карандаша",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите адрес ячейки латинскими буквами, например A1.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В таблице покупок урока (лист «База»): какой адрес у цены карандаша?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Цены — в столбце B; найди строку карандаша."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Карандаш — в строке 5, цена — в столбце B: `B5`."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `B5`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 9,
+            "material_id": "excel-sheet"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["B5", "b5"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-sheet-t08",
+        "title": "Сделай сам: выделение",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Создай пустую книгу. В `A1` введи «Товар», в `B1` — «Цена», в `C1` — «Количество». В строки 2–4 перенеси первые три товара из таблицы урока. Выдели `B2:C4`: сколько ячеек выделено?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Выделены цены и количества трёх товаров: 3 строки и 2 столбца."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "3 строки × 2 столбца = 6 ячеек."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `6`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 11,
+            "material_id": "excel-sheet"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["6"],
           "numeric_tolerance": null
         }
       },
@@ -131387,19 +131429,19 @@
     {
       "task": {
         "id": "excel-input-files-t03",
-        "title": "В файле CSV строка Тетрадь;40;12,5",
+        "title": "Поля при разделителе «;»",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "В файле CSV строка `Тетрадь;40;12,5`. Сколько полей получится при разделителе «точка с запятой» и сколько — при разделителе «запятая»?"
+              "markdown": "В файле CSV строка `Тетрадь;40;12,5`. Сколько полей получится при разделителе «точка с запятой»?"
             }
           }
         ],
@@ -131407,7 +131449,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Ввод данных и файлы»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "Посчитай знаки «;» в строке: полей на одно больше."
             }
           }
         ],
@@ -131415,7 +131457,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Три поля при «;»: `Тетрадь`, `40`, `12,5`. Два при «,»: `Тетрадь;40;12` и `5`."
+              "markdown": "Два знака «;» делят строку на три поля: `Тетрадь`, `40`, `12,5`."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
             }
           }
         ],
@@ -131447,7 +131495,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["3 2"],
+          "answer_variants": ["3"],
           "numeric_tolerance": null
         }
       },
@@ -131456,7 +131504,7 @@
     {
       "task": {
         "id": "excel-input-files-t04",
-        "title": "В файле есть код 00127",
+        "title": "Код с ведущими нулями",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
@@ -131468,7 +131516,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В файле есть код `00127`. Каким он станет, если при импорте выбрать числовой тип? Что нужно выбрать, чтобы нули сохранились?"
+              "markdown": "В файле есть код `00127`. Что окажется в ячейке, если при импорте выбрать для столбца числовой тип?"
             }
           }
         ],
@@ -131476,7 +131524,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Ввод данных и файлы»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "Число не хранит нули в начале записи."
             }
           }
         ],
@@ -131484,7 +131532,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Число 127: ведущие нули числа не хранит. Нужно выбрать текстовый тип столбца."
+              "markdown": "Числовой тип превращает `00127` в число 127. Чтобы нули сохранились, столбцу выбирают текстовый тип."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `127`"
             }
           }
         ],
@@ -131493,7 +131547,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 1,
+            "position": 2,
             "material_id": "excel-input-files"
           }
         ],
@@ -131525,19 +131579,19 @@
     {
       "task": {
         "id": "excel-input-files-t08",
-        "title": "На листе выше выбери C3 и набери 7, не нажимая F2, затем Enter",
+        "title": "Набор поверх значения",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "На листе выше выбери `C3` и набери 7, не нажимая F2, затем Enter. Чему теперь равно количество ручек? Что изменится, если вместо Enter нажать Esc?"
+              "markdown": "На листе урока выбери `C3`, набери 7, не нажимая F2, и нажми Enter. Чему теперь равно количество ручек?"
             }
           }
         ],
@@ -131545,7 +131599,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Ввод данных и файлы»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "Набор в выбранной ячейке заменяет прежнее значение целиком."
             }
           }
         ],
@@ -131553,7 +131607,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "7 — набор заменяет прежнее значение 3. После Esc набранное отменяется, остаётся 3."
+              "markdown": "Набор поверх ячейки заменяет 3 на 7."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `7`"
             }
           }
         ],
@@ -131562,7 +131622,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 2,
+            "position": 3,
             "material_id": "excel-input-files"
           }
         ],
@@ -131585,7 +131645,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["7 3"],
+          "answer_variants": ["7"],
           "numeric_tolerance": null
         }
       },
@@ -131594,19 +131654,19 @@
     {
       "task": {
         "id": "excel-cell-values-t02",
-        "title": "Что покажет процентный формат для чисел 0,075 и 2?",
+        "title": "Процентный формат для 0,075",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "answer_instruction": "Введите значение так, как его покажет ячейка, например 12%.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Что покажет процентный формат для чисел 0,075 и 2? А формат «0,0%» для 0,075?"
+              "markdown": "Что покажет процентный формат без знаков после запятой для числа 0,075?"
             }
           }
         ],
@@ -131614,7 +131674,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Что хранится в ячейке»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "Процентный формат умножает на 100 и округляет до целого."
             }
           }
         ],
@@ -131622,7 +131682,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "8% и 200%; в формате «0,0%» — 7,5%."
+              "markdown": "0,075 = 7,5 сотых; без дробной части — 8%."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `8%`"
             }
           }
         ],
@@ -131654,7 +131720,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["8% 200% 7,5%"],
+          "answer_variants": ["8%"],
           "numeric_tolerance": null
         }
       },
@@ -131663,19 +131729,19 @@
     {
       "task": {
         "id": "excel-cell-values-t04",
-        "title": "Найди среднее чисел 6, 9 и 0 и среднее чисел 6 и 9, если третья ячейка пуста",
+        "title": "Среднее с нулём",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Найди среднее чисел 6, 9 и 0 и среднее чисел 6 и 9, если третья ячейка пуста."
+              "markdown": "Найди среднее чисел 6, 9 и 0."
             }
           }
         ],
@@ -131683,7 +131749,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Что хранится в ячейке»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "Ноль — число: делим на три."
             }
           }
         ],
@@ -131691,7 +131757,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "5 и 7,5: ноль — число и входит в среднее, пустая ячейка — нет."
+              "markdown": "(6 + 9 + 0) / 3 = 5."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5`"
             }
           }
         ],
@@ -131700,7 +131772,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 1,
+            "position": 3,
             "material_id": "excel-cell-values"
           }
         ],
@@ -131723,7 +131795,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["5 7,5"],
+          "answer_variants": ["5"],
           "numeric_tolerance": null
         }
       },
@@ -131732,19 +131804,19 @@
     {
       "task": {
         "id": "excel-cell-values-t05",
-        "title": "Дата 01.10.2026 хранится как 46296",
+        "title": "Дата как число",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Дата 01.10.2026 хранится как 46296. Какое число хранится для 03.10.2026? Сколько дней от 01.10.2026 до 15.10.2026?"
+              "markdown": "Дата 01.10.2026 хранится как 46296. Какое число хранится для 03.10.2026?"
             }
           }
         ],
@@ -131752,7 +131824,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Что хранится в ячейке»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "Дата — номер дня: каждый следующий день на единицу больше."
             }
           }
         ],
@@ -131760,7 +131832,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "46298; от 01.10 до 15.10 — 14 дней: 46310 − 46296."
+              "markdown": "Через два дня: 46296 + 2 = 46298."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `46298`"
             }
           }
         ],
@@ -131769,7 +131847,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 2,
+            "position": 5,
             "material_id": "excel-cell-values"
           }
         ],
@@ -131792,7 +131870,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["46298 14"],
+          "answer_variants": ["46298"],
           "numeric_tolerance": null
         }
       },
@@ -805831,6 +805909,906 @@
         }
       },
       "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-sheet-t09",
+        "title": "Угол диапазона",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите адрес ячейки латинскими буквами, например A1.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Какая ячейка — нижний правый угол диапазона `B3:E7`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Диапазон записывают от верхнего левого угла до нижнего правого."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Вторая ячейка записи `B3:E7` — нижний правый угол: `E7`."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `E7`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 1,
+            "material_id": "excel-sheet"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["E7", "e7"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-sheet-t10",
+        "title": "Ячейки части строки",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сколько ячеек в диапазоне `B5:F5`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Строка одна — перечисли буквы от B до F."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "B, C, D, E, F — пять столбцов одной строки."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 3,
+            "material_id": "excel-sheet"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["5"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-sheet-t11",
+        "title": "Столбец после AZ",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите имя столбца латинскими буквами.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Какой столбец идёт сразу после AZ?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Вторая буква прошла весь алфавит — первая сдвигается на следующую."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "После AZ первая буква меняется на B, вторая начинается с A: BA."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `BA`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 5,
+            "material_id": "excel-sheet"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["BA", "ba"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-sheet-t12",
+        "title": "Ячейки прямоугольника",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сколько ячеек в диапазоне `B2:D4`?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Строк 4 − 2 + 1, столбцов от B до D."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "3 строки × 3 столбца = 9 ячеек."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `9`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 7,
+            "material_id": "excel-sheet"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["9"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-sheet-t13",
+        "title": "Адрес количества тетрадей",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите адрес ячейки латинскими буквами, например A1.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В той же таблице покупок: какой адрес у количества тетрадей?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Количество — в столбце C; тетрадь — первая запись под заголовком."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Тетрадь — в строке 2, количество — в столбце C: `C2`."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `C2`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 10,
+            "material_id": "excel-sheet"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["C2", "c2"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-sheet-t14",
+        "title": "Сделай сам: где количество папок",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите адрес ячейки латинскими буквами, например A1.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В той же книге: в какой ячейке хранится количество папок?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Папка — третий товар, значит строка 4; количество — столбец C."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Тетрадь, ручка, папка — строки 2, 3, 4; количество в столбце C: `C4`."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `C4`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 12,
+            "material_id": "excel-sheet"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["C4", "c4"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-input-files-t09",
+        "title": "Поля при разделителе «,»",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В файле CSV строка `Тетрадь;40;12,5`. Сколько полей получится, если разделителем выбрать запятую?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Запятая в строке одна — внутри числа 12,5."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Одна запятая делит строку на два поля: `Тетрадь;40;12` и `5` — число разрезано пополам."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 1,
+            "material_id": "excel-input-files"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["2"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-input-files-t10",
+        "title": "Отмена ввода",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "На листе урока выбери `C3` и набери 7, но вместо Enter нажми Esc. Чему равно количество ручек?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Esc отменяет ввод, который ещё не подтверждён."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ввод не подтверждён, Esc его отменил: осталось прежнее 3."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 4,
+            "material_id": "excel-input-files"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["3"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-cell-values-t11",
+        "title": "Процентный формат для 2",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите значение так, как его покажет ячейка, например 12%.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Что покажет процентный формат для числа 2?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "1 в процентном формате — это 100%."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "2 = 200 сотых: 200%."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `200%`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 1,
+            "material_id": "excel-cell-values"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["200%"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-cell-values-t12",
+        "title": "Формат «0,0%»",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите значение так, как его покажет ячейка, например 12%.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Что покажет формат «0,0%» для числа 0,075?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "«0,0%» оставляет один знак после запятой."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "0,075 · 100 = 7,5 — с одним знаком: 7,5%."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `7,5%`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 2,
+            "material_id": "excel-cell-values"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["7,5%", "7.5%"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-cell-values-t13",
+        "title": "Среднее с пустой ячейкой",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число; дробную часть — через запятую.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В трёх ячейках 6, 9 и пустота. Чему равно их среднее?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Пустая ячейка — не число и в среднее не входит."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Чисел два: (6 + 9) / 2 = 7,5."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `7,5`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 4,
+            "material_id": "excel-cell-values"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["7,5", "7.5"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-cell-values-t14",
+        "title": "Дней между датами",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сколько дней от 01.10.2026 до 15.10.2026, если вычесть одну дату из другой?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Разность дат — разность номеров дней."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "15 − 1 = 14 дней."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `14`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 6,
+            "material_id": "excel-cell-values"
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["14"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
     }
   ],
   "files": [
@@ -820413,7 +821391,7 @@
     },
     {
       "id": "excel-sheet",
-      "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
+      "sections": ["intro", "s0-okno", "s1", "s2", "s3", "s4", "s5"],
       "kind": "course",
       "status": "published",
       "course_id": "excel",

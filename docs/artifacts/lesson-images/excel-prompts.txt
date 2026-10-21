@@ -1,0 +1,47 @@
+Курс Excel, уроки 1.1 и 1.2 (Change 197, 2026-10-21). Три кадра окон для генерации архитектором.
+Готовые файлы — WebP 1280×800, все три в apps/web/public/images/lessons/excel-sheet/.
+
+excel-window.webp
+Use case: ui-mockup. Generate ONE realistic software screenshot for a Russian spreadsheet tutorial. Windows 11, light theme, landscape EXACT 1280×800 pixels, 16:10. Crisp native UI typography, all text sharp and legible. Straight-on digital screenshot, no perspective, no monitor frame, no watermark, no personal data, no unrelated windows. The application window fills the canvas.
+
+Microsoft Excel for Windows (Microsoft 365), RUSSIAN interface. Title bar: "Книга1 - Excel". Ribbon tabs exactly: Файл, Главная, Вставка, Разметка страницы, Формулы, Данные, Рецензирование, Вид; tab "Главная" is active with its usual groups (Буфер обмена, Шрифт, Выравнивание, Число). Below the ribbon: the Name Box on the left shows exactly "C4"; to its right the formula bar with the "fx" button shows exactly "2".
+The grid shows column letters A, B, C, D, E, F, G and row numbers 1–20. Data only in A1:C5, exactly:
+A1 Товар, B1 Цена, C1 Количество
+A2 Тетрадь, B2 40, C2 5
+A3 Ручка, B3 20, C3 3
+A4 Папка, B4 120, C4 2
+A5 Карандаш, B5 15, C5 4
+Text left-aligned, numbers right-aligned, no bold, no fill colours. Cell C4 is selected with the standard Excel green selection border and fill handle. All other cells empty.
+Bottom: sheet tabs "База" (active) and "Итоги", the "+" button, status bar "Готово".
+Add exactly five numbered markers: solid dark green circles (#347a66) about 30 px in diameter with a white bold digit, each placed just outside the element it points to, never covering text:
+1 — next to the ribbon (near the "Главная" tab),
+2 — next to the Name Box,
+3 — next to the formula bar,
+4 — next to cell C4 in the grid,
+5 — next to the sheet tab "База".
+No arrows, no captions, no other annotations.
+
+calc-window.webp
+Use case: ui-mockup. Same requirements as excel-window.webp: Windows 11 light theme, EXACT 1280×800, crisp legible text, straight-on screenshot, no watermark, window fills canvas.
+
+LibreOffice Calc 26.8 for Windows, RUSSIAN interface, default light theme with the standard menu bar and toolbars (not the tabbed interface). Title bar: "Безымянный 1 - LibreOffice Calc". Menu bar exactly: Файл, Правка, Вид, Вставка, Формат, Стили, Лист, Данные, Сервис, Окно, Справка. Under the toolbars: the Name Box on the left shows exactly "C4"; next to it the formula bar icons "f(x)", "Σ", "=" and the input line with exactly "2".
+The grid and data are exactly the same as in excel-window.webp: columns A–G, rows 1–20, data in A1:C5 (Товар/Цена/Количество; Тетрадь 40 5; Ручка 20 3; Папка 120 2; Карандаш 15 4), cell C4 selected with the standard Calc selection border.
+Bottom: sheet tabs "База" (active) and "Итоги", status bar with "Лист 1 из 2".
+The same five numbered markers (dark green #347a66 circles, white digits), never covering text:
+1 — next to the menu bar and toolbars (near "Файл"),
+2 — next to the Name Box,
+3 — next to the formula input line,
+4 — next to cell C4,
+5 — next to the sheet tab "База".
+No arrows, no captions, no other annotations.
+
+excel-csv-import.webp
+Use case: ui-mockup. Same requirements: Windows 11 light theme, EXACT 1280×800, crisp legible text, straight-on screenshot, no watermark.
+
+Microsoft Excel for Windows, RUSSIAN interface. Over a blank workbook (dimmed in the background) the import preview window of "Данные → Из текста/CSV" is open. Window title exactly "pokupki.csv". Three dropdowns in one row with labels and values exactly:
+"Источник файла" — "65001: Юникод (UTF-8)",
+"Разделитель" — "Точка с запятой",
+"Определение типа данных" — "На основе первых 200 строк".
+Below: a preview table with exactly three columns and headers "Товар", "Цена", "Количество", and exactly two data rows: "Тетрадь", "40", "5" and "Ручка", "20", "3". Numbers right-aligned.
+Bottom right buttons exactly: "Загрузить", "Преобразовать данные", "Отмена".
+One numbered marker: a dark green #347a66 circle with white digit 1, placed just left of the "Разделитель" dropdown, not covering text. No arrows, no other annotations.

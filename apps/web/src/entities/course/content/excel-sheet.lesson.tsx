@@ -1,8 +1,11 @@
+import { ExternalLink } from "~/shared/components/external-link";
 import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
 import {
   LessonDiagram,
+  LessonImage,
   LessonSummary,
+  LessonTabs,
   SheetBlock,
 } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
@@ -13,10 +16,10 @@ export const excelSheetLesson = defineCourseLesson({
   ...excelSheetLessonPublication,
   masteryThreshold: 0.8,
   learningOutcomes: [
+    "Открыть программу и найти части окна",
     "Найти ячейку по адресу",
     "Посчитать ячейки диапазона",
-    "Понять",
-    "Что означают строки и столбцы таблицы",
+    "Понять, что означают строки и столбцы",
   ],
   accessTier: "free",
   theory: [
@@ -27,18 +30,154 @@ export const excelSheetLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
+            Весь курс держится на маленькой таблице покупок: тетради, ручки,
+            папки и карандаши, их цены и количества. Чтобы посчитать, сколько
+            стоят три ручки, формуле нужно сказать, где лежат цена и количество.{" "}
             <strong>
               У каждого значения на листе есть адрес — буква столбца и номер
-              строки, например <Notation>{"B3"}</Notation>.
-            </strong>{" "}
-            Это первый урок курса. Из инструментов нужен только открытый Excel
-            или LibreOffice Calc; по адресам ячеек и диапазонов к данным будут
-            обращаться формулы всех следующих уроков.
+              строки, например <Notation>{"B3"}</Notation>; по адресам к данным
+              обращаются все формулы курса
+            </strong>
+            .
           </Typography.Text>
           <Typography.Text>
-            Весь курс держится на маленькой таблице покупок: тетради, ручки,
-            папки и карандаши, их цены и количества. Сначала разберёмся, где в
-            ней что лежит.
+            Сначала откроем программу и найдём в её окне всё, что понадобится,
+            потом разберёмся с адресами и диапазонами.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "s0-okno",
+      navLabel: "Программа и окно",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Курс проходится в Excel или в бесплатном LibreOffice Calc —
+              формулы и окно у них почти одинаковые.
+            </strong>{" "}
+            Всё в курсе работает в обеих. Выбери ту, что у тебя есть:
+          </Typography.Text>
+          <LessonTabs
+            label="Программа"
+            tabs={[
+              {
+                label: "Excel",
+                content: (
+                  <>
+                    <Typography.Text>
+                      Excel входит в пакет Microsoft 365. Если он установлен,
+                      открой «Excel» в меню «Пуск» и выбери «Пустая книга». Если
+                      Excel нет, возьми LibreOffice Calc — соседняя вкладка.
+                    </Typography.Text>
+                    <Typography.Text>
+                      В окне Excel пять частей — на кадре они отмечены номерами:
+                    </Typography.Text>
+                    <LessonImage
+                      src="/images/lessons/excel-sheet/excel-window.webp"
+                      width={1280}
+                      height={800}
+                      alt="Окно Excel с таблицей покупок: лента, поле имени C4, строка формул со значением 2, выбранная ячейка C4, ярлычки листов База и Итоги; метки 1–5"
+                      caption={
+                        <>
+                          Выбрана <Notation>{"C4"}</Notation>: её адрес — в поле
+                          имени (2), содержимое 2 — в строке формул (3).
+                        </>
+                      }
+                    />
+                    <ol>
+                      <li>
+                        <strong>лента</strong> — вкладки с командами: «Главная»,
+                        «Формулы», «Данные»;
+                      </li>
+                      <li>
+                        <strong>поле имени</strong> — адрес выбранной ячейки,
+                        например <Notation>{"C4"}</Notation>;
+                      </li>
+                      <li>
+                        <strong>строка формул</strong> — то, что на самом деле
+                        записано в ячейке;
+                      </li>
+                      <li>
+                        <strong>сетка</strong> — ячейки листа;
+                      </li>
+                      <li>
+                        <strong>ярлычки листов</strong> внизу — листы книги.
+                      </li>
+                    </ol>
+                  </>
+                ),
+              },
+              {
+                label: "LibreOffice Calc",
+                content: (
+                  <>
+                    <Typography.Text>
+                      LibreOffice — бесплатный пакет, Calc — его таблицы. Скачай
+                      установщик для Windows с сайта{" "}
+                      <ExternalLink href="https://www.libreoffice.org/download/download-libreoffice/">
+                        libreoffice.org
+                      </ExternalLink>
+                      : кнопка «WINDOWS (X86-64)».
+                    </Typography.Text>
+                    <LessonImage
+                      src="/images/lessons/excel-sheet/libreoffice-download.webp"
+                      width={1264}
+                      height={760}
+                      alt="Страница загрузки LibreOffice 26.8.1 с кнопками WINDOWS (X86-64) и WINDOWS (ARM64)"
+                      caption={
+                        <>
+                          Для обычного компьютера — верхняя кнопка, X86-64.
+                          ARM64 нужна только для компьютеров на процессорах ARM.
+                        </>
+                      }
+                    />
+                    <Typography.Text>
+                      Запусти скачанный файл и установи с настройками по
+                      умолчанию. Затем открой «LibreOffice Calc» в меню «Пуск».
+                      В окне те же пять частей, что у Excel:
+                    </Typography.Text>
+                    <LessonImage
+                      src="/images/lessons/excel-sheet/calc-window.webp"
+                      width={1280}
+                      height={800}
+                      alt="Окно LibreOffice Calc с таблицей покупок: меню и панели инструментов, поле имени C4, строка формул со значением 2, выбранная ячейка C4, ярлычки листов База и Итоги; метки 1–5"
+                      caption={
+                        <>
+                          Вместо ленты — меню и панели (1); поле имени (2) и
+                          строка формул (3) — те же, что в Excel.
+                        </>
+                      }
+                    />
+                    <ol>
+                      <li>
+                        <strong>меню и панели инструментов</strong> вместо
+                        ленты: «Файл», «Данные», «Сервис»;
+                      </li>
+                      <li>
+                        <strong>поле имени</strong> — адрес выбранной ячейки;
+                      </li>
+                      <li>
+                        <strong>строка формул</strong> — содержимое ячейки;
+                      </li>
+                      <li>
+                        <strong>сетка</strong> — ячейки листа;
+                      </li>
+                      <li>
+                        <strong>ярлычки листов</strong> внизу.
+                      </li>
+                    </ol>
+                  </>
+                ),
+              },
+            ]}
+          />
+          <Typography.Text>
+            Функции в обеих программах на русском и пишутся одинаково:{" "}
+            <Notation>{"СУММ"}</Notation>, <Notation>{"ЕСЛИ"}</Notation>,{" "}
+            <Notation>{"ВПР"}</Notation>. Где команды в меню различаются, урок
+            называет обе.
           </Typography.Text>
         </>
       ),
@@ -65,8 +204,8 @@ export const excelSheetLesson = defineCourseLesson({
             далее. Пересечение строки и столбца называется ячейкой.
           </Typography.Text>
           <Typography.Text>
-            Вот как выглядит таблица покупок на листе «База». Над сеткой — буквы
-            столбцов, слева — номера строк:
+            Вот таблица покупок на листе «База». Над сеткой — буквы столбцов,
+            слева — номера строк:
           </Typography.Text>
           <SheetBlock {...lessonMedia.sheet1} label={"Лист «База»"} />
           <Typography.Text>
@@ -192,6 +331,79 @@ export const excelSheetLesson = defineCourseLesson({
   ],
   checkpoint: [
     {
+      id: "t1",
+      prompt: (
+        <>
+          <Typography.Text>
+            Какой адрес у ячейки на пересечении столбца D и строки 7?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            <Notation>{"D7"}</Notation>: сначала буква столбца, потом номер
+            строки.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t2",
+      prompt: (
+        <>
+          <Typography.Text>
+            Где в окне программы видно адрес выбранной ячейки, а где — что в ней
+            записано?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            Адрес — в поле имени слева, содержимое — в строке формул справа от
+            него.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t3",
+      prompt: (
+        <>
+          <Typography.Text>
+            Сколько ячеек в диапазоне <Notation>{"B2:B9"}</Notation>?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            8: строк 9 − 2 + 1 = 8, столбец один.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t4",
+      prompt: (
+        <>
+          <Typography.Text>
+            Чем различаются диапазоны <Notation>{"A2:D2"}</Notation> и{" "}
+            <Notation>{"A2:A6"}</Notation>?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            <Notation>{"A2:D2"}</Notation> — четыре ячейки одной строки,{" "}
+            <Notation>{"A2:A6"}</Notation> — пять ячеек одного столбца.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
       id: "t7",
       prompt: (
         <>
@@ -214,37 +426,51 @@ export const excelSheetLesson = defineCourseLesson({
   ],
   result: (
     <>
+      <Typography.Text>
+        Лист — сетка ячеек с адресами, и любое значение находят по адресу. Вот
+        что понадобится дальше.
+      </Typography.Text>
       <LessonSummary
         items={[
           {
+            key: "Окно",
             note: (
               <>
-                Книга состоит из листов, лист — из ячеек на пересечении строк и
+                Лента или меню, поле имени — адрес, строка формул — содержимое,
+                ярлычки листов внизу.
+              </>
+            ),
+          },
+          {
+            key: "Книга и лист",
+            note: (
+              <>
+                Файл — книга, в ней листы, лист — ячейки на пересечении строк и
                 столбцов.
               </>
             ),
           },
           {
+            key: <Notation>{"B3"}</Notation>,
+            note: (
+              <>Адрес: буква столбца, потом номер строки; буквы латинские.</>
+            ),
+          },
+          {
+            key: <Notation>{"A2:D6"}</Notation>,
             note: (
               <>
-                Адрес — буква столбца и номер строки:{" "}
-                <Notation>{"B3"}</Notation>; буквы латинские.
+                Диапазон включает обе границы: строк 6 − 2 + 1 = 5, ячеек 5 × 4
+                = 20.
               </>
             ),
           },
           {
+            key: "Запись и поле",
             note: (
               <>
-                Диапазон <Notation>{"A2:D6"}</Notation> включает обе границы:
-                строк 6 − 2 + 1 = 5, ячеек 5 × 4 = 20.
-              </>
-            ),
-          },
-          {
-            note: (
-              <>
-                В списке строка — запись, столбец — поле; в таблице-поле
-                положение ячейки само несёт смысл.
+                В списке строка — запись, столбец — поле; в таблице-поле смысл
+                несёт само положение ячейки.
               </>
             ),
           },
