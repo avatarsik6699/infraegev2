@@ -132379,7 +132379,7 @@
           {
             "id": "statement-1",
             "purpose": "attachment",
-            "checksum": "18272be3baae940a812063ff3240a27b2a20486339aca23ad8744c5b56044875",
+            "checksum": "549db49a8e53a59a4478649a8cdc705bfeada34cc8402055bd457a08edbc1372",
             "filename": "excel-zadachnik.xlsx",
             "attribution": null,
             "description": "Задачник курса: лист «Задачи» — данные задачи и жёлтые ячейки для формул, лист «Ответы» — решения формулами"
@@ -133144,7 +133144,7 @@
           {
             "id": "statement-1",
             "purpose": "attachment",
-            "checksum": "18272be3baae940a812063ff3240a27b2a20486339aca23ad8744c5b56044875",
+            "checksum": "549db49a8e53a59a4478649a8cdc705bfeada34cc8402055bd457a08edbc1372",
             "filename": "excel-zadachnik.xlsx",
             "attribution": null,
             "description": "Задачник курса: лист «Задачи» — данные задачи и жёлтые ячейки для формул, лист «Ответы» — решения формулами"
@@ -133759,7 +133759,7 @@
           {
             "id": "statement-1",
             "purpose": "attachment",
-            "checksum": "18272be3baae940a812063ff3240a27b2a20486339aca23ad8744c5b56044875",
+            "checksum": "549db49a8e53a59a4478649a8cdc705bfeada34cc8402055bd457a08edbc1372",
             "filename": "excel-zadachnik.xlsx",
             "attribution": null,
             "description": "Задачник курса: лист «Задачи» — данные задачи и жёлтые ячейки для формул, лист «Ответы» — решения формулами"
@@ -134577,7 +134577,7 @@
           {
             "id": "statement-1",
             "purpose": "attachment",
-            "checksum": "18272be3baae940a812063ff3240a27b2a20486339aca23ad8744c5b56044875",
+            "checksum": "549db49a8e53a59a4478649a8cdc705bfeada34cc8402055bd457a08edbc1372",
             "filename": "excel-zadachnik.xlsx",
             "attribution": null,
             "description": "Задачник курса: лист «Задачи» — данные задачи и жёлтые ячейки для формул, лист «Ответы» — решения формулами"
@@ -135042,7 +135042,7 @@
           {
             "id": "statement-1",
             "purpose": "attachment",
-            "checksum": "18272be3baae940a812063ff3240a27b2a20486339aca23ad8744c5b56044875",
+            "checksum": "549db49a8e53a59a4478649a8cdc705bfeada34cc8402055bd457a08edbc1372",
             "filename": "excel-zadachnik.xlsx",
             "attribution": null,
             "description": "Задачник курса: лист «Задачи» — данные задачи и жёлтые ячейки для формул, лист «Ответы» — решения формулами"
@@ -813339,10 +813339,10 @@
     },
     {
       "format": "xlsx",
-      "checksum": "18272be3baae940a812063ff3240a27b2a20486339aca23ad8744c5b56044875",
+      "checksum": "549db49a8e53a59a4478649a8cdc705bfeada34cc8402055bd457a08edbc1372",
       "mime_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      "size_bytes": 61399,
-      "storage_key": "18272be3baae940a812063ff3240a27b2a20486339aca23ad8744c5b56044875"
+      "size_bytes": 63138,
+      "storage_key": "549db49a8e53a59a4478649a8cdc705bfeada34cc8402055bd457a08edbc1372"
     },
     {
       "format": "txt",
