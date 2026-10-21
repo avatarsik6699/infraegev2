@@ -135082,7 +135082,7 @@
     {
       "task": {
         "id": "excel-tables-pivots-t04",
-        "title": "По данным листа «Сводка» найди выручку Москвы без Какао",
+        "title": "Москва без какао",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
@@ -135094,7 +135094,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "По данным листа «Сводка» найди выручку Москвы без Какао."
+              "markdown": "Покупки: Москва — чай 300, Казань — кофе 450, Москва — кофе 250, Омск — чай 120, Казань — чай 200, Москва — какао 150. Найди выручку Москвы без какао."
             }
           }
         ],
@@ -135102,7 +135102,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Таблица, оформление и сводные»: рассуди по шагам, а затем проверь в Excel."
+              "markdown": "Два условия сразу: город — Москва, товар — не какао. Это `СУММЕСЛИМН` с критерием `\"<>Какао\"`."
             }
           }
         ],
@@ -135110,7 +135110,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "550: `=СУММЕСЛИМН(C2:C7;A2:A7;\"Москва\";B2:B7;\"<>Какао\")`."
+              "markdown": "300 + 250 = 550: `=СУММЕСЛИМН(C2:C7;A2:A7;\"Москва\";B2:B7;\"<>Какао\")`."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `550`"
             }
           }
         ],
@@ -135119,7 +135125,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 0,
+            "position": 5,
             "material_id": "excel-tables-pivots",
             "counts_toward_mastery": false
           }
@@ -812660,6 +812666,467 @@
         "checker": {
           "checker_type": "exact_match",
           "answer_variants": ["120"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-tables-pivots-t05",
+        "title": "Формула правила",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите формулу со знаком =, адреса латиницей.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Нужно подсветить строки `A2:F100`, где сумма чисел строки больше 50. Какую формулу записать в правило условного форматирования?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Правило пишут для верхней левой ячейки A2; столбцы закрепляют, номер строки оставляют свободным."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Для A2 сумма строки — `СУММ($A2:$F2)`. Знак $ перед буквами держит столбцы A:F в каждой ячейке строки, номер строки сдвигается вниз."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `=СУММ($A2:$F2)>50`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 0,
+            "material_id": "excel-tables-pivots",
+            "counts_toward_mastery": false
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["=СУММ($A2:$F2)>50"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-tables-pivots-t06",
+        "title": "Сколько строк подсветится",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Правило `=СУММ($A2:$F2)>50` применено к `A2:F4`. В строке 2 числа 9, 9, 9, 9, 9, 9; в строке 3 — 10, 10, 10, 10, 10, 0; в строке 4 — 20, 20, 5, 1, 1, 4. Сколько строк подсветится?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Каждая строка проверяет свою сумму; «больше 50» не включает 50."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Суммы: 54, 50 и 51. Больше 50 — строки 2 и 4."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 1,
+            "material_id": "excel-tables-pivots",
+            "counts_toward_mastery": false
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["2"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-tables-pivots-t07",
+        "title": "Правило без $",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите формулу со знаком =, адреса латиницей.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Правило `=СУММ(A2:F2)>50` без знаков $ применили к `A2:F100`. Как читает это правило ячейка D2?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Правило копируется на каждую ячейку, как формула: из A2 в D2 — на три столбца вправо."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Без $ оба адреса сдвигаются на три столбца: A2:F2 становится D2:I2. Ячейки одной строки проверяют разные суммы."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `=СУММ(D2:I2)>50`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 2,
+            "material_id": "excel-tables-pivots",
+            "counts_toward_mastery": false
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["=СУММ(D2:I2)>50"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-tables-pivots-t08",
+        "title": "Сводная: сумма по городу",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Покупки: Москва — чай 300, Казань — кофе 450, Москва — кофе 250, Омск — чай 120, Казань — чай 200, Москва — какао 150. В сводной поле «Город» — в строках, «Стоимость» — в значениях с операцией «Сумма». Что сводная покажет для Москвы?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Сводная складывает стоимости всех строк одного города — как `СУММЕСЛИ`."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Москва: 300 + 250 + 150 = 700."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `700`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 3,
+            "material_id": "excel-tables-pivots",
+            "counts_toward_mastery": false
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["700"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-tables-pivots-t09",
+        "title": "Сводная: Количество вместо Суммы",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите число.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Покупки: Москва — чай 300, Казань — кофе 450, Москва — кофе 250, Омск — чай 120, Казань — чай 200, Москва — какао 150. В сводной для «Стоимости» по ошибке выбрана операция «Количество». Что сводная покажет для Москвы?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "«Количество» считает записи, а не складывает их значения."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "У Москвы три покупки — сводная покажет 3 вместо 700."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 4,
+            "material_id": "excel-tables-pivots",
+            "counts_toward_mastery": false
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": ["3"],
+          "numeric_tolerance": null
+        }
+      },
+      "solution_revision": 1
+    },
+    {
+      "task": {
+        "id": "excel-tables-pivots-t10",
+        "title": "Вид диаграммы",
+        "short_description": null,
+        "explanation_kind": "unclassified",
+        "difficulty": 1,
+        "estimated_minutes": null,
+        "answer_instruction": "Введите текст без кавычек.",
+        "interaction_type": "production",
+        "content_schema_version": 1,
+        "statement": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Нужно показать, как количество проданных штук зависит от цены товара: цены 20, 40, 80 и 120 рублей. Какую диаграмму выбрать?"
+            }
+          }
+        ],
+        "hint": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "По горизонтали — числа с неравными промежутками, а не группы и не дни."
+            }
+          }
+        ],
+        "explanation": [
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Точечная: она ставит цены на свои места по оси. График разложил бы 20, 40, 80 и 120 через равные промежутки."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `точечная`"
+            }
+          }
+        ],
+        "skills": [],
+        "exam_numbers": [],
+        "files": [],
+        "lessons": [
+          {
+            "position": 6,
+            "material_id": "excel-tables-pivots",
+            "counts_toward_mastery": false
+          }
+        ],
+        "theory_links": [],
+        "catalog_visible": false,
+        "archived": false,
+        "sources": [
+          {
+            "url": null,
+            "kind": "original",
+            "role": "original",
+            "year": null,
+            "title": null,
+            "author": null,
+            "primary": true,
+            "is_public": true,
+            "adaptation": null,
+            "original_id": null
+          }
+        ],
+        "checker": {
+          "checker_type": "exact_match",
+          "answer_variants": [
+            "точечная",
+            "точечную",
+            "точечная диаграмма",
+            "точечную диаграмму"
+          ],
           "numeric_tolerance": null
         }
       },

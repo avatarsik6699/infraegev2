@@ -93,6 +93,16 @@ def _after_discount(discount: float) -> list[float]:
     return [price * qty * (1 - discount) for price, qty in ((40, 5), (20, 3), (120, 2), (15, 4))]
 
 
+_PURCHASES = (
+    ("Москва", "чай", 300),
+    ("Казань", "кофе", 450),
+    ("Москва", "кофе", 250),
+    ("Омск", "чай", 120),
+    ("Казань", "чай", 200),
+    ("Москва", "какао", 150),
+)
+
+
 def _shift(formula: str, cols: int, rows: int) -> str:
     """A formula copied by (cols, rows): the parts without $ move."""
 
@@ -292,7 +302,19 @@ RECOMPUTED = {
         )
     ),
     "excel-summary-t06": lambda: str(dict(zip((101, 102, 103, 104), (40, 20, 120, 15), strict=True))[103]),
-    "excel-tables-pivots-t04": lambda: str(300 + 250),
+    "excel-tables-pivots-t05": lambda: "=СУММ($A2:$F2)>50",
+    "excel-tables-pivots-t06": lambda: str(
+        sum(sum(row) > 50 for row in ((9,) * 6, (10, 10, 10, 10, 10, 0), (20, 20, 5, 1, 1, 4)))
+    ),
+    "excel-tables-pivots-t07": lambda: "=СУММ(" + _shift("A2:F2", 3, 0) + ")>50",
+    "excel-tables-pivots-t08": lambda: str(
+        sum(v for c, _, v in _PURCHASES if c == "Москва")
+    ),
+    "excel-tables-pivots-t09": lambda: str(sum(c == "Москва" for c, _, _ in _PURCHASES)),
+    "excel-tables-pivots-t04": lambda: str(
+        sum(v for c, g, v in _PURCHASES if c == "Москва" and g != "какао")
+    ),
+    "excel-tables-pivots-t10": lambda: "точечная",
 }
 
 

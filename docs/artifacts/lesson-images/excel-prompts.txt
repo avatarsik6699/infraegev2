@@ -96,3 +96,56 @@ Add exactly two numbered markers (solid dark green #347a66 circles about 30 px, 
 1 — next to the blue row numbers on the left (near row 4),
 2 — next to "Сумма: 300" in the status bar.
 No arrows, no captions, no other annotations.
+
+Курс Excel, урок 6.1 (Change 197, 2026-10-21). Три кадра, WebP 1280×800 в apps/web/public/images/lessons/excel-sheet/.
+
+excel-smart-table.webp
+Use case: ui-mockup. Same requirements as excel-window.webp: Windows 11 light theme, EXACT 1280×800, crisp legible text, straight-on screenshot, no watermark, window fills canvas.
+
+Microsoft Excel for Windows (Microsoft 365), RUSSIAN interface. Title bar "Покупки - Excel". Ribbon tab "Конструктор таблиц" is active (the contextual tab that appears for a formatted table); in its left group the field "Имя таблицы:" shows "Покупки". Sheet tab "База" active.
+The range A1:D5 is formatted as an Excel table with the default light-blue table style: dark-blue header row with white text and filter arrow buttons in A1, B1, C1, D1; banded rows (alternating very light blue).
+Grid data exactly:
+A1 Товар, B1 Цена, C1 Количество, D1 Стоимость
+A2 Тетрадь, B2 40, C2 5, D2 200
+A3 Ручка, B3 20, C3 3, D3 60
+A4 Папка, B4 120, C4 2, D4 240
+A5 Карандаш, B5 15, C5 4, D5 60
+Text left-aligned, numbers right-aligned.
+Cell D3 is selected (standard green border). Name box shows "D3". The formula bar shows exactly: =[@Цена]*[@Количество]
+Add exactly two numbered markers (solid dark green #347a66 circles about 30 px, white bold digit), each just outside the element, never covering text:
+1 — next to the formula bar text,
+2 — next to the filter arrow button in D1.
+No arrows, no captions, no other annotations.
+
+excel-cf-rule.webp
+Use case: ui-mockup. Same requirements as above.
+
+Microsoft Excel for Windows (Microsoft 365), RUSSIAN interface. Title bar "Правило - Excel". Ribbon tab "Главная" active. Behind the dialog the sheet shows:
+A1 1-е, B1 2-е, C1 3-е, D1 4-е, E1 5-е, F1 6-е
+row 2: 10, 5, 8, 12, 9, 7
+row 3: 3, 4, 5, 6, 7, 8
+row 4: 20, 1, 1, 1, 1, 30
+The range A2:F4 is selected (standard green selection, A2 is the active cell, white).
+In front: the standard dialog "Создание правила форматирования". In the list "Выберите тип правила" the item "Использовать формулу для определения форматируемых ячеек" is highlighted. Field "Форматировать значения, для которых следующая формула является истинной:" contains exactly: =СУММ($A2:$F2)>50
+The "Образец:" preview shows a light green fill. Buttons "Формат...", "ОК", "Отмена".
+Add exactly two numbered markers (solid dark green #347a66 circles about 30 px, white bold digit), each just outside the element, never covering text:
+1 — next to the highlighted rule type "Использовать формулу…",
+2 — next to the formula field.
+No arrows, no captions, no other annotations.
+
+excel-pivot-fields.webp
+Use case: ui-mockup. Same requirements as above.
+
+Microsoft Excel for Windows (Microsoft 365), RUSSIAN interface. Title bar "Покупки - Excel". Contextual ribbon tab "Анализ сводной таблицы" active. Sheet tab "Лист2" active (a new sheet), next to the tab "Сводка".
+On the sheet, a pivot table starting at A3, default pivot style:
+A3 "Названия строк", B3 "Сумма по полю Стоимость"
+A4 Казань, B4 650
+A5 Москва, B5 700
+A6 Омск, B6 120
+A7 "Общий итог" (bold), B7 1470 (bold)
+On the right: the task pane "Поля сводной таблицы". Field list with checkboxes: "Город" (checked), "Товар" (unchecked), "Стоимость" (checked). Below, the four areas: "Фильтры" (empty), "Столбцы" (empty), "Строки" containing "Город", "Значения" containing "Сумма по полю Стоимость".
+Add exactly three numbered markers (solid dark green #347a66 circles about 30 px, white bold digit), each just outside the element, never covering text:
+1 — next to "Город" in the area "Строки",
+2 — next to "Сумма по полю Стоимость" in the area "Значения",
+3 — next to the cell B5 with 700.
+No arrows, no captions, no other annotations.

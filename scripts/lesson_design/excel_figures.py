@@ -2005,6 +2005,173 @@ def exam_order() -> str:
     return "".join(out)
 
 
+# --- module 6 of the course: formatting and charts (Change 197) ---------------
+
+CF_ROWS = {2: (10, 5, 8, 12, 9, 7), 3: (3, 4, 5, 6, 7, 8), 4: (20, 1, 1, 1, 1, 30)}
+
+
+def cf_rule_frames(limit: int = 50) -> list[tuple[str, str]]:
+    """A conditional formatting rule =СУММ($A2:$F2)>limit on A2:F4: written for
+    the top-left cell, read by every cell of a row the same way, moved down row
+    by row; the rows where it holds are painted."""
+    L, T, rh, cw = 40, 98, 32, 56
+    cols = "ABCDEF"
+    h = T + 4 * rh + 16
+    px = L + 6 * cw + 26
+
+    def sheet(painted=(), frame=None, row_mark=None):
+        out = []
+        for i, col in enumerate(cols):
+            out.append(_box(L + i * cw, T - 24, cw, 24, col, fill=WASH, color=MUTED, size=13, weight=500))
+        for r in range(1, 5):
+            y = T + (r - 1) * rh
+            mark = r == row_mark
+            out.append(
+                _box(L - 34, y, 34, rh, str(r), fill=WASH, color=ACCENT if mark else MUTED, size=13, weight=700 if mark else 500)
+            )
+            for i in range(6):
+                x = L + i * cw
+                out.append(_box(x, y, cw, rh))
+                if r in painted:
+                    out.append(f'<rect x="{x}" y="{y}" width="{cw}" height="{rh}" fill="{ACCENT}" fill-opacity="0.16"/>')
+                v = f"{i + 1}-е" if r == 1 else str(CF_ROWS[r][i])
+                right = r > 1
+                out.append(_t(x + cw - 9 if right else x + 9, y + rh / 2 + 5, v, 14.5, INK, "end" if right else "start"))
+        if frame:
+            (c1, r1), (c2, r2) = frame
+            x1, y1 = L + cols.index(c1) * cw, T + (r1 - 1) * rh
+            x2, y2 = L + (cols.index(c2) + 1) * cw, T + r2 * rh
+            out.append(
+                f'<rect x="{x1 + 1}" y="{y1 + 1}" width="{x2 - x1 - 2}" height="{y2 - y1 - 2}" fill="none" '
+                f'stroke="{ACCENT}" stroke-width="2.5"/>'
+            )
+        return "".join(out)
+
+    def panel(lines):
+        out = []
+        for i, (text, kind) in enumerate(lines):
+            y = T - 6 + i * 26
+            if kind == "rule":
+                out.append(_ref_text(px, y, text, 15))
+            else:
+                out.append(_t(px, y, text, 14, INK if kind == "ink" else MUTED, weight=600 if kind == "ink" else 400))
+        return "".join(out)
+
+    def bar(rule):
+        out = [_t(L - 34, 30, "правило для", 13, MUTED)]
+        out.append(_box(L + 62, 12, 64, 28, "A2:F4", size=13.5, mono=True))
+        out.append(_t(L + 140, 31, "=", 15, MUTED))
+        out.append(_ref_text(L + 158, 31, rule, 15))
+        return "".join(out)
+
+    rule = f"=СУММ($A2:$F2)>{limit}"
+    s = {r: sum(v) for r, v in CF_ROWS.items()}
+    frames = []
+
+    def frame(body, caption, label):
+        frames.append((_svg(h, label) + body + "</svg>", caption))
+
+    frame(
+        bar(rule) + sheet(frame=(("A", 2), ("F", 4))) + panel([("правило пишут", "muted"), ("для верхней левой", "muted"), ("ячейки A2", "ink")]),
+        f"Выдели A2:F4 и задай правило формулой. Её пишут так, будто она стоит в верхней левой ячейке A2: {rule}.",
+        "Правило условного форматирования для A2:F4",
+    )
+    frame(
+        bar(rule) + sheet(frame=(("B", 2), ("B", 2)), row_mark=2)
+        + panel([("ячейка B2 читает", "muted"), (rule, "rule"), ("столбцы закреплены $", "muted")]),
+        "Каждая ячейка получает правило как копию формулы. В B2 оно то же самое: столбцы закреплены знаком $, поэтому вся строка проверяет одну сумму.",
+        "Правило в ячейке B2",
+    )
+    rule3 = f"=СУММ($A3:$F3)>{limit}"
+    frame(
+        bar(rule) + sheet(painted=(2,) if s[2] > limit else (), frame=(("A", 3), ("F", 3)), row_mark=3)
+        + panel([("строка 3 читает", "muted"), (rule3, "rule"), (f"сумма {s[3]} — {'ИСТИНА' if s[3] > limit else 'ЛОЖЬ'}", "ink")]),
+        f"Номер строки без $ сдвигается: строка 3 проверяет свою сумму {s[3]}. Строка 2 с суммой {s[2]} уже закрашена.",
+        "Правило в строке 3",
+    )
+    painted = tuple(r for r in (2, 3, 4) if s[r] > limit)
+    frame(
+        bar(rule) + sheet(painted=painted)
+        + panel([(f"строка {r}: {s[r]}", "ink" if s[r] > limit else "muted") for r in (2, 3, 4)]),
+        f"Закрашены строки, где сумма больше {limit}: "
+        + ", ".join(f"{r} ({s[r]})" for r in painted)
+        + ". Поменяй число — правило пересчитается, а заливка, поставленная вручную, осталась бы на месте.",
+        "Строки, где правило истинно, закрашены",
+    )
+    return frames
+
+
+def cf_rule(limit: int = 50) -> str:
+    from figures import _stepper
+
+    return _stepper(cf_rule_frames(limit))
+
+
+CHARTS = {
+    "bar": ("Выручка по городам, ₽", ["Москва", "Казань", "Омск"], [700, 650, 120]),
+    "line": ("Выручка по дням, ₽", ["1", "2", "3", "4", "5", "6", "7"], [120, 180, 150, 210, 260, 230, 300]),
+    "scatter": ("Цена и продано штук", [20, 40, 80, 120], [30, 22, 12, 5]),
+}
+
+
+def chart_kind(kind: str = "bar") -> str:
+    """One of three charts on the course data: columns compare categories, a
+    line follows time, points show how one number depends on another."""
+    title, xs, ys = CHARTS[kind]
+    L, R, T, B = 70, 630, 40, 230
+    h = B + 46
+    top = max(ys) * 1.15
+    step = 10 ** len(str(int(top))) // 10 or 1
+    while top / step > 6:
+        step *= 2
+    out = [_svg(h, title)]
+    out.append(_t(L, 22, title, 14, INK, weight=600))
+    v = 0
+    while v <= top:
+        y = B - (B - T) * v / top
+        out.append(f'<path d="M {L} {y:.1f} H {R}" stroke="{FAINT}" stroke-width="1"/>')
+        out.append(_t(L - 10, y + 5, str(v), 12.5, MUTED, "end"))
+        v += step
+    out.append(f'<path d="M {L} {B} H {R}" stroke="{MUTED}" stroke-width="1.25"/>')
+
+    def yv(val):
+        return B - (B - T) * val / top
+
+    if kind == "scatter":
+        xmax = max(xs) * 1.1
+        for x in (0, 40, 80, 120):
+            px = L + (R - L) * x / xmax
+            out.append(_t(px, B + 22, str(x), 12.5, MUTED, "middle"))
+        out.append(_t(R, B + 40, "цена, ₽", 12.5, MUTED, "end"))
+        for x, y in zip(xs, ys, strict=True):
+            px = L + (R - L) * x / xmax
+            out.append(f'<circle cx="{px:.1f}" cy="{yv(y):.1f}" r="6" fill="{ACCENT}"/>')
+            out.append(_t(px + 10, yv(y) - 8, str(y), 12.5, INK))
+    else:
+        n = len(xs)
+        slot = (R - L) / n
+        pts = []
+        for i, (x, y) in enumerate(zip(xs, ys, strict=True)):
+            cx = L + slot * (i + 0.5)
+            out.append(_t(cx, B + 22, x, 12.5, MUTED, "middle"))
+            if kind == "bar":
+                w = min(90, slot * 0.55)
+                out.append(
+                    f'<rect x="{cx - w / 2:.1f}" y="{yv(y):.1f}" width="{w:.1f}" height="{B - yv(y):.1f}" fill="{ACCENT}"/>'
+                )
+                out.append(_t(cx, yv(y) - 8, str(y), 12.5, INK, "middle"))
+            else:
+                pts.append((cx, yv(y)))
+        if kind == "line":
+            d = " L ".join(f"{x:.1f} {y:.1f}" for x, y in pts)
+            out.append(f'<path d="M {d}" fill="none" stroke="{ACCENT}" stroke-width="2.5"/>')
+            for x, y in pts:
+                out.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3.5" fill="{ACCENT}"/>')
+            out.append(_t(R, B + 40, "день месяца", 12.5, MUTED, "end"))
+    out.append("</svg>")
+    return "".join(out)
+
+
 def _toned(builder):
     """A course lesson passes ``tone="excel"`` (Change 197): the builder then draws
     its one accent in the course colour instead of the orange of the topics."""
@@ -2048,6 +2215,8 @@ EXCEL_FIGURES = {
         "grid_paths": grid_paths,
         "course_table": course_table,
         "exam_order": exam_order,
+        "cf_rule": cf_rule,
+        "chart_kind": chart_kind,
     }.items()
 }
 EXCEL_WIDGETS = {"fill_try": "FillSandbox"}
@@ -2064,6 +2233,7 @@ EXCEL_STEPPERS = {
         "freq_steps": freq_frames,
         "grid_paths": grid_paths_frames,
         "course_table": course_table_frames,
+        "cf_rule": cf_rule_frames,
     }.items()
 }
 EXCEL_SCRIPTS = {"data-fill-try": FILL_TRY_JS}
