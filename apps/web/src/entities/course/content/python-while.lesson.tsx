@@ -1,10 +1,13 @@
 import { CodeBlock } from "~/shared/components/code-block";
+import { KeyCombo } from "~/shared/components/key-combo";
 import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
 import {
   CodeRunner,
+  LessonDiagram,
   LessonStepper,
   LessonSummary,
+  ProofDisclosure,
 } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
 import { pythonWhileLessonPublication } from "./course-publication.mjs";
@@ -13,7 +16,7 @@ import { lessonMedia } from "./python-while.media";
 export const pythonWhileLesson = defineCourseLesson({
   ...pythonWhileLessonPublication,
   masteryThreshold: 0.8,
-  learningOutcomes: ["Писать цикл по условию и объяснять его инвариантом"],
+  learningOutcomes: ["Писать цикл по условию и объяснять его по проверкам"],
   accessTier: "free",
   theory: [
     {
@@ -23,19 +26,19 @@ export const pythonWhileLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
+            В модуле «Условия» сумма и наибольшее четырёх чисел потребовали
+            четырёх имён и трёх <Notation>{"if"}</Notation>. Для тысячи чисел
+            так не напишешь.{" "}
             <strong>
-              Цикл повторяет действия, а правильность цикла видна по его
-              состоянию — что означают переменные перед каждой проверкой
+              Цикл повторяет одни и те же строки, пока выполняется условие, — и
+              одна короткая программа обрабатывает сколько угодно данных
             </strong>
-            . Опора — условие из прошлых уроков и запись{" "}
-            <Notation>{"x = x + 1"}</Notation> из урока о значениях: цикл — это
-            условие, которое проверяется снова и снова, пока шаги меняют
-            переменные.
+            .
           </Typography.Text>
           <Typography.Text>
-            Начнём с суммы чисел от 1 до 4: найдём её циклом, проследим
-            состояние по шагам и докажем, что ответ 10 не случаен. Потом тот же
-            приём накопления сложит цифры числа.
+            Начнём с простого счёта, научимся накапливать сумму, снимать цифры
+            числа и останавливать цикл досрочно, а в конце решим сквозную задачу
+            для любого количества чисел.
           </Typography.Text>
         </>
       ),
@@ -50,31 +53,29 @@ export const pythonWhileLesson = defineCourseLesson({
               <Notation>{"while"}</Notation> повторяет блок, пока условие
               истинно.
             </strong>{" "}
-            <strong>Цикл</strong> повторяет блок действий.{" "}
-            <Notation>{"while"}</Notation> перед каждым повторением проверяет
-            условие. Если оно истинно, выполняется тело цикла; затем проверка
-            начинается заново.
+            Перед каждым повторением он проверяет условие. Если оно истинно,
+            выполняется <strong>тело цикла</strong> — блок с отступом, — и
+            проверка начинается заново. Как только условие ложно, выполнение
+            переходит к строке после цикла. Нажми «Запуск» и посмотри, как
+            выполнение возвращается к строке <Notation>{"while"}</Notation>:
           </Typography.Text>
-          <CodeBlock
-            code={"i = 1\nwhile i <= 4:\n    print(i)\n    i += 1"}
-            label={
-              "Если оно истинно, выполняется тело цикла; затем проверка начинается заново"
-            }
-            language="python"
-            fileName="main.py"
-            output={"1\n2\n3\n4"}
+          <CodeRunner
+            {...lessonMedia.runCount}
+            label={"while повторяет блок, пока условие истинно"}
           />
           <Typography.Text>
-            После четвёртого вывода <Notation>{"i"}</Notation> станет 5, и
-            условие окажется ложным. Одно выполнение тела называют{" "}
-            <strong>итерацией</strong>.
+            Одно выполнение тела называют <strong>итерацией</strong>. После
+            четвёртой итерации <Notation>{"i"}</Notation> равно 5, проверка{" "}
+            <Notation>{"5 <= 4"}</Notation> ложна, и цикл заканчивается. Если
+            условие ложно с самого начала — например, при{" "}
+            <Notation>{"i = 10"}</Notation>, — тело не выполнится ни разу.
           </Typography.Text>
           <Typography.Text>
-            Если перед первой проверкой условие ложно, тело не выполняется ни
-            разу. Если забыть изменение <Notation>{"i"}</Notation>, в примере
-            выше условие будет оставаться истинным — получится бесконечный цикл.
-            Его можно остановить кнопкой остановки среды или обычно сочетанием
-            Ctrl+C.
+            Если забыть <Notation>{"i += 1"}</Notation>, условие будет истинным
+            всегда — получится <strong>бесконечный цикл</strong>. Останови его
+            красной кнопкой <KeyCombo keys={["Stop"]} /> в панели{" "}
+            <KeyCombo keys={["Run"]} /> PyCharm или сочетанием{" "}
+            <KeyCombo keys={["Ctrl", "C"]} /> в терминале.
           </Typography.Text>
         </>
       ),
@@ -88,73 +89,69 @@ export const pythonWhileLesson = defineCourseLesson({
             <strong>
               Счётчик считает события, накопитель собирает результат.
             </strong>{" "}
-            Найдём сумму чисел от 1 до 4:
+            Найдём сумму чисел от 1 до 4. Нажми «Запуск» и пройди цикл по шагам:
           </Typography.Text>
           <CodeRunner
             {...lessonMedia.runSum1To4}
-            label={
-              "Счётчик считает события, накопитель собирает результат. Найдём сумму чисел от 1 до 4"
+            label={"Найдём сумму чисел от 1 до 4"}
+          />
+          <Typography.Text>
+            <Notation>{"i"}</Notation> — следующее число, которое нужно
+            прибавить. <Notation>{"total"}</Notation> собирает сумму уже
+            обработанных чисел; такая переменная называется{" "}
+            <strong>накопителем</strong>. Переменную, которая считает события,
+            называют <strong>счётчиком</strong>. Вот значения при каждой
+            проверке условия:
+          </Typography.Text>
+          <LessonDiagram
+            {...lessonMedia.loopChecks}
+            caption={
+              <>
+                Перед каждой проверкой в <Notation>{"total"}</Notation> лежит
+                сумма чисел до <Notation>{"i - 1"}</Notation>: 0, 1, 1 + 2, 1 +
+                2 + 3, 1 + 2 + 3 + 4. Четыре проверки дают{" "}
+                <Notation>{"True"}</Notation> и запускают тело, пятая —{" "}
+                <Notation>{"False"}</Notation>, и цикл заканчивается.
+              </>
             }
           />
           <Typography.Text>
-            <Notation>{"i"}</Notation> указывает следующее добавляемое число.{" "}
-            <Notation>{"total"}</Notation> хранит сумму уже обработанных чисел.
-            Такая переменная называется <strong>накопителем</strong>. Если
-            переменная хранит количество событий, её называют{" "}
-            <strong>счётчиком</strong>.
-          </Typography.Text>
-          <Typography.Text>
-            Перед каждой проверкой условия <Notation>{"i"}</Notation> равно 1,
-            2, 3, 4, 5, а <Notation>{"total"}</Notation> — 0, 1, 3, 6, 10. Это
-            суммы «ничего», 1, 1 + 2, 1 + 2 + 3 и 1 + 2 + 3 + 4: в{" "}
-            <Notation>{"total"}</Notation> всегда сложены числа до{" "}
-            <Notation>{"i - 1"}</Notation>.
-          </Typography.Text>
-          <Typography.Text>
-            Сумма начинается с 0, потому что прибавление 0 не меняет результат.
-            Произведение обычно начинают с 1 по аналогичной причине. Если начать
-            произведение с нуля, оно навсегда останется нулевым.
-          </Typography.Text>
-          <Typography.Text>
-            Нажми «Запуск» в шапке примера и пройди цикл по шагам. Строка{" "}
-            <Notation>{"while"}</Notation> выполняется пять раз: четыре проверки
-            дают <Notation>{"True"}</Notation>, пятая —{" "}
-            <Notation>{"False"}</Notation>, и только тогда выполнение переходит
-            к <Notation>{"print"}</Notation>. Значения{" "}
-            <Notation>{"i"}</Notation> и <Notation>{"total"}</Notation> в
-            моменты проверки — те самые 1 и 0, 2 и 1 и так далее.
+            Сумма начинается с 0: прибавление нуля не меняет результат.
+            Произведение начинают с 1: если начать с нуля, оно навсегда
+            останется нулём.
           </Typography.Text>
         </>
       ),
     },
     {
       id: "s3",
-      navLabel: "Инвариант и завершение",
+      navLabel: "Как цикл заканчивается",
       explanation: (
         <>
           <Typography.Text>
             <strong>
-              Цикл верен, если его утверждение о состоянии сохраняется и он
-              обязательно заканчивается.
+              Цикл должен на каждой итерации приближаться к выходу.
             </strong>{" "}
-            Утверждение «перед проверкой <Notation>{"total"}</Notation> равен
-            сумме чисел от 1 до <Notation>{"i - 1"}</Notation>» верно перед
-            первой итерацией: <Notation>{"i = 1"}</Notation>, сумма пустого
-            набора — 0. Тело добавляет число <Notation>{"i"}</Notation> и
-            увеличивает <Notation>{"i"}</Notation>, поэтому утверждение остаётся
-            верным. Когда цикл останавливается при{" "}
-            <Notation>{"i = 5"}</Notation>, обработаны именно числа от 1 до 4.
+            В сумме чисел <Notation>{"i"}</Notation> растёт на 1 и неизбежно
+            превысит 4 — значит, цикл закончится. Прежде чем запускать свой
+            цикл, ответь на два вопроса: что хранит каждая переменная перед
+            проверкой — это видно по ленте проверок выше, — и почему условие
+            когда-нибудь станет ложным.
           </Typography.Text>
-          <Typography.Text>
-            Утверждение, сохраняющееся на одинаковом этапе каждой итерации,
-            называется <strong>инвариантом цикла</strong>. Это способ понимать и
-            доказывать решение, а не дополнительная команда Python.
-          </Typography.Text>
-          <Typography.Text>
-            Отдельно объясни завершение: <Notation>{"i"}</Notation> возрастает
-            на 1 и неизбежно превышает 4. Правильное состояние без гарантии
-            завершения ещё не даёт работающего алгоритма.
-          </Typography.Text>
+          <ProofDisclosure summary="Тонкости: инвариант цикла" kind="nuance">
+            <Typography.Text>
+              Утверждение, которое верно перед каждой проверкой условия,
+              называют <strong>инвариантом цикла</strong>. Для суммы это «
+              <Notation>{"total"}</Notation> равен сумме чисел от 1 до{" "}
+              <Notation>{"i - 1"}</Notation>». Перед первой проверкой оно верно:{" "}
+              <Notation>{"i = 1"}</Notation>, сумма пустого набора — 0. Тело
+              прибавляет <Notation>{"i"}</Notation> и увеличивает{" "}
+              <Notation>{"i"}</Notation>, поэтому утверждение сохраняется. Когда
+              цикл останавливается при <Notation>{"i = 5"}</Notation>, сложены
+              ровно числа от 1 до 4. Инвариант — не команда Python, а способ
+              доказать, что цикл считает верно.
+            </Typography.Text>
+          </ProofDisclosure>
         </>
       ),
     },
@@ -173,39 +170,30 @@ export const pythonWhileLesson = defineCourseLesson({
             code={
               "number = -5072\nn = abs(number)\ndigit_sum = 0\nwhile n > 0:\n    digit = n % 10\n    digit_sum += digit\n    n //= 10\nprint(digit_sum)"
             }
-            label={
-              "Цифры числа снимают по одной справа: % 10 берёт последнюю, // 10 её отбрасывает"
-            }
+            label={"Цифры числа снимают по одной справа"}
             language="python"
-            fileName="number.py"
+            fileName="main.py"
             output={"14"}
           />
           <Typography.Text>
-            Это тот же накопитель, только складываются цифры. Проследим{" "}
+            Это тот же накопитель, только складываются цифры. Проследи{" "}
             <Notation>{"n"}</Notation> и сумму по шагам:
           </Typography.Text>
           <LessonStepper
             {...lessonMedia.digitsStepper5072}
-            label={
-              "Это тот же накопитель, только складываются цифры. Проследим n и сумму по шагам:"
-            }
+            label={"Сумма цифр числа 5072 по шагам"}
           />
           <Typography.Text>
-            После выделения последней цифры она удаляется из рабочего числа.
-            Поэтому следующая итерация рассматривает соседнюю цифру слева.{" "}
-            <Notation>{"number"}</Notation> сохраняет исходное значение, а{" "}
-            <Notation>{"n"}</Notation> — рабочая переменная, которую цикл
-            уменьшает. Для числа 0 сумма цифр тоже 0: ноль итераций здесь дают
-            правильный результат.
+            Каждая итерация снимает последнюю цифру, и следующая видит соседнюю
+            слева. <Notation>{"number"}</Notation> хранит исходное число, а{" "}
+            <Notation>{"n"}</Notation> — рабочая копия, которую цикл уменьшает.
+            Знак — не цифра, поэтому сначала берут модуль:{" "}
+            <Notation>{"abs(-5072)"}</Notation> — 5072.
           </Typography.Text>
           <Typography.Text>
-            Но для <strong>количества</strong> цифр ноль — отдельный случай: в
-            его записи одна цифра, а цикл <Notation>{"while n > 0"}</Notation>{" "}
-            не выполнится ни разу и насчитает 0. Аналогично нельзя оставить
-            отрицательное <Notation>{"n"}</Notation> и ожидать, что{" "}
-            <Notation>{"n //= 10"}</Notation> обязательно доведёт его до нуля:{" "}
-            <Notation>{"-1 // 10"}</Notation> остаётся −1. Поэтому сначала берут
-            модуль.
+            Для числа 0 цикл не выполнится ни разу. Сумма цифр 0 при этом верна,
+            а вот <strong>количество</strong> цифр получится 0, хотя в записи
+            одна цифра. Ноль при подсчёте цифр обрабатывают отдельно.
           </Typography.Text>
         </>
       ),
@@ -220,50 +208,41 @@ export const pythonWhileLesson = defineCourseLesson({
               <Notation>{"break"}</Notation> завершает цикл досрочно,{" "}
               <Notation>{"continue"}</Notation> пропускает остаток итерации.
             </strong>{" "}
-            <Notation>{"break"}</Notation> немедленно завершает ближайший
-            окружающий цикл. <Notation>{"continue"}</Notation> пропускает
-            оставшуюся часть текущей итерации и переходит к следующей проверке.
+            <Notation>{"break"}</Notation> сразу завершает цикл, в котором
+            стоит. Это удобно, когда признак окончания становится известен
+            внутри тела. Числа вводятся по одному, 0 — признак конца ввода:
           </Typography.Text>
           <CodeBlock
             code={
               "total = 0\nwhile True:\n    n = int(input())\n    if n == 0:\n        break\n    total += n\nprint(total)"
             }
-            label={
-              "continue пропускает оставшуюся часть текущей итерации и переходит к следующей проверке"
-            }
+            label={"break сразу завершает цикл, в котором стоит"}
             language="python"
-            fileName="total.py"
+            fileName="main.py"
             output={"⟪5⟫\n⟪7⟫\n⟪0⟫\n12"}
           />
           <Typography.Text>
-            Здесь 0 — заранее выбранный признак окончания ввода, а не часть
-            суммы. <Notation>{"while True"}</Notation> сам по себе бесконечен;
-            выход задаёт <Notation>{"break"}</Notation>. Нужно понимать, что
-            будет, если пользователь никогда не введёт 0.
+            <Notation>{"while True"}</Notation> сам по себе бесконечен: условие
+            всегда истинно, а выход задаёт <Notation>{"break"}</Notation>. 0
+            здесь — только признак окончания, в сумму он не входит.
           </Typography.Text>
           <Typography.Text>
-            При <Notation>{"continue"}</Notation> легко пропустить изменение
-            управляющей переменной. Если оно стоит ниже{" "}
-            <Notation>{"continue"}</Notation>, программа может застрять на одном
-            значении. Поэтому в примере ниже увеличение{" "}
-            <Notation>{"i"}</Notation> стоит первым, до проверки:
+            <Notation>{"continue"}</Notation> пропускает остаток тела и сразу
+            переходит к следующей проверке условия. Сложим нечётные числа от 1
+            до 5 — пройди по шагам и посмотри, как чётные{" "}
+            <Notation>{"i"}</Notation> перескакивают{" "}
+            <Notation>{"total += i"}</Notation>:
           </Typography.Text>
-          <CodeBlock
-            code={
-              "i = 0\ntotal = 0\nwhile i < 9:\n    i += 1\n    if i % 2 == 0:\n        continue\n    total += i\nprint(total)"
-            }
-            label={
-              "Поэтому в примере ниже увеличение i стоит первым, до проверки"
-            }
-            language="python"
-            fileName="total.py"
-            output={"25"}
+          <CodeRunner
+            {...lessonMedia.runOdd}
+            label={"continue пропускает остаток тела"}
           />
           <Typography.Text>
-            Чётные <Notation>{"i"}</Notation> пропускаются, складываются 1, 3,
-            5, 7 и 9. Если поставить <Notation>{"i += 1"}</Notation> в конец
-            тела, на первом же чётном числе <Notation>{"continue"}</Notation>{" "}
-            перескочит увеличение и цикл никогда не закончится.
+            Увеличение <Notation>{"i"}</Notation> стоит первым, до{" "}
+            <Notation>{"continue"}</Notation>. Если поставить{" "}
+            <Notation>{"i += 1"}</Notation> в конец тела, на первом же чётном
+            числе <Notation>{"continue"}</Notation> перескочит его, и цикл
+            никогда не закончится.
           </Typography.Text>
         </>
       ),
@@ -275,25 +254,24 @@ export const pythonWhileLesson = defineCourseLesson({
         <>
           <Typography.Text>
             <strong>
-              Цикл может искать первую степень, которая достигла границы.
+              Цикл может искать первое значение, которое достигло границы.
             </strong>{" "}
             Найдём наименьшее целое <Notation>{"k >= 0"}</Notation>, для
-            которого <Notation>{"2 ** k >= n"}</Notation>, где{" "}
-            <Notation>{"n"}</Notation> — положительное целое, без логарифма:
+            которого <Notation>{"2 ** k >= n"}</Notation>:
           </Typography.Text>
           <CodeBlock
             code={
               "n = 17\nk = 0\npower = 1\nwhile power < n:\n    power *= 2\n    k += 1\nprint(k)"
             }
-            label={"Программа на Python"}
+            label={"Наименьшее k, для которого 2 ** k >= n"}
             language="python"
-            fileName="power.py"
+            fileName="main.py"
             output={"5"}
           />
           <Typography.Text>
-            На каждом шаге <Notation>{"power == 2 ** k"}</Notation> — это
-            инвариант этого цикла. Цикл прекращается при первом достижении
-            границы: 2⁴ = 16 ещё меньше 17, а 2⁵ = 32 уже нет. Для{" "}
+            Перед каждой проверкой <Notation>{"power"}</Notation> — это 2 в
+            степени <Notation>{"k"}</Notation>. Цикл прекращается при первом
+            достижении границы: 2⁴ = 16 ещё меньше 17, а 2⁵ = 32 уже нет. Для{" "}
             <Notation>{"n = 1"}</Notation> ответ 0 получается без единой
             итерации.
           </Typography.Text>
@@ -319,17 +297,19 @@ export const pythonWhileLesson = defineCourseLesson({
             code={
               "n = int(input())\ntotal = 0\nbest = n\nwhile n != 0:\n    total += n\n    if n > best:\n        best = n\n    n = int(input())\nprint(total, best)"
             }
-            label={"Программа на Python"}
+            label={"Сумма и наибольшее для любого количества чисел"}
             language="python"
-            fileName="total.py"
+            fileName="main.py"
             output={"⟪5⟫\n⟪-2⟫\n⟪10⟫\n⟪7⟫\n⟪0⟫\n20 10"}
           />
           <Typography.Text>
-            <Notation>{"total"}</Notation> — накопитель,{" "}
-            <Notation>{"best"}</Notation> — лучшее найденное, и начинается он с
-            первого числа из данных, как в уроке о ветвлении. Три{" "}
-            <Notation>{"if"}</Notation> из прошлого урока стали одним{" "}
-            <Notation>{"if"}</Notation> внутри цикла.
+            Первое число читается до цикла: с него начинается{" "}
+            <Notation>{"best"}</Notation>, как в уроке о ветвлении, и его же
+            проверяет условие <Notation>{"n != 0"}</Notation>. Каждое следующее
+            число читается в конце тела — чтобы проверка увидела его до того,
+            как оно попадёт в сумму. <Notation>{"total"}</Notation> —
+            накопитель, а три <Notation>{"if"}</Notation> прошлого урока стали
+            одним <Notation>{"if"}</Notation> внутри цикла.
           </Typography.Text>
         </>
       ),
@@ -337,7 +317,50 @@ export const pythonWhileLesson = defineCourseLesson({
   ],
   checkpoint: [
     {
-      id: "t6",
+      id: "t1",
+      prompt: (
+        <>
+          <Typography.Text>
+            Сколько раз выполнится тело цикла{" "}
+            <Notation>{"while i < 5:"}</Notation>, если перед ним{" "}
+            <Notation>{"i = 10"}</Notation>?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            Ни разу: первая же проверка <Notation>{"10 < 5"}</Notation> ложна.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t2",
+      prompt: (
+        <>
+          <Typography.Text>Что напечатает программа?</Typography.Text>
+          <CodeBlock
+            code={
+              "i = 1\nproduct = 1\nwhile i <= 4:\n    product *= i\n    i += 1\nprint(product)"
+            }
+            label={"Произведение чисел от 1 до 4"}
+            language="python"
+            fileName="main.py"
+          />
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            24 = 1 · 2 · 3 · 4. Произведение начинается с 1: с нулём ответ был
+            бы 0.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t3",
       prompt: (
         <>
           <Typography.Text>
@@ -351,6 +374,52 @@ export const pythonWhileLesson = defineCourseLesson({
           <Typography.Text>
             <Notation>{"-15 // 10"}</Notation> даёт −2, затем −1, а{" "}
             <Notation>{"-1 // 10"}</Notation> снова −1: ноль не достигается.
+            Поэтому сначала берут модуль.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t4",
+      prompt: (
+        <>
+          <Typography.Text>Чем опасен такой цикл?</Typography.Text>
+          <CodeBlock
+            code={
+              "i = 0\nwhile i < 5:\n    if i == 2:\n        continue\n    i += 1"
+            }
+            label={"Цикл с continue перед увеличением"}
+            language="python"
+            fileName="main.py"
+          />
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            При <Notation>{"i == 2"}</Notation>{" "}
+            <Notation>{"continue"}</Notation> перескакивает{" "}
+            <Notation>{"i += 1"}</Notation>: <Notation>{"i"}</Notation> навсегда
+            остаётся 2, и цикл бесконечен.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t5",
+      prompt: (
+        <>
+          <Typography.Text>
+            Программа из урока складывает числа до признака 0 с{" "}
+            <Notation>{"break"}</Notation>. Что она напечатает, если ввести 3,
+            8, 0, 5?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            11: после 0 цикл закончен, и 5 программа уже не читает.
           </Typography.Text>
         </>
       ),
@@ -358,41 +427,64 @@ export const pythonWhileLesson = defineCourseLesson({
   ],
   result: (
     <>
+      <Typography.Text>
+        Теперь программа умеет повторять действия, и её длина больше не зависит
+        от количества данных. Вот что из урока понадобится дальше.
+      </Typography.Text>
       <LessonSummary
         items={[
           {
+            key: <Notation>{"while"}</Notation>,
             note: (
               <>
-                <Notation>{"while"}</Notation> проверяет условие перед каждой
-                итерацией; ложное сразу условие — ноль итераций.
-              </>
-            ),
-          },
-          { note: <>Счётчик и сумма начинаются с 0, произведение — с 1.</> },
-          {
-            note: (
-              <>
-                Правильность цикла объясняет инвариант, а завершение — изменение
-                переменной к границе.
+                Проверяет условие перед каждой итерацией; ложное сразу условие —
+                ни одной итерации.
               </>
             ),
           },
           {
+            key: "Накопитель и счётчик",
+            note: <>Сумму и счётчик начинают с 0, произведение — с 1.</>,
+          },
+          {
+            key: "Выход из цикла",
             note: (
               <>
-                Цифры: <Notation>{"n % 10"}</Notation> и{" "}
-                <Notation>{"n //= 10"}</Notation>; ноль и отрицательные числа
-                обрабатывают отдельно.
+                Каждая итерация должна приближать условие к ложному; иначе —
+                бесконечный цикл (<KeyCombo keys={["Stop"]} /> в PyCharm,{" "}
+                <KeyCombo keys={["Ctrl", "C"]} /> в терминале).
               </>
             ),
           },
           {
+            key: "Цифры числа",
             note: (
               <>
-                <Notation>{"break"}</Notation> выходит из цикла,{" "}
-                <Notation>{"continue"}</Notation> пропускает остаток итерации;
-                изменение управляющей переменной не должно оказаться за{" "}
-                <Notation>{"continue"}</Notation>.
+                <Notation>{"n % 10"}</Notation> — последняя цифра,{" "}
+                <Notation>{"n //= 10"}</Notation> отбрасывает её; сначала{" "}
+                <Notation>{"abs"}</Notation>, ноль — отдельно.
+              </>
+            ),
+          },
+          {
+            key: <Notation>{"break"}</Notation>,
+            note: <>Сразу завершает цикл, в котором стоит.</>,
+          },
+          {
+            key: <Notation>{"continue"}</Notation>,
+            note: (
+              <>
+                Пропускает остаток тела; изменение переменной условия ставят до
+                него.
+              </>
+            ),
+          },
+          {
+            key: "Признак окончания",
+            note: (
+              <>
+                Первое число читают до цикла, следующее — в конце тела; признак
+                (0) в результат не входит.
               </>
             ),
           },

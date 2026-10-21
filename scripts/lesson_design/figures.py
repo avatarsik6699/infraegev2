@@ -1944,9 +1944,12 @@ def slice_svg(text: str = "ABCDEFG", start=None, stop=None, step=1) -> str:
     return "".join(out)
 
 
-def range_svg(start: int = 2, stop: int = 9, step: int = 3, lo=None, hi=None) -> str:
+def range_svg(
+    start: int = 2, stop: int = 9, step: int = 3, lo=None, hi=None, tone: str | None = None
+) -> str:
     """Integers on a line; values of range(start, stop, step) are circled and the
     excluded stop is marked."""
+    accent = accent_of(tone)
     values = list(range(start, stop, step))
     lo = min(start, stop) - 1 if lo is None else lo
     hi = max(start, stop) + 1 if hi is None else hi
@@ -1963,7 +1966,7 @@ def range_svg(start: int = 2, stop: int = 9, step: int = 3, lo=None, hi=None) ->
         out.append(_text(x(v), base + 26, str(v), 14, INK if v in values else MUTED, "middle"))
     for k, v in enumerate(values):
         out.append(
-            f'<circle cx="{x(v):.1f}" cy="{base}" r="9" fill="{WASH}" stroke="{ACCENT}" stroke-width="2"/>'
+            f'<circle cx="{x(v):.1f}" cy="{base}" r="9" fill="{WASH}" stroke="{accent}" stroke-width="2"/>'
         )
         if k:
             a, b = x(values[k - 1]), x(v)
@@ -1983,14 +1986,14 @@ def range_svg(start: int = 2, stop: int = 9, step: int = 3, lo=None, hi=None) ->
     return "".join(out)
 
 
-def _state_frame(boxes, check, bottom) -> str:
+def _state_frame(boxes, check, bottom, accent=ACCENT) -> str:
     """Variable boxes, the loop check and a bottom line of a trace frame."""
     out = ['<svg viewBox="0 0 660 160" role="img" aria-hidden="true">']
     for k, (label, value, hot) in enumerate(boxes):
         x = 16 + k * 160
         out.append(
             f'<rect x="{x}" y="14" width="146" height="64" rx="10" fill="#fff" '
-            f'stroke="{ACCENT if hot else INK}" stroke-width="{2 if hot else 1.5}"/>'
+            f'stroke="{accent if hot else INK}" stroke-width="{2 if hot else 1.5}"/>'
         )
         out.append(_text(x + 14, 36, label, 13, MUTED))
         out.append(_text(x + 14, 66, str(value), 24, INK))
@@ -2003,7 +2006,7 @@ def _state_frame(boxes, check, bottom) -> str:
     return "".join(out)
 
 
-def digits_frames(number: int = 5072) -> list[tuple[str, str]]:
+def digits_frames(number: int = 5072, tone: str | None = None) -> list[tuple[str, str]]:
     """while n > 0: digit = n % 10; total += digit; n //= 10."""
     frames, n, total, taken = [], abs(number), 0, []
     while True:
@@ -2014,6 +2017,7 @@ def digits_frames(number: int = 5072) -> list[tuple[str, str]]:
                     [("n — что осталось", n, True), ("digit_sum", total, False)],
                     (f"n > 0: {n} > 0", "берём цифру" if ok else "цифры кончились"),
                     ("снятые цифры справа налево", " ".join(map(str, taken)) or "пока нет"),
+                    accent_of(tone),
                 ),
                 (
                     f"n = {n}: последняя цифра n % 10 = {n % 10}, n // 10 = {n // 10}."
@@ -2030,9 +2034,9 @@ def digits_frames(number: int = 5072) -> list[tuple[str, str]]:
     return frames
 
 
-def digits_stepper(number: int = 5072) -> str:
+def digits_stepper(number: int = 5072, tone: str | None = None) -> str:
     """Digits of a number removed from the right one by one."""
-    return _stepper(digits_frames(number))
+    return _stepper(digits_frames(number, tone))
 
 
 def _stack_frame(stack, note) -> str:
@@ -2216,8 +2220,15 @@ def branch_svg(value: int = 73, wrong: int = 90, tone: str | None = None) -> str
     return "".join(out)
 
 
-def loop_grid_svg(rows: int = 2, cols: int = 3, outer: str = "row", inner: str = "column") -> str:
+def loop_grid_svg(
+    rows: int = 2,
+    cols: int = 3,
+    outer: str = "row",
+    inner: str = "column",
+    tone: str | None = None,
+) -> str:
     """Order of the inner body in nested loops: each cell numbered by its turn."""
+    accent = accent_of(tone)
     cw, ch = 104, 54
     x0, y0 = 150, 44
     out = [
@@ -2236,7 +2247,7 @@ def loop_grid_svg(rows: int = 2, cols: int = 3, outer: str = "row", inner: str =
                 f'stroke="{INK}" stroke-width="1.25"/>'
             )
             out.append(_mono(x + (cw - 6) / 2, y + 30, f"({r}, {c})", 15, INK, "middle"))
-            out.append(_text(x + 8, y + 15, str(turn), 11, ACCENT, weight=600))
+            out.append(_text(x + 8, y + 15, str(turn), 11, accent, weight=600))
     out.append("</svg>")
     return "".join(out)
 
@@ -3234,6 +3245,107 @@ def code_paths_svg(panels, tone: str | None = None) -> str:
     return "".join(out)
 
 
+def loop_checks_svg(code, names, tone: str | None = None) -> str:
+    """A while loop as the strip of its condition checks: the names before each
+    check and the answer of the condition — True runs the body, the last False
+    leaves the loop; the output after the loop is written under the strip."""
+    import contextlib
+    import io
+    import sys
+
+    accent = accent_of(tone)
+    lines = code.splitlines()
+    at = next(i for i, line in enumerate(lines, 1) if line.startswith("while "))
+    cond = lines[at - 1][len("while ") :].rstrip(":")
+    checks: list = []
+
+    def tracer(frame, event, arg):
+        if frame.f_code.co_filename == "<figure>" and event == "line" and frame.f_lineno == at:
+            env = dict(frame.f_locals)
+            checks.append(([(n, env.get(n)) for n in names], eval(cond, {}, env)))  # noqa: S307
+        return tracer
+
+    printed = io.StringIO()
+    sys.settrace(tracer)
+    try:
+        with contextlib.redirect_stdout(printed):
+            exec(compile(code, "<figure>", "exec"), {})  # noqa: S102 — the figure's program
+    finally:
+        sys.settrace(None)
+    n = len(checks)
+    gap, top, h = 36, 44, 128
+    w = (628 - (n - 1) * gap) / n
+    out = [_svg(top + h + 54, "Значения перед каждой проверкой условия")]
+    out.append(_text(16, 22, "значения перед каждой проверкой условия", 13, MUTED))
+    for k, (values, ok) in enumerate(checks):
+        x = 16 + k * (w + gap)
+        last = not ok
+        out.append(_box(x, top, w, h, accent if last else INK, WASH if last else "#fff",
+                        sw=2 if last else 1.5))
+        out.append(_text(x + w / 2, top + 20, f"проверка {k + 1}", 12, MUTED, "middle"))
+        for i, (name, value) in enumerate(values):
+            shown = "—" if value is None else str(value)
+            out.append(_mono(x + w / 2, top + 46 + i * 20, f"{name} = {shown}", 14, INK, "middle"))
+        out.append(f'<path d="M {x + 10:.1f} {top + 86} H {x + w - 10:.1f}" stroke="{FAINT}"/>')
+        out.append(_mono(x + w / 2, top + 104, cond, 12, MUTED, "middle"))
+        out.append(_mono(x + w / 2, top + 121, str(ok), 14, accent if last else INK, "middle", 600))
+        if ok and k + 1 < n:
+            out.append(_arrow(x + w + 3, top + h / 2, x + w + gap - 3, top + h / 2, MUTED))
+            out.append(_text(x + w + gap / 2, top + h / 2 + 18, "тело", 11, MUTED, "middle"))
+    result = " ".join(printed.getvalue().split())
+    out.append(_text(16, top + h + 30, "условие ложно — цикл закончен", 13, MUTED))
+    last_x = 16 + (n - 1) * (w + gap) + w / 2
+    out.append(_text(last_x, top + h + 24, "вывод", 12, MUTED, "middle"))
+    out.append(_mono(last_x, top + h + 42, result, 14, INK, "middle", 600))
+    out.append("</svg>")
+    return "".join(out)
+
+
+def for_while_svg(tone: str | None = None) -> str:
+    """The same sum written with for and with while: range(1, 5) holds the start,
+    the bound and the step that the while loop keeps by hand."""
+    accent = accent_of(tone)
+    size = 15
+    cw = size * CH
+    left = ["total = 0", "for i in range(1, 5):", "    total += i", "print(total)"]
+    right = ["total = 0", "i = 1", "while i < 5:", "    total += i", "    i += 1", "print(total)"]
+    out = [_svg(262, "for и while: начало, граница и шаг")]
+
+    def mark(x, y, k, tick=False):
+        if tick:  # a short stem up to the character the mark names
+            out.append(f'<path d="M {x:.1f} {y - 9} V {y - 17}" stroke="{accent}" stroke-width="1.5"/>')
+        out.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="9" fill="{accent}"/>')
+        out.append(_text(x, y + 4, str(k), 12, "#fff", "middle", 700))
+
+    def box(x, y, chars, start):
+        out.append(_box(x + start * cw - 3, y - 18, chars * cw + 6, 25, accent, "none", rx=4))
+
+    for title, x, lines in (("for", 24, left), ("while", 354, right)):
+        out.append(_mono(x, 26, title, 15, INK, weight=700))
+        # the for side leaves room under its loop line for the marks
+        ys = (62, 92, 140, 170) if lines is left else [62 + i * 30 for i in range(len(lines))]
+        for line, ly in zip(lines, ys, strict=True):
+            out.append(_mono(x, ly, line, size))
+    # for: the numbers inside range(1, 5)
+    y = 92
+    for k, idx in ((1, 15), (2, 18)):
+        mark(24 + idx * cw + cw / 2, y + 26, k, tick=True)
+    mark(24 + 20 * cw + 8, y + 26, 3)
+    out.append(_text(24 + 20 * cw + 22, y + 30, "шаг 1 — сам", 12, MUTED))
+    # while: the same three parts written by hand
+    x = 354
+    box(x, 62 + 30, 5, 0)
+    mark(x + 5 * cw + 16, 62 + 30 - 5, 1)
+    box(x, 62 + 60, 5, 6)
+    mark(x + 11 * cw + 20, 62 + 60 - 5, 2)
+    box(x, 62 + 120, 6, 4)
+    mark(x + 10 * cw + 16, 62 + 120 - 5, 3)
+    out.append(f'<path d="M 330 10 V 216" stroke="{FAINT}"/>')
+    out.append(_text(16, 246, "1 — начало, 2 — граница (в перебор не входит), 3 — шаг", 13, MUTED))
+    out.append("</svg>")
+    return "".join(out)
+
+
 def time_split_svg(seconds: int = 3671, tone: str | None = None) -> str:
     """Seconds split into hours, minutes and seconds by // and %."""
     accent = accent_of(tone)
@@ -3623,16 +3735,17 @@ def truthy_svg(tone: str | None = None) -> str:
     return "".join(out)
 
 
-def _diamond(cx, cy, w, h, label) -> str:
+def _diamond(cx, cy, w, h, label, accent=ACCENT) -> str:
     return (
         f'<path d="M {cx} {cy - h / 2} L {cx + w / 2} {cy} L {cx} {cy + h / 2} '
-        f'L {cx - w / 2} {cy} Z" fill="#fff" stroke="{ACCENT}" stroke-width="1.75"/>'
+        f'L {cx - w / 2} {cy} Z" fill="#fff" stroke="{accent}" stroke-width="1.75"/>'
         + _text(cx, cy + 5, label, 13, INK, "middle")
     )
 
 
-def control_flow_svg() -> str:
+def control_flow_svg(tone: str | None = None) -> str:
     """Sequence, choice and repetition as three small flowcharts."""
+    accent = accent_of(tone)
     out = [_svg(300, "Три способа управлять порядком строк")]
     titles = [("Подряд", "a = 1; print(a)"), ("Выбор", "if … else"), ("Повтор", "while …")]
     for k, (title, code) in enumerate(titles):
@@ -3651,7 +3764,7 @@ def control_flow_svg() -> str:
     out.append(_text(cx, 282, "дальше", 13, MUTED, "middle"))
     # choice: one of two blocks
     cx = 330
-    out.append(_diamond(cx, 98, 116, 52, "условие?"))
+    out.append(_diamond(cx, 98, 116, 52, "условие?", accent))
     for side, label, block in [(-1, "да", "блок if"), (1, "нет", "блок else")]:
         bx = cx + side * 52
         out.append(f'<path d="M {cx + side * 58} 98 H {bx}" stroke="{MUTED}" fill="none"/>')
@@ -3664,17 +3777,17 @@ def control_flow_svg() -> str:
     out.append(_text(cx, 282, "дальше", 13, MUTED, "middle"))
     # repetition: the body returns to the check
     cx = 550
-    out.append(_diamond(cx, 98, 116, 52, "условие?"))
+    out.append(_diamond(cx, 98, 116, 52, "условие?", accent))
     out.append(_arrow(cx, 124, cx, 150, MUTED))
     out.append(_text(cx + 8, 142, "да", 12, MUTED))
     out.append(_box(cx - 48, 152, 96, 36, INK))
     out.append(_text(cx, 175, "тело", 13, INK, "middle"))
     out.append(
-        f'<path d="M {cx - 48} 170 H {cx - 92} V 98 H {cx - 66}" stroke="{ACCENT}" '
+        f'<path d="M {cx - 48} 170 H {cx - 92} V 98 H {cx - 66}" stroke="{accent}" '
         'stroke-width="1.75" fill="none"/>'
     )
-    out.append(_arrow(cx - 70, 98, cx - 59, 98, ACCENT))
-    out.append(_text(cx - 98, 140, "снова", 12, ACCENT, "end"))
+    out.append(_arrow(cx - 70, 98, cx - 59, 98, accent))
+    out.append(_text(cx - 98, 140, "снова", 12, accent, "end"))
     out.append(f'<path d="M {cx + 58} 98 H {cx + 84} V 236 H {cx}" stroke="{MUTED}" fill="none"/>')
     out.append(_text(cx + 92, 90, "нет", 12, MUTED, "middle"))
     out.append(_arrow(cx, 236, cx, 260, MUTED))
@@ -3871,6 +3984,8 @@ FIGURES = {
     "branch": branch_svg,
     "bool_tree": bool_tree_svg,
     "code_paths": code_paths_svg,
+    "loop_checks": loop_checks_svg,
+    "for_while": for_while_svg,
     "loop_grid": loop_grid_svg,
     "venn": venn_svg,
     "loop_to_comp": loop_to_comp_svg,

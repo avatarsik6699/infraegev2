@@ -3009,7 +3009,17 @@
     },
     {
       "id": "python-for-range",
-      "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6", "s7"],
+      "sections": [
+        "intro",
+        "s1",
+        "s2",
+        "s3",
+        "s4",
+        "s5",
+        "s6",
+        "s6-skvoznaya",
+        "s7"
+      ],
       "kind": "course",
       "status": "published",
       "course_id": "python",

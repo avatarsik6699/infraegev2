@@ -210,6 +210,12 @@ PRINTED_LINES = {
     "python-logic-t02": "print(7 > 3 and 2 > 5)\nprint(7 > 3 or 2 > 5)\nprint(not 7 > 3)",
     "python-logic-t05": "print(0 and 10 / 0)",
     "python-logic-t06": 'print(bool(""))\nprint(bool("0"))\nprint(bool(0))\nprint(bool(" "))',
+    "python-while-t02": "i = 1\ntotal = 0\nwhile i <= 5:\n    total += i * i\n    i += 1\nprint(total)",
+    "python-while-t03": "i = 10\ncount = 0\nwhile i > 0:\n    i -= 3\n    count += 1\nprint(count, i)",
+    "python-for-range-t04": (
+        "count = 0\nfor a in range(1, 6):\n    for b in range(1, 6):\n"
+        "        if a < b:\n            count += 1\nprint(count)"
+    ),
 }
 
 

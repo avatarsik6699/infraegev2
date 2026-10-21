@@ -120518,19 +120518,27 @@
     {
       "task": {
         "id": "python-while-t01",
-        "title": "Найди наименьшее k, для которого 2 ** k >= n, при n = 1 и n = 64",
+        "title": "Наименьшее k, для которого 2 ** k >= n",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите два числа через пробел: для n = 1, затем для n = 64.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Найди наименьшее `k`, для которого `2 ** k >= n`, при n = 1 и n = 64."
+              "markdown": "Программа ищет наименьшее `k`, для которого `2 ** k >= n`. Запусти её дважды — введи 1, затем 64 — и запиши оба ответа."
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "n = int(input())\nk = 0\npower = 1\nwhile power < n:\n    power *= 2\n    k += 1\nprint(k)",
+              "caption": null
             }
           }
         ],
@@ -120538,7 +120546,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Цикл while и состояние программы»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "При n = 1 условие `power < n` ложно сразу: цикл не выполнится ни разу."
             }
           }
         ],
@@ -120546,7 +120554,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "0 и 6: 2⁰ = 1, а 2⁶ = 64."
+              "markdown": "Для 1 цикл не выполняется: 2⁰ = 1. Для 64 цикл удваивает `power` шесть раз: 2⁶ = 64."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `0 6`"
             }
           }
         ],
@@ -120587,7 +120601,7 @@
     {
       "task": {
         "id": "python-while-t02",
-        "title": "Проследи таблицей цикл, который начинает с i = 1, total = 0 и, пока i <= 5,…",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
@@ -120599,7 +120613,15 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Проследи таблицей цикл, который начинает с `i = 1`, `total = 0` и, пока `i <= 5`, прибавляет к `total` значение `i * i` и увеличивает `i`. Чему равен `total` в конце?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "i = 1\ntotal = 0\nwhile i <= 5:\n    total += i * i\n    i += 1\nprint(total)",
+              "caption": null
             }
           }
         ],
@@ -120607,7 +120629,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Цикл while и состояние программы»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Складываются квадраты чисел от 1 до 5."
             }
           }
         ],
@@ -120615,7 +120637,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "55 = 1 + 4 + 9 + 16 + 25."
+              "markdown": "1 + 4 + 9 + 16 + 25 = 55."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `55`"
             }
           }
         ],
@@ -120656,19 +120684,27 @@
     {
       "task": {
         "id": "python-while-t03",
-        "title": "Сколько итераций выполнит цикл while i > 0: i -= 3 при начальном i = 10 и…",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите напечатанные числа через пробел в порядке вывода.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько итераций выполнит цикл `while i > 0: i -= 3` при начальном `i = 10` и чему равно `i` после него?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "i = 10\ncount = 0\nwhile i > 0:\n    i -= 3\n    count += 1\nprint(count, i)",
+              "caption": null
             }
           }
         ],
@@ -120676,7 +120712,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Цикл while и состояние программы»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Выпиши `i` перед каждой проверкой: 10, 7, 4, 1, … — цикл идёт, пока `i` больше нуля."
             }
           }
         ],
@@ -120684,7 +120720,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "4 итерации (i = 10, 7, 4, 1), после цикла i = −2."
+              "markdown": "Перед проверками `i` равно 10, 7, 4, 1 — четыре итерации; затем −2, и условие ложно."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4 -2`"
             }
           }
         ],
@@ -120725,19 +120767,19 @@
     {
       "task": {
         "id": "python-while-t04",
-        "title": "Найди произведение чисел от 1 до 5 циклом",
+        "title": "Напиши программу: произведение чисел от 1 до 5",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите два числа через пробел: с началом 1, затем с началом 0.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Найди произведение чисел от 1 до 5 циклом. Что получится, если начать произведение с нуля?"
+              "markdown": "Напиши программу, которая циклом `while` находит произведение чисел от 1 до 5. Запусти её, затем поменяй начальное значение произведения с 1 на 0 и запусти снова. Запиши оба результата."
             }
           }
         ],
@@ -120745,7 +120787,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Цикл while и состояние программы»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Произведение начинают с 1. Ноль, умноженный на что угодно, остаётся нулём."
             }
           }
         ],
@@ -120753,7 +120795,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "120; с нуля всё время будет 0."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "i = 1\nproduct = 1\nwhile i <= 5:\n    product *= i\n    i += 1\nprint(product)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "1 · 2 · 3 · 4 · 5 = 120; с началом 0 произведение всё время 0."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `120 0`"
             }
           }
         ],
@@ -120794,19 +120856,19 @@
     {
       "task": {
         "id": "python-while-t05",
-        "title": "Найди сумму и количество цифр числа 90817",
+        "title": "Напиши программу: сумма и количество цифр",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите три числа через пробел: сумма цифр 90817, количество его цифр, затем количество цифр, которое тот же цикл насчитает для 0.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Найди сумму и количество цифр числа 90817. Сколько цифр насчитает тот же цикл для числа 0?"
+              "markdown": "Напиши программу, которая циклом `while n > 0` находит сумму и количество цифр числа. Запусти её для 90817, затем для 0."
             }
           }
         ],
@@ -120814,7 +120876,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Цикл while и состояние программы»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "`% 10` — последняя цифра, `// 10` — число без неё. Для 0 условие `n > 0` ложно сразу."
             }
           }
         ],
@@ -120822,7 +120884,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сумма 25, количество 5; для 0 цикл насчитает 0, хотя цифра одна."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "n = int(input())\ndigit_sum = 0\ncount = 0\nwhile n > 0:\n    digit_sum += n % 10\n    count += 1\n    n //= 10\nprint(digit_sum, count)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "9 + 0 + 8 + 1 + 7 = 25, цифр 5. Для 0 цикл не выполняется и насчитывает 0 цифр, хотя в записи одна."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `25 5 0`"
             }
           }
         ],
@@ -120863,19 +120945,19 @@
     {
       "task": {
         "id": "python-while-t07",
-        "title": "Напиши программу: вводятся числа по одному на строке, ввод заканчивается нулём",
+        "title": "Напиши программу: количество и сумма до нуля",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 2,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите два числа через пробел: количество, затем сумму.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Напиши программу: вводятся числа по одному на строке, ввод заканчивается нулём. Выведи количество и сумму введённых чисел (без нуля). Проверь на вводе 4, −2, 9, 0."
+              "markdown": "Напиши программу: числа вводятся по одному, ввод заканчивается нулём. Программа печатает количество и сумму введённых чисел без нуля. Запусти её и введи 4, −2, 9, 0."
             }
           }
         ],
@@ -120883,7 +120965,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Цикл while и состояние программы»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Проверь число на ноль и выйди через `break`; счётчик и сумму меняй после этой проверки."
             }
           }
         ],
@@ -120891,7 +120973,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Счётчик и сумма до `break`; вывод 3 11."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "count = 0\ntotal = 0\nwhile True:\n    n = int(input())\n    if n == 0:\n        break\n    count += 1\n    total += n\nprint(count, total)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Три числа: 4 − 2 + 9 = 11."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3 11`"
             }
           }
         ],
@@ -120932,19 +121034,19 @@
     {
       "task": {
         "id": "python-while-t08",
-        "title": "Пока число не равно 1, чётное делят пополам, а нечётное заменяют на 3n + 1",
+        "title": "Напиши программу: сколько шагов до 1",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите два числа через пробел: шаги для 6, затем для 27.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Пока число не равно 1, чётное делят пополам, а нечётное заменяют на 3n + 1. Сколько шагов нужно, чтобы из 6 получить 1? А из 27?"
+              "markdown": "Пока число не равно 1, чётное делят пополам, а нечётное заменяют на 3n + 1. Напиши программу, которая считает шаги до 1, и запусти её для 6 и для 27."
             }
           }
         ],
@@ -120952,7 +121054,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Цикл while и состояние программы»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Цикл `while n != 1`; на каждой итерации — одна замена и счётчик + 1. Чётность — `n % 2 == 0`."
             }
           }
         ],
@@ -120960,7 +121062,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "8 шагов: 6, 3, 10, 5, 16, 8, 4, 2, 1; из 27 — 111 шагов."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "n = int(input())\nsteps = 0\nwhile n != 1:\n    if n % 2 == 0:\n        n //= 2\n    else:\n        n = 3 * n + 1\n    steps += 1\nprint(steps)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "6 → 3 → 10 → 5 → 16 → 8 → 4 → 2 → 1: 8 шагов. Для 27 программа насчитает 111."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `8 111`"
             }
           }
         ],
@@ -121001,7 +121123,7 @@
     {
       "task": {
         "id": "python-while-t09",
-        "title": "Напиши программу, которая переворачивает цифры числа: из 1230 получает 321",
+        "title": "Напиши программу: цифры числа в обратном порядке",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 2,
@@ -121013,7 +121135,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Напиши программу, которая переворачивает цифры числа: из 1230 получает 321. Используй `% 10`, `// 10` и накопитель `result = result * 10 + digit`."
+              "markdown": "Напиши программу, которая переворачивает цифры числа: из 123 получает 321. Запусти её для 1230 и запиши, что она напечатала."
             }
           }
         ],
@@ -121021,7 +121143,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Цикл while и состояние программы»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "На каждой итерации: `digit = n % 10`, `result = result * 10 + digit`, `n //= 10`."
             }
           }
         ],
@@ -121029,7 +121151,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "321: ноль в конце становится ведущим и исчезает."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "n = int(input())\nresult = 0\nwhile n > 0:\n    result = result * 10 + n % 10\n    n //= 10\nprint(result)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Для 1230 первая снятая цифра — 0, и в начале числа она исчезает: получается 321."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `321`"
             }
           }
         ],
@@ -121070,19 +121212,19 @@
     {
       "task": {
         "id": "python-for-range-t01",
-        "title": "Найди количество и сумму чисел от 1 до 200 включительно, кратных 9, циклом с…",
+        "title": "Напиши программу: кратные 9 до 200",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите два числа через пробел: количество, затем сумму.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Найди количество и сумму чисел от 1 до 200 включительно, кратных 9, циклом с шагом `range`."
+              "markdown": "Напиши программу, которая находит количество и сумму чисел от 1 до 200 включительно, кратных 9, — циклом по `range` с шагом 9. Запусти её и запиши, что она напечатала."
             }
           }
         ],
@@ -121090,7 +121232,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Цикл for и диапазоны»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Первое кратное 9 — само 9, шаг 9; граница — 201, чтобы 200 входило в перебор."
             }
           }
         ],
@@ -121098,7 +121240,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "22 2277: `range(9, 201, 9)` перебирает только кратные."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "count = 0\ntotal = 0\nfor n in range(9, 201, 9):\n    count += 1\n    total += n\nprint(count, total)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Кратные 9 от 9 до 198: их 22, сумма 2277."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `22 2277`"
             }
           }
         ],
@@ -121139,7 +121301,7 @@
     {
       "task": {
         "id": "python-for-range-t04",
-        "title": "Сколько пар (a, b) с a < b дают вложенные циклы, где a и b пробегают числа…",
+        "title": "Что напечатает программа?",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
@@ -121151,7 +121313,15 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько пар `(a, b)` с `a < b` дают вложенные циклы, где `a` и `b` пробегают числа от 1 до 5?"
+              "markdown": "Что напечатает программа?"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "count = 0\nfor a in range(1, 6):\n    for b in range(1, 6):\n        if a < b:\n            count += 1\nprint(count)",
+              "caption": null
             }
           }
         ],
@@ -121159,7 +121329,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Цикл for и диапазоны»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Для каждого `a` внутренний цикл перебирает все `b`; считаются пары, где `a` меньше `b`."
             }
           }
         ],
@@ -121167,7 +121337,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "10 пар."
+              "markdown": "При a = 1 подходят четыре b, при a = 2 — три, затем два, одно и ни одного: 4 + 3 + 2 + 1 = 10."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `10`"
             }
           }
         ],
@@ -121208,7 +121384,7 @@
     {
       "task": {
         "id": "python-for-range-t05",
-        "title": "Найди наименьшее число, не меньшее 500, которое делится на 23",
+        "title": "Напиши программу: первое кратное 23 от 500",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
@@ -121220,7 +121396,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Найди наименьшее число, не меньшее 500, которое делится на 23."
+              "markdown": "Напиши программу, которая находит наименьшее число, не меньшее 500, которое делится на 23: перебор по возрастанию с `break`. Запусти её и запиши ответ."
             }
           }
         ],
@@ -121228,7 +121404,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Цикл for и диапазоны»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Перебирай с 500 вверх и останови цикл `break` на первом числе с нулевым остатком от деления на 23."
             }
           }
         ],
@@ -121236,7 +121412,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "506 = 23 · 22."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "for n in range(500, 1000):\n    if n % 23 == 0:\n        print(n)\n        break",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "23 · 21 = 483 < 500, а 23 · 22 = 506."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `506`"
             }
           }
         ],
@@ -121277,19 +121473,19 @@
     {
       "task": {
         "id": "python-for-range-t06",
-        "title": "Найди три наибольших числа меньше 1000, которые делятся на 13 и оканчиваются…",
+        "title": "Напиши программу: три наибольших подходящих числа",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите три числа через пробел в том порядке, в каком их найдёт перебор вниз.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Найди три наибольших числа меньше 1000, которые делятся на 13 и оканчиваются цифрой 1."
+              "markdown": "Напиши программу, которая находит три наибольших числа меньше 1000, которые делятся на 13 и оканчиваются цифрой 1. Перебирай вниз от 999 и останови цикл после третьего найденного. Запусти её и запиши ответ."
             }
           }
         ],
@@ -121297,7 +121493,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Цикл for и диапазоны»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "`range(999, 0, -1)` идёт вниз. Оканчивается на 1 — `n % 10 == 1`. Счётчик найденных и `break`, когда он станет 3."
             }
           }
         ],
@@ -121305,7 +121501,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "871, 741 и 611: перебор `range(999, 0, -1)` и `break` после третьего."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "found = 0\nfor n in range(999, 0, -1):\n    if n % 13 == 0 and n % 10 == 1:\n        print(n, end=\" \")\n        found += 1\n        if found == 3:\n            break",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Перебор вниз встречает 871, 741 и 611."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `871 741 611`"
             }
           }
         ],
@@ -121346,7 +121562,7 @@
     {
       "task": {
         "id": "python-for-range-t08",
-        "title": "Сколько четырёхзначных чисел имеют сумму цифр 10?",
+        "title": "Напиши программу: четырёхзначные числа с суммой цифр 10",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
@@ -121358,7 +121574,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько четырёхзначных чисел имеют сумму цифр 10?"
+              "markdown": "Напиши программу, которая считает четырёхзначные числа с суммой цифр 10: перебери числа от 1000 до 9999 и для каждого найди сумму цифр циклом `while` из прошлого урока. Запусти её и запиши ответ."
             }
           }
         ],
@@ -121366,7 +121582,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Цикл for и диапазоны»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Внешний `for` по `range(1000, 10000)`; внутри — `while` по рабочей копии числа, чтобы не испортить переменную цикла."
             }
           }
         ],
@@ -121374,7 +121590,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "219."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "count = 0\nfor number in range(1000, 10000):\n    n = number\n    digit_sum = 0\n    while n > 0:\n        digit_sum += n % 10\n        n //= 10\n    if digit_sum == 10:\n        count += 1\nprint(count)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Программа насчитывает 219 таких чисел."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `219`"
             }
           }
         ],
@@ -121415,7 +121651,7 @@
     {
       "task": {
         "id": "python-for-range-t09",
-        "title": "Сколько решений имеет x + y + z = 10, если каждое из x, y, z — целое от 1 до 9?",
+        "title": "Напиши программу: решения x + y + z = 10",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
@@ -121427,7 +121663,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько решений имеет x + y + z = 10, если каждое из x, y, z — целое от 1 до 9?"
+              "markdown": "Сколько решений у уравнения x + y + z = 10, если x, y и z — целые от 1 до 9? Напиши программу с тремя вложенными циклами, запусти её и запиши ответ."
             }
           }
         ],
@@ -121435,7 +121671,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Цикл for и диапазоны»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Три цикла по `range(1, 10)`; тройка считается, если сумма равна 10."
             }
           }
         ],
@@ -121443,7 +121679,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "36."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "count = 0\nfor x in range(1, 10):\n    for y in range(1, 10):\n        for z in range(1, 10):\n            if x + y + z == 10:\n                count += 1\nprint(count)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Программа насчитывает 36 троек."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `36`"
             }
           }
         ],
@@ -819943,7 +820199,17 @@
     },
     {
       "id": "python-for-range",
-      "sections": ["intro", "s1", "s2", "s3", "s4", "s5", "s6", "s7"],
+      "sections": [
+        "intro",
+        "s1",
+        "s2",
+        "s3",
+        "s4",
+        "s5",
+        "s6",
+        "s6-skvoznaya",
+        "s7"
+      ],
       "kind": "course",
       "status": "published",
       "course_id": "python",
