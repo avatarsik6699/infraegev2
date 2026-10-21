@@ -41,14 +41,6 @@ FORMULAS = {
     "task-2-4-06": ("xyzw", lambda x, y, z, w: (imp(x, y) & imp(y, w)) | eqv(z, x | y)),
     "task-2-5-07": ("xyzw", lambda x, y, z, w: (1 - (x | (1 - y))) | imp(z, w)),
     "task-2-5-08": ("xyzw", lambda x, y, z, w: imp(w, x) & (y | z) & (1 - eqv(x, y))),
-    "task-2-6-05": (
-        "xyz",
-        lambda x, y, z: (imp(x, y) & z, x | (1 - z)),
-    ),
-    "task-2-6-06": (
-        "xyz",
-        lambda x, y, z: ((x & (1 - y)) | z, y | eqv(x, z)),
-    ),
     "task-2-7-01": ("xyz", lambda x, y, z: imp(y, x) & eqv(z, 1 - x)),
     "task-2-7-02": ("xyzw", lambda x, y, z, w: imp(x, y) & imp(y, z) & imp(z, w)),
     "task-2-7-03": ("xyzw", lambda x, y, z, w: (1 - (x | y)) | eqv(z, w) | (x & (1 - z))),
@@ -75,7 +67,8 @@ def _rows(task: TaskData) -> list[tuple[str, tuple[int | None, ...]]]:
     out = []
     for row in block.data.rows:
         cells = dict(zip(head, row, strict=True))
-        pattern = "".join(cells[h] for h in head if h.startswith("C"))
+        # an empty cell is a gap
+        pattern = "".join(cells[h] or "*" for h in head if h.startswith("C"))
         values = tuple(
             None if cells[h] == "?" else int(cells[h]) for h in head if h.startswith("F")
         )
@@ -143,22 +136,26 @@ def answers() -> dict[str, str]:
     a["task-2-5-04"] = str(len(_zeros("xyzw", FORMULAS["task-2-4-06"][1], 1).split()))
     # the print is in the body of the y loop: one line for every pair x, y
     a["task-2-5-05"] = str(2 * 2)
-    a["task-2-6-02"] = str(1 - (0 | (1 - (0 | 1))))
-    a["task-2-6-04"] = f"{4**3} {4**3 * 24}"
+    a["task-2-1-10"] = " ".join(str(v) for v in (imp(0, 0), eqv(0, 0), 1 - (0 | 0)))
+    a["task-2-1-11"] = " ".join(
+        f"{p}{q}" for p in (0, 1) for q in (0, 1) if imp(p, q) and imp(q, p)
+    )
+    a["task-2-1-12"] = f"{1 - (1 | 0)} {(1 - 1) | (1 - 0)}"
+    a["task-2-2-10"] = str(imp(1 & (1 - 0), eqv(0, 1)))
+    a["task-2-2-11"] = _zeros("xyz", lambda x, y, z: eqv(x, y) & (1 - z), 1)
     return a
 
 
 def test_every_answer_matches_independent_recomputation(answers: dict[str, str]) -> None:
     tasks = _entries()
     assert sorted(tasks) == sorted(answers)
-    assert sorted(t.lessons[0].position for t in tasks.values()) == list(range(30))
+    assert sorted(t.lessons[0].position for t in tasks.values()) == list(range(31))
     for task_id, task in tasks.items():
         assert task.checker.answer_variants[0] == answers[task_id], task_id
         assert task.exam_numbers == [2] and not task.catalog_visible and not task.archived
         on_final_page = task_id.startswith("task-2-7-")
         assert bool(task.theory_links) != on_final_page, task_id
-        advanced = task_id.startswith("task-2-6-")
-        assert task.lessons[0].counts_toward_mastery == (not advanced), task_id
+        assert task.lessons[0].counts_toward_mastery, task_id
 
 
 def test_fragment_tasks_show_their_table() -> None:

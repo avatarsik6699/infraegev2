@@ -9,11 +9,11 @@ value on a figure is computed here by evaluating the same formula.
 only false pair of an implication in accent.
 ``lt_tree(formula, values)`` — the tree of a formula with the value of every
 part for one set of inputs, the outer operation at the top.
-``lt_cases(formula, var, value)`` — the sets where the formula has the given
-value, split by the value of one variable.
-``lt_rows(formula, order, rows)`` — rows of a fragment (``*`` is a gap) and the
-full sets each row may become under one order of columns; a conflict of two
-rows with one and the same only set in accent.
+``lt_cases(formula, var, value, names)`` — the sets where the formula has the
+given value, split by the value of one variable.
+``lt_fill(formula, names, order, rows, steps)`` — the columns of a fragment
+(``*`` is a gap, shown empty) found step by step next to the sets with the
+needed F; every step is checked against the formula.
 ``lt_chain(names, rows)`` — the five sets allowed by a chain of implications
 and the order of columns forced by the 0 and 1 of the fragment rows.
 """
@@ -22,7 +22,7 @@ from __future__ import annotations
 
 from itertools import product
 
-from figures import ACCENT, FAINT, INK, MUTED, WASH, _text
+from figures import ACCENT, FAINT, INK, MUTED, WASH, _stepper, _text
 
 W = 660
 OPS = {"¬": 5, "∧": 4, "∨": 3, "→": 2, "≡": 1, "⊕": 1}
@@ -235,10 +235,10 @@ def lt_tree(formula: str, values: dict) -> str:
 # --- cases by one variable --------------------------------------------------------------------
 
 
-def lt_cases(formula: str, var: str, wanted: int = 1) -> str:
-    """Sets with F = wanted, split by the value of var."""
+def lt_cases(formula: str, var: str, wanted: int = 1, names: str | None = None) -> str:
+    """Sets with F = wanted (in the order of names), split by the value of var."""
     tree = parse(formula)
-    names = "".join(variables(tree))
+    names = names or "".join(variables(tree))
     found = sets(formula, wanted, names)
     height = 200
     out = [f'<svg viewBox="0 0 {W} {height}" role="img" aria-label="Разбор по {var}">']
@@ -269,65 +269,218 @@ def lt_cases(formula: str, var: str, wanted: int = 1) -> str:
     return "".join(out)
 
 
-# --- rows of a fragment and full sets ------------------------------------------------------------
+# --- filling the columns of a fragment step by step ---------------------------------------------
 
 
-def candidates(formula: str, order: str, row: str, wanted: int) -> list[str]:
-    """Full sets (in the column order) that keep the known digits of row."""
-    tree = parse(formula)
-    out = []
-    for bits in product("01", repeat=len(order)):
-        if all(c in "*" or c == b for c, b in zip(row, bits, strict=True)):
-            if value(tree, {n: int(b) for n, b in zip(order, bits, strict=True)}) == wanted:
-                out.append("".join(bits))
+def _row_sets(tree, names: str, assigned: dict[int, str], pattern: str, wanted: int) -> set[str]:
+    """Sets (in the order of names) that a row may become under any order of
+    columns that keeps the columns already found."""
+    from itertools import permutations
+
+    free_cols = [c for c in range(len(pattern)) if c not in assigned]
+    free_names = [n for n in names if n not in assigned.values()]
+    out: set[str] = set()
+    for perm in permutations(free_names):
+        order = dict(assigned) | dict(zip(free_cols, perm, strict=True))
+        for bits in product("01", repeat=len(names)):
+            env = {order[c]: int(b) for c, b in enumerate(bits)}
+            if all(p == "*" or p == b for p, b in zip(pattern, bits, strict=True)):
+                if value(tree, env) == wanted:
+                    out.add("".join(str(env[n]) for n in names))
     return out
 
 
-def lt_rows(formula: str, order: str, rows, wanted: int = 1, note: str = "") -> str:
-    """Each row of the fragment linked to the full sets it may become."""
-    rows = [(r, wanted) if isinstance(r, str) else (r[0], int(r[1])) for r in rows]
-    cands = [candidates(formula, order, r, w) for r, w in rows]
-    allsets = sorted({s for c in cands for s in c})
-    only = [c[0] if len(c) == 1 else None for c in cands]
-    clash = {s for s in only if s is not None and only.count(s) > 1}
-    rh = 46
-    height = 70 + rh * max(len(rows), len(allsets)) + 40
-    out = [f'<svg viewBox="0 0 {W} {height}" role="img" aria-label="Порядок {order}">']
-    out.append(_text(110, 26, f"строки, столбцы {' '.join(order)}", 14, MUTED, "middle"))
-    out.append(_text(W - 130, 26, "подходящие наборы", 14, MUTED, "middle"))
-    ry = {i: 60 + rh * i for i in range(len(rows))}
-    sy = {s: 60 + rh * j for j, s in enumerate(allsets)}
-    for i in range(len(rows)):
-        for s in cands[i]:
-            hot = s in clash and only[i] == s
+def _placements(tree, names: str, order: str, rows, wanted: int) -> list[tuple[str, ...]]:
+    """Every way to give the rows different sets under one order of columns."""
+    opts = []
+    for pattern in rows:
+        opts.append(
+            [
+                "".join(str(env[n]) for n in names)
+                for bits in product("01", repeat=len(names))
+                if all(p == "*" or p == b for p, b in zip(pattern, bits, strict=True))
+                and value(tree, env := {o: int(b) for o, b in zip(order, bits, strict=True)})
+                == wanted
+            ]
+        )
+    found: list[tuple[str, ...]] = []
+
+    def place(k: int, used: tuple[str, ...]) -> None:
+        if k == len(opts):
+            found.append(used)
+            return
+        for s in opts[k]:
+            if s not in used:
+                place(k + 1, (*used, s))
+
+    place(0, ())
+    return found
+
+
+def fill_frames(formula: str, names: str, order: str, rows, steps, wanted: int = 1):
+    """The fragment of the task and the sets with F = wanted; every step marks a
+    column or a row and names the conclusion. Each step is checked here:
+
+    - ``("col", c, name, text)`` — column c (from 1) is ``name``;
+    - ``("row", r, set, text)`` — row r can only be ``set`` (in the order of names);
+    - ``("try", c, name, text)`` — column c as ``name`` leaves two rows one set;
+    - ``("done", text)`` — the rows restored, the answer.
+    """
+    from itertools import permutations
+
+    tree = parse(formula)
+    n = len(names)
+    found = [
+        "".join(o)
+        for o in permutations(names)
+        if _placements(tree, names, "".join(o), rows, wanted)
+    ]
+    if found != [order]:
+        raise ValueError(f"the fragment must have the only order {order}, got {found}")
+    allowed = sets(formula, wanted, names)
+    restored = _placements(tree, names, order, rows, wanted)[0]
+
+    cw, rh = 52, 36
+    tx, ty = 24, 96  # the fragment: top of the first row
+    sx = tx + cw * (n + 1) + 90  # the sets panel
+    scw = 34
+    height = max(ty + rh * len(rows), ty + 30 * len(allowed)) + 62
+
+    def frame(assigned, hot_col=None, hot_rows=(), hot_sets=(), hot_name=None, note="", fill=False, bad=False):
+        out = [f'<svg viewBox="0 0 {W} {height}" role="img" aria-hidden="true">']
+        out.append(_text(tx, 22, f"F = {text_of(tree)}", 15, INK, weight=600))
+        # the fragment
+        for c in range(n + 1):
+            x = tx + cw * c
+            label = "F" if c == n else f"C{c + 1}"
+            if c == hot_col:
+                out.append(
+                    f'<rect x="{x + 2}" y="{ty - 30}" width="{cw - 4}" height="{rh * len(rows) + 34}" '
+                    f'rx="6" fill="{WASH}" stroke="{ACCENT}" stroke-width="1.6"/>'
+                )
+            out.append(_text(x + cw / 2, ty - 10, label, 13, MUTED, "middle", 600))
+            if c in assigned:
+                out.append(
+                    _text(x + cw / 2, ty - 36, assigned[c], 16, ACCENT, "middle", 700)
+                )
+        out.append(
+            f'<line x1="{tx + cw * n}" y1="{ty - 26}" x2="{tx + cw * n}" y2="{ty + rh * len(rows)}" '
+            f'stroke="{FAINT}" stroke-width="1"/>'
+        )
+        for r, pattern in enumerate(rows):
+            y = ty + rh * r
+            if r in hot_rows:
+                out.append(
+                    f'<rect x="{tx - 4}" y="{y + 2}" width="{cw * (n + 1) + 8}" height="{rh - 4}" rx="6" '
+                    f'fill="none" stroke="{ACCENT}" stroke-width="1.6"/>'
+                )
             out.append(
-                f'<line x1="190" y1="{ry[i] + 17:.1f}" x2="{W - 200}" y2="{sy[s] + 17:.1f}" '
-                f'stroke="{ACCENT if hot else MUTED}" stroke-width="{2.2 if hot else 1.2}"/>'
+                f'<line x1="{tx}" y1="{y}" x2="{tx + cw * (n + 1)}" y2="{y}" stroke="{FAINT}" stroke-width="1"/>'
             )
-    for i, (r, w) in enumerate(rows):
-        y = ry[i]
+            out.append(_text(tx - 10, y + 23, str(r + 1), 12, MUTED, "end"))
+            for c, ch in enumerate(pattern):
+                if ch != "*":
+                    out.append(_text(tx + cw * (c + 0.5), y + 23, ch, 16, INK, "middle", 600))
+                elif fill:
+                    digit = restored[r][names.index(order[c])]
+                    out.append(_text(tx + cw * (c + 0.5), y + 23, digit, 16, ACCENT, "middle", 500))
+            out.append(_text(tx + cw * (n + 0.5), y + 23, str(wanted), 16, INK, "middle", 600))
         out.append(
-            f'<rect x="40" y="{y}" width="150" height="34" rx="6" fill="#fff" '
-            f'stroke="{INK}" stroke-width="1.3"/>'
+            f'<line x1="{tx}" y1="{ty + rh * len(rows)}" x2="{tx + cw * (n + 1)}" '
+            f'y2="{ty + rh * len(rows)}" stroke="{FAINT}" stroke-width="1"/>'
         )
-        out.append(_text(115, y + 23, " ".join(r) + f"  F={w}", 15, INK, "middle", 600))
-        if not cands[i]:
-            out.append(_text(200, y + 23, "нет набора", 13, ACCENT))
-    for s, y in sy.items():
-        hot = s in clash
-        out.append(
-            f'<rect x="{W - 200}" y="{y}" width="140" height="34" rx="6" fill="{WASH}" '
-            f'stroke="{ACCENT if hot else FAINT}" stroke-width="{2 if hot else 1}"/>'
-        )
-        out.append(_text(W - 130, y + 23, " ".join(s), 15, ACCENT if hot else INK, "middle", 600))
-    verdict = (
-        "двум строкам достаётся один и тот же набор — порядок не подходит"
-        if clash
-        else (note or "каждой строке можно выбрать свой набор")
-    )
-    out.append(_text(W / 2, height - 16, verdict, 14, ACCENT if clash else INK, "middle", 600))
-    out.append("</svg>")
-    return "".join(out)
+        # the sets with F = wanted
+        out.append(_text(sx, 22, f"наборы с F = {wanted}", 14, MUTED, weight=600))
+        for j, name in enumerate(names):
+            x = sx + scw * (j + 0.5)
+            if name == hot_name:
+                out.append(
+                    f'<rect x="{x - scw / 2 + 2}" y="{ty - 30}" width="{scw - 4}" '
+                    f'height="{30 * len(allowed) + 34}" rx="6" fill="{WASH}" stroke="{ACCENT}" stroke-width="1.6"/>'
+                )
+            out.append(_text(x, ty - 10, name, 14, MUTED, "middle", 600))
+        for i, s in enumerate(allowed):
+            y = ty + 30 * i
+            if s in hot_sets:
+                out.append(
+                    f'<rect x="{sx - 4}" y="{y + 2}" width="{scw * n + 8}" height="26" rx="6" '
+                    f'fill="none" stroke="{ACCENT}" stroke-width="1.6"/>'
+                )
+            for j, ch in enumerate(s):
+                out.append(_text(sx + scw * (j + 0.5), y + 21, ch, 15, INK, "middle", 500))
+            if fill and s in restored:
+                out.append(_text(sx + scw * n + 10, y + 21, f"строка {restored.index(s) + 1}", 13, ACCENT))
+        out.append(_text(tx, height - 16, note, 14, ACCENT if bad else INK, weight=600))
+        out.append("</svg>")
+        return "".join(out)
+
+    frames = [(frame({}, note="столбцы пока не подписаны"), "")]
+    assigned: dict[int, str] = {}
+    for step in steps:
+        kind = step[0]
+        if kind == "col":
+            _, c, name, text = step
+            if order[c - 1] != name:
+                raise ValueError(f"C{c} is {order[c - 1]}, not {name}")
+            assigned[c - 1] = name
+            frames.append((frame(dict(assigned), hot_col=c - 1, hot_name=name, note=f"C{c} = {name}"), text))
+        elif kind == "row":
+            _, r, s, text = step
+            got = _row_sets(tree, names, assigned, rows[r - 1], wanted)
+            if got != {s}:
+                raise ValueError(f"row {r} may still be {sorted(got)}")
+            frames.append(
+                (frame(dict(assigned), hot_rows=(r - 1,), hot_sets=(s,), note=f"строка {r} — набор {s}"), text)
+            )
+        elif kind == "try":
+            _, c, name, text = step
+            trial = dict(assigned) | {c - 1: name}
+            free_cols = [k for k in range(n) if k not in trial]
+            free_names = [x for x in names if x not in trial.values()]
+            ok = any(
+                _placements(
+                    tree,
+                    names,
+                    "".join((trial | dict(zip(free_cols, p, strict=True)))[k] for k in range(n)),
+                    rows,
+                    wanted,
+                )
+                for p in permutations(free_names)
+            )
+            if ok:
+                raise ValueError(f"C{c} = {name} does not fail")
+            twins = [
+                r
+                for r, pattern in enumerate(rows)
+                if pattern[c - 1] != "*"
+                and len({s for s in allowed if s[names.index(name)] == pattern[c - 1]}) == 1
+            ]
+            only = {s for s in allowed if s[names.index(name)] == rows[twins[0]][c - 1]} if twins else set()
+            frames.append(
+                (
+                    frame(
+                        trial,
+                        hot_col=c - 1,
+                        hot_rows=tuple(twins),
+                        hot_sets=tuple(only),
+                        note=f"пусть C{c} = {name}: противоречие",
+                        bad=True,
+                    ),
+                    text,
+                )
+            )
+        else:
+            _, text = step
+            if len(assigned) != n:
+                raise ValueError("done before every column is found")
+            frames.append((frame(dict(assigned), fill=True, note=f"ответ: {order}"), text))
+    frames[0] = (frames[0][0], f"Формула и фрагмент. Справа все наборы, где F = {wanted}, в порядке {names}.")
+    return frames
+
+
+def lt_fill(formula: str, names: str, order: str, rows, steps, wanted: int = 1) -> str:
+    """The columns of a fragment found step by step (see fill_frames)."""
+    return _stepper(fill_frames(formula, names, order, rows, steps, wanted))
 
 
 # --- a chain of implications ----------------------------------------------------------------------
@@ -404,9 +557,9 @@ LOGIC_TABLE_FIGURES: dict = {
     "lt_ops": lt_ops,
     "lt_tree": lt_tree,
     "lt_cases": lt_cases,
-    "lt_rows": lt_rows,
+    "lt_fill": lt_fill,
     "lt_chain": lt_chain,
 }
-LOGIC_TABLE_STEPPERS: dict = {}
+LOGIC_TABLE_STEPPERS: dict = {"lt_fill": fill_frames}
 LOGIC_TABLE_WIDGETS: dict = {}
 LOGIC_TABLE_SCRIPTS: dict = {}

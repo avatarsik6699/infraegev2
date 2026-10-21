@@ -4326,9 +4326,7 @@
     {
       "id": "truth-tables",
       "sections": [
-        "operacii-i-ih-znacheniya",
         "kak-ustroena-tema-2",
-        "dva-znacheniya",
         "otricanie",
         "konyunkciya",
         "dizyunkciya",
@@ -4336,34 +4334,23 @@
         "ravnoznachnost",
         "operacii-itogo",
         "formula-po-chastyam",
-        "ot-skobok-k-vneshnej-operacii",
+        "poryadok-dejstvij",
         "polnaya-tablica",
         "ot-f-k-vhodam",
-        "dopustimye-preobrazovaniya",
         "formula-itogo",
         "fragment-i-podpisi",
         "fragment-tablicy",
-        "poryadok-ruchnogo-resheniya",
-        "obshchaya-shapka",
-        "nabory-i-poryadki",
-        "fragment-itogo",
-        "chetyre-peremennye",
-        "cepochka-implikacij",
+        "poryadok-resheniya",
+        "razbor-po-shagam",
+        "stroki-razlichny",
         "raznye-znacheniya-f",
-        "pyat-peremennyh",
-        "chetyre-itogo",
+        "cepochka-implikacij",
+        "fragment-itogo",
         "proverka-programmoj",
         "formula-na-python",
         "vlozhennye-cikly",
-        "perebor-cherez-product",
-        "python-itogo",
-        "redkie-usloviya",
-        "neznakomyj-znak",
-        "dva-urovnya-perebora",
-        "polnyj-poisk",
-        "drugaya-zadacha",
-        "dve-funkcii",
-        "poisk-itogo"
+        "ot-vyvoda-k-otvetu",
+        "python-itogo"
       ],
       "kind": "topic",
       "status": "published",
@@ -4373,9 +4360,7 @@
           "slug": "logicheskie-operacii",
           "access": "free",
           "sections": [
-            "operacii-i-ih-znacheniya",
             "kak-ustroena-tema-2",
-            "dva-znacheniya",
             "otricanie",
             "konyunkciya",
             "dizyunkciya",
@@ -4389,10 +4374,9 @@
           "access": "free",
           "sections": [
             "formula-po-chastyam",
-            "ot-skobok-k-vneshnej-operacii",
+            "poryadok-dejstvij",
             "polnaya-tablica",
             "ot-f-k-vhodam",
-            "dopustimye-preobrazovaniya",
             "formula-itogo"
           ]
         },
@@ -4402,21 +4386,12 @@
           "sections": [
             "fragment-i-podpisi",
             "fragment-tablicy",
-            "poryadok-ruchnogo-resheniya",
-            "obshchaya-shapka",
-            "nabory-i-poryadki",
-            "fragment-itogo"
-          ]
-        },
-        {
-          "slug": "chetyre-peremennye",
-          "access": "free",
-          "sections": [
-            "chetyre-peremennye",
-            "cepochka-implikacij",
+            "poryadok-resheniya",
+            "razbor-po-shagam",
+            "stroki-razlichny",
             "raznye-znacheniya-f",
-            "pyat-peremennyh",
-            "chetyre-itogo"
+            "cepochka-implikacij",
+            "fragment-itogo"
           ]
         },
         {
@@ -4426,21 +4401,8 @@
             "proverka-programmoj",
             "formula-na-python",
             "vlozhennye-cikly",
-            "perebor-cherez-product",
+            "ot-vyvoda-k-otvetu",
             "python-itogo"
-          ]
-        },
-        {
-          "slug": "polnyj-poisk",
-          "access": "free",
-          "sections": [
-            "redkie-usloviya",
-            "neznakomyj-znak",
-            "dva-urovnya-perebora",
-            "polnyj-poisk",
-            "drugaya-zadacha",
-            "dve-funkcii",
-            "poisk-itogo"
           ]
         }
       ],
