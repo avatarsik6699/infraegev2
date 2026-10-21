@@ -18,6 +18,9 @@ road and its two mirror cells in accent.
 scheme gets a number of the table; candidates and the reason under the frame.
 ``gm_pair(left, right, titles)`` — two schemes side by side with their degrees.
 ``gm_swap(edges, pos, a, b)`` — two names exchanged: every road stays a road.
+``gm_profile(edges, pos, focus)`` — a point, its neighbours' degrees and the profile.
+``gm_assume(gedges, gpos, tedges, known, letter, wrong, right, via)`` — step by
+step: a wrong candidate assumed, the road to a found point missing in the table.
 """
 
 from __future__ import annotations
@@ -417,13 +420,111 @@ def gm_swap(edges, pos, a: str, b: str) -> str:
     return "".join(out)
 
 
+# --- the profile of neighbours and a checked assumption (Change 197) -------------------------
+
+
+def gm_profile(edges, pos, focus: str) -> str:
+    """One point and its neighbours: degrees under every point, the point's
+    roads in accent, and under the scheme its neighbours → their degrees →
+    the profile sorted."""
+    adj = adjacency(edges)
+    nbrs = sorted(adj[focus])
+    degs = [len(adj[n]) for n in nbrs]
+    height = 300
+    out = [f'<svg viewBox="0 0 {W} {height}" role="img" aria-label="Профиль соседей пункта {focus}">']
+    out += _scheme(
+        edges,
+        pos,
+        (40, 26, W - 80, height - 120),
+        hot=[focus] + [focus + n for n in nbrs],
+        degrees=True,
+    )
+    line = (
+        f"соседи {focus}: {', '.join(nbrs)}   →   степени {', '.join(map(str, degs))}"
+        f"   →   профиль ({', '.join(map(str, sorted(degs)))})"
+    )
+    out.append(_text(W / 2, height - 18, line, 14, INK, "middle", 600))
+    out.append("</svg>")
+    return "".join(out)
+
+
+def assume_frames(gedges, gpos, tedges, known, letter: str, wrong: str, right: str, via: str):
+    """Two candidates for a point: the wrong one is assumed, the road to an
+    already found point is looked up in the table, it is missing — so the
+    other candidate stays, and its road is there."""
+    ga, ta = adjacency(gedges), adjacency(tedges)
+    known = {g: str(t) for g, t in known.items()}
+    if via not in ga[letter] or known[via] in ta[wrong] or known[via] not in ta[right]:
+        raise ValueError("the assumption must fail on the road to the found point")
+    tnames = nodes_of(tedges)
+    cell = 32
+    tw = cell * (len(tnames) + 1)
+    height = cell * (len(tnames) + 1) + 70
+    t_via = known[via]
+
+    def frame(label, mark, hot_cells, note, hot_road):
+        under = {g: f"↔ {t}" for g, t in known.items()}
+        under[letter] = mark
+        out = [f'<svg viewBox="0 0 {W} {height}" role="img" aria-hidden="true">']
+        out += _scheme(
+            gedges,
+            gpos,
+            (30, 26, W - tw - 120, height - 110),
+            hot=[letter] + ([letter + via] if hot_road else []),
+            under=under,
+        )
+        x0 = W - tw - 16
+        out += _matrix(tedges, tnames, x0, 16, cell, hot_cells=hot_cells, hot_rows=set(known.values()))
+        out.append(_text(30, height - 14, note, 14, INK, weight=600))
+        out.append("</svg>")
+        return "".join(out), label
+
+    return [
+        frame(
+            f"Найдены {', '.join(f'{g} ↔ {t}' for g, t in known.items())}. Для {letter} остались номера {wrong} и {right}.",
+            f"{wrong} или {right}?",
+            set(),
+            f"кандидаты для {letter}: {wrong}, {right}",
+            False,
+        ),
+        frame(
+            f"Пусть {letter} ↔ {wrong}. На схеме есть дорога {letter}—{via}, а {via} ↔ {t_via}: в таблице должна быть дорога {wrong}—{t_via}.",
+            f"↔ {wrong}?",
+            {(wrong, t_via), (t_via, wrong)},
+            f"пусть {letter} ↔ {wrong}: нужна дорога {wrong}—{t_via}",
+            True,
+        ),
+        frame(
+            f"В строке {wrong}, столбце {t_via} прочерк: дороги нет. Предположение дало противоречие, {letter} ↔ {wrong} невозможно.",
+            f"не {wrong}",
+            {(wrong, t_via), (t_via, wrong)},
+            f"дороги {wrong}—{t_via} нет — противоречие",
+            True,
+        ),
+        frame(
+            f"Остаётся {letter} ↔ {right}, и дорога {right}—{t_via} в таблице есть. Это не выбор «наугад», а единственный вариант, который не противоречит дорогам.",
+            f"↔ {right}",
+            {(right, t_via), (t_via, right)},
+            f"{letter} ↔ {right}: дорога {right}—{t_via} есть",
+            True,
+        ),
+    ]
+
+
+def gm_assume(gedges, gpos, tedges, known, letter, wrong, right, via) -> str:
+    """An assumption checked until a contradiction (see assume_frames)."""
+    return _stepper(assume_frames(gedges, gpos, tedges, known, letter, wrong, right, via))
+
+
 GRAPH_MATCH_FIGURES: dict = {
     "gm_graph": gm_graph,
     "gm_model": gm_model,
     "gm_match": gm_match,
     "gm_pair": gm_pair,
     "gm_swap": gm_swap,
+    "gm_profile": gm_profile,
+    "gm_assume": gm_assume,
 }
-GRAPH_MATCH_STEPPERS: dict = {"gm_match": match_frames}
+GRAPH_MATCH_STEPPERS: dict = {"gm_match": match_frames, "gm_assume": assume_frames}
 GRAPH_MATCH_WIDGETS: dict = {}
 GRAPH_MATCH_SCRIPTS: dict = {}
