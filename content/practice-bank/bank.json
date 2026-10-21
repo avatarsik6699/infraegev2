@@ -129205,7 +129205,7 @@
     {
       "task": {
         "id": "python-independent-program-t06",
-        "title": "Добавь в отчёт количество чётных чисел",
+        "title": "Допиши программу: чётные числа в отчёте",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
@@ -129217,7 +129217,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Добавь в отчёт количество чётных чисел. Сколько их в `numbers.txt`?"
+              "markdown": "Скачай `numbers.txt`. Добавь в `summarize` программы урока ключ `\"even\"` — количество чётных чисел — и напечатай его в `main` строкой `Чётных: …`. Запусти программу для `numbers.txt` и запиши число из этой строки."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
             }
           }
         ],
@@ -129225,7 +129231,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Законченная программа: анализ файла»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Чётность проверяют `x % 2 == 0`; для −2 это тоже верно."
             }
           }
         ],
@@ -129233,13 +129239,42 @@
           {
             "type": "text",
             "data": {
-              "markdown": "2: −2 и 10."
+              "markdown": "Например, в `summarize`:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "\"even\": sum(1 for x in numbers if x % 2 == 0),",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Чётные в файле — −2 и 10."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2`"
             }
           }
         ],
         "skills": [],
         "exam_numbers": [],
-        "files": [],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "2456e72a30086e9f65136109c9ab2ecd6cf48834aea7121906ce52e5dc3f5faa",
+            "filename": "numbers.txt",
+            "attribution": null,
+            "description": "Числа 5, −2, 10, 7 по одному на строке — файл из урока"
+          }
+        ],
         "lessons": [
           {
             "position": 0,
@@ -129274,19 +129309,25 @@
     {
       "task": {
         "id": "python-independent-program-t07",
-        "title": "Напиши вариант без списка: за один проход по файлу обновляй количество,…",
+        "title": "Напиши вариант без списка",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 2,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите четыре числа через пробел: количество, сумму, минимум, максимум.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Напиши вариант без списка: за один проход по файлу обновляй количество, сумму, минимум и максимум. Что он выведет для `numbers.txt`?"
+              "markdown": "Скачай `numbers.txt`. Напиши вариант программы без списка: за один проход по файлу обновляй количество, сумму, минимум и максимум, затем напечатай их одним `print`. Запусти и запиши, что напечатала программа."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
             }
           }
         ],
@@ -129294,7 +129335,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Законченная программа: анализ файла»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Четыре переменные; минимум и максимум начинаются с `None`, как `best` в уроке о файлах."
             }
           }
         ],
@@ -129302,13 +129343,42 @@
           {
             "type": "text",
             "data": {
-              "markdown": "4 20 −2 10."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "count = 0\ntotal = 0\nsmallest = None\nlargest = None\nwith open(\"numbers.txt\", encoding=\"utf-8\") as file:\n    for line in file:\n        number = int(line)\n        count += 1\n        total += number\n        if smallest is None or number < smallest:\n            smallest = number\n        if largest is None or number > largest:\n            largest = number\nprint(count, total, smallest, largest)",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Память не растёт с размером файла: хранятся четыре числа."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4 20 -2 10`"
             }
           }
         ],
         "skills": [],
         "exam_numbers": [],
-        "files": [],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "2456e72a30086e9f65136109c9ab2ecd6cf48834aea7121906ce52e5dc3f5faa",
+            "filename": "numbers.txt",
+            "attribution": null,
+            "description": "Числа 5, −2, 10, 7 по одному на строке — файл из урока"
+          }
+        ],
         "lessons": [
           {
             "position": 1,
@@ -129343,7 +129413,7 @@
     {
       "task": {
         "id": "python-independent-program-t08",
-        "title": "Измени договорённость: первая строка файла — количество чисел",
+        "title": "Измени договорённость: заголовок с количеством",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
@@ -129355,7 +129425,13 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Измени договорённость: первая строка файла — количество чисел. Что выведет программа суммы для `header.txt` (3, затем 4, −1, 6)?"
+              "markdown": "Скачай `header.txt`: первая строка — количество чисел, дальше сами числа. Измени `read_numbers`: прочитай заголовок отдельно, а если строк данных не столько, сколько в нём сказано, вызови `ValueError`. Запусти программу для `header.txt` и запиши сумму из отчёта."
+            }
+          },
+          {
+            "type": "attachment",
+            "data": {
+              "usage_id": "statement-1"
             }
           }
         ],
@@ -129363,7 +129439,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Законченная программа: анализ файла»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Заголовок читают `int(file.readline())` до цикла; после цикла сравни его с `len(numbers)`."
             }
           }
         ],
@@ -129371,13 +129447,56 @@
           {
             "type": "text",
             "data": {
-              "markdown": "9."
+              "markdown": "Например, в начале `read_numbers`:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "expected = int(file.readline())",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "и после цикла:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "if len(numbers) != expected:\n    raise ValueError(\"Количество не совпадает с заголовком\")",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Заголовок 3 в сумму не попадает: 4 − 1 + 6 = 9."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `9`"
             }
           }
         ],
         "skills": [],
         "exam_numbers": [],
-        "files": [],
+        "files": [
+          {
+            "id": "statement-1",
+            "purpose": "attachment",
+            "checksum": "0dd532145f72eda4694c421ff8fd21fe026a0f8a2df7c164838551e45f4b3010",
+            "filename": "header.txt",
+            "attribution": null,
+            "description": "Файл из урока: заголовок 3 и три числа"
+          }
+        ],
         "lessons": [
           {
             "position": 2,
@@ -129412,19 +129531,19 @@
     {
       "task": {
         "id": "python-practice-t01",
-        "title": "Последняя цифра степени",
+        "title": "Напиши функцию: последняя цифра степени",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите две цифры через пробел: для 7⁴, затем для 2¹⁰⁰.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "**Последняя цифра степени** (уроки 3, 7, 16). Даны неотрицательные целые `base` и `power`. Найди последнюю десятичную цифру `base ** power`, не создавая большое число. Для `power = 0` используй обычное для Python значение степени 1, включая `0 ** 0`. Чему равна последняя цифра 7⁴ и 2¹⁰⁰?"
+              "markdown": "Напиши функцию `last_digit(base, power)`, которая находит последнюю цифру `base ** power`, не вычисляя саму степень: на каждом шаге храни только последнюю цифру произведения. Напечатай `last_digit(7, 4)` и `last_digit(2, 100)` одним `print`, запусти и запиши, что напечатала программа."
             }
           }
         ],
@@ -129432,7 +129551,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Практика и итог курса»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "`result = result * base % 10` в цикле из `power` шагов: последняя цифра произведения зависит только от последних цифр множителей."
             }
           }
         ],
@@ -129440,7 +129559,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1 и 6."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def last_digit(base, power):\n    result = 1\n    for _ in range(power):\n        result = result * base % 10\n    return result\n\nprint(last_digit(7, 4), last_digit(2, 100))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "7⁴ = 2401; у степеней двойки последние цифры идут по кругу 2, 4, 8, 6, и сотая степень заканчивается на 6. Готовый способ — `pow(2, 100, 10)`."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1 6`"
             }
           }
         ],
@@ -129481,19 +129620,19 @@
     {
       "task": {
         "id": "python-practice-t02",
-        "title": "Второе различное максимальное значение",
+        "title": "Напиши функцию: второе различное наибольшее",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите два значения через пробел, как их напечатала программа.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "**Второе различное максимальное значение** (уроки 13, 18). Для списка целых найди второе по величине **различное** значение. Если различных значений меньше двух, верни `None`. Что получится для `[9, 9, 4, 7]` и для `[5, 5]`?"
+              "markdown": "Напиши функцию `second_max(numbers)`: она возвращает второе по величине **различное** значение списка или `None`, если различных значений меньше двух. Напечатай `second_max([9, 9, 4, 7])` и `second_max([5, 5])` одним `print`, запусти и запиши, что напечатала программа."
             }
           }
         ],
@@ -129501,7 +129640,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Практика и итог курса»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Множество убирает повторы, `sorted(…, reverse=True)` ставит наибольшие вперёд."
             }
           }
         ],
@@ -129509,7 +129648,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "7 и None."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def second_max(numbers):\n    unique = sorted(set(numbers), reverse=True)\n    if len(unique) < 2:\n        return None\n    return unique[1]\n\nprint(second_max([9, 9, 4, 7]), second_max([5, 5]))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Различные значения первого списка — 9, 7, 4, второе из них 7. Во втором списке различное значение одно."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `7 None`"
             }
           }
         ],
@@ -129550,19 +129709,19 @@
     {
       "task": {
         "id": "python-practice-t03",
-        "title": "Удалить повторы с сохранением порядка",
+        "title": "Напиши функцию: повторы без нарушения порядка",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите результат так, как его печатает Python.",
+        "answer_instruction": "Запишите список так, как его печатает Python.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "**Удалить повторы с сохранением порядка** (уроки 10, 13). Из списка хешируемых элементов создай список первых появлений. Например, `[3, 1, 3, 2, 1]` должен превратиться в `[3, 1, 2]`. Что получится для `\"abracadabra\"`?"
+              "markdown": "Напиши функцию `unique_in_order(items)`: она возвращает список первых появлений элементов в исходном порядке. Напечатай `unique_in_order(\"abracadabra\")`, запусти и запиши, что напечатала программа."
             }
           }
         ],
@@ -129570,7 +129729,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Практика и итог курса»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Множество `seen` отвечает на «уже было?», список — хранит порядок."
             }
           }
         ],
@@ -129578,7 +129737,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "['a', 'b', 'r', 'c', 'd']."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def unique_in_order(items):\n    seen = set()\n    result = []\n    for item in items:\n        if item not in seen:\n            seen.add(item)\n            result.append(item)\n    return result\n\nprint(unique_in_order(\"abracadabra\"))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Буквы впервые появляются в порядке a, b, r, c, d."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `['a', 'b', 'r', 'c', 'd']`"
             }
           }
         ],
@@ -129610,7 +129789,10 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["['a', 'b', 'r', 'c', 'd']"],
+          "answer_variants": [
+            "['a', 'b', 'r', 'c', 'd']",
+            "['a','b','r','c','d']"
+          ],
           "numeric_tolerance": null
         }
       },
@@ -129619,19 +129801,19 @@
     {
       "task": {
         "id": "python-practice-t05",
-        "title": "Самое длинное слово и равенство длин",
+        "title": "Напиши функцию: первое самое длинное слово",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите три значения через пробел, как их напечатала программа.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "**Самое длинное слово и равенство длин** (урок 18). В строке слова разделены пробельными символами. Верни первое самое длинное слово или `None`, если слов нет. Пунктуацию считай частью слова — это явная договорённость упражнения. Что получится для `\"кот дом окно\"`, `\"кот дом\"` и пустой строки?"
+              "markdown": "Напиши функцию `first_longest(text)`: она возвращает первое самое длинное слово строки (слова разделены пробелами) или `None`, если слов нет. Напечатай `first_longest(\"кот дом окно\")`, `first_longest(\"кот дом\")` и `first_longest(\"\")` одним `print`, запусти и запиши, что напечатала программа."
             }
           }
         ],
@@ -129639,7 +129821,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Практика и итог курса»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "`max(…, key=len)` при равных длинах оставляет первое; для пустого списка слов нужен `default=None`."
             }
           }
         ],
@@ -129647,7 +129829,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "окно, кот и None."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def first_longest(text):\n    return max(text.split(), key=len, default=None)\n\nprint(first_longest(\"кот дом окно\"), first_longest(\"кот дом\"), first_longest(\"\"))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "«кот» и «дом» одной длины — `max` возвращает первое."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `окно кот None`"
             }
           }
         ],
@@ -129688,19 +129890,19 @@
     {
       "task": {
         "id": "python-practice-t06",
-        "title": "Скобки одного вида",
+        "title": "Напиши функцию: правильные скобки",
         "short_description": null,
         "explanation_kind": "unclassified",
         "difficulty": 1,
         "estimated_minutes": null,
-        "answer_instruction": "Запишите ответы через пробел в порядке вопроса; списки и строки — так, как их печатает Python.",
+        "answer_instruction": "Запишите три значения через пробел, как их напечатала программа.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "**Скобки одного вида** (уроки 6, 7). Проверь правильность строки из символов `(` и `)`. Правильная строка не закрывает скобку до открытия и к концу закрывает все открытые. Пустая строка считается правильной. Другие символы считаются ошибкой. Что получится для `\"(()())\"`, `\")(\"` и `\"(()\"`?"
+              "markdown": "Напиши функцию `valid(text)` для строки из `(` и `)`: строка правильная, если ни одна скобка не закрывается раньше, чем открыта, и к концу все открытые закрыты. Напечатай `valid(\"(()())\")`, `valid(\")(\")` и `valid(\"(()\")` одним `print`, запусти и запиши, что напечатала программа."
             }
           }
         ],
@@ -129708,7 +129910,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Опора — урок «Практика и итог курса»: проследи программу по строкам и запиши значения так, как их покажет Python."
+              "markdown": "Счётчик открытых скобок: `(` прибавляет 1, `)` вычитает; ниже нуля — сразу `False`, в конце должен быть 0."
             }
           }
         ],
@@ -129716,7 +129918,27 @@
           {
             "type": "text",
             "data": {
-              "markdown": "True, False и False."
+              "markdown": "Например:"
+            }
+          },
+          {
+            "type": "code_example",
+            "data": {
+              "language": "python",
+              "code": "def valid(text):\n    balance = 0\n    for char in text:\n        if char == \"(\":\n            balance += 1\n        else:\n            balance -= 1\n        if balance < 0:\n            return False\n    return balance == 0\n\nprint(valid(\"(()())\"), valid(\")(\"), valid(\"(()\"))",
+              "caption": null
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "В `)(` скобок поровну, но первая закрывается до открытия; в `(()` одна осталась открытой."
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `True False False`"
             }
           }
         ],
@@ -822101,7 +822323,7 @@
     },
     {
       "id": "python-practice",
-      "sections": ["intro", "s1", "s2", "s3"],
+      "sections": ["intro", "s1", "s2", "s3", "s4", "s5"],
       "kind": "course",
       "status": "published",
       "course_id": "python",

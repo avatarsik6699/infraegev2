@@ -235,9 +235,9 @@ export const pythonIndependentProgramLessonPublication = Object.freeze({
 export const pythonPracticeLessonPublication = Object.freeze({
   id: "python-practice",
   routeSlug: "praktika-i-itog",
-  title: "Практика и итог курса",
+  title: "Итог курса",
   summary:
-    "Порядок работы над новой задачей, ошибки, которые полезно узнавать сразу, и задачи на перенос знаний.",
+    "Весь курс на одной странице: как росла одна задача, карта навыков, порядок работы над новой задачей, частые ошибки и задания ЕГЭ.",
   status: "published",
 });
 
@@ -472,7 +472,7 @@ export const pythonCoursePublication = Object.freeze({
         }),
         Object.freeze({
           id: "python-practice",
-          title: "Практика и итог курса",
+          title: "Итог курса",
           outcome:
             "Порядок работы над задачей, типичные ошибки, перенос знаний.",
         }),

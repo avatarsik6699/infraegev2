@@ -5001,6 +5001,203 @@ def pairs_triangle_svg(n: int = 5, tone: str | None = None) -> str:
     return "".join(out)
 
 
+def program_flow_svg(tone: str | None = None) -> str:
+    """The finished program of the course as a data flow: the path goes into
+    read_numbers, the list into summarize, the report into main's print; a bad
+    file turns off to stderr with exit code 1."""
+    accent = accent_of(tone)
+    x, w = 120, 236
+    out = [_svg(352, "Поток данных программы анализа файла")]
+
+    def func(y, name, note):
+        out.append(_box(x, y, w, 46, accent, "#fff", 8, 2))
+        out.append(_mono(x + 16, y + 21, name, 15, INK, weight=600))
+        out.append(_text(x + 16, y + 38, note, 12, MUTED))
+
+    def flow(y1, y2, label):
+        out.append(_arrow(x + 40, y1, x + 40, y2, MUTED))
+        out.append(_mono(x + 54, (y1 + y2) / 2 + 5, label, 13, INK))
+
+    out.append(_text(16, 26, "вход", 12, MUTED))
+    out.append(_mono(x, 26, 'sys.argv или "numbers.txt"', 14, INK, weight=600))
+    flow(34, 62, "путь к файлу")
+    func(64, "read_numbers(path)", "формат файла: строка → число")
+    flow(112, 150, "[5, -2, 10, 7]")
+    func(152, "summarize(numbers)", "вычисление по готовому списку")
+    flow(200, 238, '{"count": 4, "total": 20, …}')
+    func(240, "main()", "запуск, вывод и код завершения")
+    out.append(_arrow(x + 40, 288, x + 40, 312, MUTED))
+    out.append(_text(16, 330, "экран", 12, MUTED))
+    out.append(_mono(x, 330, "Количество: 4 … Среднее: 5.000", 13, INK))
+    out.append(_text(x + 248, 330, "→ код 0", 12, MUTED))
+    # a bad file turns off to stderr
+    ex, ey = x + w + 40, 74
+    out.append(_arrow(x + w + 2, 87, ex - 2, 87, ERR, dashed=True))
+    out.append(_box(ex, ey, 210, 54, ERR, "#fff", 8, 1.5, dashed=True))
+    out.append(_mono(ex + 12, ey + 22, "ValueError, OSError", 13, ERR))
+    out.append(_text(ex + 12, ey + 42, "→ stderr, код 1", 12.5, MUTED))
+    out.append("</svg>")
+    return "".join(out)
+
+
+# The course's through task, «сумма и наибольшее из 5, −2, 10, 7», as each
+# lesson wrote it: (lesson, title, code, what is new, output).
+COURSE_TASK = [
+    (
+        "2.2",
+        "Ветвление",
+        "a = 5\nb = -2\nc = 10\nd = 7\ntotal = a + b + c + d\nbest = a\nif b > best:\n    best = b\nif c > best:\n    best = c\nif d > best:\n    best = d\nprint(total, best)",
+        ["четыре имени", "и три if"],
+    ),
+    (
+        "3.1",
+        "Цикл while",
+        "n = int(input())\ntotal = 0\nbest = n\nwhile n != 0:\n    total += n\n    if n > best:\n        best = n\n    n = int(input())\nprint(total, best)",
+        ["один if в цикле", "числа — до нуля"],
+    ),
+    (
+        "3.2",
+        "Цикл for",
+        "count = int(input())\nn = int(input())\ntotal = n\nbest = n\nfor _ in range(count - 1):\n    n = int(input())\n    total += n\n    if n > best:\n        best = n\nprint(total, best)",
+        ["количество известно:", "for и range"],
+    ),
+    (
+        "4.2",
+        "Списки",
+        "numbers = [5, -2, 10, 7]\ntotal = 0\nbest = numbers[0]\nfor x in numbers:\n    total += x\n    if x > best:\n        best = x\nprint(total, best)",
+        ["все числа сразу:", "список"],
+    ),
+    (
+        "4.6",
+        "Функции коллекций",
+        "numbers = [5, -2, 10, 7]\nprint(sum(numbers), max(numbers))",
+        ["цикл внутри", "sum и max"],
+    ),
+    (
+        "5.2",
+        "Функция",
+        "def total_and_best(numbers):\n    total = 0\n    best = numbers[0]\n    for x in numbers:\n        total += x\n        if x > best:\n            best = x\n    return total, best\n\nprint(total_and_best([5, -2, 10, 7]))",
+        ["решение — функция,", "return двух значений"],
+    ),
+    (
+        "5.4",
+        "Сортировка",
+        "numbers = [5, -2, 10, 7]\nprint(sorted(numbers, reverse=True)[:2])",
+        ["не одно наибольшее,", "а два"],
+    ),
+    (
+        "6.1",
+        "Файлы",
+        'total = 0\nbest = None\nwith open("numbers.txt", encoding="utf-8") as file:\n    for line in file:\n        number = int(line)\n        total += number\n        if best is None or number > best:\n            best = number\nprint(total, best)',
+        ["числа из файла,", "best = None"],
+    ),
+    (
+        "6.2",
+        "Исключения",
+        'def total_and_best(numbers):\n    if not numbers:\n        raise ValueError("Пустой список")\n    ...\n\ntry:\n    total, best = total_and_best([])\nexcept ValueError:\n    print("Файл пуст")',
+        ["пустой список —", "понятная ошибка"],
+    ),
+    (
+        "7.1",
+        "Своя программа",
+        'def main():\n    path = Path(sys.argv[1])\n    numbers = read_numbers(path)\n    report = summarize(numbers)\n    print("Сумма:", report["total"])\n    print("Максимум:", report["maximum"])',
+        ["три функции,", "запуск из терминала"],
+    ),
+]
+
+
+def course_task_frames(tone: str | None = None) -> list[tuple[str, str]]:
+    """The through task across the course: each frame is one lesson's version,
+    its new lines marked with the accent."""
+    accent = accent_of(tone)
+    size, line_h, top = 12.5, 19, 64
+    longest = max(len(code.splitlines()) for _, _, code, _ in COURSE_TASK)
+    height = top + longest * line_h + 16
+    frames, before = [], set()
+    for k, (lesson, title, code, new) in enumerate(COURSE_TASK):
+        lines = code.splitlines()
+        out = [f'<svg viewBox="0 0 660 {height}" role="img" aria-hidden="true">']
+        # the course as a strip of stops; this lesson's stop is filled
+        for i, (stop, *_rest) in enumerate(COURSE_TASK):
+            cx = 24 + i * 68
+            on = i == k
+            out.append(
+                f'<circle cx="{cx}" cy="16" r="{6 if on else 4}" '
+                f'fill="{accent if on else "#fff"}" stroke="{accent if i <= k else FAINT}" '
+                f'stroke-width="1.5"/>'
+            )
+            if i:
+                out.append(
+                    f'<path d="M {cx - 62} 16 H {cx - 8}" stroke="{accent if i <= k else FAINT}" '
+                    f'stroke-width="1.5"/>'
+                )
+            out.append(
+                _mono(cx, 38, stop, 11.5, INK if on else MUTED, "middle", 600 if on else 500)
+            )
+        for i, line in enumerate(lines):
+            y = top + i * line_h + 12
+            fresh = line.strip() and line not in before
+            if fresh:
+                out.append(f'<circle cx="20" cy="{y - 4}" r="3" fill="{accent}"/>')
+            out.append(_mono(32, y, line, size, INK if fresh else MUTED))
+        x = 468
+        out.append(f'<path d="M {x - 16} {top - 6} V {height - 8}" stroke="{FAINT}"/>')
+        out.append(_text(x, top + 8, f"урок {lesson}", 12.5, MUTED))
+        out.append(_text(x, top + 30, title, 15, INK, weight=600))
+        out.append(_text(x, top + 62, "новое:", 12.5, MUTED))
+        for i, note in enumerate(new):
+            out.append(_text(x, top + 82 + i * 19, note, 13.5, accent))
+        out.append("</svg>")
+        before = set(lines)
+        caption = f"Урок {lesson}, «{title}»: {' '.join(new)}."
+        if k == 0:
+            caption += " Точками отмечены новые строки каждой версии."
+        if k == len(COURSE_TASK) - 1:
+            caption += " Задача та же, что в модуле 2, — выросли инструменты."
+        frames.append(("".join(out), caption))
+    return frames
+
+
+def course_task_stepper(tone: str | None = None) -> str:
+    return _stepper(course_task_frames(tone))
+
+
+def solve_cycle_svg(tone: str | None = None) -> str:
+    """Five steps of work on a new task, each with the lessons it comes from;
+    a failed check returns to the hand-worked example."""
+    accent = accent_of(tone)
+    steps = [
+        ("Понять", ["что найти,", "какой вход"], "1.4, 6.1"),
+        ("Пример", ["реши руками", "маленький"], "1.2, 3.1"),
+        ("Состояние", ["что хранить", "и как менять"], "3.1, 4.4"),
+        ("Код", ["по частям,", "функциями"], "5.1, 5.3"),
+        ("Проверить", ["границы,", "пустой вход"], "6.2, 6.6"),
+    ]
+    w, gap, x0, y, h = 114, 16, 11, 16, 104
+    out = [_svg(206, "Работа над задачей: понять, пример руками, состояние, код, проверить")]
+    for k, (title, lines, lessons) in enumerate(steps):
+        x = x0 + k * (w + gap)
+        key = k == 2
+        out.append(_box(x, y, w, h, accent if key else INK, sw=2 if key else 1.5))
+        out.append(_text(x + w / 2, y + 28, title, 13.5, accent if key else INK, "middle", 600))
+        for i, line in enumerate(lines):
+            out.append(_text(x + w / 2, y + 52 + i * 18, line, 12.5, MUTED, "middle"))
+        out.append(_mono(x + w / 2, y + h - 10, lessons, 11, MUTED, "middle"))
+        if k:
+            out.append(_arrow(x - gap + 2, y + h / 2, x - 2, y + h / 2, MUTED))
+    right = x0 + 4 * (w + gap) + w / 2
+    left = x0 + 1 * (w + gap) + w / 2
+    bottom = y + h + 30
+    out.append(
+        f'<path d="M {right:.1f} {y + h + 2:.1f} V {bottom} H {left:.1f} V {y + h + 14:.1f}" '
+        f'fill="none" stroke="{MUTED}" stroke-width="1.5"/>'
+    )
+    out.append(_arrow(left, y + h + 16, left, y + h + 2, MUTED))
+    out.append(_text(330, bottom + 24, "не сошлось — назад к примеру руками", 13, MUTED, "middle"))
+    out.append("</svg>")
+    return "".join(out)
+
+
 FIGURES = {
     "rectangles": rectangles_svg,
     "cover": cover_svg,
@@ -5085,6 +5282,9 @@ FIGURES = {
     "product_stepper": product_stepper,
     "base_stepper": base_stepper,
     "pairs_triangle": pairs_triangle_svg,
+    "program_flow": program_flow_svg,
+    "course_task_stepper": course_task_stepper,
+    "solve_cycle": solve_cycle_svg,
 }
 
 # Step-through figures as (svg, caption) frames, for the site media
@@ -5106,6 +5306,7 @@ STEPPERS = {
     "file_lines_stepper": file_lines_frames,
     "product_stepper": product_frames,
     "base_stepper": base_frames,
+    "course_task_stepper": course_task_frames,
 }
 
 # Interactive stand widgets that the site renders as its own component.

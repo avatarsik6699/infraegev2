@@ -23,7 +23,8 @@
   counter-increment: sheet-step;
 }
 
-/* The solving order is the sheet's one accent: orange arrows between steps. */
+/* The solving order is the sheet's one accent: arrows between steps — orange, or
+   the course tone (--lesson-figure-accent) in a course lesson. */
 .step + .step::before {
   content: "";
   position: absolute;
@@ -31,7 +32,7 @@
   left: -1.4rem;
   width: 0.9rem;
   height: 2px;
-  background: var(--color-brand-orange);
+  background: var(--lesson-figure-accent, var(--color-brand-orange));
 }
 
 .step + .step::after {
@@ -41,7 +42,7 @@
   left: -0.55rem;
   width: 6px;
   height: 10px;
-  background: var(--color-brand-orange);
+  background: var(--lesson-figure-accent, var(--color-brand-orange));
   clip-path: polygon(0 0, 100% 50%, 0 100%);
 }
 

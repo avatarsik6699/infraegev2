@@ -1,21 +1,60 @@
-import { CodeBlock } from "~/shared/components/code-block";
 import { Notation } from "~/shared/components/notation";
 import { Typography } from "~/shared/components/typography";
 import {
+  LessonDiagram,
+  LessonStepper,
   LessonSummary,
   LessonTable,
-  ProofDisclosure,
+  TopicCheatSheet,
+  VariantPicker,
 } from "~/shared/components/learning-content";
 import { defineCourseLesson } from "../lib/define-course-lesson";
+import { CourseLessonLink, ExamTopicLink } from "./course-links";
 import { pythonPracticeLessonPublication } from "./course-publication.mjs";
+import { lessonMedia } from "./python-practice.media";
+
+/** An exam task on the course map: its number, linked to the topic page. */
+const Task: React.FC<{ slug: string; number: string; title: string }> = (
+  props,
+) => (
+  <>
+    <ExamTopicLink routeSlug={props.slug}>{props.number}</ExamTopicLink>{" "}
+    {props.title}
+  </>
+);
+
+const Tasks: React.FC<{ items: readonly [string, string, string][] }> = (
+  props,
+) => (
+  <>
+    {props.items.map(([slug, number, title], index) => (
+      <span key={slug}>
+        {index ? "; " : ""}
+        <Task slug={slug} number={number} title={title} />
+      </span>
+    ))}
+  </>
+);
+
+/** A typical mistake on the switcher: the wrong code, the right one, the question. */
+const Mistake: React.FC<{
+  wrong: string;
+  right: string;
+  question: string;
+}> = (props) => (
+  <>
+    <Notation>{props.wrong}</Notation> → <Notation>{props.right}</Notation>.{" "}
+    Спроси себя: {props.question}
+  </>
+);
 
 export const pythonPracticeLesson = defineCourseLesson({
   ...pythonPracticeLessonPublication,
   masteryThreshold: 0.8,
   learningOutcomes: [
+    "Видеть курс целиком",
     "Порядок работы над задачей",
     "Типичные ошибки",
-    "Перенос знаний",
   ],
   accessTier: "free",
   theory: [
@@ -26,259 +65,540 @@ export const pythonPracticeLesson = defineCourseLesson({
       explanation: (
         <>
           <Typography.Text>
+            Шесть модулей позади: от первого <Notation>{"print"}</Notation> до
+            программы, которая читает файл и сама сообщает об ошибках.{" "}
             <strong>
-              Новую задачу решают не подбором шаблона, а одним и тем же порядком
-              рассуждений: требование, данные, пример руками, состояние,
-              переход, полнота, ресурсы, код, проверка, формат ответа
+              Здесь весь курс на одной странице: как росла одна задача, какие
+              навыки ты собрал, как браться за новую задачу и куда идти дальше
             </strong>
-            . Этот урок собирает основную часть курса: порядок работы, ошибки,
-            которые полезно узнавать сразу, задачи на перенос знаний и карту
-            применения к заданиям ЕГЭ.
+            .
           </Typography.Text>
           <Typography.Text>
-            Задачи этого урока проверяют перенос знаний. Сначала сформулируй
-            решение словами, выбери структуру данных, оцени границы и только
-            затем пиши код. Разборы показывают один из возможных способов;
-            совпадение текста программы не является целью.
+            Читай сверху вниз. Если строка карты не вспоминается сразу — ссылка
+            ведёт на урок, где это объяснено.
           </Typography.Text>
         </>
       ),
     },
     {
       id: "s1",
-      navLabel: "Порядок работы",
+      navLabel: "Одна задача — весь курс",
       explanation: (
         <>
           <Typography.Text>
-            <strong>Любая задача проходит одни и те же десять шагов.</strong>
+            <strong>
+              Сумма и наибольшее из 5, −2, 10, 7 прошли через весь курс — и
+              каждый модуль добавлял к решению новый инструмент.
+            </strong>{" "}
+            Пролистай версии: точками отмечены строки, которых не было в
+            предыдущей.
           </Typography.Text>
-          <ol>
-            <li>
-              <strong>Перескажи требование.</strong> Что именно нужно найти:
-              число, количество, сумму, максимум, список решений?
-            </li>
-            <li>
-              <strong>Определи данные.</strong> Типы, диапазоны, число
-              элементов, заголовок файла, разрешённые отрицательные значения и
-              повторы.
-            </li>
-            <li>
-              <strong>Вручную реши маленький пример.</strong> Он помогает
-              увидеть смысл ограничений.
-            </li>
-            <li>
-              <strong>Определи состояние.</strong> Что означает каждый счётчик,
-              граница, запись словаря или аргумент функции?
-            </li>
-            <li>
-              <strong>Опиши переход.</strong> Как следующий элемент меняет
-              состояние?
-            </li>
-            <li>
-              <strong>Проверь полноту.</strong> Все ли варианты рассмотрены, нет
-              ли лишних и повторно посчитанных?
-            </li>
-            <li>
-              <strong>Оцени ресурсы.</strong> Сколько состояний, итераций и
-              памяти потребуется при максимальном входе?
-            </li>
-            <li>
-              <strong>Запиши код.</strong> Сначала ясно, затем при необходимости
-              компактнее.
-            </li>
-            <li>
-              <strong>Проверь границы и результат.</strong> При возможности
-              сравни с простым эталоном.
-            </li>
-            <li>
-              <strong>Проверь формат ответа.</strong> Порядок столбцов,
-              направление сортировки, округление или отбрасывание дробной части.
-            </li>
-          </ol>
+          <LessonStepper
+            {...lessonMedia.courseTask}
+            label={"Сквозная задача от урока 2.2 до урока 7.1"}
+          />
           <Typography.Text>
-            Шаги 4–6 — это инвариант и завершение из урока о{" "}
-            <Notation>{"while"}</Notation>, перенесённые на любую программу. Шаг
-            7 — урок о скорости и памяти. Шаг 9 — урок об исключениях и отладке.
+            Задача не менялась — менялся способ: сначала каждое число отдельным
+            именем, потом цикл, список, готовые <Notation>{"sum"}</Notation> и{" "}
+            <Notation>{"max"}</Notation>, функция, файл и, наконец, программа,
+            которая проверяет вход. Так и растёт умение программировать.
           </Typography.Text>
         </>
       ),
     },
     {
       id: "s2",
-      navLabel: "Типичные ошибки",
+      navLabel: "Карта навыков",
       explanation: (
         <>
           <Typography.Text>
             <strong>
-              Многие ошибки узнаются сразу, если знать правильный вопрос к ним.
-            </strong>
+              Каждый модуль дал несколько навыков, и любая программа собирается
+              из них.
+            </strong>{" "}
+            Сверху — путь данных в любой программе, ниже — по блоку на модуль.
+            Заголовок блока ведёт к его первому уроку.
           </Typography.Text>
-          <LessonTable
-            label={
-              "Многие ошибки узнаются сразу, если знать правильный вопрос к ним"
+          <TopicCheatSheet
+            label={"Курс Python на одной схеме"}
+            flow={[
+              {
+                name: "Данные",
+                note: "ввод, файл, строка — в числа и коллекции",
+              },
+              {
+                name: "Обработка",
+                note: "условия, циклы, функции, готовые средства",
+              },
+              {
+                name: "Результат",
+                note: "вывод в нужном формате, проверка крайних случаев",
+              },
+            ]}
+            groups={[
+              {
+                number: 1,
+                title: (
+                  <CourseLessonLink lessonSlug="pervaya-programma">
+                    Старт
+                  </CourseLessonLink>
+                ),
+                rows: [
+                  {
+                    key: <Notation>{"print(…)"}</Notation>,
+                    note: "показать значение; выражение без print молчит",
+                  },
+                  {
+                    key: <Notation>{"x = …"}</Notation>,
+                    note: "имя связывается со значением",
+                  },
+                  {
+                    key: (
+                      <>
+                        <Notation>{"//"}</Notation>, <Notation>{"%"}</Notation>
+                      </>
+                    ),
+                    note: "частное и остаток; / даёт дробное",
+                  },
+                  {
+                    key: <Notation>{"int(input())"}</Notation>,
+                    note: "ввод — всегда строка",
+                  },
+                ],
+              },
+              {
+                number: 2,
+                title: (
+                  <CourseLessonLink lessonSlug="logicheskie-vyrazheniya">
+                    Условия
+                  </CourseLessonLink>
+                ),
+                rows: [
+                  {
+                    key: (
+                      <>
+                        <Notation>{"and"}</Notation>,{" "}
+                        <Notation>{"or"}</Notation>,{" "}
+                        <Notation>{"not"}</Notation>
+                      </>
+                    ),
+                    note: "правая часть — только если нужна",
+                  },
+                  {
+                    key: <Notation>{"if / elif / else"}</Notation>,
+                    note: "выполняется одна ветка",
+                  },
+                  {
+                    key: <Notation>{"x == 2 or x == 3"}</Notation>,
+                    note: "сравнение в каждой части",
+                  },
+                ],
+              },
+              {
+                number: 3,
+                title: (
+                  <CourseLessonLink lessonSlug="while">Циклы</CourseLessonLink>
+                ),
+                rows: [
+                  {
+                    key: <Notation>{"while условие"}</Notation>,
+                    note: "пока истинно; тело меняет состояние",
+                  },
+                  {
+                    key: <Notation>{"range(a, b)"}</Notation>,
+                    note: "от a до b − 1",
+                  },
+                  {
+                    key: (
+                      <>
+                        <Notation>{"total"}</Notation>,{" "}
+                        <Notation>{"best"}</Notation>
+                      </>
+                    ),
+                    note: "накопитель и лучший — по ходу цикла",
+                  },
+                ],
+              },
+              {
+                number: 4,
+                title: (
+                  <CourseLessonLink lessonSlug="stroki">
+                    Строки и коллекции
+                  </CourseLessonLink>
+                ),
+                rows: [
+                  {
+                    key: <Notation>{"s[a:b]"}</Notation>,
+                    note: "срез, b не входит",
+                  },
+                  {
+                    key: "список",
+                    note: "по порядку, меняется на месте",
+                  },
+                  {
+                    key: "словарь",
+                    note: "значение по ключу, частоты",
+                  },
+                  {
+                    key: "множество",
+                    note: "без повторов, быстрое in",
+                  },
+                ],
+              },
+              {
+                number: 5,
+                title: (
+                  <CourseLessonLink lessonSlug="funktsii">
+                    Функции
+                  </CourseLessonLink>
+                ),
+                rows: [
+                  {
+                    key: <Notation>{"def … return"}</Notation>,
+                    note: "договорённость: что принимает, что возвращает",
+                  },
+                  {
+                    key: <Notation>{"return a, b"}</Notation>,
+                    note: "два результата кортежем",
+                  },
+                  {
+                    key: <Notation>{"sorted(…, key=…)"}</Notation>,
+                    note: "порядок по ключу",
+                  },
+                  {
+                    key: <Notation>{"@cache"}</Notation>,
+                    note: "рекурсия без повторных вызовов",
+                  },
+                ],
+              },
+              {
+                number: 6,
+                title: (
+                  <CourseLessonLink lessonSlug="fayly">
+                    Файлы и инструменты
+                  </CourseLessonLink>
+                ),
+                rows: [
+                  {
+                    key: <Notation>{"with open(…)"}</Notation>,
+                    note: "файл по строкам, заголовок отдельно",
+                  },
+                  {
+                    key: <Notation>{"try / except"}</Notation>,
+                    note: "только ожидаемая ошибка",
+                  },
+                  {
+                    key: (
+                      <>
+                        <Notation>{"Counter"}</Notation>,{" "}
+                        <Notation>{"product"}</Notation>
+                      </>
+                    ),
+                    note: "частоты и перебор слов готовыми",
+                  },
+                  {
+                    key: <Notation>{"O(n²)"}</Notation>,
+                    note: "сначала порядок роста, потом секунды",
+                  },
+                ],
+              },
+            ]}
+            caption={
+              <>
+                Карта курса: путь данных сверху и главное из каждого модуля.
+                Номер блока — номер модуля.
+              </>
             }
-            columns={[
-              { label: "Ошибочная идея" },
-              { label: "Почему неверна" },
-              { label: "Правильный вопрос" },
-            ]}
-            rows={[
-              [
-                <>
-                  <Notation>{"range(a, b)"}</Notation> включает b
-                </>,
-                "Остановка исключена",
-                "Какая последняя допустимая позиция?",
-              ],
-              [
-                <>
-                  <Notation>{"x == 2 or 3"}</Notation>
-                </>,
-                "Второй операнд не сравнение",
-                "Повторено ли сравнение с x?",
-              ],
-              [
-                "Максимум начинается с 0",
-                "Данные могут быть отрицательными",
-                "Есть ли гарантированный допустимый первый кандидат?",
-              ],
-              [
-                <>
-                  <Notation>{"b = a"}</Notation> копирует список
-                </>,
-                "Имена могут указывать на один объект",
-                "Нужны общие или отдельные данные?",
-              ],
-              [
-                <>
-                  <Notation>{"a = a.sort()"}</Notation>
-                </>,
-                "sort возвращает None",
-                "Нужна мутация или новый список?",
-              ],
-              [
-                <>
-                  <Notation>{"return"}</Notation> внутри первого шага поиска
-                </>,
-                "Проверка заканчивается слишком рано",
-                "Когда уже достаточно оснований вернуть ответ?",
-              ],
-              [
-                <>
-                  <Notation>{"cache"}</Notation> решает проблему глубины
-                </>,
-                "Запоминание не убирает первый спуск",
-                "Можно ли вычислять снизу вверх?",
-              ],
-              [
-                <>
-                  <Notation>{"int(x)"}</Notation> округляет к ближайшему
-                </>,
-                "Он отбрасывает дробную часть к нулю",
-                "Что именно требует условие?",
-              ],
-              [
-                <>
-                  <Notation>{"eval(input())"}</Notation> удобно читает число
-                </>,
-                "eval выполняет выражение как код",
-                "Какой конкретный тип и формат нужно разобрать?",
-              ],
-            ]}
           />
-          <Typography.Text>
-            <Notation>{"eval"}</Notation> не нужен для обычного ввода чисел:
-            используй <Notation>{"int"}</Notation>,{" "}
-            <Notation>{"float"}</Notation> и разбор структуры. Умение выбрать
-            узкое понятное средство — часть понимания программы.
-          </Typography.Text>
         </>
       ),
     },
     {
       id: "s3",
-      navLabel: "Карта применения",
+      navLabel: "Новая задача",
       explanation: (
         <>
           <Typography.Text>
             <strong>
-              Основа курса — инструменты для тем ЕГЭ, но каждую задачу сначала
-              нужно смоделировать.
+              Незнакомую задачу решают одним и тем же порядком из пяти шагов.
             </strong>{" "}
-            Эта таблица — карта применения Python, а не утверждение о
-            неизменности экзаменационного формата. Номера и темы сверяй с
-            материалами нужного года. Здесь отражены тематические группы и
-            распространённые способы использования изученного языка.
+            Каждому шагу ты уже учился — под ним номера уроков:
+          </Typography.Text>
+          <LessonDiagram
+            {...lessonMedia.solveCycle}
+            caption={
+              <>
+                Главный шаг — состояние: что программа хранит и как меняет на
+                каждом элементе. Если проверка не сошлась, возвращаются к
+                примеру руками, а не правят код наугад.
+              </>
+            }
+          />
+          <Typography.Text>
+            Пример руками — это то же, что запуск по шагам в уроках: выписать
+            значения переменных после каждой строки. А в проверку всегда входят
+            пустой вход, один элемент и отрицательные числа, как в уроке об
+            исключениях.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "s4",
+      navLabel: "Частые ошибки",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Восемь ошибок встречаются чаще других, и каждую ловит один вопрос
+              к себе.
+            </strong>{" "}
+            Выбери ошибку — увидишь, как её исправить, и вопрос, который её
+            ловит:
+          </Typography.Text>
+          <VariantPicker
+            label={"Частые ошибки и вопросы, которые их ловят"}
+            variants={[
+              {
+                label: "range(a, b)",
+                value: (
+                  <Mistake
+                    wrong="range(1, 10)"
+                    right="range(1, 11)"
+                    question="какое последнее число нужно? b в range не входит."
+                  />
+                ),
+                note: (
+                  <CourseLessonLink lessonSlug="for-i-range">
+                    урок 3.2
+                  </CourseLessonLink>
+                ),
+              },
+              {
+                label: "x == 2 or 3",
+                value: (
+                  <Mistake
+                    wrong="x == 2 or 3"
+                    right="x == 2 or x == 3"
+                    question="с чем сравнивается каждая часть or?"
+                  />
+                ),
+                note: (
+                  <CourseLessonLink lessonSlug="logicheskie-vyrazheniya">
+                    урок 2.1
+                  </CourseLessonLink>
+                ),
+              },
+              {
+                label: "best = 0",
+                value: (
+                  <Mistake
+                    wrong="best = 0"
+                    right="best = numbers[0]"
+                    question="что, если все числа отрицательные?"
+                  />
+                ),
+                note: (
+                  <CourseLessonLink lessonSlug="usloviya">
+                    урок 2.2
+                  </CourseLessonLink>
+                ),
+              },
+              {
+                label: "b = a",
+                value: (
+                  <Mistake
+                    wrong="b = a"
+                    right="b = a.copy()"
+                    question="нужен второй список или второе имя того же?"
+                  />
+                ),
+                note: (
+                  <CourseLessonLink lessonSlug="spiski">
+                    урок 4.2
+                  </CourseLessonLink>
+                ),
+              },
+              {
+                label: "a = a.sort()",
+                value: (
+                  <Mistake
+                    wrong="a = a.sort()"
+                    right="a.sort()"
+                    question="метод меняет список или возвращает новый? sort возвращает None."
+                  />
+                ),
+                note: (
+                  <CourseLessonLink lessonSlug="sortirovka-i-poisk">
+                    урок 5.4
+                  </CourseLessonLink>
+                ),
+              },
+              {
+                label: "int(2.9)",
+                value: (
+                  <Mistake
+                    wrong="int(2.9)"
+                    right="round(2.9)"
+                    question="отбросить дробную часть или округлить? int отбрасывает."
+                  />
+                ),
+                note: (
+                  <CourseLessonLink lessonSlug="vvod-i-vyvod">
+                    урок 1.4
+                  </CourseLessonLink>
+                ),
+              },
+              {
+                label: "заголовок файла",
+                value: (
+                  <Mistake
+                    wrong="sum(int(line) for line in file)"
+                    right="count = int(file.readline())"
+                    question="первая строка — данные или описание формата?"
+                  />
+                ),
+                note: (
+                  <CourseLessonLink lessonSlug="fayly">
+                    урок 6.1
+                  </CourseLessonLink>
+                ),
+              },
+              {
+                label: "map дважды",
+                value: (
+                  <Mistake
+                    wrong="sum(m), max(m)"
+                    right="m = list(map(…))"
+                    question="источник одноразовый? map после прохода пуст."
+                  />
+                ),
+                note: (
+                  <CourseLessonLink lessonSlug="iteratory-i-generatory">
+                    урок 6.3
+                  </CourseLessonLink>
+                ),
+              },
+            ]}
+          />
+        </>
+      ),
+    },
+    {
+      id: "s5",
+      navLabel: "Куда дальше",
+      explanation: (
+        <>
+          <Typography.Text>
+            <strong>
+              Задания ЕГЭ, которые решают программой, опираются на модули курса.
+            </strong>{" "}
+            Номер задания ведёт на тему сайта. В теме разобраны приёмы самого
+            задания — пары делителей, окна, обход графа, выигрышные позиции, — а
+            язык для них уже твой.
           </Typography.Text>
           <LessonTable
-            label={"Типы задач, На что опираться"}
-            columns={[{ label: "Типы задач" }, { label: "На что опираться" }]}
+            label={"Модули курса и задания ЕГЭ"}
+            columns={[{ label: "Модуль курса" }, { label: "Задания ЕГЭ" }]}
             rows={[
               [
-                "Логика и таблицы истинности",
-                "Логические выражения, вложенные циклы, product",
+                "2–3. Условия и циклы",
+                <Tasks
+                  key="loops"
+                  items={[
+                    ["2-tablicy-istinnosti", "2", "таблицы истинности"],
+                    [
+                      "5-preobrazovanie-zapisey-chisel",
+                      "5",
+                      "формальное исполнение алгоритма",
+                    ],
+                    [
+                      "6-prostejshie-algoritmy-dlya-ispolnitelej",
+                      "6",
+                      "простейшие алгоритмы для исполнителей",
+                    ],
+                    [
+                      "12-ispolnenie-algoritma-dlya-ispolnitelya",
+                      "12",
+                      "исполнение алгоритма",
+                    ],
+                    [
+                      "15-zakony-matematicheskoj-logiki",
+                      "15",
+                      "законы математической логики",
+                    ],
+                  ]}
+                />,
               ],
               [
-                "Исполнители и преобразование чисел",
-                "Условия, циклы, системы счисления",
+                "4. Строки и коллекции",
+                <Tasks
+                  key="data"
+                  items={[
+                    ["9-obrabotka-tablicy-chisel", "9", "электронные таблицы"],
+                    [
+                      "17-chislovye-posledovatelnosti",
+                      "17",
+                      "числовая последовательность",
+                    ],
+                    [
+                      "24-obrabotka-simvolnyh-strok",
+                      "24",
+                      "символьная информация",
+                    ],
+                  ]}
+                />,
               ],
               [
-                "Геометрический исполнитель",
-                "Координаты, циклы; дополнительно turtle",
+                "5. Функции",
+                <Tasks
+                  key="functions"
+                  items={[
+                    ["16-rekursiya", "16", "рекуррентные выражения"],
+                    [
+                      "19-21-vyigryshnaya-strategiya",
+                      "19–21",
+                      "выигрышная стратегия",
+                    ],
+                    ["23-analiz-grafov", "23", "анализ графов"],
+                    [
+                      "26-sortirovka-i-otbor",
+                      "26",
+                      "обработка данных с сортировкой",
+                    ],
+                  ]}
+                />,
               ],
               [
-                "Комбинаторика",
-                "product, permutations, combinations, ограничения перебора",
-              ],
-              [
-                "Строковые преобразования",
-                "Срезы, replace, порядок выполнения",
-              ],
-              ["Адресация сетей", "Биты, маски, ipaddress"],
-              [
-                "Числовые выражения",
-                "Точные целые, степени, остатки, основания",
-              ],
-              [
-                "Рекурсивные зависимости",
-                "Функции, стек, cache, вычисление снизу вверх",
-              ],
-              [
-                "Числовые последовательности",
-                "Файлы, соседи, счётчики и максимумы",
-              ],
-              [
-                "Игровые стратегии",
-                "Состояния, any/all, рекурсия и глубина ходов",
-              ],
-              [
-                "Графы и зависимости",
-                "Обход, топологический порядок, динамика",
-              ],
-              [
-                "Символьные последовательности",
-                "Строки, серии, окна, префиксы",
-              ],
-              [
-                "Делители и маски чисел",
-                "isqrt, остатки, fnmatchcase, разумный перебор",
-              ],
-              [
-                "Сортировка и отбор",
-                "Ключи, несколько критериев, доказательство выбора",
-              ],
-              [
-                "Кластеризация",
-                "Точки, расстояния, правило разбиения, определение центра",
+                "6. Файлы и инструменты",
+                <Tasks
+                  key="tools"
+                  items={[
+                    ["8-perebor-slov", "8", "перебор слов"],
+                    ["10-ip-adresa-i-maski", "10", "маска подсети"],
+                    ["14-sistemy-schisleniya", "14", "системы счисления"],
+                    ["25-deliteli-i-maski", "25", "целочисленная информация"],
+                    [
+                      "27-analiz-dannyh-i-klasterizatsiya",
+                      "27",
+                      "анализ данных",
+                    ],
+                  ]}
+                />,
               ],
             ]}
           />
           <Typography.Text>
-            В курсе нет обещания, что одна библиотечная функция решает весь тип
-            задания. Сначала требуется математическая модель конкретного
-            условия. Приёмы самих заданий — пары делителей, окна, обход графа,
-            выигрышные позиции — разобраны в темах ЕГЭ и опираются на уроки
-            этого курса.
+            Кроме тем ЕГЭ, у курса есть три дополнительных урока:{" "}
+            <CourseLessonLink lessonSlug="klassy">классы</CourseLessonLink>,{" "}
+            <CourseLessonLink lessonSlug="dopolnitelnye-mekhanizmy">
+              дополнительные механизмы языка
+            </CourseLessonLink>{" "}
+            и{" "}
+            <CourseLessonLink lessonSlug="chitaemost-i-testy">
+              тесты
+            </CourseLessonLink>
+            . Они не нужны для экзамена, но с них начинаются большие программы.
           </Typography.Text>
         </>
       ),
@@ -286,118 +606,96 @@ export const pythonPracticeLesson = defineCourseLesson({
   ],
   checkpoint: [
     {
+      id: "t1",
+      prompt: (
+        <>
+          <Typography.Text>
+            Нужно для миллиона чисел проверять, встречалось ли число раньше.
+            Какую структуру взять и почему?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            Множество: <Notation>{"x in seen"}</Notation> — примерно один шаг, а
+            в списке — проход по всем элементам.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t2",
+      prompt: (
+        <>
+          <Typography.Text>
+            Что напечатает <Notation>{"print(list(range(2, 10, 3)))"}</Notation>
+            ?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            <Notation>{"[2, 5, 8]"}</Notation>: шаг 3, а 10 не входит.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
+      id: "t3",
+      prompt: (
+        <>
+          <Typography.Text>
+            Поиск наибольшего начали с <Notation>{"best = 0"}</Notation>. Что
+            получится для <Notation>{"[-4, -2]"}</Notation>?
+          </Typography.Text>
+        </>
+      ),
+      reveal: (
+        <>
+          <Typography.Text>
+            0 — числа, которого в списке нет. Начинать надо с первого элемента
+            или с <Notation>{"None"}</Notation>.
+          </Typography.Text>
+        </>
+      ),
+    },
+    {
       id: "t4",
       prompt: (
         <>
           <Typography.Text>
-            <strong>Частоты без учёта регистра</strong> (уроки 9, 12). Для
-            текста посчитай частоты букв, игнорируя регистр и небуквенные
-            символы. Пусть используются обычные буквы русского и английского
-            алфавитов без дополнительных правил нормализации Unicode. Что
-            получится для <Notation>{'"Аа! Б"'}</Notation>?
+            Функция <Notation>{"f"}</Notation> печатает результат через{" "}
+            <Notation>{"print"}</Notation>, но не возвращает его. Что окажется в{" "}
+            <Notation>{"x"}</Notation> после <Notation>{"x = f(3)"}</Notation>?
           </Typography.Text>
         </>
       ),
       reveal: (
         <>
           <Typography.Text>
-            {"{"}'а': 2, 'б': 1{"}"}.
+            <Notation>{"None"}</Notation>: без <Notation>{"return"}</Notation>{" "}
+            функция ничего не возвращает.
           </Typography.Text>
         </>
       ),
     },
     {
-      id: "t7",
+      id: "t5",
       prompt: (
         <>
           <Typography.Text>
-            <strong>Найти пару с заданной суммой</strong> (уроки 11, 12). Верни
-            индексы двух разных позиций, значения на которых дают{" "}
-            <Notation>{"target"}</Notation>. Достаточно любой пары. Если её нет,
-            верни <Notation>{"None"}</Notation>. Что вернёт решение из разбора
-            для <Notation>{"[4, 7, 2, 9]"}</Notation> при{" "}
-            <Notation>{"target = 11"}</Notation> и для{" "}
-            <Notation>{"[5, 5]"}</Notation> при{" "}
-            <Notation>{"target = 10"}</Notation>?
+            В файле первая строка — количество чисел, дальше сами числа. Как
+            прочитать его, чтобы количество не попало в сумму?
           </Typography.Text>
         </>
       ),
       reveal: (
         <>
-          <Typography.Text>(0, 1) и (0, 1).</Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "t8",
-      prompt: (
-        <>
           <Typography.Text>
-            <strong>Максимум завершённых встреч</strong> (урок 18). Встречи
-            заданы парами <Notation>{"(start, end)"}</Notation>, где{" "}
-            <Notation>{"start < end"}</Notation>. Один человек посещает
-            непересекающиеся встречи. Следующая может начинаться ровно в момент
-            окончания предыдущей. Выбери максимум встреч для{" "}
-            <Notation>{"[(0, 3), (1, 2), (2, 4), (3, 5)]"}</Notation>.
-          </Typography.Text>
-        </>
-      ),
-      reveal: (
-        <>
-          <Typography.Text>[(1, 2), (2, 4)] — две встречи.</Typography.Text>
-        </>
-      ),
-    },
-    {
-      id: "t9",
-      prompt: (
-        <>
-          <Typography.Text>
-            <strong>Разработать собственную небольшую программу</strong> (урок
-            26). Выбери один проект и сначала напиши его спецификацию — точное
-            описание входа, выхода и поведения в спорных случаях.
-          </Typography.Text>
-          <LessonTable
-            label={"Проект, Минимальный результат, Что он закрепляет"}
-            columns={[
-              { label: "Проект" },
-              { label: "Минимальный результат" },
-              { label: "Что он закрепляет" },
-            ]}
-            rows={[
-              [
-                "Учёт прочитанных страниц",
-                "Добавление записей, сумма по книгам, сохранение JSON",
-                "Словари, функции, файлы",
-              ],
-              [
-                "Анализатор слов текста",
-                "Частоты, топ слов, правила обработки регистра",
-                "Строки, Counter, сортировка",
-              ],
-              [
-                "Каталог задач",
-                "Номер, тема, сложность, фильтрация, сортировка",
-                "Записи, CSV/JSON, условия",
-              ],
-              [
-                "Проверка учебных ответов",
-                "Набор вопросов, сверка ответов, статистика",
-                "Циклы, функции, разделение данных и действий",
-              ],
-            ]}
-          />
-        </>
-      ),
-      reveal: (
-        <>
-          <Typography.Text>
-            Программа должна воспроизводимо запускаться из чистой папки с
-            указанными входными файлами. Вычисляющие функции проверяются
-            отдельно. Формат данных описан, ошибочный ввод не теряется
-            незаметно, отсутствие результатов обрабатывается явно. Имена
-            отражают смысл, зависимости известны. Это более содержательные
-            признаки качества, чем количество классов или сложность синтаксиса.
+            Сначала <Notation>{"int(file.readline())"}</Notation> — заголовок,
+            затем цикл по файлу: он продолжит со второй строки.
           </Typography.Text>
         </>
       ),
@@ -405,261 +703,45 @@ export const pythonPracticeLesson = defineCourseLesson({
   ],
   result: (
     <>
+      <Typography.Text>
+        Курс пройден: одна задача выросла от трёх <Notation>{"if"}</Notation> до
+        программы. Вот что взять с собой.
+      </Typography.Text>
       <LessonSummary
         items={[
           {
+            key: "Путь данных",
+            note: <>Данные → обработка → результат в нужном формате.</>,
+          },
+          {
+            key: "Новая задача",
             note: (
               <>
-                Порядок работы одинаков для любой задачи: требование, данные,
-                пример руками, состояние, переход, полнота, ресурсы, код,
-                проверка, формат.
+                Понять, пример руками, состояние, код, проверка — и назад к
+                примеру, если не сошлось.
               </>
             ),
           },
           {
+            key: "Проверка",
+            note: <>Пустой вход, один элемент, отрицательные числа, повторы.</>,
+          },
+          {
+            key: "Ошибки",
             note: (
               <>
-                Типичные ошибки узнаются по вопросам из таблицы: граница{" "}
-                <Notation>{"range"}</Notation>, повтор сравнения, начальное
-                значение, копия списка, результат <Notation>{"sort"}</Notation>.
+                Граница <Notation>{"range"}</Notation>, начало максимума,{" "}
+                <Notation>{"b = a"}</Notation>, результат{" "}
+                <Notation>{"sort"}</Notation>, заголовок файла.
               </>
             ),
           },
           {
-            note: (
-              <>
-                Ты владеешь основой на рабочем уровне, если можешь объяснить
-                каждую строку своего решения, назвать состояние цикла, указать
-                крайние случаи и восстановить алгоритм по условию без готового
-                шаблона. При непонятной конструкции вернись к обычным шагам: что
-                читается, что вычисляется, какой объект изменяется и куда
-                передаётся результат.
-              </>
-            ),
+            key: "Дальше",
+            note: <>Темы ЕГЭ на сайте: язык для них уже есть.</>,
           },
         ]}
       />
-      <ProofDisclosure summary="Решения и объяснения задач 1–8">
-        <Typography.Text>
-          <strong>1.</strong> Для последней цифры достаточно остатка по модулю
-          10:
-        </Typography.Text>
-        <CodeBlock
-          code={
-            'def last_digit_of_power(base, power):\n    if base < 0 or power < 0:\n        raise ValueError("Нужны неотрицательные значения")\n    result = 1\n    for _ in range(power):\n        result = (result * base) % 10\n    return result\n\nprint(last_digit_of_power(7, 4), last_digit_of_power(2, 100))'
-          }
-          label={"1. Для последней цифры достаточно остатка по модулю 10"}
-          language="python"
-          fileName="last_digit_of_power.py"
-          output={"1 6"}
-        />
-        <Typography.Text>
-          Если заменить промежуточное произведение на его остаток, будущий
-          остаток произведения не изменится: отброшенная часть кратна 10 и после
-          умножения останется кратна 10. Этот вариант выполняет{" "}
-          <Notation>{"power"}</Notation> шагов. Стандартная{" "}
-          <Notation>{"pow(base, power, 10)"}</Notation> считает модульную
-          степень существенно эффективнее за счёт последовательного возведения в
-          квадрат. Третий аргумент — модуль, а не точность округления.
-        </Typography.Text>
-        <Typography.Text>
-          <strong>2.</strong> Множество убирает повторы, сортировка задаёт
-          порядок:
-        </Typography.Text>
-        <CodeBlock
-          code={
-            "def second_distinct_maximum(numbers):\n    unique = sorted(set(numbers), reverse=True)\n    if len(unique) < 2:\n        return None\n    return unique[1]\n\nprint(second_distinct_maximum([9, 9, 4, 7]))\nprint(second_distinct_maximum([5, 5]))"
-          }
-          label={"2. Множество убирает повторы, сортировка задаёт порядок"}
-          language="python"
-          fileName="second_distinct_maximum.py"
-          output={"7\nNone"}
-        />
-        <Typography.Text>
-          Если бы требовался второй элемент по величине с учётом повторов, ответ
-          для этого примера был бы 9. Можно разработать вариант за один проход с
-          двумя лучшими различными значениями, но сначала нужно точно понимать
-          требование.
-        </Typography.Text>
-        <Typography.Text>
-          <strong>3.</strong> Множество отвечает за быструю проверку, список —
-          за порядок результата:
-        </Typography.Text>
-        <CodeBlock
-          code={
-            'def unique_in_order(items):\n    seen = set()\n    result = []\n    for item in items:\n        if item not in seen:\n            seen.add(item)\n            result.append(item)\n    return result\n\nprint(unique_in_order([3, 1, 3, 2, 1]))\nprint(unique_in_order("abracadabra"))'
-          }
-          label={
-            "3. Множество отвечает за быструю проверку, список — за порядок результата"
-          }
-          language="python"
-          fileName="unique_in_order.py"
-          output={"[3, 1, 2]\n['a', 'b', 'r', 'c', 'd']"}
-        />
-        <Typography.Text>
-          У каждой структуры отдельное назначение. Более короткое{" "}
-          <Notation>{"list(dict.fromkeys(items))"}</Notation> использует порядок
-          словаря, но первый вариант лучше раскрывает алгоритм.
-        </Typography.Text>
-        <Typography.Text>
-          <strong>4.</strong> Сначала приводим регистр, затем отбираем буквы:
-        </Typography.Text>
-        <CodeBlock
-          code={
-            'def letter_counts(text):\n    counts = {}\n    for letter in text.lower():\n        if letter.isalpha():\n            counts[letter] = counts.get(letter, 0) + 1\n    return counts\n\nprint(letter_counts("Аа! Б"))'
-          }
-          label={"4. Сначала приводим регистр, затем отбираем буквы"}
-          language="python"
-          fileName="letter_counts.py"
-          output={"{'а': 2, 'б': 1}"}
-        />
-        <Typography.Text>
-          Метод <Notation>{"isalpha"}</Notation> принимает и буквы других
-          письменностей; если по задаче они недопустимы, нужно отдельно
-          ограничить алфавит. Для универсального сравнения текста по регистру
-          существует <Notation>{"casefold"}</Notation>, но правила языкового
-          сравнения — самостоятельная задача.
-        </Typography.Text>
-        <Typography.Text>
-          <strong>5.</strong> <Notation>{"max"}</Notation> с одинаковым ключом
-          оставляет первый элемент:
-        </Typography.Text>
-        <CodeBlock
-          code={
-            'def first_longest_word(text):\n    return max(text.split(), key=len, default=None)\n\nprint(first_longest_word("кот дом окно"))\nprint(first_longest_word("кот дом"))\nprint(first_longest_word(""))'
-          }
-          label={"5. max с одинаковым ключом оставляет первый элемент"}
-          language="python"
-          fileName="first_longest_word.py"
-          output={"окно\nкот\nNone"}
-        />
-        <Typography.Text>
-          Дополнительная сортировка дала бы больше работы без необходимости.
-          Определение слова здесь специально простое; для естественного языка
-          потребуются другие правила.
-        </Typography.Text>
-        <Typography.Text>
-          <strong>6.</strong> <Notation>{"balance"}</Notation> — число ещё не
-          закрытых открывающих скобок:
-        </Typography.Text>
-        <CodeBlock
-          code={
-            'def valid_parentheses(text):\n    balance = 0\n    for char in text:\n        if char == "(":\n            balance += 1\n        elif char == ")":\n            balance -= 1\n        else:\n            return False\n        if balance < 0:\n            return False\n    return balance == 0\n\nfor s in ["(()())", ")(", "(()"]:\n    print(valid_parentheses(s))'
-          }
-          label={"6. balance — число ещё не закрытых открывающих скобок"}
-          language="python"
-          fileName="valid_parentheses.py"
-          output={"True\nFalse\nFalse"}
-        />
-        <Typography.Text>
-          Равенство общего количества открывающих и закрывающих недостаточно:{" "}
-          <Notation>{")("}</Notation> имеет одинаковые количества, но неверный
-          порядок. Для нескольких видов скобок нужен стек, чтобы помнить не
-          только количество, но и вид последней незакрытой скобки.
-        </Typography.Text>
-        <Typography.Text>
-          <strong>7.</strong> В словаре находятся только прежние позиции:
-        </Typography.Text>
-        <CodeBlock
-          code={
-            "def find_pair_with_sum(numbers, target):\n    positions = {}\n    for i, number in enumerate(numbers):\n        needed = target - number\n        if needed in positions:\n            return positions[needed], i\n        positions[number] = i\n    return None\n\nprint(find_pair_with_sum([4, 7, 2, 9], 11))\nprint(find_pair_with_sum([5, 5], 10))"
-          }
-          label={"7. В словаре находятся только прежние позиции"}
-          language="python"
-          fileName="find_pair_with_sum.py"
-          output={"(0, 1)\n(0, 1)"}
-        />
-        <Typography.Text>
-          Поэтому одна позиция не используется дважды. Проверка выполняется{" "}
-          <strong>до</strong> добавления текущего числа: иначе единственная
-          пятёрка могла бы ошибочно составить пару сама с собой. Обычная
-          ожидаемая сложность — <Notation>{"O(n)"}</Notation> времени и{" "}
-          <Notation>{"O(n)"}</Notation> памяти.
-        </Typography.Text>
-        <Typography.Text>
-          <strong>8.</strong> Выбирается доступная встреча, которая
-          заканчивается раньше всех:
-        </Typography.Text>
-        <CodeBlock
-          code={
-            "def choose_meetings(meetings):\n    selected = []\n    last_end = None\n    by_end = sorted(meetings, key=lambda meeting: meeting[1])\n    for start, end in by_end:\n        if last_end is None or start >= last_end:\n            selected.append((start, end))\n            last_end = end\n    return selected\n\nprint(choose_meetings([(0, 3), (1, 2), (2, 4), (3, 5)]))"
-          }
-          label={
-            "8. Выбирается доступная встреча, которая заканчивается раньше всех"
-          }
-          language="python"
-          fileName="choose_meetings.py"
-          output={"[(1, 2), (2, 4)]"}
-        />
-        <Typography.Text>
-          Почему это допустимо? Возьми оптимальное расписание и замени его
-          первую встречу на самую раннюю по окончанию. Новая встреча
-          заканчивается не позже, поэтому не мешает остальным выбранным.
-          Количество не уменьшается. Затем тот же аргумент применяется к
-          оставшейся части времени.
-        </Typography.Text>
-        <Typography.Text>
-          Это доказательство зависит от цели «максимум количества». Для
-          максимальной суммарной ценности встреч тот же жадный выбор не
-          гарантирует оптимальность.
-        </Typography.Text>
-      </ProofDisclosure>
-      <Typography.Text>
-        <strong>Что дальше.</strong> Переходи дальше, когда можешь
-        самостоятельно прочитать небольшой файл, преобразовать данные, написать
-        несколько функций, обработать отсутствие результата и проверить решение.
-        Знание всех методов наизусть не требуется: нормально смотреть точные
-        параметры в документации.
-      </Typography.Text>
-      <LessonTable
-        label={"Направление, Следующие темы, Подходящий первый результат"}
-        columns={[
-          { label: "Направление" },
-          { label: "Следующие темы" },
-          { label: "Подходящий первый результат" },
-        ]}
-        rows={[
-          [
-            "Задания ЕГЭ",
-            "Темы экзамена на этом сайте: каждая опирается на уроки курса",
-            "Решённые задачи темы с проверкой против перебора",
-          ],
-          [
-            "Алгоритмы",
-            "Динамика, структуры данных, графы, доказательства",
-            "Набор решений с проверкой против полного перебора",
-          ],
-          [
-            "Автоматизация",
-            "pathlib, argparse, logging, даты, архивы",
-            "Скрипт разбора и отчёта по папке файлов",
-          ],
-          [
-            "Анализ данных",
-            "Табличные данные, визуализация, статистика",
-            "Проверяемый отчёт по реальному набору данных",
-          ],
-          [
-            "Веб-разработка",
-            "HTTP, JSON, базы данных, обработка запросов",
-            "Небольшой сервис с хранением данных и тестами",
-          ],
-          [
-            "Крупные программы",
-            "Модули, интерфейсы, типы, тесты, упаковка",
-            "Проект с понятным запуском и разделением частей",
-          ],
-        ]}
-      />
-      <Typography.Text>
-        <strong>База данных</strong> хранит структурированные записи и
-        поддерживает запросы к ним. Стандартный <Notation>{"sqlite3"}</Notation>{" "}
-        позволяет начать без отдельного сервера. <strong>HTTP</strong> —
-        протокол обмена запросами и ответами между клиентом и сервером. Эти темы
-        опираются на язык, но имеют собственные понятия; их не стоит сводить к
-        запоминанию пары Python-команд. Дополнительные уроки курса — классы,
-        механизмы языка, тесты — первый шаг к крупным программам.
-      </Typography.Text>
     </>
   ),
   status: "published",
