@@ -139,9 +139,7 @@ def answers() -> dict[str, str]:
     # subtopic 7: transfers over the last symbol
     a["task-8-7-01"] = str(no_double(6, 4, 4))
     a["task-8-7-02"] = str(no_double(30, 3, 3))
-    a["task-8-7-03"] = str(2**7 - 1 - 7)
     a["task-8-7-04"] = str(no_double(20, 3, 2))
-    a["task-8-7-05"] = str(_upto([4, 1, 5, 3, 0], 6))
     a["task-8-7-06"] = str(_evens_apart())
     a["task-8-7-07"] = str(_zeros_and_letters())
     # Практика и итог
@@ -224,20 +222,6 @@ def _last_even() -> int:
     )
 
 
-def _upto(bound, q) -> int:
-    """Numbers with distinct digits not above the bound: count the smaller prefixes."""
-    total = 0
-    used: list[int] = []
-    n = len(bound)
-    for i, d in enumerate(bound):
-        smaller = [x for x in range(d) if x not in used and not (i == 0 and x == 0)]
-        total += len(smaller) * perm(q - len(used) - 1, n - i - 1)
-        if d in used:
-            return total
-        used.append(d)
-    return total + 1
-
-
 def _evens_apart() -> int:
     """Ten base-9 digits, three even ones, no two even side by side: choose the places of
     the even digits by gaps among the seven odd ones."""
@@ -297,7 +281,7 @@ def _solution(task: TaskData) -> str:
 def test_every_answer_matches_independent_recomputation(answers: dict[str, str]) -> None:
     tasks = _entries()
     assert sorted(tasks) == sorted(answers)
-    assert sorted(t.lessons[0].position for t in tasks.values()) == list(range(63))
+    assert sorted(t.lessons[0].position for t in tasks.values()) == list(range(61))
     for task_id, task in tasks.items():
         assert task.checker.answer_variants[0] == answers[task_id], task_id
         assert task.exam_numbers == [8] and not task.catalog_visible and not task.archived

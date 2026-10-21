@@ -176017,7 +176017,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "625: 5⁴, на каждом месте любая из пяти букв."
+              "markdown": "На каждое из четырёх мест можно поставить любую из пяти букв: 5 · 5 · 5 · 5 = 5⁴ = 625."
             }
           },
           {
@@ -176027,6 +176027,12 @@
               "code": "print(5 ** 4)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `625`"
+            }
           }
         ],
         "skills": [],
@@ -176034,7 +176040,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 0,
+            "position": 1,
             "material_id": "word-enumeration"
           }
         ],
@@ -176100,7 +176106,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "100: 1 · 5 · 5 · 4."
+              "markdown": "Первое место — только `А`, второе и третье — любая из пяти букв, последнее — любая, кроме `А`: 1 · 5 · 5 · 4 = 100."
             }
           },
           {
@@ -176110,6 +176116,12 @@
               "code": "from itertools import product\n\ncount = 0\nfor letters in product('АБВГД', repeat=4):\n    word = ''.join(letters)\n    if word[0] == 'А' and word[-1] != 'А':\n        count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `100`"
+            }
           }
         ],
         "skills": [],
@@ -176117,14 +176129,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 1,
+            "position": 2,
             "material_id": "word-enumeration"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "ogranicheniya-mest",
+            "section": "umnozhenie",
             "material_id": "word-enumeration"
           }
         ],
@@ -176183,7 +176195,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "360: 6 · 5 · 4 · 3."
+              "markdown": "Первая буква — любая из шести, каждая следующая — из оставшихся: 6 · 5 · 4 · 3 = 360."
             }
           },
           {
@@ -176193,6 +176205,12 @@
               "code": "from itertools import permutations\n\ncount = 0\nfor letters in permutations('АБВГДЕ', 4):\n    word = ''.join(letters)\n    if True:\n        count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `360`"
+            }
           }
         ],
         "skills": [],
@@ -176200,7 +176218,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 2,
+            "position": 6,
             "material_id": "word-enumeration"
           }
         ],
@@ -176266,7 +176284,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "64: различных букв четыре — К, О, Л, С, поэтому 4³."
+              "markdown": "Различных букв в слове `КОЛОС` четыре — К, О, Л, С. На каждое из трёх мест — любая из них: 4³ = 64."
             }
           },
           {
@@ -176276,6 +176294,12 @@
               "code": "from itertools import product\n\ncount = 0\nfor letters in product('КОЛС', repeat=3):\n    word = ''.join(letters)\n    if True:\n        count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `64`"
+            }
           }
         ],
         "skills": [],
@@ -176283,7 +176307,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 3,
+            "position": 0,
             "material_id": "word-enumeration"
           }
         ],
@@ -176349,7 +176373,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "39: 3 + 9 + 27, слова разной длины не пересекаются."
+              "markdown": "Однобуквенных слов 3, двухбуквенных 3² = 9, трёхбуквенных 3³ = 27. Слова разной длины не пересекаются, поэтому 3 + 9 + 27 = 39."
             }
           },
           {
@@ -176358,6 +176382,12 @@
               "language": "python",
               "code": "print(sum(3 ** n for n in range(1, 4)))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `39`"
             }
           }
         ],
@@ -176432,7 +176462,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "225: 125 + 125 − 25; слова вида `Б??О` вошли в оба случая."
+              "markdown": "Слов на `Б` — 5³ = 125, слов на `О` в конце — тоже 125. Слова вида `Б??О` попали в оба случая, их 5² = 25: 125 + 125 − 25 = 225."
             }
           },
           {
@@ -176441,6 +176471,12 @@
               "language": "python",
               "code": "from itertools import product\n\ncount = 0\nfor letters in product('АОБВГ', repeat=4):\n    word = ''.join(letters)\n    if word[0] == 'Б' or word[-1] == 'О':\n        count += 1\nprint(count)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `225`"
             }
           }
         ],
@@ -176515,7 +176551,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "24: 4!."
+              "markdown": "Все четыре буквы различны, поэтому перестановок 4 · 3 · 2 · 1 = 4! = 24."
             }
           },
           {
@@ -176525,6 +176561,12 @@
               "code": "from itertools import permutations\n\ncount = 0\nfor letters in permutations('ПЛОТ', 4):\n    word = ''.join(letters)\n    if True:\n        count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `24`"
+            }
           }
         ],
         "skills": [],
@@ -176532,14 +176574,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 6,
+            "position": 7,
             "material_id": "word-enumeration"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "permutations",
+            "section": "bez-povtorenij",
             "material_id": "word-enumeration"
           }
         ],
@@ -176598,7 +176640,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1000: 4 · 5 · 5 · 5 · 2."
+              "markdown": "Первое место — любая буква, кроме Р (4 варианта), три средних — любые из пяти, последнее — гласная О или А (2 варианта): 4 · 5 · 5 · 5 · 2 = 1000."
             }
           },
           {
@@ -176608,6 +176650,12 @@
               "code": "from itertools import product\n\ncount = 0\nfor letters in product('КРОНА', repeat=5):\n    word = ''.join(letters)\n    if word[0] != 'Р' and word[-1] in 'ОА':\n        count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1000`"
+            }
           }
         ],
         "skills": [],
@@ -176615,14 +176663,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 7,
+            "position": 3,
             "material_id": "word-enumeration"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "ogranicheniya-mest",
+            "section": "umnozhenie",
             "material_id": "word-enumeration"
           }
         ],
@@ -176673,7 +176721,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Разберите случаи: код начинается с Т или с другой согласной."
+              "markdown": "Разбери случаи: код начинается с Т или с другой согласной."
             }
           }
         ],
@@ -176681,7 +176729,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "408: если код начинается с Т, последняя буква — любая из пяти оставшихся, 5 · 4! = 120; если с С, Л или В — последняя не Т и не первая, 3 · 4 · 4! = 288; 120 + 288."
+              "markdown": "Если код начинается с Т, последняя буква — любая из пяти оставшихся, середина — 4! способами: 5 · 24 = 120. Если код начинается с С, Л или В, последняя буква — не Т и не первая (4 варианта): 3 · 4 · 24 = 288. Всего 120 + 288 = 408."
             }
           },
           {
@@ -176690,6 +176738,12 @@
               "language": "python",
               "code": "from itertools import permutations\n\ncount = 0\nfor letters in permutations('СЛИВАТ', 6):\n    word = ''.join(letters)\n    if word[0] not in 'ИА' and word[-1] != 'Т':\n        count += 1\nprint(count)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `408`"
             }
           }
         ],
@@ -176705,7 +176759,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "ogranicheniya-mest",
+            "section": "bez-povtorenij",
             "material_id": "word-enumeration"
           }
         ],
@@ -176764,7 +176818,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "640: C₅² · 4³ = 10 · 64."
+              "markdown": "Два места для `А` из пяти можно выбрать 10 способами, остальные три места — любыми из четырёх других букв: 10 · 4³ = 640."
             }
           },
           {
@@ -176773,6 +176827,12 @@
               "language": "python",
               "code": "from itertools import product\n\ncount = 0\nfor letters in product('АБВГД', repeat=5):\n    word = ''.join(letters)\n    if word.count('А') == 2:\n        count += 1\nprint(count)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `640`"
             }
           }
         ],
@@ -176788,7 +176848,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "ostalnye-pozicii",
+            "section": "vybor-mest",
             "material_id": "word-enumeration"
           }
         ],
@@ -176839,7 +176899,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Из всех слов вычтите слова без Б."
+              "markdown": "Из всех слов вычти слова без Б."
             }
           }
         ],
@@ -176847,7 +176907,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "211: 3⁵ − 2⁵, вычитаем слова без `Б`."
+              "markdown": "Всего слов 3⁵ = 243, без `Б` — 2⁵ = 32. Хотя бы одна `Б` есть в 243 − 32 = 211 словах."
             }
           },
           {
@@ -176857,6 +176917,12 @@
               "code": "from itertools import product\n\ncount = 0\nfor letters in product('АБВ', repeat=5):\n    word = ''.join(letters)\n    if 'Б' in word:\n        count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `211`"
+            }
           }
         ],
         "skills": [],
@@ -176864,14 +176930,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 10,
+            "position": 13,
             "material_id": "word-enumeration"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "dopolnenie",
+            "section": "hotya-by-ne-bolee",
             "material_id": "word-enumeration"
           }
         ],
@@ -176930,7 +176996,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "60: 6! / (3! · 2!) — три `А` и две `Н`."
+              "markdown": "В слове `АНАНАС` три `А` и две `Н`. Если считать все буквы разными, перестановок 6! = 720, и каждое слово посчитано 3! · 2! = 12 раз: 720 / 12 = 60."
             }
           },
           {
@@ -176940,6 +177006,12 @@
               "code": "from itertools import permutations\n\nprint(len(set(permutations('АНАНАС'))))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `60`"
+            }
           }
         ],
         "skills": [],
@@ -176947,7 +177019,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 11,
+            "position": 16,
             "material_id": "word-enumeration"
           }
         ],
@@ -177013,7 +177085,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "189: 3⁴ + C₄¹ · 3³ = 81 + 108."
+              "markdown": "Слов без `А` — 3⁴ = 81, с одной `А` — 4 места · 3³ = 108. Всего 81 + 108 = 189."
             }
           },
           {
@@ -177023,6 +177095,12 @@
               "code": "from itertools import product\n\ncount = 0\nfor letters in product('АБВГ', repeat=4):\n    word = ''.join(letters)\n    if word.count('А') <= 1:\n        count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `189`"
+            }
           }
         ],
         "skills": [],
@@ -177030,7 +177108,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 12,
+            "position": 14,
             "material_id": "word-enumeration"
           }
         ],
@@ -177096,7 +177174,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "720: C₅³ · 2³ · 3² = 10 · 8 · 9."
+              "markdown": "Три места для гласных из пяти — 10 способов, на каждом — `А` или `О` (2³), на остальных двух — согласные (3²): 10 · 8 · 9 = 720."
             }
           },
           {
@@ -177106,6 +177184,12 @@
               "code": "from itertools import product\n\ncount = 0\nfor letters in product('АОБВГ', repeat=5):\n    word = ''.join(letters)\n    if sum(c in 'АО' for c in word) == 3:\n        count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `720`"
+            }
           }
         ],
         "skills": [],
@@ -177113,14 +177197,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 13,
+            "position": 10,
             "material_id": "word-enumeration"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "neskolko-glasnyh",
+            "section": "vybor-mest",
             "material_id": "word-enumeration"
           }
         ],
@@ -177171,7 +177255,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "При вычитании учтите слова, где нет обеих букв."
+              "markdown": "При вычитании учти слова, где нет обеих букв."
             }
           }
         ],
@@ -177179,7 +177263,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "194: 5⁴ − 4⁴ − 4⁴ + 3⁴ = 625 − 256 − 256 + 81."
+              "markdown": "Из всех 5⁴ = 625 слов вычитаем слова без `А` (4⁴ = 256) и слова без `Д` (ещё 256). Слова без обеих букв вычтены дважды — возвращаем их 3⁴ = 81: 625 − 256 − 256 + 81 = 194."
             }
           },
           {
@@ -177189,6 +177273,12 @@
               "code": "from itertools import product\n\ncount = 0\nfor letters in product('АБВГД', repeat=4):\n    word = ''.join(letters)\n    if 'А' in word and 'Д' in word:\n        count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `194`"
+            }
           }
         ],
         "skills": [],
@@ -177196,14 +177286,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 14,
+            "position": 15,
             "material_id": "word-enumeration"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "peresecheniya",
+            "section": "hotya-by-ne-bolee",
             "material_id": "word-enumeration"
           }
         ],
@@ -177254,7 +177344,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Разберите случаи по первой букве."
+              "markdown": "Разбери случаи по первой букве."
             }
           }
         ],
@@ -177262,7 +177352,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "3200: если первая К, место второй — одно из пяти, остальные из четырёх букв: 5 · 4⁴ = 1280; если первая О, Р или Л — 3 · C₅² · 4³ = 1920; 1280 + 1920."
+              "markdown": "Если первая буква К, вторая К стоит на одном из пяти мест, остальные четыре — из О, Р, А, Л: 5 · 4⁴ = 1280. Если первая — О, Р или Л, две К ставят на 2 из 5 оставшихся мест (10 способов), ещё три места — по 4 варианта: 3 · 10 · 4³ = 1920. Всего 3200."
             }
           },
           {
@@ -177272,6 +177362,12 @@
               "code": "from itertools import product\n\ncount = 0\nfor letters in product('КОРАЛ', repeat=6):\n    word = ''.join(letters)\n    if word.count('К') == 2 and word[0] != 'А':\n        count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3200`"
+            }
           }
         ],
         "skills": [],
@@ -177279,7 +177375,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 15,
+            "position": 11,
             "material_id": "word-enumeration"
           }
         ],
@@ -177337,7 +177433,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Разберите случаи по последней букве."
+              "markdown": "Разбери случаи по последней букве."
             }
           }
         ],
@@ -177345,7 +177441,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1744: если последняя А или У, среди первых четырёх нужна хотя бы одна гласная — 2 · (5⁴ − 3⁴) = 1088; если последняя П или Р, нужны две гласные среди первых четырёх — 2 · (5⁴ − 3⁴ − 4 · 2 · 3³) = 656; 1088 + 656."
+              "markdown": "Если последняя буква — гласная А или У, среди первых четырёх нужна хотя бы одна гласная: 2 · (5⁴ − 3⁴) = 1088. Если последняя — П или Р, среди первых четырёх нужно не менее двух гласных: 2 · (5⁴ − 3⁴ − 4 · 2 · 3³) = 656. Всего 1088 + 656 = 1744."
             }
           },
           {
@@ -177355,6 +177451,12 @@
               "code": "from itertools import product\n\ncount = 0\nfor letters in product('ПАРУС', repeat=5):\n    word = ''.join(letters)\n    if sum(c in 'АУ' for c in word) >= 2 and word[-1] != 'С':\n        count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1744`"
+            }
           }
         ],
         "skills": [],
@@ -177362,7 +177464,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 16,
+            "position": 12,
             "material_id": "word-enumeration"
           }
         ],
@@ -177428,7 +177530,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "210: 7! / (2! · 3! · 2!) — две К, три О, две Л."
+              "markdown": "В слове `КОЛОКОЛ` две К, три О и две Л. Перестановок 7! / (2! · 3! · 2!) = 5040 / 24 = 210."
             }
           },
           {
@@ -177437,6 +177539,12 @@
               "language": "python",
               "code": "from itertools import permutations\n\nprint(len(set(permutations('КОЛОКОЛ'))))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `210`"
             }
           }
         ],
@@ -177511,7 +177619,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "6: C₄², две `А` вставляются в разные промежутки вокруг трёх `Б`."
+              "markdown": "Три `Б` создают четыре промежутка, две `А` ставят в разные из них: C₄² = 6 способов."
             }
           },
           {
@@ -177520,6 +177628,12 @@
               "language": "python",
               "code": "from itertools import product\n\ncount = 0\nfor letters in product('АБ', repeat=5):\n    word = ''.join(letters)\n    if word.count('А') == 2 and 'АА' not in word:\n        count += 1\nprint(count)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `6`"
             }
           }
         ],
@@ -177594,7 +177708,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "24: 3 · 2³."
+              "markdown": "Первая буква — любая из трёх, каждая следующая — любая, кроме предыдущей: 3 · 2³ = 24."
             }
           },
           {
@@ -177604,6 +177718,12 @@
               "code": "from itertools import product\n\ncount = 0\nfor letters in product('АБВ', repeat=4):\n    word = ''.join(letters)\n    if all(word[i] != word[i + 1] for i in range(3)):\n        count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `24`"
+            }
           }
         ],
         "skills": [],
@@ -177611,7 +177731,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 19,
+            "position": 21,
             "material_id": "word-enumeration"
           }
         ],
@@ -177677,7 +177797,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "243: 1 · 3⁵."
+              "markdown": "Первая буква — только `А`, каждая из пяти следующих — любая, кроме предыдущей: 1 · 3⁵ = 243."
             }
           },
           {
@@ -177687,6 +177807,12 @@
               "code": "from itertools import product\n\ncount = 0\nfor letters in product('АБВГ', repeat=6):\n    word = ''.join(letters)\n    if (\n            word[0] == 'А'\n            and all(word[i] != word[i + 1] for i in range(5))\n        ):\n        count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `243`"
+            }
           }
         ],
         "skills": [],
@@ -177694,7 +177820,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 20,
+            "position": 22,
             "material_id": "word-enumeration"
           }
         ],
@@ -177760,7 +177886,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "48: блок `ПЛ` или `ЛП` и ещё три буквы — 4! · 2."
+              "markdown": "Блок `ПЛ` или `ЛП` и ещё три буквы — четыре объекта, они расставляются 4! = 24 способами, внутри блока два порядка: 24 · 2 = 48."
             }
           },
           {
@@ -177770,6 +177896,12 @@
               "code": "from itertools import permutations\n\ncount = 0\nfor letters in permutations('ПЛАСТ', 5):\n    word = ''.join(letters)\n    if 'ПЛ' in word or 'ЛП' in word:\n        count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `48`"
+            }
           }
         ],
         "skills": [],
@@ -177777,7 +177909,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 21,
+            "position": 23,
             "material_id": "word-enumeration"
           }
         ],
@@ -177843,7 +177975,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "432: две схемы, в каждой 2³ · 3³."
+              "markdown": "Схем две: с гласной в начале и с согласной. В каждой три места для гласных (2³) и три для согласных (3³): 2 · 8 · 27 = 432."
             }
           },
           {
@@ -177853,6 +177985,12 @@
               "code": "from itertools import product\n\ncount = 0\nfor letters in product('АОБВГ', repeat=6):\n    word = ''.join(letters)\n    if all((word[i] in 'АО') != (word[i + 1] in 'АО')\n           for i in range(5)):\n        count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `432`"
+            }
           }
         ],
         "skills": [],
@@ -177860,7 +177998,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 22,
+            "position": 24,
             "material_id": "word-enumeration"
           }
         ],
@@ -177926,7 +178064,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "144: согласные К, Т, Р расставляются 3! способами, гласные — в 3 из 4 промежутков, C₄³ = 4, и переставляются 3! способами: 6 · 4 · 6."
+              "markdown": "Согласные К, Т, Р расставляются 3! = 6 способами. Вокруг них четыре промежутка, три гласные ставят в разные — C₄³ = 4 способа — и переставляют 3! способами: 6 · 4 · 6 = 144."
             }
           },
           {
@@ -177936,6 +178074,12 @@
               "code": "from itertools import permutations\n\ncount = 0\nfor letters in permutations('КАТЕРИ', 6):\n    word = ''.join(letters)\n    if all(not (word[i] in 'АЕИ' and word[i + 1] in 'АЕИ')\n           for i in range(5)):\n        count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `144`"
+            }
           }
         ],
         "skills": [],
@@ -177943,14 +178087,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 23,
+            "position": 19,
             "material_id": "word-enumeration"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "glasnye-ne-ryadom",
+            "section": "promezhutki",
             "material_id": "word-enumeration"
           }
         ],
@@ -178001,7 +178145,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Проверьте обоих соседей М."
+              "markdown": "Проверь обоих соседей М."
             }
           }
         ],
@@ -178009,7 +178153,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "448: М с краю — сосед из Д, К, остальные три места из четырёх букв, 2 · 2 · 4³ = 256; М на одном из трёх средних мест — 3 · 2² · 4² = 192; 256 + 192."
+              "markdown": "Если М с краю, её единственный сосед — Д или К, остальные три места — из четырёх букв без М: 2 · 2 · 4³ = 256. Если М на одном из трёх средних мест, оба соседа — Д или К: 3 · 2² · 4² = 192. Всего 448."
             }
           },
           {
@@ -178019,6 +178163,12 @@
               "code": "from itertools import product\n\ncount = 0\nfor letters in product('ДОМИК', repeat=5):\n    word = ''.join(letters)\n    if word.count('М') != 1:\n        continue\n    i = word.index('М')\n    near = word[max(i - 1, 0):i] + word[i + 1:i + 2]\n    if not any(c in 'ОИ' for c in near):\n        count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `448`"
+            }
           }
         ],
         "skills": [],
@@ -178026,7 +178176,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 24,
+            "position": 20,
             "material_id": "word-enumeration"
           }
         ],
@@ -178092,7 +178242,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "100: 4 · 5²."
+              "markdown": "Первая цифра — от 1 до 4 (4 варианта), две остальные — любые из пяти: 4 · 5² = 100."
             }
           },
           {
@@ -178101,6 +178251,12 @@
               "language": "python",
               "code": "from itertools import product\n\ncount = 0\nfor d in product(range(5), repeat=3):\n    if d[0] != 0 and True:\n        count += 1\nprint(count)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `100`"
             }
           }
         ],
@@ -178116,7 +178272,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "nachalnyj-nol",
+            "section": "chislo-kak-slovo",
             "material_id": "word-enumeration"
           }
         ],
@@ -178167,7 +178323,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Разберите, где стоит шестёрка."
+              "markdown": "Разбери, где стоит шестёрка."
             }
           }
         ],
@@ -178175,7 +178331,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "133: если 6 первая — 7²; если на одном из двух других мест — 2 · 6 · 7."
+              "markdown": "Если 6 стоит первой, две другие цифры — любые, кроме 6: 7² = 49. Если 6 на одном из двух других мест, первая цифра — не 0 и не 6 (6 вариантов), третья — любая, кроме 6 (7): 2 · 6 · 7 = 84. Всего 133."
             }
           },
           {
@@ -178184,6 +178340,12 @@
               "language": "python",
               "code": "from itertools import product\n\ncount = 0\nfor d in product(range(8), repeat=3):\n    if d[0] != 0 and d.count(6) == 1:\n        count += 1\nprint(count)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `133`"
             }
           }
         ],
@@ -178258,7 +178420,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1470: 7 · 7 · 6 · 5."
+              "markdown": "Первая цифра — не ноль (7 вариантов), вторая — любая из оставшихся семи, включая ноль, третья — из шести, четвёртая — из пяти: 7 · 7 · 6 · 5 = 1470."
             }
           },
           {
@@ -178268,6 +178430,12 @@
               "code": "from itertools import product\n\ncount = 0\nfor d in product(range(8), repeat=4):\n    if d[0] != 0 and len(set(d)) == 4:\n        count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1470`"
+            }
           }
         ],
         "skills": [],
@@ -178275,7 +178443,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 27,
+            "position": 28,
             "material_id": "word-enumeration"
           }
         ],
@@ -178341,7 +178509,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "20: C₆³, цифры выбираются из 1–6."
+              "markdown": "При строгом возрастании каждый набор цифр даёт одно число, а ноль стоял бы первым, поэтому цифры выбирают из 1–6: C₆³ = 20."
             }
           },
           {
@@ -178351,6 +178519,12 @@
               "code": "from itertools import product\n\ncount = 0\nfor d in product(range(7), repeat=3):\n    if d[0] != 0 and d[0] < d[1] < d[2]:\n        count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `20`"
+            }
           }
         ],
         "skills": [],
@@ -178358,7 +178532,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 28,
+            "position": 30,
             "material_id": "word-enumeration"
           }
         ],
@@ -178424,7 +178598,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1029: основание нечётное, поэтому последняя цифра не решает; четырёхзначные семеричные — числа от 7³ = 343 до 7⁴ − 1 = 2400, чётных среди них 1029."
+              "markdown": "Основание 7 нечётное, поэтому чётность числа решает сумма цифр, а не последняя цифра. Четырёхзначные семеричные числа — от 7³ = 343 до 7⁴ − 1 = 2400, чётных среди них 1029."
             }
           },
           {
@@ -178434,6 +178608,12 @@
               "code": "print(sum(1 for n in range(7 ** 3, 7 ** 4) if n % 2 == 0))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1029`"
+            }
           }
         ],
         "skills": [],
@@ -178441,7 +178621,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 29,
+            "position": 31,
             "material_id": "word-enumeration"
           }
         ],
@@ -178499,7 +178679,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Проверяйте соседей каждой семёрки."
+              "markdown": "Проверь соседей каждой семёрки."
             }
           }
         ],
@@ -178507,7 +178687,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "651: перебор 7 · 8⁴ чисел с проверкой обоих соседей каждой семёрки."
+              "markdown": "Программа перебирает все пятизначные восьмеричные числа и для каждой семёрки проверяет обоих соседей: чётных среди них быть не должно. Подходит 651 число."
             }
           },
           {
@@ -178517,6 +178697,12 @@
               "code": "from itertools import product\n\ncount = 0\nfor d in product(range(8), repeat=5):\n    if d[0] == 0 or d.count(7) != 2:\n        continue\n    ok = True\n    for i in range(5):\n        if d[i] == 7:\n            for j in (i - 1, i + 1):\n                if 0 <= j < 5 and d[j] % 2 == 0:\n                    ok = False\n    if ok:\n        count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `651`"
+            }
           }
         ],
         "skills": [],
@@ -178524,7 +178710,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 30,
+            "position": 32,
             "material_id": "word-enumeration"
           }
         ],
@@ -178590,7 +178776,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "2448: большие цифры — 9, 10, 11. Если первая цифра большая — 3 · 3 · 2 · 9 · 8 = 1296; если первая маленькая — 3 · 3 · 2 · 8 · 8 = 1152."
+              "markdown": "Большие цифры — 9, 10, 11. Если первая цифра большая, на неё 3 варианта, вторую большую ставят на одно из трёх мест (2 варианта цифры), два оставшихся места — малые цифры без повторов: 3 · 3 · 2 · 9 · 8 = 1296. Если первая малая (от 1 до 8), большие ставят на 2 из 3 остальных мест: 8 · 3 · 3 · 2 · 8 = 1152. Всего 2448."
             }
           },
           {
@@ -178600,6 +178786,12 @@
               "code": "from itertools import product\n\ncount = 0\nfor d in product(range(12), repeat=4):\n    if (\n            d[0] != 0\n            and len(set(d)) == 4\n            and sum(x > 8 for x in d) == 2\n        ):\n        count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2448`"
+            }
           }
         ],
         "skills": [],
@@ -178607,14 +178799,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 31,
+            "position": 27,
             "material_id": "word-enumeration"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "bez-povtora-cifr",
+            "section": "cifry-chislami",
             "material_id": "word-enumeration"
           }
         ],
@@ -178665,7 +178857,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Считайте по каждой длине и складывайте."
+              "markdown": "Посчитай по каждой длине и сложи."
             }
           }
         ],
@@ -178673,7 +178865,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1956: длина от 2 до 7, ноль стоит последним, остальные места занимают различные цифры 1–6: 6 + 30 + 120 + 360 + 720 + 720."
+              "markdown": "Ноль стоит последним, остальные места занимают различные цифры от 1 до 6. Для длин 2–7 это 6 + 30 + 120 + 360 + 720 + 720 = 1956."
             }
           },
           {
@@ -178683,6 +178875,12 @@
               "code": "from itertools import permutations\n\ncount = 0\nfor length in range(2, 8):\n    count += len(list(permutations(range(1, 7), length - 1)))\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1956`"
+            }
           }
         ],
         "skills": [],
@@ -178690,14 +178888,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 32,
+            "position": 29,
             "material_id": "word-enumeration"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "dlina-ne-zadana",
+            "section": "bez-povtora-cifr",
             "material_id": "word-enumeration"
           }
         ],
@@ -178756,7 +178954,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "60: `ВАБВ` → 2012₃ = 2 · 27 + 0 · 9 + 1 · 3 + 2 = 59, номер 59 + 1."
+              "markdown": "Буквы А, Б, В — цифры 0, 1, 2. `ВАБВ` ↔ 2012₃ = 2 · 27 + 0 · 9 + 1 · 3 + 2 = 59, номер на единицу больше: 60."
             }
           },
           {
@@ -178765,6 +178963,12 @@
               "language": "python",
               "code": "alphabet = 'АБВ'\nword = 'ВАБВ'\ndigits = ''.join(str(alphabet.index(c)) for c in word)\nprint(int(digits, 3) + 1)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `60`"
             }
           }
         ],
@@ -178780,7 +178984,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "nomer-slova",
+            "section": "nomer-slova-v-spiske",
             "material_id": "word-enumeration"
           }
         ],
@@ -178839,7 +179043,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`АВАБ`: 20 − 1 = 19 = 0201₃."
+              "markdown": "20 − 1 = 19 = 0201₃ — начальный ноль сохраняем. Цифры 0, 2, 0, 1 — буквы А, В, А, Б."
             }
           },
           {
@@ -178849,6 +179053,12 @@
               "code": "alphabet = 'АБВ'\nn = 20 - 1\nword = ''\nfor _ in range(4):\n    word = alphabet[n % 3] + word\n    n //= 3\nprint(word)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `АВАБ`"
+            }
           }
         ],
         "skills": [],
@@ -178856,7 +179066,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 34,
+            "position": 36,
             "material_id": "word-enumeration"
           }
         ],
@@ -178922,7 +179132,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "789: `ГАББА` → 30110₄ = 768 + 16 + 4 = 788."
+              "markdown": "Буквы А, Б, В, Г — цифры 0–3. `ГАББА` ↔ 30110₄ = 3 · 256 + 0 + 16 + 4 + 0 = 788, номер 789."
             }
           },
           {
@@ -178932,6 +179142,12 @@
               "code": "alphabet = 'АБВГ'\nword = 'ГАББА'\ndigits = ''.join(str(alphabet.index(c)) for c in word)\nprint(int(digits, 4) + 1)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `789`"
+            }
           }
         ],
         "skills": [],
@@ -178939,14 +179155,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 35,
+            "position": 34,
             "material_id": "word-enumeration"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "nomer-slova",
+            "section": "nomer-slova-v-spiske",
             "material_id": "word-enumeration"
           }
         ],
@@ -179005,7 +179221,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "`БГГАГ`: 499 = 13303₄."
+              "markdown": "500 − 1 = 499 = 13303₄. Цифры 1, 3, 3, 0, 3 — буквы Б, Г, Г, А, Г."
             }
           },
           {
@@ -179015,6 +179231,12 @@
               "code": "alphabet = 'АБВГ'\nn = 500 - 1\nword = ''\nfor _ in range(5):\n    word = alphabet[n % 4] + word\n    n //= 4\nprint(word)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `БГГАГ`"
+            }
           }
         ],
         "skills": [],
@@ -179022,14 +179244,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 36,
+            "position": 37,
             "material_id": "word-enumeration"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "nachalnye-nuli",
+            "section": "slovo-po-nomeru",
             "material_id": "word-enumeration"
           }
         ],
@@ -179088,7 +179310,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "55: перед ним все 2 · 27 слов на `А` и `Б`."
+              "markdown": "Перед первым словом на `В` стоят все слова на `А` и на `Б`, по 3³ = 27: 2 · 27 = 54. Номер 55."
             }
           },
           {
@@ -179098,6 +179320,12 @@
               "code": "print(2 * 3 ** 3 + 1)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `55`"
+            }
           }
         ],
         "skills": [],
@@ -179105,14 +179333,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 37,
+            "position": 39,
             "material_id": "word-enumeration"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "obshchee-nachalo",
+            "section": "poryadok-alfavita",
             "material_id": "word-enumeration"
           }
         ],
@@ -179163,7 +179391,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сначала запишите алфавит по порядку."
+              "markdown": "Сначала запиши алфавит по порядку."
             }
           }
         ],
@@ -179171,7 +179399,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "22: алфавит `КОТ`, `ТОК` → 210₃ = 21."
+              "markdown": "По алфавиту буквы идут К, О, Т — цифры 0, 1, 2. `ТОК` ↔ 210₃ = 21, номер 22."
             }
           },
           {
@@ -179181,6 +179409,12 @@
               "code": "alphabet = 'КОТ'\nword = 'ТОК'\ndigits = ''.join(str(alphabet.index(c)) for c in word)\nprint(int(digits, 3) + 1)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `22`"
+            }
           }
         ],
         "skills": [],
@@ -179188,7 +179422,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 38,
+            "position": 40,
             "material_id": "word-enumeration"
           }
         ],
@@ -179254,7 +179488,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "12: 3 однобуквенных кода, затем `ВВ` → 22₃ = 8 — девятый двухбуквенный."
+              "markdown": "Сначала идут 3 однобуквенных кода. Среди двухбуквенных `ВВ` ↔ 22₃ = 8 — девятый. Номер 3 + 9 = 12."
             }
           },
           {
@@ -179264,6 +179498,12 @@
               "code": "print(3 + int('22', 3) + 1)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `12`"
+            }
           }
         ],
         "skills": [],
@@ -179271,14 +179511,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 39,
+            "position": 35,
             "material_id": "word-enumeration"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "raznaya-dlina",
+            "section": "nomer-slova-v-spiske",
             "material_id": "word-enumeration"
           }
         ],
@@ -179337,7 +179577,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "723: алфавит А, Д, Р, У; РУДАР → 23102₄ = 722."
+              "markdown": "По алфавиту буквы идут А, Д, Р, У — цифры 0–3. `РУДАР` ↔ 23102₄ = 512 + 192 + 16 + 0 + 2 = 722, номер 723."
             }
           },
           {
@@ -179347,6 +179587,12 @@
               "code": "alphabet = 'АДРУ'\nword = 'РУДАР'\ndigits = ''.join(str(alphabet.index(c)) for c in word)\nprint(int(digits, 4) + 1)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `723`"
+            }
           }
         ],
         "skills": [],
@@ -179354,7 +179600,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 40,
+            "position": 41,
             "material_id": "word-enumeration"
           }
         ],
@@ -179420,7 +179666,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "ТТЫТЫ: алфавит К, О, Т, Ы; 699 = 22323₄."
+              "markdown": "По алфавиту буквы идут К, О, Т, Ы — цифры 0–3. 700 − 1 = 699 = 22323₄: цифры 2, 2, 3, 2, 3 — буквы Т, Т, Ы, Т, Ы."
             }
           },
           {
@@ -179430,6 +179676,12 @@
               "code": "alphabet = 'КОТЫ'\nn = 700 - 1\nword = ''\nfor _ in range(5):\n    word = alphabet[n % 4] + word\n    n //= 4\nprint(word)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `ТТЫТЫ`"
+            }
           }
         ],
         "skills": [],
@@ -179437,7 +179689,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 41,
+            "position": 38,
             "material_id": "word-enumeration"
           }
         ],
@@ -179503,7 +179755,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "244: по алфавиту А < Й < М, поэтому Й → 1, а перед словами на Й стоят все 3⁵ = 243 слова на А."
+              "markdown": "По алфавиту А < Й < М, поэтому перед словами на Й стоят все 3⁵ = 243 слова на А. Первое слово на Й — номер 244."
             }
           },
           {
@@ -179512,6 +179764,12 @@
               "language": "python",
               "code": "print(3 ** 5 + 1)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `244`"
             }
           }
         ],
@@ -179527,7 +179785,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "obshchee-nachalo",
+            "section": "poryadok-alfavita",
             "material_id": "word-enumeration"
           }
         ],
@@ -179586,7 +179844,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "12: последняя буква `Б` или `Г`; место `А` — одно из первых двух; оставшаяся буква — одна из трёх: 2 · 2 · 3."
+              "markdown": "Алфавит из четырёх букв, номер чётный, когда последняя буква — `Б` или `Г` (цифры 1 и 3). `А` стоит на одном из первых двух мест, оставшееся место — одна из трёх букв: 2 · 2 · 3 = 12."
             }
           },
           {
@@ -179595,6 +179853,12 @@
               "language": "python",
               "code": "from itertools import product\n\ncount = 0\nfor number, letters in enumerate(\n        product('АБВГ', repeat=3), start=1):\n    word = ''.join(letters)\n    if number % 2 == 0 and word.count('А') == 1:\n        count += 1\nprint(count)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `12`"
             }
           }
         ],
@@ -179610,7 +179874,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "chetnost-nomera",
+            "section": "nomer-i-kolichestvo",
             "material_id": "word-enumeration"
           }
         ],
@@ -179669,7 +179933,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "41: это `ББББ` → 1111₃ = 40."
+              "markdown": "Первое слово без `А` — `ББББ` ↔ 1111₃ = 40, его номер 41."
             }
           },
           {
@@ -179679,6 +179943,12 @@
               "code": "from itertools import product\n\nfor number, letters in enumerate(\n        product('АБВ', repeat=4), start=1):\n    word = ''.join(letters)\n    if 'А' not in word:\n        print(number)\n        break",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `41`"
+            }
           }
         ],
         "skills": [],
@@ -179686,7 +179956,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 44,
+            "position": 46,
             "material_id": "word-enumeration"
           }
         ],
@@ -179744,7 +180014,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Последнее — запоминая каждый новый подходящий номер."
+              "markdown": "Последнее — запоминай каждый новый подходящий номер."
             }
           }
         ],
@@ -179752,7 +180022,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "77: это `ВВББ` → 2211₃ = 76."
+              "markdown": "Последнее слово с ровно двумя `В` — `ВВББ` ↔ 2211₃ = 76, номер 77."
             }
           },
           {
@@ -179762,6 +180032,12 @@
               "code": "from itertools import product\n\nlast = None\nfor number, letters in enumerate(\n        product('АБВ', repeat=4), start=1):\n    word = ''.join(letters)\n    if word.count('В') == 2:\n        last = number\nprint(last)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `77`"
+            }
           }
         ],
         "skills": [],
@@ -179769,7 +180045,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 45,
+            "position": 47,
             "material_id": "word-enumeration"
           }
         ],
@@ -179835,7 +180111,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "16: основание 3 нечётное, номер нечётный, когда сумма цифр чётна, то есть букв `Б` (цифра 1) чётное число — ноль или две. Место `А` — 4 способа, буквы `Б` и `В` на трёх местах — 1 + 3 способа: 4 · 4."
+              "markdown": "Основание 3 нечётное: номер нечётный, когда сумма цифр чётна, то есть букв `Б` чётное число — ноль или две. Место `А` — 4 способа; три другие буквы — все `В` (1 способ) или ровно две `Б` (3 способа): 4 · (1 + 3) = 16."
             }
           },
           {
@@ -179845,6 +180121,12 @@
               "code": "from itertools import product\n\ncount = 0\nfor number, letters in enumerate(\n        product('АБВ', repeat=4), start=1):\n    word = ''.join(letters)\n    if number % 2 == 1 and word.count('А') == 1:\n        count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `16`"
+            }
           }
         ],
         "skills": [],
@@ -179852,14 +180134,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 46,
+            "position": 44,
             "material_id": "word-enumeration"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "chetnost-nomera",
+            "section": "nomer-i-kolichestvo",
             "material_id": "word-enumeration"
           }
         ],
@@ -179918,7 +180200,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "9: в новом списке перед ним только слова на `А` без одинаковых соседей, их 2 · 2 · 2 = 8."
+              "markdown": "В новом списке перед `БАБА` стоят только слова на `А` без одинаковых соседей: 2 · 2 · 2 = 8. Поэтому её новый номер 9."
             }
           },
           {
@@ -179928,6 +180210,12 @@
               "code": "from itertools import product\n\nnumber = 0\nfor letters in product('АБВ', repeat=4):\n    word = ''.join(letters)\n    if any(word[i] == word[i + 1] for i in range(3)):\n        continue\n    number += 1\n    if word == 'БАБА':\n        print(number)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `9`"
+            }
           }
         ],
         "skills": [],
@@ -179935,14 +180223,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 47,
+            "position": 50,
             "material_id": "word-enumeration"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "ne-sokrashchat",
+            "section": "polnyj-spisok",
             "material_id": "word-enumeration"
           }
         ],
@@ -180001,7 +180289,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "3113: алфавит А, К, О, Р, Т; перебор с проверками `number % 2 == 1`, `word[0] != 'А'` и `word.count('О') == 2`, ответ — последнее найденное."
+              "markdown": "Алфавит по порядку — А, К, О, Р, Т. Программа перебирает пронумерованный список, проверяет нечётность номера, первую букву и две О и запоминает последний подходящий номер — 3113."
             }
           },
           {
@@ -180010,6 +180298,12 @@
               "language": "python",
               "code": "from itertools import product\n\nlast = None\nfor number, letters in enumerate(\n        product('АКОРТ', repeat=5), start=1):\n    word = ''.join(letters)\n    if (\n            number % 2 == 1\n            and word[0] != 'А'\n            and word.count('О') == 2\n        ):\n        last = number\nprint(last)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3113`"
             }
           }
         ],
@@ -180025,7 +180319,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "odin-cikl",
+            "section": "pervoe-i-poslednee",
             "material_id": "word-enumeration"
           }
         ],
@@ -180068,7 +180362,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Все 6-буквенные слова, составленные из букв С, И, Н, Е, Л, записаны в алфавитном порядке и пронумерованы. Определите количество слов с чётными номерами, которые содержат не менее двух букв Е и не содержат двух букв Н, стоящих рядом."
+              "markdown": "Все 6-буквенные слова, составленные из букв С, И, Н, Е, Л, записаны в алфавитном порядке и пронумерованы. Определи количество слов с чётными номерами, которые содержат не менее двух букв Е и не содержат двух букв Н, стоящих рядом."
             }
           }
         ],
@@ -180084,7 +180378,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "2440: алфавит Е, И, Л, Н, С; номер и счётчик хранятся раздельно."
+              "markdown": "Алфавит по порядку — Е, И, Л, Н, С. Программа хранит номер и счётчик раздельно: номер растёт на каждом слове, счётчик — на словах с чётным номером, не менее чем двумя Е и без НН. Получается 2440."
             }
           },
           {
@@ -180094,6 +180388,12 @@
               "code": "from itertools import product\n\ncount = 0\nfor number, letters in enumerate(\n        product('ЕИЛНС', repeat=6), start=1):\n    word = ''.join(letters)\n    if (\n            number % 2 == 0\n            and word.count('Е') >= 2\n            and 'НН' not in word\n        ):\n        count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2440`"
+            }
           }
         ],
         "skills": [],
@@ -180101,14 +180401,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 49,
+            "position": 45,
             "material_id": "word-enumeration"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "odin-cikl",
+            "section": "nomer-i-kolichestvo",
             "material_id": "word-enumeration"
           }
         ],
@@ -180167,7 +180467,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1294: алфавит А, Е, К, Л, М; первое найденное — с `break`."
+              "markdown": "Алфавит по порядку — А, Е, К, Л, М. Программа останавливается на первом слове с чётным номером, которое не начинается с А или Е и содержит не менее двух Л, — номер 1294."
             }
           },
           {
@@ -180177,6 +180477,12 @@
               "code": "from itertools import product\n\nfor number, letters in enumerate(\n        product('АЕКЛМ', repeat=5), start=1):\n    word = ''.join(letters)\n    if (\n            number % 2 == 0\n            and word[0] not in 'АЕ'\n            and word.count('Л') >= 2\n        ):\n        print(number)\n        break",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1294`"
+            }
           }
         ],
         "skills": [],
@@ -180184,14 +180490,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 50,
+            "position": 49,
             "material_id": "word-enumeration"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "odin-cikl",
+            "section": "pervoe-i-poslednee",
             "material_id": "word-enumeration"
           }
         ],
@@ -180250,7 +180556,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "3105: для длины 6 a = 648, b = 3 · (171 + 648) = 2457."
+              "markdown": "По состояниям: для длины 5 на А кончается 171 слово, на другую букву — 648. Для длины 6 на А — 648, на другую букву — 3 · (171 + 648) = 2457. Всего 648 + 2457 = 3105."
             }
           },
           {
@@ -180259,6 +180565,12 @@
               "language": "python",
               "code": "end_a = 1\nend_other = 3\nfor length in range(2, 7):\n    new_a = end_other\n    new_other = 3 * (end_a + end_other)\n    end_a = new_a\n    end_other = new_other\nprint(end_a + end_other)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3105`"
             }
           }
         ],
@@ -180334,7 +180646,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "13397386067968: те же два состояния, но букв, кроме `Б`, две, b_новое = 2 · (a + b)."
+              "markdown": "Те же два состояния, но букв, кроме `Б`, две: на Б — прежнее «не на Б», на другую букву — 2 · (a + b). Двадцать девять шагов дают 13 397 386 067 968."
             }
           },
           {
@@ -180343,6 +180655,12 @@
               "language": "python",
               "code": "end_b = 1\nend_other = 2\nfor length in range(2, 31):\n    new_b = end_other\n    new_other = 2 * (end_b + end_other)\n    end_b = new_b\n    end_other = new_other\nprint(end_b + end_other)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `13397386067968`"
             }
           }
         ],
@@ -180433,22 +180751,10 @@
         "skills": [],
         "exam_numbers": [8],
         "files": [],
-        "lessons": [
-          {
-            "position": 53,
-            "material_id": "word-enumeration",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "strogij-poryadok",
-            "material_id": "word-enumeration"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -180502,7 +180808,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "423324672: состояния «на 0» и «не на 0», первая цифра не ноль: a = 0, b = 2."
+              "markdown": "Состояния — запись кончается на 0 или нет. Первая цифра не ноль, поэтому для длины 1 «на 0» — 0, «не на 0» — 2. Дальше на 0 — прежнее «не на 0», не на 0 — 2 · (a + b). Для длины 20 получается 423 324 672."
             }
           },
           {
@@ -180512,6 +180818,12 @@
               "code": "end_0 = 0\nend_other = 2\nfor length in range(2, 21):\n    new_0 = end_other\n    new_other = 2 * (end_0 + end_other)\n    end_0 = new_0\n    end_other = new_other\nprint(end_0 + end_other)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `423324672`"
+            }
           }
         ],
         "skills": [],
@@ -180519,7 +180831,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 54,
+            "position": 53,
             "material_id": "word-enumeration",
             "counts_toward_mastery": false
           }
@@ -180601,22 +180913,10 @@
         "skills": [],
         "exam_numbers": [8],
         "files": [],
-        "lessons": [
-          {
-            "position": 55,
-            "material_id": "word-enumeration",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "do-granicy",
-            "material_id": "word-enumeration"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -180670,7 +180970,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "106086400: схемы типов «ч» и «н»; чётная на первом месте — 4 варианта (2, 4, 6, 8), на остальных — 5, нечётная — 4."
+              "markdown": "Перебираем схемы «ч» и «н» с ровно тремя «ч», никакие две из которых не стоят рядом. Чётная цифра на первом месте — 4 варианта (не 0), на остальных — 5, нечётная — 4. Сумма по схемам — 106 086 400."
             }
           },
           {
@@ -180680,6 +180980,12 @@
               "code": "from itertools import product\n\ntotal = 0\nfor types in product('чн', repeat=10):\n    scheme = ''.join(types)\n    if scheme.count('ч') != 3 or 'чч' in scheme:\n        continue\n    ways = 1\n    for i, kind in enumerate(scheme):\n        if kind == 'н':\n            ways *= 4\n        elif i == 0:\n            ways *= 4\n        else:\n            ways *= 5\n    total += ways\nprint(total)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `106086400`"
+            }
           }
         ],
         "skills": [],
@@ -180687,7 +180993,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 56,
+            "position": 54,
             "material_id": "word-enumeration",
             "counts_toward_mastery": false
           }
@@ -180754,7 +181060,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "2326478112: типы — ноль, цифра-буква (5), остальные ненулевые (9); нули не на первом месте."
+              "markdown": "Типы цифр — ноль, цифра-буква A–E (5 вариантов) и остальные ненулевые (9 вариантов). Перебираем схемы из девяти типов с двумя нулями не на первом месте и не более чем тремя буквами, каждую считаем умножением: 2 326 478 112."
             }
           },
           {
@@ -180764,6 +181070,12 @@
               "code": "from itertools import product\n\ntotal = 0\nfor types in product('0bd', repeat=9):\n    scheme = ''.join(types)\n    if scheme[0] == '0' or scheme.count('0') != 2:\n        continue\n    if scheme.count('b') > 3:\n        continue\n    total += 5 ** scheme.count('b') * 9 ** scheme.count('d')\nprint(total)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2326478112`"
+            }
           }
         ],
         "skills": [],
@@ -180771,7 +181083,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 57,
+            "position": 55,
             "material_id": "word-enumeration",
             "counts_toward_mastery": false
           }
@@ -180822,7 +181134,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Лена составляет 6-буквенные коды из букв Ф, И, Л, Ь, М. Каждую букву можно использовать любое количество раз, при этом код не может начинаться с буквы Ь, а буква Ф должна встретиться ровно один раз. Сколько различных кодов может составить Лена? (Подтемы 1 и 2: разбор по первой букве.)"
+              "markdown": "Лена составляет 6-буквенные коды из букв Ф, И, Л, Ь, М. Каждую букву можно использовать любое количество раз, при этом код не может начинаться с буквы Ь, а буква Ф должна встретиться ровно один раз. Сколько различных кодов может составить Лена?"
             }
           }
         ],
@@ -180830,7 +181142,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Разберите случаи по первой букве."
+              "markdown": "Разбери случаи по первой букве."
             }
           }
         ],
@@ -180838,7 +181150,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "4864: если первая Ф, остальные пять мест — из четырёх других букв, 4⁵ = 1024; если первая И, Л или М — место Ф одно из пяти, остальные четыре из четырёх букв, 3 · 5 · 4⁴ = 3840."
+              "markdown": "Если первая буква Ф, остальные пять мест — из четырёх других букв: 4⁵ = 1024. Если первая — И, Л или М, Ф стоит на одном из пяти мест, остальные четыре — из четырёх букв без Ф: 3 · 5 · 4⁴ = 3840. Всего 4864."
             }
           },
           {
@@ -180848,6 +181160,12 @@
               "code": "from itertools import product\n\ncount = 0\nfor letters in product('ФИЛЬМ', repeat=6):\n    word = ''.join(letters)\n    if word[0] != 'Ь' and word.count('Ф') == 1:\n        count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4864`"
+            }
           }
         ],
         "skills": [],
@@ -180855,7 +181173,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 58,
+            "position": 56,
             "material_id": "word-enumeration"
           }
         ],
@@ -180899,7 +181217,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько существует девятеричных пятизначных чисел, все цифры которых различны и никакие две чётные или две нечётные цифры не стоят рядом? (Подтемы 3 и 4: схема чередования и ноль.)"
+              "markdown": "Сколько существует девятеричных пятизначных чисел, все цифры которых различны и никакие две чётные или две нечётные цифры не стоят рядом?"
             }
           }
         ],
@@ -180915,7 +181233,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1056: схема «ч н ч н ч» — 4 · 4 · 4 · 3 · 3 = 576 (первая чётная не ноль), схема «н ч н ч н» — 4 · 5 · 3 · 4 · 2 = 480."
+              "markdown": "Чётных цифр пять (0, 2, 4, 6, 8), нечётных четыре. Схема «ч н ч н ч»: первая чётная не ноль — 4 варианта, дальше 4, 4, 3, 3: 4 · 4 · 4 · 3 · 3 = 576. Схема «н ч н ч н»: 4 · 5 · 3 · 4 · 2 = 480. Всего 1056."
             }
           },
           {
@@ -180925,6 +181243,12 @@
               "code": "from itertools import product\n\ncount = 0\nfor d in product(range(9), repeat=5):\n    if (\n            d[0] != 0\n            and len(set(d)) == 5\n            and all(d[i] % 2 != d[i + 1] % 2 for i in range(4))\n        ):\n        count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1056`"
+            }
           }
         ],
         "skills": [],
@@ -180932,7 +181256,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 59,
+            "position": 57,
             "material_id": "word-enumeration"
           }
         ],
@@ -180976,7 +181300,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько существует 11-ричных шестизначных чисел, в записи которых ровно одна цифра A и не более двух цифр с числовым значением меньше 3? (Подтема 4: цифры как значения.)"
+              "markdown": "Сколько существует 11-ричных шестизначных чисел, в записи которых ровно одна цифра A и не более двух цифр с числовым значением меньше 3?"
             }
           }
         ],
@@ -180992,7 +181316,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "469567: перебор 10 · 11⁵ чисел, цифра A — значение 10, «меньше 3» — `d < 3`."
+              "markdown": "Программа перебирает шестизначные 11-ричные числа: цифра A — значение 10, «меньше 3» — `d < 3`; подходит 469 567 чисел."
             }
           },
           {
@@ -181002,6 +181326,12 @@
               "code": "from itertools import product\n\ncount = 0\nfor d in product(range(11), repeat=6):\n    if (\n            d[0] != 0\n            and d.count(10) == 1\n            and sum(x < 3 for x in d) <= 2\n        ):\n        count += 1\nprint(count)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `469567`"
+            }
           }
         ],
         "skills": [],
@@ -181009,7 +181339,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 60,
+            "position": 58,
             "material_id": "word-enumeration"
           }
         ],
@@ -181053,7 +181383,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Все 5-буквенные слова, составленные из букв Ш, А, Р, Ф, записаны в алфавитном порядке и пронумерованы, начиная с 1. Какое слово стоит под номером 444? (Подтема 5: алфавит по порядку.)"
+              "markdown": "Все 5-буквенные слова, составленные из букв Ш, А, Р, Ф, записаны в алфавитном порядке и пронумерованы, начиная с 1. Какое слово стоит под номером 444?"
             }
           }
         ],
@@ -181069,7 +181399,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "РФШФШ: алфавит А, Р, Ф, Ш; 443 = 12323₄."
+              "markdown": "По алфавиту буквы идут А, Р, Ф, Ш — цифры 0–3. 444 − 1 = 443 = 12323₄: цифры 1, 2, 3, 2, 3 — буквы Р, Ф, Ш, Ф, Ш."
             }
           },
           {
@@ -181079,6 +181409,12 @@
               "code": "alphabet = 'АРФШ'\nn = 444 - 1\nword = ''\nfor _ in range(5):\n    word = alphabet[n % 4] + word\n    n //= 4\nprint(word)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `РФШФШ`"
+            }
           }
         ],
         "skills": [],
@@ -181086,7 +181422,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 61,
+            "position": 59,
             "material_id": "word-enumeration"
           }
         ],
@@ -181130,7 +181466,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Все 6-буквенные слова, составленные из букв П, О, Л, Е, Т, записаны в алфавитном порядке и пронумерованы, начиная с 1. Под каким номером стоит последнее слово с чётным номером, которое не начинается с буквы О, содержит ровно две буквы Л и не содержит двух букв Е, стоящих рядом? (Подтема 6: номер и условия раздельно.)"
+              "markdown": "Все 6-буквенные слова, составленные из букв П, О, Л, Е, Т, записаны в алфавитном порядке и пронумерованы, начиная с 1. Под каким номером стоит последнее слово с чётным номером, которое не начинается с буквы О, содержит ровно две буквы Л и не содержит двух букв Е, стоящих рядом?"
             }
           }
         ],
@@ -181146,7 +181482,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "15582: алфавит Е, Л, О, П, Т; последнее подходящее — `ТТТПЛЛ`."
+              "markdown": "Алфавит по порядку — Е, Л, О, П, Т. Программа запоминает последнее слово с чётным номером, которое не начинается с О, содержит ровно две Л и не содержит двух Е подряд, — `ТТТПЛЛ` с номером 15582."
             }
           },
           {
@@ -181156,6 +181492,12 @@
               "code": "from itertools import product\n\nlast = None\nfor number, letters in enumerate(\n        product('ЕЛОПТ', repeat=6), start=1):\n    word = ''.join(letters)\n    if (\n            number % 2 == 0\n            and word[0] != 'О'\n            and word.count('Л') == 2\n            and 'ЕЕ' not in word\n        ):\n        last = number\nprint(last)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `15582`"
+            }
           }
         ],
         "skills": [],
@@ -181163,7 +181505,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 62,
+            "position": 60,
             "material_id": "word-enumeration"
           }
         ],
@@ -832703,79 +833045,43 @@
       "id": "word-enumeration",
       "sections": [
         "kak-ustroena-tema-8",
-        "slovo",
         "alfavit-i-zapas",
         "umnozhenie",
-        "ogranicheniya-mest",
-        "raznye-nabory",
         "slozhenie",
         "bez-povtorenij",
         "perebor-product",
-        "schyotchik",
-        "permutations",
-        "ocenka-perebora",
         "slova-itogo",
         "vybor-mest",
-        "mesta-bez-poryadka",
-        "ostalnye-pozicii",
-        "neskolko-glasnyh",
-        "hotya-by-ne-bolee",
-        "dopolnenie",
-        "peresecheniya",
         "razbor-sluchaev",
+        "hotya-by-ne-bolee",
         "programma-frazy",
-        "glasnye-ciklom",
         "odinakovye-bukvy",
         "bukva-itogo",
-        "sosedi-i-umnozhenie",
         "sosednie-pozicii",
+        "promezhutki",
         "proverka-sosedej",
         "odinakovye-sosedi",
-        "promezhutki",
-        "podstroka",
-        "glasnye-ne-ryadom",
         "blok",
         "chereduyutsya",
-        "nalozheniya",
         "sosedi-itogo",
         "chislo-kak-slovo",
-        "nachalnyj-nol",
         "cifry-chislami",
         "bez-povtora-cifr",
         "vozrastanie",
         "chetnost",
         "ryadom-s-5",
-        "chetnost-chereduetsya",
-        "dlina-ne-zadana",
         "chisla-itogo",
         "spisok-kak-schyotchik",
-        "sravnenie-slov",
-        "schyotchik-sistemy",
-        "plyus-odin",
-        "nomer-slova",
-        "nomer-programmoj",
+        "nomer-slova-v-spiske",
         "slovo-po-nomeru",
-        "nachalnye-nuli",
-        "obshchee-nachalo",
-        "mezhdu-nomerami",
         "poryadok-alfavita",
-        "raznaya-dlina",
-        "nomer-itogo",
         "nomer-i-kolichestvo",
         "pervoe-i-poslednee",
-        "razdelnye-schyotchiki",
-        "ostanovka",
         "polnyj-spisok",
-        "chetnost-nomera",
-        "odin-cikl",
-        "ne-sokrashchat",
-        "poisk-itogo",
-        "dopolnitelnyy-urok-perebor",
+        "nomer-itogo",
         "dlina-20",
         "sostoyaniya",
         "shemy-tipov",
-        "strogij-poryadok",
-        "do-granicy",
         "perebor-itogo"
       ],
       "kind": "topic",
@@ -832787,17 +833093,11 @@
           "access": "free",
           "sections": [
             "kak-ustroena-tema-8",
-            "slovo",
             "alfavit-i-zapas",
             "umnozhenie",
-            "ogranicheniya-mest",
-            "raznye-nabory",
             "slozhenie",
             "bez-povtorenij",
             "perebor-product",
-            "schyotchik",
-            "permutations",
-            "ocenka-perebora",
             "slova-itogo"
           ]
         },
@@ -832806,15 +833106,9 @@
           "access": "free",
           "sections": [
             "vybor-mest",
-            "mesta-bez-poryadka",
-            "ostalnye-pozicii",
-            "neskolko-glasnyh",
-            "hotya-by-ne-bolee",
-            "dopolnenie",
-            "peresecheniya",
             "razbor-sluchaev",
+            "hotya-by-ne-bolee",
             "programma-frazy",
-            "glasnye-ciklom",
             "odinakovye-bukvy",
             "bukva-itogo"
           ]
@@ -832823,16 +833117,12 @@
           "slug": "sosednie-bukvy",
           "access": "free",
           "sections": [
-            "sosedi-i-umnozhenie",
             "sosednie-pozicii",
+            "promezhutki",
             "proverka-sosedej",
             "odinakovye-sosedi",
-            "promezhutki",
-            "podstroka",
-            "glasnye-ne-ryadom",
             "blok",
             "chereduyutsya",
-            "nalozheniya",
             "sosedi-itogo"
           ]
         },
@@ -832841,14 +833131,11 @@
           "access": "free",
           "sections": [
             "chislo-kak-slovo",
-            "nachalnyj-nol",
             "cifry-chislami",
             "bez-povtora-cifr",
             "vozrastanie",
             "chetnost",
             "ryadom-s-5",
-            "chetnost-chereduetsya",
-            "dlina-ne-zadana",
             "chisla-itogo"
           ]
         },
@@ -832857,45 +833144,22 @@
           "access": "free",
           "sections": [
             "spisok-kak-schyotchik",
-            "sravnenie-slov",
-            "schyotchik-sistemy",
-            "plyus-odin",
-            "nomer-slova",
-            "nomer-programmoj",
+            "nomer-slova-v-spiske",
             "slovo-po-nomeru",
-            "nachalnye-nuli",
-            "obshchee-nachalo",
-            "mezhdu-nomerami",
             "poryadok-alfavita",
-            "raznaya-dlina",
-            "nomer-itogo"
-          ]
-        },
-        {
-          "slug": "poisk-v-spiske",
-          "access": "free",
-          "sections": [
             "nomer-i-kolichestvo",
             "pervoe-i-poslednee",
-            "razdelnye-schyotchiki",
-            "ostanovka",
             "polnyj-spisok",
-            "chetnost-nomera",
-            "odin-cikl",
-            "ne-sokrashchat",
-            "poisk-itogo"
+            "nomer-itogo"
           ]
         },
         {
           "slug": "kogda-perebor-ne-uspevaet",
           "access": "free",
           "sections": [
-            "dopolnitelnyy-urok-perebor",
             "dlina-20",
             "sostoyaniya",
             "shemy-tipov",
-            "strogij-poryadok",
-            "do-granicy",
             "perebor-itogo"
           ]
         }

@@ -86,7 +86,7 @@ function compiles(code: string): boolean {
 }
 
 describe("task 8 word enumeration lesson (Change 184)", () => {
-  it("has six core subtopics, one advanced and their self-checks", () => {
+  it("has five core subtopics, one advanced and their self-checks", () => {
     expect(lesson).toMatchObject({
       id: "word-enumeration",
       routeSlug: "8-perebor-slov",
@@ -102,11 +102,10 @@ describe("task 8 word enumeration lesson (Change 184)", () => {
       ["sosednie-bukvy", "core"],
       ["zapis-chisla", "core"],
       ["nomer-slova", "core"],
-      ["poisk-v-spiske", "core"],
       ["kogda-perebor-ne-uspevaet", "advanced"],
     ]);
     expect(subtopics.map(({ checkpoint }) => checkpoint?.length ?? 0)).toEqual([
-      1, 1, 2, 1, 0, 0, 0,
+      5, 5, 5, 5, 5, 4,
     ]);
     expect(lesson.examFocus).toBeDefined();
     expect(lesson.result).toBeDefined();
@@ -182,7 +181,7 @@ describe("task 8 word enumeration lesson (Change 184)", () => {
           prelude += piece.code + "\n";
       }
     }
-    expect(ran).toBe(39);
+    expect(ran).toBe(23);
   }, 60_000);
 
   it("keeps spaces around inline code, links and emphasis", () => {
@@ -213,7 +212,7 @@ describe("task 8 word enumeration lesson (Change 184)", () => {
     );
     expect(
       container.querySelectorAll("[data-python-term]").length,
-    ).toBeGreaterThanOrEqual(8);
+    ).toBeGreaterThanOrEqual(6);
     expect(container.querySelectorAll("aside, [role='note']")).toHaveLength(0);
   });
 });
