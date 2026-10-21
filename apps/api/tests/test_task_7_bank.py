@@ -56,11 +56,8 @@ def answers() -> dict[str, str]:
     a["task-7-1-01"] = str(bits(600))
     a["task-7-1-02"] = num(F(5, 2) * MB)
     a["task-7-1-03"] = num(F(2**20, KB))
-    a["task-7-1-04"] = f"{3 * KB} {6000 // 8}"
-    a["task-7-1-05"] = f"{1 << 12} {bits(4097)}"
-    a["task-7-1-06"] = num(F(1500 * bits(33), 8))
-    a["task-7-1-07"] = num(F(32 * 50 * 64 * 2 * 8, KB))
-    a["task-7-1-08"] = num(F(4096 * bits(200), KB))
+    a["task-7-1-04"] = str(3 * KB)
+    a["task-7-1-05"] = str(bits(4097))
     a["task-7-1-09"] = str(bits(100_000))
     # subtopic 2
     a["task-7-2-01"] = num(F(256 * 128 * bits(200), KB))
@@ -73,11 +70,11 @@ def answers() -> dict[str, str]:
     a["task-7-2-09"] = num(36 * F(200, 400) ** 2 * F(bits(65_536), 24))
     # subtopic 3
     a["task-7-3-01"] = num(40 * F(85, 100))
-    a["task-7-3-02"] = f"{num(F(80 - 20, 80) * 100)} {num(F(80, 20))}"
+    a["task-7-3-02"] = num(F(80 - 20, 80) * 100)
     a["task-7-3-03"] = num(28 / F(70, 100))
     a["task-7-3-04"] = num(100 - 100 * F(80, 100) * F(50, 100))
-    a["task-7-3-05"] = f"{num(F(300, 3) + 24)} {num(F(300 + 24, 3))}"
-    a["task-7-3-06"] = f"{10 * (96 + 8)} {10 * 96 + 8}"
+    a["task-7-3-05"] = num(F(300 + 24, 3))
+    a["task-7-3-06"] = str(10 * (96 + 8))
     a["task-7-3-07"] = str(1 << floor(F(576 * KB) / (F(60, 100) * 1024 * 768)))
     per = F(20 * 1024, 64)
     a["task-7-3-08"] = str(1 << floor((per - 32) / F(75, 100) * KB / (1024 * 512)))
@@ -87,7 +84,7 @@ def answers() -> dict[str, str]:
     a["task-7-4-01"] = num(F(16_000 * 10 * 2 * 16, KB))
     a["task-7-4-02"] = num(F(48_000 * 20 * 24, KB))
     a["task-7-4-03"] = num(F(3750 * KB, 32_000 * 2 * 16))
-    a["task-7-4-04"] = f"{3 * 60 + 45} {num(F(5, 2) * 60)}"
+    a["task-7-4-04"] = str(3 * 60 + 45)
     a["task-7-4-05"] = num(10 * F(2) * 2 * F(1, 2) * F(1, 2))
     a["task-7-4-06"] = num(60 * F(2, 4) * 2 / F(3, 2))
     a["task-7-4-07"] = num(F(80, 100) / (F(1, 2) * 2 * F(25, 100)))
@@ -107,29 +104,16 @@ def answers() -> dict[str, str]:
     a["task-7-5-09"] = str(floor(F(1920 * 1080 * bits(5000) * 250, 25_000_000) / 60))
     total = 44_100 * 2 * 24 * 2400 + 12 * 200 * KB
     a["task-7-5-10"] = str(floor(F(total, 100_000_000)))
-    # subtopic 6
+    # rounding by the question
     a["task-7-6-01"] = str(floor(F(1024, 90)))
     a["task-7-6-02"] = str(next(h for h in range(100) if F(400 + 5 * h, 50) > 10))
-    x = F(12346, 10)
-    a["task-7-6-03"] = f"{ceil(x)} {floor(x)} {round(x)}"
-    a["task-7-6-05"] = str(12 * ceil(F(7 * 5, 8)))
-    per = 700 // 64
-    a["task-7-6-06"] = f"{per} {ceil(F(50, per))}"
+    a["task-7-6-03"] = str(ceil(F(12346, 10)))
+    a["task-7-6-06"] = str(ceil(F(50, 700 // 64)))
     sound = 32_000 * 4 * 20 * 1800
     a["task-7-6-07"] = str(floor(F(16 * 300_000_000 - sound, 16 * KB)) + 1)
     shot = F(3000 * 2000 * bits(10_000_000), 8)
     per = floor(F(32 * 2**30) / shot)
     a["task-7-6-08"] = str((ceil(F(5000, per)) - 1) * per)
-    # subtopic 7
-    a["task-7-7-01"] = num(F(25, 25 + 75 * 3) * 100)
-    a["task-7-7-02"] = num(9 - F(33 - 9, 3))
-    a["task-7-7-03"] = num(16 - F(70 - 16, 9))
-    a["task-7-7-04"] = num(F(20, 20 + F(80, 4)) * 100)
-    a["task-7-7-05"] = num(F(1024, 2) * 60 * 16_000 * 16 / MB)
-    scan = 60 * F(4) * F(25, 100) / F(50, 100)
-    a["task-7-7-06"] = num(F(40) / (40 + scan) * 100)
-    seconds = F(2048, 4) * 60
-    a["task-7-7-07"] = str(floor(16_000 * 2 * 16 * seconds / MB * F(20, 100) / 15))
     # Практика и итог
     a["task-7-8-01"] = str(1 << floor(F(900 * KB, 1280 * 720)))
     per = F(32 * 1024, 128)
@@ -152,14 +136,13 @@ def _solution(task: TaskData) -> str:
 def test_every_answer_matches_independent_recomputation(answers: dict[str, str]) -> None:
     tasks = _entries()
     assert sorted(tasks) == sorted(answers)
-    assert sorted(t.lessons[0].position for t in tasks.values()) == list(range(65))
+    assert sorted(t.lessons[0].position for t in tasks.values()) == list(range(54))
     for task_id, task in tasks.items():
         assert task.checker.answer_variants[0] == answers[task_id], task_id
         assert task.exam_numbers == [7] and not task.catalog_visible and not task.archived
         on_final_page = task_id.startswith("task-7-8-")
         assert bool(task.theory_links) != on_final_page, task_id
-        advanced = task_id.startswith("task-7-7-")
-        assert task.lessons[0].counts_toward_mastery == (not advanced), task_id
+        assert task.lessons[0].counts_toward_mastery, task_id
 
 
 def test_checker_accepts_a_decimal_comma_and_rejects_a_neighbour(

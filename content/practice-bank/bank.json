@@ -170433,7 +170433,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Нужно закодировать 600 цветов кодами одинаковой длины. Сколько битов нужно на код? Почему нельзя взять девять?"
+              "markdown": "Нужно закодировать 600 цветов кодами одинаковой длины. Сколько битов нужно на код одного цвета?"
             }
           }
         ],
@@ -170449,7 +170449,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "10 бит: 2⁹ = 512 < 600 ≤ 1024 = 2¹⁰. Девяти битов хватает только на 512 разных кодов."
+              "markdown": "Девяти битов хватает только на 2⁹ = 512 кодов — меньше 600. Десять битов дают 2¹⁰ = 1024 кода, этого достаточно."
             }
           },
           {
@@ -170459,6 +170459,12 @@
               "code": "i = 1\nwhile 2 ** i < 600:\n    i += 1\nprint(i)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `10`"
+            }
           }
         ],
         "skills": [],
@@ -170466,7 +170472,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 0,
+            "position": 3,
             "material_id": "media-coding"
           }
         ],
@@ -170532,7 +170538,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "20 971 520 бит: 2,5 · 1024² · 8."
+              "markdown": "В Мбайте 1024 Кбайт, в Кбайте 1024 байта, в байте 8 бит: 2,5 · 1024 · 1024 · 8 = 20 971 520 бит."
             }
           },
           {
@@ -170542,6 +170548,12 @@
               "code": "print(int(2.5 * 1024 ** 2 * 8))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `20971520`"
+            }
           }
         ],
         "skills": [],
@@ -170549,14 +170561,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 1,
+            "position": 0,
             "material_id": "media-coding"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "bajt",
+            "section": "bit",
             "material_id": "media-coding"
           }
         ],
@@ -170615,7 +170627,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "128 Кбайт: 2²⁰ / 2¹³ = 2⁷."
+              "markdown": "В одном Кбайте 1024 · 8 = 2¹³ бит, поэтому 2²⁰ бит = 2²⁰ / 2¹³ = 2⁷ = 128 Кбайт."
             }
           },
           {
@@ -170624,6 +170636,12 @@
               "language": "python",
               "code": "print(2 ** 20 // 2 ** 13)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `128`"
             }
           }
         ],
@@ -170639,7 +170657,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "stepeni-dvojki",
+            "section": "bit",
             "material_id": "media-coding"
           }
         ],
@@ -170670,19 +170688,19 @@
     {
       "task": {
         "id": "task-7-1-04",
-        "title": "Биты и байты",
+        "title": "Биты в 3 Кбайт",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько битов в 3 Кбайт? Сколько байтов в 6000 бит?"
+              "markdown": "Сколько битов в 3 Кбайт?"
             }
           }
         ],
@@ -170690,7 +170708,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Из байтов в биты умножаем на 8, из битов в байты делим."
+              "markdown": "Из крупных единиц в мелкие умножают: Кбайт → байты → биты."
             }
           }
         ],
@@ -170698,15 +170716,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "24 576 бит и 750 байт: 3 · 8192 и 6000 / 8."
+              "markdown": "В Кбайте 1024 байта, в байте 8 бит: 3 · 1024 · 8 = 24 576 бит."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "print(3 * 1024 * 8, 6000 // 8)",
+              "code": "print(3 * 1024 * 8)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `24576`"
             }
           }
         ],
@@ -170715,14 +170739,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 3,
+            "position": 1,
             "material_id": "media-coding"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "bajt",
+            "section": "bit",
             "material_id": "media-coding"
           }
         ],
@@ -170744,7 +170768,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["24576 750"],
+          "answer_variants": ["24576"],
           "numeric_tolerance": null
         }
       },
@@ -170753,19 +170777,19 @@
     {
       "task": {
         "id": "task-7-1-05",
-        "title": "12 бит и 4097 цветов",
+        "title": "Код для 4097 цветов",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько различных цветов можно закодировать 12 битами? Какая наименьшая длина кода нужна для 4097 цветов?"
+              "markdown": "Какая наименьшая длина кода нужна, чтобы закодировать 4097 цветов кодами одинаковой длины?"
             }
           }
         ],
@@ -170773,7 +170797,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Каждый бит удваивает число кодов."
+              "markdown": "Двенадцать битов дают 2¹² = 4096 кодов."
             }
           }
         ],
@@ -170781,15 +170805,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "4096 цветов; для 4097 — 13 бит: 2¹² = 4096 < 4097."
+              "markdown": "Двенадцать битов дают 2¹² = 4096 кодов — на один меньше, чем нужно. Тринадцать битов дают 8192 кода, этого хватает."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "i = 1\nwhile 2 ** i < 4097:\n    i += 1\nprint(2 ** 12, i)",
+              "code": "i = 1\nwhile 2 ** i < 4097:\n    i += 1\nprint(i)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `13`"
             }
           }
         ],
@@ -170805,7 +170835,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "chislo-kodov",
+            "section": "dlina-koda",
             "material_id": "media-coding"
           }
         ],
@@ -170827,7 +170857,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["4096 13"],
+          "answer_variants": ["13"],
           "numeric_tolerance": null
         }
       },
@@ -170879,21 +170909,10 @@
         "skills": [],
         "exam_numbers": [7],
         "files": [],
-        "lessons": [
-          {
-            "position": 5,
-            "material_id": "media-coding"
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "obyom-teksta",
-            "material_id": "media-coding"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -170962,21 +170981,10 @@
         "skills": [],
         "exam_numbers": [7],
         "files": [],
-        "lessons": [
-          {
-            "position": 6,
-            "material_id": "media-coding"
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "obyom-dannyh",
-            "material_id": "media-coding"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -171045,21 +171053,10 @@
         "skills": [],
         "exam_numbers": [7],
         "files": [],
-        "lessons": [
-          {
-            "position": 7,
-            "material_id": "media-coding"
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "obyom-teksta",
-            "material_id": "media-coding"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -171105,7 +171102,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "2¹⁶ = 65 536 — мало."
+              "markdown": "2¹⁶ = 65 536 — это меньше 100 000."
             }
           }
         ],
@@ -171113,7 +171110,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "17 бит: 2¹⁶ = 65 536 < 100 000 ≤ 131 072 = 2¹⁷."
+              "markdown": "Шестнадцать битов дают 2¹⁶ = 65 536 кодов, этого мало. Семнадцать битов дают 2¹⁷ = 131 072 кода — хватает на 100 000 цветов."
             }
           },
           {
@@ -171123,6 +171120,12 @@
               "code": "i = 1\nwhile 2 ** i < 100_000:\n    i += 1\nprint(i)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `17`"
+            }
           }
         ],
         "skills": [],
@@ -171130,14 +171133,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 8,
+            "position": 5,
             "material_id": "media-coding"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "dlina-koda",
+            "section": "funkciya-bits",
             "material_id": "media-coding"
           }
         ],
@@ -171196,7 +171199,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "32 Кбайт: для 200 цветов нужно 8 бит, 256 · 128 · 8 / 8192."
+              "markdown": "Для 200 цветов нужно 8 бит: 2⁷ = 128 мало, 2⁸ = 256 хватает. Объём 256 · 128 · 8 бит, в Кбайтах 256 · 128 · 8 / 8192 = 32."
             }
           },
           {
@@ -171206,6 +171209,12 @@
               "code": "i = 1\nwhile 2 ** i < 200:\n    i += 1\nprint(256 * 128 * i // 8192)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `32`"
+            }
           }
         ],
         "skills": [],
@@ -171213,7 +171222,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 9,
+            "position": 6,
             "material_id": "media-coding"
           }
         ],
@@ -171279,7 +171288,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1024 цвета: i ≤ 80 · 8192 / 64 000 = 10,24, целая глубина 10, 2¹⁰ = 1024."
+              "markdown": "Доступно 80 · 8192 = 655 360 бит на 320 · 200 = 64 000 пикселей, то есть 10,24 бита на пиксель. Целая глубина — 10 бит, цветов 2¹⁰ = 1024."
             }
           },
           {
@@ -171289,6 +171298,12 @@
               "code": "i = 80 * 8192 // (320 * 200)\nprint(2 ** i)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1024`"
+            }
           }
         ],
         "skills": [],
@@ -171296,7 +171311,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 10,
+            "position": 9,
             "material_id": "media-coding"
           }
         ],
@@ -171362,7 +171377,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В 1,25 раза: было четыре бита на пиксель, стало пять. Количество цветов удвоилось, но длина кода выросла только на один бит."
+              "markdown": "Для 16 цветов нужно 4 бита на пиксель, для 32 — 5 бит. Цветов стало вдвое больше, а код вырос только на один бит, поэтому объём увеличился в 5 / 4 = 1,25 раза."
             }
           },
           {
@@ -171371,6 +171386,12 @@
               "language": "python",
               "code": "print(5 / 4)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1,25`"
             }
           }
         ],
@@ -171437,7 +171458,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Разрешение растёт по двум измерениям сразу."
+              "markdown": "При вдвое большем разрешении удваиваются обе стороны сетки пикселей."
             }
           }
         ],
@@ -171445,7 +171466,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "18 Мбайт: 8 · (300 / 200)² = 8 · 2,25."
+              "markdown": "Разрешение выросло в 300 / 200 = 1,5 раза по каждой стороне, поэтому пикселей стало в 1,5² = 2,25 раза больше. Объём 8 · 2,25 = 18 Мбайт."
             }
           },
           {
@@ -171454,6 +171475,12 @@
               "language": "python",
               "code": "print(int(8 * (300 / 200) ** 2))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `18`"
             }
           }
         ],
@@ -171528,7 +171555,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "2,25 Мбайт: 1024 · 768 · 24 бит = 18 874 368 бит, делим на 2²³."
+              "markdown": "Объём 1024 · 768 · 24 = 18 874 368 бит. В Мбайте 2²³ = 8 388 608 бит, поэтому изображение занимает 18 874 368 / 8 388 608 = 2,25 Мбайт."
             }
           },
           {
@@ -171538,6 +171565,12 @@
               "code": "print(1024 * 768 * 24 / 2 ** 23)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2,25`"
+            }
           }
         ],
         "skills": [],
@@ -171545,14 +171578,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 13,
+            "position": 7,
             "material_id": "media-coding"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "po-poryadku",
+            "section": "obyom-izobrazheniya",
             "material_id": "media-coding"
           }
         ],
@@ -171611,7 +171644,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "406,25 Кбайт: для 6000 цветов нужно 13 бит, 640 · 400 · 13 / 8192."
+              "markdown": "Для 6000 цветов нужно 13 бит: 2¹² = 4096 мало, 2¹³ = 8192 хватает. Объём 640 · 400 · 13 / 8192 = 406,25 Кбайт."
             }
           },
           {
@@ -171621,6 +171654,12 @@
               "code": "i = 1\nwhile 2 ** i < 6000:\n    i += 1\nprint(640 * 400 * i / 8192)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `406,25`"
+            }
           }
         ],
         "skills": [],
@@ -171628,14 +171667,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 14,
+            "position": 8,
             "material_id": "media-coding"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "glubina-cveta",
+            "section": "obyom-izobrazheniya",
             "material_id": "media-coding"
           }
         ],
@@ -171694,7 +171733,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "8 цветов: i ≤ 300 · 8192 / 750 000 = 3,27…, целая глубина 3."
+              "markdown": "Доступно 300 · 8192 = 2 457 600 бит на 750 000 пикселей — 3,27… бита на пиксель. Целая глубина 3 бита, цветов 2³ = 8."
             }
           },
           {
@@ -171704,6 +171743,12 @@
               "code": "i = 300 * 8192 // (1000 * 750)\nprint(2 ** i)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `8`"
+            }
           }
         ],
         "skills": [],
@@ -171711,7 +171756,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 15,
+            "position": 10,
             "material_id": "media-coding"
           }
         ],
@@ -171769,7 +171814,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Перемножьте множители разрешения и глубины."
+              "markdown": "Перемножь множители разрешения и глубины."
             }
           }
         ],
@@ -171777,7 +171822,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "6 Мбайт: 36 · (200 / 400)² · 16 / 24 = 36 · 1/4 · 2/3."
+              "markdown": "Разрешение уменьшилось вдвое по каждой стороне — пикселей стало в 4 раза меньше. Для 65 536 цветов нужно 16 бит вместо 24 — множитель 2/3. Новый объём 36 · 1/4 · 2/3 = 6 Мбайт."
             }
           },
           {
@@ -171787,6 +171832,12 @@
               "code": "print(int(36 * (200 / 400) ** 2 * 16 / 24))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `6`"
+            }
           }
         ],
         "skills": [],
@@ -171794,14 +171845,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 16,
+            "position": 13,
             "material_id": "media-coding"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "mnozhiteli",
+            "section": "razreshenie",
             "material_id": "media-coding"
           }
         ],
@@ -171860,7 +171911,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "34 Мбайт: осталось 85 %, 40 · 0,85."
+              "markdown": "После сжатия на 15 % остаётся 85 % объёма: 40 · 0,85 = 34 Мбайт."
             }
           },
           {
@@ -171869,6 +171920,12 @@
               "language": "python",
               "code": "print(40 * 85 // 100)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `34`"
             }
           }
         ],
@@ -171915,19 +171972,19 @@
     {
       "task": {
         "id": "task-7-3-02",
-        "title": "На сколько процентов и во сколько раз",
+        "title": "На сколько процентов уменьшился объём",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Объём файла уменьшился с 80 до 20 Мбайт. На сколько процентов и во сколько раз он уменьшился?"
+              "markdown": "Объём файла уменьшился с 80 до 20 Мбайт. На сколько процентов он уменьшился?"
             }
           }
         ],
@@ -171943,15 +172000,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "На 75 % и в 4 раза: (80 − 20) / 80 = 0,75, 80 / 20 = 4."
+              "markdown": "Объём уменьшился на 80 − 20 = 60 Мбайт. От исходных 80 Мбайт это 60 / 80 = 0,75, то есть 75 %."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "print((80 - 20) * 100 // 80, 80 // 20)",
+              "code": "print((80 - 20) * 100 // 80)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `75`"
             }
           }
         ],
@@ -171967,7 +172030,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "na-do-v",
+            "section": "szhatie",
             "material_id": "media-coding"
           }
         ],
@@ -171989,7 +172052,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["75 4"],
+          "answer_variants": ["75"],
           "numeric_tolerance": null
         }
       },
@@ -172026,7 +172089,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "40 Мбайт: осталось 70 %, 28 / 0,7."
+              "markdown": "После уменьшения на 30 % осталось 70 % исходного объёма: 28 = 0,7 · V. Значит, V = 28 / 0,7 = 40 Мбайт."
             }
           },
           {
@@ -172036,6 +172099,12 @@
               "code": "print(28 * 100 // 70)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `40`"
+            }
           }
         ],
         "skills": [],
@@ -172043,7 +172112,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 19,
+            "position": 20,
             "material_id": "media-coding"
           }
         ],
@@ -172109,7 +172178,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "На 60 %: 0,8 · 0,5 = 0,4, осталось 40 %."
+              "markdown": "После первого сжатия осталось 0,8 объёма, после второго — 0,8 · 0,5 = 0,4. Осталось 40 %, значит, объём уменьшился на 60 %."
             }
           },
           {
@@ -172119,6 +172188,12 @@
               "code": "print(100 - 80 * 50 // 100)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `60`"
+            }
           }
         ],
         "skills": [],
@@ -172126,14 +172201,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 20,
+            "position": 19,
             "material_id": "media-coding"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "posledovatelnye-izmeneniya",
+            "section": "szhatie",
             "material_id": "media-coding"
           }
         ],
@@ -172164,19 +172239,19 @@
     {
       "task": {
         "id": "task-7-3-05",
-        "title": "Заголовок до и после сжатия",
+        "title": "Сжат весь файл с заголовком",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Данные занимают 300 Кбайт и сжимаются в 3 раза, заголовок занимает 24 Кбайт. Каков объём файла, если заголовок добавляют после сжатия? А если сжимают весь файл вместе с заголовком?"
+              "markdown": "Данные занимают 300 Кбайт, заголовок — 24 Кбайт. Весь файл вместе с заголовком сжимают в 3 раза. Каков объём сжатого файла в Кбайтах?"
             }
           }
         ],
@@ -172184,7 +172259,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Порядок сжатия и добавления заголовка меняет ответ."
+              "markdown": "Сжимается вся сумма: данные и заголовок."
             }
           }
         ],
@@ -172192,15 +172267,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "124 и 108 Кбайт: 300 / 3 + 24 и (300 + 24) / 3."
+              "markdown": "Весь файл до сжатия занимает 300 + 24 = 324 Кбайт. После сжатия в 3 раза — 324 / 3 = 108 Кбайт."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "print(300 // 3 + 24, (300 + 24) // 3)",
+              "code": "print((300 + 24) // 3)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `108`"
             }
           }
         ],
@@ -172238,7 +172319,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["124 108"],
+          "answer_variants": ["108"],
           "numeric_tolerance": null
         }
       },
@@ -172247,19 +172328,19 @@
     {
       "task": {
         "id": "task-7-3-06",
-        "title": "Заголовок у каждого или один",
+        "title": "Заголовок у каждого файла",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Десять файлов содержат по 96 Кбайт данных. Каков общий объём, если у каждого файла свой заголовок 8 Кбайт? А если заголовок 8 Кбайт один на весь набор?"
+              "markdown": "Десять файлов содержат по 96 Кбайт данных, у каждого файла свой заголовок 8 Кбайт. Каков общий объём файлов в Кбайтах?"
             }
           }
         ],
@@ -172267,7 +172348,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Выясните, к чему относится служебная информация."
+              "markdown": "Заголовок есть у каждого файла."
             }
           }
         ],
@@ -172275,15 +172356,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1040 и 968 Кбайт: 10 · (96 + 8) и 10 · 96 + 8."
+              "markdown": "Каждый файл занимает 96 + 8 = 104 Кбайт, десять файлов — 10 · 104 = 1040 Кбайт."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "print(10 * (96 + 8), 10 * 96 + 8)",
+              "code": "print(10 * (96 + 8))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1040`"
             }
           }
         ],
@@ -172299,7 +172386,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "neskolko-fajlov",
+            "section": "zagolovok",
             "material_id": "media-coding"
           }
         ],
@@ -172321,7 +172408,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["1040 968"],
+          "answer_variants": ["1040"],
           "numeric_tolerance": null
         }
       },
@@ -172358,7 +172445,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1024 цвета: 0,6 · 786 432 · i ≤ 576 · 8192, i ≤ 10."
+              "markdown": "Сжатый объём — 60 % исходного: 0,6 · 1024 · 768 · i ≤ 576 · 8192. Отсюда i ≤ 10, глубина 10 бит, цветов 2¹⁰ = 1024."
             }
           },
           {
@@ -172367,6 +172454,12 @@
               "language": "python",
               "code": "i = int(576 * 8192 / (0.6 * 1024 * 768))\nprint(2 ** i)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1024`"
             }
           }
         ],
@@ -172382,7 +172475,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "drobnaya-glubina",
+            "section": "obratnyj-poryadok",
             "material_id": "media-coding"
           }
         ],
@@ -172441,7 +172534,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "64 цвета: 20 · 1024 / 64 = 320 Кбайт, 320 − 32 = 288, 288 / 0,75 = 384 Кбайт, i = 384 · 8192 / 524 288 = 6."
+              "markdown": "На одно изображение приходится 20 · 1024 / 64 = 320 Кбайт. Без заголовка 320 − 32 = 288 Кбайт, до сжатия 288 / 0,75 = 384 Кбайт. Глубина 384 · 8192 / (1024 · 512) = 6 бит, цветов 2⁶ = 64."
             }
           },
           {
@@ -172450,6 +172543,12 @@
               "language": "python",
               "code": "per = 20 * 1024 // 64\ndata = (per - 32) * 100 // 75\ni = data * 8192 // (1024 * 512)\nprint(2 ** i)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `64`"
             }
           }
         ],
@@ -172508,7 +172607,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Карточка каталога состоит из фотографии и текстового описания. Фотографии имеют размер 800 × 600 пикселей и палитру из 2²⁴ цветов; при сохранении их объём уменьшается на 75 %. 100 карточек занимают 50 Мбайт. Сколько Кбайт в среднем занимает описание одной карточки? Ответ округлите до целого числа."
+              "markdown": "Карточка каталога состоит из фотографии и текстового описания. Фотографии имеют размер 800 × 600 пикселей и палитру из 2²⁴ цветов; при сохранении их объём уменьшается на 75 %. 100 карточек занимают 50 Мбайт. Сколько Кбайт в среднем занимает описание одной карточки? Ответ округли до целого числа."
             }
           }
         ],
@@ -172516,7 +172615,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Из объёма карточки вычтите сжатую фотографию."
+              "markdown": "Из объёма одной карточки вычти сжатую фотографию."
             }
           }
         ],
@@ -172524,7 +172623,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "160 Кбайт: фотография 800 · 600 · 3 = 1 440 000 байт, после сжатия 360 000 байт = 351,5625 Кбайт; на карточку 50 · 1024 / 100 = 512 Кбайт; 512 − 351,5625 = 160,4375."
+              "markdown": "Фотография с палитрой 2²⁴ цветов занимает 800 · 600 · 3 = 1 440 000 байт, после сжатия на 75 % — 360 000 байт = 351,5625 Кбайт. На карточку приходится 50 · 1024 / 100 = 512 Кбайт, на описание — 512 − 351,5625 = 160,4… Кбайт, округлённо 160."
             }
           },
           {
@@ -172533,6 +172632,12 @@
               "language": "python",
               "code": "photo = 800 * 600 * 3 * 25 / 100 / 1024\ncard = 50 * 1024 / 100\nprint(round(card - photo))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `160`"
             }
           }
         ],
@@ -172607,7 +172712,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "625 Кбайт: 16 000 · 10 · 2 · 16 / 8192."
+              "markdown": "За 10 секунд один канал даёт 16 000 · 10 отсчётов, два канала — вдвое больше, по 16 бит каждый: 16 000 · 10 · 2 · 16 / 8192 = 625 Кбайт."
             }
           },
           {
@@ -172616,6 +172721,12 @@
               "language": "python",
               "code": "print(16_000 * 10 * 2 * 16 // 8192)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `625`"
             }
           }
         ],
@@ -172690,7 +172801,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "2812,5 Кбайт: 48 000 · 20 · 24 / 8192."
+              "markdown": "48 кГц = 48 000 Гц. Объём 48 000 · 20 · 24 бит, в Кбайтах 48 000 · 20 · 24 / 8192 = 2812,5."
             }
           },
           {
@@ -172699,6 +172810,12 @@
               "language": "python",
               "code": "print(48_000 * 20 * 24 / 8192)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `2812,5`"
             }
           }
         ],
@@ -172773,7 +172890,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "30 с: 3750 · 8192 / (32 000 · 2 · 16)."
+              "markdown": "Одна секунда записи занимает 32 000 · 2 · 16 бит. Весь объём 3750 · 8192 бит, длительность 3750 · 8192 / (32 000 · 2 · 16) = 30 с."
             }
           },
           {
@@ -172783,6 +172900,12 @@
               "code": "print(3750 * 8192 // (32_000 * 2 * 16))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `30`"
+            }
           }
         ],
         "skills": [],
@@ -172790,7 +172913,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 28,
+            "position": 31,
             "material_id": "media-coding"
           }
         ],
@@ -172833,14 +172956,14 @@
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 1,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Сколько секунд в 3 мин 45 с? А в 2,5 мин?"
+              "markdown": "Сколько секунд в 3 мин 45 с?"
             }
           }
         ],
@@ -172856,15 +172979,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "225 с и 150 с: 3 · 60 + 45 и 2,5 · 60."
+              "markdown": "В минуте 60 секунд: 3 · 60 + 45 = 225 с."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "print(3 * 60 + 45, int(2.5 * 60))",
+              "code": "print(3 * 60 + 45)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `225`"
             }
           }
         ],
@@ -172873,14 +173002,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 29,
+            "position": 28,
             "material_id": "media-coding"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "vremya-v-sekundah",
+            "section": "obyom-zapisi",
             "material_id": "media-coding"
           }
         ],
@@ -172902,7 +173031,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["225 150"],
+          "answer_variants": ["225"],
           "numeric_tolerance": null
         }
       },
@@ -172931,7 +173060,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Перемножьте множители изменений."
+              "markdown": "Перемножь множители всех изменений."
             }
           }
         ],
@@ -172939,7 +173068,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "10 Мбайт: 10 · 2 · 2 · 1/2 · 0,5 — два множителя 2 от каналов и частоты, 1/2 от глубины, 0,5 от сжатия."
+              "markdown": "Стерео вместо моно — множитель 2, частота вдвое выше — ещё 2, глубина вдвое меньше — 1/2, сжатие на 50 % — 0,5. Объём 10 · 2 · 2 · 1/2 · 0,5 = 10 Мбайт."
             }
           },
           {
@@ -172949,6 +173078,12 @@
               "code": "print(int(10 * 2 * 2 / 2 * 0.5))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `10`"
+            }
           }
         ],
         "skills": [],
@@ -172956,7 +173091,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 30,
+            "position": 33,
             "material_id": "media-coding"
           }
         ],
@@ -173022,7 +173157,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "40 Мбайт: 60 · 2/4 · 2 · 2/3."
+              "markdown": "Каналов стало 2 вместо 4 — множитель 1/2, частота выше вдвое — 2, глубина в 1,5 раза меньше — 2/3. Объём 60 · 1/2 · 2 · 2/3 = 40 Мбайт."
             }
           },
           {
@@ -173032,6 +173167,12 @@
               "code": "print(round(60 * 2 / 4 * 2 / 1.5))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `40`"
+            }
           }
         ],
         "skills": [],
@@ -173039,14 +173180,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 31,
+            "position": 34,
             "material_id": "media-coding"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "v-1-5-raza",
+            "section": "dve-zapisi",
             "material_id": "media-coding"
           }
         ],
@@ -173097,7 +173238,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Добавьте отношение оставшихся долей."
+              "markdown": "Добавь отношение оставшихся после сжатия долей."
             }
           }
         ],
@@ -173105,7 +173246,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В 3,2 раза: V₂ / V₁ = 1/2 · 2 · 0,25 / 0,8 = 0,3125 = 1 / 3,2."
+              "markdown": "Без сжатия вторая запись была бы 1/2 · 2 = 1 от первой. После сжатия у первой осталось 0,8, у второй 0,25, поэтому V₂ / V₁ = 0,25 / 0,8 = 0,3125. Второй файл меньше в 1 / 0,3125 = 3,2 раза."
             }
           },
           {
@@ -173115,6 +173256,12 @@
               "code": "print(0.8 / (1 / 2 * 2 * 0.25))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3,2`"
+            }
           }
         ],
         "skills": [],
@@ -173122,14 +173269,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 32,
+            "position": 35,
             "material_id": "media-coding"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "raznoe-szhatie",
+            "section": "dve-zapisi",
             "material_id": "media-coding"
           }
         ],
@@ -173172,7 +173319,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Голосовое сообщение оцифровано в формате стерео с частотой дискретизации 24 000 Гц и глубиной кодирования 16 бит. Определите наименьшее целое количество Кбайт, необходимое для хранения сообщения без учёта заголовка, если его длительность — 3 минуты 7 секунд."
+              "markdown": "Голосовое сообщение оцифровано в формате стерео с частотой дискретизации 24 000 Гц и глубиной кодирования 16 бит. Определи наименьшее целое количество Кбайт, необходимое для хранения сообщения без учёта заголовка, если его длительность — 3 минуты 7 секунд."
             }
           }
         ],
@@ -173188,7 +173335,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "17 532 Кбайт: 24 000 · 2 · 16 · 187 / 8192 = 17 531,25, округляем вверх."
+              "markdown": "Длительность 3 · 60 + 7 = 187 с. Объём 24 000 · 2 · 16 · 187 / 8192 = 17 531,25 Кбайт. В 17 531 Кбайт запись не поместится, поэтому нужно 17 532 Кбайт."
             }
           },
           {
@@ -173198,6 +173345,12 @@
               "code": "from math import ceil\n\nprint(ceil(24_000 * 2 * 16 * 187 / 8192))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `17532`"
+            }
           }
         ],
         "skills": [],
@@ -173205,14 +173358,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 33,
+            "position": 29,
             "material_id": "media-coding"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "okruglenie-vverh",
+            "section": "obyom-zapisi",
             "material_id": "media-coding"
           }
         ],
@@ -173255,7 +173408,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Музыкальный фрагмент записали в формате моно и сохранили без сжатия; файл занял 18 Мбайт. Затем тот же фрагмент записали в формате квадро с глубиной кодирования в 2 раза меньше и частотой дискретизации в 3 раза меньше. Сжатия нет. Укажите размер нового файла в Мбайтах."
+              "markdown": "Музыкальный фрагмент записали в формате моно и сохранили без сжатия; файл занял 18 Мбайт. Затем тот же фрагмент записали в формате квадро с глубиной кодирования в 2 раза меньше и частотой дискретизации в 3 раза меньше. Сжатия нет. Укажи размер нового файла в Мбайтах."
             }
           }
         ],
@@ -173271,7 +173424,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "12 Мбайт: 18 · 4 · 1/2 · 1/3."
+              "markdown": "Квадро вместо моно — множитель 4, глубина вдвое меньше — 1/2, частота втрое меньше — 1/3. Новый объём 18 · 4 · 1/2 · 1/3 = 12 Мбайт."
             }
           },
           {
@@ -173281,6 +173434,12 @@
               "code": "print(int(18 * 4 / 2 / 3))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `12`"
+            }
           }
         ],
         "skills": [],
@@ -173288,7 +173447,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 34,
+            "position": 36,
             "material_id": "media-coding"
           }
         ],
@@ -173338,7 +173497,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Стереозапись с частотой 48 кГц и глубиной 24 бита заняла 330 Мбайт без сжатия и заголовка. Определите длительность записи в минутах; в ответе укажите ближайшее целое число."
+              "markdown": "Стереозапись с частотой 48 кГц и глубиной 24 бита заняла 330 Мбайт без сжатия и заголовка. Определи длительность записи в минутах; в ответе укажи ближайшее целое число."
             }
           }
         ],
@@ -173354,7 +173513,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "20 минут: 330 · 2²³ / (48 000 · 2 · 24) = 1201,49… с = 20,02… мин."
+              "markdown": "Одна секунда записи занимает 48 000 · 2 · 24 бит, весь объём 330 · 2²³ бит. Длительность 1201,49… с = 20,02… мин, ближайшее целое — 20."
             }
           },
           {
@@ -173364,6 +173523,12 @@
               "code": "seconds = 330 * 2 ** 23 / (48_000 * 2 * 24)\nprint(round(seconds / 60))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `20`"
+            }
           }
         ],
         "skills": [],
@@ -173371,7 +173536,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 35,
+            "position": 32,
             "material_id": "media-coding"
           }
         ],
@@ -173437,7 +173602,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "480 с: 32 000 · 60 · 1 · 16 / 64 000 — восемь минут передачи для одной минуты записи."
+              "markdown": "Запись занимает 32 000 · 60 · 1 · 16 = 30 720 000 бит. По каналу 64 000 бит/с она передаётся 30 720 000 / 64 000 = 480 с — восемь минут передачи для одной минуты звучания."
             }
           },
           {
@@ -173447,6 +173612,12 @@
               "code": "print(32_000 * 60 * 16 // 64_000)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `480`"
+            }
           }
         ],
         "skills": [],
@@ -173454,7 +173625,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 36,
+            "position": 37,
             "material_id": "media-coding"
           }
         ],
@@ -173520,7 +173691,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "32 бита: 20 000 · 2 · i · 0,4 ≤ 512 000, i ≤ 32."
+              "markdown": "За секунду поток создаёт 20 000 · 2 · i бит, после сжатия 0,4 от этого. Нужно 0,4 · 20 000 · 2 · i ≤ 512 000, отсюда i ≤ 32. Наибольшая глубина 32 бита."
             }
           },
           {
@@ -173530,6 +173701,12 @@
               "code": "print(int(512_000 / (20_000 * 2 * 0.4)))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `32`"
+            }
           }
         ],
         "skills": [],
@@ -173537,7 +173714,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 37,
+            "position": 44,
             "material_id": "media-coding"
           }
         ],
@@ -173603,7 +173780,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "24 с: 6 · 2²³ / 2²¹ = 6 · 4."
+              "markdown": "6 Мбайт = 6 · 2²³ бит. Время передачи 6 · 2²³ / 2²¹ = 6 · 4 = 24 с."
             }
           },
           {
@@ -173613,6 +173790,12 @@
               "code": "print(6 * 2 ** 23 // 2 ** 21)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `24`"
+            }
           }
         ],
         "skills": [],
@@ -173620,7 +173803,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 38,
+            "position": 41,
             "material_id": "media-coding"
           }
         ],
@@ -173686,7 +173869,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "3750 Кбайт: 256 000 · 120 / 8192."
+              "markdown": "За 2 минуты = 120 с канал передаёт 256 000 · 120 бит. В Кбайтах 256 000 · 120 / 8192 = 3750."
             }
           },
           {
@@ -173696,6 +173879,12 @@
               "code": "print(256_000 * 120 // 8192)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3750`"
+            }
           }
         ],
         "skills": [],
@@ -173703,14 +173892,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 39,
+            "position": 42,
             "material_id": "media-coding"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "skorost",
+            "section": "edinicy",
             "material_id": "media-coding"
           }
         ],
@@ -173761,7 +173950,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Сравнивайте отношения."
+              "markdown": "Время растёт вместе с объёмом и уменьшается при росте скорости."
             }
           }
         ],
@@ -173769,7 +173958,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "60 с: 45 · 4 / 3."
+              "markdown": "Больший вчетверо файл передавался бы вчетверо дольше, а втрое более быстрый канал сокращает время втрое: 45 · 4 / 3 = 60 с."
             }
           },
           {
@@ -173779,6 +173968,12 @@
               "code": "print(45 * 4 // 3)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `60`"
+            }
           }
         ],
         "skills": [],
@@ -173786,14 +173981,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 40,
+            "position": 43,
             "material_id": "media-coding"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "otnosheniya",
+            "section": "dlitelnost-i-peredacha",
             "material_id": "media-coding"
           }
         ],
@@ -173852,7 +174047,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "80 с: 640 · 480 · 8 · 50 / 1 536 000."
+              "markdown": "Для 256 цветов нужно 8 бит. Пакет занимает 640 · 480 · 8 · 50 бит и передаётся 640 · 480 · 8 · 50 / 1 536 000 = 80 с."
             }
           },
           {
@@ -173862,6 +174057,12 @@
               "code": "print(640 * 480 * 8 * 50 // 1_536_000)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `80`"
+            }
           }
         ],
         "skills": [],
@@ -173869,14 +174070,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 41,
+            "position": 38,
             "material_id": "media-coding"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "nabor-snimkov",
+            "section": "vremya-peredachi",
             "material_id": "media-coding"
           }
         ],
@@ -173935,7 +174136,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "300 Мбайт: (2048 · 1536 · 24 − 1024 · 768 · 16) · 40 бит = 2 516 582 400 бит, делим на 2²³."
+              "markdown": "Снимок до уменьшения занимает 2048 · 1536 · 24 бит, после — 1024 · 768 · 16 бит. Экономия на 40 снимках — 40 · (2048 · 1536 · 24 − 1024 · 768 · 16) = 2 516 582 400 бит, это 300 Мбайт."
             }
           },
           {
@@ -173945,6 +174146,12 @@
               "code": "old = 2048 * 1536 * 24\nnew = 1024 * 768 * 16\nprint((old - new) * 40 // 2 ** 23)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `300`"
+            }
           }
         ],
         "skills": [],
@@ -173952,7 +174159,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 42,
+            "position": 46,
             "material_id": "media-coding"
           }
         ],
@@ -174002,7 +174209,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Камера каждые n секунд (n — целое число) делает снимок 1280 × 1024 пикселей с палитрой из 65 536 цветов. Снимки сжимаются на 60 % и передаются по каналу со скоростью 256 Кбайт/с. Определите наименьшее n, при котором возможна передача в режиме реального времени."
+              "markdown": "Камера каждые n секунд (n — целое число) делает снимок 1280 × 1024 пикселей с палитрой из 65 536 цветов. Снимки сжимаются на 60 % и передаются по каналу со скоростью 256 Кбайт/с. Определи наименьшее n, при котором возможна передача в режиме реального времени."
             }
           }
         ],
@@ -174018,7 +174225,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "4: снимок 1280 · 1024 · 2 байт = 2560 Кбайт, после сжатия 1024 Кбайт, 1024 / 256 = 4 с."
+              "markdown": "Для 65 536 цветов нужно 16 бит = 2 байта. Снимок 1280 · 1024 · 2 байт = 2560 Кбайт, после сжатия на 60 % — 1024 Кбайт. Канал передаёт его за 1024 / 256 = 4 с, поэтому снимать можно не чаще чем раз в 4 секунды."
             }
           },
           {
@@ -174028,6 +174235,12 @@
               "code": "from math import ceil\n\nshot = 1280 * 1024 * 2 / 1024 * 0.4\nprint(ceil(shot / 256))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4`"
+            }
           }
         ],
         "skills": [],
@@ -174035,14 +174248,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 43,
+            "position": 45,
             "material_id": "media-coding"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "snimki",
+            "section": "bez-otstavaniya",
             "material_id": "media-coding"
           }
         ],
@@ -174085,7 +174298,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Камера делает цветные снимки 1920 × 1080 пикселей с палитрой из 5000 цветов. Снимки группируются в пакеты по 250 штук и передаются со скоростью 25 000 000 бит/с. Сколько минут передаётся один пакет? В ответе запишите целую часть числа."
+              "markdown": "Камера делает цветные снимки 1920 × 1080 пикселей с палитрой из 5000 цветов. Снимки группируются в пакеты по 250 штук и передаются со скоростью 25 000 000 бит/с. Сколько минут передаётся один пакет? В ответе запиши целую часть числа."
             }
           }
         ],
@@ -174101,7 +174314,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "4: 5000 цветов требуют 13 бит, 1920 · 1080 · 13 · 250 / 25 000 000 = 269,568 с = 4,49… мин."
+              "markdown": "Для 5000 цветов нужно 13 бит. Пакет передаётся 1920 · 1080 · 13 · 250 / 25 000 000 = 269,568 с = 4,49… мин, целая часть — 4."
             }
           },
           {
@@ -174111,6 +174324,12 @@
               "code": "i = 1\nwhile 2 ** i < 5000:\n    i += 1\nseconds = 1920 * 1080 * i * 250 / 25_000_000\nprint(int(seconds / 60))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `4`"
+            }
           }
         ],
         "skills": [],
@@ -174118,14 +174337,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 44,
+            "position": 39,
             "material_id": "media-coding"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "nabor-snimkov",
+            "section": "vremya-peredachi",
             "material_id": "media-coding"
           }
         ],
@@ -174168,7 +174387,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Альбом записан в формате стерео с частотой дискретизации 44 100 Гц и глубиной 24 бита без сжатия. В альбоме 12 треков общей длительностью 40 минут, каждый трек содержит заголовок объёмом 200 Кбайт. Сколько секунд будет скачиваться альбом по каналу со скоростью 100 000 000 бит/с? В ответе запишите целую часть полученного числа."
+              "markdown": "Альбом записан в формате стерео с частотой дискретизации 44 100 Гц и глубиной 24 бита без сжатия. В альбоме 12 треков общей длительностью 40 минут, каждый трек содержит заголовок объёмом 200 Кбайт. Сколько секунд будет скачиваться альбом по каналу со скоростью 100 000 000 бит/с? В ответе запиши целую часть полученного числа."
             }
           }
         ],
@@ -174184,7 +174403,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "50: звук 44 100 · 2 · 24 · 2400 = 5 080 320 000 бит, заголовки 12 · 200 · 8192 = 19 660 800 бит, всего 5 099 980 800 бит, 50,99… с."
+              "markdown": "Звук всего альбома 44 100 · 2 · 24 · 2400 = 5 080 320 000 бит — общую длительность не умножают на число треков. Заголовки 12 · 200 · 8192 = 19 660 800 бит. Всего 5 099 980 800 бит, время 50,99… с, целая часть — 50."
             }
           },
           {
@@ -174194,6 +174413,12 @@
               "code": "sound = 44_100 * 2 * 24 * 40 * 60\nheads = 12 * 200 * 8192\nprint(int((sound + heads) / 100_000_000))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `50`"
+            }
           }
         ],
         "skills": [],
@@ -174201,14 +174426,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 45,
+            "position": 40,
             "material_id": "media-coding"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "albom",
+            "section": "vremya-peredachi",
             "material_id": "media-coding"
           }
         ],
@@ -174267,7 +174492,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "11 файлов: 1024 / 90 = 11,37…; двенадцать файлов занимали бы 1080 Кбайт и не поместились бы."
+              "markdown": "1 Мбайт = 1024 Кбайт, 1024 / 90 = 11,37…. Помещаются 11 целых файлов: двенадцать заняли бы 1080 Кбайт."
             }
           },
           {
@@ -174277,6 +174502,12 @@
               "code": "print(1024 // 90)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `11`"
+            }
           }
         ],
         "skills": [],
@@ -174284,7 +174515,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 46,
+            "position": 14,
             "material_id": "media-coding"
           }
         ],
@@ -174342,7 +174573,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Строгое неравенство: проверьте соседнее значение."
+              "markdown": "Строгое неравенство: проверь соседнее значение."
             }
           }
         ],
@@ -174350,7 +174581,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "21 Кбайт: (400 + 5H) / 50 > 10, 5H > 100, H > 20."
+              "markdown": "Нужно (400 + 5H) / 50 > 10, то есть 400 + 5H > 500, H > 20. При H = 20 передача длится ровно 10 секунд — не больше, поэтому наименьшее H = 21."
             }
           },
           {
@@ -174359,6 +174590,12 @@
               "language": "python",
               "code": "h = 0\nwhile (400 + 5 * h) / 50 <= 10:\n    h += 1\nprint(h)",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `21`"
             }
           }
         ],
@@ -174374,7 +174611,7 @@
         "theory_links": [
           {
             "label": "Теория",
-            "section": "sosednee-znachenie",
+            "section": "strogie-neravenstva",
             "material_id": "media-coding"
           }
         ],
@@ -174405,19 +174642,19 @@
     {
       "task": {
         "id": "task-7-6-03",
-        "title": "Три способа округлить",
+        "title": "Наименьшее целое число Кбайт",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите три числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Файл занимает 1234,6 Кбайт. Каково наименьшее целое число Кбайт для его хранения, целая часть объёма и объём, округлённый до ближайшего целого?"
+              "markdown": "Файл занимает 1234,6 Кбайт. Каково наименьшее целое число Кбайт, в котором он поместится?"
             }
           }
         ],
@@ -174425,7 +174662,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Вверх, целая часть и ближайшее целое."
+              "markdown": "Памяти должно хватить: округляй вверх."
             }
           }
         ],
@@ -174433,15 +174670,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1235, 1234 и 1235."
+              "markdown": "В 1234 Кбайт файл не поместится — не хватит 0,6 Кбайт. Нужно 1235 Кбайт."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from math import ceil\n\nx = 1234.6\nprint(ceil(x), int(x), round(x))",
+              "code": "from math import ceil\n\nprint(ceil(1234.6))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1235`"
             }
           }
         ],
@@ -174450,14 +174693,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 48,
+            "position": 30,
             "material_id": "media-coding"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "operacii-python",
+            "section": "obyom-zapisi",
             "material_id": "media-coding"
           }
         ],
@@ -174479,7 +174722,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["1235 1234 1235"],
+          "answer_variants": ["1235"],
           "numeric_tolerance": null
         }
       },
@@ -174531,21 +174774,10 @@
         "skills": [],
         "exam_numbers": [7],
         "files": [],
-        "lessons": [
-          {
-            "position": 49,
-            "material_id": "media-coding"
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "uroven-pamyati",
-            "material_id": "media-coding"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -174571,19 +174803,19 @@
     {
       "task": {
         "id": "task-7-6-06",
-        "title": "Файлы и носители",
+        "title": "Носители для 50 файлов",
         "short_description": null,
         "explanation_kind": "worked_solution",
         "difficulty": 1,
         "estimated_minutes": 2,
-        "answer_instruction": "Введите два числа через пробел в том порядке, в каком их спрашивают.",
+        "answer_instruction": "Введите число.",
         "interaction_type": "production",
         "content_schema_version": 1,
         "statement": [
           {
             "type": "text",
             "data": {
-              "markdown": "Носитель вмещает 700 Мбайт, файл занимает 64 Мбайт, файлы нельзя делить. Сколько файлов поместится на носитель и сколько носителей нужно для 50 файлов?"
+              "markdown": "Носитель вмещает 700 Мбайт, файл занимает 64 Мбайт, файлы нельзя делить между носителями. Сколько носителей нужно для 50 файлов?"
             }
           }
         ],
@@ -174591,7 +174823,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "На носитель — вниз, носителей — вверх."
+              "markdown": "Сначала найди, сколько целых файлов помещается на один носитель."
             }
           }
         ],
@@ -174599,15 +174831,21 @@
           {
             "type": "text",
             "data": {
-              "markdown": "10 файлов и 5 носителей: ⌊700 / 64⌋ = 10, ⌈50 / 10⌉ = 5."
+              "markdown": "На носитель помещается 700 / 64 = 10,9…, то есть 10 целых файлов. Для 50 файлов нужно 50 / 10 = 5 носителей."
             }
           },
           {
             "type": "code_example",
             "data": {
               "language": "python",
-              "code": "from math import ceil\n\nper = 700 // 64\nprint(per, ceil(50 / per))",
+              "code": "from math import ceil\n\nper = 700 // 64\nprint(ceil(50 / per))",
               "caption": "Решение программой"
+            }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `5`"
             }
           }
         ],
@@ -174616,7 +174854,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 50,
+            "position": 15,
             "material_id": "media-coding"
           }
         ],
@@ -174645,7 +174883,7 @@
         ],
         "checker": {
           "checker_type": "exact_match",
-          "answer_variants": ["10 5"],
+          "answer_variants": ["5"],
           "numeric_tolerance": null
         }
       },
@@ -174674,7 +174912,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Скачивание длится больше 16 секунд: ищите наименьшее подходящее H."
+              "markdown": "Скачивание длится больше 16 секунд: ищи наименьшее подходящее H."
             }
           }
         ],
@@ -174682,7 +174920,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "1465 Кбайт: звук 32 000 · 4 · 20 · 1800 = 4 608 000 000 бит; нужно 4 608 000 000 + 16 · H · 8192 > 16 · 300 000 000, то есть H > 1464,84…"
+              "markdown": "Звук альбома 32 000 · 4 · 20 · 1800 = 4 608 000 000 бит. Нужно 4 608 000 000 + 16 · H · 8192 > 16 · 300 000 000, отсюда H > 1464,84…. Наименьшее целое H = 1465 Кбайт."
             }
           },
           {
@@ -174692,6 +174930,12 @@
               "code": "sound = 32_000 * 4 * 20 * 30 * 60\nh = 0\nwhile sound + 16 * h * 8192 <= 16 * 300_000_000:\n    h += 1\nprint(h)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `1465`"
+            }
           }
         ],
         "skills": [],
@@ -174699,14 +174943,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 51,
+            "position": 48,
             "material_id": "media-coding"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "sosednee-znachenie",
+            "section": "strogie-neravenstva",
             "material_id": "media-coding"
           }
         ],
@@ -174765,7 +175009,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "3816: 10 000 000 цветов требуют 24 бита, снимок 18 000 000 байт, на карту 32 · 2³⁰ / 18 000 000 = 1908,8…, то есть 1908 снимков; карт ⌈5000 / 1908⌉ = 3, на первых двух 2 · 1908."
+              "markdown": "10 000 000 цветов требуют 24 бита, снимок занимает 3000 · 2000 · 3 = 18 000 000 байт. На карту 32 · 2³⁰ / 18 000 000 = 1908,8…, то есть 1908 снимков. Для 5000 снимков нужно 3 карты, и на первых двух 2 · 1908 = 3816 снимков."
             }
           },
           {
@@ -174775,6 +175019,12 @@
               "code": "from math import ceil\n\ni = 1\nwhile 2 ** i < 10_000_000:\n    i += 1\nshot = 3000 * 2000 * i // 8\nper = 32 * 2 ** 30 // shot\ncards = ceil(5000 / per)\nprint((cards - 1) * per)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `3816`"
+            }
           }
         ],
         "skills": [],
@@ -174782,14 +175032,14 @@
         "files": [],
         "lessons": [
           {
-            "position": 52,
+            "position": 16,
             "material_id": "media-coding"
           }
         ],
         "theory_links": [
           {
             "label": "Теория",
-            "section": "zapolnennye-nositeli",
+            "section": "fajly-i-nositeli",
             "material_id": "media-coding"
           }
         ],
@@ -174863,22 +175113,10 @@
         "skills": [],
         "exam_numbers": [7],
         "files": [],
-        "lessons": [
-          {
-            "position": 53,
-            "material_id": "media-coding",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "zamena-skana",
-            "material_id": "media-coding"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -174947,22 +175185,10 @@
         "skills": [],
         "exam_numbers": [7],
         "files": [],
-        "lessons": [
-          {
-            "position": 54,
-            "material_id": "media-coding",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "odinakovyj-zagolovok",
-            "material_id": "media-coding"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -175031,22 +175257,10 @@
         "skills": [],
         "exam_numbers": [7],
         "files": [],
-        "lessons": [
-          {
-            "position": 55,
-            "material_id": "media-coding",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "odinakovyj-zagolovok",
-            "material_id": "media-coding"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -175115,22 +175329,10 @@
         "skills": [],
         "exam_numbers": [7],
         "files": [],
-        "lessons": [
-          {
-            "position": 56,
-            "material_id": "media-coding",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "zamena-skana",
-            "material_id": "media-coding"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -175199,22 +175401,10 @@
         "skills": [],
         "exam_numbers": [7],
         "files": [],
-        "lessons": [
-          {
-            "position": 57,
-            "material_id": "media-coding",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "audiokniga",
-            "material_id": "media-coding"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -175283,22 +175473,10 @@
         "skills": [],
         "exam_numbers": [7],
         "files": [],
-        "lessons": [
-          {
-            "position": 58,
-            "material_id": "media-coding",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "zamena-skana",
-            "material_id": "media-coding"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -175367,22 +175545,10 @@
         "skills": [],
         "exam_numbers": [7],
         "files": [],
-        "lessons": [
-          {
-            "position": 59,
-            "material_id": "media-coding",
-            "counts_toward_mastery": false
-          }
-        ],
-        "theory_links": [
-          {
-            "label": "Теория",
-            "section": "audiokniga",
-            "material_id": "media-coding"
-          }
-        ],
+        "lessons": [],
+        "theory_links": [],
         "catalog_visible": false,
-        "archived": false,
+        "archived": true,
         "sources": [
           {
             "url": null,
@@ -175420,7 +175586,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Изображение размером 1280 × 720 пикселей хранится без сжатия; на него отведено не более 900 Кбайт без учёта заголовка файла. Все пиксели кодируются одинаковым количеством бит и записываются подряд. Какое наибольшее количество цветов можно использовать? (Подтема 2: обратная задача.)"
+              "markdown": "Изображение размером 1280 × 720 пикселей хранится без сжатия; на него отведено не более 900 Кбайт без учёта заголовка файла. Все пиксели кодируются одинаковым количеством бит и записываются подряд. Какое наибольшее количество цветов можно использовать?"
             }
           }
         ],
@@ -175436,7 +175602,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "256: i ≤ 900 · 8192 / 921 600 = 8, глубина 8 бит, 2⁸ = 256."
+              "markdown": "Доступно 900 · 8192 = 7 372 800 бит на 1280 · 720 = 921 600 пикселей — ровно 8 бит на пиксель. Цветов 2⁸ = 256."
             }
           },
           {
@@ -175446,6 +175612,12 @@
               "code": "i = 900 * 8192 // (1280 * 720)\nprint(2 ** i)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `256`"
+            }
           }
         ],
         "skills": [],
@@ -175453,7 +175625,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 60,
+            "position": 49,
             "material_id": "media-coding"
           }
         ],
@@ -175497,7 +175669,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "В системе хранятся 128 изображений размером 640 × 480 пикселей. Данные каждого изображения сжимаются на 25 %, после сжатия к каждому добавляется заголовок 16 Кбайт. Для хранения всех изображений потребовалось 32 Мбайт. Какое наибольшее количество цветов может быть в палитре каждого изображения? (Подтема 3: обратный ход и дробная глубина.)"
+              "markdown": "В системе хранятся 128 изображений размером 640 × 480 пикселей. Данные каждого изображения сжимаются на 25 %, после сжатия к каждому добавляется заголовок 16 Кбайт. Для хранения всех изображений потребовалось 32 Мбайт. Какое наибольшее количество цветов может быть в палитре каждого изображения?"
             }
           }
         ],
@@ -175513,7 +175685,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "256: 32 · 1024 / 128 = 256 Кбайт, 256 − 16 = 240, 240 / 0,75 = 320 Кбайт, i = 320 · 8192 / 307 200 = 8,53…, целая глубина 8."
+              "markdown": "На одно изображение приходится 32 · 1024 / 128 = 256 Кбайт, без заголовка 240, до сжатия 240 / 0,75 = 320 Кбайт. Глубина 320 · 8192 / (640 · 480) = 8,53…, целая — 8 бит, цветов 2⁸ = 256."
             }
           },
           {
@@ -175523,6 +175695,12 @@
               "code": "per = 32 * 1024 // 128\ndata = (per - 16) * 100 / 75\ni = int(data * 8192 / (640 * 480))\nprint(2 ** i)",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `256`"
+            }
           }
         ],
         "skills": [],
@@ -175530,7 +175708,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 61,
+            "position": 50,
             "material_id": "media-coding"
           }
         ],
@@ -175574,7 +175752,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Голосовое сообщение оцифровано в формате стерео с частотой дискретизации 22 050 Гц и глубиной кодирования 16 бит. Определите наименьшее целое количество Кбайт, необходимое для хранения сообщения без учёта заголовка, если его длительность — 2 минуты 35 секунд. (Подтема 4: округление вверх.)"
+              "markdown": "Голосовое сообщение оцифровано в формате стерео с частотой дискретизации 22 050 Гц и глубиной кодирования 16 бит. Определи наименьшее целое количество Кбайт, необходимое для хранения сообщения без учёта заголовка, если его длительность — 2 минуты 35 секунд."
             }
           }
         ],
@@ -175590,7 +175768,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "13 351 Кбайт: 22 050 · 2 · 16 · 155 / 8192 = 13 350,58…, округляем вверх."
+              "markdown": "Длительность 2 · 60 + 35 = 155 с. Объём 22 050 · 2 · 16 · 155 / 8192 = 13 350,58… Кбайт, поэтому нужно 13 351 Кбайт."
             }
           },
           {
@@ -175600,6 +175778,12 @@
               "code": "from math import ceil\n\nprint(ceil(22_050 * 2 * 16 * 155 / 8192))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `13351`"
+            }
           }
         ],
         "skills": [],
@@ -175607,7 +175791,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 62,
+            "position": 51,
             "material_id": "media-coding"
           }
         ],
@@ -175651,7 +175835,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Несжатая монозапись передавалась по каналу связи 50 секунд. Тот же фрагмент оцифровали повторно в формате стерео, с частотой дискретизации в 2 раза ниже и глубиной кодирования в 1,5 раза выше, и передали по каналу, скорость которого в 3 раза выше. Сколько секунд длилась вторая передача? (Подтемы 4 и 5: отношения.)"
+              "markdown": "Несжатая монозапись передавалась по каналу связи 50 секунд. Тот же фрагмент оцифровали повторно в формате стерео, с частотой дискретизации в 2 раза ниже и глубиной кодирования в 1,5 раза выше, и передали по каналу, скорость которого в 3 раза выше. Сколько секунд длилась вторая передача?"
             }
           }
         ],
@@ -175667,7 +175851,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "25 с: V₂ / V₁ = 2 · 1/2 · 1,5 = 1,5, t₂ = 50 · 1,5 / 3."
+              "markdown": "Стерео вместо моно — множитель 2, частота вдвое ниже — 1/2, глубина в 1,5 раза выше — 1,5: файл стал в 1,5 раза больше. Канал втрое быстрее, поэтому время 50 · 1,5 / 3 = 25 с."
             }
           },
           {
@@ -175677,6 +175861,12 @@
               "code": "print(round(50 * 2 * 0.5 * 1.5 / 3))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `25`"
+            }
           }
         ],
         "skills": [],
@@ -175684,7 +175874,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 63,
+            "position": 52,
             "material_id": "media-coding"
           }
         ],
@@ -175728,7 +175918,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "Камера делает цветные снимки 2000 × 1500 пикселей с палитрой из 1000 цветов. Снимки группируются в пакеты по 120 штук и передаются со скоростью 14 000 000 бит/с. Сколько секунд передаётся один пакет? В ответе запишите целую часть числа. (Подтемы 1 и 5: длина кода и пакет.)"
+              "markdown": "Камера делает цветные снимки 2000 × 1500 пикселей с палитрой из 1000 цветов. Снимки группируются в пакеты по 120 штук и передаются со скоростью 14 000 000 бит/с. Сколько секунд передаётся один пакет? В ответе запиши целую часть числа."
             }
           }
         ],
@@ -175744,7 +175934,7 @@
           {
             "type": "text",
             "data": {
-              "markdown": "257: 1000 цветов требуют 10 бит, 2000 · 1500 · 10 · 120 / 14 000 000 = 257,14… с."
+              "markdown": "Для 1000 цветов нужно 10 бит. Пакет передаётся 2000 · 1500 · 10 · 120 / 14 000 000 = 257,14… с, целая часть — 257."
             }
           },
           {
@@ -175754,6 +175944,12 @@
               "code": "i = 1\nwhile 2 ** i < 1000:\n    i += 1\nprint(int(2000 * 1500 * i * 120 / 14_000_000))",
               "caption": "Решение программой"
             }
+          },
+          {
+            "type": "text",
+            "data": {
+              "markdown": "Ответ: `257`"
+            }
           }
         ],
         "skills": [],
@@ -175761,7 +175957,7 @@
         "files": [],
         "lessons": [
           {
-            "position": 64,
+            "position": 53,
             "material_id": "media-coding"
           }
         ],
@@ -830094,81 +830290,36 @@
       "sections": [
         "kak-ustroena-tema-7",
         "bit",
-        "bajt",
-        "stepeni-dvojki",
-        "kilogercy",
-        "chislo-kodov",
         "dlina-koda",
+        "funkciya-bits",
         "nuzhnaya-i-vydelennaya",
-        "obyom-dannyh",
-        "obyom-teksta",
         "bity-itogo",
-        "setka-kodov",
         "rastr",
-        "kod-cveta",
         "obyom-izobrazheniya",
-        "po-poryadku",
-        "glubina-cveta",
-        "tri-bajta",
         "obratnaya-zadacha",
         "cveta-i-obyom",
         "razreshenie",
-        "mnozhiteli",
+        "fajly-i-nositeli",
         "izobrazhenie-itogo",
-        "szhatie-i-sluzhebnye",
         "szhatie",
-        "na-do-v",
-        "procent-umensheniya",
         "ishodnyj-obyom",
-        "posledovatelnye-izmeneniya",
-        "procenty-v-programme",
         "zagolovok",
-        "neskolko-fajlov",
         "obratnyj-poryadok",
-        "drobnaya-glubina",
         "szhatie-itogo",
         "izmereniya",
-        "otschyoty",
-        "chastota-diskretizacii",
-        "glubina-kodirovaniya",
-        "kanaly",
+        "glubina-i-kanaly",
         "obyom-zapisi",
         "dlitelnost",
-        "vremya-v-sekundah",
-        "okruglenie-vverh",
         "dve-zapisi",
-        "raznoe-szhatie",
-        "v-1-5-raza",
         "zvuk-itogo",
         "vremya-peredachi",
-        "skorost",
         "edinicy",
         "dlitelnost-i-peredacha",
-        "otnosheniya",
-        "bez-otstavaniya",
-        "snimki",
-        "nabor-snimkov",
         "naibolshee-chislo",
-        "podbor-szhatiya",
+        "bez-otstavaniya",
         "ekonomiya",
-        "albom",
-        "peredacha-itogo",
-        "napravlenie-okrugleniya",
-        "chto-sprashivayut",
-        "promezhutochnye",
-        "operacii-python",
         "strogie-neravenstva",
-        "sosednee-znachenie",
-        "uroven-pamyati",
-        "fajly-i-nositeli",
-        "zapolnennye-nositeli",
-        "okruglenie-itogo",
-        "dopolnitelnyy-urok-zapisi",
-        "odinakovyj-zagolovok",
-        "tekst-i-skan",
-        "zamena-skana",
-        "audiokniga",
-        "sostavnye-itogo"
+        "peredacha-itogo"
       ],
       "kind": "topic",
       "status": "published",
@@ -830180,14 +830331,9 @@
           "sections": [
             "kak-ustroena-tema-7",
             "bit",
-            "bajt",
-            "stepeni-dvojki",
-            "kilogercy",
-            "chislo-kodov",
             "dlina-koda",
+            "funkciya-bits",
             "nuzhnaya-i-vydelennaya",
-            "obyom-dannyh",
-            "obyom-teksta",
             "bity-itogo"
           ]
         },
@@ -830195,17 +830341,12 @@
           "slug": "izobrazhenie",
           "access": "free",
           "sections": [
-            "setka-kodov",
             "rastr",
-            "kod-cveta",
             "obyom-izobrazheniya",
-            "po-poryadku",
-            "glubina-cveta",
-            "tri-bajta",
             "obratnaya-zadacha",
             "cveta-i-obyom",
             "razreshenie",
-            "mnozhiteli",
+            "fajly-i-nositeli",
             "izobrazhenie-itogo"
           ]
         },
@@ -830213,17 +830354,10 @@
           "slug": "szhatie-i-zagolovki",
           "access": "free",
           "sections": [
-            "szhatie-i-sluzhebnye",
             "szhatie",
-            "na-do-v",
-            "procent-umensheniya",
             "ishodnyj-obyom",
-            "posledovatelnye-izmeneniya",
-            "procenty-v-programme",
             "zagolovok",
-            "neskolko-fajlov",
             "obratnyj-poryadok",
-            "drobnaya-glubina",
             "szhatie-itogo"
           ]
         },
@@ -830232,17 +830366,10 @@
           "access": "free",
           "sections": [
             "izmereniya",
-            "otschyoty",
-            "chastota-diskretizacii",
-            "glubina-kodirovaniya",
-            "kanaly",
+            "glubina-i-kanaly",
             "obyom-zapisi",
             "dlitelnost",
-            "vremya-v-sekundah",
-            "okruglenie-vverh",
             "dve-zapisi",
-            "raznoe-szhatie",
-            "v-1-5-raza",
             "zvuk-itogo"
           ]
         },
@@ -830251,46 +830378,13 @@
           "access": "free",
           "sections": [
             "vremya-peredachi",
-            "skorost",
             "edinicy",
             "dlitelnost-i-peredacha",
-            "otnosheniya",
-            "bez-otstavaniya",
-            "snimki",
-            "nabor-snimkov",
             "naibolshee-chislo",
-            "podbor-szhatiya",
+            "bez-otstavaniya",
             "ekonomiya",
-            "albom",
-            "peredacha-itogo"
-          ]
-        },
-        {
-          "slug": "okruglenie",
-          "access": "free",
-          "sections": [
-            "napravlenie-okrugleniya",
-            "chto-sprashivayut",
-            "promezhutochnye",
-            "operacii-python",
             "strogie-neravenstva",
-            "sosednee-znachenie",
-            "uroven-pamyati",
-            "fajly-i-nositeli",
-            "zapolnennye-nositeli",
-            "okruglenie-itogo"
-          ]
-        },
-        {
-          "slug": "sostavnye-zapisi",
-          "access": "free",
-          "sections": [
-            "dopolnitelnyy-urok-zapisi",
-            "odinakovyj-zagolovok",
-            "tekst-i-skan",
-            "zamena-skana",
-            "audiokniga",
-            "sostavnye-itogo"
+            "peredacha-itogo"
           ]
         }
       ],
